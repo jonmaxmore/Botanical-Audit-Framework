@@ -58,37 +58,44 @@ class HealthCheckService {
     console.log(`\n[Health Check] Running checks at ${new Date().toISOString()}`);
 
     try {
+      // Get port from environment (UAT uses 3001, production uses 5000)
+      const port = process.env.PORT || 5000;
+      const baseUrl = `http://localhost:${port}`;
+
       // Check 1: Main server health
-      const serverHealth = await this.checkServer('http://localhost:5000/health');
-      console.log(`[Health Check] Main Server: ${serverHealth.status}`);
+      const serverHealth = await this.checkServer(`${baseUrl}/health`);
+      console.log(`[Health Check] Main Server (port ${port}): ${serverHealth.status}`);
 
-      // Check 2: MongoDB health
-      const mongoHealth = await this.checkServer('http://localhost:5000/api/health/mongodb');
-      console.log(`[Health Check] MongoDB: ${mongoHealth.status}`);
-
-      // Check 3: Auth service
-      const authHealth = await this.checkServer('http://localhost:5000/api/auth/health');
+      // Check 2: Auth service (optional - may not exist in all environments)
+      const authHealth = await this.checkServer(`${baseUrl}/api/auth/health`);
       console.log(`[Health Check] Auth Service: ${authHealth.status}`);
 
-      // Check 4: DTAM service
-      const dtamHealth = await this.checkServer('http://localhost:5000/api/auth/dtam/health');
+      // Check 3: DTAM service (optional)
+      const dtamHealth = await this.checkServer(`${baseUrl}/api/auth/dtam/health`);
       console.log(`[Health Check] DTAM Service: ${dtamHealth.status}`);
 
-      // All checks passed
-      if (serverHealth.ok && authHealth.ok) {
+      // All checks passed (only require main server to be healthy)
+      if (serverHealth.ok) {
         this.failureCount = 0;
-        console.log('[Health Check] ✅ All checks passed');
+        console.log('[Health Check] ✅ All critical checks passed');
+        
+        // Log warnings for non-critical services
+        if (!authHealth.ok) {
+          console.log('[Health Check] ⚠️  Auth service unavailable (non-critical)');
+        }
+        if (!dtamHealth.ok) {
+          console.log('[Health Check] ⚠️  DTAM service unavailable (non-critical)');
+        }
       } else {
         this.failureCount++;
         console.log(
-          `[Health Check] ⚠️  Some checks failed (${this.failureCount}/${this.maxFailures})`
+          `[Health Check] ⚠️  Critical checks failed (${this.failureCount}/${this.maxFailures})`
         );
 
         if (this.failureCount >= this.maxFailures) {
           console.error('[Health Check] ❌ Max failures reached! Alerting...');
           this.sendAlert({
             serverHealth,
-            mongoHealth,
             authHealth,
             dtamHealth,
           });
