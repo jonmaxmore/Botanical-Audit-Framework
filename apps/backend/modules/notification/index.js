@@ -5,7 +5,7 @@
  * Exports all public interfaces for use by other modules.
  */
 
-const { createNotificationModule } = require('./integration/module.container');
+const { createNotificationModule } = require('./integration/container');
 const NotificationHelper = require('./integration/NotificationHelper');
 const Notification = require('./domain/entities/Notification');
 

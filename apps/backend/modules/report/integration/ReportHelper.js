@@ -5,7 +5,7 @@
  * Part of Clean Architecture - Integration Layer
  */
 
-const { getReportModuleContainer } = require('./module.container');
+const { getReportModuleContainer } = require('./container');
 const Report = require('../domain/entities/Report');
 
 class ReportHelper {

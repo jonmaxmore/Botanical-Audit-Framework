@@ -7,7 +7,7 @@
  * Part of Clean Architecture - Integration Layer
  */
 
-const DashboardModuleContainer = require('./integration/module.container');
+const DashboardModuleContainer = require('./integration/container');
 
 /**
  * Initialize Dashboard Module

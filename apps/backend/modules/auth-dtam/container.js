@@ -5,10 +5,10 @@
  * Purpose: Wire up all layers and dependencies for DTAM staff authentication
  */
 
-const mongoose = require('mongoose');
-
-// Domain
-const IDTAMStaffRepository = require('./domain/interfaces/IDTAMStaffRepository');
+/* eslint-disable no-unused-vars */
+const mongoose = require('mongoose'); // Used in JSDoc type annotations
+const IDTAMStaffRepository = require('./domain/interfaces/IDTAMStaffRepository'); // Used for interface documentation
+/* eslint-enable no-unused-vars */
 
 // Infrastructure
 const MongoDBDTAMStaffRepository = require('./infrastructure/database/MongoDBDTAMStaffRepository');

@@ -5,7 +5,7 @@
  * Exports container, helper, and key entities.
  */
 
-const { getReportModuleContainer } = require('./integration/module.container');
+const { getReportModuleContainer } = require('./integration/container');
 const ReportHelper = require('./integration/ReportHelper');
 const Report = require('./domain/entities/Report');
 

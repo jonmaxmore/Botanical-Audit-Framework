@@ -6,9 +6,10 @@
  * Flow: Infrastructure → Domain → Application → Presentation
  */
 
-// Domain Layer
-const Certificate = require('./domain/entities/Certificate');
-const CertificateNumber = require('./domain/value-objects/CertificateNumber');
+/* eslint-disable no-unused-vars */
+const Certificate = require('./domain/entities/Certificate'); // Used for type documentation
+const CertificateNumber = require('./domain/value-objects/CertificateNumber'); // Used for type documentation
+/* eslint-enable no-unused-vars */
 
 // Application Layer - Use Cases
 const GenerateCertificateUseCase = require('./application/use-cases/generate-certificate');

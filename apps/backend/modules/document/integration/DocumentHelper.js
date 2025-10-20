@@ -6,7 +6,7 @@
  * Part of Clean Architecture - Integration Layer
  */
 
-const { getDocumentModuleContainer } = require('./module.container');
+const { getDocumentModuleContainer } = require('./container');
 const Document = require('../domain/entities/Document');
 
 class DocumentHelper {

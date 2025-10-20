@@ -10,10 +10,10 @@
  * - Export configured router
  */
 
-const mongoose = require('mongoose');
-
-// Domain
-const IUserRepository = require('./domain/interfaces/IUserRepository');
+/* eslint-disable no-unused-vars */
+const mongoose = require('mongoose'); // Used in JSDoc type annotations
+const IUserRepository = require('./domain/interfaces/IUserRepository'); // Used for interface documentation
+/* eslint-enable no-unused-vars */
 
 // Infrastructure
 const MongoDBUserRepository = require('./infrastructure/database/MongoDBUserRepository');
