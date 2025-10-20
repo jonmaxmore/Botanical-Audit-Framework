@@ -13,7 +13,10 @@ const router = express.Router();
 
 // Import from shared module
 const shared = require('../../shared');
-const { config, middleware, utils } = shared;
+const { config, utils } = shared;
+
+// Import DTAM-specific middleware (not from shared)
+const dtamMiddleware = require('../middleware/dtam-auth');
 
 // Import DTAM-specific models
 const DTAMStaff = require('../models/DTAMStaff');
@@ -223,7 +226,7 @@ router.get('/verify', (req, res) => {
  * @desc Get DTAM staff profile
  * @access Private (DTAM staff only)
  */
-router.get('/profile', middleware.dtamAuth, async (req, res) => {
+router.get('/profile', dtamMiddleware.verifyDTAMToken, async (req, res) => {
   try {
     const staff = await DTAMStaff.findById(req.user.userId).select('-password');
 
@@ -259,7 +262,7 @@ router.get('/profile', middleware.dtamAuth, async (req, res) => {
  * @desc Get list of DTAM staff (admin only)
  * @access Private (DTAM admin only)
  */
-router.get('/staff-list', middleware.dtamAuth, middleware.requireDTAMAdmin, async (req, res) => {
+router.get('/staff-list', dtamMiddleware.verifyDTAMToken, dtamMiddleware.requireDTAMAdmin, async (req, res) => {
   try {
     const staffList = await DTAMStaff.find().select('-password').sort({ createdAt: -1 });
 
@@ -296,8 +299,8 @@ router.get('/staff-list', middleware.dtamAuth, middleware.requireDTAMAdmin, asyn
 router.post(
   '/create-staff',
   [
-    middleware.dtamAuth,
-    middleware.requireDTAMAdmin,
+    dtamMiddleware.verifyDTAMToken,
+    dtamMiddleware.requireDTAMAdmin,
     body('username')
       .trim()
       .isLength({ min: 3 })
@@ -408,3 +411,4 @@ router.get('/health', async (req, res) => {
 });
 
 module.exports = router;
+
