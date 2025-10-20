@@ -5,6 +5,9 @@
  * Original file backed up with .backup extension.
  */
 
+// Import shared auth module
+const auth = require('../../../shared/auth');
+
 // Re-export all auth functions for backward compatibility
 module.exports = {
   authenticateToken: auth.authenticateToken,

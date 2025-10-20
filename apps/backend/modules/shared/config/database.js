@@ -13,7 +13,7 @@ try {
 }
 const config = require('./environment');
 // Use shared logger from root
-const logger = require('../../../shared/utils/logger');
+const logger = require('../../../shared/logger');
 
 class DatabaseManager {
   constructor() {
