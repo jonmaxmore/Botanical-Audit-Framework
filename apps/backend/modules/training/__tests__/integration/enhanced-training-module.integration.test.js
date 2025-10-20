@@ -744,7 +744,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       const totalTime = endTime - startTime;
       expect(totalTime).toBeLessThan(10000);
 
-      logger.info(`✅ ${concurrentEnrollments} concurrent enrollments completed in ${totalTime}ms`)
+      logger.info(`✅ ${concurrentEnrollments} concurrent enrollments completed in ${totalTime}ms`);
     });
 
     test('should maintain performance under load', async () => {
@@ -769,7 +769,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       // Average response time should be reasonable (< 500ms)
       expect(averageTime).toBeLessThan(500);
 
-      logger.info(`✅ ${operationCount} dashboard requests averaged ${averageTime}ms`)
+      logger.info(`✅ ${operationCount} dashboard requests averaged ${averageTime}ms`);
     });
   });
 

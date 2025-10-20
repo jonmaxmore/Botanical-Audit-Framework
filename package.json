@@ -28,11 +28,7 @@
     "morgan": "^1.10.1"
   },
   "lint-staged": {
-    "apps/frontend/**/*.{js,jsx,ts,tsx,json,css}": [
-      "prettier --write"
-    ],
-    "apps/backend/**/*.{js,ts,json}": [
-      "prettier --write"
-    ]
+    "apps/frontend/**/*.{js,jsx,ts,tsx,json,css}": ["prettier --write"],
+    "apps/backend/**/*.{js,ts,json}": ["prettier --write"]
   }
 }

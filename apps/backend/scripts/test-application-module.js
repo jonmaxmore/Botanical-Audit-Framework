@@ -753,18 +753,18 @@ class ApplicationModuleTestRunner {
         ? ((this.testResults.passed / this.testResults.totalTests) * 100).toFixed(2)
         : 0;
 
-    logger.info(`\n${'='.repeat(80)}`)
-    logger.info(`${colors.bright}${colors.cyan}🏁 APPLICATION MODULE TEST RESULTS${colors.reset}`)
-    logger.info(`${'='.repeat(80)}`)
+    logger.info(`\n${'='.repeat(80)}`);
+    logger.info(`${colors.bright}${colors.cyan}🏁 APPLICATION MODULE TEST RESULTS${colors.reset}`);
+    logger.info(`${'='.repeat(80)}`);
 
-    logger.info(`${colors.bright}Test Summary:${colors.reset}`)
-    logger.info(`  Duration: ${duration}ms`)
-    logger.info(`  Total Tests: ${this.testResults.totalTests}`)
-    logger.info(`  ${colors.green}✓ Passed: ${this.testResults.passed}${colors.reset}`)
-    logger.info(`  ${colors.red}✗ Failed: ${this.testResults.failed}${colors.reset}`)
-    logger.info(`  Pass Rate: ${passRate}%`)
+    logger.info(`${colors.bright}Test Summary:${colors.reset}`);
+    logger.info(`  Duration: ${duration}ms`);
+    logger.info(`  Total Tests: ${this.testResults.totalTests}`);
+    logger.info(`  ${colors.green}✓ Passed: ${this.testResults.passed}${colors.reset}`);
+    logger.info(`  ${colors.red}✗ Failed: ${this.testResults.failed}${colors.reset}`);
+    logger.info(`  Pass Rate: ${passRate}%`);
 
-    logger.info(`\n${colors.bright}Test Coverage:${colors.reset}`)
+    logger.info(`\n${colors.bright}Test Coverage:${colors.reset}`);
     for (const [test, passed] of Object.entries(this.testCoverage)) {
       const status = passed
         ? `${colors.green}✓ PASSED${colors.reset}`
@@ -773,16 +773,16 @@ class ApplicationModuleTestRunner {
     }
 
     if (this.testResults.errors.length > 0) {
-      logger.info(`\n${colors.bright}${colors.red}Errors Encountered:${colors.reset}`)
+      logger.info(`\n${colors.bright}${colors.red}Errors Encountered:${colors.reset}`);
       this.testResults.errors.forEach((error, index) => {
-        logger.info(`  ${index + 1}. ${error}`)
+        logger.info(`  ${index + 1}. ${error}`);
       });
     }
 
     // Overall result
     const overallSuccess = this.testResults.failed === 0 && passRate >= 90;
 
-    logger.info(`\n${'='.repeat(80)}`)
+    logger.info(`\n${'='.repeat(80)}`);
     if (overallSuccess) {
       console.log(
         `${colors.bright}${colors.green}🎉 APPLICATION MODULE VALIDATION: SUCCESS${colors.reset}`,
@@ -790,48 +790,48 @@ class ApplicationModuleTestRunner {
       console.log(
         `${colors.green}✅ All critical components validated successfully${colors.reset}`,
       );
-      logger.info(`${colors.green}✅ Ready for integration with main system${colors.reset}`)
+      logger.info(`${colors.green}✅ Ready for integration with main system${colors.reset}`);
     } else {
       console.log(
         `${colors.bright}${colors.red}❌ APPLICATION MODULE VALIDATION: FAILED${colors.reset}`,
       );
-      logger.info(`${colors.red}⚠️  Please fix issues before proceeding${colors.reset}`)
+      logger.info(`${colors.red}⚠️  Please fix issues before proceeding${colors.reset}`);
     }
-    logger.info(`${'='.repeat(80)}\n`)
+    logger.info(`${'='.repeat(80)}\n`);
 
     return overallSuccess;
   }
 
   // Utility methods for logging
   printHeader() {
-    logger.info(`\n${'='.repeat(80)}`)
+    logger.info(`\n${'='.repeat(80)}`);
     console.log(
       `${colors.bright}${colors.blue}🚀 APPLICATION PROCESSING MODULE VALIDATION${colors.reset}`,
     );
     console.log(
       `${colors.cyan}Enhanced Application Processing System - Component Testing${colors.reset}`,
     );
-    logger.info(`${'='.repeat(80)}\n`)
+    logger.info(`${'='.repeat(80)}\n`);
   }
 
   logTestStart(testName) {
-    logger.info(`${colors.bright}${colors.yellow}🔍 Testing: ${testName}${colors.reset}`)
+    logger.info(`${colors.bright}${colors.yellow}🔍 Testing: ${testName}${colors.reset}`);
   }
 
   logTestComplete(testName, success) {
     const status = success
       ? `${colors.green}✅ PASSED${colors.reset}`
       : `${colors.red}❌ FAILED${colors.reset}`;
-    logger.info(`${colors.bright}📋 ${testName}: ${status}${colors.reset}\n`)
+    logger.info(`${colors.bright}📋 ${testName}: ${status}${colors.reset}\n`);
   }
 
   logSuccess(message) {
-    logger.info(`${colors.green}${message}${colors.reset}`)
+    logger.info(`${colors.green}${message}${colors.reset}`);
   }
 
   logError(context, error) {
     const errorMessage = `${context}: ${error.message}`;
-    logger.info(`${colors.red}✗ ${errorMessage}${colors.reset}`)
+    logger.info(`${colors.red}✗ ${errorMessage}${colors.reset}`);
     this.testResults.errors.push(errorMessage);
   }
 }
@@ -841,7 +841,7 @@ if (require.main === module) {
   console.log(
     `${colors.bright}${colors.magenta}Application Processing Module Test Runner${colors.reset}`,
   );
-  logger.info(`${colors.cyan}Starting comprehensive validation...${colors.reset}\n`)
+  logger.info(`${colors.cyan}Starting comprehensive validation...${colors.reset}\n`);
 
   const testRunner = new ApplicationModuleTestRunner();
   testRunner

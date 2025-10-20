@@ -42,7 +42,7 @@ class GACPEnhancedInspectionService {
    */
   async initializeInspection(applicationId, inspector, scheduledDate) {
     try {
-      logger.info(`[GACP-Inspection] Initializing inspection for application ${applicationId}`)
+      logger.info(`[GACP-Inspection] Initializing inspection for application ${applicationId}`);
 
       // Validate inspector certification against Thai FDA requirements
       const inspectorValidation = this.validateInspectorCertification(inspector);
@@ -206,7 +206,7 @@ class GACPEnhancedInspectionService {
         return this.createResponse(false, `Workflow transition failed: ${workflowResult.message}`);
       }
 
-      logger.info(`[GACP-Inspection] Successfully initialized inspection ${inspection._id}`)
+      logger.info(`[GACP-Inspection] Successfully initialized inspection ${inspection._id}`);
 
       return this.createResponse(true, 'GACP inspection successfully initialized', {
         inspectionId: inspection._id,
@@ -328,7 +328,7 @@ class GACPEnhancedInspectionService {
 
       // If all CCPs completed, finalize assessment
       if (completionStatus.allCompleted) {
-        logger.info(`[GACP-Inspection] All CCPs completed for inspection ${inspectionId}`)
+        logger.info(`[GACP-Inspection] All CCPs completed for inspection ${inspectionId}`);
         const finalResults = await this.finalizeComprehensiveAssessment(inspection);
 
         inspection.overallScore = finalResults.totalScore;
@@ -352,7 +352,7 @@ class GACPEnhancedInspectionService {
         await this.saveInspection(inspection);
       }
 
-      logger.info(`[GACP-CCP] Successfully completed assessment for CCP ${ccpId}`)
+      logger.info(`[GACP-CCP] Successfully completed assessment for CCP ${ccpId}`);
 
       return this.createResponse(true, `CCP ${ccpId} assessment completed successfully`, {
         ccp: {
@@ -644,7 +644,7 @@ class GACPEnhancedInspectionService {
         .collection('inspections')
         .updateOne({ _id: inspection._id }, { $set: inspection }, { upsert: true });
     }
-    logger.info(`[GACP-DB] Inspection ${inspection._id} saved (mock mode);`)
+    logger.info(`[GACP-DB] Inspection ${inspection._id} saved (mock mode);`);
     return true;
   }
 

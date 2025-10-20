@@ -65,13 +65,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const isValid = await this.validateWorkflowStep(step, index);
 
         if (isValid) {
-          logger.info(`   ✅ ${step.name}: Logic validated`)
+          logger.info(`   ✅ ${step.name}: Logic validated`);
           passed++;
         } else {
-          logger.info(`   ❌ ${step.name}: Logic validation failed`)
+          logger.info(`   ❌ ${step.name}: Logic validation failed`);
         }
       } catch (error) {
-        logger.info(`   ❌ ${step.name}: Error - ${error.message}`)
+        logger.info(`   ❌ ${step.name}: Error - ${error.message}`);
       }
     }
 
@@ -247,13 +247,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const isIntegrated = await this.validateModuleIntegration(test);
 
         if (isIntegrated) {
-          logger.info(`   ✅ ${test.from} → ${test.to}: Integration working`)
+          logger.info(`   ✅ ${test.from} → ${test.to}: Integration working`);
           passed++;
         } else {
-          logger.info(`   ❌ ${test.from} → ${test.to}: Integration failed`)
+          logger.info(`   ❌ ${test.from} → ${test.to}: Integration failed`);
         }
       } catch (error) {
-        logger.info(`   ❌ ${test.from} → ${test.to}: Error - ${error.message}`)
+        logger.info(`   ❌ ${test.from} → ${test.to}: Error - ${error.message}`);
       }
     }
 
@@ -305,13 +305,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const result = await this.validateBusinessRule(test.rule, test.input);
 
         if (result === test.expected) {
-          logger.info(`   ✅ ${test.rule}: Rule validation correct`)
+          logger.info(`   ✅ ${test.rule}: Rule validation correct`);
           passed++;
         } else {
-          logger.info(`   ❌ ${test.rule}: Expected ${test.expected}, got ${result}`)
+          logger.info(`   ❌ ${test.rule}: Expected ${test.expected}, got ${result}`);
         }
       } catch (error) {
-        logger.info(`   ❌ ${test.rule}: Error - ${error.message}`)
+        logger.info(`   ❌ ${test.rule}: Error - ${error.message}`);
       }
     }
 
@@ -367,13 +367,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const allSubscribersResponded = await this.validateEventPropagation(test);
 
         if (allSubscribersResponded) {
-          logger.info(`   ✅ ${test.event}: All subscribers responded`)
+          logger.info(`   ✅ ${test.event}: All subscribers responded`);
           passed++;
         } else {
-          logger.info(`   ❌ ${test.event}: Some subscribers failed`)
+          logger.info(`   ❌ ${test.event}: Some subscribers failed`);
         }
       } catch (error) {
-        logger.info(`   ❌ ${test.event}: Error - ${error.message}`)
+        logger.info(`   ❌ ${test.event}: Error - ${error.message}`);
       }
     }
 
@@ -420,13 +420,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const actualTime = await this.measurePerformance(test.name);
 
         if (actualTime <= test.target) {
-          logger.info(`   ✅ ${test.name}: ${actualTime}ms (target: ${test.target}ms);`)
+          logger.info(`   ✅ ${test.name}: ${actualTime}ms (target: ${test.target}ms);`);
           passed++;
         } else {
-          logger.info(`   ⚠️ ${test.name}: ${actualTime}ms (exceeds target: ${test.target}ms);`)
+          logger.info(`   ⚠️ ${test.name}: ${actualTime}ms (exceeds target: ${test.target}ms);`);
         }
       } catch (error) {
-        logger.info(`   ❌ ${test.name}: Error - ${error.message}`)
+        logger.info(`   ❌ ${test.name}: Error - ${error.message}`);
       }
     }
 
@@ -497,7 +497,6 @@ class GACPSystemIntegrationTest extends EventEmitter {
     logger.info(`   Success Rate: ${overallSuccessRate}% (${overallPassed}/${overallTotal})`);
     logger.info(`   Execution Time: ${(totalTime / 1000).toFixed(2)} seconds`);
 
-
     const systemStatus =
       overallSuccessRate >= 95
         ? 'EXCELLENT'
@@ -507,7 +506,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
             ? 'ACCEPTABLE'
             : 'NEEDS IMPROVEMENT';
 
-    logger.info(`   System Status: ${systemStatus}`)
+    logger.info(`   System Status: ${systemStatus}`);
 
     logger.info('\n🔍 SYSTEM ARCHITECTURE ANALYSIS:');
 
@@ -553,7 +552,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
     }
 
     logger.info('\n' + '='.repeat(80));
-    logger.info(`🎉 INTEGRATION TEST COMPLETE - ${systemStatus} SYSTEM STATUS`)
+    logger.info(`🎉 INTEGRATION TEST COMPLETE - ${systemStatus} SYSTEM STATUS`);
     logger.info('='.repeat(80) + '\n');
 
     return {
