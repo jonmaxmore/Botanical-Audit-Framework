@@ -535,7 +535,7 @@ const { initializeCertificateManagement } = require('./modules/certificate-manag
 // Initialize module
 const certificateModule = await initializeCertificateManagement(
   db, // MongoDB instance
-  authMiddleware // Authentication middleware
+  authMiddleware, // Authentication middleware
 );
 
 // Use in Express app
@@ -588,7 +588,7 @@ const certificate = await certificateService.createCertificate({
 await applicationService.updateCertificateInfo(
   applicationId,
   certificate.certificateNumber,
-  certificate._id
+  certificate._id,
 );
 ```
 

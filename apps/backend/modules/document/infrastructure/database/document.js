@@ -80,7 +80,7 @@ const documentSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'documents',
-  }
+  },
 );
 
 // Indexes
@@ -146,7 +146,7 @@ class MongoDBDocumentRepository {
         return this.toDomain(created);
       }
     } catch (error) {
-      console.error('Error saving document:', error);
+      logger.error('Error saving document:', error);
       throw error;
     }
   }
@@ -156,7 +156,7 @@ class MongoDBDocumentRepository {
       const doc = await this.DocumentModel.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding document by ID:', error);
+      logger.error('Error finding document by ID:', error);
       return null;
     }
   }
@@ -186,7 +186,7 @@ class MongoDBDocumentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding documents by uploader:', error);
+      logger.error('Error finding documents by uploader:', error);
       throw error;
     }
   }
@@ -206,7 +206,7 @@ class MongoDBDocumentRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding documents by related entity:', error);
+      logger.error('Error finding documents by related entity:', error);
       throw error;
     }
   }
@@ -230,7 +230,7 @@ class MongoDBDocumentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding documents by status:', error);
+      logger.error('Error finding documents by status:', error);
       throw error;
     }
   }
@@ -254,7 +254,7 @@ class MongoDBDocumentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding documents by type:', error);
+      logger.error('Error finding documents by type:', error);
       throw error;
     }
   }
@@ -278,7 +278,7 @@ class MongoDBDocumentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding documents by category:', error);
+      logger.error('Error finding documents by category:', error);
       throw error;
     }
   }
@@ -319,7 +319,7 @@ class MongoDBDocumentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding documents with filters:', error);
+      logger.error('Error finding documents with filters:', error);
       throw error;
     }
   }
@@ -347,7 +347,7 @@ class MongoDBDocumentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding pending documents:', error);
+      logger.error('Error finding pending documents:', error);
       throw error;
     }
   }
@@ -362,7 +362,7 @@ class MongoDBDocumentRepository {
       const docs = await this.DocumentModel.find(query);
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding expired documents:', error);
+      logger.error('Error finding expired documents:', error);
       throw error;
     }
   }
@@ -383,7 +383,7 @@ class MongoDBDocumentRepository {
 
       return versions.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding version history:', error);
+      logger.error('Error finding version history:', error);
       throw error;
     }
   }
@@ -399,7 +399,7 @@ class MongoDBDocumentRepository {
 
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding latest version:', error);
+      logger.error('Error finding latest version:', error);
       return null;
     }
   }
@@ -408,7 +408,7 @@ class MongoDBDocumentRepository {
     try {
       return await this.DocumentModel.countDocuments(criteria);
     } catch (error) {
-      console.error('Error counting documents:', error);
+      logger.error('Error counting documents:', error);
       return 0;
     }
   }
@@ -423,7 +423,7 @@ class MongoDBDocumentRepository {
 
       return await this.DocumentModel.countDocuments(query);
     } catch (error) {
-      console.error('Error counting documents by uploader:', error);
+      logger.error('Error counting documents by uploader:', error);
       return 0;
     }
   }
@@ -437,11 +437,11 @@ class MongoDBDocumentRepository {
         },
         {
           $set: { status: Document.STATUS.EXPIRED },
-        }
+        },
       );
       return result.modifiedCount;
     } catch (error) {
-      console.error('Error marking expired documents:', error);
+      logger.error('Error marking expired documents:', error);
       return 0;
     }
   }
@@ -496,7 +496,7 @@ class MongoDBDocumentRepository {
         totalSizeBytes: totalSize.length > 0 ? totalSize[0].total : 0,
       };
     } catch (error) {
-      console.error('Error getting document statistics:', error);
+      logger.error('Error getting document statistics:', error);
       throw error;
     }
   }
@@ -506,7 +506,7 @@ class MongoDBDocumentRepository {
       const result = await this.DocumentModel.findByIdAndDelete(id);
       return result !== null;
     } catch (error) {
-      console.error('Error deleting document:', error);
+      logger.error('Error deleting document:', error);
       return false;
     }
   }
@@ -540,7 +540,7 @@ class MongoDBDocumentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error searching documents:', error);
+      logger.error('Error searching documents:', error);
       throw error;
     }
   }

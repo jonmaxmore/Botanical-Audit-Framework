@@ -273,7 +273,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
 
     try {
       this.logger.info(
-        `[GovernmentApiIntegration] Starting farmer identity verification - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Starting farmer identity verification - Operation: ${operationId}`,
       );
 
       // Validate input data
@@ -312,7 +312,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       const verificationReport = await this._processIdentityVerificationResults(
         verificationResults,
         identityData,
-        operationId
+        operationId,
       );
 
       // Create audit record
@@ -331,7 +331,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       this._updatePerformanceMetrics('IDENTITY_VERIFICATION', true, Date.now() - startTime);
 
       this.logger.info(
-        `[GovernmentApiIntegration] Identity verification completed - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Identity verification completed - Operation: ${operationId}`,
       );
 
       return {
@@ -342,7 +342,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[GovernmentApiIntegration] Identity verification failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       this._updatePerformanceMetrics('IDENTITY_VERIFICATION', false, Date.now() - startTime);
@@ -368,7 +368,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
 
     try {
       this.logger.info(
-        `[GovernmentApiIntegration] Starting land ownership verification - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Starting land ownership verification - Operation: ${operationId}`,
       );
 
       // Validate land data
@@ -390,7 +390,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
           titleDeedNumber: landData.titleDeedNumber,
           issueDate: landData.issueDate,
           validateChain: true,
-        }
+        },
       );
 
       // Land use permit check if applicable
@@ -422,7 +422,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       });
 
       this.logger.info(
-        `[GovernmentApiIntegration] Land ownership verification completed - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Land ownership verification completed - Operation: ${operationId}`,
       );
 
       return {
@@ -433,7 +433,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[GovernmentApiIntegration] Land ownership verification failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       await this._createAuditRecord('LAND_OWNERSHIP_VERIFICATION_FAILED', {
@@ -457,7 +457,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
 
     try {
       this.logger.info(
-        `[GovernmentApiIntegration] Submitting GACP application - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Submitting GACP application - Operation: ${operationId}`,
       );
 
       // Validate application completeness
@@ -516,7 +516,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       await this._sendSubmissionNotifications(submissionReport, applicationData);
 
       this.logger.info(
-        `[GovernmentApiIntegration] GACP application submission completed - Operation: ${operationId}`
+        `[GovernmentApiIntegration] GACP application submission completed - Operation: ${operationId}`,
       );
 
       return {
@@ -527,7 +527,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[GovernmentApiIntegration] GACP application submission failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       await this._createAuditRecord('GACP_APPLICATION_SUBMISSION_FAILED', {
@@ -551,7 +551,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
 
     try {
       this.logger.info(
-        `[GovernmentApiIntegration] Checking application status - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Checking application status - Operation: ${operationId}`,
       );
 
       // Parallel status checks across systems
@@ -561,7 +561,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         statusPromises.push(
           this._callGovernmentApi('MOAC', 'certificationStatus', {
             referenceId: applicationTrackingData.moacReferenceId,
-          })
+          }),
         );
       }
 
@@ -569,7 +569,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         statusPromises.push(
           this._callGovernmentApi('DOA', 'complianceCheck', {
             referenceId: applicationTrackingData.doaReferenceId,
-          })
+          }),
         );
       }
 
@@ -577,7 +577,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         statusPromises.push(
           this._callGovernmentApi('FDA', 'marketAuthorization', {
             referenceId: applicationTrackingData.fdaReferenceId,
-          })
+          }),
         );
       }
 
@@ -605,7 +605,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       });
 
       this.logger.info(
-        `[GovernmentApiIntegration] Application status check completed - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Application status check completed - Operation: ${operationId}`,
       );
 
       return {
@@ -616,7 +616,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[GovernmentApiIntegration] Application status check failed - Operation: ${operationId}:`,
-        error
+        error,
       );
       throw error;
     }
@@ -632,7 +632,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
 
     try {
       this.logger.info(
-        `[GovernmentApiIntegration] Generating compliance report - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Generating compliance report - Operation: ${operationId}`,
       );
 
       // Gather compliance data from multiple sources
@@ -675,7 +675,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       });
 
       this.logger.info(
-        `[GovernmentApiIntegration] Compliance report generated - Operation: ${operationId}`
+        `[GovernmentApiIntegration] Compliance report generated - Operation: ${operationId}`,
       );
 
       return {
@@ -686,7 +686,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[GovernmentApiIntegration] Compliance report generation failed - Operation: ${operationId}:`,
-        error
+        error,
       );
       throw error;
     }
@@ -734,7 +734,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
 
       // Calculate overall health score
       const healthyEndpoints = Object.values(systemHealth.governmentEndpoints).filter(
-        endpoint => endpoint.status === 'HEALTHY'
+        endpoint => endpoint.status === 'HEALTHY',
       ).length;
       const totalEndpoints = Object.keys(systemHealth.governmentEndpoints).length;
 
@@ -930,7 +930,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       if (!rateLimitResult.allowed) {
         this.performanceMetrics.rateLimitHits++;
         throw new Error(
-          `Rate limit exceeded for ${systemName}. Retry after: ${rateLimitResult.retryAfter}ms`
+          `Rate limit exceeded for ${systemName}. Retry after: ${rateLimitResult.retryAfter}ms`,
         );
       }
     }
@@ -949,7 +949,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         // Check if error is retryable
         const isRetryable = retryConfig.retryableErrors.some(
           retryableError =>
-            error.code === retryableError || error.response?.status?.toString() === retryableError
+            error.code === retryableError || error.response?.status?.toString() === retryableError,
         );
 
         if (!isRetryable || attempt === retryConfig.maxRetries) {

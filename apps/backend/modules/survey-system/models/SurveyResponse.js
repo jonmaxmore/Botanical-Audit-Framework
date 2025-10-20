@@ -200,7 +200,7 @@ const SurveyResponseSchema = new mongoose.Schema(
   {
     collection: 'surveyresponses',
     timestamps: false,
-  }
+  },
 );
 
 // Indexes for performance

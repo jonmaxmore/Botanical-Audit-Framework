@@ -9,6 +9,7 @@
  * - Error recovery
  */
 
+const logger = require('../shared/logger/logger');
 const mongoose = require('mongoose');
 
 class TransactionManager {
@@ -36,7 +37,7 @@ class TransactionManager {
 
         // Execute each operation
         for (const operation of operations) {
-          console.log(`🔄 Executing: ${operation.name}`);
+          logger.info(`🔄 Executing: ${operation.name}`);
 
           const startTime = Date.now();
           const result = await operation.execute(session);
@@ -53,7 +54,7 @@ class TransactionManager {
         // Commit transaction
         await session.commitTransaction();
 
-        console.log('✅ Transaction committed successfully');
+        logger.info('✅ Transaction committed successfully');
 
         // Log successful transaction
         if (this.auditService) {
@@ -69,7 +70,7 @@ class TransactionManager {
               ...metadata,
               attempt: attempt + 1,
               operationCount: operations.length,
-            }
+            },
           );
         }
 
@@ -82,7 +83,7 @@ class TransactionManager {
       } catch (error) {
         console.error(
           `❌ Transaction failed (attempt ${attempt + 1}/${this.maxRetries}):`,
-          error.message
+          error.message,
         );
 
         // Abort transaction
@@ -103,7 +104,7 @@ class TransactionManager {
               attempt: attempt + 1,
               operationCount: operations.length,
               operations: operations.map(op => op.name),
-            }
+            },
           );
         }
 
@@ -144,7 +145,7 @@ class TransactionManager {
 
       // Execute each operation
       for (const operation of operations) {
-        console.log(`🔄 Executing: ${operation.name}`);
+        logger.info(`🔄 Executing: ${operation.name}`);
 
         const startTime = Date.now();
         const result = await operation.execute();
@@ -159,7 +160,7 @@ class TransactionManager {
         });
       }
 
-      console.log('✅ All operations completed successfully');
+      logger.info('✅ All operations completed successfully');
 
       return {
         success: true,
@@ -167,7 +168,7 @@ class TransactionManager {
         operations: executedOperations,
       };
     } catch (error) {
-      console.error('❌ Operation failed, executing compensations:', error.message);
+      logger.error('❌ Operation failed, executing compensations:', error.message);
 
       // Execute compensating actions in reverse order
       for (let i = executedOperations.length - 1; i >= 0; i--) {
@@ -175,12 +176,12 @@ class TransactionManager {
 
         if (operation.compensate) {
           try {
-            console.log(`↩️ Compensating: ${operation.name}`);
+            logger.info(`↩️ Compensating: ${operation.name}`);
             await operation.compensate();
           } catch (compensationError) {
             console.error(
               `❌ Compensation failed for ${operation.name}:`,
-              compensationError.message
+              compensationError.message,
             );
             // Continue with other compensations
           }
@@ -244,7 +245,7 @@ class ApplicationService {
             approvedBy: approverId,
             approvedAt: new Date(),
           },
-          { session, new: true }
+          { session, new: true },
         );
 
         if (!application) {
@@ -259,7 +260,7 @@ class ApplicationService {
 
         const certificate = await this.certificateService.generateCertificate(
           session.getClient().db(),
-          application
+          application,
         );
 
         return certificate;
@@ -273,11 +274,11 @@ class ApplicationService {
           const application = await Application.findByIdAndUpdate(
             applicationId,
             { certificateNumber: certificate.certificateNumber },
-            { session, new: true }
+            { session, new: true },
           );
 
           return application;
-        }
+        },
       ),
 
       this.transactionManager.createOperation('Send approval notification', async session => {
@@ -303,7 +304,7 @@ class ApplicationService {
             type: 'application',
             id: applicationId,
             after: { status: 'approved' },
-          }
+          },
         );
 
         return { auditLogCreated: true };
@@ -336,7 +337,7 @@ class ApplicationService {
               lockedUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
               rejectionReason: reason,
             },
-            { new: true }
+            { new: true },
           );
 
           if (!application) {
@@ -355,7 +356,7 @@ class ApplicationService {
               rejectionReason: '',
             },
           });
-        }
+        },
       ),
 
       this.transactionManager.createOperation(
@@ -376,7 +377,7 @@ class ApplicationService {
           return { notificationSent: true };
         },
         // No compensation needed for notifications
-        null
+        null,
       ),
 
       this.transactionManager.createOperation('Create audit log', async () => {
@@ -387,7 +388,7 @@ class ApplicationService {
             type: 'application',
             id: applicationId,
             after: { status: 'rejected', reason },
-          }
+          },
         );
 
         return { auditLogCreated: true };
@@ -422,11 +423,11 @@ if (require.main === module) {
     // Test transaction
     const operations = [
       transactionManager.createOperation('Operation 1', async session => {
-        console.log('Executing operation 1');
+        logger.info('Executing operation 1');
         return { result: 'success' };
       }),
       transactionManager.createOperation('Operation 2', async session => {
-        console.log('Executing operation 2');
+        logger.info('Executing operation 2');
         return { result: 'success' };
       }),
     ];
@@ -436,7 +437,7 @@ if (require.main === module) {
       role: 'admin',
     });
 
-    console.log('Transaction result:', result);
+    logger.info('Transaction result:', result);
 
     await mongoose.connection.close();
   }

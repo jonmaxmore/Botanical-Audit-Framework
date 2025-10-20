@@ -95,7 +95,7 @@ export function truncateText(text: string, maxLength: number): string {
 export function generateCertificateNumber(
   standard: string,
   year: number,
-  sequence: number
+  sequence: number,
 ): string {
   const paddedSequence = sequence.toString().padStart(4, '0');
   return `${standard}-${year}-${paddedSequence}`;
@@ -164,7 +164,7 @@ export function getStatusLabelThai(status: string): string {
  */
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null;
 

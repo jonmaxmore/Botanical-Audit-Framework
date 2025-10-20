@@ -218,7 +218,7 @@ class GACPWorkflowService {
       if (!fromState.allowedTransitions.includes(request.toState)) {
         result.isValid = false;
         result.errors.push(
-          `Transition from ${request.fromState} to ${request.toState} is not allowed`
+          `Transition from ${request.fromState} to ${request.toState} is not allowed`,
         );
         return result;
       }
@@ -227,7 +227,7 @@ class GACPWorkflowService {
       if (!fromState.requiredActors.includes(request.actor)) {
         result.isValid = false;
         result.errors.push(
-          `Actor ${request.actor} is not authorized for state ${request.fromState}`
+          `Actor ${request.actor} is not authorized for state ${request.fromState}`,
         );
       }
 
@@ -247,7 +247,7 @@ class GACPWorkflowService {
       // Time limit validation
       if (fromState.timeLimit) {
         result.warnings.push(
-          `State ${request.fromState} has time limit of ${fromState.timeLimit} days`
+          `State ${request.fromState} has time limit of ${fromState.timeLimit} days`,
         );
       }
 
@@ -315,11 +315,11 @@ class GACPWorkflowService {
    * Get workflow transition history for an application
    */
   async getTransitionHistory(
-    applicationId: string
+    applicationId: string,
   ): Promise<GACPApiResponse<GACPWorkflowTransition[]>> {
     try {
       return await gacpApiClient.get<GACPWorkflowTransition[]>(
-        `/api/applications/${applicationId}/workflow-history`
+        `/api/applications/${applicationId}/workflow-history`,
       );
     } catch (error) {
       console.error('[GACP Workflow] Get transition history failed:', error);
@@ -360,7 +360,7 @@ class GACPWorkflowService {
    */
   private async validateBusinessRules(
     request: WorkflowTransitionRequest,
-    result: WorkflowValidationResult
+    result: WorkflowValidationResult,
   ): Promise<void> {
     const state = await this.getWorkflowState(request.fromState);
     if (!state) return;
@@ -382,7 +382,7 @@ class GACPWorkflowService {
   private async validateBusinessRule(
     rule: string,
     request: WorkflowTransitionRequest,
-    result: WorkflowValidationResult
+    result: WorkflowValidationResult,
   ): Promise<void> {
     switch (rule) {
       case 'applicant_must_be_authenticated':

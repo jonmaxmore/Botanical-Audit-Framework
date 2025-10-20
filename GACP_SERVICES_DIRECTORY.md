@@ -1,10 +1,12 @@
 # 📋 บริการทั้งหมดในระบบ GACP - Service Directory
+
 **วันที่:** 20 ตุลาคม 2025  
 **สถานะ:** 🟢 ระบบ GACP Services - พร้อมใช้งาน
 
 ## 🏗️ โครงสร้างโฟลเดอร์และบริการหลัก
 
 ### 📁 `/business-logic/` - ตรรกะธุรกิจหลัก (7 บริการ)
+
 ```
 business-logic/
 ├── gacp-workflow-engine.js                    - 🔄 เครื่องมือจัดการขั้นตอน 8 ขั้น
@@ -17,6 +19,7 @@ business-logic/
 ```
 
 ### 📁 `/apps/` - แอปพลิเคชันหลัก (5 แอป)
+
 ```
 apps/
 ├── admin-portal/                              - 👨‍💼 Portal สำหรับผู้ดูแลระบบ
@@ -29,6 +32,7 @@ apps/
 ### 📁 `/apps/backend/services/` - บริการ Backend (38 บริการ)
 
 #### 🔐 Authentication & Security
+
 ```
 services/
 ├── auth-proxy.js                              - 🔐 Proxy การยืนยันตัวตน
@@ -37,6 +41,7 @@ services/
 ```
 
 #### 🌾 GACP Core Services
+
 ```
 services/
 ├── GACPApplicationService.js                  - 📝 บริการใบสมัคร GACP
@@ -48,6 +53,7 @@ services/
 ```
 
 #### 🌿 Cannabis & Survey Services
+
 ```
 services/
 ├── cannabisSurveyService.js                   - 🌿 บริการสำรวจกัญชา
@@ -58,6 +64,7 @@ services/
 ```
 
 #### 🚜 Farm Management
+
 ```
 services/
 ├── enhancedFarmManagementService.js           - 🚜 จัดการฟาร์มขั้นสูง
@@ -66,6 +73,7 @@ services/
 ```
 
 #### 🔔 Notification & Monitoring
+
 ```
 services/
 ├── enhancedNotificationService.js             - 🔔 การแจ้งเตือนขั้นสูง
@@ -79,6 +87,7 @@ services/
 ```
 
 #### 📊 Analytics & KPI
+
 ```
 services/
 ├── analytics-engine/                          - 📊 เครื่องมือวิเคราะห์
@@ -87,6 +96,7 @@ services/
 ```
 
 #### 🏛️ Compliance & Standards
+
 ```
 services/
 ├── ComplianceAuditService.js                  - ✅ บริการตรวจสอบการปฏิบัติตาม
@@ -96,6 +106,7 @@ services/
 ```
 
 #### 💰 Payment & Certificate
+
 ```
 services/
 ├── PaymentService.js                          - 💰 บริการการชำระเงิน
@@ -104,6 +115,7 @@ services/
 ```
 
 #### 🔗 Integration & External
+
 ```
 services/
 ├── blitzzIntegrationService.js                - 🔗 เชื่อมต่อระบบ Blitzz
@@ -112,6 +124,7 @@ services/
 ```
 
 ### 📁 `/backend/services/` - บริการ Backend เพิ่มเติม (2 บริการ)
+
 ```
 backend/services/
 ├── application/                               - 📝 บริการใบสมัคร
@@ -119,6 +132,7 @@ backend/services/
 ```
 
 ### 📁 `/config/` - การกำหนดค่า (7 ไฟล์)
+
 ```
 config/
 ├── database.js                                - 🗄️ การกำหนดค่าฐานข้อมูล
@@ -132,17 +146,18 @@ config/
 
 ## 📊 สรุปจำนวนบริการ
 
-| หมวดหมู่ | จำนวนบริการ | สถานะ |
-|----------|-------------|-------|
-| **Business Logic** | 7 บริการ | 🟢 พร้อมใช้งาน |
-| **Backend Services** | 38 บริการ | 🟢 พร้อมใช้งาน |
-| **Frontend Apps** | 5 แอป | 🟡 ต้อง Configure TypeScript |
-| **Configuration** | 7 ไฟล์ | 🟢 พร้อมใช้งาน |
-| **รวมทั้งหมด** | **57 บริการ** | 🟢 **95% พร้อมใช้งาน** |
+| หมวดหมู่             | จำนวนบริการ   | สถานะ                        |
+| -------------------- | ------------- | ---------------------------- |
+| **Business Logic**   | 7 บริการ      | 🟢 พร้อมใช้งาน               |
+| **Backend Services** | 38 บริการ     | 🟢 พร้อมใช้งาน               |
+| **Frontend Apps**    | 5 แอป         | 🟡 ต้อง Configure TypeScript |
+| **Configuration**    | 7 ไฟล์        | 🟢 พร้อมใช้งาน               |
+| **รวมทั้งหมด**       | **57 บริการ** | 🟢 **95% พร้อมใช้งาน**       |
 
 ## 🎯 บริการหลักที่สำคัญ
 
 ### 🔥 Core GACP Services (ใช้งานหลัก)
+
 1. **gacp-workflow-engine.js** - ควบคุมขั้นตอน 8 ขั้น
 2. **gacp-certificate-generator.js** - สร้างใบรับรอง
 3. **gacp-field-inspection-system.js** - ตรวจฟาร์ม
@@ -150,6 +165,7 @@ config/
 5. **GACPApplicationService.js** - จัดการใบสมัคร
 
 ### 🌟 Support Services (บริการสนับสนุน)
+
 1. **enhancedNotificationService.js** - การแจ้งเตือน
 2. **PaymentService.js** - การชำระเงิน
 3. **SecurityComplianceService.js** - ความปลอดภัย
@@ -157,8 +173,9 @@ config/
 5. **analytics-engine/** - การวิเคราะห์
 
 ## 🚀 สถานะความพร้อม
+
 - ✅ **Business Logic**: 100% พร้อม
-- ✅ **Backend APIs**: 95% พร้อม  
+- ✅ **Backend APIs**: 95% พร้อม
 - 🟡 **Frontend**: 80% พร้อม (ต้อง config TypeScript)
 - ✅ **Database**: 90% พร้อม (ต้องเชื่อมต่อ)
 

@@ -42,7 +42,7 @@ class NotificationController {
         data: notification,
       });
     } catch (error) {
-      console.error('Error sending notification:', error);
+      logger.error('Error sending notification:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to send notification',
@@ -61,7 +61,7 @@ class NotificationController {
 
       const notification = await this.sendBroadcastNotificationUseCase.execute(
         notificationData,
-        req.user
+        req.user,
       );
 
       res.status(201).json({
@@ -70,7 +70,7 @@ class NotificationController {
         data: notification,
       });
     } catch (error) {
-      console.error('Error sending broadcast:', error);
+      logger.error('Error sending broadcast:', error);
       res.status(error.message.includes('authorized') ? 403 : 500).json({
         success: false,
         message: 'Failed to send broadcast notification',
@@ -101,7 +101,7 @@ class NotificationController {
         data: result,
       });
     } catch (error) {
-      console.error('Error getting user notifications:', error);
+      logger.error('Error getting user notifications:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get notifications',
@@ -124,7 +124,7 @@ class NotificationController {
         data: notification,
       });
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      logger.error('Error marking notification as read:', error);
       const status = error.message.includes('not found')
         ? 404
         : error.message.includes('authorized')
@@ -150,7 +150,7 @@ class NotificationController {
         data: { count },
       });
     } catch (error) {
-      console.error('Error marking all as read:', error);
+      logger.error('Error marking all as read:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to mark all notifications as read',
@@ -170,7 +170,7 @@ class NotificationController {
         data: { count },
       });
     } catch (error) {
-      console.error('Error getting unread count:', error);
+      logger.error('Error getting unread count:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get unread count',
@@ -193,7 +193,7 @@ class NotificationController {
         data: notification,
       });
     } catch (error) {
-      console.error('Error archiving notification:', error);
+      logger.error('Error archiving notification:', error);
       const status = error.message.includes('not found')
         ? 404
         : error.message.includes('authorized')
@@ -222,7 +222,7 @@ class NotificationController {
         data: statistics,
       });
     } catch (error) {
-      console.error('Error getting statistics:', error);
+      logger.error('Error getting statistics:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get notification statistics',

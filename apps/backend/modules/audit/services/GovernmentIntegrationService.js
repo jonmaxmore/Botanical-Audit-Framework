@@ -24,6 +24,7 @@
  * - Tracks regulatory responses
  */
 
+const logger = require('../../../shared/logger/logger');
 const crypto = require('crypto');
 const https = require('https');
 
@@ -170,7 +171,7 @@ class GovernmentIntegrationService {
    * Start government integration services
    */
   async startIntegration() {
-    console.log('[GovernmentIntegration] Starting government integration services...');
+    logger.info('[GovernmentIntegration] Starting government integration services...');
 
     try {
       // Authenticate with all government systems
@@ -182,7 +183,7 @@ class GovernmentIntegrationService {
       // Initialize compliance synchronization
       await this.initializeComplianceSync();
 
-      console.log('[GovernmentIntegration] Integration services started successfully');
+      logger.info('[GovernmentIntegration] Integration services started successfully');
 
       return {
         success: true,
@@ -190,7 +191,7 @@ class GovernmentIntegrationService {
         scheduledReports: this.reportingSchedules.size,
       };
     } catch (error) {
-      console.error('[GovernmentIntegration] Failed to start integration:', error);
+      logger.error('[GovernmentIntegration] Failed to start integration:', error);
       throw error;
     }
   }
@@ -210,11 +211,11 @@ class GovernmentIntegrationService {
           system: system,
         });
 
-        console.log(`[GovernmentIntegration] Authenticated with ${system.toUpperCase()}`);
+        logger.info(`[GovernmentIntegration] Authenticated with ${system.toUpperCase()}`);
       } catch (error) {
         console.error(
           `[GovernmentIntegration] Authentication failed for ${system}:`,
-          error.message
+          error.message,
         );
         // Continue with other systems - don't fail completely
       }
@@ -237,12 +238,12 @@ class GovernmentIntegrationService {
         systemName,
         'POST',
         config.endpoints.authentication,
-        authData
+        authData,
       );
 
       return response.access_token || response.token;
     } catch (error) {
-      console.error(`[GovernmentIntegration] Authentication failed for ${systemName}:`, error);
+      logger.error(`[GovernmentIntegration] Authentication failed for ${systemName}:`, error);
       throw error;
     }
   }
@@ -285,7 +286,7 @@ class GovernmentIntegrationService {
    * Submit certificate submission report to DOA
    */
   async submitCertificateReport(certificateData) {
-    console.log('[GovernmentIntegration] Submitting certificate report to DOA...');
+    logger.info('[GovernmentIntegration] Submitting certificate report to DOA...');
 
     try {
       // Validate certificate data
@@ -299,7 +300,7 @@ class GovernmentIntegrationService {
         'doa',
         'POST',
         this.apiConfig.doa.endpoints.certificateSubmission,
-        reportData
+        reportData,
       );
 
       // Store submission record
@@ -317,12 +318,12 @@ class GovernmentIntegrationService {
       this.metrics.successfulSubmissions++;
 
       console.log(
-        `[GovernmentIntegration] Certificate report submitted: ${response.submission_id}`
+        `[GovernmentIntegration] Certificate report submitted: ${response.submission_id}`,
       );
 
       return response;
     } catch (error) {
-      console.error('[GovernmentIntegration] Certificate report submission failed:', error);
+      logger.error('[GovernmentIntegration] Certificate report submission failed:', error);
       this.metrics.failedSubmissions++;
       throw error;
     }
@@ -408,7 +409,7 @@ class GovernmentIntegrationService {
    * Submit compliance monitoring report
    */
   async submitComplianceReport(complianceData) {
-    console.log('[GovernmentIntegration] Submitting compliance report...');
+    logger.info('[GovernmentIntegration] Submitting compliance report...');
 
     try {
       const reportData = await this.prepareComplianceReport(complianceData);
@@ -418,7 +419,7 @@ class GovernmentIntegrationService {
         'doa',
         'POST',
         this.apiConfig.doa.endpoints.complianceReport,
-        reportData
+        reportData,
       );
 
       // Record submission
@@ -437,7 +438,7 @@ class GovernmentIntegrationService {
 
       return response;
     } catch (error) {
-      console.error('[GovernmentIntegration] Compliance report submission failed:', error);
+      logger.error('[GovernmentIntegration] Compliance report submission failed:', error);
       this.metrics.failedSubmissions++;
       throw error;
     }
@@ -537,8 +538,8 @@ class GovernmentIntegrationService {
             } else {
               reject(
                 new Error(
-                  `API call failed: ${res.statusCode} - ${parsedData.message || 'Unknown error'}`
-                )
+                  `API call failed: ${res.statusCode} - ${parsedData.message || 'Unknown error'}`,
+                ),
               );
             }
           } catch (error) {
@@ -585,7 +586,7 @@ class GovernmentIntegrationService {
       await this.generateMonthlyReports();
     });
 
-    console.log('[GovernmentIntegration] Automated reporting schedules configured');
+    logger.info('[GovernmentIntegration] Automated reporting schedules configured');
   }
 
   /**
@@ -593,7 +594,7 @@ class GovernmentIntegrationService {
    */
   async generateDailyReports() {
     try {
-      console.log('[GovernmentIntegration] Generating daily reports...');
+      logger.info('[GovernmentIntegration] Generating daily reports...');
 
       const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000);
 
@@ -636,7 +637,7 @@ class GovernmentIntegrationService {
       // Submit to government systems
       await this.submitDailyReport(dailyReportData);
     } catch (error) {
-      console.error('[GovernmentIntegration] Daily report generation failed:', error);
+      logger.error('[GovernmentIntegration] Daily report generation failed:', error);
     }
   }
 
@@ -683,11 +684,11 @@ class GovernmentIntegrationService {
             system: submissionData.system,
             type: submissionData.type,
             submissionId: submissionData.submissionId,
-          }
+          },
         );
       }
     } catch (error) {
-      console.error('[GovernmentIntegration] Failed to record submission:', error);
+      logger.error('[GovernmentIntegration] Failed to record submission:', error);
     }
   }
 
@@ -728,7 +729,7 @@ class GovernmentIntegrationService {
     // Clear scheduled reports
     this.reportingSchedules.clear();
 
-    console.log('[GovernmentIntegration] Integration services stopped');
+    logger.info('[GovernmentIntegration] Integration services stopped');
   }
 
   /**

@@ -64,22 +64,22 @@ function createAuthRoutes(dependencies = {}) {
 
   // User login
   router.post('/login', strictRateLimit, validationRules.login, (req, res) =>
-    userAuthenticationController.login(req, res)
+    userAuthenticationController.login(req, res),
   );
 
   // Token refresh
   router.post('/refresh', moderateRateLimit, validationRules.refreshToken, (req, res) =>
-    userAuthenticationController.refreshToken(req, res)
+    userAuthenticationController.refreshToken(req, res),
   );
 
   // Forgot password
   router.post('/forgot-password', strictRateLimit, validationRules.forgotPassword, (req, res) =>
-    userAuthenticationController.forgotPassword(req, res)
+    userAuthenticationController.forgotPassword(req, res),
   );
 
   // Reset password
   router.post('/reset-password', moderateRateLimit, validationRules.resetPassword, (req, res) =>
-    userAuthenticationController.resetPassword(req, res)
+    userAuthenticationController.resetPassword(req, res),
   );
 
   /**
@@ -92,7 +92,7 @@ function createAuthRoutes(dependencies = {}) {
     normalRateLimit,
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
-    (req, res) => userAuthenticationController.logout(req, res)
+    (req, res) => userAuthenticationController.logout(req, res),
   );
 
   // Change password
@@ -102,7 +102,7 @@ function createAuthRoutes(dependencies = {}) {
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
     validationRules.changePassword,
-    (req, res) => userAuthenticationController.changePassword(req, res)
+    (req, res) => userAuthenticationController.changePassword(req, res),
   );
 
   // Get user profile
@@ -111,7 +111,7 @@ function createAuthRoutes(dependencies = {}) {
     normalRateLimit,
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
-    (req, res) => userAuthenticationController.getProfile(req, res)
+    (req, res) => userAuthenticationController.getProfile(req, res),
   );
 
   // Update user profile
@@ -121,7 +121,7 @@ function createAuthRoutes(dependencies = {}) {
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
     validationRules.updateProfile,
-    (req, res) => userAuthenticationController.updateProfile(req, res)
+    (req, res) => userAuthenticationController.updateProfile(req, res),
   );
 
   // Token verification endpoint
@@ -144,7 +144,7 @@ function createAuthRoutes(dependencies = {}) {
           },
         },
       });
-    }
+    },
   );
 
   /**
@@ -182,7 +182,7 @@ function createAuthRoutes(dependencies = {}) {
           message: 'Error retrieving users',
         });
       }
-    }
+    },
   );
 
   // Update user status (Admin only)
@@ -212,7 +212,7 @@ function createAuthRoutes(dependencies = {}) {
           message: 'Error updating user status',
         });
       }
-    }
+    },
   );
 
   /**
@@ -258,7 +258,7 @@ function createAuthRoutes(dependencies = {}) {
    * Error handling middleware
    */
   router.use((error, req, res, next) => {
-    console.error('[AuthRoutes] Unhandled error:', error);
+    logger.error('[AuthRoutes] Unhandled error:', error);
 
     // Don't expose internal errors in production
     const isDevelopment = process.env.NODE_ENV === 'development';

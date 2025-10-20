@@ -78,7 +78,7 @@ describe('Authentication Middleware', () => {
         expect.objectContaining({
           success: false,
           error: 'UNAUTHORIZED', // Changed from stringContaining to exact match
-        })
+        }),
       );
       expect(mockNext).not.toHaveBeenCalled();
     });
@@ -104,7 +104,7 @@ describe('Authentication Middleware', () => {
       const reallyExpiredToken = jwt.sign(
         { userId: '507f1f77bcf86cd799439011', type: 'access' },
         process.env.JWT_ACCESS_SECRET,
-        { expiresIn: '0s' }
+        { expiresIn: '0s' },
       );
 
       mockReq.headers.authorization = `Bearer ${reallyExpiredToken}`;

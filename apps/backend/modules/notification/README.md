@@ -384,7 +384,7 @@ const { initializeNotification } = require('./modules/notification');
 const notificationModule = await initializeNotification(
   db, // MongoDB instance
   authMiddleware, // Authentication middleware
-  adminMiddleware // Admin middleware (optional)
+  adminMiddleware, // Admin middleware (optional)
 );
 
 // Use in Express app
@@ -422,7 +422,7 @@ await service.sendCustomNotification(
     priority: 'high',
     channels: ['inapp', 'email'],
     metadata: { category: 'urgent' },
-  }
+  },
 );
 ```
 
@@ -433,7 +433,7 @@ await service.broadcastAnnouncement(
   'ข่าวสารทั่วไป', // Title
   'ระบบอัปเดตฟีเจอร์ใหม่', // Message
   ['farmer', 'reviewer'], // Target roles
-  'medium' // Priority
+  'medium', // Priority
 );
 ```
 

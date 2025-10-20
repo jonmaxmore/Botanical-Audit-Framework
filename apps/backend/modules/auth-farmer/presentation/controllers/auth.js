@@ -58,7 +58,7 @@ class AuthController {
         },
       });
     } catch (error) {
-      console.error('Registration error:', error);
+      logger.error('Registration error:', error);
 
       if (error.message.includes('already exists')) {
         return res.status(409).json({
@@ -110,7 +110,7 @@ class AuthController {
         },
       });
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login error:', error);
 
       if (error.message.includes('Invalid credentials')) {
         return res.status(401).json({
@@ -166,7 +166,7 @@ class AuthController {
         },
       });
     } catch (error) {
-      console.error('Email verification error:', error);
+      logger.error('Email verification error:', error);
 
       if (error.message.includes('not found') || error.message.includes('Invalid')) {
         return res.status(404).json({
@@ -205,7 +205,7 @@ class AuthController {
         message: 'If an account with that email exists, a password reset link has been sent.',
       });
     } catch (error) {
-      console.error('Password reset request error:', error);
+      logger.error('Password reset request error:', error);
 
       // Always return success to prevent email enumeration
       return res.status(200).json({
@@ -233,7 +233,7 @@ class AuthController {
         message: 'Password reset successful. You can now login with your new password.',
       });
     } catch (error) {
-      console.error('Password reset error:', error);
+      logger.error('Password reset error:', error);
 
       if (
         error.message.includes('not found') ||
@@ -275,7 +275,7 @@ class AuthController {
         data: user,
       });
     } catch (error) {
-      console.error('Get profile error:', error);
+      logger.error('Get profile error:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -322,7 +322,7 @@ class AuthController {
         data: user,
       });
     } catch (error) {
-      console.error('Update profile error:', error);
+      logger.error('Update profile error:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({

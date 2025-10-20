@@ -312,7 +312,7 @@ test.describe('Payment Processing Flow', () => {
       // Wait for payment history to load
       await expect(page.locator('table tbody tr')).toHaveCount(
         await page.locator('table tbody tr').count(),
-        { timeout: 5000 }
+        { timeout: 5000 },
       );
 
       // Click download receipt for first successful payment

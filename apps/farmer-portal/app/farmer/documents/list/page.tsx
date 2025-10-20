@@ -95,7 +95,7 @@ export default function DocumentListPage() {
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>(
-    'all'
+    'all',
   );
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchDebounce, setSearchDebounce] = useState<NodeJS.Timeout | null>(null);

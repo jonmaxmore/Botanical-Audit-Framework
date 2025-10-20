@@ -1,4 +1,5 @@
 # 👥 GACP Membership System - Complete Documentation
+
 **Version:** 2.0  
 **Date:** October 20, 2025  
 **Status:** ✅ Production Ready
@@ -8,6 +9,7 @@
 ## 🎯 Overview
 
 The GACP Membership System is a comprehensive user management platform that supports:
+
 - **Multi-role authentication** for farmers, inspectors, reviewers, and admins
 - **Profile management** with verification workflows
 - **Role-based access control (RBAC)** for security
@@ -20,6 +22,7 @@ The GACP Membership System is a comprehensive user management platform that supp
 ## 🏗️ Architecture
 
 ### **Module Structure**
+
 ```
 apps/backend/modules/user-management/
 ├── index.js                          # Module entry point
@@ -35,6 +38,7 @@ apps/backend/modules/user-management/
 ```
 
 ### **Clean Architecture Layers**
+
 1. **Domain Layer** - Core business logic (authentication, authorization)
 2. **Presentation Layer** - API controllers, routes, middleware
 3. **Infrastructure Layer** - Database models, repositories, external services
@@ -44,9 +48,11 @@ apps/backend/modules/user-management/
 ## 👤 User Roles & Permissions
 
 ### **1. FARMER** 👨‍🌾
+
 **Description:** Farm owners and operators
 
 **Permissions:**
+
 - ✅ View own farm profiles
 - ✅ Submit GACP applications
 - ✅ Upload cultivation cycle data
@@ -57,6 +63,7 @@ apps/backend/modules/user-management/
 - ❌ Cannot perform inspections
 
 **Use Cases:**
+
 - Register farm and apply for GACP certification
 - Manage cultivation cycles and harvest records
 - Track product traceability with QR codes
@@ -65,9 +72,11 @@ apps/backend/modules/user-management/
 ---
 
 ### **2. DTAM_INSPECTOR** 🔍
+
 **Description:** Field inspectors who conduct on-site audits
 
 **Permissions:**
+
 - ✅ View assigned inspection tasks
 - ✅ Conduct field inspections
 - ✅ Upload inspection photos and evidence
@@ -78,6 +87,7 @@ apps/backend/modules/user-management/
 - ❌ Cannot access unassigned tasks
 
 **Use Cases:**
+
 - Receive inspection assignments
 - Conduct on-site farm inspections
 - Document compliance with GACP standards
@@ -86,9 +96,11 @@ apps/backend/modules/user-management/
 ---
 
 ### **3. DTAM_REVIEWER** 📋
+
 **Description:** Document reviewers who evaluate applications
 
 **Permissions:**
+
 - ✅ View all pending applications
 - ✅ Review submitted documents
 - ✅ Request additional information
@@ -99,6 +111,7 @@ apps/backend/modules/user-management/
 - ❌ Cannot access admin settings
 
 **Use Cases:**
+
 - Review GACP certification applications
 - Verify document completeness and accuracy
 - Request clarifications from farmers
@@ -108,9 +121,11 @@ apps/backend/modules/user-management/
 ---
 
 ### **4. DTAM_ADMIN** 👑
+
 **Description:** System administrators with full access
 
 **Permissions:**
+
 - ✅ All DTAM_REVIEWER permissions
 - ✅ Issue/revoke certificates
 - ✅ Manage user accounts
@@ -121,6 +136,7 @@ apps/backend/modules/user-management/
 - ✅ Override workflow decisions
 
 **Use Cases:**
+
 - Final approval/rejection of certifications
 - Issue GACP certificates to qualified farms
 - Manage user roles and permissions
@@ -132,6 +148,7 @@ apps/backend/modules/user-management/
 ## 🔐 Authentication & Security
 
 ### **JWT Token System**
+
 ```javascript
 {
   "accessToken": "eyJhbGciOiJIUzI1Ni...",  // 15 minutes
@@ -142,6 +159,7 @@ apps/backend/modules/user-management/
 ```
 
 ### **Security Features**
+
 - **Password Hashing:** bcrypt with 12 rounds
 - **JWT Expiry:** Access tokens expire in 15 minutes
 - **Refresh Tokens:** Valid for 7 days
@@ -151,11 +169,12 @@ apps/backend/modules/user-management/
 - **CSRF Protection:** Secure headers and token validation
 
 ### **Password Requirements**
+
 - ✅ Minimum 8 characters
 - ✅ At least 1 uppercase letter
 - ✅ At least 1 lowercase letter
 - ✅ At least 1 number
-- ✅ At least 1 special character (@$!%*?&#)
+- ✅ At least 1 special character (@$!%\*?&#)
 - ✅ No common passwords (e.g., "Password123!")
 
 ---
@@ -165,9 +184,11 @@ apps/backend/modules/user-management/
 ### **Authentication**
 
 #### **POST /api/auth/register**
+
 Register a new user account
 
 **Request:**
+
 ```json
 {
   "email": "farmer@example.com",
@@ -180,6 +201,7 @@ Register a new user account
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -197,9 +219,11 @@ Register a new user account
 ---
 
 #### **POST /api/auth/login**
+
 Authenticate user and receive JWT tokens
 
 **Request:**
+
 ```json
 {
   "email": "farmer@example.com",
@@ -208,6 +232,7 @@ Authenticate user and receive JWT tokens
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -228,9 +253,11 @@ Authenticate user and receive JWT tokens
 ---
 
 #### **POST /api/auth/refresh**
+
 Refresh expired access token
 
 **Request:**
+
 ```json
 {
   "refreshToken": "eyJhbGciOiJIUzI1Ni..."
@@ -238,6 +265,7 @@ Refresh expired access token
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -251,14 +279,17 @@ Refresh expired access token
 ---
 
 #### **POST /api/auth/logout**
+
 Invalidate current session
 
 **Headers:**
+
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -271,14 +302,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ### **User Management**
 
 #### **GET /api/users/profile**
+
 Get current user's profile
 
 **Headers:**
+
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -299,14 +333,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ---
 
 #### **PUT /api/users/profile**
+
 Update current user's profile
 
 **Headers:**
+
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ```
 
 **Request:**
+
 ```json
 {
   "name": "John Farmer Jr.",
@@ -316,6 +353,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -332,14 +370,17 @@ Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ---
 
 #### **PUT /api/users/change-password**
+
 Change user password
 
 **Headers:**
+
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ```
 
 **Request:**
+
 ```json
 {
   "currentPassword": "OldPass123!",
@@ -349,6 +390,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -359,19 +401,23 @@ Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ---
 
 #### **GET /api/users/members** (Admin Only)
+
 Get list of all platform members
 
 **Headers:**
+
 ```
 Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ```
 
 **Query Parameters:**
+
 ```
 ?role=FARMER&page=1&limit=20&search=john
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -399,26 +445,31 @@ Authorization: Bearer eyJhbGciOiJIUzI1Ni...
 ## 🔄 User Lifecycle
 
 ### **1. Registration**
+
 ```
 User submits registration → Email verification sent → User verifies email → Account activated
 ```
 
 ### **2. Login**
+
 ```
 User enters credentials → System validates → Generate JWT tokens → Return tokens to client
 ```
 
 ### **3. Token Refresh**
+
 ```
 Access token expires → Client sends refresh token → System validates → Generate new access token
 ```
 
 ### **4. Profile Management**
+
 ```
 User updates profile → System validates changes → Update database → Return updated profile
 ```
 
 ### **5. Account Lockout**
+
 ```
 5 failed login attempts → Lock account for 15 minutes → Send security alert email
 ```
@@ -428,6 +479,7 @@ User updates profile → System validates changes → Update database → Return
 ## 📊 Database Schema
 
 ### **User Model**
+
 ```javascript
 {
   _id: ObjectId,
@@ -437,23 +489,23 @@ User updates profile → System validates changes → Update database → Return
   role: String (enum: FARMER, DTAM_INSPECTOR, DTAM_REVIEWER, DTAM_ADMIN),
   phoneNumber: String,
   farmName: String (for FARMER role),
-  
+
   // Verification
   isVerified: Boolean (default: false),
   verificationToken: String,
   verificationExpires: Date,
-  
+
   // Security
   loginAttempts: Number (default: 0),
   lockUntil: Date,
   passwordChangedAt: Date,
-  
+
   // Tracking
   lastLogin: Date,
   lastLoginIP: String,
   createdAt: Date,
   updatedAt: Date,
-  
+
   // Audit
   createdBy: ObjectId,
   updatedBy: ObjectId
@@ -465,6 +517,7 @@ User updates profile → System validates changes → Update database → Return
 ## 🎓 Integration Guide
 
 ### **Step 1: Initialize Module**
+
 ```javascript
 const UserManagementModule = require('./modules/user-management');
 
@@ -472,16 +525,18 @@ const userModule = new UserManagementModule({
   database: mongoose.connection.db,
   cacheService: redisClient,
   auditService: auditLogger,
-  notificationService: emailService
+  notificationService: emailService,
 });
 ```
 
 ### **Step 2: Register Routes**
+
 ```javascript
 app.use('/api/auth', userModule.authRoutes);
 ```
 
 ### **Step 3: Protect Routes with Middleware**
+
 ```javascript
 const { requireAuth, requireRole } = userModule.authenticationMiddleware;
 
@@ -497,16 +552,19 @@ app.get('/api/admin/users', requireAuth, requireRole(['DTAM_ADMIN']), adminContr
 ## 🧪 Testing
 
 ### **Unit Tests**
+
 ```bash
 npm test -- user-management
 ```
 
 ### **Integration Tests**
+
 ```bash
 npm run test:integration -- user-management
 ```
 
 ### **Test Coverage**
+
 - Authentication: 95%
 - Authorization: 92%
 - Profile Management: 90%
@@ -517,6 +575,7 @@ npm run test:integration -- user-management
 ## 📈 Monitoring & Metrics
 
 ### **Key Metrics**
+
 - **Active Users:** Real-time count of logged-in users
 - **Registration Rate:** New users per day
 - **Login Success Rate:** % of successful logins
@@ -524,6 +583,7 @@ npm run test:integration -- user-management
 - **Token Refresh Rate:** Session management health
 
 ### **Alerts**
+
 - ⚠️ High failed login attempts (> 100/hour)
 - ⚠️ Unusual login patterns (impossible travel)
 - ⚠️ Mass account lockouts
@@ -534,6 +594,7 @@ npm run test:integration -- user-management
 ## 🚀 Future Enhancements
 
 ### **Planned Features**
+
 1. **OAuth2 Integration** - Google, Facebook, LINE login
 2. **Two-Factor Authentication (2FA)** - SMS/Email OTP
 3. **Biometric Authentication** - Face ID, Touch ID

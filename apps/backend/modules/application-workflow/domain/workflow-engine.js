@@ -18,6 +18,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../shared/logger/logger');
 const EventEmitter = require('events');
 const ApplicationStateMachine = require('./StateMachine');
 
@@ -46,7 +47,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       reminderIntervalHours: 48,
     };
 
-    console.log('[ApplicationWorkflowEngine] Initialized successfully');
+    logger.info('[ApplicationWorkflowEngine] Initialized successfully');
   }
 
   /**
@@ -103,7 +104,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return application;
     } catch (error) {
-      console.error('[WorkflowEngine] Error creating application:', error);
+      logger.error('[WorkflowEngine] Error creating application:', error);
       throw error;
     }
   }
@@ -126,7 +127,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         application,
         this.stateMachine.STATES.SUBMITTED,
         'FARMER',
-        { documents: application.documents }
+        { documents: application.documents },
       );
 
       if (!validation.valid) {
@@ -142,7 +143,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         this.stateMachine.STATES.SUBMITTED,
         userId,
         'FARMER',
-        'Application submitted for review'
+        'Application submitted for review',
       );
 
       // Auto-transition to UNDER_REVIEW after submission
@@ -152,7 +153,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[WorkflowEngine] Error submitting application:', error);
+      logger.error('[WorkflowEngine] Error submitting application:', error);
       throw error;
     }
   }
@@ -172,7 +173,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       const validation = this.stateMachine.validateTransition(
         application,
         this.stateMachine.STATES.PAYMENT_PENDING,
-        'DTAM_REVIEWER'
+        'DTAM_REVIEWER',
       );
 
       if (!validation.valid) {
@@ -196,7 +197,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         this.stateMachine.STATES.PAYMENT_PENDING,
         reviewerId,
         'DTAM_REVIEWER',
-        `Review completed. Approved for payment. ${reviewData.notes || ''}`
+        `Review completed. Approved for payment. ${reviewData.notes || ''}`,
       );
 
       // Generate payment QR code
@@ -223,7 +224,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[WorkflowEngine] Error approving for payment:', error);
+      logger.error('[WorkflowEngine] Error approving for payment:', error);
       throw error;
     }
   }
@@ -252,7 +253,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       const validation = this.stateMachine.validateTransition(
         application,
         this.stateMachine.STATES.REVISION_REQUIRED,
-        'DTAM_REVIEWER'
+        'DTAM_REVIEWER',
       );
 
       if (!validation.valid) {
@@ -273,7 +274,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         this.stateMachine.STATES.REVISION_REQUIRED,
         reviewerId,
         'DTAM_REVIEWER',
-        `Revision requested (${application.revisionCount + 1}/${this.config.maxRevisionAttempts}): ${revisionData.notes}`
+        `Revision requested (${application.revisionCount + 1}/${this.config.maxRevisionAttempts}): ${revisionData.notes}`,
       );
 
       // Send notification to farmer
@@ -287,7 +288,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[WorkflowEngine] Error requesting revision:', error);
+      logger.error('[WorkflowEngine] Error requesting revision:', error);
       throw error;
     }
   }
@@ -332,7 +333,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         targetState,
         'SYSTEM',
         'SYSTEM',
-        `Payment phase ${paymentData.phase} confirmed: ${paymentData.transactionId}`
+        `Payment phase ${paymentData.phase} confirmed: ${paymentData.transactionId}`,
       );
 
       // Handle post-payment logic
@@ -356,7 +357,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[WorkflowEngine] Error confirming payment:', error);
+      logger.error('[WorkflowEngine] Error confirming payment:', error);
       throw error;
     }
   }
@@ -376,7 +377,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       const validation = this.stateMachine.validateTransition(
         application,
         this.stateMachine.STATES.INSPECTION_SCHEDULED,
-        'DTAM_INSPECTOR'
+        'DTAM_INSPECTOR',
       );
 
       if (!validation.valid) {
@@ -398,7 +399,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         this.stateMachine.STATES.INSPECTION_SCHEDULED,
         inspectorId,
         'DTAM_INSPECTOR',
-        `Inspection scheduled for ${scheduleData.scheduledDate}`
+        `Inspection scheduled for ${scheduleData.scheduledDate}`,
       );
 
       // Send notifications
@@ -412,7 +413,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[WorkflowEngine] Error scheduling inspection:', error);
+      logger.error('[WorkflowEngine] Error scheduling inspection:', error);
       throw error;
     }
   }
@@ -433,7 +434,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         application,
         this.stateMachine.STATES.INSPECTION_COMPLETED,
         'DTAM_INSPECTOR',
-        { inspectionReport }
+        { inspectionReport },
       );
 
       if (!validation.valid) {
@@ -469,7 +470,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         this.stateMachine.STATES.INSPECTION_COMPLETED,
         inspectorId,
         'DTAM_INSPECTOR',
-        `Inspection completed successfully. Compliance score: ${complianceScore}%`
+        `Inspection completed successfully. Compliance score: ${complianceScore}%`,
       );
 
       // Auto-transition to Phase 2 payment
@@ -479,7 +480,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[WorkflowEngine] Error completing inspection:', error);
+      logger.error('[WorkflowEngine] Error completing inspection:', error);
       throw error;
     }
   }
@@ -500,7 +501,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         application,
         this.stateMachine.STATES.APPROVED,
         'DTAM_ADMIN',
-        { approverSignature: approvalData.signature }
+        { approverSignature: approvalData.signature },
       );
 
       if (!validation.valid) {
@@ -522,7 +523,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         this.stateMachine.STATES.APPROVED,
         adminId,
         'DTAM_ADMIN',
-        `Application approved for certificate issuance. ${approvalData.notes || ''}`
+        `Application approved for certificate issuance. ${approvalData.notes || ''}`,
       );
 
       // Auto-generate certificate
@@ -532,7 +533,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[WorkflowEngine] Error processing final approval:', error);
+      logger.error('[WorkflowEngine] Error processing final approval:', error);
       throw error;
     }
   }
@@ -556,7 +557,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       const validation = this.stateMachine.validateTransition(
         application,
         this.stateMachine.STATES.REJECTED,
-        userRole
+        userRole,
       );
 
       if (!validation.valid) {
@@ -580,7 +581,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         this.stateMachine.STATES.REJECTED,
         userId,
         userRole,
-        `Application rejected: ${rejectionData.reason}`
+        `Application rejected: ${rejectionData.reason}`,
       );
 
       // Send notification to farmer
@@ -594,7 +595,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[WorkflowEngine] Error rejecting application:', error);
+      logger.error('[WorkflowEngine] Error rejecting application:', error);
       throw error;
     }
   }
@@ -630,7 +631,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         paymentRequired: currentStateMetadata?.paymentRequired || false,
       };
     } catch (error) {
-      console.error('[WorkflowEngine] Error getting workflow status:', error);
+      logger.error('[WorkflowEngine] Error getting workflow status:', error);
       throw error;
     }
   }
@@ -711,7 +712,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
           this.stateMachine.STATES.UNDER_REVIEW,
           'SYSTEM',
           'SYSTEM',
-          'Automatically assigned to reviewer'
+          'Automatically assigned to reviewer',
         );
 
         // Create job ticket for reviewer
@@ -723,7 +724,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         });
       }
     } catch (error) {
-      console.error('[WorkflowEngine] Error in auto-transition to review:', error);
+      logger.error('[WorkflowEngine] Error in auto-transition to review:', error);
     }
   }
 
@@ -736,7 +737,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
           this.stateMachine.STATES.PHASE2_PAYMENT_PENDING,
           'SYSTEM',
           'SYSTEM',
-          'Automatically moved to Phase 2 payment after successful inspection'
+          'Automatically moved to Phase 2 payment after successful inspection',
         );
 
         // Generate Phase 2 payment
@@ -760,7 +761,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         });
       }
     } catch (error) {
-      console.error('[WorkflowEngine] Error in auto-transition to Phase 2 payment:', error);
+      logger.error('[WorkflowEngine] Error in auto-transition to Phase 2 payment:', error);
     }
   }
 
@@ -790,7 +791,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
           this.stateMachine.STATES.CERTIFICATE_ISSUED,
           'SYSTEM',
           'SYSTEM',
-          `Certificate issued: ${certificate.certificateNumber}`
+          `Certificate issued: ${certificate.certificateNumber}`,
         );
 
         // Send notification
@@ -801,7 +802,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         });
       }
     } catch (error) {
-      console.error('[WorkflowEngine] Error generating certificate:', error);
+      logger.error('[WorkflowEngine] Error generating certificate:', error);
     }
   }
 
@@ -859,7 +860,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       if (requirements.minCount && docs.length < requirements.minCount) {
         validationResult.errors.push(
-          `${requirements.description} requires minimum ${requirements.minCount} files, found ${docs.length}`
+          `${requirements.description} requires minimum ${requirements.minCount} files, found ${docs.length}`,
         );
         validationResult.valid = false;
       }
@@ -870,7 +871,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
           const expiryDate = new Date(doc.expiryDate);
           if (expiryDate < new Date()) {
             validationResult.errors.push(
-              `${requirements.description} has expired on ${expiryDate.toLocaleDateString()}`
+              `${requirements.description} has expired on ${expiryDate.toLocaleDateString()}`,
             );
             validationResult.valid = false;
           }
@@ -878,11 +879,11 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
         if (requirements.maxAge) {
           const docAge = Math.floor(
-            (Date.now() - new Date(doc.uploadedAt)) / (1000 * 60 * 60 * 24)
+            (Date.now() - new Date(doc.uploadedAt)) / (1000 * 60 * 60 * 24),
           );
           if (docAge > requirements.maxAge) {
             validationResult.errors.push(
-              `${requirements.description} is too old (${docAge} days, max ${requirements.maxAge} days)`
+              `${requirements.description} is too old (${docAge} days, max ${requirements.maxAge} days)`,
             );
             validationResult.valid = false;
           }
@@ -1072,7 +1073,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       }
       if (longitude < 97.345655 || longitude > 105.636812) {
         result.errors.push(
-          'Farm longitude must be within Thailand boundaries (97.35° - 105.64° E)'
+          'Farm longitude must be within Thailand boundaries (97.35° - 105.64° E)',
         );
         result.valid = false;
       }
@@ -1132,7 +1133,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         const activeApp = activeApplications[0];
         if (!['REJECTED', 'CERTIFICATE_ISSUED'].includes(activeApp.status)) {
           result.errors.push(
-            `Farmer already has an active application: ${activeApp.applicationNumber}`
+            `Farmer already has an active application: ${activeApp.applicationNumber}`,
           );
           result.valid = false;
         }
@@ -1150,7 +1151,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         result.warnings.push('Farmer profile farm information is incomplete');
       }
     } catch (error) {
-      console.error('[WorkflowEngine] Error validating farmer eligibility:', error);
+      logger.error('[WorkflowEngine] Error validating farmer eligibility:', error);
       result.errors.push('Error checking farmer eligibility');
       result.valid = false;
     }
@@ -1189,7 +1190,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       const province = application.farm.address.province.toUpperCase().replace(' ', '_');
       if (!eligibleProvinces.includes(province)) {
         result.errors.push(
-          `Farm province "${application.farm.address.province}" is not eligible for GACP certification`
+          `Farm province "${application.farm.address.province}" is not eligible for GACP certification`,
         );
         result.valid = false;
       }
@@ -1204,7 +1205,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
     // Rule 3: Farm type restrictions
     if (application.farm?.farmType === 'CONVENTIONAL') {
       result.warnings.push(
-        'Conventional farms may require additional documentation and longer processing time'
+        'Conventional farms may require additional documentation and longer processing time',
       );
     }
 

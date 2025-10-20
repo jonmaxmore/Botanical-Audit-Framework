@@ -38,21 +38,21 @@ class Logger {
           stack: error.stack,
         }
       : {};
-    console.error(formatLog(LOG_LEVELS.ERROR, `[${this.context}] ${message}`, metadata));
+    logger.error(formatLog(LOG_LEVELS.ERROR, `[${this.context}] ${message}`, metadata));
   }
 
   /**
    * Log warning message
    */
   warn(message, metadata = {}) {
-    console.warn(formatLog(LOG_LEVELS.WARN, `[${this.context}] ${message}`, metadata));
+    logger.warn(formatLog(LOG_LEVELS.WARN, `[${this.context}] ${message}`, metadata));
   }
 
   /**
    * Log info message
    */
   info(message, metadata = {}) {
-    console.log(formatLog(LOG_LEVELS.INFO, `[${this.context}] ${message}`, metadata));
+    logger.info(formatLog(LOG_LEVELS.INFO, `[${this.context}] ${message}`, metadata));
   }
 
   /**
@@ -60,7 +60,7 @@ class Logger {
    */
   debug(message, metadata = {}) {
     if (process.env.NODE_ENV === 'development' || process.env.DEBUG === 'true') {
-      console.log(formatLog(LOG_LEVELS.DEBUG, `[${this.context}] ${message}`, metadata));
+      logger.info(formatLog(LOG_LEVELS.DEBUG, `[${this.context}] ${message}`, metadata));
     }
   }
 

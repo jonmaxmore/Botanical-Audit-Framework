@@ -62,7 +62,7 @@ class CertificateController {
         certificate,
       });
     } catch (error) {
-      console.error('Error creating certificate:', error);
+      logger.error('Error creating certificate:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to create certificate',
@@ -86,7 +86,7 @@ class CertificateController {
         certificate,
       });
     } catch (error) {
-      console.error('Error getting certificate:', error);
+      logger.error('Error getting certificate:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -119,7 +119,7 @@ class CertificateController {
         certificate,
       });
     } catch (error) {
-      console.error('Error getting certificate:', error);
+      logger.error('Error getting certificate:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -166,7 +166,7 @@ class CertificateController {
         certificates,
       });
     } catch (error) {
-      console.error('Error getting certificates by user:', error);
+      logger.error('Error getting certificates by user:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve certificates',
@@ -186,7 +186,7 @@ class CertificateController {
       const result = await this.service.getAllCertificates(
         { status, standardId, search },
         parseInt(page, 10),
-        parseInt(limit, 10)
+        parseInt(limit, 10),
       );
 
       res.json({
@@ -194,7 +194,7 @@ class CertificateController {
         ...result,
       });
     } catch (error) {
-      console.error('Error getting all certificates:', error);
+      logger.error('Error getting all certificates:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve certificates',
@@ -219,7 +219,7 @@ class CertificateController {
         ...result,
       });
     } catch (error) {
-      console.error('Error verifying certificate:', error);
+      logger.error('Error verifying certificate:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to verify certificate',
@@ -247,7 +247,7 @@ class CertificateController {
         certificate: newCertificate,
       });
     } catch (error) {
-      console.error('Error renewing certificate:', error);
+      logger.error('Error renewing certificate:', error);
 
       if (error.message.includes('only be renewed within')) {
         return res.status(400).json({
@@ -289,7 +289,7 @@ class CertificateController {
         ...result,
       });
     } catch (error) {
-      console.error('Error revoking certificate:', error);
+      logger.error('Error revoking certificate:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -334,7 +334,7 @@ class CertificateController {
         certificateNumber: certificate.certificateNumber,
       });
     } catch (error) {
-      console.error('Error downloading certificate:', error);
+      logger.error('Error downloading certificate:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to download certificate',
@@ -356,7 +356,7 @@ class CertificateController {
         stats,
       });
     } catch (error) {
-      console.error('Error getting certificate stats:', error);
+      logger.error('Error getting certificate stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve certificate statistics',
@@ -381,7 +381,7 @@ class CertificateController {
         certificates,
       });
     } catch (error) {
-      console.error('Error getting expiring certificates:', error);
+      logger.error('Error getting expiring certificates:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve expiring certificates',
@@ -413,7 +413,7 @@ class CertificateController {
         ...result,
       });
     } catch (error) {
-      console.error('Error updating PDF info:', error);
+      logger.error('Error updating PDF info:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to update PDF info',

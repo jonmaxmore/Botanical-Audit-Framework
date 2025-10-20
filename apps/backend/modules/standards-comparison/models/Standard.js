@@ -30,7 +30,7 @@ const criterionSchema = new mongoose.Schema(
     description: String,
     examples: [String],
   },
-  { _id: false }
+  { _id: false },
 );
 
 const requirementSchema = new mongoose.Schema(
@@ -46,7 +46,7 @@ const requirementSchema = new mongoose.Schema(
     description: String,
     criteria: [criterionSchema],
   },
-  { _id: false }
+  { _id: false },
 );
 
 const standardSchema = new mongoose.Schema(
@@ -102,7 +102,7 @@ const standardSchema = new mongoose.Schema(
   },
   {
     collection: 'standards',
-  }
+  },
 );
 
 // Indexes
@@ -136,7 +136,7 @@ standardSchema.methods.getCriteriaByPriority = function (priority) {
         ...c.toObject(),
         category: requirement.category,
         categoryTitle: requirement.title,
-      }))
+      })),
     );
   }
 

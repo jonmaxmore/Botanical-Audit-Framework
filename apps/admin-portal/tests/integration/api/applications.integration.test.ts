@@ -91,7 +91,7 @@ describe('Applications API Integration Tests', () => {
             applicationType: 'GAP_VEGETABLES',
             // Missing required fields
           } as any,
-        })
+        }),
       ).rejects.toThrow();
     });
   });
@@ -424,7 +424,7 @@ describe('Applications API Integration Tests', () => {
             crops: ['Tomato'],
             status: 'DRAFT',
           },
-        })
+        }),
       );
 
       await Promise.all(promises);

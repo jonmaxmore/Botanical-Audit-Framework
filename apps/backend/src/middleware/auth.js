@@ -295,7 +295,7 @@ const authenticateApiKey = async (req, res, next) => {
 };
 
 // Wrapper for backward compatibility with applications.js
-const authorize = (rolesArray) => {
+const authorize = rolesArray => {
   return requireRole(...rolesArray);
 };
 

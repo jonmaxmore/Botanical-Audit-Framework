@@ -38,7 +38,7 @@ describe('Business Logic: Payment Timeout', () => {
       const actualExpiresAt = payment.expiresAt.getTime();
       expect(actualExpiresAt).toBeGreaterThanOrEqual(expectedExpiresAt);
       expect(actualExpiresAt).toBeLessThanOrEqual(
-        afterCreate + PAYMENT_TIMEOUT_MINUTES * 60 * 1000
+        afterCreate + PAYMENT_TIMEOUT_MINUTES * 60 * 1000,
       );
     });
 

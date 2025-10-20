@@ -75,7 +75,7 @@ class StandardsComparisonManagementUseCase {
     try {
       this.logger.info('Creating standards comparison', {
         farmId: comparisonData.farmId,
-        comparisonName: comparisonData.comparisonName
+        comparisonName: comparisonData.comparisonName,
       });
 
       // Step 1: Validate Farm และตรวจสอบข้อมูลพื้นฐาน
@@ -84,7 +84,7 @@ class StandardsComparisonManagementUseCase {
       // Step 2: Prepare Baseline Standard
       const baselineStandard = await this.prepareBaselineStandard(
         comparisonData.baselineStandardId || 'GACP_THAILAND_2024',
-        farmData
+        farmData,
       );
 
       // Step 3: Initialize Standards Comparison Entity
@@ -97,8 +97,8 @@ class StandardsComparisonManagementUseCase {
           ...comparisonData.analysisParameters,
           autoDataCollection: true,
           includeHistoricalData: true,
-          detailLevel: comparisonData.detailLevel || 'comprehensive'
-        }
+          detailLevel: comparisonData.detailLevel || 'comprehensive',
+        },
       });
 
       // Step 4: Configure Target Standards
@@ -120,7 +120,7 @@ class StandardsComparisonManagementUseCase {
 
       this.logger.info('Standards comparison created successfully', {
         comparisonId: savedComparison.id,
-        farmId: savedComparison.farmId
+        farmId: savedComparison.farmId,
       });
 
       return savedComparison;
@@ -199,7 +199,7 @@ class StandardsComparisonManagementUseCase {
       this.logger.info('Updating comparison configuration', {
         comparisonId,
         updateFields: Object.keys(updateData),
-        updatedBy
+        updatedBy,
       });
 
       // ดึงข้อมูลปัจจุบัน
@@ -225,9 +225,9 @@ class StandardsComparisonManagementUseCase {
         {
           ...updateData,
           lastModified: new Date(),
-          version: currentComparison.version + 1
+          version: currentComparison.version + 1,
         },
-        updatedBy
+        updatedBy,
       );
 
       // หากมีการแก้ไข analysis parameters ให้ reset ข้อมูลการวิเคราะห์
@@ -237,7 +237,7 @@ class StandardsComparisonManagementUseCase {
 
       this.logger.info('Comparison configuration updated successfully', {
         comparisonId,
-        newVersion: updatedComparison.version
+        newVersion: updatedComparison.version,
       });
 
       return updatedComparison;
@@ -282,13 +282,13 @@ class StandardsComparisonManagementUseCase {
       // อัปเดตสถานะ
       await this.standardsComparisonRepository.update(comparisonId, {
         status: 'collecting_data',
-        dataCollectionStarted: new Date()
+        dataCollectionStarted: new Date(),
       });
 
       // Step 1: Collect Farm Management Data
       const farmManagementData = await this.collectFarmManagementData(
         comparison.farmId,
-        options.dateRange
+        options.dateRange,
       );
 
       // Step 2: Collect Survey Data
@@ -305,13 +305,13 @@ class StandardsComparisonManagementUseCase {
         farmManagement: farmManagementData,
         surveys: surveyData,
         trackTrace: trackTraceData,
-        applications: applicationData
+        applications: applicationData,
       });
 
       // Step 6: Validate และ Score Data
       const validatedPractices = await this.validateAndScorePractices(
         integratedPractices,
-        comparison.baselineStandard
+        comparison.baselineStandard,
       );
 
       // Step 7: Update Comparison Entity
@@ -322,14 +322,14 @@ class StandardsComparisonManagementUseCase {
         dataCollectionSummary: {
           totalDataPoints: this.countDataPoints(validatedPractices),
           completenessScore: this.calculateCompletenessScore(validatedPractices),
-          lastCollected: new Date()
-        }
+          lastCollected: new Date(),
+        },
       });
 
       this.logger.info('Current practices data collected successfully', {
         comparisonId,
         dataPoints: updatedComparison.dataCollectionSummary.totalDataPoints,
-        completenessScore: updatedComparison.dataCollectionSummary.completenessScore
+        completenessScore: updatedComparison.dataCollectionSummary.completenessScore,
       });
 
       return updatedComparison;
@@ -341,8 +341,8 @@ class StandardsComparisonManagementUseCase {
         status: 'error',
         errorDetails: {
           message: error.message,
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       });
 
       throw new Error(`Data collection failed: ${error.message}`);
@@ -383,7 +383,7 @@ class StandardsComparisonManagementUseCase {
       // อัปเดตสถานะเป็น analyzing
       await this.standardsComparisonRepository.update(comparisonId, {
         status: 'analyzing',
-        analysisStarted: new Date()
+        analysisStarted: new Date(),
       });
 
       // ดำเนินการวิเคราะห์ผ่าน domain entity
@@ -401,7 +401,7 @@ class StandardsComparisonManagementUseCase {
         comparisonResults: enhancedResults,
         detailedReports: detailedReports,
         analysisCompleted: new Date(),
-        nextReviewDate: this.calculateNextReviewDate(enhancedResults)
+        nextReviewDate: this.calculateNextReviewDate(enhancedResults),
       });
 
       // ส่งการแจ้งเตือนผลการวิเคราะห์
@@ -410,7 +410,7 @@ class StandardsComparisonManagementUseCase {
       this.logger.info('Standards analysis completed successfully', {
         comparisonId,
         overallScore: finalComparison.overallComplianceScore,
-        criticalGaps: finalComparison.criticalGapsCount
+        criticalGaps: finalComparison.criticalGapsCount,
       });
 
       return finalComparison;
@@ -423,8 +423,8 @@ class StandardsComparisonManagementUseCase {
         errorDetails: {
           phase: 'analysis',
           message: error.message,
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       });
 
       throw new Error(`Standards analysis failed: ${error.message}`);
@@ -459,9 +459,9 @@ class StandardsComparisonManagementUseCase {
             summaryMetrics: await this.calculateComparisonSummary(comparison),
             trendsData: options.includeTrends
               ? await this.calculateComparisonTrends(comparison)
-              : null
+              : null,
           };
-        })
+        }),
       );
 
       // คำนวณสถิติรวมของฟาร์ม
@@ -470,7 +470,7 @@ class StandardsComparisonManagementUseCase {
       return {
         comparisons: enrichedComparisons,
         farmMetrics: farmMetrics,
-        pagination: comparisons.pagination
+        pagination: comparisons.pagination,
       };
     } catch (error) {
       this.logger.error('Failed to get farm comparisons:', error);
@@ -509,7 +509,7 @@ class StandardsComparisonManagementUseCase {
         format: reportOptions.format || 'comprehensive',
         language: reportOptions.language || 'thai',
         includeCharts: reportOptions.includeCharts !== false,
-        includeAppendix: reportOptions.includeAppendix !== false
+        includeAppendix: reportOptions.includeAppendix !== false,
       });
 
       // บันทึกรายงานใน repository
@@ -518,7 +518,7 @@ class StandardsComparisonManagementUseCase {
       this.logger.info('Improvement report generated successfully', {
         comparisonId,
         reportId: report.id,
-        pages: report.pageCount
+        pages: report.pageCount,
       });
 
       return report;
@@ -546,7 +546,7 @@ class StandardsComparisonManagementUseCase {
     return {
       ...standard,
       applicableVersion: this.determineApplicableVersion(standard, farmData),
-      customizations: this.generateStandardCustomizations(standard, farmData)
+      customizations: this.generateStandardCustomizations(standard, farmData),
     };
   }
 
@@ -555,7 +555,7 @@ class StandardsComparisonManagementUseCase {
     return {
       ...standard,
       ...targetStandardData,
-      preparedDate: new Date()
+      preparedDate: new Date(),
     };
   }
 
@@ -563,7 +563,7 @@ class StandardsComparisonManagementUseCase {
     // Implementation for setting up automated data collection
     this.logger.info('Setting up data collection pipeline', {
       comparisonId: comparison.id,
-      farmId: comparison.farmId
+      farmId: comparison.farmId,
     });
   }
 
@@ -593,7 +593,7 @@ class StandardsComparisonManagementUseCase {
               ? 50
               : 25,
       analysis: comparison.status === 'completed' ? 100 : 0,
-      reporting: comparison.detailedReports ? 100 : 0
+      reporting: comparison.detailedReports ? 100 : 0,
     };
   }
 
@@ -613,7 +613,7 @@ class StandardsComparisonManagementUseCase {
       comparisonResults: {},
       gapAnalysis: {},
       improvementPlan: {},
-      status: 'draft'
+      status: 'draft',
     });
   }
 
@@ -639,7 +639,7 @@ class StandardsComparisonManagementUseCase {
     return {
       integratedAt: new Date(),
       sources: Object.keys(dataCollection),
-      ...dataCollection
+      ...dataCollection,
     };
   }
 
@@ -648,7 +648,7 @@ class StandardsComparisonManagementUseCase {
     return {
       ...practices,
       validationScore: 85,
-      validatedAt: new Date()
+      validatedAt: new Date(),
     };
   }
 
@@ -684,7 +684,7 @@ class StandardsComparisonManagementUseCase {
     await this.notificationService.sendComparisonCompleted({
       comparisonId: comparison.id,
       farmId: comparison.farmId,
-      overallScore: comparison.overallComplianceScore
+      overallScore: comparison.overallComplianceScore,
     });
   }
 
@@ -693,7 +693,7 @@ class StandardsComparisonManagementUseCase {
     return {
       overallScore: comparison.overallComplianceScore,
       status: comparison.status,
-      lastAnalysis: comparison.lastAnalysisDate
+      lastAnalysis: comparison.lastAnalysisDate,
     };
   }
 
@@ -709,7 +709,7 @@ class StandardsComparisonManagementUseCase {
       averageScore:
         comparisons.reduce((sum, c) => sum + (c.overallComplianceScore || 0), 0) /
         comparisons.length,
-      lastAssessment: new Date()
+      lastAssessment: new Date(),
     };
   }
 

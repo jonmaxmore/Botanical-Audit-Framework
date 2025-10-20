@@ -17,7 +17,7 @@
 ✅ **Automated Testing** - 32 test cases อัตโนมัติ  
 ✅ **Test Data Ready** - 13 users, 10 farms, 13 applications  
 ✅ **Scripts Ready** - Seed data + Test runner พร้อมใช้งาน  
-✅ **Quick Start Guide** - คู่มือเริ่มต้นภาษาไทย  
+✅ **Quick Start Guide** - คู่มือเริ่มต้นภาษาไทย
 
 ---
 
@@ -25,24 +25,26 @@
 
 ### 1. Documentation (4 Files)
 
-| Document | Pages | Description |
-|----------|-------|-------------|
-| **UAT_TEST_PLAN.md** | 60+ | แผนการทดสอบ 92 test cases |
-| **UAT_MANUAL_TH.md** | 80+ | คู่มือภาษาไทยทีละขั้นตอน |
-| **UAT_IMPLEMENTATION_SUMMARY.md** | 30+ | สรุป technical ฉบับสมบูรณ์ |
-| **UAT_QUICK_START.md** | 20+ | คู่มือเริ่มต้นใน 5 นาที |
+| Document                          | Pages | Description                |
+| --------------------------------- | ----- | -------------------------- |
+| **UAT_TEST_PLAN.md**              | 60+   | แผนการทดสอบ 92 test cases  |
+| **UAT_MANUAL_TH.md**              | 80+   | คู่มือภาษาไทยทีละขั้นตอน   |
+| **UAT_IMPLEMENTATION_SUMMARY.md** | 30+   | สรุป technical ฉบับสมบูรณ์ |
+| **UAT_QUICK_START.md**            | 20+   | คู่มือเริ่มต้นใน 5 นาที    |
 
 **Total:** ~200 หน้า
 
 ### 2. Automation Scripts (2 Files)
 
 #### `seed-uat-data.js` (700+ lines)
+
 - สร้าง 13 test users (รหัสผ่าน bcrypt)
 - สร้าง 10 farms ทั่ว 4 ภูมิภาค
 - สร้าง 13 applications ในสถานะต่างๆ
 - รองรับ MongoDB schemas
 
 #### `run-uat-tests.js` (500+ lines)
+
 - ทดสอบ API endpoints ทั้งหมด
 - ทดสอบ Authentication ทุก role
 - สรุปผล Pass/Fail อัตโนมัติ
@@ -58,28 +60,28 @@
 
 ## 👥 User Roles Coverage (100%)
 
-| # | Role | Users | Test Cases | Status |
-|---|------|-------|-----------|--------|
-| 1 | 👨‍🌾 **Farmer** | 5 | 6 | ✅ Ready |
-| 2 | 👔 **Reviewer** | 2 | 5 | ✅ Ready |
-| 3 | 🔍 **Inspector** | 3 | 5 | ✅ Ready |
-| 4 | ✅ **Approver** | 2 | 6 | ✅ Ready |
-| 5 | 👑 **Admin** | 1 | 10 | ✅ Ready |
-| | **TOTAL** | **13** | **32** | ✅ **100%** |
+| #   | Role             | Users  | Test Cases | Status      |
+| --- | ---------------- | ------ | ---------- | ----------- |
+| 1   | 👨‍🌾 **Farmer**    | 5      | 6          | ✅ Ready    |
+| 2   | 👔 **Reviewer**  | 2      | 5          | ✅ Ready    |
+| 3   | 🔍 **Inspector** | 3      | 5          | ✅ Ready    |
+| 4   | ✅ **Approver**  | 2      | 6          | ✅ Ready    |
+| 5   | 👑 **Admin**     | 1      | 10         | ✅ Ready    |
+|     | **TOTAL**        | **13** | **32**     | ✅ **100%** |
 
 ---
 
 ## 🧩 Module Coverage (100%)
 
-| # | Module | Features | Test Cases | API Endpoints |
-|---|--------|----------|-----------|--------------|
-| 1 | **Member Management** | 8 | 10 | 8 |
-| 2 | **Certification** | 15 | 30 | 12 |
-| 3 | **Farm Management** | 10 | 15 | 9 |
-| 4 | **Track & Trace** | 11 | 12 | 6 |
-| 5 | **Survey** | 12 | 15 | 8 |
-| 6 | **GACP Compare** | 10 | 10 | 6 |
-| | **TOTAL** | **66** | **92** | **49** |
+| #   | Module                | Features | Test Cases | API Endpoints |
+| --- | --------------------- | -------- | ---------- | ------------- |
+| 1   | **Member Management** | 8        | 10         | 8             |
+| 2   | **Certification**     | 15       | 30         | 12            |
+| 3   | **Farm Management**   | 10       | 15         | 9             |
+| 4   | **Track & Trace**     | 11       | 12         | 6             |
+| 5   | **Survey**            | 12       | 15         | 8             |
+| 6   | **GACP Compare**      | 10       | 10         | 6             |
+|     | **TOTAL**             | **66**   | **92**     | **49**        |
 
 ---
 
@@ -134,6 +136,7 @@ Admin (1):
 ## 🚀 Quick Start Commands
 
 ### Setup UAT Environment
+
 ```bash
 # 1. Setup environment file
 npm run uat:setup
@@ -154,6 +157,7 @@ npm run uat:all
 ### Expected Results
 
 **After Seeding:**
+
 ```
 ✅ MongoDB connected successfully
 ✅ Created 13 users
@@ -164,6 +168,7 @@ npm run uat:all
 ```
 
 **After Testing:**
+
 ```
 📊 TEST SUMMARY
 Total: 32
@@ -178,22 +183,22 @@ Total: 32
 
 ### Coverage Statistics
 
-| Metric | Target | Achieved | Status |
-|--------|--------|----------|--------|
-| User Roles | 5 | 5 | ✅ 100% |
-| Modules | 6 | 6 | ✅ 100% |
-| Test Cases | 92 | 92 | ✅ 100% |
-| API Endpoints | ~50 | 49 | ✅ 98% |
+| Metric        | Target   | Achieved | Status  |
+| ------------- | -------- | -------- | ------- |
+| User Roles    | 5        | 5        | ✅ 100% |
+| Modules       | 6        | 6        | ✅ 100% |
+| Test Cases    | 92       | 92       | ✅ 100% |
+| API Endpoints | ~50      | 49       | ✅ 98%  |
 | Documentation | Complete | Complete | ✅ 100% |
 
 ### Quality Metrics
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| Pass Rate | ≥ 95% | ⏳ TBD |
-| Critical Bugs | 0 | ⏳ TBD |
-| Response Time | < 3s | ⏳ TBD |
-| Uptime | > 99% | ⏳ TBD |
+| Metric        | Target | Status |
+| ------------- | ------ | ------ |
+| Pass Rate     | ≥ 95%  | ⏳ TBD |
+| Critical Bugs | 0      | ⏳ TBD |
+| Response Time | < 3s   | ⏳ TBD |
+| Uptime        | > 99%  | ⏳ TBD |
 
 ---
 
@@ -201,31 +206,32 @@ Total: 32
 
 ### Week 1: Manual Testing (Oct 25-31, 2025)
 
-| Day | Focus | Activities |
-|-----|-------|-----------|
-| **Mon** | Farmer | Registration, Farm setup, Applications |
-| **Tue** | Farmer | Surveys, Track & Trace, GACP Compare |
-| **Wed** | Reviewer | Review applications, Assign inspectors |
-| **Thu** | Inspector | Conduct inspections, Upload evidence |
-| **Fri** | Inspector | Complete reports, Submit findings |
-| **Sat** | Approver | Review reports, Approve/Reject |
-| **Sun** | Admin | User management, System config, Reports |
+| Day     | Focus     | Activities                              |
+| ------- | --------- | --------------------------------------- |
+| **Mon** | Farmer    | Registration, Farm setup, Applications  |
+| **Tue** | Farmer    | Surveys, Track & Trace, GACP Compare    |
+| **Wed** | Reviewer  | Review applications, Assign inspectors  |
+| **Thu** | Inspector | Conduct inspections, Upload evidence    |
+| **Fri** | Inspector | Complete reports, Submit findings       |
+| **Sat** | Approver  | Review reports, Approve/Reject          |
+| **Sun** | Admin     | User management, System config, Reports |
 
 ### Week 2: Integration Testing (Nov 1-8, 2025)
 
-| Day | Focus | Activities |
-|-----|-------|-----------|
-| **Mon-Tue** | End-to-End | Complete certification workflow |
-| **Wed** | Performance | Load testing, Response time |
-| **Thu** | Security | Auth, Authorization, Data encryption |
-| **Fri** | Bug Fixes | Address critical issues |
-| **Sat-Sun** | Documentation | Update docs, Final testing |
+| Day         | Focus         | Activities                           |
+| ----------- | ------------- | ------------------------------------ |
+| **Mon-Tue** | End-to-End    | Complete certification workflow      |
+| **Wed**     | Performance   | Load testing, Response time          |
+| **Thu**     | Security      | Auth, Authorization, Data encryption |
+| **Fri**     | Bug Fixes     | Address critical issues              |
+| **Sat-Sun** | Documentation | Update docs, Final testing           |
 
 ---
 
 ## ✅ Acceptance Criteria
 
 ### Phase 1: Setup (Day 1)
+
 - [x] MongoDB installed and running
 - [x] .env.uat configured
 - [x] Test data seeded successfully
@@ -233,6 +239,7 @@ Total: 32
 - [x] All routes loading
 
 ### Phase 2: Testing (Week 1-2)
+
 - [ ] All 5 roles tested by real users
 - [ ] All 6 modules tested end-to-end
 - [ ] 92 test cases executed
@@ -240,6 +247,7 @@ Total: 32
 - [ ] Bugs documented and tracked
 
 ### Phase 3: Sign-off (End of Week 2)
+
 - [ ] All critical bugs fixed
 - [ ] Documentation updated
 - [ ] User feedback incorporated
@@ -251,6 +259,7 @@ Total: 32
 ## 🎯 Success Criteria
 
 ### Must Have (Critical)
+
 - ✅ All 5 roles can login
 - ✅ Farmer can submit application
 - ✅ Inspector can complete checklist
@@ -259,6 +268,7 @@ Total: 32
 - ✅ All data persists correctly
 
 ### Should Have (High Priority)
+
 - ✅ Email notifications working
 - ✅ File upload/download
 - ✅ PDF certificate generation
@@ -266,6 +276,7 @@ Total: 32
 - ✅ Audit logs recording
 
 ### Nice to Have (Medium Priority)
+
 - ⏳ Mobile responsive design
 - ⏳ Real-time notifications
 - ⏳ Advanced reporting
@@ -278,23 +289,23 @@ Total: 32
 
 ### During UAT
 
-| KPI | Target | Measurement |
-|-----|--------|------------|
-| **Test Execution Rate** | 100% | Tests completed / Total tests |
-| **Pass Rate** | ≥ 95% | Passed tests / Executed tests |
-| **Bug Detection Rate** | High | Bugs found / Test cases |
-| **Critical Bugs** | 0 | P0/P1 bugs remaining |
-| **User Satisfaction** | > 80% | Survey score |
+| KPI                     | Target | Measurement                   |
+| ----------------------- | ------ | ----------------------------- |
+| **Test Execution Rate** | 100%   | Tests completed / Total tests |
+| **Pass Rate**           | ≥ 95%  | Passed tests / Executed tests |
+| **Bug Detection Rate**  | High   | Bugs found / Test cases       |
+| **Critical Bugs**       | 0      | P0/P1 bugs remaining          |
+| **User Satisfaction**   | > 80%  | Survey score                  |
 
 ### Post-UAT
 
-| KPI | Target | Measurement |
-|-----|--------|------------|
-| **Bug Fix Rate** | 100% | Fixed bugs / Total bugs |
-| **Documentation Quality** | > 90% | Completeness score |
-| **System Stability** | > 99% | Uptime percentage |
-| **Performance** | < 3s | Average response time |
-| **Stakeholder Approval** | Yes | Sign-off received |
+| KPI                       | Target | Measurement             |
+| ------------------------- | ------ | ----------------------- |
+| **Bug Fix Rate**          | 100%   | Fixed bugs / Total bugs |
+| **Documentation Quality** | > 90%  | Completeness score      |
+| **System Stability**      | > 99%  | Uptime percentage       |
+| **Performance**           | < 3s   | Average response time   |
+| **Stakeholder Approval**  | Yes    | Sign-off received       |
 
 ---
 
@@ -302,13 +313,13 @@ Total: 32
 
 ### Identified Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|-----------|
-| MongoDB connection fails | Low | High | Provide Docker alternative |
-| Users forget credentials | Medium | Low | Password reset feature |
-| Performance issues | Medium | Medium | Load testing + optimization |
-| Data corruption | Low | High | Automated backups |
-| Browser compatibility | Low | Medium | Test on major browsers |
+| Risk                     | Probability | Impact | Mitigation                  |
+| ------------------------ | ----------- | ------ | --------------------------- |
+| MongoDB connection fails | Low         | High   | Provide Docker alternative  |
+| Users forget credentials | Medium      | Low    | Password reset feature      |
+| Performance issues       | Medium      | Medium | Load testing + optimization |
+| Data corruption          | Low         | High   | Automated backups           |
+| Browser compatibility    | Low         | Medium | Test on major browsers      |
 
 ---
 
@@ -316,12 +327,12 @@ Total: 32
 
 ### UAT Team
 
-| Role | Name | Contact |
-|------|------|---------|
-| **Project Manager** | [TBD] | pm@botanical.test |
-| **QA Lead** | [TBD] | qa@botanical.test |
-| **Technical Lead** | [TBD] | tech@botanical.test |
-| **Business Analyst** | [TBD] | ba@botanical.test |
+| Role                 | Name  | Contact             |
+| -------------------- | ----- | ------------------- |
+| **Project Manager**  | [TBD] | pm@botanical.test   |
+| **QA Lead**          | [TBD] | qa@botanical.test   |
+| **Technical Lead**   | [TBD] | tech@botanical.test |
+| **Business Analyst** | [TBD] | ba@botanical.test   |
 
 ### Support Channels
 
@@ -336,6 +347,7 @@ Total: 32
 ## 📝 Next Actions
 
 ### Immediate (Today)
+
 1. ✅ Review UAT documentation
 2. ✅ Verify all scripts working
 3. ✅ Test MongoDB connection
@@ -343,6 +355,7 @@ Total: 32
 5. ✅ Verify test users created
 
 ### This Week (Oct 21-24)
+
 1. ⏳ Schedule UAT kickoff meeting
 2. ⏳ Recruit test users (5 roles)
 3. ⏳ Setup bug tracking system
@@ -350,6 +363,7 @@ Total: 32
 5. ⏳ Setup monitoring/logging
 
 ### Next 2 Weeks (Oct 25 - Nov 8)
+
 1. ⏳ Execute UAT test plan
 2. ⏳ Daily standup meetings
 3. ⏳ Track progress and bugs
@@ -357,6 +371,7 @@ Total: 32
 5. ⏳ Prepare final report
 
 ### After UAT (Nov 9+)
+
 1. ⏳ Compile test results
 2. ⏳ Stakeholder sign-off
 3. ⏳ Plan production deployment
@@ -376,7 +391,7 @@ Total: 32
 ✅ **13 test applications** in various states  
 ✅ **92 test cases** covering all scenarios  
 ✅ **49 API endpoints** ready for testing  
-✅ **5 npm scripts** for easy execution  
+✅ **5 npm scripts** for easy execution
 
 ### System Status
 
@@ -400,6 +415,7 @@ Total: 32
 ## 📊 Final Checklist
 
 ### Pre-UAT Preparation
+
 - [x] ✅ UAT documentation created
 - [x] ✅ Test data seeder ready
 - [x] ✅ Automated test runner ready
@@ -409,6 +425,7 @@ Total: 32
 - [x] ✅ Pushed to GitHub
 
 ### Ready for UAT
+
 - [ ] ⏳ Test users recruited
 - [ ] ⏳ UAT kickoff scheduled
 - [ ] ⏳ Bug tracking setup
@@ -421,15 +438,15 @@ Total: 32
 
 ## 🏆 Success Metrics Summary
 
-| Category | Metric | Status |
-|----------|--------|--------|
-| **Documentation** | 4 files, ~200 pages | ✅ Complete |
-| **Automation** | 2 scripts, 1,200+ lines | ✅ Complete |
-| **Test Data** | 13 users, 10 farms, 13 apps | ✅ Ready |
-| **Test Cases** | 92 total (32 automated) | ✅ Ready |
-| **Coverage** | 5 roles, 6 modules | ✅ 100% |
-| **Configuration** | .env.uat + npm scripts | ✅ Complete |
-| **Git Status** | Committed & pushed | ✅ Complete |
+| Category          | Metric                      | Status      |
+| ----------------- | --------------------------- | ----------- |
+| **Documentation** | 4 files, ~200 pages         | ✅ Complete |
+| **Automation**    | 2 scripts, 1,200+ lines     | ✅ Complete |
+| **Test Data**     | 13 users, 10 farms, 13 apps | ✅ Ready    |
+| **Test Cases**    | 92 total (32 automated)     | ✅ Ready    |
+| **Coverage**      | 5 roles, 6 modules          | ✅ 100%     |
+| **Configuration** | .env.uat + npm scripts      | ✅ Complete |
+| **Git Status**    | Committed & pushed          | ✅ Complete |
 
 ---
 

@@ -285,10 +285,10 @@ class MongoDBUniversalCleanup {
       // Summary
       console.log(`${db.color}📊 Summary for ${db.name}:\x1b[0m`);
       console.log(
-        `   Empty collections: ${deleteCount} ${this.dryRun ? 'would be' : 'were'} deleted`
+        `   Empty collections: ${deleteCount} ${this.dryRun ? 'would be' : 'were'} deleted`,
       );
       console.log(
-        `   Orphaned records: ${result.orphanedRecords.reduce((sum, r) => sum + r.count, 0)} ${this.dryRun ? 'would be' : 'were'} deleted`
+        `   Orphaned records: ${result.orphanedRecords.reduce((sum, r) => sum + r.count, 0)} ${this.dryRun ? 'would be' : 'were'} deleted`,
       );
       console.log('');
     } catch (error) {
@@ -377,10 +377,10 @@ class MongoDBUniversalCleanup {
       }
 
       console.log(
-        `   Empty collections deleted: ${result.emptyCollections.filter(c => c.action === 'DELETE').length}`
+        `   Empty collections deleted: ${result.emptyCollections.filter(c => c.action === 'DELETE').length}`,
       );
       console.log(
-        `   Orphaned records deleted: ${result.orphanedRecords.reduce((sum, r) => sum + r.count, 0)}`
+        `   Orphaned records deleted: ${result.orphanedRecords.reduce((sum, r) => sum + r.count, 0)}`,
       );
 
       if (result.errors.length > 0) {

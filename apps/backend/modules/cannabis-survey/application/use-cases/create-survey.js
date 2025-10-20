@@ -20,12 +20,12 @@ class CreateSurveyUseCase {
     const exists = await this.surveyRepository.surveyExistsForPeriod(
       farmId,
       surveyYear,
-      surveyPeriod
+      surveyPeriod,
     );
 
     if (exists) {
       throw new Error(
-        `Survey already exists for farm ${farmId} in ${surveyYear} period ${surveyPeriod}`
+        `Survey already exists for farm ${farmId} in ${surveyYear} period ${surveyPeriod}`,
       );
     }
 
@@ -55,7 +55,7 @@ class CreateSurveyUseCase {
         purpose: savedSurvey.purpose,
         plantType: savedSurvey.plantType,
         createdAt: savedSurvey.createdAt,
-      })
+      }),
     );
 
     return savedSurvey;

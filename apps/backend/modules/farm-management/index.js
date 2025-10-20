@@ -3,6 +3,7 @@
  * Exports all farm management module components
  */
 
+const logger = require('../../shared/logger/logger');
 const FarmManagementService = require('./services/farm-management.service');
 const FarmManagementController = require('./controllers/farm-management.controller');
 const farmRoutes = require('./routes/farm.routes');
@@ -33,7 +34,7 @@ function initializeFarmManagement(dependencies = {}) {
   // Create routes
   const router = farmRoutes({ farmService, auth });
 
-  console.log('[FarmManagement] ✅ Module initialized successfully');
+  logger.info('[FarmManagement] ✅ Module initialized successfully');
 
   return {
     router,

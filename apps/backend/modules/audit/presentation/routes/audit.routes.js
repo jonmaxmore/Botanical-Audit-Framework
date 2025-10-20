@@ -18,7 +18,7 @@ function createAuditRoutes(controller, authMiddleware) {
     '/',
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requireAnyPermission(['view_audit_logs', 'manage_system']),
-    (req, res) => controller.listAuditLogs(req, res)
+    (req, res) => controller.listAuditLogs(req, res),
   );
 
   // Get audit statistics
@@ -26,7 +26,7 @@ function createAuditRoutes(controller, authMiddleware) {
     '/statistics',
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requireAnyPermission(['view_audit_logs', 'manage_system']),
-    (req, res) => controller.getAuditStatistics(req, res)
+    (req, res) => controller.getAuditStatistics(req, res),
   );
 
   // Get user activity
@@ -34,7 +34,7 @@ function createAuditRoutes(controller, authMiddleware) {
     '/activity/:userId',
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requireAnyPermission(['view_audit_logs', 'manage_system']),
-    (req, res) => controller.getUserActivity(req, res)
+    (req, res) => controller.getUserActivity(req, res),
   );
 
   // Get audit log details
@@ -42,7 +42,7 @@ function createAuditRoutes(controller, authMiddleware) {
     '/:id',
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requireAnyPermission(['view_audit_logs', 'manage_system']),
-    (req, res) => controller.getAuditLogDetails(req, res)
+    (req, res) => controller.getAuditLogDetails(req, res),
   );
 
   return {

@@ -294,7 +294,7 @@ class SimpleReportGeneratorService {
       await fs.unlink(filePath);
       return true;
     } catch (error) {
-      console.error('Failed to delete file:', error);
+      logger.error('Failed to delete file:', error);
       return false;
     }
   }

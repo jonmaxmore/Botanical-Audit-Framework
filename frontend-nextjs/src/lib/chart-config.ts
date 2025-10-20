@@ -24,7 +24,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler
+  Filler,
 );
 
 // Chart theme colors (matching Material-UI theme)
@@ -263,7 +263,7 @@ export const generateMonthLabels = (months: number): string[] => {
       date.toLocaleDateString('th-TH', {
         month: 'short',
         year: 'numeric',
-      })
+      }),
     );
   }
 

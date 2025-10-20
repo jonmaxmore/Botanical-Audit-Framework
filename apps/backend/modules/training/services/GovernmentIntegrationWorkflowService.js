@@ -146,7 +146,7 @@ class GovernmentIntegrationWorkflowService {
           this.metrics.systemHealth[systemCode] = healthStatus;
 
           this.logger.log(
-            `[GovernmentIntegration] ${systemCode} connection: ${healthStatus.status}`
+            `[GovernmentIntegration] ${systemCode} connection: ${healthStatus.status}`,
           );
         } catch (error) {
           this.logger.error(`[GovernmentIntegration] ${systemCode} connection failed:`, error);
@@ -184,7 +184,7 @@ class GovernmentIntegrationWorkflowService {
 
     try {
       this.logger.log(
-        `[GovernmentIntegration] Starting certificate submission - ID: ${submissionId}`
+        `[GovernmentIntegration] Starting certificate submission - ID: ${submissionId}`,
       );
 
       // 1. Validate certificate data for submission
@@ -196,7 +196,7 @@ class GovernmentIntegrationWorkflowService {
       // 2. Format certificate data for government systems
       const formattedData = await this.formatCertificateForGovernment(
         certificateData,
-        validationResult
+        validationResult,
       );
 
       // 3. Submit to required government systems
@@ -208,7 +208,7 @@ class GovernmentIntegrationWorkflowService {
           const systemResult = await this.submitToGovernmentSystem(
             systemCode,
             formattedData,
-            submissionId
+            submissionId,
           );
           submissionResults.push(systemResult);
         } catch (error) {
@@ -259,14 +259,14 @@ class GovernmentIntegrationWorkflowService {
       this.updateSubmissionMetrics(submissionRecord);
 
       this.logger.log(
-        `[GovernmentIntegration] Certificate submission completed - Status: ${submissionRecord.overallStatus}`
+        `[GovernmentIntegration] Certificate submission completed - Status: ${submissionRecord.overallStatus}`,
       );
 
       return submissionRecord;
     } catch (error) {
       this.logger.error(
         `[GovernmentIntegration] Certificate submission failed - ID: ${submissionId}`,
-        error
+        error,
       );
       this.metrics.submissionsFailed++;
 
@@ -300,7 +300,7 @@ class GovernmentIntegrationWorkflowService {
 
     try {
       this.logger.log(
-        `[GovernmentIntegration] Generating ${reportPeriod} compliance report - ID: ${reportId}`
+        `[GovernmentIntegration] Generating ${reportPeriod} compliance report - ID: ${reportId}`,
       );
 
       // 1. Collect compliance data
@@ -313,7 +313,7 @@ class GovernmentIntegrationWorkflowService {
       const reportContent = await this.generateReportContent(
         complianceData,
         complianceMetrics,
-        reportPeriod
+        reportPeriod,
       );
 
       // 4. Format report for government systems
@@ -328,13 +328,13 @@ class GovernmentIntegrationWorkflowService {
           const submission = await this.submitComplianceReport(
             systemCode,
             formattedReport,
-            reportId
+            reportId,
           );
           reportSubmissions.push(submission);
         } catch (error) {
           this.logger.error(
             `[GovernmentIntegration] Report submission to ${systemCode} failed:`,
-            error
+            error,
           );
           reportSubmissions.push({
             system: systemCode,
@@ -366,14 +366,14 @@ class GovernmentIntegrationWorkflowService {
       this.metrics.reportsGenerated++;
 
       this.logger.log(
-        `[GovernmentIntegration] Compliance report generated successfully - ID: ${reportId}`
+        `[GovernmentIntegration] Compliance report generated successfully - ID: ${reportId}`,
       );
 
       return reportRecord;
     } catch (error) {
       this.logger.error(
         `[GovernmentIntegration] Compliance report generation failed - ID: ${reportId}`,
-        error
+        error,
       );
       throw error;
     }
@@ -423,7 +423,7 @@ class GovernmentIntegrationWorkflowService {
     } catch (error) {
       this.logger.error(
         `[GovernmentIntegration] Status check failed for certificate: ${certificateNumber}`,
-        error
+        error,
       );
       throw error;
     }
@@ -563,7 +563,7 @@ class GovernmentIntegrationWorkflowService {
         systemSpecificFormats[systemCode] = await this.formatForSpecificSystem(
           governmentFormat,
           systemCode,
-          systemConfig
+          systemConfig,
         );
       }
 
@@ -605,7 +605,7 @@ class GovernmentIntegrationWorkflowService {
         systemCode,
         systemConfig.services.certificateSubmission,
         'POST',
-        payload
+        payload,
       );
 
       // Process response
@@ -619,7 +619,7 @@ class GovernmentIntegrationWorkflowService {
       };
 
       this.logger.log(
-        `[GovernmentIntegration] ${systemCode} submission result: ${submissionResult.status}`
+        `[GovernmentIntegration] ${systemCode} submission result: ${submissionResult.status}`,
       );
 
       return submissionResult;
@@ -674,7 +674,7 @@ class GovernmentIntegrationWorkflowService {
             const delay = Math.pow(2, attempt) * 1000; // Exponential backoff
             await this.sleep(delay);
             this.logger.log(
-              `[GovernmentIntegration] Retrying ${systemCode} request (attempt ${attempt + 1})`
+              `[GovernmentIntegration] Retrying ${systemCode} request (attempt ${attempt + 1})`,
             );
           }
         }
@@ -684,7 +684,7 @@ class GovernmentIntegrationWorkflowService {
     } catch (error) {
       this.logger.error(
         `[GovernmentIntegration] Authenticated request failed for ${systemCode}:`,
-        error
+        error,
       );
       throw error;
     }
@@ -738,7 +738,7 @@ class GovernmentIntegrationWorkflowService {
    */
   getServiceHealth() {
     const healthySystems = Object.values(this.metrics.systemHealth).filter(
-      h => h.status === 'HEALTHY'
+      h => h.status === 'HEALTHY',
     ).length;
     const totalSystems = Object.keys(this.governmentSystems).length;
 

@@ -283,7 +283,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
 
     try {
       this.logger.info(
-        `[DocumentManagementIntegration] Initializing application documents - Operation: ${operationId}`
+        `[DocumentManagementIntegration] Initializing application documents - Operation: ${operationId}`,
       );
 
       // Determine required documents based on application type
@@ -324,7 +324,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       });
 
       this.logger.info(
-        `[DocumentManagementIntegration] Document workflow initialized - Operation: ${operationId}`
+        `[DocumentManagementIntegration] Document workflow initialized - Operation: ${operationId}`,
       );
 
       return {
@@ -340,7 +340,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[DocumentManagementIntegration] Document workflow initialization failed - Operation: ${operationId}:`,
-        error
+        error,
       );
       throw error;
     }
@@ -363,7 +363,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
 
     try {
       this.logger.info(
-        `[DocumentManagementIntegration] Processing document upload - Operation: ${operationId}`
+        `[DocumentManagementIntegration] Processing document upload - Operation: ${operationId}`,
       );
 
       // Validate document type and requirements
@@ -455,7 +455,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       // Update document with processing results
       const updatedDocument = await this._updateDocumentProcessingResults(
         savedDocument,
-        processingResults
+        processingResults,
       );
 
       // Determine next workflow step
@@ -496,7 +496,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       });
 
       this.logger.info(
-        `[DocumentManagementIntegration] Document upload processed - Operation: ${operationId}`
+        `[DocumentManagementIntegration] Document upload processed - Operation: ${operationId}`,
       );
 
       return {
@@ -507,7 +507,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[DocumentManagementIntegration] Document upload failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       // Create error audit record
@@ -534,7 +534,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
 
     try {
       this.logger.info(
-        `[DocumentManagementIntegration] Processing document state transition - Operation: ${operationId}`
+        `[DocumentManagementIntegration] Processing document state transition - Operation: ${operationId}`,
       );
 
       // Get current document
@@ -551,7 +551,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         targetState,
         document,
         transitionData,
-        actor
+        actor,
       );
 
       if (!transitionValidation.valid) {
@@ -563,7 +563,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         targetState,
         document,
         transitionData,
-        actor
+        actor,
       );
 
       // Update document state
@@ -572,7 +572,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         targetState,
         transitionData,
         actor,
-        operationId
+        operationId,
       );
 
       // Execute post-transition workflows
@@ -599,7 +599,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       this._updatePerformanceMetrics(
         'DOCUMENT_STATE_TRANSITION',
         targetState,
-        Date.now() - startTime
+        Date.now() - startTime,
       );
 
       // Emit state transition event
@@ -612,7 +612,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       });
 
       this.logger.info(
-        `[DocumentManagementIntegration] Document state transition completed - Operation: ${operationId}`
+        `[DocumentManagementIntegration] Document state transition completed - Operation: ${operationId}`,
       );
 
       return {
@@ -627,7 +627,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[DocumentManagementIntegration] Document state transition failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       await this._createAuditRecord('DOCUMENT_STATE_TRANSITION_FAILED', {
@@ -653,7 +653,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
 
     try {
       this.logger.info(
-        `[DocumentManagementIntegration] Getting document status - Operation: ${operationId}`
+        `[DocumentManagementIntegration] Getting document status - Operation: ${operationId}`,
       );
 
       // Get application documents
@@ -687,7 +687,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         recommendations: await this._generateDocumentRecommendations(
           documents,
           requirements,
-          viewerRole
+          viewerRole,
         ),
         lastUpdated: new Date(),
         processingTime: Date.now() - startTime,
@@ -698,7 +698,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       this._updatePerformanceMetrics('DOCUMENT_STATUS_VIEW', 'STATUS', Date.now() - startTime);
 
       this.logger.info(
-        `[DocumentManagementIntegration] Document status retrieved - Operation: ${operationId}`
+        `[DocumentManagementIntegration] Document status retrieved - Operation: ${operationId}`,
       );
 
       return {
@@ -709,7 +709,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[DocumentManagementIntegration] Document status retrieval failed - Operation: ${operationId}:`,
-        error
+        error,
       );
       throw error;
     }
@@ -737,7 +737,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
 
       // Calculate health score
       const healthyServices = Object.values(systemHealth.serviceStatus).filter(
-        s => s === 'healthy'
+        s => s === 'healthy',
       ).length;
       const totalServices = Object.keys(systemHealth.serviceStatus).length;
       systemHealth.healthScore = (healthyServices / totalServices) * 100;
@@ -967,7 +967,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         notes: 'Automated workflow routing',
         automated: true,
       },
-      { userId: 'SYSTEM', role: 'SYSTEM' }
+      { userId: 'SYSTEM', role: 'SYSTEM' },
     );
   }
 
@@ -977,7 +977,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     } else if (settledPromise?.status === 'rejected') {
       this.logger.warn(
         '[DocumentManagementIntegration] Service operation failed:',
-        settledPromise.reason
+        settledPromise.reason,
       );
       return {
         error: settledPromise.reason.message,

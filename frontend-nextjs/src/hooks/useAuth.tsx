@@ -331,7 +331,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     (role: string): boolean => {
       return authState.user?.role === role;
     },
-    [authState.user]
+    [authState.user],
   );
 
   /**
@@ -341,7 +341,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     (permission: string): boolean => {
       return authState.user?.permissions?.includes(permission) || false;
     },
-    [authState.user]
+    [authState.user],
   );
 
   // Context value
@@ -430,7 +430,7 @@ export const useProfile = () => {
 export const withAuth = <P extends object>(
   Component: React.ComponentType<P>,
   requiredRole?: string,
-  requiredPermission?: string
+  requiredPermission?: string,
 ) => {
   return (props: P) => {
     const { isAuthenticated, isLoading, hasRole, hasPermission, user } = useAuth();
@@ -474,7 +474,7 @@ export const useTokenRefresh = () => {
           console.error('[Auth Hook] Automatic token refresh failed:', error);
         }
       },
-      14 * 60 * 1000
+      14 * 60 * 1000,
     ); // 14 minutes
 
     return () => clearInterval(interval);

@@ -228,7 +228,7 @@ class GACPInspectionService {
       await application.updateStatus(
         'inspection_in_progress',
         inspectorId,
-        'Field inspection started'
+        'Field inspection started',
       );
 
       logger.info('Inspection initialized', {
@@ -379,14 +379,14 @@ class GACPInspectionService {
       // Determine certification recommendation
       const recommendation = this.determineCertificationRecommendation(
         overallScore,
-        complianceReport
+        complianceReport,
       );
 
       // Update application with inspection results
       application.inspectionCompleted = new Date();
       application.inspectionDuration = this.calculateActualDuration(
         application.inspectionScheduled,
-        new Date()
+        new Date(),
       );
 
       // Add final inspection assessment
@@ -408,13 +408,13 @@ class GACPInspectionService {
         await application.updateStatus(
           'inspection_completed',
           inspectorId,
-          `Inspection completed - Recommended for approval (Score: ${overallScore})`
+          `Inspection completed - Recommended for approval (Score: ${overallScore})`,
         );
       } else {
         await application.updateStatus(
           'inspection_completed',
           inspectorId,
-          `Inspection completed - ${recommendation.decision} (Score: ${overallScore})`
+          `Inspection completed - ${recommendation.decision} (Score: ${overallScore})`,
         );
       }
 
@@ -618,7 +618,7 @@ class GACPInspectionService {
 
   calculateCategoryProgress(application, category) {
     const categoryAssessments = application.assessmentScores.filter(
-      score => score.category === category
+      score => score.category === category,
     );
 
     const categoryConfig = this.constructor.CRITICAL_CONTROL_POINTS[category];
@@ -639,16 +639,16 @@ class GACPInspectionService {
     const assessedCategories = new Set(
       application.assessmentScores
         .filter(score => requiredCategories.includes(score.category))
-        .map(score => score.category)
+        .map(score => score.category),
     );
 
     const missingCategories = requiredCategories.filter(
-      category => !assessedCategories.has(category)
+      category => !assessedCategories.has(category),
     );
 
     if (missingCategories.length > 0) {
       throw new ValidationError(
-        `Incomplete inspection: Missing assessments for ${missingCategories.join(', ')}`
+        `Incomplete inspection: Missing assessments for ${missingCategories.join(', ')}`,
       );
     }
 
@@ -670,12 +670,12 @@ class GACPInspectionService {
 
     Object.entries(this.constructor.CRITICAL_CONTROL_POINTS).forEach(([category, config]) => {
       const categoryAssessments = application.assessmentScores.filter(
-        score => score.category === category
+        score => score.category === category,
       );
 
       const categoryScore = categoryAssessments.reduce(
         (sum, assessment) => sum + assessment.achievedScore,
-        0
+        0,
       );
       const categoryMaxScore = config.maxScore;
 
@@ -729,7 +729,7 @@ class GACPInspectionService {
         reason: 'Critical compliance issues identified',
         recommendations: ['Address all critical issues before reapplication'],
         correctiveActions: complianceReport.criticalIssues.map(
-          issue => `Resolve critical issue in ${issue.category}: ${issue.description}`
+          issue => `Resolve critical issue in ${issue.category}: ${issue.description}`,
         ),
       };
     }
@@ -750,7 +750,7 @@ class GACPInspectionService {
         validityPeriod: 12, // 1 year
         recommendations: complianceReport.recommendations,
         correctiveActions: complianceReport.majorIssues.map(
-          issue => `Address major issue in ${issue.category}: ${issue.description}`
+          issue => `Address major issue in ${issue.category}: ${issue.description}`,
         ),
       };
     }

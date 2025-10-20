@@ -73,7 +73,7 @@ export default function SystemSettingsForm({
 
   const handleChange = (
     field: keyof SystemSettings,
-    value: SystemSettings[keyof SystemSettings]
+    value: SystemSettings[keyof SystemSettings],
   ) => {
     setSettings(prev => ({
       ...prev,

@@ -299,7 +299,7 @@ class EventBusService extends EventEmitter {
           this.channel.nack(msg, false, true);
         }
       },
-      { noAck: false }
+      { noAck: false },
     );
 
     logger.info(`[EventBusService] RabbitMQ subscribed to queue: ${queue}`);

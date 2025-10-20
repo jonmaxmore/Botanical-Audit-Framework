@@ -55,7 +55,7 @@ describe('Password Management API', () => {
 
       // Check user has reset token
       const updatedUser = await User.findById(testUser._id).select(
-        '+passwordResetToken +passwordResetExpires'
+        '+passwordResetToken +passwordResetExpires',
       ); // Fixed: select protected fields
       expect(updatedUser.passwordResetToken).toBeDefined();
       expect(updatedUser.passwordResetExpires).toBeDefined();
@@ -104,7 +104,7 @@ describe('Password Management API', () => {
       const requests = [];
       for (let i = 0; i < 5; i++) {
         requests.push(
-          request(app).post('/api/auth/forgot-password').send({ email: testUser.email })
+          request(app).post('/api/auth/forgot-password').send({ email: testUser.email }),
         );
       }
 
@@ -141,7 +141,7 @@ describe('Password Management API', () => {
 
       // Check password was updated
       const updatedUser = await User.findById(testUser._id).select(
-        '+passwordHash +passwordResetToken +passwordResetExpires'
+        '+passwordHash +passwordResetToken +passwordResetExpires',
       ); // Fixed: select protected fields
       const passwordMatches = await bcrypt.compare(newPassword, updatedUser.passwordHash);
       expect(passwordMatches).toBe(true);

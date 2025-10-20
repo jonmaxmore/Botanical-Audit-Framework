@@ -276,7 +276,7 @@ console.log(app.isValidTransition('SUBMITTED')); // true (from DRAFT)
 const AuditLog = require('./database/models/AuditLog.model');
 const integrity = await AuditLog.verifyChainIntegrity(
   new Date('2025-10-01'),
-  new Date('2025-10-31')
+  new Date('2025-10-31'),
 );
 console.log(integrity.intact); // Should be true
 ```

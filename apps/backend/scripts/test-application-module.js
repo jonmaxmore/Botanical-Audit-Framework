@@ -17,6 +17,7 @@
  * การตรวจสอบพื้นฐานไปจนถึงการทดสอบ integration แบบ end-to-end
  */
 
+const logger = require('../shared/logger/logger');
 const path = require('path');
 const fs = require('fs');
 
@@ -262,7 +263,7 @@ class ApplicationModuleTestRunner {
     try {
       // ทดสอบ AdvancedApplicationProcessingService
       const ServiceClass = require(
-        path.join(this.moduleBasePath, 'domain/services/AdvancedApplicationProcessingService.js')
+        path.join(this.moduleBasePath, 'domain/services/AdvancedApplicationProcessingService.js'),
       );
 
       if (typeof ServiceClass !== 'function') {
@@ -276,8 +277,8 @@ class ApplicationModuleTestRunner {
       const DocumentClass = require(
         path.join(
           this.moduleBasePath,
-          'infrastructure/integrations/DocumentManagementIntegrationSystem.js'
-        )
+          'infrastructure/integrations/DocumentManagementIntegrationSystem.js',
+        ),
       );
 
       if (typeof DocumentClass !== 'function') {
@@ -291,8 +292,8 @@ class ApplicationModuleTestRunner {
       const GovClass = require(
         path.join(
           this.moduleBasePath,
-          'infrastructure/integrations/GovernmentApiIntegrationService.js'
-        )
+          'infrastructure/integrations/GovernmentApiIntegrationService.js',
+        ),
       );
 
       if (typeof GovClass !== 'function') {
@@ -306,8 +307,8 @@ class ApplicationModuleTestRunner {
       const ControllerClass = require(
         path.join(
           this.moduleBasePath,
-          'application/controllers/EnhancedApplicationProcessingController.js'
-        )
+          'application/controllers/EnhancedApplicationProcessingController.js',
+        ),
       );
 
       if (typeof ControllerClass !== 'function') {
@@ -573,7 +574,7 @@ class ApplicationModuleTestRunner {
     try {
       // ทดสอบ route creation function
       const routeModule = require(
-        path.join(this.moduleBasePath, 'presentation/routes/enhanced-application.routes.js')
+        path.join(this.moduleBasePath, 'presentation/routes/enhanced-application.routes.js'),
       );
 
       if (typeof routeModule.createEnhancedApplicationRoutes !== 'function') {
@@ -752,85 +753,85 @@ class ApplicationModuleTestRunner {
         ? ((this.testResults.passed / this.testResults.totalTests) * 100).toFixed(2)
         : 0;
 
-    console.log(`\n${'='.repeat(80)}`);
-    console.log(`${colors.bright}${colors.cyan}🏁 APPLICATION MODULE TEST RESULTS${colors.reset}`);
-    console.log(`${'='.repeat(80)}`);
+    logger.info(`\n${'='.repeat(80)}`)
+    logger.info(`${colors.bright}${colors.cyan}🏁 APPLICATION MODULE TEST RESULTS${colors.reset}`)
+    logger.info(`${'='.repeat(80)}`)
 
-    console.log(`${colors.bright}Test Summary:${colors.reset}`);
-    console.log(`  Duration: ${duration}ms`);
-    console.log(`  Total Tests: ${this.testResults.totalTests}`);
-    console.log(`  ${colors.green}✓ Passed: ${this.testResults.passed}${colors.reset}`);
-    console.log(`  ${colors.red}✗ Failed: ${this.testResults.failed}${colors.reset}`);
-    console.log(`  Pass Rate: ${passRate}%`);
+    logger.info(`${colors.bright}Test Summary:${colors.reset}`)
+    logger.info(`  Duration: ${duration}ms`)
+    logger.info(`  Total Tests: ${this.testResults.totalTests}`)
+    logger.info(`  ${colors.green}✓ Passed: ${this.testResults.passed}${colors.reset}`)
+    logger.info(`  ${colors.red}✗ Failed: ${this.testResults.failed}${colors.reset}`)
+    logger.info(`  Pass Rate: ${passRate}%`)
 
-    console.log(`\n${colors.bright}Test Coverage:${colors.reset}`);
+    logger.info(`\n${colors.bright}Test Coverage:${colors.reset}`)
     for (const [test, passed] of Object.entries(this.testCoverage)) {
       const status = passed
         ? `${colors.green}✓ PASSED${colors.reset}`
         : `${colors.red}✗ FAILED${colors.reset}`;
-      console.log(`  ${test.padEnd(25)}: ${status}`);
+      logger.info(`  ${test.padEnd(25)}: ${status}`);
     }
 
     if (this.testResults.errors.length > 0) {
-      console.log(`\n${colors.bright}${colors.red}Errors Encountered:${colors.reset}`);
+      logger.info(`\n${colors.bright}${colors.red}Errors Encountered:${colors.reset}`)
       this.testResults.errors.forEach((error, index) => {
-        console.log(`  ${index + 1}. ${error}`);
+        logger.info(`  ${index + 1}. ${error}`)
       });
     }
 
     // Overall result
     const overallSuccess = this.testResults.failed === 0 && passRate >= 90;
 
-    console.log(`\n${'='.repeat(80)}`);
+    logger.info(`\n${'='.repeat(80)}`)
     if (overallSuccess) {
       console.log(
-        `${colors.bright}${colors.green}🎉 APPLICATION MODULE VALIDATION: SUCCESS${colors.reset}`
+        `${colors.bright}${colors.green}🎉 APPLICATION MODULE VALIDATION: SUCCESS${colors.reset}`,
       );
       console.log(
-        `${colors.green}✅ All critical components validated successfully${colors.reset}`
+        `${colors.green}✅ All critical components validated successfully${colors.reset}`,
       );
-      console.log(`${colors.green}✅ Ready for integration with main system${colors.reset}`);
+      logger.info(`${colors.green}✅ Ready for integration with main system${colors.reset}`)
     } else {
       console.log(
-        `${colors.bright}${colors.red}❌ APPLICATION MODULE VALIDATION: FAILED${colors.reset}`
+        `${colors.bright}${colors.red}❌ APPLICATION MODULE VALIDATION: FAILED${colors.reset}`,
       );
-      console.log(`${colors.red}⚠️  Please fix issues before proceeding${colors.reset}`);
+      logger.info(`${colors.red}⚠️  Please fix issues before proceeding${colors.reset}`)
     }
-    console.log(`${'='.repeat(80)}\n`);
+    logger.info(`${'='.repeat(80)}\n`)
 
     return overallSuccess;
   }
 
   // Utility methods for logging
   printHeader() {
-    console.log(`\n${'='.repeat(80)}`);
+    logger.info(`\n${'='.repeat(80)}`)
     console.log(
-      `${colors.bright}${colors.blue}🚀 APPLICATION PROCESSING MODULE VALIDATION${colors.reset}`
+      `${colors.bright}${colors.blue}🚀 APPLICATION PROCESSING MODULE VALIDATION${colors.reset}`,
     );
     console.log(
-      `${colors.cyan}Enhanced Application Processing System - Component Testing${colors.reset}`
+      `${colors.cyan}Enhanced Application Processing System - Component Testing${colors.reset}`,
     );
-    console.log(`${'='.repeat(80)}\n`);
+    logger.info(`${'='.repeat(80)}\n`)
   }
 
   logTestStart(testName) {
-    console.log(`${colors.bright}${colors.yellow}🔍 Testing: ${testName}${colors.reset}`);
+    logger.info(`${colors.bright}${colors.yellow}🔍 Testing: ${testName}${colors.reset}`)
   }
 
   logTestComplete(testName, success) {
     const status = success
       ? `${colors.green}✅ PASSED${colors.reset}`
       : `${colors.red}❌ FAILED${colors.reset}`;
-    console.log(`${colors.bright}📋 ${testName}: ${status}${colors.reset}\n`);
+    logger.info(`${colors.bright}📋 ${testName}: ${status}${colors.reset}\n`)
   }
 
   logSuccess(message) {
-    console.log(`${colors.green}${message}${colors.reset}`);
+    logger.info(`${colors.green}${message}${colors.reset}`)
   }
 
   logError(context, error) {
     const errorMessage = `${context}: ${error.message}`;
-    console.log(`${colors.red}✗ ${errorMessage}${colors.reset}`);
+    logger.info(`${colors.red}✗ ${errorMessage}${colors.reset}`)
     this.testResults.errors.push(errorMessage);
   }
 }
@@ -838,9 +839,9 @@ class ApplicationModuleTestRunner {
 // เริ่มต้นการทดสอบ
 if (require.main === module) {
   console.log(
-    `${colors.bright}${colors.magenta}Application Processing Module Test Runner${colors.reset}`
+    `${colors.bright}${colors.magenta}Application Processing Module Test Runner${colors.reset}`,
   );
-  console.log(`${colors.cyan}Starting comprehensive validation...${colors.reset}\n`);
+  logger.info(`${colors.cyan}Starting comprehensive validation...${colors.reset}\n`)
 
   const testRunner = new ApplicationModuleTestRunner();
   testRunner
@@ -849,7 +850,7 @@ if (require.main === module) {
       process.exit(success ? 0 : 1);
     })
     .catch(error => {
-      console.error(`${colors.red}Test runner crashed:${colors.reset}`, error);
+      logger.error(`${colors.red}Test runner crashed:${colors.reset}`, error);
       process.exit(1);
     });
 }

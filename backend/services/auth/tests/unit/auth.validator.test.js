@@ -204,7 +204,7 @@ describe('Authentication Validator', () => {
           console.log(`Field: ${field}`);
           console.log(
             'Errors:',
-            error.details.map(d => d.path.join('.'))
+            error.details.map(d => d.path.join('.')),
           );
         }
         expect(hasFieldError).toBe(true);

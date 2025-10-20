@@ -26,7 +26,7 @@ class ApproveDocumentUseCase {
 
       return updatedDocument;
     } catch (error) {
-      console.error('Error approving document:', error);
+      logger.error('Error approving document:', error);
       throw error;
     }
   }

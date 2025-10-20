@@ -304,7 +304,7 @@ export type NextApiHandler = (req: NextApiRequest, res: NextApiResponse) => Prom
 
 export function withSecurityHeaders(
   handler: NextApiHandler,
-  config?: SecurityHeadersConfig
+  config?: SecurityHeadersConfig,
 ): NextApiHandler {
   const security = config ? new SecurityHeaders(config) : securityHeaders;
 

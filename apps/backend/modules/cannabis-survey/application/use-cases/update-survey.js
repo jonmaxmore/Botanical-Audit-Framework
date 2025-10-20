@@ -39,7 +39,7 @@ class UpdateSurveyUseCase {
         survey.farmId,
         year,
         period,
-        surveyId
+        surveyId,
       );
 
       if (exists) {

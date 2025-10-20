@@ -114,7 +114,7 @@ class FarmManagementService {
         {
           $push: { activities: activity },
           $set: { 'metadata.updatedAt': new Date() },
-        }
+        },
       );
 
       logger.info(`[FarmService] Activity recorded for cycle ${cycleId}`, {
@@ -161,7 +161,7 @@ class FarmManagementService {
             'complianceScore.lastUpdated': new Date(),
             'metadata.updatedAt': new Date(),
           },
-        }
+        },
       );
 
       logger.info(`[FarmService] Compliance check recorded for cycle ${cycleId}`, {
@@ -208,7 +208,7 @@ class FarmManagementService {
             'harvestData.notes': harvest.notes,
             'metadata.updatedAt': new Date(),
           },
-        }
+        },
       );
 
       // Also save to harvestrecords collection
@@ -297,7 +297,7 @@ class FarmManagementService {
             completionData: completion,
             'metadata.updatedAt': new Date(),
           },
-        }
+        },
       );
 
       logger.info(`[FarmService] Cycle completed: ${cycleId}`, {

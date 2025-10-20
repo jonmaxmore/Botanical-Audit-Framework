@@ -55,7 +55,7 @@ export interface RevocationBannerProps {
 
 function calculateRemainingDays(
   revokedAt: Date,
-  waitPeriodDays: number
+  waitPeriodDays: number,
 ): {
   remainingDays: number;
   allowedDate: Date;
@@ -99,7 +99,7 @@ export function RevocationBanner({
 }: RevocationBannerProps) {
   const [isDismissed, setIsDismissed] = useState(false);
   const [remainingInfo, setRemainingInfo] = useState(
-    calculateRemainingDays(revokedAt, waitPeriodDays)
+    calculateRemainingDays(revokedAt, waitPeriodDays),
   );
 
   // Check localStorage on mount
@@ -119,7 +119,7 @@ export function RevocationBanner({
       () => {
         setRemainingInfo(calculateRemainingDays(revokedAt, waitPeriodDays));
       },
-      60 * 60 * 1000
+      60 * 60 * 1000,
     ); // Update every hour
 
     return () => clearInterval(intervalId);

@@ -142,8 +142,8 @@ export default function UsersPage() {
                 department: data.department,
                 avatar: data.avatar,
               }
-            : u
-        )
+            : u,
+        ),
       );
       alert(`แก้ไขข้อมูล "${data.name}" เรียบร้อย`);
     } else {

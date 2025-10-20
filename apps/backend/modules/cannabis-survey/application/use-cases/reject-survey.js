@@ -42,7 +42,7 @@ class RejectSurveyUseCase {
         reviewNotes: null,
         rejectionReason: rejectedSurvey.rejectionReason,
         revisionNotes: null,
-      })
+      }),
     );
 
     return rejectedSurvey;

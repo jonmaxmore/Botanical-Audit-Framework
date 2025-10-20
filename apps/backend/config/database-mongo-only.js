@@ -21,30 +21,31 @@ module.exports = {
     options: {
       useNewUrlParser: true,
       useUnifiedTopology: true,
-      // Enhanced MongoDB settings for performance and security
+
+      // Read/Write concerns
       readConcern: { level: 'majority' },
       writeConcern: { w: 'majority', j: true, wtimeout: 5000 },
 
-      // Connection Pool Optimization
-      maxPoolSize: 100, // Increased for high concurrency
-      minPoolSize: 10, // Increased minimum pool
+      // Pool
+      maxPoolSize: 100, // High concurrency
+      minPoolSize: 10,
       maxIdleTimeMS: 30000,
       waitQueueTimeoutMS: 10000,
 
-      // Connection Timeouts
+      // Timeouts
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
       connectTimeoutMS: 10000,
 
-      // Buffer Settings
+      // Buffer
       bufferCommands: false,
       bufferMaxEntries: 0,
 
-      // Monitoring and Compression
+      // Monitoring
       monitorCommands: true,
       compressors: ['snappy', 'zlib'],
 
-      // Authentication and Security
+      // Security
       authSource: 'admin',
       ssl: process.env.NODE_ENV === 'production',
       sslValidate: process.env.NODE_ENV === 'production',
@@ -56,8 +57,8 @@ module.exports = {
       heartbeatFrequencyMS: 10000,
 
       // App Name for monitoring
-      appName: 'GACP-Platform'
-    }
+      appName: 'GACP-Platform',
+    },
   },
 
   // Redis for caching (optional)
@@ -69,7 +70,7 @@ module.exports = {
     keyPrefix: 'gacp:',
     retryDelayOnFailover: 100,
     enableReadyCheck: true,
-    maxRetriesPerRequest: 3
+    maxRetriesPerRequest: 3,
   },
 
   // MongoDB Collections Schema
@@ -80,8 +81,8 @@ module.exports = {
         { key: { email: 1 }, unique: true },
         { key: { username: 1 }, unique: true },
         { key: { role: 1 } },
-        { key: { isActive: 1 } }
-      ]
+        { key: { isActive: 1 } },
+      ],
     },
 
     // Certification Module
@@ -91,8 +92,8 @@ module.exports = {
         { key: { userId: 1 } },
         { key: { status: 1 } },
         { key: { submittedAt: 1 } },
-        { key: { farmLocation: '2dsphere' } }
-      ]
+        { key: { farmLocation: '2dsphere' } },
+      ],
     },
 
     certificates: {
@@ -101,8 +102,8 @@ module.exports = {
         { key: { applicationId: 1 } },
         { key: { issuedDate: 1 } },
         { key: { expiryDate: 1 } },
-        { key: { status: 1 } }
-      ]
+        { key: { status: 1 } },
+      ],
     },
 
     // Survey Module
@@ -111,8 +112,8 @@ module.exports = {
         { key: { title: 1 } },
         { key: { category: 1 } },
         { key: { status: 1 } },
-        { key: { createdAt: 1 } }
-      ]
+        { key: { createdAt: 1 } },
+      ],
     },
 
     surveyResponses: {
@@ -120,8 +121,8 @@ module.exports = {
         { key: { surveyId: 1 } },
         { key: { userId: 1 } },
         { key: { submittedAt: 1 } },
-        { key: { surveyId: 1, userId: 1 }, unique: true }
-      ]
+        { key: { surveyId: 1, userId: 1 }, unique: true },
+      ],
     },
 
     // Tracking Module
@@ -131,8 +132,8 @@ module.exports = {
         { key: { batchNumber: 1 } },
         { key: { farmerId: 1 } },
         { key: { productType: 1 } },
-        { key: { harvestDate: 1 } }
-      ]
+        { key: { harvestDate: 1 } },
+      ],
     },
 
     trackingEvents: {
@@ -140,8 +141,8 @@ module.exports = {
         { key: { productId: 1 } },
         { key: { eventType: 1 } },
         { key: { timestamp: 1 } },
-        { key: { location: '2dsphere' } }
-      ]
+        { key: { location: '2dsphere' } },
+      ],
     },
 
     // Financial Records
@@ -151,8 +152,8 @@ module.exports = {
         { key: { applicationId: 1 } },
         { key: { userId: 1 } },
         { key: { status: 1 } },
-        { key: { createdAt: 1 } }
-      ]
+        { key: { createdAt: 1 } },
+      ],
     },
 
     // Document Management
@@ -161,8 +162,8 @@ module.exports = {
         { key: { applicationId: 1 } },
         { key: { documentType: 1 } },
         { key: { uploadedBy: 1 } },
-        { key: { uploadedAt: 1 } }
-      ]
+        { key: { uploadedAt: 1 } },
+      ],
     },
 
     // Audit Logs
@@ -172,9 +173,9 @@ module.exports = {
         { key: { action: 1 } },
         { key: { timestamp: 1 } },
         { key: { resourceType: 1 } },
-        { key: { resourceId: 1 } }
-      ]
-    }
+        { key: { resourceId: 1 } },
+      ],
+    },
   },
 
   // Environment-specific configurations
@@ -185,9 +186,9 @@ module.exports = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         maxPoolSize: 10,
-        minPoolSize: 2
-      }
-    }
+        minPoolSize: 2,
+      },
+    },
   },
 
   test: {
@@ -197,9 +198,9 @@ module.exports = {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         maxPoolSize: 5,
-        minPoolSize: 1
-      }
-    }
+        minPoolSize: 1,
+      },
+    },
   },
 
   production: {
@@ -216,8 +217,8 @@ module.exports = {
         serverSelectionTimeoutMS: 5000,
         socketTimeoutMS: 45000,
         ssl: true,
-        retryWrites: true
-      }
-    }
-  }
+        retryWrites: true,
+      },
+    },
+  },
 };

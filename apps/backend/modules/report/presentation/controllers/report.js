@@ -14,7 +14,7 @@ class ReportController {
     listReportsUseCase,
     deleteReportUseCase,
     getReportStatisticsUseCase,
-    retryFailedReportUseCase
+    retryFailedReportUseCase,
   ) {
     this.requestReportUseCase = requestReportUseCase;
     this.generateReportUseCase = generateReportUseCase;
@@ -44,7 +44,7 @@ class ReportController {
       if (report.schedule === 'ONCE') {
         // Trigger generation in background (don't await)
         this.generateReportUseCase.execute(report.id).catch(error => {
-          console.error('Failed to generate report:', error);
+          logger.error('Failed to generate report:', error);
         });
       }
 
@@ -150,7 +150,7 @@ class ReportController {
         userId,
         userRole,
         parseInt(page),
-        parseInt(limit)
+        parseInt(limit),
       );
 
       res.status(200).json({

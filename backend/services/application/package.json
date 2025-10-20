@@ -14,13 +14,7 @@
     "test:clean": "powershell -ExecutionPolicy Bypass -File ./cleanup-test.ps1",
     "pretest": "powershell -ExecutionPolicy Bypass -File ./cleanup-test.ps1"
   },
-  "keywords": [
-    "gacp",
-    "cannabis",
-    "certification",
-    "application",
-    "fsm"
-  ],
+  "keywords": ["gacp", "cannabis", "certification", "application", "fsm"],
   "author": "GACP Platform Team",
   "license": "MIT",
   "dependencies": {

@@ -190,7 +190,7 @@ class EnvironmentValidator {
       },
     };
 
-    console.log('🔍 Validating environment configuration...');
+    logger.info('🔍 Validating environment configuration...');
 
     // Validate required environment variables
     Object.entries(this.requiredEnvVars).forEach(([key, config]) => {
@@ -288,36 +288,36 @@ class EnvironmentValidator {
    * @param {Object} results - Validation results
    */
   _printValidationResults(results) {
-    console.log('\n🔐 Environment Configuration Validation Results:');
-    console.log('================================================');
+    logger.info('\n🔐 Environment Configuration Validation Results:');
+    logger.info('================================================');
 
     if (results.valid) {
-      console.log('✅ ALL REQUIRED ENVIRONMENT VARIABLES ARE VALID');
+      logger.info('✅ ALL REQUIRED ENVIRONMENT VARIABLES ARE VALID');
     } else {
-      console.log('❌ ENVIRONMENT VALIDATION FAILED:');
-      results.errors.forEach(error => console.log(`   ${error}`));
+      logger.info('❌ ENVIRONMENT VALIDATION FAILED:');
+      results.errors.forEach(error => logger.info(`   ${error}`));
     }
 
     if (results.warnings.length > 0) {
-      console.log('\n⚠️  WARNINGS:');
-      results.warnings.forEach(warning => console.log(`   ${warning}`));
+      logger.info('\n⚠️  WARNINGS:');
+      results.warnings.forEach(warning => logger.info(`   ${warning}`));
     }
 
-    console.log('\n📊 Summary:');
-    console.log(`   Required variables: ${results.summary.required}`);
-    console.log(`   Missing: ${results.summary.missing}`);
-    console.log(`   Invalid: ${results.summary.invalid}`);
-    console.log(`   Optional checked: ${results.summary.optional}`);
+    logger.info('\n📊 Summary:');
+    logger.info(`   Required variables: ${results.summary.required}`);
+    logger.info(`   Missing: ${results.summary.missing}`);
+    logger.info(`   Invalid: ${results.summary.invalid}`);
+    logger.info(`   Optional checked: ${results.summary.optional}`);
 
     if (results.valid) {
-      console.log('\n🚀 Environment is ready for production deployment!');
+      logger.info('\n🚀 Environment is ready for production deployment!');
     } else {
       console.log(
-        '\n🚨 FIX REQUIRED: Cannot start application with invalid environment configuration'
+        '\n🚨 FIX REQUIRED: Cannot start application with invalid environment configuration',
       );
     }
 
-    console.log('================================================\n');
+    logger.info('================================================\n');
   }
 
   /**
@@ -327,7 +327,7 @@ class EnvironmentValidator {
     const results = this.validateEnvironment();
 
     if (!results.valid) {
-      console.error('💥 Application startup aborted due to environment validation errors');
+      logger.error('💥 Application startup aborted due to environment validation errors');
       process.exit(1);
     }
 

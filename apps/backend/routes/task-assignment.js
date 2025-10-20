@@ -6,10 +6,7 @@
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
-const {
-  BlitzzIntegrationService,
-  TaskAssignment,
-} = require('../services/blitzz-integration');
+const { BlitzzIntegrationService, TaskAssignment } = require('../services/blitzz-integration');
 const auth = require('../middleware/auth');
 const rbac = require('../middleware/rbac');
 const auditMiddleware = require('../middleware/audit');
@@ -118,14 +115,14 @@ router.post(
         message: 'Task created successfully',
       });
     } catch (error) {
-      console.error('Error creating task:', error);
+      logger.error('Error creating task:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to create task',
         details: process.env.NODE_ENV === 'development' ? error.message : undefined,
       });
     }
-  }
+  },
 );
 
 /**
@@ -187,7 +184,7 @@ router.get('/', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, res) =>
       data: result,
     });
   } catch (error) {
-    console.error('Error fetching tasks:', error);
+    logger.error('Error fetching tasks:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch tasks',
@@ -236,7 +233,7 @@ router.get('/:taskId', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, 
       data: { task },
     });
   } catch (error) {
-    console.error('Error fetching task:', error);
+    logger.error('Error fetching task:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch task',
@@ -284,7 +281,7 @@ router.patch(
         status,
         req.user.userId,
         reason,
-        notes
+        notes,
       );
 
       // Log audit trail
@@ -312,13 +309,13 @@ router.patch(
         message: 'Task status updated successfully',
       });
     } catch (error) {
-      console.error('Error updating task status:', error);
+      logger.error('Error updating task status:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to update task status',
       });
     }
-  }
+  },
 );
 
 /**
@@ -388,13 +385,13 @@ router.patch(
         message: 'Task reassigned successfully',
       });
     } catch (error) {
-      console.error('Error reassigning task:', error);
+      logger.error('Error reassigning task:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to reassign task',
       });
     }
-  }
+  },
 );
 
 /**
@@ -450,13 +447,13 @@ router.post(
         message: 'Comment added successfully',
       });
     } catch (error) {
-      console.error('Error adding comment:', error);
+      logger.error('Error adding comment:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to add comment',
       });
     }
-  }
+  },
 );
 
 /**
@@ -510,7 +507,7 @@ router.post(
       // Update actual hours
       const totalMinutes = task.scheduling.timeEntries.reduce(
         (sum, entry) => sum + entry.duration,
-        0
+        0,
       );
       task.taskInfo.actualHours = Math.round((totalMinutes / 60) * 10) / 10; // Round to 1 decimal
 
@@ -525,13 +522,13 @@ router.post(
         message: 'Time entry added successfully',
       });
     } catch (error) {
-      console.error('Error adding time entry:', error);
+      logger.error('Error adding time entry:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to add time entry',
       });
     }
-  }
+  },
 );
 
 /**
@@ -575,13 +572,13 @@ router.post(
         message: `${tasks.length} audit preparation tasks created successfully`,
       });
     } catch (error) {
-      console.error('Error creating audit preparation tasks:', error);
+      logger.error('Error creating audit preparation tasks:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to create audit preparation tasks',
       });
     }
-  }
+  },
 );
 
 /**
@@ -597,7 +594,7 @@ router.get('/dashboard/summary', auth, rbac(['admin', 'reviewer']), async (req, 
       data: dashboardData,
     });
   } catch (error) {
-    console.error('Error fetching dashboard data:', error);
+    logger.error('Error fetching dashboard data:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch dashboard data',
@@ -626,7 +623,7 @@ router.get('/overdue', auth, rbac(['admin', 'reviewer']), async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error fetching overdue tasks:', error);
+    logger.error('Error fetching overdue tasks:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch overdue tasks',
@@ -669,7 +666,7 @@ router.post('/:taskId/sync-blitzz', auth, rbac(['admin']), async (req, res) => {
       message: 'Task synced with Blitzz successfully',
     });
   } catch (error) {
-    console.error('Error syncing with Blitzz:', error);
+    logger.error('Error syncing with Blitzz:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to sync with Blitzz',

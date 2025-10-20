@@ -524,7 +524,7 @@ const response = await axios.post(
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }
+  },
 );
 
 console.log('Comparison ID:', response.data.comparisonId);
@@ -541,7 +541,7 @@ const gapResponse = await axios.get(
     headers: {
       Authorization: `Bearer ${token}`,
     },
-  }
+  },
 );
 
 console.log('Total Gaps:', gapResponse.data.totalGaps);

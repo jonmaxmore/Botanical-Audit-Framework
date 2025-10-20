@@ -6,6 +6,7 @@
  */
 
 /* eslint-disable no-unused-vars */
+const logger = require('../../shared/logger/logger');
 const mongoose = require('mongoose'); // Used in JSDoc type annotations
 const IDTAMStaffRepository = require('./domain/interfaces/IDTAMStaffRepository'); // Used for interface documentation
 /* eslint-enable no-unused-vars */
@@ -53,7 +54,7 @@ class SimpleEventBus {
       try {
         await callback(event);
       } catch (error) {
-        console.error(`Error processing event ${eventType}:`, error);
+        logger.error(`Error processing event ${eventType}:`, error);
       }
     }
   }
@@ -97,17 +98,17 @@ function createAuthDTAMModule(config) {
 
   // Subscribe to domain events
   eventBus.subscribe('DTAMStaffCreated', async event => {
-    console.log('DTAM staff created:', event.toEventPayload());
+    logger.info('DTAM staff created:', event.toEventPayload());
     // TODO: Send welcome email, notify admin, etc.
   });
 
   eventBus.subscribe('DTAMStaffLoggedIn', async event => {
-    console.log('DTAM staff logged in:', event.toEventPayload());
+    logger.info('DTAM staff logged in:', event.toEventPayload());
     // TODO: Log activity, send notification if new device, security audit
   });
 
   eventBus.subscribe('DTAMStaffPasswordResetRequested', async event => {
-    console.log('DTAM staff password reset requested:', event.toEventPayload());
+    logger.info('DTAM staff password reset requested:', event.toEventPayload());
     // TODO: Send password reset email
   });
 

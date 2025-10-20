@@ -26,6 +26,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const { body, validationResult } = require('express-validator');
 
 class UserAuthenticationController {
@@ -35,7 +36,7 @@ class UserAuthenticationController {
     this.auditService = dependencies.auditService;
     this.notificationService = dependencies.notificationService;
 
-    console.log('[UserAuthenticationController] Initialized successfully');
+    logger.info('[UserAuthenticationController] Initialized successfully');
   }
 
   /**
@@ -86,7 +87,7 @@ class UserAuthenticationController {
         },
       });
     } catch (error) {
-      console.error('[UserAuthController] Login error:', error);
+      logger.error('[UserAuthController] Login error:', error);
 
       // Don't expose internal errors for security
       res.status(401).json({
@@ -132,7 +133,7 @@ class UserAuthenticationController {
         },
       });
     } catch (error) {
-      console.error('[UserAuthController] Token refresh error:', error);
+      logger.error('[UserAuthController] Token refresh error:', error);
 
       res.status(401).json({
         success: false,
@@ -164,7 +165,7 @@ class UserAuthenticationController {
         message: 'Logout successful',
       });
     } catch (error) {
-      console.error('[UserAuthController] Logout error:', error);
+      logger.error('[UserAuthController] Logout error:', error);
 
       res.status(500).json({
         success: false,
@@ -207,7 +208,7 @@ class UserAuthenticationController {
         message: 'Password changed successfully',
       });
     } catch (error) {
-      console.error('[UserAuthController] Password change error:', error);
+      logger.error('[UserAuthController] Password change error:', error);
 
       if (error.message.includes('Current password is incorrect')) {
         return res.status(400).json({
@@ -269,7 +270,7 @@ class UserAuthenticationController {
         data: { user: profile },
       });
     } catch (error) {
-      console.error('[UserAuthController] Get profile error:', error);
+      logger.error('[UserAuthController] Get profile error:', error);
 
       res.status(500).json({
         success: false,
@@ -330,7 +331,7 @@ class UserAuthenticationController {
         },
       });
     } catch (error) {
-      console.error('[UserAuthController] Update profile error:', error);
+      logger.error('[UserAuthController] Update profile error:', error);
 
       res.status(500).json({
         success: false,
@@ -404,7 +405,7 @@ class UserAuthenticationController {
 
       res.status(200).json(response);
     } catch (error) {
-      console.error('[UserAuthController] Forgot password error:', error);
+      logger.error('[UserAuthController] Forgot password error:', error);
 
       res.status(500).json({
         success: false,
@@ -495,7 +496,7 @@ class UserAuthenticationController {
         message: 'Password reset successfully',
       });
     } catch (error) {
-      console.error('[UserAuthController] Reset password error:', error);
+      logger.error('[UserAuthController] Reset password error:', error);
 
       res.status(500).json({
         success: false,
@@ -526,7 +527,7 @@ class UserAuthenticationController {
           .withMessage('New password must be at least 8 characters')
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/)
           .withMessage(
-            'New password must contain uppercase, lowercase, number and special character'
+            'New password must contain uppercase, lowercase, number and special character',
           ),
       ],
 
@@ -560,7 +561,7 @@ class UserAuthenticationController {
           .withMessage('New password must be at least 8 characters')
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/)
           .withMessage(
-            'New password must contain uppercase, lowercase, number and special character'
+            'New password must contain uppercase, lowercase, number and special character',
           ),
       ],
     };

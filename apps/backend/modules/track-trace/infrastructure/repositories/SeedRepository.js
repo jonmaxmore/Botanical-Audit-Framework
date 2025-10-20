@@ -199,14 +199,14 @@ class SeedRepository {
       await this.setCachedData(
         cacheKey,
         this.serializeSeedBatch(batchResult),
-        this.cacheTTL.seedBatch
+        this.cacheTTL.seedBatch,
       );
 
       this.logger.log(`[SeedRepository] Found ${seeds.length} seeds in batch: ${batchNumber}`);
       return batchResult;
     } catch (error) {
       this.logger.error(
-        `[SeedRepository] Error finding seeds by batch ${batchNumber}: ${error.message}`
+        `[SeedRepository] Error finding seeds by batch ${batchNumber}: ${error.message}`,
       );
       throw error;
     }
@@ -329,7 +329,7 @@ class SeedRepository {
 
       // Step 4: Enrich search results with related data
       const enrichedResults = await Promise.all(
-        results.results.map(doc => this.enrichSeedData(doc))
+        results.results.map(doc => this.enrichSeedData(doc)),
       );
 
       // Step 5: Create seed entities from results
@@ -357,7 +357,7 @@ class SeedRepository {
       await this.setCachedData(
         cacheKey,
         this.serializeSearchResults(searchResponse),
-        this.cacheTTL.searchResults
+        this.cacheTTL.searchResults,
       );
 
       this.logger.log(`[SeedRepository] Search completed: ${seeds.length} seeds found`);
@@ -440,7 +440,7 @@ class SeedRepository {
             timestamp: new Date(),
             version: seedDocument.version,
           },
-          session
+          session,
         );
 
         // Step 5: Update search indexes if needed
@@ -491,7 +491,7 @@ class SeedRepository {
         // Step 2: Check version for optimistic locking
         if (seed.version && currentSeed.version !== seed.version) {
           throw new Error(
-            `Concurrent modification detected for seed: ${seed.seedId}. Current version: ${currentSeed.version}, provided version: ${seed.version}`
+            `Concurrent modification detected for seed: ${seed.seedId}. Current version: ${currentSeed.version}, provided version: ${seed.version}`,
           );
         }
 
@@ -525,7 +525,7 @@ class SeedRepository {
               version: updateDocument.version,
               previousVersion: currentSeed.version,
             },
-            session
+            session,
           );
         }
 
@@ -579,7 +579,7 @@ class SeedRepository {
 
         if (dependencies.length > 0) {
           throw new Error(
-            `Cannot delete seed ${seedId}: has dependencies in ${dependencies.join(', ')}`
+            `Cannot delete seed ${seedId}: has dependencies in ${dependencies.join(', ')}`,
           );
         }
 
@@ -596,7 +596,7 @@ class SeedRepository {
             version: existingSeed.version,
             finalRecord: true,
           },
-          session
+          session,
         );
 
         // Step 5: Delete the seed document
@@ -742,8 +742,8 @@ class SeedRepository {
       keysToInvalidate.map(key =>
         this.cache
           .del(key)
-          .catch(err => this.logger.warn(`Cache invalidation error for ${key}: ${err.message}`))
-      )
+          .catch(err => this.logger.warn(`Cache invalidation error for ${key}: ${err.message}`)),
+      ),
     );
   }
 

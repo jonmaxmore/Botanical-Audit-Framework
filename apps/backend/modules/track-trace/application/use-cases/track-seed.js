@@ -121,14 +121,14 @@ class TrackSeedUseCase {
   async distributeSeed(seedId, farmId, distributionDetails) {
     try {
       this.logger.log(
-        `[TrackSeed] Processing seed distribution - Seed: ${seedId}, Farm: ${farmId}`
+        `[TrackSeed] Processing seed distribution - Seed: ${seedId}, Farm: ${farmId}`,
       );
 
       // Step 1: Validate distribution request
       const validationResult = await this.validateSeedDistribution(
         seedId,
         farmId,
-        distributionDetails
+        distributionDetails,
       );
 
       // Step 2: Get seed and farm information
@@ -153,7 +153,7 @@ class TrackSeedUseCase {
           licenseNumber: farm.licenseNumber,
           coordinates: farm.location.coordinates,
         },
-        distributionDetails
+        distributionDetails,
       );
 
       // Step 5: Update seed in repository
@@ -163,7 +163,7 @@ class TrackSeedUseCase {
       const distributionCertificate = await this.generateDistributionCertificate(
         updatedSeed,
         farm,
-        distributionRecord
+        distributionRecord,
       );
 
       // Step 7: Initialize farm monitoring
@@ -181,7 +181,7 @@ class TrackSeedUseCase {
       await this.sendDistributionNotifications(updatedSeed, farm, distributionRecord);
 
       this.logger.log(
-        `[TrackSeed] Seed distribution completed: ${distributionRecord.distributionId}`
+        `[TrackSeed] Seed distribution completed: ${distributionRecord.distributionId}`,
       );
 
       return {
@@ -219,7 +219,7 @@ class TrackSeedUseCase {
   async trackPlanting(seedId, plantingInfo) {
     try {
       this.logger.log(
-        `[TrackSeed] Tracking seed planting - Seed: ${seedId}, Plot: ${plantingInfo.plotId}`
+        `[TrackSeed] Tracking seed planting - Seed: ${seedId}, Plot: ${plantingInfo.plotId}`,
       );
 
       // Step 1: Validate planting information
@@ -233,7 +233,7 @@ class TrackSeedUseCase {
 
       if (seed.trackingInfo.currentStatus !== 'DISTRIBUTED') {
         throw new Error(
-          `Seed not ready for planting. Current status: ${seed.trackingInfo.currentStatus}`
+          `Seed not ready for planting. Current status: ${seed.trackingInfo.currentStatus}`,
         );
       }
 
@@ -530,7 +530,7 @@ class TrackSeedUseCase {
 
       if (seedData.qualityMetrics.purityPercentage < this.businessRules.minPurityPercentage) {
         errors.push(
-          `Purity percentage must be at least ${this.businessRules.minPurityPercentage}%`
+          `Purity percentage must be at least ${this.businessRules.minPurityPercentage}%`,
         );
       }
 
@@ -540,7 +540,7 @@ class TrackSeedUseCase {
         moisture > this.businessRules.maxMoistureContent
       ) {
         errors.push(
-          `Moisture content must be between ${this.businessRules.minMoistureContent}% and ${this.businessRules.maxMoistureContent}%`
+          `Moisture content must be between ${this.businessRules.minMoistureContent}% and ${this.businessRules.maxMoistureContent}%`,
         );
       }
     }

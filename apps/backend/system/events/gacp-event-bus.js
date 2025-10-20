@@ -17,6 +17,7 @@
  * - Notification Events (User communications)
  */
 
+const logger = require('../../shared/logger/logger');
 const EventEmitter = require('events');
 
 class GACPEventBus extends EventEmitter {
@@ -53,7 +54,7 @@ class GACPEventBus extends EventEmitter {
     };
 
     this._initializeEventBus();
-    console.log('📡 GACP Event Bus initialized');
+    logger.info('📡 GACP Event Bus initialized');
   }
 
   /**
@@ -82,7 +83,7 @@ class GACPEventBus extends EventEmitter {
         },
       };
 
-      console.log(`📤 Publishing event: ${eventType} (${eventId})`);
+      logger.info(`📤 Publishing event: ${eventType} (${eventId});`);
 
       // Validate event structure
       this._validateEvent(event);
@@ -110,10 +111,10 @@ class GACPEventBus extends EventEmitter {
         await this.monitoringService.trackEvent(event, processingTime);
       }
 
-      console.log(`✅ Event published successfully: ${eventType} (${eventId})`);
+      logger.info(`✅ Event published successfully: ${eventType} (${eventId});`);
       return eventId;
     } catch (error) {
-      console.error(`❌ Failed to publish event: ${eventType}`, error);
+      logger.error(`❌ Failed to publish event: ${eventType}`, error);
       this.metrics.eventsFailed++;
 
       // Add to retry queue
@@ -157,10 +158,10 @@ class GACPEventBus extends EventEmitter {
       // Sort by priority
       this._sortSubscriptionsByPriority(eventType);
 
-      console.log(`📥 Subscribed to ${eventType} (${subscriptionId})`);
+      logger.info(`📥 Subscribed to ${eventType} (${subscriptionId});`);
       return subscriptionId;
     } catch (error) {
-      console.error(`❌ Failed to subscribe to event: ${eventType}`, error);
+      logger.error(`❌ Failed to subscribe to event: ${eventType}`, error);
       throw error;
     }
   }
@@ -175,15 +176,15 @@ class GACPEventBus extends EventEmitter {
         const index = subscriptions.findIndex(sub => sub.id === subscriptionId);
         if (index !== -1) {
           subscriptions.splice(index, 1);
-          console.log(`📤 Unsubscribed: ${subscriptionId} from ${eventType}`);
+          logger.info(`📤 Unsubscribed: ${subscriptionId} from ${eventType}`);
           return true;
         }
       }
 
-      console.warn(`⚠️ Subscription not found: ${subscriptionId}`);
+      logger.warn(`⚠️ Subscription not found: ${subscriptionId}`);
       return false;
     } catch (error) {
-      console.error(`❌ Failed to unsubscribe: ${subscriptionId}`, error);
+      logger.error(`❌ Failed to unsubscribe: ${subscriptionId}`, error);
       throw error;
     }
   }
@@ -195,14 +196,14 @@ class GACPEventBus extends EventEmitter {
     const subscribers = this.subscribers.get(event.type) || [];
 
     if (subscribers.length === 0) {
-      console.warn(`⚠️ No subscribers for event: ${event.type}`);
+      logger.warn(`⚠️ No subscribers for event: ${event.type}`);
       return;
     }
 
-    console.log(`🔄 Processing event ${event.type} for ${subscribers.length} subscribers`);
+    logger.info(`🔄 Processing event ${event.type} for ${subscribers.length} subscribers`);
 
     const processingPromises = subscribers.map(subscription =>
-      this._processSubscription(event, subscription)
+      this._processSubscription(event, subscription),
     );
 
     // Wait for all subscribers to process (with error isolation)
@@ -212,12 +213,12 @@ class GACPEventBus extends EventEmitter {
     const failures = results.filter(result => result.status === 'rejected');
     if (failures.length > 0) {
       console.error(
-        `❌ ${failures.length}/${subscribers.length} subscribers failed for event: ${event.type}`
+        `❌ ${failures.length}/${subscribers.length} subscribers failed for event: ${event.type}`,
       );
 
       failures.forEach((failure, index) => {
         const subscription = subscribers[index];
-        console.error(`❌ Subscriber ${subscription.id} failed:`, failure.reason);
+        logger.error(`❌ Subscriber ${subscription.id} failed:`, failure.reason);
       });
     }
 
@@ -233,7 +234,7 @@ class GACPEventBus extends EventEmitter {
 
       // Apply filter if specified
       if (subscription.options.filter && !subscription.options.filter(event)) {
-        console.log(`🔍 Event filtered out for subscription: ${subscription.id}`);
+        logger.info(`🔍 Event filtered out for subscription: ${subscription.id}`);
         return;
       }
 
@@ -247,16 +248,16 @@ class GACPEventBus extends EventEmitter {
       await this._executeWithTimeout(
         subscription.handler,
         [processedEvent],
-        subscription.options.timeout
+        subscription.options.timeout,
       );
 
       subscription.processedCount++;
 
       const processingTime = Date.now() - startTime;
-      console.log(`✅ Subscription processed: ${subscription.id} (${processingTime}ms)`);
+      logger.info(`✅ Subscription processed: ${subscription.id} (${processingTime}ms);`);
     } catch (error) {
       subscription.errorCount++;
-      console.error(`❌ Subscription error: ${subscription.id}`, error);
+      logger.error(`❌ Subscription error: ${subscription.id}`, error);
 
       // Retry logic
       if (subscription.options.retryOnError && event.metadata.retryCount < this.config.maxRetries) {
@@ -296,7 +297,7 @@ class GACPEventBus extends EventEmitter {
   async _retrySubscription(event, subscription, error) {
     try {
       console.log(
-        `🔄 Retrying subscription: ${subscription.id} (attempt ${event.metadata.retryCount + 1})`
+        `🔄 Retrying subscription: ${subscription.id} (attempt ${event.metadata.retryCount + 1})`,
       );
 
       // Update retry count
@@ -310,7 +311,7 @@ class GACPEventBus extends EventEmitter {
       // Retry processing
       await this._processSubscription(event, subscription);
     } catch (retryError) {
-      console.error(`❌ Retry failed for subscription: ${subscription.id}`, retryError);
+      logger.error(`❌ Retry failed for subscription: ${subscription.id}`, retryError);
 
       if (event.metadata.retryCount >= this.config.maxRetries) {
         await this._handleSubscriptionFailure(event, subscription, retryError);
@@ -322,7 +323,7 @@ class GACPEventBus extends EventEmitter {
    * Handle subscription failure
    */
   async _handleSubscriptionFailure(event, subscription, error) {
-    console.error(`💀 Subscription permanently failed: ${subscription.id}`, error);
+    logger.error(`💀 Subscription permanently failed: ${subscription.id}`, error);
 
     // Add to dead letter queue
     this.deadLetterQueue.push({
@@ -354,7 +355,7 @@ class GACPEventBus extends EventEmitter {
    * Handle event publishing errors
    */
   async _handleEventError(event, error) {
-    console.error(`❌ Event processing error: ${event.type}`, error);
+    logger.error(`❌ Event processing error: ${event.type}`, error);
 
     // Add to retry queue if retries are available
     if (event.metadata && event.metadata.retryCount < this.config.maxRetries) {
@@ -372,7 +373,7 @@ class GACPEventBus extends EventEmitter {
         attempts: event.metadata.retryCount || 0,
       });
 
-      console.log(`🔄 Event added to retry queue: ${event.type} (${retryId})`);
+      logger.info(`🔄 Event added to retry queue: ${event.type} (${retryId});`);
     }
   }
 
@@ -381,7 +382,7 @@ class GACPEventBus extends EventEmitter {
    */
   async processRetryQueue() {
     try {
-      console.log('🔄 Processing retry queues...');
+      logger.info('🔄 Processing retry queues...');
 
       for (const [eventType, retryItems] of this.retryQueues) {
         const readyItems = retryItems.filter(item => item.scheduledFor <= new Date());
@@ -400,9 +401,9 @@ class GACPEventBus extends EventEmitter {
             // Remove from retry queue
             this._removeFromRetryQueue(eventType, item.id);
 
-            console.log(`✅ Retry successful: ${item.event.type} (${item.id})`);
+            logger.info(`✅ Retry successful: ${item.event.type} (${item.id});`);
           } catch (error) {
-            console.error(`❌ Retry failed: ${item.event.type} (${item.id})`, error);
+            logger.error(`❌ Retry failed: ${item.event.type} (${item.id});`, error);
 
             item.attempts++;
             if (item.attempts >= this.config.maxRetries) {
@@ -423,7 +424,7 @@ class GACPEventBus extends EventEmitter {
         }
       }
     } catch (error) {
-      console.error('❌ Retry queue processing failed:', error);
+      logger.error('❌ Retry queue processing failed:', error);
     }
   }
 
@@ -436,16 +437,16 @@ class GACPEventBus extends EventEmitter {
       subscriptions: {
         totalSubscribers: Array.from(this.subscribers.values()).reduce(
           (sum, subs) => sum + subs.length,
-          0
+          0,
         ),
         subscribersByEvent: Object.fromEntries(
-          Array.from(this.subscribers.entries()).map(([event, subs]) => [event, subs.length])
+          Array.from(this.subscribers.entries()).map(([event, subs]) => [event, subs.length]),
         ),
       },
       queues: {
         retryQueueSize: Array.from(this.retryQueues.values()).reduce(
           (sum, items) => sum + items.length,
-          0
+          0,
         ),
         deadLetterQueueSize: this.deadLetterQueue.length,
       },
@@ -570,7 +571,7 @@ class GACPEventBus extends EventEmitter {
   async _processDeadLetterQueue() {
     // Implementation for processing dead letter queue
     // Could involve manual review, alternative processing, etc.
-    console.log(`🚨 Dead letter queue size: ${this.deadLetterQueue.length}`);
+    logger.info(`🚨 Dead letter queue size: ${this.deadLetterQueue.length}`);
   }
 }
 

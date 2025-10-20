@@ -415,7 +415,7 @@ test.describe('Performance Testing', () => {
               name: entry.name,
               startTime: entry.startTime,
               duration: entry.duration,
-            }))
+            })),
           );
         });
 

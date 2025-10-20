@@ -29,10 +29,10 @@ const testConnection = async () => {
     await mongoose.disconnect();
     console.info('🔌 Disconnected successfully');
   } catch (error) {
-    console.error('❌ MongoDB connection failed!');
-    console.error('📋 Error details:');
-    console.error('   - Message:', error.message);
-    console.error('   - Code:', error.code);
+    logger.error('❌ MongoDB connection failed!');
+    logger.error('📋 Error details:');
+    logger.error('   - Message:', error.message);
+    logger.error('   - Code:', error.code);
 
     if (error.message.includes('ECONNREFUSED')) {
       console.info('\n💡 Solution:');

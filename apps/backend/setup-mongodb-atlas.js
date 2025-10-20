@@ -5,6 +5,7 @@
  * Created: October 15, 2025
  */
 
+const logger = require('shared/logger/logger');
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
@@ -159,26 +160,26 @@ async function setupCollections() {
   let client;
 
   try {
-    console.log('🚀 Starting MongoDB Atlas collection setup...\n');
+    logger.info('🚀 Starting MongoDB Atlas collection setup...\n');
 
     // Connect to MongoDB Atlas
-    console.log('📡 Connecting to MongoDB Atlas...');
+    logger.info('📡 Connecting to MongoDB Atlas...');
     client = new MongoClient(process.env.MONGODB_URI, {
       serverSelectionTimeoutMS: 10000,
       socketTimeoutMS: 60000,
     });
 
     await client.connect();
-    console.log('✅ Connected to MongoDB Atlas successfully!\n');
+    logger.info('✅ Connected to MongoDB Atlas successfully!\n');
 
     const db = client.db(process.env.MONGODB_DATABASE || 'gacp_production');
-    console.log(`📂 Using database: ${db.databaseName}\n`);
+    logger.info(`📂 Using database: ${db.databaseName}\n`);
 
     // Get existing collections
     const existingCollections = await db.listCollections().toArray();
     const existingNames = existingCollections.map(c => c.name);
 
-    console.log('📋 Setting up collections and indexes...\n');
+    logger.info('📋 Setting up collections and indexes...\n');
 
     let created = 0;
     let skipped = 0;
@@ -191,10 +192,10 @@ async function setupCollections() {
         // Create collection if it doesn't exist
         if (!existingNames.includes(name)) {
           await db.createCollection(name);
-          console.log(`  ✅ Created collection: ${name}`);
+          logger.info(`  ✅ Created collection: ${name}`);
           created++;
         } else {
-          console.log(`  ℹ️  Collection exists: ${name}`);
+          logger.info(`  ℹ️  Collection exists: ${name}`);
           skipped++;
         }
 
@@ -215,32 +216,32 @@ async function setupCollections() {
           } catch (err) {
             if (err.code !== 85 && err.code !== 86) {
               // Ignore "index already exists" errors
-              console.warn(`     ⚠️  Index creation warning for ${name}:`, err.message);
+              logger.warn(`     ⚠️  Index creation warning for ${name}:`, err.message);
             }
           }
         }
 
-        console.log(`     📊 Created ${indexes.length} indexes for ${name}`);
+        logger.info(`     📊 Created ${indexes.length} indexes for ${name}`);
       } catch (err) {
-        console.error(`  ❌ Error with collection ${name}:`, err.message);
+        logger.error(`  ❌ Error with collection ${name}:`, err.message);
       }
     }
 
-    console.log('\n' + '='.repeat(50));
-    console.log('🎉 Setup completed successfully!');
-    console.log('='.repeat(50));
-    console.log('\n📊 Summary:');
-    console.log(`   Collections created: ${created}`);
-    console.log(`   Collections skipped: ${skipped}`);
-    console.log(`   Total indexes created: ${indexesCreated}`);
-    console.log(`   Total collections: ${collections.length}`);
+    logger.info('\n' + '='.repeat(50));
+    logger.info('🎉 Setup completed successfully!');
+    logger.info('='.repeat(50));
+    logger.info('\n📊 Summary:');
+    logger.info(`   Collections created: ${created}`);
+    logger.info(`   Collections skipped: ${skipped}`);
+    logger.info(`   Total indexes created: ${indexesCreated}`);
+    logger.info(`   Total collections: ${collections.length}`);
 
     // Create sample admin user if users collection is empty
     const usersCollection = db.collection('users');
     const userCount = await usersCollection.countDocuments();
 
     if (userCount === 0) {
-      console.log('\n👤 Creating sample admin user...');
+      logger.info('\n👤 Creating sample admin user...');
       const bcrypt = require('bcrypt');
       const hashedPassword = await bcrypt.hash('Admin@2025', 12);
 
@@ -257,26 +258,26 @@ async function setupCollections() {
         updatedAt: new Date(),
       });
 
-      console.log('✅ Sample admin user created:');
-      console.log('   Email: admin@gacp-platform.com');
-      console.log('   Password: Admin@2025');
-      console.log('   ⚠️  Please change this password after first login!');
+      logger.info('✅ Sample admin user created:');
+      logger.info('   Email: admin@gacp-platform.com');
+      logger.info('   Password: Admin@2025');
+      logger.info('   ⚠️  Please change this password after first login!');
     }
 
-    console.log('\n✨ Your MongoDB Atlas database is ready!');
-    console.log('🚀 You can now start the application with: pnpm dev\n');
+    logger.info('\n✨ Your MongoDB Atlas database is ready!');
+    logger.info('🚀 You can now start the application with: pnpm dev\n');
   } catch (error) {
-    console.error('\n❌ Error during setup:', error.message);
-    console.error('\n💡 Troubleshooting:');
-    console.error('   1. Check your MONGODB_URI in .env file');
-    console.error('   2. Ensure your IP is whitelisted in MongoDB Atlas');
-    console.error('   3. Verify your database credentials');
-    console.error('   4. Check your internet connection\n');
+    logger.error('\n❌ Error during setup:', error.message);
+    logger.error('\n💡 Troubleshooting:');
+    logger.error('   1. Check your MONGODB_URI in .env file');
+    logger.error('   2. Ensure your IP is whitelisted in MongoDB Atlas');
+    logger.error('   3. Verify your database credentials');
+    logger.error('   4. Check your internet connection\n');
     process.exit(1);
   } finally {
     if (client) {
       await client.close();
-      console.log('👋 Connection closed.\n');
+      logger.info('👋 Connection closed.\n');
     }
   }
 }

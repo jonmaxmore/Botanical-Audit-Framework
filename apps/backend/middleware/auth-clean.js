@@ -184,12 +184,12 @@ const requireAllPermissions = permissions => {
     }
 
     const hasAllPermissions = permissions.every(permission =>
-      req.staff.permissions.includes(permission)
+      req.staff.permissions.includes(permission),
     );
 
     if (!hasAllPermissions) {
       const missingPermissions = permissions.filter(
-        permission => !req.staff.permissions.includes(permission)
+        permission => !req.staff.permissions.includes(permission),
       );
 
       return res.status(403).json({
@@ -229,7 +229,7 @@ const requireAnyPermission = permissions => {
     }
 
     const hasAnyPermission = permissions.some(permission =>
-      req.staff.permissions.includes(permission)
+      req.staff.permissions.includes(permission),
     );
 
     if (!hasAnyPermission) {

@@ -5,6 +5,7 @@
  * Provides gap analysis and certification recommendations
  */
 
+const logger = require('../../../shared/logger/logger');
 const { ObjectId } = require('mongodb');
 
 class StandardsComparisonService {
@@ -34,10 +35,10 @@ class StandardsComparisonService {
 
       this.initialized = true;
       console.log(
-        `Standards Comparison Service initialized with ${this.standards.length} standards`
+        `Standards Comparison Service initialized with ${this.standards.length} standards`,
       );
     } catch (error) {
-      console.error('Failed to initialize Standards Comparison Service:', error);
+      logger.error('Failed to initialize Standards Comparison Service:', error);
       throw error;
     }
   }
@@ -58,9 +59,9 @@ class StandardsComparisonService {
         this.standards = loadedStandards;
       }
 
-      console.log(`Loaded ${this.standards.length} standards`);
+      logger.info(`Loaded ${this.standards.length} standards`);
     } catch (error) {
-      console.error('Error loading standards:', error);
+      logger.error('Error loading standards:', error);
       throw error;
     }
   }
@@ -414,7 +415,7 @@ class StandardsComparisonService {
         summary,
       };
     } catch (error) {
-      console.error('Error comparing against standards:', error);
+      logger.error('Error comparing against standards:', error);
       throw error;
     }
   }
@@ -595,7 +596,7 @@ class StandardsComparisonService {
         recommendations,
       };
     } catch (error) {
-      console.error('Error analyzing gaps:', error);
+      logger.error('Error analyzing gaps:', error);
       throw error;
     }
   }
@@ -688,7 +689,7 @@ class StandardsComparisonService {
         createdAt: comparison.createdAt,
       }));
     } catch (error) {
-      console.error('Error getting comparison history:', error);
+      logger.error('Error getting comparison history:', error);
       throw error;
     }
   }
@@ -715,7 +716,7 @@ class StandardsComparisonService {
         createdAt: comparison.createdAt,
       };
     } catch (error) {
-      console.error('Error getting comparison:', error);
+      logger.error('Error getting comparison:', error);
       throw error;
     }
   }

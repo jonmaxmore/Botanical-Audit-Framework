@@ -30,6 +30,7 @@ const {
   beforeEach,
   afterEach,
 } = require('@jest/globals');
+const logger = require('../../../../shared/logger/logger');
 const request = require('supertest');
 const mongoose = require('mongoose');
 
@@ -71,7 +72,7 @@ describe('Enhanced Training Module Integration Tests', () => {
   // ============================================================================
 
   beforeAll(async () => {
-    console.log('🚀 Setting up Enhanced Training Module Integration Tests');
+    logger.info('🚀 Setting up Enhanced Training Module Integration Tests');
 
     // Initialize test database
     testDb = new TestDatabase();
@@ -87,11 +88,11 @@ describe('Enhanced Training Module Integration Tests', () => {
     // Create test application
     testApp = await createTestApplication();
 
-    console.log('✅ Enhanced Training Module Integration Tests setup complete');
+    logger.info('✅ Enhanced Training Module Integration Tests setup complete');
   });
 
   beforeEach(async () => {
-    console.log('🧹 Setting up test data');
+    logger.info('🧹 Setting up test data');
 
     // Clean test data
     await testDb.clean();
@@ -113,7 +114,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       estimatedDuration: '6_weeks',
     });
 
-    console.log('✅ Test data setup complete');
+    logger.info('✅ Test data setup complete');
   });
 
   afterEach(async () => {
@@ -123,7 +124,7 @@ describe('Enhanced Training Module Integration Tests', () => {
   });
 
   afterAll(async () => {
-    console.log('🧹 Cleaning up Enhanced Training Module Integration Tests');
+    logger.info('🧹 Cleaning up Enhanced Training Module Integration Tests');
 
     // Shutdown services
     if (integrationService) {
@@ -133,7 +134,7 @@ describe('Enhanced Training Module Integration Tests', () => {
     // Close database connection
     await testDb.disconnect();
 
-    console.log('✅ Enhanced Training Module Integration Tests cleanup complete');
+    logger.info('✅ Enhanced Training Module Integration Tests cleanup complete');
   });
 
   // ============================================================================
@@ -193,7 +194,7 @@ describe('Enhanced Training Module Integration Tests', () => {
 
   describe('Enhanced Course Enrollment Integration', () => {
     test('should process complete enrollment workflow with all integrations', async () => {
-      console.log('🎯 Testing enhanced course enrollment workflow');
+      logger.info('🎯 Testing enhanced course enrollment workflow');
 
       // Execute enhanced enrollment
       const enrollmentResult = await integrationService.enrollLearnerInCourse(
@@ -203,7 +204,7 @@ describe('Enhanced Training Module Integration Tests', () => {
           enrollmentType: 'certification_track',
           analyticsTracking: true,
           predictiveAnalytics: true,
-        }
+        },
       );
 
       // Validate core enrollment success
@@ -234,7 +235,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       // Validate processing performance
       expect(enrollmentResult.data.processingTime).toBeLessThan(5000); // Should complete within 5 seconds
 
-      console.log('✅ Enhanced enrollment workflow completed successfully');
+      logger.info('✅ Enhanced enrollment workflow completed successfully');
     });
 
     test('should handle enrollment eligibility validation', async () => {
@@ -257,7 +258,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       // Attempt enrollment - should validate eligibility
       const enrollmentResult = await integrationService.enrollLearnerInCourse(
         ineligibleUser.id,
-        advancedCourse.id
+        advancedCourse.id,
       );
 
       // Should succeed with recommendations for prerequisite courses
@@ -272,7 +273,7 @@ describe('Enhanced Training Module Integration Tests', () => {
 
       const enrollmentResult = await integrationService.enrollLearnerInCourse(
         testUser.id,
-        testCourse.id
+        testCourse.id,
       );
 
       // Should still succeed with degraded functionality
@@ -291,7 +292,7 @@ describe('Enhanced Training Module Integration Tests', () => {
     test('should generate comprehensive audit trail for enrollment', async () => {
       const enrollmentResult = await integrationService.enrollLearnerInCourse(
         testUser.id,
-        testCourse.id
+        testCourse.id,
       );
 
       // Verify audit record was created
@@ -320,7 +321,7 @@ describe('Enhanced Training Module Integration Tests', () => {
     });
 
     test('should process complete course completion workflow', async () => {
-      console.log('🎯 Testing enhanced course completion workflow');
+      logger.info('🎯 Testing enhanced course completion workflow');
 
       const completionData = {
         enrollmentId: enrollmentData.data.enrollmentId,
@@ -341,7 +342,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       const completionResult = await integrationService.processCourseCompletion(
         testUser.id,
         testCourse.id,
-        completionData
+        completionData,
       );
 
       // Validate core completion success
@@ -369,7 +370,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       expect(completionResult.data.achievements.achievementLevel).toBe('proficient');
       expect(completionResult.data.achievements.certificationProgress).toBe('on-track');
 
-      console.log('✅ Enhanced completion workflow completed successfully');
+      logger.info('✅ Enhanced completion workflow completed successfully');
     });
 
     test('should handle completion validation failures', async () => {
@@ -387,8 +388,8 @@ describe('Enhanced Training Module Integration Tests', () => {
         integrationService.processCourseCompletion(
           testUser.id,
           testCourse.id,
-          invalidCompletionData
-        )
+          invalidCompletionData,
+        ),
       ).rejects.toThrow(/completion validation failed/i);
     });
 
@@ -403,7 +404,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       const completionResult = await integrationService.processCourseCompletion(
         testUser.id,
         testCourse.id,
-        completionData
+        completionData,
       );
 
       // Verify certification system received milestone update
@@ -428,7 +429,7 @@ describe('Enhanced Training Module Integration Tests', () => {
     });
 
     test('should build comprehensive learner dashboard', async () => {
-      console.log('🎯 Testing enhanced learner dashboard');
+      logger.info('🎯 Testing enhanced learner dashboard');
 
       const dashboardResult = await integrationService.getEnhancedLearnerDashboard(testUser.id, {
         timeframe: '30d',
@@ -467,7 +468,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       // Validate performance
       expect(dashboardResult.data.processingTime).toBeLessThan(3000); // Should load within 3 seconds
 
-      console.log('✅ Enhanced learner dashboard built successfully');
+      logger.info('✅ Enhanced learner dashboard built successfully');
     });
 
     test('should cache dashboard data for performance', async () => {
@@ -519,7 +520,7 @@ describe('Enhanced Training Module Integration Tests', () => {
         {
           includeInterventions: true,
           includeTrends: true,
-        }
+        },
       );
 
       expect(predictions.successProbability).toBeGreaterThan(0);
@@ -572,7 +573,7 @@ describe('Enhanced Training Module Integration Tests', () => {
         {
           includeProgress: true,
           includeCompliance: true,
-        }
+        },
       );
 
       expect(certificationStatus.overallProgress).toBeGreaterThan(0);
@@ -583,7 +584,7 @@ describe('Enhanced Training Module Integration Tests', () => {
 
     test('should handle government integration compliance', async () => {
       const complianceReport = await certificationSystem.generateGovernmentComplianceReport(
-        testUser.id
+        testUser.id,
       );
 
       expect(complianceReport.complianceStatus).toBe('COMPLIANT');
@@ -618,7 +619,7 @@ describe('Enhanced Training Module Integration Tests', () => {
 
       const assessment = await performanceSystem.createPerformanceAssessment(
         testUser.id,
-        assessmentConfig
+        assessmentConfig,
       );
 
       expect(assessment.assessmentId).toBeDefined();
@@ -650,11 +651,11 @@ describe('Enhanced Training Module Integration Tests', () => {
 
       const competencyEval = await performanceSystem.generateCompetencyEvaluation(
         testUser.id,
-        'plant_cultivation'
+        'plant_cultivation',
       );
 
       expect(competencyEval.competencyLevel).toMatch(
-        /novice|developing|proficient|advanced|expert/
+        /novice|developing|proficient|advanced|expert/,
       );
       expect(competencyEval.strengths).toBeDefined();
       expect(competencyEval.improvementAreas).toBeDefined();
@@ -743,7 +744,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       const totalTime = endTime - startTime;
       expect(totalTime).toBeLessThan(10000);
 
-      console.log(`✅ ${concurrentEnrollments} concurrent enrollments completed in ${totalTime}ms`);
+      logger.info(`✅ ${concurrentEnrollments} concurrent enrollments completed in ${totalTime}ms`)
     });
 
     test('should maintain performance under load', async () => {
@@ -768,7 +769,7 @@ describe('Enhanced Training Module Integration Tests', () => {
       // Average response time should be reasonable (< 500ms)
       expect(averageTime).toBeLessThan(500);
 
-      console.log(`✅ ${operationCount} dashboard requests averaged ${averageTime}ms`);
+      logger.info(`✅ ${operationCount} dashboard requests averaged ${averageTime}ms`)
     });
   });
 
@@ -822,7 +823,7 @@ describe('Enhanced Training Module Integration Tests', () => {
 
       const enrollmentResult = await integrationService.enrollLearnerInCourse(
         testUser.id,
-        testCourse.id
+        testCourse.id,
       );
 
       expect(enrollmentResult.success).toBe(true);

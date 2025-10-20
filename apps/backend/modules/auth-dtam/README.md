@@ -80,7 +80,7 @@ router.post(
   authDTAM.middleware.requireDTAMAdmin,
   (req, res) => {
     /* ... */
-  }
+  },
 );
 
 // Multiple roles
@@ -90,7 +90,7 @@ router.post(
   authDTAM.middleware.requireDTAMRole(['admin', 'manager']),
   (req, res) => {
     /* ... */
-  }
+  },
 );
 ```
 
@@ -299,7 +299,7 @@ router.post(
   authDTAM.middleware.requireDTAMRole(['admin', 'manager']),
   (req, res) => {
     /* ... */
-  }
+  },
 );
 ```
 

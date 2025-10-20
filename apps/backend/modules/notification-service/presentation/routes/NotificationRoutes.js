@@ -35,6 +35,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const NotificationController = require('../controllers/NotificationController');
@@ -52,7 +53,7 @@ class NotificationRoutes {
     this.generalLimiter = this._configureGeneralRateLimit();
 
     this._setupRoutes();
-    console.log('[NotificationRoutes] Initialized successfully');
+    logger.info('[NotificationRoutes] Initialized successfully');
   }
 
   /**
@@ -73,7 +74,7 @@ class NotificationRoutes {
       '/',
       this.generalLimiter,
       validationRules.getUserNotifications,
-      controller.getUserNotifications.bind(controller)
+      controller.getUserNotifications.bind(controller),
     );
 
     // Send individual notification
@@ -81,7 +82,7 @@ class NotificationRoutes {
       '/send',
       this.notificationLimiter,
       validationRules.sendNotification,
-      controller.sendNotification.bind(controller)
+      controller.sendNotification.bind(controller),
     );
 
     // Send bulk notifications (admin only)
@@ -90,7 +91,7 @@ class NotificationRoutes {
       auth.requireRole(['DTAM_ADMIN']),
       this.bulkLimiter,
       validationRules.sendBulkNotification,
-      controller.sendBulkNotification.bind(controller)
+      controller.sendBulkNotification.bind(controller),
     );
 
     // Mark notification as read
@@ -98,7 +99,7 @@ class NotificationRoutes {
       '/:notificationId/read',
       this.generalLimiter,
       validationRules.notificationId,
-      controller.markAsRead.bind(controller)
+      controller.markAsRead.bind(controller),
     );
 
     // Dismiss notification
@@ -106,7 +107,7 @@ class NotificationRoutes {
       '/:notificationId/dismiss',
       this.generalLimiter,
       validationRules.notificationId,
-      controller.dismissNotification.bind(controller)
+      controller.dismissNotification.bind(controller),
     );
 
     // Delete notification (admin only)
@@ -114,7 +115,7 @@ class NotificationRoutes {
       '/:notificationId',
       auth.requireRole(['DTAM_ADMIN']),
       validationRules.notificationId,
-      controller.deleteNotification.bind(controller)
+      controller.deleteNotification.bind(controller),
     );
 
     // Get notification templates
@@ -146,7 +147,7 @@ class NotificationRoutes {
           .isIn(['hour', 'day', 'week', 'month'])
           .withMessage('Invalid groupBy parameter'),
       ],
-      controller.getStatistics.bind(controller)
+      controller.getStatistics.bind(controller),
     );
 
     // Test notification delivery (admin only)
@@ -168,7 +169,7 @@ class NotificationRoutes {
           .isObject()
           .withMessage('Channels configuration is required'),
       ],
-      controller.testNotification.bind(controller)
+      controller.testNotification.bind(controller),
     );
 
     // Service health check
@@ -178,7 +179,7 @@ class NotificationRoutes {
     router.post(
       '/:notificationId/track/:event',
       this.generalLimiter,
-      this._trackNotificationEvent.bind(this)
+      this._trackNotificationEvent.bind(this),
     );
 
     // User notification preferences
@@ -209,7 +210,7 @@ class NotificationRoutes {
           .isArray()
           .withMessage('notificationTypes must be an array'),
       ],
-      this._updateUserPreferences.bind(this)
+      this._updateUserPreferences.bind(this),
     );
 
     // Error handling middleware
@@ -241,7 +242,7 @@ class NotificationRoutes {
       },
       handler: (req, res) => {
         console.warn(
-          `[NotificationRoutes] Notification rate limit exceeded for user: ${req.userId}`
+          `[NotificationRoutes] Notification rate limit exceeded for user: ${req.userId}`,
         );
         res.status(429).json({
           success: false,
@@ -272,7 +273,7 @@ class NotificationRoutes {
       },
       handler: (req, res) => {
         console.warn(
-          `[NotificationRoutes] Bulk notification rate limit exceeded for user: ${req.userId}`
+          `[NotificationRoutes] Bulk notification rate limit exceeded for user: ${req.userId}`,
         );
         res.status(429).json({
           success: false,
@@ -318,7 +319,7 @@ class NotificationRoutes {
         data: health,
       });
     } catch (error) {
-      console.error('[NotificationRoutes] Health check error:', error);
+      logger.error('[NotificationRoutes] Health check error:', error);
       res.status(503).json({
         success: false,
         error: 'HEALTH_CHECK_ERROR',
@@ -375,7 +376,7 @@ class NotificationRoutes {
         message: 'Event tracked successfully',
       });
     } catch (error) {
-      console.error('[NotificationRoutes] Event tracking error:', error);
+      logger.error('[NotificationRoutes] Event tracking error:', error);
       res.status(500).json({
         success: false,
         error: 'TRACKING_ERROR',
@@ -429,7 +430,7 @@ class NotificationRoutes {
         data: { preferences },
       });
     } catch (error) {
-      console.error('[NotificationRoutes] Get preferences error:', error);
+      logger.error('[NotificationRoutes] Get preferences error:', error);
       res.status(500).json({
         success: false,
         error: 'PREFERENCES_ERROR',
@@ -457,7 +458,7 @@ class NotificationRoutes {
               updatedAt: new Date(),
             },
           },
-          { new: true }
+          { new: true },
         );
 
       if (!updatedUser) {
@@ -486,7 +487,7 @@ class NotificationRoutes {
         },
       });
     } catch (error) {
-      console.error('[NotificationRoutes] Update preferences error:', error);
+      logger.error('[NotificationRoutes] Update preferences error:', error);
       res.status(500).json({
         success: false,
         error: 'UPDATE_PREFERENCES_ERROR',
@@ -500,7 +501,7 @@ class NotificationRoutes {
    * @private
    */
   _handleErrors(error, req, res, next) {
-    console.error('[NotificationRoutes] Unhandled error:', error);
+    logger.error('[NotificationRoutes] Unhandled error:', error);
 
     // Log error details for debugging
     const errorDetails = {
@@ -512,7 +513,7 @@ class NotificationRoutes {
       timestamp: new Date(),
     };
 
-    console.error('[NotificationRoutes] Error details:', errorDetails);
+    logger.error('[NotificationRoutes] Error details:', errorDetails);
 
     // Handle specific error types
     if (error.name === 'ValidationError') {

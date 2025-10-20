@@ -15,7 +15,7 @@ class GetDTAMDashboardUseCase {
     trainingCourseRepository,
     trainingEnrollmentRepository,
     documentRepository,
-    auditRepository
+    auditRepository,
   ) {
     this.farmRepository = farmRepository;
     this.certificateRepository = certificateRepository;
@@ -135,7 +135,7 @@ class GetDTAMDashboardUseCase {
 
     const result = await this.auditRepository.findWithFilters(
       {},
-      { page: 1, limit: 20, sort: { performedAt: -1 } }
+      { page: 1, limit: 20, sort: { performedAt: -1 } },
     );
 
     return result.logs.map(log => ({

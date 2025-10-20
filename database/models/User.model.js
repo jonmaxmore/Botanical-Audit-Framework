@@ -48,7 +48,7 @@ const LoginHistorySchema = new Schema(
       default: null,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 /**
@@ -281,7 +281,7 @@ const UserSchema = new Schema(
     timestamps: true, // Auto-manage createdAt/updatedAt
     collection: 'users',
     versionKey: false,
-  }
+  },
 );
 
 // ========================================
@@ -304,7 +304,7 @@ UserSchema.index(
   {
     partialFilterExpression: { status: 'ACTIVE' },
     name: 'active_users_email',
-  }
+  },
 );
 
 // ========================================
@@ -349,7 +349,7 @@ UserSchema.methods.recordLogin = async function (
   ipAddress,
   userAgent,
   success,
-  failureReason = null
+  failureReason = null,
 ) {
   // Add to login history (keep max 10)
   const loginRecord = {

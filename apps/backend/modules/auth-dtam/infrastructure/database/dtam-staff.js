@@ -121,7 +121,7 @@ const dtamStaffSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'dtam_staff',
-  }
+  },
 );
 
 // Indexes
@@ -211,7 +211,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const doc = await this.model.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding staff by ID:', error);
+      logger.error('Error finding staff by ID:', error);
       return null;
     }
   }
@@ -221,7 +221,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const doc = await this.model.findOne({ email: email.toLowerCase() });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding staff by email:', error);
+      logger.error('Error finding staff by email:', error);
       return null;
     }
   }
@@ -231,7 +231,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const doc = await this.model.findOne({ employeeId });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding staff by employee ID:', error);
+      logger.error('Error finding staff by employee ID:', error);
       return null;
     }
   }
@@ -244,7 +244,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding staff by reset token:', error);
+      logger.error('Error finding staff by reset token:', error);
       return null;
     }
   }
@@ -267,7 +267,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
 
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error saving staff:', error);
+      logger.error('Error saving staff:', error);
       throw error;
     }
   }
@@ -277,7 +277,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const result = await this.model.findByIdAndDelete(id);
       return result !== null;
     } catch (error) {
-      console.error('Error deleting staff:', error);
+      logger.error('Error deleting staff:', error);
       return false;
     }
   }
@@ -319,7 +319,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
         total,
       };
     } catch (error) {
-      console.error('Error finding staff with filters:', error);
+      logger.error('Error finding staff with filters:', error);
       return { items: [], total: 0 };
     }
   }
@@ -328,7 +328,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
     try {
       return await this.model.countDocuments({ status });
     } catch (error) {
-      console.error('Error counting staff by status:', error);
+      logger.error('Error counting staff by status:', error);
       return 0;
     }
   }
@@ -337,7 +337,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
     try {
       return await this.model.countDocuments({ role });
     } catch (error) {
-      console.error('Error counting staff by role:', error);
+      logger.error('Error counting staff by role:', error);
       return 0;
     }
   }
@@ -351,7 +351,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const count = await this.model.countDocuments(query);
       return count > 0;
     } catch (error) {
-      console.error('Error checking email exists:', error);
+      logger.error('Error checking email exists:', error);
       return false;
     }
   }
@@ -365,7 +365,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const count = await this.model.countDocuments(query);
       return count > 0;
     } catch (error) {
-      console.error('Error checking employee ID exists:', error);
+      logger.error('Error checking employee ID exists:', error);
       return false;
     }
   }
@@ -375,7 +375,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const docs = await this.model.find().sort({ createdAt: -1 }).limit(limit);
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding recently created staff:', error);
+      logger.error('Error finding recently created staff:', error);
       return [];
     }
   }
@@ -385,7 +385,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const docs = await this.model.find({ role });
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding staff by role:', error);
+      logger.error('Error finding staff by role:', error);
       return [];
     }
   }
@@ -395,7 +395,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       const docs = await this.model.find({ department });
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding staff by department:', error);
+      logger.error('Error finding staff by department:', error);
       return [];
     }
   }

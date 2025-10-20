@@ -52,9 +52,9 @@ class EnhancedApplicationProcessingController {
       this.setupMiddleware();
 
       this.isInitialized = true;
-      console.log('[EnhancedApplicationController] Initialized successfully');
+      logger.info('[EnhancedApplicationController] Initialized successfully');
     } catch (error) {
-      console.error('[EnhancedApplicationController] Initialization failed:', error);
+      logger.error('[EnhancedApplicationController] Initialization failed:', error);
       throw error;
     }
   }
@@ -117,7 +117,7 @@ class EnhancedApplicationProcessingController {
           reasonCode,
           userId: req.user.userId,
           userRole: req.user.role,
-        }
+        },
       );
 
       // Update metrics
@@ -272,7 +272,7 @@ class EnhancedApplicationProcessingController {
       const dashboardData = await this.applicationService.getApplicationDashboard(
         applicationId,
         req.user.role,
-        options
+        options,
       );
 
       // Generate analytics if requested
@@ -362,7 +362,7 @@ class EnhancedApplicationProcessingController {
       // Determine overall health status
       const serviceStatuses = Object.values(health.services);
       const hasUnhealthyService = serviceStatuses.some(
-        status => status && status.status !== 'healthy'
+        status => status && status.status !== 'healthy',
       );
 
       if (hasUnhealthyService) {
@@ -470,16 +470,16 @@ class EnhancedApplicationProcessingController {
   // Utility Methods
   setupRouteHandlers() {
     // Setup route-specific configurations
-    console.log('[EnhancedApplicationController] Route handlers configured');
+    logger.info('[EnhancedApplicationController] Route handlers configured');
   }
 
   setupMiddleware() {
     // Setup middleware configurations
-    console.log('[EnhancedApplicationController] Middleware configured');
+    logger.info('[EnhancedApplicationController] Middleware configured');
   }
 
   handleError(res, error, context) {
-    console.error(`[EnhancedApplicationController] ${context}:`, error);
+    logger.error(`[EnhancedApplicationController] ${context}:`, error);
 
     const statusCode = error.statusCode || 500;
     const errorResponse = {

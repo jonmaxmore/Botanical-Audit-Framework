@@ -1,8 +1,10 @@
 # 🏢 แพลตฟอร์ม GACP - บริการทั้งหมดแบบครบถ้วน
+
 **วันที่:** 20 ตุลาคม 2025  
 **สถานะ:** 🌟 Complete Platform Services Directory
 
 ## 🎯 สรุปภาพรวมแพลตฟอร์ม
+
 - **รวมบริการทั้งหมด:** **150+ บริการ**
 - **โมดูลหลัก:** 25 โมดูล
 - **แอปพลิเคชัน:** 5 แอป
@@ -12,6 +14,7 @@
 ---
 
 ## 📁 **1. Business Logic Services** (7 บริการหลัก)
+
 ```
 business-logic/
 ├── gacp-workflow-engine.js                    - 🔄 เครื่องมือ Workflow 8 ขั้นตอน
@@ -26,6 +29,7 @@ business-logic/
 ---
 
 ## 📁 **2. Core Application Modules** (25 โมดูล)
+
 ```
 apps/backend/modules/
 ├── application/                               - 📝 จัดการใบสมัคร GACP
@@ -57,6 +61,7 @@ apps/backend/modules/
 ---
 
 ## 📁 **3. Backend Services** (38 บริการ)
+
 ```
 apps/backend/services/
 ├── analytics-engine/                          - 📊 เครื่องมือวิเคราะห์ข้อมูล
@@ -102,6 +107,7 @@ apps/backend/services/
 ---
 
 ## 📁 **4. Frontend Applications** (5 แอปหลัก)
+
 ```
 apps/
 ├── admin-portal/                              - 👨‍💼 Portal ผู้ดูแลระบบ
@@ -133,6 +139,7 @@ apps/
 ## 📁 **5. Infrastructure & DevOps** (50+ เครื่องมือ)
 
 ### 🐳 **Docker & Containers**
+
 ```
 ├── docker-compose.yml                         - 🐳 Docker Compose หลัก
 ├── docker-compose.gacp.yml                    - 🌿 GACP-specific services
@@ -143,6 +150,7 @@ apps/
 ```
 
 ### ☸️ **Kubernetes Deployment**
+
 ```
 k8s/
 ├── app-deployment.yaml                        - 🚀 App deployment
@@ -158,6 +166,7 @@ k8s/
 ```
 
 ### 🏗️ **Terraform Infrastructure**
+
 ```
 terraform/
 ├── main.tf                                   - 🏗️ Main infrastructure
@@ -174,6 +183,7 @@ terraform/
 ```
 
 ### 🛠️ **Scripts & Automation** (20+ สคริปต์)
+
 ```
 scripts/
 ├── database-setup.js                         - 🗄️ ตั้งค่าฐานข้อมูล
@@ -202,6 +212,7 @@ scripts/
 ## 📁 **6. Configuration & Data** (20+ ไฟล์)
 
 ### ⚙️ **Configuration Files**
+
 ```
 config/
 ├── database.js                               - 🗄️ การกำหนดค่าฐานข้อมูล
@@ -214,6 +225,7 @@ config/
 ```
 
 ### 📊 **Standards & Data**
+
 ```
 data/standards/
 ├── gacp-thailand.json                        - 🇹🇭 มาตรฐาน GACP ไทย
@@ -222,6 +234,7 @@ data/standards/
 ```
 
 ### 🌐 **API Documentation**
+
 ```
 openapi/
 ├── application-service.yaml                  - 📝 API ใบสมัคร
@@ -237,6 +250,7 @@ openapi/
 ## 📁 **7. Monitoring & Security** (10+ บริการ)
 
 ### 📊 **Monitoring**
+
 ```
 monitoring/
 ├── monitoring-config.yml                     - 📊 การกำหนดค่า Monitoring
@@ -244,6 +258,7 @@ monitoring/
 ```
 
 ### 🛡️ **Security & Middleware**
+
 ```
 middleware/
 ├── rateLimiter.js                            - 🚦 จำกัดอัตราการเข้าถึง
@@ -251,6 +266,7 @@ middleware/
 ```
 
 ### 📝 **Examples & Usage**
+
 ```
 examples/
 ├── auth-usage.js                             - 🔐 ตัวอย่างการใช้ Authentication
@@ -261,6 +277,7 @@ examples/
 ---
 
 ## 📁 **8. Shared Packages & Utils** (15+ แพคเกจ)
+
 ```
 packages/
 ├── config/                                   - ⚙️ Shared configuration
@@ -274,25 +291,27 @@ packages/
 
 ## 🎯 **สรุปบริการทั้งหมด - Platform Overview**
 
-| หมวดหมู่ | จำนวนบริการ | สถานะ | หมายเหตุ |
-|----------|-------------|-------|----------|
-| **Business Logic** | 7 บริการ | 🟢 100% | Core GACP logic |
-| **Backend Services** | 38 บริการ | 🟢 95% | API & processing |
-| **Application Modules** | 25 โมดูล | 🟢 90% | Feature modules |
-| **Frontend Apps** | 5 แอป | 🟡 80% | Need TypeScript config |
-| **Infrastructure** | 30+ เครื่องมือ | 🟢 95% | Docker, K8s, Terraform |
-| **DevOps Scripts** | 20+ สคริปต์ | 🟢 100% | Automation ready |
-| **Configuration** | 20+ ไฟล์ | 🟢 90% | Need DB connection |
-| **Monitoring & Security** | 10+ บริการ | 🟢 85% | Production ready |
-| **Shared Packages** | 15+ แพคเกจ | 🟡 75% | Need integration |
+| หมวดหมู่                  | จำนวนบริการ    | สถานะ   | หมายเหตุ               |
+| ------------------------- | -------------- | ------- | ---------------------- |
+| **Business Logic**        | 7 บริการ       | 🟢 100% | Core GACP logic        |
+| **Backend Services**      | 38 บริการ      | 🟢 95%  | API & processing       |
+| **Application Modules**   | 25 โมดูล       | 🟢 90%  | Feature modules        |
+| **Frontend Apps**         | 5 แอป          | 🟡 80%  | Need TypeScript config |
+| **Infrastructure**        | 30+ เครื่องมือ | 🟢 95%  | Docker, K8s, Terraform |
+| **DevOps Scripts**        | 20+ สคริปต์    | 🟢 100% | Automation ready       |
+| **Configuration**         | 20+ ไฟล์       | 🟢 90%  | Need DB connection     |
+| **Monitoring & Security** | 10+ บริการ     | 🟢 85%  | Production ready       |
+| **Shared Packages**       | 15+ แพคเกจ     | 🟡 75%  | Need integration       |
 
 ### 🏆 **ภาพรวมความครบถ้วน**
+
 - **รวมบริการทั้งหมด:** **150+ Services**
 - **ความครบถ้วนโดยรวม:** **92%**
 - **พร้อม Production:** **90%**
 - **Core Features:** **100% Complete**
 
 ### 🚀 **Platform Highlights**
+
 1. ✅ **Complete GACP Workflow** - ครบ 8 ขั้นตอน
 2. ✅ **Multi-Platform Support** - Web, Mobile-ready
 3. ✅ **Cloud-Native Architecture** - Docker, K8s, Terraform

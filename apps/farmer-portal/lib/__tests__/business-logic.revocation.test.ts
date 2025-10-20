@@ -162,7 +162,7 @@ describe('Business Logic: Revocation Wait Period (30 Days)', () => {
 
       // Assert
       const daysDifference = Math.floor(
-        (result.getTime() - revokedDate.getTime()) / (24 * 60 * 60 * 1000)
+        (result.getTime() - revokedDate.getTime()) / (24 * 60 * 60 * 1000),
       );
       expect(daysDifference).toBe(30);
     });
@@ -295,7 +295,7 @@ describe('Business Logic: Revocation Wait Period (30 Days)', () => {
       // Act
       const endDate = calculateRevocationWaitEndDate(revokedDate);
       const daysDiff = Math.floor(
-        (endDate.getTime() - revokedDate.getTime()) / (24 * 60 * 60 * 1000)
+        (endDate.getTime() - revokedDate.getTime()) / (24 * 60 * 60 * 1000),
       );
 
       // Assert

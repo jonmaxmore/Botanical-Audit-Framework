@@ -70,7 +70,7 @@ class PaymentService extends EventEmitter {
       // Check if payment already exists
       const existingPayment = await this.paymentRepository.findByApplicationAndType(
         applicationId,
-        type
+        type,
       );
 
       if (existingPayment && existingPayment.status === this.PAYMENT_STATUS.COMPLETED) {
@@ -227,7 +227,7 @@ class PaymentService extends EventEmitter {
     try {
       const payment = await this.paymentRepository.findByApplicationAndType(
         applicationId,
-        this.PAYMENT_TYPES.INITIAL
+        this.PAYMENT_TYPES.INITIAL,
       );
 
       return !payment || payment.status !== this.PAYMENT_STATUS.COMPLETED;
@@ -252,7 +252,7 @@ class PaymentService extends EventEmitter {
 
       const payment = await this.paymentRepository.findByApplicationAndType(
         applicationId,
-        this.PAYMENT_TYPES.RESUBMISSION
+        this.PAYMENT_TYPES.RESUBMISSION,
       );
 
       return !payment || payment.status !== this.PAYMENT_STATUS.COMPLETED;
@@ -299,14 +299,14 @@ class PaymentService extends EventEmitter {
   async handleApplicationRejection(applicationId, farmerId, submissionCount) {
     try {
       logger.info(
-        `[PaymentService] Handling rejection for ${applicationId} (count: ${submissionCount})`
+        `[PaymentService] Handling rejection for ${applicationId} (count: ${submissionCount})`,
       );
 
       // Check if 3rd rejection or more
       if (submissionCount >= this.SUBMISSION_THRESHOLD) {
         const paymentRequired = await this.isResubmissionPaymentRequired(
           applicationId,
-          submissionCount
+          submissionCount,
         );
 
         if (paymentRequired) {

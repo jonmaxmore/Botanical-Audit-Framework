@@ -74,7 +74,7 @@ class SurveyController {
       this.logger.info('Survey creation request received', {
         userId: req.user?.id,
         farmId: req.body?.farmId,
-        title: req.body?.title
+        title: req.body?.title,
       });
 
       // Input validation
@@ -85,7 +85,7 @@ class SurveyController {
           400,
           'VALIDATION_ERROR',
           'Input validation failed',
-          validationResult.errors
+          validationResult.errors,
         );
       }
 
@@ -96,14 +96,14 @@ class SurveyController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to create survey'
+          'Insufficient permissions to create survey',
         );
       }
 
       // Execute business logic
       const surveyData = {
         ...req.body,
-        createdBy: req.user.id
+        createdBy: req.user.id,
       };
 
       const createdSurvey = await this.surveyManagementUseCase.createSurvey(surveyData);
@@ -112,7 +112,7 @@ class SurveyController {
       this.logger.info('Survey created successfully', {
         surveyId: createdSurvey.id,
         farmId: createdSurvey.farmId,
-        createdBy: req.user.id
+        createdBy: req.user.id,
       });
 
       // Success response
@@ -120,7 +120,7 @@ class SurveyController {
     } catch (error) {
       this.logger.error('Survey creation failed:', error);
       return this.sendErrorResponse(res, 500, 'CREATION_ERROR', 'Failed to create survey', {
-        details: error.message
+        details: error.message,
       });
     }
   }
@@ -153,7 +153,7 @@ class SurveyController {
       this.logger.info('Survey retrieval request', {
         surveyId,
         userId: req.user?.id,
-        includeResponses
+        includeResponses,
       });
 
       // Validate survey ID
@@ -164,7 +164,7 @@ class SurveyController {
       // Get survey data
       const surveyData = await this.surveyManagementUseCase.getSurveyById(surveyId, {
         includeResponses,
-        responseLimit
+        responseLimit,
       });
 
       if (!surveyData) {
@@ -178,20 +178,20 @@ class SurveyController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to access survey'
+          'Insufficient permissions to access survey',
         );
       }
 
       this.logger.info('Survey retrieved successfully', {
         surveyId,
-        farmId: surveyData.farmId
+        farmId: surveyData.farmId,
       });
 
       return this.sendSuccessResponse(res, 200, surveyData, 'Survey retrieved successfully');
     } catch (error) {
       this.logger.error('Survey retrieval failed:', error);
       return this.sendErrorResponse(res, 500, 'RETRIEVAL_ERROR', 'Failed to retrieve survey', {
-        details: error.message
+        details: error.message,
       });
     }
   }
@@ -227,7 +227,7 @@ class SurveyController {
         farmId,
         userId: req.user?.id,
         pagination: { page, limit },
-        filters: { category, status, sort, order }
+        filters: { category, status, sort, order },
       });
 
       // Validate farm ID
@@ -242,7 +242,7 @@ class SurveyController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to access farm surveys'
+          'Insufficient permissions to access farm surveys',
         );
       }
 
@@ -252,7 +252,7 @@ class SurveyController {
         limit: Math.min(limit, 50), // จำกัดไม่เกิน 50 records per request
         category,
         includeInactive: status === 'inactive',
-        sort: this.buildSortOptions(sort, order)
+        sort: this.buildSortOptions(sort, order),
       };
 
       // Get surveys data
@@ -261,7 +261,7 @@ class SurveyController {
       this.logger.info('Farm surveys retrieved successfully', {
         farmId,
         count: surveysData.surveys.length,
-        totalCount: surveysData.pagination.totalCount
+        totalCount: surveysData.pagination.totalCount,
       });
 
       return this.sendSuccessResponse(res, 200, surveysData, 'Farm surveys retrieved successfully');
@@ -272,7 +272,7 @@ class SurveyController {
         500,
         'RETRIEVAL_ERROR',
         'Failed to retrieve farm surveys',
-        { details: error.message }
+        { details: error.message },
       );
     }
   }
@@ -298,7 +298,7 @@ class SurveyController {
       this.logger.info('Survey update request', {
         surveyId,
         userId: req.user?.id,
-        updateFields: Object.keys(updateData)
+        updateFields: Object.keys(updateData),
       });
 
       // Validate survey ID and input data
@@ -313,7 +313,7 @@ class SurveyController {
           400,
           'VALIDATION_ERROR',
           'Input validation failed',
-          validationResult.errors
+          validationResult.errors,
         );
       }
 
@@ -330,7 +330,7 @@ class SurveyController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to update survey'
+          'Insufficient permissions to update survey',
         );
       }
 
@@ -338,13 +338,13 @@ class SurveyController {
       const updatedSurvey = await this.surveyManagementUseCase.updateSurvey(
         surveyId,
         updateData,
-        req.user.id
+        req.user.id,
       );
 
       this.logger.info('Survey updated successfully', {
         surveyId,
         version: updatedSurvey.version,
-        updatedBy: req.user.id
+        updatedBy: req.user.id,
       });
 
       return this.sendSuccessResponse(res, 200, updatedSurvey, 'Survey updated successfully');
@@ -356,12 +356,12 @@ class SurveyController {
           res,
           409,
           'CONFLICT',
-          'Cannot update survey with active responses'
+          'Cannot update survey with active responses',
         );
       }
 
       return this.sendErrorResponse(res, 500, 'UPDATE_ERROR', 'Failed to update survey', {
-        details: error.message
+        details: error.message,
       });
     }
   }
@@ -383,7 +383,7 @@ class SurveyController {
 
       this.logger.info('Survey deletion request', {
         surveyId,
-        userId: req.user?.id
+        userId: req.user?.id,
       });
 
       // Validate survey ID
@@ -404,7 +404,7 @@ class SurveyController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to delete survey'
+          'Insufficient permissions to delete survey',
         );
       }
 
@@ -413,7 +413,7 @@ class SurveyController {
 
       this.logger.info('Survey deleted successfully', {
         surveyId,
-        deletedBy: req.user.id
+        deletedBy: req.user.id,
       });
 
       return this.sendSuccessResponse(res, 200, deletionResult, 'Survey deleted successfully');
@@ -425,12 +425,12 @@ class SurveyController {
           res,
           409,
           'CONFLICT',
-          'Cannot delete survey with active responses'
+          'Cannot delete survey with active responses',
         );
       }
 
       return this.sendErrorResponse(res, 500, 'DELETION_ERROR', 'Failed to delete survey', {
-        details: error.message
+        details: error.message,
       });
     }
   }
@@ -462,8 +462,8 @@ class SurveyController {
         userId: req.user?.id,
         searchCriteria: {
           ...searchCriteria,
-          searchText: searchCriteria.searchText ? '***' : undefined // ซ่อนข้อความค้นหาใน log
-        }
+          searchText: searchCriteria.searchText ? '***' : undefined, // ซ่อนข้อความค้นหาใน log
+        },
       });
 
       // Validate search input
@@ -474,7 +474,7 @@ class SurveyController {
           400,
           'VALIDATION_ERROR',
           'Search criteria validation failed',
-          validationResult.errors
+          validationResult.errors,
         );
       }
 
@@ -486,7 +486,7 @@ class SurveyController {
             res,
             403,
             'AUTHORIZATION_ERROR',
-            'Insufficient permissions to search farm surveys'
+            'Insufficient permissions to search farm surveys',
           );
         }
       }
@@ -495,31 +495,31 @@ class SurveyController {
       const options = {
         page: parseInt(searchCriteria.page) || 1,
         limit: Math.min(parseInt(searchCriteria.limit) || 20, 50),
-        sortOrder: searchCriteria.sortOrder || 'desc'
+        sortOrder: searchCriteria.sortOrder || 'desc',
       };
 
       // Execute search
       const searchResults = await this.surveyManagementUseCase.searchSurveys(
         searchCriteria,
-        options
+        options,
       );
 
       this.logger.info('Survey search completed', {
         userId: req.user?.id,
         resultsCount: searchResults.surveys.length,
-        totalCount: searchResults.pagination.totalCount
+        totalCount: searchResults.pagination.totalCount,
       });
 
       return this.sendSuccessResponse(
         res,
         200,
         searchResults,
-        'Survey search completed successfully'
+        'Survey search completed successfully',
       );
     } catch (error) {
       this.logger.error('Survey search failed:', error);
       return this.sendErrorResponse(res, 500, 'SEARCH_ERROR', 'Failed to search surveys', {
-        details: error.message
+        details: error.message,
       });
     }
   }
@@ -542,7 +542,7 @@ class SurveyController {
 
       this.logger.info('Survey statistics request', {
         userId: req.user?.id,
-        filters: { farmId, dateFrom, dateTo, category }
+        filters: { farmId, dateFrom, dateTo, category },
       });
 
       // Check permissions
@@ -553,7 +553,7 @@ class SurveyController {
             res,
             403,
             'AUTHORIZATION_ERROR',
-            'Insufficient permissions to access farm statistics'
+            'Insufficient permissions to access farm statistics',
           );
         }
       }
@@ -564,7 +564,7 @@ class SurveyController {
           res,
           400,
           'INVALID_DATE_RANGE',
-          'Date from must be before date to'
+          'Date from must be before date to',
         );
       }
 
@@ -574,20 +574,20 @@ class SurveyController {
       if (dateTo) dateRange.to = dateTo;
 
       const statistics = await this.surveyManagementUseCase.getSurveyStatistics(farmId, dateRange, {
-        category
+        category,
       });
 
       this.logger.info('Survey statistics generated successfully', {
         userId: req.user?.id,
         farmId,
-        totalSurveys: statistics.overview.totalSurveys
+        totalSurveys: statistics.overview.totalSurveys,
       });
 
       return this.sendSuccessResponse(
         res,
         200,
         statistics,
-        'Survey statistics generated successfully'
+        'Survey statistics generated successfully',
       );
     } catch (error) {
       this.logger.error('Survey statistics generation failed:', error);
@@ -596,7 +596,7 @@ class SurveyController {
         500,
         'STATISTICS_ERROR',
         'Failed to generate survey statistics',
-        { details: error.message }
+        { details: error.message },
       );
     }
   }
@@ -643,7 +643,7 @@ class SurveyController {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -685,7 +685,7 @@ class SurveyController {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -717,7 +717,7 @@ class SurveyController {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -784,7 +784,7 @@ class SurveyController {
       success: true,
       data: data,
       message: message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -794,9 +794,9 @@ class SurveyController {
       error: {
         code: errorCode,
         message: message,
-        details: details
+        details: details,
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     return res.status(statusCode).json(errorResponse);

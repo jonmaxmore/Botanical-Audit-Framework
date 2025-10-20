@@ -25,23 +25,23 @@ const GACP_INSPECTION_CRITERIA = {
         name: 'ความสะอาดของฟาร์ม',
         description: 'พื้นที่ปลูกสะอาด ไม่มีขยะหรือสิ่งปนเปื้อน',
         weight: 8,
-        checkMethod: 'visual'
+        checkMethod: 'visual',
       },
       {
         code: 'area_boundary',
         name: 'การกำหนดขอบเขตพื้นที่',
         description: 'มีการกำหนดขอบเขตพื้นที่ปลูกชัดเจน',
         weight: 7,
-        checkMethod: 'visual'
+        checkMethod: 'visual',
       },
       {
         code: 'drainage_system',
         name: 'ระบบระบายน้ำ',
         description: 'มีระบบระบายน้ำที่เหมาะสม',
         weight: 10,
-        checkMethod: 'physical'
-      }
-    ]
+        checkMethod: 'physical',
+      },
+    ],
   },
 
   // ด้านการปลูกและการดูแล
@@ -55,23 +55,23 @@ const GACP_INSPECTION_CRITERIA = {
         name: 'ระยะห่างของต้นกัญชา',
         description: 'ระยะห่างระหว่างต้นเหมาะสมตามมาตรฐาน',
         weight: 10,
-        checkMethod: 'measurement'
+        checkMethod: 'measurement',
       },
       {
         code: 'plant_health',
         name: 'สุขภาพของต้นกัญชา',
         description: 'ต้นกัญชามีสุขภาพดี ไม่เป็นโรคหรือศัตรูพืช',
         weight: 15,
-        checkMethod: 'visual'
+        checkMethod: 'visual',
       },
       {
         code: 'water_management',
         name: 'การจัดการน้ำ',
         description: 'มีระบบให้น้ำที่เหมาะสมและเพียงพอ',
         weight: 5,
-        checkMethod: 'physical'
-      }
-    ]
+        checkMethod: 'physical',
+      },
+    ],
   },
 
   // ด้านการใช้ปุ๋ยและสารเคมี
@@ -85,16 +85,16 @@ const GACP_INSPECTION_CRITERIA = {
         name: 'การเก็บรักษาปุ๋ย',
         description: 'เก็บปุ๋ยในที่เหมาะสม ป้องกันการปนเปื้อน',
         weight: 8,
-        checkMethod: 'physical'
+        checkMethod: 'physical',
       },
       {
         code: 'pesticide_storage',
         name: 'การเก็บรักษาสารกำจัดศัตรูพืช',
         description: 'เก็บสารเคมีแยกจากอาหารและอุปกรณ์อื่น',
         weight: 12,
-        checkMethod: 'physical'
-      }
-    ]
+        checkMethod: 'physical',
+      },
+    ],
   },
 
   // ด้านการบันทึกข้อมูล
@@ -108,16 +108,16 @@ const GACP_INSPECTION_CRITERIA = {
         name: 'บันทึกการปลูกและดูแล',
         description: 'มีการบันทึกกิจกรรมการปลูกอย่างสม่ำเสมอ',
         weight: 8,
-        checkMethod: 'document'
+        checkMethod: 'document',
       },
       {
         code: 'input_usage_log',
         name: 'บันทึกการใช้ปัจจัยการผลิต',
         description: 'บันทึกการใช้ปุ๋ยและสารเคมีครบถ้วน',
         weight: 7,
-        checkMethod: 'document'
-      }
-    ]
+        checkMethod: 'document',
+      },
+    ],
   },
 
   // ด้านอุปกรณ์และสิ่งปลูกสร้าง
@@ -131,17 +131,17 @@ const GACP_INSPECTION_CRITERIA = {
         name: 'สิ่งปลูกสร้างสำหรับเก็บผลผลิต',
         description: 'มีโรงเก็บหรือพื้นที่เก็บผลผลิตที่เหมาะสม',
         weight: 5,
-        checkMethod: 'physical'
+        checkMethod: 'physical',
       },
       {
         code: 'equipment_condition',
         name: 'สภาพอุปกรณ์การเกษตร',
         description: 'อุปกรณ์อยู่ในสภาพดีใช้งานได้',
         weight: 5,
-        checkMethod: 'visual'
-      }
-    ]
-  }
+        checkMethod: 'visual',
+      },
+    ],
+  },
 };
 
 // ประเภทการตรวจสอบ
@@ -152,7 +152,7 @@ const INSPECTION_TYPES = {
     description: 'ตรวจสอบผ่านการโทรวิดีโอ',
     duration: 30, // นาที
     canCheck: ['visual', 'document'],
-    limitations: ['ไม่สามารถตรวจสอบทางกายภาพได้', 'ขึ้นอยู่กับคุณภาพสัญญาณ']
+    limitations: ['ไม่สามารถตรวจสอบทางกายภาพได้', 'ขึ้นอยู่กับคุณภาพสัญญาณ'],
   },
   ON_SITE: {
     type: 'on_site',
@@ -160,8 +160,8 @@ const INSPECTION_TYPES = {
     description: 'ตรวจสอบในพื้นที่จริง',
     duration: 120, // นาที
     canCheck: ['visual', 'physical', 'measurement', 'document'],
-    limitations: ['ใช้เวลานาน', 'มีค่าใช้จ่ายในการเดินทาง']
-  }
+    limitations: ['ใช้เวลานาน', 'มีค่าใช้จ่ายในการเดินทาง'],
+  },
 };
 
 class GACPFieldInspectionSystem extends EventEmitter {
@@ -187,8 +187,8 @@ class GACPFieldInspectionSystem extends EventEmitter {
         name: item.name,
         description: item.description,
         weight: item.weight,
-        checkMethod: item.checkMethod
-      }))
+        checkMethod: item.checkMethod,
+      })),
     }));
   }
 
@@ -209,11 +209,11 @@ class GACPFieldInspectionSystem extends EventEmitter {
         meetingUrl: meetingDetails.meetingUrl,
         password: meetingDetails.password,
         instructions:
-          meetingDetails.instructions || 'เตรียมเอกสารและพื้นที่ฟาร์มให้พร้อมสำหรับการตรวจสอบ'
+          meetingDetails.instructions || 'เตรียมเอกสารและพื้นที่ฟาร์มให้พร้อมสำหรับการตรวจสอบ',
       },
       checklist: this.generateVDOChecklist(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     // บันทึกข้อมูลการตรวจสอบ
@@ -223,7 +223,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
     await this.updateApplicationInspectionStatus(applicationId, 'vdo_scheduled', {
       inspectionId: inspection.inspectionId,
       scheduledDateTime,
-      inspectorId
+      inspectorId,
     });
 
     // ส่งการแจ้งเตือน
@@ -232,7 +232,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       inspectorId,
       scheduledDateTime,
       meetingDetails: inspection.meetingDetails,
-      inspectionId: inspection.inspectionId
+      inspectionId: inspection.inspectionId,
     });
 
     return inspection;
@@ -258,7 +258,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       videos,
       findings,
       technicalIssues,
-      farmersCooperation
+      farmersCooperation,
     } = vdoResults;
 
     // คำนวณคะแนน
@@ -282,7 +282,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       technicalIssues,
       farmersCooperation,
       requiresOnSite,
-      inspector: inspectorId
+      inspector: inspectorId,
     };
     inspection.updatedAt = new Date();
 
@@ -293,14 +293,14 @@ class GACPFieldInspectionSystem extends EventEmitter {
       await this.updateApplicationInspectionStatus(inspection.applicationId, 'requires_onsite', {
         vdoScore: score,
         vdoInspectionId: inspectionId,
-        reason: 'VDO Call ไม่สามารถตรวจสอบได้ครบถ้วน'
+        reason: 'VDO Call ไม่สามารถตรวจสอบได้ครบถ้วน',
       });
 
       this.emit('onsite_inspection_required', {
         applicationId: inspection.applicationId,
         vdoInspectionId: inspectionId,
         vdoScore: score,
-        reason: requiresOnSite.reason
+        reason: requiresOnSite.reason,
       });
     } else if (score >= this.passingScore) {
       // ผ่าน VDO Call เพียงอย่างเดียว
@@ -308,7 +308,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
         finalScore: score,
         method: 'vdo_call_only',
         passed: true,
-        inspectionId
+        inspectionId,
       });
     } else {
       // ไม่ผ่านเกณฑ์
@@ -317,7 +317,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
         method: 'vdo_call_only',
         passed: false,
         inspectionId,
-        reason: 'คะแนนไม่ถึงเกณฑ์ที่กำหนด'
+        reason: 'คะแนนไม่ถึงเกณฑ์ที่กำหนด',
       });
     }
 
@@ -331,7 +331,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
     applicationId,
     inspectorId,
     scheduledDateTime,
-    appointmentDetails = {}
+    appointmentDetails = {},
   ) {
     const inspection = {
       inspectionId: this.generateInspectionId(),
@@ -346,11 +346,11 @@ class GACPFieldInspectionSystem extends EventEmitter {
         contactPhone: appointmentDetails.contactPhone,
         estimatedDuration: appointmentDetails.estimatedDuration || 120, // นาที
         specialInstructions: appointmentDetails.specialInstructions,
-        equipmentNeeded: appointmentDetails.equipmentNeeded || []
+        equipmentNeeded: appointmentDetails.equipmentNeeded || [],
       },
       checklist: this.generateOnSiteChecklist(),
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     await this.saveInspection(inspection);
@@ -358,7 +358,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
     await this.updateApplicationInspectionStatus(applicationId, 'onsite_scheduled', {
       inspectionId: inspection.inspectionId,
       scheduledDateTime,
-      inspectorId
+      inspectorId,
     });
 
     this.emit('onsite_inspection_scheduled', {
@@ -366,7 +366,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       inspectorId,
       scheduledDateTime,
       appointmentDetails: inspection.appointmentDetails,
-      inspectionId: inspection.inspectionId
+      inspectionId: inspection.inspectionId,
     });
 
     return inspection;
@@ -393,7 +393,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       findings,
       recommendations,
       farmersPresent,
-      weatherConditions
+      weatherConditions,
     } = onSiteResults;
 
     // คำนวณคะแนน
@@ -414,7 +414,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       recommendations,
       farmersPresent,
       weatherConditions,
-      inspector: inspectorId
+      inspector: inspectorId,
     };
     inspection.updatedAt = new Date();
 
@@ -426,7 +426,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       method: 'on_site',
       passed: score >= this.passingScore,
       inspectionId,
-      reason: score < this.passingScore ? 'คะแนนไม่ถึงเกณฑ์ที่กำหนด' : null
+      reason: score < this.passingScore ? 'คะแนนไม่ถึงเกณฑ์ที่กำหนด' : null,
     });
 
     return inspection;
@@ -455,7 +455,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       timestamp: new Date(),
       actor: 'INSPECTOR',
       note: `การตรวจฟาร์มสำเร็จ คะแนน: ${finalResults.finalScore}% (${finalResults.method})`,
-      details: finalResults
+      details: finalResults,
     });
 
     await this.saveApplication(application);
@@ -466,7 +466,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
       passed: finalResults.passed,
       score: finalResults.finalScore,
       method: finalResults.method,
-      inspectionId: finalResults.inspectionId
+      inspectionId: finalResults.inspectionId,
     });
 
     return application;
@@ -480,7 +480,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
     if (vdoScore < this.minVdoScore) {
       return {
         required: true,
-        reason: `คะแนน VDO Call (${vdoScore}%) ต่ำกว่าเกณฑ์ (${this.minVdoScore}%)`
+        reason: `คะแนน VDO Call (${vdoScore}%) ต่ำกว่าเกณฑ์ (${this.minVdoScore}%)`,
       };
     }
 
@@ -489,19 +489,19 @@ class GACPFieldInspectionSystem extends EventEmitter {
     if (criticalIssues.length > 0) {
       return {
         required: true,
-        reason: `พบข้อสงสัยในรายการสำคัญ: ${criticalIssues.join(', ')}`
+        reason: `พบข้อสงสัยในรายการสำคัญ: ${criticalIssues.join(', ')}`,
       };
     }
 
     // มีการรายงานปัญหาที่ต้องตรวจสอบเพิ่มเติม
     const requiresPhysicalCheck = findings.some(
-      finding => finding.requiresPhysicalInspection === true
+      finding => finding.requiresPhysicalInspection === true,
     );
 
     if (requiresPhysicalCheck) {
       return {
         required: true,
-        reason: 'พบปัญหาที่ต้องตรวจสอบทางกายภาพ'
+        reason: 'พบปัญหาที่ต้องตรวจสอบทางกายภาพ',
       };
     }
 
@@ -563,8 +563,8 @@ class GACPFieldInspectionSystem extends EventEmitter {
             checked: false,
             score: 0,
             notes: '',
-            photos: []
-          }))
+            photos: [],
+          })),
       };
     });
 
@@ -586,8 +586,8 @@ class GACPFieldInspectionSystem extends EventEmitter {
           score: 0,
           notes: '',
           photos: [],
-          measurements: item.checkMethod === 'measurement' ? {} : null
-        }))
+          measurements: item.checkMethod === 'measurement' ? {} : null,
+        })),
       };
     });
 
@@ -603,23 +603,23 @@ class GACPFieldInspectionSystem extends EventEmitter {
       byType: {
         vdo_only: 0,
         onsite_only: 0,
-        vdo_plus_onsite: 0
+        vdo_plus_onsite: 0,
       },
       averageScores: {
         vdo: 0,
         onsite: 0,
-        combined: 0
+        combined: 0,
       },
       passRates: {
         vdo: 0,
         onsite: 0,
-        overall: 0
+        overall: 0,
       },
       commonIssues: {},
       inspectionDuration: {
         vdo: 0,
-        onsite: 0
-      }
+        onsite: 0,
+      },
     };
 
     // TODO: Implement actual statistics from database
@@ -684,9 +684,9 @@ class GACPFieldInspectionSystem extends EventEmitter {
       summary: {
         strengths: [],
         weaknesses: [],
-        recommendations: []
+        recommendations: [],
       },
-      timeline: []
+      timeline: [],
     };
 
     inspections.forEach(inspection => {
@@ -694,13 +694,13 @@ class GACPFieldInspectionSystem extends EventEmitter {
         type: inspection.type,
         date: inspection.scheduledDateTime,
         score: inspection.results?.score || 0,
-        duration: inspection.results?.duration || 0
+        duration: inspection.results?.duration || 0,
       });
 
       report.timeline.push({
         action: `${inspection.type}_completed`,
         date: inspection.results?.completedAt || inspection.updatedAt,
-        score: inspection.results?.score || 0
+        score: inspection.results?.score || 0,
       });
     });
 
@@ -717,5 +717,5 @@ class GACPFieldInspectionSystem extends EventEmitter {
 module.exports = {
   GACPFieldInspectionSystem,
   GACP_INSPECTION_CRITERIA,
-  INSPECTION_TYPES
+  INSPECTION_TYPES,
 };

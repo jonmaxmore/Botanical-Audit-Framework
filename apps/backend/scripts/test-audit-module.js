@@ -4,6 +4,7 @@
  * Basic functionality test for enhanced audit module without external dependencies
  */
 
+const logger = require('../shared/logger/logger');
 const fs = require('fs');
 const path = require('path');
 
@@ -24,7 +25,7 @@ class SimpleAuditModuleTest {
    * Run all audit module tests
    */
   async runAllTests() {
-    console.log('🔍 Starting Simple Audit Module Test...\n');
+    logger.info('🔍 Starting Simple Audit Module Test...\n');
 
     try {
       // Test file existence
@@ -41,7 +42,7 @@ class SimpleAuditModuleTest {
 
       return this.generateReport();
     } catch (error) {
-      console.error('❌ Test execution failed:', error);
+      logger.error('❌ Test execution failed:', error);
       throw error;
     }
   }
@@ -50,7 +51,7 @@ class SimpleAuditModuleTest {
    * Test if all required files exist
    */
   async testFileExistence() {
-    console.log('📁 Testing File Existence...');
+    logger.info('📁 Testing File Existence...');
 
     const requiredFiles = [
       'modules/audit/services/ComplianceMonitoringSystem.js',
@@ -68,7 +69,7 @@ class SimpleAuditModuleTest {
           throw new Error(`Required file not found: ${file}`);
         }
 
-        console.log(`  ✅ ${file}`);
+        logger.info(`  ✅ ${file}`);
         return true;
       });
     }
@@ -78,12 +79,12 @@ class SimpleAuditModuleTest {
    * Test module structure and exports
    */
   async testModuleStructure() {
-    console.log('\n🏗️  Testing Module Structure...');
+    logger.info('\n🏗️  Testing Module Structure...');
 
     await this.runTest('ComplianceMonitoringSystem structure', async () => {
       const filePath = path.join(
         __dirname,
-        '../modules/audit/services/ComplianceMonitoringSystem.js'
+        '../modules/audit/services/ComplianceMonitoringSystem.js',
       );
       const content = fs.readFileSync(filePath, 'utf8');
 
@@ -101,14 +102,14 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ ComplianceMonitoringSystem has all required methods');
+      logger.info('  ✅ ComplianceMonitoringSystem has all required methods');
       return true;
     });
 
     await this.runTest('GovernmentIntegrationService structure', async () => {
       const filePath = path.join(
         __dirname,
-        '../modules/audit/services/GovernmentIntegrationService.js'
+        '../modules/audit/services/GovernmentIntegrationService.js',
       );
       const content = fs.readFileSync(filePath, 'utf8');
 
@@ -127,14 +128,14 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ GovernmentIntegrationService has all required components');
+      logger.info('  ✅ GovernmentIntegrationService has all required components');
       return true;
     });
 
     await this.runTest('EnhancedAuditController structure', async () => {
       const filePath = path.join(
         __dirname,
-        '../modules/audit/presentation/controllers/EnhancedAuditController.js'
+        '../modules/audit/presentation/controllers/EnhancedAuditController.js',
       );
       const content = fs.readFileSync(filePath, 'utf8');
 
@@ -152,7 +153,7 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ EnhancedAuditController has all required endpoints');
+      logger.info('  ✅ EnhancedAuditController has all required endpoints');
       return true;
     });
   }
@@ -161,12 +162,12 @@ class SimpleAuditModuleTest {
    * Test business logic implementation
    */
   async testBusinessLogic() {
-    console.log('\n💼 Testing Business Logic...');
+    logger.info('\n💼 Testing Business Logic...');
 
     await this.runTest('Compliance rules implementation', async () => {
       const filePath = path.join(
         __dirname,
-        '../modules/audit/services/ComplianceMonitoringSystem.js'
+        '../modules/audit/services/ComplianceMonitoringSystem.js',
       );
       const content = fs.readFileSync(filePath, 'utf8');
 
@@ -184,14 +185,14 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ All compliance business rules implemented');
+      logger.info('  ✅ All compliance business rules implemented');
       return true;
     });
 
     await this.runTest('Government integration workflow', async () => {
       const filePath = path.join(
         __dirname,
-        '../modules/audit/services/GovernmentIntegrationService.js'
+        '../modules/audit/services/GovernmentIntegrationService.js',
       );
       const content = fs.readFileSync(filePath, 'utf8');
 
@@ -209,14 +210,14 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ Government integration workflows implemented');
+      logger.info('  ✅ Government integration workflows implemented');
       return true;
     });
 
     await this.runTest('Audit trail completeness', async () => {
       const controllerPath = path.join(
         __dirname,
-        '../modules/audit/presentation/controllers/EnhancedAuditController.js'
+        '../modules/audit/presentation/controllers/EnhancedAuditController.js',
       );
       const content = fs.readFileSync(controllerPath, 'utf8');
 
@@ -234,7 +235,7 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ Complete audit trail functionality implemented');
+      logger.info('  ✅ Complete audit trail functionality implemented');
       return true;
     });
   }
@@ -243,12 +244,12 @@ class SimpleAuditModuleTest {
    * Test integration readiness
    */
   async testIntegrationReadiness() {
-    console.log('\n🔗 Testing Integration Readiness...');
+    logger.info('\n🔗 Testing Integration Readiness...');
 
     await this.runTest('API route definitions', async () => {
       const routePath = path.join(
         __dirname,
-        '../modules/audit/presentation/routes/enhanced-audit.routes.js'
+        '../modules/audit/presentation/routes/enhanced-audit.routes.js',
       );
       const content = fs.readFileSync(routePath, 'utf8');
 
@@ -266,7 +267,7 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ All API routes properly defined');
+      logger.info('  ✅ All API routes properly defined');
       return true;
     });
 
@@ -286,7 +287,7 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ Error handling implemented in all modules');
+      logger.info('  ✅ Error handling implemented in all modules');
       return true;
     });
 
@@ -316,7 +317,7 @@ class SimpleAuditModuleTest {
         }
       }
 
-      console.log('  ✅ Business processes properly documented and implemented');
+      logger.info('  ✅ Business processes properly documented and implemented');
       return true;
     });
   }
@@ -343,7 +344,7 @@ class SimpleAuditModuleTest {
         status: 'FAILED',
         error: error.message,
       });
-      console.log(`  ❌ ${testName}: ${error.message}`);
+      logger.info(`  ❌ ${testName}: ${error.message}`);
     }
   }
 
@@ -353,32 +354,32 @@ class SimpleAuditModuleTest {
   generateReport() {
     const successRate = ((this.results.passed / this.results.totalTests) * 100).toFixed(1);
 
-    console.log('\n' + '='.repeat(60));
-    console.log('📋 AUDIT MODULE TEST REPORT');
-    console.log('='.repeat(60));
-    console.log(`✅ Tests Passed: ${this.results.passed}/${this.results.totalTests}`);
-    console.log(`❌ Tests Failed: ${this.results.failed}`);
-    console.log(`📊 Success Rate: ${successRate}%`);
+    logger.info('\n' + '='.repeat(60));
+    logger.info('📋 AUDIT MODULE TEST REPORT');
+    logger.info('='.repeat(60));
+    logger.info(`✅ Tests Passed: ${this.results.passed}/${this.results.totalTests}`);
+    logger.info(`❌ Tests Failed: ${this.results.failed}`);
+    logger.info(`📊 Success Rate: ${successRate}%`);
 
     if (this.results.failed > 0) {
-      console.log('\n⚠️  Failed Tests:');
+      logger.info('\n⚠️  Failed Tests:');
       this.results.details
         .filter(test => test.status === 'FAILED')
         .forEach(test => {
-          console.log(`  - ${test.name}: ${test.error}`);
+          logger.info(`  - ${test.name}: ${test.error}`);
         });
     }
 
     const status = this.results.failed === 0 ? 'READY FOR PRODUCTION' : 'NEEDS FIXES';
-    console.log(`\n🎯 Module Status: ${status}`);
+    logger.info(`\n🎯 Module Status: ${status}`);
 
     if (this.results.failed === 0) {
-      console.log('\n🎉 All audit module components are properly implemented!');
-      console.log('📈 Enhancement Progress: 90% → 100% ✅');
-      console.log('🚀 Ready to proceed with Training Module enhancement');
+      logger.info('\n🎉 All audit module components are properly implemented!');
+      logger.info('📈 Enhancement Progress: 90% → 100% ✅');
+      logger.info('🚀 Ready to proceed with Training Module enhancement');
     }
 
-    console.log('='.repeat(60));
+    logger.info('='.repeat(60));
 
     return {
       success: this.results.failed === 0,
@@ -395,14 +396,14 @@ test
   .runAllTests()
   .then(report => {
     if (report.success) {
-      console.log('\n✅ AUDIT MODULE VALIDATION COMPLETE');
+      logger.info('\n✅ AUDIT MODULE VALIDATION COMPLETE');
       process.exit(0);
     } else {
-      console.log('\n❌ AUDIT MODULE NEEDS FIXES');
+      logger.info('\n❌ AUDIT MODULE NEEDS FIXES');
       process.exit(1);
     }
   })
   .catch(error => {
-    console.error('❌ Test execution error:', error);
+    logger.error('❌ Test execution error:', error);
     process.exit(1);
   });

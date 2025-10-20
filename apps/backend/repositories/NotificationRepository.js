@@ -161,7 +161,7 @@ class NotificationRepository {
             readAt: new Date(),
           },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -188,7 +188,7 @@ class NotificationRepository {
             read: true,
             readAt: new Date(),
           },
-        }
+        },
       );
 
       return result.modifiedCount;

@@ -32,7 +32,7 @@ class DeleteReportUseCase {
         await this.reportGeneratorService.deleteFile(report.filePath);
       } catch (error) {
         // Log error but continue with database deletion
-        console.error('Failed to delete report file:', error);
+        logger.error('Failed to delete report file:', error);
       }
     }
 

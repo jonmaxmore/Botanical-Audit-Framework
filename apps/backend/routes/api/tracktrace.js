@@ -13,6 +13,7 @@
  * @since Phase 2 - October 12, 2025
  */
 
+const logger = require('../../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 const path = require('path');
@@ -53,7 +54,7 @@ async function initializeEngine(db) {
     authenticateToken: auth,
   });
   trackTraceService = result.service;
-  console.log('[TrackTrace API] Service initialized from module');
+  logger.info('[TrackTrace API] Service initialized from module');
 }
 
 // Middleware to check if service is initialized
@@ -89,7 +90,7 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
     const farmerId = req.user?.userId || req.user?.id;
 
     if (!farmerId) {
-      console.error('[TrackTrace API] No farmer ID in request');
+      logger.error('[TrackTrace API] No farmer ID in request');
       return res.status(401).json({
         success: false,
         error: 'User authentication failed - no farmer ID',
@@ -97,7 +98,7 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
     }
 
     if (!farmName || !cropType) {
-      console.error('[TrackTrace API] Missing fields:', { farmName, cropType });
+      logger.error('[TrackTrace API] Missing fields:', { farmName, cropType });
       return res.status(400).json({
         success: false,
         error: 'Missing required fields: farmName, cropType',
@@ -118,10 +119,10 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
       cropType,
     });
 
-    console.log('[TrackTrace API] QR Generation result:', result);
+    logger.info('[TrackTrace API] QR Generation result:', result);
 
     if (!result.success) {
-      console.error('[TrackTrace API] QR generation failed:', result);
+      logger.error('[TrackTrace API] QR generation failed:', result);
       return res.status(500).json(result);
     }
 
@@ -131,8 +132,8 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
       data: result.data,
     });
   } catch (error) {
-    console.error('[TrackTrace API] QR generation exception:', error);
-    console.error('[TrackTrace API] Stack trace:', error.stack);
+    logger.error('[TrackTrace API] QR generation exception:', error);
+    logger.error('[TrackTrace API] Stack trace:', error.stack);
     res.status(500).json({
       success: false,
       error: 'Failed to generate QR code',
@@ -166,7 +167,7 @@ router.get('/verify/:qrCodeId', checkEngineInitialized, async (req, res) => {
       data: result.data,
     });
   } catch (error) {
-    console.error('[TrackTrace API] Verification error:', error);
+    logger.error('[TrackTrace API] Verification error:', error);
     res.status(500).json({
       success: false,
       verified: false,
@@ -241,7 +242,7 @@ router.post('/activities', auth, checkEngineInitialized, async (req, res) => {
       data: result.data,
     });
   } catch (error) {
-    console.error('[TrackTrace API] Activity logging error:', error);
+    logger.error('[TrackTrace API] Activity logging error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to log activity',
@@ -274,7 +275,7 @@ router.get('/qrcode/:qrCodeId/timeline', checkEngineInitialized, async (req, res
       data: result.data,
     });
   } catch (error) {
-    console.error('[TrackTrace API] Timeline error:', error);
+    logger.error('[TrackTrace API] Timeline error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve timeline',
@@ -320,7 +321,7 @@ router.get('/analytics', auth, checkEngineInitialized, async (req, res) => {
       data: result.data,
     });
   } catch (error) {
-    console.error('[TrackTrace API] Analytics error:', error);
+    logger.error('[TrackTrace API] Analytics error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve analytics',
@@ -362,7 +363,7 @@ router.put('/qrcode/:qrCodeId/status', auth, checkEngineInitialized, async (req,
       message: result.message,
     });
   } catch (error) {
-    console.error('[TrackTrace API] Status update error:', error);
+    logger.error('[TrackTrace API] Status update error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to update status',

@@ -7,6 +7,7 @@
  */
 
 /* eslint-disable no-unused-vars */
+const logger = require('../../shared/logger/logger');
 const Certificate = require('./domain/entities/Certificate'); // Used for type documentation
 const CertificateNumber = require('./domain/value-objects/CertificateNumber'); // Used for type documentation
 /* eslint-enable no-unused-vars */
@@ -160,7 +161,7 @@ function createGetCertificateUseCase(certificateRepository) {
 function createMockPDFService() {
   return {
     async generateCertificatePDF(certificate) {
-      console.warn('⚠️ Using mock PDF service');
+      logger.warn('⚠️ Using mock PDF service');
       return {
         url: `/certificates/${certificate.id}/certificate.pdf`,
         path: `/tmp/certificates/${certificate.certificateNumber}.pdf`,
@@ -172,7 +173,7 @@ function createMockPDFService() {
 function createMockQRCodeService() {
   return {
     async generateQRCode(data) {
-      console.warn('⚠️ Using mock QR code service');
+      logger.warn('⚠️ Using mock QR code service');
       return {
         url: `/certificates/qr/${data.certificateNumber}.png`,
         data: `https://gacp.go.th/verify/${data.certificateNumber}`,
@@ -184,7 +185,7 @@ function createMockQRCodeService() {
 function createMockEventBus() {
   return {
     async publish(event) {
-      console.log('📢 Event published:', event.type);
+      logger.info('📢 Event published:', event.type);
     },
   };
 }

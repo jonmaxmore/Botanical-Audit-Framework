@@ -32,7 +32,7 @@ import {
   ListItemIcon,
   ListItemText,
   Alert,
-  CircularProgress,
+  CircularProgress
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -41,7 +41,7 @@ import {
   Description as DescriptionIcon,
   Person as PersonIcon,
   Agriculture as AgricultureIcon,
-  LocationOn as LocationOnIcon,
+  LocationOn as LocationOnIcon
 } from '@mui/icons-material';
 import { ApplicationApi } from '../../../lib/api.service';
 import { GACPApplication, ApplicationStatus } from '../../../types/application.types';
@@ -64,7 +64,7 @@ export default function DocumentReviewPage() {
     farmerID: false,
     cropPlan: false,
     previousCertificates: false,
-    photos: false,
+    photos: false
   });
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function DocumentReviewPage() {
     }
   }, [id]);
 
-  const loadApplication = async () => {
+  const loadApplication = async() => {
     try {
       setLoading(true);
       setError(null);
@@ -90,11 +90,11 @@ export default function DocumentReviewPage() {
   const handleChecklistChange = (key: string) => {
     setDocumentChecklist(prev => ({
       ...prev,
-      [key]: !prev[key],
+      [key]: !prev[key]
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async() => {
     if (!checkResult) {
       alert('กรุณาเลือกผลการตรวจสอบ');
       return;
@@ -117,8 +117,11 @@ export default function DocumentReviewPage() {
     try {
       setSubmitting(true);
       await ApplicationApi.updateStatus(id as string, {
-        status: checkResult === 'approved' ? ApplicationStatus.DOCUMENT_APPROVED : ApplicationStatus.DOCUMENT_REJECTED,
-        notes,
+        status:
+          checkResult === 'approved'
+            ? ApplicationStatus.DOCUMENT_APPROVED
+            : ApplicationStatus.DOCUMENT_REJECTED,
+        notes
       });
 
       alert('บันทึกผลการตรวจสอบเรียบร้อยแล้ว');
@@ -162,7 +165,7 @@ export default function DocumentReviewPage() {
     { key: 'farmerID', label: 'สำเนาบัตรประชาชนเกษตรกร' },
     { key: 'cropPlan', label: 'แผนการปลูก / ปฏิทินการผลิต' },
     { key: 'previousCertificates', label: 'ใบรับรองมาตรฐานอื่นๆ (ถ้ามี)' },
-    { key: 'photos', label: 'รูปถ่ายฟาร์ม / แปลงปลูก' },
+    { key: 'photos', label: 'รูปถ่ายฟาร์ม / แปลงปลูก' }
   ];
 
   return (
@@ -189,7 +192,7 @@ export default function DocumentReviewPage() {
             label={WorkflowService.getStatusLabel(application.status)}
             sx={{
               backgroundColor: WorkflowService.getStatusColor(application.status),
-              color: '#fff',
+              color: '#fff'
             }}
           />
         </Toolbar>
@@ -270,10 +273,10 @@ export default function DocumentReviewPage() {
                   <Typography variant="body1">
                     {application.submittedAt
                       ? new Date(application.submittedAt).toLocaleDateString('th-TH', {
-                          year: 'numeric',
-                          month: 'long',
-                          day: 'numeric',
-                        })
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                      })
                       : '-'}
                   </Typography>
                 </Grid>
@@ -294,8 +297,9 @@ export default function DocumentReviewPage() {
                   <ListItem
                     key={item.key}
                     sx={{
-                      borderBottom: index < checklistItems.length - 1 ? '1px solid #e0e0e0' : 'none',
-                      py: 2,
+                      borderBottom:
+                        index < checklistItems.length - 1 ? '1px solid #e0e0e0' : 'none',
+                      py: 2
                     }}
                   >
                     <ListItemIcon>

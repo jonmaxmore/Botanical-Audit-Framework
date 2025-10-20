@@ -41,7 +41,7 @@ export async function getCacheValue(key: string): Promise<string | null> {
  */
 export async function assertApplicationStatus(
   applicationId: string,
-  expectedStatus: string
+  expectedStatus: string,
 ): Promise<boolean> {
   const prisma = getPrisma();
 
@@ -197,7 +197,7 @@ export function clearAllMocks() {
  */
 export async function createBulkTestData(
   count: number,
-  type: 'users' | 'applications'
+  type: 'users' | 'applications',
 ): Promise<any[]> {
   const prisma = getPrisma();
   const data = [];
@@ -248,7 +248,7 @@ export async function createBulkTestData(
  */
 export async function measurePerformance<T>(
   name: string,
-  callback: () => Promise<T>
+  callback: () => Promise<T>,
 ): Promise<{ result: T; duration: number }> {
   const startTime = Date.now();
   const result = await callback();
@@ -265,7 +265,7 @@ export async function measurePerformance<T>(
 export function assertPerformance(duration: number, threshold: number, operation: string): void {
   if (duration > threshold) {
     throw new Error(
-      `Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`
+      `Performance threshold exceeded for ${operation}: ${duration}ms > ${threshold}ms`,
     );
   }
 }

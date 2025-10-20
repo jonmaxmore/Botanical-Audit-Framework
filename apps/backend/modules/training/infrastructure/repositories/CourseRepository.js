@@ -303,7 +303,7 @@ class CourseRepository {
               changes: 'Course archived/deleted',
             },
           },
-        }
+        },
       );
 
       if (result.matchedCount === 0) {

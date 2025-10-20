@@ -59,7 +59,7 @@ class SurveySystemController {
           totalSteps: 7,
         },
         'Survey wizard started',
-        201
+        201,
       );
     } catch (error) {
       logger.error('[SurveyController] Start wizard error:', error);
@@ -118,7 +118,7 @@ class SurveySystemController {
         surveyId,
         parseInt(stepId),
         stepData,
-        userId
+        userId,
       );
 
       return successResponse(
@@ -130,7 +130,7 @@ class SurveySystemController {
           progress: result.progress,
           isComplete: result.isComplete,
         },
-        autoSave ? 'Progress auto-saved' : 'Step updated successfully'
+        autoSave ? 'Progress auto-saved' : 'Step updated successfully',
       );
     } catch (error) {
       logger.error('[SurveyController] Update step error:', error);
@@ -160,7 +160,7 @@ class SurveySystemController {
           recommendations: result.recommendations,
           submittedAt: result.submittedAt,
         },
-        'Survey submitted successfully'
+        'Survey submitted successfully',
       );
     } catch (error) {
       logger.error('[SurveyController] Submit wizard error:', error);

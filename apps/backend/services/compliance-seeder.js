@@ -86,7 +86,7 @@ class ComplianceSeeder {
 
         if (!standard || !parameter) {
           console.warn(
-            `  ⚠️  Skipping value: Standard '${valueData.standardRef}' or Parameter '${valueData.parameterRef}' not found`
+            `  ⚠️  Skipping value: Standard '${valueData.standardRef}' or Parameter '${valueData.parameterRef}' not found`,
           );
           continue;
         }
@@ -131,7 +131,7 @@ class ComplianceSeeder {
         counts: finalCounts,
       };
     } catch (error) {
-      console.error('❌ Error seeding compliance database:', error);
+      logger.error('❌ Error seeding compliance database:', error);
       throw error;
     }
   }
@@ -278,7 +278,7 @@ class ComplianceSeeder {
         }
       }
     } catch (error) {
-      console.error('Error adding additional data:', error);
+      logger.error('Error adding additional data:', error);
       throw error;
     }
   }
@@ -318,7 +318,7 @@ class ComplianceSeeder {
       ]);
 
       if (orphanedValues.length > 0) {
-        console.warn(`⚠️  Found ${orphanedValues.length} orphaned standard values`);
+        logger.warn(`⚠️  Found ${orphanedValues.length} orphaned standard values`);
       } else {
       }
 
@@ -330,7 +330,7 @@ class ComplianceSeeder {
         });
 
         if (valueCount === 0) {
-          console.warn(`⚠️  Standard '${standard.abbreviation}' has no parameter values`);
+          logger.warn(`⚠️  Standard '${standard.abbreviation}' has no parameter values`);
         }
       }
 
@@ -344,7 +344,7 @@ class ComplianceSeeder {
         },
       };
     } catch (error) {
-      console.error('❌ Error verifying data:', error);
+      logger.error('❌ Error verifying data:', error);
       throw error;
     }
   }
@@ -360,7 +360,7 @@ class ComplianceSeeder {
 
       return { success: true, message: 'All compliance data cleared' };
     } catch (error) {
-      console.error('❌ Error clearing data:', error);
+      logger.error('❌ Error clearing data:', error);
       throw error;
     }
   }
@@ -396,13 +396,13 @@ if (require.main === module) {
           result = await ComplianceSeeder.clearAll();
           break;
         default:
-          console.error('Unknown command. Use: seed, verify, or clear');
+          logger.error('Unknown command. Use: seed, verify, or clear');
           process.exit(1);
       }
 
       process.exit(0);
     } catch (error) {
-      console.error('Command failed:', error);
+      logger.error('Command failed:', error);
       process.exit(1);
     }
   }

@@ -48,7 +48,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     auditMiddleware,
     fileMiddleware,
     progressMiddleware,
-    logger
+    logger,
   } = dependencies;
 
   // =============================================================================
@@ -78,7 +78,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     rateLimitMiddleware.createStandardsComparison,
     validationMiddleware.validateCreateStandardsComparison,
     auditMiddleware.logActivity('standards_comparison_create'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await standardsComparisonController.createStandardsComparison(req, res);
       } catch (error) {
@@ -87,11 +87,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -111,7 +111,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     authMiddleware.authenticate,
     rateLimitMiddleware.getStandardsComparison,
     auditMiddleware.logActivity('standards_comparison_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await standardsComparisonController.getStandardsComparison(req, res);
       } catch (error) {
@@ -120,11 +120,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -143,7 +143,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     rateLimitMiddleware.updateStandardsComparison,
     validationMiddleware.validateUpdateComparisonConfiguration,
     auditMiddleware.logActivity('standards_comparison_config_update'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await standardsComparisonController.updateComparisonConfiguration(req, res);
       } catch (error) {
@@ -152,11 +152,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -180,7 +180,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     validationMiddleware.validateDataCollectionOptions,
     progressMiddleware.initializeProgress,
     auditMiddleware.logActivity('data_collection_start'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await standardsComparisonController.collectCurrentPracticesData(req, res);
       } catch (error) {
@@ -189,11 +189,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -215,7 +215,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     validationMiddleware.validateAnalysisOptions,
     progressMiddleware.initializeProgress,
     auditMiddleware.logActivity('standards_analysis_start'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await standardsComparisonController.runStandardsAnalysis(req, res);
       } catch (error) {
@@ -224,11 +224,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -251,7 +251,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     authMiddleware.authenticate,
     rateLimitMiddleware.getProgress,
     auditMiddleware.logActivity('progress_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await standardsComparisonController.getComparisonProgress(req, res);
       } catch (error) {
@@ -260,11 +260,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -292,7 +292,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     rateLimitMiddleware.getFarmComparisons,
     validationMiddleware.validateFarmId,
     auditMiddleware.logActivity('farm_comparisons_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await standardsComparisonController.getFarmStandardsComparisons(req, res);
       } catch (error) {
@@ -301,11 +301,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -335,7 +335,7 @@ function setupStandardsComparisonRoutes(dependencies) {
     rateLimitMiddleware.generateReport,
     validationMiddleware.validateReportOptions,
     auditMiddleware.logActivity('report_generation'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await standardsComparisonController.generateImprovementReport(req, res);
       } catch (error) {
@@ -344,11 +344,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -368,14 +368,14 @@ function setupStandardsComparisonRoutes(dependencies) {
     rateLimitMiddleware.downloadReport,
     auditMiddleware.logActivity('report_download'),
     fileMiddleware.validateFileAccess,
-    async(req, res) => {
+    async (req, res) => {
       try {
         // Implementation for report download
         // This would be handled by a separate file service
         res.status(200).json({
           success: true,
           message: 'Report download functionality to be implemented',
-          reportId: req.params.reportId
+          reportId: req.params.reportId,
         });
       } catch (error) {
         logger.error('Report download route error:', error);
@@ -383,11 +383,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -419,13 +419,13 @@ function setupStandardsComparisonRoutes(dependencies) {
     rateLimitMiddleware.searchComparisons,
     validationMiddleware.validateSearchCriteria,
     auditMiddleware.logActivity('comparisons_search'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         // Implementation for advanced search
         res.status(200).json({
           success: true,
           message: 'Advanced search functionality to be implemented',
-          searchCriteria: req.body
+          searchCriteria: req.body,
         });
       } catch (error) {
         logger.error('Search route error:', error);
@@ -433,11 +433,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -468,13 +468,13 @@ function setupStandardsComparisonRoutes(dependencies) {
     authMiddleware.authenticate,
     rateLimitMiddleware.getStatistics,
     auditMiddleware.logActivity('statistics_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         // Implementation for statistics
         res.status(200).json({
           success: true,
           message: 'Statistics functionality to be implemented',
-          filters: req.query
+          filters: req.query,
         });
       } catch (error) {
         logger.error('Statistics route error:', error);
@@ -482,11 +482,11 @@ function setupStandardsComparisonRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -511,8 +511,8 @@ function setupStandardsComparisonRoutes(dependencies) {
         'data_collection',
         'standards_analysis',
         'report_generation',
-        'progress_tracking'
-      ]
+        'progress_tracking',
+      ],
     });
   });
 
@@ -533,22 +533,22 @@ function setupStandardsComparisonRoutes(dependencies) {
           management: [
             'POST /api/standards-comparisons - Create comparison',
             'GET /api/standards-comparisons/:id - Get comparison details',
-            'PUT /api/standards-comparisons/:id/configuration - Update configuration'
+            'PUT /api/standards-comparisons/:id/configuration - Update configuration',
           ],
           workflows: [
             'POST /api/standards-comparisons/:id/collect-data - Collect practices data',
             'POST /api/standards-comparisons/:id/analyze - Run analysis',
-            'GET /api/standards-comparisons/:id/progress - Get progress'
+            'GET /api/standards-comparisons/:id/progress - Get progress',
           ],
           reporting: [
             'POST /api/standards-comparisons/:id/reports - Generate reports',
-            'GET /api/standards-comparisons/:id/reports/:reportId/download - Download report'
+            'GET /api/standards-comparisons/:id/reports/:reportId/download - Download report',
           ],
           farm_management: ['GET /api/farms/:farmId/standards-comparisons - Get farm comparisons'],
           utilities: [
             'POST /api/standards-comparisons/search - Search comparisons',
-            'GET /api/standards-comparisons/statistics - Get statistics'
-          ]
+            'GET /api/standards-comparisons/statistics - Get statistics',
+          ],
         },
         workflow_steps: {
           typical_flow: [
@@ -556,10 +556,10 @@ function setupStandardsComparisonRoutes(dependencies) {
             '2. Collect data with POST /api/standards-comparisons/:id/collect-data',
             '3. Run analysis with POST /api/standards-comparisons/:id/analyze',
             '4. Generate reports with POST /api/standards-comparisons/:id/reports',
-            '5. Monitor progress with GET /api/standards-comparisons/:id/progress'
-          ]
-        }
-      }
+            '5. Monitor progress with GET /api/standards-comparisons/:id/progress',
+          ],
+        },
+      },
     });
   });
 
@@ -576,7 +576,7 @@ function setupStandardsComparisonRoutes(dependencies) {
       method: req.method,
       path: req.originalUrl,
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(404).json({
@@ -593,10 +593,10 @@ function setupStandardsComparisonRoutes(dependencies) {
           'POST /api/standards-comparisons/:id/collect-data',
           'POST /api/standards-comparisons/:id/analyze',
           'GET /api/standards-comparisons/:id/progress',
-          'POST /api/standards-comparisons/:id/reports'
-        ]
+          'POST /api/standards-comparisons/:id/reports',
+        ],
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   });
 
@@ -610,7 +610,7 @@ function setupStandardsComparisonRoutes(dependencies) {
       stack: error.stack,
       path: req.originalUrl,
       method: req.method,
-      userId: req.user?.id
+      userId: req.user?.id,
     });
 
     // ตรวจสอบประเภทข้อผิดพลาด
@@ -620,9 +620,9 @@ function setupStandardsComparisonRoutes(dependencies) {
         error: {
           code: 'VALIDATION_ERROR',
           message: 'Input validation failed',
-          details: error.message
+          details: error.message,
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -631,9 +631,9 @@ function setupStandardsComparisonRoutes(dependencies) {
         success: false,
         error: {
           code: 'UNAUTHORIZED',
-          message: 'Authentication required'
+          message: 'Authentication required',
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -643,9 +643,9 @@ function setupStandardsComparisonRoutes(dependencies) {
         error: {
           code: 'BUSINESS_LOGIC_ERROR',
           message: error.message,
-          details: error.details
+          details: error.details,
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -654,9 +654,9 @@ function setupStandardsComparisonRoutes(dependencies) {
       success: false,
       error: {
         code: 'INTERNAL_SERVER_ERROR',
-        message: 'An unexpected error occurred in standards comparison system'
+        message: 'An unexpected error occurred in standards comparison system',
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   });
 
@@ -670,9 +670,9 @@ function setupStandardsComparisonRoutes(dependencies) {
       'reporting',
       'search',
       'statistics',
-      'utilities'
+      'utilities',
     ],
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 
   return router;

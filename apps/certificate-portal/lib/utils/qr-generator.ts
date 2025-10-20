@@ -40,7 +40,7 @@ export async function generateQRCode(data: string, options?: QRCodeOptions): Pro
 export async function generateQRCodeCanvas(
   data: string,
   canvas: HTMLCanvasElement,
-  options?: QRCodeOptions
+  options?: QRCodeOptions,
 ): Promise<void> {
   const defaultOptions: QRCodeOptions = {
     width: 200,
@@ -63,7 +63,7 @@ export async function generateQRCodeCanvas(
  */
 export async function generateCertificateQR(
   certificateNumber: string,
-  options?: QRCodeOptions
+  options?: QRCodeOptions,
 ): Promise<string> {
   const verificationURL = `${process.env.NEXT_PUBLIC_API_URL}/verify/${certificateNumber}`;
   return generateQRCode(verificationURL, options);

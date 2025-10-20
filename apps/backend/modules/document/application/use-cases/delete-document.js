@@ -34,7 +34,7 @@ class DeleteDocumentUseCase {
             const thumbnailPath = document.thumbnailUrl.split('/').pop();
             await this.fileStorageService.deleteFile(thumbnailPath);
           } catch (error) {
-            console.error('Failed to delete thumbnail:', error);
+            logger.error('Failed to delete thumbnail:', error);
           }
         }
 
@@ -47,7 +47,7 @@ class DeleteDocumentUseCase {
         return archivedDocument;
       }
     } catch (error) {
-      console.error('Error deleting document:', error);
+      logger.error('Error deleting document:', error);
       throw error;
     }
   }

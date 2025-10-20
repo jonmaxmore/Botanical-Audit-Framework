@@ -1,3 +1,4 @@
+const logger = require('shared/logger/logger');
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -377,35 +378,35 @@ function handleAPIRequest(req, res) {
         success: false,
         error: 'API endpoint not found',
         available_endpoints: Object.keys(mockResponses),
-      })
+      }),
     );
   }
 }
 
 // Start server
 server.listen(PORT, () => {
-  console.log('🌿 GACP Platform Demo Server เริ่มต้นแล้ว!');
-  console.log('='.repeat(50));
-  console.log(`🚀 Server: http://localhost:${PORT}`);
-  console.log(`🎮 Demo Page: http://localhost:${PORT}/demo.html`);
-  console.log(`📊 Monitoring: http://localhost:${PORT}/monitoring-dashboard.html`);
-  console.log('='.repeat(50));
-  console.log('📋 Available API Endpoints:');
+  logger.info('🌿 GACP Platform Demo Server เริ่มต้นแล้ว!');
+  logger.info('='.repeat(50));
+  logger.info(`🚀 Server: http://localhost:${PORT}`);
+  logger.info(`🎮 Demo Page: http://localhost:${PORT}/demo.html`);
+  logger.info(`📊 Monitoring: http://localhost:${PORT}/monitoring-dashboard.html`);
+  logger.info('='.repeat(50));
+  logger.info('📋 Available API Endpoints:');
   Object.keys(mockResponses).forEach(endpoint => {
-    console.log(`   - ${endpoint}`);
+    logger.info(`   - ${endpoint}`);
   });
-  console.log('='.repeat(50));
-  console.log('✅ พร้อมใช้งาน! เปิด browser และไปที่ URL ด้านบน');
+  logger.info('='.repeat(50));
+  logger.info('✅ พร้อมใช้งาน! เปิด browser และไปที่ URL ด้านบน');
 });
 
 // Handle server shutdown
 process.on('SIGTERM', () => {
-  console.log('🛑 GACP Platform Demo Server หยุดทำงาน');
+  logger.info('🛑 GACP Platform Demo Server หยุดทำงาน');
   server.close();
 });
 
 process.on('SIGINT', () => {
-  console.log('\n🛑 GACP Platform Demo Server หยุดทำงาน');
+  logger.info('\n🛑 GACP Platform Demo Server หยุดทำงาน');
   server.close();
   process.exit(0);
 });

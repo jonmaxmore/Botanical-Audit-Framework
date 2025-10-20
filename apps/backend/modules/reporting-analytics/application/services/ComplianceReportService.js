@@ -40,6 +40,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const moment = require('moment-timezone');
 
 class ComplianceReportService {
@@ -61,7 +62,7 @@ class ComplianceReportService {
     this.reportingSchedule = this._initializeReportingSchedule();
     this.retentionPolicies = this._initializeRetentionPolicies();
 
-    console.log('[ComplianceReportService] Initializing government compliance reporting engine...');
+    logger.info('[ComplianceReportService] Initializing government compliance reporting engine...');
   }
 
   /**
@@ -86,10 +87,10 @@ class ComplianceReportService {
       await this._initializeComplianceScoring();
 
       console.log(
-        '[ComplianceReportService] Initialization completed with regulatory compliance capabilities'
+        '[ComplianceReportService] Initialization completed with regulatory compliance capabilities',
       );
     } catch (error) {
-      console.error('[ComplianceReportService] Initialization failed:', error);
+      logger.error('[ComplianceReportService] Initialization failed:', error);
       throw new Error(`ComplianceReportService initialization failed: ${error.message}`);
     }
   }
@@ -108,7 +109,7 @@ class ComplianceReportService {
    */
   async generateDTAMComplianceReport(criteria = {}) {
     try {
-      console.log('[ComplianceReportService] Generating DTAM compliance report...');
+      logger.info('[ComplianceReportService] Generating DTAM compliance report...');
 
       // Step 1: Validate and normalize criteria
       const normalizedCriteria = this._validateComplianceCriteria(criteria);
@@ -119,19 +120,19 @@ class ComplianceReportService {
       // Step 3: Perform compliance validation against DTAM standards
       const complianceValidation = await this._validateDTAMCompliance(
         complianceData,
-        normalizedCriteria
+        normalizedCriteria,
       );
 
       // Step 4: Calculate compliance scores and ratings
       const complianceScores = await this._calculateDTAMComplianceScores(
         complianceData,
-        complianceValidation
+        complianceValidation,
       );
 
       // Step 5: Generate risk assessment and mitigation recommendations
       const riskAssessment = await this._performComplianceRiskAssessment(
         complianceData,
-        complianceScores
+        complianceScores,
       );
 
       // Step 6: Compile audit trail documentation
@@ -271,12 +272,12 @@ class ComplianceReportService {
       }
 
       console.log(
-        `[ComplianceReportService] DTAM compliance report generated (Score: ${complianceScores.overall}%)`
+        `[ComplianceReportService] DTAM compliance report generated (Score: ${complianceScores.overall}%)`,
       );
 
       return exportedReport;
     } catch (error) {
-      console.error('[ComplianceReportService] DTAM compliance report generation failed:', error);
+      logger.error('[ComplianceReportService] DTAM compliance report generation failed:', error);
       throw new Error(`DTAM compliance report generation failed: ${error.message}`);
     }
   }
@@ -290,7 +291,7 @@ class ComplianceReportService {
    */
   async generateAuditTrailReport(criteria = {}) {
     try {
-      console.log('[ComplianceReportService] Generating audit trail report...');
+      logger.info('[ComplianceReportService] Generating audit trail report...');
 
       const normalizedCriteria = this._validateComplianceCriteria(criteria);
 
@@ -354,12 +355,12 @@ class ComplianceReportService {
       const exportedReport = await this._exportComplianceReport(auditReport, 'pdf');
 
       console.log(
-        `[ComplianceReportService] Audit trail report generated (${auditData.entries.length} entries)`
+        `[ComplianceReportService] Audit trail report generated (${auditData.entries.length} entries)`,
       );
 
       return exportedReport;
     } catch (error) {
-      console.error('[ComplianceReportService] Audit trail report generation failed:', error);
+      logger.error('[ComplianceReportService] Audit trail report generation failed:', error);
       throw new Error(`Audit trail report generation failed: ${error.message}`);
     }
   }
@@ -373,7 +374,7 @@ class ComplianceReportService {
    */
   async generatePrivacyComplianceReport(criteria = {}) {
     try {
-      console.log('[ComplianceReportService] Generating privacy compliance report...');
+      logger.info('[ComplianceReportService] Generating privacy compliance report...');
 
       const normalizedCriteria = this._validateComplianceCriteria(criteria);
 
@@ -426,13 +427,13 @@ class ComplianceReportService {
 
       const exportedReport = await this._exportComplianceReport(privacyReport, 'pdf');
 
-      console.log('[ComplianceReportService] Privacy compliance report generated successfully');
+      logger.info('[ComplianceReportService] Privacy compliance report generated successfully');
 
       return exportedReport;
     } catch (error) {
       console.error(
         '[ComplianceReportService] Privacy compliance report generation failed:',
-        error
+        error,
       );
       throw new Error(`Privacy compliance report generation failed: ${error.message}`);
     }
@@ -447,7 +448,7 @@ class ComplianceReportService {
    */
   async generateSecurityComplianceReport(criteria = {}) {
     try {
-      console.log('[ComplianceReportService] Generating security compliance report...');
+      logger.info('[ComplianceReportService] Generating security compliance report...');
 
       const normalizedCriteria = this._validateComplianceCriteria(criteria);
 
@@ -504,14 +505,14 @@ class ComplianceReportService {
       const exportedReport = await this._exportComplianceReport(securityReport, 'pdf');
 
       console.log(
-        `[ComplianceReportService] Security compliance report generated (Score: ${securityAnalysis.overallScore}%)`
+        `[ComplianceReportService] Security compliance report generated (Score: ${securityAnalysis.overallScore}%)`,
       );
 
       return exportedReport;
     } catch (error) {
       console.error(
         '[ComplianceReportService] Security compliance report generation failed:',
-        error
+        error,
       );
       throw new Error(`Security compliance report generation failed: ${error.message}`);
     }
@@ -657,16 +658,16 @@ class ComplianceReportService {
 
   // Utility methods for compliance processing
   async _initializeComplianceFrameworks() {
-    console.log('[ComplianceReportService] Compliance frameworks initialized');
+    logger.info('[ComplianceReportService] Compliance frameworks initialized');
   }
   async _setupAutomatedReporting() {
-    console.log('[ComplianceReportService] Automated reporting configured');
+    logger.info('[ComplianceReportService] Automated reporting configured');
   }
   async _initializeAuditMonitoring() {
-    console.log('[ComplianceReportService] Audit monitoring enabled');
+    logger.info('[ComplianceReportService] Audit monitoring enabled');
   }
   async _initializeComplianceScoring() {
-    console.log('[ComplianceReportService] Compliance scoring engine initialized');
+    logger.info('[ComplianceReportService] Compliance scoring engine initialized');
   }
 
   // Data collection methods
@@ -749,9 +750,9 @@ class ComplianceReportService {
    * @returns {Promise<void>}
    */
   async shutdown() {
-    console.log('[ComplianceReportService] Shutting down...');
+    logger.info('[ComplianceReportService] Shutting down...');
     // Save compliance state and cleanup
-    console.log('[ComplianceReportService] Shutdown completed');
+    logger.info('[ComplianceReportService] Shutdown completed');
   }
 }
 

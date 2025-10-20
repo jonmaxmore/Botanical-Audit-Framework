@@ -161,7 +161,7 @@ describe('Token Refresh API', () => {
           tokenId: 'expired-token-id',
         },
         process.env.JWT_REFRESH_SECRET,
-        { expiresIn: '0s' }
+        { expiresIn: '0s' },
       );
 
       // Store in database
@@ -193,7 +193,7 @@ describe('Token Refresh API', () => {
           tokenId: 'fake-token-id',
         },
         process.env.JWT_REFRESH_SECRET,
-        { expiresIn: '7d' }
+        { expiresIn: '7d' },
       );
 
       const response = await request(app)
@@ -224,7 +224,7 @@ describe('Token Refresh API', () => {
       const jwt = require('jsonwebtoken');
       const accessDecoded = jwt.verify(
         response.body.data.accessToken,
-        process.env.JWT_ACCESS_SECRET
+        process.env.JWT_ACCESS_SECRET,
       );
 
       expect(accessDecoded.userId).toBe(testUser.userId); // Business userId (USR-XXXX-XXXX)

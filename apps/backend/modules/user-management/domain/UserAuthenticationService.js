@@ -24,6 +24,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../shared/logger/logger');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
@@ -120,7 +121,7 @@ class UserAuthenticationService extends EventEmitter {
       ],
     };
 
-    console.log('[UserAuthenticationService] Initialized successfully');
+    logger.info('[UserAuthenticationService] Initialized successfully');
   }
 
   /**
@@ -228,7 +229,7 @@ class UserAuthenticationService extends EventEmitter {
         },
       };
     } catch (error) {
-      console.error('[UserAuthenticationService] Authentication error:', error);
+      logger.error('[UserAuthenticationService] Authentication error:', error);
       throw error;
     }
   }
@@ -270,7 +271,7 @@ class UserAuthenticationService extends EventEmitter {
           type: 'access',
         },
         this.config.jwt.secret,
-        { expiresIn: this.config.jwt.expiresIn }
+        { expiresIn: this.config.jwt.expiresIn },
       );
 
       // Update session last activity
@@ -285,7 +286,7 @@ class UserAuthenticationService extends EventEmitter {
         expiresIn: this.config.jwt.expiresIn,
       };
     } catch (error) {
-      console.error('[UserAuthenticationService] Token refresh error:', error);
+      logger.error('[UserAuthenticationService] Token refresh error:', error);
       throw new Error('Invalid or expired refresh token');
     }
   }
@@ -326,7 +327,7 @@ class UserAuthenticationService extends EventEmitter {
         sessionId: decoded.sessionId,
       };
     } catch (error) {
-      console.error('[UserAuthenticationService] Token validation error:', error);
+      logger.error('[UserAuthenticationService] Token validation error:', error);
       throw new Error('Invalid or expired token');
     }
   }
@@ -370,7 +371,7 @@ class UserAuthenticationService extends EventEmitter {
 
       return false;
     } catch (error) {
-      console.error('[UserAuthenticationService] Permission check error:', error);
+      logger.error('[UserAuthenticationService] Permission check error:', error);
       return false;
     }
   }
@@ -395,7 +396,7 @@ class UserAuthenticationService extends EventEmitter {
 
       return true;
     } catch (error) {
-      console.error('[UserAuthenticationService] Logout error:', error);
+      logger.error('[UserAuthenticationService] Logout error:', error);
       return false;
     }
   }
@@ -463,7 +464,7 @@ class UserAuthenticationService extends EventEmitter {
 
       return true;
     } catch (error) {
-      console.error('[UserAuthenticationService] Password change error:', error);
+      logger.error('[UserAuthenticationService] Password change error:', error);
       throw error;
     }
   }
@@ -486,7 +487,7 @@ class UserAuthenticationService extends EventEmitter {
         type: 'access',
       },
       this.config.jwt.secret,
-      { expiresIn: this.config.jwt.expiresIn }
+      { expiresIn: this.config.jwt.expiresIn },
     );
 
     const refreshToken = jwt.sign(
@@ -496,7 +497,7 @@ class UserAuthenticationService extends EventEmitter {
         type: 'refresh',
       },
       this.config.jwt.secret,
-      { expiresIn: this.config.jwt.refreshExpiresIn }
+      { expiresIn: this.config.jwt.refreshExpiresIn },
     );
 
     return { accessToken, refreshToken, sessionId };
@@ -539,7 +540,7 @@ class UserAuthenticationService extends EventEmitter {
       await this.cacheService.set(
         lockoutKey,
         { until: lockoutUntil },
-        this.config.security.lockoutDuration / 1000
+        this.config.security.lockoutDuration / 1000,
       );
 
       await this._logSecurityEvent('ACCOUNT_LOCKED', { userId, lockoutUntil, ...context });
@@ -627,7 +628,7 @@ class UserAuthenticationService extends EventEmitter {
     await this.cacheService.set(
       `session:${sessionId}`,
       sessionData,
-      this.config.security.sessionTimeout / 1000
+      this.config.security.sessionTimeout / 1000,
     );
   }
 
@@ -652,7 +653,7 @@ class UserAuthenticationService extends EventEmitter {
       await this.cacheService.set(
         `session:${sessionId}`,
         session,
-        this.config.security.sessionTimeout / 1000
+        this.config.security.sessionTimeout / 1000,
       );
     }
   }
@@ -673,7 +674,7 @@ class UserAuthenticationService extends EventEmitter {
     // This would require a more sophisticated session store to track all user sessions
     // For now, we rely on password change forcing re-authentication
     console.log(
-      `[UserAuthenticationService] Invalidating all sessions for user ${userId} except ${exceptSessionId}`
+      `[UserAuthenticationService] Invalidating all sessions for user ${userId} except ${exceptSessionId}`,
     );
   }
 
@@ -690,7 +691,7 @@ class UserAuthenticationService extends EventEmitter {
         ...data,
       });
     } catch (error) {
-      console.error('[UserAuthenticationService] Failed to log security event:', error);
+      logger.error('[UserAuthenticationService] Failed to log security event:', error);
     }
   }
 }

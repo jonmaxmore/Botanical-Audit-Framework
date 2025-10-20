@@ -3,6 +3,7 @@
  * Comprehensive notification management with role-based preferences and real-time delivery
  */
 
+const logger = require('../shared/logger/logger');
 const EventEmitter = require('events');
 const mongoose = require('mongoose');
 
@@ -286,7 +287,7 @@ const EnhancedNotificationSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Indexes
@@ -518,7 +519,7 @@ class EnhancedNotificationService extends EventEmitter {
 
       return notification;
     } catch (error) {
-      console.error('Error creating notification:', error);
+      logger.error('Error creating notification:', error);
       throw error;
     }
   }
@@ -648,7 +649,7 @@ class EnhancedNotificationService extends EventEmitter {
         }
       }
     } catch (error) {
-      console.error('Error processing delivery:', error);
+      logger.error('Error processing delivery:', error);
     }
   }
 
@@ -681,7 +682,7 @@ class EnhancedNotificationService extends EventEmitter {
             channelConfig.status = 'pending';
             this.queueForDelivery(notification);
           },
-          Math.pow(2, channelConfig.retryCount) * 1000
+          Math.pow(2, channelConfig.retryCount) * 1000,
         ); // Exponential backoff
       }
     }
@@ -697,28 +698,28 @@ class EnhancedNotificationService extends EventEmitter {
 
   async deliverToEmail(notification) {
     // Email delivery implementation
-    console.log(`Sending email notification to ${notification.recipient.userEmail}`);
+    logger.info(`Sending email notification to ${notification.recipient.userEmail}`);
     // Implementation would use nodemailer or similar
     return true;
   }
 
   async deliverToSMS(notification) {
     // SMS delivery implementation
-    console.log(`Sending SMS notification to ${notification.recipient.userPhone}`);
+    logger.info(`Sending SMS notification to ${notification.recipient.userPhone}`);
     // Implementation would use Twilio or similar
     return true;
   }
 
   async deliverToPush(notification) {
     // Push notification delivery
-    console.log(`Sending push notification to user ${notification.recipient.userId}`);
+    logger.info(`Sending push notification to user ${notification.recipient.userId}`);
     // Implementation would use Firebase or similar
     return true;
   }
 
   async deliverToLine(notification) {
     // LINE notification delivery
-    console.log(`Sending LINE notification to user ${notification.recipient.userId}`);
+    logger.info(`Sending LINE notification to user ${notification.recipient.userId}`);
     // Implementation would use LINE API
     return true;
   }

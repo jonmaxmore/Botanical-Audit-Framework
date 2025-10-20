@@ -61,7 +61,7 @@ class EnrollmentRepository {
       // Check for existing active enrollment
       const existingEnrollment = await this.findActiveEnrollment(
         enrollmentData.farmerId,
-        enrollmentData.courseId
+        enrollmentData.courseId,
       );
 
       if (existingEnrollment) {
@@ -119,7 +119,7 @@ class EnrollmentRepository {
       const createdEnrollment = { ...enrollmentDocument, id: result.insertedId.toString() };
 
       this.logger.log(
-        `[EnrollmentRepository] Enrollment created successfully: ${createdEnrollment.id}`
+        `[EnrollmentRepository] Enrollment created successfully: ${createdEnrollment.id}`,
       );
       return createdEnrollment;
     } catch (error) {
@@ -296,7 +296,7 @@ class EnrollmentRepository {
       // Execute update
       const result = await collection.updateOne(
         { _id: this.objectId(enrollmentId) },
-        { $set: update }
+        { $set: update },
       );
 
       if (result.matchedCount === 0) {
@@ -308,7 +308,7 @@ class EnrollmentRepository {
         await this.handleStatusChangeEffects(
           enrollmentId,
           currentEnrollment.status,
-          updateData.status
+          updateData.status,
         );
       }
 
@@ -388,7 +388,7 @@ class EnrollmentRepository {
       const collection = this.db.collection(this.collectionName);
       const result = await collection.updateOne(
         { _id: this.objectId(enrollmentId) },
-        { $set: update }
+        { $set: update },
       );
 
       if (result.matchedCount === 0) {
@@ -413,7 +413,7 @@ class EnrollmentRepository {
   async recordAssessment(enrollmentId, assessmentData) {
     try {
       this.logger.log(
-        `[EnrollmentRepository] Recording assessment for enrollment: ${enrollmentId}`
+        `[EnrollmentRepository] Recording assessment for enrollment: ${enrollmentId}`,
       );
 
       const enrollment = await this.findById(enrollmentId);
@@ -441,7 +441,7 @@ class EnrollmentRepository {
       // Check if this assessment qualifies for completion
       const qualifiesForCompletion = await this.checkCompletionQualification(
         enrollment,
-        processedAssessment
+        processedAssessment,
       );
       if (qualifiesForCompletion.eligible) {
         update.status = Enrollment.STATUS.COMPLETED;
@@ -545,7 +545,7 @@ class EnrollmentRepository {
     const activeEnrollments = await this.getFarmerActiveEnrollmentCount(enrollmentData.farmerId);
     if (activeEnrollments >= this.businessConfig.maxActiveEnrollments) {
       throw new Error(
-        `Maximum active enrollments reached: ${this.businessConfig.maxActiveEnrollments}`
+        `Maximum active enrollments reached: ${this.businessConfig.maxActiveEnrollments}`,
       );
     }
   }
@@ -571,7 +571,7 @@ class EnrollmentRepository {
         {
           $inc: { 'businessMetadata.enrollmentCount': increment },
           $set: { 'businessMetadata.lastAnalyticsUpdate': new Date() },
-        }
+        },
       );
     } catch (error) {
       // Don't fail main operation if stats update fails
@@ -673,7 +673,7 @@ class EnrollmentRepository {
       ...newProgressData,
       progressPercentage: Math.min(
         100,
-        newProgressData.progressPercentage || currentProgress.progressPercentage || 0
+        newProgressData.progressPercentage || currentProgress.progressPercentage || 0,
       ),
     };
   }
@@ -698,7 +698,7 @@ class EnrollmentRepository {
   async handleMilestoneAchievements(enrollmentId, milestones) {
     // Trigger notifications, analytics events, etc.
     this.logger.log(
-      `[EnrollmentRepository] Milestones achieved for ${enrollmentId}: ${milestones.join(', ')}`
+      `[EnrollmentRepository] Milestones achieved for ${enrollmentId}: ${milestones.join(', ')}`,
     );
   }
 

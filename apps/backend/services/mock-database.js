@@ -13,6 +13,9 @@
  * @date 2025-10-19
  */
 
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('mock-database');
+
 class MockDatabaseService {
   constructor() {
     this.collections = new Map();
@@ -20,8 +23,8 @@ class MockDatabaseService {
     this.initializeCollections();
     this.generateSampleData();
 
-    console.log('[MockDB] 🗄️ Mock Database Service initialized');
-    console.log('[MockDB] Available collections:', Array.from(this.collections.keys()));
+    logger.info('[MockDB] 🗄️ Mock Database Service initialized');
+    logger.info('[MockDB] Available collections:', Array.from(this.collections.keys()));
   }
 
   initializeCollections() {
@@ -107,7 +110,7 @@ class MockDatabaseService {
       createdAt: new Date(),
     });
 
-    console.log('[MockDB] ✅ Sample data generated');
+    logger.info('[MockDB] ✅ Sample data generated');
   }
 
   // MongoDB-like API methods
@@ -222,7 +225,7 @@ class MockDatabaseService {
   }
 
   async close() {
-    console.log('[MockDB] 🗄️ Mock Database Service closed');
+    logger.info('[MockDB] 🗄️ Mock Database Service closed');
     this.isConnected = false;
   }
 

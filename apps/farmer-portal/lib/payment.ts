@@ -98,7 +98,7 @@ const OMISE_CONFIG = {
 export function createPaymentSession(
   applicationId: string,
   userId: string,
-  submissionCount: number
+  submissionCount: number,
 ): PaymentSession {
   const paymentRecord = createPaymentRecord(applicationId, userId, submissionCount);
   const sessionId = generateSessionId();
@@ -201,7 +201,7 @@ export async function verifyOmiseCharge(chargeId: string): Promise<OmiseChargeRe
  */
 export async function processPayment(
   session: PaymentSession,
-  omiseToken: string
+  omiseToken: string,
 ): Promise<PaymentResult> {
   // 1. Validate session
   const validation = isPaymentSessionValid(session);
@@ -264,7 +264,7 @@ export async function processPayment(
  */
 export function updatePaymentRecordAfterSuccess(
   payment: PaymentRecord,
-  _transactionId: string
+  _transactionId: string,
 ): PaymentRecord {
   return {
     ...payment,
@@ -278,7 +278,7 @@ export function updatePaymentRecordAfterSuccess(
  */
 export function cancelPayment(
   payment: PaymentRecord,
-  reason: 'TIMEOUT' | 'USER_CANCELLED'
+  reason: 'TIMEOUT' | 'USER_CANCELLED',
 ): PaymentRecord {
   return {
     ...payment,

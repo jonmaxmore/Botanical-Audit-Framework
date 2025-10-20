@@ -40,7 +40,7 @@ class AuditController {
           message: error.message,
         });
       }
-      console.error('Get audit log details error:', error);
+      logger.error('Get audit log details error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve audit log details',
@@ -91,7 +91,7 @@ class AuditController {
         },
       });
     } catch (error) {
-      console.error('List audit logs error:', error);
+      logger.error('List audit logs error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve audit logs',
@@ -119,7 +119,7 @@ class AuditController {
         data: statistics,
       });
     } catch (error) {
-      console.error('Get audit statistics error:', error);
+      logger.error('Get audit statistics error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve audit statistics',
@@ -147,7 +147,7 @@ class AuditController {
         data: activity,
       });
     } catch (error) {
-      console.error('Get user activity error:', error);
+      logger.error('Get user activity error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve user activity',

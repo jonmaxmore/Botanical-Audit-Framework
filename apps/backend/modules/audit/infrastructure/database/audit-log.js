@@ -110,7 +110,7 @@ const auditLogSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'audit_logs',
-  }
+  },
 );
 
 // Compound indexes for common queries
@@ -217,7 +217,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
       const saved = await doc.save();
       return this.toDomain(saved);
     } catch (error) {
-      console.error('Error saving audit log:', error);
+      logger.error('Error saving audit log:', error);
       // Don't throw - audit logging should not break application flow
       return null;
     }
@@ -228,7 +228,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
       const doc = await this.AuditLogModel.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding audit log by ID:', error);
+      logger.error('Error finding audit log by ID:', error);
       throw error;
     }
   }
@@ -245,7 +245,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding audit logs by actor:', error);
+      logger.error('Error finding audit logs by actor:', error);
       throw error;
     }
   }
@@ -259,7 +259,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding audit logs by action type:', error);
+      logger.error('Error finding audit logs by action type:', error);
       throw error;
     }
   }
@@ -279,7 +279,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding audit logs by entity:', error);
+      logger.error('Error finding audit logs by entity:', error);
       throw error;
     }
   }
@@ -325,7 +325,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding audit logs with filters:', error);
+      logger.error('Error finding audit logs with filters:', error);
       throw error;
     }
   }
@@ -347,7 +347,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding audit logs by date range:', error);
+      logger.error('Error finding audit logs by date range:', error);
       throw error;
     }
   }
@@ -358,7 +358,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding recent audit logs:', error);
+      logger.error('Error finding recent audit logs:', error);
       throw error;
     }
   }
@@ -381,7 +381,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding security logs:', error);
+      logger.error('Error finding security logs:', error);
       throw error;
     }
   }
@@ -398,7 +398,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding failed actions:', error);
+      logger.error('Error finding failed actions:', error);
       throw error;
     }
   }
@@ -407,7 +407,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
     try {
       return await this.AuditLogModel.countDocuments(criteria);
     } catch (error) {
-      console.error('Error counting audit logs:', error);
+      logger.error('Error counting audit logs:', error);
       throw error;
     }
   }
@@ -467,7 +467,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         }, {}),
       };
     } catch (error) {
-      console.error('Error getting audit statistics:', error);
+      logger.error('Error getting audit statistics:', error);
       throw error;
     }
   }
@@ -503,7 +503,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         recentActions: recentActions.map(doc => this.toDomain(doc)),
       };
     } catch (error) {
-      console.error('Error getting activity summary:', error);
+      logger.error('Error getting activity summary:', error);
       throw error;
     }
   }
@@ -515,7 +515,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
       });
       return result.deletedCount;
     } catch (error) {
-      console.error('Error deleting old audit logs:', error);
+      logger.error('Error deleting old audit logs:', error);
       throw error;
     }
   }

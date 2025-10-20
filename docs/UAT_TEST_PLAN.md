@@ -21,6 +21,7 @@
 ## 👥 User Roles Overview
 
 ### 1. **UAT Farmer** 👨‍🌾
+
 - **Primary User:** Farm owners, Cannabis cultivators
 - **Access Level:** Basic user (own data only)
 - **Key Responsibilities:**
@@ -31,6 +32,7 @@
   - Track farm activities
 
 ### 2. **UAT DTAM Reviewer** 👔
+
 - **Primary User:** DTAM staff - initial reviewer
 - **Access Level:** Reviewer (assigned applications)
 - **Key Responsibilities:**
@@ -40,6 +42,7 @@
   - Assign to inspectors
 
 ### 3. **UAT DTAM Inspector** 🔍
+
 - **Primary User:** DTAM staff - field inspector
 - **Access Level:** Inspector (assigned inspections)
 - **Key Responsibilities:**
@@ -49,6 +52,7 @@
   - Submit inspection reports
 
 ### 4. **UAT DTAM Approver** ✅
+
 - **Primary User:** DTAM staff - final approver
 - **Access Level:** Approver (all pending approvals)
 - **Key Responsibilities:**
@@ -58,6 +62,7 @@
   - Quality assurance
 
 ### 5. **UAT DTAM Admin** 👑
+
 - **Primary User:** System administrator
 - **Access Level:** Full system access
 - **Key Responsibilities:**
@@ -71,14 +76,14 @@
 
 ## 🎯 Module Testing Matrix
 
-| Module | Farmer | Reviewer | Inspector | Approver | Admin |
-|--------|:------:|:--------:|:---------:|:--------:|:-----:|
-| **Member Management** | ✅ View | ✅ View | ✅ View | ✅ View | ✅ Full |
-| **Certification** | ✅ Submit | ✅ Review | ✅ Inspect | ✅ Approve | ✅ Manage |
-| **Farm Management** | ✅ Full | ✅ View | ✅ View | ✅ View | ✅ Full |
-| **Track & Trace** | ✅ Record | ✅ View | ✅ View | ✅ View | ✅ Manage |
-| **Survey** | ✅ Complete | ✅ View | ✅ View | ✅ View | ✅ Manage |
-| **GACP Compare** | ✅ View | ✅ View | ✅ View | ✅ View | ✅ Manage |
+| Module                |   Farmer    | Reviewer  | Inspector  |  Approver  |   Admin   |
+| --------------------- | :---------: | :-------: | :--------: | :--------: | :-------: |
+| **Member Management** |   ✅ View   |  ✅ View  |  ✅ View   |  ✅ View   |  ✅ Full  |
+| **Certification**     |  ✅ Submit  | ✅ Review | ✅ Inspect | ✅ Approve | ✅ Manage |
+| **Farm Management**   |   ✅ Full   |  ✅ View  |  ✅ View   |  ✅ View   |  ✅ Full  |
+| **Track & Trace**     |  ✅ Record  |  ✅ View  |  ✅ View   |  ✅ View   | ✅ Manage |
+| **Survey**            | ✅ Complete |  ✅ View  |  ✅ View   |  ✅ View   | ✅ Manage |
+| **GACP Compare**      |   ✅ View   |  ✅ View  |  ✅ View   |  ✅ View   | ✅ Manage |
 
 ---
 
@@ -87,6 +92,7 @@
 ### 1️⃣ UAT Farmer Test Cases
 
 #### TC-F001: Farmer Registration & Login
+
 - **Priority:** Critical
 - **Steps:**
   1. Navigate to farmer portal
@@ -100,6 +106,7 @@
 - **Module:** Member Management
 
 #### TC-F002: Farm Profile Creation
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as farmer
@@ -113,6 +120,7 @@
 - **Module:** Farm Management
 
 #### TC-F003: GACP Certification Application
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as farmer
@@ -127,6 +135,7 @@
 - **Module:** Certification
 
 #### TC-F004: Cannabis Survey Completion
+
 - **Priority:** High
 - **Steps:**
   1. Login as farmer
@@ -140,6 +149,7 @@
 - **Module:** Survey
 
 #### TC-F005: Track & Trace Recording
+
 - **Priority:** High
 - **Steps:**
   1. Login as farmer
@@ -152,6 +162,7 @@
 - **Module:** Track & Trace
 
 #### TC-F006: GACP Standards Comparison
+
 - **Priority:** Medium
 - **Steps:**
   1. Login as farmer
@@ -168,6 +179,7 @@
 ### 2️⃣ UAT DTAM Reviewer Test Cases
 
 #### TC-R001: Reviewer Login & Dashboard
+
 - **Priority:** Critical
 - **Steps:**
   1. Navigate to DTAM portal
@@ -179,6 +191,7 @@
 - **Module:** Member Management
 
 #### TC-R002: Application Review
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as reviewer
@@ -193,6 +206,7 @@
 - **Module:** Certification
 
 #### TC-R003: Document Verification
+
 - **Priority:** High
 - **Steps:**
   1. Login as reviewer
@@ -206,6 +220,7 @@
 - **Module:** Certification
 
 #### TC-R004: Inspector Assignment
+
 - **Priority:** High
 - **Steps:**
   1. Login as reviewer
@@ -220,6 +235,7 @@
 - **Module:** Certification
 
 #### TC-R005: Member Management Review
+
 - **Priority:** Medium
 - **Steps:**
   1. Login as reviewer
@@ -236,6 +252,7 @@
 ### 3️⃣ UAT DTAM Inspector Test Cases
 
 #### TC-I001: Inspector Login & Assignments
+
 - **Priority:** Critical
 - **Steps:**
   1. Login to DTAM portal as inspector
@@ -247,6 +264,7 @@
 - **Module:** Certification
 
 #### TC-I002: On-Site Inspection (Mobile)
+
 - **Priority:** Critical
 - **Steps:**
   1. Login on mobile device
@@ -263,6 +281,7 @@
 - **Module:** Certification
 
 #### TC-I003: Inspection Checklist Completion
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as inspector
@@ -281,6 +300,7 @@
 - **Module:** Certification
 
 #### TC-I004: Inspection Report Submission
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as inspector
@@ -294,6 +314,7 @@
 - **Module:** Certification
 
 #### TC-I005: Farm Management Verification
+
 - **Priority:** High
 - **Steps:**
   1. Login as inspector
@@ -310,6 +331,7 @@
 ### 4️⃣ UAT DTAM Approver Test Cases
 
 #### TC-A001: Approver Dashboard
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as approver
@@ -321,6 +343,7 @@
 - **Module:** Certification
 
 #### TC-A002: Inspection Report Review
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as approver
@@ -334,6 +357,7 @@
 - **Module:** Certification
 
 #### TC-A003: Certificate Approval
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as approver
@@ -348,6 +372,7 @@
 - **Module:** Certification
 
 #### TC-A004: Certificate Rejection
+
 - **Priority:** High
 - **Steps:**
   1. Login as approver
@@ -361,6 +386,7 @@
 - **Module:** Certification
 
 #### TC-A005: Conditional Approval
+
 - **Priority:** High
 - **Steps:**
   1. Login as approver
@@ -374,6 +400,7 @@
 - **Module:** Certification
 
 #### TC-A006: Certificate Management
+
 - **Priority:** Medium
 - **Steps:**
   1. Login as approver
@@ -391,6 +418,7 @@
 ### 5️⃣ UAT DTAM Admin Test Cases
 
 #### TC-AD001: Admin Dashboard
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as admin
@@ -405,6 +433,7 @@
 - **Module:** Member Management
 
 #### TC-AD002: User Management
+
 - **Priority:** Critical
 - **Steps:**
   1. Login as admin
@@ -419,6 +448,7 @@
 - **Module:** Member Management
 
 #### TC-AD003: User Role Modification
+
 - **Priority:** High
 - **Steps:**
   1. Login as admin
@@ -431,6 +461,7 @@
 - **Module:** Member Management
 
 #### TC-AD004: Farm Data Management
+
 - **Priority:** High
 - **Steps:**
   1. Login as admin
@@ -444,6 +475,7 @@
 - **Module:** Farm Management
 
 #### TC-AD005: Certificate Management (Admin)
+
 - **Priority:** High
 - **Steps:**
   1. Login as admin
@@ -457,6 +489,7 @@
 - **Module:** Certification
 
 #### TC-AD006: Survey Management
+
 - **Priority:** Medium
 - **Steps:**
   1. Login as admin
@@ -470,6 +503,7 @@
 - **Module:** Survey
 
 #### TC-AD007: Track & Trace Data Management
+
 - **Priority:** Medium
 - **Steps:**
   1. Login as admin
@@ -483,6 +517,7 @@
 - **Module:** Track & Trace
 
 #### TC-AD008: GACP Standards Management
+
 - **Priority:** Medium
 - **Steps:**
   1. Login as admin
@@ -496,6 +531,7 @@
 - **Module:** GACP Compare
 
 #### TC-AD009: System Audit Logs
+
 - **Priority:** High
 - **Steps:**
   1. Login as admin
@@ -509,6 +545,7 @@
 - **Module:** Member Management
 
 #### TC-AD010: Report Generation
+
 - **Priority:** Medium
 - **Steps:**
   1. Login as admin
@@ -528,6 +565,7 @@
 ### 📝 Module 1: Member Management
 
 #### Test Scenarios:
+
 - ✅ User registration (all roles)
 - ✅ User login/logout
 - ✅ Password reset
@@ -537,6 +575,7 @@
 - ✅ User activation/deactivation
 
 #### Integration Points:
+
 - Authentication service
 - Database (MongoDB)
 - Email notification service
@@ -546,6 +585,7 @@
 ### 🎓 Module 2: Certification Management
 
 #### Test Scenarios:
+
 - ✅ Application submission
 - ✅ Application review workflow
 - ✅ Inspector assignment
@@ -558,6 +598,7 @@
 - ✅ Certificate revocation
 
 #### Integration Points:
+
 - Member management module
 - Farm management module
 - Notification service
@@ -569,6 +610,7 @@
 ### 🌾 Module 3: Farm Management
 
 #### Test Scenarios:
+
 - ✅ Farm profile creation
 - ✅ Farm location mapping (GPS)
 - ✅ Crop type management
@@ -579,6 +621,7 @@
 - ✅ Farm data export
 
 #### Integration Points:
+
 - Member management module
 - Certification module
 - Track & trace module
@@ -589,6 +632,7 @@
 ### 📦 Module 4: Track & Trace
 
 #### Test Scenarios:
+
 - ✅ Activity recording (planting, harvesting, processing)
 - ✅ Batch/lot number generation
 - ✅ Quantity tracking
@@ -599,6 +643,7 @@
 - ✅ QR code generation
 
 #### Integration Points:
+
 - Farm management module
 - Certification module
 - Report generation service
@@ -608,6 +653,7 @@
 ### 📊 Module 5: Survey Management
 
 #### Test Scenarios:
+
 - ✅ Survey template creation
 - ✅ Question types (multiple choice, text, rating)
 - ✅ Regional survey deployment (4 regions)
@@ -618,6 +664,7 @@
 - ✅ Response analysis and reporting
 
 #### Integration Points:
+
 - Member management module
 - Farm management module
 - Notification service
@@ -628,6 +675,7 @@
 ### 📋 Module 6: GACP Standards Comparison
 
 #### Test Scenarios:
+
 - ✅ Standards checklist display
 - ✅ Farm compliance scoring
 - ✅ Gap analysis
@@ -637,6 +685,7 @@
 - ✅ Standards update notification
 
 #### Integration Points:
+
 - Farm management module
 - Certification module
 - Report generation service
@@ -646,6 +695,7 @@
 ## 🔧 Test Environment Setup
 
 ### 1. Database Setup
+
 ```bash
 # MongoDB connection
 MONGODB_URI=mongodb://localhost:27017/botanical-audit-uat
@@ -658,6 +708,7 @@ mongoimport --db botanical-audit-uat --collection users --file test-users.json
 ```
 
 ### 2. Backend Server
+
 ```bash
 cd apps/backend
 pnpm install
@@ -674,6 +725,7 @@ node server.js
 ```
 
 ### 3. Frontend Portal
+
 ```bash
 cd apps/farmer-portal
 pnpm install
@@ -689,6 +741,7 @@ pnpm dev
 ### Test Users
 
 #### Farmers (5 users)
+
 ```json
 {
   "farmers": [
@@ -713,6 +766,7 @@ pnpm dev
 ```
 
 #### DTAM Staff
+
 ```json
 {
   "staff": [
@@ -749,12 +803,14 @@ pnpm dev
 ```
 
 ### Test Farms (10 farms)
+
 - Central region: 3 farms
 - Northern region: 3 farms
 - Southern region: 2 farms
 - Northeastern region: 2 farms
 
 ### Test Applications (20 applications)
+
 - Pending review: 5
 - Under inspection: 5
 - Pending approval: 5
@@ -766,6 +822,7 @@ pnpm dev
 ## ✅ Test Execution Checklist
 
 ### Pre-Testing
+
 - [ ] UAT environment deployed
 - [ ] Test database populated
 - [ ] Test users created
@@ -773,32 +830,30 @@ pnpm dev
 - [ ] Test data verified
 
 ### Role-Based Testing
+
 - [ ] **Farmer Role**
   - [ ] TC-F001 to TC-F006 completed
   - [ ] All modules accessible
   - [ ] No unauthorized access
-  
 - [ ] **Reviewer Role**
   - [ ] TC-R001 to TC-R005 completed
   - [ ] Review workflow functional
   - [ ] Inspector assignment working
-  
 - [ ] **Inspector Role**
   - [ ] TC-I001 to TC-I005 completed
   - [ ] Mobile inspection working
   - [ ] Photo upload functional
-  
 - [ ] **Approver Role**
   - [ ] TC-A001 to TC-A006 completed
   - [ ] Approval workflow functional
   - [ ] Certificate generation working
-  
 - [ ] **Admin Role**
   - [ ] TC-AD001 to TC-AD010 completed
   - [ ] All management functions working
   - [ ] Reports generating correctly
 
 ### Module Testing
+
 - [ ] **Member Management** (10 test cases)
 - [ ] **Certification** (30 test cases)
 - [ ] **Farm Management** (15 test cases)
@@ -807,6 +862,7 @@ pnpm dev
 - [ ] **GACP Compare** (10 test cases)
 
 ### Integration Testing
+
 - [ ] End-to-end certification workflow
 - [ ] Cross-module data flow
 - [ ] Notification system
@@ -814,12 +870,14 @@ pnpm dev
 - [ ] File upload/download
 
 ### Performance Testing
+
 - [ ] Load testing (100 concurrent users)
 - [ ] Response time < 3 seconds
 - [ ] Database query optimization
 - [ ] File upload speed
 
 ### Security Testing
+
 - [ ] Role-based access control
 - [ ] SQL injection prevention
 - [ ] XSS prevention
@@ -835,20 +893,20 @@ pnpm dev
 **Test Period:** [Start Date] - [End Date]  
 **Test Team:** [Names]
 
-| Role | Total Cases | Passed | Failed | Blocked | Pass Rate |
-|------|------------|--------|--------|---------|-----------|
-| Farmer | 6 | - | - | - | - |
-| Reviewer | 5 | - | - | - | - |
-| Inspector | 5 | - | - | - | - |
-| Approver | 6 | - | - | - | - |
-| Admin | 10 | - | - | - | - |
-| **TOTAL** | **32** | **-** | **-** | **-** | **-%** |
+| Role      | Total Cases | Passed | Failed | Blocked | Pass Rate |
+| --------- | ----------- | ------ | ------ | ------- | --------- |
+| Farmer    | 6           | -      | -      | -       | -         |
+| Reviewer  | 5           | -      | -      | -       | -         |
+| Inspector | 5           | -      | -      | -       | -         |
+| Approver  | 6           | -      | -      | -       | -         |
+| Admin     | 10          | -      | -      | -       | -         |
+| **TOTAL** | **32**      | **-**  | **-**  | **-**   | **-%**    |
 
 ### Critical Issues Log
 
-| ID | Module | Description | Severity | Status | Assigned To |
-|----|--------|-------------|----------|--------|-------------|
-| ISS-001 | - | - | Critical | - | - |
+| ID      | Module | Description | Severity | Status | Assigned To |
+| ------- | ------ | ----------- | -------- | ------ | ----------- |
+| ISS-001 | -      | -           | Critical | -      | -           |
 
 ---
 
@@ -866,13 +924,14 @@ pnpm dev
 ## 📝 Sign-Off
 
 **Prepared By:** GitHub Copilot  
-**Date:** October 20, 2025  
+**Date:** October 20, 2025
 
 **Approved By:**
-- [ ] Project Manager: _________________ Date: _______
-- [ ] QA Lead: _________________ Date: _______
-- [ ] Technical Lead: _________________ Date: _______
-- [ ] Business Owner: _________________ Date: _______
+
+- [ ] Project Manager: **\*\*\*\***\_**\*\*\*\*** Date: **\_\_\_**
+- [ ] QA Lead: **\*\*\*\***\_**\*\*\*\*** Date: **\_\_\_**
+- [ ] Technical Lead: **\*\*\*\***\_**\*\*\*\*** Date: **\_\_\_**
+- [ ] Business Owner: **\*\*\*\***\_**\*\*\*\*** Date: **\_\_\_**
 
 ---
 

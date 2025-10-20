@@ -215,7 +215,7 @@ export default function CertificatesPage() {
 
   const paginatedCertificates = filteredCertificates.slice(
     page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
+    page * rowsPerPage + rowsPerPage,
   );
 
   return (

@@ -10,11 +10,12 @@
  * Regions: Central, Southern, Northern, Northeastern
  */
 
+const logger = require('../../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 const path = require('path');
 const SurveyProcessEngine = require(
-  path.join(__dirname, '../../services/survey-process-engine-4regions')
+  path.join(__dirname, '../../services/survey-process-engine-4regions'),
 );
 const Survey = require(path.join(__dirname, '../../models/mongodb/Survey'));
 
@@ -54,7 +55,7 @@ let surveyEngine = null;
  */
 function initializeEngine(db) {
   surveyEngine = new SurveyProcessEngine(db);
-  console.log('[Survey4Regions] Engine initialized with database');
+  logger.info('[Survey4Regions] Engine initialized with database');
 }
 
 // Export initialization function
@@ -92,7 +93,7 @@ router.get('/templates', async (req, res) => {
       data: templates,
     });
   } catch (error) {
-    console.error('Error fetching templates:', error);
+    logger.error('Error fetching templates:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch survey templates',
@@ -138,7 +139,7 @@ router.get('/templates/:region', async (req, res) => {
       data: template,
     });
   } catch (error) {
-    console.error('Error fetching template:', error);
+    logger.error('Error fetching template:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch survey template',
@@ -213,7 +214,7 @@ router.post('/wizard/start', auth, checkEngineInitialized, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error starting wizard:', error);
+    logger.error('Error starting wizard:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to start survey wizard',
@@ -255,7 +256,7 @@ router.get('/wizard/:surveyId/current', auth, async (req, res) => {
     });
 
     const currentStepQuestions = template.sections.find(
-      section => section.id === survey.wizardData.currentStep
+      section => section.id === survey.wizardData.currentStep,
     );
 
     res.json({
@@ -271,7 +272,7 @@ router.get('/wizard/:surveyId/current', auth, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error fetching wizard state:', error);
+    logger.error('Error fetching wizard state:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch wizard state',
@@ -296,7 +297,7 @@ router.put('/wizard/:surveyId/step/:stepId', auth, async (req, res) => {
       surveyId,
       parseInt(stepId),
       stepData,
-      userId
+      userId,
     );
 
     res.json({
@@ -311,7 +312,7 @@ router.put('/wizard/:surveyId/step/:stepId', auth, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error updating wizard step:', error);
+    logger.error('Error updating wizard step:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to update wizard step',
@@ -346,7 +347,7 @@ router.post('/wizard/:surveyId/submit', auth, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error submitting wizard:', error);
+    logger.error('Error submitting wizard:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to submit survey',
@@ -415,7 +416,7 @@ router.get('/wizard/:surveyId/progress', auth, checkEngineInitialized, async (re
       },
     });
   } catch (error) {
-    console.error('Error fetching progress:', error);
+    logger.error('Error fetching progress:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch progress',
@@ -451,7 +452,7 @@ router.get('/my-surveys', auth, async (req, res) => {
       data: surveys,
     });
   } catch (error) {
-    console.error('Error fetching surveys:', error);
+    logger.error('Error fetching surveys:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch surveys',
@@ -491,7 +492,7 @@ router.get('/:surveyId', auth, async (req, res) => {
       data: survey,
     });
   } catch (error) {
-    console.error('Error fetching survey:', error);
+    logger.error('Error fetching survey:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch survey',
@@ -541,7 +542,7 @@ router.delete('/:surveyId', auth, async (req, res) => {
       message: 'Survey deleted successfully',
     });
   } catch (error) {
-    console.error('Error deleting survey:', error);
+    logger.error('Error deleting survey:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to delete survey',
@@ -570,7 +571,7 @@ router.get('/analytics/regional/:region', auth, async (req, res) => {
       data: analytics,
     });
   } catch (error) {
-    console.error('Error fetching regional analytics:', error);
+    logger.error('Error fetching regional analytics:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch analytics',
@@ -602,7 +603,7 @@ router.post('/analytics/compare', auth, async (req, res) => {
       data: comparison,
     });
   } catch (error) {
-    console.error('Error comparing regions:', error);
+    logger.error('Error comparing regions:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to compare regions',
@@ -638,7 +639,7 @@ router.get('/analytics/overview', auth, async (req, res) => {
       data: overview,
     });
   } catch (error) {
-    console.error('Error fetching overview:', error);
+    logger.error('Error fetching overview:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch overview',
@@ -690,7 +691,7 @@ router.get('/admin/all', auth, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error fetching all surveys:', error);
+    logger.error('Error fetching all surveys:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch surveys',
@@ -750,7 +751,7 @@ router.put('/admin/:surveyId/review', auth, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('Error reviewing survey:', error);
+    logger.error('Error reviewing survey:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to review survey',
@@ -764,7 +765,7 @@ router.put('/admin/:surveyId/review', auth, async (req, res) => {
 // ============================================================================
 
 router.use((error, req, res, next) => {
-  console.error('Survey API Error:', error);
+  logger.error('Survey API Error:', error);
   res.status(500).json({
     success: false,
     error: 'Internal server error',

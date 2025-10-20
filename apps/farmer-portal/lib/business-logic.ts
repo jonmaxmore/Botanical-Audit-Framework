@@ -157,7 +157,7 @@ export const PAYMENT_TIMEOUT_MS = PAYMENT_TIMEOUT_MINUTES * 60 * 1000;
 export function createPaymentRecord(
   applicationId: string,
   userId: string,
-  submissionCount: number
+  submissionCount: number,
 ): Omit<PaymentRecord, 'id'> {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + PAYMENT_TIMEOUT_MS);
@@ -283,7 +283,7 @@ export function canApplyAfterRevocation(certificate: Certificate): boolean {
   const now = new Date();
   const revokedDate = new Date(certificate.revokedDate);
   const daysSinceRevocation = Math.floor(
-    (now.getTime() - revokedDate.getTime()) / (24 * 60 * 60 * 1000)
+    (now.getTime() - revokedDate.getTime()) / (24 * 60 * 60 * 1000),
   );
 
   return daysSinceRevocation >= REVOCATION_WAIT_PERIOD_DAYS;

@@ -18,6 +18,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -77,7 +78,7 @@ const WorkflowHistorySchema = new Schema(
       default: '',
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Document Schema
@@ -146,7 +147,7 @@ const DocumentSchema = new Schema(
       default: null,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Farm Information Schema
@@ -203,7 +204,7 @@ const FarmSchema = new Schema(
       },
     ],
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Payment Schema
@@ -257,7 +258,7 @@ const PaymentSchema = new Schema(
       default: null,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Review Schema
@@ -305,7 +306,7 @@ const ReviewSchema = new Schema(
       maxlength: 2000,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Inspection Schema
@@ -380,7 +381,7 @@ const InspectionSchema = new Schema(
       maxlength: 3000,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Approval Schema
@@ -409,7 +410,7 @@ const ApprovalSchema = new Schema(
       default: 'standard',
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Rejection Schema
@@ -459,7 +460,7 @@ const RejectionSchema = new Schema(
       default: true,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // ==============================================
@@ -625,7 +626,7 @@ const ApplicationSchema = new Schema(
   {
     timestamps: true,
     collection: 'applications',
-  }
+  },
 );
 
 // ==============================================
@@ -796,7 +797,7 @@ ApplicationSchema.post('save', function (doc) {
   // Emit events for external systems
   if (doc.isModified('status')) {
     // Could emit to event bus here
-    console.log(`Application ${doc.applicationNumber} status changed to ${doc.status}`);
+    logger.info(`Application ${doc.applicationNumber} status changed to ${doc.status}`);
   }
 });
 

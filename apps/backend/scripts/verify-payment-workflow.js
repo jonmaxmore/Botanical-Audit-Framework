@@ -5,6 +5,7 @@
  * เพื่อยืนยันว่าระบบใช้ 2-Phase Payment เท่านั้น
  */
 
+const logger = require('../shared/logger/logger');
 const { PAYMENT_FEES } = require('../config/payment-fees');
 
 class PaymentWorkflowVerifier {
@@ -18,7 +19,7 @@ class PaymentWorkflowVerifier {
    * ทดสอบ Payment Configuration ที่ถูกต้อง
    */
   verifyPaymentConfiguration() {
-    console.log('🔍 Verifying Payment Configuration...');
+    logger.info('🔍 Verifying Payment Configuration...');
 
     // Test 1: ตรวจสอบว่ามีแค่ 2 phases
     const phases = Object.keys(PAYMENT_FEES.PAYMENT_PHASES);
@@ -64,7 +65,7 @@ class PaymentWorkflowVerifier {
    * ทดสอบ Helper Functions
    */
   verifyHelperFunctions() {
-    console.log('🔧 Verifying Helper Functions...');
+    logger.info('🔧 Verifying Helper Functions...');
 
     // Test getTotalFee
     const totalFee = require('../config/payment-fees').getTotalFee();
@@ -109,7 +110,7 @@ class PaymentWorkflowVerifier {
    * ทดสอบ Business Logic Flow
    */
   verifyBusinessFlow() {
-    console.log('💼 Verifying Business Flow...');
+    logger.info('💼 Verifying Business Flow...');
 
     // Simulate application flow
     const phases = [];
@@ -153,7 +154,7 @@ class PaymentWorkflowVerifier {
    * ทดสอบ Payment Timeouts
    */
   verifyPaymentTimeouts() {
-    console.log('⏰ Verifying Payment Timeouts...');
+    logger.info('⏰ Verifying Payment Timeouts...');
 
     const timeouts = PAYMENT_FEES.PAYMENT_TIMEOUT;
 
@@ -187,7 +188,7 @@ class PaymentWorkflowVerifier {
    * ทดสอบ Business Process Descriptions
    */
   verifyDescriptions() {
-    console.log('📝 Verifying Payment Descriptions...');
+    logger.info('📝 Verifying Payment Descriptions...');
 
     const phase1Desc = PAYMENT_FEES.PAYMENT_PHASES.PHASE_1.description;
     const phase2Desc = PAYMENT_FEES.PAYMENT_PHASES.PHASE_2.description;
@@ -209,7 +210,7 @@ class PaymentWorkflowVerifier {
    * รันการทดสอบทั้งหมด
    */
   async runAllTests() {
-    console.log('🚀 Starting Payment Workflow Verification...\n');
+    logger.info('🚀 Starting Payment Workflow Verification...\n');
 
     try {
       this.verifyPaymentConfiguration();
@@ -220,7 +221,7 @@ class PaymentWorkflowVerifier {
 
       this.generateReport();
     } catch (error) {
-      console.error('❌ Verification failed with error:', error.message);
+      logger.error('❌ Verification failed with error:', error.message);
       this.errors.push(`System Error: ${error.message}`);
       this.generateReport();
     }
@@ -230,39 +231,39 @@ class PaymentWorkflowVerifier {
    * สร้างรายงานผลการทดสอบ
    */
   generateReport() {
-    console.log('\n' + '='.repeat(60));
-    console.log('📊 PAYMENT WORKFLOW VERIFICATION REPORT');
-    console.log('='.repeat(60));
+    logger.info('\n' + '='.repeat(60));
+    logger.info('📊 PAYMENT WORKFLOW VERIFICATION REPORT');
+    logger.info('='.repeat(60));
 
-    console.log(`\n✅ PASSED TESTS (${this.passed.length}):`);
-    this.passed.forEach(test => console.log(`   ${test}`));
+    logger.info(`\n✅ PASSED TESTS (${this.passed.length});:`);
+    this.passed.forEach(test => logger.info(`   ${test}`));
 
     if (this.warnings.length > 0) {
-      console.log(`\n⚠️  WARNINGS (${this.warnings.length}):`);
-      this.warnings.forEach(warning => console.log(`   ${warning}`));
+      logger.info(`\n⚠️  WARNINGS (${this.warnings.length});:`);
+      this.warnings.forEach(warning => logger.info(`   ${warning}`));
     }
 
     if (this.errors.length > 0) {
-      console.log(`\n❌ FAILED TESTS (${this.errors.length}):`);
-      this.errors.forEach(error => console.log(`   ${error}`));
+      logger.info(`\n❌ FAILED TESTS (${this.errors.length});:`);
+      this.errors.forEach(error => logger.info(`   ${error}`));
     }
 
-    console.log('\n' + '='.repeat(60));
+    logger.info('\n' + '='.repeat(60));
 
     const totalTests = this.passed.length + this.warnings.length + this.errors.length;
     const successRate = ((this.passed.length / totalTests) * 100).toFixed(1);
 
-    console.log(`📈 SUCCESS RATE: ${successRate}% (${this.passed.length}/${totalTests})`);
+    logger.info(`📈 SUCCESS RATE: ${successRate}% (${this.passed.length}/${totalTests});`);
 
     if (this.errors.length === 0) {
-      console.log('🎉 ALL PAYMENT WORKFLOW TESTS PASSED! ');
-      console.log('✅ Payment system is consistent and ready for production.');
+      logger.info('🎉 ALL PAYMENT WORKFLOW TESTS PASSED! ');
+      logger.info('✅ Payment system is consistent and ready for production.');
     } else {
-      console.log('🚨 PAYMENT WORKFLOW HAS ISSUES!');
-      console.log('❌ Please fix the errors before proceeding.');
+      logger.info('🚨 PAYMENT WORKFLOW HAS ISSUES!');
+      logger.info('❌ Please fix the errors before proceeding.');
     }
 
-    console.log('='.repeat(60) + '\n');
+    logger.info('='.repeat(60) + '\n');
 
     return {
       success: this.errors.length === 0,

@@ -3,6 +3,7 @@
  * API endpoints สำหรับการจัดการฟาร์ม Cannabis
  */
 
+const logger = require('../../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 
@@ -10,7 +11,7 @@ module.exports = (dependencies = {}) => {
   const { farmEngine, auth } = dependencies;
 
   if (!farmEngine) {
-    console.error('[FarmAPI] FarmEngine not provided');
+    logger.error('[FarmAPI] FarmEngine not provided');
     return router;
   }
 
@@ -34,7 +35,7 @@ module.exports = (dependencies = {}) => {
         data: cycle,
       });
     } catch (error) {
-      console.error('[FarmAPI] Create cycle error:', error);
+      logger.error('[FarmAPI] Create cycle error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -72,7 +73,7 @@ module.exports = (dependencies = {}) => {
         total: cycles.length,
       });
     } catch (error) {
-      console.error('[FarmAPI] List cycles error:', error);
+      logger.error('[FarmAPI] List cycles error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -101,7 +102,7 @@ module.exports = (dependencies = {}) => {
         data: cycle,
       });
     } catch (error) {
-      console.error('[FarmAPI] Get cycle error:', error);
+      logger.error('[FarmAPI] Get cycle error:', error);
       res.status(404).json({
         success: false,
         message: 'Cycle not found',
@@ -138,7 +139,7 @@ module.exports = (dependencies = {}) => {
         data: activity,
       });
     } catch (error) {
-      console.error('[FarmAPI] Record activity error:', error);
+      logger.error('[FarmAPI] Record activity error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -168,7 +169,7 @@ module.exports = (dependencies = {}) => {
         total: cycle.activities?.length || 0,
       });
     } catch (error) {
-      console.error('[FarmAPI] Get activities error:', error);
+      logger.error('[FarmAPI] Get activities error:', error);
       res.status(404).json({
         success: false,
         message: 'Cycle not found',
@@ -203,7 +204,7 @@ module.exports = (dependencies = {}) => {
         data: complianceCheck,
       });
     } catch (error) {
-      console.error('[FarmAPI] Compliance check error:', error);
+      logger.error('[FarmAPI] Compliance check error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -235,7 +236,7 @@ module.exports = (dependencies = {}) => {
         },
       });
     } catch (error) {
-      console.error('[FarmAPI] Get compliance error:', error);
+      logger.error('[FarmAPI] Get compliance error:', error);
       res.status(404).json({
         success: false,
         message: 'Cycle not found',
@@ -272,7 +273,7 @@ module.exports = (dependencies = {}) => {
         data: harvest,
       });
     } catch (error) {
-      console.error('[FarmAPI] Record harvest error:', error);
+      logger.error('[FarmAPI] Record harvest error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -309,7 +310,7 @@ module.exports = (dependencies = {}) => {
         data: harvests,
       });
     } catch (error) {
-      console.error('[FarmAPI] Get harvest error:', error);
+      logger.error('[FarmAPI] Get harvest error:', error);
       res.status(404).json({
         success: false,
         message: 'Cycle not found',
@@ -344,7 +345,7 @@ module.exports = (dependencies = {}) => {
         data: qualityTest,
       });
     } catch (error) {
-      console.error('[FarmAPI] Quality test error:', error);
+      logger.error('[FarmAPI] Quality test error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -381,7 +382,7 @@ module.exports = (dependencies = {}) => {
         data: tests,
       });
     } catch (error) {
-      console.error('[FarmAPI] Get quality tests error:', error);
+      logger.error('[FarmAPI] Get quality tests error:', error);
       res.status(404).json({
         success: false,
         message: 'Cycle not found',
@@ -413,7 +414,7 @@ module.exports = (dependencies = {}) => {
         data: result,
       });
     } catch (error) {
-      console.error('[FarmAPI] Complete cycle error:', error);
+      logger.error('[FarmAPI] Complete cycle error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -474,7 +475,7 @@ module.exports = (dependencies = {}) => {
         },
       });
     } catch (error) {
-      console.error('[FarmAPI] Dashboard error:', error);
+      logger.error('[FarmAPI] Dashboard error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -482,7 +483,7 @@ module.exports = (dependencies = {}) => {
     }
   });
 
-  console.log('[FarmAPI] Routes loaded successfully');
+  logger.info('[FarmAPI] Routes loaded successfully');
 
   return router;
 };

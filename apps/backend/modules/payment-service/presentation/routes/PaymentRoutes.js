@@ -36,6 +36,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const PaymentController = require('../controllers/PaymentController');
@@ -53,7 +54,7 @@ class PaymentRoutes {
     this.generalLimiter = this._configureGeneralRateLimit();
 
     this._setupRoutes();
-    console.log('[PaymentRoutes] Initialized successfully');
+    logger.info('[PaymentRoutes] Initialized successfully');
   }
 
   /**
@@ -71,7 +72,7 @@ class PaymentRoutes {
       '/webhook',
       this.webhookLimiter,
       this._validateWebhookSource.bind(this),
-      controller.processWebhook.bind(controller)
+      controller.processWebhook.bind(controller),
     );
 
     // Apply authentication to all other routes
@@ -82,7 +83,7 @@ class PaymentRoutes {
       '/calculate-fees',
       this.generalLimiter,
       validationRules.calculateFees,
-      controller.calculateFees.bind(controller)
+      controller.calculateFees.bind(controller),
     );
 
     // Payment initiation endpoint with enhanced rate limiting
@@ -90,7 +91,7 @@ class PaymentRoutes {
       '/initiate',
       this.paymentLimiter,
       validationRules.initiatePayment,
-      controller.initiatePayment.bind(controller)
+      controller.initiatePayment.bind(controller),
     );
 
     // Get payment status
@@ -98,7 +99,7 @@ class PaymentRoutes {
       '/:paymentId',
       this.generalLimiter,
       validationRules.getPayment,
-      controller.getPaymentStatus.bind(controller)
+      controller.getPaymentStatus.bind(controller),
     );
 
     // Retry failed payment
@@ -106,7 +107,7 @@ class PaymentRoutes {
       '/:paymentId/retry',
       this.paymentLimiter,
       validationRules.getPayment,
-      controller.retryPayment.bind(controller)
+      controller.retryPayment.bind(controller),
     );
 
     // Cancel pending payment
@@ -114,7 +115,7 @@ class PaymentRoutes {
       '/:paymentId/cancel',
       this.generalLimiter,
       validationRules.getPayment,
-      controller.cancelPayment.bind(controller)
+      controller.cancelPayment.bind(controller),
     );
 
     // Process refund (admin only)
@@ -122,7 +123,7 @@ class PaymentRoutes {
       '/:paymentId/refund',
       auth.requireRole(['DTAM_ADMIN']),
       validationRules.processRefund,
-      controller.processRefund.bind(controller)
+      controller.processRefund.bind(controller),
     );
 
     // Get payments for specific application
@@ -135,7 +136,7 @@ class PaymentRoutes {
           .isMongoId()
           .withMessage('Valid application ID is required'),
       ],
-      controller.getApplicationPayments.bind(controller)
+      controller.getApplicationPayments.bind(controller),
     );
 
     // Get user payment history
@@ -159,7 +160,7 @@ class PaymentRoutes {
           .isIn(['PENDING', 'COMPLETED', 'FAILED', 'CANCELLED', 'EXPIRED', 'REFUNDED'])
           .withMessage('Invalid status filter'),
       ],
-      controller.getUserPaymentHistory.bind(controller)
+      controller.getUserPaymentHistory.bind(controller),
     );
 
     // Download payment receipt
@@ -167,7 +168,7 @@ class PaymentRoutes {
       '/receipt/:paymentId',
       this.generalLimiter,
       validationRules.getPayment,
-      controller.downloadReceipt.bind(controller)
+      controller.downloadReceipt.bind(controller),
     );
 
     // Payment statistics (admin only)
@@ -191,7 +192,7 @@ class PaymentRoutes {
           .isIn(['day', 'week', 'month'])
           .withMessage('Invalid groupBy parameter'),
       ],
-      this._getPaymentStatistics.bind(this)
+      this._getPaymentStatistics.bind(this),
     );
 
     // Health check endpoint
@@ -222,7 +223,7 @@ class PaymentRoutes {
         return req.userId || req.ip;
       },
       handler: (req, res) => {
-        console.warn(`[PaymentRoutes] Payment rate limit exceeded for user: ${req.userId}`);
+        logger.warn(`[PaymentRoutes] Payment rate limit exceeded for user: ${req.userId}`);
         res.status(429).json({
           success: false,
           error: 'PAYMENT_RATE_LIMIT',
@@ -286,7 +287,7 @@ class PaymentRoutes {
     const expectedSecret = process.env.PROMPTPAY_WEBHOOK_SECRET;
 
     if (!webhookSecret || webhookSecret !== expectedSecret) {
-      console.warn('[PaymentRoutes] Invalid webhook secret from IP:', req.ip);
+      logger.warn('[PaymentRoutes] Invalid webhook secret from IP:', req.ip);
       return res.status(401).json({
         success: false,
         error: 'UNAUTHORIZED_WEBHOOK',
@@ -335,7 +336,7 @@ class PaymentRoutes {
         },
       });
     } catch (error) {
-      console.error('[PaymentRoutes] Statistics error:', error);
+      logger.error('[PaymentRoutes] Statistics error:', error);
       res.status(500).json({
         success: false,
         error: 'STATISTICS_ERROR',
@@ -359,7 +360,7 @@ class PaymentRoutes {
         data: health,
       });
     } catch (error) {
-      console.error('[PaymentRoutes] Health check error:', error);
+      logger.error('[PaymentRoutes] Health check error:', error);
       res.status(503).json({
         success: false,
         error: 'HEALTH_CHECK_ERROR',
@@ -373,7 +374,7 @@ class PaymentRoutes {
    * @private
    */
   _handleErrors(error, req, res, next) {
-    console.error('[PaymentRoutes] Unhandled error:', error);
+    logger.error('[PaymentRoutes] Unhandled error:', error);
 
     // Log error details for debugging
     const errorDetails = {
@@ -385,7 +386,7 @@ class PaymentRoutes {
       timestamp: new Date(),
     };
 
-    console.error('[PaymentRoutes] Error details:', errorDetails);
+    logger.error('[PaymentRoutes] Error details:', errorDetails);
 
     // Handle specific error types
     if (error.name === 'ValidationError') {

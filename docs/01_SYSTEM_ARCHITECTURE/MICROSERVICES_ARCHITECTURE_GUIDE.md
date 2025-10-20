@@ -1770,7 +1770,7 @@ const tracer = initTracer(
       agentPort: 6831,
     },
   },
-  {}
+  {},
 );
 
 // Middleware
@@ -1815,7 +1815,7 @@ app.use((req, res, next) => {
 
     httpRequestDuration.observe(
       { method: req.method, route: req.route?.path || req.path, status_code: res.statusCode },
-      duration
+      duration,
     );
 
     httpRequestTotal.inc({

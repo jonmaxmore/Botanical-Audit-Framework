@@ -4,6 +4,7 @@
  * Requires DTAM authentication
  */
 
+const logger = require('../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 const {
@@ -100,7 +101,7 @@ router.get('/applications', verifyDTAMToken, (req, res) => {
       },
     });
   } catch (error) {
-    console.error('[DTAM] Error fetching applications:', error);
+    logger.error('[DTAM] Error fetching applications:', error);
     res.status(500).json({
       success: false,
       error: 'เกิดข้อผิดพลาดในการดึงข้อมูล',
@@ -131,7 +132,7 @@ router.get('/applications/:id', verifyDTAMToken, (req, res) => {
       data: application,
     });
   } catch (error) {
-    console.error('[DTAM] Error fetching application:', error);
+    logger.error('[DTAM] Error fetching application:', error);
     res.status(500).json({
       success: false,
       error: 'เกิดข้อผิดพลาด',
@@ -194,15 +195,15 @@ router.put(
         data: application,
       });
 
-      console.log(`[DTAM] Application ${id} ${action}ed by ${req.user.username}`);
+      logger.info(`[DTAM] Application ${id} ${action}ed by ${req.user.username}`);
     } catch (error) {
-      console.error('[DTAM] Error reviewing application:', error);
+      logger.error('[DTAM] Error reviewing application:', error);
       res.status(500).json({
         success: false,
         error: 'เกิดข้อผิดพลาด',
       });
     }
-  }
+  },
 );
 
 /**
@@ -230,7 +231,7 @@ router.get('/statistics', verifyDTAMToken, (req, res) => {
       data: stats,
     });
   } catch (error) {
-    console.error('[DTAM] Error fetching statistics:', error);
+    logger.error('[DTAM] Error fetching statistics:', error);
     res.status(500).json({
       success: false,
       error: 'เกิดข้อผิดพลาด',
@@ -281,9 +282,9 @@ router.post('/staff/create', verifyDTAMToken, requireDTAMAdmin, async (req, res)
       },
     });
 
-    console.log(`[DTAM] New staff created: ${username} by ${req.user.username}`);
+    logger.info(`[DTAM] New staff created: ${username} by ${req.user.username}`);
   } catch (error) {
-    console.error('[DTAM] Error creating staff:', error);
+    logger.error('[DTAM] Error creating staff:', error);
     res.status(500).json({
       success: false,
       error: 'เกิดข้อผิดพลาด',

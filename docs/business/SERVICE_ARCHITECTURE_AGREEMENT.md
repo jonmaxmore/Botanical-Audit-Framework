@@ -1042,7 +1042,7 @@ const operations = [
       return await Application.findByIdAndUpdate(
         applicationId,
         { status: 'approved', approvedAt: new Date() },
-        { session, new: true }
+        { session, new: true },
       );
     },
   },
@@ -1057,7 +1057,7 @@ const operations = [
             status: 'active',
           },
         ],
-        { session }
+        { session },
       );
     },
   },

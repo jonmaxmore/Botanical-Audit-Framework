@@ -292,7 +292,7 @@ const userSchema = new mongoose.Schema(
       },
     },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Indexes for performance

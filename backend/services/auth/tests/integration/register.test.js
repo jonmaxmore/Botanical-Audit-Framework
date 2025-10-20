@@ -286,7 +286,7 @@ describe('Registration API', () => {
       const requests = [];
       for (let i = 0; i < 5; i++) {
         requests.push(
-          request(app).post('/api/auth/resend-verification').send({ email: user.email })
+          request(app).post('/api/auth/resend-verification').send({ email: user.email }),
         );
       }
 

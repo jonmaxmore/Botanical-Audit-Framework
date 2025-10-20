@@ -100,9 +100,9 @@ class GovernmentApiIntegrationService {
       this.setupHealthMonitoring();
 
       this.isInitialized = true;
-      console.log('[GovernmentApiIntegrationService] Initialized successfully');
+      logger.info('[GovernmentApiIntegrationService] Initialized successfully');
     } catch (error) {
-      console.error('[GovernmentApiIntegrationService] Initialization failed:', error);
+      logger.error('[GovernmentApiIntegrationService] Initialization failed:', error);
       throw error;
     }
   }
@@ -309,7 +309,7 @@ class GovernmentApiIntegrationService {
         },
       };
     } catch (error) {
-      console.error('[GovernmentApiIntegrationService] Status check failed:', error);
+      logger.error('[GovernmentApiIntegrationService] Status check failed:', error);
       throw error;
     }
   }
@@ -372,7 +372,7 @@ class GovernmentApiIntegrationService {
   // Private Methods
   async setupAuthentication() {
     // Setup authentication for each service
-    console.log('[GovernmentApiIntegrationService] Authentication configured');
+    logger.info('[GovernmentApiIntegrationService] Authentication configured');
   }
 
   initializeCircuitBreakers() {
@@ -385,7 +385,7 @@ class GovernmentApiIntegrationService {
         nextRetry: null,
       });
     }
-    console.log('[GovernmentApiIntegrationService] Circuit breakers initialized');
+    logger.info('[GovernmentApiIntegrationService] Circuit breakers initialized');
   }
 
   initializeRateLimiters() {
@@ -397,12 +397,12 @@ class GovernmentApiIntegrationService {
         maxRequests: this.governmentServices[serviceName].rateLimit.requests,
       });
     }
-    console.log('[GovernmentApiIntegrationService] Rate limiters initialized');
+    logger.info('[GovernmentApiIntegrationService] Rate limiters initialized');
   }
 
   setupHealthMonitoring() {
     // Setup periodic health monitoring
-    console.log('[GovernmentApiIntegrationService] Health monitoring configured');
+    logger.info('[GovernmentApiIntegrationService] Health monitoring configured');
   }
 
   validateIdentityData(data) {
@@ -470,7 +470,7 @@ class GovernmentApiIntegrationService {
       this.metrics.circuitBreakerTrips++;
     }
 
-    console.error(`[GovernmentApiIntegrationService] ${serviceName} error:`, error);
+    logger.error(`[GovernmentApiIntegrationService] ${serviceName} error:`, error);
   }
 
   async callNationalIdService(identityData) {

@@ -42,7 +42,7 @@ class RequestSurveyRevisionUseCase {
         reviewNotes: null,
         rejectionReason: null,
         revisionNotes: updatedSurvey.revisionNotes,
-      })
+      }),
     );
 
     return updatedSurvey;

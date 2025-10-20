@@ -5,6 +5,7 @@
  * Part of Clean Architecture - Integration Layer
  */
 
+const logger = require('../../../shared/logger/logger');
 const Notification = require('../domain/entities/Notification');
 
 class NotificationHelper {
@@ -206,7 +207,7 @@ class NotificationHelper {
   async sendSystemAnnouncement(title, message, priority = Notification.PRIORITY.MEDIUM) {
     // Use SendBroadcastNotificationUseCase for system announcements
     // This is a helper - actual implementation should use the broadcast use case
-    console.log('System announcement:', { title, message, priority });
+    logger.info('System announcement:', { title, message, priority });
     // Implementation depends on broadcast use case availability
   }
 }

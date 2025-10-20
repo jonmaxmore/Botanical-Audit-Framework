@@ -25,6 +25,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const Notification = require('../domain/entities/Notification');
 const Handlebars = require('handlebars');
 const path = require('path');
@@ -82,7 +83,7 @@ class NotificationService {
     // Initialize template system
     this._initializeTemplates();
 
-    console.log('[NotificationService] Initialized successfully');
+    logger.info('[NotificationService] Initialized successfully');
   }
 
   /**
@@ -190,12 +191,12 @@ class NotificationService {
         success: true,
         notificationId: notification.notificationId,
         channels: Object.keys(notificationConfig.channels).filter(
-          c => notificationConfig.channels[c]
+          c => notificationConfig.channels[c],
         ),
         message: 'Workflow notification created successfully',
       };
     } catch (error) {
-      console.error('[NotificationService] Workflow notification error:', error);
+      logger.error('[NotificationService] Workflow notification error:', error);
       throw new Error(`Failed to send workflow notification: ${error.message}`);
     }
   }
@@ -295,7 +296,7 @@ class NotificationService {
         message: 'Payment notification created successfully',
       };
     } catch (error) {
-      console.error('[NotificationService] Payment notification error:', error);
+      logger.error('[NotificationService] Payment notification error:', error);
       throw new Error(`Failed to send payment notification: ${error.message}`);
     }
   }
@@ -408,7 +409,7 @@ class NotificationService {
         message: 'Bulk notification created successfully',
       };
     } catch (error) {
-      console.error('[NotificationService] Bulk notification error:', error);
+      logger.error('[NotificationService] Bulk notification error:', error);
       throw new Error(`Failed to send bulk notification: ${error.message}`);
     }
   }
@@ -427,7 +428,7 @@ class NotificationService {
         throw new Error('Notification not found');
       }
 
-      console.log(`[NotificationService] Processing delivery for: ${notificationId}`);
+      logger.info(`[NotificationService] Processing delivery for: ${notificationId}`);
 
       notification.status = 'PROCESSING';
       await notification.save();
@@ -440,7 +441,7 @@ class NotificationService {
           const emailResult = await this._deliverEmail(notification);
           deliveryResults.email = emailResult;
         } catch (error) {
-          console.error('[NotificationService] Email delivery failed:', error);
+          logger.error('[NotificationService] Email delivery failed:', error);
           await notification.addDeliveryAttempt('email', 'FAILED', {
             errorCode: 'EMAIL_DELIVERY_FAILED',
             errorMessage: error.message,
@@ -454,7 +455,7 @@ class NotificationService {
           const smsResult = await this._deliverSMS(notification);
           deliveryResults.sms = smsResult;
         } catch (error) {
-          console.error('[NotificationService] SMS delivery failed:', error);
+          logger.error('[NotificationService] SMS delivery failed:', error);
           await notification.addDeliveryAttempt('sms', 'FAILED', {
             errorCode: 'SMS_DELIVERY_FAILED',
             errorMessage: error.message,
@@ -468,7 +469,7 @@ class NotificationService {
           const inAppResult = await this._deliverInApp(notification);
           deliveryResults.inApp = inAppResult;
         } catch (error) {
-          console.error('[NotificationService] In-app delivery failed:', error);
+          logger.error('[NotificationService] In-app delivery failed:', error);
           await notification.addDeliveryAttempt('inApp', 'FAILED', {
             errorCode: 'INAPP_DELIVERY_FAILED',
             errorMessage: error.message,
@@ -493,7 +494,7 @@ class NotificationService {
         canRetry: notification.canRetry,
       };
     } catch (error) {
-      console.error('[NotificationService] Delivery processing error:', error);
+      logger.error('[NotificationService] Delivery processing error:', error);
       throw error;
     }
   }
@@ -543,7 +544,7 @@ class NotificationService {
           {
             'channels.inApp.status': 'READ',
             'channels.inApp.readAt': new Date(),
-          }
+          },
         );
       }
 
@@ -564,7 +565,7 @@ class NotificationService {
         unreadCount,
       };
     } catch (error) {
-      console.error('[NotificationService] Get user notifications error:', error);
+      logger.error('[NotificationService] Get user notifications error:', error);
       throw error;
     }
   }
@@ -588,9 +589,9 @@ class NotificationService {
         return this._formatCurrency(amount, currency);
       });
 
-      console.log('[NotificationService] Templates initialized');
+      logger.info('[NotificationService] Templates initialized');
     } catch (error) {
-      console.warn('[NotificationService] Template initialization warning:', error.message);
+      logger.warn('[NotificationService] Template initialization warning:', error.message);
     }
   }
 
@@ -758,7 +759,7 @@ class NotificationService {
             type: 'exponential',
             delay: this.config.retry.baseDelayMs,
           },
-        }
+        },
       );
     } else {
       // Immediate processing if no queue service

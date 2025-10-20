@@ -60,7 +60,7 @@ export default function InspectionActionModal({
   const [photos, setPhotos] = useState<File[]>([]);
   const [videos, setVideos] = useState<File[]>([]);
   const [checklist, setChecklist] = useState(
-    defaultChecklist.map(item => ({ item, checked: false, notes: '' }))
+    defaultChecklist.map(item => ({ item, checked: false, notes: '' })),
   );
   const [comments, setComments] = useState('');
   const [feedbackScore, setFeedbackScore] = useState(3);
@@ -86,7 +86,7 @@ export default function InspectionActionModal({
         // Try to get address from reverse geocoding (optional)
         try {
           const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+            `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`,
           );
           const data = await response.json();
 
@@ -108,7 +108,7 @@ export default function InspectionActionModal({
         console.error('Error getting location:', error);
         alert('ไม่สามารถระบุตำแหน่งได้');
         setGettingLocation(false);
-      }
+      },
     );
   };
 
@@ -142,7 +142,7 @@ export default function InspectionActionModal({
   const updateChecklistItem = (
     index: number,
     field: 'checked' | 'notes',
-    value: boolean | string
+    value: boolean | string,
   ) => {
     const newChecklist = [...checklist];
     if (field === 'checked') {

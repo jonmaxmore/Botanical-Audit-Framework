@@ -49,7 +49,7 @@ class CertificateWorkflowIntegration {
     // เมื่อใบรับรองหมดอายุ → อัปเดตสถานะ
     this.eventBus.on('CertificateExpired', this.handleCertificateExpired.bind(this));
 
-    console.log('🔗 Certificate workflow integration initialized');
+    logger.info('🔗 Certificate workflow integration initialized');
   }
 
   /**
@@ -58,14 +58,14 @@ class CertificateWorkflowIntegration {
    */
   async handleApplicationApproved(event) {
     try {
-      console.log(`📋 Processing approved application: ${event.payload.applicationId}`);
+      logger.info(`📋 Processing approved application: ${event.payload.applicationId}`);
 
       const { applicationId, applicationData, approvedBy } = event.payload;
 
       // 1. ตรวจสอบว่า application อยู่ในสถานะที่ถูกต้อง
       if (applicationData.status !== 'DTAM_APPROVED') {
         console.warn(
-          `⚠️ Application ${applicationId} is not in DTAM_APPROVED status: ${applicationData.status}`
+          `⚠️ Application ${applicationId} is not in DTAM_APPROVED status: ${applicationData.status}`,
         );
         return;
       }
@@ -73,12 +73,12 @@ class CertificateWorkflowIntegration {
       // 2. ตรวจสอบว่าใบรับรองยังไม่ถูกสร้าง
       const existingCertificate = await this.certificateService.findByApplicationId(applicationId);
       if (existingCertificate) {
-        console.warn(`⚠️ Certificate already exists for application: ${applicationId}`);
+        logger.warn(`⚠️ Certificate already exists for application: ${applicationId}`);
         return;
       }
 
       // 3. สร้างใบรับรอง
-      console.log(`🏆 Generating certificate for approved application: ${applicationId}`);
+      logger.info(`🏆 Generating certificate for approved application: ${applicationId}`);
 
       const certificate = await this.certificateService.generateCertificate({
         applicationId,
@@ -87,7 +87,7 @@ class CertificateWorkflowIntegration {
         validityPeriod: 36, // 3 years
       });
 
-      console.log(`✅ Certificate generated successfully: ${certificate.certificateNumber}`);
+      logger.info(`✅ Certificate generated successfully: ${certificate.certificateNumber}`);
 
       // 4. ส่ง event แจ้งว่าใบรับรองถูกสร้างแล้ว
       await this.eventBus.publish({
@@ -105,7 +105,7 @@ class CertificateWorkflowIntegration {
     } catch (error) {
       console.error(
         `❌ Failed to process approved application: ${event.payload.applicationId}`,
-        error
+        error,
       );
 
       // ส่ง event แจ้งการล้มเหลว
@@ -126,7 +126,7 @@ class CertificateWorkflowIntegration {
    */
   async handleCertificateGenerated(event) {
     try {
-      console.log(`🎉 Processing certificate generation: ${event.payload.certificateNumber}`);
+      logger.info(`🎉 Processing certificate generation: ${event.payload.certificateNumber}`);
 
       const { applicationId, certificateId, certificateNumber, userId, farmId } = event.payload;
 
@@ -137,7 +137,7 @@ class CertificateWorkflowIntegration {
         issuedAt: new Date(),
       });
 
-      console.log(`📝 Updated application status to CERTIFICATE_ISSUED: ${applicationId}`);
+      logger.info(`📝 Updated application status to CERTIFICATE_ISSUED: ${applicationId}`);
 
       // 2. ส่งการแจ้งเตือนไปยังเกษตรกร
       await this.notificationService.sendCertificateIssuedNotification({
@@ -148,7 +148,7 @@ class CertificateWorkflowIntegration {
         channels: ['email', 'sms', 'in-app'],
       });
 
-      console.log(`📧 Sent certificate issued notification to user: ${userId}`);
+      logger.info(`📧 Sent certificate issued notification to user: ${userId}`);
 
       // 3. บันทึก audit log
       await this.auditService.logAction({
@@ -163,11 +163,11 @@ class CertificateWorkflowIntegration {
         },
       });
 
-      console.log(`📋 Audit log recorded for certificate issuance: ${certificateNumber}`);
+      logger.info(`📋 Audit log recorded for certificate issuance: ${certificateNumber}`);
     } catch (error) {
       console.error(
         `❌ Failed to process certificate generation: ${event.payload.certificateNumber}`,
-        error
+        error,
       );
     }
   }
@@ -178,7 +178,7 @@ class CertificateWorkflowIntegration {
    */
   async handleCertificateExpiringSoon(event) {
     try {
-      console.log(`⏰ Processing expiring certificate: ${event.payload.certificateNumber}`);
+      logger.info(`⏰ Processing expiring certificate: ${event.payload.certificateNumber}`);
 
       const { certificateId, certificateNumber, userId, farmId, daysUntilExpiry } = event.payload;
 
@@ -193,7 +193,7 @@ class CertificateWorkflowIntegration {
       });
 
       console.log(
-        `📨 Sent renewal reminder for certificate: ${certificateNumber} (${daysUntilExpiry} days)`
+        `📨 Sent renewal reminder for certificate: ${certificateNumber} (${daysUntilExpiry} days)`,
       );
 
       // บันทึก audit log
@@ -211,7 +211,7 @@ class CertificateWorkflowIntegration {
     } catch (error) {
       console.error(
         `❌ Failed to process expiring certificate: ${event.payload.certificateNumber}`,
-        error
+        error,
       );
     }
   }
@@ -222,7 +222,7 @@ class CertificateWorkflowIntegration {
    */
   async handleCertificateExpired(event) {
     try {
-      console.log(`⏲️ Processing expired certificate: ${event.payload.certificateNumber}`);
+      logger.info(`⏲️ Processing expired certificate: ${event.payload.certificateNumber}`);
 
       const { certificateId, certificateNumber, userId, farmId } = event.payload;
 
@@ -238,7 +238,7 @@ class CertificateWorkflowIntegration {
         channels: ['email', 'sms', 'in-app'],
       });
 
-      console.log(`📧 Sent expiration notification for certificate: ${certificateNumber}`);
+      logger.info(`📧 Sent expiration notification for certificate: ${certificateNumber}`);
 
       // 3. บันทึก audit log
       await this.auditService.logAction({
@@ -255,7 +255,7 @@ class CertificateWorkflowIntegration {
     } catch (error) {
       console.error(
         `❌ Failed to process expired certificate: ${event.payload.certificateNumber}`,
-        error
+        error,
       );
     }
   }
@@ -266,7 +266,7 @@ class CertificateWorkflowIntegration {
    */
   async checkExpiringSooonCertificates() {
     try {
-      console.log('🔍 Checking for expiring certificates...');
+      logger.info('🔍 Checking for expiring certificates...');
 
       // ค้นหาใบรับรองที่จะหมดอายุใน 30, 7, และ 1 วัน
       const expiringRanges = [30, 7, 1];
@@ -290,11 +290,11 @@ class CertificateWorkflowIntegration {
         }
 
         console.log(
-          `📊 Found ${expiringCertificates.length} certificates expiring in ${days} days`
+          `📊 Found ${expiringCertificates.length} certificates expiring in ${days} days`,
         );
       }
     } catch (error) {
-      console.error('❌ Failed to check expiring certificates:', error);
+      logger.error('❌ Failed to check expiring certificates:', error);
     }
   }
 
@@ -304,7 +304,7 @@ class CertificateWorkflowIntegration {
    */
   async processExpiredCertificates() {
     try {
-      console.log('🔍 Processing expired certificates...');
+      logger.info('🔍 Processing expired certificates...');
 
       const expiredCertificates = await this.certificateService.findExpiredCertificates();
 
@@ -322,9 +322,9 @@ class CertificateWorkflowIntegration {
         });
       }
 
-      console.log(`📊 Processed ${expiredCertificates.length} expired certificates`);
+      logger.info(`📊 Processed ${expiredCertificates.length} expired certificates`);
     } catch (error) {
-      console.error('❌ Failed to process expired certificates:', error);
+      logger.error('❌ Failed to process expired certificates:', error);
     }
   }
 }

@@ -77,7 +77,7 @@ class SurveyResponseController {
       this.logger.info('Survey response start request', {
         userId: req.user?.id,
         surveyId: req.body?.surveyId,
-        farmId: req.body?.farmId
+        farmId: req.body?.farmId,
       });
 
       // Input validation
@@ -88,7 +88,7 @@ class SurveyResponseController {
           400,
           'VALIDATION_ERROR',
           'Input validation failed',
-          validationResult.errors
+          validationResult.errors,
         );
       }
 
@@ -96,14 +96,14 @@ class SurveyResponseController {
       const authResult = await this.checkResponseCreatePermission(
         req.user,
         req.body.surveyId,
-        req.body.farmId
+        req.body.farmId,
       );
       if (!authResult.authorized) {
         return this.sendErrorResponse(
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to start survey response'
+          'Insufficient permissions to start survey response',
         );
       }
 
@@ -114,8 +114,8 @@ class SurveyResponseController {
         metadata: {
           ...req.body.metadata,
           userAgent: req.get('User-Agent'),
-          ipAddress: req.ip
-        }
+          ipAddress: req.ip,
+        },
       };
 
       const surveyResponse = await this.surveyManagementUseCase.startSurveyResponse(responseData);
@@ -123,7 +123,7 @@ class SurveyResponseController {
       this.logger.info('Survey response started successfully', {
         responseId: surveyResponse.id,
         surveyId: surveyResponse.surveyId,
-        sessionId: surveyResponse.sessionId
+        sessionId: surveyResponse.sessionId,
       });
 
       return this.sendSuccessResponse(
@@ -131,9 +131,9 @@ class SurveyResponseController {
         201,
         {
           response: surveyResponse,
-          nextSteps: this.generateNextSteps(surveyResponse)
+          nextSteps: this.generateNextSteps(surveyResponse),
         },
-        'Survey response started successfully'
+        'Survey response started successfully',
       );
     } catch (error) {
       this.logger.error('Survey response start failed:', error);
@@ -143,7 +143,7 @@ class SurveyResponseController {
       }
 
       return this.sendErrorResponse(res, 500, 'START_ERROR', 'Failed to start survey response', {
-        details: error.message
+        details: error.message,
       });
     }
   }
@@ -172,7 +172,7 @@ class SurveyResponseController {
       this.logger.info('Survey response retrieval request', {
         responseId,
         userId: req.user?.id,
-        options: { includeAnswers, includeProgress, includeScoring }
+        options: { includeAnswers, includeProgress, includeScoring },
       });
 
       // Validate response ID
@@ -184,7 +184,7 @@ class SurveyResponseController {
       const responseData = await this.surveyManagementUseCase.getSurveyResponse(responseId, {
         includeAnswers,
         includeProgress,
-        includeScoring
+        includeScoring,
       });
 
       if (!responseData) {
@@ -198,7 +198,7 @@ class SurveyResponseController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to access survey response'
+          'Insufficient permissions to access survey response',
         );
       }
 
@@ -208,20 +208,20 @@ class SurveyResponseController {
         canEdit: await this.checkResponseEditPermission(req.user, responseData),
         estimatedTimeRemaining: this.calculateEstimatedTimeRemaining(responseData),
         nextSteps:
-          responseData.status === 'in_progress' ? this.generateNextSteps(responseData) : null
+          responseData.status === 'in_progress' ? this.generateNextSteps(responseData) : null,
       };
 
       this.logger.info('Survey response retrieved successfully', {
         responseId,
         status: responseData.status,
-        progress: responseData.progressPercentage
+        progress: responseData.progressPercentage,
       });
 
       return this.sendSuccessResponse(
         res,
         200,
         enrichedData,
-        'Survey response retrieved successfully'
+        'Survey response retrieved successfully',
       );
     } catch (error) {
       this.logger.error('Survey response retrieval failed:', error);
@@ -230,7 +230,7 @@ class SurveyResponseController {
         500,
         'RETRIEVAL_ERROR',
         'Failed to retrieve survey response',
-        { details: error.message }
+        { details: error.message },
       );
     }
   }
@@ -270,7 +270,7 @@ class SurveyResponseController {
         responseId,
         questionId,
         userId: req.user?.id,
-        hasAnswer: !!answer
+        hasAnswer: !!answer,
       });
 
       // Input validation
@@ -281,7 +281,7 @@ class SurveyResponseController {
           400,
           'VALIDATION_ERROR',
           'Answer validation failed',
-          validationResult.errors
+          validationResult.errors,
         );
       }
 
@@ -297,7 +297,7 @@ class SurveyResponseController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to modify survey response'
+          'Insufficient permissions to modify survey response',
         );
       }
 
@@ -307,7 +307,7 @@ class SurveyResponseController {
           res,
           409,
           'RESPONSE_COMPLETED',
-          'Cannot modify completed survey response'
+          'Cannot modify completed survey response',
         );
       }
 
@@ -319,8 +319,8 @@ class SurveyResponseController {
         {
           ...metadata,
           answeredBy: req.user.id,
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       );
 
       // Generate progress update
@@ -328,14 +328,14 @@ class SurveyResponseController {
         previousProgress: currentResponse.progressPercentage,
         currentProgress: updatedResponse.progressPercentage,
         progressDelta: updatedResponse.progressPercentage - currentResponse.progressPercentage,
-        estimatedTimeRemaining: this.calculateEstimatedTimeRemaining(updatedResponse)
+        estimatedTimeRemaining: this.calculateEstimatedTimeRemaining(updatedResponse),
       };
 
       this.logger.info('Answer recorded successfully', {
         responseId,
         questionId,
         progress: updatedResponse.progressPercentage,
-        progressDelta: progressUpdate.progressDelta
+        progressDelta: progressUpdate.progressDelta,
       });
 
       return this.sendSuccessResponse(
@@ -344,9 +344,9 @@ class SurveyResponseController {
         {
           response: updatedResponse,
           progressUpdate,
-          nextSteps: this.generateNextSteps(updatedResponse)
+          nextSteps: this.generateNextSteps(updatedResponse),
         },
-        'Answer recorded successfully'
+        'Answer recorded successfully',
       );
     } catch (error) {
       this.logger.error('Answer recording failed:', error);
@@ -356,7 +356,7 @@ class SurveyResponseController {
       }
 
       return this.sendErrorResponse(res, 500, 'ANSWER_RECORDING_ERROR', 'Failed to record answer', {
-        details: error.message
+        details: error.message,
       });
     }
   }
@@ -383,7 +383,7 @@ class SurveyResponseController {
       this.logger.info('Multiple answers recording request', {
         responseId,
         userId: req.user?.id,
-        answersCount: Object.keys(answers || {}).length
+        answersCount: Object.keys(answers || {}).length,
       });
 
       // Input validation
@@ -396,7 +396,7 @@ class SurveyResponseController {
           res,
           400,
           'VALIDATION_ERROR',
-          'At least one answer is required'
+          'At least one answer is required',
         );
       }
 
@@ -412,7 +412,7 @@ class SurveyResponseController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to modify survey response'
+          'Insufficient permissions to modify survey response',
         );
       }
 
@@ -421,7 +421,7 @@ class SurveyResponseController {
           res,
           409,
           'RESPONSE_COMPLETED',
-          'Cannot modify completed survey response'
+          'Cannot modify completed survey response',
         );
       }
 
@@ -429,19 +429,19 @@ class SurveyResponseController {
       const updatedResponse = await this.surveyManagementUseCase.recordMultipleAnswers(
         responseId,
         answers,
-        req.user.id
+        req.user.id,
       );
 
       const progressUpdate = {
         previousProgress: currentResponse.progressPercentage,
         currentProgress: updatedResponse.progressPercentage,
-        progressDelta: updatedResponse.progressPercentage - currentResponse.progressPercentage
+        progressDelta: updatedResponse.progressPercentage - currentResponse.progressPercentage,
       };
 
       this.logger.info('Multiple answers recorded successfully', {
         responseId,
         answersCount: Object.keys(answers).length,
-        progress: updatedResponse.progressPercentage
+        progress: updatedResponse.progressPercentage,
       });
 
       return this.sendSuccessResponse(
@@ -450,9 +450,9 @@ class SurveyResponseController {
         {
           response: updatedResponse,
           progressUpdate,
-          nextSteps: this.generateNextSteps(updatedResponse)
+          nextSteps: this.generateNextSteps(updatedResponse),
         },
-        `${Object.keys(answers).length} answers recorded successfully`
+        `${Object.keys(answers).length} answers recorded successfully`,
       );
     } catch (error) {
       this.logger.error('Multiple answers recording failed:', error);
@@ -461,7 +461,7 @@ class SurveyResponseController {
         500,
         'MULTIPLE_ANSWERS_ERROR',
         'Failed to record multiple answers',
-        { details: error.message }
+        { details: error.message },
       );
     }
   }
@@ -493,13 +493,13 @@ class SurveyResponseController {
       this.logger.info('Survey response completion request', {
         responseId,
         userId: req.user?.id,
-        forceComplete
+        forceComplete,
       });
 
       // Get current response
       const currentResponse = await this.surveyManagementUseCase.getSurveyResponse(responseId, {
         includeAnswers: true,
-        includeProgress: true
+        includeProgress: true,
       });
 
       if (!currentResponse) {
@@ -513,7 +513,7 @@ class SurveyResponseController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to complete survey response'
+          'Insufficient permissions to complete survey response',
         );
       }
 
@@ -523,7 +523,7 @@ class SurveyResponseController {
           res,
           200,
           currentResponse,
-          'Survey response is already completed'
+          'Survey response is already completed',
         );
       }
 
@@ -536,8 +536,8 @@ class SurveyResponseController {
           'Survey response is not complete',
           {
             currentProgress: currentResponse.progressPercentage,
-            canForceComplete: true
-          }
+            canForceComplete: true,
+          },
         );
       }
 
@@ -551,9 +551,9 @@ class SurveyResponseController {
           completionMetadata: {
             userAgent: req.get('User-Agent'),
             ipAddress: req.ip,
-            timestamp: new Date()
-          }
-        }
+            timestamp: new Date(),
+          },
+        },
       );
 
       // Generate completion summary
@@ -563,13 +563,13 @@ class SurveyResponseController {
         completionTime: completedResponse.completionTimeMinutes,
         qualityMetrics: completedResponse.qualityMetrics,
         certificateUrl: this.generateCertificateUrl(completedResponse),
-        reportUrl: this.generateReportUrl(completedResponse)
+        reportUrl: this.generateReportUrl(completedResponse),
       };
 
       this.logger.info('Survey response completed successfully', {
         responseId,
         totalScore: completedResponse.totalScore,
-        completionTime: completedResponse.completionTimeMinutes
+        completionTime: completedResponse.completionTimeMinutes,
       });
 
       return this.sendSuccessResponse(
@@ -577,9 +577,9 @@ class SurveyResponseController {
         200,
         {
           response: completedResponse,
-          completionSummary
+          completionSummary,
         },
-        'Survey response completed successfully'
+        'Survey response completed successfully',
       );
     } catch (error) {
       this.logger.error('Survey response completion failed:', error);
@@ -593,7 +593,7 @@ class SurveyResponseController {
         500,
         'COMPLETION_ERROR',
         'Failed to complete survey response',
-        { details: error.message }
+        { details: error.message },
       );
     }
   }
@@ -610,12 +610,12 @@ class SurveyResponseController {
 
       this.logger.info('Response progress request', {
         responseId,
-        userId: req.user?.id
+        userId: req.user?.id,
       });
 
       // Get current response
       const currentResponse = await this.surveyManagementUseCase.getSurveyResponse(responseId, {
-        includeProgress: true
+        includeProgress: true,
       });
 
       if (!currentResponse) {
@@ -629,7 +629,7 @@ class SurveyResponseController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to access survey response progress'
+          'Insufficient permissions to access survey response progress',
         );
       }
 
@@ -644,14 +644,14 @@ class SurveyResponseController {
         lastActivity: currentResponse.lastAnswerDate || currentResponse.startDate,
         qualityMetrics: currentResponse.qualityMetrics,
         nextSteps:
-          currentResponse.status === 'in_progress' ? this.generateNextSteps(currentResponse) : null
+          currentResponse.status === 'in_progress' ? this.generateNextSteps(currentResponse) : null,
       };
 
       return this.sendSuccessResponse(
         res,
         200,
         progressInfo,
-        'Response progress retrieved successfully'
+        'Response progress retrieved successfully',
       );
     } catch (error) {
       this.logger.error('Response progress retrieval failed:', error);
@@ -660,7 +660,7 @@ class SurveyResponseController {
         500,
         'PROGRESS_ERROR',
         'Failed to retrieve response progress',
-        { details: error.message }
+        { details: error.message },
       );
     }
   }
@@ -682,13 +682,13 @@ class SurveyResponseController {
         dateFrom,
         dateTo,
         sort = 'startDate',
-        order = 'desc'
+        order = 'desc',
       } = req.query;
 
       this.logger.info('Survey responses request', {
         surveyId,
         userId: req.user?.id,
-        filters: { status, farmId, dateFrom, dateTo }
+        filters: { status, farmId, dateFrom, dateTo },
       });
 
       // Validate survey ID
@@ -703,7 +703,7 @@ class SurveyResponseController {
           res,
           403,
           'AUTHORIZATION_ERROR',
-          'Insufficient permissions to access survey responses'
+          'Insufficient permissions to access survey responses',
         );
       }
 
@@ -715,26 +715,26 @@ class SurveyResponseController {
         farmId,
         dateFrom,
         dateTo,
-        sort: { [sort]: order === 'asc' ? 1 : -1 }
+        sort: { [sort]: order === 'asc' ? 1 : -1 },
       };
 
       // Get responses
       const responsesData = await this.surveyManagementUseCase.getSurveyResponses(
         surveyId,
-        options
+        options,
       );
 
       this.logger.info('Survey responses retrieved successfully', {
         surveyId,
         count: responsesData.responses.length,
-        totalCount: responsesData.pagination.totalCount
+        totalCount: responsesData.pagination.totalCount,
       });
 
       return this.sendSuccessResponse(
         res,
         200,
         responsesData,
-        'Survey responses retrieved successfully'
+        'Survey responses retrieved successfully',
       );
     } catch (error) {
       this.logger.error('Survey responses retrieval failed:', error);
@@ -743,7 +743,7 @@ class SurveyResponseController {
         500,
         'RETRIEVAL_ERROR',
         'Failed to retrieve survey responses',
-        { details: error.message }
+        { details: error.message },
       );
     }
   }
@@ -773,7 +773,7 @@ class SurveyResponseController {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -790,7 +790,7 @@ class SurveyResponseController {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -847,7 +847,7 @@ class SurveyResponseController {
       currentSection: response.currentSection,
       nextAction: 'continue_survey',
       description: 'Continue answering questions to complete the survey',
-      progress: response.progressPercentage
+      progress: response.progressPercentage,
     };
   }
 
@@ -868,7 +868,7 @@ class SurveyResponseController {
       success: true,
       data: data,
       message: message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -878,9 +878,9 @@ class SurveyResponseController {
       error: {
         code: errorCode,
         message: message,
-        details: details
+        details: details,
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     return res.status(statusCode).json(errorResponse);

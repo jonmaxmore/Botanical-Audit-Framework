@@ -30,7 +30,7 @@ class RejectDocumentUseCase {
 
       return updatedDocument;
     } catch (error) {
-      console.error('Error rejecting document:', error);
+      logger.error('Error rejecting document:', error);
       throw error;
     }
   }

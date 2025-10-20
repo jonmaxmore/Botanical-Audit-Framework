@@ -24,6 +24,7 @@
  * - Enables data-driven training program optimization
  */
 
+const logger = require('../../../shared/logger/logger');
 const EventEmitter = require('events');
 
 class AdvancedTrainingAnalyticsSystem extends EventEmitter {
@@ -142,7 +143,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
    */
   async initializeAnalytics() {
     try {
-      console.log('[TrainingAnalytics] Initializing advanced analytics system...');
+      logger.info('[TrainingAnalytics] Initializing advanced analytics system...');
 
       // Initialize data collection
       await this.setupDataCollection();
@@ -157,7 +158,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       await this.initializePerformanceDashboards();
 
       this.monitoringActive = true;
-      console.log('[TrainingAnalytics] Analytics system initialized successfully');
+      logger.info('[TrainingAnalytics] Analytics system initialized successfully');
 
       // Emit initialization event for audit trail
       this.emit('analytics_initialized', {
@@ -173,7 +174,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         monitoringStatus: 'active',
       };
     } catch (error) {
-      console.error('[TrainingAnalytics] Initialization error:', error);
+      logger.error('[TrainingAnalytics] Initialization error:', error);
       throw new Error(`Analytics initialization failed: ${error.message}`);
     }
   }
@@ -188,7 +189,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
    * 4. Initialize data quality monitoring
    */
   async setupDataCollection() {
-    console.log('[TrainingAnalytics] Setting up data collection pipelines...');
+    logger.info('[TrainingAnalytics] Setting up data collection pipelines...');
 
     // Setup event listeners for real-time training data
     this.setupTrainingEventListeners();
@@ -212,7 +213,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
     this.on('user_interaction', this.processEngagementData.bind(this));
     this.on('course_feedback', this.processFeedbackData.bind(this));
 
-    console.log('[TrainingAnalytics] Event listeners configured for real-time data collection');
+    logger.info('[TrainingAnalytics] Event listeners configured for real-time data collection');
   }
 
   /**
@@ -249,7 +250,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       // Trigger predictive analysis for new enrollment
       await this.predictLearnerSuccess(enrollmentData.userId, enrollmentData.courseId);
     } catch (error) {
-      console.error('[TrainingAnalytics] Enrollment processing error:', error);
+      logger.error('[TrainingAnalytics] Enrollment processing error:', error);
     }
   }
 
@@ -294,7 +295,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       // Check for performance alerts
       await this.checkPerformanceAlerts(completionData.userId, analytics);
     } catch (error) {
-      console.error('[TrainingAnalytics] Lesson completion processing error:', error);
+      logger.error('[TrainingAnalytics] Lesson completion processing error:', error);
     }
   }
 
@@ -340,7 +341,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       // Generate personalized recommendations
       await this.generateLearningRecommendations(assessmentData.userId, analytics);
     } catch (error) {
-      console.error('[TrainingAnalytics] Assessment processing error:', error);
+      logger.error('[TrainingAnalytics] Assessment processing error:', error);
     }
   }
 
@@ -353,7 +354,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
    * - Setup model validation and updating processes
    */
   async initializeMachineLearningModels() {
-    console.log('[TrainingAnalytics] Initializing ML models for predictive analytics...');
+    logger.info('[TrainingAnalytics] Initializing ML models for predictive analytics...');
 
     try {
       // Initialize dropout prediction model
@@ -365,11 +366,11 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       // Initialize engagement prediction model
       this.mlModels.engagementPredictor = await this.createEngagementPredictionModel();
 
-      console.log('[TrainingAnalytics] ML models initialized successfully');
+      logger.info('[TrainingAnalytics] ML models initialized successfully');
     } catch (error) {
-      console.error('[TrainingAnalytics] ML model initialization error:', error);
+      logger.error('[TrainingAnalytics] ML model initialization error:', error);
       // Continue without ML models if initialization fails
-      console.log('[TrainingAnalytics] Continuing with rule-based analytics only');
+      logger.info('[TrainingAnalytics] Continuing with rule-based analytics only');
     }
   }
 
@@ -442,7 +443,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
 
       return predictions;
     } catch (error) {
-      console.error('[TrainingAnalytics] Prediction error:', error);
+      logger.error('[TrainingAnalytics] Prediction error:', error);
       return null;
     }
   }
@@ -501,7 +502,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
 
       return dashboard;
     } catch (error) {
-      console.error('[TrainingAnalytics] Dashboard generation error:', error);
+      logger.error('[TrainingAnalytics] Dashboard generation error:', error);
       throw new Error(`Dashboard generation failed: ${error.message}`);
     }
   }
@@ -591,7 +592,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       const key = `${type}:${data.userId}:${data.courseId || 'global'}:${Date.now()}`;
       this.analyticsData.realTimeMetrics.set(key, data);
     } catch (error) {
-      console.error('[TrainingAnalytics] Data storage error:', error);
+      logger.error('[TrainingAnalytics] Data storage error:', error);
     }
   }
 
@@ -631,7 +632,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         clearInterval(this.predictionInterval);
       }
 
-      console.log('[TrainingAnalytics] Analytics system stopped');
+      logger.info('[TrainingAnalytics] Analytics system stopped');
 
       return {
         success: true,
@@ -639,7 +640,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         timestamp: new Date(),
       };
     } catch (error) {
-      console.error('[TrainingAnalytics] Stop error:', error);
+      logger.error('[TrainingAnalytics] Stop error:', error);
       throw error;
     }
   }

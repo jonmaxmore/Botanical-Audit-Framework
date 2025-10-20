@@ -106,7 +106,7 @@ async function testFarmerLogin() {
     if (response.status === 200 && response.data.success && response.data.token) {
       farmerToken = response.data.token;
       logSuccess(
-        `Farmer logged in successfully (Token type: ${response.data.user?.type || 'unknown'})`
+        `Farmer logged in successfully (Token type: ${response.data.user?.type || 'unknown'})`,
       );
       return true;
     } else {
@@ -128,7 +128,7 @@ async function testFarmerProfile() {
 
     if (response.status === 200 && response.data.success) {
       logSuccess(
-        `Farmer profile retrieved: ${response.data.user.firstName} ${response.data.user.lastName}`
+        `Farmer profile retrieved: ${response.data.user.firstName} ${response.data.user.lastName}`,
       );
       return true;
     } else {
@@ -215,7 +215,7 @@ async function testDTAMStaffProfile() {
 
     if (response.status === 200 && response.data.success) {
       logSuccess(
-        `DTAM Staff profile retrieved: ${response.data.staff.firstName} ${response.data.staff.lastName}`
+        `DTAM Staff profile retrieved: ${response.data.staff.firstName} ${response.data.staff.lastName}`,
       );
       return true;
     } else {
@@ -262,7 +262,7 @@ async function testPermissionCheck() {
       },
       {
         headers: { Authorization: `Bearer ${staffToken}` },
-      }
+      },
     );
     logError('REVIEWER was allowed to create staff (PERMISSION ISSUE!)');
     return false;

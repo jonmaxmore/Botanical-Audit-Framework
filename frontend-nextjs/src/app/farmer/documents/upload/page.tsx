@@ -81,7 +81,7 @@ export default function DocumentUploadPage() {
       }, 2000);
     } catch (error) {
       setUploadError(
-        error instanceof Error ? error.message : 'Failed to upload document. Please try again.'
+        error instanceof Error ? error.message : 'Failed to upload document. Please try again.',
       );
     }
   };

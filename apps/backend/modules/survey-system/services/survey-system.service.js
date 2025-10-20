@@ -132,7 +132,7 @@ class SurveySystemService {
 
       await this.responsesCollection.updateOne(
         { _id: new ObjectId(surveyId) },
-        { $set: updateData }
+        { $set: updateData },
       );
 
       logger.info(`[SurveyService] Step ${stepId} updated`, { surveyId, progress });
@@ -197,7 +197,7 @@ class SurveySystemService {
             recommendations,
             'metadata.submittedAt': new Date(),
           },
-        }
+        },
       );
 
       logger.info('[SurveyService] Survey submitted', {
@@ -512,7 +512,7 @@ class SurveySystemService {
         priority: 'LOW',
         text,
         impact: 'Optimizes regional advantages',
-      }))
+      })),
     );
 
     return recommendations;

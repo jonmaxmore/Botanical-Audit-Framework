@@ -50,7 +50,7 @@ function createAuditMiddleware(auditModule) {
           responseMessage: data?.message,
           success: res.statusCode < 400,
         }).catch(error => {
-          console.error('Audit middleware error:', error);
+          logger.error('Audit middleware error:', error);
         });
 
         // Call original json method

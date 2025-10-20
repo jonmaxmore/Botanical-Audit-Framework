@@ -406,7 +406,7 @@ describe('User Management Integration Tests', () => {
         expect(mockSave).toHaveBeenCalledWith(
           expect.objectContaining({
             address: '456 New Street, Chiang Mai',
-          })
+          }),
         );
       });
     });
@@ -446,7 +446,7 @@ describe('User Management Integration Tests', () => {
         expect(mockSave).toHaveBeenCalledWith(
           expect.objectContaining({
             address: '',
-          })
+          }),
         );
       });
     });
@@ -496,7 +496,7 @@ describe('User Management Integration Tests', () => {
         expect(mockSave).toHaveBeenCalledWith(
           expect.objectContaining({
             address: '789 Complete St',
-          })
+          }),
         );
       });
     });
@@ -508,7 +508,7 @@ describe('User Management Integration Tests', () => {
 
       // Register
       const { unmount: unmountRegister } = renderWithTheme(
-        <MockRegistrationForm onSubmit={mockRegister} />
+        <MockRegistrationForm onSubmit={mockRegister} />,
       );
 
       await user.type(screen.getByTestId('email-input'), 'test@example.com');

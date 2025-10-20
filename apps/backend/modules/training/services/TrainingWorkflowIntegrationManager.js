@@ -200,7 +200,7 @@ class TrainingWorkflowIntegrationManager {
         'validateCompletion',
         async () => {
           return await this.validateCourseCompletion(completionData);
-        }
+        },
       );
 
       if (!validationResult.success) {
@@ -220,7 +220,7 @@ class TrainingWorkflowIntegrationManager {
               farmerId: completionData.farmerId,
               completionData: completionData,
             });
-          }
+          },
         );
       }
 
@@ -235,7 +235,7 @@ class TrainingWorkflowIntegrationManager {
             certificate: certificateResult?.data,
             timestamp: new Date(),
           });
-        }
+        },
       );
 
       // Step 4: Submit to government systems if certificate was generated
@@ -246,7 +246,7 @@ class TrainingWorkflowIntegrationManager {
           'submitToGovernment',
           async () => {
             return await this.governmentService.submitCertificate(certificateResult.data);
-          }
+          },
         );
       }
 
@@ -261,7 +261,7 @@ class TrainingWorkflowIntegrationManager {
             analytics: analyticsResult?.data,
             government: governmentResult?.data,
           });
-        }
+        },
       );
 
       // Step 6: Update all records
@@ -316,7 +316,7 @@ class TrainingWorkflowIntegrationManager {
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Course completion workflow failed - ID: ${workflowId}`,
-        error
+        error,
       );
 
       // Handle workflow failure
@@ -334,7 +334,7 @@ class TrainingWorkflowIntegrationManager {
 
     try {
       this.logger.log(
-        `[WorkflowManager] Starting certificate generation workflow - ID: ${workflowId}`
+        `[WorkflowManager] Starting certificate generation workflow - ID: ${workflowId}`,
       );
 
       const workflowExecution = {
@@ -352,29 +352,29 @@ class TrainingWorkflowIntegrationManager {
       const eligibilityCheck = await this.executeWorkflowStep(
         workflowId,
         'validateEligibility',
-        () => this.certificateService.validateEligibility(certificateRequest)
+        () => this.certificateService.validateEligibility(certificateRequest),
       );
 
       const pdfGeneration = await this.executeWorkflowStep(workflowId, 'generatePDF', () =>
-        this.certificateService.generatePDFCertificate(eligibilityCheck.data)
+        this.certificateService.generatePDFCertificate(eligibilityCheck.data),
       );
 
       const digitalSignature = await this.executeWorkflowStep(
         workflowId,
         'addDigitalSignature',
-        () => this.certificateService.addDigitalSignature(pdfGeneration.data)
+        () => this.certificateService.addDigitalSignature(pdfGeneration.data),
       );
 
       const secureStorage = await this.executeWorkflowStep(workflowId, 'storeSecurely', () =>
-        this.certificateService.storeSecurely(digitalSignature.data)
+        this.certificateService.storeSecurely(digitalSignature.data),
       );
 
       const databaseUpdate = await this.executeWorkflowStep(workflowId, 'updateDatabase', () =>
-        this.certificateService.updateCertificateRecord(secureStorage.data)
+        this.certificateService.updateCertificateRecord(secureStorage.data),
       );
 
       const analyticsUpdate = await this.executeWorkflowStep(workflowId, 'triggerAnalytics', () =>
-        this.analyticsService.processCertificateGeneration(databaseUpdate.data)
+        this.analyticsService.processCertificateGeneration(databaseUpdate.data),
       );
 
       // Complete workflow
@@ -396,7 +396,7 @@ class TrainingWorkflowIntegrationManager {
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Certificate generation workflow failed - ID: ${workflowId}`,
-        error
+        error,
       );
       await this.handleWorkflowFailure(workflowId, error, certificateRequest);
       throw error;
@@ -411,7 +411,7 @@ class TrainingWorkflowIntegrationManager {
 
     try {
       this.logger.log(
-        `[WorkflowManager] Starting analytics processing workflow - ID: ${workflowId}`
+        `[WorkflowManager] Starting analytics processing workflow - ID: ${workflowId}`,
       );
 
       const workflowExecution = {
@@ -427,29 +427,29 @@ class TrainingWorkflowIntegrationManager {
 
       // Execute analytics processing steps
       const dataCollection = await this.executeWorkflowStep(workflowId, 'collectData', () =>
-        this.analyticsService.collectTrainingData(analyticsData)
+        this.analyticsService.collectTrainingData(analyticsData),
       );
 
       const metricsProcessing = await this.executeWorkflowStep(workflowId, 'processMetrics', () =>
-        this.analyticsService.processTrainingMetrics(dataCollection.data)
+        this.analyticsService.processTrainingMetrics(dataCollection.data),
       );
 
       const dashboardUpdate = await this.executeWorkflowStep(workflowId, 'updateDashboard', () =>
-        this.analyticsService.updateDashboard(metricsProcessing.data)
+        this.analyticsService.updateDashboard(metricsProcessing.data),
       );
 
       const insightsGeneration = await this.executeWorkflowStep(
         workflowId,
         'generateInsights',
-        () => this.analyticsService.generateTrainingInsights(metricsProcessing.data)
+        () => this.analyticsService.generateTrainingInsights(metricsProcessing.data),
       );
 
       const alertTriggering = await this.executeWorkflowStep(workflowId, 'triggerAlerts', () =>
-        this.analyticsService.checkAndTriggerAlerts(insightsGeneration.data)
+        this.analyticsService.checkAndTriggerAlerts(insightsGeneration.data),
       );
 
       const resultsStorage = await this.executeWorkflowStep(workflowId, 'storeResults', () =>
-        this.analyticsService.storeAnalyticsResults(insightsGeneration.data)
+        this.analyticsService.storeAnalyticsResults(insightsGeneration.data),
       );
 
       // Complete workflow
@@ -473,7 +473,7 @@ class TrainingWorkflowIntegrationManager {
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Analytics processing workflow failed - ID: ${workflowId}`,
-        error
+        error,
       );
       await this.handleWorkflowFailure(workflowId, error, analyticsData);
       throw error;
@@ -488,7 +488,7 @@ class TrainingWorkflowIntegrationManager {
 
     try {
       this.logger.log(
-        `[WorkflowManager] Starting government compliance workflow - ID: ${workflowId}`
+        `[WorkflowManager] Starting government compliance workflow - ID: ${workflowId}`,
       );
 
       const workflowExecution = {
@@ -506,27 +506,27 @@ class TrainingWorkflowIntegrationManager {
       const complianceValidation = await this.executeWorkflowStep(
         workflowId,
         'validateCompliance',
-        () => this.governmentService.validateCompliance(complianceData)
+        () => this.governmentService.validateCompliance(complianceData),
       );
 
       const dataFormatting = await this.executeWorkflowStep(workflowId, 'formatData', () =>
-        this.governmentService.formatForGovernment(complianceValidation.data)
+        this.governmentService.formatForGovernment(complianceValidation.data),
       );
 
       const systemSubmission = await this.executeWorkflowStep(workflowId, 'submitToSystems', () =>
-        this.governmentService.submitToAllSystems(dataFormatting.data)
+        this.governmentService.submitToAllSystems(dataFormatting.data),
       );
 
       const statusTracking = await this.executeWorkflowStep(workflowId, 'trackStatus', () =>
-        this.governmentService.trackSubmissionStatus(systemSubmission.data)
+        this.governmentService.trackSubmissionStatus(systemSubmission.data),
       );
 
       const auditUpdate = await this.executeWorkflowStep(workflowId, 'updateAuditTrail', () =>
-        this.auditService.updateGovernmentAuditTrail(statusTracking.data)
+        this.auditService.updateGovernmentAuditTrail(statusTracking.data),
       );
 
       const responseHandling = await this.executeWorkflowStep(workflowId, 'handleResponses', () =>
-        this.governmentService.handleSystemResponses(statusTracking.data)
+        this.governmentService.handleSystemResponses(statusTracking.data),
       );
 
       // Complete workflow
@@ -549,7 +549,7 @@ class TrainingWorkflowIntegrationManager {
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Government compliance workflow failed - ID: ${workflowId}`,
-        error
+        error,
       );
       await this.handleWorkflowFailure(workflowId, error, complianceData);
       throw error;
@@ -590,7 +590,7 @@ class TrainingWorkflowIntegrationManager {
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Step ${stepName} failed for workflow ${workflowId}:`,
-        error
+        error,
       );
 
       const stepExecution = {
@@ -650,7 +650,7 @@ class TrainingWorkflowIntegrationManager {
 
     // Check completed workflows
     const completed = this.executionTracking.completedWorkflows.find(
-      w => w.workflowId === workflowId
+      w => w.workflowId === workflowId,
     );
     if (completed) return completed;
 

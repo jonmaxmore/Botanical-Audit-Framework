@@ -29,7 +29,7 @@ export type NextApiHandler = (req: NextApiRequest, res: NextApiResponse) => Prom
  */
 export function withRateLimit(
   handler: NextApiHandler,
-  options: RateLimitMiddlewareOptions
+  options: RateLimitMiddlewareOptions,
 ): NextApiHandler {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
@@ -178,7 +178,7 @@ export function withPublicApiLimit(handler: NextApiHandler): NextApiHandler {
 // Authenticated API endpoints (120 req/min)
 export function withAuthenticatedApiLimit(
   handler: NextApiHandler,
-  getUserId?: (req: NextApiRequest) => string | null
+  getUserId?: (req: NextApiRequest) => string | null,
 ): NextApiHandler {
   return withRateLimit(handler, {
     namespace: 'authenticated-api',
@@ -208,7 +208,7 @@ export function withPasswordResetLimit(handler: NextApiHandler): NextApiHandler 
 // File upload endpoints (10 uploads per minute)
 export function withUploadLimit(
   handler: NextApiHandler,
-  getUserId?: (req: NextApiRequest) => string | null
+  getUserId?: (req: NextApiRequest) => string | null,
 ): NextApiHandler {
   return withRateLimit(handler, {
     namespace: 'upload',
@@ -229,7 +229,7 @@ export function withHeavyOperationLimit(handler: NextApiHandler): NextApiHandler
 // Admin endpoints (200 req/min)
 export function withAdminLimit(
   handler: NextApiHandler,
-  getUserId?: (req: NextApiRequest) => string | null
+  getUserId?: (req: NextApiRequest) => string | null,
 ): NextApiHandler {
   return withRateLimit(handler, {
     namespace: 'admin',
@@ -245,7 +245,7 @@ export function withAdminLimit(
 export async function checkRateLimit(
   req: NextApiRequest,
   namespace: string,
-  config?: Partial<RateLimitConfig>
+  config?: Partial<RateLimitConfig>,
 ): Promise<{
   allowed: boolean;
   remaining: number;
@@ -282,7 +282,7 @@ export async function blockIp(
   ip: string,
   namespace: string,
   durationMs: number,
-  reason?: string
+  reason?: string,
 ): Promise<void> {
   await rateLimiter.blockIdentifier(ip, namespace, durationMs, reason);
 }

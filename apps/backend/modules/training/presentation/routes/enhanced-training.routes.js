@@ -62,7 +62,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       query('includePredictions').optional().isBoolean(),
       query('certificationPath').optional().isString(),
     ],
-    enhancedTrainingController.listCourses
+    enhancedTrainingController.listCourses,
   );
 
   farmerRouter.get(
@@ -75,7 +75,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       query('includeRecommendations').optional().isBoolean(),
       query('certificationGoal').optional().isString(),
     ],
-    enhancedTrainingController.listCourses
+    enhancedTrainingController.listCourses,
   );
 
   /**
@@ -98,7 +98,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       query('includeAnalytics').optional().isBoolean(),
       query('includeLearnerData').optional().isBoolean(),
     ],
-    enhancedTrainingController.getCourseDetails
+    enhancedTrainingController.getCourseDetails,
   );
 
   farmerRouter.get(
@@ -106,7 +106,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['farmer']),
     param('id').isUUID(),
-    enhancedTrainingController.getCourseDetails
+    enhancedTrainingController.getCourseDetails,
   );
 
   // ============================================================================
@@ -128,7 +128,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     '/analytics/dashboard',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'training_manager']),
-    enhancedTrainingController.getAnalyticsDashboard
+    enhancedTrainingController.getAnalyticsDashboard,
   );
 
   /**
@@ -152,7 +152,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       query('competencyId').optional().isString(),
       query('includeInterventions').optional().isBoolean(),
     ],
-    enhancedTrainingController.getLearnerPredictions
+    enhancedTrainingController.getLearnerPredictions,
   );
 
   /**
@@ -192,7 +192,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to retrieve effectiveness analytics',
         });
       }
-    }
+    },
   );
 
   /**
@@ -231,7 +231,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to retrieve real-time metrics',
         });
       }
-    }
+    },
   );
 
   // ============================================================================
@@ -253,7 +253,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     '/certification/dashboard',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'certification_manager']),
-    enhancedTrainingController.getCertificationDashboard
+    enhancedTrainingController.getCertificationDashboard,
   );
 
   /**
@@ -277,7 +277,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       query('includePredictions').optional().isBoolean(),
       query('certificationTypes').optional().isString(),
     ],
-    enhancedTrainingController.getLearnerCertificationProgress
+    enhancedTrainingController.getLearnerCertificationProgress,
   );
 
   /**
@@ -302,7 +302,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       // Use the same controller method but with farmer's own user ID
       req.params.userId = req.user.id;
       return enhancedTrainingController.getLearnerCertificationProgress(req, res);
-    }
+    },
   );
 
   /**
@@ -345,7 +345,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to update certification milestone',
         });
       }
-    }
+    },
   );
 
   // ============================================================================
@@ -372,7 +372,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       body('assessmentType').isIn(['ADAPTIVE', 'FIXED', 'SIMULATION', 'PORTFOLIO']),
       body('configurationOptions').optional().isObject(),
     ],
-    enhancedTrainingController.createPerformanceAssessment
+    enhancedTrainingController.createPerformanceAssessment,
   );
 
   /**
@@ -398,7 +398,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       body('responseTime').optional().isNumeric(),
       body('contextData').optional().isObject(),
     ],
-    enhancedTrainingController.submitAssessmentResponse
+    enhancedTrainingController.submitAssessmentResponse,
   );
 
   farmerRouter.post(
@@ -412,7 +412,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       body('responseTime').optional().isNumeric(),
       body('contextData').optional().isObject(),
     ],
-    enhancedTrainingController.submitAssessmentResponse
+    enhancedTrainingController.submitAssessmentResponse,
   );
 
   /**
@@ -451,7 +451,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to retrieve assessment dashboard',
         });
       }
-    }
+    },
   );
 
   /**
@@ -494,7 +494,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to retrieve assessment history',
         });
       }
-    }
+    },
   );
 
   farmerRouter.get(
@@ -517,7 +517,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           personalAnalytics: {},
         },
       });
-    }
+    },
   );
 
   // ============================================================================
@@ -557,7 +557,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to retrieve interventions dashboard',
         });
       }
-    }
+    },
   );
 
   /**
@@ -604,7 +604,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to trigger intervention',
         });
       }
-    }
+    },
   );
 
   // ============================================================================
@@ -625,7 +625,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     '/system/status',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'system_admin']),
-    enhancedTrainingController.getSystemStatus
+    enhancedTrainingController.getSystemStatus,
   );
 
   /**
@@ -660,7 +660,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to run system diagnostics',
         });
       }
-    }
+    },
   );
 
   /**
@@ -707,7 +707,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Failed to execute system control action',
         });
       }
-    }
+    },
   );
 
   // ============================================================================
@@ -716,7 +716,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
 
   // Global error handler for enhanced training routes
   const errorHandler = (error, req, res, next) => {
-    console.error('[EnhancedTrainingRoutes] Unhandled error:', error);
+    logger.error('[EnhancedTrainingRoutes] Unhandled error:', error);
 
     res.status(500).json({
       success: false,

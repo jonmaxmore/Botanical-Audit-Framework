@@ -25,8 +25,8 @@ exports.validateApplicationId = (req, res, next) => {
       .required()
       .messages({
         'string.pattern.base': 'Invalid application ID format. Expected: APP-YYYY-XXXXXXXX',
-        'any.required': 'Application ID is required'
-      })
+        'any.required': 'Application ID is required',
+      }),
   });
 
   const { error } = schema.validate(req.params);
@@ -37,8 +37,8 @@ exports.validateApplicationId = (req, res, next) => {
       message: 'Validation error',
       errors: error.details.map(detail => ({
         field: detail.path[0],
-        message: detail.message
-      }))
+        message: detail.message,
+      })),
     });
   }
 
@@ -53,26 +53,26 @@ exports.validateCreateApplication = (req, res, next) => {
     farmName: Joi.string().min(2).max(200).required().messages({
       'string.min': 'Farm name must be at least 2 characters',
       'string.max': 'Farm name cannot exceed 200 characters',
-      'any.required': 'Farm name is required'
+      'any.required': 'Farm name is required',
     }),
 
     farmAddress: Joi.object({
       houseNo: Joi.string().required().messages({
-        'any.required': 'House number is required'
+        'any.required': 'House number is required',
       }),
 
       moo: Joi.string().allow(null, '').default(null),
 
       tambon: Joi.string().required().messages({
-        'any.required': 'Tambon (sub-district) is required'
+        'any.required': 'Tambon (sub-district) is required',
       }),
 
       amphoe: Joi.string().required().messages({
-        'any.required': 'Amphoe (district) is required'
+        'any.required': 'Amphoe (district) is required',
       }),
 
       province: Joi.string().required().messages({
-        'any.required': 'Province is required'
+        'any.required': 'Province is required',
       }),
 
       postalCode: Joi.string()
@@ -80,7 +80,7 @@ exports.validateCreateApplication = (req, res, next) => {
         .required()
         .messages({
           'string.pattern.base': 'Postal code must be 5 digits',
-          'any.required': 'Postal code is required'
+          'any.required': 'Postal code is required',
         }),
 
       gpsCoordinates: Joi.object({
@@ -90,33 +90,33 @@ exports.validateCreateApplication = (req, res, next) => {
           .length(2)
           .items(
             Joi.number().min(-180).max(180), // longitude
-            Joi.number().min(-90).max(90) // latitude
+            Joi.number().min(-90).max(90), // latitude
           )
           .required()
           .messages({
             'array.length': 'GPS coordinates must have exactly 2 values [longitude, latitude]',
-            'any.required': 'GPS coordinates are required'
-          })
-      }).required()
+            'any.required': 'GPS coordinates are required',
+          }),
+      }).required(),
     }).required(),
 
     farmSize: Joi.number().min(0.1).max(10000).required().messages({
       'number.min': 'Farm size must be at least 0.1',
       'number.max': 'Farm size cannot exceed 10,000',
-      'any.required': 'Farm size is required'
+      'any.required': 'Farm size is required',
     }),
 
     farmSizeUnit: Joi.string().valid('rai', 'sqm', 'hectare').default('rai'),
 
     cultivationType: Joi.string().valid('INDOOR', 'OUTDOOR', 'GREENHOUSE').required().messages({
       'any.only': 'Cultivation type must be INDOOR, OUTDOOR, or GREENHOUSE',
-      'any.required': 'Cultivation type is required'
+      'any.required': 'Cultivation type is required',
     }),
 
     cannabisVariety: Joi.string().valid('CBD', 'THC', 'MIXED').required().messages({
       'any.only': 'Cannabis variety must be CBD, THC, or MIXED',
-      'any.required': 'Cannabis variety is required'
-    })
+      'any.required': 'Cannabis variety is required',
+    }),
   });
 
   const { error } = schema.validate(req.body, { abortEarly: false });
@@ -127,8 +127,8 @@ exports.validateCreateApplication = (req, res, next) => {
       message: 'Validation error',
       errors: error.details.map(detail => ({
         field: detail.path.join('.'),
-        message: detail.message
-      }))
+        message: detail.message,
+      })),
     });
   }
 
@@ -143,7 +143,7 @@ exports.validateUpdateApplication = (req, res, next) => {
   const schema = Joi.object({
     farmName: Joi.string().min(2).max(200).messages({
       'string.min': 'Farm name must be at least 2 characters',
-      'string.max': 'Farm name cannot exceed 200 characters'
+      'string.max': 'Farm name cannot exceed 200 characters',
     }),
 
     farmAddress: Joi.object({
@@ -157,8 +157,8 @@ exports.validateUpdateApplication = (req, res, next) => {
         type: Joi.string().valid('Point'),
         coordinates: Joi.array()
           .length(2)
-          .items(Joi.number().min(-180).max(180), Joi.number().min(-90).max(90))
-      })
+          .items(Joi.number().min(-180).max(180), Joi.number().min(-90).max(90)),
+      }),
     }),
 
     farmSize: Joi.number().min(0.1).max(10000),
@@ -167,7 +167,7 @@ exports.validateUpdateApplication = (req, res, next) => {
 
     cultivationType: Joi.string().valid('INDOOR', 'OUTDOOR', 'GREENHOUSE'),
 
-    cannabisVariety: Joi.string().valid('CBD', 'THC', 'MIXED')
+    cannabisVariety: Joi.string().valid('CBD', 'THC', 'MIXED'),
   }).min(1); // At least one field must be present
 
   const { error } = schema.validate(req.body, { abortEarly: false });
@@ -178,8 +178,8 @@ exports.validateUpdateApplication = (req, res, next) => {
       message: 'Validation error',
       errors: error.details.map(detail => ({
         field: detail.path.join('.'),
-        message: detail.message
-      }))
+        message: detail.message,
+      })),
     });
   }
 
@@ -210,7 +210,7 @@ exports.validateListQuery = (req, res, next) => {
         'CERTIFICATE_ISSUED',
         'REJECTED',
         'REVISION_REQUIRED',
-        'EXPIRED'
+        'EXPIRED',
       )
       .optional(),
 
@@ -220,7 +220,7 @@ exports.validateListQuery = (req, res, next) => {
       .valid('createdAt', 'submittedAt', 'farmName', 'state')
       .default('createdAt'),
 
-    sortOrder: Joi.string().valid('asc', 'desc').default('desc')
+    sortOrder: Joi.string().valid('asc', 'desc').default('desc'),
   });
 
   const { error, value } = schema.validate(req.query);
@@ -231,8 +231,8 @@ exports.validateListQuery = (req, res, next) => {
       message: 'Validation error',
       errors: error.details.map(detail => ({
         field: detail.path[0],
-        message: detail.message
-      }))
+        message: detail.message,
+      })),
     });
   }
 

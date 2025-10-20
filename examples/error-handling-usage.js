@@ -19,7 +19,7 @@ router.get(
     }
 
     res.standardSuccess(user);
-  })
+  }),
 );
 
 // Example: Validation error
@@ -34,7 +34,7 @@ router.post(
       message: 'User created successfully',
       messageThTh: 'สร้างผู้ใช้สำเร็จ',
     });
-  })
+  }),
 );
 
 module.exports = router;

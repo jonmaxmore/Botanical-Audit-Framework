@@ -12,7 +12,7 @@ try {
   User = require('../models/user');
   mongoose = require('mongoose');
 } catch (error) {
-  console.warn('[GACPApplicationService] Models not available, using mock mode');
+  logger.warn('[GACPApplicationService] Models not available, using mock mode');
 }
 
 const logger = require('../shared/logger');
@@ -198,7 +198,7 @@ class GACPApplicationService {
         await application.updateStatus(
           'inspection_scheduled',
           reviewerId,
-          'Approved for field inspection'
+          'Approved for field inspection',
         );
 
         // Schedule inspection
@@ -212,7 +212,7 @@ class GACPApplicationService {
         await application.updateStatus(
           'rejected',
           reviewerId,
-          'Application does not meet minimum requirements'
+          'Application does not meet minimum requirements',
         );
       }
 
@@ -262,12 +262,12 @@ class GACPApplicationService {
       // 1. Find available inspector based on location and expertise
       const availableInspector = await this.findAvailableInspector(
         application.farmInformation.location.province,
-        application.cropInformation.map(crop => crop.cropType)
+        application.cropInformation.map(crop => crop.cropType),
       );
 
       if (!availableInspector) {
         throw new BusinessLogicError(
-          'No available inspector found for this location and crop type'
+          'No available inspector found for this location and crop type',
         );
       }
 
@@ -325,7 +325,7 @@ class GACPApplicationService {
       await application.updateStatus(
         'inspection_completed',
         inspectorId,
-        'Field inspection completed'
+        'Field inspection completed',
       );
       application.inspectionCompleted = new Date();
 
@@ -359,7 +359,7 @@ class GACPApplicationService {
         await application.updateStatus(
           'approved',
           inspectorId,
-          `Approved with score ${finalScore}`
+          `Approved with score ${finalScore}`,
         );
 
         // Generate certificate
@@ -387,7 +387,7 @@ class GACPApplicationService {
         await application.updateStatus(
           'rejected',
           inspectorId,
-          `Rejected with score ${finalScore}`
+          `Rejected with score ${finalScore}`,
         );
       }
 
@@ -492,7 +492,7 @@ class GACPApplicationService {
     let score = 0;
     const totalDocuments = application.documents.length;
     const verifiedDocuments = application.documents.filter(
-      doc => doc.verificationStatus === 'verified'
+      doc => doc.verificationStatus === 'verified',
     ).length;
 
     score = totalDocuments > 0 ? (verifiedDocuments / totalDocuments) * 100 : 0;

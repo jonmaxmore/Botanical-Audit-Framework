@@ -3,6 +3,7 @@
  * API endpoints for GACP certification application workflow
  */
 
+const logger = require('../../../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 const ApplicationWorkflowController = require('../controllers/application-workflow.controller');
@@ -11,12 +12,12 @@ module.exports = (dependencies = {}) => {
   const { workflowService, auth } = dependencies;
 
   if (!workflowService) {
-    console.error('[WorkflowRoutes] Workflow service not provided');
+    logger.error('[WorkflowRoutes] Workflow service not provided');
     return router;
   }
 
   if (!auth) {
-    console.error('[WorkflowRoutes] Auth middleware not provided');
+    logger.error('[WorkflowRoutes] Auth middleware not provided');
     return router;
   }
 
@@ -107,7 +108,7 @@ module.exports = (dependencies = {}) => {
    */
   router.get('/statistics', auth, controller.getStatistics);
 
-  console.log('[WorkflowRoutes] Routes loaded successfully - 13 endpoints');
+  logger.info('[WorkflowRoutes] Routes loaded successfully - 13 endpoints');
 
   return router;
 };

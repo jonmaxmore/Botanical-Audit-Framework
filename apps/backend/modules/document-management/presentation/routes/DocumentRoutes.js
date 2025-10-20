@@ -30,6 +30,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const DocumentController = require('../controllers/DocumentController');
@@ -46,7 +47,7 @@ class DocumentRoutes {
     this.downloadLimiter = this._configureDownloadRateLimit();
 
     this._setupRoutes();
-    console.log('[DocumentRoutes] Initialized successfully');
+    logger.info('[DocumentRoutes] Initialized successfully');
   }
 
   /**
@@ -69,14 +70,14 @@ class DocumentRoutes {
       controller.uploadConfig.single('document'),
       validationRules.upload,
       this._handleMulterErrors.bind(this),
-      controller.uploadDocument.bind(controller)
+      controller.uploadDocument.bind(controller),
     );
 
     // Document metadata route
     router.get(
       '/:id',
       validationRules.getDocument,
-      controller.getDocumentMetadata.bind(controller)
+      controller.getDocumentMetadata.bind(controller),
     );
 
     // Document download route with rate limiting
@@ -84,7 +85,7 @@ class DocumentRoutes {
       '/:id/download',
       this.downloadLimiter,
       validationRules.getDocument,
-      controller.downloadDocument.bind(controller)
+      controller.downloadDocument.bind(controller),
     );
 
     // Document thumbnail route
@@ -94,7 +95,7 @@ class DocumentRoutes {
     router.put(
       '/:id',
       validationRules.updateDocument,
-      controller.updateDocumentMetadata.bind(controller)
+      controller.updateDocumentMetadata.bind(controller),
     );
 
     // Delete document route
@@ -112,7 +113,7 @@ class DocumentRoutes {
           .isMongoId()
           .withMessage('Valid application ID is required'),
       ],
-      controller.getApplicationDocuments.bind(controller)
+      controller.getApplicationDocuments.bind(controller),
     );
 
     // Search documents route
@@ -125,7 +126,7 @@ class DocumentRoutes {
     router.get(
       '/stats',
       auth.requireRole(['DTAM_ADMIN', 'DTAM_REVIEWER']),
-      this._getDocumentStats.bind(this)
+      this._getDocumentStats.bind(this),
     );
 
     // Error handling middleware
@@ -185,7 +186,7 @@ class DocumentRoutes {
    */
   _handleMulterErrors(error, req, res, next) {
     if (error) {
-      console.error('[DocumentRoutes] Multer error:', error);
+      logger.error('[DocumentRoutes] Multer error:', error);
 
       if (error.code === 'LIMIT_FILE_SIZE') {
         return res.status(400).json({
@@ -245,7 +246,7 @@ class DocumentRoutes {
       const hasAccess = await this.documentController._checkDocumentAccess(
         document,
         userId,
-        userRole
+        userRole,
       );
       if (!hasAccess) {
         return res.status(403).json({
@@ -264,7 +265,7 @@ class DocumentRoutes {
         res.redirect(defaultThumbnail);
       }
     } catch (error) {
-      console.error('[DocumentRoutes] Thumbnail error:', error);
+      logger.error('[DocumentRoutes] Thumbnail error:', error);
       res.status(500).json({
         success: false,
         error: 'THUMBNAIL_ERROR',
@@ -322,7 +323,7 @@ class DocumentRoutes {
             expiryDate: new Date(Date.now() + expiryHours * 60 * 60 * 1000),
           });
           return { email, token };
-        })
+        }),
       );
 
       // Send sharing notifications
@@ -345,7 +346,7 @@ class DocumentRoutes {
         },
       });
     } catch (error) {
-      console.error('[DocumentRoutes] Share error:', error);
+      logger.error('[DocumentRoutes] Share error:', error);
       res.status(500).json({
         success: false,
         error: 'SHARE_ERROR',
@@ -393,7 +394,7 @@ class DocumentRoutes {
         },
       });
     } catch (error) {
-      console.error('[DocumentRoutes] Stats error:', error);
+      logger.error('[DocumentRoutes] Stats error:', error);
       res.status(500).json({
         success: false,
         error: 'STATS_ERROR',
@@ -425,7 +426,7 @@ class DocumentRoutes {
    * @private
    */
   _handleErrors(error, req, res, next) {
-    console.error('[DocumentRoutes] Unhandled error:', error);
+    logger.error('[DocumentRoutes] Unhandled error:', error);
 
     // Don't log stack trace in production
     const stack = process.env.NODE_ENV === 'development' ? error.stack : undefined;

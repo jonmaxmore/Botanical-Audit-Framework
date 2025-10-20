@@ -398,7 +398,7 @@ router.get('/analytics/:region', (req, res) => {
   try {
     const { region } = req.params;
     const regionResponses = mockSurveyResponses.filter(
-      r => r.region.toLowerCase() === region.toLowerCase()
+      r => r.region.toLowerCase() === region.toLowerCase(),
     );
 
     const analytics = {

@@ -80,7 +80,7 @@ class JobAssignmentService extends EventEmitter {
       } = data;
 
       logger.info(
-        `[JobAssignmentService] Auto-assigning ${role} for ${applicationId} using ${strategy}`
+        `[JobAssignmentService] Auto-assigning ${role} for ${applicationId} using ${strategy}`,
       );
 
       // Validate role
@@ -154,12 +154,12 @@ class JobAssignmentService extends EventEmitter {
       // Check if assignment already exists
       const existingAssignment = await this.assignmentRepository.findByApplicationAndRole(
         applicationId,
-        role
+        role,
       );
 
       if (existingAssignment && existingAssignment.status !== this.STATUS.COMPLETED) {
         logger.warn(
-          `[JobAssignmentService] Active assignment already exists: ${existingAssignment.id}`
+          `[JobAssignmentService] Active assignment already exists: ${existingAssignment.id}`,
         );
         return existingAssignment;
       }
@@ -448,7 +448,7 @@ class JobAssignmentService extends EventEmitter {
             user,
             workload: activeAssignments.length,
           };
-        })
+        }),
       );
 
       // Sort by workload (ascending) and select user with least workload
@@ -479,7 +479,7 @@ class JobAssignmentService extends EventEmitter {
             user,
             score: this._calculatePerformanceScore(metrics),
           };
-        })
+        }),
       );
 
       // Sort by score (descending) and select best performer

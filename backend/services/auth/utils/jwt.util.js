@@ -20,19 +20,19 @@ const crypto = require('crypto');
 const config =
   process.env.NODE_ENV === 'test'
     ? {
-      jwt: {
-        access: {
-          secret: process.env.JWT_ACCESS_SECRET,
-          expiresIn: process.env.JWT_ACCESS_EXPIRY || '15m',
-          algorithm: 'HS256'
+        jwt: {
+          access: {
+            secret: process.env.JWT_ACCESS_SECRET,
+            expiresIn: process.env.JWT_ACCESS_EXPIRY || '15m',
+            algorithm: 'HS256',
+          },
+          refresh: {
+            secret: process.env.JWT_REFRESH_SECRET,
+            expiresIn: process.env.JWT_REFRESH_EXPIRY || '7d',
+            algorithm: 'HS256',
+          },
         },
-        refresh: {
-          secret: process.env.JWT_REFRESH_SECRET,
-          expiresIn: process.env.JWT_REFRESH_EXPIRY || '7d',
-          algorithm: 'HS256'
-        }
       }
-    }
     : require('../../../config/env.config');
 
 const RefreshToken = require('../../../../database/models/RefreshToken.model');
@@ -55,15 +55,15 @@ function generateAccessToken(payload) {
       email,
       role,
       type: 'access',
-      jti: crypto.randomUUID() // JWT ID for token tracking and revocation
+      jti: crypto.randomUUID(), // JWT ID for token tracking and revocation
     },
     config.jwt.access.secret,
     {
       expiresIn: config.jwt.access.expiresIn,
       algorithm: config.jwt.access.algorithm,
       issuer: 'gacp-platform',
-      audience: 'gacp-api'
-    }
+      audience: 'gacp-api',
+    },
   );
 }
 
@@ -92,15 +92,15 @@ async function generateRefreshToken(payload) {
       email,
       role, // Include role so we can generate access tokens without DB query
       tokenId,
-      type: 'refresh'
+      type: 'refresh',
     },
     config.jwt.refresh.secret,
     {
       expiresIn: config.jwt.refresh.expiresIn,
       algorithm: config.jwt.refresh.algorithm,
       issuer: 'gacp-platform',
-      audience: 'gacp-api'
-    }
+      audience: 'gacp-api',
+    },
   );
 
   // Hash token for storage (security best practice)
@@ -116,12 +116,12 @@ async function generateRefreshToken(payload) {
     userId,
     tokenHash,
     expiresAt,
-    isUsed: false
+    isUsed: false,
   });
 
   return {
     token: refreshToken,
-    tokenId
+    tokenId,
   };
 }
 
@@ -137,7 +137,7 @@ function verifyAccessToken(token) {
     const decoded = jwt.verify(token, config.jwt.access.secret, {
       algorithms: [config.jwt.access.algorithm],
       issuer: 'gacp-platform',
-      audience: 'gacp-api'
+      audience: 'gacp-api',
     });
 
     // Verify token type
@@ -172,7 +172,7 @@ async function verifyRefreshToken(token) {
     const decoded = jwt.verify(token, config.jwt.refresh.secret, {
       algorithms: [config.jwt.refresh.algorithm],
       issuer: 'gacp-platform',
-      audience: 'gacp-api'
+      audience: 'gacp-api',
     });
 
     // Verify token type
@@ -186,7 +186,7 @@ async function verifyRefreshToken(token) {
     // Find token in database
     const storedToken = await RefreshToken.findOne({
       tokenId: decoded.tokenId,
-      tokenHash
+      tokenHash,
     });
 
     if (!storedToken) {
@@ -238,9 +238,9 @@ async function revokeRefreshToken(tokenId) {
     {
       $set: {
         isUsed: true,
-        usedAt: new Date()
-      }
-    }
+        usedAt: new Date(),
+      },
+    },
   );
   return result.modifiedCount > 0;
 }
@@ -259,9 +259,9 @@ async function revokeAllUserTokens(userId) {
     {
       $set: {
         isUsed: true,
-        usedAt: new Date()
-      }
-    }
+        usedAt: new Date(),
+      },
+    },
   );
   return result.modifiedCount;
 }
@@ -276,7 +276,7 @@ async function revokeAllUserTokens(userId) {
  */
 async function cleanupExpiredTokens() {
   const result = await RefreshToken.deleteMany({
-    expiresAt: { $lt: new Date() }
+    expiresAt: { $lt: new Date() },
   });
   return result.deletedCount;
 }
@@ -299,19 +299,19 @@ async function rotateTokens(oldRefreshToken) {
   const accessToken = generateAccessToken({
     userId: decoded.userId,
     email: decoded.email,
-    role: decoded.role // Get role from refresh token (stored when token was generated)
+    role: decoded.role, // Get role from refresh token (stored when token was generated)
   });
 
   const refreshToken = await generateRefreshToken({
     userId: decoded.userId,
     email: decoded.email,
-    role: decoded.role // Preserve role in new refresh token
+    role: decoded.role, // Preserve role in new refresh token
   });
 
   return {
     accessToken,
     refreshToken: refreshToken.token,
-    expiresIn: 900 // 15 minutes in seconds
+    expiresIn: 900, // 15 minutes in seconds
   };
 }
 
@@ -343,5 +343,5 @@ module.exports = {
   cleanupExpiredTokens,
   rotateTokens,
   generateEmailVerificationToken,
-  generatePasswordResetToken
+  generatePasswordResetToken,
 };

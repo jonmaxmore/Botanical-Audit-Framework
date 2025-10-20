@@ -64,7 +64,7 @@ const reportSchema = new mongoose.Schema(
     collection: 'reports',
     timestamps: false,
     _id: false,
-  }
+  },
 );
 
 // Indexes
@@ -86,7 +86,7 @@ class MongoDBReportRepository {
     const doc = await ReportModel.findOneAndUpdate(
       { _id: report.id },
       { $set: this._toDocument(report) },
-      { upsert: true, new: true }
+      { upsert: true, new: true },
     );
 
     return this._toDomain(doc);
@@ -242,7 +242,7 @@ class MongoDBReportRepository {
           status: Report.STATUS.EXPIRED,
           updatedAt: now,
         },
-      }
+      },
     );
 
     return result.modifiedCount;

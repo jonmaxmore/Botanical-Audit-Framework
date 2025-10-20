@@ -114,7 +114,7 @@ router.post(
         applicationId,
         documentType,
         fileInfo,
-        analysisResult
+        analysisResult,
       );
 
       res.json({
@@ -135,7 +135,7 @@ router.post(
         error: error.message,
       });
     }
-  }
+  },
 );
 
 // Get application details

@@ -282,7 +282,7 @@ class SurveyResponse {
 
     this.timeTracking.totalTimeSpent = this.timeTracking.sessionTimes.reduce(
       (total, session) => total + (session.duration || 0),
-      0
+      0,
     );
 
     // Final validation
@@ -602,7 +602,7 @@ class SurveyResponse {
     if (completionRate < minCompletionRate) {
       validation.canComplete = false;
       validation.issues.push(
-        `ต้องตอบครบอย่างน้อย ${minCompletionRate}% (ปัจจุบัน ${completionRate.toFixed(1)}%)`
+        `ต้องตอบครบอย่างน้อย ${minCompletionRate}% (ปัจจุบัน ${completionRate.toFixed(1)}%)`,
       );
     }
 
@@ -619,7 +619,7 @@ class SurveyResponse {
     // Check validation errors
     if (this.validationResults.errors.length > 0) {
       validation.warnings.push(
-        `มีข้อผิดพลาด ${this.validationResults.errors.length} รายการที่ควรแก้ไข`
+        `มีข้อผิดพลาด ${this.validationResults.errors.length} รายการที่ควรแก้ไข`,
       );
     }
 
@@ -660,12 +660,12 @@ class SurveyResponse {
   calculateOverallProgress() {
     const totalQuestions = Array.from(this.sectionProgress.values()).reduce(
       (total, section) => total + section.totalQuestions,
-      0
+      0,
     );
 
     const totalAnswered = Array.from(this.sectionProgress.values()).reduce(
       (total, section) => total + section.answeredQuestions,
-      0
+      0,
     );
 
     this.overallProgress = totalQuestions > 0 ? (totalAnswered / totalQuestions) * 100 : 0;
@@ -705,7 +705,7 @@ class SurveyResponse {
 
   getCompletedSections() {
     return Array.from(this.sectionProgress.values()).filter(
-      section => section.completionPercentage >= 100
+      section => section.completionPercentage >= 100,
     );
   }
 

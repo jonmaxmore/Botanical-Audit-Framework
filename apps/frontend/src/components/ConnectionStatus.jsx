@@ -6,10 +6,10 @@ const ConnectionStatus = () => {
     isConnected: false,
     mongodb: 'checking',
     lastChecked: null,
-    isChecking: false,
+    isChecking: false
   });
 
-  const checkHealth = async () => {
+  const checkHealth = async() => {
     setStatus(prev => ({ ...prev, isChecking: true }));
 
     try {
@@ -18,19 +18,19 @@ const ConnectionStatus = () => {
         isConnected: true,
         mongodb: response.data.mongodb.status,
         lastChecked: new Date(),
-        isChecking: false,
+        isChecking: false
       });
     } catch (error) {
       setStatus({
         isConnected: false,
         mongodb: 'unhealthy',
         lastChecked: new Date(),
-        isChecking: false,
+        isChecking: false
       });
     }
   };
 
-  const triggerReconnect = async () => {
+  const triggerReconnect = async() => {
     try {
       await axios.post('/api/mongodb/reconnect');
       setTimeout(checkHealth, 2000);

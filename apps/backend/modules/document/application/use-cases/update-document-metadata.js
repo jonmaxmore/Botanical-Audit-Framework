@@ -41,7 +41,7 @@ class UpdateDocumentMetadataUseCase {
       const updatedDocument = await this.documentRepository.save(document);
       return updatedDocument;
     } catch (error) {
-      console.error('Error updating document metadata:', error);
+      logger.error('Error updating document metadata:', error);
       throw error;
     }
   }

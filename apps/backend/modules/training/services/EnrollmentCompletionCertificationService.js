@@ -109,7 +109,7 @@ class EnrollmentCompletionCertificationService {
 
     try {
       this.logger.log(
-        `[CompletionCertification] Starting certification process - ID: ${certificationId}, Enrollment: ${enrollmentId}`
+        `[CompletionCertification] Starting certification process - ID: ${certificationId}, Enrollment: ${enrollmentId}`,
       );
 
       // Initialize certification tracking
@@ -129,12 +129,12 @@ class EnrollmentCompletionCertificationService {
         'validateEligibility',
         async () => {
           return await this.validateCompletionEligibility(enrollmentId, completionData);
-        }
+        },
       );
 
       if (!eligibilityResult.success || !eligibilityResult.data.eligible) {
         throw new Error(
-          `Completion eligibility validation failed: ${eligibilityResult.data.reason}`
+          `Completion eligibility validation failed: ${eligibilityResult.data.reason}`,
         );
       }
 
@@ -144,7 +144,7 @@ class EnrollmentCompletionCertificationService {
         'assessPerformance',
         async () => {
           return await this.assessFinalPerformance(enrollmentId, completionData);
-        }
+        },
       );
 
       // Step 3: Determine certification level
@@ -153,7 +153,7 @@ class EnrollmentCompletionCertificationService {
         'determineCertificationLevel',
         async () => {
           return await this.determineCertificationLevel(performanceResult.data);
-        }
+        },
       );
 
       // Step 4: Generate certificate
@@ -167,7 +167,7 @@ class EnrollmentCompletionCertificationService {
             level: levelResult.data,
             completionData: completionData,
           });
-        }
+        },
       );
 
       // Step 5: Submit to government systems
@@ -176,7 +176,7 @@ class EnrollmentCompletionCertificationService {
         'submitToGovernment',
         async () => {
           return await this.submitCertificationToGovernment(certificateResult.data);
-        }
+        },
       );
 
       // Step 6: Update records
@@ -190,7 +190,7 @@ class EnrollmentCompletionCertificationService {
             government: governmentResult.data,
             performance: performanceResult.data,
           });
-        }
+        },
       );
 
       // Step 7: Process analytics
@@ -203,7 +203,7 @@ class EnrollmentCompletionCertificationService {
             certificate: certificateResult.data,
             performance: performanceResult.data,
           });
-        }
+        },
       );
 
       // Step 8: Send notifications
@@ -216,7 +216,7 @@ class EnrollmentCompletionCertificationService {
             certificate: certificateResult.data,
             performance: performanceResult.data,
           });
-        }
+        },
       );
 
       // Finalize certification process
@@ -238,7 +238,7 @@ class EnrollmentCompletionCertificationService {
       this.updateCertificationMetrics(certificationProcess);
 
       this.logger.log(
-        `[CompletionCertification] Certification completed successfully - ID: ${certificationId}, Level: ${levelResult.data.level}`
+        `[CompletionCertification] Certification completed successfully - ID: ${certificationId}, Level: ${levelResult.data.level}`,
       );
 
       return {
@@ -252,7 +252,7 @@ class EnrollmentCompletionCertificationService {
     } catch (error) {
       this.logger.error(
         `[CompletionCertification] Certification failed - ID: ${certificationId}`,
-        error
+        error,
       );
 
       this.metrics.certificationsFailed++;
@@ -372,7 +372,7 @@ class EnrollmentCompletionCertificationService {
       performanceAssessment.overallPerformance =
         this.calculateOverallPerformance(performanceAssessment);
       performanceAssessment.performanceGrade = this.determinePerformanceGrade(
-        performanceAssessment.overallPerformance
+        performanceAssessment.overallPerformance,
       );
 
       // Identify strengths and improvement areas

@@ -32,7 +32,7 @@ function initializeDashboardModule(repositories) {
     repositories.trainingEnrollmentRepository,
     repositories.documentRepository,
     repositories.notificationRepository,
-    repositories.auditRepository
+    repositories.auditRepository,
   );
 }
 

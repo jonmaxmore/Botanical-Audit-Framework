@@ -281,7 +281,7 @@ class GACPPlatformModuleAnalyzer {
 
     if (components.presentation.exists) {
       const routeFiles = components.presentation.files.filter(
-        f => f.includes('route') || f.includes('controller')
+        f => f.includes('route') || f.includes('controller'),
       );
 
       apiEndpoints.count = routeFiles.length;
@@ -305,7 +305,7 @@ class GACPPlatformModuleAnalyzer {
     // Component structure (40 points)
     const componentTypes = ['domain', 'application', 'infrastructure', 'presentation'];
     const componentScore = componentTypes.filter(
-      type => status.components[type].exists && status.components[type].files.length > 0
+      type => status.components[type].exists && status.components[type].files.length > 0,
     ).length;
     score += (componentScore / componentTypes.length) * 40;
 
@@ -409,7 +409,7 @@ class GACPPlatformModuleAnalyzer {
     const totalModules = moduleEntries.length;
     const implementedModules = moduleEntries.filter(([key, status]) => status.exists).length;
     const completeModules = moduleEntries.filter(
-      ([key, status]) => status.overallStatus === 'COMPLETE'
+      ([key, status]) => status.overallStatus === 'COMPLETE',
     ).length;
 
     appLogger.info(`🎯 Platform Overview:`);
@@ -417,7 +417,7 @@ class GACPPlatformModuleAnalyzer {
     appLogger.info(`   ✅ Implemented: ${implementedModules}/${totalModules}`);
     appLogger.info(`   🎖️ Complete: ${completeModules}/${totalModules}`);
     appLogger.info(
-      `   📊 Platform Completion: ${Math.round((completeModules / totalModules) * 100)}%\n`
+      `   📊 Platform Completion: ${Math.round((completeModules / totalModules) * 100)}%\n`,
     );
 
     appLogger.info('📈 Module Status Breakdown:');
@@ -428,7 +428,7 @@ class GACPPlatformModuleAnalyzer {
       appLogger.info(`      Files: ${status.fileCount} files (${status.totalSize}KB)`);
       if (status.issues.length > 0) {
         appLogger.info(
-          `      Issues: ${status.issues.slice(0, 2).join(', ')}${status.issues.length > 2 ? '...' : ''}`
+          `      Issues: ${status.issues.slice(0, 2).join(', ')}${status.issues.length > 2 ? '...' : ''}`,
         );
       }
       appLogger.info('');
@@ -438,18 +438,18 @@ class GACPPlatformModuleAnalyzer {
     appLogger.info('🎯 Priority Actions:');
     const notImplemented = moduleEntries.filter(([key, status]) => !status.exists);
     const needWork = moduleEntries.filter(
-      ([key, status]) => status.exists && status.completionPercentage < 70
+      ([key, status]) => status.exists && status.completionPercentage < 70,
     );
 
     if (notImplemented.length > 0) {
       appLogger.info(
-        `   🚨 Implement missing modules: ${notImplemented.map(([key, status]) => key).join(', ')}`
+        `   🚨 Implement missing modules: ${notImplemented.map(([key, status]) => key).join(', ')}`,
       );
     }
 
     if (needWork.length > 0) {
       appLogger.info(
-        `   ⚠️  Complete modules needing work: ${needWork.map(([key, status]) => key).join(', ')}`
+        `   ⚠️  Complete modules needing work: ${needWork.map(([key, status]) => key).join(', ')}`,
       );
     }
 
@@ -488,11 +488,11 @@ class GACPPlatformModuleAnalyzer {
         totalModules: Object.keys(this.moduleStatus).length,
         implementedModules: Object.values(this.moduleStatus).filter(s => s.exists).length,
         completeModules: Object.values(this.moduleStatus).filter(
-          s => s.overallStatus === 'COMPLETE'
+          s => s.overallStatus === 'COMPLETE',
         ).length,
         overallCompletion: Math.round(
           Object.values(this.moduleStatus).reduce((sum, s) => sum + s.completionPercentage, 0) /
-            Object.keys(this.moduleStatus).length
+            Object.keys(this.moduleStatus).length,
         ),
       },
       modules: this.moduleStatus,
@@ -512,7 +512,7 @@ class GACPPlatformModuleAnalyzer {
 
     const notImplemented = moduleEntries.filter(([key, status]) => !status.exists);
     const inProgress = moduleEntries.filter(
-      ([key, status]) => status.exists && status.completionPercentage < 70
+      ([key, status]) => status.exists && status.completionPercentage < 70,
     );
     const complete = moduleEntries.filter(([key, status]) => status.overallStatus === 'COMPLETE');
 

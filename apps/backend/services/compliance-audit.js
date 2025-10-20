@@ -115,7 +115,7 @@ const auditLogSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'audit_logs',
-  }
+  },
 );
 
 // Prevent modification of audit logs
@@ -212,7 +212,7 @@ class ComplianceAuditService {
       };
     } catch (error) {
       // Critical: Audit logging failure should be escalated
-      console.error('CRITICAL: Audit logging failed:', error);
+      logger.error('CRITICAL: Audit logging failed:', error);
 
       // Attempt to log the failure itself
       try {
@@ -222,7 +222,7 @@ class ComplianceAuditService {
           riskLevel: 'CRITICAL',
         });
       } catch (fallbackError) {
-        console.error('CRITICAL: Fallback audit logging also failed:', fallbackError);
+        logger.error('CRITICAL: Fallback audit logging also failed:', fallbackError);
       }
 
       throw error;
@@ -485,7 +485,7 @@ class ComplianceAuditService {
             correlationId: req.headers['x-correlation-id'],
           });
         } catch (error) {
-          console.error('Audit middleware error:', error);
+          logger.error('Audit middleware error:', error);
         }
       });
 

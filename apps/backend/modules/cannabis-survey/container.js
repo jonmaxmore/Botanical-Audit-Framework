@@ -7,6 +7,7 @@
  * @module module.container
  */
 
+const logger = require('../../shared/logger/logger');
 const MongoDBSurveyRepository = require('./infrastructure/database/survey');
 const { STATUS, PURPOSE, PLANT_TYPE } = require('./domain/entities/Survey');
 
@@ -46,7 +47,7 @@ class SimpleEventBus {
         try {
           handler(event);
         } catch (error) {
-          console.error(`Error handling event ${eventName}:`, error);
+          logger.error(`Error handling event ${eventName}:`, error);
         }
       });
     }
@@ -65,20 +66,20 @@ function createCannabisSurveyModule(config) {
 
   // Subscribe to domain events
   eventBus.subscribe('SurveyCreated', event => {
-    console.log(`[SurveyCreated] Survey ${event.surveyId} created for farm ${event.farmId}`);
+    logger.info(`[SurveyCreated] Survey ${event.surveyId} created for farm ${event.farmId}`);
     // TODO: Send notification to farmer
     // TODO: Add to analytics
   });
 
   eventBus.subscribe('SurveySubmitted', event => {
-    console.log(`[SurveySubmitted] Survey ${event.surveyId} submitted for review`);
+    logger.info(`[SurveySubmitted] Survey ${event.surveyId} submitted for review`);
     // TODO: Notify DTAM staff of new submission
     // TODO: Add to review queue
   });
 
   eventBus.subscribe('SurveyReviewCompleted', event => {
     console.log(
-      `[SurveyReviewCompleted] Survey ${event.surveyId} review completed: ${event.status}`
+      `[SurveyReviewCompleted] Survey ${event.surveyId} review completed: ${event.status}`,
     );
     // TODO: Notify farmer of review result
     // TODO: If approved, enable next steps in workflow
@@ -145,7 +146,7 @@ function createCannabisSurveyModule(config) {
   const { farmerRouter, dtamRouter } = createSurveyRoutes(
     surveyController,
     authMiddleware,
-    validators
+    validators,
   );
 
   // Return module interface

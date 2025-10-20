@@ -29,26 +29,26 @@ const config = isTestEnvironment ? null : require('../../../config/env.config');
 const loginLimiter = isTestEnvironment
   ? noopMiddleware
   : rateLimit({
-    windowMs: config.rateLimit.login.windowMs,
-    max: config.rateLimit.login.max,
-    message: {
-      success: false,
-      error: 'TOO_MANY_REQUESTS',
-      message: config.rateLimit.login.message
-    },
-    standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
-    legacyHeaders: false, // Disable `X-RateLimit-*` headers
-    skipSuccessfulRequests: false, // Count successful requests
-    skipFailedRequests: false, // Count failed requests
-    handler: (req, res) => {
-      res.status(429).json({
+      windowMs: config.rateLimit.login.windowMs,
+      max: config.rateLimit.login.max,
+      message: {
         success: false,
         error: 'TOO_MANY_REQUESTS',
-        message: 'คุณพยายามเข้าสู่ระบบมากเกินไป กรุณาลองใหม่ในอีก 15 นาที',
-        retryAfter: Math.ceil(config.rateLimit.login.windowMs / 1000 / 60) + ' minutes'
-      });
-    }
-  });
+        message: config.rateLimit.login.message,
+      },
+      standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
+      legacyHeaders: false, // Disable `X-RateLimit-*` headers
+      skipSuccessfulRequests: false, // Count successful requests
+      skipFailedRequests: false, // Count failed requests
+      handler: (req, res) => {
+        res.status(429).json({
+          success: false,
+          error: 'TOO_MANY_REQUESTS',
+          message: 'คุณพยายามเข้าสู่ระบบมากเกินไป กรุณาลองใหม่ในอีก 15 นาที',
+          retryAfter: Math.ceil(config.rateLimit.login.windowMs / 1000 / 60) + ' minutes',
+        });
+      },
+    });
 
 /**
  * Rate limiter for registration endpoint
@@ -59,24 +59,24 @@ const loginLimiter = isTestEnvironment
 const registerLimiter = isTestEnvironment
   ? noopMiddleware
   : rateLimit({
-    windowMs: config.rateLimit.register.windowMs,
-    max: config.rateLimit.register.max,
-    message: {
-      success: false,
-      error: 'TOO_MANY_REQUESTS',
-      message: config.rateLimit.register.message
-    },
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-      res.status(429).json({
+      windowMs: config.rateLimit.register.windowMs,
+      max: config.rateLimit.register.max,
+      message: {
         success: false,
         error: 'TOO_MANY_REQUESTS',
-        message: 'คุณสร้างบัญชีมากเกินไป กรุณาลองใหม่ภายหลัง',
-        retryAfter: Math.ceil(config.rateLimit.register.windowMs / 1000 / 60) + ' minutes'
-      });
-    }
-  });
+        message: config.rateLimit.register.message,
+      },
+      standardHeaders: true,
+      legacyHeaders: false,
+      handler: (req, res) => {
+        res.status(429).json({
+          success: false,
+          error: 'TOO_MANY_REQUESTS',
+          message: 'คุณสร้างบัญชีมากเกินไป กรุณาลองใหม่ภายหลัง',
+          retryAfter: Math.ceil(config.rateLimit.register.windowMs / 1000 / 60) + ' minutes',
+        });
+      },
+    });
 
 /**
  * General API rate limiter
@@ -87,24 +87,24 @@ const registerLimiter = isTestEnvironment
 const generalLimiter = isTestEnvironment
   ? noopMiddleware
   : rateLimit({
-    windowMs: config.rateLimit.general.windowMs,
-    max: config.rateLimit.general.max,
-    message: {
-      success: false,
-      error: 'TOO_MANY_REQUESTS',
-      message: config.rateLimit.general.message
-    },
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-      res.status(429).json({
+      windowMs: config.rateLimit.general.windowMs,
+      max: config.rateLimit.general.max,
+      message: {
         success: false,
         error: 'TOO_MANY_REQUESTS',
-        message: 'คุณส่งคำขอมากเกินไป กรุณาลองใหม่ภายหลัง',
-        retryAfter: Math.ceil(config.rateLimit.general.windowMs / 1000 / 60) + ' minutes'
-      });
-    }
-  });
+        message: config.rateLimit.general.message,
+      },
+      standardHeaders: true,
+      legacyHeaders: false,
+      handler: (req, res) => {
+        res.status(429).json({
+          success: false,
+          error: 'TOO_MANY_REQUESTS',
+          message: 'คุณส่งคำขอมากเกินไป กรุณาลองใหม่ภายหลัง',
+          retryAfter: Math.ceil(config.rateLimit.general.windowMs / 1000 / 60) + ' minutes',
+        });
+      },
+    });
 
 /**
  * Strict rate limiter for sensitive operations
@@ -115,28 +115,28 @@ const generalLimiter = isTestEnvironment
 const strictLimiter = isTestEnvironment
   ? noopMiddleware
   : rateLimit({
-    windowMs: 60 * 60 * 1000, // 1 hour
-    max: 3,
-    message: {
-      success: false,
-      error: 'TOO_MANY_REQUESTS',
-      message: 'คุณส่งคำขอมากเกินไป กรุณาลองใหม่ในอีก 1 ชั่วโมง'
-    },
-    standardHeaders: true,
-    legacyHeaders: false,
-    handler: (req, res) => {
-      res.status(429).json({
+      windowMs: 60 * 60 * 1000, // 1 hour
+      max: 3,
+      message: {
         success: false,
         error: 'TOO_MANY_REQUESTS',
         message: 'คุณส่งคำขอมากเกินไป กรุณาลองใหม่ในอีก 1 ชั่วโมง',
-        retryAfter: '1 hour'
-      });
-    }
-  });
+      },
+      standardHeaders: true,
+      legacyHeaders: false,
+      handler: (req, res) => {
+        res.status(429).json({
+          success: false,
+          error: 'TOO_MANY_REQUESTS',
+          message: 'คุณส่งคำขอมากเกินไป กรุณาลองใหม่ในอีก 1 ชั่วโมง',
+          retryAfter: '1 hour',
+        });
+      },
+    });
 
 module.exports = {
   loginLimiter,
   registerLimiter,
   generalLimiter,
-  strictLimiter
+  strictLimiter,
 };

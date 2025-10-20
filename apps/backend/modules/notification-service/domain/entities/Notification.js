@@ -23,6 +23,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const mongoose = require('mongoose');
 
 const NotificationSchema = new mongoose.Schema(
@@ -445,7 +446,7 @@ const NotificationSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'notifications',
-  }
+  },
 );
 
 // Indexes for Performance
@@ -673,11 +674,11 @@ NotificationSchema.pre('save', function (next) {
 NotificationSchema.post('save', function (doc) {
   // Emit events for external processing
   if (doc.status === 'SENT' && doc.isModified('status')) {
-    console.log(`[Notification] Notification sent: ${doc.notificationId}`);
+    logger.info(`[Notification] Notification sent: ${doc.notificationId}`);
   }
 
   if (doc.status === 'FAILED' && doc.isModified('status')) {
-    console.log(`[Notification] Notification failed: ${doc.notificationId}`);
+    logger.info(`[Notification] Notification failed: ${doc.notificationId}`);
   }
 });
 

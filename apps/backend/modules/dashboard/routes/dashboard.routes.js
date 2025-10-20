@@ -38,7 +38,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private
    */
   router.get('/stats/realtime', authMiddleware, (req, res) =>
-    controller.getRealtimeStats(req, res)
+    controller.getRealtimeStats(req, res),
   );
 
   /**
@@ -54,7 +54,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private
    */
   router.get('/farmer/:userId', authMiddleware, (req, res) =>
-    controller.getFarmerDashboard(req, res)
+    controller.getFarmerDashboard(req, res),
   );
 
   /**
@@ -84,7 +84,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private
    */
   router.get('/stats/farmer/:userId', authMiddleware, (req, res) =>
-    controller.getFarmerStats(req, res)
+    controller.getFarmerStats(req, res),
   );
 
   /**
@@ -114,7 +114,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private (DTAM staff)
    */
   router.get('/applications/pending', authMiddleware, (req, res) =>
-    controller.getPendingApplications(req, res)
+    controller.getPendingApplications(req, res),
   );
 
   /**

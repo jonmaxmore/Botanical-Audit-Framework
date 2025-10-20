@@ -227,7 +227,7 @@ export class AlertManager {
   private async triggerAlert(
     rule: AlertRule,
     value: number,
-    metadata?: Record<string, any>
+    metadata?: Record<string, any>,
   ): Promise<void> {
     // Check cooldown
     const lastAlert = this.lastAlertTime.get(rule.id);
@@ -503,7 +503,7 @@ export const alertManager = AlertManager.getInstance();
 export function checkMetric(
   metric: string,
   value: number,
-  metadata?: Record<string, any>
+  metadata?: Record<string, any>,
 ): Promise<void> {
   return alertManager.checkMetric(metric, value, metadata);
 }

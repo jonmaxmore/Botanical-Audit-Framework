@@ -12,6 +12,7 @@
  * 6. ส่ง event แจ้งเตือน
  */
 
+const logger = require('../../../../shared/logger/logger');
 const Certificate = require('../../domain/entities/Certificate');
 
 class RenewCertificateUseCase {
@@ -37,7 +38,7 @@ class RenewCertificateUseCase {
     renewalReason = 'Regular renewal',
   }) {
     try {
-      console.log(`🔄 Starting certificate renewal for: ${certificateId}`);
+      logger.info(`🔄 Starting certificate renewal for: ${certificateId}`);
 
       // 1. ดึงใบรับรองที่ต้องการต่ออายุ
       const existingCertificate = await this.certificateRepository.findById(certificateId);
@@ -57,7 +58,7 @@ class RenewCertificateUseCase {
 
       if (daysUntilExpiry > 90) {
         throw new Error(
-          `Certificate renewal is only allowed within 90 days of expiry. Current days until expiry: ${daysUntilExpiry}`
+          `Certificate renewal is only allowed within 90 days of expiry. Current days until expiry: ${daysUntilExpiry}`,
         );
       }
 
@@ -65,12 +66,12 @@ class RenewCertificateUseCase {
         throw new Error('Cannot renew expired certificate. Please apply for a new certificate.');
       }
 
-      console.log(`📅 Certificate expires in ${daysUntilExpiry} days - eligible for renewal`);
+      logger.info(`📅 Certificate expires in ${daysUntilExpiry} days - eligible for renewal`);
 
       // 4. ตรวจสอบสถานะฟาร์ม (optional verification)
       if (this.farmVerificationService) {
         const farmStatus = await this.farmVerificationService.verifyFarmStatus(
-          existingCertificate.farmId
+          existingCertificate.farmId,
         );
         if (!farmStatus.isActive) {
           throw new Error(`Farm is not active: ${farmStatus.reason}`);
@@ -92,7 +93,7 @@ class RenewCertificateUseCase {
       };
 
       await this.certificateRepository.save(existingCertificate);
-      console.log('📝 Updated existing certificate status to RENEWED');
+      logger.info('📝 Updated existing certificate status to RENEWED');
 
       // 7. สร้างใบรับรองใหม่
       const renewedCertificate = Certificate.createRenewal({
@@ -112,7 +113,7 @@ class RenewCertificateUseCase {
       });
 
       const savedRenewedCertificate = await this.certificateRepository.save(renewedCertificate);
-      console.log(`✨ New certificate created: ${savedRenewedCertificate.certificateNumber}`);
+      logger.info(`✨ New certificate created: ${savedRenewedCertificate.certificateNumber}`);
 
       // 8. อัปเดต reference ในใบรับรองเดิม
       existingCertificate.renewalInfo.newCertificateId = savedRenewedCertificate.id;
@@ -137,11 +138,11 @@ class RenewCertificateUseCase {
       });
 
       console.log(
-        `✅ Certificate renewal completed: ${existingCertificate.certificateNumber} → ${savedRenewedCertificate.certificateNumber}`
+        `✅ Certificate renewal completed: ${existingCertificate.certificateNumber} → ${savedRenewedCertificate.certificateNumber}`,
       );
       return savedRenewedCertificate;
     } catch (error) {
-      console.error('❌ Certificate renewal failed:', error);
+      logger.error('❌ Certificate renewal failed:', error);
 
       // ส่ง event แจ้งการล้มเหลว
       await this.eventBus.publish({
@@ -195,7 +196,7 @@ class RenewCertificateUseCase {
         certificate: certificate.toJSON(),
       };
     } catch (error) {
-      console.error('Error checking renewal eligibility:', error);
+      logger.error('Error checking renewal eligibility:', error);
       return { eligible: false, reason: 'System error occurred' };
     }
   }

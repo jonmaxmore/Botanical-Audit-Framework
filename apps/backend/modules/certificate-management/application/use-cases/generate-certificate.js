@@ -13,6 +13,7 @@
  * 7. ส่ง event แจ้งเตือนและอัปเดต application status
  */
 
+const logger = require('../../../../shared/logger/logger');
 const Certificate = require('../../domain/entities/Certificate');
 const CertificateNumber = require('../../domain/value-objects/CertificateNumber');
 
@@ -42,15 +43,15 @@ class GenerateCertificateUseCase {
 
       if (applicationData.status !== 'DTAM_APPROVED') {
         throw new Error(
-          `Cannot generate certificate. Application status is ${applicationData.status}, expected DTAM_APPROVED`
+          `Cannot generate certificate. Application status is ${applicationData.status}, expected DTAM_APPROVED`,
         );
       }
 
-      console.log(`🏁 Starting certificate generation for application: ${applicationId}`);
+      logger.info(`🏁 Starting certificate generation for application: ${applicationId}`);
 
       // 2. สร้างเลขที่ใบรับรอง
       const certificateNumber = await this._generateCertificateNumber();
-      console.log(`🔢 Generated certificate number: ${certificateNumber.value}`);
+      logger.info(`🔢 Generated certificate number: ${certificateNumber.value}`);
 
       // 3. สร้าง verification code
       const verificationCode = this._generateVerificationCode();
@@ -84,7 +85,7 @@ class GenerateCertificateUseCase {
         status: 'ACTIVE',
       });
 
-      console.log(`📋 Certificate entity created: ${certificate.certificateNumber}`);
+      logger.info(`📋 Certificate entity created: ${certificate.certificateNumber}`);
 
       // 6. สร้าง QR Code
       const qrCodeData = {
@@ -95,7 +96,7 @@ class GenerateCertificateUseCase {
 
       const qrCode = await this.qrcodeService.generateQRCode(qrCodeData);
       certificate.setQRCode(qrCode.url, qrCode.data);
-      console.log(`📱 QR Code generated: ${qrCode.url}`);
+      logger.info(`📱 QR Code generated: ${qrCode.url}`);
 
       // 7. สร้างไฟล์ PDF
       const pdfResult = await this.pdfService.generateCertificatePDF({
@@ -105,11 +106,11 @@ class GenerateCertificateUseCase {
       });
 
       certificate.setPDFInfo(pdfResult.url, pdfResult.path);
-      console.log(`📄 PDF generated: ${pdfResult.url}`);
+      logger.info(`📄 PDF generated: ${pdfResult.url}`);
 
       // 8. บันทึกลงฐานข้อมูล
       const savedCertificate = await this.certificateRepository.save(certificate);
-      console.log(`💾 Certificate saved to database: ${savedCertificate.id}`);
+      logger.info(`💾 Certificate saved to database: ${savedCertificate.id}`);
 
       // 9. ส่ง event แจ้งการออกใบรับรอง
       await this.eventBus.publish({
@@ -127,10 +128,10 @@ class GenerateCertificateUseCase {
         timestamp: new Date(),
       });
 
-      console.log(`✅ Certificate generation completed: ${savedCertificate.certificateNumber}`);
+      logger.info(`✅ Certificate generation completed: ${savedCertificate.certificateNumber}`);
       return savedCertificate;
     } catch (error) {
-      console.error('❌ Certificate generation failed:', error);
+      logger.error('❌ Certificate generation failed:', error);
 
       // ส่ง event แจ้งการล้มเหลว
       await this.eventBus.publish({

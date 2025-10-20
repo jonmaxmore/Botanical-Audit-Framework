@@ -3,6 +3,7 @@
  * Handles survey workflow: create, update, submit, review
  */
 
+const logger = require('../../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 const { ObjectId } = require('mongodb');
@@ -12,7 +13,7 @@ let surveyEngine = null;
 // Initialize survey engine
 function initialize(engine) {
   surveyEngine = engine;
-  console.log('[SurveyAPI] Routes loaded successfully');
+  logger.info('[SurveyAPI] Routes loaded successfully');
 }
 
 // Middleware to check survey engine
@@ -63,7 +64,7 @@ router.post('/responses', checkEngine, async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('[SurveyAPI] Error creating response:', error);
+    logger.error('[SurveyAPI] Error creating response:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -104,7 +105,7 @@ router.put('/responses/:id', checkEngine, async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('[SurveyAPI] Error updating response:', error);
+    logger.error('[SurveyAPI] Error updating response:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -140,7 +141,7 @@ router.post('/responses/:id/submit', checkEngine, async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('[SurveyAPI] Error submitting survey:', error);
+    logger.error('[SurveyAPI] Error submitting survey:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -186,7 +187,7 @@ router.post('/responses/:id/review', checkEngine, async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('[SurveyAPI] Error reviewing survey:', error);
+    logger.error('[SurveyAPI] Error reviewing survey:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -240,7 +241,7 @@ router.get('/responses', checkEngine, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('[SurveyAPI] Error getting responses:', error);
+    logger.error('[SurveyAPI] Error getting responses:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -284,7 +285,7 @@ router.get('/responses/:id', checkEngine, async (req, res) => {
       data: response,
     });
   } catch (error) {
-    console.error('[SurveyAPI] Error getting response:', error);
+    logger.error('[SurveyAPI] Error getting response:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -310,7 +311,7 @@ router.get('/statistics', checkEngine, async (req, res) => {
       data: stats,
     });
   } catch (error) {
-    console.error('[SurveyAPI] Error getting statistics:', error);
+    logger.error('[SurveyAPI] Error getting statistics:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -341,7 +342,7 @@ router.get('/templates', checkEngine, async (req, res) => {
       data: templates,
     });
   } catch (error) {
-    console.error('[SurveyAPI] Error getting templates:', error);
+    logger.error('[SurveyAPI] Error getting templates:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -375,7 +376,7 @@ router.get('/templates/:id', checkEngine, async (req, res) => {
       data: template,
     });
   } catch (error) {
-    console.error('[SurveyAPI] Error getting template:', error);
+    logger.error('[SurveyAPI] Error getting template:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',
@@ -429,7 +430,7 @@ router.delete('/responses/:id', checkEngine, async (req, res) => {
       message: 'Survey response deleted successfully',
     });
   } catch (error) {
-    console.error('[SurveyAPI] Error deleting response:', error);
+    logger.error('[SurveyAPI] Error deleting response:', error);
     res.status(500).json({
       success: false,
       message: 'Internal server error',

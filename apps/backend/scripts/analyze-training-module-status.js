@@ -5,6 +5,7 @@
  * มุ่งเน้นให้มี logic, workflow และ process ที่ชัดเจน
  */
 
+const logger = require('../shared/logger/logger');
 const fs = require('fs');
 const path = require('path');
 
@@ -25,31 +26,31 @@ class TrainingModuleStatusAnalyzer {
    * วิเคราะห์สถานะปัจจุบันของ Training Module
    */
   async analyzeCurrentStatus() {
-    console.log('🔍 TRAINING MODULE STATUS ANALYSIS');
-    console.log('='.repeat(60));
+    logger.info('🔍 TRAINING MODULE STATUS ANALYSIS');
+    logger.info('='.repeat(60));
 
     // 1. ตรวจสอบโครงสร้างไฟล์
-    console.log('\n📁 Analyzing File Structure...');
+    logger.info('\n📁 Analyzing File Structure...');
     await this.analyzeFileStructure();
 
     // 2. ตรวจสอบ Business Logic Implementation
-    console.log('\n🔧 Analyzing Business Logic...');
+    logger.info('\n🔧 Analyzing Business Logic...');
     await this.analyzeBusinessLogic();
 
     // 3. ตรวจสอบ Workflow Integration
-    console.log('\n🔄 Analyzing Workflow Integration...');
+    logger.info('\n🔄 Analyzing Workflow Integration...');
     await this.analyzeWorkflowIntegration();
 
     // 4. ตรวจสอบ API Routes และ Controllers
-    console.log('\n🛣️ Analyzing API Implementation...');
+    logger.info('\n🛣️ Analyzing API Implementation...');
     await this.analyzeAPIImplementation();
 
     // 5. วิเคราะห์ช่องว่างและข้อเสนอแนะ
-    console.log('\n🎯 Generating Recommendations...');
+    logger.info('\n🎯 Generating Recommendations...');
     this.generateRecommendations();
 
     // 6. สร้างรายงานสรุป
-    console.log('\n📊 Generating Status Report...');
+    logger.info('\n📊 Generating Status Report...');
     this.generateStatusReport();
 
     return this.results;
@@ -83,7 +84,7 @@ class TrainingModuleStatusAnalyzer {
     let existingFiles = 0;
 
     for (const [folder, files] of Object.entries(requiredStructure)) {
-      console.log(`  📂 ${folder}:`);
+      logger.info(`  📂 ${folder}:`);
 
       for (const file of files) {
         totalFiles++;
@@ -92,10 +93,10 @@ class TrainingModuleStatusAnalyzer {
         if (fs.existsSync(filePath)) {
           const stats = fs.statSync(filePath);
           const sizeKB = Math.round(stats.size / 1024);
-          console.log(`    ✅ ${file} (${sizeKB} KB)`);
+          logger.info(`    ✅ ${file} (${sizeKB} KB);`);
           existingFiles++;
         } else {
-          console.log(`    ❌ ${file} - MISSING`);
+          logger.info(`    ❌ ${file} - MISSING`);
           this.results.missingComponents.push(`${folder}/${file}`);
         }
       }
@@ -103,7 +104,7 @@ class TrainingModuleStatusAnalyzer {
 
     const completionRate = Math.round((existingFiles / totalFiles) * 100);
     console.log(
-      `\n  📊 File Structure Completion: ${completionRate}% (${existingFiles}/${totalFiles})`
+      `\n  📊 File Structure Completion: ${completionRate}% (${existingFiles}/${totalFiles})`,
     );
 
     this.results.currentStatus.fileStructure = {
@@ -149,24 +150,24 @@ class TrainingModuleStatusAnalyzer {
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, 'utf8');
         const hasBusinessLogic = check.keywords.some(keyword =>
-          content.toLowerCase().includes(keyword.toLowerCase())
+          content.toLowerCase().includes(keyword.toLowerCase()),
         );
 
         if (hasBusinessLogic) {
-          console.log(`    ✅ ${check.name}`);
+          logger.info(`    ✅ ${check.name}`);
           implementedLogic++;
         } else {
-          console.log(`    ⚠️  ${check.name} - Limited business logic`);
+          logger.info(`    ⚠️  ${check.name} - Limited business logic`);
           this.results.businessLogicGaps.push(check.name);
         }
       } else {
-        console.log(`    ❌ ${check.name} - File missing`);
+        logger.info(`    ❌ ${check.name} - File missing`);
         this.results.businessLogicGaps.push(check.name);
       }
     }
 
     const businessLogicScore = Math.round((implementedLogic / businessLogicChecks.length) * 100);
-    console.log(`\n  📊 Business Logic Implementation: ${businessLogicScore}%`);
+    logger.info(`\n  📊 Business Logic Implementation: ${businessLogicScore}%`);
 
     this.results.currentStatus.businessLogic = {
       score: businessLogicScore,
@@ -218,10 +219,10 @@ class TrainingModuleStatusAnalyzer {
       }
 
       if (workflowImplemented) {
-        console.log(`    ✅ ${workflow.name}`);
+        logger.info(`    ✅ ${workflow.name}`);
         implementedWorkflows++;
       } else {
-        console.log(`    ❌ ${workflow.name} - Missing: ${missingComponents.join(', ')}`);
+        logger.info(`    ❌ ${workflow.name} - Missing: ${missingComponents.join(', ')}`);
         this.results.workflowIssues.push({
           workflow: workflow.name,
           missingComponents,
@@ -230,7 +231,7 @@ class TrainingModuleStatusAnalyzer {
     }
 
     const workflowScore = Math.round((implementedWorkflows / workflowChecks.length) * 100);
-    console.log(`\n  📊 Workflow Integration: ${workflowScore}%`);
+    logger.info(`\n  📊 Workflow Integration: ${workflowScore}%`);
 
     this.results.currentStatus.workflowIntegration = {
       score: workflowScore,
@@ -286,18 +287,18 @@ class TrainingModuleStatusAnalyzer {
           : api.expectedRoutes.some(route => content.includes(route.split(' ')[1]));
 
         if (hasExpectedFeatures && sizeKB > 10) {
-          console.log(`    ✅ ${api.name} (${sizeKB} KB)`);
+          logger.info(`    ✅ ${api.name} (${sizeKB} KB);`);
           implementedAPIs++;
         } else {
-          console.log(`    ⚠️  ${api.name} - Limited implementation (${sizeKB} KB)`);
+          logger.info(`    ⚠️  ${api.name} - Limited implementation (${sizeKB} KB);`);
         }
       } else {
-        console.log(`    ❌ ${api.name} - File missing`);
+        logger.info(`    ❌ ${api.name} - File missing`);
       }
     }
 
     const apiScore = Math.round((implementedAPIs / apiComponents.length) * 100);
-    console.log(`\n  📊 API Implementation: ${apiScore}%`);
+    logger.info(`\n  📊 API Implementation: ${apiScore}%`);
 
     this.results.currentStatus.apiImplementation = {
       score: apiScore,
@@ -360,7 +361,7 @@ class TrainingModuleStatusAnalyzer {
         (scores.businessLogic?.score || 0) +
         (scores.workflowIntegration?.score || 0) +
         (scores.apiImplementation?.score || 0)) /
-        4
+        4,
     );
 
     this.results.currentStatus.overallScore = overallScore;
@@ -391,19 +392,19 @@ class TrainingModuleStatusAnalyzer {
     // เพิ่มข้อเสนะแนะเฉพาะ
     if (this.results.missingComponents.length > 0) {
       this.results.recommendations.push(
-        `สร้างไฟล์ที่ขาดหายไป: ${this.results.missingComponents.length} ไฟล์`
+        `สร้างไฟล์ที่ขาดหายไป: ${this.results.missingComponents.length} ไฟล์`,
       );
     }
 
     if (this.results.businessLogicGaps.length > 0) {
       this.results.recommendations.push(
-        'เสริม Business Logic ใน: ' + this.results.businessLogicGaps.join(', ')
+        'เสริม Business Logic ใน: ' + this.results.businessLogicGaps.join(', '),
       );
     }
 
     if (this.results.workflowIssues.length > 0) {
       this.results.recommendations.push(
-        'แก้ไข Workflow Issues: ' + this.results.workflowIssues.length + ' workflow'
+        'แก้ไข Workflow Issues: ' + this.results.workflowIssues.length + ' workflow',
       );
     }
   }
@@ -414,47 +415,47 @@ class TrainingModuleStatusAnalyzer {
   generateStatusReport() {
     const status = this.results.currentStatus;
 
-    console.log('\n📊 TRAINING MODULE STATUS SUMMARY');
-    console.log('='.repeat(60));
+    logger.info('\n📊 TRAINING MODULE STATUS SUMMARY');
+    logger.info('='.repeat(60));
 
-    console.log(`\n🎯 Overall Completion: ${status.overallScore}%`);
+    logger.info(`\n🎯 Overall Completion: ${status.overallScore}%`);
 
-    console.log('\n📈 Component Breakdown:');
-    console.log(`  📁 File Structure: ${status.fileStructure?.completionRate || 0}%`);
-    console.log(`  🔧 Business Logic: ${status.businessLogic?.score || 0}%`);
-    console.log(`  🔄 Workflow Integration: ${status.workflowIntegration?.score || 0}%`);
-    console.log(`  🛣️ API Implementation: ${status.apiImplementation?.score || 0}%`);
+    logger.info('\n📈 Component Breakdown:');
+    logger.info(`  📁 File Structure: ${status.fileStructure?.completionRate || 0}%`);
+    logger.info(`  🔧 Business Logic: ${status.businessLogic?.score || 0}%`);
+    logger.info(`  🔄 Workflow Integration: ${status.workflowIntegration?.score || 0}%`);
+    logger.info(`  🛣️ API Implementation: ${status.apiImplementation?.score || 0}%`);
 
     if (this.results.missingComponents.length > 0) {
-      console.log(`\n❌ Missing Components (${this.results.missingComponents.length}):`);
+      logger.info(`\n❌ Missing Components (${this.results.missingComponents.length});:`);
       this.results.missingComponents.forEach(component => {
-        console.log(`  - ${component}`);
+        logger.info(`  - ${component}`);
       });
     }
 
     if (this.results.workflowIssues.length > 0) {
-      console.log(`\n⚠️  Workflow Issues (${this.results.workflowIssues.length}):`);
+      logger.info(`\n⚠️  Workflow Issues (${this.results.workflowIssues.length});:`);
       this.results.workflowIssues.forEach(issue => {
-        console.log(`  - ${issue.workflow}: Missing ${issue.missingComponents.join(', ')}`);
+        logger.info(`  - ${issue.workflow}: Missing ${issue.missingComponents.join(', ')}`);
       });
     }
 
-    console.log('\n🎯 Recommendations:');
+    logger.info('\n🎯 Recommendations:');
     this.results.recommendations.forEach((rec, index) => {
-      console.log(`  ${index + 1}. ${rec}`);
+      logger.info(`  ${index + 1}. ${rec}`);
     });
 
-    console.log('\n🎖️ Next Steps:');
+    logger.info('\n🎖️ Next Steps:');
     if (status.overallScore >= 85) {
-      console.log('  ✅ Ready for final enhancement to 100%');
-      console.log('  🚀 Focus on testing and optimization');
+      logger.info('  ✅ Ready for final enhancement to 100%');
+      logger.info('  🚀 Focus on testing and optimization');
     } else {
-      console.log('  🔧 Complete missing components first');
-      console.log('  📋 Implement business logic workflows');
-      console.log('  🔄 Ensure process integration');
+      logger.info('  🔧 Complete missing components first');
+      logger.info('  📋 Implement business logic workflows');
+      logger.info('  🔄 Ensure process integration');
     }
 
-    console.log('='.repeat(60));
+    logger.info('='.repeat(60));
   }
 }
 
@@ -467,7 +468,7 @@ async function main() {
   const reportPath = path.join(__dirname, '../TRAINING_MODULE_STATUS_ANALYSIS.json');
   fs.writeFileSync(reportPath, JSON.stringify(results, null, 2));
 
-  console.log(`\n📄 Detailed analysis saved to: ${reportPath}`);
+  logger.info(`\n📄 Detailed analysis saved to: ${reportPath}`);
 
   return results;
 }

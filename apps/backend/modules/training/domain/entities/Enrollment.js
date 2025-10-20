@@ -167,7 +167,7 @@ class Enrollment {
 
     // Weight: 50% modules, 50% lessons
     this.progress.progressPercentage = Math.round(
-      (moduleProgress * 0.5 + lessonProgress * 0.5) * 100
+      (moduleProgress * 0.5 + lessonProgress * 0.5) * 100,
     );
   }
 

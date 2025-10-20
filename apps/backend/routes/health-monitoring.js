@@ -7,6 +7,7 @@
  * @date 2025-10-19
  */
 
+const logger = require('../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 const dbHealthMonitor = require('../services/database-health-monitor');
@@ -44,7 +45,7 @@ router.get('/health', async (req, res) => {
     const statusCode = healthStatus.summary.isHealthy ? 200 : 503;
     res.status(statusCode).json(response);
   } catch (error) {
-    console.error('Health check error:', error);
+    logger.error('Health check error:', error);
     res.status(500).json({
       success: false,
       status: 'error',
@@ -66,7 +67,7 @@ router.get('/health/detailed', async (req, res) => {
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Detailed health check error:', error);
+    logger.error('Detailed health check error:', error);
     res.status(500).json({
       success: false,
       error: 'Detailed health check failed',
@@ -93,7 +94,7 @@ router.get('/health/database', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Database health check error:', error);
+    logger.error('Database health check error:', error);
     res.status(500).json({
       success: false,
       error: 'Database health check failed',
@@ -106,7 +107,7 @@ router.get('/health/database', async (req, res) => {
 // Force database reconnection (admin endpoint)
 router.post('/health/database/reconnect', async (req, res) => {
   try {
-    console.log('🔄 Manual database reconnection requested');
+    logger.info('🔄 Manual database reconnection requested');
     const reconnected = await dbHealthMonitor.forceReconnection();
 
     if (reconnected) {
@@ -123,7 +124,7 @@ router.post('/health/database/reconnect', async (req, res) => {
       });
     }
   } catch (error) {
-    console.error('Database reconnection error:', error);
+    logger.error('Database reconnection error:', error);
     res.status(500).json({
       success: false,
       error: 'Database reconnection failed',
@@ -155,7 +156,7 @@ router.get('/health/metrics', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Performance metrics error:', error);
+    logger.error('Performance metrics error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve performance metrics',
@@ -181,7 +182,7 @@ router.get('/health/history', async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('Health history error:', error);
+    logger.error('Health history error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve health history',
@@ -231,7 +232,7 @@ router.get('/status', async (req, res) => {
       data: systemStatus,
     });
   } catch (error) {
-    console.error('System status error:', error);
+    logger.error('System status error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve system status',

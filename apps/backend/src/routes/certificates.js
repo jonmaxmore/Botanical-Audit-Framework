@@ -30,7 +30,7 @@ router.get(
   '/stats',
   authenticate,
   authorize(['director', 'auditor', 'admin']),
-  getCertificateStats
+  getCertificateStats,
 );
 
 // Certificate verification (public endpoint)
@@ -48,7 +48,7 @@ router.post(
   authenticate,
   authorize(['director', 'auditor']),
   validateRequest('certificate'),
-  createCertificate
+  createCertificate,
 );
 
 // Update certificate
@@ -57,7 +57,7 @@ router.put(
   authenticate,
   authorize(['director', 'auditor']),
   validateRequest('certificate'),
-  updateCertificate
+  updateCertificate,
 );
 
 // Renew certificate

@@ -40,7 +40,7 @@ router.post(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array()
+          errors.array(),
         );
       }
 
@@ -52,7 +52,7 @@ router.post(
         return utils.response.error(
           res,
           'อีเมลนี้ถูกใช้งานแล้ว',
-          shared.constants.statusCodes.CONFLICT
+          shared.constants.statusCodes.CONFLICT,
         );
       }
 
@@ -82,7 +82,7 @@ router.post(
           role: newUser.role,
         },
         config.environment.jwtSecret || 'fallback-secret-key',
-        { expiresIn: config.environment.jwtExpiry || '7d' }
+        { expiresIn: config.environment.jwtExpiry || '7d' },
       );
 
       return utils.response.success(
@@ -102,17 +102,17 @@ router.post(
           },
         },
         'ลงทะเบียนสำเร็จ',
-        shared.constants.statusCodes.CREATED
+        shared.constants.statusCodes.CREATED,
       );
     } catch (error) {
       logger.error('Registration error:', error);
       return utils.response.error(
         res,
         'ไม่สามารถลงทะเบียนได้ในขณะนี้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  },
 );
 
 /**
@@ -135,7 +135,7 @@ router.post(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array()
+          errors.array(),
         );
       }
 
@@ -147,7 +147,7 @@ router.post(
         return utils.response.error(
           res,
           'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-          shared.constants.statusCodes.UNAUTHORIZED
+          shared.constants.statusCodes.UNAUTHORIZED,
         );
       }
 
@@ -174,7 +174,7 @@ router.post(
         return utils.response.error(
           res,
           'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-          shared.constants.statusCodes.UNAUTHORIZED
+          shared.constants.statusCodes.UNAUTHORIZED,
         );
       }
 
@@ -191,7 +191,7 @@ router.post(
           role: user.role,
         },
         config.environment.jwtSecret || 'fallback-secret-key',
-        { expiresIn: config.environment.jwtExpiry || '7d' }
+        { expiresIn: config.environment.jwtExpiry || '7d' },
       );
 
       logger.info(`Farmer logged in: ${user.email}`);
@@ -212,17 +212,17 @@ router.post(
             accountStatus: user.accountStatus,
           },
         },
-        'เข้าสู่ระบบสำเร็จ'
+        'เข้าสู่ระบบสำเร็จ',
       );
     } catch (error) {
       logger.error('Login error:', error);
       return utils.response.error(
         res,
         'ไม่สามารถเข้าสู่ระบบได้ในขณะนี้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  },
 );
 
 /**
@@ -257,7 +257,7 @@ router.get('/profile', middleware.auth, async (req, res) => {
     return utils.response.error(
       res,
       'ไม่สามารถดึงข้อมูลโปรไฟล์ได้',
-      shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+      shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
     );
   }
 });
@@ -287,7 +287,7 @@ router.put(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array()
+          errors.array(),
         );
       }
 
@@ -324,17 +324,17 @@ router.put(
           permissions: user.getPermissions(),
           accountStatus: user.accountStatus,
         },
-        'อัปเดตโปรไฟล์สำเร็จ'
+        'อัปเดตโปรไฟล์สำเร็จ',
       );
     } catch (error) {
       logger.error('Update profile error:', error);
       return utils.response.error(
         res,
         'ไม่สามารถอัปเดตโปรไฟล์ได้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  },
 );
 
 /**
@@ -358,7 +358,7 @@ router.post(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array()
+          errors.array(),
         );
       }
 
@@ -376,7 +376,7 @@ router.post(
         return utils.response.error(
           res,
           'รหัสผ่านปัจจุบันไม่ถูกต้อง',
-          shared.constants.statusCodes.BAD_REQUEST
+          shared.constants.statusCodes.BAD_REQUEST,
         );
       }
 
@@ -392,10 +392,10 @@ router.post(
       return utils.response.error(
         res,
         'ไม่สามารถเปลี่ยนรหัสผ่านได้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  },
 );
 
 /**

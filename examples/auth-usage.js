@@ -14,7 +14,7 @@ router.get(
       message: 'Welcome admin!',
       user: req.user,
     });
-  }
+  },
 );
 
 // Example: Login endpoint
@@ -43,7 +43,7 @@ router.post('/login', validation.validationRules.userLogin, async (req, res, nex
       {
         message: 'Login successful',
         messageThTh: 'เข้าสู่ระบบสำเร็จ',
-      }
+      },
     );
   } catch (error) {
     next(error);

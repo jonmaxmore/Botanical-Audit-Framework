@@ -35,7 +35,7 @@ class DocumentContentValidationService {
    */
   async validateDocumentContent(documentId, documentType, fileBuffer, applicationData = {}) {
     try {
-      console.log(`🔍 Starting content validation for ${documentType}: ${documentId}`);
+      logger.info(`🔍 Starting content validation for ${documentType}: ${documentId}`);
 
       // 1. OCR Text Extraction
       const ocrResults = await this._extractTextWithOCR(fileBuffer, documentType);
@@ -48,19 +48,19 @@ class DocumentContentValidationService {
         };
       }
 
-      console.log(`📝 OCR extraction completed with confidence: ${ocrResults.confidence}%`);
+      logger.info(`📝 OCR extraction completed with confidence: ${ocrResults.confidence}%`);
 
       // 2. Validate based on document type
       const validationResult = await this._validateByDocumentType(
         documentType,
         ocrResults.extractedText,
-        applicationData
+        applicationData,
       );
 
       // 3. Calculate overall confidence
       const overallConfidence = this._calculateOverallConfidence(
         ocrResults.confidence,
-        validationResult.validationScore
+        validationResult.validationScore,
       );
 
       // 4. Determine if validation passed
@@ -79,7 +79,7 @@ class DocumentContentValidationService {
         },
       };
     } catch (error) {
-      console.error(`❌ Document validation failed for ${documentId}:`, error);
+      logger.error(`❌ Document validation failed for ${documentId}:`, error);
       return {
         valid: false,
         confidence: 0,
@@ -132,7 +132,7 @@ class DocumentContentValidationService {
       if (licenseMatch) {
         extractedData.licenseNumber = licenseMatch[1].trim();
         validationScore += 25;
-        console.log(`✅ License number found: ${extractedData.licenseNumber}`);
+        logger.info(`✅ License number found: ${extractedData.licenseNumber}`);
       } else {
         errors.push('ไม่พบเลขที่ใบอนุญาต');
         criticalFieldsValid = false;
@@ -146,7 +146,7 @@ class DocumentContentValidationService {
         if (namePattern.test(text)) {
           extractedData.farmerName = farmerName;
           validationScore += 25;
-          console.log(`✅ Farmer name verified: ${farmerName}`);
+          logger.info(`✅ Farmer name verified: ${farmerName}`);
         } else {
           errors.push(`ชื่อเกษตรกรในเอกสารไม่ตรงกับใบสมัคร (${farmerName})`);
           criticalFieldsValid = false;
@@ -164,7 +164,7 @@ class DocumentContentValidationService {
 
         if (expiryDate && expiryDate > new Date()) {
           validationScore += 20;
-          console.log(`✅ Valid expiry date: ${expiryDate.toLocaleDateString('th-TH')}`);
+          logger.info(`✅ Valid expiry date: ${expiryDate.toLocaleDateString('th-TH')}`);
         } else {
           errors.push('ใบอนุญาตหมดอายุแล้ว');
           criticalFieldsValid = false;
@@ -176,13 +176,13 @@ class DocumentContentValidationService {
       // 4. ตรวจสอบประเภทการเกษตร
       const farmTypeKeywords = ['เพาะปลูก', 'ปลูก', 'เกษตร', 'กัญชา', 'cannabis', 'hemp'];
       const foundFarmTypes = farmTypeKeywords.filter(keyword =>
-        new RegExp(keyword, 'i').test(text)
+        new RegExp(keyword, 'i').test(text),
       );
 
       if (foundFarmTypes.length > 0) {
         extractedData.farmType = foundFarmTypes;
         validationScore += 15;
-        console.log(`✅ Farm type keywords found: ${foundFarmTypes.join(', ')}`);
+        logger.info(`✅ Farm type keywords found: ${foundFarmTypes.join(', ')}`);
       } else {
         warnings.push('ไม่พบข้อมูลประเภทการเกษตร');
       }
@@ -194,7 +194,7 @@ class DocumentContentValidationService {
       if (foundAuthority) {
         extractedData.issuingAuthority = foundAuthority;
         validationScore += 15;
-        console.log(`✅ Issuing authority found: ${foundAuthority}`);
+        logger.info(`✅ Issuing authority found: ${foundAuthority}`);
       } else {
         warnings.push('ไม่พบข้อมูลหน่วยงานที่ออกใบอนุญาต');
       }
@@ -207,7 +207,7 @@ class DocumentContentValidationService {
         criticalFieldsValid,
       };
     } catch (error) {
-      console.error('Error validating farm license:', error);
+      logger.error('Error validating farm license:', error);
       return {
         extractedData: {},
         errors: ['เกิดข้อผิดพลาดในการตรวจสอบใบอนุญาต'],
@@ -240,7 +240,7 @@ class DocumentContentValidationService {
         // ตรวจสอบ checksum เลขบัตรประชาชน
         if (this._validateThaiIdChecksum(idNumber)) {
           validationScore += 30;
-          console.log(`✅ Valid Thai ID number: ${idNumber}`);
+          logger.info(`✅ Valid Thai ID number: ${idNumber}`);
         } else {
           errors.push('เลขบัตรประชาชนไม่ถูกต้อง');
           criticalFieldsValid = false;
@@ -258,7 +258,7 @@ class DocumentContentValidationService {
         if (namePattern.test(text)) {
           extractedData.fullName = farmerName;
           validationScore += 25;
-          console.log(`✅ Name verified: ${farmerName}`);
+          logger.info(`✅ Name verified: ${farmerName}`);
         } else {
           errors.push(`ชื่อในบัตรประชาชนไม่ตรงกับใบสมัคร (${farmerName})`);
           criticalFieldsValid = false;
@@ -276,7 +276,7 @@ class DocumentContentValidationService {
 
         if (expiryDate && expiryDate > new Date()) {
           validationScore += 20;
-          console.log(`✅ Valid ID expiry: ${expiryDate.toLocaleDateString('th-TH')}`);
+          logger.info(`✅ Valid ID expiry: ${expiryDate.toLocaleDateString('th-TH')}`);
         } else {
           errors.push('บัตรประชาชนหมดอายุแล้ว');
           criticalFieldsValid = false;
@@ -293,7 +293,7 @@ class DocumentContentValidationService {
         const birthDate = this._parseDate(birthMatch[1]);
         extractedData.birthDate = birthDate;
         validationScore += 15;
-        console.log(`✅ Birth date found: ${birthDate.toLocaleDateString('th-TH')}`);
+        logger.info(`✅ Birth date found: ${birthDate.toLocaleDateString('th-TH')}`);
       }
 
       // 5. ตรวจสอบที่อยู่
@@ -302,7 +302,7 @@ class DocumentContentValidationService {
 
       if (foundAddress) {
         validationScore += 10;
-        console.log('✅ Address information found');
+        logger.info('✅ Address information found');
       } else {
         warnings.push('ไม่พบข้อมูลที่อยู่');
       }
@@ -315,7 +315,7 @@ class DocumentContentValidationService {
         criticalFieldsValid,
       };
     } catch (error) {
-      console.error('Error validating ID card:', error);
+      logger.error('Error validating ID card:', error);
       return {
         extractedData: {},
         errors: ['เกิดข้อผิดพลาดในการตรวจสอบบัตรประชาชน'],
@@ -344,7 +344,7 @@ class DocumentContentValidationService {
       if (landMatch) {
         extractedData.landNumber = landMatch[1].trim();
         validationScore += 30;
-        console.log(`✅ Land number found: ${extractedData.landNumber}`);
+        logger.info(`✅ Land number found: ${extractedData.landNumber}`);
       } else {
         errors.push('ไม่พบเลขที่โฉนดที่ดินหรือเลขที่ดิน');
         criticalFieldsValid = false;
@@ -357,7 +357,7 @@ class DocumentContentValidationService {
       if (areaMatch) {
         extractedData.landArea = parseFloat(areaMatch[1]);
         validationScore += 20;
-        console.log(`✅ Land area found: ${extractedData.landArea} ไร่`);
+        logger.info(`✅ Land area found: ${extractedData.landArea} ไร่`);
       } else {
         warnings.push('ไม่พบข้อมูลเนื้อที่ที่ดิน');
       }
@@ -382,7 +382,7 @@ class DocumentContentValidationService {
           extractedData.locationVerified = true;
           validationScore += 25;
           console.log(
-            `✅ Location verified: ${locationMatches}/${locationKeywords.length} matches`
+            `✅ Location verified: ${locationMatches}/${locationKeywords.length} matches`,
           );
         } else {
           errors.push('ที่ตั้งที่ดินไม่ตรงกับที่ระบุในใบสมัคร');
@@ -398,7 +398,7 @@ class DocumentContentValidationService {
         if (namePattern.test(text)) {
           extractedData.ownerName = ownerName;
           validationScore += 15;
-          console.log(`✅ Land owner name verified: ${ownerName}`);
+          logger.info(`✅ Land owner name verified: ${ownerName}`);
         } else {
           warnings.push(`ชื่อเจ้าของที่ดินอาจไม่ตรงกับผู้สมัคร (${ownerName})`);
         }
@@ -411,7 +411,7 @@ class DocumentContentValidationService {
       if (foundLandUse) {
         extractedData.landUse = foundLandUse;
         validationScore += 10;
-        console.log(`✅ Land use type found: ${foundLandUse}`);
+        logger.info(`✅ Land use type found: ${foundLandUse}`);
       } else {
         warnings.push('ไม่พบข้อมูลประเภทการใช้ที่ดิน');
       }
@@ -424,7 +424,7 @@ class DocumentContentValidationService {
         criticalFieldsValid,
       };
     } catch (error) {
-      console.error('Error validating land document:', error);
+      logger.error('Error validating land document:', error);
       return {
         extractedData: {},
         errors: ['เกิดข้อผิดพลาดในการตรวจสอบเอกสารสิทธิ์ที่ดิน'],
@@ -441,7 +441,7 @@ class DocumentContentValidationService {
   async _extractTextWithOCR(fileBuffer, documentType) {
     try {
       if (!this.ocrService) {
-        console.warn('OCR service not available, using mock extraction');
+        logger.warn('OCR service not available, using mock extraction');
         return {
           success: true,
           extractedText: 'Mock OCR text for testing purposes',
@@ -461,7 +461,7 @@ class DocumentContentValidationService {
         confidence: result.confidence || 0,
       };
     } catch (error) {
-      console.error('OCR extraction failed:', error);
+      logger.error('OCR extraction failed:', error);
       return {
         success: false,
         extractedText: '',

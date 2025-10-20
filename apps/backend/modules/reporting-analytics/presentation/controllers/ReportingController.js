@@ -42,6 +42,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const { validationResult, query, body, param } = require('express-validator');
 
 class ReportingController {
@@ -53,7 +54,7 @@ class ReportingController {
     this.auditService = dependencies.auditService;
     this.config = dependencies.config;
 
-    console.log('[ReportingController] Initializing reporting API endpoints...');
+    logger.info('[ReportingController] Initializing reporting API endpoints...');
   }
 
   /**
@@ -106,7 +107,7 @@ class ReportingController {
         },
       });
     } catch (error) {
-      console.error('[ReportingController] Dashboard metrics error:', error);
+      logger.error('[ReportingController] Dashboard metrics error:', error);
 
       await this._logAuditEvent('DASHBOARD_ERROR', {
         userId: req.userId,
@@ -180,7 +181,7 @@ class ReportingController {
         },
       });
     } catch (error) {
-      console.error('[ReportingController] Application report error:', error);
+      logger.error('[ReportingController] Application report error:', error);
 
       await this._logAuditEvent('APPLICATION_REPORT_ERROR', {
         userId: req.userId,
@@ -254,7 +255,7 @@ class ReportingController {
         },
       });
     } catch (error) {
-      console.error('[ReportingController] Financial report error:', error);
+      logger.error('[ReportingController] Financial report error:', error);
 
       await this._logAuditEvent('FINANCIAL_REPORT_ERROR', {
         userId: req.userId,
@@ -328,7 +329,7 @@ class ReportingController {
         },
       });
     } catch (error) {
-      console.error('[ReportingController] User activity report error:', error);
+      logger.error('[ReportingController] User activity report error:', error);
 
       await this._logAuditEvent('USER_ACTIVITY_REPORT_ERROR', {
         userId: req.userId,
@@ -403,7 +404,7 @@ class ReportingController {
         },
       });
     } catch (error) {
-      console.error('[ReportingController] Compliance report error:', error);
+      logger.error('[ReportingController] Compliance report error:', error);
 
       await this._logAuditEvent('COMPLIANCE_REPORT_ERROR', {
         userId: req.userId,
@@ -470,7 +471,7 @@ class ReportingController {
         },
       });
     } catch (error) {
-      console.error('[ReportingController] Business analytics error:', error);
+      logger.error('[ReportingController] Business analytics error:', error);
 
       await this._logAuditEvent('BUSINESS_ANALYTICS_ERROR', {
         userId: req.userId,
@@ -538,7 +539,7 @@ class ReportingController {
         },
       });
     } catch (error) {
-      console.error('[ReportingController] Predictive analytics error:', error);
+      logger.error('[ReportingController] Predictive analytics error:', error);
 
       await this._logAuditEvent('PREDICTIVE_ANALYTICS_ERROR', {
         userId: req.userId,
@@ -590,7 +591,7 @@ class ReportingController {
         data: overallHealth,
       });
     } catch (error) {
-      console.error('[ReportingController] Health check error:', error);
+      logger.error('[ReportingController] Health check error:', error);
 
       res.status(503).json({
         success: false,
@@ -648,7 +649,7 @@ class ReportingController {
         });
       }
     } catch (error) {
-      console.error('[ReportingController] Audit logging error:', error);
+      logger.error('[ReportingController] Audit logging error:', error);
     }
   }
 

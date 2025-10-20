@@ -96,7 +96,7 @@ class TrackPlantUseCase {
   async initializePlantTracking(plantingData) {
     try {
       this.logger.log(
-        `[TrackPlant] Initializing plant tracking for planting: ${plantingData.plantingId}`
+        `[TrackPlant] Initializing plant tracking for planting: ${plantingData.plantingId}`,
       );
 
       // Step 1: Validate planting data
@@ -217,7 +217,7 @@ class TrackPlantUseCase {
       // Step 4: Analyze growth patterns and trends
       const growthAnalysis = await this.analyzeGrowthPatterns(
         plant,
-        measurementData.measurementType
+        measurementData.measurementType,
       );
 
       // Step 5: Update plant health assessment
@@ -322,7 +322,7 @@ class TrackPlantUseCase {
       const environmentalRecommendations = await this.generateEnvironmentalRecommendations(
         updatedPlant,
         environmentalResult,
-        environmentalImpact
+        environmentalImpact,
       );
 
       // Step 9: Create audit trail
@@ -385,7 +385,7 @@ class TrackPlantUseCase {
       // Step 3: Validate transition eligibility
       const eligibilityCheck = await this.validateTransitionEligibility(
         plant,
-        transitionData.newPhase
+        transitionData.newPhase,
       );
 
       if (!eligibilityCheck.eligible) {
@@ -399,7 +399,7 @@ class TrackPlantUseCase {
         case 'FLOWERING':
           transitionResult = plant.transitionToFloweringPhase(
             transitionData.transitionDate,
-            transitionData.trigger || 'PHOTOPERIOD_CHANGE'
+            transitionData.trigger || 'PHOTOPERIOD_CHANGE',
           );
           break;
 
@@ -419,7 +419,7 @@ class TrackPlantUseCase {
       const transitionDocumentation = await this.generatePhaseTransitionDocumentation(
         plant,
         transitionResult,
-        transitionData
+        transitionData,
       );
 
       // Step 7: Update plant in repository
@@ -441,7 +441,7 @@ class TrackPlantUseCase {
       await this.sendPhaseTransitionNotifications(updatedPlant, transitionResult, transitionData);
 
       this.logger.log(
-        `[TrackPlant] Phase transition recorded for plant: ${plantId} - ${transitionData.newPhase}`
+        `[TrackPlant] Phase transition recorded for plant: ${plantId} - ${transitionData.newPhase}`,
       );
 
       return {

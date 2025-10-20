@@ -131,7 +131,7 @@ const NotificationSchema = new mongoose.Schema(
   {
     timestamps: { createdAt: true, updatedAt: false },
     collection: 'notifications',
-  }
+  },
 );
 
 // Compound indexes for better query performance
@@ -191,7 +191,7 @@ NotificationSchema.statics.markAllAsReadForUser = function (userId) {
         read: true,
         readAt: new Date(),
       },
-    }
+    },
   );
 };
 

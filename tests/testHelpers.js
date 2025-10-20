@@ -420,7 +420,7 @@ const testCleanup = {
       try {
         const files = await fs.readdir(path.dirname(pattern));
         const matchingFiles = files.filter(file =>
-          file.startsWith(path.basename(pattern).replace('*', ''))
+          file.startsWith(path.basename(pattern).replace('*', '')),
         );
 
         for (const file of matchingFiles) {

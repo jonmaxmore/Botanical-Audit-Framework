@@ -1,4 +1,5 @@
 // Performance Optimization Configuration for GACP Standards System
+const logger = require('../shared/logger');
 const compression = require('compression');
 const helmet = require('helmet');
 
@@ -107,7 +108,7 @@ const responseTimeMiddleware = (req, res, next) => {
 
     // Log slow responses
     if (duration > 2000) {
-      console.warn(`Slow response: ${req.method} ${req.url} took ${duration}ms`);
+      logger.warn(`Slow response: ${req.method} ${req.url} took ${duration}ms`);
     }
   });
 
@@ -154,7 +155,7 @@ const imageOptimization = {
 
       return processed;
     } catch (error) {
-      console.error('Image processing error:', error);
+      logger.error('Image processing error:', error);
       return buffer; // Return original if processing fails
     }
   },
@@ -273,12 +274,12 @@ const memoryMonitor = {
 
   logMemoryUsage: () => {
     const usage = memoryMonitor.checkMemoryUsage();
-    console.log('Memory Usage:', usage);
+    logger.info('Memory Usage:', usage);
 
     // Warn if memory usage is high
     if (usage.heapUsed > 500) {
       // 500MB
-      console.warn('⚠️  High memory usage detected:', usage.heapUsed, 'MB');
+      logger.warn('⚠️  High memory usage detected:', usage.heapUsed, 'MB');
     }
   },
 
@@ -362,7 +363,7 @@ const setupPerformanceMiddleware = app => {
         includeSubDomains: true,
         preload: true,
       },
-    })
+    }),
   );
 
   // Metrics tracking

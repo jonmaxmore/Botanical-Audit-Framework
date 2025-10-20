@@ -44,7 +44,7 @@ router.post(
   authenticate,
   authorize(['director', 'admin']),
   validateRequest('survey'),
-  createSurvey
+  createSurvey,
 );
 
 // Update survey
@@ -53,7 +53,7 @@ router.put(
   authenticate,
   authorize(['director', 'admin']),
   validateRequest('survey'),
-  updateSurvey
+  updateSurvey,
 );
 
 // Delete survey

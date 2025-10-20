@@ -19,7 +19,7 @@ import {
   useMediaQuery,
   useTheme,
   Divider,
-  Chip,
+  Chip
 } from '@mui/material';
 import {
   Agriculture,
@@ -31,7 +31,7 @@ import {
   Logout,
   Menu as MenuIcon,
   Download,
-  Visibility,
+  Visibility
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -64,15 +64,15 @@ export default function FarmerCertificates() {
       farmName: 'ฟาร์มสมุนไพรเชียงใหม่',
       issueDate: '2025-09-01',
       expiryDate: '2026-09-01',
-      status: 'active',
+      status: 'active'
     },
     {
       id: 'CERT002',
       farmName: 'ฟาร์มไพรสมุนไพรออร์แกนิก',
       issueDate: '2025-08-15',
       expiryDate: '2026-08-15',
-      status: 'active',
-    },
+      status: 'active'
+    }
   ];
 
   const menuItems = [
@@ -81,7 +81,7 @@ export default function FarmerCertificates() {
     { text: 'คำขอรับรอง', icon: <Assignment />, path: '/farmer/applications' },
     { text: 'ใบรับรอง', icon: <Verified />, path: '/farmer/certificates' },
     { text: 'เอกสาร', icon: <Description />, path: '/farmer/documents' },
-    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' },
+    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' }
   ];
 
   const drawer = (

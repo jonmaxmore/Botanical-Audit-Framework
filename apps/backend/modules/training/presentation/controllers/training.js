@@ -46,10 +46,10 @@ class TrainingController {
             limit: result.limit,
             totalPages: Math.ceil(result.total / result.limit),
           },
-        })
+        }),
       );
     } catch (error) {
-      console.error('List courses error:', error);
+      logger.error('List courses error:', error);
       const CourseDTO = require('../dto/CourseDTO');
       res.status(500).json(CourseDTO.errorResponse('Failed to retrieve courses', [error.message]));
     }
@@ -70,10 +70,10 @@ class TrainingController {
       res.json(
         CourseDTO.successResponse('Course retrieved successfully', {
           course: CourseDTO.toDetailedDTO(course),
-        })
+        }),
       );
     } catch (error) {
-      console.error('Get course details error:', error);
+      logger.error('Get course details error:', error);
       const CourseDTO = require('../dto/CourseDTO');
       const status = error.message.includes('not found')
         ? 404
@@ -97,10 +97,10 @@ class TrainingController {
       res.status(201).json(
         CourseDTO.successResponse('Course created successfully', {
           course: CourseDTO.toDetailedDTO(course),
-        })
+        }),
       );
     } catch (error) {
-      console.error('Create course error:', error);
+      logger.error('Create course error:', error);
       const CourseDTO = require('../dto/CourseDTO');
       const status = error.message.includes('already exists') ? 409 : 400;
       res.status(status).json(CourseDTO.errorResponse(error.message, [error.message]));
@@ -122,10 +122,10 @@ class TrainingController {
       res.json(
         CourseDTO.successResponse('Course updated successfully', {
           course: CourseDTO.toDetailedDTO(course),
-        })
+        }),
       );
     } catch (error) {
-      console.error('Update course error:', error);
+      logger.error('Update course error:', error);
       const CourseDTO = require('../dto/CourseDTO');
       const status = error.message.includes('not found') ? 404 : 400;
       res.status(status).json(CourseDTO.errorResponse(error.message, [error.message]));
@@ -146,10 +146,10 @@ class TrainingController {
       res.json(
         CourseDTO.successResponse('Course published successfully', {
           course: CourseDTO.toSummaryDTO(course),
-        })
+        }),
       );
     } catch (error) {
-      console.error('Publish course error:', error);
+      logger.error('Publish course error:', error);
       const CourseDTO = require('../dto/CourseDTO');
       const status = error.message.includes('not found') ? 404 : 400;
       res.status(status).json(CourseDTO.errorResponse(error.message, [error.message]));
@@ -176,10 +176,10 @@ class TrainingController {
       res.status(201).json(
         EnrollmentDTO.successResponse('Enrolled successfully', {
           enrollment: EnrollmentDTO.toDetailedDTO(enrollment),
-        })
+        }),
       );
     } catch (error) {
-      console.error('Enroll in course error:', error);
+      logger.error('Enroll in course error:', error);
       const EnrollmentDTO = require('../dto/EnrollmentDTO');
       const status = error.message.includes('not found')
         ? 404
@@ -220,10 +220,10 @@ class TrainingController {
             limit: result.limit,
             totalPages: Math.ceil(result.total / result.limit),
           },
-        })
+        }),
       );
     } catch (error) {
-      console.error('Get enrollments error:', error);
+      logger.error('Get enrollments error:', error);
       const EnrollmentDTO = require('../dto/EnrollmentDTO');
       res
         .status(500)
@@ -245,10 +245,10 @@ class TrainingController {
       res.json(
         EnrollmentDTO.successResponse('Progress updated successfully', {
           enrollment: EnrollmentDTO.toDetailedDTO(enrollment),
-        })
+        }),
       );
     } catch (error) {
-      console.error('Update progress error:', error);
+      logger.error('Update progress error:', error);
       const EnrollmentDTO = require('../dto/EnrollmentDTO');
       const status = error.message.includes('not found') ? 404 : 400;
       res.status(status).json(EnrollmentDTO.errorResponse(error.message, [error.message]));
@@ -273,10 +273,10 @@ class TrainingController {
       res.json(
         EnrollmentDTO.successResponse(message, {
           enrollment: EnrollmentDTO.toDetailedDTO(enrollment),
-        })
+        }),
       );
     } catch (error) {
-      console.error('Submit assessment error:', error);
+      logger.error('Submit assessment error:', error);
       const EnrollmentDTO = require('../dto/EnrollmentDTO');
       const status = error.message.includes('not found') ? 404 : 400;
       res.status(status).json(EnrollmentDTO.errorResponse(error.message, [error.message]));
@@ -300,7 +300,7 @@ class TrainingController {
         data: statistics,
       });
     } catch (error) {
-      console.error('Get statistics error:', error);
+      logger.error('Get statistics error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve statistics',

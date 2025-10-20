@@ -30,7 +30,7 @@ const createHealthCheck = () => {
           used: Math.round(process.memoryUsage().heapUsed / 1024 / 1024),
           total: Math.round(process.memoryUsage().heapTotal / 1024 / 1024),
           percentage: Math.round(
-            (process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100
+            (process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100,
           ),
         },
       };

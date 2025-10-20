@@ -55,7 +55,7 @@ class DocumentWorkflowIntegration {
     // เมื่อเอกสารใกล้หมดอายุ → แจ้งเตือน
     this.eventBus.on('DocumentExpiringSoon', this.handleDocumentExpiringSoon.bind(this));
 
-    console.log('📁 Document workflow integration initialized');
+    logger.info('📁 Document workflow integration initialized');
   }
 
   /**
@@ -64,7 +64,7 @@ class DocumentWorkflowIntegration {
    */
   async handleDocumentUploaded(event) {
     try {
-      console.log(`📄 Processing uploaded document: ${event.payload.documentId}`);
+      logger.info(`📄 Processing uploaded document: ${event.payload.documentId}`);
 
       const { documentId, applicationId, documentType, userId } = event.payload;
 
@@ -75,7 +75,7 @@ class DocumentWorkflowIntegration {
       }
 
       // 2. ตรวจสอบความปลอดภัย (Virus Scan)
-      console.log(`🔍 Starting security validation for: ${documentId}`);
+      logger.info(`🔍 Starting security validation for: ${documentId}`);
       const securityCheck = await this.documentService.performSecurityCheck(documentId);
 
       if (!securityCheck.safe) {
@@ -84,10 +84,10 @@ class DocumentWorkflowIntegration {
       }
 
       // 3. ตรวจสอบเนื้อหาเอกสาร (OCR + Validation)
-      console.log(`📋 Starting content validation for: ${documentId}`);
+      logger.info(`📋 Starting content validation for: ${documentId}`);
       const contentValidation = await this.documentService.validateDocumentContent(
         documentId,
-        documentType
+        documentType,
       );
 
       if (!contentValidation.valid) {
@@ -124,9 +124,9 @@ class DocumentWorkflowIntegration {
         timestamp: new Date(),
       });
 
-      console.log(`✅ Document validation completed: ${documentId}`);
+      logger.info(`✅ Document validation completed: ${documentId}`);
     } catch (error) {
-      console.error(`❌ Document upload processing failed: ${event.payload.documentId}`, error);
+      logger.error(`❌ Document upload processing failed: ${event.payload.documentId}`, error);
 
       await this.eventBus.publish({
         type: 'DocumentProcessingFailed',
@@ -146,7 +146,7 @@ class DocumentWorkflowIntegration {
    */
   async handleDocumentValidated(event) {
     try {
-      console.log(`✅ Processing validated document: ${event.payload.documentId}`);
+      logger.info(`✅ Processing validated document: ${event.payload.documentId}`);
 
       const { documentId, applicationId, documentType, userId } = event.payload;
 
@@ -157,7 +157,7 @@ class DocumentWorkflowIntegration {
         validatedAt: new Date(),
       });
 
-      console.log(`📝 Updated application progress: ${applicationId}`);
+      logger.info(`📝 Updated application progress: ${applicationId}`);
 
       // 2. ตรวจสอบว่าเอกสารครบหรือยัง
       const application = await this.applicationService.getApplicationById(applicationId);
@@ -168,7 +168,7 @@ class DocumentWorkflowIntegration {
         // เอกสารครบแล้ว → อัปเดตสถานะ application
         await this.applicationService.updateStatus(applicationId, 'DOCUMENTS_COMPLETE');
 
-        console.log(`🎉 All documents completed for application: ${applicationId}`);
+        logger.info(`🎉 All documents completed for application: ${applicationId}`);
 
         // ส่ง event แจ้งว่าเอกสารครบแล้ว
         await this.eventBus.publish({
@@ -203,7 +203,7 @@ class DocumentWorkflowIntegration {
         },
       });
     } catch (error) {
-      console.error(`❌ Document validation processing failed: ${event.payload.documentId}`, error);
+      logger.error(`❌ Document validation processing failed: ${event.payload.documentId}`, error);
     }
   }
 
@@ -213,7 +213,7 @@ class DocumentWorkflowIntegration {
    */
   async handleDocumentRejected(event) {
     try {
-      console.log(`❌ Processing rejected document: ${event.payload.documentId}`);
+      logger.info(`❌ Processing rejected document: ${event.payload.documentId}`);
 
       const { documentId, applicationId, userId, rejectionReasons } = event.payload;
 
@@ -232,7 +232,7 @@ class DocumentWorkflowIntegration {
           status: 'REJECTED',
           rejectedAt: new Date(),
           rejectionReasons,
-        }
+        },
       );
 
       // 3. ส่งการแจ้งเตือนไปยังเกษตรกร
@@ -256,9 +256,9 @@ class DocumentWorkflowIntegration {
         },
       });
 
-      console.log(`📧 Document rejection notifications sent for: ${documentId}`);
+      logger.info(`📧 Document rejection notifications sent for: ${documentId}`);
     } catch (error) {
-      console.error(`❌ Document rejection processing failed: ${event.payload.documentId}`, error);
+      logger.error(`❌ Document rejection processing failed: ${event.payload.documentId}`, error);
     }
   }
 
@@ -268,7 +268,7 @@ class DocumentWorkflowIntegration {
    */
   async handleCertificateGenerated(event) {
     try {
-      console.log(`🏆 Processing certificate generation: ${event.payload.certificateNumber}`);
+      logger.info(`🏆 Processing certificate generation: ${event.payload.certificateNumber}`);
 
       const { certificateId, certificateNumber, applicationId, userId } = event.payload;
 
@@ -286,7 +286,7 @@ class DocumentWorkflowIntegration {
         userId,
       });
 
-      console.log(`📄 Certificate PDF created: ${pdfDocument.id}`);
+      logger.info(`📄 Certificate PDF created: ${pdfDocument.id}`);
 
       // 3. Link เอกสาร PDF กับใบรับรอง
       await this.certificateService.updateCertificatePDF(certificateId, {
@@ -317,11 +317,11 @@ class DocumentWorkflowIntegration {
         },
       });
 
-      console.log(`✅ Certificate PDF workflow completed: ${certificateNumber}`);
+      logger.info(`✅ Certificate PDF workflow completed: ${certificateNumber}`);
     } catch (error) {
       console.error(
         `❌ Certificate PDF generation failed: ${event.payload.certificateNumber}`,
-        error
+        error,
       );
     }
   }
@@ -332,7 +332,7 @@ class DocumentWorkflowIntegration {
    */
   async handleDocumentExpiringSoon(event) {
     try {
-      console.log(`⏰ Processing expiring document: ${event.payload.documentId}`);
+      logger.info(`⏰ Processing expiring document: ${event.payload.documentId}`);
 
       const { documentId, userId, documentType, daysUntilExpiry } = event.payload;
 
@@ -345,7 +345,7 @@ class DocumentWorkflowIntegration {
         channels: ['email', 'sms', 'in-app'],
       });
 
-      console.log(`📨 Document renewal reminder sent: ${documentId} (${daysUntilExpiry} days)`);
+      logger.info(`📨 Document renewal reminder sent: ${documentId} (${daysUntilExpiry} days);`);
 
       // บันทึก audit log
       await this.auditService.logAction({
@@ -359,7 +359,7 @@ class DocumentWorkflowIntegration {
         },
       });
     } catch (error) {
-      console.error(`❌ Document expiry processing failed: ${event.payload.documentId}`, error);
+      logger.error(`❌ Document expiry processing failed: ${event.payload.documentId}`, error);
     }
   }
 
@@ -391,7 +391,7 @@ class DocumentWorkflowIntegration {
       metadata: { threats },
     });
 
-    console.log(`🚨 Unsafe document quarantined: ${documentId}`);
+    logger.info(`🚨 Unsafe document quarantined: ${documentId}`);
   }
 
   /**
@@ -400,7 +400,7 @@ class DocumentWorkflowIntegration {
    */
   async checkExpiringDocuments() {
     try {
-      console.log('🔍 Checking for expiring documents...');
+      logger.info('🔍 Checking for expiring documents...');
 
       // ค้นหาเอกสารที่จะหมดอายุใน 30, 7, และ 1 วัน
       const expiringRanges = [30, 7, 1];
@@ -422,10 +422,10 @@ class DocumentWorkflowIntegration {
           });
         }
 
-        console.log(`📊 Found ${expiringDocuments.length} documents expiring in ${days} days`);
+        logger.info(`📊 Found ${expiringDocuments.length} documents expiring in ${days} days`);
       }
     } catch (error) {
-      console.error('❌ Failed to check expiring documents:', error);
+      logger.error('❌ Failed to check expiring documents:', error);
     }
   }
 }

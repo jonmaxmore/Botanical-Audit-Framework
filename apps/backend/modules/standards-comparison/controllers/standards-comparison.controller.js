@@ -46,7 +46,7 @@ class StandardsComparisonController {
         standards,
       });
     } catch (error) {
-      console.error('Error getting available standards:', error);
+      logger.error('Error getting available standards:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve available standards',
@@ -69,7 +69,7 @@ class StandardsComparisonController {
         standard,
       });
     } catch (error) {
-      console.error('Error getting standard details:', error);
+      logger.error('Error getting standard details:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -137,7 +137,7 @@ class StandardsComparisonController {
         ...result,
       });
     } catch (error) {
-      console.error('Error comparing farm:', error);
+      logger.error('Error comparing farm:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -169,7 +169,7 @@ class StandardsComparisonController {
         comparison,
       });
     } catch (error) {
-      console.error('Error getting comparison results:', error);
+      logger.error('Error getting comparison results:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -201,7 +201,7 @@ class StandardsComparisonController {
         ...gapAnalysis,
       });
     } catch (error) {
-      console.error('Error analyzing gaps:', error);
+      logger.error('Error analyzing gaps:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -237,7 +237,7 @@ class StandardsComparisonController {
         history,
       });
     } catch (error) {
-      console.error('Error getting comparison history:', error);
+      logger.error('Error getting comparison history:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve comparison history',
@@ -274,7 +274,7 @@ class StandardsComparisonController {
         recommendations: groupedRecommendations,
       });
     } catch (error) {
-      console.error('Error getting recommendations:', error);
+      logger.error('Error getting recommendations:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({

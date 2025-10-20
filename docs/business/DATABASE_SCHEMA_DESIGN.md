@@ -515,7 +515,7 @@ db.applications.createIndex({
 // Partial index (active applications only)
 db.applications.createIndex(
   { state: 1, submittedAt: -1 },
-  { partialFilterExpression: { isActive: true, isDeleted: false } }
+  { partialFilterExpression: { isActive: true, isDeleted: false } },
 );
 ```
 
@@ -658,7 +658,7 @@ db.application_documents.createIndex({ status: 1, uploadedAt: -1 });
 // TTL Index (auto-delete expired documents)
 db.application_documents.createIndex(
   { expiresAt: 1 },
-  { expireAfterSeconds: 0, partialFilterExpression: { expiresAt: { $ne: null } } }
+  { expireAfterSeconds: 0, partialFilterExpression: { expiresAt: { $ne: null } } },
 );
 ```
 
@@ -910,7 +910,7 @@ db.certificates.createIndex({ issuedAt: -1 });
 // Partial index (active certificates only)
 db.certificates.createIndex(
   { expiresAt: 1 },
-  { partialFilterExpression: { status: { $in: ['ACTIVE', 'EXPIRING_SOON'] } } }
+  { partialFilterExpression: { status: { $in: ['ACTIVE', 'EXPIRING_SOON'] } } },
 );
 ```
 
@@ -1251,7 +1251,7 @@ async function anonymizeUserData(userId) {
         thaiId: null,
         phoneNumber: null,
       },
-    }
+    },
   );
 
   // Step 2: Anonymize applications (keep for business records)
@@ -1263,7 +1263,7 @@ async function anonymizeUserData(userId) {
         farmerEmail: `deleted_${userId}@anonymized.local`,
         farmerPhone: null,
       },
-    }
+    },
   );
 
   // Step 3: Log anonymization

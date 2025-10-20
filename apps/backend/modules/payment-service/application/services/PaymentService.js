@@ -25,6 +25,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const Payment = require('../domain/entities/Payment');
 const crypto = require('crypto');
 const QRCode = require('qrcode');
@@ -57,7 +58,7 @@ class PaymentService {
       },
     };
 
-    console.log('[PaymentService] Initialized successfully');
+    logger.info('[PaymentService] Initialized successfully');
   }
 
   /**
@@ -157,14 +158,14 @@ class PaymentService {
         });
       }
 
-      console.log('[PaymentService] Fee calculation completed:', feeBreakdown);
+      logger.info('[PaymentService] Fee calculation completed:', feeBreakdown);
       return {
         success: true,
         feeBreakdown,
         expiryMinutes: this.config.limits.paymentExpiryMinutes,
       };
     } catch (error) {
-      console.error('[PaymentService] Fee calculation error:', error);
+      logger.error('[PaymentService] Fee calculation error:', error);
       throw new Error(`Failed to calculate fees: ${error.message}`);
     }
   }
@@ -255,7 +256,7 @@ class PaymentService {
         });
       }
 
-      console.log(`[PaymentService] Payment initiated successfully: ${payment.paymentId}`);
+      logger.info(`[PaymentService] Payment initiated successfully: ${payment.paymentId}`);
 
       return {
         success: true,
@@ -275,7 +276,7 @@ class PaymentService {
         },
       };
     } catch (error) {
-      console.error('[PaymentService] Payment initiation error:', error);
+      logger.error('[PaymentService] Payment initiation error:', error);
       throw new Error(`Failed to initiate payment: ${error.message}`);
     }
   }
@@ -354,7 +355,7 @@ class PaymentService {
         message: updateResult.message,
       };
     } catch (error) {
-      console.error('[PaymentService] Webhook processing error:', error);
+      logger.error('[PaymentService] Webhook processing error:', error);
 
       // Log webhook error for investigation
       if (this.auditService) {
@@ -411,7 +412,7 @@ class PaymentService {
         },
       };
     } catch (error) {
-      console.error('[PaymentService] Get payment status error:', error);
+      logger.error('[PaymentService] Get payment status error:', error);
       throw error;
     }
   }
@@ -496,7 +497,7 @@ class PaymentService {
         message: 'Refund processed successfully',
       };
     } catch (error) {
-      console.error('[PaymentService] Refund processing error:', error);
+      logger.error('[PaymentService] Refund processing error:', error);
       throw error;
     }
   }
@@ -540,7 +541,7 @@ class PaymentService {
         paymentMethod: 'QR_CODE',
       };
     } catch (error) {
-      console.error('[PaymentService] QR generation error:', error);
+      logger.error('[PaymentService] QR generation error:', error);
       throw new Error(`Failed to generate PromptPay QR: ${error.message}`);
     }
   }
@@ -669,7 +670,7 @@ class PaymentService {
 
     return crypto.timingSafeEqual(
       Buffer.from(signature, 'hex'),
-      Buffer.from(expectedSignature, 'hex')
+      Buffer.from(expectedSignature, 'hex'),
     );
   }
 

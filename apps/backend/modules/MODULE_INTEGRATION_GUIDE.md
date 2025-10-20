@@ -52,7 +52,7 @@ router.use(
   auth.rateLimit(),
   auth.extractToken(),
   auth.authenticate(),
-  applicationRoutes
+  applicationRoutes,
 );
 ```
 
@@ -311,7 +311,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.requireRole('FARMER'),
     auth.authorize('application:create'),
     auth.rateLimit({ max: 10 }), // 10 applications per 15 min
-    applicationController.createApplication
+    applicationController.createApplication,
   );
 
   router.get(
@@ -319,7 +319,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.authenticate(),
     auth.requireRole('FARMER'),
     auth.authorize('application:read:own'),
-    applicationController.getMyApplications
+    applicationController.getMyApplications,
   );
 
   router.put(
@@ -328,7 +328,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.requireRole('FARMER'),
     auth.authorize('application:update:own'),
     auth.validateResourceOwnership('applicationId'),
-    applicationController.updateApplication
+    applicationController.updateApplication,
   );
 
   // Reviewer routes
@@ -337,7 +337,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.authenticate(),
     auth.requireRole(['DTAM_REVIEWER', 'DTAM_ADMIN']),
     auth.authorize('application:read:all'),
-    applicationController.getPendingReviewApplications
+    applicationController.getPendingReviewApplications,
   );
 
   router.post(
@@ -346,7 +346,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.requireRole(['DTAM_REVIEWER', 'DTAM_ADMIN']),
     auth.authorize('application:review'),
     auth.rateLimit({ max: 20 }), // 20 reviews per 15 min
-    applicationController.reviewApplication
+    applicationController.reviewApplication,
   );
 
   // Inspector routes
@@ -355,7 +355,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.authenticate(),
     auth.requireRole('DTAM_INSPECTOR'),
     auth.authorize('application:read:assigned'),
-    applicationController.getAssignedApplications
+    applicationController.getAssignedApplications,
   );
 
   router.post(
@@ -363,7 +363,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.authenticate(),
     auth.requireRole('DTAM_INSPECTOR'),
     auth.authorize('inspection:conduct'),
-    applicationController.conductInspection
+    applicationController.conductInspection,
   );
 
   // Admin routes
@@ -372,7 +372,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.authenticate(),
     auth.requireRole('DTAM_ADMIN'),
     auth.authorize('application:read:all'),
-    applicationController.getAllApplications
+    applicationController.getAllApplications,
   );
 
   router.patch(
@@ -381,7 +381,7 @@ function createProtectedApplicationRoutes(dependencies) {
     auth.requireRole('DTAM_ADMIN'),
     auth.authorize('application:manage:all'),
     auth.rateLimit({ max: 50 }), // 50 admin actions per 15 min
-    applicationController.updateApplicationStatus
+    applicationController.updateApplicationStatus,
   );
 
   return router;
@@ -488,7 +488,7 @@ app.use(
   '/api/applications',
   auth.securityHeaders(),
   auth.rateLimit(),
-  workflowModule.getApplicationRoutes()
+  workflowModule.getApplicationRoutes(),
 );
 
 // Error handling

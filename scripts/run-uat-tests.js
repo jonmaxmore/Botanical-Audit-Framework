@@ -32,11 +32,11 @@ const testUsers = {
 
 // Helper Functions
 const log = {
-  info: (msg) => console.log(`ℹ️  ${msg}`.cyan),
-  success: (msg) => console.log(`✅ ${msg}`.green),
-  error: (msg) => console.log(`❌ ${msg}`.red),
-  warning: (msg) => console.log(`⚠️  ${msg}`.yellow),
-  section: (msg) => console.log(`\n${'='.repeat(60)}`.gray),
+  info: msg => console.log(`ℹ️  ${msg}`.cyan),
+  success: msg => console.log(`✅ ${msg}`.green),
+  error: msg => console.log(`❌ ${msg}`.red),
+  warning: msg => console.log(`⚠️  ${msg}`.yellow),
+  section: msg => console.log(`\n${'='.repeat(60)}`.gray),
 };
 
 const recordTest = (name, status, details = '') => {
@@ -55,7 +55,7 @@ const recordTest = (name, status, details = '') => {
 };
 
 // Authentication Helper
-const authenticate = async (role) => {
+const authenticate = async role => {
   try {
     const user = testUsers[role];
     const response = await axios.post(`${config.baseURL}/api/auth/login`, user, {
@@ -98,7 +98,7 @@ const testFarmerRole = async () => {
     recordTest(
       'TC-F002: View Farm Profile',
       response.data.farms ? 'passed' : 'failed',
-      `Found ${response.data.farms?.length || 0} farms`
+      `Found ${response.data.farms?.length || 0} farms`,
     );
   } catch (error) {
     recordTest('TC-F002: View Farm Profile', 'failed', error.message);
@@ -114,12 +114,12 @@ const testFarmerRole = async () => {
     const response = await axios.post(
       `${config.baseURL}/api/applications/submit`,
       applicationData,
-      { headers, timeout: config.timeout }
+      { headers, timeout: config.timeout },
     );
     recordTest(
       'TC-F003: Submit Application',
       response.data.applicationId ? 'passed' : 'failed',
-      `Application ID: ${response.data.applicationId || 'N/A'}`
+      `Application ID: ${response.data.applicationId || 'N/A'}`,
     );
   } catch (error) {
     recordTest('TC-F003: Submit Application', 'failed', error.message);
@@ -135,15 +135,11 @@ const testFarmerRole = async () => {
         { questionId: 'Q2', answer: '5 rai' },
       ],
     };
-    const response = await axios.post(
-      `${config.baseURL}/api/surveys/submit`,
-      surveyData,
-      { headers, timeout: config.timeout }
-    );
-    recordTest(
-      'TC-F004: Complete Survey',
-      response.data.success ? 'passed' : 'failed'
-    );
+    const response = await axios.post(`${config.baseURL}/api/surveys/submit`, surveyData, {
+      headers,
+      timeout: config.timeout,
+    });
+    recordTest('TC-F004: Complete Survey', response.data.success ? 'passed' : 'failed');
   } catch (error) {
     recordTest('TC-F004: Complete Survey', 'failed', error.message);
   }
@@ -156,29 +152,25 @@ const testFarmerRole = async () => {
       quantity: 100,
       date: new Date().toISOString(),
     };
-    const response = await axios.post(
-      `${config.baseURL}/api/tracktrace/record`,
-      activityData,
-      { headers, timeout: config.timeout }
-    );
-    recordTest(
-      'TC-F005: Track & Trace',
-      response.data.activityId ? 'passed' : 'failed'
-    );
+    const response = await axios.post(`${config.baseURL}/api/tracktrace/record`, activityData, {
+      headers,
+      timeout: config.timeout,
+    });
+    recordTest('TC-F005: Track & Trace', response.data.activityId ? 'passed' : 'failed');
   } catch (error) {
     recordTest('TC-F005: Track & Trace', 'failed', error.message);
   }
 
   // TC-F006: GACP Standards Comparison
   try {
-    const response = await axios.get(
-      `${config.baseURL}/api/standards/compare?farmId=FRM-C001`,
-      { headers, timeout: config.timeout }
-    );
+    const response = await axios.get(`${config.baseURL}/api/standards/compare?farmId=FRM-C001`, {
+      headers,
+      timeout: config.timeout,
+    });
     recordTest(
       'TC-F006: GACP Standards',
       response.data.complianceScore !== undefined ? 'passed' : 'failed',
-      `Score: ${response.data.complianceScore || 'N/A'}`
+      `Score: ${response.data.complianceScore || 'N/A'}`,
     );
   } catch (error) {
     recordTest('TC-F006: GACP Standards', 'failed', error.message);
@@ -210,7 +202,7 @@ const testReviewerRole = async () => {
     recordTest(
       'TC-R002: View Applications',
       response.data.applications ? 'passed' : 'failed',
-      `Found ${response.data.applications?.length || 0} applications`
+      `Found ${response.data.applications?.length || 0} applications`,
     );
   } catch (error) {
     recordTest('TC-R002: View Applications', 'failed', error.message);
@@ -223,11 +215,10 @@ const testReviewerRole = async () => {
       status: 'under_review',
       comments: 'Initial review completed',
     };
-    const response = await axios.post(
-      `${config.baseURL}/api/applications/review`,
-      reviewData,
-      { headers, timeout: config.timeout }
-    );
+    const response = await axios.post(`${config.baseURL}/api/applications/review`, reviewData, {
+      headers,
+      timeout: config.timeout,
+    });
     recordTest('TC-R003: Review Application', response.data.success ? 'passed' : 'failed');
   } catch (error) {
     recordTest('TC-R003: Review Application', 'failed', error.message);
@@ -243,7 +234,7 @@ const testReviewerRole = async () => {
     const response = await axios.post(
       `${config.baseURL}/api/applications/assign-inspector`,
       assignData,
-      { headers, timeout: config.timeout }
+      { headers, timeout: config.timeout },
     );
     recordTest('TC-R004: Assign Inspector', response.data.success ? 'passed' : 'failed');
   } catch (error) {
@@ -276,7 +267,7 @@ const testInspectorRole = async () => {
     recordTest(
       'TC-I002: View Inspections',
       response.data.inspections ? 'passed' : 'failed',
-      `Found ${response.data.inspections?.length || 0} inspections`
+      `Found ${response.data.inspections?.length || 0} inspections`,
     );
   } catch (error) {
     recordTest('TC-I002: View Inspections', 'failed', error.message);
@@ -294,7 +285,7 @@ const testInspectorRole = async () => {
     const response = await axios.post(
       `${config.baseURL}/api/inspections/checklist`,
       checklistData,
-      { headers, timeout: config.timeout }
+      { headers, timeout: config.timeout },
     );
     recordTest('TC-I003: Complete Checklist', response.data.success ? 'passed' : 'failed');
   } catch (error) {
@@ -311,7 +302,7 @@ const testInspectorRole = async () => {
     const response = await axios.post(
       `${config.baseURL}/api/inspections/submit-report`,
       reportData,
-      { headers, timeout: config.timeout }
+      { headers, timeout: config.timeout },
     );
     recordTest('TC-I004: Submit Report', response.data.success ? 'passed' : 'failed');
   } catch (error) {
@@ -344,7 +335,7 @@ const testApproverRole = async () => {
     recordTest(
       'TC-A002: View Pending',
       response.data.approvals ? 'passed' : 'failed',
-      `Found ${response.data.approvals?.length || 0} pending`
+      `Found ${response.data.approvals?.length || 0} pending`,
     );
   } catch (error) {
     recordTest('TC-A002: View Pending', 'failed', error.message);
@@ -358,11 +349,10 @@ const testApproverRole = async () => {
       validityPeriod: 365,
       notes: 'All requirements met',
     };
-    const response = await axios.post(
-      `${config.baseURL}/api/approvals/approve`,
-      approvalData,
-      { headers, timeout: config.timeout }
-    );
+    const response = await axios.post(`${config.baseURL}/api/approvals/approve`, approvalData, {
+      headers,
+      timeout: config.timeout,
+    });
     recordTest('TC-A003: Approve Certificate', response.data.certificateId ? 'passed' : 'failed');
   } catch (error) {
     recordTest('TC-A003: Approve Certificate', 'failed', error.message);
@@ -372,7 +362,7 @@ const testApproverRole = async () => {
   try {
     const response = await axios.get(
       `${config.baseURL}/api/certificates/download?certId=CERT-001`,
-      { headers, timeout: config.timeout, responseType: 'blob' }
+      { headers, timeout: config.timeout, responseType: 'blob' },
     );
     recordTest('TC-A004: Download Certificate', response.data ? 'passed' : 'failed');
   } catch (error) {
@@ -416,7 +406,7 @@ const testAdminRole = async () => {
     recordTest(
       'TC-AD003: User Management',
       response.data.users ? 'passed' : 'failed',
-      `Total users: ${response.data.users?.length || 0}`
+      `Total users: ${response.data.users?.length || 0}`,
     );
   } catch (error) {
     recordTest('TC-AD003: User Management', 'failed', error.message);
@@ -483,8 +473,8 @@ const runAllTests = async () => {
   if (results.failed > 0) {
     console.log('\n❌ FAILED TESTS:'.red.bold);
     results.tests
-      .filter((t) => t.status === 'failed')
-      .forEach((t) => {
+      .filter(t => t.status === 'failed')
+      .forEach(t => {
         console.log(`   - ${t.name}`.red);
         if (t.details) console.log(`     ${t.details}`.gray);
       });
@@ -495,7 +485,7 @@ const runAllTests = async () => {
 };
 
 // Run tests
-runAllTests().catch((error) => {
+runAllTests().catch(error => {
   log.error(`Fatal error: ${error.message}`);
   process.exit(1);
 });

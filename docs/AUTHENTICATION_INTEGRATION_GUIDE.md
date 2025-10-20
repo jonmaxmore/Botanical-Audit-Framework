@@ -183,7 +183,7 @@ router.post(
   '/staff',
   auth.authenticateDTAMStaff,
   auth.requirePermission('create_staff'),
-  staffController.createStaff
+  staffController.createStaff,
 );
 
 // Multiple permissions (ALL required)
@@ -191,7 +191,7 @@ router.put(
   '/certificate/:id/approve',
   auth.authenticateDTAMStaff,
   auth.requireAllPermissions(['view_certificates', 'issue_certificates']),
-  certificateController.approveCertificate
+  certificateController.approveCertificate,
 );
 
 // Any permission (at least ONE required)
@@ -199,7 +199,7 @@ router.get(
   '/reports',
   auth.authenticateDTAMStaff,
   auth.requireAnyPermission(['view_reports', 'export_data']),
-  reportController.getReports
+  reportController.getReports,
 );
 ```
 
@@ -211,7 +211,7 @@ router.delete(
   '/staff/:id',
   auth.authenticateDTAMStaff,
   auth.requireRole('ADMIN'),
-  staffController.deleteStaff
+  staffController.deleteStaff,
 );
 
 // Multiple roles
@@ -219,7 +219,7 @@ router.get(
   '/applications',
   auth.authenticateDTAMStaff,
   auth.requireAnyRole(['ADMIN', 'MANAGER', 'REVIEWER']),
-  applicationController.listApplications
+  applicationController.listApplications,
 );
 
 // Admin shorthand
@@ -227,7 +227,7 @@ router.post(
   '/system/settings',
   auth.authenticateDTAMStaff,
   auth.requireAdmin,
-  systemController.updateSettings
+  systemController.updateSettings,
 );
 ```
 
@@ -331,14 +331,14 @@ router.get(
   '/farms',
   auth.authenticateDTAMStaff,
   auth.requireAnyPermission(['view_applications', 'review_applications']),
-  farmController.listAllFarms
+  farmController.listAllFarms,
 );
 
 router.put(
   '/farms/:id/verify',
   auth.authenticateDTAMStaff,
   auth.requirePermission('review_applications'),
-  farmController.verifyFarm
+  farmController.verifyFarm,
 );
 
 module.exports = router;

@@ -29,6 +29,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const multer = require('multer');
 const { validationResult, param, body, query } = require('express-validator');
 
@@ -42,7 +43,7 @@ class DocumentController {
     // Configure multer for file uploads
     this.uploadConfig = this._configureMulter();
 
-    console.log('[DocumentController] Initialized successfully');
+    logger.info('[DocumentController] Initialized successfully');
   }
 
   /**
@@ -85,7 +86,7 @@ class DocumentController {
           expiryDate: expiryDate ? new Date(expiryDate) : null,
         },
         userId,
-        userRole
+        userRole,
       );
 
       res.status(201).json({
@@ -94,7 +95,7 @@ class DocumentController {
         data: result.document,
       });
     } catch (error) {
-      console.error('[DocumentController] Upload error:', error);
+      logger.error('[DocumentController] Upload error:', error);
 
       // Handle specific error types
       if (error.message.includes('validation failed')) {
@@ -193,7 +194,7 @@ class DocumentController {
         },
       });
     } catch (error) {
-      console.error('[DocumentController] Get metadata error:', error);
+      logger.error('[DocumentController] Get metadata error:', error);
       res.status(500).json({
         success: false,
         error: 'METADATA_ERROR',
@@ -217,14 +218,14 @@ class DocumentController {
       // Set appropriate headers for download
       res.setHeader(
         'Content-Disposition',
-        `attachment; filename="${result.document.originalName}"`
+        `attachment; filename="${result.document.originalName}"`,
       );
       res.setHeader('Content-Type', 'application/octet-stream');
 
       // Redirect to secure download URL
       res.redirect(result.downloadUrl);
     } catch (error) {
-      console.error('[DocumentController] Download error:', error);
+      logger.error('[DocumentController] Download error:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -271,7 +272,7 @@ class DocumentController {
         },
       });
     } catch (error) {
-      console.error('[DocumentController] Get application documents error:', error);
+      logger.error('[DocumentController] Get application documents error:', error);
 
       if (error.message.includes('permission')) {
         return res.status(403).json({
@@ -369,7 +370,7 @@ class DocumentController {
         },
       });
     } catch (error) {
-      console.error('[DocumentController] Update error:', error);
+      logger.error('[DocumentController] Update error:', error);
       res.status(500).json({
         success: false,
         error: 'UPDATE_ERROR',
@@ -404,7 +405,7 @@ class DocumentController {
         });
       }
     } catch (error) {
-      console.error('[DocumentController] Delete error:', error);
+      logger.error('[DocumentController] Delete error:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -492,7 +493,7 @@ class DocumentController {
         },
       });
     } catch (error) {
-      console.error('[DocumentController] Search error:', error);
+      logger.error('[DocumentController] Search error:', error);
       res.status(500).json({
         success: false,
         error: 'SEARCH_ERROR',
@@ -534,7 +535,7 @@ class DocumentController {
         },
       });
     } catch (error) {
-      console.error('[DocumentController] Get document types error:', error);
+      logger.error('[DocumentController] Get document types error:', error);
       res.status(500).json({
         success: false,
         error: 'TYPES_ERROR',

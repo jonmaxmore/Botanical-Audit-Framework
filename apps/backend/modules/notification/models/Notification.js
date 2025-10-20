@@ -146,7 +146,7 @@ const notificationSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'notifications',
-  }
+  },
 );
 
 // Indexes for performance
@@ -219,7 +219,7 @@ notificationSchema.statics.markAllAsReadForUser = async function (userId) {
         isRead: true,
         readAt: new Date(),
       },
-    }
+    },
   );
 };
 

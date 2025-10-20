@@ -20,12 +20,12 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   error: null,
-  login: async () => false,
+  login: async() => false,
   logout: () => {},
   isAuthenticated: false,
   hasRole: () => false,
   hasAnyRole: () => false,
-  refreshUser: async () => {},
+  refreshUser: async() => {}
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -38,7 +38,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // ตรวจสอบว่ามีผู้ใช้ที่เข้าสู่ระบบอยู่แล้วหรือไม่
   useEffect(() => {
-    const initAuth = async () => {
+    const initAuth = async() => {
       try {
         // ตรวจสอบ token ใน localStorage
         if (AuthService.verifyToken()) {
@@ -58,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   // เข้าสู่ระบบ
-  const login = async (username: string, password: string): Promise<boolean> => {
+  const login = async(username: string, password: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
@@ -86,7 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // โหลดข้อมูลผู้ใช้อีกครั้ง
-  const refreshUser = async () => {
+  const refreshUser = async() => {
     if (!AuthService.isAuthenticated()) return;
 
     try {
@@ -118,7 +118,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAuthenticated: !!user,
     hasRole,
     hasAnyRole,
-    refreshUser,
+    refreshUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

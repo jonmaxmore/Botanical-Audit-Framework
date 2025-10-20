@@ -1,4 +1,5 @@
 // Database Optimization and Connection Management
+const logger = require('../shared/logger/logger');
 const mongoose = require('mongoose');
 const redis = require('redis');
 
@@ -34,7 +35,7 @@ class DatabaseManager {
 
       // Auto Index
       autoIndex: false, // Don't build indexes in production
-      autoCreate: false // Don't automatically create collections
+      autoCreate: false, // Don't automatically create collections
     };
 
     try {
@@ -44,10 +45,10 @@ class DatabaseManager {
       this.setupMongoEventHandlers();
       this.connectionRetries = 0;
 
-      console.log('✅ MongoDB connected successfully');
+      logger.info('✅ MongoDB connected successfully');
       return this.mongoConnection;
     } catch (error) {
-      console.error('❌ MongoDB connection error:', error);
+      logger.error('❌ MongoDB connection error:', error);
       await this.handleConnectionError();
       throw error;
     }
@@ -56,20 +57,20 @@ class DatabaseManager {
   // MongoDB Event Handlers
   setupMongoEventHandlers() {
     this.mongoConnection.on('connected', () => {
-      console.log('📡 MongoDB connected');
+      logger.info('📡 MongoDB connected');
     });
 
     this.mongoConnection.on('error', err => {
-      console.error('❌ MongoDB connection error:', err);
+      logger.error('❌ MongoDB connection error:', err);
     });
 
     this.mongoConnection.on('disconnected', () => {
-      console.log('📴 MongoDB disconnected');
+      logger.info('📴 MongoDB disconnected');
       this.handleConnectionError();
     });
 
     this.mongoConnection.on('reconnected', () => {
-      console.log('🔄 MongoDB reconnected');
+      logger.info('🔄 MongoDB reconnected');
       this.connectionRetries = 0;
     });
 
@@ -82,12 +83,12 @@ class DatabaseManager {
   // Connection Error Handling with Retry Logic
   async handleConnectionError() {
     if (this.connectionRetries >= this.maxRetries) {
-      console.error('💀 Max reconnection attempts reached. Exiting...');
+      logger.error('💀 Max reconnection attempts reached. Exiting...');
       process.exit(1);
     }
 
     this.connectionRetries++;
-    console.log(`🔄 Attempting to reconnect (${this.connectionRetries}/${this.maxRetries})...`);
+    logger.info(`🔄 Attempting to reconnect (${this.connectionRetries}/${this.maxRetries});...`);
 
     setTimeout(() => {
       this.connectMongoDB().catch(console.error);
@@ -107,28 +108,28 @@ class DatabaseManager {
       keepAlive: 30000,
       family: 4, // IPv4
       connectTimeout: 10000,
-      commandTimeout: 5000
+      commandTimeout: 5000,
     };
 
     try {
       this.redisClient = redis.createClient(redisConfig);
 
       this.redisClient.on('error', err => {
-        console.error('❌ Redis Client Error:', err);
+        logger.error('❌ Redis Client Error:', err);
       });
 
       this.redisClient.on('connect', () => {
-        console.log('✅ Redis connected successfully');
+        logger.info('✅ Redis connected successfully');
       });
 
       this.redisClient.on('reconnecting', () => {
-        console.log('🔄 Redis reconnecting...');
+        logger.info('🔄 Redis reconnecting...');
       });
 
       await this.redisClient.connect();
       return this.redisClient;
     } catch (error) {
-      console.error('❌ Redis connection error:', error);
+      logger.error('❌ Redis connection error:', error);
       // Redis is optional, continue without it
       this.redisClient = null;
       return null;
@@ -137,20 +138,20 @@ class DatabaseManager {
 
   // Graceful Shutdown
   async disconnect() {
-    console.log('🔄 Closing database connections...');
+    logger.info('🔄 Closing database connections...');
 
     try {
       if (this.mongoConnection) {
         await mongoose.connection.close();
-        console.log('✅ MongoDB connection closed');
+        logger.info('✅ MongoDB connection closed');
       }
 
       if (this.redisClient) {
         await this.redisClient.quit();
-        console.log('✅ Redis connection closed');
+        logger.info('✅ Redis connection closed');
       }
     } catch (error) {
-      console.error('❌ Error closing database connections:', error);
+      logger.error('❌ Error closing database connections:', error);
     }
   }
 
@@ -158,7 +159,7 @@ class DatabaseManager {
   async healthCheck() {
     const health = {
       mongodb: { status: 'disconnected', latency: null },
-      redis: { status: 'disconnected', latency: null }
+      redis: { status: 'disconnected', latency: null },
     };
 
     // MongoDB Health Check
@@ -168,7 +169,7 @@ class DatabaseManager {
       health.mongodb = {
         status: 'connected',
         latency: Date.now() - startTime,
-        readyState: mongoose.connection.readyState
+        readyState: mongoose.connection.readyState,
       };
     } catch (error) {
       health.mongodb.error = error.message;
@@ -181,7 +182,7 @@ class DatabaseManager {
         await this.redisClient.ping();
         health.redis = {
           status: 'connected',
-          latency: Date.now() - startTime
+          latency: Date.now() - startTime,
         };
       } catch (error) {
         health.redis.error = error.message;
@@ -226,7 +227,7 @@ class CacheManager {
 
       return null;
     } catch (error) {
-      console.error('Cache get error:', error);
+      logger.error('Cache get error:', error);
       return null;
     }
   }
@@ -250,12 +251,12 @@ class CacheManager {
 
       this.memoryCache.set(key, {
         value,
-        expiry: Date.now() + ttl * 1000
+        expiry: Date.now() + ttl * 1000,
       });
 
       return true;
     } catch (error) {
-      console.error('Cache set error:', error);
+      logger.error('Cache set error:', error);
       return false;
     }
   }
@@ -269,7 +270,7 @@ class CacheManager {
       this.memoryCache.delete(key);
       return true;
     } catch (error) {
-      console.error('Cache delete error:', error);
+      logger.error('Cache delete error:', error);
       return false;
     }
   }
@@ -283,7 +284,7 @@ class CacheManager {
       this.memoryCache.clear();
       return true;
     } catch (error) {
-      console.error('Cache clear error:', error);
+      logger.error('Cache clear error:', error);
       return false;
     }
   }
@@ -293,19 +294,19 @@ class CacheManager {
     return {
       memoryCache: {
         size: this.memoryCache.size,
-        maxSize: this.maxMemoryCacheSize
+        maxSize: this.maxMemoryCacheSize,
       },
       redis: {
-        connected: !!this.redis
-      }
+        connected: !!this.redis,
+      },
     };
   }
 }
 
 // Database Indexes for Optimization
-const createIndexes = async() => {
+const createIndexes = async () => {
   try {
-    console.log('🔄 Creating database indexes...');
+    logger.info('🔄 Creating database indexes...');
 
     // Standards Collection Indexes
     const Standards = mongoose.model('Standards');
@@ -316,7 +317,7 @@ const createIndexes = async() => {
     await Standards.collection.createIndex({
       title: 'text',
       description: 'text',
-      'requirements.requirement_text': 'text'
+      'requirements.requirement_text': 'text',
     });
 
     // Assessments Collection Indexes
@@ -334,9 +335,9 @@ const createIndexes = async() => {
     await Comparison.collection.createIndex({ compare_standards: 1 });
     await Comparison.collection.createIndex({ createdAt: -1 });
 
-    console.log('✅ Database indexes created successfully');
+    logger.info('✅ Database indexes created successfully');
   } catch (error) {
-    console.error('❌ Error creating indexes:', error);
+    logger.error('❌ Error creating indexes:', error);
   }
 };
 
@@ -349,7 +350,7 @@ const queryHelpers = {
   },
 
   // Search with caching
-  searchWithCache: async(cacheManager, cacheKey, queryFn, ttl = 3600) => {
+  searchWithCache: async (cacheManager, cacheKey, queryFn, ttl = 3600) => {
     // Try cache first
     const cached = await cacheManager.get(cacheKey);
     if (cached) {
@@ -368,7 +369,7 @@ const queryHelpers = {
   // Aggregation with timeout
   aggregateWithTimeout: (model, pipeline, timeout = 30000) => {
     return model.aggregate(pipeline).maxTimeMS(timeout);
-  }
+  },
 };
 
 // Database Transaction Helper
@@ -397,10 +398,10 @@ const monitorConnectionPool = connection => {
       const stats = {
         totalConnections: connection.db?.serverConfig?.connections?.length || 0,
         availableConnections: connection.db?.serverConfig?.availableConnections?.length || 0,
-        currentOp: connection.db?.serverConfig?.currentOp || 0
+        currentOp: connection.db?.serverConfig?.currentOp || 0,
       };
 
-      console.log('📊 Connection Pool Stats:', stats);
+      logger.info('📊 Connection Pool Stats:', stats);
     }, 60000); // Every minute
   }
 };
@@ -411,5 +412,5 @@ module.exports = {
   createIndexes,
   queryHelpers,
   withTransaction,
-  monitorConnectionPool
+  monitorConnectionPool,
 };

@@ -14,6 +14,7 @@
  * @since Phase 2 - October 12, 2025
  */
 
+const logger = require('../../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 const path = require('path');
@@ -49,11 +50,11 @@ let standardsService = null;
  */
 async function initializeEngine(db) {
   const { initializeStandardsComparison } = require(
-    path.join(__dirname, '../../modules/standards-comparison')
+    path.join(__dirname, '../../modules/standards-comparison'),
   );
   const result = await initializeStandardsComparison(db, auth);
   standardsService = result.service;
-  console.log('[Standards API] Service initialized from module');
+  logger.info('[Standards API] Service initialized from module');
 }
 
 // Middleware to check if service is initialized
@@ -104,7 +105,7 @@ router.get('/', checkEngineInitialized, async (req, res) => {
       standards,
     });
   } catch (error) {
-    console.error('[Standards API] List error:', error);
+    logger.error('[Standards API] List error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve standards',
@@ -139,7 +140,7 @@ router.get('/:id', checkEngineInitialized, async (req, res) => {
       standard,
     });
   } catch (error) {
-    console.error('[Standards API] Get standard error:', error);
+    logger.error('[Standards API] Get standard error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve standard',
@@ -213,7 +214,7 @@ router.post('/compare', auth, checkEngineInitialized, async (req, res) => {
       },
     });
   } catch (error) {
-    console.error('[Standards API] Comparison error:', error);
+    logger.error('[Standards API] Comparison error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to complete comparison',
@@ -258,7 +259,7 @@ router.get('/comparison/:id', auth, checkEngineInitialized, async (req, res) => 
       },
     });
   } catch (error) {
-    console.error('[Standards API] Get comparison error:', error);
+    logger.error('[Standards API] Get comparison error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve comparison',
@@ -297,7 +298,7 @@ router.get('/gaps/:comparisonId', auth, checkEngineInitialized, async (req, res)
       },
     });
   } catch (error) {
-    console.error('[Standards API] Gap analysis error:', error);
+    logger.error('[Standards API] Gap analysis error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to analyze gaps',
@@ -333,7 +334,7 @@ router.get('/history/:farmId', auth, checkEngineInitialized, async (req, res) =>
       comparisons: result.comparisons,
     });
   } catch (error) {
-    console.error('[Standards API] History error:', error);
+    logger.error('[Standards API] History error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve history',
@@ -381,7 +382,7 @@ router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async
       },
     });
   } catch (error) {
-    console.error('[Standards API] Recommendations error:', error);
+    logger.error('[Standards API] Recommendations error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to generate recommendations',

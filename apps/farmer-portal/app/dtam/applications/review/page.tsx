@@ -115,7 +115,7 @@ export default function DTAMReviewPage() {
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>(
-    'all'
+    'all',
   );
   const [urgencyFilter, setUrgencyFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
   const [searchDebounce, setSearchDebounce] = useState<NodeJS.Timeout | null>(null);

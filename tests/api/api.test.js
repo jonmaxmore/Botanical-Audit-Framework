@@ -18,7 +18,7 @@ describe('API Endpoints', () => {
     authToken = jwt.sign(
       { userId: testUser._id, email: testUser.email, role: testUser.role },
       process.env.JWT_SECRET || 'test-secret',
-      { expiresIn: '1h' }
+      { expiresIn: '1h' },
     );
   });
 

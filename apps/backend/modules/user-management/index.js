@@ -37,6 +37,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../shared/logger/logger');
 const UserAuthenticationService = require('./domain/UserAuthenticationService');
 const AuthenticationMiddleware = require('./presentation/middleware/AuthenticationMiddleware');
 const UserAuthenticationController = require('./presentation/controllers/UserAuthenticationController');
@@ -55,7 +56,7 @@ class UserManagementModule {
     // Initialize module components
     this._initializeComponents();
 
-    console.log('[UserManagementModule] Initialized successfully');
+    logger.info('[UserManagementModule] Initialized successfully');
   }
 
   /**
@@ -109,12 +110,12 @@ class UserManagementModule {
       authorize: this.authenticationMiddleware.authorize.bind(this.authenticationMiddleware),
       requireRole: this.authenticationMiddleware.requireRole.bind(this.authenticationMiddleware),
       validateResourceOwnership: this.authenticationMiddleware.validateResourceOwnership.bind(
-        this.authenticationMiddleware
+        this.authenticationMiddleware,
       ),
       rateLimit: this.authenticationMiddleware.rateLimit.bind(this.authenticationMiddleware),
       optionalAuth: this.authenticationMiddleware.optionalAuth.bind(this.authenticationMiddleware),
       securityHeaders: this.authenticationMiddleware.securityHeaders.bind(
-        this.authenticationMiddleware
+        this.authenticationMiddleware,
       ),
     };
   }
@@ -173,10 +174,10 @@ class UserManagementModule {
         requirePasswordChange: true, // Force password change on first login
       });
 
-      console.log('[UserManagementModule] Initial admin user created:', adminUser.email);
+      logger.info('[UserManagementModule] Initial admin user created:', adminUser.email);
       return adminUser;
     } catch (error) {
-      console.error('[UserManagementModule] Create initial admin error:', error);
+      logger.error('[UserManagementModule] Create initial admin error:', error);
       throw error;
     }
   }
@@ -272,14 +273,14 @@ class UserManagementModule {
    */
   async cleanup() {
     try {
-      console.log('[UserManagementModule] Cleaning up resources...');
+      logger.info('[UserManagementModule] Cleaning up resources...');
 
       // Close any open connections or cleanup resources
       // This would be called during application shutdown
 
-      console.log('[UserManagementModule] Cleanup completed');
+      logger.info('[UserManagementModule] Cleanup completed');
     } catch (error) {
-      console.error('[UserManagementModule] Cleanup error:', error);
+      logger.error('[UserManagementModule] Cleanup error:', error);
     }
   }
 }

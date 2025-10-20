@@ -173,14 +173,14 @@ router.get(
         },
       });
     } catch (error) {
-      console.error('Error fetching audit calendar:', error);
+      logger.error('Error fetching audit calendar:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching audit calendar',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -230,14 +230,14 @@ router.get(
         },
       });
     } catch (error) {
-      console.error('Error fetching upcoming audits:', error);
+      logger.error('Error fetching upcoming audits:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching upcoming audits',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -257,7 +257,7 @@ router.get('/overdue', authenticate, authorizeRoles(['admin', 'supervisor']), as
       },
     });
   } catch (error) {
-    console.error('Error fetching overdue audits:', error);
+    logger.error('Error fetching overdue audits:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching overdue audits',
@@ -287,14 +287,14 @@ router.get(
         },
       });
     } catch (error) {
-      console.error('Error fetching cannabis audits:', error);
+      logger.error('Error fetching cannabis audits:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching cannabis audits',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -348,14 +348,14 @@ router.get(
         data: { audit },
       });
     } catch (error) {
-      console.error('Error fetching audit:', error);
+      logger.error('Error fetching audit:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching audit',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -458,14 +458,14 @@ router.post(
         },
       });
     } catch (error) {
-      console.error('Error scheduling audit:', error);
+      logger.error('Error scheduling audit:', error);
       res.status(500).json({
         success: false,
         message: 'Error scheduling audit',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -537,14 +537,14 @@ router.put(
         },
       });
     } catch (error) {
-      console.error('Error rescheduling audit:', error);
+      logger.error('Error rescheduling audit:', error);
       res.status(500).json({
         success: false,
         message: 'Error rescheduling audit',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -618,14 +618,14 @@ router.put(
         },
       });
     } catch (error) {
-      console.error('Error updating audit status:', error);
+      logger.error('Error updating audit status:', error);
       res.status(500).json({
         success: false,
         message: 'Error updating audit status',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -674,14 +674,14 @@ router.get(
         },
       });
     } catch (error) {
-      console.error('Error fetching auditor workload:', error);
+      logger.error('Error fetching auditor workload:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching auditor workload',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 module.exports = router;

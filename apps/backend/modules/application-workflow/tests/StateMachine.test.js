@@ -72,16 +72,16 @@ describe('Application State Machine', () => {
       expect(stateMachine.isValidTransition('payment_pending', 'payment_verified')).toBe(true);
       expect(stateMachine.isValidTransition('payment_verified', 'inspection_scheduled')).toBe(true);
       expect(
-        stateMachine.isValidTransition('phase2_payment_pending', 'phase2_payment_verified')
+        stateMachine.isValidTransition('phase2_payment_pending', 'phase2_payment_verified'),
       ).toBe(true);
     });
 
     test('should handle inspection flow correctly', () => {
       expect(stateMachine.isValidTransition('inspection_scheduled', 'inspection_completed')).toBe(
-        true
+        true,
       );
       expect(stateMachine.isValidTransition('inspection_completed', 'phase2_payment_pending')).toBe(
-        true
+        true,
       );
       expect(stateMachine.isValidTransition('inspection_scheduled', 'rejected')).toBe(true);
     });
@@ -109,47 +109,51 @@ describe('Application State Machine', () => {
 
     test('should not allow FARMER to approve applications', () => {
       expect(stateMachine.canUserTransition('FARMER', 'under_review', 'payment_pending')).toBe(
-        false
+        false,
       );
       expect(stateMachine.canUserTransition('FARMER', 'phase2_payment_verified', 'approved')).toBe(
-        false
+        false,
       );
     });
 
     test('should allow DTAM_REVIEWER to review applications', () => {
       expect(
-        stateMachine.canUserTransition('DTAM_REVIEWER', 'under_review', 'payment_pending')
+        stateMachine.canUserTransition('DTAM_REVIEWER', 'under_review', 'payment_pending'),
       ).toBe(true);
       expect(
-        stateMachine.canUserTransition('DTAM_REVIEWER', 'under_review', 'revision_required')
+        stateMachine.canUserTransition('DTAM_REVIEWER', 'under_review', 'revision_required'),
       ).toBe(true);
       expect(stateMachine.canUserTransition('DTAM_REVIEWER', 'under_review', 'rejected')).toBe(
-        true
+        true,
       );
     });
 
     test('should allow DTAM_INSPECTOR to handle inspections', () => {
       expect(
-        stateMachine.canUserTransition('DTAM_INSPECTOR', 'payment_verified', 'inspection_scheduled')
+        stateMachine.canUserTransition(
+          'DTAM_INSPECTOR',
+          'payment_verified',
+          'inspection_scheduled',
+        ),
       ).toBe(true);
       expect(
         stateMachine.canUserTransition(
           'DTAM_INSPECTOR',
           'inspection_scheduled',
-          'inspection_completed'
-        )
+          'inspection_completed',
+        ),
       ).toBe(true);
       expect(
-        stateMachine.canUserTransition('DTAM_INSPECTOR', 'inspection_scheduled', 'rejected')
+        stateMachine.canUserTransition('DTAM_INSPECTOR', 'inspection_scheduled', 'rejected'),
       ).toBe(true);
     });
 
     test('should allow DTAM_ADMIN to final approve', () => {
       expect(
-        stateMachine.canUserTransition('DTAM_ADMIN', 'phase2_payment_verified', 'approved')
+        stateMachine.canUserTransition('DTAM_ADMIN', 'phase2_payment_verified', 'approved'),
       ).toBe(true);
       expect(
-        stateMachine.canUserTransition('DTAM_ADMIN', 'phase2_payment_verified', 'rejected')
+        stateMachine.canUserTransition('DTAM_ADMIN', 'phase2_payment_verified', 'rejected'),
       ).toBe(true);
     });
 
@@ -244,7 +248,7 @@ describe('Application State Machine', () => {
       const validation = stateMachine.validateTransition(
         applicationWithDocs,
         'submitted',
-        'FARMER'
+        'FARMER',
       );
 
       expect(validation.valid).toBe(true);
@@ -254,7 +258,7 @@ describe('Application State Machine', () => {
       const validation = stateMachine.validateTransition(
         mockApplication,
         'submitted',
-        'INVALID_ROLE'
+        'INVALID_ROLE',
       );
 
       expect(validation.valid).toBe(false);
@@ -267,7 +271,7 @@ describe('Application State Machine', () => {
       const validationWithoutRef = stateMachine.validateTransition(
         paymentApp,
         'payment_verified',
-        'SYSTEM'
+        'SYSTEM',
       );
       expect(validationWithoutRef.valid).toBe(false);
       expect(validationWithoutRef.error).toBe('MISSING_PAYMENT_REFERENCE');
@@ -276,7 +280,7 @@ describe('Application State Machine', () => {
         paymentApp,
         'payment_verified',
         'SYSTEM',
-        { paymentReference: 'PAY-123456' }
+        { paymentReference: 'PAY-123456' },
       );
       expect(validationWithRef.valid).toBe(true);
     });

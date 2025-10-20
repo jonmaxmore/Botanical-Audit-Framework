@@ -125,7 +125,7 @@ const comparisonSchema = new mongoose.Schema(
   },
   {
     collection: 'standards_comparisons',
-  }
+  },
 );
 
 // Indexes for performance

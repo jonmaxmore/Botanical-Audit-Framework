@@ -54,7 +54,7 @@ export default function ApprovalActionModal({
   const [comments, setComments] = useState('');
   const [feedbackScore, setFeedbackScore] = useState(3);
   const [certificateNumber, setCertificateNumber] = useState(
-    `GACP-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
+    `GACP-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
   );
 
   const handleSubmit = async () => {

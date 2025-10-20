@@ -3,6 +3,7 @@
  * API endpoints for cultivation cycle management
  */
 
+const logger = require('../../../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 const FarmManagementController = require('../controllers/farm-management.controller');
@@ -11,12 +12,12 @@ module.exports = (dependencies = {}) => {
   const { farmService, auth } = dependencies;
 
   if (!farmService) {
-    console.error('[FarmRoutes] Farm service not provided');
+    logger.error('[FarmRoutes] Farm service not provided');
     return router;
   }
 
   if (!auth) {
-    console.error('[FarmRoutes] Auth middleware not provided');
+    logger.error('[FarmRoutes] Auth middleware not provided');
     return router;
   }
 
@@ -125,7 +126,7 @@ module.exports = (dependencies = {}) => {
    */
   router.get('/dashboard', auth, controller.getDashboard);
 
-  console.log('[FarmRoutes] Routes loaded successfully - 13 endpoints');
+  logger.info('[FarmRoutes] Routes loaded successfully - 13 endpoints');
 
   return router;
 };

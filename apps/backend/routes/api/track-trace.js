@@ -335,7 +335,7 @@ router.get('/farmer/stats', (req, res) => {
       certified: mockFarmerProducts.filter(p => p.certificationStatus === 'CERTIFIED').length,
       pending: mockFarmerProducts.filter(p => p.certificationStatus === 'PENDING').length,
       inProgress: mockFarmerProducts.filter(p =>
-        ['Planting', 'Harvesting', 'Processing'].includes(p.stage)
+        ['Planting', 'Harvesting', 'Processing'].includes(p.stage),
       ).length,
     };
 

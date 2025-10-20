@@ -26,6 +26,7 @@
  * - Notification System: Status updates and alerts
  */
 
+const logger = require('../../../shared/logger/logger');
 const EventEmitter = require('events');
 
 class CertificationTrackingIntegrationSystem extends EventEmitter {
@@ -149,7 +150,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
    */
   async initializeSystem() {
     try {
-      console.log('[CertificationTracking] Initializing certification tracking system...');
+      logger.info('[CertificationTracking] Initializing certification tracking system...');
 
       // Setup tracking workflows
       await this.setupTrackingWorkflows();
@@ -167,7 +168,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
       await this.initializeQualityAssurance();
 
       this.integrationActive = true;
-      console.log('[CertificationTracking] System initialized successfully');
+      logger.info('[CertificationTracking] System initialized successfully');
 
       // Audit system initialization
       this.emit('system_initialized', {
@@ -184,7 +185,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         trackingStatus: 'operational',
       };
     } catch (error) {
-      console.error('[CertificationTracking] Initialization error:', error);
+      logger.error('[CertificationTracking] Initialization error:', error);
       throw new Error(`Certification tracking initialization failed: ${error.message}`);
     }
   }
@@ -193,7 +194,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
    * Setup tracking workflows for all certification processes
    */
   async setupTrackingWorkflows() {
-    console.log('[CertificationTracking] Setting up tracking workflows...');
+    logger.info('[CertificationTracking] Setting up tracking workflows...');
 
     // Setup event listeners for training progress
     this.setupTrainingProgressListeners();
@@ -224,7 +225,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
     // Monitor training pathway progress
     this.on('pathway_progress', this.trackCertificationPathway.bind(this));
 
-    console.log('[CertificationTracking] Training progress listeners configured');
+    logger.info('[CertificationTracking] Training progress listeners configured');
   }
 
   /**
@@ -301,10 +302,10 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
       }
 
       console.log(
-        `[CertificationTracking] Started tracking for user ${userId} in ${certificationPathways.length} pathways`
+        `[CertificationTracking] Started tracking for user ${userId} in ${certificationPathways.length} pathways`,
       );
     } catch (error) {
-      console.error('[CertificationTracking] Enrollment tracking error:', error);
+      logger.error('[CertificationTracking] Enrollment tracking error:', error);
     }
   }
 
@@ -348,7 +349,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         }
       }
     } catch (error) {
-      console.error('[CertificationTracking] Progress tracking error:', error);
+      logger.error('[CertificationTracking] Progress tracking error:', error);
     }
   }
 
@@ -416,7 +417,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         });
       }
     } catch (error) {
-      console.error('[CertificationTracking] Course completion tracking error:', error);
+      logger.error('[CertificationTracking] Course completion tracking error:', error);
     }
   }
 
@@ -439,7 +440,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
 
       if (!trackingRecord) {
         console.log(
-          `[CertificationTracking] No tracking record found for assessment ${assessmentId}`
+          `[CertificationTracking] No tracking record found for assessment ${assessmentId}`,
         );
         return;
       }
@@ -490,7 +491,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           : false,
       });
     } catch (error) {
-      console.error('[CertificationTracking] Assessment processing error:', error);
+      logger.error('[CertificationTracking] Assessment processing error:', error);
     }
   }
 
@@ -507,7 +508,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
   async generateCertificate(trackingRecord) {
     try {
       console.log(
-        `[CertificationTracking] Generating certificate for user ${trackingRecord.userId}`
+        `[CertificationTracking] Generating certificate for user ${trackingRecord.userId}`,
       );
 
       const certType =
@@ -582,12 +583,12 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
       });
 
       console.log(
-        `[CertificationTracking] Certificate issued successfully: ${certificateData.details.certificateNumber}`
+        `[CertificationTracking] Certificate issued successfully: ${certificateData.details.certificateNumber}`,
       );
 
       return certificate;
     } catch (error) {
-      console.error('[CertificationTracking] Certificate generation error:', error);
+      logger.error('[CertificationTracking] Certificate generation error:', error);
       throw error;
     }
   }
@@ -618,13 +619,13 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         // Renewal timeline
         renewalDue: trackingRecord.certificateDetails.expiryDate,
         renewalStartDate: new Date(
-          trackingRecord.certificateDetails.expiryDate.getTime() - 90 * 24 * 60 * 60 * 1000
+          trackingRecord.certificateDetails.expiryDate.getTime() - 90 * 24 * 60 * 60 * 1000,
         ), // 90 days before expiry
 
         // Renewal requirements
         renewalRequirements: {
           continuingEducation: await this.getContinuingEducationRequirements(
-            trackingRecord.certificationType
+            trackingRecord.certificationType,
           ),
           assessmentRequired: certType.minPassingScore > 0,
           practicalEvaluation: certType.practicalEvaluation?.required || false,
@@ -640,17 +641,17 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
       // Store renewal tracking
       this.trackingData.renewalSchedule.set(
         `${trackingRecord.userId}:${trackingRecord.certificationType}`,
-        renewalTrackingData
+        renewalTrackingData,
       );
 
       // Schedule renewal reminders
       await this.scheduleRenewalReminders(renewalTrackingData);
 
       console.log(
-        `[CertificationTracking] Renewal tracking setup for ${trackingRecord.certificationType}`
+        `[CertificationTracking] Renewal tracking setup for ${trackingRecord.certificationType}`,
       );
     } catch (error) {
-      console.error('[CertificationTracking] Renewal tracking setup error:', error);
+      logger.error('[CertificationTracking] Renewal tracking setup error:', error);
     }
   }
 
@@ -695,7 +696,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         renewalTracking: {
           upcomingRenewals: Array.from(this.trackingData.renewalSchedule.values())
             .filter(
-              renewal => renewal.renewalDue <= new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+              renewal => renewal.renewalDue <= new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
             )
             .map(renewal => ({
               userId: renewal.userId,
@@ -705,7 +706,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
             })),
 
           overdueRenewals: Array.from(this.trackingData.renewalSchedule.values()).filter(
-            renewal => renewal.renewalDue < new Date() && !renewal.renewalCompleted
+            renewal => renewal.renewalDue < new Date() && !renewal.renewalCompleted,
           ).length,
         },
 
@@ -727,7 +728,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
 
       return dashboard;
     } catch (error) {
-      console.error('[CertificationTracking] Dashboard generation error:', error);
+      logger.error('[CertificationTracking] Dashboard generation error:', error);
       throw error;
     }
   }
@@ -756,11 +757,11 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         await this.governmentIntegration.submitCertificateReport(reportData);
 
         console.log(
-          `[CertificationTracking] Certificate reported to government: ${certificate.certificateNumber}`
+          `[CertificationTracking] Certificate reported to government: ${certificate.certificateNumber}`,
         );
       }
     } catch (error) {
-      console.error('[CertificationTracking] Government reporting error:', error);
+      logger.error('[CertificationTracking] Government reporting error:', error);
       // Don't throw error - continue with certification process
     }
   }
@@ -806,7 +807,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         clearInterval(this.monitoringInterval);
       }
 
-      console.log('[CertificationTracking] Certification tracking system stopped');
+      logger.info('[CertificationTracking] Certification tracking system stopped');
 
       return {
         success: true,
@@ -814,7 +815,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         timestamp: new Date(),
       };
     } catch (error) {
-      console.error('[CertificationTracking] Stop error:', error);
+      logger.error('[CertificationTracking] Stop error:', error);
       throw error;
     }
   }

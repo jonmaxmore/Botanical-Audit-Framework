@@ -41,6 +41,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../shared/logger/logger');
 const ReportingService = require('./application/services/ReportingService');
 const ReportingController = require('./presentation/controllers/ReportingController');
 const ReportingRoutes = require('./presentation/routes/ReportingRoutes');
@@ -59,7 +60,7 @@ class ReportingModule {
     this.routes = null;
     this.isInitialized = false;
 
-    console.log('[ReportingModule] Initializing comprehensive analytics and reporting system...');
+    logger.info('[ReportingModule] Initializing comprehensive analytics and reporting system...');
   }
 
   /**
@@ -106,7 +107,7 @@ class ReportingModule {
 
       this.isInitialized = true;
 
-      console.log('[ReportingModule] Initialized successfully with full analytics capabilities');
+      logger.info('[ReportingModule] Initialized successfully with full analytics capabilities');
 
       // Log module capabilities
       this._logModuleCapabilities();
@@ -116,7 +117,7 @@ class ReportingModule {
 
       return this;
     } catch (error) {
-      console.error('[ReportingModule] Initialization failed:', error);
+      logger.error('[ReportingModule] Initialization failed:', error);
       throw new Error(`ReportingModule initialization failed: ${error.message}`);
     }
   }
@@ -152,7 +153,7 @@ class ReportingModule {
     });
     await this.complianceService.initialize();
 
-    console.log('[ReportingModule] All services initialized successfully');
+    logger.info('[ReportingModule] All services initialized successfully');
   }
 
   /**
@@ -177,7 +178,7 @@ class ReportingModule {
     // Validate configuration
     const config = this.dependencies.config;
     if (!config.reporting) {
-      console.warn('[ReportingModule] No reporting configuration found, using defaults');
+      logger.warn('[ReportingModule] No reporting configuration found, using defaults');
       config.reporting = {
         dashboard: { refreshInterval: 60000 },
         analytics: { retentionDays: 365 },
@@ -223,7 +224,7 @@ class ReportingModule {
       ],
     };
 
-    console.log('[ReportingModule] Capabilities:', JSON.stringify(capabilities, null, 2));
+    logger.info('[ReportingModule] Capabilities:', JSON.stringify(capabilities, null, 2));
   }
 
   /**
@@ -242,10 +243,10 @@ class ReportingModule {
         // Schedule monthly compliance reports
         await this._scheduleMonthlyReports();
 
-        console.log('[ReportingModule] Automated reports scheduled successfully');
+        logger.info('[ReportingModule] Automated reports scheduled successfully');
       }
     } catch (error) {
-      console.error('[ReportingModule] Failed to schedule automated reports:', error);
+      logger.error('[ReportingModule] Failed to schedule automated reports:', error);
     }
   }
 
@@ -255,7 +256,7 @@ class ReportingModule {
    */
   async _scheduleDailyReports() {
     // Implementation would use a job scheduler like node-cron
-    console.log('[ReportingModule] Daily reports scheduling configured');
+    logger.info('[ReportingModule] Daily reports scheduling configured');
   }
 
   /**
@@ -264,7 +265,7 @@ class ReportingModule {
    */
   async _scheduleWeeklyReports() {
     // Implementation would use a job scheduler like node-cron
-    console.log('[ReportingModule] Weekly reports scheduling configured');
+    logger.info('[ReportingModule] Weekly reports scheduling configured');
   }
 
   /**
@@ -273,7 +274,7 @@ class ReportingModule {
    */
   async _scheduleMonthlyReports() {
     // Implementation would use a job scheduler like node-cron
-    console.log('[ReportingModule] Monthly compliance reports scheduling configured');
+    logger.info('[ReportingModule] Monthly compliance reports scheduling configured');
   }
 
   /**
@@ -480,7 +481,7 @@ class ReportingModule {
    */
   async shutdown() {
     try {
-      console.log('[ReportingModule] Shutting down...');
+      logger.info('[ReportingModule] Shutting down...');
 
       if (this.complianceService) {
         await this.complianceService.shutdown();
@@ -499,9 +500,9 @@ class ReportingModule {
       }
 
       this.isInitialized = false;
-      console.log('[ReportingModule] Shutdown completed');
+      logger.info('[ReportingModule] Shutdown completed');
     } catch (error) {
-      console.error('[ReportingModule] Shutdown error:', error);
+      logger.error('[ReportingModule] Shutdown error:', error);
       throw error;
     }
   }

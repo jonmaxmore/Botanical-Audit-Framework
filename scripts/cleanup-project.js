@@ -350,13 +350,13 @@ class ProjectCleaner {
     console.log('═══════════════════════════════════════════════════════\n');
 
     console.log(
-      `📁 Directories ${this.dryRun ? 'to be deleted' : 'deleted'}: ${this.deletedDirs.length}`
+      `📁 Directories ${this.dryRun ? 'to be deleted' : 'deleted'}: ${this.deletedDirs.length}`,
     );
     this.deletedDirs.forEach(dir => console.log(`   - ${dir}/`));
     console.log('');
 
     console.log(
-      `📄 Files ${this.dryRun ? 'to be deleted/moved' : 'deleted/moved'}: ${this.deletedFiles.length}`
+      `📄 Files ${this.dryRun ? 'to be deleted/moved' : 'deleted/moved'}: ${this.deletedFiles.length}`,
     );
     if (this.deletedFiles.length > 20) {
       console.log(`   (${this.deletedFiles.length} files - showing first 20)`);

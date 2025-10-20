@@ -167,11 +167,11 @@ router.get('/analytics', (req, res) => {
           total_points: analyticsData.performance[period].length,
           avg_efficiency: Math.round(
             analyticsData.performance[period].reduce((sum, item) => sum + item.efficiency, 0) /
-              analyticsData.performance[period].length
+              analyticsData.performance[period].length,
           ),
           avg_productivity: Math.round(
             analyticsData.performance[period].reduce((sum, item) => sum + item.productivity, 0) /
-              analyticsData.performance[period].length
+              analyticsData.performance[period].length,
           ),
         },
       };

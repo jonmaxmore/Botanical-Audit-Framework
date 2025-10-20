@@ -62,14 +62,14 @@ class SurveyResponseRepository {
       await this.collection.createIndex({
         farmId: 1,
         status: 1,
-        completedDate: -1
+        completedDate: -1,
       });
 
       // Index สำหรับการค้นหาตามคะแนน
       await this.collection.createIndex({ totalScore: -1 });
       await this.collection.createIndex({
         'scoreBreakdown.category': 1,
-        'scoreBreakdown.score': -1
+        'scoreBreakdown.score': -1,
       });
 
       this.logger.info('Survey response repository indexes initialized successfully');
@@ -101,13 +101,13 @@ class SurveyResponseRepository {
     try {
       this.logger.info('Creating new survey response', {
         surveyId: responseData.surveyId,
-        farmId: responseData.farmId
+        farmId: responseData.farmId,
       });
 
       // ตรวจสอบว่า Survey มีอยู่และ active
       const survey = await this.surveyCollection.findOne({
         _id: responseData.surveyId,
-        isActive: true
+        isActive: true,
       });
 
       if (!survey) {
@@ -118,12 +118,12 @@ class SurveyResponseRepository {
       const existingResponse = await this.collection.findOne({
         surveyId: responseData.surveyId,
         farmId: responseData.farmId,
-        status: { $in: ['in_progress'] }
+        status: { $in: ['in_progress'] },
       });
 
       if (existingResponse) {
         this.logger.info('Found existing in-progress response', {
-          responseId: existingResponse._id
+          responseId: existingResponse._id,
         });
 
         // ส่งคืน existing response แทนการสร้างใหม่
@@ -136,7 +136,7 @@ class SurveyResponseRepository {
         farmId: responseData.farmId,
         respondentName: responseData.respondentName,
         respondentRole: responseData.respondentRole,
-        metadata: responseData.metadata || {}
+        metadata: responseData.metadata || {},
       });
 
       // เตรียมข้อมูลสำหรับบันทึกลงฐานข้อมูล
@@ -164,10 +164,10 @@ class SurveyResponseRepository {
           totalSections: survey.sections ? survey.sections.length : 0,
           totalQuestions: survey.sections
             ? survey.sections.reduce(
-              (sum, section) => sum + (section.questions ? section.questions.length : 0),
-              0
-            )
-            : 0
+                (sum, section) => sum + (section.questions ? section.questions.length : 0),
+                0,
+              )
+            : 0,
         },
 
         // Audit trail
@@ -182,11 +182,11 @@ class SurveyResponseRepository {
               timestamp: new Date(),
               details: {
                 respondentName: surveyResponse.respondentName,
-                respondentRole: surveyResponse.respondentRole
-              }
-            }
-          ]
-        }
+                respondentRole: surveyResponse.respondentRole,
+              },
+            },
+          ],
+        },
       };
 
       // บันทึกลงฐานข้อมูล
@@ -198,7 +198,7 @@ class SurveyResponseRepository {
 
       this.logger.info('Survey response created successfully', {
         responseId: surveyResponse.id,
-        surveyId: responseData.surveyId
+        surveyId: responseData.surveyId,
       });
 
       return surveyResponse;
@@ -315,14 +315,14 @@ class SurveyResponseRepository {
           currentPage: Math.floor(skip / limit) + 1,
           totalPages: Math.ceil(totalCount / limit),
           hasNext: skip + limit < totalCount,
-          hasPrev: skip > 0
-        }
+          hasPrev: skip > 0,
+        },
       };
 
       this.logger.info('Survey responses found successfully', {
         surveyId,
         count: responses.length,
-        totalCount
+        totalCount,
       });
 
       return result;
@@ -363,22 +363,22 @@ class SurveyResponseRepository {
         $set: {
           ...updateData,
           'auditTrail.lastModifiedBy': updatedBy,
-          'auditTrail.lastModifiedAt': new Date()
+          'auditTrail.lastModifiedAt': new Date(),
         },
         $push: {
           'auditTrail.sessionHistory': {
             action: 'response_updated',
             timestamp: new Date(),
             updatedBy: updatedBy,
-            changes: Object.keys(updateData)
-          }
-        }
+            changes: Object.keys(updateData),
+          },
+        },
       };
 
       // ถ้าอัปเดตคำตอบ ให้คำนวณ progress และคะแนนใหม่
       if (updateData.answers) {
         const survey = await this.surveyCollection.findOne({
-          _id: existingResponse.surveyId
+          _id: existingResponse.surveyId,
         });
 
         if (survey) {
@@ -413,7 +413,7 @@ class SurveyResponseRepository {
 
       this.logger.info('Survey response updated successfully', {
         responseId,
-        progress: updatedResponse.progressPercentage
+        progress: updatedResponse.progressPercentage,
       });
 
       return updatedResponse;
@@ -444,7 +444,7 @@ class SurveyResponseRepository {
       this.logger.info('Recording answer for survey response', {
         responseId,
         questionId,
-        answeredBy
+        answeredBy,
       });
 
       // ดึง response ปัจจุบัน
@@ -463,7 +463,7 @@ class SurveyResponseRepository {
       updatedAnswers[questionId] = {
         answer: answer,
         answeredAt: new Date(),
-        answeredBy: answeredBy
+        answeredBy: answeredBy,
       };
 
       // อัปเดต response
@@ -471,15 +471,15 @@ class SurveyResponseRepository {
         responseId,
         {
           answers: updatedAnswers,
-          lastAnswerDate: new Date()
+          lastAnswerDate: new Date(),
         },
-        answeredBy
+        answeredBy,
       );
 
       this.logger.info('Answer recorded successfully', {
         responseId,
         questionId,
-        progress: updateResult.progressPercentage
+        progress: updateResult.progressPercentage,
       });
 
       return updateResult;
@@ -522,7 +522,7 @@ class SurveyResponseRepository {
 
       // ดึงข้อมูล survey เพื่อตรวจสอบความสมบูรณ์
       const survey = await this.surveyCollection.findOne({
-        _id: currentResponse.surveyId
+        _id: currentResponse.surveyId,
       });
 
       if (!survey) {
@@ -534,7 +534,7 @@ class SurveyResponseRepository {
 
       if (!completionCheck.isComplete) {
         throw new Error(
-          `Survey response is incomplete: ${completionCheck.missingQuestions.length} questions missing`
+          `Survey response is incomplete: ${completionCheck.missingQuestions.length} questions missing`,
         );
       }
 
@@ -555,19 +555,19 @@ class SurveyResponseRepository {
         totalScore: scoreData.totalScore,
         scoreBreakdown: scoreData.breakdown,
         qualityMetrics: qualityMetrics,
-        progressPercentage: 100
+        progressPercentage: 100,
       };
 
       const updatedResponse = await this.updateSurveyResponse(
         responseId,
         completionData,
-        completedBy
+        completedBy,
       );
 
       this.logger.info('Survey response completed successfully', {
         responseId,
         totalScore: updatedResponse.totalScore,
-        completionTime: Math.round(completionTime)
+        completionTime: Math.round(completionTime),
       });
 
       return updatedResponse;
@@ -641,14 +641,14 @@ class SurveyResponseRepository {
           currentPage: Math.floor(skip / limit) + 1,
           totalPages: Math.ceil(totalCount / limit),
           hasNext: skip + limit < totalCount,
-          hasPrev: skip > 0
-        }
+          hasPrev: skip > 0,
+        },
       };
 
       this.logger.info('Farm survey responses retrieved successfully', {
         farmId,
         count: responseEntities.length,
-        totalCount
+        totalCount,
       });
 
       return result;
@@ -685,7 +685,7 @@ class SurveyResponseRepository {
       scoreBreakdown: doc.scoreBreakdown,
       qualityMetrics: doc.qualityMetrics,
       completionTimeMinutes: doc.completionTimeMinutes,
-      metadata: doc.metadata
+      metadata: doc.metadata,
     });
   }
 
@@ -720,7 +720,7 @@ class SurveyResponseRepository {
 
     return {
       percentage,
-      currentSection: percentage === 100 ? null : currentSection
+      currentSection: percentage === 100 ? null : currentSection,
     };
   }
 
@@ -761,7 +761,7 @@ class SurveyResponseRepository {
         sectionTitle: section.title,
         score: sectionScore,
         maxScore: sectionMaxScore,
-        percentage: sectionPercentage
+        percentage: sectionPercentage,
       });
 
       totalScore += sectionScore;
@@ -780,24 +780,24 @@ class SurveyResponseRepository {
     }
 
     switch (question.type) {
-    case 'multiple_choice':
-      const correctOption = question.options?.find(opt => opt.isCorrect);
-      return answer === correctOption?.value ? question.scoring.maxPoints : 0;
+      case 'multiple_choice':
+        const correctOption = question.options?.find(opt => opt.isCorrect);
+        return answer === correctOption?.value ? question.scoring.maxPoints : 0;
 
-    case 'rating':
-      const rating = parseInt(answer) || 0;
-      const maxRating = question.maxRating || 5;
-      return Math.round((rating / maxRating) * question.scoring.maxPoints);
+      case 'rating':
+        const rating = parseInt(answer) || 0;
+        const maxRating = question.maxRating || 5;
+        return Math.round((rating / maxRating) * question.scoring.maxPoints);
 
-    case 'yes_no':
-      return answer === 'yes' ? question.scoring.maxPoints : 0;
+      case 'yes_no':
+        return answer === 'yes' ? question.scoring.maxPoints : 0;
 
-    case 'text':
-      // สำหรับคำตอบข้อความ ให้คะแนนเต็มหากมีคำตอบ
-      return answer && answer.trim().length > 0 ? question.scoring.maxPoints : 0;
+      case 'text':
+        // สำหรับคำตอบข้อความ ให้คะแนนเต็มหากมีคำตอบ
+        return answer && answer.trim().length > 0 ? question.scoring.maxPoints : 0;
 
-    default:
-      return 0;
+      default:
+        return 0;
     }
   }
 
@@ -816,7 +816,7 @@ class SurveyResponseRepository {
               missingQuestions.push({
                 questionId: question.id,
                 sectionTitle: section.title,
-                questionText: question.questionText
+                questionText: question.questionText,
               });
             }
           });
@@ -826,7 +826,7 @@ class SurveyResponseRepository {
 
     return {
       isComplete: missingQuestions.length === 0,
-      missingQuestions
+      missingQuestions,
     };
   }
 
@@ -839,13 +839,13 @@ class SurveyResponseRepository {
       completionRate: response.progressPercentage,
       averageTimePerQuestion: 0,
       consistencyScore: 0,
-      thoroughnessScore: 0
+      thoroughnessScore: 0,
     };
 
     if (response.completionTimeMinutes && survey.sections) {
       const totalQuestions = survey.sections.reduce(
         (sum, section) => sum + (section.questions ? section.questions.length : 0),
-        0
+        0,
       );
 
       if (totalQuestions > 0) {
@@ -887,16 +887,16 @@ class SurveyResponseRepository {
           _id: null,
           totalResponses: { $sum: 1 },
           completedResponses: {
-            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
           },
           inProgressResponses: {
-            $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] }
+            $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] },
           },
           averageScore: { $avg: '$totalScore' },
           averageCompletionTime: { $avg: '$completionTimeMinutes' },
-          averageProgress: { $avg: '$progressPercentage' }
-        }
-      }
+          averageProgress: { $avg: '$progressPercentage' },
+        },
+      },
     ];
 
     const result = await this.collection.aggregate(pipeline).toArray();
@@ -912,7 +912,7 @@ class SurveyResponseRepository {
           : 0,
       averageScore: Math.round(stats.averageScore || 0),
       averageCompletionTime: Math.round(stats.averageCompletionTime || 0),
-      averageProgress: Math.round(stats.averageProgress || 0)
+      averageProgress: Math.round(stats.averageProgress || 0),
     };
   }
 
@@ -936,13 +936,13 @@ class SurveyResponseRepository {
           _id: null,
           totalSurveys: { $sum: 1 },
           completedSurveys: {
-            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
           },
           averageScore: { $avg: '$totalScore' },
           totalCompletionTime: { $sum: '$completionTimeMinutes' },
-          distinctSurveyTypes: { $addToSet: '$surveyId' }
-        }
-      }
+          distinctSurveyTypes: { $addToSet: '$surveyId' },
+        },
+      },
     ];
 
     const result = await this.collection.aggregate(pipeline).toArray();
@@ -957,7 +957,7 @@ class SurveyResponseRepository {
           ? Math.round((stats.completedSurveys / stats.totalSurveys) * 100)
           : 0,
       averageScore: Math.round(stats.averageScore || 0),
-      totalTimeSpent: Math.round(stats.totalCompletionTime || 0)
+      totalTimeSpent: Math.round(stats.totalCompletionTime || 0),
     };
   }
 }

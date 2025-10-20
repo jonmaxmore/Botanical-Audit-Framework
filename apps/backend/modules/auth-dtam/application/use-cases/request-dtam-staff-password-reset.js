@@ -41,7 +41,7 @@ class RequestDTAMStaffPasswordResetUseCase {
       const event = new DTAMStaffPasswordResetRequested(
         staff,
         resetToken,
-        staff.passwordResetTokenExpiresAt
+        staff.passwordResetTokenExpiresAt,
       );
       await this.eventBus.publish(event);
 
@@ -50,7 +50,7 @@ class RequestDTAMStaffPasswordResetUseCase {
         resetToken, // Only for testing/development
       };
     } catch (error) {
-      console.error('Password reset request error:', error);
+      logger.error('Password reset request error:', error);
       // Always return success (prevent email enumeration)
       return { success: true };
     }

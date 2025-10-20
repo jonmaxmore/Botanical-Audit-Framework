@@ -48,7 +48,7 @@ class GACAApplication {
           },
         },
         crossOriginEmbedderPolicy: false,
-      })
+      }),
     );
 
     // CORS configuration
@@ -58,7 +58,7 @@ class GACAApplication {
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
-      })
+      }),
     );
 
     // Compression and parsing

@@ -43,7 +43,7 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          minHeight: '100vh',
+          minHeight: '100vh'
         }}
       >
         <CircularProgress />

@@ -18,6 +18,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const User = require('../models/user');
 const mongoose = require('mongoose');
 
@@ -33,7 +34,7 @@ class UserRepository {
       search: 10 * 60, // 10 minutes
     };
 
-    console.log('[UserRepository] Initialized successfully');
+    logger.info('[UserRepository] Initialized successfully');
   }
 
   /**
@@ -75,7 +76,7 @@ class UserRepository {
 
       return savedUser;
     } catch (error) {
-      console.error('[UserRepository] Create user error:', error);
+      logger.error('[UserRepository] Create user error:', error);
       throw error;
     }
   }
@@ -123,7 +124,7 @@ class UserRepository {
 
       return user;
     } catch (error) {
-      console.error('[UserRepository] Find by ID error:', error);
+      logger.error('[UserRepository] Find by ID error:', error);
       throw error;
     }
   }
@@ -170,7 +171,7 @@ class UserRepository {
 
       return user;
     } catch (error) {
-      console.error('[UserRepository] Find by email error:', error);
+      logger.error('[UserRepository] Find by email error:', error);
       throw error;
     }
   }
@@ -195,7 +196,7 @@ class UserRepository {
 
       return await mongoQuery.exec();
     } catch (error) {
-      console.error('[UserRepository] Find one error:', error);
+      logger.error('[UserRepository] Find one error:', error);
       throw error;
     }
   }
@@ -253,7 +254,7 @@ class UserRepository {
 
       return updatedUser;
     } catch (error) {
-      console.error('[UserRepository] Update user error:', error);
+      logger.error('[UserRepository] Update user error:', error);
       throw error;
     }
   }
@@ -278,7 +279,7 @@ class UserRepository {
           deletedAt: new Date(),
           deletedBy: options.deletedBy,
         },
-        options
+        options,
       );
 
       // Log user deletion
@@ -296,7 +297,7 @@ class UserRepository {
 
       return !!updatedUser;
     } catch (error) {
-      console.error('[UserRepository] Delete user error:', error);
+      logger.error('[UserRepository] Delete user error:', error);
       throw error;
     }
   }
@@ -364,7 +365,7 @@ class UserRepository {
 
       return result;
     } catch (error) {
-      console.error('[UserRepository] Find with pagination error:', error);
+      logger.error('[UserRepository] Find with pagination error:', error);
       throw error;
     }
   }
@@ -425,7 +426,7 @@ class UserRepository {
 
       return users;
     } catch (error) {
-      console.error('[UserRepository] Search users error:', error);
+      logger.error('[UserRepository] Search users error:', error);
       throw error;
     }
   }
@@ -474,7 +475,7 @@ class UserRepository {
 
       return users;
     } catch (error) {
-      console.error('[UserRepository] Find by role error:', error);
+      logger.error('[UserRepository] Find by role error:', error);
       throw error;
     }
   }
@@ -505,7 +506,7 @@ class UserRepository {
 
       return inspectors;
     } catch (error) {
-      console.error('[UserRepository] Get inspectors by province error:', error);
+      logger.error('[UserRepository] Get inspectors by province error:', error);
       throw error;
     }
   }
@@ -600,7 +601,7 @@ class UserRepository {
 
       return result;
     } catch (error) {
-      console.error('[UserRepository] Get user statistics error:', error);
+      logger.error('[UserRepository] Get user statistics error:', error);
       throw error;
     }
   }
@@ -648,7 +649,7 @@ class UserRepository {
         await this.cacheService.deletePattern(pattern);
       }
     } catch (error) {
-      console.error('[UserRepository] Clear user caches error:', error);
+      logger.error('[UserRepository] Clear user caches error:', error);
     }
   }
 
@@ -666,7 +667,7 @@ class UserRepository {
         await this.cacheService.deletePattern(pattern);
       }
     } catch (error) {
-      console.error('[UserRepository] Clear user list caches error:', error);
+      logger.error('[UserRepository] Clear user list caches error:', error);
     }
   }
 }

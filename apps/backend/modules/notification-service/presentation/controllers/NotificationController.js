@@ -29,6 +29,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const { validationResult, body, param, query } = require('express-validator');
 const NotificationService = require('../services/NotificationService');
 
@@ -38,7 +39,7 @@ class NotificationController {
     this.auditService = dependencies.auditService;
     this.rateLimiter = dependencies.rateLimiter;
 
-    console.log('[NotificationController] Initialized successfully');
+    logger.info('[NotificationController] Initialized successfully');
   }
 
   /**
@@ -96,7 +97,7 @@ class NotificationController {
         },
       });
     } catch (error) {
-      console.error('[NotificationController] Get notifications error:', error);
+      logger.error('[NotificationController] Get notifications error:', error);
       res.status(500).json({
         success: false,
         error: 'NOTIFICATIONS_ERROR',
@@ -202,7 +203,7 @@ class NotificationController {
         },
       });
     } catch (error) {
-      console.error('[NotificationController] Send notification error:', error);
+      logger.error('[NotificationController] Send notification error:', error);
 
       if (error.message.includes('User not found')) {
         return res.status(404).json({
@@ -303,7 +304,7 @@ class NotificationController {
         data: result,
       });
     } catch (error) {
-      console.error('[NotificationController] Bulk notification error:', error);
+      logger.error('[NotificationController] Bulk notification error:', error);
 
       if (error.message.includes('No recipients found')) {
         return res.status(400).json({
@@ -382,7 +383,7 @@ class NotificationController {
         },
       });
     } catch (error) {
-      console.error('[NotificationController] Mark as read error:', error);
+      logger.error('[NotificationController] Mark as read error:', error);
       res.status(500).json({
         success: false,
         error: 'MARK_READ_ERROR',
@@ -431,7 +432,7 @@ class NotificationController {
         },
       });
     } catch (error) {
-      console.error('[NotificationController] Dismiss notification error:', error);
+      logger.error('[NotificationController] Dismiss notification error:', error);
       res.status(500).json({
         success: false,
         error: 'DISMISS_ERROR',
@@ -505,7 +506,7 @@ class NotificationController {
         message: 'Notification deleted successfully',
       });
     } catch (error) {
-      console.error('[NotificationController] Delete notification error:', error);
+      logger.error('[NotificationController] Delete notification error:', error);
       res.status(500).json({
         success: false,
         error: 'DELETE_ERROR',
@@ -538,7 +539,7 @@ class NotificationController {
         },
       });
     } catch (error) {
-      console.error('[NotificationController] Get templates error:', error);
+      logger.error('[NotificationController] Get templates error:', error);
       res.status(500).json({
         success: false,
         error: 'TEMPLATES_ERROR',
@@ -597,7 +598,7 @@ class NotificationController {
         },
       });
     } catch (error) {
-      console.error('[NotificationController] Statistics error:', error);
+      logger.error('[NotificationController] Statistics error:', error);
       res.status(500).json({
         success: false,
         error: 'STATISTICS_ERROR',
@@ -659,7 +660,7 @@ class NotificationController {
         data: result,
       });
     } catch (error) {
-      console.error('[NotificationController] Test notification error:', error);
+      logger.error('[NotificationController] Test notification error:', error);
       res.status(500).json({
         success: false,
         error: 'TEST_ERROR',
@@ -728,8 +729,8 @@ class NotificationController {
     // Return subset for other roles
     return Object.fromEntries(
       Object.entries(allTemplates).filter(
-        ([key]) => !key.includes('admin') && !key.includes('bulk')
-      )
+        ([key]) => !key.includes('admin') && !key.includes('bulk'),
+      ),
     );
   }
 

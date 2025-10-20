@@ -61,7 +61,7 @@ class SurveyController {
           message: error.message,
         });
       }
-      console.error('Create survey error:', error);
+      logger.error('Create survey error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to create survey',
@@ -108,7 +108,7 @@ class SurveyController {
           message: error.message,
         });
       }
-      console.error('Update survey error:', error);
+      logger.error('Update survey error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to update survey',
@@ -153,7 +153,7 @@ class SurveyController {
           message: error.message,
         });
       }
-      console.error('Submit survey error:', error);
+      logger.error('Submit survey error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to submit survey',
@@ -193,7 +193,7 @@ class SurveyController {
           message: error.message,
         });
       }
-      console.error('Get survey details error:', error);
+      logger.error('Get survey details error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve survey details',
@@ -244,7 +244,7 @@ class SurveyController {
         },
       });
     } catch (error) {
-      console.error('List surveys error:', error);
+      logger.error('List surveys error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve surveys',
@@ -283,7 +283,7 @@ class SurveyController {
           message: error.message,
         });
       }
-      console.error('Start survey review error:', error);
+      logger.error('Start survey review error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to start survey review',
@@ -324,7 +324,7 @@ class SurveyController {
           message: error.message,
         });
       }
-      console.error('Approve survey error:', error);
+      logger.error('Approve survey error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to approve survey',
@@ -365,7 +365,7 @@ class SurveyController {
           message: error.message,
         });
       }
-      console.error('Reject survey error:', error);
+      logger.error('Reject survey error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to reject survey',
@@ -406,7 +406,7 @@ class SurveyController {
           message: error.message,
         });
       }
-      console.error('Request survey revision error:', error);
+      logger.error('Request survey revision error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to request revision',

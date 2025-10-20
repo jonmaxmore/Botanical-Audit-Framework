@@ -42,7 +42,7 @@ class ApproveSurveyUseCase {
         reviewNotes: approvedSurvey.reviewNotes,
         rejectionReason: null,
         revisionNotes: null,
-      })
+      }),
     );
 
     return approvedSurvey;

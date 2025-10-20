@@ -39,7 +39,7 @@ class NotificationController {
         data: result,
       });
     } catch (error) {
-      console.error('Get user notifications error:', error);
+      logger.error('Get user notifications error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get notifications',
@@ -73,7 +73,7 @@ class NotificationController {
         },
       });
     } catch (error) {
-      console.error('Get unread count error:', error);
+      logger.error('Get unread count error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get unread count',
@@ -105,7 +105,7 @@ class NotificationController {
         });
       }
     } catch (error) {
-      console.error('Mark as read error:', error);
+      logger.error('Mark as read error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to mark as read',
@@ -138,7 +138,7 @@ class NotificationController {
         data: { count },
       });
     } catch (error) {
-      console.error('Mark all as read error:', error);
+      logger.error('Mark all as read error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to mark all as read',
@@ -170,7 +170,7 @@ class NotificationController {
         });
       }
     } catch (error) {
-      console.error('Delete notification error:', error);
+      logger.error('Delete notification error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to delete notification',
@@ -203,7 +203,7 @@ class NotificationController {
         data: stats,
       });
     } catch (error) {
-      console.error('Get notification stats error:', error);
+      logger.error('Get notification stats error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get statistics',
@@ -239,7 +239,7 @@ class NotificationController {
         recipients,
         title,
         message,
-        options || {}
+        options || {},
       );
 
       res.status(201).json({
@@ -248,7 +248,7 @@ class NotificationController {
         data: { count },
       });
     } catch (error) {
-      console.error('Send custom notification error:', error);
+      logger.error('Send custom notification error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to send notification',
@@ -277,7 +277,7 @@ class NotificationController {
         title,
         message,
         targetRoles || [],
-        priority || 'medium'
+        priority || 'medium',
       );
 
       res.status(201).json({
@@ -286,7 +286,7 @@ class NotificationController {
         data: { announcementId },
       });
     } catch (error) {
-      console.error('Broadcast announcement error:', error);
+      logger.error('Broadcast announcement error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to broadcast announcement',
@@ -319,7 +319,7 @@ class NotificationController {
         data: result,
       });
     } catch (error) {
-      console.error('Send test notification error:', error);
+      logger.error('Send test notification error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to send test notification',
@@ -359,7 +359,7 @@ class NotificationController {
         });
       }
     } catch (error) {
-      console.error('Update preferences error:', error);
+      logger.error('Update preferences error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to update preferences',
@@ -392,7 +392,7 @@ class NotificationController {
         data: preferences,
       });
     } catch (error) {
-      console.error('Get preferences error:', error);
+      logger.error('Get preferences error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get preferences',
@@ -410,7 +410,7 @@ class NotificationController {
       const { service } = req.params;
       const payload = req.body;
 
-      console.log(`Webhook received from ${service}:`, payload);
+      logger.info(`Webhook received from ${service}:`, payload);
 
       // Handle different webhook services
       switch (service) {
@@ -425,7 +425,7 @@ class NotificationController {
           // Handle LINE delivery status
           break;
         default:
-          console.warn(`Unknown webhook service: ${service}`);
+          logger.warn(`Unknown webhook service: ${service}`);
       }
 
       res.json({
@@ -433,7 +433,7 @@ class NotificationController {
         message: 'Webhook processed',
       });
     } catch (error) {
-      console.error('Webhook processing error:', error);
+      logger.error('Webhook processing error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to process webhook',
@@ -467,7 +467,7 @@ class NotificationController {
         data: sanitized,
       });
     } catch (error) {
-      console.error('Get templates error:', error);
+      logger.error('Get templates error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get templates',

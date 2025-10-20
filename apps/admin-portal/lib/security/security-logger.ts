@@ -104,7 +104,7 @@ export class SecurityLogger {
       userAgent: string;
       details?: Record<string, any>;
       metadata?: Record<string, any>;
-    }
+    },
   ): Promise<SecurityEvent> {
     const event: SecurityEvent = {
       id: this.generateEventId(),
@@ -385,7 +385,7 @@ export const SecurityLog = {
       SecurityEventType.LOGIN_SUCCESS,
       SecurityEventSeverity.LOW,
       'User logged in successfully',
-      { userId, ip, userAgent }
+      { userId, ip, userAgent },
     );
   },
 
@@ -401,7 +401,7 @@ export const SecurityLog = {
         ip,
         userAgent,
         details: { identifier, reason },
-      }
+      },
     );
   },
 
@@ -417,7 +417,7 @@ export const SecurityLog = {
         ip,
         userAgent: 'system',
         details: { identifier, attempts },
-      }
+      },
     );
   },
 
@@ -434,7 +434,7 @@ export const SecurityLog = {
         ip,
         userAgent,
         details: { resource },
-      }
+      },
     );
   },
 
@@ -450,7 +450,7 @@ export const SecurityLog = {
         ip,
         userAgent,
         details: { input: input.substring(0, 200) },
-      }
+      },
     );
   },
 
@@ -466,7 +466,7 @@ export const SecurityLog = {
         ip,
         userAgent,
         details: { query: query.substring(0, 200) },
-      }
+      },
     );
   },
 
@@ -482,7 +482,7 @@ export const SecurityLog = {
         ip,
         userAgent: 'system',
         details: { identifier, endpoint },
-      }
+      },
     );
   },
 
@@ -499,7 +499,7 @@ export const SecurityLog = {
         ip,
         userAgent,
         details: { dataType },
-      }
+      },
     );
   },
 
@@ -516,7 +516,7 @@ export const SecurityLog = {
         ip,
         userAgent,
         details: { reason },
-      }
+      },
     );
   },
 };

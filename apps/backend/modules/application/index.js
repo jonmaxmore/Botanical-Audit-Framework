@@ -28,6 +28,7 @@
  */
 
 // Core Node.js modules
+const logger = require('../../shared/logger/logger');
 const path = require('path');
 const fs = require('fs');
 const EventEmitter = require('events');
@@ -43,7 +44,7 @@ const mongoose = require('mongoose');
 // Import enhanced application configuration
 const { config, getConfig, getSection, getConfigValue } = require('./config');
 
-console.log('[EnhancedApplicationModule] Loading enhanced application processing system...');
+logger.info('[EnhancedApplicationModule] Loading enhanced application processing system...');
 
 // ============================================================================
 // DOMAIN LAYER IMPORTS
@@ -182,7 +183,7 @@ class EnhancedApplicationModule extends EventEmitter {
       errors: 0,
     };
 
-    console.log('[EnhancedApplicationModule] Module instance created');
+    logger.info('[EnhancedApplicationModule] Module instance created');
   }
 
   /**
@@ -190,11 +191,11 @@ class EnhancedApplicationModule extends EventEmitter {
    */
   async initialize(app = null) {
     if (this.isInitialized) {
-      console.log('[EnhancedApplicationModule] Already initialized');
+      logger.info('[EnhancedApplicationModule] Already initialized');
       return this;
     }
 
-    console.log('[EnhancedApplicationModule] Starting initialization...');
+    logger.info('[EnhancedApplicationModule] Starting initialization...');
     this.startupTime = Date.now();
 
     try {
@@ -226,12 +227,12 @@ class EnhancedApplicationModule extends EventEmitter {
       this.isInitialized = true;
       const initTime = Date.now() - this.startupTime;
 
-      console.log(`[EnhancedApplicationModule] Initialization completed in ${initTime}ms`);
+      logger.info(`[EnhancedApplicationModule] Initialization completed in ${initTime}ms`);
       this.emit('module.initialized', { initTime });
 
       return this;
     } catch (error) {
-      console.error('[EnhancedApplicationModule] Initialization failed:', error);
+      logger.error('[EnhancedApplicationModule] Initialization failed:', error);
       this.isHealthy = false;
       this.emit('module.initialization_failed', { error });
       throw error;
@@ -242,7 +243,7 @@ class EnhancedApplicationModule extends EventEmitter {
    * Initialize database repositories
    */
   async initializeRepositories() {
-    console.log('[EnhancedApplicationModule] Initializing repositories...');
+    logger.info('[EnhancedApplicationModule] Initializing repositories...');
 
     const dbConfig = getSection('database').mongodb;
 
@@ -279,24 +280,24 @@ class EnhancedApplicationModule extends EventEmitter {
     // Wait for repositories to be ready
     await Promise.all(
       Object.values(this.repositories).map(repo =>
-        repo.initialize ? repo.initialize() : Promise.resolve()
-      )
+        repo.initialize ? repo.initialize() : Promise.resolve(),
+      ),
     );
 
-    console.log('[EnhancedApplicationModule] Repositories initialized successfully');
+    logger.info('[EnhancedApplicationModule] Repositories initialized successfully');
   }
 
   /**
    * Initialize infrastructure services
    */
   async initializeInfrastructureServices() {
-    console.log('[EnhancedApplicationModule] Initializing infrastructure services...');
+    logger.info('[EnhancedApplicationModule] Initializing infrastructure services...');
 
     // Initialize document management system
     if (this.options.enableDocumentProcessing) {
       const documentConfig = getSection('documentManagement');
       this.integrations.documentManagement = new DocumentManagementIntegrationSystem(
-        documentConfig
+        documentConfig,
       );
       await this.integrations.documentManagement.initialize();
     }
@@ -317,14 +318,14 @@ class EnhancedApplicationModule extends EventEmitter {
       sms: this.integrations.sms,
     });
 
-    console.log('[EnhancedApplicationModule] Infrastructure services initialized successfully');
+    logger.info('[EnhancedApplicationModule] Infrastructure services initialized successfully');
   }
 
   /**
    * Initialize domain services
    */
   async initializeDomainServices() {
-    console.log('[EnhancedApplicationModule] Initializing domain services...');
+    logger.info('[EnhancedApplicationModule] Initializing domain services...');
 
     // Initialize advanced application processing service
     this.services.applicationProcessing = new AdvancedApplicationProcessingService({
@@ -341,14 +342,14 @@ class EnhancedApplicationModule extends EventEmitter {
 
     await this.services.applicationProcessing.initialize();
 
-    console.log('[EnhancedApplicationModule] Domain services initialized successfully');
+    logger.info('[EnhancedApplicationModule] Domain services initialized successfully');
   }
 
   /**
    * Initialize application controllers
    */
   async initializeControllers() {
-    console.log('[EnhancedApplicationModule] Initializing controllers...');
+    logger.info('[EnhancedApplicationModule] Initializing controllers...');
 
     // Initialize enhanced application processing controller
     this.controllers.applicationProcessing = new EnhancedApplicationProcessingController({
@@ -363,14 +364,14 @@ class EnhancedApplicationModule extends EventEmitter {
 
     await this.controllers.applicationProcessing.initialize();
 
-    console.log('[EnhancedApplicationModule] Controllers initialized successfully');
+    logger.info('[EnhancedApplicationModule] Controllers initialized successfully');
   }
 
   /**
    * Setup Express routes
    */
   async setupRoutes(app) {
-    console.log('[EnhancedApplicationModule] Setting up routes...');
+    logger.info('[EnhancedApplicationModule] Setting up routes...');
 
     // Create authentication middleware
     const authMiddleware = {
@@ -381,7 +382,7 @@ class EnhancedApplicationModule extends EventEmitter {
     // Create enhanced application routes
     const { dtamRouter, farmerRouter, adminRouter } = createEnhancedApplicationRoutes(
       this.controllers.applicationProcessing,
-      authMiddleware
+      authMiddleware,
     );
 
     // Apply global middleware
@@ -390,7 +391,7 @@ class EnhancedApplicationModule extends EventEmitter {
       ApplicationMiddleware.requestLogging,
       ApplicationMiddleware.rateLimiting,
       ValidationMiddleware.validateRequest,
-      dtamRouter
+      dtamRouter,
     );
 
     app.use(
@@ -398,7 +399,7 @@ class EnhancedApplicationModule extends EventEmitter {
       ApplicationMiddleware.requestLogging,
       ApplicationMiddleware.rateLimiting,
       ValidationMiddleware.validateRequest,
-      farmerRouter
+      farmerRouter,
     );
 
     app.use(
@@ -406,7 +407,7 @@ class EnhancedApplicationModule extends EventEmitter {
       ApplicationMiddleware.requestLogging,
       ApplicationMiddleware.rateLimiting,
       ValidationMiddleware.validateRequest,
-      adminRouter
+      adminRouter,
     );
 
     // Add API documentation endpoint
@@ -419,21 +420,21 @@ class EnhancedApplicationModule extends EventEmitter {
       res.json(this.getHealthStatus());
     });
 
-    console.log('[EnhancedApplicationModule] Routes setup completed');
+    logger.info('[EnhancedApplicationModule] Routes setup completed');
   }
 
   /**
    * Initialize health checks and monitoring
    */
   async initializeHealthChecks() {
-    console.log('[EnhancedApplicationModule] Initializing health checks...');
+    logger.info('[EnhancedApplicationModule] Initializing health checks...');
 
     // Setup periodic health checks
     this.healthCheckInterval = setInterval(
       () => {
         this.performHealthCheck();
       },
-      getConfigValue('application.healthCheck.interval') || 30000
+      getConfigValue('application.healthCheck.interval') || 30000,
     );
 
     // Setup metrics collection
@@ -442,18 +443,18 @@ class EnhancedApplicationModule extends EventEmitter {
         () => {
           this.collectMetrics();
         },
-        getConfigValue('analytics.performance.realtime.updateInterval') || 5000
+        getConfigValue('analytics.performance.realtime.updateInterval') || 5000,
       );
     }
 
-    console.log('[EnhancedApplicationModule] Health checks initialized');
+    logger.info('[EnhancedApplicationModule] Health checks initialized');
   }
 
   /**
    * Setup event listeners for module coordination
    */
   async setupEventListeners() {
-    console.log('[EnhancedApplicationModule] Setting up event listeners...');
+    logger.info('[EnhancedApplicationModule] Setting up event listeners...');
 
     // Listen to application processing events
     if (this.services.applicationProcessing) {
@@ -470,7 +471,7 @@ class EnhancedApplicationModule extends EventEmitter {
       this.services.applicationProcessing.on('error', error => {
         this.metrics.errors++;
         this.emit(ApplicationEvents.ERROR_OCCURRED, error);
-        console.error('[EnhancedApplicationModule] Application processing error:', error);
+        logger.error('[EnhancedApplicationModule] Application processing error:', error);
       });
     }
 
@@ -495,11 +496,11 @@ class EnhancedApplicationModule extends EventEmitter {
 
       this.integrations.government.on('api.error', error => {
         this.emit('government.api.error', error);
-        console.warn('[EnhancedApplicationModule] Government API error:', error);
+        logger.warn('[EnhancedApplicationModule] Government API error:', error);
       });
     }
 
-    console.log('[EnhancedApplicationModule] Event listeners setup completed');
+    logger.info('[EnhancedApplicationModule] Event listeners setup completed');
   }
 
   /**
@@ -556,7 +557,7 @@ class EnhancedApplicationModule extends EventEmitter {
       healthStatus.overall = 'critical';
       healthStatus.error = error.message;
       this.isHealthy = false;
-      console.error('[EnhancedApplicationModule] Health check failed:', error);
+      logger.error('[EnhancedApplicationModule] Health check failed:', error);
     }
 
     return healthStatus;
@@ -583,7 +584,7 @@ class EnhancedApplicationModule extends EventEmitter {
 
       this.emit('metrics.collected', currentMetrics);
     } catch (error) {
-      console.error('[EnhancedApplicationModule] Metrics collection failed:', error);
+      logger.error('[EnhancedApplicationModule] Metrics collection failed:', error);
     }
   }
 
@@ -652,7 +653,7 @@ class EnhancedApplicationModule extends EventEmitter {
    * Run integration tests
    */
   async runIntegrationTests() {
-    console.log('[EnhancedApplicationModule] Running integration tests...');
+    logger.info('[EnhancedApplicationModule] Running integration tests...');
 
     const testSuite = new ApplicationIntegrationTestSuite();
     const results = await testSuite.runCompleteTestSuite();
@@ -665,7 +666,7 @@ class EnhancedApplicationModule extends EventEmitter {
    * Graceful shutdown
    */
   async shutdown() {
-    console.log('[EnhancedApplicationModule] Initiating graceful shutdown...');
+    logger.info('[EnhancedApplicationModule] Initiating graceful shutdown...');
 
     try {
       // Clear intervals
@@ -702,10 +703,10 @@ class EnhancedApplicationModule extends EventEmitter {
       this.isInitialized = false;
       this.isHealthy = false;
 
-      console.log('[EnhancedApplicationModule] Shutdown completed successfully');
+      logger.info('[EnhancedApplicationModule] Shutdown completed successfully');
       this.emit('module.shutdown');
     } catch (error) {
-      console.error('[EnhancedApplicationModule] Shutdown error:', error);
+      logger.error('[EnhancedApplicationModule] Shutdown error:', error);
       throw error;
     }
   }
@@ -769,8 +770,8 @@ module.exports = {
 };
 
 // Log successful module loading
-console.log('[EnhancedApplicationModule] Module loaded successfully');
+logger.info('[EnhancedApplicationModule] Module loaded successfully');
 console.log(
   '[EnhancedApplicationModule] Available components:',
-  Object.keys(module.exports).length
+  Object.keys(module.exports).length,
 );

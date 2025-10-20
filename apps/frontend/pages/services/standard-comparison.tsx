@@ -20,14 +20,14 @@ import {
   Paper,
   Tabs,
   Tab,
-  Chip,
+  Chip
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
   Compare as CompareIcon,
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
-  RemoveCircle as RemoveCircleIcon,
+  RemoveCircle as RemoveCircleIcon
 } from '@mui/icons-material';
 
 export default function StandardComparisonPage() {
@@ -42,23 +42,23 @@ export default function StandardComparisonPage() {
     {
       name: 'GACP',
       fullName: 'Good Agricultural and Collection Practices',
-      description: 'มาตรฐานการปฏิบัติทางการเกษตรและการเก็บรวบรวมที่ดี สำหรับพืชสมุนไพร',
+      description: 'มาตรฐานการปฏิบัติทางการเกษตรและการเก็บรวบรวมที่ดี สำหรับพืชสมุนไพร'
     },
     {
       name: 'GAP',
       fullName: 'Good Agricultural Practices',
-      description: 'มาตรฐานการปฏิบัติทางการเกษตรที่ดี สำหรับพืชทั่วไป',
+      description: 'มาตรฐานการปฏิบัติทางการเกษตรที่ดี สำหรับพืชทั่วไป'
     },
     {
       name: 'Organic',
       fullName: 'Organic Agriculture',
-      description: 'เกษตรอินทรีย์ ระบบการผลิตที่คำนึงถึงสิ่งแวดล้อม ไม่ใช้สารเคมี',
+      description: 'เกษตรอินทรีย์ ระบบการผลิตที่คำนึงถึงสิ่งแวดล้อม ไม่ใช้สารเคมี'
     },
     {
       name: 'GMP',
       fullName: 'Good Manufacturing Practices',
-      description: 'หลักเกณฑ์วิธีการที่ดีในการผลิตอาหารและผลิตภัณฑ์',
-    },
+      description: 'หลักเกณฑ์วิธีการที่ดีในการผลิตอาหารและผลิตภัณฑ์'
+    }
   ];
 
   // ตัวอย่างข้อมูลการเปรียบเทียบมาตรฐาน
@@ -68,64 +68,64 @@ export default function StandardComparisonPage() {
       GACP: 'required',
       GAP: 'required',
       Organic: 'required',
-      GMP: 'not-applicable',
+      GMP: 'not-applicable'
     },
     {
       criteria: 'การใช้สารเคมี',
       GACP: 'limited',
       GAP: 'limited',
       Organic: 'prohibited',
-      GMP: 'not-applicable',
+      GMP: 'not-applicable'
     },
     {
       criteria: 'การจดบันทึก',
       GACP: 'required',
       GAP: 'required',
       Organic: 'required',
-      GMP: 'required',
+      GMP: 'required'
     },
     {
       criteria: 'การตรวจสอบย้อนกลับ',
       GACP: 'required',
       GAP: 'required',
       Organic: 'required',
-      GMP: 'required',
+      GMP: 'required'
     },
     {
       criteria: 'การเก็บรักษาผลผลิต',
       GACP: 'required',
       GAP: 'required',
       Organic: 'required',
-      GMP: 'required',
+      GMP: 'required'
     },
     {
       criteria: 'การจัดการโรงเรือน',
       GACP: 'optional',
       GAP: 'optional',
       Organic: 'required',
-      GMP: 'required',
+      GMP: 'required'
     },
     {
       criteria: 'การทดสอบสารพิษตกค้าง',
       GACP: 'required',
       GAP: 'required',
       Organic: 'required',
-      GMP: 'required',
-    },
+      GMP: 'required'
+    }
   ];
 
   const statusIcons = {
     required: <CheckCircleIcon sx={{ color: '#4caf50' }} />,
     optional: <RemoveCircleIcon sx={{ color: '#ff9800' }} />,
     prohibited: <CancelIcon sx={{ color: '#f44336' }} />,
-    'not-applicable': <CancelIcon sx={{ color: '#9e9e9e' }} />,
+    'not-applicable': <CancelIcon sx={{ color: '#9e9e9e' }} />
   };
 
   const statusText = {
     required: 'จำเป็น',
     optional: 'ทางเลือก',
     prohibited: 'ห้ามใช้',
-    'not-applicable': 'ไม่เกี่ยวข้อง',
+    'not-applicable': 'ไม่เกี่ยวข้อง'
   };
 
   return (

@@ -10,22 +10,27 @@
 ### ✅ **สิ่งที่ทำสำเร็จ:**
 
 #### 🗑️ **ลบระบบซ้ำซ้อน:**
+
 - ❌ ลบ: `apps/backend/services/GACPWorkflowEngine.js` (499 lines)
 - ❌ ลบ: `apps/backend/services/ApplicationWorkflowEngine.js` (567 lines)
 - ✅ เก็บ: `business-logic/gacp-workflow-engine.js` (1,041 lines) - **ระบบหลัก**
 
 #### 🔄 **ปรับ Import Paths:**
+
 ✅ **ไฟล์ที่ปรับแล้ว:**
+
 1. `apps/backend/services/GACPEnhancedInspectionService.js`
-2. `apps/backend/routes/gacp-business-logic.js`  
+2. `apps/backend/routes/gacp-business-logic.js`
 3. `apps/backend/atlas-server.js`
 4. `app.js`
 5. `apps/backend/server.js`
 
 #### 📦 **Dependencies:**
+
 ✅ ติดตั้ง: `npm install uuid` - สำหรับ business-logic
 
 #### ✅ **การทดสอบ:**
+
 - ✅ business-logic/gacp-workflow-engine.js โหลดได้ปกติ
 - ✅ ไม่มี import errors
 - ✅ ระบบทำงานได้ตามปกติ
@@ -35,15 +40,17 @@
 ## 📊 **สรุปผลลัพธ์**
 
 ### 🔢 **ก่อนแก้ไข:**
+
 ```
 ✗ business-logic/gacp-workflow-engine.js      (1,041 lines) - หลัก
-✗ services/GACPWorkflowEngine.js             (499 lines)   - ซ้ำ  
+✗ services/GACPWorkflowEngine.js             (499 lines)   - ซ้ำ
 ✗ services/ApplicationWorkflowEngine.js      (567 lines)   - ซ้ำ
 ----------------------------------------
 รวม: 3 ระบบ, 2,107 lines โค้ดซ้ำซ้อน
 ```
 
 ### 🎯 **หลังแก้ไข:**
+
 ```
 ✅ business-logic/gacp-workflow-engine.js      (1,041 lines) - หลักเดียว
 ----------------------------------------
@@ -51,6 +58,7 @@
 ```
 
 ### 🎉 **ประโยชน์ที่ได้:**
+
 - 🗂️ **Maintainability:** บำรุงรักษาง่ายขึ้น - แก้ไขที่เดียว
 - ⚡ **Performance:** ลดการโหลดโค้ดซ้ำซ้อน
 - 🧹 **Code Cleanliness:** โครงสร้างชัดเจนขึ้น
@@ -61,11 +69,13 @@
 ## 🔍 **สิ่งที่เรียนรู้**
 
 ### 🤔 **สาเหตุการซ้ำซ้อน:**
+
 1. **Evolution ของ Architecture:** business-logic → modules → services
 2. **Multiple Developers:** ไม่รู้ว่ามีระบบอยู่แล้ว
 3. **Refactoring ไม่สมบูรณ์:** เพิ่มระบบใหม่แต่ไม่ลบของเก่า
 
 ### 💡 **แนวทางป้องกัน:**
+
 1. **Documentation:** เอกสารชัดเจนว่าระบบไหนเป็นหลัก
 2. **Code Review:** ตรวจสอบก่อน merge
 3. **Naming Convention:** ตั้งชื่อที่ไม่ซ้ำกัน
@@ -76,6 +86,7 @@
 ## 🚀 **ขั้นตอนต่อไป**
 
 ### 🔶 **Priority 2: Survey System (ซ้ำซ้อนรอง)**
+
 ```
 📊 ระบบที่ซ้ำ:
 - modules/survey-system/              ← 7-step wizard (เก็บ)
@@ -85,6 +96,7 @@
 ```
 
 ### 🔷 **Priority 3: ระบบอื่นๆ**
+
 ```
 🚜 Farm Management:
 - modules/farm-management/            ← เก็บ
@@ -105,11 +117,13 @@
 ## 📈 **Progress Tracking**
 
 ### ✅ **Completed (Priority 1):**
+
 - [x] Workflow Engine ซ้ำซ้อน - **แก้ไขเสร็จ 100%**
 
 ### 🔄 **Next Steps:**
+
 - [ ] Survey System ซ้ำซ้อน (Priority 2)
-- [ ] Farm Management ซ้ำซ้อน (Priority 3)  
+- [ ] Farm Management ซ้ำซ้อน (Priority 3)
 - [ ] Track Trace ซ้ำซ้อน (Priority 3)
 - [ ] Standards ซ้ำซ้อน (Priority 3)
 
@@ -118,6 +132,7 @@
 ## 🎯 **Target Architecture**
 
 ### 🏗️ **เป้าหมายสุดท้าย:**
+
 ```
 ✅ business-logic/        ← Core business rules (หลัก)
 ✅ modules/              ← Feature modules (Clean Architecture)
@@ -125,10 +140,11 @@
 ```
 
 ### 🔗 **Integration Pattern:**
+
 ```
 apps/ → modules/ → business-logic/
 ```
 
-**🎉 Workflow Engine Priority 1 เสร็จสมบูรณ์!** 
+**🎉 Workflow Engine Priority 1 เสร็จสมบูรณ์!**
 
 พร้อมเริ่ม Priority 2 หรือไม่ครับ? 🚀

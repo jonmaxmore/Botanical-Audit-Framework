@@ -3,6 +3,7 @@
  * Integrates the enhanced cannabis survey system with existing survey microservice and GACP systems
  */
 
+const logger = require('../shared/logger/logger');
 const axios = require('axios');
 const {
   CannabisSurveyTemplate,
@@ -34,11 +35,11 @@ class CannabisSurveyIntegrationService {
       await this.setupWebhooks();
 
       this.isConnected = true;
-      console.log('✅ Cannabis Survey Integration Service initialized successfully');
+      logger.info('✅ Cannabis Survey Integration Service initialized successfully');
 
       return { success: true, message: 'Integration service initialized' };
     } catch (error) {
-      console.error('❌ Failed to initialize Cannabis Survey Integration Service:', error);
+      logger.error('❌ Failed to initialize Cannabis Survey Integration Service:', error);
       throw new Error(`Integration initialization failed: ${error.message}`);
     }
   }
@@ -47,18 +48,18 @@ class CannabisSurveyIntegrationService {
     try {
       const response = await axios.get(`${this.surveyMicroserviceUrl}/api/health`);
       if (response.status === 200) {
-        console.log('✅ Survey microservice connection successful');
+        logger.info('✅ Survey microservice connection successful');
         return true;
       }
     } catch (error) {
-      console.warn('⚠️  Survey microservice not available, operating in standalone mode');
+      logger.warn('⚠️  Survey microservice not available, operating in standalone mode');
       return false;
     }
   }
 
   async syncCannabisTemplates() {
     try {
-      console.log('🔄 Syncing cannabis templates with survey microservice...');
+      logger.info('🔄 Syncing cannabis templates with survey microservice...');
 
       const cannabisTemplates = await CannabisSurveyTemplate.find({ status: 'published' });
 
@@ -70,33 +71,33 @@ class CannabisSurveyIntegrationService {
           // Check if template exists in microservice
           const existingResponse = await axios.get(
             `${this.surveyMicroserviceUrl}/api/admin/templates`,
-            { params: { title: template.title } }
+            { params: { title: template.title } },
           );
 
           const existingTemplate = existingResponse.data.data?.find(
-            t => t.title === template.title
+            t => t.title === template.title,
           );
 
           if (existingTemplate) {
             // Update existing template
             await axios.put(
               `${this.surveyMicroserviceUrl}/api/admin/templates/${existingTemplate._id}`,
-              standardTemplate
+              standardTemplate,
             );
-            console.log(`📝 Updated template: ${template.title}`);
+            logger.info(`📝 Updated template: ${template.title}`);
           } else {
             // Create new template
             await axios.post(`${this.surveyMicroserviceUrl}/api/admin/templates`, standardTemplate);
-            console.log(`➕ Created template: ${template.title}`);
+            logger.info(`➕ Created template: ${template.title}`);
           }
         } catch (error) {
-          console.warn(`⚠️  Failed to sync template ${template.title}:`, error.message);
+          logger.warn(`⚠️  Failed to sync template ${template.title}:`, error.message);
         }
       }
 
-      console.log('✅ Cannabis template sync completed');
+      logger.info('✅ Cannabis template sync completed');
     } catch (error) {
-      console.error('❌ Error syncing cannabis templates:', error);
+      logger.error('❌ Error syncing cannabis templates:', error);
       throw error;
     }
   }
@@ -218,15 +219,15 @@ class CannabisSurveyIntegrationService {
       // Send to microservice
       await axios.post(`${this.surveyMicroserviceUrl}/api/responses`, standardResponse);
 
-      console.log(`✅ Synced cannabis response ${cannabisResponse.responseId} to microservice`);
+      logger.info(`✅ Synced cannabis response ${cannabisResponse.responseId} to microservice`);
     } catch (error) {
-      console.error('❌ Error syncing response to microservice:', error);
+      logger.error('❌ Error syncing response to microservice:', error);
     }
   }
 
   async syncFromMicroservice() {
     try {
-      console.log('🔄 Syncing data from survey microservice...');
+      logger.info('🔄 Syncing data from survey microservice...');
 
       // Get all cannabis-related responses from microservice
       const response = await axios.get(`${this.surveyMicroserviceUrl}/api/responses`, {
@@ -253,9 +254,9 @@ class CannabisSurveyIntegrationService {
         }
       }
 
-      console.log(`✅ Synced ${microserviceResponses.length} responses from microservice`);
+      logger.info(`✅ Synced ${microserviceResponses.length} responses from microservice`);
     } catch (error) {
-      console.error('❌ Error syncing from microservice:', error);
+      logger.error('❌ Error syncing from microservice:', error);
     }
   }
 
@@ -267,7 +268,7 @@ class CannabisSurveyIntegrationService {
       });
 
       if (!template) {
-        console.warn(`⚠️  No matching cannabis template for: ${msResponse.templateTitle}`);
+        logger.warn(`⚠️  No matching cannabis template for: ${msResponse.templateTitle}`);
         return;
       }
 
@@ -331,9 +332,9 @@ class CannabisSurveyIntegrationService {
       });
 
       await cannabisResponse.save();
-      console.log(`➕ Imported response ${msResponse.responseId} from microservice`);
+      logger.info(`➕ Imported response ${msResponse.responseId} from microservice`);
     } catch (error) {
-      console.error(`❌ Error importing response ${msResponse.responseId}:`, error);
+      logger.error(`❌ Error importing response ${msResponse.responseId}:`, error);
     }
   }
 
@@ -361,13 +362,13 @@ class CannabisSurveyIntegrationService {
       for (const webhook of webhookEndpoints) {
         try {
           await axios.post(`${this.surveyMicroserviceUrl}/api/admin/webhooks`, webhook);
-          console.log(`🔗 Registered webhook: ${webhook.event}`);
+          logger.info(`🔗 Registered webhook: ${webhook.event}`);
         } catch (error) {
-          console.warn(`⚠️  Failed to register webhook ${webhook.event}:`, error.message);
+          logger.warn(`⚠️  Failed to register webhook ${webhook.event}:`, error.message);
         }
       }
     } catch (error) {
-      console.error('❌ Error setting up webhooks:', error);
+      logger.error('❌ Error setting up webhooks:', error);
     }
   }
 
@@ -384,13 +385,13 @@ class CannabisSurveyIntegrationService {
         // Update farm cultivation records
         await enhancedFarmManagementService.updateCultivationRecord(
           response.respondent.farmCode,
-          cultivationData
+          cultivationData,
         );
 
-        console.log(`🌱 Updated farm cultivation data for ${response.respondent.farmCode}`);
+        logger.info(`🌱 Updated farm cultivation data for ${response.respondent.farmCode}`);
       }
     } catch (error) {
-      console.error('❌ Error integrating with farm management:', error);
+      logger.error('❌ Error integrating with farm management:', error);
     }
   }
 
@@ -505,10 +506,10 @@ class CannabisSurveyIntegrationService {
       }
 
       console.log(
-        `📧 Sent ${notifications.length} compliance notifications for response ${responseId}`
+        `📧 Sent ${notifications.length} compliance notifications for response ${responseId}`,
       );
     } catch (error) {
-      console.error('❌ Error triggering compliance notifications:', error);
+      logger.error('❌ Error triggering compliance notifications:', error);
     }
   }
 
@@ -561,9 +562,9 @@ class CannabisSurveyIntegrationService {
         await blitzzIntegrationService.createTask(task);
       }
 
-      console.log(`📋 Created ${tasks.length} compliance tasks for response ${responseId}`);
+      logger.info(`📋 Created ${tasks.length} compliance tasks for response ${responseId}`);
     } catch (error) {
-      console.error('❌ Error creating compliance tasks:', error);
+      logger.error('❌ Error creating compliance tasks:', error);
     }
   }
 

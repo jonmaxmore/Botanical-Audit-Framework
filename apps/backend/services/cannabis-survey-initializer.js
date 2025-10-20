@@ -3,6 +3,7 @@
  * Sets up the complete cannabis survey system with templates, questions, and configurations
  */
 
+const logger = require('../shared/logger/logger');
 const mongoose = require('mongoose');
 const { createCannabisTemplates } = require('../config/cannabisTemplates');
 const { CannabisSurveyTemplate, CannabisQuestion } = require('../models/CannabisSurvey');
@@ -15,13 +16,13 @@ class CannabisSurveyInitializer {
 
   async initialize(options = {}) {
     try {
-      console.log('🌿 Starting Cannabis Survey System initialization...');
+      logger.info('🌿 Starting Cannabis Survey System initialization...');
 
       const { recreateTemplates = false, createSampleData = true, runValidation = true } = options;
 
       // Check if already initialized
       if (!recreateTemplates && (await this.checkExistingSystem())) {
-        console.log('✅ Cannabis Survey System already initialized');
+        logger.info('✅ Cannabis Survey System already initialized');
         return {
           success: true,
           message: 'System already initialized',
@@ -38,19 +39,19 @@ class CannabisSurveyInitializer {
       const systemAdmin = await this.getOrCreateSystemAdmin();
 
       // Step 3: Create cannabis survey templates
-      console.log('📋 Creating cannabis survey templates...');
+      logger.info('📋 Creating cannabis survey templates...');
       const templateResults = await createCannabisTemplates(systemAdmin._id);
 
       // Step 4: Create sample responses if requested
       let sampleData = null;
       if (createSampleData) {
-        console.log('📊 Creating sample survey data...');
+        logger.info('📊 Creating sample survey data...');
         sampleData = await this.createSampleData(templateResults);
       }
 
       // Step 5: Validate system integrity
       if (runValidation) {
-        console.log('🔍 Validating system integrity...');
+        logger.info('🔍 Validating system integrity...');
         await this.validateSystemIntegrity();
       }
 
@@ -59,7 +60,7 @@ class CannabisSurveyInitializer {
 
       const stats = await this.getSystemStats();
 
-      console.log('🎉 Cannabis Survey System initialization completed successfully!');
+      logger.info('🎉 Cannabis Survey System initialization completed successfully!');
       console.log(`📈 System Statistics:
         - Templates: ${stats.templates}
         - Questions: ${stats.questions}
@@ -76,7 +77,7 @@ class CannabisSurveyInitializer {
         },
       };
     } catch (error) {
-      console.error('❌ Cannabis Survey System initialization failed:', error);
+      logger.error('❌ Cannabis Survey System initialization failed:', error);
       throw new Error(`Initialization failed: ${error.message}`);
     }
   }
@@ -89,20 +90,20 @@ class CannabisSurveyInitializer {
       // Consider system initialized if we have at least 3 templates and 20 questions
       return templateCount >= 3 && questionCount >= 20;
     } catch (error) {
-      console.error('Error checking existing system:', error);
+      logger.error('Error checking existing system:', error);
       return false;
     }
   }
 
   async clearExistingData() {
     try {
-      console.log('🧹 Clearing existing cannabis survey data...');
+      logger.info('🧹 Clearing existing cannabis survey data...');
 
       await Promise.all([CannabisQuestion.deleteMany({}), CannabisSurveyTemplate.deleteMany({})]);
 
-      console.log('✅ Existing data cleared');
+      logger.info('✅ Existing data cleared');
     } catch (error) {
-      console.error('Error clearing existing data:', error);
+      logger.error('Error clearing existing data:', error);
       throw error;
     }
   }
@@ -138,12 +139,12 @@ class CannabisSurveyInitializer {
         });
 
         await admin.save();
-        console.log('👤 Created system admin user for cannabis surveys');
+        logger.info('👤 Created system admin user for cannabis surveys');
       }
 
       return admin;
     } catch (error) {
-      console.error('Error getting/creating system admin:', error);
+      logger.error('Error getting/creating system admin:', error);
       throw error;
     }
   }
@@ -225,10 +226,10 @@ class CannabisSurveyInitializer {
         }
       }
 
-      console.log(`📊 Created ${sampleResponses.length} sample survey responses`);
+      logger.info(`📊 Created ${sampleResponses.length} sample survey responses`);
       return sampleResponses;
     } catch (error) {
-      console.error('Error creating sample data:', error);
+      logger.error('Error creating sample data:', error);
       // Don't throw here, sample data is optional
       return [];
     }
@@ -249,7 +250,7 @@ class CannabisSurveyInitializer {
           if (question.options && question.options.length > 0) {
             // Prefer options with higher compliance scores
             const sortedOptions = question.options.sort(
-              (a, b) => (b.complianceScore || 50) - (a.complianceScore || 50)
+              (a, b) => (b.complianceScore || 50) - (a.complianceScore || 50),
             );
             answer = sortedOptions[0].value;
           }
@@ -375,14 +376,14 @@ class CannabisSurveyInitializer {
       }
 
       if (issues.length > 0) {
-        console.warn('⚠️  System validation found issues:', issues);
+        logger.warn('⚠️  System validation found issues:', issues);
         return { valid: false, issues };
       }
 
-      console.log('✅ System validation passed');
+      logger.info('✅ System validation passed');
       return { valid: true, issues: [] };
     } catch (error) {
-      console.error('Error during system validation:', error);
+      logger.error('Error during system validation:', error);
       throw error;
     }
   }
@@ -411,7 +412,7 @@ class CannabisSurveyInitializer {
         },
       };
     } catch (error) {
-      console.error('Error getting system stats:', error);
+      logger.error('Error getting system stats:', error);
       return {
         templates: 0,
         questions: 0,
@@ -424,14 +425,14 @@ class CannabisSurveyInitializer {
 
   async reinitialize(options = {}) {
     try {
-      console.log('🔄 Reinitializing Cannabis Survey System...');
+      logger.info('🔄 Reinitializing Cannabis Survey System...');
 
       return await this.initialize({
         ...options,
         recreateTemplates: true,
       });
     } catch (error) {
-      console.error('Error during reinitialization:', error);
+      logger.error('Error during reinitialization:', error);
       throw error;
     }
   }
@@ -469,11 +470,11 @@ class CannabisSurveyInitializer {
       });
 
       await template.save();
-      console.log(`✅ Added custom cannabis survey template: ${template.title}`);
+      logger.info(`✅ Added custom cannabis survey template: ${template.title}`);
 
       return template;
     } catch (error) {
-      console.error('Error adding custom template:', error);
+      logger.error('Error adding custom template:', error);
       throw error;
     }
   }
@@ -483,7 +484,7 @@ class CannabisSurveyInitializer {
     try {
       const templates = await CannabisSurveyTemplate.find().populate(
         'createdBy',
-        'firstName lastName email'
+        'firstName lastName email',
       );
 
       const templateIds = templates.map(t => t._id);
@@ -501,7 +502,7 @@ class CannabisSurveyInitializer {
 
       return configuration;
     } catch (error) {
-      console.error('Error exporting configuration:', error);
+      logger.error('Error exporting configuration:', error);
       throw error;
     }
   }

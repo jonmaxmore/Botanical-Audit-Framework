@@ -14,22 +14,24 @@
 
 ## 👥 User Roles Covered
 
-| Role | Count | Test Cases | Description |
-|------|-------|-----------|-------------|
-| 👨‍🌾 **Farmer** | 5 users | 6 cases | เกษตรกรผู้ปลูกกัญชา |
-| 👔 **Reviewer** | 2 users | 5 cases | เจ้าหน้าที่ตรวจสอบเอกสาร |
-| 🔍 **Inspector** | 3 users | 5 cases | ผู้ตรวจประเมินภาคสนาม |
-| ✅ **Approver** | 2 users | 6 cases | ผู้อนุมัติใบรับรอง |
-| 👑 **Admin** | 1 user | 10 cases | ผู้ดูแลระบบ |
-| **TOTAL** | **13 users** | **32 cases** | |
+| Role             | Count        | Test Cases   | Description              |
+| ---------------- | ------------ | ------------ | ------------------------ |
+| 👨‍🌾 **Farmer**    | 5 users      | 6 cases      | เกษตรกรผู้ปลูกกัญชา      |
+| 👔 **Reviewer**  | 2 users      | 5 cases      | เจ้าหน้าที่ตรวจสอบเอกสาร |
+| 🔍 **Inspector** | 3 users      | 5 cases      | ผู้ตรวจประเมินภาคสนาม    |
+| ✅ **Approver**  | 2 users      | 6 cases      | ผู้อนุมัติใบรับรอง       |
+| 👑 **Admin**     | 1 user       | 10 cases     | ผู้ดูแลระบบ              |
+| **TOTAL**        | **13 users** | **32 cases** |                          |
 
 ---
 
 ## 🧩 Modules Covered
 
 ### 1. Member Management Module
+
 **Test Cases:** 10  
 **Features:**
+
 - ✅ User registration (all roles)
 - ✅ Login/Logout
 - ✅ Password reset
@@ -40,6 +42,7 @@
 - ✅ User audit logs
 
 **API Endpoints:**
+
 ```
 POST   /api/auth/register
 POST   /api/auth/login
@@ -54,8 +57,10 @@ PUT    /api/admin/users/:id/status
 ---
 
 ### 2. Certification Module
+
 **Test Cases:** 30  
 **Features:**
+
 - ✅ Application submission
 - ✅ Document upload (multiple files)
 - ✅ Application review workflow
@@ -73,6 +78,7 @@ PUT    /api/admin/users/:id/status
 - ✅ Email notifications
 
 **API Endpoints:**
+
 ```
 POST   /api/applications/submit
 GET    /api/applications/my-applications
@@ -91,8 +97,10 @@ GET    /api/certificates/download/:id
 ---
 
 ### 3. Farm Management Module
+
 **Test Cases:** 15  
 **Features:**
+
 - ✅ Farm profile creation
 - ✅ Multiple farms per farmer
 - ✅ GPS location mapping
@@ -105,6 +113,7 @@ GET    /api/certificates/download/:id
 - ✅ Farm search by region/province
 
 **API Endpoints:**
+
 ```
 POST   /api/farms/create
 GET    /api/farms/my-farms
@@ -120,8 +129,10 @@ PUT    /api/admin/farms/:id/status
 ---
 
 ### 4. Track & Trace Module
+
 **Test Cases:** 12  
 **Features:**
+
 - ✅ Activity recording (planting, watering, pest control, harvesting, processing)
 - ✅ Batch/lot number generation
 - ✅ Quantity tracking (plants, kg, units)
@@ -135,6 +146,7 @@ PUT    /api/admin/farms/:id/status
 - ✅ Traceability report
 
 **API Endpoints:**
+
 ```
 POST   /api/tracktrace/record
 GET    /api/tracktrace/farm/:farmId
@@ -147,8 +159,10 @@ POST   /api/tracktrace/export
 ---
 
 ### 5. Survey Module
+
 **Test Cases:** 15  
 **Features:**
+
 - ✅ Survey template creation (Admin)
 - ✅ Multiple question types (choice, number, text, photo)
 - ✅ Regional survey deployment (4 regions: Central, Northern, Southern, Northeastern)
@@ -163,6 +177,7 @@ POST   /api/tracktrace/export
 - ✅ Email reminders
 
 **API Endpoints:**
+
 ```
 POST   /api/admin/surveys/create
 GET    /api/surveys/assigned
@@ -177,8 +192,10 @@ POST   /api/admin/surveys/:id/report
 ---
 
 ### 6. GACP Standards Comparison Module
+
 **Test Cases:** 10  
 **Features:**
+
 - ✅ Standards checklist display (all GACP parameters)
 - ✅ Farm compliance scoring
 - ✅ Gap analysis
@@ -191,6 +208,7 @@ POST   /api/admin/surveys/:id/report
 - ✅ PDF report download
 
 **API Endpoints:**
+
 ```
 GET    /api/standards/gacp
 GET    /api/standards/compare?farmId=:id
@@ -206,6 +224,7 @@ PUT    /api/admin/standards/update
 ## 📁 Files Created
 
 ### Documentation
+
 1. **`docs/UAT_TEST_PLAN.md`**
    - Complete test plan (92 test cases)
    - Test cases by role (32 detailed scenarios)
@@ -223,6 +242,7 @@ PUT    /api/admin/standards/update
    - Contact information
 
 ### Scripts
+
 3. **`scripts/seed-uat-data.js`**
    - Seeds 13 test users (5 farmers, 2 reviewers, 3 inspectors, 2 approvers, 1 admin)
    - Seeds 10 farms across 4 regions
@@ -240,6 +260,7 @@ PUT    /api/admin/standards/update
    - Colored console output
 
 ### Configuration
+
 5. **`.env.uat.example`**
    - UAT environment variables
    - MongoDB connection string
@@ -249,7 +270,9 @@ PUT    /api/admin/standards/update
    - Testing mode settings
 
 ### Package Scripts
+
 6. **`package.json` updates:**
+
 ```json
 {
   "scripts": {
@@ -269,6 +292,7 @@ PUT    /api/admin/standards/update
 ### Users (13 total)
 
 #### Farmers (5)
+
 ```
 farmer001 / Test@1234 - Somchai Prasert (Central)
 farmer002 / Test@1234 - Somsri Boonmee (Northern)
@@ -278,6 +302,7 @@ farmer005 / Test@1234 - Surachai Thongchai (Central)
 ```
 
 #### DTAM Staff (8)
+
 ```
 Reviewers:
   reviewer001 / Rev@1234 - Panya Reviewer
@@ -297,12 +322,14 @@ Admin:
 ```
 
 ### Farms (10 total)
+
 - **Central Region:** 3 farms (Nonthaburi, Pathum Thani, Ayutthaya)
 - **Northern Region:** 3 farms (Chiang Mai x2, Phrae)
 - **Southern Region:** 2 farms (Phuket, Surat Thani)
 - **Northeastern Region:** 2 farms (Khon Kaen, Udon Thani)
 
 ### Applications (13 total)
+
 - **Pending Review:** 3 applications
 - **Under Review:** 2 applications
 - **Assigned to Inspector:** 2 applications
@@ -316,6 +343,7 @@ Admin:
 ## 🚀 Quick Start Guide
 
 ### 1. Environment Setup
+
 ```bash
 # Copy UAT environment file
 npm run uat:setup
@@ -325,12 +353,14 @@ notepad .env.uat
 ```
 
 ### 2. Seed Test Data
+
 ```bash
 # Populate database with test data
 npm run uat:seed
 ```
 
 **Output:**
+
 ```
 ✅ MongoDB connected
 ✅ Created 13 users
@@ -346,18 +376,21 @@ npm run uat:seed
 ```
 
 ### 3. Start UAT Server
+
 ```bash
 # Start backend in UAT mode
 npm run uat:server
 ```
 
 ### 4. Run Automated Tests
+
 ```bash
 # Execute all UAT test cases
 npm run uat:test
 ```
 
 **Output:**
+
 ```
 🧪 UAT TEST RUNNER
 Testing 32 test cases...
@@ -378,19 +411,20 @@ Total: 32
 
 ## 🔗 Access URLs
 
-| Service | URL | Description |
-|---------|-----|-------------|
-| Farmer Portal | http://localhost:3000 | Frontend for farmers |
-| DTAM Portal | http://localhost:3002 | Frontend for DTAM staff |
-| API Backend | http://localhost:3001 | REST API |
-| API Docs | http://localhost:3001/api-docs | Swagger documentation |
-| MongoDB | mongodb://localhost:27017/botanical-audit-uat | Database |
+| Service       | URL                                           | Description             |
+| ------------- | --------------------------------------------- | ----------------------- |
+| Farmer Portal | http://localhost:3000                         | Frontend for farmers    |
+| DTAM Portal   | http://localhost:3002                         | Frontend for DTAM staff |
+| API Backend   | http://localhost:3001                         | REST API                |
+| API Docs      | http://localhost:3001/api-docs                | Swagger documentation   |
+| MongoDB       | mongodb://localhost:27017/botanical-audit-uat | Database                |
 
 ---
 
 ## ✅ Testing Workflow
 
 ### Phase 1: Manual Testing (Week 1)
+
 **Oct 25 - Oct 31, 2025**
 
 1. **Day 1-2:** Farmer role testing
@@ -422,6 +456,7 @@ Total: 32
    - Audit logs review
 
 ### Phase 2: Integration Testing (Week 2)
+
 **Nov 1 - Nov 8, 2025**
 
 1. **End-to-end workflow testing**
@@ -452,6 +487,7 @@ Total: 32
 ## 📋 Test Metrics
 
 ### Coverage
+
 - **User Roles:** 5/5 (100%)
 - **Modules:** 6/6 (100%)
 - **API Endpoints:** ~50 endpoints
@@ -462,6 +498,7 @@ Total: 32
   - Low: 12
 
 ### Expected Results
+
 - **Pass Rate Target:** ≥ 95%
 - **Critical Bugs:** 0
 - **High Priority Bugs:** < 3
@@ -473,6 +510,7 @@ Total: 32
 ## 🐛 Known Issues & Limitations
 
 ### Current Limitations
+
 1. ⚠️ Email notifications use Mailtrap (test mode)
 2. ⚠️ SMS notifications disabled in UAT
 3. ⚠️ Payment integration not included
@@ -480,6 +518,7 @@ Total: 32
 5. ⚠️ Real-time chat support not enabled
 
 ### To Be Tested
+
 - [ ] Multi-language support (Thai/English)
 - [ ] Offline mode for inspectors
 - [ ] Bulk operations (mass approval)
@@ -494,36 +533,41 @@ Total: 32
 ## UAT Test Results - [Date]
 
 ### Overall Summary
+
 - Total Test Cases: 92
-- Executed: __/92
-- Passed: __/92
-- Failed: __/92
-- Blocked: __/92
-- Pass Rate: __%
+- Executed: \_\_/92
+- Passed: \_\_/92
+- Failed: \_\_/92
+- Blocked: \_\_/92
+- Pass Rate: \_\_%
 
 ### By Role
-| Role | Executed | Passed | Failed | Pass Rate |
-|------|----------|--------|--------|-----------|
-| Farmer | __/6 | __ | __ | __% |
-| Reviewer | __/5 | __ | __ | __% |
-| Inspector | __/5 | __ | __ | __% |
-| Approver | __/6 | __ | __ | __% |
-| Admin | __/10 | __ | __ | __% |
+
+| Role      | Executed | Passed | Failed | Pass Rate |
+| --------- | -------- | ------ | ------ | --------- |
+| Farmer    | \_\_/6   | \_\_   | \_\_   | \_\_%     |
+| Reviewer  | \_\_/5   | \_\_   | \_\_   | \_\_%     |
+| Inspector | \_\_/5   | \_\_   | \_\_   | \_\_%     |
+| Approver  | \_\_/6   | \_\_   | \_\_   | \_\_%     |
+| Admin     | \_\_/10  | \_\_   | \_\_   | \_\_%     |
 
 ### By Module
-| Module | Executed | Passed | Failed | Pass Rate |
-|--------|----------|--------|--------|-----------|
-| Member Management | __/10 | __ | __ | __% |
-| Certification | __/30 | __ | __ | __% |
-| Farm Management | __/15 | __ | __ | __% |
-| Track & Trace | __/12 | __ | __ | __% |
-| Survey | __/15 | __ | __ | __% |
-| GACP Compare | __/10 | __ | __ | __% |
+
+| Module            | Executed | Passed | Failed | Pass Rate |
+| ----------------- | -------- | ------ | ------ | --------- |
+| Member Management | \_\_/10  | \_\_   | \_\_   | \_\_%     |
+| Certification     | \_\_/30  | \_\_   | \_\_   | \_\_%     |
+| Farm Management   | \_\_/15  | \_\_   | \_\_   | \_\_%     |
+| Track & Trace     | \_\_/12  | \_\_   | \_\_   | \_\_%     |
+| Survey            | \_\_/15  | \_\_   | \_\_   | \_\_%     |
+| GACP Compare      | \_\_/10  | \_\_   | \_\_   | \_\_%     |
 
 ### Critical Issues
+
 1. [Issue ID] - [Description] - [Status]
 
 ### Recommendations
+
 - [Recommendation 1]
 - [Recommendation 2]
 ```
@@ -533,6 +577,7 @@ Total: 32
 ## 📝 Next Steps
 
 ### Immediate Actions
+
 1. ✅ Review UAT documentation
 2. ✅ Setup UAT environment
 3. ✅ Seed test data
@@ -540,6 +585,7 @@ Total: 32
 5. ✅ Distribute credentials to testers
 
 ### Before Testing
+
 - [ ] Schedule kickoff meeting
 - [ ] Train testers on each role
 - [ ] Set up bug tracking system
@@ -547,6 +593,7 @@ Total: 32
 - [ ] Setup monitoring/logging
 
 ### During Testing
+
 - [ ] Daily standup meetings
 - [ ] Track test execution progress
 - [ ] Triage and prioritize bugs
@@ -554,6 +601,7 @@ Total: 32
 - [ ] Collect user feedback
 
 ### After Testing
+
 - [ ] Compile final test report
 - [ ] Stakeholder sign-off
 - [ ] Plan for production deployment
@@ -565,12 +613,14 @@ Total: 32
 ## 👏 Acknowledgments
 
 **Testing Team:**
+
 - Project Manager: [Name]
 - QA Lead: [Name]
 - Technical Lead: [Name]
 - Business Analyst: [Name]
 
 **Test Users:**
+
 - 5 Farmers
 - 2 Reviewers
 - 3 Inspectors
@@ -582,11 +632,13 @@ Total: 32
 ## 📞 Support
 
 **For UAT Support:**
+
 - 📧 Email: uat-support@botanical.test
 - 📱 Line: @botanical-uat
 - 💬 Slack: #botanical-uat
 
 **For Technical Issues:**
+
 - 🐛 Bug Tracker: [URL]
 - 📖 Documentation: [URL]
 - 💻 GitHub: [Repository URL]

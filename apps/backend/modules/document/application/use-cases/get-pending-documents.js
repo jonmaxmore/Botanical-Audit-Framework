@@ -15,7 +15,7 @@ class GetPendingDocumentsUseCase {
       const result = await this.documentRepository.findPendingReview(options);
       return result;
     } catch (error) {
-      console.error('Error getting pending documents:', error);
+      logger.error('Error getting pending documents:', error);
       throw error;
     }
   }

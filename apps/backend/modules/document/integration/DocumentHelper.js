@@ -175,7 +175,7 @@ class DocumentHelper {
         'relatedEntity.id': entityId,
       },
       userId,
-      userRole
+      userRole,
     );
   }
 
@@ -192,7 +192,7 @@ class DocumentHelper {
         },
       },
       userId,
-      userRole
+      userRole,
     );
   }
 
@@ -206,7 +206,7 @@ class DocumentHelper {
         relatedEntity: null,
       },
       userId,
-      userRole
+      userRole,
     );
   }
 

@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
+    "check-format": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
+  }
+}

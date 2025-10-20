@@ -154,7 +154,7 @@ class CacheService {
     namespace: string,
     key: string,
     fetchFn: () => Promise<T>,
-    ttl?: number
+    ttl?: number,
   ): Promise<T> {
     // Try to get from cache first
     const cached = await this.get<T>(namespace, key);
@@ -194,7 +194,7 @@ class CacheService {
   public async setMany(
     namespace: string,
     data: Record<string, any>,
-    ttl?: number
+    ttl?: number,
   ): Promise<boolean> {
     const config = this.getNamespaceConfig(namespace);
     const finalTtl = ttl || config.ttl;
@@ -303,7 +303,7 @@ class CacheService {
     key: string,
     fetchFn: () => Promise<T>,
     ttl: number,
-    staleTime: number
+    staleTime: number,
   ): Promise<T> {
     const cached = await this.get<T>(namespace, key);
 

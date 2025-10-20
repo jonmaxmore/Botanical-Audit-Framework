@@ -29,7 +29,7 @@ router.get(
   '/stats',
   authenticate,
   authorize(['director', 'auditor', 'admin']),
-  getApplicationStats
+  getApplicationStats,
 );
 
 // Get specific application
@@ -41,7 +41,7 @@ router.post(
   authenticate,
   authorize(['farmer']),
   validateRequest('application'),
-  createApplication
+  createApplication,
 );
 
 // Submit application for review
@@ -53,7 +53,7 @@ router.post(
   authenticate,
   authorize(['director', 'auditor']),
   validateRequest('applicationReview'),
-  reviewApplication
+  reviewApplication,
 );
 
 // Update application

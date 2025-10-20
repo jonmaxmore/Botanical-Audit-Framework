@@ -60,7 +60,7 @@ const farmSchema = new mongoose.Schema(
   {
     collection: 'farms',
     timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
-  }
+  },
 );
 
 // Compound indexes
@@ -160,7 +160,7 @@ class MongoDBFarmRepository extends IFarmRepository {
       const doc = await this.FarmModel.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding farm by ID:', error);
+      logger.error('Error finding farm by ID:', error);
       throw error;
     }
   }
@@ -173,7 +173,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding farms by owner:', error);
+      logger.error('Error finding farms by owner:', error);
       throw error;
     }
   }
@@ -186,7 +186,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding farms by status:', error);
+      logger.error('Error finding farms by status:', error);
       throw error;
     }
   }
@@ -226,7 +226,7 @@ class MongoDBFarmRepository extends IFarmRepository {
         total,
       };
     } catch (error) {
-      console.error('Error finding farms with filters:', error);
+      logger.error('Error finding farms with filters:', error);
       throw error;
     }
   }
@@ -242,7 +242,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding farms by location:', error);
+      logger.error('Error finding farms by location:', error);
       throw error;
     }
   }
@@ -284,7 +284,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding farms near location:', error);
+      logger.error('Error finding farms near location:', error);
       throw error;
     }
   }
@@ -302,7 +302,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error saving farm:', error);
+      logger.error('Error saving farm:', error);
       throw error;
     }
   }
@@ -312,7 +312,7 @@ class MongoDBFarmRepository extends IFarmRepository {
       const result = await this.FarmModel.findByIdAndDelete(id);
       return !!result;
     } catch (error) {
-      console.error('Error deleting farm:', error);
+      logger.error('Error deleting farm:', error);
       throw error;
     }
   }
@@ -321,7 +321,7 @@ class MongoDBFarmRepository extends IFarmRepository {
     try {
       return await this.FarmModel.countDocuments({ status });
     } catch (error) {
-      console.error('Error counting farms by status:', error);
+      logger.error('Error counting farms by status:', error);
       throw error;
     }
   }
@@ -330,7 +330,7 @@ class MongoDBFarmRepository extends IFarmRepository {
     try {
       return await this.FarmModel.countDocuments({ ownerId });
     } catch (error) {
-      console.error('Error counting farms by owner:', error);
+      logger.error('Error counting farms by owner:', error);
       throw error;
     }
   }
@@ -345,7 +345,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return result;
     } catch (error) {
-      console.error('Error getting statistics by province:', error);
+      logger.error('Error getting statistics by province:', error);
       throw error;
     }
   }
@@ -360,7 +360,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return result;
     } catch (error) {
-      console.error('Error getting statistics by status:', error);
+      logger.error('Error getting statistics by status:', error);
       throw error;
     }
   }
@@ -375,7 +375,7 @@ class MongoDBFarmRepository extends IFarmRepository {
       const count = await this.FarmModel.countDocuments(query);
       return count > 0;
     } catch (error) {
-      console.error('Error checking farm name existence:', error);
+      logger.error('Error checking farm name existence:', error);
       throw error;
     }
   }
@@ -388,7 +388,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding recently submitted farms:', error);
+      logger.error('Error finding recently submitted farms:', error);
       throw error;
     }
   }
@@ -404,7 +404,7 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding farms verified by staff:', error);
+      logger.error('Error finding farms verified by staff:', error);
       throw error;
     }
   }

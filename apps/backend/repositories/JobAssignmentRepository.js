@@ -160,7 +160,7 @@ class JobAssignmentRepository {
             updatedAt: new Date(),
           },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;

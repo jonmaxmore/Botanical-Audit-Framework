@@ -5,6 +5,7 @@
  * Exports all public interfaces for use by other modules.
  */
 
+const logger = require('../../shared/logger/logger');
 const { createNotificationModule } = require('./integration/container');
 const NotificationHelper = require('./integration/NotificationHelper');
 const Notification = require('./domain/entities/Notification');
@@ -24,15 +25,15 @@ const initializeRoutes = require('./routes/notification.routes');
  */
 function initializeNotificationModule(config = {}) {
   try {
-    console.log('Initializing Notification module (Clean Architecture)...');
+    logger.info('Initializing Notification module (Clean Architecture);...');
 
     // Create and initialize module container
     const container = createNotificationModule(config);
 
-    console.log('✓ Notification module initialized');
+    logger.info('✓ Notification module initialized');
     return container;
   } catch (error) {
-    console.error('Error initializing notification module:', error);
+    logger.error('Error initializing notification module:', error);
     throw error;
   }
 }
@@ -47,7 +48,7 @@ function initializeNotificationModule(config = {}) {
  */
 async function initializeNotification(db, authMiddleware, adminMiddleware) {
   try {
-    console.log('Initializing Notification module (LEGACY)...');
+    logger.info('Initializing Notification module (LEGACY);...');
 
     // Validate dependencies
     if (!db) {
@@ -75,17 +76,17 @@ async function initializeNotification(db, authMiddleware, adminMiddleware) {
     // Initialize service
     const notificationService = new NotificationService(db);
     await notificationService.initialize();
-    console.log('✓ Notification service initialized (LEGACY)');
+    logger.info('✓ Notification service initialized (LEGACY);');
 
     // Initialize controller
     const notificationController = new NotificationController(notificationService);
-    console.log('✓ Notification controller initialized (LEGACY)');
+    logger.info('✓ Notification controller initialized (LEGACY);');
 
     // Initialize routes
     const router = initializeRoutes(notificationController, authMiddleware, adminMiddleware);
-    console.log('✓ Notification routes initialized (LEGACY)');
+    logger.info('✓ Notification routes initialized (LEGACY);');
 
-    console.log('✓ Notification module ready (LEGACY)');
+    logger.info('✓ Notification module ready (LEGACY);');
 
     return {
       router,
@@ -93,7 +94,7 @@ async function initializeNotification(db, authMiddleware, adminMiddleware) {
       controller: notificationController,
     };
   } catch (error) {
-    console.error('Failed to initialize Notification module (LEGACY):', error);
+    logger.error('Failed to initialize Notification module (LEGACY);:', error);
     throw error;
   }
 }

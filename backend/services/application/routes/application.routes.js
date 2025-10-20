@@ -25,7 +25,7 @@ const { authenticate, authorize } = require('../../auth/middleware/auth.middlewa
 const {
   validateCreateApplication,
   validateUpdateApplication,
-  validateApplicationId
+  validateApplicationId,
 } = require('../middleware/validation.middleware');
 
 // ========================================
@@ -49,7 +49,7 @@ router.post(
   authenticate,
   authorize(['FARMER']),
   validateCreateApplication,
-  applicationController.createApplication
+  applicationController.createApplication,
 );
 
 /**
@@ -81,7 +81,7 @@ router.put(
   authorize(['FARMER']),
   validateApplicationId,
   validateUpdateApplication,
-  applicationController.updateApplication
+  applicationController.updateApplication,
 );
 
 /**
@@ -95,7 +95,7 @@ router.delete(
   authenticate,
   authorize(['FARMER']),
   validateApplicationId,
-  applicationController.deleteApplication
+  applicationController.deleteApplication,
 );
 
 /**
@@ -109,7 +109,7 @@ router.post(
   authenticate,
   authorize(['FARMER']),
   validateApplicationId,
-  applicationController.submitApplication
+  applicationController.submitApplication,
 );
 
 /**

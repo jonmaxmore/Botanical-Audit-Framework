@@ -31,7 +31,7 @@ class DashboardController {
         data: DashboardDTO.toFarmerDashboard(dashboard),
       });
     } catch (error) {
-      console.error('Error getting farmer dashboard:', error);
+      logger.error('Error getting farmer dashboard:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load dashboard',
@@ -55,7 +55,7 @@ class DashboardController {
         data: DashboardDTO.toDTAMDashboard(dashboard),
       });
     } catch (error) {
-      console.error('Error getting DTAM dashboard:', error);
+      logger.error('Error getting DTAM dashboard:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load dashboard',
@@ -79,7 +79,7 @@ class DashboardController {
         data: DashboardDTO.toSystemStatistics(statistics),
       });
     } catch (error) {
-      console.error('Error getting system statistics:', error);
+      logger.error('Error getting system statistics:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load statistics',
@@ -103,7 +103,7 @@ class DashboardController {
         data: dashboard.quickStats,
       });
     } catch (error) {
-      console.error('Error getting quick stats:', error);
+      logger.error('Error getting quick stats:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load quick stats',
@@ -127,7 +127,7 @@ class DashboardController {
         data: dashboard.alerts,
       });
     } catch (error) {
-      console.error('Error getting farmer alerts:', error);
+      logger.error('Error getting farmer alerts:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load alerts',
@@ -151,7 +151,7 @@ class DashboardController {
         data: dashboard.quickActions,
       });
     } catch (error) {
-      console.error('Error getting farmer quick actions:', error);
+      logger.error('Error getting farmer quick actions:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load quick actions',
@@ -175,7 +175,7 @@ class DashboardController {
         data: dashboard.pendingTasks,
       });
     } catch (error) {
-      console.error('Error getting pending tasks:', error);
+      logger.error('Error getting pending tasks:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load pending tasks',
@@ -200,7 +200,7 @@ class DashboardController {
         data: dashboard.recentActivity.slice(0, limit),
       });
     } catch (error) {
-      console.error('Error getting recent activity:', error);
+      logger.error('Error getting recent activity:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load recent activity',
@@ -224,7 +224,7 @@ class DashboardController {
         data: dashboard.trends,
       });
     } catch (error) {
-      console.error('Error getting trends:', error);
+      logger.error('Error getting trends:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load trends',

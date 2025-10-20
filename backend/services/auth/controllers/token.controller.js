@@ -31,7 +31,7 @@ async function refresh(req, res) {
       return res.status(401).json({
         success: false,
         error: 'NO_REFRESH_TOKEN',
-        message: 'ไม่พบ refresh token กรุณาเข้าสู่ระบบใหม่'
+        message: 'ไม่พบ refresh token กรุณาเข้าสู่ระบบใหม่',
       });
     }
 
@@ -44,7 +44,7 @@ async function refresh(req, res) {
       secure: config.cookie.secure,
       sameSite: config.cookie.sameSite,
       maxAge: config.cookie.maxAge,
-      path: '/'
+      path: '/',
     });
 
     // Return new access token
@@ -54,8 +54,8 @@ async function refresh(req, res) {
       data: {
         accessToken,
         tokenType: 'Bearer',
-        expiresIn
-      }
+        expiresIn,
+      },
     });
   } catch (error) {
     console.error('Token refresh error:', error);
@@ -65,7 +65,7 @@ async function refresh(req, res) {
       httpOnly: true,
       secure: config.cookie.secure,
       sameSite: config.cookie.sameSite,
-      path: '/'
+      path: '/',
     });
 
     // Handle specific errors
@@ -74,7 +74,7 @@ async function refresh(req, res) {
       return res.status(401).json({
         success: false,
         error: 'TOKEN_REUSE_DETECTED',
-        message: 'ตรวจพบการใช้ token ซ้ำ โปรดเข้าสู่ระบบใหม่'
+        message: 'ตรวจพบการใช้ token ซ้ำ โปรดเข้าสู่ระบบใหม่',
       });
     }
 
@@ -82,7 +82,7 @@ async function refresh(req, res) {
       return res.status(401).json({
         success: false,
         error: 'REFRESH_TOKEN_EXPIRED',
-        message: 'Refresh token หมดอายุ กรุณาเข้าสู่ระบบใหม่'
+        message: 'Refresh token หมดอายุ กรุณาเข้าสู่ระบบใหม่',
       });
     }
 
@@ -90,7 +90,7 @@ async function refresh(req, res) {
       return res.status(401).json({
         success: false,
         error: 'INVALID_REFRESH_TOKEN',
-        message: 'Refresh token ไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่'
+        message: 'Refresh token ไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่',
       });
     }
 
@@ -99,7 +99,7 @@ async function refresh(req, res) {
       return res.status(401).json({
         success: false,
         error: 'INVALID_REFRESH_TOKEN',
-        message: 'Refresh token ไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่'
+        message: 'Refresh token ไม่ถูกต้อง กรุณาเข้าสู่ระบบใหม่',
       });
     }
 
@@ -107,11 +107,11 @@ async function refresh(req, res) {
     res.status(500).json({
       success: false,
       error: 'TOKEN_REFRESH_ERROR',
-      message: 'เกิดข้อผิดพลาดในการ refresh token'
+      message: 'เกิดข้อผิดพลาดในการ refresh token',
     });
   }
 }
 
 module.exports = {
-  refresh
+  refresh,
 };

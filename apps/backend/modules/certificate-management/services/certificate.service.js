@@ -5,6 +5,7 @@
  * Handles generation, verification, renewal, and PDF creation
  */
 
+const logger = require('../../../shared/logger/logger');
 const { ObjectId } = require('mongodb');
 const crypto = require('crypto');
 
@@ -34,9 +35,9 @@ class CertificateService {
       await this.certificatesCollection.createIndex({ verificationCode: 1 });
 
       this.initialized = true;
-      console.log('Certificate Service initialized successfully');
+      logger.info('Certificate Service initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize Certificate Service:', error);
+      logger.error('Failed to initialize Certificate Service:', error);
       throw error;
     }
   }
@@ -167,7 +168,7 @@ class CertificateService {
             certificateIssued: true,
             certificateIssuedAt: now,
           },
-        }
+        },
       );
 
       return {
@@ -178,7 +179,7 @@ class CertificateService {
         ...certificate,
       };
     } catch (error) {
-      console.error('Error creating certificate:', error);
+      logger.error('Error creating certificate:', error);
       throw error;
     }
   }
@@ -201,7 +202,7 @@ class CertificateService {
         ...certificate,
       };
     } catch (error) {
-      console.error('Error getting certificate:', error);
+      logger.error('Error getting certificate:', error);
       throw error;
     }
   }
@@ -224,7 +225,7 @@ class CertificateService {
         ...certificate,
       };
     } catch (error) {
-      console.error('Error getting certificate:', error);
+      logger.error('Error getting certificate:', error);
       throw error;
     }
   }
@@ -260,7 +261,7 @@ class CertificateService {
         score: cert.score,
       }));
     } catch (error) {
-      console.error('Error getting certificates by user:', error);
+      logger.error('Error getting certificates by user:', error);
       throw error;
     }
   }
@@ -311,7 +312,7 @@ class CertificateService {
         totalPages: Math.ceil(total / limit),
       };
     } catch (error) {
-      console.error('Error getting all certificates:', error);
+      logger.error('Error getting all certificates:', error);
       throw error;
     }
   }
@@ -339,7 +340,7 @@ class CertificateService {
         {
           $inc: { verificationCount: 1 },
           $set: { lastVerifiedAt: new Date() },
-        }
+        },
       );
 
       // Check if verification code is provided and matches
@@ -400,7 +401,7 @@ class CertificateService {
         },
       };
     } catch (error) {
-      console.error('Error verifying certificate:', error);
+      logger.error('Error verifying certificate:', error);
       throw error;
     }
   }
@@ -447,12 +448,12 @@ class CertificateService {
             renewedAt: now,
             updatedAt: now,
           },
-        }
+        },
       );
 
       return newCertificate;
     } catch (error) {
-      console.error('Error renewing certificate:', error);
+      logger.error('Error renewing certificate:', error);
       throw error;
     }
   }
@@ -474,7 +475,7 @@ class CertificateService {
             revokedBy,
             updatedAt: now,
           },
-        }
+        },
       );
 
       if (result.matchedCount === 0) {
@@ -486,7 +487,7 @@ class CertificateService {
         message: 'Certificate revoked successfully',
       };
     } catch (error) {
-      console.error('Error revoking certificate:', error);
+      logger.error('Error revoking certificate:', error);
       throw error;
     }
   }
@@ -504,7 +505,7 @@ class CertificateService {
             pdfUrl,
             updatedAt: new Date(),
           },
-        }
+        },
       );
 
       return {
@@ -512,7 +513,7 @@ class CertificateService {
         pdfUrl,
       };
     } catch (error) {
-      console.error('Error updating PDF info:', error);
+      logger.error('Error updating PDF info:', error);
       throw error;
     }
   }
@@ -527,10 +528,10 @@ class CertificateService {
         {
           $inc: { downloadCount: 1 },
           $set: { lastDownloadedAt: new Date() },
-        }
+        },
       );
     } catch (error) {
-      console.error('Error incrementing download count:', error);
+      logger.error('Error incrementing download count:', error);
     }
   }
 
@@ -594,7 +595,7 @@ class CertificateService {
         }, {}),
       };
     } catch (error) {
-      console.error('Error getting certificate stats:', error);
+      logger.error('Error getting certificate stats:', error);
       throw error;
     }
   }
@@ -627,7 +628,7 @@ class CertificateService {
         daysUntilExpiry: Math.ceil((cert.expiryDate - now) / (1000 * 60 * 60 * 24)),
       }));
     } catch (error) {
-      console.error('Error getting expiring certificates:', error);
+      logger.error('Error getting expiring certificates:', error);
       throw error;
     }
   }

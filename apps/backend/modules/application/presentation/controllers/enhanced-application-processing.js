@@ -91,7 +91,7 @@ class EnhancedApplicationProcessingController {
 
     try {
       this.logger.info(
-        `[EnhancedApplicationController] Creating application - Request: ${requestId}`
+        `[EnhancedApplicationController] Creating application - Request: ${requestId}`,
       );
 
       // Validate request data
@@ -103,7 +103,7 @@ class EnhancedApplicationProcessingController {
       // Authorize user for application creation
       const authorizationResult = await this.authorizationService.authorizeApplicationCreation(
         req.user,
-        req.body
+        req.body,
       );
       if (!authorizationResult.authorized) {
         return this._sendAuthorizationError(res, authorizationResult.reason, requestId);
@@ -144,7 +144,7 @@ class EnhancedApplicationProcessingController {
       const applicationResult = await this.advancedApplicationProcessingService.createApplication(
         farmerData,
         applicationData,
-        options
+        options,
       );
 
       // Create controller audit record
@@ -179,14 +179,14 @@ class EnhancedApplicationProcessingController {
       };
 
       this.logger.info(
-        `[EnhancedApplicationController] Application created successfully - Request: ${requestId}`
+        `[EnhancedApplicationController] Application created successfully - Request: ${requestId}`,
       );
 
       res.status(201).json(response);
     } catch (error) {
       this.logger.error(
         `[EnhancedApplicationController] Application creation failed - Request: ${requestId}:`,
-        error
+        error,
       );
 
       // Update failure metrics
@@ -216,7 +216,7 @@ class EnhancedApplicationProcessingController {
 
     try {
       this.logger.info(
-        `[EnhancedApplicationController] Processing state transition - Request: ${requestId}`
+        `[EnhancedApplicationController] Processing state transition - Request: ${requestId}`,
       );
 
       const { applicationId } = req.params;
@@ -238,7 +238,7 @@ class EnhancedApplicationProcessingController {
       const authorizationResult = await this.authorizationService.authorizeStateTransition(
         req.user,
         applicationId,
-        targetState
+        targetState,
       );
 
       if (!authorizationResult.authorized) {
@@ -269,7 +269,7 @@ class EnhancedApplicationProcessingController {
           applicationId,
           targetState,
           transitionData,
-          actor
+          actor,
         );
 
       // Create controller audit record
@@ -307,14 +307,14 @@ class EnhancedApplicationProcessingController {
       };
 
       this.logger.info(
-        `[EnhancedApplicationController] State transition processed successfully - Request: ${requestId}`
+        `[EnhancedApplicationController] State transition processed successfully - Request: ${requestId}`,
       );
 
       res.status(200).json(response);
     } catch (error) {
       this.logger.error(
         `[EnhancedApplicationController] State transition failed - Request: ${requestId}:`,
-        error
+        error,
       );
 
       this._updateControllerMetrics('processStateTransition', false, Date.now() - startTime);
@@ -345,7 +345,7 @@ class EnhancedApplicationProcessingController {
 
     try {
       this.logger.info(
-        `[EnhancedApplicationController] Getting application dashboard - Request: ${requestId}`
+        `[EnhancedApplicationController] Getting application dashboard - Request: ${requestId}`,
       );
 
       const { applicationId } = req.params;
@@ -354,7 +354,7 @@ class EnhancedApplicationProcessingController {
       // Authorize dashboard access
       const authorizationResult = await this.authorizationService.authorizeDashboardAccess(
         req.user,
-        applicationId
+        applicationId,
       );
 
       if (!authorizationResult.authorized) {
@@ -365,7 +365,7 @@ class EnhancedApplicationProcessingController {
       const dashboardResult =
         await this.advancedApplicationProcessingService.getApplicationDashboard(
           applicationId,
-          viewerRole
+          viewerRole,
         );
 
       // Enhance dashboard with additional controller-level data
@@ -376,7 +376,7 @@ class EnhancedApplicationProcessingController {
           permissions: await this.authorizationService.getUserPermissions(req.user, applicationId),
           availableActions: await this._getAvailableUserActions(
             req.user,
-            dashboardResult.data.application
+            dashboardResult.data.application,
           ),
         },
         metadata: {
@@ -402,14 +402,14 @@ class EnhancedApplicationProcessingController {
       };
 
       this.logger.info(
-        `[EnhancedApplicationController] Dashboard retrieved successfully - Request: ${requestId}`
+        `[EnhancedApplicationController] Dashboard retrieved successfully - Request: ${requestId}`,
       );
 
       res.status(200).json(response);
     } catch (error) {
       this.logger.error(
         `[EnhancedApplicationController] Dashboard retrieval failed - Request: ${requestId}:`,
-        error
+        error,
       );
 
       this._updateControllerMetrics('getApplicationDashboard', false, Date.now() - startTime);
@@ -430,7 +430,7 @@ class EnhancedApplicationProcessingController {
 
     try {
       this.logger.info(
-        `[EnhancedApplicationController] Uploading document - Request: ${requestId}`
+        `[EnhancedApplicationController] Uploading document - Request: ${requestId}`,
       );
 
       const { applicationId } = req.params;
@@ -445,7 +445,7 @@ class EnhancedApplicationProcessingController {
       const authorizationResult = await this.authorizationService.authorizeDocumentUpload(
         req.user,
         applicationId,
-        documentType
+        documentType,
       );
 
       if (!authorizationResult.authorized) {
@@ -472,7 +472,7 @@ class EnhancedApplicationProcessingController {
         applicationId,
         documentType,
         fileData,
-        uploadedBy
+        uploadedBy,
       );
 
       // Create controller audit record
@@ -509,14 +509,14 @@ class EnhancedApplicationProcessingController {
       };
 
       this.logger.info(
-        `[EnhancedApplicationController] Document uploaded successfully - Request: ${requestId}`
+        `[EnhancedApplicationController] Document uploaded successfully - Request: ${requestId}`,
       );
 
       res.status(201).json(response);
     } catch (error) {
       this.logger.error(
         `[EnhancedApplicationController] Document upload failed - Request: ${requestId}:`,
-        error
+        error,
       );
 
       this._updateControllerMetrics('uploadDocument', false, Date.now() - startTime);
@@ -545,7 +545,7 @@ class EnhancedApplicationProcessingController {
 
     try {
       this.logger.info(
-        `[EnhancedApplicationController] Verifying farmer identity - Request: ${requestId}`
+        `[EnhancedApplicationController] Verifying farmer identity - Request: ${requestId}`,
       );
 
       const { applicationId } = req.params;
@@ -560,7 +560,7 @@ class EnhancedApplicationProcessingController {
       // Authorize identity verification
       const authorizationResult = await this.authorizationService.authorizeIdentityVerification(
         req.user,
-        applicationId
+        applicationId,
       );
 
       if (!authorizationResult.authorized) {
@@ -573,7 +573,7 @@ class EnhancedApplicationProcessingController {
         {
           includePhoto: req.body.includePhoto || false,
           verificationLevel: req.body.verificationLevel || 'STANDARD',
-        }
+        },
       );
 
       // Create controller audit record
@@ -607,14 +607,14 @@ class EnhancedApplicationProcessingController {
       };
 
       this.logger.info(
-        `[EnhancedApplicationController] Identity verification completed - Request: ${requestId}`
+        `[EnhancedApplicationController] Identity verification completed - Request: ${requestId}`,
       );
 
       res.status(200).json(response);
     } catch (error) {
       this.logger.error(
         `[EnhancedApplicationController] Identity verification failed - Request: ${requestId}:`,
-        error
+        error,
       );
 
       this._updateControllerMetrics('verifyFarmerIdentity', false, Date.now() - startTime);
@@ -635,7 +635,7 @@ class EnhancedApplicationProcessingController {
 
     try {
       this.logger.info(
-        `[EnhancedApplicationController] Verifying land ownership - Request: ${requestId}`
+        `[EnhancedApplicationController] Verifying land ownership - Request: ${requestId}`,
       );
 
       const { applicationId } = req.params;
@@ -650,7 +650,7 @@ class EnhancedApplicationProcessingController {
       // Authorize land verification
       const authorizationResult = await this.authorizationService.authorizeLandVerification(
         req.user,
-        applicationId
+        applicationId,
       );
 
       if (!authorizationResult.authorized) {
@@ -660,7 +660,7 @@ class EnhancedApplicationProcessingController {
       // Process land ownership verification
       const verificationResult = await this.governmentApiIntegrationService.verifyLandOwnership(
         landData,
-        ownerData
+        ownerData,
       );
 
       // Create controller audit record
@@ -694,14 +694,14 @@ class EnhancedApplicationProcessingController {
       };
 
       this.logger.info(
-        `[EnhancedApplicationController] Land ownership verification completed - Request: ${requestId}`
+        `[EnhancedApplicationController] Land ownership verification completed - Request: ${requestId}`,
       );
 
       res.status(200).json(response);
     } catch (error) {
       this.logger.error(
         `[EnhancedApplicationController] Land ownership verification failed - Request: ${requestId}:`,
-        error
+        error,
       );
 
       this._updateControllerMetrics('verifyLandOwnership', false, Date.now() - startTime);
@@ -722,7 +722,7 @@ class EnhancedApplicationProcessingController {
 
     try {
       this.logger.info(
-        `[EnhancedApplicationController] Submitting to government - Request: ${requestId}`
+        `[EnhancedApplicationController] Submitting to government - Request: ${requestId}`,
       );
 
       const { applicationId } = req.params;
@@ -731,7 +731,7 @@ class EnhancedApplicationProcessingController {
       // Authorize government submission
       const authorizationResult = await this.authorizationService.authorizeGovernmentSubmission(
         req.user,
-        applicationId
+        applicationId,
       );
 
       if (!authorizationResult.authorized) {
@@ -747,7 +747,7 @@ class EnhancedApplicationProcessingController {
       // Submit to government systems
       const submissionResult = await this.governmentApiIntegrationService.submitGacpApplication(
         applicationData.data.application,
-        documentsData.data
+        documentsData.data,
       );
 
       // Create controller audit record
@@ -781,14 +781,14 @@ class EnhancedApplicationProcessingController {
       };
 
       this.logger.info(
-        `[EnhancedApplicationController] Government submission completed - Request: ${requestId}`
+        `[EnhancedApplicationController] Government submission completed - Request: ${requestId}`,
       );
 
       res.status(200).json(response);
     } catch (error) {
       this.logger.error(
         `[EnhancedApplicationController] Government submission failed - Request: ${requestId}:`,
-        error
+        error,
       );
 
       this._updateControllerMetrics('submitToGovernment', false, Date.now() - startTime);
@@ -809,12 +809,12 @@ class EnhancedApplicationProcessingController {
 
     try {
       this.logger.info(
-        `[EnhancedApplicationController] Getting analytics dashboard - Request: ${requestId}`
+        `[EnhancedApplicationController] Getting analytics dashboard - Request: ${requestId}`,
       );
 
       // Authorize analytics access
       const authorizationResult = await this.authorizationService.authorizeAnalyticsDashboard(
-        req.user
+        req.user,
       );
       if (!authorizationResult.authorized) {
         return this._sendAuthorizationError(res, authorizationResult.reason, requestId);
@@ -866,14 +866,14 @@ class EnhancedApplicationProcessingController {
       };
 
       this.logger.info(
-        `[EnhancedApplicationController] Analytics dashboard retrieved - Request: ${requestId}`
+        `[EnhancedApplicationController] Analytics dashboard retrieved - Request: ${requestId}`,
       );
 
       res.status(200).json(response);
     } catch (error) {
       this.logger.error(
         `[EnhancedApplicationController] Analytics dashboard failed - Request: ${requestId}:`,
-        error
+        error,
       );
 
       this._updateControllerMetrics('getAnalyticsDashboard', false, Date.now() - startTime);
@@ -1065,7 +1065,7 @@ class EnhancedApplicationProcessingController {
 
   _calculateOverallSystemHealth(analyticsResults) {
     const healthyServices = analyticsResults.filter(
-      r => r.status === 'fulfilled' && r.value?.data?.overallStatus === 'HEALTHY'
+      r => r.status === 'fulfilled' && r.value?.data?.overallStatus === 'HEALTHY',
     ).length;
 
     const totalServices = analyticsResults.length;
@@ -1092,7 +1092,7 @@ class EnhancedApplicationProcessingController {
         endpoint,
         averageResponseTime: avgTime,
         usage: this.controllerMetrics.endpointUsage[endpoint] || 0,
-      })
+      }),
     );
   }
 

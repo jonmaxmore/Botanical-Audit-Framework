@@ -19,6 +19,7 @@ const {
   GACPScoringSystem,
   GACPApplicationStatus,
 } = require('../models/gacp-business-logic');
+const logger = require('../shared/logger/logger');
 
 const GACPWorkflowEngine = require('../../../business-logic/gacp-workflow-engine');
 
@@ -41,7 +42,7 @@ class GACPEnhancedInspectionService {
    */
   async initializeInspection(applicationId, inspector, scheduledDate) {
     try {
-      console.log(`[GACP-Inspection] Initializing inspection for application ${applicationId}`);
+      logger.info(`[GACP-Inspection] Initializing inspection for application ${applicationId}`)
 
       // Validate inspector certification against Thai FDA requirements
       const inspectorValidation = this.validateInspectorCertification(inspector);
@@ -70,7 +71,7 @@ class GACPEnhancedInspectionService {
       // Create comprehensive inspection framework
       const inspectionFramework = this.createComprehensiveInspectionFramework(
         application,
-        inspector
+        inspector,
       );
 
       // Initialize CCP Assessment Matrix
@@ -198,14 +199,14 @@ class GACPEnhancedInspectionService {
           inspection,
           inspector: inspector,
         },
-        inspector
+        inspector,
       );
 
       if (!workflowResult.success) {
         return this.createResponse(false, `Workflow transition failed: ${workflowResult.message}`);
       }
 
-      console.log(`[GACP-Inspection] Successfully initialized inspection ${inspection._id}`);
+      logger.info(`[GACP-Inspection] Successfully initialized inspection ${inspection._id}`)
 
       return this.createResponse(true, 'GACP inspection successfully initialized', {
         inspectionId: inspection._id,
@@ -225,7 +226,7 @@ class GACPEnhancedInspectionService {
         preparationRequirements: this.getPreparationRequirements(application),
       });
     } catch (error) {
-      console.error('[GACP-Inspection] Initialization failed:', error);
+      logger.error('[GACP-Inspection] Initialization failed:', error);
       return this.createResponse(false, `Inspection initialization failed: ${error.message}`);
     }
   }
@@ -243,7 +244,7 @@ class GACPEnhancedInspectionService {
   async conductCCPAssessment(inspectionId, ccpId, assessmentData, evidence) {
     try {
       console.log(
-        `[GACP-CCP] Conducting assessment for CCP ${ccpId} in inspection ${inspectionId}`
+        `[GACP-CCP] Conducting assessment for CCP ${ccpId} in inspection ${inspectionId}`,
       );
 
       // Retrieve inspection record
@@ -327,7 +328,7 @@ class GACPEnhancedInspectionService {
 
       // If all CCPs completed, finalize assessment
       if (completionStatus.allCompleted) {
-        console.log(`[GACP-Inspection] All CCPs completed for inspection ${inspectionId}`);
+        logger.info(`[GACP-Inspection] All CCPs completed for inspection ${inspectionId}`)
         const finalResults = await this.finalizeComprehensiveAssessment(inspection);
 
         inspection.overallScore = finalResults.totalScore;
@@ -351,7 +352,7 @@ class GACPEnhancedInspectionService {
         await this.saveInspection(inspection);
       }
 
-      console.log(`[GACP-CCP] Successfully completed assessment for CCP ${ccpId}`);
+      logger.info(`[GACP-CCP] Successfully completed assessment for CCP ${ccpId}`)
 
       return this.createResponse(true, `CCP ${ccpId} assessment completed successfully`, {
         ccp: {
@@ -383,7 +384,7 @@ class GACPEnhancedInspectionService {
         },
       });
     } catch (error) {
-      console.error(`[GACP-CCP] Assessment failed for CCP ${ccpId}:`, error);
+      logger.error(`[GACP-CCP] Assessment failed for CCP ${ccpId}:`, error);
       return this.createResponse(false, `CCP assessment failed: ${error.message}`);
     }
   }
@@ -412,7 +413,7 @@ class GACPEnhancedInspectionService {
         criterion,
         criterionData,
         evidence,
-        ccp.id
+        ccp.id,
       );
 
       evaluation.criteriaResults[i] = {
@@ -466,7 +467,7 @@ class GACPEnhancedInspectionService {
    */
   calculateWeightedCCPScore(ccpEvaluation, ccp) {
     const criteriaScores = Object.values(ccpEvaluation.criteriaResults).map(
-      result => result.compliance
+      result => result.compliance,
     );
 
     // Base score: weighted average of criteria
@@ -643,7 +644,7 @@ class GACPEnhancedInspectionService {
         .collection('inspections')
         .updateOne({ _id: inspection._id }, { $set: inspection }, { upsert: true });
     }
-    console.log(`[GACP-DB] Inspection ${inspection._id} saved (mock mode)`);
+    logger.info(`[GACP-DB] Inspection ${inspection._id} saved (mock mode);`)
     return true;
   }
 

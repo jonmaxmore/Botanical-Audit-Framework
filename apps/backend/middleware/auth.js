@@ -13,6 +13,7 @@
  * Request → Extract Token → Verify with Correct Secret → Check Role → Attach User → Continue
  */
 
+const logger = require('../shared/logger');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../../../config/jwt-security');
 
@@ -21,8 +22,8 @@ let JWT_CONFIG;
 try {
   JWT_CONFIG = jwtConfig.loadJWTConfiguration();
 } catch (error) {
-  console.error('❌ Failed to load JWT configuration:', error.message);
-  console.error('   Application cannot start without valid JWT secrets');
+  logger.error('❌ Failed to load JWT configuration:', error.message);
+  logger.error('   Application cannot start without valid JWT secrets');
   process.exit(1);
 }
 
@@ -69,7 +70,7 @@ function authenticateFarmer(req, res, next) {
     req.user = decoded;
     next();
   } catch (error) {
-    console.error('[AUTH] Farmer authentication failed:', error.message);
+    logger.error('[AUTH] Farmer authentication failed:', error.message);
 
     // Enhanced error response
     if (error.code === 'TOKEN_EXPIRED') {
@@ -152,7 +153,7 @@ function authenticateDTAM(req, res, next) {
     req.user = decoded;
     next();
   } catch (error) {
-    console.error('[AUTH] DTAM authentication failed:', error.message);
+    logger.error('[AUTH] DTAM authentication failed:', error.message);
 
     // Enhanced error response
     if (error.code === 'TOKEN_EXPIRED') {
@@ -202,7 +203,7 @@ function optionalAuth(req, res, next) {
         req.user = decoded;
       } catch (error) {
         // Token ไม่ถูกต้อง แต่ไม่ block request
-        console.log('[AUTH] Optional auth failed:', error.message);
+        logger.info('[AUTH] Optional auth failed:', error.message);
       }
     }
 
@@ -218,4 +219,36 @@ module.exports = {
   authenticateFarmer,
   authenticateDTAM,
   optionalAuth,
+  authenticate: authenticateFarmer, // Alias for generic authentication
+  authorize: roles => (req, res, next) => {
+    // Simple role-based authorization middleware
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        error: 'Unauthorized',
+        message: 'Authentication required',
+      });
+    }
+
+    const userRole = req.user.role?.toLowerCase() || '';
+    const allowedRoles = Array.isArray(roles) ? roles : [roles];
+    const normalizedRoles = allowedRoles.map(r => r.toLowerCase());
+
+    if (!normalizedRoles.includes(userRole)) {
+      return res.status(403).json({
+        success: false,
+        error: 'Forbidden',
+        message: 'Insufficient permissions',
+        requiredRoles: allowedRoles,
+        yourRole: req.user.role,
+      });
+    }
+
+    next();
+  },
+  rateLimitSensitive: (windowMs, max) => {
+    // Simple rate limiting placeholder
+    // In production, use express-rate-limit
+    return (req, res, next) => next();
+  },
 };

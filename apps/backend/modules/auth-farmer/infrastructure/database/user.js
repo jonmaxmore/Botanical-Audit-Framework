@@ -125,7 +125,7 @@ const userSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'users_farmer',
-  }
+  },
 );
 
 // Indexes for performance
@@ -220,7 +220,7 @@ class MongoDBUserRepository extends IUserRepository {
       const doc = await this.model.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding user by ID:', error);
+      logger.error('Error finding user by ID:', error);
       return null;
     }
   }
@@ -233,7 +233,7 @@ class MongoDBUserRepository extends IUserRepository {
       const doc = await this.model.findOne({ email: email.toLowerCase() });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding user by email:', error);
+      logger.error('Error finding user by email:', error);
       return null;
     }
   }
@@ -246,7 +246,7 @@ class MongoDBUserRepository extends IUserRepository {
       const doc = await this.model.findOne({ idCard });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding user by ID card:', error);
+      logger.error('Error finding user by ID card:', error);
       return null;
     }
   }
@@ -262,7 +262,7 @@ class MongoDBUserRepository extends IUserRepository {
       });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding user by verification token:', error);
+      logger.error('Error finding user by verification token:', error);
       return null;
     }
   }
@@ -278,7 +278,7 @@ class MongoDBUserRepository extends IUserRepository {
       });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding user by reset token:', error);
+      logger.error('Error finding user by reset token:', error);
       return null;
     }
   }
@@ -304,7 +304,7 @@ class MongoDBUserRepository extends IUserRepository {
 
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error saving user:', error);
+      logger.error('Error saving user:', error);
       throw error;
     }
   }
@@ -317,7 +317,7 @@ class MongoDBUserRepository extends IUserRepository {
       const result = await this.model.findByIdAndDelete(id);
       return result !== null;
     } catch (error) {
-      console.error('Error deleting user:', error);
+      logger.error('Error deleting user:', error);
       return false;
     }
   }
@@ -342,7 +342,7 @@ class MongoDBUserRepository extends IUserRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding users with filters:', error);
+      logger.error('Error finding users with filters:', error);
       return [];
     }
   }
@@ -354,7 +354,7 @@ class MongoDBUserRepository extends IUserRepository {
     try {
       return await this.model.countDocuments({ status });
     } catch (error) {
-      console.error('Error counting users:', error);
+      logger.error('Error counting users:', error);
       return 0;
     }
   }
@@ -369,7 +369,7 @@ class MongoDBUserRepository extends IUserRepository {
       });
       return count > 0;
     } catch (error) {
-      console.error('Error checking email exists:', error);
+      logger.error('Error checking email exists:', error);
       return false;
     }
   }
@@ -382,7 +382,7 @@ class MongoDBUserRepository extends IUserRepository {
       const count = await this.model.countDocuments({ idCard });
       return count > 0;
     } catch (error) {
-      console.error('Error checking ID card exists:', error);
+      logger.error('Error checking ID card exists:', error);
       return false;
     }
   }
@@ -402,7 +402,7 @@ class MongoDBUserRepository extends IUserRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding recently registered users:', error);
+      logger.error('Error finding recently registered users:', error);
       return [];
     }
   }

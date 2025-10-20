@@ -11,6 +11,7 @@
  */
 
 /* eslint-disable no-unused-vars */
+const logger = require('../../shared/logger/logger');
 const mongoose = require('mongoose'); // Used in JSDoc type annotations
 const IUserRepository = require('./domain/interfaces/IUserRepository'); // Used for interface documentation
 /* eslint-enable no-unused-vars */
@@ -56,7 +57,7 @@ class SimpleEventBus {
       try {
         await callback(event);
       } catch (error) {
-        console.error(`Error processing event ${eventType}:`, error);
+        logger.error(`Error processing event ${eventType}:`, error);
       }
     }
   }
@@ -100,17 +101,17 @@ function createAuthFarmerModule(config) {
 
   // Subscribe to domain events (for logging, email sending, etc.)
   eventBus.subscribe('UserRegistered', async event => {
-    console.log('User registered:', event.toEventPayload());
+    logger.info('User registered:', event.toEventPayload());
     // TODO: Send verification email
   });
 
   eventBus.subscribe('UserLoggedIn', async event => {
-    console.log('User logged in:', event.toEventPayload());
+    logger.info('User logged in:', event.toEventPayload());
     // TODO: Log activity, send notification if new device, etc.
   });
 
   eventBus.subscribe('PasswordResetRequested', async event => {
-    console.log('Password reset requested:', event.toEventPayload());
+    logger.info('Password reset requested:', event.toEventPayload());
     // TODO: Send password reset email
   });
 

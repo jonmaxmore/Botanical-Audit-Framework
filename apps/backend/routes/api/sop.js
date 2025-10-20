@@ -115,14 +115,14 @@ router.get(
         },
       });
     } catch (error) {
-      console.error('Error fetching SOPs:', error);
+      logger.error('Error fetching SOPs:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching SOPs',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -154,14 +154,14 @@ router.get(
         },
       });
     } catch (error) {
-      console.error('Error fetching cannabis SOPs:', error);
+      logger.error('Error fetching cannabis SOPs:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching cannabis SOPs',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -193,7 +193,7 @@ router.get(
         {
           $inc: { 'usage.timesUsed': 1 },
           $set: { 'usage.lastUsed': new Date() },
-        }
+        },
       );
 
       res.json({
@@ -201,14 +201,14 @@ router.get(
         data: { sop },
       });
     } catch (error) {
-      console.error('Error fetching SOP:', error);
+      logger.error('Error fetching SOP:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching SOP',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -265,14 +265,14 @@ router.post(
         },
       });
     } catch (error) {
-      console.error('Error creating SOP:', error);
+      logger.error('Error creating SOP:', error);
       res.status(500).json({
         success: false,
         message: 'Error creating SOP',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -330,14 +330,14 @@ router.put(
         },
       });
     } catch (error) {
-      console.error('Error updating SOP:', error);
+      logger.error('Error updating SOP:', error);
       res.status(500).json({
         success: false,
         message: 'Error updating SOP',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -379,14 +379,14 @@ router.post(
         message: 'Feedback added successfully',
       });
     } catch (error) {
-      console.error('Error adding SOP feedback:', error);
+      logger.error('Error adding SOP feedback:', error);
       res.status(500).json({
         success: false,
         message: 'Error adding feedback',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -489,14 +489,14 @@ router.post(
         },
       });
     } catch (error) {
-      console.error('Error adopting SOP:', error);
+      logger.error('Error adopting SOP:', error);
       res.status(500).json({
         success: false,
         message: 'Error adopting SOP',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -552,14 +552,14 @@ router.get(
         },
       });
     } catch (error) {
-      console.error('Error fetching SOP activities:', error);
+      logger.error('Error fetching SOP activities:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching activities',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -639,14 +639,14 @@ router.put(
         },
       });
     } catch (error) {
-      console.error('Error updating SOP activity:', error);
+      logger.error('Error updating SOP activity:', error);
       res.status(500).json({
         success: false,
         message: 'Error updating activity',
         error: error.message,
       });
     }
-  }
+  },
 );
 
 module.exports = router;

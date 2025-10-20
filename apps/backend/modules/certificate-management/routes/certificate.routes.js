@@ -38,7 +38,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private (Admin/Staff)
    */
   router.get('/expiring', authMiddleware, (req, res) =>
-    controller.getExpiringCertificates(req, res)
+    controller.getExpiringCertificates(req, res),
   );
 
   /**
@@ -54,7 +54,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private
    */
   router.get('/number/:certificateNumber', authMiddleware, (req, res) =>
-    controller.getCertificateByNumber(req, res)
+    controller.getCertificateByNumber(req, res),
   );
 
   /**
@@ -63,7 +63,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private
    */
   router.get('/user/:userId', authMiddleware, (req, res) =>
-    controller.getCertificatesByUser(req, res)
+    controller.getCertificatesByUser(req, res),
   );
 
   /**

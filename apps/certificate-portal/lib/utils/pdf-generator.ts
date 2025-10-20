@@ -14,7 +14,7 @@ interface PDFOptions {
 export async function generateCertificatePDF(
   certificate: Certificate,
   elementId: string,
-  options?: PDFOptions
+  options?: PDFOptions,
 ): Promise<jsPDF> {
   const defaultOptions: PDFOptions = {
     orientation: 'portrait',
@@ -58,7 +58,7 @@ export async function generateCertificatePDF(
 export function generateSimpleCertificatePDF(
   certificate: Certificate,
   qrCodeDataURL?: string,
-  options?: PDFOptions
+  options?: PDFOptions,
 ): jsPDF {
   const defaultOptions: PDFOptions = {
     orientation: 'portrait',
@@ -139,19 +139,19 @@ export function generateSimpleCertificatePDF(
   pdf.text(
     `Issued Date: ${new Date(certificate.issuedDate).toLocaleDateString('en-US')}`,
     20,
-    yPos
+    yPos,
   );
   yPos += 7;
   pdf.text(
     `Expiry Date: ${new Date(certificate.expiryDate).toLocaleDateString('en-US')}`,
     20,
-    yPos
+    yPos,
   );
   yPos += 7;
   pdf.text(
     `Inspection Date: ${new Date(certificate.inspectionDate).toLocaleDateString('en-US')}`,
     20,
-    yPos
+    yPos,
   );
   yPos += 7;
   pdf.text(`Inspector: ${certificate.inspectorName}`, 20, yPos);
@@ -174,7 +174,7 @@ export function generateSimpleCertificatePDF(
     'Department of Agriculture, Ministry of Agriculture and Cooperatives',
     pageWidth / 2,
     pageHeight - 20,
-    { align: 'center' }
+    { align: 'center' },
   );
   pdf.text(`Issued by: ${certificate.issuedBy}`, pageWidth / 2, pageHeight - 15, {
     align: 'center',

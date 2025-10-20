@@ -1,4 +1,5 @@
 # 📦 GACP Platform - Complete System Inventory
+
 **Last Updated:** October 20, 2025  
 **Status:** ✅ Production Ready  
 **Total Systems:** 50+ Modules, Services & Engines
@@ -13,15 +14,15 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 
 ## 📊 Summary Statistics
 
-| Category | Count | Location |
-|----------|-------|----------|
-| **Business Logic Engines** | 7 | `business-logic/` |
-| **Backend Modules** | 21 | `apps/backend/modules/` |
-| **Backend Services** | 25 | `apps/backend/services/` |
-| **Frontend Apps** | 4 | `apps/` |
-| **Database Models** | 15+ | `database/models/` |
-| **API Routes** | 30+ | `apps/backend/routes/` |
-| **TOTAL SYSTEMS** | **100+** | Various |
+| Category                   | Count    | Location                 |
+| -------------------------- | -------- | ------------------------ |
+| **Business Logic Engines** | 7        | `business-logic/`        |
+| **Backend Modules**        | 21       | `apps/backend/modules/`  |
+| **Backend Services**       | 25       | `apps/backend/services/` |
+| **Frontend Apps**          | 4        | `apps/`                  |
+| **Database Models**        | 15+      | `database/models/`       |
+| **API Routes**             | 30+      | `apps/backend/routes/`   |
+| **TOTAL SYSTEMS**          | **100+** | Various                  |
 
 ---
 
@@ -32,6 +33,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Core Workflow Engines**
 
 #### 1. **GACP Workflow Engine** ⭐ PRIMARY
+
 - **File:** `gacp-workflow-engine.js`
 - **Purpose:** 8-step GACP certification workflow
 - **Features:**
@@ -45,6 +47,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Usage:** Core certification process
 
 #### 2. **GACP Business Rules Engine**
+
 - **File:** `gacp-business-rules-engine.js`
 - **Purpose:** Business rule validation and enforcement
 - **Features:**
@@ -56,6 +59,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Usage:** All application submissions
 
 #### 3. **GACP Certificate Generator**
+
 - **File:** `gacp-certificate-generator.js`
 - **Purpose:** Generate official GACP certificates
 - **Features:**
@@ -68,6 +72,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Usage:** After successful certification
 
 #### 4. **GACP Document Review System**
+
 - **File:** `gacp-document-review-system.js`
 - **Purpose:** Review and validate application documents
 - **Features:**
@@ -80,6 +85,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Usage:** Step 3 of certification workflow
 
 #### 5. **GACP Field Inspection System**
+
 - **File:** `gacp-field-inspection-system.js`
 - **Purpose:** Manage on-site field inspections
 - **Features:**
@@ -93,6 +99,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Usage:** Step 4 of certification workflow
 
 #### 6. **GACP Status Manager**
+
 - **File:** `gacp-status-manager.js`
 - **Purpose:** Centralized application status management
 - **Features:**
@@ -104,6 +111,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Usage:** Throughout workflow
 
 #### 7. **GACP Dashboard & Notification System**
+
 - **File:** `gacp-dashboard-notification-system.js`
 - **Purpose:** Real-time dashboard and notifications
 - **Features:**
@@ -124,6 +132,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Authentication & User Management (3 modules)**
 
 #### 1. **User Management Module** 👥
+
 - **Folder:** `user-management/`
 - **Purpose:** Complete user authentication & management
 - **Features:**
@@ -137,6 +146,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **API:** `/api/auth/*`, `/api/users/*`
 
 #### 2. **Auth DTAM Module** 🔐
+
 - **Folder:** `auth-dtam/`
 - **Purpose:** DTAM (Department) staff authentication
 - **Features:**
@@ -147,6 +157,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Status:** ✅ Active
 
 #### 3. **Auth Farmer Module** 🌾
+
 - **Folder:** `auth-farmer/`
 - **Purpose:** Farmer authentication system
 - **Features:**
@@ -160,6 +171,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Application & Workflow (2 modules)**
 
 #### 4. **Application Module** 📝
+
 - **Folder:** `application/`
 - **Purpose:** GACP application management
 - **Features:**
@@ -171,6 +183,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **API:** `/api/applications/*`
 
 #### 5. **Application Workflow Module** 🔄
+
 - **Folder:** `application-workflow/`
 - **Purpose:** Workflow state management
 - **Features:**
@@ -184,6 +197,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Inspection & Audit (1 module)**
 
 #### 6. **Audit Module** 🔍
+
 - **Folder:** `audit/`
 - **Purpose:** Audit trail and compliance
 - **Features:**
@@ -198,6 +212,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Farm Management (1 module)**
 
 #### 7. **Farm Management Module** 🏡
+
 - **Folder:** `farm-management/`
 - **Purpose:** Comprehensive farm management
 - **Features:**
@@ -216,6 +231,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Product Tracking (1 module)**
 
 #### 8. **Track & Trace Module** 📦
+
 - **Folder:** `track-trace/`
 - **Purpose:** Product traceability system
 - **Features:**
@@ -233,6 +249,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Standards & Compliance (1 module)**
 
 #### 9. **Standards Comparison Module** 📏
+
 - **Folder:** `standards-comparison/`
 - **Purpose:** Compare farms against GACP/GAP standards
 - **Features:**
@@ -249,6 +266,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Survey System (2 modules)**
 
 #### 10. **Survey System Module** 📋
+
 - **Folder:** `survey-system/`
 - **Purpose:** 7-step survey wizard
 - **Features:**
@@ -261,6 +279,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **API:** `/api/survey/*`
 
 #### 11. **Cannabis Survey Module** 🌿
+
 - **Folder:** `cannabis-survey/`
 - **Purpose:** Cannabis-specific surveys
 - **Features:**
@@ -274,6 +293,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Certificate Management (1 module)**
 
 #### 12. **Certificate Management Module** 🎓
+
 - **Folder:** `certificate-management/`
 - **Purpose:** Certificate lifecycle management
 - **Features:**
@@ -291,6 +311,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Document Management (2 modules)**
 
 #### 13. **Document Module** 📄
+
 - **Folder:** `document/`
 - **Purpose:** Basic document handling
 - **Features:**
@@ -300,6 +321,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Status:** ✅ Active
 
 #### 14. **Document Management Module** 🗂️
+
 - **Folder:** `document-management/`
 - **Purpose:** Advanced document management
 - **Features:**
@@ -314,6 +336,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Notifications (2 modules)**
 
 #### 15. **Notification Module** 🔔
+
 - **Folder:** `notification/`
 - **Purpose:** Basic notifications
 - **Features:**
@@ -323,6 +346,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Status:** ✅ Active
 
 #### 16. **Notification Service Module** 📨
+
 - **Folder:** `notification-service/`
 - **Purpose:** Advanced notification service
 - **Features:**
@@ -337,6 +361,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Payment (1 module)**
 
 #### 17. **Payment Service Module** 💳
+
 - **Folder:** `payment-service/`
 - **Purpose:** Payment processing
 - **Features:**
@@ -352,6 +377,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Reporting & Analytics (2 modules)**
 
 #### 18. **Report Module** 📊
+
 - **Folder:** `report/`
 - **Purpose:** Report generation
 - **Features:**
@@ -361,6 +387,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Status:** ✅ Active
 
 #### 19. **Reporting Analytics Module** 📈
+
 - **Folder:** `reporting-analytics/`
 - **Purpose:** Advanced analytics
 - **Features:**
@@ -375,6 +402,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Dashboard (1 module)**
 
 #### 20. **Dashboard Module** 📊
+
 - **Folder:** `dashboard/`
 - **Purpose:** Admin dashboard
 - **Features:**
@@ -390,6 +418,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Training (1 module)**
 
 #### 21. **Training Module** 🎓
+
 - **Folder:** `training/`
 - **Purpose:** User training system
 - **Features:**
@@ -404,6 +433,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Shared Utilities (1 module)**
 
 #### 22. **Shared Module** 🔧
+
 - **Folder:** `shared/`
 - **Purpose:** Shared utilities and helpers
 - **Features:**
@@ -424,6 +454,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Core Application Services**
 
 #### 1. **GACP Application Service** ⭐
+
 - **File:** `GACPApplicationService.js`
 - **Purpose:** Core application management service
 - **Features:** Application CRUD, validation, workflow integration
@@ -431,12 +462,14 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Lines:** 670
 
 #### 2. **GACP Certificate Service** 🎓
+
 - **File:** `GACPCertificateService.js`
 - **Purpose:** Certificate management
 - **Features:** Certificate generation, validation, renewal
 - **Status:** ✅ Production Ready
 
 #### 3. **Certificate Service** 📜
+
 - **File:** `CertificateService.js`
 - **Purpose:** General certificate operations
 - **Status:** ✅ Active
@@ -446,12 +479,14 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Inspection Services**
 
 #### 4. **GACP Enhanced Inspection Service** 🔍
+
 - **File:** `GACPEnhancedInspectionService.js`
 - **Purpose:** Advanced inspection management
 - **Features:** Inspector assignment, scheduling, reporting
 - **Status:** ✅ Production Ready
 
 #### 5. **GACP Inspection Service** 📋
+
 - **File:** `GACPInspectionService.js`
 - **Purpose:** Standard inspection operations
 - **Status:** ✅ Active
@@ -461,11 +496,13 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Survey Services**
 
 #### 6. **Cannabis Survey Service** 🌿
+
 - **File:** `cannabisSurveyService.js`
 - **Purpose:** Cannabis survey management
 - **Status:** ✅ Active
 
 #### 7. **Cannabis Survey Integration Service** 🔗
+
 - **File:** `cannabisSurveyIntegrationService.js`
 - **Purpose:** Survey microservice integration
 - **Features:** Template sync, response sync, data integration
@@ -473,6 +510,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Lines:** 500+
 
 #### 8. **Cannabis Survey Initializer** 🌱
+
 - **File:** `cannabisSurveyInitializer.js`
 - **Purpose:** Initialize cannabis survey system
 - **Status:** ✅ Active
@@ -482,6 +520,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Notification Services**
 
 #### 9. **Enhanced Notification Service** 🔔
+
 - **File:** `enhancedNotificationService.js`
 - **Purpose:** Advanced notification system
 - **Features:** Email, SMS, in-app, push notifications
@@ -493,6 +532,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Payment Services**
 
 #### 10. **Payment Service** 💳
+
 - **File:** `PaymentService.js`
 - **Purpose:** Payment processing and verification
 - **Status:** ✅ Production Ready
@@ -502,12 +542,14 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Integration Services**
 
 #### 11. **Blitzz Integration Service** 📱
+
 - **File:** `blitzzIntegrationService.js`
 - **Purpose:** Blitzz video call integration
 - **Features:** Video inspections, remote consultations
 - **Status:** ✅ Active
 
 #### 12. **Event Bus Service** 📡
+
 - **File:** `EventBusService.js`
 - **Purpose:** Event-driven architecture support
 - **Features:** Pub/sub messaging, event handling
@@ -518,23 +560,27 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Monitoring & Health Services**
 
 #### 13. **Health Check Service** ❤️
+
 - **File:** `health-check-service.js`
 - **Purpose:** System health monitoring
 - **Status:** ✅ Production Ready
 - **Usage:** Used in app.js & server.js
 
 #### 14. **Health Monitoring Service** 📊
+
 - **File:** `HealthMonitoringService.js`
 - **Purpose:** Advanced health monitoring
 - **Status:** ✅ Active
 - **Usage:** Used in atlas-server.js
 
 #### 15. **Database Health Monitor** 🗄️
+
 - **File:** `DatabaseHealthMonitor.js`
 - **Purpose:** MongoDB health monitoring
 - **Status:** ✅ Active
 
 #### 16. **Performance Optimizer** ⚡
+
 - **File:** `performance-optimizer.js`
 - **Purpose:** Performance optimization
 - **Status:** ✅ Active
@@ -544,21 +590,25 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Security & Compliance Services**
 
 #### 17. **Audit Service** 🔒
+
 - **File:** `AuditService.js`
 - **Purpose:** Audit trail and logging
 - **Status:** ✅ Production Ready
 
 #### 18. **Security Compliance Service** 🛡️
+
 - **File:** `SecurityComplianceService.js`
 - **Purpose:** Security compliance monitoring
 - **Status:** ✅ Active
 
 #### 19. **Compliance Audit Service** ✅
+
 - **File:** `ComplianceAuditService.js`
 - **Purpose:** Compliance verification
 - **Status:** ✅ Active
 
 #### 20. **Compliance Seeder** 🌱
+
 - **File:** `ComplianceSeeder.js`
 - **Purpose:** Seed compliance data
 - **Status:** ✅ Development
@@ -568,11 +618,13 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Job & Task Services**
 
 #### 21. **Job Assignment Service** 📋
+
 - **File:** `JobAssignmentService.js`
 - **Purpose:** Assign tasks to users
 - **Status:** ✅ Active
 
 #### 22. **Transaction Manager** 💼
+
 - **File:** `TransactionManager.js`
 - **Purpose:** Database transaction management
 - **Status:** ✅ Active
@@ -582,11 +634,13 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Analytics Services**
 
 #### 23. **Analytics Engine** 📊
+
 - **Folder:** `analytics-engine/`
 - **Purpose:** Advanced analytics processing
 - **Status:** ✅ Active
 
 #### 24. **KPI Service** 📈
+
 - **File:** `KPIService.js`
 - **Purpose:** Key Performance Indicator tracking
 - **Status:** ✅ Active
@@ -596,11 +650,13 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Utility Services**
 
 #### 25. **Mock Database Service** 🎭
+
 - **File:** `MockDatabaseService.js`
 - **Purpose:** Testing and development mock data
 - **Status:** ✅ Development
 
 #### 26. **Auth Proxy** 🔐
+
 - **File:** `auth-proxy.js`
 - **Purpose:** Authentication proxy service
 - **Status:** ✅ Active
@@ -612,6 +668,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 **Location:** `apps/`
 
 #### 1. **Admin Portal** 👑
+
 - **Folder:** `apps/admin-portal/`
 - **Purpose:** Administrator dashboard
 - **Features:**
@@ -623,6 +680,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Status:** ✅ Production Ready
 
 #### 2. **Farmer Portal** 👨‍🌾
+
 - **Folder:** `apps/farmer-portal/`
 - **Purpose:** Farmer application interface
 - **Features:**
@@ -634,6 +692,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Status:** ✅ Production Ready
 
 #### 3. **Certificate Portal** 🎓
+
 - **Folder:** `apps/certificate-portal/`
 - **Purpose:** Public certificate verification
 - **Features:**
@@ -644,6 +703,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 - **Status:** ✅ Production Ready
 
 #### 4. **Backend API** 🔌
+
 - **Folder:** `apps/backend/`
 - **Purpose:** Core API server
 - **Features:**
@@ -682,6 +742,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 **Location:** `apps/backend/routes/`
 
 ### **Main API Routes:**
+
 - `/api/auth/*` - Authentication
 - `/api/users/*` - User management
 - `/api/applications/*` - Applications
@@ -782,12 +843,14 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Problem:** Systems not showing up in queries
 
 **Root Causes:**
+
 1. **Multiple Layers:** Systems spread across 3 layers (business-logic, modules, services)
 2. **Naming Inconsistencies:** PascalCase, camelCase, kebab-case mixed
 3. **No Central Registry:** No single file listing all systems
 4. **Documentation Gaps:** Not all systems documented in README
 
 **Solution:**
+
 - ✅ This document (`COMPLETE_SYSTEM_INVENTORY.md`)
 - ✅ Lists ALL 100+ systems in one place
 - ✅ Categorized by type and location
@@ -800,16 +863,19 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ### **Evolution of GACP Platform:**
 
 **Phase 1: Core (2024 Q1-Q2)**
+
 - Business logic engines (7)
 - Basic modules (10)
 - Core services (10)
 
 **Phase 2: Expansion (2024 Q3-Q4)**
+
 - Advanced modules (11 more)
 - Additional services (15 more)
 - Frontend apps (4)
 
 **Phase 3: Optimization (2025 Q1-Q4)**
+
 - Module consolidation
 - Duplicate removal (13 files)
 - Documentation (8 files)
@@ -820,30 +886,39 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ## 🎯 Quick Reference
 
 ### **Need Authentication?**
+
 → `modules/user-management/`
 
 ### **Need Application Workflow?**
+
 → `business-logic/gacp-workflow-engine.js`
 
 ### **Need Farm Management?**
+
 → `modules/farm-management/`
 
 ### **Need Product Tracking?**
+
 → `modules/track-trace/`
 
 ### **Need Surveys?**
+
 → `modules/survey-system/`
 
 ### **Need Certificates?**
+
 → `modules/certificate-management/`
 
 ### **Need Standards Checking?**
+
 → `modules/standards-comparison/`
 
 ### **Need Notifications?**
+
 → `services/enhancedNotificationService.js`
 
 ### **Need Analytics?**
+
 → `modules/reporting-analytics/`
 
 ---
@@ -861,6 +936,7 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 ## 🆘 When to Use Each System
 
 ### **For Certification Workflow:**
+
 1. `gacp-workflow-engine.js` - Main workflow
 2. `gacp-business-rules-engine.js` - Validation
 3. `modules/application/` - Application management
@@ -869,16 +945,19 @@ This document provides a **COMPLETE INVENTORY** of all systems, modules, service
 6. `gacp-certificate-generator.js` - Certificate issuance
 
 ### **For Farm Operations:**
+
 1. `modules/farm-management/` - Farm profiles & cycles
 2. `modules/track-trace/` - Product tracking
 3. `modules/survey-system/` - Data collection
 
 ### **For User Management:**
+
 1. `modules/user-management/` - Authentication & users
 2. `modules/auth-dtam/` - DTAM staff auth
 3. `modules/auth-farmer/` - Farmer auth
 
 ### **For Reporting:**
+
 1. `modules/reporting-analytics/` - Analytics
 2. `modules/dashboard/` - Admin dashboard
 3. `services/KPIService.js` - KPI tracking

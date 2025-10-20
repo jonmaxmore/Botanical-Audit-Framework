@@ -34,12 +34,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/setup.js"
-    ],
-    "testMatch": [
-      "**/tests/**/*.test.js"
-    ],
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"],
+    "testMatch": ["**/tests/**/*.test.js"],
     "collectCoverageFrom": [
       "controllers/**/*.js",
       "middleware/**/*.js",
@@ -55,10 +51,7 @@
         "statements": 80
       }
     },
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/tests/"
-    ],
+    "coveragePathIgnorePatterns": ["/node_modules/", "/tests/"],
     "testTimeout": 30000,
     "verbose": false
   }

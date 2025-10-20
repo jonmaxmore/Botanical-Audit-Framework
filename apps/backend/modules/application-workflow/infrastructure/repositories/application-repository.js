@@ -43,7 +43,7 @@ class ApplicationRepository {
 
       return savedApplication.toObject();
     } catch (error) {
-      console.error('[ApplicationRepository] Error creating application:', error);
+      logger.error('[ApplicationRepository] Error creating application:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -76,7 +76,7 @@ class ApplicationRepository {
       const application = await query.lean();
       return application;
     } catch (error) {
-      console.error('[ApplicationRepository] Error finding application by ID:', error);
+      logger.error('[ApplicationRepository] Error finding application by ID:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -98,7 +98,7 @@ class ApplicationRepository {
 
       return application;
     } catch (error) {
-      console.error('[ApplicationRepository] Error finding by application number:', error);
+      logger.error('[ApplicationRepository] Error finding by application number:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -137,7 +137,7 @@ class ApplicationRepository {
 
       return updatedApplication;
     } catch (error) {
-      console.error('[ApplicationRepository] Error updating application:', error);
+      logger.error('[ApplicationRepository] Error updating application:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -159,12 +159,12 @@ class ApplicationRepository {
           deletedAt: new Date(),
           isDeleted: true,
         },
-        { new: true }
+        { new: true },
       );
 
       return !!result;
     } catch (error) {
-      console.error('[ApplicationRepository] Error deleting application:', error);
+      logger.error('[ApplicationRepository] Error deleting application:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -212,7 +212,7 @@ class ApplicationRepository {
         },
       };
     } catch (error) {
-      console.error('[ApplicationRepository] Error in findWithPagination:', error);
+      logger.error('[ApplicationRepository] Error in findWithPagination:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -232,7 +232,7 @@ class ApplicationRepository {
       const filters = { farmerId, isDeleted: { $ne: true } };
       return await this.findWithPagination(filters, options);
     } catch (error) {
-      console.error('[ApplicationRepository] Error finding by farmer ID:', error);
+      logger.error('[ApplicationRepository] Error finding by farmer ID:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -248,7 +248,7 @@ class ApplicationRepository {
       const filters = { status, isDeleted: { $ne: true } };
       return await this.findWithPagination(filters, options);
     } catch (error) {
-      console.error('[ApplicationRepository] Error finding by status:', error);
+      logger.error('[ApplicationRepository] Error finding by status:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -274,7 +274,7 @@ class ApplicationRepository {
 
       return count;
     } catch (error) {
-      console.error('[ApplicationRepository] Error counting today applications:', error);
+      logger.error('[ApplicationRepository] Error counting today applications:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -340,7 +340,7 @@ class ApplicationRepository {
         }
       );
     } catch (error) {
-      console.error('[ApplicationRepository] Error getting dashboard stats:', error);
+      logger.error('[ApplicationRepository] Error getting dashboard stats:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -380,7 +380,7 @@ class ApplicationRepository {
 
       return await this.findWithPagination(filters, options);
     } catch (error) {
-      console.error('[ApplicationRepository] Error finding applications requiring action:', error);
+      logger.error('[ApplicationRepository] Error finding applications requiring action:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -400,7 +400,7 @@ class ApplicationRepository {
 
       return await this.findWithPagination(filters, options);
     } catch (error) {
-      console.error('[ApplicationRepository] Error finding expired applications:', error);
+      logger.error('[ApplicationRepository] Error finding expired applications:', error);
       throw this._handleDatabaseError(error);
     }
   }
@@ -418,7 +418,7 @@ class ApplicationRepository {
       const result = await this.model.updateMany(filter, update);
       return result;
     } catch (error) {
-      console.error('[ApplicationRepository] Error in bulk update:', error);
+      logger.error('[ApplicationRepository] Error in bulk update:', error);
       throw this._handleDatabaseError(error);
     }
   }

@@ -10,6 +10,7 @@
  * - Auto-restart if needed
  */
 
+const logger = require('../shared/logger/logger');
 const http = require('http');
 const https = require('https');
 
@@ -25,8 +26,8 @@ class HealthCheckService {
    * Start health check service
    */
   start() {
-    console.log('[Health Check] Starting service...');
-    console.log(`[Health Check] Check interval: ${this.checkInterval}ms`);
+    logger.info('[Health Check] Starting service...');
+    logger.info(`[Health Check] Check interval: ${this.checkInterval}ms`);
 
     this.isRunning = true;
     this.runChecks();
@@ -41,7 +42,7 @@ class HealthCheckService {
    * Stop health check service
    */
   stop() {
-    console.log('[Health Check] Stopping service...');
+    logger.info('[Health Check] Stopping service...');
     this.isRunning = false;
 
     if (this.intervalId) {
@@ -55,7 +56,7 @@ class HealthCheckService {
   async runChecks() {
     if (!this.isRunning) return;
 
-    console.log(`\n[Health Check] Running checks at ${new Date().toISOString()}`);
+    logger.info(`\n[Health Check] Running checks at ${new Date().toISOString()}`);
 
     try {
       // Get port from environment (UAT uses 3001, production uses 5000)
@@ -64,36 +65,36 @@ class HealthCheckService {
 
       // Check 1: Main server health
       const serverHealth = await this.checkServer(`${baseUrl}/health`);
-      console.log(`[Health Check] Main Server (port ${port}): ${serverHealth.status}`);
+      logger.info(`[Health Check] Main Server (port ${port});: ${serverHealth.status}`);
 
       // Check 2: Auth service (optional - may not exist in all environments)
       const authHealth = await this.checkServer(`${baseUrl}/api/auth/health`);
-      console.log(`[Health Check] Auth Service: ${authHealth.status}`);
+      logger.info(`[Health Check] Auth Service: ${authHealth.status}`);
 
       // Check 3: DTAM service (optional)
       const dtamHealth = await this.checkServer(`${baseUrl}/api/auth/dtam/health`);
-      console.log(`[Health Check] DTAM Service: ${dtamHealth.status}`);
+      logger.info(`[Health Check] DTAM Service: ${dtamHealth.status}`);
 
       // All checks passed (only require main server to be healthy)
       if (serverHealth.ok) {
         this.failureCount = 0;
-        console.log('[Health Check] ✅ All critical checks passed');
-        
+        logger.info('[Health Check] ✅ All critical checks passed');
+
         // Log warnings for non-critical services
         if (!authHealth.ok) {
-          console.log('[Health Check] ⚠️  Auth service unavailable (non-critical)');
+          logger.info('[Health Check] ⚠️  Auth service unavailable (non-critical);');
         }
         if (!dtamHealth.ok) {
-          console.log('[Health Check] ⚠️  DTAM service unavailable (non-critical)');
+          logger.info('[Health Check] ⚠️  DTAM service unavailable (non-critical);');
         }
       } else {
         this.failureCount++;
         console.log(
-          `[Health Check] ⚠️  Critical checks failed (${this.failureCount}/${this.maxFailures})`
+          `[Health Check] ⚠️  Critical checks failed (${this.failureCount}/${this.maxFailures})`,
         );
 
         if (this.failureCount >= this.maxFailures) {
-          console.error('[Health Check] ❌ Max failures reached! Alerting...');
+          logger.error('[Health Check] ❌ Max failures reached! Alerting...');
           this.sendAlert({
             serverHealth,
             authHealth,
@@ -102,7 +103,7 @@ class HealthCheckService {
         }
       }
     } catch (error) {
-      console.error('[Health Check] ❌ Error during checks:', error.message);
+      logger.error('[Health Check] ❌ Error during checks:', error.message);
       this.failureCount++;
     }
   }
@@ -164,13 +165,13 @@ class HealthCheckService {
    * Send alert (console for now, can integrate with email/Slack)
    */
   sendAlert(healthData) {
-    console.error('\n========================================');
-    console.error('🚨 HEALTH CHECK ALERT');
-    console.error('========================================');
-    console.error('Time:', new Date().toISOString());
-    console.error('Failure Count:', this.failureCount);
-    console.error('Health Data:', JSON.stringify(healthData, null, 2));
-    console.error('========================================\n');
+    logger.error('\n========================================');
+    logger.error('🚨 HEALTH CHECK ALERT');
+    logger.error('========================================');
+    logger.error('Time:', new Date().toISOString());
+    logger.error('Failure Count:', this.failureCount);
+    logger.error('Health Data:', JSON.stringify(healthData, null, 2));
+    logger.error('========================================\n');
 
     // TODO: Send email, Slack notification, or SMS
     // TODO: Trigger auto-restart via PM2 API
@@ -196,13 +197,13 @@ if (require.main === module) {
 
   // Graceful shutdown
   process.on('SIGINT', () => {
-    console.log('\n[Health Check] Received SIGINT, shutting down...');
+    logger.info('\n[Health Check] Received SIGINT, shutting down...');
     service.stop();
     process.exit(0);
   });
 
   process.on('SIGTERM', () => {
-    console.log('\n[Health Check] Received SIGTERM, shutting down...');
+    logger.info('\n[Health Check] Received SIGTERM, shutting down...');
     service.stop();
     process.exit(0);
   });

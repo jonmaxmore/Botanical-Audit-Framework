@@ -24,7 +24,7 @@ import {
   MenuItem,
   Button,
   Tabs,
-  Tab,
+  Tab
 } from '@mui/material';
 import {
   Logout as LogoutIcon,
@@ -32,7 +32,7 @@ import {
   VerifiedUser as VerifiedUserIcon,
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
-  HourglassEmpty as HourglassEmptyIcon,
+  HourglassEmpty as HourglassEmptyIcon
 } from '@mui/icons-material';
 import { Approver } from '../../types/user.types';
 import { WorkflowService } from '../../lib/workflow.service';
@@ -64,7 +64,7 @@ export default function ApproverDashboard() {
     { label: 'รออนุมัติ', value: '0', icon: <HourglassEmptyIcon />, color: '#ff9800' },
     { label: 'อนุมัติแล้ว', value: '0', icon: <CheckCircleIcon />, color: '#4caf50' },
     { label: 'ไม่อนุมัติ', value: '0', icon: <CancelIcon />, color: '#f44336' },
-    { label: 'ออกใบรับรอง', value: '0', icon: <VerifiedUserIcon />, color: '#9c27b0' },
+    { label: 'ออกใบรับรอง', value: '0', icon: <VerifiedUserIcon />, color: '#9c27b0' }
   ];
 
   return (
@@ -117,7 +117,7 @@ export default function ApproverDashboard() {
                         color: stat.color,
                         p: 1,
                         borderRadius: 1,
-                        mr: 2,
+                        mr: 2
                       }}
                     >
                       {stat.icon}

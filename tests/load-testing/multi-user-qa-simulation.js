@@ -165,7 +165,7 @@ function logAction(userId, group, action, status, responseTime, error = null) {
   console.log(
     `[${timestamp}] ${statusColor}${status}${resetColor} | ` +
       `User ${userId} (${group}) | ${action} | ${responseTime}ms` +
-      (error ? ` | ERROR: ${error.message}` : '')
+      (error ? ` | ERROR: ${error.message}` : ''),
   );
 }
 
@@ -204,7 +204,7 @@ class FarmerQATester {
           'REGISTER',
           'FAIL',
           Date.now() - startTime,
-          new Error('Missing required field (intentional)')
+          new Error('Missing required field (intentional)'),
         );
         return false;
       }
@@ -239,7 +239,7 @@ class FarmerQATester {
           'LOGIN',
           'FAIL',
           Date.now() - startTime,
-          new Error('Wrong password (intentional)')
+          new Error('Wrong password (intentional)'),
         );
         return false;
       }
@@ -372,7 +372,7 @@ class FarmerQATester {
           'RANDOM_EXPLORATION',
           'FAIL',
           Date.now() - startTime,
-          error
+          error,
         );
       }
     }
@@ -456,7 +456,7 @@ class DTAMQATester {
           status: Math.random() > 0.5 ? 'approved' : 'rejected',
           reviewComment: `Reviewed by DTAM ${this.role} QA Tester ${this.userId}`,
         },
-        { headers: { Authorization: `Bearer ${this.token}` } }
+        { headers: { Authorization: `Bearer ${this.token}` } },
       );
 
       logAction(this.userId, this.group, 'REVIEW_APPLICATION', 'PASS', Date.now() - startTime);
@@ -468,7 +468,7 @@ class DTAMQATester {
         'REVIEW_APPLICATION',
         'FAIL',
         Date.now() - startTime,
-        error
+        error,
       );
       return false;
     }
@@ -627,10 +627,10 @@ function printResults() {
   console.log('\n✅ Overall Results:');
   console.log(`   Total Tests: ${stats.totalTests}`);
   console.log(
-    `   Passed: ${stats.passed} (${((stats.passed / stats.totalTests) * 100).toFixed(2)}%)`
+    `   Passed: ${stats.passed} (${((stats.passed / stats.totalTests) * 100).toFixed(2)}%)`,
   );
   console.log(
-    `   Failed: ${stats.failed} (${((stats.failed / stats.totalTests) * 100).toFixed(2)}%)`
+    `   Failed: ${stats.failed} (${((stats.failed / stats.totalTests) * 100).toFixed(2)}%)`,
   );
   console.log(`   Success Rate: ${((stats.passed / stats.totalTests) * 100).toFixed(2)}%`);
 
@@ -646,7 +646,7 @@ function printResults() {
       const successRate = ((data.passed / data.tests) * 100).toFixed(2);
       console.log(`   ${group.toUpperCase()}:`);
       console.log(
-        `      Tests: ${data.tests} | Passed: ${data.passed} | Failed: ${data.failed} | Success: ${successRate}%`
+        `      Tests: ${data.tests} | Passed: ${data.passed} | Failed: ${data.failed} | Success: ${successRate}%`,
       );
     }
   });
@@ -658,7 +658,7 @@ function printResults() {
       const errorRate = ((data.errors / data.calls) * 100).toFixed(2);
       console.log(`   ${endpoint}:`);
       console.log(
-        `      Calls: ${data.calls} | Avg Time: ${data.avgTime.toFixed(2)}ms | Errors: ${data.errors} (${errorRate}%)`
+        `      Calls: ${data.calls} | Avg Time: ${data.avgTime.toFixed(2)}ms | Errors: ${data.errors} (${errorRate}%)`,
       );
     });
 
@@ -689,7 +689,7 @@ function saveDetailedReport() {
       duration: ((stats.endTime - stats.startTime) / 1000).toFixed(2) + 's',
       avgResponseTime:
         (stats.responseTimesms.reduce((a, b) => a + b, 0) / stats.responseTimesms.length).toFixed(
-          2
+          2,
         ) + 'ms',
     },
     byGroup: stats.byGroup,

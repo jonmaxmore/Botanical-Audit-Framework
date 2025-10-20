@@ -157,7 +157,7 @@ class FarmManagementController {
 
       const complianceCheck = await this.farmService.recordComplianceCheck(
         req.params.id,
-        checkData
+        checkData,
       );
 
       return successResponse(res, complianceCheck, 'Compliance check recorded', 201);

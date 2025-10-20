@@ -83,7 +83,7 @@ const notificationSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'notifications',
-  }
+  },
 );
 
 // Indexes
@@ -147,7 +147,7 @@ class MongoDBNotificationRepository {
         return this.toDomain(created);
       }
     } catch (error) {
-      console.error('Error saving notification:', error);
+      logger.error('Error saving notification:', error);
       throw error;
     }
   }
@@ -157,7 +157,7 @@ class MongoDBNotificationRepository {
       const doc = await this.NotificationModel.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding notification by ID:', error);
+      logger.error('Error finding notification by ID:', error);
       return null;
     }
   }
@@ -187,7 +187,7 @@ class MongoDBNotificationRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding notifications by recipient:', error);
+      logger.error('Error finding notifications by recipient:', error);
       throw error;
     }
   }
@@ -203,7 +203,7 @@ class MongoDBNotificationRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding unread notifications:', error);
+      logger.error('Error finding unread notifications:', error);
       throw error;
     }
   }
@@ -227,7 +227,7 @@ class MongoDBNotificationRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding notifications by type:', error);
+      logger.error('Error finding notifications by type:', error);
       throw error;
     }
   }
@@ -251,7 +251,7 @@ class MongoDBNotificationRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding notifications by status:', error);
+      logger.error('Error finding notifications by status:', error);
       throw error;
     }
   }
@@ -275,7 +275,7 @@ class MongoDBNotificationRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding notifications by priority:', error);
+      logger.error('Error finding notifications by priority:', error);
       throw error;
     }
   }
@@ -314,7 +314,7 @@ class MongoDBNotificationRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding notifications with filters:', error);
+      logger.error('Error finding notifications with filters:', error);
       throw error;
     }
   }
@@ -347,7 +347,7 @@ class MongoDBNotificationRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding broadcast notifications:', error);
+      logger.error('Error finding broadcast notifications:', error);
       throw error;
     }
   }
@@ -359,7 +359,7 @@ class MongoDBNotificationRepository {
         status: Notification.STATUS.UNREAD,
       });
     } catch (error) {
-      console.error('Error counting unread notifications:', error);
+      logger.error('Error counting unread notifications:', error);
       return 0;
     }
   }
@@ -368,7 +368,7 @@ class MongoDBNotificationRepository {
     try {
       return await this.NotificationModel.countDocuments(criteria);
     } catch (error) {
-      console.error('Error counting notifications:', error);
+      logger.error('Error counting notifications:', error);
       return 0;
     }
   }
@@ -385,11 +385,11 @@ class MongoDBNotificationRepository {
             status: Notification.STATUS.READ,
             readAt: new Date(),
           },
-        }
+        },
       );
       return result.modifiedCount;
     } catch (error) {
-      console.error('Error marking all as read:', error);
+      logger.error('Error marking all as read:', error);
       return 0;
     }
   }
@@ -401,7 +401,7 @@ class MongoDBNotificationRepository {
       });
       return result.deletedCount;
     } catch (error) {
-      console.error('Error deleting expired notifications:', error);
+      logger.error('Error deleting expired notifications:', error);
       return 0;
     }
   }
@@ -469,7 +469,7 @@ class MongoDBNotificationRepository {
         }, {}),
       };
     } catch (error) {
-      console.error('Error getting notification statistics:', error);
+      logger.error('Error getting notification statistics:', error);
       throw error;
     }
   }
@@ -479,7 +479,7 @@ class MongoDBNotificationRepository {
       const result = await this.NotificationModel.findByIdAndDelete(id);
       return result !== null;
     } catch (error) {
-      console.error('Error deleting notification:', error);
+      logger.error('Error deleting notification:', error);
       return false;
     }
   }

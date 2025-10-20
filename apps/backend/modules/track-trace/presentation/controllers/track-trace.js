@@ -115,8 +115,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid seed initialization data',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors
-            )
+              validationResult.errors,
+            ),
           );
       }
 
@@ -150,7 +150,7 @@ class TrackTraceController {
       });
 
       this.logger.log(
-        `[TrackTrace] Seed tracking initialized successfully - Request: ${requestId}, Duration: ${executionTime}ms`
+        `[TrackTrace] Seed tracking initialized successfully - Request: ${requestId}, Duration: ${executionTime}ms`,
       );
 
       res.status(201).json(response);
@@ -175,7 +175,7 @@ class TrackTraceController {
 
     try {
       this.logger.log(
-        `[TrackTrace] Get seed tracking - Seed: ${req.params.seedId}, Request: ${requestId}`
+        `[TrackTrace] Get seed tracking - Seed: ${req.params.seedId}, Request: ${requestId}`,
       );
 
       // Step 1: Authenticate and authorize
@@ -187,7 +187,7 @@ class TrackTraceController {
         return res
           .status(400)
           .json(
-            this.responseFormats.error('Invalid seed ID format', this.errorCodes.VALIDATION_ERROR)
+            this.responseFormats.error('Invalid seed ID format', this.errorCodes.VALIDATION_ERROR),
           );
       }
 
@@ -234,7 +234,7 @@ class TrackTraceController {
       });
 
       this.logger.log(
-        `[TrackTrace] Seed tracking retrieved - Request: ${requestId}, Duration: ${executionTime}ms`
+        `[TrackTrace] Seed tracking retrieved - Request: ${requestId}, Duration: ${executionTime}ms`,
       );
 
       res.status(200).json(response);
@@ -273,8 +273,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid plant initialization data',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors
-            )
+              validationResult.errors,
+            ),
           );
       }
 
@@ -287,8 +287,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Seed not available for planting',
               this.errorCodes.BUSINESS_RULE_VIOLATION,
-              seedValidation.issues
-            )
+              seedValidation.issues,
+            ),
           );
       }
 
@@ -329,7 +329,7 @@ class TrackTraceController {
       });
 
       this.logger.log(
-        `[TrackTrace] Plant tracking initialized - Plant: ${plantTrackingResult.plantId}, Request: ${requestId}`
+        `[TrackTrace] Plant tracking initialized - Plant: ${plantTrackingResult.plantId}, Request: ${requestId}`,
       );
 
       res.status(201).json(response);
@@ -354,7 +354,7 @@ class TrackTraceController {
 
     try {
       this.logger.log(
-        `[TrackTrace] Record plant measurement - Plant: ${req.params.plantId}, Request: ${requestId}`
+        `[TrackTrace] Record plant measurement - Plant: ${req.params.plantId}, Request: ${requestId}`,
       );
 
       // Step 1: Authenticate and authorize
@@ -370,8 +370,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid measurement data',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors
-            )
+              validationResult.errors,
+            ),
           );
       }
 
@@ -382,7 +382,7 @@ class TrackTraceController {
           ...req.body,
           recordedBy: userContext.userId,
           recordedAt: new Date(),
-        }
+        },
       );
 
       // Step 4: Handle alerts if any anomalies detected
@@ -390,7 +390,7 @@ class TrackTraceController {
         await this.handleMeasurementAnomalies(
           req.params.plantId,
           measurementResult.anomalies,
-          userContext
+          userContext,
         );
       }
 
@@ -421,7 +421,7 @@ class TrackTraceController {
       });
 
       this.logger.log(
-        `[TrackTrace] Plant measurement recorded - Plant: ${req.params.plantId}, Request: ${requestId}`
+        `[TrackTrace] Plant measurement recorded - Plant: ${req.params.plantId}, Request: ${requestId}`,
       );
 
       res.status(200).json(response);
@@ -446,7 +446,7 @@ class TrackTraceController {
 
     try {
       this.logger.log(
-        `[TrackTrace] Initialize harvest tracking - Plants: ${req.body.plantIds?.length || 0}, Request: ${requestId}`
+        `[TrackTrace] Initialize harvest tracking - Plants: ${req.body.plantIds?.length || 0}, Request: ${requestId}`,
       );
 
       // Step 1: Authenticate and authorize
@@ -462,14 +462,14 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid harvest initialization data',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors
-            )
+              validationResult.errors,
+            ),
           );
       }
 
       // Step 3: Validate plant readiness for harvest
       const plantsValidation = await Promise.all(
-        req.body.plantIds.map(plantId => this.trackPlantUseCase.validateHarvestReadiness(plantId))
+        req.body.plantIds.map(plantId => this.trackPlantUseCase.validateHarvestReadiness(plantId)),
       );
 
       const notReadyPlants = plantsValidation
@@ -483,8 +483,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Some plants are not ready for harvest',
               this.errorCodes.BUSINESS_RULE_VIOLATION,
-              { notReadyPlants: notReadyPlants }
-            )
+              { notReadyPlants: notReadyPlants },
+            ),
           );
       }
 
@@ -521,7 +521,7 @@ class TrackTraceController {
       });
 
       this.logger.log(
-        `[TrackTrace] Harvest tracking initialized - Batch: ${harvestTrackingResult.harvestBatch.batchId}, Request: ${requestId}`
+        `[TrackTrace] Harvest tracking initialized - Batch: ${harvestTrackingResult.harvestBatch.batchId}, Request: ${requestId}`,
       );
 
       res.status(201).json(response);
@@ -548,7 +548,7 @@ class TrackTraceController {
       const { entityType, entityId } = req.params;
 
       this.logger.log(
-        `[TrackTrace] Generate tracking report - Type: ${entityType}, ID: ${entityId}, Request: ${requestId}`
+        `[TrackTrace] Generate tracking report - Type: ${entityType}, ID: ${entityId}, Request: ${requestId}`,
       );
 
       // Step 1: Authenticate and authorize
@@ -556,7 +556,7 @@ class TrackTraceController {
       await this.authService.authorizeResourceAccess(
         userContext,
         entityType.toUpperCase(),
-        entityId
+        entityId,
       );
 
       // Step 2: Validate entity type and ID
@@ -564,7 +564,7 @@ class TrackTraceController {
         return res
           .status(400)
           .json(
-            this.responseFormats.error('Invalid entity type', this.errorCodes.VALIDATION_ERROR)
+            this.responseFormats.error('Invalid entity type', this.errorCodes.VALIDATION_ERROR),
           );
       }
 
@@ -587,8 +587,8 @@ class TrackTraceController {
             .json(
               this.responseFormats.error(
                 'Unsupported entity type for reporting',
-                this.errorCodes.VALIDATION_ERROR
-              )
+                this.errorCodes.VALIDATION_ERROR,
+              ),
             );
       }
 
@@ -639,7 +639,7 @@ class TrackTraceController {
       });
 
       this.logger.log(
-        `[TrackTrace] Tracking report generated - Type: ${entityType}, ID: ${entityId}, Request: ${requestId}, Duration: ${executionTime}ms`
+        `[TrackTrace] Tracking report generated - Type: ${entityType}, ID: ${entityId}, Request: ${requestId}, Duration: ${executionTime}ms`,
       );
 
       res.status(200).json(response);
@@ -678,7 +678,7 @@ class TrackTraceController {
           page: parseInt(req.query.page) || 1,
           limit: Math.min(
             parseInt(req.query.limit) || this.apiConfig.defaultPageSize,
-            this.apiConfig.maxPageSize
+            this.apiConfig.maxPageSize,
           ),
         },
         sort: req.query.sort || 'relevance',
@@ -692,8 +692,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid search parameters',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors
-            )
+              validationResult.errors,
+            ),
           );
       }
 
@@ -736,7 +736,7 @@ class TrackTraceController {
       };
 
       this.logger.log(
-        `[TrackTrace] Search completed - Results: ${searchResults.totalResults}, Request: ${requestId}, Duration: ${executionTime}ms`
+        `[TrackTrace] Search completed - Results: ${searchResults.totalResults}, Request: ${requestId}, Duration: ${executionTime}ms`,
       );
 
       res.status(200).json(response);
@@ -760,7 +760,7 @@ class TrackTraceController {
         requestBody: req.body,
         requestParams: req.params,
         requestQuery: req.query,
-      }
+      },
     );
 
     // Record error metrics
@@ -878,8 +878,8 @@ class TrackTraceController {
             .json(
               this.responseFormats.error(
                 'Unsupported export format',
-                this.errorCodes.VALIDATION_ERROR
-              )
+                this.errorCodes.VALIDATION_ERROR,
+              ),
             );
       }
 

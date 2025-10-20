@@ -175,7 +175,7 @@ test.describe('Admin Review Flow', () => {
 
       // Add review notes
       await reviewPage.addReviewNotes(
-        'All documents verified. Farm meets GAP standards. Approved.'
+        'All documents verified. Farm meets GAP standards. Approved.',
       );
 
       // Click approve button
@@ -248,7 +248,7 @@ test.describe('Admin Review Flow', () => {
 
       // Add rejection reason
       await reviewPage.addReviewNotes(
-        'Missing required land certificate. Farm size does not meet minimum requirements.'
+        'Missing required land certificate. Farm size does not meet minimum requirements.',
       );
 
       // Click reject button
@@ -301,7 +301,7 @@ test.describe('Admin Review Flow', () => {
 
       // Add change request notes
       await reviewPage.addReviewNotes(
-        'Please update farm size information and re-upload land certificate with current date.'
+        'Please update farm size information and re-upload land certificate with current date.',
       );
 
       // Click request changes

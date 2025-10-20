@@ -45,7 +45,7 @@ function setupSurveyRoutes(dependencies) {
     validationMiddleware,
     rateLimitMiddleware,
     auditMiddleware,
-    logger
+    logger,
   } = dependencies;
 
   // =============================================================================
@@ -75,7 +75,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.createSurvey,
     validationMiddleware.validateCreateSurvey,
     auditMiddleware.logActivity('survey_create'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyController.createSurvey(req, res);
       } catch (error) {
@@ -84,11 +84,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -102,7 +102,7 @@ function setupSurveyRoutes(dependencies) {
     authMiddleware.authenticate,
     rateLimitMiddleware.getSurvey,
     auditMiddleware.logActivity('survey_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyController.getSurveyById(req, res);
       } catch (error) {
@@ -111,11 +111,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -130,7 +130,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.updateSurvey,
     validationMiddleware.validateUpdateSurvey,
     auditMiddleware.logActivity('survey_update'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyController.updateSurvey(req, res);
       } catch (error) {
@@ -139,11 +139,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -157,7 +157,7 @@ function setupSurveyRoutes(dependencies) {
     authMiddleware.authenticate,
     rateLimitMiddleware.deleteSurvey,
     auditMiddleware.logActivity('survey_delete'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyController.deleteSurvey(req, res);
       } catch (error) {
@@ -166,11 +166,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -185,7 +185,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.searchSurveys,
     validationMiddleware.validateSearchSurveys,
     auditMiddleware.logActivity('survey_search'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyController.searchSurveys(req, res);
       } catch (error) {
@@ -194,11 +194,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -212,7 +212,7 @@ function setupSurveyRoutes(dependencies) {
     authMiddleware.authenticate,
     rateLimitMiddleware.getSurveyStatistics,
     auditMiddleware.logActivity('survey_statistics'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyController.getSurveyStatistics(req, res);
       } catch (error) {
@@ -221,11 +221,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -244,7 +244,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.getFarmSurveys,
     validationMiddleware.validateFarmId,
     auditMiddleware.logActivity('farm_surveys_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyController.getFarmSurveys(req, res);
       } catch (error) {
@@ -253,11 +253,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -276,7 +276,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.startSurveyResponse,
     validationMiddleware.validateStartResponse,
     auditMiddleware.logActivity('response_start'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyResponseController.startSurveyResponse(req, res);
       } catch (error) {
@@ -285,11 +285,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -303,7 +303,7 @@ function setupSurveyRoutes(dependencies) {
     authMiddleware.authenticate,
     rateLimitMiddleware.getSurveyResponse,
     auditMiddleware.logActivity('response_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyResponseController.getSurveyResponse(req, res);
       } catch (error) {
@@ -312,11 +312,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -331,7 +331,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.recordAnswer,
     validationMiddleware.validateAnswerInput,
     auditMiddleware.logActivity('answer_record'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyResponseController.recordAnswer(req, res);
       } catch (error) {
@@ -340,11 +340,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -359,7 +359,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.recordMultipleAnswers,
     validationMiddleware.validateMultipleAnswers,
     auditMiddleware.logActivity('multiple_answers_record'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyResponseController.recordMultipleAnswers(req, res);
       } catch (error) {
@@ -368,11 +368,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -387,7 +387,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.completeSurveyResponse,
     validationMiddleware.validateCompletionInput,
     auditMiddleware.logActivity('response_complete'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyResponseController.completeSurveyResponse(req, res);
       } catch (error) {
@@ -396,11 +396,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -414,7 +414,7 @@ function setupSurveyRoutes(dependencies) {
     authMiddleware.authenticate,
     rateLimitMiddleware.getResponseProgress,
     auditMiddleware.logActivity('progress_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyResponseController.getResponseProgress(req, res);
       } catch (error) {
@@ -423,11 +423,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   /**
@@ -442,7 +442,7 @@ function setupSurveyRoutes(dependencies) {
     rateLimitMiddleware.getSurveyResponses,
     validationMiddleware.validateSurveyId,
     auditMiddleware.logActivity('survey_responses_view'),
-    async(req, res) => {
+    async (req, res) => {
       try {
         await surveyResponseController.getSurveyResponses(req, res);
       } catch (error) {
@@ -451,11 +451,11 @@ function setupSurveyRoutes(dependencies) {
           success: false,
           error: {
             code: 'INTERNAL_ERROR',
-            message: 'Internal server error occurred'
-          }
+            message: 'Internal server error occurred',
+          },
         });
       }
-    }
+    },
   );
 
   // =============================================================================
@@ -474,7 +474,7 @@ function setupSurveyRoutes(dependencies) {
       status: 'healthy',
       service: 'survey-system',
       timestamp: new Date().toISOString(),
-      version: '1.0.0'
+      version: '1.0.0',
     });
   });
 
@@ -498,7 +498,7 @@ function setupSurveyRoutes(dependencies) {
             'PUT /api/surveys/:id - Update survey',
             'DELETE /api/surveys/:id - Delete survey',
             'POST /api/surveys/search - Search surveys',
-            'GET /api/surveys/statistics - Get statistics'
+            'GET /api/surveys/statistics - Get statistics',
           ],
           responses: [
             'POST /api/survey-responses - Start survey response',
@@ -506,10 +506,10 @@ function setupSurveyRoutes(dependencies) {
             'PUT /api/survey-responses/:id/answers/:questionId - Record answer',
             'PUT /api/survey-responses/:id/answers - Record multiple answers',
             'POST /api/survey-responses/:id/complete - Complete response',
-            'GET /api/survey-responses/:id/progress - Get progress'
-          ]
-        }
-      }
+            'GET /api/survey-responses/:id/progress - Get progress',
+          ],
+        },
+      },
     });
   });
 
@@ -526,7 +526,7 @@ function setupSurveyRoutes(dependencies) {
       method: req.method,
       path: req.originalUrl,
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(404).json({
@@ -535,9 +535,9 @@ function setupSurveyRoutes(dependencies) {
         code: 'ROUTE_NOT_FOUND',
         message: 'The requested survey system endpoint was not found',
         path: req.originalUrl,
-        method: req.method
+        method: req.method,
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   });
 
@@ -551,7 +551,7 @@ function setupSurveyRoutes(dependencies) {
       stack: error.stack,
       path: req.originalUrl,
       method: req.method,
-      userId: req.user?.id
+      userId: req.user?.id,
     });
 
     // ตรวจสอบประเภทข้อผิดพลาด
@@ -561,9 +561,9 @@ function setupSurveyRoutes(dependencies) {
         error: {
           code: 'VALIDATION_ERROR',
           message: 'Input validation failed',
-          details: error.message
+          details: error.message,
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -572,9 +572,9 @@ function setupSurveyRoutes(dependencies) {
         success: false,
         error: {
           code: 'UNAUTHORIZED',
-          message: 'Authentication required'
+          message: 'Authentication required',
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -583,15 +583,15 @@ function setupSurveyRoutes(dependencies) {
       success: false,
       error: {
         code: 'INTERNAL_SERVER_ERROR',
-        message: 'An unexpected error occurred in survey system'
+        message: 'An unexpected error occurred in survey system',
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   });
 
   logger.info('Survey System routes configured successfully', {
     totalRoutes: router.stack.length,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 
   return router;

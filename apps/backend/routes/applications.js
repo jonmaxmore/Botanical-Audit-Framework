@@ -73,7 +73,7 @@ router.post(
         ],
       },
     });
-  })
+  }),
 );
 
 /**
@@ -129,7 +129,7 @@ router.get(
         },
       },
     });
-  })
+  }),
 );
 
 /**
@@ -164,7 +164,7 @@ router.get(
       success: true,
       data: { application },
     });
-  })
+  }),
 );
 
 /**
@@ -217,7 +217,7 @@ router.put(
       message: 'Application updated successfully',
       data: { application },
     });
-  })
+  }),
 );
 
 /**
@@ -269,7 +269,7 @@ router.post(
         totalDocuments: application.documents.length,
       },
     });
-  })
+  }),
 );
 
 /**
@@ -291,7 +291,7 @@ router.post(
         estimatedReviewTime: '7-14 working days',
       },
     });
-  })
+  }),
 );
 
 // === REVIEW WORKFLOW ROUTES ===
@@ -312,7 +312,7 @@ router.post(
     const result = await GACPApplicationService.reviewApplication(
       req.params.id,
       req.user.id,
-      req.body
+      req.body,
     );
 
     res.json({
@@ -320,7 +320,7 @@ router.post(
       message: 'Application review completed',
       data: result,
     });
-  })
+  }),
 );
 
 /**
@@ -343,7 +343,7 @@ router.post(
 
     const inspectionDetails = await GACPApplicationService.scheduleInspection(
       application,
-      req.body.preferredDate
+      req.body.preferredDate,
     );
 
     res.json({
@@ -351,7 +351,7 @@ router.post(
       message: 'Inspection scheduled successfully',
       data: inspectionDetails,
     });
-  })
+  }),
 );
 
 // === INSPECTION ROUTES ===
@@ -367,7 +367,7 @@ router.post(
   handleAsync(async (req, res) => {
     const inspectionData = await GACPInspectionService.initializeInspection(
       req.params.applicationId,
-      req.user.id
+      req.user.id,
     );
 
     res.json({
@@ -375,7 +375,7 @@ router.post(
       message: 'Inspection initialized',
       data: inspectionData,
     });
-  })
+  }),
 );
 
 /**
@@ -398,7 +398,7 @@ router.post(
       req.user.id,
       req.body.category,
       req.body.criterionId,
-      req.body
+      req.body,
     );
 
     res.json({
@@ -406,7 +406,7 @@ router.post(
       message: 'Control point assessed',
       data: assessment,
     });
-  })
+  }),
 );
 
 /**
@@ -424,7 +424,7 @@ router.post(
     const inspectionResult = await GACPInspectionService.completeInspection(
       req.params.applicationId,
       req.user.id,
-      req.body
+      req.body,
     );
 
     res.json({
@@ -432,7 +432,7 @@ router.post(
       message: 'Inspection completed',
       data: inspectionResult,
     });
-  })
+  }),
 );
 
 // === CERTIFICATE ROUTES ===
@@ -448,7 +448,7 @@ router.post(
   handleAsync(async (req, res) => {
     const certificateData = await GACPCertificateService.generateCertificate(
       req.params.id,
-      req.user.id
+      req.user.id,
     );
 
     res.json({
@@ -456,7 +456,7 @@ router.post(
       message: 'Certificate generated successfully',
       data: certificateData,
     });
-  })
+  }),
 );
 
 /**
@@ -468,14 +468,14 @@ router.get(
   handleAsync(async (req, res) => {
     const verification = await GACPCertificateService.verifyCertificate(
       req.params.certificateNumber,
-      req.query.code
+      req.query.code,
     );
 
     res.json({
       success: true,
       data: verification,
     });
-  })
+  }),
 );
 
 /**
@@ -486,14 +486,14 @@ router.get(
   '/certificates/:certificateNumber/page',
   handleAsync(async (req, res) => {
     const verificationPage = await GACPCertificateService.generateVerificationPage(
-      req.params.certificateNumber
+      req.params.certificateNumber,
     );
 
     res.json({
       success: true,
       data: verificationPage,
     });
-  })
+  }),
 );
 
 /**
@@ -508,7 +508,7 @@ router.post(
     const renewalResult = await GACPCertificateService.renewCertificate(
       req.params.certificateNumber,
       req.user.id,
-      req.body
+      req.body,
     );
 
     res.json({
@@ -516,7 +516,7 @@ router.post(
       message: 'Certificate renewed successfully',
       data: renewalResult,
     });
-  })
+  }),
 );
 
 /**
@@ -534,7 +534,7 @@ router.post(
     const revocationResult = await GACPCertificateService.revokeCertificate(
       req.params.certificateNumber,
       req.user.id,
-      req.body.reason
+      req.body.reason,
     );
 
     res.json({
@@ -542,7 +542,7 @@ router.post(
       message: 'Certificate revoked successfully',
       data: revocationResult,
     });
-  })
+  }),
 );
 
 // === DASHBOARD & ANALYTICS ROUTES ===
@@ -600,7 +600,7 @@ router.get(
         total: stats.reduce((sum, count) => sum + count, 0),
       },
     });
-  })
+  }),
 );
 
 /**
@@ -631,7 +631,7 @@ router.get(
       success: true,
       data: { recentApplications },
     });
-  })
+  }),
 );
 
 module.exports = router;

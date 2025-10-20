@@ -61,7 +61,7 @@ class DTAMStaffAuthController {
         },
       });
     } catch (error) {
-      console.error('Create staff error:', error);
+      logger.error('Create staff error:', error);
 
       if (error.message.includes('already exists')) {
         return res.status(409).json({
@@ -117,7 +117,7 @@ class DTAMStaffAuthController {
         },
       });
     } catch (error) {
-      console.error('Login error:', error);
+      logger.error('Login error:', error);
 
       if (error.message.includes('Invalid credentials')) {
         return res.status(401).json({
@@ -163,7 +163,7 @@ class DTAMStaffAuthController {
         message: 'If an account with that email exists, a password reset link has been sent.',
       });
     } catch (error) {
-      console.error('Password reset request error:', error);
+      logger.error('Password reset request error:', error);
 
       // Always return success (prevent email enumeration)
       return res.status(200).json({
@@ -189,7 +189,7 @@ class DTAMStaffAuthController {
         message: 'Password reset successful. You can now login with your new password.',
       });
     } catch (error) {
-      console.error('Password reset error:', error);
+      logger.error('Password reset error:', error);
 
       if (error.message.includes('Invalid') || error.message.includes('expired')) {
         return res.status(404).json({
@@ -227,7 +227,7 @@ class DTAMStaffAuthController {
         data: staff,
       });
     } catch (error) {
-      console.error('Get profile error:', error);
+      logger.error('Get profile error:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -269,7 +269,7 @@ class DTAMStaffAuthController {
         data: staff,
       });
     } catch (error) {
-      console.error('Update profile error:', error);
+      logger.error('Update profile error:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -324,7 +324,7 @@ class DTAMStaffAuthController {
         data: result,
       });
     } catch (error) {
-      console.error('List staff error:', error);
+      logger.error('List staff error:', error);
 
       return res.status(500).json({
         success: false,
@@ -355,7 +355,7 @@ class DTAMStaffAuthController {
         data: staff,
       });
     } catch (error) {
-      console.error('Update role error:', error);
+      logger.error('Update role error:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({

@@ -229,7 +229,7 @@ const certificateSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'certificates',
-  }
+  },
 );
 
 // Indexes for performance

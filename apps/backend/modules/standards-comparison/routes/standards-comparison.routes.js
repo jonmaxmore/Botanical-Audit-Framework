@@ -59,7 +59,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private (requires authentication)
    */
   router.get('/comparison/:id', authMiddleware, (req, res) =>
-    controller.getComparisonResults(req, res)
+    controller.getComparisonResults(req, res),
   );
 
   /**
@@ -75,7 +75,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private (requires authentication)
    */
   router.get('/history/:farmId', authMiddleware, (req, res) =>
-    controller.getComparisonHistory(req, res)
+    controller.getComparisonHistory(req, res),
   );
 
   /**
@@ -84,7 +84,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private (requires authentication)
    */
   router.get('/recommendations/:comparisonId', authMiddleware, (req, res) =>
-    controller.getRecommendations(req, res)
+    controller.getRecommendations(req, res),
   );
 
   return router;

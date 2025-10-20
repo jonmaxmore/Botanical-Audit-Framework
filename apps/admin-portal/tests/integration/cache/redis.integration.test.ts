@@ -283,7 +283,7 @@ describe('Redis Cache Integration Tests', () => {
 
       const { duration } = await measurePerformance('50 concurrent cache operations', async () => {
         const operations = Array.from({ length: 50 }, (_, i) =>
-          redis.set(`concurrent:${i}`, `value-${i}`)
+          redis.set(`concurrent:${i}`, `value-${i}`),
         );
 
         await Promise.all(operations);
@@ -318,7 +318,7 @@ describe('Redis Cache Integration Tests', () => {
         'Read large data',
         async () => {
           return await redis.get(key);
-        }
+        },
       );
 
       expect(JSON.parse(result!)).toHaveLength(1000);
@@ -363,7 +363,7 @@ describe('Redis Cache Integration Tests', () => {
           JSON.stringify({
             ...user,
             firstName: 'Updated',
-          })
+          }),
         ),
       ]);
 
@@ -383,7 +383,7 @@ describe('Redis Cache Integration Tests', () => {
       // Pre-populate cache with frequently accessed data
       const { duration } = await measurePerformance('Cache warming', async () => {
         const operations = users.map(user =>
-          redis.setEx(`user:${user.id}`, 3600, JSON.stringify(user))
+          redis.setEx(`user:${user.id}`, 3600, JSON.stringify(user)),
         );
 
         await Promise.all(operations);

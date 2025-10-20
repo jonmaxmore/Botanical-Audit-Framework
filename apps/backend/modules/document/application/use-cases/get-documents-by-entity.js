@@ -15,7 +15,7 @@ class GetDocumentsByRelatedEntityUseCase {
       const documents = await this.documentRepository.findByRelatedEntity(
         entityType,
         entityId,
-        options
+        options,
       );
 
       // Filter by access permission
@@ -23,7 +23,7 @@ class GetDocumentsByRelatedEntityUseCase {
 
       return accessibleDocuments;
     } catch (error) {
-      console.error('Error getting documents by related entity:', error);
+      logger.error('Error getting documents by related entity:', error);
       throw error;
     }
   }

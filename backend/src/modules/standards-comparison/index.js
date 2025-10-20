@@ -62,7 +62,7 @@ class StandardsComparisonModule {
     this.dependencies.logger?.info('Standards Comparison Module initialized successfully', {
       moduleId: this.moduleId,
       version: this.version,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 
@@ -79,7 +79,7 @@ class StandardsComparisonModule {
       'auditService',
       'farmManagementModule',
       'surveyModule',
-      'trackTraceModule'
+      'trackTraceModule',
     ];
 
     // ตรวจสอบ required dependencies
@@ -93,12 +93,12 @@ class StandardsComparisonModule {
     this.dependencies.logger?.info('Dependencies validation completed', {
       required: requiredDependencies.map(dep => ({
         name: dep,
-        available: !!this.dependencies[dep]
+        available: !!this.dependencies[dep],
       })),
       optional: optionalDependencies.map(dep => ({
         name: dep,
-        available: !!this.dependencies[dep]
-      }))
+        available: !!this.dependencies[dep],
+      })),
     });
   }
 
@@ -112,7 +112,7 @@ class StandardsComparisonModule {
       this.repository = new StandardsComparisonRepository({
         database: this.dependencies.database,
         logger: this.dependencies.logger,
-        auditService: this.dependencies.auditService
+        auditService: this.dependencies.auditService,
       });
 
       // Initialize Application Layer
@@ -123,7 +123,7 @@ class StandardsComparisonModule {
         trackTraceRepository: this.dependencies.trackTraceModule?.repository,
         eventBus: this.dependencies.eventBus,
         logger: this.dependencies.logger,
-        auditService: this.dependencies.auditService
+        auditService: this.dependencies.auditService,
       });
 
       // Initialize Presentation Layer
@@ -131,7 +131,7 @@ class StandardsComparisonModule {
         standardsComparisonUseCase: this.useCase,
         logger: this.dependencies.logger,
         authService: this.dependencies.authService,
-        fileService: this.dependencies.fileService
+        fileService: this.dependencies.fileService,
       });
 
       // Initialize Routes
@@ -146,20 +146,20 @@ class StandardsComparisonModule {
         fileMiddleware:
           this.dependencies.fileService?.middleware || this._createMockFileMiddleware(),
         progressMiddleware: this._createProgressMiddleware(),
-        logger: this.dependencies.logger
+        logger: this.dependencies.logger,
       });
 
       this.dependencies.logger?.info('Standards Comparison Module components initialized', {
         components: ['repository', 'useCase', 'controller', 'routes'],
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } catch (error) {
       this.dependencies.logger?.error(
         'Failed to initialize Standards Comparison Module components',
         {
           error: error.message,
-          stack: error.stack
-        }
+          stack: error.stack,
+        },
       );
       throw error;
     }
@@ -182,7 +182,7 @@ class StandardsComparisonModule {
       // Listen for survey completion
       this.dependencies.eventBus.on('survey.completed', surveyData => {
         this.dependencies.logger?.info('Survey completed event received', {
-          surveyId: surveyData.id
+          surveyId: surveyData.id,
         });
         // Update related standards comparisons with new survey data
         this._handleSurveyCompletion(surveyData);
@@ -191,7 +191,7 @@ class StandardsComparisonModule {
       // Listen for track & trace updates
       this.dependencies.eventBus.on('track-trace.updated', trackData => {
         this.dependencies.logger?.info('Track & trace updated event received', {
-          trackId: trackData.id
+          trackId: trackData.id,
         });
         // Update related standards comparisons with new tracking data
         this._handleTrackTraceUpdate(trackData);
@@ -216,7 +216,7 @@ class StandardsComparisonModule {
         stack: error.stack,
         context,
         moduleId: this.moduleId,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       // Emit error event for system monitoring
@@ -225,7 +225,7 @@ class StandardsComparisonModule {
           moduleId: this.moduleId,
           error: error.message,
           context,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
     };
@@ -240,7 +240,7 @@ class StandardsComparisonModule {
     process.on('unhandledRejection', (reason, promise) => {
       this.errorHandler(new Error(reason), {
         type: 'unhandledRejection',
-        promise: promise.toString()
+        promise: promise.toString(),
       });
     });
   }
@@ -257,7 +257,7 @@ class StandardsComparisonModule {
     try {
       // Find active standards comparisons for this farm
       const activeComparisons = await this.repository.findByFarmId(farmData.id, {
-        status: ['in_progress', 'data_collection', 'analyzing']
+        status: ['in_progress', 'data_collection', 'analyzing'],
       });
 
       // Update comparisons with new farm data
@@ -266,13 +266,13 @@ class StandardsComparisonModule {
 
         this.dependencies.logger?.info('Standards comparison updated with farm data', {
           comparisonId: comparison.id,
-          farmId: farmData.id
+          farmId: farmData.id,
         });
       }
     } catch (error) {
       this.errorHandler(error, {
         operation: 'handleFarmUpdate',
-        farmId: farmData.id
+        farmId: farmData.id,
       });
     }
   }
@@ -292,13 +292,13 @@ class StandardsComparisonModule {
 
         this.dependencies.logger?.info('Standards comparison updated with survey data', {
           comparisonId: comparison.id,
-          surveyId: surveyData.id
+          surveyId: surveyData.id,
         });
       }
     } catch (error) {
       this.errorHandler(error, {
         operation: 'handleSurveyCompletion',
-        surveyId: surveyData.id
+        surveyId: surveyData.id,
       });
     }
   }
@@ -311,7 +311,7 @@ class StandardsComparisonModule {
     try {
       // Find standards comparisons using this tracking data
       const relatedComparisons = await this.repository.findByFarmId(trackData.farmId, {
-        includeTrackingData: true
+        includeTrackingData: true,
       });
 
       // Update comparisons with new tracking data
@@ -320,13 +320,13 @@ class StandardsComparisonModule {
 
         this.dependencies.logger?.info('Standards comparison updated with tracking data', {
           comparisonId: comparison.id,
-          trackId: trackData.id
+          trackId: trackData.id,
         });
       }
     } catch (error) {
       this.errorHandler(error, {
         operation: 'handleTrackTraceUpdate',
-        trackId: trackData.id
+        trackId: trackData.id,
       });
     }
   }
@@ -342,17 +342,17 @@ class StandardsComparisonModule {
   _setupPeriodicTasks() {
     // Auto-refresh data for active comparisons (every hour)
     if (this.dependencies.scheduler) {
-      this.dependencies.scheduler.schedule('refresh-comparison-data', '0 */1 * * *', async() => {
+      this.dependencies.scheduler.schedule('refresh-comparison-data', '0 */1 * * *', async () => {
         await this._refreshActiveComparisons();
       });
 
       // Generate periodic compliance reports (daily at midnight)
-      this.dependencies.scheduler.schedule('generate-compliance-reports', '0 0 * * *', async() => {
+      this.dependencies.scheduler.schedule('generate-compliance-reports', '0 0 * * *', async () => {
         await this._generatePeriodicReports();
       });
 
       // Cleanup old comparison data (weekly)
-      this.dependencies.scheduler.schedule('cleanup-old-data', '0 2 * * 0', async() => {
+      this.dependencies.scheduler.schedule('cleanup-old-data', '0 2 * * 0', async () => {
         await this._cleanupOldData();
       });
     }
@@ -371,7 +371,7 @@ class StandardsComparisonModule {
       }
 
       this.dependencies.logger?.info('Active comparisons refreshed', {
-        count: activeComparisons.length
+        count: activeComparisons.length,
       });
     } catch (error) {
       this.errorHandler(error, { operation: 'refreshActiveComparisons' });
@@ -387,7 +387,7 @@ class StandardsComparisonModule {
       authenticate: (req, res, next) => {
         req.user = { id: 'dev-user', role: 'admin' };
         next();
-      }
+      },
     };
   }
 
@@ -399,7 +399,7 @@ class StandardsComparisonModule {
       validateAnalysisOptions: (req, res, next) => next(),
       validateReportOptions: (req, res, next) => next(),
       validateFarmId: (req, res, next) => next(),
-      validateSearchCriteria: (req, res, next) => next()
+      validateSearchCriteria: (req, res, next) => next(),
     };
   }
 
@@ -415,7 +415,7 @@ class StandardsComparisonModule {
       generateReport: (req, res, next) => next(),
       downloadReport: (req, res, next) => next(),
       searchComparisons: (req, res, next) => next(),
-      getStatistics: (req, res, next) => next()
+      getStatistics: (req, res, next) => next(),
     };
   }
 
@@ -424,13 +424,13 @@ class StandardsComparisonModule {
       logActivity: action => (req, res, next) => {
         this.dependencies.logger?.info('Activity logged', { action, user: req.user?.id });
         next();
-      }
+      },
     };
   }
 
   _createMockFileMiddleware() {
     return {
-      validateFileAccess: (req, res, next) => next()
+      validateFileAccess: (req, res, next) => next(),
     };
   }
 
@@ -440,10 +440,10 @@ class StandardsComparisonModule {
         req.progressTracker = {
           start: () => {},
           update: () => {},
-          complete: () => {}
+          complete: () => {},
         };
         next();
-      }
+      },
     };
   }
 
@@ -465,16 +465,16 @@ class StandardsComparisonModule {
         repository: !!this.repository,
         useCase: !!this.useCase,
         controller: !!this.controller,
-        routes: !!this.routes
+        routes: !!this.routes,
       },
       dependencies: {
         database: !!this.dependencies.database,
         logger: !!this.dependencies.logger,
         eventBus: !!this.dependencies.eventBus,
         fileService: !!this.dependencies.fileService,
-        authService: !!this.dependencies.authService
+        authService: !!this.dependencies.authService,
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
   }
 
@@ -489,14 +489,14 @@ class StandardsComparisonModule {
       return {
         moduleId: this.moduleId,
         statistics: stats,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       this.errorHandler(error, { operation: 'getModuleStatistics' });
       return {
         moduleId: this.moduleId,
         error: 'Failed to retrieve statistics',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     }
   }
@@ -547,5 +547,5 @@ module.exports = {
   StandardsComparisonManagementUseCase,
   StandardsComparisonRepository,
   StandardsComparisonController,
-  setupStandardsComparisonRoutes
+  setupStandardsComparisonRoutes,
 };

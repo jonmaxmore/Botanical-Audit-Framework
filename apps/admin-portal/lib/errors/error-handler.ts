@@ -70,7 +70,7 @@ export class AppError extends Error {
     category: ErrorCategory = ErrorCategory.INTERNAL,
     severity: ErrorSeverity = ErrorSeverity.MEDIUM,
     isOperational: boolean = true,
-    details?: any
+    details?: any,
   ) {
     super(message);
     Object.setPrototypeOf(this, new.target.prototype);
@@ -99,7 +99,7 @@ export class ValidationError extends AppError {
       ErrorCategory.VALIDATION,
       ErrorSeverity.LOW,
       true,
-      details
+      details,
     );
   }
 }
@@ -112,7 +112,7 @@ export class AuthenticationError extends AppError {
       'AUTHENTICATION_ERROR',
       ErrorCategory.AUTHENTICATION,
       ErrorSeverity.MEDIUM,
-      true
+      true,
     );
   }
 }
@@ -125,7 +125,7 @@ export class AuthorizationError extends AppError {
       'AUTHORIZATION_ERROR',
       ErrorCategory.AUTHORIZATION,
       ErrorSeverity.MEDIUM,
-      true
+      true,
     );
   }
 }
@@ -138,7 +138,7 @@ export class NotFoundError extends AppError {
       'NOT_FOUND',
       ErrorCategory.NOT_FOUND,
       ErrorSeverity.LOW,
-      true
+      true,
     );
   }
 }
@@ -158,7 +158,7 @@ export class RateLimitError extends AppError {
       ErrorCategory.RATE_LIMIT,
       ErrorSeverity.MEDIUM,
       true,
-      { retryAfter }
+      { retryAfter },
     );
   }
 }
@@ -172,7 +172,7 @@ export class DatabaseError extends AppError {
       ErrorCategory.DATABASE,
       ErrorSeverity.HIGH,
       true,
-      details
+      details,
     );
   }
 }
@@ -186,7 +186,7 @@ export class ExternalAPIError extends AppError {
       ErrorCategory.EXTERNAL_API,
       ErrorSeverity.HIGH,
       true,
-      details
+      details,
     );
   }
 }
@@ -199,7 +199,7 @@ export class TimeoutError extends AppError {
       'TIMEOUT_ERROR',
       ErrorCategory.TIMEOUT,
       ErrorSeverity.MEDIUM,
-      true
+      true,
     );
   }
 }
@@ -275,7 +275,7 @@ export class ErrorHandler {
         'INTERNAL_ERROR',
         ErrorCategory.INTERNAL,
         ErrorSeverity.HIGH,
-        false
+        false,
       );
     }
 
@@ -287,7 +287,7 @@ export class ErrorHandler {
       ErrorCategory.INTERNAL,
       ErrorSeverity.CRITICAL,
       false,
-      { originalError: String(error) }
+      { originalError: String(error) },
     );
   }
 
@@ -340,7 +340,7 @@ export class ErrorHandler {
   static formatErrorResponse(
     error: AppError,
     req?: NextApiRequest,
-    includeStack: boolean = false
+    includeStack: boolean = false,
   ): ErrorResponse {
     const response: ErrorResponse = {
       success: false,
@@ -386,7 +386,7 @@ export class ErrorHandler {
   static async handleError(
     error: unknown,
     req: NextApiRequest,
-    res: NextApiResponse
+    res: NextApiResponse,
   ): Promise<void> {
     const normalizedError = this.normalizeError(error);
 
@@ -526,7 +526,7 @@ export class ErrorHandler {
       statusCode,
       'HTTP_ERROR',
       ErrorCategory.EXTERNAL_API,
-      ErrorSeverity.MEDIUM
+      ErrorSeverity.MEDIUM,
     );
   }
 }
@@ -539,7 +539,7 @@ export function throwError(
   statusCode?: number,
   code?: string,
   category?: ErrorCategory,
-  severity?: ErrorSeverity
+  severity?: ErrorSeverity,
 ): never {
   throw new AppError(message, statusCode, code, category, severity);
 }
@@ -550,7 +550,7 @@ export function throwError(
 export function assert(
   condition: boolean,
   message: string,
-  ErrorClass: typeof AppError = ValidationError
+  ErrorClass: typeof AppError = ValidationError,
 ): asserts condition {
   if (!condition) {
     throw new ErrorClass(message);

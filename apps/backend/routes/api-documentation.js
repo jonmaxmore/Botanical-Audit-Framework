@@ -258,7 +258,7 @@ router.get('/docs', (req, res) => {
       generatedAt: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('API Documentation Generation Error:', error);
+    logger.error('API Documentation Generation Error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to generate API documentation',
@@ -325,7 +325,7 @@ router.get('/openapi', (req, res) => {
 
     res.status(200).json(openApiSpec);
   } catch (error) {
-    console.error('OpenAPI Specification Generation Error:', error);
+    logger.error('OpenAPI Specification Generation Error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to generate OpenAPI specification',
@@ -363,7 +363,7 @@ router.get('/health', (req, res) => {
       data: healthStatus,
     });
   } catch (error) {
-    console.error('API Health Check Error:', error);
+    logger.error('API Health Check Error:', error);
     res.status(500).json({
       success: false,
       error: 'Health check failed',

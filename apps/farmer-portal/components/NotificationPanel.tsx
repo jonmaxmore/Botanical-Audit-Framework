@@ -91,7 +91,7 @@ export default function NotificationPanel({ userId, isOpen, onClose }: Notificat
         setLoading(false);
       }
     },
-    [filterType, filterPriority]
+    [filterType, filterPriority],
   );
 
   // Load initial notifications
@@ -121,7 +121,7 @@ export default function NotificationPanel({ userId, isOpen, onClose }: Notificat
 
       if (response.ok) {
         setNotifications(prev =>
-          prev.map(n => (n.id === notificationId ? { ...n, read: true, readAt: new Date() } : n))
+          prev.map(n => (n.id === notificationId ? { ...n, read: true, readAt: new Date() } : n)),
         );
       }
     } catch (error) {
@@ -339,7 +339,7 @@ export default function NotificationPanel({ userId, isOpen, onClose }: Notificat
                         </h3>
                         <span
                           className={`flex-shrink-0 text-xs px-2 py-0.5 rounded-full ${getPriorityColor(
-                            notification.priority
+                            notification.priority,
                           )}`}
                         >
                           {notification.priority}

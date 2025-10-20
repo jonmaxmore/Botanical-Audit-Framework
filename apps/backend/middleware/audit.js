@@ -40,7 +40,7 @@ class AuditMiddleware {
       try {
         await AuditMiddleware.createAuditLog(req, res, responseData, responseStatus);
       } catch (error) {
-        console.error('Audit logging error:', error);
+        logger.error('Audit logging error:', error);
       }
     });
   }
@@ -140,7 +140,7 @@ class AuditMiddleware {
       // Create audit log
       await AuditLog.createLog(auditLogData);
     } catch (error) {
-      console.error('Failed to create audit log:', error);
+      logger.error('Failed to create audit log:', error);
       // Don't throw error to avoid breaking the main request
     }
   }

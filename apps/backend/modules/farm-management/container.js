@@ -6,6 +6,7 @@
  */
 
 // Domain
+const logger = require('../../shared/logger/logger');
 const Farm = require('./domain/entities/Farm');
 
 // Application Use Cases
@@ -45,7 +46,7 @@ class SimpleEventBus {
       try {
         handler(event);
       } catch (error) {
-        console.error(`Error handling event ${event.eventType}:`, error);
+        logger.error(`Error handling event ${event.eventType}:`, error);
       }
     });
   }
@@ -78,7 +79,7 @@ function createFarmManagementModule(config) {
 
   // FarmRegistered Event
   eventBus.subscribe('FarmRegistered', event => {
-    console.log(`[FarmRegistered] Farm ${event.farmName} registered by owner ${event.ownerId}`);
+    logger.info(`[FarmRegistered] Farm ${event.farmName} registered by owner ${event.ownerId}`);
     // TODO: Send notification to farmer
     // TODO: Log to analytics
   });
@@ -86,7 +87,7 @@ function createFarmManagementModule(config) {
   // FarmSubmittedForReview Event
   eventBus.subscribe('FarmSubmittedForReview', event => {
     console.log(
-      `[FarmSubmittedForReview] Farm ${event.farmName} (ID: ${event.farmId}) submitted for review`
+      `[FarmSubmittedForReview] Farm ${event.farmName} (ID: ${event.farmId}) submitted for review`,
     );
     // TODO: Notify DTAM staff about new farm to review
     // TODO: Add to review queue
@@ -94,14 +95,14 @@ function createFarmManagementModule(config) {
 
   // FarmVerificationCompleted Event
   eventBus.subscribe('FarmVerificationCompleted', event => {
-    console.log(`[FarmVerificationCompleted] Farm ${event.farmName} verification: ${event.status}`);
-    console.log(`  Verified by: ${event.verifiedBy}`);
+    logger.info(`[FarmVerificationCompleted] Farm ${event.farmName} verification: ${event.status}`);
+    logger.info(`  Verified by: ${event.verifiedBy}`);
     if (event.status === 'APPROVED') {
-      console.log(`  Notes: ${event.notes || 'No notes'}`);
+      logger.info(`  Notes: ${event.notes || 'No notes'}`);
       // TODO: Send approval notification to farmer
       // TODO: Enable farm for certificate application
     } else if (event.status === 'REJECTED') {
-      console.log(`  Rejection reason: ${event.rejectionReason}`);
+      logger.info(`  Rejection reason: ${event.rejectionReason}`);
       // TODO: Send rejection notification to farmer with improvement suggestions
     }
   });
@@ -164,7 +165,7 @@ function createFarmManagementModule(config) {
   const { farmerRouter, dtamRouter } = createFarmRoutes(
     farmController,
     authMiddleware,
-    farmValidators
+    farmValidators,
   );
 
   // ===================================================================

@@ -209,7 +209,7 @@ describe('Application Workflow Integration Tests', () => {
           application={mockApplication}
           onApprove={mockApprove}
           onReject={mockReject}
-        />
+        />,
       );
 
       // Enter notes
@@ -234,7 +234,7 @@ describe('Application Workflow Integration Tests', () => {
           application={mockApplication}
           onApprove={mockApprove}
           onReject={mockReject}
-        />
+        />,
       );
 
       // Enter rejection reason
@@ -258,7 +258,7 @@ describe('Application Workflow Integration Tests', () => {
           application={mockApplication}
           onApprove={mockApprove}
           onReject={mockReject}
-        />
+        />,
       );
 
       expect(screen.getByText(/APP-2025-001/)).toBeInTheDocument();
@@ -276,7 +276,7 @@ describe('Application Workflow Integration Tests', () => {
           application={mockApplication}
           onApprove={mockApprove}
           onReject={mockReject}
-        />
+        />,
       );
 
       // Click approve without entering notes
@@ -319,7 +319,11 @@ describe('Application Workflow Integration Tests', () => {
       };
 
       renderWithTheme(
-        <MockApplicationReview application={mockApp} onApprove={mockApprove} onReject={jest.fn()} />
+        <MockApplicationReview
+          application={mockApp}
+          onApprove={mockApprove}
+          onReject={jest.fn()}
+        />,
       );
 
       await user.type(screen.getByTestId('review-notes'), 'Approved after review');
@@ -409,7 +413,7 @@ describe('Application Workflow Integration Tests', () => {
       };
 
       renderWithTheme(
-        <MockApplicationReview application={mockApp} onApprove={jest.fn()} onReject={jest.fn()} />
+        <MockApplicationReview application={mockApp} onApprove={jest.fn()} onReject={jest.fn()} />,
       );
 
       expect(screen.getByTestId('approve-button')).toBeInTheDocument();

@@ -26,7 +26,7 @@ class BcryptPasswordHasher {
       const hashed = await bcrypt.hash(plainPassword, salt);
       return hashed;
     } catch (error) {
-      console.error('Error hashing password:', error);
+      logger.error('Error hashing password:', error);
       throw new Error('Failed to hash password');
     }
   }
@@ -41,7 +41,7 @@ class BcryptPasswordHasher {
     try {
       return await bcrypt.compare(plainPassword, hashedPassword);
     } catch (error) {
-      console.error('Error comparing passwords:', error);
+      logger.error('Error comparing passwords:', error);
       return false;
     }
   }

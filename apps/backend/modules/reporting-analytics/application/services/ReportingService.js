@@ -32,6 +32,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const moment = require('moment-timezone');
 
 class ReportingService {
@@ -53,7 +54,7 @@ class ReportingService {
     this.reportRetentionDays = 365;
     this.cacheExpiry = 300; // 5 minutes for real-time reports
 
-    console.log('[ReportingService] Initializing comprehensive reporting engine...');
+    logger.info('[ReportingService] Initializing comprehensive reporting engine...');
   }
 
   /**
@@ -74,9 +75,9 @@ class ReportingService {
       // Initialize export services
       await this._initializeExportServices();
 
-      console.log('[ReportingService] Initialization completed successfully');
+      logger.info('[ReportingService] Initialization completed successfully');
     } catch (error) {
-      console.error('[ReportingService] Initialization failed:', error);
+      logger.error('[ReportingService] Initialization failed:', error);
       throw new Error(`ReportingService initialization failed: ${error.message}`);
     }
   }
@@ -95,7 +96,7 @@ class ReportingService {
    */
   async generateApplicationReport(criteria) {
     try {
-      console.log('[ReportingService] Generating application processing report...');
+      logger.info('[ReportingService] Generating application processing report...');
 
       // Step 1: Validate and normalize criteria
       const normalizedCriteria = this._validateReportCriteria(criteria);
@@ -105,7 +106,7 @@ class ReportingService {
       const cachedReport = await this._getCachedReport(cacheKey);
 
       if (cachedReport) {
-        console.log('[ReportingService] Returning cached application report');
+        logger.info('[ReportingService] Returning cached application report');
         return cachedReport;
       }
 
@@ -156,16 +157,16 @@ class ReportingService {
       await this._logReportGeneration(
         'APPLICATION_REPORT',
         normalizedCriteria,
-        reportData.metadata
+        reportData.metadata,
       );
 
       console.log(
-        `[ReportingService] Application report generated successfully (${applicationData.length} applications)`
+        `[ReportingService] Application report generated successfully (${applicationData.length} applications)`,
       );
 
       return exportedReport;
     } catch (error) {
-      console.error('[ReportingService] Application report generation failed:', error);
+      logger.error('[ReportingService] Application report generation failed:', error);
       throw new Error(`Application report generation failed: ${error.message}`);
     }
   }
@@ -179,7 +180,7 @@ class ReportingService {
    */
   async generateFinancialReport(criteria) {
     try {
-      console.log('[ReportingService] Generating financial performance report...');
+      logger.info('[ReportingService] Generating financial performance report...');
 
       const normalizedCriteria = this._validateReportCriteria(criteria);
 
@@ -189,7 +190,7 @@ class ReportingService {
       // Calculate financial metrics
       const financialMetrics = await this._calculateFinancialMetrics(
         paymentData,
-        normalizedCriteria
+        normalizedCriteria,
       );
 
       // Generate revenue insights and forecasting
@@ -226,12 +227,12 @@ class ReportingService {
       await this._logReportGeneration('FINANCIAL_REPORT', normalizedCriteria, reportData.metadata);
 
       console.log(
-        `[ReportingService] Financial report generated (${paymentData.length} transactions, ${financialMetrics.totalRevenue} THB revenue)`
+        `[ReportingService] Financial report generated (${paymentData.length} transactions, ${financialMetrics.totalRevenue} THB revenue)`,
       );
 
       return exportedReport;
     } catch (error) {
-      console.error('[ReportingService] Financial report generation failed:', error);
+      logger.error('[ReportingService] Financial report generation failed:', error);
       throw new Error(`Financial report generation failed: ${error.message}`);
     }
   }
@@ -245,7 +246,7 @@ class ReportingService {
    */
   async generateUserActivityReport(criteria) {
     try {
-      console.log('[ReportingService] Generating user activity report...');
+      logger.info('[ReportingService] Generating user activity report...');
 
       const normalizedCriteria = this._validateReportCriteria(criteria);
 
@@ -255,13 +256,13 @@ class ReportingService {
       // Calculate engagement metrics
       const engagementMetrics = await this._calculateEngagementMetrics(
         userData,
-        normalizedCriteria
+        normalizedCriteria,
       );
 
       // Generate behavioral insights
       const behavioralInsights = await this._generateBehavioralInsights(
         userData,
-        engagementMetrics
+        engagementMetrics,
       );
 
       const reportData = {
@@ -296,16 +297,16 @@ class ReportingService {
       await this._logReportGeneration(
         'USER_ACTIVITY_REPORT',
         normalizedCriteria,
-        reportData.metadata
+        reportData.metadata,
       );
 
       console.log(
-        `[ReportingService] User activity report generated (${userData.activeUsers.length} active users)`
+        `[ReportingService] User activity report generated (${userData.activeUsers.length} active users)`,
       );
 
       return exportedReport;
     } catch (error) {
-      console.error('[ReportingService] User activity report generation failed:', error);
+      logger.error('[ReportingService] User activity report generation failed:', error);
       throw new Error(`User activity report generation failed: ${error.message}`);
     }
   }
@@ -319,7 +320,7 @@ class ReportingService {
    */
   async generateComplianceReport(criteria) {
     try {
-      console.log('[ReportingService] Generating compliance and audit report...');
+      logger.info('[ReportingService] Generating compliance and audit report...');
 
       const normalizedCriteria = this._validateReportCriteria(criteria);
 
@@ -364,12 +365,12 @@ class ReportingService {
       await this._logReportGeneration('COMPLIANCE_REPORT', normalizedCriteria, reportData.metadata);
 
       console.log(
-        `[ReportingService] Compliance report generated (Score: ${complianceMetrics.overallScore}%)`
+        `[ReportingService] Compliance report generated (Score: ${complianceMetrics.overallScore}%)`,
       );
 
       return exportedReport;
     } catch (error) {
-      console.error('[ReportingService] Compliance report generation failed:', error);
+      logger.error('[ReportingService] Compliance report generation failed:', error);
       throw new Error(`Compliance report generation failed: ${error.message}`);
     }
   }
@@ -398,7 +399,7 @@ class ReportingService {
           return await this._exportToJSON(reportData, exportTimestamp);
       }
     } catch (error) {
-      console.error('[ReportingService] Report export failed:', error);
+      logger.error('[ReportingService] Report export failed:', error);
       throw new Error(`Report export failed: ${error.message}`);
     }
   }
@@ -468,11 +469,11 @@ class ReportingService {
 
       const applications = await this.applicationRepository.aggregate(pipeline);
 
-      console.log(`[ReportingService] Collected ${applications.length} applications for analysis`);
+      logger.info(`[ReportingService] Collected ${applications.length} applications for analysis`);
 
       return applications;
     } catch (error) {
-      console.error('[ReportingService] Application data collection failed:', error);
+      logger.error('[ReportingService] Application data collection failed:', error);
       throw error;
     }
   }
@@ -497,11 +498,11 @@ class ReportingService {
         },
       };
 
-      console.log('[ReportingService] Application metrics calculated successfully');
+      logger.info('[ReportingService] Application metrics calculated successfully');
 
       return metrics;
     } catch (error) {
-      console.error('[ReportingService] Metrics calculation failed:', error);
+      logger.error('[ReportingService] Metrics calculation failed:', error);
       throw error;
     }
   }
@@ -534,11 +535,11 @@ class ReportingService {
         },
       };
 
-      console.log('[ReportingService] Application insights generated successfully');
+      logger.info('[ReportingService] Application insights generated successfully');
 
       return insights;
     } catch (error) {
-      console.error('[ReportingService] Insights generation failed:', error);
+      logger.error('[ReportingService] Insights generation failed:', error);
       throw error;
     }
   }
@@ -610,7 +611,7 @@ class ReportingService {
         });
       }
     } catch (error) {
-      console.error('[ReportingService] Report logging failed:', error);
+      logger.error('[ReportingService] Report logging failed:', error);
     }
   }
 
@@ -676,7 +677,7 @@ class ReportingService {
    * @private
    */
   async _initializeReportTemplates() {
-    console.log('[ReportingService] Report templates initialized');
+    logger.info('[ReportingService] Report templates initialized');
   }
 
   /**
@@ -684,7 +685,7 @@ class ReportingService {
    * @private
    */
   async _setupAggregationPipelines() {
-    console.log('[ReportingService] Aggregation pipelines configured');
+    logger.info('[ReportingService] Aggregation pipelines configured');
   }
 
   /**
@@ -692,7 +693,7 @@ class ReportingService {
    * @private
    */
   async _initializeExportServices() {
-    console.log('[ReportingService] Export services initialized');
+    logger.info('[ReportingService] Export services initialized');
   }
 
   // Additional utility methods would be implemented here...
@@ -799,9 +800,9 @@ class ReportingService {
    * @returns {Promise<void>}
    */
   async shutdown() {
-    console.log('[ReportingService] Shutting down...');
+    logger.info('[ReportingService] Shutting down...');
     // Cleanup logic here
-    console.log('[ReportingService] Shutdown completed');
+    logger.info('[ReportingService] Shutdown completed');
   }
 }
 

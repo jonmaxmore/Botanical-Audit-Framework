@@ -59,7 +59,7 @@ const enrollmentSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'enrollments',
-  }
+  },
 );
 
 // Indexes
@@ -130,7 +130,7 @@ class MongoDBEnrollmentRepository {
         return this.toDomain(created);
       }
     } catch (error) {
-      console.error('Error saving enrollment:', error);
+      logger.error('Error saving enrollment:', error);
       throw error;
     }
   }
@@ -140,7 +140,7 @@ class MongoDBEnrollmentRepository {
       const doc = await this.EnrollmentModel.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding enrollment by ID:', error);
+      logger.error('Error finding enrollment by ID:', error);
       return null;
     }
   }
@@ -153,7 +153,7 @@ class MongoDBEnrollmentRepository {
       });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding enrollment by farmer and course:', error);
+      logger.error('Error finding enrollment by farmer and course:', error);
       return null;
     }
   }
@@ -185,7 +185,7 @@ class MongoDBEnrollmentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding enrollments by farmer:', error);
+      logger.error('Error finding enrollments by farmer:', error);
       throw error;
     }
   }
@@ -217,7 +217,7 @@ class MongoDBEnrollmentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding enrollments by course:', error);
+      logger.error('Error finding enrollments by course:', error);
       throw error;
     }
   }
@@ -248,7 +248,7 @@ class MongoDBEnrollmentRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding enrollments by status:', error);
+      logger.error('Error finding enrollments by status:', error);
       throw error;
     }
   }
@@ -264,7 +264,7 @@ class MongoDBEnrollmentRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding active enrollments:', error);
+      logger.error('Error finding active enrollments:', error);
       throw error;
     }
   }
@@ -280,7 +280,7 @@ class MongoDBEnrollmentRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding completed enrollments:', error);
+      logger.error('Error finding completed enrollments:', error);
       throw error;
     }
   }
@@ -304,7 +304,7 @@ class MongoDBEnrollmentRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding expiring enrollments:', error);
+      logger.error('Error finding expiring enrollments:', error);
       throw error;
     }
   }
@@ -318,7 +318,7 @@ class MongoDBEnrollmentRepository {
       });
       return count > 0;
     } catch (error) {
-      console.error('Error checking enrollment:', error);
+      logger.error('Error checking enrollment:', error);
       return false;
     }
   }
@@ -332,7 +332,7 @@ class MongoDBEnrollmentRepository {
       });
       return count > 0;
     } catch (error) {
-      console.error('Error checking completion:', error);
+      logger.error('Error checking completion:', error);
       return false;
     }
   }
@@ -341,7 +341,7 @@ class MongoDBEnrollmentRepository {
     try {
       return await this.EnrollmentModel.countDocuments(criteria);
     } catch (error) {
-      console.error('Error counting enrollments:', error);
+      logger.error('Error counting enrollments:', error);
       return 0;
     }
   }
@@ -409,7 +409,7 @@ class MongoDBEnrollmentRepository {
         }, {}),
       };
     } catch (error) {
-      console.error('Error getting enrollment statistics:', error);
+      logger.error('Error getting enrollment statistics:', error);
       throw error;
     }
   }
@@ -439,7 +439,7 @@ class MongoDBEnrollmentRepository {
         totalTimeSpentMinutes: totalTimeSpent[0]?.total || 0,
       };
     } catch (error) {
-      console.error('Error getting farmer progress summary:', error);
+      logger.error('Error getting farmer progress summary:', error);
       throw error;
     }
   }
@@ -480,7 +480,7 @@ class MongoDBEnrollmentRepository {
         averageScore: Math.round(avgScore),
       };
     } catch (error) {
-      console.error('Error getting course enrollment summary:', error);
+      logger.error('Error getting course enrollment summary:', error);
       throw error;
     }
   }
@@ -490,7 +490,7 @@ class MongoDBEnrollmentRepository {
       const result = await this.EnrollmentModel.findByIdAndDelete(id);
       return result !== null;
     } catch (error) {
-      console.error('Error deleting enrollment:', error);
+      logger.error('Error deleting enrollment:', error);
       return false;
     }
   }

@@ -37,7 +37,7 @@ class DownloadDocumentUseCase {
         mimeType: document.mimeType,
       };
     } catch (error) {
-      console.error('Error downloading document:', error);
+      logger.error('Error downloading document:', error);
       throw error;
     }
   }

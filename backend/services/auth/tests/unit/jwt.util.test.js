@@ -152,7 +152,7 @@ describe('JWT Utility', () => {
       const expiredToken = jwt.sign(
         { ...mockPayload, type: 'access' },
         process.env.JWT_ACCESS_SECRET,
-        { expiresIn: '0s' }
+        { expiresIn: '0s' },
       );
 
       // Wait a moment to ensure expiration
@@ -167,7 +167,7 @@ describe('JWT Utility', () => {
       const refreshToken = jwt.sign(
         { ...mockPayload, type: 'refresh' },
         process.env.JWT_REFRESH_SECRET,
-        { expiresIn: '7d' }
+        { expiresIn: '7d' },
       );
 
       expect(() => {
@@ -195,7 +195,7 @@ describe('JWT Utility', () => {
       const fakeToken = jwt.sign(
         { ...mockPayload, type: 'refresh', tokenId: 'fake-id' },
         process.env.JWT_REFRESH_SECRET,
-        { expiresIn: '7d' }
+        { expiresIn: '7d' },
       );
 
       // Expect exact error message from jwt.util.js (line 226)
@@ -210,7 +210,7 @@ describe('JWT Utility', () => {
 
       // Expect exact error message from jwt.util.js (line 206-208)
       await expect(jwtUtil.verifyRefreshToken(token)).rejects.toThrow(
-        'Refresh token reuse detected. All tokens invalidated. Please login again.'
+        'Refresh token reuse detected. All tokens invalidated. Please login again.',
       );
     });
 
@@ -221,13 +221,13 @@ describe('JWT Utility', () => {
       // Use token1 once (mark as used)
       await RefreshToken.findOneAndUpdate(
         { tokenHash: crypto.createHash('sha256').update(token1).digest('hex') },
-        { isUsed: true, usedAt: new Date() }
+        { isUsed: true, usedAt: new Date() },
       );
 
       // Try to use token1 again (reuse attempt)
       // Expect exact error message from jwt.util.js (line 206-208)
       await expect(jwtUtil.verifyRefreshToken(token1)).rejects.toThrow(
-        'Refresh token reuse detected. All tokens invalidated. Please login again.'
+        'Refresh token reuse detected. All tokens invalidated. Please login again.',
       );
 
       // All user tokens should be revoked

@@ -517,7 +517,7 @@ class DatabaseCleanupTool {
     try {
       console.log('🚀 Database Cleanup Tool\n');
       console.log(
-        `Mode: ${this.dryRun ? '🔍 DRY RUN (no changes)' : '⚡ EXECUTION (will make changes)'}`
+        `Mode: ${this.dryRun ? '🔍 DRY RUN (no changes)' : '⚡ EXECUTION (will make changes)'}`,
       );
       console.log(`Deep Clean: ${this.deep ? 'YES' : 'NO'}\n`);
 

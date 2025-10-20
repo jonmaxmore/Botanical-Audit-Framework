@@ -32,6 +32,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const ReportingController = require('../controllers/ReportingController');
@@ -49,7 +50,7 @@ class ReportingRoutes {
     this.dashboardLimiter = this._configureDashboardRateLimit();
 
     this._setupRoutes();
-    console.log('[ReportingRoutes] Initialized with comprehensive reporting endpoints');
+    logger.info('[ReportingRoutes] Initialized with comprehensive reporting endpoints');
   }
 
   /**
@@ -71,7 +72,7 @@ class ReportingRoutes {
       auth.requireRole(['DTAM_ADMIN', 'DTAM_REVIEWER']),
       this.dashboardLimiter,
       validationRules.dashboard,
-      controller.getDashboardMetrics.bind(controller)
+      controller.getDashboardMetrics.bind(controller),
     );
 
     // Application reporting routes
@@ -80,7 +81,7 @@ class ReportingRoutes {
       auth.requireRole(['DTAM_ADMIN', 'DTAM_REVIEWER']),
       this.reportLimiter,
       validationRules.reports,
-      controller.generateApplicationReport.bind(controller)
+      controller.generateApplicationReport.bind(controller),
     );
 
     // Financial reporting routes
@@ -89,7 +90,7 @@ class ReportingRoutes {
       auth.requireRole(['DTAM_ADMIN']), // More restrictive for financial data
       this.reportLimiter,
       validationRules.reports,
-      controller.generateFinancialReport.bind(controller)
+      controller.generateFinancialReport.bind(controller),
     );
 
     // User activity reporting routes
@@ -98,7 +99,7 @@ class ReportingRoutes {
       auth.requireRole(['DTAM_ADMIN', 'DTAM_REVIEWER']),
       this.reportLimiter,
       validationRules.reports,
-      controller.generateUserActivityReport.bind(controller)
+      controller.generateUserActivityReport.bind(controller),
     );
 
     // Compliance reporting routes - Government oversight
@@ -107,7 +108,7 @@ class ReportingRoutes {
       auth.requireRole(['DTAM_ADMIN']), // Most restrictive for compliance reports
       this.reportLimiter,
       validationRules.reports,
-      controller.generateComplianceReport.bind(controller)
+      controller.generateComplianceReport.bind(controller),
     );
 
     // Business analytics routes
@@ -116,7 +117,7 @@ class ReportingRoutes {
       auth.requireRole(['DTAM_ADMIN', 'DTAM_REVIEWER']),
       this.analyticsLimiter,
       validationRules.analytics,
-      controller.getBusinessAnalytics.bind(controller)
+      controller.getBusinessAnalytics.bind(controller),
     );
 
     // Predictive analytics routes
@@ -125,7 +126,7 @@ class ReportingRoutes {
       auth.requireRole(['DTAM_ADMIN']), // Predictive models are admin-only
       this.analyticsLimiter,
       validationRules.analytics,
-      controller.getPredictiveAnalytics.bind(controller)
+      controller.getPredictiveAnalytics.bind(controller),
     );
 
     // Service health check - No authentication required
@@ -159,7 +160,7 @@ class ReportingRoutes {
         return req.path === '/health';
       },
       handler: (req, res) => {
-        console.warn(`[ReportingRoutes] Report rate limit exceeded for user: ${req.userId}`);
+        logger.warn(`[ReportingRoutes] Report rate limit exceeded for user: ${req.userId}`);
         res.status(429).json({
           success: false,
           error: 'REPORT_RATE_LIMIT',
@@ -188,7 +189,7 @@ class ReportingRoutes {
         return req.userId || req.ip;
       },
       handler: (req, res) => {
-        console.warn(`[ReportingRoutes] Analytics rate limit exceeded for user: ${req.userId}`);
+        logger.warn(`[ReportingRoutes] Analytics rate limit exceeded for user: ${req.userId}`);
         res.status(429).json({
           success: false,
           error: 'ANALYTICS_RATE_LIMIT',
@@ -217,7 +218,7 @@ class ReportingRoutes {
         return req.userId || req.ip;
       },
       handler: (req, res) => {
-        console.warn(`[ReportingRoutes] Dashboard rate limit exceeded for user: ${req.userId}`);
+        logger.warn(`[ReportingRoutes] Dashboard rate limit exceeded for user: ${req.userId}`);
         res.status(429).json({
           success: false,
           error: 'DASHBOARD_RATE_LIMIT',
@@ -233,7 +234,7 @@ class ReportingRoutes {
    * @private
    */
   _handleErrors(error, req, res, next) {
-    console.error('[ReportingRoutes] Unhandled error:', error);
+    logger.error('[ReportingRoutes] Unhandled error:', error);
 
     // Log error details for debugging
     const errorDetails = {
@@ -245,7 +246,7 @@ class ReportingRoutes {
       timestamp: new Date(),
     };
 
-    console.error('[ReportingRoutes] Error details:', errorDetails);
+    logger.error('[ReportingRoutes] Error details:', errorDetails);
 
     // Handle specific error types
     if (error.name === 'ValidationError') {

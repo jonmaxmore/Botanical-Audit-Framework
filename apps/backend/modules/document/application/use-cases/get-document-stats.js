@@ -15,7 +15,7 @@ class GetDocumentStatisticsUseCase {
       const statistics = await this.documentRepository.getStatistics(filters);
       return statistics;
     } catch (error) {
-      console.error('Error getting document statistics:', error);
+      logger.error('Error getting document statistics:', error);
       throw error;
     }
   }

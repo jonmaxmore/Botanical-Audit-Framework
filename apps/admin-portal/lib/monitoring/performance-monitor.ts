@@ -129,7 +129,7 @@ export class PerformanceMonitor {
     method: string,
     duration: number,
     statusCode: number,
-    error?: Error
+    error?: Error,
   ): void {
     const metric: PerformanceMetrics = {
       timestamp: new Date().toISOString(),
@@ -160,7 +160,7 @@ export class PerformanceMonitor {
     query: string,
     duration: number,
     success: boolean = true,
-    error?: Error
+    error?: Error,
   ): void {
     const metric: PerformanceMetrics = {
       timestamp: new Date().toISOString(),
@@ -190,7 +190,7 @@ export class PerformanceMonitor {
     endpoint: string,
     duration: number,
     success: boolean,
-    error?: Error
+    error?: Error,
   ): void {
     const metric: PerformanceMetrics = {
       timestamp: new Date().toISOString(),
@@ -297,7 +297,7 @@ export class PerformanceMonitor {
     transactionId: string,
     operation: string,
     description: string,
-    parentSpanId?: string
+    parentSpanId?: string,
   ): Span | null {
     const transaction = this.transactions.get(transactionId);
     if (!transaction) return null;
@@ -339,7 +339,7 @@ export class PerformanceMonitor {
    */
   getSummary(
     type?: 'api' | 'page' | 'component' | 'database' | 'external',
-    minutes: number = 60
+    minutes: number = 60,
   ): PerformanceSummary {
     const cutoff = Date.now() - minutes * 60 * 1000;
     const filtered = this.metrics.filter(m => {
@@ -418,7 +418,7 @@ export class PerformanceMonitor {
    */
   getMetrics(
     type?: 'api' | 'page' | 'component' | 'database' | 'external',
-    limit: number = 100
+    limit: number = 100,
   ): PerformanceMetrics[] {
     let filtered = this.metrics;
 
@@ -450,7 +450,7 @@ export class PerformanceMonitor {
 export function measurePerformance(
   target: any,
   propertyKey: string,
-  descriptor: PropertyDescriptor
+  descriptor: PropertyDescriptor,
 ) {
   const originalMethod = descriptor.value;
 
@@ -491,7 +491,7 @@ export function trackApiPerformance(
   method: string,
   duration: number,
   statusCode: number,
-  error?: Error
+  error?: Error,
 ): void {
   performanceMonitor.trackApiCall(endpoint, method, duration, statusCode, error);
 }
@@ -500,7 +500,7 @@ export function trackDatabasePerformance(
   query: string,
   duration: number,
   success?: boolean,
-  error?: Error
+  error?: Error,
 ): void {
   performanceMonitor.trackDatabaseQuery(query, duration, success, error);
 }
@@ -510,14 +510,14 @@ export function trackExternalApiPerformance(
   endpoint: string,
   duration: number,
   success: boolean,
-  error?: Error
+  error?: Error,
 ): void {
   performanceMonitor.trackExternalApi(service, endpoint, duration, success, error);
 }
 
 export function getPerformanceSummary(
   type?: 'api' | 'page' | 'component' | 'database' | 'external',
-  minutes?: number
+  minutes?: number,
 ): PerformanceSummary {
   return performanceMonitor.getSummary(type, minutes);
 }

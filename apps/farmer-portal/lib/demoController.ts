@@ -150,8 +150,8 @@ export class DemoFlowController {
           applications: demoApplications.filter(app => app.applicantId === this.currentUser.id),
           certificates: demoData.certificates.filter(cert =>
             demoApplications.find(
-              app => app.applicantId === this.currentUser.id && app.id === cert.applicationId
-            )
+              app => app.applicantId === this.currentUser.id && app.id === cert.applicationId,
+            ),
           ),
         };
 
@@ -159,10 +159,10 @@ export class DemoFlowController {
         return {
           user: this.currentUser,
           assignedInspections: demoData.inspections.filter(
-            ins => ins.inspectorId === this.currentUser.id
+            ins => ins.inspectorId === this.currentUser.id,
           ),
           pendingApplications: demoApplications.filter(
-            app => app.status === 'inspection_scheduled' && app.inspector === this.currentUser.id
+            app => app.status === 'inspection_scheduled' && app.inspector === this.currentUser.id,
           ),
         };
 
@@ -170,7 +170,7 @@ export class DemoFlowController {
         return {
           user: this.currentUser,
           pendingReviews: demoApplications.filter(
-            app => app.status === 'under_review' && app.reviewer === this.currentUser.id
+            app => app.status === 'under_review' && app.reviewer === this.currentUser.id,
           ),
           completedReviews: demoApplications
             .filter(app => app.status === 'approved' || app.status === 'rejected')

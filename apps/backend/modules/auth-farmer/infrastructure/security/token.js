@@ -38,7 +38,7 @@ class JWTService {
 
       return jwt.sign(payload, this.secret, jwtOptions);
     } catch (error) {
-      console.error('Error signing JWT:', error);
+      logger.error('Error signing JWT:', error);
       throw new Error('Failed to sign JWT token');
     }
   }
@@ -58,7 +58,7 @@ class JWTService {
       } else if (error.name === 'JsonWebTokenError') {
         throw new Error('Invalid token');
       } else {
-        console.error('Error verifying JWT:', error);
+        logger.error('Error verifying JWT:', error);
         throw new Error('Token verification failed');
       }
     }
@@ -73,7 +73,7 @@ class JWTService {
     try {
       return jwt.decode(token);
     } catch (error) {
-      console.error('Error decoding JWT:', error);
+      logger.error('Error decoding JWT:', error);
       return null;
     }
   }

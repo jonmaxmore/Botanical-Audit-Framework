@@ -71,7 +71,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
     if (hasError && resetKeys) {
       const hasResetKeyChanged = resetKeys.some(
-        (key, index) => key !== prevProps.resetKeys?.[index]
+        (key, index) => key !== prevProps.resetKeys?.[index],
       );
 
       if (hasResetKeyChanged) {
@@ -375,7 +375,7 @@ export function ComponentErrorFallback({
  */
 export function withErrorBoundary<P extends object>(
   Component: React.ComponentType<P>,
-  errorBoundaryProps?: Omit<ErrorBoundaryProps, 'children'>
+  errorBoundaryProps?: Omit<ErrorBoundaryProps, 'children'>,
 ): React.ComponentType<P> {
   const WrappedComponent = (props: P) => (
     <ErrorBoundary {...errorBoundaryProps}>
@@ -402,7 +402,7 @@ export function useErrorHandler(): (error: Error) => void {
         throw error;
       });
     },
-    [setError]
+    [setError],
   );
 }
 
@@ -459,7 +459,7 @@ export function RetryErrorBoundary({
         onMaxRetriesReached();
       }
     },
-    [retryCount, maxRetries, retryDelay, onMaxRetriesReached]
+    [retryCount, maxRetries, retryDelay, onMaxRetriesReached],
   );
 
   return (

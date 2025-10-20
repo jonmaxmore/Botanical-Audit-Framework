@@ -58,7 +58,7 @@ function createApplicationRoutes(dependencies = {}) {
     rateLimit({ windowMs: 60 * 60 * 1000, max: 10 }), // 10 per hour
     validateRequest('createApplication'),
     auditLog('APPLICATION_CREATE'),
-    applicationController.createApplication
+    applicationController.createApplication,
   );
 
   /**
@@ -71,7 +71,7 @@ function createApplicationRoutes(dependencies = {}) {
     authenticate,
     validateRequest('getApplication'),
     auditLog('APPLICATION_VIEW'),
-    applicationController.getApplication
+    applicationController.getApplication,
   );
 
   /**
@@ -85,7 +85,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['FARMER']),
     validateRequest('updateApplication'),
     auditLog('APPLICATION_UPDATE'),
-    applicationController.updateApplication
+    applicationController.updateApplication,
   );
 
   /**
@@ -99,7 +99,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['FARMER']),
     validateRequest('submitApplication'),
     auditLog('APPLICATION_SUBMIT'),
-    applicationController.submitApplication
+    applicationController.submitApplication,
   );
 
   /**
@@ -118,7 +118,7 @@ function createApplicationRoutes(dependencies = {}) {
     '/:id/workflow-history',
     authenticate,
     auditLog('WORKFLOW_HISTORY_VIEW'),
-    applicationController.getWorkflowHistory
+    applicationController.getWorkflowHistory,
   );
 
   // ==============================================
@@ -136,7 +136,7 @@ function createApplicationRoutes(dependencies = {}) {
     authenticate,
     authorize(['FARMER']),
     validateRequest('getFarmerApplications'),
-    applicationController.getFarmerApplications
+    applicationController.getFarmerApplications,
   );
 
   // ==============================================
@@ -154,7 +154,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_REVIEWER']),
     validateRequest('approveForPayment'),
     auditLog('APPLICATION_APPROVE_PAYMENT'),
-    applicationController.approveForPayment
+    applicationController.approveForPayment,
   );
 
   /**
@@ -168,7 +168,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_REVIEWER']),
     validateRequest('requestRevision'),
     auditLog('APPLICATION_REQUEST_REVISION'),
-    applicationController.requestRevision
+    applicationController.requestRevision,
   );
 
   // ==============================================
@@ -186,7 +186,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_INSPECTOR']),
     validateRequest('scheduleInspection'),
     auditLog('INSPECTION_SCHEDULE'),
-    applicationController.scheduleInspection
+    applicationController.scheduleInspection,
   );
 
   /**
@@ -200,7 +200,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_INSPECTOR']),
     validateRequest('completeInspection'),
     auditLog('INSPECTION_COMPLETE'),
-    applicationController.completeInspection
+    applicationController.completeInspection,
   );
 
   // ==============================================
@@ -218,7 +218,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_ADMIN', 'ADMIN']),
     validateRequest('finalApproval'),
     auditLog('APPLICATION_FINAL_APPROVAL'),
-    applicationController.finalApproval
+    applicationController.finalApproval,
   );
 
   // ==============================================
@@ -236,7 +236,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN', 'ADMIN']),
     validateRequest('rejectApplication'),
     auditLog('APPLICATION_REJECT'),
-    applicationController.rejectApplication
+    applicationController.rejectApplication,
   );
 
   // ==============================================
@@ -260,10 +260,10 @@ function createApplicationRoutes(dependencies = {}) {
 
         res.json({ success: true, message: 'Webhook processed' });
       } catch (error) {
-        console.error('[ApplicationRoutes] Payment webhook error:', error);
+        logger.error('[ApplicationRoutes] Payment webhook error:', error);
         res.status(500).json({ success: false, error: 'Webhook processing failed' });
       }
-    }
+    },
   );
 
   return router;

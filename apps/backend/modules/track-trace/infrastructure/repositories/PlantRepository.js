@@ -277,7 +277,7 @@ class PlantRepository {
           batchResults.plants.map(async plantDoc => {
             const recentData = await this.getRecentTimeSeriesData(plantDoc.plantId);
             return { ...plantDoc, recentTimeSeries: recentData };
-          })
+          }),
         );
       }
 
@@ -287,7 +287,7 @@ class PlantRepository {
       // Step 6: Process batch analytics
       const batchAnalytics = this.processBatchAnalytics(
         batchResults.analytics[0],
-        batchResults.plants
+        batchResults.plants,
       );
 
       // Step 7: Prepare batch result
@@ -307,14 +307,14 @@ class PlantRepository {
       await this.setCachedData(
         cacheKey,
         this.serializeBatchResult(batchResult),
-        this.cacheStrategies.batchPlants.ttl
+        this.cacheStrategies.batchPlants.ttl,
       );
 
       this.logger.log(`[PlantRepository] Found ${plants.length} plants in batch: ${batchId}`);
       return batchResult;
     } catch (error) {
       this.logger.error(
-        `[PlantRepository] Error finding plants by batch ${batchId}: ${error.message}`
+        `[PlantRepository] Error finding plants by batch ${batchId}: ${error.message}`,
       );
       throw error;
     }
@@ -394,7 +394,7 @@ class PlantRepository {
             timestamp: new Date(),
             version: savedDocument.version,
           },
-          session
+          session,
         );
       });
 
@@ -552,14 +552,14 @@ class PlantRepository {
       await this.setCachedData(
         cacheKey,
         this.serializeAnalytics(growthAnalytics),
-        this.cacheStrategies.timeSeriesData.ttl
+        this.cacheStrategies.timeSeriesData.ttl,
       );
 
       this.logger.log(`[PlantRepository] Growth analytics generated for plant: ${plantId}`);
       return growthAnalytics;
     } catch (error) {
       this.logger.error(
-        `[PlantRepository] Error getting plant analytics ${plantId}: ${error.message}`
+        `[PlantRepository] Error getting plant analytics ${plantId}: ${error.message}`,
       );
       throw error;
     }
@@ -629,7 +629,7 @@ class PlantRepository {
       const totalResults = this.aggregateBulkResults(results);
 
       this.logger.log(
-        `[PlantRepository] Bulk update completed: ${totalResults.modifiedCount} plants updated`
+        `[PlantRepository] Bulk update completed: ${totalResults.modifiedCount} plants updated`,
       );
       return totalResults;
     } catch (error) {

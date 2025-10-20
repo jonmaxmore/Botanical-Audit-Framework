@@ -29,6 +29,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const { validationResult, body, param, query } = require('express-validator');
 const PaymentService = require('../services/PaymentService');
 
@@ -38,7 +39,7 @@ class PaymentController {
     this.auditService = dependencies.auditService;
     this.rateLimiter = dependencies.rateLimiter;
 
-    console.log('[PaymentController] Initialized successfully');
+    logger.info('[PaymentController] Initialized successfully');
   }
 
   /**
@@ -110,7 +111,7 @@ class PaymentController {
         },
       });
     } catch (error) {
-      console.error('[PaymentController] Fee calculation error:', error);
+      logger.error('[PaymentController] Fee calculation error:', error);
 
       if (error.message.includes('Unknown application type')) {
         return res.status(400).json({
@@ -173,7 +174,7 @@ class PaymentController {
             sessionId: req.sessionID,
           },
         },
-        userId
+        userId,
       );
 
       res.status(201).json({
@@ -182,7 +183,7 @@ class PaymentController {
         data: result.payment,
       });
     } catch (error) {
-      console.error('[PaymentController] Payment initiation error:', error);
+      logger.error('[PaymentController] Payment initiation error:', error);
 
       if (error.message.includes('Application not found')) {
         return res.status(404).json({
@@ -246,7 +247,7 @@ class PaymentController {
         data: result.payment,
       });
     } catch (error) {
-      console.error('[PaymentController] Get payment status error:', error);
+      logger.error('[PaymentController] Get payment status error:', error);
 
       if (error.message.includes('Payment not found')) {
         return res.status(404).json({
@@ -305,7 +306,7 @@ class PaymentController {
         status: result.status,
       });
     } catch (error) {
-      console.error('[PaymentController] Webhook processing error:', error);
+      logger.error('[PaymentController] Webhook processing error:', error);
 
       if (error.message.includes('Invalid webhook signature')) {
         return res.status(401).json({
@@ -353,7 +354,7 @@ class PaymentController {
       const { paymentId } = req.params;
       const userId = req.userId;
 
-      console.log(`[PaymentController] Retrying payment ${paymentId}`, { userId });
+      logger.info(`[PaymentController] Retrying payment ${paymentId}`, { userId });
 
       // Get current payment status
       const payment = await this.paymentService.getPaymentStatus(paymentId, userId);
@@ -388,7 +389,7 @@ class PaymentController {
             ipAddress: req.ip,
           },
         },
-        userId
+        userId,
       );
 
       res.status(201).json({
@@ -397,7 +398,7 @@ class PaymentController {
         data: retryResult.payment,
       });
     } catch (error) {
-      console.error('[PaymentController] Payment retry error:', error);
+      logger.error('[PaymentController] Payment retry error:', error);
       res.status(500).json({
         success: false,
         error: 'PAYMENT_RETRY_ERROR',
@@ -421,7 +422,7 @@ class PaymentController {
       const { reason } = req.body;
       const userId = req.userId;
 
-      console.log(`[PaymentController] Cancelling payment ${paymentId}`, { userId, reason });
+      logger.info(`[PaymentController] Cancelling payment ${paymentId}`, { userId, reason });
 
       // This would be implemented in PaymentService
       const result = await this.paymentService.cancelPayment(paymentId, userId, reason);
@@ -431,7 +432,7 @@ class PaymentController {
         message: 'Payment cancelled successfully',
       });
     } catch (error) {
-      console.error('[PaymentController] Payment cancellation error:', error);
+      logger.error('[PaymentController] Payment cancellation error:', error);
 
       if (error.message.includes('Payment not found')) {
         return res.status(404).json({
@@ -495,7 +496,7 @@ class PaymentController {
           amount,
           notes,
         },
-        adminUserId
+        adminUserId,
       );
 
       res.status(200).json({
@@ -507,7 +508,7 @@ class PaymentController {
         },
       });
     } catch (error) {
-      console.error('[PaymentController] Refund processing error:', error);
+      logger.error('[PaymentController] Refund processing error:', error);
 
       if (error.message.includes('Payment not found')) {
         return res.status(404).json({
@@ -568,7 +569,7 @@ class PaymentController {
       const payments = await this.paymentService.getApplicationPayments(
         applicationId,
         userId,
-        userRole
+        userRole,
       );
 
       res.status(200).json({
@@ -579,12 +580,12 @@ class PaymentController {
           totalPayments: payments.length,
           totalAmount: payments.reduce(
             (sum, p) => sum + (p.status === 'COMPLETED' ? p.amount : 0),
-            0
+            0,
           ),
         },
       });
     } catch (error) {
-      console.error('[PaymentController] Get application payments error:', error);
+      logger.error('[PaymentController] Get application payments error:', error);
 
       if (error.message.includes('Application not found')) {
         return res.status(404).json({
@@ -651,7 +652,7 @@ class PaymentController {
         },
       });
     } catch (error) {
-      console.error('[PaymentController] Get payment history error:', error);
+      logger.error('[PaymentController] Get payment history error:', error);
       res.status(500).json({
         success: false,
         error: 'PAYMENT_HISTORY_ERROR',
@@ -687,7 +688,7 @@ class PaymentController {
         res.send(result.receiptBuffer);
       }
     } catch (error) {
-      console.error('[PaymentController] Receipt download error:', error);
+      logger.error('[PaymentController] Receipt download error:', error);
 
       if (error.message.includes('Payment not found')) {
         return res.status(404).json({

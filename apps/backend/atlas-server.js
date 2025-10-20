@@ -82,7 +82,7 @@ app.use(
         imgSrc: ["'self'", 'data:', 'https:'],
       },
     },
-  })
+  }),
 );
 
 // CORS configuration
@@ -92,7 +92,7 @@ app.use(
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  })
+  }),
 );
 
 // Body parsing
@@ -247,7 +247,7 @@ app.post('/api/gacp/workflow/transition', async (req, res) => {
       currentState,
       targetState,
       context || {},
-      actor
+      actor,
     );
 
     res.json({
@@ -279,7 +279,7 @@ app.post('/api/gacp/workflow/available-transitions', async (req, res) => {
     const availableTransitions = workflowEngine.getAvailableTransitions(
       currentState,
       actor,
-      context || {}
+      context || {},
     );
 
     const stateRequirements = workflowEngine.getStateRequirements(currentState);
@@ -322,7 +322,7 @@ app.post('/api/gacp/inspections/initialize', async (req, res) => {
     const result = await inspectionService.initializeInspection(
       applicationId,
       inspector,
-      scheduledDate
+      scheduledDate,
     );
 
     res.status(result.success ? 201 : 400).json(result);
@@ -355,7 +355,7 @@ app.post('/api/gacp/inspections/:inspectionId/ccp/:ccpId/assess', async (req, re
       inspectionId,
       ccpId,
       assessmentData,
-      evidence || {}
+      evidence || {},
     );
 
     res.status(result.success ? 200 : 400).json(result);
@@ -537,7 +537,7 @@ async function startServer() {
       appLogger.info(`❤️  Health Check: http://localhost:${port}/health`);
       appLogger.info(`🗄️  Database Test: http://localhost:${port}/api/db/test`);
       appLogger.info(
-        `💾 Database: ${connected ? 'MongoDB Atlas Connected' : 'Disconnected - No Database'}`
+        `💾 Database: ${connected ? 'MongoDB Atlas Connected' : 'Disconnected - No Database'}`,
       );
       appLogger.info('');
       appLogger.info('🎯 Test Endpoints:');

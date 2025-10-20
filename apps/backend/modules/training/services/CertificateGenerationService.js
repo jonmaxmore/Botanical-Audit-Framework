@@ -90,7 +90,7 @@ class CertificateGenerationService {
 
     try {
       this.logger.log(
-        `[CertificateGeneration] Starting certificate generation - Operation: ${operationId}`
+        `[CertificateGeneration] Starting certificate generation - Operation: ${operationId}`,
       );
 
       // 1. Validate completion eligibility
@@ -102,20 +102,20 @@ class CertificateGenerationService {
       // 2. Determine certificate type and template
       const certificateTemplate = await this.determineCertificateTemplate(
         completionData,
-        eligibilityValidation
+        eligibilityValidation,
       );
 
       // 3. Generate certificate data and metadata
       const certificateData = await this.generateCertificateData(
         completionData,
         certificateTemplate,
-        operationId
+        operationId,
       );
 
       // 4. Create digital certificate (PDF)
       const certificatePdf = await this.createDigitalCertificate(
         certificateData,
-        certificateTemplate
+        certificateTemplate,
       );
 
       // 5. Store certificate in database
@@ -146,13 +146,13 @@ class CertificateGenerationService {
       };
 
       this.logger.log(
-        `[CertificateGeneration] Certificate generated successfully - ID: ${storedCertificate.id}`
+        `[CertificateGeneration] Certificate generated successfully - ID: ${storedCertificate.id}`,
       );
       return result;
     } catch (error) {
       this.logger.error(
         `[CertificateGeneration] Certificate generation failed - Operation: ${operationId}`,
-        error
+        error,
       );
       this.updateMetrics('FAILURE', Date.now() - startTime);
       throw error;
@@ -199,7 +199,7 @@ class CertificateGenerationService {
       const courseCompetencies = course.learningObjectives || [];
       const requiredCompetencies = this.certificateRules.requiredCompetencies;
       const missingCompetencies = requiredCompetencies.filter(
-        req => !courseCompetencies.some(comp => comp.toLowerCase().includes(req.toLowerCase()))
+        req => !courseCompetencies.some(comp => comp.toLowerCase().includes(req.toLowerCase())),
       );
 
       if (missingCompetencies.length > 0) {
@@ -215,7 +215,7 @@ class CertificateGenerationService {
       const existingCertificate = await this.checkExistingValidCertificate(
         completionData.enrollment.farmerId,
         course.id,
-        validation.certificateType
+        validation.certificateType,
       );
 
       if (existingCertificate) {
@@ -556,12 +556,12 @@ class CertificateGenerationService {
       }
 
       this.logger.log(
-        `[CertificateGeneration] Certificate tracking initialized: ${certificate.certificateNumber}`
+        `[CertificateGeneration] Certificate tracking initialized: ${certificate.certificateNumber}`,
       );
     } catch (error) {
       this.logger.error(
         '[CertificateGeneration] Certificate tracking initialization failed:',
-        error
+        error,
       );
       // Don't fail the main process
     }

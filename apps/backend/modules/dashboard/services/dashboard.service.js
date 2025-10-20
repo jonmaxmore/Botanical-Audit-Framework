@@ -35,9 +35,9 @@ class DashboardService {
       await this.activitiesCollection.createIndex({ userId: 1, timestamp: -1 });
 
       this.initialized = true;
-      console.log('Dashboard Service initialized successfully');
+      logger.info('Dashboard Service initialized successfully');
     } catch (error) {
-      console.error('Failed to initialize Dashboard Service:', error);
+      logger.error('Failed to initialize Dashboard Service:', error);
       throw error;
     }
   }
@@ -67,7 +67,7 @@ class DashboardService {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      console.error('Error getting farmer dashboard:', error);
+      logger.error('Error getting farmer dashboard:', error);
       throw error;
     }
   }
@@ -92,7 +92,7 @@ class DashboardService {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      console.error('Error getting DTAM dashboard:', error);
+      logger.error('Error getting DTAM dashboard:', error);
       throw error;
     }
   }
@@ -117,7 +117,7 @@ class DashboardService {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      console.error('Error getting admin dashboard:', error);
+      logger.error('Error getting admin dashboard:', error);
       throw error;
     }
   }
@@ -189,7 +189,7 @@ class DashboardService {
           totalProducts > 0 ? Math.round((certifiedProducts / totalProducts) * 100) : 0,
       };
     } catch (error) {
-      console.error('Error getting farmer stats:', error);
+      logger.error('Error getting farmer stats:', error);
       throw error;
     }
   }
@@ -259,7 +259,7 @@ class DashboardService {
           totalApplications > 0 ? Math.round((approvedApplications / totalApplications) * 100) : 0,
       };
     } catch (error) {
-      console.error('Error getting DTAM stats:', error);
+      logger.error('Error getting DTAM stats:', error);
       throw error;
     }
   }
@@ -340,7 +340,7 @@ class DashboardService {
         }, {}),
       };
     } catch (error) {
-      console.error('Error getting admin stats:', error);
+      logger.error('Error getting admin stats:', error);
       throw error;
     }
   }
@@ -364,7 +364,7 @@ class DashboardService {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      console.error('Error getting system health:', error);
+      logger.error('Error getting system health:', error);
       return {
         status: 'unhealthy',
         error: error.message,
@@ -395,7 +395,7 @@ class DashboardService {
         timestamp: activity.timestamp,
       }));
     } catch (error) {
-      console.error('Error getting recent activities:', error);
+      logger.error('Error getting recent activities:', error);
       // Return mock data if collection doesn't exist yet
       return [];
     }
@@ -421,7 +421,7 @@ class DashboardService {
         type: app.cropType || app.farmData?.cropType,
       }));
     } catch (error) {
-      console.error('Error getting farmer applications:', error);
+      logger.error('Error getting farmer applications:', error);
       return [];
     }
   }
@@ -442,7 +442,7 @@ class DashboardService {
         status: farm.status,
       }));
     } catch (error) {
-      console.error('Error getting farmer farms:', error);
+      logger.error('Error getting farmer farms:', error);
       return [];
     }
   }
@@ -468,7 +468,7 @@ class DashboardService {
         unit: product.unit,
       }));
     } catch (error) {
-      console.error('Error getting farmer products:', error);
+      logger.error('Error getting farmer products:', error);
       return [];
     }
   }
@@ -494,7 +494,7 @@ class DashboardService {
         type: app.cropType || app.farmData?.cropType,
       }));
     } catch (error) {
-      console.error('Error getting pending applications:', error);
+      logger.error('Error getting pending applications:', error);
       return [];
     }
   }
@@ -516,7 +516,7 @@ class DashboardService {
         },
       ];
     } catch (error) {
-      console.error('Error getting farmer notifications:', error);
+      logger.error('Error getting farmer notifications:', error);
       return [];
     }
   }
@@ -541,7 +541,7 @@ class DashboardService {
         },
       ];
     } catch (error) {
-      console.error('Error getting DTAM notifications:', error);
+      logger.error('Error getting DTAM notifications:', error);
       return [];
     }
   }
@@ -587,7 +587,7 @@ class DashboardService {
 
       return notifications;
     } catch (error) {
-      console.error('Error getting admin notifications:', error);
+      logger.error('Error getting admin notifications:', error);
       return [];
     }
   }
@@ -621,7 +621,7 @@ class DashboardService {
           return await this.getFarmerDashboard(userId);
       }
     } catch (error) {
-      console.error('Error getting dashboard by role:', error);
+      logger.error('Error getting dashboard by role:', error);
       throw error;
     }
   }
@@ -653,7 +653,7 @@ class DashboardService {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      console.error('Error getting realtime stats:', error);
+      logger.error('Error getting realtime stats:', error);
       throw error;
     }
   }

@@ -147,7 +147,7 @@ router.post(
         ],
       },
     });
-  })
+  }),
 );
 
 /**
@@ -178,7 +178,7 @@ router.post(
     if (user.isLocked) {
       return sendError.authentication(
         res,
-        'Account is temporarily locked due to too many failed login attempts'
+        'Account is temporarily locked due to too many failed login attempts',
       );
     }
 
@@ -207,7 +207,7 @@ router.post(
     user.addLoginHistory(
       req.ip,
       req.get('User-Agent'),
-      req.get('X-Forwarded-For') || req.connection.remoteAddress
+      req.get('X-Forwarded-For') || req.connection.remoteAddress,
     );
     await user.save();
 
@@ -238,7 +238,7 @@ router.post(
         },
       },
     });
-  })
+  }),
 );
 
 /**
@@ -256,7 +256,7 @@ router.post(
     try {
       const decoded = jwt.verify(
         refreshToken,
-        process.env.JWT_REFRESH_SECRET || 'default-refresh-secret'
+        process.env.JWT_REFRESH_SECRET || 'default-refresh-secret',
       );
 
       if (decoded.type !== 'refresh') {
@@ -288,7 +288,7 @@ router.post(
 
       return sendError.authentication(res, 'Invalid refresh token');
     }
-  })
+  }),
 );
 
 /**
@@ -311,7 +311,7 @@ router.post(
       success: true,
       message: 'Logout successful',
     });
-  })
+  }),
 );
 
 /**
@@ -336,7 +336,7 @@ router.get(
         profileCompleteness: user.profileCompleteness,
       },
     });
-  })
+  }),
 );
 
 /**
@@ -389,7 +389,7 @@ router.put(
         user: user.toPublicProfile(),
       },
     });
-  })
+  }),
 );
 
 /**
@@ -439,7 +439,7 @@ router.post(
       success: true,
       message: 'Password changed successfully',
     });
-  })
+  }),
 );
 
 /**
@@ -484,7 +484,7 @@ router.post(
       success: true,
       message: 'If the email exists, a password reset link has been sent',
     });
-  })
+  }),
 );
 
 /**
@@ -533,7 +533,7 @@ router.post(
       success: true,
       message: 'Password reset successfully',
     });
-  })
+  }),
 );
 
 /**
@@ -576,7 +576,7 @@ router.post(
       success: true,
       message: 'Email verified successfully',
     });
-  })
+  }),
 );
 
 /**
@@ -613,7 +613,7 @@ router.post(
       success: true,
       message: 'Verification email sent',
     });
-  })
+  }),
 );
 
 /**
@@ -637,7 +637,7 @@ router.get(
         lastLogin: user.lastLogin,
       },
     });
-  })
+  }),
 );
 
 /**
@@ -673,7 +673,7 @@ router.post(
         expiresAt: user.apiKeyExpiry,
       },
     });
-  })
+  }),
 );
 
 module.exports = router;

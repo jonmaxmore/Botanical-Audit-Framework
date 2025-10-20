@@ -54,7 +54,7 @@ router.get('/public/templates', async (req, res) => {
     let filteredTemplates = templates;
     if (licenseType) {
       filteredTemplates = templates.filter(
-        template => template.cannabisMetadata.licenseRequirements[licenseType] === true
+        template => template.cannabisMetadata.licenseRequirements[licenseType] === true,
       );
     }
 
@@ -71,7 +71,7 @@ router.get('/public/templates', async (req, res) => {
       messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error getting public cannabis survey templates:', error);
+    logger.error('Error getting public cannabis survey templates:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve cannabis survey templates',
@@ -146,7 +146,7 @@ router.get('/public/templates/:templateId/questions', async (req, res) => {
       messageTH: 'ดึงข้อมูลคำถามแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error getting cannabis survey questions:', error);
+    logger.error('Error getting cannabis survey questions:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve cannabis survey questions',
@@ -208,7 +208,7 @@ router.post('/public/responses', auditMiddleware, async (req, res) => {
       messageTH: 'ส่งแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error submitting cannabis survey response:', error);
+    logger.error('Error submitting cannabis survey response:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to submit cannabis survey response',
@@ -249,7 +249,7 @@ router.post('/templates', async (req, res) => {
       messageTH: 'สร้างแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error creating cannabis survey template:', error);
+    logger.error('Error creating cannabis survey template:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to create cannabis survey template',
@@ -298,7 +298,7 @@ router.post('/templates/:templateId/questions', async (req, res) => {
         : 'สร้างคำถามแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error creating cannabis survey questions:', error);
+    logger.error('Error creating cannabis survey questions:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to create cannabis survey questions',
@@ -341,7 +341,7 @@ router.get('/templates', async (req, res) => {
       messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error getting cannabis survey templates:', error);
+    logger.error('Error getting cannabis survey templates:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve cannabis survey templates',
@@ -386,7 +386,7 @@ router.post('/responses', auditMiddleware, async (req, res) => {
       messageTH: 'ส่งแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error submitting cannabis survey response:', error);
+    logger.error('Error submitting cannabis survey response:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to submit cannabis survey response',
@@ -454,7 +454,7 @@ router.get('/responses/my-farm', async (req, res) => {
       messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error getting cannabis survey responses:', error);
+    logger.error('Error getting cannabis survey responses:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve cannabis survey responses',
@@ -500,7 +500,7 @@ router.get('/compliance/report', async (req, res) => {
       messageTH: 'สร้างรายงานการปฏิบัติตามข้อกำหนดกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error generating compliance report:', error);
+    logger.error('Error generating compliance report:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to generate compliance report',
@@ -536,7 +536,7 @@ router.post('/responses/:responseId/link-audit', async (req, res) => {
       messageTH: 'เชื่อมโยงแบบสำรวจกัญชากับการตรวจสอบเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error linking response to audit:', error);
+    logger.error('Error linking response to audit:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to link response to audit',
@@ -562,7 +562,7 @@ router.post('/responses/:responseId/sync-sop', async (req, res) => {
       messageTH: 'ซิงค์แบบสำรวจกัญชากับระบบ SOP เรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error syncing response with SOP system:', error);
+    logger.error('Error syncing response with SOP system:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to sync response with SOP system',
@@ -646,7 +646,7 @@ router.get('/admin/responses', async (req, res) => {
       messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error getting admin cannabis survey responses:', error);
+    logger.error('Error getting admin cannabis survey responses:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve cannabis survey responses',
@@ -689,7 +689,7 @@ router.put('/admin/responses/:responseId/review', async (req, res) => {
     const response = await cannabisSurveyService.updateResponse(
       responseId,
       updateData,
-      req.user.id
+      req.user.id,
     );
 
     res.json({
@@ -699,7 +699,7 @@ router.put('/admin/responses/:responseId/review', async (req, res) => {
       messageTH: 'ตรวจสอบแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error reviewing cannabis survey response:', error);
+    logger.error('Error reviewing cannabis survey response:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to review cannabis survey response',
@@ -820,7 +820,7 @@ router.get('/admin/analytics/dashboard', async (req, res) => {
       messageTH: 'ดึงข้อมูลการวิเคราะห์แบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
-    console.error('Error getting cannabis survey analytics:', error);
+    logger.error('Error getting cannabis survey analytics:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve cannabis survey analytics',

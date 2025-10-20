@@ -24,6 +24,7 @@
  * - Comprehensive error scenario coverage
  */
 
+const logger = require('../../../../shared/logger/logger');
 const request = require('supertest');
 const mongoose = require('mongoose');
 const { MongoMemoryServer } = require('mongodb-memory-server');
@@ -71,7 +72,7 @@ class ApplicationIntegrationTestSuite {
    * Setup test environment with database and application
    */
   async setupTestEnvironment() {
-    console.log('[Integration Test] Setting up test environment...');
+    logger.info('[Integration Test] Setting up test environment...');
 
     try {
       // Start in-memory MongoDB server
@@ -88,7 +89,7 @@ class ApplicationIntegrationTestSuite {
       });
 
       this.testDatabase = mongoose.connection.db;
-      console.log('[Integration Test] Database connected successfully');
+      logger.info('[Integration Test] Database connected successfully');
 
       // Create enhanced application services
       await this.createEnhancedServices();
@@ -99,9 +100,9 @@ class ApplicationIntegrationTestSuite {
       // Create test users with different roles
       await this.createTestUsers();
 
-      console.log('[Integration Test] Environment setup completed successfully');
+      logger.info('[Integration Test] Environment setup completed successfully');
     } catch (error) {
-      console.error('[Integration Test] Setup failed:', error);
+      logger.error('[Integration Test] Setup failed:', error);
       throw error;
     }
   }
@@ -110,7 +111,7 @@ class ApplicationIntegrationTestSuite {
    * Create enhanced application services with test configuration
    */
   async createEnhancedServices() {
-    console.log('[Integration Test] Creating enhanced services...');
+    logger.info('[Integration Test] Creating enhanced services...');
 
     // Create government API integration service with mocking
     const governmentService = new GovernmentApiIntegrationService({
@@ -177,14 +178,14 @@ class ApplicationIntegrationTestSuite {
       },
     });
 
-    console.log('[Integration Test] Enhanced services created successfully');
+    logger.info('[Integration Test] Enhanced services created successfully');
   }
 
   /**
    * Setup Express application with enhanced routes
    */
   async setupExpressApp() {
-    console.log('[Integration Test] Setting up Express application...');
+    logger.info('[Integration Test] Setting up Express application...');
 
     this.app = express();
 
@@ -233,7 +234,7 @@ class ApplicationIntegrationTestSuite {
     // Create enhanced application routes
     const { dtamRouter, farmerRouter, adminRouter } = createEnhancedApplicationRoutes(
       this.enhancedController,
-      authMiddleware
+      authMiddleware,
     );
 
     // Mount routers
@@ -253,14 +254,14 @@ class ApplicationIntegrationTestSuite {
       });
     });
 
-    console.log('[Integration Test] Express application configured successfully');
+    logger.info('[Integration Test] Express application configured successfully');
   }
 
   /**
    * Create test users with different roles
    */
   async createTestUsers() {
-    console.log('[Integration Test] Creating test users...');
+    logger.info('[Integration Test] Creating test users...');
 
     const users = [
       {
@@ -313,7 +314,7 @@ class ApplicationIntegrationTestSuite {
           email: user.email,
         },
         this.config.jwt.secret,
-        { expiresIn: this.config.jwt.expiresIn }
+        { expiresIn: this.config.jwt.expiresIn },
       );
 
       this.testUsers[user.role] = {
@@ -322,14 +323,14 @@ class ApplicationIntegrationTestSuite {
       };
     }
 
-    console.log('[Integration Test] Test users created successfully');
+    logger.info('[Integration Test] Test users created successfully');
   }
 
   /**
    * Cleanup test environment
    */
   async cleanup() {
-    console.log('[Integration Test] Cleaning up test environment...');
+    logger.info('[Integration Test] Cleaning up test environment...');
 
     try {
       // Close database connection
@@ -346,9 +347,9 @@ class ApplicationIntegrationTestSuite {
       this.testUsers = {};
       this.testApplications = {};
 
-      console.log('[Integration Test] Cleanup completed successfully');
+      logger.info('[Integration Test] Cleanup completed successfully');
     } catch (error) {
-      console.error('[Integration Test] Cleanup failed:', error);
+      logger.error('[Integration Test] Cleanup failed:', error);
       throw error;
     }
   }
@@ -361,7 +362,7 @@ class ApplicationIntegrationTestSuite {
    * Test complete application lifecycle workflow
    */
   async testCompleteApplicationLifecycle() {
-    console.log('\n=== Testing Complete Application Lifecycle ===');
+    logger.info('\n=== Testing Complete Application Lifecycle ===');
 
     const testResults = {
       testName: 'Complete Application Lifecycle',
@@ -372,7 +373,7 @@ class ApplicationIntegrationTestSuite {
 
     try {
       // 1. Test application creation by farmer
-      console.log('[Test] Creating new GACP application...');
+      logger.info('[Test] Creating new GACP application...');
 
       const applicationData = {
         farmerCitizenId: '1234567890123',
@@ -411,7 +412,7 @@ class ApplicationIntegrationTestSuite {
         this.testApplications.primary = createResponse.body.data;
         console.log(
           '[Test] ✓ Application created successfully:',
-          this.testApplications.primary.applicationId
+          this.testApplications.primary.applicationId,
         );
       } else {
         testResults.failed++;
@@ -419,7 +420,7 @@ class ApplicationIntegrationTestSuite {
       }
 
       // 2. Test document upload
-      console.log('[Test] Uploading application documents...');
+      logger.info('[Test] Uploading application documents...');
 
       const documentTypes = ['FARMER_ID', 'LAND_OWNERSHIP', 'FARM_REGISTRATION'];
 
@@ -434,7 +435,7 @@ class ApplicationIntegrationTestSuite {
 
         if (uploadResponse.body.success) {
           testResults.passed++;
-          console.log(`[Test] ✓ Document ${docType} uploaded successfully`);
+          logger.info(`[Test] ✓ Document ${docType} uploaded successfully`);
         } else {
           testResults.failed++;
           testResults.errors.push(`Document ${docType} upload failed`);
@@ -442,7 +443,7 @@ class ApplicationIntegrationTestSuite {
       }
 
       // 3. Test DTAM review and state transitions
-      console.log('[Test] Processing DTAM review workflow...');
+      logger.info('[Test] Processing DTAM review workflow...');
 
       const stateTransitions = [
         { state: 'UNDER_REVIEW', notes: 'Application received and under initial review' },
@@ -466,7 +467,7 @@ class ApplicationIntegrationTestSuite {
 
         if (transitionResponse.body.success) {
           testResults.passed++;
-          console.log(`[Test] ✓ State transition to ${transition.state} successful`);
+          logger.info(`[Test] ✓ State transition to ${transition.state} successful`);
         } else {
           testResults.failed++;
           testResults.errors.push(`State transition to ${transition.state} failed`);
@@ -477,11 +478,11 @@ class ApplicationIntegrationTestSuite {
       }
 
       // 4. Test government integration
-      console.log('[Test] Testing government integration...');
+      logger.info('[Test] Testing government integration...');
 
       const identityVerification = await request(this.app)
         .post(
-          `/api/dtam/applications/${this.testApplications.primary.applicationId}/verify-identity`
+          `/api/dtam/applications/${this.testApplications.primary.applicationId}/verify-identity`,
         )
         .set('Authorization', this.testUsers.dtam_staff.token)
         .send({
@@ -495,7 +496,7 @@ class ApplicationIntegrationTestSuite {
 
       if (identityVerification.body.success) {
         testResults.passed++;
-        console.log('[Test] ✓ Identity verification successful');
+        logger.info('[Test] ✓ Identity verification successful');
       } else {
         testResults.failed++;
         testResults.errors.push('Identity verification failed');
@@ -522,14 +523,14 @@ class ApplicationIntegrationTestSuite {
 
       if (landVerification.body.success) {
         testResults.passed++;
-        console.log('[Test] ✓ Land verification successful');
+        logger.info('[Test] ✓ Land verification successful');
       } else {
         testResults.failed++;
         testResults.errors.push('Land verification failed');
       }
 
       // 5. Test dashboard and analytics
-      console.log('[Test] Testing dashboard and analytics...');
+      logger.info('[Test] Testing dashboard and analytics...');
 
       const dashboardResponse = await request(this.app)
         .get(`/api/farmer/applications/${this.testApplications.primary.applicationId}/dashboard`)
@@ -543,7 +544,7 @@ class ApplicationIntegrationTestSuite {
 
       if (dashboardResponse.body.success && dashboardResponse.body.data.applicationId) {
         testResults.passed++;
-        console.log('[Test] ✓ Dashboard retrieved successfully');
+        logger.info('[Test] ✓ Dashboard retrieved successfully');
       } else {
         testResults.failed++;
         testResults.errors.push('Dashboard retrieval failed');
@@ -561,7 +562,7 @@ class ApplicationIntegrationTestSuite {
 
       if (analyticsResponse.body.success) {
         testResults.passed++;
-        console.log('[Test] ✓ Analytics dashboard retrieved successfully');
+        logger.info('[Test] ✓ Analytics dashboard retrieved successfully');
       } else {
         testResults.failed++;
         testResults.errors.push('Analytics dashboard retrieval failed');
@@ -569,14 +570,14 @@ class ApplicationIntegrationTestSuite {
     } catch (error) {
       testResults.failed++;
       testResults.errors.push(`Lifecycle test error: ${error.message}`);
-      console.error('[Test] Lifecycle test failed:', error);
+      logger.error('[Test] Lifecycle test failed:', error);
     }
 
-    console.log(`\n[Test Results] Complete Application Lifecycle:`);
-    console.log(`  Passed: ${testResults.passed}`);
-    console.log(`  Failed: ${testResults.failed}`);
+    logger.info(`\n[Test Results] Complete Application Lifecycle:`);
+    logger.info(`  Passed: ${testResults.passed}`);
+    logger.info(`  Failed: ${testResults.failed}`);
     if (testResults.errors.length > 0) {
-      console.log(`  Errors: ${testResults.errors.join(', ')}`);
+      logger.info(`  Errors: ${testResults.errors.join(', ')}`);
     }
 
     return testResults;
@@ -586,7 +587,7 @@ class ApplicationIntegrationTestSuite {
    * Test performance and load scenarios
    */
   async testPerformanceAndLoad() {
-    console.log('\n=== Testing Performance and Load ===');
+    logger.info('\n=== Testing Performance and Load ===');
 
     const testResults = {
       testName: 'Performance and Load Testing',
@@ -602,7 +603,7 @@ class ApplicationIntegrationTestSuite {
 
     try {
       // Test concurrent application creation
-      console.log('[Test] Testing concurrent application creation...');
+      logger.info('[Test] Testing concurrent application creation...');
 
       const concurrentRequests = 10;
       const startTime = Date.now();
@@ -643,7 +644,7 @@ class ApplicationIntegrationTestSuite {
       const endMemory = process.memoryUsage().heapUsed;
 
       const successfulRequests = responses.filter(
-        r => r.status === 'fulfilled' && r.value.status === 201
+        r => r.status === 'fulfilled' && r.value.status === 201,
       ).length;
       const totalTime = endTime - startTime;
       const memoryIncrease = endMemory - startMemory;
@@ -656,19 +657,19 @@ class ApplicationIntegrationTestSuite {
         // 80% success rate acceptable
         testResults.passed++;
         console.log(
-          `[Test] ✓ Concurrent requests: ${successfulRequests}/${concurrentRequests} successful`
+          `[Test] ✓ Concurrent requests: ${successfulRequests}/${concurrentRequests} successful`,
         );
         console.log(
-          `[Test] ✓ Total time: ${totalTime}ms (${totalTime / concurrentRequests}ms average)`
+          `[Test] ✓ Total time: ${totalTime}ms (${totalTime / concurrentRequests}ms average)`,
         );
-        console.log(`[Test] ✓ Memory increase: ${Math.round(memoryIncrease / 1024 / 1024)}MB`);
+        logger.info(`[Test] ✓ Memory increase: ${Math.round(memoryIncrease / 1024 / 1024)}MB`);
       } else {
         testResults.failed++;
         testResults.errors.push(`Low success rate: ${successfulRequests}/${concurrentRequests}`);
       }
 
       // Test response time under load
-      console.log('[Test] Testing response time under load...');
+      logger.info('[Test] Testing response time under load...');
 
       const loadTestPromises = Array.from({ length: 5 }, async () => {
         const start = Date.now();
@@ -684,7 +685,7 @@ class ApplicationIntegrationTestSuite {
 
       if (avgResponseTime < this.config.performance.maxResponseTime) {
         testResults.passed++;
-        console.log(`[Test] ✓ Average response time: ${avgResponseTime}ms`);
+        logger.info(`[Test] ✓ Average response time: ${avgResponseTime}ms`);
       } else {
         testResults.failed++;
         testResults.errors.push(`High response time: ${avgResponseTime}ms`);
@@ -695,7 +696,7 @@ class ApplicationIntegrationTestSuite {
       if (memoryUsagePercent < 80) {
         // Less than 80% of max memory
         testResults.passed++;
-        console.log(`[Test] ✓ Memory usage: ${memoryUsagePercent.toFixed(2)}%`);
+        logger.info(`[Test] ✓ Memory usage: ${memoryUsagePercent.toFixed(2)}%`);
       } else {
         testResults.failed++;
         testResults.errors.push(`High memory usage: ${memoryUsagePercent.toFixed(2)}%`);
@@ -703,14 +704,14 @@ class ApplicationIntegrationTestSuite {
     } catch (error) {
       testResults.failed++;
       testResults.errors.push(`Performance test error: ${error.message}`);
-      console.error('[Test] Performance test failed:', error);
+      logger.error('[Test] Performance test failed:', error);
     }
 
-    console.log(`\n[Test Results] Performance and Load Testing:`);
-    console.log(`  Passed: ${testResults.passed}`);
-    console.log(`  Failed: ${testResults.failed}`);
+    logger.info(`\n[Test Results] Performance and Load Testing:`);
+    logger.info(`  Passed: ${testResults.passed}`);
+    logger.info(`  Failed: ${testResults.failed}`);
     if (testResults.errors.length > 0) {
-      console.log(`  Errors: ${testResults.errors.join(', ')}`);
+      logger.info(`  Errors: ${testResults.errors.join(', ')}`);
     }
 
     return testResults;
@@ -720,7 +721,7 @@ class ApplicationIntegrationTestSuite {
    * Test error handling and recovery scenarios
    */
   async testErrorHandlingAndRecovery() {
-    console.log('\n=== Testing Error Handling and Recovery ===');
+    logger.info('\n=== Testing Error Handling and Recovery ===');
 
     const testResults = {
       testName: 'Error Handling and Recovery',
@@ -731,7 +732,7 @@ class ApplicationIntegrationTestSuite {
 
     try {
       // Test invalid authentication
-      console.log('[Test] Testing invalid authentication...');
+      logger.info('[Test] Testing invalid authentication...');
 
       const invalidAuthResponse = await request(this.app)
         .post('/api/farmer/applications')
@@ -741,14 +742,14 @@ class ApplicationIntegrationTestSuite {
 
       if (invalidAuthResponse.body.error === 'INVALID_TOKEN') {
         testResults.passed++;
-        console.log('[Test] ✓ Invalid authentication handled correctly');
+        logger.info('[Test] ✓ Invalid authentication handled correctly');
       } else {
         testResults.failed++;
         testResults.errors.push('Invalid authentication not handled properly');
       }
 
       // Test insufficient permissions
-      console.log('[Test] Testing insufficient permissions...');
+      logger.info('[Test] Testing insufficient permissions...');
 
       const permissionResponse = await request(this.app)
         .put('/api/dtam/applications/GACP-2024-12345678/state')
@@ -761,14 +762,14 @@ class ApplicationIntegrationTestSuite {
 
       if (permissionResponse.body.error === 'INSUFFICIENT_PERMISSIONS') {
         testResults.passed++;
-        console.log('[Test] ✓ Insufficient permissions handled correctly');
+        logger.info('[Test] ✓ Insufficient permissions handled correctly');
       } else {
         testResults.failed++;
         testResults.errors.push('Permission validation not working properly');
       }
 
       // Test invalid data validation
-      console.log('[Test] Testing data validation...');
+      logger.info('[Test] Testing data validation...');
 
       const validationResponse = await request(this.app)
         .post('/api/farmer/applications')
@@ -782,14 +783,14 @@ class ApplicationIntegrationTestSuite {
 
       if (validationResponse.body.error && validationResponse.body.message) {
         testResults.passed++;
-        console.log('[Test] ✓ Data validation working correctly');
+        logger.info('[Test] ✓ Data validation working correctly');
       } else {
         testResults.failed++;
         testResults.errors.push('Data validation not working properly');
       }
 
       // Test rate limiting
-      console.log('[Test] Testing rate limiting...');
+      logger.info('[Test] Testing rate limiting...');
 
       // Make many requests quickly to trigger rate limiting
       const rateLimitPromises = Array.from({ length: 25 }, () => {
@@ -805,19 +806,19 @@ class ApplicationIntegrationTestSuite {
 
       const rateLimitResults = await Promise.allSettled(rateLimitPromises);
       const rateLimitedRequests = rateLimitResults.filter(
-        result => result.status === 'fulfilled' && result.value.status === 429
+        result => result.status === 'fulfilled' && result.value.status === 429,
       );
 
       if (rateLimitedRequests.length > 0) {
         testResults.passed++;
-        console.log(`[Test] ✓ Rate limiting triggered for ${rateLimitedRequests.length} requests`);
+        logger.info(`[Test] ✓ Rate limiting triggered for ${rateLimitedRequests.length} requests`);
       } else {
         testResults.failed++;
         testResults.errors.push('Rate limiting not working');
       }
 
       // Test non-existent resource
-      console.log('[Test] Testing non-existent resource handling...');
+      logger.info('[Test] Testing non-existent resource handling...');
 
       const notFoundResponse = await request(this.app)
         .get('/api/farmer/applications/GACP-9999-NOTFOUND/dashboard')
@@ -826,7 +827,7 @@ class ApplicationIntegrationTestSuite {
 
       if (notFoundResponse.body.error) {
         testResults.passed++;
-        console.log('[Test] ✓ Non-existent resource handled correctly');
+        logger.info('[Test] ✓ Non-existent resource handled correctly');
       } else {
         testResults.failed++;
         testResults.errors.push('Non-existent resource not handled properly');
@@ -834,14 +835,14 @@ class ApplicationIntegrationTestSuite {
     } catch (error) {
       testResults.failed++;
       testResults.errors.push(`Error handling test error: ${error.message}`);
-      console.error('[Test] Error handling test failed:', error);
+      logger.error('[Test] Error handling test failed:', error);
     }
 
-    console.log(`\n[Test Results] Error Handling and Recovery:`);
-    console.log(`  Passed: ${testResults.passed}`);
-    console.log(`  Failed: ${testResults.failed}`);
+    logger.info(`\n[Test Results] Error Handling and Recovery:`);
+    logger.info(`  Passed: ${testResults.passed}`);
+    logger.info(`  Failed: ${testResults.failed}`);
     if (testResults.errors.length > 0) {
-      console.log(`  Errors: ${testResults.errors.join(', ')}`);
+      logger.info(`  Errors: ${testResults.errors.join(', ')}`);
     }
 
     return testResults;
@@ -851,8 +852,8 @@ class ApplicationIntegrationTestSuite {
    * Run complete integration test suite
    */
   async runCompleteTestSuite() {
-    console.log('\n🚀 Starting Enhanced Application Module Integration Test Suite');
-    console.log('='.repeat(80));
+    logger.info('\n🚀 Starting Enhanced Application Module Integration Test Suite');
+    logger.info('='.repeat(80));
 
     const suiteResults = {
       startTime: new Date(),
@@ -885,28 +886,28 @@ class ApplicationIntegrationTestSuite {
       suiteResults.overallSuccess = passRate >= 90;
 
       // Print final results
-      console.log('\n' + '='.repeat(80));
-      console.log('🏁 Integration Test Suite Results');
-      console.log('='.repeat(80));
-      console.log(`Duration: ${suiteResults.endTime - suiteResults.startTime}ms`);
-      console.log(`Total Tests: ${suiteResults.totalTests}`);
-      console.log(`Passed: ${suiteResults.totalPassed} (${passRate.toFixed(1)}%)`);
-      console.log(`Failed: ${suiteResults.totalFailed}`);
-      console.log(`Overall Status: ${suiteResults.overallSuccess ? '✅ PASSED' : '❌ FAILED'}`);
+      logger.info('\n' + '='.repeat(80));
+      logger.info('🏁 Integration Test Suite Results');
+      logger.info('='.repeat(80));
+      logger.info(`Duration: ${suiteResults.endTime - suiteResults.startTime}ms`);
+      logger.info(`Total Tests: ${suiteResults.totalTests}`);
+      logger.info(`Passed: ${suiteResults.totalPassed} (${passRate.toFixed(1)}%)`);
+      logger.info(`Failed: ${suiteResults.totalFailed}`);
+      logger.info(`Overall Status: ${suiteResults.overallSuccess ? '✅ PASSED' : '❌ FAILED'}`);
 
       if (suiteResults.overallSuccess) {
-        console.log('\n🎉 Application Module Integration Test Suite completed successfully!');
-        console.log('✅ All critical workflows validated');
-        console.log('✅ Performance requirements met');
-        console.log('✅ Error handling working correctly');
-        console.log('✅ Security measures functioning properly');
+        logger.info('\n🎉 Application Module Integration Test Suite completed successfully!');
+        logger.info('✅ All critical workflows validated');
+        logger.info('✅ Performance requirements met');
+        logger.info('✅ Error handling working correctly');
+        logger.info('✅ Security measures functioning properly');
       } else {
-        console.log('\n❌ Integration Test Suite failed!');
-        console.log('Please review failed tests and fix issues before deployment.');
+        logger.info('\n❌ Integration Test Suite failed!');
+        logger.info('Please review failed tests and fix issues before deployment.');
       }
     } catch (error) {
       suiteResults.overallSuccess = false;
-      console.error('\n💥 Integration Test Suite crashed:', error);
+      logger.error('\n💥 Integration Test Suite crashed:', error);
     } finally {
       // Cleanup
       await this.cleanup();
@@ -928,7 +929,7 @@ if (require.main === module) {
       process.exit(results.overallSuccess ? 0 : 1);
     })
     .catch(error => {
-      console.error('Test suite execution failed:', error);
+      logger.error('Test suite execution failed:', error);
       process.exit(1);
     });
 }

@@ -54,7 +54,7 @@ class CertificateController {
       }
 
       const certificate = await this.generateCertificateUseCase.execute(
-        requestDTO.toApplicationRequest()
+        requestDTO.toApplicationRequest(),
       );
 
       return res.status(201).json({
@@ -63,7 +63,7 @@ class CertificateController {
         data: CertificateResponseDTO.fromDomain(certificate),
       });
     } catch (error) {
-      console.error('Error generating certificate:', error);
+      logger.error('Error generating certificate:', error);
 
       if (error.message.includes('not found') || error.message.includes('does not exist')) {
         return res.status(404).json({
@@ -104,7 +104,7 @@ class CertificateController {
         data: CertificateResponseDTO.fromDomain(certificate),
       });
     } catch (error) {
-      console.error('Error getting certificate:', error);
+      logger.error('Error getting certificate:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
@@ -143,7 +143,7 @@ class CertificateController {
         },
       });
     } catch (error) {
-      console.error('Error listing certificates:', error);
+      logger.error('Error listing certificates:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
@@ -172,7 +172,7 @@ class CertificateController {
         data: responseDTO,
       });
     } catch (error) {
-      console.error('Error verifying certificate:', error);
+      logger.error('Error verifying certificate:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
@@ -210,7 +210,7 @@ class CertificateController {
         data: CertificateResponseDTO.fromDomain(certificate),
       });
     } catch (error) {
-      console.error('Error revoking certificate:', error);
+      logger.error('Error revoking certificate:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -265,7 +265,7 @@ class CertificateController {
         data: CertificateResponseDTO.fromDomain(certificate),
       });
     } catch (error) {
-      console.error('Error renewing certificate:', error);
+      logger.error('Error renewing certificate:', error);
 
       if (error.message.includes('not found')) {
         return res.status(404).json({
@@ -312,7 +312,7 @@ class CertificateController {
       // Redirect to PDF URL or serve file
       return res.redirect(certificate.pdfUrl);
     } catch (error) {
-      console.error('Error downloading PDF:', error);
+      logger.error('Error downloading PDF:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
@@ -350,7 +350,7 @@ class CertificateController {
       // Redirect to QR code URL or serve image
       return res.redirect(certificate.qrCodeUrl);
     } catch (error) {
-      console.error('Error getting QR code:', error);
+      logger.error('Error getting QR code:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
@@ -412,7 +412,7 @@ class CertificateController {
         },
       });
     } catch (error) {
-      console.error('Error getting certificate history:', error);
+      logger.error('Error getting certificate history:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',

@@ -260,7 +260,7 @@ export const fileUploadSchema = z
     {
       message: 'File type must be PDF, JPEG, PNG, or WebP',
       path: ['fileType'],
-    }
+    },
   );
 
 /**
@@ -341,7 +341,7 @@ export const dateRangeSchema = z
     {
       message: 'Start date must be before or equal to end date',
       path: ['endDate'],
-    }
+    },
   );
 
 /**
@@ -431,7 +431,7 @@ export const paginatedResponseSchema = z.object({
  */
 export function validate<T>(
   schema: z.ZodSchema<T>,
-  data: unknown
+  data: unknown,
 ): {
   success: boolean;
   data?: T;

@@ -37,6 +37,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const moment = require('moment-timezone');
 
 class AnalyticsService {
@@ -58,7 +59,7 @@ class AnalyticsService {
     this.modelCache = new Map();
     this.insightCache = new Map();
 
-    console.log('[AnalyticsService] Initializing business intelligence engine...');
+    logger.info('[AnalyticsService] Initializing business intelligence engine...');
   }
 
   /**
@@ -83,10 +84,10 @@ class AnalyticsService {
       this._startAnalyticsProcessing();
 
       console.log(
-        '[AnalyticsService] Initialization completed with business intelligence capabilities'
+        '[AnalyticsService] Initialization completed with business intelligence capabilities',
       );
     } catch (error) {
-      console.error('[AnalyticsService] Initialization failed:', error);
+      logger.error('[AnalyticsService] Initialization failed:', error);
       throw new Error(`AnalyticsService initialization failed: ${error.message}`);
     }
   }
@@ -105,7 +106,7 @@ class AnalyticsService {
    */
   async getBusinessAnalytics(criteria = {}) {
     try {
-      console.log('[AnalyticsService] Generating comprehensive business analytics...');
+      logger.info('[AnalyticsService] Generating comprehensive business analytics...');
 
       // Step 1: Validate and normalize criteria
       const normalizedCriteria = this._validateAnalyticsCriteria(criteria);
@@ -115,7 +116,7 @@ class AnalyticsService {
       const cachedAnalytics = await this._getCachedAnalytics(cacheKey);
 
       if (cachedAnalytics && this._isCacheValid(cachedAnalytics)) {
-        console.log('[AnalyticsService] Returning cached business analytics');
+        logger.info('[AnalyticsService] Returning cached business analytics');
         return cachedAnalytics;
       }
 
@@ -125,13 +126,13 @@ class AnalyticsService {
       // Step 4: Perform descriptive analytics (what happened?)
       const descriptiveAnalytics = await this._performDescriptiveAnalytics(
         analyticsData,
-        normalizedCriteria
+        normalizedCriteria,
       );
 
       // Step 5: Perform diagnostic analytics (why did it happen?)
       const diagnosticAnalytics = await this._performDiagnosticAnalytics(
         analyticsData,
-        normalizedCriteria
+        normalizedCriteria,
       );
 
       // Step 6: Perform predictive analytics (what will happen?)
@@ -144,7 +145,7 @@ class AnalyticsService {
         analyticsData,
         descriptiveAnalytics,
         diagnosticAnalytics,
-        normalizedCriteria
+        normalizedCriteria,
       );
 
       // Step 8: Generate business insights and recommendations
@@ -152,7 +153,7 @@ class AnalyticsService {
         descriptiveAnalytics,
         diagnosticAnalytics,
         predictiveAnalytics,
-        prescriptiveAnalytics
+        prescriptiveAnalytics,
       );
 
       // Step 9: Compile comprehensive analytics report
@@ -217,11 +218,11 @@ class AnalyticsService {
       // Step 11: Log analytics generation for audit
       await this._logAnalyticsGeneration(normalizedCriteria, analyticsReport.metadata);
 
-      console.log('[AnalyticsService] Business analytics generated successfully');
+      logger.info('[AnalyticsService] Business analytics generated successfully');
 
       return analyticsReport;
     } catch (error) {
-      console.error('[AnalyticsService] Business analytics generation failed:', error);
+      logger.error('[AnalyticsService] Business analytics generation failed:', error);
       throw new Error(`Business analytics generation failed: ${error.message}`);
     }
   }
@@ -235,7 +236,7 @@ class AnalyticsService {
    */
   async getWorkflowAnalytics(criteria = {}) {
     try {
-      console.log('[AnalyticsService] Performing workflow analytics...');
+      logger.info('[AnalyticsService] Performing workflow analytics...');
 
       const normalizedCriteria = this._validateAnalyticsCriteria(criteria);
 
@@ -276,7 +277,7 @@ class AnalyticsService {
         },
       };
 
-      console.log('[AnalyticsService] Workflow analytics completed successfully');
+      logger.info('[AnalyticsService] Workflow analytics completed successfully');
 
       return {
         timestamp: new Date(),
@@ -288,7 +289,7 @@ class AnalyticsService {
         dataQuality: this._assessDataQuality(workflowData),
       };
     } catch (error) {
-      console.error('[AnalyticsService] Workflow analytics failed:', error);
+      logger.error('[AnalyticsService] Workflow analytics failed:', error);
       throw new Error(`Workflow analytics failed: ${error.message}`);
     }
   }
@@ -302,7 +303,7 @@ class AnalyticsService {
    */
   async getUserBehaviorAnalytics(criteria = {}) {
     try {
-      console.log('[AnalyticsService] Performing user behavior analytics...');
+      logger.info('[AnalyticsService] Performing user behavior analytics...');
 
       const normalizedCriteria = this._validateAnalyticsCriteria(criteria);
 
@@ -343,7 +344,7 @@ class AnalyticsService {
         },
       };
 
-      console.log('[AnalyticsService] User behavior analytics completed successfully');
+      logger.info('[AnalyticsService] User behavior analytics completed successfully');
 
       return {
         timestamp: new Date(),
@@ -355,7 +356,7 @@ class AnalyticsService {
         dataQuality: this._assessDataQuality(userBehaviorData),
       };
     } catch (error) {
-      console.error('[AnalyticsService] User behavior analytics failed:', error);
+      logger.error('[AnalyticsService] User behavior analytics failed:', error);
       throw new Error(`User behavior analytics failed: ${error.message}`);
     }
   }
@@ -369,7 +370,7 @@ class AnalyticsService {
    */
   async getFinancialAnalytics(criteria = {}) {
     try {
-      console.log('[AnalyticsService] Performing financial analytics...');
+      logger.info('[AnalyticsService] Performing financial analytics...');
 
       const normalizedCriteria = this._validateAnalyticsCriteria(criteria);
 
@@ -410,7 +411,7 @@ class AnalyticsService {
         },
       };
 
-      console.log('[AnalyticsService] Financial analytics completed successfully');
+      logger.info('[AnalyticsService] Financial analytics completed successfully');
 
       return {
         timestamp: new Date(),
@@ -422,7 +423,7 @@ class AnalyticsService {
         dataQuality: this._assessDataQuality(financialData),
       };
     } catch (error) {
-      console.error('[AnalyticsService] Financial analytics failed:', error);
+      logger.error('[AnalyticsService] Financial analytics failed:', error);
       throw new Error(`Financial analytics failed: ${error.message}`);
     }
   }
@@ -436,7 +437,7 @@ class AnalyticsService {
    */
   async generatePredictiveModels(criteria = {}) {
     try {
-      console.log('[AnalyticsService] Generating predictive models...');
+      logger.info('[AnalyticsService] Generating predictive models...');
 
       const normalizedCriteria = this._validateAnalyticsCriteria(criteria);
 
@@ -480,7 +481,7 @@ class AnalyticsService {
       // Generate business recommendations based on models
       const recommendations = await this._generateModelBasedRecommendations(predictiveModels);
 
-      console.log('[AnalyticsService] Predictive models generated successfully');
+      logger.info('[AnalyticsService] Predictive models generated successfully');
 
       return {
         timestamp: new Date(),
@@ -493,7 +494,7 @@ class AnalyticsService {
         modelPerformance: this._assessOverallModelPerformance(predictiveModels),
       };
     } catch (error) {
-      console.error('[AnalyticsService] Predictive modeling failed:', error);
+      logger.error('[AnalyticsService] Predictive modeling failed:', error);
       throw new Error(`Predictive modeling failed: ${error.message}`);
     }
   }
@@ -618,16 +619,16 @@ class AnalyticsService {
 
   // Utility methods for analytics processing
   async _initializeAnalyticsModels() {
-    console.log('[AnalyticsService] Analytics models initialized');
+    logger.info('[AnalyticsService] Analytics models initialized');
   }
   async _setupDataPipelines() {
-    console.log('[AnalyticsService] Data pipelines configured');
+    logger.info('[AnalyticsService] Data pipelines configured');
   }
   async _initializeMLModels() {
-    console.log('[AnalyticsService] Machine learning models initialized');
+    logger.info('[AnalyticsService] Machine learning models initialized');
   }
   _startAnalyticsProcessing() {
-    console.log('[AnalyticsService] Background analytics processing started');
+    logger.info('[AnalyticsService] Background analytics processing started');
   }
 
   // Data collection methods
@@ -922,9 +923,9 @@ class AnalyticsService {
    * @returns {Promise<void>}
    */
   async shutdown() {
-    console.log('[AnalyticsService] Shutting down...');
+    logger.info('[AnalyticsService] Shutting down...');
     // Save model state and cleanup
-    console.log('[AnalyticsService] Shutdown completed');
+    logger.info('[AnalyticsService] Shutdown completed');
   }
 }
 

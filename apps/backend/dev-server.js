@@ -14,6 +14,7 @@
  * @date 2025-10-19
  */
 
+const logger = require('shared/logger/logger');
 require('dotenv').config();
 
 const express = require('express');
@@ -31,8 +32,8 @@ const port = process.env.PORT || 3004;
 // Initialize mock database
 const mockDb = new MockDatabaseService();
 
-console.log('🚀 GACP Development Server Starting...');
-console.log('📊 Using Mock Database Mode');
+logger.info('🚀 GACP Development Server Starting...');
+logger.info('📊 Using Mock Database Mode');
 
 // Security middleware
 app.use(
@@ -45,7 +46,7 @@ app.use(
         imgSrc: ["'self'", 'data:', 'https:'],
       },
     },
-  })
+  }),
 );
 
 // CORS configuration
@@ -55,7 +56,7 @@ app.use(
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  })
+  }),
 );
 
 // Body parsing
@@ -329,7 +330,7 @@ app.use((req, res) => {
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  logger.error(err.stack);
   res.status(500).json({
     success: false,
     message: 'Internal server error',
@@ -339,14 +340,14 @@ app.use((err, req, res, next) => {
 
 // Start server
 app.listen(port, () => {
-  console.log('✅ GACP Development Server started successfully');
-  console.log(`🌐 Server: http://localhost:${port}`);
-  console.log(`📋 API Documentation: http://localhost:${port}/api`);
-  console.log(`❤️  Health Check: http://localhost:${port}/health`);
-  console.log('📊 Database: Mock Database (In-Memory)');
-  console.log("🔑 Dev Token: 'dev_token' for authentication");
-  console.log('');
-  console.log('Ready for frontend development! 🚀');
+  logger.info('✅ GACP Development Server started successfully');
+  logger.info(`🌐 Server: http://localhost:${port}`);
+  logger.info(`📋 API Documentation: http://localhost:${port}/api`);
+  logger.info(`❤️  Health Check: http://localhost:${port}/health`);
+  logger.info('📊 Database: Mock Database (In-Memory);');
+  logger.info("🔑 Dev Token: 'dev_token' for authentication");
+  logger.info('');
+  logger.info('Ready for frontend development! 🚀');
 });
 
 module.exports = app;

@@ -40,7 +40,7 @@ class NotificationModuleContainer {
   initialize() {
     // Infrastructure Layer
     this.instances.notificationRepository = new MongoDBNotificationRepository(
-      this.config.database || mongoose
+      this.config.database || mongoose,
     );
 
     this.instances.notificationService = new EmailNotificationService(this.config.email || {});
@@ -48,35 +48,35 @@ class NotificationModuleContainer {
     // Application Layer - Use Cases
     this.instances.sendNotificationUseCase = new SendNotificationUseCase(
       this.instances.notificationRepository,
-      this.instances.notificationService
+      this.instances.notificationService,
     );
 
     this.instances.sendBroadcastNotificationUseCase = new SendBroadcastNotificationUseCase(
-      this.instances.notificationRepository
+      this.instances.notificationRepository,
     );
 
     this.instances.getUserNotificationsUseCase = new GetUserNotificationsUseCase(
-      this.instances.notificationRepository
+      this.instances.notificationRepository,
     );
 
     this.instances.markNotificationAsReadUseCase = new MarkNotificationAsReadUseCase(
-      this.instances.notificationRepository
+      this.instances.notificationRepository,
     );
 
     this.instances.markAllAsReadUseCase = new MarkAllAsReadUseCase(
-      this.instances.notificationRepository
+      this.instances.notificationRepository,
     );
 
     this.instances.getUnreadCountUseCase = new GetUnreadCountUseCase(
-      this.instances.notificationRepository
+      this.instances.notificationRepository,
     );
 
     this.instances.deleteNotificationUseCase = new DeleteNotificationUseCase(
-      this.instances.notificationRepository
+      this.instances.notificationRepository,
     );
 
     this.instances.getNotificationStatisticsUseCase = new GetNotificationStatisticsUseCase(
-      this.instances.notificationRepository
+      this.instances.notificationRepository,
     );
 
     // Presentation Layer - Controller

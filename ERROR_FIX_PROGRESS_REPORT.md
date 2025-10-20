@@ -24,6 +24,7 @@
 ### 2. แก้ไข Module Dependencies
 
 #### 2.1 modules/shared/config/database.js
+
 ```javascript
 // ❌ เดิม
 const logger = require('../../../shared/utils/logger');
@@ -33,6 +34,7 @@ const logger = require('../../../shared/logger');
 ```
 
 #### 2.2 modules/shared/middleware/auth.js
+
 ```javascript
 // ❌ เดิม
 // ไม่มี import auth
@@ -42,6 +44,7 @@ const auth = require('../../../shared/auth');
 ```
 
 #### 2.3 modules/auth-dtam/routes/dtam-auth.js
+
 ```javascript
 // ❌ เดิม
 const { config, middleware, utils } = shared;
@@ -83,17 +86,17 @@ const dtamMiddleware = require('../middleware/dtam-auth');
 
 ## 🎯 สรุปความคืบหน้า
 
-| Route | สถานะเดิม | สถานะใหม่ | Progress |
-|-------|-----------|-----------|----------|
-| MongoDB Auth | ✅ สำเร็จ | ✅ สำเร็จ | - |
-| **DTAM Management** | ❌ ล้มเหลว | **✅ สำเร็จ** | ✅ แก้ไขได้ |
-| Dashboard | ✅ สำเร็จ | ✅ สำเร็จ | - |
-| Survey API (legacy) | ✅ สำเร็จ | ✅ สำเร็จ | - |
-| DTAM Auth | ❌ ล้มเหลว | ❌ ล้มเหลว | 🔄 ต้องแก้ต่อ |
-| NEW Application | ❌ ล้มเหลว | ❌ ล้มเหลว | 🔄 ต้องแก้ต่อ |
-| Survey 4-Regions | ❌ ล้มเหลว | ❌ ล้มเหลว | 🔄 ต้องแก้ต่อ |
-| Track & Trace | ❌ ล้มเหลว | ❌ ล้มเหลว | 🔄 ต้องแก้ต่อ |
-| Standards Comparison | ❌ ล้มเหลว | ❌ ล้มเหลว | 🔄 ต้องแก้ต่อ |
+| Route                | สถานะเดิม  | สถานะใหม่     | Progress      |
+| -------------------- | ---------- | ------------- | ------------- |
+| MongoDB Auth         | ✅ สำเร็จ  | ✅ สำเร็จ     | -             |
+| **DTAM Management**  | ❌ ล้มเหลว | **✅ สำเร็จ** | ✅ แก้ไขได้   |
+| Dashboard            | ✅ สำเร็จ  | ✅ สำเร็จ     | -             |
+| Survey API (legacy)  | ✅ สำเร็จ  | ✅ สำเร็จ     | -             |
+| DTAM Auth            | ❌ ล้มเหลว | ❌ ล้มเหลว    | 🔄 ต้องแก้ต่อ |
+| NEW Application      | ❌ ล้มเหลว | ❌ ล้มเหลว    | 🔄 ต้องแก้ต่อ |
+| Survey 4-Regions     | ❌ ล้มเหลว | ❌ ล้มเหลว    | 🔄 ต้องแก้ต่อ |
+| Track & Trace        | ❌ ล้มเหลว | ❌ ล้มเหลว    | 🔄 ต้องแก้ต่อ |
+| Standards Comparison | ❌ ล้มเหลว | ❌ ล้มเหลว    | 🔄 ต้องแก้ต่อ |
 
 **ผลรวม:** 1/6 errors แก้ไขได้ (16.67%)
 
@@ -106,6 +109,7 @@ const dtamMiddleware = require('../middleware/dtam-auth');
 **ปัญหา:** Middleware references ไม่ถูกต้อง
 
 **การแก้ไข:**
+
 - ✅ แก้ไข import แล้ว
 - ✅ แทนที่ `middleware.dtamAuth` → `dtamMiddleware.verifyDTAMToken`
 - ⚠️ **ต้องทดสอบอีกครั้ง** - อาจมีปัญหาอื่นๆ
@@ -117,17 +121,19 @@ const dtamMiddleware = require('../middleware/dtam-auth');
 **ไฟล์:** `src/routes/applications.js`
 
 **ปัญหา:**
+
 ```javascript
 // Line 11
 const { authenticate, authorize } = require('../middleware/auth'); // ❌ ไฟล์ไม่มี
 ```
 
 **วิธีแก้:**
+
 ```javascript
 // Option 1: สร้างไฟล์ src/middleware/auth.js
 module.exports = {
   authenticate: require('../../shared/middleware/auth').authenticate,
-  authorize: require('../../shared/middleware/roles').authorize
+  authorize: require('../../shared/middleware/roles').authorize,
 };
 
 // Option 2: แก้ import ตรงๆ
@@ -142,11 +148,13 @@ const authorize = require('../middleware/roles'); // ต้องสร้าง
 **ไฟล์:** `routes/api/surveys-4regions.js`
 
 **ปัญหา:** ไม่ทราบแน่ชัด - ต้องตรวจสอบ:
+
 - Missing `module.exports = router;`
 - Missing dependencies (controllers, models)
 - Import path errors
 
 **ขั้นตอนการแก้:**
+
 ```powershell
 # 1. ตรวจสอบว่ามี exports หรือไม่
 Get-Content routes/api/surveys-4regions.js -Tail 5
@@ -170,6 +178,7 @@ node -e "try { require('./routes/api/surveys-4regions'); } catch(e) { console.lo
 **ไฟล์:** `routes/api/standards-comparison.js`
 
 **ปัญหา:** Export format
+
 ```javascript
 // ปัจจุบัน
 module.exports = { router };
@@ -200,14 +209,16 @@ module.exports = router; // ✅ ง่ายกว่า
 **ขั้นตอน:**
 
 1. สร้าง `src/middleware/auth.js`:
+
 ```javascript
 module.exports = {
   authenticate: require('../../shared/middleware/auth').authenticateToken,
-  authorize: (roles) => require('../../shared/middleware/auth').requireRole(roles)
+  authorize: roles => require('../../shared/middleware/auth').requireRole(roles),
 };
 ```
 
 2. หรือ แก้ import ใน `src/routes/applications.js`:
+
 ```javascript
 const { authenticateToken: authenticate } = require('../../shared/middleware/auth');
 ```
@@ -219,6 +230,7 @@ const { authenticateToken: authenticate } = require('../../shared/middleware/aut
 **ขั้นตอน:**
 
 1. ตรวจสอบแต่ละไฟล์:
+
 ```powershell
 node -e "try { require('./apps/backend/routes/api/surveys-4regions'); console.log('OK'); } catch(e) { console.log(e.stack); }"
 node -e "try { require('./apps/backend/routes/api/tracktrace'); console.log('OK'); } catch(e) { console.log(e.stack); }"

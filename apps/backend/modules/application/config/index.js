@@ -26,6 +26,7 @@
  * - Monitoring and alerting settings
  */
 
+const logger = require('../../../shared/logger/logger');
 const path = require('path');
 const fs = require('fs');
 
@@ -88,12 +89,16 @@ class EnhancedApplicationModuleConfig {
           options: {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            // Pool
             maxPoolSize: 50,
             minPoolSize: 5,
+            // Timeouts
             maxIdleTimeMS: 30000,
             serverSelectionTimeoutMS: 5000,
             socketTimeoutMS: 45000,
+            // Network
             family: 4, // Use IPv4
+            // Retry
             retryWrites: true,
             w: 'majority',
           },
@@ -865,7 +870,7 @@ class EnhancedApplicationModuleConfig {
     this.validateConfiguration();
 
     console.log(
-      `[EnhancedApplicationConfig] Configuration loaded for environment: ${this.environment}`
+      `[EnhancedApplicationConfig] Configuration loaded for environment: ${this.environment}`,
     );
   }
 
@@ -1055,7 +1060,7 @@ class EnhancedApplicationModuleConfig {
       }
     }
 
-    console.log('[EnhancedApplicationConfig] Configuration validation passed');
+    logger.info('[EnhancedApplicationConfig] Configuration validation passed');
   }
 
   /**
@@ -1096,7 +1101,7 @@ class EnhancedApplicationModuleConfig {
 
 // Export singleton instance
 const enhancedApplicationConfig = new EnhancedApplicationModuleConfig(
-  process.env.NODE_ENV || 'development'
+  process.env.NODE_ENV || 'development',
 );
 
 module.exports = {

@@ -140,7 +140,7 @@ const GACPIntegrationTest: React.FC = () => {
     testName: string,
     status: TestResult['status'],
     message: string,
-    details?: any
+    details?: any,
   ) => {
     setTestState(prev => ({
       ...prev,
@@ -153,7 +153,7 @@ const GACPIntegrationTest: React.FC = () => {
               details,
               timestamp: new Date().toISOString(),
             }
-          : test
+          : test,
       ),
     }));
   };
@@ -192,20 +192,20 @@ const GACPIntegrationTest: React.FC = () => {
           'Backend Connectivity',
           'success',
           `Backend server is healthy (uptime: ${Math.round(data.uptime || 0)}s)`,
-          data
+          data,
         );
       } else {
         updateTestResult(
           'Backend Connectivity',
           'error',
-          `Backend server returned status ${response.status}`
+          `Backend server returned status ${response.status}`,
         );
       }
     } catch (error: any) {
       updateTestResult(
         'Backend Connectivity',
         'error',
-        `Failed to connect to backend: ${error.message}`
+        `Failed to connect to backend: ${error.message}`,
       );
     }
   };
@@ -240,28 +240,28 @@ const GACPIntegrationTest: React.FC = () => {
               'GACP Workflow API',
               'success',
               `Workflow API validated: ${workflowData.workflowStates} states, ${workflowData.transitions} transitions`,
-              workflowData
+              workflowData,
             );
           } else {
             updateTestResult(
               'GACP Workflow API',
               'warning',
               'Workflow API structure is incomplete or invalid',
-              workflowData
+              workflowData,
             );
           }
         } else {
           updateTestResult(
             'GACP Workflow API',
             'error',
-            'Workflow API returned invalid response format'
+            'Workflow API returned invalid response format',
           );
         }
       } else {
         updateTestResult(
           'GACP Workflow API',
           'error',
-          `Workflow API returned status ${response.status}`
+          `Workflow API returned status ${response.status}`,
         );
       }
     } catch (error: any) {
@@ -299,35 +299,35 @@ const GACPIntegrationTest: React.FC = () => {
               'CCP Framework API',
               'success',
               `CCP Framework validated: ${ccpData.totalCCPs} CCPs, HACCP methodology`,
-              ccpData
+              ccpData,
             );
           } else {
             updateTestResult(
               'CCP Framework API',
               'warning',
               'CCP Framework structure is incomplete or invalid',
-              ccpData
+              ccpData,
             );
           }
         } else {
           updateTestResult(
             'CCP Framework API',
             'error',
-            'CCP Framework API returned invalid response format'
+            'CCP Framework API returned invalid response format',
           );
         }
       } else {
         updateTestResult(
           'CCP Framework API',
           'error',
-          `CCP Framework API returned status ${response.status}`
+          `CCP Framework API returned status ${response.status}`,
         );
       }
     } catch (error: any) {
       updateTestResult(
         'CCP Framework API',
         'error',
-        `CCP Framework API test failed: ${error.message}`
+        `CCP Framework API test failed: ${error.message}`,
       );
     }
   };
@@ -343,7 +343,7 @@ const GACPIntegrationTest: React.FC = () => {
     updateTestResult(
       'Business Logic Validation',
       'running',
-      'Testing business rules and validation...'
+      'Testing business rules and validation...',
     );
 
     try {
@@ -379,35 +379,35 @@ const GACPIntegrationTest: React.FC = () => {
               'Business Logic Validation',
               'success',
               `Business logic validated: Score calculation accurate (${actualScore}%)`,
-              result
+              result,
             );
           } else {
             updateTestResult(
               'Business Logic Validation',
               'warning',
               `Score calculation deviation detected: expected ${expectedScore}%, got ${actualScore}%`,
-              result
+              result,
             );
           }
         } else {
           updateTestResult(
             'Business Logic Validation',
             'error',
-            'Business logic test returned invalid response'
+            'Business logic test returned invalid response',
           );
         }
       } else {
         updateTestResult(
           'Business Logic Validation',
           'error',
-          `Business logic test returned status ${response.status}`
+          `Business logic test returned status ${response.status}`,
         );
       }
     } catch (error: any) {
       updateTestResult(
         'Business Logic Validation',
         'error',
-        `Business logic test failed: ${error.message}`
+        `Business logic test failed: ${error.message}`,
       );
     }
   };
@@ -429,14 +429,14 @@ const GACPIntegrationTest: React.FC = () => {
     updateTestResult(
       'API Configuration',
       'success',
-      'API client properly configured with base URL http://localhost:3004'
+      'API client properly configured with base URL http://localhost:3004',
     );
     await new Promise(resolve => setTimeout(resolve, 300));
 
     updateTestResult(
       'Authentication Service',
       'warning',
-      'Authentication endpoints configured but not tested (requires user credentials)'
+      'Authentication endpoints configured but not tested (requires user credentials)',
     );
     await new Promise(resolve => setTimeout(resolve, 300));
 
@@ -452,7 +452,7 @@ const GACPIntegrationTest: React.FC = () => {
     updateTestResult(
       'Error Handling',
       'success',
-      'Error handling patterns implemented in API client'
+      'Error handling patterns implemented in API client',
     );
     await new Promise(resolve => setTimeout(resolve, 300));
 

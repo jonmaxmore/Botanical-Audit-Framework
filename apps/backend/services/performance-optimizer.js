@@ -22,7 +22,7 @@ class PerformanceOptimizer {
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.errors({ stack: true }),
-        winston.format.json()
+        winston.format.json(),
       ),
       transports: [
         new winston.transports.File({
@@ -292,7 +292,7 @@ class PerformanceOptimizer {
     for (const [name, values] of this.metrics.entries()) {
       if (values.length > 0) {
         const recentValues = values.filter(
-          v => Date.now() - v.timestamp < 60000 // Last minute
+          v => Date.now() - v.timestamp < 60000, // Last minute
         );
 
         if (recentValues.length > 0) {

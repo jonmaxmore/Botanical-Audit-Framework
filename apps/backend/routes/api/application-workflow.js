@@ -3,6 +3,7 @@
  * API endpoints สำหรับระบบสมัครใบรับรอง GACP
  */
 
+const logger = require('../../shared/logger/logger');
 const express = require('express');
 const router = express.Router();
 
@@ -10,23 +11,23 @@ module.exports = (dependencies = {}) => {
   const { workflowEngine, auth } = dependencies;
 
   // 🔍 PM DEBUG: Check dependencies received
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log('🔍 [ApplicationAPI] Received dependencies:');
-  console.log('   workflowEngine:', workflowEngine ? '✅ EXISTS' : '❌ UNDEFINED');
-  console.log('   auth:', auth ? '✅ EXISTS' : '❌ UNDEFINED');
-  console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  logger.info('🔍 [ApplicationAPI] Received dependencies:');
+  logger.info('   workflowEngine:', workflowEngine ? '✅ EXISTS' : '❌ UNDEFINED');
+  logger.info('   auth:', auth ? '✅ EXISTS' : '❌ UNDEFINED');
+  logger.info('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
   if (!workflowEngine) {
-    console.error('❌ [ApplicationAPI] WorkflowEngine not provided - returning empty router');
+    logger.error('❌ [ApplicationAPI] WorkflowEngine not provided - returning empty router');
     return router;
   }
 
   if (!auth) {
-    console.error('❌ [ApplicationAPI] Auth middleware not provided - returning empty router');
+    logger.error('❌ [ApplicationAPI] Auth middleware not provided - returning empty router');
     return router;
   }
 
-  console.log('✅ [ApplicationAPI] All dependencies OK - registering routes...');
+  logger.info('✅ [ApplicationAPI] All dependencies OK - registering routes...');
 
   /**
    * POST /api/applications
@@ -48,7 +49,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Create error:', error);
+      logger.error('[ApplicationAPI] Create error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -70,7 +71,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Submit error:', error);
+      logger.error('[ApplicationAPI] Submit error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -100,7 +101,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Review error:', error);
+      logger.error('[ApplicationAPI] Review error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -134,7 +135,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Review complete error:', error);
+      logger.error('[ApplicationAPI] Review complete error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -163,7 +164,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Inspection start error:', error);
+      logger.error('[ApplicationAPI] Inspection start error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -191,7 +192,7 @@ module.exports = (dependencies = {}) => {
 
       const application = await workflowEngine.completeFieldInspection(
         req.params.id,
-        inspectionReport
+        inspectionReport,
       );
 
       res.json({
@@ -200,7 +201,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Inspection complete error:', error);
+      logger.error('[ApplicationAPI] Inspection complete error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -224,7 +225,7 @@ module.exports = (dependencies = {}) => {
       const application = await workflowEngine.approveApplication(
         req.params.id,
         req.user.id,
-        req.body.note
+        req.body.note,
       );
 
       res.json({
@@ -233,7 +234,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Approve error:', error);
+      logger.error('[ApplicationAPI] Approve error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -257,7 +258,7 @@ module.exports = (dependencies = {}) => {
       const application = await workflowEngine.rejectApplication(
         req.params.id,
         req.body.reason,
-        req.user.id
+        req.user.id,
       );
 
       res.json({
@@ -266,7 +267,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Reject error:', error);
+      logger.error('[ApplicationAPI] Reject error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -299,7 +300,7 @@ module.exports = (dependencies = {}) => {
         data: application,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Get error:', error);
+      logger.error('[ApplicationAPI] Get error:', error);
       res.status(404).json({
         success: false,
         message: 'Application not found',
@@ -338,7 +339,7 @@ module.exports = (dependencies = {}) => {
       const updatedApplication = await Application.findOneAndUpdate(
         { id: id },
         { $set: updateData },
-        { new: true }
+        { new: true },
       );
 
       if (!updatedApplication) {
@@ -354,7 +355,7 @@ module.exports = (dependencies = {}) => {
         data: updatedApplication,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Save step error:', error);
+      logger.error('[ApplicationAPI] Save step error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -389,7 +390,7 @@ module.exports = (dependencies = {}) => {
         total: applications.length,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] List error:', error);
+      logger.error('[ApplicationAPI] List error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -417,7 +418,7 @@ module.exports = (dependencies = {}) => {
         data: stats,
       });
     } catch (error) {
-      console.error('[ApplicationAPI] Statistics error:', error);
+      logger.error('[ApplicationAPI] Statistics error:', error);
       res.status(500).json({
         success: false,
         message: error.message,
@@ -425,7 +426,7 @@ module.exports = (dependencies = {}) => {
     }
   });
 
-  console.log('[ApplicationAPI] Routes loaded successfully');
+  logger.info('[ApplicationAPI] Routes loaded successfully');
 
   return router;
 };

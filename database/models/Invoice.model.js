@@ -44,7 +44,7 @@ const PromptPaySchema = new Schema(
       description: '15 minutes from generation',
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 /**
@@ -74,7 +74,7 @@ const CreditCardSchema = new Schema(
       default: false,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 /**
@@ -265,7 +265,7 @@ const InvoiceSchema = new Schema(
     timestamps: true,
     collection: 'invoices',
     versionKey: false,
-  }
+  },
 );
 
 // ========================================
@@ -284,7 +284,7 @@ InvoiceSchema.index(
   {
     partialFilterExpression: { status: 'PENDING' },
     name: 'pending_invoice_expiry',
-  }
+  },
 );
 
 // ========================================
@@ -470,7 +470,7 @@ InvoiceSchema.statics.findExpired = function () {
 InvoiceSchema.statics.createPhase1Invoice = async function (
   applicationId,
   applicationNumber,
-  userId
+  userId,
 ) {
   const baseAmount = 5000;
   const vatAmount = baseAmount * 0.07;
@@ -506,7 +506,7 @@ InvoiceSchema.statics.createPhase1Invoice = async function (
 InvoiceSchema.statics.createPhase2Invoice = async function (
   applicationId,
   applicationNumber,
-  userId
+  userId,
 ) {
   const baseAmount = 25000;
   const vatAmount = baseAmount * 0.07;

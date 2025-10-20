@@ -16,7 +16,7 @@ import {
   Grid,
   MenuItem,
   FormControlLabel,
-  Checkbox,
+  Checkbox
 } from '@mui/material';
 import {
   Visibility,
@@ -28,7 +28,7 @@ import {
   Person,
   Home,
   Business,
-  Map,
+  Map
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -60,7 +60,7 @@ export default function RegisterPage() {
     subDistrict: '',
     zipCode: '',
     farmSize: '',
-    acceptTerms: false,
+    acceptTerms: false
   });
 
   const provinces = [
@@ -72,13 +72,13 @@ export default function RegisterPage() {
     'พะเยา',
     'แพร่',
     'อุตรดิตถ์',
-    'กรุงเทพมหานคร',
+    'กรุงเทพมหานคร'
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
     setError('');
   };
@@ -86,51 +86,51 @@ export default function RegisterPage() {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.checked,
+      [e.target.name]: e.target.checked
     });
   };
 
   const validateStep = (step: number): boolean => {
     switch (step) {
-      case 0:
-        if (!formData.email || !formData.password || !formData.confirmPassword) {
-          setError('กรุณากรอกข้อมูลให้ครบถ้วน');
-          return false;
-        }
-        if (formData.password !== formData.confirmPassword) {
-          setError('รหัสผ่านไม่ตรงกัน');
-          return false;
-        }
-        if (formData.password.length < 8) {
-          setError('รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร');
-          return false;
-        }
-        break;
-      case 1:
-        if (!formData.firstName || !formData.lastName || !formData.idCard || !formData.phone) {
-          setError('กรุณากรอกข้อมูลให้ครบถ้วน');
-          return false;
-        }
-        if (formData.idCard.length !== 13) {
-          setError('เลขบัตรประชาชนต้องมี 13 หลัก');
-          return false;
-        }
-        break;
-      case 2:
-        if (
-          !formData.farmName ||
+    case 0:
+      if (!formData.email || !formData.password || !formData.confirmPassword) {
+        setError('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return false;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        setError('รหัสผ่านไม่ตรงกัน');
+        return false;
+      }
+      if (formData.password.length < 8) {
+        setError('รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร');
+        return false;
+      }
+      break;
+    case 1:
+      if (!formData.firstName || !formData.lastName || !formData.idCard || !formData.phone) {
+        setError('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return false;
+      }
+      if (formData.idCard.length !== 13) {
+        setError('เลขบัตรประชาชนต้องมี 13 หลัก');
+        return false;
+      }
+      break;
+    case 2:
+      if (
+        !formData.farmName ||
           !formData.farmAddress ||
           !formData.province ||
           !formData.farmSize
-        ) {
-          setError('กรุณากรอกข้อมูลให้ครบถ้วน');
-          return false;
-        }
-        if (!formData.acceptTerms) {
-          setError('กรุณายอมรับข้อกำหนดและเงื่อนไข');
-          return false;
-        }
-        break;
+      ) {
+        setError('กรุณากรอกข้อมูลให้ครบถ้วน');
+        return false;
+      }
+      if (!formData.acceptTerms) {
+        setError('กรุณายอมรับข้อกำหนดและเงื่อนไข');
+        return false;
+      }
+      break;
     }
     setError('');
     return true;
@@ -147,7 +147,7 @@ export default function RegisterPage() {
     setError('');
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async() => {
     if (!validateStep(activeStep)) return;
 
     setLoading(true);
@@ -158,7 +158,7 @@ export default function RegisterPage() {
       const response = await fetch('http://localhost:3001/api/auth/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email: formData.email,
@@ -173,8 +173,8 @@ export default function RegisterPage() {
           district: formData.district,
           subDistrict: formData.subDistrict,
           zipCode: formData.zipCode,
-          farmSize: parseFloat(formData.farmSize),
-        }),
+          farmSize: parseFloat(formData.farmSize)
+        })
       });
 
       if (!response.ok) {
@@ -187,7 +187,7 @@ export default function RegisterPage() {
     } catch (err: any) {
       if (err.message === 'Failed to fetch') {
         setError(
-          '⚠️ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาเริ่มเซิร์ฟเวอร์ backend หรือใช้บัญชีทดสอบที่มีอยู่แล้วเพื่อเข้าสู่ระบบ',
+          '⚠️ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาเริ่มเซิร์ฟเวอร์ backend หรือใช้บัญชีทดสอบที่มีอยู่แล้วเพื่อเข้าสู่ระบบ'
         );
       } else {
         setError(err.message || 'เกิดข้อผิดพลาดในการลงทะเบียน');
@@ -199,302 +199,302 @@ export default function RegisterPage() {
 
   const renderStepContent = (step: number) => {
     switch (step) {
-      case 0:
-        return (
-          <Box>
-            <Typography variant="h6" gutterBottom fontWeight={600}>
+    case 0:
+      return (
+        <Box>
+          <Typography variant="h6" gutterBottom fontWeight={600}>
               ข้อมูลบัญชี
-            </Typography>
-            <TextField
-              fullWidth
-              label="อีเมล"
-              name="email"
-              type="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              margin="normal"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              fullWidth
-              label="รหัสผ่าน"
-              name="password"
-              type={showPassword ? 'text' : 'password'}
-              value={formData.password}
-              onChange={handleChange}
-              required
-              margin="normal"
-              helperText="รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock color="action" />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      {showPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              fullWidth
-              label="ยืนยันรหัสผ่าน"
-              name="confirmPassword"
-              type={showConfirmPassword ? 'text' : 'password'}
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              required
-              margin="normal"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Lock color="action" />
-                  </InputAdornment>
-                ),
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                      edge="end"
-                    >
-                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
-        );
+          </Typography>
+          <TextField
+            fullWidth
+            label="อีเมล"
+            name="email"
+            type="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Email color="action" />
+                </InputAdornment>
+              )
+            }}
+          />
+          <TextField
+            fullWidth
+            label="รหัสผ่าน"
+            name="password"
+            type={showPassword ? 'text' : 'password'}
+            value={formData.password}
+            onChange={handleChange}
+            required
+            margin="normal"
+            helperText="รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock color="action" />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+          />
+          <TextField
+            fullWidth
+            label="ยืนยันรหัสผ่าน"
+            name="confirmPassword"
+            type={showConfirmPassword ? 'text' : 'password'}
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            required
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock color="action" />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              )
+            }}
+          />
+        </Box>
+      );
 
-      case 1:
-        return (
-          <Box>
-            <Typography variant="h6" gutterBottom fontWeight={600}>
+    case 1:
+      return (
+        <Box>
+          <Typography variant="h6" gutterBottom fontWeight={600}>
               ข้อมูลส่วนตัว
-            </Typography>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="ชื่อ"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  required
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Person color="action" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="นามสกุล"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Person color="action" />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
+          </Typography>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="ชื่อ"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+                margin="normal"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Person color="action" />
+                    </InputAdornment>
+                  )
+                }}
+              />
             </Grid>
-            <TextField
-              fullWidth
-              label="เลขบัตรประชาชน"
-              name="idCard"
-              value={formData.idCard}
-              onChange={handleChange}
-              required
-              margin="normal"
-              inputProps={{ maxLength: 13 }}
-              helperText="กรอกตัวเลข 13 หลัก"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Person color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              fullWidth
-              label="เบอร์โทรศัพท์"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-              margin="normal"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Phone color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-          </Box>
-        );
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="นามสกุล"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+                margin="normal"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Person color="action" />
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
+          </Grid>
+          <TextField
+            fullWidth
+            label="เลขบัตรประชาชน"
+            name="idCard"
+            value={formData.idCard}
+            onChange={handleChange}
+            required
+            margin="normal"
+            inputProps={{ maxLength: 13 }}
+            helperText="กรอกตัวเลข 13 หลัก"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Person color="action" />
+                </InputAdornment>
+              )
+            }}
+          />
+          <TextField
+            fullWidth
+            label="เบอร์โทรศัพท์"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            required
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Phone color="action" />
+                </InputAdornment>
+              )
+            }}
+          />
+        </Box>
+      );
 
-      case 2:
-        return (
-          <Box>
-            <Typography variant="h6" gutterBottom fontWeight={600}>
+    case 2:
+      return (
+        <Box>
+          <Typography variant="h6" gutterBottom fontWeight={600}>
               ข้อมูลฟาร์ม
-            </Typography>
-            <TextField
-              fullWidth
-              label="ชื่อฟาร์ม"
-              name="farmName"
-              value={formData.farmName}
-              onChange={handleChange}
-              required
-              margin="normal"
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Business color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              fullWidth
-              label="ที่อยู่ฟาร์ม"
-              name="farmAddress"
-              value={formData.farmAddress}
-              onChange={handleChange}
-              required
-              margin="normal"
-              multiline
-              rows={2}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Home color="action" />
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  select
-                  label="จังหวัด"
-                  name="province"
-                  value={formData.province}
-                  onChange={handleChange}
-                  required
-                  margin="normal"
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Map color="action" />
-                      </InputAdornment>
-                    ),
-                  }}
-                >
-                  {provinces.map(province => (
-                    <MenuItem key={province} value={province}>
-                      {province}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="อำเภอ"
-                  name="district"
-                  value={formData.district}
-                  onChange={handleChange}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="ตำบล"
-                  name="subDistrict"
-                  value={formData.subDistrict}
-                  onChange={handleChange}
-                  margin="normal"
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  label="รหัสไปรษณีย์"
-                  name="zipCode"
-                  value={formData.zipCode}
-                  onChange={handleChange}
-                  margin="normal"
-                  inputProps={{ maxLength: 5 }}
-                />
-              </Grid>
+          </Typography>
+          <TextField
+            fullWidth
+            label="ชื่อฟาร์ม"
+            name="farmName"
+            value={formData.farmName}
+            onChange={handleChange}
+            required
+            margin="normal"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Business color="action" />
+                </InputAdornment>
+              )
+            }}
+          />
+          <TextField
+            fullWidth
+            label="ที่อยู่ฟาร์ม"
+            name="farmAddress"
+            value={formData.farmAddress}
+            onChange={handleChange}
+            required
+            margin="normal"
+            multiline
+            rows={2}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Home color="action" />
+                </InputAdornment>
+              )
+            }}
+          />
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                select
+                label="จังหวัด"
+                name="province"
+                value={formData.province}
+                onChange={handleChange}
+                required
+                margin="normal"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Map color="action" />
+                    </InputAdornment>
+                  )
+                }}
+              >
+                {provinces.map(province => (
+                  <MenuItem key={province} value={province}>
+                    {province}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
-            <TextField
-              fullWidth
-              label="ขนาดพื้นที่ (ไร่)"
-              name="farmSize"
-              type="number"
-              value={formData.farmSize}
-              onChange={handleChange}
-              required
-              margin="normal"
-              inputProps={{ min: 0, step: 0.01 }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={formData.acceptTerms}
-                  onChange={handleCheckboxChange}
-                  name="acceptTerms"
-                  color="primary"
-                />
-              }
-              label={
-                <Typography variant="body2">
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="อำเภอ"
+                name="district"
+                value={formData.district}
+                onChange={handleChange}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="ตำบล"
+                name="subDistrict"
+                value={formData.subDistrict}
+                onChange={handleChange}
+                margin="normal"
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                fullWidth
+                label="รหัสไปรษณีย์"
+                name="zipCode"
+                value={formData.zipCode}
+                onChange={handleChange}
+                margin="normal"
+                inputProps={{ maxLength: 5 }}
+              />
+            </Grid>
+          </Grid>
+          <TextField
+            fullWidth
+            label="ขนาดพื้นที่ (ไร่)"
+            name="farmSize"
+            type="number"
+            value={formData.farmSize}
+            onChange={handleChange}
+            required
+            margin="normal"
+            inputProps={{ min: 0, step: 0.01 }}
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={formData.acceptTerms}
+                onChange={handleCheckboxChange}
+                name="acceptTerms"
+                color="primary"
+              />
+            }
+            label={
+              <Typography variant="body2">
                   ฉันยอมรับ{' '}
-                  <Link href="/terms" target="_blank" sx={{ color: 'primary.main' }}>
+                <Link href="/terms" target="_blank" sx={{ color: 'primary.main' }}>
                     ข้อกำหนดและเงื่อนไข
-                  </Link>{' '}
+                </Link>{' '}
                   และ{' '}
-                  <Link href="/privacy" target="_blank" sx={{ color: 'primary.main' }}>
+                <Link href="/privacy" target="_blank" sx={{ color: 'primary.main' }}>
                     นโยบายความเป็นส่วนตัว
-                  </Link>
-                </Typography>
-              }
-              sx={{ mt: 2 }}
-            />
-          </Box>
-        );
+                </Link>
+              </Typography>
+            }
+            sx={{ mt: 2 }}
+          />
+        </Box>
+      );
 
-      default:
-        return null;
+    default:
+      return null;
     }
   };
 
@@ -509,7 +509,7 @@ export default function RegisterPage() {
         sx={{
           minHeight: '100vh',
           background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
-          py: 4,
+          py: 4
         }}
       >
         <Container maxWidth="md">
@@ -527,7 +527,7 @@ export default function RegisterPage() {
                   justifyContent: 'center',
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
-                  color: 'white',
+                  color: 'white'
                 }}
               >
                 <PersonAdd sx={{ fontSize: 40 }} />
@@ -595,7 +595,7 @@ export default function RegisterPage() {
                     color: 'primary.main',
                     textDecoration: 'none',
                     fontWeight: 600,
-                    '&:hover': { textDecoration: 'underline' },
+                    '&:hover': { textDecoration: 'underline' }
                   }}
                 >
                   เข้าสู่ระบบ
@@ -613,8 +613,8 @@ export default function RegisterPage() {
                 color: 'white',
                 textTransform: 'none',
                 '&:hover': {
-                  bgcolor: 'rgba(255, 255, 255, 0.1)',
-                },
+                  bgcolor: 'rgba(255, 255, 255, 0.1)'
+                }
               }}
             >
               ← กลับหน้าหลัก

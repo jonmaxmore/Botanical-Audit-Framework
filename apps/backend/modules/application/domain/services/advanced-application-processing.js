@@ -210,7 +210,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
 
     try {
       this.logger.info(
-        `[AdvancedApplicationProcessing] Starting application creation - Operation: ${operationId}`
+        `[AdvancedApplicationProcessing] Starting application creation - Operation: ${operationId}`,
       );
 
       // Advanced farmer eligibility validation
@@ -339,7 +339,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       });
 
       this.logger.info(
-        `[AdvancedApplicationProcessing] Application created successfully - Operation: ${operationId}`
+        `[AdvancedApplicationProcessing] Application created successfully - Operation: ${operationId}`,
       );
 
       return {
@@ -350,7 +350,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[AdvancedApplicationProcessing] Application creation failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       // Update failure metrics
@@ -386,7 +386,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
 
     try {
       this.logger.info(
-        `[AdvancedApplicationProcessing] Processing state transition - Operation: ${operationId}`
+        `[AdvancedApplicationProcessing] Processing state transition - Operation: ${operationId}`,
       );
 
       // Get current application
@@ -403,7 +403,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
         targetState,
         application,
         transitionData,
-        actor
+        actor,
       );
 
       if (!transitionValidation.valid) {
@@ -418,7 +418,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
         targetState,
         application,
         transitionData,
-        actor
+        actor,
       );
 
       // Update application state
@@ -427,7 +427,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
         targetState,
         transitionData,
         actor,
-        operationId
+        operationId,
       );
 
       // Execute parallel post-transition workflows
@@ -509,7 +509,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       });
 
       this.logger.info(
-        `[AdvancedApplicationProcessing] State transition completed - Operation: ${operationId}`
+        `[AdvancedApplicationProcessing] State transition completed - Operation: ${operationId}`,
       );
 
       return {
@@ -520,7 +520,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[AdvancedApplicationProcessing] State transition failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       // Update failure metrics
@@ -550,7 +550,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
 
     try {
       this.logger.info(
-        `[AdvancedApplicationProcessing] Building application dashboard - Operation: ${operationId}`
+        `[AdvancedApplicationProcessing] Building application dashboard - Operation: ${operationId}`,
       );
 
       // Get application data
@@ -601,14 +601,14 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       // Generate personalized recommendations based on viewer role
       dashboard.recommendations = await this._generateDashboardRecommendations(
         application,
-        viewerRole
+        viewerRole,
       );
 
       // Update performance metrics
       this._updatePerformanceMetrics('DASHBOARD_VIEW', true, Date.now() - startTime);
 
       this.logger.info(
-        `[AdvancedApplicationProcessing] Dashboard built successfully - Operation: ${operationId}`
+        `[AdvancedApplicationProcessing] Dashboard built successfully - Operation: ${operationId}`,
       );
 
       return {
@@ -619,7 +619,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[AdvancedApplicationProcessing] Dashboard build failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       this._updatePerformanceMetrics('DASHBOARD_VIEW', false, Date.now() - startTime);
@@ -651,7 +651,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
 
       // Calculate overall health score
       const healthyServices = Object.values(systemHealth.serviceStatus).filter(
-        s => s === 'healthy'
+        s => s === 'healthy',
       ).length;
       const totalServices = Object.keys(systemHealth.serviceStatus).length;
       systemHealth.healthScore = (healthyServices / totalServices) * 100;
@@ -781,7 +781,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
 
     const results = await Promise.allSettled(validations);
     const failures = results.filter(
-      r => r.status === 'rejected' || (r.status === 'fulfilled' && !r.value.valid)
+      r => r.status === 'rejected' || (r.status === 'fulfilled' && !r.value.valid),
     );
 
     if (failures.length > 0) {
@@ -837,7 +837,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     } else {
       this.logger.warn(
         '[AdvancedApplicationProcessing] Service operation failed:',
-        settledPromise.reason
+        settledPromise.reason,
       );
       return {
         error: settledPromise.reason.message,
@@ -869,7 +869,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       fromState,
       toState,
       application,
-      transitionData
+      transitionData,
     );
     if (!businessRuleValidation.valid) {
       return businessRuleValidation;
@@ -895,7 +895,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       actionsExecuted: await this._executeStateActions(
         stateConfig.requiredActions,
         application,
-        actor
+        actor,
       ),
       complianceChecks: await this._performComplianceChecks(state, application),
       governmentNotifications: stateConfig.governmentNotificationRequired
@@ -1021,7 +1021,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       const validationResults = [];
 
       console.log(
-        `[AdvancedApplicationProcessing] Starting eligibility validation - Operation: ${operationId}`
+        `[AdvancedApplicationProcessing] Starting eligibility validation - Operation: ${operationId}`,
       );
 
       // 1. Basic eligibility validation
@@ -1066,7 +1066,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
 
       // 5. Previous applications check
       const previousApplicationsCheck = await this._checkExistingApplications(
-        applicationData.farmerData?.citizenId
+        applicationData.farmerData?.citizenId,
       );
       validationResults.push({
         category: 'PREVIOUS_APPLICATIONS',
@@ -1098,16 +1098,16 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       this._updatePerformanceMetrics(
         'validateEligibility',
         overallEligible,
-        Date.now() - parseInt(operationId.split('-')[1])
+        Date.now() - parseInt(operationId.split('-')[1]),
       );
 
       console.log(
-        `[AdvancedApplicationProcessing] Eligibility validation completed - Eligible: ${overallEligible}, Score: ${averageScore}%`
+        `[AdvancedApplicationProcessing] Eligibility validation completed - Eligible: ${overallEligible}, Score: ${averageScore}%`,
       );
 
       return eligibilityAssessment;
     } catch (error) {
-      console.error('[AdvancedApplicationProcessing] Eligibility validation failed:', error);
+      logger.error('[AdvancedApplicationProcessing] Eligibility validation failed:', error);
       this._updatePerformanceMetrics('validateEligibility', false, 0);
       throw error;
     }
@@ -1124,7 +1124,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       const includeDetails = options.includeDetails || false;
 
       console.log(
-        `[AdvancedApplicationProcessing] Generating analytics - Operation: ${operationId}, Timeframe: ${timeframe}`
+        `[AdvancedApplicationProcessing] Generating analytics - Operation: ${operationId}, Timeframe: ${timeframe}`,
       );
 
       const analyticsData = {
@@ -1195,16 +1195,16 @@ class AdvancedApplicationProcessingService extends EventEmitter {
       this._updatePerformanceMetrics(
         'generateAnalytics',
         true,
-        Date.now() - parseInt(operationId.split('-')[1])
+        Date.now() - parseInt(operationId.split('-')[1]),
       );
 
       console.log(
-        `[AdvancedApplicationProcessing] Analytics generation completed - Quality Score: ${analyticsQuality.score}%`
+        `[AdvancedApplicationProcessing] Analytics generation completed - Quality Score: ${analyticsQuality.score}%`,
       );
 
       return analyticsData;
     } catch (error) {
-      console.error('[AdvancedApplicationProcessing] Analytics generation failed:', error);
+      logger.error('[AdvancedApplicationProcessing] Analytics generation failed:', error);
       this._updatePerformanceMetrics('generateAnalytics', false, 0);
       throw error;
     }

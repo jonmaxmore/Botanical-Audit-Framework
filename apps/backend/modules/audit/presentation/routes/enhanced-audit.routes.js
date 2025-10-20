@@ -41,7 +41,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'compliance_officer']),
     param('id').isUUID().withMessage('Invalid audit log ID'),
-    auditController.getAuditLogDetails.bind(auditController)
+    auditController.getAuditLogDetails.bind(auditController),
   );
 
   /**
@@ -62,7 +62,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       query('startDate').optional().isISO8601(),
       query('endDate').optional().isISO8601(),
     ],
-    auditController.listAuditLogs.bind(auditController)
+    auditController.listAuditLogs.bind(auditController),
   );
 
   /**
@@ -79,7 +79,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       query('period').optional().isIn(['last_7_days', 'last_30_days', 'last_90_days', 'last_year']),
       query('entityType').optional().isString(),
     ],
-    auditController.getAuditStatistics.bind(auditController)
+    auditController.getAuditStatistics.bind(auditController),
   );
 
   /**
@@ -98,7 +98,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       query('endDate').optional().isISO8601(),
       query('limit').optional().isInt({ min: 1, max: 200 }),
     ],
-    auditController.getUserActivity.bind(auditController)
+    auditController.getUserActivity.bind(auditController),
   );
 
   // ============================================================================
@@ -118,7 +118,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     '/compliance/dashboard',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'compliance_officer']),
-    auditController.getComplianceDashboard.bind(auditController)
+    auditController.getComplianceDashboard.bind(auditController),
   );
 
   /**
@@ -145,7 +145,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       query('startDate').optional().isISO8601(),
       query('endDate').optional().isISO8601(),
     ],
-    auditController.getComplianceViolations.bind(auditController)
+    auditController.getComplianceViolations.bind(auditController),
   );
 
   /**
@@ -167,7 +167,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       body('resolution').optional().isString().isLength({ min: 10, max: 1000 }),
       body('correctiveActions').optional().isArray(),
     ],
-    auditController.updateViolationStatus.bind(auditController)
+    auditController.updateViolationStatus.bind(auditController),
   );
 
   /**
@@ -188,7 +188,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       query('period').optional().isIn(['7d', '30d', '90d', '1y']),
       query('category').optional().isString(),
     ],
-    auditController.getComplianceAnalytics.bind(auditController)
+    auditController.getComplianceAnalytics.bind(auditController),
   );
 
   /**
@@ -205,7 +205,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'system_admin']),
     param('action').isIn(['start', 'stop', 'restart']),
-    auditController.controlComplianceMonitoring.bind(auditController)
+    auditController.controlComplianceMonitoring.bind(auditController),
   );
 
   // ============================================================================
@@ -225,7 +225,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     '/government/status',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'compliance_officer']),
-    auditController.getGovernmentIntegrationStatus.bind(auditController)
+    auditController.getGovernmentIntegrationStatus.bind(auditController),
   );
 
   /**
@@ -246,7 +246,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       body('system').isIn(['DOA', 'FDA', 'DIGITAL_GOVERNMENT']),
       body('data').isObject().notEmpty(),
     ],
-    auditController.submitGovernmentReport.bind(auditController)
+    auditController.submitGovernmentReport.bind(auditController),
   );
 
   /**
@@ -275,7 +275,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       // This would be implemented as a separate method
       // For now, redirect to existing functionality
       res.redirect('/api/dtam/audit/government/status');
-    }
+    },
   );
 
   // ============================================================================
@@ -312,7 +312,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
           message: 'Failed to get compliance trends',
         });
       }
-    }
+    },
   );
 
   /**
@@ -353,7 +353,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
           message: 'Failed to get performance metrics',
         });
       }
-    }
+    },
   );
 
   /**
@@ -409,7 +409,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
           message: 'Failed to generate compliance report',
         });
       }
-    }
+    },
   );
 
   // ============================================================================
@@ -448,7 +448,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
           message: 'System health check failed',
         });
       }
-    }
+    },
   );
 
   // ============================================================================
@@ -457,7 +457,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
 
   // Global error handler for audit routes
   dtamRouter.use((error, req, res, next) => {
-    console.error('[AuditRoutes] Unhandled error:', error);
+    logger.error('[AuditRoutes] Unhandled error:', error);
 
     res.status(500).json({
       success: false,

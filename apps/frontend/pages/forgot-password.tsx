@@ -8,7 +8,7 @@ import {
   Typography,
   Link,
   Alert,
-  InputAdornment,
+  InputAdornment
 } from '@mui/material';
 import { Email, LockReset } from '@mui/icons-material';
 import { useRouter } from 'next/router';
@@ -21,7 +21,7 @@ export default function ForgotPasswordPage() {
   const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async(e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -32,9 +32,9 @@ export default function ForgotPasswordPage() {
       const response = await fetch('http://localhost:3001/api/auth/forgot-password', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email })
       });
 
       if (!response.ok) {
@@ -62,7 +62,7 @@ export default function ForgotPasswordPage() {
           display: 'flex',
           alignItems: 'center',
           background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
-          py: 4,
+          py: 4
         }}
       >
         <Container maxWidth="sm">
@@ -80,8 +80,8 @@ export default function ForgotPasswordPage() {
                 left: 0,
                 right: 0,
                 height: '6px',
-                background: 'linear-gradient(90deg, #2e7d32 0%, #4caf50 100%)',
-              },
+                background: 'linear-gradient(90deg, #2e7d32 0%, #4caf50 100%)'
+              }
             }}
           >
             {/* Logo and Title */}
@@ -97,7 +97,7 @@ export default function ForgotPasswordPage() {
                   justifyContent: 'center',
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
-                  color: 'white',
+                  color: 'white'
                 }}
               >
                 <LockReset sx={{ fontSize: 40 }} />
@@ -127,7 +127,7 @@ export default function ForgotPasswordPage() {
                     py: 1.5,
                     fontSize: '1.1rem',
                     fontWeight: 600,
-                    textTransform: 'none',
+                    textTransform: 'none'
                   }}
                 >
                   กลับไปหน้าเข้าสู่ระบบ
@@ -157,7 +157,7 @@ export default function ForgotPasswordPage() {
                         <InputAdornment position="start">
                           <Email color="action" />
                         </InputAdornment>
-                      ),
+                      )
                     }}
                     sx={{ mb: 3 }}
                   />
@@ -175,8 +175,8 @@ export default function ForgotPasswordPage() {
                       textTransform: 'none',
                       boxShadow: 3,
                       '&:hover': {
-                        boxShadow: 6,
-                      },
+                        boxShadow: 6
+                      }
                     }}
                   >
                     {loading ? 'กำลังส่ง...' : 'ส่งลิงก์รีเซ็ตรหัสผ่าน'}
@@ -193,7 +193,7 @@ export default function ForgotPasswordPage() {
                         color: 'primary.main',
                         textDecoration: 'none',
                         fontWeight: 600,
-                        '&:hover': { textDecoration: 'underline' },
+                        '&:hover': { textDecoration: 'underline' }
                       }}
                     >
                       เข้าสู่ระบบ
@@ -213,8 +213,8 @@ export default function ForgotPasswordPage() {
                 color: 'white',
                 textTransform: 'none',
                 '&:hover': {
-                  bgcolor: 'rgba(255, 255, 255, 0.1)',
-                },
+                  bgcolor: 'rgba(255, 255, 255, 0.1)'
+                }
               }}
             >
               ← กลับหน้าหลัก

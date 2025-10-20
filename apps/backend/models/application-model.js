@@ -17,7 +17,7 @@ const PaymentEmbedSchema = new mongoose.Schema(
     status: { type: String, enum: ['pending', 'completed', 'failed', 'cancelled'], required: true },
     createdAt: { type: Date, required: true },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const AssignmentEmbedSchema = new mongoose.Schema(
@@ -28,7 +28,7 @@ const AssignmentEmbedSchema = new mongoose.Schema(
     status: { type: String, required: true },
     assignedAt: { type: Date, required: true },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const KPIEmbedSchema = new mongoose.Schema(
@@ -41,7 +41,7 @@ const KPIEmbedSchema = new mongoose.Schema(
     endTime: { type: Date, default: null },
     processingTime: { type: Number, default: null },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const ApplicationSchema = new mongoose.Schema(
@@ -271,7 +271,7 @@ const ApplicationSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'applications',
-  }
+  },
 );
 
 // Indexes for better query performance

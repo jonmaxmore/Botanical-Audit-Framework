@@ -26,7 +26,7 @@ class DatabaseManager {
       // Connect to MongoDB
       this.mongodb = await mongoose.connect(
         config.database.mongodb.uri,
-        config.database.mongodb.options
+        config.database.mongodb.options,
       );
 
       // MongoDB connection events

@@ -11,6 +11,7 @@
 ### ขั้นตอนที่ 1: ติดตั้ง MongoDB (ถ้ายังไม่มี)
 
 #### Windows:
+
 ```powershell
 # ดาวน์โหลด MongoDB Community Server
 # https://www.mongodb.com/try/download/community
@@ -23,6 +24,7 @@ docker run -d -p 27017:27017 --name mongodb mongo:latest
 ```
 
 #### ตรวจสอบ MongoDB ทำงาน:
+
 ```powershell
 # ตรวจสอบว่า MongoDB service ทำงานหรือไม่
 Get-Service MongoDB
@@ -49,6 +51,7 @@ notepad .env.uat
 ```
 
 #### ตัวอย่าง .env.uat (minimum config):
+
 ```env
 NODE_ENV=uat
 PORT=3001
@@ -67,6 +70,7 @@ npm run uat:seed
 ```
 
 **Expected Output:**
+
 ```
 ✅ MongoDB connected successfully
 🗑️  Cleared existing users
@@ -95,6 +99,7 @@ npm run uat:server
 ```
 
 **Expected Output:**
+
 ```
 [UAT Mode] Starting server...
 ✅ MongoDB connected
@@ -112,6 +117,7 @@ npm run uat:test
 ```
 
 **Expected Output:**
+
 ```
 🧪 UAT TEST RUNNER
 ================================================
@@ -139,6 +145,7 @@ Total Tests: 32
 ### Week 1: Manual Testing (Oct 25-31)
 
 #### Day 1: Farmer Testing
+
 ```powershell
 # 1. เปิดเบราว์เซอร์
 start http://localhost:3000
@@ -155,6 +162,7 @@ start http://localhost:3000
 ```
 
 #### Day 2: Reviewer Testing
+
 ```powershell
 # 1. Login ที่ DTAM Portal
 start http://localhost:3002
@@ -170,6 +178,7 @@ start http://localhost:3002
 ```
 
 #### Day 3-4: Inspector Testing
+
 ```powershell
 # Login ด้วย inspector001 / Insp@1234
 # ทดสอบ:
@@ -180,6 +189,7 @@ start http://localhost:3002
 ```
 
 #### Day 5: Approver Testing
+
 ```powershell
 # Login ด้วย approver001 / App@1234
 # ทดสอบ:
@@ -189,6 +199,7 @@ start http://localhost:3002
 ```
 
 #### Day 6-7: Admin Testing
+
 ```powershell
 # Login ด้วย admin001 / Admin@1234
 # ทดสอบ:
@@ -205,6 +216,7 @@ start http://localhost:3002
 ### ปัญหา: MongoDB ไม่ทำงาน
 
 **Solution:**
+
 ```powershell
 # Windows - เริ่ม MongoDB Service
 net start MongoDB
@@ -221,6 +233,7 @@ choco install mongodb
 ### ปัญหา: Port 3001 ถูกใช้งานแล้ว
 
 **Solution:**
+
 ```powershell
 # หา process ที่ใช้ port 3001
 netstat -ano | findstr :3001
@@ -237,6 +250,7 @@ PORT=3002
 ### ปัญหา: ไม่สามารถเชื่อมต่อ MongoDB
 
 **Solution:**
+
 ```powershell
 # 1. ตรวจสอบ MongoDB ทำงานหรือไม่
 Get-Service MongoDB
@@ -253,6 +267,7 @@ mongosh "mongodb://localhost:27017/botanical-audit-uat"
 ### ปัญหา: npm run uat:seed ล้มเหลว
 
 **Solution:**
+
 ```powershell
 # 1. ตรวจสอบ dependencies
 cd apps/backend
@@ -375,6 +390,7 @@ npm run uat:test > ".\test-results\uat-$(Get-Date -Format 'yyyy-MM-dd')\results.
 ## 🎯 Success Criteria Checklist
 
 ### Before Starting UAT
+
 - [ ] MongoDB running
 - [ ] .env.uat configured
 - [ ] Test data seeded (13 users, 10 farms, 13 applications)
@@ -383,6 +399,7 @@ npm run uat:test > ".\test-results\uat-$(Get-Date -Format 'yyyy-MM-dd')\results.
 - [ ] API endpoints responding
 
 ### During UAT
+
 - [ ] All 5 roles tested
 - [ ] All 6 modules tested
 - [ ] 92 test cases executed
@@ -390,6 +407,7 @@ npm run uat:test > ".\test-results\uat-$(Get-Date -Format 'yyyy-MM-dd')\results.
 - [ ] User feedback collected
 
 ### After UAT
+
 - [ ] Pass rate ≥ 95%
 - [ ] All critical bugs fixed
 - [ ] Documentation updated
@@ -400,27 +418,29 @@ npm run uat:test > ".\test-results\uat-$(Get-Date -Format 'yyyy-MM-dd')\results.
 
 ## 🔗 Useful Links
 
-| Resource | URL |
-|----------|-----|
-| **UAT Test Plan** | `docs/UAT_TEST_PLAN.md` |
-| **UAT Manual (Thai)** | `docs/UAT_MANUAL_TH.md` |
-| **UAT Summary** | `docs/UAT_IMPLEMENTATION_SUMMARY.md` |
-| **Farmer Portal** | http://localhost:3000 |
-| **DTAM Portal** | http://localhost:3002 |
-| **API Backend** | http://localhost:3001 |
-| **API Docs** | http://localhost:3001/api-docs |
-| **Bug Report Form** | [Create Issue on GitHub] |
+| Resource              | URL                                  |
+| --------------------- | ------------------------------------ |
+| **UAT Test Plan**     | `docs/UAT_TEST_PLAN.md`              |
+| **UAT Manual (Thai)** | `docs/UAT_MANUAL_TH.md`              |
+| **UAT Summary**       | `docs/UAT_IMPLEMENTATION_SUMMARY.md` |
+| **Farmer Portal**     | http://localhost:3000                |
+| **DTAM Portal**       | http://localhost:3002                |
+| **API Backend**       | http://localhost:3001                |
+| **API Docs**          | http://localhost:3001/api-docs       |
+| **Bug Report Form**   | [Create Issue on GitHub]             |
 
 ---
 
 ## 📞 Support Contacts
 
 **UAT Team:**
+
 - 📧 Email: uat-support@botanical.test
 - 📱 Line: @botanical-uat
 - 💬 Slack: #botanical-uat
 
 **Technical Support:**
+
 - 🐛 Bug Tracker: GitHub Issues
 - 📖 Documentation: `/docs` folder
 - 💻 Source Code: GitHub Repository
@@ -432,6 +452,7 @@ npm run uat:test > ".\test-results\uat-$(Get-Date -Format 'yyyy-MM-dd')\results.
 ระบบพร้อมสำหรับการทดสอบ UAT แล้ว!
 
 **Next Actions:**
+
 1. ✅ Start MongoDB
 2. ✅ Run `npm run uat:seed`
 3. ✅ Run `npm run uat:server`

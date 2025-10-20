@@ -16,7 +16,7 @@ class GetSystemStatisticsUseCase {
     trainingEnrollmentRepository,
     documentRepository,
     notificationRepository,
-    auditRepository
+    auditRepository,
   ) {
     this.farmRepository = farmRepository;
     this.certificateRepository = certificateRepository;

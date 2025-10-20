@@ -217,7 +217,7 @@ class AnalyticsProcessingWorkflowService {
     } catch (error) {
       this.logger.error(
         `[AnalyticsProcessing] Real-time event processing failed for ${eventType}:`,
-        error
+        error,
       );
       this.metrics.errorCount++;
 
@@ -402,7 +402,7 @@ class AnalyticsProcessingWorkflowService {
         performanceRanking: await this.calculatePerformanceRanking(
           enrollmentId,
           courseId,
-          finalScore
+          finalScore,
         ),
       };
 
@@ -469,7 +469,7 @@ class AnalyticsProcessingWorkflowService {
       this.metrics.lastProcessingTime = new Date();
 
       this.logger.log(
-        `[AnalyticsProcessing] Batch analytics processing completed in ${processingTime}ms`
+        `[AnalyticsProcessing] Batch analytics processing completed in ${processingTime}ms`,
       );
     } catch (error) {
       this.logger.error('[AnalyticsProcessing] Batch analytics processing failed:', error);
@@ -740,7 +740,7 @@ class AnalyticsProcessingWorkflowService {
       () => {
         this.generateDailyReport();
       },
-      24 * 60 * 60 * 1000
+      24 * 60 * 60 * 1000,
     ); // Daily
   }
 

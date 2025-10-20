@@ -31,7 +31,7 @@ class BusinessRulesEngine {
     this.ruleDependencies = new Map();
 
     this._initializeRules();
-    console.log('⚖️ Business Rules Engine initialized');
+    logger.info('⚖️ Business Rules Engine initialized');
   }
 
   /**
@@ -43,11 +43,11 @@ class BusinessRulesEngine {
    */
   async executeRules(context, data, options = {}) {
     try {
-      console.log(`⚖️ Executing business rules for context: ${context}`);
+      logger.info(`⚖️ Executing business rules for context: ${context}`);
 
       // 1. Get applicable rules for context
       const applicableRules = this._getApplicableRules(context, data);
-      console.log(`📋 Found ${applicableRules.length} applicable rules`);
+      logger.info(`📋 Found ${applicableRules.length} applicable rules`);
 
       // 2. Sort rules by priority and dependencies
       const sortedRules = this._sortRulesByDependencies(applicableRules);
@@ -67,13 +67,13 @@ class BusinessRulesEngine {
 
       for (const rule of sortedRules) {
         try {
-          console.log(`🔍 Executing rule: ${rule.name}`);
+          logger.info(`🔍 Executing rule: ${rule.name}`);
 
           const ruleResult = await this._executeRule(rule, data, results.metadata);
 
           if (ruleResult.passed) {
             results.passed++;
-            console.log(`✅ Rule passed: ${rule.name}`);
+            logger.info(`✅ Rule passed: ${rule.name}`);
           } else {
             results.failed++;
             results.violations.push({
@@ -84,7 +84,7 @@ class BusinessRulesEngine {
               correctionHint: ruleResult.correctionHint,
               timestamp: new Date(),
             });
-            console.log(`❌ Rule failed: ${rule.name} - ${ruleResult.message}`);
+            logger.info(`❌ Rule failed: ${rule.name} - ${ruleResult.message}`);
           }
 
           // Add warnings if any
@@ -94,7 +94,7 @@ class BusinessRulesEngine {
                 rule: rule.name,
                 message: warning,
                 timestamp: new Date(),
-              }))
+              })),
             );
             results.warnings++;
           }
@@ -104,7 +104,7 @@ class BusinessRulesEngine {
             results.metadata[rule.name] = ruleResult.metadata;
           }
         } catch (error) {
-          console.error(`❌ Rule execution error: ${rule.name}`, error);
+          logger.error(`❌ Rule execution error: ${rule.name}`, error);
           results.failed++;
           results.violations.push({
             rule: rule.name,
@@ -127,10 +127,10 @@ class BusinessRulesEngine {
         score: this._calculateComplianceScore(results),
       };
 
-      console.log(`📊 Rules execution completed: ${results.passed}/${results.totalRules} passed`);
+      logger.info(`📊 Rules execution completed: ${results.passed}/${results.totalRules} passed`);
       return results;
     } catch (error) {
-      console.error(`❌ Business rules execution failed for context: ${context}`, error);
+      logger.error(`❌ Business rules execution failed for context: ${context}`, error);
       throw error;
     }
   }
@@ -437,7 +437,7 @@ class BusinessRulesEngine {
       },
     });
 
-    console.log(`📋 Initialized ${this.rules.size} business rules`);
+    logger.info(`📋 Initialized ${this.rules.size} business rules`);
   }
 
   /**
@@ -536,7 +536,7 @@ class BusinessRulesEngine {
         metadata: result.metadata,
       };
     } catch (error) {
-      console.error(`Rule execution error: ${rule.name}`, error);
+      logger.error(`Rule execution error: ${rule.name}`, error);
       throw error;
     }
   }

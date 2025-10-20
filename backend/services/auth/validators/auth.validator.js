@@ -46,7 +46,7 @@ const thaiIdValidator = (value, helpers) => {
 const registerSchema = Joi.object({
   email: Joi.string().email().lowercase().trim().required().messages({
     'string.email': 'กรุณากรอกอีเมลที่ถูกต้อง',
-    'any.required': 'กรุณากรอกอีเมล'
+    'any.required': 'กรุณากรอกอีเมล',
   }),
 
   password: Joi.string()
@@ -59,18 +59,18 @@ const registerSchema = Joi.object({
       'string.max': 'รหัสผ่านต้องไม่เกิน 128 ตัวอักษร',
       'string.pattern.base':
         'รหัสผ่านต้องประกอบด้วย: ตัวพิมพ์เล็ก, ตัวพิมพ์ใหญ่, ตัวเลข, และอักขระพิเศษ (@$!%*?&)',
-      'any.required': 'กรุณากรอกรหัสผ่าน'
+      'any.required': 'กรุณากรอกรหัสผ่าน',
     }),
 
   confirmPassword: Joi.string().valid(Joi.ref('password')).required().messages({
     'any.only': 'รหัสผ่านไม่ตรงกัน',
-    'any.required': 'กรุณายืนยันรหัสผ่าน'
+    'any.required': 'กรุณายืนยันรหัสผ่าน',
   }),
 
   fullName: Joi.string().min(2).max(200).trim().required().messages({
     'string.min': 'ชื่อ-นามสกุลต้องมีอย่างน้อย 2 ตัวอักษร',
     'string.max': 'ชื่อ-นามสกุลต้องไม่เกิน 200 ตัวอักษร',
-    'any.required': 'กรุณากรอกชื่อ-นามสกุล'
+    'any.required': 'กรุณากรอกชื่อ-นามสกุล',
   }),
 
   thaiId: Joi.string()
@@ -82,7 +82,7 @@ const registerSchema = Joi.object({
       'string.length': 'เลขบัตรประชาชนต้องมี 13 หลัก',
       'string.pattern.base': 'เลขบัตรประชาชนต้องเป็นตัวเลขเท่านั้น',
       'custom.invalidThaiID': 'เลขบัตรประชาชนไม่ถูกต้อง',
-      'any.required': 'กรุณากรอกเลขบัตรประชาชน'
+      'any.required': 'กรุณากรอกเลขบัตรประชาชน',
     }),
 
   phoneNumber: Joi.string()
@@ -90,24 +90,24 @@ const registerSchema = Joi.object({
     .required()
     .messages({
       'string.pattern.base': 'เบอร์โทรศัพท์ไม่ถูกต้อง (ต้องขึ้นต้นด้วย 0 และมี 10 หลัก)',
-      'any.required': 'กรุณากรอกเบอร์โทรศัพท์'
+      'any.required': 'กรุณากรอกเบอร์โทรศัพท์',
     }),
 
   address: Joi.object({
     houseNumber: Joi.string().required().messages({
-      'any.required': 'กรุณากรอกบ้านเลขที่'
+      'any.required': 'กรุณากรอกบ้านเลขที่',
     }),
     village: Joi.string().optional().allow(''),
     lane: Joi.string().optional().allow(''),
     road: Joi.string().optional().allow(''),
     subDistrict: Joi.string().required().messages({
-      'any.required': 'กรุณากรอกแขวง/ตำบล'
+      'any.required': 'กรุณากรอกแขวง/ตำบล',
     }),
     district: Joi.string().required().messages({
-      'any.required': 'กรุณากรอกเขต/อำเภอ'
+      'any.required': 'กรุณากรอกเขต/อำเภอ',
     }),
     province: Joi.string().required().messages({
-      'any.required': 'กรุณากรอกจังหวัด'
+      'any.required': 'กรุณากรอกจังหวัด',
     }),
     postalCode: Joi.string()
       .length(5)
@@ -116,13 +116,13 @@ const registerSchema = Joi.object({
       .messages({
         'string.length': 'รหัสไปรษณีย์ต้องมี 5 หลัก',
         'string.pattern.base': 'รหัสไปรษณีย์ต้องเป็นตัวเลข',
-        'any.required': 'กรุณากรอกรหัสไปรษณีย์'
-      })
+        'any.required': 'กรุณากรอกรหัสไปรษณีย์',
+      }),
   })
     .required()
     .messages({
-      'any.required': 'กรุณากรอกที่อยู่'
-    })
+      'any.required': 'กรุณากรอกที่อยู่',
+    }),
 });
 
 /**
@@ -131,12 +131,12 @@ const registerSchema = Joi.object({
 const loginSchema = Joi.object({
   email: Joi.string().email().required().messages({
     'string.email': 'กรุณากรอกอีเมลที่ถูกต้อง',
-    'any.required': 'กรุณากรอกอีเมล'
+    'any.required': 'กรุณากรอกอีเมล',
   }),
 
   password: Joi.string().required().messages({
-    'any.required': 'กรุณากรอกรหัสผ่าน'
-  })
+    'any.required': 'กรุณากรอกรหัสผ่าน',
+  }),
 });
 
 /**
@@ -150,8 +150,8 @@ const verifyEmailSchema = Joi.object({
     .messages({
       'string.length': 'โทเค็นไม่ถูกต้อง',
       'string.pattern.base': 'โทเค็นไม่ถูกต้อง',
-      'any.required': 'กรุณาระบุโทเค็น'
-    })
+      'any.required': 'กรุณาระบุโทเค็น',
+    }),
 });
 
 /**
@@ -160,8 +160,8 @@ const verifyEmailSchema = Joi.object({
 const forgotPasswordSchema = Joi.object({
   email: Joi.string().email().lowercase().trim().required().messages({
     'string.email': 'กรุณากรอกอีเมลที่ถูกต้อง',
-    'any.required': 'กรุณากรอกอีเมล'
-  })
+    'any.required': 'กรุณากรอกอีเมล',
+  }),
 });
 
 /**
@@ -175,7 +175,7 @@ const resetPasswordSchema = Joi.object({
     .messages({
       'string.length': 'โทเค็นไม่ถูกต้อง',
       'string.pattern.base': 'โทเค็นไม่ถูกต้อง',
-      'any.required': 'กรุณาระบุโทเค็น'
+      'any.required': 'กรุณาระบุโทเค็น',
     }),
 
   newPassword: Joi.string()
@@ -188,13 +188,13 @@ const resetPasswordSchema = Joi.object({
       'string.max': 'รหัสผ่านต้องไม่เกิน 128 ตัวอักษร',
       'string.pattern.base':
         'รหัสผ่านต้องประกอบด้วย: ตัวพิมพ์เล็ก, ตัวพิมพ์ใหญ่, ตัวเลข, และอักขระพิเศษ (@$!%*?&)',
-      'any.required': 'กรุณากรอกรหัสผ่าน'
+      'any.required': 'กรุณากรอกรหัสผ่าน',
     }),
 
   confirmPassword: Joi.string().valid(Joi.ref('newPassword')).required().messages({
     'any.only': 'รหัสผ่านไม่ตรงกัน',
-    'any.required': 'กรุณายืนยันรหัสผ่าน'
-  })
+    'any.required': 'กรุณายืนยันรหัสผ่าน',
+  }),
 });
 
 /**
@@ -203,7 +203,7 @@ const resetPasswordSchema = Joi.object({
 const changePasswordSchema = Joi.object({
   currentPassword: Joi.string().required().messages({
     'any.required': 'กรุณากรอกรหัสผ่านปัจจุบัน',
-    'string.empty': 'กรุณากรอกรหัสผ่านปัจจุบัน'
+    'string.empty': 'กรุณากรอกรหัสผ่านปัจจุบัน',
   }),
 
   newPassword: Joi.string()
@@ -216,8 +216,8 @@ const changePasswordSchema = Joi.object({
       'string.max': 'รหัสผ่านต้องไม่เกิน 128 ตัวอักษร',
       'string.pattern.base':
         'รหัสผ่านต้องประกอบด้วย: ตัวพิมพ์เล็ก, ตัวพิมพ์ใหญ่, ตัวเลข, และอักขระพิเศษ (@$!%*?&)',
-      'any.required': 'กรุณากรอกรหัสผ่านใหม่'
-    })
+      'any.required': 'กรุณากรอกรหัสผ่านใหม่',
+    }),
 });
 
 /**
@@ -227,20 +227,20 @@ function validate(schema) {
   return (req, res, next) => {
     const { error, value } = schema.validate(req.body, {
       abortEarly: false,
-      stripUnknown: true
+      stripUnknown: true,
     });
 
     if (error) {
       const errors = error.details.map(detail => ({
         field: detail.path.join('.'),
-        message: detail.message
+        message: detail.message,
       }));
 
       return res.status(400).json({
         success: false,
         error: 'VALIDATION_ERROR',
         message: 'ข้อมูลไม่ถูกต้อง',
-        details: errors
+        details: errors,
       });
     }
 
@@ -257,5 +257,5 @@ module.exports = {
   forgotPasswordSchema,
   resetPasswordSchema,
   changePasswordSchema,
-  validateThaiID
+  validateThaiID,
 };

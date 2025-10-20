@@ -80,7 +80,7 @@ const FarmInformationSchema = new mongoose.Schema(
       testResults: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabResult' }],
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Crop Information Schema
@@ -122,7 +122,7 @@ const CropInformationSchema = new mongoose.Schema(
       validUntil: Date,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Document Reference Schema
@@ -156,7 +156,7 @@ const DocumentReferenceSchema = new mongoose.Schema(
     verificationDate: Date,
     notes: String,
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Assessment Score Schema
@@ -184,7 +184,7 @@ const AssessmentScoreSchema = new mongoose.Schema(
     notes: String,
     recommendations: [String],
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Status History Schema
@@ -205,7 +205,7 @@ const StatusHistorySchema = new mongoose.Schema(
     notes: String,
     systemGenerated: { type: Boolean, default: false },
   },
-  { _id: false }
+  { _id: false },
 );
 
 // Main Application Schema
@@ -346,7 +346,7 @@ const ApplicationSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'gacp_applications',
-  }
+  },
 );
 
 // Indexes for Performance

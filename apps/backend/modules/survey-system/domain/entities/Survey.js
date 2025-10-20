@@ -113,7 +113,7 @@ class Survey {
     // Process questions and calculate scoring
     if (sectionData.questions && sectionData.questions.length > 0) {
       section.questions = sectionData.questions.map(q =>
-        this.processQuestion(q, section.sectionId)
+        this.processQuestion(q, section.sectionId),
       );
       section.scoring.maxScore = this.calculateSectionMaxScore(section.questions);
     }
@@ -529,12 +529,12 @@ class Survey {
   calculateSurveyTotals() {
     this.totalQuestions = this.sections.reduce(
       (total, section) => total + section.questions.length,
-      0
+      0,
     );
 
     this.totalPossibleScore = this.sections.reduce(
       (total, section) => total + this.calculateSectionMaxScore(section.questions),
-      0
+      0,
     );
   }
 
@@ -643,10 +643,10 @@ class Survey {
     // Find strongest and weakest categories
     const categories = Object.entries(scoring.categoryScores);
     const strongest = categories.reduce((max, cat) =>
-      cat[1].score / cat[1].maxScore > max[1].score / max[1].maxScore ? cat : max
+      cat[1].score / cat[1].maxScore > max[1].score / max[1].maxScore ? cat : max,
     );
     const weakest = categories.reduce((min, cat) =>
-      cat[1].score / cat[1].maxScore < min[1].score / min[1].maxScore ? cat : min
+      cat[1].score / cat[1].maxScore < min[1].score / min[1].maxScore ? cat : min,
     );
 
     findings.push(`จุดแข็ง: ${this.translateCategory(strongest[0])}`);

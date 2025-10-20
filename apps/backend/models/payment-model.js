@@ -135,7 +135,7 @@ const PaymentSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'payments',
-  }
+  },
 );
 
 // Indexes for better query performance

@@ -26,6 +26,7 @@
  * - Predictive models optimize training effectiveness
  */
 
+const logger = require('../../../../shared/logger/logger');
 const TrainingController = require('./TrainingController');
 
 class EnhancedTrainingController extends TrainingController {
@@ -63,7 +64,7 @@ class EnhancedTrainingController extends TrainingController {
    */
   getAnalyticsDashboard = async (req, res) => {
     try {
-      console.log('[EnhancedTraining] Getting analytics dashboard...');
+      logger.info('[EnhancedTraining] Getting analytics dashboard...');
 
       if (!this.analyticsSystem) {
         return res.status(503).json({
@@ -103,7 +104,7 @@ class EnhancedTrainingController extends TrainingController {
         insights: await this.generateTrainingInsights(
           analyticsData,
           certificationAnalytics,
-          performanceAnalytics
+          performanceAnalytics,
         ),
         recommendations: await this.generateSystemRecommendations(analyticsData),
       };
@@ -125,7 +126,7 @@ class EnhancedTrainingController extends TrainingController {
         data: combinedDashboard,
       });
     } catch (error) {
-      console.error('[EnhancedTraining] Analytics dashboard error:', error);
+      logger.error('[EnhancedTraining] Analytics dashboard error:', error);
       res.status(500).json({
         success: false,
         error: 'ANALYTICS_ERROR',
@@ -149,7 +150,7 @@ class EnhancedTrainingController extends TrainingController {
       const { userId } = req.params;
       const { courseId, competencyId } = req.query;
 
-      console.log(`[EnhancedTraining] Getting predictions for learner ${userId}`);
+      logger.info(`[EnhancedTraining] Getting predictions for learner ${userId}`);
 
       if (!this.analyticsSystem) {
         return res.status(503).json({
@@ -167,7 +168,7 @@ class EnhancedTrainingController extends TrainingController {
       if (this.performanceAssessment && competencyId) {
         performancePredictions = await this.performanceAssessment.predictCompetencySuccess(
           userId,
-          competencyId
+          competencyId,
         );
       }
 
@@ -189,7 +190,7 @@ class EnhancedTrainingController extends TrainingController {
         },
         interventionRecommendations: await this.generateInterventionRecommendations(
           userId,
-          predictions
+          predictions,
         ),
         generatedAt: new Date(),
       };
@@ -209,7 +210,7 @@ class EnhancedTrainingController extends TrainingController {
         data: response,
       });
     } catch (error) {
-      console.error('[EnhancedTraining] Predictions error:', error);
+      logger.error('[EnhancedTraining] Predictions error:', error);
       res.status(500).json({
         success: false,
         error: 'PREDICTIONS_ERROR',
@@ -234,7 +235,7 @@ class EnhancedTrainingController extends TrainingController {
    */
   getCertificationDashboard = async (req, res) => {
     try {
-      console.log('[EnhancedTraining] Getting certification dashboard...');
+      logger.info('[EnhancedTraining] Getting certification dashboard...');
 
       if (!this.certificationTracking) {
         return res.status(503).json({
@@ -277,7 +278,7 @@ class EnhancedTrainingController extends TrainingController {
         data: certificationData,
       });
     } catch (error) {
-      console.error('[EnhancedTraining] Certification dashboard error:', error);
+      logger.error('[EnhancedTraining] Certification dashboard error:', error);
       res.status(500).json({
         success: false,
         error: 'CERTIFICATION_ERROR',
@@ -301,7 +302,7 @@ class EnhancedTrainingController extends TrainingController {
       const { userId } = req.params;
       const { includeAnalytics = 'true', includePredictions = 'true' } = req.query;
 
-      console.log(`[EnhancedTraining] Getting certification progress for learner ${userId}`);
+      logger.info(`[EnhancedTraining] Getting certification progress for learner ${userId}`);
 
       if (!this.certificationTracking) {
         return res.status(503).json({
@@ -329,7 +330,7 @@ class EnhancedTrainingController extends TrainingController {
       // Generate personalized recommendations
       certificationProgress.recommendations = await this.generateCertificationRecommendations(
         userId,
-        certificationProgress
+        certificationProgress,
       );
 
       // Log progress access
@@ -350,7 +351,7 @@ class EnhancedTrainingController extends TrainingController {
         data: certificationProgress,
       });
     } catch (error) {
-      console.error('[EnhancedTraining] Certification progress error:', error);
+      logger.error('[EnhancedTraining] Certification progress error:', error);
       res.status(500).json({
         success: false,
         error: 'PROGRESS_ERROR',
@@ -377,7 +378,7 @@ class EnhancedTrainingController extends TrainingController {
     try {
       const { userId, competencyId, assessmentType, configurationOptions } = req.body;
 
-      console.log(`[EnhancedTraining] Creating performance assessment for user ${userId}`);
+      logger.info(`[EnhancedTraining] Creating performance assessment for user ${userId}`);
 
       if (!this.performanceAssessment) {
         return res.status(503).json({
@@ -409,7 +410,7 @@ class EnhancedTrainingController extends TrainingController {
       if (this.analyticsSystem) {
         await this.analyticsSystem.initializeAssessmentTracking(
           assessment.assessmentId,
-          assessmentRequest
+          assessmentRequest,
         );
       }
 
@@ -418,7 +419,7 @@ class EnhancedTrainingController extends TrainingController {
         await this.certificationTracking.registerAssessmentStart(
           assessment.assessmentId,
           userId,
-          competencyId
+          competencyId,
         );
       }
 
@@ -447,7 +448,7 @@ class EnhancedTrainingController extends TrainingController {
         },
       });
     } catch (error) {
-      console.error('[EnhancedTraining] Assessment creation error:', error);
+      logger.error('[EnhancedTraining] Assessment creation error:', error);
       res.status(500).json({
         success: false,
         error: 'ASSESSMENT_CREATION_ERROR',
@@ -471,7 +472,7 @@ class EnhancedTrainingController extends TrainingController {
       const { assessmentId } = req.params;
       const { itemId, response, responseTime, contextData } = req.body;
 
-      console.log(`[EnhancedTraining] Processing response for assessment ${assessmentId}`);
+      logger.info(`[EnhancedTraining] Processing response for assessment ${assessmentId}`);
 
       if (!this.performanceAssessment) {
         return res.status(503).json({
@@ -525,7 +526,7 @@ class EnhancedTrainingController extends TrainingController {
         await this.triggerLearnerIntervention(
           req.user.id,
           assessmentId,
-          processingResult.interventionType
+          processingResult.interventionType,
         );
       }
 
@@ -557,7 +558,7 @@ class EnhancedTrainingController extends TrainingController {
         },
       });
     } catch (error) {
-      console.error('[EnhancedTraining] Response submission error:', error);
+      logger.error('[EnhancedTraining] Response submission error:', error);
       res.status(500).json({
         success: false,
         error: 'RESPONSE_PROCESSING_ERROR',
@@ -582,7 +583,7 @@ class EnhancedTrainingController extends TrainingController {
    */
   getSystemStatus = async (req, res) => {
     try {
-      console.log('[EnhancedTraining] Getting system status...');
+      logger.info('[EnhancedTraining] Getting system status...');
 
       const systemStatus = {
         coreTrainingSystem: {
@@ -629,7 +630,7 @@ class EnhancedTrainingController extends TrainingController {
         data: systemStatus,
       });
     } catch (error) {
-      console.error('[EnhancedTraining] System status error:', error);
+      logger.error('[EnhancedTraining] System status error:', error);
       res.status(500).json({
         success: false,
         error: 'SYSTEM_STATUS_ERROR',
@@ -660,7 +661,7 @@ class EnhancedTrainingController extends TrainingController {
 
     // Determine overall health
     const unavailableCount = Object.values(healthStatus.components).filter(
-      status => status === 'UNAVAILABLE'
+      status => status === 'UNAVAILABLE',
     ).length;
     if (unavailableCount > 0) {
       healthStatus.overall = unavailableCount > 2 ? 'DEGRADED' : 'PARTIAL';
@@ -810,10 +811,10 @@ class EnhancedTrainingController extends TrainingController {
       });
 
       console.log(
-        `[EnhancedTraining] Intervention triggered for learner ${userId}: ${interventionType}`
+        `[EnhancedTraining] Intervention triggered for learner ${userId}: ${interventionType}`,
       );
     } catch (error) {
-      console.error('[EnhancedTraining] Intervention trigger error:', error);
+      logger.error('[EnhancedTraining] Intervention trigger error:', error);
     }
   }
 

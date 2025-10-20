@@ -195,7 +195,7 @@ class Plant {
       const highSeverityErrors = validationErrors.filter(e => e.severity === 'HIGH');
       if (highSeverityErrors.length > 0) {
         throw new Error(
-          `Critical planting validation failed: ${JSON.stringify(highSeverityErrors)}`
+          `Critical planting validation failed: ${JSON.stringify(highSeverityErrors)}`,
         );
       }
     }
@@ -272,7 +272,7 @@ class Plant {
     currentPhase.status = 'COMPLETED';
     currentPhase.actualDuration = this.calculatePhaseDuration(
       currentPhase.startDate,
-      germinationDate
+      germinationDate,
     );
 
     // Start vegetative phase
@@ -590,7 +590,7 @@ class Plant {
 
     if (vegetativeAge < minVegetativeAge) {
       throw new Error(
-        `Plant too young for flowering. Current age: ${vegetativeAge} days, minimum required: ${minVegetativeAge} days`
+        `Plant too young for flowering. Current age: ${vegetativeAge} days, minimum required: ${minVegetativeAge} days`,
       );
     }
 
@@ -600,7 +600,7 @@ class Plant {
     currentPhase.status = 'COMPLETED';
     currentPhase.actualDuration = this.calculatePhaseDuration(
       currentPhase.startDate,
-      floweringDate
+      floweringDate,
     );
 
     // Record flowering milestone

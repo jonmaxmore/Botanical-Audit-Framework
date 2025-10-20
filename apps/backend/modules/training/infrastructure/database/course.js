@@ -114,7 +114,7 @@ const courseSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'courses',
-  }
+  },
 );
 
 // Indexes
@@ -182,7 +182,7 @@ class MongoDBCourseRepository {
         return this.toDomain(created);
       }
     } catch (error) {
-      console.error('Error saving course:', error);
+      logger.error('Error saving course:', error);
       throw error;
     }
   }
@@ -192,7 +192,7 @@ class MongoDBCourseRepository {
       const doc = await this.CourseModel.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding course by ID:', error);
+      logger.error('Error finding course by ID:', error);
       return null;
     }
   }
@@ -202,7 +202,7 @@ class MongoDBCourseRepository {
       const doc = await this.CourseModel.findOne({ code });
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding course by code:', error);
+      logger.error('Error finding course by code:', error);
       return null;
     }
   }
@@ -226,7 +226,7 @@ class MongoDBCourseRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding courses by status:', error);
+      logger.error('Error finding courses by status:', error);
       throw error;
     }
   }
@@ -250,7 +250,7 @@ class MongoDBCourseRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding courses by type:', error);
+      logger.error('Error finding courses by type:', error);
       throw error;
     }
   }
@@ -288,7 +288,7 @@ class MongoDBCourseRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding available courses:', error);
+      logger.error('Error finding available courses:', error);
       throw error;
     }
   }
@@ -322,7 +322,7 @@ class MongoDBCourseRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error searching courses:', error);
+      logger.error('Error searching courses:', error);
       throw error;
     }
   }
@@ -362,7 +362,7 @@ class MongoDBCourseRepository {
         limit,
       };
     } catch (error) {
-      console.error('Error finding courses with filters:', error);
+      logger.error('Error finding courses with filters:', error);
       throw error;
     }
   }
@@ -376,7 +376,7 @@ class MongoDBCourseRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding mandatory courses:', error);
+      logger.error('Error finding mandatory courses:', error);
       throw error;
     }
   }
@@ -387,7 +387,7 @@ class MongoDBCourseRepository {
       const docs = await this.CourseModel.find({ _id: { $in: objectIds } });
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding courses by IDs:', error);
+      logger.error('Error finding courses by IDs:', error);
       throw error;
     }
   }
@@ -401,7 +401,7 @@ class MongoDBCourseRepository {
       const count = await this.CourseModel.countDocuments(query);
       return count > 0;
     } catch (error) {
-      console.error('Error checking code existence:', error);
+      logger.error('Error checking code existence:', error);
       return false;
     }
   }
@@ -410,7 +410,7 @@ class MongoDBCourseRepository {
     try {
       return await this.CourseModel.countDocuments(criteria);
     } catch (error) {
-      console.error('Error counting courses:', error);
+      logger.error('Error counting courses:', error);
       return 0;
     }
   }
@@ -468,7 +468,7 @@ class MongoDBCourseRepository {
         }, {}),
       };
     } catch (error) {
-      console.error('Error getting course statistics:', error);
+      logger.error('Error getting course statistics:', error);
       throw error;
     }
   }
@@ -478,7 +478,7 @@ class MongoDBCourseRepository {
       const result = await this.CourseModel.findByIdAndDelete(id);
       return result !== null;
     } catch (error) {
-      console.error('Error deleting course:', error);
+      logger.error('Error deleting course:', error);
       return false;
     }
   }

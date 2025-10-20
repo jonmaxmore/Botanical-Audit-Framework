@@ -25,7 +25,7 @@ export function sanitizeHTML(
     allowedTags?: string[];
     allowedAttributes?: Record<string, string[]>;
     allowedSchemes?: string[];
-  }
+  },
 ): string {
   if (!dirty || typeof dirty !== 'string') {
     return '';
@@ -552,7 +552,7 @@ export function sanitize(input: string, options: SanitizeOptions = {}): string {
  */
 export function sanitizeObject<T extends Record<string, any>>(
   obj: T,
-  options: SanitizeOptions = {}
+  options: SanitizeOptions = {},
 ): T {
   const sanitized: any = {};
 
@@ -561,7 +561,7 @@ export function sanitizeObject<T extends Record<string, any>>(
       sanitized[key] = sanitize(value, options);
     } else if (Array.isArray(value)) {
       sanitized[key] = value.map(item =>
-        typeof item === 'string' ? sanitize(item, options) : item
+        typeof item === 'string' ? sanitize(item, options) : item,
       );
     } else if (value && typeof value === 'object') {
       sanitized[key] = sanitizeObject(value, options);

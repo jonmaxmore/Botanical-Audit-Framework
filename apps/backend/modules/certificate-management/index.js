@@ -4,6 +4,7 @@
  * Main entry point for certificate management functionality
  */
 
+const logger = require('../../shared/logger/logger');
 const CertificateService = require('./services/certificate.service');
 const CertificateController = require('./controllers/certificate.controller');
 const initializeRoutes = require('./routes/certificate.routes');
@@ -17,7 +18,7 @@ const initializeRoutes = require('./routes/certificate.routes');
  */
 async function initializeCertificateManagement(db, authMiddleware) {
   try {
-    console.log('Initializing Certificate Management module...');
+    logger.info('Initializing Certificate Management module...');
 
     // Validate dependencies
     if (!db) {
@@ -31,17 +32,17 @@ async function initializeCertificateManagement(db, authMiddleware) {
     // Initialize service
     const certificateService = new CertificateService(db);
     await certificateService.initialize();
-    console.log('✓ Certificate service initialized');
+    logger.info('✓ Certificate service initialized');
 
     // Initialize controller
     const certificateController = new CertificateController(certificateService);
-    console.log('✓ Certificate controller initialized');
+    logger.info('✓ Certificate controller initialized');
 
     // Initialize routes
     const router = initializeRoutes(certificateController, authMiddleware);
-    console.log('✓ Certificate routes initialized');
+    logger.info('✓ Certificate routes initialized');
 
-    console.log('✓ Certificate Management module ready');
+    logger.info('✓ Certificate Management module ready');
 
     return {
       router,
@@ -49,7 +50,7 @@ async function initializeCertificateManagement(db, authMiddleware) {
       controller: certificateController,
     };
   } catch (error) {
-    console.error('Failed to initialize Certificate Management module:', error);
+    logger.error('Failed to initialize Certificate Management module:', error);
     throw error;
   }
 }

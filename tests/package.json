@@ -20,17 +20,8 @@
   },
   "jest": {
     "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "<rootDir>/tests/setup.js"
-    ],
-    "collectCoverageFrom": [
-      "**/*.{js,jsx}",
-      "!**/node_modules/**",
-      "!**/coverage/**"
-    ],
-    "testMatch": [
-      "**/tests/**/*.test.js",
-      "**/__tests__/**/*.js"
-    ]
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"],
+    "collectCoverageFrom": ["**/*.{js,jsx}", "!**/node_modules/**", "!**/coverage/**"],
+    "testMatch": ["**/tests/**/*.test.js", "**/__tests__/**/*.js"]
   }
 }

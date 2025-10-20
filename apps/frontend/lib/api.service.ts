@@ -7,8 +7,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 const apiClient = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
 // Request interceptor - add auth token to all requests
@@ -22,7 +22,7 @@ apiClient.interceptors.request.use(
     }
     return config;
   },
-  error => Promise.reject(error),
+  error => Promise.reject(error)
 );
 
 // Response interceptor - handle common errors
@@ -44,7 +44,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 // Generic API service
@@ -106,7 +106,7 @@ export const AuthApi = {
   changePassword: (data: { oldPassword: string; newPassword: string }) =>
     ApiService.post('/auth/change-password', data),
 
-  forgotPassword: (email: string) => ApiService.post('/auth/forgot-password', { email }),
+  forgotPassword: (email: string) => ApiService.post('/auth/forgot-password', { email })
 };
 
 export const UserApi = {
@@ -120,7 +120,7 @@ export const UserApi = {
 
   updateUser: (id: string, userData: any) => ApiService.put(`/users/${id}`, userData),
 
-  deleteUser: (id: string) => ApiService.delete(`/users/${id}`),
+  deleteUser: (id: string) => ApiService.delete(`/users/${id}`)
 };
 
 export const ApplicationApi = {
@@ -137,7 +137,7 @@ export const ApplicationApi = {
 
   delete: (id: string) => ApiService.delete(`/applications/${id}`),
 
-  getHistory: (id: string) => ApiService.get(`/applications/${id}/history`),
+  getHistory: (id: string) => ApiService.get(`/applications/${id}/history`)
 };
 
 export const FarmApi = {
@@ -153,7 +153,7 @@ export const FarmApi = {
 
   getActivities: (id: string) => ApiService.get(`/farms/${id}/activities`),
 
-  addActivity: (id: string, data: any) => ApiService.post(`/farms/${id}/activities`, data),
+  addActivity: (id: string, data: any) => ApiService.post(`/farms/${id}/activities`, data)
 };
 
 export const InspectionApi = {
@@ -165,14 +165,14 @@ export const InspectionApi = {
 
   update: (id: string, data: any) => ApiService.put(`/inspections/${id}`, data),
 
-  submitReport: (id: string, data: any) => ApiService.post(`/inspections/${id}/report`, data),
+  submitReport: (id: string, data: any) => ApiService.post(`/inspections/${id}/report`, data)
 };
 
 // Additional APIs for new services
 export const TraceabilityApi = {
   generateQR: (productId: string) => ApiService.post('/traceability/qr', { productId }),
 
-  getProductInfo: (qrCode: string) => ApiService.get(`/traceability/product/${qrCode}`),
+  getProductInfo: (qrCode: string) => ApiService.get(`/traceability/product/${qrCode}`)
 };
 
 export const SurveyApi = {
@@ -180,13 +180,13 @@ export const SurveyApi = {
 
   getSurveyById: (id: string) => ApiService.get(`/surveys/${id}`),
 
-  submitResponse: (id: string, data: any) => ApiService.post(`/surveys/${id}/responses`, data),
+  submitResponse: (id: string, data: any) => ApiService.post(`/surveys/${id}/responses`, data)
 };
 
 export const StandardApi = {
   getComparison: () => ApiService.get('/standards/comparison'),
 
-  getStandardDetails: (standard: string) => ApiService.get(`/standards/${standard}`),
+  getStandardDetails: (standard: string) => ApiService.get(`/standards/${standard}`)
 };
 
 export const ReportApi = {
@@ -199,6 +199,6 @@ export const ReportApi = {
   exportReports: (type: string, params?: any) =>
     ApiService.get(`/reports/export/${type}`, {
       params,
-      responseType: 'blob',
-    }),
+      responseType: 'blob'
+    })
 };

@@ -33,7 +33,7 @@ function validateEnv() {
   if (missing.length > 0) {
     throw new Error(
       `Missing required environment variables: ${missing.join(', ')}\n` +
-        `Please check your .env file.`
+        `Please check your .env file.`,
     );
   }
 

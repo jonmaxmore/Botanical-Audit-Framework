@@ -135,7 +135,7 @@ class AdvancedDatabaseCleanup {
       }
 
       const deleteCount = this.report.findings.emptyCollections.filter(
-        c => c.action === 'DELETE'
+        c => c.action === 'DELETE',
       ).length;
 
       if (deleteCount === 0) {
@@ -195,7 +195,7 @@ class AdvancedDatabaseCleanup {
         console.log('   ✓ No duplicate indexes found\n');
       } else {
         console.log(
-          `\n   Found: ${this.report.findings.duplicateIndexes.length} collections with duplicate indexes\n`
+          `\n   Found: ${this.report.findings.duplicateIndexes.length} collections with duplicate indexes\n`,
         );
       }
     } catch (error) {
@@ -337,10 +337,10 @@ class AdvancedDatabaseCleanup {
     // Empty collections
     if (this.report.findings.emptyCollections.length > 0) {
       const deleteCount = this.report.findings.emptyCollections.filter(
-        c => c.action === 'DELETE'
+        c => c.action === 'DELETE',
       ).length;
       console.log(
-        `📦 Empty Collections: ${this.report.findings.emptyCollections.length} (${deleteCount} can be deleted)`
+        `📦 Empty Collections: ${this.report.findings.emptyCollections.length} (${deleteCount} can be deleted)`,
       );
 
       this.report.findings.emptyCollections.forEach(coll => {
@@ -353,7 +353,7 @@ class AdvancedDatabaseCleanup {
     // Duplicate indexes
     if (this.report.findings.duplicateIndexes.length > 0) {
       console.log(
-        `🔍 Duplicate Indexes: ${this.report.findings.duplicateIndexes.length} collections affected`
+        `🔍 Duplicate Indexes: ${this.report.findings.duplicateIndexes.length} collections affected`,
       );
       this.report.findings.duplicateIndexes.forEach(item => {
         console.log(`   ⚠️  ${item.collection}: ${item.duplicates.length} duplicates`);

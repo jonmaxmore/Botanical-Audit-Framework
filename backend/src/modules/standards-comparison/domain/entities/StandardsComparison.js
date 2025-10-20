@@ -56,7 +56,7 @@ class StandardsComparison {
       includeCriticalItems: true,
       includeRecommendations: true,
       detailLevel: 'comprehensive', // basic, detailed, comprehensive
-      priorityFocus: 'high_impact' // all, high_impact, quick_wins
+      priorityFocus: 'high_impact', // all, high_impact, quick_wins
     };
 
     // Current State Data
@@ -140,7 +140,7 @@ class StandardsComparison {
       ...this.analysisParameters,
       ...parameters,
       lastUpdated: new Date(),
-      updatedBy: parameters.updatedBy || 'system'
+      updatedBy: parameters.updatedBy || 'system',
     };
 
     // ตรวจสอบความถูกต้องของการตั้งค่า
@@ -173,7 +173,7 @@ class StandardsComparison {
 
     // ตรวจสอบว่าไม่มีมาตรฐานซ้ำ
     const existingStandard = this.targetStandards.find(
-      std => std.id === standardData.id && std.version === standardData.version
+      std => std.id === standardData.id && std.version === standardData.version,
     );
 
     if (existingStandard) {
@@ -187,7 +187,7 @@ class StandardsComparison {
       weight: standardData.weight || 1.0,
       isActive: standardData.isActive !== false,
       comparisonAreas: standardData.comparisonAreas || [],
-      customCriteria: standardData.customCriteria || {}
+      customCriteria: standardData.customCriteria || {},
     };
 
     this.targetStandards.push(standardEntry);
@@ -196,7 +196,7 @@ class StandardsComparison {
     this.logConfigurationChange('target_standard_added', {
       standardId: standardData.id,
       standardName: standardData.name,
-      version: standardData.version
+      version: standardData.version,
     });
 
     return standardEntry;
@@ -230,7 +230,7 @@ class StandardsComparison {
         cultivationPractices: practicesData.cultivationPractices || {},
         fertilizerManagement: practicesData.fertilizerManagement || {},
         pestManagement: practicesData.pestManagement || {},
-        irrigationManagement: practicesData.irrigationManagement || {}
+        irrigationManagement: practicesData.irrigationManagement || {},
       },
 
       // การควบคุมคุณภาพ (Quality Control)
@@ -238,7 +238,7 @@ class StandardsComparison {
         testingProtocols: practicesData.testingProtocols || {},
         qualityAssurance: practicesData.qualityAssurance || {},
         contaminationPrevention: practicesData.contaminationPrevention || {},
-        storageManagement: practicesData.storageManagement || {}
+        storageManagement: practicesData.storageManagement || {},
       },
 
       // การจัดการสิ่งแวดล้อม (Environmental Management)
@@ -246,7 +246,7 @@ class StandardsComparison {
         soilManagement: practicesData.soilManagement || {},
         waterConservation: practicesData.waterConservation || {},
         wasteManagement: practicesData.wasteManagement || {},
-        biodiversityProtection: practicesData.biodiversityProtection || {}
+        biodiversityProtection: practicesData.biodiversityProtection || {},
       },
 
       // ความปลอดภัยและอาชีวอนามัย (Safety and Health)
@@ -254,7 +254,7 @@ class StandardsComparison {
         workerSafety: practicesData.workerSafety || {},
         equipmentSafety: practicesData.equipmentSafety || {},
         emergencyProcedures: practicesData.emergencyProcedures || {},
-        healthMonitoring: practicesData.healthMonitoring || {}
+        healthMonitoring: practicesData.healthMonitoring || {},
       },
 
       // การบริหารจัดการ (Management Systems)
@@ -262,14 +262,14 @@ class StandardsComparison {
         documentationSystem: practicesData.documentationSystem || {},
         recordKeeping: practicesData.recordKeeping || {},
         staffTraining: practicesData.staffTraining || {},
-        supplierManagement: practicesData.supplierManagement || {}
+        supplierManagement: practicesData.supplierManagement || {},
       },
 
       // ข้อมูลเมตา
       lastUpdated: new Date(),
       dataSource: practicesData.dataSource || 'manual_input',
       verificationStatus: practicesData.verificationStatus || 'pending',
-      evidenceFiles: practicesData.evidenceFiles || []
+      evidenceFiles: practicesData.evidenceFiles || [],
     };
 
     // คำนวณคะแนนการปฏิบัติในแต่ละด้าน
@@ -278,7 +278,7 @@ class StandardsComparison {
     // บันทึก audit trail
     this.logConfigurationChange('current_practices_updated', {
       categories: Object.keys(this.currentPractices),
-      lastUpdated: this.currentPractices.lastUpdated
+      lastUpdated: this.currentPractices.lastUpdated,
     });
 
     return this.currentPractices;
@@ -344,7 +344,7 @@ class StandardsComparison {
         // Recommendations
         totalRecommendations: recommendations.length,
         highPriorityRecommendations: recommendations.filter(r => r.priority === 'high').length,
-        estimatedImplementationTime: this.calculateTotalImplementationTime(recommendations)
+        estimatedImplementationTime: this.calculateTotalImplementationTime(recommendations),
       };
 
       this.gapAnalysis = gapAnalysisResults;
@@ -405,7 +405,7 @@ class StandardsComparison {
         return {
           ...standard,
           alignedCriteria: this.alignStandardCriteria(standard),
-          mappingConfidence: this.calculateMappingConfidence(standard)
+          mappingConfidence: this.calculateMappingConfidence(standard),
         };
       });
   }
@@ -434,7 +434,7 @@ class StandardsComparison {
       criticalGaps: criticalGapsCount,
       gaps: gaps,
       byCategory: gapsByCategory,
-      analysisDate: new Date()
+      analysisDate: new Date(),
     };
   }
 
@@ -473,7 +473,7 @@ class StandardsComparison {
     return {
       overall: overallScore,
       byCategory: categoryScores,
-      calculationDate: new Date()
+      calculationDate: new Date(),
     };
   }
 
@@ -513,7 +513,7 @@ class StandardsComparison {
       phases: [],
       timeline: {},
       resourceRequirements: {},
-      expectedOutcomes: {}
+      expectedOutcomes: {},
     };
 
     // จัดกลุ่มคำแนะนำตามความสำคัญและเวลาดำเนินการ
@@ -526,7 +526,7 @@ class StandardsComparison {
       estimatedDuration: phase.duration,
       dependencies: phase.dependencies || [],
       resources: phase.resources || {},
-      successCriteria: phase.successCriteria || []
+      successCriteria: phase.successCriteria || [],
     }));
 
     // คำนวณไทม์ไลน์รวม
@@ -582,7 +582,7 @@ class StandardsComparison {
       qualityControl: 2.0,
       environmentalManagement: 1.3,
       safetyHealth: 1.8,
-      managementSystems: 1.2
+      managementSystems: 1.2,
     };
   }
 
@@ -619,7 +619,7 @@ class StandardsComparison {
   calculateTotalCriteria(alignedStandards) {
     return alignedStandards.reduce(
       (total, standard) => total + (standard.alignedCriteria ? standard.alignedCriteria.length : 0),
-      0
+      0,
     );
   }
 
@@ -645,7 +645,7 @@ class StandardsComparison {
       timestamp: new Date(),
       action: action,
       details: details,
-      version: this.version
+      version: this.version,
     });
   }
 
@@ -653,14 +653,14 @@ class StandardsComparison {
     this.logConfigurationChange('analysis_completed', {
       overallScore: this.overallComplianceScore,
       criticalGaps: this.criticalGapsCount,
-      completionTime: new Date() - this.lastAnalysisDate
+      completionTime: new Date() - this.lastAnalysisDate,
     });
   }
 
   logError(action, error) {
     this.logConfigurationChange(action, {
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
   }
 
@@ -678,12 +678,12 @@ class StandardsComparison {
         farmId: this.farmId,
         status: this.status,
         analysisDate: this.lastAnalysisDate,
-        version: this.version
+        version: this.version,
       },
       results: this.comparisonResults,
       gapAnalysis: this.gapAnalysis,
       improvementPlan: this.improvementPlan,
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
 
@@ -695,7 +695,7 @@ class StandardsComparison {
       criticalGapsCount: this.criticalGapsCount,
       improvementOpportunities: this.improvementOpportunities,
       analysisDate: this.lastAnalysisDate,
-      status: this.status
+      status: this.status,
     };
   }
 }

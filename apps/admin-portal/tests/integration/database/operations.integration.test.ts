@@ -204,7 +204,7 @@ describe('Database Operations Integration Tests', () => {
           return await prisma.application.findMany({
             where: { userId: user.id },
           });
-        }
+        },
       );
 
       expect(result).toHaveLength(3);
@@ -229,7 +229,7 @@ describe('Database Operations Integration Tests', () => {
               status: 'PENDING_REVIEW',
             },
           });
-        }
+        },
       );
 
       expect(result).toHaveLength(2);
@@ -281,7 +281,7 @@ describe('Database Operations Integration Tests', () => {
               crops: ['Tomato'],
               status: 'DRAFT',
             },
-          })
+          }),
         );
 
         await Promise.all(promises);
@@ -341,8 +341,8 @@ describe('Database Operations Integration Tests', () => {
               crops: ['Tomato'],
               status: 'DRAFT',
             },
-          })
-        )
+          }),
+        ),
       );
 
       const { duration } = await measurePerformance('Bulk delete 20 applications', async () => {
@@ -405,7 +405,7 @@ describe('Database Operations Integration Tests', () => {
               payments: true,
             },
           });
-        }
+        },
       );
 
       expect(result).toBeDefined();
@@ -499,7 +499,7 @@ describe('Database Operations Integration Tests', () => {
             isEmailVerified: true,
             isActive: true,
           },
-        })
+        }),
       ).rejects.toThrow();
     });
 
@@ -518,7 +518,7 @@ describe('Database Operations Integration Tests', () => {
             crops: ['Tomato'],
             status: 'DRAFT',
           },
-        })
+        }),
       ).rejects.toThrow();
     });
 
@@ -534,7 +534,7 @@ describe('Database Operations Integration Tests', () => {
             applicationType: 'GAP_VEGETABLES',
             // Missing required fields: farmName, farmLocation, farmSize
           } as any,
-        })
+        }),
       ).rejects.toThrow();
     });
   });
@@ -548,7 +548,7 @@ describe('Database Operations Integration Tests', () => {
         const promises = Array.from({ length: 10 }, () =>
           prisma.user.findUnique({
             where: { id: user.id },
-          })
+          }),
         );
 
         await Promise.all(promises);

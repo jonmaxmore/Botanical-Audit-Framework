@@ -34,6 +34,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../shared/logger/logger');
 const PaymentService = require('./application/services/PaymentService');
 const PaymentController = require('./presentation/controllers/PaymentController');
 const PaymentRoutes = require('./presentation/routes/PaymentRoutes');
@@ -47,7 +48,7 @@ class PaymentServiceModule {
     this.routes = null;
 
     this._initializeModule();
-    console.log('[PaymentServiceModule] Initialized successfully');
+    logger.info('[PaymentServiceModule] Initialized successfully');
   }
 
   /**
@@ -71,9 +72,9 @@ class PaymentServiceModule {
       this.controller = new PaymentController(controllerDependencies);
       this.routes = new PaymentRoutes(controllerDependencies);
 
-      console.log('[PaymentServiceModule] All components initialized');
+      logger.info('[PaymentServiceModule] All components initialized');
     } catch (error) {
-      console.error('[PaymentServiceModule] Initialization failed:', error);
+      logger.error('[PaymentServiceModule] Initialization failed:', error);
       throw error;
     }
   }
@@ -93,12 +94,12 @@ class PaymentServiceModule {
 
     // Validate PromptPay configuration
     if (!process.env.PROMPTPAY_MERCHANT_ID) {
-      console.warn('[PaymentServiceModule] PROMPTPAY_MERCHANT_ID not configured - using default');
+      logger.warn('[PaymentServiceModule] PROMPTPAY_MERCHANT_ID not configured - using default');
     }
 
     if (!process.env.PROMPTPAY_WEBHOOK_SECRET) {
       console.warn(
-        '[PaymentServiceModule] PROMPTPAY_WEBHOOK_SECRET not configured - webhook security disabled'
+        '[PaymentServiceModule] PROMPTPAY_WEBHOOK_SECRET not configured - webhook security disabled',
       );
     }
 
@@ -114,7 +115,7 @@ class PaymentServiceModule {
     optional.forEach(dep => {
       if (!this.dependencies[dep]) {
         console.warn(
-          `[PaymentServiceModule] Optional dependency '${dep}' not provided - related features will be disabled`
+          `[PaymentServiceModule] Optional dependency '${dep}' not provided - related features will be disabled`,
         );
       }
     });
@@ -317,7 +318,7 @@ class PaymentServiceModule {
 
       return summary;
     } catch (error) {
-      console.error('[PaymentServiceModule] Statistics error:', error);
+      logger.error('[PaymentServiceModule] Statistics error:', error);
       throw error;
     }
   }
@@ -327,7 +328,7 @@ class PaymentServiceModule {
    */
   async cleanupExpiredPayments() {
     try {
-      console.log('[PaymentServiceModule] Starting expired payment cleanup');
+      logger.info('[PaymentServiceModule] Starting expired payment cleanup');
 
       // Find expired payments
       const expiredPayments = await Payment.find({
@@ -354,19 +355,19 @@ class PaymentServiceModule {
         } catch (error) {
           console.error(
             `[PaymentServiceModule] Error cleaning up payment ${payment.paymentId}:`,
-            error
+            error,
           );
         }
       }
 
-      console.log(`[PaymentServiceModule] Cleanup completed: ${cleanupCount} payments expired`);
+      logger.info(`[PaymentServiceModule] Cleanup completed: ${cleanupCount} payments expired`);
 
       return {
         cleanupCount,
         processedAt: new Date(),
       };
     } catch (error) {
-      console.error('[PaymentServiceModule] Cleanup error:', error);
+      logger.error('[PaymentServiceModule] Cleanup error:', error);
       throw error;
     }
   }
@@ -393,7 +394,7 @@ class PaymentServiceModule {
         completedAt: payment.paidAt,
       };
     } catch (error) {
-      console.error('[PaymentServiceModule] Payment notification error:', error);
+      logger.error('[PaymentServiceModule] Payment notification error:', error);
       throw error;
     }
   }
@@ -402,7 +403,7 @@ class PaymentServiceModule {
    * Clean shutdown of the module
    */
   async shutdown() {
-    console.log('[PaymentServiceModule] Shutting down...');
+    logger.info('[PaymentServiceModule] Shutting down...');
 
     try {
       // Process any remaining webhook events
@@ -418,9 +419,9 @@ class PaymentServiceModule {
         await this.dependencies.promptPayGateway.disconnect();
       }
 
-      console.log('[PaymentServiceModule] Shutdown completed');
+      logger.info('[PaymentServiceModule] Shutdown completed');
     } catch (error) {
-      console.error('[PaymentServiceModule] Error during shutdown:', error);
+      logger.error('[PaymentServiceModule] Error during shutdown:', error);
       throw error;
     }
   }

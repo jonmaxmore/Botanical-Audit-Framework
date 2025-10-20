@@ -85,9 +85,9 @@ class DocumentManagementIntegrationSystem {
       this.setupDocumentWorkflows();
 
       this.isInitialized = true;
-      console.log('[DocumentManagementSystem] Initialized successfully');
+      logger.info('[DocumentManagementSystem] Initialized successfully');
     } catch (error) {
-      console.error('[DocumentManagementSystem] Initialization failed:', error);
+      logger.error('[DocumentManagementSystem] Initialization failed:', error);
       throw error;
     }
   }
@@ -134,7 +134,7 @@ class DocumentManagementIntegrationSystem {
       };
     } catch (error) {
       this.metrics.errors++;
-      console.error('[DocumentManagementSystem] Document processing failed:', error);
+      logger.error('[DocumentManagementSystem] Document processing failed:', error);
       throw error;
     }
   }
@@ -186,7 +186,7 @@ class DocumentManagementIntegrationSystem {
 
       return ocrResult;
     } catch (error) {
-      console.error('[DocumentManagementSystem] OCR extraction failed:', error);
+      logger.error('[DocumentManagementSystem] OCR extraction failed:', error);
       throw error;
     }
   }
@@ -229,7 +229,7 @@ class DocumentManagementIntegrationSystem {
         timestamp: new Date(),
       };
     } catch (error) {
-      console.error('[DocumentManagementSystem] Quality assurance failed:', error);
+      logger.error('[DocumentManagementSystem] Quality assurance failed:', error);
       throw error;
     }
   }
@@ -277,7 +277,7 @@ class DocumentManagementIntegrationSystem {
         },
       };
     } catch (error) {
-      console.error('[DocumentManagementSystem] Status retrieval failed:', error);
+      logger.error('[DocumentManagementSystem] Status retrieval failed:', error);
       throw error;
     }
   }
@@ -320,17 +320,17 @@ class DocumentManagementIntegrationSystem {
   // Private Methods
   async setupStorage() {
     // Setup storage configuration
-    console.log('[DocumentManagementSystem] Storage configured');
+    logger.info('[DocumentManagementSystem] Storage configured');
   }
 
   async initializeProcessingServices() {
     // Initialize OCR and quality services
-    console.log('[DocumentManagementSystem] Processing services initialized');
+    logger.info('[DocumentManagementSystem] Processing services initialized');
   }
 
   setupDocumentWorkflows() {
     // Setup document processing workflows
-    console.log('[DocumentManagementSystem] Document workflows configured');
+    logger.info('[DocumentManagementSystem] Document workflows configured');
   }
 
   validateDocumentData(data) {

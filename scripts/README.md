@@ -7,14 +7,17 @@ Scripts สำหรับการทดสอบ UAT (User Acceptance Testing)
 ## 📁 Files
 
 ### 1. `seed-uat-data.js`
+
 **Purpose:** สร้างข้อมูลทดสอบในฐานข้อมูล
 
 **What it creates:**
+
 - ✅ 13 Test Users (5 roles: Farmer, Reviewer, Inspector, Approver, Admin)
 - ✅ 10 Test Farms (across 4 regions)
 - ✅ 13 Test Applications (various states)
 
 **Usage:**
+
 ```bash
 npm run uat:seed
 # or
@@ -22,15 +25,18 @@ node scripts/seed-uat-data.js
 ```
 
 **Requirements:**
+
 - MongoDB running on localhost:27017
 - .env.uat file configured
 
 ---
 
 ### 2. `run-uat-tests.js`
+
 **Purpose:** รันการทดสอบอัตโนมัติสำหรับทุก Role และ Module
 
 **What it tests:**
+
 - ✅ Farmer role (6 test cases)
 - ✅ Reviewer role (5 test cases)
 - ✅ Inspector role (5 test cases)
@@ -38,6 +44,7 @@ node scripts/seed-uat-data.js
 - ✅ Admin role (10 test cases)
 
 **Usage:**
+
 ```bash
 npm run uat:test
 # or
@@ -45,10 +52,12 @@ node scripts/run-uat-tests.js
 ```
 
 **Requirements:**
+
 - Backend server running on localhost:3001
 - Test data seeded in database
 
 **Output:**
+
 ```
 🧪 UAT TEST RUNNER
 ================================================
@@ -64,21 +73,25 @@ Total: 32 | Passed: 30 | Failed: 2 | Pass Rate: 93.75%
 ## 🚀 Quick Start
 
 ### Step 1: Setup Environment
+
 ```bash
 npm run uat:setup
 ```
 
 ### Step 2: Seed Test Data
+
 ```bash
 npm run uat:seed
 ```
 
 ### Step 3: Start Server
+
 ```bash
 npm run uat:server
 ```
 
 ### Step 4: Run Tests
+
 ```bash
 # In new terminal
 npm run uat:test
@@ -91,6 +104,7 @@ npm run uat:test
 All users created by `seed-uat-data.js`:
 
 ### Farmers (5)
+
 ```
 farmer001 / Test@1234 - Somchai Prasert (Central)
 farmer002 / Test@1234 - Somsri Boonmee (Northern)
@@ -100,6 +114,7 @@ farmer005 / Test@1234 - Surachai Thongchai (Central)
 ```
 
 ### DTAM Staff (8)
+
 ```
 Reviewers:
   reviewer001 / Rev@1234 - Panya Reviewer
@@ -125,6 +140,7 @@ Admin:
 ### Collections Created
 
 1. **users** - User accounts
+
    ```javascript
    {
      username: String,
@@ -141,6 +157,7 @@ Admin:
    ```
 
 2. **farms** - Farm profiles
+
    ```javascript
    {
      farmId: String,
@@ -205,6 +222,7 @@ SEED_TEST_DATA=true
 ## 🐛 Troubleshooting
 
 ### MongoDB Connection Failed
+
 ```bash
 # Check if MongoDB is running
 mongosh --eval "db.version()"
@@ -215,6 +233,7 @@ brew services start mongodb-community  # macOS
 ```
 
 ### Seed Script Fails
+
 ```bash
 # Install dependencies
 cd apps/backend
@@ -232,6 +251,7 @@ npm run uat:seed
 ```
 
 ### Test Script Fails
+
 ```bash
 # Make sure server is running
 npm run uat:server
@@ -248,6 +268,7 @@ DEBUG=* node scripts/run-uat-tests.js
 ## 📊 Test Coverage
 
 ### By Role
+
 - **Farmer:** 6 test cases
 - **Reviewer:** 5 test cases
 - **Inspector:** 5 test cases
@@ -257,6 +278,7 @@ DEBUG=* node scripts/run-uat-tests.js
 **Total:** 32 automated test cases
 
 ### By Module
+
 - **Member Management:** Authentication, Profile, User CRUD
 - **Certification:** Application, Review, Inspection, Approval
 - **Farm Management:** Farm CRUD, Location mapping
@@ -303,9 +325,9 @@ const testUsers = {
       name: 'New Farmer',
       role: 'farmer',
       // ...
-    }
-  ]
-}
+    },
+  ],
+};
 ```
 
 ---
@@ -313,6 +335,7 @@ const testUsers = {
 ## 🎯 Success Criteria
 
 ### Seed Script Success
+
 ```
 ✅ MongoDB connected successfully
 ✅ Successfully seeded 13 users
@@ -321,6 +344,7 @@ const testUsers = {
 ```
 
 ### Test Script Success
+
 ```
 ✅ Pass Rate: ≥ 95%
 ✅ All critical test cases passed
@@ -333,6 +357,7 @@ const testUsers = {
 ## 📞 Support
 
 For issues with scripts:
+
 - 📧 Email: uat-support@botanical.test
 - 🐛 GitHub Issues: [Create Issue]
 - 📖 Documentation: `docs/UAT_*.md`

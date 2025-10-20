@@ -33,7 +33,7 @@ const customFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.errors({ stack: true }),
   winston.format.json(),
-  winston.format.prettyPrint()
+  winston.format.prettyPrint(),
 );
 
 // Console format for development
@@ -54,7 +54,7 @@ const consoleFormat = winston.format.combine(
     }
 
     return msg;
-  })
+  }),
 );
 
 // Create logs directory if it doesn't exist
@@ -69,7 +69,7 @@ if (config.environment === 'development' || config.logging.console) {
     new winston.transports.Console({
       level: config.logging.level,
       format: consoleFormat,
-    })
+    }),
   );
 }
 
@@ -83,7 +83,7 @@ if (config.environment === 'production' || config.logging.file) {
       format: customFormat,
       maxsize: 5242880, // 5MB
       maxFiles: 5,
-    })
+    }),
   );
 
   // Error log file
@@ -94,7 +94,7 @@ if (config.environment === 'production' || config.logging.file) {
       format: customFormat,
       maxsize: 5242880, // 5MB
       maxFiles: 5,
-    })
+    }),
   );
 }
 

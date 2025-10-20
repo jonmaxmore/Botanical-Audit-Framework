@@ -75,7 +75,7 @@ setup('authenticate as inspector', async ({ page }) => {
   await page.fill('input[name="email"]', process.env.TEST_INSPECTOR_EMAIL || 'inspector@test.com');
   await page.fill(
     'input[name="password"]',
-    process.env.TEST_INSPECTOR_PASSWORD || 'InspectorPass123!'
+    process.env.TEST_INSPECTOR_PASSWORD || 'InspectorPass123!',
   );
 
   // Submit login

@@ -43,7 +43,7 @@ router.post(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array()
+          errors.array(),
         );
       }
 
@@ -54,7 +54,7 @@ router.post(
         return utils.response.error(
           res,
           'คุณไม่มีสิทธิ์เข้าถึงระบบนี้',
-          shared.constants.statusCodes.FORBIDDEN
+          shared.constants.statusCodes.FORBIDDEN,
         );
       }
 
@@ -68,7 +68,7 @@ router.post(
         return utils.response.error(
           res,
           'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
-          shared.constants.statusCodes.UNAUTHORIZED
+          shared.constants.statusCodes.UNAUTHORIZED,
         );
       }
 
@@ -77,7 +77,7 @@ router.post(
         return utils.response.error(
           res,
           'บัญชีของคุณถูกระงับการใช้งาน',
-          shared.constants.statusCodes.FORBIDDEN
+          shared.constants.statusCodes.FORBIDDEN,
         );
       }
 
@@ -95,7 +95,7 @@ router.post(
         return utils.response.error(
           res,
           'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
-          shared.constants.statusCodes.UNAUTHORIZED
+          shared.constants.statusCodes.UNAUTHORIZED,
         );
       }
 
@@ -119,7 +119,7 @@ router.post(
           department: staff.department,
         },
         dtamJwtSecret,
-        { expiresIn: '8h' } // Shorter session for security
+        { expiresIn: '8h' }, // Shorter session for security
       );
 
       logger.info(`DTAM staff login successful: ${staff.username} (${staff.role})`);
@@ -139,17 +139,17 @@ router.post(
             department: staff.department,
           },
         },
-        'เข้าสู่ระบบสำเร็จ'
+        'เข้าสู่ระบบสำเร็จ',
       );
     } catch (error) {
       logger.error('DTAM login error:', error);
       return utils.response.error(
         res,
         'เกิดข้อผิดพลาดในการเข้าสู่ระบบ',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  },
 );
 
 /**
@@ -161,7 +161,7 @@ router.post('/register', (req, res) => {
   return utils.response.error(
     res,
     'ไม่สามารถสมัครสมาชิกด้วยตนเองได้ - บัญชีเจ้าหน้าที่ต้องสร้างโดยผู้ดูแลระบบเท่านั้น กรุณาติดต่อผู้ดูแลระบบ',
-    shared.constants.statusCodes.FORBIDDEN
+    shared.constants.statusCodes.FORBIDDEN,
   );
 });
 
@@ -206,7 +206,7 @@ router.get('/verify', (req, res) => {
       return utils.response.error(
         res,
         'Token ไม่ถูกต้อง',
-        shared.constants.statusCodes.UNAUTHORIZED
+        shared.constants.statusCodes.UNAUTHORIZED,
       );
     }
     if (error.name === 'TokenExpiredError') {
@@ -216,7 +216,7 @@ router.get('/verify', (req, res) => {
     return utils.response.error(
       res,
       'เกิดข้อผิดพลาดในการตรวจสอบ token',
-      shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+      shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
     );
   }
 });
@@ -252,7 +252,7 @@ router.get('/profile', dtamMiddleware.verifyDTAMToken, async (req, res) => {
     return utils.response.error(
       res,
       'ไม่สามารถดึงข้อมูลโปรไฟล์ได้',
-      shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+      shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
     );
   }
 });
@@ -262,34 +262,39 @@ router.get('/profile', dtamMiddleware.verifyDTAMToken, async (req, res) => {
  * @desc Get list of DTAM staff (admin only)
  * @access Private (DTAM admin only)
  */
-router.get('/staff-list', dtamMiddleware.verifyDTAMToken, dtamMiddleware.requireDTAMAdmin, async (req, res) => {
-  try {
-    const staffList = await DTAMStaff.find().select('-password').sort({ createdAt: -1 });
+router.get(
+  '/staff-list',
+  dtamMiddleware.verifyDTAMToken,
+  dtamMiddleware.requireDTAMAdmin,
+  async (req, res) => {
+    try {
+      const staffList = await DTAMStaff.find().select('-password').sort({ createdAt: -1 });
 
-    return utils.response.success(res, {
-      count: staffList.length,
-      staff: staffList.map(staff => ({
-        userId: staff._id,
-        username: staff.username,
-        email: staff.email,
-        firstName: staff.firstName,
-        lastName: staff.lastName,
-        role: staff.role,
-        department: staff.department,
-        isActive: staff.isActive,
-        createdAt: staff.createdAt,
-        lastLoginAt: staff.lastLoginAt,
-      })),
-    });
-  } catch (error) {
-    logger.error('Get DTAM staff list error:', error);
-    return utils.response.error(
-      res,
-      'เกิดข้อผิดพลาด',
-      shared.constants.statusCodes.INTERNAL_SERVER_ERROR
-    );
-  }
-});
+      return utils.response.success(res, {
+        count: staffList.length,
+        staff: staffList.map(staff => ({
+          userId: staff._id,
+          username: staff.username,
+          email: staff.email,
+          firstName: staff.firstName,
+          lastName: staff.lastName,
+          role: staff.role,
+          department: staff.department,
+          isActive: staff.isActive,
+          createdAt: staff.createdAt,
+          lastLoginAt: staff.lastLoginAt,
+        })),
+      });
+    } catch (error) {
+      logger.error('Get DTAM staff list error:', error);
+      return utils.response.error(
+        res,
+        'เกิดข้อผิดพลาด',
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
+      );
+    }
+  },
+);
 
 /**
  * @route POST /api/auth-dtam/create-staff
@@ -322,7 +327,7 @@ router.post(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array()
+          errors.array(),
         );
       }
 
@@ -337,7 +342,7 @@ router.post(
         return utils.response.error(
           res,
           'ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้งานแล้ว',
-          shared.constants.statusCodes.CONFLICT
+          shared.constants.statusCodes.CONFLICT,
         );
       }
 
@@ -370,17 +375,17 @@ router.post(
           department: newStaff.department,
         },
         'สร้างบัญชีเจ้าหน้าที่สำเร็จ',
-        shared.constants.statusCodes.CREATED
+        shared.constants.statusCodes.CREATED,
       );
     } catch (error) {
       logger.error('Create DTAM staff error:', error);
       return utils.response.error(
         res,
         'ไม่สามารถสร้างบัญชีได้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
       );
     }
-  }
+  },
 );
 
 /**
@@ -411,4 +416,3 @@ router.get('/health', async (req, res) => {
 });
 
 module.exports = router;
-

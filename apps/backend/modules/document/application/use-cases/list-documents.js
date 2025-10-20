@@ -27,7 +27,7 @@ class ListDocumentsUseCase {
 
       return result;
     } catch (error) {
-      console.error('Error listing documents:', error);
+      logger.error('Error listing documents:', error);
       throw error;
     }
   }

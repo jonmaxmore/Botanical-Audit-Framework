@@ -28,7 +28,7 @@ class ListCertificatesUseCase {
    */
   async execute({ filters = {}, pagination = {}, sort = {}, user }) {
     try {
-      console.log('📋 Listing certificates with filters:', filters);
+      logger.info('📋 Listing certificates with filters:', filters);
 
       // 1. ตั้งค่า default values
       const defaultPagination = {
@@ -66,7 +66,7 @@ class ListCertificatesUseCase {
       // 7. เตรียมข้อมูลสถิติ
       const statistics = await this._gatherStatistics(authorizedFilters, user);
 
-      console.log(`📊 Retrieved ${certificates.length} certificates (${totalCount} total)`);
+      logger.info(`📊 Retrieved ${certificates.length} certificates (${totalCount} total);`);
 
       return {
         certificates: certificates.map(cert => cert.toJSON()),
@@ -83,7 +83,7 @@ class ListCertificatesUseCase {
         statistics,
       };
     } catch (error) {
-      console.error('❌ Failed to list certificates:', error);
+      logger.error('❌ Failed to list certificates:', error);
       throw error;
     }
   }
@@ -240,7 +240,7 @@ class ListCertificatesUseCase {
         expiringSoon,
       };
     } catch (error) {
-      console.error('Failed to gather statistics:', error);
+      logger.error('Failed to gather statistics:', error);
       return {};
     }
   }

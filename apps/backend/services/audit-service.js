@@ -9,6 +9,7 @@
  * - SIEM integration (optional)
  */
 
+const logger = require('../shared/logger/logger');
 const { v4: uuidv4 } = require('uuid');
 
 class AuditService {
@@ -77,11 +78,11 @@ class AuditService {
         await this.logToSIEM(log);
       }
 
-      console.log(`✅ Audit log created: ${action} by ${actor.userId}`);
+      logger.info(`✅ Audit log created: ${action} by ${actor.userId}`);
 
       return log;
     } catch (error) {
-      console.error('❌ Failed to create audit log:', error);
+      logger.error('❌ Failed to create audit log:', error);
       // Don't throw - audit logging should not break the main flow
       return null;
     }
@@ -131,7 +132,7 @@ class AuditService {
 
       return log;
     } catch (err) {
-      console.error('❌ Failed to log failure:', err);
+      logger.error('❌ Failed to log failure:', err);
       return null;
     }
   }
@@ -148,7 +149,7 @@ class AuditService {
    */
   async logToSIEM(log) {
     if (!this.siemEndpoint) {
-      console.warn('⚠️ SIEM endpoint not configured');
+      logger.warn('⚠️ SIEM endpoint not configured');
       return;
     }
 
@@ -167,9 +168,9 @@ class AuditService {
         throw new Error(`SIEM request failed: ${response.statusText}`);
       }
 
-      console.log('✅ Log sent to SIEM');
+      logger.info('✅ Log sent to SIEM');
     } catch (error) {
-      console.error('❌ SIEM logging failed:', error.message);
+      logger.error('❌ SIEM logging failed:', error.message);
       // Don't throw - SIEM failures should not affect main flow
     }
   }
@@ -387,7 +388,7 @@ class AuditService {
       action: { $nin: Array.from(this.criticalActions) }, // Keep critical actions
     });
 
-    console.log(`✅ Cleaned up ${result.deletedCount} old audit logs`);
+    logger.info(`✅ Cleaned up ${result.deletedCount} old audit logs`);
 
     return result.deletedCount;
   }
@@ -401,7 +402,7 @@ if (require.main === module) {
 
   async function test() {
     const client = await MongoClient.connect(
-      process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_platform'
+      process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_platform',
     );
     const db = client.db();
 
@@ -430,7 +431,7 @@ if (require.main === module) {
       {
         reason: 'New application submitted',
         paymentId: 'PAY-001',
-      }
+      },
     );
 
     // Test failure logging
@@ -451,23 +452,23 @@ if (require.main === module) {
       {
         amount: 5000,
         currency: 'THB',
-      }
+      },
     );
 
     // Get audit trail
     const trail = await auditService.getAuditTrail('application', 'APP-2025-000001');
-    console.log('Audit trail:', trail.length, 'entries');
+    logger.info('Audit trail:', trail.length, 'entries');
 
     // Get statistics
     const stats = await auditService.getAuditStats(
       new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-      new Date()
+      new Date(),
     );
-    console.log('Audit stats:', stats);
+    logger.info('Audit stats:', stats);
 
     // Get recent critical actions
     const critical = await auditService.getRecentCriticalActions(5);
-    console.log('Recent critical actions:', critical.length);
+    logger.info('Recent critical actions:', critical.length);
 
     await client.close();
   }

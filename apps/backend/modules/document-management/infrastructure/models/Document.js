@@ -370,7 +370,7 @@ const documentSchema = new mongoose.Schema(
         return ret;
       },
     },
-  }
+  },
 );
 
 // Indexes for performance optimization
@@ -485,7 +485,7 @@ documentSchema.methods.shareWith = function (
   userId,
   role,
   permissions = ['READ'],
-  expiresIn = null
+  expiresIn = null,
 ) {
   const expiresAt = expiresIn ? new Date(Date.now() + expiresIn) : null;
 

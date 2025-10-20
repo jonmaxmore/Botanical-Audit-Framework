@@ -285,7 +285,7 @@ router.post('/workflow/transition', async (req, res) => {
       currentState,
       targetState,
       context || {},
-      actor || { role: 'system' }
+      actor || { role: 'system' },
     );
 
     res.json({

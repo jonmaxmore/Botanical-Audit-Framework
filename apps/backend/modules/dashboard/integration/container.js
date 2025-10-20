@@ -25,7 +25,7 @@ class DashboardModuleContainer {
     trainingEnrollmentRepository = null,
     documentRepository = null,
     notificationRepository = null,
-    auditRepository = null
+    auditRepository = null,
   ) {
     // Store repositories
     this.farmRepository = farmRepository;
@@ -54,7 +54,7 @@ class DashboardModuleContainer {
       this.surveyRepository,
       this.trainingEnrollmentRepository,
       this.documentRepository,
-      this.notificationRepository
+      this.notificationRepository,
     );
 
     this.getDTAMDashboardUseCase = new GetDTAMDashboardUseCase(
@@ -64,7 +64,7 @@ class DashboardModuleContainer {
       this.trainingCourseRepository,
       this.trainingEnrollmentRepository,
       this.documentRepository,
-      this.auditRepository
+      this.auditRepository,
     );
 
     this.getSystemStatisticsUseCase = new GetSystemStatisticsUseCase(
@@ -75,7 +75,7 @@ class DashboardModuleContainer {
       this.trainingEnrollmentRepository,
       this.documentRepository,
       this.notificationRepository,
-      this.auditRepository
+      this.auditRepository,
     );
   }
 
@@ -83,7 +83,7 @@ class DashboardModuleContainer {
     this.dashboardController = new DashboardController(
       this.getFarmerDashboardUseCase,
       this.getDTAMDashboardUseCase,
-      this.getSystemStatisticsUseCase
+      this.getSystemStatisticsUseCase,
     );
   }
 

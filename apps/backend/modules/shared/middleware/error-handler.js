@@ -140,7 +140,7 @@ const errorHandler = (err, req, res, next) => {
       ERROR_CODES.VALIDATION_ERROR,
       'Validation failed',
       err.errors,
-      400
+      400,
     );
     return res.status(400).json(errorResponse);
   }
@@ -150,7 +150,7 @@ const errorHandler = (err, req, res, next) => {
       ERROR_CODES.DATABASE_ERROR,
       'Database operation failed',
       process.env.NODE_ENV === 'development' ? err.message : null,
-      500
+      500,
     );
     return res.status(500).json(errorResponse);
   }
@@ -160,7 +160,7 @@ const errorHandler = (err, req, res, next) => {
       ERROR_CODES.INVALID_TOKEN,
       'Invalid token',
       null,
-      401
+      401,
     );
     return res.status(401).json(errorResponse);
   }
@@ -170,7 +170,7 @@ const errorHandler = (err, req, res, next) => {
       ERROR_CODES.TOKEN_EXPIRED,
       'Token expired',
       null,
-      401
+      401,
     );
     return res.status(401).json(errorResponse);
   }
@@ -180,7 +180,7 @@ const errorHandler = (err, req, res, next) => {
     ERROR_CODES.INTERNAL_SERVER_ERROR,
     'Internal server error',
     process.env.NODE_ENV === 'development' ? err.message : null,
-    500
+    500,
   );
 
   res.status(500).json(errorResponse);
@@ -194,7 +194,7 @@ const notFoundHandler = (req, res) => {
     ERROR_CODES.RESOURCE_NOT_FOUND,
     'Endpoint not found',
     { endpoint: req.path, method: req.method },
-    404
+    404,
   );
   res.status(404).json(errorResponse);
 };

@@ -274,13 +274,13 @@ class DocumentModuleContainer {
     // Application
     this.uploadDocumentUseCase = new UploadDocumentUseCase(
       this.documentRepository,
-      this.storageService
+      this.storageService,
     );
 
     // Presentation
     this.documentController = new DocumentController(
       this.uploadDocumentUseCase,
-      this.listDocumentsUseCase
+      this.listDocumentsUseCase,
     );
   }
 

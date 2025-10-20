@@ -100,7 +100,7 @@ const dtamStaffSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'dtam_staff',
-  }
+  },
 );
 
 // Apply shared mongoose plugins (commented out - plugin not available)

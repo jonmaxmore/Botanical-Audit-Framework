@@ -40,6 +40,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../shared/logger/logger');
 const NotificationService = require('./application/services/NotificationService');
 const NotificationController = require('./presentation/controllers/NotificationController');
 const NotificationRoutes = require('./presentation/routes/NotificationRoutes');
@@ -53,7 +54,7 @@ class NotificationModule {
     this.routes = null;
     this.isInitialized = false;
 
-    console.log('[NotificationModule] Initializing...');
+    logger.info('[NotificationModule] Initializing...');
   }
 
   /**
@@ -95,14 +96,14 @@ class NotificationModule {
 
       this.isInitialized = true;
 
-      console.log('[NotificationModule] Initialized successfully');
+      logger.info('[NotificationModule] Initialized successfully');
 
       // Log module capabilities
       this._logModuleCapabilities();
 
       return this;
     } catch (error) {
-      console.error('[NotificationModule] Initialization failed:', error);
+      logger.error('[NotificationModule] Initialization failed:', error);
       throw new Error(`NotificationModule initialization failed: ${error.message}`);
     }
   }
@@ -131,7 +132,7 @@ class NotificationModule {
     const missingConfig = requiredConfig.filter(key => !notificationConfig[key]);
 
     if (missingConfig.length > 0) {
-      console.warn(`[NotificationModule] Missing notification config: ${missingConfig.join(', ')}`);
+      logger.warn(`[NotificationModule] Missing notification config: ${missingConfig.join(', ')}`);
     }
   }
 
@@ -162,7 +163,7 @@ class NotificationModule {
       endpoints: this.routes ? this.routes.getRouteInfo().endpoints.length : 0,
     };
 
-    console.log('[NotificationModule] Capabilities:', JSON.stringify(capabilities, null, 2));
+    logger.info('[NotificationModule] Capabilities:', JSON.stringify(capabilities, null, 2));
   }
 
   /**
@@ -218,7 +219,7 @@ class NotificationModule {
   async sendWorkflowNotification(workflowData) {
     if (!this.isInitialized) {
       throw new Error(
-        'NotificationModule must be initialized before sending workflow notifications'
+        'NotificationModule must be initialized before sending workflow notifications',
       );
     }
     return await this.service.sendWorkflowNotification(workflowData);
@@ -232,7 +233,7 @@ class NotificationModule {
   async sendPaymentNotification(paymentData) {
     if (!this.isInitialized) {
       throw new Error(
-        'NotificationModule must be initialized before sending payment notifications'
+        'NotificationModule must be initialized before sending payment notifications',
       );
     }
     return await this.service.sendPaymentNotification(paymentData);
@@ -332,16 +333,16 @@ class NotificationModule {
    */
   async shutdown() {
     try {
-      console.log('[NotificationModule] Shutting down...');
+      logger.info('[NotificationModule] Shutting down...');
 
       if (this.service) {
         await this.service.shutdown();
       }
 
       this.isInitialized = false;
-      console.log('[NotificationModule] Shutdown completed');
+      logger.info('[NotificationModule] Shutdown completed');
     } catch (error) {
-      console.error('[NotificationModule] Shutdown error:', error);
+      logger.error('[NotificationModule] Shutdown error:', error);
       throw error;
     }
   }

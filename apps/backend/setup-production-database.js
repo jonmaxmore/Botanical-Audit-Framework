@@ -11,6 +11,7 @@
  * - Connection string in .env file
  */
 
+const logger = require('shared/logger/logger');
 require('dotenv').config();
 const { MongoClient } = require('mongodb');
 const bcrypt = require('bcrypt');
@@ -140,9 +141,9 @@ async function setupProductionDatabase() {
   let client;
   const startTime = Date.now();
 
-  console.log('\n' + '='.repeat(70));
-  console.log('🚀 GACP Platform - Production Database Setup');
-  console.log('='.repeat(70) + '\n');
+  logger.info('\n' + '='.repeat(70));
+  logger.info('🚀 GACP Platform - Production Database Setup');
+  logger.info('='.repeat(70) + '\n');
 
   try {
     // Validate environment
@@ -151,15 +152,15 @@ async function setupProductionDatabase() {
     }
 
     if (process.env.NODE_ENV !== 'production') {
-      console.warn('⚠️  WARNING: NODE_ENV is not set to "production"');
-      console.warn('   Current environment:', process.env.NODE_ENV || 'undefined');
-      console.warn('   Continue? (Press Ctrl+C to cancel)\n');
+      logger.warn('⚠️  WARNING: NODE_ENV is not set to "production"');
+      logger.warn('   Current environment:', process.env.NODE_ENV || 'undefined');
+      logger.warn('   Continue? (Press Ctrl+C to cancel);\n');
       await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     // Connect to MongoDB Atlas
-    console.log('📡 Connecting to MongoDB Atlas...');
-    console.log('   Database:', process.env.MONGODB_DATABASE);
+    logger.info('📡 Connecting to MongoDB Atlas...');
+    logger.info('   Database:', process.env.MONGODB_DATABASE);
 
     client = new MongoClient(process.env.MONGODB_URI, {
       maxPoolSize: 10,
@@ -168,7 +169,7 @@ async function setupProductionDatabase() {
     });
 
     await client.connect();
-    console.log('✅ Connected to MongoDB Atlas\n');
+    logger.info('✅ Connected to MongoDB Atlas\n');
 
     const db = client.db(process.env.MONGODB_DATABASE);
 
@@ -176,13 +177,13 @@ async function setupProductionDatabase() {
     const existingCollections = await db.listCollections().toArray();
     const existingNames = new Set(existingCollections.map(c => c.name));
 
-    console.log('📊 Database Statistics:');
+    logger.info('📊 Database Statistics:');
     const stats = await db.stats();
-    console.log(`   Collections: ${stats.collections}`);
-    console.log(`   Size: ${(stats.dataSize / 1024 / 1024).toFixed(2)} MB`);
-    console.log(`   Indexes: ${stats.indexes}\n`);
+    logger.info(`   Collections: ${stats.collections}`);
+    logger.info(`   Size: ${(stats.dataSize / 1024 / 1024).toFixed(2)} MB`);
+    logger.info(`   Indexes: ${stats.indexes}\n`);
 
-    console.log('📋 Setting up collections and indexes...\n');
+    logger.info('📋 Setting up collections and indexes...\n');
 
     let created = 0;
     let updated = 0;
@@ -198,10 +199,10 @@ async function setupProductionDatabase() {
           if (validator) options.validator = validator;
 
           await db.createCollection(name, options);
-          console.log(`  ✅ Created collection: ${name}`);
+          logger.info(`  ✅ Created collection: ${name}`);
           created++;
         } else {
-          console.log(`  ℹ️  Collection exists: ${name}`);
+          logger.info(`  ℹ️  Collection exists: ${name}`);
           updated++;
 
           // Update validator if provided
@@ -211,7 +212,7 @@ async function setupProductionDatabase() {
               validator: validator,
               validationLevel: 'moderate',
             });
-            console.log('     📝 Updated validator');
+            logger.info('     📝 Updated validator');
           }
         }
 
@@ -225,14 +226,14 @@ async function setupProductionDatabase() {
             totalIndexes++;
           } catch (err) {
             if (err.code !== 85 && err.code !== 86) {
-              console.warn(`     ⚠️  Index warning: ${err.message}`);
+              logger.warn(`     ⚠️  Index warning: ${err.message}`);
             }
           }
         }
 
-        console.log(`     📊 ${indexes.length} indexes configured\n`);
+        logger.info(`     📊 ${indexes.length} indexes configured\n`);
       } catch (err) {
-        console.error(`  ❌ Error with collection ${name}:`, err.message);
+        logger.error(`  ❌ Error with collection ${name}:`, err.message);
       }
     }
 
@@ -241,7 +242,7 @@ async function setupProductionDatabase() {
     const userCount = await usersCollection.countDocuments();
 
     if (userCount === 0) {
-      console.log('👤 Creating default admin user...');
+      logger.info('👤 Creating default admin user...');
 
       const adminPassword = process.env.ADMIN_DEFAULT_PASSWORD || 'Admin@2025';
       const hashedPassword = await bcrypt.hash(adminPassword, 12);
@@ -260,39 +261,39 @@ async function setupProductionDatabase() {
         updatedAt: new Date(),
       });
 
-      console.log('   ✅ Admin user created');
-      console.log('   Email: admin@gacp-platform.com');
-      console.log('   Password:', adminPassword);
-      console.log('   ⚠️  IMPORTANT: Change this password immediately!\n');
+      logger.info('   ✅ Admin user created');
+      logger.info('   Email: admin@gacp-platform.com');
+      logger.info('   Password:', adminPassword);
+      logger.info('   ⚠️  IMPORTANT: Change this password immediately!\n');
     }
 
     // Summary
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
 
-    console.log('='.repeat(70));
-    console.log('🎉 Database setup completed successfully!');
-    console.log('='.repeat(70));
-    console.log('\n📊 Summary:');
-    console.log(`   Collections created: ${created}`);
-    console.log(`   Collections updated: ${updated}`);
-    console.log(`   Total indexes: ${totalIndexes}`);
-    console.log(`   Execution time: ${duration}s`);
-    console.log('\n✨ Your production database is ready!');
-    console.log('🚀 Next: Start the application with production settings\n');
+    logger.info('='.repeat(70));
+    logger.info('🎉 Database setup completed successfully!');
+    logger.info('='.repeat(70));
+    logger.info('\n📊 Summary:');
+    logger.info(`   Collections created: ${created}`);
+    logger.info(`   Collections updated: ${updated}`);
+    logger.info(`   Total indexes: ${totalIndexes}`);
+    logger.info(`   Execution time: ${duration}s`);
+    logger.info('\n✨ Your production database is ready!');
+    logger.info('🚀 Next: Start the application with production settings\n');
   } catch (error) {
-    console.error('\n' + '='.repeat(70));
-    console.error('❌ Setup failed:', error.message);
-    console.error('='.repeat(70));
-    console.error('\n💡 Troubleshooting:');
-    console.error('   1. Verify MONGODB_URI in .env file');
-    console.error('   2. Check IP whitelist in MongoDB Atlas');
-    console.error('   3. Verify database user permissions');
-    console.error('   4. Ensure cluster is running\n');
+    logger.error('\n' + '='.repeat(70));
+    logger.error('❌ Setup failed:', error.message);
+    logger.error('='.repeat(70));
+    logger.error('\n💡 Troubleshooting:');
+    logger.error('   1. Verify MONGODB_URI in .env file');
+    logger.error('   2. Check IP whitelist in MongoDB Atlas');
+    logger.error('   3. Verify database user permissions');
+    logger.error('   4. Ensure cluster is running\n');
     process.exit(1);
   } finally {
     if (client) {
       await client.close();
-      console.log('👋 Connection closed.\n');
+      logger.info('👋 Connection closed.\n');
     }
   }
 }

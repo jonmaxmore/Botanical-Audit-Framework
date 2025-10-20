@@ -47,7 +47,7 @@ const surveySchema = new Schema({
   },
 });
 
-surveySchema.pre('save', function(next) {
+surveySchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });

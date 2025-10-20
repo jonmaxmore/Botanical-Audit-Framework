@@ -17,14 +17,7 @@
     "docker:build": "docker build -t gacp-platform .",
     "docker:run": "docker run -p 3000:3000 gacp-platform"
   },
-  "keywords": [
-    "gacp",
-    "certification",
-    "agriculture",
-    "nodejs",
-    "express",
-    "mongodb"
-  ],
+  "keywords": ["gacp", "certification", "agriculture", "nodejs", "express", "mongodb"],
   "author": "GACP Platform Team",
   "license": "MIT",
   "dependencies": {

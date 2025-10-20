@@ -7,7 +7,7 @@ export const WORKFLOW_TRANSITIONS: Record<ApplicationStatus, ApplicationStatus[]
   [ApplicationStatus.SUBMITTED]: [ApplicationStatus.DOCUMENT_CHECKING],
   [ApplicationStatus.DOCUMENT_CHECKING]: [
     ApplicationStatus.DOCUMENT_APPROVED,
-    ApplicationStatus.DOCUMENT_REJECTED,
+    ApplicationStatus.DOCUMENT_REJECTED
   ],
   [ApplicationStatus.DOCUMENT_APPROVED]: [ApplicationStatus.INSPECTION_SCHEDULED],
   [ApplicationStatus.DOCUMENT_REJECTED]: [ApplicationStatus.SUBMITTED], // ให้แก้ไขและส่งใหม่
@@ -15,14 +15,14 @@ export const WORKFLOW_TRANSITIONS: Record<ApplicationStatus, ApplicationStatus[]
   [ApplicationStatus.INSPECTING]: [ApplicationStatus.INSPECTION_COMPLETED],
   [ApplicationStatus.INSPECTION_COMPLETED]: [
     ApplicationStatus.INSPECTION_PASSED,
-    ApplicationStatus.INSPECTION_FAILED,
+    ApplicationStatus.INSPECTION_FAILED
   ],
   [ApplicationStatus.INSPECTION_PASSED]: [ApplicationStatus.PENDING_APPROVAL],
   [ApplicationStatus.INSPECTION_FAILED]: [ApplicationStatus.SUBMITTED], // ให้ปรับปรุงและส่งใหม่
   [ApplicationStatus.PENDING_APPROVAL]: [ApplicationStatus.APPROVED, ApplicationStatus.REJECTED],
   [ApplicationStatus.APPROVED]: [ApplicationStatus.CERTIFICATE_ISSUED],
   [ApplicationStatus.REJECTED]: [ApplicationStatus.SUBMITTED], // ให้แก้ไขและส่งใหม่
-  [ApplicationStatus.CERTIFICATE_ISSUED]: [], // สถานะสุดท้าย
+  [ApplicationStatus.CERTIFICATE_ISSUED]: [] // สถานะสุดท้าย
 };
 
 // กำหนดสิทธิ์ในการเปลี่ยนสถานะตาม Role
@@ -31,22 +31,22 @@ export const ROLE_PERMISSIONS: Record<UserRole, ApplicationStatus[]> = {
   [UserRole.DOCUMENT_CHECKER]: [
     ApplicationStatus.DOCUMENT_CHECKING,
     ApplicationStatus.DOCUMENT_APPROVED,
-    ApplicationStatus.DOCUMENT_REJECTED,
+    ApplicationStatus.DOCUMENT_REJECTED
   ],
   [UserRole.INSPECTOR]: [
     ApplicationStatus.INSPECTION_SCHEDULED,
     ApplicationStatus.INSPECTING,
     ApplicationStatus.INSPECTION_COMPLETED,
     ApplicationStatus.INSPECTION_PASSED,
-    ApplicationStatus.INSPECTION_FAILED,
+    ApplicationStatus.INSPECTION_FAILED
   ],
   [UserRole.APPROVER]: [
     ApplicationStatus.PENDING_APPROVAL,
     ApplicationStatus.APPROVED,
     ApplicationStatus.REJECTED,
-    ApplicationStatus.CERTIFICATE_ISSUED,
+    ApplicationStatus.CERTIFICATE_ISSUED
   ],
-  [UserRole.ADMIN]: Object.values(ApplicationStatus), // Admin มีสิทธิ์ทุกสถานะ
+  [UserRole.ADMIN]: Object.values(ApplicationStatus) // Admin มีสิทธิ์ทุกสถานะ
 };
 
 // เพิ่มการรองรับกรณีพิเศษในระบบ
@@ -66,11 +66,11 @@ export const SPECIAL_TRANSITIONS: Record<string, ApplicationStatus[]> = {
     ApplicationStatus.SUBMITTED,
     ApplicationStatus.DOCUMENT_CHECKING,
     ApplicationStatus.DOCUMENT_APPROVED,
-    ApplicationStatus.DOCUMENT_REJECTED,
+    ApplicationStatus.DOCUMENT_REJECTED
   ],
 
   // กรณีต้องการปรับปรุงระบบ
-  ADMIN_OVERRIDE: Object.values(ApplicationStatus),
+  ADMIN_OVERRIDE: Object.values(ApplicationStatus)
 };
 
 export class WorkflowService {
@@ -90,7 +90,7 @@ export class WorkflowService {
   static canUserPerformTransition(
     role: UserRole,
     currentStatus: ApplicationStatus,
-    newStatus: ApplicationStatus,
+    newStatus: ApplicationStatus
   ): boolean {
     return this.canTransition(currentStatus, newStatus) && this.hasPermission(role, newStatus);
   }
@@ -98,7 +98,7 @@ export class WorkflowService {
   // รับสถานะถัดไปที่เป็นไปได้สำหรับ Role นั้นๆ
   static getNextPossibleStatuses(
     role: UserRole,
-    currentStatus: ApplicationStatus,
+    currentStatus: ApplicationStatus
   ): ApplicationStatus[] {
     const possibleTransitions = WORKFLOW_TRANSITIONS[currentStatus] || [];
     return possibleTransitions.filter(status => this.hasPermission(role, status));
@@ -120,7 +120,7 @@ export class WorkflowService {
       [ApplicationStatus.PENDING_APPROVAL]: 'รอการอนุมัติ',
       [ApplicationStatus.APPROVED]: 'อนุมัติแล้ว',
       [ApplicationStatus.REJECTED]: 'ไม่อนุมัติ',
-      [ApplicationStatus.CERTIFICATE_ISSUED]: 'ออกใบรับรองแล้ว',
+      [ApplicationStatus.CERTIFICATE_ISSUED]: 'ออกใบรับรองแล้ว'
     };
     return labels[status] || status;
   }
@@ -141,7 +141,7 @@ export class WorkflowService {
       [ApplicationStatus.PENDING_APPROVAL]: '#ff9800',
       [ApplicationStatus.APPROVED]: '#4caf50',
       [ApplicationStatus.REJECTED]: '#f44336',
-      [ApplicationStatus.CERTIFICATE_ISSUED]: '#9c27b0',
+      [ApplicationStatus.CERTIFICATE_ISSUED]: '#9c27b0'
     };
     return colors[status] || '#9e9e9e';
   }
@@ -150,7 +150,7 @@ export class WorkflowService {
   static canPerformSpecialTransition(
     specialCase: string,
     currentStatus: ApplicationStatus,
-    role: UserRole,
+    role: UserRole
   ): boolean {
     // ตรวจสอบว่าสถานะปัจจุบันอยู่ในรายการที่อนุญาตหรือไม่
     const allowedStatuses = SPECIAL_TRANSITIONS[specialCase] || [];
@@ -158,33 +158,33 @@ export class WorkflowService {
 
     // ตรวจสอบสิทธิ์พิเศษตามบทบาท
     switch (specialCase) {
-      case 'REASSIGN_DOCUMENT_CHECKER':
-        return role === UserRole.ADMIN || role === UserRole.DOCUMENT_CHECKER;
+    case 'REASSIGN_DOCUMENT_CHECKER':
+      return role === UserRole.ADMIN || role === UserRole.DOCUMENT_CHECKER;
 
-      case 'RESCHEDULE_INSPECTION':
-        return role === UserRole.ADMIN || role === UserRole.INSPECTOR;
+    case 'RESCHEDULE_INSPECTION':
+      return role === UserRole.ADMIN || role === UserRole.INSPECTOR;
 
-      case 'EMERGENCY_STOP':
-        return role === UserRole.ADMIN;
+    case 'EMERGENCY_STOP':
+      return role === UserRole.ADMIN;
 
-      case 'FARMER_CANCEL':
-        return role === UserRole.ADMIN || role === UserRole.FARMER;
+    case 'FARMER_CANCEL':
+      return role === UserRole.ADMIN || role === UserRole.FARMER;
 
-      case 'ADMIN_OVERRIDE':
-        return role === UserRole.ADMIN;
+    case 'ADMIN_OVERRIDE':
+      return role === UserRole.ADMIN;
 
-      default:
-        return false;
+    default:
+      return false;
     }
   }
 
   // เพิ่มเมธอดวิเคราะห์ขั้นตอนที่ขาดหายไป
   static analyzeMissingSteps(
-    applicationHistory: Array<{ fromStatus: ApplicationStatus; toStatus: ApplicationStatus }>,
+    applicationHistory: Array<{ fromStatus: ApplicationStatus; toStatus: ApplicationStatus }>
   ): { hasMissingSteps: boolean; missingSteps: string[] } {
     const result = {
       hasMissingSteps: false,
-      missingSteps: [] as string[],
+      missingSteps: [] as string[]
     };
 
     if (!applicationHistory.length) return result;
@@ -198,7 +198,7 @@ export class WorkflowService {
       if (fromStatus !== currentStatus) {
         result.hasMissingSteps = true;
         result.missingSteps.push(
-          `Missing transition from ${this.getStatusLabel(currentStatus)} to ${this.getStatusLabel(fromStatus)}`,
+          `Missing transition from ${this.getStatusLabel(currentStatus)} to ${this.getStatusLabel(fromStatus)}`
         );
       }
 
@@ -215,18 +215,18 @@ export class WorkflowService {
       fromStatus: ApplicationStatus;
       toStatus: ApplicationStatus;
       timestamp: Date;
-    }>,
+    }>
   ): { isValid: boolean; errors: string[] } {
     const result = {
       isValid: true,
-      errors: [] as string[],
+      errors: [] as string[]
     };
 
     if (!applicationHistory.length) return result;
 
     // เรียงลำดับตาม timestamp
     const sortedHistory = [...applicationHistory].sort(
-      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime(),
+      (a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
     );
 
     let currentStatus = sortedHistory[0].fromStatus;
@@ -238,7 +238,7 @@ export class WorkflowService {
       if (fromStatus !== currentStatus) {
         result.isValid = false;
         result.errors.push(
-          `Inconsistent workflow: Expected ${this.getStatusLabel(currentStatus)} but found ${this.getStatusLabel(fromStatus)}`,
+          `Inconsistent workflow: Expected ${this.getStatusLabel(currentStatus)} but found ${this.getStatusLabel(fromStatus)}`
         );
       }
 
@@ -246,7 +246,7 @@ export class WorkflowService {
       if (!this.canTransition(fromStatus, toStatus)) {
         result.isValid = false;
         result.errors.push(
-          `Invalid transition from ${this.getStatusLabel(fromStatus)} to ${this.getStatusLabel(toStatus)}`,
+          `Invalid transition from ${this.getStatusLabel(fromStatus)} to ${this.getStatusLabel(toStatus)}`
         );
       }
 

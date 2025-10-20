@@ -15,7 +15,7 @@ const connectDB = async () => {
       {
         useNewUrlParser: true,
         useUnifiedTopology: true,
-      }
+      },
     );
     console.log('✅ MongoDB connected successfully');
   } catch (error) {
@@ -210,7 +210,7 @@ const seedUsers = async () => {
       - Reviewers: ${testUsers.reviewers.length}
       - Inspectors: ${testUsers.inspectors.length}
       - Approvers: ${testUsers.approvers.length}
-      - Admins: ${testUsers.admins.length}`
+      - Admins: ${testUsers.admins.length}`,
     );
   } catch (error) {
     console.error('❌ Error seeding users:', error);
@@ -411,7 +411,7 @@ const seedFarms = async () => {
         cropType: ['Cannabis Sativa', 'CBD Hemp'],
         status: 'active',
       },
-    {
+      {
         farmId: 'FRM-NE002',
         name: 'ฟาร์มกัญชาอุดรธานี',
         ownerId: farmers[3]._id,
@@ -421,7 +421,7 @@ const seedFarms = async () => {
           district: 'เมืองอุดรธานี',
           subDistrict: 'หมากแข้ง',
           latitude: 17.3647,
-          longitude: 102.8160,
+          longitude: 102.816,
         },
         region: 'Northeastern',
         size: 9,

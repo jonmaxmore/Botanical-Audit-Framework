@@ -26,6 +26,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../shared/logger/logger');
 const DocumentManagementService = require('./application/services/DocumentManagementService');
 const DocumentController = require('./presentation/controllers/DocumentController');
 const DocumentRoutes = require('./presentation/routes/DocumentRoutes');
@@ -39,7 +40,7 @@ class DocumentManagementModule {
     this.routes = null;
 
     this._initializeModule();
-    console.log('[DocumentManagementModule] Initialized successfully');
+    logger.info('[DocumentManagementModule] Initialized successfully');
   }
 
   /**
@@ -63,9 +64,9 @@ class DocumentManagementModule {
       this.controller = new DocumentController(controllerDependencies);
       this.routes = new DocumentRoutes(controllerDependencies);
 
-      console.log('[DocumentManagementModule] All components initialized');
+      logger.info('[DocumentManagementModule] All components initialized');
     } catch (error) {
-      console.error('[DocumentManagementModule] Initialization failed:', error);
+      logger.error('[DocumentManagementModule] Initialization failed:', error);
       throw error;
     }
   }
@@ -89,7 +90,7 @@ class DocumentManagementModule {
     optional.forEach(dep => {
       if (!this.dependencies[dep]) {
         console.warn(
-          `[DocumentManagementModule] Optional dependency '${dep}' not provided - related features will be disabled`
+          `[DocumentManagementModule] Optional dependency '${dep}' not provided - related features will be disabled`,
         );
       }
     });
@@ -229,7 +230,7 @@ class DocumentManagementModule {
    * Clean shutdown of the module
    */
   async shutdown() {
-    console.log('[DocumentManagementModule] Shutting down...');
+    logger.info('[DocumentManagementModule] Shutting down...');
 
     try {
       // Close any open connections or cleanup resources
@@ -237,9 +238,9 @@ class DocumentManagementModule {
         await this.service.shutdown();
       }
 
-      console.log('[DocumentManagementModule] Shutdown completed');
+      logger.info('[DocumentManagementModule] Shutdown completed');
     } catch (error) {
-      console.error('[DocumentManagementModule] Error during shutdown:', error);
+      logger.error('[DocumentManagementModule] Error during shutdown:', error);
       throw error;
     }
   }

@@ -5,6 +5,7 @@
  * Part of Clean Architecture - Infrastructure Layer
  */
 
+const logger = require('../../../../shared/logger/logger');
 const nodemailer = require('nodemailer');
 
 class EmailNotificationService {
@@ -38,13 +39,13 @@ class EmailNotificationService {
       // Verify connection
       this.transporter.verify((error, success) => {
         if (error) {
-          console.error('Email service verification failed:', error);
+          logger.error('Email service verification failed:', error);
         } else {
-          console.log('Email service ready to send messages');
+          logger.info('Email service ready to send messages');
         }
       });
     } catch (error) {
-      console.error('Failed to initialize email transporter:', error);
+      logger.error('Failed to initialize email transporter:', error);
     }
   }
 
@@ -85,7 +86,7 @@ class EmailNotificationService {
         response: info.response,
       };
     } catch (error) {
-      console.error('Failed to send email:', error);
+      logger.error('Failed to send email:', error);
       throw error;
     }
   }
@@ -93,7 +94,7 @@ class EmailNotificationService {
   async sendSMS(smsData) {
     // SMS service not implemented in MVP
     // Can be integrated with services like Twilio, AWS SNS, etc.
-    console.warn('SMS service not implemented yet:', smsData);
+    logger.warn('SMS service not implemented yet:', smsData);
 
     return {
       success: false,
@@ -104,7 +105,7 @@ class EmailNotificationService {
   async sendPush(pushData) {
     // Push notification service not implemented in MVP
     // Can be integrated with Firebase Cloud Messaging, OneSignal, etc.
-    console.warn('Push notification service not implemented yet:', pushData);
+    logger.warn('Push notification service not implemented yet:', pushData);
 
     return {
       success: false,

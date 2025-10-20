@@ -85,7 +85,7 @@ export class AuthSecurityService {
     success: boolean,
     ip: string,
     userAgent: string,
-    userId?: string
+    userId?: string,
   ): Promise<void> {
     const key = `login:attempts:${identifier}`;
     const attempt: LoginAttempt = {
@@ -543,7 +543,7 @@ export class AuthSecurityService {
       JSON.stringify({
         ip,
         timestamp: new Date().toISOString(),
-      })
+      }),
     );
     await this.redis.ltrim(key, 0, 49); // Keep last 50
     await this.redis.expire(key, 90 * 24 * 60 * 60); // 90 days

@@ -386,7 +386,7 @@ async function connectMongoDB() {
     log.info(`MongoDB Version: ${serverInfo.version}`);
     log.info(`Database Name: ${config.mongodb.dbName}`);
     log.info(
-      `Connection Pool: ${config.mongodb.options.minPoolSize}-${config.mongodb.options.maxPoolSize} connections`
+      `Connection Pool: ${config.mongodb.options.minPoolSize}-${config.mongodb.options.maxPoolSize} connections`,
     );
 
     return client;
@@ -449,7 +449,7 @@ async function setupDatabase(db) {
   }
 
   log.success(
-    `Database setup complete: ${collectionsCount} collections created, ${indexesCount} indexes created`
+    `Database setup complete: ${collectionsCount} collections created, ${indexesCount} indexes created`,
   );
 
   return { collectionsCount, indexesCount };
@@ -562,7 +562,7 @@ async function connectRedis() {
 function displaySummary(results) {
   console.log('\n' + '='.repeat(60));
   console.log(
-    `${colors.bright}${colors.cyan}GACP Platform - Infrastructure Setup Summary${colors.reset}`
+    `${colors.bright}${colors.cyan}GACP Platform - Infrastructure Setup Summary${colors.reset}`,
   );
   console.log('='.repeat(60) + '\n');
 
@@ -592,7 +592,7 @@ function displaySummary(results) {
 
   if (allSuccess) {
     console.log(
-      `${colors.green}${colors.bright}✓ Infrastructure setup completed successfully!${colors.reset}`
+      `${colors.green}${colors.bright}✓ Infrastructure setup completed successfully!${colors.reset}`,
     );
     console.log('\nNext steps:');
     console.log('1. Start backend server: cd apps/backend && pnpm dev');

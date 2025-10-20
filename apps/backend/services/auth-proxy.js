@@ -5,7 +5,7 @@ authApp.use(
   cors({
     origin: ['http://localhost:3001', 'http://localhost:5173', 'http://localhost:3000'],
     credentials: true,
-  })
+  }),
 );
 
 authApp.use(express.json());
@@ -30,13 +30,13 @@ authApp.use(
       '^/': '/auth/', // Redirect to auth routes on main backend
     },
     onError: (err, req, res) => {
-      console.error('Auth proxy error:', err.message);
+      logger.error('Auth proxy error:', err.message);
       res.status(503).json({
         error: 'Service temporarily unavailable',
         service: 'auth-service',
       });
     },
-  })
+  }),
 );
 
 const PORT = 3001;

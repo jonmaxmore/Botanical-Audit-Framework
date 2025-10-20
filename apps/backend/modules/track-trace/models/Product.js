@@ -127,7 +127,7 @@ const ProductSchema = new mongoose.Schema(
   {
     collection: 'products',
     timestamps: false,
-  }
+  },
 );
 
 // Indexes for performance

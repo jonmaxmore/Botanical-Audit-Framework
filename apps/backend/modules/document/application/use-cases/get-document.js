@@ -29,7 +29,7 @@ class GetDocumentUseCase {
 
       return document;
     } catch (error) {
-      console.error('Error getting document:', error);
+      logger.error('Error getting document:', error);
       throw error;
     }
   }

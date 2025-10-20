@@ -67,12 +67,12 @@ function createTrainingModule(config) {
   const updateProgress = new UpdateProgressUseCase(courseRepository, enrollmentRepository);
   const submitFinalAssessment = new SubmitFinalAssessmentUseCase(
     courseRepository,
-    enrollmentRepository
+    enrollmentRepository,
   );
   const getFarmerEnrollments = new GetFarmerEnrollmentsUseCase(enrollmentRepository);
   const getTrainingStatistics = new GetTrainingStatisticsUseCase(
     courseRepository,
-    enrollmentRepository
+    enrollmentRepository,
   );
 
   const useCases = {

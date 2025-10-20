@@ -26,6 +26,7 @@
  * - Predictive performance analytics
  */
 
+const logger = require('../../../shared/logger/logger');
 const EventEmitter = require('events');
 
 class PerformanceAssessmentToolsSystem extends EventEmitter {
@@ -222,7 +223,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
    */
   async initializeSystem() {
     try {
-      console.log('[PerformanceAssessment] Initializing performance assessment tools system...');
+      logger.info('[PerformanceAssessment] Initializing performance assessment tools system...');
 
       // Initialize assessment frameworks
       await this.initializeAssessmentFrameworks();
@@ -243,7 +244,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
       await this.setupBenchmarkingSystem();
 
       this.systemActive = true;
-      console.log('[PerformanceAssessment] Performance assessment system initialized successfully');
+      logger.info('[PerformanceAssessment] Performance assessment system initialized successfully');
 
       // Emit initialization event for audit trail
       this.emit('system_initialized', {
@@ -261,7 +262,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
         monitoringStatus: 'active',
       };
     } catch (error) {
-      console.error('[PerformanceAssessment] Initialization error:', error);
+      logger.error('[PerformanceAssessment] Initialization error:', error);
       throw new Error(`Performance assessment initialization failed: ${error.message}`);
     }
   }
@@ -270,7 +271,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
    * Initialize comprehensive assessment frameworks
    */
   async initializeAssessmentFrameworks() {
-    console.log('[PerformanceAssessment] Initializing assessment frameworks...');
+    logger.info('[PerformanceAssessment] Initializing assessment frameworks...');
 
     // Setup competency-based assessment framework
     await this.setupCompetencyFramework();
@@ -290,7 +291,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
    */
   async setupCompetencyFramework() {
     for (const [competencyId, framework] of Object.entries(
-      this.assessmentConfig.competencyFramework
+      this.assessmentConfig.competencyFramework,
     )) {
       // Initialize competency assessment tools
       const competencyTools = {
@@ -329,7 +330,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
       this.assessmentData.competencyProfiles.set(competencyId, competencyTools);
     }
 
-    console.log('[PerformanceAssessment] Competency frameworks initialized');
+    logger.info('[PerformanceAssessment] Competency frameworks initialized');
   }
 
   /**
@@ -346,7 +347,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
       const { userId, competencyId, assessmentType, contextData } = assessmentRequest;
 
       console.log(
-        `[PerformanceAssessment] Creating assessment for user ${userId}, competency ${competencyId}`
+        `[PerformanceAssessment] Creating assessment for user ${userId}, competency ${competencyId}`,
       );
 
       // Analyze learner profile
@@ -356,7 +357,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
       const assessmentConfiguration = await this.selectOptimalAssessmentConfiguration(
         competencyId,
         learnerProfile,
-        assessmentType
+        assessmentType,
       );
 
       // Generate assessment instance
@@ -429,11 +430,11 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
         configuration: assessmentConfiguration,
       });
 
-      console.log(`[PerformanceAssessment] Assessment created: ${assessment.assessmentId}`);
+      logger.info(`[PerformanceAssessment] Assessment created: ${assessment.assessmentId}`);
 
       return assessment;
     } catch (error) {
-      console.error('[PerformanceAssessment] Assessment creation error:', error);
+      logger.error('[PerformanceAssessment] Assessment creation error:', error);
       throw error;
     }
   }
@@ -517,7 +518,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
         currentPerformance: assessment.performance.realTimeMetrics,
       };
     } catch (error) {
-      console.error('[PerformanceAssessment] Response processing error:', error);
+      logger.error('[PerformanceAssessment] Response processing error:', error);
       throw error;
     }
   }
@@ -539,7 +540,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
         throw new Error(`Assessment not found: ${assessmentId}`);
       }
 
-      console.log(`[PerformanceAssessment] Completing assessment ${assessmentId}`);
+      logger.info(`[PerformanceAssessment] Completing assessment ${assessmentId}`);
 
       // Finalize performance calculations
       const finalPerformance = await this.calculateFinalPerformance(assessment);
@@ -551,13 +552,13 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
       const performanceReport = await this.generatePerformanceReport(
         assessment,
         finalPerformance,
-        competencyEvaluation
+        competencyEvaluation,
       );
 
       // Generate personalized recommendations
       const recommendations = await this.generatePersonalizedRecommendations(
         assessment,
-        performanceReport
+        performanceReport,
       );
 
       // Create assessment result record
@@ -617,11 +618,11 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
         competencyAchieved: competencyEvaluation.competencyAchieved,
       });
 
-      console.log(`[PerformanceAssessment] Assessment completed successfully: ${assessmentId}`);
+      logger.info(`[PerformanceAssessment] Assessment completed successfully: ${assessmentId}`);
 
       return assessmentResult;
     } catch (error) {
-      console.error('[PerformanceAssessment] Assessment completion error:', error);
+      logger.error('[PerformanceAssessment] Assessment completion error:', error);
       throw error;
     }
   }
@@ -687,7 +688,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
 
       return dashboard;
     } catch (error) {
-      console.error('[PerformanceAssessment] Dashboard generation error:', error);
+      logger.error('[PerformanceAssessment] Dashboard generation error:', error);
       throw error;
     }
   }
@@ -737,7 +738,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
         await this.completeAssessment(assessmentId, 'system_shutdown');
       }
 
-      console.log('[PerformanceAssessment] Performance assessment system stopped');
+      logger.info('[PerformanceAssessment] Performance assessment system stopped');
 
       return {
         success: true,
@@ -745,7 +746,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
         timestamp: new Date(),
       };
     } catch (error) {
-      console.error('[PerformanceAssessment] Stop error:', error);
+      logger.error('[PerformanceAssessment] Stop error:', error);
       throw error;
     }
   }

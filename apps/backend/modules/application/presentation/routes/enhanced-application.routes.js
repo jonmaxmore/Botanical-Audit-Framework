@@ -208,7 +208,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .isIn(['GACP', 'ORGANIC', 'GMP', 'HALAL'])
         .withMessage('Invalid certification goal'),
     ],
-    enhancedApplicationController.createApplication
+    enhancedApplicationController.createApplication,
   );
 
   // DTAM can create applications on behalf of farmers
@@ -233,7 +233,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
 
       body('fastTrack').optional().isBoolean().withMessage('Fast track must be boolean'),
     ],
-    enhancedApplicationController.createApplication
+    enhancedApplicationController.createApplication,
   );
 
   /**
@@ -270,7 +270,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
 
       query('includeHistory').optional().isBoolean().withMessage('Include history must be boolean'),
     ],
-    enhancedApplicationController.getApplicationDashboard
+    enhancedApplicationController.getApplicationDashboard,
   );
 
   dtamRouter.get(
@@ -298,7 +298,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .isBoolean()
         .withMessage('Include government data must be boolean'),
     ],
-    enhancedApplicationController.getApplicationDashboard
+    enhancedApplicationController.getApplicationDashboard,
   );
 
   /**
@@ -362,7 +362,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .isUUID()
         .withMessage('Assigned inspector must be valid UUID'),
     ],
-    enhancedApplicationController.processStateTransition
+    enhancedApplicationController.processStateTransition,
   );
 
   // ============================================================================
@@ -416,7 +416,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
 
       body('replaces').optional().isUUID().withMessage('Replaces must be valid document ID'),
     ],
-    enhancedApplicationController.uploadDocument
+    enhancedApplicationController.uploadDocument,
   );
 
   /**
@@ -464,7 +464,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         const documentStatus =
           await enhancedApplicationController.documentManagementIntegrationSystem.getDocumentStatus(
             req.params.applicationId,
-            req.user.role
+            req.user.role,
           );
 
         res.json({
@@ -479,7 +479,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           message: 'Failed to retrieve document status',
         });
       }
-    }
+    },
   );
 
   dtamRouter.get(
@@ -512,7 +512,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         const documentStatus =
           await enhancedApplicationController.documentManagementIntegrationSystem.getDocumentStatus(
             req.params.applicationId,
-            req.user.role
+            req.user.role,
           );
 
         res.json({
@@ -527,7 +527,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           message: 'Failed to retrieve document status',
         });
       }
-    }
+    },
   );
 
   // ============================================================================
@@ -580,7 +580,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .isIn(['BASIC', 'STANDARD', 'ENHANCED'])
         .withMessage('Invalid verification level'),
     ],
-    enhancedApplicationController.verifyFarmerIdentity
+    enhancedApplicationController.verifyFarmerIdentity,
   );
 
   /**
@@ -638,7 +638,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .matches(/^[ก-๙a-zA-Z\s]+$/)
         .withMessage('Owner last name must be 2-50 characters (Thai/English only)'),
     ],
-    enhancedApplicationController.verifyLandOwnership
+    enhancedApplicationController.verifyLandOwnership,
   );
 
   /**
@@ -688,7 +688,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .isISO8601()
         .withMessage('Requested deadline must be valid ISO8601 format'),
     ],
-    enhancedApplicationController.submitToGovernment
+    enhancedApplicationController.submitToGovernment,
   );
 
   /**
@@ -720,7 +720,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
 
       query('forceRefresh').optional().isBoolean().withMessage('Force refresh must be boolean'),
     ],
-    enhancedApplicationController.checkGovernmentStatus
+    enhancedApplicationController.checkGovernmentStatus,
   );
 
   // ============================================================================
@@ -760,7 +760,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
 
       query('includeErrors').optional().isBoolean().withMessage('Include errors must be boolean'),
     ],
-    enhancedApplicationController.getAnalyticsDashboard
+    enhancedApplicationController.getAnalyticsDashboard,
   );
 
   /**
@@ -794,7 +794,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           message: 'Failed to retrieve system health',
         });
       }
-    }
+    },
   );
 
   /**
@@ -858,7 +858,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           message: 'Failed to execute system control action',
         });
       }
-    }
+    },
   );
 
   // ============================================================================
@@ -897,7 +897,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
 
   // Global error handler for enhanced application routes
   const errorHandler = (error, req, res, next) => {
-    console.error('[EnhancedApplicationRoutes] Unhandled error:', error);
+    logger.error('[EnhancedApplicationRoutes] Unhandled error:', error);
 
     const statusCode = error.statusCode || error.status || 500;
     const errorType = error.type || 'INTERNAL_SERVER_ERROR';

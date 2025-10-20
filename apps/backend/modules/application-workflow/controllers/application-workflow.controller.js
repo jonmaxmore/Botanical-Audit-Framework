@@ -61,7 +61,7 @@ class ApplicationWorkflowController {
 
       const application = await this.workflowService.startDocumentReview(
         req.params.id,
-        req.user.id
+        req.user.id,
       );
 
       return successResponse(res, application, 'Document review started');
@@ -88,7 +88,7 @@ class ApplicationWorkflowController {
 
       const application = await this.workflowService.completeDocumentReview(
         req.params.id,
-        reviewResult
+        reviewResult,
       );
 
       return successResponse(res, application, 'Document review completed');
@@ -110,7 +110,7 @@ class ApplicationWorkflowController {
 
       const application = await this.workflowService.startFieldInspection(
         req.params.id,
-        req.user.id
+        req.user.id,
       );
 
       return successResponse(res, application, 'Field inspection started');
@@ -137,7 +137,7 @@ class ApplicationWorkflowController {
 
       const application = await this.workflowService.completeFieldInspection(
         req.params.id,
-        inspectionReport
+        inspectionReport,
       );
 
       return successResponse(res, application, 'Field inspection completed');
@@ -160,7 +160,7 @@ class ApplicationWorkflowController {
       const application = await this.workflowService.approveApplication(
         req.params.id,
         req.user.id,
-        req.body.note
+        req.body.note,
       );
 
       return successResponse(res, application, 'Application approved successfully');
@@ -183,7 +183,7 @@ class ApplicationWorkflowController {
       const application = await this.workflowService.rejectApplication(
         req.params.id,
         req.body.reason,
-        req.user.id
+        req.user.id,
       );
 
       return successResponse(res, application, 'Application rejected');
@@ -249,7 +249,7 @@ class ApplicationWorkflowController {
           {
             $set: updateData,
             $addToSet: { completedSteps: parseInt(stepId) },
-          }
+          },
         );
       } else {
         await this.workflowService.collection.updateOne({ id }, { $set: updateData });

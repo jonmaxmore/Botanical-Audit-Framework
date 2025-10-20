@@ -53,7 +53,7 @@ const refreshTokenSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Indexes

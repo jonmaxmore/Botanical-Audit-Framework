@@ -27,12 +27,12 @@ const server = spawn('node', [serverPath], {
   env: { ...process.env },
 });
 
-server.on('error', (error) => {
+server.on('error', error => {
   console.error('❌ Failed to start server:', error);
   process.exit(1);
 });
 
-server.on('exit', (code) => {
+server.on('exit', code => {
   if (code !== 0) {
     console.error(`\n❌ Server exited with code ${code}`);
   }

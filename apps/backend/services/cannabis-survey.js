@@ -240,7 +240,7 @@ class CannabisSurveyService {
       const updatedResponse = await CannabisSurveyResponse.findByIdAndUpdate(
         responseId,
         updateData,
-        { new: true, runValidators: true }
+        { new: true, runValidators: true },
       );
 
       return updatedResponse;
@@ -391,10 +391,10 @@ class CannabisSurveyService {
 
         // Track SOP adoption
         response.analytics.sopAdherence.adoptedSOPs.forEach(sop =>
-          complianceReport.sopAdoption.adopted.add(sop)
+          complianceReport.sopAdoption.adopted.add(sop),
         );
         response.analytics.sopAdherence.gaps.forEach(sop =>
-          complianceReport.sopAdoption.gaps.add(sop)
+          complianceReport.sopAdoption.gaps.add(sop),
         );
 
         // Track risk areas
@@ -482,7 +482,7 @@ class CannabisSurveyService {
                 evidenceId: responseId,
               },
             },
-          }
+          },
         );
       }
 

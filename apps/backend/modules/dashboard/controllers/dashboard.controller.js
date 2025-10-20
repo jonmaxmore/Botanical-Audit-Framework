@@ -33,7 +33,7 @@ class DashboardController {
         ...dashboard,
       });
     } catch (error) {
-      console.error('Error getting dashboard by role:', error);
+      logger.error('Error getting dashboard by role:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve dashboard data',
@@ -67,7 +67,7 @@ class DashboardController {
         ...dashboard,
       });
     } catch (error) {
-      console.error('Error getting farmer dashboard:', error);
+      logger.error('Error getting farmer dashboard:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve farmer dashboard',
@@ -93,7 +93,7 @@ class DashboardController {
         ...dashboard,
       });
     } catch (error) {
-      console.error('Error getting reviewer dashboard:', error);
+      logger.error('Error getting reviewer dashboard:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve reviewer dashboard',
@@ -119,7 +119,7 @@ class DashboardController {
         ...dashboard,
       });
     } catch (error) {
-      console.error('Error getting auditor dashboard:', error);
+      logger.error('Error getting auditor dashboard:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve auditor dashboard',
@@ -150,7 +150,7 @@ class DashboardController {
         ...dashboard,
       });
     } catch (error) {
-      console.error('Error getting admin dashboard:', error);
+      logger.error('Error getting admin dashboard:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve admin dashboard',
@@ -172,7 +172,7 @@ class DashboardController {
         ...stats,
       });
     } catch (error) {
-      console.error('Error getting realtime stats:', error);
+      logger.error('Error getting realtime stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve realtime statistics',
@@ -194,7 +194,7 @@ class DashboardController {
         ...health,
       });
     } catch (error) {
-      console.error('Error getting system health:', error);
+      logger.error('Error getting system health:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve system health',
@@ -228,7 +228,7 @@ class DashboardController {
         stats,
       });
     } catch (error) {
-      console.error('Error getting farmer stats:', error);
+      logger.error('Error getting farmer stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve farmer statistics',
@@ -252,7 +252,7 @@ class DashboardController {
         stats,
       });
     } catch (error) {
-      console.error('Error getting DTAM stats:', error);
+      logger.error('Error getting DTAM stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve DTAM statistics',
@@ -282,7 +282,7 @@ class DashboardController {
         stats,
       });
     } catch (error) {
-      console.error('Error getting admin stats:', error);
+      logger.error('Error getting admin stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve admin statistics',
@@ -311,7 +311,7 @@ class DashboardController {
         activities,
       });
     } catch (error) {
-      console.error('Error getting recent activities:', error);
+      logger.error('Error getting recent activities:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve recent activities',
@@ -337,7 +337,7 @@ class DashboardController {
         applications,
       });
     } catch (error) {
-      console.error('Error getting pending applications:', error);
+      logger.error('Error getting pending applications:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve pending applications',
@@ -372,7 +372,7 @@ class DashboardController {
         notifications,
       });
     } catch (error) {
-      console.error('Error getting notifications:', error);
+      logger.error('Error getting notifications:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve notifications',

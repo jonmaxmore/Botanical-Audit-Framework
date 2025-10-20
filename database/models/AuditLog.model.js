@@ -210,7 +210,7 @@ const AuditLogSchema = new Schema(
       metaField: 'metadata',
       granularity: 'seconds',
     },
-  }
+  },
 );
 
 // ========================================

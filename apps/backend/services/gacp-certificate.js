@@ -61,7 +61,7 @@ class GACPCertificateService {
       const certificateData = this.prepareCertificateData(
         application,
         certificateNumber,
-        approvedBy
+        approvedBy,
       );
 
       // Generate QR code for verification
@@ -78,14 +78,14 @@ class GACPCertificateService {
         application,
         certificateData,
         digitalSignature,
-        certificatePDF
+        certificatePDF,
       );
 
       // Update application status
       await application.updateStatus(
         'certificate_issued',
         approvedBy,
-        `Certificate ${certificateNumber} issued`
+        `Certificate ${certificateNumber} issued`,
       );
 
       // Schedule certificate expiry reminder
@@ -210,7 +210,7 @@ class GACPCertificateService {
 
       // Check if renewal is allowed
       const daysUntilExpiry = Math.ceil(
-        (certificate.expiryDate - new Date()) / (1000 * 60 * 60 * 24)
+        (certificate.expiryDate - new Date()) / (1000 * 60 * 60 * 24),
       );
 
       if (daysUntilExpiry > 90) {
@@ -223,7 +223,7 @@ class GACPCertificateService {
       if (!complianceCheck.compliant) {
         throw new BusinessLogicError(
           'Certificate cannot be renewed due to compliance issues: ' +
-            complianceCheck.issues.join(', ')
+            complianceCheck.issues.join(', '),
         );
       }
 
@@ -296,7 +296,7 @@ class GACPCertificateService {
         await application.updateStatus(
           'certificate_revoked',
           revokedBy,
-          `Certificate revoked: ${revocationReason}`
+          `Certificate revoked: ${revocationReason}`,
         );
       }
 
@@ -553,7 +553,7 @@ class GACPCertificateService {
       .font('Helvetica')
       .text(`Farmer: ${data.farmerName}`)
       .text(
-        `Location: ${data.location.subdistrict}, ${data.location.district}, ${data.location.province}`
+        `Location: ${data.location.subdistrict}, ${data.location.district}, ${data.location.province}`,
       )
       .text(`Farm Size: ${data.farmSize} rai`)
       .text(`Crop Types: ${data.cropTypes.join(', ')}`);
@@ -686,7 +686,7 @@ class GACPCertificateService {
     // Check for recent surveillance violations
     if (application.surveillanceViolations && application.surveillanceViolations.length > 0) {
       const recentViolations = application.surveillanceViolations.filter(
-        v => new Date() - v.date < 365 * 24 * 60 * 60 * 1000 // Within last year
+        v => new Date() - v.date < 365 * 24 * 60 * 60 * 1000, // Within last year
       );
 
       if (recentViolations.length > 0) {
@@ -697,7 +697,7 @@ class GACPCertificateService {
     // Check for complaint records
     if (application.complaintRecords && application.complaintRecords.length > 0) {
       const unresolvedComplaints = application.complaintRecords.filter(
-        c => c.status !== 'resolved'
+        c => c.status !== 'resolved',
       );
       if (unresolvedComplaints.length > 0) {
         issues.push('Unresolved complaints');

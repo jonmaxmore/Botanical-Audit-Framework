@@ -107,7 +107,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           {
             title: 'ใบรับรอง',
             value: demoCertificates.filter(
-              cert => cert.farmerId === currentUser.id && cert.status === 'active'
+              cert => cert.farmerId === currentUser.id && cert.status === 'active',
             ).length,
             subtitle: 'ใบรับรองที่ใช้งานได้',
             icon: '🏆',
@@ -120,7 +120,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           {
             title: 'งานตรวจสอบ',
             value: demoInspections.filter(
-              ins => ins.inspectorId === currentUser.id && ins.status === 'scheduled'
+              ins => ins.inspectorId === currentUser.id && ins.status === 'scheduled',
             ).length,
             subtitle: 'ที่ได้รับมอบหมาย',
             icon: '📋',
@@ -129,7 +129,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           {
             title: 'ตรวจสอบแล้ว',
             value: demoInspections.filter(
-              ins => ins.inspectorId === currentUser.id && ins.status === 'completed'
+              ins => ins.inspectorId === currentUser.id && ins.status === 'completed',
             ).length,
             subtitle: 'ในเดือนนี้',
             icon: '✅',
@@ -204,7 +204,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
     // Add recent applications
     demoApplications
       .filter(
-        app => userRole === 'admin' || (userRole === 'farmer' && app.farmerId === currentUser.id)
+        app => userRole === 'admin' || (userRole === 'farmer' && app.farmerId === currentUser.id),
       )
       .slice(0, 3)
       .forEach(app => {
@@ -221,7 +221,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
     demoInspections
       .filter(
         ins =>
-          userRole === 'admin' || (userRole === 'inspector' && ins.inspectorId === currentUser.id)
+          userRole === 'admin' || (userRole === 'inspector' && ins.inspectorId === currentUser.id),
       )
       .slice(0, 2)
       .forEach(ins => {

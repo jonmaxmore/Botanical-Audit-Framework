@@ -5,6 +5,7 @@
  * Provides functionality to compare farms against GACP/GAP standards
  */
 
+const logger = require('../../shared/logger/logger');
 const StandardsComparisonService = require('./services/standards-comparison.service');
 const StandardsComparisonController = require('./controllers/standards-comparison.controller');
 const initializeRoutes = require('./routes/standards-comparison.routes');
@@ -30,7 +31,7 @@ async function initializeStandardsComparison(db, authMiddleware) {
     // Create routes
     const router = initializeRoutes(controller, authMiddleware);
 
-    console.log('✓ Standards Comparison module initialized successfully');
+    logger.info('✓ Standards Comparison module initialized successfully');
 
     return {
       router,
@@ -38,7 +39,7 @@ async function initializeStandardsComparison(db, authMiddleware) {
       controller,
     };
   } catch (error) {
-    console.error('✗ Failed to initialize Standards Comparison module:', error);
+    logger.error('✗ Failed to initialize Standards Comparison module:', error);
     throw error;
   }
 }

@@ -13,7 +13,7 @@ class SimpleDataAggregationService {
     surveyRepository,
     trainingEnrollmentRepository,
     documentRepository,
-    auditRepository
+    auditRepository,
   ) {
     this.farmRepository = farmRepository;
     this.certificateRepository = certificateRepository;

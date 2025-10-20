@@ -38,6 +38,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const moment = require('moment-timezone');
 
 class DashboardService {
@@ -59,7 +60,7 @@ class DashboardService {
     this.kpiCache = new Map();
     this.isRealTimeEnabled = true;
 
-    console.log('[DashboardService] Initializing real-time dashboard engine...');
+    logger.info('[DashboardService] Initializing real-time dashboard engine...');
   }
 
   /**
@@ -83,9 +84,9 @@ class DashboardService {
       // Start background metric collection
       this._startMetricCollection();
 
-      console.log('[DashboardService] Initialization completed with real-time capabilities');
+      logger.info('[DashboardService] Initialization completed with real-time capabilities');
     } catch (error) {
-      console.error('[DashboardService] Initialization failed:', error);
+      logger.error('[DashboardService] Initialization failed:', error);
       throw new Error(`DashboardService initialization failed: ${error.message}`);
     }
   }
@@ -102,7 +103,7 @@ class DashboardService {
    */
   async getDashboardMetrics(criteria = {}) {
     try {
-      console.log('[DashboardService] Generating real-time dashboard metrics...');
+      logger.info('[DashboardService] Generating real-time dashboard metrics...');
 
       // Step 1: Normalize criteria with business context
       const normalizedCriteria = this._normalizeDashboardCriteria(criteria);
@@ -112,7 +113,7 @@ class DashboardService {
       const cachedMetrics = await this._getCachedMetrics(cacheKey);
 
       if (cachedMetrics && this._isCacheValid(cachedMetrics)) {
-        console.log('[DashboardService] Returning cached dashboard metrics');
+        logger.info('[DashboardService] Returning cached dashboard metrics');
         return this._enrichMetricsWithRealTime(cachedMetrics);
       }
 
@@ -187,11 +188,11 @@ class DashboardService {
       // Step 8: Log dashboard access for audit
       await this._logDashboardAccess(normalizedCriteria, dashboardData.metadata);
 
-      console.log('[DashboardService] Dashboard metrics generated successfully');
+      logger.info('[DashboardService] Dashboard metrics generated successfully');
 
       return dashboardData;
     } catch (error) {
-      console.error('[DashboardService] Dashboard metrics generation failed:', error);
+      logger.error('[DashboardService] Dashboard metrics generation failed:', error);
       throw new Error(`Dashboard metrics generation failed: ${error.message}`);
     }
   }
@@ -205,7 +206,7 @@ class DashboardService {
    */
   async getWorkflowMetrics(criteria = {}) {
     try {
-      console.log('[DashboardService] Collecting real-time workflow metrics...');
+      logger.info('[DashboardService] Collecting real-time workflow metrics...');
 
       const timeframe = this._getTimeframeForCriteria(criteria);
 
@@ -237,7 +238,7 @@ class DashboardService {
         alerts: this._generateWorkflowAlerts(workflowData),
       };
 
-      console.log('[DashboardService] Workflow metrics collected successfully');
+      logger.info('[DashboardService] Workflow metrics collected successfully');
 
       return {
         timestamp: new Date(),
@@ -246,7 +247,7 @@ class DashboardService {
         refreshInterval: this.refreshInterval,
       };
     } catch (error) {
-      console.error('[DashboardService] Workflow metrics collection failed:', error);
+      logger.error('[DashboardService] Workflow metrics collection failed:', error);
       throw new Error(`Workflow metrics collection failed: ${error.message}`);
     }
   }
@@ -260,7 +261,7 @@ class DashboardService {
    */
   async getFinancialMetrics(criteria = {}) {
     try {
-      console.log('[DashboardService] Collecting real-time financial metrics...');
+      logger.info('[DashboardService] Collecting real-time financial metrics...');
 
       const timeframe = this._getTimeframeForCriteria(criteria);
 
@@ -291,7 +292,7 @@ class DashboardService {
         trends: {
           hourlyRevenue: this._calculateHourlyRevenueTrend(financialData, timeframe),
           paymentMethodDistribution: this._calculatePaymentMethodDistribution(
-            financialData.payments
+            financialData.payments,
           ),
           seasonalPatterns: this._identifySeasonalPatterns(financialData),
         },
@@ -299,7 +300,7 @@ class DashboardService {
       };
 
       console.log(
-        `[DashboardService] Financial metrics collected (Revenue: ${metrics.revenue.today} THB)`
+        `[DashboardService] Financial metrics collected (Revenue: ${metrics.revenue.today} THB)`,
       );
 
       return {
@@ -309,7 +310,7 @@ class DashboardService {
         refreshInterval: this.refreshInterval,
       };
     } catch (error) {
-      console.error('[DashboardService] Financial metrics collection failed:', error);
+      logger.error('[DashboardService] Financial metrics collection failed:', error);
       throw new Error(`Financial metrics collection failed: ${error.message}`);
     }
   }
@@ -323,7 +324,7 @@ class DashboardService {
    */
   async getUserEngagementMetrics(criteria = {}) {
     try {
-      console.log('[DashboardService] Collecting real-time user engagement metrics...');
+      logger.info('[DashboardService] Collecting real-time user engagement metrics...');
 
       const timeframe = this._getTimeframeForCriteria(criteria);
 
@@ -358,7 +359,7 @@ class DashboardService {
       };
 
       console.log(
-        `[DashboardService] User engagement metrics collected (${metrics.activity.activeUsers} active users)`
+        `[DashboardService] User engagement metrics collected (${metrics.activity.activeUsers} active users)`,
       );
 
       return {
@@ -368,7 +369,7 @@ class DashboardService {
         refreshInterval: this.refreshInterval,
       };
     } catch (error) {
-      console.error('[DashboardService] User engagement metrics collection failed:', error);
+      logger.error('[DashboardService] User engagement metrics collection failed:', error);
       throw new Error(`User engagement metrics collection failed: ${error.message}`);
     }
   }
@@ -382,7 +383,7 @@ class DashboardService {
    */
   async getSystemHealthMetrics(criteria = {}) {
     try {
-      console.log('[DashboardService] Collecting real-time system health metrics...');
+      logger.info('[DashboardService] Collecting real-time system health metrics...');
 
       // Collect system performance data
       const systemData = await this._collectSystemData();
@@ -420,7 +421,7 @@ class DashboardService {
       const healthScore = this._calculateOverallHealthScore(metrics);
 
       console.log(
-        `[DashboardService] System health metrics collected (Health Score: ${healthScore}%)`
+        `[DashboardService] System health metrics collected (Health Score: ${healthScore}%)`,
       );
 
       return {
@@ -430,7 +431,7 @@ class DashboardService {
         refreshInterval: this.refreshInterval,
       };
     } catch (error) {
-      console.error('[DashboardService] System health metrics collection failed:', error);
+      logger.error('[DashboardService] System health metrics collection failed:', error);
       throw new Error(`System health metrics collection failed: ${error.message}`);
     }
   }
@@ -583,12 +584,12 @@ class DashboardService {
         try {
           await this._refreshMetricsCache();
         } catch (error) {
-          console.error('[DashboardService] Metric collection error:', error);
+          logger.error('[DashboardService] Metric collection error:', error);
         }
       }, this.refreshInterval);
 
       console.log(
-        `[DashboardService] Background metric collection started (${this.refreshInterval}ms interval)`
+        `[DashboardService] Background metric collection started (${this.refreshInterval}ms interval)`,
       );
     }
   }
@@ -608,13 +609,13 @@ class DashboardService {
 
   // Utility methods for various calculations and data processing
   async _initializeKPIEngines() {
-    console.log('[DashboardService] KPI engines initialized');
+    logger.info('[DashboardService] KPI engines initialized');
   }
   async _setupRealTimeFeeds() {
-    console.log('[DashboardService] Real-time feeds configured');
+    logger.info('[DashboardService] Real-time feeds configured');
   }
   async _initializeAlertMonitoring() {
-    console.log('[DashboardService] Alert monitoring enabled');
+    logger.info('[DashboardService] Alert monitoring enabled');
   }
   async _collectRealTimeMetrics(criteria) {
     return {};
@@ -777,9 +778,9 @@ class DashboardService {
    * @returns {Promise<void>}
    */
   async shutdown() {
-    console.log('[DashboardService] Shutting down...');
+    logger.info('[DashboardService] Shutting down...');
     this.isRealTimeEnabled = false;
-    console.log('[DashboardService] Shutdown completed');
+    logger.info('[DashboardService] Shutdown completed');
   }
 }
 

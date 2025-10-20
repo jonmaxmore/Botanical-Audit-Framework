@@ -34,7 +34,7 @@ class DocumentSecurityService {
    */
   async performSecurityCheck(fileBuffer, fileMetadata, documentType) {
     try {
-      console.log(`🔒 Starting security check for ${documentType}: ${fileMetadata.originalName}`);
+      logger.info(`🔒 Starting security check for ${documentType}: ${fileMetadata.originalName}`);
 
       const securityChecks = {
         fileTypeCheck: null,
@@ -49,11 +49,11 @@ class DocumentSecurityService {
       const warnings = [];
 
       // 1. File Type Validation
-      console.log('📋 Checking file type...');
+      logger.info('📋 Checking file type...');
       securityChecks.fileTypeCheck = await this._validateFileType(
         fileBuffer,
         fileMetadata,
-        documentType
+        documentType,
       );
       if (!securityChecks.fileTypeCheck.valid) {
         overallScore -= 50;
@@ -61,7 +61,7 @@ class DocumentSecurityService {
       }
 
       // 2. File Size Validation
-      console.log('📏 Checking file size...');
+      logger.info('📏 Checking file size...');
       securityChecks.fileSizeCheck = await this._validateFileSize(fileMetadata, documentType);
       if (!securityChecks.fileSizeCheck.valid) {
         overallScore -= 20;
@@ -69,7 +69,7 @@ class DocumentSecurityService {
       }
 
       // 3. Virus Scanning
-      console.log('🦠 Performing virus scan...');
+      logger.info('🦠 Performing virus scan...');
       securityChecks.virusScan = await this._performVirusScan(fileBuffer);
       if (!securityChecks.virusScan.clean) {
         overallScore = 0; // Virus = immediate failure
@@ -78,10 +78,10 @@ class DocumentSecurityService {
 
       // 4. Content Analysis (only if previous checks passed)
       if (overallScore > 0) {
-        console.log('🔍 Analyzing content security...');
+        logger.info('🔍 Analyzing content security...');
         securityChecks.contentAnalysis = await this._analyzeContentSecurity(
           fileBuffer,
-          documentType
+          documentType,
         );
         if (securityChecks.contentAnalysis.riskLevel === 'HIGH') {
           overallScore -= 30;
@@ -93,7 +93,7 @@ class DocumentSecurityService {
       }
 
       // 5. Metadata Sanitization
-      console.log('🧹 Sanitizing metadata...');
+      logger.info('🧹 Sanitizing metadata...');
       securityChecks.metadataSanitization = await this._sanitizeMetadata(fileMetadata);
       if (securityChecks.metadataSanitization.hasPrivacyRisks) {
         overallScore -= 10;
@@ -103,7 +103,7 @@ class DocumentSecurityService {
       // Calculate final security assessment
       const isSafe = overallScore >= 70 && threats.length === 0;
 
-      console.log(`🎯 Security check completed. Score: ${overallScore}/100, Safe: ${isSafe}`);
+      logger.info(`🎯 Security check completed. Score: ${overallScore}/100, Safe: ${isSafe}`);
 
       return {
         safe: isSafe,
@@ -114,7 +114,7 @@ class DocumentSecurityService {
         recommendation: this._getSecurityRecommendation(overallScore, threats, warnings),
       };
     } catch (error) {
-      console.error('❌ Security check failed:', error);
+      logger.error('❌ Security check failed:', error);
       return {
         safe: false,
         securityScore: 0,
@@ -168,7 +168,7 @@ class DocumentSecurityService {
         warnings,
       };
     } catch (error) {
-      console.error('File type validation error:', error);
+      logger.error('File type validation error:', error);
       return {
         valid: false,
         threats: ['File type validation failed'],
@@ -209,7 +209,7 @@ class DocumentSecurityService {
   async _performVirusScan(fileBuffer) {
     try {
       if (!this.virusScanService) {
-        console.warn('⚠️ Virus scan service not available, using mock scan');
+        logger.warn('⚠️ Virus scan service not available, using mock scan');
         return {
           clean: true,
           threats: [],
@@ -227,7 +227,7 @@ class DocumentSecurityService {
         scanEngine: scanResult.engine,
       };
     } catch (error) {
-      console.error('Virus scan error:', error);
+      logger.error('Virus scan error:', error);
       return {
         clean: false,
         threats: ['Virus scan failed'],
@@ -280,7 +280,7 @@ class DocumentSecurityService {
         complexityScore: complexityCheck.score,
       };
     } catch (error) {
-      console.error('Content security analysis error:', error);
+      logger.error('Content security analysis error:', error);
       return {
         riskLevel: 'HIGH',
         threats: ['Content analysis failed'],

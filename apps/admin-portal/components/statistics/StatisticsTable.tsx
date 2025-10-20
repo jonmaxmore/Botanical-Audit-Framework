@@ -152,7 +152,7 @@ export default function StatisticsTable({
 
   // Filter data based on search query
   const filteredData = data.filter(row =>
-    row.category.toLowerCase().includes(searchQuery.toLowerCase())
+    row.category.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   // Sort data

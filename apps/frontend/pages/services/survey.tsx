@@ -12,7 +12,7 @@ import {
   CardMedia,
   Divider,
   AppBar,
-  Toolbar,
+  Toolbar
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -20,7 +20,7 @@ import {
   LocationOn as LocationOnIcon,
   TrendingUp as TrendingUpIcon,
   Share as ShareIcon,
-  Group as GroupIcon,
+  Group as GroupIcon
 } from '@mui/icons-material';
 
 export default function SurveyPage() {
@@ -30,23 +30,23 @@ export default function SurveyPage() {
     {
       name: 'ภาคเหนือ',
       image: '/images/north.jpg',
-      plants: 'มะแขว่น, กวาวเครือ, จิงจูฉ่าย',
+      plants: 'มะแขว่น, กวาวเครือ, จิงจูฉ่าย'
     },
     {
       name: 'ภาคกลาง',
       image: '/images/central.jpg',
-      plants: 'กระชาย, ขมิ้นชัน, ไพล',
+      plants: 'กระชาย, ขมิ้นชัน, ไพล'
     },
     {
       name: 'ภาคตะวันออกเฉียงเหนือ',
       image: '/images/northeast.jpg',
-      plants: 'พญานาค, ย่านาง, บุก',
+      plants: 'พญานาค, ย่านาง, บุก'
     },
     {
       name: 'ภาคใต้',
       image: '/images/south.jpg',
-      plants: 'ลูกยอ, เถาวัลย์เปรียง, สมุนไพรทะเล',
-    },
+      plants: 'ลูกยอ, เถาวัลย์เปรียง, สมุนไพรทะเล'
+    }
   ];
 
   return (

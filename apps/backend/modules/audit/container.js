@@ -74,7 +74,7 @@ function createAuditModule(config) {
       const auditLog = AuditLog.create(auditLogData);
       await createAuditLogUseCase.execute(auditLog);
     } catch (error) {
-      console.error('Failed to create audit log:', error);
+      logger.error('Failed to create audit log:', error);
       // Don't throw - audit logging should not break application flow
     }
   };
@@ -85,7 +85,7 @@ function createAuditModule(config) {
       const auditLog = AuditLog.fromRequest(req, actionType, entityType, entityId, additionalData);
       await createAuditLogUseCase.execute(auditLog);
     } catch (error) {
-      console.error('Failed to create audit log from request:', error);
+      logger.error('Failed to create audit log from request:', error);
     }
   };
 

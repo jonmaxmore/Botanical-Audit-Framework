@@ -120,7 +120,7 @@ class ApplicationRepository {
             updatedAt: new Date(),
           },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -152,7 +152,7 @@ class ApplicationRepository {
           },
           $set: { updatedAt: new Date() },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -182,7 +182,7 @@ class ApplicationRepository {
             updatedAt: new Date(),
           },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -214,7 +214,7 @@ class ApplicationRepository {
           },
           $set: { updatedAt: new Date() },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -244,7 +244,7 @@ class ApplicationRepository {
             updatedAt: new Date(),
           },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -278,7 +278,7 @@ class ApplicationRepository {
           },
           $set: { updatedAt: new Date() },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -301,7 +301,7 @@ class ApplicationRepository {
           $inc: { submissionCount: 1 },
           $set: { updatedAt: new Date() },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -320,7 +320,7 @@ class ApplicationRepository {
     try {
       const application = await this.collection.findOne(
         { _id: applicationId },
-        { projection: { submissionCount: 1 } }
+        { projection: { submissionCount: 1 } },
       );
 
       return application?.submissionCount || 0;

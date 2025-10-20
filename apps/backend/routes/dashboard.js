@@ -233,7 +233,7 @@ router.get('/:role', (req, res) => {
 
     res.json(dashboardData);
   } catch (error) {
-    console.error('Dashboard API error:', error);
+    logger.error('Dashboard API error:', error);
     res.status(500).json({ error: 'Failed to fetch dashboard data' });
   }
 });
@@ -254,7 +254,7 @@ router.get('/farmer/:userId', (req, res) => {
 
     res.json(dashboardData);
   } catch (error) {
-    console.error('Farmer dashboard API error:', error);
+    logger.error('Farmer dashboard API error:', error);
     res.status(500).json({ error: 'Failed to fetch farmer dashboard data' });
   }
 });
@@ -273,7 +273,7 @@ router.get('/reviewer', (req, res) => {
 
     res.json(dashboardData);
   } catch (error) {
-    console.error('Reviewer dashboard API error:', error);
+    logger.error('Reviewer dashboard API error:', error);
     res.status(500).json({ error: 'Failed to fetch reviewer dashboard data' });
   }
 });
@@ -292,7 +292,7 @@ router.get('/auditor', (req, res) => {
 
     res.json(dashboardData);
   } catch (error) {
-    console.error('Auditor dashboard API error:', error);
+    logger.error('Auditor dashboard API error:', error);
     res.status(500).json({ error: 'Failed to fetch auditor dashboard data' });
   }
 });
@@ -311,7 +311,7 @@ router.get('/admin', (req, res) => {
 
     res.json(dashboardData);
   } catch (error) {
-    console.error('Admin dashboard API error:', error);
+    logger.error('Admin dashboard API error:', error);
     res.status(500).json({ error: 'Failed to fetch admin dashboard data' });
   }
 });
@@ -332,7 +332,7 @@ router.get('/stats/realtime', (req, res) => {
 
     res.json(stats);
   } catch (error) {
-    console.error('Realtime stats API error:', error);
+    logger.error('Realtime stats API error:', error);
     res.status(500).json({ error: 'Failed to fetch realtime statistics' });
   }
 });

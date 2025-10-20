@@ -130,7 +130,7 @@ class KPIService extends EventEmitter {
       });
 
       logger.info(
-        `[KPIService] Task completed: ${taskId} (${processingTime} minutes, delayed: ${isDelayed})`
+        `[KPIService] Task completed: ${taskId} (${processingTime} minutes, delayed: ${isDelayed})`,
       );
       return updatedKpi;
     } catch (error) {
@@ -308,7 +308,7 @@ class KPIService extends EventEmitter {
               (reviewerMetrics.avgProcessingTime * reviewerMetrics.completedTasks +
                 inspectorMetrics.avgProcessingTime * inspectorMetrics.completedTasks +
                 approverMetrics.avgProcessingTime * approverMetrics.completedTasks) /
-                totalCompleted
+                totalCompleted,
             )
           : 0;
 

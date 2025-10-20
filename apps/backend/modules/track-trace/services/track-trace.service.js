@@ -227,7 +227,7 @@ class TrackTraceService {
 
       const result = await this.productsCollection.updateOne(
         { _id: new ObjectId(productId) },
-        { $set: update }
+        { $set: update },
       );
 
       return {

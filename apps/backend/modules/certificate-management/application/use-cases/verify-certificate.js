@@ -27,7 +27,7 @@ class VerifyCertificateUseCase {
    */
   async execute({ certificateNumber, verificationCode, clientIP }) {
     try {
-      console.log(`🔍 Verifying certificate: ${certificateNumber}`);
+      logger.info(`🔍 Verifying certificate: ${certificateNumber}`);
 
       // 1. Validate input
       if (!certificateNumber) {
@@ -98,7 +98,7 @@ class VerifyCertificateUseCase {
 
       // 6. ส่งผลการตรวจสอบ
       if (validationResult.isValid) {
-        console.log(`✅ Certificate verification successful: ${certificateNumber}`);
+        logger.info(`✅ Certificate verification successful: ${certificateNumber}`);
 
         return {
           isValid: true,
@@ -122,7 +122,7 @@ class VerifyCertificateUseCase {
         };
       } else {
         console.log(
-          `❌ Certificate verification failed: ${certificateNumber} - ${validationResult.message}`
+          `❌ Certificate verification failed: ${certificateNumber} - ${validationResult.message}`,
         );
 
         return {
@@ -142,7 +142,7 @@ class VerifyCertificateUseCase {
         };
       }
     } catch (error) {
-      console.error('❌ Certificate verification error:', error);
+      logger.error('❌ Certificate verification error:', error);
 
       // บันทึก error
       await this._logVerificationAttempt({
@@ -246,10 +246,10 @@ class VerifyCertificateUseCase {
       if (this.auditService) {
         await this.auditService.logVerification(logData);
       } else {
-        console.log('📝 Verification attempt:', logData);
+        logger.info('📝 Verification attempt:', logData);
       }
     } catch (error) {
-      console.error('Failed to log verification attempt:', error);
+      logger.error('Failed to log verification attempt:', error);
       // ไม่ throw error เพราะไม่ควรให้การ log ทำให้การตรวจสอบล้มเหลว
     }
   }

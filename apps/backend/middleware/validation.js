@@ -103,7 +103,7 @@ const schemas = {
             value: Joi.number().required(),
             unit: Joi.string().required(),
             date: Joi.date().required(),
-          })
+          }),
         )
         .optional(),
     }).required(),
@@ -134,7 +134,7 @@ const schemas = {
             'root_crops',
             'cereals',
             'spices',
-            'medicinal_plants'
+            'medicinal_plants',
           )
           .required(),
 
@@ -159,7 +159,7 @@ const schemas = {
         intendedUse: Joi.string()
           .valid('fresh_consumption', 'processing', 'export', 'seed_production', 'medicinal')
           .required(),
-      })
+      }),
     )
     .min(1)
     .required(),
@@ -183,7 +183,7 @@ const schemas = {
           category: Joi.string().required(),
           requirement: Joi.string().required(),
           priority: Joi.string().valid('high', 'medium', 'low').default('medium'),
-        })
+        }),
       )
       .optional(),
 
@@ -206,7 +206,7 @@ const schemas = {
         'post_harvest_handling',
         'storage_transportation',
         'record_keeping',
-        'worker_training'
+        'worker_training',
       )
       .required(),
 
@@ -226,7 +226,7 @@ const schemas = {
           type: Joi.string().valid('photo', 'document', 'measurement', 'observation').required(),
           description: Joi.string().required(),
           value: Joi.alternatives().try(Joi.string(), Joi.number()).optional(),
-        })
+        }),
       )
       .optional(),
 
@@ -238,7 +238,7 @@ const schemas = {
           action: Joi.string().required(),
           timeline: Joi.string().required(),
           priority: Joi.string().valid('immediate', 'short_term', 'long_term').required(),
-        })
+        }),
       )
       .optional(),
 
@@ -332,7 +332,7 @@ const schemas = {
         'approved',
         'rejected',
         'certificate_issued',
-        'certificate_revoked'
+        'certificate_revoked',
       )
       .optional(),
 
@@ -368,12 +368,12 @@ schemas.createApplication = Joi.object({
             'farming_plan',
             'cultivation_record',
             'input_record',
-            'other'
+            'other',
           )
           .required(),
         filename: Joi.string().required(),
         description: Joi.string().max(200).optional(),
-      })
+      }),
     )
     .optional(),
 });
@@ -408,7 +408,7 @@ const validateFileUpload = (allowedTypes = [], maxSize = 10 * 1024 * 1024) => {
       // Check file type
       if (allowedTypes.length > 0 && !allowedTypes.includes(file.mimetype)) {
         errors.push(
-          `File ${index + 1}: Invalid file type. Allowed types: ${allowedTypes.join(', ')}`
+          `File ${index + 1}: Invalid file type. Allowed types: ${allowedTypes.join(', ')}`,
         );
       }
 

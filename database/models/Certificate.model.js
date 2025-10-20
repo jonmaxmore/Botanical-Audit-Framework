@@ -56,7 +56,7 @@ const DigitalSignatureSchema = new Schema(
       description: 'Base64-encoded X.509 certificate',
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 /**
@@ -286,7 +286,7 @@ const CertificateSchema = new Schema(
     timestamps: true,
     collection: 'certificates',
     versionKey: false,
-  }
+  },
 );
 
 // ========================================
@@ -308,7 +308,7 @@ CertificateSchema.index(
       status: { $in: ['ACTIVE', 'EXPIRING_SOON'] },
     },
     name: 'active_certificates_expiry',
-  }
+  },
 );
 
 // ========================================

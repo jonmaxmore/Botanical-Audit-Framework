@@ -78,7 +78,7 @@ class ApplicationController {
         message: 'Application created successfully',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error creating application:', error);
+      logger.error('[ApplicationController] Error creating application:', error);
       handleApiError(res, error, 'Failed to create application');
     }
   }
@@ -121,7 +121,7 @@ class ApplicationController {
         },
       });
     } catch (error) {
-      console.error('[ApplicationController] Error getting application:', error);
+      logger.error('[ApplicationController] Error getting application:', error);
       handleApiError(res, error, 'Failed to get application');
     }
   }
@@ -186,7 +186,7 @@ class ApplicationController {
         message: 'Application updated successfully',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error updating application:', error);
+      logger.error('[ApplicationController] Error updating application:', error);
       handleApiError(res, error, 'Failed to update application');
     }
   }
@@ -227,7 +227,7 @@ class ApplicationController {
         message: 'Application submitted successfully',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error submitting application:', error);
+      logger.error('[ApplicationController] Error submitting application:', error);
       handleApiError(res, error, 'Failed to submit application');
     }
   }
@@ -266,7 +266,7 @@ class ApplicationController {
         data: workflowStatus,
       });
     } catch (error) {
-      console.error('[ApplicationController] Error getting application status:', error);
+      logger.error('[ApplicationController] Error getting application status:', error);
       handleApiError(res, error, 'Failed to get application status');
     }
   }
@@ -309,7 +309,7 @@ class ApplicationController {
         },
       });
     } catch (error) {
-      console.error('[ApplicationController] Error getting farmer applications:', error);
+      logger.error('[ApplicationController] Error getting farmer applications:', error);
       handleApiError(res, error, 'Failed to get applications');
     }
   }
@@ -344,7 +344,7 @@ class ApplicationController {
       const updatedApplication = await this.workflowEngine.approveForPayment(
         id,
         req.user.id,
-        value
+        value,
       );
 
       res.json({
@@ -353,7 +353,7 @@ class ApplicationController {
         message: 'Application approved for payment',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error approving for payment:', error);
+      logger.error('[ApplicationController] Error approving for payment:', error);
       handleApiError(res, error, 'Failed to approve application for payment');
     }
   }
@@ -393,7 +393,7 @@ class ApplicationController {
         message: 'Revision requested successfully',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error requesting revision:', error);
+      logger.error('[ApplicationController] Error requesting revision:', error);
       handleApiError(res, error, 'Failed to request revision');
     }
   }
@@ -428,7 +428,7 @@ class ApplicationController {
       const updatedApplication = await this.workflowEngine.scheduleInspection(
         id,
         req.user.id,
-        value
+        value,
       );
 
       res.json({
@@ -437,7 +437,7 @@ class ApplicationController {
         message: 'Inspection scheduled successfully',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error scheduling inspection:', error);
+      logger.error('[ApplicationController] Error scheduling inspection:', error);
       handleApiError(res, error, 'Failed to schedule inspection');
     }
   }
@@ -472,7 +472,7 @@ class ApplicationController {
       const updatedApplication = await this.workflowEngine.completeInspection(
         id,
         req.user.id,
-        value
+        value,
       );
 
       res.json({
@@ -481,7 +481,7 @@ class ApplicationController {
         message: 'Inspection completed successfully',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error completing inspection:', error);
+      logger.error('[ApplicationController] Error completing inspection:', error);
       handleApiError(res, error, 'Failed to complete inspection');
     }
   }
@@ -521,7 +521,7 @@ class ApplicationController {
         message: 'Application approved and certificate will be issued',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error in final approval:', error);
+      logger.error('[ApplicationController] Error in final approval:', error);
       handleApiError(res, error, 'Failed to approve application');
     }
   }
@@ -556,7 +556,7 @@ class ApplicationController {
       const updatedApplication = await this.workflowEngine.rejectApplication(
         id,
         req.user.id,
-        value
+        value,
       );
 
       res.json({
@@ -565,7 +565,7 @@ class ApplicationController {
         message: 'Application rejected',
       });
     } catch (error) {
-      console.error('[ApplicationController] Error rejecting application:', error);
+      logger.error('[ApplicationController] Error rejecting application:', error);
       handleApiError(res, error, 'Failed to reject application');
     }
   }
@@ -606,7 +606,7 @@ class ApplicationController {
         },
       });
     } catch (error) {
-      console.error('[ApplicationController] Error getting workflow history:', error);
+      logger.error('[ApplicationController] Error getting workflow history:', error);
       handleApiError(res, error, 'Failed to get workflow history');
     }
   }

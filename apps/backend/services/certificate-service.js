@@ -9,6 +9,7 @@
  * - Public verification API
  */
 
+const logger = require('../shared/logger/logger');
 const QRCode = require('qrcode');
 const crypto = require('crypto');
 const PDFDocument = require('pdfkit');
@@ -40,7 +41,7 @@ class CertificateService {
       .collection('certificates')
       .findOne(
         { certificateNumber: new RegExp(`^GACP-${year}-`) },
-        { sort: { certificateNumber: -1 } }
+        { sort: { certificateNumber: -1 } },
       );
 
     let sequence = 1;
@@ -184,7 +185,7 @@ class CertificateService {
               day: 'numeric',
             }),
             50,
-            400
+            400,
           );
 
         doc.fontSize(12).font('Helvetica-Bold').text('วันหมดอายุ / Expiry Date:', 300, 380);
@@ -200,7 +201,7 @@ class CertificateService {
               day: 'numeric',
             }),
             300,
-            400
+            400,
           )
           .fillColor('#000000');
 
@@ -290,11 +291,11 @@ class CertificateService {
       // Save to database
       await db.collection('certificates').insertOne(certificate);
 
-      console.log(`✅ Certificate generated: ${certificateNumber}`);
+      logger.info(`✅ Certificate generated: ${certificateNumber}`);
 
       return certificate;
     } catch (error) {
-      console.error('❌ Certificate generation failed:', error);
+      logger.error('❌ Certificate generation failed:', error);
       throw error;
     }
   }
@@ -402,14 +403,14 @@ class CertificateService {
           revocationReason: reason,
           updatedAt: new Date(),
         },
-      }
+      },
     );
 
     if (result.modifiedCount === 0) {
       throw new Error('Certificate not found or already revoked');
     }
 
-    console.log(`✅ Certificate revoked: ${certificateNumber}`);
+    logger.info(`✅ Certificate revoked: ${certificateNumber}`);
 
     return { success: true };
   }
@@ -453,7 +454,7 @@ if (require.main === module) {
 
   async function test() {
     const client = await MongoClient.connect(
-      process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_platform'
+      process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_platform',
     );
     const db = client.db();
 
@@ -474,14 +475,14 @@ if (require.main === module) {
     };
 
     const certificate = await certificateService.generateCertificate(db, mockApplication);
-    console.log('Certificate generated:', certificate.certificateNumber);
+    logger.info('Certificate generated:', certificate.certificateNumber);
 
     // Test verification
     const verification = await certificateService.verifyCertificate(
       db,
-      certificate.certificateNumber
+      certificate.certificateNumber,
     );
-    console.log('Verification result:', verification);
+    logger.info('Verification result:', verification);
 
     // Test QR code verification
     const qrPayload = JSON.stringify({
@@ -494,11 +495,11 @@ if (require.main === module) {
     });
 
     const qrVerification = await certificateService.verifyQRCode(db, qrPayload);
-    console.log('QR verification result:', qrVerification);
+    logger.info('QR verification result:', qrVerification);
 
     // Get stats
     const stats = await certificateService.getCertificateStats(db);
-    console.log('Certificate stats:', stats);
+    logger.info('Certificate stats:', stats);
 
     await client.close();
   }

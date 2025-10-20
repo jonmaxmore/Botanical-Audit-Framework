@@ -50,7 +50,7 @@ class GACPSystemOrchestrator {
     // Initialize event listeners
     this._registerSystemEventListeners();
 
-    console.log('🎯 GACP System Orchestrator initialized');
+    logger.info('🎯 GACP System Orchestrator initialized');
   }
 
   /**
@@ -69,7 +69,7 @@ class GACPSystemOrchestrator {
     this.eventBus.on('SystemAlert', this.handleSystemAlert.bind(this));
     this.eventBus.on('BusinessRuleViolation', this.handleBusinessRuleViolation.bind(this));
 
-    console.log('📡 System event listeners registered');
+    logger.info('📡 System event listeners registered');
   }
 
   /**
@@ -78,7 +78,7 @@ class GACPSystemOrchestrator {
    */
   async handleApplicationSubmitted(event) {
     try {
-      console.log(`🚀 Processing application submission: ${event.payload.applicationId}`);
+      logger.info(`🚀 Processing application submission: ${event.payload.applicationId}`);
 
       const { applicationId, userId, applicationData } = event.payload;
 
@@ -108,7 +108,7 @@ class GACPSystemOrchestrator {
         dueDate: this._calculatePaymentDueDate(),
       });
 
-      console.log(`💰 Payment record created: ฿${paymentInfo.totalAmount}`);
+      logger.info(`💰 Payment record created: ฿${paymentInfo.totalAmount}`);
 
       // 4. Send welcome notification with next steps
       await this.services.notification.sendApplicationSubmittedNotification({
@@ -136,11 +136,11 @@ class GACPSystemOrchestrator {
         },
       });
 
-      console.log(`✅ Application submission workflow initialized: ${applicationId}`);
+      logger.info(`✅ Application submission workflow initialized: ${applicationId}`);
     } catch (error) {
       console.error(
         `❌ Application submission workflow failed: ${event.payload.applicationId}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'SUBMISSION', error);
     }
@@ -152,7 +152,7 @@ class GACPSystemOrchestrator {
    */
   async handleDocumentsComplete(event) {
     try {
-      console.log(`📄 Processing documents completion: ${event.payload.applicationId}`);
+      logger.info(`📄 Processing documents completion: ${event.payload.applicationId}`);
 
       const { applicationId, userId } = event.payload;
 
@@ -179,7 +179,7 @@ class GACPSystemOrchestrator {
           channels: ['email', 'sms', 'in-app'],
         });
 
-        console.log(`💰 Payment reminder sent for application: ${applicationId}`);
+        logger.info(`💰 Payment reminder sent for application: ${applicationId}`);
       }
 
       // 3. Generate interim progress report
@@ -195,11 +195,11 @@ class GACPSystemOrchestrator {
         nextStage: paymentStatus.isPaid ? 'QC_REVIEW' : 'PAYMENT_VERIFICATION',
       });
 
-      console.log(`✅ Documents completion processed: ${applicationId}`);
+      logger.info(`✅ Documents completion processed: ${applicationId}`);
     } catch (error) {
       console.error(
         `❌ Documents completion processing failed: ${event.payload.applicationId}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'DOCUMENTS_COMPLETE', error);
     }
@@ -211,7 +211,7 @@ class GACPSystemOrchestrator {
    */
   async handlePaymentComplete(event) {
     try {
-      console.log(`💰 Processing payment completion: ${event.payload.applicationId}`);
+      logger.info(`💰 Processing payment completion: ${event.payload.applicationId}`);
 
       const { applicationId, userId, paymentData } = event.payload;
 
@@ -243,11 +243,11 @@ class GACPSystemOrchestrator {
         category: 'APPLICATION_FEE',
       });
 
-      console.log(`✅ Payment completion processed: ${applicationId}`);
+      logger.info(`✅ Payment completion processed: ${applicationId}`);
     } catch (error) {
       console.error(
         `❌ Payment completion processing failed: ${event.payload.applicationId}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'PAYMENT_COMPLETE', error);
     }
@@ -259,7 +259,7 @@ class GACPSystemOrchestrator {
    */
   async handleApplicationApproved(event) {
     try {
-      console.log(`🎉 Processing application approval: ${event.payload.applicationId}`);
+      logger.info(`🎉 Processing application approval: ${event.payload.applicationId}`);
 
       const { applicationId, userId, approvedBy, applicationData } = event.payload;
 
@@ -303,11 +303,11 @@ class GACPSystemOrchestrator {
         approvedBy,
       });
 
-      console.log(`✅ Application approval processed: ${applicationId}`);
+      logger.info(`✅ Application approval processed: ${applicationId}`);
     } catch (error) {
       console.error(
         `❌ Application approval processing failed: ${event.payload.applicationId}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'APPROVAL', error);
     }
@@ -319,7 +319,7 @@ class GACPSystemOrchestrator {
    */
   async handleCertificateGenerated(event) {
     try {
-      console.log(`🏆 Processing certificate generation: ${event.payload.certificateNumber}`);
+      logger.info(`🏆 Processing certificate generation: ${event.payload.certificateNumber}`);
 
       const { applicationId, certificateId, certificateNumber, userId } = event.payload;
 
@@ -359,11 +359,11 @@ class GACPSystemOrchestrator {
         completedAt: new Date(),
       });
 
-      console.log(`🎯 Certificate generation workflow completed: ${certificateNumber}`);
+      logger.info(`🎯 Certificate generation workflow completed: ${certificateNumber}`);
     } catch (error) {
       console.error(
         `❌ Certificate generation processing failed: ${event.payload.certificateNumber}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'CERTIFICATE_GENERATION', error);
     }
@@ -375,7 +375,7 @@ class GACPSystemOrchestrator {
    */
   async handleUserRoleChanged(event) {
     try {
-      console.log(`👤 Processing user role change: ${event.payload.userId}`);
+      logger.info(`👤 Processing user role change: ${event.payload.userId}`);
 
       const { userId, oldRole, newRole, changedBy } = event.payload;
 
@@ -383,7 +383,7 @@ class GACPSystemOrchestrator {
       const roleChangeValidation = await this.services.userManagement.validateRoleChange(
         changedBy,
         oldRole,
-        newRole
+        newRole,
       );
 
       if (!roleChangeValidation.valid) {
@@ -416,9 +416,9 @@ class GACPSystemOrchestrator {
         channels: ['email', 'in-app'],
       });
 
-      console.log(`✅ User role change processed: ${userId} (${oldRole} → ${newRole})`);
+      logger.info(`✅ User role change processed: ${userId} (${oldRole} → ${newRole});`);
     } catch (error) {
-      console.error(`❌ User role change processing failed: ${event.payload.userId}`, error);
+      logger.error(`❌ User role change processing failed: ${event.payload.userId}`, error);
       await this._handleSystemError('USER_ROLE_CHANGE', error, event.payload);
     }
   }
@@ -513,7 +513,7 @@ class GACPSystemOrchestrator {
       channels: ['email', 'in-app'],
     });
 
-    console.log(`👨‍🔬 QC Officer assigned: ${qcOfficer.id} for application: ${applicationId}`);
+    logger.info(`👨‍🔬 QC Officer assigned: ${qcOfficer.id} for application: ${applicationId}`);
   }
 
   /**
@@ -591,7 +591,7 @@ class GACPSystemOrchestrator {
           severity: 'CRITICAL',
           validate: async data => {
             const documentStatus = await this.services.document.getDocumentCompleteness(
-              data.applicationId
+              data.applicationId,
             );
             return {
               valid: documentStatus.allValidated,
@@ -622,7 +622,7 @@ class GACPSystemOrchestrator {
    * Handle business rule violations
    */
   async _handleBusinessRuleViolation(applicationId, violations) {
-    console.error(`❌ Business rule violations for application: ${applicationId}`, violations);
+    logger.error(`❌ Business rule violations for application: ${applicationId}`, violations);
 
     // Update application status
     await this.services.application.updateStatus(applicationId, 'BUSINESS_RULE_VIOLATION', {
@@ -652,7 +652,7 @@ class GACPSystemOrchestrator {
    * Handle workflow errors
    */
   async _handleWorkflowError(applicationId, stage, error) {
-    console.error(`❌ Workflow error in ${stage} for application: ${applicationId}`, error);
+    logger.error(`❌ Workflow error in ${stage} for application: ${applicationId}`, error);
 
     // Update workflow state
     await this._updateWorkflowState(applicationId, 'ERROR', {

@@ -333,7 +333,7 @@ class RBACService {
 
       return true;
     } catch (error) {
-      console.error('Permission check failed:', error);
+      logger.error('Permission check failed:', error);
       return false; // Fail closed
     }
   }
@@ -407,7 +407,7 @@ class RBACService {
 
         next();
       } catch (error) {
-        console.error('RBAC middleware error:', error);
+        logger.error('RBAC middleware error:', error);
         res.status(500).json({ error: 'Authorization check failed' });
       }
     };

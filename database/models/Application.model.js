@@ -77,7 +77,7 @@ const FarmAddressSchema = new Schema(
       },
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 /**
@@ -135,7 +135,7 @@ const StateHistorySchema = new Schema(
       default: null,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 /**
@@ -186,7 +186,7 @@ const DTAMReviewSchema = new Schema(
       default: null,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 /**
@@ -514,7 +514,7 @@ const ApplicationSchema = new Schema(
     timestamps: true,
     collection: 'applications',
     versionKey: false,
-  }
+  },
 );
 
 // ========================================
@@ -549,7 +549,7 @@ ApplicationSchema.index(
       isDeleted: false,
     },
     name: 'active_applications_queue',
-  }
+  },
 );
 
 // ========================================
@@ -614,7 +614,7 @@ ApplicationSchema.methods.transitionTo = async function (
   newState,
   actorId,
   actorRole,
-  notes = null
+  notes = null,
 ) {
   // Validate state transition
   if (!this.isValidTransition(newState)) {

@@ -134,7 +134,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
 
       this.isInitialized = true;
       this.logger.info(
-        '[EnhancedTrainingIntegration] Service initialization completed successfully'
+        '[EnhancedTrainingIntegration] Service initialization completed successfully',
       );
 
       // Emit initialization complete event
@@ -180,7 +180,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
 
     try {
       this.logger.info(
-        `[EnhancedTrainingIntegration] Starting enhanced course enrollment - Operation: ${operationId}`
+        `[EnhancedTrainingIntegration] Starting enhanced course enrollment - Operation: ${operationId}`,
       );
 
       // Validate system readiness
@@ -190,7 +190,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       const eligibilityResult = await this._validateEnrollmentEligibility(
         userId,
         courseId,
-        options
+        options,
       );
       if (!eligibilityResult.eligible) {
         throw new Error(`Enrollment not eligible: ${eligibilityResult.reason}`);
@@ -200,7 +200,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       const enrollmentResult = await this.originalTrainingService.enrollLearner(
         userId,
         courseId,
-        options
+        options,
       );
 
       // Parallel integration updates for performance
@@ -250,7 +250,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       const predictions = await this._generateEnrollmentPredictions(
         userId,
         courseId,
-        enhancedResult
+        enhancedResult,
       );
       enhancedResult.predictions = predictions;
 
@@ -283,7 +283,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       });
 
       this.logger.info(
-        `[EnhancedTrainingIntegration] Enhanced enrollment completed - Operation: ${operationId}`
+        `[EnhancedTrainingIntegration] Enhanced enrollment completed - Operation: ${operationId}`,
       );
 
       return {
@@ -294,7 +294,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[EnhancedTrainingIntegration] Enhanced enrollment failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       // Update performance metrics for failure
@@ -332,14 +332,14 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
 
     try {
       this.logger.info(
-        `[EnhancedTrainingIntegration] Processing enhanced course completion - Operation: ${operationId}`
+        `[EnhancedTrainingIntegration] Processing enhanced course completion - Operation: ${operationId}`,
       );
 
       // Validate completion data and criteria
       const validationResult = await this._validateCompletionCriteria(
         userId,
         courseId,
-        completionData
+        completionData,
       );
       if (!validationResult.valid) {
         throw new Error(`Completion validation failed: ${validationResult.reason}`);
@@ -349,7 +349,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       const completionResult = await this.originalTrainingService.processCourseCompletion(
         userId,
         courseId,
-        completionData
+        completionData,
       );
 
       // Enhanced integration processing
@@ -401,7 +401,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       const achievements = await this._generateAchievementAnalysis(
         userId,
         courseId,
-        enhancedResult
+        enhancedResult,
       );
       enhancedResult.achievements = achievements;
 
@@ -434,7 +434,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       });
 
       this.logger.info(
-        `[EnhancedTrainingIntegration] Enhanced completion processed - Operation: ${operationId}`
+        `[EnhancedTrainingIntegration] Enhanced completion processed - Operation: ${operationId}`,
       );
 
       return {
@@ -445,7 +445,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[EnhancedTrainingIntegration] Enhanced completion failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       this._updatePerformanceMetrics(false, Date.now() - startTime);
@@ -480,7 +480,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
 
     try {
       this.logger.info(
-        `[EnhancedTrainingIntegration] Building enhanced learner dashboard - Operation: ${operationId}`
+        `[EnhancedTrainingIntegration] Building enhanced learner dashboard - Operation: ${operationId}`,
       );
 
       // Get core learner data
@@ -533,7 +533,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       // Generate personalized recommendations
       const recommendations = await this._generatePersonalizedRecommendations(
         userId,
-        enhancedDashboard
+        enhancedDashboard,
       );
       enhancedDashboard.recommendations = recommendations;
 
@@ -546,7 +546,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       this._updatePerformanceMetrics(true, Date.now() - startTime);
 
       this.logger.info(
-        `[EnhancedTrainingIntegration] Enhanced dashboard built - Operation: ${operationId}`
+        `[EnhancedTrainingIntegration] Enhanced dashboard built - Operation: ${operationId}`,
       );
 
       return {
@@ -557,7 +557,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     } catch (error) {
       this.logger.error(
         `[EnhancedTrainingIntegration] Enhanced dashboard failed - Operation: ${operationId}:`,
-        error
+        error,
       );
 
       this._updatePerformanceMetrics(false, Date.now() - startTime);
@@ -585,7 +585,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
 
       // Calculate system score
       const healthyServices = Object.values(this.serviceHealth).filter(
-        status => status === 'healthy'
+        status => status === 'healthy',
       ).length;
       const totalServices = Object.keys(this.serviceHealth).length;
       const healthScore = (healthyServices / totalServices) * 100;
@@ -662,7 +662,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         this.serviceHealth[check.name] = 'unhealthy';
         this.logger.warn(
           `[EnhancedTrainingIntegration] Health check failed for ${check.name}:`,
-          error.message
+          error.message,
         );
       }
     }
@@ -741,7 +741,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     }
 
     const healthyServices = Object.values(this.serviceHealth).filter(
-      status => status === 'healthy'
+      status => status === 'healthy',
     ).length;
     const totalServices = Object.keys(this.serviceHealth).length;
 
@@ -793,7 +793,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     } else {
       this.logger.warn(
         '[EnhancedTrainingIntegration] Service operation failed:',
-        settledPromise.reason
+        settledPromise.reason,
       );
       return {
         error: settledPromise.reason.message,

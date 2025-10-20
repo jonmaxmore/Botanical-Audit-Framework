@@ -141,7 +141,7 @@ const userSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'users',
-  }
+  },
 );
 
 // Apply shared mongoose plugins

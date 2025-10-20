@@ -132,7 +132,7 @@ const surveySchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'cannabis_surveys',
-  }
+  },
 );
 
 // Compound indexes
@@ -245,7 +245,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
       const doc = await this.SurveyModel.findById(id);
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error finding survey by ID:', error);
+      logger.error('Error finding survey by ID:', error);
       throw error;
     }
   }
@@ -262,7 +262,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding surveys by farmer ID:', error);
+      logger.error('Error finding surveys by farmer ID:', error);
       throw error;
     }
   }
@@ -279,7 +279,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding surveys by farm ID:', error);
+      logger.error('Error finding surveys by farm ID:', error);
       throw error;
     }
   }
@@ -293,7 +293,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding surveys by status:', error);
+      logger.error('Error finding surveys by status:', error);
       throw error;
     }
   }
@@ -326,7 +326,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding surveys with filters:', error);
+      logger.error('Error finding surveys with filters:', error);
       throw error;
     }
   }
@@ -343,7 +343,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding surveys by year and period:', error);
+      logger.error('Error finding surveys by year and period:', error);
       throw error;
     }
   }
@@ -360,7 +360,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding surveys reviewed by staff:', error);
+      logger.error('Error finding surveys reviewed by staff:', error);
       throw error;
     }
   }
@@ -377,7 +377,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return this.toDomain(doc);
     } catch (error) {
-      console.error('Error saving survey:', error);
+      logger.error('Error saving survey:', error);
       throw error;
     }
   }
@@ -387,7 +387,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
       const result = await this.SurveyModel.findByIdAndDelete(id);
       return !!result;
     } catch (error) {
-      console.error('Error deleting survey:', error);
+      logger.error('Error deleting survey:', error);
       throw error;
     }
   }
@@ -396,7 +396,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
     try {
       return await this.SurveyModel.countDocuments({ status });
     } catch (error) {
-      console.error('Error counting surveys by status:', error);
+      logger.error('Error counting surveys by status:', error);
       throw error;
     }
   }
@@ -407,7 +407,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
         farmerId: new mongoose.Types.ObjectId(farmerId),
       });
     } catch (error) {
-      console.error('Error counting surveys by farmer:', error);
+      logger.error('Error counting surveys by farmer:', error);
       throw error;
     }
   }
@@ -434,7 +434,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
         },
       ]);
     } catch (error) {
-      console.error('Error getting statistics by purpose:', error);
+      logger.error('Error getting statistics by purpose:', error);
       throw error;
     }
   }
@@ -461,7 +461,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
         },
       ]);
     } catch (error) {
-      console.error('Error getting statistics by plant type:', error);
+      logger.error('Error getting statistics by plant type:', error);
       throw error;
     }
   }
@@ -494,7 +494,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
         { $sort: { period: 1, status: 1 } },
       ]);
     } catch (error) {
-      console.error('Error getting statistics by year:', error);
+      logger.error('Error getting statistics by year:', error);
       throw error;
     }
   }
@@ -514,7 +514,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
       const count = await this.SurveyModel.countDocuments(query);
       return count > 0;
     } catch (error) {
-      console.error('Error checking survey existence:', error);
+      logger.error('Error checking survey existence:', error);
       throw error;
     }
   }
@@ -529,7 +529,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding recently submitted surveys:', error);
+      logger.error('Error finding recently submitted surveys:', error);
       throw error;
     }
   }
@@ -542,7 +542,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       return docs.map(doc => this.toDomain(doc));
     } catch (error) {
-      console.error('Error finding surveys requiring attention:', error);
+      logger.error('Error finding surveys requiring attention:', error);
       throw error;
     }
   }

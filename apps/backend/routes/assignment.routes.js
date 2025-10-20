@@ -203,7 +203,7 @@ function initializeAssignmentRoutes(dependencies) {
         id,
         newUserId,
         reason || 'Reassigned by admin',
-        reassignedBy
+        reassignedBy,
       );
 
       res.json({
@@ -233,7 +233,7 @@ function initializeAssignmentRoutes(dependencies) {
 
       const assignment = await jobAssignmentService.cancelAssignment(
         id,
-        reason || 'Assignment cancelled'
+        reason || 'Assignment cancelled',
       );
 
       res.json({
@@ -401,7 +401,7 @@ function initializeAssignmentRoutes(dependencies) {
       const { hours = 24 } = req.query;
 
       const overdueAssignments = await jobAssignmentService.assignmentRepository.findOverdue(
-        Number(hours)
+        Number(hours),
       );
 
       res.json({

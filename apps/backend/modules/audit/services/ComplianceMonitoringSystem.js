@@ -25,6 +25,7 @@
  * - Tracks corrective actions
  */
 
+const logger = require('../../../shared/logger/logger');
 const EventEmitter = require('events');
 
 class ComplianceMonitoringSystem extends EventEmitter {
@@ -208,7 +209,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
    * Start real-time compliance monitoring
    */
   async startMonitoring() {
-    console.log('[ComplianceMonitoring] Starting real-time compliance monitoring...');
+    logger.info('[ComplianceMonitoring] Starting real-time compliance monitoring...');
 
     try {
       // Start event listeners for different compliance areas
@@ -223,7 +224,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
       // Start violation processing
       this.startViolationProcessing();
 
-      console.log('[ComplianceMonitoring] Real-time monitoring started successfully');
+      logger.info('[ComplianceMonitoring] Real-time monitoring started successfully');
 
       this.emit('monitoring_started', {
         timestamp: new Date(),
@@ -231,7 +232,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         monitors: this.activeMonitors.size,
       });
     } catch (error) {
-      console.error('[ComplianceMonitoring] Failed to start monitoring:', error);
+      logger.error('[ComplianceMonitoring] Failed to start monitoring:', error);
       throw error;
     }
   }
@@ -307,7 +308,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         await this.updateComplianceScore('application_workflow', applicationId);
       }
     } catch (error) {
-      console.error('[ComplianceMonitoring] Application compliance check failed:', error);
+      logger.error('[ComplianceMonitoring] Application compliance check failed:', error);
     }
   }
 
@@ -348,7 +349,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         }
       }
     } catch (error) {
-      console.error('[ComplianceMonitoring] Payment compliance check failed:', error);
+      logger.error('[ComplianceMonitoring] Payment compliance check failed:', error);
     }
   }
 
@@ -370,7 +371,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
           const hasAuthorization = await this.checkDataAccessAuthorization(
             user,
             dataType,
-            accessType
+            accessType,
           );
 
           if (!hasAuthorization) {
@@ -396,7 +397,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         }
       }
     } catch (error) {
-      console.error('[ComplianceMonitoring] Data access compliance check failed:', error);
+      logger.error('[ComplianceMonitoring] Data access compliance check failed:', error);
     }
   }
 
@@ -460,7 +461,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         }
       }
     } catch (error) {
-      console.error('[ComplianceMonitoring] Certificate compliance check failed:', error);
+      logger.error('[ComplianceMonitoring] Certificate compliance check failed:', error);
     }
   }
 
@@ -469,7 +470,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
    */
   async reportViolation(violationData) {
     try {
-      console.log(`[ComplianceMonitoring] Violation detected: ${violationData.ruleId}`);
+      logger.info(`[ComplianceMonitoring] Violation detected: ${violationData.ruleId}`);
 
       // Store violation in database
       const violation = {
@@ -505,14 +506,14 @@ class ComplianceMonitoringSystem extends EventEmitter {
             ruleId: violation.ruleId,
             severity: violation.severity,
             category: violation.category,
-          }
+          },
         );
       }
 
       // Emit violation event
       this.emit('violation_detected', violation);
     } catch (error) {
-      console.error('[ComplianceMonitoring] Failed to report violation:', error);
+      logger.error('[ComplianceMonitoring] Failed to report violation:', error);
     }
   }
 
@@ -539,9 +540,9 @@ class ComplianceMonitoringSystem extends EventEmitter {
 
       this.metrics.alertsSent++;
 
-      console.log(`[ComplianceMonitoring] Alert sent for violation: ${violation.ruleId}`);
+      logger.info(`[ComplianceMonitoring] Alert sent for violation: ${violation.ruleId}`);
     } catch (error) {
-      console.error('[ComplianceMonitoring] Failed to send alert:', error);
+      logger.error('[ComplianceMonitoring] Failed to send alert:', error);
     }
   }
 
@@ -555,11 +556,11 @@ class ComplianceMonitoringSystem extends EventEmitter {
       try {
         await this.runPeriodicChecks();
       } catch (error) {
-        console.error('[ComplianceMonitoring] Periodic check failed:', error);
+        logger.error('[ComplianceMonitoring] Periodic check failed:', error);
       }
     }, interval);
 
-    console.log(`[ComplianceMonitoring] Periodic checks started (interval: ${interval}ms)`);
+    logger.info(`[ComplianceMonitoring] Periodic checks started (interval: ${interval}ms);`);
   }
 
   /**
@@ -619,10 +620,10 @@ class ComplianceMonitoringSystem extends EventEmitter {
             lastUpdated: new Date(),
           },
         },
-        { upsert: true }
+        { upsert: true },
       );
     } catch (error) {
-      console.error('[ComplianceMonitoring] Failed to update compliance score:', error);
+      logger.error('[ComplianceMonitoring] Failed to update compliance score:', error);
     }
   }
 
@@ -675,7 +676,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         lastUpdated: new Date(),
       };
     } catch (error) {
-      console.error('[ComplianceMonitoring] Failed to generate dashboard:', error);
+      logger.error('[ComplianceMonitoring] Failed to generate dashboard:', error);
       throw error;
     }
   }
@@ -706,7 +707,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
 
       return trends;
     } catch (error) {
-      console.error('[ComplianceMonitoring] Failed to get violation trends:', error);
+      logger.error('[ComplianceMonitoring] Failed to get violation trends:', error);
       return [];
     }
   }
@@ -745,7 +746,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
     this.removeAllListeners();
     this.activeMonitors.clear();
 
-    console.log('[ComplianceMonitoring] Monitoring stopped');
+    logger.info('[ComplianceMonitoring] Monitoring stopped');
   }
 
   /**

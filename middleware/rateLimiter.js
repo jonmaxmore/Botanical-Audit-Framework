@@ -48,7 +48,7 @@ function createRedisClient() {
         retryStrategy: times => {
           if (times > 3) {
             console.warn(
-              '⚠️  Redis connection failed - falling back to memory store for rate limiting'
+              '⚠️  Redis connection failed - falling back to memory store for rate limiting',
             );
             return null; // Stop retrying
           }

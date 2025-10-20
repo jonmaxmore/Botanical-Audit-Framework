@@ -66,7 +66,7 @@ app.post(
       // Generate JWT
       const token = securityUtils.generateJWT(
         { userId: user.id, email: user.email },
-        process.env.JWT_SECRET
+        process.env.JWT_SECRET,
       );
 
       res.json({
@@ -81,7 +81,7 @@ app.post(
         message: error.message,
       });
     }
-  }
+  },
 );
 
 // Example 4: Farm application with comprehensive validation
@@ -114,7 +114,7 @@ app.post(
         message: error.message,
       });
     }
-  }
+  },
 );
 
 // Example 5: Different security for admin routes
@@ -136,7 +136,7 @@ app.get(
       success: true,
       data: users,
     });
-  }
+  },
 );
 
 // Example 6: Public routes with lenient security
@@ -159,7 +159,7 @@ app.get(
       success: true,
       data: standards,
     });
-  }
+  },
 );
 
 // Example 7: Custom validation schemas
@@ -183,7 +183,7 @@ const customValidation = apiSecurity.validate({
         'ORGANIC_CERTIFICATION',
         'GAP_CERTIFICATION',
         'HACCP_CERTIFICATION',
-        'ISO_CERTIFICATION'
+        'ISO_CERTIFICATION',
       )
       .required(),
 

@@ -76,7 +76,7 @@ class DocumentController {
         data: document,
       });
     } catch (error) {
-      console.error('Error uploading document:', error);
+      logger.error('Error uploading document:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to upload document',
@@ -99,7 +99,7 @@ class DocumentController {
         data: document,
       });
     } catch (error) {
-      console.error('Error getting document:', error);
+      logger.error('Error getting document:', error);
       const status = error.message.includes('not found')
         ? 404
         : error.message.includes('Access denied')
@@ -126,7 +126,7 @@ class DocumentController {
       res.setHeader('Content-Disposition', `attachment; filename="${result.fileName}"`);
       res.send(result.buffer);
     } catch (error) {
-      console.error('Error downloading document:', error);
+      logger.error('Error downloading document:', error);
       const status = error.message.includes('not found')
         ? 404
         : error.message.includes('Access denied')
@@ -168,7 +168,7 @@ class DocumentController {
         data: result,
       });
     } catch (error) {
-      console.error('Error listing documents:', error);
+      logger.error('Error listing documents:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to list documents',
@@ -195,7 +195,7 @@ class DocumentController {
         entityId,
         userId,
         userRole,
-        options
+        options,
       );
 
       res.status(200).json({
@@ -203,7 +203,7 @@ class DocumentController {
         data: documents,
       });
     } catch (error) {
-      console.error('Error getting documents by entity:', error);
+      logger.error('Error getting documents by entity:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get documents',
@@ -227,7 +227,7 @@ class DocumentController {
         data: document,
       });
     } catch (error) {
-      console.error('Error approving document:', error);
+      logger.error('Error approving document:', error);
       const status = error.message.includes('not found') ? 404 : 500;
       res.status(status).json({
         success: false,
@@ -259,7 +259,7 @@ class DocumentController {
         data: document,
       });
     } catch (error) {
-      console.error('Error rejecting document:', error);
+      logger.error('Error rejecting document:', error);
       const status = error.message.includes('not found') ? 404 : 500;
       res.status(status).json({
         success: false,
@@ -281,7 +281,7 @@ class DocumentController {
         documentId,
         updates,
         userId,
-        userRole
+        userRole,
       );
 
       res.status(200).json({
@@ -290,7 +290,7 @@ class DocumentController {
         data: document,
       });
     } catch (error) {
-      console.error('Error updating document:', error);
+      logger.error('Error updating document:', error);
       const status = error.message.includes('not found')
         ? 404
         : error.message.includes('Access denied')
@@ -316,7 +316,7 @@ class DocumentController {
         documentId,
         userId,
         userRole,
-        hardDelete
+        hardDelete,
       );
 
       res.status(200).json({
@@ -325,7 +325,7 @@ class DocumentController {
         data: result,
       });
     } catch (error) {
-      console.error('Error deleting document:', error);
+      logger.error('Error deleting document:', error);
       const status = error.message.includes('not found')
         ? 404
         : error.message.includes('Access denied')
@@ -355,7 +355,7 @@ class DocumentController {
         data: result,
       });
     } catch (error) {
-      console.error('Error getting pending documents:', error);
+      logger.error('Error getting pending documents:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get pending documents',
@@ -380,7 +380,7 @@ class DocumentController {
         data: statistics,
       });
     } catch (error) {
-      console.error('Error getting statistics:', error);
+      logger.error('Error getting statistics:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get document statistics',

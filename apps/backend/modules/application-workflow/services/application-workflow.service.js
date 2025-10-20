@@ -118,7 +118,7 @@ class ApplicationWorkflowService {
               note: 'Application submitted for review',
             },
           },
-        }
+        },
       );
 
       logger.info(`[WorkflowService] Application submitted: ${applicationId}`);
@@ -159,7 +159,7 @@ class ApplicationWorkflowService {
               note: 'Document review started',
             },
           },
-        }
+        },
       );
 
       logger.info(`[WorkflowService] Document review started: ${applicationId}`, {
@@ -214,7 +214,7 @@ class ApplicationWorkflowService {
               details: findings,
             },
           },
-        }
+        },
       );
 
       logger.info(`[WorkflowService] Document review completed: ${applicationId}`, {
@@ -257,7 +257,7 @@ class ApplicationWorkflowService {
               note: 'Field inspection started',
             },
           },
-        }
+        },
       );
 
       logger.info(`[WorkflowService] Field inspection started: ${applicationId}`, {
@@ -313,7 +313,7 @@ class ApplicationWorkflowService {
               details: { complianceScore, findings },
             },
           },
-        }
+        },
       );
 
       logger.info(`[WorkflowService] Field inspection completed: ${applicationId}`, {
@@ -361,7 +361,7 @@ class ApplicationWorkflowService {
               details: { certificateNumber },
             },
           },
-        }
+        },
       );
 
       logger.info(`[WorkflowService] Application approved: ${applicationId}`, {
@@ -402,7 +402,7 @@ class ApplicationWorkflowService {
               details: { reason },
             },
           },
-        }
+        },
       );
 
       logger.info(`[WorkflowService] Application rejected: ${applicationId}`);

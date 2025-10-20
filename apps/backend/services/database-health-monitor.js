@@ -7,6 +7,7 @@
  * @date 2025-10-19
  */
 
+const logger = require('../shared/logger/logger');
 const mongoose = require('mongoose');
 const mongoManager = require('../config/mongodb-manager');
 
@@ -40,7 +41,7 @@ class DatabaseHealthMonitor {
    * Start continuous health monitoring
    */
   startMonitoring() {
-    console.log('🔍 Starting database health monitoring...');
+    logger.info('🔍 Starting database health monitoring...');
 
     // Initial health check
     this.performHealthCheck();
@@ -61,7 +62,7 @@ class DatabaseHealthMonitor {
     if (this.monitoringInterval) {
       clearInterval(this.monitoringInterval);
       this.monitoringInterval = null;
-      console.log('⏹️ Database health monitoring stopped');
+      logger.info('⏹️ Database health monitoring stopped');
     }
   }
 
@@ -70,26 +71,26 @@ class DatabaseHealthMonitor {
    */
   setupEventListeners() {
     mongoose.connection.on('connected', () => {
-      console.log('✅ MongoDB connected');
+      logger.info('✅ MongoDB connected');
       this.healthMetrics.connectionStatus = 'connected';
       this.updateHealthHistory('connected');
     });
 
     mongoose.connection.on('error', error => {
-      console.error('❌ MongoDB connection error:', error);
+      logger.error('❌ MongoDB connection error:', error);
       this.healthMetrics.connectionStatus = 'error';
       this.healthMetrics.errorCount++;
       this.updateHealthHistory('error', error.message);
     });
 
     mongoose.connection.on('disconnected', () => {
-      console.log('⚠️ MongoDB disconnected');
+      logger.info('⚠️ MongoDB disconnected');
       this.healthMetrics.connectionStatus = 'disconnected';
       this.updateHealthHistory('disconnected');
     });
 
     mongoose.connection.on('reconnected', () => {
-      console.log('🔄 MongoDB reconnected');
+      logger.info('🔄 MongoDB reconnected');
       this.healthMetrics.connectionStatus = 'reconnected';
       this.updateHealthHistory('reconnected');
     });
@@ -128,9 +129,9 @@ class DatabaseHealthMonitor {
       this.healthMetrics.lastHealthCheck = new Date().toISOString();
       this.healthMetrics.uptime = process.uptime();
 
-      console.log(`💚 Database health check completed in ${responseTime}ms`);
+      logger.info(`💚 Database health check completed in ${responseTime}ms`);
     } catch (error) {
-      console.error('❌ Database health check failed:', error);
+      logger.error('❌ Database health check failed:', error);
 
       const responseTime = Date.now() - startTime;
       this.updatePerformanceMetrics(responseTime, false);
@@ -184,7 +185,7 @@ class DatabaseHealthMonitor {
         host: serverStatus.host,
       };
     } catch (error) {
-      console.warn('⚠️ Could not retrieve server statistics:', error.message);
+      logger.warn('⚠️ Could not retrieve server statistics:', error.message);
     }
   }
 
@@ -211,7 +212,7 @@ class DatabaseHealthMonitor {
         };
       }
     } catch (error) {
-      console.warn('⚠️ Could not retrieve collection statistics:', error.message);
+      logger.warn('⚠️ Could not retrieve collection statistics:', error.message);
     }
   }
 
@@ -325,13 +326,13 @@ class DatabaseHealthMonitor {
    */
   async forceReconnection() {
     try {
-      console.log('🔄 Forcing database reconnection...');
+      logger.info('🔄 Forcing database reconnection...');
       await mongoose.disconnect();
       await mongoManager.connect();
-      console.log('✅ Database reconnection successful');
+      logger.info('✅ Database reconnection successful');
       return true;
     } catch (error) {
-      console.error('❌ Database reconnection failed:', error);
+      logger.error('❌ Database reconnection failed:', error);
       return false;
     }
   }

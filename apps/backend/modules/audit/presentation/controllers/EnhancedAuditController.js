@@ -34,7 +34,7 @@ class EnhancedAuditController {
    */
   async getComplianceDashboard(req, res) {
     try {
-      console.log('[EnhancedAuditController] Getting compliance dashboard...');
+      logger.info('[EnhancedAuditController] Getting compliance dashboard...');
 
       // Get compliance monitoring data
       const complianceDashboard = await this.complianceMonitoringSystem.getComplianceDashboard();
@@ -89,7 +89,7 @@ class EnhancedAuditController {
         data: dashboardData,
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Dashboard error:', error);
+      logger.error('[EnhancedAuditController] Dashboard error:', error);
       res.status(500).json({
         success: false,
         error: 'DASHBOARD_ERROR',
@@ -144,7 +144,7 @@ class EnhancedAuditController {
         },
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Violations error:', error);
+      logger.error('[EnhancedAuditController] Violations error:', error);
       res.status(500).json({
         success: false,
         error: 'VIOLATIONS_ERROR',
@@ -198,7 +198,7 @@ class EnhancedAuditController {
           previousStatus: req.body.previousStatus,
           newStatus: status,
           resolution,
-        }
+        },
       );
 
       res.json({
@@ -206,7 +206,7 @@ class EnhancedAuditController {
         message: 'Violation status updated successfully',
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Update violation error:', error);
+      logger.error('[EnhancedAuditController] Update violation error:', error);
       res.status(500).json({
         success: false,
         error: 'UPDATE_ERROR',
@@ -239,7 +239,7 @@ class EnhancedAuditController {
         },
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Government status error:', error);
+      logger.error('[EnhancedAuditController] Government status error:', error);
       res.status(500).json({
         success: false,
         error: 'GOVERNMENT_STATUS_ERROR',
@@ -286,7 +286,7 @@ class EnhancedAuditController {
           reportType,
           system,
           submissionId: response.submission_id,
-        }
+        },
       );
 
       res.json({
@@ -294,7 +294,7 @@ class EnhancedAuditController {
         data: response,
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Report submission error:', error);
+      logger.error('[EnhancedAuditController] Report submission error:', error);
       res.status(500).json({
         success: false,
         error: 'SUBMISSION_ERROR',
@@ -340,7 +340,7 @@ class EnhancedAuditController {
         data: analytics,
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Analytics error:', error);
+      logger.error('[EnhancedAuditController] Analytics error:', error);
       res.status(500).json({
         success: false,
         error: 'ANALYTICS_ERROR',
@@ -388,7 +388,7 @@ class EnhancedAuditController {
         { userId, role: req.userRole },
         'compliance_monitoring',
         'system',
-        { action }
+        { action },
       );
 
       res.json({
@@ -397,7 +397,7 @@ class EnhancedAuditController {
         data: result,
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Monitoring control error:', error);
+      logger.error('[EnhancedAuditController] Monitoring control error:', error);
       res.status(500).json({
         success: false,
         error: 'MONITORING_ERROR',
@@ -510,7 +510,7 @@ class EnhancedAuditController {
         data: auditLog,
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Get audit log error:', error);
+      logger.error('[EnhancedAuditController] Get audit log error:', error);
       res.status(500).json({
         success: false,
         error: 'AUDIT_LOG_ERROR',
@@ -538,7 +538,7 @@ class EnhancedAuditController {
         data: result,
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] List audit logs error:', error);
+      logger.error('[EnhancedAuditController] List audit logs error:', error);
       res.status(500).json({
         success: false,
         error: 'LIST_AUDIT_LOGS_ERROR',
@@ -561,7 +561,7 @@ class EnhancedAuditController {
         data: statistics,
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Get statistics error:', error);
+      logger.error('[EnhancedAuditController] Get statistics error:', error);
       res.status(500).json({
         success: false,
         error: 'STATISTICS_ERROR',
@@ -587,7 +587,7 @@ class EnhancedAuditController {
         data: activity,
       });
     } catch (error) {
-      console.error('[EnhancedAuditController] Get user activity error:', error);
+      logger.error('[EnhancedAuditController] Get user activity error:', error);
       res.status(500).json({
         success: false,
         error: 'USER_ACTIVITY_ERROR',

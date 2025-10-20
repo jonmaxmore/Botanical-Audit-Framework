@@ -89,7 +89,7 @@ export function CountdownTimer({
       if (seconds <= warningThreshold) return 'warning';
       return 'normal';
     },
-    [criticalThreshold, warningThreshold]
+    [criticalThreshold, warningThreshold],
   );
 
   // Timer effect

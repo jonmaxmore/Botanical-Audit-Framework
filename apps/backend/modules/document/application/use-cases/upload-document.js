@@ -32,7 +32,7 @@ class UploadDocumentUseCase {
             'application/vnd.ms-excel',
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
           ],
-        }
+        },
       );
 
       if (!validation.valid) {
@@ -49,7 +49,7 @@ class UploadDocumentUseCase {
         {
           folder: `documents/${uploadData.category || 'other'}`,
           accessLevel: uploadData.accessLevel || Document.ACCESS_LEVEL.INTERNAL,
-        }
+        },
       );
 
       // Create document entity
@@ -86,7 +86,7 @@ class UploadDocumentUseCase {
           });
           document.thumbnailUrl = thumbnail.thumbnailUrl;
         } catch (error) {
-          console.error('Failed to generate thumbnail:', error);
+          logger.error('Failed to generate thumbnail:', error);
           // Continue without thumbnail
         }
       }
@@ -96,7 +96,7 @@ class UploadDocumentUseCase {
 
       return savedDocument;
     } catch (error) {
-      console.error('Error uploading document:', error);
+      logger.error('Error uploading document:', error);
       throw error;
     }
   }

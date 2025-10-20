@@ -34,7 +34,7 @@ async function forgotPassword(req, res) {
       // Don't reveal if email exists (security best practice)
       return res.status(200).json({
         success: true,
-        message: 'หากอีเมลนี้มีในระบบ เราจะส่งลิงก์รีเซ็ตรหัสผ่านให้คุณ'
+        message: 'หากอีเมลนี้มีในระบบ เราจะส่งลิงก์รีเซ็ตรหัสผ่านให้คุณ',
       });
     }
 
@@ -61,12 +61,12 @@ async function forgotPassword(req, res) {
       resourceId: user.userId,
       ipAddress: req.ip || 'unknown',
       userAgent: req.get('user-agent') || 'unknown',
-      metadata: {}
+      metadata: {},
     });
 
     res.status(200).json({
       success: true,
-      message: 'ส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลของคุณแล้ว'
+      message: 'ส่งลิงก์รีเซ็ตรหัสผ่านไปยังอีเมลของคุณแล้ว',
     });
   } catch (error) {
     console.error('Forgot password error:', error);
@@ -74,7 +74,7 @@ async function forgotPassword(req, res) {
     res.status(500).json({
       success: false,
       error: 'FORGOT_PASSWORD_ERROR',
-      message: 'เกิดข้อผิดพลาดในการส่งลิงก์รีเซ็ตรหัสผ่าน'
+      message: 'เกิดข้อผิดพลาดในการส่งลิงก์รีเซ็ตรหัสผ่าน',
     });
   }
 }
@@ -94,14 +94,14 @@ async function resetPassword(req, res) {
     // Find user with valid reset token
     const user = await User.findOne({
       passwordResetToken: token,
-      passwordResetExpires: { $gt: new Date() }
+      passwordResetExpires: { $gt: new Date() },
     });
 
     if (!user) {
       return res.status(400).json({
         success: false,
         error: 'INVALID_OR_EXPIRED_TOKEN',
-        message: 'Token ไม่ถูกต้องหรือหมดอายุแล้ว'
+        message: 'Token ไม่ถูกต้องหรือหมดอายุแล้ว',
       });
     }
 
@@ -134,12 +134,12 @@ async function resetPassword(req, res) {
       resourceId: user.userId,
       ipAddress: req.ip || 'unknown',
       userAgent: req.get('user-agent') || 'unknown',
-      metadata: {}
+      metadata: {},
     });
 
     res.status(200).json({
       success: true,
-      message: 'รีเซ็ตรหัสผ่านสำเร็จ กรุณาเข้าสู่ระบบด้วยรหัสผ่านใหม่'
+      message: 'รีเซ็ตรหัสผ่านสำเร็จ กรุณาเข้าสู่ระบบด้วยรหัสผ่านใหม่',
     });
   } catch (error) {
     console.error('Reset password error:', error);
@@ -147,7 +147,7 @@ async function resetPassword(req, res) {
     res.status(500).json({
       success: false,
       error: 'RESET_PASSWORD_ERROR',
-      message: 'เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน'
+      message: 'เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน',
     });
   }
 }
@@ -173,7 +173,7 @@ async function changePassword(req, res) {
       return res.status(404).json({
         success: false,
         error: 'USER_NOT_FOUND',
-        message: 'ไม่พบผู้ใช้'
+        message: 'ไม่พบผู้ใช้',
       });
     }
 
@@ -184,7 +184,7 @@ async function changePassword(req, res) {
       return res.status(401).json({
         success: false,
         error: 'INVALID_PASSWORD',
-        message: 'รหัสผ่านปัจจุบันไม่ถูกต้อง'
+        message: 'รหัสผ่านปัจจุบันไม่ถูกต้อง',
       });
     }
 
@@ -194,7 +194,7 @@ async function changePassword(req, res) {
       return res.status(400).json({
         success: false,
         error: 'SAME_PASSWORD',
-        message: 'รหัสผ่านใหม่ต้องไม่เหมือนรหัสผ่านเดิม'
+        message: 'รหัสผ่านใหม่ต้องไม่เหมือนรหัสผ่านเดิม',
       });
     }
 
@@ -219,12 +219,12 @@ async function changePassword(req, res) {
       resourceId: user.userId,
       ipAddress: req.ip || 'unknown',
       userAgent: req.get('user-agent') || 'unknown',
-      metadata: {}
+      metadata: {},
     });
 
     res.status(200).json({
       success: true,
-      message: 'เปลี่ยนรหัสผ่านสำเร็จ กรุณาเข้าสู่ระบบใหม่'
+      message: 'เปลี่ยนรหัสผ่านสำเร็จ กรุณาเข้าสู่ระบบใหม่',
     });
   } catch (error) {
     console.error('Change password error:', error);
@@ -232,7 +232,7 @@ async function changePassword(req, res) {
     res.status(500).json({
       success: false,
       error: 'CHANGE_PASSWORD_ERROR',
-      message: 'เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน'
+      message: 'เกิดข้อผิดพลาดในการเปลี่ยนรหัสผ่าน',
     });
   }
 }
@@ -240,5 +240,5 @@ async function changePassword(req, res) {
 module.exports = {
   forgotPassword,
   resetPassword,
-  changePassword
+  changePassword,
 };

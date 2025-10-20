@@ -8,6 +8,7 @@
 ## 🎯 ความเข้าใจที่ถูกต้องเกี่ยว Smart Platform
 
 ### ❌ ความเข้าใจผิด (เดิม)
+
 - "ระบบเป็นแค่ระบบอัพโหลดเอกสาร"
 - "SOP เป็นไฟล์ PDF ที่อัพโหลด"
 - "เกษตรกรต้องเตรียมเอกสารเอง"
@@ -15,6 +16,7 @@
 ### ✅ ความจริง (Botanical Audit Framework)
 
 **เป็น Smart Digital Platform:**
+
 - ✅ **Form-Based System** - กรอกข้อมูลออนไลน์ 90%
 - ✅ **Guided Workflow** - ระบบนำทางทีละขั้นตอน
 - ✅ **Auto-Generated Documents** - ระบบสร้างเอกสารให้อัตโนมัติ
@@ -38,7 +40,7 @@
     farmSize: "5 ไร่",
     location: { province: "เชียงใหม่", district: "เมือง" }
   },
-  
+
   operatingProcedures: {
     // ✅ กรอกใน Form (ไม่อัพโหลด PDF)
     seedSelection: {
@@ -46,20 +48,20 @@
       variety: "CBD สูง",
       certification: "มีใบรับรอง"
     },
-    
+
     cultivation: {
       soilPreparation: "ไถพรวน + ปรับ pH",
       irrigation: "ระบบน้ำหยด",
       pestControl: "ชีวภาพ 100%"
     },
-    
+
     harvesting: {
       method: "เก็บด้วยมือ",
       timing: "ตามระดับ THC/CBD",
       storage: "ห้องเย็น 15-20°C"
     }
   },
-  
+
   qualityControl: {
     // ระบบ Auto-generate Checklist
     checkpoints: [
@@ -72,6 +74,7 @@
 ```
 
 **ผลลัพธ์:**
+
 - ✅ ระบบ **สร้าง SOP PDF อัตโนมัติ** จากข้อมูลที่กรอก
 - ✅ มี **Digital Signature** พร้อมใช้
 - ✅ เก็บใน **Database** ไม่ใช่เป็นไฟล์
@@ -98,7 +101,7 @@
       }
     ]
   },
-  
+
   farmActivities: {
     // ✅ กรอกใน Calendar Form (ไม่อัพโหลด Excel)
     schedule: [
@@ -111,7 +114,7 @@
       }
     ]
   },
-  
+
   traceability: {
     // ✅ ระบบ Auto-generate QR Code
     batchId: "BATCH-2025-A1-001",
@@ -122,6 +125,7 @@
 ```
 
 **ผลลัพธ์:**
+
 - ✅ **Dashboard แสดงแผนที่ฟาร์ม** Real-time
 - ✅ **ระบบแจ้งเตือน** กิจกรรมที่ต้องทำ
 - ✅ **Track & Trace** ตั้งแต่เมล็ดถึงผู้บริโภค
@@ -130,14 +134,14 @@
 
 ## 🔍 สรุป Smart Platform Features
 
-| Feature | ❌ ระบบเก่า | ✅ Smart Platform |
-|---------|-------------|------------------|
-| SOP | อัพโหลด PDF | กรอก Form → Auto-generate |
-| แผนที่ฟาร์ม | อัพโหลดรูป | Interactive Map |
-| กิจกรรมฟาร์ม | Excel | Digital Calendar |
-| เอกสาร | File Upload | Database + PDF Export |
-| การตรวจสอบ | Manual | Auto Validation |
-| รายงาน | เขียนเอง | Auto-generated |
+| Feature      | ❌ ระบบเก่า | ✅ Smart Platform         |
+| ------------ | ----------- | ------------------------- |
+| SOP          | อัพโหลด PDF | กรอก Form → Auto-generate |
+| แผนที่ฟาร์ม  | อัพโหลดรูป  | Interactive Map           |
+| กิจกรรมฟาร์ม | Excel       | Digital Calendar          |
+| เอกสาร       | File Upload | Database + PDF Export     |
+| การตรวจสอบ   | Manual      | Auto Validation           |
+| รายงาน       | เขียนเอง    | Auto-generated            |
 
 ---
 
@@ -163,18 +167,21 @@
 **ไฟล์:** `apps/backend/modules/auth-dtam/routes/dtam-auth.js`
 
 **ปัญหา:**
+
 ```javascript
 // Line 14: shared module path ไม่ถูกต้อง
 const shared = require('../../shared'); // ❌ ผิด
 ```
 
 **วิธีแก้:**
+
 ```javascript
 // ✅ ถูกต้อง - ใช้ path จาก backend root
 const shared = require('../../../shared');
 ```
 
 **คำอธิบาย:**
+
 ```
 Structure:
 apps/backend/
@@ -197,12 +204,14 @@ Path: ../../../shared (ขึ้น 3 ระดับ)
 **ไฟล์:** `apps/backend/src/routes/applications.js`
 
 **ปัญหา:**
+
 ```javascript
 // Line 11: middleware ไม่มี
 const { authenticate, authorize } = require('../middleware/auth'); // ❌ ไฟล์ไม่มี
 ```
 
 **วิธีแก้:**
+
 ```javascript
 // Option 1: ใช้ shared middleware
 const { authenticate } = require('../../shared/middleware/auth');
@@ -212,7 +221,7 @@ const { authorize } = require('../../shared/middleware/roles');
 // apps/backend/src/middleware/auth.js
 module.exports = {
   authenticate: require('../../shared/middleware/auth').authenticate,
-  authorize: require('../../shared/middleware/roles').authorize
+  authorize: require('../../shared/middleware/roles').authorize,
 };
 ```
 
@@ -223,6 +232,7 @@ module.exports = {
 **ไฟล์:** `apps/backend/routes/dtam-management.js`
 
 **ปัญหา:**
+
 ```javascript
 // Line 10-13: middleware path ไม่ถูกต้อง
 const {
@@ -235,6 +245,7 @@ const {
 **สาเหตุจริง:** Mock data ไม่มี module.exports
 
 **วิธีแก้:**
+
 ```javascript
 // เพิ่ม module.exports ที่ท้ายไฟล์
 module.exports = router;
@@ -249,6 +260,7 @@ module.exports = router;
 **ปัญหา:** ไฟล์ไม่ export router
 
 **วิธีแก้:**
+
 ```javascript
 // ตรวจสอบท้ายไฟล์ต้องมี
 module.exports = router;
@@ -263,6 +275,7 @@ module.exports = router;
 **ปัญหา:** ไฟล์ไม่ export router หรือใช้ dependencies ที่ไม่มี
 
 **วิธีแก้:**
+
 ```javascript
 // 1. ตรวจสอบ exports
 module.exports = router;
@@ -280,6 +293,7 @@ module.exports = router;
 **ปัญหา:** Export เป็น object `{ router }` แต่ server.js expect default export
 
 **วิธีแก้:**
+
 ```javascript
 // Option 1: แก้ไขในไฟล์ standards-comparison.js
 module.exports = router; // ✅ ง่ายที่สุด

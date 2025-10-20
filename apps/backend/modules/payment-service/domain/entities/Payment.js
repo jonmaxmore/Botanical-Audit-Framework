@@ -21,6 +21,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const mongoose = require('mongoose');
 
 const PaymentSchema = new mongoose.Schema(
@@ -358,7 +359,7 @@ const PaymentSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'payments',
-  }
+  },
 );
 
 // Indexes for Performance
@@ -529,12 +530,12 @@ PaymentSchema.post('save', function (doc) {
   // Emit events for external processing
   if (doc.status === 'COMPLETED' && doc.isModified('status')) {
     // Payment completed - trigger application status update
-    console.log(`[Payment] Payment completed: ${doc.paymentId}`);
+    logger.info(`[Payment] Payment completed: ${doc.paymentId}`);
   }
 
   if (doc.status === 'FAILED' && doc.isModified('status')) {
     // Payment failed - trigger retry logic or notification
-    console.log(`[Payment] Payment failed: ${doc.paymentId}`);
+    logger.info(`[Payment] Payment failed: ${doc.paymentId}`);
   }
 });
 

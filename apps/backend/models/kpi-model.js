@@ -127,7 +127,7 @@ const KPISchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'kpis',
-  }
+  },
 );
 
 // Compound indexes for better query performance

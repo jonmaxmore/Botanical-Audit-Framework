@@ -121,7 +121,7 @@ class SurveyManagementUseCase {
       for (const category of gacpCategories) {
         const sectionData = await this.generateGACPSection(
           category,
-          surveyData.complexity || 'STANDARD'
+          surveyData.complexity || 'STANDARD',
         );
         survey.addSection(sectionData);
       }
@@ -144,7 +144,7 @@ class SurveyManagementUseCase {
       const complianceCheck = await this.validateGACPCompliance(survey);
       if (!complianceCheck.compliant) {
         this.logger.warn(
-          `[SurveyManagement] GACP compliance warnings: ${complianceCheck.warnings.join(', ')}`
+          `[SurveyManagement] GACP compliance warnings: ${complianceCheck.warnings.join(', ')}`,
         );
       }
 
@@ -185,7 +185,7 @@ class SurveyManagementUseCase {
         nextSteps: {
           canPublish: validationResult.isComplete && complianceCheck.compliant,
           recommendedActions: validationResult.recommendations.concat(
-            complianceCheck.recommendations
+            complianceCheck.recommendations,
           ),
         },
       };
@@ -209,7 +209,7 @@ class SurveyManagementUseCase {
   async startSurveyResponse(sessionData) {
     try {
       this.logger.log(
-        `[SurveyManagement] Starting survey response session - Survey: ${sessionData.surveyId}, User: ${sessionData.userId}`
+        `[SurveyManagement] Starting survey response session - Survey: ${sessionData.surveyId}, User: ${sessionData.userId}`,
       );
 
       // Step 1: Validate session start data
@@ -234,11 +234,11 @@ class SurveyManagementUseCase {
       // Step 4: Check for existing responses and attempt limits
       const existingResponses = await this.responseRepository.findByUserAndSurvey(
         sessionData.userId,
-        sessionData.surveyId
+        sessionData.surveyId,
       );
 
       const completedResponses = existingResponses.filter(
-        r => r.status === 'COMPLETED' || r.status === 'SUBMITTED'
+        r => r.status === 'COMPLETED' || r.status === 'SUBMITTED',
       );
 
       if (completedResponses.length >= survey.configuration.maxAttempts) {
@@ -253,7 +253,7 @@ class SurveyManagementUseCase {
         // Resume existing session
         surveyResponse = inProgressResponse;
         this.logger.log(
-          `[SurveyManagement] Resuming existing response session: ${surveyResponse.responseId}`
+          `[SurveyManagement] Resuming existing response session: ${surveyResponse.responseId}`,
         );
       } else {
         // Create new response session
@@ -320,7 +320,7 @@ class SurveyManagementUseCase {
       });
 
       this.logger.log(
-        `[SurveyManagement] Survey response session started: ${updatedResponse.responseId}`
+        `[SurveyManagement] Survey response session started: ${updatedResponse.responseId}`,
       );
 
       return {
@@ -373,7 +373,7 @@ class SurveyManagementUseCase {
   async processSurveyAnswer(answerData) {
     try {
       this.logger.log(
-        `[SurveyManagement] Processing survey answer - Response: ${answerData.responseId}, Question: ${answerData.questionId}`
+        `[SurveyManagement] Processing survey answer - Response: ${answerData.responseId}, Question: ${answerData.questionId}`,
       );
 
       // Step 1: Validate answer submission data
@@ -410,14 +410,14 @@ class SurveyManagementUseCase {
           evidenceFiles: answerData.evidenceFiles || [],
           timeToAnswer: answerData.timeToAnswer || 0,
         },
-        questionInfo
+        questionInfo,
       );
 
       // Step 5: Perform additional business validations
       const businessValidation = await this.performBusinessValidation(
         answerData,
         questionInfo,
-        surveyResponse
+        surveyResponse,
       );
 
       // Step 6: Update response in repository
@@ -433,7 +433,7 @@ class SurveyManagementUseCase {
       const feedback = await this.generateAnswerFeedback(
         questionInfo,
         answerData,
-        businessValidation
+        businessValidation,
       );
 
       // Step 9: Check for recommendations or alerts
@@ -455,7 +455,7 @@ class SurveyManagementUseCase {
       });
 
       this.logger.log(
-        `[SurveyManagement] Survey answer processed successfully: ${answerData.responseId}`
+        `[SurveyManagement] Survey answer processed successfully: ${answerData.responseId}`,
       );
 
       return {
@@ -469,7 +469,7 @@ class SurveyManagementUseCase {
           nextQuestion: answerResult.nextQuestion,
           canProceedToNextSection: this.canProceedToNextSection(
             updatedResponse,
-            questionInfo.sectionId
+            questionInfo.sectionId,
           ),
           canComplete: this.canCompleteResponse(updatedResponse, survey),
           suggestedBreak: this.shouldSuggestBreak(updatedResponse),
@@ -501,7 +501,7 @@ class SurveyManagementUseCase {
   async completeSurveyResponse(completionData) {
     try {
       this.logger.log(
-        `[SurveyManagement] Completing survey response: ${completionData.responseId}`
+        `[SurveyManagement] Completing survey response: ${completionData.responseId}`,
       );
 
       // Step 1: Validate completion data
@@ -540,7 +540,7 @@ class SurveyManagementUseCase {
       const followUpPlan = await this.createFollowUpPlan(
         surveyResponse,
         gacpAssessment,
-        actionPlan
+        actionPlan,
       );
 
       // Step 8: Update response in repository
@@ -550,7 +550,7 @@ class SurveyManagementUseCase {
       const assessmentReport = await this.generateAssessmentReport(
         finalResponse,
         survey,
-        gacpAssessment
+        gacpAssessment,
       );
 
       // Step 10: Send completion notifications
@@ -572,7 +572,7 @@ class SurveyManagementUseCase {
       });
 
       this.logger.log(
-        `[SurveyManagement] Survey response completed: ${finalResponse.responseId} - Score: ${completionResult.scoring.percentage}%`
+        `[SurveyManagement] Survey response completed: ${finalResponse.responseId} - Score: ${completionResult.scoring.percentage}%`,
       );
 
       return {
@@ -638,7 +638,7 @@ class SurveyManagementUseCase {
       const targetedRecommendations = await this.generateTargetedRecommendations(
         surveyResponse,
         survey,
-        gacpAnalysis
+        gacpAnalysis,
       );
 
       // Step 6: Estimate completion timeline

@@ -198,7 +198,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={mockApplications}
           onApplicationClick={jest.fn()}
           onRefresh={jest.fn()}
-        />
+        />,
       );
 
       expect(screen.getByTestId('stats-card-total-applications')).toBeInTheDocument();
@@ -214,7 +214,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={mockApplications}
           onApplicationClick={jest.fn()}
           onRefresh={jest.fn()}
-        />
+        />,
       );
 
       const statValues = screen.getAllByTestId('stats-value');
@@ -231,7 +231,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={mockApplications}
           onApplicationClick={jest.fn()}
           onRefresh={jest.fn()}
-        />
+        />,
       );
 
       expect(screen.getByTestId('application-table')).toBeInTheDocument();
@@ -249,7 +249,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={mockApplications}
           onApplicationClick={mockClick}
           onRefresh={jest.fn()}
-        />
+        />,
       );
 
       await user.click(screen.getByTestId('app-row-app-1'));
@@ -267,7 +267,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={mockApplications}
           onApplicationClick={jest.fn()}
           onRefresh={mockRefresh}
-        />
+        />,
       );
 
       await user.click(screen.getByTestId('refresh-button'));
@@ -282,7 +282,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={mockApplications}
           onApplicationClick={jest.fn()}
           onRefresh={jest.fn()}
-        />
+        />,
       );
 
       expect(screen.getByTestId('status-app-1')).toHaveTextContent('PENDING_REVIEW');
@@ -330,7 +330,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           monthlyData={mockMonthlyData}
           statusDistribution={mockStatusDistribution}
           onDateRangeChange={jest.fn()}
-        />
+        />,
       );
 
       expect(screen.getByTestId('analytics-page')).toBeInTheDocument();
@@ -343,7 +343,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           monthlyData={mockMonthlyData}
           statusDistribution={mockStatusDistribution}
           onDateRangeChange={jest.fn()}
-        />
+        />,
       );
 
       expect(screen.getByTestId('start-date-input')).toBeInTheDocument();
@@ -360,7 +360,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           monthlyData={mockMonthlyData}
           statusDistribution={mockStatusDistribution}
           onDateRangeChange={mockDateChange}
-        />
+        />,
       );
 
       await user.clear(screen.getByTestId('start-date-input'));
@@ -382,7 +382,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           monthlyData={mockMonthlyData}
           statusDistribution={mockStatusDistribution}
           onDateRangeChange={jest.fn()}
-        />
+        />,
       );
 
       expect(screen.getByTestId('chart-line')).toBeInTheDocument();
@@ -395,7 +395,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           monthlyData={mockMonthlyData}
           statusDistribution={mockStatusDistribution}
           onDateRangeChange={jest.fn()}
-        />
+        />,
       );
 
       const charts = screen.getAllByTestId('chart-data');
@@ -424,7 +424,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
 
     test('should display all table rows', () => {
       renderWithTheme(
-        <MockApplicationTable applications={mockApplications} onRowClick={jest.fn()} />
+        <MockApplicationTable applications={mockApplications} onRowClick={jest.fn()} />,
       );
 
       expect(screen.getByTestId('app-row-app-1')).toBeInTheDocument();
@@ -441,7 +441,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
 
     test('should format dates correctly', () => {
       renderWithTheme(
-        <MockApplicationTable applications={mockApplications} onRowClick={jest.fn()} />
+        <MockApplicationTable applications={mockApplications} onRowClick={jest.fn()} />,
       );
 
       // Date formatting depends on locale, so just check it exists
@@ -455,7 +455,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
       const user = userEvent.setup();
 
       renderWithTheme(
-        <MockApplicationTable applications={mockApplications} onRowClick={mockClick} />
+        <MockApplicationTable applications={mockApplications} onRowClick={mockClick} />,
       );
 
       await user.click(screen.getByTestId('app-row-app-1'));
@@ -532,7 +532,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={largeApplications}
           onApplicationClick={jest.fn()}
           onRefresh={jest.fn()}
-        />
+        />,
       );
 
       const renderTime = Date.now() - startTime;
@@ -551,7 +551,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={[]}
           onApplicationClick={jest.fn()}
           onRefresh={mockRefresh}
-        />
+        />,
       );
 
       const refreshButton = screen.getByTestId('refresh-button');
@@ -573,7 +573,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
           recentApplications={[]}
           onApplicationClick={jest.fn()}
           onRefresh={jest.fn()}
-        />
+        />,
       );
 
       const statsSection = screen.getByTestId('statistics-section');
@@ -593,7 +593,7 @@ describe('Dashboard and Analytics Integration Tests', () => {
       ];
 
       renderWithTheme(
-        <MockApplicationTable applications={mockApplications} onRowClick={jest.fn()} />
+        <MockApplicationTable applications={mockApplications} onRowClick={jest.fn()} />,
       );
 
       const table = screen.getByTestId('application-table');

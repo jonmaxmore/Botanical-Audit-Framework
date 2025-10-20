@@ -571,7 +571,7 @@
        public code: string,
        public message: string,
        public statusCode: number,
-       public details?: any
+       public details?: any,
      ) {
        super(message);
      }

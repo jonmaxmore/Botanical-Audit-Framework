@@ -132,7 +132,7 @@ class PaymentRepository {
             updatedAt: new Date(),
           },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;

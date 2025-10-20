@@ -34,6 +34,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../shared/logger/logger');
 const crypto = require('crypto');
 const path = require('path');
 const fs = require('fs').promises;
@@ -176,7 +177,7 @@ class DocumentManagementService extends EventEmitter {
       },
     };
 
-    console.log('[DocumentManagementService] Initialized successfully');
+    logger.info('[DocumentManagementService] Initialized successfully');
   }
 
   /**
@@ -212,7 +213,7 @@ class DocumentManagementService extends EventEmitter {
         documentType,
         applicationId,
         userId,
-        version
+        version,
       );
 
       // 4. Virus scan (if enabled)
@@ -256,7 +257,7 @@ class DocumentManagementService extends EventEmitter {
           documentMetadata.ocrConfidence = ocrResult.confidence;
           documentMetadata.extractedData = ocrResult.extractedData;
         } catch (ocrError) {
-          console.warn('[DocumentService] OCR processing failed:', ocrError);
+          logger.warn('[DocumentService] OCR processing failed:', ocrError);
           documentMetadata.ocrError = ocrError.message;
         }
       }
@@ -307,7 +308,7 @@ class DocumentManagementService extends EventEmitter {
         },
       };
     } catch (error) {
-      console.error('[DocumentService] Upload error:', error);
+      logger.error('[DocumentService] Upload error:', error);
 
       // Clean up partial uploads
       if (uploadData.storageKey) {
@@ -368,7 +369,7 @@ class DocumentManagementService extends EventEmitter {
         },
       };
     } catch (error) {
-      console.error('[DocumentService] Download error:', error);
+      logger.error('[DocumentService] Download error:', error);
       throw error;
     }
   }
@@ -392,7 +393,7 @@ class DocumentManagementService extends EventEmitter {
 
       // 3. Filter documents based on user role
       const filteredDocuments = documents.filter(doc =>
-        this._canUserAccessDocument(doc, userId, userRole)
+        this._canUserAccessDocument(doc, userId, userRole),
       );
 
       // 4. Enrich with download URLs and metadata
@@ -413,7 +414,7 @@ class DocumentManagementService extends EventEmitter {
           ocrAvailable: !!doc.ocrText,
           isExpired: doc.expiryDate && new Date(doc.expiryDate) < new Date(),
           validationStatus: doc.validationStatus,
-        }))
+        })),
       );
 
       return {
@@ -422,7 +423,7 @@ class DocumentManagementService extends EventEmitter {
         summary: this._generateDocumentSummary(enrichedDocuments, applicationId),
       };
     } catch (error) {
-      console.error('[DocumentService] Get application documents error:', error);
+      logger.error('[DocumentService] Get application documents error:', error);
       throw error;
     }
   }
@@ -465,7 +466,7 @@ class DocumentManagementService extends EventEmitter {
       // 5. Archive in storage (move to deleted folder)
       await this.storageService.move(
         document.storageKey,
-        `${this.config.storageBasePath}/deleted/${document.storageKey}`
+        `${this.config.storageBasePath}/deleted/${document.storageKey}`,
       );
 
       // 6. Create audit log
@@ -486,7 +487,7 @@ class DocumentManagementService extends EventEmitter {
 
       return true;
     } catch (error) {
-      console.error('[DocumentService] Delete document error:', error);
+      logger.error('[DocumentService] Delete document error:', error);
       throw error;
     }
   }
@@ -533,7 +534,7 @@ class DocumentManagementService extends EventEmitter {
     if (docConfig.validationRules) {
       const specificValidation = await this._performSpecificValidation(
         file,
-        docConfig.validationRules
+        docConfig.validationRules,
       );
       if (!specificValidation.valid) {
         result.errors.push(...specificValidation.errors);

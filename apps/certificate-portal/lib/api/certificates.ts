@@ -91,7 +91,7 @@ export const certificateApi = {
   validate: async (certificateNumber: string) => {
     const response = await api.post<{ valid: boolean; certificate?: Certificate }>(
       '/certificates/validate',
-      { certificateNumber }
+      { certificateNumber },
     );
     return response.data;
   },

@@ -150,7 +150,7 @@ class QueryService {
           CACHE_NAMESPACES.API_RESPONSES.prefix,
           cacheKey,
           result,
-          options.ttl || 600
+          options.ttl || 600,
         );
       }
 
@@ -167,7 +167,7 @@ class QueryService {
   public async findUnique<T>(
     model: keyof PrismaClient,
     where: Record<string, unknown>,
-    options: Omit<QueryOptions, 'where'> = {}
+    options: Omit<QueryOptions, 'where'> = {},
   ): Promise<T | null> {
     const startTime = Date.now();
 
@@ -206,7 +206,7 @@ class QueryService {
           CACHE_NAMESPACES.API_RESPONSES.prefix,
           cacheKey,
           result,
-          options.ttl || 600
+          options.ttl || 600,
         );
       }
 
@@ -243,7 +243,7 @@ class QueryService {
   public async update<T>(
     model: keyof PrismaClient,
     where: Record<string, unknown>,
-    data: Record<string, unknown>
+    data: Record<string, unknown>,
   ): Promise<T> {
     const startTime = Date.now();
 
@@ -287,7 +287,7 @@ class QueryService {
   public async count(
     model: keyof PrismaClient,
     where?: Record<string, unknown>,
-    cache: boolean = true
+    cache: boolean = true,
   ): Promise<number> {
     const startTime = Date.now();
 
@@ -298,7 +298,7 @@ class QueryService {
 
         const cached = await cacheService.get<number>(
           CACHE_NAMESPACES.API_RESPONSES.prefix,
-          cacheKey
+          cacheKey,
         );
 
         if (cached !== null) {
@@ -319,7 +319,7 @@ class QueryService {
           CACHE_NAMESPACES.API_RESPONSES.prefix,
           cacheKey,
           result,
-          300 // 5 minutes for counts
+          300, // 5 minutes for counts
         );
       }
 
@@ -335,7 +335,7 @@ class QueryService {
    */
   public async createMany(
     model: keyof PrismaClient,
-    data: Record<string, unknown>[]
+    data: Record<string, unknown>[],
   ): Promise<{ count: number }> {
     const startTime = Date.now();
 

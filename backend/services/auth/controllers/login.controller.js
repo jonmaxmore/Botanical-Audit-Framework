@@ -38,7 +38,7 @@ async function login(req, res) {
       return res.status(401).json({
         success: false,
         error: 'INVALID_CREDENTIALS',
-        message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง'
+        message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
       });
     }
 
@@ -47,7 +47,7 @@ async function login(req, res) {
       return res.status(403).json({
         success: false,
         error: 'ACCOUNT_INACTIVE',
-        message: 'บัญชีถูกระงับ กรุณาติดต่อผู้ดูแลระบบ'
+        message: 'บัญชีถูกระงับ กรุณาติดต่อผู้ดูแลระบบ',
       });
     }
 
@@ -67,14 +67,14 @@ async function login(req, res) {
         ipAddress: req.ip || 'unknown',
         userAgent: req.get('user-agent') || 'unknown',
         metadata: {
-          reason: 'Account locked'
-        }
+          reason: 'Account locked',
+        },
       });
 
       return res.status(423).json({
         success: false,
         error: 'ACCOUNT_LOCKED',
-        message: `บัญชีถูกล็อคชั่วคราว กรุณาลองใหม่ในอีก ${remainingMinutes} นาที`
+        message: `บัญชีถูกล็อคชั่วคราว กรุณาลองใหม่ในอีก ${remainingMinutes} นาที`,
       });
     }
 
@@ -87,7 +87,7 @@ async function login(req, res) {
         req.ip || 'unknown',
         req.get('user-agent') || 'unknown',
         false,
-        'INVALID_PASSWORD'
+        'INVALID_PASSWORD',
       );
 
       // Log failed login attempt
@@ -102,8 +102,8 @@ async function login(req, res) {
         ipAddress: req.ip || 'unknown',
         userAgent: req.get('user-agent') || 'unknown',
         metadata: {
-          reason: 'Invalid password'
-        }
+          reason: 'Invalid password',
+        },
       });
 
       // Check if account is now locked
@@ -111,7 +111,7 @@ async function login(req, res) {
         return res.status(423).json({
           success: false,
           error: 'ACCOUNT_LOCKED',
-          message: `บัญชีถูกล็อคชั่วคราว (ความพยายามเข้าสู่ระบบล้มเหลว ${user.loginAttempts} ครั้ง) กรุณาลองใหม่ในอีก 30 นาที`
+          message: `บัญชีถูกล็อคชั่วคราว (ความพยายามเข้าสู่ระบบล้มเหลว ${user.loginAttempts} ครั้ง) กรุณาลองใหม่ในอีก 30 นาที`,
         });
       }
 
@@ -119,7 +119,7 @@ async function login(req, res) {
         success: false,
         error: 'INVALID_CREDENTIALS',
         message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-        attemptsRemaining: config.security.maxLoginAttempts - user.loginAttempts
+        attemptsRemaining: config.security.maxLoginAttempts - user.loginAttempts,
       });
     }
 
@@ -127,13 +127,13 @@ async function login(req, res) {
     const accessToken = generateAccessToken({
       userId: user.userId,
       email: user.email,
-      role: user.role
+      role: user.role,
     });
 
     const refreshToken = await generateRefreshToken({
       userId: user.userId,
       email: user.email,
-      role: user.role // Include role in refresh token for token rotation
+      role: user.role, // Include role in refresh token for token rotation
     });
 
     // Record successful login (this also resets failed attempts and updates lastLogin)
@@ -145,7 +145,7 @@ async function login(req, res) {
       secure: config.cookie.secure,
       sameSite: config.cookie.sameSite,
       maxAge: config.cookie.maxAge,
-      path: '/'
+      path: '/',
     });
 
     // Log successful login
@@ -159,7 +159,7 @@ async function login(req, res) {
       resourceId: user.userId,
       ipAddress: req.ip || 'unknown',
       userAgent: req.get('user-agent') || 'unknown',
-      metadata: {}
+      metadata: {},
     });
 
     // Return response (without sensitive data)
@@ -176,9 +176,9 @@ async function login(req, res) {
           fullName: user.fullName,
           role: user.role,
           emailVerified: user.emailVerified,
-          permissions: user.permissions
-        }
-      }
+          permissions: user.permissions,
+        },
+      },
     });
   } catch (error) {
     console.error('Login error:', error);
@@ -186,7 +186,7 @@ async function login(req, res) {
     res.status(500).json({
       success: false,
       error: 'LOGIN_ERROR',
-      message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ'
+      message: 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ',
     });
   }
 }
@@ -214,7 +214,7 @@ async function logout(req, res) {
       httpOnly: true,
       secure: config.cookie.secure,
       sameSite: config.cookie.sameSite,
-      path: '/'
+      path: '/',
     });
 
     // Log logout (if user is authenticated)
@@ -229,13 +229,13 @@ async function logout(req, res) {
         resourceId: req.user.userId,
         ipAddress: req.ip || 'unknown',
         userAgent: req.get('user-agent') || 'unknown',
-        metadata: {}
+        metadata: {},
       });
     }
 
     res.status(200).json({
       success: true,
-      message: 'ออกจากระบบสำเร็จ'
+      message: 'ออกจากระบบสำเร็จ',
     });
   } catch (error) {
     console.error('Logout error:', error);
@@ -243,7 +243,7 @@ async function logout(req, res) {
     res.status(500).json({
       success: false,
       error: 'LOGOUT_ERROR',
-      message: 'เกิดข้อผิดพลาดในการออกจากระบบ'
+      message: 'เกิดข้อผิดพลาดในการออกจากระบบ',
     });
   }
 }
@@ -279,9 +279,9 @@ async function getMe(req, res) {
           emailVerified: user.emailVerified,
           status: user.status,
           lastLogin: user.lastLoginAt,
-          createdAt: user.createdAt
-        }
-      }
+          createdAt: user.createdAt,
+        },
+      },
     });
   } catch (error) {
     console.error('Get me error:', error);
@@ -289,7 +289,7 @@ async function getMe(req, res) {
     res.status(500).json({
       success: false,
       error: 'GET_ME_ERROR',
-      message: 'เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้'
+      message: 'เกิดข้อผิดพลาดในการดึงข้อมูลผู้ใช้',
     });
   }
 }
@@ -297,5 +297,5 @@ async function getMe(req, res) {
 module.exports = {
   login,
   logout,
-  getMe
+  getMe,
 };

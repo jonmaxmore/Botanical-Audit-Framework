@@ -167,7 +167,7 @@ const cultivationCycleSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'cultivationcycles',
-  }
+  },
 );
 
 // Indexes for performance

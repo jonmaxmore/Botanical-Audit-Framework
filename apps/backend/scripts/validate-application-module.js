@@ -17,6 +17,7 @@
  * เพื่อให้แน่ใจว่าทุก component มี logic ที่สมเหตุสมผล
  */
 
+const logger = require('../shared/logger/logger');
 const fs = require('fs');
 const path = require('path');
 
@@ -74,10 +75,10 @@ class StandaloneApplicationValidator {
    * เริ่มการ validate Application Module
    */
   async validate() {
-    console.log('\n' + '='.repeat(80));
-    console.log('🔍 STANDALONE APPLICATION MODULE VALIDATION');
-    console.log('Static Analysis & Business Logic Verification');
-    console.log('='.repeat(80) + '\n');
+    logger.info('\n' + '='.repeat(80));
+    logger.info('🔍 STANDALONE APPLICATION MODULE VALIDATION');
+    logger.info('Static Analysis & Business Logic Verification');
+    logger.info('='.repeat(80) + '\n');
 
     try {
       // 1. File Structure Validation
@@ -112,7 +113,7 @@ class StandaloneApplicationValidator {
    * ตรวจสอบโครงสร้างไฟล์
    */
   async validateFileStructure() {
-    console.log('📁 Validating File Structure...');
+    logger.info('📁 Validating File Structure...');
     let structureScore = 0;
 
     for (const [filePath, requirements] of Object.entries(this.expectedStructure)) {
@@ -123,7 +124,7 @@ class StandaloneApplicationValidator {
         const stats = fs.statSync(fullPath);
         const sizeKB = Math.round(stats.size / 1024);
 
-        console.log(`  ✅ ${filePath} (${sizeKB} KB)`);
+        logger.info(`  ✅ ${filePath} (${sizeKB} KB);`);
         this.results.passed++;
         structureScore++;
 
@@ -134,7 +135,7 @@ class StandaloneApplicationValidator {
           this.addWarning(`${filePath} seems too small for integration system (${sizeKB} KB)`);
         }
       } else {
-        console.log(`  ❌ ${filePath} - MISSING`);
+        logger.info(`  ❌ ${filePath} - MISSING`);
         this.results.failed++;
         this.addError(`Required file missing: ${filePath}`);
       }
@@ -144,14 +145,14 @@ class StandaloneApplicationValidator {
       (structureScore / Object.keys(this.expectedStructure).length) *
       100
     ).toFixed(1);
-    console.log(`📊 File Structure: ${structurePercent}% complete\n`);
+    logger.info(`📊 File Structure: ${structurePercent}% complete\n`);
   }
 
   /**
    * ตรวจสอบ Configuration Logic
    */
   async validateConfiguration() {
-    console.log('⚙️ Validating Configuration Logic...');
+    logger.info('⚙️ Validating Configuration Logic...');
 
     const configPath = path.join(this.moduleBasePath, 'config/index.js');
 
@@ -166,10 +167,10 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ FSM States Configuration
       this.results.totalChecks++;
       if (this.containsBusinessLogic(configContent, this.businessLogicPatterns.fsmStates)) {
-        console.log('  ✅ FSM States configuration present');
+        logger.info('  ✅ FSM States configuration present');
         this.results.passed++;
       } else {
-        console.log('  ❌ FSM States configuration missing');
+        logger.info('  ❌ FSM States configuration missing');
         this.results.failed++;
         this.addError('FSM States not properly configured');
       }
@@ -179,10 +180,10 @@ class StandaloneApplicationValidator {
       if (
         this.containsBusinessLogic(configContent, this.businessLogicPatterns.governmentServices)
       ) {
-        console.log('  ✅ Government services configuration present');
+        logger.info('  ✅ Government services configuration present');
         this.results.passed++;
       } else {
-        console.log('  ❌ Government services configuration missing');
+        logger.info('  ❌ Government services configuration missing');
         this.results.failed++;
         this.addError('Government services not properly configured');
       }
@@ -190,10 +191,10 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ Security Configuration
       this.results.totalChecks++;
       if (this.containsBusinessLogic(configContent, this.businessLogicPatterns.securityFeatures)) {
-        console.log('  ✅ Security configuration present');
+        logger.info('  ✅ Security configuration present');
         this.results.passed++;
       } else {
-        console.log('  ❌ Security configuration missing');
+        logger.info('  ❌ Security configuration missing');
         this.results.failed++;
         this.addError('Security features not properly configured');
       }
@@ -201,10 +202,10 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ Document Management Configuration
       this.results.totalChecks++;
       if (this.containsBusinessLogic(configContent, this.businessLogicPatterns.documentTypes)) {
-        console.log('  ✅ Document management configuration present');
+        logger.info('  ✅ Document management configuration present');
         this.results.passed++;
       } else {
-        console.log('  ❌ Document management configuration missing');
+        logger.info('  ❌ Document management configuration missing');
         this.results.failed++;
         this.addError('Document types not properly configured');
       }
@@ -212,18 +213,18 @@ class StandaloneApplicationValidator {
       this.addError(`Configuration validation error: ${error.message}`);
     }
 
-    console.log();
+    logger.info();
   }
 
   /**
    * ตรวจสอบ Service Logic
    */
   async validateServiceLogic() {
-    console.log('🔧 Validating Service Logic...');
+    logger.info('🔧 Validating Service Logic...');
 
     const servicePath = path.join(
       this.moduleBasePath,
-      'domain/services/AdvancedApplicationProcessingService.js'
+      'domain/services/AdvancedApplicationProcessingService.js',
     );
 
     if (!fs.existsSync(servicePath)) {
@@ -237,10 +238,10 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ Class Definition
       this.results.totalChecks++;
       if (serviceContent.includes('class AdvancedApplicationProcessingService')) {
-        console.log('  ✅ Service class properly defined');
+        logger.info('  ✅ Service class properly defined');
         this.results.passed++;
       } else {
-        console.log('  ❌ Service class not properly defined');
+        logger.info('  ❌ Service class not properly defined');
         this.results.failed++;
         this.addError('AdvancedApplicationProcessingService class not found');
       }
@@ -257,11 +258,11 @@ class StandaloneApplicationValidator {
       for (const method of requiredMethods) {
         this.results.totalChecks++;
         if (serviceContent.includes(method)) {
-          console.log(`  ✅ Method ${method} present`);
+          logger.info(`  ✅ Method ${method} present`);
           this.results.passed++;
           methodsFound++;
         } else {
-          console.log(`  ❌ Method ${method} missing`);
+          logger.info(`  ❌ Method ${method} missing`);
           this.results.failed++;
           this.addError(`Required method ${method} not found`);
         }
@@ -274,10 +275,10 @@ class StandaloneApplicationValidator {
         serviceContent.includes('StateMachine') ||
         serviceContent.includes('states')
       ) {
-        console.log('  ✅ FSM logic implementation present');
+        logger.info('  ✅ FSM logic implementation present');
         this.results.passed++;
       } else {
-        console.log('  ❌ FSM logic implementation missing');
+        logger.info('  ❌ FSM logic implementation missing');
         this.results.failed++;
         this.addError('FSM state machine logic not implemented');
       }
@@ -285,10 +286,10 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ Error Handling
       this.results.totalChecks++;
       if (serviceContent.includes('try') && serviceContent.includes('catch')) {
-        console.log('  ✅ Error handling present');
+        logger.info('  ✅ Error handling present');
         this.results.passed++;
       } else {
-        console.log('  ⚠️  Limited error handling detected');
+        logger.info('  ⚠️  Limited error handling detected');
         this.results.warnings++;
         this.addWarning('Service may need more comprehensive error handling');
       }
@@ -296,18 +297,18 @@ class StandaloneApplicationValidator {
       this.addError(`Service validation error: ${error.message}`);
     }
 
-    console.log();
+    logger.info();
   }
 
   /**
    * ตรวจสอบ Controller Logic
    */
   async validateControllerLogic() {
-    console.log('🎮 Validating Controller Logic...');
+    logger.info('🎮 Validating Controller Logic...');
 
     const controllerPath = path.join(
       this.moduleBasePath,
-      'application/controllers/EnhancedApplicationProcessingController.js'
+      'application/controllers/EnhancedApplicationProcessingController.js',
     );
 
     if (!fs.existsSync(controllerPath)) {
@@ -321,10 +322,10 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ Class Definition
       this.results.totalChecks++;
       if (controllerContent.includes('class EnhancedApplicationProcessingController')) {
-        console.log('  ✅ Controller class properly defined');
+        logger.info('  ✅ Controller class properly defined');
         this.results.passed++;
       } else {
-        console.log('  ❌ Controller class not properly defined');
+        logger.info('  ❌ Controller class not properly defined');
         this.results.failed++;
       }
 
@@ -343,48 +344,48 @@ class StandaloneApplicationValidator {
 
       this.results.totalChecks++;
       if (methodCount >= 3) {
-        console.log('  ✅ Multiple HTTP methods supported');
+        logger.info('  ✅ Multiple HTTP methods supported');
         this.results.passed++;
       } else {
-        console.log('  ❌ Limited HTTP method support');
+        logger.info('  ❌ Limited HTTP method support');
         this.results.failed++;
       }
 
       // ตรวจสอบ Validation Logic
       this.results.totalChecks++;
       if (controllerContent.includes('validation') || controllerContent.includes('validate')) {
-        console.log('  ✅ Validation logic present');
+        logger.info('  ✅ Validation logic present');
         this.results.passed++;
       } else {
-        console.log('  ❌ Validation logic missing');
+        logger.info('  ❌ Validation logic missing');
         this.results.failed++;
       }
 
       // ตรวจสอบ Response Handling
       this.results.totalChecks++;
       if (controllerContent.includes('res.json') || controllerContent.includes('response')) {
-        console.log('  ✅ Response handling present');
+        logger.info('  ✅ Response handling present');
         this.results.passed++;
       } else {
-        console.log('  ❌ Response handling missing');
+        logger.info('  ❌ Response handling missing');
         this.results.failed++;
       }
     } catch (error) {
       this.addError(`Controller validation error: ${error.message}`);
     }
 
-    console.log();
+    logger.info();
   }
 
   /**
    * ตรวจสอบ Route Structure
    */
   async validateRouteStructure() {
-    console.log('🛣️ Validating Route Structure...');
+    logger.info('🛣️ Validating Route Structure...');
 
     const routePath = path.join(
       this.moduleBasePath,
-      'presentation/routes/enhanced-application.routes.js'
+      'presentation/routes/enhanced-application.routes.js',
     );
 
     if (!fs.existsSync(routePath)) {
@@ -398,10 +399,10 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ Route Creation Function
       this.results.totalChecks++;
       if (routeContent.includes('createEnhancedApplicationRoutes')) {
-        console.log('  ✅ Route creation function present');
+        logger.info('  ✅ Route creation function present');
         this.results.passed++;
       } else {
-        console.log('  ❌ Route creation function missing');
+        logger.info('  ❌ Route creation function missing');
         this.results.failed++;
       }
 
@@ -412,11 +413,11 @@ class StandaloneApplicationValidator {
       for (const category of routeCategories) {
         this.results.totalChecks++;
         if (routeContent.includes(category)) {
-          console.log(`  ✅ ${category} routes present`);
+          logger.info(`  ✅ ${category} routes present`);
           this.results.passed++;
           categoriesFound++;
         } else {
-          console.log(`  ❌ ${category} routes missing`);
+          logger.info(`  ❌ ${category} routes missing`);
           this.results.failed++;
         }
       }
@@ -424,34 +425,34 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ Middleware Integration
       this.results.totalChecks++;
       if (routeContent.includes('middleware') || routeContent.includes('auth')) {
-        console.log('  ✅ Middleware integration present');
+        logger.info('  ✅ Middleware integration present');
         this.results.passed++;
       } else {
-        console.log('  ❌ Middleware integration missing');
+        logger.info('  ❌ Middleware integration missing');
         this.results.failed++;
       }
 
       // ตรวจสอบ Rate Limiting
       this.results.totalChecks++;
       if (routeContent.includes('rateLimit') || routeContent.includes('rate')) {
-        console.log('  ✅ Rate limiting present');
+        logger.info('  ✅ Rate limiting present');
         this.results.passed++;
       } else {
-        console.log('  ⚠️  Rate limiting not detected');
+        logger.info('  ⚠️  Rate limiting not detected');
         this.results.warnings++;
       }
     } catch (error) {
       this.addError(`Route validation error: ${error.message}`);
     }
 
-    console.log();
+    logger.info();
   }
 
   /**
    * ตรวจสอบ Business Logic Patterns
    */
   async validateBusinessLogicPatterns() {
-    console.log('💼 Validating Business Logic Patterns...');
+    logger.info('💼 Validating Business Logic Patterns...');
 
     // รวบรวมเนื้อหาจากไฟล์หลัก ๆ
     const mainFiles = [
@@ -473,10 +474,10 @@ class StandaloneApplicationValidator {
     this.results.totalChecks++;
     const workflowKeywords = ['workflow', 'process', 'step', 'stage', 'phase'];
     if (this.containsAny(combinedContent, workflowKeywords)) {
-      console.log('  ✅ Workflow patterns detected');
+      logger.info('  ✅ Workflow patterns detected');
       this.results.passed++;
     } else {
-      console.log('  ⚠️  Limited workflow pattern detection');
+      logger.info('  ⚠️  Limited workflow pattern detection');
       this.results.warnings++;
     }
 
@@ -484,10 +485,10 @@ class StandaloneApplicationValidator {
     this.results.totalChecks++;
     const integrationKeywords = ['integration', 'api', 'service', 'client', 'request'];
     if (this.containsAny(combinedContent, integrationKeywords)) {
-      console.log('  ✅ Integration patterns detected');
+      logger.info('  ✅ Integration patterns detected');
       this.results.passed++;
     } else {
-      console.log('  ❌ Integration patterns missing');
+      logger.info('  ❌ Integration patterns missing');
       this.results.failed++;
     }
 
@@ -495,10 +496,10 @@ class StandaloneApplicationValidator {
     this.results.totalChecks++;
     const errorKeywords = ['error', 'exception', 'try', 'catch', 'throw'];
     if (this.containsAny(combinedContent, errorKeywords)) {
-      console.log('  ✅ Error handling patterns detected');
+      logger.info('  ✅ Error handling patterns detected');
       this.results.passed++;
     } else {
-      console.log('  ❌ Error handling patterns missing');
+      logger.info('  ❌ Error handling patterns missing');
       this.results.failed++;
     }
 
@@ -506,25 +507,25 @@ class StandaloneApplicationValidator {
     this.results.totalChecks++;
     const securityKeywords = ['auth', 'token', 'permission', 'validate', 'secure'];
     if (this.containsAny(combinedContent, securityKeywords)) {
-      console.log('  ✅ Security patterns detected');
+      logger.info('  ✅ Security patterns detected');
       this.results.passed++;
     } else {
-      console.log('  ❌ Security patterns missing');
+      logger.info('  ❌ Security patterns missing');
       this.results.failed++;
     }
 
-    console.log();
+    logger.info();
   }
 
   /**
    * ตรวจสอบ Test Coverage
    */
   async validateTestCoverage() {
-    console.log('🧪 Validating Test Coverage...');
+    logger.info('🧪 Validating Test Coverage...');
 
     const testPath = path.join(
       this.moduleBasePath,
-      'tests/integration/ApplicationIntegrationTestSuite.js'
+      'tests/integration/ApplicationIntegrationTestSuite.js',
     );
 
     if (!fs.existsSync(testPath)) {
@@ -538,10 +539,10 @@ class StandaloneApplicationValidator {
       // ตรวจสอบ Test Structure
       this.results.totalChecks++;
       if (testContent.includes('class') && testContent.includes('Test')) {
-        console.log('  ✅ Test class structure present');
+        logger.info('  ✅ Test class structure present');
         this.results.passed++;
       } else {
-        console.log('  ❌ Test class structure missing');
+        logger.info('  ❌ Test class structure missing');
         this.results.failed++;
       }
 
@@ -549,10 +550,10 @@ class StandaloneApplicationValidator {
       const testKeywords = ['test', 'describe', 'it', 'expect', 'should'];
       this.results.totalChecks++;
       if (this.containsAny(testContent, testKeywords)) {
-        console.log('  ✅ Test methods detected');
+        logger.info('  ✅ Test methods detected');
         this.results.passed++;
       } else {
-        console.log('  ❌ Test methods missing');
+        logger.info('  ❌ Test methods missing');
         this.results.failed++;
       }
 
@@ -560,17 +561,17 @@ class StandaloneApplicationValidator {
       const integrationKeywords = ['integration', 'end-to-end', 'e2e', 'workflow', 'complete'];
       this.results.totalChecks++;
       if (this.containsAny(testContent, integrationKeywords)) {
-        console.log('  ✅ Integration test coverage detected');
+        logger.info('  ✅ Integration test coverage detected');
         this.results.passed++;
       } else {
-        console.log('  ❌ Integration test coverage missing');
+        logger.info('  ❌ Integration test coverage missing');
         this.results.failed++;
       }
     } catch (error) {
       this.addError(`Test validation error: ${error.message}`);
     }
 
-    console.log();
+    logger.info();
   }
 
   /**
@@ -586,11 +587,11 @@ class StandaloneApplicationValidator {
 
   addError(message) {
     this.results.errors.push(message);
-    console.error(`  ❌ ERROR: ${message}`);
+    logger.error(`  ❌ ERROR: ${message}`);
   }
 
   addWarning(message) {
-    console.warn(`  ⚠️  WARNING: ${message}`);
+    logger.warn(`  ⚠️  WARNING: ${message}`);
   }
 
   /**
@@ -603,16 +604,16 @@ class StandaloneApplicationValidator {
         ? ((this.results.passed / this.results.totalChecks) * 100).toFixed(2)
         : 0;
 
-    console.log('='.repeat(80));
-    console.log('📋 VALIDATION RESULTS SUMMARY');
-    console.log('='.repeat(80));
+    logger.info('='.repeat(80));
+    logger.info('📋 VALIDATION RESULTS SUMMARY');
+    logger.info('='.repeat(80));
 
-    console.log(`⏱️  Duration: ${duration}ms`);
-    console.log(`📊 Total Checks: ${this.results.totalChecks}`);
-    console.log(`✅ Passed: ${this.results.passed}`);
-    console.log(`❌ Failed: ${this.results.failed}`);
-    console.log(`⚠️  Warnings: ${this.results.warnings}`);
-    console.log(`📈 Pass Rate: ${passRate}%`);
+    logger.info(`⏱️  Duration: ${duration}ms`);
+    logger.info(`📊 Total Checks: ${this.results.totalChecks}`);
+    logger.info(`✅ Passed: ${this.results.passed}`);
+    logger.info(`❌ Failed: ${this.results.failed}`);
+    logger.info(`⚠️  Warnings: ${this.results.warnings}`);
+    logger.info(`📈 Pass Rate: ${passRate}%`);
 
     // Quality Assessment
     let qualityLevel = 'Unknown';
@@ -635,40 +636,40 @@ class StandaloneApplicationValidator {
       readinessStatus = 'Major Rework Needed';
     }
 
-    console.log(`🏆 Quality Level: ${qualityLevel}`);
-    console.log(`🚀 Readiness Status: ${readinessStatus}`);
+    logger.info(`🏆 Quality Level: ${qualityLevel}`);
+    logger.info(`🚀 Readiness Status: ${readinessStatus}`);
 
     if (this.results.errors.length > 0) {
-      console.log('\n❌ CRITICAL ISSUES:');
+      logger.info('\n❌ CRITICAL ISSUES:');
       this.results.errors.forEach((error, index) => {
-        console.log(`  ${index + 1}. ${error}`);
+        logger.info(`  ${index + 1}. ${error}`);
       });
     }
 
     // Business Logic Assessment
-    console.log('\n💼 BUSINESS LOGIC ASSESSMENT:');
-    console.log('  📋 Configuration Logic: Present');
-    console.log('  🔄 Workflow Logic: Implemented');
-    console.log('  🔧 Service Logic: Structured');
-    console.log('  🛡️  Security Logic: Integrated');
-    console.log('  🔗 Integration Logic: Available');
+    logger.info('\n💼 BUSINESS LOGIC ASSESSMENT:');
+    logger.info('  📋 Configuration Logic: Present');
+    logger.info('  🔄 Workflow Logic: Implemented');
+    logger.info('  🔧 Service Logic: Structured');
+    logger.info('  🛡️  Security Logic: Integrated');
+    logger.info('  🔗 Integration Logic: Available');
 
     // Final Verdict
-    console.log('\n' + '='.repeat(80));
+    logger.info('\n' + '='.repeat(80));
     if (passRate >= 90) {
-      console.log('🎉 APPLICATION MODULE VALIDATION: SUCCESS');
-      console.log('✅ Module demonstrates clear logic, workflow, and process');
-      console.log('✅ Ready for integration and deployment');
+      logger.info('🎉 APPLICATION MODULE VALIDATION: SUCCESS');
+      logger.info('✅ Module demonstrates clear logic, workflow, and process');
+      logger.info('✅ Ready for integration and deployment');
     } else if (passRate >= 80) {
-      console.log('⚠️  APPLICATION MODULE VALIDATION: PARTIAL SUCCESS');
-      console.log('📝 Module has good foundation but needs improvements');
-      console.log('🔧 Address issues before full deployment');
+      logger.info('⚠️  APPLICATION MODULE VALIDATION: PARTIAL SUCCESS');
+      logger.info('📝 Module has good foundation but needs improvements');
+      logger.info('🔧 Address issues before full deployment');
     } else {
-      console.log('❌ APPLICATION MODULE VALIDATION: NEEDS WORK');
-      console.log('🚨 Module requires significant improvements');
-      console.log('🔨 Major refactoring needed before deployment');
+      logger.info('❌ APPLICATION MODULE VALIDATION: NEEDS WORK');
+      logger.info('🚨 Module requires significant improvements');
+      logger.info('🔨 Major refactoring needed before deployment');
     }
-    console.log('='.repeat(80) + '\n');
+    logger.info('='.repeat(80) + '\n');
 
     return passRate >= 90;
   }
@@ -683,7 +684,7 @@ if (require.main === module) {
       process.exit(0);
     })
     .catch(error => {
-      console.error('Validation failed:', error);
+      logger.error('Validation failed:', error);
       process.exit(1);
     });
 }

@@ -48,7 +48,7 @@ export default function LoginPage() {
             email: 'cert@gacp.test',
             name: 'Certificate Officer',
             role: 'certificate_officer',
-          })
+          }),
         );
 
         enqueueSnackbar('เข้าสู่ระบบสำเร็จ!', { variant: 'success' });

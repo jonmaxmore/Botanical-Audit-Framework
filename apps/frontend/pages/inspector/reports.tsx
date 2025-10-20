@@ -31,7 +31,7 @@ import {
   DialogContent,
   DialogActions,
   Grid,
-  Rating,
+  Rating
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -45,7 +45,7 @@ import {
   Visibility,
   Download,
   Add,
-  CheckCircle,
+  CheckCircle
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -87,7 +87,7 @@ export default function InspectorReports() {
       status: 'approved',
       score: 4.5,
       result: 'ผ่านการตรวจสอบ',
-      recommendation: 'แนะนำให้รับรอง GACP',
+      recommendation: 'แนะนำให้รับรอง GACP'
     },
     {
       id: 'REP002',
@@ -99,7 +99,7 @@ export default function InspectorReports() {
       status: 'approved',
       score: 4.0,
       result: 'ผ่านการตรวจสอบ',
-      recommendation: 'แนะนำให้รับรอง GACP',
+      recommendation: 'แนะนำให้รับรอง GACP'
     },
     {
       id: 'REP003',
@@ -111,7 +111,7 @@ export default function InspectorReports() {
       status: 'rejected',
       score: 2.5,
       result: 'ไม่ผ่านการตรวจสอบ',
-      recommendation: 'จำเป็นต้องปรับปรุง: ระบบการเก็บบันทึก, การจัดการน้ำ',
+      recommendation: 'จำเป็นต้องปรับปรุง: ระบบการเก็บบันทึก, การจัดการน้ำ'
     },
     {
       id: 'REP004',
@@ -123,8 +123,8 @@ export default function InspectorReports() {
       status: 'draft',
       score: null,
       result: 'กำลังจัดทำรายงาน',
-      recommendation: '-',
-    },
+      recommendation: '-'
+    }
   ];
 
   const menuItems = [
@@ -133,7 +133,7 @@ export default function InspectorReports() {
     { text: 'ตารางนัดหมาย', icon: <CalendarToday />, path: '/inspector/schedule' },
     { text: 'รายงานการตรวจสอบ', icon: <Assessment />, path: '/inspector/reports' },
     { text: 'ค้นหาฟาร์ม', icon: <SearchIcon />, path: '/inspector/farms' },
-    { text: 'โปรไฟล์', icon: <Person />, path: '/inspector/profile' },
+    { text: 'โปรไฟล์', icon: <Person />, path: '/inspector/profile' }
   ];
 
   const handleLogout = () => {
@@ -147,7 +147,7 @@ export default function InspectorReports() {
       draft: { label: 'ร่าง', color: 'default' },
       submitted: { label: 'ส่งแล้ว', color: 'info' },
       approved: { label: 'อนุมัติแล้ว', color: 'success' },
-      rejected: { label: 'ไม่อนุมัติ', color: 'error' },
+      rejected: { label: 'ไม่อนุมัติ', color: 'error' }
     };
     return (
       <Chip label={statusConfig[status]?.label} color={statusConfig[status]?.color} size="small" />
@@ -168,7 +168,7 @@ export default function InspectorReports() {
       report.farmName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       report.farmerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       report.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      report.applicationId.toLowerCase().includes(searchTerm.toLowerCase()),
+      report.applicationId.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const drawer = (
@@ -199,7 +199,7 @@ export default function InspectorReports() {
             sx={{
               cursor: 'pointer',
               bgcolor: router.pathname === item.path ? 'primary.light' : 'transparent',
-              '&:hover': { bgcolor: 'action.hover' },
+              '&:hover': { bgcolor: 'action.hover' }
             }}
             onClick={() => router.push(item.path)}
           >
@@ -263,8 +263,8 @@ export default function InspectorReports() {
                   width: 260,
                   top: 64,
                   height: 'calc(100% - 64px)',
-                  borderRight: '2px solid #e0e0e0',
-                },
+                  borderRight: '2px solid #e0e0e0'
+                }
               }}
             >
               {drawer}
@@ -305,7 +305,7 @@ export default function InspectorReports() {
                     <InputAdornment position="start">
                       <SearchIcon />
                     </InputAdornment>
-                  ),
+                  )
                 }}
               />
             </Paper>

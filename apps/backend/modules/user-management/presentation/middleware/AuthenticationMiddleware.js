@@ -23,6 +23,7 @@
  * @date 2025-10-18
  */
 
+const logger = require('../../../../shared/logger/logger');
 const rateLimit = require('express-rate-limit');
 
 class AuthenticationMiddleware {
@@ -39,7 +40,7 @@ class AuthenticationMiddleware {
       legacyHeaders: false,
     };
 
-    console.log('[AuthenticationMiddleware] Initialized successfully');
+    logger.info('[AuthenticationMiddleware] Initialized successfully');
   }
 
   /**
@@ -82,7 +83,7 @@ class AuthenticationMiddleware {
         req.token = token;
         next();
       } catch (error) {
-        console.error('[AuthMiddleware] Token extraction error:', error);
+        logger.error('[AuthMiddleware] Token extraction error:', error);
         return res.status(500).json({
           success: false,
           error: 'INTERNAL_ERROR',
@@ -142,7 +143,7 @@ class AuthenticationMiddleware {
 
         next();
       } catch (error) {
-        console.error('[AuthMiddleware] Authentication error:', error);
+        logger.error('[AuthMiddleware] Authentication error:', error);
 
         // Handle specific token errors
         if (error.message.includes('expired')) {
@@ -210,7 +211,7 @@ class AuthenticationMiddleware {
         const hasPermission = await this.authService.hasPermission(
           req.userId,
           permission,
-          resourceContext
+          resourceContext,
         );
 
         if (!hasPermission) {
@@ -236,7 +237,7 @@ class AuthenticationMiddleware {
 
         next();
       } catch (error) {
-        console.error('[AuthMiddleware] Authorization error:', error);
+        logger.error('[AuthMiddleware] Authorization error:', error);
         return res.status(500).json({
           success: false,
           error: 'AUTHORIZATION_ERROR',
@@ -287,7 +288,7 @@ class AuthenticationMiddleware {
 
         next();
       } catch (error) {
-        console.error('[AuthMiddleware] Role check error:', error);
+        logger.error('[AuthMiddleware] Role check error:', error);
         return res.status(500).json({
           success: false,
           error: 'ROLE_CHECK_ERROR',
@@ -342,7 +343,7 @@ class AuthenticationMiddleware {
 
         next();
       } catch (error) {
-        console.error('[AuthMiddleware] Resource ownership check error:', error);
+        logger.error('[AuthMiddleware] Resource ownership check error:', error);
         return res.status(500).json({
           success: false,
           error: 'OWNERSHIP_CHECK_ERROR',
@@ -410,14 +411,14 @@ class AuthenticationMiddleware {
               req.userPermissions = userInfo.permissions;
             } catch (error) {
               // Ignore token validation errors for optional auth
-              console.log('[AuthMiddleware] Optional auth failed:', error.message);
+              logger.info('[AuthMiddleware] Optional auth failed:', error.message);
             }
           }
         }
 
         next();
       } catch (error) {
-        console.error('[AuthMiddleware] Optional auth error:', error);
+        logger.error('[AuthMiddleware] Optional auth error:', error);
         next(); // Continue anyway for optional auth
       }
     };

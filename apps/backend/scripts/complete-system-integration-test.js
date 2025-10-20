@@ -8,6 +8,7 @@
  * through certificate issuance with all business rules.
  */
 
+const logger = require('../shared/logger/logger');
 const { EventEmitter } = require('events');
 
 class GACPSystemIntegrationTest extends EventEmitter {
@@ -40,7 +41,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
    * Test 1: Complete Application Workflow Integration
    */
   async testApplicationWorkflow() {
-    console.log('\n🔄 Testing Complete Application Workflow...');
+    logger.info('\n🔄 Testing Complete Application Workflow...');
 
     const workflow = {
       steps: [
@@ -64,13 +65,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const isValid = await this.validateWorkflowStep(step, index);
 
         if (isValid) {
-          console.log(`   ✅ ${step.name}: Logic validated`);
+          logger.info(`   ✅ ${step.name}: Logic validated`)
           passed++;
         } else {
-          console.log(`   ❌ ${step.name}: Logic validation failed`);
+          logger.info(`   ❌ ${step.name}: Logic validation failed`)
         }
       } catch (error) {
-        console.log(`   ❌ ${step.name}: Error - ${error.message}`);
+        logger.info(`   ❌ ${step.name}: Error - ${error.message}`)
       }
     }
 
@@ -226,7 +227,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
    * Test 2: Cross-Module Integration
    */
   async testCrossModuleIntegration() {
-    console.log('\n🔗 Testing Cross-Module Integration...');
+    logger.info('\n🔗 Testing Cross-Module Integration...');
 
     const integrationTests = [
       { from: 'Application Workflow', to: 'Document Management', event: 'documents_required' },
@@ -246,13 +247,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const isIntegrated = await this.validateModuleIntegration(test);
 
         if (isIntegrated) {
-          console.log(`   ✅ ${test.from} → ${test.to}: Integration working`);
+          logger.info(`   ✅ ${test.from} → ${test.to}: Integration working`)
           passed++;
         } else {
-          console.log(`   ❌ ${test.from} → ${test.to}: Integration failed`);
+          logger.info(`   ❌ ${test.from} → ${test.to}: Integration failed`)
         }
       } catch (error) {
-        console.log(`   ❌ ${test.from} → ${test.to}: Error - ${error.message}`);
+        logger.info(`   ❌ ${test.from} → ${test.to}: Error - ${error.message}`)
       }
     }
 
@@ -283,7 +284,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
    * Test 3: Business Rules Engine
    */
   async testBusinessRulesEngine() {
-    console.log('\n🎯 Testing Business Rules Engine...');
+    logger.info('\n🎯 Testing Business Rules Engine...');
 
     const ruleTests = [
       { rule: 'FARMER_MINIMUM_AGE', input: { age: 25 }, expected: true },
@@ -304,13 +305,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const result = await this.validateBusinessRule(test.rule, test.input);
 
         if (result === test.expected) {
-          console.log(`   ✅ ${test.rule}: Rule validation correct`);
+          logger.info(`   ✅ ${test.rule}: Rule validation correct`)
           passed++;
         } else {
-          console.log(`   ❌ ${test.rule}: Expected ${test.expected}, got ${result}`);
+          logger.info(`   ❌ ${test.rule}: Expected ${test.expected}, got ${result}`)
         }
       } catch (error) {
-        console.log(`   ❌ ${test.rule}: Error - ${error.message}`);
+        logger.info(`   ❌ ${test.rule}: Error - ${error.message}`)
       }
     }
 
@@ -348,7 +349,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
    * Test 4: Event-Driven Architecture
    */
   async testEventDrivenArchitecture() {
-    console.log('\n📡 Testing Event-Driven Architecture...');
+    logger.info('\n📡 Testing Event-Driven Architecture...');
 
     const eventTests = [
       { event: 'ApplicationSubmitted', subscribers: ['Document', 'Notification', 'Audit'] },
@@ -366,13 +367,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const allSubscribersResponded = await this.validateEventPropagation(test);
 
         if (allSubscribersResponded) {
-          console.log(`   ✅ ${test.event}: All subscribers responded`);
+          logger.info(`   ✅ ${test.event}: All subscribers responded`)
           passed++;
         } else {
-          console.log(`   ❌ ${test.event}: Some subscribers failed`);
+          logger.info(`   ❌ ${test.event}: Some subscribers failed`)
         }
       } catch (error) {
-        console.log(`   ❌ ${test.event}: Error - ${error.message}`);
+        logger.info(`   ❌ ${test.event}: Error - ${error.message}`)
       }
     }
 
@@ -400,7 +401,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
    * Test 5: System Performance & Reliability
    */
   async testSystemPerformance() {
-    console.log('\n⚡ Testing System Performance & Reliability...');
+    logger.info('\n⚡ Testing System Performance & Reliability...');
 
     const performanceTests = [
       { name: 'Application Submission', target: 500, unit: 'ms' },
@@ -419,13 +420,13 @@ class GACPSystemIntegrationTest extends EventEmitter {
         const actualTime = await this.measurePerformance(test.name);
 
         if (actualTime <= test.target) {
-          console.log(`   ✅ ${test.name}: ${actualTime}ms (target: ${test.target}ms)`);
+          logger.info(`   ✅ ${test.name}: ${actualTime}ms (target: ${test.target}ms);`)
           passed++;
         } else {
-          console.log(`   ⚠️ ${test.name}: ${actualTime}ms (exceeds target: ${test.target}ms)`);
+          logger.info(`   ⚠️ ${test.name}: ${actualTime}ms (exceeds target: ${test.target}ms);`)
         }
       } catch (error) {
-        console.log(`   ❌ ${test.name}: Error - ${error.message}`);
+        logger.info(`   ❌ ${test.name}: Error - ${error.message}`)
       }
     }
 
@@ -480,21 +481,22 @@ class GACPSystemIntegrationTest extends EventEmitter {
     const overallTotal = this.testResults.reduce((sum, result) => sum + result.total, 0);
     const overallSuccessRate = ((overallPassed / overallTotal) * 100).toFixed(1);
 
-    console.log('\n' + '='.repeat(80));
-    console.log('🎯 GACP PLATFORM - COMPLETE SYSTEM INTEGRATION REPORT');
-    console.log('='.repeat(80));
+    logger.info('\n' + '='.repeat(80));
+    logger.info('🎯 GACP PLATFORM - COMPLETE SYSTEM INTEGRATION REPORT');
+    logger.info('='.repeat(80));
 
-    console.log('\n📊 TEST SUITE RESULTS:');
+    logger.info('\n📊 TEST SUITE RESULTS:');
     this.testResults.forEach(result => {
       const status = result.status === 'PASS' ? '✅' : result.status === 'WARNING' ? '⚠️' : '❌';
       console.log(
-        `   ${status} ${result.suite}: ${result.passed}/${result.total} (${result.successRate}%)`
+        `   ${status} ${result.suite}: ${result.passed}/${result.total} (${result.successRate}%)`,
       );
     });
 
-    console.log('\n📈 OVERALL METRICS:');
-    console.log(`   Success Rate: ${overallSuccessRate}% (${overallPassed}/${overallTotal})`);
-    console.log(`   Execution Time: ${(totalTime / 1000).toFixed(2)} seconds`);
+    logger.info('\n📈 OVERALL METRICS:');
+    logger.info(`   Success Rate: ${overallSuccessRate}% (${overallPassed}/${overallTotal})`);
+    logger.info(`   Execution Time: ${(totalTime / 1000).toFixed(2)} seconds`);
+
 
     const systemStatus =
       overallSuccessRate >= 95
@@ -505,54 +507,54 @@ class GACPSystemIntegrationTest extends EventEmitter {
             ? 'ACCEPTABLE'
             : 'NEEDS IMPROVEMENT';
 
-    console.log(`   System Status: ${systemStatus}`);
+    logger.info(`   System Status: ${systemStatus}`)
 
-    console.log('\n🔍 SYSTEM ARCHITECTURE ANALYSIS:');
+    logger.info('\n🔍 SYSTEM ARCHITECTURE ANALYSIS:');
 
-    console.log('\n✅ CONFIRMED WORKING:');
-    console.log('   • Clear Business Logic - All workflow steps have defined rules');
-    console.log('   • Complete Process Flow - Application submission to certificate issuance');
-    console.log('   • Cross-Module Integration - Event-driven communication working');
-    console.log('   • Business Rules Engine - Government compliance rules implemented');
-    console.log('   • Payment Workflow - 2-phase payment system (30,000 THB total)');
-    console.log('   • Document Management - Security validation and content verification');
-    console.log('   • Certificate Management - PDF generation and lifecycle management');
+    logger.info('\n✅ CONFIRMED WORKING:');
+    logger.info('   • Clear Business Logic - All workflow steps have defined rules');
+    logger.info('   • Complete Process Flow - Application submission to certificate issuance');
+    logger.info('   • Cross-Module Integration - Event-driven communication working');
+    logger.info('   • Business Rules Engine - Government compliance rules implemented');
+    logger.info('   • Payment Workflow - 2-phase payment system (30,000 THB total);');
+    logger.info('   • Document Management - Security validation and content verification');
+    logger.info('   • Certificate Management - PDF generation and lifecycle management');
 
-    console.log('\n🎯 BUSINESS PROCESS MATURITY:');
-    console.log('   • Logic Clarity: ✅ Every step has clear business purpose');
-    console.log('   • Workflow Completeness: ✅ End-to-end process defined');
-    console.log('   • Process Documentation: ✅ All procedures documented');
-    console.log('   • Error Handling: ✅ Failure scenarios covered');
-    console.log('   • Recovery Mechanisms: ✅ Retry and fallback procedures');
+    logger.info('\n🎯 BUSINESS PROCESS MATURITY:');
+    logger.info('   • Logic Clarity: ✅ Every step has clear business purpose');
+    logger.info('   • Workflow Completeness: ✅ End-to-end process defined');
+    logger.info('   • Process Documentation: ✅ All procedures documented');
+    logger.info('   • Error Handling: ✅ Failure scenarios covered');
+    logger.info('   • Recovery Mechanisms: ✅ Retry and fallback procedures');
 
-    console.log('\n📋 MODULE STATUS SUMMARY:');
-    console.log('   Production Ready (15 modules):');
-    console.log('     ✅ Core Platform (6/6): 100%');
-    console.log('     ✅ Critical Extensions (3/3): 95%');
-    console.log('     ✅ Additional Features (6/13): 44%');
+    logger.info('\n📋 MODULE STATUS SUMMARY:');
+    logger.info('   Production Ready (15 modules);:');
+    logger.info('     ✅ Core Platform (6/6);: 100%');
+    logger.info('     ✅ Critical Extensions (3/3);: 95%');
+    logger.info('     ✅ Additional Features (6/13);: 44%');
 
-    console.log('\n🚀 DEPLOYMENT READINESS:');
+    logger.info('\n🚀 DEPLOYMENT READINESS:');
     if (overallSuccessRate >= 90) {
-      console.log('   🟢 SYSTEM READY FOR PRODUCTION');
-      console.log('   • All critical workflows validated');
-      console.log('   • Business logic fully implemented');
-      console.log('   • Integration testing completed');
-      console.log('   • Performance targets met');
+      logger.info('   🟢 SYSTEM READY FOR PRODUCTION');
+      logger.info('   • All critical workflows validated');
+      logger.info('   • Business logic fully implemented');
+      logger.info('   • Integration testing completed');
+      logger.info('   • Performance targets met');
     } else if (overallSuccessRate >= 80) {
-      console.log('   🟡 SYSTEM READY FOR STAGING');
-      console.log('   • Minor issues need resolution');
-      console.log('   • Core functionality working');
-      console.log('   • Additional testing recommended');
+      logger.info('   🟡 SYSTEM READY FOR STAGING');
+      logger.info('   • Minor issues need resolution');
+      logger.info('   • Core functionality working');
+      logger.info('   • Additional testing recommended');
     } else {
-      console.log('   🔴 SYSTEM NEEDS MORE WORK');
-      console.log('   • Critical issues found');
-      console.log('   • Additional development required');
-      console.log('   • Full retest needed after fixes');
+      logger.info('   🔴 SYSTEM NEEDS MORE WORK');
+      logger.info('   • Critical issues found');
+      logger.info('   • Additional development required');
+      logger.info('   • Full retest needed after fixes');
     }
 
-    console.log('\n' + '='.repeat(80));
-    console.log(`🎉 INTEGRATION TEST COMPLETE - ${systemStatus} SYSTEM STATUS`);
-    console.log('='.repeat(80) + '\n');
+    logger.info('\n' + '='.repeat(80));
+    logger.info(`🎉 INTEGRATION TEST COMPLETE - ${systemStatus} SYSTEM STATUS`)
+    logger.info('='.repeat(80) + '\n');
 
     return {
       overallSuccessRate: parseFloat(overallSuccessRate),
@@ -568,8 +570,8 @@ class GACPSystemIntegrationTest extends EventEmitter {
    * Run complete system integration test
    */
   async runCompleteTest() {
-    console.log('🚀 Starting GACP Platform Complete System Integration Test...');
-    console.log('📋 Testing: Logic, Workflow, Process Flow & Integration\n');
+    logger.info('🚀 Starting GACP Platform Complete System Integration Test...');
+    logger.info('📋 Testing: Logic, Workflow, Process Flow & Integration\n');
 
     try {
       // Run all test suites
@@ -582,7 +584,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       // Generate comprehensive report
       return this.generateSystemReport();
     } catch (error) {
-      console.error('❌ Integration test failed:', error.message);
+      logger.error('❌ Integration test failed:', error.message);
       throw error;
     }
   }
@@ -598,11 +600,11 @@ if (require.main === module) {
   integrationTest
     .runCompleteTest()
     .then(result => {
-      console.log('✅ Integration test completed successfully');
+      logger.info('✅ Integration test completed successfully');
       process.exit(result.overallSuccessRate >= 80 ? 0 : 1);
     })
     .catch(error => {
-      console.error('❌ Integration test failed:', error);
+      logger.error('❌ Integration test failed:', error);
       process.exit(1);
     });
 }

@@ -9,6 +9,7 @@
  * - Webhooks
  */
 
+const logger = require('../../../shared/logger/logger');
 const { ObjectId } = require('mongodb');
 const nodemailer = require('nodemailer');
 const axios = require('axios');
@@ -139,7 +140,7 @@ class NotificationService {
    */
   async initialize() {
     try {
-      console.log('Initializing Notification Service...');
+      logger.info('Initializing Notification Service...');
 
       // Get collections
       this.notifications = this.db.collection('notifications');
@@ -153,9 +154,9 @@ class NotificationService {
       this.initializeEmailTransporter();
 
       this.initialized = true;
-      console.log('✓ Notification Service initialized');
+      logger.info('✓ Notification Service initialized');
     } catch (error) {
-      console.error('Failed to initialize Notification Service:', error);
+      logger.error('Failed to initialize Notification Service:', error);
       throw error;
     }
   }
@@ -172,7 +173,7 @@ class NotificationService {
 
     await this.preferences.createIndex({ userId: 1 }, { unique: true });
 
-    console.log('✓ Notification indexes created');
+    logger.info('✓ Notification indexes created');
   }
 
   /**
@@ -191,9 +192,9 @@ class NotificationService {
 
     if (config.auth.user && config.auth.pass) {
       this.emailTransporter = nodemailer.createTransport(config);
-      console.log('✓ Email transporter initialized');
+      logger.info('✓ Email transporter initialized');
     } else {
-      console.log('⚠ Email credentials not configured - email notifications disabled');
+      logger.info('⚠ Email credentials not configured - email notifications disabled');
     }
   }
 
@@ -209,7 +210,7 @@ class NotificationService {
       const template = this.notificationTemplates[eventType];
 
       if (!template) {
-        console.warn(`No template found for event type: ${eventType}`);
+        logger.warn(`No template found for event type: ${eventType}`);
         return { success: false, error: 'Unknown event type' };
       }
 
@@ -246,19 +247,19 @@ class NotificationService {
             case 'email':
               results.email = await this.sendEmailNotification(
                 data.email || data.userEmail,
-                notification
+                notification,
               );
               break;
             case 'line':
               results.line = await this.sendLineNotification(
                 data.lineToken || userPrefs.lineToken,
-                notification
+                notification,
               );
               break;
             case 'sms':
               results.sms = await this.sendSMSNotification(
                 data.phone || data.userPhone,
-                notification
+                notification,
               );
               break;
           }
@@ -271,7 +272,7 @@ class NotificationService {
         channels: results,
       };
     } catch (error) {
-      console.error('Notification failed:', error);
+      logger.error('Notification failed:', error);
       return { success: false, error: error.message };
     }
   }
@@ -284,7 +285,7 @@ class NotificationService {
       const result = await this.notifications.insertOne(notification);
       return result.acknowledged;
     } catch (error) {
-      console.error('In-app notification failed:', error);
+      logger.error('In-app notification failed:', error);
       return false;
     }
   }
@@ -309,7 +310,7 @@ class NotificationService {
       await this.emailTransporter.sendMail(mailOptions);
       return true;
     } catch (error) {
-      console.error('Email notification failed:', error);
+      logger.error('Email notification failed:', error);
       return false;
     }
   }
@@ -333,12 +334,12 @@ class NotificationService {
             Authorization: `Bearer ${lineToken}`,
             'Content-Type': 'application/x-www-form-urlencoded',
           },
-        }
+        },
       );
 
       return response.status === 200;
     } catch (error) {
-      console.error('LINE notification failed:', error);
+      logger.error('LINE notification failed:', error);
       return false;
     }
   }
@@ -353,10 +354,10 @@ class NotificationService {
 
     try {
       // TODO: Integrate with SMS provider (Twilio, AWS SNS, etc.)
-      console.log(`SMS to ${phone}: ${notification.message}`);
+      logger.info(`SMS to ${phone}: ${notification.message}`);
       return true;
     } catch (error) {
-      console.error('SMS notification failed:', error);
+      logger.error('SMS notification failed:', error);
       return false;
     }
   }
@@ -409,7 +410,7 @@ class NotificationService {
           isRead: true,
           readAt: new Date(),
         },
-      }
+      },
     );
 
     return result.modifiedCount > 0;
@@ -429,7 +430,7 @@ class NotificationService {
           isRead: true,
           readAt: new Date(),
         },
-      }
+      },
     );
 
     return result.modifiedCount;
@@ -535,7 +536,7 @@ class NotificationService {
           updatedAt: new Date(),
         },
       },
-      { upsert: true }
+      { upsert: true },
     );
 
     return result.acknowledged;

@@ -46,7 +46,7 @@ class FarmController {
         farm: farm.toJSON(),
       });
     } catch (error) {
-      console.error('Register farm error:', error);
+      logger.error('Register farm error:', error);
 
       if (error.message.includes('already exists')) {
         return res.status(409).json({
@@ -90,7 +90,7 @@ class FarmController {
         farm: farm.toJSON(),
       });
     } catch (error) {
-      console.error('Update farm error:', error);
+      logger.error('Update farm error:', error);
 
       if (error.message === 'Farm not found') {
         return res.status(404).json({
@@ -147,7 +147,7 @@ class FarmController {
         farm: farm.toJSON(),
       });
     } catch (error) {
-      console.error('Submit farm error:', error);
+      logger.error('Submit farm error:', error);
 
       if (error.message === 'Farm not found') {
         return res.status(404).json({
@@ -206,7 +206,7 @@ class FarmController {
         farm: farm.toJSON(),
       });
     } catch (error) {
-      console.error('Get farm details error:', error);
+      logger.error('Get farm details error:', error);
 
       if (error.message === 'Farm not found') {
         return res.status(404).json({
@@ -258,7 +258,7 @@ class FarmController {
         farms: result.farms.map(farm => farm.toJSON()),
       });
     } catch (error) {
-      console.error('List farms error:', error);
+      logger.error('List farms error:', error);
 
       return res.status(500).json({
         success: false,
@@ -287,7 +287,7 @@ class FarmController {
         farm: farm.toJSON(),
       });
     } catch (error) {
-      console.error('Start farm review error:', error);
+      logger.error('Start farm review error:', error);
 
       if (error.message === 'Farm not found') {
         return res.status(404).json({
@@ -332,7 +332,7 @@ class FarmController {
         farm: farm.toJSON(),
       });
     } catch (error) {
-      console.error('Approve farm error:', error);
+      logger.error('Approve farm error:', error);
 
       if (error.message === 'Farm not found') {
         return res.status(404).json({
@@ -377,7 +377,7 @@ class FarmController {
         farm: farm.toJSON(),
       });
     } catch (error) {
-      console.error('Reject farm error:', error);
+      logger.error('Reject farm error:', error);
 
       if (error.message === 'Farm not found') {
         return res.status(404).json({

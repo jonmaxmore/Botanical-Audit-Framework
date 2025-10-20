@@ -87,7 +87,7 @@ describe('Users & Authentication API Integration Tests', () => {
             isEmailVerified: true,
             isActive: true,
           },
-        })
+        }),
       ).rejects.toThrow();
     });
 
@@ -386,7 +386,7 @@ describe('Users & Authentication API Integration Tests', () => {
 
       expect(roleStats.length).toBeGreaterThan(0);
       expect(roleStats.every(stat => ['FARMER', 'ADMIN', 'INSPECTOR'].includes(stat.role))).toBe(
-        true
+        true,
       );
     });
 

@@ -88,7 +88,7 @@ function isDateAvailable(date: Date, availableDates?: Date[]): boolean {
 
   const dateStr = date.toISOString().split('T')[0];
   return availableDates.some(
-    availableDate => availableDate.toISOString().split('T')[0] === dateStr
+    availableDate => availableDate.toISOString().split('T')[0] === dateStr,
   );
 }
 

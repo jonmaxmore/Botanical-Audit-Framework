@@ -47,7 +47,7 @@ class SubmitSurveyUseCase {
         surveyYear: submittedSurvey.surveyYear,
         surveyPeriod: submittedSurvey.surveyPeriod,
         submittedAt: submittedSurvey.submittedAt,
-      })
+      }),
     );
 
     return submittedSurvey;

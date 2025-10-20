@@ -3,6 +3,7 @@
  * External task management system integration for GACP platform
  */
 
+const logger = require('../shared/logger/logger');
 const axios = require('axios');
 const mongoose = require('mongoose');
 const EventEmitter = require('events');
@@ -429,7 +430,7 @@ const TaskAssignmentSchema = new mongoose.Schema(
     timestamps: true,
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
-  }
+  },
 );
 
 // Indexes
@@ -501,14 +502,14 @@ class BlitzzIntegrationService extends EventEmitter {
           taskId: internalTask.taskId,
           title: internalTask.taskInfo.title,
           userRole: taskData.assignment.assignedTo.userRole,
-        }
+        },
       );
 
       this.emit('task_created', internalTask);
 
       return internalTask;
     } catch (error) {
-      console.error('Error creating task:', error);
+      logger.error('Error creating task:', error);
       throw error;
     }
   }
@@ -528,7 +529,7 @@ class BlitzzIntegrationService extends EventEmitter {
             Authorization: `Bearer ${this.apiKey}`,
             'Content-Type': 'application/json',
           },
-        }
+        },
       );
 
       // Update internal task with Blitzz ID
@@ -540,11 +541,11 @@ class BlitzzIntegrationService extends EventEmitter {
 
       await internalTask.save();
 
-      console.log(`Task ${internalTask.taskId} synced to Blitzz with ID: ${response.data.id}`);
+      logger.info(`Task ${internalTask.taskId} synced to Blitzz with ID: ${response.data.id}`);
 
       return response.data;
     } catch (error) {
-      console.error('Error creating Blitzz task:', error);
+      logger.error('Error creating Blitzz task:', error);
 
       // Update sync status to error
       internalTask.blitzzIntegration.syncStatus = 'error';
@@ -660,7 +661,7 @@ class BlitzzIntegrationService extends EventEmitter {
 
       return task;
     } catch (error) {
-      console.error('Error updating task status:', error);
+      logger.error('Error updating task status:', error);
       throw error;
     }
   }
@@ -683,14 +684,14 @@ class BlitzzIntegrationService extends EventEmitter {
             Authorization: `Bearer ${this.apiKey}`,
             'Content-Type': 'application/json',
           },
-        }
+        },
       );
 
       task.blitzzIntegration.lastSyncAt = new Date();
       task.blitzzIntegration.syncStatus = 'synced';
       await task.save();
     } catch (error) {
-      console.error('Error syncing status to Blitzz:', error);
+      logger.error('Error syncing status to Blitzz:', error);
       task.blitzzIntegration.syncStatus = 'error';
       task.blitzzIntegration.syncErrors.push(`Status sync failed: ${error.message}`);
       await task.save();
@@ -884,7 +885,7 @@ class BlitzzIntegrationService extends EventEmitter {
       try {
         await this.syncWithBlitzz(syncItem);
       } catch (error) {
-        console.error('Sync error:', error);
+        logger.error('Sync error:', error);
       }
     }
   }

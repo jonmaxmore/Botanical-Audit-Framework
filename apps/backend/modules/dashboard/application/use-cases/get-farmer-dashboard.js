@@ -14,7 +14,7 @@ class GetFarmerDashboardUseCase {
     surveyRepository,
     trainingEnrollmentRepository,
     documentRepository,
-    notificationRepository
+    notificationRepository,
   ) {
     this.farmRepository = farmRepository;
     this.certificateRepository = certificateRepository;

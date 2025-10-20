@@ -48,10 +48,12 @@ async function main() {
 
   // Test 1: Health Check
   results.total++;
-  if (await test('Health Check', async () => {
-    const response = await axios.get(`${BASE_URL}/health`);
-    if (!response.data) throw new Error('No response data');
-  })) {
+  if (
+    await test('Health Check', async () => {
+      const response = await axios.get(`${BASE_URL}/health`);
+      if (!response.data) throw new Error('No response data');
+    })
+  ) {
     results.passed++;
   } else {
     results.failed++;
@@ -59,15 +61,17 @@ async function main() {
 
   // Test 2: Farmer Login
   results.total++;
-  if (await test('Farmer Login (farmer001)', async () => {
-    const response = await axios.post(`${BASE_URL}/api/auth/login`, {
-      username: 'farmer001',
-      password: 'Test@1234',
-    });
-    if (!response.data.token) throw new Error('No token received');
-    farmerToken = response.data.token;
-    await log(`   Token: ${farmerToken.substring(0, 20)}...`, colors.blue);
-  })) {
+  if (
+    await test('Farmer Login (farmer001)', async () => {
+      const response = await axios.post(`${BASE_URL}/api/auth/login`, {
+        username: 'farmer001',
+        password: 'Test@1234',
+      });
+      if (!response.data.token) throw new Error('No token received');
+      farmerToken = response.data.token;
+      await log(`   Token: ${farmerToken.substring(0, 20)}...`, colors.blue);
+    })
+  ) {
     results.passed++;
   } else {
     results.failed++;
@@ -75,13 +79,15 @@ async function main() {
 
   // Test 3: Get Farmer Profile
   results.total++;
-  if (await test('Get Farmer Profile', async () => {
-    const response = await axios.get(`${BASE_URL}/api/auth/profile`, {
-      headers: { Authorization: `Bearer ${farmerToken}` },
-    });
-    if (!response.data) throw new Error('No profile data');
-    await log(`   User: ${response.data.firstName} ${response.data.lastName}`, colors.blue);
-  })) {
+  if (
+    await test('Get Farmer Profile', async () => {
+      const response = await axios.get(`${BASE_URL}/api/auth/profile`, {
+        headers: { Authorization: `Bearer ${farmerToken}` },
+      });
+      if (!response.data) throw new Error('No profile data');
+      await log(`   User: ${response.data.firstName} ${response.data.lastName}`, colors.blue);
+    })
+  ) {
     results.passed++;
   } else {
     results.failed++;
@@ -89,14 +95,16 @@ async function main() {
 
   // Test 4: DTAM Reviewer Login
   results.total++;
-  if (await test('DTAM Reviewer Login (reviewer001)', async () => {
-    const response = await axios.post(`${BASE_URL}/api/dtam/auth/login`, {
-      username: 'reviewer001',
-      password: 'Rev@1234',
-    });
-    if (!response.data.token) throw new Error('No token received');
-    reviewerToken = response.data.token;
-  })) {
+  if (
+    await test('DTAM Reviewer Login (reviewer001)', async () => {
+      const response = await axios.post(`${BASE_URL}/api/dtam/auth/login`, {
+        username: 'reviewer001',
+        password: 'Rev@1234',
+      });
+      if (!response.data.token) throw new Error('No token received');
+      reviewerToken = response.data.token;
+    })
+  ) {
     results.passed++;
   } else {
     results.failed++;
@@ -104,12 +112,14 @@ async function main() {
 
   // Test 5: List Farms (Farmer)
   results.total++;
-  if (await test('List Farms (Farmer)', async () => {
-    const response = await axios.get(`${BASE_URL}/api/farm`, {
-      headers: { Authorization: `Bearer ${farmerToken}` },
-    });
-    await log(`   Farms found: ${response.data.length || 0}`, colors.blue);
-  })) {
+  if (
+    await test('List Farms (Farmer)', async () => {
+      const response = await axios.get(`${BASE_URL}/api/farm`, {
+        headers: { Authorization: `Bearer ${farmerToken}` },
+      });
+      await log(`   Farms found: ${response.data.length || 0}`, colors.blue);
+    })
+  ) {
     results.passed++;
   } else {
     results.failed++;
@@ -117,12 +127,14 @@ async function main() {
 
   // Test 6: List Applications (DTAM)
   results.total++;
-  if (await test('List Applications (DTAM Reviewer)', async () => {
-    const response = await axios.get(`${BASE_URL}/api/applications`, {
-      headers: { Authorization: `Bearer ${reviewerToken}` },
-    });
-    await log(`   Applications found: ${response.data.length || 0}`, colors.blue);
-  })) {
+  if (
+    await test('List Applications (DTAM Reviewer)', async () => {
+      const response = await axios.get(`${BASE_URL}/api/applications`, {
+        headers: { Authorization: `Bearer ${reviewerToken}` },
+      });
+      await log(`   Applications found: ${response.data.length || 0}`, colors.blue);
+    })
+  ) {
     results.passed++;
   } else {
     results.failed++;
@@ -147,7 +159,7 @@ async function main() {
   }
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error('Fatal error:', error);
   process.exit(1);
 });

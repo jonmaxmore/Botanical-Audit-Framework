@@ -162,7 +162,7 @@ const JobAssignmentSchema = new mongoose.Schema(
   {
     timestamps: true,
     collection: 'job_assignments',
-  }
+  },
 );
 
 // Compound indexes for better query performance
