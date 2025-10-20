@@ -143,7 +143,7 @@ class NotificationController {
       const senderId = req.userId;
       const senderRole = req.userRole;
 
-      console.log(`[NotificationController] Sending notification`, {
+      console.log('[NotificationController] Sending notification', {
         recipientId,
         notificationType,
         senderId,
@@ -257,7 +257,7 @@ class NotificationController {
       const senderId = req.userId;
       const senderRole = req.userRole;
 
-      console.log(`[NotificationController] Sending bulk notification`, {
+      console.log('[NotificationController] Sending bulk notification', {
         notificationType,
         senderId,
         recipientFilters,

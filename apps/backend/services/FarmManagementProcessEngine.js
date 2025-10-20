@@ -100,7 +100,7 @@ class FarmManagementProcessEngine extends EventEmitter {
    */
   _generatePlannedActivities(cycle) {
     const activities = [];
-    let dayOffset = 0;
+    const dayOffset = 0;
 
     // Phase 1: Planning (Days 1-7)
     activities.push(

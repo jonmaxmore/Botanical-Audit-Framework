@@ -401,7 +401,7 @@ ApplicationSchema.methods.calculateTotalScore = function () {
 };
 
 ApplicationSchema.methods.assessRisk = function () {
-  let riskFactors = [];
+  const riskFactors = [];
   let riskScore = 0;
 
   // Location-based risk

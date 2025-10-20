@@ -92,7 +92,7 @@ class RenewCertificateUseCase {
       };
 
       await this.certificateRepository.save(existingCertificate);
-      console.log(`📝 Updated existing certificate status to RENEWED`);
+      console.log('📝 Updated existing certificate status to RENEWED');
 
       // 7. สร้างใบรับรองใหม่
       const renewedCertificate = Certificate.createRenewal({

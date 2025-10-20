@@ -124,7 +124,7 @@ class FarmManagementService {
 
       return activity;
     } catch (error) {
-      logger.error(`[FarmService] Error recording activity:`, error);
+      logger.error('[FarmService] Error recording activity:', error);
       throw error;
     }
   }
@@ -171,7 +171,7 @@ class FarmManagementService {
 
       return { ...check, score };
     } catch (error) {
-      logger.error(`[FarmService] Error recording compliance check:`, error);
+      logger.error('[FarmService] Error recording compliance check:', error);
       throw error;
     }
   }
@@ -223,7 +223,7 @@ class FarmManagementService {
 
       return harvest;
     } catch (error) {
-      logger.error(`[FarmService] Error recording harvest:`, error);
+      logger.error('[FarmService] Error recording harvest:', error);
       throw error;
     }
   }
@@ -254,7 +254,7 @@ class FarmManagementService {
 
       return test;
     } catch (error) {
-      logger.error(`[FarmService] Error recording quality test:`, error);
+      logger.error('[FarmService] Error recording quality test:', error);
       throw error;
     }
   }
@@ -307,7 +307,7 @@ class FarmManagementService {
 
       return { ...cycle, status: 'completed', completionData: completion };
     } catch (error) {
-      logger.error(`[FarmService] Error completing cycle:`, error);
+      logger.error('[FarmService] Error completing cycle:', error);
       throw error;
     }
   }

@@ -95,7 +95,7 @@ router.get(
     } = req.query;
 
     // Build filter based on user role
-    let filter = {};
+    const filter = {};
 
     if (req.user.role === 'farmer') {
       filter.applicant = req.user.id;
@@ -555,7 +555,7 @@ router.get(
   '/dashboard/stats',
   authenticate,
   handleAsync(async (req, res) => {
-    let filter = {};
+    const filter = {};
 
     // Role-based filtering
     if (req.user.role === 'farmer') {
@@ -611,7 +611,7 @@ router.get(
   '/dashboard/recent',
   authenticate,
   handleAsync(async (req, res) => {
-    let filter = {};
+    const filter = {};
 
     if (req.user.role === 'farmer') {
       filter.applicant = req.user.id;

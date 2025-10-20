@@ -76,7 +76,7 @@ router.get(
       } = req.query;
 
       // Build query
-      let query = {};
+      const query = {};
 
       // Date range filter
       if (startDate || endDate) {
@@ -194,7 +194,7 @@ router.get(
   authorizeRoles(['auditor', 'admin', 'supervisor', 'reviewer', 'farmer']),
   async (req, res) => {
     try {
-      let query = {};
+      const query = {};
 
       // Role-based filtering
       if (req.user.role === 'auditor') {

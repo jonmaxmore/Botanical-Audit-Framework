@@ -28,7 +28,7 @@ class ListCertificatesUseCase {
    */
   async execute({ filters = {}, pagination = {}, sort = {}, user }) {
     try {
-      console.log(`📋 Listing certificates with filters:`, filters);
+      console.log('📋 Listing certificates with filters:', filters);
 
       // 1. ตั้งค่า default values
       const defaultPagination = {

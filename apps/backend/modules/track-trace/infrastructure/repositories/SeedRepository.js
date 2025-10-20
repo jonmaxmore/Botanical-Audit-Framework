@@ -223,14 +223,14 @@ class SeedRepository {
    */
   async searchSeeds(searchCriteria) {
     try {
-      this.logger.log(`[SeedRepository] Searching seeds with criteria`);
+      this.logger.log('[SeedRepository] Searching seeds with criteria');
 
       // Step 1: Check search cache
       const cacheKey = `seed_search:${this.hashSearchCriteria(searchCriteria)}`;
       const cachedResults = await this.getCachedData(cacheKey);
 
       if (cachedResults) {
-        this.logger.log(`[SeedRepository] Search results found in cache`);
+        this.logger.log('[SeedRepository] Search results found in cache');
         return this.deserializeSearchResults(cachedResults);
       }
 
@@ -734,7 +734,7 @@ class SeedRepository {
     const keysToInvalidate = [
       `seed:${seed.seedId}`,
       `seed_batch:${seed.batchNumber}*`,
-      `seed_search:*`,
+      'seed_search:*',
       `supplier_seeds:${seed.supplier.supplierId}*`,
     ];
 

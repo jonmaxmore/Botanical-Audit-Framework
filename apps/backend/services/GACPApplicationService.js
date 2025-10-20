@@ -535,7 +535,7 @@ class GACPApplicationService {
     const farmInfoWeight = 0.3;
     const practiceWeight = 0.4;
 
-    let baseScore =
+    const baseScore =
       documentValidation.score * documentWeight +
       farmInfoScore * farmInfoWeight +
       practiceScore * practiceWeight;

@@ -61,7 +61,7 @@ class SurveySystemService {
         await this.responsesCollection.insertOne(response);
       }
 
-      logger.info(`[SurveyService] Survey response created`, { userId, region });
+      logger.info('[SurveyService] Survey response created', { userId, region });
 
       return {
         success: true,
@@ -200,7 +200,7 @@ class SurveySystemService {
         }
       );
 
-      logger.info(`[SurveyService] Survey submitted`, {
+      logger.info('[SurveyService] Survey submitted', {
         surveyId,
         totalScore,
         region: response.region,

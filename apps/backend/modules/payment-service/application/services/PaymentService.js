@@ -157,7 +157,7 @@ class PaymentService {
         });
       }
 
-      console.log(`[PaymentService] Fee calculation completed:`, feeBreakdown);
+      console.log('[PaymentService] Fee calculation completed:', feeBreakdown);
       return {
         success: true,
         feeBreakdown,

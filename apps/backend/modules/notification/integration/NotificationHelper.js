@@ -19,7 +19,7 @@ class NotificationHelper {
       recipientEmail: farmerData.email,
       type: Notification.TYPE.FARM_APPROVED,
       title: `ฟาร์ม ${farmData.name} ได้รับการอนุมัติแล้ว`,
-      message: `ฟาร์มของท่านได้รับการอนุมัติเรียบร้อยแล้ว สามารถดำเนินการขั้นตอนต่อไปได้`,
+      message: 'ฟาร์มของท่านได้รับการอนุมัติเรียบร้อยแล้ว สามารถดำเนินการขั้นตอนต่อไปได้',
       priority: Notification.PRIORITY.HIGH,
       channels: [Notification.CHANNEL.IN_APP, Notification.CHANNEL.EMAIL],
       actionUrl: `/farmer/farms/${farmData.id}`,

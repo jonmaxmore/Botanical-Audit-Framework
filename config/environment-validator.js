@@ -150,7 +150,7 @@ function validateEnvironment() {
     insecure.forEach(v => {
       console.log(`   ⚠  ${v.name.padEnd(25)} - ${v.description}`);
       console.log(`      Current: "${v.value}"`);
-      console.log(`      Problem: Contains unsafe default value`);
+      console.log('      Problem: Contains unsafe default value');
     });
     console.log('');
   }

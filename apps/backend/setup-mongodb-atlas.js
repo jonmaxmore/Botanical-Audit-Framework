@@ -229,7 +229,7 @@ async function setupCollections() {
     console.log('\n' + '='.repeat(50));
     console.log('🎉 Setup completed successfully!');
     console.log('='.repeat(50));
-    console.log(`\n📊 Summary:`);
+    console.log('\n📊 Summary:');
     console.log(`   Collections created: ${created}`);
     console.log(`   Collections skipped: ${skipped}`);
     console.log(`   Total indexes created: ${indexesCreated}`);

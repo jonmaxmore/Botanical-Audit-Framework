@@ -211,7 +211,7 @@ async function setupProductionDatabase() {
               validator: validator,
               validationLevel: 'moderate',
             });
-            console.log(`     📝 Updated validator`);
+            console.log('     📝 Updated validator');
           }
         }
 
@@ -272,13 +272,13 @@ async function setupProductionDatabase() {
     console.log('='.repeat(70));
     console.log('🎉 Database setup completed successfully!');
     console.log('='.repeat(70));
-    console.log(`\n📊 Summary:`);
+    console.log('\n📊 Summary:');
     console.log(`   Collections created: ${created}`);
     console.log(`   Collections updated: ${updated}`);
     console.log(`   Total indexes: ${totalIndexes}`);
     console.log(`   Execution time: ${duration}s`);
-    console.log(`\n✨ Your production database is ready!`);
-    console.log(`🚀 Next: Start the application with production settings\n`);
+    console.log('\n✨ Your production database is ready!');
+    console.log('🚀 Next: Start the application with production settings\n');
   } catch (error) {
     console.error('\n' + '='.repeat(70));
     console.error('❌ Setup failed:', error.message);

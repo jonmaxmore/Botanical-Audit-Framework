@@ -316,7 +316,7 @@ router.get('/templates', async (req, res) => {
   try {
     const { region, cannabisCategory, status, surveyType } = req.query;
 
-    let query = {
+    const query = {
       'accessControl.allowedRoles': req.user.role,
     };
 
@@ -414,7 +414,7 @@ router.get('/responses/my-farm', async (req, res) => {
       });
     }
 
-    let query = { 'respondent.farmCode': farmCode };
+    const query = { 'respondent.farmCode': farmCode };
     if (status) query.status = status;
     if (surveyType) {
       // Need to populate template to filter by survey type
@@ -603,7 +603,7 @@ router.get('/admin/responses', async (req, res) => {
       endDate,
     } = req.query;
 
-    let query = {};
+    const query = {};
     if (status) query.status = status;
     if (riskLevel) query['analytics.riskProfile.overallRisk'] = riskLevel;
     if (complianceThreshold) {
@@ -746,7 +746,7 @@ router.get('/admin/analytics/dashboard', async (req, res) => {
         startDate.setDate(endDate.getDate() - 30);
     }
 
-    let matchQuery = {
+    const matchQuery = {
       createdAt: { $gte: startDate, $lte: endDate },
     };
 

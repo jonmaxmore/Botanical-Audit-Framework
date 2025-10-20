@@ -125,7 +125,7 @@ class ApplicationWorkflowService {
 
       return { ...application, status: 'submitted', workflowState: 'pending_review' };
     } catch (error) {
-      logger.error(`[WorkflowService] Error submitting application:`, error);
+      logger.error('[WorkflowService] Error submitting application:', error);
       throw error;
     }
   }
@@ -168,7 +168,7 @@ class ApplicationWorkflowService {
 
       return { ...application, status: 'in_review', workflowState: 'document_review' };
     } catch (error) {
-      logger.error(`[WorkflowService] Error starting review:`, error);
+      logger.error('[WorkflowService] Error starting review:', error);
       throw error;
     }
   }
@@ -223,7 +223,7 @@ class ApplicationWorkflowService {
 
       return { ...application, ...updateData };
     } catch (error) {
-      logger.error(`[WorkflowService] Error completing review:`, error);
+      logger.error('[WorkflowService] Error completing review:', error);
       throw error;
     }
   }
@@ -266,7 +266,7 @@ class ApplicationWorkflowService {
 
       return { ...application, status: 'in_inspection', workflowState: 'field_inspection' };
     } catch (error) {
-      logger.error(`[WorkflowService] Error starting inspection:`, error);
+      logger.error('[WorkflowService] Error starting inspection:', error);
       throw error;
     }
   }
@@ -323,7 +323,7 @@ class ApplicationWorkflowService {
 
       return { ...application, ...updateData };
     } catch (error) {
-      logger.error(`[WorkflowService] Error completing inspection:`, error);
+      logger.error('[WorkflowService] Error completing inspection:', error);
       throw error;
     }
   }
@@ -370,7 +370,7 @@ class ApplicationWorkflowService {
 
       return { ...application, status: 'approved', certificateNumber };
     } catch (error) {
-      logger.error(`[WorkflowService] Error approving application:`, error);
+      logger.error('[WorkflowService] Error approving application:', error);
       throw error;
     }
   }
@@ -409,7 +409,7 @@ class ApplicationWorkflowService {
 
       return { ...application, status: 'rejected', rejectionReason: reason };
     } catch (error) {
-      logger.error(`[WorkflowService] Error rejecting application:`, error);
+      logger.error('[WorkflowService] Error rejecting application:', error);
       throw error;
     }
   }

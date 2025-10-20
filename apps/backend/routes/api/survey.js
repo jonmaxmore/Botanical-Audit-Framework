@@ -251,7 +251,7 @@ const mockSurveyTemplates = {
 };
 
 // Mock survey responses storage
-let mockSurveyResponses = [];
+const mockSurveyResponses = [];
 
 /**
  * @route GET /api/survey/templates
@@ -451,7 +451,7 @@ router.get('/health', (req, res) => {
 // Helper functions
 function calculateComplianceScore(region, answers) {
   // Simple scoring algorithm - in real implementation this would be more sophisticated
-  let score = 100;
+  const score = 100;
   let penalties = 0;
 
   Object.values(answers).forEach(answer => {

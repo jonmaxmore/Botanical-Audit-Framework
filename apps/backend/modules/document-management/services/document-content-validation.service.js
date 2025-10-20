@@ -302,7 +302,7 @@ class DocumentContentValidationService {
 
       if (foundAddress) {
         validationScore += 10;
-        console.log(`✅ Address information found`);
+        console.log('✅ Address information found');
       } else {
         warnings.push('ไม่พบข้อมูลที่อยู่');
       }

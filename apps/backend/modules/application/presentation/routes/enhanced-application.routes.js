@@ -869,7 +869,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
   const multerErrorHandler = (error, req, res, next) => {
     if (error instanceof multer.MulterError) {
       let message = 'File upload error';
-      let statusCode = 400;
+      const statusCode = 400;
 
       switch (error.code) {
         case 'LIMIT_FILE_SIZE':

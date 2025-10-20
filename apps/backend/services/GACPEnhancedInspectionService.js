@@ -225,7 +225,7 @@ class GACPEnhancedInspectionService {
         preparationRequirements: this.getPreparationRequirements(application),
       });
     } catch (error) {
-      console.error(`[GACP-Inspection] Initialization failed:`, error);
+      console.error('[GACP-Inspection] Initialization failed:', error);
       return this.createResponse(false, `Inspection initialization failed: ${error.message}`);
     }
   }

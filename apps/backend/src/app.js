@@ -154,7 +154,7 @@ class GACAApplication {
 
       // Start HTTP server
       this.server = this.app.listen(this.port, () => {
-        logger.info(`🚀 GACP Platform Server v2.0 started successfully`);
+        logger.info('🚀 GACP Platform Server v2.0 started successfully');
         logger.info(`📍 Environment: ${this.environment}`);
         logger.info(`🌐 Server running on port ${this.port}`);
         logger.info(`🔗 API Base URL: http://localhost:${this.port}/api/v1`);

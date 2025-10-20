@@ -135,12 +135,12 @@ async function startServer() {
     // Start Express server
     const server = app.listen(config.server.port, config.server.host, () => {
       console.log('\n🚀 Authentication Service Started');
-      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
       console.log(`Environment: ${config.env}`);
       console.log(`Server: http://${config.server.host}:${config.server.port}`);
       console.log(`Health: http://${config.server.host}:${config.server.port}/health`);
       console.log(`API Base: http://${config.server.host}:${config.server.port}/api/auth`);
-      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+      console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
     });
 
     // Graceful shutdown

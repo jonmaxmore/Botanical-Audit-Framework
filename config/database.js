@@ -217,12 +217,12 @@ async function connectDatabase() {
         throw new Error(
           `Failed to connect to MongoDB after ${MAX_RETRY_ATTEMPTS} attempts.\n` +
             `Last error: ${error.message}\n` +
-            `\n` +
-            `Troubleshooting:\n` +
-            `1. Check if MongoDB server is running\n` +
-            `2. Verify MONGODB_URI is correct\n` +
-            `3. Check network connectivity\n` +
-            `4. Verify database user credentials\n`
+            '\n' +
+            'Troubleshooting:\n' +
+            '1. Check if MongoDB server is running\n' +
+            '2. Verify MONGODB_URI is correct\n' +
+            '3. Check network connectivity\n' +
+            '4. Verify database user credentials\n'
         );
       }
     }

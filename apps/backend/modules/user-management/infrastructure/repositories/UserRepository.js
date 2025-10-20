@@ -642,7 +642,7 @@ class UserRepository {
     if (!this.cacheService) return;
 
     try {
-      const patterns = [`user:${userId}:*`, `user:email:*:*`];
+      const patterns = [`user:${userId}:*`, 'user:email:*:*'];
 
       for (const pattern of patterns) {
         await this.cacheService.deletePattern(pattern);

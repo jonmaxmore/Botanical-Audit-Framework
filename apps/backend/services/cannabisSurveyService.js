@@ -259,9 +259,9 @@ class CannabisSurveyService {
 
       let totalScore = 0;
       let maxScore = 0;
-      let categoryScores = {};
-      let riskFactors = [];
-      let sopAdherence = {
+      const categoryScores = {};
+      const riskFactors = [];
+      const sopAdherence = {
         adoptedSOPs: [],
         complianceLevel: 0,
         gaps: [],
@@ -508,8 +508,9 @@ class CannabisSurveyService {
           priority: 'high',
           title: 'High Risk Cannabis Survey Response',
           titleTH: 'ตรวจพบความเสี่ยงสูงในแบบสำรวจกัญชา',
-          message: `Your cannabis survey response indicates high risk areas that require immediate attention`,
-          messageTH: `การตอบแบบสำรวจกัญชาของคุณพบความเสี่ยงสูงที่ต้องดำเนินการทันที`,
+          message:
+            'Your cannabis survey response indicates high risk areas that require immediate attention',
+          messageTH: 'การตอบแบบสำรวจกัญชาของคุณพบความเสี่ยงสูงที่ต้องดำเนินการทันที',
           metadata: {
             responseId: response._id,
             riskLevel: response.analytics.riskProfile.overallRisk,
@@ -547,8 +548,8 @@ class CannabisSurveyService {
       const riskTasks = response.analytics.riskProfile.riskFactors.map(risk => ({
         title: `Mitigate Cannabis Risk: ${risk.factor}`,
         titleTH: `จัดการความเสี่ยงกัญชา: ${risk.factor}`,
-        description: `Address high-risk area identified in cannabis survey`,
-        descriptionTH: `แก้ไขพื้นที่เสี่ยงสูงที่พบในแบบสำรวจกัญชา`,
+        description: 'Address high-risk area identified in cannabis survey',
+        descriptionTH: 'แก้ไขพื้นที่เสี่ยงสูงที่พบในแบบสำรวจกัญชา',
         priority: risk.severity === 'critical' ? 'urgent' : 'high',
         category: 'cannabis_compliance',
         metadata: {

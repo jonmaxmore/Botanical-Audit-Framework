@@ -49,7 +49,7 @@ class DocumentSecurityService {
       const warnings = [];
 
       // 1. File Type Validation
-      console.log(`📋 Checking file type...`);
+      console.log('📋 Checking file type...');
       securityChecks.fileTypeCheck = await this._validateFileType(
         fileBuffer,
         fileMetadata,
@@ -61,7 +61,7 @@ class DocumentSecurityService {
       }
 
       // 2. File Size Validation
-      console.log(`📏 Checking file size...`);
+      console.log('📏 Checking file size...');
       securityChecks.fileSizeCheck = await this._validateFileSize(fileMetadata, documentType);
       if (!securityChecks.fileSizeCheck.valid) {
         overallScore -= 20;
@@ -69,7 +69,7 @@ class DocumentSecurityService {
       }
 
       // 3. Virus Scanning
-      console.log(`🦠 Performing virus scan...`);
+      console.log('🦠 Performing virus scan...');
       securityChecks.virusScan = await this._performVirusScan(fileBuffer);
       if (!securityChecks.virusScan.clean) {
         overallScore = 0; // Virus = immediate failure
@@ -78,7 +78,7 @@ class DocumentSecurityService {
 
       // 4. Content Analysis (only if previous checks passed)
       if (overallScore > 0) {
-        console.log(`🔍 Analyzing content security...`);
+        console.log('🔍 Analyzing content security...');
         securityChecks.contentAnalysis = await this._analyzeContentSecurity(
           fileBuffer,
           documentType
@@ -93,7 +93,7 @@ class DocumentSecurityService {
       }
 
       // 5. Metadata Sanitization
-      console.log(`🧹 Sanitizing metadata...`);
+      console.log('🧹 Sanitizing metadata...');
       securityChecks.metadataSanitization = await this._sanitizeMetadata(fileMetadata);
       if (securityChecks.metadataSanitization.hasPrivacyRisks) {
         overallScore -= 10;
@@ -114,7 +114,7 @@ class DocumentSecurityService {
         recommendation: this._getSecurityRecommendation(overallScore, threats, warnings),
       };
     } catch (error) {
-      console.error(`❌ Security check failed:`, error);
+      console.error('❌ Security check failed:', error);
       return {
         safe: false,
         securityScore: 0,

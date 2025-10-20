@@ -43,7 +43,7 @@ class UpdateSurveyUseCase {
       );
 
       if (exists) {
-        throw new Error(`Survey already exists for this period`);
+        throw new Error('Survey already exists for this period');
       }
     }
 

@@ -207,7 +207,7 @@ router.get('/responses', checkEngine, async (req, res) => {
     const userRole = req.user.role;
 
     // Build query based on role
-    let query = {};
+    const query = {};
 
     if (userRole === 'farmer') {
       query.userId = new ObjectId(userId);
@@ -328,7 +328,7 @@ router.get('/templates', checkEngine, async (req, res) => {
   try {
     const { region } = req.query;
 
-    let query = { active: true };
+    const query = { active: true };
 
     if (region) {
       query.region = region;

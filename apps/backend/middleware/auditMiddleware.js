@@ -220,7 +220,7 @@ class AuditMiddleware {
     const descriptions = {
       login: `${user} logged in`,
       logout: `${user} logged out`,
-      user_created: `New user registered`,
+      user_created: 'New user registered',
       application_created: `${user} created new application`,
       application_viewed: `${user} viewed application`,
       application_modified: `${user} modified application`,
@@ -404,7 +404,7 @@ class AuditMiddleware {
       anomalies.push({
         type: 'privilege_escalation',
         severity: 'high',
-        details: `Non-admin user accessing admin endpoint`,
+        details: 'Non-admin user accessing admin endpoint',
         flaggedAt: new Date(),
       });
     }

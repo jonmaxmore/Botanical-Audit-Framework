@@ -133,7 +133,7 @@ const createHealthCheck = () => {
   router.get('/ready', async (req, res) => {
     try {
       let isReady = true;
-      let reasons = [];
+      const reasons = [];
 
       // Check MongoDB connection
       if (mongoose.connection.readyState !== 1) {
