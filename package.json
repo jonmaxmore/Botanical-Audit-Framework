@@ -24,7 +24,12 @@
     "clean": "turbo run clean",
     "install:all": "npm install && cd apps/backend && npm install && cd frontend-nextjs && npm install",
     "health": "node -e \"console.log('Node.js:', process.version); console.log('Platform:', process.platform);\"",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "uat:setup": "cp .env.uat.example .env.uat && echo 'Please update .env.uat with your configuration'",
+    "uat:seed": "node scripts/seed-uat-data.js",
+    "uat:test": "node scripts/run-uat-tests.js",
+    "uat:server": "NODE_ENV=uat node apps/backend/server.js",
+    "uat:all": "npm run uat:seed && npm run uat:server"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.0.0",
