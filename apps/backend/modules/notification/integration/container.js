@@ -23,7 +23,7 @@ const GetNotificationStatisticsUseCase = require('../application/use-cases/get-n
 
 // Infrastructure
 const MongoDBNotificationRepository = require('../infrastructure/database/MongoDBNotificationRepository');
-const EmailNotificationService = require('../infrastructure/services/EmailNotificationService');
+const EmailNotificationService = require('../infrastructure/services/email');
 
 // Presentation
 const NotificationController = require('../presentation/controllers/notification');

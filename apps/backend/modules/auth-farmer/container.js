@@ -17,8 +17,8 @@ const IUserRepository = require('./domain/interfaces/IUserRepository'); // Used 
 
 // Infrastructure
 const MongoDBUserRepository = require('./infrastructure/database/MongoDBUserRepository');
-const BcryptPasswordHasher = require('./infrastructure/security/BcryptPasswordHasher');
-const JWTService = require('./infrastructure/security/JWTService');
+const BcryptPasswordHasher = require('./infrastructure/security/password');
+const JWTService = require('./infrastructure/security/token');
 
 // Application (Use Cases)
 const RegisterUserUseCase = require('./application/use-cases/register');

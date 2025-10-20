@@ -11,7 +11,7 @@ const Document = require('../domain/entities/Document');
 
 // Infrastructure
 const MongoDBDocumentRepository = require('../infrastructure/database/MongoDBDocumentRepository');
-const LocalFileStorageService = require('../infrastructure/storage/LocalFileStorageService');
+const LocalFileStorageService = require('../infrastructure/storage/storage');
 const mongoose = require('mongoose');
 
 // Application Use Cases

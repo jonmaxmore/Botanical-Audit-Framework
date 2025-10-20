@@ -13,8 +13,8 @@ const IDTAMStaffRepository = require('./domain/interfaces/IDTAMStaffRepository')
 // Infrastructure
 const MongoDBDTAMStaffRepository = require('./infrastructure/database/MongoDBDTAMStaffRepository');
 // Reuse security services from auth-farmer
-const BcryptPasswordHasher = require('../auth-farmer/infrastructure/security/BcryptPasswordHasher');
-const JWTService = require('../auth-farmer/infrastructure/security/JWTService');
+const BcryptPasswordHasher = require('../auth-farmer/infrastructure/security/password');
+const JWTService = require('../auth-farmer/infrastructure/security/token');
 
 // Application (Use Cases)
 const CreateDTAMStaffUseCase = require('./application/use-cases/create-dtam-staff');
