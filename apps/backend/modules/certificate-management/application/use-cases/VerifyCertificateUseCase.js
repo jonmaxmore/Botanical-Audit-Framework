@@ -44,7 +44,7 @@ class VerifyCertificateUseCase {
           verificationCode,
           clientIP,
           result: 'NOT_FOUND',
-          timestamp: new Date(),
+          timestamp: new Date()
         });
 
         return {
@@ -53,8 +53,8 @@ class VerifyCertificateUseCase {
           message: 'ไม่พบใบรับรองในระบบ',
           details: {
             certificateNumber,
-            verifiedAt: new Date(),
-          },
+            verifiedAt: new Date()
+          }
         };
       }
 
@@ -66,7 +66,7 @@ class VerifyCertificateUseCase {
           clientIP,
           result: 'INVALID_CODE',
           certificateId: certificate.id,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
 
         return {
@@ -75,8 +75,8 @@ class VerifyCertificateUseCase {
           message: 'รหัสตรวจสอบไม่ถูกต้อง',
           details: {
             certificateNumber,
-            verifiedAt: new Date(),
-          },
+            verifiedAt: new Date()
+          }
         };
       }
 
@@ -93,7 +93,7 @@ class VerifyCertificateUseCase {
         clientIP,
         result: validationResult.status,
         certificateId: certificate.id,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       // 6. ส่งผลการตรวจสอบ
@@ -113,12 +113,12 @@ class VerifyCertificateUseCase {
             issuedDate: certificate.issuedDate,
             expiryDate: certificate.expiryDate,
             status: certificate.status,
-            verificationCount: certificate.verificationCount,
+            verificationCount: certificate.verificationCount
           },
           details: {
             verifiedAt: new Date(),
-            daysUntilExpiry: this._calculateDaysUntilExpiry(certificate.expiryDate),
-          },
+            daysUntilExpiry: this._calculateDaysUntilExpiry(certificate.expiryDate)
+          }
         };
       } else {
         console.log(
@@ -133,12 +133,12 @@ class VerifyCertificateUseCase {
             certificateNumber: certificate.certificateNumber,
             status: certificate.status,
             farmerName: certificate.farmerName,
-            farmName: certificate.farmName,
+            farmName: certificate.farmName
           },
           details: {
             verifiedAt: new Date(),
-            ...validationResult.details,
-          },
+            ...validationResult.details
+          }
         };
       }
     } catch (error) {
@@ -151,7 +151,7 @@ class VerifyCertificateUseCase {
         clientIP,
         result: 'ERROR',
         error: error.message,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       throw error;
@@ -167,65 +167,65 @@ class VerifyCertificateUseCase {
 
     // ตรวจสอบสถานะ
     switch (certificate.status) {
-      case 'ACTIVE':
-        // ตรวจสอบว่าหมดอายุหรือยัง
-        if (expiryDate < now) {
-          return {
-            isValid: false,
-            status: 'EXPIRED',
-            message: 'ใบรับรองหมดอายุแล้ว',
-            details: {
-              expiredDate: expiryDate,
-              expiredDays: Math.ceil((now - expiryDate) / (1000 * 60 * 60 * 24)),
-            },
-          };
-        }
+    case 'ACTIVE':
+      // ตรวจสอบว่าหมดอายุหรือยัง
+      if (expiryDate < now) {
+        return {
+          isValid: false,
+          status: 'EXPIRED',
+          message: 'ใบรับรองหมดอายุแล้ว',
+          details: {
+            expiredDate: expiryDate,
+            expiredDays: Math.ceil((now - expiryDate) / (1000 * 60 * 60 * 24))
+          }
+        };
+      }
 
-        // ตรวจสอบว่าใกล้หมดอายุหรือไม่
-        const daysUntilExpiry = this._calculateDaysUntilExpiry(expiryDate);
-        if (daysUntilExpiry <= 30) {
-          return {
-            isValid: true,
-            status: 'VALID_EXPIRING_SOON',
-            message: `ใบรับรองใช้งานได้ แต่จะหมดอายุใน ${daysUntilExpiry} วัน`,
-            details: { daysUntilExpiry },
-          };
-        }
-
+      // ตรวจสอบว่าใกล้หมดอายุหรือไม่
+      const daysUntilExpiry = this._calculateDaysUntilExpiry(expiryDate);
+      if (daysUntilExpiry <= 30) {
         return {
           isValid: true,
-          status: 'VALID',
-          message: 'ใบรับรองถูกต้องและใช้งานได้',
+          status: 'VALID_EXPIRING_SOON',
+          message: `ใบรับรองใช้งานได้ แต่จะหมดอายุใน ${daysUntilExpiry} วัน`,
+          details: { daysUntilExpiry }
         };
+      }
 
-      case 'REVOKED':
-        return {
-          isValid: false,
-          status: 'REVOKED',
-          message: 'ใบรับรองถูกยกเลิกแล้ว',
-          details: {
-            revokedDate: certificate.revocationInfo?.revokedAt,
-            revokedReason: certificate.revocationInfo?.reason,
-          },
-        };
+      return {
+        isValid: true,
+        status: 'VALID',
+        message: 'ใบรับรองถูกต้องและใช้งานได้'
+      };
 
-      case 'RENEWED':
-        return {
-          isValid: false,
-          status: 'RENEWED',
-          message: 'ใบรับรองได้ถูกต่ออายุแล้ว กรุณาใช้ใบรับรองฉบับใหม่',
-          details: {
-            renewedDate: certificate.renewalInfo?.renewedAt,
-            newCertificateId: certificate.renewalInfo?.newCertificateId,
-          },
-        };
+    case 'REVOKED':
+      return {
+        isValid: false,
+        status: 'REVOKED',
+        message: 'ใบรับรองถูกยกเลิกแล้ว',
+        details: {
+          revokedDate: certificate.revocationInfo?.revokedAt,
+          revokedReason: certificate.revocationInfo?.reason
+        }
+      };
 
-      default:
-        return {
-          isValid: false,
-          status: 'INVALID',
-          message: `สถานะใบรับรองไม่ถูกต้อง: ${certificate.status}`,
-        };
+    case 'RENEWED':
+      return {
+        isValid: false,
+        status: 'RENEWED',
+        message: 'ใบรับรองได้ถูกต่ออายุแล้ว กรุณาใช้ใบรับรองฉบับใหม่',
+        details: {
+          renewedDate: certificate.renewalInfo?.renewedAt,
+          newCertificateId: certificate.renewalInfo?.newCertificateId
+        }
+      };
+
+    default:
+      return {
+        isValid: false,
+        status: 'INVALID',
+        message: `สถานะใบรับรองไม่ถูกต้อง: ${certificate.status}`
+      };
     }
   }
 

@@ -22,14 +22,14 @@ class EnrollmentDTO {
         currentModuleId: enrollment.progress.currentModuleId,
         currentLessonId: enrollment.progress.currentLessonId,
         progressPercentage: enrollment.progress.progressPercentage,
-        totalTimeSpentMinutes: enrollment.progress.totalTimeSpentMinutes,
+        totalTimeSpentMinutes: enrollment.progress.totalTimeSpentMinutes
       },
 
       assessments: enrollment.assessments.map(a => ({
         assessmentId: a.assessmentId,
         score: a.score,
         timeSpentMinutes: a.timeSpentMinutes,
-        submittedAt: a.submittedAt,
+        submittedAt: a.submittedAt
       })),
 
       finalScore: enrollment.finalScore,
@@ -59,7 +59,7 @@ class EnrollmentDTO {
       hasFailed: enrollment.hasFailed(),
       isExpired: enrollment.isExpired(),
 
-      notes: enrollment.notes,
+      notes: enrollment.notes
     };
   }
 
@@ -86,7 +86,7 @@ class EnrollmentDTO {
       completedAt: enrollment.completedAt,
       lastAccessedAt: enrollment.lastAccessedAt,
 
-      daysActive: enrollment.getDaysSinceEnrollment(),
+      daysActive: enrollment.getDaysSinceEnrollment()
     };
   }
 
@@ -100,7 +100,7 @@ class EnrollmentDTO {
       status: enrollment.status,
       progressPercentage: enrollment.progress.progressPercentage,
       hasPassed: enrollment.hasPassed(),
-      isActive: enrollment.isActive(),
+      isActive: enrollment.isActive()
     };
   }
 
@@ -111,7 +111,7 @@ class EnrollmentDTO {
     return {
       success: true,
       message,
-      data,
+      data
     };
   }
 
@@ -122,7 +122,7 @@ class EnrollmentDTO {
     return {
       success: false,
       message,
-      errors,
+      errors
     };
   }
 }

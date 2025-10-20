@@ -15,7 +15,7 @@ module.exports = {
   hashPassword: auth.hashPassword,
   comparePassword: auth.comparePassword,
   extractUserIdFromToken: auth.extractUserIdFromToken,
-  JWT_CONFIG: auth.JWT_CONFIG,
+  JWT_CONFIG: auth.JWT_CONFIG
 };
 
 // Export individual functions for convenience

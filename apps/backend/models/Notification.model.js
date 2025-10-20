@@ -15,14 +15,14 @@ const NotificationSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
 
     // User reference
     userId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     // Notification type
@@ -41,9 +41,9 @@ const NotificationSchema = new mongoose.Schema(
         'inspection_completed',
         'certificate_issued',
         'application_rejected',
-        'system_alert',
+        'system_alert'
       ],
-      index: true,
+      index: true
     },
 
     // Priority level
@@ -52,43 +52,43 @@ const NotificationSchema = new mongoose.Schema(
       required: true,
       enum: ['low', 'medium', 'high', 'critical'],
       default: 'medium',
-      index: true,
+      index: true
     },
 
     // Notification content
     title: {
       type: String,
-      required: true,
+      required: true
     },
 
     message: {
       type: String,
-      required: true,
+      required: true
     },
 
     // Related data
     data: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     // Application reference (optional)
     applicationId: {
       type: String,
       default: null,
-      index: true,
+      index: true
     },
 
     // Action URL (optional)
     actionUrl: {
       type: String,
-      default: null,
+      default: null
     },
 
     // Action label (optional)
     actionLabel: {
       type: String,
-      default: null,
+      default: null
     },
 
     // Read status
@@ -96,41 +96,41 @@ const NotificationSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
       default: false,
-      index: true,
+      index: true
     },
 
     readAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Delivery status
     delivered: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     deliveredAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Metadata
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
-    },
+      index: true
+    }
   },
   {
     timestamps: { createdAt: true, updatedAt: false },
-    collection: 'notifications',
+    collection: 'notifications'
   }
 );
 
@@ -141,19 +141,19 @@ NotificationSchema.index({ userId: 1, priority: 1 });
 NotificationSchema.index({ read: 1, createdAt: -1 });
 
 // Virtual for notification age (in hours)
-NotificationSchema.virtual('ageInHours').get(function () {
+NotificationSchema.virtual('ageInHours').get(function() {
   const now = new Date();
   const created = this.createdAt;
   return Math.floor((now - created) / (1000 * 60 * 60));
 });
 
 // Virtual for is new (less than 24 hours old)
-NotificationSchema.virtual('isNew').get(function () {
+NotificationSchema.virtual('isNew').get(function() {
   return this.ageInHours < 24;
 });
 
 // Instance method: Mark as read
-NotificationSchema.methods.markAsRead = function () {
+NotificationSchema.methods.markAsRead = function() {
   if (!this.read) {
     this.read = true;
     this.readAt = new Date();
@@ -163,7 +163,7 @@ NotificationSchema.methods.markAsRead = function () {
 };
 
 // Instance method: Mark as delivered
-NotificationSchema.methods.markAsDelivered = function () {
+NotificationSchema.methods.markAsDelivered = function() {
   if (!this.delivered) {
     this.delivered = true;
     this.deliveredAt = new Date();
@@ -173,41 +173,41 @@ NotificationSchema.methods.markAsDelivered = function () {
 };
 
 // Static method: Find unread by user
-NotificationSchema.statics.findUnreadByUser = function (userId, limit = 50) {
+NotificationSchema.statics.findUnreadByUser = function(userId, limit = 50) {
   return this.find({ userId, read: false }).sort({ createdAt: -1 }).limit(limit);
 };
 
 // Static method: Count unread by user
-NotificationSchema.statics.countUnreadByUser = function (userId) {
+NotificationSchema.statics.countUnreadByUser = function(userId) {
   return this.countDocuments({ userId, read: false });
 };
 
 // Static method: Mark all as read for user
-NotificationSchema.statics.markAllAsReadForUser = function (userId) {
+NotificationSchema.statics.markAllAsReadForUser = function(userId) {
   return this.updateMany(
     { userId, read: false },
     {
       $set: {
         read: true,
-        readAt: new Date(),
-      },
+        readAt: new Date()
+      }
     }
   );
 };
 
 // Static method: Delete old read notifications
-NotificationSchema.statics.deleteOldRead = function (daysOld = 30) {
+NotificationSchema.statics.deleteOldRead = function(daysOld = 30) {
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - daysOld);
 
   return this.deleteMany({
     read: true,
-    readAt: { $lte: cutoffDate },
+    readAt: { $lte: cutoffDate }
   });
 };
 
 // Static method: Get user statistics
-NotificationSchema.statics.getUserStatistics = function (userId) {
+NotificationSchema.statics.getUserStatistics = function(userId) {
   return this.aggregate([
     { $match: { userId } },
     {
@@ -215,42 +215,42 @@ NotificationSchema.statics.getUserStatistics = function (userId) {
         _id: null,
         total: { $sum: 1 },
         unread: {
-          $sum: { $cond: [{ $eq: ['$read', false] }, 1, 0] },
+          $sum: { $cond: [{ $eq: ['$read', false] }, 1, 0] }
         },
         byType: {
           $push: {
             type: '$type',
-            read: '$read',
-          },
+            read: '$read'
+          }
         },
         byPriority: {
           $push: {
             priority: '$priority',
-            read: '$read',
-          },
-        },
-      },
-    },
+            read: '$read'
+          }
+        }
+      }
+    }
   ]);
 };
 
 // Static method: Create notification with auto-generated ID
-NotificationSchema.statics.createNotification = function (data) {
+NotificationSchema.statics.createNotification = function(data) {
   const notificationId = `NOTIF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   return this.create({
     notificationId,
     ...data,
-    createdAt: new Date(),
+    createdAt: new Date()
   });
 };
 
 // Static method: Create multiple notifications
-NotificationSchema.statics.createMany = function (notificationsData) {
+NotificationSchema.statics.createMany = function(notificationsData) {
   const notifications = notificationsData.map(data => ({
     notificationId: `NOTIF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     ...data,
     read: false,
-    createdAt: new Date(),
+    createdAt: new Date()
   }));
 
   return this.insertMany(notifications);

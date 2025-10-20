@@ -45,7 +45,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     auditService,
     cacheService,
     notificationService,
-    logger,
+    logger
   }) {
     super();
 
@@ -70,25 +70,25 @@ class GovernmentApiIntegrationService extends EventEmitter {
           farmVerification: '/farm/verify',
           certificationSubmit: '/certification/submit',
           certificationStatus: '/certification/status',
-          complianceReport: '/compliance/report',
+          complianceReport: '/compliance/report'
         },
         authentication: {
           type: 'API_KEY_AND_OAUTH2',
           apiKeyHeader: 'X-MOAC-API-Key',
           oauthEndpoint: '/oauth/token',
-          scope: 'farm_management certification_authority',
+          scope: 'farm_management certification_authority'
         },
         rateLimit: {
           requestsPerMinute: 60,
           burstLimit: 10,
-          backoffStrategy: 'exponential',
+          backoffStrategy: 'exponential'
         },
         timeout: 30000,
         retryConfig: {
           maxRetries: 3,
           retryDelay: 2000,
-          retryableErrors: ['ECONNRESET', 'ETIMEDOUT', '503', '502'],
-        },
+          retryableErrors: ['ECONNRESET', 'ETIMEDOUT', '503', '502']
+        }
       },
 
       DOA: {
@@ -99,25 +99,25 @@ class GovernmentApiIntegrationService extends EventEmitter {
           qualityAssessment: '/quality/assess',
           inspectionSchedule: '/inspection/schedule',
           inspectionReport: '/inspection/report',
-          complianceCheck: '/compliance/check',
+          complianceCheck: '/compliance/check'
         },
         authentication: {
           type: 'MUTUAL_TLS',
           clientCertPath: process.env.DOA_CLIENT_CERT_PATH,
           clientKeyPath: process.env.DOA_CLIENT_KEY_PATH,
-          caCertPath: process.env.DOA_CA_CERT_PATH,
+          caCertPath: process.env.DOA_CA_CERT_PATH
         },
         rateLimit: {
           requestsPerMinute: 30,
           burstLimit: 5,
-          backoffStrategy: 'linear',
+          backoffStrategy: 'linear'
         },
         timeout: 45000,
         retryConfig: {
           maxRetries: 2,
           retryDelay: 5000,
-          retryableErrors: ['ECONNRESET', 'ETIMEDOUT'],
-        },
+          retryableErrors: ['ECONNRESET', 'ETIMEDOUT']
+        }
       },
 
       FDA: {
@@ -127,27 +127,27 @@ class GovernmentApiIntegrationService extends EventEmitter {
           productRegistration: '/product/register',
           safetyCompliance: '/safety/compliance',
           qualityControl: '/quality/control',
-          marketAuthorization: '/market/authorization',
+          marketAuthorization: '/market/authorization'
         },
         authentication: {
           type: 'JWT_TOKEN',
           tokenEndpoint: '/auth/token',
           credentials: {
             clientId: process.env.FDA_CLIENT_ID,
-            clientSecret: process.env.FDA_CLIENT_SECRET,
-          },
+            clientSecret: process.env.FDA_CLIENT_SECRET
+          }
         },
         rateLimit: {
           requestsPerMinute: 45,
           burstLimit: 8,
-          backoffStrategy: 'exponential',
+          backoffStrategy: 'exponential'
         },
         timeout: 25000,
         retryConfig: {
           maxRetries: 3,
           retryDelay: 1500,
-          retryableErrors: ['ECONNRESET', 'ETIMEDOUT', '503'],
-        },
+          retryableErrors: ['ECONNRESET', 'ETIMEDOUT', '503']
+        }
       },
 
       DGA: {
@@ -157,7 +157,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
           citizenVerification: '/citizen/verify',
           digitalIdentity: '/identity/validate',
           eKYC: '/ekyc/process',
-          businessRegistration: '/business/verify',
+          businessRegistration: '/business/verify'
         },
         authentication: {
           type: 'OAUTH2_CLIENT_CREDENTIALS',
@@ -165,20 +165,20 @@ class GovernmentApiIntegrationService extends EventEmitter {
           credentials: {
             clientId: process.env.DGA_CLIENT_ID,
             clientSecret: process.env.DGA_CLIENT_SECRET,
-            scope: 'citizen_verification digital_identity',
-          },
+            scope: 'citizen_verification digital_identity'
+          }
         },
         rateLimit: {
           requestsPerMinute: 100,
           burstLimit: 20,
-          backoffStrategy: 'exponential',
+          backoffStrategy: 'exponential'
         },
         timeout: 15000,
         retryConfig: {
           maxRetries: 2,
           retryDelay: 1000,
-          retryableErrors: ['ECONNRESET', 'ETIMEDOUT', '429'],
-        },
+          retryableErrors: ['ECONNRESET', 'ETIMEDOUT', '429']
+        }
       },
 
       NATIONAL_ID: {
@@ -187,24 +187,24 @@ class GovernmentApiIntegrationService extends EventEmitter {
         endpoints: {
           citizenLookup: '/citizen/lookup',
           identityVerification: '/identity/verify',
-          addressVerification: '/address/verify',
+          addressVerification: '/address/verify'
         },
         authentication: {
           type: 'HMAC_SIGNATURE',
           secretKey: process.env.NATIONAL_ID_SECRET_KEY,
-          algorithm: 'sha256',
+          algorithm: 'sha256'
         },
         rateLimit: {
           requestsPerMinute: 120,
           burstLimit: 15,
-          backoffStrategy: 'linear',
+          backoffStrategy: 'linear'
         },
         timeout: 10000,
         retryConfig: {
           maxRetries: 1,
           retryDelay: 500,
-          retryableErrors: ['ECONNRESET', 'ETIMEDOUT'],
-        },
+          retryableErrors: ['ECONNRESET', 'ETIMEDOUT']
+        }
       },
 
       LAND_DEPT: {
@@ -214,25 +214,25 @@ class GovernmentApiIntegrationService extends EventEmitter {
           landVerification: '/land/verify',
           ownershipCheck: '/ownership/check',
           titleDeedValidation: '/deed/validate',
-          landUsePermit: '/permit/landuse',
+          landUsePermit: '/permit/landuse'
         },
         authentication: {
           type: 'API_KEY',
           apiKeyHeader: 'X-DOL-API-Key',
-          apiKey: process.env.LAND_DEPT_API_KEY,
+          apiKey: process.env.LAND_DEPT_API_KEY
         },
         rateLimit: {
           requestsPerMinute: 40,
           burstLimit: 6,
-          backoffStrategy: 'exponential',
+          backoffStrategy: 'exponential'
         },
         timeout: 35000,
         retryConfig: {
           maxRetries: 2,
           retryDelay: 3000,
-          retryableErrors: ['ECONNRESET', 'ETIMEDOUT', '503'],
-        },
-      },
+          retryableErrors: ['ECONNRESET', 'ETIMEDOUT', '503']
+        }
+      }
     };
 
     // Authentication tokens cache
@@ -246,7 +246,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       averageResponseTimes: {},
       rateLimitHits: 0,
       authenticationFailures: 0,
-      governmentSystemStatus: {},
+      governmentSystemStatus: {}
     };
 
     // Circuit breaker configurations
@@ -286,23 +286,23 @@ class GovernmentApiIntegrationService extends EventEmitter {
           citizenId: identityData.citizenId,
           firstName: identityData.firstName,
           lastName: identityData.lastName,
-          dateOfBirth: identityData.dateOfBirth,
+          dateOfBirth: identityData.dateOfBirth
         }),
 
         // DGA digital identity verification
         this._callGovernmentApi('DGA', 'citizenVerification', {
           citizenId: identityData.citizenId,
           verificationType: 'ENHANCED',
-          includePhoto: options.includePhoto || false,
+          includePhoto: options.includePhoto || false
         }),
 
         // Address verification if provided
         identityData.address
           ? this._callGovernmentApi('NATIONAL_ID', 'addressVerification', {
-              citizenId: identityData.citizenId,
-              address: identityData.address,
-            })
-          : Promise.resolve(null),
+            citizenId: identityData.citizenId,
+            address: identityData.address
+          })
+          : Promise.resolve(null)
       ];
 
       // Execute verifications
@@ -321,10 +321,10 @@ class GovernmentApiIntegrationService extends EventEmitter {
         citizenId: identityData.citizenId,
         verificationResults: verificationResults.map(r => ({
           status: r.status,
-          success: r.status === 'fulfilled',
+          success: r.status === 'fulfilled'
         })),
         verificationReport,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       // Update performance metrics
@@ -337,7 +337,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       return {
         success: true,
         data: verificationReport,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -351,7 +351,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         operationId,
         citizenId: identityData?.citizenId,
         error: error.message,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       throw error;
@@ -379,7 +379,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         titleDeedNumber: landData.titleDeedNumber,
         landParcelId: landData.landParcelId,
         ownerCitizenId: ownerData.citizenId,
-        ownerName: `${ownerData.firstName} ${ownerData.lastName}`,
+        ownerName: `${ownerData.firstName} ${ownerData.lastName}`
       });
 
       // Title deed validation
@@ -389,7 +389,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         {
           titleDeedNumber: landData.titleDeedNumber,
           issueDate: landData.issueDate,
-          validateChain: true,
+          validateChain: true
         }
       );
 
@@ -398,7 +398,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       if (landData.landUseType && landData.landUseType !== 'AGRICULTURE') {
         landUsePermit = await this._callGovernmentApi('LAND_DEPT', 'landUsePermit', {
           titleDeedNumber: landData.titleDeedNumber,
-          requestedUse: landData.landUseType,
+          requestedUse: landData.landUseType
         });
       }
 
@@ -409,7 +409,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         landUsePermit,
         landData,
         ownerData,
-        operationId,
+        operationId
       });
 
       // Create audit record
@@ -418,7 +418,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         titleDeedNumber: landData.titleDeedNumber,
         ownerCitizenId: ownerData.citizenId,
         verificationReport,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       this.logger.info(
@@ -428,7 +428,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       return {
         success: true,
         data: verificationReport,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -440,7 +440,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         operationId,
         titleDeedNumber: landData?.titleDeedNumber,
         error: error.message,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       throw error;
@@ -467,7 +467,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       const transformedData = await this.dataTransformService.transformForGovernmentSubmission({
         applicationData,
         documentsData,
-        targetSystems: ['MOAC', 'DOA', 'FDA'],
+        targetSystems: ['MOAC', 'DOA', 'FDA']
       });
 
       // Parallel submission to multiple government systems
@@ -481,7 +481,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         // FDA - Product safety and quality (if applicable)
         applicationData.productType !== 'CULTIVATION_ONLY'
           ? this._callGovernmentApi('FDA', 'safetyCompliance', transformedData.fda)
-          : Promise.resolve(null),
+          : Promise.resolve(null)
       ];
 
       // Execute submissions
@@ -492,7 +492,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         submissionResults,
         applicationData,
         transformedData,
-        operationId,
+        operationId
       });
 
       // Schedule follow-up tracking
@@ -506,10 +506,10 @@ class GovernmentApiIntegrationService extends EventEmitter {
         applicationId: applicationData.applicationId,
         submissionResults: submissionResults.map(r => ({
           status: r.status,
-          success: r.status === 'fulfilled',
+          success: r.status === 'fulfilled'
         })),
         submissionReport,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       // Send submission notifications
@@ -522,7 +522,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       return {
         success: true,
         data: submissionReport,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -534,7 +534,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         operationId,
         applicationId: applicationData?.applicationId,
         error: error.message,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       throw error;
@@ -560,7 +560,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       if (applicationTrackingData.moacReferenceId) {
         statusPromises.push(
           this._callGovernmentApi('MOAC', 'certificationStatus', {
-            referenceId: applicationTrackingData.moacReferenceId,
+            referenceId: applicationTrackingData.moacReferenceId
           })
         );
       }
@@ -568,7 +568,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       if (applicationTrackingData.doaReferenceId) {
         statusPromises.push(
           this._callGovernmentApi('DOA', 'complianceCheck', {
-            referenceId: applicationTrackingData.doaReferenceId,
+            referenceId: applicationTrackingData.doaReferenceId
           })
         );
       }
@@ -576,7 +576,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       if (applicationTrackingData.fdaReferenceId) {
         statusPromises.push(
           this._callGovernmentApi('FDA', 'marketAuthorization', {
-            referenceId: applicationTrackingData.fdaReferenceId,
+            referenceId: applicationTrackingData.fdaReferenceId
           })
         );
       }
@@ -588,7 +588,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       const statusReport = await this._processStatusResults({
         statusResults,
         applicationTrackingData,
-        operationId,
+        operationId
       });
 
       // Update application tracking data if needed
@@ -601,7 +601,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         operationId,
         applicationId: applicationTrackingData.applicationId,
         statusReport,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       this.logger.info(
@@ -611,7 +611,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       return {
         success: true,
         data: statusReport,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -643,7 +643,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       const reportData = await this.dataTransformService.transformForComplianceReport({
         complianceData,
         reportType,
-        targetAuthority: 'MOAC',
+        targetAuthority: 'MOAC'
       });
 
       // Submit report to government system
@@ -651,7 +651,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         applicationId,
         reportType,
         reportData,
-        submissionTimestamp: new Date().toISOString(),
+        submissionTimestamp: new Date().toISOString()
       });
 
       // Process submission response
@@ -663,7 +663,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         reportType,
         applicationId,
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       };
 
       // Create audit record
@@ -671,7 +671,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         operationId,
         applicationId,
         reportResult,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       this.logger.info(
@@ -681,7 +681,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       return {
         success: true,
         data: reportResult,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -703,7 +703,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         rateLimitStatus: {},
         performanceMetrics: { ...this.performanceMetrics },
         circuitBreakerStatus: {},
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       // Check each government endpoint
@@ -713,13 +713,13 @@ class GovernmentApiIntegrationService extends EventEmitter {
           systemHealth.governmentEndpoints[systemName] = {
             status: healthCheck.status,
             responseTime: healthCheck.responseTime,
-            lastChecked: new Date(),
+            lastChecked: new Date()
           };
         } catch (error) {
           systemHealth.governmentEndpoints[systemName] = {
             status: 'ERROR',
             error: error.message,
-            lastChecked: new Date(),
+            lastChecked: new Date()
           };
         }
       }
@@ -728,7 +728,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       for (const systemName of Object.keys(this.governmentEndpoints)) {
         systemHealth.authenticationStatus[systemName] = {
           hasValidToken: this.authTokens.has(systemName),
-          tokenExpiry: this.authTokens.get(systemName)?.expiry || null,
+          tokenExpiry: this.authTokens.get(systemName)?.expiry || null
         };
       }
 
@@ -748,7 +748,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
 
       return {
         success: true,
-        data: systemHealth,
+        data: systemHealth
       };
     } catch (error) {
       this.logger.error('[GovernmentApiIntegration] Health check failed:', error);
@@ -758,8 +758,8 @@ class GovernmentApiIntegrationService extends EventEmitter {
         error: error.message,
         data: {
           overallStatus: 'ERROR',
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       };
     }
   }
@@ -777,7 +777,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
         isOpen: false,
         failureCount: 0,
         lastFailureTime: null,
-        timeout: 60000, // 1 minute
+        timeout: 60000 // 1 minute
       });
     }
 
@@ -796,7 +796,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       averageResponseTimes: {},
       rateLimitHits: 0,
       authenticationFailures: 0,
-      governmentSystemStatus: {},
+      governmentSystemStatus: {}
     };
 
     // Initialize response times for each system
@@ -808,7 +808,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
 
   _setupTokenRefresh() {
     // Setup periodic token refresh for OAuth2 systems
-    setInterval(async () => {
+    setInterval(async() => {
       for (const [systemName, config] of Object.entries(this.governmentEndpoints)) {
         if (config.authentication.type.includes('OAUTH')) {
           await this._refreshAuthToken(systemName);
@@ -848,11 +848,11 @@ class GovernmentApiIntegrationService extends EventEmitter {
       headers: {
         'Content-Type': 'application/json',
         'User-Agent': 'GACP-Platform/1.0',
-        ...authHeaders,
+        ...authHeaders
       },
       data,
       timeout: config.timeout,
-      validateStatus: status => status < 500,
+      validateStatus: status => status < 500
     };
 
     const startTime = Date.now();
@@ -888,39 +888,39 @@ class GovernmentApiIntegrationService extends EventEmitter {
     const authType = config.authentication.type;
 
     switch (authType) {
-      case 'API_KEY':
-        return {
-          [config.authentication.apiKeyHeader]: config.authentication.apiKey,
-        };
+    case 'API_KEY':
+      return {
+        [config.authentication.apiKeyHeader]: config.authentication.apiKey
+      };
 
-      case 'API_KEY_AND_OAUTH2':
-        const oauthToken = await this._getOAuthToken(systemName);
-        return {
-          [config.authentication.apiKeyHeader]: process.env[`${systemName}_API_KEY`],
-          Authorization: `Bearer ${oauthToken}`,
-        };
+    case 'API_KEY_AND_OAUTH2':
+      const oauthToken = await this._getOAuthToken(systemName);
+      return {
+        [config.authentication.apiKeyHeader]: process.env[`${systemName}_API_KEY`],
+        Authorization: `Bearer ${oauthToken}`
+      };
 
-      case 'JWT_TOKEN':
-        const jwtToken = await this._getJwtToken(systemName);
-        return {
-          Authorization: `Bearer ${jwtToken}`,
-        };
+    case 'JWT_TOKEN':
+      const jwtToken = await this._getJwtToken(systemName);
+      return {
+        Authorization: `Bearer ${jwtToken}`
+      };
 
-      case 'OAUTH2_CLIENT_CREDENTIALS':
-        const clientToken = await this._getClientCredentialsToken(systemName);
-        return {
-          Authorization: `Bearer ${clientToken}`,
-        };
+    case 'OAUTH2_CLIENT_CREDENTIALS':
+      const clientToken = await this._getClientCredentialsToken(systemName);
+      return {
+        Authorization: `Bearer ${clientToken}`
+      };
 
-      case 'HMAC_SIGNATURE':
-        return this._generateHmacSignature(systemName, data);
+    case 'HMAC_SIGNATURE':
+      return this._generateHmacSignature(systemName, data);
 
-      case 'MUTUAL_TLS':
-        // Mutual TLS is handled at the HTTP client level
-        return {};
+    case 'MUTUAL_TLS':
+      // Mutual TLS is handled at the HTTP client level
+      return {};
 
-      default:
-        throw new Error(`Unsupported authentication type: ${authType}`);
+    default:
+      throw new Error(`Unsupported authentication type: ${authType}`);
     }
   }
 
@@ -973,7 +973,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     const transformedData = await this.dataTransformService.transformFromGovernmentResponse({
       data: response.data,
       systemName,
-      endpoint,
+      endpoint
     });
 
     return {
@@ -983,8 +983,8 @@ class GovernmentApiIntegrationService extends EventEmitter {
         systemName,
         endpoint,
         responseTime: response.headers['x-response-time'],
-        requestId: response.headers['x-request-id'],
-      },
+        requestId: response.headers['x-request-id']
+      }
     };
   }
 
@@ -1016,7 +1016,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
           module: 'GOVERNMENT_API_INTEGRATION',
           action,
           data,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
     } catch (error) {

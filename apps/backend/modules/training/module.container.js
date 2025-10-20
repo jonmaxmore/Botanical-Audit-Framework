@@ -85,7 +85,7 @@ function createTrainingModule(config) {
     updateProgress,
     submitFinalAssessment,
     getFarmerEnrollments,
-    getTrainingStatistics,
+    getTrainingStatistics
   };
 
   // Presentation Layer - Controller
@@ -104,13 +104,13 @@ function createTrainingModule(config) {
     services: {
       courseRepository,
       enrollmentRepository,
-      ...useCases,
+      ...useCases
     },
 
     // Domain entities (for type reference)
     entities: {
       Course,
-      Enrollment,
+      Enrollment
     },
 
     // Constants
@@ -118,8 +118,8 @@ function createTrainingModule(config) {
       COURSE_STATUS: Course.STATUS,
       COURSE_TYPE: Course.TYPE,
       COURSE_LEVEL: Course.LEVEL,
-      ENROLLMENT_STATUS: Enrollment.STATUS,
-    },
+      ENROLLMENT_STATUS: Enrollment.STATUS
+    }
   };
 }
 

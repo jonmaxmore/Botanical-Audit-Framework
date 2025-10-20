@@ -22,7 +22,7 @@ const REQUIRED_DOCUMENTS = {
     category: 'personal',
     acceptedFormats: ['pdf', 'jpg', 'png'],
     maxSizeMB: 5,
-    description: 'สำเนาบัตรประชาชนของเกษตรกรที่ชัดเจน อ่านได้ทุกตัวอักษร',
+    description: 'สำเนาบัตรประชาชนของเกษตรกรที่ชัดเจน อ่านได้ทุกตัวอักษร'
   },
 
   HOUSE_REGISTRATION: {
@@ -33,7 +33,7 @@ const REQUIRED_DOCUMENTS = {
     category: 'personal',
     acceptedFormats: ['pdf', 'jpg', 'png'],
     maxSizeMB: 5,
-    description: 'สำเนาทะเบียนบ้านของเกษตรกร',
+    description: 'สำเนาทะเบียนบ้านของเกษตรกร'
   },
 
   // เอกสารที่ดิน
@@ -45,7 +45,7 @@ const REQUIRED_DOCUMENTS = {
     category: 'land',
     acceptedFormats: ['pdf', 'jpg', 'png'],
     maxSizeMB: 10,
-    description: 'เอกสารแสดงสิทธิ์ในที่ดินที่จะปลูกกัญชา',
+    description: 'เอกสารแสดงสิทธิ์ในที่ดินที่จะปลูกกัญชา'
   },
 
   LAND_USE_PERMIT: {
@@ -56,7 +56,7 @@ const REQUIRED_DOCUMENTS = {
     category: 'land',
     acceptedFormats: ['pdf', 'jpg', 'png'],
     maxSizeMB: 5,
-    description: 'กรณีเช่าที่ดินหรือใช้ที่ดินของผู้อื่น',
+    description: 'กรณีเช่าที่ดินหรือใช้ที่ดินของผู้อื่น'
   },
 
   // แผนผังฟาร์ม
@@ -68,7 +68,7 @@ const REQUIRED_DOCUMENTS = {
     category: 'farm',
     acceptedFormats: ['pdf', 'jpg', 'png'],
     maxSizeMB: 10,
-    description: 'แผนผังแสดงขอบเขตพื้นที่ฟาร์ม พื้นที่ปลูก และสิ่งปลูกสร้าง',
+    description: 'แผนผังแสดงขอบเขตพื้นที่ฟาร์ม พื้นที่ปลูก และสิ่งปลูกสร้าง'
   },
 
   // ระบบน้ำ
@@ -80,7 +80,7 @@ const REQUIRED_DOCUMENTS = {
     category: 'infrastructure',
     acceptedFormats: ['pdf', 'jpg', 'png'],
     maxSizeMB: 5,
-    description: 'เอกสารแสดงสิทธิ์ในการใช้น้ำสำหรับการเกษตร',
+    description: 'เอกสารแสดงสิทธิ์ในการใช้น้ำสำหรับการเกษตร'
   },
 
   // ใบอนุญาตปลูกกัญชา
@@ -92,7 +92,7 @@ const REQUIRED_DOCUMENTS = {
     category: 'permit',
     acceptedFormats: ['pdf'],
     maxSizeMB: 5,
-    description: 'ใบอนุญาตปลูกกัญชาที่ยังไม่หมดอายุ',
+    description: 'ใบอนุญาตปลูกกัญชาที่ยังไม่หมดอายุ'
   },
 
   // แผนการปลูก
@@ -104,7 +104,7 @@ const REQUIRED_DOCUMENTS = {
     category: 'plan',
     acceptedFormats: ['pdf', 'doc', 'docx'],
     maxSizeMB: 10,
-    description: 'แผนการปลูก การใช้ปุ๋ย สารกำจัดศัตรูพืช และการจัดการฟาร์ม',
+    description: 'แผนการปลูก การใช้ปุ๋ย สารกำจัดศัตรูพืช และการจัดการฟาร์ม'
   },
 
   // การฝึกอบรม
@@ -116,8 +116,8 @@ const REQUIRED_DOCUMENTS = {
     category: 'training',
     acceptedFormats: ['pdf', 'jpg', 'png'],
     maxSizeMB: 5,
-    description: 'ใบรับรองการอบรมหลักเกณฑ์ GACP',
-  },
+    description: 'ใบรับรองการอบรมหลักเกณฑ์ GACP'
+  }
 };
 
 // Checklist สำหรับการตรวจสอบเอกสาร
@@ -129,21 +129,21 @@ const DOCUMENT_CHECKLIST = {
         code: 'all_required_docs',
         question: 'มีเอกสารที่จำเป็นทั้งหมดหรือไม่?',
         weight: 20,
-        critical: true,
+        critical: true
       },
       {
         code: 'docs_readable',
         question: 'เอกสารชัดเจน อ่านได้ทุกตัวอักษรหรือไม่?',
         weight: 15,
-        critical: true,
+        critical: true
       },
       {
         code: 'docs_current',
         question: 'เอกสารยังไม่หมดอายุหรือไม่?',
         weight: 15,
-        critical: true,
-      },
-    ],
+        critical: true
+      }
+    ]
   },
 
   VALIDITY: {
@@ -153,21 +153,21 @@ const DOCUMENT_CHECKLIST = {
         code: 'id_matches',
         question: 'ข้อมูลในบัตรประชาชนตรงกับใบสมัครหรือไม่?',
         weight: 10,
-        critical: false,
+        critical: false
       },
       {
         code: 'land_ownership',
         question: 'สิทธิ์ในที่ดินถูกต้อง ชัดเจนหรือไม่?',
         weight: 15,
-        critical: true,
+        critical: true
       },
       {
         code: 'cannabis_permit_valid',
         question: 'ใบอนุญาตปลูกกัญชายังไม่หมดอายุหรือไม่?',
         weight: 20,
-        critical: true,
-      },
-    ],
+        critical: true
+      }
+    ]
   },
 
   COMPLIANCE: {
@@ -177,16 +177,16 @@ const DOCUMENT_CHECKLIST = {
         code: 'farm_map_accurate',
         question: 'แผนผังฟาร์มสอดคล้องกับพื้นที่จริงหรือไม่?',
         weight: 10,
-        critical: false,
+        critical: false
       },
       {
         code: 'cultivation_plan_feasible',
         question: 'แผนการปลูกเป็นไปได้และสมเหตุสมผลหรือไม่?',
         weight: 15,
-        critical: false,
-      },
-    ],
-  },
+        critical: false
+      }
+    ]
+  }
 };
 
 class GACPDocumentReviewSystem extends EventEmitter {
@@ -210,7 +210,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
       category: doc.category,
       acceptedFormats: doc.acceptedFormats,
       maxSizeMB: doc.maxSizeMB,
-      description: doc.description,
+      description: doc.description
     }));
   }
 
@@ -224,7 +224,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
       warnings: [],
       missingRequired: [],
       invalidFormats: [],
-      oversizedFiles: [],
+      oversizedFiles: []
     };
 
     // ตรวจสอบเอกสารที่จำเป็น
@@ -233,7 +233,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
         validation.missingRequired.push({
           code: docSpec.code,
           name: docSpec.name,
-          category: docSpec.category,
+          category: docSpec.category
         });
         validation.valid = false;
       }
@@ -248,7 +248,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
             code: docSpec.code,
             name: docSpec.name,
             submitted: doc.format,
-            accepted: docSpec.acceptedFormats,
+            accepted: docSpec.acceptedFormats
           });
           validation.valid = false;
         }
@@ -259,7 +259,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
             code: docSpec.code,
             name: docSpec.name,
             sizeMB: Math.round((doc.sizeBytes / (1024 * 1024)) * 10) / 10,
-            maxSizeMB: docSpec.maxSizeMB,
+            maxSizeMB: docSpec.maxSizeMB
           });
           validation.valid = false;
         }
@@ -286,65 +286,64 @@ class GACPDocumentReviewSystem extends EventEmitter {
    * เริ่มกระบวนการตรวจสอบเอกสาร
    */
   async startDocumentReview(applicationId, reviewerId) {
-    try {
-      // ดึงข้อมูลใบสมัคร
-      const application = await this.getApplication(applicationId);
+    // ดึงข้อมูลใบสมัคร
+    const application = await this.getApplication(applicationId);
+    console.log(
+      `Starting document review for application ${applicationId} by reviewer ${reviewerId}`
+    );
 
-      if (!application.documents) {
-        throw new Error('ไม่พบเอกสารในใบสมัคร');
-      }
-
-      // ตรวจสอบความครบถ้วนเบื้องต้น
-      const validation = this.validateDocumentSubmission(application.documents);
-
-      if (!validation.valid) {
-        // ส่งกลับให้แก้ไขเอกสารทันที
-        return await this.rejectDocuments(applicationId, reviewerId, {
-          reason: 'เอกสารไม่ครบถ้วนหรือไม่ถูกต้อง',
-          findings: validation.errors,
-          details: {
-            missingRequired: validation.missingRequired,
-            invalidFormats: validation.invalidFormats,
-            oversizedFiles: validation.oversizedFiles,
-          },
-          autoReject: true,
-        });
-      }
-
-      // สร้าง review session
-      const reviewSession = {
-        sessionId: this.generateReviewSessionId(),
-        applicationId,
-        reviewerId,
-        startedAt: new Date(),
-        status: 'in_progress',
-        checklist: this.generateChecklist(),
-        findings: [],
-        score: 0,
-        documents: application.documents,
-      };
-
-      // บันทึก review session
-      await this.saveReviewSession(reviewSession);
-
-      // อัพเดตสถานะใบสมัคร
-      application.currentReviewSession = reviewSession.sessionId;
-      application.reviewSessions = application.reviewSessions || [];
-      application.reviewSessions.push(reviewSession.sessionId);
-
-      await this.saveApplication(application);
-
-      // ส่ง event
-      this.emit('review_started', {
-        applicationId,
-        reviewerId,
-        sessionId: reviewSession.sessionId,
-      });
-
-      return reviewSession;
-    } catch (error) {
-      throw error;
+    if (!application.documents) {
+      throw new Error('ไม่พบเอกสารในใบสมัคร');
     }
+
+    // ตรวจสอบความครบถ้วนเบื้องต้น
+    const validation = this.validateDocumentSubmission(application.documents);
+
+    if (!validation.valid) {
+      // ส่งกลับให้แก้ไขเอกสารทันที
+      return await this.rejectDocuments(applicationId, reviewerId, {
+        reason: 'เอกสารไม่ครบถ้วนหรือไม่ถูกต้อง',
+        findings: validation.errors,
+        details: {
+          missingRequired: validation.missingRequired,
+          invalidFormats: validation.invalidFormats,
+          oversizedFiles: validation.oversizedFiles
+        },
+        autoReject: true
+      });
+    }
+
+    // สร้าง review session
+    const reviewSession = {
+      sessionId: this.generateReviewSessionId(),
+      applicationId,
+      reviewerId,
+      startedAt: new Date(),
+      status: 'in_progress',
+      checklist: this.generateChecklist(),
+      findings: [],
+      score: 0,
+      documents: application.documents
+    };
+
+    // บันทึก review session
+    await this.saveReviewSession(reviewSession);
+
+    // อัพเดตสถานะใบสมัคร
+    application.currentReviewSession = reviewSession.sessionId;
+    application.reviewSessions = application.reviewSessions || [];
+    application.reviewSessions.push(reviewSession.sessionId);
+
+    await this.saveApplication(application);
+
+    // ส่ง event
+    this.emit('review_started', {
+      applicationId,
+      reviewerId,
+      sessionId: reviewSession.sessionId
+    });
+
+    return reviewSession;
   }
 
   /**
@@ -354,6 +353,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
     try {
       const session = await this.getReviewSession(sessionId);
       const application = await this.getApplication(session.applicationId);
+      console.log(`Processing review result for application: ${application.id}`);
 
       const { approved, findings, checklistResults, recommendedActions } = reviewResult;
 
@@ -382,7 +382,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
           score,
           checklistResults,
           recommendedActions,
-          sessionId,
+          sessionId
         });
       }
     } catch (error) {
@@ -414,8 +414,8 @@ class GACPDocumentReviewSystem extends EventEmitter {
       note: `เอกสารผ่านการตรวจสอบ คะแนน: ${reviewSession.score}%`,
       details: {
         sessionId: reviewSession.sessionId,
-        score: reviewSession.score,
-      },
+        score: reviewSession.score
+      }
     });
 
     await this.saveApplication(application);
@@ -425,7 +425,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
       applicationId,
       reviewerId,
       score: reviewSession.score,
-      sessionId: reviewSession.sessionId,
+      sessionId: reviewSession.sessionId
     });
 
     console.log(`✅ Documents approved: ${applicationId} - Score: ${reviewSession.score}%`);
@@ -455,7 +455,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
       checklistResults: rejectionDetails.checklistResults,
       recommendedActions: rejectionDetails.recommendedActions,
       sessionId: rejectionDetails.sessionId,
-      autoReject: rejectionDetails.autoReject || false,
+      autoReject: rejectionDetails.autoReject || false
     };
 
     application.documentReview.rejections.push(rejection);
@@ -475,7 +475,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
         timestamp: new Date(),
         actor: reviewerId,
         note: `เอกสารถูกปฏิเสธครบ ${this.maxRejections} ครั้ง - ต้องชำระเงินใหม่`,
-        details: rejection,
+        details: rejection
       });
 
       // ส่ง event
@@ -483,7 +483,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
         applicationId,
         reviewerId,
         rejectionCount: application.documentReview.rejectionCount,
-        requiresNewPayment: true,
+        requiresNewPayment: true
       });
 
       console.log(`❌ Documents rejected MAX: ${applicationId} - Requires new payment`);
@@ -498,7 +498,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
         timestamp: new Date(),
         actor: reviewerId,
         note: `เอกสารต้องแก้ไข (ครั้งที่ ${application.documentReview.rejectionCount}/${this.maxRejections})`,
-        details: rejection,
+        details: rejection
       });
 
       // ส่ง event
@@ -507,7 +507,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
         reviewerId,
         rejectionCount: application.documentReview.rejectionCount,
         maxRejections: this.maxRejections,
-        canRevise: true,
+        canRevise: true
       });
 
       console.log(
@@ -551,8 +551,8 @@ class GACPDocumentReviewSystem extends EventEmitter {
       note: 'ส่งเอกสารแก้ไขแล้ว - รอการตรวจสอบ',
       details: {
         revisedDocuments: Object.keys(revisedDocuments),
-        rejectionCount: application.documentReview.rejectionCount,
-      },
+        rejectionCount: application.documentReview.rejectionCount
+      }
     });
 
     await this.saveApplication(application);
@@ -562,7 +562,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
       applicationId,
       farmerId,
       revisedDocuments: Object.keys(revisedDocuments),
-      rejectionCount: application.documentReview.rejectionCount,
+      rejectionCount: application.documentReview.rejectionCount
     });
 
     console.log(`📝 Documents revised: ${applicationId} - Ready for re-review`);
@@ -582,8 +582,8 @@ class GACPDocumentReviewSystem extends EventEmitter {
           ...item,
           checked: false,
           notes: '',
-          score: 0,
-        })),
+          score: 0
+        }))
       };
     });
 
@@ -614,6 +614,8 @@ class GACPDocumentReviewSystem extends EventEmitter {
    */
   async getReviewStatistics(reviewerId = null, dateFrom = null, dateTo = null) {
     // สำหรับใช้งานจริงจะดึงจากฐานข้อมูล
+    const filters = { reviewerId, dateFrom, dateTo };
+    console.log('Getting review statistics with filters:', filters);
     const stats = {
       totalReviews: 0,
       approved: 0,
@@ -623,7 +625,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
       averageReviewTime: 0,
       commonIssues: {},
       byCategory: {},
-      byReviewer: {},
+      byReviewer: {}
     };
 
     // TODO: Implement actual statistics calculation from database
@@ -647,7 +649,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
   async getApplication(applicationId) {
     // TODO: Implement database query
     // For now, return mock data or throw error
-    throw new Error('Application not found - Database integration needed');
+    throw new Error(`Application ${applicationId} not found - Database integration needed`);
   }
 
   /**
@@ -663,7 +665,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
    */
   async getReviewSession(sessionId) {
     // TODO: Implement database query
-    throw new Error('Review session not found - Database integration needed');
+    throw new Error(`Review session ${sessionId} not found - Database integration needed`);
   }
 
   /**
@@ -712,8 +714,8 @@ class GACPDocumentReviewSystem extends EventEmitter {
         duration:
           reviewSession.completedAt && reviewSession.startedAt
             ? reviewSession.completedAt - reviewSession.startedAt
-            : null,
-      },
+            : null
+      }
     };
   }
 
@@ -751,7 +753,7 @@ class GACPDocumentReviewSystem extends EventEmitter {
         if (item.critical && !item.checked) {
           critical.push({
             question: item.question,
-            notes: item.notes,
+            notes: item.notes
           });
         }
       });
@@ -764,5 +766,5 @@ class GACPDocumentReviewSystem extends EventEmitter {
 module.exports = {
   GACPDocumentReviewSystem,
   REQUIRED_DOCUMENTS,
-  DOCUMENT_CHECKLIST,
+  DOCUMENT_CHECKLIST
 };

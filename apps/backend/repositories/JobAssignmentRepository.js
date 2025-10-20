@@ -90,7 +90,7 @@ class JobAssignmentRepository {
       return await this.collection.findOne({
         applicationId,
         role,
-        status: { $nin: ['completed', 'cancelled', 'reassigned'] },
+        status: { $nin: ['completed', 'cancelled', 'reassigned'] }
       });
     } catch (error) {
       logger.error('[JobAssignmentRepository] findByApplicationAndRole error:', error);
@@ -129,14 +129,14 @@ class JobAssignmentRepository {
       const result = await this.collection.insertOne({
         ...assignmentData,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       return {
         id: result.insertedId,
         ...assignmentData,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       };
     } catch (error) {
       logger.error('[JobAssignmentRepository] create error:', error);
@@ -157,8 +157,8 @@ class JobAssignmentRepository {
         {
           $set: {
             ...updateData,
-            updatedAt: new Date(),
-          },
+            updatedAt: new Date()
+          }
         },
         { returnDocument: 'after' }
       );
@@ -216,9 +216,9 @@ class JobAssignmentRepository {
             {
               $group: {
                 _id: '$status',
-                count: { $sum: 1 },
-              },
-            },
+                count: { $sum: 1 }
+              }
+            }
           ])
           .toArray(),
 
@@ -229,9 +229,9 @@ class JobAssignmentRepository {
             {
               $group: {
                 _id: '$role',
-                count: { $sum: 1 },
-              },
-            },
+                count: { $sum: 1 }
+              }
+            }
           ])
           .toArray(),
 
@@ -242,9 +242,9 @@ class JobAssignmentRepository {
             {
               $group: {
                 _id: '$strategy',
-                count: { $sum: 1 },
-              },
-            },
+                count: { $sum: 1 }
+              }
+            }
           ])
           .toArray(),
 
@@ -256,37 +256,37 @@ class JobAssignmentRepository {
                 ...query,
                 status: 'completed',
                 assignedAt: { $exists: true },
-                completedAt: { $exists: true },
-              },
+                completedAt: { $exists: true }
+              }
             },
             {
               $project: {
                 timeToComplete: {
-                  $subtract: ['$completedAt', '$assignedAt'],
+                  $subtract: ['$completedAt', '$assignedAt']
                 },
                 timeToAccept: {
                   $cond: [
                     { $ifNull: ['$acceptedAt', false] },
                     { $subtract: ['$acceptedAt', '$assignedAt'] },
-                    null,
-                  ],
-                },
-              },
+                    null
+                  ]
+                }
+              }
             },
             {
               $group: {
                 _id: null,
                 avgTimeToComplete: { $avg: '$timeToComplete' },
-                avgTimeToAccept: { $avg: '$timeToAccept' },
-              },
-            },
+                avgTimeToAccept: { $avg: '$timeToAccept' }
+              }
+            }
           ])
-          .toArray(),
+          .toArray()
       ]);
 
       const times = avgTimes[0] || {
         avgTimeToComplete: 0,
-        avgTimeToAccept: 0,
+        avgTimeToAccept: 0
       };
 
       return {
@@ -307,7 +307,7 @@ class JobAssignmentRepository {
           : 0,
         avgTimeToAccept: times.avgTimeToAccept
           ? Math.round(times.avgTimeToAccept / 1000 / 60) // Convert to minutes
-          : 0,
+          : 0
       };
     } catch (error) {
       logger.error('[JobAssignmentRepository] getStatistics error:', error);
@@ -324,7 +324,7 @@ class JobAssignmentRepository {
     try {
       return await this.collection.countDocuments({
         assignedTo: userId,
-        status: { $in: ['assigned', 'accepted', 'in_progress'] },
+        status: { $in: ['assigned', 'accepted', 'in_progress'] }
       });
     } catch (error) {
       logger.error('[JobAssignmentRepository] getActiveCountByUser error:', error);
@@ -370,7 +370,7 @@ class JobAssignmentRepository {
       return await this.collection
         .find({
           status: { $in: ['assigned', 'accepted'] },
-          assignedAt: { $lte: cutoffDate },
+          assignedAt: { $lte: cutoffDate }
         })
         .sort({ assignedAt: 1 })
         .toArray();
@@ -391,7 +391,7 @@ class JobAssignmentRepository {
         // Total active
         this.collection.countDocuments({
           assignedTo: userId,
-          status: { $in: ['assigned', 'accepted', 'in_progress'] },
+          status: { $in: ['assigned', 'accepted', 'in_progress'] }
         }),
 
         // By status
@@ -400,15 +400,15 @@ class JobAssignmentRepository {
             {
               $match: {
                 assignedTo: userId,
-                status: { $in: ['assigned', 'accepted', 'in_progress'] },
-              },
+                status: { $in: ['assigned', 'accepted', 'in_progress'] }
+              }
             },
             {
               $group: {
                 _id: '$status',
-                count: { $sum: 1 },
-              },
-            },
+                count: { $sum: 1 }
+              }
+            }
           ])
           .toArray(),
 
@@ -418,17 +418,17 @@ class JobAssignmentRepository {
             {
               $match: {
                 assignedTo: userId,
-                status: { $in: ['assigned', 'accepted', 'in_progress'] },
-              },
+                status: { $in: ['assigned', 'accepted', 'in_progress'] }
+              }
             },
             {
               $group: {
                 _id: '$priority',
-                count: { $sum: 1 },
-              },
-            },
+                count: { $sum: 1 }
+              }
+            }
           ])
-          .toArray(),
+          .toArray()
       ]);
 
       return {
@@ -440,7 +440,7 @@ class JobAssignmentRepository {
         byPriority: byPriority.reduce((acc, item) => {
           acc[item._id] = item.count;
           return acc;
-        }, {}),
+        }, {})
       };
     } catch (error) {
       logger.error('[JobAssignmentRepository] getUserWorkload error:', error);

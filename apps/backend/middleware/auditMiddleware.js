@@ -20,13 +20,13 @@ class AuditMiddleware {
     let responseStatus = null;
 
     // Override response methods to capture data
-    res.send = function (data) {
+    res.send = function(data) {
       responseData = data;
       responseStatus = res.statusCode;
       return originalSend.call(this, data);
     };
 
-    res.json = function (data) {
+    res.json = function(data) {
       responseData = data;
       responseStatus = res.statusCode;
       return originalJson.call(this, data);
@@ -36,7 +36,7 @@ class AuditMiddleware {
     next();
 
     // Log after response is sent
-    res.on('finish', async () => {
+    res.on('finish', async() => {
       try {
         await AuditMiddleware.createAuditLog(req, res, responseData, responseStatus);
       } catch (error) {
@@ -73,20 +73,20 @@ class AuditMiddleware {
           email: userEmail,
           ipAddress: AuditMiddleware.getClientIP(req),
           userAgent: req.get('User-Agent') || '',
-          sessionId: req.sessionID || req.get('X-Session-ID') || '',
+          sessionId: req.sessionID || req.get('X-Session-ID') || ''
         },
 
         action: {
           type: actionType,
           description: AuditMiddleware.generateActionDescription(actionType, req),
-          category: AuditMiddleware.categorizeAction(actionType),
+          category: AuditMiddleware.categorizeAction(actionType)
         },
 
         target: {
           resourceType: AuditMiddleware.determineResourceType(req),
           resourceId: req.params.id || req.body?.id || null,
           resourceName: AuditMiddleware.extractResourceName(req),
-          collection: AuditMiddleware.determineCollection(req),
+          collection: AuditMiddleware.determineCollection(req)
         },
 
         request: {
@@ -96,7 +96,7 @@ class AuditMiddleware {
           query: req.query,
           body: AuditMiddleware.sanitizeRequestBody(req.body),
           responseStatus: responseStatus,
-          responseTime: res.get('X-Response-Time') || null,
+          responseTime: res.get('X-Response-Time') || null
         },
 
         changes: AuditMiddleware.extractChanges(req, responseData),
@@ -105,7 +105,7 @@ class AuditMiddleware {
           isPiiInvolved: piiInvolved.involved,
           dataType: piiInvolved.dataType,
           legalBasis: AuditMiddleware.determineLegalBasis(actionType, userRole),
-          retentionPeriod: AuditMiddleware.getRetentionPeriod(actionType, piiInvolved.dataType),
+          retentionPeriod: AuditMiddleware.getRetentionPeriod(actionType, piiInvolved.dataType)
         },
 
         security: {
@@ -113,7 +113,7 @@ class AuditMiddleware {
           anomalies: AuditMiddleware.detectAnomalies(req, user),
           tlsVersion: req.connection?.tlsVersion || null,
           encryptionUsed: req.secure || false,
-          mfaVerified: user.mfaVerified || false,
+          mfaVerified: user.mfaVerified || false
         },
 
         location: AuditMiddleware.extractLocation(req),
@@ -122,19 +122,19 @@ class AuditMiddleware {
         correlation: {
           sessionId: req.sessionID || req.get('X-Session-ID') || '',
           requestId: req.get('X-Request-ID') || '',
-          traceId: req.get('X-Trace-ID') || '',
+          traceId: req.get('X-Trace-ID') || ''
         },
 
         compliance: {
           complianceFrameworks: ['pdpa', 'iso27001'],
-          retentionPolicy: AuditMiddleware.getRetentionPolicy(actionType, piiInvolved.dataType),
+          retentionPolicy: AuditMiddleware.getRetentionPolicy(actionType, piiInvolved.dataType)
         },
 
         metadata: {
           systemVersion: process.env.APP_VERSION || '1.0.0',
           environment: process.env.NODE_ENV || 'development',
-          serverInstance: process.env.SERVER_INSTANCE || 'default',
-        },
+          serverInstance: process.env.SERVER_INSTANCE || 'default'
+        }
       };
 
       // Create audit log
@@ -196,17 +196,17 @@ class AuditMiddleware {
 
     // Default based on HTTP method
     switch (method) {
-      case 'GET':
-        return 'data_accessed';
-      case 'POST':
-        return 'data_created';
-      case 'PUT':
-      case 'PATCH':
-        return 'data_modified';
-      case 'DELETE':
-        return 'data_deleted';
-      default:
-        return 'unknown_action';
+    case 'GET':
+      return 'data_accessed';
+    case 'POST':
+      return 'data_created';
+    case 'PUT':
+    case 'PATCH':
+      return 'data_modified';
+    case 'DELETE':
+      return 'data_deleted';
+    default:
+      return 'unknown_action';
     }
   }
 
@@ -226,7 +226,7 @@ class AuditMiddleware {
       application_modified: `${user} modified application`,
       document_uploaded: `${user} uploaded document`,
       pii_viewed: `${user} accessed personal information`,
-      payment_initiated: `${user} initiated payment`,
+      payment_initiated: `${user} initiated payment`
     };
 
     return descriptions[actionType] || `${user} performed ${actionType} on ${resource}`;
@@ -250,7 +250,7 @@ class AuditMiddleware {
       document_viewed: 'document',
       pii_viewed: 'data_access',
       pii_exported: 'data_access',
-      payment_initiated: 'payment',
+      payment_initiated: 'payment'
     };
 
     return categories[actionType] || 'system';
@@ -270,7 +270,7 @@ class AuditMiddleware {
       'address',
       'firstName',
       'lastName',
-      'name',
+      'name'
     ];
 
     // Check request body
@@ -352,7 +352,7 @@ class AuditMiddleware {
       'system_admin',
       'data_deleted',
       'certificate_revoked',
-      'payment_refunded',
+      'payment_refunded'
     ];
 
     // Medium-risk actions
@@ -361,14 +361,14 @@ class AuditMiddleware {
       'pii_viewed',
       'application_approved',
       'certificate_issued',
-      'payment_initiated',
+      'payment_initiated'
     ];
 
     // Check for suspicious patterns
     const suspiciousPatterns = [
       req.get('User-Agent')?.includes('bot'),
       req.path.includes('admin') && userRole !== 'admin',
-      req.method === 'DELETE' && userRole === 'guest',
+      req.method === 'DELETE' && userRole === 'guest'
     ];
 
     if (highRiskActions.includes(actionType) || suspiciousPatterns.some(Boolean)) {
@@ -395,7 +395,7 @@ class AuditMiddleware {
         type: 'unusual_time',
         severity: 'medium',
         details: `Access at unusual hour: ${currentHour}:00`,
-        flaggedAt: new Date(),
+        flaggedAt: new Date()
       });
     }
 
@@ -405,7 +405,7 @@ class AuditMiddleware {
         type: 'privilege_escalation',
         severity: 'high',
         details: 'Non-admin user accessing admin endpoint',
-        flaggedAt: new Date(),
+        flaggedAt: new Date()
       });
     }
 
@@ -416,7 +416,7 @@ class AuditMiddleware {
         type: 'suspicious_pattern',
         severity: 'medium',
         details: `Suspicious user agent: ${userAgent}`,
-        flaggedAt: new Date(),
+        flaggedAt: new Date()
       });
     }
 
@@ -471,7 +471,7 @@ class AuditMiddleware {
       'creditCard',
       'cvv',
       'pin',
-      'ssn',
+      'ssn'
     ];
 
     sensitiveFields.forEach(field => {
@@ -492,7 +492,7 @@ class AuditMiddleware {
       country: req.get('CF-IPCountry') || 'Unknown',
       region: 'Unknown',
       city: 'Unknown',
-      timezone: req.get('X-Timezone') || 'Unknown',
+      timezone: req.get('X-Timezone') || 'Unknown'
     };
   }
 
@@ -513,7 +513,7 @@ class AuditMiddleware {
       type: deviceType,
       os: AuditMiddleware.extractOS(userAgent),
       browser: AuditMiddleware.extractBrowser(userAgent),
-      deviceId: req.get('X-Device-ID') || null,
+      deviceId: req.get('X-Device-ID') || null
     };
   }
 
@@ -570,7 +570,7 @@ class AuditMiddleware {
       cms_content: 'cmscontents',
       track_trace: 'tracktraces',
       payment: 'payments',
-      certificate: 'certificates',
+      certificate: 'certificates'
     };
 
     return collectionMap[resourceType] || null;
@@ -592,7 +592,7 @@ class AuditMiddleware {
     if (req.method === 'PUT' || req.method === 'PATCH') {
       return {
         modifiedFields: Object.keys(req.body || {}),
-        changeReason: req.body?.changeReason || 'User modification',
+        changeReason: req.body?.changeReason || 'User modification'
       };
     }
 
@@ -609,7 +609,7 @@ class AuditMiddleware {
       user_created: 'consent',
       application_created: 'contract',
       pii_viewed: 'legitimate_interests',
-      audit_conducted: 'legal_obligation',
+      audit_conducted: 'legal_obligation'
     };
 
     return legalBasisMap[actionType] || 'legitimate_interests';
@@ -624,7 +624,7 @@ class AuditMiddleware {
       sensitive: 2555, // 7 years
       financial: 2555, // 7 years
       personal: 1095, // 3 years
-      public: 365, // 1 year
+      public: 365 // 1 year
     };
 
     return retentionMap[dataType] || 365;
@@ -638,7 +638,7 @@ class AuditMiddleware {
       sensitive: '7_years',
       financial: '7_years',
       personal: '3_years',
-      public: '1_year',
+      public: '1_year'
     };
 
     return policyMap[dataType] || '1_year';

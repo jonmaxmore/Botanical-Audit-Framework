@@ -44,7 +44,7 @@ class GovernmentIntegrationService {
       reportsSubmitted: 0,
       successfulSubmissions: 0,
       failedSubmissions: 0,
-      complianceUpdates: 0,
+      complianceUpdates: 0
     };
 
     // Business logic configuration
@@ -64,17 +64,17 @@ class GovernmentIntegrationService {
           certificateSubmission: '/certificates/submit',
           complianceReport: '/compliance/report',
           statusUpdate: '/status/update',
-          documentVerification: '/documents/verify',
+          documentVerification: '/documents/verify'
         },
         credentials: {
           clientId: process.env.DOA_CLIENT_ID,
           clientSecret: process.env.DOA_CLIENT_SECRET,
-          orgCode: process.env.DOA_ORG_CODE || 'GACP-001',
+          orgCode: process.env.DOA_ORG_CODE || 'GACP-001'
         },
         rateLimits: {
           requestsPerMinute: 60,
-          dailyLimit: 1000,
-        },
+          dailyLimit: 1000
+        }
       },
 
       fda: {
@@ -84,17 +84,17 @@ class GovernmentIntegrationService {
           authentication: '/oauth/token',
           productRegistration: '/products/register',
           safetyReport: '/safety/report',
-          qualityAssurance: '/qa/submit',
+          qualityAssurance: '/qa/submit'
         },
         credentials: {
           apiKey: process.env.FDA_API_KEY,
           secretKey: process.env.FDA_SECRET_KEY,
-          facilityCode: process.env.FDA_FACILITY_CODE || 'FAC-GACP-001',
+          facilityCode: process.env.FDA_FACILITY_CODE || 'FAC-GACP-001'
         },
         rateLimits: {
           requestsPerMinute: 30,
-          dailyLimit: 500,
-        },
+          dailyLimit: 500
+        }
       },
 
       digital_government: {
@@ -103,13 +103,13 @@ class GovernmentIntegrationService {
         endpoints: {
           digitalSignature: '/dsig/sign',
           documentAuthentication: '/auth/document',
-          timestamping: '/timestamp/create',
+          timestamping: '/timestamp/create'
         },
         credentials: {
           certificateId: process.env.DGA_CERT_ID,
-          privateKey: process.env.DGA_PRIVATE_KEY,
-        },
-      },
+          privateKey: process.env.DGA_PRIVATE_KEY
+        }
+      }
     };
   }
 
@@ -123,14 +123,14 @@ class GovernmentIntegrationService {
           daily: ['application_counts', 'payment_summary'],
           weekly: ['certificate_issued', 'compliance_status'],
           monthly: ['comprehensive_report', 'audit_summary'],
-          quarterly: ['performance_metrics', 'violation_report'],
+          quarterly: ['performance_metrics', 'violation_report']
         },
 
         mandatoryReports: [
           'certificate_issuance_report',
           'compliance_monitoring_report',
           'financial_transaction_report',
-          'audit_trail_report',
+          'audit_trail_report'
         ],
 
         dataRequirements: {
@@ -139,30 +139,30 @@ class GovernmentIntegrationService {
             'farmer_details',
             'farm_location',
             'inspection_results',
-            'compliance_scores',
+            'compliance_scores'
           ],
           compliance_monitoring_report: [
             'compliance_checks',
             'violations_found',
             'corrective_actions',
-            'prevention_measures',
-          ],
-        },
+            'prevention_measures'
+          ]
+        }
       },
 
       authentication: {
         tokenRefreshInterval: 3600000, // 1 hour
         maxRetryAttempts: 3,
-        timeoutDuration: 30000, // 30 seconds
+        timeoutDuration: 30000 // 30 seconds
       },
 
       dataValidation: {
         requiredFields: {
           farmer: ['citizen_id', 'full_name', 'address', 'phone'],
           farm: ['registration_number', 'location', 'size', 'crop_type'],
-          certificate: ['certificate_number', 'issue_date', 'expiry_date', 'status'],
-        },
-      },
+          certificate: ['certificate_number', 'issue_date', 'expiry_date', 'status']
+        }
+      }
     };
   }
 
@@ -187,7 +187,7 @@ class GovernmentIntegrationService {
       return {
         success: true,
         authenticatedSystems: Array.from(this.authTokens.keys()),
-        scheduledReports: this.reportingSchedules.size,
+        scheduledReports: this.reportingSchedules.size
       };
     } catch (error) {
       console.error('[GovernmentIntegration] Failed to start integration:', error);
@@ -207,7 +207,7 @@ class GovernmentIntegrationService {
         this.authTokens.set(system, {
           token: token,
           expiresAt: Date.now() + this.businessRules.authentication.tokenRefreshInterval,
-          system: system,
+          system: system
         });
 
         console.log(`[GovernmentIntegration] Authenticated with ${system.toUpperCase()}`);
@@ -254,30 +254,30 @@ class GovernmentIntegrationService {
     const config = this.apiConfig[systemName];
 
     switch (systemName) {
-      case 'doa':
-        return {
-          grant_type: 'client_credentials',
-          client_id: config.credentials.clientId,
-          client_secret: config.credentials.clientSecret,
-          scope: 'certificate_management compliance_reporting',
-        };
+    case 'doa':
+      return {
+        grant_type: 'client_credentials',
+        client_id: config.credentials.clientId,
+        client_secret: config.credentials.clientSecret,
+        scope: 'certificate_management compliance_reporting'
+      };
 
-      case 'fda':
-        return {
-          api_key: config.credentials.apiKey,
-          timestamp: Date.now(),
-          signature: this.generateSignature(config.credentials.secretKey, Date.now()),
-        };
+    case 'fda':
+      return {
+        api_key: config.credentials.apiKey,
+        timestamp: Date.now(),
+        signature: this.generateSignature(config.credentials.secretKey, Date.now())
+      };
 
-      case 'digital_government':
-        return {
-          certificate_id: config.credentials.certificateId,
-          timestamp: Date.now(),
-          signature: this.generateDigitalSignature(config.credentials.privateKey),
-        };
+    case 'digital_government':
+      return {
+        certificate_id: config.credentials.certificateId,
+        timestamp: Date.now(),
+        signature: this.generateDigitalSignature(config.credentials.privateKey)
+      };
 
-      default:
-        throw new Error(`Authentication not configured for ${systemName}`);
+    default:
+      throw new Error(`Authentication not configured for ${systemName}`);
     }
   }
 
@@ -310,7 +310,7 @@ class GovernmentIntegrationService {
         submissionId: response.submission_id,
         status: 'SUBMITTED',
         submittedAt: new Date(),
-        response: response,
+        response: response
       });
 
       this.metrics.reportsSubmitted++;
@@ -334,11 +334,11 @@ class GovernmentIntegrationService {
   async prepareDOACertificateReport(certificateData) {
     // Get related application and farmer data
     const application = await this.database.collection('applications').findOne({
-      _id: certificateData.applicationId,
+      _id: certificateData.applicationId
     });
 
     const farmer = await this.database.collection('users').findOne({
-      _id: application.farmerId,
+      _id: application.farmerId
     });
 
     // Format according to DOA requirements
@@ -347,7 +347,7 @@ class GovernmentIntegrationService {
         report_type: 'GACP_CERTIFICATE_ISSUANCE',
         organization_code: this.apiConfig.doa.credentials.orgCode,
         submission_date: new Date().toISOString(),
-        report_version: '2.0',
+        report_version: '2.0'
       },
 
       certificate: {
@@ -355,7 +355,7 @@ class GovernmentIntegrationService {
         issue_date: certificateData.issuedAt,
         expiry_date: certificateData.expiresAt,
         status: certificateData.status,
-        certificate_type: 'GACP_STANDARD',
+        certificate_type: 'GACP_STANDARD'
       },
 
       farmer: {
@@ -366,12 +366,12 @@ class GovernmentIntegrationService {
           village: farmer.address.village,
           district: farmer.address.district,
           province: farmer.address.province,
-          postal_code: farmer.address.postalCode,
+          postal_code: farmer.address.postalCode
         },
         contact: {
           phone: farmer.phone,
-          email: farmer.email,
-        },
+          email: farmer.email
+        }
       },
 
       farm: {
@@ -380,11 +380,11 @@ class GovernmentIntegrationService {
           latitude: application.farmLocation.latitude,
           longitude: application.farmLocation.longitude,
           province: application.farmLocation.province,
-          district: application.farmLocation.district,
+          district: application.farmLocation.district
         },
         size_rai: application.farmSize,
         crop_types: application.cropTypes,
-        cultivation_method: application.cultivationMethod,
+        cultivation_method: application.cultivationMethod
       },
 
       inspection: {
@@ -392,15 +392,15 @@ class GovernmentIntegrationService {
         inspector_id: certificateData.inspectorId,
         compliance_score: certificateData.complianceScore,
         findings: certificateData.inspectionFindings,
-        recommendations: certificateData.recommendations,
+        recommendations: certificateData.recommendations
       },
 
       compliance: {
         gacp_standards_met: certificateData.gacpStandardsMet,
         critical_points_compliance: certificateData.criticalPointsCompliance,
         documentation_completeness: certificateData.documentationCompleteness,
-        training_completion: certificateData.trainingCompletion,
-      },
+        training_completion: certificateData.trainingCompletion
+      }
     };
   }
 
@@ -429,7 +429,7 @@ class GovernmentIntegrationService {
         submissionId: response.submission_id,
         status: 'SUBMITTED',
         submittedAt: new Date(),
-        response: response,
+        response: response
       });
 
       this.metrics.reportsSubmitted++;
@@ -452,14 +452,14 @@ class GovernmentIntegrationService {
         report_type: 'COMPLIANCE_MONITORING',
         organization_code: this.apiConfig.doa.credentials.orgCode,
         report_period: complianceData.period,
-        submission_date: new Date().toISOString(),
+        submission_date: new Date().toISOString()
       },
 
       summary: {
         total_certificates_issued: complianceData.totalCertificates,
         active_certificates: complianceData.activeCertificates,
         compliance_checks_performed: complianceData.complianceChecks,
-        violations_detected: complianceData.violations.length,
+        violations_detected: complianceData.violations.length
       },
 
       violations: complianceData.violations.map(violation => ({
@@ -468,14 +468,14 @@ class GovernmentIntegrationService {
         severity: violation.severity,
         detected_date: violation.detectedAt,
         status: violation.status,
-        corrective_actions: violation.correctiveActions,
+        corrective_actions: violation.correctiveActions
       })),
 
       performance_metrics: {
         average_processing_time: complianceData.avgProcessingTime,
         compliance_score: complianceData.overallComplianceScore,
-        customer_satisfaction: complianceData.customerSatisfaction,
-      },
+        customer_satisfaction: complianceData.customerSatisfaction
+      }
     };
   }
 
@@ -494,7 +494,7 @@ class GovernmentIntegrationService {
 
     return this.makeSecureAPICall(systemName, method, endpoint, data, {
       Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     });
   }
 
@@ -510,9 +510,9 @@ class GovernmentIntegrationService {
       headers: {
         'User-Agent': 'GACP-Platform/1.0',
         Accept: 'application/json',
-        ...headers,
+        ...headers
       },
-      timeout: this.businessRules.authentication.timeoutDuration,
+      timeout: this.businessRules.authentication.timeoutDuration
     };
 
     if (data && (method === 'POST' || method === 'PUT')) {
@@ -571,17 +571,17 @@ class GovernmentIntegrationService {
     const cron = require('node-cron');
 
     // Daily reports at 8 AM
-    cron.schedule('0 8 * * *', async () => {
+    cron.schedule('0 8 * * *', async() => {
       await this.generateDailyReports();
     });
 
     // Weekly reports on Monday 9 AM
-    cron.schedule('0 9 * * 1', async () => {
+    cron.schedule('0 9 * * 1', async() => {
       await this.generateWeeklyReports();
     });
 
     // Monthly reports on 1st day at 10 AM
-    cron.schedule('0 10 1 * *', async () => {
+    cron.schedule('0 10 1 * *', async() => {
       await this.generateMonthlyReports();
     });
 
@@ -601,8 +601,8 @@ class GovernmentIntegrationService {
       const applicationCounts = await this.database.collection('applications').countDocuments({
         createdAt: {
           $gte: new Date(yesterday.setHours(0, 0, 0, 0)),
-          $lt: new Date(yesterday.setHours(23, 59, 59, 999)),
-        },
+          $lt: new Date(yesterday.setHours(23, 59, 59, 999))
+        }
       });
 
       // Payment summary
@@ -613,24 +613,24 @@ class GovernmentIntegrationService {
             $match: {
               processedAt: {
                 $gte: new Date(yesterday.setHours(0, 0, 0, 0)),
-                $lt: new Date(yesterday.setHours(23, 59, 59, 999)),
-              },
-            },
+                $lt: new Date(yesterday.setHours(23, 59, 59, 999))
+              }
+            }
           },
           {
             $group: {
               _id: null,
               totalAmount: { $sum: '$amount' },
-              transactionCount: { $sum: 1 },
-            },
-          },
+              transactionCount: { $sum: 1 }
+            }
+          }
         ])
         .toArray();
 
       const dailyReportData = {
         date: yesterday.toISOString().split('T')[0],
         applications: applicationCounts,
-        payments: paymentSummary[0] || { totalAmount: 0, transactionCount: 0 },
+        payments: paymentSummary[0] || { totalAmount: 0, transactionCount: 0 }
       };
 
       // Submit to government systems
@@ -667,7 +667,7 @@ class GovernmentIntegrationService {
         ...submissionData,
         id: require('crypto').randomUUID(),
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       };
 
       await this.database.collection('government_submissions').insertOne(submission);
@@ -682,7 +682,7 @@ class GovernmentIntegrationService {
           {
             system: submissionData.system,
             type: submissionData.type,
-            submissionId: submissionData.submissionId,
+            submissionId: submissionData.submissionId
           }
         );
       }
@@ -714,7 +714,7 @@ class GovernmentIntegrationService {
       authenticatedSystems: Array.from(this.authTokens.keys()),
       metrics: this.metrics,
       scheduledReports: this.reportingSchedules.size,
-      lastUpdate: new Date(),
+      lastUpdate: new Date()
     };
   }
 

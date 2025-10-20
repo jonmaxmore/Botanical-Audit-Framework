@@ -22,7 +22,7 @@ const NOTIFICATION_TYPES = {
       title: 'แจ้งชำระเงิน',
       template: 'กรุณาชำระค่าธรรมเนียม {amount} บาท ภายใน {days} วัน',
       actions: ['ชำระเงิน', 'ดูรายละเอียด'],
-      category: 'payment',
+      category: 'payment'
     },
     DOCUMENT_REVISION: {
       type: 'document_revision',
@@ -30,7 +30,7 @@ const NOTIFICATION_TYPES = {
       title: 'เอกสารต้องแก้ไข',
       template: 'เอกสารของท่านต้องแก้ไข กรุณาตรวจสอบและส่งใหม่',
       actions: ['แก้ไขเอกสาร', 'ดูรายละเอียด'],
-      category: 'document',
+      category: 'document'
     },
     INSPECTION_SCHEDULED: {
       type: 'inspection_scheduled',
@@ -38,7 +38,7 @@ const NOTIFICATION_TYPES = {
       title: 'นัดหมายตรวจฟาร์ม',
       template: 'มีการนัดหมาย {inspection_type} วันที่ {date} เวลา {time}',
       actions: ['ยืนยันเข้าร่วม', 'ดูรายละเอียด'],
-      category: 'inspection',
+      category: 'inspection'
     },
     CERTIFICATE_READY: {
       type: 'certificate_ready',
@@ -46,7 +46,7 @@ const NOTIFICATION_TYPES = {
       title: 'ใบรับรองพร้อมแล้ว',
       template: 'ใบรับรอง GACP ของท่านพร้อมดาวน์โหลดแล้ว',
       actions: ['ดาวน์โหลด', 'ดูรายละเอียด'],
-      category: 'certificate',
+      category: 'certificate'
     },
     STATUS_UPDATE: {
       type: 'status_update',
@@ -54,8 +54,8 @@ const NOTIFICATION_TYPES = {
       title: 'อัพเดตสถานะ',
       template: 'สถานะใบสมัครของท่านเปลี่ยนเป็น "{status}"',
       actions: ['ดูรายละเอียด'],
-      category: 'status',
-    },
+      category: 'status'
+    }
   },
 
   // การแจ้งเตือนสำหรับเจ้าหน้าที่
@@ -66,7 +66,7 @@ const NOTIFICATION_TYPES = {
       title: 'ใบสมัครใหม่',
       template: 'มีใบสมัครใหม่จาก {farmer_name} รอการตรวจสอบ',
       actions: ['ตรวจสอบ', 'มอบหมายงาน'],
-      category: 'work',
+      category: 'work'
     },
     DOCUMENT_READY: {
       type: 'document_ready',
@@ -74,7 +74,7 @@ const NOTIFICATION_TYPES = {
       title: 'เอกสารพร้อมตรวจ',
       template: 'เอกสารจาก {farmer_name} พร้อมสำหรับการตรวจสอบ',
       actions: ['เริ่มตรวจสอบ', 'ดูเอกสาร'],
-      category: 'work',
+      category: 'work'
     },
     INSPECTION_DUE: {
       type: 'inspection_due',
@@ -82,7 +82,7 @@ const NOTIFICATION_TYPES = {
       title: 'งานตรวจฟาร์มรอดำเนินการ',
       template: 'มีงานตรวจฟาร์ม {count} รายการที่ต้องดำเนินการ',
       actions: ['ดูรายการ', 'จัดตารางงาน'],
-      category: 'work',
+      category: 'work'
     },
     OVERDUE_TASK: {
       type: 'overdue_task',
@@ -90,8 +90,8 @@ const NOTIFICATION_TYPES = {
       title: 'งานเกินกำหนด',
       template: 'มีงาน {task_type} เกินกำหนด {days} วันแล้ว',
       actions: ['ดำเนินการทันที', 'ดูรายละเอียด'],
-      category: 'urgent',
-    },
+      category: 'urgent'
+    }
   },
 
   // การแจ้งเตือนสำหรับผู้บริหาร
@@ -102,7 +102,7 @@ const NOTIFICATION_TYPES = {
       title: 'รออนุมัติ',
       template: 'มีใบสมัคร {count} รายการรอการอนุมัติ',
       actions: ['ดูรายการ', 'อนุมัติทั้งหมด'],
-      category: 'approval',
+      category: 'approval'
     },
     MONTHLY_REPORT: {
       type: 'monthly_report',
@@ -110,7 +110,7 @@ const NOTIFICATION_TYPES = {
       title: 'รายงานประจำเดือน',
       template: 'รายงานประจำเดือน {month} พร้อมแล้ว',
       actions: ['ดูรายงาน', 'ส่งออกข้อมูล'],
-      category: 'report',
+      category: 'report'
     },
     SYSTEM_ALERT: {
       type: 'system_alert',
@@ -118,9 +118,9 @@ const NOTIFICATION_TYPES = {
       title: 'แจ้งเตือนระบบ',
       template: 'ระบบตรวจพบปัญหา: {issue}',
       actions: ['ตรวจสอบ', 'แก้ไข'],
-      category: 'system',
-    },
-  },
+      category: 'system'
+    }
+  }
 };
 
 // ช่องทางการแจ้งเตือน
@@ -129,26 +129,26 @@ const NOTIFICATION_CHANNELS = {
     channel: 'in_app',
     name: 'แจ้งเตือนในระบบ',
     immediate: true,
-    supports: ['text', 'actions', 'rich_content'],
+    supports: ['text', 'actions', 'rich_content']
   },
   EMAIL: {
     channel: 'email',
     name: 'อีเมล',
     immediate: false,
-    supports: ['text', 'html', 'attachments'],
+    supports: ['text', 'html', 'attachments']
   },
   SMS: {
     channel: 'sms',
     name: 'SMS',
     immediate: true,
-    supports: ['text'],
+    supports: ['text']
   },
   LINE: {
     channel: 'line',
     name: 'LINE Notify',
     immediate: true,
-    supports: ['text', 'stickers', 'images'],
-  },
+    supports: ['text', 'stickers', 'images']
+  }
 };
 
 class GACPDashboardNotificationSystem extends EventEmitter {
@@ -185,7 +185,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
           applicationNumber: currentApplication.applicationNumber,
           submittedAt: currentApplication.submittedAt,
           status: status,
-          progressBar: progressBar,
+          progressBar: progressBar
         },
         quickActions: this.generateFarmerQuickActions(currentApplication),
         notifications: await this.getFarmerNotifications(farmerId),
@@ -193,7 +193,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
         timeline: this.generateTimeline(currentApplication),
         documents: this.generateDocumentStatus(currentApplication),
         nextSteps: this.generateNextSteps(currentApplication),
-        lastUpdated: new Date(),
+        lastUpdated: new Date()
       };
     } catch (error) {
       throw new Error(`Failed to generate farmer dashboard: ${error.message}`);
@@ -215,18 +215,18 @@ class GACPDashboardNotificationSystem extends EventEmitter {
           urgent: workItems.filter(item => item.priority === 'urgent'),
           today: workItems.filter(item => this.isDueToday(item.dueDate)),
           thisWeek: workItems.filter(item => this.isDueThisWeek(item.dueDate)),
-          overdue: workItems.filter(item => this.isOverdue(item.dueDate)),
+          overdue: workItems.filter(item => this.isOverdue(item.dueDate))
         },
         statistics: {
           todayCompleted: stats.todayCompleted || 0,
           weekCompleted: stats.weekCompleted || 0,
           monthCompleted: stats.monthCompleted || 0,
-          averageProcessingTime: stats.averageProcessingTime || 0,
+          averageProcessingTime: stats.averageProcessingTime || 0
         },
         notifications: await this.getStaffNotifications(staffId),
         quickActions: this.generateStaffQuickActions(),
         recentActivities: await this.getRecentActivities(staffId),
-        lastUpdated: new Date(),
+        lastUpdated: new Date()
       };
     } catch (error) {
       throw new Error(`Failed to generate staff dashboard: ${error.message}`);
@@ -249,18 +249,18 @@ class GACPDashboardNotificationSystem extends EventEmitter {
           pendingApproval: overallStats.pendingApproval || 0,
           completedThisMonth: overallStats.completedThisMonth || 0,
           successRate: overallStats.successRate || 0,
-          averageProcessingDays: overallStats.averageProcessingDays || 0,
+          averageProcessingDays: overallStats.averageProcessingDays || 0
         },
         charts: {
           applicationsByStatus: overallStats.applicationsByStatus || {},
           monthlyTrends: overallStats.monthlyTrends || [],
-          paymentSummary: overallStats.paymentSummary || {},
+          paymentSummary: overallStats.paymentSummary || {}
         },
         alerts: await this.getSystemAlerts(),
         pendingApprovals: await this.getPendingApprovals(),
         recentApplications: recentApplications,
         notifications: await this.getAdminNotifications(adminId),
-        lastUpdated: new Date(),
+        lastUpdated: new Date()
       };
     } catch (error) {
       throw new Error(`Failed to generate admin dashboard: ${error.message}`);
@@ -287,7 +287,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
         notificationId: notification.id,
         recipientId,
         type: notificationType,
-        channels,
+        channels
       });
 
       return notification;
@@ -318,7 +318,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
       actions: typeConfig.actions || [],
       createdAt: new Date(),
       readAt: null,
-      status: 'unread',
+      status: 'unread'
     };
 
     return notification;
@@ -330,72 +330,72 @@ class GACPDashboardNotificationSystem extends EventEmitter {
   async handleWorkflowEvent(eventType, eventData) {
     try {
       switch (eventType) {
-        case 'application_submitted':
-          await this.sendNotification(
-            eventData.farmerId,
-            'status_update',
-            { status: 'ส่งใบสมัครแล้ว - รอการชำระเงิน' },
-            ['in_app', 'email']
-          );
-          break;
+      case 'application_submitted':
+        await this.sendNotification(
+          eventData.farmerId,
+          'status_update',
+          { status: 'ส่งใบสมัครแล้ว - รอการชำระเงิน' },
+          ['in_app', 'email']
+        );
+        break;
 
-        case 'payment_requested':
-          await this.sendNotification(
-            eventData.farmerId,
-            'payment_due',
-            {
-              amount: eventData.amount,
-              phase: eventData.phase,
-              days: 7,
-            },
-            ['in_app', 'sms', 'email']
-          );
-          break;
+      case 'payment_requested':
+        await this.sendNotification(
+          eventData.farmerId,
+          'payment_due',
+          {
+            amount: eventData.amount,
+            phase: eventData.phase,
+            days: 7
+          },
+          ['in_app', 'sms', 'email']
+        );
+        break;
 
-        case 'document_revision_required':
-          await this.sendNotification(
-            eventData.farmerId,
-            'document_revision',
-            {
-              applicationId: eventData.applicationId,
-              findings: eventData.findings,
-            },
-            ['in_app', 'email']
-          );
-          break;
+      case 'document_revision_required':
+        await this.sendNotification(
+          eventData.farmerId,
+          'document_revision',
+          {
+            applicationId: eventData.applicationId,
+            findings: eventData.findings
+          },
+          ['in_app', 'email']
+        );
+        break;
 
-        case 'vdo_call_scheduled':
-          await this.sendNotification(
-            eventData.farmerId,
-            'inspection_scheduled',
-            {
-              inspection_type: 'VDO Call',
-              date: eventData.scheduledDateTime.toLocaleDateString('th-TH'),
-              time: eventData.scheduledDateTime.toLocaleTimeString('th-TH', {
-                hour: '2-digit',
-                minute: '2-digit',
-              }),
-              meetingUrl: eventData.meetingUrl,
-            },
-            ['in_app', 'sms', 'email']
-          );
-          break;
+      case 'vdo_call_scheduled':
+        await this.sendNotification(
+          eventData.farmerId,
+          'inspection_scheduled',
+          {
+            inspection_type: 'VDO Call',
+            date: eventData.scheduledDateTime.toLocaleDateString('th-TH'),
+            time: eventData.scheduledDateTime.toLocaleTimeString('th-TH', {
+              hour: '2-digit',
+              minute: '2-digit'
+            }),
+            meetingUrl: eventData.meetingUrl
+          },
+          ['in_app', 'sms', 'email']
+        );
+        break;
 
-        case 'certificate_issued':
-          await this.sendNotification(
-            eventData.farmerId,
-            'certificate_ready',
-            {
-              certificateNumber: eventData.certificateNumber,
-              downloadUrl: eventData.downloadUrl,
-            },
-            ['in_app', 'sms', 'email']
-          );
-          break;
+      case 'certificate_issued':
+        await this.sendNotification(
+          eventData.farmerId,
+          'certificate_ready',
+          {
+            certificateNumber: eventData.certificateNumber,
+            downloadUrl: eventData.downloadUrl
+          },
+          ['in_app', 'sms', 'email']
+        );
+        break;
 
-        default:
-          // ไม่ทำอะไร สำหรับ events ที่ไม่ต้องแจ้งเตือน
-          break;
+      default:
+        // ไม่ทำอะไร สำหรับ events ที่ไม่ต้องแจ้งเตือน
+        break;
       }
     } catch (error) {
       console.error(`Failed to handle workflow event ${eventType}:`, error);
@@ -437,7 +437,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
 
     this.emit('notification_read', {
       notificationId,
-      userId,
+      userId
     });
 
     return notification;
@@ -454,7 +454,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
       unread: notifications.filter(n => n.status === 'unread').length,
       byCategory: this.groupBy(notifications, 'category'),
       byPriority: this.groupBy(notifications, 'priority'),
-      recent: notifications.slice(0, 5),
+      recent: notifications.slice(0, 5)
     };
   }
 
@@ -471,7 +471,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
       timeline: [],
       documents: { total: 0, uploaded: 0, approved: 0 },
       nextSteps: ['สมัครใช้งานระบบ GACP'],
-      lastUpdated: new Date(),
+      lastUpdated: new Date()
     };
   }
 
@@ -480,36 +480,36 @@ class GACPDashboardNotificationSystem extends EventEmitter {
     const status = application.currentState;
 
     switch (status) {
-      case 'payment_pending_1':
-      case 'payment_pending_2':
-        actions.push({
-          action: 'make_payment',
-          label: 'ชำระเงิน',
-          icon: '💰',
-          urgent: true,
-        });
-        break;
-      case 'document_revision':
-        actions.push({
-          action: 'upload_documents',
-          label: 'แก้ไขเอกสาร',
-          icon: '📄',
-          urgent: true,
-        });
-        break;
-      case 'certificate_issued':
-        actions.push({
-          action: 'download_certificate',
-          label: 'ดาวน์โหลดใบรับรอง',
-          icon: '📜',
-        });
-        break;
+    case 'payment_pending_1':
+    case 'payment_pending_2':
+      actions.push({
+        action: 'make_payment',
+        label: 'ชำระเงิน',
+        icon: '💰',
+        urgent: true
+      });
+      break;
+    case 'document_revision':
+      actions.push({
+        action: 'upload_documents',
+        label: 'แก้ไขเอกสาร',
+        icon: '📄',
+        urgent: true
+      });
+      break;
+    case 'certificate_issued':
+      actions.push({
+        action: 'download_certificate',
+        label: 'ดาวน์โหลดใบรับรอง',
+        icon: '📜'
+      });
+      break;
     }
 
     actions.push({
       action: 'view_status',
       label: 'ดูสถานะ',
-      icon: '📊',
+      icon: '📊'
     });
 
     return actions;
@@ -520,7 +520,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
       { action: 'review_documents', label: 'ตรวจสอบเอกสาร', icon: '📋' },
       { action: 'schedule_inspection', label: 'นัดตรวจฟาร์ม', icon: '📅' },
       { action: 'view_workqueue', label: 'ดูงานรอดำเนินการ', icon: '📝' },
-      { action: 'generate_report', label: 'สร้างรายงาน', icon: '📊' },
+      { action: 'generate_report', label: 'สร้างรายงาน', icon: '📊' }
     ];
   }
 
@@ -538,15 +538,15 @@ class GACPDashboardNotificationSystem extends EventEmitter {
           phase: 1,
           amount: 5000,
           status: phase1.status || 'pending',
-          description: 'ค่าธรรมเนียมตรวจสอบเอกสาร',
+          description: 'ค่าธรรมเนียมตรวจสอบเอกสาร'
         },
         {
           phase: 2,
           amount: 25000,
           status: phase2.status || 'pending',
-          description: 'ค่าธรรมเนียมตรวจสอบภาคสนาม',
-        },
-      ],
+          description: 'ค่าธรรมเนียมตรวจสอบภาคสนาม'
+        }
+      ]
     };
   }
 
@@ -557,7 +557,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
         action: event.action,
         note: event.note,
         actor: event.actor,
-        icon: this.getTimelineIcon(event.action),
+        icon: this.getTimelineIcon(event.action)
       }))
       .sort((a, b) => b.date - a.date);
   }
@@ -571,7 +571,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
       total: requiredDocs,
       uploaded: uploadedDocs,
       approved: approvedDocs,
-      completion: Math.round((uploadedDocs / requiredDocs) * 100),
+      completion: Math.round((uploadedDocs / requiredDocs) * 100)
     };
   }
 
@@ -589,7 +589,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
       PAYMENT_2_CONFIRMED: '💰',
       INSPECTION_COMPLETED: '🔍',
       FINAL_APPROVAL_GRANTED: '👍',
-      CERTIFICATE_ISSUED: '🏆',
+      CERTIFICATE_ISSUED: '🏆'
     };
     return icons[action] || '📋';
   }
@@ -616,14 +616,14 @@ class GACPDashboardNotificationSystem extends EventEmitter {
   async sendThroughChannel(notification, channel) {
     // TODO: Implement actual channel integration
     switch (channel) {
-      case 'email':
-        return this.sendEmail(notification);
-      case 'sms':
-        return this.sendSMS(notification);
-      case 'line':
-        return this.sendLineNotify(notification);
-      default:
-        return this.saveToInApp(notification);
+    case 'email':
+      return this.sendEmail(notification);
+    case 'sms':
+      return this.sendSMS(notification);
+    case 'line':
+      return this.sendLineNotify(notification);
+    default:
+      return this.saveToInApp(notification);
     }
   }
 
@@ -685,7 +685,7 @@ class GACPDashboardNotificationSystem extends EventEmitter {
 
   // TODO: Implement these methods with actual database queries
   async getApplicationsByFarmer(farmerId) {
-    throw new Error('Database integration needed');
+    throw new Error(`Database integration needed for farmer ID: ${farmerId}`);
   }
 
   async getFarmerNotifications(farmerId) {
@@ -693,12 +693,14 @@ class GACPDashboardNotificationSystem extends EventEmitter {
   }
 
   async getStaffWorkItems(staffId) {
-    // TODO: Implement
+    // TODO: Implement work items for staff
+    console.log(`Getting work items for staff: ${staffId}`);
     return [];
   }
 
   async getStaffStatistics(staffId) {
-    // TODO: Implement
+    // TODO: Implement statistics for staff
+    console.log(`Getting statistics for staff: ${staffId}`);
     return {};
   }
 
@@ -707,17 +709,19 @@ class GACPDashboardNotificationSystem extends EventEmitter {
   }
 
   async getRecentActivities(staffId) {
-    // TODO: Implement
+    // TODO: Implement recent activities
+    console.log(`Getting recent activities for staff: ${staffId}`);
     return [];
   }
 
   async getOverallStatistics() {
-    // TODO: Implement
+    // TODO: Implement overall statistics
     return {};
   }
 
   async getRecentApplications(limit) {
-    // TODO: Implement
+    // TODO: Implement recent applications
+    console.log(`Getting recent applications with limit: ${limit}`);
     return [];
   }
 
@@ -740,5 +744,5 @@ class GACPDashboardNotificationSystem extends EventEmitter {
 module.exports = {
   GACPDashboardNotificationSystem,
   NOTIFICATION_TYPES,
-  NOTIFICATION_CHANNELS,
+  NOTIFICATION_CHANNELS
 };

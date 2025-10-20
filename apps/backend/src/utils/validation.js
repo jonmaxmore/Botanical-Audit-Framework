@@ -120,7 +120,7 @@ const sanitizeString = str => {
   return str
     .trim()
     .replace(/[<>]/g, '') // Remove potential HTML tags
-    .replace(/'/g, "\\'") // Escape single quotes
+    .replace(/'/g, '\\\'') // Escape single quotes
     .slice(0, 1000); // Limit length
 };
 
@@ -159,7 +159,7 @@ class ValidationSchema {
     this.rules[field] = this.rules[field] || [];
     this.rules[field].push({
       type: 'required',
-      message: message || `${field} is required`,
+      message: message || `${field} is required`
     });
     return this;
   }
@@ -169,7 +169,7 @@ class ValidationSchema {
     this.rules[field].push({
       type: 'email',
       validator: isValidEmail,
-      message: message || `${field} must be a valid email`,
+      message: message || `${field} must be a valid email`
     });
     return this;
   }
@@ -180,7 +180,7 @@ class ValidationSchema {
       type: 'password',
       validator: isValidPassword,
       message:
-        message || `${field} must be at least 8 characters with uppercase, lowercase, and number`,
+        message || `${field} must be at least 8 characters with uppercase, lowercase, and number`
     });
     return this;
   }
@@ -190,7 +190,7 @@ class ValidationSchema {
     this.rules[field].push({
       type: 'phone',
       validator: isValidPhone,
-      message: message || `${field} must be a valid Thai phone number`,
+      message: message || `${field} must be a valid Thai phone number`
     });
     return this;
   }
@@ -200,7 +200,7 @@ class ValidationSchema {
     this.rules[field].push({
       type: 'thaiId',
       validator: isValidThaiID,
-      message: message || `${field} must be a valid Thai national ID`,
+      message: message || `${field} must be a valid Thai national ID`
     });
     return this;
   }
@@ -210,7 +210,7 @@ class ValidationSchema {
     this.rules[field].push({
       type: 'objectId',
       validator: isValidObjectId,
-      message: message || `${field} must be a valid ObjectId`,
+      message: message || `${field} must be a valid ObjectId`
     });
     return this;
   }
@@ -220,7 +220,7 @@ class ValidationSchema {
     this.rules[field].push({
       type: 'minLength',
       validator: value => value && value.length >= length,
-      message: message || `${field} must be at least ${length} characters`,
+      message: message || `${field} must be at least ${length} characters`
     });
     return this;
   }
@@ -230,7 +230,7 @@ class ValidationSchema {
     this.rules[field].push({
       type: 'maxLength',
       validator: value => !value || value.length <= length,
-      message: message || `${field} must not exceed ${length} characters`,
+      message: message || `${field} must not exceed ${length} characters`
     });
     return this;
   }
@@ -240,7 +240,7 @@ class ValidationSchema {
     this.rules[field].push({
       type: 'custom',
       validator,
-      message: message || `${field} is invalid`,
+      message: message || `${field} is invalid`
     });
     return this;
   }
@@ -309,7 +309,7 @@ const schemas = {
     .required('farmerId')
     .objectId('farmerId')
     .required('surveyType')
-    .required('responses'),
+    .required('responses')
 };
 
 /**
@@ -354,5 +354,5 @@ module.exports = {
   schemas,
 
   // Middleware
-  validateRequest,
+  validateRequest
 };

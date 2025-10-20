@@ -34,7 +34,7 @@ class DownloadDocumentUseCase {
       return {
         buffer: fileBuffer,
         fileName: document.originalFileName,
-        mimeType: document.mimeType,
+        mimeType: document.mimeType
       };
     } catch (error) {
       console.error('Error downloading document:', error);

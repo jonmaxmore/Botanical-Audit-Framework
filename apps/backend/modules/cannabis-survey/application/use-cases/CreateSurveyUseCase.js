@@ -35,7 +35,7 @@ class CreateSurveyUseCase {
       farmerId,
       surveyYear,
       surveyPeriod,
-      ...surveyData,
+      ...surveyData
     });
 
     // Validate
@@ -54,7 +54,7 @@ class CreateSurveyUseCase {
         surveyPeriod: savedSurvey.surveyPeriod,
         purpose: savedSurvey.purpose,
         plantType: savedSurvey.plantType,
-        createdAt: savedSurvey.createdAt,
+        createdAt: savedSurvey.createdAt
       })
     );
 

@@ -32,7 +32,7 @@ app.use(helmet());
 app.use(
   cors({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    credentials: true,
+    credentials: true
   })
 );
 
@@ -55,7 +55,7 @@ if (process.env.NODE_ENV === 'development') {
     console.log(`${req.method} ${req.path}`, {
       body: req.body,
       query: req.query,
-      params: req.params,
+      params: req.params
     });
     next();
   });
@@ -71,7 +71,7 @@ app.get('/health', (req, res) => {
     service: 'application-service',
     version: '1.0.0',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
+    uptime: process.uptime()
   });
 });
 
@@ -92,7 +92,7 @@ app.use((req, res) => {
   res.status(404).json({
     success: false,
     message: 'Route not found',
-    path: req.path,
+    path: req.path
   });
 });
 
@@ -104,7 +104,7 @@ app.use((err, req, res, next) => {
   if (err.name === 'UnauthorizedError') {
     return res.status(401).json({
       success: false,
-      message: 'Invalid or expired token',
+      message: 'Invalid or expired token'
     });
   }
 
@@ -115,8 +115,8 @@ app.use((err, req, res, next) => {
       message: 'Validation error',
       errors: Object.keys(err.errors).map(key => ({
         field: key,
-        message: err.errors[key].message,
-      })),
+        message: err.errors[key].message
+      }))
     });
   }
 
@@ -124,7 +124,7 @@ app.use((err, req, res, next) => {
   if (err.name === 'CastError') {
     return res.status(400).json({
       success: false,
-      message: 'Invalid ID format',
+      message: 'Invalid ID format'
     });
   }
 
@@ -132,7 +132,7 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500).json({
     success: false,
     message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
 });
 

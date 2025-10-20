@@ -45,37 +45,37 @@ const WorkflowHistorySchema = new Schema(
         'approved',
         'certificate_issued',
         'rejected',
-        'expired',
-      ],
+        'expired'
+      ]
     },
     enteredAt: {
       type: Date,
       required: true,
-      default: Date.now,
+      default: Date.now
     },
     exitedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     duration: {
       type: Number, // milliseconds
-      default: null,
+      default: null
     },
     actor: {
       type: String,
       required: true,
-      description: 'User ID who triggered this state change',
+      description: 'User ID who triggered this state change'
     },
     actorRole: {
       type: String,
       required: true,
-      enum: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN', 'ADMIN', 'SYSTEM'],
+      enum: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN', 'ADMIN', 'SYSTEM']
     },
     notes: {
       type: String,
       maxlength: 1000,
-      default: '',
-    },
+      default: ''
+    }
   },
   { _id: false }
 );
@@ -85,7 +85,7 @@ const DocumentSchema = new Schema(
   {
     id: {
       type: String,
-      required: true,
+      required: true
     },
     type: {
       type: String,
@@ -98,53 +98,53 @@ const DocumentSchema = new Schema(
         'water_test',
         'soil_test',
         'business_license',
-        'other',
-      ],
+        'other'
+      ]
     },
     fileName: {
       type: String,
-      required: true,
+      required: true
     },
     originalName: {
       type: String,
-      required: true,
+      required: true
     },
     mimeType: {
       type: String,
-      required: true,
+      required: true
     },
     size: {
       type: Number,
       required: true,
       min: 1,
-      max: 10 * 1024 * 1024, // 10MB limit
+      max: 10 * 1024 * 1024 // 10MB limit
     },
     uploadPath: {
       type: String,
-      required: true,
+      required: true
     },
     uploadedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
     uploadedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: true
     },
     verified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     verifiedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     verifiedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      default: null,
-    },
+      default: null
+    }
   },
   { _id: false }
 );
@@ -156,52 +156,52 @@ const FarmSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      maxlength: 200,
+      maxlength: 200
     },
     registrationNumber: {
       type: String,
       trim: true,
-      maxlength: 50,
+      maxlength: 50
     },
     address: {
       street: { type: String, required: true, maxlength: 200 },
       district: { type: String, required: true, maxlength: 100 },
       province: { type: String, required: true, maxlength: 100 },
       postalCode: { type: String, required: true, match: /^\d{5}$/ },
-      country: { type: String, default: 'Thailand' },
+      country: { type: String, default: 'Thailand' }
     },
     coordinates: {
       latitude: {
         type: Number,
         required: true,
         min: -90,
-        max: 90,
+        max: 90
       },
       longitude: {
         type: Number,
         required: true,
         min: -180,
-        max: 180,
-      },
+        max: 180
+      }
     },
     area: {
       total: { type: Number, required: true, min: 0 }, // in rai
-      cultivated: { type: Number, required: true, min: 0 },
+      cultivated: { type: Number, required: true, min: 0 }
     },
     soilType: {
       type: String,
-      enum: ['clay', 'sandy', 'loamy', 'silt', 'rocky', 'other'],
+      enum: ['clay', 'sandy', 'loamy', 'silt', 'rocky', 'other']
     },
     waterSource: {
       type: String,
-      enum: ['well', 'river', 'irrigation', 'rainwater', 'other'],
+      enum: ['well', 'river', 'irrigation', 'rainwater', 'other']
     },
     facilities: [
       {
         type: String,
-        enum: ['greenhouse', 'storage', 'processing', 'irrigation', 'other'],
-      },
-    ],
+        enum: ['greenhouse', 'storage', 'processing', 'irrigation', 'other']
+      }
+    ]
   },
   { _id: false }
 );
@@ -212,50 +212,50 @@ const PaymentSchema = new Schema(
     amount: {
       type: Number,
       required: true,
-      min: 0,
+      min: 0
     },
     currency: {
       type: String,
-      default: 'THB',
+      default: 'THB'
     },
     paymentMethod: {
       type: String,
       enum: ['promptpay', 'bank_transfer', 'credit_card', 'cash'],
-      default: 'promptpay',
+      default: 'promptpay'
     },
     status: {
       type: String,
       enum: ['pending', 'processing', 'completed', 'failed', 'refunded'],
-      default: 'pending',
+      default: 'pending'
     },
     transactionId: {
       type: String,
-      default: null,
+      default: null
     },
     paymentRef: {
       type: String,
-      default: null,
+      default: null
     },
     qrCode: {
       type: String,
-      default: null,
+      default: null
     },
     paymentUrl: {
       type: String,
-      default: null,
+      default: null
     },
     initiatedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
     paidAt: {
       type: Date,
-      default: null,
+      default: null
     },
     dueDate: {
       type: Date,
-      default: null,
-    },
+      default: null
+    }
   },
   { _id: false }
 );
@@ -266,44 +266,44 @@ const ReviewSchema = new Schema(
     reviewerId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      default: null,
+      default: null
     },
     startedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     completedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     approved: {
       type: Boolean,
-      default: null,
+      default: null
     },
     findings: [
       {
         type: String,
-        maxlength: 500,
-      },
+        maxlength: 500
+      }
     ],
     notes: {
       type: String,
-      maxlength: 2000,
+      maxlength: 2000
     },
     revisionRequested: {
       type: Boolean,
-      default: false,
+      default: false
     },
     revisionReasons: [
       {
         type: String,
-        maxlength: 500,
-      },
+        maxlength: 500
+      }
     ],
     revisionNotes: {
       type: String,
-      maxlength: 2000,
-    },
+      maxlength: 2000
+    }
   },
   { _id: false }
 );
@@ -314,54 +314,54 @@ const InspectionSchema = new Schema(
     inspectorId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      default: null,
+      default: null
     },
     type: {
       type: String,
       enum: ['onsite', 'virtual'],
-      default: 'onsite',
+      default: 'onsite'
     },
     scheduledDate: {
       type: Date,
-      default: null,
+      default: null
     },
     scheduledAt: {
       type: Date,
-      default: null,
+      default: null
     },
     startedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     completedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     passed: {
       type: Boolean,
-      default: null,
+      default: null
     },
     complianceScore: {
       type: Number,
       min: 0,
       max: 100,
-      default: null,
+      default: null
     },
     findings: [
       {
         category: String,
         item: String,
         status: { type: String, enum: ['pass', 'fail', 'na'] },
-        notes: String,
-      },
+        notes: String
+      }
     ],
     photos: [
       {
         fileName: String,
         uploadPath: String,
         caption: String,
-        takenAt: { type: Date, default: Date.now },
-      },
+        takenAt: { type: Date, default: Date.now }
+      }
     ],
     checklist: {
       siteSelection: { passed: Boolean, notes: String },
@@ -373,12 +373,12 @@ const InspectionSchema = new Schema(
       harvestTiming: { passed: Boolean, notes: String },
       postHarvestHandling: { passed: Boolean, notes: String },
       storageConditions: { passed: Boolean, notes: String },
-      recordKeeping: { passed: Boolean, notes: String },
+      recordKeeping: { passed: Boolean, notes: String }
     },
     inspectorNotes: {
       type: String,
-      maxlength: 3000,
-    },
+      maxlength: 3000
+    }
   },
   { _id: false }
 );
@@ -389,25 +389,25 @@ const ApprovalSchema = new Schema(
     adminId: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      default: null,
+      default: null
     },
     approvedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     signature: {
       type: String,
-      default: null,
+      default: null
     },
     notes: {
       type: String,
-      maxlength: 1000,
+      maxlength: 1000
     },
     certificateTemplate: {
       type: String,
       enum: ['standard', 'organic', 'premium'],
-      default: 'standard',
-    },
+      default: 'standard'
+    }
   },
   { _id: false }
 );
@@ -418,18 +418,18 @@ const RejectionSchema = new Schema(
     rejectedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      default: null,
+      default: null
     },
     rejectedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     reason: {
       type: String,
-      required: function () {
+      required: function() {
         return this.parent().status === 'rejected';
       },
-      maxlength: 1000,
+      maxlength: 1000
     },
     stage: {
       type: String,
@@ -437,27 +437,27 @@ const RejectionSchema = new Schema(
         'under_review',
         'inspection_scheduled',
         'inspection_completed',
-        'phase2_payment_verified',
-      ],
+        'phase2_payment_verified'
+      ]
     },
     notes: {
       type: String,
-      maxlength: 2000,
+      maxlength: 2000
     },
     complianceScore: {
       type: Number,
       min: 0,
       max: 100,
-      default: null,
+      default: null
     },
     autoRejection: {
       type: Boolean,
-      default: false,
+      default: false
     },
     canReapply: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   { _id: false }
 );
@@ -473,7 +473,7 @@ const ApplicationSchema = new Schema(
       required: true,
       unique: true,
       match: /^APP-\d{8}-\d{4}$/,
-      index: true,
+      index: true
     },
 
     // Farmer Information
@@ -481,19 +481,19 @@ const ApplicationSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      index: true,
+      index: true
     },
     farmerEmail: {
       type: String,
       required: true,
       lowercase: true,
-      trim: true,
+      trim: true
     },
 
     // Farm Information
     farm: {
       type: FarmSchema,
-      required: true,
+      required: true
     },
 
     // Workflow State
@@ -514,10 +514,10 @@ const ApplicationSchema = new Schema(
         'approved',
         'certificate_issued',
         'rejected',
-        'expired',
+        'expired'
       ],
       default: 'draft',
-      index: true,
+      index: true
     },
 
     // Workflow History
@@ -528,7 +528,7 @@ const ApplicationSchema = new Schema(
       type: Number,
       default: 0,
       min: 0,
-      max: 3,
+      max: 3
     },
 
     // Documents
@@ -537,7 +537,7 @@ const ApplicationSchema = new Schema(
     // Payment Information
     payment: {
       phase1: PaymentSchema,
-      phase2: PaymentSchema,
+      phase2: PaymentSchema
     },
 
     // Process Stages
@@ -550,81 +550,81 @@ const ApplicationSchema = new Schema(
     certificateId: {
       type: Schema.Types.ObjectId,
       ref: 'Certificate',
-      default: null,
+      default: null
     },
     certificateNumber: {
       type: String,
       default: null,
       unique: true,
-      sparse: true,
+      sparse: true
     },
     certificateIssuedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Expiration and SLA
     expiresAt: {
       type: Date,
       default: null,
-      index: true,
+      index: true
     },
     slaDeadline: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Metadata
     priority: {
       type: String,
       enum: ['low', 'normal', 'high', 'urgent'],
-      default: 'normal',
+      default: 'normal'
     },
     tags: [
       {
         type: String,
-        maxlength: 50,
-      },
+        maxlength: 50
+      }
     ],
     notes: {
       type: String,
-      maxlength: 2000,
+      maxlength: 2000
     },
 
     // Soft Delete
     isDeleted: {
       type: Boolean,
       default: false,
-      index: true,
+      index: true
     },
     deletedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     deletedBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',
-      default: null,
+      default: null
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
+      index: true
     },
     updatedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
     submittedAt: {
       type: Date,
-      default: null,
-    },
+      default: null
+    }
   },
   {
     timestamps: true,
-    collection: 'applications',
+    collection: 'applications'
   }
 );
 
@@ -645,7 +645,7 @@ ApplicationSchema.index({ 'approval.adminId': 1, status: 1 });
 ApplicationSchema.index({
   applicationNumber: 'text',
   farmerEmail: 'text',
-  'farm.name': 'text',
+  'farm.name': 'text'
 });
 
 // Geospatial index for farm locations
@@ -656,27 +656,27 @@ ApplicationSchema.index({ 'farm.coordinates': '2dsphere' });
 // ==============================================
 
 // Instance Methods
-ApplicationSchema.methods.isInState = function (state) {
+ApplicationSchema.methods.isInState = function(state) {
   return this.status === state;
 };
 
-ApplicationSchema.methods.canTransitionTo = function (newState) {
+ApplicationSchema.methods.canTransitionTo = function(newState) {
   const ApplicationStateMachine = require('../domain/StateMachine');
   const stateMachine = new ApplicationStateMachine();
   return stateMachine.isValidTransition(this.status, newState);
 };
 
-ApplicationSchema.methods.getCurrentStateMetadata = function () {
+ApplicationSchema.methods.getCurrentStateMetadata = function() {
   const ApplicationStateMachine = require('../domain/StateMachine');
   const stateMachine = new ApplicationStateMachine();
   return stateMachine.getStateMetadata(this.status);
 };
 
-ApplicationSchema.methods.isExpired = function () {
+ApplicationSchema.methods.isExpired = function() {
   return this.expiresAt && new Date() > this.expiresAt;
 };
 
-ApplicationSchema.methods.getProgress = function () {
+ApplicationSchema.methods.getProgress = function() {
   const stateOrder = [
     'draft',
     'submitted',
@@ -688,30 +688,30 @@ ApplicationSchema.methods.getProgress = function () {
     'phase2_payment_pending',
     'phase2_payment_verified',
     'approved',
-    'certificate_issued',
+    'certificate_issued'
   ];
 
   const currentIndex = stateOrder.indexOf(this.status);
   return currentIndex >= 0 ? Math.round(((currentIndex + 1) / stateOrder.length) * 100) : 0;
 };
 
-ApplicationSchema.methods.getRequiredDocuments = function () {
+ApplicationSchema.methods.getRequiredDocuments = function() {
   return [
     { type: 'farm_license', required: true, description: 'Farm license document' },
     { type: 'land_deed', required: true, description: 'Land ownership or lease agreement' },
     { type: 'farmer_id', required: true, description: 'Farmer identification document' },
-    { type: 'farm_photos', required: true, description: 'Farm location photos' },
+    { type: 'farm_photos', required: true, description: 'Farm location photos' }
   ];
 };
 
-ApplicationSchema.methods.getMissingDocuments = function () {
+ApplicationSchema.methods.getMissingDocuments = function() {
   const required = this.getRequiredDocuments();
   const uploaded = this.documents.map(doc => doc.type);
 
   return required.filter(req => req.required && !uploaded.includes(req.type));
 };
 
-ApplicationSchema.methods.isReadyForSubmission = function () {
+ApplicationSchema.methods.isReadyForSubmission = function() {
   return (
     this.getMissingDocuments().length === 0 &&
     this.farm &&
@@ -721,40 +721,40 @@ ApplicationSchema.methods.isReadyForSubmission = function () {
 };
 
 // Static Methods
-ApplicationSchema.statics.findByApplicationNumber = function (applicationNumber) {
+ApplicationSchema.statics.findByApplicationNumber = function(applicationNumber) {
   return this.findOne({ applicationNumber, isDeleted: { $ne: true } });
 };
 
-ApplicationSchema.statics.findByFarmer = function (farmerId) {
+ApplicationSchema.statics.findByFarmer = function(farmerId) {
   return this.find({ farmerId, isDeleted: { $ne: true } }).sort({ createdAt: -1 });
 };
 
-ApplicationSchema.statics.findRequiringAction = function (role) {
+ApplicationSchema.statics.findRequiringAction = function(role) {
   let statusFilters = [];
 
   switch (role) {
-    case 'DTAM_REVIEWER':
-      statusFilters = ['under_review'];
-      break;
-    case 'DTAM_INSPECTOR':
-      statusFilters = ['payment_verified', 'inspection_scheduled'];
-      break;
-    case 'DTAM_ADMIN':
-      statusFilters = ['phase2_payment_verified'];
-      break;
+  case 'DTAM_REVIEWER':
+    statusFilters = ['under_review'];
+    break;
+  case 'DTAM_INSPECTOR':
+    statusFilters = ['payment_verified', 'inspection_scheduled'];
+    break;
+  case 'DTAM_ADMIN':
+    statusFilters = ['phase2_payment_verified'];
+    break;
   }
 
   return this.find({
     status: { $in: statusFilters },
-    isDeleted: { $ne: true },
+    isDeleted: { $ne: true }
   }).sort({ createdAt: 1 });
 };
 
-ApplicationSchema.statics.findExpired = function () {
+ApplicationSchema.statics.findExpired = function() {
   return this.find({
     expiresAt: { $lt: new Date() },
     status: { $nin: ['certificate_issued', 'rejected', 'expired'] },
-    isDeleted: { $ne: true },
+    isDeleted: { $ne: true }
   });
 };
 
@@ -763,7 +763,7 @@ ApplicationSchema.statics.findExpired = function () {
 // ==============================================
 
 // Pre-save middleware
-ApplicationSchema.pre('save', function (next) {
+ApplicationSchema.pre('save', function(next) {
   // Update timestamp
   this.updatedAt = new Date();
 
@@ -787,12 +787,12 @@ ApplicationSchema.pre('save', function (next) {
 });
 
 // Pre-find middleware to exclude deleted documents
-ApplicationSchema.pre(/^find/, function () {
+ApplicationSchema.pre(/^find/, function() {
   this.where({ isDeleted: { $ne: true } });
 });
 
 // Post-save middleware for audit logging
-ApplicationSchema.post('save', function (doc) {
+ApplicationSchema.post('save', function(doc) {
   // Emit events for external systems
   if (doc.isModified('status')) {
     // Could emit to event bus here
@@ -804,23 +804,23 @@ ApplicationSchema.post('save', function (doc) {
 // VIRTUAL FIELDS
 // ==============================================
 
-ApplicationSchema.virtual('progress').get(function () {
+ApplicationSchema.virtual('progress').get(function() {
   return this.getProgress();
 });
 
-ApplicationSchema.virtual('isExpiredVirtual').get(function () {
+ApplicationSchema.virtual('isExpiredVirtual').get(function() {
   return this.isExpired();
 });
 
-ApplicationSchema.virtual('currentStateMetadata').get(function () {
+ApplicationSchema.virtual('currentStateMetadata').get(function() {
   return this.getCurrentStateMetadata();
 });
 
-ApplicationSchema.virtual('missingDocuments').get(function () {
+ApplicationSchema.virtual('missingDocuments').get(function() {
   return this.getMissingDocuments();
 });
 
-ApplicationSchema.virtual('readyForSubmission').get(function () {
+ApplicationSchema.virtual('readyForSubmission').get(function() {
   return this.isReadyForSubmission();
 });
 

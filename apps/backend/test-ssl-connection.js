@@ -36,8 +36,8 @@ async function testSSLConnection() {
         ssl: true,
         tls: true,
         tlsAllowInvalidCertificates: false,
-        tlsAllowInvalidHostnames: false,
-      },
+        tlsAllowInvalidHostnames: false
+      }
     },
     {
       name: 'Simplified SSL Configuration',
@@ -48,8 +48,8 @@ async function testSSLConnection() {
         socketTimeoutMS: 60000,
         connectTimeoutMS: 15000,
         ssl: true,
-        tls: true,
-      },
+        tls: true
+      }
     },
     {
       name: 'Basic Connection (no explicit SSL options)',
@@ -58,9 +58,9 @@ async function testSSLConnection() {
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 20000,
         socketTimeoutMS: 60000,
-        connectTimeoutMS: 20000,
-      },
-    },
+        connectTimeoutMS: 20000
+      }
+    }
   ];
 
   for (let i = 0; i < sslConfigurations.length; i++) {

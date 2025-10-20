@@ -38,7 +38,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     auditService,
     notificationService,
     cacheService,
-    logger,
+    logger
   }) {
     super();
 
@@ -58,7 +58,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       originalTraining: 'unknown',
       analytics: 'unknown',
       certification: 'unknown',
-      performance: 'unknown',
+      performance: 'unknown'
     };
 
     // Circuit breaker configuration for resilience
@@ -68,22 +68,22 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         failureCount: 0,
         threshold: 5,
         timeout: 60000,
-        lastFailureTime: null,
+        lastFailureTime: null
       },
       certification: {
         isOpen: false,
         failureCount: 0,
         threshold: 3,
         timeout: 30000,
-        lastFailureTime: null,
+        lastFailureTime: null
       },
       performance: {
         isOpen: false,
         failureCount: 0,
         threshold: 4,
         timeout: 45000,
-        lastFailureTime: null,
-      },
+        lastFailureTime: null
+      }
     };
 
     // Performance metrics tracking
@@ -92,7 +92,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       successfulOperations: 0,
       failedOperations: 0,
       averageResponseTime: 0,
-      lastOperationTime: null,
+      lastOperationTime: null
     };
 
     this._setupEventListeners();
@@ -129,7 +129,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       await this._createAuditRecord('SYSTEM_STARTUP', {
         services: Object.keys(this.serviceHealth),
         healthStatus: this.serviceHealth,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       this.isInitialized = true;
@@ -140,13 +140,13 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       // Emit initialization complete event
       this.emit('initialized', {
         serviceHealth: this.serviceHealth,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       return {
         success: true,
         serviceHealth: this.serviceHealth,
-        performanceMetrics: this.performanceMetrics,
+        performanceMetrics: this.performanceMetrics
       };
     } catch (error) {
       this.logger.error('[EnhancedTrainingIntegration] Service initialization failed:', error);
@@ -154,7 +154,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       await this._createAuditRecord('SYSTEM_STARTUP_FAILED', {
         error: error.message,
         stack: error.stack,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       throw new Error(`Enhanced Training Service initialization failed: ${error.message}`);
@@ -206,31 +206,31 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       // Parallel integration updates for performance
       const integrationPromises = [
         // Initialize analytics tracking
-        this._safeExecuteWithCircuitBreaker('analytics', async () => {
+        this._safeExecuteWithCircuitBreaker('analytics', async() => {
           return this.advancedAnalyticsSystem.initializeLearnerTracking(userId, courseId, {
             enrollmentData: enrollmentResult,
             predictiveAnalytics: true,
-            interventionMonitoring: true,
+            interventionMonitoring: true
           });
         }),
 
         // Setup certification pathway
-        this._safeExecuteWithCircuitBreaker('certification', async () => {
+        this._safeExecuteWithCircuitBreaker('certification', async() => {
           return this.certificationTrackingSystem.initializeCertificationPathway(userId, courseId, {
             enrollmentId: enrollmentResult.enrollmentId,
             governmentCompliance: true,
-            qualityAssurance: true,
+            qualityAssurance: true
           });
         }),
 
         // Initialize performance assessment
-        this._safeExecuteWithCircuitBreaker('performance', async () => {
+        this._safeExecuteWithCircuitBreaker('performance', async() => {
           return this.performanceAssessmentSystem.setupLearnerProfile(userId, courseId, {
             competencyMapping: true,
             adaptiveAssessment: true,
-            realTimeFeedback: true,
+            realTimeFeedback: true
           });
-        }),
+        })
       ];
 
       // Execute integrations with error handling
@@ -243,7 +243,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         certification: this._extractSettledResult(integrationResults[1]),
         performance: this._extractSettledResult(integrationResults[2]),
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       };
 
       // Generate enrollment predictions
@@ -261,11 +261,11 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         enrollmentId: enrollmentResult.enrollmentId,
         integrationResults: integrationResults.map(r => ({
           status: r.status,
-          success: r.status === 'fulfilled',
+          success: r.status === 'fulfilled'
         })),
         predictions,
         operationId,
-        processingTime: enhancedResult.processingTime,
+        processingTime: enhancedResult.processingTime
       });
 
       // Send enhanced notifications
@@ -279,7 +279,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         userId,
         courseId,
         enrollmentResult: enhancedResult,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       this.logger.info(
@@ -289,7 +289,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       return {
         success: true,
         data: enhancedResult,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -306,7 +306,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         courseId,
         error: error.message,
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       throw error;
@@ -355,33 +355,33 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       // Enhanced integration processing
       const integrationPromises = [
         // Update analytics with completion data
-        this._safeExecuteWithCircuitBreaker('analytics', async () => {
+        this._safeExecuteWithCircuitBreaker('analytics', async() => {
           return this.advancedAnalyticsSystem.processCompletionEvent(userId, courseId, {
             completionData: completionResult,
             performanceMetrics: completionData.performanceMetrics,
             learningOutcomes: completionData.learningOutcomes,
-            generatePredictions: true,
+            generatePredictions: true
           });
         }),
 
         // Progress certification pathway
-        this._safeExecuteWithCircuitBreaker('certification', async () => {
+        this._safeExecuteWithCircuitBreaker('certification', async() => {
           return this.certificationTrackingSystem.progressCertificationMilestone(userId, courseId, {
             completionId: completionResult.completionId,
             achievementLevel: completionData.achievementLevel,
             competenciesAchieved: completionData.competencies,
-            governmentReporting: true,
+            governmentReporting: true
           });
         }),
 
         // Generate performance assessment
-        this._safeExecuteWithCircuitBreaker('performance', async () => {
+        this._safeExecuteWithCircuitBreaker('performance', async() => {
           return this.performanceAssessmentSystem.generateCompletionAssessment(userId, courseId, {
             completionData: completionResult,
             competencyEvaluation: true,
-            futureRecommendations: true,
+            futureRecommendations: true
           });
-        }),
+        })
       ];
 
       // Execute integrations
@@ -394,7 +394,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         certification: this._extractSettledResult(integrationResults[1]),
         performance: this._extractSettledResult(integrationResults[2]),
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       };
 
       // Generate achievement predictions and next steps
@@ -412,11 +412,11 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         completionId: completionResult.completionId,
         integrationResults: integrationResults.map(r => ({
           status: r.status,
-          success: r.status === 'fulfilled',
+          success: r.status === 'fulfilled'
         })),
         achievements,
         operationId,
-        processingTime: enhancedResult.processingTime,
+        processingTime: enhancedResult.processingTime
       });
 
       // Send achievement notifications and certificates
@@ -430,7 +430,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         userId,
         courseId,
         completionResult: enhancedResult,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       this.logger.info(
@@ -440,7 +440,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       return {
         success: true,
         data: enhancedResult,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -455,7 +455,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         courseId,
         error: error.message,
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       throw error;
@@ -489,31 +489,31 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       // Parallel data aggregation for performance
       const dataPromises = [
         // Analytics insights
-        this._safeExecuteWithCircuitBreaker('analytics', async () => {
+        this._safeExecuteWithCircuitBreaker('analytics', async() => {
           return this.advancedAnalyticsSystem.generateLearnerInsights(userId, {
             includePredictions: true,
             includeInterventions: true,
-            timeframe: options.timeframe || '30d',
+            timeframe: options.timeframe || '30d'
           });
         }),
 
         // Certification progress
-        this._safeExecuteWithCircuitBreaker('certification', async () => {
+        this._safeExecuteWithCircuitBreaker('certification', async() => {
           return this.certificationTrackingSystem.getLearnerCertificationStatus(userId, {
             includeProgress: true,
             includeRenewalSchedule: true,
-            includeCompliance: true,
+            includeCompliance: true
           });
         }),
 
         // Performance assessments
-        this._safeExecuteWithCircuitBreaker('performance', async () => {
+        this._safeExecuteWithCircuitBreaker('performance', async() => {
           return this.performanceAssessmentSystem.getLearnerPerformanceSummary(userId, {
             includeCompetencies: true,
             includeRecommendations: true,
-            includeTrends: true,
+            includeTrends: true
           });
-        }),
+        })
       ];
 
       // Execute data aggregation
@@ -527,7 +527,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         performance: this._extractSettledResult(dataResults[2]),
         operationId,
         lastUpdated: new Date(),
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       };
 
       // Generate personalized recommendations
@@ -552,7 +552,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       return {
         success: true,
         data: enhancedDashboard,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -577,7 +577,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         circuitBreakers: { ...this.circuitBreakers },
         performanceMetrics: { ...this.performanceMetrics },
         systemStatus: this.isInitialized ? 'OPERATIONAL' : 'INITIALIZING',
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       // Perform live health checks
@@ -596,7 +596,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
 
       return {
         success: true,
-        data: healthData,
+        data: healthData
       };
     } catch (error) {
       this.logger.error('[EnhancedTrainingIntegration] Health check failed:', error);
@@ -607,8 +607,8 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
         data: {
           serviceHealth: this.serviceHealth,
           status: 'ERROR',
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       };
     }
   }
@@ -647,7 +647,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       { name: 'analytics', service: this.advancedAnalyticsSystem },
       { name: 'certification', service: this.certificationTrackingSystem },
       { name: 'performance', service: this.performanceAssessmentSystem },
-      { name: 'originalTraining', service: this.originalTrainingService },
+      { name: 'originalTraining', service: this.originalTrainingService }
     ];
 
     for (const check of healthChecks) {
@@ -726,7 +726,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       successfulOperations: 0,
       failedOperations: 0,
       averageResponseTime: 0,
-      lastOperationTime: null,
+      lastOperationTime: null
     };
 
     // Setup periodic performance reporting
@@ -797,7 +797,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       );
       return {
         error: settledPromise.reason.message,
-        status: 'failed',
+        status: 'failed'
       };
     }
   }
@@ -831,7 +831,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     this.emit('performanceMetrics', {
       metrics: this.performanceMetrics,
       serviceHealth: this.serviceHealth,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
   }
 
@@ -842,7 +842,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
           module: 'ENHANCED_TRAINING',
           action,
           data,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
     } catch (error) {
@@ -858,7 +858,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     return {
       eligible: true,
       reason: null,
-      recommendations: [],
+      recommendations: []
     };
   }
 
@@ -869,7 +869,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     return {
       valid: true,
       reason: null,
-      missingRequirements: [],
+      missingRequirements: []
     };
   }
 
@@ -881,7 +881,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       successProbability: 0.85,
       estimatedCompletionTime: '4-6 weeks',
       interventionRisk: 'low',
-      recommendedStudyPlan: 'standard',
+      recommendedStudyPlan: 'standard'
     };
   }
 
@@ -893,7 +893,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       achievementLevel: 'proficient',
       competenciesGained: [],
       nextSteps: [],
-      certificationProgress: 'on-track',
+      certificationProgress: 'on-track'
     };
   }
 
@@ -905,7 +905,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
       nextCourses: [],
       skillGaps: [],
       certificationOpportunities: [],
-      studyTips: [],
+      studyTips: []
     };
   }
 
@@ -918,8 +918,8 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
           data: {
             courseId,
             enrollmentId: enrollmentResult.enrollmentId,
-            predictions: enrollmentResult.predictions,
-          },
+            predictions: enrollmentResult.predictions
+          }
         });
       }
     } catch (error) {
@@ -936,8 +936,8 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
           data: {
             courseId,
             completionId: completionResult.completionId,
-            achievements: completionResult.achievements,
-          },
+            achievements: completionResult.achievements
+          }
         });
       }
     } catch (error) {

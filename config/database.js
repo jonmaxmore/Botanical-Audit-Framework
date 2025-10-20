@@ -81,7 +81,7 @@ function loadDatabaseConfiguration() {
       console.warn('   Set MONGODB_URI in .env for custom configuration\n');
       return {
         uri: defaultUri,
-        options: getMongooseOptions(isDevelopment),
+        options: getMongooseOptions(isDevelopment)
       };
     } else {
       throw new Error(
@@ -120,7 +120,7 @@ function loadDatabaseConfiguration() {
 
   return {
     uri: mongodbUri,
-    options,
+    options
   };
 }
 
@@ -156,7 +156,7 @@ function getMongooseOptions(isDevelopment) {
 
     // Write Concern (สำหรับ production)
     w: isDevelopment ? 1 : 'majority', // Write concern
-    wtimeout: isDevelopment ? 5000 : 10000,
+    wtimeout: isDevelopment ? 5000 : 10000
   };
 
   // Production-specific options
@@ -182,7 +182,7 @@ function getMongooseOptions(isDevelopment) {
 async function connectDatabase() {
   const config = loadDatabaseConfiguration();
 
-  const connectWithRetry = async () => {
+  const connectWithRetry = async() => {
     try {
       console.log(
         `🔄 Attempting to connect to MongoDB (attempt ${connectionAttempts + 1}/${MAX_RETRY_ATTEMPTS})...`
@@ -282,7 +282,7 @@ function getReadyStateText(state) {
     0: 'disconnected',
     1: 'connected',
     2: 'connecting',
-    3: 'disconnecting',
+    3: 'disconnecting'
   };
   return states[state] || 'unknown';
 }
@@ -299,7 +299,7 @@ async function checkHealth() {
         status: 'unhealthy',
         connected: false,
         readyState: getReadyStateText(mongoose.connection.readyState),
-        message: 'Database is not connected',
+        message: 'Database is not connected'
       };
     }
 
@@ -317,14 +317,14 @@ async function checkHealth() {
       host: mongoose.connection.host,
       port: mongoose.connection.port,
       poolSize: poolStats,
-      message: 'Database is connected and responding',
+      message: 'Database is connected and responding'
     };
   } catch (error) {
     return {
       status: 'unhealthy',
       connected: false,
       error: error.message,
-      message: 'Database health check failed',
+      message: 'Database health check failed'
     };
   }
 }
@@ -356,7 +356,7 @@ function getConnectionStats() {
     host: mongoose.connection.host,
     port: mongoose.connection.port,
     models: Object.keys(mongoose.models).length,
-    collections: Object.keys(mongoose.connection.collections).length,
+    collections: Object.keys(mongoose.connection.collections).length
   };
 }
 
@@ -370,5 +370,5 @@ module.exports = {
   },
   get connection() {
     return mongoose.connection;
-  },
+  }
 };

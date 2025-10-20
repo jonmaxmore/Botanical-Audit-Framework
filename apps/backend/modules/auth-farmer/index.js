@@ -23,17 +23,17 @@ const validators = require('./validators/auth-validators');
 module.exports = {
   // Routes
   routes: {
-    farmerAuth: farmerAuthRoutes,
+    farmerAuth: farmerAuthRoutes
   },
 
   // Models
   models: {
-    User,
+    User
   },
 
   // Services
   services: {
-    logger,
+    logger
   },
 
   // Validators
@@ -43,5 +43,5 @@ module.exports = {
   mountRoutes: (app, basePath = '/api/auth-farmer') => {
     app.use(basePath, farmerAuthRoutes);
     logger.info(`Auth Farmer routes mounted at ${basePath}`);
-  },
+  }
 };

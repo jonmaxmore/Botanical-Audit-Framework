@@ -12,7 +12,7 @@ const comparisonSchema = new mongoose.Schema(
     farmId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     // Farm data submitted for comparison
@@ -20,7 +20,7 @@ const comparisonSchema = new mongoose.Schema(
       farmName: {
         type: String,
         required: true,
-        index: true,
+        index: true
       },
       location: {
         province: String,
@@ -28,8 +28,8 @@ const comparisonSchema = new mongoose.Schema(
         subDistrict: String,
         coordinates: {
           latitude: Number,
-          longitude: Number,
-        },
+          longitude: Number
+        }
       },
       cropType: String,
       farmSize: Number,
@@ -45,7 +45,7 @@ const comparisonSchema = new mongoose.Schema(
         foodSafety: Boolean,
         environmental: Boolean,
         wasteManagement: Boolean,
-        traceability: Boolean,
+        traceability: Boolean
       },
 
       // Documents
@@ -53,8 +53,8 @@ const comparisonSchema = new mongoose.Schema(
         {
           type: String,
           name: String,
-          uploadedAt: Date,
-        },
+          uploadedAt: Date
+        }
       ],
 
       // Certifications
@@ -65,8 +65,8 @@ const comparisonSchema = new mongoose.Schema(
         complete: Boolean,
         cultivation: Boolean,
         harvesting: Boolean,
-        batchTracking: Boolean,
-      },
+        batchTracking: Boolean
+      }
     },
 
     // Comparison results for each standard
@@ -96,16 +96,16 @@ const comparisonSchema = new mongoose.Schema(
                 requirement: String,
                 priority: {
                   type: String,
-                  enum: ['critical', 'important', 'optional'],
+                  enum: ['critical', 'important', 'optional']
                 },
                 weight: Number,
                 met: Boolean,
-                score: Number,
-              },
-            ],
-          },
-        ],
-      },
+                score: Number
+              }
+            ]
+          }
+        ]
+      }
     ],
 
     // Overall summary
@@ -113,18 +113,18 @@ const comparisonSchema = new mongoose.Schema(
       standardsCompared: Number,
       certified: Number,
       notCertified: Number,
-      averageScore: Number,
+      averageScore: Number
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
-    },
+      index: true
+    }
   },
   {
-    collection: 'standards_comparisons',
+    collection: 'standards_comparisons'
   }
 );
 
@@ -134,7 +134,7 @@ comparisonSchema.index({ 'farmData.farmName': 1 });
 comparisonSchema.index({ 'comparisons.standardId': 1 });
 
 // Virtual for comparison age
-comparisonSchema.virtual('age').get(function () {
+comparisonSchema.virtual('age').get(function() {
   const now = new Date();
   const diff = now - this.createdAt;
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -142,14 +142,14 @@ comparisonSchema.virtual('age').get(function () {
 });
 
 // Method to check if comparison is recent (within 30 days)
-comparisonSchema.methods.isRecent = function () {
+comparisonSchema.methods.isRecent = function() {
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
   return this.createdAt >= thirtyDaysAgo;
 };
 
 // Method to get overall certification status
-comparisonSchema.methods.getOverallStatus = function () {
+comparisonSchema.methods.getOverallStatus = function() {
   if (this.summary.certified === this.summary.standardsCompared) {
     return 'fully_certified';
   } else if (this.summary.certified > 0) {
@@ -160,7 +160,7 @@ comparisonSchema.methods.getOverallStatus = function () {
 };
 
 // Method to get critical gaps count
-comparisonSchema.methods.getCriticalGapsCount = function () {
+comparisonSchema.methods.getCriticalGapsCount = function() {
   let count = 0;
 
   for (const comparison of this.comparisons) {
@@ -177,25 +177,25 @@ comparisonSchema.methods.getCriticalGapsCount = function () {
 };
 
 // Static method to find recent comparisons
-comparisonSchema.statics.findRecent = function (farmId, days = 30) {
+comparisonSchema.statics.findRecent = function(farmId, days = 30) {
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - days);
 
   return this.find({
     farmId,
-    createdAt: { $gte: startDate },
+    createdAt: { $gte: startDate }
   }).sort({ createdAt: -1 });
 };
 
 // Static method to find certified farms
-comparisonSchema.statics.findCertified = function (standardId) {
+comparisonSchema.statics.findCertified = function(standardId) {
   return this.find({
     comparisons: {
       $elemMatch: {
         standardId,
-        certified: true,
-      },
-    },
+        certified: true
+      }
+    }
   });
 };
 

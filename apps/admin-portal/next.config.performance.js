@@ -20,9 +20,9 @@ const nextConfig = {
     removeConsole:
       process.env.NODE_ENV === 'production'
         ? {
-            exclude: ['error', 'warn'],
-          }
-        : false,
+          exclude: ['error', 'warn']
+        }
+        : false
   },
 
   // Image optimization
@@ -31,7 +31,7 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-    minimumCacheTTL: 60 * 60 * 24 * 365, // 1 year
+    minimumCacheTTL: 60 * 60 * 24 * 365 // 1 year
   },
 
   // Webpack configuration
@@ -53,32 +53,32 @@ const nextConfig = {
                 )?.[1];
                 return `npm.${packageName?.replace('@', '')}`;
               },
-              priority: 10,
+              priority: 10
             },
             // Common chunks
             common: {
               minChunks: 2,
               priority: 5,
-              reuseExistingChunk: true,
+              reuseExistingChunk: true
             },
             // React chunks
             react: {
               test: /[\\/]node_modules[\\/](react|react-dom|react-router-dom)[\\/]/,
               name: 'react-vendors',
-              priority: 20,
+              priority: 20
             },
             // Material UI chunks
             mui: {
               test: /[\\/]node_modules[\\/](@mui|@emotion)[\\/]/,
               name: 'mui-vendors',
-              priority: 15,
-            },
-          },
+              priority: 15
+            }
+          }
         },
         // Runtime chunk for better long-term caching
         runtimeChunk: {
-          name: 'runtime',
-        },
+          name: 'runtime'
+        }
       };
     }
 
@@ -87,7 +87,7 @@ const nextConfig = {
       ...config.resolve.alias,
       '@/components': require('path').resolve(__dirname, 'components'),
       '@/lib': require('path').resolve(__dirname, 'lib'),
-      '@/app': require('path').resolve(__dirname, 'app'),
+      '@/app': require('path').resolve(__dirname, 'app')
     };
 
     return config;
@@ -100,7 +100,7 @@ const nextConfig = {
     // Optimize fonts
     optimizeFonts: true,
     // Server components
-    serverComponents: true,
+    serverComponents: true
   },
 
   // Compression
@@ -118,8 +118,8 @@ const nextConfig = {
   // Environment variables exposed to browser
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
-    NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL,
-  },
+    NEXT_PUBLIC_CDN_URL: process.env.NEXT_PUBLIC_CDN_URL
+  }
 };
 
 module.exports = nextConfig;

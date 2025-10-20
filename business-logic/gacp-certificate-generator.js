@@ -22,7 +22,7 @@ const CERTIFICATE_TEMPLATES = {
     layout: {
       width: 297, // A4 width in mm
       height: 210, // A4 height in mm
-      orientation: 'landscape',
+      orientation: 'landscape'
     },
     elements: {
       logo: { x: 20, y: 20, width: 60, height: 30 },
@@ -35,8 +35,8 @@ const CERTIFICATE_TEMPLATES = {
       validUntil: { x: 60, y: 155, fontSize: 10 },
       qrCode: { x: 220, y: 120, size: 50 },
       signature: { x: 40, y: 170, width: 60, height: 25 },
-      seal: { x: 200, y: 160, width: 40, height: 40 },
-    },
+      seal: { x: 200, y: 160, width: 40, height: 40 }
+    }
   },
   PREMIUM: {
     id: 'premium',
@@ -47,9 +47,9 @@ const CERTIFICATE_TEMPLATES = {
     layout: {
       width: 210, // A4 width in mm
       height: 297, // A4 height in mm
-      orientation: 'portrait',
-    },
-  },
+      orientation: 'portrait'
+    }
+  }
 };
 
 // ข้อมูลหน่วยงานผู้ออกใบรับรอง
@@ -65,8 +65,8 @@ const ISSUING_AUTHORITY = {
   director: {
     name: 'นายกรรมการ ผู้อำนวยการ',
     title: 'ผู้อำนวยการกรมวิชาการเกษตร',
-    signature: '/assets/images/director-signature.png',
-  },
+    signature: '/assets/images/director-signature.png'
+  }
 };
 
 class GACPCertificateGenerator extends EventEmitter {
@@ -107,7 +107,7 @@ class GACPCertificateGenerator extends EventEmitter {
           name: application.farmerName,
           idCard: application.farmerId,
           phone: application.farmerPhone,
-          email: application.farmerEmail,
+          email: application.farmerEmail
         },
 
         // ข้อมูลฟาร์ม
@@ -115,7 +115,7 @@ class GACPCertificateGenerator extends EventEmitter {
           name: application.farmDetails?.name || `ฟาร์ม${application.farmerName}`,
           address: this.formatFarmAddress(application.farmDetails),
           area: application.farmDetails?.area || 0,
-          gpsLocation: application.farmDetails?.gpsLocation,
+          gpsLocation: application.farmDetails?.gpsLocation
         },
 
         // ข้อมูลการรับรอง
@@ -125,7 +125,7 @@ class GACPCertificateGenerator extends EventEmitter {
           validUntil: this.calculateExpiryDate(template.validityPeriod),
           standard: 'GACP (Good Agricultural and Collection Practices)',
           score: application.finalScore || 0,
-          grade: this.calculateGrade(application.finalScore || 0),
+          grade: this.calculateGrade(application.finalScore || 0)
         },
 
         // ข้อมูลการตรวจสอบ
@@ -133,20 +133,20 @@ class GACPCertificateGenerator extends EventEmitter {
           inspectorId: application.inspection?.inspectorId,
           inspectionDate: application.inspection?.completedAt,
           method: application.inspection?.method || 'comprehensive',
-          findings: application.inspection?.findings || [],
+          findings: application.inspection?.findings || []
         },
 
         // QR Code และการตรวจสอบ
         verification: {
           qrCode: null, // จะสร้างภายหลัง
           verificationUrl: null,
-          digitalSignature: null,
+          digitalSignature: null
         },
 
         // สถานะ
         status: 'draft',
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       };
 
       // สร้าง QR Code
@@ -177,7 +177,7 @@ class GACPCertificateGenerator extends EventEmitter {
         certificateId: certificateData.id,
         certificateNumber,
         downloadUrl: certificateFile.downloadUrl,
-        issuedAt: certificateData.issuedAt,
+        issuedAt: certificateData.issuedAt
       });
 
       // ส่ง event
@@ -185,7 +185,7 @@ class GACPCertificateGenerator extends EventEmitter {
         applicationId,
         certificateId: certificateData.id,
         certificateNumber,
-        farmerName: application.farmerName,
+        farmerName: application.farmerName
       });
 
       return certificateData;
@@ -204,7 +204,7 @@ class GACPCertificateGenerator extends EventEmitter {
       if (!certificate) {
         return {
           valid: false,
-          error: 'ไม่พบใบรับรองในระบบ',
+          error: 'ไม่พบใบรับรองในระบบ'
         };
       }
 
@@ -223,17 +223,17 @@ class GACPCertificateGenerator extends EventEmitter {
           standard: certificate.certification.standard,
           score: certificate.certification.score,
           grade: certificate.certification.grade,
-          expired: expired,
+          expired: expired
         },
         verification: {
           verifiedAt: new Date(),
-          digitalSignature: certificate.verification.digitalSignature,
-        },
+          digitalSignature: certificate.verification.digitalSignature
+        }
       };
     } catch (error) {
       return {
         valid: false,
-        error: 'เกิดข้อผิดพลาดในการตรวจสอบ',
+        error: 'เกิดข้อผิดพลาดในการตรวจสอบ'
       };
     }
   }
@@ -257,7 +257,7 @@ class GACPCertificateGenerator extends EventEmitter {
       grade: cert.certification.grade,
       status: cert.status,
       downloadUrl: cert.downloadUrl,
-      expired: new Date() > new Date(cert.certification.validUntil),
+      expired: new Date() > new Date(cert.certification.validUntil)
     }));
   }
 
@@ -293,8 +293,8 @@ class GACPCertificateGenerator extends EventEmitter {
           certificateNumber: cert.certificateNumber,
           farmerName: cert.farmer.name,
           farmName: cert.farm.name,
-          score: cert.certification.score,
-        })),
+          score: cert.certification.score
+        }))
     };
   }
 
@@ -359,7 +359,7 @@ class GACPCertificateGenerator extends EventEmitter {
       farmDetails.subdistrict,
       farmDetails.district,
       farmDetails.province,
-      farmDetails.postalCode,
+      farmDetails.postalCode
     ].filter(Boolean);
 
     return parts.join(' ');
@@ -385,8 +385,11 @@ class GACPCertificateGenerator extends EventEmitter {
       certificateNumber: certificateData.certificateNumber,
       verificationUrl: this.generateVerificationUrl(certificateData.certificateNumber),
       issuedDate: certificateData.certification.issuedDate.toISOString(),
-      farmerName: certificateData.farmer.name,
+      farmerName: certificateData.farmer.name
     };
+
+    // ใช้ qrData สำหรับสร้าง QR Code
+    console.log('QR Code data:', qrData);
 
     // Return mock QR code data URL
     return `data:image/png;base64,mock_qr_code_${certificateData.certificateNumber}`;
@@ -402,7 +405,7 @@ class GACPCertificateGenerator extends EventEmitter {
       certificateNumber: certificateData.certificateNumber,
       farmerName: certificateData.farmer.name,
       issuedDate: certificateData.certification.issuedDate,
-      score: certificateData.certification.score,
+      score: certificateData.certification.score
     });
 
     // Return mock signature
@@ -423,7 +426,7 @@ class GACPCertificateGenerator extends EventEmitter {
       downloadUrl: `https://gacp.doa.go.th${filePath}`,
       mimeType: 'application/pdf',
       size: certificateContent.length,
-      generatedAt: new Date(),
+      generatedAt: new Date()
     };
   }
 
@@ -480,7 +483,7 @@ class GACPCertificateGenerator extends EventEmitter {
 
   // TODO: Implement these methods with actual database integration
   async getApplication(applicationId) {
-    throw new Error('Database integration needed - getApplication');
+    throw new Error(`Database integration needed - getApplication for ID: ${applicationId}`);
   }
 
   async saveCertificate(certificateData) {
@@ -521,7 +524,7 @@ class GACPCertificateGenerator extends EventEmitter {
       certificateNumber,
       reason,
       revokedBy,
-      farmerName: certificate.farmer.name,
+      farmerName: certificate.farmer.name
     });
 
     return certificate;
@@ -555,5 +558,5 @@ class GACPCertificateGenerator extends EventEmitter {
 module.exports = {
   GACPCertificateGenerator,
   CERTIFICATE_TEMPLATES,
-  ISSUING_AUTHORITY,
+  ISSUING_AUTHORITY
 };

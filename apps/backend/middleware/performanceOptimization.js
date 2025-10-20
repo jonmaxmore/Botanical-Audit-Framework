@@ -14,7 +14,7 @@ class PerformanceOptimizer {
 
   // Memory cache with TTL
   memoize(fn, keyGenerator, ttl = this.cacheTimeout) {
-    return async (...args) => {
+    return async(...args) => {
       const key = keyGenerator ? keyGenerator(...args) : JSON.stringify(args);
 
       if (this.cache.has(key)) {
@@ -34,7 +34,7 @@ class PerformanceOptimizer {
       const result = await fn(...args);
       this.cache.set(key, {
         value: result,
-        timestamp: Date.now(),
+        timestamp: Date.now()
       });
 
       return result;
@@ -50,7 +50,7 @@ class PerformanceOptimizer {
   getCacheStats() {
     return {
       size: this.cache.size,
-      maxSize: this.maxCacheSize,
+      maxSize: this.maxCacheSize
     };
   }
 }
@@ -65,7 +65,7 @@ const compressionMiddleware = compression({
   },
   threshold: 1024, // Only compress responses > 1KB
   level: 6, // Compression level (1-9, 6 is good balance)
-  memLevel: 8,
+  memLevel: 8
 });
 
 // Static file caching headers
@@ -131,13 +131,13 @@ const optimizeQuery = {
   // Add sorting with index
   sort: (query, sortField = 'createdAt', order = -1) => {
     return query.sort({ [sortField]: order });
-  },
+  }
 };
 
 // Image optimization middleware
 const imageOptimization = {
   // Resize and compress images
-  processImage: async (buffer, options = {}) => {
+  processImage: async(buffer, options = {}) => {
     const sharp = require('sharp');
 
     const { width = 800, height = 600, quality = 80, format = 'jpeg' } = options;
@@ -146,7 +146,7 @@ const imageOptimization = {
       const processed = await sharp(buffer)
         .resize(width, height, {
           fit: 'inside',
-          withoutEnlargement: true,
+          withoutEnlargement: true
         })
         .jpeg({ quality })
         .png({ quality })
@@ -160,11 +160,11 @@ const imageOptimization = {
   },
 
   // Generate multiple sizes
-  generateSizes: async (buffer, sizes = []) => {
+  generateSizes: async(buffer, sizes = []) => {
     const defaultSizes = [
       { name: 'thumbnail', width: 150, height: 150 },
       { name: 'medium', width: 400, height: 300 },
-      { name: 'large', width: 800, height: 600 },
+      { name: 'large', width: 800, height: 600 }
     ];
 
     const sizesToProcess = sizes.length ? sizes : defaultSizes;
@@ -175,7 +175,7 @@ const imageOptimization = {
     }
 
     return results;
-  },
+  }
 };
 
 // Bundle optimization for React
@@ -187,21 +187,21 @@ const bundleOptimization = {
       vendor: {
         test: /[\\/]node_modules[\\/]/,
         name: 'vendors',
-        chunks: 'all',
+        chunks: 'all'
       },
       common: {
         name: 'common',
         minChunks: 2,
         chunks: 'all',
-        enforce: true,
-      },
-    },
+        enforce: true
+      }
+    }
   },
 
   // Tree shaking configuration
   treeShaking: {
     usedExports: true,
-    sideEffects: false,
+    sideEffects: false
   },
 
   // Minification options
@@ -213,8 +213,8 @@ const bundleOptimization = {
     removeScriptTypeAttributes: true,
     removeStyleLinkTypeAttributes: true,
     minifyCSS: true,
-    minifyJS: true,
-  },
+    minifyJS: true
+  }
 };
 
 // API response optimization
@@ -251,10 +251,10 @@ const optimizeApiResponse = {
         total,
         pages: Math.ceil(total / limit),
         hasNext: page * limit < total,
-        hasPrev: page > 1,
-      },
+        hasPrev: page > 1
+      }
     };
-  },
+  }
 };
 
 // Memory usage monitoring
@@ -267,7 +267,7 @@ const memoryMonitor = {
       rss: formatBytes(usage.rss),
       heapTotal: formatBytes(usage.heapTotal),
       heapUsed: formatBytes(usage.heapUsed),
-      external: formatBytes(usage.external),
+      external: formatBytes(usage.external)
     };
   },
 
@@ -286,7 +286,7 @@ const memoryMonitor = {
     setInterval(() => {
       memoryMonitor.logMemoryUsage();
     }, interval);
-  },
+  }
 };
 
 // Performance metrics collection
@@ -295,7 +295,7 @@ const performanceMetrics = {
     requestCount: 0,
     errorCount: 0,
     responseTimeSum: 0,
-    slowQueries: 0,
+    slowQueries: 0
   },
 
   incrementRequestCount: () => {
@@ -323,7 +323,7 @@ const performanceMetrics = {
       errorRate:
         metrics.requestCount > 0
           ? Math.round((metrics.errorCount / metrics.requestCount) * 100)
-          : 0,
+          : 0
     };
   },
 
@@ -332,9 +332,9 @@ const performanceMetrics = {
       requestCount: 0,
       errorCount: 0,
       responseTimeSum: 0,
-      slowQueries: 0,
+      slowQueries: 0
     };
-  },
+  }
 };
 
 // Setup performance middleware
@@ -360,8 +360,8 @@ const setupPerformanceMiddleware = app => {
       hsts: {
         maxAge: 31536000,
         includeSubDomains: true,
-        preload: true,
-      },
+        preload: true
+      }
     })
   );
 
@@ -397,5 +397,5 @@ module.exports = {
   optimizeApiResponse,
   memoryMonitor,
   performanceMetrics,
-  setupPerformanceMiddleware,
+  setupPerformanceMiddleware
 };

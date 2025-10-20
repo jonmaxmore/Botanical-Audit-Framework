@@ -17,10 +17,10 @@
 const {
   GACPCriticalControlPoints,
   GACPScoringSystem,
-  GACPApplicationStatus,
+  GACPApplicationStatus
 } = require('../models/GACPBusinessLogic');
 
-const GACPWorkflowEngine = require('./GACPWorkflowEngine');
+const GACPWorkflowEngine = require('../../../business-logic/gacp-workflow-engine');
 
 class GACPEnhancedInspectionService {
   constructor(database = null) {
@@ -48,7 +48,7 @@ class GACPEnhancedInspectionService {
       if (!inspectorValidation.valid) {
         return this.createResponse(false, 'Inspector certification validation failed', {
           errors: inspectorValidation.errors,
-          requirements: inspectorValidation.requirements,
+          requirements: inspectorValidation.requirements
         });
       }
 
@@ -63,7 +63,7 @@ class GACPEnhancedInspectionService {
       if (!statusCheck.eligible) {
         return this.createResponse(false, statusCheck.reason, {
           currentStatus: application.status,
-          requiredStatus: statusCheck.requiredStatuses,
+          requiredStatus: statusCheck.requiredStatuses
         });
       }
 
@@ -92,10 +92,10 @@ class GACPEnhancedInspectionService {
             number: inspector.certification.number,
             issuedBy: inspector.certification.issuedBy,
             validUntil: inspector.certification.validUntil,
-            specialization: inspector.certification.specialization,
+            specialization: inspector.certification.specialization
           },
           qualifications: inspector.qualifications,
-          experienceYears: inspector.experienceYears,
+          experienceYears: inspector.experienceYears
         },
 
         // Scheduling and Timeline
@@ -104,7 +104,7 @@ class GACPEnhancedInspectionService {
           estimatedDuration: this.calculateInspectionDuration(application),
           weatherConditions: null,
           accessibilityNotes: '',
-          emergencyContacts: application.emergencyContacts,
+          emergencyContacts: application.emergencyContacts
         },
 
         // Inspection Status and Workflow
@@ -122,30 +122,30 @@ class GACPEnhancedInspectionService {
           thaiFDA: {
             checked: false,
             compliant: null,
-            requirements: this.getThaiFDARequirements(),
+            requirements: this.getThaiFDARequirements()
           },
           whoGACP: {
             checked: false,
             compliant: null,
-            guidelines: this.getWHOGACPGuidelines(),
+            guidelines: this.getWHOGACPGuidelines()
           },
           faoGuidelines: {
             checked: false,
             compliant: null,
-            standards: this.getFAOStandards(),
+            standards: this.getFAOStandards()
           },
           aseanTM: {
             checked: false,
             compliant: null,
-            guidelines: this.getASEANTMGuidelines(),
-          },
+            guidelines: this.getASEANTMGuidelines()
+          }
         },
 
         // Risk Assessment (Initial)
         riskAssessment: {
           initial: this.performInitialRiskAssessment(application),
           detailed: null,
-          mitigation: [],
+          mitigation: []
         },
 
         // Evidence and Documentation
@@ -154,7 +154,7 @@ class GACPEnhancedInspectionService {
           documents: [],
           measurements: [],
           samples: [],
-          interviews: [],
+          interviews: []
         },
 
         // Scoring and Assessment Results
@@ -174,14 +174,14 @@ class GACPEnhancedInspectionService {
             action: 'inspection_initialized',
             actor: inspector.name,
             timestamp: new Date(),
-            details: 'Inspection framework created and scheduled',
-          },
+            details: 'Inspection framework created and scheduled'
+          }
         ],
 
         // Metadata
         createdAt: new Date(),
         createdBy: inspector.id,
-        version: '2.0.0',
+        version: '2.0.0'
       };
 
       // Save inspection to database
@@ -196,7 +196,7 @@ class GACPEnhancedInspectionService {
         {
           application,
           inspection,
-          inspector: inspector,
+          inspector: inspector
         },
         inspector
       );
@@ -214,15 +214,15 @@ class GACPEnhancedInspectionService {
         framework: {
           ccpCount: Object.keys(ccpAssessmentMatrix).length,
           protocolSteps: inspectionProtocol.steps.length,
-          complianceItems: inspection.complianceChecklist.length,
+          complianceItems: inspection.complianceChecklist.length
         },
         inspector: {
           name: inspector.name,
           certification: inspector.certification.number,
-          specialization: inspector.certification.specialization,
+          specialization: inspector.certification.specialization
         },
         nextSteps: this.getInspectionNextSteps(inspection),
-        preparationRequirements: this.getPreparationRequirements(application),
+        preparationRequirements: this.getPreparationRequirements(application)
       });
     } catch (error) {
       console.error('[GACP-Inspection] Initialization failed:', error);
@@ -255,7 +255,7 @@ class GACPEnhancedInspectionService {
       // Validate CCP exists in framework
       if (!this.ccpFramework[ccpId]) {
         return this.createResponse(false, `Invalid CCP identifier: ${ccpId}`, {
-          availableCCPs: Object.keys(this.ccpFramework),
+          availableCCPs: Object.keys(this.ccpFramework)
         });
       }
 
@@ -266,7 +266,7 @@ class GACPEnhancedInspectionService {
       if (!validationResult.valid) {
         return this.createResponse(false, 'CCP assessment data validation failed', {
           errors: validationResult.errors,
-          requirements: validationResult.requirements,
+          requirements: validationResult.requirements
         });
       }
 
@@ -315,8 +315,8 @@ class GACPEnhancedInspectionService {
         regulatoryCompliance: {
           thaiFDA: this.checkThaiFDACompliance(ccpEvaluation, ccpId),
           whoGACP: this.checkWHOGACPCompliance(ccpEvaluation, ccpId),
-          faoGuidelines: this.checkFAOCompliance(ccpEvaluation, ccpId),
-        },
+          faoGuidelines: this.checkFAOCompliance(ccpEvaluation, ccpId)
+        }
       };
 
       // Update evidence collections
@@ -342,7 +342,7 @@ class GACPEnhancedInspectionService {
           action: 'inspection_completed',
           actor: inspection.inspector.name,
           timestamp: new Date(),
-          details: `Overall score: ${finalResults.totalScore}%, Risk level: ${finalResults.riskLevel}`,
+          details: `Overall score: ${finalResults.totalScore}%, Risk level: ${finalResults.riskLevel}`
         });
       }
 
@@ -358,7 +358,7 @@ class GACPEnhancedInspectionService {
           id: ccpId,
           name: ccp.name,
           name_th: ccp.name_th,
-          weight: ccp.weight,
+          weight: ccp.weight
         },
         assessment: {
           score: ccpScore,
@@ -366,7 +366,7 @@ class GACPEnhancedInspectionService {
           thresholdMet: thresholdValidation.met,
           requiredThreshold: ccp.min_score,
           complianceLevel: thresholdValidation.level,
-          weightedContribution: (ccpScore * ccp.weight) / 100,
+          weightedContribution: (ccpScore * ccp.weight) / 100
         },
         recommendations: ccpRecommendations,
         completionStatus: {
@@ -374,13 +374,13 @@ class GACPEnhancedInspectionService {
           totalCCPs: completionStatus.totalCount,
           percentComplete: completionStatus.percentComplete,
           nextCCP: completionStatus.nextCCP,
-          allCompleted: completionStatus.allCompleted,
+          allCompleted: completionStatus.allCompleted
         },
         overallProgress: {
           overallScore: inspection.overallScore,
           estimatedFinalScore: this.estimateFinalScore(inspection),
-          riskLevel: inspection.riskLevel,
-        },
+          riskLevel: inspection.riskLevel
+        }
       });
     } catch (error) {
       console.error(`[GACP-CCP] Assessment failed for CCP ${ccpId}:`, error);
@@ -400,7 +400,7 @@ class GACPEnhancedInspectionService {
       strengths: [],
       recommendations: [],
       evidenceQuality: 0,
-      confidenceLevel: 0,
+      confidenceLevel: 0
     };
 
     // Evaluate each criterion with detailed analysis
@@ -418,7 +418,7 @@ class GACPEnhancedInspectionService {
       evaluation.criteriaResults[i] = {
         criterion,
         criterion_th: this.translateCriterion(criterion),
-        ...criterionEvaluation,
+        ...criterionEvaluation
       };
 
       // Categorize issues by severity
@@ -428,7 +428,7 @@ class GACPEnhancedInspectionService {
           issue: criterionEvaluation.primaryIssue,
           severity: 'critical',
           impact: 'high',
-          urgency: 'immediate',
+          urgency: 'immediate'
         });
       } else if (criterionEvaluation.compliance < 75) {
         evaluation.minorIssues.push({
@@ -436,13 +436,13 @@ class GACPEnhancedInspectionService {
           issue: criterionEvaluation.primaryIssue,
           severity: 'minor',
           impact: 'medium',
-          urgency: 'within_30_days',
+          urgency: 'within_30_days'
         });
       } else {
         evaluation.strengths.push({
           criterion,
           strength: criterionEvaluation.strengths[0],
-          score: criterionEvaluation.compliance,
+          score: criterionEvaluation.compliance
         });
       }
     }
@@ -528,7 +528,7 @@ class GACPEnhancedInspectionService {
     return {
       valid: errors.length === 0,
       errors,
-      requirements,
+      requirements
     };
   }
 
@@ -536,7 +536,7 @@ class GACPEnhancedInspectionService {
     const eligibleStatuses = [
       GACPApplicationStatus.DOCUMENT_APPROVED,
       GACPApplicationStatus.INSPECTION_SCHEDULED,
-      GACPApplicationStatus.CORRECTIVE_ACTION_REQUIRED,
+      GACPApplicationStatus.CORRECTIVE_ACTION_REQUIRED
     ];
 
     return {
@@ -544,7 +544,7 @@ class GACPEnhancedInspectionService {
       reason: eligibleStatuses.includes(status)
         ? 'Application eligible for inspection'
         : `Application status '${status}' not eligible for inspection`,
-      requiredStatuses: eligibleStatuses,
+      requiredStatuses: eligibleStatuses
     };
   }
 
@@ -556,7 +556,7 @@ class GACPEnhancedInspectionService {
       assessmentLevel: 'full_certification',
       riskBasedApproach: true,
       evidenceRequirements: 'comprehensive',
-      reportingStandard: 'thai_fda_format',
+      reportingStandard: 'thai_fda_format'
     };
   }
 
@@ -570,7 +570,7 @@ class GACPEnhancedInspectionService {
         notes: '',
         startTime: null,
         endTime: null,
-        assessor: null,
+        assessor: null
       };
     });
     return matrix;
@@ -589,7 +589,7 @@ class GACPEnhancedInspectionService {
         'evidence_collection_and_documentation',
         'farmer_interview_and_verification',
         'post_assessment_review',
-        'preliminary_findings_discussion',
+        'preliminary_findings_discussion'
       ],
       estimatedTimePerStep: {
         pre_inspection_document_review: 30,
@@ -599,8 +599,8 @@ class GACPEnhancedInspectionService {
         evidence_collection_and_documentation: 60,
         farmer_interview_and_verification: 30,
         post_assessment_review: 30,
-        preliminary_findings_discussion: 30,
-      },
+        preliminary_findings_discussion: 30
+      }
     };
   }
 
@@ -611,7 +611,7 @@ class GACPEnhancedInspectionService {
       timestamp: new Date(),
       service: 'GACPEnhancedInspectionService',
       version: '2.0.0',
-      ...data,
+      ...data
     };
   }
 
@@ -626,7 +626,7 @@ class GACPEnhancedInspectionService {
       status: GACPApplicationStatus.DOCUMENT_APPROVED,
       cropType: 'medicinal_herbs',
       farmSize: 'medium',
-      emergencyContacts: [],
+      emergencyContacts: []
     };
   }
 
@@ -663,7 +663,7 @@ class GACPEnhancedInspectionService {
       cropType: 'medium_risk',
       farmerExperience: 'low_risk',
       previousViolations: 'none',
-      overallRisk: 'medium',
+      overallRisk: 'medium'
     };
   }
 
@@ -673,7 +673,7 @@ class GACPEnhancedInspectionService {
       'Review application documents thoroughly',
       'Prepare inspection equipment and checklists',
       'Coordinate with local DTAM office',
-      'Conduct pre-inspection site assessment call',
+      'Conduct pre-inspection site assessment call'
     ];
   }
 
@@ -683,7 +683,7 @@ class GACPEnhancedInspectionService {
       'All required documents organized',
       'Key personnel available during inspection',
       'Farm areas accessible for assessment',
-      'Any ongoing treatments or activities disclosed',
+      'Any ongoing treatments or activities disclosed'
     ];
   }
 }

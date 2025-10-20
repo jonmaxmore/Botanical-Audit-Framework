@@ -25,7 +25,7 @@ class JobAssignmentService extends EventEmitter {
       COMPLETED: 'completed',
       REJECTED: 'rejected',
       CANCELLED: 'cancelled',
-      REASSIGNED: 'reassigned',
+      REASSIGNED: 'reassigned'
     };
 
     // Priority levels
@@ -33,14 +33,14 @@ class JobAssignmentService extends EventEmitter {
       LOW: 'low',
       MEDIUM: 'medium',
       HIGH: 'high',
-      URGENT: 'urgent',
+      URGENT: 'urgent'
     };
 
     // Role types
     this.ROLES = {
       REVIEWER: 'reviewer',
       INSPECTOR: 'inspector',
-      APPROVER: 'approver',
+      APPROVER: 'approver'
     };
 
     // Assignment strategies
@@ -48,14 +48,14 @@ class JobAssignmentService extends EventEmitter {
       ROUND_ROBIN: 'round_robin',
       WORKLOAD_BASED: 'workload_based',
       PERFORMANCE_BASED: 'performance_based',
-      MANUAL: 'manual',
+      MANUAL: 'manual'
     };
 
     // Track round-robin indices
     this.roundRobinIndex = {
       reviewer: 0,
       inspector: 0,
-      approver: 0,
+      approver: 0
     };
   }
 
@@ -76,7 +76,7 @@ class JobAssignmentService extends EventEmitter {
         role,
         priority = this.PRIORITY.MEDIUM,
         strategy = this.STRATEGIES.WORKLOAD_BASED,
-        assignedBy = 'system',
+        assignedBy = 'system'
       } = data;
 
       logger.info(
@@ -97,17 +97,17 @@ class JobAssignmentService extends EventEmitter {
       // Select user based on strategy
       let selectedUser;
       switch (strategy) {
-        case this.STRATEGIES.ROUND_ROBIN:
-          selectedUser = this._selectRoundRobin(role, availableUsers);
-          break;
-        case this.STRATEGIES.WORKLOAD_BASED:
-          selectedUser = await this._selectByWorkload(role, availableUsers);
-          break;
-        case this.STRATEGIES.PERFORMANCE_BASED:
-          selectedUser = await this._selectByPerformance(role, availableUsers);
-          break;
-        default:
-          selectedUser = this._selectRoundRobin(role, availableUsers);
+      case this.STRATEGIES.ROUND_ROBIN:
+        selectedUser = this._selectRoundRobin(role, availableUsers);
+        break;
+      case this.STRATEGIES.WORKLOAD_BASED:
+        selectedUser = await this._selectByWorkload(role, availableUsers);
+        break;
+      case this.STRATEGIES.PERFORMANCE_BASED:
+        selectedUser = await this._selectByPerformance(role, availableUsers);
+        break;
+      default:
+        selectedUser = this._selectRoundRobin(role, availableUsers);
       }
 
       // Create assignment
@@ -117,7 +117,7 @@ class JobAssignmentService extends EventEmitter {
         role,
         priority,
         assignedBy,
-        strategy,
+        strategy
       });
 
       return assignment;
@@ -146,7 +146,7 @@ class JobAssignmentService extends EventEmitter {
         role,
         priority = this.PRIORITY.MEDIUM,
         assignedBy = 'system',
-        strategy = this.STRATEGIES.MANUAL,
+        strategy = this.STRATEGIES.MANUAL
       } = data;
 
       logger.info(`[JobAssignmentService] Creating assignment for ${assignedTo} (${role})`);
@@ -178,7 +178,7 @@ class JobAssignmentService extends EventEmitter {
         startedAt: null,
         completedAt: null,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       // Start KPI tracking
@@ -188,7 +188,7 @@ class JobAssignmentService extends EventEmitter {
           applicationId,
           role,
           userId: assignedTo,
-          comments: `Auto-assigned using ${strategy} strategy`,
+          comments: `Auto-assigned using ${strategy} strategy`
         });
       }
 
@@ -196,7 +196,7 @@ class JobAssignmentService extends EventEmitter {
         assignment,
         applicationId,
         assignedTo,
-        role,
+        role
       });
 
       logger.info(`[JobAssignmentService] Assignment created: ${assignment.id}`);
@@ -233,7 +233,7 @@ class JobAssignmentService extends EventEmitter {
       const updatedAssignment = await this.assignmentRepository.update(assignmentId, {
         status: this.STATUS.ACCEPTED,
         acceptedAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       this.emit('assignment:accepted', { assignment: updatedAssignment, userId });
@@ -272,7 +272,7 @@ class JobAssignmentService extends EventEmitter {
         status: this.STATUS.IN_PROGRESS,
         startedAt: new Date(),
         acceptedAt: assignment.acceptedAt || new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       this.emit('assignment:started', { assignment: updatedAssignment, userId });
@@ -308,14 +308,14 @@ class JobAssignmentService extends EventEmitter {
         status: this.STATUS.COMPLETED,
         completedAt: new Date(),
         updatedAt: new Date(),
-        ...data,
+        ...data
       });
 
       // Complete KPI tracking
       if (this.kpiService) {
         await this.kpiService.completeTask(`assignment_${assignmentId}`, {
           comments: data.comments || 'Assignment completed',
-          feedbackScore: data.feedbackScore,
+          feedbackScore: data.feedbackScore
         });
       }
 
@@ -351,7 +351,7 @@ class JobAssignmentService extends EventEmitter {
         reassignedTo: newUserId,
         reassignedBy,
         reassignReason: reason,
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       // Create new assignment
@@ -361,14 +361,14 @@ class JobAssignmentService extends EventEmitter {
         role: oldAssignment.role,
         priority: oldAssignment.priority,
         assignedBy: reassignedBy,
-        strategy: this.STRATEGIES.MANUAL,
+        strategy: this.STRATEGIES.MANUAL
       });
 
       this.emit('assignment:reassigned', {
         oldAssignment,
         newAssignment,
         newUserId,
-        reason,
+        reason
       });
 
       return newAssignment;
@@ -442,11 +442,11 @@ class JobAssignmentService extends EventEmitter {
       const workloads = await Promise.all(
         users.map(async user => {
           const activeAssignments = await this.assignmentRepository.findByUser(user.id, {
-            status: [this.STATUS.ASSIGNED, this.STATUS.ACCEPTED, this.STATUS.IN_PROGRESS],
+            status: [this.STATUS.ASSIGNED, this.STATUS.ACCEPTED, this.STATUS.IN_PROGRESS]
           });
           return {
             user,
-            workload: activeAssignments.length,
+            workload: activeAssignments.length
           };
         })
       );
@@ -477,7 +477,7 @@ class JobAssignmentService extends EventEmitter {
           const metrics = await this.kpiService.getUserMetrics(user.id);
           return {
             user,
-            score: this._calculatePerformanceScore(metrics),
+            score: this._calculatePerformanceScore(metrics)
           };
         })
       );
@@ -521,7 +521,7 @@ class JobAssignmentService extends EventEmitter {
       const updatedAssignment = await this.assignmentRepository.update(assignmentId, {
         status: this.STATUS.CANCELLED,
         cancellationReason: reason,
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       // Cancel KPI tracking

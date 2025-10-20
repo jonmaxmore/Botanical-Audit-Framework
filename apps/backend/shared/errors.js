@@ -89,7 +89,7 @@ function errorHandler(err, req, res) {
     success: false,
     timestamp: new Date().toISOString(),
     path: req.originalUrl,
-    method: req.method,
+    method: req.method
   };
 
   // Handle operational errors
@@ -97,7 +97,7 @@ function errorHandler(err, req, res) {
     error.error = {
       message: err.message,
       code: err.code,
-      details: err.details,
+      details: err.details
     };
 
     return res.status(err.statusCode).json(error);
@@ -108,7 +108,7 @@ function errorHandler(err, req, res) {
     error.error = {
       message: 'Validation failed',
       code: 'VALIDATION_ERROR',
-      details: err.errors,
+      details: err.errors
     };
     return res.status(400).json(error);
   }
@@ -116,7 +116,7 @@ function errorHandler(err, req, res) {
   if (err.name === 'MongoError' || err.name === 'MongooseError') {
     error.error = {
       message: 'Database operation failed',
-      code: 'DATABASE_ERROR',
+      code: 'DATABASE_ERROR'
     };
     return res.status(500).json(error);
   }
@@ -124,7 +124,7 @@ function errorHandler(err, req, res) {
   if (err.name === 'JsonWebTokenError') {
     error.error = {
       message: 'Invalid token',
-      code: 'INVALID_TOKEN',
+      code: 'INVALID_TOKEN'
     };
     return res.status(401).json(error);
   }
@@ -132,7 +132,7 @@ function errorHandler(err, req, res) {
   if (err.name === 'TokenExpiredError') {
     error.error = {
       message: 'Token expired',
-      code: 'TOKEN_EXPIRED',
+      code: 'TOKEN_EXPIRED'
     };
     return res.status(401).json(error);
   }
@@ -140,7 +140,7 @@ function errorHandler(err, req, res) {
   // Handle unexpected errors
   error.error = {
     message: process.env.NODE_ENV === 'production' ? 'Internal server error' : err.message,
-    code: 'INTERNAL_ERROR',
+    code: 'INTERNAL_ERROR'
   };
 
   // Log unexpected errors with proper logger
@@ -153,7 +153,7 @@ function errorHandler(err, req, res) {
     url: req.originalUrl,
     method: req.method,
     user: req.user?.id,
-    timestamp: error.timestamp,
+    timestamp: error.timestamp
   });
 
   return res.status(500).json(error);
@@ -167,11 +167,11 @@ function notFoundHandler(req, res) {
     success: false,
     error: {
       message: `Route ${req.originalUrl} not found`,
-      code: 'ROUTE_NOT_FOUND',
+      code: 'ROUTE_NOT_FOUND'
     },
     timestamp: new Date().toISOString(),
     path: req.originalUrl,
-    method: req.method,
+    method: req.method
   });
 }
 
@@ -193,9 +193,9 @@ function createErrorResponse(message, code = null, details = null) {
     error: {
       message,
       code,
-      details,
+      details
     },
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   };
 }
 
@@ -215,5 +215,5 @@ module.exports = {
   asyncHandler,
 
   // Utilities
-  createErrorResponse,
+  createErrorResponse
 };

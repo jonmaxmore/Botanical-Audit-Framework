@@ -25,7 +25,7 @@ const chalk = require('chalk') || {
   green: t => t,
   red: t => t,
   yellow: t => t,
-  cyan: t => t,
+  cyan: t => t
 };
 
 /**
@@ -42,7 +42,7 @@ function isValidEnvVar(value, envName) {
     'change-in-production',
     'gacp-secret-key',
     'gacp-dtam-secret-key',
-    'gacp-platform-secret-key',
+    'gacp-platform-secret-key'
   ];
 
   const lowerValue = value.toLowerCase();
@@ -65,7 +65,7 @@ const REQUIRED_ENV_VARS = {
   // Development environment
   development: [
     { name: 'MONGODB_URI', description: 'MongoDB connection string' },
-    { name: 'PORT', description: 'Server port number', defaultOk: true },
+    { name: 'PORT', description: 'Server port number', defaultOk: true }
   ],
 
   // Staging environment (คล้าย production แต่ยอมให้บาง config ยืดหยุ่นกว่า)
@@ -73,7 +73,7 @@ const REQUIRED_ENV_VARS = {
     { name: 'MONGODB_URI', description: 'MongoDB connection string' },
     { name: 'JWT_SECRET', description: 'JWT signing secret (must be secure)' },
     { name: 'DTAM_JWT_SECRET', description: 'DTAM JWT signing secret (must be secure)' },
-    { name: 'PORT', description: 'Server port number', defaultOk: true },
+    { name: 'PORT', description: 'Server port number', defaultOk: true }
   ],
 
   // Production environment (เข้มงวดที่สุด)
@@ -81,21 +81,21 @@ const REQUIRED_ENV_VARS = {
     { name: 'MONGODB_URI', description: 'MongoDB connection string' },
     {
       name: 'JWT_SECRET',
-      description: 'JWT signing secret (MUST BE SECURE - no defaults allowed)',
+      description: 'JWT signing secret (MUST BE SECURE - no defaults allowed)'
     },
     {
       name: 'DTAM_JWT_SECRET',
-      description: 'DTAM JWT signing secret (MUST BE SECURE - no defaults allowed)',
+      description: 'DTAM JWT signing secret (MUST BE SECURE - no defaults allowed)'
     },
     { name: 'JWT_EXPIRY', description: 'JWT token expiration time', defaultOk: true },
     { name: 'DTAM_JWT_EXPIRY', description: 'DTAM JWT token expiration time', defaultOk: true },
     { name: 'BCRYPT_ROUNDS', description: 'Password hashing rounds', defaultOk: true },
     { name: 'PORT', description: 'Server port number', defaultOk: true },
-    { name: 'ALLOWED_ORIGINS', description: 'CORS allowed origins' },
+    { name: 'ALLOWED_ORIGINS', description: 'CORS allowed origins' }
   ],
 
   // Test environment
-  test: [{ name: 'MONGODB_URI', description: 'Test MongoDB connection string', defaultOk: true }],
+  test: [{ name: 'MONGODB_URI', description: 'Test MongoDB connection string', defaultOk: true }]
 };
 
 /**
@@ -179,7 +179,7 @@ function validateEnvironment() {
     console.log('   1. Create or update your .env file');
     console.log('   2. Set the missing/insecure variables with secure values');
     console.log(
-      "   3. For JWT secrets, use: node -e \"console.log(require('crypto').randomBytes(64).toString('hex'))\""
+      '   3. For JWT secrets, use: node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"'
     );
     console.log('   4. Restart the application');
   }
@@ -191,7 +191,7 @@ function validateEnvironment() {
     missing,
     insecure,
     validCount: valid.length,
-    totalChecked: requiredVars.length,
+    totalChecked: requiredVars.length
   };
 }
 
@@ -233,7 +233,7 @@ function showSetupGuide() {
   console.log('   cp .env.example .env\n');
 
   console.log('2. Generate secure JWT secrets:');
-  console.log("   node -e \"console.log(require('crypto').randomBytes(64).toString('hex'))\"\n");
+  console.log('   node -e "console.log(require(\'crypto\').randomBytes(64).toString(\'hex\'))"\n');
 
   console.log('3. Required variables for PRODUCTION:');
   REQUIRED_ENV_VARS.production.forEach(v => {
@@ -248,5 +248,5 @@ module.exports = {
   validateOrExit,
   generateSecureSecret,
   showSetupGuide,
-  isValidEnvVar,
+  isValidEnvVar
 };

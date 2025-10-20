@@ -99,7 +99,7 @@ class DatabaseManager {
           }
           // Reconnect after
           return Math.min(options.attempt * 100, 3000);
-        },
+        }
       });
 
       this.redis.on('connect', () => {
@@ -154,12 +154,12 @@ class DatabaseManager {
         status: 'disconnected',
         readyState: mongoose.connection.readyState,
         host: mongoose.connection.host,
-        name: mongoose.connection.name,
+        name: mongoose.connection.name
       },
       redis: {
         status: 'disabled',
-        connected: false,
-      },
+        connected: false
+      }
     };
 
     // MongoDB health check
@@ -251,5 +251,5 @@ module.exports = {
   getRedisConnection: () => databaseManager.getRedisConnection(),
   healthCheck: () => databaseManager.healthCheck(),
   isReady: () => databaseManager.isReady(),
-  databaseManager,
+  databaseManager
 };

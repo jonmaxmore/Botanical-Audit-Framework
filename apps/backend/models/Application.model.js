@@ -15,7 +15,7 @@ const PaymentEmbedSchema = new mongoose.Schema(
     type: { type: String, enum: ['initial', 'resubmission'], required: true },
     amount: { type: Number, required: true },
     status: { type: String, enum: ['pending', 'completed', 'failed', 'cancelled'], required: true },
-    createdAt: { type: Date, required: true },
+    createdAt: { type: Date, required: true }
   },
   { _id: false }
 );
@@ -26,7 +26,7 @@ const AssignmentEmbedSchema = new mongoose.Schema(
     assignedTo: { type: String, required: true },
     role: { type: String, enum: ['reviewer', 'inspector', 'approver'], required: true },
     status: { type: String, required: true },
-    assignedAt: { type: Date, required: true },
+    assignedAt: { type: Date, required: true }
   },
   { _id: false }
 );
@@ -39,7 +39,7 @@ const KPIEmbedSchema = new mongoose.Schema(
     status: { type: String, required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date, default: null },
-    processingTime: { type: Number, default: null },
+    processingTime: { type: Number, default: null }
   },
   { _id: false }
 );
@@ -51,25 +51,25 @@ const ApplicationSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
 
     // Farmer reference
     farmerId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     farmerName: {
       type: String,
-      required: true,
+      required: true
     },
 
     // Farm information
     farmName: {
       type: String,
-      required: true,
+      required: true
     },
 
     farmAddress: {
@@ -77,27 +77,27 @@ const ApplicationSchema = new mongoose.Schema(
       district: { type: String, required: true },
       subDistrict: { type: String, required: true },
       postalCode: { type: String, required: true },
-      details: { type: String, default: null },
+      details: { type: String, default: null }
     },
 
     farmSize: {
       type: Number,
-      required: true,
+      required: true
     },
 
     // Cannabis details
     cannabisType: {
       type: String,
       required: true,
-      enum: ['medical', 'hemp', 'both'],
+      enum: ['medical', 'hemp', 'both']
     },
 
     strains: [
       {
         name: { type: String, required: true },
         quantity: { type: Number, required: true },
-        purpose: { type: String, required: true },
-      },
+        purpose: { type: String, required: true }
+      }
     ],
 
     // Application status
@@ -116,10 +116,10 @@ const ApplicationSchema = new mongoose.Schema(
         'pending_approval',
         'approved',
         'rejected',
-        'certificate_issued',
+        'certificate_issued'
       ],
       default: 'draft',
-      index: true,
+      index: true
     },
 
     // Submission tracking
@@ -127,7 +127,7 @@ const ApplicationSchema = new mongoose.Schema(
       type: Number,
       required: true,
       default: 0,
-      index: true,
+      index: true
     },
 
     // Documents
@@ -136,141 +136,141 @@ const ApplicationSchema = new mongoose.Schema(
         type: { type: String, required: true },
         fileName: { type: String, required: true },
         fileUrl: { type: String, required: true },
-        uploadedAt: { type: Date, required: true },
-      },
+        uploadedAt: { type: Date, required: true }
+      }
     ],
 
     // Review information
     reviewedBy: {
       type: String,
-      default: null,
+      default: null
     },
 
     reviewedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     reviewComments: {
       type: String,
-      default: null,
+      default: null
     },
 
     reviewDecision: {
       type: String,
       enum: ['approved', 'rejected', 'needs_revision', null],
-      default: null,
+      default: null
     },
 
     // Inspection information
     inspectorId: {
       type: String,
-      default: null,
+      default: null
     },
 
     inspectionDate: {
       type: Date,
-      default: null,
+      default: null
     },
 
     inspectionStatus: {
       type: String,
       enum: ['pending', 'scheduled', 'completed', 'cancelled', null],
-      default: null,
+      default: null
     },
 
     lotId: {
       type: String,
       default: null,
-      index: true,
+      index: true
     },
 
     inspectionReport: {
       type: mongoose.Schema.Types.Mixed,
-      default: null,
+      default: null
     },
 
     // Approval information
     approverId: {
       type: String,
-      default: null,
+      default: null
     },
 
     approvedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     approvalComments: {
       type: String,
-      default: null,
+      default: null
     },
 
     // Certificate information
     certificateId: {
       type: String,
       default: null,
-      index: true,
+      index: true
     },
 
     certificateIssuedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     certificateExpiresAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     certificateUrl: {
       type: String,
-      default: null,
+      default: null
     },
 
     // NEW: Embedded arrays for tracking
     payments: {
       type: [PaymentEmbedSchema],
-      default: [],
+      default: []
     },
 
     assignments: {
       type: [AssignmentEmbedSchema],
-      default: [],
+      default: []
     },
 
     kpis: {
       type: [KPIEmbedSchema],
-      default: [],
+      default: []
     },
 
     // Metadata
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
 
     submittedAt: {
       type: Date,
       default: null,
-      index: true,
-    },
+      index: true
+    }
   },
   {
     timestamps: true,
-    collection: 'applications',
+    collection: 'applications'
   }
 );
 
@@ -282,32 +282,32 @@ ApplicationSchema.index({ 'payments.status': 1 });
 ApplicationSchema.index({ 'assignments.assignedTo': 1 });
 
 // Virtual for has initial payment
-ApplicationSchema.virtual('hasInitialPayment').get(function () {
+ApplicationSchema.virtual('hasInitialPayment').get(function() {
   return this.payments.some(p => p.type === 'initial' && p.status === 'completed');
 });
 
 // Virtual for has resubmission payment
-ApplicationSchema.virtual('hasResubmissionPayment').get(function () {
+ApplicationSchema.virtual('hasResubmissionPayment').get(function() {
   return this.payments.some(p => p.type === 'resubmission' && p.status === 'completed');
 });
 
 // Virtual for payment required
-ApplicationSchema.virtual('isPaymentRequired').get(function () {
+ApplicationSchema.virtual('isPaymentRequired').get(function() {
   return this.payments.some(p => p.status === 'pending');
 });
 
 // Virtual for current assignment
-ApplicationSchema.virtual('currentAssignment').get(function () {
+ApplicationSchema.virtual('currentAssignment').get(function() {
   return this.assignments.find(a => ['assigned', 'accepted', 'in_progress'].includes(a.status));
 });
 
 // Virtual for is active (has active assignment)
-ApplicationSchema.virtual('isActive').get(function () {
+ApplicationSchema.virtual('isActive').get(function() {
   return this.assignments.some(a => ['assigned', 'accepted', 'in_progress'].includes(a.status));
 });
 
 // Instance method: Submit application
-ApplicationSchema.methods.submit = function () {
+ApplicationSchema.methods.submit = function() {
   if (this.status === 'draft') {
     this.status = 'submitted';
     this.submittedAt = new Date();
@@ -319,20 +319,20 @@ ApplicationSchema.methods.submit = function () {
 };
 
 // Instance method: Add payment
-ApplicationSchema.methods.addPayment = function (paymentData) {
+ApplicationSchema.methods.addPayment = function(paymentData) {
   this.payments.push({
     paymentId: paymentData.id || paymentData.paymentId,
     type: paymentData.type,
     amount: paymentData.amount,
     status: paymentData.status,
-    createdAt: paymentData.createdAt || new Date(),
+    createdAt: paymentData.createdAt || new Date()
   });
   this.updatedAt = new Date();
   return this.save();
 };
 
 // Instance method: Update payment status
-ApplicationSchema.methods.updatePaymentStatus = function (paymentId, status) {
+ApplicationSchema.methods.updatePaymentStatus = function(paymentId, status) {
   const payment = this.payments.find(p => p.paymentId === paymentId);
   if (payment) {
     payment.status = status;
@@ -343,20 +343,20 @@ ApplicationSchema.methods.updatePaymentStatus = function (paymentId, status) {
 };
 
 // Instance method: Add assignment
-ApplicationSchema.methods.addAssignment = function (assignmentData) {
+ApplicationSchema.methods.addAssignment = function(assignmentData) {
   this.assignments.push({
     assignmentId: assignmentData.id || assignmentData.assignmentId,
     assignedTo: assignmentData.assignedTo,
     role: assignmentData.role,
     status: assignmentData.status,
-    assignedAt: assignmentData.assignedAt || new Date(),
+    assignedAt: assignmentData.assignedAt || new Date()
   });
   this.updatedAt = new Date();
   return this.save();
 };
 
 // Instance method: Update assignment status
-ApplicationSchema.methods.updateAssignmentStatus = function (assignmentId, status) {
+ApplicationSchema.methods.updateAssignmentStatus = function(assignmentId, status) {
   const assignment = this.assignments.find(a => a.assignmentId === assignmentId);
   if (assignment) {
     assignment.status = status;
@@ -367,7 +367,7 @@ ApplicationSchema.methods.updateAssignmentStatus = function (assignmentId, statu
 };
 
 // Instance method: Add KPI
-ApplicationSchema.methods.addKPI = function (kpiData) {
+ApplicationSchema.methods.addKPI = function(kpiData) {
   this.kpis.push({
     taskId: kpiData.taskId,
     role: kpiData.role,
@@ -375,42 +375,42 @@ ApplicationSchema.methods.addKPI = function (kpiData) {
     status: kpiData.status,
     startTime: kpiData.startTime,
     endTime: kpiData.endTime || null,
-    processingTime: kpiData.processingTime || null,
+    processingTime: kpiData.processingTime || null
   });
   this.updatedAt = new Date();
   return this.save();
 };
 
 // Instance method: Update status
-ApplicationSchema.methods.updateStatus = function (newStatus) {
+ApplicationSchema.methods.updateStatus = function(newStatus) {
   this.status = newStatus;
   this.updatedAt = new Date();
   return this.save();
 };
 
 // Instance method: Increment submission count
-ApplicationSchema.methods.incrementSubmissionCount = function () {
+ApplicationSchema.methods.incrementSubmissionCount = function() {
   this.submissionCount += 1;
   this.updatedAt = new Date();
   return this.save();
 };
 
 // Static method: Find with pending payments
-ApplicationSchema.statics.findWithPendingPayments = function () {
+ApplicationSchema.statics.findWithPendingPayments = function() {
   return this.find({
-    'payments.status': 'pending',
+    'payments.status': 'pending'
   }).sort({ submittedAt: -1 });
 };
 
 // Static method: Find by submission count
-ApplicationSchema.statics.findBySubmissionCount = function (count) {
+ApplicationSchema.statics.findBySubmissionCount = function(count) {
   return this.find({
-    submissionCount: { $gte: count },
+    submissionCount: { $gte: count }
   }).sort({ submittedAt: -1 });
 };
 
 // Static method: Get statistics
-ApplicationSchema.statics.getStatistics = function (filters = {}) {
+ApplicationSchema.statics.getStatistics = function(filters = {}) {
   const matchStage = {};
 
   if (filters.status) {
@@ -435,16 +435,16 @@ ApplicationSchema.statics.getStatistics = function (filters = {}) {
         total: { $sum: 1 },
         byStatus: {
           $push: {
-            status: '$status',
-          },
-        },
-      },
-    },
+            status: '$status'
+          }
+        }
+      }
+    }
   ]);
 };
 
 // Pre-save middleware
-ApplicationSchema.pre('save', function (next) {
+ApplicationSchema.pre('save', function(next) {
   this.updatedAt = new Date();
   next();
 });

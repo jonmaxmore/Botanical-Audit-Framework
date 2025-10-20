@@ -175,5 +175,5 @@ function getDocumentModuleContainer(database = null) {
 
 module.exports = {
   DocumentModuleContainer,
-  getDocumentModuleContainer,
+  getDocumentModuleContainer
 };

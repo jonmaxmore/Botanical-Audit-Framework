@@ -32,7 +32,7 @@ class TrackSeedUseCase {
       minMoistureContent: 5, // Minimum 5% moisture
       certificationValidityDays: 365, // Certification valid for 1 year
       maxDistributionDays: 180, // Seeds must be distributed within 180 days
-      auditFrequencyDays: 30, // Audit every 30 days
+      auditFrequencyDays: 30 // Audit every 30 days
     };
   }
 
@@ -64,7 +64,7 @@ class TrackSeedUseCase {
         geneticLineage: seedData.geneticLineage,
         supplier: seedData.supplier,
         certificationDetails: seedData.certificationDetails,
-        qualityMetrics: qualityAssessment.validatedMetrics,
+        qualityMetrics: qualityAssessment.validatedMetrics
       });
 
       // Step 4: Store seed in repository
@@ -78,7 +78,7 @@ class TrackSeedUseCase {
         seedId: savedSeed.seedId,
         batchNumber: savedSeed.batchNumber,
         supplier: savedSeed.supplier.supplierName,
-        qualityScore: qualityAssessment.overallScore,
+        qualityScore: qualityAssessment.overallScore
       });
 
       // Step 7: Send notifications
@@ -92,7 +92,7 @@ class TrackSeedUseCase {
         batchNumber: savedSeed.batchNumber,
         qualityAssessment: qualityAssessment,
         complianceStatus: savedSeed.certificationDetails.complianceStatus,
-        trackingUrl: this.generateTrackingUrl(savedSeed.seedId),
+        trackingUrl: this.generateTrackingUrl(savedSeed.seedId)
       };
     } catch (error) {
       this.logger.error(`[TrackSeed] Seed registration failed: ${error.message}`);
@@ -100,7 +100,7 @@ class TrackSeedUseCase {
       // Log failure for audit
       await this.createAuditTrail('SEED_REGISTRATION_FAILED', {
         batchNumber: seedData?.batchNumber,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -151,7 +151,7 @@ class TrackSeedUseCase {
           farmId: farm.farmId,
           farmName: farm.farmName,
           licenseNumber: farm.licenseNumber,
-          coordinates: farm.location.coordinates,
+          coordinates: farm.location.coordinates
         },
         distributionDetails
       );
@@ -174,7 +174,7 @@ class TrackSeedUseCase {
         seedId: seed.seedId,
         farmId: farm.farmId,
         quantity: distributionDetails.quantity,
-        distributionId: distributionRecord.distributionId,
+        distributionId: distributionRecord.distributionId
       });
 
       // Step 9: Send notifications
@@ -190,7 +190,7 @@ class TrackSeedUseCase {
         certificateNumber: distributionCertificate.certificateNumber,
         trackingStatus: updatedSeed.trackingInfo.currentStatus,
         monitoringSchedule: distributionRecord.monitoringSchedule,
-        nextAudit: this.calculateNextAuditDate(updatedSeed),
+        nextAudit: this.calculateNextAuditDate(updatedSeed)
       };
     } catch (error) {
       this.logger.error(`[TrackSeed] Seed distribution failed: ${error.message}`);
@@ -198,7 +198,7 @@ class TrackSeedUseCase {
       await this.createAuditTrail('SEED_DISTRIBUTION_FAILED', {
         seedId: seedId,
         farmId: farmId,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -257,7 +257,7 @@ class TrackSeedUseCase {
         seedId: seed.seedId,
         plotId: plantingInfo.plotId,
         plantingId: plantingRecord.plantingId,
-        seedsPlanted: plantingInfo.seedsPlanted,
+        seedsPlanted: plantingInfo.seedsPlanted
       });
 
       // Step 9: Send planting notifications
@@ -272,14 +272,14 @@ class TrackSeedUseCase {
         expectedGermination: plantingRecord.expectedGerminationDate,
         expectedHarvest: plantingRecord.expectedHarvestDate,
         monitoringSchedule: seed.growthTracking.monitoringSchedule,
-        complianceStatus: updatedSeed.certificationDetails.complianceStatus,
+        complianceStatus: updatedSeed.certificationDetails.complianceStatus
       };
     } catch (error) {
       this.logger.error(`[TrackSeed] Seed planting tracking failed: ${error.message}`);
 
       await this.createAuditTrail('SEED_PLANTING_FAILED', {
         seedId: seedId,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -321,7 +321,7 @@ class TrackSeedUseCase {
           qualityScore:
             seed.qualityMetrics.overallQualityScore || seed.calculateOverallQualityScore(),
           complianceStatus: seed.certificationDetails.complianceStatus,
-          lastUpdated: seed.trackingInfo.updatedAt,
+          lastUpdated: seed.trackingInfo.updatedAt
         },
 
         // Complete lifecycle timeline
@@ -336,7 +336,7 @@ class TrackSeedUseCase {
             seed.trackingInfo.plantingRecords.length > 0
               ? seed.trackingInfo.plantingRecords[0].plantingDate
               : null,
-          currentPhase: seed.growthTracking?.currentPhase || 'STORAGE',
+          currentPhase: seed.growthTracking?.currentPhase || 'STORAGE'
         },
 
         // Distribution history
@@ -345,11 +345,11 @@ class TrackSeedUseCase {
           farm: {
             farmId: dist.farmId,
             farmName: dist.farmName,
-            licenseNumber: dist.farmLicenseNumber,
+            licenseNumber: dist.farmLicenseNumber
           },
           quantity: dist.quantity,
           distributionDate: dist.distributionDate,
-          status: dist.distributionStatus,
+          status: dist.distributionStatus
         })),
 
         // Planting and growth tracking
@@ -359,7 +359,7 @@ class TrackSeedUseCase {
           plantingDate: plant.plantingDate,
           seedsPlanted: plant.seedsPlanted,
           expectedGermination: plant.expectedGerminationDate,
-          expectedHarvest: plant.expectedHarvestDate,
+          expectedHarvest: plant.expectedHarvestDate
         })),
 
         // Quality and compliance metrics
@@ -370,7 +370,7 @@ class TrackSeedUseCase {
           overallScore:
             seed.qualityMetrics.overallQualityScore || seed.calculateOverallQualityScore(),
           lastTested: seed.qualityMetrics.testingDate,
-          testingLab: seed.qualityMetrics.testingLab,
+          testingLab: seed.qualityMetrics.testingLab
         },
 
         // Certification and compliance
@@ -380,7 +380,7 @@ class TrackSeedUseCase {
           certificationDate: seed.certificationDetails.certificationDate,
           expiryDate: seed.certificationDetails.expiryDate,
           complianceStatus: seed.certificationDetails.complianceStatus,
-          isValid: seed.isCertificationValid(),
+          isValid: seed.isCertificationValid()
         },
 
         // Related plant tracking (if planted)
@@ -390,9 +390,9 @@ class TrackSeedUseCase {
           healthScore:
             plant.growthMetrics.healthScores.length > 0
               ? plant.growthMetrics.healthScores[plant.growthMetrics.healthScores.length - 1]
-                  .overallScore
+                .overallScore
               : null,
-          lastUpdate: plant.lifecycle.updatedAt,
+          lastUpdate: plant.lifecycle.updatedAt
         })),
 
         // Audit trail
@@ -404,15 +404,15 @@ class TrackSeedUseCase {
           generatedBy: 'TRACK_SEED_USE_CASE',
           reportVersion: '1.0',
           dataCompleteness: this.calculateDataCompleteness(seed),
-          verificationStatus: await this.verifyDataIntegrity(seed),
-        },
+          verificationStatus: await this.verifyDataIntegrity(seed)
+        }
       };
 
       // Update access log
       await this.createAuditTrail('TRACKING_REPORT_GENERATED', {
         seedId: seedId,
         reportSize: JSON.stringify(trackingReport).length,
-        accessedAt: new Date(),
+        accessedAt: new Date()
       });
 
       this.logger.log(`[TrackSeed] Tracking report generated for seed: ${seedId}`);
@@ -470,7 +470,7 @@ class TrackSeedUseCase {
         previousScore: previousMetrics.overallQualityScore,
         newScore: updatedSeed.qualityMetrics.overallQualityScore,
         testingLab: testingInfo.testingLab,
-        changes: qualityChanges.significantChanges,
+        changes: qualityChanges.significantChanges
       });
 
       // Step 9: Send update notifications
@@ -484,14 +484,14 @@ class TrackSeedUseCase {
         qualityScore: updatedSeed.qualityMetrics.overallQualityScore,
         complianceStatus: updatedSeed.certificationDetails.complianceStatus,
         qualityChanges: qualityChanges,
-        lastTested: updatedSeed.qualityMetrics.testingDate,
+        lastTested: updatedSeed.qualityMetrics.testingDate
       };
     } catch (error) {
       this.logger.error(`[TrackSeed] Quality update failed: ${error.message}`);
 
       await this.createAuditTrail('SEED_QUALITY_UPDATE_FAILED', {
         seedId: seedId,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -614,7 +614,7 @@ class TrackSeedUseCase {
       validatedMetrics: { ...qualityMetrics },
       overallScore: 0,
       compliance: 'PENDING',
-      recommendations: [],
+      recommendations: []
     };
 
     // Calculate overall quality score
@@ -695,7 +695,7 @@ class TrackSeedUseCase {
         module: 'TRACK_TRACE',
         action: action,
         data: data,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
     }
   }

@@ -112,38 +112,38 @@ function createFarmManagementModule(config) {
 
   const registerFarmUseCase = new RegisterFarmUseCase({
     farmRepository,
-    eventBus,
+    eventBus
   });
 
   const updateFarmUseCase = new UpdateFarmUseCase({
-    farmRepository,
+    farmRepository
   });
 
   const submitFarmForReviewUseCase = new SubmitFarmForReviewUseCase({
     farmRepository,
-    eventBus,
+    eventBus
   });
 
   const getFarmDetailsUseCase = new GetFarmDetailsUseCase({
-    farmRepository,
+    farmRepository
   });
 
   const listFarmsUseCase = new ListFarmsUseCase({
-    farmRepository,
+    farmRepository
   });
 
   const startFarmReviewUseCase = new StartFarmReviewUseCase({
-    farmRepository,
+    farmRepository
   });
 
   const approveFarmUseCase = new ApproveFarmUseCase({
     farmRepository,
-    eventBus,
+    eventBus
   });
 
   const rejectFarmUseCase = new RejectFarmUseCase({
     farmRepository,
-    eventBus,
+    eventBus
   });
 
   // ===================================================================
@@ -158,7 +158,7 @@ function createFarmManagementModule(config) {
     listFarmsUseCase,
     startFarmReviewUseCase,
     approveFarmUseCase,
-    rejectFarmUseCase,
+    rejectFarmUseCase
   });
 
   const { farmerRouter, dtamRouter } = createFarmRoutes(
@@ -180,15 +180,15 @@ function createFarmManagementModule(config) {
     services: {
       farmRepository,
       getFarmDetailsUseCase,
-      listFarmsUseCase,
+      listFarmsUseCase
     },
 
     // Constants
     constants: {
       STATUS: Farm.STATUS,
       FARM_TYPE: Farm.FARM_TYPE,
-      IRRIGATION_TYPE: Farm.IRRIGATION_TYPE,
-    },
+      IRRIGATION_TYPE: Farm.IRRIGATION_TYPE
+    }
   };
 }
 

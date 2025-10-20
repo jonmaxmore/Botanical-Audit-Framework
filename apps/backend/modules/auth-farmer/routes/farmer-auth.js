@@ -29,9 +29,9 @@ router.post(
     body('password').isLength({ min: 8 }).withMessage('รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร'),
     body('firstName').trim().isLength({ min: 2 }).withMessage('กรุณาใส่ชื่อ'),
     body('lastName').trim().isLength({ min: 2 }).withMessage('กรุณาใส่นามสกุล'),
-    body('phoneNumber').isMobilePhone('th-TH').withMessage('กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง'),
+    body('phoneNumber').isMobilePhone('th-TH').withMessage('กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง')
   ],
-  async (req, res) => {
+  async(req, res) => {
     try {
       // Validate request
       const errors = validationResult(req);
@@ -67,7 +67,7 @@ router.post(
         organizationType: 'farmer',
         organizationName: organizationName || `${firstName} ${lastName} Farm`,
         accountStatus: 'active',
-        isVerified: false,
+        isVerified: false
       });
 
       await newUser.save();
@@ -79,7 +79,7 @@ router.post(
         {
           userId: newUser._id,
           email: newUser.email,
-          role: newUser.role,
+          role: newUser.role
         },
         config.environment.jwtSecret || 'fallback-secret-key',
         { expiresIn: config.environment.jwtExpiry || '7d' }
@@ -98,8 +98,8 @@ router.post(
             role: newUser.role,
             organizationType: newUser.organizationType,
             permissions: newUser.getPermissions(),
-            accountStatus: newUser.accountStatus,
-          },
+            accountStatus: newUser.accountStatus
+          }
         },
         'ลงทะเบียนสำเร็จ',
         shared.constants.statusCodes.CREATED
@@ -124,9 +124,9 @@ router.post(
   '/login',
   [
     body('email').isEmail().normalizeEmail().withMessage('กรุณาใส่อีเมลที่ถูกต้อง'),
-    body('password').notEmpty().withMessage('กรุณาใส่รหัสผ่าน'),
+    body('password').notEmpty().withMessage('กรุณาใส่รหัสผ่าน')
   ],
-  async (req, res) => {
+  async(req, res) => {
     try {
       // Validate request
       const errors = validationResult(req);
@@ -188,7 +188,7 @@ router.post(
         {
           userId: user._id,
           email: user.email,
-          role: user.role,
+          role: user.role
         },
         config.environment.jwtSecret || 'fallback-secret-key',
         { expiresIn: config.environment.jwtExpiry || '7d' }
@@ -209,8 +209,8 @@ router.post(
             role: user.role,
             organizationType: user.organizationType,
             permissions: user.getPermissions(),
-            accountStatus: user.accountStatus,
-          },
+            accountStatus: user.accountStatus
+          }
         },
         'เข้าสู่ระบบสำเร็จ'
       );
@@ -230,7 +230,7 @@ router.post(
  * @desc ดึงข้อมูลโปรไฟล์เกษตรกร (Get farmer profile)
  * @access Private
  */
-router.get('/profile', middleware.auth, async (req, res) => {
+router.get('/profile', middleware.auth, async(req, res) => {
   try {
     const user = await User.findById(req.user.userId).select('-password');
 
@@ -250,7 +250,7 @@ router.get('/profile', middleware.auth, async (req, res) => {
       permissions: user.getPermissions(),
       accountStatus: user.accountStatus,
       lastLoginAt: user.lastLoginAt,
-      createdAt: user.createdAt,
+      createdAt: user.createdAt
     });
   } catch (error) {
     logger.error('Get profile error:', error);
@@ -276,9 +276,9 @@ router.put(
     body('phoneNumber')
       .optional()
       .isMobilePhone('th-TH')
-      .withMessage('กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง'),
+      .withMessage('กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง')
   ],
-  async (req, res) => {
+  async(req, res) => {
     try {
       // Validate request
       const errors = validationResult(req);
@@ -322,7 +322,7 @@ router.put(
           organizationType: user.organizationType,
           organizationName: user.organizationName,
           permissions: user.getPermissions(),
-          accountStatus: user.accountStatus,
+          accountStatus: user.accountStatus
         },
         'อัปเดตโปรไฟล์สำเร็จ'
       );
@@ -347,9 +347,9 @@ router.post(
   [
     middleware.auth,
     body('currentPassword').notEmpty().withMessage('กรุณาใส่รหัสผ่านปัจจุบัน'),
-    body('newPassword').isLength({ min: 8 }).withMessage('รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร'),
+    body('newPassword').isLength({ min: 8 }).withMessage('รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร')
   ],
-  async (req, res) => {
+  async(req, res) => {
     try {
       // Validate request
       const errors = validationResult(req);
@@ -425,7 +425,7 @@ router.get('/verify', (req, res) => {
     const decoded = jwt.verify(token, config.environment.jwtSecret || 'fallback-secret-key');
     return utils.response.success(res, {
       valid: true,
-      user: decoded,
+      user: decoded
     });
   } catch (error) {
     return utils.response.error(res, 'Token ไม่ถูกต้อง', shared.constants.statusCodes.UNAUTHORIZED);

@@ -37,7 +37,7 @@ class RequestReportUseCase {
       sharedWith: reportData.sharedWith || [],
       tags: reportData.tags || [],
       metadata: reportData.metadata || {},
-      status: Report.STATUS.PENDING,
+      status: Report.STATUS.PENDING
     });
 
     // Set next run for scheduled reports
@@ -82,44 +82,44 @@ class RequestReportUseCase {
 
   _validateTypeParameters(type, parameters) {
     switch (type) {
-      case Report.TYPE.FARM_SUMMARY:
-      case Report.TYPE.CULTIVATION_HISTORY:
-      case Report.TYPE.SURVEY_RESULTS:
-        if (!parameters?.farmId) {
-          throw new Error(`${type} requires farmId parameter`);
-        }
-        break;
+    case Report.TYPE.FARM_SUMMARY:
+    case Report.TYPE.CULTIVATION_HISTORY:
+    case Report.TYPE.SURVEY_RESULTS:
+      if (!parameters?.farmId) {
+        throw new Error(`${type} requires farmId parameter`);
+      }
+      break;
 
-      case Report.TYPE.CERTIFICATE_STATUS:
-      case Report.TYPE.TRAINING_PROGRESS:
-        if (!parameters?.farmerId) {
-          throw new Error(`${type} requires farmerId parameter`);
-        }
-        break;
+    case Report.TYPE.CERTIFICATE_STATUS:
+    case Report.TYPE.TRAINING_PROGRESS:
+      if (!parameters?.farmerId) {
+        throw new Error(`${type} requires farmerId parameter`);
+      }
+      break;
 
-      case Report.TYPE.DOCUMENT_LIST:
-        if (!parameters?.userId) {
-          throw new Error(`${type} requires userId parameter`);
-        }
-        break;
+    case Report.TYPE.DOCUMENT_LIST:
+      if (!parameters?.userId) {
+        throw new Error(`${type} requires userId parameter`);
+      }
+      break;
 
-      case Report.TYPE.MONTHLY_SUMMARY:
-        if (!parameters?.year || !parameters?.month) {
-          throw new Error(`${type} requires year and month parameters`);
-        }
-        break;
+    case Report.TYPE.MONTHLY_SUMMARY:
+      if (!parameters?.year || !parameters?.month) {
+        throw new Error(`${type} requires year and month parameters`);
+      }
+      break;
 
-      case Report.TYPE.QUARTERLY_SUMMARY:
-        if (!parameters?.year || !parameters?.quarter) {
-          throw new Error(`${type} requires year and quarter parameters`);
-        }
-        break;
+    case Report.TYPE.QUARTERLY_SUMMARY:
+      if (!parameters?.year || !parameters?.quarter) {
+        throw new Error(`${type} requires year and quarter parameters`);
+      }
+      break;
 
-      case Report.TYPE.ANNUAL_SUMMARY:
-        if (!parameters?.year) {
-          throw new Error(`${type} requires year parameter`);
-        }
-        break;
+    case Report.TYPE.ANNUAL_SUMMARY:
+      if (!parameters?.year) {
+        throw new Error(`${type} requires year parameter`);
+      }
+      break;
     }
   }
 }

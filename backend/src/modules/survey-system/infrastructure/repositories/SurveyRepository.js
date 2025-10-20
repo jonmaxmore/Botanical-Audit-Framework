@@ -66,7 +66,7 @@ class SurveyRepository {
         title: 'text',
         description: 'text',
         'sections.title': 'text',
-        'sections.questions.questionText': 'text',
+        'sections.questions.questionText': 'text'
       });
 
       // Response collection indexes
@@ -101,7 +101,7 @@ class SurveyRepository {
     try {
       this.logger.info('Creating new survey in database', {
         title: surveyData.title,
-        category: surveyData.category,
+        category: surveyData.category
       });
 
       // สร้าง Survey entity
@@ -128,8 +128,8 @@ class SurveyRepository {
           createdAt: new Date(),
           lastModifiedBy: surveyData.createdBy || 'system',
           lastModifiedAt: new Date(),
-          changeHistory: [],
-        },
+          changeHistory: []
+        }
       };
 
       // บันทึกลงฐานข้อมูล
@@ -188,7 +188,7 @@ class SurveyRepository {
         isActive: surveyDocument.isActive,
         createdDate: surveyDocument.createdDate,
         lastModified: surveyDocument.lastModified,
-        version: surveyDocument.version,
+        version: surveyDocument.version
       });
 
       this.logger.info('Survey found successfully', { surveyId });
@@ -263,7 +263,7 @@ class SurveyRepository {
             isActive: doc.isActive,
             createdDate: doc.createdDate,
             lastModified: doc.lastModified,
-            version: doc.version,
+            version: doc.version
           })
       );
 
@@ -275,14 +275,14 @@ class SurveyRepository {
           currentPage: Math.floor(skip / limit) + 1,
           totalPages: Math.ceil(totalCount / limit),
           hasNext: skip + limit < totalCount,
-          hasPrev: skip > 0,
-        },
+          hasPrev: skip > 0
+        }
       };
 
       this.logger.info('Surveys found successfully', {
         farmId,
         count: surveys.length,
-        totalCount,
+        totalCount
       });
 
       return result;
@@ -335,13 +335,13 @@ class SurveyRepository {
             timestamp: new Date(),
             updatedBy: updatedBy,
             changes: Object.keys(updateData),
-            previousVersion: existingSurvey.version,
-          },
+            previousVersion: existingSurvey.version
+          }
         },
         $set: {
           'auditTrail.lastModifiedBy': updatedBy,
-          'auditTrail.lastModifiedAt': new Date(),
-        },
+          'auditTrail.lastModifiedAt': new Date()
+        }
       };
 
       // ทำการอัปเดต
@@ -360,7 +360,7 @@ class SurveyRepository {
 
       this.logger.info('Survey updated successfully', {
         surveyId,
-        version: updatedSurvey.version,
+        version: updatedSurvey.version
       });
 
       return updatedSurvey;
@@ -402,7 +402,7 @@ class SurveyRepository {
       // ตรวจสอบว่ามี active responses หรือไม่
       const activeResponses = await this.responseCollection.countDocuments({
         surveyId: surveyId,
-        status: { $in: ['in_progress', 'completed'] },
+        status: { $in: ['in_progress', 'completed'] }
       });
 
       if (activeResponses > 0) {
@@ -417,16 +417,16 @@ class SurveyRepository {
             isActive: false,
             deletedDate: new Date(),
             'auditTrail.lastModifiedBy': deletedBy,
-            'auditTrail.lastModifiedAt': new Date(),
+            'auditTrail.lastModifiedAt': new Date()
           },
           $push: {
             'auditTrail.changeHistory': {
               timestamp: new Date(),
               updatedBy: deletedBy,
               action: 'soft_delete',
-              reason: 'Survey deactivated',
-            },
-          },
+              reason: 'Survey deactivated'
+            }
+          }
         }
       );
 
@@ -471,7 +471,7 @@ class SurveyRepository {
 
       // Match stage - กรองข้อมูลพื้นฐาน
       const matchStage = {
-        isActive: searchCriteria.includeInactive !== true,
+        isActive: searchCriteria.includeInactive !== true
       };
 
       // เพิ่มการกรองตามฟาร์ม
@@ -499,7 +499,7 @@ class SurveyRepository {
       if (searchCriteria.searchText) {
         matchStage.$text = {
           $search: searchCriteria.searchText,
-          $language: 'thai', // รองรับภาษาไทย
+          $language: 'thai' // รองรับภาษาไทย
         };
       }
 
@@ -509,8 +509,8 @@ class SurveyRepository {
       if (searchCriteria.searchText) {
         pipeline.push({
           $addFields: {
-            searchScore: { $meta: 'textScore' },
-          },
+            searchScore: { $meta: 'textScore' }
+          }
         });
       }
 
@@ -554,7 +554,7 @@ class SurveyRepository {
             createdDate: doc.createdDate,
             lastModified: doc.lastModified,
             version: doc.version,
-            searchScore: doc.searchScore,
+            searchScore: doc.searchScore
           })
       );
 
@@ -565,14 +565,14 @@ class SurveyRepository {
           currentPage: Math.floor(skip / limit) + 1,
           totalPages: Math.ceil(totalCount / limit),
           hasNext: skip + limit < totalCount,
-          hasPrev: skip > 0,
+          hasPrev: skip > 0
         },
-        searchCriteria,
+        searchCriteria
       };
 
       this.logger.info('Survey search completed', {
         resultsCount: surveys.length,
-        totalCount,
+        totalCount
       });
 
       return result;
@@ -632,13 +632,13 @@ class SurveyRepository {
           _id: null,
           totalSurveys: { $sum: 1 },
           categories: {
-            $addToSet: '$category',
+            $addToSet: '$category'
           },
           surveysByCategory: {
             $push: {
               category: '$category',
-              gacpStandards: '$gacpStandards',
-            },
+              gacpStandards: '$gacpStandards'
+            }
           },
           averageQuestionsPerSurvey: {
             $avg: {
@@ -646,12 +646,12 @@ class SurveyRepository {
                 $map: {
                   input: '$sections',
                   as: 'section',
-                  in: { $size: '$$section.questions' },
-                },
-              },
-            },
-          },
-        },
+                  in: { $size: '$$section.questions' }
+                }
+              }
+            }
+          }
+        }
       });
 
       const statsResult = await this.collection.aggregate(pipeline).toArray();
@@ -670,17 +670,17 @@ class SurveyRepository {
           totalCategories: stats.categories ? stats.categories.length : 0,
           averageQuestionsPerSurvey: Math.round(stats.averageQuestionsPerSurvey || 0),
           totalResponses: responseStats.totalResponses || 0,
-          completionRate: responseStats.completionRate || 0,
+          completionRate: responseStats.completionRate || 0
         },
         categoryBreakdown,
         responseStats,
         trends: completionTrends,
-        generatedAt: new Date(),
+        generatedAt: new Date()
       };
 
       this.logger.info('Survey statistics generated successfully', {
         totalSurveys: finalStats.overview.totalSurveys,
-        totalResponses: finalStats.overview.totalResponses,
+        totalResponses: finalStats.overview.totalResponses
       });
 
       return finalStats;
@@ -711,12 +711,12 @@ class SurveyRepository {
           _id: null,
           totalResponses: { $sum: 1 },
           completedResponses: {
-            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
+            $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
           },
           averageScore: { $avg: '$totalScore' },
-          averageCompletionTime: { $avg: '$completionTimeMinutes' },
-        },
-      },
+          averageCompletionTime: { $avg: '$completionTimeMinutes' }
+        }
+      }
     ];
 
     const result = await this.responseCollection.aggregate(pipeline).toArray();
@@ -730,7 +730,7 @@ class SurveyRepository {
           ? Math.round((stats.completedResponses / stats.totalResponses) * 100)
           : 0,
       averageScore: Math.round(stats.averageScore || 0),
-      averageCompletionTime: Math.round(stats.averageCompletionTime || 0),
+      averageCompletionTime: Math.round(stats.averageCompletionTime || 0)
     };
   }
 
@@ -754,10 +754,10 @@ class SurveyRepository {
         $group: {
           _id: '$category',
           count: { $sum: 1 },
-          gacpStandards: { $addToSet: '$gacpStandards' },
-        },
+          gacpStandards: { $addToSet: '$gacpStandards' }
+        }
       },
-      { $sort: { count: -1 } },
+      { $sort: { count: -1 } }
     ];
 
     const results = await this.collection.aggregate(pipeline).toArray();
@@ -765,7 +765,7 @@ class SurveyRepository {
     return results.map(item => ({
       category: item._id,
       surveyCount: item.count,
-      gacpStandardsCount: item.gacpStandards.length,
+      gacpStandardsCount: item.gacpStandards.length
     }));
   }
 
@@ -786,7 +786,7 @@ class SurveyRepository {
 
     matchStage.completedDate = {
       $gte: startDate,
-      $lte: endDate,
+      $lte: endDate
     };
 
     const pipeline = [
@@ -794,13 +794,13 @@ class SurveyRepository {
       {
         $group: {
           _id: {
-            $dateToString: { format: '%Y-%m-%d', date: '$completedDate' },
+            $dateToString: { format: '%Y-%m-%d', date: '$completedDate' }
           },
           completions: { $sum: 1 },
-          averageScore: { $avg: '$totalScore' },
-        },
+          averageScore: { $avg: '$totalScore' }
+        }
       },
-      { $sort: { _id: 1 } },
+      { $sort: { _id: 1 } }
     ];
 
     const results = await this.responseCollection.aggregate(pipeline).toArray();
@@ -808,7 +808,7 @@ class SurveyRepository {
     return results.map(item => ({
       date: item._id,
       completions: item.completions,
-      averageScore: Math.round(item.averageScore || 0),
+      averageScore: Math.round(item.averageScore || 0)
     }));
   }
 }

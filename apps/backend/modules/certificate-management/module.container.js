@@ -49,16 +49,16 @@ function createCertificateModuleV2(dependencies = {}) {
     certificateRepository,
     pdfService: pdfService || createMockPDFService(),
     qrcodeService: qrcodeService || createMockQRCodeService(),
-    eventBus: eventBus || createMockEventBus(),
+    eventBus: eventBus || createMockEventBus()
   });
 
   const verifyCertificateUseCase = new VerifyCertificateUseCase({
-    certificateRepository,
+    certificateRepository
   });
 
   const revokeCertificateUseCase = new RevokeCertificateUseCase({
     certificateRepository,
-    eventBus: eventBus || createMockEventBus(),
+    eventBus: eventBus || createMockEventBus()
   });
 
   // Temporary use cases (to be moved to proper files)
@@ -76,7 +76,7 @@ function createCertificateModuleV2(dependencies = {}) {
     revokeCertificateUseCase,
     renewCertificateUseCase,
     listCertificatesUseCase,
-    getCertificateUseCase,
+    getCertificateUseCase
   });
 
   const certificateRouter = setupCertificateRoutes(certificateController, middleware);
@@ -94,9 +94,9 @@ function createCertificateModuleV2(dependencies = {}) {
       revokeCertificateUseCase,
       renewCertificateUseCase,
       listCertificatesUseCase,
-      getCertificateUseCase,
+      getCertificateUseCase
     },
-    controller: certificateController,
+    controller: certificateController
   };
 }
 
@@ -119,12 +119,12 @@ function createRenewCertificateUseCase(certificateRepository, eventBus) {
       if (eventBus) {
         await eventBus.publish({
           type: 'CertificateRenewed',
-          payload: { certificateId: updated.id, renewedBy },
+          payload: { certificateId: updated.id, renewedBy }
         });
       }
 
       return updated;
-    },
+    }
   };
 }
 
@@ -135,12 +135,12 @@ function createListCertificatesUseCase(certificateRepository) {
         ...filters,
         skip: (pagination.page - 1) * pagination.limit,
         limit: pagination.limit,
-        sort: { [sort.field]: sort.order === 'asc' ? 1 : -1 },
+        sort: { [sort.field]: sort.order === 'asc' ? 1 : -1 }
       });
 
       const total = await certificateRepository.countByStatus(filters.status);
       return { certificates, total };
-    },
+    }
   };
 }
 
@@ -148,7 +148,7 @@ function createGetCertificateUseCase(certificateRepository) {
   return {
     async execute({ id }) {
       return await certificateRepository.findById(id);
-    },
+    }
   };
 }
 
@@ -162,9 +162,9 @@ function createMockPDFService() {
       console.warn('⚠️ Using mock PDF service');
       return {
         url: `/certificates/${certificate.id}/certificate.pdf`,
-        path: `/tmp/certificates/${certificate.certificateNumber}.pdf`,
+        path: `/tmp/certificates/${certificate.certificateNumber}.pdf`
       };
-    },
+    }
   };
 }
 
@@ -174,9 +174,9 @@ function createMockQRCodeService() {
       console.warn('⚠️ Using mock QR code service');
       return {
         url: `/certificates/qr/${data.certificateNumber}.png`,
-        data: `https://gacp.go.th/verify/${data.certificateNumber}`,
+        data: `https://gacp.go.th/verify/${data.certificateNumber}`
       };
-    },
+    }
   };
 }
 
@@ -184,7 +184,7 @@ function createMockEventBus() {
   return {
     async publish(event) {
       console.log('📢 Event published:', event.type);
-    },
+    }
   };
 }
 

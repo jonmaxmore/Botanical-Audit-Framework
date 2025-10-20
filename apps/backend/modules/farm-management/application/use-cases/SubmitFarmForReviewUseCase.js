@@ -48,7 +48,7 @@ class SubmitFarmForReviewUseCase {
         farmId: updatedFarm.id,
         ownerId: updatedFarm.ownerId,
         farmName: updatedFarm.farmName,
-        submittedAt: updatedFarm.submittedAt,
+        submittedAt: updatedFarm.submittedAt
       });
       this.eventBus.publish(event);
     }

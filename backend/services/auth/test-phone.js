@@ -3,7 +3,7 @@ const Joi = require('joi');
 const schema = Joi.object({
   phoneNumber: Joi.string()
     .pattern(/^0\d{9}$/)
-    .required(),
+    .required()
 });
 
 const testPhones = [
@@ -12,7 +12,7 @@ const testPhones = [
   '08123456789', // Too long (11 digits)
   '1812345678', // Doesn't start with 0
   '0112345678', // Valid format
-  '0812345678', // Valid
+  '0812345678' // Valid
 ];
 
 console.log('Testing phone validation:\n');

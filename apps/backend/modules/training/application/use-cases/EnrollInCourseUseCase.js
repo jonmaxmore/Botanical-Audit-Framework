@@ -58,7 +58,7 @@ class EnrollInCourseUseCase {
       courseId,
       passingScore: course.passingScore,
       maxAttempts: 3,
-      enrolledBy: enrolledBy || farmerId,
+      enrolledBy: enrolledBy || farmerId
     });
 
     // Save enrollment

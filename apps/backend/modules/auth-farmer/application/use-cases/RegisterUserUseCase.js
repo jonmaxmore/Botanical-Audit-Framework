@@ -73,7 +73,7 @@ class RegisterUserUseCase {
       isEmailVerified: false,
       emailVerificationToken: verificationToken,
       emailVerificationExpiry: verificationExpiry,
-      metadata: request.metadata || {},
+      metadata: request.metadata || {}
     });
 
     // 8. Validate user entity
@@ -92,7 +92,7 @@ class RegisterUserUseCase {
         email: savedUser.email,
         firstName: savedUser.firstName,
         lastName: savedUser.lastName,
-        registeredAt: savedUser.createdAt,
+        registeredAt: savedUser.createdAt
       });
 
       await this.eventBus.publish(event.toEventPayload());

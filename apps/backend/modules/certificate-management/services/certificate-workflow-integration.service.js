@@ -21,7 +21,7 @@ class CertificateWorkflowIntegration {
     applicationService,
     notificationService,
     auditService,
-    eventBus,
+    eventBus
   }) {
     this.certificateService = certificateService;
     this.applicationService = applicationService;
@@ -84,7 +84,7 @@ class CertificateWorkflowIntegration {
         applicationId,
         applicationData,
         issuedBy: approvedBy,
-        validityPeriod: 36, // 3 years
+        validityPeriod: 36 // 3 years
       });
 
       console.log(`✅ Certificate generated successfully: ${certificate.certificateNumber}`);
@@ -98,9 +98,9 @@ class CertificateWorkflowIntegration {
           applicationId,
           userId: certificate.userId,
           farmId: certificate.farmId,
-          issuedBy: approvedBy,
+          issuedBy: approvedBy
         },
-        timestamp: new Date(),
+        timestamp: new Date()
       });
     } catch (error) {
       console.error(
@@ -114,8 +114,8 @@ class CertificateWorkflowIntegration {
         payload: {
           applicationId: event.payload.applicationId,
           error: error.message,
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       });
     }
   }
@@ -134,7 +134,7 @@ class CertificateWorkflowIntegration {
       await this.applicationService.updateStatus(applicationId, 'CERTIFICATE_ISSUED', {
         certificateId,
         certificateNumber,
-        issuedAt: new Date(),
+        issuedAt: new Date()
       });
 
       console.log(`📝 Updated application status to CERTIFICATE_ISSUED: ${applicationId}`);
@@ -145,7 +145,7 @@ class CertificateWorkflowIntegration {
         farmId,
         certificateNumber,
         applicationId,
-        channels: ['email', 'sms', 'in-app'],
+        channels: ['email', 'sms', 'in-app']
       });
 
       console.log(`📧 Sent certificate issued notification to user: ${userId}`);
@@ -159,8 +159,8 @@ class CertificateWorkflowIntegration {
         metadata: {
           applicationId,
           certificateNumber,
-          farmId,
-        },
+          farmId
+        }
       });
 
       console.log(`📋 Audit log recorded for certificate issuance: ${certificateNumber}`);
@@ -189,7 +189,7 @@ class CertificateWorkflowIntegration {
         certificateId,
         certificateNumber,
         daysUntilExpiry,
-        channels: ['email', 'sms', 'in-app'],
+        channels: ['email', 'sms', 'in-app']
       });
 
       console.log(
@@ -205,8 +205,8 @@ class CertificateWorkflowIntegration {
         metadata: {
           certificateNumber,
           daysUntilExpiry,
-          farmId,
-        },
+          farmId
+        }
       });
     } catch (error) {
       console.error(
@@ -235,7 +235,7 @@ class CertificateWorkflowIntegration {
         farmId,
         certificateId,
         certificateNumber,
-        channels: ['email', 'sms', 'in-app'],
+        channels: ['email', 'sms', 'in-app']
       });
 
       console.log(`📧 Sent expiration notification for certificate: ${certificateNumber}`);
@@ -249,8 +249,8 @@ class CertificateWorkflowIntegration {
         metadata: {
           certificateNumber,
           farmId,
-          expiredAt: new Date(),
-        },
+          expiredAt: new Date()
+        }
       });
     } catch (error) {
       console.error(
@@ -283,9 +283,9 @@ class CertificateWorkflowIntegration {
               userId: certificate.userId,
               farmId: certificate.farmId,
               daysUntilExpiry: days,
-              expiryDate: certificate.expiryDate,
+              expiryDate: certificate.expiryDate
             },
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
 
@@ -316,9 +316,9 @@ class CertificateWorkflowIntegration {
             certificateNumber: certificate.certificateNumber,
             userId: certificate.userId,
             farmId: certificate.farmId,
-            expiredAt: new Date(),
+            expiredAt: new Date()
           },
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 

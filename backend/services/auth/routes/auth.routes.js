@@ -28,7 +28,7 @@ const { refresh } = require('../controllers/token.controller');
 const {
   forgotPassword,
   resetPassword,
-  changePassword,
+  changePassword
 } = require('../controllers/password.controller');
 
 // Validators
@@ -38,7 +38,7 @@ const {
   loginSchema,
   forgotPasswordSchema,
   resetPasswordSchema,
-  changePasswordSchema,
+  changePasswordSchema
 } = require('../validators/auth.validator');
 
 // Middleware
@@ -47,7 +47,7 @@ const {
   registerLimiter,
   loginLimiter,
   generalLimiter,
-  strictLimiter,
+  strictLimiter
 } = require('../middleware/rateLimiter.middleware');
 
 /**

@@ -44,7 +44,7 @@ class Survey {
       maxAttempts: options.maxAttempts || 3,
       showScoreImmediately: options.showScoreImmediately !== false,
       allowReview: options.allowReview !== false,
-      requireAllAnswers: options.requireAllAnswers !== false,
+      requireAllAnswers: options.requireAllAnswers !== false
     };
 
     // Survey status and lifecycle
@@ -95,19 +95,19 @@ class Survey {
       configuration: {
         allowSkip: sectionData.allowSkip || false,
         randomizeQuestions: sectionData.randomizeQuestions || false,
-        minRequiredAnswers: sectionData.minRequiredAnswers || 0,
+        minRequiredAnswers: sectionData.minRequiredAnswers || 0
       },
 
       // Section scoring
       scoring: {
         maxScore: 0,
         passingScore: sectionData.passingScore || this.passingScore,
-        scoringMethod: sectionData.scoringMethod || 'WEIGHTED_AVERAGE',
+        scoringMethod: sectionData.scoringMethod || 'WEIGHTED_AVERAGE'
       },
 
       // Timestamps
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     // Process questions and calculate scoring
@@ -159,7 +159,7 @@ class Survey {
         minValue: questionData.minValue || null,
         maxValue: questionData.maxValue || null,
         pattern: questionData.pattern || null,
-        customValidation: questionData.customValidation || null,
+        customValidation: questionData.customValidation || null
       },
 
       // GACP compliance information
@@ -167,7 +167,7 @@ class Survey {
         standardSection: questionData.gacpSection,
         requirement: questionData.gacpRequirement,
         complianceLevel: questionData.complianceLevel || 'MANDATORY',
-        evidenceRequired: questionData.evidenceRequired || false,
+        evidenceRequired: questionData.evidenceRequired || false
       },
 
       // Help and guidance
@@ -179,10 +179,10 @@ class Survey {
       conditionalLogic: {
         showIf: questionData.showIf || null,
         hideIf: questionData.hideIf || null,
-        requiredIf: questionData.requiredIf || null,
+        requiredIf: questionData.requiredIf || null
       },
 
-      createdAt: new Date(),
+      createdAt: new Date()
     };
 
     // Validate question based on type
@@ -222,7 +222,7 @@ class Survey {
       totalQuestions: this.totalQuestions,
       completionRate: 0,
 
-      calculatedAt: new Date(),
+      calculatedAt: new Date()
     };
 
     // Score each section
@@ -236,7 +236,7 @@ class Survey {
         scoring.categoryScores[section.category] = {
           score: 0,
           maxScore: 0,
-          questions: 0,
+          questions: 0
         };
       }
 
@@ -271,7 +271,7 @@ class Survey {
       maxScore: section.scoring.maxScore,
       weightedScore: 0,
       percentage: 0,
-      questionScores: [],
+      questionScores: []
     };
 
     // Score each question in the section
@@ -300,7 +300,7 @@ class Survey {
       maxScore: question.points,
       isCorrect: false,
       feedback: '',
-      explanation: '',
+      explanation: ''
     };
 
     if (!response || !response.answer) {
@@ -309,28 +309,28 @@ class Survey {
     }
 
     switch (question.type) {
-      case 'MULTIPLE_CHOICE':
-        questionScore = this.scoreMultipleChoice(question, response.answer);
-        break;
+    case 'MULTIPLE_CHOICE':
+      questionScore = this.scoreMultipleChoice(question, response.answer);
+      break;
 
-      case 'YES_NO':
-        questionScore = this.scoreYesNo(question, response.answer);
-        break;
+    case 'YES_NO':
+      questionScore = this.scoreYesNo(question, response.answer);
+      break;
 
-      case 'RATING':
-        questionScore = this.scoreRating(question, response.answer);
-        break;
+    case 'RATING':
+      questionScore = this.scoreRating(question, response.answer);
+      break;
 
-      case 'NUMERIC':
-        questionScore = this.scoreNumeric(question, response.answer);
-        break;
+    case 'NUMERIC':
+      questionScore = this.scoreNumeric(question, response.answer);
+      break;
 
-      case 'TEXT':
-        questionScore = this.scoreText(question, response.answer);
-        break;
+    case 'TEXT':
+      questionScore = this.scoreText(question, response.answer);
+      break;
 
-      default:
-        questionScore.feedback = 'ประเภทคำถามไม่รองรับ';
+    default:
+      questionScore.feedback = 'ประเภทคำถามไม่รองรับ';
     }
 
     // Add GACP compliance feedback
@@ -372,7 +372,7 @@ class Survey {
         completionRate: scoring.completionRate,
         keyFindings: this.generateKeyFindings(scoring),
         criticalIssues: scoring.criticalIssues.length,
-        recommendationsCount: scoring.recommendedActions.length,
+        recommendationsCount: scoring.recommendedActions.length
       },
 
       // Detailed analysis
@@ -380,15 +380,15 @@ class Survey {
         sectionBreakdown: scoring.sectionScores.map(section => ({
           ...section,
           analysis: this.generateSectionAnalysis(section),
-          recommendations: this.generateSectionRecommendations(section),
+          recommendations: this.generateSectionRecommendations(section)
         })),
 
         categoryAnalysis: Object.keys(scoring.categoryScores).map(category => ({
           category: category,
           score: scoring.categoryScores[category],
           interpretation: this.interpretCategoryScore(category, scoring.categoryScores[category]),
-          priority: this.calculateCategoryPriority(category, scoring.categoryScores[category]),
-        })),
+          priority: this.calculateCategoryPriority(category, scoring.categoryScores[category])
+        }))
       },
 
       // GACP compliance assessment
@@ -397,7 +397,7 @@ class Survey {
         mandatoryRequirements: this.assessMandatoryRequirements(scoring),
         optionalRequirements: this.assessOptionalRequirements(scoring),
         evidenceGaps: this.identifyEvidenceGaps(scoring),
-        complianceGaps: this.identifyComplianceGaps(scoring),
+        complianceGaps: this.identifyComplianceGaps(scoring)
       },
 
       // Action plan
@@ -406,7 +406,7 @@ class Survey {
         shortTermActions: this.generateShortTermActions(scoring),
         longTermGoals: this.generateLongTermGoals(scoring),
         timeline: this.generateActionTimeline(scoring),
-        resources: this.identifyRequiredResources(scoring),
+        resources: this.identifyRequiredResources(scoring)
       },
 
       // Progress tracking
@@ -414,7 +414,7 @@ class Survey {
         nextReviewDate: this.calculateNextReviewDate(),
         milestones: this.generateProgressMilestones(scoring),
         successMetrics: this.defineSuccessMetrics(scoring),
-        monitoringPlan: this.createMonitoringPlan(scoring),
+        monitoringPlan: this.createMonitoringPlan(scoring)
       },
 
       // Supporting information
@@ -422,8 +422,8 @@ class Survey {
         gacpReferences: this.getRelevantGACPReferences(),
         additionalResources: this.getAdditionalResources(),
         trainingRecommendations: this.generateTrainingRecommendations(scoring),
-        consultationSuggestions: this.generateConsultationSuggestions(scoring),
-      },
+        consultationSuggestions: this.generateConsultationSuggestions(scoring)
+      }
     };
 
     return report;
@@ -437,7 +437,7 @@ class Survey {
       isComplete: true,
       issues: [],
       warnings: [],
-      recommendations: [],
+      recommendations: []
     };
 
     // Check if survey has sections
@@ -497,7 +497,7 @@ class Survey {
       'POST_HARVEST',
       'STORAGE',
       'QUALITY_CONTROL',
-      'DOCUMENTATION',
+      'DOCUMENTATION'
     ];
     if (!validCategories.includes(sectionData.category)) {
       throw new Error(`หมวดหมู่ไม่ถูกต้อง ต้องเป็น: ${validCategories.join(', ')}`);
@@ -509,17 +509,17 @@ class Survey {
    */
   validateQuestionByType(question) {
     switch (question.type) {
-      case 'MULTIPLE_CHOICE':
-        if (!question.options || question.options.length < 2) {
-          throw new Error('คำถามแบบเลือกตอบต้องมีตัวเลือกอย่างน้อย 2 ตัวเลือก');
-        }
-        break;
+    case 'MULTIPLE_CHOICE':
+      if (!question.options || question.options.length < 2) {
+        throw new Error('คำถามแบบเลือกตอบต้องมีตัวเลือกอย่างน้อย 2 ตัวเลือก');
+      }
+      break;
 
-      case 'RATING':
-        if (!question.minValue || !question.maxValue || question.minValue >= question.maxValue) {
-          throw new Error('คำถามแบบให้คะแนนต้องกำหนดช่วงคะแนนที่ถูกต้อง');
-        }
-        break;
+    case 'RATING':
+      if (!question.minValue || !question.maxValue || question.minValue >= question.maxValue) {
+        throw new Error('คำถามแบบให้คะแนนต้องกำหนดช่วงคะแนนที่ถูกต้อง');
+      }
+      break;
     }
   }
 
@@ -553,7 +553,7 @@ class Survey {
       score: isCorrect ? question.points : 0,
       maxScore: question.points,
       isCorrect: isCorrect,
-      feedback: isCorrect ? 'ตอบถูกต้อง' : 'ตอบไม่ถูกต้อง',
+      feedback: isCorrect ? 'ตอบถูกต้อง' : 'ตอบไม่ถูกต้อง'
     };
   }
 
@@ -565,7 +565,7 @@ class Survey {
       score: isCorrect ? question.points : 0,
       maxScore: question.points,
       isCorrect: isCorrect,
-      feedback: isCorrect ? 'ตอบถูกต้อง' : 'ควรปรับปรุงตามมาตรฐาน GACP',
+      feedback: isCorrect ? 'ตอบถูกต้อง' : 'ควรปรับปรุงตามมาตรฐาน GACP'
     };
   }
 
@@ -584,7 +584,7 @@ class Survey {
           ? 'ยอดเยี่ยม'
           : numericAnswer >= maxRating * 0.6
             ? 'ดี'
-            : 'ควรปรับปรุง',
+            : 'ควรปรับปรุง'
     };
   }
 
@@ -601,7 +601,7 @@ class Survey {
       score: isCorrect ? question.points : 0,
       maxScore: question.points,
       isCorrect: isCorrect,
-      feedback: isCorrect ? 'ค่าอยู่ในช่วงที่ยอมรับได้' : 'ค่าไม่อยู่ในช่วงมาตรฐาน',
+      feedback: isCorrect ? 'ค่าอยู่ในช่วงที่ยอมรับได้' : 'ค่าไม่อยู่ในช่วงมาตรฐาน'
     };
   }
 
@@ -618,7 +618,7 @@ class Survey {
       score: Math.round(score * 100) / 100,
       maxScore: question.points,
       isCorrect: isAdequate,
-      feedback: isAdequate ? 'คำตอบมีความครบถ้วน' : 'ควรให้รายละเอียดเพิ่มเติม',
+      feedback: isAdequate ? 'คำตอบมีความครบถ้วน' : 'ควรให้รายละเอียดเพิ่มเติม'
     };
   }
 
@@ -665,7 +665,7 @@ class Survey {
         recommendations.push({
           category: category,
           priority: percentage < 50 ? 'HIGH' : 'MEDIUM',
-          recommendation: this.getCategoryRecommendation(category, percentage),
+          recommendation: this.getCategoryRecommendation(category, percentage)
         });
       }
     });
@@ -684,7 +684,7 @@ class Survey {
           sectionId: section.sectionId,
           section: section.sectionTitle,
           score: section.percentage,
-          severity: 'CRITICAL',
+          severity: 'CRITICAL'
         });
       }
     });
@@ -700,7 +700,7 @@ class Survey {
       POST_HARVEST: 'หลังการเก็บเกี่ยว',
       STORAGE: 'การเก็บรักษา',
       QUALITY_CONTROL: 'การควบคุมคุณภาพ',
-      DOCUMENTATION: 'การจัดทำเอกสาร',
+      DOCUMENTATION: 'การจัดทำเอกสาร'
     };
     return translations[category] || category;
   }
@@ -712,7 +712,7 @@ class Survey {
       POST_HARVEST: 'ปรับปรุงกระบวนการหลังการเก็บเกี่ยว',
       STORAGE: 'พัฒนาระบบการเก็บรักษา',
       QUALITY_CONTROL: 'เสริมสร้างระบบควบคุมคุณภาพ',
-      DOCUMENTATION: 'ปรับปรุงระบบการจัดทำเอกสาร',
+      DOCUMENTATION: 'ปรับปรุงระบบการจัดทำเอกสาร'
     };
     return recommendations[category] || 'ปรับปรุงให้ตรงตามมาตรฐาน GACP';
   }
@@ -724,7 +724,7 @@ class Survey {
       averageScore: 0,
       passRate: 0,
       completionRate: 0,
-      lastResponseDate: null,
+      lastResponseDate: null
     };
   }
 
@@ -732,7 +732,7 @@ class Survey {
     return {
       minAnsweredQuestions: Math.ceil(this.totalQuestions * 0.8), // 80% completion required
       timeoutAction: 'SAVE_PROGRESS',
-      allowMultipleAttempts: true,
+      allowMultipleAttempts: true
     };
   }
 
@@ -741,7 +741,7 @@ class Survey {
       method: 'WEIGHTED_AVERAGE',
       penalizeIncomplete: true,
       bonusForSpeed: false,
-      roundingMethod: 'NEAREST',
+      roundingMethod: 'NEAREST'
     };
   }
 

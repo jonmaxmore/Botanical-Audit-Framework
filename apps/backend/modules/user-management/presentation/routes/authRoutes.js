@@ -40,19 +40,19 @@ function createAuthRoutes(dependencies = {}) {
   const strictRateLimit = authenticationMiddleware.rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 5, // 5 attempts per window
-    message: 'Too many authentication attempts, please try again later',
+    message: 'Too many authentication attempts, please try again later'
   });
 
   const moderateRateLimit = authenticationMiddleware.rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 20, // 20 requests per window
-    message: 'Too many requests, please try again later',
+    message: 'Too many requests, please try again later'
   });
 
   const normalRateLimit = authenticationMiddleware.rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
     max: 100, // 100 requests per window
-    message: 'Too many requests, please try again later',
+    message: 'Too many requests, please try again later'
   });
 
   // Security headers for all routes
@@ -140,9 +140,9 @@ function createAuthRoutes(dependencies = {}) {
             id: req.user.userId,
             email: req.user.email,
             role: req.user.role,
-            permissions: req.user.permissions,
-          },
-        },
+            permissions: req.user.permissions
+          }
+        }
       });
     }
   );
@@ -159,7 +159,7 @@ function createAuthRoutes(dependencies = {}) {
     authenticationMiddleware.authenticate(),
     authenticationMiddleware.requireRole('DTAM_ADMIN'),
     authenticationMiddleware.authorize('user:read:all'),
-    async (req, res) => {
+    async(req, res) => {
       try {
         // This would be implemented in a separate UserManagementController
         // For now, return placeholder
@@ -171,15 +171,15 @@ function createAuthRoutes(dependencies = {}) {
             pagination: {
               total: 0,
               page: 1,
-              limit: 10,
-            },
-          },
+              limit: 10
+            }
+          }
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'INTERNAL_ERROR',
-          message: 'Error retrieving users',
+          message: 'Error retrieving users'
         });
       }
     }
@@ -193,7 +193,7 @@ function createAuthRoutes(dependencies = {}) {
     authenticationMiddleware.authenticate(),
     authenticationMiddleware.requireRole('DTAM_ADMIN'),
     authenticationMiddleware.authorize('user:manage:all'),
-    async (req, res) => {
+    async(req, res) => {
       try {
         // This would be implemented in a separate UserManagementController
         // For now, return placeholder
@@ -202,14 +202,14 @@ function createAuthRoutes(dependencies = {}) {
           message: 'User status update endpoint (Admin only)',
           data: {
             userId: req.params.userId,
-            status: req.body.isActive,
-          },
+            status: req.body.isActive
+          }
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'INTERNAL_ERROR',
-          message: 'Error updating user status',
+          message: 'Error updating user status'
         });
       }
     }
@@ -226,7 +226,7 @@ function createAuthRoutes(dependencies = {}) {
       service: 'User Authentication Service',
       status: 'healthy',
       timestamp: new Date(),
-      version: '1.0.0',
+      version: '1.0.0'
     });
   });
 
@@ -240,17 +240,17 @@ function createAuthRoutes(dependencies = {}) {
           requireUppercase: true,
           requireLowercase: true,
           requireNumbers: true,
-          requireSpecialChars: true,
+          requireSpecialChars: true
         },
         tokenPolicy: {
           accessTokenExpiry: '24h',
-          refreshTokenExpiry: '7d',
+          refreshTokenExpiry: '7d'
         },
         securityPolicy: {
           maxLoginAttempts: 5,
-          lockoutDuration: 30, // minutes
-        },
-      },
+          lockoutDuration: 30 // minutes
+        }
+      }
     });
   });
 
@@ -267,7 +267,7 @@ function createAuthRoutes(dependencies = {}) {
       success: false,
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred',
-      ...(isDevelopment && { debug: error.message }),
+      ...(isDevelopment && { debug: error.message })
     });
   });
 
@@ -278,7 +278,7 @@ function createAuthRoutes(dependencies = {}) {
     res.status(404).json({
       success: false,
       error: 'ROUTE_NOT_FOUND',
-      message: `Authentication route not found: ${req.method} ${req.originalUrl}`,
+      message: `Authentication route not found: ${req.method} ${req.originalUrl}`
     });
   });
 

@@ -14,13 +14,13 @@ class GetTrainingStatisticsUseCase {
   async execute(filters = {}) {
     const [courseStats, enrollmentStats] = await Promise.all([
       this.courseRepository.getStatistics(),
-      this.enrollmentRepository.getStatistics(filters),
+      this.enrollmentRepository.getStatistics(filters)
     ]);
 
     return {
       courses: courseStats,
       enrollments: enrollmentStats,
-      generatedAt: new Date(),
+      generatedAt: new Date()
     };
   }
 }

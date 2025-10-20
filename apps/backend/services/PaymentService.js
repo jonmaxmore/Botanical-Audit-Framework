@@ -23,7 +23,7 @@ class PaymentService extends EventEmitter {
     // Payment types
     this.PAYMENT_TYPES = {
       INITIAL: 'initial',
-      RESUBMISSION: 'resubmission',
+      RESUBMISSION: 'resubmission'
     };
 
     // Payment status
@@ -31,7 +31,7 @@ class PaymentService extends EventEmitter {
       PENDING: 'pending',
       COMPLETED: 'completed',
       FAILED: 'failed',
-      CANCELLED: 'cancelled',
+      CANCELLED: 'cancelled'
     };
 
     // Payment methods
@@ -39,7 +39,7 @@ class PaymentService extends EventEmitter {
       CREDIT_CARD: 'credit_card',
       BANK_TRANSFER: 'bank_transfer',
       QR_CODE: 'qr_code',
-      PROMPTPAY: 'promptpay',
+      PROMPTPAY: 'promptpay'
     };
 
     // Amount constants
@@ -90,7 +90,7 @@ class PaymentService extends EventEmitter {
         transactionId: null,
         paidAt: null,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       // Send notification to farmer
@@ -108,8 +108,8 @@ class PaymentService extends EventEmitter {
             paymentId: payment.id,
             applicationId,
             amount: this.PAYMENT_AMOUNT,
-            type,
-          },
+            type
+          }
         });
       }
 
@@ -156,7 +156,7 @@ class PaymentService extends EventEmitter {
         paymentMethod,
         transactionId,
         paidAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       // Update application payment status
@@ -165,7 +165,7 @@ class PaymentService extends EventEmitter {
         amount: updatedPayment.amount,
         type: updatedPayment.type,
         status: this.PAYMENT_STATUS.COMPLETED,
-        paidAt: updatedPayment.paidAt,
+        paidAt: updatedPayment.paidAt
       });
 
       // Send notifications
@@ -180,8 +180,8 @@ class PaymentService extends EventEmitter {
           data: {
             paymentId: updatedPayment.id,
             applicationId: payment.applicationId,
-            amount: payment.amount,
-          },
+            amount: payment.amount
+          }
         });
 
         // Notify reviewer (if initial payment)
@@ -196,8 +196,8 @@ class PaymentService extends EventEmitter {
               priority: 'medium',
               data: {
                 applicationId: application.id,
-                paymentId: updatedPayment.id,
-              },
+                paymentId: updatedPayment.id
+              }
             });
           }
         }
@@ -207,7 +207,7 @@ class PaymentService extends EventEmitter {
       this.emit('payment:completed', {
         payment: updatedPayment,
         applicationId: payment.applicationId,
-        farmerId: payment.farmerId,
+        farmerId: payment.farmerId
       });
 
       logger.info(`[PaymentService] Payment completed: ${paymentId}`);
@@ -281,7 +281,7 @@ class PaymentService extends EventEmitter {
           .filter(p => p.status === this.PAYMENT_STATUS.COMPLETED)
           .reduce((sum, p) => sum + p.amount, 0),
         pendingPayments: payments.filter(p => p.status === this.PAYMENT_STATUS.PENDING),
-        completedPayments: payments.filter(p => p.status === this.PAYMENT_STATUS.COMPLETED),
+        completedPayments: payments.filter(p => p.status === this.PAYMENT_STATUS.COMPLETED)
       };
     } catch (error) {
       logger.error('[PaymentService] Get payment status error:', error);
@@ -315,7 +315,7 @@ class PaymentService extends EventEmitter {
             applicationId,
             farmerId,
             type: this.PAYMENT_TYPES.RESUBMISSION,
-            submissionCount,
+            submissionCount
           });
         }
       }
@@ -361,7 +361,7 @@ class PaymentService extends EventEmitter {
 
       const updatedPayment = await this.paymentRepository.update(paymentId, {
         status: this.PAYMENT_STATUS.CANCELLED,
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       this.emit('payment:cancelled', { payment: updatedPayment });
@@ -388,7 +388,7 @@ class PaymentService extends EventEmitter {
         failedPayments: stats.failed,
         totalAmount: stats.totalAmount,
         averageAmount: stats.total > 0 ? stats.totalAmount / stats.total : 0,
-        completionRate: stats.total > 0 ? (stats.completed / stats.total) * 100 : 0,
+        completionRate: stats.total > 0 ? (stats.completed / stats.total) * 100 : 0
       };
     } catch (error) {
       logger.error('[PaymentService] Get statistics error:', error);

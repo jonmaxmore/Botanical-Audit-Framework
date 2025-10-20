@@ -147,7 +147,7 @@ class ReportingRoutes {
         success: false,
         error: 'REPORT_RATE_LIMIT',
         message: 'Too many report generation requests, please try again later',
-        retryAfter: 15 * 60,
+        retryAfter: 15 * 60
       },
       standardHeaders: true,
       legacyHeaders: false,
@@ -164,9 +164,9 @@ class ReportingRoutes {
           success: false,
           error: 'REPORT_RATE_LIMIT',
           message: 'Too many report generation requests, please try again later',
-          retryAfter: 15 * 60,
+          retryAfter: 15 * 60
         });
-      },
+      }
     });
   }
 
@@ -182,7 +182,7 @@ class ReportingRoutes {
         success: false,
         error: 'ANALYTICS_RATE_LIMIT',
         message: 'Too many analytics requests, please try again later',
-        retryAfter: 10 * 60,
+        retryAfter: 10 * 60
       },
       keyGenerator: req => {
         return req.userId || req.ip;
@@ -193,9 +193,9 @@ class ReportingRoutes {
           success: false,
           error: 'ANALYTICS_RATE_LIMIT',
           message: 'Too many analytics requests, please try again later',
-          retryAfter: 10 * 60,
+          retryAfter: 10 * 60
         });
-      },
+      }
     });
   }
 
@@ -211,7 +211,7 @@ class ReportingRoutes {
         success: false,
         error: 'DASHBOARD_RATE_LIMIT',
         message: 'Too many dashboard requests, please try again later',
-        retryAfter: 60,
+        retryAfter: 60
       },
       keyGenerator: req => {
         return req.userId || req.ip;
@@ -222,9 +222,9 @@ class ReportingRoutes {
           success: false,
           error: 'DASHBOARD_RATE_LIMIT',
           message: 'Too many dashboard requests, please try again later',
-          retryAfter: 60,
+          retryAfter: 60
         });
-      },
+      }
     });
   }
 
@@ -242,7 +242,7 @@ class ReportingRoutes {
       url: req.url,
       method: req.method,
       userId: req.userId,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     console.error('[ReportingRoutes] Error details:', errorDetails);
@@ -253,7 +253,7 @@ class ReportingRoutes {
         success: false,
         error: 'VALIDATION_ERROR',
         message: 'Input validation failed',
-        details: error.errors,
+        details: error.errors
       });
     }
 
@@ -261,7 +261,7 @@ class ReportingRoutes {
       return res.status(400).json({
         success: false,
         error: 'INVALID_ID',
-        message: 'Invalid ID format',
+        message: 'Invalid ID format'
       });
     }
 
@@ -269,7 +269,7 @@ class ReportingRoutes {
       return res.status(503).json({
         success: false,
         error: 'SERVICE_UNAVAILABLE',
-        message: 'External service temporarily unavailable',
+        message: 'External service temporarily unavailable'
       });
     }
 
@@ -277,7 +277,7 @@ class ReportingRoutes {
       return res.status(504).json({
         success: false,
         error: 'REQUEST_TIMEOUT',
-        message: 'Request processing timeout',
+        message: 'Request processing timeout'
       });
     }
 
@@ -286,7 +286,7 @@ class ReportingRoutes {
       success: false,
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred while processing your request',
-      requestId: req.id || 'unknown',
+      requestId: req.id || 'unknown'
     });
   }
 
@@ -311,7 +311,7 @@ class ReportingRoutes {
           description: 'Get real-time dashboard metrics',
           authentication: 'required',
           authorization: 'DTAM_ADMIN, DTAM_REVIEWER',
-          rateLimit: 'dashboard',
+          rateLimit: 'dashboard'
         },
         {
           method: 'GET',
@@ -319,7 +319,7 @@ class ReportingRoutes {
           description: 'Generate application processing report',
           authentication: 'required',
           authorization: 'DTAM_ADMIN, DTAM_REVIEWER',
-          rateLimit: 'report',
+          rateLimit: 'report'
         },
         {
           method: 'GET',
@@ -327,7 +327,7 @@ class ReportingRoutes {
           description: 'Generate financial performance report',
           authentication: 'required',
           authorization: 'DTAM_ADMIN',
-          rateLimit: 'report',
+          rateLimit: 'report'
         },
         {
           method: 'GET',
@@ -335,7 +335,7 @@ class ReportingRoutes {
           description: 'Generate user activity report',
           authentication: 'required',
           authorization: 'DTAM_ADMIN, DTAM_REVIEWER',
-          rateLimit: 'report',
+          rateLimit: 'report'
         },
         {
           method: 'GET',
@@ -343,7 +343,7 @@ class ReportingRoutes {
           description: 'Generate compliance and audit report',
           authentication: 'required',
           authorization: 'DTAM_ADMIN',
-          rateLimit: 'report',
+          rateLimit: 'report'
         },
         {
           method: 'GET',
@@ -351,7 +351,7 @@ class ReportingRoutes {
           description: 'Get business intelligence analytics',
           authentication: 'required',
           authorization: 'DTAM_ADMIN, DTAM_REVIEWER',
-          rateLimit: 'analytics',
+          rateLimit: 'analytics'
         },
         {
           method: 'GET',
@@ -359,7 +359,7 @@ class ReportingRoutes {
           description: 'Get predictive analytics and forecasts',
           authentication: 'required',
           authorization: 'DTAM_ADMIN',
-          rateLimit: 'analytics',
+          rateLimit: 'analytics'
         },
         {
           method: 'GET',
@@ -367,32 +367,32 @@ class ReportingRoutes {
           description: 'Service health check',
           authentication: 'none',
           authorization: 'none',
-          rateLimit: 'none',
-        },
+          rateLimit: 'none'
+        }
       ],
       rateLimits: {
         dashboard: '60 requests per minute',
         report: '10 requests per 15 minutes',
-        analytics: '20 requests per 10 minutes',
+        analytics: '20 requests per 10 minutes'
       },
       security: {
         authentication: 'JWT Bearer token',
         authorization: 'Role-based access control',
         inputValidation: 'express-validator',
         rateLimiting: 'express-rate-limit',
-        auditLogging: 'Comprehensive activity tracking',
+        auditLogging: 'Comprehensive activity tracking'
       },
       exportFormats: {
         reports: ['json', 'pdf', 'excel', 'csv'],
         analytics: ['json'],
-        dashboard: ['json'],
+        dashboard: ['json']
       },
       businessIntegration: {
         realTimeData: 'Live metrics and KPIs',
         complianceReporting: 'DTAM regulatory compliance',
         businessIntelligence: 'Predictive analytics and insights',
-        auditSupport: 'Complete audit trail generation',
-      },
+        auditSupport: 'Complete audit trail generation'
+      }
     };
   }
 }

@@ -125,7 +125,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
 
   return {
     farmerRouter,
-    dtamRouter,
+    dtamRouter
   };
 }
 

@@ -73,7 +73,7 @@ class CertificateService {
     const expectedHash = this.generateHash({
       certificateNumber: payload.c,
       issuedAt: payload.i,
-      expiresAt: payload.e,
+      expiresAt: payload.e
     });
 
     return payload.h === expectedHash;
@@ -91,7 +91,7 @@ class CertificateService {
       u: verificationUrl,
       i: new Date(certificateData.issuedAt).getTime(),
       e: new Date(certificateData.expiresAt).getTime(),
-      h: this.generateHash(certificateData),
+      h: this.generateHash(certificateData)
     };
 
     // Generate QR code as data URL
@@ -101,8 +101,8 @@ class CertificateService {
       margin: 2,
       color: {
         dark: '#000000',
-        light: '#FFFFFF',
-      },
+        light: '#FFFFFF'
+      }
     });
 
     return qrCodeDataURL;
@@ -120,7 +120,7 @@ class CertificateService {
         // Create PDF document
         const doc = new PDFDocument({
           size: 'A4',
-          margins: { top: 50, bottom: 50, left: 50, right: 50 },
+          margins: { top: 50, bottom: 50, left: 50, right: 50 }
         });
 
         // Pipe to file
@@ -181,7 +181,7 @@ class CertificateService {
             new Date(certificate.issuedAt).toLocaleDateString('th-TH', {
               year: 'numeric',
               month: 'long',
-              day: 'numeric',
+              day: 'numeric'
             }),
             50,
             400
@@ -197,7 +197,7 @@ class CertificateService {
             new Date(certificate.expiresAt).toLocaleDateString('th-TH', {
               year: 'numeric',
               month: 'long',
-              day: 'numeric',
+              day: 'numeric'
             }),
             300,
             400
@@ -219,7 +219,7 @@ class CertificateService {
           .font('Helvetica')
           .text(`${this.baseUrl}/verify/${certificate.certificateNumber}`, 220, 530, {
             width: 300,
-            align: 'left',
+            align: 'left'
           });
 
         // Footer
@@ -227,11 +227,11 @@ class CertificateService {
           .fontSize(10)
           .font('Helvetica')
           .text('กรมพัฒนาการแพทย์แผนไทยและการแพทย์ทางเลือก', 50, 700, {
-            align: 'center',
+            align: 'center'
           });
 
         doc.fontSize(10).text('Department of Thai Traditional and Alternative Medicine', 50, 715, {
-          align: 'center',
+          align: 'center'
         });
 
         // Signature line
@@ -278,7 +278,7 @@ class CertificateService {
         expiresAt: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000), // 3 years
         issuedBy: applicationData.approvedBy,
         status: 'active',
-        createdAt: new Date(),
+        createdAt: new Date()
       };
 
       // Generate QR code
@@ -305,13 +305,13 @@ class CertificateService {
   async verifyCertificate(db, certificateNumber) {
     const certificate = await db.collection('certificates').findOne({
       certificateNumber,
-      status: { $ne: 'revoked' },
+      status: { $ne: 'revoked' }
     });
 
     if (!certificate) {
       return {
         valid: false,
-        reason: 'Certificate not found',
+        reason: 'Certificate not found'
       };
     }
 
@@ -322,8 +322,8 @@ class CertificateService {
         reason: 'Certificate expired',
         certificate: {
           certificateNumber: certificate.certificateNumber,
-          expiresAt: certificate.expiresAt,
-        },
+          expiresAt: certificate.expiresAt
+        }
       };
     }
 
@@ -335,8 +335,8 @@ class CertificateService {
         certificate: {
           certificateNumber: certificate.certificateNumber,
           revokedAt: certificate.revokedAt,
-          revokedBy: certificate.revokedBy,
-        },
+          revokedBy: certificate.revokedBy
+        }
       };
     }
 
@@ -350,8 +350,8 @@ class CertificateService {
         farmSize: certificate.farmSize,
         issuedAt: certificate.issuedAt,
         expiresAt: certificate.expiresAt,
-        status: certificate.status,
-      },
+        status: certificate.status
+      }
     };
   }
 
@@ -366,7 +366,7 @@ class CertificateService {
       if (payload.v !== 1) {
         return {
           valid: false,
-          reason: 'Unsupported QR code version',
+          reason: 'Unsupported QR code version'
         };
       }
 
@@ -374,7 +374,7 @@ class CertificateService {
       if (!this.verifyHash(payload)) {
         return {
           valid: false,
-          reason: 'QR code tampered or invalid',
+          reason: 'QR code tampered or invalid'
         };
       }
 
@@ -383,7 +383,7 @@ class CertificateService {
     } catch (error) {
       return {
         valid: false,
-        reason: 'Invalid QR code format',
+        reason: 'Invalid QR code format'
       };
     }
   }
@@ -400,8 +400,8 @@ class CertificateService {
           revokedAt: new Date(),
           revokedBy,
           revocationReason: reason,
-          updatedAt: new Date(),
-        },
+          updatedAt: new Date()
+        }
       }
     );
 
@@ -430,9 +430,9 @@ class CertificateService {
         status: 'active',
         expiresAt: {
           $gt: now,
-          $lt: thirtyDaysFromNow,
-        },
-      }),
+          $lt: thirtyDaysFromNow
+        }
+      })
     ]);
 
     return {
@@ -440,7 +440,7 @@ class CertificateService {
       active,
       expired,
       revoked,
-      expiringThisMonth,
+      expiringThisMonth
     };
   }
 }
@@ -459,7 +459,7 @@ if (require.main === module) {
 
     const certificateService = new CertificateService({
       secretKey: 'test-secret-key',
-      baseUrl: 'https://gacp.go.th',
+      baseUrl: 'https://gacp.go.th'
     });
 
     // Test certificate generation
@@ -470,7 +470,7 @@ if (require.main === module) {
       farmerName: 'นายทดสอบ ระบบ',
       cropType: 'Cannabis',
       farmSize: 5.5,
-      approvedBy: 'Director',
+      approvedBy: 'Director'
     };
 
     const certificate = await certificateService.generateCertificate(db, mockApplication);
@@ -490,7 +490,7 @@ if (require.main === module) {
       u: `https://gacp.go.th/verify/${certificate.certificateNumber}`,
       i: certificate.issuedAt.getTime(),
       e: certificate.expiresAt.getTime(),
-      h: certificateService.generateHash(certificate),
+      h: certificateService.generateHash(certificate)
     });
 
     const qrVerification = await certificateService.verifyQRCode(db, qrPayload);

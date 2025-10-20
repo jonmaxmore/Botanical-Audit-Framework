@@ -36,7 +36,7 @@ class AuthenticationMiddleware {
       max: 100, // limit each IP to 100 requests per windowMs
       message: 'Too many requests from this IP, please try again later',
       standardHeaders: true,
-      legacyHeaders: false,
+      legacyHeaders: false
     };
 
     console.log('[AuthenticationMiddleware] Initialized successfully');
@@ -55,7 +55,7 @@ class AuthenticationMiddleware {
           return res.status(401).json({
             success: false,
             error: 'MISSING_AUTH_HEADER',
-            message: 'Authorization header is required',
+            message: 'Authorization header is required'
           });
         }
 
@@ -64,7 +64,7 @@ class AuthenticationMiddleware {
           return res.status(401).json({
             success: false,
             error: 'INVALID_AUTH_FORMAT',
-            message: 'Authorization header must use Bearer token format',
+            message: 'Authorization header must use Bearer token format'
           });
         }
 
@@ -74,7 +74,7 @@ class AuthenticationMiddleware {
           return res.status(401).json({
             success: false,
             error: 'MISSING_TOKEN',
-            message: 'JWT token is required',
+            message: 'JWT token is required'
           });
         }
 
@@ -86,7 +86,7 @@ class AuthenticationMiddleware {
         return res.status(500).json({
           success: false,
           error: 'INTERNAL_ERROR',
-          message: 'Internal server error',
+          message: 'Internal server error'
         });
       }
     };
@@ -97,13 +97,13 @@ class AuthenticationMiddleware {
    * @returns {Function} - Express middleware
    */
   authenticate() {
-    return async (req, res, next) => {
+    return async(req, res, next) => {
       try {
         if (!req.token) {
           return res.status(401).json({
             success: false,
             error: 'TOKEN_REQUIRED',
-            message: 'Authentication token is required',
+            message: 'Authentication token is required'
           });
         }
 
@@ -124,7 +124,7 @@ class AuthenticationMiddleware {
           timestamp: new Date(),
           method: req.method,
           path: req.path,
-          sessionId: userInfo.sessionId,
+          sessionId: userInfo.sessionId
         };
 
         // Log authenticated request (optional, for audit)
@@ -136,7 +136,7 @@ class AuthenticationMiddleware {
             path: req.path,
             ip: req.context.ip,
             userAgent: req.context.userAgent,
-            timestamp: req.context.timestamp,
+            timestamp: req.context.timestamp
           });
         }
 
@@ -149,7 +149,7 @@ class AuthenticationMiddleware {
           return res.status(401).json({
             success: false,
             error: 'TOKEN_EXPIRED',
-            message: 'Token has expired. Please refresh your token or login again.',
+            message: 'Token has expired. Please refresh your token or login again.'
           });
         }
 
@@ -157,7 +157,7 @@ class AuthenticationMiddleware {
           return res.status(401).json({
             success: false,
             error: 'INVALID_TOKEN',
-            message: 'Invalid authentication token',
+            message: 'Invalid authentication token'
           });
         }
 
@@ -165,14 +165,14 @@ class AuthenticationMiddleware {
           return res.status(401).json({
             success: false,
             error: 'SESSION_EXPIRED',
-            message: 'Session has expired. Please login again.',
+            message: 'Session has expired. Please login again.'
           });
         }
 
         return res.status(401).json({
           success: false,
           error: 'AUTHENTICATION_FAILED',
-          message: 'Authentication failed',
+          message: 'Authentication failed'
         });
       }
     };
@@ -184,20 +184,20 @@ class AuthenticationMiddleware {
    * @returns {Function} - Express middleware
    */
   authorize(permission) {
-    return async (req, res, next) => {
+    return async(req, res, next) => {
       try {
         if (!req.user) {
           return res.status(401).json({
             success: false,
             error: 'NOT_AUTHENTICATED',
-            message: 'User not authenticated',
+            message: 'User not authenticated'
           });
         }
 
         // Build resource context for ownership checks
         const resourceContext = {
           ownerId: req.params.userId || req.body.userId || req.query.userId,
-          applicationId: req.params.applicationId || req.body.applicationId,
+          applicationId: req.params.applicationId || req.body.applicationId
         };
 
         // If resource has owner, check if current user is owner
@@ -223,14 +223,14 @@ class AuthenticationMiddleware {
               resource: resourceContext,
               method: req.method,
               path: req.path,
-              timestamp: new Date(),
+              timestamp: new Date()
             });
           }
 
           return res.status(403).json({
             success: false,
             error: 'INSUFFICIENT_PERMISSIONS',
-            message: 'You do not have permission to perform this action',
+            message: 'You do not have permission to perform this action'
           });
         }
 
@@ -240,7 +240,7 @@ class AuthenticationMiddleware {
         return res.status(500).json({
           success: false,
           error: 'AUTHORIZATION_ERROR',
-          message: 'Error checking permissions',
+          message: 'Error checking permissions'
         });
       }
     };
@@ -260,7 +260,7 @@ class AuthenticationMiddleware {
           return res.status(401).json({
             success: false,
             error: 'NOT_AUTHENTICATED',
-            message: 'User not authenticated',
+            message: 'User not authenticated'
           });
         }
 
@@ -274,14 +274,14 @@ class AuthenticationMiddleware {
               requiredRoles: allowedRoles,
               method: req.method,
               path: req.path,
-              timestamp: new Date(),
+              timestamp: new Date()
             });
           }
 
           return res.status(403).json({
             success: false,
             error: 'ROLE_NOT_AUTHORIZED',
-            message: `Access denied. Required role: ${allowedRoles.join(' or ')}`,
+            message: `Access denied. Required role: ${allowedRoles.join(' or ')}`
           });
         }
 
@@ -291,7 +291,7 @@ class AuthenticationMiddleware {
         return res.status(500).json({
           success: false,
           error: 'ROLE_CHECK_ERROR',
-          message: 'Error checking user role',
+          message: 'Error checking user role'
         });
       }
     };
@@ -304,13 +304,13 @@ class AuthenticationMiddleware {
    * @returns {Function} - Express middleware
    */
   validateResourceOwnership(resourceIdParam = 'id', ownerField = 'userId') {
-    return async (req, res, next) => {
+    return async(req, res, next) => {
       try {
         if (!req.user) {
           return res.status(401).json({
             success: false,
             error: 'NOT_AUTHENTICATED',
-            message: 'User not authenticated',
+            message: 'User not authenticated'
           });
         }
 
@@ -324,7 +324,7 @@ class AuthenticationMiddleware {
           return res.status(400).json({
             success: false,
             error: 'RESOURCE_ID_REQUIRED',
-            message: `Resource ID parameter '${resourceIdParam}' is required`,
+            message: `Resource ID parameter '${resourceIdParam}' is required`
           });
         }
 
@@ -336,7 +336,7 @@ class AuthenticationMiddleware {
           return res.status(403).json({
             success: false,
             error: 'RESOURCE_ACCESS_DENIED',
-            message: 'You can only access your own resources',
+            message: 'You can only access your own resources'
           });
         }
 
@@ -346,7 +346,7 @@ class AuthenticationMiddleware {
         return res.status(500).json({
           success: false,
           error: 'OWNERSHIP_CHECK_ERROR',
-          message: 'Error checking resource ownership',
+          message: 'Error checking resource ownership'
         });
       }
     };
@@ -375,7 +375,7 @@ class AuthenticationMiddleware {
             ip: req.ip,
             method: req.method,
             path: req.path,
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
 
@@ -383,9 +383,9 @@ class AuthenticationMiddleware {
           success: false,
           error: 'RATE_LIMIT_EXCEEDED',
           message: config.message,
-          retryAfter: Math.round(config.windowMs / 1000),
+          retryAfter: Math.round(config.windowMs / 1000)
         });
-      },
+      }
     });
   }
 
@@ -394,7 +394,7 @@ class AuthenticationMiddleware {
    * @returns {Function} - Express middleware
    */
   optionalAuth() {
-    return async (req, res, next) => {
+    return async(req, res, next) => {
       try {
         const authHeader = req.headers.authorization;
 

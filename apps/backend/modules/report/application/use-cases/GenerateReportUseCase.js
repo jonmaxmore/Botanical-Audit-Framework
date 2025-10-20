@@ -48,7 +48,7 @@ class GenerateReportUseCase {
       const content = await this.reportGeneratorService.generate(report.format, data, {
         title: report.title,
         parameters: report.parameters,
-        filters: report.filters,
+        filters: report.filters
       });
 
       // Save to file
@@ -83,73 +83,73 @@ class GenerateReportUseCase {
     const { type, parameters, filters } = report;
 
     switch (type) {
-      // Farmer Reports
-      case Report.TYPE.FARM_SUMMARY:
-        return await this.dataAggregationService.getFarmSummary(parameters.farmId, filters);
+    // Farmer Reports
+    case Report.TYPE.FARM_SUMMARY:
+      return await this.dataAggregationService.getFarmSummary(parameters.farmId, filters);
 
-      case Report.TYPE.CULTIVATION_HISTORY:
-        return await this.dataAggregationService.getCultivationHistory(parameters.farmId, filters);
+    case Report.TYPE.CULTIVATION_HISTORY:
+      return await this.dataAggregationService.getCultivationHistory(parameters.farmId, filters);
 
-      case Report.TYPE.CERTIFICATE_STATUS:
-        return await this.dataAggregationService.getCertificateStatus(parameters.farmerId, filters);
+    case Report.TYPE.CERTIFICATE_STATUS:
+      return await this.dataAggregationService.getCertificateStatus(parameters.farmerId, filters);
 
-      case Report.TYPE.TRAINING_PROGRESS:
-        return await this.dataAggregationService.getTrainingProgress(parameters.farmerId, filters);
+    case Report.TYPE.TRAINING_PROGRESS:
+      return await this.dataAggregationService.getTrainingProgress(parameters.farmerId, filters);
 
-      case Report.TYPE.DOCUMENT_LIST:
-        return await this.dataAggregationService.getDocumentList(parameters.userId, filters);
+    case Report.TYPE.DOCUMENT_LIST:
+      return await this.dataAggregationService.getDocumentList(parameters.userId, filters);
 
-      case Report.TYPE.SURVEY_RESULTS:
-        return await this.dataAggregationService.getSurveyResults(parameters.farmId, filters);
+    case Report.TYPE.SURVEY_RESULTS:
+      return await this.dataAggregationService.getSurveyResults(parameters.farmId, filters);
 
       // DTAM Reports
-      case Report.TYPE.APPLICATIONS_SUMMARY:
-        return await this.dataAggregationService.getApplicationsSummary(filters);
+    case Report.TYPE.APPLICATIONS_SUMMARY:
+      return await this.dataAggregationService.getApplicationsSummary(filters);
 
-      case Report.TYPE.CERTIFICATES_ISSUED:
-        return await this.dataAggregationService.getCertificatesIssued(filters);
+    case Report.TYPE.CERTIFICATES_ISSUED:
+      return await this.dataAggregationService.getCertificatesIssued(filters);
 
-      case Report.TYPE.AUDIT_LOG:
-        return await this.dataAggregationService.getAuditLog(filters);
+    case Report.TYPE.AUDIT_LOG:
+      return await this.dataAggregationService.getAuditLog(filters);
 
-      case Report.TYPE.FARMER_STATISTICS:
-        return await this.dataAggregationService.getFarmerStatistics(filters);
+    case Report.TYPE.FARMER_STATISTICS:
+      return await this.dataAggregationService.getFarmerStatistics(filters);
 
-      case Report.TYPE.TRAINING_STATISTICS:
-        return await this.dataAggregationService.getTrainingStatistics(filters);
+    case Report.TYPE.TRAINING_STATISTICS:
+      return await this.dataAggregationService.getTrainingStatistics(filters);
 
-      case Report.TYPE.SYSTEM_ACTIVITY:
-        return await this.dataAggregationService.getSystemActivity(filters);
+    case Report.TYPE.SYSTEM_ACTIVITY:
+      return await this.dataAggregationService.getSystemActivity(filters);
 
       // Analytics Reports
-      case Report.TYPE.PERFORMANCE_DASHBOARD:
-        return await this.dataAggregationService.getPerformanceDashboard(filters);
+    case Report.TYPE.PERFORMANCE_DASHBOARD:
+      return await this.dataAggregationService.getPerformanceDashboard(filters);
 
-      case Report.TYPE.COMPLIANCE_REPORT:
-        return await this.dataAggregationService.getComplianceReport(filters);
+    case Report.TYPE.COMPLIANCE_REPORT:
+      return await this.dataAggregationService.getComplianceReport(filters);
 
-      case Report.TYPE.MONTHLY_SUMMARY:
-        return await this.dataAggregationService.getMonthlySummary(
-          parameters.year,
-          parameters.month
-        );
+    case Report.TYPE.MONTHLY_SUMMARY:
+      return await this.dataAggregationService.getMonthlySummary(
+        parameters.year,
+        parameters.month
+      );
 
-      case Report.TYPE.QUARTERLY_SUMMARY:
-        return await this.dataAggregationService.getQuarterlySummary(
-          parameters.year,
-          parameters.quarter
-        );
+    case Report.TYPE.QUARTERLY_SUMMARY:
+      return await this.dataAggregationService.getQuarterlySummary(
+        parameters.year,
+        parameters.quarter
+      );
 
-      case Report.TYPE.ANNUAL_SUMMARY:
-        return await this.dataAggregationService.getAnnualSummary(parameters.year);
+    case Report.TYPE.ANNUAL_SUMMARY:
+      return await this.dataAggregationService.getAnnualSummary(parameters.year);
 
       // Export Reports
-      case Report.TYPE.DATA_EXPORT:
-      case Report.TYPE.CUSTOM_REPORT:
-        return await this.dataAggregationService.exportCustomData(parameters);
+    case Report.TYPE.DATA_EXPORT:
+    case Report.TYPE.CUSTOM_REPORT:
+      return await this.dataAggregationService.exportCustomData(parameters);
 
-      default:
-        throw new Error(`Unsupported report type: ${type}`);
+    default:
+      throw new Error(`Unsupported report type: ${type}`);
     }
   }
 
@@ -163,18 +163,18 @@ class GenerateReportUseCase {
 
   _getFileExtension(format) {
     switch (format) {
-      case Report.FORMAT.PDF:
-        return 'pdf';
-      case Report.FORMAT.EXCEL:
-        return 'xlsx';
-      case Report.FORMAT.CSV:
-        return 'csv';
-      case Report.FORMAT.HTML:
-        return 'html';
-      case Report.FORMAT.JSON:
-        return 'json';
-      default:
-        return 'txt';
+    case Report.FORMAT.PDF:
+      return 'pdf';
+    case Report.FORMAT.EXCEL:
+      return 'xlsx';
+    case Report.FORMAT.CSV:
+      return 'csv';
+    case Report.FORMAT.HTML:
+      return 'html';
+    case Report.FORMAT.JSON:
+      return 'json';
+    default:
+      return 'txt';
     }
   }
 }

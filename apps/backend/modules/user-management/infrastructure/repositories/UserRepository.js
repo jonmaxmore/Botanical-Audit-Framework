@@ -30,7 +30,7 @@ class UserRepository {
     this.cacheTTL = {
       user: 15 * 60, // 15 minutes
       userList: 5 * 60, // 5 minutes
-      search: 10 * 60, // 10 minutes
+      search: 10 * 60 // 10 minutes
     };
 
     console.log('[UserRepository] Initialized successfully');
@@ -67,9 +67,9 @@ class UserRepository {
           details: {
             email: savedUser.email,
             role: savedUser.role,
-            createdBy: userData.createdBy,
+            createdBy: userData.createdBy
           },
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -225,7 +225,7 @@ class UserRepository {
       const updateOptions = {
         new: true,
         runValidators: true,
-        ...options,
+        ...options
       };
 
       const updatedUser = await User.findByIdAndUpdate(userId, sanitizedData, updateOptions);
@@ -245,9 +245,9 @@ class UserRepository {
           userId,
           details: {
             updatedFields: Object.keys(sanitizedData),
-            updatedBy: options.updatedBy,
+            updatedBy: options.updatedBy
           },
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -276,7 +276,7 @@ class UserRepository {
         {
           isActive: false,
           deletedAt: new Date(),
-          deletedBy: options.deletedBy,
+          deletedBy: options.deletedBy
         },
         options
       );
@@ -288,9 +288,9 @@ class UserRepository {
           userId,
           details: {
             deletedBy: options.deletedBy,
-            reason: options.reason,
+            reason: options.reason
           },
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -314,7 +314,7 @@ class UserRepository {
         limit = 10,
         sort = { createdAt: -1 },
         select = null,
-        populate = null,
+        populate = null
       } = options;
 
       const skip = (page - 1) * limit;
@@ -342,7 +342,7 @@ class UserRepository {
       // Execute query with pagination
       const [users, total] = await Promise.all([
         query.sort(sort).skip(skip).limit(limit).exec(),
-        User.countDocuments(filter),
+        User.countDocuments(filter)
       ]);
 
       const result = {
@@ -353,8 +353,8 @@ class UserRepository {
           limit,
           pages: Math.ceil(total / limit),
           hasNext: page * limit < total,
-          hasPrev: page > 1,
-        },
+          hasPrev: page > 1
+        }
       };
 
       // Cache result
@@ -397,10 +397,10 @@ class UserRepository {
               { firstName: { $regex: searchTerm, $options: 'i' } },
               { lastName: { $regex: searchTerm, $options: 'i' } },
               { email: { $regex: searchTerm, $options: 'i' } },
-              { 'profile.farmInfo.farmName': { $regex: searchTerm, $options: 'i' } },
-            ],
-          },
-        ],
+              { 'profile.farmInfo.farmName': { $regex: searchTerm, $options: 'i' } }
+            ]
+          }
+        ]
       };
 
       // Add filters
@@ -532,18 +532,18 @@ class UserRepository {
             _id: null,
             totalUsers: { $sum: 1 },
             activeUsers: {
-              $sum: { $cond: [{ $eq: ['$isActive', true] }, 1, 0] },
+              $sum: { $cond: [{ $eq: ['$isActive', true] }, 1, 0] }
             },
             verifiedUsers: {
-              $sum: { $cond: [{ $eq: ['$isVerified', true] }, 1, 0] },
+              $sum: { $cond: [{ $eq: ['$isVerified', true] }, 1, 0] }
             },
             usersByRole: {
               $push: {
                 role: '$role',
-                isActive: '$isActive',
-              },
-            },
-          },
+                isActive: '$isActive'
+              }
+            }
+          }
         },
         {
           $project: {
@@ -568,29 +568,29 @@ class UserRepository {
                                 {
                                   $ifNull: [
                                     { $getField: { field: '$$this.role', input: '$$value' } },
-                                    0,
-                                  ],
+                                    0
+                                  ]
                                 },
-                                1,
-                              ],
-                            },
-                          },
-                        ],
-                      ],
-                    },
-                  ],
-                },
-              },
-            },
-          },
-        },
+                                1
+                              ]
+                            }
+                          }
+                        ]
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
       ]);
 
       const result = stats[0] || {
         totalUsers: 0,
         activeUsers: 0,
         verifiedUsers: 0,
-        roleBreakdown: {},
+        roleBreakdown: {}
       };
 
       // Cache result

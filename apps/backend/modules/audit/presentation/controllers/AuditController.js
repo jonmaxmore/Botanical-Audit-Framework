@@ -12,7 +12,7 @@ class AuditController {
     getAuditLogDetailsUseCase,
     listAuditLogsUseCase,
     getAuditStatisticsUseCase,
-    getUserActivityUseCase,
+    getUserActivityUseCase
   }) {
     this.getAuditLogDetailsUseCase = getAuditLogDetailsUseCase;
     this.listAuditLogsUseCase = listAuditLogsUseCase;
@@ -31,19 +31,19 @@ class AuditController {
 
       res.json({
         success: true,
-        data: auditLog,
+        data: auditLog
       });
     } catch (error) {
       if (error.message === 'Audit log not found') {
         return res.status(404).json({
           success: false,
-          message: error.message,
+          message: error.message
         });
       }
       console.error('Get audit log details error:', error);
       res.status(500).json({
         success: false,
-        message: 'Failed to retrieve audit log details',
+        message: 'Failed to retrieve audit log details'
       });
     }
   }
@@ -65,7 +65,7 @@ class AuditController {
         startDate: req.query.startDate,
         endDate: req.query.endDate,
         search: req.query.search,
-        tags: req.query.tags ? req.query.tags.split(',') : undefined,
+        tags: req.query.tags ? req.query.tags.split(',') : undefined
       };
 
       // Remove undefined values
@@ -74,12 +74,12 @@ class AuditController {
       const options = {
         page: parseInt(req.query.page) || 1,
         limit: parseInt(req.query.limit) || 50,
-        sort: req.query.sort || { timestamp: -1 },
+        sort: req.query.sort || { timestamp: -1 }
       };
 
       const auditLogs = await this.listAuditLogsUseCase.execute({
         filters,
-        options,
+        options
       });
 
       res.json({
@@ -87,14 +87,14 @@ class AuditController {
         data: auditLogs,
         pagination: {
           page: options.page,
-          limit: options.limit,
-        },
+          limit: options.limit
+        }
       });
     } catch (error) {
       console.error('List audit logs error:', error);
       res.status(500).json({
         success: false,
-        message: 'Failed to retrieve audit logs',
+        message: 'Failed to retrieve audit logs'
       });
     }
   }
@@ -106,7 +106,7 @@ class AuditController {
     try {
       const filters = {
         startDate: req.query.startDate,
-        endDate: req.query.endDate,
+        endDate: req.query.endDate
       };
 
       // Remove undefined values
@@ -116,13 +116,13 @@ class AuditController {
 
       res.json({
         success: true,
-        data: statistics,
+        data: statistics
       });
     } catch (error) {
       console.error('Get audit statistics error:', error);
       res.status(500).json({
         success: false,
-        message: 'Failed to retrieve audit statistics',
+        message: 'Failed to retrieve audit statistics'
       });
     }
   }
@@ -139,18 +139,18 @@ class AuditController {
       const activity = await this.getUserActivityUseCase.execute({
         actorId,
         startDate,
-        endDate,
+        endDate
       });
 
       res.json({
         success: true,
-        data: activity,
+        data: activity
       });
     } catch (error) {
       console.error('Get user activity error:', error);
       res.status(500).json({
         success: false,
-        message: 'Failed to retrieve user activity',
+        message: 'Failed to retrieve user activity'
       });
     }
   }

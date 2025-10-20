@@ -39,9 +39,9 @@ function initializeFarmManagement(dependencies = {}) {
     router,
     service: farmService,
     models: {
-      CultivationCycle,
+      CultivationCycle
     },
-    validators,
+    validators
   };
 }
 
@@ -50,5 +50,5 @@ module.exports = {
   FarmManagementService,
   FarmManagementController,
   CultivationCycle,
-  validators,
+  validators
 };

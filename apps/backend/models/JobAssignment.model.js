@@ -15,27 +15,27 @@ const JobAssignmentSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
 
     // Application reference
     applicationId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     // User assignment
     assignedTo: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     assignedBy: {
       type: String,
       required: true,
-      default: 'system',
+      default: 'system'
     },
 
     // Role
@@ -43,7 +43,7 @@ const JobAssignmentSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['reviewer', 'inspector', 'approver'],
-      index: true,
+      index: true
     },
 
     // Assignment status
@@ -57,10 +57,10 @@ const JobAssignmentSchema = new mongoose.Schema(
         'completed',
         'rejected',
         'cancelled',
-        'reassigned',
+        'reassigned'
       ],
       default: 'assigned',
-      index: true,
+      index: true
     },
 
     // Priority level
@@ -69,7 +69,7 @@ const JobAssignmentSchema = new mongoose.Schema(
       required: true,
       enum: ['low', 'medium', 'high', 'urgent'],
       default: 'medium',
-      index: true,
+      index: true
     },
 
     // Assignment strategy
@@ -77,7 +77,7 @@ const JobAssignmentSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['round_robin', 'workload_based', 'performance_based', 'manual'],
-      default: 'workload_based',
+      default: 'workload_based'
     },
 
     // Time tracking
@@ -85,83 +85,83 @@ const JobAssignmentSchema = new mongoose.Schema(
       type: Date,
       required: true,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     acceptedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     startedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     completedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Reassignment tracking
     reassignedTo: {
       type: String,
-      default: null,
+      default: null
     },
 
     reassignedBy: {
       type: String,
-      default: null,
+      default: null
     },
 
     reassignReason: {
       type: String,
-      default: null,
+      default: null
     },
 
     reassignedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Cancellation tracking
     cancellationReason: {
       type: String,
-      default: null,
+      default: null
     },
 
     cancelledAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Notes and comments
     notes: {
       type: String,
-      default: null,
+      default: null
     },
 
     // Metadata
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   },
   {
     timestamps: true,
-    collection: 'job_assignments',
+    collection: 'job_assignments'
   }
 );
 
@@ -173,24 +173,24 @@ JobAssignmentSchema.index({ role: 1, status: 1 });
 JobAssignmentSchema.index({ assignedAt: -1 });
 
 // Virtual for time to accept (in minutes)
-JobAssignmentSchema.virtual('timeToAcceptMinutes').get(function () {
+JobAssignmentSchema.virtual('timeToAcceptMinutes').get(function() {
   if (!this.acceptedAt) return null;
   return Math.floor((this.acceptedAt - this.assignedAt) / (1000 * 60));
 });
 
 // Virtual for time to complete (in minutes)
-JobAssignmentSchema.virtual('timeToCompleteMinutes').get(function () {
+JobAssignmentSchema.virtual('timeToCompleteMinutes').get(function() {
   if (!this.completedAt) return null;
   return Math.floor((this.completedAt - this.assignedAt) / (1000 * 60));
 });
 
 // Virtual for is active
-JobAssignmentSchema.virtual('isActive').get(function () {
+JobAssignmentSchema.virtual('isActive').get(function() {
   return ['assigned', 'accepted', 'in_progress'].includes(this.status);
 });
 
 // Virtual for is overdue (24 hours without acceptance)
-JobAssignmentSchema.virtual('isOverdue').get(function () {
+JobAssignmentSchema.virtual('isOverdue').get(function() {
   if (this.status !== 'assigned') return false;
   const now = new Date();
   const hours = (now - this.assignedAt) / (1000 * 60 * 60);
@@ -198,7 +198,7 @@ JobAssignmentSchema.virtual('isOverdue').get(function () {
 });
 
 // Instance method: Accept assignment
-JobAssignmentSchema.methods.accept = function () {
+JobAssignmentSchema.methods.accept = function() {
   if (this.status === 'assigned') {
     this.status = 'accepted';
     this.acceptedAt = new Date();
@@ -209,7 +209,7 @@ JobAssignmentSchema.methods.accept = function () {
 };
 
 // Instance method: Start assignment
-JobAssignmentSchema.methods.start = function () {
+JobAssignmentSchema.methods.start = function() {
   if (['assigned', 'accepted'].includes(this.status)) {
     this.status = 'in_progress';
     this.startedAt = new Date();
@@ -223,7 +223,7 @@ JobAssignmentSchema.methods.start = function () {
 };
 
 // Instance method: Complete assignment
-JobAssignmentSchema.methods.complete = function (data = {}) {
+JobAssignmentSchema.methods.complete = function(data = {}) {
   if (['assigned', 'accepted', 'in_progress'].includes(this.status)) {
     this.status = 'completed';
     this.completedAt = new Date();
@@ -239,7 +239,7 @@ JobAssignmentSchema.methods.complete = function (data = {}) {
 };
 
 // Instance method: Reject assignment
-JobAssignmentSchema.methods.reject = function (reason) {
+JobAssignmentSchema.methods.reject = function(reason) {
   if (this.status === 'assigned') {
     this.status = 'rejected';
     this.notes = reason || 'Assignment rejected';
@@ -250,7 +250,7 @@ JobAssignmentSchema.methods.reject = function (reason) {
 };
 
 // Instance method: Cancel assignment
-JobAssignmentSchema.methods.cancel = function (reason) {
+JobAssignmentSchema.methods.cancel = function(reason) {
   if (this.status !== 'completed' && this.status !== 'reassigned') {
     this.status = 'cancelled';
     this.cancellationReason = reason || 'Assignment cancelled';
@@ -262,7 +262,7 @@ JobAssignmentSchema.methods.cancel = function (reason) {
 };
 
 // Instance method: Reassign to another user
-JobAssignmentSchema.methods.reassign = function (newUserId, reassignedBy, reason) {
+JobAssignmentSchema.methods.reassign = function(newUserId, reassignedBy, reason) {
   if (this.status !== 'completed' && this.status !== 'reassigned') {
     this.status = 'reassigned';
     this.reassignedTo = newUserId;
@@ -276,32 +276,32 @@ JobAssignmentSchema.methods.reassign = function (newUserId, reassignedBy, reason
 };
 
 // Static method: Find active assignments by user
-JobAssignmentSchema.statics.findActiveByUser = function (userId) {
+JobAssignmentSchema.statics.findActiveByUser = function(userId) {
   return this.find({
     assignedTo: userId,
-    status: { $in: ['assigned', 'accepted', 'in_progress'] },
+    status: { $in: ['assigned', 'accepted', 'in_progress'] }
   }).sort({ assignedAt: -1 });
 };
 
 // Static method: Find overdue assignments
-JobAssignmentSchema.statics.findOverdue = function (hoursThreshold = 24) {
+JobAssignmentSchema.statics.findOverdue = function(hoursThreshold = 24) {
   const cutoffDate = new Date();
   cutoffDate.setHours(cutoffDate.getHours() - hoursThreshold);
 
   return this.find({
     status: { $in: ['assigned', 'accepted'] },
-    assignedAt: { $lte: cutoffDate },
+    assignedAt: { $lte: cutoffDate }
   }).sort({ assignedAt: 1 });
 };
 
 // Static method: Get user workload
-JobAssignmentSchema.statics.getUserWorkload = function (userId) {
+JobAssignmentSchema.statics.getUserWorkload = function(userId) {
   return this.aggregate([
     {
       $match: {
         assignedTo: userId,
-        status: { $in: ['assigned', 'accepted', 'in_progress'] },
-      },
+        status: { $in: ['assigned', 'accepted', 'in_progress'] }
+      }
     },
     {
       $group: {
@@ -310,16 +310,16 @@ JobAssignmentSchema.statics.getUserWorkload = function (userId) {
         byStatus: {
           $push: {
             status: '$status',
-            priority: '$priority',
-          },
-        },
-      },
-    },
+            priority: '$priority'
+          }
+        }
+      }
+    }
   ]);
 };
 
 // Static method: Get assignment statistics
-JobAssignmentSchema.statics.getStatistics = function (filters = {}) {
+JobAssignmentSchema.statics.getStatistics = function(filters = {}) {
   const matchStage = {};
 
   if (filters.role) {
@@ -344,35 +344,35 @@ JobAssignmentSchema.statics.getStatistics = function (filters = {}) {
         total: { $sum: 1 },
         byStatus: {
           $push: {
-            status: '$status',
-          },
+            status: '$status'
+          }
         },
         byRole: {
           $push: {
-            role: '$role',
-          },
+            role: '$role'
+          }
         },
         byStrategy: {
           $push: {
-            strategy: '$strategy',
-          },
+            strategy: '$strategy'
+          }
         },
         avgTimeToComplete: {
           $avg: {
             $cond: [
               { $and: [{ $eq: ['$status', 'completed'] }, { $ifNull: ['$completedAt', false] }] },
               { $subtract: ['$completedAt', '$assignedAt'] },
-              null,
-            ],
-          },
-        },
-      },
-    },
+              null
+            ]
+          }
+        }
+      }
+    }
   ]);
 };
 
 // Pre-save middleware
-JobAssignmentSchema.pre('save', function (next) {
+JobAssignmentSchema.pre('save', function(next) {
   this.updatedAt = new Date();
   next();
 });

@@ -30,12 +30,12 @@ router.get('/', (req, res) => {
       Payments: '/api/v1/payments',
       Surveys: '/api/v1/surveys',
       'Health Check': '/health',
-      Documentation: '/api/v1/docs',
+      Documentation: '/api/v1/docs'
     },
     documentation: {
       postman: '/api/v1/docs/postman',
       swagger: '/api/v1/docs/swagger',
-      readme: '/api/v1/docs/readme',
+      readme: '/api/v1/docs/readme'
     },
     features: {
       authentication: 'JWT-based authentication',
@@ -44,8 +44,8 @@ router.get('/', (req, res) => {
       errorHandling: 'Structured error responses',
       logging: 'Centralized logging system',
       versioning: 'API versioning support',
-      restful: 'RESTful API design patterns',
-    },
+      restful: 'RESTful API design patterns'
+    }
   });
 });
 
@@ -65,7 +65,7 @@ router.get('/health', (req, res) => {
     message: 'API is healthy',
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
-    environment: process.env.NODE_ENV || 'development',
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
@@ -152,18 +152,18 @@ router.get('/docs', (req, res) => {
       'GET /surveys/:id': 'Get survey by ID',
       'POST /surveys': 'Create new survey (admin/director)',
       'PUT /surveys/:id': 'Update survey',
-      'DELETE /surveys/:id': 'Delete survey',
+      'DELETE /surveys/:id': 'Delete survey'
     },
     authentication: {
       type: 'Bearer Token (JWT)',
       header: 'Authorization: Bearer <token>',
-      expiration: '7 days',
+      expiration: '7 days'
     },
     roles: {
       farmer: 'Basic user role for farmers - can create applications, view own data',
       auditor: 'Auditor role for compliance checking - can conduct audits, review applications',
       director: 'Director role for management - can approve certificates, manage system',
-      admin: 'Administrator role with full access - can manage all aspects of system',
+      admin: 'Administrator role with full access - can manage all aspects of system'
     },
     errorCodes: {
       400: 'Bad Request - Validation errors',
@@ -172,8 +172,8 @@ router.get('/docs', (req, res) => {
       404: 'Not Found - Resource not found',
       409: 'Conflict - Resource already exists',
       429: 'Too Many Requests - Rate limit exceeded',
-      500: 'Internal Server Error - Server error',
-    },
+      500: 'Internal Server Error - Server error'
+    }
   });
 });
 

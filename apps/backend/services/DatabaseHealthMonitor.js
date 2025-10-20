@@ -25,8 +25,8 @@ class DatabaseHealthMonitor {
         peakResponseTime: 0,
         totalQueries: 0,
         successfulQueries: 0,
-        failedQueries: 0,
-      },
+        failedQueries: 0
+      }
     };
 
     this.healthHistory = [];
@@ -149,7 +149,7 @@ class DatabaseHealthMonitor {
     const testData = {
       _id: new mongoose.Types.ObjectId(),
       testField: 'health-check',
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     // Test insert
@@ -181,7 +181,7 @@ class DatabaseHealthMonitor {
       this.healthMetrics.serverInfo = {
         version: serverStatus.version,
         uptime: serverStatus.uptime,
-        host: serverStatus.host,
+        host: serverStatus.host
       };
     } catch (error) {
       console.warn('⚠️ Could not retrieve server statistics:', error.message);
@@ -207,7 +207,7 @@ class DatabaseHealthMonitor {
           size: stats.size,
           avgDocumentSize: stats.avgObjSize,
           indexes: stats.nindexes,
-          healthy: true,
+          healthy: true
         };
       }
     } catch (error) {
@@ -246,7 +246,7 @@ class DatabaseHealthMonitor {
       timestamp: new Date().toISOString(),
       status: status,
       details: details,
-      responseTime: this.healthMetrics.responseTime,
+      responseTime: this.healthMetrics.responseTime
     };
 
     this.healthHistory.unshift(historyEntry);
@@ -271,14 +271,14 @@ class DatabaseHealthMonitor {
         successRate:
           this.healthMetrics.performance.totalQueries > 0
             ? (
-                (this.healthMetrics.performance.successfulQueries /
+              (this.healthMetrics.performance.successfulQueries /
                   this.healthMetrics.performance.totalQueries) *
                 100
-              ).toFixed(2)
+            ).toFixed(2)
             : 0,
         avgResponseTime: Math.round(this.healthMetrics.performance.avgResponseTime),
-        uptime: process.uptime(),
-      },
+        uptime: process.uptime()
+      }
     };
   }
 
@@ -293,7 +293,7 @@ class DatabaseHealthMonitor {
         readyStateText: this.getReadyStateText(mongoose.connection.readyState),
         host: mongoose.connection.host,
         port: mongoose.connection.port,
-        name: mongoose.connection.name,
+        name: mongoose.connection.name
       },
       collections: this.healthMetrics.collections,
       performance: this.healthMetrics.performance,
@@ -302,8 +302,8 @@ class DatabaseHealthMonitor {
         nodeVersion: process.version,
         platform: process.platform,
         memory: process.memoryUsage(),
-        uptime: process.uptime(),
-      },
+        uptime: process.uptime()
+      }
     };
   }
 
@@ -315,7 +315,7 @@ class DatabaseHealthMonitor {
       0: 'disconnected',
       1: 'connected',
       2: 'connecting',
-      3: 'disconnecting',
+      3: 'disconnecting'
     };
     return states[readyState] || 'unknown';
   }

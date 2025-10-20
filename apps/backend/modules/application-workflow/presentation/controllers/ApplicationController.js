@@ -54,7 +54,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Only farmers can create applications',
+          message: 'Only farmers can create applications'
         });
       }
 
@@ -65,7 +65,7 @@ class ApplicationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: error.details[0].message,
-          details: error.details,
+          details: error.details
         });
       }
 
@@ -75,7 +75,7 @@ class ApplicationController {
       res.status(201).json({
         success: true,
         data: application,
-        message: 'Application created successfully',
+        message: 'Application created successfully'
       });
     } catch (error) {
       console.error('[ApplicationController] Error creating application:', error);
@@ -97,7 +97,7 @@ class ApplicationController {
         return res.status(404).json({
           success: false,
           error: 'NOT_FOUND',
-          message: 'Application not found',
+          message: 'Application not found'
         });
       }
 
@@ -106,7 +106,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Access denied',
+          message: 'Access denied'
         });
       }
 
@@ -117,8 +117,8 @@ class ApplicationController {
         success: true,
         data: {
           ...application,
-          workflow: workflowStatus,
-        },
+          workflow: workflowStatus
+        }
       });
     } catch (error) {
       console.error('[ApplicationController] Error getting application:', error);
@@ -140,7 +140,7 @@ class ApplicationController {
         return res.status(404).json({
           success: false,
           error: 'NOT_FOUND',
-          message: 'Application not found',
+          message: 'Application not found'
         });
       }
 
@@ -149,7 +149,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Can only update your own applications',
+          message: 'Can only update your own applications'
         });
       }
 
@@ -159,7 +159,7 @@ class ApplicationController {
         return res.status(400).json({
           success: false,
           error: 'INVALID_STATE',
-          message: `Cannot edit application in ${application.status} state`,
+          message: `Cannot edit application in ${application.status} state`
         });
       }
 
@@ -170,20 +170,20 @@ class ApplicationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: error.details[0].message,
-          details: error.details,
+          details: error.details
         });
       }
 
       // Update application
       const updatedApplication = await this.applicationRepo.update(id, {
         ...value,
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       res.json({
         success: true,
         data: updatedApplication,
-        message: 'Application updated successfully',
+        message: 'Application updated successfully'
       });
     } catch (error) {
       console.error('[ApplicationController] Error updating application:', error);
@@ -205,7 +205,7 @@ class ApplicationController {
         return res.status(404).json({
           success: false,
           error: 'NOT_FOUND',
-          message: 'Application not found',
+          message: 'Application not found'
         });
       }
 
@@ -214,7 +214,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Can only submit your own applications',
+          message: 'Can only submit your own applications'
         });
       }
 
@@ -224,7 +224,7 @@ class ApplicationController {
       res.json({
         success: true,
         data: updatedApplication,
-        message: 'Application submitted successfully',
+        message: 'Application submitted successfully'
       });
     } catch (error) {
       console.error('[ApplicationController] Error submitting application:', error);
@@ -246,7 +246,7 @@ class ApplicationController {
         return res.status(404).json({
           success: false,
           error: 'NOT_FOUND',
-          message: 'Application not found',
+          message: 'Application not found'
         });
       }
 
@@ -255,7 +255,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Access denied',
+          message: 'Access denied'
         });
       }
 
@@ -263,7 +263,7 @@ class ApplicationController {
 
       res.json({
         success: true,
-        data: workflowStatus,
+        data: workflowStatus
       });
     } catch (error) {
       console.error('[ApplicationController] Error getting application status:', error);
@@ -282,7 +282,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Only farmers can access this endpoint',
+          message: 'Only farmers can access this endpoint'
         });
       }
 
@@ -295,7 +295,7 @@ class ApplicationController {
         page: parseInt(page),
         limit: parseInt(limit),
         sortBy,
-        sortOrder,
+        sortOrder
       });
 
       res.json({
@@ -305,8 +305,8 @@ class ApplicationController {
           currentPage: applications.page,
           totalPages: applications.totalPages,
           totalItems: applications.totalItems,
-          itemsPerPage: applications.limit,
-        },
+          itemsPerPage: applications.limit
+        }
       });
     } catch (error) {
       console.error('[ApplicationController] Error getting farmer applications:', error);
@@ -327,7 +327,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'DTAM access required',
+          message: 'DTAM access required'
         });
       }
 
@@ -337,7 +337,7 @@ class ApplicationController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          message: error.details[0].message,
+          message: error.details[0].message
         });
       }
 
@@ -350,7 +350,7 @@ class ApplicationController {
       res.json({
         success: true,
         data: updatedApplication,
-        message: 'Application approved for payment',
+        message: 'Application approved for payment'
       });
     } catch (error) {
       console.error('[ApplicationController] Error approving for payment:', error);
@@ -371,7 +371,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Reviewer access required',
+          message: 'Reviewer access required'
         });
       }
 
@@ -381,7 +381,7 @@ class ApplicationController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          message: error.details[0].message,
+          message: error.details[0].message
         });
       }
 
@@ -390,7 +390,7 @@ class ApplicationController {
       res.json({
         success: true,
         data: updatedApplication,
-        message: 'Revision requested successfully',
+        message: 'Revision requested successfully'
       });
     } catch (error) {
       console.error('[ApplicationController] Error requesting revision:', error);
@@ -411,7 +411,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Inspector access required',
+          message: 'Inspector access required'
         });
       }
 
@@ -421,7 +421,7 @@ class ApplicationController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          message: error.details[0].message,
+          message: error.details[0].message
         });
       }
 
@@ -434,7 +434,7 @@ class ApplicationController {
       res.json({
         success: true,
         data: updatedApplication,
-        message: 'Inspection scheduled successfully',
+        message: 'Inspection scheduled successfully'
       });
     } catch (error) {
       console.error('[ApplicationController] Error scheduling inspection:', error);
@@ -455,7 +455,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Inspector access required',
+          message: 'Inspector access required'
         });
       }
 
@@ -465,7 +465,7 @@ class ApplicationController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          message: error.details[0].message,
+          message: error.details[0].message
         });
       }
 
@@ -478,7 +478,7 @@ class ApplicationController {
       res.json({
         success: true,
         data: updatedApplication,
-        message: 'Inspection completed successfully',
+        message: 'Inspection completed successfully'
       });
     } catch (error) {
       console.error('[ApplicationController] Error completing inspection:', error);
@@ -499,7 +499,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Admin access required',
+          message: 'Admin access required'
         });
       }
 
@@ -509,7 +509,7 @@ class ApplicationController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          message: error.details[0].message,
+          message: error.details[0].message
         });
       }
 
@@ -518,7 +518,7 @@ class ApplicationController {
       res.json({
         success: true,
         data: updatedApplication,
-        message: 'Application approved and certificate will be issued',
+        message: 'Application approved and certificate will be issued'
       });
     } catch (error) {
       console.error('[ApplicationController] Error in final approval:', error);
@@ -539,7 +539,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'DTAM access required',
+          message: 'DTAM access required'
         });
       }
 
@@ -549,7 +549,7 @@ class ApplicationController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          message: error.details[0].message,
+          message: error.details[0].message
         });
       }
 
@@ -562,7 +562,7 @@ class ApplicationController {
       res.json({
         success: true,
         data: updatedApplication,
-        message: 'Application rejected',
+        message: 'Application rejected'
       });
     } catch (error) {
       console.error('[ApplicationController] Error rejecting application:', error);
@@ -584,7 +584,7 @@ class ApplicationController {
         return res.status(404).json({
           success: false,
           error: 'NOT_FOUND',
-          message: 'Application not found',
+          message: 'Application not found'
         });
       }
 
@@ -593,7 +593,7 @@ class ApplicationController {
         return res.status(403).json({
           success: false,
           error: 'FORBIDDEN',
-          message: 'Access denied',
+          message: 'Access denied'
         });
       }
 
@@ -602,8 +602,8 @@ class ApplicationController {
         data: {
           applicationId: id,
           applicationNumber: application.applicationNumber,
-          workflowHistory: application.workflowHistory || [],
-        },
+          workflowHistory: application.workflowHistory || []
+        }
       });
     } catch (error) {
       console.error('[ApplicationController] Error getting workflow history:', error);

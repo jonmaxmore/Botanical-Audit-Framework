@@ -28,7 +28,7 @@ class SeedRepository {
       seedBatches: 'seed_batches',
       seedSuppliers: 'seed_suppliers',
       seedAuditLogs: 'seed_audit_logs',
-      seedQualityTests: 'seed_quality_tests',
+      seedQualityTests: 'seed_quality_tests'
     };
 
     // Index configurations for query optimization
@@ -53,7 +53,7 @@ class SeedRepository {
       availability: { field: 'availability.status' },
 
       // Geospatial indexes (for location-based queries)
-      location: { geoSpatial: 'supplier.location' },
+      location: { geoSpatial: 'supplier.location' }
     };
 
     // Cache TTL configurations
@@ -62,7 +62,7 @@ class SeedRepository {
       seedBatch: 7200, // 2 hours
       supplierSeeds: 1800, // 30 minutes
       qualityReports: 3600, // 1 hour
-      searchResults: 900, // 15 minutes
+      searchResults: 900 // 15 minutes
     };
   }
 
@@ -90,7 +90,7 @@ class SeedRepository {
 
       // Step 2: Query database with optimized projection
       const seedQuery = {
-        seedId: seedId,
+        seedId: seedId
       };
 
       const seedDocument = await this.database
@@ -143,7 +143,7 @@ class SeedRepository {
 
       // Step 2: Build optimized query with options
       const batchQuery = {
-        batchNumber: batchNumber,
+        batchNumber: batchNumber
       };
 
       // Apply filters if provided
@@ -157,7 +157,7 @@ class SeedRepository {
 
       if (options.qualityThreshold) {
         batchQuery['qualityMetrics.overallQualityScore'] = {
-          $gte: options.qualityThreshold,
+          $gte: options.qualityThreshold
         };
       }
 
@@ -165,12 +165,12 @@ class SeedRepository {
       const queryOptions = {
         limit: options.limit || 100,
         skip: options.offset || 0,
-        sort: options.sort || { createdAt: -1 },
+        sort: options.sort || { createdAt: -1 }
       };
 
       const [seedDocuments, totalCount] = await Promise.all([
         this.database.collection(this.collections.seeds).find(batchQuery, queryOptions).toArray(),
-        this.database.collection(this.collections.seeds).countDocuments(batchQuery),
+        this.database.collection(this.collections.seeds).countDocuments(batchQuery)
       ]);
 
       // Step 4: Enrich seeds with related data
@@ -191,8 +191,8 @@ class SeedRepository {
           total: totalCount,
           limit: queryOptions.limit,
           offset: queryOptions.skip,
-          hasMore: queryOptions.skip + seeds.length < totalCount,
-        },
+          hasMore: queryOptions.skip + seeds.length < totalCount
+        }
       };
 
       // Step 8: Cache batch result
@@ -252,18 +252,18 @@ class SeedRepository {
                       $regexMatch: {
                         input: '$strain.strainName',
                         regex: searchCriteria.textQuery || '',
-                        options: 'i',
-                      },
+                        options: 'i'
+                      }
                     },
                     10,
-                    0,
-                  ],
+                    0
+                  ]
                 },
                 { $cond: [{ $gte: ['$qualityMetrics.overallQualityScore', 80] }, 5, 0] },
-                { $cond: [{ $eq: ['$currentStatus', 'AVAILABLE'] }, 3, 0] },
-              ],
-            },
-          },
+                { $cond: [{ $eq: ['$currentStatus', 'AVAILABLE'] }, 3, 0] }
+              ]
+            }
+          }
         },
 
         // Faceted search for filters
@@ -273,7 +273,7 @@ class SeedRepository {
             results: [
               { $sort: { searchScore: -1, createdAt: -1 } },
               { $skip: searchCriteria.offset || 0 },
-              { $limit: searchCriteria.limit || 50 },
+              { $limit: searchCriteria.limit || 50 }
             ],
 
             // Search facets for filtering
@@ -285,8 +285,8 @@ class SeedRepository {
                   suppliers: {
                     $addToSet: {
                       supplierId: '$supplier.supplierId',
-                      supplierName: '$supplier.supplierName',
-                    },
+                      supplierName: '$supplier.supplierName'
+                    }
                   },
                   qualityRanges: {
                     $push: {
@@ -294,30 +294,30 @@ class SeedRepository {
                         branches: [
                           {
                             case: { $gte: ['$qualityMetrics.overallQualityScore', 90] },
-                            then: 'PREMIUM',
+                            then: 'PREMIUM'
                           },
                           {
                             case: { $gte: ['$qualityMetrics.overallQualityScore', 80] },
-                            then: 'HIGH',
+                            then: 'HIGH'
                           },
                           {
                             case: { $gte: ['$qualityMetrics.overallQualityScore', 70] },
-                            then: 'GOOD',
-                          },
+                            then: 'GOOD'
+                          }
                         ],
-                        default: 'STANDARD',
-                      },
-                    },
+                        default: 'STANDARD'
+                      }
+                    }
                   },
-                  locations: { $addToSet: '$supplier.location.region' },
-                },
-              },
+                  locations: { $addToSet: '$supplier.location.region' }
+                }
+              }
             ],
 
             // Total count for pagination
-            totalCount: [{ $count: 'total' }],
-          },
-        },
+            totalCount: [{ $count: 'total' }]
+          }
+        }
       ];
 
       const searchResults = await this.database
@@ -344,13 +344,13 @@ class SeedRepository {
           limit: searchCriteria.limit || 50,
           offset: searchCriteria.offset || 0,
           hasMore:
-            (searchCriteria.offset || 0) + seeds.length < (results.totalCount[0]?.total || 0),
+            (searchCriteria.offset || 0) + seeds.length < (results.totalCount[0]?.total || 0)
         },
         searchMetadata: {
           query: searchCriteria,
           executionTime: Date.now(),
-          resultsFound: seeds.length,
-        },
+          resultsFound: seeds.length
+        }
       };
 
       // Step 7: Cache search results
@@ -384,7 +384,7 @@ class SeedRepository {
     try {
       this.logger.log(`[SeedRepository] Saving seed: ${seed.seedId}`);
 
-      await session.withTransaction(async () => {
+      await session.withTransaction(async() => {
         // Step 1: Validate seed data
         await this.validateSeedForSave(seed);
 
@@ -438,7 +438,7 @@ class SeedRepository {
               ? this.calculateChanges(existingSeed, seedDocument)
               : 'INITIAL_CREATE',
             timestamp: new Date(),
-            version: seedDocument.version,
+            version: seedDocument.version
           },
           session
         );
@@ -478,7 +478,7 @@ class SeedRepository {
     try {
       this.logger.log(`[SeedRepository] Updating seed: ${seed.seedId}`);
 
-      await session.withTransaction(async () => {
+      await session.withTransaction(async() => {
         // Step 1: Get current version for optimistic locking
         const currentSeed = await this.database
           .collection(this.collections.seeds)
@@ -507,7 +507,7 @@ class SeedRepository {
         const updateResult = await this.database
           .collection(this.collections.seeds)
           .replaceOne({ seedId: seed.seedId, version: currentSeed.version }, updateDocument, {
-            session,
+            session
           });
 
         if (updateResult.matchedCount === 0) {
@@ -523,7 +523,7 @@ class SeedRepository {
               changes: changes,
               timestamp: new Date(),
               version: updateDocument.version,
-              previousVersion: currentSeed.version,
+              previousVersion: currentSeed.version
             },
             session
           );
@@ -564,7 +564,7 @@ class SeedRepository {
     try {
       this.logger.log(`[SeedRepository] Deleting seed: ${seedId}`);
 
-      await session.withTransaction(async () => {
+      await session.withTransaction(async() => {
         // Step 1: Check if seed exists
         const existingSeed = await this.database
           .collection(this.collections.seeds)
@@ -594,7 +594,7 @@ class SeedRepository {
             changes: { deletedSeed: existingSeed },
             timestamp: new Date(),
             version: existingSeed.version,
-            finalRecord: true,
+            finalRecord: true
           },
           session
         );
@@ -646,7 +646,7 @@ class SeedRepository {
       compliance: document.compliance,
       createdAt: document.createdAt,
       updatedAt: document.updatedAt,
-      version: document.version,
+      version: document.version
     });
   }
 
@@ -666,7 +666,7 @@ class SeedRepository {
       availability: seed.availability,
       currentStatus: seed.currentStatus,
       compliance: seed.compliance,
-      version: seed.version || 1,
+      version: seed.version || 1
     };
   }
 
@@ -735,7 +735,7 @@ class SeedRepository {
       `seed:${seed.seedId}`,
       `seed_batch:${seed.batchNumber}*`,
       'seed_search:*',
-      `supplier_seeds:${seed.supplier.supplierId}*`,
+      `supplier_seeds:${seed.supplier.supplierId}*`
     ];
 
     await Promise.all(

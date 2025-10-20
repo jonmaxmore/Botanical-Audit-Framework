@@ -59,7 +59,7 @@ class PaymentController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid input parameters',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -68,7 +68,7 @@ class PaymentController {
         isExpedited = false,
         requiresInspection = true,
         promoCode,
-        applicationId,
+        applicationId
       } = req.body;
 
       const userId = req.userId;
@@ -77,7 +77,7 @@ class PaymentController {
         userId,
         isExpedited,
         requiresInspection,
-        promoCode,
+        promoCode
       });
 
       // Calculate fees using business service
@@ -85,7 +85,7 @@ class PaymentController {
         isExpedited,
         requiresInspection,
         promoCode,
-        applicationId,
+        applicationId
       });
 
       // Log fee calculation for audit
@@ -95,7 +95,7 @@ class PaymentController {
           userId,
           applicationType,
           feeBreakdown: result.feeBreakdown,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -106,8 +106,8 @@ class PaymentController {
           feeBreakdown: result.feeBreakdown,
           expiryMinutes: result.expiryMinutes,
           calculatedAt: new Date(),
-          validUntil: new Date(Date.now() + 30 * 60 * 1000), // Valid for 30 minutes
-        },
+          validUntil: new Date(Date.now() + 30 * 60 * 1000) // Valid for 30 minutes
+        }
       });
     } catch (error) {
       console.error('[PaymentController] Fee calculation error:', error);
@@ -116,14 +116,14 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'INVALID_APPLICATION_TYPE',
-          message: error.message,
+          message: error.message
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'FEE_CALCULATION_ERROR',
-        message: 'Error calculating fees',
+        message: 'Error calculating fees'
       });
     }
   }
@@ -146,7 +146,7 @@ class PaymentController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid payment request',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -157,7 +157,7 @@ class PaymentController {
       console.log(`[PaymentController] Initiating payment for application ${applicationId}`, {
         userId,
         paymentType,
-        amount,
+        amount
       });
 
       // Initiate payment through service
@@ -170,8 +170,8 @@ class PaymentController {
           metadata: {
             userAgent: req.get('User-Agent'),
             ipAddress: req.ip,
-            sessionId: req.sessionID,
-          },
+            sessionId: req.sessionID
+          }
         },
         userId
       );
@@ -179,7 +179,7 @@ class PaymentController {
       res.status(201).json({
         success: true,
         message: 'Payment initiated successfully',
-        data: result.payment,
+        data: result.payment
       });
     } catch (error) {
       console.error('[PaymentController] Payment initiation error:', error);
@@ -188,7 +188,7 @@ class PaymentController {
         return res.status(404).json({
           success: false,
           error: 'APPLICATION_NOT_FOUND',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -196,7 +196,7 @@ class PaymentController {
         return res.status(403).json({
           success: false,
           error: 'ACCESS_DENIED',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -204,14 +204,14 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'INVALID_APPLICATION_STATE',
-          message: error.message,
+          message: error.message
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'PAYMENT_INITIATION_ERROR',
-        message: 'Error initiating payment',
+        message: 'Error initiating payment'
       });
     }
   }
@@ -232,7 +232,7 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -243,7 +243,7 @@ class PaymentController {
 
       res.status(200).json({
         success: true,
-        data: result.payment,
+        data: result.payment
       });
     } catch (error) {
       console.error('[PaymentController] Get payment status error:', error);
@@ -252,7 +252,7 @@ class PaymentController {
         return res.status(404).json({
           success: false,
           error: 'PAYMENT_NOT_FOUND',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -260,14 +260,14 @@ class PaymentController {
         return res.status(403).json({
           success: false,
           error: 'ACCESS_DENIED',
-          message: error.message,
+          message: error.message
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'PAYMENT_STATUS_ERROR',
-        message: 'Error retrieving payment status',
+        message: 'Error retrieving payment status'
       });
     }
   }
@@ -289,7 +289,7 @@ class PaymentController {
 
       console.log('[PaymentController] Processing payment webhook', {
         paymentId: webhookData.paymentId,
-        status: webhookData.status,
+        status: webhookData.status
       });
 
       // Add signature to webhook data for verification
@@ -302,7 +302,7 @@ class PaymentController {
         success: true,
         message: 'Webhook processed successfully',
         paymentId: result.paymentId,
-        status: result.status,
+        status: result.status
       });
     } catch (error) {
       console.error('[PaymentController] Webhook processing error:', error);
@@ -311,7 +311,7 @@ class PaymentController {
         return res.status(401).json({
           success: false,
           error: 'INVALID_SIGNATURE',
-          message: 'Webhook signature verification failed',
+          message: 'Webhook signature verification failed'
         });
       }
 
@@ -319,7 +319,7 @@ class PaymentController {
         return res.status(404).json({
           success: false,
           error: 'PAYMENT_NOT_FOUND',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -327,14 +327,14 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'AMOUNT_MISMATCH',
-          message: error.message,
+          message: error.message
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'WEBHOOK_PROCESSING_ERROR',
-        message: 'Error processing webhook',
+        message: 'Error processing webhook'
       });
     }
   }
@@ -362,7 +362,7 @@ class PaymentController {
         return res.status(404).json({
           success: false,
           error: 'PAYMENT_NOT_FOUND',
-          message: 'Payment not found',
+          message: 'Payment not found'
         });
       }
 
@@ -370,7 +370,7 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'RETRY_NOT_ALLOWED',
-          message: 'Payment cannot be retried',
+          message: 'Payment cannot be retried'
         });
       }
 
@@ -385,8 +385,8 @@ class PaymentController {
             isRetry: true,
             originalPaymentId: paymentId,
             userAgent: req.get('User-Agent'),
-            ipAddress: req.ip,
-          },
+            ipAddress: req.ip
+          }
         },
         userId
       );
@@ -394,14 +394,14 @@ class PaymentController {
       res.status(201).json({
         success: true,
         message: 'Payment retry initiated successfully',
-        data: retryResult.payment,
+        data: retryResult.payment
       });
     } catch (error) {
       console.error('[PaymentController] Payment retry error:', error);
       res.status(500).json({
         success: false,
         error: 'PAYMENT_RETRY_ERROR',
-        message: 'Error retrying payment',
+        message: 'Error retrying payment'
       });
     }
   }
@@ -428,7 +428,7 @@ class PaymentController {
 
       res.status(200).json({
         success: true,
-        message: 'Payment cancelled successfully',
+        message: 'Payment cancelled successfully'
       });
     } catch (error) {
       console.error('[PaymentController] Payment cancellation error:', error);
@@ -437,7 +437,7 @@ class PaymentController {
         return res.status(404).json({
           success: false,
           error: 'PAYMENT_NOT_FOUND',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -445,14 +445,14 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'CANCELLATION_NOT_ALLOWED',
-          message: error.message,
+          message: error.message
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'PAYMENT_CANCELLATION_ERROR',
-        message: 'Error cancelling payment',
+        message: 'Error cancelling payment'
       });
     }
   }
@@ -474,7 +474,7 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -485,7 +485,7 @@ class PaymentController {
       console.log(`[PaymentController] Processing refund for payment ${paymentId}`, {
         adminUserId,
         reason,
-        amount,
+        amount
       });
 
       const result = await this.paymentService.processRefund(
@@ -493,7 +493,7 @@ class PaymentController {
         {
           reason,
           amount,
-          notes,
+          notes
         },
         adminUserId
       );
@@ -503,8 +503,8 @@ class PaymentController {
         message: 'Refund processed successfully',
         data: {
           refundAmount: result.refundAmount,
-          refundDate: result.refundDate,
-        },
+          refundDate: result.refundDate
+        }
       });
     } catch (error) {
       console.error('[PaymentController] Refund processing error:', error);
@@ -513,7 +513,7 @@ class PaymentController {
         return res.status(404).json({
           success: false,
           error: 'PAYMENT_NOT_FOUND',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -521,7 +521,7 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'REFUND_NOT_ELIGIBLE',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -529,7 +529,7 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'ALREADY_REFUNDED',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -537,14 +537,14 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'REFUND_WINDOW_EXPIRED',
-          message: error.message,
+          message: error.message
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'REFUND_PROCESSING_ERROR',
-        message: 'Error processing refund',
+        message: 'Error processing refund'
       });
     }
   }
@@ -580,8 +580,8 @@ class PaymentController {
           totalAmount: payments.reduce(
             (sum, p) => sum + (p.status === 'COMPLETED' ? p.amount : 0),
             0
-          ),
-        },
+          )
+        }
       });
     } catch (error) {
       console.error('[PaymentController] Get application payments error:', error);
@@ -590,7 +590,7 @@ class PaymentController {
         return res.status(404).json({
           success: false,
           error: 'APPLICATION_NOT_FOUND',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -598,14 +598,14 @@ class PaymentController {
         return res.status(403).json({
           success: false,
           error: 'ACCESS_DENIED',
-          message: error.message,
+          message: error.message
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'APPLICATION_PAYMENTS_ERROR',
-        message: 'Error retrieving application payments',
+        message: 'Error retrieving application payments'
       });
     }
   }
@@ -630,16 +630,16 @@ class PaymentController {
         ...(paymentType && { paymentType }),
         ...(startDate &&
           endDate && {
-            createdAt: {
-              $gte: new Date(startDate),
-              $lte: new Date(endDate),
-            },
-          }),
+          createdAt: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate)
+          }
+        })
       };
 
       const result = await this.paymentService.getUserPaymentHistory(filters, {
         page: parseInt(page),
-        limit: parseInt(limit),
+        limit: parseInt(limit)
       });
 
       res.status(200).json({
@@ -647,15 +647,15 @@ class PaymentController {
         data: {
           payments: result.payments,
           pagination: result.pagination,
-          summary: result.summary,
-        },
+          summary: result.summary
+        }
       });
     } catch (error) {
       console.error('[PaymentController] Get payment history error:', error);
       res.status(500).json({
         success: false,
         error: 'PAYMENT_HISTORY_ERROR',
-        message: 'Error retrieving payment history',
+        message: 'Error retrieving payment history'
       });
     }
   }
@@ -693,7 +693,7 @@ class PaymentController {
         return res.status(404).json({
           success: false,
           error: 'PAYMENT_NOT_FOUND',
-          message: error.message,
+          message: error.message
         });
       }
 
@@ -701,14 +701,14 @@ class PaymentController {
         return res.status(400).json({
           success: false,
           error: 'RECEIPT_NOT_AVAILABLE',
-          message: 'Receipt is not available for this payment',
+          message: 'Receipt is not available for this payment'
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'RECEIPT_DOWNLOAD_ERROR',
-        message: 'Error downloading receipt',
+        message: 'Error downloading receipt'
       });
     }
   }
@@ -732,7 +732,7 @@ class PaymentController {
           .isString()
           .isLength({ max: 20 })
           .withMessage('Invalid promo code'),
-        body('applicationId').optional().isMongoId().withMessage('Invalid application ID'),
+        body('applicationId').optional().isMongoId().withMessage('Invalid application ID')
       ],
 
       initiatePayment: [
@@ -741,14 +741,14 @@ class PaymentController {
           .isIn(['CERTIFICATION_FEE', 'INSPECTION_FEE', 'RENEWAL_FEE', 'AMENDMENT_FEE'])
           .withMessage('Invalid payment type'),
         body('amount').isFloat({ min: 0.01 }).withMessage('Amount must be greater than 0'),
-        body('feeBreakdown').isObject().withMessage('Fee breakdown is required'),
+        body('feeBreakdown').isObject().withMessage('Fee breakdown is required')
       ],
 
       getPayment: [
         param('paymentId')
           .isString()
           .isLength({ min: 10, max: 50 })
-          .withMessage('Invalid payment ID'),
+          .withMessage('Invalid payment ID')
       ],
 
       processRefund: [
@@ -763,7 +763,7 @@ class PaymentController {
             'USER_REQUEST',
             'SYSTEM_ERROR',
             'OVERPAYMENT',
-            'ADMIN_ADJUSTMENT',
+            'ADMIN_ADJUSTMENT'
           ])
           .withMessage('Invalid refund reason'),
         body('amount')
@@ -774,8 +774,8 @@ class PaymentController {
           .optional()
           .isString()
           .isLength({ max: 500 })
-          .withMessage('Notes cannot exceed 500 characters'),
-      ],
+          .withMessage('Notes cannot exceed 500 characters')
+      ]
     };
   }
 }

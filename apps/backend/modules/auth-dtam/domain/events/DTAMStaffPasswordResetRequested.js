@@ -21,7 +21,7 @@ class DTAMStaffPasswordResetRequested {
       email: this.email,
       resetToken: this.resetToken,
       expiresAt: this.expiresAt,
-      timestamp: this.timestamp,
+      timestamp: this.timestamp
     };
   }
 }

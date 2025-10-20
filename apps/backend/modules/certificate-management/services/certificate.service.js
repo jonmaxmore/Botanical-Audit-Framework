@@ -98,7 +98,7 @@ class CertificateService {
         standardName,
         score,
         issuedBy,
-        validityYears = 3,
+        validityYears = 3
       } = data;
 
       // Generate certificate details
@@ -127,7 +127,7 @@ class CertificateService {
           province: location?.province || '',
           district: location?.district || '',
           subDistrict: location?.subDistrict || '',
-          address: location?.address || '',
+          address: location?.address || ''
         },
         cropType,
         farmSize,
@@ -152,7 +152,7 @@ class CertificateService {
 
         // Audit trail
         createdAt: now,
-        updatedAt: now,
+        updatedAt: now
       };
 
       const result = await this.certificatesCollection.insertOne(certificate);
@@ -165,8 +165,8 @@ class CertificateService {
             certificateId: result.insertedId,
             certificateNumber,
             certificateIssued: true,
-            certificateIssuedAt: now,
-          },
+            certificateIssuedAt: now
+          }
         }
       );
 
@@ -175,7 +175,7 @@ class CertificateService {
         certificateNumber,
         verificationCode,
         qrData,
-        ...certificate,
+        ...certificate
       };
     } catch (error) {
       console.error('Error creating certificate:', error);
@@ -189,7 +189,7 @@ class CertificateService {
   async getCertificateById(certificateId) {
     try {
       const certificate = await this.certificatesCollection.findOne({
-        _id: new ObjectId(certificateId),
+        _id: new ObjectId(certificateId)
       });
 
       if (!certificate) {
@@ -198,7 +198,7 @@ class CertificateService {
 
       return {
         certificateId: certificate._id.toString(),
-        ...certificate,
+        ...certificate
       };
     } catch (error) {
       console.error('Error getting certificate:', error);
@@ -212,7 +212,7 @@ class CertificateService {
   async getCertificateByNumber(certificateNumber) {
     try {
       const certificate = await this.certificatesCollection.findOne({
-        certificateNumber,
+        certificateNumber
       });
 
       if (!certificate) {
@@ -221,7 +221,7 @@ class CertificateService {
 
       return {
         certificateId: certificate._id.toString(),
-        ...certificate,
+        ...certificate
       };
     } catch (error) {
       console.error('Error getting certificate:', error);
@@ -257,7 +257,7 @@ class CertificateService {
         status: cert.status,
         issuedDate: cert.issuedDate,
         expiryDate: cert.expiryDate,
-        score: cert.score,
+        score: cert.score
       }));
     } catch (error) {
       console.error('Error getting certificates by user:', error);
@@ -284,7 +284,7 @@ class CertificateService {
         query.$or = [
           { certificateNumber: { $regex: filters.search, $options: 'i' } },
           { farmName: { $regex: filters.search, $options: 'i' } },
-          { farmerName: { $regex: filters.search, $options: 'i' } },
+          { farmerName: { $regex: filters.search, $options: 'i' } }
         ];
       }
 
@@ -297,18 +297,18 @@ class CertificateService {
           .skip(skip)
           .limit(limit)
           .toArray(),
-        this.certificatesCollection.countDocuments(query),
+        this.certificatesCollection.countDocuments(query)
       ]);
 
       return {
         certificates: certificates.map(cert => ({
           certificateId: cert._id.toString(),
-          ...cert,
+          ...cert
         })),
         total,
         page,
         limit,
-        totalPages: Math.ceil(total / limit),
+        totalPages: Math.ceil(total / limit)
       };
     } catch (error) {
       console.error('Error getting all certificates:', error);
@@ -322,14 +322,14 @@ class CertificateService {
   async verifyCertificate(certificateNumber, verificationCode = null) {
     try {
       const certificate = await this.certificatesCollection.findOne({
-        certificateNumber,
+        certificateNumber
       });
 
       if (!certificate) {
         return {
           valid: false,
           message: 'Certificate not found',
-          certificateNumber,
+          certificateNumber
         };
       }
 
@@ -338,7 +338,7 @@ class CertificateService {
         { _id: certificate._id },
         {
           $inc: { verificationCount: 1 },
-          $set: { lastVerifiedAt: new Date() },
+          $set: { lastVerifiedAt: new Date() }
         }
       );
 
@@ -347,7 +347,7 @@ class CertificateService {
         return {
           valid: false,
           message: 'Invalid verification code',
-          certificateNumber,
+          certificateNumber
         };
       }
 
@@ -364,8 +364,8 @@ class CertificateService {
             farmName: certificate.farmName,
             farmerName: certificate.farmerName,
             standardName: certificate.standardName,
-            status: 'expired',
-          },
+            status: 'expired'
+          }
         };
       }
 
@@ -376,7 +376,7 @@ class CertificateService {
           message: 'Certificate has been revoked',
           certificateNumber,
           revokedDate: certificate.revokedDate,
-          revokedReason: certificate.revokedReason,
+          revokedReason: certificate.revokedReason
         };
       }
 
@@ -396,8 +396,8 @@ class CertificateService {
           issuedDate: certificate.issuedDate,
           expiryDate: certificate.expiryDate,
           status: certificate.status,
-          qrData: certificate.qrData,
-        },
+          qrData: certificate.qrData
+        }
       };
     } catch (error) {
       console.error('Error verifying certificate:', error);
@@ -434,7 +434,7 @@ class CertificateService {
         standardName: oldCertificate.standardName,
         score: oldCertificate.score,
         issuedBy: renewedBy,
-        validityYears,
+        validityYears
       });
 
       // Update old certificate status
@@ -445,8 +445,8 @@ class CertificateService {
             status: 'renewed',
             renewedCertificateId: newCertificate.certificateId,
             renewedAt: now,
-            updatedAt: now,
-          },
+            updatedAt: now
+          }
         }
       );
 
@@ -472,8 +472,8 @@ class CertificateService {
             revokedDate: now,
             revokedReason: reason,
             revokedBy,
-            updatedAt: now,
-          },
+            updatedAt: now
+          }
         }
       );
 
@@ -483,7 +483,7 @@ class CertificateService {
 
       return {
         success: true,
-        message: 'Certificate revoked successfully',
+        message: 'Certificate revoked successfully'
       };
     } catch (error) {
       console.error('Error revoking certificate:', error);
@@ -502,14 +502,14 @@ class CertificateService {
           $set: {
             pdfGenerated: true,
             pdfUrl,
-            updatedAt: new Date(),
-          },
+            updatedAt: new Date()
+          }
         }
       );
 
       return {
         success: true,
-        pdfUrl,
+        pdfUrl
       };
     } catch (error) {
       console.error('Error updating PDF info:', error);
@@ -526,7 +526,7 @@ class CertificateService {
         { _id: new ObjectId(certificateId) },
         {
           $inc: { downloadCount: 1 },
-          $set: { lastDownloadedAt: new Date() },
+          $set: { lastDownloadedAt: new Date() }
         }
       );
     } catch (error) {
@@ -548,25 +548,25 @@ class CertificateService {
         expiredCertificates,
         revokedCertificates,
         thisMonthCertificates,
-        expiringCertificates,
+        expiringCertificates
       ] = await Promise.all([
         this.certificatesCollection.countDocuments({}),
         this.certificatesCollection.countDocuments({ status: 'active' }),
         this.certificatesCollection.countDocuments({
           expiryDate: { $lt: now },
-          status: { $ne: 'renewed' },
+          status: { $ne: 'renewed' }
         }),
         this.certificatesCollection.countDocuments({ status: 'revoked' }),
         this.certificatesCollection.countDocuments({
-          issuedDate: { $gte: monthStart },
+          issuedDate: { $gte: monthStart }
         }),
         this.certificatesCollection.countDocuments({
           status: 'active',
           expiryDate: {
             $gte: now,
-            $lte: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000),
-          },
-        }),
+            $lte: new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000)
+          }
+        })
       ]);
 
       // Get certificates by standard
@@ -575,9 +575,9 @@ class CertificateService {
           {
             $group: {
               _id: '$standardName',
-              count: { $sum: 1 },
-            },
-          },
+              count: { $sum: 1 }
+            }
+          }
         ])
         .toArray();
 
@@ -591,7 +591,7 @@ class CertificateService {
         byStandard: byStandard.reduce((acc, item) => {
           acc[item._id] = item.count;
           return acc;
-        }, {}),
+        }, {})
       };
     } catch (error) {
       console.error('Error getting certificate stats:', error);
@@ -612,8 +612,8 @@ class CertificateService {
           status: 'active',
           expiryDate: {
             $gte: now,
-            $lte: futureDate,
-          },
+            $lte: futureDate
+          }
         })
         .sort({ expiryDate: 1 })
         .toArray();
@@ -624,7 +624,7 @@ class CertificateService {
         farmName: cert.farmName,
         farmerName: cert.farmerName,
         expiryDate: cert.expiryDate,
-        daysUntilExpiry: Math.ceil((cert.expiryDate - now) / (1000 * 60 * 60 * 24)),
+        daysUntilExpiry: Math.ceil((cert.expiryDate - now) / (1000 * 60 * 60 * 24))
       }));
     } catch (error) {
       console.error('Error getting expiring certificates:', error);

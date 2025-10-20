@@ -13,7 +13,7 @@ const {
   ACTION_TYPE,
   ENTITY_TYPE,
   SEVERITY,
-  ACTOR_TYPE,
+  ACTOR_TYPE
 } = require('./domain/entities/AuditLog');
 
 // Use Cases
@@ -38,23 +38,23 @@ function createAuditModule(config) {
 
   // Application Layer - Use Cases
   const createAuditLogUseCase = new CreateAuditLogUseCase({
-    auditLogRepository,
+    auditLogRepository
   });
 
   const getAuditLogDetailsUseCase = new GetAuditLogDetailsUseCase({
-    auditLogRepository,
+    auditLogRepository
   });
 
   const listAuditLogsUseCase = new ListAuditLogsUseCase({
-    auditLogRepository,
+    auditLogRepository
   });
 
   const getAuditStatisticsUseCase = new GetAuditStatisticsUseCase({
-    auditLogRepository,
+    auditLogRepository
   });
 
   const getUserActivityUseCase = new GetUserActivityUseCase({
-    auditLogRepository,
+    auditLogRepository
   });
 
   // Presentation Layer - Controller
@@ -62,7 +62,7 @@ function createAuditModule(config) {
     getAuditLogDetailsUseCase,
     listAuditLogsUseCase,
     getAuditStatisticsUseCase,
-    getUserActivityUseCase,
+    getUserActivityUseCase
   });
 
   // Presentation Layer - Routes
@@ -80,7 +80,7 @@ function createAuditModule(config) {
   };
 
   // Helper function to create audit log from request
-  const logFromRequest = async (req, actionType, entityType, entityId, additionalData = {}) => {
+  const logFromRequest = async(req, actionType, entityType, entityId, additionalData = {}) => {
     try {
       const auditLog = AuditLog.fromRequest(req, actionType, entityType, entityId, additionalData);
       await createAuditLogUseCase.execute(auditLog);
@@ -99,7 +99,7 @@ function createAuditModule(config) {
       auditLogRepository,
       createAuditLogUseCase,
       logAction,
-      logFromRequest,
+      logFromRequest
     },
 
     // Constants for use by other modules
@@ -108,8 +108,8 @@ function createAuditModule(config) {
       ENTITY_TYPE,
       SEVERITY,
       ACTOR_TYPE,
-      AuditLog,
-    },
+      AuditLog
+    }
   };
 }
 

@@ -35,7 +35,7 @@ async function register(req, res) {
       return res.status(400).json({
         success: false,
         error: 'EMAIL_EXISTS',
-        message: 'อีเมลนี้ถูกใช้งานแล้ว',
+        message: 'อีเมลนี้ถูกใช้งานแล้ว'
       });
     }
 
@@ -45,7 +45,7 @@ async function register(req, res) {
       return res.status(400).json({
         success: false,
         error: 'THAI_ID_EXISTS',
-        message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว',
+        message: 'เลขบัตรประชาชนนี้ถูกใช้งานแล้ว'
       });
     }
 
@@ -55,7 +55,7 @@ async function register(req, res) {
       return res.status(400).json({
         success: false,
         error: 'PHONE_EXISTS',
-        message: 'เบอร์โทรศัพท์นี้ถูกใช้งานแล้ว',
+        message: 'เบอร์โทรศัพท์นี้ถูกใช้งานแล้ว'
       });
     }
 
@@ -87,7 +87,7 @@ async function register(req, res) {
         subDistrict: address.tambon,
         district: address.amphoe,
         province: address.province,
-        postalCode: address.postalCode,
+        postalCode: address.postalCode
       },
       role: 'FARMER',
       permissions: [
@@ -96,12 +96,12 @@ async function register(req, res) {
         'application:update:own',
         'document:upload:own',
         'payment:create',
-        'certificate:read:own',
+        'certificate:read:own'
       ],
       emailVerified: false,
       emailVerificationToken,
       emailVerificationExpires,
-      isActive: true,
+      isActive: true
     });
 
     // Create audit log
@@ -118,8 +118,8 @@ async function register(req, res) {
       metadata: {
         email: user.email,
         role: user.role,
-        registrationMethod: 'email',
-      },
+        registrationMethod: 'email'
+      }
     });
 
     // TODO: Send verification email (async)
@@ -137,9 +137,9 @@ async function register(req, res) {
           role: user.role,
           permissions: user.permissions,
           emailVerified: user.emailVerified,
-          createdAt: user.createdAt,
-        },
-      },
+          createdAt: user.createdAt
+        }
+      }
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -150,14 +150,14 @@ async function register(req, res) {
       return res.status(400).json({
         success: false,
         error: 'DUPLICATE_FIELD',
-        message: `${field} นี้ถูกใช้งานแล้ว`,
+        message: `${field} นี้ถูกใช้งานแล้ว`
       });
     }
 
     res.status(500).json({
       success: false,
       error: 'REGISTRATION_ERROR',
-      message: 'เกิดข้อผิดพลาดในการลงทะเบียน',
+      message: 'เกิดข้อผิดพลาดในการลงทะเบียน'
     });
   }
 }
@@ -181,7 +181,7 @@ async function resendVerification(req, res) {
       // Don't reveal if email exists (security best practice)
       return res.status(200).json({
         success: true,
-        message: 'หากอีเมลนี้มีในระบบ เราจะส่งอีเมลยืนยันให้คุณ',
+        message: 'หากอีเมลนี้มีในระบบ เราจะส่งอีเมลยืนยันให้คุณ'
       });
     }
 
@@ -190,7 +190,7 @@ async function resendVerification(req, res) {
       return res.status(400).json({
         success: false,
         error: 'EMAIL_ALREADY_VERIFIED',
-        message: 'อีเมลถูกยืนยันแล้ว',
+        message: 'อีเมลถูกยืนยันแล้ว'
       });
     }
 
@@ -218,12 +218,12 @@ async function resendVerification(req, res) {
       resourceId: user.userId,
       ipAddress: req.ip || 'unknown',
       userAgent: req.get('user-agent') || 'unknown',
-      metadata: {},
+      metadata: {}
     });
 
     res.status(200).json({
       success: true,
-      message: 'ส่งอีเมลยืนยันใหม่แล้ว กรุณาตรวจสอบอีเมลของคุณ',
+      message: 'ส่งอีเมลยืนยันใหม่แล้ว กรุณาตรวจสอบอีเมลของคุณ'
     });
   } catch (error) {
     console.error('Resend verification error:', error);
@@ -231,7 +231,7 @@ async function resendVerification(req, res) {
     res.status(500).json({
       success: false,
       error: 'RESEND_ERROR',
-      message: 'เกิดข้อผิดพลาดในการส่งอีเมลยืนยัน',
+      message: 'เกิดข้อผิดพลาดในการส่งอีเมลยืนยัน'
     });
   }
 }
@@ -252,21 +252,21 @@ async function verifyEmail(req, res) {
       return res.status(400).json({
         success: false,
         error: 'INVALID_TOKEN',
-        message: 'กรุณาระบุ token',
+        message: 'กรุณาระบุ token'
       });
     }
 
     // Find user with this token
     const user = await User.findOne({
       emailVerificationToken: token,
-      emailVerificationExpires: { $gt: new Date() },
+      emailVerificationExpires: { $gt: new Date() }
     });
 
     if (!user) {
       return res.status(400).json({
         success: false,
         error: 'INVALID_TOKEN',
-        message: 'Token ไม่ถูกต้องหรือหมดอายุแล้ว',
+        message: 'Token ไม่ถูกต้องหรือหมดอายุแล้ว'
       });
     }
 
@@ -275,7 +275,7 @@ async function verifyEmail(req, res) {
       return res.status(400).json({
         success: false,
         error: 'EMAIL_ALREADY_VERIFIED',
-        message: 'อีเมลถูกยืนยันแล้ว',
+        message: 'อีเมลถูกยืนยันแล้ว'
       });
     }
 
@@ -296,7 +296,7 @@ async function verifyEmail(req, res) {
       resourceId: user.userId,
       ipAddress: req.ip || 'unknown',
       userAgent: req.get('user-agent') || 'unknown',
-      metadata: {},
+      metadata: {}
     });
 
     res.status(200).json({
@@ -305,8 +305,8 @@ async function verifyEmail(req, res) {
       data: {
         userId: user.userId,
         email: user.email,
-        emailVerified: user.emailVerified,
-      },
+        emailVerified: user.emailVerified
+      }
     });
   } catch (error) {
     console.error('Email verification error:', error);
@@ -314,7 +314,7 @@ async function verifyEmail(req, res) {
     res.status(500).json({
       success: false,
       error: 'VERIFICATION_ERROR',
-      message: 'เกิดข้อผิดพลาดในการยืนยันอีเมล',
+      message: 'เกิดข้อผิดพลาดในการยืนยันอีเมล'
     });
   }
 }
@@ -322,5 +322,5 @@ async function verifyEmail(req, res) {
 module.exports = {
   register,
   resendVerification,
-  verifyEmail,
+  verifyEmail
 };

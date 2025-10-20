@@ -119,37 +119,37 @@ function createAuthFarmerModule(config) {
     userRepository,
     passwordHasher,
     tokenGenerator,
-    eventBus,
+    eventBus
   });
 
   const loginUserUseCase = new LoginUserUseCase({
     userRepository,
     passwordHasher,
     jwtService,
-    eventBus,
+    eventBus
   });
 
   const verifyEmailUseCase = new VerifyEmailUseCase({
-    userRepository,
+    userRepository
   });
 
   const requestPasswordResetUseCase = new RequestPasswordResetUseCase({
     userRepository,
     tokenGenerator,
-    eventBus,
+    eventBus
   });
 
   const resetPasswordUseCase = new ResetPasswordUseCase({
     userRepository,
-    passwordHasher,
+    passwordHasher
   });
 
   const getUserProfileUseCase = new GetUserProfileUseCase({
-    userRepository,
+    userRepository
   });
 
   const updateUserProfileUseCase = new UpdateUserProfileUseCase({
-    userRepository,
+    userRepository
   });
 
   // Presentation Layer
@@ -160,7 +160,7 @@ function createAuthFarmerModule(config) {
     requestPasswordResetUseCase,
     resetPasswordUseCase,
     getUserProfileUseCase,
-    updateUserProfileUseCase,
+    updateUserProfileUseCase
   });
 
   // Create and return router
@@ -171,8 +171,8 @@ function createAuthFarmerModule(config) {
     services: {
       userRepository,
       passwordHasher,
-      jwtService,
-    },
+      jwtService
+    }
   };
 }
 

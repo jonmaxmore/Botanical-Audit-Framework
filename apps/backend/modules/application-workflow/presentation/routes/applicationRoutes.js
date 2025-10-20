@@ -28,7 +28,7 @@ const {
   authorize,
   validateRequest,
   rateLimit,
-  auditLog,
+  auditLog
 } = require('../../../shared/middleware');
 
 const router = express.Router();
@@ -252,7 +252,7 @@ function createApplicationRoutes(dependencies = {}) {
     '/webhooks/payment-confirmed',
     validateRequest('paymentWebhook'),
     auditLog('PAYMENT_WEBHOOK'),
-    async (req, res) => {
+    async(req, res) => {
       try {
         // Verify webhook signature
         // Process payment confirmation
@@ -282,15 +282,15 @@ const routeDocumentation = {
       body: {
         farmer: { type: 'object', required: true },
         farm: { type: 'object', required: true },
-        documents: { type: 'array', required: false },
+        documents: { type: 'array', required: false }
       },
       responses: {
         201: 'Application created successfully',
         400: 'Validation error',
         403: 'Forbidden - Farmers only',
-        429: 'Rate limit exceeded',
-      },
-    },
+        429: 'Rate limit exceeded'
+      }
+    }
   },
 
   '/applications/:id': {
@@ -300,8 +300,8 @@ const routeDocumentation = {
       responses: {
         200: 'Application details with workflow status',
         403: 'Access denied',
-        404: 'Application not found',
-      },
+        404: 'Application not found'
+      }
     },
     PUT: {
       description: 'Update application (draft/revision states only)',
@@ -309,9 +309,9 @@ const routeDocumentation = {
       responses: {
         200: 'Application updated',
         400: 'Cannot edit in current state',
-        403: 'Access denied',
-      },
-    },
+        403: 'Access denied'
+      }
+    }
   },
 
   '/applications/:id/submit': {
@@ -321,9 +321,9 @@ const routeDocumentation = {
       responses: {
         200: 'Application submitted',
         400: 'Missing required documents',
-        403: 'Access denied',
-      },
-    },
+        403: 'Access denied'
+      }
+    }
   },
 
   '/dtam/applications/:id/approve-payment': {
@@ -332,14 +332,14 @@ const routeDocumentation = {
       access: 'DTAM_REVIEWER',
       body: {
         findings: { type: 'array', required: false },
-        notes: { type: 'string', required: false },
+        notes: { type: 'string', required: false }
       },
       responses: {
         200: 'Approved for payment',
         400: 'Invalid state transition',
-        403: 'Reviewer access required',
-      },
-    },
+        403: 'Reviewer access required'
+      }
+    }
   },
 
   '/dtam/applications/:id/request-revision': {
@@ -348,14 +348,14 @@ const routeDocumentation = {
       access: 'DTAM_REVIEWER',
       body: {
         reasons: { type: 'array', required: true },
-        notes: { type: 'string', required: true },
+        notes: { type: 'string', required: true }
       },
       responses: {
         200: 'Revision requested',
         400: 'Max revisions exceeded',
-        403: 'Reviewer access required',
-      },
-    },
+        403: 'Reviewer access required'
+      }
+    }
   },
 
   '/dtam/applications/:id/schedule-inspection': {
@@ -365,14 +365,14 @@ const routeDocumentation = {
       body: {
         scheduledDate: { type: 'string', format: 'date-time', required: true },
         type: { type: 'string', enum: ['onsite', 'virtual'], required: true },
-        notes: { type: 'string', required: false },
+        notes: { type: 'string', required: false }
       },
       responses: {
         200: 'Inspection scheduled',
         400: 'Invalid date or type',
-        403: 'Inspector access required',
-      },
-    },
+        403: 'Inspector access required'
+      }
+    }
   },
 
   '/dtam/applications/:id/complete-inspection': {
@@ -383,14 +383,14 @@ const routeDocumentation = {
         findings: { type: 'array', required: true },
         checklist: { type: 'object', required: true },
         photos: { type: 'array', required: false },
-        notes: { type: 'string', required: false },
+        notes: { type: 'string', required: false }
       },
       responses: {
         200: 'Inspection completed',
         400: 'Compliance score too low',
-        403: 'Inspector access required',
-      },
-    },
+        403: 'Inspector access required'
+      }
+    }
   },
 
   '/dtam/applications/:id/final-approval': {
@@ -400,14 +400,14 @@ const routeDocumentation = {
       body: {
         signature: { type: 'string', required: true },
         notes: { type: 'string', required: false },
-        certificateTemplate: { type: 'string', required: false },
+        certificateTemplate: { type: 'string', required: false }
       },
       responses: {
         200: 'Application approved, certificate will be issued',
         400: 'Missing signature',
-        403: 'Admin access required',
-      },
-    },
+        403: 'Admin access required'
+      }
+    }
   },
 
   '/dtam/applications/:id/reject': {
@@ -416,17 +416,17 @@ const routeDocumentation = {
       access: 'DTAM staff',
       body: {
         reason: { type: 'string', required: true },
-        notes: { type: 'string', required: false },
+        notes: { type: 'string', required: false }
       },
       responses: {
         200: 'Application rejected',
-        403: 'DTAM access required',
-      },
-    },
-  },
+        403: 'DTAM access required'
+      }
+    }
+  }
 };
 
 module.exports = {
   createApplicationRoutes,
-  routeDocumentation,
+  routeDocumentation
 };

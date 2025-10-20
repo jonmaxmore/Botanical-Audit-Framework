@@ -19,7 +19,7 @@ const {
   submitSurveyResponse,
   getSurveyStats,
   getSurveyRegions,
-  getSurveyByRegion,
+  getSurveyByRegion
 } = require('../controllers/surveyController');
 
 // Public endpoints for survey participation

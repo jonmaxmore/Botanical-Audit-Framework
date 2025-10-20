@@ -18,7 +18,7 @@ const {
   deleteApplication,
   submitApplication,
   reviewApplication,
-  getApplicationStats,
+  getApplicationStats
 } = require('../controllers/applicationController');
 
 // Application list and search

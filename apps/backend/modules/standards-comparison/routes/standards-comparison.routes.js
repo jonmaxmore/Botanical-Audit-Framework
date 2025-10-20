@@ -16,7 +16,7 @@ function initializeRoutes(controller, authMiddleware) {
     if (!controller.service.initialized) {
       return res.status(503).json({
         success: false,
-        message: 'Standards Comparison service is not initialized yet',
+        message: 'Standards Comparison service is not initialized yet'
       });
     }
     next();

@@ -115,7 +115,7 @@ class CompleteCourseUseCase {
         completedAt: updatedEnrollment.completedAt,
         certificate: certificateData,
         analyticsUpdated: true,
-        notificationsSent: true,
+        notificationsSent: true
       };
 
       console.log(
@@ -140,7 +140,7 @@ class CompleteCourseUseCase {
     const validation = {
       isEligible: true,
       reason: null,
-      details: {},
+      details: {}
     };
 
     try {
@@ -186,7 +186,7 @@ class CompleteCourseUseCase {
         completedRequiredModules: completedRequiredModules.length,
         totalRequiredModules: requiredModules.length,
         assessmentAttempts: currentAttempts,
-        maxAttempts: maxAttempts,
+        maxAttempts: maxAttempts
       };
 
       return validation;
@@ -209,7 +209,7 @@ class CompleteCourseUseCase {
       answers: completionData.assessmentAnswers || {},
       timeSpent: completionData.timeSpent || 0,
       scores: {},
-      finalScore: 0,
+      finalScore: 0
     };
 
     try {
@@ -235,7 +235,7 @@ class CompleteCourseUseCase {
         totalStudyTime: enrollment.progress.totalTimeSpentMinutes,
         completionRate: enrollment.progress.progressPercentage,
         moduleCompletionTime: this.calculateModuleCompletionTimes(enrollment),
-        performancePattern: this.analyzePerformancePattern(enrollment),
+        performancePattern: this.analyzePerformancePattern(enrollment)
       };
 
       console.log(`[CompleteCourse] Final assessment processed - Score: ${assessment.finalScore}%`);
@@ -289,7 +289,7 @@ class CompleteCourseUseCase {
       studyConsistency:
         enrollment.progress.completedLessons.length > 5 ? 'consistent' : 'irregular',
       completionSpeed: enrollment.progress.totalTimeSpentMinutes > 240 ? 'thorough' : 'quick',
-      engagementLevel: enrollment.lastAccessedAt ? 'high' : 'low',
+      engagementLevel: enrollment.lastAccessedAt ? 'high' : 'low'
     };
   }
 
@@ -303,7 +303,7 @@ class CompleteCourseUseCase {
       Math.max(1, enrollment.progress.completedModules.length);
     return {
       averageTimePerModule: Math.round(avgTimePerModule),
-      totalTime: enrollment.progress.totalTimeSpentMinutes,
+      totalTime: enrollment.progress.totalTimeSpentMinutes
     };
   }
 
@@ -320,7 +320,7 @@ class CompleteCourseUseCase {
       passingScore: passingScore,
       assessment: assessment,
       certificateEligible: false,
-      recommendation: null,
+      recommendation: null
     };
 
     // Determine certificate eligibility
@@ -361,7 +361,7 @@ class CompleteCourseUseCase {
       status: outcome.status === 'PASSED' ? 'COMPLETED' : 'FAILED',
       finalScore: outcome.finalScore,
       completedAt: new Date(),
-      assessments: [...(enrollment.assessments || []), outcome.assessment],
+      assessments: [...(enrollment.assessments || []), outcome.assessment]
     };
 
     const updatedEnrollment = await this.enrollmentRepository.update(enrollment.id, updates);
@@ -386,7 +386,7 @@ class CompleteCourseUseCase {
         completedAt: enrollment.completedAt,
         certificateNumber: this.generateCertificateNumber(enrollment, course),
         validUntil: this.calculateCertificateExpiry(course),
-        competenciesAchieved: this.extractCompetencies(course, outcome),
+        competenciesAchieved: this.extractCompetencies(course, outcome)
       };
 
       // Generate certificate through certification service
@@ -451,7 +451,7 @@ class CompleteCourseUseCase {
           completionStatus: outcome.status,
           finalScore: outcome.finalScore,
           studyTime: enrollment.progress.totalTimeSpentMinutes,
-          certificateIssued: !!certificate,
+          certificateIssued: !!certificate
         });
       }
 
@@ -463,7 +463,7 @@ class CompleteCourseUseCase {
           courseId: course.id,
           status: 'ACTIVE',
           issuedAt: new Date(),
-          expiresAt: certificate.validUntil,
+          expiresAt: certificate.validUntil
         });
       }
     } catch (error) {
@@ -488,8 +488,8 @@ class CompleteCourseUseCase {
           enrollmentId: enrollment.id,
           courseId: course.id,
           finalScore: outcome.finalScore,
-          certificateId: certificate?.id,
-        },
+          certificateId: certificate?.id
+        }
       };
 
       await this.notificationService.send(notificationData);
@@ -521,7 +521,7 @@ class CompleteCourseUseCase {
           enrollmentId,
           operation: 'COURSE_COMPLETION',
           error: errorMessage,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
     } catch (error) {

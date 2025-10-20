@@ -6,8 +6,8 @@ const addressSchema = Joi.object({
     subDistrict: Joi.string().required(),
     district: Joi.string().required(),
     province: Joi.string().required(),
-    postalCode: Joi.string().required(),
-  }).required(),
+    postalCode: Joi.string().required()
+  }).required()
 });
 
 const testData = {
@@ -16,8 +16,8 @@ const testData = {
     // subDistrict missing
     district: 'เขต',
     province: 'กรุงเทพฯ',
-    postalCode: '10110',
-  },
+    postalCode: '10110'
+  }
 };
 
 const { error } = addressSchema.validate(testData, { abortEarly: false });

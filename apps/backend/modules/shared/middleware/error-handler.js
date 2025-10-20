@@ -57,7 +57,7 @@ const ERROR_CODES = {
   FILE_UPLOAD_FAILED: 'FILE_UPLOAD_FAILED',
   FILE_TOO_LARGE: 'FILE_TOO_LARGE',
   INVALID_FILE_TYPE: 'INVALID_FILE_TYPE',
-  SECURITY_VIOLATION: 'SECURITY_VIOLATION',
+  SECURITY_VIOLATION: 'SECURITY_VIOLATION'
 };
 
 /**
@@ -97,7 +97,7 @@ const ERROR_MESSAGES_TH = {
 
   [ERROR_CODES.PAYMENT_PROCESSING_FAILED]: 'การชำระเงินล้มเหลว',
   [ERROR_CODES.EMAIL_DELIVERY_FAILED]: 'การส่งอีเมลล้มเหลว',
-  [ERROR_CODES.SMS_DELIVERY_FAILED]: 'การส่ง SMS ล้มเหลว',
+  [ERROR_CODES.SMS_DELIVERY_FAILED]: 'การส่ง SMS ล้มเหลว'
 };
 
 /**
@@ -116,7 +116,7 @@ const createErrorResponse = (errorCode, message, details = null, statusCode = 50
     messageThTh: ERROR_MESSAGES_TH[errorCode] || 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ',
     details: details,
     timestamp: new Date().toISOString(),
-    statusCode: statusCode,
+    statusCode: statusCode
   };
 };
 
@@ -131,7 +131,7 @@ const errorHandler = (err, req, res, next) => {
     method: req.method,
     ip: req.ip,
     userAgent: req.get('User-Agent'),
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   // Handle specific error types
@@ -211,7 +211,7 @@ const sendSuccess = (res, data = null, message = 'Operation successful', statusC
     success: true,
     message: message,
     data: data,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 };
 
@@ -246,5 +246,5 @@ module.exports = {
   notFoundHandler,
   sendSuccess,
   sendError,
-  asyncHandler,
+  asyncHandler
 };

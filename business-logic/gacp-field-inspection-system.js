@@ -1,7 +1,7 @@
 /**
  * 🚗 GACP Field Inspection System
  * ระบบตรวจสอบฟาร์มแบบ VDO Call + ลงพื้นที่ตรวจจริง
- * 
+ *
  * กระบวนการตรวจสอบ:
  * 1. นัดหมาย VDO Call กับเกษตรกร
  * 2. ทำ VDO Call เบื้องต้น
@@ -208,7 +208,8 @@ class GACPFieldInspectionSystem extends EventEmitter {
         meetingId: meetingDetails.meetingId || this.generateMeetingId(),
         meetingUrl: meetingDetails.meetingUrl,
         password: meetingDetails.password,
-        instructions: meetingDetails.instructions || 'เตรียมเอกสารและพื้นที่ฟาร์มให้พร้อมสำหรับการตรวจสอบ'
+        instructions:
+          meetingDetails.instructions || 'เตรียมเอกสารและพื้นที่ฟาร์มให้พร้อมสำหรับการตรวจสอบ'
       },
       checklist: this.generateVDOChecklist(),
       createdAt: new Date(),
@@ -242,7 +243,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
    */
   async conductVDOCall(inspectionId, vdoResults) {
     const inspection = await this.getInspection(inspectionId);
-    
+
     if (inspection.type !== 'vdo_call' || inspection.status !== 'scheduled') {
       throw new Error('สถานะการตรวจสอบไม่ถูกต้องสำหรับ VDO Call');
     }
@@ -262,7 +263,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
 
     // คำนวณคะแนน
     const score = this.calculateInspectionScore(checklistResults, 'vdo_call');
-    
+
     // ตัดสินใจว่าต้องลงพื้นที่หรือไม่
     const requiresOnSite = this.shouldRequireOnSiteInspection(score, checklistResults, findings);
 
@@ -301,7 +302,6 @@ class GACPFieldInspectionSystem extends EventEmitter {
         vdoScore: score,
         reason: requiresOnSite.reason
       });
-
     } else if (score >= this.passingScore) {
       // ผ่าน VDO Call เพียงอย่างเดียว
       await this.completeInspection(inspection.applicationId, {
@@ -310,7 +310,6 @@ class GACPFieldInspectionSystem extends EventEmitter {
         passed: true,
         inspectionId
       });
-
     } else {
       // ไม่ผ่านเกณฑ์
       await this.completeInspection(inspection.applicationId, {
@@ -328,7 +327,12 @@ class GACPFieldInspectionSystem extends EventEmitter {
   /**
    * นัดหมายลงพื้นที่ตรวจจริง
    */
-  async scheduleOnSiteInspection(applicationId, inspectorId, scheduledDateTime, appointmentDetails = {}) {
+  async scheduleOnSiteInspection(
+    applicationId,
+    inspectorId,
+    scheduledDateTime,
+    appointmentDetails = {}
+  ) {
     const inspection = {
       inspectionId: this.generateInspectionId(),
       applicationId,
@@ -373,7 +377,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
    */
   async conductOnSiteInspection(inspectionId, onSiteResults) {
     const inspection = await this.getInspection(inspectionId);
-    
+
     if (inspection.type !== 'on_site' || inspection.status !== 'scheduled') {
       throw new Error('สถานะการตรวจสอบไม่ถูกต้องสำหรับการลงพื้นที่');
     }
@@ -490,8 +494,8 @@ class GACPFieldInspectionSystem extends EventEmitter {
     }
 
     // มีการรายงานปัญหาที่ต้องตรวจสอบเพิ่มเติม
-    const requiresPhysicalCheck = findings.some(finding => 
-      finding.requiresPhysicalInspection === true
+    const requiresPhysicalCheck = findings.some(
+      finding => finding.requiresPhysicalInspection === true
     );
 
     if (requiresPhysicalCheck) {
@@ -509,7 +513,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
    */
   findCriticalIssues(checklistResults) {
     const critical = [];
-    
+
     Object.values(checklistResults || {}).forEach(category => {
       category.items.forEach(item => {
         // รายการที่มีน้ำหนักมาก หรือเกี่ยวกับความปลอดภัย
@@ -535,7 +539,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
         const canCheck = this.inspectionTypes[inspectionType.toUpperCase()]?.canCheck || [];
         if (canCheck.includes(item.checkMethod)) {
           totalWeight += item.weight;
-          earnedScore += (item.score || 0);
+          earnedScore += item.score || 0;
         }
       });
     });
@@ -548,7 +552,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
    */
   generateVDOChecklist() {
     const checklist = {};
-    
+
     Object.entries(this.criteria).forEach(([categoryKey, category]) => {
       checklist[categoryKey] = {
         category: category.name,
@@ -572,7 +576,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
    */
   generateOnSiteChecklist() {
     const checklist = {};
-    
+
     Object.entries(this.criteria).forEach(([categoryKey, category]) => {
       checklist[categoryKey] = {
         category: category.name,
@@ -593,7 +597,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
   /**
    * ดึงสถิติการตรวจสอบ
    */
-  async getInspectionStatistics(inspectorId = null, dateFrom = null, dateTo = null) {
+  async getInspectionStatistics() {
     const stats = {
       total: 0,
       byType: {
@@ -636,7 +640,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
 
   async getInspection(inspectionId) {
     // TODO: Implement database query
-    throw new Error('Inspection not found - Database integration needed');
+    throw new Error(`Inspection ${inspectionId} not found - Database integration needed`);
   }
 
   async saveInspection(inspection) {
@@ -646,7 +650,7 @@ class GACPFieldInspectionSystem extends EventEmitter {
 
   async getApplication(applicationId) {
     // TODO: Implement database query
-    throw new Error('Application not found - Database integration needed');
+    throw new Error(`Application ${applicationId} not found - Database integration needed`);
   }
 
   async saveApplication(application) {
@@ -714,5 +718,4 @@ module.exports = {
   GACPFieldInspectionSystem,
   GACP_INSPECTION_CRITERIA,
   INSPECTION_TYPES
-}; 
- 
+};

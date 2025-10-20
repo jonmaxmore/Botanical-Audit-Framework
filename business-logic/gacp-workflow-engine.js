@@ -54,7 +54,7 @@ const WORKFLOW_STATES = {
   // สถานะพิเศษ
   CANCELLED: 'cancelled', // ยกเลิก
   EXPIRED: 'expired', // หมดอายุ
-  ON_HOLD: 'on_hold', // พักการดำเนินการ
+  ON_HOLD: 'on_hold' // พักการดำเนินการ
 };
 
 // Workflow steps with clear Thai descriptions
@@ -65,7 +65,7 @@ const WORKFLOW_STEPS = {
     description: 'เกษตรกรสมัครใช้งานระบบและอัปโหลดเอกสารที่จำเป็น',
     states: [WORKFLOW_STATES.DRAFT, WORKFLOW_STATES.SUBMITTED],
     nextStep: 2,
-    requiredActions: ['submit_application'],
+    requiredActions: ['submit_application']
   },
   2: {
     step: 2,
@@ -74,7 +74,7 @@ const WORKFLOW_STEPS = {
     states: [WORKFLOW_STATES.PAYMENT_PENDING_1, WORKFLOW_STATES.PAYMENT_PROCESSING_1],
     nextStep: 3,
     requiredActions: ['payment_first_phase'],
-    amount: 5000,
+    amount: 5000
   },
   3: {
     step: 3,
@@ -83,11 +83,11 @@ const WORKFLOW_STEPS = {
     states: [
       WORKFLOW_STATES.DOCUMENT_REVIEW,
       WORKFLOW_STATES.DOCUMENT_REVISION,
-      WORKFLOW_STATES.DOCUMENT_REJECTED,
+      WORKFLOW_STATES.DOCUMENT_REJECTED
     ],
     nextStep: [4, 2], // หากผ่าน ไป step 4, หากไม่ผ่าน 2 ครั้ง กลับไป step 2
     requiredActions: ['document_review_approve', 'document_review_reject'],
-    maxRejections: 2,
+    maxRejections: 2
   },
   4: {
     step: 4,
@@ -95,7 +95,7 @@ const WORKFLOW_STEPS = {
     description: 'เอกสารได้รับการอนุมัติแล้ว',
     states: [WORKFLOW_STATES.DOCUMENT_APPROVED],
     nextStep: 5,
-    requiredActions: ['proceed_to_payment_2'],
+    requiredActions: ['proceed_to_payment_2']
   },
   5: {
     step: 5,
@@ -104,7 +104,7 @@ const WORKFLOW_STEPS = {
     states: [WORKFLOW_STATES.PAYMENT_PENDING_2, WORKFLOW_STATES.PAYMENT_PROCESSING_2],
     nextStep: 6,
     requiredActions: ['payment_second_phase'],
-    amount: 25000,
+    amount: 25000
   },
   6: {
     step: 6,
@@ -114,15 +114,15 @@ const WORKFLOW_STEPS = {
       WORKFLOW_STATES.INSPECTION_SCHEDULED,
       WORKFLOW_STATES.INSPECTION_VDO_CALL,
       WORKFLOW_STATES.INSPECTION_ON_SITE,
-      WORKFLOW_STATES.INSPECTION_COMPLETED,
+      WORKFLOW_STATES.INSPECTION_COMPLETED
     ],
     nextStep: 7,
     requiredActions: [
       'schedule_inspection',
       'conduct_vdo_call',
       'conduct_on_site_inspection',
-      'complete_inspection',
-    ],
+      'complete_inspection'
+    ]
   },
   7: {
     step: 7,
@@ -130,7 +130,7 @@ const WORKFLOW_STEPS = {
     description: 'ผู้อนุมัติพิจารณาผลการตรวจสอบทั้งหมด',
     states: [WORKFLOW_STATES.PENDING_APPROVAL, WORKFLOW_STATES.APPROVED, WORKFLOW_STATES.REJECTED],
     nextStep: 8,
-    requiredActions: ['final_approval', 'final_rejection'],
+    requiredActions: ['final_approval', 'final_rejection']
   },
   8: {
     step: 8,
@@ -138,8 +138,8 @@ const WORKFLOW_STEPS = {
     description: 'ระบบออกใบรับรองและเกษตรกรสามารถดาวน์โหลดได้',
     states: [WORKFLOW_STATES.CERTIFICATE_GENERATING, WORKFLOW_STATES.CERTIFICATE_ISSUED],
     nextStep: null, // จบกระบวนการ
-    requiredActions: ['generate_certificate', 'issue_certificate'],
-  },
+    requiredActions: ['generate_certificate', 'issue_certificate']
+  }
 };
 
 class GACPWorkflowEngine extends EventEmitter {
@@ -173,14 +173,14 @@ class GACPWorkflowEngine extends EventEmitter {
       // Payment tracking
       payments: {
         phase1: { amount: 5000, status: 'pending', paidAt: null },
-        phase2: { amount: 25000, status: 'pending', paidAt: null },
+        phase2: { amount: 25000, status: 'pending', paidAt: null }
       },
 
       // Document review tracking
       documentReview: {
         rejectionCount: 0,
         maxRejections: 2,
-        reviews: [],
+        reviews: []
       },
 
       // Inspection tracking
@@ -190,7 +190,7 @@ class GACPWorkflowEngine extends EventEmitter {
         onSiteRequired: false,
         onSiteScheduled: null,
         onSiteCompleted: null,
-        findings: [],
+        findings: []
       },
 
       // Approval tracking
@@ -198,14 +198,14 @@ class GACPWorkflowEngine extends EventEmitter {
         approved: false,
         approvedBy: null,
         approvedAt: null,
-        rejectionReason: null,
+        rejectionReason: null
       },
 
       // Certificate
       certificate: {
         number: null,
         generatedAt: null,
-        downloadUrl: null,
+        downloadUrl: null
       },
 
       // Audit trail
@@ -215,13 +215,13 @@ class GACPWorkflowEngine extends EventEmitter {
           timestamp: new Date(),
           actor: farmerData.farmerId,
           state: WORKFLOW_STATES.DRAFT,
-          note: 'ใบสมัครถูกสร้างขึ้น',
-        },
+          note: 'ใบสมัครถูกสร้างขึ้น'
+        }
       ],
 
       // Metadata
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     // Save to storage
@@ -265,7 +265,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: application.farmerId,
       state: WORKFLOW_STATES.SUBMITTED,
-      note: 'ส่งใบสมัครแล้ว - รอการชำระเงินรอบแรก',
+      note: 'ส่งใบสมัครแล้ว - รอการชำระเงินรอบแรก'
     });
 
     await this.saveApplication(application);
@@ -302,7 +302,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: 'SYSTEM',
       state: WORKFLOW_STATES.PAYMENT_PENDING_1,
-      note: 'ระบบแจ้งให้ชำระเงินรอบแรก 5,000 บาท',
+      note: 'ระบบแจ้งให้ชำระเงินรอบแรก 5,000 บาท'
     });
 
     await this.saveApplication(application);
@@ -311,7 +311,7 @@ class GACPWorkflowEngine extends EventEmitter {
       application,
       phase: 1,
       amount: 5000,
-      description: 'ค่าธรรมเนียมตรวจสอบเอกสาร',
+      description: 'ค่าธรรมเนียมตรวจสอบเอกสาร'
     });
 
     console.log(`💰 First payment requested: ${applicationId} - 5,000 THB`);
@@ -342,7 +342,7 @@ class GACPWorkflowEngine extends EventEmitter {
       actor: application.farmerId,
       state: WORKFLOW_STATES.PAYMENT_PROCESSING_1,
       note: 'ได้รับการชำระเงินรอบแรก - กำลังตรวจสอบ',
-      details: { transactionId: paymentData.transactionId },
+      details: { transactionId: paymentData.transactionId }
     });
 
     await this.saveApplication(application);
@@ -372,7 +372,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: 'SYSTEM',
       state: WORKFLOW_STATES.DOCUMENT_REVIEW,
-      note: 'การชำระเงินรอบแรกสำเร็จ - ส่งเรื่องไปตรวจเอกสาร',
+      note: 'การชำระเงินรอบแรกสำเร็จ - ส่งเรื่องไปตรวจเอกสาร'
     });
 
     await this.saveApplication(application);
@@ -380,7 +380,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('payment_confirmed', {
       application,
       phase: 1,
-      amount: 5000,
+      amount: 5000
     });
 
     console.log(`✅ First payment confirmed: ${applicationId} - Starting document review`);
@@ -405,7 +405,7 @@ class GACPWorkflowEngine extends EventEmitter {
       reviewedAt: new Date(),
       approved,
       findings,
-      corrections,
+      corrections
     };
 
     application.documentReview.reviews.push(review);
@@ -421,7 +421,7 @@ class GACPWorkflowEngine extends EventEmitter {
         timestamp: new Date(),
         actor: reviewerId,
         state: WORKFLOW_STATES.DOCUMENT_APPROVED,
-        note: 'เอกสารผ่านการตรวจสอบ - รอการชำระเงินรอบสอง',
+        note: 'เอกสารผ่านการตรวจสอบ - รอการชำระเงินรอบสอง'
       });
 
       // Auto-request second payment
@@ -442,7 +442,7 @@ class GACPWorkflowEngine extends EventEmitter {
           timestamp: new Date(),
           actor: reviewerId,
           state: WORKFLOW_STATES.DOCUMENT_REJECTED,
-          note: `เอกสารถูกปฏิเสธครบ ${application.documentReview.maxRejections} ครั้ง - ต้องชำระเงินใหม่`,
+          note: `เอกสารถูกปฏิเสธครบ ${application.documentReview.maxRejections} ครั้ง - ต้องชำระเงินใหม่`
         });
       } else {
         // Allow correction
@@ -453,7 +453,7 @@ class GACPWorkflowEngine extends EventEmitter {
           timestamp: new Date(),
           actor: reviewerId,
           state: WORKFLOW_STATES.DOCUMENT_REVISION,
-          note: `เอกสารต้องแก้ไข (ครั้งที่ ${application.documentReview.rejectionCount}/${application.documentReview.maxRejections})`,
+          note: `เอกสารต้องแก้ไข (ครั้งที่ ${application.documentReview.rejectionCount}/${application.documentReview.maxRejections})`
         });
       }
     }
@@ -463,7 +463,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('document_reviewed', {
       application,
       approved,
-      rejectionCount: application.documentReview.rejectionCount,
+      rejectionCount: application.documentReview.rejectionCount
     });
 
     console.log(`📋 Document reviewed: ${applicationId} - ${approved ? 'APPROVED' : 'REJECTED'}`);
@@ -493,7 +493,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: 'SYSTEM',
       state: WORKFLOW_STATES.PAYMENT_PENDING_2,
-      note: 'ระบบแจ้งให้ชำระเงินรอบสอง 25,000 บาท',
+      note: 'ระบบแจ้งให้ชำระเงินรอบสอง 25,000 บาท'
     });
 
     await this.saveApplication(application);
@@ -502,7 +502,7 @@ class GACPWorkflowEngine extends EventEmitter {
       application,
       phase: 2,
       amount: 25000,
-      description: 'ค่าธรรมเนียมตรวจสอบภาคสนาม',
+      description: 'ค่าธรรมเนียมตรวจสอบภาคสนาม'
     });
 
     console.log(`💰 Second payment requested: ${applicationId} - 25,000 THB`);
@@ -534,7 +534,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: 'SYSTEM',
       state: WORKFLOW_STATES.INSPECTION_SCHEDULED,
-      note: 'การชำระเงินรอบสองสำเร็จ - เตรียมนัดตรวจฟาร์ม',
+      note: 'การชำระเงินรอบสองสำเร็จ - เตรียมนัดตรวจฟาร์ม'
     });
 
     await this.saveApplication(application);
@@ -542,7 +542,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('payment_confirmed', {
       application,
       phase: 2,
-      amount: 25000,
+      amount: 25000
     });
 
     console.log(`✅ Second payment confirmed: ${applicationId} - Ready for inspection`);
@@ -571,7 +571,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: inspectorId,
       state: WORKFLOW_STATES.INSPECTION_VDO_CALL,
-      note: `นัดหมาย VDO Call วันที่ ${scheduledDateTime.toLocaleDateString('th-TH')}`,
+      note: `นัดหมาย VDO Call วันที่ ${scheduledDateTime.toLocaleDateString('th-TH')}`
     });
 
     await this.saveApplication(application);
@@ -579,7 +579,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('vdo_call_scheduled', {
       application,
       inspector: inspectorId,
-      scheduledDateTime,
+      scheduledDateTime
     });
 
     console.log(`📹 VDO Call scheduled: ${applicationId} at ${scheduledDateTime}`);
@@ -606,7 +606,7 @@ class GACPWorkflowEngine extends EventEmitter {
       inspectorId,
       completedAt: new Date(),
       findings,
-      onSiteRequired,
+      onSiteRequired
     });
 
     if (onSiteRequired) {
@@ -618,7 +618,7 @@ class GACPWorkflowEngine extends EventEmitter {
         timestamp: new Date(),
         actor: inspectorId,
         state: WORKFLOW_STATES.INSPECTION_ON_SITE,
-        note: 'VDO Call เสร็จแล้ว - ต้องลงพื้นที่ตรวจเพิ่มเติม',
+        note: 'VDO Call เสร็จแล้ว - ต้องลงพื้นที่ตรวจเพิ่มเติม'
       });
     } else if (completed) {
       // VDO Call sufficient
@@ -629,7 +629,7 @@ class GACPWorkflowEngine extends EventEmitter {
         timestamp: new Date(),
         actor: inspectorId,
         state: WORKFLOW_STATES.INSPECTION_COMPLETED,
-        note: 'การตรวจสอบเสร็จสิ้นด้วย VDO Call',
+        note: 'การตรวจสอบเสร็จสิ้นด้วย VDO Call'
       });
 
       // Auto-proceed to approval phase
@@ -644,7 +644,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('vdo_call_completed', {
       application,
       onSiteRequired,
-      findings,
+      findings
     });
 
     console.log(`📹 VDO Call completed: ${applicationId} - On-site required: ${onSiteRequired}`);
@@ -669,7 +669,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: inspectorId,
       state: WORKFLOW_STATES.INSPECTION_ON_SITE,
-      note: `นัดหมายตรวจพื้นที่จริง วันที่ ${scheduledDateTime.toLocaleDateString('th-TH')}`,
+      note: `นัดหมายตรวจพื้นที่จริง วันที่ ${scheduledDateTime.toLocaleDateString('th-TH')}`
     });
 
     await this.saveApplication(application);
@@ -677,7 +677,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('on_site_inspection_scheduled', {
       application,
       inspector: inspectorId,
-      scheduledDateTime,
+      scheduledDateTime
     });
 
     console.log(`🚗 On-site inspection scheduled: ${applicationId} at ${scheduledDateTime}`);
@@ -702,7 +702,7 @@ class GACPWorkflowEngine extends EventEmitter {
       findings,
       complianceScore,
       photos,
-      passed,
+      passed
     });
 
     application.history.push({
@@ -710,7 +710,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: inspectorId,
       state: WORKFLOW_STATES.INSPECTION_COMPLETED,
-      note: `การตรวจพื้นที่เสร็จสิ้น - คะแนน: ${complianceScore}%`,
+      note: `การตรวจพื้นที่เสร็จสิ้น - คะแนน: ${complianceScore}%`
     });
 
     application.updatedAt = new Date();
@@ -722,7 +722,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('on_site_inspection_completed', {
       application,
       complianceScore,
-      passed,
+      passed
     });
 
     console.log(`🚗 On-site inspection completed: ${applicationId} - Score: ${complianceScore}%`);
@@ -748,7 +748,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: 'SYSTEM',
       state: WORKFLOW_STATES.PENDING_APPROVAL,
-      note: 'ส่งเรื่องให้ผู้อนุมัติพิจารณา',
+      note: 'ส่งเรื่องให้ผู้อนุมัติพิจารณา'
     });
 
     await this.saveApplication(application);
@@ -786,7 +786,7 @@ class GACPWorkflowEngine extends EventEmitter {
         timestamp: new Date(),
         actor: approverId,
         state: WORKFLOW_STATES.APPROVED,
-        note: 'ใบสมัครได้รับการอนุมัติ - เตรียมออกใบรับรอง',
+        note: 'ใบสมัครได้รับการอนุมัติ - เตรียมออกใบรับรอง'
       });
 
       // Auto-generate certificate
@@ -802,7 +802,7 @@ class GACPWorkflowEngine extends EventEmitter {
         timestamp: new Date(),
         actor: approverId,
         state: WORKFLOW_STATES.REJECTED,
-        note: `ใบสมัครถูกปฏิเสธ: ${reason}`,
+        note: `ใบสมัครถูกปฏิเสธ: ${reason}`
       });
     }
 
@@ -811,7 +811,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('final_approval_decided', {
       application,
       approved,
-      reason,
+      reason
     });
 
     console.log(`✅ Final approval: ${applicationId} - ${approved ? 'APPROVED' : 'REJECTED'}`);
@@ -842,13 +842,13 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: 'SYSTEM',
       state: WORKFLOW_STATES.CERTIFICATE_GENERATING,
-      note: `กำลังสร้างใบรับรอง หมายเลข: ${certificateNumber}`,
+      note: `กำลังสร้างใบรับรอง หมายเลข: ${certificateNumber}`
     });
 
     await this.saveApplication(application);
 
     // Simulate async certificate generation
-    setTimeout(async () => {
+    setTimeout(async() => {
       await this.issueCertificate(applicationId);
     }, 2000); // 2 second delay
 
@@ -872,7 +872,7 @@ class GACPWorkflowEngine extends EventEmitter {
       timestamp: new Date(),
       actor: 'SYSTEM',
       state: WORKFLOW_STATES.CERTIFICATE_ISSUED,
-      note: `ใบรับรองออกเรียบร้อยแล้ว - หมายเลข: ${application.certificate.number}`,
+      note: `ใบรับรองออกเรียบร้อยแล้ว - หมายเลข: ${application.certificate.number}`
     });
 
     await this.saveApplication(application);
@@ -880,7 +880,7 @@ class GACPWorkflowEngine extends EventEmitter {
     this.emit('certificate_issued', {
       application,
       certificateNumber: application.certificate.number,
-      downloadUrl: application.certificate.downloadUrl,
+      downloadUrl: application.certificate.downloadUrl
     });
 
     console.log(`🎉 Certificate issued: ${applicationId} - ${application.certificate.number}`);
@@ -928,7 +928,7 @@ class GACPWorkflowEngine extends EventEmitter {
       'house_registration',
       'land_deed',
       'farm_map',
-      'water_source_permit',
+      'water_source_permit'
     ];
 
     return required.every(doc => documents && documents[doc]);
@@ -977,9 +977,9 @@ class GACPWorkflowEngine extends EventEmitter {
       byStep: {},
       payments: {
         phase1: { completed: 0, pending: 0, total: 0 },
-        phase2: { completed: 0, pending: 0, total: 0 },
+        phase2: { completed: 0, pending: 0, total: 0 }
       },
-      certificatesIssued: 0,
+      certificatesIssued: 0
     };
 
     applications.forEach(app => {
@@ -1036,5 +1036,5 @@ class GACPWorkflowEngine extends EventEmitter {
 module.exports = {
   GACPWorkflowEngine,
   WORKFLOW_STATES,
-  WORKFLOW_STEPS,
+  WORKFLOW_STEPS
 };

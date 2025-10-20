@@ -11,73 +11,73 @@ const cultivationCycleSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
     farmerId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
     farmerEmail: {
       type: String,
-      required: true,
+      required: true
     },
     farmId: {
       type: String,
-      required: false,
+      required: false
     },
     farmName: {
       type: String,
-      required: false,
+      required: false
     },
     cropType: {
       type: String,
       required: true,
-      enum: ['cannabis', 'hemp', 'medicinal_cannabis'],
+      enum: ['cannabis', 'hemp', 'medicinal_cannabis']
     },
     variety: {
       type: String,
-      required: true,
+      required: true
     },
     plantingDate: {
       type: Date,
-      required: true,
+      required: true
     },
     expectedHarvestDate: {
       type: Date,
-      required: false,
+      required: false
     },
     status: {
       type: String,
       required: true,
       enum: ['planning', 'active', 'harvesting', 'completed', 'cancelled'],
       default: 'planning',
-      index: true,
+      index: true
     },
     phase: {
       type: String,
       required: true,
       enum: ['germination', 'vegetative', 'flowering', 'harvest', 'post-harvest'],
-      default: 'germination',
+      default: 'germination'
     },
     area: {
       value: Number,
       unit: {
         type: String,
         enum: ['sqm', 'rai', 'hectare'],
-        default: 'rai',
-      },
+        default: 'rai'
+      }
     },
     plantCount: {
       type: Number,
-      required: false,
+      required: false
     },
     activities: [
       {
         id: String,
         type: {
           type: String,
-          enum: ['watering', 'fertilizing', 'pruning', 'pest_control', 'inspection', 'other'],
+          enum: ['watering', 'fertilizing', 'pruning', 'pest_control', 'inspection', 'other']
         },
         description: String,
         date: Date,
@@ -85,8 +85,8 @@ const cultivationCycleSchema = new mongoose.Schema(
         userName: String,
         notes: String,
         sopCompliance: Boolean,
-        recordedAt: Date,
-      },
+        recordedAt: Date
+      }
     ],
     complianceChecks: [
       {
@@ -96,7 +96,7 @@ const cultivationCycleSchema = new mongoose.Schema(
         checkDate: Date,
         checkType: {
           type: String,
-          enum: ['routine', 'spot_check', 'certification', 'follow_up'],
+          enum: ['routine', 'spot_check', 'certification', 'follow_up']
         },
         findings: [
           {
@@ -104,21 +104,21 @@ const cultivationCycleSchema = new mongoose.Schema(
             finding: String,
             severity: {
               type: String,
-              enum: ['minor', 'major', 'critical'],
+              enum: ['minor', 'major', 'critical']
             },
             status: {
               type: String,
-              enum: ['open', 'resolved', 'pending'],
-            },
-          },
+              enum: ['open', 'resolved', 'pending']
+            }
+          }
         ],
         overallCompliance: {
           type: String,
-          enum: ['compliant', 'non_compliant', 'partially_compliant'],
+          enum: ['compliant', 'non_compliant', 'partially_compliant']
         },
         notes: String,
-        recordedAt: Date,
-      },
+        recordedAt: Date
+      }
     ],
     complianceScore: {
       score: Number,
@@ -127,21 +127,21 @@ const cultivationCycleSchema = new mongoose.Schema(
         sopCompliance: Number,
         gacpStandards: Number,
         safetyProtocols: Number,
-        recordKeeping: Number,
-      },
+        recordKeeping: Number
+      }
     },
     harvestData: {
       harvestDate: Date,
       totalYield: Number,
       yieldUnit: {
         type: String,
-        enum: ['kg', 'ton', 'gram'],
+        enum: ['kg', 'ton', 'gram']
       },
       qualityGrade: {
         type: String,
-        enum: ['A', 'B', 'C', 'D'],
+        enum: ['A', 'B', 'C', 'D']
       },
-      notes: String,
+      notes: String
     },
     completionData: {
       completedDate: Date,
@@ -149,9 +149,9 @@ const cultivationCycleSchema = new mongoose.Schema(
       finalComplianceScore: Number,
       certification: {
         eligible: Boolean,
-        reason: String,
+        reason: String
       },
-      notes: String,
+      notes: String
     },
     metadata: {
       createdBy: String,
@@ -160,13 +160,13 @@ const cultivationCycleSchema = new mongoose.Schema(
       updatedAt: Date,
       version: {
         type: Number,
-        default: 1,
-      },
-    },
+        default: 1
+      }
+    }
   },
   {
     timestamps: true,
-    collection: 'cultivationcycles',
+    collection: 'cultivationcycles'
   }
 );
 
@@ -176,7 +176,7 @@ cultivationCycleSchema.index({ farmerId: 1, plantingDate: -1 });
 cultivationCycleSchema.index({ status: 1, phase: 1 });
 
 // Virtual for days since planting
-cultivationCycleSchema.virtual('daysSincePlanting').get(function () {
+cultivationCycleSchema.virtual('daysSincePlanting').get(function() {
   if (!this.plantingDate) return 0;
   const now = new Date();
   const diff = now - this.plantingDate;
@@ -184,12 +184,12 @@ cultivationCycleSchema.virtual('daysSincePlanting').get(function () {
 });
 
 // Instance method to check if cycle is active
-cultivationCycleSchema.methods.isActive = function () {
+cultivationCycleSchema.methods.isActive = function() {
   return this.status === 'active';
 };
 
 // Instance method to calculate compliance score
-cultivationCycleSchema.methods.calculateComplianceScore = function () {
+cultivationCycleSchema.methods.calculateComplianceScore = function() {
   if (!this.complianceChecks || this.complianceChecks.length === 0) {
     return null;
   }
@@ -211,10 +211,10 @@ cultivationCycleSchema.methods.calculateComplianceScore = function () {
 };
 
 // Static method to find active cycles for farmer
-cultivationCycleSchema.statics.findActiveCyclesForFarmer = function (farmerId) {
+cultivationCycleSchema.statics.findActiveCyclesForFarmer = function(farmerId) {
   return this.find({
     farmerId,
-    status: 'active',
+    status: 'active'
   }).sort({ plantingDate: -1 });
 };
 

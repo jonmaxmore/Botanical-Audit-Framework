@@ -60,7 +60,7 @@ app.get('/health', (req, res) => {
     service: 'auth-service',
     status: 'healthy',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
+    uptime: process.uptime()
   });
 });
 
@@ -73,8 +73,8 @@ app.get('/', (req, res) => {
     endpoints: {
       health: 'GET /health',
       auth: 'POST /api/auth/*',
-      docs: 'GET /api/docs (coming soon)',
-    },
+      docs: 'GET /api/docs (coming soon)'
+    }
   });
 });
 
@@ -91,7 +91,7 @@ app.use((req, res) => {
     success: false,
     error: 'NOT_FOUND',
     message: 'ไม่พบเส้นทาง API ที่คุณร้องขอ',
-    path: req.path,
+    path: req.path
   });
 });
 
@@ -106,7 +106,7 @@ app.use((err, req, res, next) => {
     success: false,
     error: err.code || 'INTERNAL_ERROR',
     message: errorMessage,
-    ...(config.isDevelopment && { stack: err.stack }),
+    ...(config.isDevelopment && { stack: err.stack })
   });
 });
 
@@ -147,7 +147,7 @@ async function startServer() {
     const shutdown = async signal => {
       console.log(`\n${signal} received. Starting graceful shutdown...`);
 
-      server.close(async () => {
+      server.close(async() => {
         console.log('✅ HTTP server closed');
 
         try {

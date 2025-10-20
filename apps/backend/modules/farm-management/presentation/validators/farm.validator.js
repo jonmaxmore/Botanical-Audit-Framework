@@ -18,7 +18,7 @@ const validate = (req, res, next) => {
     return res.status(400).json({
       success: false,
       message: 'Validation failed',
-      errors: errors.array(),
+      errors: errors.array()
     });
   }
   next();
@@ -105,7 +105,7 @@ const validateRegisterFarm = [
 
   body('waterSource').optional().trim(),
 
-  validate,
+  validate
 ];
 
 /**
@@ -174,7 +174,7 @@ const validateUpdateFarm = [
 
   body('waterSource').optional().trim(),
 
-  validate,
+  validate
 ];
 
 /**
@@ -187,7 +187,7 @@ const validateApproveFarm = [
     .isLength({ max: 1000 })
     .withMessage('Notes must not exceed 1000 characters'),
 
-  validate,
+  validate
 ];
 
 /**
@@ -201,12 +201,12 @@ const validateRejectFarm = [
     .isLength({ min: 10, max: 1000 })
     .withMessage('Rejection reason must be 10-1000 characters'),
 
-  validate,
+  validate
 ];
 
 module.exports = {
   validateRegisterFarm,
   validateUpdateFarm,
   validateApproveFarm,
-  validateRejectFarm,
+  validateRejectFarm
 };

@@ -40,32 +40,25 @@ try {
   };
 }
 
-let standardsEngine = null;
+let standardsService = null;
 
 /**
- * Initialize Standards Engine with database
+ * Initialize Standards Service with database
+ * Using standards-comparison module instead of old engine
  */
-function initializeEngine(db) {
-  const StandardsEngine = require(path.join(__dirname, '../../services/StandardsEngine'));
-  standardsEngine = new StandardsEngine(db);
-
-  // Load standards asynchronously
-  standardsEngine
-    .loadStandards()
-    .then(() => {
-      console.log('[Standards API] Engine initialized and standards loaded');
-    })
-    .catch(error => {
-      console.error('[Standards API] Error loading standards:', error);
-    });
+async function initializeEngine(db) {
+  const { initializeStandardsComparison } = require(path.join(__dirname, '../../modules/standards-comparison'));
+  const result = await initializeStandardsComparison(db, auth);
+  standardsService = result.service;
+  console.log('[Standards API] Service initialized from module');
 }
 
-// Middleware to check if engine is initialized
+// Middleware to check if service is initialized
 const checkEngineInitialized = (req, res, next) => {
-  if (!standardsEngine) {
+  if (!standardsService) {
     return res.status(503).json({
       success: false,
-      error: 'Standards engine not initialized. Please wait for database connection.',
+      error: 'Standards service not initialized. Please wait for database connection.'
     });
   }
   next();
@@ -84,8 +77,8 @@ router.get('/health', checkEngineInitialized, (req, res) => {
     success: true,
     service: 'Standards Comparison API',
     status: 'operational',
-    standardsLoaded: standardsEngine.standards.size,
-    timestamp: new Date().toISOString(),
+    standardsLoaded: standardsService.standards ? standardsService.standards.size : 0,
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -98,21 +91,21 @@ router.get('/health', checkEngineInitialized, (req, res) => {
  * Get list of all available certification standards
  * Public endpoint
  */
-router.get('/', checkEngineInitialized, async (req, res) => {
+router.get('/', checkEngineInitialized, async(req, res) => {
   try {
-    const standards = standardsEngine.getAvailableStandards();
+    const standards = standardsService.getAvailableStandards();
 
     res.json({
       success: true,
       count: standards.length,
-      standards,
+      standards
     });
   } catch (error) {
     console.error('[Standards API] List error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve standards',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -126,28 +119,28 @@ router.get('/', checkEngineInitialized, async (req, res) => {
  * Get detailed information about a specific standard
  * Public endpoint
  */
-router.get('/:id', checkEngineInitialized, async (req, res) => {
+router.get('/:id', checkEngineInitialized, async(req, res) => {
   try {
     const { id } = req.params;
-    const standard = standardsEngine.getStandard(id);
+    const standard = standardsService.getStandard(id);
 
     if (!standard) {
       return res.status(404).json({
         success: false,
-        error: `Standard not found: ${id}`,
+        error: `Standard not found: ${id}`
       });
     }
 
     res.json({
       success: true,
-      standard,
+      standard
     });
   } catch (error) {
     console.error('[Standards API] Get standard error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve standard',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -175,7 +168,7 @@ router.get('/:id', checkEngineInitialized, async (req, res) => {
  *   }
  * }
  */
-router.post('/compare', auth, checkEngineInitialized, async (req, res) => {
+router.post('/compare', auth, checkEngineInitialized, async(req, res) => {
   try {
     const { farmId, standardIds, farmData } = req.body;
 
@@ -183,22 +176,22 @@ router.post('/compare', auth, checkEngineInitialized, async (req, res) => {
     if (!farmId || !standardIds || !farmData) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: farmId, standardIds, farmData',
+        error: 'Missing required fields: farmId, standardIds, farmData'
       });
     }
 
     if (!Array.isArray(standardIds) || standardIds.length === 0) {
       return res.status(400).json({
         success: false,
-        error: 'standardIds must be a non-empty array',
+        error: 'standardIds must be a non-empty array'
       });
     }
 
     // Perform comparison
-    const result = await standardsEngine.compareAgainstStandards({
+    const result = await standardsService.compareAgainstStandards({
       farmId,
       standardIds,
-      farmData,
+      farmData
     });
 
     if (!result.success) {
@@ -213,15 +206,15 @@ router.post('/compare', auth, checkEngineInitialized, async (req, res) => {
       summary: {
         standardsCompared: result.results.length,
         certified: result.results.filter(r => r.certified).length,
-        notCertified: result.results.filter(r => !r.certified).length,
-      },
+        notCertified: result.results.filter(r => !r.certified).length
+      }
     });
   } catch (error) {
     console.error('[Standards API] Comparison error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to complete comparison',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -235,19 +228,19 @@ router.post('/compare', auth, checkEngineInitialized, async (req, res) => {
  * Retrieve saved comparison results
  * Requires: Authentication
  */
-router.get('/comparison/:id', auth, checkEngineInitialized, async (req, res) => {
+router.get('/comparison/:id', auth, checkEngineInitialized, async(req, res) => {
   try {
     const { id } = req.params;
     const { ObjectId } = require('mongodb');
 
-    const comparison = await standardsEngine.comparisons.findOne({
-      _id: new ObjectId(id),
+    const comparison = await standardsService.comparisons.findOne({
+      _id: new ObjectId(id)
     });
 
     if (!comparison) {
       return res.status(404).json({
         success: false,
-        error: 'Comparison not found',
+        error: 'Comparison not found'
       });
     }
 
@@ -258,15 +251,15 @@ router.get('/comparison/:id', auth, checkEngineInitialized, async (req, res) => 
         farmId: comparison.farmId,
         farmData: comparison.farmData,
         results: comparison.comparisons,
-        createdAt: comparison.createdAt,
-      },
+        createdAt: comparison.createdAt
+      }
     });
   } catch (error) {
     console.error('[Standards API] Get comparison error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve comparison',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -280,11 +273,11 @@ router.get('/comparison/:id', auth, checkEngineInitialized, async (req, res) => 
  * Analyze gaps and identify areas for improvement
  * Requires: Authentication
  */
-router.get('/gaps/:comparisonId', auth, checkEngineInitialized, async (req, res) => {
+router.get('/gaps/:comparisonId', auth, checkEngineInitialized, async(req, res) => {
   try {
     const { comparisonId } = req.params;
 
-    const result = await standardsEngine.analyzeGaps({ comparisonId });
+    const result = await standardsService.analyzeGaps({ comparisonId });
 
     if (!result.success) {
       return res.status(404).json(result);
@@ -297,15 +290,15 @@ router.get('/gaps/:comparisonId', auth, checkEngineInitialized, async (req, res)
         totalGaps: result.gapCount,
         priority: result.priority,
         gaps: result.gaps,
-        topRecommendations: result.recommendations,
-      },
+        topRecommendations: result.recommendations
+      }
     });
   } catch (error) {
     console.error('[Standards API] Gap analysis error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to analyze gaps',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -319,12 +312,12 @@ router.get('/gaps/:comparisonId', auth, checkEngineInitialized, async (req, res)
  * Get comparison history for a farm
  * Requires: Authentication
  */
-router.get('/history/:farmId', auth, checkEngineInitialized, async (req, res) => {
+router.get('/history/:farmId', auth, checkEngineInitialized, async(req, res) => {
   try {
     const { farmId } = req.params;
     const limit = parseInt(req.query.limit) || 10;
 
-    const result = await standardsEngine.getComparisonHistory(farmId, limit);
+    const result = await standardsService.getComparisonHistory(farmId, limit);
 
     if (!result.success) {
       return res.status(500).json(result);
@@ -334,14 +327,14 @@ router.get('/history/:farmId', auth, checkEngineInitialized, async (req, res) =>
       success: true,
       farmId,
       historyCount: result.count,
-      comparisons: result.comparisons,
+      comparisons: result.comparisons
     });
   } catch (error) {
     console.error('[Standards API] History error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve history',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -355,11 +348,11 @@ router.get('/history/:farmId', auth, checkEngineInitialized, async (req, res) =>
  * Get detailed recommendations for improvement
  * Requires: Authentication
  */
-router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async (req, res) => {
+router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async(req, res) => {
   try {
     const { comparisonId } = req.params;
 
-    const result = await standardsEngine.analyzeGaps({ comparisonId });
+    const result = await standardsService.analyzeGaps({ comparisonId });
 
     if (!result.success) {
       return res.status(404).json(result);
@@ -369,7 +362,7 @@ router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async
     const groupedRecommendations = {
       critical: result.recommendations.filter(r => r.priority === 'Critical'),
       important: result.recommendations.filter(r => r.priority === 'Important'),
-      optional: result.recommendations.filter(r => r.priority === 'Optional'),
+      optional: result.recommendations.filter(r => r.priority === 'Optional')
     };
 
     res.json({
@@ -381,15 +374,15 @@ router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async
         total: result.recommendations.length,
         critical: groupedRecommendations.critical.length,
         important: groupedRecommendations.important.length,
-        optional: groupedRecommendations.optional.length,
-      },
+        optional: groupedRecommendations.optional.length
+      }
     });
   } catch (error) {
     console.error('[Standards API] Recommendations error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to generate recommendations',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -400,5 +393,5 @@ router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async
 
 module.exports = {
   router,
-  initializeEngine,
+  initializeEngine
 };

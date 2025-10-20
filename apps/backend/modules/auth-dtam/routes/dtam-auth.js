@@ -29,9 +29,9 @@ router.post(
   [
     body('username').notEmpty().withMessage('กรุณากรอกชื่อผู้ใช้'),
     body('password').notEmpty().withMessage('กรุณากรอกรหัสผ่าน'),
-    body('userType').equals('DTAM_STAFF').withMessage('ประเภทผู้ใช้ไม่ถูกต้อง'),
+    body('userType').equals('DTAM_STAFF').withMessage('ประเภทผู้ใช้ไม่ถูกต้อง')
   ],
-  async (req, res) => {
+  async(req, res) => {
     try {
       // Validate request
       const errors = validationResult(req);
@@ -58,7 +58,7 @@ router.post(
       // Find staff user by username or email
       const staff = await DTAMStaff.findOne({
         $or: [{ username: username }, { email: username }],
-        userType: 'DTAM_STAFF',
+        userType: 'DTAM_STAFF'
       });
 
       if (!staff) {
@@ -113,7 +113,7 @@ router.post(
           email: staff.email,
           userType: 'DTAM_STAFF',
           role: staff.role,
-          department: staff.department,
+          department: staff.department
         },
         dtamJwtSecret,
         { expiresIn: '8h' } // Shorter session for security
@@ -133,8 +133,8 @@ router.post(
             lastName: staff.lastName,
             userType: 'DTAM_STAFF',
             role: staff.role,
-            department: staff.department,
-          },
+            department: staff.department
+          }
         },
         'เข้าสู่ระบบสำเร็จ'
       );
@@ -195,8 +195,8 @@ router.get('/verify', (req, res) => {
         email: decoded.email,
         userType: decoded.userType,
         role: decoded.role,
-        department: decoded.department,
-      },
+        department: decoded.department
+      }
     });
   } catch (error) {
     if (error.name === 'JsonWebTokenError') {
@@ -223,7 +223,7 @@ router.get('/verify', (req, res) => {
  * @desc Get DTAM staff profile
  * @access Private (DTAM staff only)
  */
-router.get('/profile', middleware.dtamAuth, async (req, res) => {
+router.get('/profile', middleware.dtamAuth, async(req, res) => {
   try {
     const staff = await DTAMStaff.findById(req.user.userId).select('-password');
 
@@ -242,7 +242,7 @@ router.get('/profile', middleware.dtamAuth, async (req, res) => {
       department: staff.department,
       isActive: staff.isActive,
       lastLoginAt: staff.lastLoginAt,
-      createdAt: staff.createdAt,
+      createdAt: staff.createdAt
     });
   } catch (error) {
     logger.error('Get DTAM profile error:', error);
@@ -259,7 +259,7 @@ router.get('/profile', middleware.dtamAuth, async (req, res) => {
  * @desc Get list of DTAM staff (admin only)
  * @access Private (DTAM admin only)
  */
-router.get('/staff-list', middleware.dtamAuth, middleware.requireDTAMAdmin, async (req, res) => {
+router.get('/staff-list', middleware.dtamAuth, middleware.requireDTAMAdmin, async(req, res) => {
   try {
     const staffList = await DTAMStaff.find().select('-password').sort({ createdAt: -1 });
 
@@ -275,8 +275,8 @@ router.get('/staff-list', middleware.dtamAuth, middleware.requireDTAMAdmin, asyn
         department: staff.department,
         isActive: staff.isActive,
         createdAt: staff.createdAt,
-        lastLoginAt: staff.lastLoginAt,
-      })),
+        lastLoginAt: staff.lastLoginAt
+      }))
     });
   } catch (error) {
     logger.error('Get DTAM staff list error:', error);
@@ -308,9 +308,9 @@ router.post(
     body('lastName').notEmpty().withMessage('กรุณาใส่นามสกุล'),
     body('role')
       .isIn(['admin', 'reviewer', 'manager', 'inspector'])
-      .withMessage('ตำแหน่งไม่ถูกต้อง'),
+      .withMessage('ตำแหน่งไม่ถูกต้อง')
   ],
-  async (req, res) => {
+  async(req, res) => {
     try {
       // Validate request
       const errors = validationResult(req);
@@ -327,7 +327,7 @@ router.post(
 
       // Check if username or email already exists
       const existingStaff = await DTAMStaff.findOne({
-        $or: [{ username }, { email }],
+        $or: [{ username }, { email }]
       });
 
       if (existingStaff) {
@@ -348,7 +348,7 @@ router.post(
         userType: 'DTAM_STAFF',
         role,
         department: department || 'กรมส่งเสริมการเกษตร',
-        isActive: true,
+        isActive: true
       });
 
       await newStaff.save();
@@ -364,7 +364,7 @@ router.post(
           firstName: newStaff.firstName,
           lastName: newStaff.lastName,
           role: newStaff.role,
-          department: newStaff.department,
+          department: newStaff.department
         },
         'สร้างบัญชีเจ้าหน้าที่สำเร็จ',
         shared.constants.statusCodes.CREATED
@@ -385,7 +385,7 @@ router.post(
  * @desc Health check for DTAM auth
  * @access Public
  */
-router.get('/health', async (req, res) => {
+router.get('/health', async(req, res) => {
   try {
     const staffCount = await DTAMStaff.countDocuments();
     const activeCount = await DTAMStaff.countDocuments({ isActive: true });
@@ -395,14 +395,14 @@ router.get('/health', async (req, res) => {
       status: 'healthy',
       staffCount,
       activeStaffCount: activeCount,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   } catch (error) {
     res.status(500).json({
       service: 'auth-dtam',
       status: 'unhealthy',
       error: error.message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 });

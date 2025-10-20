@@ -18,7 +18,7 @@ class AuthController {
     requestPasswordResetUseCase,
     resetPasswordUseCase,
     getUserProfileUseCase,
-    updateUserProfileUseCase,
+    updateUserProfileUseCase
   }) {
     this.registerUserUseCase = registerUserUseCase;
     this.loginUserUseCase = loginUserUseCase;
@@ -45,7 +45,7 @@ class AuthController {
         farmName: req.body.farmName,
         province: req.body.province,
         district: req.body.district,
-        subDistrict: req.body.subDistrict,
+        subDistrict: req.body.subDistrict
       });
 
       return res.status(201).json({
@@ -54,8 +54,8 @@ class AuthController {
         data: {
           userId: result.user.id,
           email: result.user.email,
-          verificationToken: result.verificationToken,
-        },
+          verificationToken: result.verificationToken
+        }
       });
     } catch (error) {
       console.error('Registration error:', error);
@@ -63,20 +63,20 @@ class AuthController {
       if (error.message.includes('already exists')) {
         return res.status(409).json({
           success: false,
-          message: error.message,
+          message: error.message
         });
       }
 
       if (error.message.includes('Invalid') || error.message.includes('required')) {
         return res.status(400).json({
           success: false,
-          message: error.message,
+          message: error.message
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Registration failed. Please try again.',
+        message: 'Registration failed. Please try again.'
       });
     }
   }
@@ -91,7 +91,7 @@ class AuthController {
         email: req.body.email,
         password: req.body.password,
         ipAddress: req.ip,
-        userAgent: req.get('user-agent'),
+        userAgent: req.get('user-agent')
       });
 
       return res.status(200).json({
@@ -105,9 +105,9 @@ class AuthController {
             firstName: result.user.firstName,
             lastName: result.user.lastName,
             farmName: result.user.farmName,
-            status: result.user.status,
-          },
-        },
+            status: result.user.status
+          }
+        }
       });
     } catch (error) {
       console.error('Login error:', error);
@@ -115,34 +115,34 @@ class AuthController {
       if (error.message.includes('Invalid credentials')) {
         return res.status(401).json({
           success: false,
-          message: 'Invalid email or password',
+          message: 'Invalid email or password'
         });
       }
 
       if (error.message.includes('locked')) {
         return res.status(403).json({
           success: false,
-          message: error.message,
+          message: error.message
         });
       }
 
       if (error.message.includes('not verified')) {
         return res.status(403).json({
           success: false,
-          message: 'Please verify your email before logging in',
+          message: 'Please verify your email before logging in'
         });
       }
 
       if (error.message.includes('suspended') || error.message.includes('inactive')) {
         return res.status(403).json({
           success: false,
-          message: 'Your account is not active. Please contact support.',
+          message: 'Your account is not active. Please contact support.'
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Login failed. Please try again.',
+        message: 'Login failed. Please try again.'
       });
     }
   }
@@ -162,8 +162,8 @@ class AuthController {
         message: 'Email verified successfully',
         data: {
           userId: result.user.id,
-          email: result.user.email,
-        },
+          email: result.user.email
+        }
       });
     } catch (error) {
       console.error('Email verification error:', error);
@@ -171,20 +171,20 @@ class AuthController {
       if (error.message.includes('not found') || error.message.includes('Invalid')) {
         return res.status(404).json({
           success: false,
-          message: 'Invalid or expired verification token',
+          message: 'Invalid or expired verification token'
         });
       }
 
       if (error.message.includes('already verified')) {
         return res.status(400).json({
           success: false,
-          message: 'Email is already verified',
+          message: 'Email is already verified'
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Email verification failed. Please try again.',
+        message: 'Email verification failed. Please try again.'
       });
     }
   }
@@ -202,7 +202,7 @@ class AuthController {
       // Always return success to prevent email enumeration
       return res.status(200).json({
         success: true,
-        message: 'If an account with that email exists, a password reset link has been sent.',
+        message: 'If an account with that email exists, a password reset link has been sent.'
       });
     } catch (error) {
       console.error('Password reset request error:', error);
@@ -210,7 +210,7 @@ class AuthController {
       // Always return success to prevent email enumeration
       return res.status(200).json({
         success: true,
-        message: 'If an account with that email exists, a password reset link has been sent.',
+        message: 'If an account with that email exists, a password reset link has been sent.'
       });
     }
   }
@@ -225,12 +225,12 @@ class AuthController {
 
       await this.resetPasswordUseCase.execute({
         token,
-        newPassword,
+        newPassword
       });
 
       return res.status(200).json({
         success: true,
-        message: 'Password reset successful. You can now login with your new password.',
+        message: 'Password reset successful. You can now login with your new password.'
       });
     } catch (error) {
       console.error('Password reset error:', error);
@@ -242,20 +242,20 @@ class AuthController {
       ) {
         return res.status(404).json({
           success: false,
-          message: 'Invalid or expired reset token',
+          message: 'Invalid or expired reset token'
         });
       }
 
       if (error.message.includes('weak') || error.message.includes('requirements')) {
         return res.status(400).json({
           success: false,
-          message: error.message,
+          message: error.message
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Password reset failed. Please try again.',
+        message: 'Password reset failed. Please try again.'
       });
     }
   }
@@ -272,7 +272,7 @@ class AuthController {
 
       return res.status(200).json({
         success: true,
-        data: user,
+        data: user
       });
     } catch (error) {
       console.error('Get profile error:', error);
@@ -280,13 +280,13 @@ class AuthController {
       if (error.message.includes('not found')) {
         return res.status(404).json({
           success: false,
-          message: 'User not found',
+          message: 'User not found'
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to retrieve profile',
+        message: 'Failed to retrieve profile'
       });
     }
   }
@@ -312,14 +312,14 @@ class AuthController {
           district: req.body.district,
           subDistrict: req.body.subDistrict,
           postalCode: req.body.postalCode,
-          address: req.body.address,
-        },
+          address: req.body.address
+        }
       });
 
       return res.status(200).json({
         success: true,
         message: 'Profile updated successfully',
-        data: user,
+        data: user
       });
     } catch (error) {
       console.error('Update profile error:', error);
@@ -327,27 +327,27 @@ class AuthController {
       if (error.message.includes('not found')) {
         return res.status(404).json({
           success: false,
-          message: 'User not found',
+          message: 'User not found'
         });
       }
 
       if (error.message.includes('not active')) {
         return res.status(403).json({
           success: false,
-          message: 'Cannot update profile. Account is not active.',
+          message: 'Cannot update profile. Account is not active.'
         });
       }
 
       if (error.message.includes('Invalid') || error.message.includes('required')) {
         return res.status(400).json({
           success: false,
-          message: error.message,
+          message: error.message
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Profile update failed. Please try again.',
+        message: 'Profile update failed. Please try again.'
       });
     }
   }

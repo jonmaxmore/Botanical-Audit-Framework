@@ -115,7 +115,7 @@ class ReportHelper {
       requestedBy: userId,
       requestedByType: userType,
       parameters: { farmId },
-      schedule: Report.SCHEDULE.ONCE,
+      schedule: Report.SCHEDULE.ONCE
     });
   }
 
@@ -131,7 +131,7 @@ class ReportHelper {
       requestedBy: userId,
       requestedByType: userType,
       parameters: { farmerId },
-      schedule: Report.SCHEDULE.ONCE,
+      schedule: Report.SCHEDULE.ONCE
     });
   }
 
@@ -147,7 +147,7 @@ class ReportHelper {
       requestedBy: userId,
       requestedByType: userType,
       parameters: { farmerId },
-      schedule: Report.SCHEDULE.ONCE,
+      schedule: Report.SCHEDULE.ONCE
     });
   }
 
@@ -163,7 +163,7 @@ class ReportHelper {
       requestedBy: userId,
       requestedByType: 'dtam',
       parameters: { year, month },
-      schedule: Report.SCHEDULE.ONCE,
+      schedule: Report.SCHEDULE.ONCE
     });
   }
 
@@ -179,7 +179,7 @@ class ReportHelper {
       requestedBy: userId,
       requestedByType: 'dtam',
       filters: filters,
-      schedule: Report.SCHEDULE.ONCE,
+      schedule: Report.SCHEDULE.ONCE
     });
   }
 

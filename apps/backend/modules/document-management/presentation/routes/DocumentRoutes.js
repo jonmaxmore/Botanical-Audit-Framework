@@ -110,7 +110,7 @@ class DocumentRoutes {
         require('express-validator')
           .param('id')
           .isMongoId()
-          .withMessage('Valid application ID is required'),
+          .withMessage('Valid application ID is required')
       ],
       controller.getApplicationDocuments.bind(controller)
     );
@@ -144,14 +144,14 @@ class DocumentRoutes {
         success: false,
         error: 'UPLOAD_RATE_LIMIT',
         message: 'Too many upload requests, please try again later',
-        retryAfter: 15 * 60, // seconds
+        retryAfter: 15 * 60 // seconds
       },
       standardHeaders: true,
       legacyHeaders: false,
       keyGenerator: req => {
         // Rate limit per user, not IP for authenticated requests
         return req.userId || req.ip;
-      },
+      }
     });
   }
 
@@ -167,7 +167,7 @@ class DocumentRoutes {
         success: false,
         error: 'DOWNLOAD_RATE_LIMIT',
         message: 'Too many download requests, please try again later',
-        retryAfter: 5 * 60, // seconds
+        retryAfter: 5 * 60 // seconds
       },
       keyGenerator: req => {
         return req.userId || req.ip;
@@ -175,7 +175,7 @@ class DocumentRoutes {
       skip: req => {
         // Skip rate limiting for admins
         return req.userRole === 'DTAM_ADMIN';
-      },
+      }
     });
   }
 
@@ -191,7 +191,7 @@ class DocumentRoutes {
         return res.status(400).json({
           success: false,
           error: 'FILE_TOO_LARGE',
-          message: 'File size exceeds the maximum limit of 50MB',
+          message: 'File size exceeds the maximum limit of 50MB'
         });
       }
 
@@ -199,7 +199,7 @@ class DocumentRoutes {
         return res.status(400).json({
           success: false,
           error: 'TOO_MANY_FILES',
-          message: 'Only one file can be uploaded at a time',
+          message: 'Only one file can be uploaded at a time'
         });
       }
 
@@ -207,14 +207,14 @@ class DocumentRoutes {
         return res.status(400).json({
           success: false,
           error: 'INVALID_FILE_TYPE',
-          message: error.message,
+          message: error.message
         });
       }
 
       return res.status(400).json({
         success: false,
         error: 'UPLOAD_ERROR',
-        message: 'Error uploading file',
+        message: 'Error uploading file'
       });
     }
 
@@ -237,7 +237,7 @@ class DocumentRoutes {
         return res.status(404).json({
           success: false,
           error: 'DOCUMENT_NOT_FOUND',
-          message: 'Document not found',
+          message: 'Document not found'
         });
       }
 
@@ -251,7 +251,7 @@ class DocumentRoutes {
         return res.status(403).json({
           success: false,
           error: 'ACCESS_DENIED',
-          message: 'You do not have permission to access this document',
+          message: 'You do not have permission to access this document'
         });
       }
 
@@ -268,7 +268,7 @@ class DocumentRoutes {
       res.status(500).json({
         success: false,
         error: 'THUMBNAIL_ERROR',
-        message: 'Error retrieving thumbnail',
+        message: 'Error retrieving thumbnail'
       });
     }
   }
@@ -288,7 +288,7 @@ class DocumentRoutes {
         return res.status(400).json({
           success: false,
           error: 'INVALID_EMAILS',
-          message: 'Valid email addresses are required',
+          message: 'Valid email addresses are required'
         });
       }
 
@@ -298,7 +298,7 @@ class DocumentRoutes {
         return res.status(404).json({
           success: false,
           error: 'DOCUMENT_NOT_FOUND',
-          message: 'Document not found',
+          message: 'Document not found'
         });
       }
 
@@ -307,7 +307,7 @@ class DocumentRoutes {
         return res.status(403).json({
           success: false,
           error: 'SHARE_PERMISSION_DENIED',
-          message: 'You can only share documents you uploaded',
+          message: 'You can only share documents you uploaded'
         });
       }
 
@@ -319,7 +319,7 @@ class DocumentRoutes {
             sharedBy: userId,
             sharedWith: email,
             permissions: permissions || ['view'],
-            expiryDate: new Date(Date.now() + expiryHours * 60 * 60 * 1000),
+            expiryDate: new Date(Date.now() + expiryHours * 60 * 60 * 1000)
           });
           return { email, token };
         })
@@ -331,7 +331,7 @@ class DocumentRoutes {
           document,
           sharedBy: userId,
           shareTokens,
-          message: req.body.message,
+          message: req.body.message
         });
       }
 
@@ -341,15 +341,15 @@ class DocumentRoutes {
         data: {
           sharedWith: emails,
           expiryDate: new Date(Date.now() + expiryHours * 60 * 60 * 1000),
-          shareCount: shareTokens.length,
-        },
+          shareCount: shareTokens.length
+        }
       });
     } catch (error) {
       console.error('[DocumentRoutes] Share error:', error);
       res.status(500).json({
         success: false,
         error: 'SHARE_ERROR',
-        message: 'Error sharing document',
+        message: 'Error sharing document'
       });
     }
   }
@@ -365,39 +365,39 @@ class DocumentRoutes {
       // Calculate date range
       let startDate;
       switch (period) {
-        case '7d':
-          startDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-          break;
-        case '30d':
-          startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
-          break;
-        case '90d':
-          startDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
-          break;
-        default:
-          startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+      case '7d':
+        startDate = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case '30d':
+        startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      case '90d':
+        startDate = new Date(Date.now() - 90 * 24 * 60 * 60 * 1000);
+        break;
+      default:
+        startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
       }
 
       // Get statistics from repository
       const stats = await this.documentController.documentRepository.getStatistics({
         startDate,
         endDate: new Date(),
-        documentType: type,
+        documentType: type
       });
 
       res.status(200).json({
         success: true,
         data: {
           period,
-          statistics: stats,
-        },
+          statistics: stats
+        }
       });
     } catch (error) {
       console.error('[DocumentRoutes] Stats error:', error);
       res.status(500).json({
         success: false,
         error: 'STATS_ERROR',
-        message: 'Error retrieving document statistics',
+        message: 'Error retrieving document statistics'
       });
     }
   }
@@ -414,7 +414,7 @@ class DocumentRoutes {
       'image/png': '/assets/thumbnails/image.svg',
       'application/msword': '/assets/thumbnails/doc.svg',
       'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
-        '/assets/thumbnails/doc.svg',
+        '/assets/thumbnails/doc.svg'
     };
 
     return thumbnailMap[mimeType] || '/assets/thumbnails/file.svg';
@@ -434,7 +434,7 @@ class DocumentRoutes {
       success: false,
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred',
-      ...(stack && { stack }),
+      ...(stack && { stack })
     });
   }
 

@@ -41,7 +41,7 @@ class RequestSurveyRevisionUseCase {
         reviewedAt: updatedSurvey.reviewedAt,
         reviewNotes: null,
         rejectionReason: null,
-        revisionNotes: updatedSurvey.revisionNotes,
+        revisionNotes: updatedSurvey.revisionNotes
       })
     );
 

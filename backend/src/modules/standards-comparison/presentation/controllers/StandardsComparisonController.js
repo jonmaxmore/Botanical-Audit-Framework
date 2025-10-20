@@ -80,7 +80,7 @@ class StandardsComparisonController {
       this.logger.info('Standards comparison creation request received', {
         userId: req.user?.id,
         farmId: req.body?.farmId,
-        comparisonName: req.body?.comparisonName,
+        comparisonName: req.body?.comparisonName
       });
 
       // Input validation
@@ -109,7 +109,7 @@ class StandardsComparisonController {
       // Execute business logic
       const comparisonData = {
         ...req.body,
-        createdBy: req.user.id,
+        createdBy: req.user.id
       };
 
       const createdComparison =
@@ -121,7 +121,7 @@ class StandardsComparisonController {
       this.logger.info('Standards comparison created successfully', {
         comparisonId: createdComparison.id,
         farmId: createdComparison.farmId,
-        createdBy: req.user.id,
+        createdBy: req.user.id
       });
 
       return this.sendSuccessResponse(
@@ -129,7 +129,7 @@ class StandardsComparisonController {
         201,
         {
           comparison: createdComparison,
-          nextSteps: nextSteps,
+          nextSteps: nextSteps
         },
         'Standards comparison created successfully'
       );
@@ -171,7 +171,7 @@ class StandardsComparisonController {
       this.logger.info('Standards comparison retrieval request', {
         comparisonId,
         userId: req.user?.id,
-        options: { includeLatestData, includeProgress, includeRecommendations, format },
+        options: { includeLatestData, includeProgress, includeRecommendations, format }
       });
 
       // Validate comparison ID
@@ -185,7 +185,7 @@ class StandardsComparisonController {
         {
           includeLatestData,
           includeProgress,
-          includeRecommendations,
+          includeRecommendations
         }
       );
 
@@ -210,7 +210,7 @@ class StandardsComparisonController {
       this.logger.info('Standards comparison retrieved successfully', {
         comparisonId,
         farmId: comparisonData.farmId,
-        status: comparisonData.status,
+        status: comparisonData.status
       });
 
       return this.sendSuccessResponse(
@@ -252,7 +252,7 @@ class StandardsComparisonController {
       this.logger.info('Comparison configuration update request', {
         comparisonId,
         userId: req.user?.id,
-        updateFields: Object.keys(updateData),
+        updateFields: Object.keys(updateData)
       });
 
       // Validate input
@@ -304,7 +304,7 @@ class StandardsComparisonController {
       this.logger.info('Comparison configuration updated successfully', {
         comparisonId,
         version: updatedComparison.version,
-        updatedBy: req.user.id,
+        updatedBy: req.user.id
       });
 
       return this.sendSuccessResponse(
@@ -361,7 +361,7 @@ class StandardsComparisonController {
       this.logger.info('Data collection request', {
         comparisonId,
         userId: req.user?.id,
-        options: collectionOptions,
+        options: collectionOptions
       });
 
       // Validate comparison exists and is in correct state
@@ -410,7 +410,7 @@ class StandardsComparisonController {
 
       this.logger.info('Data collection started successfully', {
         comparisonId,
-        estimatedCompletion,
+        estimatedCompletion
       });
 
       return this.sendSuccessResponse(
@@ -420,7 +420,7 @@ class StandardsComparisonController {
           comparison: collectionResult,
           collectionStatus: 'started',
           estimatedCompletion,
-          progressEndpoint: `/api/standards-comparisons/${comparisonId}/progress`,
+          progressEndpoint: `/api/standards-comparisons/${comparisonId}/progress`
         },
         'Data collection started successfully'
       );
@@ -472,7 +472,7 @@ class StandardsComparisonController {
         comparisonId,
         userId: req.user?.id,
         analysisOptions,
-        reportOptions,
+        reportOptions
       });
 
       // Validate comparison exists and is ready for analysis
@@ -492,7 +492,7 @@ class StandardsComparisonController {
           'Comparison is not ready for analysis',
           {
             currentStatus: comparison.status,
-            requiredStatus: 'data_collected',
+            requiredStatus: 'data_collected'
           }
         );
       }
@@ -520,7 +520,7 @@ class StandardsComparisonController {
       this.logger.info('Standards analysis completed successfully', {
         comparisonId,
         overallScore: analysisResult.overallComplianceScore,
-        criticalGaps: analysisResult.criticalGapsCount,
+        criticalGaps: analysisResult.criticalGapsCount
       });
 
       return this.sendSuccessResponse(
@@ -531,8 +531,8 @@ class StandardsComparisonController {
           analysisSummary,
           nextSteps: {
             availableActions: ['generate_report', 'export_data', 'create_action_plan'],
-            recommendations: 'Review analysis results and generate improvement report',
-          },
+            recommendations: 'Review analysis results and generate improvement report'
+          }
         },
         'Standards analysis completed successfully'
       );
@@ -580,14 +580,14 @@ class StandardsComparisonController {
         includeMetrics = false,
         includeTrends = false,
         sort = 'createdDate',
-        order = 'desc',
+        order = 'desc'
       } = req.query;
 
       this.logger.info('Farm standards comparisons request', {
         farmId,
         userId: req.user?.id,
         filters: { status, dateFrom, dateTo },
-        pagination: { page, limit },
+        pagination: { page, limit }
       });
 
       // Validate farm ID
@@ -615,7 +615,7 @@ class StandardsComparisonController {
         dateTo,
         includeMetrics: includeMetrics === 'true',
         includeTrends: includeTrends === 'true',
-        sort: { [sort]: order === 'asc' ? 1 : -1 },
+        sort: { [sort]: order === 'asc' ? 1 : -1 }
       };
 
       // Get comparisons data
@@ -627,7 +627,7 @@ class StandardsComparisonController {
       this.logger.info('Farm standards comparisons retrieved successfully', {
         farmId,
         count: comparisonsData.comparisons.length,
-        totalCount: comparisonsData.pagination.totalCount,
+        totalCount: comparisonsData.pagination.totalCount
       });
 
       return this.sendSuccessResponse(
@@ -672,7 +672,7 @@ class StandardsComparisonController {
       this.logger.info('Improvement report generation request', {
         comparisonId,
         userId: req.user?.id,
-        reportOptions,
+        reportOptions
       });
 
       // Validate comparison exists and is completed
@@ -724,7 +724,7 @@ class StandardsComparisonController {
       this.logger.info('Improvement report generated successfully', {
         comparisonId,
         reportId: report.id,
-        format: report.format,
+        format: report.format
       });
 
       // Return report info and download URL
@@ -739,10 +739,10 @@ class StandardsComparisonController {
             language: report.language,
             generatedDate: report.generatedDate,
             pageCount: report.pageCount,
-            fileSize: report.fileSize,
+            fileSize: report.fileSize
           },
           downloadUrl: `/api/standards-comparisons/${comparisonId}/reports/${report.id}/download`,
-          expiresAt: report.expiresAt,
+          expiresAt: report.expiresAt
         },
         'Improvement report generated successfully'
       );
@@ -770,7 +770,7 @@ class StandardsComparisonController {
 
       this.logger.info('Comparison progress request', {
         comparisonId,
-        userId: req.user?.id,
+        userId: req.user?.id
       });
 
       // Get comparison with progress info
@@ -803,11 +803,11 @@ class StandardsComparisonController {
           configuration: comparison.status !== 'draft' ? 100 : 50,
           dataCollection: this.calculateDataCollectionProgress(comparison),
           analysis: this.calculateAnalysisProgress(comparison),
-          reporting: this.calculateReportingProgress(comparison),
+          reporting: this.calculateReportingProgress(comparison)
         },
         estimatedCompletion: this.calculateEstimatedCompletion(comparison),
         lastActivity: comparison.lastAnalysisDate || comparison.createdDate,
-        nextSteps: this.generateProgressNextSteps(comparison),
+        nextSteps: this.generateProgressNextSteps(comparison)
       };
 
       return this.sendSuccessResponse(
@@ -936,23 +936,23 @@ class StandardsComparisonController {
 
   formatComparisonData(comparison, format) {
     switch (format) {
-      case 'summary':
-        return {
-          id: comparison.id,
-          comparisonName: comparison.comparisonName,
-          status: comparison.status,
-          overallComplianceScore: comparison.overallComplianceScore,
-          createdDate: comparison.createdDate,
-        };
-      case 'full':
-        return comparison;
-      default: // detailed
-        return {
-          ...comparison,
-          // Remove large data objects for better performance
-          currentPractices: undefined,
-          detailedReports: undefined,
-        };
+    case 'summary':
+      return {
+        id: comparison.id,
+        comparisonName: comparison.comparisonName,
+        status: comparison.status,
+        overallComplianceScore: comparison.overallComplianceScore,
+        createdDate: comparison.createdDate
+      };
+    case 'full':
+      return comparison;
+    default: // detailed
+      return {
+        ...comparison,
+        // Remove large data objects for better performance
+        currentPractices: undefined,
+        detailedReports: undefined
+      };
     }
   }
 
@@ -961,7 +961,7 @@ class StandardsComparisonController {
       currentPhase: 'configuration',
       nextAction: 'collect_data',
       description: 'Configure comparison parameters and collect current practices data',
-      estimatedTime: '2-4 hours',
+      estimatedTime: '2-4 hours'
     };
   }
 
@@ -976,24 +976,24 @@ class StandardsComparisonController {
       overallScore: analysisResult.overallComplianceScore,
       criticalGaps: analysisResult.criticalGapsCount,
       improvementOpportunities: analysisResult.improvementOpportunities,
-      completedDate: analysisResult.completedDate,
+      completedDate: analysisResult.completedDate
     };
   }
 
   calculateOverallProgress(comparison) {
     switch (comparison.status) {
-      case 'draft':
-      case 'configuring':
-        return 25;
-      case 'collecting_data':
-      case 'data_collected':
-        return 50;
-      case 'analyzing':
-        return 75;
-      case 'completed':
-        return 100;
-      default:
-        return 0;
+    case 'draft':
+    case 'configuring':
+      return 25;
+    case 'collecting_data':
+    case 'data_collected':
+      return 50;
+    case 'analyzing':
+      return 75;
+    case 'completed':
+      return 100;
+    default:
+      return 0;
     }
   }
 
@@ -1018,18 +1018,18 @@ class StandardsComparisonController {
     let hoursToAdd = 0;
 
     switch (comparison.status) {
-      case 'draft':
-      case 'configuring':
-        hoursToAdd = 8;
-        break;
-      case 'collecting_data':
-        hoursToAdd = 4;
-        break;
-      case 'analyzing':
-        hoursToAdd = 2;
-        break;
-      default:
-        hoursToAdd = 0;
+    case 'draft':
+    case 'configuring':
+      hoursToAdd = 8;
+      break;
+    case 'collecting_data':
+      hoursToAdd = 4;
+      break;
+    case 'analyzing':
+      hoursToAdd = 2;
+      break;
+    default:
+      hoursToAdd = 0;
     }
 
     return new Date(now.getTime() + hoursToAdd * 60 * 60 * 1000);
@@ -1037,18 +1037,18 @@ class StandardsComparisonController {
 
   generateProgressNextSteps(comparison) {
     switch (comparison.status) {
-      case 'draft':
-        return 'Complete comparison configuration';
-      case 'collecting_data':
-        return 'Data collection in progress';
-      case 'data_collected':
-        return 'Ready for analysis';
-      case 'analyzing':
-        return 'Analysis in progress';
-      case 'completed':
-        return 'Generate reports or create action plan';
-      default:
-        return 'Configure comparison parameters';
+    case 'draft':
+      return 'Complete comparison configuration';
+    case 'collecting_data':
+      return 'Data collection in progress';
+    case 'data_collected':
+      return 'Ready for analysis';
+    case 'analyzing':
+      return 'Analysis in progress';
+    case 'completed':
+      return 'Generate reports or create action plan';
+    default:
+      return 'Configure comparison parameters';
     }
   }
 
@@ -1061,7 +1061,7 @@ class StandardsComparisonController {
       success: true,
       data: data,
       message: message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 
@@ -1071,9 +1071,9 @@ class StandardsComparisonController {
       error: {
         code: errorCode,
         message: message,
-        details: details,
+        details: details
       },
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     return res.status(statusCode).json(errorResponse);

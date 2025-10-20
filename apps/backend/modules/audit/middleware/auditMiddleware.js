@@ -25,10 +25,10 @@ function createAuditMiddleware(auditModule) {
       entityType = null,
       getEntityId = null,
       enabled = true,
-      excludePaths = [],
+      excludePaths = []
     } = options;
 
-    return async (req, res, next) => {
+    return async(req, res, next) => {
       // Skip if disabled or path is excluded
       if (!enabled || excludePaths.some(path => req.path.includes(path))) {
         return next();
@@ -38,7 +38,7 @@ function createAuditMiddleware(auditModule) {
       const originalJson = res.json;
 
       // Override json method to capture response
-      res.json = function (data) {
+      res.json = function(data) {
         // Restore original json method
         res.json = originalJson;
 
@@ -48,7 +48,7 @@ function createAuditMiddleware(auditModule) {
         logFromRequest(req, actionType, entityType, entityId, {
           responseStatus: res.statusCode,
           responseMessage: data?.message,
-          success: res.statusCode < 400,
+          success: res.statusCode < 400
         }).catch(error => {
           console.error('Audit middleware error:', error);
         });
@@ -75,14 +75,14 @@ function createAuditHelpers(auditModule) {
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.USER_LOGIN,
         entityType: ENTITY_TYPE.USER,
-        getEntityId: req => req.user?.userId,
+        getEntityId: req => req.user?.userId
       }),
 
     auditUserRegister: () =>
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.USER_REGISTER,
         entityType: ENTITY_TYPE.USER,
-        getEntityId: (req, res, data) => data?.data?.id,
+        getEntityId: (req, res, data) => data?.data?.id
       }),
 
     // Farm actions
@@ -90,28 +90,28 @@ function createAuditHelpers(auditModule) {
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.FARM_CREATE,
         entityType: ENTITY_TYPE.FARM,
-        getEntityId: (req, res, data) => data?.data?.id,
+        getEntityId: (req, res, data) => data?.data?.id
       }),
 
     auditFarmUpdate: () =>
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.FARM_UPDATE,
         entityType: ENTITY_TYPE.FARM,
-        getEntityId: req => req.params.id,
+        getEntityId: req => req.params.id
       }),
 
     auditFarmApprove: () =>
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.FARM_APPROVE,
         entityType: ENTITY_TYPE.FARM,
-        getEntityId: req => req.params.id,
+        getEntityId: req => req.params.id
       }),
 
     auditFarmReject: () =>
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.FARM_REJECT,
         entityType: ENTITY_TYPE.FARM,
-        getEntityId: req => req.params.id,
+        getEntityId: req => req.params.id
       }),
 
     // Survey actions
@@ -119,21 +119,21 @@ function createAuditHelpers(auditModule) {
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.SURVEY_CREATE,
         entityType: ENTITY_TYPE.SURVEY,
-        getEntityId: (req, res, data) => data?.data?.id,
+        getEntityId: (req, res, data) => data?.data?.id
       }),
 
     auditSurveyUpdate: () =>
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.SURVEY_UPDATE,
         entityType: ENTITY_TYPE.SURVEY,
-        getEntityId: req => req.params.id,
+        getEntityId: req => req.params.id
       }),
 
     auditSurveyApprove: () =>
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.SURVEY_APPROVE,
         entityType: ENTITY_TYPE.SURVEY,
-        getEntityId: req => req.params.id,
+        getEntityId: req => req.params.id
       }),
 
     // Certificate actions
@@ -141,17 +141,17 @@ function createAuditHelpers(auditModule) {
       createAuditMiddleware(auditModule)({
         actionType: ACTION_TYPE.CERTIFICATE_ISSUE,
         entityType: ENTITY_TYPE.CERTIFICATE,
-        getEntityId: (req, res, data) => data?.data?.id,
+        getEntityId: (req, res, data) => data?.data?.id
       }),
 
     // Generic action logger
-    logAction: async (actionType, entityType, entityId, additionalData = {}) => {
+    logAction: async(actionType, entityType, entityId, additionalData = {}) => {
       return logFromRequest(null, actionType, entityType, entityId, additionalData);
-    },
+    }
   };
 }
 
 module.exports = {
   createAuditMiddleware,
-  createAuditHelpers,
+  createAuditHelpers
 };

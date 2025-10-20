@@ -3,16 +3,16 @@ module.exports = {
   env: {
     browser: true,
     es6: true,
-    node: true,
+    node: true
   },
   parserOptions: {
     ecmaVersion: 2020,
-    sourceType: 'module',
+    sourceType: 'module'
   },
   rules: {
     'no-unused-vars': 'warn',
     'no-console': 'warn',
-    'no-undef': 'error',
+    'no-undef': 'error'
   },
-  ignorePatterns: ['node_modules/', '.next/', 'dist/'],
+  ignorePatterns: ['node_modules/', '.next/', 'dist/']
 };

@@ -38,7 +38,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     qualityAssuranceService,
     notificationService,
     auditService,
-    logger,
+    logger
   }) {
     super();
 
@@ -64,7 +64,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentVerification: true,
         qualityChecks: ['identity_verification', 'document_authenticity'],
         validationRules: ['valid_id_number', 'name_matching', 'address_verification'],
-        expirationTracking: true,
+        expirationTracking: true
       },
 
       LAND_OWNERSHIP: {
@@ -76,7 +76,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentVerification: true,
         qualityChecks: ['document_authenticity', 'legal_validity'],
         validationRules: ['valid_deed_number', 'area_matching', 'ownership_verification'],
-        expirationTracking: false,
+        expirationTracking: false
       },
 
       FARM_REGISTRATION: {
@@ -88,7 +88,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentVerification: true,
         qualityChecks: ['certificate_authenticity', 'registration_validity'],
         validationRules: ['valid_registration_number', 'farm_details_matching'],
-        expirationTracking: true,
+        expirationTracking: true
       },
 
       CULTIVATION_PLAN: {
@@ -100,7 +100,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentVerification: false,
         qualityChecks: ['completeness_check', 'technical_review'],
         validationRules: ['plan_completeness', 'technical_feasibility'],
-        expirationTracking: false,
+        expirationTracking: false
       },
 
       SOIL_TEST_REPORT: {
@@ -112,7 +112,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentVerification: false,
         qualityChecks: ['report_authenticity', 'lab_certification'],
         validationRules: ['certified_lab', 'recent_report', 'parameter_completeness'],
-        expirationTracking: true,
+        expirationTracking: true
       },
 
       WATER_SOURCE_PERMIT: {
@@ -124,7 +124,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentVerification: true,
         qualityChecks: ['permit_validity', 'authority_verification'],
         validationRules: ['valid_permit_number', 'authority_issued'],
-        expirationTracking: true,
+        expirationTracking: true
       },
 
       ENVIRONMENTAL_ASSESSMENT: {
@@ -136,7 +136,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentVerification: true,
         qualityChecks: ['assessment_completeness', 'expert_certification'],
         validationRules: ['certified_assessor', 'methodology_compliance'],
-        expirationTracking: true,
+        expirationTracking: true
       },
 
       SUPPORTING_DOCUMENTS: {
@@ -148,8 +148,8 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentVerification: false,
         qualityChecks: ['relevance_check'],
         validationRules: ['document_relevance'],
-        expirationTracking: false,
-      },
+        expirationTracking: false
+      }
     };
 
     // Document processing states
@@ -158,98 +158,98 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         description: 'Document uploaded to system',
         nextStates: ['PROCESSING', 'REJECTED'],
         autoProcessing: true,
-        requiredActions: ['virus_scan', 'format_validation'],
+        requiredActions: ['virus_scan', 'format_validation']
       },
       PROCESSING: {
         description: 'Document being processed (OCR, validation)',
         nextStates: ['VALIDATED', 'VALIDATION_FAILED'],
         autoProcessing: true,
-        requiredActions: ['ocr_processing', 'metadata_extraction', 'initial_validation'],
+        requiredActions: ['ocr_processing', 'metadata_extraction', 'initial_validation']
       },
       VALIDATED: {
         description: 'Document passed initial validation',
         nextStates: ['UNDER_REVIEW', 'QUALITY_CHECK'],
         autoProcessing: false,
-        requiredActions: ['human_review_scheduled', 'quality_assurance_queued'],
+        requiredActions: ['human_review_scheduled', 'quality_assurance_queued']
       },
       UNDER_REVIEW: {
         description: 'Document under human review',
         nextStates: ['APPROVED', 'REJECTED', 'REVISION_REQUIRED'],
         autoProcessing: false,
-        requiredActions: ['reviewer_assigned', 'review_deadline_set'],
+        requiredActions: ['reviewer_assigned', 'review_deadline_set']
       },
       QUALITY_CHECK: {
         description: 'Document undergoing quality assurance',
         nextStates: ['QA_PASSED', 'QA_FAILED'],
         autoProcessing: true,
-        requiredActions: ['automated_quality_checks', 'compliance_verification'],
+        requiredActions: ['automated_quality_checks', 'compliance_verification']
       },
       QA_PASSED: {
         description: 'Document passed quality assurance',
         nextStates: ['GOVERNMENT_SUBMISSION', 'APPROVED'],
         autoProcessing: true,
-        requiredActions: ['government_api_check', 'final_approval_queue'],
+        requiredActions: ['government_api_check', 'final_approval_queue']
       },
       GOVERNMENT_SUBMISSION: {
         description: 'Document submitted to government API',
         nextStates: ['GOVERNMENT_VERIFIED', 'GOVERNMENT_REJECTED'],
         autoProcessing: true,
-        requiredActions: ['api_submission', 'verification_tracking'],
+        requiredActions: ['api_submission', 'verification_tracking']
       },
       GOVERNMENT_VERIFIED: {
         description: 'Document verified by government system',
         nextStates: ['APPROVED'],
         autoProcessing: true,
-        requiredActions: ['final_approval', 'notification_sent'],
+        requiredActions: ['final_approval', 'notification_sent']
       },
       APPROVED: {
         description: 'Document approved and ready for use',
         nextStates: ['ARCHIVED'],
         autoProcessing: false,
-        requiredActions: ['approval_notification', 'application_progress_update'],
+        requiredActions: ['approval_notification', 'application_progress_update']
       },
       REJECTED: {
         description: 'Document rejected',
         nextStates: ['RESUBMISSION'],
         autoProcessing: false,
-        requiredActions: ['rejection_notification', 'feedback_provided'],
+        requiredActions: ['rejection_notification', 'feedback_provided']
       },
       VALIDATION_FAILED: {
         description: 'Document failed validation',
         nextStates: ['RESUBMISSION'],
         autoProcessing: true,
-        requiredActions: ['validation_report_generated', 'farmer_notification'],
+        requiredActions: ['validation_report_generated', 'farmer_notification']
       },
       QA_FAILED: {
         description: 'Document failed quality assurance',
         nextStates: ['RESUBMISSION'],
         autoProcessing: true,
-        requiredActions: ['qa_report_generated', 'improvement_suggestions'],
+        requiredActions: ['qa_report_generated', 'improvement_suggestions']
       },
       GOVERNMENT_REJECTED: {
         description: 'Document rejected by government system',
         nextStates: ['RESUBMISSION'],
         autoProcessing: true,
-        requiredActions: ['government_feedback_processed', 'correction_guidelines'],
+        requiredActions: ['government_feedback_processed', 'correction_guidelines']
       },
       REVISION_REQUIRED: {
         description: 'Document requires revision',
         nextStates: ['RESUBMISSION'],
         autoProcessing: false,
-        requiredActions: ['revision_instructions', 'deadline_notification'],
+        requiredActions: ['revision_instructions', 'deadline_notification']
       },
       RESUBMISSION: {
         description: 'Document available for resubmission',
         nextStates: ['UPLOADED'],
         autoProcessing: false,
-        requiredActions: ['resubmission_window_opened', 'farmer_guidance'],
+        requiredActions: ['resubmission_window_opened', 'farmer_guidance']
       },
       ARCHIVED: {
         description: 'Document archived for long-term storage',
         nextStates: ['RETRIEVAL'],
         autoProcessing: true,
-        requiredActions: ['archival_processing', 'metadata_indexed'],
-      },
+        requiredActions: ['archival_processing', 'metadata_indexed']
+      }
     };
 
     // Performance metrics
@@ -259,7 +259,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       qualityScores: {},
       governmentApiCalls: 0,
       ocrAccuracyRates: {},
-      validationSuccessRates: {},
+      validationSuccessRates: {}
     };
 
     // Initialize service
@@ -299,7 +299,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         governmentIntegration: documentRequirements.governmentIntegration,
         deadlines: documentRequirements.deadlines,
         createdAt: new Date(),
-        operationId,
+        operationId
       };
 
       // Initialize document tracking
@@ -311,7 +311,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       // Initialize quality assurance protocols
       await this.qualityAssuranceService.initializeDocumentQA(applicationId, {
         qualityStandards: workflowConfig.qualityStandards,
-        complianceFramework: 'GACP_2025',
+        complianceFramework: 'GACP_2025'
       });
 
       // Create audit record
@@ -320,7 +320,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         documentRequirements,
         workflowConfig,
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       this.logger.info(
@@ -333,9 +333,9 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
           applicationId,
           documentRequirements,
           workflowConfig,
-          processingTime: Date.now() - startTime,
+          processingTime: Date.now() - startTime
         },
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -386,7 +386,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         versionId,
         uploadedBy: uploadedBy.userId,
         securityLevel: 'HIGH',
-        encryption: true,
+        encryption: true
       });
 
       // Create document record
@@ -406,8 +406,8 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
             actor: uploadedBy.userId,
             actorRole: uploadedBy.role,
             notes: 'Document uploaded',
-            operationId,
-          },
+            operationId
+          }
         ],
         storageReference: storageResult.storageId,
         uploadedBy: uploadedBy.userId,
@@ -418,17 +418,17 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
           validationCompleted: false,
           qualityCheckCompleted: false,
           governmentSubmissionRequired: typeConfig.governmentVerification,
-          governmentSubmissionCompleted: false,
+          governmentSubmissionCompleted: false
         },
         metadata: {
           originalFileName: fileData.originalName,
           uploadSource: 'WEB_PORTAL',
           checksums: {
             md5: storageResult.checksums.md5,
-            sha256: storageResult.checksums.sha256,
-          },
+            sha256: storageResult.checksums.sha256
+          }
         },
-        operationId,
+        operationId
       };
 
       // Save document record
@@ -446,7 +446,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         this._performSecurityScan(savedDocument),
 
         // Metadata extraction
-        this._extractMetadata(savedDocument),
+        this._extractMetadata(savedDocument)
       ];
 
       // Execute processing pipeline
@@ -470,14 +470,14 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         fileData: {
           fileName: fileData.originalName,
           size: fileData.size,
-          mimeType: fileData.mimeType,
+          mimeType: fileData.mimeType
         },
         processingResults: processingResults.map(r => ({
           status: r.status,
-          success: r.status === 'fulfilled',
+          success: r.status === 'fulfilled'
         })),
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       // Send upload notifications
@@ -492,7 +492,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         applicationId,
         documentType,
         uploadedBy,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       this.logger.info(
@@ -502,7 +502,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       return {
         success: true,
         data: updatedDocument,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -517,7 +517,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         uploadedBy: uploadedBy?.userId,
         error: error.message,
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       throw error;
@@ -589,7 +589,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         transitionData,
         stateProcessingResults,
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       // Send state transition notifications
@@ -608,7 +608,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         fromState: currentState,
         toState: targetState,
         actor,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       this.logger.info(
@@ -620,9 +620,9 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         data: {
           document: updatedDocument,
           stateProcessingResults,
-          processingTime: Date.now() - startTime,
+          processingTime: Date.now() - startTime
         },
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -636,7 +636,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         actor: actor?.userId,
         error: error.message,
         operationId,
-        processingTime: Date.now() - startTime,
+        processingTime: Date.now() - startTime
       });
 
       throw error;
@@ -667,7 +667,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         this._getDocumentCompletionAnalysis(documents, requirements),
         this._getDocumentQualityAnalysis(documents),
         this._getProcessingTimeAnalysis(documents),
-        this._getGovernmentVerificationStatus(documents),
+        this._getGovernmentVerificationStatus(documents)
       ];
 
       const analyticsResults = await Promise.allSettled(analyticsPromises);
@@ -691,7 +691,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         ),
         lastUpdated: new Date(),
         processingTime: Date.now() - startTime,
-        operationId,
+        operationId
       };
 
       // Update performance metrics
@@ -704,7 +704,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       return {
         success: true,
         data: documentStatus,
-        operationId,
+        operationId
       };
     } catch (error) {
       this.logger.error(
@@ -727,12 +727,12 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
           ocrProcessing: await this._checkServiceHealth(this.ocrProcessingService),
           documentValidation: await this._checkServiceHealth(this.documentValidationService),
           governmentApi: await this._checkServiceHealth(this.governmentDocumentApi),
-          qualityAssurance: await this._checkServiceHealth(this.qualityAssuranceService),
+          qualityAssurance: await this._checkServiceHealth(this.qualityAssuranceService)
         },
         performanceMetrics: { ...this.performanceMetrics },
         processingQueues: await this._getProcessingQueueStatus(),
         storageMetrics: await this._getStorageMetrics(),
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       // Calculate health score
@@ -750,7 +750,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
 
       return {
         success: true,
-        data: systemHealth,
+        data: systemHealth
       };
     } catch (error) {
       this.logger.error('[DocumentManagementIntegration] Health check failed:', error);
@@ -760,8 +760,8 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         error: error.message,
         data: {
           overallStatus: 'ERROR',
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       };
     }
   }
@@ -787,7 +787,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       qualityScores: {},
       governmentApiCalls: 0,
       ocrAccuracyRates: {},
-      validationSuccessRates: {},
+      validationSuccessRates: {}
     };
   }
 
@@ -838,7 +838,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       processingRules: {},
       qualityStandards: {},
       governmentIntegration: {},
-      deadlines: {},
+      deadlines: {}
     };
 
     // Add cultivation-specific requirements
@@ -874,7 +874,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       JPG: ['image/jpeg'],
       PNG: ['image/png'],
       DOC: ['application/msword'],
-      DOCX: ['application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+      DOCX: ['application/vnd.openxmlformats-officedocument.wordprocessingml.document']
     };
 
     const allowedMimeTypes = typeConfig.formats.flatMap(format => validMimeTypes[format] || []);
@@ -888,7 +888,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       return await this.ocrProcessingService.processDocument(document.documentId, {
         language: 'th+en',
         outputFormat: 'structured',
-        confidenceThreshold: 0.8,
+        confidenceThreshold: 0.8
       });
     }
     return null;
@@ -898,7 +898,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     if (this.documentValidationService) {
       return await this.documentValidationService.validateDocument(document.documentId, {
         validationRules: typeConfig.validationRules,
-        qualityChecks: typeConfig.qualityChecks,
+        qualityChecks: typeConfig.qualityChecks
       });
     }
     return { valid: true, issues: [] };
@@ -910,7 +910,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       virusScanResult: 'CLEAN',
       malwareDetected: false,
       suspiciousContent: false,
-      securityScore: 100,
+      securityScore: 100
     };
   }
 
@@ -920,7 +920,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       extractedText: '',
       documentStructure: {},
       technicalMetadata: {},
-      businessMetadata: {},
+      businessMetadata: {}
     };
   }
 
@@ -931,8 +931,8 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
         ocr: this._extractSettledResult(processingResults[0]),
         validation: this._extractSettledResult(processingResults[1]),
         securityScan: this._extractSettledResult(processingResults[2]),
-        metadata: this._extractSettledResult(processingResults[3]),
-      },
+        metadata: this._extractSettledResult(processingResults[3])
+      }
     };
 
     // Update processing flags
@@ -965,7 +965,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       nextState,
       {
         notes: 'Automated workflow routing',
-        automated: true,
+        automated: true
       },
       { userId: 'SYSTEM', role: 'SYSTEM' }
     );
@@ -981,7 +981,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
       );
       return {
         error: settledPromise.reason.message,
-        status: 'failed',
+        status: 'failed'
       };
     }
     return null;
@@ -1010,7 +1010,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
           module: 'DOCUMENT_MANAGEMENT_INTEGRATION',
           action,
           data,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
     } catch (error) {
@@ -1026,7 +1026,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
           documentId: documentData.documentId,
           applicationId: documentData.applicationId,
           recipients: this._determineDocumentNotificationRecipients(type, documentData),
-          data: documentData,
+          data: documentData
         });
       }
     } catch (error) {

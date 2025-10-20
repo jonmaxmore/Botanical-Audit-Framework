@@ -22,10 +22,10 @@ const authLimiter = rateLimit({
   message: {
     success: false,
     message: 'Too many authentication attempts, please try again later',
-    retryAfter: 15 * 60,
+    retryAfter: 15 * 60
   },
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 
 const loginLimiter = rateLimit({
@@ -34,8 +34,8 @@ const loginLimiter = rateLimit({
   message: {
     success: false,
     message: 'Too many login attempts, please try again later',
-    retryAfter: 15 * 60,
-  },
+    retryAfter: 15 * 60
+  }
 });
 
 /**
@@ -46,13 +46,13 @@ const generateToken = user => {
     userId: user._id,
     email: user.email,
     role: user.role,
-    permissions: user.permissions,
+    permissions: user.permissions
   };
 
   return jwt.sign(payload, process.env.JWT_SECRET || 'default-secret', {
     expiresIn: '24h',
     issuer: 'gacp-platform',
-    audience: 'gacp-users',
+    audience: 'gacp-users'
   });
 };
 
@@ -62,12 +62,12 @@ const generateToken = user => {
 const generateRefreshToken = user => {
   const payload = {
     userId: user._id,
-    type: 'refresh',
+    type: 'refresh'
   };
 
   return jwt.sign(payload, process.env.JWT_REFRESH_SECRET || 'default-refresh-secret', {
     expiresIn: '7d',
-    issuer: 'gacp-platform',
+    issuer: 'gacp-platform'
   });
 };
 
@@ -79,12 +79,12 @@ router.post(
   '/register',
   authLimiter,
   validateUserRegistration,
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const { email, password, fullName, phone, nationalId, role, ...roleSpecificData } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({
-      $or: [{ email: email.toLowerCase() }, { nationalId }],
+      $or: [{ email: email.toLowerCase() }, { nationalId }]
     });
 
     if (existingUser) {
@@ -106,7 +106,7 @@ router.post(
       nationalId,
       role,
       registrationSource: 'web',
-      ...roleSpecificData,
+      ...roleSpecificData
     };
 
     const user = new User(userData);
@@ -125,7 +125,7 @@ router.post(
       userId: user._id,
       email: user.email,
       role: user.role,
-      registrationSource: 'web',
+      registrationSource: 'web'
     });
 
     // TODO: Send verification email
@@ -138,14 +138,14 @@ router.post(
         tokens: {
           accessToken,
           refreshToken,
-          expiresIn: '24h',
+          expiresIn: '24h'
         },
         nextSteps: [
           'Verify your email address',
           'Complete your profile',
-          'Read platform guidelines',
-        ],
-      },
+          'Read platform guidelines'
+        ]
+      }
     });
   })
 );
@@ -159,15 +159,15 @@ router.post(
   loginLimiter,
   validateRequest({
     email: 'required|email',
-    password: 'required|string|min:8',
+    password: 'required|string|min:8'
   }),
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const { email, password, rememberMe = false } = req.body;
 
     // Find user with password
     const user = await User.findOne({
       email: email.toLowerCase(),
-      isActive: true,
+      isActive: true
     }).select('+password');
 
     if (!user) {
@@ -192,7 +192,7 @@ router.post(
         email: user.email,
         ip: req.ip,
         userAgent: req.get('User-Agent'),
-        attempts: user.loginAttempts + 1,
+        attempts: user.loginAttempts + 1
       });
 
       return sendError.authentication(res, 'Invalid email or password');
@@ -223,7 +223,7 @@ router.post(
       email: user.email,
       role: user.role,
       ip: req.ip,
-      rememberMe,
+      rememberMe
     });
 
     res.json({
@@ -234,9 +234,9 @@ router.post(
         tokens: {
           accessToken,
           refreshToken,
-          expiresIn,
-        },
-      },
+          expiresIn
+        }
+      }
     });
   })
 );
@@ -248,9 +248,9 @@ router.post(
 router.post(
   '/refresh',
   validateRequest({
-    refreshToken: 'required|string',
+    refreshToken: 'required|string'
   }),
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const { refreshToken } = req.body;
 
     try {
@@ -277,13 +277,13 @@ router.post(
         message: 'Token refreshed successfully',
         data: {
           accessToken,
-          expiresIn: '24h',
-        },
+          expiresIn: '24h'
+        }
       });
     } catch (error) {
       logger.warn('Invalid refresh token', {
         error: error.message,
-        ip: req.ip,
+        ip: req.ip
       });
 
       return sendError.authentication(res, 'Invalid refresh token');
@@ -298,18 +298,18 @@ router.post(
 router.post(
   '/logout',
   authenticate,
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     // In a production system, you would blacklist the token
     // For now, we just log the logout
 
     logger.info('User logged out', {
       userId: req.user.id,
-      email: req.user.email,
+      email: req.user.email
     });
 
     res.json({
       success: true,
-      message: 'Logout successful',
+      message: 'Logout successful'
     });
   })
 );
@@ -321,7 +321,7 @@ router.post(
 router.get(
   '/me',
   authenticate,
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -333,8 +333,8 @@ router.get(
       data: {
         user: user.toPublicProfile(),
         permissions: user.permissions,
-        profileCompleteness: user.profileCompleteness,
-      },
+        profileCompleteness: user.profileCompleteness
+      }
     });
   })
 );
@@ -349,9 +349,9 @@ router.put(
   validateRequest({
     fullName: 'string|min:2|max:100',
     phone: 'string|regex:/^[\+]?[0-9\-\(\)\s]+$/',
-    notifications: 'object',
+    notifications: 'object'
   }),
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -379,15 +379,15 @@ router.put(
 
     logger.info('User profile updated', {
       userId: user._id,
-      updatedFields: Object.keys(req.body),
+      updatedFields: Object.keys(req.body)
     });
 
     res.json({
       success: true,
       message: 'Profile updated successfully',
       data: {
-        user: user.toPublicProfile(),
-      },
+        user: user.toPublicProfile()
+      }
     });
   })
 );
@@ -403,9 +403,9 @@ router.post(
   validateRequest({
     currentPassword: 'required|string',
     newPassword:
-      'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/',
+      'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/'
   }),
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const { currentPassword, newPassword } = req.body;
 
     const user = await User.findById(req.user.id).select('+password');
@@ -420,7 +420,7 @@ router.post(
     if (!isCurrentPasswordValid) {
       logger.warn('Failed password change attempt', {
         userId: user._id,
-        ip: req.ip,
+        ip: req.ip
       });
 
       return sendError.authentication(res, 'Current password is incorrect');
@@ -432,12 +432,12 @@ router.post(
 
     logger.info('Password changed', {
       userId: user._id,
-      ip: req.ip,
+      ip: req.ip
     });
 
     res.json({
       success: true,
-      message: 'Password changed successfully',
+      message: 'Password changed successfully'
     });
   })
 );
@@ -450,21 +450,21 @@ router.post(
   '/forgot-password',
   authLimiter,
   validateRequest({
-    email: 'required|email',
+    email: 'required|email'
   }),
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const { email } = req.body;
 
     const user = await User.findOne({
       email: email.toLowerCase(),
-      isActive: true,
+      isActive: true
     });
 
     // Always return success to prevent email enumeration
     if (!user) {
       return res.json({
         success: true,
-        message: 'If the email exists, a password reset link has been sent',
+        message: 'If the email exists, a password reset link has been sent'
       });
     }
 
@@ -475,14 +475,14 @@ router.post(
     logger.info('Password reset requested', {
       userId: user._id,
       email: user.email,
-      ip: req.ip,
+      ip: req.ip
     });
 
     // TODO: Send password reset email
 
     res.json({
       success: true,
-      message: 'If the email exists, a password reset link has been sent',
+      message: 'If the email exists, a password reset link has been sent'
     });
   })
 );
@@ -497,9 +497,9 @@ router.post(
   validateRequest({
     token: 'required|string',
     newPassword:
-      'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/',
+      'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/'
   }),
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const { token, newPassword } = req.body;
 
     // Hash the token to match stored version
@@ -508,7 +508,7 @@ router.post(
     const user = await User.findOne({
       passwordResetToken: hashedToken,
       passwordResetExpires: { $gt: Date.now() },
-      isActive: true,
+      isActive: true
     });
 
     if (!user) {
@@ -526,12 +526,12 @@ router.post(
 
     logger.info('Password reset completed', {
       userId: user._id,
-      ip: req.ip,
+      ip: req.ip
     });
 
     res.json({
       success: true,
-      message: 'Password reset successfully',
+      message: 'Password reset successfully'
     });
   })
 );
@@ -543,9 +543,9 @@ router.post(
 router.post(
   '/verify-email',
   validateRequest({
-    token: 'required|string',
+    token: 'required|string'
   }),
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const { token } = req.body;
 
     // Hash the token to match stored version
@@ -553,7 +553,7 @@ router.post(
 
     const user = await User.findOne({
       emailVerificationToken: hashedToken,
-      emailVerificationExpires: { $gt: Date.now() },
+      emailVerificationExpires: { $gt: Date.now() }
     });
 
     if (!user) {
@@ -569,12 +569,12 @@ router.post(
 
     logger.info('Email verified', {
       userId: user._id,
-      email: user.email,
+      email: user.email
     });
 
     res.json({
       success: true,
-      message: 'Email verified successfully',
+      message: 'Email verified successfully'
     });
   })
 );
@@ -587,7 +587,7 @@ router.post(
   '/resend-verification',
   authenticate,
   authLimiter,
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -604,14 +604,14 @@ router.post(
 
     logger.info('Email verification resent', {
       userId: user._id,
-      email: user.email,
+      email: user.email
     });
 
     // TODO: Send verification email
 
     res.json({
       success: true,
-      message: 'Verification email sent',
+      message: 'Verification email sent'
     });
   })
 );
@@ -623,7 +623,7 @@ router.post(
 router.get(
   '/login-history',
   authenticate,
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const user = await User.findById(req.user.id).select('loginHistory lastLogin');
 
     if (!user) {
@@ -634,8 +634,8 @@ router.get(
       success: true,
       data: {
         loginHistory: user.loginHistory,
-        lastLogin: user.lastLogin,
-      },
+        lastLogin: user.lastLogin
+      }
     });
   })
 );
@@ -649,7 +649,7 @@ router.post(
   authenticate,
   authorize(['admin', 'dtam_officer']),
   rateLimitSensitive(24 * 60 * 60 * 1000, 3), // 3 per day
-  handleAsync(async (req, res) => {
+  handleAsync(async(req, res) => {
     const user = await User.findById(req.user.id);
 
     if (!user) {
@@ -662,7 +662,7 @@ router.post(
 
     logger.info('API key generated', {
       userId: user._id,
-      keyExpiry: user.apiKeyExpiry,
+      keyExpiry: user.apiKeyExpiry
     });
 
     res.json({
@@ -670,8 +670,8 @@ router.post(
       message: 'API key generated successfully',
       data: {
         apiKey,
-        expiresAt: user.apiKeyExpiry,
-      },
+        expiresAt: user.apiKeyExpiry
+      }
     });
   })
 );

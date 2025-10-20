@@ -57,7 +57,7 @@ class DocumentManagementModule {
       // Initialize presentation layer
       const controllerDependencies = {
         ...this.dependencies,
-        documentManagementService: this.service,
+        documentManagementService: this.service
       };
 
       this.controller = new DocumentController(controllerDependencies);
@@ -132,7 +132,7 @@ class DocumentManagementModule {
         module: 'DocumentManagement',
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        components: {},
+        components: {}
       };
 
       // Check service health
@@ -145,7 +145,7 @@ class DocumentManagementModule {
         health.components.database = {
           status:
             this.dependencies.mongooseConnection.readyState === 1 ? 'connected' : 'disconnected',
-          readyState: this.dependencies.mongooseConnection.readyState,
+          readyState: this.dependencies.mongooseConnection.readyState
         };
       }
 
@@ -157,7 +157,7 @@ class DocumentManagementModule {
         } catch (error) {
           health.components.s3Storage = {
             status: 'error',
-            error: error.message,
+            error: error.message
           };
         }
       }
@@ -165,7 +165,7 @@ class DocumentManagementModule {
       // Check Redis connection
       if (this.dependencies.redisConnection) {
         health.components.redis = {
-          status: this.dependencies.redisConnection.status || 'unknown',
+          status: this.dependencies.redisConnection.status || 'unknown'
         };
       }
 
@@ -183,7 +183,7 @@ class DocumentManagementModule {
         module: 'DocumentManagement',
         status: 'error',
         timestamp: new Date().toISOString(),
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -202,7 +202,7 @@ class DocumentManagementModule {
         thumbnailGeneration: true,
         documentSharing: true,
         auditLogging: !!this.dependencies.auditService,
-        notifications: !!this.dependencies.notificationService,
+        notifications: !!this.dependencies.notificationService
       },
       limits: {
         maxFileSize: '50MB',
@@ -212,16 +212,16 @@ class DocumentManagementModule {
           'image/jpg',
           'image/png',
           'application/msword',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         ],
-        maxDocumentsPerApplication: 50,
+        maxDocumentsPerApplication: 50
       },
       security: {
         encryptionAtRest: true,
         encryptionInTransit: true,
         accessControl: 'role-based',
-        auditLogging: !!this.dependencies.auditService,
-      },
+        auditLogging: !!this.dependencies.auditService
+      }
     };
   }
 
@@ -267,7 +267,7 @@ module.exports.metadata = {
   author: 'GACP Platform Team',
   dependencies: {
     required: ['mongooseConnection', 'awsS3Config', 'redisConnection'],
-    optional: ['virusScanService', 'ocrService', 'auditService', 'notificationService'],
+    optional: ['virusScanService', 'ocrService', 'auditService', 'notificationService']
   },
   features: [
     'file-upload',
@@ -277,6 +277,6 @@ module.exports.metadata = {
     'document-sharing',
     'audit-logging',
     'access-control',
-    'search-filtering',
-  ],
+    'search-filtering'
+  ]
 };

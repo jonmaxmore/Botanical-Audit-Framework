@@ -19,7 +19,7 @@ const {
   scheduleFieldAudit,
   getAuditorSchedule,
   submitAuditReport,
-  getAuditStats,
+  getAuditStats
 } = require('../controllers/auditController');
 
 // Audit list and search

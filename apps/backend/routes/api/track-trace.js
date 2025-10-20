@@ -12,14 +12,14 @@ const mockTrackingData = {
       variety: 'Jasmine Rice',
       grade: 'Grade A',
       quantity: 1000,
-      unit: 'kg',
+      unit: 'kg'
     },
     origin: {
       farm: 'สวนข้าวอินทรีย์ บ้านนา',
       farmer: 'นายสมชาย ใจดี',
       location: 'ตำบลบ้านนา อำเภอเมือง จังหวัดเชียงใหม่',
       coordinates: { lat: 18.7883, lng: 98.9853 },
-      certification: 'GACP-TH-2024-001',
+      certification: 'GACP-TH-2024-001'
     },
     timeline: [
       {
@@ -27,41 +27,41 @@ const mockTrackingData = {
         stage: 'Planting',
         location: 'Farm Field A1',
         description: 'Rice seeds planted according to GACP standards',
-        verifiedBy: 'Farm Manager',
+        verifiedBy: 'Farm Manager'
       },
       {
         date: '2024-04-15',
         stage: 'Harvesting',
         location: 'Farm Field A1',
         description: 'Rice harvested at optimal maturity',
-        verifiedBy: 'Quality Inspector',
+        verifiedBy: 'Quality Inspector'
       },
       {
         date: '2024-04-20',
         stage: 'Processing',
         location: 'Processing Facility',
         description: 'Rice processed and packaged',
-        verifiedBy: 'Processing Manager',
+        verifiedBy: 'Processing Manager'
       },
       {
         date: '2024-04-25',
         stage: 'Distribution',
         location: 'Distribution Center',
         description: 'Ready for distribution',
-        verifiedBy: 'Distribution Manager',
-      },
+        verifiedBy: 'Distribution Manager'
+      }
     ],
     certification: {
       status: 'CERTIFIED',
       number: 'GACP-TH-2024-001',
       issuedDate: '2024-04-25',
       expiryDate: '2025-04-25',
-      authority: 'GACP Thailand Authority',
+      authority: 'GACP Thailand Authority'
     },
     qrData: {
       url: 'https://gacp-platform.com/verify/OR2024-001',
-      generatedAt: '2024-04-25T10:00:00Z',
-    },
+      generatedAt: '2024-04-25T10:00:00Z'
+    }
   },
   'TM2024-002': {
     serial: 'TM2024-002',
@@ -72,14 +72,14 @@ const mockTrackingData = {
       variety: 'Curcuma longa',
       grade: 'Premium',
       quantity: 500,
-      unit: 'kg',
+      unit: 'kg'
     },
     origin: {
       farm: 'สวนขมิ้นอินทรีย์ บ้านดอย',
       farmer: 'นางสาวมณี ใจงาม',
       location: 'ตำบลดอยสะเก็ด อำเภอดอยสะเก็ด จังหวัดเชียงใหม่',
       coordinates: { lat: 18.8956, lng: 99.1234 },
-      certification: 'GACP-TH-2024-002',
+      certification: 'GACP-TH-2024-002'
     },
     timeline: [
       {
@@ -87,35 +87,35 @@ const mockTrackingData = {
         stage: 'Planting',
         location: 'Farm Field B2',
         description: 'Turmeric rhizomes planted in organic soil',
-        verifiedBy: 'Farm Manager',
+        verifiedBy: 'Farm Manager'
       },
       {
         date: '2024-10-10',
         stage: 'Harvesting',
         location: 'Farm Field B2',
         description: 'Turmeric harvested after 9 months',
-        verifiedBy: 'Quality Inspector',
+        verifiedBy: 'Quality Inspector'
       },
       {
         date: '2024-10-15',
         stage: 'Processing',
         location: 'Processing Facility',
         description: 'Turmeric cleaned, dried, and ground to powder',
-        verifiedBy: 'Processing Manager',
-      },
+        verifiedBy: 'Processing Manager'
+      }
     ],
     certification: {
       status: 'CERTIFIED',
       number: 'GACP-TH-2024-002',
       issuedDate: '2024-10-15',
       expiryDate: '2025-10-15',
-      authority: 'GACP Thailand Authority',
+      authority: 'GACP Thailand Authority'
     },
     qrData: {
       url: 'https://gacp-platform.com/verify/TM2024-002',
-      generatedAt: '2024-10-15T10:00:00Z',
-    },
-  },
+      generatedAt: '2024-10-15T10:00:00Z'
+    }
+  }
 };
 
 // Mock farmer products data for dashboard
@@ -130,7 +130,7 @@ const mockFarmerProducts = [
     stage: 'Distribution',
     certificationStatus: 'CERTIFIED',
     createdDate: '2024-01-15',
-    lastUpdated: '2024-04-25',
+    lastUpdated: '2024-04-25'
   },
   {
     id: '2',
@@ -142,7 +142,7 @@ const mockFarmerProducts = [
     stage: 'Processing',
     certificationStatus: 'CERTIFIED',
     createdDate: '2024-01-10',
-    lastUpdated: '2024-10-15',
+    lastUpdated: '2024-10-15'
   },
   {
     id: '3',
@@ -154,8 +154,8 @@ const mockFarmerProducts = [
     stage: 'Harvesting',
     certificationStatus: 'PENDING',
     createdDate: '2024-02-01',
-    lastUpdated: '2024-08-15',
-  },
+    lastUpdated: '2024-08-15'
+  }
 ];
 
 /**
@@ -172,19 +172,19 @@ router.get('/lookup/:productCode', (req, res) => {
       return res.status(404).json({
         success: false,
         message: 'Product not found',
-        code: productCode,
+        code: productCode
       });
     }
 
     res.json({
       success: true,
-      data: product,
+      data: product
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message,
+      error: error.message
     });
   }
 });
@@ -199,13 +199,13 @@ router.get('/farmer/products', (req, res) => {
     res.json({
       success: true,
       data: mockFarmerProducts,
-      total: mockFarmerProducts.length,
+      total: mockFarmerProducts.length
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message,
+      error: error.message
     });
   }
 });
@@ -232,7 +232,7 @@ router.post('/farmer/products', (req, res) => {
       stage: 'Planting',
       certificationStatus: 'PENDING',
       createdDate: new Date().toISOString().split('T')[0],
-      lastUpdated: new Date().toISOString().split('T')[0],
+      lastUpdated: new Date().toISOString().split('T')[0]
     };
 
     mockFarmerProducts.push(newProduct);
@@ -240,13 +240,13 @@ router.post('/farmer/products', (req, res) => {
     res.status(201).json({
       success: true,
       data: newProduct,
-      message: 'Product batch created successfully',
+      message: 'Product batch created successfully'
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message,
+      error: error.message
     });
   }
 });
@@ -264,14 +264,14 @@ router.put('/farmer/products/:id', (req, res) => {
     if (productIndex === -1) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found',
+        message: 'Product not found'
       });
     }
 
     const updatedProduct = {
       ...mockFarmerProducts[productIndex],
       ...req.body,
-      lastUpdated: new Date().toISOString().split('T')[0],
+      lastUpdated: new Date().toISOString().split('T')[0]
     };
 
     mockFarmerProducts[productIndex] = updatedProduct;
@@ -279,13 +279,13 @@ router.put('/farmer/products/:id', (req, res) => {
     res.json({
       success: true,
       data: updatedProduct,
-      message: 'Product updated successfully',
+      message: 'Product updated successfully'
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message,
+      error: error.message
     });
   }
 });
@@ -303,7 +303,7 @@ router.delete('/farmer/products/:id', (req, res) => {
     if (productIndex === -1) {
       return res.status(404).json({
         success: false,
-        message: 'Product not found',
+        message: 'Product not found'
       });
     }
 
@@ -312,13 +312,13 @@ router.delete('/farmer/products/:id', (req, res) => {
     res.json({
       success: true,
       data: deletedProduct,
-      message: 'Product deleted successfully',
+      message: 'Product deleted successfully'
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message,
+      error: error.message
     });
   }
 });
@@ -336,18 +336,18 @@ router.get('/farmer/stats', (req, res) => {
       pending: mockFarmerProducts.filter(p => p.certificationStatus === 'PENDING').length,
       inProgress: mockFarmerProducts.filter(p =>
         ['Planting', 'Harvesting', 'Processing'].includes(p.stage)
-      ).length,
+      ).length
     };
 
     res.json({
       success: true,
-      data: stats,
+      data: stats
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message,
+      error: error.message
     });
   }
 });
@@ -368,8 +368,8 @@ router.get('/health', (req, res) => {
       'POST /api/track-trace/farmer/products',
       'PUT /api/track-trace/farmer/products/:id',
       'DELETE /api/track-trace/farmer/products/:id',
-      'GET /api/track-trace/farmer/stats',
-    ],
+      'GET /api/track-trace/farmer/stats'
+    ]
   });
 });
 

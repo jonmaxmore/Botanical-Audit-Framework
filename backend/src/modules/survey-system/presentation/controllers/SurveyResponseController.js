@@ -77,7 +77,7 @@ class SurveyResponseController {
       this.logger.info('Survey response start request', {
         userId: req.user?.id,
         surveyId: req.body?.surveyId,
-        farmId: req.body?.farmId,
+        farmId: req.body?.farmId
       });
 
       // Input validation
@@ -114,8 +114,8 @@ class SurveyResponseController {
         metadata: {
           ...req.body.metadata,
           userAgent: req.get('User-Agent'),
-          ipAddress: req.ip,
-        },
+          ipAddress: req.ip
+        }
       };
 
       const surveyResponse = await this.surveyManagementUseCase.startSurveyResponse(responseData);
@@ -123,7 +123,7 @@ class SurveyResponseController {
       this.logger.info('Survey response started successfully', {
         responseId: surveyResponse.id,
         surveyId: surveyResponse.surveyId,
-        sessionId: surveyResponse.sessionId,
+        sessionId: surveyResponse.sessionId
       });
 
       return this.sendSuccessResponse(
@@ -131,7 +131,7 @@ class SurveyResponseController {
         201,
         {
           response: surveyResponse,
-          nextSteps: this.generateNextSteps(surveyResponse),
+          nextSteps: this.generateNextSteps(surveyResponse)
         },
         'Survey response started successfully'
       );
@@ -143,7 +143,7 @@ class SurveyResponseController {
       }
 
       return this.sendErrorResponse(res, 500, 'START_ERROR', 'Failed to start survey response', {
-        details: error.message,
+        details: error.message
       });
     }
   }
@@ -172,7 +172,7 @@ class SurveyResponseController {
       this.logger.info('Survey response retrieval request', {
         responseId,
         userId: req.user?.id,
-        options: { includeAnswers, includeProgress, includeScoring },
+        options: { includeAnswers, includeProgress, includeScoring }
       });
 
       // Validate response ID
@@ -184,7 +184,7 @@ class SurveyResponseController {
       const responseData = await this.surveyManagementUseCase.getSurveyResponse(responseId, {
         includeAnswers,
         includeProgress,
-        includeScoring,
+        includeScoring
       });
 
       if (!responseData) {
@@ -208,13 +208,13 @@ class SurveyResponseController {
         canEdit: await this.checkResponseEditPermission(req.user, responseData),
         estimatedTimeRemaining: this.calculateEstimatedTimeRemaining(responseData),
         nextSteps:
-          responseData.status === 'in_progress' ? this.generateNextSteps(responseData) : null,
+          responseData.status === 'in_progress' ? this.generateNextSteps(responseData) : null
       };
 
       this.logger.info('Survey response retrieved successfully', {
         responseId,
         status: responseData.status,
-        progress: responseData.progressPercentage,
+        progress: responseData.progressPercentage
       });
 
       return this.sendSuccessResponse(
@@ -270,7 +270,7 @@ class SurveyResponseController {
         responseId,
         questionId,
         userId: req.user?.id,
-        hasAnswer: !!answer,
+        hasAnswer: !!answer
       });
 
       // Input validation
@@ -319,7 +319,7 @@ class SurveyResponseController {
         {
           ...metadata,
           answeredBy: req.user.id,
-          timestamp: new Date(),
+          timestamp: new Date()
         }
       );
 
@@ -328,14 +328,14 @@ class SurveyResponseController {
         previousProgress: currentResponse.progressPercentage,
         currentProgress: updatedResponse.progressPercentage,
         progressDelta: updatedResponse.progressPercentage - currentResponse.progressPercentage,
-        estimatedTimeRemaining: this.calculateEstimatedTimeRemaining(updatedResponse),
+        estimatedTimeRemaining: this.calculateEstimatedTimeRemaining(updatedResponse)
       };
 
       this.logger.info('Answer recorded successfully', {
         responseId,
         questionId,
         progress: updatedResponse.progressPercentage,
-        progressDelta: progressUpdate.progressDelta,
+        progressDelta: progressUpdate.progressDelta
       });
 
       return this.sendSuccessResponse(
@@ -344,7 +344,7 @@ class SurveyResponseController {
         {
           response: updatedResponse,
           progressUpdate,
-          nextSteps: this.generateNextSteps(updatedResponse),
+          nextSteps: this.generateNextSteps(updatedResponse)
         },
         'Answer recorded successfully'
       );
@@ -356,7 +356,7 @@ class SurveyResponseController {
       }
 
       return this.sendErrorResponse(res, 500, 'ANSWER_RECORDING_ERROR', 'Failed to record answer', {
-        details: error.message,
+        details: error.message
       });
     }
   }
@@ -383,7 +383,7 @@ class SurveyResponseController {
       this.logger.info('Multiple answers recording request', {
         responseId,
         userId: req.user?.id,
-        answersCount: Object.keys(answers || {}).length,
+        answersCount: Object.keys(answers || {}).length
       });
 
       // Input validation
@@ -435,13 +435,13 @@ class SurveyResponseController {
       const progressUpdate = {
         previousProgress: currentResponse.progressPercentage,
         currentProgress: updatedResponse.progressPercentage,
-        progressDelta: updatedResponse.progressPercentage - currentResponse.progressPercentage,
+        progressDelta: updatedResponse.progressPercentage - currentResponse.progressPercentage
       };
 
       this.logger.info('Multiple answers recorded successfully', {
         responseId,
         answersCount: Object.keys(answers).length,
-        progress: updatedResponse.progressPercentage,
+        progress: updatedResponse.progressPercentage
       });
 
       return this.sendSuccessResponse(
@@ -450,7 +450,7 @@ class SurveyResponseController {
         {
           response: updatedResponse,
           progressUpdate,
-          nextSteps: this.generateNextSteps(updatedResponse),
+          nextSteps: this.generateNextSteps(updatedResponse)
         },
         `${Object.keys(answers).length} answers recorded successfully`
       );
@@ -493,13 +493,13 @@ class SurveyResponseController {
       this.logger.info('Survey response completion request', {
         responseId,
         userId: req.user?.id,
-        forceComplete,
+        forceComplete
       });
 
       // Get current response
       const currentResponse = await this.surveyManagementUseCase.getSurveyResponse(responseId, {
         includeAnswers: true,
-        includeProgress: true,
+        includeProgress: true
       });
 
       if (!currentResponse) {
@@ -536,7 +536,7 @@ class SurveyResponseController {
           'Survey response is not complete',
           {
             currentProgress: currentResponse.progressPercentage,
-            canForceComplete: true,
+            canForceComplete: true
           }
         );
       }
@@ -551,8 +551,8 @@ class SurveyResponseController {
           completionMetadata: {
             userAgent: req.get('User-Agent'),
             ipAddress: req.ip,
-            timestamp: new Date(),
-          },
+            timestamp: new Date()
+          }
         }
       );
 
@@ -563,13 +563,13 @@ class SurveyResponseController {
         completionTime: completedResponse.completionTimeMinutes,
         qualityMetrics: completedResponse.qualityMetrics,
         certificateUrl: this.generateCertificateUrl(completedResponse),
-        reportUrl: this.generateReportUrl(completedResponse),
+        reportUrl: this.generateReportUrl(completedResponse)
       };
 
       this.logger.info('Survey response completed successfully', {
         responseId,
         totalScore: completedResponse.totalScore,
-        completionTime: completedResponse.completionTimeMinutes,
+        completionTime: completedResponse.completionTimeMinutes
       });
 
       return this.sendSuccessResponse(
@@ -577,7 +577,7 @@ class SurveyResponseController {
         200,
         {
           response: completedResponse,
-          completionSummary,
+          completionSummary
         },
         'Survey response completed successfully'
       );
@@ -610,12 +610,12 @@ class SurveyResponseController {
 
       this.logger.info('Response progress request', {
         responseId,
-        userId: req.user?.id,
+        userId: req.user?.id
       });
 
       // Get current response
       const currentResponse = await this.surveyManagementUseCase.getSurveyResponse(responseId, {
-        includeProgress: true,
+        includeProgress: true
       });
 
       if (!currentResponse) {
@@ -644,7 +644,7 @@ class SurveyResponseController {
         lastActivity: currentResponse.lastAnswerDate || currentResponse.startDate,
         qualityMetrics: currentResponse.qualityMetrics,
         nextSteps:
-          currentResponse.status === 'in_progress' ? this.generateNextSteps(currentResponse) : null,
+          currentResponse.status === 'in_progress' ? this.generateNextSteps(currentResponse) : null
       };
 
       return this.sendSuccessResponse(
@@ -682,13 +682,13 @@ class SurveyResponseController {
         dateFrom,
         dateTo,
         sort = 'startDate',
-        order = 'desc',
+        order = 'desc'
       } = req.query;
 
       this.logger.info('Survey responses request', {
         surveyId,
         userId: req.user?.id,
-        filters: { status, farmId, dateFrom, dateTo },
+        filters: { status, farmId, dateFrom, dateTo }
       });
 
       // Validate survey ID
@@ -715,7 +715,7 @@ class SurveyResponseController {
         farmId,
         dateFrom,
         dateTo,
-        sort: { [sort]: order === 'asc' ? 1 : -1 },
+        sort: { [sort]: order === 'asc' ? 1 : -1 }
       };
 
       // Get responses
@@ -727,7 +727,7 @@ class SurveyResponseController {
       this.logger.info('Survey responses retrieved successfully', {
         surveyId,
         count: responsesData.responses.length,
-        totalCount: responsesData.pagination.totalCount,
+        totalCount: responsesData.pagination.totalCount
       });
 
       return this.sendSuccessResponse(
@@ -773,7 +773,7 @@ class SurveyResponseController {
 
     return {
       isValid: errors.length === 0,
-      errors,
+      errors
     };
   }
 
@@ -790,7 +790,7 @@ class SurveyResponseController {
 
     return {
       isValid: errors.length === 0,
-      errors,
+      errors
     };
   }
 
@@ -847,7 +847,7 @@ class SurveyResponseController {
       currentSection: response.currentSection,
       nextAction: 'continue_survey',
       description: 'Continue answering questions to complete the survey',
-      progress: response.progressPercentage,
+      progress: response.progressPercentage
     };
   }
 
@@ -868,7 +868,7 @@ class SurveyResponseController {
       success: true,
       data: data,
       message: message,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 
@@ -878,9 +878,9 @@ class SurveyResponseController {
       error: {
         code: errorCode,
         message: message,
-        details: details,
+        details: details
       },
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     return res.status(statusCode).json(errorResponse);

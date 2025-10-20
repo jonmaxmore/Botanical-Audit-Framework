@@ -64,30 +64,30 @@ class StandardsComparisonRepository {
       await this.collection.createIndex({
         farmId: 1,
         status: 1,
-        'comparisonResults.overallCompliance': -1,
+        'comparisonResults.overallCompliance': -1
       });
 
       // Text search index
       await this.collection.createIndex({
         comparisonName: 'text',
         description: 'text',
-        'targetStandards.name': 'text',
+        'targetStandards.name': 'text'
       });
 
       // Analysis results indexes
       await this.analysisCollection.createIndex({
         comparisonId: 1,
-        analysisDate: -1,
+        analysisDate: -1
       });
       await this.analysisCollection.createIndex({
-        'results.overallCompliance': -1,
+        'results.overallCompliance': -1
       });
 
       // Reports collection indexes
       await this.reportsCollection.createIndex({
         comparisonId: 1,
         reportType: 1,
-        generatedDate: -1,
+        generatedDate: -1
       });
 
       this.logger.info('Standards comparison repository indexes initialized successfully');
@@ -119,7 +119,7 @@ class StandardsComparisonRepository {
     try {
       this.logger.info('Creating standards comparison in database', {
         comparisonName: standardsComparison.comparisonName,
-        farmId: standardsComparison.farmId,
+        farmId: standardsComparison.farmId
       });
 
       // เตรียมข้อมูลหลักสำหรับบันทึก
@@ -168,11 +168,11 @@ class StandardsComparisonRepository {
               action: 'comparison_created',
               details: {
                 comparisonName: standardsComparison.comparisonName,
-                farmId: standardsComparison.farmId,
-              },
-            },
-          ],
-        },
+                farmId: standardsComparison.farmId
+              }
+            }
+          ]
+        }
       };
 
       // บันทึกข้อมูลหลัก
@@ -186,7 +186,7 @@ class StandardsComparisonRepository {
       await this.createAnalysisWorkspace(standardsComparison.id);
 
       this.logger.info('Standards comparison created successfully', {
-        comparisonId: standardsComparison.id,
+        comparisonId: standardsComparison.id
       });
 
       return standardsComparison;
@@ -257,7 +257,7 @@ class StandardsComparisonRepository {
         version: comparisonDocument.version,
         overallComplianceScore: comparisonDocument.overallComplianceScore,
         criticalGapsCount: comparisonDocument.criticalGapsCount,
-        improvementOpportunities: comparisonDocument.improvementOpportunities,
+        improvementOpportunities: comparisonDocument.improvementOpportunities
       });
 
       this.logger.info('Standards comparison found successfully', { comparisonId });
@@ -342,7 +342,7 @@ class StandardsComparisonRepository {
             version: doc.version,
             overallComplianceScore: doc.overallComplianceScore,
             criticalGapsCount: doc.criticalGapsCount,
-            improvementOpportunities: doc.improvementOpportunities,
+            improvementOpportunities: doc.improvementOpportunities
           })
       );
 
@@ -357,14 +357,14 @@ class StandardsComparisonRepository {
           currentPage: Math.floor(skip / limit) + 1,
           totalPages: Math.ceil(totalCount / limit),
           hasNext: skip + limit < totalCount,
-          hasPrev: skip > 0,
-        },
+          hasPrev: skip > 0
+        }
       };
 
       this.logger.info('Farm standards comparisons found successfully', {
         farmId,
         count: comparisons.length,
-        totalCount,
+        totalCount
       });
 
       return result;
@@ -408,16 +408,16 @@ class StandardsComparisonRepository {
           ...mainUpdateData,
           'auditTrail.lastModifiedBy': updatedBy,
           'auditTrail.lastModifiedAt': new Date(),
-          version: existingComparison.version + 1,
+          version: existingComparison.version + 1
         },
         $push: {
           'auditTrail.changeHistory': {
             timestamp: new Date(),
             updatedBy: updatedBy,
             changes: Object.keys(updateData),
-            previousVersion: existingComparison.version,
-          },
-        },
+            previousVersion: existingComparison.version
+          }
+        }
       };
 
       // อัปเดต main document
@@ -434,7 +434,7 @@ class StandardsComparisonRepository {
           gapAnalysis: gapAnalysis,
           improvementPlan: improvementPlan,
           analysisDate: new Date(),
-          analyzedBy: updatedBy,
+          analyzedBy: updatedBy
         });
       }
 
@@ -443,7 +443,7 @@ class StandardsComparisonRepository {
 
       this.logger.info('Standards comparison updated successfully', {
         comparisonId,
-        version: updatedComparison.version,
+        version: updatedComparison.version
       });
 
       return updatedComparison;
@@ -485,16 +485,16 @@ class StandardsComparisonRepository {
             status: 'deleted',
             deletedDate: new Date(),
             'auditTrail.lastModifiedBy': deletedBy,
-            'auditTrail.lastModifiedAt': new Date(),
+            'auditTrail.lastModifiedAt': new Date()
           },
           $push: {
             'auditTrail.changeHistory': {
               timestamp: new Date(),
               updatedBy: deletedBy,
               action: 'soft_delete',
-              reason: 'Standards comparison deactivated',
-            },
-          },
+              reason: 'Standards comparison deactivated'
+            }
+          }
         }
       );
 
@@ -509,8 +509,8 @@ class StandardsComparisonRepository {
           $set: {
             deleted: true,
             deletedDate: new Date(),
-            deletedBy: deletedBy,
-          },
+            deletedBy: deletedBy
+          }
         }
       );
 
@@ -521,8 +521,8 @@ class StandardsComparisonRepository {
           $set: {
             deleted: true,
             deletedDate: new Date(),
-            deletedBy: deletedBy,
-          },
+            deletedBy: deletedBy
+          }
         }
       );
 
@@ -532,7 +532,7 @@ class StandardsComparisonRepository {
         success: true,
         comparisonId,
         deletedBy,
-        deletedDate: new Date(),
+        deletedDate: new Date()
       };
     } catch (error) {
       this.logger.error('Failed to delete standards comparison:', error);
@@ -562,7 +562,7 @@ class StandardsComparisonRepository {
 
       // Match stage - กรองข้อมูลพื้นฐาน
       const matchStage = {
-        status: { $ne: 'deleted' },
+        status: { $ne: 'deleted' }
       };
 
       // เพิ่มการกรองตามฟาร์ม
@@ -603,7 +603,7 @@ class StandardsComparisonRepository {
       if (searchCriteria.searchText) {
         matchStage.$text = {
           $search: searchCriteria.searchText,
-          $language: 'none', // รองรับหลายภาษา
+          $language: 'none' // รองรับหลายภาษา
         };
       }
 
@@ -613,8 +613,8 @@ class StandardsComparisonRepository {
       if (searchCriteria.searchText) {
         pipeline.push({
           $addFields: {
-            searchScore: { $meta: 'textScore' },
-          },
+            searchScore: { $meta: 'textScore' }
+          }
         });
       }
 
@@ -667,7 +667,7 @@ class StandardsComparisonRepository {
             overallComplianceScore: doc.overallComplianceScore,
             criticalGapsCount: doc.criticalGapsCount,
             improvementOpportunities: doc.improvementOpportunities,
-            searchScore: doc.searchScore,
+            searchScore: doc.searchScore
           })
       );
 
@@ -678,14 +678,14 @@ class StandardsComparisonRepository {
           currentPage: Math.floor(skip / limit) + 1,
           totalPages: Math.ceil(totalCount / limit),
           hasNext: skip + limit < totalCount,
-          hasPrev: skip > 0,
+          hasPrev: skip > 0
         },
-        searchCriteria,
+        searchCriteria
       };
 
       this.logger.info('Standards comparison search completed', {
         resultsCount: comparisons.length,
-        totalCount,
+        totalCount
       });
 
       return result;
@@ -711,7 +711,7 @@ class StandardsComparisonRepository {
         createdDate: new Date(),
         analysisHistory: [],
         largeDataReferences: {},
-        computationMetrics: {},
+        computationMetrics: {}
       };
 
       await this.analysisCollection.insertOne(workspaceDoc);
@@ -740,15 +740,15 @@ class StandardsComparisonRepository {
         computationMetrics: {
           executionTime: analysisData.executionTime,
           dataPointsProcessed: analysisData.dataPointsProcessed,
-          algorithmsUsed: analysisData.algorithmsUsed,
-        },
+          algorithmsUsed: analysisData.algorithmsUsed
+        }
       };
 
       await this.analysisCollection.insertOne(analysisDoc);
 
       this.logger.info('Analysis results saved', {
         comparisonId,
-        analysisId: analysisDoc.analysisId,
+        analysisId: analysisDoc.analysisId
       });
     } catch (error) {
       this.logger.error('Failed to save analysis results:', error);
@@ -771,14 +771,14 @@ class StandardsComparisonRepository {
         language: reportData.language,
         content: reportData.content,
         metadata: reportData.metadata,
-        fileReferences: reportData.fileReferences || [],
+        fileReferences: reportData.fileReferences || []
       };
 
       await this.reportsCollection.insertOne(reportDoc);
 
       this.logger.info('Report saved', {
         comparisonId,
-        reportId: reportData.id,
+        reportId: reportData.id
       });
     } catch (error) {
       this.logger.error('Failed to save report:', error);
@@ -801,15 +801,15 @@ class StandardsComparisonRepository {
             _id: null,
             totalComparisons: { $sum: 1 },
             completedComparisons: {
-              $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
+              $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
             },
             averageComplianceScore: { $avg: '$overallComplianceScore' },
             totalCriticalGaps: { $sum: '$criticalGapsCount' },
             totalImprovementOpportunities: { $sum: '$improvementOpportunities' },
             latestComparison: { $max: '$createdDate' },
-            oldestComparison: { $min: '$createdDate' },
-          },
-        },
+            oldestComparison: { $min: '$createdDate' }
+          }
+        }
       ];
 
       const result = await this.collection.aggregate(pipeline).toArray();
@@ -827,8 +827,8 @@ class StandardsComparisonRepository {
         totalImprovementOpportunities: stats.totalImprovementOpportunities || 0,
         assessmentPeriod: {
           from: stats.oldestComparison,
-          to: stats.latestComparison,
-        },
+          to: stats.latestComparison
+        }
       };
     } catch (error) {
       this.logger.error('Failed to calculate farm statistics:', error);
@@ -838,7 +838,7 @@ class StandardsComparisonRepository {
         completionRate: 0,
         averageComplianceScore: 0,
         totalCriticalGaps: 0,
-        totalImprovementOpportunities: 0,
+        totalImprovementOpportunities: 0
       };
     }
   }

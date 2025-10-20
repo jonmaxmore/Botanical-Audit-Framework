@@ -44,7 +44,7 @@ class EnhancedAuditController {
 
       // Get recent audit statistics
       const auditStats = await this.getAuditStatisticsUseCase.execute({
-        period: 'last_30_days',
+        period: 'last_30_days'
       });
 
       // Compile dashboard data
@@ -55,7 +55,7 @@ class EnhancedAuditController {
           openViolations: complianceDashboard.summary.openViolations,
           criticalViolations: complianceDashboard.summary.criticalViolations,
           recentViolations: complianceDashboard.recentViolations.slice(0, 5),
-          trends: complianceDashboard.violationTrends,
+          trends: complianceDashboard.violationTrends
         },
 
         government: {
@@ -66,34 +66,34 @@ class EnhancedAuditController {
               (governmentStatus.metrics.successfulSubmissions +
                 governmentStatus.metrics.failedSubmissions)) *
             100,
-          lastSubmission: governmentStatus.lastUpdate,
+          lastSubmission: governmentStatus.lastUpdate
         },
 
         audit: {
           totalLogs: auditStats.totalLogs,
           criticalActions: auditStats.criticalActions,
           systemEvents: auditStats.systemEvents,
-          userActivities: auditStats.userActivities,
+          userActivities: auditStats.userActivities
         },
 
         performance: {
           monitoringStatus: this.complianceMonitoringSystem.getMonitoringStatus(),
-          systemHealth: await this.getSystemHealthMetrics(),
+          systemHealth: await this.getSystemHealthMetrics()
         },
 
-        generatedAt: new Date(),
+        generatedAt: new Date()
       };
 
       res.json({
         success: true,
-        data: dashboardData,
+        data: dashboardData
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Dashboard error:', error);
       res.status(500).json({
         success: false,
         error: 'DASHBOARD_ERROR',
-        message: 'Failed to load compliance dashboard',
+        message: 'Failed to load compliance dashboard'
       });
     }
   }
@@ -139,16 +139,16 @@ class EnhancedAuditController {
             page: parseInt(page),
             limit: parseInt(limit),
             total: totalViolations,
-            pages: Math.ceil(totalViolations / limit),
-          },
-        },
+            pages: Math.ceil(totalViolations / limit)
+          }
+        }
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Violations error:', error);
       res.status(500).json({
         success: false,
         error: 'VIOLATIONS_ERROR',
-        message: 'Failed to fetch compliance violations',
+        message: 'Failed to fetch compliance violations'
       });
     }
   }
@@ -169,7 +169,7 @@ class EnhancedAuditController {
         return res.status(400).json({
           success: false,
           error: 'INVALID_STATUS',
-          message: 'Invalid violation status',
+          message: 'Invalid violation status'
         });
       }
 
@@ -177,7 +177,7 @@ class EnhancedAuditController {
       const updateData = {
         status,
         updatedAt: new Date(),
-        updatedBy: userId,
+        updatedBy: userId
       };
 
       if (resolution) updateData.resolution = resolution;
@@ -197,20 +197,20 @@ class EnhancedAuditController {
         {
           previousStatus: req.body.previousStatus,
           newStatus: status,
-          resolution,
+          resolution
         }
       );
 
       res.json({
         success: true,
-        message: 'Violation status updated successfully',
+        message: 'Violation status updated successfully'
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Update violation error:', error);
       res.status(500).json({
         success: false,
         error: 'UPDATE_ERROR',
-        message: 'Failed to update violation status',
+        message: 'Failed to update violation status'
       });
     }
   }
@@ -235,15 +235,15 @@ class EnhancedAuditController {
         success: true,
         data: {
           ...status,
-          recentSubmissions,
-        },
+          recentSubmissions
+        }
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Government status error:', error);
       res.status(500).json({
         success: false,
         error: 'GOVERNMENT_STATUS_ERROR',
-        message: 'Failed to get government integration status',
+        message: 'Failed to get government integration status'
       });
     }
   }
@@ -260,20 +260,20 @@ class EnhancedAuditController {
       let response;
 
       switch (reportType) {
-        case 'CERTIFICATE_REPORT':
-          response = await this.governmentIntegrationService.submitCertificateReport(data);
-          break;
+      case 'CERTIFICATE_REPORT':
+        response = await this.governmentIntegrationService.submitCertificateReport(data);
+        break;
 
-        case 'COMPLIANCE_REPORT':
-          response = await this.governmentIntegrationService.submitComplianceReport(data);
-          break;
+      case 'COMPLIANCE_REPORT':
+        response = await this.governmentIntegrationService.submitComplianceReport(data);
+        break;
 
-        default:
-          return res.status(400).json({
-            success: false,
-            error: 'INVALID_REPORT_TYPE',
-            message: 'Invalid report type',
-          });
+      default:
+        return res.status(400).json({
+          success: false,
+          error: 'INVALID_REPORT_TYPE',
+          message: 'Invalid report type'
+        });
       }
 
       // Log manual submission
@@ -285,20 +285,20 @@ class EnhancedAuditController {
         {
           reportType,
           system,
-          submissionId: response.submission_id,
+          submissionId: response.submission_id
         }
       );
 
       res.json({
         success: true,
-        data: response,
+        data: response
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Report submission error:', error);
       res.status(500).json({
         success: false,
         error: 'SUBMISSION_ERROR',
-        message: 'Failed to submit report to government',
+        message: 'Failed to submit report to government'
       });
     }
   }
@@ -316,20 +316,20 @@ class EnhancedAuditController {
       const startDate = new Date();
 
       switch (period) {
-        case '7d':
-          startDate.setDate(startDate.getDate() - 7);
-          break;
-        case '30d':
-          startDate.setDate(startDate.getDate() - 30);
-          break;
-        case '90d':
-          startDate.setDate(startDate.getDate() - 90);
-          break;
-        case '1y':
-          startDate.setFullYear(startDate.getFullYear() - 1);
-          break;
-        default:
-          startDate.setDate(startDate.getDate() - 30);
+      case '7d':
+        startDate.setDate(startDate.getDate() - 7);
+        break;
+      case '30d':
+        startDate.setDate(startDate.getDate() - 30);
+        break;
+      case '90d':
+        startDate.setDate(startDate.getDate() - 90);
+        break;
+      case '1y':
+        startDate.setFullYear(startDate.getFullYear() - 1);
+        break;
+      default:
+        startDate.setDate(startDate.getDate() - 30);
       }
 
       // Get analytics data
@@ -337,14 +337,14 @@ class EnhancedAuditController {
 
       res.json({
         success: true,
-        data: analytics,
+        data: analytics
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Analytics error:', error);
       res.status(500).json({
         success: false,
         error: 'ANALYTICS_ERROR',
-        message: 'Failed to generate compliance analytics',
+        message: 'Failed to generate compliance analytics'
       });
     }
   }
@@ -361,25 +361,25 @@ class EnhancedAuditController {
       let result;
 
       switch (action) {
-        case 'start':
-          result = await this.complianceMonitoringSystem.startMonitoring();
-          break;
+      case 'start':
+        result = await this.complianceMonitoringSystem.startMonitoring();
+        break;
 
-        case 'stop':
-          result = await this.complianceMonitoringSystem.stopMonitoring();
-          break;
+      case 'stop':
+        result = await this.complianceMonitoringSystem.stopMonitoring();
+        break;
 
-        case 'restart':
-          await this.complianceMonitoringSystem.stopMonitoring();
-          result = await this.complianceMonitoringSystem.startMonitoring();
-          break;
+      case 'restart':
+        await this.complianceMonitoringSystem.stopMonitoring();
+        result = await this.complianceMonitoringSystem.startMonitoring();
+        break;
 
-        default:
-          return res.status(400).json({
-            success: false,
-            error: 'INVALID_ACTION',
-            message: 'Invalid monitoring action',
-          });
+      default:
+        return res.status(400).json({
+          success: false,
+          error: 'INVALID_ACTION',
+          message: 'Invalid monitoring action'
+        });
       }
 
       // Log action
@@ -394,14 +394,14 @@ class EnhancedAuditController {
       res.json({
         success: true,
         message: `Compliance monitoring ${action}ed successfully`,
-        data: result,
+        data: result
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Monitoring control error:', error);
       res.status(500).json({
         success: false,
         error: 'MONITORING_ERROR',
-        message: `Failed to ${action} compliance monitoring`,
+        message: `Failed to ${action} compliance monitoring`
       });
     }
   }
@@ -411,7 +411,7 @@ class EnhancedAuditController {
    */
   async generateComplianceAnalytics(startDate, endDate, category) {
     const filters = {
-      createdAt: { $gte: startDate, $lte: endDate },
+      createdAt: { $gte: startDate, $lte: endDate }
     };
 
     if (category) filters.category = category;
@@ -425,12 +425,12 @@ class EnhancedAuditController {
           $group: {
             _id: {
               date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
-              severity: '$severity',
+              severity: '$severity'
             },
-            count: { $sum: 1 },
-          },
+            count: { $sum: 1 }
+          }
         },
-        { $sort: { '_id.date': 1 } },
+        { $sort: { '_id.date': 1 } }
       ])
       .toArray();
 
@@ -442,9 +442,9 @@ class EnhancedAuditController {
         {
           $group: {
             _id: '$category',
-            count: { $sum: 1 },
-          },
-        },
+            count: { $sum: 1 }
+          }
+        }
       ])
       .toArray();
 
@@ -456,24 +456,24 @@ class EnhancedAuditController {
           $match: {
             ...filters,
             status: 'RESOLVED',
-            resolvedAt: { $exists: true },
-          },
+            resolvedAt: { $exists: true }
+          }
         },
         {
           $project: {
             resolutionTime: {
-              $subtract: ['$resolvedAt', '$createdAt'],
-            },
-          },
+              $subtract: ['$resolvedAt', '$createdAt']
+            }
+          }
         },
         {
           $group: {
             _id: null,
             avgResolutionTime: { $avg: '$resolutionTime' },
             minResolutionTime: { $min: '$resolutionTime' },
-            maxResolutionTime: { $max: '$resolutionTime' },
-          },
-        },
+            maxResolutionTime: { $max: '$resolutionTime' }
+          }
+        }
       ])
       .toArray();
 
@@ -483,8 +483,8 @@ class EnhancedAuditController {
       resolutionTimes: resolutionTimes[0] || null,
       period: {
         start: startDate,
-        end: endDate,
-      },
+        end: endDate
+      }
     };
   }
 
@@ -495,7 +495,7 @@ class EnhancedAuditController {
     return {
       complianceMonitoring: this.complianceMonitoringSystem.getMonitoringStatus(),
       governmentIntegration: this.governmentIntegrationService.getIntegrationStatus(),
-      lastHealthCheck: new Date(),
+      lastHealthCheck: new Date()
     };
   }
 
@@ -507,14 +507,14 @@ class EnhancedAuditController {
 
       res.json({
         success: true,
-        data: auditLog,
+        data: auditLog
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Get audit log error:', error);
       res.status(500).json({
         success: false,
         error: 'AUDIT_LOG_ERROR',
-        message: 'Failed to get audit log details',
+        message: 'Failed to get audit log details'
       });
     }
   }
@@ -528,21 +528,21 @@ class EnhancedAuditController {
         entityType: req.query.entityType,
         actorId: req.query.actorId,
         startDate: req.query.startDate ? new Date(req.query.startDate) : undefined,
-        endDate: req.query.endDate ? new Date(req.query.endDate) : undefined,
+        endDate: req.query.endDate ? new Date(req.query.endDate) : undefined
       };
 
       const result = await this.listAuditLogsUseCase.execute(criteria);
 
       res.json({
         success: true,
-        data: result,
+        data: result
       });
     } catch (error) {
       console.error('[EnhancedAuditController] List audit logs error:', error);
       res.status(500).json({
         success: false,
         error: 'LIST_AUDIT_LOGS_ERROR',
-        message: 'Failed to list audit logs',
+        message: 'Failed to list audit logs'
       });
     }
   }
@@ -551,21 +551,21 @@ class EnhancedAuditController {
     try {
       const criteria = {
         period: req.query.period || 'last_30_days',
-        entityType: req.query.entityType,
+        entityType: req.query.entityType
       };
 
       const statistics = await this.getAuditStatisticsUseCase.execute(criteria);
 
       res.json({
         success: true,
-        data: statistics,
+        data: statistics
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Get statistics error:', error);
       res.status(500).json({
         success: false,
         error: 'STATISTICS_ERROR',
-        message: 'Failed to get audit statistics',
+        message: 'Failed to get audit statistics'
       });
     }
   }
@@ -577,21 +577,21 @@ class EnhancedAuditController {
         userId,
         startDate: req.query.startDate ? new Date(req.query.startDate) : undefined,
         endDate: req.query.endDate ? new Date(req.query.endDate) : undefined,
-        limit: parseInt(req.query.limit) || 50,
+        limit: parseInt(req.query.limit) || 50
       };
 
       const activity = await this.getUserActivityUseCase.execute(criteria);
 
       res.json({
         success: true,
-        data: activity,
+        data: activity
       });
     } catch (error) {
       console.error('[EnhancedAuditController] Get user activity error:', error);
       res.status(500).json({
         success: false,
         error: 'USER_ACTIVITY_ERROR',
-        message: 'Failed to get user activity',
+        message: 'Failed to get user activity'
       });
     }
   }

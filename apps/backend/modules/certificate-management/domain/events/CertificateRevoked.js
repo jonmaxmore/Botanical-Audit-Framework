@@ -10,7 +10,7 @@ class CertificateRevoked {
     userId,
     reason,
     revokedBy,
-    occurredAt = new Date(),
+    occurredAt = new Date()
   }) {
     this.eventType = 'CertificateRevoked';
     this.certificateId = certificateId;
@@ -32,9 +32,9 @@ class CertificateRevoked {
         certificateNumber: this.certificateNumber,
         userId: this.userId,
         reason: this.reason,
-        revokedBy: this.revokedBy,
+        revokedBy: this.revokedBy
       },
-      occurredAt: this.occurredAt,
+      occurredAt: this.occurredAt
     };
   }
 }

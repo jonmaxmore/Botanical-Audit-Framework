@@ -54,7 +54,7 @@ class DownloadReportUseCase {
         buffer: fileBuffer,
         fileName: report.fileName,
         mimeType: this._getMimeType(report.format),
-        fileSize: report.fileSize,
+        fileSize: report.fileSize
       };
     } catch (error) {
       throw new Error(`Failed to download report file: ${error.message}`);
@@ -63,18 +63,18 @@ class DownloadReportUseCase {
 
   _getMimeType(format) {
     switch (format) {
-      case 'PDF':
-        return 'application/pdf';
-      case 'EXCEL':
-        return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-      case 'CSV':
-        return 'text/csv';
-      case 'HTML':
-        return 'text/html';
-      case 'JSON':
-        return 'application/json';
-      default:
-        return 'application/octet-stream';
+    case 'PDF':
+      return 'application/pdf';
+    case 'EXCEL':
+      return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+    case 'CSV':
+      return 'text/csv';
+    case 'HTML':
+      return 'text/html';
+    case 'JSON':
+      return 'application/json';
+    default:
+      return 'application/octet-stream';
     }
   }
 }

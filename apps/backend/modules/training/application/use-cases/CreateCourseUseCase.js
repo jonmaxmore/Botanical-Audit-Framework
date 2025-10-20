@@ -27,7 +27,7 @@ class CreateCourseUseCase {
       descriptionEn,
       type,
       level,
-      createdBy,
+      createdBy
     });
 
     // Validate

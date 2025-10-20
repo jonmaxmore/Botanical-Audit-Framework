@@ -85,7 +85,7 @@ class PaymentRepository {
     try {
       return await this.collection.findOne({
         applicationId,
-        type,
+        type
       });
     } catch (error) {
       logger.error('[PaymentRepository] findByApplicationAndType error:', error);
@@ -103,12 +103,12 @@ class PaymentRepository {
       const result = await this.collection.insertOne({
         ...paymentData,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       return {
         id: result.insertedId,
-        ...paymentData,
+        ...paymentData
       };
     } catch (error) {
       logger.error('[PaymentRepository] create error:', error);
@@ -129,8 +129,8 @@ class PaymentRepository {
         {
           $set: {
             ...updateData,
-            updatedAt: new Date(),
-          },
+            updatedAt: new Date()
+          }
         },
         { returnDocument: 'after' }
       );
@@ -193,9 +193,9 @@ class PaymentRepository {
               $group: {
                 _id: null,
                 totalCount: { $sum: 1 },
-                totalAmount: { $sum: '$amount' },
-              },
-            },
+                totalAmount: { $sum: '$amount' }
+              }
+            }
           ])
           .toArray(),
 
@@ -207,9 +207,9 @@ class PaymentRepository {
               $group: {
                 _id: '$status',
                 count: { $sum: 1 },
-                amount: { $sum: '$amount' },
-              },
-            },
+                amount: { $sum: '$amount' }
+              }
+            }
           ])
           .toArray(),
 
@@ -221,11 +221,11 @@ class PaymentRepository {
               $group: {
                 _id: '$type',
                 count: { $sum: 1 },
-                amount: { $sum: '$amount' },
-              },
-            },
+                amount: { $sum: '$amount' }
+              }
+            }
           ])
-          .toArray(),
+          .toArray()
       ]);
 
       const total = totalResult[0] || { totalCount: 0, totalAmount: 0 };
@@ -233,22 +233,22 @@ class PaymentRepository {
       return {
         total: {
           count: total.totalCount,
-          amount: total.totalAmount,
+          amount: total.totalAmount
         },
         byStatus: statusBreakdown.reduce((acc, item) => {
           acc[item._id] = {
             count: item.count,
-            amount: item.amount,
+            amount: item.amount
           };
           return acc;
         }, {}),
         byType: typeBreakdown.reduce((acc, item) => {
           acc[item._id] = {
             count: item.count,
-            amount: item.amount,
+            amount: item.amount
           };
           return acc;
-        }, {}),
+        }, {})
       };
     } catch (error) {
       logger.error('[PaymentRepository] getStatistics error:', error);
@@ -269,7 +269,7 @@ class PaymentRepository {
       return await this.collection
         .find({
           status: 'pending',
-          createdAt: { $lte: cutoffDate },
+          createdAt: { $lte: cutoffDate }
         })
         .sort({ createdAt: 1 })
         .toArray();

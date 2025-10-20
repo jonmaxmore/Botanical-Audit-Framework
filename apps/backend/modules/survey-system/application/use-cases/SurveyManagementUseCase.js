@@ -55,13 +55,13 @@ class SurveyManagementUseCase {
         'POST_HARVEST',
         'STORAGE',
         'QUALITY_CONTROL',
-        'DOCUMENTATION',
+        'DOCUMENTATION'
       ],
 
       // Response management
       maxResponsesPerUser: 10,
       responseRetentionDays: 2555, // 7 years
-      reportingLevels: ['INDIVIDUAL', 'FARM', 'ORGANIZATION', 'AGGREGATE'],
+      reportingLevels: ['INDIVIDUAL', 'FARM', 'ORGANIZATION', 'AGGREGATE']
     };
 
     // GACP standard question templates
@@ -71,7 +71,7 @@ class SurveyManagementUseCase {
       POST_HARVEST: this.getPostHarvestQuestionTemplates(),
       STORAGE: this.getStorageQuestionTemplates(),
       QUALITY_CONTROL: this.getQualityControlQuestionTemplates(),
-      DOCUMENTATION: this.getDocumentationQuestionTemplates(),
+      DOCUMENTATION: this.getDocumentationQuestionTemplates()
     };
   }
 
@@ -110,8 +110,8 @@ class SurveyManagementUseCase {
           timeLimit: surveyData.timeLimit || this.businessConfig.defaultTimeLimit,
           maxAttempts: surveyData.maxAttempts || 3,
           showScoreImmediately: surveyData.showScoreImmediately !== false,
-          requireAllAnswers: surveyData.requireAllAnswers || false,
-        },
+          requireAllAnswers: surveyData.requireAllAnswers || false
+        }
       });
 
       // Step 3: Generate sections based on GACP categories
@@ -162,8 +162,8 @@ class SurveyManagementUseCase {
           type: savedSurvey.surveyType,
           sections: savedSurvey.sections.length,
           totalQuestions: savedSurvey.totalQuestions,
-          gacpCategories: gacpCategories,
-        },
+          gacpCategories: gacpCategories
+        }
       });
 
       this.logger.log(`[SurveyManagement] GACP assessment survey created: ${savedSurvey.surveyId}`);
@@ -177,7 +177,7 @@ class SurveyManagementUseCase {
           totalQuestions: savedSurvey.totalQuestions,
           estimatedDuration: savedSurvey.estimatedDuration,
           passingScore: savedSurvey.passingScore,
-          gacpCompliance: complianceCheck.compliant,
+          gacpCompliance: complianceCheck.compliant
         },
         validationResult: validationResult,
         complianceCheck: complianceCheck,
@@ -186,8 +186,8 @@ class SurveyManagementUseCase {
           canPublish: validationResult.isComplete && complianceCheck.compliant,
           recommendedActions: validationResult.recommendations.concat(
             complianceCheck.recommendations
-          ),
-        },
+          )
+        }
       };
     } catch (error) {
       this.logger.error(`[SurveyManagement] Survey creation failed: ${error.message}`);
@@ -277,16 +277,16 @@ class SurveyManagementUseCase {
             farmId: farmInfo ? farmInfo.farmId : null,
             contactInfo: {
               phone: userInfo.phone,
-              address: farmInfo ? farmInfo.address : userInfo.address,
-            },
+              address: farmInfo ? farmInfo.address : userInfo.address
+            }
           },
           metadata: {
             ipAddress: sessionData.ipAddress,
             userAgent: sessionData.userAgent,
             browserInfo: sessionData.browserInfo,
             deviceInfo: sessionData.deviceInfo,
-            geoLocation: sessionData.geoLocation,
-          },
+            geoLocation: sessionData.geoLocation
+          }
         });
 
         // Save new response
@@ -315,8 +315,8 @@ class SurveyManagementUseCase {
           surveyId: sessionData.surveyId,
           surveyTitle: survey.surveyTitle,
           sessionId: updatedResponse.sessionId,
-          attemptNumber: completedResponses.length + 1,
-        },
+          attemptNumber: completedResponses.length + 1
+        }
       });
 
       this.logger.log(
@@ -337,21 +337,21 @@ class SurveyManagementUseCase {
             sectionId: s.sectionId,
             title: s.title,
             description: s.description,
-            questions: s.questions.length,
-          })),
+            questions: s.questions.length
+          }))
         },
         sessionInfo: {
           ...sessionResult,
           currentProgress: updatedResponse.overallProgress,
           timeRemaining: sessionResult.estimatedTimeRemaining,
           autoSaveEnabled: true,
-          autoSaveInterval: this.businessConfig.autoSaveInterval,
+          autoSaveInterval: this.businessConfig.autoSaveInterval
         },
         userContext: {
           previousAttempts: completedResponses.length,
           maxAttempts: survey.configuration.maxAttempts,
-          canRetake: completedResponses.length < survey.configuration.maxAttempts - 1,
-        },
+          canRetake: completedResponses.length < survey.configuration.maxAttempts - 1
+        }
       };
     } catch (error) {
       this.logger.error(`[SurveyManagement] Session start failed: ${error.message}`);
@@ -382,7 +382,7 @@ class SurveyManagementUseCase {
       // Step 2: Get response and survey information
       const [surveyResponse, survey] = await Promise.all([
         this.responseRepository.findById(answerData.responseId),
-        this.surveyRepository.findById(answerData.surveyId),
+        this.surveyRepository.findById(answerData.surveyId)
       ]);
 
       if (!surveyResponse) {
@@ -408,7 +408,7 @@ class SurveyManagementUseCase {
           confidence: answerData.confidence,
           notes: answerData.notes,
           evidenceFiles: answerData.evidenceFiles || [],
-          timeToAnswer: answerData.timeToAnswer || 0,
+          timeToAnswer: answerData.timeToAnswer || 0
         },
         questionInfo
       );
@@ -450,8 +450,8 @@ class SurveyManagementUseCase {
           sectionId: questionInfo.sectionId,
           answerLength: answerData.answer?.length || 0,
           timeToAnswer: answerData.timeToAnswer,
-          progressUpdated: answerResult.overallProgress,
-        },
+          progressUpdated: answerResult.overallProgress
+        }
       });
 
       this.logger.log(
@@ -472,14 +472,14 @@ class SurveyManagementUseCase {
             questionInfo.sectionId
           ),
           canComplete: this.canCompleteResponse(updatedResponse, survey),
-          suggestedBreak: this.shouldSuggestBreak(updatedResponse),
+          suggestedBreak: this.shouldSuggestBreak(updatedResponse)
         },
         progressInfo: {
           overallProgress: updatedResponse.overallProgress,
           sectionProgress: answerResult.sectionProgress,
           timeSpent: updatedResponse.timeTracking.totalTimeSpent,
-          estimatedTimeRemaining: this.estimateTimeRemaining(updatedResponse, survey),
-        },
+          estimatedTimeRemaining: this.estimateTimeRemaining(updatedResponse, survey)
+        }
       };
     } catch (error) {
       this.logger.error(`[SurveyManagement] Answer processing failed: ${error.message}`);
@@ -510,7 +510,7 @@ class SurveyManagementUseCase {
       // Step 2: Get response and survey
       const [surveyResponse, survey] = await Promise.all([
         this.responseRepository.findById(completionData.responseId),
-        this.surveyRepository.findById(completionData.surveyId),
+        this.surveyRepository.findById(completionData.surveyId)
       ]);
 
       if (!surveyResponse) {
@@ -567,8 +567,8 @@ class SurveyManagementUseCase {
           passed: completionResult.passed,
           complianceLevel: completionResult.scoring.complianceLevel,
           certificateIssued: certificate !== null,
-          completionTime: finalResponse.completedAt,
-        },
+          completionTime: finalResponse.completedAt
+        }
       });
 
       this.logger.log(
@@ -585,14 +585,14 @@ class SurveyManagementUseCase {
         assessmentReport: {
           reportId: assessmentReport.reportId,
           reportUrl: assessmentReport.url,
-          downloadUrl: assessmentReport.downloadUrl,
+          downloadUrl: assessmentReport.downloadUrl
         },
         nextSteps: {
           canRetake: !completionResult.passed && finalResponse.canRetake,
           followUpDate: followUpPlan.nextReviewDate,
           immediateActions: actionPlan.immediateActions,
-          trainingRecommended: actionPlan.trainingRecommendations.length > 0,
-        },
+          trainingRecommended: actionPlan.trainingRecommendations.length > 0
+        }
       };
     } catch (error) {
       this.logger.error(`[SurveyManagement] Response completion failed: ${error.message}`);
@@ -618,7 +618,7 @@ class SurveyManagementUseCase {
       // Step 1: Get response and survey data
       const [surveyResponse, survey] = await Promise.all([
         this.responseRepository.findById(reportData.responseId),
-        this.surveyRepository.findById(reportData.surveyId),
+        this.surveyRepository.findById(reportData.surveyId)
       ]);
 
       if (!surveyResponse) {
@@ -654,7 +654,7 @@ class SurveyManagementUseCase {
           strongAreas: gacpAnalysis.strongAreas,
           improvementAreas: gacpAnalysis.improvementAreas,
           missingEvidence: gacpAnalysis.missingEvidence,
-          criticalGaps: gacpAnalysis.criticalGaps,
+          criticalGaps: gacpAnalysis.criticalGaps
         },
 
         // Completion readiness
@@ -662,7 +662,7 @@ class SurveyManagementUseCase {
           overallReadiness: completionReadiness.percentage,
           readyToComplete: completionReadiness.ready,
           blockers: completionReadiness.blockers,
-          requirements: completionReadiness.requirements,
+          requirements: completionReadiness.requirements
         },
 
         // Enhanced recommendations
@@ -670,7 +670,7 @@ class SurveyManagementUseCase {
           ...progressReport.recommendations,
           targeted: targetedRecommendations,
           evidenceNeeded: gacpAnalysis.evidenceRequirements,
-          priorityOrder: this.prioritizeRecommendations(targetedRecommendations),
+          priorityOrder: this.prioritizeRecommendations(targetedRecommendations)
         },
 
         // Timeline and planning
@@ -678,8 +678,8 @@ class SurveyManagementUseCase {
           estimatedCompletion: completionEstimate.completionDate,
           remainingEffort: completionEstimate.effortHours,
           suggestedSchedule: completionEstimate.schedule,
-          milestones: completionEstimate.milestones,
-        },
+          milestones: completionEstimate.milestones
+        }
       };
 
       // Step 8: Save report for future reference
@@ -694,8 +694,8 @@ class SurveyManagementUseCase {
         data: {
           reportId: savedReport.reportId,
           overallProgress: progressReport.summary.overallProgress,
-          completionReadiness: completionReadiness.percentage,
-        },
+          completionReadiness: completionReadiness.percentage
+        }
       });
 
       this.logger.log(`[SurveyManagement] Progress report generated: ${savedReport.reportId}`);
@@ -711,8 +711,8 @@ class SurveyManagementUseCase {
             ? 'พร้อมสำเร็จ'
             : `ต้องปรับปรุง ${completionReadiness.blockers.length} รายการ`,
           timeEstimate: `ประมาณ ${completionEstimate.effortHours} ชั่วโมงที่เหลือ`,
-          nextMilestone: completionEstimate.milestones[0]?.title || 'ไม่มีขั้นตอนถัดไป',
-        },
+          nextMilestone: completionEstimate.milestones[0]?.title || 'ไม่มีขั้นตอนถัดไป'
+        }
       };
     } catch (error) {
       this.logger.error(`[SurveyManagement] Progress report generation failed: ${error.message}`);
@@ -755,8 +755,8 @@ class SurveyManagementUseCase {
       questions: selectedQuestions.map((template, index) => ({
         ...template,
         order: index + 1,
-        questionId: null, // Will be generated by Survey entity
-      })),
+        questionId: null // Will be generated by Survey entity
+      }))
     };
   }
 
@@ -777,7 +777,7 @@ class SurveyManagementUseCase {
         complianceLevel: 'MANDATORY',
         evidenceRequired: true,
         helpText: 'แผนการปลูกควรระบุพันธุ์พืช ระยะปลูก และแผนการดูแล',
-        examples: ['แผนการปลูกรายปี', 'ตารางการปลูกรายเดือน'],
+        examples: ['แผนการปลูกรายปี', 'ตารางการปลูกรายเดือน']
       },
       {
         text: 'ท่านใช้เมล็ดพันธุ์หรือกิ่งพันธุ์จากแหล่งใด?',
@@ -792,14 +792,14 @@ class SurveyManagementUseCase {
           { value: 'GOVERNMENT_AGENCY', text: 'หน่วยงานราชการ' },
           { value: 'RESEARCH_INSTITUTE', text: 'สถาบันวิจัย' },
           { value: 'OWN_PRODUCTION', text: 'ผลิตเอง' },
-          { value: 'OTHER_FARMERS', text: 'เกษตรกรอื่น' },
+          { value: 'OTHER_FARMERS', text: 'เกษตรกรอื่น' }
         ],
         correctAnswers: ['CERTIFIED_SUPPLIER', 'GOVERNMENT_AGENCY', 'RESEARCH_INSTITUTE'],
         gacpSection: 'GACP-4.2',
         gacpRequirement: 'การเลือกใช้วัสดุปลูก',
         complianceLevel: 'MANDATORY',
-        evidenceRequired: true,
-      },
+        evidenceRequired: true
+      }
       // More cultivation questions would be added here
     ];
   }
@@ -818,8 +818,8 @@ class SurveyManagementUseCase {
         gacpSection: 'GACP-5.1',
         gacpRequirement: 'เกณฑ์การเก็บเกี่ยว',
         complianceLevel: 'MANDATORY',
-        evidenceRequired: true,
-      },
+        evidenceRequired: true
+      }
       // More harvesting questions would be added here
     ];
   }
@@ -847,7 +847,7 @@ class SurveyManagementUseCase {
         weight: 1.5,
         required: true,
         passingScore: 70,
-        minQuestions: 10,
+        minQuestions: 10
       },
       HARVESTING: {
         title: 'การเก็บเกี่ยว',
@@ -855,7 +855,7 @@ class SurveyManagementUseCase {
         weight: 1.3,
         required: true,
         passingScore: 75,
-        minQuestions: 8,
+        minQuestions: 8
       },
       POST_HARVEST: {
         title: 'หลังการเก็บเกี่ยว',
@@ -863,7 +863,7 @@ class SurveyManagementUseCase {
         weight: 1.2,
         required: true,
         passingScore: 70,
-        minQuestions: 6,
+        minQuestions: 6
       },
       STORAGE: {
         title: 'การเก็บรักษา',
@@ -871,7 +871,7 @@ class SurveyManagementUseCase {
         weight: 1.0,
         required: true,
         passingScore: 75,
-        minQuestions: 5,
+        minQuestions: 5
       },
       QUALITY_CONTROL: {
         title: 'การควบคุมคุณภาพ',
@@ -879,7 +879,7 @@ class SurveyManagementUseCase {
         weight: 1.4,
         required: true,
         passingScore: 80,
-        minQuestions: 7,
+        minQuestions: 7
       },
       DOCUMENTATION: {
         title: 'การจัดทำเอกสาร',
@@ -887,8 +887,8 @@ class SurveyManagementUseCase {
         weight: 1.1,
         required: true,
         passingScore: 70,
-        minQuestions: 5,
-      },
+        minQuestions: 5
+      }
     };
 
     return (
@@ -898,7 +898,7 @@ class SurveyManagementUseCase {
         weight: 1.0,
         required: false,
         passingScore: 70,
-        minQuestions: 3,
+        minQuestions: 3
       }
     );
   }

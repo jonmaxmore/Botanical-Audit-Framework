@@ -36,8 +36,8 @@ class TrackTraceController {
       rateLimits: {
         standard: 100, // requests per minute
         bulk: 10, // bulk operations per minute
-        reporting: 20, // report generations per minute
-      },
+        reporting: 20 // report generations per minute
+      }
     };
 
     // Response formats and templates
@@ -48,8 +48,8 @@ class TrackTraceController {
         metadata: {
           timestamp: new Date(),
           requestId: metadata.requestId,
-          ...metadata,
-        },
+          ...metadata
+        }
       }),
 
       error: (message, code = 'GENERAL_ERROR', details = {}) => ({
@@ -58,8 +58,8 @@ class TrackTraceController {
           code: code,
           message: message,
           details: details,
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       }),
 
       pagination: (data, pagination) => ({
@@ -67,9 +67,9 @@ class TrackTraceController {
         data: data,
         pagination: pagination,
         metadata: {
-          timestamp: new Date(),
-        },
-      }),
+          timestamp: new Date()
+        }
+      })
     };
 
     // Error codes for consistent error handling
@@ -81,7 +81,7 @@ class TrackTraceController {
       BUSINESS_RULE_VIOLATION: 'BUSINESS_RULE_VIOLATION',
       SYSTEM_ERROR: 'SYSTEM_ERROR',
       RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
-      TIMEOUT: 'OPERATION_TIMEOUT',
+      TIMEOUT: 'OPERATION_TIMEOUT'
     };
   }
 
@@ -131,8 +131,8 @@ class TrackTraceController {
         data: {
           seedId: seedTrackingResult.seedId,
           batchNumber: req.body.batchNumber,
-          supplierId: req.body.supplier?.supplierId,
-        },
+          supplierId: req.body.supplier?.supplierId
+        }
       });
 
       // Step 5: Performance monitoring
@@ -140,13 +140,13 @@ class TrackTraceController {
       this.performanceMonitor.recordMetric('api.seed.initialize', {
         duration: executionTime,
         success: true,
-        userId: userContext.userId,
+        userId: userContext.userId
       });
 
       // Step 6: Format successful response
       const response = this.responseFormats.success(seedTrackingResult, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
@@ -198,7 +198,7 @@ class TrackTraceController {
       const seedTracking = await this.trackSeedUseCase.getSeedTrackingInfo(req.params.seedId, {
         includeHistory: includeHistory,
         includeQualityData: includeQualityData,
-        userContext: userContext,
+        userContext: userContext
       });
 
       if (!seedTracking) {
@@ -211,7 +211,7 @@ class TrackTraceController {
       res.set({
         'Cache-Control': 'public, max-age=300', // 5 minutes
         ETag: this.generateETag(seedTracking),
-        'Last-Modified': seedTracking.updatedAt,
+        'Last-Modified': seedTracking.updatedAt
       });
 
       // Step 5: Check conditional requests
@@ -224,13 +224,13 @@ class TrackTraceController {
       this.performanceMonitor.recordMetric('api.seed.get', {
         duration: executionTime,
         cacheHit: false,
-        dataSize: JSON.stringify(seedTracking).length,
+        dataSize: JSON.stringify(seedTracking).length
       });
 
       // Step 7: Format response
       const response = this.responseFormats.success(seedTracking, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
@@ -299,7 +299,7 @@ class TrackTraceController {
       await this.trackSeedUseCase.recordSeedUsage(req.body.seedId, {
         plantId: plantTrackingResult.plantId,
         plantingDate: req.body.plantingDate,
-        quantityUsed: req.body.seedsPlanted,
+        quantityUsed: req.body.seedsPlanted
       });
 
       // Step 6: Create audit trail
@@ -311,21 +311,21 @@ class TrackTraceController {
           plantId: plantTrackingResult.plantId,
           seedId: req.body.seedId,
           farmId: req.body.farmId,
-          plotId: req.body.plotId,
-        },
+          plotId: req.body.plotId
+        }
       });
 
       // Step 7: Performance monitoring
       const executionTime = Date.now() - startTime;
       this.performanceMonitor.recordMetric('api.plant.initialize', {
         duration: executionTime,
-        success: true,
+        success: true
       });
 
       // Step 8: Format response
       const response = this.responseFormats.success(plantTrackingResult, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
@@ -381,7 +381,7 @@ class TrackTraceController {
         {
           ...req.body,
           recordedBy: userContext.userId,
-          recordedAt: new Date(),
+          recordedAt: new Date()
         }
       );
 
@@ -403,21 +403,21 @@ class TrackTraceController {
           plantId: req.params.plantId,
           measurementType: req.body.measurementType,
           value: req.body.value,
-          growthRate: measurementResult.measurement?.growthRate,
-        },
+          growthRate: measurementResult.measurement?.growthRate
+        }
       });
 
       // Step 6: Performance monitoring
       const executionTime = Date.now() - startTime;
       this.performanceMonitor.recordMetric('api.plant.measurement', {
         duration: executionTime,
-        measurementType: req.body.measurementType,
+        measurementType: req.body.measurementType
       });
 
       // Step 7: Format response
       const response = this.responseFormats.success(measurementResult, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
@@ -491,7 +491,7 @@ class TrackTraceController {
       // Step 4: Initialize harvest tracking
       const harvestTrackingResult = await this.trackHarvestUseCase.initializeHarvestTracking({
         ...req.body,
-        initiatedBy: userContext.userId,
+        initiatedBy: userContext.userId
       });
 
       // Step 5: Create comprehensive audit log
@@ -503,21 +503,21 @@ class TrackTraceController {
           batchId: harvestTrackingResult.harvestBatch.batchId,
           plantCount: req.body.plantIds.length,
           estimatedYield: harvestTrackingResult.preHarvestSummary.estimatedTotalYield,
-          farmId: req.body.farmId,
-        },
+          farmId: req.body.farmId
+        }
       });
 
       // Step 6: Performance monitoring
       const executionTime = Date.now() - startTime;
       this.performanceMonitor.recordMetric('api.harvest.initialize', {
         duration: executionTime,
-        plantCount: req.body.plantIds.length,
+        plantCount: req.body.plantIds.length
       });
 
       // Step 7: Format response
       const response = this.responseFormats.success(harvestTrackingResult, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
@@ -572,24 +572,24 @@ class TrackTraceController {
       let reportData;
 
       switch (entityType.toLowerCase()) {
-        case 'seed':
-          reportData = await this.trackSeedUseCase.generateSeedTrackingReport(entityId);
-          break;
-        case 'plant':
-          reportData = await this.trackPlantUseCase.generatePlantTrackingReport(entityId);
-          break;
-        case 'harvest':
-          reportData = await this.trackHarvestUseCase.generateHarvestBatchReport(entityId);
-          break;
-        default:
-          return res
-            .status(400)
-            .json(
-              this.responseFormats.error(
-                'Unsupported entity type for reporting',
-                this.errorCodes.VALIDATION_ERROR
-              )
-            );
+      case 'seed':
+        reportData = await this.trackSeedUseCase.generateSeedTrackingReport(entityId);
+        break;
+      case 'plant':
+        reportData = await this.trackPlantUseCase.generatePlantTrackingReport(entityId);
+        break;
+      case 'harvest':
+        reportData = await this.trackHarvestUseCase.generateHarvestBatchReport(entityId);
+        break;
+      default:
+        return res
+          .status(400)
+          .json(
+            this.responseFormats.error(
+              'Unsupported entity type for reporting',
+              this.errorCodes.VALIDATION_ERROR
+            )
+          );
       }
 
       if (!reportData) {
@@ -613,8 +613,8 @@ class TrackTraceController {
         data: {
           entityType: entityType,
           entityId: entityId,
-          reportSize: JSON.stringify(reportData).length,
-        },
+          reportSize: JSON.stringify(reportData).length
+        }
       });
 
       // Step 6: Performance monitoring
@@ -622,20 +622,20 @@ class TrackTraceController {
       this.performanceMonitor.recordMetric('api.report.generate', {
         duration: executionTime,
         entityType: entityType,
-        reportSize: JSON.stringify(reportData).length,
+        reportSize: JSON.stringify(reportData).length
       });
 
       // Step 7: Format response with caching headers
       res.set({
         'Cache-Control': 'private, max-age=300', // 5 minutes private cache
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       });
 
       const response = this.responseFormats.success(reportData, {
         requestId: requestId,
         executionTime: executionTime,
         entityType: entityType,
-        entityId: entityId,
+        entityId: entityId
       });
 
       this.logger.log(
@@ -679,9 +679,9 @@ class TrackTraceController {
           limit: Math.min(
             parseInt(req.query.limit) || this.apiConfig.defaultPageSize,
             this.apiConfig.maxPageSize
-          ),
+          )
         },
-        sort: req.query.sort || 'relevance',
+        sort: req.query.sort || 'relevance'
       };
 
       const validationResult = await this.validationService.validateSearchParams(searchParams);
@@ -713,7 +713,7 @@ class TrackTraceController {
       this.performanceMonitor.recordMetric('api.search', {
         duration: executionTime,
         entityType: searchParams.entityType,
-        resultsCount: searchResults.totalResults,
+        resultsCount: searchResults.totalResults
       });
 
       // Step 5: Format paginated response
@@ -723,7 +723,7 @@ class TrackTraceController {
         total: searchResults.totalResults,
         totalPages: Math.ceil(searchResults.totalResults / searchParams.pagination.limit),
         hasNext: searchResults.hasNext,
-        hasPrev: searchParams.pagination.page > 1,
+        hasPrev: searchParams.pagination.page > 1
       });
 
       // Add search metadata
@@ -732,7 +732,7 @@ class TrackTraceController {
         entityType: searchParams.entityType,
         filtersApplied: Object.keys(searchParams.filters).length,
         executionTime: executionTime,
-        facets: searchResults.facets || null,
+        facets: searchResults.facets || null
       };
 
       this.logger.log(
@@ -759,7 +759,7 @@ class TrackTraceController {
         error: error.stack,
         requestBody: req.body,
         requestParams: req.params,
-        requestQuery: req.query,
+        requestQuery: req.query
       }
     );
 
@@ -767,7 +767,7 @@ class TrackTraceController {
     this.performanceMonitor.recordError(operation.toLowerCase(), {
       duration: executionTime,
       errorType: error.name,
-      errorMessage: error.message,
+      errorMessage: error.message
     });
 
     // Audit error occurrence
@@ -778,8 +778,8 @@ class TrackTraceController {
         error: {
           message: error.message,
           type: error.name,
-          operation: operation,
-        },
+          operation: operation
+        }
       });
     } catch (auditError) {
       this.logger.error(`[TrackTrace] Audit logging failed: ${auditError.message}`);
@@ -819,7 +819,7 @@ class TrackTraceController {
     const errorResponse = this.responseFormats.error(errorMessage, errorCode, {
       requestId: requestId,
       operation: operation,
-      executionTime: executionTime,
+      executionTime: executionTime
     });
 
     res.status(statusCode).json(errorResponse);
@@ -838,7 +838,7 @@ class TrackTraceController {
             plantId: plantId,
             anomaly: anomaly,
             detectedBy: userContext.userId,
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
       }
@@ -857,30 +857,30 @@ class TrackTraceController {
       let fileExtension;
 
       switch (format.toLowerCase()) {
-        case 'pdf':
-          exportResult = await this.exportService.generatePDF(reportData);
-          contentType = 'application/pdf';
-          fileExtension = 'pdf';
-          break;
-        case 'csv':
-          exportResult = await this.exportService.generateCSV(reportData);
-          contentType = 'text/csv';
-          fileExtension = 'csv';
-          break;
-        case 'xlsx':
-          exportResult = await this.exportService.generateExcel(reportData);
-          contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
-          fileExtension = 'xlsx';
-          break;
-        default:
-          return res
-            .status(400)
-            .json(
-              this.responseFormats.error(
-                'Unsupported export format',
-                this.errorCodes.VALIDATION_ERROR
-              )
-            );
+      case 'pdf':
+        exportResult = await this.exportService.generatePDF(reportData);
+        contentType = 'application/pdf';
+        fileExtension = 'pdf';
+        break;
+      case 'csv':
+        exportResult = await this.exportService.generateCSV(reportData);
+        contentType = 'text/csv';
+        fileExtension = 'csv';
+        break;
+      case 'xlsx':
+        exportResult = await this.exportService.generateExcel(reportData);
+        contentType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+        fileExtension = 'xlsx';
+        break;
+      default:
+        return res
+          .status(400)
+          .json(
+            this.responseFormats.error(
+              'Unsupported export format',
+              this.errorCodes.VALIDATION_ERROR
+            )
+          );
       }
 
       const filename = `track-trace-report-${requestId}.${fileExtension}`;
@@ -888,7 +888,7 @@ class TrackTraceController {
       res.set({
         'Content-Type': contentType,
         'Content-Disposition': `attachment; filename="${filename}"`,
-        'Content-Length': exportResult.length,
+        'Content-Length': exportResult.length
       });
 
       res.send(exportResult);

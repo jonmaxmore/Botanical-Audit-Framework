@@ -46,7 +46,7 @@ class NotificationDTO {
       isUrgent: notification.isUrgent(),
       isExpired: notification.isExpired(),
       isBroadcast: notification.isBroadcast(),
-      timeSinceSent: notification.getTimeSinceSent(),
+      timeSinceSent: notification.getTimeSinceSent()
     };
   }
 
@@ -61,15 +61,15 @@ class NotificationDTO {
         total: result.total,
         page: result.page,
         limit: result.limit,
-        totalPages: Math.ceil(result.total / result.limit),
-      },
+        totalPages: Math.ceil(result.total / result.limit)
+      }
     };
   }
 
   static toUnreadCountResponse(count) {
     return {
       count,
-      hasUnread: count > 0,
+      hasUnread: count > 0
     };
   }
 
@@ -87,7 +87,7 @@ class NotificationDTO {
       readRate:
         statistics.totalNotifications > 0
           ? ((statistics.readCount / statistics.totalNotifications) * 100).toFixed(2) + '%'
-          : '0%',
+          : '0%'
     };
   }
 }

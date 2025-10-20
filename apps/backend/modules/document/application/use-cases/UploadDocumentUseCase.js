@@ -30,8 +30,8 @@ class UploadDocumentUseCase {
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/vnd.ms-excel',
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-          ],
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          ]
         }
       );
 
@@ -44,11 +44,11 @@ class UploadDocumentUseCase {
         {
           buffer: fileData.buffer,
           originalName: fileData.originalname,
-          mimeType: fileData.mimetype,
+          mimeType: fileData.mimetype
         },
         {
           folder: `documents/${uploadData.category || 'other'}`,
-          accessLevel: uploadData.accessLevel || Document.ACCESS_LEVEL.INTERNAL,
+          accessLevel: uploadData.accessLevel || Document.ACCESS_LEVEL.INTERNAL
         }
       );
 
@@ -74,7 +74,7 @@ class UploadDocumentUseCase {
         tags: uploadData.tags || [],
         metadata: uploadData.metadata || {},
         expiresAt: uploadData.expiresAt,
-        issuedDate: uploadData.issuedDate,
+        issuedDate: uploadData.issuedDate
       });
 
       // Generate thumbnail for images
@@ -82,7 +82,7 @@ class UploadDocumentUseCase {
         try {
           const thumbnail = await this.fileStorageService.generateThumbnail(uploadResult.filePath, {
             width: 300,
-            height: 300,
+            height: 300
           });
           document.thumbnailUrl = thumbnail.thumbnailUrl;
         } catch (error) {

@@ -25,7 +25,7 @@ class NotificationHelper {
       actionUrl: `/farmer/farms/${farmData.id}`,
       actionLabel: 'ดูรายละเอียดฟาร์ม',
       relatedEntity: { type: 'farm', id: farmData.id },
-      metadata: { farmName: farmData.name },
+      metadata: { farmName: farmData.name }
     });
   }
 
@@ -41,7 +41,7 @@ class NotificationHelper {
       actionUrl: `/farmer/farms/${farmData.id}`,
       actionLabel: 'แก้ไขข้อมูล',
       relatedEntity: { type: 'farm', id: farmData.id },
-      metadata: { farmName: farmData.name, reason },
+      metadata: { farmName: farmData.name, reason }
     });
   }
 
@@ -57,7 +57,7 @@ class NotificationHelper {
       channels: [Notification.CHANNEL.IN_APP, Notification.CHANNEL.EMAIL],
       actionUrl: `/farmer/surveys/${surveyData.id}`,
       actionLabel: 'ดูแบบสำรวจ',
-      relatedEntity: { type: 'survey', id: surveyData.id },
+      relatedEntity: { type: 'survey', id: surveyData.id }
     });
   }
 
@@ -72,7 +72,7 @@ class NotificationHelper {
       channels: [Notification.CHANNEL.IN_APP, Notification.CHANNEL.EMAIL],
       actionUrl: `/farmer/surveys/${surveyData.id}`,
       actionLabel: 'ดูผลการประเมิน',
-      relatedEntity: { type: 'survey', id: surveyData.id },
+      relatedEntity: { type: 'survey', id: surveyData.id }
     });
   }
 
@@ -88,7 +88,7 @@ class NotificationHelper {
       actionUrl: `/farmer/surveys/${surveyData.id}/edit`,
       actionLabel: 'แก้ไขแบบสำรวจ',
       relatedEntity: { type: 'survey', id: surveyData.id },
-      metadata: { reason },
+      metadata: { reason }
     });
   }
 
@@ -104,7 +104,7 @@ class NotificationHelper {
       channels: [Notification.CHANNEL.IN_APP, Notification.CHANNEL.EMAIL],
       actionUrl: `/farmer/certificates/${certificateData.id}`,
       actionLabel: 'ดาวน์โหลดใบรับรอง',
-      relatedEntity: { type: 'certificate', id: certificateData.id },
+      relatedEntity: { type: 'certificate', id: certificateData.id }
     });
   }
 
@@ -120,7 +120,7 @@ class NotificationHelper {
       actionUrl: `/farmer/certificates/${certificateData.id}/renew`,
       actionLabel: 'ต่ออายุใบรับรอง',
       relatedEntity: { type: 'certificate', id: certificateData.id },
-      metadata: { daysLeft },
+      metadata: { daysLeft }
     });
   }
 
@@ -135,7 +135,7 @@ class NotificationHelper {
       channels: [Notification.CHANNEL.IN_APP, Notification.CHANNEL.EMAIL],
       actionUrl: `/farmer/certificates/${certificateData.id}/renew`,
       actionLabel: 'ต่ออายุใบรับรอง',
-      relatedEntity: { type: 'certificate', id: certificateData.id },
+      relatedEntity: { type: 'certificate', id: certificateData.id }
     });
   }
 
@@ -151,7 +151,7 @@ class NotificationHelper {
       channels: [Notification.CHANNEL.IN_APP, Notification.CHANNEL.EMAIL],
       actionUrl: `/farmer/training/${courseData.id}`,
       actionLabel: 'เริ่มเรียน',
-      relatedEntity: { type: 'course', id: courseData.id },
+      relatedEntity: { type: 'course', id: courseData.id }
     });
   }
 
@@ -167,7 +167,7 @@ class NotificationHelper {
       actionUrl: `/farmer/training/${courseData.id}/certificate`,
       actionLabel: 'ดาวน์โหลดใบประกาศนียบัตร',
       relatedEntity: { type: 'course', id: courseData.id },
-      metadata: { score },
+      metadata: { score }
     });
   }
 
@@ -182,7 +182,7 @@ class NotificationHelper {
       priority: Notification.PRIORITY.MEDIUM,
       channels: [Notification.CHANNEL.IN_APP],
       actionUrl: `/farmer/documents/${documentData.id}`,
-      relatedEntity: { type: 'document', id: documentData.id },
+      relatedEntity: { type: 'document', id: documentData.id }
     });
   }
 
@@ -198,7 +198,7 @@ class NotificationHelper {
       actionUrl: `/farmer/documents/${documentData.id}`,
       actionLabel: 'อัพโหลดเอกสารใหม่',
       relatedEntity: { type: 'document', id: documentData.id },
-      metadata: { reason },
+      metadata: { reason }
     });
   }
 

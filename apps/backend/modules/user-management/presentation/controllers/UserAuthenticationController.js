@@ -51,7 +51,7 @@ class UserAuthenticationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid input data',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -61,7 +61,7 @@ class UserAuthenticationController {
       const context = {
         ip: req.ip || req.connection.remoteAddress,
         userAgent: req.get('User-Agent'),
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       // Authenticate user
@@ -72,7 +72,7 @@ class UserAuthenticationController {
           success: false,
           error: result.requirePasswordChange ? 'PASSWORD_EXPIRED' : 'AUTHENTICATION_FAILED',
           message: result.message,
-          requirePasswordChange: result.requirePasswordChange || false,
+          requirePasswordChange: result.requirePasswordChange || false
         });
       }
 
@@ -82,8 +82,8 @@ class UserAuthenticationController {
         message: 'Login successful',
         data: {
           user: result.user,
-          tokens: result.tokens,
-        },
+          tokens: result.tokens
+        }
       });
     } catch (error) {
       console.error('[UserAuthController] Login error:', error);
@@ -92,7 +92,7 @@ class UserAuthenticationController {
       res.status(401).json({
         success: false,
         error: 'AUTHENTICATION_FAILED',
-        message: 'Invalid credentials',
+        message: 'Invalid credentials'
       });
     }
   }
@@ -109,7 +109,7 @@ class UserAuthenticationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid input data',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -118,7 +118,7 @@ class UserAuthenticationController {
       const context = {
         ip: req.ip,
         userAgent: req.get('User-Agent'),
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       const result = await this.authService.refreshToken(refreshToken, context);
@@ -128,8 +128,8 @@ class UserAuthenticationController {
         message: 'Token refreshed successfully',
         data: {
           accessToken: result.accessToken,
-          expiresIn: result.expiresIn,
-        },
+          expiresIn: result.expiresIn
+        }
       });
     } catch (error) {
       console.error('[UserAuthController] Token refresh error:', error);
@@ -137,7 +137,7 @@ class UserAuthenticationController {
       res.status(401).json({
         success: false,
         error: 'TOKEN_REFRESH_FAILED',
-        message: 'Invalid or expired refresh token',
+        message: 'Invalid or expired refresh token'
       });
     }
   }
@@ -154,14 +154,14 @@ class UserAuthenticationController {
       const context = {
         ip: req.ip,
         userAgent: req.get('User-Agent'),
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       await this.authService.logout(userId, sessionId, context);
 
       res.status(200).json({
         success: true,
-        message: 'Logout successful',
+        message: 'Logout successful'
       });
     } catch (error) {
       console.error('[UserAuthController] Logout error:', error);
@@ -169,7 +169,7 @@ class UserAuthenticationController {
       res.status(500).json({
         success: false,
         error: 'LOGOUT_ERROR',
-        message: 'Error during logout',
+        message: 'Error during logout'
       });
     }
   }
@@ -186,7 +186,7 @@ class UserAuthenticationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid input data',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -197,14 +197,14 @@ class UserAuthenticationController {
         ip: req.ip,
         userAgent: req.get('User-Agent'),
         timestamp: new Date(),
-        sessionId: req.sessionId,
+        sessionId: req.sessionId
       };
 
       await this.authService.changePassword(userId, currentPassword, newPassword, context);
 
       res.status(200).json({
         success: true,
-        message: 'Password changed successfully',
+        message: 'Password changed successfully'
       });
     } catch (error) {
       console.error('[UserAuthController] Password change error:', error);
@@ -213,7 +213,7 @@ class UserAuthenticationController {
         return res.status(400).json({
           success: false,
           error: 'INVALID_CURRENT_PASSWORD',
-          message: 'Current password is incorrect',
+          message: 'Current password is incorrect'
         });
       }
 
@@ -221,14 +221,14 @@ class UserAuthenticationController {
         return res.status(400).json({
           success: false,
           error: 'PASSWORD_VALIDATION_ERROR',
-          message: error.message,
+          message: error.message
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'PASSWORD_CHANGE_ERROR',
-        message: 'Error changing password',
+        message: 'Error changing password'
       });
     }
   }
@@ -246,7 +246,7 @@ class UserAuthenticationController {
         return res.status(404).json({
           success: false,
           error: 'USER_NOT_FOUND',
-          message: 'User not found',
+          message: 'User not found'
         });
       }
 
@@ -260,13 +260,13 @@ class UserAuthenticationController {
         isActive: user.isActive,
         lastLoginAt: user.lastLoginAt,
         createdAt: user.createdAt,
-        profile: user.profile || {},
+        profile: user.profile || {}
       };
 
       res.status(200).json({
         success: true,
         message: 'Profile retrieved successfully',
-        data: { user: profile },
+        data: { user: profile }
       });
     } catch (error) {
       console.error('[UserAuthController] Get profile error:', error);
@@ -274,7 +274,7 @@ class UserAuthenticationController {
       res.status(500).json({
         success: false,
         error: 'PROFILE_FETCH_ERROR',
-        message: 'Error retrieving profile',
+        message: 'Error retrieving profile'
       });
     }
   }
@@ -291,7 +291,7 @@ class UserAuthenticationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid input data',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -313,7 +313,7 @@ class UserAuthenticationController {
           type: 'PROFILE_UPDATED',
           userId,
           changes: Object.keys(updateData),
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -325,9 +325,9 @@ class UserAuthenticationController {
             id: updatedUser.id,
             firstName: updatedUser.firstName,
             lastName: updatedUser.lastName,
-            profile: updatedUser.profile,
-          },
-        },
+            profile: updatedUser.profile
+          }
+        }
       });
     } catch (error) {
       console.error('[UserAuthController] Update profile error:', error);
@@ -335,7 +335,7 @@ class UserAuthenticationController {
       res.status(500).json({
         success: false,
         error: 'PROFILE_UPDATE_ERROR',
-        message: 'Error updating profile',
+        message: 'Error updating profile'
       });
     }
   }
@@ -352,7 +352,7 @@ class UserAuthenticationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid input data',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -365,7 +365,7 @@ class UserAuthenticationController {
       const response = {
         success: true,
         message:
-          'If an account with this email exists, password reset instructions have been sent.',
+          'If an account with this email exists, password reset instructions have been sent.'
       };
 
       if (user && user.isActive) {
@@ -376,7 +376,7 @@ class UserAuthenticationController {
         // Save reset token
         await this.userRepository.update(user.id, {
           passwordResetToken: resetToken,
-          passwordResetExpiry: resetExpiry,
+          passwordResetExpiry: resetExpiry
         });
 
         // Send reset email
@@ -386,7 +386,7 @@ class UserAuthenticationController {
             resetUrl: `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`,
             expiryTime: resetExpiry,
             userAgent: req.get('User-Agent'),
-            ip: req.ip,
+            ip: req.ip
           });
         }
 
@@ -397,7 +397,7 @@ class UserAuthenticationController {
             userId: user.id,
             ip: req.ip,
             userAgent: req.get('User-Agent'),
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
       }
@@ -409,7 +409,7 @@ class UserAuthenticationController {
       res.status(500).json({
         success: false,
         error: 'PASSWORD_RESET_ERROR',
-        message: 'Error processing password reset request',
+        message: 'Error processing password reset request'
       });
     }
   }
@@ -426,7 +426,7 @@ class UserAuthenticationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid input data',
-          details: errors.array(),
+          details: errors.array()
         });
       }
 
@@ -436,14 +436,14 @@ class UserAuthenticationController {
       const user = await this.userRepository.findOne({
         passwordResetToken: token,
         passwordResetExpiry: { $gt: new Date() },
-        isActive: true,
+        isActive: true
       });
 
       if (!user) {
         return res.status(400).json({
           success: false,
           error: 'INVALID_RESET_TOKEN',
-          message: 'Invalid or expired reset token',
+          message: 'Invalid or expired reset token'
         });
       }
 
@@ -453,7 +453,7 @@ class UserAuthenticationController {
         return res.status(400).json({
           success: false,
           error: 'PASSWORD_VALIDATION_ERROR',
-          message: passwordValidation.message,
+          message: passwordValidation.message
         });
       }
 
@@ -468,7 +468,7 @@ class UserAuthenticationController {
         passwordUpdatedAt: new Date(),
         passwordResetToken: null,
         passwordResetExpiry: null,
-        requirePasswordChange: false,
+        requirePasswordChange: false
       });
 
       // Log password reset
@@ -478,7 +478,7 @@ class UserAuthenticationController {
           userId: user.id,
           ip: req.ip,
           userAgent: req.get('User-Agent'),
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -486,13 +486,13 @@ class UserAuthenticationController {
       if (this.notificationService) {
         await this.notificationService.send(user.email, 'PASSWORD_RESET_CONFIRMED', {
           timestamp: new Date(),
-          ip: req.ip,
+          ip: req.ip
         });
       }
 
       res.status(200).json({
         success: true,
-        message: 'Password reset successfully',
+        message: 'Password reset successfully'
       });
     } catch (error) {
       console.error('[UserAuthController] Reset password error:', error);
@@ -500,7 +500,7 @@ class UserAuthenticationController {
       res.status(500).json({
         success: false,
         error: 'PASSWORD_RESET_ERROR',
-        message: 'Error resetting password',
+        message: 'Error resetting password'
       });
     }
   }
@@ -512,11 +512,11 @@ class UserAuthenticationController {
     return {
       login: [
         body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
-        body('password').isLength({ min: 1 }).withMessage('Password is required'),
+        body('password').isLength({ min: 1 }).withMessage('Password is required')
       ],
 
       refreshToken: [
-        body('refreshToken').isLength({ min: 1 }).withMessage('Refresh token is required'),
+        body('refreshToken').isLength({ min: 1 }).withMessage('Refresh token is required')
       ],
 
       changePassword: [
@@ -527,7 +527,7 @@ class UserAuthenticationController {
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/)
           .withMessage(
             'New password must contain uppercase, lowercase, number and special character'
-          ),
+          )
       ],
 
       updateProfile: [
@@ -546,11 +546,11 @@ class UserAuthenticationController {
         body('profile.address')
           .optional()
           .isLength({ max: 500 })
-          .withMessage('Address must not exceed 500 characters'),
+          .withMessage('Address must not exceed 500 characters')
       ],
 
       forgotPassword: [
-        body('email').isEmail().normalizeEmail().withMessage('Valid email is required'),
+        body('email').isEmail().normalizeEmail().withMessage('Valid email is required')
       ],
 
       resetPassword: [
@@ -561,8 +561,8 @@ class UserAuthenticationController {
           .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/)
           .withMessage(
             'New password must contain uppercase, lowercase, number and special character'
-          ),
-      ],
+          )
+      ]
     };
   }
 }

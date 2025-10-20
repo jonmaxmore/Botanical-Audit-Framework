@@ -54,7 +54,7 @@ class ResetDTAMStaffPasswordUseCase {
     await this.staffRepository.save(staff);
 
     return {
-      staff,
+      staff
     };
   }
 }

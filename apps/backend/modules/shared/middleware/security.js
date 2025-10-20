@@ -17,7 +17,7 @@ const securityConfig = {
     accessTokenExpiry: process.env.JWT_EXPIRY || '15m',
     refreshTokenExpiry: process.env.JWT_REFRESH_EXPIRY || '7d',
     issuer: 'gacp-standards-system',
-    audience: 'gacp-users',
+    audience: 'gacp-users'
   },
 
   // Rate Limiting Configuration
@@ -26,10 +26,10 @@ const securityConfig = {
     max: 100, // limit each IP to 100 requests per windowMs
     message: {
       error: 'Too many requests from this IP',
-      retryAfter: '15 minutes',
+      retryAfter: '15 minutes'
     },
     standardHeaders: true,
-    legacyHeaders: false,
+    legacyHeaders: false
   },
 
   // API Rate Limiting (more restrictive)
@@ -38,8 +38,8 @@ const securityConfig = {
     max: 50,
     message: {
       error: 'API rate limit exceeded',
-      retryAfter: '15 minutes',
-    },
+      retryAfter: '15 minutes'
+    }
   },
 
   // Authentication Rate Limiting (very restrictive)
@@ -48,13 +48,13 @@ const securityConfig = {
     max: 5,
     message: {
       error: 'Too many authentication attempts',
-      retryAfter: '15 minutes',
-    },
+      retryAfter: '15 minutes'
+    }
   },
 
   // CORS Configuration
   cors: {
-    origin: function (origin, callback) {
+    origin: function(origin, callback) {
       const allowedOrigins = process.env.ALLOWED_ORIGINS
         ? process.env.ALLOWED_ORIGINS.split(',')
         : ['http://localhost:3000', 'http://localhost:5173'];
@@ -71,25 +71,25 @@ const securityConfig = {
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-    exposedHeaders: ['X-Total-Count', 'X-Page-Count'],
+    exposedHeaders: ['X-Total-Count', 'X-Page-Count']
   },
 
   // Helmet Configuration
   helmet: {
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
-        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
-        imgSrc: ["'self'", 'data:', 'https:'],
-        scriptSrc: ["'self'"],
-        connectSrc: ["'self'"],
-        frameSrc: ["'none'"],
-        objectSrc: ["'none'"],
-        baseUri: ["'self'"],
-      },
+        defaultSrc: ['\'self\''],
+        styleSrc: ['\'self\'', '\'unsafe-inline\'', 'https://fonts.googleapis.com'],
+        fontSrc: ['\'self\'', 'https://fonts.gstatic.com'],
+        imgSrc: ['\'self\'', 'data:', 'https:'],
+        scriptSrc: ['\'self\''],
+        connectSrc: ['\'self\''],
+        frameSrc: ['\'none\''],
+        objectSrc: ['\'none\''],
+        baseUri: ['\'self\'']
+      }
     },
-    crossOriginEmbedderPolicy: false, // Disable for development
+    crossOriginEmbedderPolicy: false // Disable for development
   },
 
   // File Upload Security
@@ -103,11 +103,11 @@ const securityConfig = {
       'application/json',
       'image/jpeg',
       'image/png',
-      'image/gif',
+      'image/gif'
     ],
     uploadPath: process.env.UPLOAD_PATH || './uploads',
-    virusScanEnabled: process.env.VIRUS_SCAN_ENABLED === 'true',
-  },
+    virusScanEnabled: process.env.VIRUS_SCAN_ENABLED === 'true'
+  }
 };
 
 // Input Validation Schemas
@@ -116,7 +116,7 @@ const validationSchemas = {
   userRegistration: {
     email: {
       validator: validator.isEmail,
-      message: 'Invalid email format',
+      message: 'Invalid email format'
     },
     password: {
       validator: value => {
@@ -126,12 +126,12 @@ const validationSchemas = {
         );
       },
       message:
-        'Password must be at least 8 characters with uppercase, lowercase, number, and special character',
+        'Password must be at least 8 characters with uppercase, lowercase, number, and special character'
     },
     name: {
       validator: value => value.length >= 2 && value.length <= 50,
-      message: 'Name must be between 2 and 50 characters',
-    },
+      message: 'Name must be between 2 and 50 characters'
+    }
   },
 
   // Standards Creation
@@ -139,15 +139,15 @@ const validationSchemas = {
     standard_code: {
       validator: value => /^[A-Z0-9-]{3,20}$/.test(value),
       message:
-        'Standard code must be 3-20 characters, uppercase letters, numbers, and hyphens only',
+        'Standard code must be 3-20 characters, uppercase letters, numbers, and hyphens only'
     },
     source: {
       validator: value => ['WHO', 'Thai FDA', 'ASEAN', 'GMP', 'ISO'].includes(value),
-      message: 'Invalid source',
+      message: 'Invalid source'
     },
     title: {
       validator: value => value.length >= 5 && value.length <= 200,
-      message: 'Title must be between 5 and 200 characters',
+      message: 'Title must be between 5 and 200 characters'
     },
     category: {
       validator: value =>
@@ -161,10 +161,10 @@ const validationSchemas = {
           'documentation',
           'facility',
           'personnel',
-          'traceability',
+          'traceability'
         ].includes(value),
-      message: 'Invalid category',
-    },
+      message: 'Invalid category'
+    }
   },
 
   // Assessment Creation
@@ -172,13 +172,13 @@ const validationSchemas = {
     assessment_type: {
       validator: value =>
         ['self-assessment', 'third-party', 'internal-audit', 'external-audit'].includes(value),
-      message: 'Invalid assessment type',
+      message: 'Invalid assessment type'
     },
     facility_name: {
       validator: value => value.length >= 2 && value.length <= 100,
-      message: 'Facility name must be between 2 and 100 characters',
-    },
-  },
+      message: 'Facility name must be between 2 and 100 characters'
+    }
+  }
 };
 
 // Security Middleware Functions
@@ -205,7 +205,7 @@ const securityMiddleware = {
         return res.status(400).json({
           success: false,
           message: 'Validation failed',
-          errors: errors,
+          errors: errors
         });
       }
 
@@ -241,7 +241,7 @@ const securityMiddleware = {
   },
 
   // Password Verification
-  verifyPassword: async (password, hashedPassword) => {
+  verifyPassword: async(password, hashedPassword) => {
     return await bcrypt.compare(password, hashedPassword);
   },
 
@@ -252,13 +252,13 @@ const securityMiddleware = {
     const accessToken = jwt.sign(payload, securityConfig.jwt.secret, {
       expiresIn: securityConfig.jwt.accessTokenExpiry,
       issuer: securityConfig.jwt.issuer,
-      audience: securityConfig.jwt.audience,
+      audience: securityConfig.jwt.audience
     });
 
     const refreshToken = jwt.sign({ userId: payload.userId }, securityConfig.jwt.refreshSecret, {
       expiresIn: securityConfig.jwt.refreshTokenExpiry,
       issuer: securityConfig.jwt.issuer,
-      audience: securityConfig.jwt.audience,
+      audience: securityConfig.jwt.audience
     });
 
     return { accessToken, refreshToken };
@@ -272,7 +272,7 @@ const securityMiddleware = {
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({
         success: false,
-        message: 'Access token is required',
+        message: 'Access token is required'
       });
     }
 
@@ -281,7 +281,7 @@ const securityMiddleware = {
     try {
       const decoded = jwt.verify(token, securityConfig.jwt.secret, {
         issuer: securityConfig.jwt.issuer,
-        audience: securityConfig.jwt.audience,
+        audience: securityConfig.jwt.audience
       });
       req.user = decoded;
       next();
@@ -290,17 +290,17 @@ const securityMiddleware = {
         return res.status(401).json({
           success: false,
           message: 'Access token has expired',
-          code: 'TOKEN_EXPIRED',
+          code: 'TOKEN_EXPIRED'
         });
       } else if (error.name === 'JsonWebTokenError') {
         return res.status(401).json({
           success: false,
-          message: 'Invalid access token',
+          message: 'Invalid access token'
         });
       } else {
         return res.status(500).json({
           success: false,
-          message: 'Token verification failed',
+          message: 'Token verification failed'
         });
       }
     }
@@ -326,7 +326,7 @@ const securityMiddleware = {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
         const sanitizedName = file.originalname.replace(/[^a-zA-Z0-9.-]/g, '');
         cb(null, `${uniqueSuffix}-${sanitizedName}`);
-      },
+      }
     });
 
     const fileFilter = (req, file, cb) => {
@@ -342,9 +342,9 @@ const securityMiddleware = {
       storage: storage,
       limits: {
         fileSize: securityConfig.fileUpload.maxFileSize,
-        files: 5, // Maximum 5 files
+        files: 5 // Maximum 5 files
       },
-      fileFilter: fileFilter,
+      fileFilter: fileFilter
     });
 
     return upload;
@@ -358,7 +358,7 @@ const securityMiddleware = {
     if (!apiKey || !validApiKeys.includes(apiKey)) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid or missing API key',
+        message: 'Invalid or missing API key'
       });
     }
 
@@ -380,7 +380,7 @@ const securityMiddleware = {
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.removeHeader('X-Powered-By');
     next();
-  },
+  }
 };
 
 // Rate Limiting Setup
@@ -388,7 +388,7 @@ const createRateLimiters = () => {
   return {
     general: rateLimit(securityConfig.rateLimiting),
     api: rateLimit(securityConfig.apiRateLimiting),
-    auth: rateLimit(securityConfig.authRateLimiting),
+    auth: rateLimit(securityConfig.authRateLimiting)
   };
 };
 
@@ -426,5 +426,5 @@ module.exports = {
   validationSchemas,
   securityMiddleware,
   setupAppSecurity,
-  createRateLimiters,
+  createRateLimiters
 };

@@ -39,9 +39,9 @@ const documentSchema = new mongoose.Schema(
         'certificate',
         'payment_receipt',
         'revision_request',
-        'other',
+        'other'
       ],
-      index: true,
+      index: true
     },
 
     // Application and user context
@@ -49,20 +49,20 @@ const documentSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Application',
       required: [true, 'Application ID is required'],
-      index: true,
+      index: true
     },
 
     uploadedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'Uploader ID is required'],
-      index: true,
+      index: true
     },
 
     userRole: {
       type: String,
       required: [true, 'User role is required'],
-      enum: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN', 'SYSTEM'],
+      enum: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN', 'SYSTEM']
     },
 
     // File information
@@ -70,21 +70,21 @@ const documentSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Original filename is required'],
       trim: true,
-      maxlength: [255, 'Filename cannot exceed 255 characters'],
+      maxlength: [255, 'Filename cannot exceed 255 characters']
     },
 
     fileName: {
       type: String,
       required: [true, 'Storage filename is required'],
       unique: true,
-      trim: true,
+      trim: true
     },
 
     fileSize: {
       type: Number,
       required: [true, 'File size is required'],
       min: [1, 'File size must be greater than 0'],
-      max: [100 * 1024 * 1024, 'File size cannot exceed 100MB'], // 100MB limit
+      max: [100 * 1024 * 1024, 'File size cannot exceed 100MB'] // 100MB limit
     },
 
     mimeType: {
@@ -96,54 +96,54 @@ const documentSchema = new mongoose.Schema(
         'image/jpg',
         'image/png',
         'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      ],
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+      ]
     },
 
     fileExtension: {
       type: String,
       required: true,
-      enum: ['.pdf', '.jpg', '.jpeg', '.png', '.doc', '.docx'],
+      enum: ['.pdf', '.jpg', '.jpeg', '.png', '.doc', '.docx']
     },
 
     // Storage and security
     storagePath: {
       type: String,
       required: [true, 'Storage path is required'],
-      trim: true,
+      trim: true
     },
 
     storageUrl: {
       type: String,
-      trim: true,
+      trim: true
     },
 
     storageKey: {
       type: String,
       required: [true, 'Storage key is required'],
-      trim: true,
+      trim: true
     },
 
     checksum: {
       type: String,
       required: [true, 'File checksum is required'],
-      length: 64, // SHA-256 hash length
+      length: 64 // SHA-256 hash length
     },
 
     // Security and encryption
     encrypted: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     encryptionKey: {
       type: String,
-      select: false, // Never include in queries by default
+      select: false // Never include in queries by default
     },
 
     encryptionAlgorithm: {
       type: String,
-      default: 'AES-256-GCM',
+      default: 'AES-256-GCM'
     },
 
     // Virus scanning results
@@ -153,19 +153,19 @@ const documentSchema = new mongoose.Schema(
       scanDate: { type: Date },
       scanEngine: { type: String },
       threat: { type: String },
-      scanId: { type: String },
+      scanId: { type: String }
     },
 
     // OCR and content extraction
     ocrText: {
       type: String,
-      index: 'text', // Text search index
+      index: 'text' // Text search index
     },
 
     ocrConfidence: {
       type: Number,
       min: 0,
-      max: 100,
+      max: 100
     },
 
     extractedData: {
@@ -175,42 +175,42 @@ const documentSchema = new mongoose.Schema(
         {
           type: { type: String },
           value: { type: String },
-          confidence: { type: Number },
-        },
+          confidence: { type: Number }
+        }
       ],
       keywords: [{ type: String }],
-      language: { type: String, default: 'th' },
+      language: { type: String, default: 'th' }
     },
 
     // Document metadata and validation
     description: {
       type: String,
       trim: true,
-      maxlength: [1000, 'Description cannot exceed 1000 characters'],
+      maxlength: [1000, 'Description cannot exceed 1000 characters']
     },
 
     tags: [
       {
         type: String,
         trim: true,
-        lowercase: true,
-      },
+        lowercase: true
+      }
     ],
 
     expiryDate: {
       type: Date,
-      index: true,
+      index: true
     },
 
     validationStatus: {
       status: {
         type: String,
         enum: ['PENDING', 'VALID', 'INVALID', 'EXPIRED', 'REQUIRES_REVIEW'],
-        default: 'PENDING',
+        default: 'PENDING'
       },
       validatedAt: { type: Date },
       validatedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      validationNotes: { type: String, trim: true },
+      validationNotes: { type: String, trim: true }
     },
 
     // Document lifecycle
@@ -218,19 +218,19 @@ const documentSchema = new mongoose.Schema(
       type: String,
       enum: ['ACTIVE', 'ARCHIVED', 'DELETED', 'QUARANTINED'],
       default: 'ACTIVE',
-      index: true,
+      index: true
     },
 
     // Version control
     version: {
       type: Number,
       default: 1,
-      min: 1,
+      min: 1
     },
 
     previousVersionId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Document',
+      ref: 'Document'
     },
 
     versionHistory: [
@@ -240,8 +240,8 @@ const documentSchema = new mongoose.Schema(
         createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         changes: { type: String },
         fileSize: { type: Number },
-        checksum: { type: String },
-      },
+        checksum: { type: String }
+      }
     ],
 
     // Image-specific metadata
@@ -254,13 +254,13 @@ const documentSchema = new mongoose.Schema(
       gpsCoordinates: {
         latitude: { type: Number },
         longitude: { type: Number },
-        accuracy: { type: Number },
+        accuracy: { type: Number }
       },
       cameraInfo: {
         make: { type: String },
         model: { type: String },
-        timestamp: { type: Date },
-      },
+        timestamp: { type: Date }
+      }
     },
 
     // PDF-specific metadata
@@ -273,25 +273,25 @@ const documentSchema = new mongoose.Schema(
       author: { type: String },
       creator: { type: String },
       producer: { type: String },
-      creationDate: { type: Date },
+      creationDate: { type: Date }
     },
 
     // Thumbnail and preview
     thumbnailUrl: {
       type: String,
-      trim: true,
+      trim: true
     },
 
     previewUrl: {
       type: String,
-      trim: true,
+      trim: true
     },
 
     // Access control and sharing
     accessLevel: {
       type: String,
       enum: ['PRIVATE', 'APPLICATION_TEAM', 'DTAM_STAFF', 'PUBLIC'],
-      default: 'APPLICATION_TEAM',
+      default: 'APPLICATION_TEAM'
     },
 
     sharedWith: [
@@ -300,8 +300,8 @@ const documentSchema = new mongoose.Schema(
         role: { type: String },
         sharedAt: { type: Date, default: Date.now },
         expiresAt: { type: Date },
-        permissions: [{ type: String, enum: ['READ', 'DOWNLOAD', 'COMMENT'] }],
-      },
+        permissions: [{ type: String, enum: ['READ', 'DOWNLOAD', 'COMMENT'] }]
+      }
     ],
 
     // Audit trail
@@ -310,38 +310,38 @@ const documentSchema = new mongoose.Schema(
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
         downloadedAt: { type: Date, default: Date.now },
         ipAddress: { type: String },
-        userAgent: { type: String },
-      },
+        userAgent: { type: String }
+      }
     ],
 
     // Timestamps and tracking
     uploadedAt: {
       type: Date,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     lastAccessedAt: {
       type: Date,
-      index: true,
+      index: true
     },
 
     archivedAt: {
-      type: Date,
+      type: Date
     },
 
     deletedAt: {
-      type: Date,
+      type: Date
     },
 
     deletedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User'
     },
 
     deletionReason: {
       type: String,
-      trim: true,
+      trim: true
     },
 
     // Retention and compliance
@@ -349,27 +349,27 @@ const documentSchema = new mongoose.Schema(
       retainUntil: { type: Date },
       autoDeleteAfter: { type: Date },
       legalHold: { type: Boolean, default: false },
-      complianceNotes: { type: String },
-    },
+      complianceNotes: { type: String }
+    }
   },
   {
     timestamps: true,
     collection: 'documents',
     toJSON: {
-      transform: function (doc, ret) {
+      transform: function(doc, ret) {
         // Remove sensitive fields from JSON output
         delete ret.encryptionKey;
         delete ret.__v;
         return ret;
-      },
+      }
     },
     toObject: {
-      transform: function (doc, ret) {
+      transform: function(doc, ret) {
         delete ret.encryptionKey;
         delete ret.__v;
         return ret;
-      },
-    },
+      }
+    }
   }
 );
 
@@ -391,23 +391,23 @@ documentSchema.index({
   ocrText: 'text',
   originalName: 'text',
   description: 'text',
-  tags: 'text',
+  tags: 'text'
 });
 
 // Virtual properties
-documentSchema.virtual('isExpired').get(function () {
+documentSchema.virtual('isExpired').get(function() {
   return this.expiryDate && this.expiryDate < new Date();
 });
 
-documentSchema.virtual('isValid').get(function () {
+documentSchema.virtual('isValid').get(function() {
   return this.validationStatus?.status === 'VALID' && !this.isExpired;
 });
 
-documentSchema.virtual('fileType').get(function () {
+documentSchema.virtual('fileType').get(function() {
   return this.mimeType.split('/')[0]; // 'image', 'application', etc.
 });
 
-documentSchema.virtual('fileSizeHuman').get(function () {
+documentSchema.virtual('fileSizeHuman').get(function() {
   const sizes = ['B', 'KB', 'MB', 'GB'];
   let size = this.fileSize;
   let i = 0;
@@ -421,7 +421,7 @@ documentSchema.virtual('fileSizeHuman').get(function () {
 });
 
 // Pre-save middleware
-documentSchema.pre('save', function (next) {
+documentSchema.pre('save', function(next) {
   // Extract file extension
   if (this.originalName && !this.fileExtension) {
     const path = require('path');
@@ -433,7 +433,7 @@ documentSchema.pre('save', function (next) {
     const retentionYears = 7; // Default retention period
     this.retentionPolicy = {
       ...this.retentionPolicy,
-      retainUntil: new Date(Date.now() + retentionYears * 365 * 24 * 60 * 60 * 1000),
+      retainUntil: new Date(Date.now() + retentionYears * 365 * 24 * 60 * 60 * 1000)
     };
   }
 
@@ -441,47 +441,47 @@ documentSchema.pre('save', function (next) {
 });
 
 // Instance methods
-documentSchema.methods.generateDownloadToken = function (userId, expiresIn = 3600) {
+documentSchema.methods.generateDownloadToken = function(userId, expiresIn = 3600) {
   const crypto = require('crypto');
   const payload = {
     documentId: this._id,
     userId,
-    expiresAt: Date.now() + expiresIn * 1000,
+    expiresAt: Date.now() + expiresIn * 1000
   };
 
   return crypto.createHash('sha256').update(JSON.stringify(payload)).digest('hex');
 };
 
-documentSchema.methods.validateChecksum = async function (fileBuffer) {
+documentSchema.methods.validateChecksum = async function(fileBuffer) {
   const crypto = require('crypto');
   const calculatedChecksum = crypto.createHash('sha256').update(fileBuffer).digest('hex');
   return calculatedChecksum === this.checksum;
 };
 
-documentSchema.methods.addVersionHistory = function (userId, changes = '') {
+documentSchema.methods.addVersionHistory = function(userId, changes = '') {
   this.versionHistory.push({
     version: this.version,
     createdAt: new Date(),
     createdBy: userId,
     changes,
     fileSize: this.fileSize,
-    checksum: this.checksum,
+    checksum: this.checksum
   });
 };
 
-documentSchema.methods.recordDownload = function (userId, ipAddress = '', userAgent = '') {
+documentSchema.methods.recordDownload = function(userId, ipAddress = '', userAgent = '') {
   this.downloadHistory.push({
     userId,
     downloadedAt: new Date(),
     ipAddress,
-    userAgent,
+    userAgent
   });
 
   this.lastAccessedAt = new Date();
   return this.save();
 };
 
-documentSchema.methods.shareWith = function (
+documentSchema.methods.shareWith = function(
   userId,
   role,
   permissions = ['READ'],
@@ -498,14 +498,14 @@ documentSchema.methods.shareWith = function (
     role,
     permissions,
     expiresAt,
-    sharedAt: new Date(),
+    sharedAt: new Date()
   });
 
   return this.save();
 };
 
 // Static methods
-documentSchema.statics.findByApplication = function (applicationId, options = {}) {
+documentSchema.statics.findByApplication = function(applicationId, options = {}) {
   const query = { applicationId };
 
   if (!options.includeDeleted) {
@@ -515,14 +515,14 @@ documentSchema.statics.findByApplication = function (applicationId, options = {}
   return this.find(query).sort({ uploadedAt: -1 });
 };
 
-documentSchema.statics.findExpiredDocuments = function () {
+documentSchema.statics.findExpiredDocuments = function() {
   return this.find({
     expiryDate: { $lt: new Date() },
-    status: 'ACTIVE',
+    status: 'ACTIVE'
   });
 };
 
-documentSchema.statics.findByType = function (documentType, applicationId = null) {
+documentSchema.statics.findByType = function(documentType, applicationId = null) {
   const query = { documentType, status: 'ACTIVE' };
 
   if (applicationId) {
@@ -532,11 +532,11 @@ documentSchema.statics.findByType = function (documentType, applicationId = null
   return this.find(query).sort({ uploadedAt: -1 });
 };
 
-documentSchema.statics.findDuplicatesByChecksum = function (checksum) {
+documentSchema.statics.findDuplicatesByChecksum = function(checksum) {
   return this.find({ checksum, status: { $ne: 'DELETED' } });
 };
 
-documentSchema.statics.getStorageStatistics = function () {
+documentSchema.statics.getStorageStatistics = function() {
   return this.aggregate([
     { $match: { status: { $ne: 'DELETED' } } },
     {
@@ -544,10 +544,10 @@ documentSchema.statics.getStorageStatistics = function () {
         _id: '$documentType',
         count: { $sum: 1 },
         totalSize: { $sum: '$fileSize' },
-        avgSize: { $avg: '$fileSize' },
-      },
+        avgSize: { $avg: '$fileSize' }
+      }
     },
-    { $sort: { totalSize: -1 } },
+    { $sort: { totalSize: -1 } }
   ]);
 };
 

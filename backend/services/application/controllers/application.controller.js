@@ -37,7 +37,7 @@ const AuditLog = require('../../../../database/models/AuditLog.model');
  * @param {String} req.body.cannabisVariety - CBD|THC|MIXED
  * @returns {Object} 201 - Created application
  */
-exports.createApplication = async (req, res) => {
+exports.createApplication = async(req, res) => {
   try {
     const {
       farmName,
@@ -45,7 +45,7 @@ exports.createApplication = async (req, res) => {
       farmSize,
       farmSizeUnit = 'rai',
       cultivationType,
-      cannabisVariety,
+      cannabisVariety
     } = req.body;
 
     // Get user information
@@ -53,7 +53,7 @@ exports.createApplication = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: 'User not found'
       });
     }
 
@@ -61,7 +61,7 @@ exports.createApplication = async (req, res) => {
     if (user.role !== 'FARMER') {
       return res.status(403).json({
         success: false,
-        message: 'Only farmers can create applications',
+        message: 'Only farmers can create applications'
       });
     }
 
@@ -93,9 +93,9 @@ exports.createApplication = async (req, res) => {
           duration: null,
           actor: user.userId,
           actorRole: 'FARMER',
-          notes: 'Application created',
-        },
-      ],
+          notes: 'Application created'
+        }
+      ]
     });
 
     // Audit log
@@ -106,10 +106,10 @@ exports.createApplication = async (req, res) => {
       resourceId: application.applicationId,
       details: {
         applicationNumber: application.applicationNumber,
-        farmName: application.farmName,
+        farmName: application.farmName
       },
       ipAddress: req.ip,
-      userAgent: req.get('user-agent'),
+      userAgent: req.get('user-agent')
     });
 
     res.status(201).json({
@@ -122,9 +122,9 @@ exports.createApplication = async (req, res) => {
           farmName: application.farmName,
           state: application.state,
           progress: application.calculateProgress(),
-          createdAt: application.createdAt,
-        },
-      },
+          createdAt: application.createdAt
+        }
+      }
     });
   } catch (error) {
     console.error('Create application error:', error);
@@ -136,14 +136,14 @@ exports.createApplication = async (req, res) => {
         message: 'Validation error',
         errors: Object.keys(error.errors).map(key => ({
           field: key,
-          message: error.errors[key].message,
-        })),
+          message: error.errors[key].message
+        }))
       });
     }
 
     res.status(500).json({
       success: false,
-      message: 'Failed to create application',
+      message: 'Failed to create application'
     });
   }
 };
@@ -159,7 +159,7 @@ exports.createApplication = async (req, res) => {
  * @query {String} province - Filter by province
  * @returns {Object} 200 - List of applications with pagination
  */
-exports.listApplications = async (req, res) => {
+exports.listApplications = async(req, res) => {
   try {
     const {
       page = 1,
@@ -167,21 +167,21 @@ exports.listApplications = async (req, res) => {
       state,
       province,
       sortBy = 'createdAt',
-      sortOrder = 'desc',
+      sortOrder = 'desc'
     } = req.query;
 
     const user = await User.findOne({ userId: req.user.userId });
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: 'User not found'
       });
     }
 
     // Build query
     const query = {
       isActive: true,
-      isDeleted: false,
+      isDeleted: false
     };
 
     // Farmers can only see their own applications
@@ -215,13 +215,13 @@ exports.listApplications = async (req, res) => {
         .limit(limitNum)
         .select('-stateHistory -dtamReview') // Exclude large fields
         .lean(),
-      Application.countDocuments(query),
+      Application.countDocuments(query)
     ]);
 
     // Add progress to each application
     const applicationsWithProgress = applications.map(app => ({
       ...app,
-      progress: calculateProgressForState(app.state),
+      progress: calculateProgressForState(app.state)
     }));
 
     res.status(200).json({
@@ -234,15 +234,15 @@ exports.listApplications = async (req, res) => {
           total,
           totalPages: Math.ceil(total / limitNum),
           hasNext: pageNum < Math.ceil(total / limitNum),
-          hasPrev: pageNum > 1,
-        },
-      },
+          hasPrev: pageNum > 1
+        }
+      }
     });
   } catch (error) {
     console.error('List applications error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to list applications',
+      message: 'Failed to list applications'
     });
   }
 };
@@ -255,7 +255,7 @@ exports.listApplications = async (req, res) => {
  * @param {String} req.params.id - Application ID
  * @returns {Object} 200 - Application details
  */
-exports.getApplication = async (req, res) => {
+exports.getApplication = async(req, res) => {
   try {
     const { id } = req.params;
 
@@ -263,7 +263,7 @@ exports.getApplication = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: 'User not found'
       });
     }
 
@@ -271,13 +271,13 @@ exports.getApplication = async (req, res) => {
     const application = await Application.findOne({
       applicationId: id,
       isActive: true,
-      isDeleted: false,
+      isDeleted: false
     });
 
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
@@ -285,7 +285,7 @@ exports.getApplication = async (req, res) => {
     if (user.role === 'FARMER' && application.userId !== user.userId) {
       return res.status(403).json({
         success: false,
-        message: 'You can only access your own applications',
+        message: 'You can only access your own applications'
       });
     }
 
@@ -296,7 +296,7 @@ exports.getApplication = async (req, res) => {
       resource: 'Application',
       resourceId: application.applicationId,
       ipAddress: req.ip,
-      userAgent: req.get('user-agent'),
+      userAgent: req.get('user-agent')
     });
 
     res.status(200).json({
@@ -304,15 +304,15 @@ exports.getApplication = async (req, res) => {
       data: {
         application: {
           ...application.toJSON(),
-          progress: application.calculateProgress(),
-        },
-      },
+          progress: application.calculateProgress()
+        }
+      }
     });
   } catch (error) {
     console.error('Get application error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to get application',
+      message: 'Failed to get application'
     });
   }
 };
@@ -326,7 +326,7 @@ exports.getApplication = async (req, res) => {
  * @param {Object} req.body - Updated fields
  * @returns {Object} 200 - Updated application
  */
-exports.updateApplication = async (req, res) => {
+exports.updateApplication = async(req, res) => {
   try {
     const { id } = req.params;
     const updates = req.body;
@@ -335,7 +335,7 @@ exports.updateApplication = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: 'User not found'
       });
     }
 
@@ -343,13 +343,13 @@ exports.updateApplication = async (req, res) => {
     const application = await Application.findOne({
       applicationId: id,
       isActive: true,
-      isDeleted: false,
+      isDeleted: false
     });
 
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
@@ -357,7 +357,7 @@ exports.updateApplication = async (req, res) => {
     if (application.userId !== user.userId) {
       return res.status(403).json({
         success: false,
-        message: 'You can only update your own applications',
+        message: 'You can only update your own applications'
       });
     }
 
@@ -365,7 +365,7 @@ exports.updateApplication = async (req, res) => {
     if (!['DRAFT', 'REVISION_REQUIRED'].includes(application.state)) {
       return res.status(400).json({
         success: false,
-        message: 'Can only update applications in DRAFT or REVISION_REQUIRED state',
+        message: 'Can only update applications in DRAFT or REVISION_REQUIRED state'
       });
     }
 
@@ -376,7 +376,7 @@ exports.updateApplication = async (req, res) => {
       'farmSize',
       'farmSizeUnit',
       'cultivationType',
-      'cannabisVariety',
+      'cannabisVariety'
     ];
 
     // Apply updates
@@ -395,10 +395,10 @@ exports.updateApplication = async (req, res) => {
       resource: 'Application',
       resourceId: application.applicationId,
       details: {
-        updatedFields: Object.keys(updates),
+        updatedFields: Object.keys(updates)
       },
       ipAddress: req.ip,
-      userAgent: req.get('user-agent'),
+      userAgent: req.get('user-agent')
     });
 
     res.status(200).json({
@@ -407,9 +407,9 @@ exports.updateApplication = async (req, res) => {
       data: {
         application: {
           ...application.toJSON(),
-          progress: application.calculateProgress(),
-        },
-      },
+          progress: application.calculateProgress()
+        }
+      }
     });
   } catch (error) {
     console.error('Update application error:', error);
@@ -420,14 +420,14 @@ exports.updateApplication = async (req, res) => {
         message: 'Validation error',
         errors: Object.keys(error.errors).map(key => ({
           field: key,
-          message: error.errors[key].message,
-        })),
+          message: error.errors[key].message
+        }))
       });
     }
 
     res.status(500).json({
       success: false,
-      message: 'Failed to update application',
+      message: 'Failed to update application'
     });
   }
 };
@@ -440,7 +440,7 @@ exports.updateApplication = async (req, res) => {
  * @param {String} req.params.id - Application ID
  * @returns {Object} 200 - Deletion confirmation
  */
-exports.deleteApplication = async (req, res) => {
+exports.deleteApplication = async(req, res) => {
   try {
     const { id } = req.params;
 
@@ -448,7 +448,7 @@ exports.deleteApplication = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: 'User not found'
       });
     }
 
@@ -456,13 +456,13 @@ exports.deleteApplication = async (req, res) => {
     const application = await Application.findOne({
       applicationId: id,
       isActive: true,
-      isDeleted: false,
+      isDeleted: false
     });
 
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
@@ -470,7 +470,7 @@ exports.deleteApplication = async (req, res) => {
     if (application.userId !== user.userId) {
       return res.status(403).json({
         success: false,
-        message: 'You can only delete your own applications',
+        message: 'You can only delete your own applications'
       });
     }
 
@@ -478,7 +478,7 @@ exports.deleteApplication = async (req, res) => {
     if (application.state !== 'DRAFT') {
       return res.status(400).json({
         success: false,
-        message: 'Can only delete applications in DRAFT state',
+        message: 'Can only delete applications in DRAFT state'
       });
     }
 
@@ -495,18 +495,18 @@ exports.deleteApplication = async (req, res) => {
       resource: 'Application',
       resourceId: application.applicationId,
       ipAddress: req.ip,
-      userAgent: req.get('user-agent'),
+      userAgent: req.get('user-agent')
     });
 
     res.status(200).json({
       success: true,
-      message: 'Application deleted successfully',
+      message: 'Application deleted successfully'
     });
   } catch (error) {
     console.error('Delete application error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to delete application',
+      message: 'Failed to delete application'
     });
   }
 };
@@ -519,7 +519,7 @@ exports.deleteApplication = async (req, res) => {
  * @param {String} req.params.id - Application ID
  * @returns {Object} 200 - Submitted application
  */
-exports.submitApplication = async (req, res) => {
+exports.submitApplication = async(req, res) => {
   try {
     const { id } = req.params;
 
@@ -527,7 +527,7 @@ exports.submitApplication = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: 'User not found'
       });
     }
 
@@ -535,13 +535,13 @@ exports.submitApplication = async (req, res) => {
     const application = await Application.findOne({
       applicationId: id,
       isActive: true,
-      isDeleted: false,
+      isDeleted: false
     });
 
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
@@ -549,7 +549,7 @@ exports.submitApplication = async (req, res) => {
     if (application.userId !== user.userId) {
       return res.status(403).json({
         success: false,
-        message: 'You can only submit your own applications',
+        message: 'You can only submit your own applications'
       });
     }
 
@@ -557,7 +557,7 @@ exports.submitApplication = async (req, res) => {
     if (!['DRAFT', 'REVISION_REQUIRED'].includes(application.state)) {
       return res.status(400).json({
         success: false,
-        message: `Cannot submit application in ${application.state} state`,
+        message: `Cannot submit application in ${application.state} state`
       });
     }
 
@@ -565,7 +565,7 @@ exports.submitApplication = async (req, res) => {
     if (!application.requiredDocumentsComplete) {
       return res.status(400).json({
         success: false,
-        message: 'Please upload all required documents before submitting',
+        message: 'Please upload all required documents before submitting'
       });
     }
 
@@ -593,10 +593,10 @@ exports.submitApplication = async (req, res) => {
       resourceId: application.applicationId,
       details: {
         previousState: 'DRAFT',
-        newState: 'UNDER_REVIEW',
+        newState: 'UNDER_REVIEW'
       },
       ipAddress: req.ip,
-      userAgent: req.get('user-agent'),
+      userAgent: req.get('user-agent')
     });
 
     res.status(200).json({
@@ -608,15 +608,15 @@ exports.submitApplication = async (req, res) => {
           applicationNumber: application.applicationNumber,
           state: application.state,
           progress: application.calculateProgress(),
-          submittedAt: application.submittedAt,
-        },
-      },
+          submittedAt: application.submittedAt
+        }
+      }
     });
   } catch (error) {
     console.error('Submit application error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to submit application',
+      message: 'Failed to submit application'
     });
   }
 };
@@ -629,7 +629,7 @@ exports.submitApplication = async (req, res) => {
  * @param {String} req.params.id - Application ID
  * @returns {Object} 200 - Timeline events
  */
-exports.getTimeline = async (req, res) => {
+exports.getTimeline = async(req, res) => {
   try {
     const { id } = req.params;
 
@@ -637,7 +637,7 @@ exports.getTimeline = async (req, res) => {
     if (!user) {
       return res.status(404).json({
         success: false,
-        message: 'User not found',
+        message: 'User not found'
       });
     }
 
@@ -645,13 +645,13 @@ exports.getTimeline = async (req, res) => {
     const application = await Application.findOne({
       applicationId: id,
       isActive: true,
-      isDeleted: false,
+      isDeleted: false
     }).select('applicationId applicationNumber userId state stateHistory'); // ✅ FIXED: Added userId for authorization check
 
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
@@ -659,7 +659,7 @@ exports.getTimeline = async (req, res) => {
     if (user.role === 'FARMER' && application.userId !== user.userId) {
       return res.status(403).json({
         success: false,
-        message: 'You can only view your own application timeline',
+        message: 'You can only view your own application timeline'
       });
     }
 
@@ -672,15 +672,15 @@ exports.getTimeline = async (req, res) => {
           exitedAt: event.exitedAt,
           durationDays: event.duration ? Math.floor(event.duration / (1000 * 60 * 60 * 24)) : null,
           actor: event.actorRole,
-          notes: event.notes,
-        })),
-      },
+          notes: event.notes
+        }))
+      }
     });
   } catch (error) {
     console.error('Get timeline error:', error);
     res.status(500).json({
       success: false,
-      message: 'Failed to get timeline',
+      message: 'Failed to get timeline'
     });
   }
 };
@@ -709,7 +709,7 @@ function calculateProgressForState(state) {
     CERTIFICATE_ISSUED: 100,
     REJECTED: 0,
     REVISION_REQUIRED: 15,
-    EXPIRED: 0,
+    EXPIRED: 0
   };
 
   return stateProgress[state] || 0;

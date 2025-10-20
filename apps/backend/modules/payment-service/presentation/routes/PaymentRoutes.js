@@ -133,7 +133,7 @@ class PaymentRoutes {
         require('express-validator')
           .param('applicationId')
           .isMongoId()
-          .withMessage('Valid application ID is required'),
+          .withMessage('Valid application ID is required')
       ],
       controller.getApplicationPayments.bind(controller)
     );
@@ -157,7 +157,7 @@ class PaymentRoutes {
           .query('status')
           .optional()
           .isIn(['PENDING', 'COMPLETED', 'FAILED', 'CANCELLED', 'EXPIRED', 'REFUNDED'])
-          .withMessage('Invalid status filter'),
+          .withMessage('Invalid status filter')
       ],
       controller.getUserPaymentHistory.bind(controller)
     );
@@ -189,7 +189,7 @@ class PaymentRoutes {
           .query('groupBy')
           .optional()
           .isIn(['day', 'week', 'month'])
-          .withMessage('Invalid groupBy parameter'),
+          .withMessage('Invalid groupBy parameter')
       ],
       this._getPaymentStatistics.bind(this)
     );
@@ -213,7 +213,7 @@ class PaymentRoutes {
         success: false,
         error: 'PAYMENT_RATE_LIMIT',
         message: 'Too many payment requests, please try again later',
-        retryAfter: 15 * 60,
+        retryAfter: 15 * 60
       },
       standardHeaders: true,
       legacyHeaders: false,
@@ -227,9 +227,9 @@ class PaymentRoutes {
           success: false,
           error: 'PAYMENT_RATE_LIMIT',
           message: 'Too many payment requests, please try again later',
-          retryAfter: 15 * 60,
+          retryAfter: 15 * 60
         });
-      },
+      }
     });
   }
 
@@ -244,7 +244,7 @@ class PaymentRoutes {
       message: {
         success: false,
         error: 'WEBHOOK_RATE_LIMIT',
-        message: 'Too many webhook requests',
+        message: 'Too many webhook requests'
       },
       keyGenerator: req => {
         // Rate limit by IP for webhooks
@@ -254,7 +254,7 @@ class PaymentRoutes {
         // Skip rate limiting for trusted webhook sources
         const trustedIPs = process.env.TRUSTED_WEBHOOK_IPS?.split(',') || [];
         return trustedIPs.includes(req.ip);
-      },
+      }
     });
   }
 
@@ -269,11 +269,11 @@ class PaymentRoutes {
       message: {
         success: false,
         error: 'GENERAL_RATE_LIMIT',
-        message: 'Too many requests, please try again later',
+        message: 'Too many requests, please try again later'
       },
       keyGenerator: req => {
         return req.userId || req.ip;
-      },
+      }
     });
   }
 
@@ -290,14 +290,14 @@ class PaymentRoutes {
       return res.status(401).json({
         success: false,
         error: 'UNAUTHORIZED_WEBHOOK',
-        message: 'Invalid webhook credentials',
+        message: 'Invalid webhook credentials'
       });
     }
 
     // Log webhook attempt for security monitoring
     console.log('[PaymentRoutes] Webhook request from:', req.ip, {
       userAgent: req.get('User-Agent'),
-      paymentId: req.body?.paymentId,
+      paymentId: req.body?.paymentId
     });
 
     next();
@@ -312,14 +312,14 @@ class PaymentRoutes {
       const {
         startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // Default: last 30 days
         endDate = new Date(),
-        groupBy = 'day',
+        groupBy = 'day'
       } = req.query;
 
       // This would be implemented in PaymentService
       const stats = await this.paymentController.paymentService.getPaymentStatistics({
         startDate: new Date(startDate),
         endDate: new Date(endDate),
-        groupBy,
+        groupBy
       });
 
       res.status(200).json({
@@ -329,17 +329,17 @@ class PaymentRoutes {
           period: {
             startDate,
             endDate,
-            groupBy,
+            groupBy
           },
-          generatedAt: new Date(),
-        },
+          generatedAt: new Date()
+        }
       });
     } catch (error) {
       console.error('[PaymentRoutes] Statistics error:', error);
       res.status(500).json({
         success: false,
         error: 'STATISTICS_ERROR',
-        message: 'Error retrieving payment statistics',
+        message: 'Error retrieving payment statistics'
       });
     }
   }
@@ -356,14 +356,14 @@ class PaymentRoutes {
 
       res.status(statusCode).json({
         success: health.status === 'healthy',
-        data: health,
+        data: health
       });
     } catch (error) {
       console.error('[PaymentRoutes] Health check error:', error);
       res.status(503).json({
         success: false,
         error: 'HEALTH_CHECK_ERROR',
-        message: 'Error checking service health',
+        message: 'Error checking service health'
       });
     }
   }
@@ -382,7 +382,7 @@ class PaymentRoutes {
       url: req.url,
       method: req.method,
       userId: req.userId,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     console.error('[PaymentRoutes] Error details:', errorDetails);
@@ -393,7 +393,7 @@ class PaymentRoutes {
         success: false,
         error: 'VALIDATION_ERROR',
         message: 'Input validation failed',
-        details: error.errors,
+        details: error.errors
       });
     }
 
@@ -401,7 +401,7 @@ class PaymentRoutes {
       return res.status(400).json({
         success: false,
         error: 'INVALID_ID',
-        message: 'Invalid ID format',
+        message: 'Invalid ID format'
       });
     }
 
@@ -409,7 +409,7 @@ class PaymentRoutes {
       return res.status(409).json({
         success: false,
         error: 'DUPLICATE_ENTRY',
-        message: 'Duplicate entry detected',
+        message: 'Duplicate entry detected'
       });
     }
 
@@ -418,7 +418,7 @@ class PaymentRoutes {
       success: false,
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred',
-      requestId: req.id || 'unknown',
+      requestId: req.id || 'unknown'
     });
   }
 
@@ -442,98 +442,98 @@ class PaymentRoutes {
           path: '/calculate-fees',
           description: 'Calculate application fees',
           authentication: 'required',
-          rateLimit: 'general',
+          rateLimit: 'general'
         },
         {
           method: 'POST',
           path: '/initiate',
           description: 'Initiate payment process',
           authentication: 'required',
-          rateLimit: 'payment',
+          rateLimit: 'payment'
         },
         {
           method: 'GET',
           path: '/:paymentId',
           description: 'Get payment status',
           authentication: 'required',
-          rateLimit: 'general',
+          rateLimit: 'general'
         },
         {
           method: 'POST',
           path: '/webhook',
           description: 'Process payment webhooks',
           authentication: 'webhook-secret',
-          rateLimit: 'webhook',
+          rateLimit: 'webhook'
         },
         {
           method: 'POST',
           path: '/:paymentId/retry',
           description: 'Retry failed payment',
           authentication: 'required',
-          rateLimit: 'payment',
+          rateLimit: 'payment'
         },
         {
           method: 'POST',
           path: '/:paymentId/cancel',
           description: 'Cancel pending payment',
           authentication: 'required',
-          rateLimit: 'general',
+          rateLimit: 'general'
         },
         {
           method: 'POST',
           path: '/:paymentId/refund',
           description: 'Process refund (admin only)',
           authentication: 'admin',
-          rateLimit: 'general',
+          rateLimit: 'general'
         },
         {
           method: 'GET',
           path: '/application/:applicationId',
           description: 'Get application payments',
           authentication: 'required',
-          rateLimit: 'general',
+          rateLimit: 'general'
         },
         {
           method: 'GET',
           path: '/user/history',
           description: 'Get user payment history',
           authentication: 'required',
-          rateLimit: 'general',
+          rateLimit: 'general'
         },
         {
           method: 'GET',
           path: '/receipt/:paymentId',
           description: 'Download payment receipt',
           authentication: 'required',
-          rateLimit: 'general',
+          rateLimit: 'general'
         },
         {
           method: 'GET',
           path: '/stats',
           description: 'Payment statistics (admin only)',
           authentication: 'admin',
-          rateLimit: 'general',
+          rateLimit: 'general'
         },
         {
           method: 'GET',
           path: '/health',
           description: 'Service health check',
           authentication: 'none',
-          rateLimit: 'none',
-        },
+          rateLimit: 'none'
+        }
       ],
       rateLimits: {
         payment: '10 requests per 15 minutes',
         webhook: '100 requests per minute',
-        general: '100 requests per 5 minutes',
+        general: '100 requests per 5 minutes'
       },
       security: {
         authentication: 'JWT Bearer token',
         authorization: 'Role-based access control',
         webhookSecurity: 'Secret-based authentication',
         inputValidation: 'express-validator',
-        rateLimiting: 'express-rate-limit',
-      },
+        rateLimiting: 'express-rate-limit'
+      }
     };
   }
 }

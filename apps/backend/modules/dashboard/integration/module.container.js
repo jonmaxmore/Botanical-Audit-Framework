@@ -12,7 +12,7 @@ const GetDTAMDashboardUseCase = require('../application/use-cases/GetDTAMDashboa
 const GetSystemStatisticsUseCase = require('../application/use-cases/GetSystemStatisticsUseCase');
 const DashboardController = require('../presentation/controllers/DashboardController');
 const {
-  initializeDashboardFarmerRoutes,
+  initializeDashboardFarmerRoutes
 } = require('../presentation/routes/dashboard.farmer.routes');
 const { initializeDashboardDTAMRoutes } = require('../presentation/routes/dashboard.dtam.routes');
 
@@ -109,7 +109,7 @@ class DashboardModuleContainer {
     return {
       getFarmerDashboardUseCase: this.getFarmerDashboardUseCase,
       getDTAMDashboardUseCase: this.getDTAMDashboardUseCase,
-      getSystemStatisticsUseCase: this.getSystemStatisticsUseCase,
+      getSystemStatisticsUseCase: this.getSystemStatisticsUseCase
     };
   }
 }

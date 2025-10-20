@@ -88,7 +88,7 @@ class NotificationModuleContainer {
       markAllAsReadUseCase: this.instances.markAllAsReadUseCase,
       getUnreadCountUseCase: this.instances.getUnreadCountUseCase,
       deleteNotificationUseCase: this.instances.deleteNotificationUseCase,
-      getNotificationStatisticsUseCase: this.instances.getNotificationStatisticsUseCase,
+      getNotificationStatisticsUseCase: this.instances.getNotificationStatisticsUseCase
     });
 
     return this;
@@ -135,7 +135,7 @@ class NotificationModuleContainer {
       markAllAsRead: this.instances.markAllAsReadUseCase,
       getUnreadCount: this.instances.getUnreadCountUseCase,
       deleteNotification: this.instances.deleteNotificationUseCase,
-      getStatistics: this.instances.getNotificationStatisticsUseCase,
+      getStatistics: this.instances.getNotificationStatisticsUseCase
     };
   }
 }
@@ -148,5 +148,5 @@ function createNotificationModule(config = {}) {
 
 module.exports = {
   NotificationModuleContainer,
-  createNotificationModule,
+  createNotificationModule
 };

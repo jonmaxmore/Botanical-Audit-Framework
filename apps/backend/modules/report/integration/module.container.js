@@ -156,5 +156,5 @@ function getReportModuleContainer(config = {}) {
 
 module.exports = {
   ReportModuleContainer,
-  getReportModuleContainer,
+  getReportModuleContainer
 };

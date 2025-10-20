@@ -41,7 +41,7 @@ class ApproveSurveyUseCase {
         reviewedAt: approvedSurvey.reviewedAt,
         reviewNotes: approvedSurvey.reviewNotes,
         rejectionReason: null,
-        revisionNotes: null,
+        revisionNotes: null
       })
     );
 

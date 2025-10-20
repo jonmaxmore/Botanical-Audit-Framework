@@ -33,10 +33,10 @@ const mongoManager = require('./config/mongodb-manager');
 const {
   GACPApplicationStatus,
   GACPCriticalControlPoints,
-  GACPScoringSystem,
+  GACPScoringSystem
 } = require('./models/GACPBusinessLogic');
 
-const GACPWorkflowEngine = require('./services/GACPWorkflowEngine');
+const GACPWorkflowEngine = require('../../business-logic/gacp-workflow-engine');
 const GACPEnhancedInspectionService = require('./services/GACPEnhancedInspectionService');
 
 // Import Database Health Monitor
@@ -47,7 +47,7 @@ const dbHealthMonitor = require('./services/DatabaseHealthMonitor');
 const HealthMonitoringService = require('./services/HealthMonitoringService');
 
 // Clear mongoose cache to prevent model overwrite errors
-mongoose.deleteModel = function (modelName) {
+mongoose.deleteModel = function(modelName) {
   delete mongoose.models[modelName];
   delete mongoose.modelSchemas[modelName];
 };
@@ -76,12 +76,12 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'"],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
-      },
-    },
+        defaultSrc: ['\'self\''],
+        scriptSrc: ['\'self\'', '\'unsafe-inline\''],
+        styleSrc: ['\'self\'', '\'unsafe-inline\''],
+        imgSrc: ['\'self\'', 'data:', 'https:']
+      }
+    }
   })
 );
 
@@ -91,7 +91,7 @@ app.use(
     origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3005'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
   })
 );
 
@@ -118,7 +118,7 @@ app.get('/version', healthRoutes.version);
 app.use(express.static('public'));
 
 // Health check endpoint
-app.get('/health', async (req, res) => {
+app.get('/health', async(req, res) => {
   const dbHealth = await mongoManager.healthCheck();
 
   const health = {
@@ -130,8 +130,8 @@ app.get('/health', async (req, res) => {
     database: dbHealth,
     mongodb: {
       connected: mongoManager.isConnected,
-      status: mongoManager.getStatus(),
-    },
+      status: mongoManager.getStatus()
+    }
   };
 
   res.json(health);
@@ -150,10 +150,10 @@ app.get('/', (req, res) => {
       api: '/api - API documentation',
       auth: '/api/auth - Authentication endpoints',
       applications: '/api/applications - Application management',
-      dashboard: '/api/dashboard - Dashboard data',
+      dashboard: '/api/dashboard - Dashboard data'
     },
     message: 'Atlas server ready! Frontend: http://localhost:3001',
-    demo: 'Live demo available at /demo.html',
+    demo: 'Live demo available at /demo.html'
   });
 });
 
@@ -173,7 +173,7 @@ app.get('/api', (req, res) => {
       'GET /api/applications': 'List applications (requires auth)',
       'POST /api/applications': 'Create application (requires auth)',
       'GET /api/applications/:id': 'Get application details (requires auth)',
-      'GET /api/dashboard/stats': 'Dashboard statistics (requires auth)',
+      'GET /api/dashboard/stats': 'Dashboard statistics (requires auth)'
     },
     authentication: 'JWT Bearer Token',
     example_request: {
@@ -182,10 +182,10 @@ app.get('/api', (req, res) => {
         method: 'POST',
         body: {
           email: 'farmer@example.com',
-          password: 'password123',
-        },
-      },
-    },
+          password: 'password123'
+        }
+      }
+    }
   });
 });
 
@@ -203,9 +203,9 @@ app.get('/api/gacp/workflow', (req, res) => {
       transitions: workflowGraph.edges.length,
       framework: 'Thai FDA GACP Certification Process (2018)',
       compliance: ['WHO-GACP', 'FAO-Guidelines', 'Thai-FDA', 'ASEAN-TM'],
-      workflowGraph: workflowGraph,
+      workflowGraph: workflowGraph
     },
-    message: 'GACP workflow information retrieved',
+    message: 'GACP workflow information retrieved'
   });
 });
 
@@ -214,7 +214,7 @@ app.get('/api/gacp/ccps', (req, res) => {
   const ccpList = Object.entries(GACPCriticalControlPoints).map(([key, ccp]) => ({
     id: key,
     ...ccp,
-    compliance_standards: ['WHO GACP 2003', 'Thai FDA 2018', 'FAO Guidelines'],
+    compliance_standards: ['WHO GACP 2003', 'Thai FDA 2018', 'FAO Guidelines']
   }));
 
   res.json({
@@ -224,21 +224,21 @@ app.get('/api/gacp/ccps', (req, res) => {
       ccps: ccpList,
       scoringSystem: GACPScoringSystem,
       framework: '8 Critical Control Points for Medicinal Plants',
-      methodology: 'HACCP-based Assessment',
+      methodology: 'HACCP-based Assessment'
     },
-    message: 'GACP Critical Control Points framework retrieved',
+    message: 'GACP Critical Control Points framework retrieved'
   });
 });
 
 // Workflow Transition Validation
-app.post('/api/gacp/workflow/transition', async (req, res) => {
+app.post('/api/gacp/workflow/transition', async(req, res) => {
   try {
     const { currentState, targetState, context, actor } = req.body;
 
     if (!currentState || !targetState || !actor) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required parameters: currentState, targetState, actor',
+        message: 'Missing required parameters: currentState, targetState, actor'
       });
     }
 
@@ -253,26 +253,26 @@ app.post('/api/gacp/workflow/transition', async (req, res) => {
     res.json({
       success: transitionResult.success,
       data: transitionResult,
-      message: transitionResult.message,
+      message: transitionResult.message
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Workflow transition validation failed',
-      error: error.message,
+      error: error.message
     });
   }
 });
 
 // Get Available Transitions
-app.post('/api/gacp/workflow/available-transitions', async (req, res) => {
+app.post('/api/gacp/workflow/available-transitions', async(req, res) => {
   try {
     const { currentState, actor, context } = req.body;
 
     if (!currentState || !actor) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required parameters: currentState, actor',
+        message: 'Missing required parameters: currentState, actor'
       });
     }
 
@@ -291,28 +291,28 @@ app.post('/api/gacp/workflow/available-transitions', async (req, res) => {
         availableTransitions,
         requirements: stateRequirements,
         actor: actor.role,
-        timestamp: new Date(),
+        timestamp: new Date()
       },
-      message: 'Available transitions retrieved',
+      message: 'Available transitions retrieved'
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to get available transitions',
-      error: error.message,
+      error: error.message
     });
   }
 });
 
 // Initialize GACP Inspection
-app.post('/api/gacp/inspections/initialize', async (req, res) => {
+app.post('/api/gacp/inspections/initialize', async(req, res) => {
   try {
     const { applicationId, inspector, scheduledDate } = req.body;
 
     if (!applicationId || !inspector || !scheduledDate) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required parameters: applicationId, inspector, scheduledDate',
+        message: 'Missing required parameters: applicationId, inspector, scheduledDate'
       });
     }
 
@@ -330,13 +330,13 @@ app.post('/api/gacp/inspections/initialize', async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Inspection initialization failed',
-      error: error.message,
+      error: error.message
     });
   }
 });
 
 // Conduct CCP Assessment
-app.post('/api/gacp/inspections/:inspectionId/ccp/:ccpId/assess', async (req, res) => {
+app.post('/api/gacp/inspections/:inspectionId/ccp/:ccpId/assess', async(req, res) => {
   try {
     const { inspectionId, ccpId } = req.params;
     const { assessmentData, evidence } = req.body;
@@ -344,7 +344,7 @@ app.post('/api/gacp/inspections/:inspectionId/ccp/:ccpId/assess', async (req, re
     if (!assessmentData) {
       return res.status(400).json({
         success: false,
-        message: 'Assessment data required',
+        message: 'Assessment data required'
       });
     }
 
@@ -363,7 +363,7 @@ app.post('/api/gacp/inspections/:inspectionId/ccp/:ccpId/assess', async (req, re
     res.status(500).json({
       success: false,
       message: 'CCP assessment failed',
-      error: error.message,
+      error: error.message
     });
   }
 });
@@ -379,13 +379,13 @@ app.get('/api/gacp/test/score-calculation', (req, res) => {
     POST_HARVEST: 82,
     STORAGE_PACKAGING: 76,
     DOCUMENTATION: 94,
-    PERSONNEL_TRAINING: 89,
+    PERSONNEL_TRAINING: 89
   };
 
   const {
     calculateTotalScore,
     getCertificateLevel,
-    validateCCPScores,
+    validateCCPScores
   } = require('./models/GACPBusinessLogic');
 
   const totalScore = calculateTotalScore(sampleCCPScores);
@@ -399,13 +399,13 @@ app.get('/api/gacp/test/score-calculation', (req, res) => {
       totalScore: totalScore,
       certificateLevel: certificateLevel,
       violations: violations,
-      passed: violations.length === 0 && totalScore >= 75,
+      passed: violations.length === 0 && totalScore >= 75
     },
-    message: 'GACP score calculation test completed',
+    message: 'GACP score calculation test completed'
   });
 });
 
-app.get('/api/dashboard/test-stats', async (req, res) => {
+app.get('/api/dashboard/test-stats', async(req, res) => {
   const dbHealth = await mongoManager.healthCheck();
 
   res.json({
@@ -420,14 +420,14 @@ app.get('/api/dashboard/test-stats', async (req, res) => {
       server_info: {
         port: port,
         version: '1.0.0-atlas',
-        uptime: process.uptime(),
-      },
-    },
+        uptime: process.uptime()
+      }
+    }
   });
 });
 
 // Database connection test
-app.get('/api/db/test', async (req, res) => {
+app.get('/api/db/test', async(req, res) => {
   try {
     if (mongoManager.isConnected) {
       // Test basic database operations
@@ -438,20 +438,20 @@ app.get('/api/db/test', async (req, res) => {
         message: 'Database connection successful',
         database: mongoose.connection.db.databaseName,
         collections: collections.map(c => c.name),
-        connection_info: mongoManager.getStatus(),
+        connection_info: mongoManager.getStatus()
       });
     } else {
       res.status(503).json({
         success: false,
         message: 'Database not connected',
-        status: mongoManager.getStatus(),
+        status: mongoManager.getStatus()
       });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Database test failed',
-      error: error.message,
+      error: error.message
     });
   }
 });
@@ -503,8 +503,8 @@ app.use((req, res) => {
       'GET /api/monitoring/status',
       'GET /api/docs/docs',
       'GET /api/docs/openapi',
-      'GET /api/docs/health',
-    ],
+      'GET /api/docs/health'
+    ]
   });
 });
 
@@ -514,7 +514,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({
     success: false,
     message: 'Internal server error',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
   });
 });
 
@@ -553,13 +553,13 @@ async function startServer() {
 }
 
 // Handle graceful shutdown
-process.on('SIGINT', async () => {
+process.on('SIGINT', async() => {
   appLogger.info('\n⏹️  SIGINT received, shutting down gracefully...');
   await mongoManager.disconnect();
   process.exit(0);
 });
 
-process.on('SIGTERM', async () => {
+process.on('SIGTERM', async() => {
   appLogger.info('\n⏹️  SIGTERM received, shutting down gracefully...');
   await mongoManager.disconnect();
   process.exit(0);

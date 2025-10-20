@@ -14,7 +14,7 @@ class FarmVerificationCompleted {
     verifiedAt,
     notes,
     rejectionReason,
-    timestamp = new Date(),
+    timestamp = new Date()
   }) {
     this.eventType = 'FarmVerificationCompleted';
     this.farmId = farmId;

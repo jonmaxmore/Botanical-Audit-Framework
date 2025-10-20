@@ -25,7 +25,7 @@ const { authenticate, authorize } = require('../../auth/middleware/auth.middlewa
 const {
   validateCreateApplication,
   validateUpdateApplication,
-  validateApplicationId,
+  validateApplicationId
 } = require('../middleware/validation.middleware');
 
 // ========================================

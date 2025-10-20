@@ -43,23 +43,23 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         completionRate: {
           threshold: 85, // Minimum acceptable completion rate (%)
           weight: 0.3, // Metric importance weight
-          trend_period: 30, // Days to calculate trend
+          trend_period: 30 // Days to calculate trend
         },
         assessmentScore: {
           threshold: 80, // Minimum passing score (%)
           weight: 0.25,
-          trend_period: 30,
+          trend_period: 30
         },
         engagementRate: {
           threshold: 70, // Minimum engagement rate (%)
           weight: 0.2,
-          trend_period: 14,
+          trend_period: 14
         },
         certificationRate: {
           threshold: 75, // Minimum certification success rate (%)
           weight: 0.25,
-          trend_period: 60,
-        },
+          trend_period: 60
+        }
       },
 
       // Learning Analytics Configuration
@@ -68,7 +68,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         pathAnalytics: {
           optimalDuration: { min: 2, max: 8 }, // Weeks
           dropoutRiskFactors: ['low_engagement', 'poor_assessment', 'delayed_progress'],
-          successIndicators: ['consistent_progress', 'high_assessment', 'peer_interaction'],
+          successIndicators: ['consistent_progress', 'high_assessment', 'peer_interaction']
         },
 
         // Content effectiveness tracking
@@ -78,9 +78,9 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
           effectivenessMetrics: [
             'knowledge_retention',
             'skill_application',
-            'assessment_correlation',
-          ],
-        },
+            'assessment_correlation'
+          ]
+        }
       },
 
       // Predictive Analytics Configuration
@@ -90,10 +90,10 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
             'engagement_trend',
             'assessment_performance',
             'login_frequency',
-            'help_requests',
+            'help_requests'
           ],
           threshold: 0.7, // Confidence threshold for predictions
-          action_trigger: 0.5, // Risk level that triggers intervention
+          action_trigger: 0.5 // Risk level that triggers intervention
         },
 
         certificationSuccess: {
@@ -101,12 +101,12 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
             'course_performance',
             'assessment_scores',
             'engagement_metrics',
-            'time_management',
+            'time_management'
           ],
           threshold: 0.8,
-          early_prediction_point: 0.6, // Course progress point for early prediction
-        },
-      },
+          early_prediction_point: 0.6 // Course progress point for early prediction
+        }
+      }
     };
 
     // Analytics data storage
@@ -115,14 +115,14 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       historicalData: new Map(), // Historical trends and patterns
       predictiveScores: new Map(), // ML prediction scores
       alertThresholds: new Map(), // Dynamic alert thresholds
-      performanceTrends: new Map(), // Performance trend analysis
+      performanceTrends: new Map() // Performance trend analysis
     };
 
     // Machine learning models (simplified implementation)
     this.mlModels = {
       dropoutPredictor: null,
       successPredictor: null,
-      engagementPredictor: null,
+      engagementPredictor: null
     };
 
     // Active monitoring
@@ -163,14 +163,14 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       this.emit('analytics_initialized', {
         timestamp: new Date(),
         system: 'training_analytics',
-        status: 'active',
+        status: 'active'
       });
 
       return {
         success: true,
         message: 'Advanced training analytics initialized',
         capabilities: Object.keys(this.analyticsConfig),
-        monitoringStatus: 'active',
+        monitoringStatus: 'active'
       };
     } catch (error) {
       console.error('[TrainingAnalytics] Initialization error:', error);
@@ -236,8 +236,8 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         metrics: {
           timeToEnroll: enrollmentData.timeToEnroll || null,
           previousCourses: enrollmentData.previousCourses || 0,
-          recommendationScore: enrollmentData.recommendationScore || null,
-        },
+          recommendationScore: enrollmentData.recommendationScore || null
+        }
       };
 
       // Store analytics data
@@ -274,15 +274,15 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
           timeSpent: completionData.timeSpent,
           attemptsRequired: completionData.attempts || 1,
           helpRequested: completionData.helpRequested || false,
-          interactionCount: completionData.interactions || 0,
+          interactionCount: completionData.interactions || 0
         },
 
         // Learning progress
         progress: {
           percentageComplete: completionData.progress,
           learningVelocity: this.calculateLearningVelocity(completionData),
-          difficultyRating: completionData.difficultyRating || null,
-        },
+          difficultyRating: completionData.difficultyRating || null
+        }
       };
 
       // Store analytics data
@@ -320,15 +320,15 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
           maxScore: assessmentData.maxScore,
           percentage: (assessmentData.score / assessmentData.maxScore) * 100,
           timeSpent: assessmentData.timeSpent,
-          attemptNumber: assessmentData.attempt,
+          attemptNumber: assessmentData.attempt
         },
 
         // Detailed analysis
         analysis: {
           strengthAreas: assessmentData.strengthAreas || [],
           improvementAreas: assessmentData.improvementAreas || [],
-          questionAnalysis: assessmentData.questionAnalysis || [],
-        },
+          questionAnalysis: assessmentData.questionAnalysis || []
+        }
       };
 
       // Store assessment analytics
@@ -398,7 +398,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         if (features.helpRequests > 5) score += 0.1;
 
         return Math.min(score, 1.0); // Cap at 100% risk
-      },
+      }
     };
   }
 
@@ -425,14 +425,14 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
           : 0.8,
         engagementTrend: this.mlModels.engagementPredictor
           ? this.mlModels.engagementPredictor.predict(learnerFeatures)
-          : 'stable',
+          : 'stable'
       };
 
       // Store predictions
       this.analyticsData.predictiveScores.set(`${userId}:${courseId}`, {
         predictions,
         generatedAt: new Date(),
-        features: learnerFeatures,
+        features: learnerFeatures
       });
 
       // Generate intervention recommendations if needed
@@ -464,39 +464,39 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
           completionRate: await this.calculateOverallCompletionRate(),
           certificationRate: await this.calculateCertificationRate(),
           averageScore: await this.calculateAverageAssessmentScore(),
-          engagementRate: await this.calculateEngagementRate(),
+          engagementRate: await this.calculateEngagementRate()
         },
 
         trends: {
           enrollmentTrend: await this.calculateEnrollmentTrend(),
           completionTrend: await this.calculateCompletionTrend(),
           performanceTrend: await this.calculatePerformanceTrend(),
-          engagementTrend: await this.calculateEngagementTrend(),
+          engagementTrend: await this.calculateEngagementTrend()
         },
 
         performance: {
           topPerformingCourses: await this.getTopPerformingCourses(),
           strugglingLearners: await this.getStruggllingLearners(),
           contentEffectiveness: await this.getContentEffectiveness(),
-          learningPathAnalysis: await this.getLearningPathAnalysis(),
+          learningPathAnalysis: await this.getLearningPathAnalysis()
         },
 
         predictions: {
           atRiskLearners: await this.getAtRiskLearners(),
           successPredictions: await this.getSuccessPredictions(),
           resourceNeeds: await this.predictResourceNeeds(),
-          interventionRecommendations: await this.getInterventionRecommendations(),
+          interventionRecommendations: await this.getInterventionRecommendations()
         },
 
         quality: {
           dataQualityScore: await this.calculateDataQualityScore(),
           systemHealth: await this.getSystemHealthMetrics(),
           alertStatus: await this.getAlertStatus(),
-          reportingStatus: await this.getReportingStatus(),
+          reportingStatus: await this.getReportingStatus()
         },
 
         generatedAt: new Date(),
-        nextUpdate: new Date(Date.now() + 15 * 60 * 1000), // Next update in 15 minutes
+        nextUpdate: new Date(Date.now() + 15 * 60 * 1000) // Next update in 15 minutes
       };
 
       return dashboard;
@@ -531,7 +531,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       courseId,
       riskLevel: predictions.dropoutRisk,
       interventions: [],
-      generatedAt: new Date(),
+      generatedAt: new Date()
     };
 
     // High dropout risk interventions
@@ -540,7 +540,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         type: 'immediate_support',
         action: 'Schedule one-on-one mentoring session',
         priority: 'high',
-        timeline: 'within_24_hours',
+        timeline: 'within_24_hours'
       });
     }
 
@@ -550,7 +550,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         type: 'engagement_boost',
         action: 'Provide additional learning resources',
         priority: 'medium',
-        timeline: 'within_3_days',
+        timeline: 'within_3_days'
       });
     }
 
@@ -560,7 +560,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         type: 'motivation_support',
         action: 'Send personalized progress encouragement',
         priority: 'medium',
-        timeline: 'within_week',
+        timeline: 'within_week'
       });
     }
 
@@ -583,7 +583,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         await this.database.collection('training_analytics').insertOne({
           type,
           data,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -604,7 +604,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       dataQuality: await this.calculateDataQualityScore(),
       processingLatency: this.calculateProcessingLatency(),
       errorRate: this.calculateErrorRate(),
-      lastUpdate: new Date(),
+      lastUpdate: new Date()
     };
   }
 
@@ -636,7 +636,7 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
       return {
         success: true,
         message: 'Training analytics system stopped',
-        timestamp: new Date(),
+        timestamp: new Date()
       };
     } catch (error) {
       console.error('[TrainingAnalytics] Stop error:', error);

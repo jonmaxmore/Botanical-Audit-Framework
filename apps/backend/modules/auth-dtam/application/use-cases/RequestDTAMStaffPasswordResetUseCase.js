@@ -47,7 +47,7 @@ class RequestDTAMStaffPasswordResetUseCase {
 
       return {
         success: true,
-        resetToken, // Only for testing/development
+        resetToken // Only for testing/development
       };
     } catch (error) {
       console.error('Password reset request error:', error);

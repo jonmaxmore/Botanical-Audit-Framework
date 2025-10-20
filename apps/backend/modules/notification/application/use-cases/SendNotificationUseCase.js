@@ -36,7 +36,7 @@ class SendNotificationUseCase {
             to: notificationData.recipientEmail,
             subject: notification.title,
             html: this._generateEmailHTML(notification),
-            text: notification.message,
+            text: notification.message
           })
           .then(() => savedNotification.markChannelDelivered('EMAIL'))
           .catch(error => savedNotification.markChannelDelivered('EMAIL', error.message))
@@ -48,7 +48,7 @@ class SendNotificationUseCase {
         this.notificationService
           .sendSMS({
             to: notificationData.recipientPhone,
-            message: `${notification.title}: ${notification.message}`,
+            message: `${notification.title}: ${notification.message}`
           })
           .then(() => savedNotification.markChannelDelivered('SMS'))
           .catch(error => savedNotification.markChannelDelivered('SMS', error.message))
@@ -70,8 +70,8 @@ class SendNotificationUseCase {
         <h2>${notification.title}</h2>
         <p>${notification.message}</p>
         ${
-          notification.actionUrl
-            ? `
+  notification.actionUrl
+    ? `
           <p>
             <a href="${notification.actionUrl}" 
                style="background: #4CAF50; color: white; padding: 10px 20px; 
@@ -80,8 +80,8 @@ class SendNotificationUseCase {
             </a>
           </p>
         `
-            : ''
-        }
+    : ''
+}
         <p style="color: #666; font-size: 12px; margin-top: 20px;">
           GACP Certification System - Department of Thai Traditional and Alternative Medicine
         </p>

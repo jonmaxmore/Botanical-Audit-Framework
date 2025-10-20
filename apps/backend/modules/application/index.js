@@ -70,7 +70,7 @@ const ApplicationEvents = {
   CERTIFICATE_ISSUED: 'application.certificate_issued',
   APPLICATION_REJECTED: 'application.rejection',
   APPEAL_SUBMITTED: 'application.appeal_submitted',
-  ERROR_OCCURRED: 'application.error',
+  ERROR_OCCURRED: 'application.error'
 };
 
 // ============================================================================
@@ -87,7 +87,7 @@ const ApplicationUseCases = {
   ProcessStateTransitionUseCase: require('./application/use-cases/ProcessStateTransitionUseCase'),
   UploadDocumentUseCase: require('./application/use-cases/UploadDocumentUseCase'),
   VerifyGovernmentDataUseCase: require('./application/use-cases/VerifyGovernmentDataUseCase'),
-  GenerateAnalyticsUseCase: require('./application/use-cases/GenerateAnalyticsUseCase'),
+  GenerateAnalyticsUseCase: require('./application/use-cases/GenerateAnalyticsUseCase')
 };
 
 // ============================================================================
@@ -117,7 +117,7 @@ const NotificationServiceAdapter = require('./infrastructure/adapters/Notificati
 // Enhanced routing system
 const {
   createEnhancedApplicationRoutes,
-  getRouteDocumentation,
+  getRouteDocumentation
 } = require('./presentation/routes/enhanced-application.routes');
 
 // API middleware and validators
@@ -137,7 +137,7 @@ const ApplicationIntegrationTestSuite = require('./tests/integration/Application
 const TestUtilities = {
   ApplicationTestFactory: require('./tests/factories/ApplicationTestFactory'),
   MockGovernmentServices: require('./tests/mocks/MockGovernmentServices'),
-  TestDataGenerator: require('./tests/helpers/TestDataGenerator'),
+  TestDataGenerator: require('./tests/helpers/TestDataGenerator')
 };
 
 // ============================================================================
@@ -161,7 +161,7 @@ class EnhancedApplicationModule extends EventEmitter {
       enableDocumentProcessing: true,
       enableRealTimeUpdates: true,
       enableHealthChecks: true,
-      ...options,
+      ...options
     };
 
     // Service instances
@@ -179,7 +179,7 @@ class EnhancedApplicationModule extends EventEmitter {
       documentsUploaded: 0,
       governmentVerifications: 0,
       stateTransitions: 0,
-      errors: 0,
+      errors: 0
     };
 
     console.log('[EnhancedApplicationModule] Module instance created');
@@ -250,21 +250,21 @@ class EnhancedApplicationModule extends EventEmitter {
     this.repositories.application = new ApplicationRepository({
       connectionUri: dbConfig.uri,
       collectionName: dbConfig.collections.applications.name,
-      indexes: dbConfig.collections.applications.indexes,
+      indexes: dbConfig.collections.applications.indexes
     });
 
     // Initialize document repository
     this.repositories.document = new DocumentRepository({
       connectionUri: dbConfig.uri,
       collectionName: dbConfig.collections.documents.name,
-      indexes: dbConfig.collections.documents.indexes,
+      indexes: dbConfig.collections.documents.indexes
     });
 
     // Initialize audit log repository
     this.repositories.auditLog = new AuditLogRepository({
       connectionUri: dbConfig.uri,
       collectionName: dbConfig.collections.auditLogs.name,
-      indexes: dbConfig.collections.auditLogs.indexes,
+      indexes: dbConfig.collections.auditLogs.indexes
     });
 
     // Initialize analytics repository
@@ -272,7 +272,7 @@ class EnhancedApplicationModule extends EventEmitter {
       this.repositories.analytics = new AnalyticsRepository({
         connectionUri: dbConfig.uri,
         collectionName: dbConfig.collections.analytics.name,
-        indexes: dbConfig.collections.analytics.indexes,
+        indexes: dbConfig.collections.analytics.indexes
       });
     }
 
@@ -314,7 +314,7 @@ class EnhancedApplicationModule extends EventEmitter {
     this.integrations.sms = new SMSServiceAdapter(securityConfig.sms || {});
     this.integrations.notification = new NotificationServiceAdapter({
       email: this.integrations.email,
-      sms: this.integrations.sms,
+      sms: this.integrations.sms
     });
 
     console.log('[EnhancedApplicationModule] Infrastructure services initialized successfully');
@@ -336,7 +336,7 @@ class EnhancedApplicationModule extends EventEmitter {
       governmentIntegration: this.integrations.government,
       notificationService: this.integrations.notification,
       config: getSection('workflow'),
-      enableRealTime: this.options.enableRealTimeUpdates,
+      enableRealTime: this.options.enableRealTimeUpdates
     });
 
     await this.services.applicationProcessing.initialize();
@@ -357,8 +357,8 @@ class EnhancedApplicationModule extends EventEmitter {
       governmentService: this.integrations.government,
       config: {
         security: getSection('security'),
-        performance: getSection('analytics').performance || {},
-      },
+        performance: getSection('analytics').performance || {}
+      }
     });
 
     await this.controllers.applicationProcessing.initialize();
@@ -375,7 +375,7 @@ class EnhancedApplicationModule extends EventEmitter {
     // Create authentication middleware
     const authMiddleware = {
       requireAuth: AuthorizationMiddleware.requireAuth,
-      requireRole: AuthorizationMiddleware.requireRole,
+      requireRole: AuthorizationMiddleware.requireRole
     };
 
     // Create enhanced application routes
@@ -510,7 +510,7 @@ class EnhancedApplicationModule extends EventEmitter {
       timestamp: new Date(),
       overall: 'healthy',
       services: {},
-      metrics: this.metrics,
+      metrics: this.metrics
     };
 
     try {
@@ -573,7 +573,7 @@ class EnhancedApplicationModule extends EventEmitter {
         memory: process.memoryUsage(),
         cpu: process.cpuUsage(),
         uptime: process.uptime(),
-        moduleMetrics: { ...this.metrics },
+        moduleMetrics: { ...this.metrics }
       };
 
       // Store metrics if analytics repository is available
@@ -600,7 +600,7 @@ class EnhancedApplicationModule extends EventEmitter {
       lastHealthCheck: this.lastHealthCheck,
       services: Object.keys(this.services).length,
       integrations: Object.keys(this.integrations).length,
-      repositories: Object.keys(this.repositories).length,
+      repositories: Object.keys(this.repositories).length
     };
   }
 
@@ -622,7 +622,7 @@ class EnhancedApplicationModule extends EventEmitter {
         'Comprehensive audit trails',
         'Performance optimization',
         'Circuit breaker patterns',
-        'Automated testing suite',
+        'Automated testing suite'
       ],
 
       endpoints: {
@@ -630,7 +630,7 @@ class EnhancedApplicationModule extends EventEmitter {
         dtam: '/api/dtam/applications/*',
         admin: '/api/admin/applications/*',
         health: '/api/applications/health',
-        docs: '/api/applications/docs',
+        docs: '/api/applications/docs'
       },
 
       events: Object.values(ApplicationEvents),
@@ -643,8 +643,8 @@ class EnhancedApplicationModule extends EventEmitter {
         'Food and Drug Administration (FDA)',
         'Document Management System',
         'Email Service',
-        'SMS Service',
-      ],
+        'SMS Service'
+      ]
     };
   }
 
@@ -765,7 +765,7 @@ module.exports = {
   getHealthStatus: () => enhancedApplicationModule.getHealthStatus(),
   getModuleInfo: () => enhancedApplicationModule.getModuleInfo(),
   runTests: () => enhancedApplicationModule.runIntegrationTests(),
-  shutdown: () => enhancedApplicationModule.shutdown(),
+  shutdown: () => enhancedApplicationModule.shutdown()
 };
 
 // Log successful module loading

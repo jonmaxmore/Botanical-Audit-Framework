@@ -50,33 +50,33 @@ class NotificationService {
           enabled: true,
           provider: 'SES',
           fromAddress: process.env.EMAIL_FROM_ADDRESS || 'noreply@gacp.go.th',
-          fromName: process.env.EMAIL_FROM_NAME || 'GACP Platform',
+          fromName: process.env.EMAIL_FROM_NAME || 'GACP Platform'
         },
         sms: {
           enabled: true,
           provider: 'THAI_SMS_GATEWAY',
-          sender: process.env.SMS_SENDER || 'GACP',
+          sender: process.env.SMS_SENDER || 'GACP'
         },
         inApp: {
           enabled: true,
-          defaultExpiry: 30 * 24 * 60 * 60 * 1000, // 30 days
-        },
+          defaultExpiry: 30 * 24 * 60 * 60 * 1000 // 30 days
+        }
       },
       retry: {
         maxAttempts: {
           CRITICAL: 3,
           HIGH: 2,
           NORMAL: 2,
-          LOW: 1,
+          LOW: 1
         },
         backoffMultiplier: 2,
-        baseDelayMs: 60000, // 1 minute
+        baseDelayMs: 60000 // 1 minute
       },
       rateLimits: {
         emailPerHour: 1000,
         smsPerHour: 500,
-        bulkEmailPerHour: 5000,
-      },
+        bulkEmailPerHour: 5000
+      }
     };
 
     // Initialize template system
@@ -102,13 +102,13 @@ class NotificationService {
         previousStatus,
         reviewerNotes,
         inspectionDate,
-        certificateUrl,
+        certificateUrl
       } = eventData;
 
       console.log(`[NotificationService] Processing workflow notification: ${eventType}`, {
         applicationId,
         userId,
-        currentStatus,
+        currentStatus
       });
 
       // Get user details for notification
@@ -131,7 +131,7 @@ class NotificationService {
         user: {
           firstName: user.firstName,
           lastName: user.lastName,
-          email: user.email,
+          email: user.email
         },
         application: {
           id: application.id,
@@ -139,19 +139,19 @@ class NotificationService {
           applicationNumber: application.applicationNumber,
           submittedAt: application.submittedAt,
           currentStatus,
-          previousStatus,
+          previousStatus
         },
         eventData: {
           reviewerNotes,
           inspectionDate,
           certificateUrl,
-          statusChangeDate: new Date(),
+          statusChangeDate: new Date()
         },
         system: {
           platformName: 'GACP Platform',
           supportEmail: 'support@gacp.go.th',
-          baseUrl: process.env.FRONTEND_BASE_URL || 'https://gacp.go.th',
-        },
+          baseUrl: process.env.FRONTEND_BASE_URL || 'https://gacp.go.th'
+        }
       };
 
       // Create notification
@@ -167,8 +167,8 @@ class NotificationService {
         channels: notificationConfig.channels,
         relatedEntities: {
           applicationId,
-          userId,
-        },
+          userId
+        }
       });
 
       // Queue for delivery
@@ -182,7 +182,7 @@ class NotificationService {
           eventType,
           userId,
           applicationId,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -192,7 +192,7 @@ class NotificationService {
         channels: Object.keys(notificationConfig.channels).filter(
           c => notificationConfig.channels[c]
         ),
-        message: 'Workflow notification created successfully',
+        message: 'Workflow notification created successfully'
       };
     } catch (error) {
       console.error('[NotificationService] Workflow notification error:', error);
@@ -219,19 +219,19 @@ class NotificationService {
         paymentStatus,
         failureReason,
         receiptUrl,
-        qrCodeData,
+        qrCodeData
       } = paymentData;
 
       console.log(`[NotificationService] Processing payment notification: ${paymentEvent}`, {
         paymentId,
         userId,
-        amount,
+        amount
       });
 
       // Get user and application details
       const [user, application] = await Promise.all([
         this.userRepository.findById(userId),
-        this.applicationRepository.findById(applicationId),
+        this.applicationRepository.findById(applicationId)
       ]);
 
       if (!user || !application) {
@@ -246,26 +246,26 @@ class NotificationService {
         user: {
           firstName: user.firstName,
           lastName: user.lastName,
-          email: user.email,
+          email: user.email
         },
         payment: {
           id: paymentId,
           amount: this._formatCurrency(amount, currency),
           status: paymentStatus,
           failureReason,
-          receiptUrl,
+          receiptUrl
         },
         application: {
           id: application.id,
           farmName: application.farmDetails?.farmName || 'ไม่ระบุ',
-          applicationNumber: application.applicationNumber,
+          applicationNumber: application.applicationNumber
         },
         qrCode: qrCodeData,
         system: {
           platformName: 'GACP Platform',
           supportEmail: 'support@gacp.go.th',
-          baseUrl: process.env.FRONTEND_BASE_URL || 'https://gacp.go.th',
-        },
+          baseUrl: process.env.FRONTEND_BASE_URL || 'https://gacp.go.th'
+        }
       };
 
       // Create notification
@@ -282,8 +282,8 @@ class NotificationService {
         relatedEntities: {
           applicationId,
           userId,
-          paymentId,
-        },
+          paymentId
+        }
       });
 
       // Queue for delivery
@@ -292,7 +292,7 @@ class NotificationService {
       return {
         success: true,
         notificationId: notification.notificationId,
-        message: 'Payment notification created successfully',
+        message: 'Payment notification created successfully'
       };
     } catch (error) {
       console.error('[NotificationService] Payment notification error:', error);
@@ -318,13 +318,13 @@ class NotificationService {
         channels,
         scheduledFor,
         templateId,
-        templateVariables = {},
+        templateVariables = {}
       } = bulkNotificationData;
 
       console.log('[NotificationService] Processing bulk notification', {
         notificationType,
         recipientFilters,
-        scheduledFor,
+        scheduledFor
       });
 
       // Get recipients based on filters
@@ -351,13 +351,13 @@ class NotificationService {
           user: {
             firstName: recipient.firstName,
             lastName: recipient.lastName,
-            email: recipient.email,
+            email: recipient.email
           },
           batchInfo: {
             batchId,
             totalRecipients: recipients.length,
-            position: i + 1,
-          },
+            position: i + 1
+          }
         };
 
         const notification = await this._createNotification({
@@ -375,7 +375,7 @@ class NotificationService {
           scheduledFor: scheduledFor ? new Date(scheduledFor) : undefined,
           batchId,
           batchSize: recipients.length,
-          batchPosition: i + 1,
+          batchPosition: i + 1
         });
 
         notifications.push(notification);
@@ -395,7 +395,7 @@ class NotificationService {
           notificationType,
           recipientCount: recipients.length,
           scheduledFor,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -405,7 +405,7 @@ class NotificationService {
         recipientCount: recipients.length,
         notificationIds: notifications.map(n => n.notificationId),
         scheduledFor,
-        message: 'Bulk notification created successfully',
+        message: 'Bulk notification created successfully'
       };
     } catch (error) {
       console.error('[NotificationService] Bulk notification error:', error);
@@ -443,7 +443,7 @@ class NotificationService {
           console.error('[NotificationService] Email delivery failed:', error);
           await notification.addDeliveryAttempt('email', 'FAILED', {
             errorCode: 'EMAIL_DELIVERY_FAILED',
-            errorMessage: error.message,
+            errorMessage: error.message
           });
         }
       }
@@ -457,7 +457,7 @@ class NotificationService {
           console.error('[NotificationService] SMS delivery failed:', error);
           await notification.addDeliveryAttempt('sms', 'FAILED', {
             errorCode: 'SMS_DELIVERY_FAILED',
-            errorMessage: error.message,
+            errorMessage: error.message
           });
         }
       }
@@ -471,7 +471,7 @@ class NotificationService {
           console.error('[NotificationService] In-app delivery failed:', error);
           await notification.addDeliveryAttempt('inApp', 'FAILED', {
             errorCode: 'INAPP_DELIVERY_FAILED',
-            errorMessage: error.message,
+            errorMessage: error.message
           });
         }
       }
@@ -490,7 +490,7 @@ class NotificationService {
         notificationId,
         status: notification.status,
         deliveryResults,
-        canRetry: notification.canRetry,
+        canRetry: notification.canRetry
       };
     } catch (error) {
       console.error('[NotificationService] Delivery processing error:', error);
@@ -513,7 +513,7 @@ class NotificationService {
         notificationType,
         limit = 50,
         page = 1,
-        markAsRead = false,
+        markAsRead = false
       } = options;
 
       const query = { recipientId: userId };
@@ -538,11 +538,11 @@ class NotificationService {
         await Notification.updateMany(
           {
             _id: { $in: notificationIds },
-            'channels.inApp.status': { $in: ['PENDING', 'DELIVERED'] },
+            'channels.inApp.status': { $in: ['PENDING', 'DELIVERED'] }
           },
           {
             'channels.inApp.status': 'READ',
-            'channels.inApp.readAt': new Date(),
+            'channels.inApp.readAt': new Date()
           }
         );
       }
@@ -550,7 +550,7 @@ class NotificationService {
       // Get unread count
       const unreadCount = await Notification.countDocuments({
         recipientId: userId,
-        'channels.inApp.status': { $in: ['PENDING', 'DELIVERED'] },
+        'channels.inApp.status': { $in: ['PENDING', 'DELIVERED'] }
       });
 
       return {
@@ -559,9 +559,9 @@ class NotificationService {
         pagination: {
           page,
           limit,
-          total: await Notification.countDocuments(query),
+          total: await Notification.countDocuments(query)
         },
-        unreadCount,
+        unreadCount
       };
     } catch (error) {
       console.error('[NotificationService] Get user notifications error:', error);
@@ -604,38 +604,38 @@ class NotificationService {
         type: 'APPLICATION_SUBMITTED',
         priority: 'NORMAL',
         templateId: 'application-submitted',
-        channels: { email: true, inApp: true, sms: false },
+        channels: { email: true, inApp: true, sms: false }
       },
       APPLICATION_APPROVED: {
         type: 'APPLICATION_APPROVED',
         priority: 'HIGH',
         templateId: 'application-approved',
-        channels: { email: true, inApp: true, sms: true },
+        channels: { email: true, inApp: true, sms: true }
       },
       APPLICATION_REJECTED: {
         type: 'APPLICATION_REJECTED',
         priority: 'HIGH',
         templateId: 'application-rejected',
-        channels: { email: true, inApp: true, sms: true },
+        channels: { email: true, inApp: true, sms: true }
       },
       PAYMENT_REQUIRED: {
         type: 'PAYMENT_REQUIRED',
         priority: 'HIGH',
         templateId: 'payment-required',
-        channels: { email: true, inApp: true, sms: true },
+        channels: { email: true, inApp: true, sms: true }
       },
       INSPECTION_SCHEDULED: {
         type: 'INSPECTION_SCHEDULED',
         priority: 'HIGH',
         templateId: 'inspection-scheduled',
-        channels: { email: true, inApp: true, sms: true },
+        channels: { email: true, inApp: true, sms: true }
       },
       CERTIFICATE_ISSUED: {
         type: 'CERTIFICATE_ISSUED',
         priority: 'HIGH',
         templateId: 'certificate-issued',
-        channels: { email: true, inApp: true, sms: true },
-      },
+        channels: { email: true, inApp: true, sms: true }
+      }
     };
 
     return (
@@ -643,7 +643,7 @@ class NotificationService {
         type: 'SYSTEM_NOTIFICATION',
         priority: 'NORMAL',
         templateId: 'default',
-        channels: { email: false, inApp: true, sms: false },
+        channels: { email: false, inApp: true, sms: false }
       }
     );
   }
@@ -658,32 +658,32 @@ class NotificationService {
         type: 'PAYMENT_REQUIRED',
         priority: 'HIGH',
         templateId: 'payment-initiated',
-        channels: { email: true, inApp: true, sms: true },
+        channels: { email: true, inApp: true, sms: true }
       },
       PAYMENT_SUCCESS: {
         type: 'PAYMENT_RECEIVED',
         priority: 'HIGH',
         templateId: 'payment-success',
-        channels: { email: true, inApp: true, sms: true },
+        channels: { email: true, inApp: true, sms: true }
       },
       PAYMENT_FAILED: {
         type: 'PAYMENT_FAILED',
         priority: 'HIGH',
         templateId: 'payment-failed',
-        channels: { email: true, inApp: true, sms: true },
+        channels: { email: true, inApp: true, sms: true }
       },
       PAYMENT_EXPIRED: {
         type: 'PAYMENT_EXPIRED',
         priority: 'NORMAL',
         templateId: 'payment-expired',
-        channels: { email: true, inApp: true, sms: false },
+        channels: { email: true, inApp: true, sms: false }
       },
       REFUND_PROCESSED: {
         type: 'REFUND_PROCESSED',
         priority: 'HIGH',
         templateId: 'refund-processed',
-        channels: { email: true, inApp: true, sms: true },
-      },
+        channels: { email: true, inApp: true, sms: true }
+      }
     };
 
     return (
@@ -691,7 +691,7 @@ class NotificationService {
         type: 'PAYMENT_NOTIFICATION',
         priority: 'NORMAL',
         templateId: 'payment-default',
-        channels: { email: true, inApp: true, sms: false },
+        channels: { email: true, inApp: true, sms: false }
       }
     );
   }
@@ -715,23 +715,23 @@ class NotificationService {
       channels: {
         email: {
           enabled: notificationData.channels.email || false,
-          status: 'PENDING',
+          status: 'PENDING'
         },
         sms: {
           enabled: notificationData.channels.sms || false,
-          status: 'PENDING',
+          status: 'PENDING'
         },
         inApp: {
           enabled: notificationData.channels.inApp !== false,
-          status: 'PENDING',
-        },
+          status: 'PENDING'
+        }
       },
       relatedEntities: notificationData.relatedEntities,
       scheduledFor: notificationData.scheduledFor,
       batchId: notificationData.batchId,
       batchSize: notificationData.batchSize,
       batchPosition: notificationData.batchPosition,
-      status: 'SCHEDULED',
+      status: 'SCHEDULED'
     });
 
     await notification.save();
@@ -747,7 +747,7 @@ class NotificationService {
       await this.queueService.add(
         'notification-delivery',
         {
-          notificationId: notification.notificationId,
+          notificationId: notification.notificationId
         },
         {
           delay: notification.scheduledFor
@@ -756,8 +756,8 @@ class NotificationService {
           attempts: this.config.retry.maxAttempts[notification.priority],
           backoff: {
             type: 'exponential',
-            delay: this.config.retry.baseDelayMs,
-          },
+            delay: this.config.retry.baseDelayMs
+          }
         }
       );
     } else {
@@ -773,7 +773,7 @@ class NotificationService {
   _formatCurrency(amount, currency = 'THB') {
     return new Intl.NumberFormat('th-TH', {
       style: 'currency',
-      currency: currency,
+      currency: currency
     }).format(amount);
   }
 
@@ -793,7 +793,7 @@ class NotificationService {
       readAt: notification.channels.inApp.readAt,
       actionUrl: notification.channels.inApp.actionUrl,
       actionText: notification.channels.inApp.actionText,
-      relatedEntities: notification.relatedEntities,
+      relatedEntities: notification.relatedEntities
     };
   }
 
@@ -803,7 +803,7 @@ class NotificationService {
   async healthCheck() {
     try {
       const pendingCount = await Notification.countDocuments({
-        status: { $in: ['SCHEDULED', 'PROCESSING'] },
+        status: { $in: ['SCHEDULED', 'PROCESSING'] }
       });
 
       return {
@@ -812,15 +812,15 @@ class NotificationService {
         channels: {
           email: this.config.channels.email.enabled,
           sms: this.config.channels.sms.enabled,
-          inApp: this.config.channels.inApp.enabled,
+          inApp: this.config.channels.inApp.enabled
         },
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         error: error.message,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     }
   }

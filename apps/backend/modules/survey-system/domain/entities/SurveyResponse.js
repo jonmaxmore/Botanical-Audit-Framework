@@ -32,7 +32,7 @@ class SurveyResponse {
       organization: options.respondentInfo?.organization,
       role: options.respondentInfo?.role,
       farmId: options.respondentInfo?.farmId,
-      contactInfo: options.respondentInfo?.contactInfo || {},
+      contactInfo: options.respondentInfo?.contactInfo || {}
     };
 
     // Response status and timeline
@@ -58,7 +58,7 @@ class SurveyResponse {
       totalTimeSpent: options.timeTracking?.totalTimeSpent || 0, // seconds
       sectionTimes: options.timeTracking?.sectionTimes || new Map(),
       sessionTimes: options.timeTracking?.sessionTimes || [],
-      averageQuestionTime: options.timeTracking?.averageQuestionTime || 0,
+      averageQuestionTime: options.timeTracking?.averageQuestionTime || 0
     };
 
     // Validation and quality control
@@ -66,7 +66,7 @@ class SurveyResponse {
       isValid: false,
       errors: [],
       warnings: [],
-      suggestions: [],
+      suggestions: []
     };
 
     // Follow-up and improvement tracking
@@ -75,7 +75,7 @@ class SurveyResponse {
       nextReviewDate: options.followUp?.nextReviewDate || null,
       assignedConsultant: options.followUp?.assignedConsultant || null,
       trainingRecommendations: options.followUp?.trainingRecommendations || [],
-      priorityActions: options.followUp?.priorityActions || [],
+      priorityActions: options.followUp?.priorityActions || []
     };
 
     // Metadata and audit
@@ -84,7 +84,7 @@ class SurveyResponse {
       userAgent: options.metadata?.userAgent,
       browserInfo: options.metadata?.browserInfo,
       deviceInfo: options.metadata?.deviceInfo,
-      geoLocation: options.metadata?.geoLocation,
+      geoLocation: options.metadata?.geoLocation
     };
 
     this.auditTrail = options.auditTrail || [];
@@ -122,7 +122,7 @@ class SurveyResponse {
         startedAt: null,
         completedAt: null,
         timeSpent: 0,
-        skipped: false,
+        skipped: false
       });
     });
 
@@ -130,14 +130,14 @@ class SurveyResponse {
     this.timeTracking.sessionTimes.push({
       sessionStart: new Date(),
       sessionEnd: null,
-      duration: 0,
+      duration: 0
     });
 
     // Create audit entry
     this.addAuditEntry('RESPONSE_STARTED', {
       surveyId: this.surveyId,
       respondentId: this.respondentId,
-      startTime: this.startedAt,
+      startTime: this.startedAt
     });
 
     this.updatedAt = new Date();
@@ -148,7 +148,7 @@ class SurveyResponse {
       status: this.status,
       progress: this.overallProgress,
       estimatedTimeRemaining: this.estimateTimeRemaining(surveyData),
-      nextSection: this.getNextSection(),
+      nextSection: this.getNextSection()
     };
   }
 
@@ -185,7 +185,7 @@ class SurveyResponse {
       timeToAnswer: answerData.timeToAnswer || 0,
       answeredAt: new Date(),
       previousAnswer: previousAnswer || null,
-      isModified: previousAnswer !== null,
+      isModified: previousAnswer !== null
     };
 
     this.answers.set(questionId, answerRecord);
@@ -204,7 +204,7 @@ class SurveyResponse {
         this.validationResults.warnings.push({
           questionId: questionId,
           message: questionValidation.message,
-          suggestion: questionValidation.suggestion,
+          suggestion: questionValidation.suggestion
         });
       }
     }
@@ -218,7 +218,7 @@ class SurveyResponse {
       questionId: questionId,
       sectionId: sectionId,
       isModified: answerRecord.isModified,
-      timeToAnswer: answerRecord.timeToAnswer,
+      timeToAnswer: answerRecord.timeToAnswer
     });
 
     return {
@@ -228,7 +228,7 @@ class SurveyResponse {
       overallProgress: this.overallProgress,
       validation: validationResult,
       nextQuestion: this.getNextQuestion(questionInfo.sectionId),
-      autoSaved: true,
+      autoSaved: true
     };
   }
 
@@ -294,7 +294,7 @@ class SurveyResponse {
       totalTimeSpent: this.timeTracking.totalTimeSpent,
       finalScore: this.scoring.percentage,
       passed: this.passed,
-      complianceLevel: this.scoring.complianceLevel,
+      complianceLevel: this.scoring.complianceLevel
     });
 
     return {
@@ -306,7 +306,7 @@ class SurveyResponse {
       grade: this.grade,
       certificateEligible: this.certificateEligible,
       improvementPlan: this.followUp.improvementPlan,
-      reportUrl: this.generateReportUrl(),
+      reportUrl: this.generateReportUrl()
     };
   }
 
@@ -350,14 +350,14 @@ class SurveyResponse {
       submittedAt: this.submittedAt,
       respondent: this.respondentInfo,
       scoring: this.scoring,
-      nextSteps: this.generateNextSteps(),
+      nextSteps: this.generateNextSteps()
     };
 
     // Create audit entry
     this.addAuditEntry('RESPONSE_SUBMITTED', {
       submissionTime: this.submittedAt,
       confirmationId: submissionConfirmation.confirmationId,
-      finalScore: this.scoring.percentage,
+      finalScore: this.scoring.percentage
     });
 
     return submissionConfirmation;
@@ -383,7 +383,7 @@ class SurveyResponse {
         sectionsCompleted: this.getCompletedSections().length,
         sectionsTotal: surveyData.sections.length,
         sectionCompletionRate:
-          (this.getCompletedSections().length / surveyData.sections.length) * 100,
+          (this.getCompletedSections().length / surveyData.sections.length) * 100
       },
 
       // Time metrics
@@ -391,7 +391,7 @@ class SurveyResponse {
         totalTimeSpent: this.timeTracking.totalTimeSpent,
         averageTimePerQuestion: this.timeTracking.totalTimeSpent / this.answers.size,
         estimatedTimeRemaining: this.estimateTimeRemaining(surveyData),
-        efficiencyScore: this.calculateEfficiencyScore(surveyData),
+        efficiencyScore: this.calculateEfficiencyScore(surveyData)
       },
 
       // Quality metrics
@@ -400,7 +400,7 @@ class SurveyResponse {
         validationIssues: this.validationResults.errors.length,
         warnings: this.validationResults.warnings.length,
         evidenceProvided: this.countEvidenceFiles(),
-        detailLevel: this.assessResponseDetailLevel(),
+        detailLevel: this.assessResponseDetailLevel()
       },
 
       // Performance metrics per section
@@ -411,18 +411,18 @@ class SurveyResponse {
         timeSpent: progress.timeSpent,
         questionsAnswered: progress.answeredQuestions,
         totalQuestions: progress.totalQuestions,
-        averageTimePerQuestion: progress.timeSpent / Math.max(progress.answeredQuestions, 1),
+        averageTimePerQuestion: progress.timeSpent / Math.max(progress.answeredQuestions, 1)
       })),
 
       // Compliance analysis
       compliance: this.scoring
         ? {
-            overallComplianceLevel: this.scoring.complianceLevel,
-            mandatoryRequirementsMet: this.scoring.mandatoryScore || 0,
-            optionalRequirementsMet: this.scoring.optionalScore || 0,
-            criticalIssuesCount: this.scoring.criticalIssues?.length || 0,
-            improvementAreasCount: this.followUp.priorityActions?.length || 0,
-          }
+          overallComplianceLevel: this.scoring.complianceLevel,
+          mandatoryRequirementsMet: this.scoring.mandatoryScore || 0,
+          optionalRequirementsMet: this.scoring.optionalScore || 0,
+          criticalIssuesCount: this.scoring.criticalIssues?.length || 0,
+          improvementAreasCount: this.followUp.priorityActions?.length || 0
+        }
         : null,
 
       // Benchmark comparison
@@ -431,11 +431,11 @@ class SurveyResponse {
         industryPercentile: this.scoring
           ? this.calculateIndustryPercentile(this.scoring.percentage)
           : null,
-        improvementPotential: this.scoring ? 100 - this.scoring.percentage : null,
+        improvementPotential: this.scoring ? 100 - this.scoring.percentage : null
       },
 
       // Calculated at
-      calculatedAt: new Date(),
+      calculatedAt: new Date()
     };
 
     return metrics;
@@ -462,7 +462,7 @@ class SurveyResponse {
         surveyTitle: surveyData.surveyTitle,
         respondent: this.respondentInfo,
         generatedAt: new Date(),
-        reportType: 'PROGRESS_REPORT',
+        reportType: 'PROGRESS_REPORT'
       },
 
       // Executive summary
@@ -473,7 +473,7 @@ class SurveyResponse {
         timeSpent: this.formatDuration(metrics.time.totalTimeSpent),
         estimatedTimeRemaining: this.formatDuration(metrics.time.estimatedTimeRemaining),
         qualityScore: metrics.quality.responseQualityScore,
-        readyToComplete: this.isReadyToComplete(surveyData),
+        readyToComplete: this.isReadyToComplete(surveyData)
       },
 
       // Detailed progress breakdown
@@ -482,12 +482,12 @@ class SurveyResponse {
           ...section,
           status: this.getSectionStatus(section.sectionId),
           recommendations: this.getSectionRecommendations(section),
-          nextSteps: this.getSectionNextSteps(section.sectionId),
+          nextSteps: this.getSectionNextSteps(section.sectionId)
         })),
 
         milestones: this.generateProgressMilestones(),
         achievements: this.identifyAchievements(metrics),
-        challenges: this.identifyChallenges(metrics),
+        challenges: this.identifyChallenges(metrics)
       },
 
       // Performance analysis
@@ -495,14 +495,14 @@ class SurveyResponse {
         strengths: this.identifyStrengths(metrics),
         improvementAreas: this.identifyImprovementAreas(metrics),
         timeEfficiency: this.analyzeTimeEfficiency(metrics),
-        responseQuality: this.analyzeResponseQuality(metrics),
+        responseQuality: this.analyzeResponseQuality(metrics)
       },
 
       // Recommendations
       recommendations: {
         immediate: this.generateImmediateRecommendations(metrics),
         shortTerm: this.generateShortTermRecommendations(metrics),
-        preparation: this.generateCompletionPreparation(surveyData, metrics),
+        preparation: this.generateCompletionPreparation(surveyData, metrics)
       },
 
       // Next steps
@@ -510,8 +510,8 @@ class SurveyResponse {
         nextSection: this.getNextSection(),
         priorityQuestions: this.getPriorityQuestions(surveyData),
         preparationNeeded: this.getPreparationNeeded(surveyData),
-        estimatedCompletionDate: this.estimateCompletionDate(metrics),
-      },
+        estimatedCompletionDate: this.estimateCompletionDate(metrics)
+      }
     };
 
     return progressReport;
@@ -527,7 +527,7 @@ class SurveyResponse {
       isValid: true,
       errors: [],
       warnings: [],
-      suggestions: [],
+      suggestions: []
     };
 
     // Check if answer is provided for required questions
@@ -538,40 +538,40 @@ class SurveyResponse {
 
     // Type-specific validation
     switch (questionInfo.type) {
-      case 'NUMERIC':
-        if (!this.isNumeric(answerData.value)) {
+    case 'NUMERIC':
+      if (!this.isNumeric(answerData.value)) {
+        validation.isValid = false;
+        validation.errors.push('ต้องเป็นตัวเลข');
+      } else {
+        const numValue = parseFloat(answerData.value);
+        if (questionInfo.validation.minValue && numValue < questionInfo.validation.minValue) {
           validation.isValid = false;
-          validation.errors.push('ต้องเป็นตัวเลข');
-        } else {
-          const numValue = parseFloat(answerData.value);
-          if (questionInfo.validation.minValue && numValue < questionInfo.validation.minValue) {
-            validation.isValid = false;
-            validation.errors.push(`ค่าต้องมากกว่า ${questionInfo.validation.minValue}`);
-          }
-          if (questionInfo.validation.maxValue && numValue > questionInfo.validation.maxValue) {
-            validation.isValid = false;
-            validation.errors.push(`ค่าต้องน้อยกว่า ${questionInfo.validation.maxValue}`);
-          }
+          validation.errors.push(`ค่าต้องมากกว่า ${questionInfo.validation.minValue}`);
         }
-        break;
+        if (questionInfo.validation.maxValue && numValue > questionInfo.validation.maxValue) {
+          validation.isValid = false;
+          validation.errors.push(`ค่าต้องน้อยกว่า ${questionInfo.validation.maxValue}`);
+        }
+      }
+      break;
 
-      case 'TEXT':
-        const textLength = answerData.value?.length || 0;
-        if (questionInfo.validation.minLength && textLength < questionInfo.validation.minLength) {
-          validation.isValid = false;
-          validation.errors.push(`ต้องมีอย่างน้อย ${questionInfo.validation.minLength} ตัวอักษร`);
-        }
-        if (questionInfo.validation.maxLength && textLength > questionInfo.validation.maxLength) {
-          validation.warnings.push(`ควรไม่เกิน ${questionInfo.validation.maxLength} ตัวอักษร`);
-        }
-        break;
+    case 'TEXT':
+      const textLength = answerData.value?.length || 0;
+      if (questionInfo.validation.minLength && textLength < questionInfo.validation.minLength) {
+        validation.isValid = false;
+        validation.errors.push(`ต้องมีอย่างน้อย ${questionInfo.validation.minLength} ตัวอักษร`);
+      }
+      if (questionInfo.validation.maxLength && textLength > questionInfo.validation.maxLength) {
+        validation.warnings.push(`ควรไม่เกิน ${questionInfo.validation.maxLength} ตัวอักษร`);
+      }
+      break;
 
-      case 'EMAIL':
-        if (answerData.value && !this.isValidEmail(answerData.value)) {
-          validation.isValid = false;
-          validation.errors.push('รูปแบบอีเมลไม่ถูกต้อง');
-        }
-        break;
+    case 'EMAIL':
+      if (answerData.value && !this.isValidEmail(answerData.value)) {
+        validation.isValid = false;
+        validation.errors.push('รูปแบบอีเมลไม่ถูกต้อง');
+      }
+      break;
     }
 
     // GACP-specific validation
@@ -592,7 +592,7 @@ class SurveyResponse {
     const validation = {
       canComplete: true,
       issues: [],
-      warnings: [],
+      warnings: []
     };
 
     // Check minimum completion rate
@@ -679,7 +679,7 @@ class SurveyResponse {
       complianceLevel: 'SUBSTANTIAL_COMPLIANCE',
       sectionScores: [],
       recommendations: [],
-      passed: true,
+      passed: true
     };
   }
 
@@ -715,7 +715,7 @@ class SurveyResponse {
       timestamp: new Date(),
       action: action,
       data: data,
-      sessionId: this.sessionId,
+      sessionId: this.sessionId
     });
   }
 

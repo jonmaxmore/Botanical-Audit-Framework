@@ -22,8 +22,8 @@ class AnalyticsEngine {
       format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
       transports: [
         new winston.transports.Console(),
-        new winston.transports.File({ filename: 'analytics.log' }),
-      ],
+        new winston.transports.File({ filename: 'analytics.log' })
+      ]
     });
   }
 
@@ -42,12 +42,12 @@ class AnalyticsEngine {
         status: 'OK',
         service: 'Analytics Engine',
         timestamp: new Date().toISOString(),
-        version: '2.0.0-mongodb',
+        version: '2.0.0-mongodb'
       });
     });
 
     // Dashboard Analytics - MongoDB Version
-    this.app.get('/api/analytics/dashboard', async (req, res) => {
+    this.app.get('/api/analytics/dashboard', async(req, res) => {
       try {
         const dashboardData = await this.getDashboardAnalytics();
         res.json(dashboardData);
@@ -58,7 +58,7 @@ class AnalyticsEngine {
     });
 
     // Application Statistics - MongoDB Version
-    this.app.get('/api/analytics/applications', async (req, res) => {
+    this.app.get('/api/analytics/applications', async(req, res) => {
       try {
         const { period = '30d', status, herbType } = req.query;
         const stats = await this.getApplicationStatistics(period, { status, herbType });
@@ -70,7 +70,7 @@ class AnalyticsEngine {
     });
 
     // User Analytics - MongoDB Version
-    this.app.get('/api/analytics/users', async (req, res) => {
+    this.app.get('/api/analytics/users', async(req, res) => {
       try {
         const { period = '30d', role } = req.query;
         const userStats = await this.getUserAnalytics(period, { role });
@@ -82,7 +82,7 @@ class AnalyticsEngine {
     });
 
     // Performance Metrics - MongoDB Version
-    this.app.get('/api/analytics/performance', async (req, res) => {
+    this.app.get('/api/analytics/performance', async(req, res) => {
       try {
         const performance = await this.getPerformanceMetrics();
         res.json(performance);
@@ -93,7 +93,7 @@ class AnalyticsEngine {
     });
 
     // Compliance Reports - MongoDB Version
-    this.app.get('/api/analytics/compliance', async (req, res) => {
+    this.app.get('/api/analytics/compliance', async(req, res) => {
       try {
         const { period = '30d', herbType } = req.query;
         const compliance = await this.getComplianceReports(period, { herbType });
@@ -105,7 +105,7 @@ class AnalyticsEngine {
     });
 
     // Real-time Statistics - MongoDB Version
-    this.app.get('/api/analytics/realtime', async (req, res) => {
+    this.app.get('/api/analytics/realtime', async(req, res) => {
       try {
         const realtime = await this.getRealtimeStatistics();
         res.json(realtime);
@@ -131,7 +131,7 @@ class AnalyticsEngine {
         applicationsByHerbType,
         totalUsers,
         usersByRole,
-        averageProcessingTime,
+        averageProcessingTime
       ] = await Promise.all([
         Application.countDocuments(),
         Application.countDocuments({ createdAt: { $gte: thirtyDaysAgo } }),
@@ -139,7 +139,7 @@ class AnalyticsEngine {
         this.getApplicationsByHerbType(),
         User.countDocuments(),
         this.getUsersByRole(),
-        this.getAverageProcessingTime(),
+        this.getAverageProcessingTime()
       ]);
 
       return {
@@ -147,16 +147,16 @@ class AnalyticsEngine {
           totalApplications,
           recentApplications,
           totalUsers,
-          averageProcessingTime,
+          averageProcessingTime
         },
         applications: {
           byStatus: applicationsByStatus,
-          byHerbType: applicationsByHerbType,
+          byHerbType: applicationsByHerbType
         },
         users: {
-          byRole: usersByRole,
+          byRole: usersByRole
         },
-        lastUpdated: new Date().toISOString(),
+        lastUpdated: new Date().toISOString()
       };
     } catch (error) {
       this.logger.error('Get dashboard analytics error:', error);
@@ -171,7 +171,7 @@ class AnalyticsEngine {
     try {
       const dateRange = this.getDateRange(period);
       const query = {
-        createdAt: { $gte: dateRange.start, $lte: dateRange.end },
+        createdAt: { $gte: dateRange.start, $lte: dateRange.end }
       };
 
       if (filters.status) {
@@ -186,7 +186,7 @@ class AnalyticsEngine {
         Application.find(query).sort({ createdAt: -1 }),
         this.getDailyApplicationStats(dateRange, filters),
         this.getStatusDistribution(query),
-        this.getProcessingTimeStats(query),
+        this.getProcessingTimeStats(query)
       ]);
 
       return {
@@ -195,7 +195,7 @@ class AnalyticsEngine {
         dailyStats,
         statusDistribution,
         processingTimes,
-        applications: applications.slice(0, 100), // Limit for performance
+        applications: applications.slice(0, 100) // Limit for performance
       };
     } catch (error) {
       this.logger.error('Get application statistics error:', error);
@@ -210,7 +210,7 @@ class AnalyticsEngine {
     try {
       const dateRange = this.getDateRange(period);
       const query = {
-        createdAt: { $gte: dateRange.start, $lte: dateRange.end },
+        createdAt: { $gte: dateRange.start, $lte: dateRange.end }
       };
 
       if (filters.role) {
@@ -221,7 +221,7 @@ class AnalyticsEngine {
         User.find(query).select('-password').sort({ createdAt: -1 }),
         this.getUserRegistrationTrend(dateRange, filters),
         this.getUserRoleDistribution(query),
-        this.getUserActivityStats(dateRange, filters),
+        this.getUserActivityStats(dateRange, filters)
       ]);
 
       return {
@@ -230,7 +230,7 @@ class AnalyticsEngine {
         registrationTrend,
         roleDistribution,
         activityStats,
-        users: users.slice(0, 100), // Limit for performance
+        users: users.slice(0, 100) // Limit for performance
       };
     } catch (error) {
       this.logger.error('Get user analytics error:', error);
@@ -248,7 +248,7 @@ class AnalyticsEngine {
           this.getAverageProcessingTime(),
           this.getApprovalRate(),
           this.getInspectionEfficiency(),
-          this.getSystemUptime(),
+          this.getSystemUptime()
         ]);
 
       return {
@@ -256,7 +256,7 @@ class AnalyticsEngine {
         approvalRate: approvalRate,
         inspectionEfficiency: inspectionEfficiency,
         systemUptime: systemUptime,
-        lastCalculated: new Date().toISOString(),
+        lastCalculated: new Date().toISOString()
       };
     } catch (error) {
       this.logger.error('Get performance metrics error:', error);
@@ -271,7 +271,7 @@ class AnalyticsEngine {
     try {
       const dateRange = this.getDateRange(period);
       const query = {
-        createdAt: { $gte: dateRange.start, $lte: dateRange.end },
+        createdAt: { $gte: dateRange.start, $lte: dateRange.end }
       };
 
       if (filters.herbType) {
@@ -283,7 +283,7 @@ class AnalyticsEngine {
           this.getComplianceScores(query),
           this.getNonComplianceIssues(query),
           this.getImprovementTrends(dateRange, filters),
-          this.getInspectionResults(query),
+          this.getInspectionResults(query)
         ]);
 
       return {
@@ -291,7 +291,7 @@ class AnalyticsEngine {
         complianceScores,
         nonComplianceIssues,
         improvementTrends,
-        inspectionResults,
+        inspectionResults
       };
     } catch (error) {
       this.logger.error('Get compliance reports error:', error);
@@ -312,7 +312,7 @@ class AnalyticsEngine {
           Application.countDocuments({ createdAt: { $gte: todayStart } }),
           Application.countDocuments({ status: 'submitted' }),
           Application.countDocuments({ status: 'under_review' }),
-          User.countDocuments({ lastLoginAt: { $gte: new Date(now.getTime() - 60 * 60 * 1000) } }),
+          User.countDocuments({ lastLoginAt: { $gte: new Date(now.getTime() - 60 * 60 * 1000) } })
         ]);
 
       return {
@@ -320,7 +320,7 @@ class AnalyticsEngine {
         pendingReviews,
         activeInspections,
         recentLogins,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       this.logger.error('Get realtime statistics error:', error);
@@ -332,7 +332,7 @@ class AnalyticsEngine {
 
   async getApplicationsByStatus() {
     const result = await Application.aggregate([
-      { $group: { _id: '$status', count: { $sum: 1 } } },
+      { $group: { _id: '$status', count: { $sum: 1 } } }
     ]);
 
     const statusMap = {};
@@ -345,7 +345,7 @@ class AnalyticsEngine {
 
   async getApplicationsByHerbType() {
     const result = await Application.aggregate([
-      { $group: { _id: '$herbDetails.herbType', count: { $sum: 1 } } },
+      { $group: { _id: '$herbDetails.herbType', count: { $sum: 1 } } }
     ]);
 
     const herbTypeMap = {};
@@ -373,22 +373,22 @@ class AnalyticsEngine {
         $match: {
           status: { $in: ['approved', 'rejected'] },
           submittedAt: { $exists: true },
-          inspectionCompletedAt: { $exists: true },
-        },
+          inspectionCompletedAt: { $exists: true }
+        }
       },
       {
         $project: {
           processingTime: {
-            $subtract: ['$inspectionCompletedAt', '$submittedAt'],
-          },
-        },
+            $subtract: ['$inspectionCompletedAt', '$submittedAt']
+          }
+        }
       },
       {
         $group: {
           _id: null,
-          avgProcessingTime: { $avg: '$processingTime' },
-        },
-      },
+          avgProcessingTime: { $avg: '$processingTime' }
+        }
+      }
     ]);
 
     return result.length > 0 ? Math.round(result[0].avgProcessingTime / (1000 * 60 * 60 * 24)) : 0; // Days
@@ -396,7 +396,7 @@ class AnalyticsEngine {
 
   async getDailyApplicationStats(dateRange, filters) {
     const query = {
-      createdAt: { $gte: dateRange.start, $lte: dateRange.end },
+      createdAt: { $gte: dateRange.start, $lte: dateRange.end }
     };
 
     if (filters.status) query.status = filters.status;
@@ -407,24 +407,24 @@ class AnalyticsEngine {
       {
         $group: {
           _id: {
-            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
+            $dateToString: { format: '%Y-%m-%d', date: '$createdAt' }
           },
-          count: { $sum: 1 },
-        },
+          count: { $sum: 1 }
+        }
       },
-      { $sort: { _id: 1 } },
+      { $sort: { _id: 1 } }
     ]);
 
     return result.map(item => ({
       date: item._id,
-      count: item.count,
+      count: item.count
     }));
   }
 
   async getStatusDistribution(query) {
     const result = await Application.aggregate([
       { $match: query },
-      { $group: { _id: '$status', count: { $sum: 1 } } },
+      { $group: { _id: '$status', count: { $sum: 1 } } }
     ]);
 
     const distribution = {};
@@ -438,7 +438,7 @@ class AnalyticsEngine {
   async getApprovalRate() {
     const [totalCompleted, approved] = await Promise.all([
       Application.countDocuments({ status: { $in: ['approved', 'rejected'] } }),
-      Application.countDocuments({ status: 'approved' }),
+      Application.countDocuments({ status: 'approved' })
     ]);
 
     return totalCompleted > 0 ? Math.round((approved / totalCompleted) * 100) : 0;
@@ -449,23 +449,23 @@ class AnalyticsEngine {
     let days = 30; // default
 
     switch (period) {
-      case '7d':
-        days = 7;
-        break;
-      case '30d':
-        days = 30;
-        break;
-      case '90d':
-        days = 90;
-        break;
-      case '1y':
-        days = 365;
-        break;
+    case '7d':
+      days = 7;
+      break;
+    case '30d':
+      days = 30;
+      break;
+    case '90d':
+      days = 90;
+      break;
+    case '1y':
+      days = 365;
+      break;
     }
 
     return {
       start: new Date(now.getTime() - days * 24 * 60 * 60 * 1000),
-      end: now,
+      end: now
     };
   }
 
@@ -521,7 +521,7 @@ class AnalyticsEngine {
 
   setupCronJobs() {
     // Generate daily reports at midnight
-    cron.schedule('0 0 * * *', async () => {
+    cron.schedule('0 0 * * *', async() => {
       this.logger.info('Generating daily analytics report...');
       try {
         await this.generateDailyReport();
@@ -531,7 +531,7 @@ class AnalyticsEngine {
     });
 
     // Update analytics cache every hour
-    cron.schedule('0 * * * *', async () => {
+    cron.schedule('0 * * * *', async() => {
       this.logger.info('Updating analytics cache...');
       try {
         await this.updateAnalyticsCache();
@@ -546,7 +546,7 @@ class AnalyticsEngine {
       const dashboard = await this.getDashboardAnalytics();
       this.logger.info('Daily report generated', {
         totalApplications: dashboard.overview.totalApplications,
-        totalUsers: dashboard.overview.totalUsers,
+        totalUsers: dashboard.overview.totalUsers
       });
     } catch (error) {
       this.logger.error('Generate daily report error:', error);

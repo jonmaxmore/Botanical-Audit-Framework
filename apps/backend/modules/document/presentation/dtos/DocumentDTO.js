@@ -70,7 +70,7 @@ class DocumentDTO {
       requiresReview: document.requiresReview(),
       isImage: document.isImage(),
       isPDF: document.isPDF(),
-      isPreviewSupported: document.isPreviewSupported(),
+      isPreviewSupported: document.isPreviewSupported()
     };
   }
 
@@ -85,8 +85,8 @@ class DocumentDTO {
         total: result.total,
         page: result.page,
         limit: result.limit,
-        totalPages: Math.ceil(result.total / result.limit),
-      },
+        totalPages: Math.ceil(result.total / result.limit)
+      }
     };
   }
 
@@ -106,7 +106,7 @@ class DocumentDTO {
       uploadedAt: document.uploadedAt,
       thumbnailUrl: document.thumbnailUrl,
       isImage: document.isImage(),
-      isPDF: document.isPDF(),
+      isPDF: document.isPDF()
     };
   }
 
@@ -133,7 +133,7 @@ class DocumentDTO {
         statistics.totalDocuments > 0
           ? (((statistics.byStatus?.REJECTED || 0) / statistics.totalDocuments) * 100).toFixed(2) +
             '%'
-          : '0%',
+          : '0%'
     };
   }
 }

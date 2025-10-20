@@ -32,7 +32,7 @@ const registerValidation = [
     .optional()
     .trim()
     .isLength({ min: 2 })
-    .withMessage('ชื่อฟาร์มต้องมีอย่างน้อย 2 ตัวอักษร'),
+    .withMessage('ชื่อฟาร์มต้องมีอย่างน้อย 2 ตัวอักษร')
 ];
 
 /**
@@ -41,7 +41,7 @@ const registerValidation = [
 const loginValidation = [
   body('email').isEmail().normalizeEmail().withMessage('กรุณาใส่อีเมลที่ถูกต้อง'),
 
-  body('password').notEmpty().withMessage('กรุณาใส่รหัสผ่าน'),
+  body('password').notEmpty().withMessage('กรุณาใส่รหัสผ่าน')
 ];
 
 /**
@@ -69,7 +69,7 @@ const updateProfileValidation = [
     .optional()
     .trim()
     .isLength({ min: 2 })
-    .withMessage('ชื่อฟาร์มต้องมีอย่างน้อย 2 ตัวอักษร'),
+    .withMessage('ชื่อฟาร์มต้องมีอย่างน้อย 2 ตัวอักษร')
 ];
 
 /**
@@ -86,12 +86,12 @@ const changePasswordValidation = [
 
   body('newPassword')
     .custom((value, { req }) => value !== req.body.currentPassword)
-    .withMessage('รหัสผ่านใหม่ต้องแตกต่างจากรหัสผ่านเดิม'),
+    .withMessage('รหัสผ่านใหม่ต้องแตกต่างจากรหัสผ่านเดิม')
 ];
 
 module.exports = {
   registerValidation,
   loginValidation,
   updateProfileValidation,
-  changePasswordValidation,
+  changePasswordValidation
 };

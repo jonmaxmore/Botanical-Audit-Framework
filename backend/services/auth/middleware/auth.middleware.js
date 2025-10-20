@@ -31,7 +31,7 @@ async function authenticate(req, res, next) {
       return res.status(401).json({
         success: false,
         error: 'UNAUTHORIZED',
-        message: 'กรุณาเข้าสู่ระบบ',
+        message: 'กรุณาเข้าสู่ระบบ'
       });
     }
 
@@ -40,7 +40,7 @@ async function authenticate(req, res, next) {
       return res.status(401).json({
         success: false,
         error: 'INVALID_TOKEN_FORMAT',
-        message: 'รูปแบบ token ไม่ถูกต้อง',
+        message: 'รูปแบบ token ไม่ถูกต้อง'
       });
     }
 
@@ -57,7 +57,7 @@ async function authenticate(req, res, next) {
       return res.status(401).json({
         success: false,
         error: 'USER_NOT_FOUND',
-        message: 'ไม่พบผู้ใช้นี้ในระบบ',
+        message: 'ไม่พบผู้ใช้นี้ในระบบ'
       });
     }
 
@@ -66,7 +66,7 @@ async function authenticate(req, res, next) {
       return res.status(403).json({
         success: false,
         error: 'ACCOUNT_INACTIVE',
-        message: 'บัญชีถูกระงับ',
+        message: 'บัญชีถูกระงับ'
       });
     }
 
@@ -77,7 +77,7 @@ async function authenticate(req, res, next) {
       return res.status(423).json({
         success: false,
         error: 'ACCOUNT_LOCKED',
-        message: `บัญชีถูกล็อค กรุณาลองใหม่ในอีก ${remainingMinutes} นาที`,
+        message: `บัญชีถูกล็อค กรุณาลองใหม่ในอีก ${remainingMinutes} นาที`
       });
     }
 
@@ -89,7 +89,7 @@ async function authenticate(req, res, next) {
       return res.status(401).json({
         success: false,
         error: 'TOKEN_EXPIRED',
-        message: 'Token หมดอายุ กรุณา refresh token',
+        message: 'Token หมดอายุ กรุณา refresh token'
       });
     }
 
@@ -97,14 +97,14 @@ async function authenticate(req, res, next) {
       return res.status(401).json({
         success: false,
         error: 'INVALID_TOKEN',
-        message: 'Token ไม่ถูกต้อง',
+        message: 'Token ไม่ถูกต้อง'
       });
     }
 
     return res.status(500).json({
       success: false,
       error: 'AUTHENTICATION_ERROR',
-      message: 'เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์',
+      message: 'เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์'
     });
   }
 }
@@ -124,7 +124,7 @@ function authorize(...roles) {
       return res.status(401).json({
         success: false,
         error: 'UNAUTHORIZED',
-        message: 'กรุณาเข้าสู่ระบบ',
+        message: 'กรุณาเข้าสู่ระบบ'
       });
     }
 
@@ -132,7 +132,7 @@ function authorize(...roles) {
       return res.status(403).json({
         success: false,
         error: 'FORBIDDEN',
-        message: 'คุณไม่มีสิทธิ์เข้าถึงส่วนนี้',
+        message: 'คุณไม่มีสิทธิ์เข้าถึงส่วนนี้'
       });
     }
 
@@ -157,7 +157,7 @@ function requirePermission(...permissions) {
       return res.status(401).json({
         success: false,
         error: 'UNAUTHORIZED',
-        message: 'กรุณาเข้าสู่ระบบ',
+        message: 'กรุณาเข้าสู่ระบบ'
       });
     }
 
@@ -185,7 +185,7 @@ function requirePermission(...permissions) {
         success: false,
         error: 'INSUFFICIENT_PERMISSIONS',
         message: 'คุณไม่มีสิทธิ์ดำเนินการนี้',
-        required: permissions,
+        required: permissions
       });
     }
 
@@ -248,7 +248,7 @@ function requireEmailVerified(req, res, next) {
     return res.status(401).json({
       success: false,
       error: 'UNAUTHORIZED',
-      message: 'กรุณาเข้าสู่ระบบ',
+      message: 'กรุณาเข้าสู่ระบบ'
     });
   }
 
@@ -256,7 +256,7 @@ function requireEmailVerified(req, res, next) {
     return res.status(403).json({
       success: false,
       error: 'EMAIL_NOT_VERIFIED',
-      message: 'กรุณายืนยันอีเมลก่อนใช้งานฟีเจอร์นี้',
+      message: 'กรุณายืนยันอีเมลก่อนใช้งานฟีเจอร์นี้'
     });
   }
 
@@ -268,5 +268,5 @@ module.exports = {
   authorize,
   requirePermission,
   optionalAuth,
-  requireEmailVerified,
+  requireEmailVerified
 };

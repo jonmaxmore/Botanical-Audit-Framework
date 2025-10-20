@@ -34,7 +34,7 @@ class RenewCertificateUseCase {
     certificateId,
     renewedBy,
     validityPeriod = 36,
-    renewalReason = 'Regular renewal',
+    renewalReason = 'Regular renewal'
   }) {
     try {
       console.log(`🔄 Starting certificate renewal for: ${certificateId}`);
@@ -88,7 +88,7 @@ class RenewCertificateUseCase {
         renewedAt: renewalDate,
         renewedBy,
         renewalReason,
-        newCertificateId: null, // จะอัปเดตหลังจากสร้างใบรับรองใหม่
+        newCertificateId: null // จะอัปเดตหลังจากสร้างใบรับรองใหม่
       };
 
       await this.certificateRepository.save(existingCertificate);
@@ -108,7 +108,7 @@ class RenewCertificateUseCase {
         issuedDate: renewalDate,
         expiryDate: newExpiryDate,
         renewedBy,
-        renewalReason,
+        renewalReason
       });
 
       const savedRenewedCertificate = await this.certificateRepository.save(renewedCertificate);
@@ -131,9 +131,9 @@ class RenewCertificateUseCase {
           renewedBy,
           renewalDate,
           newExpiryDate,
-          validityPeriod,
+          validityPeriod
         },
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       console.log(
@@ -149,9 +149,9 @@ class RenewCertificateUseCase {
         payload: {
           certificateId,
           error: error.message,
-          renewedBy,
+          renewedBy
         },
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       throw error;
@@ -181,7 +181,7 @@ class RenewCertificateUseCase {
       if (daysUntilExpiry > 90) {
         return {
           eligible: false,
-          reason: `Renewal available within 90 days of expiry. Days remaining: ${daysUntilExpiry}`,
+          reason: `Renewal available within 90 days of expiry. Days remaining: ${daysUntilExpiry}`
         };
       }
 
@@ -192,7 +192,7 @@ class RenewCertificateUseCase {
       return {
         eligible: true,
         daysUntilExpiry,
-        certificate: certificate.toJSON(),
+        certificate: certificate.toJSON()
       };
     } catch (error) {
       console.error('Error checking renewal eligibility:', error);

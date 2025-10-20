@@ -18,12 +18,12 @@ module.exports = (dependencies = {}) => {
    * POST /api/farm/cycles
    * สร้างรอบการเพาะปลูกใหม่
    */
-  router.post('/cycles', auth, async (req, res) => {
+  router.post('/cycles', auth, async(req, res) => {
     try {
       const cycleData = {
         ...req.body,
         farmerId: req.user.id,
-        farmerEmail: req.user.email,
+        farmerEmail: req.user.email
       };
 
       const cycle = await farmEngine.createCultivationCycle(cycleData);
@@ -31,13 +31,13 @@ module.exports = (dependencies = {}) => {
       res.status(201).json({
         success: true,
         message: 'Cultivation cycle created successfully',
-        data: cycle,
+        data: cycle
       });
     } catch (error) {
       console.error('[FarmAPI] Create cycle error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -46,7 +46,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/farm/cycles
    * ดูรายการรอบการเพาะปลูกทั้งหมด
    */
-  router.get('/cycles', auth, async (req, res) => {
+  router.get('/cycles', auth, async(req, res) => {
     try {
       const filters = {};
 
@@ -69,13 +69,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         data: cycles,
-        total: cycles.length,
+        total: cycles.length
       });
     } catch (error) {
       console.error('[FarmAPI] List cycles error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -84,7 +84,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/farm/cycles/:id
    * ดูรายละเอียดรอบการเพาะปลูก
    */
-  router.get('/cycles/:id', auth, async (req, res) => {
+  router.get('/cycles/:id', auth, async(req, res) => {
     try {
       const cycle = await farmEngine._getCycle(req.params.id);
 
@@ -92,19 +92,19 @@ module.exports = (dependencies = {}) => {
       if (cycle.farmerId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       res.json({
         success: true,
-        data: cycle,
+        data: cycle
       });
     } catch (error) {
       console.error('[FarmAPI] Get cycle error:', error);
       res.status(404).json({
         success: false,
-        message: 'Cycle not found',
+        message: 'Cycle not found'
       });
     }
   });
@@ -113,7 +113,7 @@ module.exports = (dependencies = {}) => {
    * POST /api/farm/cycles/:id/activities
    * บันทึกกิจกรรม SOP
    */
-  router.post('/cycles/:id/activities', auth, async (req, res) => {
+  router.post('/cycles/:id/activities', auth, async(req, res) => {
     try {
       const cycle = await farmEngine._getCycle(req.params.id);
 
@@ -121,13 +121,13 @@ module.exports = (dependencies = {}) => {
       if (cycle.farmerId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       const activityData = {
         ...req.body,
-        userId: req.user.id,
+        userId: req.user.id
       };
 
       const activity = await farmEngine.recordActivity(req.params.id, activityData);
@@ -135,13 +135,13 @@ module.exports = (dependencies = {}) => {
       res.status(201).json({
         success: true,
         message: 'Activity recorded successfully',
-        data: activity,
+        data: activity
       });
     } catch (error) {
       console.error('[FarmAPI] Record activity error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -150,7 +150,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/farm/cycles/:id/activities
    * ดูรายการกิจกรรมทั้งหมดของรอบการเพาะปลูก
    */
-  router.get('/cycles/:id/activities', auth, async (req, res) => {
+  router.get('/cycles/:id/activities', auth, async(req, res) => {
     try {
       const cycle = await farmEngine._getCycle(req.params.id);
 
@@ -158,20 +158,20 @@ module.exports = (dependencies = {}) => {
       if (cycle.farmerId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       res.json({
         success: true,
         data: cycle.activities || [],
-        total: cycle.activities?.length || 0,
+        total: cycle.activities?.length || 0
       });
     } catch (error) {
       console.error('[FarmAPI] Get activities error:', error);
       res.status(404).json({
         success: false,
-        message: 'Cycle not found',
+        message: 'Cycle not found'
       });
     }
   });
@@ -180,19 +180,19 @@ module.exports = (dependencies = {}) => {
    * POST /api/farm/cycles/:id/compliance
    * บันทึกผลการตรวจสอบความสอดคล้อง
    */
-  router.post('/cycles/:id/compliance', auth, async (req, res) => {
+  router.post('/cycles/:id/compliance', auth, async(req, res) => {
     try {
       // Only admin/inspector can record compliance checks
       if (req.user.role !== 'admin' && req.user.role !== 'inspector') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       const checkData = {
         ...req.body,
-        inspectorId: req.user.id,
+        inspectorId: req.user.id
       };
 
       const complianceCheck = await farmEngine.recordComplianceCheck(req.params.id, checkData);
@@ -200,13 +200,13 @@ module.exports = (dependencies = {}) => {
       res.status(201).json({
         success: true,
         message: 'Compliance check recorded',
-        data: complianceCheck,
+        data: complianceCheck
       });
     } catch (error) {
       console.error('[FarmAPI] Compliance check error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -215,7 +215,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/farm/cycles/:id/compliance
    * ดูผลการตรวจสอบความสอดคล้อง
    */
-  router.get('/cycles/:id/compliance', auth, async (req, res) => {
+  router.get('/cycles/:id/compliance', auth, async(req, res) => {
     try {
       const cycle = await farmEngine._getCycle(req.params.id);
 
@@ -223,7 +223,7 @@ module.exports = (dependencies = {}) => {
       if (cycle.farmerId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
@@ -231,14 +231,14 @@ module.exports = (dependencies = {}) => {
         success: true,
         data: {
           checks: cycle.complianceChecks || [],
-          score: cycle.complianceScore || null,
-        },
+          score: cycle.complianceScore || null
+        }
       });
     } catch (error) {
       console.error('[FarmAPI] Get compliance error:', error);
       res.status(404).json({
         success: false,
-        message: 'Cycle not found',
+        message: 'Cycle not found'
       });
     }
   });
@@ -247,7 +247,7 @@ module.exports = (dependencies = {}) => {
    * POST /api/farm/cycles/:id/harvest
    * บันทึกข้อมูลการเก็บเกี่ยว
    */
-  router.post('/cycles/:id/harvest', auth, async (req, res) => {
+  router.post('/cycles/:id/harvest', auth, async(req, res) => {
     try {
       const cycle = await farmEngine._getCycle(req.params.id);
 
@@ -255,13 +255,13 @@ module.exports = (dependencies = {}) => {
       if (cycle.farmerId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       const harvestData = {
         ...req.body,
-        userId: req.user.id,
+        userId: req.user.id
       };
 
       const harvest = await farmEngine.recordHarvest(req.params.id, harvestData);
@@ -269,13 +269,13 @@ module.exports = (dependencies = {}) => {
       res.status(201).json({
         success: true,
         message: 'Harvest recorded successfully',
-        data: harvest,
+        data: harvest
       });
     } catch (error) {
       console.error('[FarmAPI] Record harvest error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -284,7 +284,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/farm/cycles/:id/harvest
    * ดูข้อมูลการเก็บเกี่ยว
    */
-  router.get('/cycles/:id/harvest', auth, async (req, res) => {
+  router.get('/cycles/:id/harvest', auth, async(req, res) => {
     try {
       const cycle = await farmEngine._getCycle(req.params.id);
 
@@ -292,7 +292,7 @@ module.exports = (dependencies = {}) => {
       if (cycle.farmerId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
@@ -300,19 +300,19 @@ module.exports = (dependencies = {}) => {
       const collection = farmEngine.db.collection('harvestrecords');
       const harvests = await collection
         .find({
-          cycleId: cycle.id,
+          cycleId: cycle.id
         })
         .toArray();
 
       res.json({
         success: true,
-        data: harvests,
+        data: harvests
       });
     } catch (error) {
       console.error('[FarmAPI] Get harvest error:', error);
       res.status(404).json({
         success: false,
-        message: 'Cycle not found',
+        message: 'Cycle not found'
       });
     }
   });
@@ -321,19 +321,19 @@ module.exports = (dependencies = {}) => {
    * POST /api/farm/cycles/:id/quality-test
    * บันทึกผลการทดสอบคุณภาพ
    */
-  router.post('/cycles/:id/quality-test', auth, async (req, res) => {
+  router.post('/cycles/:id/quality-test', auth, async(req, res) => {
     try {
       // Only admin/laboratorian can record quality tests
       if (req.user.role !== 'admin' && req.user.role !== 'laboratorian') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       const testData = {
         ...req.body,
-        laboratorianId: req.user.id,
+        laboratorianId: req.user.id
       };
 
       const qualityTest = await farmEngine.recordQualityTest(req.params.id, testData);
@@ -341,13 +341,13 @@ module.exports = (dependencies = {}) => {
       res.status(201).json({
         success: true,
         message: 'Quality test recorded',
-        data: qualityTest,
+        data: qualityTest
       });
     } catch (error) {
       console.error('[FarmAPI] Quality test error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -356,7 +356,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/farm/cycles/:id/quality-tests
    * ดูผลการทดสอบคุณภาพทั้งหมด
    */
-  router.get('/cycles/:id/quality-tests', auth, async (req, res) => {
+  router.get('/cycles/:id/quality-tests', auth, async(req, res) => {
     try {
       const cycle = await farmEngine._getCycle(req.params.id);
 
@@ -364,7 +364,7 @@ module.exports = (dependencies = {}) => {
       if (cycle.farmerId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
@@ -372,19 +372,19 @@ module.exports = (dependencies = {}) => {
       const collection = farmEngine.db.collection('qualitytests');
       const tests = await collection
         .find({
-          cycleId: cycle.id,
+          cycleId: cycle.id
         })
         .toArray();
 
       res.json({
         success: true,
-        data: tests,
+        data: tests
       });
     } catch (error) {
       console.error('[FarmAPI] Get quality tests error:', error);
       res.status(404).json({
         success: false,
-        message: 'Cycle not found',
+        message: 'Cycle not found'
       });
     }
   });
@@ -393,7 +393,7 @@ module.exports = (dependencies = {}) => {
    * POST /api/farm/cycles/:id/complete
    * ปิดรอบการเพาะปลูก
    */
-  router.post('/cycles/:id/complete', auth, async (req, res) => {
+  router.post('/cycles/:id/complete', auth, async(req, res) => {
     try {
       const cycle = await farmEngine._getCycle(req.params.id);
 
@@ -401,7 +401,7 @@ module.exports = (dependencies = {}) => {
       if (cycle.farmerId !== req.user.id && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
@@ -410,13 +410,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Cultivation cycle completed',
-        data: result,
+        data: result
       });
     } catch (error) {
       console.error('[FarmAPI] Complete cycle error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -425,7 +425,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/farm/dashboard
    * Dashboard สำหรับเกษตรกร
    */
-  router.get('/dashboard', auth, async (req, res) => {
+  router.get('/dashboard', auth, async(req, res) => {
     try {
       const collection = farmEngine.db.collection('cultivationcycles');
 
@@ -435,7 +435,7 @@ module.exports = (dependencies = {}) => {
       const activeCycles = await collection
         .find({
           ...filters,
-          status: 'active',
+          status: 'active'
         })
         .toArray();
 
@@ -443,7 +443,7 @@ module.exports = (dependencies = {}) => {
       const completedCycles = await collection
         .find({
           ...filters,
-          status: 'completed',
+          status: 'completed'
         })
         .limit(5)
         .sort({ completedAt: -1 })
@@ -459,25 +459,25 @@ module.exports = (dependencies = {}) => {
         data: {
           activeCycles: {
             count: activeCycles.length,
-            cycles: activeCycles,
+            cycles: activeCycles
           },
           completedCycles: {
             count: completedCycles.length,
-            cycles: completedCycles,
+            cycles: completedCycles
           },
           statistics: {
             totalYield,
             avgComplianceScore:
               completedCycles.reduce((sum, c) => sum + (c.complianceScore?.score || 0), 0) /
-              (completedCycles.length || 1),
-          },
-        },
+              (completedCycles.length || 1)
+          }
+        }
       });
     } catch (error) {
       console.error('[FarmAPI] Dashboard error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
