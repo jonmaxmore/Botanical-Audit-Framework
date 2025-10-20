@@ -9,7 +9,7 @@ const rateLimit = require('express-rate-limit');
 const {
   BlitzzIntegrationService,
   TaskAssignment,
-} = require('../services/blitzzIntegrationService');
+} = require('../services/blitzz-integration');
 const auth = require('../middleware/auth');
 const rbac = require('../middleware/rbac');
 const auditMiddleware = require('../middleware/audit');

@@ -37,14 +37,14 @@ const {
 } = require('./models/gacp-business-logic');
 
 const GACPWorkflowEngine = require('../../business-logic/gacp-workflow-engine');
-const GACPEnhancedInspectionService = require('./services/GACPEnhancedInspectionService');
+const GACPEnhancedInspectionService = require('./services/gacp-enhanced-inspection');
 
 // Import Database Health Monitor
 // eslint-disable-next-line no-unused-vars
-const dbHealthMonitor = require('./services/DatabaseHealthMonitor');
+const dbHealthMonitor = require('./services/database-health-monitor');
 
 // Import Health Monitoring Service
-const HealthMonitoringService = require('./services/HealthMonitoringService');
+const HealthMonitoringService = require('./services/health-monitoring');
 
 // Clear mongoose cache to prevent model overwrite errors
 mongoose.deleteModel = function (modelName) {

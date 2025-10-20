@@ -5,7 +5,7 @@
 
 const express = require('express');
 const router = express.Router();
-const cannabisSurveyService = require('../services/cannabisSurveyService');
+const cannabisSurveyService = require('../services/cannabis-survey');
 const {
   CannabisSurveyTemplate,
   CannabisQuestion,

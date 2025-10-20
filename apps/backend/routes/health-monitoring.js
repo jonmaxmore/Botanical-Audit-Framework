@@ -9,7 +9,7 @@
 
 const express = require('express');
 const router = express.Router();
-const dbHealthMonitor = require('../services/DatabaseHealthMonitor');
+const dbHealthMonitor = require('../services/database-health-monitor');
 
 // Basic health check endpoint
 router.get('/health', async (req, res) => {

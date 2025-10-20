@@ -23,7 +23,7 @@ const compression = require('compression');
 const morgan = require('morgan');
 
 // Import mock services
-const MockDatabaseService = require('./services/MockDatabaseService');
+const MockDatabaseService = require('./services/mock-database');
 
 const app = express();
 const port = process.env.PORT || 3004;

@@ -74,9 +74,9 @@ const HealthCheckService = require('./services/health-check-service');
 // ============================================================================
 
 // Import comprehensive GACP business logic services
-const GACPApplicationService = require('./services/GACPApplicationService');
-const GACPInspectionService = require('./services/GACPInspectionService');
-const GACPCertificateService = require('./services/GACPCertificateService');
+const GACPApplicationService = require('./services/gacp-application');
+const GACPInspectionService = require('./services/gacp-inspection');
+const GACPCertificateService = require('./services/gacp-certificate');
 
 // Import new validation middleware
 // const validationMiddleware = require('./middleware/validation'); // Unused - commented out

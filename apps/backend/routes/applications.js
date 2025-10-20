@@ -8,9 +8,9 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 
-const GACPApplicationService = require('../services/GACPApplicationService');
-const GACPInspectionService = require('../services/GACPInspectionService');
-const GACPCertificateService = require('../services/GACPCertificateService');
+const GACPApplicationService = require('../services/gacp-application');
+const GACPInspectionService = require('../services/gacp-inspection');
+const GACPCertificateService = require('../services/gacp-certificate');
 
 const { authenticate, authorize } = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validation');

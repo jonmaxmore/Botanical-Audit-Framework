@@ -14,7 +14,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const SurveyProcessEngine = require(
-  path.join(__dirname, '../../services/SurveyProcessEngine-4Regions')
+  path.join(__dirname, '../../services/survey-process-engine-4regions')
 );
 const Survey = require(path.join(__dirname, '../../models/mongodb/Survey'));
 

@@ -9,7 +9,7 @@ const {
   CannabisQuestion,
   CannabisSurveyResponse,
 } = require('../models/CannabisSurvey');
-const cannabisSurveyService = require('./cannabisSurveyService');
+const cannabisSurveyService = require('./cannabis-survey');
 // Farm management is now a module - use module instead
 const farmManagementModule = require('../modules/farm-management');
 const enhancedNotificationService = require('./enhancedNotificationService');

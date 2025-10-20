@@ -17,7 +17,7 @@ try {
 
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
-const MockDatabaseService = require('./MockDatabaseService');
+const MockDatabaseService = require('./mock-database');
 
 class GACPApplicationService {
   constructor(database = null, logger = null) {
