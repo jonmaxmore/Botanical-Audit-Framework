@@ -203,7 +203,26 @@ Model User already exists, reusing existing model
 
 ---
 
-## ⚠️ Error ที่พบ (ปัญหาเดิมของโปรเจค - ไม่เกี่ยวกับ Refactoring)
+## ⚠️ Error ที่พบ (ปัญหาเดิมของโปรเจค - แก้ไขแล้วบางส่วน)
+
+### ✅ แก้ไขสำเร็จ
+
+**1. Logger Path Error**
+- **ปัญหา:** `modules/shared/config/database.js` require logger path ผิด
+- **แก้ไข:** เปลี่ยนจาก `../../../shared/utils/logger` เป็น `../../../shared/logger`
+- **สถานะ:** ✅ แก้ไขแล้ว
+
+**2. Missing Auth Import**
+- **ปัญหา:** `modules/shared/middleware/auth.js` ไม่ได้ import auth module
+- **แก้ไข:** เพิ่ม `const auth = require('../../../shared/auth');`
+- **สถานะ:** ✅ แก้ไขแล้ว
+
+**3. Missing Package**
+- **ปัญหา:** ขาด `express-mongo-sanitize` package
+- **แก้ไข:** `pnpm add express-mongo-sanitize`
+- **สถานะ:** ✅ ติดตั้งแล้ว
+
+### ⚠️ ยังไม่ได้แก้ (ปัญหาเดิม - ไม่กระทบระบบหลัก)
 
 ### 1. ❌ Failed to load DTAM auth routes
 
