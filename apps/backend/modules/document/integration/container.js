@@ -10,7 +10,7 @@
 const Document = require('../domain/entities/Document');
 
 // Infrastructure
-const MongoDBDocumentRepository = require('../infrastructure/database/MongoDBDocumentRepository');
+const MongoDBDocumentRepository = require('../infrastructure/database/document');
 const LocalFileStorageService = require('../infrastructure/storage/storage');
 const mongoose = require('mongoose');
 

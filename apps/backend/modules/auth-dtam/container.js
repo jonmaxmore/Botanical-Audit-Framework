@@ -11,7 +11,7 @@ const IDTAMStaffRepository = require('./domain/interfaces/IDTAMStaffRepository')
 /* eslint-enable no-unused-vars */
 
 // Infrastructure
-const MongoDBDTAMStaffRepository = require('./infrastructure/database/MongoDBDTAMStaffRepository');
+const MongoDBDTAMStaffRepository = require('./infrastructure/database/dtam-staff');
 // Reuse security services from auth-farmer
 const BcryptPasswordHasher = require('../auth-farmer/infrastructure/security/password');
 const JWTService = require('../auth-farmer/infrastructure/security/token');

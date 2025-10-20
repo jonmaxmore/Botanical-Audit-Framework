@@ -7,7 +7,7 @@
  * @module module.container
  */
 
-const MongoDBSurveyRepository = require('./infrastructure/database/MongoDBSurveyRepository');
+const MongoDBSurveyRepository = require('./infrastructure/database/survey');
 const { STATUS, PURPOSE, PLANT_TYPE } = require('./domain/entities/Survey');
 
 // Use Cases

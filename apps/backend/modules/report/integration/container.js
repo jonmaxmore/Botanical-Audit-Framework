@@ -10,7 +10,7 @@
 const Report = require('../domain/entities/Report');
 
 // Infrastructure
-const MongoDBReportRepository = require('../infrastructure/repositories/MongoDBReportRepository');
+const MongoDBReportRepository = require('../infrastructure/repositories/report');
 const SimpleReportGeneratorService = require('../infrastructure/services/generator');
 const SimpleDataAggregationService = require('../infrastructure/services/aggregator');
 const mongoose = require('mongoose');

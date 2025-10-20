@@ -15,8 +15,8 @@ const Course = require('./domain/entities/Course');
 const Enrollment = require('./domain/entities/Enrollment');
 
 // Infrastructure
-const MongoDBCourseRepository = require('./infrastructure/database/MongoDBCourseRepository');
-const MongoDBEnrollmentRepository = require('./infrastructure/database/MongoDBEnrollmentRepository');
+const MongoDBCourseRepository = require('./infrastructure/database/course');
+const MongoDBEnrollmentRepository = require('./infrastructure/database/enrollment');
 
 // Application - Use Cases
 const CreateCourseUseCase = require('./application/use-cases/create-course');

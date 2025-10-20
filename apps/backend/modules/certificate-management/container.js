@@ -17,7 +17,7 @@ const VerifyCertificateUseCase = require('./application/use-cases/verify-certifi
 const RevokeCertificateUseCase = require('./application/use-cases/revoke-certificate');
 
 // Infrastructure Layer
-const MongoDBCertificateRepository = require('./infrastructure/database/MongoDBCertificateRepository');
+const MongoDBCertificateRepository = require('./infrastructure/database/certificate');
 
 // Presentation Layer
 const CertificateController = require('./presentation/controllers/certificate');

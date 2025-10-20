@@ -7,7 +7,7 @@
  * @module module.container
  */
 
-const MongoDBAuditLogRepository = require('./infrastructure/database/MongoDBAuditLogRepository');
+const MongoDBAuditLogRepository = require('./infrastructure/database/audit-log');
 const {
   AuditLog,
   ACTION_TYPE,

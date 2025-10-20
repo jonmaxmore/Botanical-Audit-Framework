@@ -16,7 +16,7 @@ const IUserRepository = require('./domain/interfaces/IUserRepository'); // Used 
 /* eslint-enable no-unused-vars */
 
 // Infrastructure
-const MongoDBUserRepository = require('./infrastructure/database/MongoDBUserRepository');
+const MongoDBUserRepository = require('./infrastructure/database/user');
 const BcryptPasswordHasher = require('./infrastructure/security/password');
 const JWTService = require('./infrastructure/security/token');
 

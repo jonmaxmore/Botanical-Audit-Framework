@@ -19,7 +19,7 @@ const ApproveFarmUseCase = require('./application/use-cases/approve-farm');
 const RejectFarmUseCase = require('./application/use-cases/reject-farm');
 
 // Infrastructure
-const MongoDBFarmRepository = require('./infrastructure/database/MongoDBFarmRepository');
+const MongoDBFarmRepository = require('./infrastructure/database/farm');
 
 // Presentation
 const FarmController = require('./presentation/controllers/farm');

@@ -22,7 +22,7 @@ const DeleteNotificationUseCase = require('../application/use-cases/delete-notif
 const GetNotificationStatisticsUseCase = require('../application/use-cases/get-notification-stats');
 
 // Infrastructure
-const MongoDBNotificationRepository = require('../infrastructure/database/MongoDBNotificationRepository');
+const MongoDBNotificationRepository = require('../infrastructure/database/notification');
 const EmailNotificationService = require('../infrastructure/services/email');
 
 // Presentation
