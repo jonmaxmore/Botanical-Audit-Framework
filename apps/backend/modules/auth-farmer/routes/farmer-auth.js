@@ -14,7 +14,7 @@ const shared = require('../../shared');
 const { config, middleware, utils } = shared;
 
 // Import farmer-specific models
-const User = require('../models/User');
+const User = require('../models/user');
 const logger = require('../services/logger');
 
 /**

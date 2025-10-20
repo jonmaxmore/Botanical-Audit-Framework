@@ -21,7 +21,8 @@ const Survey = require(path.join(__dirname, '../../models/mongodb/Survey'));
 // Auth middleware - try to load from shared or create simple one
 let auth;
 try {
-  auth = require(path.join(__dirname, '../../middleware/auth'));
+  const authModule = require(path.join(__dirname, '../../middleware/auth'));
+  auth = authModule.authenticateToken || authModule.authenticateFarmer || authModule;
 } catch (error) {
   // Fallback auth middleware
   auth = (req, res, next) => {

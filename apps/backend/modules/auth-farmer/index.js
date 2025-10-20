@@ -9,7 +9,7 @@
 const farmerAuthRoutes = require('./routes/farmer-auth');
 
 // Import models
-const User = require('./models/User');
+const User = require('./models/user');
 
 // Import services
 const logger = require('./services/logger');

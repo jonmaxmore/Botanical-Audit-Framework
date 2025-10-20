@@ -294,10 +294,17 @@ const authenticateApiKey = async (req, res, next) => {
   }
 };
 
+// Wrapper for backward compatibility with applications.js
+const authorize = (rolesArray) => {
+  return requireRole(...rolesArray);
+};
+
 module.exports = {
   authenticateToken,
+  authenticate: authenticateToken, // Alias for compatibility
   optionalAuth,
   requireRole,
+  authorize, // Array wrapper for requireRole
   requirePermission,
   requireAdmin,
   requireActiveUser,

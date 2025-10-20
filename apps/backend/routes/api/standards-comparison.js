@@ -21,7 +21,8 @@ const path = require('path');
 // Auth middleware
 let auth;
 try {
-  auth = require(path.join(__dirname, '../../middleware/auth'));
+  const authModule = require(path.join(__dirname, '../../middleware/auth'));
+  auth = authModule.authenticateToken || authModule.authenticateFarmer || authModule;
 } catch (error) {
   auth = (req, res, next) => {
     const authHeader = req.headers['authorization'];

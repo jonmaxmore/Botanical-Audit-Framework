@@ -6,7 +6,7 @@
 const mongoose = require('mongoose');
 const { createCannabisTemplates } = require('../config/cannabisTemplates');
 const { CannabisSurveyTemplate, CannabisQuestion } = require('../models/CannabisSurvey');
-const User = require('../models/User');
+const User = require('../models/user');
 
 class CannabisSurveyInitializer {
   constructor() {

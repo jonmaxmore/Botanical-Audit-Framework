@@ -9,10 +9,10 @@ const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
-const User = require('../models/User');
+const User = require('../models/user');
 const { authenticate, authorize, rateLimitSensitive } = require('../middleware/auth');
 const { validateRequest, validateUserRegistration } = require('../middleware/validation');
-const { handleAsync, createError, sendError } = require('../middleware/errorHandler');
+const { handleAsync, createError, sendError } = require('../middleware/error-handler');
 const logger = require('../shared/logger');
 
 // Rate limiting for auth endpoints

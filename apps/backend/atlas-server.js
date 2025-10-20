@@ -34,7 +34,7 @@ const {
   GACPApplicationStatus,
   GACPCriticalControlPoints,
   GACPScoringSystem,
-} = require('./models/GACPBusinessLogic');
+} = require('./models/gacp-business-logic');
 
 const GACPWorkflowEngine = require('../../business-logic/gacp-workflow-engine');
 const GACPEnhancedInspectionService = require('./services/GACPEnhancedInspectionService');
@@ -386,7 +386,7 @@ app.get('/api/gacp/test/score-calculation', (req, res) => {
     calculateTotalScore,
     getCertificateLevel,
     validateCCPScores,
-  } = require('./models/GACPBusinessLogic');
+  } = require('./models/gacp-business-logic');
 
   const totalScore = calculateTotalScore(sampleCCPScores);
   const certificateLevel = getCertificateLevel(totalScore);

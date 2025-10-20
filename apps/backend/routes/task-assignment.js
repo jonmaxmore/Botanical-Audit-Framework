@@ -12,7 +12,7 @@ const {
 } = require('../services/blitzzIntegrationService');
 const auth = require('../middleware/auth');
 const rbac = require('../middleware/rbac');
-const auditMiddleware = require('../middleware/auditMiddleware');
+const auditMiddleware = require('../middleware/audit');
 
 // Initialize Blitzz service
 const blitzzService = new BlitzzIntegrationService();

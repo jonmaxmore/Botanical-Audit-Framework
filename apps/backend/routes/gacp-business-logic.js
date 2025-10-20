@@ -37,7 +37,7 @@ const {
   calculateTotalScore,
   getCertificateLevel,
   validateCCPScores,
-} = require('../models/GACPBusinessLogic');
+} = require('../models/gacp-business-logic');
 
 // Initialize workflow engine
 const workflowEngine = new GACPWorkflowEngine();

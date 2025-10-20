@@ -18,7 +18,7 @@ const {
   GACPCriticalControlPoints,
   GACPScoringSystem,
   GACPApplicationStatus,
-} = require('../models/GACPBusinessLogic');
+} = require('../models/gacp-business-logic');
 
 const GACPWorkflowEngine = require('../../../business-logic/gacp-workflow-engine');
 

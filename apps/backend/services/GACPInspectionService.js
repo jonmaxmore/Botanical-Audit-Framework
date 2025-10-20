@@ -6,8 +6,8 @@
  * Based on WHO/ASEAN GACP standards and DTAM guidelines
  */
 
-const Application = require('../models/Application');
-const User = require('../models/User');
+const Application = require('../models/application');
+const User = require('../models/user');
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
 

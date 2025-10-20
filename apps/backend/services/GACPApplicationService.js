@@ -8,8 +8,8 @@
 // Import Models (with fallback to mock if MongoDB unavailable)
 let Application, User, mongoose;
 try {
-  Application = require('../models/Application');
-  User = require('../models/User');
+  Application = require('../models/application');
+  User = require('../models/user');
   mongoose = require('mongoose');
 } catch (error) {
   console.warn('[GACPApplicationService] Models not available, using mock mode');

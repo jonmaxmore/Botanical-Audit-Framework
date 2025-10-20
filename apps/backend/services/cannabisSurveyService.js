@@ -9,7 +9,7 @@ const {
   CannabisSurveyResponse,
 } = require('../models/CannabisSurvey');
 const SOP = require('../models/SOP');
-const User = require('../models/User');
+const User = require('../models/user');
 const Farm = require('../models/Farm');
 const EnhancedCultivationRecord = require('../models/EnhancedCultivationRecord');
 const AuditCalendar = require('../models/AuditCalendar');

@@ -13,8 +13,8 @@ const path = require('path');
 const PDFDocument = require('pdfkit');
 const crypto = require('crypto');
 
-const Application = require('../models/Application');
-const User = require('../models/User');
+const Application = require('../models/application');
+const User = require('../models/user');
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
 

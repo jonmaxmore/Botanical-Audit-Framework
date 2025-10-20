@@ -8,7 +8,7 @@
 
 const express = require('express');
 const router = express.Router();
-const { authenticate, authorize } = require('../middleware/auth');
+const { authenticateToken: authenticate, requireRole: authorize } = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validation');
 const {
   getAllApplications,

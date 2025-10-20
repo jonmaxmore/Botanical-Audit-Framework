@@ -14,7 +14,7 @@ const GACPCertificateService = require('../services/GACPCertificateService');
 
 const { authenticate, authorize } = require('../middleware/auth');
 const { validateRequest } = require('../middleware/validation');
-const { handleAsync } = require('../middleware/errorHandler');
+const { handleAsync } = require('../middleware/error-handler');
 const logger = require('../shared/logger');
 
 // Configure multer for file uploads

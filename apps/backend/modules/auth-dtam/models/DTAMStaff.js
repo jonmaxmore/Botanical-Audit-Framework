@@ -103,8 +103,8 @@ const dtamStaffSchema = new mongoose.Schema(
   }
 );
 
-// Apply shared mongoose plugins
-dtamStaffSchema.plugin(shared.database.mongoosePlugins.timestampPlugin);
+// Apply shared mongoose plugins (commented out - plugin not available)
+// dtamStaffSchema.plugin(shared.database.mongoosePlugins.timestampPlugin);
 
 // Indexes for performance
 dtamStaffSchema.index({ username: 1 }, { unique: true });

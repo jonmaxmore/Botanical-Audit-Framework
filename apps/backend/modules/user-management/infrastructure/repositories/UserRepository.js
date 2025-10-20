@@ -18,7 +18,7 @@
  * @date 2025-10-18
  */
 
-const User = require('../models/User');
+const User = require('../models/user');
 const mongoose = require('mongoose');
 
 class UserRepository {
