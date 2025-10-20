@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botanical Audit Framework</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .status-badge {
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .status-ok {
+      background-color: #d4edda;
+      color: #155724;
+    }
+    .status-error {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+    .status-pending {
+      background-color: #fff3cd;
+      color: #856404;
+    }
+    .card {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Botanical Audit Framework</h1>
+    <div class="status-badge status-pending" id="status-badge">Connecting...</div>
+  </div>
+
+  <div class="card">
+    <h2>System Status</h2>
+    <div id="system-status">Checking system status...</div>
+  </div>
+  
+  <div class="card">
+    <h2>MongoDB Connection</h2>
+    <div id="mongo-status">Checking database connection...</div>
+    <button id="reconnect-btn" style="margin-top: 10px; display: none;">Reconnect to Database</button>
+  </div>
+
+  <script>
+    // Check API status
+    function checkStatus() {
+      fetch('/api/status')
+        .then(response => response.json())
+        .then(data => {
+          // Update UI with status
+          const statusBadge = document.getElementById('status-badge');
+          const systemStatus = document.getElementById('system-status');
+          const mongoStatus = document.getElementById('mongo-status');
+          const reconnectBtn = document.getElementById('reconnect-btn');
+          
+          if (data.status === 'ok') {
+            statusBadge.textContent = 'System Online';
+            statusBadge.className = 'status-badge status-ok';
+            systemStatus.textContent = 'API server is running correctly.';
+            
+            // MongoDB status
+            if (data.mongodb.isConnected) {
+              mongoStatus.textContent = `Connected to MongoDB (${data.mongodb.database} on ${data.mongodb.host})`;
+              reconnectBtn.style.display = 'none';
+            } else {
+              mongoStatus.textContent = 'Not connected to MongoDB database.';
+              reconnectBtn.style.display = 'block';
+            }
+          } else {
+            statusBadge.textContent = 'System Issue';
+            statusBadge.className = 'status-badge status-error';
+            systemStatus.textContent = 'API server reported an issue.';
+          }
+        })
+        .catch(error => {
+          const statusBadge = document.getElementById('status-badge');
+          const systemStatus = document.getElementById('system-status');
+          
+          statusBadge.textContent = 'Backend Unreachable';
+          statusBadge.className = 'status-badge status-error';
+          systemStatus.textContent = 'Unable to connect to API server. Ensure backend is running.';
+          document.getElementById('mongo-status').textContent = 'Database connection unknown - backend not reachable';
+        });
+    }
+    
+    // Add reconnect button functionality
+    document.getElementById('reconnect-btn').addEventListener('click', function() {
+      this.textContent = 'Reconnecting...';
+      this.disabled = true;
+      
+      fetch('/api/mongodb/reconnect', { method: 'POST' })
+        .then(response => response.json())
+        .then(data => {
+          setTimeout(checkStatus, 2000); // Check again after 2 seconds
+          this.textContent = 'Reconnect to Database';
+          this.disabled = false;
+        })
+        .catch(error => {
+          this.textContent = 'Reconnect Failed';
+          setTimeout(() => {
+            this.textContent = 'Reconnect to Database';
+            this.disabled = false;
+          }, 3000);
+        });
+    });
+    
+    // Initial status check
+    checkStatus();
+    
+    // Check status every 30 seconds
+    setInterval(checkStatus, 30000);
+  </script>
+</body>
+</html>
