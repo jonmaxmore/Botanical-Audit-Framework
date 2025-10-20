@@ -11,7 +11,6 @@
  */
 
 const mongoose = require('mongoose');
-const { promisify } = require('util');
 const fs = require('fs');
 const path = require('path');
 const logger = require('../shared').logger;
