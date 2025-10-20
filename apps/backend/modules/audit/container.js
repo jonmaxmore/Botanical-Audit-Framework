@@ -24,7 +24,7 @@ const GetAuditStatisticsUseCase = require('./application/use-cases/GetAuditStati
 const GetUserActivityUseCase = require('./application/use-cases/GetUserActivityUseCase');
 
 // Presentation Layer
-const AuditController = require('./presentation/controllers/AuditController');
+const AuditController = require('./presentation/controllers/audit');
 const createAuditRoutes = require('./presentation/routes/audit.routes');
 
 /**

@@ -10,7 +10,7 @@
 const GetFarmerDashboardUseCase = require('../application/use-cases/get-farmer-dashboard');
 const GetDTAMDashboardUseCase = require('../application/use-cases/get-dtam-dashboard');
 const GetSystemStatisticsUseCase = require('../application/use-cases/get-system-stats');
-const DashboardController = require('../presentation/controllers/DashboardController');
+const DashboardController = require('../presentation/controllers/dashboard');
 const {
   initializeDashboardFarmerRoutes,
 } = require('../presentation/routes/dashboard.farmer.routes');

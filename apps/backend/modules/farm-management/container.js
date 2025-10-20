@@ -22,7 +22,7 @@ const RejectFarmUseCase = require('./application/use-cases/reject-farm');
 const MongoDBFarmRepository = require('./infrastructure/database/MongoDBFarmRepository');
 
 // Presentation
-const FarmController = require('./presentation/controllers/FarmController');
+const FarmController = require('./presentation/controllers/farm');
 const createFarmRoutes = require('./presentation/routes/farm.routes');
 const farmValidators = require('./presentation/validators/farm.validator');
 

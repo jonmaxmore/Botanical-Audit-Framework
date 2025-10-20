@@ -26,7 +26,7 @@ const MongoDBNotificationRepository = require('../infrastructure/database/MongoD
 const EmailNotificationService = require('../infrastructure/services/EmailNotificationService');
 
 // Presentation
-const NotificationController = require('../presentation/controllers/NotificationController');
+const NotificationController = require('../presentation/controllers/notification');
 const createFarmerRoutes = require('../presentation/routes/notification.farmer.routes');
 const createDTAMRoutes = require('../presentation/routes/notification.dtam.routes');
 

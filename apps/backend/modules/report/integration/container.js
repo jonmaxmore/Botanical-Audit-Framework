@@ -27,7 +27,7 @@ const ProcessScheduledReportsUseCase = require('../application/use-cases/process
 const RetryFailedReportUseCase = require('../application/use-cases/retry-failed-report');
 
 // Presentation
-const ReportController = require('../presentation/controllers/ReportController');
+const ReportController = require('../presentation/controllers/report');
 const farmerRoutes = require('../presentation/routes/report.farmer.routes');
 const dtamRoutes = require('../presentation/routes/report.dtam.routes');
 

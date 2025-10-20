@@ -27,7 +27,7 @@ const ListDTAMStaffUseCase = require('./application/use-cases/list-dtam-staff');
 const UpdateDTAMStaffRoleUseCase = require('./application/use-cases/update-dtam-staff-role');
 
 // Presentation
-const DTAMStaffAuthController = require('./presentation/controllers/DTAMStaffAuthController');
+const DTAMStaffAuthController = require('./presentation/controllers/dtam-auth');
 const createDTAMAuthRouter = require('./presentation/routes/dtam.routes');
 
 /**

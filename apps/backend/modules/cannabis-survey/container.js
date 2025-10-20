@@ -22,7 +22,7 @@ const RejectSurveyUseCase = require('./application/use-cases/reject-survey');
 const RequestSurveyRevisionUseCase = require('./application/use-cases/request-survey-revision');
 
 // Presentation Layer
-const SurveyController = require('./presentation/controllers/SurveyController');
+const SurveyController = require('./presentation/controllers/survey');
 const createSurveyRoutes = require('./presentation/routes/survey.routes');
 const validators = require('./presentation/validators/survey.validator');
 

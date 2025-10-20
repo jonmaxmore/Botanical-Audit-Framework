@@ -30,7 +30,7 @@ const GetUserProfileUseCase = require('./application/use-cases/get-profile');
 const UpdateUserProfileUseCase = require('./application/use-cases/update-profile');
 
 // Presentation
-const AuthController = require('./presentation/controllers/AuthController');
+const AuthController = require('./presentation/controllers/auth');
 const createAuthRouter = require('./presentation/routes/auth.routes');
 
 /**

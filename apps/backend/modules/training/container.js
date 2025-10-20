@@ -31,7 +31,7 @@ const GetFarmerEnrollmentsUseCase = require('./application/use-cases/get-farmer-
 const GetTrainingStatisticsUseCase = require('./application/use-cases/get-training-stats');
 
 // Presentation
-const TrainingController = require('./presentation/controllers/TrainingController');
+const TrainingController = require('./presentation/controllers/training');
 const createTrainingRoutes = require('./presentation/routes/training.routes');
 
 /**

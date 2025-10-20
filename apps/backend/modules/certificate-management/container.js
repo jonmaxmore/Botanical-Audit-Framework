@@ -20,7 +20,7 @@ const RevokeCertificateUseCase = require('./application/use-cases/revoke-certifi
 const MongoDBCertificateRepository = require('./infrastructure/database/MongoDBCertificateRepository');
 
 // Presentation Layer
-const CertificateController = require('./presentation/controllers/CertificateController');
+const CertificateController = require('./presentation/controllers/certificate');
 const setupCertificateRoutes = require('./presentation/routes/certificate.routes');
 
 /**

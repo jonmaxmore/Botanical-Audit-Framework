@@ -47,7 +47,7 @@ module.exports = {
   GetSystemStatisticsUseCase: require('./application/use-cases/get-system-stats'),
 
   // Controller
-  DashboardController: require('./presentation/controllers/DashboardController'),
+  DashboardController: require('./presentation/controllers/dashboard'),
 
   // Routes
   initializeDashboardFarmerRoutes: require('./presentation/routes/dashboard.farmer.routes')

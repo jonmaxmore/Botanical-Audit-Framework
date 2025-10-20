@@ -28,7 +28,7 @@ const GetPendingDocumentsUseCase = require('../application/use-cases/get-pending
 const GetDocumentStatisticsUseCase = require('../application/use-cases/get-document-stats');
 
 // Presentation
-const DocumentController = require('../presentation/controllers/DocumentController');
+const DocumentController = require('../presentation/controllers/document');
 const farmerRoutes = require('../presentation/routes/document.farmer.routes');
 const dtamRoutes = require('../presentation/routes/document.dtam.routes');
 
