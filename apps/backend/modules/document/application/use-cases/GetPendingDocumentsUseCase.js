@@ -1,0 +1,24 @@
+/**
+ * Get Pending Documents Use Case
+ *
+ * Retrieves documents pending review (for DTAM staff).
+ * Part of Clean Architecture - Application Layer
+ */
+
+class GetPendingDocumentsUseCase {
+  constructor(documentRepository) {
+    this.documentRepository = documentRepository;
+  }
+
+  async execute(options = {}) {
+    try {
+      const result = await this.documentRepository.findPendingReview(options);
+      return result;
+    } catch (error) {
+      console.error('Error getting pending documents:', error);
+      throw error;
+    }
+  }
+}
+
+module.exports = GetPendingDocumentsUseCase;

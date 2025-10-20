@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gacp-production
+  labels:
+    name: gacp-production
+    environment: production
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: gacp-staging
+  labels:
+    name: gacp-staging
+    environment: staging

@@ -1,0 +1,245 @@
+name: GACP Platform CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  NODE_VERSION: '18'
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # Phase 1: Code Quality & Testing
+  lint-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [farmer-portal, admin-portal, backend]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: 📥 Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🔍 Lint ${{ matrix.app }}
+        run: |
+          cd apps/${{ matrix.app }}
+          pnpm lint
+
+      - name: 🧪 Test ${{ matrix.app }}
+        run: |
+          cd apps/${{ matrix.app }}
+          pnpm test --coverage --watchAll=false
+        env:
+          CI: true
+
+      - name: 📊 Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./apps/${{ matrix.app }}/coverage/lcov.info
+          flags: ${{ matrix.app }}
+
+  # Phase 2: Build Applications
+  build:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [farmer-portal, admin-portal, backend]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: 📥 Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: 📥 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🏗️ Build ${{ matrix.app }}
+        run: |
+          cd apps/${{ matrix.app }}
+          pnpm build
+
+      - name: 📦 Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.app }}-build
+          path: |
+            apps/${{ matrix.app }}/.next/
+            apps/${{ matrix.app }}/dist/
+            apps/${{ matrix.app }}/build/
+          retention-days: 7
+
+  # Phase 3: Security Scanning
+  security-scan:
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔒 Run security audit
+        run: |
+          npm audit --audit-level=moderate
+          pnpm audit --audit-level=moderate
+
+      - name: 🔍 Run Snyk security scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=medium
+
+  # Phase 4: Build Docker Images
+  docker-build:
+    needs: [build, security-scan]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🔑 Log in to Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📝 Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=sha,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: 🏗️ Build and push Backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile.backend
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}-backend
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: 🏗️ Build and push Frontend images
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-farmer-portal \
+            --build-arg APP_NAME=farmer-portal .
+          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-admin-portal \
+            --build-arg APP_NAME=admin-portal .
+
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-farmer-portal
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-admin-portal
+
+  # Phase 5: Deploy to Staging
+  deploy-staging:
+    needs: [docker-build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment: staging
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🚀 Deploy to staging
+        run: |
+          echo "🎯 Deploying to staging environment..."
+          # Update docker-compose with new image tags
+          sed -i "s|gacp-backend:latest|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-backend|g" docker-compose.yml
+          sed -i "s|gacp-farmer-portal:latest|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-farmer-portal|g" docker-compose.yml
+          sed -i "s|gacp-admin-portal:latest|${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-admin-portal|g" docker-compose.yml
+
+      - name: 📊 Run health checks
+        run: |
+          echo "🔍 Running post-deployment health checks..."
+          sleep 30
+          curl -f http://staging.gacp-platform.com/health || exit 1
+          curl -f http://staging.gacp-platform.com/api/status || exit 1
+
+      - name: 📧 Notify deployment success
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#deployments'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()
+
+  # Phase 6: Production Deployment (Manual Approval)
+  deploy-production:
+    needs: [deploy-staging]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment: production
+
+    steps:
+      - name: 🎯 Deploy to production
+        run: |
+          echo "🚀 Deploying to production environment..."
+          echo "📋 This step requires manual approval via GitHub Environment protection rules"
+
+      - name: 📊 Run production health checks
+        run: |
+          echo "🔍 Running production health checks..."
+          curl -f https://gacp-platform.com/health || exit 1
+          curl -f https://gacp-platform.com/api/status || exit 1
+
+      - name: 📧 Notify production deployment
+        uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          channel: '#production'
+          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        if: always()
+
+  # Artifact Management
+  artifact-management:
+    needs: [deploy-production]
+    runs-on: ubuntu-latest
+    if: always() && github.ref == 'refs/heads/main'
+
+    steps:
+      - name: 📦 Create release artifacts
+        run: |
+          echo "📦 Creating release artifacts for version control..."
+          echo "🏷️ Tag: ${{ github.sha }}"
+          echo "📅 Date: $(date)"
+          echo "👤 Deployer: ${{ github.actor }}"
+
+      - name: 🧹 Cleanup old artifacts
+        run: |
+          echo "🧹 Cleaning up artifacts older than 30 days..."
+          # Implement cleanup logic for old Docker images

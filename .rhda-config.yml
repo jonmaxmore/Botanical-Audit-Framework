@@ -1,0 +1,47 @@
+# RHDA Analysis Configuration
+# Exclude archived and backup directories from Resource Health Data Analytics
+
+# Excluded paths from RHDA analysis
+exclude:
+  - archive/**
+  - backup-*/**
+  - '*-backup/**'
+  - '**/*.backup/**'
+  - node_modules/**
+  - .git/**
+  - .vscode/**
+  - dist/**
+  - build/**
+
+# Package.json analysis rules
+package_analysis:
+  require_lock_file: true
+  exclude_paths:
+    - archive/**
+    - backup-*/**
+    - '*-backup/**'
+
+# Workspace configuration
+workspace:
+  active_apps:
+    - apps/backend
+    - apps/farmer-portal
+    - apps/admin-portal
+    - apps/certificate-portal
+    - frontend-nextjs
+
+  archived_paths:
+    - archive/
+    - backup-frontends/
+    - backup-phase2-*/
+
+# Analysis settings
+analysis:
+  scan_archived: false
+  require_lockfiles: true
+  skip_broken_packages: true
+
+# Error handling
+error_handling:
+  skip_missing_lockfiles_in_archived: true
+  continue_on_archive_errors: true

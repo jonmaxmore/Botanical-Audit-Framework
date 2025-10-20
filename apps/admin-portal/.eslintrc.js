@@ -1,0 +1,18 @@
+module.exports = {
+  extends: ['eslint:recommended'],
+  env: {
+    browser: true,
+    es6: true,
+    node: true,
+  },
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
+  },
+  rules: {
+    'no-unused-vars': 'warn',
+    'no-console': 'warn',
+    'no-undef': 'error',
+  },
+  ignorePatterns: ['node_modules/', '.next/', 'dist/'],
+};

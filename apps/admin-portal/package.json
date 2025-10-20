@@ -1,0 +1,40 @@
+{
+  "name": "@gacp/admin-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GACP Admin Portal - Application Review & User Management",
+  "scripts": {
+    "dev": "next dev -p 3002",
+    "build": "next build",
+    "start": "next start -p 3002",
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
+    "@hookform/resolvers": "^3.9.0",
+    "@mui/icons-material": "^6.1.0",
+    "@mui/lab": "7.0.1-beta.18",
+    "@mui/material": "^6.1.0",
+    "@mui/x-date-pickers": "^7.22.2",
+    "axios": "^1.7.0",
+    "chart.js": "^4.4.0",
+    "date-fns": "^3.6.0",
+    "jwt-decode": "^4.0.0",
+    "next": "^14.2.18",
+    "react": "^18.3.1",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.53.0",
+    "yup": "^1.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/react": "^18.3.26",
+    "@types/react-dom": "^18.3.7",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "name": "gacp-load-testing",
+  "version": "1.0.0",
+  "description": "Load testing suite for GACP Certify Flow platform",
+  "main": "multi-user-qa-simulation.js",
+  "scripts": {
+    "test": "node multi-user-qa-simulation.js",
+    "test:quick": "node multi-user-qa-simulation.js --quick",
+    "test:full": "node multi-user-qa-simulation.js --full"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "chalk": "^4.1.2",
+    "cli-progress": "^3.12.0"
+  },
+  "devDependencies": {},
+  "author": "GACP Development Team",
+  "license": "MIT"
+}

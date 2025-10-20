@@ -1,0 +1,88 @@
+{
+  "timestamp": "2025-10-13T12:05:56.411Z",
+  "summary": {
+    "total": 15,
+    "passed": 6,
+    "failed": 0,
+    "skipped": 9,
+    "passRate": 40
+  },
+  "tests": [
+    {
+      "name": "TypeScript Compilation",
+      "status": "PASS",
+      "details": "Compiled successfully (verified)"
+    },
+    {
+      "name": "ESLint Validation",
+      "status": "PASS",
+      "details": "No warnings or errors (verified)"
+    },
+    {
+      "name": "Production Build",
+      "status": "PASS",
+      "details": "Build successful (verified)"
+    },
+    {
+      "name": "Next.js Build Directory",
+      "status": "PASS",
+      "details": ".next folder exists"
+    },
+    {
+      "name": "Static Assets Directory",
+      "status": "PASS",
+      "details": "static folder exists"
+    },
+    {
+      "name": "Server Directory",
+      "status": "PASS",
+      "details": "server folder exists"
+    },
+    {
+      "name": "Frontend Server Running",
+      "status": "SKIP",
+      "details": "Server not running - start with npm run dev"
+    },
+    {
+      "name": "Route: /farmer/dashboard",
+      "status": "SKIP",
+      "details": "Frontend not running"
+    },
+    {
+      "name": "Route: /farmer/documents/list",
+      "status": "SKIP",
+      "details": "Frontend not running"
+    },
+    {
+      "name": "Route: /farmer/documents/upload",
+      "status": "SKIP",
+      "details": "Frontend not running"
+    },
+    {
+      "name": "Route: /dtam/dashboard",
+      "status": "SKIP",
+      "details": "Frontend not running"
+    },
+    {
+      "name": "Route: /dtam/applications/review",
+      "status": "SKIP",
+      "details": "Frontend not running"
+    },
+    {
+      "name": "Backend Health Endpoint",
+      "status": "SKIP",
+      "details": "Backend not running - start with node app.js"
+    },
+    {
+      "name": "Farmer Login Endpoint",
+      "status": "SKIP",
+      "details": "Backend not running"
+    },
+    {
+      "name": "DTAM Login Endpoint",
+      "status": "SKIP",
+      "details": "Backend not running"
+    }
+  ],
+  "recommendations": ["⚠️ Start frontend/backend servers to run all tests"]
+}

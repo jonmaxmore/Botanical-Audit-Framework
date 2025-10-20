@@ -1,0 +1,125 @@
+# Performance Test Configuration for GACP Platform
+# Artillery.io Load Testing Configuration
+
+config:
+  target: 'http://localhost:3004'
+  phases:
+    # Warm-up phase
+    - duration: 30
+      arrivalRate: 2
+      name: 'Warm-up'
+
+    # Ramp-up phase
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 20
+      name: 'Ramp-up load'
+
+    # Sustained load phase
+    - duration: 120
+      arrivalRate: 20
+      name: 'Sustained load'
+
+    # Peak load phase
+    - duration: 60
+      arrivalRate: 50
+      name: 'Peak load'
+
+  payload:
+    path: './test-data/users.csv'
+    fields:
+      - 'userId'
+      - 'farmerId'
+
+  plugins:
+    expect: {}
+    metrics-by-endpoint: {}
+
+scenarios:
+  # Health check endpoint
+  - name: 'Health Check'
+    weight: 10
+    flow:
+      - get:
+          url: '/health'
+          expect:
+            - statusCode: 200
+            - hasProperty: 'status'
+            - contentType: json
+
+  # GACP Workflow API
+  - name: 'GACP Workflow API'
+    weight: 25
+    flow:
+      - get:
+          url: '/api/gacp/workflow'
+          expect:
+            - statusCode: 200
+            - hasProperty: 'data.workflowStates'
+            - contentType: json
+
+  # CCP Framework API
+  - name: 'CCP Framework API'
+    weight: 25
+    flow:
+      - get:
+          url: '/api/gacp/ccps'
+          expect:
+            - statusCode: 200
+            - hasProperty: 'data.totalCCPs'
+            - contentType: json
+
+  # Score Calculation Test
+  - name: 'Score Calculation'
+    weight: 20
+    flow:
+      - post:
+          url: '/api/gacp/test/score-calculation'
+          json:
+            scores:
+              CCP01: 85
+              CCP02: 90
+              CCP03: 80
+              CCP04: 88
+              CCP05: 92
+              CCP06: 78
+              CCP07: 85
+              CCP08: 87
+          expect:
+            - statusCode: 200
+            - hasProperty: 'data.totalScore'
+            - contentType: json
+
+  # RHDA Analytics
+  - name: 'RHDA Analytics'
+    weight: 15
+    flow:
+      - get:
+          url: '/api/rhda/analytics'
+          expect:
+            - statusCode: 200
+            - contentType: json
+
+  # Database Test
+  - name: 'Database Connection Test'
+    weight: 5
+    flow:
+      - get:
+          url: '/api/db/test'
+          expect:
+            - statusCode: 200
+            - hasProperty: 'success'
+            - contentType: json
+
+# Performance thresholds
+thresholds:
+  # Response time thresholds
+  http.response_time:
+    p95: 200 # 95% of requests should complete within 200ms
+    p99: 500 # 99% of requests should complete within 500ms
+
+  # Error rate threshold
+  http.request_rate: 50 # Should handle at least 50 requests per second
+
+  # Success rate threshold
+  vusers.failed: 0.1% # Less than 0.1% failed requests

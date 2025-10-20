@@ -1,0 +1,277 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: mongodb-backup
+  namespace: gacp-production
+  labels:
+    app: gacp
+    component: backup
+spec:
+  # Run every day at 2:00 AM Bangkok time (19:00 UTC)
+  schedule: '0 19 * * *'
+
+  # Keep last 7 successful and 3 failed job histories
+  successfulJobsHistoryLimit: 7
+  failedJobsHistoryLimit: 3
+
+  # Timezone support (requires K8s 1.25+)
+  timeZone: 'Asia/Bangkok'
+
+  jobTemplate:
+    spec:
+      # Retry failed jobs
+      backoffLimit: 3
+
+      template:
+        metadata:
+          labels:
+            app: gacp
+            component: backup
+        spec:
+          restartPolicy: OnFailure
+
+          serviceAccountName: mongodb-backup
+
+          containers:
+            - name: mongodb-backup
+              image: mongo:6.0
+              imagePullPolicy: IfNotPresent
+
+              command:
+                - /bin/bash
+                - -c
+                - |
+                  #!/bin/bash
+                  set -e
+
+                  echo "=== MongoDB Backup Started ==="
+                  echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')"
+
+                  # Create backup directory with timestamp
+                  BACKUP_DIR="/backup/mongodb-$(date +%Y%m%d-%H%M%S)"
+                  mkdir -p ${BACKUP_DIR}
+
+                  # MongoDB Atlas backup using mongodump
+                  echo "Starting mongodump..."
+                  mongodump \
+                    --uri="${MONGODB_URI}" \
+                    --gzip \
+                    --out=${BACKUP_DIR}
+
+                  # Check if backup was successful
+                  if [ $? -eq 0 ]; then
+                    echo "✓ Backup successful: ${BACKUP_DIR}"
+                    
+                    # Calculate backup size
+                    BACKUP_SIZE=$(du -sh ${BACKUP_DIR} | cut -f1)
+                    echo "Backup size: ${BACKUP_SIZE}"
+                    
+                    # Upload to S3 (if AWS CLI is configured)
+                    if command -v aws &> /dev/null; then
+                      echo "Uploading to S3..."
+                      BACKUP_FILE="mongodb-backup-$(date +%Y%m%d-%H%M%S).tar.gz"
+                      tar -czf /tmp/${BACKUP_FILE} -C /backup .
+                      
+                      aws s3 cp /tmp/${BACKUP_FILE} \
+                        s3://${AWS_S3_BUCKET}/backups/mongodb/${BACKUP_FILE} \
+                        --region ${AWS_REGION}
+                      
+                      if [ $? -eq 0 ]; then
+                        echo "✓ Uploaded to S3: s3://${AWS_S3_BUCKET}/backups/mongodb/${BACKUP_FILE}"
+                        rm -f /tmp/${BACKUP_FILE}
+                      else
+                        echo "✗ Failed to upload to S3"
+                        exit 1
+                      fi
+                    fi
+                    
+                    # Cleanup old local backups (keep last 3 days)
+                    echo "Cleaning up old backups..."
+                    find /backup -type d -name "mongodb-*" -mtime +3 -exec rm -rf {} + 2>/dev/null || true
+                    
+                    echo "=== Backup Completed Successfully ==="
+                  else
+                    echo "✗ Backup failed"
+                    exit 1
+                  fi
+
+              env:
+                - name: MONGODB_URI
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-secrets
+                      key: MONGODB_URI
+
+                - name: AWS_ACCESS_KEY_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-secrets
+                      key: AWS_ACCESS_KEY_ID
+                      optional: true
+
+                - name: AWS_SECRET_ACCESS_KEY
+                  valueFrom:
+                    secretKeyRef:
+                      name: app-secrets
+                      key: AWS_SECRET_ACCESS_KEY
+                      optional: true
+
+                - name: AWS_REGION
+                  valueFrom:
+                    configMapKeyRef:
+                      name: app-config
+                      key: AWS_REGION
+
+                - name: AWS_S3_BUCKET
+                  valueFrom:
+                    configMapKeyRef:
+                      name: app-config
+                      key: AWS_S3_BUCKET
+
+              volumeMounts:
+                - name: backup-storage
+                  mountPath: /backup
+
+              resources:
+                limits:
+                  cpu: '1000m'
+                  memory: '2Gi'
+                requests:
+                  cpu: '500m'
+                  memory: '1Gi'
+
+          volumes:
+            - name: backup-storage
+              persistentVolumeClaim:
+                claimName: mongodb-backup-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongodb-backup-pvc
+  namespace: gacp-production
+  labels:
+    app: gacp
+    component: backup
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: gp3 # AWS EBS gp3
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: mongodb-backup
+  namespace: gacp-production
+  labels:
+    app: gacp
+    component: backup
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: mongodb-backup-role
+  namespace: gacp-production
+spec:
+  rules:
+    - apiGroups: ['']
+      resources: ['secrets', 'configmaps']
+      verbs: ['get', 'list']
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: mongodb-backup-rolebinding
+  namespace: gacp-production
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: mongodb-backup-role
+subjects:
+  - kind: ServiceAccount
+    name: mongodb-backup
+    namespace: gacp-production
+---
+# Manual backup job (run on-demand)
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mongodb-manual-backup
+  namespace: gacp-production
+  labels:
+    app: gacp
+    component: backup
+    type: manual
+spec:
+  ttlSecondsAfterFinished: 86400 # Delete after 24 hours
+  backoffLimit: 2
+
+  template:
+    metadata:
+      labels:
+        app: gacp
+        component: backup
+    spec:
+      restartPolicy: Never
+      serviceAccountName: mongodb-backup
+
+      containers:
+        - name: mongodb-backup
+          image: mongo:6.0
+          imagePullPolicy: IfNotPresent
+
+          command:
+            - /bin/bash
+            - -c
+            - |
+              #!/bin/bash
+              set -e
+
+              echo "=== MongoDB Manual Backup Started ==="
+              echo "Timestamp: $(date '+%Y-%m-%d %H:%M:%S')"
+
+              BACKUP_DIR="/backup/mongodb-manual-$(date +%Y%m%d-%H%M%S)"
+              mkdir -p ${BACKUP_DIR}
+
+              echo "Starting mongodump..."
+              mongodump \
+                --uri="${MONGODB_URI}" \
+                --gzip \
+                --out=${BACKUP_DIR}
+
+              if [ $? -eq 0 ]; then
+                BACKUP_SIZE=$(du -sh ${BACKUP_DIR} | cut -f1)
+                echo "✓ Manual backup successful"
+                echo "Location: ${BACKUP_DIR}"
+                echo "Size: ${BACKUP_SIZE}"
+              else
+                echo "✗ Manual backup failed"
+                exit 1
+              fi
+
+          env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: MONGODB_URI
+
+          volumeMounts:
+            - name: backup-storage
+              mountPath: /backup
+
+          resources:
+            limits:
+              cpu: '1000m'
+              memory: '2Gi'
+            requests:
+              cpu: '500m'
+              memory: '1Gi'
+
+      volumes:
+        - name: backup-storage
+          persistentVolumeClaim:
+            claimName: mongodb-backup-pvc

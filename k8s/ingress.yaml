@@ -1,0 +1,259 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gacp-ingress
+  namespace: gacp-production
+  labels:
+    app: gacp
+  annotations:
+    # Cert-manager for automatic SSL
+    cert-manager.io/cluster-issuer: 'letsencrypt-prod'
+
+    # Nginx Ingress Controller settings
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/ssl-protocols: 'TLSv1.2 TLSv1.3'
+    nginx.ingress.kubernetes.io/ssl-ciphers: 'ECDHE-RSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384'
+
+    # Rate limiting
+    nginx.ingress.kubernetes.io/limit-rps: '100'
+    nginx.ingress.kubernetes.io/limit-connections: '50'
+
+    # Client body size
+    nginx.ingress.kubernetes.io/proxy-body-size: '10m'
+
+    # Timeouts
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: '60'
+    nginx.ingress.kubernetes.io/proxy-send-timeout: '60'
+    nginx.ingress.kubernetes.io/proxy-read-timeout: '60'
+
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: 'true'
+    nginx.ingress.kubernetes.io/cors-allow-origin: 'https://admin.gacp-certify.com'
+    nginx.ingress.kubernetes.io/cors-allow-methods: 'GET, POST, PUT, DELETE, OPTIONS'
+    nginx.ingress.kubernetes.io/cors-allow-credentials: 'true'
+
+    # Security headers
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Referrer-Policy: strict-origin-when-cross-origin";
+      more_set_headers "Permissions-Policy: geolocation=(), microphone=(), camera=()";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline';";
+
+    # Session affinity
+    nginx.ingress.kubernetes.io/affinity: 'cookie'
+    nginx.ingress.kubernetes.io/affinity-mode: 'persistent'
+    nginx.ingress.kubernetes.io/session-cookie-name: 'gacp-session'
+    nginx.ingress.kubernetes.io/session-cookie-expires: '172800'
+    nginx.ingress.kubernetes.io/session-cookie-max-age: '172800'
+    nginx.ingress.kubernetes.io/session-cookie-samesite: 'Strict'
+
+    # Cache
+    nginx.ingress.kubernetes.io/server-snippet: |
+      location ~* \.(jpg|jpeg|png|gif|ico|css|js|svg|woff|woff2|ttf|eot)$ {
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+      }
+
+spec:
+  ingressClassName: nginx
+
+  tls:
+    - hosts:
+        - admin.gacp-certify.com
+      secretName: tls-secret
+
+  rules:
+    - host: admin.gacp-certify.com
+      http:
+        paths:
+          # Next.js application
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gacp-app-service
+                port:
+                  number: 3000
+
+          # API endpoints
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: gacp-app-service
+                port:
+                  number: 3000
+
+          # Health check endpoint
+          - path: /health
+            pathType: Prefix
+            backend:
+              service:
+                name: gacp-app-service
+                port:
+                  number: 3000
+
+---
+# Certificate Issuer for Let's Encrypt (Production)
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    # Let's Encrypt production server
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: admin@gacp-certify.com
+
+    # Private key for ACME account
+    privateKeySecretRef:
+      name: letsencrypt-prod-account-key
+
+    # HTTP-01 challenge
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+
+---
+# Certificate Issuer for Let's Encrypt (Staging - for testing)
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    # Let's Encrypt staging server
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: admin@gacp-certify.com
+
+    # Private key for ACME account
+    privateKeySecretRef:
+      name: letsencrypt-staging-account-key
+
+    # HTTP-01 challenge
+    solvers:
+      - http01:
+          ingress:
+            class: nginx
+
+---
+# Certificate resource for automatic SSL certificate management
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: gacp-tls-cert
+  namespace: gacp-production
+spec:
+  secretName: tls-secret
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - admin.gacp-certify.com
+    - www.admin.gacp-certify.com
+  renewBefore: 720h # 30 days
+
+---
+# Network Policy for security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: gacp-network-policy
+  namespace: gacp-production
+spec:
+  podSelector:
+    matchLabels:
+      app: gacp-app
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    # Allow from ingress controller
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 3000
+    # Allow from within namespace
+    - from:
+        - podSelector: {}
+      ports:
+        - protocol: TCP
+          port: 3000
+  egress:
+    # Allow to PostgreSQL
+    - to:
+        - podSelector:
+            matchLabels:
+              app: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    # Allow to Redis
+    - to:
+        - podSelector:
+            matchLabels:
+              app: redis
+      ports:
+        - protocol: TCP
+          port: 6379
+    # Allow DNS
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              name: kube-system
+      ports:
+        - protocol: UDP
+          port: 53
+    # Allow external HTTPS (for APIs, etc.)
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 443
+    # Allow external HTTP
+    - to:
+        - namespaceSelector: {}
+      ports:
+        - protocol: TCP
+          port: 80
+
+---
+# Staging Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: gacp-staging-ingress
+  namespace: gacp-staging
+  labels:
+    app: gacp
+    environment: staging
+  annotations:
+    cert-manager.io/cluster-issuer: 'letsencrypt-staging'
+    nginx.ingress.kubernetes.io/ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/force-ssl-redirect: 'true'
+    nginx.ingress.kubernetes.io/limit-rps: '50'
+    nginx.ingress.kubernetes.io/proxy-body-size: '10m'
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - staging.admin.gacp-certify.com
+      secretName: staging-tls-secret
+  rules:
+    - host: staging.admin.gacp-certify.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: gacp-app-service
+                port:
+                  number: 3000

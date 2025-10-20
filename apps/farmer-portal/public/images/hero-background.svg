@@ -1,0 +1,79 @@
+<!-- Placeholder for Hero Background Image -->
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="heroGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ade80;stop-opacity:0.8" />
+      <stop offset="50%" style="stop-color:#22c55e;stop-opacity:0.6" />
+      <stop offset="100%" style="stop-color:#16a34a;stop-opacity:0.4" />
+    </linearGradient>
+    <pattern id="farmPattern" patternUnits="userSpaceOnUse" width="200" height="200">
+      <rect width="200" height="200" fill="url(#heroGradient)"/>
+      <circle cx="100" cy="100" r="3" fill="#ffffff" opacity="0.3"/>
+      <circle cx="50" cy="50" r="2" fill="#ffffff" opacity="0.2"/>
+      <circle cx="150" cy="150" r="2" fill="#ffffff" opacity="0.2"/>
+      <circle cx="50" cy="150" r="1" fill="#ffffff" opacity="0.1"/>
+      <circle cx="150" cy="50" r="1" fill="#ffffff" opacity="0.1"/>
+    </pattern>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1920" height="1080" fill="url(#farmPattern)"/>
+  
+  <!-- Abstract Farm Elements -->
+  <g opacity="0.1">
+    <!-- Trees -->
+    <ellipse cx="300" cy="800" rx="40" ry="60" fill="#15803d"/>
+    <ellipse cx="600" cy="750" rx="35" ry="55" fill="#15803d"/>
+    <ellipse cx="1200" cy="820" rx="45" ry="65" fill="#15803d"/>
+    <ellipse cx="1500" cy="780" rx="38" ry="58" fill="#15803d"/>
+    
+    <!-- Plants/Crops -->
+    <path d="M100 900 Q150 850 200 900 Q250 850 300 900" stroke="#16a34a" stroke-width="3" fill="none"/>
+    <path d="M400 920 Q450 870 500 920 Q550 870 600 920" stroke="#16a34a" stroke-width="3" fill="none"/>
+    <path d="M1000 910 Q1050 860 1100 910 Q1150 860 1200 910" stroke="#16a34a" stroke-width="3" fill="none"/>
+    <path d="M1300 930 Q1350 880 1400 930 Q1450 880 1500 930" stroke="#16a34a" stroke-width="3" fill="none"/>
+  </g>
+  
+  <!-- GACP Logo Area -->
+  <g transform="translate(860, 200)">
+    <!-- Shield Shape -->
+    <path d="M0 0 Q0 -20 20 -20 L180 -20 Q200 -20 200 0 L200 120 Q200 140 100 160 Q0 140 0 120 Z" 
+          fill="#ffffff" opacity="0.9" stroke="#22c55e" stroke-width="2"/>
+    
+    <!-- Leaf Symbol -->
+    <g transform="translate(100, 70)">
+      <path d="M0 0 Q-30 -30 0 -60 Q30 -30 0 0 Q15 15 0 30 Q-15 15 0 0" 
+            fill="#22c55e"/>
+      <line x1="0" y1="0" x2="0" y2="30" stroke="#16a34a" stroke-width="2"/>
+    </g>
+    
+    <!-- GACP Text -->
+    <text x="100" y="100" text-anchor="middle" fill="#16a34a" font-family="Arial, sans-serif" font-size="16" font-weight="bold">
+      GACP
+    </text>
+    <text x="100" y="115" text-anchor="middle" fill="#16a34a" font-family="Arial, sans-serif" font-size="10">
+      CERTIFIED
+    </text>
+  </g>
+  
+  <!-- Decorative Elements -->
+  <g opacity="0.05">
+    <!-- Sun -->
+    <circle cx="1600" cy="200" r="80" fill="#fbbf24"/>
+    <g transform="translate(1600, 200)">
+      <line x1="-120" y1="0" x2="-100" y2="0" stroke="#fbbf24" stroke-width="4"/>
+      <line x1="100" y1="0" x2="120" y2="0" stroke="#fbbf24" stroke-width="4"/>
+      <line x1="0" y1="-120" x2="0" y2="-100" stroke="#fbbf24" stroke-width="4"/>
+      <line x1="0" y1="100" x2="0" y2="120" stroke="#fbbf24" stroke-width="4"/>
+      <line x1="-85" y1="-85" x2="-71" y2="-71" stroke="#fbbf24" stroke-width="4"/>
+      <line x1="71" y1="-85" x2="85" y2="-71" stroke="#fbbf24" stroke-width="4"/>
+      <line x1="-85" y1="85" x2="-71" y2="71" stroke="#fbbf24" stroke-width="4"/>
+      <line x1="71" y1="85" x2="85" y2="71" stroke="#fbbf24" stroke-width="4"/>
+    </g>
+    
+    <!-- Mountains -->
+    <polygon points="0,1080 300,600 600,1080" fill="#065f46"/>
+    <polygon points="200,1080 500,650 800,1080" fill="#047857"/>
+    <polygon points="1200,1080 1500,550 1800,1080" fill="#065f46"/>
+  </g>
+</svg>

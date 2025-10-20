@@ -1,0 +1,386 @@
+# MongoDB Monitoring Stack for GACP Platform
+# This file deploys Prometheus MongoDB Exporter and Grafana dashboards
+
+---
+# MongoDB Exporter Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-exporter
+  namespace: gacp-production
+  labels:
+    app: mongodb-exporter
+    component: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb-exporter
+  template:
+    metadata:
+      labels:
+        app: mongodb-exporter
+        component: monitoring
+      annotations:
+        prometheus.io/scrape: 'true'
+        prometheus.io/port: '9216'
+        prometheus.io/path: '/metrics'
+    spec:
+      containers:
+        - name: mongodb-exporter
+          image: bitnami/mongodb-exporter:0.40.0
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: metrics
+              containerPort: 9216
+              protocol: TCP
+
+          env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: MONGODB_URI
+
+            # Exporter Configuration
+            - name: MONGODB_DIRECT_CONNECT
+              value: 'false'
+
+            - name: MONGODB_GLOBAL_CONN_POOL
+              value: 'true'
+
+            # Metrics to collect
+            - name: MONGODB_COLLECT_ALL
+              value: 'true'
+
+            - name: MONGODB_COLLECT_DATABASE
+              value: 'true'
+
+            - name: MONGODB_COLLECT_COLLECTION
+              value: 'true'
+
+            - name: MONGODB_COLLECT_TOPMETRICS
+              value: 'true'
+
+            - name: MONGODB_COLLECT_INDEX_USAGE
+              value: 'true'
+
+            - name: MONGODB_COLLECT_CONNPOOLSTATS
+              value: 'true'
+
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 9216
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 9216
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+---
+# MongoDB Exporter Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-exporter
+  namespace: gacp-production
+  labels:
+    app: mongodb-exporter
+    component: monitoring
+  annotations:
+    prometheus.io/scrape: 'true'
+    prometheus.io/port: '9216'
+spec:
+  type: ClusterIP
+  ports:
+    - name: metrics
+      port: 9216
+      targetPort: 9216
+      protocol: TCP
+  selector:
+    app: mongodb-exporter
+---
+# ServiceMonitor for Prometheus Operator
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: mongodb-exporter
+  namespace: gacp-production
+  labels:
+    app: mongodb-exporter
+    component: monitoring
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: mongodb-exporter
+  endpoints:
+    - port: metrics
+      interval: 30s
+      scrapeTimeout: 10s
+      path: /metrics
+---
+# Grafana Dashboard ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongodb-dashboard
+  namespace: gacp-production
+  labels:
+    grafana_dashboard: '1'
+data:
+  mongodb-dashboard.json: |
+    {
+      "dashboard": {
+        "title": "MongoDB Atlas - GACP Production",
+        "uid": "mongodb-gacp-prod",
+        "tags": ["mongodb", "gacp", "production"],
+        "timezone": "browser",
+        "schemaVersion": 27,
+        "panels": [
+          {
+            "id": 1,
+            "title": "MongoDB Connections",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "mongodb_ss_connections{type=\"current\"}",
+                "legendFormat": "Current Connections"
+              },
+              {
+                "expr": "mongodb_ss_connections{type=\"available\"}",
+                "legendFormat": "Available Connections"
+              }
+            ],
+            "gridPos": {"x": 0, "y": 0, "w": 12, "h": 8}
+          },
+          {
+            "id": 2,
+            "title": "Operations Per Second",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(mongodb_ss_opcounters[5m])",
+                "legendFormat": "{{type}}"
+              }
+            ],
+            "gridPos": {"x": 12, "y": 0, "w": 12, "h": 8}
+          },
+          {
+            "id": 3,
+            "title": "Query Execution Time (ms)",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "mongodb_ss_metrics_query_executor_scanned / mongodb_ss_metrics_query_executor_scanned_objects",
+                "legendFormat": "Avg Query Time"
+              }
+            ],
+            "gridPos": {"x": 0, "y": 8, "w": 12, "h": 8}
+          },
+          {
+            "id": 4,
+            "title": "Document Operations",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(mongodb_ss_metrics_document[5m])",
+                "legendFormat": "{{state}}"
+              }
+            ],
+            "gridPos": {"x": 12, "y": 8, "w": 12, "h": 8}
+          },
+          {
+            "id": 5,
+            "title": "Replication Lag (seconds)",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "mongodb_ss_oplog_stats_time_diff",
+                "legendFormat": "Replication Lag"
+              }
+            ],
+            "gridPos": {"x": 0, "y": 16, "w": 12, "h": 8},
+            "alert": {
+              "conditions": [
+                {
+                  "evaluator": {"params": [10], "type": "gt"},
+                  "operator": {"type": "and"},
+                  "query": {"params": ["A", "5m", "now"]},
+                  "reducer": {"params": [], "type": "avg"},
+                  "type": "query"
+                }
+              ],
+              "name": "MongoDB Replication Lag High"
+            }
+          },
+          {
+            "id": 6,
+            "title": "Memory Usage",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "mongodb_ss_mem_resident",
+                "legendFormat": "Resident Memory (MB)"
+              },
+              {
+                "expr": "mongodb_ss_mem_virtual",
+                "legendFormat": "Virtual Memory (MB)"
+              }
+            ],
+            "gridPos": {"x": 12, "y": 16, "w": 12, "h": 8}
+          },
+          {
+            "id": 7,
+            "title": "Network Traffic (bytes/sec)",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "rate(mongodb_ss_network_bytes_in[5m])",
+                "legendFormat": "Bytes In"
+              },
+              {
+                "expr": "rate(mongodb_ss_network_bytes_out[5m])",
+                "legendFormat": "Bytes Out"
+              }
+            ],
+            "gridPos": {"x": 0, "y": 24, "w": 12, "h": 8}
+          },
+          {
+            "id": 8,
+            "title": "Database Size (GB)",
+            "type": "graph",
+            "targets": [
+              {
+                "expr": "mongodb_ss_wt_cache_bytes_currently_in_the_cache / 1024 / 1024 / 1024",
+                "legendFormat": "Cache Size"
+              }
+            ],
+            "gridPos": {"x": 12, "y": 24, "w": 12, "h": 8}
+          }
+        ]
+      }
+    }
+---
+# PrometheusRule for Alerts
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: mongodb-alerts
+  namespace: gacp-production
+  labels:
+    prometheus: kube-prometheus
+    role: alert-rules
+spec:
+  groups:
+    - name: mongodb.rules
+      interval: 30s
+      rules:
+        # High Connection Usage Alert
+        - alert: MongoDBHighConnectionUsage
+          expr: |
+            (mongodb_ss_connections{type="current"} / mongodb_ss_connections{type="available"}) * 100 > 80
+          for: 5m
+          labels:
+            severity: warning
+            component: mongodb
+          annotations:
+            summary: 'MongoDB connection pool usage is high'
+            description: 'MongoDB connection usage is {{ $value }}% (> 80%)'
+
+        # Replication Lag Alert
+        - alert: MongoDBReplicationLagHigh
+          expr: |
+            mongodb_ss_oplog_stats_time_diff > 10
+          for: 5m
+          labels:
+            severity: critical
+            component: mongodb
+          annotations:
+            summary: 'MongoDB replication lag is high'
+            description: 'Replication lag is {{ $value }} seconds (> 10s)'
+
+        # High Query Execution Time
+        - alert: MongoDBSlowQueries
+          expr: |
+            rate(mongodb_ss_metrics_query_executor_scanned[5m]) / rate(mongodb_ss_metrics_query_executor_scanned_objects[5m]) > 1000
+          for: 10m
+          labels:
+            severity: warning
+            component: mongodb
+          annotations:
+            summary: 'MongoDB queries are running slow'
+            description: 'Average query scans {{ $value }} documents per result'
+
+        # MongoDB Down
+        - alert: MongoDBDown
+          expr: |
+            up{job="mongodb-exporter"} == 0
+          for: 2m
+          labels:
+            severity: critical
+            component: mongodb
+          annotations:
+            summary: 'MongoDB is down or unreachable'
+            description: 'MongoDB exporter has been down for more than 2 minutes'
+
+        # High Memory Usage
+        - alert: MongoDBHighMemoryUsage
+          expr: |
+            mongodb_ss_mem_resident > 8192
+          for: 10m
+          labels:
+            severity: warning
+            component: mongodb
+          annotations:
+            summary: 'MongoDB memory usage is high'
+            description: 'Resident memory usage is {{ $value }} MB (> 8 GB)'
+
+        # Too Many Connections
+        - alert: MongoDBTooManyConnections
+          expr: |
+            mongodb_ss_connections{type="current"} > 1000
+          for: 5m
+          labels:
+            severity: warning
+            component: mongodb
+          annotations:
+            summary: 'MongoDB has too many connections'
+            description: 'Current connections: {{ $value }} (> 1000)'
+
+        # Disk Usage High (WiredTiger Cache)
+        - alert: MongoDBCacheHighUsage
+          expr: |
+            (mongodb_ss_wt_cache_bytes_currently_in_the_cache / mongodb_ss_wt_cache_maximum_bytes_configured) * 100 > 90
+          for: 10m
+          labels:
+            severity: warning
+            component: mongodb
+          annotations:
+            summary: 'MongoDB WiredTiger cache usage is high'
+            description: 'Cache usage is {{ $value }}% (> 90%)'
+
+        # Oplog Window Too Small
+        - alert: MongoDBOplogWindowSmall
+          expr: |
+            mongodb_ss_oplog_stats_time_diff < 3600
+          for: 15m
+          labels:
+            severity: warning
+            component: mongodb
+          annotations:
+            summary: 'MongoDB oplog window is too small'
+            description: 'Oplog covers only {{ $value }} seconds (< 1 hour)'
