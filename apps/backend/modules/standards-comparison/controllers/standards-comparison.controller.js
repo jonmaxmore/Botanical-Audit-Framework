@@ -22,12 +22,12 @@ class StandardsComparisonController {
         service: 'Standards Comparison',
         initialized: this.service.initialized,
         standardsLoaded: standardsCount,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } catch (error) {
       res.status(500).json({
         status: 'error',
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -43,14 +43,14 @@ class StandardsComparisonController {
       res.json({
         success: true,
         count: standards.length,
-        standards
+        standards,
       });
     } catch (error) {
       console.error('Error getting available standards:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve available standards',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -66,7 +66,7 @@ class StandardsComparisonController {
 
       res.json({
         success: true,
-        standard
+        standard,
       });
     } catch (error) {
       console.error('Error getting standard details:', error);
@@ -75,14 +75,14 @@ class StandardsComparisonController {
         return res.status(404).json({
           success: false,
           message: 'Standard not found',
-          error: error.message
+          error: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve standard details',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -99,21 +99,21 @@ class StandardsComparisonController {
       if (!farmId) {
         return res.status(400).json({
           success: false,
-          message: 'farmId is required'
+          message: 'farmId is required',
         });
       }
 
       if (!standardIds || !Array.isArray(standardIds) || standardIds.length === 0) {
         return res.status(400).json({
           success: false,
-          message: 'standardIds must be a non-empty array'
+          message: 'standardIds must be a non-empty array',
         });
       }
 
       if (!farmData) {
         return res.status(400).json({
           success: false,
-          message: 'farmData is required'
+          message: 'farmData is required',
         });
       }
 
@@ -121,20 +121,20 @@ class StandardsComparisonController {
       if (!farmData.farmName) {
         return res.status(400).json({
           success: false,
-          message: 'farmData.farmName is required'
+          message: 'farmData.farmName is required',
         });
       }
 
       const result = await this.service.compareAgainstStandards({
         farmId,
         standardIds,
-        farmData
+        farmData,
       });
 
       res.json({
         success: true,
         message: 'Comparison completed successfully',
-        ...result
+        ...result,
       });
     } catch (error) {
       console.error('Error comparing farm:', error);
@@ -143,14 +143,14 @@ class StandardsComparisonController {
         return res.status(404).json({
           success: false,
           message: 'One or more standards not found',
-          error: error.message
+          error: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to compare farm against standards',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -166,7 +166,7 @@ class StandardsComparisonController {
 
       res.json({
         success: true,
-        comparison
+        comparison,
       });
     } catch (error) {
       console.error('Error getting comparison results:', error);
@@ -175,14 +175,14 @@ class StandardsComparisonController {
         return res.status(404).json({
           success: false,
           message: 'Comparison not found',
-          error: error.message
+          error: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve comparison results',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -198,7 +198,7 @@ class StandardsComparisonController {
 
       res.json({
         success: true,
-        ...gapAnalysis
+        ...gapAnalysis,
       });
     } catch (error) {
       console.error('Error analyzing gaps:', error);
@@ -207,14 +207,14 @@ class StandardsComparisonController {
         return res.status(404).json({
           success: false,
           message: 'Comparison not found',
-          error: error.message
+          error: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to analyze gaps',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -234,14 +234,14 @@ class StandardsComparisonController {
         success: true,
         farmId,
         count: history.length,
-        history
+        history,
       });
     } catch (error) {
       console.error('Error getting comparison history:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve comparison history',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -259,7 +259,7 @@ class StandardsComparisonController {
       const groupedRecommendations = {
         critical: gapAnalysis.recommendations.filter(r => r.priority === 'critical'),
         important: gapAnalysis.recommendations.filter(r => r.priority === 'important'),
-        optional: gapAnalysis.recommendations.filter(r => r.priority === 'optional')
+        optional: gapAnalysis.recommendations.filter(r => r.priority === 'optional'),
       };
 
       res.json({
@@ -269,9 +269,9 @@ class StandardsComparisonController {
         breakdown: {
           critical: groupedRecommendations.critical.length,
           important: groupedRecommendations.important.length,
-          optional: groupedRecommendations.optional.length
+          optional: groupedRecommendations.optional.length,
         },
-        recommendations: groupedRecommendations
+        recommendations: groupedRecommendations,
       });
     } catch (error) {
       console.error('Error getting recommendations:', error);
@@ -280,14 +280,14 @@ class StandardsComparisonController {
         return res.status(404).json({
           success: false,
           message: 'Comparison not found',
-          error: error.message
+          error: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve recommendations',
-        error: error.message
+        error: error.message,
       });
     }
   }

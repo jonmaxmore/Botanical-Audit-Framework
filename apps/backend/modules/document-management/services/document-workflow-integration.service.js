@@ -23,7 +23,7 @@ class DocumentWorkflowIntegration {
     certificateService,
     notificationService,
     auditService,
-    eventBus
+    eventBus,
   }) {
     this.documentService = documentService;
     this.applicationService = applicationService;
@@ -98,9 +98,9 @@ class DocumentWorkflowIntegration {
             applicationId,
             userId,
             errors: contentValidation.errors,
-            documentType
+            documentType,
           },
-          timestamp: new Date()
+          timestamp: new Date(),
         });
         return;
       }
@@ -108,7 +108,7 @@ class DocumentWorkflowIntegration {
       // 4. อัปเดตสถานะเอกสารเป็น VALIDATED
       await this.documentService.updateDocumentStatus(documentId, 'VALIDATED', {
         validatedAt: new Date(),
-        validationResults: contentValidation
+        validationResults: contentValidation,
       });
 
       // 5. ส่ง event แจ้งว่าเอกสารผ่านการตรวจสอบ
@@ -119,9 +119,9 @@ class DocumentWorkflowIntegration {
           applicationId,
           documentType,
           userId,
-          validationResults: contentValidation
+          validationResults: contentValidation,
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       console.log(`✅ Document validation completed: ${documentId}`);
@@ -133,9 +133,9 @@ class DocumentWorkflowIntegration {
         payload: {
           documentId: event.payload.documentId,
           error: error.message,
-          userId: event.payload.userId
+          userId: event.payload.userId,
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -154,7 +154,7 @@ class DocumentWorkflowIntegration {
       await this.applicationService.updateDocumentProgress(applicationId, documentType, {
         documentId,
         status: 'VALIDATED',
-        validatedAt: new Date()
+        validatedAt: new Date(),
       });
 
       console.log(`📝 Updated application progress: ${applicationId}`);
@@ -176,9 +176,9 @@ class DocumentWorkflowIntegration {
           payload: {
             applicationId,
             userId,
-            completedAt: new Date()
+            completedAt: new Date(),
           },
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
@@ -188,7 +188,7 @@ class DocumentWorkflowIntegration {
         applicationId,
         documentType,
         documentId,
-        channels: ['email', 'in-app']
+        channels: ['email', 'in-app'],
       });
 
       // 4. บันทึก audit log
@@ -199,8 +199,8 @@ class DocumentWorkflowIntegration {
         userId,
         metadata: {
           applicationId,
-          documentType
-        }
+          documentType,
+        },
       });
     } catch (error) {
       console.error(`❌ Document validation processing failed: ${event.payload.documentId}`, error);
@@ -220,7 +220,7 @@ class DocumentWorkflowIntegration {
       // 1. อัปเดตสถานะเอกสารเป็น REJECTED
       await this.documentService.updateDocumentStatus(documentId, 'REJECTED', {
         rejectedAt: new Date(),
-        rejectionReasons
+        rejectionReasons,
       });
 
       // 2. อัปเดต application progress
@@ -231,7 +231,7 @@ class DocumentWorkflowIntegration {
           documentId,
           status: 'REJECTED',
           rejectedAt: new Date(),
-          rejectionReasons
+          rejectionReasons,
         }
       );
 
@@ -241,7 +241,7 @@ class DocumentWorkflowIntegration {
         applicationId,
         documentType: event.payload.documentType,
         rejectionReasons,
-        channels: ['email', 'sms', 'in-app']
+        channels: ['email', 'sms', 'in-app'],
       });
 
       // 4. บันทึก audit log
@@ -252,8 +252,8 @@ class DocumentWorkflowIntegration {
         userId,
         metadata: {
           applicationId,
-          rejectionReasons
-        }
+          rejectionReasons,
+        },
       });
 
       console.log(`📧 Document rejection notifications sent for: ${documentId}`);
@@ -283,7 +283,7 @@ class DocumentWorkflowIntegration {
         certificate,
         applicationId,
         documentType: 'CERTIFICATE_PDF',
-        userId
+        userId,
       });
 
       console.log(`📄 Certificate PDF created: ${pdfDocument.id}`);
@@ -292,7 +292,7 @@ class DocumentWorkflowIntegration {
       await this.certificateService.updateCertificatePDF(certificateId, {
         documentId: pdfDocument.id,
         pdfUrl: pdfDocument.downloadUrl,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       });
 
       // 4. ส่งการแจ้งเตือนพร้อมลิงก์ดาวน์โหลด
@@ -301,7 +301,7 @@ class DocumentWorkflowIntegration {
         applicationId,
         certificateNumber,
         downloadUrl: pdfDocument.downloadUrl,
-        channels: ['email', 'sms', 'in-app']
+        channels: ['email', 'sms', 'in-app'],
       });
 
       // 5. บันทึก audit log
@@ -313,8 +313,8 @@ class DocumentWorkflowIntegration {
         metadata: {
           certificateId,
           certificateNumber,
-          applicationId
-        }
+          applicationId,
+        },
       });
 
       console.log(`✅ Certificate PDF workflow completed: ${certificateNumber}`);
@@ -342,7 +342,7 @@ class DocumentWorkflowIntegration {
         documentId,
         documentType,
         daysUntilExpiry,
-        channels: ['email', 'sms', 'in-app']
+        channels: ['email', 'sms', 'in-app'],
       });
 
       console.log(`📨 Document renewal reminder sent: ${documentId} (${daysUntilExpiry} days)`);
@@ -355,8 +355,8 @@ class DocumentWorkflowIntegration {
         userId,
         metadata: {
           documentType,
-          daysUntilExpiry
-        }
+          daysUntilExpiry,
+        },
       });
     } catch (error) {
       console.error(`❌ Document expiry processing failed: ${event.payload.documentId}`, error);
@@ -370,7 +370,7 @@ class DocumentWorkflowIntegration {
     // อัปเดตสถานะเอกสารเป็น QUARANTINED
     await this.documentService.updateDocumentStatus(documentId, 'QUARANTINED', {
       quarantinedAt: new Date(),
-      threats
+      threats,
     });
 
     // ส่งการแจ้งเตือนความปลอดภัย
@@ -378,7 +378,7 @@ class DocumentWorkflowIntegration {
       userId,
       documentId,
       threats,
-      channels: ['email', 'in-app']
+      channels: ['email', 'in-app'],
     });
 
     // บันทึก security audit log
@@ -388,7 +388,7 @@ class DocumentWorkflowIntegration {
       entityId: documentId,
       userId,
       severity: 'HIGH',
-      metadata: { threats }
+      metadata: { threats },
     });
 
     console.log(`🚨 Unsafe document quarantined: ${documentId}`);
@@ -416,9 +416,9 @@ class DocumentWorkflowIntegration {
               userId: document.userId,
               documentType: document.documentType,
               daysUntilExpiry: days,
-              expiryDate: document.expiryDate
+              expiryDate: document.expiryDate,
             },
-            timestamp: new Date()
+            timestamp: new Date(),
           });
         }
 

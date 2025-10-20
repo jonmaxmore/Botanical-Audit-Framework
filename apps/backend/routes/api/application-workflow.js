@@ -32,12 +32,12 @@ module.exports = (dependencies = {}) => {
    * POST /api/applications
    * สร้างใบสมัครใหม่
    */
-  router.post('/applications', auth, async(req, res) => {
+  router.post('/applications', auth, async (req, res) => {
     try {
       const applicationData = {
         ...req.body,
         farmerId: req.user.id,
-        farmerEmail: req.user.email
+        farmerEmail: req.user.email,
       };
 
       const application = await workflowEngine.createApplication(applicationData);
@@ -45,13 +45,13 @@ module.exports = (dependencies = {}) => {
       res.status(201).json({
         success: true,
         message: 'Application created successfully',
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Create error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -60,20 +60,20 @@ module.exports = (dependencies = {}) => {
    * POST /api/applications/:id/submit
    * ยื่นใบสมัคร
    */
-  router.post('/applications/:id/submit', auth, async(req, res) => {
+  router.post('/applications/:id/submit', auth, async (req, res) => {
     try {
       const application = await workflowEngine.submitApplication(req.params.id, req.user.id);
 
       res.json({
         success: true,
         message: 'Application submitted successfully',
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Submit error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -82,13 +82,13 @@ module.exports = (dependencies = {}) => {
    * POST /api/applications/:id/review
    * เริ่มตรวจสอบเอกสาร (Admin only)
    */
-  router.post('/applications/:id/review', auth, async(req, res) => {
+  router.post('/applications/:id/review', auth, async (req, res) => {
     try {
       // Check if user is admin/reviewer
       if (req.user.role !== 'admin' && req.user.role !== 'reviewer') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
@@ -97,13 +97,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Document review started',
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Review error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -112,18 +112,18 @@ module.exports = (dependencies = {}) => {
    * POST /api/applications/:id/review/complete
    * เสร็จสิ้นการตรวจสอบเอกสาร
    */
-  router.post('/applications/:id/review/complete', auth, async(req, res) => {
+  router.post('/applications/:id/review/complete', auth, async (req, res) => {
     try {
       if (req.user.role !== 'admin' && req.user.role !== 'reviewer') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
       const reviewResult = {
         ...req.body,
-        reviewerId: req.user.id
+        reviewerId: req.user.id,
       };
 
       const application = await workflowEngine.completeDocumentReview(req.params.id, reviewResult);
@@ -131,13 +131,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Document review completed',
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Review complete error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -146,12 +146,12 @@ module.exports = (dependencies = {}) => {
    * POST /api/applications/:id/inspection/start
    * เริ่มการตรวจสอบหน้างาน
    */
-  router.post('/applications/:id/inspection/start', auth, async(req, res) => {
+  router.post('/applications/:id/inspection/start', auth, async (req, res) => {
     try {
       if (req.user.role !== 'admin' && req.user.role !== 'inspector') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
@@ -160,13 +160,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Field inspection started',
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Inspection start error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -175,18 +175,18 @@ module.exports = (dependencies = {}) => {
    * POST /api/applications/:id/inspection/complete
    * บันทึกผลการตรวจสอบหน้างาน
    */
-  router.post('/applications/:id/inspection/complete', auth, async(req, res) => {
+  router.post('/applications/:id/inspection/complete', auth, async (req, res) => {
     try {
       if (req.user.role !== 'admin' && req.user.role !== 'inspector') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
       const inspectionReport = {
         ...req.body,
-        inspectorId: req.user.id
+        inspectorId: req.user.id,
       };
 
       const application = await workflowEngine.completeFieldInspection(
@@ -197,13 +197,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Field inspection completed',
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Inspection complete error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -212,12 +212,12 @@ module.exports = (dependencies = {}) => {
    * POST /api/applications/:id/approve
    * อนุมัติใบสมัคร (Admin only)
    */
-  router.post('/applications/:id/approve', auth, async(req, res) => {
+  router.post('/applications/:id/approve', auth, async (req, res) => {
     try {
       if (req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
@@ -230,13 +230,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Application approved successfully',
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Approve error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -245,12 +245,12 @@ module.exports = (dependencies = {}) => {
    * POST /api/applications/:id/reject
    * ปฏิเสธใบสมัคร (Admin only)
    */
-  router.post('/applications/:id/reject', auth, async(req, res) => {
+  router.post('/applications/:id/reject', auth, async (req, res) => {
     try {
       if (req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
@@ -263,13 +263,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Application rejected',
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Reject error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -278,7 +278,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/applications/:id
    * ดูรายละเอียดใบสมัคร
    */
-  router.get('/applications/:id', auth, async(req, res) => {
+  router.get('/applications/:id', auth, async (req, res) => {
     try {
       const application = await workflowEngine._getApplication(req.params.id);
 
@@ -290,19 +290,19 @@ module.exports = (dependencies = {}) => {
       ) {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
       res.json({
         success: true,
-        data: application
+        data: application,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Get error:', error);
       res.status(404).json({
         success: false,
-        message: 'Application not found'
+        message: 'Application not found',
       });
     }
   });
@@ -311,7 +311,7 @@ module.exports = (dependencies = {}) => {
    * PUT /api/applications/:id/step/:stepId
    * บันทึกข้อมูลแต่ละ step ของใบสมัคร
    */
-  router.put('/applications/:id/step/:stepId', auth, async(req, res) => {
+  router.put('/applications/:id/step/:stepId', auth, async (req, res) => {
     try {
       const { id, stepId } = req.params;
       const { stepData } = req.body;
@@ -323,7 +323,7 @@ module.exports = (dependencies = {}) => {
       if (application.farmerId !== req.user.id) {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
@@ -331,7 +331,7 @@ module.exports = (dependencies = {}) => {
       const stepKey = `step${stepId}`;
       const updateData = {
         [stepKey]: stepData,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       const Application = require('../../models/mongodb/Application');
@@ -344,20 +344,20 @@ module.exports = (dependencies = {}) => {
       if (!updatedApplication) {
         return res.status(404).json({
           success: false,
-          message: 'Application not found'
+          message: 'Application not found',
         });
       }
 
       res.json({
         success: true,
         message: `Step ${stepId} saved successfully`,
-        data: updatedApplication
+        data: updatedApplication,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Save step error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -366,7 +366,7 @@ module.exports = (dependencies = {}) => {
    * GET /api/applications
    * ดูรายการใบสมัครทั้งหมด
    */
-  router.get('/applications', auth, async(req, res) => {
+  router.get('/applications', auth, async (req, res) => {
     try {
       const filters = {};
 
@@ -386,13 +386,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         data: applications,
-        total: applications.length
+        total: applications.length,
       });
     } catch (error) {
       console.error('[ApplicationAPI] List error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });
@@ -401,12 +401,12 @@ module.exports = (dependencies = {}) => {
    * GET /api/applications/statistics
    * สถิติของใบสมัคร (Admin only)
    */
-  router.get('/statistics', auth, async(req, res) => {
+  router.get('/statistics', auth, async (req, res) => {
     try {
       if (req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions'
+          message: 'Insufficient permissions',
         });
       }
 
@@ -414,13 +414,13 @@ module.exports = (dependencies = {}) => {
 
       res.json({
         success: true,
-        data: stats
+        data: stats,
       });
     } catch (error) {
       console.error('[ApplicationAPI] Statistics error:', error);
       res.status(500).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   });

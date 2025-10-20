@@ -66,7 +66,7 @@ class UserManagementModule {
     // Initialize repository
     this.userRepository = new UserRepository({
       cacheService: this.cacheService,
-      auditService: this.auditService
+      auditService: this.auditService,
     });
 
     // Initialize authentication service
@@ -74,13 +74,13 @@ class UserManagementModule {
       userRepository: this.userRepository,
       auditService: this.auditService,
       notificationService: this.notificationService,
-      cacheService: this.cacheService
+      cacheService: this.cacheService,
     });
 
     // Initialize middleware
     this.authenticationMiddleware = new AuthenticationMiddleware({
       userAuthenticationService: this.authenticationService,
-      auditService: this.auditService
+      auditService: this.auditService,
     });
 
     // Initialize controller
@@ -88,13 +88,13 @@ class UserManagementModule {
       userAuthenticationService: this.authenticationService,
       userRepository: this.userRepository,
       auditService: this.auditService,
-      notificationService: this.notificationService
+      notificationService: this.notificationService,
     });
 
     // Create routes
     this.authRoutes = createAuthRoutes({
       userAuthenticationController: this.authenticationController,
-      authenticationMiddleware: this.authenticationMiddleware
+      authenticationMiddleware: this.authenticationMiddleware,
     });
   }
 
@@ -115,7 +115,7 @@ class UserManagementModule {
       optionalAuth: this.authenticationMiddleware.optionalAuth.bind(this.authenticationMiddleware),
       securityHeaders: this.authenticationMiddleware.securityHeaders.bind(
         this.authenticationMiddleware
-      )
+      ),
     };
   }
 
@@ -170,7 +170,7 @@ class UserManagementModule {
         role: 'DTAM_ADMIN',
         isActive: true,
         isVerified: true,
-        requirePasswordChange: true // Force password change on first login
+        requirePasswordChange: true, // Force password change on first login
       });
 
       console.log('[UserManagementModule] Initial admin user created:', adminUser.email);
@@ -208,7 +208,7 @@ class UserManagementModule {
 
     return {
       valid: issues.length === 0,
-      issues
+      issues,
     };
   }
 
@@ -222,7 +222,7 @@ class UserManagementModule {
         module: 'UserManagement',
         status: 'healthy',
         timestamp: new Date(),
-        components: {}
+        components: {},
       };
 
       // Check database connectivity
@@ -261,7 +261,7 @@ class UserManagementModule {
         module: 'UserManagement',
         status: 'unhealthy',
         timestamp: new Date(),
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -303,7 +303,7 @@ module.exports = {
   UserAuthenticationController,
   UserRepository,
   User,
-  createAuthRoutes
+  createAuthRoutes,
 };
 
 /**

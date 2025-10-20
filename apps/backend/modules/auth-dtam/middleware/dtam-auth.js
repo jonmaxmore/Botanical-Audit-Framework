@@ -78,7 +78,7 @@ const verifyDTAMToken = (req, res, next) => {
       email: decoded.email,
       userType: decoded.userType,
       role: decoded.role,
-      department: decoded.department
+      department: decoded.department,
     };
 
     next();
@@ -123,7 +123,7 @@ const requireDTAMRole = (allowedRoles = []) => {
         constants.statusCodes.FORBIDDEN,
         {
           requiredRole: allowedRoles,
-          yourRole: req.user.role
+          yourRole: req.user.role,
         }
       );
     }
@@ -176,5 +176,5 @@ module.exports = {
   verifyDTAMToken,
   requireDTAMRole,
   requireDTAMAdmin,
-  requireDTAMManagerOrAdmin
+  requireDTAMManagerOrAdmin,
 };

@@ -39,8 +39,8 @@ class FarmDTO {
       isApproved: farm.isApproved(),
       // Include rejection reason if rejected
       ...(farm.status === 'REJECTED' && {
-        rejectionReason: farm.rejectionReason
-      })
+        rejectionReason: farm.rejectionReason,
+      }),
     };
   }
 
@@ -55,7 +55,7 @@ class FarmDTO {
       verifiedBy: farm.verifiedBy,
       verifiedAt: farm.verifiedAt,
       rejectionReason: farm.rejectionReason,
-      isUnderVerification: farm.isUnderVerification()
+      isUnderVerification: farm.isUnderVerification(),
     };
   }
 
@@ -74,7 +74,7 @@ class FarmDTO {
       status: farm.status,
       submittedAt: farm.submittedAt,
       createdAt: farm.createdAt,
-      updatedAt: farm.updatedAt
+      updatedAt: farm.updatedAt,
     };
 
     if (userType === 'dtam_staff') {
@@ -82,7 +82,7 @@ class FarmDTO {
         ...baseData,
         ownerId: farm.ownerId,
         verifiedBy: farm.verifiedBy,
-        verifiedAt: farm.verifiedAt
+        verifiedAt: farm.verifiedAt,
       };
     }
 
@@ -110,7 +110,7 @@ class FarmDTO {
       cultivationMethod: body.cultivationMethod,
       irrigationType: body.irrigationType,
       soilType: body.soilType,
-      waterSource: body.waterSource
+      waterSource: body.waterSource,
     };
   }
 
@@ -147,7 +147,7 @@ class FarmDTO {
     return {
       success: true,
       message,
-      ...(data && { data })
+      ...(data && { data }),
     };
   }
 
@@ -155,7 +155,7 @@ class FarmDTO {
     return {
       success: false,
       message,
-      ...(errors && { errors })
+      ...(errors && { errors }),
     };
   }
 }

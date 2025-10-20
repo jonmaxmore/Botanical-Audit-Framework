@@ -84,13 +84,13 @@ class NotificationModule {
       // Initialize controller
       this.controller = new NotificationController({
         ...this.dependencies,
-        notificationService: this.service
+        notificationService: this.service,
       });
 
       // Initialize routes
       this.routes = new NotificationRoutes({
         ...this.dependencies,
-        notificationController: this.controller
+        notificationController: this.controller,
       });
 
       this.isInitialized = true;
@@ -150,16 +150,16 @@ class NotificationModule {
         'Bulk notifications',
         'Analytics and reporting',
         'Rate limiting',
-        'Audit logging'
+        'Audit logging',
       ],
       integration: [
         'Application workflow',
         'Payment system',
         'Document management',
         'User management',
-        'Audit system'
+        'Audit system',
       ],
-      endpoints: this.routes ? this.routes.getRouteInfo().endpoints.length : 0
+      endpoints: this.routes ? this.routes.getRouteInfo().endpoints.length : 0,
     };
 
     console.log('[NotificationModule] Capabilities:', JSON.stringify(capabilities, null, 2));
@@ -284,7 +284,7 @@ class NotificationModule {
       return {
         status: 'unhealthy',
         reason: 'Module not initialized',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     }
 
@@ -311,18 +311,18 @@ class NotificationModule {
           'Bulk notifications',
           'Analytics and reporting',
           'Rate limiting',
-          'Audit logging'
+          'Audit logging',
         ],
         integrations: [
           'Application workflow',
           'Payment system',
           'Document management',
           'User management',
-          'Audit system'
-        ]
+          'Audit system',
+        ],
       },
       routes: this.routes ? this.routes.getRouteInfo() : null,
-      dependencies: Object.keys(this.dependencies)
+      dependencies: Object.keys(this.dependencies),
     };
   }
 
@@ -348,7 +348,7 @@ class NotificationModule {
 }
 
 // Static factory method for easy instantiation
-NotificationModule.create = function(dependencies = {}) {
+NotificationModule.create = function (dependencies = {}) {
   return new NotificationModule(dependencies);
 };
 

@@ -28,12 +28,12 @@ class PasswordResetRequested {
         userId: this.userId,
         email: this.email,
         resetToken: this.resetToken,
-        expiresAt: this.expiresAt
+        expiresAt: this.expiresAt,
       },
       metadata: {
         occurredAt: this.occurredAt,
-        version: '1.0'
-      }
+        version: '1.0',
+      },
     };
   }
 }

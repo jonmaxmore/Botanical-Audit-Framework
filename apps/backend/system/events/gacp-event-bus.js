@@ -40,7 +40,7 @@ class GACPEventBus extends EventEmitter {
       eventsPublished: 0,
       eventsProcessed: 0,
       eventsFailed: 0,
-      averageProcessingTime: 0
+      averageProcessingTime: 0,
     };
 
     // Configuration
@@ -49,7 +49,7 @@ class GACPEventBus extends EventEmitter {
       retryDelay: 1000,
       deadLetterThreshold: 10,
       enablePersistence: true,
-      enableMonitoring: true
+      enableMonitoring: true,
     };
 
     this._initializeEventBus();
@@ -78,8 +78,8 @@ class GACPEventBus extends EventEmitter {
         metadata: {
           ...options.metadata,
           publishedAt: timestamp,
-          retryCount: 0
-        }
+          retryCount: 0,
+        },
       };
 
       console.log(`📤 Publishing event: ${eventType} (${eventId})`);
@@ -141,11 +141,11 @@ class GACPEventBus extends EventEmitter {
           retryOnError: options.retryOnError !== false,
           timeout: options.timeout || 30000,
           filter: options.filter,
-          transform: options.transform
+          transform: options.transform,
         },
         subscribedAt: new Date(),
         processedCount: 0,
-        errorCount: 0
+        errorCount: 0,
       };
 
       // Register subscription
@@ -329,7 +329,7 @@ class GACPEventBus extends EventEmitter {
       event,
       subscription: subscription.id,
       error: error.message,
-      failedAt: new Date()
+      failedAt: new Date(),
     });
 
     // Audit the failure
@@ -340,7 +340,7 @@ class GACPEventBus extends EventEmitter {
         subscriptionId: subscription.id,
         error: error.message,
         severity: 'HIGH',
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
 
@@ -369,7 +369,7 @@ class GACPEventBus extends EventEmitter {
         event,
         error: error.message,
         scheduledFor: new Date(Date.now() + this.config.retryDelay),
-        attempts: event.metadata.retryCount || 0
+        attempts: event.metadata.retryCount || 0,
       });
 
       console.log(`🔄 Event added to retry queue: ${event.type} (${retryId})`);
@@ -394,7 +394,7 @@ class GACPEventBus extends EventEmitter {
             // Retry publishing
             await this.publish(item.event.type, item.event.payload, {
               ...item.event.metadata,
-              correlationId: item.event.correlationId
+              correlationId: item.event.correlationId,
             });
 
             // Remove from retry queue
@@ -411,7 +411,7 @@ class GACPEventBus extends EventEmitter {
                 event: item.event,
                 error: error.message,
                 failedAt: new Date(),
-                totalAttempts: item.attempts
+                totalAttempts: item.attempts,
               });
 
               this._removeFromRetryQueue(eventType, item.id);
@@ -440,19 +440,19 @@ class GACPEventBus extends EventEmitter {
         ),
         subscribersByEvent: Object.fromEntries(
           Array.from(this.subscribers.entries()).map(([event, subs]) => [event, subs.length])
-        )
+        ),
       },
       queues: {
         retryQueueSize: Array.from(this.retryQueues.values()).reduce(
           (sum, items) => sum + items.length,
           0
         ),
-        deadLetterQueueSize: this.deadLetterQueue.length
+        deadLetterQueueSize: this.deadLetterQueue.length,
       },
       history: {
         totalEvents: this.eventHistory.size,
-        recentEvents: Array.from(this.eventHistory.values()).slice(-10)
-      }
+        recentEvents: Array.from(this.eventHistory.values()).slice(-10),
+      },
     };
   }
 
@@ -516,7 +516,7 @@ class GACPEventBus extends EventEmitter {
       type: event.type,
       timestamp: event.timestamp,
       source: event.source,
-      correlationId: event.correlationId
+      correlationId: event.correlationId,
     });
 
     // Keep only last 1000 events

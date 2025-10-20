@@ -13,7 +13,7 @@ class CertificateIssued {
     issueDate,
     expiryDate,
     issuedBy,
-    occurredAt = new Date()
+    occurredAt = new Date(),
   }) {
     this.eventType = 'CertificateIssued';
     this.certificateId = certificateId;
@@ -41,9 +41,9 @@ class CertificateIssued {
         certificateType: this.certificateType,
         issueDate: this.issueDate,
         expiryDate: this.expiryDate,
-        issuedBy: this.issuedBy
+        issuedBy: this.issuedBy,
       },
-      occurredAt: this.occurredAt
+      occurredAt: this.occurredAt,
     };
   }
 }

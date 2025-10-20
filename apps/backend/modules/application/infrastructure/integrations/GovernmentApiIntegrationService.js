@@ -34,7 +34,7 @@ class GovernmentApiIntegrationService {
       responsesReceived: 0,
       successfulVerifications: 0,
       failedRequests: 0,
-      circuitBreakerTrips: 0
+      circuitBreakerTrips: 0,
     };
 
     // Government service configurations
@@ -45,7 +45,7 @@ class GovernmentApiIntegrationService {
         authentication: { type: 'API_KEY' },
         rateLimit: { requests: 100, window: 3600000 },
         circuitBreaker: { failureThreshold: 5, resetTimeout: 60000 },
-        timeout: 10000
+        timeout: 10000,
       },
       landDepartment: {
         name: 'Department of Lands API',
@@ -53,7 +53,7 @@ class GovernmentApiIntegrationService {
         authentication: { type: 'OAUTH2' },
         rateLimit: { requests: 50, window: 3600000 },
         circuitBreaker: { failureThreshold: 3, resetTimeout: 120000 },
-        timeout: 15000
+        timeout: 15000,
       },
       moac: {
         name: 'Ministry of Agriculture and Cooperatives',
@@ -61,7 +61,7 @@ class GovernmentApiIntegrationService {
         authentication: { type: 'JWT' },
         rateLimit: { requests: 200, window: 3600000 },
         circuitBreaker: { failureThreshold: 5, resetTimeout: 180000 },
-        timeout: 12000
+        timeout: 12000,
       },
       doa: {
         name: 'Department of Agriculture',
@@ -69,7 +69,7 @@ class GovernmentApiIntegrationService {
         authentication: { type: 'HMAC' },
         rateLimit: { requests: 150, window: 3600000 },
         circuitBreaker: { failureThreshold: 4, resetTimeout: 90000 },
-        timeout: 10000
+        timeout: 10000,
       },
       fda: {
         name: 'Food and Drug Administration',
@@ -77,8 +77,8 @@ class GovernmentApiIntegrationService {
         authentication: { type: 'MUTUAL_TLS' },
         rateLimit: { requests: 75, window: 3600000 },
         circuitBreaker: { failureThreshold: 3, resetTimeout: 300000 },
-        timeout: 20000
-      }
+        timeout: 20000,
+      },
     };
   }
 
@@ -142,8 +142,8 @@ class GovernmentApiIntegrationService {
         serviceResponse: {
           service: 'nationalId',
           responseTime: verificationResult.responseTime,
-          transactionId: verificationResult.transactionId
-        }
+          transactionId: verificationResult.transactionId,
+        },
       };
     } catch (error) {
       this.metrics.failedRequests++;
@@ -188,8 +188,8 @@ class GovernmentApiIntegrationService {
         serviceResponse: {
           service: 'landDepartment',
           responseTime: verificationResult.responseTime,
-          transactionId: verificationResult.transactionId
-        }
+          transactionId: verificationResult.transactionId,
+        },
       };
     } catch (error) {
       this.metrics.failedRequests++;
@@ -220,7 +220,7 @@ class GovernmentApiIntegrationService {
             submissionResults.push({
               system,
               status: 'FAILED',
-              error: 'Service temporarily unavailable'
+              error: 'Service temporarily unavailable',
             });
             continue;
           }
@@ -232,14 +232,14 @@ class GovernmentApiIntegrationService {
             system,
             status: 'SUCCESS',
             submissionId: result.submissionId,
-            responseTime: result.responseTime
+            responseTime: result.responseTime,
           });
         } catch (error) {
           this.handleServiceError(system, error);
           submissionResults.push({
             system,
             status: 'FAILED',
-            error: error.message
+            error: error.message,
           });
         }
       }
@@ -257,7 +257,7 @@ class GovernmentApiIntegrationService {
         status: overallStatus,
         targetSystems: submissionResults,
         submittedAt: new Date(),
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     } catch (error) {
       this.metrics.failedRequests++;
@@ -285,14 +285,14 @@ class GovernmentApiIntegrationService {
             system,
             status: status.status,
             lastUpdated: status.lastUpdated,
-            details: status.details
+            details: status.details,
           });
         } catch (error) {
           statusResults.push({
             system,
             status: 'UNAVAILABLE',
             error: error.message,
-            lastUpdated: new Date()
+            lastUpdated: new Date(),
           });
         }
       }
@@ -305,8 +305,8 @@ class GovernmentApiIntegrationService {
           total: statusResults.length,
           available: statusResults.filter(s => s.status !== 'UNAVAILABLE').length,
           processing: statusResults.filter(s => s.status === 'PROCESSING').length,
-          completed: statusResults.filter(s => s.status === 'COMPLETED').length
-        }
+          completed: statusResults.filter(s => s.status === 'COMPLETED').length,
+        },
       };
     } catch (error) {
       console.error('[GovernmentApiIntegrationService] Status check failed:', error);
@@ -324,7 +324,7 @@ class GovernmentApiIntegrationService {
         timestamp: new Date(),
         services: {},
         circuitBreakers: {},
-        metrics: { ...this.metrics }
+        metrics: { ...this.metrics },
       };
 
       // Check each government service health
@@ -336,7 +336,7 @@ class GovernmentApiIntegrationService {
           health.services[serviceName] = {
             status: 'unhealthy',
             error: error.message,
-            lastCheck: new Date()
+            lastCheck: new Date(),
           };
         }
 
@@ -344,7 +344,7 @@ class GovernmentApiIntegrationService {
         health.circuitBreakers[serviceName] = {
           isOpen: this.isCircuitBreakerOpen(serviceName),
           failures: this.getCircuitBreakerFailures(serviceName),
-          lastTrip: this.getCircuitBreakerLastTrip(serviceName)
+          lastTrip: this.getCircuitBreakerLastTrip(serviceName),
         };
       }
 
@@ -364,7 +364,7 @@ class GovernmentApiIntegrationService {
       return {
         status: 'unhealthy',
         timestamp: new Date(),
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -382,7 +382,7 @@ class GovernmentApiIntegrationService {
         isOpen: false,
         failures: 0,
         lastFailure: null,
-        nextRetry: null
+        nextRetry: null,
       });
     }
     console.log('[GovernmentApiIntegrationService] Circuit breakers initialized');
@@ -394,7 +394,7 @@ class GovernmentApiIntegrationService {
       this.rateLimiters.set(serviceName, {
         requests: 0,
         windowStart: Date.now(),
-        maxRequests: this.governmentServices[serviceName].rateLimit.requests
+        maxRequests: this.governmentServices[serviceName].rateLimit.requests,
       });
     }
     console.log('[GovernmentApiIntegrationService] Rate limiters initialized');
@@ -481,17 +481,17 @@ class GovernmentApiIntegrationService {
         citizenId: identityData.citizenId,
         name: `${identityData.firstName} ${identityData.lastName}`,
         dateOfBirth: identityData.dateOfBirth,
-        address: 'Bangkok, Thailand'
+        address: 'Bangkok, Thailand',
       },
       responseTime: 150,
-      transactionId: `NID-${Date.now()}`
+      transactionId: `NID-${Date.now()}`,
     };
   }
 
   async processIdentityVerification(verificationResult) {
     return {
       verifiedData: verificationResult.data,
-      confidence: 0.95
+      confidence: 0.95,
     };
   }
 
@@ -502,14 +502,14 @@ class GovernmentApiIntegrationService {
       landDetails: {
         titleDeedNumber: landData.landData.titleDeedNumber,
         landArea: landData.landData.landArea,
-        location: 'Chiang Mai, Thailand'
+        location: 'Chiang Mai, Thailand',
       },
       ownerDetails: {
         ownerName: landData.ownerData.firstName + ' ' + landData.ownerData.lastName,
-        citizenId: landData.ownerData.citizenId
+        citizenId: landData.ownerData.citizenId,
       },
       responseTime: 200,
-      transactionId: `LAND-${Date.now()}`
+      transactionId: `LAND-${Date.now()}`,
     };
   }
 
@@ -517,7 +517,7 @@ class GovernmentApiIntegrationService {
     return {
       landDetails: verificationResult.landDetails,
       ownershipDetails: verificationResult.ownerDetails,
-      confidence: 0.92
+      confidence: 0.92,
     };
   }
 
@@ -526,7 +526,7 @@ class GovernmentApiIntegrationService {
     return {
       submissionId: `${system.toUpperCase()}-${Date.now()}`,
       status: 'SUBMITTED',
-      responseTime: 300
+      responseTime: 300,
     };
   }
 
@@ -535,7 +535,7 @@ class GovernmentApiIntegrationService {
     return {
       status: 'PROCESSING',
       lastUpdated: new Date(),
-      details: `Application ${applicationId} is being processed by ${system}`
+      details: `Application ${applicationId} is being processed by ${system}`,
     };
   }
 
@@ -544,7 +544,7 @@ class GovernmentApiIntegrationService {
     return {
       status: 'healthy',
       responseTime: Math.floor(Math.random() * 100) + 50,
-      lastCheck: new Date()
+      lastCheck: new Date(),
     };
   }
 

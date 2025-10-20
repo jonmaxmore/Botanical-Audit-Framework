@@ -144,7 +144,7 @@ class NotificationRoutes {
           .query('groupBy')
           .optional()
           .isIn(['hour', 'day', 'week', 'month'])
-          .withMessage('Invalid groupBy parameter')
+          .withMessage('Invalid groupBy parameter'),
       ],
       controller.getStatistics.bind(controller)
     );
@@ -166,7 +166,7 @@ class NotificationRoutes {
         require('express-validator')
           .body('channels')
           .isObject()
-          .withMessage('Channels configuration is required')
+          .withMessage('Channels configuration is required'),
       ],
       controller.testNotification.bind(controller)
     );
@@ -207,7 +207,7 @@ class NotificationRoutes {
           .body('notificationTypes')
           .optional()
           .isArray()
-          .withMessage('notificationTypes must be an array')
+          .withMessage('notificationTypes must be an array'),
       ],
       this._updateUserPreferences.bind(this)
     );
@@ -228,7 +228,7 @@ class NotificationRoutes {
         success: false,
         error: 'NOTIFICATION_RATE_LIMIT',
         message: 'Too many notification requests, please try again later',
-        retryAfter: 15 * 60
+        retryAfter: 15 * 60,
       },
       standardHeaders: true,
       legacyHeaders: false,
@@ -247,9 +247,9 @@ class NotificationRoutes {
           success: false,
           error: 'NOTIFICATION_RATE_LIMIT',
           message: 'Too many notification requests, please try again later',
-          retryAfter: 15 * 60
+          retryAfter: 15 * 60,
         });
-      }
+      },
     });
   }
 
@@ -265,7 +265,7 @@ class NotificationRoutes {
         success: false,
         error: 'BULK_RATE_LIMIT',
         message: 'Bulk notification limit exceeded, please try again later',
-        retryAfter: 60 * 60
+        retryAfter: 60 * 60,
       },
       keyGenerator: req => {
         return req.userId || req.ip;
@@ -278,9 +278,9 @@ class NotificationRoutes {
           success: false,
           error: 'BULK_RATE_LIMIT',
           message: 'Bulk notification limit exceeded, please try again later',
-          retryAfter: 60 * 60
+          retryAfter: 60 * 60,
         });
-      }
+      },
     });
   }
 
@@ -295,11 +295,11 @@ class NotificationRoutes {
       message: {
         success: false,
         error: 'GENERAL_RATE_LIMIT',
-        message: 'Too many requests, please try again later'
+        message: 'Too many requests, please try again later',
       },
       keyGenerator: req => {
         return req.userId || req.ip;
-      }
+      },
     });
   }
 
@@ -315,14 +315,14 @@ class NotificationRoutes {
 
       res.status(statusCode).json({
         success: health.status === 'healthy',
-        data: health
+        data: health,
       });
     } catch (error) {
       console.error('[NotificationRoutes] Health check error:', error);
       res.status(503).json({
         success: false,
         error: 'HEALTH_CHECK_ERROR',
-        message: 'Error checking service health'
+        message: 'Error checking service health',
       });
     }
   }
@@ -343,7 +343,7 @@ class NotificationRoutes {
         return res.status(400).json({
           success: false,
           error: 'INVALID_EVENT',
-          message: 'Invalid tracking event type'
+          message: 'Invalid tracking event type',
         });
       }
 
@@ -351,14 +351,14 @@ class NotificationRoutes {
       const notification =
         await this.notificationController.notificationService.notificationRepository.findOne({
           notificationId,
-          recipientId: userId
+          recipientId: userId,
         });
 
       if (!notification) {
         return res.status(404).json({
           success: false,
           error: 'NOTIFICATION_NOT_FOUND',
-          message: 'Notification not found or access denied'
+          message: 'Notification not found or access denied',
         });
       }
 
@@ -372,14 +372,14 @@ class NotificationRoutes {
 
       res.status(200).json({
         success: true,
-        message: 'Event tracked successfully'
+        message: 'Event tracked successfully',
       });
     } catch (error) {
       console.error('[NotificationRoutes] Event tracking error:', error);
       res.status(500).json({
         success: false,
         error: 'TRACKING_ERROR',
-        message: 'Error tracking event'
+        message: 'Error tracking event',
       });
     }
   }
@@ -400,7 +400,7 @@ class NotificationRoutes {
         return res.status(404).json({
           success: false,
           error: 'USER_NOT_FOUND',
-          message: 'User not found'
+          message: 'User not found',
         });
       }
 
@@ -413,27 +413,27 @@ class NotificationRoutes {
           PAYMENT_ALERTS: true,
           INSPECTION_NOTICES: true,
           SYSTEM_MESSAGES: true,
-          MARKETING: false
+          MARKETING: false,
         },
         quietHours: {
           enabled: false,
           startTime: '22:00',
-          endTime: '08:00'
+          endTime: '08:00',
         },
         language: 'th',
-        timezone: 'Asia/Bangkok'
+        timezone: 'Asia/Bangkok',
       };
 
       res.status(200).json({
         success: true,
-        data: { preferences }
+        data: { preferences },
       });
     } catch (error) {
       console.error('[NotificationRoutes] Get preferences error:', error);
       res.status(500).json({
         success: false,
         error: 'PREFERENCES_ERROR',
-        message: 'Error retrieving notification preferences'
+        message: 'Error retrieving notification preferences',
       });
     }
   }
@@ -454,8 +454,8 @@ class NotificationRoutes {
           {
             $set: {
               notificationPreferences: preferences,
-              updatedAt: new Date()
-            }
+              updatedAt: new Date(),
+            },
           },
           { new: true }
         );
@@ -464,7 +464,7 @@ class NotificationRoutes {
         return res.status(404).json({
           success: false,
           error: 'USER_NOT_FOUND',
-          message: 'User not found'
+          message: 'User not found',
         });
       }
 
@@ -474,7 +474,7 @@ class NotificationRoutes {
           type: 'NOTIFICATION_PREFERENCES_UPDATED',
           userId,
           preferences,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
@@ -482,15 +482,15 @@ class NotificationRoutes {
         success: true,
         message: 'Notification preferences updated successfully',
         data: {
-          preferences: updatedUser.notificationPreferences
-        }
+          preferences: updatedUser.notificationPreferences,
+        },
       });
     } catch (error) {
       console.error('[NotificationRoutes] Update preferences error:', error);
       res.status(500).json({
         success: false,
         error: 'UPDATE_PREFERENCES_ERROR',
-        message: 'Error updating notification preferences'
+        message: 'Error updating notification preferences',
       });
     }
   }
@@ -509,7 +509,7 @@ class NotificationRoutes {
       url: req.url,
       method: req.method,
       userId: req.userId,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     console.error('[NotificationRoutes] Error details:', errorDetails);
@@ -520,7 +520,7 @@ class NotificationRoutes {
         success: false,
         error: 'VALIDATION_ERROR',
         message: 'Input validation failed',
-        details: error.errors
+        details: error.errors,
       });
     }
 
@@ -528,7 +528,7 @@ class NotificationRoutes {
       return res.status(400).json({
         success: false,
         error: 'INVALID_ID',
-        message: 'Invalid ID format'
+        message: 'Invalid ID format',
       });
     }
 
@@ -536,7 +536,7 @@ class NotificationRoutes {
       return res.status(409).json({
         success: false,
         error: 'DUPLICATE_ENTRY',
-        message: 'Duplicate entry detected'
+        message: 'Duplicate entry detected',
       });
     }
 
@@ -545,7 +545,7 @@ class NotificationRoutes {
       success: false,
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred',
-      requestId: req.id || 'unknown'
+      requestId: req.id || 'unknown',
     });
   }
 
@@ -569,105 +569,105 @@ class NotificationRoutes {
           path: '/',
           description: 'Get user notifications',
           authentication: 'required',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'POST',
           path: '/send',
           description: 'Send individual notification',
           authentication: 'required',
-          rateLimit: 'notification'
+          rateLimit: 'notification',
         },
         {
           method: 'POST',
           path: '/bulk',
           description: 'Send bulk notifications',
           authentication: 'admin',
-          rateLimit: 'bulk'
+          rateLimit: 'bulk',
         },
         {
           method: 'PUT',
           path: '/:notificationId/read',
           description: 'Mark notification as read',
           authentication: 'required',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'PUT',
           path: '/:notificationId/dismiss',
           description: 'Dismiss notification',
           authentication: 'required',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'DELETE',
           path: '/:notificationId',
           description: 'Delete notification',
           authentication: 'admin',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'GET',
           path: '/templates',
           description: 'Get notification templates',
           authentication: 'required',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'GET',
           path: '/stats',
           description: 'Get notification statistics',
           authentication: 'admin/reviewer',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'POST',
           path: '/test',
           description: 'Test notification delivery',
           authentication: 'admin',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'GET',
           path: '/health',
           description: 'Service health check',
           authentication: 'none',
-          rateLimit: 'none'
+          rateLimit: 'none',
         },
         {
           method: 'POST',
           path: '/:notificationId/track/:event',
           description: 'Track notification events',
           authentication: 'required',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'GET',
           path: '/preferences',
           description: 'Get user notification preferences',
           authentication: 'required',
-          rateLimit: 'general'
+          rateLimit: 'general',
         },
         {
           method: 'PUT',
           path: '/preferences',
           description: 'Update user notification preferences',
           authentication: 'required',
-          rateLimit: 'general'
-        }
+          rateLimit: 'general',
+        },
       ],
       rateLimits: {
         notification: '50 requests per 15 minutes',
         bulk: '5 requests per hour',
-        general: '200 requests per 5 minutes'
+        general: '200 requests per 5 minutes',
       },
       security: {
         authentication: 'JWT Bearer token',
         authorization: 'Role-based access control',
         inputValidation: 'express-validator',
         rateLimiting: 'express-rate-limit',
-        spamPrevention: 'Enabled'
-      }
+        spamPrevention: 'Enabled',
+      },
     };
   }
 }

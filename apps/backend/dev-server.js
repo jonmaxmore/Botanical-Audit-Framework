@@ -39,12 +39,12 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ['\'self\''],
-        scriptSrc: ['\'self\'', '\'unsafe-inline\''],
-        styleSrc: ['\'self\'', '\'unsafe-inline\''],
-        imgSrc: ['\'self\'', 'data:', 'https:']
-      }
-    }
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
+    },
   })
 );
 
@@ -54,7 +54,7 @@ app.use(
     origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3005'],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   })
 );
 
@@ -82,7 +82,7 @@ const authenticateToken = (req, res, next) => {
     req.user = {
       id: 'user001',
       email: 'farmer@example.com',
-      role: 'farmer'
+      role: 'farmer',
     };
     next();
   } else {
@@ -91,7 +91,7 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Health check endpoint
-app.get('/health', async(req, res) => {
+app.get('/health', async (req, res) => {
   const health = {
     status: 'OK',
     timestamp: new Date().toISOString(),
@@ -102,8 +102,8 @@ app.get('/health', async(req, res) => {
       type: 'mock',
       status: 'connected',
       collections: await mockDb.listCollections(),
-      stats: await mockDb.stats()
-    }
+      stats: await mockDb.stats(),
+    },
   };
 
   res.json(health);
@@ -120,9 +120,9 @@ app.get('/', (req, res) => {
       health: '/health - System health check',
       auth: '/api/auth - Authentication endpoints',
       applications: '/api/applications - Application management',
-      dashboard: '/api/dashboard - Dashboard data'
+      dashboard: '/api/dashboard - Dashboard data',
     },
-    message: 'Development server ready! Frontend: http://localhost:3001'
+    message: 'Development server ready! Frontend: http://localhost:3001',
   });
 });
 
@@ -139,13 +139,13 @@ app.get('/api', (req, res) => {
       'GET /api/applications': 'List applications',
       'POST /api/applications': 'Create application',
       'GET /api/applications/:id': 'Get application details',
-      'GET /api/dashboard/stats': 'Dashboard statistics'
-    }
+      'GET /api/dashboard/stats': 'Dashboard statistics',
+    },
   });
 });
 
 // Mock Authentication Routes
-app.post('/api/auth/login', async(req, res) => {
+app.post('/api/auth/login', async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -162,20 +162,20 @@ app.post('/api/auth/login', async(req, res) => {
           id: user._id,
           email: user.email,
           name: user.name,
-          role: user.role
-        }
+          role: user.role,
+        },
       });
     } else {
       res.status(401).json({
         success: false,
-        message: 'Invalid credentials'
+        message: 'Invalid credentials',
       });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Login failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -183,12 +183,12 @@ app.post('/api/auth/login', async(req, res) => {
 app.get('/api/auth/me', authenticateToken, (req, res) => {
   res.json({
     success: true,
-    user: req.user
+    user: req.user,
   });
 });
 
 // Mock Applications Routes
-app.get('/api/applications', authenticateToken, async(req, res) => {
+app.get('/api/applications', authenticateToken, async (req, res) => {
   try {
     const applications = await mockDb.collection('applications');
     const docs = await applications.find({});
@@ -198,18 +198,18 @@ app.get('/api/applications', authenticateToken, async(req, res) => {
       success: true,
       data: results,
       total: results.length,
-      message: 'Applications retrieved successfully'
+      message: 'Applications retrieved successfully',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve applications',
-      error: error.message
+      error: error.message,
     });
   }
 });
 
-app.post('/api/applications', authenticateToken, async(req, res) => {
+app.post('/api/applications', authenticateToken, async (req, res) => {
   try {
     const applications = await mockDb.collection('applications');
     const newApplication = {
@@ -218,7 +218,7 @@ app.post('/api/applications', authenticateToken, async(req, res) => {
       status: 'draft',
       applicationNumber: `GACP${Date.now()}`,
       createdAt: new Date(),
-      submittedAt: null
+      submittedAt: null,
     };
 
     const result = await applications.insertOne(newApplication);
@@ -226,18 +226,18 @@ app.post('/api/applications', authenticateToken, async(req, res) => {
     res.status(201).json({
       success: true,
       data: { ...newApplication, _id: result.insertedId },
-      message: 'Application created successfully'
+      message: 'Application created successfully',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to create application',
-      error: error.message
+      error: error.message,
     });
   }
 });
 
-app.get('/api/applications/:id', authenticateToken, async(req, res) => {
+app.get('/api/applications/:id', authenticateToken, async (req, res) => {
   try {
     const applications = await mockDb.collection('applications');
     const application = await applications.findOne({ _id: req.params.id });
@@ -245,25 +245,25 @@ app.get('/api/applications/:id', authenticateToken, async(req, res) => {
     if (application) {
       res.json({
         success: true,
-        data: application
+        data: application,
       });
     } else {
       res.status(404).json({
         success: false,
-        message: 'Application not found'
+        message: 'Application not found',
       });
     }
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve application',
-      error: error.message
+      error: error.message,
     });
   }
 });
 
 // Mock Dashboard Routes
-app.get('/api/dashboard/stats', authenticateToken, async(req, res) => {
+app.get('/api/dashboard/stats', authenticateToken, async (req, res) => {
   try {
     const stats = await mockDb.stats();
 
@@ -278,27 +278,27 @@ app.get('/api/dashboard/stats', authenticateToken, async(req, res) => {
           {
             type: 'application_submitted',
             message: 'New application submitted',
-            timestamp: new Date()
+            timestamp: new Date(),
           },
           {
             type: 'inspection_scheduled',
             message: 'Inspection scheduled',
-            timestamp: new Date(Date.now() - 60000)
-          }
-        ]
-      }
+            timestamp: new Date(Date.now() - 60000),
+          },
+        ],
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve dashboard stats',
-      error: error.message
+      error: error.message,
     });
   }
 });
 
 // Mock Certificates Routes
-app.get('/api/certificates', authenticateToken, async(req, res) => {
+app.get('/api/certificates', authenticateToken, async (req, res) => {
   try {
     const certificates = await mockDb.collection('certificates');
     const docs = await certificates.find({});
@@ -307,13 +307,13 @@ app.get('/api/certificates', authenticateToken, async(req, res) => {
     res.json({
       success: true,
       data: results,
-      total: results.length
+      total: results.length,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve certificates',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -324,7 +324,7 @@ app.use((req, res) => {
     success: false,
     message: 'Route not found',
     path: req.originalUrl,
-    method: req.method
+    method: req.method,
   });
 });
 
@@ -333,7 +333,7 @@ app.use((err, req, res, next) => {
   res.status(500).json({
     success: false,
     message: 'Internal server error',
-    error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong',
   });
 });
 
@@ -344,7 +344,7 @@ app.listen(port, () => {
   console.log(`📋 API Documentation: http://localhost:${port}/api`);
   console.log(`❤️  Health Check: http://localhost:${port}/health`);
   console.log('📊 Database: Mock Database (In-Memory)');
-  console.log('🔑 Dev Token: \'dev_token\' for authentication');
+  console.log("🔑 Dev Token: 'dev_token' for authentication");
   console.log('');
   console.log('Ready for frontend development! 🚀');
 });

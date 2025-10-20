@@ -35,7 +35,7 @@ class EnrollmentRepository {
       assessmentRetryLimit: 3,
       enrollmentExpiryDays: 90,
       auditTrailEnabled: true,
-      analyticsEnabled: true
+      analyticsEnabled: true,
     };
   }
 
@@ -83,13 +83,13 @@ class EnrollmentRepository {
             studySessionCount: 0,
             averageSessionDuration: 0,
             lastActivityDate: null,
-            engagementScore: 0
+            engagementScore: 0,
           },
           analyticsData: {
             enrollmentSource: enrollmentData.source || 'DIRECT',
             deviceInfo: enrollmentData.deviceInfo || {},
-            referralCode: enrollmentData.referralCode || null
-          }
+            referralCode: enrollmentData.referralCode || null,
+          },
         },
         auditTrail: [
           {
@@ -99,10 +99,10 @@ class EnrollmentRepository {
             details: 'New enrollment created',
             metadata: {
               courseId: enrollmentData.courseId,
-              enrollmentMethod: enrollmentData.enrollmentMethod || 'SELF_ENROLLMENT'
-            }
-          }
-        ]
+              enrollmentMethod: enrollmentData.enrollmentMethod || 'SELF_ENROLLMENT',
+            },
+          },
+        ],
       };
 
       // Insert enrollment with transaction for consistency
@@ -177,7 +177,7 @@ class EnrollmentRepository {
         page = 1,
         limit = 20,
         sortBy = 'createdAt',
-        sortOrder = -1
+        sortOrder = -1,
       } = options;
 
       const collection = this.db.collection(this.collectionName);
@@ -186,7 +186,7 @@ class EnrollmentRepository {
       const query = this.buildEnrollmentQuery({
         farmerId,
         courseId,
-        status
+        status,
       });
 
       // Execute paginated query
@@ -225,12 +225,12 @@ class EnrollmentRepository {
           totalCount,
           totalPages: Math.ceil(totalCount / limit),
           hasNextPage: page < Math.ceil(totalCount / limit),
-          hasPreviousPage: page > 1
+          hasPreviousPage: page > 1,
         },
         summary: {
           totalEnrollments: totalCount,
-          byStatus: await this.getEnrollmentStatusSummary(query)
-        }
+          byStatus: await this.getEnrollmentStatusSummary(query),
+        },
       };
     } catch (error) {
       this.logger.error('[EnrollmentRepository] Find all failed:', error);
@@ -260,7 +260,7 @@ class EnrollmentRepository {
       const update = {
         ...updateData,
         updatedAt: new Date(),
-        version: (currentEnrollment.version || 1) + 1
+        version: (currentEnrollment.version || 1) + 1,
       };
 
       // Update business metadata if needed
@@ -271,8 +271,8 @@ class EnrollmentRepository {
             ...currentEnrollment.businessMetadata?.performanceTracking,
             lastActivityDate: new Date(),
             studySessionCount:
-              (currentEnrollment.businessMetadata?.performanceTracking?.studySessionCount || 0) + 1
-          }
+              (currentEnrollment.businessMetadata?.performanceTracking?.studySessionCount || 0) + 1,
+          },
         };
       }
 
@@ -286,8 +286,8 @@ class EnrollmentRepository {
           metadata: {
             previousStatus: currentEnrollment.status,
             newStatus: updateData.status,
-            progressChange: updateData.progress ? true : false
-          }
+            progressChange: updateData.progress ? true : false,
+          },
         };
 
         update.$push = { auditTrail: auditEntry };
@@ -366,9 +366,9 @@ class EnrollmentRepository {
             totalTimeSpent: progressData.timeSpent
               ? (enrollment.businessMetadata?.performanceTracking?.totalTimeSpent || 0) +
                 progressData.timeSpent
-              : enrollment.businessMetadata?.performanceTracking?.totalTimeSpent || 0
-          }
-        }
+              : enrollment.businessMetadata?.performanceTracking?.totalTimeSpent || 0,
+          },
+        },
       };
 
       // Add milestone achievements to audit trail
@@ -379,8 +379,8 @@ class EnrollmentRepository {
             timestamp: new Date(),
             userId: enrollment.farmerId,
             details: `Milestones achieved: ${milestones.join(', ')}`,
-            metadata: { milestones, progressPercentage: updatedProgress.progressPercentage }
-          }
+            metadata: { milestones, progressPercentage: updatedProgress.progressPercentage },
+          },
         };
       }
 
@@ -435,7 +435,7 @@ class EnrollmentRepository {
         assessments: assessments,
         finalScore: bestScore,
         lastAssessmentAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       // Check if this assessment qualifies for completion
@@ -480,19 +480,19 @@ class EnrollmentRepository {
               _id: null,
               totalEnrollments: { $sum: 1 },
               completedEnrollments: {
-                $sum: { $cond: [{ $eq: ['$status', 'COMPLETED'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'COMPLETED'] }, 1, 0] },
               },
               activeEnrollments: {
-                $sum: { $cond: [{ $eq: ['$status', 'ACTIVE'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'ACTIVE'] }, 1, 0] },
               },
               failedEnrollments: {
-                $sum: { $cond: [{ $eq: ['$status', 'FAILED'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'FAILED'] }, 1, 0] },
               },
               averageFinalScore: { $avg: '$finalScore' },
               averageProgress: { $avg: '$progress.progressPercentage' },
-              totalStudyTime: { $sum: '$progress.totalTimeSpentMinutes' }
-            }
-          }
+              totalStudyTime: { $sum: '$progress.totalTimeSpentMinutes' },
+            },
+          },
         ])
         .toArray();
 
@@ -503,7 +503,7 @@ class EnrollmentRepository {
         failedEnrollments: 0,
         averageFinalScore: 0,
         averageProgress: 0,
-        totalStudyTime: 0
+        totalStudyTime: 0,
       };
 
       // Calculate derived metrics
@@ -570,7 +570,7 @@ class EnrollmentRepository {
         { _id: this.objectId(courseId) },
         {
           $inc: { 'businessMetadata.enrollmentCount': increment },
-          $set: { 'businessMetadata.lastAnalyticsUpdate': new Date() }
+          $set: { 'businessMetadata.lastAnalyticsUpdate': new Date() },
         }
       );
     } catch (error) {
@@ -596,7 +596,7 @@ class EnrollmentRepository {
     return {
       riskLevel: 'LOW',
       factors: [],
-      confidence: 0.8
+      confidence: 0.8,
     };
   }
 
@@ -629,7 +629,7 @@ class EnrollmentRepository {
     enrollment.progressInsights = {
       currentPhase: this.determineCurrentPhase(enrollment.progress),
       nextMilestone: this.getNextMilestone(enrollment.progress),
-      estimatedCompletion: this.estimateCompletionDate(enrollment)
+      estimatedCompletion: this.estimateCompletionDate(enrollment),
     };
   }
 
@@ -641,7 +641,7 @@ class EnrollmentRepository {
     enrollment.analytics = {
       performanceRank: 'TOP_25_PERCENT', // Would calculate actual rank
       averageSessionTime: 45, // Would calculate from actual data
-      learningVelocity: 'FAST' // Would analyze learning speed
+      learningVelocity: 'FAST', // Would analyze learning speed
     };
   }
 
@@ -654,7 +654,7 @@ class EnrollmentRepository {
     return await collection.findOne({
       farmerId: farmerId,
       courseId: courseId,
-      status: Enrollment.STATUS.ACTIVE
+      status: Enrollment.STATUS.ACTIVE,
     });
   }
 
@@ -662,7 +662,7 @@ class EnrollmentRepository {
     const collection = this.db.collection(this.collectionName);
     return await collection.countDocuments({
       farmerId: farmerId,
-      status: Enrollment.STATUS.ACTIVE
+      status: Enrollment.STATUS.ACTIVE,
     });
   }
 
@@ -674,7 +674,7 @@ class EnrollmentRepository {
       progressPercentage: Math.min(
         100,
         newProgressData.progressPercentage || currentProgress.progressPercentage || 0
-      )
+      ),
     };
   }
 
@@ -708,7 +708,7 @@ class EnrollmentRepository {
     return {
       id: enrollmentDoc._id.toString(),
       ...enrollmentDoc,
-      _id: undefined
+      _id: undefined,
     };
   }
 

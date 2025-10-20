@@ -29,12 +29,12 @@ class BaseModel {
         createdAt: {
           type: Date,
           default: Date.now,
-          index: true
+          index: true,
         },
         updatedAt: {
           type: Date,
-          default: Date.now
-        }
+          default: Date.now,
+        },
       });
     }
 
@@ -44,12 +44,12 @@ class BaseModel {
         isDeleted: {
           type: Boolean,
           default: false,
-          index: true
+          index: true,
         },
         deletedAt: {
           type: Date,
-          default: null
-        }
+          default: null,
+        },
       });
     }
 
@@ -58,8 +58,8 @@ class BaseModel {
       this.schema.add({
         version: {
           type: Number,
-          default: 0
-        }
+          default: 0,
+        },
       });
     }
   }
@@ -69,7 +69,7 @@ class BaseModel {
    */
   addCommonMethods() {
     // Update timestamp before save
-    this.schema.pre('save', function(next) {
+    this.schema.pre('save', function (next) {
       this.updatedAt = new Date();
       if (this.isModified() && !this.isNew) {
         this.version += 1;
@@ -78,21 +78,21 @@ class BaseModel {
     });
 
     // Soft delete method
-    this.schema.methods.softDelete = function() {
+    this.schema.methods.softDelete = function () {
       this.isDeleted = true;
       this.deletedAt = new Date();
       return this.save();
     };
 
     // Restore method
-    this.schema.methods.restore = function() {
+    this.schema.methods.restore = function () {
       this.isDeleted = false;
       this.deletedAt = null;
       return this.save();
     };
 
     // To JSON transform
-    this.schema.methods.toJSON = function() {
+    this.schema.methods.toJSON = function () {
       const obj = this.toObject();
       delete obj.__v;
       delete obj.isDeleted;
@@ -101,7 +101,7 @@ class BaseModel {
     };
 
     // Get safe object (remove sensitive fields)
-    this.schema.methods.getSafeObject = function(fieldsToRemove = []) {
+    this.schema.methods.getSafeObject = function (fieldsToRemove = []) {
       const obj = this.toObject();
       const defaultRemove = ['__v', 'isDeleted', 'deletedAt', 'password'];
       const toRemove = [...defaultRemove, ...fieldsToRemove];
@@ -119,38 +119,38 @@ class BaseModel {
    */
   addCommonStatics() {
     // Find active (non-deleted) documents
-    this.schema.statics.findActive = function(filter = {}) {
+    this.schema.statics.findActive = function (filter = {}) {
       return this.find({ ...filter, isDeleted: false });
     };
 
     // Find one active document
-    this.schema.statics.findOneActive = function(filter = {}) {
+    this.schema.statics.findOneActive = function (filter = {}) {
       return this.findOne({ ...filter, isDeleted: false });
     };
 
     // Find by ID active
-    this.schema.statics.findByIdActive = function(id) {
+    this.schema.statics.findByIdActive = function (id) {
       return this.findOne({ _id: id, isDeleted: false });
     };
 
     // Soft delete by ID
-    this.schema.statics.softDeleteById = function(id) {
+    this.schema.statics.softDeleteById = function (id) {
       return this.findByIdAndUpdate(id, {
         isDeleted: true,
-        deletedAt: new Date()
+        deletedAt: new Date(),
       });
     };
 
     // Bulk soft delete
-    this.schema.statics.softDeleteMany = function(filter = {}) {
+    this.schema.statics.softDeleteMany = function (filter = {}) {
       return this.updateMany(filter, {
         isDeleted: true,
-        deletedAt: new Date()
+        deletedAt: new Date(),
       });
     };
 
     // Create with validation
-    this.schema.statics.createSafe = async function(data) {
+    this.schema.statics.createSafe = async function (data) {
       try {
         const document = new this(data);
         await document.validate();
@@ -164,7 +164,7 @@ class BaseModel {
     };
 
     // Update with validation
-    this.schema.statics.updateSafe = async function(id, data, options = {}) {
+    this.schema.statics.updateSafe = async function (id, data, options = {}) {
       try {
         const document = await this.findByIdActive(id);
         if (!document) {
@@ -183,13 +183,13 @@ class BaseModel {
     };
 
     // Paginated find
-    this.schema.statics.findPaginated = async function(filter = {}, options = {}) {
+    this.schema.statics.findPaginated = async function (filter = {}, options = {}) {
       const {
         page = 1,
         limit = 10,
         sort = { createdAt: -1 },
         populate = null,
-        select = null
+        select = null,
       } = options;
 
       const skip = (page - 1) * limit;
@@ -207,7 +207,7 @@ class BaseModel {
 
       const [documents, total] = await Promise.all([
         query.exec(),
-        this.countDocuments(activeFilter)
+        this.countDocuments(activeFilter),
       ]);
 
       return {
@@ -218,27 +218,27 @@ class BaseModel {
           total,
           pages: Math.ceil(total / limit),
           hasNext: page * limit < total,
-          hasPrev: page > 1
-        }
+          hasPrev: page > 1,
+        },
       };
     };
 
     // Search with text index
-    this.schema.statics.search = function(searchTerm, filter = {}, options = {}) {
+    this.schema.statics.search = function (searchTerm, filter = {}, options = {}) {
       const searchFilter = {
         ...filter,
         isDeleted: false,
-        $text: { $search: searchTerm }
+        $text: { $search: searchTerm },
       };
 
       return this.findPaginated(searchFilter, {
         ...options,
-        sort: { score: { $meta: 'textScore' }, ...options.sort }
+        sort: { score: { $meta: 'textScore' }, ...options.sort },
       });
     };
 
     // Aggregate with common pipeline stages
-    this.schema.statics.aggregateActive = function(pipeline = []) {
+    this.schema.statics.aggregateActive = function (pipeline = []) {
       const basePipeline = [{ $match: { isDeleted: false } }, ...pipeline];
 
       return this.aggregate(basePipeline);
@@ -250,7 +250,14 @@ class BaseModel {
    */
   createModel() {
     try {
-      this.model = mongoose.model(this.modelName, this.schema);
+      // Check if model already exists to prevent overwrite error
+      try {
+        this.model = mongoose.model(this.modelName);
+        logger.warn(`Model ${this.modelName} already exists, reusing existing model`);
+      } catch (err) {
+        // Model doesn't exist yet, create it
+        this.model = mongoose.model(this.modelName, this.schema);
+      }
     } catch (error) {
       logger.error(`Failed to create model ${this.modelName}:`, error);
       throw new DatabaseError(`Model creation failed: ${this.modelName}`);
@@ -303,7 +310,7 @@ class BaseModel {
         count: stats.count,
         size: stats.size,
         avgObjSize: stats.avgObjSize,
-        indexes: stats.nindexes
+        indexes: stats.nindexes,
       };
     } catch (error) {
       logger.error(`Failed to get stats for ${this.modelName}:`, error);

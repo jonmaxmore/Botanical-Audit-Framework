@@ -42,7 +42,7 @@ async function initializeSurveySystem({ db, authenticateToken }) {
 
     return {
       router: protectedRouter,
-      service: surveyService
+      service: surveyService,
     };
   } catch (error) {
     logger.error('[SurveySystem] Initialization failed:', error);
@@ -70,7 +70,7 @@ const config = {
     4: { name: 'managementProduction', title: 'Management & Production', required: true },
     5: { name: 'costRevenue', title: 'Cost & Revenue', required: true },
     6: { name: 'marketSales', title: 'Market & Sales', required: true },
-    7: { name: 'problemsNeeds', title: 'Problems & Needs', required: true }
+    7: { name: 'problemsNeeds', title: 'Problems & Needs', required: true },
   },
 
   // Scoring configuration
@@ -81,25 +81,25 @@ const config = {
         certification: 25,
         organicPractices: 15,
         sops: 20,
-        qualityControl: 15
-      }
+        qualityControl: 15,
+      },
     },
     sustainability: {
       max: 100,
       weights: {
         waterConservation: 20,
         organicFertilizer: 15,
-        environmentalConcern: 15
-      }
+        environmentalConcern: 15,
+      },
     },
     market: {
       max: 100,
       weights: {
         marketAccess: 20,
         directToConsumer: 15,
-        exportMarket: 10
-      }
-    }
+        exportMarket: 10,
+      },
+    },
   },
 
   // Regional bonus configuration
@@ -107,23 +107,23 @@ const config = {
     northern: {
       condition: 'sustainability >= 60',
       points: 10,
-      reason: 'Mountain region sustainability excellence'
+      reason: 'Mountain region sustainability excellence',
     },
     central: {
       condition: 'market >= 60',
       points: 10,
-      reason: 'Central region market access excellence'
+      reason: 'Central region market access excellence',
     },
     southern: {
       condition: 'gacp >= 60',
       points: 10,
-      reason: 'Southern region GACP compliance excellence'
+      reason: 'Southern region GACP compliance excellence',
     },
     northeastern: {
       condition: 'sustainability >= 60',
       points: 10,
-      reason: 'Northeastern region organic practices excellence'
-    }
+      reason: 'Northeastern region organic practices excellence',
+    },
   },
 
   // API endpoints
@@ -140,11 +140,11 @@ const config = {
     deleteSurvey: 'DELETE /api/surveys/:surveyId',
     regionalAnalytics: 'GET /api/surveys/analytics/regional/:region',
     compareRegions: 'POST /api/surveys/analytics/compare',
-    statistics: 'GET /api/surveys/statistics'
-  }
+    statistics: 'GET /api/surveys/statistics',
+  },
 };
 
 module.exports = {
   initializeSurveySystem,
-  config
+  config,
 };

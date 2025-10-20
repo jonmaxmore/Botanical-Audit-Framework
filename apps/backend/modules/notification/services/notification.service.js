@@ -31,106 +31,106 @@ class NotificationService {
         message: 'คำขอรับรองมาตรฐาน GACP ของคุณได้รับการส่งเรียบร้อยแล้ว',
         recipients: ['applicant'],
         priority: 'medium',
-        channels: ['inapp', 'email']
+        channels: ['inapp', 'email'],
       },
       'application.under_review': {
         title: 'คำขออยู่ระหว่างการตรวจสอบ',
         message: 'คำขอของคุณกำลังได้รับการตรวจสอบโดยเจ้าหน้าที่',
         recipients: ['applicant'],
         priority: 'medium',
-        channels: ['inapp', 'email']
+        channels: ['inapp', 'email'],
       },
       'application.approved': {
         title: 'คำขอได้รับการอนุมัติ',
         message: 'ยินดีด้วย! คำขอรับรองมาตรฐาน GACP ของคุณได้รับการอนุมัติแล้ว',
         recipients: ['applicant'],
         priority: 'high',
-        channels: ['inapp', 'email', 'line']
+        channels: ['inapp', 'email', 'line'],
       },
       'application.rejected': {
         title: 'คำขอไม่ได้รับการอนุมัติ',
         message: 'คำขอของคุณไม่ได้รับการอนุมัติ กรุณาตรวจสอบเหตุผลและแก้ไข',
         recipients: ['applicant'],
         priority: 'high',
-        channels: ['inapp', 'email', 'line']
+        channels: ['inapp', 'email', 'line'],
       },
       'certificate.issued': {
         title: 'ออกใบรับรองแล้ว',
         message: 'ใบรับรองมาตรฐาน GACP ของคุณได้รับการออกแล้ว',
         recipients: ['applicant'],
         priority: 'high',
-        channels: ['inapp', 'email', 'line']
+        channels: ['inapp', 'email', 'line'],
       },
       'certificate.expiring': {
         title: 'ใบรับรองใกล้หมดอายุ',
         message: 'ใบรับรองของคุณจะหมดอายุในอีก {days} วัน กรุณาดำเนินการต่ออายุ',
         recipients: ['applicant'],
         priority: 'high',
-        channels: ['inapp', 'email', 'line', 'sms']
+        channels: ['inapp', 'email', 'line', 'sms'],
       },
       'certificate.renewed': {
         title: 'ต่ออายุใบรับรองแล้ว',
         message: 'ใบรับรองของคุณได้รับการต่ออายุเรียบร้อยแล้ว',
         recipients: ['applicant'],
         priority: 'medium',
-        channels: ['inapp', 'email']
+        channels: ['inapp', 'email'],
       },
       'certificate.revoked': {
         title: 'ใบรับรองถูกเพิกถอน',
         message: 'ใบรับรองของคุณถูกเพิกถอน: {reason}',
         recipients: ['applicant'],
         priority: 'urgent',
-        channels: ['inapp', 'email', 'line', 'sms']
+        channels: ['inapp', 'email', 'line', 'sms'],
       },
       'survey.assigned': {
         title: 'ได้รับมอบหมายการสำรวจ',
         message: 'คุณได้รับมอบหมายให้ทำแบบสำรวจใหม่',
         recipients: ['surveyor'],
         priority: 'medium',
-        channels: ['inapp', 'email']
+        channels: ['inapp', 'email'],
       },
       'survey.reminder': {
         title: 'แจ้งเตือนทำแบบสำรวจ',
         message: 'คุณยังมีแบบสำรวจที่รอการทำให้เสร็จสิ้น',
         recipients: ['surveyor'],
         priority: 'medium',
-        channels: ['inapp', 'line']
+        channels: ['inapp', 'line'],
       },
       'payment.required': {
         title: 'รอการชำระเงิน',
         message: 'กรุณาชำระค่าธรรมเนียมการขอรับรอง จำนวน {amount} บาท',
         recipients: ['applicant'],
         priority: 'high',
-        channels: ['inapp', 'email', 'line']
+        channels: ['inapp', 'email', 'line'],
       },
       'payment.confirmed': {
         title: 'ยืนยันการชำระเงิน',
         message: 'ได้รับการชำระเงินของคุณเรียบร้อยแล้ว',
         recipients: ['applicant'],
         priority: 'medium',
-        channels: ['inapp', 'email']
+        channels: ['inapp', 'email'],
       },
       'document.uploaded': {
         title: 'อัปโหลดเอกสารแล้ว',
         message: 'เอกสาร {documentName} ได้รับการอัปโหลดเรียบร้อยแล้ว',
         recipients: ['applicant'],
         priority: 'low',
-        channels: ['inapp']
+        channels: ['inapp'],
       },
       'document.verified': {
         title: 'ตรวจสอบเอกสารแล้ว',
         message: 'เอกสารของคุณได้รับการตรวจสอบและรับรองแล้ว',
         recipients: ['applicant'],
         priority: 'medium',
-        channels: ['inapp', 'email']
+        channels: ['inapp', 'email'],
       },
       'announcement.general': {
         title: 'ประกาศทั่วไป',
         message: '{message}',
         recipients: ['all'],
         priority: 'medium',
-        channels: ['inapp']
-      }
+        channels: ['inapp'],
+      },
     };
   }
 
@@ -185,8 +185,8 @@ class NotificationService {
       secure: process.env.SMTP_SECURE === 'true',
       auth: {
         user: process.env.SMTP_USER || '',
-        pass: process.env.SMTP_PASS || ''
-      }
+        pass: process.env.SMTP_PASS || '',
+      },
     };
 
     if (config.auth.user && config.auth.pass) {
@@ -223,14 +223,14 @@ class NotificationService {
         metadata: data.metadata || {},
         isRead: false,
         createdAt: new Date(),
-        expiresAt: this.calculateExpiry(template.priority)
+        expiresAt: this.calculateExpiry(template.priority),
       };
 
       const results = {
         inapp: false,
         email: false,
         line: false,
-        sms: false
+        sms: false,
       };
 
       // Get user preferences
@@ -240,27 +240,27 @@ class NotificationService {
       for (const channel of template.channels) {
         if (this.isChannelEnabled(channel, userPrefs)) {
           switch (channel) {
-          case 'inapp':
-            results.inapp = await this.sendInAppNotification(notification);
-            break;
-          case 'email':
-            results.email = await this.sendEmailNotification(
-              data.email || data.userEmail,
-              notification
-            );
-            break;
-          case 'line':
-            results.line = await this.sendLineNotification(
-              data.lineToken || userPrefs.lineToken,
-              notification
-            );
-            break;
-          case 'sms':
-            results.sms = await this.sendSMSNotification(
-              data.phone || data.userPhone,
-              notification
-            );
-            break;
+            case 'inapp':
+              results.inapp = await this.sendInAppNotification(notification);
+              break;
+            case 'email':
+              results.email = await this.sendEmailNotification(
+                data.email || data.userEmail,
+                notification
+              );
+              break;
+            case 'line':
+              results.line = await this.sendLineNotification(
+                data.lineToken || userPrefs.lineToken,
+                notification
+              );
+              break;
+            case 'sms':
+              results.sms = await this.sendSMSNotification(
+                data.phone || data.userPhone,
+                notification
+              );
+              break;
           }
         }
       }
@@ -268,7 +268,7 @@ class NotificationService {
       return {
         success: true,
         notificationId: notification._id,
-        channels: results
+        channels: results,
       };
     } catch (error) {
       console.error('Notification failed:', error);
@@ -303,7 +303,7 @@ class NotificationService {
         to: email,
         subject: notification.title,
         text: notification.message,
-        html: this.generateEmailHTML(notification)
+        html: this.generateEmailHTML(notification),
       };
 
       await this.emailTransporter.sendMail(mailOptions);
@@ -326,13 +326,13 @@ class NotificationService {
       const response = await axios.post(
         'https://notify-api.line.me/api/notify',
         new URLSearchParams({
-          message: `${notification.title}\n${notification.message}`
+          message: `${notification.title}\n${notification.message}`,
         }),
         {
           headers: {
             Authorization: `Bearer ${lineToken}`,
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
         }
       );
 
@@ -381,7 +381,7 @@ class NotificationService {
 
     const [notifications, total] = await Promise.all([
       this.notifications.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).toArray(),
-      this.notifications.countDocuments(query)
+      this.notifications.countDocuments(query),
     ]);
 
     return {
@@ -390,8 +390,8 @@ class NotificationService {
         page,
         limit,
         total,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     };
   }
 
@@ -402,13 +402,13 @@ class NotificationService {
     const result = await this.notifications.updateOne(
       {
         _id: new ObjectId(notificationId),
-        userId
+        userId,
       },
       {
         $set: {
           isRead: true,
-          readAt: new Date()
-        }
+          readAt: new Date(),
+        },
       }
     );
 
@@ -422,13 +422,13 @@ class NotificationService {
     const result = await this.notifications.updateMany(
       {
         userId,
-        isRead: false
+        isRead: false,
       },
       {
         $set: {
           isRead: true,
-          readAt: new Date()
-        }
+          readAt: new Date(),
+        },
       }
     );
 
@@ -441,7 +441,7 @@ class NotificationService {
   async deleteNotification(notificationId, userId) {
     const result = await this.notifications.deleteOne({
       _id: new ObjectId(notificationId),
-      userId
+      userId,
     });
 
     return result.deletedCount > 0;
@@ -463,10 +463,10 @@ class NotificationService {
             recent: [
               { $sort: { createdAt: -1 } },
               { $limit: 5 },
-              { $project: { title: 1, createdAt: 1, isRead: 1 } }
-            ]
-          }
-        }
+              { $project: { title: 1, createdAt: 1, isRead: 1 } },
+            ],
+          },
+        },
       ])
       .toArray();
 
@@ -475,7 +475,7 @@ class NotificationService {
       unread: stats.unread[0]?.count || 0,
       byPriority: stats.byPriority || [],
       byEventType: stats.byEventType || [],
-      recent: stats.recent || []
+      recent: stats.recent || [],
     };
   }
 
@@ -494,7 +494,7 @@ class NotificationService {
       metadata,
       isRead: false,
       createdAt: new Date(),
-      expiresAt: this.calculateExpiry(priority)
+      expiresAt: this.calculateExpiry(priority),
     }));
 
     const result = await this.notifications.insertMany(notifications);
@@ -515,7 +515,7 @@ class NotificationService {
       targetRoles,
       priority,
       createdAt: new Date(),
-      expiresAt: this.calculateExpiry(priority)
+      expiresAt: this.calculateExpiry(priority),
     };
 
     const result = await this.notifications.insertOne(announcement);
@@ -532,8 +532,8 @@ class NotificationService {
       {
         $set: {
           ...preferences,
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       },
       { upsert: true }
     );
@@ -553,7 +553,7 @@ class NotificationService {
         email: true,
         line: false,
         sms: false,
-        lineToken: null
+        lineToken: null,
       }
     );
   }
@@ -576,7 +576,7 @@ class NotificationService {
       urgent: 7,
       high: 30,
       medium: 90,
-      low: 180
+      low: 180,
     };
 
     now.setDate(now.getDate() + (days[priority] || 90));

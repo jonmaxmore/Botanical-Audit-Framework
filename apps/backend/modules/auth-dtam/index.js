@@ -24,12 +24,12 @@ const logger = require('./services/logger');
 module.exports = {
   // Routes
   routes: {
-    dtamAuth: dtamAuthRoutes
+    dtamAuth: dtamAuthRoutes,
   },
 
   // Models
   models: {
-    DTAMStaff
+    DTAMStaff,
   },
 
   // Middleware
@@ -37,17 +37,17 @@ module.exports = {
     dtamAuth: dtamAuthMiddleware.verifyDTAMToken,
     requireDTAMRole: dtamAuthMiddleware.requireDTAMRole,
     requireDTAMAdmin: dtamAuthMiddleware.requireDTAMAdmin,
-    requireDTAMManagerOrAdmin: dtamAuthMiddleware.requireDTAMManagerOrAdmin
+    requireDTAMManagerOrAdmin: dtamAuthMiddleware.requireDTAMManagerOrAdmin,
   },
 
   // Services
   services: {
-    logger
+    logger,
   },
 
   // Convenience method to mount routes
   mountRoutes: (app, basePath = '/api/auth-dtam') => {
     app.use(basePath, dtamAuthRoutes);
     logger.info(`Auth DTAM routes mounted at ${basePath}`);
-  }
+  },
 };

@@ -90,7 +90,7 @@ class HealthCheckService {
             serverHealth,
             mongoHealth,
             authHealth,
-            dtamHealth
+            dtamHealth,
           });
         }
       }
@@ -121,14 +121,14 @@ class HealthCheckService {
               ok: res.statusCode === 200,
               status: json.status || 'unknown',
               statusCode: res.statusCode,
-              data: json
+              data: json,
             });
           } catch (e) {
             resolve({
               ok: res.statusCode === 200,
               status: res.statusCode === 200 ? 'healthy' : 'unhealthy',
               statusCode: res.statusCode,
-              data: data
+              data: data,
             });
           }
         });
@@ -138,7 +138,7 @@ class HealthCheckService {
         resolve({
           ok: false,
           status: 'error',
-          error: error.message
+          error: error.message,
         });
       });
 
@@ -147,7 +147,7 @@ class HealthCheckService {
         resolve({
           ok: false,
           status: 'timeout',
-          error: 'Request timeout'
+          error: 'Request timeout',
         });
       });
     });
@@ -177,7 +177,7 @@ class HealthCheckService {
       isRunning: this.isRunning,
       checkInterval: this.checkInterval,
       failureCount: this.failureCount,
-      maxFailures: this.maxFailures
+      maxFailures: this.maxFailures,
     };
   }
 }

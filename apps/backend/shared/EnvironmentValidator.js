@@ -18,62 +18,62 @@ class EnvironmentValidator {
       JWT_SECRET: {
         required: true,
         minLength: 32,
-        description: 'JWT signing secret for authentication tokens'
+        description: 'JWT signing secret for authentication tokens',
       },
 
       // Database Configuration
       MONGODB_URI: {
         required: true,
         pattern: /^mongodb(\+srv)?:\/\/.+/,
-        description: 'MongoDB connection string'
+        description: 'MongoDB connection string',
       },
 
       // Government API Integration
       DOA_API_URL: {
         required: true,
         pattern: /^https?:\/\/.+/,
-        description: 'Department of Agriculture API endpoint'
+        description: 'Department of Agriculture API endpoint',
       },
       DOA_CLIENT_ID: {
         required: true,
         minLength: 10,
-        description: 'DOA API client identifier'
+        description: 'DOA API client identifier',
       },
       DOA_CLIENT_SECRET: {
         required: true,
         minLength: 32,
-        description: 'DOA API client secret'
+        description: 'DOA API client secret',
       },
 
       FDA_API_URL: {
         required: true,
         pattern: /^https?:\/\/.+/,
-        description: 'Food and Drug Administration API endpoint'
+        description: 'Food and Drug Administration API endpoint',
       },
       FDA_API_KEY: {
         required: true,
         minLength: 20,
-        description: 'FDA API access key'
+        description: 'FDA API access key',
       },
       FDA_SECRET_KEY: {
         required: true,
         minLength: 32,
-        description: 'FDA API secret key'
+        description: 'FDA API secret key',
       },
 
       DGA_API_URL: {
         required: true,
         pattern: /^https?:\/\/.+/,
-        description: 'Digital Government Agency API endpoint'
+        description: 'Digital Government Agency API endpoint',
       },
       DGA_CERT_ID: {
         required: true,
-        description: 'DGA digital certificate ID'
+        description: 'DGA digital certificate ID',
       },
       DGA_PRIVATE_KEY: {
         required: true,
         minLength: 100,
-        description: 'DGA private key for digital signing'
+        description: 'DGA private key for digital signing',
       },
 
       // Payment Integration - DISABLED FOR DEVELOPMENT
@@ -87,31 +87,31 @@ class EnvironmentValidator {
       PROMPTPAY_WEBHOOK_SECRET: {
         required: true,
         minLength: 32,
-        description: 'PromptPay webhook signature secret'
+        description: 'PromptPay webhook signature secret',
       },
 
       // Notification Services
       EMAIL_FROM_ADDRESS: {
         required: true,
         pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        description: 'Email sender address'
+        description: 'Email sender address',
       },
       SMS_SENDER: {
         required: true,
-        description: 'SMS sender identifier'
+        description: 'SMS sender identifier',
       },
 
       // Application URLs
       FRONTEND_URL: {
         required: true,
         pattern: /^https?:\/\/.+/,
-        description: 'Frontend application URL'
+        description: 'Frontend application URL',
       },
       FRONTEND_BASE_URL: {
         required: true,
         pattern: /^https?:\/\/.+/,
-        description: 'Frontend base URL for links'
-      }
+        description: 'Frontend base URL for links',
+      },
     };
 
     this.optionalEnvVars = {
@@ -119,57 +119,57 @@ class EnvironmentValidator {
       NODE_ENV: {
         default: 'development',
         allowed: ['development', 'staging', 'production'],
-        description: 'Node.js environment mode'
+        description: 'Node.js environment mode',
       },
       PORT: {
         default: 3000,
         type: 'number',
-        description: 'Application server port'
+        description: 'Application server port',
       },
       LOG_LEVEL: {
         default: 'info',
         allowed: ['error', 'warn', 'info', 'debug'],
-        description: 'Logging level'
+        description: 'Logging level',
       },
 
       // JWT Configuration
       JWT_EXPIRES_IN: {
         default: '24h',
-        description: 'JWT token expiration time'
+        description: 'JWT token expiration time',
       },
       JWT_REFRESH_EXPIRES_IN: {
         default: '7d',
-        description: 'JWT refresh token expiration time'
+        description: 'JWT refresh token expiration time',
       },
 
       // API Configuration
       CORS_ORIGIN: {
         default: '*',
-        description: 'CORS allowed origins'
+        description: 'CORS allowed origins',
       },
 
       // External Services (Optional)
       NATIONAL_ID_API_URL: {
-        description: 'National ID verification API (optional)'
+        description: 'National ID verification API (optional)',
       },
       NATIONAL_ID_API_KEY: {
-        description: 'National ID API key (optional)'
+        description: 'National ID API key (optional)',
       },
       LAND_DEPT_API_URL: {
-        description: 'Land Department API (optional)'
+        description: 'Land Department API (optional)',
       },
       LAND_DEPT_CLIENT_ID: {
-        description: 'Land Department client ID (optional)'
+        description: 'Land Department client ID (optional)',
       },
       LAND_DEPT_CLIENT_SECRET: {
-        description: 'Land Department client secret (optional)'
+        description: 'Land Department client secret (optional)',
       },
       MOAC_API_URL: {
-        description: 'Ministry of Agriculture API (optional)'
+        description: 'Ministry of Agriculture API (optional)',
       },
       MOAC_JWT_SECRET: {
-        description: 'MOAC JWT secret (optional)'
-      }
+        description: 'MOAC JWT secret (optional)',
+      },
     };
   }
 
@@ -186,8 +186,8 @@ class EnvironmentValidator {
         required: 0,
         missing: 0,
         invalid: 0,
-        optional: 0
-      }
+        optional: 0,
+      },
     };
 
     console.log('🔍 Validating environment configuration...');
@@ -239,7 +239,7 @@ class EnvironmentValidator {
       return {
         valid: false,
         missing: true,
-        error: `❌ MISSING REQUIRED: ${key} - ${config.description}`
+        error: `❌ MISSING REQUIRED: ${key} - ${config.description}`,
       };
     }
 
@@ -252,7 +252,7 @@ class EnvironmentValidator {
     if (config.minLength && value.length < config.minLength) {
       return {
         valid: false,
-        error: `❌ INVALID LENGTH: ${key} must be at least ${config.minLength} characters (current: ${value.length})`
+        error: `❌ INVALID LENGTH: ${key} must be at least ${config.minLength} characters (current: ${value.length})`,
       };
     }
 
@@ -260,7 +260,7 @@ class EnvironmentValidator {
     if (config.pattern && !config.pattern.test(value)) {
       return {
         valid: false,
-        error: `❌ INVALID FORMAT: ${key} does not match required pattern`
+        error: `❌ INVALID FORMAT: ${key} does not match required pattern`,
       };
     }
 
@@ -268,7 +268,7 @@ class EnvironmentValidator {
     if (config.allowed && !config.allowed.includes(value)) {
       return {
         valid: false,
-        error: `❌ INVALID VALUE: ${key} must be one of: ${config.allowed.join(', ')}`
+        error: `❌ INVALID VALUE: ${key} must be one of: ${config.allowed.join(', ')}`,
       };
     }
 
@@ -276,7 +276,7 @@ class EnvironmentValidator {
     if (config.type === 'number' && isNaN(Number(value))) {
       return {
         valid: false,
-        error: `❌ INVALID TYPE: ${key} must be a number`
+        error: `❌ INVALID TYPE: ${key} must be a number`,
       };
     }
 
@@ -347,12 +347,12 @@ class EnvironmentValidator {
       governmentApisConfigured: {
         doa: !!(process.env.DOA_API_URL && process.env.DOA_CLIENT_ID),
         fda: !!(process.env.FDA_API_URL && process.env.FDA_API_KEY),
-        dga: !!(process.env.DGA_API_URL && process.env.DGA_CERT_ID)
+        dga: !!(process.env.DGA_API_URL && process.env.DGA_CERT_ID),
       },
       paymentConfigured: !!(
         process.env.PROMPTPAY_MERCHANT_ID && process.env.PROMPTPAY_WEBHOOK_SECRET
       ),
-      notificationConfigured: !!(process.env.EMAIL_FROM_ADDRESS && process.env.SMS_SENDER)
+      notificationConfigured: !!(process.env.EMAIL_FROM_ADDRESS && process.env.SMS_SENDER),
     };
 
     return summary;

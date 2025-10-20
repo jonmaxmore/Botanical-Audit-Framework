@@ -46,7 +46,7 @@ class TransactionManager {
           executedOperations.push({
             name: operation.name,
             duration,
-            result: 'success'
+            result: 'success',
           });
         }
 
@@ -63,12 +63,12 @@ class TransactionManager {
             {
               type: 'transaction',
               id: session.id.toString(),
-              after: { operations: executedOperations, results }
+              after: { operations: executedOperations, results },
             },
             {
               ...metadata,
               attempt: attempt + 1,
-              operationCount: operations.length
+              operationCount: operations.length,
             }
           );
         }
@@ -77,7 +77,7 @@ class TransactionManager {
           success: true,
           results,
           operations: executedOperations,
-          attempt: attempt + 1
+          attempt: attempt + 1,
         };
       } catch (error) {
         console.error(
@@ -95,14 +95,14 @@ class TransactionManager {
             { userId: metadata.userId || 'system', role: metadata.role || 'system' },
             {
               type: 'transaction',
-              id: session.id.toString()
+              id: session.id.toString(),
             },
             error,
             {
               ...metadata,
               attempt: attempt + 1,
               operationCount: operations.length,
-              operations: operations.map(op => op.name)
+              operations: operations.map(op => op.name),
             }
           );
         }
@@ -117,10 +117,10 @@ class TransactionManager {
             error: {
               message: error.message,
               code: error.code,
-              stack: error.stack
+              stack: error.stack,
             },
             rollback: true,
-            attempts: attempt
+            attempts: attempt,
           };
         }
 
@@ -155,7 +155,7 @@ class TransactionManager {
           name: operation.name,
           duration,
           result: 'success',
-          compensate: operation.compensate || null
+          compensate: operation.compensate || null,
         });
       }
 
@@ -164,7 +164,7 @@ class TransactionManager {
       return {
         success: true,
         results,
-        operations: executedOperations
+        operations: executedOperations,
       };
     } catch (error) {
       console.error('❌ Operation failed, executing compensations:', error.message);
@@ -192,10 +192,10 @@ class TransactionManager {
         error: {
           message: error.message,
           code: error.code,
-          stack: error.stack
+          stack: error.stack,
         },
         compensated: true,
-        executedOperations: executedOperations.map(op => op.name)
+        executedOperations: executedOperations.map(op => op.name),
       };
     }
   }
@@ -214,7 +214,7 @@ class TransactionManager {
     return {
       name,
       execute: executeFunc,
-      compensate: compensateFunc
+      compensate: compensateFunc,
     };
   }
 }
@@ -242,7 +242,7 @@ class ApplicationService {
           {
             status: 'approved',
             approvedBy: approverId,
-            approvedAt: new Date()
+            approvedAt: new Date(),
           },
           { session, new: true }
         );
@@ -288,8 +288,8 @@ class ApplicationService {
           userId: application.farmerId,
           data: {
             applicationId: application.id,
-            certificateNumber: application.certificateNumber
-          }
+            certificateNumber: application.certificateNumber,
+          },
         });
 
         return { notificationSent: true };
@@ -302,18 +302,18 @@ class ApplicationService {
           {
             type: 'application',
             id: applicationId,
-            after: { status: 'approved' }
+            after: { status: 'approved' },
           }
         );
 
         return { auditLogCreated: true };
-      })
+      }),
     ];
 
     return await this.transactionManager.executeWithRollback(operations, {
       userId: approverId,
       role: 'approver',
-      action: 'approve_application'
+      action: 'approve_application',
     });
   }
 
@@ -326,7 +326,7 @@ class ApplicationService {
     const operations = [
       this.transactionManager.createOperation(
         'Update application status',
-        async() => {
+        async () => {
           const application = await Application.findByIdAndUpdate(
             applicationId,
             {
@@ -334,7 +334,7 @@ class ApplicationService {
               rejectedBy: reviewerId,
               rejectedAt: new Date(),
               lockedUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-              rejectionReason: reason
+              rejectionReason: reason,
             },
             { new: true }
           );
@@ -346,21 +346,21 @@ class ApplicationService {
           return application;
         },
         // Compensation: revert to previous status
-        async() => {
+        async () => {
           await Application.findByIdAndUpdate(applicationId, {
             $unset: {
               rejectedBy: '',
               rejectedAt: '',
               lockedUntil: '',
-              rejectionReason: ''
-            }
+              rejectionReason: '',
+            },
           });
         }
       ),
 
       this.transactionManager.createOperation(
         'Send rejection notification',
-        async() => {
+        async () => {
           const application = await Application.findById(applicationId);
 
           await this.notificationService.sendNotification({
@@ -369,8 +369,8 @@ class ApplicationService {
             data: {
               applicationId: application.id,
               reason,
-              canResubmitAt: application.lockedUntil
-            }
+              canResubmitAt: application.lockedUntil,
+            },
           });
 
           return { notificationSent: true };
@@ -379,19 +379,19 @@ class ApplicationService {
         null
       ),
 
-      this.transactionManager.createOperation('Create audit log', async() => {
+      this.transactionManager.createOperation('Create audit log', async () => {
         await this.auditService.logAction(
           'application_rejected',
           { userId: reviewerId, role: 'reviewer' },
           {
             type: 'application',
             id: applicationId,
-            after: { status: 'rejected', reason }
+            after: { status: 'rejected', reason },
           }
         );
 
         return { auditLogCreated: true };
-      })
+      }),
     ];
 
     return await this.transactionManager.executeWithCompensation(operations);
@@ -400,7 +400,7 @@ class ApplicationService {
 
 module.exports = {
   TransactionManager,
-  ApplicationService
+  ApplicationService,
 };
 
 // Example usage
@@ -416,7 +416,7 @@ if (require.main === module) {
     const transactionManager = new TransactionManager({
       maxRetries: 3,
       retryDelay: 1000,
-      auditService
+      auditService,
     });
 
     // Test transaction
@@ -428,12 +428,12 @@ if (require.main === module) {
       transactionManager.createOperation('Operation 2', async session => {
         console.log('Executing operation 2');
         return { result: 'success' };
-      })
+      }),
     ];
 
     const result = await transactionManager.executeWithRollback(operations, {
       userId: 'test-user',
-      role: 'admin'
+      role: 'admin',
     });
 
     console.log('Transaction result:', result);

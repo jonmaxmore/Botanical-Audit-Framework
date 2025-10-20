@@ -9,7 +9,7 @@ const cannabisSurveyService = require('../services/cannabisSurveyService');
 const {
   CannabisSurveyTemplate,
   CannabisQuestion,
-  CannabisSurveyResponse
+  CannabisSurveyResponse,
 } = require('../models/CannabisSurvey');
 const authMiddleware = require('../middleware/authMiddleware');
 const auditMiddleware = require('../middleware/auditMiddleware');
@@ -21,8 +21,8 @@ const cannabisLimit = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   message: {
     error: 'Too many cannabis survey requests, please try again later',
-    errorTH: 'คำขอแบบสำรวจกัญชามากเกินไป กรุณาลองใหม่อีกครั้ง'
-  }
+    errorTH: 'คำขอแบบสำรวจกัญชามากเกินไป กรุณาลองใหม่อีกครั้ง',
+  },
 });
 
 // Apply rate limiting to all routes
@@ -36,7 +36,7 @@ router.use(cannabisLimit);
  * GET /api/cannabis-surveys/public/templates
  * Get public cannabis survey templates by region and category
  */
-router.get('/public/templates', async(req, res) => {
+router.get('/public/templates', async (req, res) => {
   try {
     const { region, cannabisCategory, licenseType } = req.query;
 
@@ -44,7 +44,7 @@ router.get('/public/templates', async(req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Region and cannabis category are required',
-        errorTH: 'จำเป็นต้องระบุภูมิภาคและประเภทกัญชา'
+        errorTH: 'จำเป็นต้องระบุภูมิภาคและประเภทกัญชา',
       });
     }
 
@@ -65,10 +65,10 @@ router.get('/public/templates', async(req, res) => {
         total: filteredTemplates.length,
         region,
         cannabisCategory,
-        licenseType: licenseType || 'all'
+        licenseType: licenseType || 'all',
       },
       message: 'Cannabis survey templates retrieved successfully',
-      messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error getting public cannabis survey templates:', error);
@@ -76,7 +76,7 @@ router.get('/public/templates', async(req, res) => {
       success: false,
       error: 'Failed to retrieve cannabis survey templates',
       errorTH: 'ไม่สามารถดึงข้อมูลแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -85,7 +85,7 @@ router.get('/public/templates', async(req, res) => {
  * GET /api/cannabis-surveys/public/templates/:templateId/questions
  * Get questions for a specific cannabis survey template
  */
-router.get('/public/templates/:templateId/questions', async(req, res) => {
+router.get('/public/templates/:templateId/questions', async (req, res) => {
   try {
     const { templateId } = req.params;
     const { includeMetadata } = req.query;
@@ -95,7 +95,7 @@ router.get('/public/templates/:templateId/questions', async(req, res) => {
       return res.status(404).json({
         success: false,
         error: 'Cannabis survey template not found',
-        errorTH: 'ไม่พบแบบสำรวจกัญชา'
+        errorTH: 'ไม่พบแบบสำรวจกัญชา',
       });
     }
 
@@ -103,7 +103,7 @@ router.get('/public/templates/:templateId/questions', async(req, res) => {
       return res.status(403).json({
         success: false,
         error: 'Survey template is not publicly available',
-        errorTH: 'แบบสำรวจนี้ไม่เปิดให้ใช้งานสาธารณะ'
+        errorTH: 'แบบสำรวจนี้ไม่เปิดให้ใช้งานสาธารณะ',
       });
     }
 
@@ -124,8 +124,8 @@ router.get('/public/templates/:templateId/questions', async(req, res) => {
       metadata: includeMetadata === 'true' ? q.metadata : undefined,
       cannabisProperties: {
         licenseRequired: q.cannabisProperties.licenseRequired,
-        thcRelevant: q.cannabisProperties.thcRelevant
-      }
+        thcRelevant: q.cannabisProperties.thcRelevant,
+      },
     }));
 
     res.json({
@@ -139,11 +139,11 @@ router.get('/public/templates/:templateId/questions', async(req, res) => {
         cannabisMetadata: {
           surveyType: template.cannabisMetadata.surveyType,
           cannabisCategory: template.cannabisMetadata.cannabisCategory,
-          licenseRequirements: template.cannabisMetadata.licenseRequirements
-        }
+          licenseRequirements: template.cannabisMetadata.licenseRequirements,
+        },
       },
       message: 'Cannabis survey questions retrieved successfully',
-      messageTH: 'ดึงข้อมูลคำถามแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ดึงข้อมูลคำถามแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error getting cannabis survey questions:', error);
@@ -151,7 +151,7 @@ router.get('/public/templates/:templateId/questions', async(req, res) => {
       success: false,
       error: 'Failed to retrieve cannabis survey questions',
       errorTH: 'ไม่สามารถดึงข้อมูลคำถามแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -160,7 +160,7 @@ router.get('/public/templates/:templateId/questions', async(req, res) => {
  * POST /api/cannabis-surveys/public/responses
  * Submit a public cannabis survey response
  */
-router.post('/public/responses', auditMiddleware, async(req, res) => {
+router.post('/public/responses', auditMiddleware, async (req, res) => {
   try {
     const responseData = req.body;
 
@@ -169,7 +169,7 @@ router.post('/public/responses', auditMiddleware, async(req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Template ID, answers, and respondent information are required',
-        errorTH: 'จำเป็นต้องระบุ ID แบบสำรวจ คำตอบ และข้อมูลผู้ตอบ'
+        errorTH: 'จำเป็นต้องระบุ ID แบบสำรวจ คำตอบ และข้อมูลผู้ตอบ',
       });
     }
 
@@ -180,7 +180,7 @@ router.post('/public/responses', auditMiddleware, async(req, res) => {
         return res.status(400).json({
           success: false,
           error: 'Cannabis license number and type are required',
-          errorTH: 'จำเป็นต้องระบุหมายเลขและประเภทใบอนุญาตกัญชา'
+          errorTH: 'จำเป็นต้องระบุหมายเลขและประเภทใบอนุญาตกัญชา',
         });
       }
     }
@@ -189,7 +189,7 @@ router.post('/public/responses', auditMiddleware, async(req, res) => {
     responseData.security = {
       ipAddress: req.ip,
       userAgent: req.get('User-Agent'),
-      sessionId: req.sessionID || 'anonymous'
+      sessionId: req.sessionID || 'anonymous',
     };
 
     const response = await cannabisSurveyService.submitPublicResponse(responseData);
@@ -202,10 +202,10 @@ router.post('/public/responses', auditMiddleware, async(req, res) => {
         complianceScore: response.analytics.complianceScore.overall,
         riskLevel: response.analytics.riskProfile.overallRisk,
         completionRate: response.analytics.completionRate,
-        status: response.status
+        status: response.status,
       },
       message: 'Cannabis survey response submitted successfully',
-      messageTH: 'ส่งแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ส่งแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error submitting cannabis survey response:', error);
@@ -213,7 +213,7 @@ router.post('/public/responses', auditMiddleware, async(req, res) => {
       success: false,
       error: 'Failed to submit cannabis survey response',
       errorTH: 'ไม่สามารถส่งแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -228,14 +228,14 @@ router.use(authMiddleware);
  * POST /api/cannabis-surveys/templates
  * Create a new cannabis survey template (Admin/Cannabis Specialist only)
  */
-router.post('/templates', async(req, res) => {
+router.post('/templates', async (req, res) => {
   try {
     // Check permissions
     if (!['admin', 'cannabis_specialist', 'reviewer'].includes(req.user.role)) {
       return res.status(403).json({
         success: false,
         error: 'Insufficient permissions to create cannabis survey templates',
-        errorTH: 'ไม่มีสิทธิ์ในการสร้างแบบสำรวจกัญชา'
+        errorTH: 'ไม่มีสิทธิ์ในการสร้างแบบสำรวจกัญชา',
       });
     }
 
@@ -246,7 +246,7 @@ router.post('/templates', async(req, res) => {
       success: true,
       data: template,
       message: 'Cannabis survey template created successfully',
-      messageTH: 'สร้างแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'สร้างแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error creating cannabis survey template:', error);
@@ -254,7 +254,7 @@ router.post('/templates', async(req, res) => {
       success: false,
       error: 'Failed to create cannabis survey template',
       errorTH: 'ไม่สามารถสร้างแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -263,14 +263,14 @@ router.post('/templates', async(req, res) => {
  * POST /api/cannabis-surveys/templates/:templateId/questions
  * Create questions for a cannabis survey template
  */
-router.post('/templates/:templateId/questions', async(req, res) => {
+router.post('/templates/:templateId/questions', async (req, res) => {
   try {
     // Check permissions
     if (!['admin', 'cannabis_specialist', 'reviewer'].includes(req.user.role)) {
       return res.status(403).json({
         success: false,
         error: 'Insufficient permissions to create cannabis survey questions',
-        errorTH: 'ไม่มีสิทธิ์ในการสร้างคำถามแบบสำรวจกัญชา'
+        errorTH: 'ไม่มีสิทธิ์ในการสร้างคำถามแบบสำรวจกัญชา',
       });
     }
 
@@ -283,7 +283,7 @@ router.post('/templates/:templateId/questions', async(req, res) => {
     } else {
       result = await cannabisSurveyService.createQuestion({
         ...req.body,
-        templateId
+        templateId,
       });
     }
 
@@ -295,7 +295,7 @@ router.post('/templates/:templateId/questions', async(req, res) => {
         : 'Cannabis survey question created successfully',
       messageTH: bulkCreate
         ? 'สร้างคำถามแบบสำรวจกัญชาเรียบร้อยแล้ว'
-        : 'สร้างคำถามแบบสำรวจกัญชาเรียบร้อยแล้ว'
+        : 'สร้างคำถามแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error creating cannabis survey questions:', error);
@@ -303,7 +303,7 @@ router.post('/templates/:templateId/questions', async(req, res) => {
       success: false,
       error: 'Failed to create cannabis survey questions',
       errorTH: 'ไม่สามารถสร้างคำถามแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -312,12 +312,12 @@ router.post('/templates/:templateId/questions', async(req, res) => {
  * GET /api/cannabis-surveys/templates
  * Get cannabis survey templates (with role-based filtering)
  */
-router.get('/templates', async(req, res) => {
+router.get('/templates', async (req, res) => {
   try {
     const { region, cannabisCategory, status, surveyType } = req.query;
 
     const query = {
-      'accessControl.allowedRoles': req.user.role
+      'accessControl.allowedRoles': req.user.role,
     };
 
     if (region) query.region = { $in: [region, 'national'] };
@@ -335,10 +335,10 @@ router.get('/templates', async(req, res) => {
       data: {
         templates,
         total: templates.length,
-        userRole: req.user.role
+        userRole: req.user.role,
       },
       message: 'Cannabis survey templates retrieved successfully',
-      messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error getting cannabis survey templates:', error);
@@ -346,7 +346,7 @@ router.get('/templates', async(req, res) => {
       success: false,
       error: 'Failed to retrieve cannabis survey templates',
       errorTH: 'ไม่สามารถดึงข้อมูลแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -355,7 +355,7 @@ router.get('/templates', async(req, res) => {
  * POST /api/cannabis-surveys/responses
  * Submit cannabis survey response (authenticated users)
  */
-router.post('/responses', auditMiddleware, async(req, res) => {
+router.post('/responses', auditMiddleware, async (req, res) => {
   try {
     const responseData = req.body;
 
@@ -363,7 +363,7 @@ router.post('/responses', auditMiddleware, async(req, res) => {
     responseData.security = {
       ipAddress: req.ip,
       userAgent: req.get('User-Agent'),
-      sessionId: req.sessionID
+      sessionId: req.sessionID,
     };
 
     // Link to user
@@ -380,10 +380,10 @@ router.post('/responses', auditMiddleware, async(req, res) => {
         riskLevel: response.analytics.riskProfile.overallRisk,
         completionRate: response.analytics.completionRate,
         status: response.status,
-        sopAdherence: response.analytics.sopAdherence
+        sopAdherence: response.analytics.sopAdherence,
       },
       message: 'Cannabis survey response submitted successfully',
-      messageTH: 'ส่งแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ส่งแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error submitting cannabis survey response:', error);
@@ -391,7 +391,7 @@ router.post('/responses', auditMiddleware, async(req, res) => {
       success: false,
       error: 'Failed to submit cannabis survey response',
       errorTH: 'ไม่สามารถส่งแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -400,7 +400,7 @@ router.post('/responses', auditMiddleware, async(req, res) => {
  * GET /api/cannabis-surveys/responses/my-farm
  * Get cannabis survey responses for user's farm
  */
-router.get('/responses/my-farm', async(req, res) => {
+router.get('/responses/my-farm', async (req, res) => {
   try {
     const { limit = 10, status, surveyType } = req.query;
 
@@ -410,7 +410,7 @@ router.get('/responses/my-farm', async(req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Farm code not found in user profile',
-        errorTH: 'ไม่พบรหัสฟาร์มในโปรไฟล์ผู้ใช้'
+        errorTH: 'ไม่พบรหัสฟาร์มในโปรไฟล์ผู้ใช้',
       });
     }
 
@@ -421,7 +421,7 @@ router.get('/responses/my-farm', async(req, res) => {
       const responses = await CannabisSurveyResponse.find(query)
         .populate({
           path: 'templateId',
-          match: { 'cannabisMetadata.surveyType': surveyType }
+          match: { 'cannabisMetadata.surveyType': surveyType },
         })
         .sort({ createdAt: -1 })
         .limit(parseInt(limit));
@@ -434,10 +434,10 @@ router.get('/responses/my-farm', async(req, res) => {
         data: {
           responses: filteredResponses,
           total: filteredResponses.length,
-          farmCode
+          farmCode,
         },
         message: 'Cannabis survey responses retrieved successfully',
-        messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว'
+        messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
       });
     }
 
@@ -448,10 +448,10 @@ router.get('/responses/my-farm', async(req, res) => {
       data: {
         responses,
         total: responses.length,
-        farmCode
+        farmCode,
       },
       message: 'Cannabis survey responses retrieved successfully',
-      messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error getting cannabis survey responses:', error);
@@ -459,7 +459,7 @@ router.get('/responses/my-farm', async(req, res) => {
       success: false,
       error: 'Failed to retrieve cannabis survey responses',
       errorTH: 'ไม่สามารถดึงข้อมูลแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -468,7 +468,7 @@ router.get('/responses/my-farm', async(req, res) => {
  * GET /api/cannabis-surveys/compliance/report
  * Get compliance report for user's farm
  */
-router.get('/compliance/report', async(req, res) => {
+router.get('/compliance/report', async (req, res) => {
   try {
     const { startDate, endDate } = req.query;
 
@@ -478,7 +478,7 @@ router.get('/compliance/report', async(req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Farm code not found in user profile',
-        errorTH: 'ไม่พบรหัสฟาร์มในโปรไฟล์ผู้ใช้'
+        errorTH: 'ไม่พบรหัสฟาร์มในโปรไฟล์ผู้ใช้',
       });
     }
 
@@ -490,14 +490,14 @@ router.get('/compliance/report', async(req, res) => {
 
     const report = await cannabisSurveyService.getComplianceReport(farmCode, {
       startDate: startDateObj,
-      endDate: endDateObj
+      endDate: endDateObj,
     });
 
     res.json({
       success: true,
       data: report,
       message: 'Cannabis compliance report generated successfully',
-      messageTH: 'สร้างรายงานการปฏิบัติตามข้อกำหนดกัญชาเรียบร้อยแล้ว'
+      messageTH: 'สร้างรายงานการปฏิบัติตามข้อกำหนดกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error generating compliance report:', error);
@@ -505,7 +505,7 @@ router.get('/compliance/report', async(req, res) => {
       success: false,
       error: 'Failed to generate compliance report',
       errorTH: 'ไม่สามารถสร้างรายงานการปฏิบัติตามข้อกำหนดได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -514,7 +514,7 @@ router.get('/compliance/report', async(req, res) => {
  * POST /api/cannabis-surveys/responses/:responseId/link-audit
  * Link cannabis survey response to audit
  */
-router.post('/responses/:responseId/link-audit', async(req, res) => {
+router.post('/responses/:responseId/link-audit', async (req, res) => {
   try {
     const { responseId } = req.params;
     const { auditId } = req.body;
@@ -523,7 +523,7 @@ router.post('/responses/:responseId/link-audit', async(req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Audit ID is required',
-        errorTH: 'จำเป็นต้องระบุ ID การตรวจสอบ'
+        errorTH: 'จำเป็นต้องระบุ ID การตรวจสอบ',
       });
     }
 
@@ -533,7 +533,7 @@ router.post('/responses/:responseId/link-audit', async(req, res) => {
       success: true,
       data: response,
       message: 'Cannabis survey response linked to audit successfully',
-      messageTH: 'เชื่อมโยงแบบสำรวจกัญชากับการตรวจสอบเรียบร้อยแล้ว'
+      messageTH: 'เชื่อมโยงแบบสำรวจกัญชากับการตรวจสอบเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error linking response to audit:', error);
@@ -541,7 +541,7 @@ router.post('/responses/:responseId/link-audit', async(req, res) => {
       success: false,
       error: 'Failed to link response to audit',
       errorTH: 'ไม่สามารถเชื่อมโยงแบบสำรวจกับการตรวจสอบได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -550,7 +550,7 @@ router.post('/responses/:responseId/link-audit', async(req, res) => {
  * POST /api/cannabis-surveys/responses/:responseId/sync-sop
  * Sync cannabis survey response with SOP system
  */
-router.post('/responses/:responseId/sync-sop', async(req, res) => {
+router.post('/responses/:responseId/sync-sop', async (req, res) => {
   try {
     const { responseId } = req.params;
 
@@ -559,7 +559,7 @@ router.post('/responses/:responseId/sync-sop', async(req, res) => {
     res.json({
       success: true,
       message: 'Cannabis survey response synced with SOP system successfully',
-      messageTH: 'ซิงค์แบบสำรวจกัญชากับระบบ SOP เรียบร้อยแล้ว'
+      messageTH: 'ซิงค์แบบสำรวจกัญชากับระบบ SOP เรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error syncing response with SOP system:', error);
@@ -567,7 +567,7 @@ router.post('/responses/:responseId/sync-sop', async(req, res) => {
       success: false,
       error: 'Failed to sync response with SOP system',
       errorTH: 'ไม่สามารถซิงค์แบบสำรวจกับระบบ SOP ได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -580,14 +580,14 @@ router.post('/responses/:responseId/sync-sop', async(req, res) => {
  * GET /api/cannabis-surveys/admin/responses
  * Get all cannabis survey responses for admin review
  */
-router.get('/admin/responses', async(req, res) => {
+router.get('/admin/responses', async (req, res) => {
   try {
     // Check admin permissions
     if (!['admin', 'cannabis_specialist', 'reviewer'].includes(req.user.role)) {
       return res.status(403).json({
         success: false,
         error: 'Insufficient permissions for admin operations',
-        errorTH: 'ไม่มีสิทธิ์ในการดำเนินการระดับผู้ดูแลระบบ'
+        errorTH: 'ไม่มีสิทธิ์ในการดำเนินการระดับผู้ดูแลระบบ',
       });
     }
 
@@ -600,7 +600,7 @@ router.get('/admin/responses', async(req, res) => {
       farmCode,
       region,
       startDate,
-      endDate
+      endDate,
     } = req.query;
 
     const query = {};
@@ -608,14 +608,14 @@ router.get('/admin/responses', async(req, res) => {
     if (riskLevel) query['analytics.riskProfile.overallRisk'] = riskLevel;
     if (complianceThreshold) {
       query['analytics.complianceScore.overall'] = {
-        $lt: parseInt(complianceThreshold)
+        $lt: parseInt(complianceThreshold),
       };
     }
     if (farmCode) query['respondent.farmCode'] = farmCode;
     if (startDate && endDate) {
       query.createdAt = {
         $gte: new Date(startDate),
-        $lte: new Date(endDate)
+        $lte: new Date(endDate),
       };
     }
 
@@ -628,7 +628,7 @@ router.get('/admin/responses', async(req, res) => {
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(parseInt(limit)),
-      CannabisSurveyResponse.countDocuments(query)
+      CannabisSurveyResponse.countDocuments(query),
     ]);
 
     res.json({
@@ -639,11 +639,11 @@ router.get('/admin/responses', async(req, res) => {
           current: parseInt(page),
           pages: Math.ceil(total / parseInt(limit)),
           total,
-          limit: parseInt(limit)
-        }
+          limit: parseInt(limit),
+        },
       },
       message: 'Cannabis survey responses retrieved successfully',
-      messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ดึงข้อมูลแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error getting admin cannabis survey responses:', error);
@@ -651,7 +651,7 @@ router.get('/admin/responses', async(req, res) => {
       success: false,
       error: 'Failed to retrieve cannabis survey responses',
       errorTH: 'ไม่สามารถดึงข้อมูลแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -660,14 +660,14 @@ router.get('/admin/responses', async(req, res) => {
  * PUT /api/cannabis-surveys/admin/responses/:responseId/review
  * Review cannabis survey response (Admin/Reviewer only)
  */
-router.put('/admin/responses/:responseId/review', async(req, res) => {
+router.put('/admin/responses/:responseId/review', async (req, res) => {
   try {
     // Check permissions
     if (!['admin', 'cannabis_specialist', 'reviewer'].includes(req.user.role)) {
       return res.status(403).json({
         success: false,
         error: 'Insufficient permissions to review responses',
-        errorTH: 'ไม่มีสิทธิ์ในการตรวจสอบแบบสำรวจ'
+        errorTH: 'ไม่มีสิทธิ์ในการตรวจสอบแบบสำรวจ',
       });
     }
 
@@ -682,8 +682,8 @@ router.put('/admin/responses/:responseId/review', async(req, res) => {
         reviewComments,
         complianceNotes,
         followUpRequired: followUpRequired || false,
-        followUpActions: followUpActions || []
-      }
+        followUpActions: followUpActions || [],
+      },
     };
 
     const response = await cannabisSurveyService.updateResponse(
@@ -696,7 +696,7 @@ router.put('/admin/responses/:responseId/review', async(req, res) => {
       success: true,
       data: response,
       message: 'Cannabis survey response reviewed successfully',
-      messageTH: 'ตรวจสอบแบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ตรวจสอบแบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error reviewing cannabis survey response:', error);
@@ -704,7 +704,7 @@ router.put('/admin/responses/:responseId/review', async(req, res) => {
       success: false,
       error: 'Failed to review cannabis survey response',
       errorTH: 'ไม่สามารถตรวจสอบแบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -713,14 +713,14 @@ router.put('/admin/responses/:responseId/review', async(req, res) => {
  * GET /api/cannabis-surveys/admin/analytics/dashboard
  * Get cannabis survey analytics dashboard
  */
-router.get('/admin/analytics/dashboard', async(req, res) => {
+router.get('/admin/analytics/dashboard', async (req, res) => {
   try {
     // Check admin permissions
     if (!['admin', 'cannabis_specialist'].includes(req.user.role)) {
       return res.status(403).json({
         success: false,
         error: 'Insufficient permissions for analytics dashboard',
-        errorTH: 'ไม่มีสิทธิ์ในการดูแดชบอร์ดการวิเคราะห์'
+        errorTH: 'ไม่มีสิทธิ์ในการดูแดชบอร์ดการวิเคราะห์',
       });
     }
 
@@ -730,30 +730,30 @@ router.get('/admin/analytics/dashboard', async(req, res) => {
     const endDate = new Date();
     const startDate = new Date();
     switch (period) {
-    case '7d':
-      startDate.setDate(endDate.getDate() - 7);
-      break;
-    case '30d':
-      startDate.setDate(endDate.getDate() - 30);
-      break;
-    case '90d':
-      startDate.setDate(endDate.getDate() - 90);
-      break;
-    case '1y':
-      startDate.setFullYear(endDate.getFullYear() - 1);
-      break;
-    default:
-      startDate.setDate(endDate.getDate() - 30);
+      case '7d':
+        startDate.setDate(endDate.getDate() - 7);
+        break;
+      case '30d':
+        startDate.setDate(endDate.getDate() - 30);
+        break;
+      case '90d':
+        startDate.setDate(endDate.getDate() - 90);
+        break;
+      case '1y':
+        startDate.setFullYear(endDate.getFullYear() - 1);
+        break;
+      default:
+        startDate.setDate(endDate.getDate() - 30);
     }
 
     const matchQuery = {
-      createdAt: { $gte: startDate, $lte: endDate }
+      createdAt: { $gte: startDate, $lte: endDate },
     };
 
     if (region) {
       // Get templates for the region and use those template IDs
       const templates = await CannabisSurveyTemplate.find({
-        region: { $in: [region, 'national'] }
+        region: { $in: [region, 'national'] },
       }).select('_id');
 
       matchQuery.templateId = { $in: templates.map(t => t._id) };
@@ -768,23 +768,23 @@ router.get('/admin/analytics/dashboard', async(req, res) => {
           averageCompliance: { $avg: '$analytics.complianceScore.overall' },
           highRiskCount: {
             $sum: {
-              $cond: [{ $in: ['$analytics.riskProfile.overallRisk', ['high', 'critical']] }, 1, 0]
-            }
+              $cond: [{ $in: ['$analytics.riskProfile.overallRisk', ['high', 'critical']] }, 1, 0],
+            },
           },
           lowComplianceCount: {
             $sum: {
-              $cond: [{ $lt: ['$analytics.complianceScore.overall', 70] }, 1, 0]
-            }
-          }
-        }
-      }
+              $cond: [{ $lt: ['$analytics.complianceScore.overall', 70] }, 1, 0],
+            },
+          },
+        },
+      },
     ]);
 
     const dashboardData = analytics[0] || {
       totalResponses: 0,
       averageCompliance: 0,
       highRiskCount: 0,
-      lowComplianceCount: 0
+      lowComplianceCount: 0,
     };
 
     // Get cannabis category distribution
@@ -795,16 +795,16 @@ router.get('/admin/analytics/dashboard', async(req, res) => {
           from: 'cannabis_survey_templates',
           localField: 'templateId',
           foreignField: '_id',
-          as: 'template'
-        }
+          as: 'template',
+        },
       },
       { $unwind: '$template' },
       {
         $group: {
           _id: '$template.cannabisMetadata.cannabisCategory',
-          count: { $sum: 1 }
-        }
-      }
+          count: { $sum: 1 },
+        },
+      },
     ]);
 
     res.json({
@@ -814,10 +814,10 @@ router.get('/admin/analytics/dashboard', async(req, res) => {
         categoryDistribution,
         period,
         region: region || 'all',
-        dateRange: { startDate, endDate }
+        dateRange: { startDate, endDate },
       },
       message: 'Cannabis survey analytics retrieved successfully',
-      messageTH: 'ดึงข้อมูลการวิเคราะห์แบบสำรวจกัญชาเรียบร้อยแล้ว'
+      messageTH: 'ดึงข้อมูลการวิเคราะห์แบบสำรวจกัญชาเรียบร้อยแล้ว',
     });
   } catch (error) {
     console.error('Error getting cannabis survey analytics:', error);
@@ -825,7 +825,7 @@ router.get('/admin/analytics/dashboard', async(req, res) => {
       success: false,
       error: 'Failed to retrieve cannabis survey analytics',
       errorTH: 'ไม่สามารถดึงข้อมูลการวิเคราะห์แบบสำรวจกัญชาได้',
-      details: error.message
+      details: error.message,
     });
   }
 });

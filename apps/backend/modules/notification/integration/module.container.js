@@ -12,14 +12,14 @@ const mongoose = require('mongoose');
 // (No dependencies from domain - pure business logic)
 
 // Application - Use Cases
-const SendNotificationUseCase = require('../application/use-cases/SendNotificationUseCase');
-const SendBroadcastNotificationUseCase = require('../application/use-cases/SendBroadcastNotificationUseCase');
-const GetUserNotificationsUseCase = require('../application/use-cases/GetUserNotificationsUseCase');
-const MarkNotificationAsReadUseCase = require('../application/use-cases/MarkNotificationAsReadUseCase');
-const MarkAllAsReadUseCase = require('../application/use-cases/MarkAllAsReadUseCase');
-const GetUnreadCountUseCase = require('../application/use-cases/GetUnreadCountUseCase');
-const DeleteNotificationUseCase = require('../application/use-cases/DeleteNotificationUseCase');
-const GetNotificationStatisticsUseCase = require('../application/use-cases/GetNotificationStatisticsUseCase');
+const SendNotificationUseCase = require('../application/use-cases/send-notification');
+const SendBroadcastNotificationUseCase = require('../application/use-cases/send-broadcast');
+const GetUserNotificationsUseCase = require('../application/use-cases/get-user-notifications');
+const MarkNotificationAsReadUseCase = require('../application/use-cases/mark-as-read');
+const MarkAllAsReadUseCase = require('../application/use-cases/mark-all-read');
+const GetUnreadCountUseCase = require('../application/use-cases/get-unread-count');
+const DeleteNotificationUseCase = require('../application/use-cases/delete-notification');
+const GetNotificationStatisticsUseCase = require('../application/use-cases/get-notification-stats');
 
 // Infrastructure
 const MongoDBNotificationRepository = require('../infrastructure/database/MongoDBNotificationRepository');
@@ -88,7 +88,7 @@ class NotificationModuleContainer {
       markAllAsReadUseCase: this.instances.markAllAsReadUseCase,
       getUnreadCountUseCase: this.instances.getUnreadCountUseCase,
       deleteNotificationUseCase: this.instances.deleteNotificationUseCase,
-      getNotificationStatisticsUseCase: this.instances.getNotificationStatisticsUseCase
+      getNotificationStatisticsUseCase: this.instances.getNotificationStatisticsUseCase,
     });
 
     return this;
@@ -135,7 +135,7 @@ class NotificationModuleContainer {
       markAllAsRead: this.instances.markAllAsReadUseCase,
       getUnreadCount: this.instances.getUnreadCountUseCase,
       deleteNotification: this.instances.deleteNotificationUseCase,
-      getStatistics: this.instances.getNotificationStatisticsUseCase
+      getStatistics: this.instances.getNotificationStatisticsUseCase,
     };
   }
 }
@@ -148,5 +148,5 @@ function createNotificationModule(config = {}) {
 
 module.exports = {
   NotificationModuleContainer,
-  createNotificationModule
+  createNotificationModule,
 };

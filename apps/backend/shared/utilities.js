@@ -20,7 +20,7 @@ function formatDateThai(date, options = {}) {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-    ...options
+    ...options,
   };
 
   return new Date(date).toLocaleDateString('th-TH', defaultOptions);
@@ -323,7 +323,7 @@ function formatCurrency(amount) {
 
   return new Intl.NumberFormat('th-TH', {
     style: 'currency',
-    currency: 'THB'
+    currency: 'THB',
   }).format(amount);
 }
 
@@ -417,5 +417,5 @@ module.exports = {
 
   // Performance utilities
   debounce,
-  throttle
+  throttle,
 };

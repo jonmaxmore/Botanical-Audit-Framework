@@ -244,8 +244,8 @@ router.use('*', (req, res) => {
     error: {
       code: 'NOT_FOUND',
       message: 'Compliance API endpoint not found',
-      details: `Route ${req.method} ${req.originalUrl} not found`
-    }
+      details: `Route ${req.method} ${req.originalUrl} not found`,
+    },
   });
 });
 
@@ -258,8 +258,8 @@ router.use((error, req, res, next) => {
     error: {
       code: 'INTERNAL_ERROR',
       message: 'Internal server error in compliance API',
-      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
-    }
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
+    },
   });
 });
 

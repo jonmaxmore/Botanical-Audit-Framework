@@ -42,9 +42,9 @@ module.exports = {
   DashboardModuleContainer,
 
   // Use Cases
-  GetFarmerDashboardUseCase: require('./application/use-cases/GetFarmerDashboardUseCase'),
-  GetDTAMDashboardUseCase: require('./application/use-cases/GetDTAMDashboardUseCase'),
-  GetSystemStatisticsUseCase: require('./application/use-cases/GetSystemStatisticsUseCase'),
+  GetFarmerDashboardUseCase: require('./application/use-cases/get-farmer-dashboard'),
+  GetDTAMDashboardUseCase: require('./application/use-cases/get-dtam-dashboard'),
+  GetSystemStatisticsUseCase: require('./application/use-cases/get-system-stats'),
 
   // Controller
   DashboardController: require('./presentation/controllers/DashboardController'),
@@ -56,5 +56,5 @@ module.exports = {
     .initializeDashboardDTAMRoutes,
 
   // DTOs
-  DashboardDTO: require('./presentation/dto/DashboardDTO').DashboardDTO
+  DashboardDTO: require('./presentation/dto/DashboardDTO').DashboardDTO,
 };

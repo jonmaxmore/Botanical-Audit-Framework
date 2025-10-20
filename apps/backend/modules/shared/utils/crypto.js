@@ -22,7 +22,7 @@ const hashPassword = async password => {
  * @param {String} hashedPassword
  * @returns {Promise<Boolean>}
  */
-const comparePassword = async(password, hashedPassword) => {
+const comparePassword = async (password, hashedPassword) => {
   return await bcrypt.compare(password, hashedPassword);
 };
 
@@ -63,5 +63,5 @@ module.exports = {
   comparePassword,
   generateToken,
   generateVerificationCode,
-  sha256Hash
+  sha256Hash,
 };

@@ -7,12 +7,12 @@
  * Part of Clean Architecture - Integration Layer
  */
 
-const GetFarmerDashboardUseCase = require('../application/use-cases/GetFarmerDashboardUseCase');
-const GetDTAMDashboardUseCase = require('../application/use-cases/GetDTAMDashboardUseCase');
-const GetSystemStatisticsUseCase = require('../application/use-cases/GetSystemStatisticsUseCase');
+const GetFarmerDashboardUseCase = require('../application/use-cases/get-farmer-dashboard');
+const GetDTAMDashboardUseCase = require('../application/use-cases/get-dtam-dashboard');
+const GetSystemStatisticsUseCase = require('../application/use-cases/get-system-stats');
 const DashboardController = require('../presentation/controllers/DashboardController');
 const {
-  initializeDashboardFarmerRoutes
+  initializeDashboardFarmerRoutes,
 } = require('../presentation/routes/dashboard.farmer.routes');
 const { initializeDashboardDTAMRoutes } = require('../presentation/routes/dashboard.dtam.routes');
 
@@ -109,7 +109,7 @@ class DashboardModuleContainer {
     return {
       getFarmerDashboardUseCase: this.getFarmerDashboardUseCase,
       getDTAMDashboardUseCase: this.getDTAMDashboardUseCase,
-      getSystemStatisticsUseCase: this.getSystemStatisticsUseCase
+      getSystemStatisticsUseCase: this.getSystemStatisticsUseCase,
     };
   }
 }

@@ -37,15 +37,15 @@ class GovernmentIntegrationWorkflowService {
         authentication: {
           type: 'API_KEY',
           keyId: this.config.doaApiKey,
-          secret: this.config.doaSecret
+          secret: this.config.doaSecret,
         },
         services: {
           certificateSubmission: '/certificates/submit',
           statusCheck: '/certificates/status',
-          complianceReport: '/compliance/report'
+          complianceReport: '/compliance/report',
         },
         timeout: 30000,
-        retryLimit: 3
+        retryLimit: 3,
       },
       FDA: {
         name: 'Food and Drug Administration',
@@ -53,15 +53,15 @@ class GovernmentIntegrationWorkflowService {
         authentication: {
           type: 'OAUTH2',
           clientId: this.config.fdaClientId,
-          clientSecret: this.config.fdaClientSecret
+          clientSecret: this.config.fdaClientSecret,
         },
         services: {
           safetyCompliance: '/safety/compliance',
           qualityReport: '/quality/report',
-          certificationStatus: '/certification/status'
+          certificationStatus: '/certification/status',
         },
         timeout: 45000,
-        retryLimit: 2
+        retryLimit: 2,
       },
       MOC: {
         name: 'Ministry of Commerce',
@@ -69,30 +69,30 @@ class GovernmentIntegrationWorkflowService {
         authentication: {
           type: 'MUTUAL_TLS',
           certPath: this.config.mocCertPath,
-          keyPath: this.config.mocKeyPath
+          keyPath: this.config.mocKeyPath,
         },
         services: {
           exportCertification: '/export/certification',
-          tradeCompliance: '/trade/compliance'
+          tradeCompliance: '/trade/compliance',
         },
         timeout: 25000,
-        retryLimit: 3
+        retryLimit: 3,
       },
       DOAE: {
         name: 'Department of Agricultural Extension',
         endpoint: this.config.doaeEndpoint || 'https://api.doae.go.th/v1',
         authentication: {
           type: 'JWT',
-          token: this.config.doaeJwtToken
+          token: this.config.doaeJwtToken,
         },
         services: {
           farmerRegistration: '/farmers/registration',
           trainingRecord: '/training/record',
-          developmentProgram: '/development/program'
+          developmentProgram: '/development/program',
         },
         timeout: 20000,
-        retryLimit: 2
-      }
+        retryLimit: 2,
+      },
     };
 
     // Compliance requirements
@@ -101,20 +101,20 @@ class GovernmentIntegrationWorkflowService {
         required: true,
         systems: ['DOA', 'FDA'],
         deadline: '24_HOURS',
-        retryPolicy: 'EXPONENTIAL_BACKOFF'
+        retryPolicy: 'EXPONENTIAL_BACKOFF',
       },
       complianceReporting: {
         required: true,
         frequency: 'MONTHLY',
         systems: ['DOA', 'MOC'],
-        format: 'XML_STANDARD_V2'
+        format: 'XML_STANDARD_V2',
       },
       auditTrail: {
         required: true,
         retention: '7_YEARS',
         encryption: true,
-        digitalSignature: true
-      }
+        digitalSignature: true,
+      },
     };
 
     // Processing metrics
@@ -125,7 +125,7 @@ class GovernmentIntegrationWorkflowService {
       reportsGenerated: 0,
       averageProcessingTime: 0,
       lastSuccessfulSync: null,
-      systemHealth: {}
+      systemHealth: {},
     };
 
     // Initialize government integrations
@@ -217,7 +217,7 @@ class GovernmentIntegrationWorkflowService {
             system: systemCode,
             status: 'FAILED',
             error: error.message,
-            submissionTime: new Date()
+            submissionTime: new Date(),
           });
         }
       }
@@ -243,7 +243,7 @@ class GovernmentIntegrationWorkflowService {
         complianceStatus:
           successfulSubmissions.length >= requiredSystems.length * 0.5
             ? 'COMPLIANT'
-            : 'NON_COMPLIANT'
+            : 'NON_COMPLIANT',
       };
 
       // 6. Store submission record and update audit trail
@@ -277,7 +277,7 @@ class GovernmentIntegrationWorkflowService {
         status: 'FAILED',
         error: error.message,
         submissionTime: new Date(),
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       };
 
       await this.storeSubmissionRecord(failureRecord);
@@ -339,7 +339,7 @@ class GovernmentIntegrationWorkflowService {
           reportSubmissions.push({
             system: systemCode,
             status: 'FAILED',
-            error: error.message
+            error: error.message,
           });
         }
       }
@@ -356,7 +356,7 @@ class GovernmentIntegrationWorkflowService {
         submissions: reportSubmissions,
         overallStatus: reportSubmissions.every(s => s.status === 'SUCCESS')
           ? 'SUCCESS'
-          : 'PARTIAL_SUCCESS'
+          : 'PARTIAL_SUCCESS',
       };
 
       // 7. Store report and update audit trail
@@ -397,7 +397,7 @@ class GovernmentIntegrationWorkflowService {
             systemName: systemConfig.name,
             status: status.status,
             lastUpdated: status.lastUpdated,
-            details: status.details
+            details: status.details,
           });
         } catch (error) {
           statusResults.push({
@@ -405,7 +405,7 @@ class GovernmentIntegrationWorkflowService {
             systemName: systemConfig.name,
             status: 'UNAVAILABLE',
             error: error.message,
-            lastUpdated: new Date()
+            lastUpdated: new Date(),
           });
         }
       }
@@ -416,7 +416,7 @@ class GovernmentIntegrationWorkflowService {
         overallStatus: this.determineOverallStatus(statusResults),
         systems: statusResults,
         checkedAt: new Date(),
-        complianceStatus: this.determineComplianceStatus(statusResults)
+        complianceStatus: this.determineComplianceStatus(statusResults),
       };
 
       return aggregatedStatus;
@@ -438,7 +438,7 @@ class GovernmentIntegrationWorkflowService {
         valid: true,
         reason: null,
         requirements: [],
-        warnings: []
+        warnings: [],
       };
 
       // Check required fields
@@ -449,7 +449,7 @@ class GovernmentIntegrationWorkflowService {
         'course.courseName',
         'performance.finalScore',
         'metadata.issuedDate',
-        'metadata.expiryDate'
+        'metadata.expiryDate',
       ];
 
       for (const field of requiredFields) {
@@ -503,7 +503,7 @@ class GovernmentIntegrationWorkflowService {
       return {
         valid: false,
         reason: `Validation error: ${error.message}`,
-        requirements: []
+        requirements: [],
       };
     }
   }
@@ -521,14 +521,14 @@ class GovernmentIntegrationWorkflowService {
           certificateType: certificateData.certificateType,
           issuedDate: certificateData.metadata.issuedDate,
           expiryDate: certificateData.metadata.expiryDate,
-          issuingAuthority: certificateData.metadata.issuingAuthority
+          issuingAuthority: certificateData.metadata.issuingAuthority,
         },
 
         // Recipient information
         recipient: {
           nationalId: certificateData.recipient.nationalId,
           fullName: certificateData.recipient.farmerName,
-          farmerCode: certificateData.recipient.farmerCode
+          farmerCode: certificateData.recipient.farmerCode,
         },
 
         // Training information
@@ -538,22 +538,22 @@ class GovernmentIntegrationWorkflowService {
           courseType: certificateData.course.courseType,
           finalScore: certificateData.performance.finalScore,
           completionDate: certificateData.performance.completionDate,
-          studyDuration: certificateData.performance.studyDuration
+          studyDuration: certificateData.performance.studyDuration,
         },
 
         // Compliance information
         compliance: {
           gacpStandard: certificateData.compliance.gacpStandard,
           competencies: certificateData.metadata.competencies,
-          validityMonths: certificateData.metadata.validityMonths
+          validityMonths: certificateData.metadata.validityMonths,
         },
 
         // Security and verification
         security: {
           verificationUrl: certificateData.security.verificationUrl,
           digitalSignature: certificateData.security.digitalSignature,
-          certificateHash: certificateData.security.certificateHash
-        }
+          certificateHash: certificateData.security.certificateHash,
+        },
       };
 
       // Add system-specific formatting
@@ -569,7 +569,7 @@ class GovernmentIntegrationWorkflowService {
 
       return {
         standard: governmentFormat,
-        systemSpecific: systemSpecificFormats
+        systemSpecific: systemSpecificFormats,
       };
     } catch (error) {
       this.logger.error('[GovernmentIntegration] Certificate formatting failed:', error);
@@ -597,7 +597,7 @@ class GovernmentIntegrationWorkflowService {
         submissionId: submissionId,
         timestamp: new Date().toISOString(),
         submittingSystem: 'GACP_TRAINING_PLATFORM',
-        version: '2.0'
+        version: '2.0',
       };
 
       // Make API call with authentication
@@ -615,7 +615,7 @@ class GovernmentIntegrationWorkflowService {
         governmentReference: response.referenceNumber,
         submissionTime: new Date(),
         responseData: response,
-        processingTime: response.processingTime
+        processingTime: response.processingTime,
       };
 
       this.logger.log(
@@ -648,11 +648,11 @@ class GovernmentIntegrationWorkflowService {
           'Content-Type': 'application/json',
           Accept: 'application/json',
           'User-Agent': 'GACP-Training-Platform/2.0',
-          ...authHeaders
+          ...authHeaders,
         },
         data: data,
         timeout: systemConfig.timeout,
-        retry: systemConfig.retryLimit
+        retry: systemConfig.retryLimit,
       };
 
       // Make request with retry logic
@@ -666,7 +666,7 @@ class GovernmentIntegrationWorkflowService {
             statusCode: response.status,
             data: response.data,
             referenceNumber: response.data?.referenceNumber,
-            processingTime: response.headers['x-processing-time']
+            processingTime: response.headers['x-processing-time'],
           };
         } catch (error) {
           lastError = error;
@@ -694,7 +694,7 @@ class GovernmentIntegrationWorkflowService {
    * Setup periodic health checks for government systems
    */
   setupPeriodicHealthChecks() {
-    setInterval(async() => {
+    setInterval(async () => {
       try {
         for (const systemCode of Object.keys(this.governmentSystems)) {
           const health = await this.checkSystemHealth(systemCode);
@@ -722,13 +722,13 @@ class GovernmentIntegrationWorkflowService {
         status: response.success ? 'HEALTHY' : 'UNHEALTHY',
         responseTime: response.processingTime || 0,
         lastCheck: new Date(),
-        details: response.data
+        details: response.data,
       };
     } catch (error) {
       return {
         status: 'DISCONNECTED',
         error: error.message,
-        lastCheck: new Date()
+        lastCheck: new Date(),
       };
     }
   }
@@ -748,7 +748,7 @@ class GovernmentIntegrationWorkflowService {
       systemsHealthy: healthySystems,
       systemsTotal: totalSystems,
       metrics: this.metrics,
-      lastHealthCheck: new Date()
+      lastHealthCheck: new Date(),
     };
   }
 

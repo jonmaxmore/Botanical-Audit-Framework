@@ -68,7 +68,7 @@ class SurveyDTO {
 
       // Timestamps
       createdAt: survey.createdAt,
-      updatedAt: survey.updatedAt
+      updatedAt: survey.updatedAt,
     };
   }
 
@@ -82,7 +82,7 @@ class SurveyDTO {
       reviewedBy: survey.reviewedBy,
 
       // Additional DTAM-specific fields
-      summary: survey.getSummary()
+      summary: survey.getSummary(),
     };
   }
 
@@ -108,7 +108,7 @@ class SurveyDTO {
       daysUntilHarvest: survey.getDaysUntilHarvest(),
       isOverdue: survey.isOverdue(),
       createdAt: survey.createdAt,
-      updatedAt: survey.updatedAt
+      updatedAt: survey.updatedAt,
     };
 
     if (userType === 'dtam') {
@@ -149,7 +149,7 @@ class SurveyDTO {
       additionalNotes: body.additionalNotes,
       complianceChecklist: body.complianceChecklist,
       thcContent: body.thcContent,
-      cbdContent: body.cbdContent
+      cbdContent: body.cbdContent,
     };
   }
 
@@ -184,7 +184,7 @@ class SurveyDTO {
       'additionalNotes',
       'complianceChecklist',
       'thcContent',
-      'cbdContent'
+      'cbdContent',
     ];
 
     allowedFields.forEach(field => {
@@ -203,7 +203,7 @@ class SurveyDTO {
     return {
       success: true,
       message,
-      data
+      data,
     };
   }
 
@@ -213,7 +213,7 @@ class SurveyDTO {
   static errorResponse(message, errors = null) {
     const response = {
       success: false,
-      message
+      message,
     };
 
     if (errors) {

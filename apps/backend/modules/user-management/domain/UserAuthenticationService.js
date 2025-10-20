@@ -52,7 +52,7 @@ class UserAuthenticationService extends EventEmitter {
       jwt: {
         secret: process.env.JWT_SECRET, // REMOVED: Insecure fallback
         expiresIn: process.env.JWT_EXPIRES_IN || '24h',
-        refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
+        refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
       },
       password: {
         minLength: 8,
@@ -60,14 +60,14 @@ class UserAuthenticationService extends EventEmitter {
         requireLowercase: true,
         requireNumbers: true,
         requireSpecialChars: true,
-        maxAge: 90 * 24 * 60 * 60 * 1000 // 90 days
+        maxAge: 90 * 24 * 60 * 60 * 1000, // 90 days
       },
       security: {
         maxLoginAttempts: 5,
         lockoutDuration: 30 * 60 * 1000, // 30 minutes
         passwordResetExpiry: 60 * 60 * 1000, // 1 hour
-        sessionTimeout: 24 * 60 * 60 * 1000 // 24 hours
-      }
+        sessionTimeout: 24 * 60 * 60 * 1000, // 24 hours
+      },
     };
 
     // Role hierarchy and permissions
@@ -75,7 +75,7 @@ class UserAuthenticationService extends EventEmitter {
       DTAM_ADMIN: 4,
       DTAM_INSPECTOR: 3,
       DTAM_REVIEWER: 2,
-      FARMER: 1
+      FARMER: 1,
     };
 
     this.permissions = {
@@ -86,7 +86,7 @@ class UserAuthenticationService extends EventEmitter {
         'document:upload:own',
         'payment:make:own',
         'profile:read:own',
-        'profile:update:own'
+        'profile:update:own',
       ],
       DTAM_REVIEWER: [
         'application:read:all',
@@ -96,7 +96,7 @@ class UserAuthenticationService extends EventEmitter {
         'application:request_revision',
         'document:read:all',
         'jobticket:create',
-        'jobticket:update:own'
+        'jobticket:update:own',
       ],
       DTAM_INSPECTOR: [
         'application:read:assigned',
@@ -105,7 +105,7 @@ class UserAuthenticationService extends EventEmitter {
         'inspection:report',
         'document:read:assigned',
         'jobticket:read:assigned',
-        'jobticket:update:assigned'
+        'jobticket:update:assigned',
       ],
       DTAM_ADMIN: [
         'application:read:all',
@@ -116,8 +116,8 @@ class UserAuthenticationService extends EventEmitter {
         'audit:read:all',
         'report:generate:all',
         'certificate:issue',
-        'certificate:revoke'
-      ]
+        'certificate:revoke',
+      ],
     };
 
     console.log('[UserAuthenticationService] Initialized successfully');
@@ -143,7 +143,7 @@ class UserAuthenticationService extends EventEmitter {
         await this._logSecurityEvent('LOGIN_FAILED', {
           email,
           reason: 'USER_NOT_FOUND',
-          ...context
+          ...context,
         });
         throw new Error('Invalid credentials');
       }
@@ -153,7 +153,7 @@ class UserAuthenticationService extends EventEmitter {
         await this._logSecurityEvent('LOGIN_BLOCKED', {
           userId: user.id,
           reason: 'ACCOUNT_LOCKED',
-          ...context
+          ...context,
         });
         throw new Error('Account is temporarily locked due to multiple failed login attempts');
       }
@@ -163,7 +163,7 @@ class UserAuthenticationService extends EventEmitter {
         await this._logSecurityEvent('LOGIN_BLOCKED', {
           userId: user.id,
           reason: 'ACCOUNT_INACTIVE',
-          ...context
+          ...context,
         });
         throw new Error('Account is inactive. Please contact administrator');
       }
@@ -181,7 +181,7 @@ class UserAuthenticationService extends EventEmitter {
         return {
           success: false,
           requirePasswordChange: true,
-          message: 'Password has expired. Please change your password.'
+          message: 'Password has expired. Please change your password.',
         };
       }
 
@@ -197,7 +197,7 @@ class UserAuthenticationService extends EventEmitter {
       // Update last login
       await this.userRepository.update(user.id, {
         lastLoginAt: new Date(),
-        lastLoginIP: context.ip
+        lastLoginIP: context.ip,
       });
 
       // Log successful login
@@ -208,7 +208,7 @@ class UserAuthenticationService extends EventEmitter {
         userId: user.id,
         role: user.role,
         email: user.email,
-        context
+        context,
       });
 
       return {
@@ -219,13 +219,13 @@ class UserAuthenticationService extends EventEmitter {
           role: user.role,
           firstName: user.firstName,
           lastName: user.lastName,
-          permissions: this.permissions[user.role]
+          permissions: this.permissions[user.role],
         },
         tokens: {
           accessToken: tokens.accessToken,
           refreshToken: tokens.refreshToken,
-          expiresIn: this.config.jwt.expiresIn
-        }
+          expiresIn: this.config.jwt.expiresIn,
+        },
       };
     } catch (error) {
       console.error('[UserAuthenticationService] Authentication error:', error);
@@ -267,7 +267,7 @@ class UserAuthenticationService extends EventEmitter {
           email: user.email,
           role: user.role,
           sessionId: decoded.sessionId,
-          type: 'access'
+          type: 'access',
         },
         this.config.jwt.secret,
         { expiresIn: this.config.jwt.expiresIn }
@@ -282,7 +282,7 @@ class UserAuthenticationService extends EventEmitter {
       return {
         success: true,
         accessToken,
-        expiresIn: this.config.jwt.expiresIn
+        expiresIn: this.config.jwt.expiresIn,
       };
     } catch (error) {
       console.error('[UserAuthenticationService] Token refresh error:', error);
@@ -323,7 +323,7 @@ class UserAuthenticationService extends EventEmitter {
         firstName: user.firstName,
         lastName: user.lastName,
         permissions: this.permissions[user.role],
-        sessionId: decoded.sessionId
+        sessionId: decoded.sessionId,
       };
     } catch (error) {
       console.error('[UserAuthenticationService] Token validation error:', error);
@@ -421,7 +421,7 @@ class UserAuthenticationService extends EventEmitter {
         await this._logSecurityEvent('PASSWORD_CHANGE_FAILED', {
           userId,
           reason: 'INVALID_CURRENT_PASSWORD',
-          ...context
+          ...context,
         });
         throw new Error('Current password is incorrect');
       }
@@ -446,7 +446,7 @@ class UserAuthenticationService extends EventEmitter {
       await this.userRepository.update(userId, {
         passwordHash: newPasswordHash,
         passwordUpdatedAt: new Date(),
-        requirePasswordChange: false
+        requirePasswordChange: false,
       });
 
       // Invalidate all sessions except current
@@ -458,7 +458,7 @@ class UserAuthenticationService extends EventEmitter {
       // Send notification
       await this.notificationService.send(user.email, 'PASSWORD_CHANGED', {
         timestamp: new Date(),
-        ip: context.ip
+        ip: context.ip,
       });
 
       return true;
@@ -483,7 +483,7 @@ class UserAuthenticationService extends EventEmitter {
         email: user.email,
         role: user.role,
         sessionId,
-        type: 'access'
+        type: 'access',
       },
       this.config.jwt.secret,
       { expiresIn: this.config.jwt.expiresIn }
@@ -493,7 +493,7 @@ class UserAuthenticationService extends EventEmitter {
       {
         userId: user.id,
         sessionId,
-        type: 'refresh'
+        type: 'refresh',
       },
       this.config.jwt.secret,
       { expiresIn: this.config.jwt.refreshExpiresIn }
@@ -528,7 +528,7 @@ class UserAuthenticationService extends EventEmitter {
       userId,
       attempts: newAttempts,
       reason: 'INVALID_PASSWORD',
-      ...context
+      ...context,
     });
 
     // Lock account after max attempts
@@ -549,7 +549,7 @@ class UserAuthenticationService extends EventEmitter {
       if (user) {
         await this.notificationService.send(user.email, 'ACCOUNT_LOCKED', {
           lockoutDuration: this.config.security.lockoutDuration / 60000, // minutes
-          unlockTime: lockoutUntil
+          unlockTime: lockoutUntil,
         });
       }
     }
@@ -606,7 +606,7 @@ class UserAuthenticationService extends EventEmitter {
 
     return {
       valid: errors.length === 0,
-      message: errors.join('. ')
+      message: errors.join('. '),
     };
   }
 
@@ -621,7 +621,7 @@ class UserAuthenticationService extends EventEmitter {
       lastActivity: new Date(),
       ip: context.ip,
       userAgent: context.userAgent,
-      isActive: true
+      isActive: true,
     };
 
     await this.cacheService.set(
@@ -687,7 +687,7 @@ class UserAuthenticationService extends EventEmitter {
         type: 'SECURITY',
         event,
         timestamp: new Date(),
-        ...data
+        ...data,
       });
     } catch (error) {
       console.error('[UserAuthenticationService] Failed to log security event:', error);

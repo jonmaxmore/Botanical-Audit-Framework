@@ -35,7 +35,7 @@ class SimpleDataAggregationService {
     const [certificates, surveys, documents] = await Promise.all([
       this.certificateRepository.findByFarmId(farmId),
       this.surveyRepository.findByFarmId(farmId),
-      this.documentRepository.findByRelatedEntity('farm', farmId)
+      this.documentRepository.findByRelatedEntity('farm', farmId),
     ]);
 
     return {
@@ -46,17 +46,17 @@ class SimpleDataAggregationService {
         address: farm.address,
         area: farm.area,
         coordinates: farm.coordinates,
-        createdAt: farm.createdAt
+        createdAt: farm.createdAt,
       },
       statistics: {
         totalCertificates: certificates.length,
         activeCertificates: certificates.filter(c => c.isActive()).length,
         totalSurveys: surveys.length,
         completedSurveys: surveys.filter(s => s.isCompleted()).length,
-        totalDocuments: documents.length
+        totalDocuments: documents.length,
       },
       recentCertificates: certificates.slice(0, 5),
-      recentSurveys: surveys.slice(0, 5)
+      recentSurveys: surveys.slice(0, 5),
     };
   }
 
@@ -73,7 +73,7 @@ class SimpleDataAggregationService {
       harvestDate: survey.harvestDate,
       yield: survey.yield,
       status: survey.status,
-      submittedAt: survey.submittedAt
+      submittedAt: survey.submittedAt,
     }));
   }
 
@@ -90,7 +90,7 @@ class SimpleDataAggregationService {
       expiryDate: cert.expiryDate,
       isActive: cert.isActive(),
       daysUntilExpiry: cert.getDaysUntilExpiry(),
-      canRenew: cert.canRenew()
+      canRenew: cert.canRenew(),
     }));
   }
 
@@ -109,8 +109,8 @@ class SimpleDataAggregationService {
         progress: e.progressPercentage,
         enrolledAt: e.enrolledAt,
         completedAt: e.completedAt,
-        certificateIssued: e.certificateIssued
-      }))
+        certificateIssued: e.certificateIssued,
+      })),
     };
 
     return progress;
@@ -129,7 +129,7 @@ class SimpleDataAggregationService {
       status: doc.status,
       uploadedAt: doc.uploadedAt,
       expiresAt: doc.expiresAt,
-      isApproved: doc.isApproved()
+      isApproved: doc.isApproved(),
     }));
   }
 
@@ -147,7 +147,7 @@ class SimpleDataAggregationService {
       plantingDate: survey.plantingDate,
       expectedHarvest: survey.expectedHarvest,
       pesticideUsed: survey.pesticideUsed,
-      submittedAt: survey.submittedAt
+      submittedAt: survey.submittedAt,
     }));
   }
 
@@ -160,7 +160,7 @@ class SimpleDataAggregationService {
       total: certificates.total,
       byStatus: {},
       byType: {},
-      recent: certificates.certificates.slice(0, 10)
+      recent: certificates.certificates.slice(0, 10),
     };
 
     // Count by status
@@ -175,7 +175,7 @@ class SimpleDataAggregationService {
   async getCertificatesIssued(filters = {}) {
     const certificates = await this.certificateRepository.findWithFilters({
       status: 'ACTIVE',
-      ...filters
+      ...filters,
     });
 
     return certificates.certificates.map(cert => ({
@@ -185,7 +185,7 @@ class SimpleDataAggregationService {
       farmName: cert.farmName,
       issuedDate: cert.issuedDate,
       expiryDate: cert.expiryDate,
-      issuedBy: cert.issuedBy
+      issuedBy: cert.issuedBy,
     }));
   }
 
@@ -201,7 +201,7 @@ class SimpleDataAggregationService {
       entityType: log.entityType,
       performedBy: log.performedBy,
       performedAt: log.performedAt,
-      details: log.details
+      details: log.details,
     }));
   }
 
@@ -210,13 +210,13 @@ class SimpleDataAggregationService {
     const [farmsCount, certificatesCount, surveysCount] = await Promise.all([
       this.farmRepository.count(filters),
       this.certificateRepository.count(filters),
-      this.surveyRepository.count(filters)
+      this.surveyRepository.count(filters),
     ]);
 
     return {
       totalFarms: farmsCount,
       totalCertificates: certificatesCount,
-      totalSurveys: surveysCount
+      totalSurveys: surveysCount,
       // Add more statistics as needed
     };
   }
@@ -227,7 +227,7 @@ class SimpleDataAggregationService {
         totalEnrollments: 0,
         completed: 0,
         inProgress: 0,
-        completionRate: '0%'
+        completionRate: '0%',
       };
     }
 
@@ -241,7 +241,7 @@ class SimpleDataAggregationService {
       completed: completed,
       inProgress: enrollments.enrollments.filter(e => e.isActive()).length,
       failed: enrollments.enrollments.filter(e => e.isFailed()).length,
-      completionRate: total > 0 ? `${((completed / total) * 100).toFixed(2)}%` : '0%'
+      completionRate: total > 0 ? `${((completed / total) * 100).toFixed(2)}%` : '0%',
     };
   }
 
@@ -257,7 +257,7 @@ class SimpleDataAggregationService {
       totalActions: logs.total,
       byAction: {},
       byUser: {},
-      recent: logs.logs.slice(0, 20)
+      recent: logs.logs.slice(0, 20),
     };
 
     for (const log of logs.logs) {
@@ -274,14 +274,14 @@ class SimpleDataAggregationService {
       this.farmRepository.count(filters),
       this.certificateRepository.count(filters),
       this.surveyRepository.count(filters),
-      this.documentRepository ? this.documentRepository.count(filters) : Promise.resolve(0)
+      this.documentRepository ? this.documentRepository.count(filters) : Promise.resolve(0),
     ]);
 
     return {
       totalFarms: farms,
       totalCertificates: certificates,
       totalSurveys: surveys,
-      totalDocuments: documents
+      totalDocuments: documents,
     };
   }
 
@@ -301,14 +301,14 @@ class SimpleDataAggregationService {
         complianceRate:
           certificates.total > 0
             ? `${((activeCerts / certificates.total) * 100).toFixed(2)}%`
-            : '0%'
+            : '0%',
       },
       surveyCompliance: {
         completed: completedSurveys,
         total: surveys.total,
         completionRate:
-          surveys.total > 0 ? `${((completedSurveys / surveys.total) * 100).toFixed(2)}%` : '0%'
-      }
+          surveys.total > 0 ? `${((completedSurveys / surveys.total) * 100).toFixed(2)}%` : '0%',
+      },
     };
   }
 
@@ -319,8 +319,8 @@ class SimpleDataAggregationService {
     const filters = {
       createdAt: {
         $gte: startDate,
-        $lte: endDate
-      }
+        $lte: endDate,
+      },
     };
 
     return await this.getPerformanceDashboard(filters);
@@ -334,8 +334,8 @@ class SimpleDataAggregationService {
     const filters = {
       createdAt: {
         $gte: startDate,
-        $lte: endDate
-      }
+        $lte: endDate,
+      },
     };
 
     return await this.getPerformanceDashboard(filters);
@@ -348,8 +348,8 @@ class SimpleDataAggregationService {
     const filters = {
       createdAt: {
         $gte: startDate,
-        $lte: endDate
-      }
+        $lte: endDate,
+      },
     };
 
     return await this.getPerformanceDashboard(filters);
@@ -361,7 +361,7 @@ class SimpleDataAggregationService {
     return {
       message: 'Custom data export',
       query: query,
-      data: []
+      data: [],
     };
   }
 }

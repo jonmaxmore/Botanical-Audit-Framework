@@ -43,7 +43,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       maxRevisionAttempts: 3,
       autoExpireJobHours: 72,
       slaWarningHours: 24,
-      reminderIntervalHours: 48
+      reminderIntervalHours: 48,
     };
 
     console.log('[ApplicationWorkflowEngine] Initialized successfully');
@@ -79,26 +79,26 @@ class ApplicationWorkflowEngine extends EventEmitter {
             enteredAt: new Date(),
             actor: farmerId,
             actorRole: 'FARMER',
-            notes: 'Application created'
-          }
+            notes: 'Application created',
+          },
         ],
         revisionCount: 0,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
 
       // Create audit log
       await this._createAuditLog(application.id, 'APPLICATION_CREATED', {
         farmerId,
         applicationNumber,
-        state: this.stateMachine.STATES.DRAFT
+        state: this.stateMachine.STATES.DRAFT,
       });
 
       // Emit event
       this.emit('application.created', {
         applicationId: application.id,
         farmerId,
-        state: this.stateMachine.STATES.DRAFT
+        state: this.stateMachine.STATES.DRAFT,
       });
 
       return application;
@@ -146,7 +146,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       );
 
       // Auto-transition to UNDER_REVIEW after submission
-      setTimeout(async() => {
+      setTimeout(async () => {
         await this._autoTransitionToReview(updatedApplication.id);
       }, 1000);
 
@@ -186,8 +186,8 @@ class ApplicationWorkflowEngine extends EventEmitter {
           completedAt: new Date(),
           approved: true,
           findings: reviewData.findings || [],
-          notes: reviewData.notes
-        }
+          notes: reviewData.notes,
+        },
       });
 
       // Transition to PAYMENT_PENDING
@@ -204,12 +204,12 @@ class ApplicationWorkflowEngine extends EventEmitter {
         applicationId,
         amount: 5000,
         phase: 1,
-        description: `GACP Certification Phase 1 - ${application.applicationNumber}`
+        description: `GACP Certification Phase 1 - ${application.applicationNumber}`,
       });
 
       // Update application with payment info
       await this.applicationRepo.update(applicationId, {
-        'payment.phase1': paymentData
+        'payment.phase1': paymentData,
       });
 
       // Send notification to farmer
@@ -218,7 +218,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         amount: 5000,
         phase: 1,
         paymentUrl: paymentData.paymentUrl,
-        qrCode: paymentData.qrCode
+        qrCode: paymentData.qrCode,
       });
 
       return updatedApplication;
@@ -244,7 +244,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         // Automatically reject if too many revisions
         return await this.rejectApplication(applicationId, reviewerId, {
           reason: 'Maximum revision attempts exceeded',
-          autoRejection: true
+          autoRejection: true,
         });
       }
 
@@ -264,7 +264,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         revisionCount: application.revisionCount + 1,
         'review.revisionRequested': true,
         'review.revisionReasons': revisionData.reasons,
-        'review.revisionNotes': revisionData.notes
+        'review.revisionNotes': revisionData.notes,
       });
 
       // Transition to REVISION_REQUIRED
@@ -282,7 +282,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         reasons: revisionData.reasons,
         notes: revisionData.notes,
         revisionCount: application.revisionCount + 1,
-        maxRevisions: this.config.maxRevisionAttempts
+        maxRevisions: this.config.maxRevisionAttempts,
       });
 
       return updatedApplication;
@@ -310,7 +310,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
       // Validate transition
       const validation = this.stateMachine.validateTransition(application, targetState, 'SYSTEM', {
-        paymentReference: paymentData.transactionId
+        paymentReference: paymentData.transactionId,
       });
 
       if (!validation.valid) {
@@ -323,7 +323,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         [`${paymentField}.paidAt`]: new Date(),
         [`${paymentField}.transactionId`]: paymentData.transactionId,
         [`${paymentField}.amount`]: paymentData.amount,
-        [`${paymentField}.status`]: 'COMPLETED'
+        [`${paymentField}.status`]: 'COMPLETED',
       });
 
       // Transition state
@@ -342,7 +342,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
           title: `Farm Inspection Required - ${application.applicationNumber}`,
           description: 'Schedule and conduct farm inspection',
           priority: 'NORMAL',
-          dueDate: this._calculateDueDate(14) // 14 days SLA
+          dueDate: this._calculateDueDate(14), // 14 days SLA
         });
       } else {
         // Phase 2 payment - create job for admin approval
@@ -350,7 +350,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
           title: `Final Approval Required - ${application.applicationNumber}`,
           description: 'Review and approve certificate issuance',
           priority: 'HIGH',
-          dueDate: this._calculateDueDate(7) // 7 days SLA
+          dueDate: this._calculateDueDate(7), // 7 days SLA
         });
       }
 
@@ -389,7 +389,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         'inspection.scheduledDate': scheduleData.scheduledDate,
         'inspection.type': scheduleData.type, // 'onsite' or 'virtual'
         'inspection.notes': scheduleData.notes,
-        'inspection.scheduledAt': new Date()
+        'inspection.scheduledAt': new Date(),
       });
 
       // Transition state
@@ -407,7 +407,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         inspectorName: await this._getInspectorName(inspectorId),
         scheduledDate: scheduleData.scheduledDate,
         type: scheduleData.type,
-        notes: scheduleData.notes
+        notes: scheduleData.notes,
       });
 
       return updatedApplication;
@@ -448,7 +448,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         return await this.rejectApplication(applicationId, inspectorId, {
           reason: 'Farm inspection failed',
           complianceScore,
-          inspectionFindings: inspectionReport.findings
+          inspectionFindings: inspectionReport.findings,
         });
       }
 
@@ -460,7 +460,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         'inspection.findings': inspectionReport.findings,
         'inspection.photos': inspectionReport.photos || [],
         'inspection.checklist': inspectionReport.checklist || {},
-        'inspection.inspectorNotes': inspectionReport.notes
+        'inspection.inspectorNotes': inspectionReport.notes,
       });
 
       // Transition state
@@ -473,7 +473,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       );
 
       // Auto-transition to Phase 2 payment
-      setTimeout(async() => {
+      setTimeout(async () => {
         await this._autoTransitionToPhase2Payment(applicationId);
       }, 1000);
 
@@ -513,7 +513,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         'approval.approvedAt': new Date(),
         'approval.signature': approvalData.signature,
         'approval.notes': approvalData.notes,
-        'approval.certificateTemplate': approvalData.certificateTemplate || 'standard'
+        'approval.certificateTemplate': approvalData.certificateTemplate || 'standard',
       });
 
       // Transition to APPROVED
@@ -526,7 +526,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       );
 
       // Auto-generate certificate
-      setTimeout(async() => {
+      setTimeout(async () => {
         await this._generateCertificate(applicationId, adminId);
       }, 1000);
 
@@ -571,7 +571,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         'rejection.stage': application.status,
         'rejection.notes': rejectionData.notes,
         'rejection.complianceScore': rejectionData.complianceScore || null,
-        'rejection.autoRejection': rejectionData.autoRejection || false
+        'rejection.autoRejection': rejectionData.autoRejection || false,
       });
 
       // Transition to REJECTED
@@ -589,7 +589,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         reason: rejectionData.reason,
         stage: application.status,
         notes: rejectionData.notes,
-        canReapply: true
+        canReapply: true,
       });
 
       return updatedApplication;
@@ -627,7 +627,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         estimatedCompletion: this._estimateCompletion(application),
         slaStatus: this._checkSLAStatus(application),
         canEdit: currentStateMetadata?.canEdit || false,
-        paymentRequired: currentStateMetadata?.paymentRequired || false
+        paymentRequired: currentStateMetadata?.paymentRequired || false,
       };
     } catch (error) {
       console.error('[WorkflowEngine] Error getting workflow status:', error);
@@ -667,7 +667,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       enteredAt: now,
       actor: userId,
       actorRole: userRole,
-      notes: notes || ''
+      notes: notes || '',
     });
 
     // Calculate expiration date
@@ -678,7 +678,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       status: newState,
       workflowHistory,
       expiresAt: expirationDate,
-      updatedAt: now
+      updatedAt: now,
     });
 
     // Create audit log
@@ -687,7 +687,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       toState: newState,
       userId,
       userRole,
-      notes
+      notes,
     });
 
     // Emit event
@@ -696,7 +696,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       fromState: application.status,
       toState: newState,
       userId,
-      userRole
+      userRole,
     });
 
     return updatedApplication;
@@ -719,7 +719,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
           title: `Document Review Required - ${application.applicationNumber}`,
           description: 'Review application documents for completeness and accuracy',
           priority: 'NORMAL',
-          dueDate: this._calculateDueDate(14)
+          dueDate: this._calculateDueDate(14),
         });
       }
     } catch (error) {
@@ -744,11 +744,11 @@ class ApplicationWorkflowEngine extends EventEmitter {
           applicationId,
           amount: 25000,
           phase: 2,
-          description: `GACP Certification Phase 2 - ${application.applicationNumber}`
+          description: `GACP Certification Phase 2 - ${application.applicationNumber}`,
         });
 
         await this.applicationRepo.update(applicationId, {
-          'payment.phase2': paymentData
+          'payment.phase2': paymentData,
         });
 
         // Send notification
@@ -756,7 +756,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
           applicationNumber: application.applicationNumber,
           amount: 25000,
           paymentUrl: paymentData.paymentUrl,
-          qrCode: paymentData.qrCode
+          qrCode: paymentData.qrCode,
         });
       }
     } catch (error) {
@@ -774,14 +774,14 @@ class ApplicationWorkflowEngine extends EventEmitter {
           farmerId: application.farmerId,
           applicationNumber: application.applicationNumber,
           issuedBy,
-          template: application.approval?.certificateTemplate || 'standard'
+          template: application.approval?.certificateTemplate || 'standard',
         });
 
         // Update application with certificate info
         await this.applicationRepo.update(applicationId, {
           certificateId: certificate.id,
           certificateNumber: certificate.certificateNumber,
-          certificateIssuedAt: new Date()
+          certificateIssuedAt: new Date(),
         });
 
         // Transition to final state
@@ -797,7 +797,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         await this._sendNotification(application.farmerId, 'CERTIFICATE_ISSUED', {
           applicationNumber: application.applicationNumber,
           certificateNumber: certificate.certificateNumber,
-          downloadUrl: certificate.downloadUrl
+          downloadUrl: certificate.downloadUrl,
         });
       }
     } catch (error) {
@@ -809,7 +809,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
     const validationResult = {
       valid: true,
       errors: [],
-      warnings: []
+      warnings: [],
     };
 
     // 1. Check required documents with detailed validation
@@ -817,34 +817,34 @@ class ApplicationWorkflowEngine extends EventEmitter {
       farm_license: {
         required: true,
         description: 'Farm registration license',
-        validityCheck: true
+        validityCheck: true,
       },
       land_deed: {
         required: true,
         description: 'Land ownership document',
-        validityCheck: true
+        validityCheck: true,
       },
       farmer_id: {
         required: true,
         description: 'Farmer identification card',
-        validityCheck: true
+        validityCheck: true,
       },
       farm_photos: {
         required: true,
         description: 'Farm site photos (minimum 5 photos)',
-        minCount: 5
+        minCount: 5,
       },
       water_test_report: {
         required: true,
         description: 'Water quality test report',
-        maxAge: 90 // days
+        maxAge: 90, // days
       },
       soil_test_report: {
         required: false,
         description: 'Soil analysis report',
         maxAge: 180, // days
-        recommended: true
-      }
+        recommended: true,
+      },
     };
 
     const uploadedDocs = application.documents || [];
@@ -948,7 +948,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       'phase2_payment_pending',
       'phase2_payment_verified',
       'approved',
-      'certificate_issued'
+      'certificate_issued',
     ];
 
     const currentIndex = stateOrder.indexOf(currentState);
@@ -982,7 +982,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       DTAM_REVIEWER: 'DTAM_REVIEWER',
       DTAM_INSPECTOR: 'DTAM_INSPECTOR',
       DTAM_ADMIN: 'DTAM_ADMIN',
-      ADMIN: 'DTAM_ADMIN'
+      ADMIN: 'DTAM_ADMIN',
     };
     return roleMapping[userRole] || userRole;
   }
@@ -994,7 +994,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         entityId: applicationId,
         action,
         details,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
   }
@@ -1005,7 +1005,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         userId,
         type,
         data,
-        channels: ['email', 'sms', 'in_app']
+        channels: ['email', 'sms', 'in_app'],
       });
     }
   }
@@ -1015,7 +1015,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       await this.jobTicketService.create({
         applicationId,
         assignedRole,
-        ...ticketData
+        ...ticketData,
       });
     }
   }
@@ -1053,7 +1053,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       'coordinates.longitude': 'Farm coordinates (longitude)',
       area: 'Farm area (rai)',
       farmType: 'Farm type (organic/conventional)',
-      owner: 'Farm owner information'
+      owner: 'Farm owner information',
     };
 
     for (const [field, description] of Object.entries(requiredFields)) {
@@ -1182,7 +1182,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       'PHITSANULOK',
       'PHICHIT',
       'PHETCHABUN',
-      'NAKHON_SAWAN'
+      'NAKHON_SAWAN',
     ];
 
     if (application.farm?.address?.province) {
@@ -1250,7 +1250,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       quality: { weight: 0.25, items: [] },
       environmental: { weight: 0.2, items: [] },
       documentation: { weight: 0.15, items: [] },
-      facility: { weight: 0.1, items: [] }
+      facility: { weight: 0.1, items: [] },
     };
 
     // Categorize checklist items
@@ -1277,7 +1277,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
         score: Math.round(categoryScore),
         passed: passedItems.length,
         total: categoryData.items.length,
-        weight: categoryData.weight
+        weight: categoryData.weight,
       };
     }
 
@@ -1297,7 +1297,7 @@ class ApplicationWorkflowEngine extends EventEmitter {
       quality: ['crop_quality', 'harvest_handling', 'post_harvest', 'traceability'],
       environmental: ['water_management', 'soil_conservation', 'waste_management', 'biodiversity'],
       documentation: ['record_keeping', 'training_records', 'certificates', 'procedures'],
-      facility: ['storage_facilities', 'processing_area', 'hygiene', 'infrastructure']
+      facility: ['storage_facilities', 'processing_area', 'hygiene', 'infrastructure'],
     };
 
     for (const [category, keywords] of Object.entries(categoryMap)) {

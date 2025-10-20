@@ -11,25 +11,25 @@ const SurveyResponseSchema = new mongoose.Schema(
     surveyId: {
       type: String,
       required: true,
-      description: 'Template ID (e.g., template-central)'
+      description: 'Template ID (e.g., template-central)',
     },
     userId: {
       type: String,
       required: true,
       index: true,
-      description: 'User who started the survey'
+      description: 'User who started the survey',
     },
     farmId: {
       type: String,
       index: true,
-      description: 'Associated farm ID'
+      description: 'Associated farm ID',
     },
     region: {
       type: String,
       required: true,
       enum: ['central', 'southern', 'northern', 'northeastern'],
       index: true,
-      description: 'Farm region'
+      description: 'Farm region',
     },
 
     // Wizard state
@@ -39,27 +39,27 @@ const SurveyResponseSchema = new mongoose.Schema(
       default: 1,
       min: 1,
       max: 7,
-      description: 'Current wizard step (1-7)'
+      description: 'Current wizard step (1-7)',
     },
     progress: {
       type: Number,
       default: 0,
       min: 0,
       max: 100,
-      description: 'Overall progress percentage'
+      description: 'Overall progress percentage',
     },
     state: {
       type: String,
       enum: ['DRAFT', 'COMPLETE', 'SUBMITTED'],
       default: 'DRAFT',
       index: true,
-      description: 'Survey response state'
+      description: 'Survey response state',
     },
 
     // Step 1: Region Selection
     regionSelection: {
       selectedRegion: String,
-      confirmedAt: Date
+      confirmedAt: Date,
     },
 
     // Step 2: Personal Information
@@ -74,8 +74,8 @@ const SurveyResponseSchema = new mongoose.Schema(
         subDistrict: String,
         district: String,
         province: String,
-        postalCode: String
-      }
+        postalCode: String,
+      },
     },
 
     // Step 3: Farm Information
@@ -86,8 +86,8 @@ const SurveyResponseSchema = new mongoose.Schema(
       annualProduction: Number, // kg/year
       farmLocation: {
         latitude: Number,
-        longitude: Number
-      }
+        longitude: Number,
+      },
     },
 
     // Step 4: Management & Production
@@ -102,7 +102,7 @@ const SurveyResponseSchema = new mongoose.Schema(
       hasPestManagement: Boolean,
       environmentalConcern: Boolean,
       productionMethod: String,
-      challenges: [String]
+      challenges: [String],
     },
 
     // Step 5: Cost & Revenue
@@ -111,7 +111,7 @@ const SurveyResponseSchema = new mongoose.Schema(
       monthlyRevenue: Number, // THB
       profitMargin: Number, // %
       mainExpenses: [String],
-      revenueStreams: [String]
+      revenueStreams: [String],
     },
 
     // Step 6: Market & Sales
@@ -121,7 +121,7 @@ const SurveyResponseSchema = new mongoose.Schema(
       exportMarket: Boolean,
       mainMarkets: [String],
       salesChannels: [String],
-      marketingStrategy: String
+      marketingStrategy: String,
     },
 
     // Step 7: Problems & Needs
@@ -131,7 +131,7 @@ const SurveyResponseSchema = new mongoose.Schema(
       financialNeeds: [String],
       trainingNeeds: [String],
       supportNeeded: String,
-      futureGoals: String
+      futureGoals: String,
     },
 
     // Scoring results
@@ -140,31 +140,31 @@ const SurveyResponseSchema = new mongoose.Schema(
         type: Number,
         min: 0,
         max: 100,
-        description: 'GACP compliance score'
+        description: 'GACP compliance score',
       },
       sustainability: {
         type: Number,
         min: 0,
         max: 100,
-        description: 'Sustainability score'
+        description: 'Sustainability score',
       },
       market: {
         type: Number,
         min: 0,
         max: 100,
-        description: 'Market access score'
+        description: 'Market access score',
       },
       overall: {
         type: Number,
         min: 0,
         max: 100,
-        description: 'Overall score (average + bonus)'
+        description: 'Overall score (average + bonus)',
       },
       regionalBonus: {
         type: Number,
         default: 0,
-        description: 'Regional bonus points'
-      }
+        description: 'Regional bonus points',
+      },
     },
 
     // Recommendations
@@ -172,13 +172,13 @@ const SurveyResponseSchema = new mongoose.Schema(
       {
         priority: {
           type: String,
-          enum: ['HIGH', 'MEDIUM', 'LOW']
+          enum: ['HIGH', 'MEDIUM', 'LOW'],
         },
         category: String,
         title: String,
         description: String,
-        actionItems: [String]
-      }
+        actionItems: [String],
+      },
     ],
 
     // Metadata
@@ -186,20 +186,20 @@ const SurveyResponseSchema = new mongoose.Schema(
       createdAt: {
         type: Date,
         default: Date.now,
-        index: true
+        index: true,
       },
       lastSavedAt: {
         type: Date,
-        default: Date.now
+        default: Date.now,
       },
       submittedAt: Date,
       ipAddress: String,
-      userAgent: String
-    }
+      userAgent: String,
+    },
   },
   {
     collection: 'surveyresponses',
-    timestamps: false
+    timestamps: false,
   }
 );
 
@@ -210,12 +210,12 @@ SurveyResponseSchema.index({ 'metadata.createdAt': -1 });
 SurveyResponseSchema.index({ 'scores.overall': -1 });
 
 // Virtual: Check if all steps completed
-SurveyResponseSchema.virtual('isComplete').get(function() {
+SurveyResponseSchema.virtual('isComplete').get(function () {
   return this.progress === 100 && this.currentStep === 7;
 });
 
 // Virtual: Score grade
-SurveyResponseSchema.virtual('grade').get(function() {
+SurveyResponseSchema.virtual('grade').get(function () {
   if (!this.scores || !this.scores.overall) return null;
 
   const score = this.scores.overall;
@@ -227,7 +227,7 @@ SurveyResponseSchema.virtual('grade').get(function() {
 });
 
 // Instance method: Get step data
-SurveyResponseSchema.methods.getStepData = function(stepNumber) {
+SurveyResponseSchema.methods.getStepData = function (stepNumber) {
   const stepMap = {
     1: 'regionSelection',
     2: 'personalInfo',
@@ -235,20 +235,20 @@ SurveyResponseSchema.methods.getStepData = function(stepNumber) {
     4: 'managementProduction',
     5: 'costRevenue',
     6: 'marketSales',
-    7: 'problemsNeeds'
+    7: 'problemsNeeds',
   };
 
   return this[stepMap[stepNumber]];
 };
 
 // Instance method: Update auto-save timestamp
-SurveyResponseSchema.methods.updateAutoSave = function() {
+SurveyResponseSchema.methods.updateAutoSave = function () {
   this.metadata.lastSavedAt = new Date();
   return this.save();
 };
 
 // Static method: Get user's surveys
-SurveyResponseSchema.statics.findByUser = function(userId, options = {}) {
+SurveyResponseSchema.statics.findByUser = function (userId, options = {}) {
   const query = { userId };
 
   if (options.status) query.state = options.status;
@@ -260,7 +260,7 @@ SurveyResponseSchema.statics.findByUser = function(userId, options = {}) {
 };
 
 // Static method: Get regional statistics
-SurveyResponseSchema.statics.getRegionalStats = async function(region) {
+SurveyResponseSchema.statics.getRegionalStats = async function (region) {
   return this.aggregate([
     { $match: { region, state: 'SUBMITTED' } },
     {
@@ -270,14 +270,14 @@ SurveyResponseSchema.statics.getRegionalStats = async function(region) {
         avgGACPScore: { $avg: '$scores.gacp' },
         avgSustainabilityScore: { $avg: '$scores.sustainability' },
         avgMarketScore: { $avg: '$scores.market' },
-        avgOverallScore: { $avg: '$scores.overall' }
-      }
-    }
+        avgOverallScore: { $avg: '$scores.overall' },
+      },
+    },
   ]);
 };
 
 // Pre-save middleware
-SurveyResponseSchema.pre('save', function(next) {
+SurveyResponseSchema.pre('save', function (next) {
   // Update lastSavedAt
   this.metadata.lastSavedAt = new Date();
 

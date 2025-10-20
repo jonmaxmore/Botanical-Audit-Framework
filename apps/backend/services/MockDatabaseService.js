@@ -35,7 +35,7 @@ class MockDatabaseService {
       'notifications',
       'audit_logs',
       'farms',
-      'crops'
+      'crops',
     ];
 
     collectionNames.forEach(name => {
@@ -53,7 +53,7 @@ class MockDatabaseService {
       role: 'farmer',
       nationalId: '1234567890123',
       createdAt: new Date(),
-      isActive: true
+      isActive: true,
     });
 
     users.set('user002', {
@@ -63,7 +63,7 @@ class MockDatabaseService {
       role: 'inspector',
       nationalId: '1234567890124',
       createdAt: new Date(),
-      isActive: true
+      isActive: true,
     });
 
     // Sample Applications
@@ -77,22 +77,22 @@ class MockDatabaseService {
         location: {
           address: '123 หมู่ 1 ตำบลทดสอบ',
           province: 'เชียงใหม่',
-          coordinates: { lat: 18.7883, lng: 98.9853 }
+          coordinates: { lat: 18.7883, lng: 98.9853 },
         },
-        farmSize: 10.5
+        farmSize: 10.5,
       },
       cropInformation: {
         crops: [
           {
             scientificName: 'Curcuma longa',
             commonName: 'ขมิ้นชัน',
-            cultivationArea: 5.0
-          }
-        ]
+            cultivationArea: 5.0,
+          },
+        ],
       },
       status: 'submitted',
       submittedAt: new Date(),
-      createdAt: new Date()
+      createdAt: new Date(),
     });
 
     // Sample Inspections
@@ -104,7 +104,7 @@ class MockDatabaseService {
       scheduledDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
       status: 'scheduled',
       controlPoints: {},
-      createdAt: new Date()
+      createdAt: new Date(),
     });
 
     console.log('[MockDB] ✅ Sample data generated');
@@ -137,7 +137,7 @@ class MockDatabaseService {
         return null;
       },
 
-      find: async(query = {}) => {
+      find: async (query = {}) => {
         const collection = this.collections.get(name);
         const results = [];
 
@@ -153,11 +153,11 @@ class MockDatabaseService {
         }
 
         return {
-          toArray: async() => results,
-          limit: n => ({ toArray: async() => results.slice(0, n) }),
-          skip: n => ({ toArray: async() => results.slice(n) }),
+          toArray: async () => results,
+          limit: n => ({ toArray: async () => results.slice(0, n) }),
+          skip: n => ({ toArray: async () => results.slice(n) }),
           sort: sortObj => ({
-            toArray: async() => {
+            toArray: async () => {
               const sortKey = Object.keys(sortObj)[0];
               const sortOrder = sortObj[sortKey];
               return results.sort((a, b) => {
@@ -166,8 +166,8 @@ class MockDatabaseService {
                 if (sortOrder === 1) return aVal > bVal ? 1 : -1;
                 return aVal < bVal ? 1 : -1;
               });
-            }
-          })
+            },
+          }),
         };
       },
 
@@ -179,7 +179,7 @@ class MockDatabaseService {
         return { insertedId: id };
       },
 
-      updateOne: async(query, update) => {
+      updateOne: async (query, update) => {
         const collection = this.collections.get(name);
         const doc = await this.collection(name).findOne(query);
         if (doc) {
@@ -200,11 +200,11 @@ class MockDatabaseService {
         return { deletedCount: 0 };
       },
 
-      countDocuments: async(query = {}) => {
+      countDocuments: async (query = {}) => {
         const docs = await this.collection(name).find(query);
         const results = await docs.toArray();
         return results.length;
-      }
+      },
     };
   }
 

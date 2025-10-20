@@ -6,5 +6,5 @@ module.exports = {
   validation: require('./validation'),
   response: require('./response'),
   constants: require('./constants'),
-  utilities: require('./utilities')
+  utilities: require('./utilities'),
 };

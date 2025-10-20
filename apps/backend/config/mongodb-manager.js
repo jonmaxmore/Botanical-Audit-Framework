@@ -57,7 +57,7 @@ class MongoDBManager {
       ssl: forceAtlas || !isLocalMongoDB,
       tls: forceAtlas || !isLocalMongoDB,
       tlsAllowInvalidCertificates: false,
-      tlsAllowInvalidHostnames: false
+      tlsAllowInvalidHostnames: false,
     };
 
     try {
@@ -137,12 +137,12 @@ class MongoDBManager {
     });
 
     // Handle process termination
-    process.on('SIGINT', async() => {
+    process.on('SIGINT', async () => {
       await this.disconnect();
       process.exit(0);
     });
 
-    process.on('SIGTERM', async() => {
+    process.on('SIGTERM', async () => {
       await this.disconnect();
       process.exit(0);
     });
@@ -170,7 +170,7 @@ class MongoDBManager {
         return {
           status: 'unhealthy',
           connected: false,
-          message: 'Not connected to MongoDB'
+          message: 'Not connected to MongoDB',
         };
       }
 
@@ -184,13 +184,13 @@ class MongoDBManager {
         host: mongoose.connection.host,
         port: mongoose.connection.port,
         readyState: mongoose.connection.readyState,
-        collections: await this.getCollectionStats()
+        collections: await this.getCollectionStats(),
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         connected: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -208,7 +208,7 @@ class MongoDBManager {
         stats[coll.name] = {
           documents: collStats.count,
           size: collStats.size,
-          indexes: collStats.nindexes
+          indexes: collStats.nindexes,
         };
       }
 
@@ -226,7 +226,7 @@ class MongoDBManager {
       0: 'disconnected',
       1: 'connected',
       2: 'connecting',
-      3: 'disconnecting'
+      3: 'disconnecting',
     };
 
     return {
@@ -234,7 +234,7 @@ class MongoDBManager {
       readyState: states[mongoose.connection.readyState] || 'unknown',
       host: mongoose.connection.host,
       port: mongoose.connection.port,
-      database: mongoose.connection.db?.databaseName || 'N/A'
+      database: mongoose.connection.db?.databaseName || 'N/A',
     };
   }
 }

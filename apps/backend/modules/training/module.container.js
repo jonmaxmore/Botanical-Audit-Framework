@@ -19,16 +19,16 @@ const MongoDBCourseRepository = require('./infrastructure/database/MongoDBCourse
 const MongoDBEnrollmentRepository = require('./infrastructure/database/MongoDBEnrollmentRepository');
 
 // Application - Use Cases
-const CreateCourseUseCase = require('./application/use-cases/CreateCourseUseCase');
-const UpdateCourseUseCase = require('./application/use-cases/UpdateCourseUseCase');
-const PublishCourseUseCase = require('./application/use-cases/PublishCourseUseCase');
-const ListCoursesUseCase = require('./application/use-cases/ListCoursesUseCase');
-const GetCourseDetailsUseCase = require('./application/use-cases/GetCourseDetailsUseCase');
-const EnrollInCourseUseCase = require('./application/use-cases/EnrollInCourseUseCase');
-const UpdateProgressUseCase = require('./application/use-cases/UpdateProgressUseCase');
-const SubmitFinalAssessmentUseCase = require('./application/use-cases/SubmitFinalAssessmentUseCase');
-const GetFarmerEnrollmentsUseCase = require('./application/use-cases/GetFarmerEnrollmentsUseCase');
-const GetTrainingStatisticsUseCase = require('./application/use-cases/GetTrainingStatisticsUseCase');
+const CreateCourseUseCase = require('./application/use-cases/create-course');
+const UpdateCourseUseCase = require('./application/use-cases/update-course');
+const PublishCourseUseCase = require('./application/use-cases/publish-course');
+const ListCoursesUseCase = require('./application/use-cases/list-courses');
+const GetCourseDetailsUseCase = require('./application/use-cases/get-course-details');
+const EnrollInCourseUseCase = require('./application/use-cases/enroll-course');
+const UpdateProgressUseCase = require('./application/use-cases/update-progress');
+const SubmitFinalAssessmentUseCase = require('./application/use-cases/submit-assessment');
+const GetFarmerEnrollmentsUseCase = require('./application/use-cases/get-farmer-enrollments');
+const GetTrainingStatisticsUseCase = require('./application/use-cases/get-training-stats');
 
 // Presentation
 const TrainingController = require('./presentation/controllers/TrainingController');
@@ -85,7 +85,7 @@ function createTrainingModule(config) {
     updateProgress,
     submitFinalAssessment,
     getFarmerEnrollments,
-    getTrainingStatistics
+    getTrainingStatistics,
   };
 
   // Presentation Layer - Controller
@@ -104,13 +104,13 @@ function createTrainingModule(config) {
     services: {
       courseRepository,
       enrollmentRepository,
-      ...useCases
+      ...useCases,
     },
 
     // Domain entities (for type reference)
     entities: {
       Course,
-      Enrollment
+      Enrollment,
     },
 
     // Constants
@@ -118,8 +118,8 @@ function createTrainingModule(config) {
       COURSE_STATUS: Course.STATUS,
       COURSE_TYPE: Course.TYPE,
       COURSE_LEVEL: Course.LEVEL,
-      ENROLLMENT_STATUS: Enrollment.STATUS
-    }
+      ENROLLMENT_STATUS: Enrollment.STATUS,
+    },
   };
 }
 

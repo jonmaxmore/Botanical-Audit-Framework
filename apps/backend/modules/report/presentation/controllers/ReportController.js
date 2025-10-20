@@ -35,7 +35,7 @@ class ReportController {
       const reportData = {
         ...req.body,
         requestedBy: userId,
-        requestedByType: userType
+        requestedByType: userType,
       };
 
       const report = await this.requestReportUseCase.execute(reportData);
@@ -51,12 +51,12 @@ class ReportController {
       res.status(201).json({
         success: true,
         message: 'Report requested successfully',
-        data: report
+        data: report,
       });
     } catch (error) {
       res.status(400).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -77,12 +77,12 @@ class ReportController {
       res.status(200).json({
         success: true,
         message: 'Report generated successfully',
-        data: generatedReport
+        data: generatedReport,
       });
     } catch (error) {
       res.status(400).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -98,12 +98,12 @@ class ReportController {
 
       res.status(200).json({
         success: true,
-        data: report
+        data: report,
       });
     } catch (error) {
       res.status(error.message.includes('Access denied') ? 403 : 404).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -120,14 +120,14 @@ class ReportController {
       res.set({
         'Content-Type': result.mimeType,
         'Content-Disposition': `attachment; filename="${result.fileName}"`,
-        'Content-Length': result.fileSize
+        'Content-Length': result.fileSize,
       });
 
       res.send(result.buffer);
     } catch (error) {
       res.status(error.message.includes('Access denied') ? 403 : 404).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -160,13 +160,13 @@ class ReportController {
           total: result.total,
           page: result.page,
           limit: result.limit,
-          totalPages: Math.ceil(result.total / result.limit)
-        }
+          totalPages: Math.ceil(result.total / result.limit),
+        },
       });
     } catch (error) {
       res.status(400).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -182,12 +182,12 @@ class ReportController {
 
       res.status(200).json({
         success: true,
-        message: 'Report deleted successfully'
+        message: 'Report deleted successfully',
       });
     } catch (error) {
       res.status(error.message.includes('Only') ? 403 : 404).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -204,7 +204,7 @@ class ReportController {
       if (req.query.endDate) {
         filters.createdAt = {
           ...filters.createdAt,
-          $lte: new Date(req.query.endDate)
+          $lte: new Date(req.query.endDate),
         };
       }
 
@@ -212,12 +212,12 @@ class ReportController {
 
       res.status(200).json({
         success: true,
-        data: statistics
+        data: statistics,
       });
     } catch (error) {
       res.status(400).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }
@@ -232,12 +232,12 @@ class ReportController {
       res.status(200).json({
         success: true,
         message: 'Report retry initiated',
-        data: report
+        data: report,
       });
     } catch (error) {
       res.status(400).json({
         success: false,
-        message: error.message
+        message: error.message,
       });
     }
   }

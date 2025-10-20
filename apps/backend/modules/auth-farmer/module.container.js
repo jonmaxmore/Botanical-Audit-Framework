@@ -21,13 +21,13 @@ const BcryptPasswordHasher = require('./infrastructure/security/BcryptPasswordHa
 const JWTService = require('./infrastructure/security/JWTService');
 
 // Application (Use Cases)
-const RegisterUserUseCase = require('./application/use-cases/RegisterUserUseCase');
-const LoginUserUseCase = require('./application/use-cases/LoginUserUseCase');
-const VerifyEmailUseCase = require('./application/use-cases/VerifyEmailUseCase');
-const RequestPasswordResetUseCase = require('./application/use-cases/RequestPasswordResetUseCase');
-const ResetPasswordUseCase = require('./application/use-cases/ResetPasswordUseCase');
-const GetUserProfileUseCase = require('./application/use-cases/GetUserProfileUseCase');
-const UpdateUserProfileUseCase = require('./application/use-cases/UpdateUserProfileUseCase');
+const RegisterUserUseCase = require('./application/use-cases/register');
+const LoginUserUseCase = require('./application/use-cases/login');
+const VerifyEmailUseCase = require('./application/use-cases/verify-email');
+const RequestPasswordResetUseCase = require('./application/use-cases/request-password-reset');
+const ResetPasswordUseCase = require('./application/use-cases/reset-password');
+const GetUserProfileUseCase = require('./application/use-cases/get-profile');
+const UpdateUserProfileUseCase = require('./application/use-cases/update-profile');
 
 // Presentation
 const AuthController = require('./presentation/controllers/AuthController');
@@ -119,37 +119,37 @@ function createAuthFarmerModule(config) {
     userRepository,
     passwordHasher,
     tokenGenerator,
-    eventBus
+    eventBus,
   });
 
   const loginUserUseCase = new LoginUserUseCase({
     userRepository,
     passwordHasher,
     jwtService,
-    eventBus
+    eventBus,
   });
 
   const verifyEmailUseCase = new VerifyEmailUseCase({
-    userRepository
+    userRepository,
   });
 
   const requestPasswordResetUseCase = new RequestPasswordResetUseCase({
     userRepository,
     tokenGenerator,
-    eventBus
+    eventBus,
   });
 
   const resetPasswordUseCase = new ResetPasswordUseCase({
     userRepository,
-    passwordHasher
+    passwordHasher,
   });
 
   const getUserProfileUseCase = new GetUserProfileUseCase({
-    userRepository
+    userRepository,
   });
 
   const updateUserProfileUseCase = new UpdateUserProfileUseCase({
-    userRepository
+    userRepository,
   });
 
   // Presentation Layer
@@ -160,7 +160,7 @@ function createAuthFarmerModule(config) {
     requestPasswordResetUseCase,
     resetPasswordUseCase,
     getUserProfileUseCase,
-    updateUserProfileUseCase
+    updateUserProfileUseCase,
   });
 
   // Create and return router
@@ -171,8 +171,8 @@ function createAuthFarmerModule(config) {
     services: {
       userRepository,
       passwordHasher,
-      jwtService
-    }
+      jwtService,
+    },
   };
 }
 

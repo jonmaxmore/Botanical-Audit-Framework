@@ -16,7 +16,7 @@ class SurveyReviewCompleted {
     reviewedAt,
     reviewNotes,
     rejectionReason,
-    revisionNotes
+    revisionNotes,
   }) {
     this.surveyId = surveyId;
     this.farmId = farmId;

@@ -63,7 +63,7 @@ const ACTION_TYPE = {
   // Security Actions
   SECURITY_VIOLATION: 'SECURITY_VIOLATION',
   ACCESS_DENIED: 'ACCESS_DENIED',
-  SUSPICIOUS_ACTIVITY: 'SUSPICIOUS_ACTIVITY'
+  SUSPICIOUS_ACTIVITY: 'SUSPICIOUS_ACTIVITY',
 };
 
 // Entity Types
@@ -74,7 +74,7 @@ const ENTITY_TYPE = {
   SURVEY: 'SURVEY',
   CERTIFICATE: 'CERTIFICATE',
   DOCUMENT: 'DOCUMENT',
-  SYSTEM: 'SYSTEM'
+  SYSTEM: 'SYSTEM',
 };
 
 // Severity Levels
@@ -82,7 +82,7 @@ const SEVERITY = {
   INFO: 'INFO',
   WARNING: 'WARNING',
   ERROR: 'ERROR',
-  CRITICAL: 'CRITICAL'
+  CRITICAL: 'CRITICAL',
 };
 
 // Actor Types
@@ -90,7 +90,7 @@ const ACTOR_TYPE = {
   FARMER: 'FARMER',
   DTAM_STAFF: 'DTAM_STAFF',
   SYSTEM: 'SYSTEM',
-  ANONYMOUS: 'ANONYMOUS'
+  ANONYMOUS: 'ANONYMOUS',
 };
 
 class AuditLog {
@@ -141,7 +141,7 @@ class AuditLog {
 
     // Timestamp
     timestamp = new Date(),
-    createdAt = new Date()
+    createdAt = new Date(),
   }) {
     // Identifiers
     this.id = id;
@@ -212,7 +212,7 @@ class AuditLog {
       entityId,
       ...logData,
       timestamp: new Date(),
-      createdAt: new Date()
+      createdAt: new Date(),
     });
   }
 
@@ -250,7 +250,7 @@ class AuditLog {
       userAgent: req.get('user-agent'),
       sessionId: req.session?.id,
 
-      ...additionalData
+      ...additionalData,
     });
   }
 
@@ -270,7 +270,7 @@ class AuditLog {
       'privateKey',
       'creditCard',
       'ssn',
-      'nationalId'
+      'nationalId',
     ];
 
     const sanitized = Array.isArray(data) ? [...data] : { ...data };
@@ -352,7 +352,7 @@ class AuditLog {
         changes.push({
           field: key,
           from: before[key],
-          to: after[key]
+          to: after[key],
         });
       }
     });
@@ -373,7 +373,7 @@ class AuditLog {
       entityName: this.entityName,
       severity: this.severity,
       success: this.success,
-      timestamp: this.timestamp
+      timestamp: this.timestamp,
     };
   }
 
@@ -386,7 +386,7 @@ class AuditLog {
       ACTION_TYPE.ACCESS_DENIED,
       ACTION_TYPE.SUSPICIOUS_ACTIVITY,
       ACTION_TYPE.PASSWORD_CHANGE,
-      ACTION_TYPE.PASSWORD_RESET
+      ACTION_TYPE.PASSWORD_RESET,
     ];
     return securityActions.includes(this.actionType);
   }
@@ -427,5 +427,5 @@ module.exports = {
   ACTION_TYPE,
   ENTITY_TYPE,
   SEVERITY,
-  ACTOR_TYPE
+  ACTOR_TYPE,
 };

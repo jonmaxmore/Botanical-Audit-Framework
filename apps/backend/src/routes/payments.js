@@ -18,7 +18,7 @@ const {
   getPaymentStatus,
   processWebhook,
   getPaymentStats,
-  refundPayment
+  refundPayment,
 } = require('../controllers/paymentController');
 
 // Payment list and search

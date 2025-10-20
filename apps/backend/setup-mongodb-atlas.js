@@ -16,8 +16,8 @@ const collections = [
       { key: { nationalId: 1 }, unique: true, sparse: true },
       { key: { phoneNumber: 1 } },
       { key: { role: 1 } },
-      { key: { createdAt: -1 } }
-    ]
+      { key: { createdAt: -1 } },
+    ],
   },
   {
     name: 'applications',
@@ -26,8 +26,8 @@ const collections = [
       { key: { farmerId: 1 } },
       { key: { status: 1 } },
       { key: { createdAt: -1 } },
-      { key: { farmerId: 1, status: 1 } }
-    ]
+      { key: { farmerId: 1, status: 1 } },
+    ],
   },
   {
     name: 'jobTickets',
@@ -36,8 +36,8 @@ const collections = [
       { key: { applicationId: 1 } },
       { key: { assignedTo: 1 } },
       { key: { status: 1 } },
-      { key: { createdAt: -1 } }
-    ]
+      { key: { createdAt: -1 } },
+    ],
   },
   {
     name: 'payments',
@@ -46,8 +46,8 @@ const collections = [
       { key: { applicationId: 1 } },
       { key: { farmerId: 1 } },
       { key: { status: 1 } },
-      { key: { createdAt: -1 } }
-    ]
+      { key: { createdAt: -1 } },
+    ],
   },
   {
     name: 'certificates',
@@ -57,8 +57,8 @@ const collections = [
       { key: { farmerId: 1 } },
       { key: { status: 1 } },
       { key: { expiryDate: 1 } },
-      { key: { createdAt: -1 } }
-    ]
+      { key: { createdAt: -1 } },
+    ],
   },
   {
     name: 'farms',
@@ -66,8 +66,8 @@ const collections = [
       { key: { farmCode: 1 }, unique: true, sparse: true },
       { key: { ownerId: 1 } },
       { key: { location: '2dsphere' } },
-      { key: { createdAt: -1 } }
-    ]
+      { key: { createdAt: -1 } },
+    ],
   },
   {
     name: 'crops',
@@ -75,8 +75,8 @@ const collections = [
       { key: { farmId: 1 } },
       { key: { cropType: 1 } },
       { key: { plantingDate: -1 } },
-      { key: { status: 1 } }
-    ]
+      { key: { status: 1 } },
+    ],
   },
   {
     name: 'sopRecords',
@@ -84,8 +84,8 @@ const collections = [
       { key: { farmId: 1 } },
       { key: { cropId: 1 } },
       { key: { recordDate: -1 } },
-      { key: { activityType: 1 } }
-    ]
+      { key: { activityType: 1 } },
+    ],
   },
   {
     name: 'chemicalRegistry',
@@ -93,8 +93,8 @@ const collections = [
       { key: { farmId: 1 } },
       { key: { chemicalName: 1 } },
       { key: { usageDate: -1 } },
-      { key: { cropId: 1 } }
-    ]
+      { key: { cropId: 1 } },
+    ],
   },
   {
     name: 'qrCodes',
@@ -102,8 +102,8 @@ const collections = [
       { key: { qrCode: 1 }, unique: true },
       { key: { certificateId: 1 } },
       { key: { farmId: 1 } },
-      { key: { createdAt: -1 } }
-    ]
+      { key: { createdAt: -1 } },
+    ],
   },
   {
     name: 'notifications',
@@ -111,8 +111,8 @@ const collections = [
       { key: { userId: 1 } },
       { key: { read: 1 } },
       { key: { createdAt: -1 } },
-      { key: { userId: 1, read: 1 } }
-    ]
+      { key: { userId: 1, read: 1 } },
+    ],
   },
   {
     name: 'auditLogs',
@@ -120,16 +120,16 @@ const collections = [
       { key: { userId: 1 } },
       { key: { action: 1 } },
       { key: { timestamp: -1 } },
-      { key: { entityType: 1, entityId: 1 } }
-    ]
+      { key: { entityType: 1, entityId: 1 } },
+    ],
   },
   {
     name: 'sessions',
     indexes: [
       { key: { sessionId: 1 }, unique: true },
       { key: { userId: 1 } },
-      { key: { expiresAt: 1 }, expireAfterSeconds: 0 }
-    ]
+      { key: { expiresAt: 1 }, expireAfterSeconds: 0 },
+    ],
   },
   {
     name: 'otpRecords',
@@ -137,12 +137,12 @@ const collections = [
       { key: { phoneNumber: 1 } },
       { key: { email: 1 } },
       { key: { createdAt: 1 }, expireAfterSeconds: 600 },
-      { key: { verified: 1 } }
-    ]
+      { key: { verified: 1 } },
+    ],
   },
   {
     name: 'surveyResponses',
-    indexes: [{ key: { surveyId: 1 } }, { key: { respondentId: 1 } }, { key: { submittedAt: -1 } }]
+    indexes: [{ key: { surveyId: 1 } }, { key: { respondentId: 1 } }, { key: { submittedAt: -1 } }],
   },
   {
     name: 'fileUploads',
@@ -150,9 +150,9 @@ const collections = [
       { key: { uploadedBy: 1 } },
       { key: { entityType: 1, entityId: 1 } },
       { key: { fileType: 1 } },
-      { key: { uploadedAt: -1 } }
-    ]
-  }
+      { key: { uploadedAt: -1 } },
+    ],
+  },
 ];
 
 async function setupCollections() {
@@ -165,7 +165,7 @@ async function setupCollections() {
     console.log('📡 Connecting to MongoDB Atlas...');
     client = new MongoClient(process.env.MONGODB_URI, {
       serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 60000
+      socketTimeoutMS: 60000,
     });
 
     await client.connect();
@@ -254,7 +254,7 @@ async function setupCollections() {
         isActive: true,
         isVerified: true,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
 
       console.log('✅ Sample admin user created:');

@@ -17,7 +17,7 @@ const mimeTypes = {
   '.jpg': 'image/jpg',
   '.gif': 'image/gif',
   '.svg': 'image/svg+xml',
-  '.ico': 'image/x-icon'
+  '.ico': 'image/x-icon',
 };
 
 // Mock API responses for demo
@@ -37,7 +37,7 @@ const mockResponses = {
           status: 'active',
           description: 'ยื่นใบสมัครและเอกสารเบื้องต้น',
           requirements: ['ใบทะเบียนฟาร์ม', 'รายงานการประเมินดิน', 'แผนปลูก'],
-          estimatedDuration: '5-7 วันทำการ'
+          estimatedDuration: '5-7 วันทำการ',
         },
         {
           id: 2,
@@ -45,7 +45,7 @@ const mockResponses = {
           status: 'pending',
           description: 'ตรวจสอบความถูกต้องของเอกสาร',
           requirements: ['เอกสารครบถ้วน', 'ผ่านการตรวจสอบเบื้องต้น'],
-          estimatedDuration: '3-5 วันทำการ'
+          estimatedDuration: '3-5 วันทำการ',
         },
         {
           id: 3,
@@ -53,10 +53,10 @@ const mockResponses = {
           status: 'pending',
           description: 'ประเมินความเหมาะสมของพื้นที่ปลูก',
           requirements: ['การตรวจสอบดิน', 'การตรวจสอบน้ำ', 'การประเมินสภาพอากาศ'],
-          estimatedDuration: '7-14 วันทำการ'
-        }
-      ]
-    }
+          estimatedDuration: '7-14 วันทำการ',
+        },
+      ],
+    },
   },
 
   '/api/gacp/ccps': {
@@ -74,7 +74,7 @@ const mockResponses = {
           compliance: 'WHO-GACP Section 4.2',
           criticalLimits: 'pH 6.0-7.5, EC < 2.0 dS/m',
           monitoringProcedure: 'ตรวจสอบทุก 2 สัปดาห์',
-          status: 'Active'
+          status: 'Active',
         },
         {
           id: 'CCP02',
@@ -84,7 +84,7 @@ const mockResponses = {
           compliance: 'WHO-GACP Section 4.3',
           criticalLimits: 'pH 6.5-8.5, ไม่มีสารปนเปื้อน',
           monitoringProcedure: 'ตรวจสอบรายสัปดาห์',
-          status: 'Active'
+          status: 'Active',
         },
         {
           id: 'CCP03',
@@ -94,7 +94,7 @@ const mockResponses = {
           compliance: 'WHO-GACP Section 4.4',
           criticalLimits: 'อัตราการงอก > 85%',
           monitoringProcedure: 'ตรวจสอบทุกแบทช์',
-          status: 'Active'
+          status: 'Active',
         },
         {
           id: 'CCP04',
@@ -104,7 +104,7 @@ const mockResponses = {
           compliance: 'WHO-GACP Section 5.1',
           criticalLimits: 'ตามแผนการปลูกที่อนุมัติ',
           monitoringProcedure: 'ตรวจสอบรายวัน',
-          status: 'Active'
+          status: 'Active',
         },
         {
           id: 'CCP05',
@@ -114,7 +114,7 @@ const mockResponses = {
           compliance: 'WHO-GACP Section 5.2',
           criticalLimits: 'ในช่วงเวลาที่กำหนด',
           monitoringProcedure: 'ตรวจสอบขณะเก็บเกี่ยว',
-          status: 'Active'
+          status: 'Active',
         },
         {
           id: 'CCP06',
@@ -124,7 +124,7 @@ const mockResponses = {
           compliance: 'WHO-GACP Section 5.3',
           criticalLimits: 'ความชื้น < 12%, อุณหภูมิ < 25°C',
           monitoringProcedure: 'ตรวจสอบรายวัน',
-          status: 'Active'
+          status: 'Active',
         },
         {
           id: 'CCP07',
@@ -134,7 +134,7 @@ const mockResponses = {
           compliance: 'WHO-GACP Section 6.1',
           criticalLimits: 'สภาพแวดล้อมควบคุม',
           monitoringProcedure: 'ตรวจสอบรายวัน',
-          status: 'Active'
+          status: 'Active',
         },
         {
           id: 'CCP08',
@@ -144,10 +144,10 @@ const mockResponses = {
           compliance: 'WHO-GACP Section 7.1',
           criticalLimits: 'เอกสารครบถ้วน 100%',
           monitoringProcedure: 'ตรวจสอบรายสัปดาห์',
-          status: 'Active'
-        }
-      ]
-    }
+          status: 'Active',
+        },
+      ],
+    },
   },
 
   '/api/gacp/compliance': {
@@ -163,32 +163,32 @@ const mockResponses = {
           name: 'การปฏิบัติการปลูก',
           requirements: 45,
           compliance: 'WHO-GACP Section 4',
-          status: 'Compliant'
+          status: 'Compliant',
         },
         {
           name: 'การควบคุมคุณภาพ',
           requirements: 38,
           compliance: 'WHO-GACP Section 5',
-          status: 'Compliant'
+          status: 'Compliant',
         },
         {
           name: 'การจัดการหลังการเก็บเกี่ยว',
           requirements: 29,
           compliance: 'WHO-GACP Section 6',
-          status: 'Compliant'
+          status: 'Compliant',
         },
         {
           name: 'การจัดทำเอกสาร',
           requirements: 44,
           compliance: 'WHO-GACP Section 7',
-          status: 'Compliant'
-        }
+          status: 'Compliant',
+        },
       ],
       certificationLevel: 'GACP-Premium',
       validUntil: '2025-12-31',
       lastAudit: '2024-10-01',
-      nextAudit: '2025-04-01'
-    }
+      nextAudit: '2025-04-01',
+    },
   },
 
   '/api/monitoring/health': {
@@ -200,23 +200,23 @@ const mockResponses = {
         status: 'connected',
         isHealthy: true,
         responseTime: 45,
-        successRate: '99.8'
+        successRate: '99.8',
       },
       api: {
         uptime: 3600,
         version: '1.0.0',
-        environment: 'demo'
+        environment: 'demo',
       },
       system: {
         memory: {
           heapUsed: 25165824,
-          heapTotal: 33554432
+          heapTotal: 33554432,
         },
         platform: 'win32',
-        nodeVersion: 'v18.17.0'
-      }
-    }
-  }
+        nodeVersion: 'v18.17.0',
+      },
+    },
+  },
 };
 
 // Create HTTP server
@@ -268,7 +268,7 @@ const server = http.createServer((req, res) => {
         'Content-Type': contentType,
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization'
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       });
       res.end(content);
     }
@@ -315,7 +315,7 @@ function handleAPIRequest(req, res) {
           CCP05: 14,
           CCP06: 11,
           CCP07: 13,
-          CCP08: 7
+          CCP08: 7,
         };
 
         for (const [ccp, score] of Object.entries(scores)) {
@@ -352,8 +352,8 @@ function handleAPIRequest(req, res) {
             recommendations:
               totalScore < 75
                 ? ['ปรับปรุงการควบคุมคุณภาพ', 'เพิ่มการติดตามผล']
-                : ['ดำเนินการได้ดี', 'รักษามาตรฐานปัจจุบัน']
-          }
+                : ['ดำเนินการได้ดี', 'รักษามาตรฐานปัจจุบัน'],
+          },
         };
 
         res.writeHead(200);
@@ -376,7 +376,7 @@ function handleAPIRequest(req, res) {
       JSON.stringify({
         success: false,
         error: 'API endpoint not found',
-        available_endpoints: Object.keys(mockResponses)
+        available_endpoints: Object.keys(mockResponses),
       })
     );
   }

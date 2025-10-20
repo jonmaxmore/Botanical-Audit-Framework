@@ -3,7 +3,7 @@
 
 require('dotenv').config();
 
-const testConnection = async() => {
+const testConnection = async () => {
   console.info('🔄 Testing MongoDB Connection...');
   console.info('📍 MongoDB URI:', process.env.MONGODB_URI_SIMPLE?.replace(/:[^:]*@/, ':****@'));
 
@@ -12,7 +12,7 @@ const testConnection = async() => {
 
     // Connect to MongoDB
     await mongoose.connect(process.env.MONGODB_URI_SIMPLE, {
-      serverSelectionTimeoutMS: 5000 // 5 second timeout
+      serverSelectionTimeoutMS: 5000, // 5 second timeout
     });
 
     console.info('✅ MongoDB Atlas connected successfully!');

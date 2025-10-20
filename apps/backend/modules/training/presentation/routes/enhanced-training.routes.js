@@ -60,7 +60,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       query('limit').optional().isInt({ min: 1, max: 100 }),
       query('includeAnalytics').optional().isBoolean(),
       query('includePredictions').optional().isBoolean(),
-      query('certificationPath').optional().isString()
+      query('certificationPath').optional().isString(),
     ],
     enhancedTrainingController.listCourses
   );
@@ -73,7 +73,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       query('page').optional().isInt({ min: 1 }),
       query('limit').optional().isInt({ min: 1, max: 50 }),
       query('includeRecommendations').optional().isBoolean(),
-      query('certificationGoal').optional().isString()
+      query('certificationGoal').optional().isString(),
     ],
     enhancedTrainingController.listCourses
   );
@@ -96,7 +96,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     [
       param('id').isUUID(),
       query('includeAnalytics').optional().isBoolean(),
-      query('includeLearnerData').optional().isBoolean()
+      query('includeLearnerData').optional().isBoolean(),
     ],
     enhancedTrainingController.getCourseDetails
   );
@@ -150,7 +150,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       param('userId').isUUID(),
       query('courseId').optional().isUUID(),
       query('competencyId').optional().isString(),
-      query('includeInterventions').optional().isBoolean()
+      query('includeInterventions').optional().isBoolean(),
     ],
     enhancedTrainingController.getLearnerPredictions
   );
@@ -172,9 +172,9 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     [
       query('timeframe').optional().isIn(['7d', '30d', '90d', '1y']),
       query('courseType').optional().isString(),
-      query('competencyArea').optional().isString()
+      query('competencyArea').optional().isString(),
     ],
-    async(req, res) => {
+    async (req, res) => {
       try {
         // This would be implemented as a method in EnhancedTrainingController
         res.json({
@@ -182,14 +182,14 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           message: 'Training effectiveness analytics endpoint - to be implemented',
           data: {
             placeholder: true,
-            timeframe: req.query.timeframe || '30d'
-          }
+            timeframe: req.query.timeframe || '30d',
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'ANALYTICS_ERROR',
-          message: 'Failed to retrieve effectiveness analytics'
+          message: 'Failed to retrieve effectiveness analytics',
         });
       }
     }
@@ -209,7 +209,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     '/analytics/realtime',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'system_admin']),
-    async(req, res) => {
+    async (req, res) => {
       try {
         // Real-time metrics endpoint
         res.json({
@@ -220,15 +220,15 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
             metrics: {
               activeTrainingSessions: 0,
               concurrentUsers: 0,
-              systemLoad: 'normal'
-            }
-          }
+              systemLoad: 'normal',
+            },
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'REALTIME_ERROR',
-          message: 'Failed to retrieve real-time metrics'
+          message: 'Failed to retrieve real-time metrics',
         });
       }
     }
@@ -275,7 +275,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       param('userId').isUUID(),
       query('includeAnalytics').optional().isBoolean(),
       query('includePredictions').optional().isBoolean(),
-      query('certificationTypes').optional().isString()
+      query('certificationTypes').optional().isString(),
     ],
     enhancedTrainingController.getLearnerCertificationProgress
   );
@@ -296,9 +296,9 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     authMiddleware.requireRole(['farmer']),
     [
       query('includeRecommendations').optional().isBoolean(),
-      query('showRenewalSchedule').optional().isBoolean()
+      query('showRenewalSchedule').optional().isBoolean(),
     ],
-    async(req, res) => {
+    async (req, res) => {
       // Use the same controller method but with farmer's own user ID
       req.params.userId = req.user.id;
       return enhancedTrainingController.getLearnerCertificationProgress(req, res);
@@ -324,9 +324,9 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       param('milestoneId').isString(),
       body('status').isIn(['COMPLETED', 'VERIFIED', 'FAILED']),
       body('evidence').optional().isObject(),
-      body('verificationData').optional().isObject()
+      body('verificationData').optional().isObject(),
     ],
-    async(req, res) => {
+    async (req, res) => {
       try {
         // Milestone update endpoint - to be implemented
         res.json({
@@ -335,14 +335,14 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           data: {
             userId: req.params.userId,
             milestoneId: req.params.milestoneId,
-            status: req.body.status
-          }
+            status: req.body.status,
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'MILESTONE_ERROR',
-          message: 'Failed to update certification milestone'
+          message: 'Failed to update certification milestone',
         });
       }
     }
@@ -370,7 +370,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       body('userId').isUUID(),
       body('competencyId').isString(),
       body('assessmentType').isIn(['ADAPTIVE', 'FIXED', 'SIMULATION', 'PORTFOLIO']),
-      body('configurationOptions').optional().isObject()
+      body('configurationOptions').optional().isObject(),
     ],
     enhancedTrainingController.createPerformanceAssessment
   );
@@ -396,7 +396,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       body('itemId').isString(),
       body('response').notEmpty(),
       body('responseTime').optional().isNumeric(),
-      body('contextData').optional().isObject()
+      body('contextData').optional().isObject(),
     ],
     enhancedTrainingController.submitAssessmentResponse
   );
@@ -410,7 +410,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       body('itemId').isString(),
       body('response').notEmpty(),
       body('responseTime').optional().isNumeric(),
-      body('contextData').optional().isObject()
+      body('contextData').optional().isObject(),
     ],
     enhancedTrainingController.submitAssessmentResponse
   );
@@ -429,7 +429,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     '/assessment/dashboard',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'assessment_manager']),
-    async(req, res) => {
+    async (req, res) => {
       try {
         // Assessment dashboard endpoint
         res.json({
@@ -439,16 +439,16 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
             overview: {
               totalAssessments: 0,
               activeAssessments: 0,
-              completionRate: 0
+              completionRate: 0,
             },
-            timestamp: new Date()
-          }
+            timestamp: new Date(),
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'DASHBOARD_ERROR',
-          message: 'Failed to retrieve assessment dashboard'
+          message: 'Failed to retrieve assessment dashboard',
         });
       }
     }
@@ -473,9 +473,9 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       param('userId').isUUID(),
       query('competencyId').optional().isString(),
       query('timeframe').optional().isString(),
-      query('includeAnalytics').optional().isBoolean()
+      query('includeAnalytics').optional().isBoolean(),
     ],
-    async(req, res) => {
+    async (req, res) => {
       try {
         // Assessment history endpoint
         res.json({
@@ -484,14 +484,14 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           data: {
             userId: req.params.userId,
             assessments: [],
-            analytics: req.query.includeAnalytics === 'true' ? {} : null
-          }
+            analytics: req.query.includeAnalytics === 'true' ? {} : null,
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'HISTORY_ERROR',
-          message: 'Failed to retrieve assessment history'
+          message: 'Failed to retrieve assessment history',
         });
       }
     }
@@ -502,7 +502,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['farmer']),
     [query('competencyId').optional().isString(), query('timeframe').optional().isString()],
-    async(req, res) => {
+    async (req, res) => {
       // Use same endpoint but with farmer's user ID
       req.params.userId = req.user.id;
       req.query.includeAnalytics = 'true'; // Always include analytics for farmers
@@ -514,8 +514,8 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
         data: {
           userId: req.user.id,
           assessments: [],
-          personalAnalytics: {}
-        }
+          personalAnalytics: {},
+        },
       });
     }
   );
@@ -538,7 +538,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     '/interventions/dashboard',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'training_manager']),
-    async(req, res) => {
+    async (req, res) => {
       try {
         res.json({
           success: true,
@@ -547,14 +547,14 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
             atRiskLearners: [],
             activeInterventions: [],
             successMetrics: {},
-            timestamp: new Date()
-          }
+            timestamp: new Date(),
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'INTERVENTION_ERROR',
-          message: 'Failed to retrieve interventions dashboard'
+          message: 'Failed to retrieve interventions dashboard',
         });
       }
     }
@@ -580,13 +580,13 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
         'MENTORING',
         'ADDITIONAL_RESOURCES',
         'ASSESSMENT_SUPPORT',
-        'CUSTOM'
+        'CUSTOM',
       ]),
       body('description').isLength({ min: 10, max: 500 }),
       body('priority').isIn(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']),
-      body('assignedTo').optional().isUUID()
+      body('assignedTo').optional().isUUID(),
     ],
-    async(req, res) => {
+    async (req, res) => {
       try {
         res.json({
           success: true,
@@ -594,14 +594,14 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           data: {
             interventionId: 'temp-id',
             status: 'INITIATED',
-            scheduledActions: []
-          }
+            scheduledActions: [],
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'TRIGGER_ERROR',
-          message: 'Failed to trigger intervention'
+          message: 'Failed to trigger intervention',
         });
       }
     }
@@ -642,7 +642,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
     '/system/diagnostics',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'system_admin']),
-    async(req, res) => {
+    async (req, res) => {
       try {
         res.json({
           success: true,
@@ -650,14 +650,14 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           data: {
             diagnosticId: 'temp-diagnostic-id',
             status: 'RUNNING',
-            estimatedCompletion: new Date(Date.now() + 5 * 60 * 1000)
-          }
+            estimatedCompletion: new Date(Date.now() + 5 * 60 * 1000),
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'DIAGNOSTICS_ERROR',
-          message: 'Failed to run system diagnostics'
+          message: 'Failed to run system diagnostics',
         });
       }
     }
@@ -684,12 +684,12 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
         'restart_certification',
         'enable_performance',
         'disable_performance',
-        'maintenance_mode'
+        'maintenance_mode',
       ]),
       body('reason').optional().isString(),
-      body('scheduledTime').optional().isISO8601()
+      body('scheduledTime').optional().isISO8601(),
     ],
-    async(req, res) => {
+    async (req, res) => {
       try {
         res.json({
           success: true,
@@ -697,14 +697,14 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
           data: {
             action: req.params.action,
             status: 'EXECUTED',
-            timestamp: new Date()
-          }
+            timestamp: new Date(),
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'CONTROL_ERROR',
-          message: 'Failed to execute system control action'
+          message: 'Failed to execute system control action',
         });
       }
     }
@@ -723,7 +723,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred in the enhanced training system',
       requestId: req.id || 'unknown',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   };
 
@@ -740,7 +740,7 @@ function getRouteDocumentation() {
   return {
     basePath: {
       dtam: '/api/dtam/training',
-      farmer: '/api/farmer/training'
+      farmer: '/api/farmer/training',
     },
     version: '2.0.0',
     description:
@@ -752,8 +752,8 @@ function getRouteDocumentation() {
         routes: [
           'GET /courses - List courses with analytics',
           'GET /courses/:id - Course details with performance metrics',
-          'POST /enrollments - Enroll with tracking integration'
-        ]
+          'POST /enrollments - Enroll with tracking integration',
+        ],
       },
 
       'Advanced Analytics': {
@@ -762,8 +762,8 @@ function getRouteDocumentation() {
           'GET /analytics/dashboard - Complete analytics dashboard',
           'GET /analytics/predictions/:userId - Learner success predictions',
           'GET /analytics/effectiveness - Training effectiveness metrics',
-          'GET /analytics/realtime - Real-time monitoring'
-        ]
+          'GET /analytics/realtime - Real-time monitoring',
+        ],
       },
 
       'Certification Tracking': {
@@ -771,8 +771,8 @@ function getRouteDocumentation() {
         routes: [
           'GET /certification/dashboard - Certification overview',
           'GET /certification/progress/:userId - Detailed progress tracking',
-          'PUT /certification/milestone/:userId/:milestoneId - Milestone updates'
-        ]
+          'PUT /certification/milestone/:userId/:milestoneId - Milestone updates',
+        ],
       },
 
       'Performance Assessment': {
@@ -781,16 +781,16 @@ function getRouteDocumentation() {
           'POST /assessment/create - Create performance assessment',
           'POST /assessment/:id/response - Submit assessment response',
           'GET /assessment/dashboard - Assessment analytics',
-          'GET /assessment/history/:userId - Assessment history'
-        ]
+          'GET /assessment/history/:userId - Assessment history',
+        ],
       },
 
       'Predictive Analytics': {
         description: 'AI-powered predictions and interventions',
         routes: [
           'GET /interventions/dashboard - Intervention management',
-          'POST /interventions/trigger - Manual intervention trigger'
-        ]
+          'POST /interventions/trigger - Manual intervention trigger',
+        ],
       },
 
       'System Management': {
@@ -798,9 +798,9 @@ function getRouteDocumentation() {
         routes: [
           'GET /system/status - System health status',
           'POST /system/diagnostics - Run diagnostics',
-          'POST /system/control/:action - System control'
-        ]
-      }
+          'POST /system/control/:action - System control',
+        ],
+      },
     },
 
     businessLogicIntegration: {
@@ -810,12 +810,12 @@ function getRouteDocumentation() {
       performanceAssessment: 'Competency-based assessments with adaptive algorithms',
       predictiveAnalytics: 'Machine learning predictions for proactive interventions',
       governmentCompliance: 'Built-in compliance monitoring and reporting',
-      auditTrail: 'Complete audit trail for all training and certification activities'
-    }
+      auditTrail: 'Complete audit trail for all training and certification activities',
+    },
   };
 }
 
 module.exports = {
   createEnhancedTrainingRoutes,
-  getRouteDocumentation
+  getRouteDocumentation,
 };

@@ -46,7 +46,7 @@ function createAuditRoutes(controller, authMiddleware) {
   );
 
   return {
-    dtamRouter
+    dtamRouter,
   };
 }
 

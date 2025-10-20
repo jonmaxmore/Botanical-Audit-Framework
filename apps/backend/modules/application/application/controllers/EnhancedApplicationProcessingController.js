@@ -33,7 +33,7 @@ class EnhancedApplicationProcessingController {
       applicationsProcessed: 0,
       stateTransitions: 0,
       documentsUploaded: 0,
-      errors: 0
+      errors: 0,
     };
   }
 
@@ -74,7 +74,7 @@ class EnhancedApplicationProcessingController {
       // Create application through service
       const application = await this.applicationService.createApplication(applicationData, {
         userId: req.user.userId,
-        userRole: req.user.role
+        userRole: req.user.role,
       });
 
       // Update metrics
@@ -87,8 +87,8 @@ class EnhancedApplicationProcessingController {
         data: {
           applicationId: application.applicationId,
           status: application.currentState,
-          createdAt: application.createdAt
-        }
+          createdAt: application.createdAt,
+        },
       });
     } catch (error) {
       this.metrics.errors++;
@@ -116,7 +116,7 @@ class EnhancedApplicationProcessingController {
           notes,
           reasonCode,
           userId: req.user.userId,
-          userRole: req.user.role
+          userRole: req.user.role,
         }
       );
 
@@ -131,8 +131,8 @@ class EnhancedApplicationProcessingController {
           applicationId,
           previousState: result.previousState,
           currentState: result.currentState,
-          transitionTime: result.transitionTime
-        }
+          transitionTime: result.transitionTime,
+        },
       });
     } catch (error) {
       this.metrics.errors++;
@@ -159,7 +159,7 @@ class EnhancedApplicationProcessingController {
         documentType,
         description,
         file,
-        uploadedBy: req.user.userId
+        uploadedBy: req.user.userId,
       });
 
       // Update metrics
@@ -172,8 +172,8 @@ class EnhancedApplicationProcessingController {
         data: {
           documentId: document.documentId,
           status: document.processingStatus,
-          uploadedAt: document.uploadedAt
-        }
+          uploadedAt: document.uploadedAt,
+        },
       });
     } catch (error) {
       this.metrics.errors++;
@@ -199,7 +199,7 @@ class EnhancedApplicationProcessingController {
         firstName,
         lastName,
         dateOfBirth,
-        applicationId
+        applicationId,
       });
 
       // Generate response
@@ -210,8 +210,8 @@ class EnhancedApplicationProcessingController {
           applicationId,
           verificationStatus: verificationResult.status,
           verifiedData: verificationResult.verifiedData,
-          verificationTime: verificationResult.timestamp
-        }
+          verificationTime: verificationResult.timestamp,
+        },
       });
     } catch (error) {
       this.metrics.errors++;
@@ -235,7 +235,7 @@ class EnhancedApplicationProcessingController {
       const verificationResult = await this.governmentService.verifyLandOwnership({
         landData,
         ownerData,
-        applicationId
+        applicationId,
       });
 
       // Generate response
@@ -246,8 +246,8 @@ class EnhancedApplicationProcessingController {
           applicationId,
           verificationStatus: verificationResult.status,
           landDetails: verificationResult.landDetails,
-          ownershipDetails: verificationResult.ownershipDetails
-        }
+          ownershipDetails: verificationResult.ownershipDetails,
+        },
       });
     } catch (error) {
       this.metrics.errors++;
@@ -265,7 +265,7 @@ class EnhancedApplicationProcessingController {
       const options = {
         includeAnalytics: req.query.includeAnalytics === 'true',
         includeDocuments: req.query.includeDocuments === 'true',
-        includeHistory: req.query.includeHistory === 'true'
+        includeHistory: req.query.includeHistory === 'true',
       };
 
       // Get dashboard data through service
@@ -284,7 +284,7 @@ class EnhancedApplicationProcessingController {
       res.json({
         success: true,
         message: 'Dashboard data retrieved successfully',
-        data: dashboardData
+        data: dashboardData,
       });
     } catch (error) {
       this.metrics.errors++;
@@ -310,7 +310,7 @@ class EnhancedApplicationProcessingController {
         submissionType,
         targetSystems,
         additionalNotes,
-        submittedBy: req.user.userId
+        submittedBy: req.user.userId,
       });
 
       // Generate response
@@ -321,8 +321,8 @@ class EnhancedApplicationProcessingController {
           applicationId,
           submissionId: submissionResult.submissionId,
           targetSystems: submissionResult.targetSystems,
-          submissionTime: submissionResult.timestamp
-        }
+          submissionTime: submissionResult.timestamp,
+        },
       });
     } catch (error) {
       this.metrics.errors++;
@@ -341,7 +341,7 @@ class EnhancedApplicationProcessingController {
         timestamp: new Date(),
         services: {},
         metrics: { ...this.metrics },
-        uptime: process.uptime()
+        uptime: process.uptime(),
       };
 
       // Check application service health
@@ -376,8 +376,8 @@ class EnhancedApplicationProcessingController {
         data: {
           status: 'unhealthy',
           timestamp: new Date(),
-          error: error.message
-        }
+          error: error.message,
+        },
       };
     }
   }
@@ -462,8 +462,8 @@ class EnhancedApplicationProcessingController {
       bottlenecks: ['document_processing', 'government_verification'],
       predictions: {
         estimatedCompletionDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-        successProbability: 0.92
-      }
+        successProbability: 0.92,
+      },
     };
   }
 
@@ -486,7 +486,7 @@ class EnhancedApplicationProcessingController {
       success: false,
       error: error.name || 'INTERNAL_ERROR',
       message: error.message || 'An unexpected error occurred',
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     res.status(statusCode).json(errorResponse);

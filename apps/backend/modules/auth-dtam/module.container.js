@@ -17,14 +17,14 @@ const BcryptPasswordHasher = require('../auth-farmer/infrastructure/security/Bcr
 const JWTService = require('../auth-farmer/infrastructure/security/JWTService');
 
 // Application (Use Cases)
-const CreateDTAMStaffUseCase = require('./application/use-cases/CreateDTAMStaffUseCase');
-const LoginDTAMStaffUseCase = require('./application/use-cases/LoginDTAMStaffUseCase');
-const RequestDTAMStaffPasswordResetUseCase = require('./application/use-cases/RequestDTAMStaffPasswordResetUseCase');
-const ResetDTAMStaffPasswordUseCase = require('./application/use-cases/ResetDTAMStaffPasswordUseCase');
-const GetDTAMStaffProfileUseCase = require('./application/use-cases/GetDTAMStaffProfileUseCase');
-const UpdateDTAMStaffProfileUseCase = require('./application/use-cases/UpdateDTAMStaffProfileUseCase');
-const ListDTAMStaffUseCase = require('./application/use-cases/ListDTAMStaffUseCase');
-const UpdateDTAMStaffRoleUseCase = require('./application/use-cases/UpdateDTAMStaffRoleUseCase');
+const CreateDTAMStaffUseCase = require('./application/use-cases/create-dtam-staff');
+const LoginDTAMStaffUseCase = require('./application/use-cases/login-dtam-staff');
+const RequestDTAMStaffPasswordResetUseCase = require('./application/use-cases/request-dtam-staff-password-reset');
+const ResetDTAMStaffPasswordUseCase = require('./application/use-cases/reset-dtam-staff-password');
+const GetDTAMStaffProfileUseCase = require('./application/use-cases/get-dtam-staff-profile');
+const UpdateDTAMStaffProfileUseCase = require('./application/use-cases/update-dtam-staff-profile');
+const ListDTAMStaffUseCase = require('./application/use-cases/list-dtam-staff');
+const UpdateDTAMStaffRoleUseCase = require('./application/use-cases/update-dtam-staff-role');
 
 // Presentation
 const DTAMStaffAuthController = require('./presentation/controllers/DTAMStaffAuthController');
@@ -115,41 +115,41 @@ function createAuthDTAMModule(config) {
   const createDTAMStaffUseCase = new CreateDTAMStaffUseCase({
     staffRepository,
     passwordHasher,
-    eventBus
+    eventBus,
   });
 
   const loginDTAMStaffUseCase = new LoginDTAMStaffUseCase({
     staffRepository,
     passwordHasher,
     jwtService,
-    eventBus
+    eventBus,
   });
 
   const requestPasswordResetUseCase = new RequestDTAMStaffPasswordResetUseCase({
     staffRepository,
     tokenGenerator,
-    eventBus
+    eventBus,
   });
 
   const resetPasswordUseCase = new ResetDTAMStaffPasswordUseCase({
     staffRepository,
-    passwordHasher
+    passwordHasher,
   });
 
   const getProfileUseCase = new GetDTAMStaffProfileUseCase({
-    staffRepository
+    staffRepository,
   });
 
   const updateProfileUseCase = new UpdateDTAMStaffProfileUseCase({
-    staffRepository
+    staffRepository,
   });
 
   const listStaffUseCase = new ListDTAMStaffUseCase({
-    staffRepository
+    staffRepository,
   });
 
   const updateRoleUseCase = new UpdateDTAMStaffRoleUseCase({
-    staffRepository
+    staffRepository,
   });
 
   // Presentation Layer
@@ -161,7 +161,7 @@ function createAuthDTAMModule(config) {
     getProfileUseCase,
     updateProfileUseCase,
     listStaffUseCase,
-    updateRoleUseCase
+    updateRoleUseCase,
   });
 
   // Create and return router
@@ -172,8 +172,8 @@ function createAuthDTAMModule(config) {
     services: {
       staffRepository,
       passwordHasher,
-      jwtService
-    }
+      jwtService,
+    },
   };
 }
 

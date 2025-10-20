@@ -16,7 +16,7 @@ function initializeRoutes(controller, authMiddleware) {
     if (!controller.service.initialized) {
       return res.status(503).json({
         success: false,
-        message: 'Certificate service is not initialized yet'
+        message: 'Certificate service is not initialized yet',
       });
     }
     next();

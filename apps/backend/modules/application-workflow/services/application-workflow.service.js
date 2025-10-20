@@ -32,14 +32,14 @@ class ApplicationWorkflowService {
             action: 'created',
             timestamp: new Date(),
             userId: applicationData.farmerId,
-            note: 'Application created'
-          }
+            note: 'Application created',
+          },
         ],
         metadata: {
           createdAt: new Date(),
           updatedAt: new Date(),
-          version: 1
-        }
+          version: 1,
+        },
       };
 
       // Validate required fields
@@ -54,7 +54,7 @@ class ApplicationWorkflowService {
 
       logger.info(`[WorkflowService] Application created: ${application.id}`, {
         farmerId: application.farmerId,
-        applicationNumber: application.applicationNumber
+        applicationNumber: application.applicationNumber,
       });
 
       return application;
@@ -108,16 +108,16 @@ class ApplicationWorkflowService {
             status: 'submitted',
             workflowState: 'pending_review',
             submittedAt: new Date(),
-            'metadata.updatedAt': new Date()
+            'metadata.updatedAt': new Date(),
           },
           $push: {
             history: {
               action: 'submitted',
               timestamp: new Date(),
               userId,
-              note: 'Application submitted for review'
-            }
-          }
+              note: 'Application submitted for review',
+            },
+          },
         }
       );
 
@@ -149,21 +149,21 @@ class ApplicationWorkflowService {
             workflowState: 'document_review',
             'review.startedAt': new Date(),
             'review.reviewerId': reviewerId,
-            'metadata.updatedAt': new Date()
+            'metadata.updatedAt': new Date(),
           },
           $push: {
             history: {
               action: 'review_started',
               timestamp: new Date(),
               userId: reviewerId,
-              note: 'Document review started'
-            }
-          }
+              note: 'Document review started',
+            },
+          },
         }
       );
 
       logger.info(`[WorkflowService] Document review started: ${applicationId}`, {
-        reviewerId
+        reviewerId,
       });
 
       return { ...application, status: 'in_review', workflowState: 'document_review' };
@@ -190,7 +190,7 @@ class ApplicationWorkflowService {
         'review.completedAt': new Date(),
         'review.approved': approved,
         'review.findings': findings,
-        'metadata.updatedAt': new Date()
+        'metadata.updatedAt': new Date(),
       };
 
       if (approved) {
@@ -211,14 +211,14 @@ class ApplicationWorkflowService {
               timestamp: new Date(),
               userId: reviewerId,
               note: approved ? 'Document review approved' : 'Revision required',
-              details: findings
-            }
-          }
+              details: findings,
+            },
+          },
         }
       );
 
       logger.info(`[WorkflowService] Document review completed: ${applicationId}`, {
-        approved
+        approved,
       });
 
       return { ...application, ...updateData };
@@ -247,21 +247,21 @@ class ApplicationWorkflowService {
             workflowState: 'field_inspection',
             'inspection.startedAt': new Date(),
             'inspection.inspectorId': inspectorId,
-            'metadata.updatedAt': new Date()
+            'metadata.updatedAt': new Date(),
           },
           $push: {
             history: {
               action: 'inspection_started',
               timestamp: new Date(),
               userId: inspectorId,
-              note: 'Field inspection started'
-            }
-          }
+              note: 'Field inspection started',
+            },
+          },
         }
       );
 
       logger.info(`[WorkflowService] Field inspection started: ${applicationId}`, {
-        inspectorId
+        inspectorId,
       });
 
       return { ...application, status: 'in_inspection', workflowState: 'field_inspection' };
@@ -289,7 +289,7 @@ class ApplicationWorkflowService {
         'inspection.passed': passed,
         'inspection.findings': findings,
         'inspection.complianceScore': complianceScore,
-        'metadata.updatedAt': new Date()
+        'metadata.updatedAt': new Date(),
       };
 
       if (passed && complianceScore >= 80) {
@@ -310,15 +310,15 @@ class ApplicationWorkflowService {
               timestamp: new Date(),
               userId: inspectorId,
               note: passed ? 'Field inspection passed' : 'Inspection failed - revision required',
-              details: { complianceScore, findings }
-            }
-          }
+              details: { complianceScore, findings },
+            },
+          },
         }
       );
 
       logger.info(`[WorkflowService] Field inspection completed: ${applicationId}`, {
         passed,
-        complianceScore
+        complianceScore,
       });
 
       return { ...application, ...updateData };
@@ -350,7 +350,7 @@ class ApplicationWorkflowService {
             approvedAt: new Date(),
             approvedBy: adminId,
             certificateNumber,
-            'metadata.updatedAt': new Date()
+            'metadata.updatedAt': new Date(),
           },
           $push: {
             history: {
@@ -358,14 +358,14 @@ class ApplicationWorkflowService {
               timestamp: new Date(),
               userId: adminId,
               note: note || 'Application approved',
-              details: { certificateNumber }
-            }
-          }
+              details: { certificateNumber },
+            },
+          },
         }
       );
 
       logger.info(`[WorkflowService] Application approved: ${applicationId}`, {
-        certificateNumber
+        certificateNumber,
       });
 
       return { ...application, status: 'approved', certificateNumber };
@@ -391,7 +391,7 @@ class ApplicationWorkflowService {
             rejectedAt: new Date(),
             rejectedBy: adminId,
             rejectionReason: reason,
-            'metadata.updatedAt': new Date()
+            'metadata.updatedAt': new Date(),
           },
           $push: {
             history: {
@@ -399,9 +399,9 @@ class ApplicationWorkflowService {
               timestamp: new Date(),
               userId: adminId,
               note: 'Application rejected',
-              details: { reason }
-            }
-          }
+              details: { reason },
+            },
+          },
         }
       );
 
@@ -428,9 +428,9 @@ class ApplicationWorkflowService {
           {
             $group: {
               _id: '$status',
-              count: { $sum: 1 }
-            }
-          }
+              count: { $sum: 1 },
+            },
+          },
         ])
         .toArray();
 
@@ -444,7 +444,7 @@ class ApplicationWorkflowService {
           acc[stat._id] = stat.count;
           return acc;
         }, {}),
-        avgProcessingTime
+        avgProcessingTime,
       };
     } catch (error) {
       logger.error('[WorkflowService] Error getting statistics:', error);
@@ -515,7 +515,7 @@ class ApplicationWorkflowService {
         .find({
           status: 'approved',
           approvedAt: { $exists: true },
-          'metadata.createdAt': { $exists: true }
+          'metadata.createdAt': { $exists: true },
         })
         .toArray();
 

@@ -19,7 +19,7 @@ const {
   downloadCertificate,
   verifyCertificate,
   renewCertificate,
-  getCertificateStats
+  getCertificateStats,
 } = require('../controllers/certificateController');
 
 // Certificate list and search

@@ -131,54 +131,54 @@ class DashboardService {
           generatedAt: new Date(),
           timeframe: normalizedCriteria.timeframe,
           refreshInterval: this.refreshInterval,
-          dataFreshness: this._calculateDataFreshness(metrics)
+          dataFreshness: this._calculateDataFreshness(metrics),
         },
         overview: {
           systemHealth: kpis.systemHealth,
           operationalStatus: kpis.operationalStatus,
           criticalAlerts: alerts.critical.length,
-          performanceScore: kpis.overallPerformance
+          performanceScore: kpis.overallPerformance,
         },
         applications: {
           totalActive: metrics.applications.active,
           processingQueue: metrics.applications.queue,
           completionRate: kpis.applications.completionRate,
           averageProcessingTime: kpis.applications.avgProcessingTime,
-          bottlenecks: alerts.applications.bottlenecks
+          bottlenecks: alerts.applications.bottlenecks,
         },
         financial: {
           todayRevenue: metrics.financial.todayRevenue,
           monthlyRevenue: metrics.financial.monthlyRevenue,
           paymentSuccessRate: kpis.financial.successRate,
           outstandingPayments: metrics.financial.outstanding,
-          revenueGrowth: kpis.financial.growth
+          revenueGrowth: kpis.financial.growth,
         },
         users: {
           activeUsers: metrics.users.active,
           newRegistrations: metrics.users.newRegistrations,
           engagementRate: kpis.users.engagement,
           supportTickets: metrics.users.supportTickets,
-          userSatisfaction: kpis.users.satisfaction
+          userSatisfaction: kpis.users.satisfaction,
         },
         system: {
           uptime: metrics.system.uptime,
           responseTime: metrics.system.responseTime,
           errorRate: metrics.system.errorRate,
           resourceUtilization: metrics.system.resources,
-          securityAlerts: alerts.security.length
+          securityAlerts: alerts.security.length,
         },
         alerts: {
           critical: alerts.critical,
           warnings: alerts.warnings,
           informational: alerts.informational,
-          recentActions: alerts.recentActions
+          recentActions: alerts.recentActions,
         },
         trends: {
           applicationTrends: kpis.trends.applications,
           revenueTrends: kpis.trends.revenue,
           userTrends: kpis.trends.users,
-          performanceTrends: kpis.trends.performance
-        }
+          performanceTrends: kpis.trends.performance,
+        },
       };
 
       // Step 7: Cache metrics for performance
@@ -221,20 +221,20 @@ class DashboardService {
           inInspection:
             (workflowData.stateDistribution.INSPECTION_SCHEDULED || 0) +
             (workflowData.stateDistribution.INSPECTION_COMPLETED || 0),
-          completed: workflowData.stateDistribution.CERTIFICATE_ISSUED || 0
+          completed: workflowData.stateDistribution.CERTIFICATE_ISSUED || 0,
         },
         performance: {
           averageProcessingTime: this._calculateAverageProcessingTime(workflowData.applications),
           completionRate: this._calculateCompletionRate(workflowData.applications),
           bottleneckStates: this._identifyBottleneckStates(workflowData.stateDistribution),
-          slaCompliance: this._calculateSLACompliance(workflowData.applications)
+          slaCompliance: this._calculateSLACompliance(workflowData.applications),
         },
         trends: {
           submissionTrend: this._calculateSubmissionTrend(workflowData.applications, timeframe),
           completionTrend: this._calculateCompletionTrend(workflowData.applications, timeframe),
-          rejectionTrend: this._calculateRejectionTrend(workflowData.applications, timeframe)
+          rejectionTrend: this._calculateRejectionTrend(workflowData.applications, timeframe),
         },
-        alerts: this._generateWorkflowAlerts(workflowData)
+        alerts: this._generateWorkflowAlerts(workflowData),
       };
 
       console.log('[DashboardService] Workflow metrics collected successfully');
@@ -243,7 +243,7 @@ class DashboardService {
         timestamp: new Date(),
         timeframe: criteria.timeframe || '24h',
         metrics,
-        refreshInterval: this.refreshInterval
+        refreshInterval: this.refreshInterval,
       };
     } catch (error) {
       console.error('[DashboardService] Workflow metrics collection failed:', error);
@@ -274,28 +274,28 @@ class DashboardService {
           thisWeek: financialData.weekRevenue,
           thisMonth: financialData.monthRevenue,
           growthRate: this._calculateRevenueGrowth(financialData),
-          forecast: this._generateRevenueForecast(financialData)
+          forecast: this._generateRevenueForecast(financialData),
         },
         payments: {
           successRate: this._calculatePaymentSuccessRate(financialData.payments),
           averageValue: this._calculateAveragePaymentValue(financialData.payments),
           processingTime: this._calculatePaymentProcessingTime(financialData.payments),
-          failureReasons: this._analyzePaymentFailures(financialData.payments)
+          failureReasons: this._analyzePaymentFailures(financialData.payments),
         },
         outstanding: {
           amount: financialData.outstandingAmount,
           count: financialData.outstandingCount,
           overdue: financialData.overduePayments,
-          collections: this._calculateCollectionEfficiency(financialData)
+          collections: this._calculateCollectionEfficiency(financialData),
         },
         trends: {
           hourlyRevenue: this._calculateHourlyRevenueTrend(financialData, timeframe),
           paymentMethodDistribution: this._calculatePaymentMethodDistribution(
             financialData.payments
           ),
-          seasonalPatterns: this._identifySeasonalPatterns(financialData)
+          seasonalPatterns: this._identifySeasonalPatterns(financialData),
         },
-        alerts: this._generateFinancialAlerts(financialData)
+        alerts: this._generateFinancialAlerts(financialData),
       };
 
       console.log(
@@ -306,7 +306,7 @@ class DashboardService {
         timestamp: new Date(),
         timeframe: criteria.timeframe || '24h',
         metrics,
-        refreshInterval: this.refreshInterval
+        refreshInterval: this.refreshInterval,
       };
     } catch (error) {
       console.error('[DashboardService] Financial metrics collection failed:', error);
@@ -336,25 +336,25 @@ class DashboardService {
           activeUsers: userActivityData.activeUsers,
           newRegistrations: userActivityData.newRegistrations,
           returningUsers: userActivityData.returningUsers,
-          sessionDuration: this._calculateAverageSessionDuration(userActivityData.sessions)
+          sessionDuration: this._calculateAverageSessionDuration(userActivityData.sessions),
         },
         engagement: {
           loginFrequency: this._calculateLoginFrequency(userActivityData.logins),
           featureUsage: this._calculateFeatureUsage(userActivityData.activities),
           completionRates: this._calculateTaskCompletionRates(userActivityData.tasks),
-          supportInteractions: userActivityData.supportTickets
+          supportInteractions: userActivityData.supportTickets,
         },
         demographics: {
           roleDistribution: this._calculateRoleDistribution(userActivityData.users),
           geographicDistribution: this._calculateGeographicDistribution(userActivityData.users),
-          deviceUsage: this._calculateDeviceUsage(userActivityData.sessions)
+          deviceUsage: this._calculateDeviceUsage(userActivityData.sessions),
         },
         satisfaction: {
           npsScore: this._calculateNPSScore(userActivityData.feedback),
           supportRating: this._calculateSupportRating(userActivityData.support),
-          featureSatisfaction: this._calculateFeatureSatisfaction(userActivityData.feedback)
+          featureSatisfaction: this._calculateFeatureSatisfaction(userActivityData.feedback),
         },
-        alerts: this._generateUserEngagementAlerts(userActivityData)
+        alerts: this._generateUserEngagementAlerts(userActivityData),
       };
 
       console.log(
@@ -365,7 +365,7 @@ class DashboardService {
         timestamp: new Date(),
         timeframe: criteria.timeframe || '24h',
         metrics,
-        refreshInterval: this.refreshInterval
+        refreshInterval: this.refreshInterval,
       };
     } catch (error) {
       console.error('[DashboardService] User engagement metrics collection failed:', error);
@@ -393,27 +393,27 @@ class DashboardService {
           responseTime: systemData.responseTime,
           throughput: systemData.throughput,
           errorRate: systemData.errorRate,
-          uptime: systemData.uptime
+          uptime: systemData.uptime,
         },
         resources: {
           cpuUsage: systemData.cpu,
           memoryUsage: systemData.memory,
           diskUsage: systemData.disk,
-          networkUsage: systemData.network
+          networkUsage: systemData.network,
         },
         services: {
           database: await this._checkDatabaseHealth(),
           cache: await this._checkCacheHealth(),
           storage: await this._checkStorageHealth(),
-          external: await this._checkExternalServicesHealth()
+          external: await this._checkExternalServicesHealth(),
         },
         security: {
           activeThreats: systemData.securityThreats,
           loginAttempts: systemData.loginAttempts,
           suspiciousActivity: systemData.suspiciousActivity,
-          certificationStatus: systemData.sslStatus
+          certificationStatus: systemData.sslStatus,
         },
-        alerts: this._generateSystemAlerts(systemData)
+        alerts: this._generateSystemAlerts(systemData),
       };
 
       // Calculate overall health score
@@ -427,7 +427,7 @@ class DashboardService {
         timestamp: new Date(),
         healthScore,
         metrics,
-        refreshInterval: this.refreshInterval
+        refreshInterval: this.refreshInterval,
       };
     } catch (error) {
       console.error('[DashboardService] System health metrics collection failed:', error);
@@ -444,7 +444,7 @@ class DashboardService {
       critical: [],
       warnings: [],
       informational: [],
-      recentActions: []
+      recentActions: [],
     };
 
     // Check application processing alerts
@@ -454,7 +454,7 @@ class DashboardService {
         message: `Application completion rate below threshold: ${kpis.applications.completionRate}%`,
         severity: 'critical',
         timestamp: new Date(),
-        actionRequired: true
+        actionRequired: true,
       });
     }
 
@@ -465,7 +465,7 @@ class DashboardService {
         message: `Payment success rate below threshold: ${kpis.financial.successRate}%`,
         severity: 'critical',
         timestamp: new Date(),
-        actionRequired: true
+        actionRequired: true,
       });
     }
 
@@ -476,7 +476,7 @@ class DashboardService {
         message: `System health score below threshold: ${kpis.systemHealth.score}%`,
         severity: 'critical',
         timestamp: new Date(),
-        actionRequired: true
+        actionRequired: true,
       });
     }
 
@@ -492,22 +492,22 @@ class DashboardService {
       applications: {
         minCompletionRate: 80, // 80%
         maxProcessingTime: 72, // 72 hours
-        maxQueueSize: 100
+        maxQueueSize: 100,
       },
       financial: {
         minSuccessRate: 95, // 95%
         maxProcessingTime: 30, // 30 minutes
-        dailyRevenueThreshold: 10000 // 10,000 THB
+        dailyRevenueThreshold: 10000, // 10,000 THB
       },
       system: {
         minHealthScore: 85, // 85%
         maxResponseTime: 2000, // 2 seconds
-        maxErrorRate: 1 // 1%
+        maxErrorRate: 1, // 1%
       },
       users: {
         minEngagementRate: 60, // 60%
-        maxSupportTickets: 50
-      }
+        maxSupportTickets: 50,
+      },
     };
   }
 
@@ -521,7 +521,7 @@ class DashboardService {
       modules: criteria.modules || ['applications', 'financial', 'users', 'system'],
       userRole: criteria.userRole || 'DTAM_ADMIN',
       includeAlerts: criteria.includeAlerts !== false,
-      includeTrends: criteria.includeTrends !== false
+      includeTrends: criteria.includeTrends !== false,
     };
   }
 
@@ -537,13 +537,13 @@ class DashboardService {
         services: {
           database: 'unknown',
           cache: 'unknown',
-          metrics: 'unknown'
+          metrics: 'unknown',
         },
         performance: {
           responseTime: 0,
           cacheHitRate: 0,
-          dataFreshness: 0
-        }
+          dataFreshness: 0,
+        },
       };
 
       const startTime = Date.now();
@@ -568,7 +568,7 @@ class DashboardService {
       return {
         status: 'unhealthy',
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     }
   }
@@ -579,7 +579,7 @@ class DashboardService {
    */
   _startMetricCollection() {
     if (this.isRealTimeEnabled) {
-      setInterval(async() => {
+      setInterval(async () => {
         try {
           await this._refreshMetricsCache();
         } catch (error) {

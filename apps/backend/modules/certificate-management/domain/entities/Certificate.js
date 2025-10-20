@@ -21,7 +21,7 @@ class Certificate {
     verificationCount,
     metadata,
     createdAt,
-    updatedAt
+    updatedAt,
   }) {
     this.id = id;
     this.certificateNumber = certificateNumber;
@@ -145,7 +145,7 @@ class Certificate {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -174,7 +174,7 @@ class Certificate {
       // Computed properties
       isValid: this.isValid(),
       isExpired: this.isExpired(),
-      isNearExpiry: this.isNearExpiry()
+      isNearExpiry: this.isNearExpiry(),
     };
   }
 }

@@ -95,13 +95,13 @@ class ReportingModule {
         reportingService: this.reportingService,
         dashboardService: this.dashboardService,
         analyticsService: this.analyticsService,
-        complianceService: this.complianceService
+        complianceService: this.complianceService,
       });
 
       // Initialize routes
       this.routes = new ReportingRoutes({
         ...this.dependencies,
-        reportingController: this.controller
+        reportingController: this.controller,
       });
 
       this.isInitialized = true;
@@ -133,14 +133,14 @@ class ReportingModule {
     // Dashboard service for real-time metrics
     this.dashboardService = new DashboardService({
       ...this.dependencies,
-      reportingService: this.reportingService
+      reportingService: this.reportingService,
     });
     await this.dashboardService.initialize();
 
     // Analytics service for business intelligence
     this.analyticsService = new AnalyticsService({
       ...this.dependencies,
-      reportingService: this.reportingService
+      reportingService: this.reportingService,
     });
     await this.analyticsService.initialize();
 
@@ -148,7 +148,7 @@ class ReportingModule {
     this.complianceService = new ComplianceReportService({
       ...this.dependencies,
       reportingService: this.reportingService,
-      analyticsService: this.analyticsService
+      analyticsService: this.analyticsService,
     });
     await this.complianceService.initialize();
 
@@ -165,7 +165,7 @@ class ReportingModule {
       'applicationRepository',
       'userRepository',
       'paymentRepository',
-      'config'
+      'config',
     ];
 
     const missing = required.filter(dep => !this.dependencies[dep]);
@@ -181,7 +181,7 @@ class ReportingModule {
       config.reporting = {
         dashboard: { refreshInterval: 60000 },
         analytics: { retentionDays: 365 },
-        compliance: { automatedReports: true }
+        compliance: { automatedReports: true },
       };
     }
   }
@@ -198,29 +198,29 @@ class ReportingModule {
         'Financial transaction reports',
         'User activity summaries',
         'Document management statistics',
-        'System performance metrics'
+        'System performance metrics',
       ],
       dashboardFeatures: [
         'Real-time application metrics',
         'Payment processing status',
         'User engagement analytics',
         'System health monitoring',
-        'Compliance adherence tracking'
+        'Compliance adherence tracking',
       ],
       analyticsCapabilities: [
         'Historical trend analysis',
         'Predictive modeling',
         'Performance optimization insights',
         'User behavior analysis',
-        'Revenue forecasting'
+        'Revenue forecasting',
       ],
       exportFormats: ['PDF', 'Excel', 'CSV', 'JSON'],
       automatedReports: [
         'Daily operational summary',
         'Weekly performance report',
         'Monthly compliance report',
-        'Quarterly business review'
-      ]
+        'Quarterly business review',
+      ],
     };
 
     console.log('[ReportingModule] Capabilities:', JSON.stringify(capabilities, null, 2));
@@ -401,7 +401,7 @@ class ReportingModule {
       return {
         status: 'unhealthy',
         reason: 'Module not initialized',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     }
 
@@ -410,7 +410,7 @@ class ReportingModule {
         this.reportingService.healthCheck(),
         this.dashboardService.healthCheck(),
         this.analyticsService.healthCheck(),
-        this.complianceService.healthCheck()
+        this.complianceService.healthCheck(),
       ]);
 
       const allHealthy = serviceHealth.every(health => health.status === 'healthy');
@@ -421,15 +421,15 @@ class ReportingModule {
           reporting: serviceHealth[0],
           dashboard: serviceHealth[1],
           analytics: serviceHealth[2],
-          compliance: serviceHealth[3]
+          compliance: serviceHealth[3],
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     }
   }
@@ -448,7 +448,7 @@ class ReportingModule {
         reporting: 'Core reporting engine',
         dashboard: 'Real-time metrics and KPIs',
         analytics: 'Business intelligence and insights',
-        compliance: 'Government reporting and auditing'
+        compliance: 'Government reporting and auditing',
       },
       capabilities: {
         reportTypes: [
@@ -457,7 +457,7 @@ class ReportingModule {
           'Financial transaction reports',
           'User activity summaries',
           'Document management statistics',
-          'System performance metrics'
+          'System performance metrics',
         ],
         exportFormats: ['PDF', 'Excel', 'CSV', 'JSON'],
         features: [
@@ -466,11 +466,11 @@ class ReportingModule {
           'Historical trend analysis',
           'Predictive analytics',
           'Compliance monitoring',
-          'Performance optimization'
-        ]
+          'Performance optimization',
+        ],
       },
       routes: this.routes ? this.routes.getRouteInfo() : null,
-      dependencies: Object.keys(this.dependencies)
+      dependencies: Object.keys(this.dependencies),
     };
   }
 
@@ -508,7 +508,7 @@ class ReportingModule {
 }
 
 // Static factory method for easy instantiation
-ReportingModule.create = function(dependencies = {}) {
+ReportingModule.create = function (dependencies = {}) {
   return new ReportingModule(dependencies);
 };
 

@@ -14,9 +14,9 @@ router.get('/standards', (req, res) => {
         id: 1,
         name: 'GACP Basic Standards',
         version: '1.0',
-        status: 'active'
-      }
-    ]
+        status: 'active',
+      },
+    ],
   });
 });
 
@@ -29,9 +29,9 @@ router.get('/parameters', (req, res) => {
         id: 1,
         name: 'Soil Quality',
         category: 'environmental',
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   });
 });
 
@@ -42,8 +42,8 @@ router.post('/comparison', (req, res) => {
     data: {
       comparisonId: Date.now(),
       status: 'completed',
-      results: []
-    }
+      results: [],
+    },
   });
 });
 
@@ -52,7 +52,7 @@ router.get('/health', (req, res) => {
   res.json({
     service: 'compliance-service',
     status: 'healthy',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 

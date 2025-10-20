@@ -35,7 +35,7 @@ class User {
     lockedUntil = null,
     metadata = {},
     createdAt = new Date(),
-    updatedAt = new Date()
+    updatedAt = new Date(),
   }) {
     this.id = id;
     this.email = email;
@@ -207,7 +207,7 @@ class User {
       'province',
       'district',
       'subdistrict',
-      'zipCode'
+      'zipCode',
     ];
 
     allowedFields.forEach(field => {
@@ -314,7 +314,7 @@ class User {
       isLocked: this.isAccountLocked(),
       lastLoginAt: this.lastLoginAt,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
       // Note: Sensitive fields (password, tokens) are excluded
     };
   }
@@ -328,7 +328,7 @@ class User {
       id: this.id,
       fullName: this.getFullName(),
       province: this.province,
-      role: this.role
+      role: this.role,
     };
   }
 }

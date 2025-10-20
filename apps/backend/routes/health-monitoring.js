@@ -12,7 +12,7 @@ const router = express.Router();
 const dbHealthMonitor = require('../services/DatabaseHealthMonitor');
 
 // Basic health check endpoint
-router.get('/health', async(req, res) => {
+router.get('/health', async (req, res) => {
   try {
     const healthStatus = dbHealthMonitor.getHealthStatus();
 
@@ -25,19 +25,19 @@ router.get('/health', async(req, res) => {
           status: healthStatus.status,
           isHealthy: healthStatus.summary.isHealthy,
           responseTime: healthStatus.metrics.responseTime,
-          successRate: healthStatus.summary.successRate
+          successRate: healthStatus.summary.successRate,
         },
         api: {
           uptime: healthStatus.summary.uptime,
           version: process.env.API_VERSION || '1.0.0',
-          environment: process.env.NODE_ENV || 'development'
+          environment: process.env.NODE_ENV || 'development',
         },
         system: {
           memory: process.memoryUsage(),
           platform: process.platform,
-          nodeVersion: process.version
-        }
-      }
+          nodeVersion: process.version,
+        },
+      },
     };
 
     // Set appropriate HTTP status based on health
@@ -50,20 +50,20 @@ router.get('/health', async(req, res) => {
       status: 'error',
       error: 'Health check failed',
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
 
 // Detailed system health report
-router.get('/health/detailed', async(req, res) => {
+router.get('/health/detailed', async (req, res) => {
   try {
     const detailedHealth = dbHealthMonitor.getDetailedHealthReport();
 
     res.status(200).json({
       success: true,
       data: detailedHealth,
-      generatedAt: new Date().toISOString()
+      generatedAt: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Detailed health check error:', error);
@@ -71,13 +71,13 @@ router.get('/health/detailed', async(req, res) => {
       success: false,
       error: 'Detailed health check failed',
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
 
 // Database-specific health endpoint
-router.get('/health/database', async(req, res) => {
+router.get('/health/database', async (req, res) => {
   try {
     const healthStatus = dbHealthMonitor.getHealthStatus();
 
@@ -88,9 +88,9 @@ router.get('/health/database', async(req, res) => {
         metrics: healthStatus.metrics,
         collections: healthStatus.metrics.collections,
         performance: healthStatus.metrics.performance,
-        recentHistory: healthStatus.history
+        recentHistory: healthStatus.history,
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Database health check error:', error);
@@ -98,13 +98,13 @@ router.get('/health/database', async(req, res) => {
       success: false,
       error: 'Database health check failed',
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
 
 // Force database reconnection (admin endpoint)
-router.post('/health/database/reconnect', async(req, res) => {
+router.post('/health/database/reconnect', async (req, res) => {
   try {
     console.log('🔄 Manual database reconnection requested');
     const reconnected = await dbHealthMonitor.forceReconnection();
@@ -113,13 +113,13 @@ router.post('/health/database/reconnect', async(req, res) => {
       res.status(200).json({
         success: true,
         message: 'Database reconnection successful',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     } else {
       res.status(500).json({
         success: false,
         error: 'Database reconnection failed',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
   } catch (error) {
@@ -128,13 +128,13 @@ router.post('/health/database/reconnect', async(req, res) => {
       success: false,
       error: 'Database reconnection failed',
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
 
 // Performance metrics endpoint
-router.get('/health/metrics', async(req, res) => {
+router.get('/health/metrics', async (req, res) => {
   try {
     const healthStatus = dbHealthMonitor.getHealthStatus();
 
@@ -149,10 +149,10 @@ router.get('/health/metrics', async(req, res) => {
         responseTime: {
           current: healthStatus.metrics.responseTime,
           average: healthStatus.metrics.performance.avgResponseTime,
-          peak: healthStatus.metrics.performance.peakResponseTime
-        }
+          peak: healthStatus.metrics.performance.peakResponseTime,
+        },
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Performance metrics error:', error);
@@ -160,13 +160,13 @@ router.get('/health/metrics', async(req, res) => {
       success: false,
       error: 'Failed to retrieve performance metrics',
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
 
 // Health history endpoint
-router.get('/health/history', async(req, res) => {
+router.get('/health/history', async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 50;
     const healthStatus = dbHealthMonitor.getHealthStatus();
@@ -176,9 +176,9 @@ router.get('/health/history', async(req, res) => {
       data: {
         history: healthStatus.history.slice(0, limit),
         totalEntries: healthStatus.history.length,
-        summary: healthStatus.summary
+        summary: healthStatus.summary,
       },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     console.error('Health history error:', error);
@@ -186,13 +186,13 @@ router.get('/health/history', async(req, res) => {
       success: false,
       error: 'Failed to retrieve health history',
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
 
 // System status endpoint (comprehensive)
-router.get('/status', async(req, res) => {
+router.get('/status', async (req, res) => {
   try {
     const healthStatus = dbHealthMonitor.getHealthStatus();
 
@@ -202,33 +202,33 @@ router.get('/status', async(req, res) => {
         api: {
           status: 'operational',
           uptime: healthStatus.summary.uptime,
-          version: process.env.API_VERSION || '1.0.0'
+          version: process.env.API_VERSION || '1.0.0',
         },
         database: {
           status: healthStatus.status === 'healthy' ? 'operational' : 'degraded',
           responseTime: healthStatus.metrics.responseTime,
-          successRate: healthStatus.summary.successRate
+          successRate: healthStatus.summary.successRate,
         },
         gacpWorkflow: {
           status: 'operational', // This should be checked against actual service
-          endpoints: 6
+          endpoints: 6,
         },
         authentication: {
-          status: 'operational' // This should be checked against actual service
-        }
+          status: 'operational', // This should be checked against actual service
+        },
       },
       metadata: {
         generatedAt: new Date().toISOString(),
         environment: process.env.NODE_ENV || 'development',
         region: process.env.AWS_REGION || 'local',
-        version: process.env.API_VERSION || '1.0.0'
-      }
+        version: process.env.API_VERSION || '1.0.0',
+      },
     };
 
     const statusCode = systemStatus.overall === 'operational' ? 200 : 503;
     res.status(statusCode).json({
       success: true,
-      data: systemStatus
+      data: systemStatus,
     });
   } catch (error) {
     console.error('System status error:', error);
@@ -236,7 +236,7 @@ router.get('/status', async(req, res) => {
       success: false,
       error: 'Failed to retrieve system status',
       details: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });

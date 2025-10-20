@@ -51,7 +51,7 @@ const GACPApplicationStatus = {
   CERTIFICATE_ISSUED: 'certificate_issued', // ออกใบรับรอง - ใช้ได้ 3 ปี
   CERTIFICATE_SUSPENDED: 'certificate_suspended', // ระงับใบรับรอง - ชั่วคราว
   CERTIFICATE_REVOKED: 'certificate_revoked', // เพิกถอนใบรับรอง - ถาวร
-  CERTIFICATE_EXPIRED: 'certificate_expired' // หมดอายุ - ต้องต่ออายุ
+  CERTIFICATE_EXPIRED: 'certificate_expired', // หมดอายุ - ต้องต่ออายุ
 };
 
 /**
@@ -71,10 +71,10 @@ const GACPCriticalControlPoints = {
       'Authenticated botanical identity', // ตัวตนทางพฤกษศาสตร์ที่ถูกต้อง
       'Genetic purity and stability', // ความบริสุทธิ์และเสถียรภาพทางพันธุกรรม
       'Freedom from pathogens', // ปราศจากเชื้อโรค
-      'Proper storage conditions' // การเก็บรักษาที่เหมาะสม
+      'Proper storage conditions', // การเก็บรักษาที่เหมาะสม
     ],
     weight: 15, // 15% ของคะแนนรวม
-    min_score: 70 // คะแนนขั้นต่ำ 70%
+    min_score: 70, // คะแนนขั้นต่ำ 70%
   },
 
   // CCP 2: Soil Management (การจัดการดิน)
@@ -86,10 +86,10 @@ const GACPCriticalControlPoints = {
       'Soil contamination assessment', // การประเมินการปนเปื้อนในดิน
       'Heavy metals within limits', // โลหะหนักไม่เกินเกณฑ์
       'Proper drainage systems', // ระบบการระบายน้ำที่เหมาะสม
-      'Environmental protection' // การปกป้องสิ่งแวดล้อม
+      'Environmental protection', // การปกป้องสิ่งแวดล้อม
     ],
     weight: 12,
-    min_score: 75
+    min_score: 75,
   },
 
   // CCP 3: Pest and Disease Management (การจัดการศัตรูพืช)
@@ -101,10 +101,10 @@ const GACPCriticalControlPoints = {
       'IPM strategy implementation', // การใช้กลยุทธ์ IPM
       'Approved pesticide list compliance', // การใช้สารกำจัดศัตรูพืชที่อนุญาต
       'Residue levels within MRL', // สารตกค้างไม่เกิน MRL
-      'Natural control methods priority' // ให้ความสำคัญกับการควบคุมทางธรรมชาติ
+      'Natural control methods priority', // ให้ความสำคัญกับการควบคุมทางธรรมชาติ
     ],
     weight: 18,
-    min_score: 80
+    min_score: 80,
   },
 
   // CCP 4: Harvesting (การเก็บเกี่ยว)
@@ -116,10 +116,10 @@ const GACPCriticalControlPoints = {
       'Optimal harvesting time', // เวลาเก็บเกี่ยวที่เหมาะสม
       'Proper harvesting methods', // วิธีการเก็บเกี่ยวที่ถูกต้อง
       'Clean harvesting tools', // เครื่องมือเก็บเกี่ยวที่สะอาด
-      'Weather conditions consideration' // การพิจารณาสภาพอากาศ
+      'Weather conditions consideration', // การพิจารณาสภาพอากาศ
     ],
     weight: 15,
-    min_score: 75
+    min_score: 75,
   },
 
   // CCP 5: Post-Harvest Handling (การจัดการหลังการเก็บเกี่ยว)
@@ -131,10 +131,10 @@ const GACPCriticalControlPoints = {
       'Immediate cooling/drying', // การทำความเย็น/การอบแห้งทันที
       'Clean processing facilities', // สิ่งอำนวยความสะดวกในการแปรรูปที่สะอาด
       'Prevention of cross-contamination', // การป้องกันการปนเปื้อนไขว้
-      'Proper handling procedures' // ขั้นตอนการจัดการที่เหมาะสม
+      'Proper handling procedures', // ขั้นตอนการจัดการที่เหมาะสม
     ],
     weight: 13,
-    min_score: 75
+    min_score: 75,
   },
 
   // CCP 6: Storage and Packaging (การเก็บรักษาและบรรจุภัณฑ์)
@@ -146,10 +146,10 @@ const GACPCriticalControlPoints = {
       'Controlled storage conditions', // สภาวะการเก็บรักษาที่ควบคุม
       'Pest-free storage areas', // พื้นที่เก็บปราศจากศัตรูพืช
       'Appropriate packaging materials', // วัสดุบรรจุภัณฑ์ที่เหมาะสม
-      'Clear labeling system' // ระบบการติดฉลากที่ชัดเจน
+      'Clear labeling system', // ระบบการติดฉลากที่ชัดเจน
     ],
     weight: 10,
-    min_score: 70
+    min_score: 70,
   },
 
   // CCP 7: Documentation and Records (การจัดทำเอกสารและบันทึก)
@@ -161,10 +161,10 @@ const GACPCriticalControlPoints = {
       'Complete field records', // บันทึกการปฏิบัติในแปลงครบถ้วน
       'Input usage documentation', // การบันทึกการใช้ปัจจัยการผลิต
       'Traceability system', // ระบบการติดตามย้อนกลับ
-      'Staff training records' // บันทึกการฝึกอบรมพนักงาน
+      'Staff training records', // บันทึกการฝึกอบรมพนักงาน
     ],
     weight: 9,
-    min_score: 80
+    min_score: 80,
   },
 
   // CCP 8: Personnel Training (การฝึกอบรมบุคลากร)
@@ -176,11 +176,11 @@ const GACPCriticalControlPoints = {
       'GACP knowledge training', // การฝึกอบรมความรู้ GACP
       'Personal hygiene practices', // การปฏิบัติด้านสุขอนามัยส่วนบุคคล
       'Safety procedures understanding', // ความเข้าใจขั้นตอนความปลอดภัย
-      'Regular competency assessment' // การประเมินความสามารถเป็นประจำ
+      'Regular competency assessment', // การประเมินความสามารถเป็นประจำ
     ],
     weight: 8,
-    min_score: 75
-  }
+    min_score: 75,
+  },
 };
 
 /**
@@ -200,15 +200,15 @@ const GACPScoringSystem = {
   CERTIFICATE_LEVELS: {
     GOLD: { min: 90, max: 100, validity: 3 }, // 3 years validity
     SILVER: { min: 80, max: 89, validity: 2 }, // 2 years validity
-    BRONZE: { min: 75, max: 79, validity: 1 } // 1 year validity
+    BRONZE: { min: 75, max: 79, validity: 1 }, // 1 year validity
   },
 
   // Risk Assessment Categories
   RISK_LEVELS: {
     LOW: { score_range: [85, 100], monitoring: 'Annual' },
     MEDIUM: { score_range: [75, 84], monitoring: 'Semi-annual' },
-    HIGH: { score_range: [0, 74], monitoring: 'Quarterly' }
-  }
+    HIGH: { score_range: [0, 74], monitoring: 'Quarterly' },
+  },
 };
 
 /**
@@ -221,7 +221,7 @@ const GACPComplianceFramework = {
     FDA_NOTIFICATION: 'Thai FDA Notification on GACP for Medicinal Plants (2018)',
     PLANT_QUARANTINE_ACT: 'Plant Quarantine Act B.E. 2507 (1964)',
     HAZARDOUS_SUBSTANCES_ACT: 'Hazardous Substances Act B.E. 2535 (1992)',
-    DRUG_ACT: 'Drug Act B.E. 2510 (1967)'
+    DRUG_ACT: 'Drug Act B.E. 2510 (1967)',
   },
 
   // International Standards
@@ -229,7 +229,7 @@ const GACPComplianceFramework = {
     WHO_GACP: 'WHO Guidelines on Good Agricultural and Collection Practices (2003)',
     FAO_GUIDELINES: 'FAO Guidelines on Good Agricultural Practices',
     ASEAN_GUIDELINES: 'ASEAN Guidelines for Traditional Medicine',
-    ISO_22000: 'ISO 22000:2018 Food Safety Management Systems'
+    ISO_22000: 'ISO 22000:2018 Food Safety Management Systems',
   },
 
   // Mandatory Documentation
@@ -241,8 +241,8 @@ const GACPComplianceFramework = {
     'Pesticide usage records', // บันทึกการใช้สารกำจัดศัตรูพืช
     'Harvesting and processing records', // บันทึกการเก็บเกี่ยวและแปรรูป
     'Staff training certificates', // ใบรับรองการฝึกอบรมพนักงาน
-    'Internal audit reports' // รายงานการตรวจสอบภายใน
-  ]
+    'Internal audit reports', // รายงานการตรวจสอบภายใน
+  ],
 };
 
 /**
@@ -289,11 +289,11 @@ module.exports = {
           ccp: ccpKey,
           required: ccp.min_score,
           actual: ccpScores[ccpKey],
-          name: ccp.name_th
+          name: ccp.name_th,
         });
       }
     }
 
     return violations;
-  }
+  },
 };

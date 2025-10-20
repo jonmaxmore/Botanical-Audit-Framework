@@ -15,21 +15,21 @@ const PaymentSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true
+      index: true,
     },
 
     // Application reference
     applicationId: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
 
     // Farmer reference
     farmerId: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
 
     // Payment type
@@ -37,14 +37,14 @@ const PaymentSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['initial', 'resubmission'],
-      index: true
+      index: true,
     },
 
     // Payment amount (THB)
     amount: {
       type: Number,
       required: true,
-      default: 5000
+      default: 5000,
     },
 
     // Payment status
@@ -53,88 +53,88 @@ const PaymentSchema = new mongoose.Schema(
       required: true,
       enum: ['pending', 'completed', 'failed', 'cancelled'],
       default: 'pending',
-      index: true
+      index: true,
     },
 
     // Payment method
     method: {
       type: String,
       enum: ['credit_card', 'bank_transfer', 'qr_code', 'promptpay'],
-      default: null
+      default: null,
     },
 
     // Transaction details
     transactionId: {
       type: String,
       default: null,
-      index: true
+      index: true,
     },
 
     transactionDate: {
       type: Date,
-      default: null
+      default: null,
     },
 
     // Receipt information
     receiptNumber: {
       type: String,
-      default: null
+      default: null,
     },
 
     receiptUrl: {
       type: String,
-      default: null
+      default: null,
     },
 
     // Submission count (for resubmission payments)
     submissionCount: {
       type: Number,
-      default: null
+      default: null,
     },
 
     // Payment gateway response
     gatewayResponse: {
       type: mongoose.Schema.Types.Mixed,
-      default: null
+      default: null,
     },
 
     // Notes and comments
     notes: {
       type: String,
-      default: null
+      default: null,
     },
 
     // Metadata
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {}
+      default: {},
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true
+      index: true,
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
 
     paidAt: {
       type: Date,
-      default: null
+      default: null,
     },
 
     cancelledAt: {
       type: Date,
-      default: null
-    }
+      default: null,
+    },
   },
   {
     timestamps: true,
-    collection: 'payments'
+    collection: 'payments',
   }
 );
 
@@ -145,7 +145,7 @@ PaymentSchema.index({ status: 1, createdAt: -1 });
 PaymentSchema.index({ transactionId: 1 }, { sparse: true });
 
 // Virtual for payment age (in days)
-PaymentSchema.virtual('ageInDays').get(function() {
+PaymentSchema.virtual('ageInDays').get(function () {
   if (this.status !== 'pending') return null;
   const now = new Date();
   const created = this.createdAt;
@@ -153,13 +153,13 @@ PaymentSchema.virtual('ageInDays').get(function() {
 });
 
 // Virtual for is overdue (7 days)
-PaymentSchema.virtual('isOverdue').get(function() {
+PaymentSchema.virtual('isOverdue').get(function () {
   if (this.status !== 'pending') return false;
   return this.ageInDays > 7;
 });
 
 // Instance method: Mark as completed
-PaymentSchema.methods.markCompleted = function(transactionData) {
+PaymentSchema.methods.markCompleted = function (transactionData) {
   this.status = 'completed';
   this.transactionId = transactionData.transactionId;
   this.transactionDate = transactionData.transactionDate || new Date();
@@ -172,7 +172,7 @@ PaymentSchema.methods.markCompleted = function(transactionData) {
 };
 
 // Instance method: Mark as failed
-PaymentSchema.methods.markFailed = function(reason) {
+PaymentSchema.methods.markFailed = function (reason) {
   this.status = 'failed';
   this.notes = reason || 'Payment failed';
   this.updatedAt = new Date();
@@ -180,7 +180,7 @@ PaymentSchema.methods.markFailed = function(reason) {
 };
 
 // Instance method: Cancel payment
-PaymentSchema.methods.cancel = function(reason) {
+PaymentSchema.methods.cancel = function (reason) {
   this.status = 'cancelled';
   this.notes = reason || 'Payment cancelled';
   this.cancelledAt = new Date();
@@ -189,18 +189,18 @@ PaymentSchema.methods.cancel = function(reason) {
 };
 
 // Static method: Find pending payments older than X days
-PaymentSchema.statics.findOverdue = function(days = 7) {
+PaymentSchema.statics.findOverdue = function (days = 7) {
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - days);
 
   return this.find({
     status: 'pending',
-    createdAt: { $lte: cutoffDate }
+    createdAt: { $lte: cutoffDate },
   }).sort({ createdAt: 1 });
 };
 
 // Static method: Get statistics
-PaymentSchema.statics.getStatistics = function(filters = {}) {
+PaymentSchema.statics.getStatistics = function (filters = {}) {
   const matchStage = {};
 
   if (filters.startDate || filters.endDate) {
@@ -231,22 +231,22 @@ PaymentSchema.statics.getStatistics = function(filters = {}) {
         byStatus: {
           $push: {
             status: '$status',
-            amount: '$amount'
-          }
+            amount: '$amount',
+          },
         },
         byType: {
           $push: {
             type: '$type',
-            amount: '$amount'
-          }
-        }
-      }
-    }
+            amount: '$amount',
+          },
+        },
+      },
+    },
   ]);
 };
 
 // Pre-save middleware
-PaymentSchema.pre('save', function(next) {
+PaymentSchema.pre('save', function (next) {
   this.updatedAt = new Date();
   next();
 });

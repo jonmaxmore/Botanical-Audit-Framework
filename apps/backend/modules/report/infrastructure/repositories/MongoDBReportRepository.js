@@ -58,12 +58,12 @@ const reportSchema = new mongoose.Schema(
     viewCount: { type: Number, default: 0 },
 
     createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
   },
   {
     collection: 'reports',
     timestamps: false,
-    _id: false
+    _id: false,
   }
 );
 
@@ -103,17 +103,17 @@ class MongoDBReportRepository {
 
     const query = {
       requestedBy: requesterId,
-      ...filters
+      ...filters,
     };
 
     const [reports, total] = await Promise.all([
       ReportModel.find(query).sort(sort).skip(skip).limit(limit).lean(),
-      ReportModel.countDocuments(query)
+      ReportModel.countDocuments(query),
     ]);
 
     return {
       reports: reports.map(doc => this._toDomain(doc)),
-      total
+      total,
     };
   }
 
@@ -123,12 +123,12 @@ class MongoDBReportRepository {
 
     const [reports, total] = await Promise.all([
       ReportModel.find({ status }).sort(sort).skip(skip).limit(limit).lean(),
-      ReportModel.countDocuments({ status })
+      ReportModel.countDocuments({ status }),
     ]);
 
     return {
       reports: reports.map(doc => this._toDomain(doc)),
-      total
+      total,
     };
   }
 
@@ -138,12 +138,12 @@ class MongoDBReportRepository {
 
     const [reports, total] = await Promise.all([
       ReportModel.find({ type }).sort(sort).skip(skip).limit(limit).lean(),
-      ReportModel.countDocuments({ type })
+      ReportModel.countDocuments({ type }),
     ]);
 
     return {
       reports: reports.map(doc => this._toDomain(doc)),
-      total
+      total,
     };
   }
 
@@ -153,12 +153,12 @@ class MongoDBReportRepository {
 
     const [reports, total] = await Promise.all([
       ReportModel.find({ category }).sort(sort).skip(skip).limit(limit).lean(),
-      ReportModel.countDocuments({ category })
+      ReportModel.countDocuments({ category }),
     ]);
 
     return {
       reports: reports.map(doc => this._toDomain(doc)),
-      total
+      total,
     };
   }
 
@@ -168,12 +168,12 @@ class MongoDBReportRepository {
 
     const [reports, total] = await Promise.all([
       ReportModel.find(filters).sort(sort).skip(skip).limit(limit).lean(),
-      ReportModel.countDocuments(filters)
+      ReportModel.countDocuments(filters),
     ]);
 
     return {
       reports: reports.map(doc => this._toDomain(doc)),
-      total
+      total,
     };
   }
 
@@ -187,7 +187,7 @@ class MongoDBReportRepository {
     const reports = await ReportModel.find({
       status: Report.STATUS.PENDING,
       schedule: { $ne: Report.SCHEDULE.ONCE },
-      $or: [{ nextRunAt: { $lte: now } }, { nextRunAt: null }]
+      $or: [{ nextRunAt: { $lte: now } }, { nextRunAt: null }],
     }).lean();
 
     return reports.map(doc => this._toDomain(doc));
@@ -200,7 +200,7 @@ class MongoDBReportRepository {
 
     const reports = await ReportModel.find({
       expiresAt: { $lte: now },
-      status: { $ne: Report.STATUS.EXPIRED }
+      status: { $ne: Report.STATUS.EXPIRED },
     })
       .skip(skip)
       .limit(limit)
@@ -212,7 +212,7 @@ class MongoDBReportRepository {
   async findRetryable() {
     const reports = await ReportModel.find({
       status: Report.STATUS.FAILED,
-      $expr: { $lt: ['$retryCount', '$maxRetries'] }
+      $expr: { $lt: ['$retryCount', '$maxRetries'] },
     }).lean();
 
     return reports.map(doc => this._toDomain(doc));
@@ -225,7 +225,7 @@ class MongoDBReportRepository {
   async countByRequester(requesterId, filters = {}) {
     return await ReportModel.countDocuments({
       requestedBy: requesterId,
-      ...filters
+      ...filters,
     });
   }
 
@@ -235,13 +235,13 @@ class MongoDBReportRepository {
     const result = await ReportModel.updateMany(
       {
         expiresAt: { $lte: now },
-        status: { $ne: Report.STATUS.EXPIRED }
+        status: { $ne: Report.STATUS.EXPIRED },
       },
       {
         $set: {
           status: Report.STATUS.EXPIRED,
-          updatedAt: now
-        }
+          updatedAt: now,
+        },
       }
     );
 
@@ -256,21 +256,21 @@ class MongoDBReportRepository {
           _id: null,
           total: { $sum: 1 },
           byStatus: {
-            $push: '$status'
+            $push: '$status',
           },
           byType: {
-            $push: '$type'
+            $push: '$type',
           },
           byCategory: {
-            $push: '$category'
+            $push: '$category',
           },
           byFormat: {
-            $push: '$format'
+            $push: '$format',
           },
           totalDownloads: { $sum: '$downloadCount' },
           totalViews: { $sum: '$viewCount' },
-          totalFileSize: { $sum: '$fileSize' }
-        }
+          totalFileSize: { $sum: '$fileSize' },
+        },
       },
       {
         $project: {
@@ -282,9 +282,9 @@ class MongoDBReportRepository {
           byFormat: 1,
           totalDownloads: 1,
           totalViews: 1,
-          totalFileSize: 1
-        }
-      }
+          totalFileSize: 1,
+        },
+      },
     ]);
 
     if (stats.length === 0) {
@@ -296,7 +296,7 @@ class MongoDBReportRepository {
         byFormat: {},
         totalDownloads: 0,
         totalViews: 0,
-        totalFileSize: 0
+        totalFileSize: 0,
       };
     }
 
@@ -322,7 +322,7 @@ class MongoDBReportRepository {
 
     const result = await ReportModel.deleteMany({
       status: Report.STATUS.COMPLETED,
-      completedAt: { $lte: cutoffDate }
+      completedAt: { $lte: cutoffDate },
     });
 
     return result.deletedCount;
@@ -333,17 +333,17 @@ class MongoDBReportRepository {
     const skip = (page - 1) * limit;
 
     const query = {
-      $text: { $search: searchText }
+      $text: { $search: searchText },
     };
 
     const [reports, total] = await Promise.all([
       ReportModel.find(query).sort(sort).skip(skip).limit(limit).lean(),
-      ReportModel.countDocuments(query)
+      ReportModel.countDocuments(query),
     ]);
 
     return {
       reports: reports.map(doc => this._toDomain(doc)),
-      total
+      total,
     };
   }
 
@@ -390,7 +390,7 @@ class MongoDBReportRepository {
       downloadCount: doc.downloadCount,
       viewCount: doc.viewCount,
       createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt
+      updatedAt: doc.updatedAt,
     });
   }
 
@@ -434,7 +434,7 @@ class MongoDBReportRepository {
       downloadCount: report.downloadCount,
       viewCount: report.viewCount,
       createdAt: report.createdAt,
-      updatedAt: report.updatedAt
+      updatedAt: report.updatedAt,
     };
   }
 

@@ -22,7 +22,7 @@ const formatDateThai = date => {
     'กันยายน',
     'ตุลาคม',
     'พฤศจิกายน',
-    'ธันวาคม'
+    'ธันวาคม',
   ];
   const day = d.getDate();
   const month = months[d.getMonth()];
@@ -105,5 +105,5 @@ module.exports = {
   addDays,
   isExpired,
   getCurrentTimestamp,
-  formatDateTime
+  formatDateTime,
 };

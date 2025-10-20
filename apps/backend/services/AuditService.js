@@ -35,7 +35,7 @@ class AuditService {
       'account_unlocked',
       'inspector_assigned',
       'reviewer_assigned',
-      'approver_assigned'
+      'approver_assigned',
     ]);
   }
 
@@ -52,20 +52,20 @@ class AuditService {
         name: actor.name || 'Unknown',
         email: actor.email,
         ip: actor.ip || 'unknown',
-        userAgent: actor.userAgent || 'unknown'
+        userAgent: actor.userAgent || 'unknown',
       },
       action,
       resource: {
         type: resource.type,
         id: resource.id,
         before: resource.before || null,
-        after: resource.after || null
+        after: resource.after || null,
       },
       metadata: {
         ...metadata,
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
       },
-      result: 'success'
+      result: 'success',
     };
 
     try {
@@ -100,25 +100,25 @@ class AuditService {
         name: actor.name || 'Unknown',
         email: actor.email,
         ip: actor.ip || 'unknown',
-        userAgent: actor.userAgent || 'unknown'
+        userAgent: actor.userAgent || 'unknown',
       },
       action,
       resource: {
         type: resource.type,
         id: resource.id,
         before: resource.before || null,
-        after: null
+        after: null,
       },
       metadata: {
         ...metadata,
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
       },
       result: 'failure',
       error: {
         message: error.message,
         code: error.code,
-        stack: error.stack
-      }
+        stack: error.stack,
+      },
     };
 
     try {
@@ -158,9 +158,9 @@ class AuditService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.SIEM_API_KEY}`
+          Authorization: `Bearer ${process.env.SIEM_API_KEY}`,
         },
-        body: JSON.stringify(log)
+        body: JSON.stringify(log),
       });
 
       if (!response.ok) {
@@ -180,7 +180,7 @@ class AuditService {
   async getAuditTrail(resourceType, resourceId, options = {}) {
     const query = {
       'resource.type': resourceType,
-      'resource.id': resourceId
+      'resource.id': resourceId,
     };
 
     // Add time filter if provided
@@ -215,7 +215,7 @@ class AuditService {
    */
   async getAuditLogsByActor(userId, options = {}) {
     const query = {
-      'actor.userId': userId
+      'actor.userId': userId,
     };
 
     if (options.from || options.to) {
@@ -284,8 +284,8 @@ class AuditService {
     const query = {
       timestamp: {
         $gte: from || new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
-        $lte: to || new Date()
-      }
+        $lte: to || new Date(),
+      },
     };
 
     const [totalLogs, successfulActions, failedActions, criticalActions, topActors, topActions] =
@@ -295,17 +295,17 @@ class AuditService {
         this.db.collection(this.collection).countDocuments({ ...query, result: 'failure' }),
         this.db.collection(this.collection).countDocuments({
           ...query,
-          action: { $in: Array.from(this.criticalActions) }
+          action: { $in: Array.from(this.criticalActions) },
         }),
         this.db
           .collection(this.collection)
           .aggregate([
             { $match: query },
             {
-              $group: { _id: '$actor.userId', count: { $sum: 1 }, name: { $first: '$actor.name' } }
+              $group: { _id: '$actor.userId', count: { $sum: 1 }, name: { $first: '$actor.name' } },
             },
             { $sort: { count: -1 } },
-            { $limit: 10 }
+            { $limit: 10 },
           ])
           .toArray(),
         this.db
@@ -314,9 +314,9 @@ class AuditService {
             { $match: query },
             { $group: { _id: '$action', count: { $sum: 1 } } },
             { $sort: { count: -1 } },
-            { $limit: 10 }
+            { $limit: 10 },
           ])
-          .toArray()
+          .toArray(),
       ]);
 
     return {
@@ -326,7 +326,7 @@ class AuditService {
       criticalActions,
       successRate: totalLogs > 0 ? ((successfulActions / totalLogs) * 100).toFixed(2) : 0,
       topActors: topActors.map(a => ({ userId: a._id, name: a.name, count: a.count })),
-      topActions: topActions.map(a => ({ action: a._id, count: a.count }))
+      topActions: topActions.map(a => ({ action: a._id, count: a.count })),
     };
   }
 
@@ -337,7 +337,7 @@ class AuditService {
     return await this.db
       .collection(this.collection)
       .find({
-        action: { $in: Array.from(this.criticalActions) }
+        action: { $in: Array.from(this.criticalActions) },
       })
       .sort({ timestamp: -1 })
       .limit(limit)
@@ -367,12 +367,12 @@ class AuditService {
     return {
       period: {
         from,
-        to
+        to,
       },
       statistics: stats,
       recentCriticalActions: recentCritical,
       recentFailures: recentFailures,
-      generatedAt: new Date()
+      generatedAt: new Date(),
     };
   }
 
@@ -384,7 +384,7 @@ class AuditService {
 
     const result = await this.db.collection(this.collection).deleteMany({
       timestamp: { $lt: cutoffDate },
-      action: { $nin: Array.from(this.criticalActions) } // Keep critical actions
+      action: { $nin: Array.from(this.criticalActions) }, // Keep critical actions
     });
 
     console.log(`✅ Cleaned up ${result.deletedCount} old audit logs`);
@@ -407,7 +407,7 @@ if (require.main === module) {
 
     const auditService = new AuditService(db, {
       collection: 'audit_logs',
-      siemEnabled: false
+      siemEnabled: false,
     });
 
     // Test logging
@@ -419,17 +419,17 @@ if (require.main === module) {
         name: 'นายทดสอบ ระบบ',
         email: 'test@example.com',
         ip: '127.0.0.1',
-        userAgent: 'Mozilla/5.0'
+        userAgent: 'Mozilla/5.0',
       },
       {
         type: 'application',
         id: 'APP-2025-000001',
         before: null,
-        after: { status: 'submitted', farmName: 'ฟาร์มทดสอบ' }
+        after: { status: 'submitted', farmName: 'ฟาร์มทดสอบ' },
       },
       {
         reason: 'New application submitted',
-        paymentId: 'PAY-001'
+        paymentId: 'PAY-001',
       }
     );
 
@@ -441,16 +441,16 @@ if (require.main === module) {
         role: 'farmer',
         name: 'นายทดสอบ ระบบ',
         email: 'test@example.com',
-        ip: '127.0.0.1'
+        ip: '127.0.0.1',
       },
       {
         type: 'payment',
-        id: 'PAY-002'
+        id: 'PAY-002',
       },
       new Error('Insufficient funds'),
       {
         amount: 5000,
-        currency: 'THB'
+        currency: 'THB',
       }
     );
 

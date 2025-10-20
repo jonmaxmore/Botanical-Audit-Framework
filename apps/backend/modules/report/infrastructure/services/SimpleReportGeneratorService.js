@@ -25,18 +25,18 @@ class SimpleReportGeneratorService {
 
   async generate(format, data, options = {}) {
     switch (format) {
-    case 'PDF':
-      return await this.generatePDF(data, options);
-    case 'EXCEL':
-      return await this.generateExcel(data, options);
-    case 'CSV':
-      return await this.generateCSV(data, options);
-    case 'HTML':
-      return await this.generateHTML(data, options);
-    case 'JSON':
-      return await this.generateJSON(data, options);
-    default:
-      throw new Error(`Unsupported format: ${format}`);
+      case 'PDF':
+        return await this.generatePDF(data, options);
+      case 'EXCEL':
+        return await this.generateExcel(data, options);
+      case 'CSV':
+        return await this.generateCSV(data, options);
+      case 'HTML':
+        return await this.generateHTML(data, options);
+      case 'JSON':
+        return await this.generateJSON(data, options);
+      default:
+        throw new Error(`Unsupported format: ${format}`);
     }
   }
 
@@ -264,7 +264,7 @@ class SimpleReportGeneratorService {
       generated: new Date().toISOString(),
       parameters: options.parameters,
       filters: options.filters,
-      data: data
+      data: data,
     };
 
     return JSON.stringify(output, null, 2);
@@ -285,7 +285,7 @@ class SimpleReportGeneratorService {
 
     return {
       filePath,
-      fileSize: stats.size
+      fileSize: stats.size,
     };
   }
 

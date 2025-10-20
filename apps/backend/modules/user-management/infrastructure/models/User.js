@@ -35,13 +35,13 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please provide a valid email address'],
-      index: true
+      index: true,
     },
 
     passwordHash: {
       type: String,
       required: [true, 'Password is required'],
-      minlength: [60, 'Password hash should be properly encrypted'] // bcrypt hash length
+      minlength: [60, 'Password hash should be properly encrypted'], // bcrypt hash length
     },
 
     firstName: {
@@ -49,7 +49,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'First name is required'],
       trim: true,
       maxlength: [50, 'First name cannot exceed 50 characters'],
-      match: [/^[a-zA-Zก-๏\s]+$/, 'First name can only contain letters and spaces']
+      match: [/^[a-zA-Zก-๏\s]+$/, 'First name can only contain letters and spaces'],
     },
 
     lastName: {
@@ -57,7 +57,7 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Last name is required'],
       trim: true,
       maxlength: [50, 'Last name cannot exceed 50 characters'],
-      match: [/^[a-zA-Zก-๏\s]+$/, 'Last name can only contain letters and spaces']
+      match: [/^[a-zA-Zก-๏\s]+$/, 'Last name can only contain letters and spaces'],
     },
 
     // Role-based access control
@@ -66,64 +66,64 @@ const userSchema = new mongoose.Schema(
       required: [true, 'User role is required'],
       enum: {
         values: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN'],
-        message: 'Role must be one of: FARMER, DTAM_REVIEWER, DTAM_INSPECTOR, DTAM_ADMIN'
+        message: 'Role must be one of: FARMER, DTAM_REVIEWER, DTAM_INSPECTOR, DTAM_ADMIN',
       },
-      index: true
+      index: true,
     },
 
     // Account status and security
     isActive: {
       type: Boolean,
       default: true,
-      index: true
+      index: true,
     },
 
     isVerified: {
       type: Boolean,
       default: false,
-      index: true
+      index: true,
     },
 
     requirePasswordChange: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     // Password management
     passwordUpdatedAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
 
     passwordResetToken: {
       type: String,
-      select: false // Don't include in queries by default
+      select: false, // Don't include in queries by default
     },
 
     passwordResetExpiry: {
       type: Date,
-      select: false
+      select: false,
     },
 
     // Account security tracking
     lastLoginAt: {
       type: Date,
-      index: true
+      index: true,
     },
 
     lastLoginIP: {
       type: String,
-      trim: true
+      trim: true,
     },
 
     failedLoginAttempts: {
       type: Number,
-      default: 0
+      default: 0,
     },
 
     lockedUntil: {
       type: Date,
-      index: true
+      index: true,
     },
 
     // Profile information (role-specific)
@@ -132,7 +132,7 @@ const userSchema = new mongoose.Schema(
       phone: {
         type: String,
         trim: true,
-        match: [/^[0-9+\-\s()]+$/, 'Please provide a valid phone number']
+        match: [/^[0-9+\-\s()]+$/, 'Please provide a valid phone number'],
       },
 
       address: {
@@ -140,7 +140,7 @@ const userSchema = new mongoose.Schema(
         district: { type: String, trim: true, maxlength: 100 },
         province: { type: String, trim: true, maxlength: 100 },
         postalCode: { type: String, trim: true, match: /^[0-9]{5}$/ },
-        country: { type: String, default: 'Thailand', trim: true }
+        country: { type: String, default: 'Thailand', trim: true },
       },
 
       // Farmer-specific fields
@@ -149,20 +149,20 @@ const userSchema = new mongoose.Schema(
         farmSize: { type: Number, min: 0 }, // in rai
         farmType: {
           type: String,
-          enum: ['ORGANIC', 'CONVENTIONAL', 'MIXED']
+          enum: ['ORGANIC', 'CONVENTIONAL', 'MIXED'],
         },
         coordinates: {
           latitude: { type: Number, min: -90, max: 90 },
-          longitude: { type: Number, min: -180, max: 180 }
+          longitude: { type: Number, min: -180, max: 180 },
         },
         certificationHistory: [
           {
             certType: String,
             issuedDate: Date,
             expiryDate: Date,
-            certNumber: String
-          }
-        ]
+            certNumber: String,
+          },
+        ],
       },
 
       // DTAM staff fields
@@ -171,13 +171,13 @@ const userSchema = new mongoose.Schema(
         department: { type: String, trim: true },
         position: { type: String, trim: true },
         specializations: [{ type: String, trim: true }],
-        workingProvinces: [{ type: String, trim: true }]
+        workingProvinces: [{ type: String, trim: true }],
       },
 
       // Additional profile data
       avatar: { type: String, trim: true }, // URL to profile picture
       bio: { type: String, trim: true, maxlength: 500 },
-      language: { type: String, default: 'th', enum: ['th', 'en'] }
+      language: { type: String, default: 'th', enum: ['th', 'en'] },
     },
 
     // Preferences and settings
@@ -185,57 +185,57 @@ const userSchema = new mongoose.Schema(
       notifications: {
         email: { type: Boolean, default: true },
         sms: { type: Boolean, default: false },
-        push: { type: Boolean, default: true }
+        push: { type: Boolean, default: true },
       },
 
       dashboard: {
         defaultView: { type: String, default: 'summary' },
-        itemsPerPage: { type: Number, default: 10, min: 5, max: 100 }
+        itemsPerPage: { type: Number, default: 10, min: 5, max: 100 },
       },
 
       privacy: {
         profileVisibility: { type: String, default: 'private', enum: ['public', 'private'] },
-        contactInfoVisible: { type: Boolean, default: false }
-      }
+        contactInfoVisible: { type: Boolean, default: false },
+      },
     },
 
     // System metadata
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true
+      index: true,
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
 
     lastModifiedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
 
     // Verification tokens
     emailVerificationToken: {
       type: String,
-      select: false
+      select: false,
     },
 
     emailVerificationExpiry: {
       type: Date,
-      select: false
-    }
+      select: false,
+    },
   },
   {
     timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
     toJSON: {
-      transform: function(doc, ret) {
+      transform: function (doc, ret) {
         // Remove sensitive fields from JSON output
         delete ret.passwordHash;
         delete ret.passwordResetToken;
@@ -244,10 +244,10 @@ const userSchema = new mongoose.Schema(
         delete ret.emailVerificationExpiry;
         delete ret.__v;
         return ret;
-      }
+      },
     },
     toObject: {
-      transform: function(doc, ret) {
+      transform: function (doc, ret) {
         delete ret.passwordHash;
         delete ret.passwordResetToken;
         delete ret.passwordResetExpiry;
@@ -255,8 +255,8 @@ const userSchema = new mongoose.Schema(
         delete ret.emailVerificationExpiry;
         delete ret.__v;
         return ret;
-      }
-    }
+      },
+    },
   }
 );
 
@@ -272,21 +272,21 @@ userSchema.index({ role: 1, 'profile.dtamInfo.workingProvinces': 1 }); // For in
 userSchema.index({ isActive: 1, isVerified: 1 }); // For active user queries
 
 // Virtual properties
-userSchema.virtual('fullName').get(function() {
+userSchema.virtual('fullName').get(function () {
   return `${this.firstName} ${this.lastName}`;
 });
 
-userSchema.virtual('isLocked').get(function() {
+userSchema.virtual('isLocked').get(function () {
   return !!(this.lockedUntil && this.lockedUntil > Date.now());
 });
 
-userSchema.virtual('passwordAge').get(function() {
+userSchema.virtual('passwordAge').get(function () {
   if (!this.passwordUpdatedAt) return null;
   return Math.floor((Date.now() - this.passwordUpdatedAt.getTime()) / (1000 * 60 * 60 * 24)); // Days
 });
 
 // Pre-save middleware
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   // Update the updatedAt timestamp
   this.updatedAt = new Date();
 
@@ -314,7 +314,7 @@ userSchema.pre('save', async function(next) {
 });
 
 // Instance methods
-userSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
   try {
     return await bcrypt.compare(candidatePassword, this.passwordHash);
   } catch (error) {
@@ -322,12 +322,12 @@ userSchema.methods.comparePassword = async function(candidatePassword) {
   }
 };
 
-userSchema.methods.incrementLoginAttempts = function() {
+userSchema.methods.incrementLoginAttempts = function () {
   // If we have a previous lock that has expired, restart at 1
   if (this.lockedUntil && this.lockedUntil < Date.now()) {
     return this.updateOne({
       $unset: { lockedUntil: 1 },
-      $set: { failedLoginAttempts: 1 }
+      $set: { failedLoginAttempts: 1 },
     });
   }
 
@@ -344,13 +344,13 @@ userSchema.methods.incrementLoginAttempts = function() {
   return this.updateOne(updates);
 };
 
-userSchema.methods.resetLoginAttempts = function() {
+userSchema.methods.resetLoginAttempts = function () {
   return this.updateOne({
-    $unset: { failedLoginAttempts: 1, lockedUntil: 1 }
+    $unset: { failedLoginAttempts: 1, lockedUntil: 1 },
   });
 };
 
-userSchema.methods.generatePasswordResetToken = function() {
+userSchema.methods.generatePasswordResetToken = function () {
   const crypto = require('crypto');
   const resetToken = crypto.randomBytes(32).toString('hex');
 
@@ -360,7 +360,7 @@ userSchema.methods.generatePasswordResetToken = function() {
   return resetToken;
 };
 
-userSchema.methods.generateEmailVerificationToken = function() {
+userSchema.methods.generateEmailVerificationToken = function () {
   const crypto = require('crypto');
   const verificationToken = crypto.randomBytes(32).toString('hex');
 
@@ -370,29 +370,29 @@ userSchema.methods.generateEmailVerificationToken = function() {
   return verificationToken;
 };
 
-userSchema.methods.hasPermission = function(permission) {
+userSchema.methods.hasPermission = function (permission) {
   const rolePermissions = {
     FARMER: [
       'application:create',
       'application:read:own',
       'application:update:own',
       'document:upload:own',
-      'payment:make:own'
+      'payment:make:own',
     ],
     DTAM_REVIEWER: [
       'application:read:all',
       'application:review',
       'application:approve',
       'application:reject',
-      'document:read:all'
+      'document:read:all',
     ],
     DTAM_INSPECTOR: [
       'application:read:assigned',
       'inspection:schedule',
       'inspection:conduct',
-      'inspection:report'
+      'inspection:report',
     ],
-    DTAM_ADMIN: ['*'] // Admin has all permissions
+    DTAM_ADMIN: ['*'], // Admin has all permissions
   };
 
   const userPermissions = rolePermissions[this.role] || [];
@@ -400,57 +400,57 @@ userSchema.methods.hasPermission = function(permission) {
 };
 
 // Private validation methods
-userSchema.methods._validateRoleSpecificProfile = function() {
+userSchema.methods._validateRoleSpecificProfile = function () {
   switch (this.role) {
-  case 'FARMER':
-    if (this.profile && this.profile.farmInfo) {
-      if (this.profile.farmInfo.farmSize && this.profile.farmInfo.farmSize <= 0) {
-        throw new Error('Farm size must be greater than 0');
+    case 'FARMER':
+      if (this.profile && this.profile.farmInfo) {
+        if (this.profile.farmInfo.farmSize && this.profile.farmInfo.farmSize <= 0) {
+          throw new Error('Farm size must be greater than 0');
+        }
       }
-    }
-    break;
+      break;
 
-  case 'DTAM_REVIEWER':
-  case 'DTAM_INSPECTOR':
-  case 'DTAM_ADMIN':
-    if (this.profile && this.profile.dtamInfo) {
-      if (!this.profile.dtamInfo.employeeId) {
-        throw new Error('Employee ID is required for DTAM staff');
+    case 'DTAM_REVIEWER':
+    case 'DTAM_INSPECTOR':
+    case 'DTAM_ADMIN':
+      if (this.profile && this.profile.dtamInfo) {
+        if (!this.profile.dtamInfo.employeeId) {
+          throw new Error('Employee ID is required for DTAM staff');
+        }
       }
-    }
-    break;
+      break;
   }
 };
 
 // Static methods
-userSchema.statics.findByEmail = function(email) {
+userSchema.statics.findByEmail = function (email) {
   return this.findOne({ email: email.toLowerCase() });
 };
 
-userSchema.statics.findActiveUsers = function() {
+userSchema.statics.findActiveUsers = function () {
   return this.find({ isActive: true, isVerified: true });
 };
 
-userSchema.statics.findByRole = function(role) {
+userSchema.statics.findByRole = function (role) {
   return this.find({ role, isActive: true });
 };
 
-userSchema.statics.getInspectorsByProvince = function(province) {
+userSchema.statics.getInspectorsByProvince = function (province) {
   return this.find({
     role: 'DTAM_INSPECTOR',
     isActive: true,
-    'profile.dtamInfo.workingProvinces': province
+    'profile.dtamInfo.workingProvinces': province,
   });
 };
 
-userSchema.statics.searchUsers = function(searchTerm, role = null) {
+userSchema.statics.searchUsers = function (searchTerm, role = null) {
   const query = {
     $or: [
       { firstName: { $regex: searchTerm, $options: 'i' } },
       { lastName: { $regex: searchTerm, $options: 'i' } },
-      { email: { $regex: searchTerm, $options: 'i' } }
+      { email: { $regex: searchTerm, $options: 'i' } },
     ],
-    isActive: true
+    isActive: true,
   };
 
   if (role) {
@@ -460,7 +460,12 @@ userSchema.statics.searchUsers = function(searchTerm, role = null) {
   return this.find(query);
 };
 
-// Model compilation
-const User = mongoose.model('User', userSchema);
+// Create model only if it doesn't exist
+let User;
+try {
+  User = mongoose.model('User');
+} catch {
+  User = mongoose.model('User', userSchema);
+}
 
 module.exports = User;

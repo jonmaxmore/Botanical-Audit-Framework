@@ -19,7 +19,7 @@ const {
   validateRevokeCertificate,
   validateRenewCertificate,
   validateListCertificates,
-  checkValidationResult
+  checkValidationResult,
 } = require('../validators/certificate.validator');
 
 /**
@@ -35,7 +35,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authenticateDTAM = (req, res, next) => next(),
     authorizeRoles = (...roles) =>
       (req, res, next) =>
-        next()
+        next(),
   } = middleware;
 
   // ============================================

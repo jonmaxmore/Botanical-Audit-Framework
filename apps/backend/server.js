@@ -7,7 +7,7 @@ require('dotenv').config();
 const {
   auth,
   errors,
-  logger
+  logger,
   // validation, // Unused - commented out
   // response, // Unused - commented out
   // constants // Unused - commented out
@@ -91,15 +91,14 @@ const app = express();
 
 // Mock security configuration for now
 const security = {
-  api: _config => ({
-    // eslint-disable-line no-unused-vars
-    stack: () => [cors(), express.json({ limit: '10mb' }), express.urlencoded({ extended: true })]
-  })
+  api: () => ({
+    stack: () => [cors(), express.json({ limit: '10mb' }), express.urlencoded({ extended: true })],
+  }),
 };
 
 const securityUtils = {
   sanitizeInput: input => input,
-  validateCSRF: (req, res, next) => next()
+  validateCSRF: (req, res, next) => next(),
 };
 
 // Apply security middleware stack
@@ -184,7 +183,7 @@ try {
     res.status(401).json({
       success: false,
       message: 'Authentication service temporarily unavailable',
-      error: 'SERVICE_UNAVAILABLE'
+      error: 'SERVICE_UNAVAILABLE',
     });
   });
 
@@ -193,7 +192,7 @@ try {
     res.status(401).json({
       success: false,
       message: 'Invalid credentials or service unavailable',
-      error: 'AUTHENTICATION_FAILED'
+      error: 'AUTHENTICATION_FAILED',
     });
   });
 }
@@ -211,7 +210,7 @@ try {
     res.status(401).json({
       success: false,
       message: 'Invalid credentials or service unavailable',
-      error: 'DTAM_AUTH_FAILED'
+      error: 'DTAM_AUTH_FAILED',
     });
   });
 }
@@ -227,7 +226,7 @@ try {
   newApplicationRoutes.get('/', (req, res) => {
     res.status(503).json({
       error: 'Service unavailable',
-      message: 'Application service not available'
+      message: 'Application service not available',
     });
   });
 }
@@ -238,7 +237,7 @@ userRoutes.get('/', (req, res) => {
   res.json({
     message: 'MongoDB User service available',
     version: '2.0.0-mongodb',
-    features: ['profile_management', 'role_based_access', 'activity_tracking']
+    features: ['profile_management', 'role_based_access', 'activity_tracking'],
   });
 });
 
@@ -252,7 +251,7 @@ applicationRoutes.get('/', authenticateToken, (req, res) =>
     version: '2.0.0-mongodb',
     features: ['persistent_storage', 'advanced_search', 'real_time_updates'],
     user: req.user.email,
-    applications: []
+    applications: [],
   })
 );
 
@@ -263,12 +262,12 @@ applicationRoutes.post('/', authenticateToken, (req, res) => {
     applicant: req.user.email,
     status: 'submitted',
     submittedAt: new Date(),
-    ...req.body
+    ...req.body,
   };
 
   res.status(201).json({
     message: 'à¸ªà¸£à¹‰à¸²à¸‡à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¸ªà¸³à¹€à¸£à¹‡à¸ˆ',
-    application: applicationData
+    application: applicationData,
   });
 });
 
@@ -280,9 +279,9 @@ applicationRoutes.get('/status', authenticateToken, (req, res) => {
         id: 1,
         status: 'under_review',
         lastUpdated: new Date(),
-        progress: 60
-      }
-    ]
+        progress: 60,
+      },
+    ],
   });
 });
 
@@ -292,12 +291,12 @@ const workflowRoutes = express.Router();
 workflowRoutes.get('/', authenticateToken, (req, res) =>
   res.json({
     message: 'Workflow service available',
-    user: req.user.email
+    user: req.user.email,
   })
 );
 
 // GET /api/workflow/applications - List applications
-workflowRoutes.get('/applications', authenticateToken, async(req, res) => {
+workflowRoutes.get('/applications', authenticateToken, async (req, res) => {
   try {
     // Mock applications for UAT testing
     const mockApplications = [
@@ -307,14 +306,14 @@ workflowRoutes.get('/applications', authenticateToken, async(req, res) => {
         farmName: 'à¸Ÿà¸²à¸£à¹Œà¸¡à¸—à¸”à¸ªà¸­à¸š UAT',
         status: 'submitted',
         submittedAt: new Date(),
-        crops: ['à¸‚à¸¡à¸´à¹‰à¸™à¸Šà¸±à¸™']
-      }
+        crops: ['à¸‚à¸¡à¸´à¹‰à¸™à¸Šà¸±à¸™'],
+      },
     ];
 
     res.json({
       success: true,
       data: mockApplications,
-      total: mockApplications.length
+      total: mockApplications.length,
     });
   } catch (error) {
     appLogger.error('Get applications error:', error);
@@ -322,13 +321,13 @@ workflowRoutes.get('/applications', authenticateToken, async(req, res) => {
       success: false,
       error: 'Internal server error',
       message:
-        'à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸”à¸¶à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¹„à¸”à¹‰'
+        'à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸”à¸¶à¸‡à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¹„à¸”à¹‰',
     });
   }
 });
 
 // POST /api/workflow/applications - Create application
-workflowRoutes.post('/applications', authenticateToken, async(req, res) => {
+workflowRoutes.post('/applications', authenticateToken, async (req, res) => {
   try {
     const applicationData = req.body;
 
@@ -339,26 +338,26 @@ workflowRoutes.post('/applications', authenticateToken, async(req, res) => {
       applicantId: req.user.id,
       status: 'draft',
       createdAt: new Date(),
-      submittedAt: null
+      submittedAt: null,
     };
 
     res.status(201).json({
       success: true,
       data: newApplication,
-      message: 'à¸ªà¸£à¹‰à¸²à¸‡à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¸ªà¸³à¹€à¸£à¹‡à¸ˆ'
+      message: 'à¸ªà¸£à¹‰à¸²à¸‡à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¸ªà¸³à¹€à¸£à¹‡à¸ˆ',
     });
   } catch (error) {
     appLogger.error('Create application error:', error);
     res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: 'à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¹„à¸”à¹‰'
+      message: 'à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸ªà¸£à¹‰à¸²à¸‡à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¹„à¸”à¹‰',
     });
   }
 });
 
 // GET /api/workflow/applications/:id - Get application details
-workflowRoutes.get('/applications/:id', authenticateToken, async(req, res) => {
+workflowRoutes.get('/applications/:id', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -372,12 +371,12 @@ workflowRoutes.get('/applications/:id', authenticateToken, async(req, res) => {
       applicantInfo: {
         organizationName: 'à¸Ÿà¸²à¸£à¹Œà¸¡à¸—à¸”à¸ªà¸­à¸š UAT',
         ownerName: 'à¸—à¸”à¸ªà¸­à¸š à¹€à¸à¸©à¸•à¸£à¸à¸£',
-        organizationType: 'individual'
+        organizationType: 'individual',
       },
       farmInfo: {
         farmName: 'à¸Ÿà¸²à¸£à¹Œà¸¡à¸—à¸”à¸ªà¸­à¸š UAT',
         farmArea: 10.5,
-        farmType: 'organic'
+        farmType: 'organic',
       },
       cropInfo: {
         crops: [
@@ -387,15 +386,15 @@ workflowRoutes.get('/applications/:id', authenticateToken, async(req, res) => {
             cropCategory: 'medicinal',
             cultivationArea: 5.0,
             expectedYield: 200,
-            usedFor: 'medicine'
-          }
-        ]
-      }
+            usedFor: 'medicine',
+          },
+        ],
+      },
     };
 
     res.json({
       success: true,
-      data: application
+      data: application,
     });
   } catch (error) {
     appLogger.error('Get application details error:', error);
@@ -403,13 +402,13 @@ workflowRoutes.get('/applications/:id', authenticateToken, async(req, res) => {
       success: false,
       error: 'Internal server error',
       message:
-        'à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸”à¸¶à¸‡à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¹„à¸”à¹‰'
+        'à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸”à¸¶à¸‡à¸£à¸²à¸¢à¸¥à¸°à¹€à¸­à¸µà¸¢à¸”à¹ƒà¸šà¸ªà¸¡à¸±à¸„à¸£à¹„à¸”à¹‰',
     });
   }
 });
 
 // POST /api/workflow/applications/:id/documents - Upload documents
-workflowRoutes.post('/applications/:id/documents', authenticateToken, async(req, res) => {
+workflowRoutes.post('/applications/:id/documents', authenticateToken, async (req, res) => {
   try {
     const { id } = req.params;
     const documentData = req.body;
@@ -420,20 +419,20 @@ workflowRoutes.post('/applications/:id/documents', authenticateToken, async(req,
       applicationId: id,
       ...documentData,
       uploadedAt: new Date(),
-      status: 'uploaded'
+      status: 'uploaded',
     };
 
     res.json({
       success: true,
       data: document,
-      message: 'à¸­à¸±à¸žà¹‚à¸«à¸¥à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¸ªà¸³à¹€à¸£à¹‡à¸ˆ'
+      message: 'à¸­à¸±à¸žà¹‚à¸«à¸¥à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¸ªà¸³à¹€à¸£à¹‡à¸ˆ',
     });
   } catch (error) {
     appLogger.error('Upload document error:', error);
     res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: 'à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸­à¸±à¸žà¹‚à¸«à¸¥à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸”à¹‰'
+      message: 'à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¸­à¸±à¸žà¹‚à¸«à¸¥à¸”à¹€à¸­à¸à¸ªà¸²à¸£à¹„à¸”à¹‰',
     });
   }
 });
@@ -445,7 +444,7 @@ documentRoutes.get('/', authenticateToken, (req, res) =>
   res.json({
     message: 'Document service available',
     user: req.user.email,
-    documents: []
+    documents: [],
   })
 );
 
@@ -458,7 +457,7 @@ documentRoutes.post('/upload', authenticateToken, (req, res) => {
     uploadedDocuments: documents || [],
     applicationId: applicationId,
     uploadedBy: req.user.email,
-    uploadedAt: new Date()
+    uploadedAt: new Date(),
   });
 });
 
@@ -478,7 +477,7 @@ try {
   dashboardRoutes.get('/', (req, res) => {
     res.status(503).json({
       error: 'Service unavailable',
-      message: 'Dashboard service not available'
+      message: 'Dashboard service not available',
     });
   });
 }
@@ -489,24 +488,24 @@ const notificationService = {
     mainLogger.info('[MOCK] Payment confirmation sent', data);
     return { success: true, messageId: Date.now() };
   },
-  updateSMSStatus: async(messageId, status, deliveredAt) => {
+  updateSMSStatus: async (messageId, status, deliveredAt) => {
     mainLogger.info('[MOCK] SMS status updated', {
       messageId,
       status,
-      deliveredAt
+      deliveredAt,
     });
     return { success: true };
   },
-  initialize: async() => {
+  initialize: async () => {
     mainLogger.info('[MOCK] NotificationService initialized');
   },
-  cleanup: async() => {
+  cleanup: async () => {
     mainLogger.info('[MOCK] NotificationService cleanup');
-  }
+  },
 };
 
 const certificateService = {
-  initializeDirectories: async() => {
+  initializeDirectories: async () => {
     try {
       const CertificateService = require('./modules/certificate-management/services/certificate.service');
       const realService = new CertificateService();
@@ -519,7 +518,7 @@ const certificateService = {
       return null;
     }
   },
-  cleanup: async() => {
+  cleanup: async () => {
     mainLogger.info('[MOCK] CertificateService cleanup');
   },
   generateCertificate: async data => {
@@ -528,7 +527,7 @@ const certificateService = {
       const realService = new CertificateService();
       const result = await realService.generateCertificate(data);
       mainLogger.info('[REAL] Certificate generated', {
-        certificateNumber: result.certificateNumber
+        certificateNumber: result.certificateNumber,
       });
       return result;
     } catch (error) {
@@ -536,7 +535,7 @@ const certificateService = {
       return {
         success: true,
         certificateId: Date.now(),
-        downloadUrl: '/mock-certificate.pdf'
+        downloadUrl: '/mock-certificate.pdf',
       };
     }
   },
@@ -549,20 +548,20 @@ const certificateService = {
       mainLogger.warn('[FALLBACK] Mock certificate download:', error.message);
       throw new Error('Certificate download service temporarily unavailable');
     }
-  }
+  },
 };
 
 const documentService = {
-  initialize: async() => {
+  initialize: async () => {
     mainLogger.info('[MOCK] DocumentService initialized');
   },
-  cleanup: async() => {
+  cleanup: async () => {
     mainLogger.info('[MOCK] DocumentService cleanup');
   },
   uploadDocument: async data => {
     mainLogger.info('[MOCK] Document uploaded', data);
     return { success: true, documentId: Date.now() };
-  }
+  },
 };
 
 // MIDDLEWARE CONFIGURATION
@@ -571,28 +570,28 @@ app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
-        defaultSrc: ['\'self\''],
-        scriptSrc: ['\'self\'', '\'unsafe-inline\'', 'cdnjs.cloudflare.com'],
-        styleSrc: ['\'self\'', '\'unsafe-inline\'', 'fonts.googleapis.com'],
-        fontSrc: ['\'self\'', 'fonts.gstatic.com'],
-        imgSrc: ['\'self\'', 'data:', 'https:'],
-        connectSrc: ['\'self\'']
-      }
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", 'cdnjs.cloudflare.com'],
+        styleSrc: ["'self'", "'unsafe-inline'", 'fonts.googleapis.com'],
+        fontSrc: ["'self'", 'fonts.gstatic.com'],
+        imgSrc: ["'self'", 'data:', 'https:'],
+        connectSrc: ["'self'"],
+      },
     },
-    crossOriginEmbedderPolicy: false
+    crossOriginEmbedderPolicy: false,
   })
 );
 
 // CORS configuration
 app.use(
   cors({
-    origin: function(origin, callback) {
+    origin: function (origin, callback) {
       const allowedOrigins = [
         'http://localhost:3000', // Current development server
         'http://localhost:3001',
         'http://localhost:3005',
         'https://gacp.doa.go.th',
-        'https://api.gacp.doa.go.th'
+        'https://api.gacp.doa.go.th',
       ];
 
       // Allow requests with no origin (like mobile apps or curl requests)
@@ -604,7 +603,7 @@ app.use(
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   })
 );
 
@@ -614,14 +613,14 @@ const limiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   message: {
     error: 'Too many requests from this IP, please try again later.',
-    retryAfter: 15 * 60 // seconds
+    retryAfter: 15 * 60, // seconds
   },
   standardHeaders: true,
   legacyHeaders: false,
   skip: req => {
     // Skip rate limiting for certificate verification (public access)
     return req.path.startsWith('/verify/') || req.path.startsWith('/api/certificates/verify/');
-  }
+  },
 });
 
 app.use('/api/', limiter);
@@ -633,8 +632,8 @@ app.use(compression());
 app.use(
   morgan('combined', {
     stream: {
-      write: message => mainLogger.info(message.trim())
-    }
+      write: message => mainLogger.info(message.trim()),
+    },
   })
 );
 
@@ -659,10 +658,10 @@ app.get('/', (req, res) => {
     endpoints: {
       auth: '/api/auth - Authentication (login, register, logout)',
       dashboard: '/api/dashboard - Role-based dashboard data',
-      health: '/health - System health check'
+      health: '/health - System health check',
     },
     message:
-      'à¹€à¸žà¸·à¹ˆà¸­à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸£à¸°à¸šà¸š à¸à¸£à¸¸à¸“à¸²à¹€à¸‚à¹‰à¸²à¸—à¸µà¹ˆ http://localhost:3001'
+      'à¹€à¸žà¸·à¹ˆà¸­à¹ƒà¸Šà¹‰à¸‡à¸²à¸™à¸£à¸°à¸šà¸š à¸à¸£à¸¸à¸“à¸²à¹€à¸‚à¹‰à¸²à¸—à¸µà¹ˆ http://localhost:3001',
   });
 });
 
@@ -670,28 +669,28 @@ app.get('/', (req, res) => {
 app.get('/auth.html', (req, res) => {
   res.status(301).json({
     message: 'Authentication moved to React frontend',
-    redirect: 'http://localhost:3001/login'
+    redirect: 'http://localhost:3001/login',
   });
 });
 
 app.get('/farmer-dashboard.html', (req, res) => {
   res.status(301).json({
     message: 'Dashboard moved to React frontend',
-    redirect: 'http://localhost:3001/dashboard'
+    redirect: 'http://localhost:3001/dashboard',
   });
 });
 
 app.get('/director-dashboard.html', (req, res) => {
   res.status(301).json({
     message: 'Dashboard moved to React frontend',
-    redirect: 'http://localhost:3001/dashboard'
+    redirect: 'http://localhost:3001/dashboard',
   });
 });
 
 app.get('/auditor-dashboard.html', (req, res) => {
   res.status(301).json({
     message: 'Dashboard moved to React frontend',
-    redirect: 'http://localhost:3001/dashboard'
+    redirect: 'http://localhost:3001/dashboard',
   });
 });
 
@@ -745,7 +744,7 @@ async function initializeDatabase() {
         // Initialize Report Module with mongoose connection
         reportModule = getReportModuleContainer({
           database: mongoose,
-          otherRepositories: {} // Will be populated when other modules are migrated
+          otherRepositories: {}, // Will be populated when other modules are migrated
         });
         mainLogger.info('âœ“ Report module initialized');
 
@@ -760,7 +759,7 @@ async function initializeDatabase() {
           trainingEnrollmentRepository: null,
           documentRepository: null,
           notificationRepository: null,
-          auditRepository: null
+          auditRepository: null,
         });
         mainLogger.info('âœ“ Dashboard module initialized (with null repositories)');
 
@@ -768,7 +767,7 @@ async function initializeDatabase() {
         app.locals.newModules = {
           documentModule,
           reportModule,
-          dashboardModule
+          dashboardModule,
         };
 
         // ============================================================================
@@ -836,7 +835,7 @@ async function initializeDatabase() {
 const workflowEngines = {
   application: null,
   farm: null,
-  survey: null
+  survey: null,
 };
 
 async function initializeWorkflowEngines() {
@@ -844,15 +843,15 @@ async function initializeWorkflowEngines() {
     // Import Workflow Engines
     const ApplicationWorkflowEngine = require('./../../business-logic/gacp-workflow-engine');
     // Farm management is now a complete module
-    const farmManagementModule = require('./modules/farm-management');
+    require('./modules/farm-management');
     // Survey engine is now part of survey-system module
-    const surveySystemModule = require('./modules/survey-system');
+    require('./modules/survey-system');
 
     // Initialize with database connection
     workflowEngines.application = new ApplicationWorkflowEngine({
       db: mongoose.connection.db,
       notificationService: notificationService,
-      documentService: null // Will be added later
+      documentService: null, // Will be added later
     });
 
     // Farm management is now a complete module - no engine needed here
@@ -905,7 +904,7 @@ async function initializeWorkflowEngines() {
 }
 
 // API ROUTES
-app.get('/health', async(req, res) => {
+app.get('/health', async (req, res) => {
   try {
     // Use MongoDB Manager for health check (MIS Team)
     const mongoHealth = await mongoManager.healthCheck();
@@ -927,10 +926,10 @@ app.get('/health', async(req, res) => {
       database: {
         mongodb: mongoHealth.healthy ? 'connected' : 'disconnected',
         ...mongoHealth,
-        ...mongoStatus
+        ...mongoStatus,
       },
       // Additional compatibility field
-      healthy: mongoHealth.healthy
+      healthy: mongoHealth.healthy,
     };
 
     // Always return 200 - status field indicates actual health
@@ -942,7 +941,7 @@ app.get('/health', async(req, res) => {
     res.status(503).json({
       status: 'ERROR',
       timestamp: new Date().toISOString(),
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -963,10 +962,10 @@ app.get('/api', (req, res) => {
       notifications: '/api/notifications - Notification system',
       certificates: '/api/certificates - Certificate management',
       dashboard: '/api/dashboard - Role-based dashboard data',
-      health: '/health - System health check'
+      health: '/health - System health check',
     },
     authentication: 'Bearer token required for most endpoints',
-    rateLimit: '100 requests per 15 minutes per IP'
+    rateLimit: '100 requests per 15 minutes per IP',
   });
 });
 
@@ -981,7 +980,7 @@ try {
   complianceRoutes.get('/', (req, res) => {
     res.status(503).json({
       error: 'Service unavailable',
-      message: 'Compliance comparator service not available'
+      message: 'Compliance comparator service not available',
     });
   });
 }
@@ -1016,7 +1015,7 @@ try {
 let applicationWorkflowRoutes, farmManagementRoutes, surveyProcessRoutes;
 
 // Health check endpoints (MIS Team - for monitoring)
-app.get('/api/auth/health', async(req, res) => {
+app.get('/api/auth/health', async (req, res) => {
   try {
     const mongoHealth = await mongoManager.healthCheck();
     const mongoStatus = mongoManager.getStatus();
@@ -1025,18 +1024,18 @@ app.get('/api/auth/health', async(req, res) => {
       service: 'auth',
       status: mongoHealth.healthy ? 'healthy' : 'unhealthy',
       timestamp: new Date().toISOString(),
-      database: { ...mongoHealth, ...mongoStatus }
+      database: { ...mongoHealth, ...mongoStatus },
     });
   } catch (error) {
     res.status(503).json({
       service: 'auth',
       status: 'unhealthy',
-      error: error.message
+      error: error.message,
     });
   }
 });
 
-app.get('/api/auth/dtam/health', async(req, res) => {
+app.get('/api/auth/dtam/health', async (req, res) => {
   try {
     const mongoHealth = await mongoManager.healthCheck();
     const mongoStatus = mongoManager.getStatus();
@@ -1045,13 +1044,13 @@ app.get('/api/auth/dtam/health', async(req, res) => {
       service: 'dtam-auth',
       status: mongoHealth.healthy ? 'healthy' : 'unhealthy',
       timestamp: new Date().toISOString(),
-      database: { ...mongoHealth, ...mongoStatus }
+      database: { ...mongoHealth, ...mongoStatus },
     });
   } catch (error) {
     res.status(503).json({
       service: 'dtam-auth',
       status: 'unhealthy',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -1154,7 +1153,7 @@ function mountWorkflowRoutes() {
 
     applicationWorkflowRoutes = applicationWorkflowAPI({
       workflowEngine: workflowEngines.application,
-      auth: authenticateToken
+      auth: authenticateToken,
     });
 
     mainLogger.info(
@@ -1177,7 +1176,7 @@ function mountWorkflowRoutes() {
 
     farmManagementRoutes = farmManagementAPI({
       farmEngine: workflowEngines.farm,
-      auth: authenticateToken
+      auth: authenticateToken,
     });
 
     mainLogger.info(
@@ -1214,7 +1213,7 @@ function mountWorkflowRoutes() {
 }
 
 // Add specific certificate endpoints
-app.post('/api/certificates/generate/:applicationId', async(req, res) => {
+app.post('/api/certificates/generate/:applicationId', async (req, res) => {
   try {
     const { applicationId } = req.params;
     const options = req.body.options || {};
@@ -1225,11 +1224,11 @@ app.post('/api/certificates/generate/:applicationId', async(req, res) => {
       applicant: {
         name: 'à¸™à¸²à¸¢à¸—à¸”à¸ªà¸­à¸š à¸£à¸°à¸šà¸š',
         address: 'à¸—à¸µà¹ˆà¸­à¸¢à¸¹à¹ˆà¸—à¸”à¸ªà¸­à¸š',
-        farmLocation: 'à¸ˆà¸±à¸‡à¸«à¸§à¸±à¸”à¸—à¸”à¸ªà¸­à¸š'
+        farmLocation: 'à¸ˆà¸±à¸‡à¸«à¸§à¸±à¸”à¸—à¸”à¸ªà¸­à¸š',
       },
       herbs: ['à¸‚à¸¡à¸´à¹‰à¸™à¸Šà¸±à¸™', 'à¸‚à¸´à¸‡'],
       farmSize: '5 à¹„à¸£à¹ˆ',
-      approvalDate: new Date().toISOString()
+      approvalDate: new Date().toISOString(),
     };
 
     const result = await certificateService.generateCertificate(mockApplicationData, options);
@@ -1237,19 +1236,19 @@ app.post('/api/certificates/generate/:applicationId', async(req, res) => {
     res.json({
       success: true,
       message: 'Certificate generated successfully',
-      data: result
+      data: result,
     });
   } catch (error) {
     mainLogger.error('Certificate generation failed', { error: error.message });
     res.status(500).json({
       success: false,
       message: 'Certificate generation failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
 
-app.get('/api/certificates/download/:certificateNumber', async(req, res) => {
+app.get('/api/certificates/download/:certificateNumber', async (req, res) => {
   try {
     const { certificateNumber } = req.params;
     const downloadInfo = await certificateService.downloadCertificate(certificateNumber);
@@ -1266,7 +1265,7 @@ app.get('/api/certificates/download/:certificateNumber', async(req, res) => {
     res.status(404).json({
       success: false,
       message: 'Certificate not found or download failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -1275,7 +1274,7 @@ app.get('/api/certificates/download/:certificateNumber', async(req, res) => {
 app.use('/verify', certificateRoutes);
 
 // Field Audit Scheduling API
-app.post('/api/audits/schedule-field-audit', async(req, res) => {
+app.post('/api/audits/schedule-field-audit', async (req, res) => {
   try {
     const { applicationId, auditorId, scheduledDate, location, estimatedDuration } = req.body;
 
@@ -1295,8 +1294,8 @@ app.post('/api/audits/schedule-field-audit', async(req, res) => {
         'Soil sample analysis',
         'Water source verification',
         'Storage facility inspection',
-        'Record keeping review'
-      ]
+        'Record keeping review',
+      ],
     };
 
     mainLogger.info('[FIELD AUDIT] Scheduled successfully', fieldAuditSchedule);
@@ -1304,19 +1303,19 @@ app.post('/api/audits/schedule-field-audit', async(req, res) => {
     res.json({
       success: true,
       message: 'Field audit scheduled successfully',
-      data: fieldAuditSchedule
+      data: fieldAuditSchedule,
     });
   } catch (error) {
     mainLogger.error('Field audit scheduling failed', { error: error.message });
     res.status(500).json({
       success: false,
       message: 'Field audit scheduling failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
 
-app.get('/api/audits/field-schedule/:auditorId', async(req, res) => {
+app.get('/api/audits/field-schedule/:auditorId', async (req, res) => {
   try {
     const { auditorId: _auditorId } = req.params; // eslint-disable-line no-unused-vars
 
@@ -1329,7 +1328,7 @@ app.get('/api/audits/field-schedule/:auditorId', async(req, res) => {
         scheduledDate: new Date(Date.now() + 24 * 60 * 60 * 1000), // tomorrow
         location: 'à¹€à¸Šà¸µà¸¢à¸‡à¹ƒà¸«à¸¡à¹ˆ',
         herbs: ['à¸‚à¸¡à¸´à¹‰à¸™à¸Šà¸±à¸™'],
-        status: 'scheduled'
+        status: 'scheduled',
       },
       {
         scheduleId: 'AUDIT-002',
@@ -1338,21 +1337,21 @@ app.get('/api/audits/field-schedule/:auditorId', async(req, res) => {
         scheduledDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // day after tomorrow
         location: 'à¸£à¸°à¸¢à¸­à¸‡',
         herbs: ['à¸à¸±à¸à¸Šà¸²'],
-        status: 'scheduled'
-      }
+        status: 'scheduled',
+      },
     ];
 
     res.json({
       success: true,
       data: mockSchedule,
-      total: mockSchedule.length
+      total: mockSchedule.length,
     });
   } catch (error) {
     mainLogger.error('Get field schedule failed', { error: error.message });
     res.status(500).json({
       success: false,
       message: 'Failed to get field audit schedule',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -1366,14 +1365,14 @@ app.get('/api/audits/field-schedule/:auditorId', async(req, res) => {
 // =============================================================================
 
 // Payment gateway webhooks
-app.post('/webhook/payment', async(req, res) => {
+app.post('/webhook/payment', async (req, res) => {
   try {
     const paymentData = req.body;
 
     mainLogger.info('Payment webhook received', {
       paymentId: paymentData.paymentId,
       status: paymentData.status,
-      amount: paymentData.amount
+      amount: paymentData.amount,
     });
 
     // Update application payment status in database
@@ -1385,7 +1384,7 @@ app.post('/webhook/payment', async(req, res) => {
         'payment.transactionId': paymentData.transactionId,
         'payment.completedAt': new Date(),
         'payment.method': paymentData.method,
-        'payment.amount': paymentData.amount
+        'payment.amount': paymentData.amount,
       });
 
       // Send notification
@@ -1406,7 +1405,7 @@ app.post('/webhook/payment', async(req, res) => {
 });
 
 // Payment Gateway Integration API
-app.post('/api/payments/initiate', async(req, res) => {
+app.post('/api/payments/initiate', async (req, res) => {
   try {
     const { applicationId, stage, amount, paymentMethod } = req.body;
 
@@ -1422,8 +1421,8 @@ app.post('/api/payments/initiate', async(req, res) => {
       gateway: {
         providerReference: `GW-${Date.now()}`,
         checkoutUrl: `https://payment.mock/checkout/${Date.now()}`,
-        expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 minutes
-      }
+        expiresAt: new Date(Date.now() + 30 * 60 * 1000), // 30 minutes
+      },
     };
 
     mainLogger.info('[PAYMENT] Payment initiated', paymentData);
@@ -1431,19 +1430,19 @@ app.post('/api/payments/initiate', async(req, res) => {
     res.json({
       success: true,
       message: 'Payment initiated successfully',
-      data: paymentData
+      data: paymentData,
     });
   } catch (error) {
     mainLogger.error('Payment initiation failed', { error: error.message });
     res.status(500).json({
       success: false,
       message: 'Payment initiation failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
 
-app.get('/api/payments/status/:applicationId', async(req, res) => {
+app.get('/api/payments/status/:applicationId', async (req, res) => {
   try {
     const { applicationId } = req.params;
 
@@ -1455,30 +1454,30 @@ app.get('/api/payments/status/:applicationId', async(req, res) => {
           stage: 'document_review',
           amount: 5000,
           status: 'completed',
-          paidAt: new Date(Date.now() - 24 * 60 * 60 * 1000) // yesterday
+          paidAt: new Date(Date.now() - 24 * 60 * 60 * 1000), // yesterday
         },
         {
           stage: 'assessment_fee',
           amount: 25000,
           status: 'pending',
-          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) // in 7 days
-        }
+          dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // in 7 days
+        },
       ],
       totalAmount: 30000,
       paidAmount: 5000,
-      remainingAmount: 25000
+      remainingAmount: 25000,
     };
 
     res.json({
       success: true,
-      data: paymentStatus
+      data: paymentStatus,
     });
   } catch (error) {
     mainLogger.error('Payment status check failed', { error: error.message });
     res.status(500).json({
       success: false,
       message: 'Payment status check failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -1488,7 +1487,7 @@ app.get('/api/payments/status/:applicationId', async(req, res) => {
 // =============================================================================
 
 // Payment gateway webhooks
-app.post('/webhook/payment', async(req, res) => {
+app.post('/webhook/payment', async (req, res) => {
   try {
     const signature = req.headers['x-payment-signature'];
     const payload = req.body;
@@ -1498,7 +1497,7 @@ app.post('/webhook/payment', async(req, res) => {
 
     mainLogger.info('Payment webhook received', {
       signature: signature?.substring(0, 20) + '...',
-      payloadSize: payload.length
+      payloadSize: payload.length,
     });
 
     // Process payment notification
@@ -1508,17 +1507,14 @@ app.post('/webhook/payment', async(req, res) => {
     const Application = require('./models/mongodb/Application');
 
     // GACP Security Middleware Integration
-    const {
-      securityPresets: _securityPresets,
-      securityUtils: _securityUtils
-    } = require('shared/security'); // eslint-disable-line no-unused-vars
+    // require('shared/security'); // Removed unused destructured variables
     if (paymentData.status === 'completed' && paymentData.applicationId) {
       await Application.findByIdAndUpdate(paymentData.applicationId, {
         'payment.status': 'completed',
         'payment.transactionId': paymentData.transactionId,
         'payment.completedAt': new Date(),
         'payment.method': paymentData.method,
-        'payment.amount': paymentData.amount
+        'payment.amount': paymentData.amount,
       });
 
       // Send notification
@@ -1533,14 +1529,14 @@ app.post('/webhook/payment', async(req, res) => {
 });
 
 // SMS delivery status webhooks
-app.post('/webhook/sms', async(req, res) => {
+app.post('/webhook/sms', async (req, res) => {
   try {
     const { messageId, status, deliveredAt } = req.body;
 
     mainLogger.info('SMS webhook received', {
       messageId,
       status,
-      deliveredAt
+      deliveredAt,
     });
 
     // Update notification status
@@ -1574,24 +1570,24 @@ if (process.env.NODE_ENV === 'production') {
 // =============================================================================
 
 // 404 handler
-const notFoundHandler = (req, res, _next) => {
+const notFoundHandler = (req, res) => {
   // eslint-disable-line no-unused-vars
   res.status(404).json({
     success: false,
     message: 'Route not found',
     path: req.originalUrl,
-    method: req.method
+    method: req.method,
   });
 };
 
 // Global error handler
-const errorHandler = (err, req, res, _next) => {
+const errorHandler = (err, req, res) => {
   // eslint-disable-line no-unused-vars
   appLogger.error(err.stack);
   res.status(err.statusCode || err.status || 500).json({
     success: false,
     message: err.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
+    ...(process.env.NODE_ENV === 'development' && { stack: err.stack }),
   });
 };
 
@@ -1605,7 +1601,7 @@ function gracefulShutdown(signal) {
   mainLogger.info(`Received ${signal}, shutting down gracefully`);
 
   if (serverInstance) {
-    serverInstance.close(async() => {
+    serverInstance.close(async () => {
       mainLogger.info('HTTP server closed');
 
       try {
@@ -1645,7 +1641,7 @@ process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 process.on('unhandledRejection', (reason, promise) => {
   mainLogger.error('Unhandled Rejection', {
     reason: reason,
-    promise: promise
+    promise: promise,
   });
 });
 
@@ -1653,7 +1649,7 @@ process.on('unhandledRejection', (reason, promise) => {
 process.on('uncaughtException', error => {
   mainLogger.error('Uncaught Exception', {
     error: error.message,
-    stack: error.stack
+    stack: error.stack,
   });
   process.exit(1);
 });
@@ -1703,7 +1699,7 @@ async function startServer() {
       if (notificationService.initialize) {
         await Promise.race([
           notificationService.initialize(),
-          timeout(5000, 'NotificationService')
+          timeout(5000, 'NotificationService'),
         ]);
         mainLogger.info('   âœ… NotificationService initialized');
       }
@@ -1711,7 +1707,7 @@ async function startServer() {
       if (certificateService.initializeDirectories) {
         await Promise.race([
           certificateService.initializeDirectories(),
-          timeout(5000, 'CertificateService')
+          timeout(5000, 'CertificateService'),
         ]);
         mainLogger.info('   âœ… CertificateService initialized');
       }
@@ -1731,7 +1727,7 @@ async function startServer() {
     mainLogger.info('ðŸ¥ Starting Health Check Service...');
     healthCheckService = new HealthCheckService({
       port: parseInt(port),
-      interval: 30000 // Check every 30 seconds
+      interval: 30000, // Check every 30 seconds
     });
     healthCheckService.start();
     mainLogger.info('   âœ… Health Check Service started (monitoring every 30s)');
@@ -1742,7 +1738,7 @@ async function startServer() {
         port: parseInt(port),
         environment: process.env.NODE_ENV || 'development',
         nodeVersion: process.version,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
 
       // Display health check stats after startup (only if method exists)

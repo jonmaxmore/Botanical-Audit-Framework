@@ -58,7 +58,7 @@ class DocumentController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid input data',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -71,7 +71,7 @@ class DocumentController {
         return res.status(400).json({
           success: false,
           error: 'FILE_REQUIRED',
-          message: 'No file uploaded'
+          message: 'No file uploaded',
         });
       }
 
@@ -82,7 +82,7 @@ class DocumentController {
           documentType,
           applicationId,
           description,
-          expiryDate: expiryDate ? new Date(expiryDate) : null
+          expiryDate: expiryDate ? new Date(expiryDate) : null,
         },
         userId,
         userRole
@@ -91,7 +91,7 @@ class DocumentController {
       res.status(201).json({
         success: true,
         message: 'Document uploaded successfully',
-        data: result.document
+        data: result.document,
       });
     } catch (error) {
       console.error('[DocumentController] Upload error:', error);
@@ -102,7 +102,7 @@ class DocumentController {
           success: false,
           error: 'DOCUMENT_VALIDATION_ERROR',
           message: error.message,
-          validationResult: error.validationResult
+          validationResult: error.validationResult,
         });
       }
 
@@ -110,7 +110,7 @@ class DocumentController {
         return res.status(403).json({
           success: false,
           error: 'UPLOAD_PERMISSION_DENIED',
-          message: error.message
+          message: error.message,
         });
       }
 
@@ -118,14 +118,14 @@ class DocumentController {
         return res.status(400).json({
           success: false,
           error: 'SECURITY_SCAN_FAILED',
-          message: error.message
+          message: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'UPLOAD_ERROR',
-        message: 'Error uploading document'
+        message: 'Error uploading document',
       });
     }
   }
@@ -141,7 +141,7 @@ class DocumentController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -155,7 +155,7 @@ class DocumentController {
         return res.status(404).json({
           success: false,
           error: 'DOCUMENT_NOT_FOUND',
-          message: 'Document not found'
+          message: 'Document not found',
         });
       }
 
@@ -165,7 +165,7 @@ class DocumentController {
         return res.status(403).json({
           success: false,
           error: 'ACCESS_DENIED',
-          message: 'You do not have permission to access this document'
+          message: 'You do not have permission to access this document',
         });
       }
 
@@ -188,16 +188,16 @@ class DocumentController {
             downloadUrl: downloadUrl,
             thumbnailUrl: document.thumbnailUrl,
             isExpired: document.isExpired,
-            ocrAvailable: !!document.ocrText
-          }
-        }
+            ocrAvailable: !!document.ocrText,
+          },
+        },
       });
     } catch (error) {
       console.error('[DocumentController] Get metadata error:', error);
       res.status(500).json({
         success: false,
         error: 'METADATA_ERROR',
-        message: 'Error retrieving document metadata'
+        message: 'Error retrieving document metadata',
       });
     }
   }
@@ -230,7 +230,7 @@ class DocumentController {
         return res.status(404).json({
           success: false,
           error: 'DOCUMENT_NOT_FOUND',
-          message: 'Document not found'
+          message: 'Document not found',
         });
       }
 
@@ -238,14 +238,14 @@ class DocumentController {
         return res.status(403).json({
           success: false,
           error: 'DOWNLOAD_PERMISSION_DENIED',
-          message: error.message
+          message: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'DOWNLOAD_ERROR',
-        message: 'Error downloading document'
+        message: 'Error downloading document',
       });
     }
   }
@@ -267,8 +267,8 @@ class DocumentController {
         message: 'Documents retrieved successfully',
         data: {
           documents: result.documents,
-          summary: result.summary
-        }
+          summary: result.summary,
+        },
       });
     } catch (error) {
       console.error('[DocumentController] Get application documents error:', error);
@@ -277,14 +277,14 @@ class DocumentController {
         return res.status(403).json({
           success: false,
           error: 'ACCESS_DENIED',
-          message: error.message
+          message: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'DOCUMENTS_ERROR',
-        message: 'Error retrieving application documents'
+        message: 'Error retrieving application documents',
       });
     }
   }
@@ -300,7 +300,7 @@ class DocumentController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -315,7 +315,7 @@ class DocumentController {
         return res.status(404).json({
           success: false,
           error: 'DOCUMENT_NOT_FOUND',
-          message: 'Document not found'
+          message: 'Document not found',
         });
       }
 
@@ -325,7 +325,7 @@ class DocumentController {
         return res.status(403).json({
           success: false,
           error: 'UPDATE_PERMISSION_DENIED',
-          message: 'You do not have permission to update this document'
+          message: 'You do not have permission to update this document',
         });
       }
 
@@ -334,7 +334,7 @@ class DocumentController {
         description,
         tags: tags ? tags.split(',').map(tag => tag.trim()) : undefined,
         expiryDate: expiryDate ? new Date(expiryDate) : undefined,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       // Remove undefined values
@@ -351,7 +351,7 @@ class DocumentController {
           documentId: id,
           userId,
           changes: Object.keys(updateData),
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
@@ -364,16 +364,16 @@ class DocumentController {
             description: updatedDocument.description,
             tags: updatedDocument.tags,
             expiryDate: updatedDocument.expiryDate,
-            updatedAt: updatedDocument.updatedAt
-          }
-        }
+            updatedAt: updatedDocument.updatedAt,
+          },
+        },
       });
     } catch (error) {
       console.error('[DocumentController] Update error:', error);
       res.status(500).json({
         success: false,
         error: 'UPDATE_ERROR',
-        message: 'Error updating document'
+        message: 'Error updating document',
       });
     }
   }
@@ -394,13 +394,13 @@ class DocumentController {
       if (success) {
         res.status(200).json({
           success: true,
-          message: 'Document deleted successfully'
+          message: 'Document deleted successfully',
         });
       } else {
         res.status(400).json({
           success: false,
           error: 'DELETE_FAILED',
-          message: 'Failed to delete document'
+          message: 'Failed to delete document',
         });
       }
     } catch (error) {
@@ -410,7 +410,7 @@ class DocumentController {
         return res.status(404).json({
           success: false,
           error: 'DOCUMENT_NOT_FOUND',
-          message: 'Document not found'
+          message: 'Document not found',
         });
       }
 
@@ -418,7 +418,7 @@ class DocumentController {
         return res.status(403).json({
           success: false,
           error: 'DELETE_PERMISSION_DENIED',
-          message: error.message
+          message: error.message,
         });
       }
 
@@ -426,14 +426,14 @@ class DocumentController {
         return res.status(400).json({
           success: false,
           error: 'CANNOT_DELETE_REQUIRED',
-          message: error.message
+          message: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'DELETE_ERROR',
-        message: 'Error deleting document'
+        message: 'Error deleting document',
       });
     }
   }
@@ -450,7 +450,7 @@ class DocumentController {
         application: applicationId,
         status,
         page = 1,
-        limit = 20
+        limit = 20,
       } = req.query;
 
       const userId = req.userId;
@@ -458,7 +458,7 @@ class DocumentController {
 
       // Build search filters
       const filters = {
-        status: status || 'ACTIVE'
+        status: status || 'ACTIVE',
       };
 
       if (documentType) filters.documentType = documentType;
@@ -475,8 +475,8 @@ class DocumentController {
         filters,
         pagination: {
           page: parseInt(page),
-          limit: parseInt(limit)
-        }
+          limit: parseInt(limit),
+        },
       });
 
       res.status(200).json({
@@ -487,16 +487,16 @@ class DocumentController {
           searchMetadata: {
             searchTerm,
             filters,
-            totalResults: results.total
-          }
-        }
+            totalResults: results.total,
+          },
+        },
       });
     } catch (error) {
       console.error('[DocumentController] Search error:', error);
       res.status(500).json({
         success: false,
         error: 'SEARCH_ERROR',
-        message: 'Error searching documents'
+        message: 'Error searching documents',
       });
     }
   }
@@ -522,7 +522,7 @@ class DocumentController {
             maxSize: config.maxSize,
             hasExpiry: config.hasExpiry,
             allowMultiple: config.allowMultiple,
-            minimumCount: config.minimumCount
+            minimumCount: config.minimumCount,
           };
         }
       }
@@ -530,15 +530,15 @@ class DocumentController {
       res.status(200).json({
         success: true,
         data: {
-          documentTypes: filteredTypes
-        }
+          documentTypes: filteredTypes,
+        },
       });
     } catch (error) {
       console.error('[DocumentController] Get document types error:', error);
       res.status(500).json({
         success: false,
         error: 'TYPES_ERROR',
-        message: 'Error retrieving document types'
+        message: 'Error retrieving document types',
       });
     }
   }
@@ -556,7 +556,7 @@ class DocumentController {
       storage,
       limits: {
         fileSize: 50 * 1024 * 1024, // 50MB
-        files: 1
+        files: 1,
       },
       fileFilter: (req, file, cb) => {
         // Basic file type validation
@@ -566,7 +566,7 @@ class DocumentController {
           'image/jpg',
           'image/png',
           'application/msword',
-          'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         ];
 
         if (allowedMimes.includes(file.mimetype)) {
@@ -574,7 +574,7 @@ class DocumentController {
         } else {
           cb(new Error(`Invalid file type: ${file.mimetype}`), false);
         }
-      }
+      },
     });
   }
 
@@ -591,21 +591,21 @@ class DocumentController {
 
     // Role-based access rules
     switch (userRole) {
-    case 'FARMER':
-      // Farmers can only access their own documents
-      return document.uploadedBy.toString() === userId;
+      case 'FARMER':
+        // Farmers can only access their own documents
+        return document.uploadedBy.toString() === userId;
 
-    case 'DTAM_REVIEWER':
-      // Reviewers can access all application documents
-      return ['ACTIVE', 'ARCHIVED'].includes(document.status);
+      case 'DTAM_REVIEWER':
+        // Reviewers can access all application documents
+        return ['ACTIVE', 'ARCHIVED'].includes(document.status);
 
-    case 'DTAM_INSPECTOR':
-      // Inspectors can access documents for assigned applications
-      // This would require checking application assignment
-      return ['ACTIVE', 'ARCHIVED'].includes(document.status);
+      case 'DTAM_INSPECTOR':
+        // Inspectors can access documents for assigned applications
+        // This would require checking application assignment
+        return ['ACTIVE', 'ARCHIVED'].includes(document.status);
 
-    default:
-      return false;
+      default:
+        return false;
     }
   }
 
@@ -643,7 +643,7 @@ class DocumentController {
             'inspection_photos',
             'inspection_report',
             'certificate',
-            'payment_receipt'
+            'payment_receipt',
           ])
           .withMessage('Invalid document type'),
         body('applicationId').isMongoId().withMessage('Valid application ID is required'),
@@ -651,7 +651,7 @@ class DocumentController {
           .optional()
           .isLength({ max: 1000 })
           .withMessage('Description cannot exceed 1000 characters'),
-        body('expiryDate').optional().isISO8601().withMessage('Invalid expiry date format')
+        body('expiryDate').optional().isISO8601().withMessage('Invalid expiry date format'),
       ],
 
       getDocument: [param('id').isMongoId().withMessage('Valid document ID is required')],
@@ -663,7 +663,7 @@ class DocumentController {
           .isLength({ max: 1000 })
           .withMessage('Description cannot exceed 1000 characters'),
         body('tags').optional().isString().withMessage('Tags must be a comma-separated string'),
-        body('expiryDate').optional().isISO8601().withMessage('Invalid expiry date format')
+        body('expiryDate').optional().isISO8601().withMessage('Invalid expiry date format'),
       ],
 
       search: [
@@ -671,8 +671,8 @@ class DocumentController {
         query('limit')
           .optional()
           .isInt({ min: 1, max: 100 })
-          .withMessage('Limit must be between 1 and 100')
-      ]
+          .withMessage('Limit must be between 1 and 100'),
+      ],
     };
   }
 }

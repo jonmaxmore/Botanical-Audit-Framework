@@ -14,7 +14,7 @@ const validate = (req, res, next) => {
     return res.status(400).json({
       success: false,
       message: 'Validation error',
-      errors: errors.array()
+      errors: errors.array(),
     });
   }
   next();
@@ -55,7 +55,7 @@ const validateCreateCycle = [
     .isInt({ min: 1 })
     .withMessage('Plant count must be positive integer'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -82,7 +82,7 @@ const validateRecordActivity = [
 
   body('notes').optional().isString().withMessage('Notes must be a string'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -111,7 +111,7 @@ const validateComplianceCheck = [
     .isIn(['compliant', 'non_compliant', 'partially_compliant'])
     .withMessage('Overall compliance must be valid'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -136,7 +136,7 @@ const validateRecordHarvest = [
     .isIn(['A', 'B', 'C', 'D'])
     .withMessage('Quality grade must be A, B, C, or D'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -161,7 +161,7 @@ const validateQualityTest = [
     .isObject()
     .withMessage('Results must be an object'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -174,7 +174,7 @@ const validateCycleId = [
     .isString()
     .withMessage('Cycle ID must be a string'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -191,7 +191,7 @@ const validateFilters = [
     .isIn(['germination', 'vegetative', 'flowering', 'harvest', 'post-harvest'])
     .withMessage('Phase must be valid'),
 
-  validate
+  validate,
 ];
 
 module.exports = {
@@ -201,5 +201,5 @@ module.exports = {
   validateRecordHarvest,
   validateQualityTest,
   validateCycleId,
-  validateFilters
+  validateFilters,
 };

@@ -13,7 +13,7 @@ const notificationSchema = new mongoose.Schema(
       type: String,
       required: true,
       index: true,
-      description: 'User who receives the notification'
+      description: 'User who receives the notification',
     },
 
     // Event information
@@ -37,9 +37,9 @@ const notificationSchema = new mongoose.Schema(
         'document.uploaded',
         'document.verified',
         'announcement.general',
-        'custom'
+        'custom',
       ],
-      description: 'Type of notification event'
+      description: 'Type of notification event',
     },
 
     // Content
@@ -47,14 +47,14 @@ const notificationSchema = new mongoose.Schema(
       type: String,
       required: true,
       maxlength: 200,
-      description: 'Notification title'
+      description: 'Notification title',
     },
 
     message: {
       type: String,
       required: true,
       maxlength: 1000,
-      description: 'Notification message'
+      description: 'Notification message',
     },
 
     // Priority
@@ -64,7 +64,7 @@ const notificationSchema = new mongoose.Schema(
       enum: ['low', 'medium', 'high', 'urgent'],
       default: 'medium',
       index: true,
-      description: 'Notification priority level'
+      description: 'Notification priority level',
     },
 
     // Read status
@@ -72,12 +72,12 @@ const notificationSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
       index: true,
-      description: 'Whether notification has been read'
+      description: 'Whether notification has been read',
     },
 
     readAt: {
       type: Date,
-      description: 'Timestamp when notification was read'
+      description: 'Timestamp when notification was read',
     },
 
     // Delivery channels
@@ -85,67 +85,67 @@ const notificationSchema = new mongoose.Schema(
       type: [String],
       enum: ['inapp', 'email', 'line', 'sms'],
       default: ['inapp'],
-      description: 'Delivery channels used'
+      description: 'Delivery channels used',
     },
 
     deliveryStatus: {
       inapp: { type: Boolean, default: true },
       email: { type: Boolean, default: false },
       line: { type: Boolean, default: false },
-      sms: { type: Boolean, default: false }
+      sms: { type: Boolean, default: false },
     },
 
     // Related entities
     relatedId: {
       type: mongoose.Schema.Types.ObjectId,
-      description: 'Related entity ID (application, certificate, etc.)'
+      description: 'Related entity ID (application, certificate, etc.)',
     },
 
     relatedType: {
       type: String,
       enum: ['application', 'certificate', 'survey', 'payment', 'document'],
-      description: 'Type of related entity'
+      description: 'Type of related entity',
     },
 
     // Action
     actionUrl: {
       type: String,
-      description: 'URL for notification action'
+      description: 'URL for notification action',
     },
 
     actionLabel: {
       type: String,
-      description: 'Label for action button'
+      description: 'Label for action button',
     },
 
     // Additional data
     metadata: {
       type: mongoose.Schema.Types.Mixed,
       default: {},
-      description: 'Additional metadata'
+      description: 'Additional metadata',
     },
 
     // Icon/Image
     icon: {
       type: String,
-      description: 'Notification icon'
+      description: 'Notification icon',
     },
 
     imageUrl: {
       type: String,
-      description: 'Notification image URL'
+      description: 'Notification image URL',
     },
 
     // Expiry
     expiresAt: {
       type: Date,
       index: true,
-      description: 'When notification expires and should be auto-deleted'
-    }
+      description: 'When notification expires and should be auto-deleted',
+    },
   },
   {
     timestamps: true,
-    collection: 'notifications'
+    collection: 'notifications',
   }
 );
 
@@ -162,12 +162,12 @@ notificationSchema.index({ userId: 1, priority: 1 });
 notificationSchema.index({ relatedId: 1, relatedType: 1 });
 
 // Virtual: Is expired
-notificationSchema.virtual('isExpired').get(function() {
+notificationSchema.virtual('isExpired').get(function () {
   return this.expiresAt && this.expiresAt < new Date();
 });
 
 // Virtual: Age in days
-notificationSchema.virtual('ageInDays').get(function() {
+notificationSchema.virtual('ageInDays').get(function () {
   const now = new Date();
   const diffTime = now - this.createdAt;
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -175,73 +175,73 @@ notificationSchema.virtual('ageInDays').get(function() {
 });
 
 // Instance method: Mark as read
-notificationSchema.methods.markAsRead = async function() {
+notificationSchema.methods.markAsRead = async function () {
   this.isRead = true;
   this.readAt = new Date();
   return this.save();
 };
 
 // Instance method: Check if urgent
-notificationSchema.methods.isUrgent = function() {
+notificationSchema.methods.isUrgent = function () {
   return this.priority === 'urgent';
 };
 
 // Static method: Find unread for user
-notificationSchema.statics.findUnreadForUser = function(userId) {
+notificationSchema.statics.findUnreadForUser = function (userId) {
   return this.find({
     userId,
-    isRead: false
+    isRead: false,
   }).sort({ createdAt: -1 });
 };
 
 // Static method: Find by event type
-notificationSchema.statics.findByEventType = function(userId, eventType) {
+notificationSchema.statics.findByEventType = function (userId, eventType) {
   return this.find({
     userId,
-    eventType
+    eventType,
   }).sort({ createdAt: -1 });
 };
 
 // Static method: Get unread count
-notificationSchema.statics.getUnreadCount = async function(userId) {
+notificationSchema.statics.getUnreadCount = async function (userId) {
   return this.countDocuments({
     userId,
-    isRead: false
+    isRead: false,
   });
 };
 
 // Static method: Mark all as read for user
-notificationSchema.statics.markAllAsReadForUser = async function(userId) {
+notificationSchema.statics.markAllAsReadForUser = async function (userId) {
   return this.updateMany(
     { userId, isRead: false },
     {
       $set: {
         isRead: true,
-        readAt: new Date()
-      }
+        readAt: new Date(),
+      },
     }
   );
 };
 
 // Static method: Delete old notifications
-notificationSchema.statics.deleteOldNotifications = async function(days = 90) {
+notificationSchema.statics.deleteOldNotifications = async function (days = 90) {
   const cutoffDate = new Date();
   cutoffDate.setDate(cutoffDate.getDate() - days);
 
   return this.deleteMany({
     createdAt: { $lt: cutoffDate },
-    isRead: true
+    isRead: true,
   });
 };
 
 // Pre-save middleware: Set default expiry if not provided
-notificationSchema.pre('save', function(next) {
+notificationSchema.pre('save', function (next) {
   if (!this.expiresAt) {
     const days = {
       urgent: 7,
       high: 30,
       medium: 90,
-      low: 180
+      low: 180,
     };
 
     const expiryDate = new Date();
@@ -254,14 +254,14 @@ notificationSchema.pre('save', function(next) {
 // Enable virtuals in JSON output
 notificationSchema.set('toJSON', {
   virtuals: true,
-  transform: function(doc, ret) {
+  transform: function (doc, ret) {
     delete ret.__v;
     return ret;
-  }
+  },
 });
 
 notificationSchema.set('toObject', {
-  virtuals: true
+  virtuals: true,
 });
 
 const Notification = mongoose.model('Notification', notificationSchema);

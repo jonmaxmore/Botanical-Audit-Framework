@@ -21,21 +21,21 @@ class KPIService extends EventEmitter {
       IN_PROGRESS: 'in_progress',
       COMPLETED: 'completed',
       DELAYED: 'delayed',
-      CANCELLED: 'cancelled'
+      CANCELLED: 'cancelled',
     };
 
     // Role types
     this.ROLES = {
       REVIEWER: 'reviewer',
       INSPECTOR: 'inspector',
-      APPROVER: 'approver'
+      APPROVER: 'approver',
     };
 
     // SLA thresholds (in hours)
     this.SLA_THRESHOLDS = {
       reviewer: 72, // 3 days
       inspector: 120, // 5 days
-      approver: 48 // 2 days
+      approver: 48, // 2 days
     };
   }
 
@@ -72,7 +72,7 @@ class KPIService extends EventEmitter {
         comments,
         feedbackScore: null,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
 
       this.emit('task:started', { kpi, taskId, applicationId, role, userId });
@@ -119,14 +119,14 @@ class KPIService extends EventEmitter {
         status: isDelayed ? this.STATUS.DELAYED : this.STATUS.COMPLETED,
         comments: comments || kpi.comments,
         feedbackScore: feedbackScore || kpi.feedbackScore,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
 
       this.emit('task:completed', {
         kpi: updatedKpi,
         taskId,
         processingTime,
-        isDelayed
+        isDelayed,
       });
 
       logger.info(
@@ -156,7 +156,7 @@ class KPIService extends EventEmitter {
 
       return await this.kpiRepository.update(taskId, {
         comments: updatedComments,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
     } catch (error) {
       logger.error('[KPIService] Update comments error:', error);
@@ -178,7 +178,7 @@ class KPIService extends EventEmitter {
 
       return await this.kpiRepository.update(taskId, {
         feedbackScore,
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
     } catch (error) {
       logger.error('[KPIService] Set feedback score error:', error);
@@ -228,7 +228,7 @@ class KPIService extends EventEmitter {
         delayRate: Math.round(delayRate * 100) / 100,
         avgFeedbackScore: Math.round(avgFeedbackScore * 100) / 100,
         slaThreshold: this.SLA_THRESHOLDS[role],
-        filters
+        filters,
       };
     } catch (error) {
       logger.error('[KPIService] Get role metrics error:', error);
@@ -270,7 +270,7 @@ class KPIService extends EventEmitter {
         completionRate: Math.round(completionRate * 100) / 100,
         delayRate: kpis.length > 0 ? Math.round((delayed.length / kpis.length) * 10000) / 100 : 0,
         avgFeedbackScore: Math.round(avgFeedbackScore * 100) / 100,
-        filters
+        filters,
       };
     } catch (error) {
       logger.error('[KPIService] Get user metrics error:', error);
@@ -288,7 +288,7 @@ class KPIService extends EventEmitter {
       const [reviewerMetrics, inspectorMetrics, approverMetrics] = await Promise.all([
         this.getRoleMetrics(this.ROLES.REVIEWER, filters),
         this.getRoleMetrics(this.ROLES.INSPECTOR, filters),
-        this.getRoleMetrics(this.ROLES.APPROVER, filters)
+        this.getRoleMetrics(this.ROLES.APPROVER, filters),
       ]);
 
       const totalTasks =
@@ -305,11 +305,11 @@ class KPIService extends EventEmitter {
       const avgProcessingTime =
         totalCompleted > 0
           ? Math.round(
-            (reviewerMetrics.avgProcessingTime * reviewerMetrics.completedTasks +
+              (reviewerMetrics.avgProcessingTime * reviewerMetrics.completedTasks +
                 inspectorMetrics.avgProcessingTime * inspectorMetrics.completedTasks +
                 approverMetrics.avgProcessingTime * approverMetrics.completedTasks) /
                 totalCompleted
-          )
+            )
           : 0;
 
       return {
@@ -325,9 +325,9 @@ class KPIService extends EventEmitter {
         byRole: {
           reviewer: reviewerMetrics,
           inspector: inspectorMetrics,
-          approver: approverMetrics
+          approver: approverMetrics,
         },
-        filters
+        filters,
       };
     } catch (error) {
       logger.error('[KPIService] Get system metrics error:', error);
@@ -354,13 +354,13 @@ class KPIService extends EventEmitter {
           await this.kpiRepository.update(task.taskId, {
             status: this.STATUS.DELAYED,
             processingTime,
-            updatedAt: new Date()
+            updatedAt: new Date(),
           });
 
           delayedTasks.push({
             ...task,
             processingTime,
-            hoursOverdue: Math.round(processingTime / 60 - this.SLA_THRESHOLDS[task.role])
+            hoursOverdue: Math.round(processingTime / 60 - this.SLA_THRESHOLDS[task.role]),
           });
 
           this.emit('task:delayed', { task, processingTime });
@@ -403,7 +403,7 @@ class KPIService extends EventEmitter {
             total: 0,
             completed: 0,
             delayed: 0,
-            totalProcessingTime: 0
+            totalProcessingTime: 0,
           };
         }
 
@@ -422,7 +422,7 @@ class KPIService extends EventEmitter {
         ...day,
         completionRate: day.total > 0 ? Math.round((day.completed / day.total) * 100) : 0,
         avgProcessingTime:
-          day.completed > 0 ? Math.round(day.totalProcessingTime / day.completed) : 0
+          day.completed > 0 ? Math.round(day.totalProcessingTime / day.completed) : 0,
       }));
 
       return {
@@ -430,7 +430,7 @@ class KPIService extends EventEmitter {
         days,
         startDate,
         endDate,
-        trends: trends.sort((a, b) => a.date.localeCompare(b.date))
+        trends: trends.sort((a, b) => a.date.localeCompare(b.date)),
       };
     } catch (error) {
       logger.error('[KPIService] Get trends error:', error);
@@ -474,7 +474,7 @@ class KPIService extends EventEmitter {
       return await this.kpiRepository.update(taskId, {
         status: this.STATUS.CANCELLED,
         endTime: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
     } catch (error) {
       logger.error('[KPIService] Cancel task error:', error);

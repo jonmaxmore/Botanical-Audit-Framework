@@ -28,7 +28,7 @@ class Plant {
       expectedFloweringDays: strainInfo?.expectedFloweringDays || 60,
       expectedHarvestDays: strainInfo?.expectedHarvestDays || 90,
       thcContent: strainInfo?.thcContent,
-      cbdContent: strainInfo?.cbdContent
+      cbdContent: strainInfo?.cbdContent,
     };
 
     // Planting information
@@ -38,7 +38,7 @@ class Plant {
       initialSeedCount: plantingInfo?.initialSeedCount || 1,
       plantingDepth: plantingInfo?.plantingDepth,
       soilType: plantingInfo?.soilType,
-      plantedBy: plantingInfo?.plantedBy
+      plantedBy: plantingInfo?.plantedBy,
     };
 
     // Growth phase management with clear business logic
@@ -50,10 +50,10 @@ class Plant {
           startDate: this.plantingInfo.plantingDate,
           expectedDuration: this.calculateGerminationDuration(),
           status: 'IN_PROGRESS',
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       ],
-      milestones: []
+      milestones: [],
     };
 
     // Comprehensive growth metrics tracking
@@ -79,7 +79,7 @@ class Plant {
       // Performance indicators
       overallGrowthRate: 0,
       healthTrend: 'STABLE',
-      complianceScore: 0
+      complianceScore: 0,
     };
 
     // Environmental requirements and monitoring
@@ -87,23 +87,23 @@ class Plant {
       temperature: {
         optimal: { min: 20, max: 26 }, // Celsius
         acceptable: { min: 18, max: 30 },
-        current: null
+        current: null,
       },
       humidity: {
         optimal: { min: 50, max: 70 }, // Percentage
         acceptable: { min: 40, max: 80 },
-        current: null
+        current: null,
       },
       lighting: {
         photoperiod: this.calculateRequiredPhotoperiod(),
         intensity: 'MEDIUM', // LOW, MEDIUM, HIGH
-        lightType: 'FULL_SPECTRUM'
+        lightType: 'FULL_SPECTRUM',
       },
       soil: {
         phRange: { min: 6.0, max: 7.0 },
         drainageLevel: 'GOOD',
-        organicMatterPercent: null
-      }
+        organicMatterPercent: null,
+      },
     };
 
     // Compliance and quality tracking
@@ -112,19 +112,19 @@ class Plant {
         compliant: true,
         violations: [],
         lastAudit: null,
-        nextAudit: this.calculateNextAuditDate()
+        nextAudit: this.calculateNextAuditDate(),
       },
       organicCertification: {
         certified: false,
         certifyingBody: null,
-        restrictions: []
+        restrictions: [],
       },
       pesticideRecord: {
         applications: [],
         allowedSubstances: [],
         restrictedSubstances: [],
-        residueTests: []
-      }
+        residueTests: [],
+      },
     };
 
     // Lifecycle timestamps
@@ -134,7 +134,7 @@ class Plant {
       germinationDate: null,
       floweringDate: null,
       harvestDate: null,
-      destructionDate: null
+      destructionDate: null,
     };
 
     // Initialize business rules validation
@@ -158,7 +158,7 @@ class Plant {
       validationErrors.push({
         field: 'seedId',
         message: 'Seed ID required for traceability compliance',
-        severity: 'HIGH'
+        severity: 'HIGH',
       });
     }
 
@@ -167,7 +167,7 @@ class Plant {
       validationErrors.push({
         field: 'location',
         message: 'Farm ID and Plot ID required for location tracking',
-        severity: 'HIGH'
+        severity: 'HIGH',
       });
     }
 
@@ -178,7 +178,7 @@ class Plant {
       validationErrors.push({
         field: 'plantingDate',
         message: 'Planting date cannot be in the future',
-        severity: 'HIGH'
+        severity: 'HIGH',
       });
     }
 
@@ -187,7 +187,7 @@ class Plant {
       validationErrors.push({
         field: 'strainType',
         message: 'Strain type required for growth phase calculations',
-        severity: 'MEDIUM'
+        severity: 'MEDIUM',
       });
     }
 
@@ -242,7 +242,7 @@ class Plant {
         germinationRate || (successfulSeedlings / this.plantingInfo.initialSeedCount) * 100,
       observations: observations,
       recordedBy: recordedBy,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     this.growthPhases.milestones.push(germinationMilestone);
@@ -283,7 +283,7 @@ class Plant {
       expectedEndDate: this.calculateExpectedFloweringDate(germinationDate),
       status: 'IN_PROGRESS',
       monitoringSchedule: this.createVegetativeMonitoringSchedule(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     this.growthPhases.history.push(vegetativePhase);
@@ -317,25 +317,25 @@ class Plant {
       unit: unit,
       measuredBy: measuredBy,
       notes: notes,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Store measurement in appropriate category
     switch (measurementType) {
-    case 'HEIGHT':
-      this.growthMetrics.height.push({ ...measurement, height_cm: value });
-      break;
-    case 'STEM_DIAMETER':
-      this.growthMetrics.stemDiameter.push({ ...measurement, diameter_mm: value });
-      break;
-    case 'LEAF_COUNT':
-      this.growthMetrics.leafCount.push({ ...measurement, count: value });
-      break;
-    case 'NODE_COUNT':
-      this.growthMetrics.nodeCount.push({ ...measurement, nodes: value });
-      break;
-    default:
-      throw new Error(`Unknown measurement type: ${measurementType}`);
+      case 'HEIGHT':
+        this.growthMetrics.height.push({ ...measurement, height_cm: value });
+        break;
+      case 'STEM_DIAMETER':
+        this.growthMetrics.stemDiameter.push({ ...measurement, diameter_mm: value });
+        break;
+      case 'LEAF_COUNT':
+        this.growthMetrics.leafCount.push({ ...measurement, count: value });
+        break;
+      case 'NODE_COUNT':
+        this.growthMetrics.nodeCount.push({ ...measurement, nodes: value });
+        break;
+      default:
+        throw new Error(`Unknown measurement type: ${measurementType}`);
     }
 
     // Calculate growth rate and update metrics
@@ -353,7 +353,7 @@ class Plant {
       measurement: measurement,
       growthRate: this.growthMetrics.overallGrowthRate,
       healthTrend: this.growthMetrics.healthTrend,
-      anomalies: anomalies
+      anomalies: anomalies,
     };
   }
 
@@ -364,14 +364,14 @@ class Plant {
     let measurements;
 
     switch (measurementType) {
-    case 'HEIGHT':
-      measurements = this.growthMetrics.height;
-      break;
-    case 'STEM_DIAMETER':
-      measurements = this.growthMetrics.stemDiameter;
-      break;
-    default:
-      return 0;
+      case 'HEIGHT':
+        measurements = this.growthMetrics.height;
+        break;
+      case 'STEM_DIAMETER':
+        measurements = this.growthMetrics.stemDiameter;
+        break;
+      default:
+        return 0;
     }
 
     if (measurements.length < 2) {
@@ -419,7 +419,7 @@ class Plant {
       photoperiod: photoperiod,
       soilPh: soilPh ? parseFloat(soilPh) : null,
       recordedBy: recordedBy,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Check against optimal ranges
@@ -446,7 +446,7 @@ class Plant {
       recorded: envRecord,
       alerts: alerts,
       stressFactor: stressFactor,
-      recommendations: this.generateEnvironmentalRecommendations(envRecord)
+      recommendations: this.generateEnvironmentalRecommendations(envRecord),
     };
   }
 
@@ -464,14 +464,14 @@ class Plant {
         type: 'TEMPERATURE_LOW',
         severity: envRecord.temperature < tempReq.optimal.min ? 'HIGH' : 'MEDIUM',
         message: `Temperature ${envRecord.temperature}°C below optimal range`,
-        recommendation: 'Increase heating or move to warmer location'
+        recommendation: 'Increase heating or move to warmer location',
       });
     } else if (envRecord.temperature > tempReq.acceptable.max) {
       alerts.push({
         type: 'TEMPERATURE_HIGH',
         severity: envRecord.temperature > tempReq.optimal.max ? 'HIGH' : 'MEDIUM',
         message: `Temperature ${envRecord.temperature}°C above optimal range`,
-        recommendation: 'Increase ventilation or cooling'
+        recommendation: 'Increase ventilation or cooling',
       });
     }
 
@@ -482,14 +482,14 @@ class Plant {
         type: 'HUMIDITY_LOW',
         severity: envRecord.humidity < humidityReq.optimal.min ? 'HIGH' : 'MEDIUM',
         message: `Humidity ${envRecord.humidity}% below optimal range`,
-        recommendation: 'Increase humidity through misting or humidifiers'
+        recommendation: 'Increase humidity through misting or humidifiers',
       });
     } else if (envRecord.humidity > humidityReq.acceptable.max) {
       alerts.push({
         type: 'HUMIDITY_HIGH',
         severity: envRecord.humidity > humidityReq.optimal.max ? 'HIGH' : 'MEDIUM',
         message: `Humidity ${envRecord.humidity}% above optimal range`,
-        recommendation: 'Improve ventilation to reduce humidity'
+        recommendation: 'Improve ventilation to reduce humidity',
       });
     }
 
@@ -504,7 +504,7 @@ class Plant {
           recommendation:
             envRecord.soilPh < soilReq.phRange.min
               ? 'Add lime to raise pH'
-              : 'Add sulfur or organic matter to lower pH'
+              : 'Add sulfur or organic matter to lower pH',
         });
       }
     }
@@ -526,7 +526,7 @@ class Plant {
       growthRate: 0.3,
       environment: 0.25,
       physical: 0.25,
-      compliance: 0.2
+      compliance: 0.2,
     };
 
     // Growth rate score (0-100)
@@ -559,11 +559,11 @@ class Plant {
         growth: Math.round(growthScore),
         environment: Math.round(environmentScore),
         physical: Math.round(physicalScore),
-        compliance: Math.round(complianceScore)
+        compliance: Math.round(complianceScore),
       },
       trend: healthTrend,
       assessmentMethod: 'AUTOMATED',
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Store health assessment
@@ -611,7 +611,7 @@ class Plant {
       trigger: floweringTrigger,
       plantHeight: this.getCurrentHeight(),
       nodeCount: this.getCurrentNodeCount(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     this.growthPhases.milestones.push(floweringMilestone);
@@ -624,7 +624,7 @@ class Plant {
       expectedEndDate: this.calculateExpectedHarvestDate(floweringDate),
       status: 'IN_PROGRESS',
       monitoringSchedule: this.createFloweringMonitoringSchedule(),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     this.growthPhases.history.push(floweringPhase);
@@ -640,7 +640,7 @@ class Plant {
     return {
       milestone: floweringMilestone,
       phase: floweringPhase,
-      expectedHarvest: floweringPhase.expectedEndDate
+      expectedHarvest: floweringPhase.expectedEndDate,
     };
   }
 
@@ -658,7 +658,7 @@ class Plant {
         plantId: this.plantId,
         seedId: this.seedId,
         strain: this.strainInfo.strainName,
-        location: `Farm: ${this.farmId}, Plot: ${this.plotId}`
+        location: `Farm: ${this.farmId}, Plot: ${this.plotId}`,
       },
       lifecycle: {
         totalAge: currentAge,
@@ -666,37 +666,37 @@ class Plant {
         plantingDate: this.plantingInfo.plantingDate,
         germinationDate: this.lifecycle.germinationDate,
         floweringDate: this.lifecycle.floweringDate,
-        expectedHarvest: this.calculateExpectedHarvestDate()
+        expectedHarvest: this.calculateExpectedHarvestDate(),
       },
       currentStatus: {
         health: latestHealth
           ? {
-            overallScore: latestHealth.overallScore,
-            trend: latestHealth.trend,
-            lastAssessed: latestHealth.date
-          }
+              overallScore: latestHealth.overallScore,
+              trend: latestHealth.trend,
+              lastAssessed: latestHealth.date,
+            }
           : null,
         growth: {
           height: this.getCurrentHeight(),
           growthRate: this.growthMetrics.overallGrowthRate,
-          nodes: this.getCurrentNodeCount()
+          nodes: this.getCurrentNodeCount(),
         },
         environment: {
           temperature: this.environmentalRequirements.temperature.current,
           humidity: this.environmentalRequirements.humidity.current,
-          recentAlerts: this.getRecentEnvironmentalAlerts()
-        }
+          recentAlerts: this.getRecentEnvironmentalAlerts(),
+        },
       },
       compliance: {
         gacpCompliant: this.compliance.gacpStandards.compliant,
         violations: this.compliance.gacpStandards.violations,
-        nextAudit: this.compliance.gacpStandards.nextAudit
+        nextAudit: this.compliance.gacpStandards.nextAudit,
       },
       milestones: this.growthPhases.milestones.map(m => ({
         milestone: m.milestone,
         date: m.date,
-        daysFromPlanting: m.daysFromPlanting || m.daysFromGermination
-      }))
+        daysFromPlanting: m.daysFromPlanting || m.daysFromGermination,
+      })),
     };
   }
 
@@ -707,7 +707,7 @@ class Plant {
       INDICA: 3,
       SATIVA: 4,
       HYBRID: 3,
-      AUTO_FLOWERING: 2
+      AUTO_FLOWERING: 2,
     };
     return strainDurations[this.strainInfo.strainType] || 4;
   }
@@ -717,7 +717,7 @@ class Plant {
       INDICA: 28,
       SATIVA: 35,
       HYBRID: 30,
-      AUTO_FLOWERING: 20
+      AUTO_FLOWERING: 20,
     };
     return strainDurations[this.strainInfo.strainType] || 30;
   }

@@ -30,14 +30,14 @@ class PlantRepository {
       plantEnvironmentalData: 'plant_environmental_data',
       plantHealthAssessments: 'plant_health_assessments',
       plantMilestones: 'plant_milestones',
-      plantAuditLogs: 'plant_audit_logs'
+      plantAuditLogs: 'plant_audit_logs',
     };
 
     // Time-series collections for high-frequency data
     this.timeSeriesCollections = {
       growthMeasurements: 'ts_growth_measurements',
       environmentalReadings: 'ts_environmental_readings',
-      healthMetrics: 'ts_health_metrics'
+      healthMetrics: 'ts_health_metrics',
     };
 
     // Index configurations for query optimization
@@ -65,31 +65,31 @@ class PlantRepository {
 
       // Search and reporting indexes
       strain: { field: 'strainInfo.strainName' },
-      batchTracking: { field: 'batchId' }
+      batchTracking: { field: 'batchId' },
     };
 
     // Cache strategies for different data types
     this.cacheStrategies = {
       plantDetails: {
         ttl: 1800, // 30 minutes
-        pattern: 'plant:details:{plantId}'
+        pattern: 'plant:details:{plantId}',
       },
       plantSummary: {
         ttl: 300, // 5 minutes (more frequent updates)
-        pattern: 'plant:summary:{plantId}'
+        pattern: 'plant:summary:{plantId}',
       },
       farmPlants: {
         ttl: 600, // 10 minutes
-        pattern: 'farm:plants:{farmId}:{plotId?}'
+        pattern: 'farm:plants:{farmId}:{plotId?}',
       },
       batchPlants: {
         ttl: 900, // 15 minutes
-        pattern: 'batch:plants:{batchId}'
+        pattern: 'batch:plants:{batchId}',
       },
       timeSeriesData: {
         ttl: 120, // 2 minutes (real-time data)
-        pattern: 'timeseries:{type}:{plantId}:{timeRange}'
-      }
+        pattern: 'timeseries:{type}:{plantId}:{timeRange}',
+      },
     };
 
     // Query optimization configurations
@@ -97,7 +97,7 @@ class PlantRepository {
       batchSize: 1000, // For bulk operations
       maxTimeSeriesPoints: 10000, // Maximum points to return
       defaultTimeRange: 30, // Days
-      aggregationTimeout: 30000 // 30 seconds
+      aggregationTimeout: 30000, // 30 seconds
     };
   }
 
@@ -144,7 +144,7 @@ class PlantRepository {
       const enrichedData = await this.enrichPlantData(plantDocument, {
         includeHistory,
         includeTimeSeries,
-        timeRange
+        timeRange,
       });
 
       // Step 5: Create plant entity
@@ -212,16 +212,16 @@ class PlantRepository {
             plantAge: {
               $divide: [
                 { $subtract: [new Date(), '$plantingInfo.plantingDate'] },
-                1000 * 60 * 60 * 24 // Convert to days
-              ]
+                1000 * 60 * 60 * 24, // Convert to days
+              ],
             },
             daysToExpectedHarvest: {
               $divide: [
                 { $subtract: ['$harvestInfo.expectedHarvestDate', new Date()] },
-                1000 * 60 * 60 * 24
-              ]
-            }
-          }
+                1000 * 60 * 60 * 24,
+              ],
+            },
+          },
         },
 
         // Faceted results for batch analytics
@@ -230,7 +230,7 @@ class PlantRepository {
             plants: [
               { $sort: options.sort || { 'plantingInfo.plantingDate': -1 } },
               { $skip: options.offset || 0 },
-              { $limit: options.limit || 100 }
+              { $limit: options.limit || 100 },
             ],
             analytics: [
               {
@@ -240,7 +240,7 @@ class PlantRepository {
                   avgHealthScore: { $avg: '$currentHealthScore' },
                   avgAge: { $avg: '$plantAge' },
                   phaseDistribution: {
-                    $push: '$growthPhases.current'
+                    $push: '$growthPhases.current',
                   },
                   healthDistribution: {
                     $push: {
@@ -248,18 +248,18 @@ class PlantRepository {
                         branches: [
                           { case: { $gte: ['$currentHealthScore', 90] }, then: 'EXCELLENT' },
                           { case: { $gte: ['$currentHealthScore', 80] }, then: 'GOOD' },
-                          { case: { $gte: ['$currentHealthScore', 70] }, then: 'FAIR' }
+                          { case: { $gte: ['$currentHealthScore', 70] }, then: 'FAIR' },
                         ],
-                        default: 'POOR'
-                      }
-                    }
-                  }
-                }
-              }
+                        default: 'POOR',
+                      },
+                    },
+                  },
+                },
+              },
             ],
-            totalCount: [{ $count: 'total' }]
-          }
-        }
+            totalCount: [{ $count: 'total' }],
+          },
+        },
       ];
 
       const results = await this.database
@@ -299,8 +299,8 @@ class PlantRepository {
           total: batchResults.totalCount[0]?.total || 0,
           limit: options.limit || 100,
           offset: options.offset || 0,
-          hasMore: (options.offset || 0) + plants.length < (batchResults.totalCount[0]?.total || 0)
-        }
+          hasMore: (options.offset || 0) + plants.length < (batchResults.totalCount[0]?.total || 0),
+        },
       };
 
       // Step 8: Cache batch result
@@ -335,7 +335,7 @@ class PlantRepository {
     try {
       this.logger.log(`[PlantRepository] Saving plant: ${plant.plantId}`);
 
-      await session.withTransaction(async() => {
+      await session.withTransaction(async () => {
         // Step 1: Validate plant data
         await this.validatePlantForSave(plant);
 
@@ -392,7 +392,7 @@ class PlantRepository {
               ? this.calculatePlantChanges(existingPlant, savedDocument)
               : 'INITIAL_CREATE',
             timestamp: new Date(),
-            version: savedDocument.version
+            version: savedDocument.version,
           },
           session
         );
@@ -450,8 +450,8 @@ class PlantRepository {
         {
           $match: {
             plantId: plantId,
-            timestamp: { $gte: fromDate }
-          }
+            timestamp: { $gte: fromDate },
+          },
         },
 
         // Group by day for trend analysis
@@ -459,13 +459,13 @@ class PlantRepository {
           $group: {
             _id: {
               date: { $dateToString: { format: '%Y-%m-%d', date: '$timestamp' } },
-              measurementType: '$measurementType'
+              measurementType: '$measurementType',
             },
             avgValue: { $avg: '$value' },
             maxValue: { $max: '$value' },
             minValue: { $min: '$value' },
-            count: { $sum: 1 }
-          }
+            count: { $sum: 1 },
+          },
         },
 
         // Reshape for easier consumption
@@ -478,13 +478,13 @@ class PlantRepository {
                 avgValue: '$avgValue',
                 maxValue: '$maxValue',
                 minValue: '$minValue',
-                count: '$count'
-              }
-            }
-          }
+                count: '$count',
+              },
+            },
+          },
         },
 
-        { $sort: { _id: 1 } }
+        { $sort: { _id: 1 } },
       ];
 
       // Step 4: Execute analytics queries in parallel
@@ -492,17 +492,17 @@ class PlantRepository {
         await Promise.all([
           this.timeSeriesDB
             ? this.timeSeriesDB
-              .collection(this.timeSeriesCollections.growthMeasurements)
-              .aggregate(analyticsPipeline)
-              .toArray()
+                .collection(this.timeSeriesCollections.growthMeasurements)
+                .aggregate(analyticsPipeline)
+                .toArray()
             : this.database
-              .collection(this.collections.plantGrowthHistory)
-              .aggregate(analyticsPipeline)
-              .toArray(),
+                .collection(this.collections.plantGrowthHistory)
+                .aggregate(analyticsPipeline)
+                .toArray(),
 
           this.getHealthTrendsAnalytics(plantId, fromDate),
           this.getEnvironmentalAnalytics(plantId, fromDate),
-          this.getBatchComparisonAnalytics(plant.batchId, plantId)
+          this.getBatchComparisonAnalytics(plant.batchId, plantId),
         ]);
 
       // Step 5: Process and combine analytics
@@ -511,7 +511,7 @@ class PlantRepository {
           plantId: plantId,
           age: this.calculatePlantAge(plant),
           currentPhase: plant.growthPhases.current,
-          strain: plant.strainInfo.strainName
+          strain: plant.strainInfo.strainName,
         },
 
         timeSeries: {
@@ -519,33 +519,33 @@ class PlantRepository {
           dateRange: {
             from: fromDate,
             to: new Date(),
-            days: timeRange
-          }
+            days: timeRange,
+          },
         },
 
         trends: {
           growth: this.calculateGrowthTrends(timeSeriesAnalytics),
           health: this.calculateHealthTrends(healthTrends),
-          environmental: this.calculateEnvironmentalTrends(environmentalAnalytics)
+          environmental: this.calculateEnvironmentalTrends(environmentalAnalytics),
         },
 
         performance: {
           batchComparison: batchComparison,
           benchmarkPosition: this.calculateBenchmarkPosition(plant, batchComparison),
-          performanceScore: this.calculatePerformanceScore(plant, timeSeriesAnalytics)
+          performanceScore: this.calculatePerformanceScore(plant, timeSeriesAnalytics),
         },
 
         predictions: {
           nextMilestone: this.predictNextMilestone(plant, timeSeriesAnalytics),
           harvestProjection: this.projectHarvestDate(plant, timeSeriesAnalytics),
-          yieldEstimate: this.estimateYield(plant, timeSeriesAnalytics)
+          yieldEstimate: this.estimateYield(plant, timeSeriesAnalytics),
         },
 
         metadata: {
           generatedAt: new Date(),
           dataPoints: timeSeriesAnalytics.length,
-          analysisQuality: this.assessAnalysisQuality(timeSeriesAnalytics)
-        }
+          analysisQuality: this.assessAnalysisQuality(timeSeriesAnalytics),
+        },
       };
 
       // Step 6: Cache analytics result
@@ -583,7 +583,7 @@ class PlantRepository {
       const batchSize = options.batchSize || this.queryOptimizations.batchSize;
       const results = [];
 
-      await session.withTransaction(async() => {
+      await session.withTransaction(async () => {
         // Step 1: Process updates in batches
         for (let i = 0; i < updates.length; i += batchSize) {
           const batch = updates.slice(i, i + batchSize);
@@ -596,10 +596,10 @@ class PlantRepository {
                 $set: {
                   ...this.preparePlantUpdateDocument(update),
                   updatedAt: new Date(),
-                  $inc: { version: 1 }
-                }
-              }
-            }
+                  $inc: { version: 1 },
+                },
+              },
+            },
           }));
 
           // Step 3: Execute bulk operation
@@ -617,7 +617,7 @@ class PlantRepository {
             options.onProgress({
               completed: i + batch.length,
               total: updates.length,
-              batchResult: bulkResult
+              batchResult: bulkResult,
             });
           }
         }
@@ -660,11 +660,11 @@ class PlantRepository {
       strainInfo: document.strainInfo,
       growthPhases: {
         ...document.growthPhases,
-        history: enrichedData.phaseHistory || document.growthPhases.history
+        history: enrichedData.phaseHistory || document.growthPhases.history,
       },
       growthMetrics: {
         ...document.growthMetrics,
-        timeSeriesData: enrichedData.timeSeriesData || {}
+        timeSeriesData: enrichedData.timeSeriesData || {},
       },
       environmentalRequirements: document.environmentalRequirements,
       healthAssessment: document.healthAssessment,
@@ -674,7 +674,7 @@ class PlantRepository {
       compliance: document.compliance,
       createdAt: document.createdAt,
       updatedAt: document.updatedAt,
-      version: document.version
+      version: document.version,
     });
   }
 
@@ -693,14 +693,14 @@ class PlantRepository {
       growthPhases: {
         current: plant.growthPhases.current,
         currentStartDate: plant.growthPhases.currentStartDate,
-        history: plant.growthPhases.history?.slice(-10) || [] // Keep last 10 phases
+        history: plant.growthPhases.history?.slice(-10) || [], // Keep last 10 phases
       },
       growthMetrics: {
         // Store only summary metrics in main document
         height: plant.growthMetrics.height?.slice(-30) || [], // Last 30 measurements
         nodeCount: plant.growthMetrics.nodeCount?.slice(-30) || [],
         overallGrowthRate: plant.growthMetrics.overallGrowthRate,
-        healthTrend: plant.growthMetrics.healthTrend
+        healthTrend: plant.growthMetrics.healthTrend,
       },
       environmentalRequirements: plant.environmentalRequirements,
       healthAssessment: plant.healthAssessment,
@@ -708,7 +708,7 @@ class PlantRepository {
       currentHealthScore: plant.currentHealthScore,
       harvestInfo: plant.harvestInfo,
       compliance: plant.compliance,
-      version: plant.version || 1
+      version: plant.version || 1,
     };
 
     return document;

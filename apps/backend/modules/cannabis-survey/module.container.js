@@ -11,15 +11,15 @@ const MongoDBSurveyRepository = require('./infrastructure/database/MongoDBSurvey
 const { STATUS, PURPOSE, PLANT_TYPE } = require('./domain/entities/Survey');
 
 // Use Cases
-const CreateSurveyUseCase = require('./application/use-cases/CreateSurveyUseCase');
-const UpdateSurveyUseCase = require('./application/use-cases/UpdateSurveyUseCase');
-const SubmitSurveyUseCase = require('./application/use-cases/SubmitSurveyUseCase');
-const GetSurveyDetailsUseCase = require('./application/use-cases/GetSurveyDetailsUseCase');
-const ListSurveysUseCase = require('./application/use-cases/ListSurveysUseCase');
-const StartSurveyReviewUseCase = require('./application/use-cases/StartSurveyReviewUseCase');
-const ApproveSurveyUseCase = require('./application/use-cases/ApproveSurveyUseCase');
-const RejectSurveyUseCase = require('./application/use-cases/RejectSurveyUseCase');
-const RequestSurveyRevisionUseCase = require('./application/use-cases/RequestSurveyRevisionUseCase');
+const CreateSurveyUseCase = require('./application/use-cases/create-survey');
+const UpdateSurveyUseCase = require('./application/use-cases/update-survey');
+const SubmitSurveyUseCase = require('./application/use-cases/submit-survey');
+const GetSurveyDetailsUseCase = require('./application/use-cases/get-survey-details');
+const ListSurveysUseCase = require('./application/use-cases/list-surveys');
+const StartSurveyReviewUseCase = require('./application/use-cases/start-survey-review');
+const ApproveSurveyUseCase = require('./application/use-cases/approve-survey');
+const RejectSurveyUseCase = require('./application/use-cases/reject-survey');
+const RequestSurveyRevisionUseCase = require('./application/use-cases/request-survey-revision');
 
 // Presentation Layer
 const SurveyController = require('./presentation/controllers/SurveyController');
@@ -89,43 +89,43 @@ function createCannabisSurveyModule(config) {
   // Application Layer - Use Cases
   const createSurveyUseCase = new CreateSurveyUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   const updateSurveyUseCase = new UpdateSurveyUseCase({
-    surveyRepository
+    surveyRepository,
   });
 
   const submitSurveyUseCase = new SubmitSurveyUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   const getSurveyDetailsUseCase = new GetSurveyDetailsUseCase({
-    surveyRepository
+    surveyRepository,
   });
 
   const listSurveysUseCase = new ListSurveysUseCase({
-    surveyRepository
+    surveyRepository,
   });
 
   const startSurveyReviewUseCase = new StartSurveyReviewUseCase({
-    surveyRepository
+    surveyRepository,
   });
 
   const approveSurveyUseCase = new ApproveSurveyUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   const rejectSurveyUseCase = new RejectSurveyUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   const requestSurveyRevisionUseCase = new RequestSurveyRevisionUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   // Presentation Layer - Controller
@@ -138,7 +138,7 @@ function createCannabisSurveyModule(config) {
     startSurveyReviewUseCase,
     approveSurveyUseCase,
     rejectSurveyUseCase,
-    requestSurveyRevisionUseCase
+    requestSurveyRevisionUseCase,
   });
 
   // Presentation Layer - Routes
@@ -158,15 +158,15 @@ function createCannabisSurveyModule(config) {
     services: {
       surveyRepository,
       getSurveyDetailsUseCase,
-      listSurveysUseCase
+      listSurveysUseCase,
     },
 
     // Constants for use by other modules
     constants: {
       STATUS,
       PURPOSE,
-      PLANT_TYPE
-    }
+      PLANT_TYPE,
+    },
   };
 }
 

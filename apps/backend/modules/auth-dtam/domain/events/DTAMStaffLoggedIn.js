@@ -23,7 +23,7 @@ class DTAMStaffLoggedIn {
       role: this.role,
       ipAddress: this.ipAddress,
       userAgent: this.userAgent,
-      timestamp: this.timestamp
+      timestamp: this.timestamp,
     };
   }
 }

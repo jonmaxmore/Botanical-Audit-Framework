@@ -33,7 +33,7 @@ const NotificationSchema = new mongoose.Schema(
       required: true,
       unique: true,
       index: true,
-      default: () => `NOTIF_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`
+      default: () => `NOTIF_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
     },
 
     // Recipient Information
@@ -41,34 +41,34 @@ const NotificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      index: true
+      index: true,
     },
 
     recipientRole: {
       type: String,
       enum: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN'],
-      required: true
+      required: true,
     },
 
     recipientEmail: {
       type: String,
       validate: {
-        validator: function(email) {
+        validator: function (email) {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         },
-        message: 'Invalid email format'
-      }
+        message: 'Invalid email format',
+      },
     },
 
     recipientPhone: {
       type: String,
       validate: {
-        validator: function(phone) {
+        validator: function (phone) {
           // Thai mobile number format: 08XXXXXXXX or 09XXXXXXXX
           return !phone || /^(08|09)\d{8}$/.test(phone.replace(/[-\s]/g, ''));
         },
-        message: 'Invalid Thai mobile number format'
-      }
+        message: 'Invalid Thai mobile number format',
+      },
     },
 
     // Notification Content & Type
@@ -108,17 +108,17 @@ const NotificationSchema = new mongoose.Schema(
         // Admin Notifications
         'NEW_APPLICATION_ALERT',
         'BULK_NOTIFICATION',
-        'SYSTEM_ERROR_ALERT'
+        'SYSTEM_ERROR_ALERT',
       ],
       required: true,
-      index: true
+      index: true,
     },
 
     priority: {
       type: String,
       enum: ['LOW', 'NORMAL', 'HIGH', 'CRITICAL'],
       default: 'NORMAL',
-      index: true
+      index: true,
     },
 
     // Content & Messaging
@@ -126,35 +126,35 @@ const NotificationSchema = new mongoose.Schema(
       type: String,
       required: true,
       maxlength: 200,
-      trim: true
+      trim: true,
     },
 
     message: {
       type: String,
       required: true,
       maxlength: 2000,
-      trim: true
+      trim: true,
     },
 
     messageHtml: {
       type: String,
-      maxlength: 5000 // For rich HTML email content
+      maxlength: 5000, // For rich HTML email content
     },
 
     // Template Information
     templateId: {
       type: String,
-      index: true
+      index: true,
     },
 
     templateVersion: {
       type: String,
-      default: '1.0'
+      default: '1.0',
     },
 
     templateVariables: {
       type: mongoose.Schema.Types.Mixed,
-      default: {}
+      default: {},
     },
 
     // Delivery Channels
@@ -162,13 +162,13 @@ const NotificationSchema = new mongoose.Schema(
       email: {
         enabled: {
           type: Boolean,
-          default: false
+          default: false,
         },
 
         status: {
           type: String,
           enum: ['PENDING', 'SENT', 'DELIVERED', 'FAILED', 'BOUNCED'],
-          default: 'PENDING'
+          default: 'PENDING',
         },
 
         sentAt: Date,
@@ -178,7 +178,7 @@ const NotificationSchema = new mongoose.Schema(
         emailProvider: {
           type: String,
           enum: ['SES', 'SENDGRID', 'SMTP'],
-          default: 'SES'
+          default: 'SES',
         },
 
         messageId: String, // Provider message ID
@@ -188,19 +188,19 @@ const NotificationSchema = new mongoose.Schema(
         openedAt: Date,
         clickedAt: Date,
 
-        trackingPixelId: String
+        trackingPixelId: String,
       },
 
       sms: {
         enabled: {
           type: Boolean,
-          default: false
+          default: false,
         },
 
         status: {
           type: String,
           enum: ['PENDING', 'SENT', 'DELIVERED', 'FAILED'],
-          default: 'PENDING'
+          default: 'PENDING',
         },
 
         sentAt: Date,
@@ -209,7 +209,7 @@ const NotificationSchema = new mongoose.Schema(
         smsProvider: {
           type: String,
           enum: ['TWILIO', 'AWS_SNS', 'THAI_SMS_GATEWAY'],
-          default: 'THAI_SMS_GATEWAY'
+          default: 'THAI_SMS_GATEWAY',
         },
 
         messageId: String,
@@ -219,20 +219,20 @@ const NotificationSchema = new mongoose.Schema(
         cost: {
           type: Number,
           min: 0,
-          default: 0
-        }
+          default: 0,
+        },
       },
 
       inApp: {
         enabled: {
           type: Boolean,
-          default: true
+          default: true,
         },
 
         status: {
           type: String,
           enum: ['PENDING', 'DELIVERED', 'READ', 'DISMISSED'],
-          default: 'PENDING'
+          default: 'PENDING',
         },
 
         deliveredAt: Date,
@@ -244,34 +244,34 @@ const NotificationSchema = new mongoose.Schema(
 
         expiresAt: {
           type: Date,
-          default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
-        }
-      }
+          default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+        },
+      },
     },
 
     // Context & Related Entities
     relatedEntities: {
       applicationId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Application'
+        ref: 'Application',
       },
 
       paymentId: String,
 
       documentId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Document'
+        ref: 'Document',
       },
 
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
       },
 
       inspectionId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Inspection'
-      }
+        ref: 'Inspection',
+      },
     },
 
     // Delivery & Retry Logic
@@ -279,24 +279,24 @@ const NotificationSchema = new mongoose.Schema(
       {
         attemptNumber: {
           type: Number,
-          required: true
+          required: true,
         },
 
         channel: {
           type: String,
           enum: ['email', 'sms', 'inApp'],
-          required: true
+          required: true,
         },
 
         attemptedAt: {
           type: Date,
-          default: Date.now
+          default: Date.now,
         },
 
         status: {
           type: String,
           enum: ['SUCCESS', 'FAILED', 'RETRY'],
-          required: true
+          required: true,
         },
 
         errorCode: String,
@@ -304,28 +304,28 @@ const NotificationSchema = new mongoose.Schema(
 
         providerResponse: {
           type: mongoose.Schema.Types.Mixed,
-          default: {}
+          default: {},
         },
 
-        nextRetryAt: Date
-      }
+        nextRetryAt: Date,
+      },
     ],
 
     // Scheduling & Timing
     scheduledFor: {
       type: Date,
-      index: true
+      index: true,
     },
 
     timezone: {
       type: String,
-      default: 'Asia/Bangkok'
+      default: 'Asia/Bangkok',
     },
 
     // Batch Processing
     batchId: {
       type: String,
-      index: true
+      index: true,
     },
 
     batchSize: Number,
@@ -336,16 +336,16 @@ const NotificationSchema = new mongoose.Schema(
       language: {
         type: String,
         enum: ['th', 'en'],
-        default: 'th'
+        default: 'th',
       },
 
       emailFormat: {
         type: String,
         enum: ['text', 'html'],
-        default: 'html'
+        default: 'html',
       },
 
-      timezone: String
+      timezone: String,
     },
 
     // Analytics & Tracking
@@ -353,43 +353,43 @@ const NotificationSchema = new mongoose.Schema(
       opened: {
         count: {
           type: Number,
-          default: 0
+          default: 0,
         },
         firstOpenedAt: Date,
-        lastOpenedAt: Date
+        lastOpenedAt: Date,
       },
 
       clicked: {
         count: {
           type: Number,
-          default: 0
+          default: 0,
         },
         firstClickedAt: Date,
         lastClickedAt: Date,
-        clickedUrls: [String]
+        clickedUrls: [String],
       },
 
       bounced: {
         type: Boolean,
-        default: false
+        default: false,
       },
 
       marked_as_spam: {
         type: Boolean,
-        default: false
+        default: false,
       },
 
       unsubscribed: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
 
     // Metadata & Tags
     metadata: {
       source: {
         type: String,
-        default: 'SYSTEM'
+        default: 'SYSTEM',
       },
 
       campaign: String,
@@ -398,8 +398,8 @@ const NotificationSchema = new mongoose.Schema(
 
       customData: {
         type: mongoose.Schema.Types.Mixed,
-        default: {}
-      }
+        default: {},
+      },
     },
 
     // Status & Lifecycle
@@ -413,23 +413,23 @@ const NotificationSchema = new mongoose.Schema(
         'PARTIALLY_SENT', // ส่งได้บาง channel
         'FAILED', // ส่งไม่สำเร็จ
         'CANCELLED', // ยกเลิกการส่ง
-        'EXPIRED' // หมดอายุ
+        'EXPIRED', // หมดอายุ
       ],
       default: 'DRAFT',
       required: true,
-      index: true
+      index: true,
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true
+      index: true,
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
 
     sentAt: Date,
@@ -439,12 +439,12 @@ const NotificationSchema = new mongoose.Schema(
     // TTL for cleanup
     expiresAt: {
       type: Date,
-      index: { expireAfterSeconds: 0 }
-    }
+      index: { expireAfterSeconds: 0 },
+    },
   },
   {
     timestamps: true,
-    collection: 'notifications'
+    collection: 'notifications',
   }
 );
 
@@ -459,28 +459,28 @@ NotificationSchema.index({ 'channels.sms.status': 1 });
 NotificationSchema.index({ 'channels.inApp.status': 1 });
 
 // Virtual Fields
-NotificationSchema.virtual('isDelivered').get(function() {
+NotificationSchema.virtual('isDelivered').get(function () {
   return this.status === 'SENT' || this.status === 'PARTIALLY_SENT';
 });
 
-NotificationSchema.virtual('canRetry').get(function() {
+NotificationSchema.virtual('canRetry').get(function () {
   const maxRetries = this.priority === 'CRITICAL' ? 3 : 2;
   return this.status === 'FAILED' && this.deliveryAttempts.length < maxRetries;
 });
 
-NotificationSchema.virtual('isExpired').get(function() {
+NotificationSchema.virtual('isExpired').get(function () {
   if (this.channels.inApp.enabled && this.channels.inApp.expiresAt) {
     return new Date() > this.channels.inApp.expiresAt;
   }
   return false;
 });
 
-NotificationSchema.virtual('totalCost').get(function() {
+NotificationSchema.virtual('totalCost').get(function () {
   return this.channels.sms.cost || 0;
 });
 
 // Business Logic Methods
-NotificationSchema.methods.markAsRead = function(channel = 'inApp') {
+NotificationSchema.methods.markAsRead = function (channel = 'inApp') {
   if (channel === 'inApp' && this.channels.inApp.enabled) {
     this.channels.inApp.status = 'READ';
     this.channels.inApp.readAt = new Date();
@@ -490,7 +490,7 @@ NotificationSchema.methods.markAsRead = function(channel = 'inApp') {
   return this.save();
 };
 
-NotificationSchema.methods.markAsDismissed = function() {
+NotificationSchema.methods.markAsDismissed = function () {
   if (this.channels.inApp.enabled) {
     this.channels.inApp.status = 'DISMISSED';
     this.channels.inApp.dismissedAt = new Date();
@@ -500,7 +500,7 @@ NotificationSchema.methods.markAsDismissed = function() {
   return this.save();
 };
 
-NotificationSchema.methods.addDeliveryAttempt = function(channel, status, errorData = {}) {
+NotificationSchema.methods.addDeliveryAttempt = function (channel, status, errorData = {}) {
   const attemptNumber = this.deliveryAttempts.filter(a => a.channel === channel).length + 1;
 
   this.deliveryAttempts.push({
@@ -510,14 +510,14 @@ NotificationSchema.methods.addDeliveryAttempt = function(channel, status, errorD
     errorCode: errorData.errorCode,
     errorMessage: errorData.errorMessage,
     providerResponse: errorData.providerResponse || {},
-    nextRetryAt: errorData.nextRetryAt
+    nextRetryAt: errorData.nextRetryAt,
   });
 
   this.updatedAt = new Date();
   return this.save();
 };
 
-NotificationSchema.methods.updateChannelStatus = function(channel, status, metadata = {}) {
+NotificationSchema.methods.updateChannelStatus = function (channel, status, metadata = {}) {
   if (this.channels[channel]) {
     this.channels[channel].status = status;
 
@@ -542,7 +542,7 @@ NotificationSchema.methods.updateChannelStatus = function(channel, status, metad
   return this.save();
 };
 
-NotificationSchema.methods._updateOverallStatus = function() {
+NotificationSchema.methods._updateOverallStatus = function () {
   const enabledChannels = [];
   const channelStatuses = [];
 
@@ -574,38 +574,38 @@ NotificationSchema.methods._updateOverallStatus = function() {
   }
 };
 
-NotificationSchema.methods.recordAnalytics = function(event, data = {}) {
+NotificationSchema.methods.recordAnalytics = function (event, data = {}) {
   switch (event) {
-  case 'opened':
-    this.analytics.opened.count += 1;
-    if (!this.analytics.opened.firstOpenedAt) {
-      this.analytics.opened.firstOpenedAt = new Date();
-    }
-    this.analytics.opened.lastOpenedAt = new Date();
-    break;
+    case 'opened':
+      this.analytics.opened.count += 1;
+      if (!this.analytics.opened.firstOpenedAt) {
+        this.analytics.opened.firstOpenedAt = new Date();
+      }
+      this.analytics.opened.lastOpenedAt = new Date();
+      break;
 
-  case 'clicked':
-    this.analytics.clicked.count += 1;
-    if (!this.analytics.clicked.firstClickedAt) {
-      this.analytics.clicked.firstClickedAt = new Date();
-    }
-    this.analytics.clicked.lastClickedAt = new Date();
-    if (data.url) {
-      this.analytics.clicked.clickedUrls.push(data.url);
-    }
-    break;
+    case 'clicked':
+      this.analytics.clicked.count += 1;
+      if (!this.analytics.clicked.firstClickedAt) {
+        this.analytics.clicked.firstClickedAt = new Date();
+      }
+      this.analytics.clicked.lastClickedAt = new Date();
+      if (data.url) {
+        this.analytics.clicked.clickedUrls.push(data.url);
+      }
+      break;
 
-  case 'bounced':
-    this.analytics.bounced = true;
-    break;
+    case 'bounced':
+      this.analytics.bounced = true;
+      break;
 
-  case 'spam':
-    this.analytics.marked_as_spam = true;
-    break;
+    case 'spam':
+      this.analytics.marked_as_spam = true;
+      break;
 
-  case 'unsubscribed':
-    this.analytics.unsubscribed = true;
-    break;
+    case 'unsubscribed':
+      this.analytics.unsubscribed = true;
+      break;
   }
 
   this.updatedAt = new Date();
@@ -613,14 +613,14 @@ NotificationSchema.methods.recordAnalytics = function(event, data = {}) {
 };
 
 // Static Methods
-NotificationSchema.statics.findPendingNotifications = function() {
+NotificationSchema.statics.findPendingNotifications = function () {
   return this.find({
     status: { $in: ['SCHEDULED', 'PROCESSING'] },
-    scheduledFor: { $lte: new Date() }
+    scheduledFor: { $lte: new Date() },
   }).sort({ priority: -1, scheduledFor: 1 });
 };
 
-NotificationSchema.statics.findByRecipient = function(recipientId, options = {}) {
+NotificationSchema.statics.findByRecipient = function (recipientId, options = {}) {
   const query = { recipientId };
 
   if (options.unreadOnly) {
@@ -632,28 +632,28 @@ NotificationSchema.statics.findByRecipient = function(recipientId, options = {})
     .limit(options.limit || 50);
 };
 
-NotificationSchema.statics.getStatistics = function(startDate, endDate) {
+NotificationSchema.statics.getStatistics = function (startDate, endDate) {
   return this.aggregate([
     {
       $match: {
-        createdAt: { $gte: startDate, $lte: endDate }
-      }
+        createdAt: { $gte: startDate, $lte: endDate },
+      },
     },
     {
       $group: {
         _id: {
           type: '$notificationType',
-          status: '$status'
+          status: '$status',
         },
         count: { $sum: 1 },
-        totalCost: { $sum: '$channels.sms.cost' }
-      }
-    }
+        totalCost: { $sum: '$channels.sms.cost' },
+      },
+    },
   ]);
 };
 
 // Pre-save Middleware
-NotificationSchema.pre('save', function(next) {
+NotificationSchema.pre('save', function (next) {
   this.updatedAt = new Date();
 
   // Set expiry for in-app notifications
@@ -670,7 +670,7 @@ NotificationSchema.pre('save', function(next) {
 });
 
 // Post-save Middleware
-NotificationSchema.post('save', function(doc) {
+NotificationSchema.post('save', function (doc) {
   // Emit events for external processing
   if (doc.status === 'SENT' && doc.isModified('status')) {
     console.log(`[Notification] Notification sent: ${doc.notificationId}`);

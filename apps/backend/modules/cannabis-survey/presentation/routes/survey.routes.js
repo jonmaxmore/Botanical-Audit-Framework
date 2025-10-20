@@ -100,7 +100,7 @@ function createSurveyRoutes(controller, authMiddleware, validators) {
 
   return {
     farmerRouter,
-    dtamRouter
+    dtamRouter,
   };
 }
 

@@ -22,7 +22,7 @@ class NotificationController {
       if (req.user.userId !== userId && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
@@ -30,20 +30,20 @@ class NotificationController {
         page: parseInt(page) || 1,
         limit: parseInt(limit) || 20,
         isRead: isRead === 'true' ? true : isRead === 'false' ? false : undefined,
-        priority
+        priority,
       });
 
       res.json({
         success: true,
         message: 'Notifications retrieved',
-        data: result
+        data: result,
       });
     } catch (error) {
       console.error('Get user notifications error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get notifications',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -60,7 +60,7 @@ class NotificationController {
       if (req.user.userId !== userId && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
@@ -69,15 +69,15 @@ class NotificationController {
       res.json({
         success: true,
         data: {
-          unread: stats.unread
-        }
+          unread: stats.unread,
+        },
       });
     } catch (error) {
       console.error('Get unread count error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get unread count',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -96,12 +96,12 @@ class NotificationController {
       if (success) {
         res.json({
           success: true,
-          message: 'Notification marked as read'
+          message: 'Notification marked as read',
         });
       } else {
         res.status(404).json({
           success: false,
-          message: 'Notification not found'
+          message: 'Notification not found',
         });
       }
     } catch (error) {
@@ -109,7 +109,7 @@ class NotificationController {
       res.status(500).json({
         success: false,
         message: 'Failed to mark as read',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -126,7 +126,7 @@ class NotificationController {
       if (req.user.userId !== userId && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
@@ -135,14 +135,14 @@ class NotificationController {
       res.json({
         success: true,
         message: `${count} notifications marked as read`,
-        data: { count }
+        data: { count },
       });
     } catch (error) {
       console.error('Mark all as read error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to mark all as read',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -161,12 +161,12 @@ class NotificationController {
       if (success) {
         res.json({
           success: true,
-          message: 'Notification deleted'
+          message: 'Notification deleted',
         });
       } else {
         res.status(404).json({
           success: false,
-          message: 'Notification not found'
+          message: 'Notification not found',
         });
       }
     } catch (error) {
@@ -174,7 +174,7 @@ class NotificationController {
       res.status(500).json({
         success: false,
         message: 'Failed to delete notification',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -191,7 +191,7 @@ class NotificationController {
       if (req.user.userId !== userId && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
@@ -200,14 +200,14 @@ class NotificationController {
       res.json({
         success: true,
         message: 'Statistics retrieved',
-        data: stats
+        data: stats,
       });
     } catch (error) {
       console.error('Get notification stats error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get statistics',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -224,14 +224,14 @@ class NotificationController {
       if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
         return res.status(400).json({
           success: false,
-          message: 'Recipients array is required'
+          message: 'Recipients array is required',
         });
       }
 
       if (!title || !message) {
         return res.status(400).json({
           success: false,
-          message: 'Title and message are required'
+          message: 'Title and message are required',
         });
       }
 
@@ -245,14 +245,14 @@ class NotificationController {
       res.status(201).json({
         success: true,
         message: `Notification sent to ${count} users`,
-        data: { count }
+        data: { count },
       });
     } catch (error) {
       console.error('Send custom notification error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to send notification',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -269,7 +269,7 @@ class NotificationController {
       if (!title || !message) {
         return res.status(400).json({
           success: false,
-          message: 'Title and message are required'
+          message: 'Title and message are required',
         });
       }
 
@@ -283,14 +283,14 @@ class NotificationController {
       res.status(201).json({
         success: true,
         message: 'Announcement broadcasted successfully',
-        data: { announcementId }
+        data: { announcementId },
       });
     } catch (error) {
       console.error('Broadcast announcement error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to broadcast announcement',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -307,7 +307,7 @@ class NotificationController {
       if (!eventType || !data) {
         return res.status(400).json({
           success: false,
-          message: 'Event type and data are required'
+          message: 'Event type and data are required',
         });
       }
 
@@ -316,14 +316,14 @@ class NotificationController {
       res.json({
         success: true,
         message: 'Test notification sent',
-        data: result
+        data: result,
       });
     } catch (error) {
       console.error('Send test notification error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to send test notification',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -341,7 +341,7 @@ class NotificationController {
       if (req.user.userId !== userId && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
@@ -350,12 +350,12 @@ class NotificationController {
       if (success) {
         res.json({
           success: true,
-          message: 'Preferences updated'
+          message: 'Preferences updated',
         });
       } else {
         res.status(500).json({
           success: false,
-          message: 'Failed to update preferences'
+          message: 'Failed to update preferences',
         });
       }
     } catch (error) {
@@ -363,7 +363,7 @@ class NotificationController {
       res.status(500).json({
         success: false,
         message: 'Failed to update preferences',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -380,7 +380,7 @@ class NotificationController {
       if (req.user.userId !== userId && req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
@@ -389,14 +389,14 @@ class NotificationController {
       res.json({
         success: true,
         message: 'Preferences retrieved',
-        data: preferences
+        data: preferences,
       });
     } catch (error) {
       console.error('Get preferences error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get preferences',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -414,30 +414,30 @@ class NotificationController {
 
       // Handle different webhook services
       switch (service) {
-      case 'email':
-        // Handle email delivery status
-        // Update notification status based on email delivery
-        break;
-      case 'sms':
-        // Handle SMS delivery status
-        break;
-      case 'line':
-        // Handle LINE delivery status
-        break;
-      default:
-        console.warn(`Unknown webhook service: ${service}`);
+        case 'email':
+          // Handle email delivery status
+          // Update notification status based on email delivery
+          break;
+        case 'sms':
+          // Handle SMS delivery status
+          break;
+        case 'line':
+          // Handle LINE delivery status
+          break;
+        default:
+          console.warn(`Unknown webhook service: ${service}`);
       }
 
       res.json({
         success: true,
-        message: 'Webhook processed'
+        message: 'Webhook processed',
       });
     } catch (error) {
       console.error('Webhook processing error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to process webhook',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -457,21 +457,21 @@ class NotificationController {
           title: template.title,
           recipients: template.recipients,
           priority: template.priority,
-          channels: template.channels
+          channels: template.channels,
         };
       }
 
       res.json({
         success: true,
         message: 'Templates retrieved',
-        data: sanitized
+        data: sanitized,
       });
     } catch (error) {
       console.error('Get templates error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get templates',
-        error: error.message
+        error: error.message,
       });
     }
   }

@@ -35,7 +35,7 @@ class EnrollmentCompletionCertificationService {
         maxScore: 74,
         validityMonths: 24,
         governmentRecognition: true,
-        competencies: ['basic_knowledge', 'safety_awareness']
+        competencies: ['basic_knowledge', 'safety_awareness'],
       },
       STANDARD: {
         name: 'Standard Proficiency Certificate',
@@ -43,7 +43,7 @@ class EnrollmentCompletionCertificationService {
         maxScore: 84,
         validityMonths: 30,
         governmentRecognition: true,
-        competencies: ['comprehensive_knowledge', 'practical_skills', 'compliance_understanding']
+        competencies: ['comprehensive_knowledge', 'practical_skills', 'compliance_understanding'],
       },
       ADVANCED: {
         name: 'Advanced Excellence Certificate',
@@ -51,7 +51,7 @@ class EnrollmentCompletionCertificationService {
         maxScore: 94,
         validityMonths: 36,
         governmentRecognition: true,
-        competencies: ['expert_knowledge', 'leadership_skills', 'innovation_capability']
+        competencies: ['expert_knowledge', 'leadership_skills', 'innovation_capability'],
       },
       EXPERT: {
         name: 'Expert Mastery Certificate',
@@ -59,8 +59,8 @@ class EnrollmentCompletionCertificationService {
         maxScore: 100,
         validityMonths: 48,
         governmentRecognition: true,
-        competencies: ['master_knowledge', 'training_capability', 'industry_leadership']
-      }
+        competencies: ['master_knowledge', 'training_capability', 'industry_leadership'],
+      },
     };
 
     // Certification workflow steps
@@ -72,7 +72,7 @@ class EnrollmentCompletionCertificationService {
       'submitToGovernment',
       'updateRecords',
       'processAnalytics',
-      'sendNotifications'
+      'sendNotifications',
     ];
 
     // Processing metrics
@@ -85,8 +85,8 @@ class EnrollmentCompletionCertificationService {
         BASIC: 0,
         STANDARD: 0,
         ADVANCED: 0,
-        EXPERT: 0
-      }
+        EXPERT: 0,
+      },
     };
   }
 
@@ -120,14 +120,14 @@ class EnrollmentCompletionCertificationService {
         status: 'PROCESSING',
         steps: [],
         data: completionData,
-        results: {}
+        results: {},
       };
 
       // Step 1: Validate completion eligibility
       const eligibilityResult = await this.executeStep(
         certificationProcess,
         'validateEligibility',
-        async() => {
+        async () => {
           return await this.validateCompletionEligibility(enrollmentId, completionData);
         }
       );
@@ -142,7 +142,7 @@ class EnrollmentCompletionCertificationService {
       const performanceResult = await this.executeStep(
         certificationProcess,
         'assessPerformance',
-        async() => {
+        async () => {
           return await this.assessFinalPerformance(enrollmentId, completionData);
         }
       );
@@ -151,7 +151,7 @@ class EnrollmentCompletionCertificationService {
       const levelResult = await this.executeStep(
         certificationProcess,
         'determineCertificationLevel',
-        async() => {
+        async () => {
           return await this.determineCertificationLevel(performanceResult.data);
         }
       );
@@ -160,12 +160,12 @@ class EnrollmentCompletionCertificationService {
       const certificateResult = await this.executeStep(
         certificationProcess,
         'generateCertificate',
-        async() => {
+        async () => {
           return await this.generateCompletionCertificate({
             enrollmentId: enrollmentId,
             performance: performanceResult.data,
             level: levelResult.data,
-            completionData: completionData
+            completionData: completionData,
           });
         }
       );
@@ -174,7 +174,7 @@ class EnrollmentCompletionCertificationService {
       const governmentResult = await this.executeStep(
         certificationProcess,
         'submitToGovernment',
-        async() => {
+        async () => {
           return await this.submitCertificationToGovernment(certificateResult.data);
         }
       );
@@ -183,12 +183,12 @@ class EnrollmentCompletionCertificationService {
       const recordsResult = await this.executeStep(
         certificationProcess,
         'updateRecords',
-        async() => {
+        async () => {
           return await this.updateCompletionRecords({
             enrollmentId: enrollmentId,
             certificate: certificateResult.data,
             government: governmentResult.data,
-            performance: performanceResult.data
+            performance: performanceResult.data,
           });
         }
       );
@@ -197,11 +197,11 @@ class EnrollmentCompletionCertificationService {
       const analyticsResult = await this.executeStep(
         certificationProcess,
         'processAnalytics',
-        async() => {
+        async () => {
           return await this.processCompletionAnalytics({
             certification: certificationProcess,
             certificate: certificateResult.data,
-            performance: performanceResult.data
+            performance: performanceResult.data,
           });
         }
       );
@@ -210,11 +210,11 @@ class EnrollmentCompletionCertificationService {
       const notificationsResult = await this.executeStep(
         certificationProcess,
         'sendNotifications',
-        async() => {
+        async () => {
           return await this.sendCompletionNotifications({
             enrollmentId: enrollmentId,
             certificate: certificateResult.data,
-            performance: performanceResult.data
+            performance: performanceResult.data,
           });
         }
       );
@@ -231,7 +231,7 @@ class EnrollmentCompletionCertificationService {
         government: governmentResult.data,
         records: recordsResult.data,
         analytics: analyticsResult.data,
-        notifications: notificationsResult.data
+        notifications: notificationsResult.data,
       };
 
       // Update metrics
@@ -247,7 +247,7 @@ class EnrollmentCompletionCertificationService {
         processingTime: certificationProcess.processingTime,
         certificateNumber: certificateResult.data.certificateNumber,
         certificationLevel: levelResult.data.level,
-        results: certificationProcess.results
+        results: certificationProcess.results,
       };
     } catch (error) {
       this.logger.error(
@@ -287,7 +287,7 @@ class EnrollmentCompletionCertificationService {
       if (completionData.finalScore < minPassingScore) {
         return {
           eligible: false,
-          reason: `Final score ${completionData.finalScore}% below passing score ${minPassingScore}%`
+          reason: `Final score ${completionData.finalScore}% below passing score ${minPassingScore}%`,
         };
       }
 
@@ -299,7 +299,7 @@ class EnrollmentCompletionCertificationService {
       if (missingRequired.length > 0) {
         return {
           eligible: false,
-          reason: `Missing required modules: ${missingRequired.map(m => m.name).join(', ')}`
+          reason: `Missing required modules: ${missingRequired.map(m => m.name).join(', ')}`,
         };
       }
 
@@ -310,7 +310,7 @@ class EnrollmentCompletionCertificationService {
       if (actualAttendance < requiredAttendance) {
         return {
           eligible: false,
-          reason: `Insufficient attendance: ${actualAttendance}% (required: ${requiredAttendance}%)`
+          reason: `Insufficient attendance: ${actualAttendance}% (required: ${requiredAttendance}%)`,
         };
       }
 
@@ -323,8 +323,8 @@ class EnrollmentCompletionCertificationService {
           requiredModules: requiredModules.length,
           completedModules: completedModules.length,
           attendanceRequirement: requiredAttendance,
-          actualAttendance: actualAttendance
-        }
+          actualAttendance: actualAttendance,
+        },
       };
     } catch (error) {
       return { eligible: false, reason: `Validation error: ${error.message}` };
@@ -365,7 +365,7 @@ class EnrollmentCompletionCertificationService {
         overallPerformance: null,
         performanceGrade: null,
         strengths: [],
-        improvements: []
+        improvements: [],
       };
 
       // Determine overall performance rating
@@ -421,7 +421,7 @@ class EnrollmentCompletionCertificationService {
         config: this.certificationLevels[adjustedLevel],
         justification: this.generateLevelJustification(adjustedLevel, performanceData),
         competencies: this.certificationLevels[adjustedLevel].competencies,
-        validityMonths: this.certificationLevels[adjustedLevel].validityMonths
+        validityMonths: this.certificationLevels[adjustedLevel].validityMonths,
       };
     } catch (error) {
       this.logger.error('[CompletionCertification] Level determination failed:', error);
@@ -463,14 +463,14 @@ class EnrollmentCompletionCertificationService {
           performance: {
             grade: certificationData.performance.performanceGrade,
             strengths: certificationData.performance.strengths,
-            competencyMastery: certificationData.performance.competencies
+            competencyMastery: certificationData.performance.competencies,
           },
           validation: {
             governmentSubmitted: false, // Will be updated after submission
             digitallyVerified: true,
-            auditTrail: true
-          }
-        }
+            auditTrail: true,
+          },
+        },
       };
 
       const certificate =
@@ -501,7 +501,7 @@ class EnrollmentCompletionCertificationService {
         submissionId: submissionResult.submissionId,
         governmentReference: submissionResult.governmentReference,
         submissionTime: submissionResult.submissionTime,
-        status: submissionResult.overallStatus
+        status: submissionResult.overallStatus,
       };
     } catch (error) {
       this.logger.error('[CompletionCertification] Government submission failed:', error);
@@ -523,7 +523,7 @@ class EnrollmentCompletionCertificationService {
         'completion.certificateNumber': updateData.certificate.certificateNumber,
         'completion.certificationLevel': updateData.certificate.certificationLevel,
         'completion.governmentSubmitted': updateData.government?.submitted || false,
-        'completion.governmentReference': updateData.government?.governmentReference || null
+        'completion.governmentReference': updateData.government?.governmentReference || null,
       });
 
       updates.enrollment = 'UPDATED';
@@ -533,7 +533,7 @@ class EnrollmentCompletionCertificationService {
         await this.analyticsService.updateCompletionMetrics({
           enrollmentId: updateData.enrollmentId,
           certificate: updateData.certificate,
-          performance: updateData.performance
+          performance: updateData.performance,
         });
         updates.analytics = 'UPDATED';
       }
@@ -543,7 +543,7 @@ class EnrollmentCompletionCertificationService {
         await this.auditService.logCertificationCompletion({
           enrollmentId: updateData.enrollmentId,
           certificate: updateData.certificate,
-          government: updateData.government
+          government: updateData.government,
         });
         updates.audit = 'UPDATED';
       }
@@ -572,7 +572,7 @@ class EnrollmentCompletionCertificationService {
         startTime: new Date(stepStartTime),
         endTime: new Date(),
         processingTime: Date.now() - stepStartTime,
-        result: stepResult
+        result: stepResult,
       };
 
       certificationProcess.steps.push(stepExecution);
@@ -580,7 +580,7 @@ class EnrollmentCompletionCertificationService {
       return {
         success: true,
         data: stepResult,
-        step: stepExecution
+        step: stepExecution,
       };
     } catch (error) {
       this.logger.error(`[CompletionCertification] Step ${stepName} failed:`, error);
@@ -591,7 +591,7 @@ class EnrollmentCompletionCertificationService {
         startTime: new Date(stepStartTime),
         endTime: new Date(),
         processingTime: Date.now() - stepStartTime,
-        error: error.message
+        error: error.message,
       };
 
       certificationProcess.steps.push(stepExecution);
@@ -630,9 +630,9 @@ class EnrollmentCompletionCertificationService {
     const successRate =
       this.metrics.certificationsProcessed > 0
         ? (
-          (this.metrics.certificationsSuccessful / this.metrics.certificationsProcessed) *
+            (this.metrics.certificationsSuccessful / this.metrics.certificationsProcessed) *
             100
-        ).toFixed(2)
+          ).toFixed(2)
         : 0;
 
     return {
@@ -640,7 +640,7 @@ class EnrollmentCompletionCertificationService {
       metrics: this.metrics,
       successRate: `${successRate}%`,
       certificationLevels: this.certificationLevels,
-      lastUpdate: new Date()
+      lastUpdate: new Date(),
     };
   }
 
@@ -696,7 +696,7 @@ class EnrollmentCompletionCertificationService {
       finalScore: 0.4,
       consistencyScore: 0.2,
       interactionScore: 0.2,
-      improvementRate: 0.2
+      improvementRate: 0.2,
     };
 
     return (

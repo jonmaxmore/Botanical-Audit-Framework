@@ -35,7 +35,7 @@ class EnhancedApplicationProcessingController {
     validationService,
     authorizationService,
     performanceMonitor,
-    logger
+    logger,
   }) {
     // Core service dependencies
     this.advancedApplicationProcessingService = advancedApplicationProcessingService;
@@ -54,7 +54,7 @@ class EnhancedApplicationProcessingController {
       failedRequests: 0,
       averageResponseTimes: {},
       endpointUsage: {},
-      errorDistribution: {}
+      errorDistribution: {},
     };
 
     // Bind methods to maintain context
@@ -118,7 +118,7 @@ class EnhancedApplicationProcessingController {
         lastName: req.body.farmerLastName,
         email: req.body.farmerEmail,
         phoneNumber: req.body.farmerPhoneNumber,
-        address: req.body.farmerAddress
+        address: req.body.farmerAddress,
       };
 
       const applicationData = {
@@ -131,13 +131,13 @@ class EnhancedApplicationProcessingController {
         farmType: req.body.farmType || 'OUTDOOR',
         productionCapacity: req.body.productionCapacity,
         marketIntent: req.body.marketIntent || 'DOMESTIC',
-        certificationGoals: req.body.certificationGoals || []
+        certificationGoals: req.body.certificationGoals || [],
       };
 
       const options = {
         priority: req.body.priority || 'STANDARD',
         fastTrack: req.body.fastTrack || false,
-        additionalServices: req.body.additionalServices || []
+        additionalServices: req.body.additionalServices || [],
       };
 
       // Create application through service
@@ -152,7 +152,7 @@ class EnhancedApplicationProcessingController {
         requestId,
         userId: req.user.userId,
         applicationId: applicationResult.data.applicationId,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       // Update controller metrics
@@ -169,13 +169,13 @@ class EnhancedApplicationProcessingController {
           state: applicationResult.data.state,
           workflowStatus: applicationResult.data.workflowStatus,
           nextSteps: this._generateNextSteps(applicationResult.data),
-          estimatedProcessingTime: applicationResult.data.workflowStatus.estimatedCompletion
+          estimatedProcessingTime: applicationResult.data.workflowStatus.estimatedCompletion,
         },
         metadata: {
           requestId,
           processingTime: Date.now() - startTime,
-          operationId: applicationResult.operationId
-        }
+          operationId: applicationResult.operationId,
+        },
       };
 
       this.logger.info(
@@ -197,7 +197,7 @@ class EnhancedApplicationProcessingController {
         requestId,
         userId: req.user?.userId,
         error: error.message,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       this._sendErrorResponse(res, error, requestId);
@@ -227,7 +227,7 @@ class EnhancedApplicationProcessingController {
         applicationId,
         targetState,
         notes,
-        reasonCode
+        reasonCode,
       });
 
       if (!validationResult.valid) {
@@ -253,14 +253,14 @@ class EnhancedApplicationProcessingController {
         metadata: {
           userAgent: req.get('User-Agent'),
           ipAddress: req.ip,
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       };
 
       const actor = {
         userId: req.user.userId,
         role: req.user.role,
-        name: req.user.fullName
+        name: req.user.fullName,
       };
 
       // Process state transition
@@ -280,7 +280,7 @@ class EnhancedApplicationProcessingController {
         fromState:
           transitionResult.data.stateHistory[transitionResult.data.stateHistory.length - 2]?.state,
         toState: targetState,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       // Update controller metrics
@@ -297,13 +297,13 @@ class EnhancedApplicationProcessingController {
           nextPossibleStates: this._getNextPossibleStates(targetState),
           workflowStatus: transitionResult.data.workflowStatus,
           nextSteps: this._generateNextSteps(transitionResult.data),
-          notifications: transitionResult.data.postTransition.workflowProcessing.notifications
+          notifications: transitionResult.data.postTransition.workflowProcessing.notifications,
         },
         metadata: {
           requestId,
           processingTime: Date.now() - startTime,
-          operationId: transitionResult.operationId
-        }
+          operationId: transitionResult.operationId,
+        },
       };
 
       this.logger.info(
@@ -325,7 +325,7 @@ class EnhancedApplicationProcessingController {
         applicationId: req.params.applicationId,
         targetState: req.body.targetState,
         error: error.message,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       this._sendErrorResponse(res, error, requestId);
@@ -377,14 +377,14 @@ class EnhancedApplicationProcessingController {
           availableActions: await this._getAvailableUserActions(
             req.user,
             dashboardResult.data.application
-          )
+          ),
         },
         metadata: {
           requestId,
           processingTime: Date.now() - startTime,
           operationId: dashboardResult.operationId,
-          lastRefreshed: new Date()
-        }
+          lastRefreshed: new Date(),
+        },
       };
 
       // Update controller metrics
@@ -397,8 +397,8 @@ class EnhancedApplicationProcessingController {
         data: enhancedDashboard,
         metadata: {
           requestId,
-          processingTime: Date.now() - startTime
-        }
+          processingTime: Date.now() - startTime,
+        },
       };
 
       this.logger.info(
@@ -458,13 +458,13 @@ class EnhancedApplicationProcessingController {
         originalName: req.file.originalname,
         mimeType: req.file.mimetype,
         size: req.file.size,
-        encoding: req.file.encoding
+        encoding: req.file.encoding,
       };
 
       const uploadedBy = {
         userId: req.user.userId,
         role: req.user.role,
-        name: req.user.fullName
+        name: req.user.fullName,
       };
 
       // Process document upload
@@ -483,7 +483,7 @@ class EnhancedApplicationProcessingController {
         documentId: uploadResult.data.documentId,
         documentType,
         fileName: fileData.originalName,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       // Update controller metrics
@@ -499,13 +499,13 @@ class EnhancedApplicationProcessingController {
           fileName: uploadResult.data.fileName,
           state: uploadResult.data.state,
           processingStatus: uploadResult.data.processingStatus,
-          nextSteps: this._generateDocumentNextSteps(uploadResult.data)
+          nextSteps: this._generateDocumentNextSteps(uploadResult.data),
         },
         metadata: {
           requestId,
           processingTime: Date.now() - startTime,
-          operationId: uploadResult.operationId
-        }
+          operationId: uploadResult.operationId,
+        },
       };
 
       this.logger.info(
@@ -526,7 +526,7 @@ class EnhancedApplicationProcessingController {
         userId: req.user?.userId,
         applicationId: req.params.applicationId,
         error: error.message,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       this._sendErrorResponse(res, error, requestId);
@@ -572,7 +572,7 @@ class EnhancedApplicationProcessingController {
         identityData,
         {
           includePhoto: req.body.includePhoto || false,
-          verificationLevel: req.body.verificationLevel || 'STANDARD'
+          verificationLevel: req.body.verificationLevel || 'STANDARD',
         }
       );
 
@@ -583,7 +583,7 @@ class EnhancedApplicationProcessingController {
         applicationId,
         citizenId: identityData.citizenId,
         verificationStatus: verificationResult.data.verificationStatus,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       // Update controller metrics
@@ -597,13 +597,13 @@ class EnhancedApplicationProcessingController {
           verificationStatus: verificationResult.data.verificationStatus,
           verificationScore: verificationResult.data.verificationScore,
           verificationDetails: verificationResult.data.verificationDetails,
-          recommendations: verificationResult.data.recommendations
+          recommendations: verificationResult.data.recommendations,
         },
         metadata: {
           requestId,
           processingTime: Date.now() - startTime,
-          operationId: verificationResult.operationId
-        }
+          operationId: verificationResult.operationId,
+        },
       };
 
       this.logger.info(
@@ -670,7 +670,7 @@ class EnhancedApplicationProcessingController {
         applicationId,
         titleDeedNumber: landData.titleDeedNumber,
         verificationStatus: verificationResult.data.verificationStatus,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       // Update controller metrics
@@ -684,13 +684,13 @@ class EnhancedApplicationProcessingController {
           verificationStatus: verificationResult.data.verificationStatus,
           ownershipConfirmed: verificationResult.data.ownershipConfirmed,
           landDetails: verificationResult.data.landDetails,
-          complianceStatus: verificationResult.data.complianceStatus
+          complianceStatus: verificationResult.data.complianceStatus,
         },
         metadata: {
           requestId,
           processingTime: Date.now() - startTime,
-          operationId: verificationResult.operationId
-        }
+          operationId: verificationResult.operationId,
+        },
       };
 
       this.logger.info(
@@ -757,7 +757,7 @@ class EnhancedApplicationProcessingController {
         applicationId,
         submissionStatus: submissionResult.data.overallStatus,
         governmentReferences: submissionResult.data.governmentReferences,
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       });
 
       // Update controller metrics
@@ -771,13 +771,13 @@ class EnhancedApplicationProcessingController {
           submissionStatus: submissionResult.data.overallStatus,
           governmentReferences: submissionResult.data.governmentReferences,
           trackingInformation: submissionResult.data.trackingInformation,
-          estimatedProcessingTime: submissionResult.data.estimatedProcessingTime
+          estimatedProcessingTime: submissionResult.data.estimatedProcessingTime,
         },
         metadata: {
           requestId,
           processingTime: Date.now() - startTime,
-          operationId: submissionResult.operationId
-        }
+          operationId: submissionResult.operationId,
+        },
       };
 
       this.logger.info(
@@ -824,7 +824,7 @@ class EnhancedApplicationProcessingController {
       const analyticsPromises = [
         this.advancedApplicationProcessingService.getSystemHealth(),
         this.documentManagementIntegrationSystem.getSystemHealth(),
-        this.governmentApiIntegrationService.getSystemHealth()
+        this.governmentApiIntegrationService.getSystemHealth(),
       ];
 
       const analyticsResults = await Promise.allSettled(analyticsPromises);
@@ -835,20 +835,20 @@ class EnhancedApplicationProcessingController {
           totalApplications: this.controllerMetrics.totalRequests,
           successRate: this._calculateSuccessRate(),
           averageProcessingTime: this._calculateAverageProcessingTime(),
-          systemHealth: this._calculateOverallSystemHealth(analyticsResults)
+          systemHealth: this._calculateOverallSystemHealth(analyticsResults),
         },
         services: {
           applicationProcessing: this._extractSettledResult(analyticsResults[0]),
           documentManagement: this._extractSettledResult(analyticsResults[1]),
-          governmentIntegration: this._extractSettledResult(analyticsResults[2])
+          governmentIntegration: this._extractSettledResult(analyticsResults[2]),
         },
         performance: {
           controllerMetrics: this.controllerMetrics,
           endpointPerformance: this._getEndpointPerformance(),
-          errorAnalysis: this._getErrorAnalysis()
+          errorAnalysis: this._getErrorAnalysis(),
         },
         timestamp: new Date(),
-        processingTime: Date.now() - startTime
+        processingTime: Date.now() - startTime,
       };
 
       // Update controller metrics
@@ -861,8 +861,8 @@ class EnhancedApplicationProcessingController {
         data: analyticsDashboard,
         metadata: {
           requestId,
-          processingTime: Date.now() - startTime
-        }
+          processingTime: Date.now() - startTime,
+        },
       };
 
       this.logger.info(
@@ -921,7 +921,7 @@ class EnhancedApplicationProcessingController {
           module: 'ENHANCED_APPLICATION_CONTROLLER',
           action,
           data,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     } catch (error) {
@@ -937,8 +937,8 @@ class EnhancedApplicationProcessingController {
       details: errors,
       metadata: {
         requestId,
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      },
     });
   }
 
@@ -950,8 +950,8 @@ class EnhancedApplicationProcessingController {
       details: reason,
       metadata: {
         requestId,
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      },
     });
   }
 
@@ -971,8 +971,8 @@ class EnhancedApplicationProcessingController {
       message: error.message || 'An unexpected error occurred',
       metadata: {
         requestId,
-        timestamp: new Date()
-      }
+        timestamp: new Date(),
+      },
     });
   }
 
@@ -980,26 +980,26 @@ class EnhancedApplicationProcessingController {
     const nextSteps = [];
 
     switch (applicationData.state) {
-    case 'DRAFT':
-      nextSteps.push('Complete application information');
-      nextSteps.push('Upload required documents');
-      nextSteps.push('Submit application for review');
-      break;
-    case 'SUBMITTED':
-      nextSteps.push('Wait for initial review');
-      nextSteps.push('Prepare for potential document requests');
-      break;
-    case 'UNDER_REVIEW':
-      nextSteps.push('Wait for DTAM review completion');
-      break;
-    case 'DOCUMENT_REQUEST':
-      nextSteps.push('Upload requested documents');
-      nextSteps.push('Respond within specified deadline');
-      break;
-    case 'INSPECTION_SCHEDULED':
-      nextSteps.push('Prepare farm for inspection');
-      nextSteps.push('Ensure all facilities are accessible');
-      break;
+      case 'DRAFT':
+        nextSteps.push('Complete application information');
+        nextSteps.push('Upload required documents');
+        nextSteps.push('Submit application for review');
+        break;
+      case 'SUBMITTED':
+        nextSteps.push('Wait for initial review');
+        nextSteps.push('Prepare for potential document requests');
+        break;
+      case 'UNDER_REVIEW':
+        nextSteps.push('Wait for DTAM review completion');
+        break;
+      case 'DOCUMENT_REQUEST':
+        nextSteps.push('Upload requested documents');
+        nextSteps.push('Respond within specified deadline');
+        break;
+      case 'INSPECTION_SCHEDULED':
+        nextSteps.push('Prepare farm for inspection');
+        nextSteps.push('Ensure all facilities are accessible');
+        break;
       // Additional states...
     }
 
@@ -1010,17 +1010,17 @@ class EnhancedApplicationProcessingController {
     const nextSteps = [];
 
     switch (documentData.state) {
-    case 'UPLOADED':
-      nextSteps.push('Document is being processed');
-      nextSteps.push('OCR and validation in progress');
-      break;
-    case 'VALIDATED':
-      nextSteps.push('Document is under review');
-      nextSteps.push('Quality assurance in progress');
-      break;
-    case 'APPROVED':
-      nextSteps.push('Document approved and ready');
-      break;
+      case 'UPLOADED':
+        nextSteps.push('Document is being processed');
+        nextSteps.push('OCR and validation in progress');
+        break;
+      case 'VALIDATED':
+        nextSteps.push('Document is under review');
+        nextSteps.push('Quality assurance in progress');
+        break;
+      case 'APPROVED':
+        nextSteps.push('Document approved and ready');
+        break;
       // Additional states...
     }
 
@@ -1031,7 +1031,7 @@ class EnhancedApplicationProcessingController {
     const stateTransitions = {
       DRAFT: ['SUBMITTED', 'CANCELLED'],
       SUBMITTED: ['UNDER_REVIEW', 'REJECTED'],
-      UNDER_REVIEW: ['DOCUMENT_REQUEST', 'INSPECTION_SCHEDULED', 'REJECTED']
+      UNDER_REVIEW: ['DOCUMENT_REQUEST', 'INSPECTION_SCHEDULED', 'REJECTED'],
       // Additional state transitions...
     };
 
@@ -1080,7 +1080,7 @@ class EnhancedApplicationProcessingController {
     } else if (settledPromise?.status === 'rejected') {
       return {
         error: settledPromise.reason.message,
-        status: 'failed'
+        status: 'failed',
       };
     }
     return null;
@@ -1091,7 +1091,7 @@ class EnhancedApplicationProcessingController {
       ([endpoint, avgTime]) => ({
         endpoint,
         averageResponseTime: avgTime,
-        usage: this.controllerMetrics.endpointUsage[endpoint] || 0
+        usage: this.controllerMetrics.endpointUsage[endpoint] || 0,
       })
     );
   }
@@ -1100,7 +1100,7 @@ class EnhancedApplicationProcessingController {
     return Object.entries(this.controllerMetrics.errorDistribution).map(([errorType, count]) => ({
       errorType,
       count,
-      percentage: (count / this.controllerMetrics.totalRequests) * 100
+      percentage: (count / this.controllerMetrics.totalRequests) * 100,
     }));
   }
 }

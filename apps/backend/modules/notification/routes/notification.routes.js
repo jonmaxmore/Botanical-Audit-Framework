@@ -16,7 +16,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
     if (!controller.service.initialized) {
       return res.status(503).json({
         success: false,
-        message: 'Notification service is not initialized yet'
+        message: 'Notification service is not initialized yet',
       });
     }
     next();

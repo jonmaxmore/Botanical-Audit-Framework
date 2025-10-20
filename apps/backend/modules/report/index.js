@@ -24,5 +24,5 @@ module.exports = {
   ReportFormats: Report.FORMAT,
   ReportStatuses: Report.STATUS,
   ReportCategories: Report.CATEGORY,
-  ReportSchedules: Report.SCHEDULE
+  ReportSchedules: Report.SCHEDULE,
 };

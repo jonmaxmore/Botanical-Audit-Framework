@@ -9,14 +9,14 @@
 const Farm = require('./domain/entities/Farm');
 
 // Application Use Cases
-const RegisterFarmUseCase = require('./application/use-cases/RegisterFarmUseCase');
-const UpdateFarmUseCase = require('./application/use-cases/UpdateFarmUseCase');
-const SubmitFarmForReviewUseCase = require('./application/use-cases/SubmitFarmForReviewUseCase');
-const GetFarmDetailsUseCase = require('./application/use-cases/GetFarmDetailsUseCase');
-const ListFarmsUseCase = require('./application/use-cases/ListFarmsUseCase');
-const StartFarmReviewUseCase = require('./application/use-cases/StartFarmReviewUseCase');
-const ApproveFarmUseCase = require('./application/use-cases/ApproveFarmUseCase');
-const RejectFarmUseCase = require('./application/use-cases/RejectFarmUseCase');
+const RegisterFarmUseCase = require('./application/use-cases/register-farm');
+const UpdateFarmUseCase = require('./application/use-cases/update-farm');
+const SubmitFarmForReviewUseCase = require('./application/use-cases/submit-farm-for-review');
+const GetFarmDetailsUseCase = require('./application/use-cases/get-farm-details');
+const ListFarmsUseCase = require('./application/use-cases/list-farms');
+const StartFarmReviewUseCase = require('./application/use-cases/start-farm-review');
+const ApproveFarmUseCase = require('./application/use-cases/approve-farm');
+const RejectFarmUseCase = require('./application/use-cases/reject-farm');
 
 // Infrastructure
 const MongoDBFarmRepository = require('./infrastructure/database/MongoDBFarmRepository');
@@ -112,38 +112,38 @@ function createFarmManagementModule(config) {
 
   const registerFarmUseCase = new RegisterFarmUseCase({
     farmRepository,
-    eventBus
+    eventBus,
   });
 
   const updateFarmUseCase = new UpdateFarmUseCase({
-    farmRepository
+    farmRepository,
   });
 
   const submitFarmForReviewUseCase = new SubmitFarmForReviewUseCase({
     farmRepository,
-    eventBus
+    eventBus,
   });
 
   const getFarmDetailsUseCase = new GetFarmDetailsUseCase({
-    farmRepository
+    farmRepository,
   });
 
   const listFarmsUseCase = new ListFarmsUseCase({
-    farmRepository
+    farmRepository,
   });
 
   const startFarmReviewUseCase = new StartFarmReviewUseCase({
-    farmRepository
+    farmRepository,
   });
 
   const approveFarmUseCase = new ApproveFarmUseCase({
     farmRepository,
-    eventBus
+    eventBus,
   });
 
   const rejectFarmUseCase = new RejectFarmUseCase({
     farmRepository,
-    eventBus
+    eventBus,
   });
 
   // ===================================================================
@@ -158,7 +158,7 @@ function createFarmManagementModule(config) {
     listFarmsUseCase,
     startFarmReviewUseCase,
     approveFarmUseCase,
-    rejectFarmUseCase
+    rejectFarmUseCase,
   });
 
   const { farmerRouter, dtamRouter } = createFarmRoutes(
@@ -180,15 +180,15 @@ function createFarmManagementModule(config) {
     services: {
       farmRepository,
       getFarmDetailsUseCase,
-      listFarmsUseCase
+      listFarmsUseCase,
     },
 
     // Constants
     constants: {
       STATUS: Farm.STATUS,
       FARM_TYPE: Farm.FARM_TYPE,
-      IRRIGATION_TYPE: Farm.IRRIGATION_TYPE
-    }
+      IRRIGATION_TYPE: Farm.IRRIGATION_TYPE,
+    },
   };
 }
 

@@ -20,27 +20,27 @@ class AuditDTO {
         id: auditLog.actorId,
         name: auditLog.actorName,
         email: auditLog.actorEmail,
-        role: auditLog.actorRole
+        role: auditLog.actorRole,
       },
 
       // Action information
       action: {
         type: auditLog.actionType,
-        description: auditLog.actionDescription
+        description: auditLog.actionDescription,
       },
 
       // Entity information
       entity: {
         type: auditLog.entityType,
         id: auditLog.entityId,
-        name: auditLog.entityName
+        name: auditLog.entityName,
       },
 
       // Changes
       changes: {
         before: auditLog.changesBefore,
         after: auditLog.changesAfter,
-        summary: auditLog.changesSummary
+        summary: auditLog.changesSummary,
       },
 
       // Request context
@@ -48,13 +48,13 @@ class AuditDTO {
         method: auditLog.requestMethod,
         path: auditLog.requestPath,
         query: auditLog.requestQuery,
-        body: auditLog.requestBody
+        body: auditLog.requestBody,
       },
 
       // Response
       response: {
         status: auditLog.responseStatus,
-        message: auditLog.responseMessage
+        message: auditLog.responseMessage,
       },
 
       // Metadata
@@ -69,9 +69,9 @@ class AuditDTO {
       success: auditLog.success,
       error: auditLog.errorMessage
         ? {
-          message: auditLog.errorMessage,
-          stack: auditLog.errorStack
-        }
+            message: auditLog.errorMessage,
+            stack: auditLog.errorStack,
+          }
         : null,
 
       // Computed fields
@@ -81,7 +81,7 @@ class AuditDTO {
 
       // Timestamp
       timestamp: auditLog.timestamp,
-      createdAt: auditLog.createdAt
+      createdAt: auditLog.createdAt,
     };
   }
 
@@ -103,7 +103,7 @@ class AuditDTO {
       isSecurityRelated: auditLog.isSecurityRelated(),
       isCritical: auditLog.isCritical(),
       timeSince: auditLog.getTimeSince(),
-      timestamp: auditLog.timestamp
+      timestamp: auditLog.timestamp,
     };
   }
 
@@ -119,7 +119,7 @@ class AuditDTO {
       entityName: auditLog.entityName,
       severity: auditLog.severity,
       success: auditLog.success,
-      timestamp: auditLog.timestamp
+      timestamp: auditLog.timestamp,
     };
   }
 
@@ -130,7 +130,7 @@ class AuditDTO {
     return {
       success: true,
       message,
-      data
+      data,
     };
   }
 
@@ -140,7 +140,7 @@ class AuditDTO {
   static errorResponse(message, errors = null) {
     const response = {
       success: false,
-      message
+      message,
     };
 
     if (errors) {

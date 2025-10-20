@@ -51,7 +51,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
       eventsProcessed: 0,
       violationsDetected: 0,
       alertsSent: 0,
-      reportsGenerated: 0
+      reportsGenerated: 0,
     };
   }
 
@@ -66,20 +66,20 @@ class ComplianceMonitoringSystem extends EventEmitter {
           rule: 'Documents must be retained for minimum 5 years',
           threshold: 5 * 365 * 24 * 60 * 60 * 1000, // 5 years in milliseconds
           severity: 'HIGH',
-          category: 'DOCUMENT_MANAGEMENT'
+          category: 'DOCUMENT_MANAGEMENT',
         },
         paymentProcessing: {
           rule: 'Payments must be processed within 24 hours of receipt',
           threshold: 24 * 60 * 60 * 1000, // 24 hours
           severity: 'MEDIUM',
-          category: 'FINANCIAL'
+          category: 'FINANCIAL',
         },
         certificateValidity: {
           rule: 'Certificates must not be issued with expired documents',
           threshold: 0,
           severity: 'CRITICAL',
-          category: 'CERTIFICATE_MANAGEMENT'
-        }
+          category: 'CERTIFICATE_MANAGEMENT',
+        },
       },
 
       // Data Privacy Compliance (PDPA_COMPLIANCE)
@@ -88,20 +88,20 @@ class ComplianceMonitoringSystem extends EventEmitter {
           rule: 'Personal data access must be logged and authorized',
           threshold: 0,
           severity: 'HIGH',
-          category: 'DATA_PRIVACY'
+          category: 'DATA_PRIVACY',
         },
         dataRetention: {
           rule: 'Personal data retention must not exceed legal requirements',
           threshold: 7 * 365 * 24 * 60 * 60 * 1000, // 7 years
           severity: 'HIGH',
-          category: 'DATA_PRIVACY'
+          category: 'DATA_PRIVACY',
         },
         consentTracking: {
           rule: 'User consent must be tracked and verifiable',
           threshold: 0,
           severity: 'CRITICAL',
-          category: 'DATA_PRIVACY'
-        }
+          category: 'DATA_PRIVACY',
+        },
       },
 
       // Security Compliance - SECURITY_COMPLIANCE
@@ -110,20 +110,20 @@ class ComplianceMonitoringSystem extends EventEmitter {
           rule: 'More than 5 failed login attempts require security review',
           threshold: 5,
           severity: 'MEDIUM',
-          category: 'SECURITY'
+          category: 'SECURITY',
         },
         privilegeEscalation: {
           rule: 'Role changes must be approved and logged',
           threshold: 0,
           severity: 'HIGH',
-          category: 'SECURITY'
+          category: 'SECURITY',
         },
         dataExport: {
           rule: 'Data exports must be authorized and logged',
           threshold: 0,
           severity: 'HIGH',
-          category: 'SECURITY'
-        }
+          category: 'SECURITY',
+        },
       },
 
       // Government Regulatory Compliance
@@ -132,21 +132,21 @@ class ComplianceMonitoringSystem extends EventEmitter {
           rule: 'Applications must be processed within 30 days',
           threshold: 30 * 24 * 60 * 60 * 1000, // 30 days
           severity: 'HIGH',
-          category: 'REGULATORY'
+          category: 'REGULATORY',
         },
         inspectionScheduling: {
           rule: 'Inspections must be scheduled within 14 days of payment',
           threshold: 14 * 24 * 60 * 60 * 1000, // 14 days
           severity: 'MEDIUM',
-          category: 'REGULATORY'
+          category: 'REGULATORY',
         },
         certificateIssuance: {
           rule: 'Certificates must be issued within 7 days of approval',
           threshold: 7 * 24 * 60 * 60 * 1000, // 7 days
           severity: 'HIGH',
-          category: 'REGULATORY'
-        }
-      }
+          category: 'REGULATORY',
+        },
+      },
     };
   }
 
@@ -158,21 +158,21 @@ class ComplianceMonitoringSystem extends EventEmitter {
       realTimeMonitoring: {
         enabled: true,
         checkInterval: 60000, // 1 minute
-        batchSize: 100
+        batchSize: 100,
       },
       alerting: {
         enabled: true,
         channels: ['email', 'sms', 'dashboard'],
-        escalationLevels: 3
+        escalationLevels: 3,
       },
       reporting: {
         enabled: true,
         schedules: {
           daily: '0 8 * * *', // 8 AM daily
           weekly: '0 8 * * 1', // 8 AM Monday
-          monthly: '0 8 1 * *' // 8 AM 1st of month
-        }
-      }
+          monthly: '0 8 1 * *', // 8 AM 1st of month
+        },
+      },
     };
   }
 
@@ -184,23 +184,23 @@ class ComplianceMonitoringSystem extends EventEmitter {
       CRITICAL: {
         immediateAlert: true,
         escalationTime: 15 * 60 * 1000, // 15 minutes
-        recipients: ['compliance_officer', 'system_admin', 'cto']
+        recipients: ['compliance_officer', 'system_admin', 'cto'],
       },
       HIGH: {
         immediateAlert: true,
         escalationTime: 60 * 60 * 1000, // 1 hour
-        recipients: ['compliance_officer', 'system_admin']
+        recipients: ['compliance_officer', 'system_admin'],
       },
       MEDIUM: {
         immediateAlert: false,
         escalationTime: 4 * 60 * 60 * 1000, // 4 hours
-        recipients: ['compliance_officer']
+        recipients: ['compliance_officer'],
       },
       LOW: {
         immediateAlert: false,
         escalationTime: 24 * 60 * 60 * 1000, // 24 hours
-        recipients: ['compliance_officer']
-      }
+        recipients: ['compliance_officer'],
+      },
     };
   }
 
@@ -228,7 +228,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
       this.emit('monitoring_started', {
         timestamp: new Date(),
         rules: Object.keys(this.complianceRules).length,
-        monitors: this.activeMonitors.size
+        monitors: this.activeMonitors.size,
       });
     } catch (error) {
       console.error('[ComplianceMonitoring] Failed to start monitoring:', error);
@@ -275,7 +275,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
 
       // Check processing time compliance
       const application = await this.database.collection('applications').findOne({
-        _id: applicationId
+        _id: applicationId,
       });
 
       if (application) {
@@ -296,10 +296,10 @@ class ComplianceMonitoringSystem extends EventEmitter {
             violationData: {
               processingTime: processingTime,
               threshold: rule.threshold,
-              exceedsBy: processingTime - rule.threshold
+              exceedsBy: processingTime - rule.threshold,
             },
             detectedAt: currentTime,
-            actor
+            actor,
           });
         }
 
@@ -319,7 +319,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
       const { paymentId, timestamp, actor } = eventData;
 
       const payment = await this.database.collection('payments').findOne({
-        _id: paymentId
+        _id: paymentId,
       });
 
       if (payment) {
@@ -340,10 +340,10 @@ class ComplianceMonitoringSystem extends EventEmitter {
             violationData: {
               processingDelay: processingDelay,
               threshold: rule.threshold,
-              exceedsBy: processingDelay - rule.threshold
+              exceedsBy: processingDelay - rule.threshold,
             },
             detectedAt: new Date(),
-            actor
+            actor,
           });
         }
       }
@@ -362,7 +362,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
       // Check if access to personal data is properly authorized
       if (dataType === 'personal_data') {
         const user = await this.database.collection('users').findOne({
-          _id: userId
+          _id: userId,
         });
 
         if (user) {
@@ -387,10 +387,10 @@ class ComplianceMonitoringSystem extends EventEmitter {
                 userRole: user.role,
                 dataType: dataType,
                 accessType: accessType,
-                unauthorized: true
+                unauthorized: true,
               },
               detectedAt: new Date(),
-              actor: { userId, role: user.role }
+              actor: { userId, role: user.role },
             });
           }
         }
@@ -409,7 +409,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
 
       // Get application data
       const application = await this.database.collection('applications').findOne({
-        _id: applicationId
+        _id: applicationId,
       });
 
       if (application) {
@@ -428,10 +428,10 @@ class ComplianceMonitoringSystem extends EventEmitter {
             violationData: {
               certificateId: certificateId,
               applicationId: applicationId,
-              expiredDocuments: hasExpiredDocuments
+              expiredDocuments: hasExpiredDocuments,
             },
             detectedAt: new Date(),
-            actor
+            actor,
           });
         }
 
@@ -452,10 +452,10 @@ class ComplianceMonitoringSystem extends EventEmitter {
             violationData: {
               issuanceDelay: issuanceDelay,
               threshold: rule.threshold,
-              exceedsBy: issuanceDelay - rule.threshold
+              exceedsBy: issuanceDelay - rule.threshold,
             },
             detectedAt: new Date(),
-            actor
+            actor,
           });
         }
       }
@@ -477,7 +477,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         id: require('crypto').randomUUID(),
         status: 'OPEN',
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
 
       await this.database.collection('compliance_violations').insertOne(violation);
@@ -504,7 +504,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
           {
             ruleId: violation.ruleId,
             severity: violation.severity,
-            category: violation.category
+            category: violation.category,
           }
         );
       }
@@ -530,7 +530,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         message: `Rule violated: ${violation.rule}`,
         violation: violation,
         recipients: threshold.recipients,
-        channels: this.monitoringConfig.alerting.channels
+        channels: this.monitoringConfig.alerting.channels,
       };
 
       if (this.notificationService) {
@@ -551,7 +551,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
   startPeriodicChecks() {
     const interval = this.monitoringConfig.realTimeMonitoring.checkInterval;
 
-    this.periodicCheckInterval = setInterval(async() => {
+    this.periodicCheckInterval = setInterval(async () => {
       try {
         await this.runPeriodicChecks();
       } catch (error) {
@@ -592,7 +592,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         .find({
           category: category,
           entityId: entityId,
-          status: 'OPEN'
+          status: 'OPEN',
         })
         .toArray();
 
@@ -605,7 +605,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
         score: complianceScore,
         violations: violationCount,
         totalRules: totalRules,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       });
 
       // Store in database for persistence
@@ -616,8 +616,8 @@ class ComplianceMonitoringSystem extends EventEmitter {
             score: complianceScore,
             violations: violationCount,
             totalRules: totalRules,
-            lastUpdated: new Date()
-          }
+            lastUpdated: new Date(),
+          },
         },
         { upsert: true }
       );
@@ -665,14 +665,14 @@ class ComplianceMonitoringSystem extends EventEmitter {
             .collection('compliance_violations')
             .countDocuments({
               status: 'OPEN',
-              severity: 'CRITICAL'
-            })
+              severity: 'CRITICAL',
+            }),
         },
         recentViolations: recentViolations,
         complianceScores: complianceScores,
         violationTrends: violationTrends,
         metrics: this.metrics,
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       };
     } catch (error) {
       console.error('[ComplianceMonitoring] Failed to generate dashboard:', error);
@@ -695,12 +695,12 @@ class ComplianceMonitoringSystem extends EventEmitter {
             $group: {
               _id: {
                 date: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
-                category: '$category'
+                category: '$category',
               },
-              count: { $sum: 1 }
-            }
+              count: { $sum: 1 },
+            },
           },
-          { $sort: { '_id.date': 1 } }
+          { $sort: { '_id.date': 1 } },
         ])
         .toArray();
 
@@ -719,7 +719,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
     const authorizedRoles = {
       personal_data: ['admin', 'compliance_officer', 'dtam_staff'],
       financial_data: ['admin', 'finance_officer', 'dtam_staff'],
-      application_data: ['admin', 'dtam_staff', 'qc_inspector']
+      application_data: ['admin', 'dtam_staff', 'qc_inspector'],
     };
 
     return authorizedRoles[dataType]?.includes(user.role) || false;
@@ -757,7 +757,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
       activeMonitors: this.activeMonitors.size,
       metrics: this.metrics,
       queueSize: this.violationQueue.length,
-      complianceScores: this.complianceScores.size
+      complianceScores: this.complianceScores.size,
     };
   }
 
@@ -778,7 +778,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
       severity: rule.severity,
       rule: rule.rule,
       eventData: eventData,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     await this.reportViolation(violation);

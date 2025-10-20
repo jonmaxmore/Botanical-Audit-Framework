@@ -16,15 +16,15 @@ const SimpleDataAggregationService = require('../infrastructure/services/SimpleD
 const mongoose = require('mongoose');
 
 // Application Use Cases
-const RequestReportUseCase = require('../application/use-cases/RequestReportUseCase');
-const GenerateReportUseCase = require('../application/use-cases/GenerateReportUseCase');
-const GetReportUseCase = require('../application/use-cases/GetReportUseCase');
-const DownloadReportUseCase = require('../application/use-cases/DownloadReportUseCase');
-const ListReportsUseCase = require('../application/use-cases/ListReportsUseCase');
-const DeleteReportUseCase = require('../application/use-cases/DeleteReportUseCase');
-const GetReportStatisticsUseCase = require('../application/use-cases/GetReportStatisticsUseCase');
-const ProcessScheduledReportsUseCase = require('../application/use-cases/ProcessScheduledReportsUseCase');
-const RetryFailedReportUseCase = require('../application/use-cases/RetryFailedReportUseCase');
+const RequestReportUseCase = require('../application/use-cases/request-report');
+const GenerateReportUseCase = require('../application/use-cases/generate-report');
+const GetReportUseCase = require('../application/use-cases/get-report');
+const DownloadReportUseCase = require('../application/use-cases/download-report');
+const ListReportsUseCase = require('../application/use-cases/list-reports');
+const DeleteReportUseCase = require('../application/use-cases/delete-report');
+const GetReportStatisticsUseCase = require('../application/use-cases/get-report-statistics');
+const ProcessScheduledReportsUseCase = require('../application/use-cases/process-scheduled-reports');
+const RetryFailedReportUseCase = require('../application/use-cases/retry-failed-report');
 
 // Presentation
 const ReportController = require('../presentation/controllers/ReportController');
@@ -156,5 +156,5 @@ function getReportModuleContainer(config = {}) {
 
 module.exports = {
   ReportModuleContainer,
-  getReportModuleContainer
+  getReportModuleContainer,
 };

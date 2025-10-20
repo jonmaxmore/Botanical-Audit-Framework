@@ -27,7 +27,7 @@ class DTAMStaffCreated {
       employeeId: this.employeeId,
       role: this.role,
       createdBy: this.createdBy,
-      timestamp: this.timestamp
+      timestamp: this.timestamp,
     };
   }
 }

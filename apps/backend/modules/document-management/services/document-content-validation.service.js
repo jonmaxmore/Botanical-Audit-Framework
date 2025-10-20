@@ -44,7 +44,7 @@ class DocumentContentValidationService {
           valid: false,
           confidence: 0,
           errors: ['Failed to extract text from document'],
-          extractedData: {}
+          extractedData: {},
         };
       }
 
@@ -75,8 +75,8 @@ class DocumentContentValidationService {
         validationDetails: {
           ocrConfidence: ocrResults.confidence,
           validationScore: validationResult.validationScore,
-          criticalFieldsValid: validationResult.criticalFieldsValid
-        }
+          criticalFieldsValid: validationResult.criticalFieldsValid,
+        },
       };
     } catch (error) {
       console.error(`❌ Document validation failed for ${documentId}:`, error);
@@ -84,7 +84,7 @@ class DocumentContentValidationService {
         valid: false,
         confidence: 0,
         errors: ['System error during validation'],
-        extractedData: {}
+        extractedData: {},
       };
     }
   }
@@ -94,23 +94,23 @@ class DocumentContentValidationService {
    */
   async _validateByDocumentType(documentType, extractedText, applicationData) {
     switch (documentType) {
-    case 'FARM_LICENSE':
-      return await this._validateFarmLicense(extractedText, applicationData);
+      case 'FARM_LICENSE':
+        return await this._validateFarmLicense(extractedText, applicationData);
 
-    case 'ID_CARD':
-      return await this._validateIdCard(extractedText, applicationData);
+      case 'ID_CARD':
+        return await this._validateIdCard(extractedText, applicationData);
 
-    case 'LAND_DOCUMENT':
-      return await this._validateLandDocument(extractedText, applicationData);
+      case 'LAND_DOCUMENT':
+        return await this._validateLandDocument(extractedText, applicationData);
 
-    case 'GAP_CERTIFICATE':
-      return await this._validateGAPCertificate(extractedText, applicationData);
+      case 'GAP_CERTIFICATE':
+        return await this._validateGAPCertificate(extractedText, applicationData);
 
-    case 'CROP_DETAILS':
-      return await this._validateCropDetails(extractedText, applicationData);
+      case 'CROP_DETAILS':
+        return await this._validateCropDetails(extractedText, applicationData);
 
-    default:
-      return await this._validateGenericDocument(extractedText, applicationData);
+      default:
+        return await this._validateGenericDocument(extractedText, applicationData);
     }
   }
 
@@ -204,7 +204,7 @@ class DocumentContentValidationService {
         errors,
         warnings,
         validationScore,
-        criticalFieldsValid
+        criticalFieldsValid,
       };
     } catch (error) {
       console.error('Error validating farm license:', error);
@@ -213,7 +213,7 @@ class DocumentContentValidationService {
         errors: ['เกิดข้อผิดพลาดในการตรวจสอบใบอนุญาต'],
         warnings: [],
         validationScore: 0,
-        criticalFieldsValid: false
+        criticalFieldsValid: false,
       };
     }
   }
@@ -312,7 +312,7 @@ class DocumentContentValidationService {
         errors,
         warnings,
         validationScore,
-        criticalFieldsValid
+        criticalFieldsValid,
       };
     } catch (error) {
       console.error('Error validating ID card:', error);
@@ -321,7 +321,7 @@ class DocumentContentValidationService {
         errors: ['เกิดข้อผิดพลาดในการตรวจสอบบัตรประชาชน'],
         warnings: [],
         validationScore: 0,
-        criticalFieldsValid: false
+        criticalFieldsValid: false,
       };
     }
   }
@@ -368,7 +368,7 @@ class DocumentContentValidationService {
         const locationKeywords = [
           location.province,
           location.district,
-          location.subdistrict
+          location.subdistrict,
         ].filter(Boolean);
 
         let locationMatches = 0;
@@ -421,7 +421,7 @@ class DocumentContentValidationService {
         errors,
         warnings,
         validationScore,
-        criticalFieldsValid
+        criticalFieldsValid,
       };
     } catch (error) {
       console.error('Error validating land document:', error);
@@ -430,7 +430,7 @@ class DocumentContentValidationService {
         errors: ['เกิดข้อผิดพลาดในการตรวจสอบเอกสารสิทธิ์ที่ดิน'],
         warnings: [],
         validationScore: 0,
-        criticalFieldsValid: false
+        criticalFieldsValid: false,
       };
     }
   }
@@ -445,27 +445,27 @@ class DocumentContentValidationService {
         return {
           success: true,
           extractedText: 'Mock OCR text for testing purposes',
-          confidence: 85
+          confidence: 85,
         };
       }
 
       const result = await this.ocrService.extractText(fileBuffer, {
         language: 'tha+eng',
         documentType,
-        enhanceImage: true
+        enhanceImage: true,
       });
 
       return {
         success: result.success,
         extractedText: result.text || '',
-        confidence: result.confidence || 0
+        confidence: result.confidence || 0,
       };
     } catch (error) {
       console.error('OCR extraction failed:', error);
       return {
         success: false,
         extractedText: '',
-        confidence: 0
+        confidence: 0,
       };
     }
   }
@@ -492,7 +492,7 @@ class DocumentContentValidationService {
     const formats = [
       /(\d{1,2})\/(\d{1,2})\/(\d{4})/,
       /(\d{1,2})-(\d{1,2})-(\d{4})/,
-      /(\d{1,2})\.(\d{1,2})\.(\d{4})/
+      /(\d{1,2})\.(\d{1,2})\.(\d{4})/,
     ];
 
     for (const format of formats) {
@@ -528,16 +528,16 @@ class DocumentContentValidationService {
       // Define document patterns here
       farmLicense: {
         requiredFields: ['licenseNumber', 'farmerName', 'expiryDate'],
-        optionalFields: ['farmType', 'issuingAuthority']
+        optionalFields: ['farmType', 'issuingAuthority'],
       },
       idCard: {
         requiredFields: ['idNumber', 'fullName', 'expiryDate'],
-        optionalFields: ['birthDate', 'address']
+        optionalFields: ['birthDate', 'address'],
       },
       landDocument: {
         requiredFields: ['landNumber', 'ownerName', 'location'],
-        optionalFields: ['landArea', 'landUse']
-      }
+        optionalFields: ['landArea', 'landUse'],
+      },
     };
   }
 }

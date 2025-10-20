@@ -19,7 +19,7 @@ function initializeAuthRoutes() {
   const { authenticateToken } = require('../shared/auth');
 
   // Login route
-  router.post('/login', async(req, res) => {
+  router.post('/login', async (req, res) => {
     try {
       const { email, password } = req.body;
 
@@ -28,7 +28,7 @@ function initializeAuthRoutes() {
         id: 'user_' + Date.now(),
         email,
         role: 'farmer',
-        permissions: ['read:applications', 'write:applications']
+        permissions: ['read:applications', 'write:applications'],
       };
 
       res.json({
@@ -36,20 +36,20 @@ function initializeAuthRoutes() {
         data: {
           user: mockUser,
           token: 'mock_jwt_token',
-          refreshToken: 'mock_refresh_token'
-        }
+          refreshToken: 'mock_refresh_token',
+        },
       });
     } catch (error) {
       routeLogger.error('Login failed', { error: error.message });
       res.status(500).json({
         success: false,
-        error: 'Authentication failed'
+        error: 'Authentication failed',
       });
     }
   });
 
   // Register route
-  router.post('/register', async(req, res) => {
+  router.post('/register', async (req, res) => {
     try {
       const userData = req.body;
 
@@ -59,19 +59,19 @@ function initializeAuthRoutes() {
         ...userData,
         role: 'farmer',
         status: 'active',
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       res.status(201).json({
         success: true,
         data: newUser,
-        message: 'Registration successful'
+        message: 'Registration successful',
       });
     } catch (error) {
       routeLogger.error('Registration failed', { error: error.message });
       res.status(500).json({
         success: false,
-        error: 'Registration failed'
+        error: 'Registration failed',
       });
     }
   });
@@ -80,7 +80,7 @@ function initializeAuthRoutes() {
   router.post('/logout', authenticateToken, (req, res) => {
     res.json({
       success: true,
-      message: 'Logged out successfully'
+      message: 'Logged out successfully',
     });
   });
 
@@ -95,7 +95,7 @@ function initializeApplicationRoutes() {
   const { authenticateToken } = require('../shared/auth');
 
   // Get applications
-  router.get('/', authenticateToken, async(req, res) => {
+  router.get('/', authenticateToken, async (req, res) => {
     try {
       const mockApplications = [
         {
@@ -103,36 +103,36 @@ function initializeApplicationRoutes() {
           farmName: 'ฟาร์มออร์แกนิค สมชาย',
           status: 'pending_review',
           submittedAt: new Date('2025-10-15'),
-          applicantName: 'นายสมชาย ใจดี'
+          applicantName: 'นายสมชาย ใจดี',
         },
         {
           id: 'APP002',
           farmName: 'ฟาร์มผักปลอดสาร มาลี',
           status: 'approved',
           submittedAt: new Date('2025-10-10'),
-          applicantName: 'นางมาลี สวยงาม'
-        }
+          applicantName: 'นางมาลี สวยงาม',
+        },
       ];
 
       res.json({
         success: true,
         data: mockApplications,
-        total: mockApplications.length
+        total: mockApplications.length,
       });
     } catch (error) {
       routeLogger.error('Get applications failed', {
         error: error.message,
-        userId: req.user?.id
+        userId: req.user?.id,
       });
       res.status(500).json({
         success: false,
-        error: 'Failed to fetch applications'
+        error: 'Failed to fetch applications',
       });
     }
   });
 
   // Create application
-  router.post('/', authenticateToken, async(req, res) => {
+  router.post('/', authenticateToken, async (req, res) => {
     try {
       const applicationData = req.body;
 
@@ -142,28 +142,28 @@ function initializeApplicationRoutes() {
         applicantId: req.user.id,
         status: 'draft',
         createdAt: new Date(),
-        submittedAt: null
+        submittedAt: null,
       };
 
       res.status(201).json({
         success: true,
         data: newApplication,
-        message: 'Application created successfully'
+        message: 'Application created successfully',
       });
     } catch (error) {
       routeLogger.error('Create application failed', {
         error: error.message,
-        userId: req.user?.id
+        userId: req.user?.id,
       });
       res.status(500).json({
         success: false,
-        error: 'Failed to create application'
+        error: 'Failed to create application',
       });
     }
   });
 
   // Get application details
-  router.get('/:id', authenticateToken, async(req, res) => {
+  router.get('/:id', authenticateToken, async (req, res) => {
     try {
       const { id } = req.params;
 
@@ -179,23 +179,23 @@ function initializeApplicationRoutes() {
         submittedAt: new Date('2025-10-15'),
         documents: [
           { type: 'land_certificate', status: 'approved' },
-          { type: 'water_quality', status: 'pending' }
-        ]
+          { type: 'water_quality', status: 'pending' },
+        ],
       };
 
       res.json({
         success: true,
-        data: applicationDetails
+        data: applicationDetails,
       });
     } catch (error) {
       routeLogger.error('Get application details failed', {
         error: error.message,
         applicationId: req.params.id,
-        userId: req.user?.id
+        userId: req.user?.id,
       });
       res.status(500).json({
         success: false,
-        error: 'Failed to fetch application details'
+        error: 'Failed to fetch application details',
       });
     }
   });
@@ -211,7 +211,7 @@ function initializeDocumentRoutes() {
   const { authenticateToken } = require('../shared/auth');
 
   // Upload document
-  router.post('/upload', authenticateToken, async(req, res) => {
+  router.post('/upload', authenticateToken, async (req, res) => {
     try {
       const { applicationId, documentType, filename } = req.body;
 
@@ -222,28 +222,28 @@ function initializeDocumentRoutes() {
         filename,
         uploadedAt: new Date(),
         status: 'pending_review',
-        uploadedBy: req.user.id
+        uploadedBy: req.user.id,
       };
 
       res.status(201).json({
         success: true,
         data: uploadedDocument,
-        message: 'Document uploaded successfully'
+        message: 'Document uploaded successfully',
       });
     } catch (error) {
       routeLogger.error('Document upload failed', {
         error: error.message,
-        userId: req.user?.id
+        userId: req.user?.id,
       });
       res.status(500).json({
         success: false,
-        error: 'Failed to upload document'
+        error: 'Failed to upload document',
       });
     }
   });
 
   // Get documents for application
-  router.get('/:applicationId', authenticateToken, async(req, res) => {
+  router.get('/:applicationId', authenticateToken, async (req, res) => {
     try {
       const { applicationId } = req.params;
 
@@ -253,30 +253,30 @@ function initializeDocumentRoutes() {
           type: 'land_certificate',
           filename: 'land_cert.pdf',
           status: 'approved',
-          uploadedAt: new Date('2025-10-15')
+          uploadedAt: new Date('2025-10-15'),
         },
         {
           id: 'DOC002',
           type: 'water_quality',
           filename: 'water_test.pdf',
           status: 'pending_review',
-          uploadedAt: new Date('2025-10-16')
-        }
+          uploadedAt: new Date('2025-10-16'),
+        },
       ];
 
       res.json({
         success: true,
-        data: mockDocuments
+        data: mockDocuments,
       });
     } catch (error) {
       routeLogger.error('Get documents failed', {
         error: error.message,
         applicationId: req.params.applicationId,
-        userId: req.user?.id
+        userId: req.user?.id,
       });
       res.status(500).json({
         success: false,
-        error: 'Failed to fetch documents'
+        error: 'Failed to fetch documents',
       });
     }
   });
@@ -292,7 +292,7 @@ function initializeDashboardRoutes() {
   const { authenticateToken } = require('../shared/auth');
 
   // Get dashboard statistics
-  router.get('/stats', authenticateToken, async(req, res) => {
+  router.get('/stats', authenticateToken, async (req, res) => {
     try {
       const dashboardStats = {
         totalApplications: 156,
@@ -302,34 +302,34 @@ function initializeDashboardRoutes() {
         certificates: {
           active: 89,
           expired: 9,
-          revoked: 0
+          revoked: 0,
         },
         recentActivity: [
           {
             type: 'application_submitted',
             message: 'ใบสมัครใหม่จาก ฟาร์มสมชาย',
-            timestamp: new Date()
+            timestamp: new Date(),
           },
           {
             type: 'certificate_issued',
             message: 'ออกใบรับรองให้ ฟาร์มมาลี',
-            timestamp: new Date(Date.now() - 3600000)
-          }
-        ]
+            timestamp: new Date(Date.now() - 3600000),
+          },
+        ],
       };
 
       res.json({
         success: true,
-        data: dashboardStats
+        data: dashboardStats,
       });
     } catch (error) {
       routeLogger.error('Get dashboard stats failed', {
         error: error.message,
-        userId: req.user?.id
+        userId: req.user?.id,
       });
       res.status(500).json({
         success: false,
-        error: 'Failed to fetch dashboard statistics'
+        error: 'Failed to fetch dashboard statistics',
       });
     }
   });
@@ -341,5 +341,5 @@ module.exports = {
   initializeAuthRoutes,
   initializeApplicationRoutes,
   initializeDocumentRoutes,
-  initializeDashboardRoutes
+  initializeDashboardRoutes,
 };

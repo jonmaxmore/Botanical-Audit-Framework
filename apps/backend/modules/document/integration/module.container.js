@@ -15,17 +15,17 @@ const LocalFileStorageService = require('../infrastructure/storage/LocalFileStor
 const mongoose = require('mongoose');
 
 // Application Use Cases
-const UploadDocumentUseCase = require('../application/use-cases/UploadDocumentUseCase');
-const GetDocumentUseCase = require('../application/use-cases/GetDocumentUseCase');
-const DownloadDocumentUseCase = require('../application/use-cases/DownloadDocumentUseCase');
-const ListDocumentsUseCase = require('../application/use-cases/ListDocumentsUseCase');
-const ApproveDocumentUseCase = require('../application/use-cases/ApproveDocumentUseCase');
-const RejectDocumentUseCase = require('../application/use-cases/RejectDocumentUseCase');
-const DeleteDocumentUseCase = require('../application/use-cases/DeleteDocumentUseCase');
-const UpdateDocumentMetadataUseCase = require('../application/use-cases/UpdateDocumentMetadataUseCase');
-const GetDocumentsByRelatedEntityUseCase = require('../application/use-cases/GetDocumentsByRelatedEntityUseCase');
-const GetPendingDocumentsUseCase = require('../application/use-cases/GetPendingDocumentsUseCase');
-const GetDocumentStatisticsUseCase = require('../application/use-cases/GetDocumentStatisticsUseCase');
+const UploadDocumentUseCase = require('../application/use-cases/upload-document');
+const GetDocumentUseCase = require('../application/use-cases/get-document');
+const DownloadDocumentUseCase = require('../application/use-cases/download-document');
+const ListDocumentsUseCase = require('../application/use-cases/list-documents');
+const ApproveDocumentUseCase = require('../application/use-cases/approve-document');
+const RejectDocumentUseCase = require('../application/use-cases/reject-document');
+const DeleteDocumentUseCase = require('../application/use-cases/delete-document');
+const UpdateDocumentMetadataUseCase = require('../application/use-cases/update-document-metadata');
+const GetDocumentsByRelatedEntityUseCase = require('../application/use-cases/get-documents-by-entity');
+const GetPendingDocumentsUseCase = require('../application/use-cases/get-pending-documents');
+const GetDocumentStatisticsUseCase = require('../application/use-cases/get-document-stats');
 
 // Presentation
 const DocumentController = require('../presentation/controllers/DocumentController');
@@ -175,5 +175,5 @@ function getDocumentModuleContainer(database = null) {
 
 module.exports = {
   DocumentModuleContainer,
-  getDocumentModuleContainer
+  getDocumentModuleContainer,
 };
