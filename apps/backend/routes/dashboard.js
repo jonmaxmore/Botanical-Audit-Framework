@@ -2,7 +2,8 @@
  * Dashboard API Routes for GACP System
  * Provides role-based dashboard data and analytics
  */
-
+const express = require('express');
+const logger = require('../shared/logger').createLogger('dashboard');
 const router = express.Router();
 
 // Mock data for development

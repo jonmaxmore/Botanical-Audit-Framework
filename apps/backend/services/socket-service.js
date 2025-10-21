@@ -5,7 +5,7 @@
  * authentication, and horizontal scaling via Redis.
  */
 const socketIo = require('socket.io');
-const redisAdapter = require('socket.io-redis');
+const { createAdapter } = require('@socket.io/redis-adapter');
 const jwt = require('jsonwebtoken');
 const logger = require('../shared/logger');
 const metrics = require('../shared/metrics');
@@ -27,8 +27,9 @@ function initialize(server, redisManager) {
   // Create Socket.IO instance
   io = socketIo(server, {
     cors: {
-      origin: config.server.cors.allowedOrigins,
-      methods: config.server.cors.allowedMethods,
+      origin: config.server.cors?.allowedOrigins ||
+        process.env.ALLOWED_ORIGINS?.split(',') || ['*'],
+      methods: config.server.cors?.allowedMethods || ['GET', 'POST'],
       credentials: true,
     },
     transports: ['websocket', 'polling'],
@@ -38,12 +39,9 @@ function initialize(server, redisManager) {
   if (config.redis && config.redis.enabled) {
     try {
       const redisClient = redisManager.getClient();
-      io.adapter(
-        redisAdapter({
-          pubClient: redisClient,
-          subClient: redisClient.duplicate(),
-        }),
-      );
+      const pubClient = redisClient;
+      const subClient = redisClient.duplicate();
+      io.adapter(createAdapter(pubClient, subClient));
       socketLogger.info('Socket.IO configured with Redis adapter for horizontal scaling');
     } catch (err) {
       socketLogger.error('Failed to setup Redis adapter:', err);

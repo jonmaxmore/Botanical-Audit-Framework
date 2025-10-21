@@ -209,6 +209,17 @@ function overrideWithEnvVars(config) {
     config.mongodb.uri = process.env.MONGODB_URI;
   }
 
+  // Storage configuration
+  if (!config.storage) {
+    config.storage = {};
+  }
+  if (process.env.STORAGE_TYPE) {
+    config.storage.type = process.env.STORAGE_TYPE;
+  }
+  if (process.env.STORAGE_LOCAL_PATH) {
+    config.storage.localPath = process.env.STORAGE_LOCAL_PATH;
+  }
+
   // Add more environment variable overrides as needed
 
   return config;
