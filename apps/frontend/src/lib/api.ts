@@ -13,8 +13,8 @@ export const api = axios.create({
   baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 // Request interceptor for adding auth token
@@ -28,7 +28,7 @@ api.interceptors.request.use(
   },
   error => {
     return Promise.reject(error);
-  }
+  },
 );
 
 // Response interceptor for handling errors
@@ -41,7 +41,7 @@ api.interceptors.response.use(
       window.location.href = '/auth/login';
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 // API Endpoints
@@ -51,14 +51,14 @@ export const endpoints = {
     login: '/api/auth/login',
     register: '/api/auth/register',
     profile: '/api/auth/profile',
-    logout: '/api/auth/logout'
+    logout: '/api/auth/logout',
   },
 
   // Dashboard
   dashboard: {
     farmer: '/api/farmer/dashboard',
     dtam: '/api/dtam/dashboard',
-    auditor: '/api/auditor/dashboard'
+    auditor: '/api/auditor/dashboard',
   },
 
   // Applications
@@ -67,18 +67,18 @@ export const endpoints = {
     create: '/api/applications',
     get: (id: string) => `/api/applications/${id}`,
     update: (id: string) => `/api/applications/${id}`,
-    delete: (id: string) => `/api/applications/${id}`
+    delete: (id: string) => `/api/applications/${id}`,
   },
 
   // Certificates
   certificates: {
     generate: (id: string) => `/api/certificates/generate/${id}`,
     download: (id: string) => `/api/certificates/download/${id}`,
-    verify: (number: string) => `/verify/${number}`
+    verify: (number: string) => `/verify/${number}`,
   },
 
   // Health Check
-  health: '/health'
+  health: '/health',
 };
 
 export default api;

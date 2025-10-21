@@ -7,37 +7,37 @@ const theme = createTheme({
       main: '#2e7d32', // เขียวสมุนไพร
       light: '#60ad5e',
       dark: '#005005',
-      contrastText: '#fff'
+      contrastText: '#fff',
     },
     secondary: {
       main: '#1976d2', // น้ำเงินราชการ
       light: '#63a4ff',
       dark: '#004ba0',
-      contrastText: '#fff'
+      contrastText: '#fff',
     },
     success: {
       main: '#4caf50',
       light: '#80e27e',
-      dark: '#087f23'
+      dark: '#087f23',
     },
     warning: {
       main: '#ff9800',
       light: '#ffc947',
-      dark: '#c66900'
+      dark: '#c66900',
     },
     error: {
       main: '#f44336',
       light: '#ff7961',
-      dark: '#ba000d'
+      dark: '#ba000d',
     },
     background: {
       default: '#f5f5f5',
-      paper: '#ffffff'
+      paper: '#ffffff',
     },
     text: {
       primary: '#212121',
-      secondary: '#757575'
-    }
+      secondary: '#757575',
+    },
   },
   typography: {
     fontFamily: [
@@ -49,53 +49,53 @@ const theme = createTheme({
       'Segoe UI',
       'Roboto',
       'Arial',
-      'sans-serif'
+      'sans-serif',
     ].join(','),
     h1: {
       fontWeight: 700,
       fontSize: '3rem',
-      lineHeight: 1.2
+      lineHeight: 1.2,
     },
     h2: {
       fontWeight: 700,
       fontSize: '2.5rem',
-      lineHeight: 1.3
+      lineHeight: 1.3,
     },
     h3: {
       fontWeight: 600,
       fontSize: '2rem',
-      lineHeight: 1.4
+      lineHeight: 1.4,
     },
     h4: {
       fontWeight: 600,
       fontSize: '1.75rem',
-      lineHeight: 1.4
+      lineHeight: 1.4,
     },
     h5: {
       fontWeight: 600,
       fontSize: '1.5rem',
-      lineHeight: 1.5
+      lineHeight: 1.5,
     },
     h6: {
       fontWeight: 600,
       fontSize: '1.25rem',
-      lineHeight: 1.5
+      lineHeight: 1.5,
     },
     body1: {
       fontSize: '1rem',
-      lineHeight: 1.7
+      lineHeight: 1.7,
     },
     body2: {
       fontSize: '0.875rem',
-      lineHeight: 1.6
+      lineHeight: 1.6,
     },
     button: {
       fontWeight: 600,
-      textTransform: 'none'
-    }
+      textTransform: 'none',
+    },
   },
   shape: {
-    borderRadius: 8
+    borderRadius: 8,
   },
   shadows: [
     'none',
@@ -122,7 +122,7 @@ const theme = createTheme({
     '0px 44px 88px rgba(0,0,0,0.28)',
     '0px 48px 96px rgba(0,0,0,0.3)',
     '0px 52px 104px rgba(0,0,0,0.32)',
-    '0px 56px 112px rgba(0,0,0,0.34)'
+    '0px 56px 112px rgba(0,0,0,0.34)',
   ],
   components: {
     MuiButton: {
@@ -134,15 +134,15 @@ const theme = createTheme({
           fontWeight: 600,
           boxShadow: 'none',
           '&:hover': {
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-          }
+            boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          },
         },
         contained: {
           '&:hover': {
-            boxShadow: '0 6px 16px rgba(0,0,0,0.2)'
-          }
-        }
-      }
+            boxShadow: '0 6px 16px rgba(0,0,0,0.2)',
+          },
+        },
+      },
     },
     MuiCard: {
       styleOverrides: {
@@ -151,27 +151,27 @@ const theme = createTheme({
           boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
           transition: 'all 0.3s ease',
           '&:hover': {
-            boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
-          }
-        }
-      }
+            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+          },
+        },
+      },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
-        }
-      }
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+        },
+      },
     },
     MuiChip: {
       styleOverrides: {
         root: {
           fontWeight: 600,
-          borderRadius: 6
-        }
-      }
-    }
-  }
+          borderRadius: 6,
+        },
+      },
+    },
+  },
 });
 
 export default theme;

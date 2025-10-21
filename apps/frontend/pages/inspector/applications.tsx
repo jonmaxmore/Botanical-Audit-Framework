@@ -31,7 +31,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Grid
+  Grid,
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -46,7 +46,7 @@ import {
   CheckCircle,
   Cancel,
   Schedule,
-  FilterList
+  FilterList,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -91,7 +91,7 @@ export default function InspectorApplications() {
       type: 'ตรวจสอบครั้งแรก',
       status: 'assigned',
       priority: 'high',
-      crops: ['กัญชา', 'สมุนไพร']
+      crops: ['กัญชา', 'สมุนไพร'],
     },
     {
       id: 'APP002',
@@ -105,7 +105,7 @@ export default function InspectorApplications() {
       type: 'ตรวจสอบติดตาม',
       status: 'in_progress',
       priority: 'medium',
-      crops: ['กัญชาทางการแพทย์']
+      crops: ['กัญชาทางการแพทย์'],
     },
     {
       id: 'APP003',
@@ -119,7 +119,7 @@ export default function InspectorApplications() {
       type: 'ตรวจสอบเพื่อต่ออายุ',
       status: 'assigned',
       priority: 'low',
-      crops: ['สมุนไพร', 'ไพรออร์แกนิก']
+      crops: ['สมุนไพร', 'ไพรออร์แกนิก'],
     },
     {
       id: 'APP004',
@@ -133,7 +133,7 @@ export default function InspectorApplications() {
       type: 'ตรวจสอบครั้งแรก',
       status: 'pending_schedule',
       priority: 'high',
-      crops: ['กัญชา']
+      crops: ['กัญชา'],
     },
     {
       id: 'APP005',
@@ -147,8 +147,8 @@ export default function InspectorApplications() {
       type: 'ตรวจสอบครั้งแรก',
       status: 'completed',
       priority: 'medium',
-      crops: ['สมุนไพร', 'พืชสมุนไพร']
-    }
+      crops: ['สมุนไพร', 'พืชสมุนไพร'],
+    },
   ];
 
   const menuItems = [
@@ -157,7 +157,7 @@ export default function InspectorApplications() {
     { text: 'ตารางนัดหมาย', icon: <CalendarToday />, path: '/inspector/schedule' },
     { text: 'รายงานการตรวจสอบ', icon: <Assessment />, path: '/inspector/reports' },
     { text: 'ค้นหาฟาร์ม', icon: <SearchIcon />, path: '/inspector/farms' },
-    { text: 'โปรไฟล์', icon: <Person />, path: '/inspector/profile' }
+    { text: 'โปรไฟล์', icon: <Person />, path: '/inspector/profile' },
   ];
 
   const handleLogout = () => {
@@ -172,7 +172,7 @@ export default function InspectorApplications() {
       assigned: { label: 'มอบหมายแล้ว', color: 'info' },
       in_progress: { label: 'กำลังตรวจสอบ', color: 'primary' },
       completed: { label: 'ตรวจสอบแล้ว', color: 'success' },
-      rejected: { label: 'ไม่อนุมัติ', color: 'error' }
+      rejected: { label: 'ไม่อนุมัติ', color: 'error' },
     };
     return (
       <Chip label={statusConfig[status]?.label} color={statusConfig[status]?.color} size="small" />
@@ -183,7 +183,7 @@ export default function InspectorApplications() {
     const config: any = {
       high: { label: 'ด่วน', color: 'error' },
       medium: { label: 'ปานกลาง', color: 'warning' },
-      low: { label: 'ปกติ', color: 'info' }
+      low: { label: 'ปกติ', color: 'info' },
     };
     return <Chip label={config[priority]?.label} color={config[priority]?.color} size="small" />;
   };
@@ -225,7 +225,7 @@ export default function InspectorApplications() {
             sx={{
               cursor: 'pointer',
               bgcolor: router.pathname === item.path ? 'primary.light' : 'transparent',
-              '&:hover': { bgcolor: 'action.hover' }
+              '&:hover': { bgcolor: 'action.hover' },
             }}
             onClick={() => router.push(item.path)}
           >
@@ -289,8 +289,8 @@ export default function InspectorApplications() {
                   width: 260,
                   top: 64,
                   height: 'calc(100% - 64px)',
-                  borderRight: '2px solid #e0e0e0'
-                }
+                  borderRight: '2px solid #e0e0e0',
+                },
               }}
             >
               {drawer}
@@ -324,7 +324,7 @@ export default function InspectorApplications() {
                         <InputAdornment position="start">
                           <SearchIcon />
                         </InputAdornment>
-                      )
+                      ),
                     }}
                   />
                 </Grid>
@@ -340,7 +340,7 @@ export default function InspectorApplications() {
                         <InputAdornment position="start">
                           <FilterList />
                         </InputAdornment>
-                      )
+                      ),
                     }}
                   >
                     <MenuItem value="all">ทั้งหมด</MenuItem>

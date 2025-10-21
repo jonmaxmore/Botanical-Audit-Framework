@@ -13,7 +13,8 @@
  * Request → Extract Token → Verify with Correct Secret → Check Role → Attach User → Continue
  */
 
-const logger = require('../shared/logger');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('auth-middleware');
 const jwt = require('jsonwebtoken');
 const jwtConfig = require('../../../config/jwt-security');
 

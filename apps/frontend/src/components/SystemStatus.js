@@ -6,7 +6,7 @@ const SystemStatus = () => {
   const [status, setStatus] = useState({ loading: true, connected: false, message: '' });
 
   useEffect(() => {
-    const checkConnection = async() => {
+    const checkConnection = async () => {
       try {
         const response = await fetch('/api/status');
         const data = await response.json();
@@ -16,13 +16,13 @@ const SystemStatus = () => {
           connected: true,
           message: `Connected to backend. MongoDB: ${
             data.mongodb?.isConnected ? 'Connected' : 'Disconnected'
-          }`
+          }`,
         });
       } catch (error) {
         setStatus({
           loading: false,
           connected: false,
-          message: `Cannot connect to backend: ${error.message}`
+          message: `Cannot connect to backend: ${error.message}`,
         });
       }
     };

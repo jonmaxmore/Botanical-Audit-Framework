@@ -4,7 +4,7 @@ import { allUsers, userCredentials } from '../data/users.seed';
 export class AuthService {
   static login(username: string, password: string): User | null {
     const credential = userCredentials.find(
-      c => c.username === username && c.password === password
+      c => c.username === username && c.password === password,
     );
 
     if (!credential) {
@@ -17,7 +17,7 @@ export class AuthService {
       // บันทึก last login
       const updatedUser = {
         ...user,
-        lastLogin: new Date()
+        lastLogin: new Date(),
       };
 
       if (typeof window !== 'undefined') {

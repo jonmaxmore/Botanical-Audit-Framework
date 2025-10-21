@@ -17,7 +17,7 @@ import {
   Divider,
   Card,
   CardContent,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import { LocalFlorist as LocalFloristIcon, Login as LoginIcon } from '@mui/icons-material';
 import { UserRole } from '../types/user.types';
@@ -49,25 +49,25 @@ export default function LoginPage() {
 
   const redirectToDashboard = (role: UserRole) => {
     switch (role) {
-    case UserRole.FARMER:
-      router.push('/farmer/dashboard');
-      break;
-    case UserRole.DOCUMENT_CHECKER:
-      router.push('/document-checker/dashboard');
-      break;
-    case UserRole.INSPECTOR:
-      router.push('/inspector/dashboard');
-      break;
-    case UserRole.APPROVER:
-      router.push('/approver/dashboard');
-      break;
-    case UserRole.ADMIN:
-      router.push('/admin/dashboard');
-      break;
+      case UserRole.FARMER:
+        router.push('/farmer/dashboard');
+        break;
+      case UserRole.DOCUMENT_CHECKER:
+        router.push('/document-checker/dashboard');
+        break;
+      case UserRole.INSPECTOR:
+        router.push('/inspector/dashboard');
+        break;
+      case UserRole.APPROVER:
+        router.push('/approver/dashboard');
+        break;
+      case UserRole.ADMIN:
+        router.push('/admin/dashboard');
+        break;
     }
   };
 
-  const handleLogin = async(e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsLoggingIn(true);
@@ -94,7 +94,7 @@ export default function LoginPage() {
     [UserRole.DOCUMENT_CHECKER]: 'ผู้ตรวจสอบเอกสาร',
     [UserRole.INSPECTOR]: 'ผู้ตรวจประเมิน',
     [UserRole.APPROVER]: 'ผู้อนุมัติ',
-    [UserRole.ADMIN]: 'ผู้ดูแลระบบ'
+    [UserRole.ADMIN]: 'ผู้ดูแลระบบ',
   };
 
   const demoCredentials = [
@@ -102,27 +102,27 @@ export default function LoginPage() {
       role: UserRole.FARMER,
       username: 'somchai.farmer',
       password: 'password123',
-      name: 'สมชาย ใจดี'
+      name: 'สมชาย ใจดี',
     },
     {
       role: UserRole.DOCUMENT_CHECKER,
       username: 'surapong.doc',
       password: 'password123',
-      name: 'สุรพงษ์ ตรวจสอบ'
+      name: 'สุรพงษ์ ตรวจสอบ',
     },
     {
       role: UserRole.INSPECTOR,
       username: 'wichai.inspect',
       password: 'password123',
-      name: 'วิชัย ประเมินผล'
+      name: 'วิชัย ประเมินผล',
     },
     {
       role: UserRole.APPROVER,
       username: 'somkid.approve',
       password: 'password123',
-      name: 'สมคิด อนุมัติ'
+      name: 'สมคิด อนุมัติ',
     },
-    { role: UserRole.ADMIN, username: 'admin', password: 'password123', name: 'ผู้ดูแลระบบ' }
+    { role: UserRole.ADMIN, username: 'admin', password: 'password123', name: 'ผู้ดูแลระบบ' },
   ];
 
   if (loading) {
@@ -147,7 +147,7 @@ export default function LoginPage() {
           background: 'linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #43a047 100%)',
           display: 'flex',
           alignItems: 'center',
-          py: 4
+          py: 4,
         }}
       >
         <Container maxWidth="md">
@@ -219,7 +219,7 @@ export default function LoginPage() {
                     backgroundColor: '#2e7d32',
                     py: 1.5,
                     fontSize: '1.1rem',
-                    '&:hover': { backgroundColor: '#1b5e20' }
+                    '&:hover': { backgroundColor: '#1b5e20' },
                   }}
                 >
                   {isLoggingIn ? 'กำลังเข้าสู่ระบบ...' : 'เข้าสู่ระบบ'}

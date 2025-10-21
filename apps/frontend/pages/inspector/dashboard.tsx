@@ -24,7 +24,7 @@ import {
   MenuItem,
   Button,
   Tabs,
-  Tab
+  Tab,
 } from '@mui/material';
 import {
   Logout as LogoutIcon,
@@ -32,7 +32,7 @@ import {
   Assessment as AssessmentIcon,
   Schedule as ScheduleIcon,
   CheckCircle as CheckCircleIcon,
-  Cancel as CancelIcon
+  Cancel as CancelIcon,
 } from '@mui/icons-material';
 import { Inspector } from '../../types/user.types';
 import { ApplicationStatus } from '../../types/application.types';
@@ -65,7 +65,7 @@ export default function InspectorDashboard() {
     { label: 'รอกำหนดวัน', value: '0', icon: <ScheduleIcon />, color: '#2196f3' },
     { label: 'กำลังตรวจ', value: '0', icon: <AssessmentIcon />, color: '#ff9800' },
     { label: 'ผ่าน', value: '0', icon: <CheckCircleIcon />, color: '#4caf50' },
-    { label: 'ไม่ผ่าน', value: '0', icon: <CancelIcon />, color: '#f44336' }
+    { label: 'ไม่ผ่าน', value: '0', icon: <CancelIcon />, color: '#f44336' },
   ];
 
   return (
@@ -118,7 +118,7 @@ export default function InspectorDashboard() {
                         color: stat.color,
                         p: 1,
                         borderRadius: 1,
-                        mr: 2
+                        mr: 2,
                       }}
                     >
                       {stat.icon}

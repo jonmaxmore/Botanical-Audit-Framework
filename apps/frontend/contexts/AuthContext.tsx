@@ -20,12 +20,12 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   error: null,
-  login: async() => false,
+  login: async () => false,
   logout: () => {},
   isAuthenticated: false,
   hasRole: () => false,
   hasAnyRole: () => false,
-  refreshUser: async() => {}
+  refreshUser: async () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -38,17 +38,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // ตรวจสอบว่ามีผู้ใช้ที่เข้าสู่ระบบอยู่แล้วหรือไม่
   useEffect(() => {
-    const initAuth = async() => {
+    const initAuth = async () => {
       try {
         // ตรวจสอบ token ใน localStorage
         if (AuthService.verifyToken()) {
           // ถ้ามี token ที่ถูกต้อง ให้โหลดข้อมูลผู้ใช้จาก API
-          const userData = await UserApi.getCurrentUser();
+          const userData = (await UserApi.getCurrentUser()) as User;
           setUser(userData);
         }
-      } catch (err) {
-        console.error('Authentication initialization error:', err);
-        AuthService.logout();
+      } catch (err: any) {
+        // Silent fail - don't show error on initial load
+        console.log('Could not load user data:', err?.message || 'Network error');
+        // Clear invalid tokens
+        if (err?.response?.status === 401) {
+          AuthService.logout();
+        }
       } finally {
         setLoading(false);
       }
@@ -58,7 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   // เข้าสู่ระบบ
-  const login = async(username: string, password: string): Promise<boolean> => {
+  const login = async (username: string, password: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
@@ -86,7 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // โหลดข้อมูลผู้ใช้อีกครั้ง
-  const refreshUser = async() => {
+  const refreshUser = async () => {
     if (!AuthService.isAuthenticated()) return;
 
     try {
@@ -118,7 +122,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAuthenticated: !!user,
     hasRole,
     hasAnyRole,
-    refreshUser
+    refreshUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

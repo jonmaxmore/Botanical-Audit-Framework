@@ -4,28 +4,52 @@
   "private": true,
   "description": "GACP Platform Monorepo",
   "scripts": {
-    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
-    "start:backend": "cd apps/backend && node server.js",
-    "start:frontend": "cd apps/frontend && npm start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "lint": "cd apps/frontend && pnpm lint",
-    "lint:fix": "cd apps/frontend && pnpm lint:fix"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.22"
-  },
-  "packageManager": "pnpm@8.15.0",
-  "engines": {
-    "node": ">=18.0.0",
-    "pnpm": ">=8.0.0"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "clean": "rm -rf .next node_modules",
+    "reinstall": "npm run clean && npm install"
   },
   "dependencies": {
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "http-proxy-middleware": "^3.0.5",
-    "morgan": "^1.10.1"
+    "morgan": "^1.10.1",
+    "next": "^14.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
+    "@types/node": "^20.10.5",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.0.4",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "nodemon": "^2.0.22",
+    "pm2": "^6.0.13",
+    "postcss": "^8.4.32",
+    "prettier": "^3.6.2",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   },
   "lint-staged": {
     "apps/frontend/**/*.{js,jsx,ts,tsx,json,css}": ["prettier --write"],

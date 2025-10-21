@@ -18,7 +18,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 15,
     totalFarmArea: 20,
     isActive: true,
-    createdAt: new Date('2024-01-15')
+    createdAt: new Date('2024-01-15'),
   },
   {
     id: 'F002',
@@ -36,7 +36,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 8,
     totalFarmArea: 15,
     isActive: true,
-    createdAt: new Date('2024-01-20')
+    createdAt: new Date('2024-01-20'),
   },
   {
     id: 'F003',
@@ -54,7 +54,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 12,
     totalFarmArea: 25,
     isActive: true,
-    createdAt: new Date('2024-02-01')
+    createdAt: new Date('2024-02-01'),
   },
   {
     id: 'F004',
@@ -72,7 +72,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 6,
     totalFarmArea: 10,
     isActive: true,
-    createdAt: new Date('2024-02-10')
+    createdAt: new Date('2024-02-10'),
   },
   {
     id: 'F005',
@@ -90,7 +90,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 20,
     totalFarmArea: 30,
     isActive: true,
-    createdAt: new Date('2024-02-15')
+    createdAt: new Date('2024-02-15'),
   },
   {
     id: 'F006',
@@ -108,7 +108,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 10,
     totalFarmArea: 18,
     isActive: true,
-    createdAt: new Date('2024-03-01')
+    createdAt: new Date('2024-03-01'),
   },
   {
     id: 'F007',
@@ -126,7 +126,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 14,
     totalFarmArea: 22,
     isActive: true,
-    createdAt: new Date('2024-03-10')
+    createdAt: new Date('2024-03-10'),
   },
   {
     id: 'F008',
@@ -144,7 +144,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 7,
     totalFarmArea: 12,
     isActive: true,
-    createdAt: new Date('2024-03-20')
+    createdAt: new Date('2024-03-20'),
   },
   {
     id: 'F009',
@@ -162,7 +162,7 @@ export const farmers: Farmer[] = [
     farmingExperience: 18,
     totalFarmArea: 28,
     isActive: true,
-    createdAt: new Date('2024-04-01')
+    createdAt: new Date('2024-04-01'),
   },
   {
     id: 'F010',
@@ -180,8 +180,8 @@ export const farmers: Farmer[] = [
     farmingExperience: 5,
     totalFarmArea: 8,
     isActive: true,
-    createdAt: new Date('2024-04-10')
-  }
+    createdAt: new Date('2024-04-10'),
+  },
 ];
 
 // ผู้ตรวจสอบเอกสาร 1 คน
@@ -197,8 +197,8 @@ export const documentCheckers: DocumentChecker[] = [
     phone: '02-149-7001',
     assignedApplications: 0,
     isActive: true,
-    createdAt: new Date('2024-01-01')
-  }
+    createdAt: new Date('2024-01-01'),
+  },
 ];
 
 // ผู้ตรวจประเมิน 1 คน
@@ -215,8 +215,8 @@ export const inspectors: Inspector[] = [
     phone: '02-149-7002',
     assignedInspections: 0,
     isActive: true,
-    createdAt: new Date('2024-01-01')
-  }
+    createdAt: new Date('2024-01-01'),
+  },
 ];
 
 // ผู้อนุมัติ 1 คน
@@ -233,8 +233,8 @@ export const approvers: Approver[] = [
     phone: '02-149-7003',
     pendingApprovals: 0,
     isActive: true,
-    createdAt: new Date('2024-01-01')
-  }
+    createdAt: new Date('2024-01-01'),
+  },
 ];
 
 // แอดมิน 1 คน
@@ -250,8 +250,8 @@ export const admins: Admin[] = [
     permissions: ['ALL'],
     canManageRoles: true,
     isActive: true,
-    createdAt: new Date('2024-01-01')
-  }
+    createdAt: new Date('2024-01-01'),
+  },
 ];
 
 // รวมผู้ใช้ทั้งหมด
@@ -262,5 +262,5 @@ export const userCredentials = allUsers.map(user => ({
   username: user.username,
   password: 'password123', // ในระบบจริงต้อง hash
   userId: user.id,
-  role: user.role
+  role: user.role,
 }));

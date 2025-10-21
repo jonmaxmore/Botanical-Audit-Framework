@@ -19,8 +19,12 @@ const createHealthCheck = () => {
   // Basic health endpoint
   router.get('/', async (req, res) => {
     try {
+      // Check MongoDB connection
+      const mongoStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+      const isHealthy = mongoose.connection.readyState === 1;
+
       const health = {
-        status: 'healthy',
+        status: isHealthy ? 'healthy' : 'degraded',
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
         version: process.env.npm_package_version || '1.0.0',
@@ -33,10 +37,18 @@ const createHealthCheck = () => {
             (process.memoryUsage().heapUsed / process.memoryUsage().heapTotal) * 100,
           ),
         },
+        database: {
+          mongodb: {
+            status: mongoStatus,
+            connected: mongoose.connection.readyState === 1,
+          },
+        },
       };
 
-      res.json({
-        success: true,
+      const statusCode = isHealthy ? 200 : 503;
+
+      res.status(statusCode).json({
+        success: isHealthy,
         data: health,
       });
     } catch (error) {

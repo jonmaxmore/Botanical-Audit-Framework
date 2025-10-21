@@ -19,7 +19,7 @@ export default function UnauthorizedPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#f5f5f5'
+          backgroundColor: '#f5f5f5',
         }}
       >
         <Container maxWidth="sm">

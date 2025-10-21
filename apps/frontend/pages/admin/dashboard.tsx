@@ -17,7 +17,7 @@ import {
   Paper,
   Tabs,
   Tab,
-  Button
+  Button,
 } from '@mui/material';
 import {
   Logout as LogoutIcon,
@@ -26,7 +26,7 @@ import {
   People as PeopleIcon,
   Assessment as AssessmentIcon,
   Settings as SettingsIcon,
-  BarChart as BarChartIcon
+  BarChart as BarChartIcon,
 } from '@mui/icons-material';
 import { Admin } from '../../types/user.types';
 import { allUsers } from '../../data/users.seed';
@@ -59,11 +59,11 @@ export default function AdminDashboard() {
       label: 'ผู้ใช้ทั้งหมด',
       value: allUsers.length.toString(),
       icon: <PeopleIcon />,
-      color: '#2196f3'
+      color: '#2196f3',
     },
     { label: 'เกษตรกร', value: '10', icon: <PeopleIcon />, color: '#4caf50' },
     { label: 'พนักงาน', value: '4', icon: <PeopleIcon />, color: '#ff9800' },
-    { label: 'คำขอทั้งหมด', value: '1', icon: <AssessmentIcon />, color: '#9c27b0' }
+    { label: 'คำขอทั้งหมด', value: '1', icon: <AssessmentIcon />, color: '#9c27b0' },
   ];
 
   return (
@@ -120,7 +120,7 @@ export default function AdminDashboard() {
                         color: stat.color,
                         p: 1,
                         borderRadius: 1,
-                        mr: 2
+                        mr: 2,
                       }}
                     >
                       {stat.icon}

@@ -22,7 +22,7 @@ import {
   Chip,
   Avatar,
   Menu,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 import {
   Add as AddIcon,
@@ -31,7 +31,7 @@ import {
   Agriculture as AgricultureIcon,
   Description as DescriptionIcon,
   TrendingUp as TrendingUpIcon,
-  VerifiedUser as VerifiedIcon
+  VerifiedUser as VerifiedIcon,
 } from '@mui/icons-material';
 import { Farmer } from '../../types/user.types';
 import { WorkflowService } from '../../lib/workflow.service';
@@ -66,8 +66,8 @@ export default function FarmerDashboard() {
       farmName: 'ฟาร์มสมุนไพรสมชาย',
       cropType: 'ฟ้าทะลายโจร',
       status: 'submitted',
-      submittedAt: new Date('2025-01-15')
-    }
+      submittedAt: new Date('2025-01-15'),
+    },
   ];
 
   const stats = [
@@ -78,8 +78,8 @@ export default function FarmerDashboard() {
       label: 'พื้นที่ทั้งหมด',
       value: `${currentUser.totalFarmArea || 0} ไร่`,
       icon: <AgricultureIcon />,
-      color: '#9c27b0'
-    }
+      color: '#9c27b0',
+    },
   ];
 
   return (
@@ -140,7 +140,7 @@ export default function FarmerDashboard() {
                         color: stat.color,
                         p: 1,
                         borderRadius: 1,
-                        mr: 2
+                        mr: 2,
                       }}
                     >
                       {stat.icon}
@@ -197,7 +197,7 @@ export default function FarmerDashboard() {
                           size="small"
                           sx={{
                             backgroundColor: WorkflowService.getStatusColor(app.status as any),
-                            color: '#fff'
+                            color: '#fff',
                           }}
                         />
                       </TableCell>

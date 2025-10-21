@@ -23,7 +23,7 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
-  Divider
+  Divider,
 } from '@mui/material';
 import {
   Agriculture,
@@ -34,7 +34,7 @@ import {
   Person,
   Logout,
   Menu as MenuIcon,
-  Visibility
+  Visibility,
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -67,29 +67,29 @@ export default function FarmerApplications() {
       farmName: 'ฟาร์มสมุนไพรเชียงใหม่',
       type: 'GACP Certification',
       status: 'pending',
-      date: '2025-10-15'
+      date: '2025-10-15',
     },
     {
       id: 'APP002',
       farmName: 'ฟาร์มกัญชาทางการแพทย์',
       type: 'GACP Renewal',
       status: 'in_progress',
-      date: '2025-10-10'
+      date: '2025-10-10',
     },
     {
       id: 'APP003',
       farmName: 'ฟาร์มไพรสมุนไพรออร์แกนิก',
       type: 'GACP Certification',
       status: 'approved',
-      date: '2025-10-05'
+      date: '2025-10-05',
     },
     {
       id: 'APP004',
       farmName: 'ฟาร์มสมุนไพรลำปาง',
       type: 'GACP Certification',
       status: 'rejected',
-      date: '2025-09-28'
-    }
+      date: '2025-09-28',
+    },
   ];
 
   const getStatusChip = (status: string) => {
@@ -97,7 +97,7 @@ export default function FarmerApplications() {
       pending: { label: 'รอดำเนินการ', color: 'warning' },
       in_progress: { label: 'กำลังตรวจสอบ', color: 'info' },
       approved: { label: 'อนุมัติ', color: 'success' },
-      rejected: { label: 'ไม่อนุมัติ', color: 'error' }
+      rejected: { label: 'ไม่อนุมัติ', color: 'error' },
     };
     return <Chip label={config[status]?.label} color={config[status]?.color} size="small" />;
   };
@@ -108,7 +108,7 @@ export default function FarmerApplications() {
     { text: 'คำขอรับรอง', icon: <Assignment />, path: '/farmer/applications' },
     { text: 'ใบรับรอง', icon: <Verified />, path: '/farmer/certificates' },
     { text: 'เอกสาร', icon: <Description />, path: '/farmer/documents' },
-    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' }
+    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' },
   ];
 
   const drawer = (

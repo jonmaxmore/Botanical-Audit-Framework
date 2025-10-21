@@ -15,11 +15,11 @@ const theme = createTheme({
     primary: {
       main: '#2e7d32',
       light: '#4caf50',
-      dark: '#1b5e20'
+      dark: '#1b5e20',
     },
     secondary: {
-      main: '#ff9800'
-    }
+      main: '#ff9800',
+    },
   },
   typography: {
     fontFamily: [
@@ -29,9 +29,9 @@ const theme = createTheme({
       '"Segoe UI"',
       'Roboto',
       'Arial',
-      'sans-serif'
-    ].join(',')
-  }
+      'sans-serif',
+    ].join(','),
+  },
 });
 
 interface MyAppProps extends AppProps {
@@ -59,7 +59,7 @@ export default function MyApp(props: MyAppProps) {
             maxSnack={3}
             anchorOrigin={{
               vertical: 'bottom',
-              horizontal: 'right'
+              horizontal: 'right',
             }}
           >
             <Component {...pageProps} />

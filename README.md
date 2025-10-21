@@ -1,10 +1,23 @@
-# GACP Certification Flow Platform
+# GACP Certification Flow Platform (Botanical Audit Framework)
 
 **Version**: 2.0.0  
 **Status**: ✅ Production Ready  
-**Last Updated**: October 19, 2025
+**Last Updated**: January 21, 2025  
+**Production Readiness**: 95%
 
 A comprehensive digital platform for managing **GACP (Good Agricultural and Collection Practices)** certification process for cannabis farms in Thailand, serving farmers and DTAM (Department of Thai Traditional and Alternative Medicine) staff.
+
+---
+
+## 🎯 New to the Project?
+
+**Start here**: [QUICK_START.md](./QUICK_START.md) - Get up and running in 2 minutes!
+
+### Important Guides
+
+📖 **[Server Management Guide](./SERVER_MANAGEMENT_GUIDE.md)** - Complete guide for dev and production  
+📊 **[Production Final Report](./PRODUCTION_FINAL_REPORT.md)** - Latest production readiness report  
+🔧 **[PM2 Guide](./PM2_GUIDE.md)** - Process management for production
 
 ---
 

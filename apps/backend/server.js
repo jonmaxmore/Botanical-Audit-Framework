@@ -123,9 +123,17 @@ app.get('/api/health', async (req, res) => {
     system: systemHealth.status,
   };
 
-  const isHealthy = Object.values(services).every(
-    status => status === 'operational' || status === 'healthy',
-  );
+  // Consider system healthy if critical services (database, system) are healthy
+  // Redis/cache is optional - disabled is acceptable
+  const criticalServicesHealthy =
+    services.database === 'healthy' &&
+    (services.system === 'healthy' || services.system === 'operational');
+
+  const isHealthy =
+    criticalServicesHealthy &&
+    (services.cache === 'disabled' ||
+      services.cache === 'healthy' ||
+      services.cache === 'operational');
 
   const health = {
     status: isHealthy ? 'healthy' : 'degraded',
@@ -211,6 +219,32 @@ const gracefulShutdown = async signal => {
 // Listen for termination signals
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+
+// Handle uncaught exceptions
+process.on('uncaughtException', error => {
+  appLogger.error('Uncaught Exception:', error);
+  appLogger.error('Stack trace:', error.stack);
+
+  // Attempt graceful shutdown
+  gracefulShutdown('uncaughtException');
+});
+
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  appLogger.error('Unhandled Promise Rejection at:', promise);
+  appLogger.error('Reason:', reason);
+
+  // Log but don't exit - let the application continue
+  // In production, you might want to exit and let PM2 restart
+});
+
+// Handle warnings (useful for deprecation warnings)
+process.on('warning', warning => {
+  appLogger.warn('Node.js Warning:');
+  appLogger.warn('Name:', warning.name);
+  appLogger.warn('Message:', warning.message);
+  appLogger.warn('Stack:', warning.stack);
+});
 
 // Start server
 async function startServer() {
