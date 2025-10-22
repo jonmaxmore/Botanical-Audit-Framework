@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
+import { retryFetch } from '@/lib/api/retry'; // Task 2.1 - Retry logic
 
 // Types
 export type UserRole = 'FARMER' | 'DTAM_OFFICER' | 'INSPECTOR' | 'ADMIN';
@@ -70,30 +71,66 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setIsLoading(false);
   }, []);
 
-  // Login function (Mock Authentication for UI Testing)
+  // Login function (Real Backend API with Timeout + Retry)
   const login = async (credentials: LoginCredentials) => {
     try {
       setIsLoading(true);
-      
-      // 🚀 REAL API CALL - Call Backend Login
-      const response = await fetch('http://localhost:3004/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+
+      // Task 2.1: Wrap fetch with retry logic (3 attempts, exponential backoff)
+      const data = await retryFetch(
+        async () => {
+          // Task 1.1: 10s timeout with AbortController
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+          try {
+            const response = await fetch('http://localhost:3004/api/auth/login', {
+              method: 'POST',
+              signal: controller.signal,
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: credentials.email,
+                password: credentials.password,
+              }),
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              const error: any = new Error(errorData.message || 'เข้าสู่ระบบไม่สำเร็จ');
+              error.status = response.status; // Add status for retry logic
+              throw error;
+            }
+
+            return response.json();
+          } catch (fetchError: any) {
+            clearTimeout(timeoutId);
+
+            // Handle timeout error specifically
+            if (fetchError.name === 'AbortError') {
+              const error: any = new Error(
+                'การเชื่อมต่อหมดเวลา กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต'
+              );
+              error.name = 'AbortError'; // Preserve error type for retry logic
+              throw error;
+            }
+
+            throw fetchError;
+          }
         },
-        body: JSON.stringify({
-          email: credentials.email,
-          password: credentials.password,
-        }),
-      });
+        {
+          maxAttempts: 3,
+          initialDelay: 1000, // 1s, 2s, 4s backoff
+          onRetry: (attempt, error) => {
+            console.warn(`🔄 Login retry ${attempt}/3:`, error.message);
+          },
+        }
+      );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'เข้าสู่ระบบไม่สำเร็จ');
-      }
-
-      const data = await response.json();
-      
       // Backend returns: { token, user: { id, email, role, ... } }
       const realToken = data.token;
       const realUser: User = {
@@ -104,7 +141,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         phoneNumber: data.user.phone || data.user.phoneNumber,
         createdAt: data.user.createdAt,
       };
-      
+
       // Store token and user
       setToken(realToken);
       setUser(realUser);
@@ -112,6 +149,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.setItem('auth_user', JSON.stringify(realUser));
 
       console.log('✅ Real Login Success:', { email: realUser.email, role: realUser.role });
+
+      // Set loading to false BEFORE redirect to ensure withAuth HOC works correctly
+      setIsLoading(false);
 
       // Redirect based on role
       const roleRedirects: Record<UserRole, string> = {
@@ -122,55 +162,92 @@ export function AuthProvider({ children }: AuthProviderProps) {
       };
 
       router.push(roleRedirects[realUser.role] || '/');
+
+      return data; // Return login data
     } catch (error) {
       console.error('Login error:', error);
+      setIsLoading(false); // Also set to false on error
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  // Register function (Real Backend API)
+  // Register function (Real Backend API with Timeout + Retry)
   const register = async (data: RegisterData) => {
     try {
       setIsLoading(true);
-      
-      // 🚀 REAL API CALL - Call Backend Register
-      const response = await fetch('http://localhost:3004/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+
+      // Task 2.1: Wrap fetch with retry logic (3 attempts, exponential backoff)
+      const responseData = await retryFetch(
+        async () => {
+          // Task 1.1: 10s timeout with AbortController
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+          try {
+            const response = await fetch('http://localhost:3004/api/auth/register', {
+              method: 'POST',
+              signal: controller.signal,
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email: data.email,
+                password: data.password,
+                fullName: data.name,
+                phone: data.phoneNumber,
+                nationalId: (data as any).nationalId || Date.now().toString().substring(0, 13),
+                role: data.role.toLowerCase(),
+                farmerType: data.role === 'FARMER' ? 'individual' : undefined,
+                farmingExperience: data.role === 'FARMER' ? 0 : undefined,
+              }),
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              const error: any = new Error(errorData.message || 'ลงทะเบียนไม่สำเร็จ');
+              error.status = response.status;
+              throw error;
+            }
+
+            return response.json();
+          } catch (fetchError: any) {
+            clearTimeout(timeoutId);
+
+            if (fetchError.name === 'AbortError') {
+              const error: any = new Error(
+                'การเชื่อมต่อหมดเวลา กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต'
+              );
+              error.name = 'AbortError';
+              throw error;
+            }
+
+            throw fetchError;
+          }
         },
-        body: JSON.stringify({
-          email: data.email,
-          password: data.password,
-          fullName: data.name,
-          phone: data.phoneNumber,
-          nationalId: data.nationalId || '1234567890123',
-          role: data.role.toLowerCase(), // Backend expects lowercase
-          farmerType: data.role === 'FARMER' ? 'individual' : undefined,
-          farmingExperience: data.role === 'FARMER' ? 0 : undefined,
-        }),
-      });
+        {
+          maxAttempts: 3,
+          initialDelay: 1000,
+          onRetry: (attempt, error) => {
+            console.warn(`🔄 Register retry ${attempt}/3:`, error.message);
+          },
+        }
+      );
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'ลงทะเบียนไม่สำเร็จ');
-      }
-
-      const responseData = await response.json();
-      
-      // Backend returns: { token, user: { id, email, role, ... } }
-      const realToken = responseData.token;
+      // Backend returns: { data: { tokens: { accessToken, refreshToken }, user: { id, email, role, ... } } }
+      const realToken = responseData.data?.tokens?.accessToken || responseData.token;
+      const userData = responseData.data?.user || responseData.user;
       const realUser: User = {
-        id: responseData.user.id,
-        email: responseData.user.email,
-        role: responseData.user.role.toUpperCase() as UserRole,
-        name: responseData.user.fullName || responseData.user.name,
-        phoneNumber: responseData.user.phone || responseData.user.phoneNumber,
-        createdAt: responseData.user.createdAt,
+        id: userData.id,
+        email: userData.email,
+        role: userData.role.toUpperCase() as UserRole,
+        name: userData.fullName || userData.name,
+        phoneNumber: userData.phone || userData.phoneNumber,
+        createdAt: userData.createdAt,
       };
-      
+
       // Auto-login after registration
       setToken(realToken);
       setUser(realUser);
@@ -178,6 +255,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.setItem('auth_user', JSON.stringify(realUser));
 
       console.log('✅ Real Registration Success:', { email: realUser.email, role: realUser.role });
+
+      // Set loading to false BEFORE redirect to ensure withAuth HOC works correctly
+      setIsLoading(false);
 
       // Redirect based on role
       const roleRedirects: Record<UserRole, string> = {
@@ -190,9 +270,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       router.push(roleRedirects[data.role] || '/');
     } catch (error) {
       console.error('Registration error:', error);
+      setIsLoading(false); // Also set to false on error
       throw error;
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -205,24 +284,60 @@ export function AuthProvider({ children }: AuthProviderProps) {
     router.push('/login');
   };
 
-  // Refresh token function
+  // Refresh token function with Timeout + Retry
   const refreshToken = async () => {
     try {
       if (!token) return;
 
-      const response = await fetch('http://localhost:3004/api/auth/refresh', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+      // Task 2.1: Wrap fetch with retry logic (2 attempts, faster retry for background refresh)
+      const data = await retryFetch(
+        async () => {
+          // Task 1.1: 10s timeout with AbortController
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+          try {
+            const response = await fetch('http://localhost:3004/api/auth/refresh', {
+              method: 'POST',
+              signal: controller.signal,
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            });
+
+            clearTimeout(timeoutId);
+
+            if (!response.ok) {
+              const error: any = new Error('Token refresh failed');
+              error.status = response.status;
+              throw error;
+            }
+
+            return response.json();
+          } catch (fetchError: any) {
+            clearTimeout(timeoutId);
+
+            if (fetchError.name === 'AbortError') {
+              const error: any = new Error(
+                'การเชื่อมต่อหมดเวลา กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต'
+              );
+              error.name = 'AbortError';
+              throw error;
+            }
+
+            throw fetchError;
+          }
         },
-      });
+        {
+          maxAttempts: 2, // Fewer retries for background refresh
+          initialDelay: 500, // Faster retry (not user-facing)
+          onRetry: (attempt, error) => {
+            console.warn(`🔄 Token refresh retry ${attempt}/2:`, error.message);
+          },
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error('Token refresh failed');
-      }
-
-      const data = await response.json();
       setToken(data.token);
       localStorage.setItem('auth_token', data.token);
     } catch (error) {

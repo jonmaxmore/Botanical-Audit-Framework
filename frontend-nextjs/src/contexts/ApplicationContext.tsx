@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useAuth } from './AuthContext';
+import { retryFetch } from '@/lib/api/retry'; // Task 2.1 - Retry logic
 
 // Types
 export type WorkflowState =
@@ -119,21 +120,36 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
     ...(token && { Authorization: `Bearer ${token}` }),
   });
 
-  // Fetch all applications for current user
+  // Fetch all applications for current user (with Retry)
   const fetchApplications = async () => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch(`${apiUrl}/applications`, {
-        headers: getHeaders(),
-      });
+      // Task 2.1: Wrap fetch with retry logic (2 attempts, fast retry for list view)
+      const data = await retryFetch(
+        async () => {
+          const response = await fetch(`${apiUrl}/applications`, {
+            headers: getHeaders(),
+          });
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch applications');
-      }
+          if (!response.ok) {
+            const error: any = new Error('Failed to fetch applications');
+            error.status = response.status;
+            throw error;
+          }
 
-      const data = await response.json();
+          return response.json();
+        },
+        {
+          maxAttempts: 2,
+          initialDelay: 500,
+          onRetry: (attempt, error) => {
+            console.warn(`🔄 Fetch applications retry ${attempt}/2:`, error.message);
+          },
+        }
+      );
+
       setApplications(data.applications || []);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
@@ -144,21 +160,36 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
     }
   };
 
-  // Fetch single application by ID
+  // Fetch single application by ID (with Retry)
   const fetchApplicationById = async (id: string) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch(`${apiUrl}/applications/${id}`, {
-        headers: getHeaders(),
-      });
+      // Task 2.1: Wrap fetch with retry logic (2 attempts, fast retry)
+      const data = await retryFetch(
+        async () => {
+          const response = await fetch(`${apiUrl}/applications/${id}`, {
+            headers: getHeaders(),
+          });
 
-      if (!response.ok) {
-        throw new Error('Failed to fetch application');
-      }
+          if (!response.ok) {
+            const error: any = new Error('Failed to fetch application');
+            error.status = response.status;
+            throw error;
+          }
 
-      const data = await response.json();
+          return response.json();
+        },
+        {
+          maxAttempts: 2,
+          initialDelay: 500,
+          onRetry: (attempt, error) => {
+            console.warn(`🔄 Fetch application retry ${attempt}/2:`, error.message);
+          },
+        }
+      );
+
       setCurrentApplication(data.application);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
@@ -169,24 +200,39 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
     }
   };
 
-  // Create new application
+  // Create new application (with Retry)
   const createApplication = async (farmData: any): Promise<Application> => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch(`${apiUrl}/applications`, {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(farmData),
-      });
+      // Task 2.1: Wrap fetch with retry logic (3 attempts, prevent data loss)
+      const data = await retryFetch(
+        async () => {
+          const response = await fetch(`${apiUrl}/applications`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify(farmData),
+          });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Failed to create application');
-      }
+          if (!response.ok) {
+            const errorData = await response.json();
+            const error: any = new Error(errorData.message || 'Failed to create application');
+            error.status = response.status;
+            throw error;
+          }
 
-      const data = await response.json();
+          return response.json();
+        },
+        {
+          maxAttempts: 3,
+          initialDelay: 1000,
+          onRetry: (attempt, error) => {
+            console.warn(`🔄 Create application retry ${attempt}/3:`, error.message);
+          },
+        }
+      );
+
       const newApplication = data.application;
 
       setApplications((prev) => [...prev, newApplication]);
@@ -203,23 +249,39 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
     }
   };
 
-  // Update application
+  // Update application (with Retry)
   const updateApplication = async (id: string, data: any) => {
     try {
       setIsLoading(true);
       setError(null);
 
-      const response = await fetch(`${apiUrl}/applications/${id}`, {
-        method: 'PUT',
-        headers: getHeaders(),
-        body: JSON.stringify(data),
-      });
+      // Task 2.1: Wrap fetch with retry logic (3 attempts, prevent data loss)
+      const responseData = await retryFetch(
+        async () => {
+          const response = await fetch(`${apiUrl}/applications/${id}`, {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify(data),
+          });
 
-      if (!response.ok) {
-        throw new Error('Failed to update application');
-      }
+          if (!response.ok) {
+            const errorData = await response.json();
+            const error: any = new Error(errorData.message || 'Failed to update application');
+            error.status = response.status;
+            throw error;
+          }
 
-      const responseData = await response.json();
+          return response.json();
+        },
+        {
+          maxAttempts: 3,
+          initialDelay: 1000,
+          onRetry: (attempt, error) => {
+            console.warn(`🔄 Update application retry ${attempt}/3:`, error.message);
+          },
+        }
+      );
+
       const updatedApplication = responseData.application;
 
       setApplications((prev) =>
