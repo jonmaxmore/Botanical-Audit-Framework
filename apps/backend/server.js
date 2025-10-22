@@ -4,6 +4,10 @@
  * Enterprise-grade application server designed for scalability,
  * observability, and sustainability.
  */
+
+// Load environment variables FIRST
+require('dotenv').config();
+
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
@@ -164,7 +168,7 @@ app.get('/api/health', async (req, res) => {
 // Basic API routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/health', require('./routes/health'));
-// app.use('/api/applications', require('./routes/applications')); // Commented - needs fix
+app.use('/api/applications', require('./routes/applications')); // ✅ Enabled for real API
 app.use('/api/dashboard', require('./routes/dashboard'));
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
 // app.use('/api/notifications', require('./routes/notifications')); // Commented - needs check

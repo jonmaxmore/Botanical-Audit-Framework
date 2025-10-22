@@ -1,0 +1,302 @@
+# 🚀 GACP Platform Production Deployment Guide
+# การปรับใช้แพลตฟอร์ม GACP สู่ Production แบบครบวงจร
+
+version: '3.8'
+
+services:
+  # 🗄️ MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: gacp-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD}
+      MONGO_INITDB_DATABASE: gacp_production
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    ports:
+      - "27017:27017"
+    networks:
+      - gacp-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # 🔴 Redis Cache
+  redis:
+    image: redis:7.2-alpine
+    container_name: gacp-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - gacp-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # 🔌 API Integration Layer
+  gacp-api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    container_name: gacp-api-layer
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      GACP_API_PORT: 4000
+      MONGODB_URI: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/gacp_production?authSource=admin
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      JWT_SECRET: ${JWT_SECRET}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      LOG_LEVEL: info
+    volumes:
+      - api_logs:/app/logs
+      - uploaded_files:/app/uploads
+    ports:
+      - "4000:4000"
+    networks:
+      - gacp-network
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🌐 Frontend Application
+  gacp-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: gacp-frontend
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: http://gacp-api:4000
+      NEXT_PUBLIC_APP_NAME: "GACP Platform"
+      NEXT_PUBLIC_VERSION: "1.0.0"
+    ports:
+      - "3000:3000"
+    networks:
+      - gacp-network
+    depends_on:
+      - gacp-api
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🔍 Monitoring - Prometheus
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: gacp-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    ports:
+      - "9090:9090"
+    networks:
+      - gacp-network
+
+  # 📊 Monitoring - Grafana
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: gacp-grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD}
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning
+      - ./monitoring/grafana/dashboards:/etc/grafana/dashboards
+    ports:
+      - "3001:3000"
+    networks:
+      - gacp-network
+    depends_on:
+      - prometheus
+
+  # 📝 Logging - ELK Stack (Elasticsearch)
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.11.0
+    container_name: gacp-elasticsearch
+    restart: unless-stopped
+    environment:
+      discovery.type: single-node
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+      xpack.security.enabled: false
+      xpack.monitoring.collection.enabled: true
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+    networks:
+      - gacp-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9200/_health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # 📝 Logging - Logstash
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.11.0
+    container_name: gacp-logstash
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./monitoring/logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - api_logs:/logs
+    ports:
+      - "5044:5044"
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+    networks:
+      - gacp-network
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+
+  # 📝 Logging - Kibana
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.11.0
+    container_name: gacp-kibana
+    restart: unless-stopped
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    networks:
+      - gacp-network
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  # 🔒 Security - Let's Encrypt SSL
+  certbot:
+    image: certbot/certbot:v2.7.4
+    container_name: gacp-certbot
+    volumes:
+      - certbot_certs:/etc/letsencrypt
+      - certbot_www:/var/www/certbot
+    command: certonly --webroot --webroot-path=/var/www/certbot --email ${ADMIN_EMAIL} --agree-tos --no-eff-email -d ${DOMAIN_NAME}
+    networks:
+      - gacp-network
+
+  # 🌐 Reverse Proxy - Nginx
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: gacp-nginx
+    restart: unless-stopped
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - certbot_certs:/etc/letsencrypt:ro
+      - certbot_www:/var/www/certbot:ro
+      - nginx_logs:/var/log/nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - gacp-network
+    depends_on:
+      - gacp-frontend
+      - gacp-api
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # 🔄 Backup Service
+  backup:
+    build:
+      context: .
+      dockerfile: Dockerfile.backup
+    container_name: gacp-backup
+    restart: unless-stopped
+    environment:
+      MONGODB_URI: mongodb://${MONGO_ROOT_USER}:${MONGO_ROOT_PASSWORD}@mongodb:27017/gacp_production?authSource=admin
+      BACKUP_SCHEDULE: "0 2 * * *"  # Daily at 2 AM
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      S3_BUCKET: ${BACKUP_S3_BUCKET}
+      RETENTION_DAYS: 30
+    volumes:
+      - backup_data:/backups
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - gacp-network
+    depends_on:
+      - mongodb
+
+# 🌐 Networks
+networks:
+  gacp-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+# 💾 Volumes
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+  redis_data:
+    driver: local
+  api_logs:
+    driver: local
+  uploaded_files:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  elasticsearch_data:
+    driver: local
+  certbot_certs:
+    driver: local
+  certbot_www:
+    driver: local
+  nginx_logs:
+    driver: local
+  backup_data:
+    driver: local
+
+# 🏷️ Labels for container management
+x-common-labels: &common-labels
+  com.gacp.project: "botanical-audit-framework"
+  com.gacp.environment: "production"
+  com.gacp.version: "1.0.0"
+  com.gacp.maintainer: "GACP Development Team"

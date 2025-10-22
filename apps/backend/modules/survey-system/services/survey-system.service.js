@@ -481,6 +481,7 @@ class SurveySystemService {
         priority: 'HIGH',
         text: 'Consider attending GACP certification training workshops',
         impact: 'Will improve overall compliance score by 20-30%',
+        sopActivities: ['soil_testing', 'water_testing', 'seed_selection'], // Recommended SOP activities
       });
     }
 
@@ -491,6 +492,7 @@ class SurveySystemService {
         priority: 'MEDIUM',
         text: 'Implement water conservation and organic practices',
         impact: 'Reduces costs and improves environmental score',
+        sopActivities: ['daily_watering', 'pest_monitoring', 'disease_inspection'],
       });
     }
 
@@ -501,6 +503,7 @@ class SurveySystemService {
         priority: 'MEDIUM',
         text: 'Explore cooperative memberships for better market access',
         impact: 'Can increase revenue by 15-25%',
+        sopActivities: ['quality_testing', 'final_packaging'],
       });
     }
 
@@ -512,10 +515,153 @@ class SurveySystemService {
         priority: 'LOW',
         text,
         impact: 'Optimizes regional advantages',
+        sopActivities: this._getRegionalSOPActivities(response.region),
       })),
     );
 
     return recommendations;
+  }
+
+  /**
+   * Get recommended SOP activities by region
+   */
+  _getRegionalSOPActivities(region) {
+    const regionalSOPs = {
+      northern: ['soil_preparation', 'water_testing', 'growth_measurement'],
+      central: ['irrigation_setup', 'weekly_fertilizing', 'processing'],
+      southern: ['pest_monitoring', 'disease_inspection', 'drying_process'],
+      northeastern: ['daily_watering', 'maturity_assessment', 'storage_conditions'],
+    };
+    return regionalSOPs[region.toLowerCase()] || [];
+  }
+
+  /**
+   * Generate SOP recommendations based on survey results
+   */
+  async generateSOPRecommendations(surveyId, userId) {
+    try {
+      if (!this.responsesCollection) {
+        throw new AppError('Database not initialized', 500);
+      }
+
+      const response = await this.responsesCollection.findOne({
+        _id: new ObjectId(surveyId),
+        userId,
+        state: 'SUBMITTED',
+      });
+
+      if (!response) {
+        throw new AppError('Survey not found or not submitted', 404);
+      }
+
+      const scores = response.scores;
+      const sopRecommendations = {
+        priority_activities: [],
+        phase_focus: '',
+        estimated_timeline: '',
+        compliance_gap_analysis: {},
+      };
+
+      // Determine priority phase based on lowest scores
+      if (scores.gacp < 60) {
+        sopRecommendations.phase_focus = 'pre_planting';
+        sopRecommendations.priority_activities = [
+          'soil_testing',
+          'water_testing',
+          'seed_selection',
+          'area_measurement',
+        ];
+        sopRecommendations.estimated_timeline = '2-3 สัปดาห์';
+      } else if (scores.sustainability < 60) {
+        sopRecommendations.phase_focus = 'growing';
+        sopRecommendations.priority_activities = [
+          'pest_monitoring',
+          'disease_inspection',
+          'growth_measurement',
+        ];
+        sopRecommendations.estimated_timeline = '6-8 สัปดาห์';
+      } else if (scores.market < 60) {
+        sopRecommendations.phase_focus = 'post_harvest';
+        sopRecommendations.priority_activities = [
+          'quality_testing',
+          'final_packaging',
+          'storage_conditions',
+        ];
+        sopRecommendations.estimated_timeline = '1-2 สัปดาห์';
+      }
+
+      // Compliance gap analysis
+      sopRecommendations.compliance_gap_analysis = {
+        current_score: scores.total || 0,
+        target_score: 80,
+        gap: Math.max(0, 80 - (scores.total || 0)),
+        required_activities: sopRecommendations.priority_activities.length,
+        estimated_points: sopRecommendations.priority_activities.length * 15, // Average points per activity
+      };
+
+      // Regional adjustments
+      const regionalActivities = this._getRegionalSOPActivities(response.region);
+      sopRecommendations.regional_focus = regionalActivities;
+
+      return {
+        success: true,
+        sopRecommendations,
+        surveyScores: scores,
+        region: response.region,
+        generatedAt: new Date(),
+      };
+    } catch (error) {
+      logger.error('[SurveyService] Error generating SOP recommendations:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Link survey results to farm management
+   */
+  async linkSurveyToFarm(surveyId, farmId, userId) {
+    try {
+      if (!this.responsesCollection) {
+        throw new AppError('Database not initialized', 500);
+      }
+
+      const response = await this.responsesCollection.findOne({
+        _id: new ObjectId(surveyId),
+        userId,
+      });
+
+      if (!response) {
+        throw new AppError('Survey not found', 404);
+      }
+
+      // Update survey with farm link
+      await this.responsesCollection.updateOne(
+        { _id: new ObjectId(surveyId) },
+        {
+          $set: {
+            linkedFarmId: farmId,
+            'metadata.linkedAt': new Date(),
+          },
+        },
+      );
+
+      // Generate SOP recommendations for the farm
+      const sopRecommendations = await this.generateSOPRecommendations(surveyId, userId);
+
+      return {
+        success: true,
+        message: 'Survey linked to farm successfully',
+        sopRecommendations: sopRecommendations.sopRecommendations,
+        linkage: {
+          surveyId,
+          farmId,
+          linkedAt: new Date(),
+        },
+      };
+    } catch (error) {
+      logger.error('[SurveyService] Error linking survey to farm:', error);
+      throw error;
+    }
   }
 
   /**

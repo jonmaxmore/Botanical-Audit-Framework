@@ -10,6 +10,9 @@
  * - Error handling
  */
 
+// Load environment variables FIRST (before any config reading)
+require('dotenv').config();
+
 const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
@@ -22,15 +25,23 @@ try {
   const configPath = path.join(__dirname, 'app-config.json');
   const configFile = fs.readFileSync(configPath, 'utf8');
   config = JSON.parse(configFile);
+  dbLogger.info('Loaded MongoDB config from app-config.json');
 } catch (error) {
-  // Fallback to default config if file not found or invalid JSON
-  dbLogger.warn(`Could not load MongoDB config from file: ${error.message}. Using defaults.`);
+  // Fallback to environment variables (dotenv already loaded at top of file)
+  dbLogger.warn(`Could not load MongoDB config from file: ${error.message}. Using environment variables.`);
+  
+  // Read MONGODB_URI from environment (should be loaded by dotenv at top)
+  const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/botanical-audit';
+  
+  dbLogger.info(`Using MongoDB URI from environment: ${mongoUri.includes('mongodb+srv') ? 'Atlas' : 'Local'}`);
+  
   config = {
     mongodb: {
-      uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/botanical-audit',
+      uri: mongoUri,
       options: {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
+        // Remove deprecated options
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true,
       },
       reconnectInterval: 5000,
       reconnectAttempts: 5,
@@ -210,8 +221,31 @@ function maskUri(uri) {
   }
 }
 
+/**
+ * Disconnect from MongoDB
+ */
+async function disconnect() {
+  if (reconnectTimer) {
+    clearTimeout(reconnectTimer);
+    reconnectTimer = null;
+  }
+
+  if (isConnected || mongoose.connection.readyState !== 0) {
+    try {
+      await mongoose.connection.close();
+      isConnected = false;
+      isConnecting = false;
+      dbLogger.info('MongoDB connection closed');
+    } catch (error) {
+      dbLogger.error(`Error closing MongoDB connection: ${error.message}`);
+      throw error;
+    }
+  }
+}
+
 module.exports = {
   connect,
+  disconnect,
   forceReconnect,
   getStatus,
   healthCheck,

@@ -95,17 +95,67 @@ class FarmManagementService {
         recordedAt: new Date(),
       };
 
-      // Validate activity type
+      // Validate activity type - Extended for GACP SOP Integration
       const validTypes = [
+        // Legacy types (backward compatibility)
         'watering',
         'fertilizing',
         'pruning',
         'pest_control',
         'inspection',
         'other',
+
+        // Pre-Planting Phase
+        'soil_preparation',
+        'soil_testing',
+        'water_testing',
+        'seed_selection',
+        'area_measurement',
+
+        // Planting Phase
+        'seed_germination',
+        'seedling_transplant',
+        'irrigation_setup',
+        'plant_tagging',
+
+        // Growing Phase
+        'daily_watering',
+        'weekly_fertilizing',
+        'monthly_pruning',
+        'pest_monitoring',
+        'disease_inspection',
+        'growth_measurement',
+
+        // Harvesting Phase
+        'maturity_assessment',
+        'harvesting_process',
+        'fresh_weight_recording',
+        'initial_packaging',
+
+        // Post-Harvest Phase
+        'drying_process',
+        'processing',
+        'final_packaging',
+        'storage_conditions',
+        'quality_testing',
       ];
+
       if (!validTypes.includes(activity.type)) {
         throw new AppError('Invalid activity type', 400);
+      }
+
+      // Add GACP compliance metadata if SOP activity
+      const isSOPActivity = ![
+        'watering',
+        'fertilizing',
+        'pruning',
+        'pest_control',
+        'inspection',
+        'other',
+      ].includes(activity.type);
+      if (isSOPActivity) {
+        activity.isSOPActivity = true;
+        activity.gacpCompliance = this._getGACPComplianceInfo(activity.type);
       }
 
       // Update cycle
@@ -381,6 +431,49 @@ class FarmManagementService {
     }
 
     return Math.max(0, score);
+  }
+
+  /**
+   * Get GACP compliance info for SOP activities
+   */
+  _getGACPComplianceInfo(activityType) {
+    const gacpMapping = {
+      // Pre-Planting Phase
+      soil_preparation: { requirement: 'GACP-05.1', points: 15, phase: 'pre_planting' },
+      soil_testing: { requirement: 'GACP-05.2', points: 20, phase: 'pre_planting' },
+      water_testing: { requirement: 'GACP-06.1', points: 20, phase: 'pre_planting' },
+      seed_selection: { requirement: 'GACP-04.1', points: 15, phase: 'pre_planting' },
+      area_measurement: { requirement: 'GACP-03.2', points: 10, phase: 'pre_planting' },
+
+      // Planting Phase
+      seed_germination: { requirement: 'GACP-04.2', points: 15, phase: 'planting' },
+      seedling_transplant: { requirement: 'GACP-04.3', points: 15, phase: 'planting' },
+      irrigation_setup: { requirement: 'GACP-06.2', points: 10, phase: 'planting' },
+      plant_tagging: { requirement: 'GACP-10.1', points: 10, phase: 'planting' },
+
+      // Growing Phase
+      daily_watering: { requirement: 'GACP-06.3', points: 5, phase: 'growing' },
+      weekly_fertilizing: { requirement: 'GACP-07.1', points: 10, phase: 'growing' },
+      monthly_pruning: { requirement: 'GACP-08.1', points: 10, phase: 'growing' },
+      pest_monitoring: { requirement: 'GACP-09.1', points: 15, phase: 'growing' },
+      disease_inspection: { requirement: 'GACP-09.2', points: 15, phase: 'growing' },
+      growth_measurement: { requirement: 'GACP-08.2', points: 10, phase: 'growing' },
+
+      // Harvesting Phase
+      maturity_assessment: { requirement: 'GACP-11.1', points: 15, phase: 'harvesting' },
+      harvesting_process: { requirement: 'GACP-11.2', points: 20, phase: 'harvesting' },
+      fresh_weight_recording: { requirement: 'GACP-11.3', points: 10, phase: 'harvesting' },
+      initial_packaging: { requirement: 'GACP-12.1', points: 10, phase: 'harvesting' },
+
+      // Post-Harvest Phase
+      drying_process: { requirement: 'GACP-13.1', points: 20, phase: 'post_harvest' },
+      processing: { requirement: 'GACP-13.2', points: 15, phase: 'post_harvest' },
+      final_packaging: { requirement: 'GACP-12.2', points: 15, phase: 'post_harvest' },
+      storage_conditions: { requirement: 'GACP-14.1', points: 10, phase: 'post_harvest' },
+      quality_testing: { requirement: 'GACP-14.2', points: 25, phase: 'post_harvest' },
+    };
+
+    return gacpMapping[activityType] || { requirement: 'GACP-GEN', points: 0, phase: 'general' };
   }
 }
 

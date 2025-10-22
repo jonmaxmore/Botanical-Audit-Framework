@@ -3,6 +3,8 @@
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ReactNode } from 'react';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { ApplicationProvider } from '@/contexts/ApplicationContext';
 
 // GACP Theme with Material-UI + Tailwind
 const theme = createTheme({
@@ -107,7 +109,9 @@ export function Providers({ children }: { children: ReactNode }) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {children}
+      <AuthProvider>
+        <ApplicationProvider>{children}</ApplicationProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

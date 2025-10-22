@@ -307,6 +307,158 @@ class TrackTraceService {
   }
 
   /**
+   * Link SOP activity to product batch
+   */
+  async linkSOPActivity(batchCode, sopActivity) {
+    try {
+      const product = await this.productsCollection.findOne({ batchCode });
+      if (!product) {
+        throw new AppError('Product batch not found', 404);
+      }
+
+      // Add SOP activity to timeline
+      await this.addTimelineEvent({
+        productId: product._id.toString(),
+        stage: 'SOP_ACTIVITY',
+        description: `SOP: ${sopActivity.activityName} (${sopActivity.phase})`,
+        location: sopActivity.gpsLocation
+          ? `GPS: ${sopActivity.gpsLocation.latitude}, ${sopActivity.gpsLocation.longitude}`
+          : 'Farm Location',
+        verifiedBy: sopActivity.recordedBy,
+      });
+
+      // Update product with SOP compliance data
+      const sopUpdate = {
+        sopActivities: {
+          $push: {
+            activityId: sopActivity.activityId,
+            activityName: sopActivity.activityName,
+            phase: sopActivity.phase,
+            compliancePoints: sopActivity.compliancePoints,
+            recordedAt: sopActivity.recordedAt,
+            gacpRequirement: sopActivity.gacpRequirement,
+          },
+        },
+        'metadata.lastUpdated': new Date(),
+      };
+
+      await this.productsCollection.updateOne(
+        { batchCode },
+        { $addToSet: sopUpdate.sopActivities },
+      );
+
+      return {
+        success: true,
+        message: 'SOP activity linked to batch successfully',
+      };
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+      logger.error('[TrackTrace] Link SOP activity error:', error);
+      throw new AppError('Failed to link SOP activity', 500);
+    }
+  }
+
+  /**
+   * Get batch compliance score from SOP activities
+   */
+  async getBatchComplianceScore(batchCode) {
+    try {
+      const product = await this.productsCollection.findOne({ batchCode });
+      if (!product) {
+        throw new AppError('Product batch not found', 404);
+      }
+
+      const sopActivities = product.sopActivities || [];
+      const totalPoints = sopActivities.reduce(
+        (sum, activity) => sum + (activity.compliancePoints || 0),
+        0,
+      );
+
+      // Calculate compliance percentage (345 is max possible points)
+      const compliancePercentage = Math.min((totalPoints / 345) * 100, 100);
+
+      // Count activities by phase
+      const activitiesByPhase = sopActivities.reduce((acc, activity) => {
+        acc[activity.phase] = (acc[activity.phase] || 0) + 1;
+        return acc;
+      }, {});
+
+      return {
+        success: true,
+        data: {
+          batchCode,
+          totalCompliancePoints: totalPoints,
+          compliancePercentage: Math.round(compliancePercentage),
+          totalSOPActivities: sopActivities.length,
+          activitiesByPhase,
+          sopActivities: sopActivities.map(activity => ({
+            activityName: activity.activityName,
+            phase: activity.phase,
+            points: activity.compliancePoints,
+            recordedAt: activity.recordedAt,
+            requirement: activity.gacpRequirement,
+          })),
+        },
+      };
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+      logger.error('[TrackTrace] Get compliance score error:', error);
+      throw new AppError('Failed to get compliance score', 500);
+    }
+  }
+
+  /**
+   * Generate enhanced QR code with SOP compliance data
+   */
+  async generateEnhancedQRCode(batchCode) {
+    try {
+      const product = await this.productsCollection.findOne({ batchCode });
+      if (!product) {
+        throw new AppError('Product batch not found', 404);
+      }
+
+      // Get compliance score
+      const complianceData = await this.getBatchComplianceScore(batchCode);
+
+      // Enhanced verification URL with compliance info
+      const verifyUrl = `https://gacp-platform.com/verify/${batchCode}?type=enhanced&compliance=${complianceData.data.compliancePercentage}`;
+
+      // Generate QR code
+      const qrCodeImage = await QRCode.toDataURL(verifyUrl, {
+        errorCorrectionLevel: 'H',
+        type: 'image/png',
+        quality: 0.92,
+        margin: 1,
+        width: 300,
+      });
+
+      // Save enhanced QR code data
+      const qrData = {
+        batchCode,
+        url: verifyUrl,
+        qrCode: qrCodeImage,
+        type: 'enhanced',
+        complianceScore: complianceData.data.compliancePercentage,
+        sopActivitiesCount: complianceData.data.totalSOPActivities,
+        generatedAt: new Date(),
+      };
+
+      await this.qrCodesCollection.updateOne({ batchCode }, { $set: qrData }, { upsert: true });
+
+      return {
+        success: true,
+        qrCode: qrCodeImage,
+        verifyUrl,
+        complianceData: complianceData.data,
+      };
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+      logger.error('[TrackTrace] Generate enhanced QR error:', error);
+      throw new AppError('Failed to generate enhanced QR code', 500);
+    }
+  }
+
+  /**
    * Generate QR code
    */
   async generateQRCode(batchCode) {

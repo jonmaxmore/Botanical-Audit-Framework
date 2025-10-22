@@ -17,7 +17,28 @@ A comprehensive digital platform for managing **GACP (Good Agricultural and Coll
 
 📖 **[Server Management Guide](./SERVER_MANAGEMENT_GUIDE.md)** - Complete guide for dev and production  
 📊 **[Production Final Report](./PRODUCTION_FINAL_REPORT.md)** - Latest production readiness report  
-🔧 **[PM2 Guide](./PM2_GUIDE.md)** - Process management for production
+🔧 **[PM2 Guide](./PM2_GUIDE.md)** - Process management for production  
+🏢 **[Main Services Catalog](./docs/MAIN_SERVICES_CATALOG.md)** - Complete list of all 6 main services  
+📇 **[Quick Reference Services](./docs/QUICK_REFERENCE_SERVICES.md)** - Quick reference card for services
+
+---
+
+## 🏢 Main Services (6 Core Services)
+
+GACP Platform provides **6 main services** with 4 supporting services:
+
+| #   | Service                     | Type                 | Status        |
+| --- | --------------------------- | -------------------- | ------------- |
+| 1   | **Authentication & SSO**    | Infrastructure       | ✅ Production |
+| 2   | **GACP Application System** | Business             | ✅ Production |
+| 3   | **Farm Management**         | Standalone + Control | ✅ Production |
+| 4   | **Track & Trace**           | Business             | ✅ Production |
+| 5   | **Survey System**           | Standalone           | ✅ Production |
+| 6   | **Standards Comparison**    | Standalone           | ✅ Production |
+
+**Quick Command**: `node config/services-catalog.js` to see complete catalog
+
+📖 **Full Documentation**: [Main Services Catalog](./docs/MAIN_SERVICES_CATALOG.md)
 
 ---
 
