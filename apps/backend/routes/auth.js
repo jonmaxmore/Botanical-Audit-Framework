@@ -17,9 +17,12 @@ const { createLogger } = require('../shared/logger');
 const logger = createLogger('auth');
 
 // Rate limiting for auth endpoints
+// Higher limits in development for testing
+const isDevelopment = process.env.NODE_ENV !== 'production';
+
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 5, // 5 attempts per window
+  max: isDevelopment ? 100 : 5, // 100 attempts in dev, 5 in production
   message: {
     success: false,
     message: 'Too many authentication attempts, please try again later',
@@ -31,7 +34,7 @@ const authLimiter = rateLimit({
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 10, // 10 login attempts per window
+  max: isDevelopment ? 100 : 10, // 100 attempts in dev, 10 in production
   message: {
     success: false,
     message: 'Too many login attempts, please try again later',

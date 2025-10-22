@@ -201,6 +201,7 @@ test.describe('Error Boundary with Authentication', () => {
       !error.includes('Warning') &&
       !error.includes('401') && // Auth errors are expected
       !error.includes('400') && // Bad request from invalid login is expected
+      !error.includes('429') && // Rate limiting from multiple test runs is expected
       !error.includes('Validation failed') && // Validation errors from invalid credentials are expected
       !error.includes('Login error') // Login errors from invalid login are expected
     );
@@ -208,7 +209,11 @@ test.describe('Error Boundary with Authentication', () => {
     // Log all console errors for debugging
     if (consoleErrors.length > 0) {
       console.log('📋 All console errors detected:', consoleErrors.length);
-      console.log('🔍 Critical errors after filtering:', criticalErrors.length);
+      console.log('� Full errors list:', consoleErrors);
+      console.log('�🔍 Critical errors after filtering:', criticalErrors.length);
+      if (criticalErrors.length > 0) {
+        console.log('❌ Critical errors:', criticalErrors);
+      }
     }
     
     expect(criticalErrors.length).toBe(0);

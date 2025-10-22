@@ -13,16 +13,24 @@ const TEST_USERS = [
   {
     email: 'farmer-test-001@example.com',
     password: 'TestPass123!',
-    name: 'สมชาย ใจดี',
-    phoneNumber: '0812345678',
-    role: 'FARMER'
+    fullName: 'สมชาย ใจดี',
+    phone: '0812345678',
+    nationalId: '1234567890123', // Required 13-digit Thai national ID
+    role: 'farmer',
+    farmingExperience: 5,
+    farmerType: 'individual'
   },
   {
     email: 'officer-test-001@example.com',
     password: 'TestPass123!',
-    name: 'สมหญิง ดีใจ',
-    phoneNumber: '0823456789',
-    role: 'DTAM_OFFICER'
+    fullName: 'สมหญิง ดีใจ',
+    phone: '0823456789',
+    nationalId: '1234567890124', // Different national ID
+    role: 'dtam_officer',
+    workLocation: {
+      provinces: ['กรุงเทพมหานคร'],
+      districts: []
+    }
   }
 ];
 
