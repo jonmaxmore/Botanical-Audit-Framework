@@ -38,9 +38,12 @@ app.use(helmet()); // Security headers
 app.use(compression()); // Response compression
 app.use(
   cors({
-    origin: config.server.cors?.allowedOrigins || process.env.ALLOWED_ORIGINS?.split(',') || ['*'],
+    origin: config.server.cors?.allowedOrigins ||
+      process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://127.0.0.1:3000'],
     methods: config.server.cors?.allowedMethods || ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Length', 'X-Request-Id'],
   }),
 );
 app.use(express.json({ limit: '10mb' }));

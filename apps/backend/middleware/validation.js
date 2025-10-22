@@ -14,11 +14,12 @@ const validateRequest = (schema, source = 'body') => {
     const data = req[source];
 
     let joiSchema;
-    if (typeof schema === 'object' && !schema.isJoi) {
+    // Use Joi.isSchema() to properly check if it's already a Joi schema
+    if (Joi.isSchema(schema)) {
+      joiSchema = schema;
+    } else {
       // Convert simple object to Joi schema
       joiSchema = Joi.object(schema);
-    } else {
-      joiSchema = schema;
     }
 
     const { error, value } = joiSchema.validate(data, {
@@ -298,11 +299,17 @@ const schemas = {
       otherwise: Joi.optional(),
     }),
 
+    farmerType: Joi.string().valid('individual', 'cooperative', 'enterprise').when('role', {
+      is: 'farmer',
+      then: Joi.optional(),
+      otherwise: Joi.forbidden(),
+    }),
+
     workLocation: Joi.object({
       provinces: Joi.array().items(Joi.string()).min(1).required(),
       districts: Joi.array().items(Joi.string()).optional(),
     }).when('role', {
-      is: Joi.valid('dtam_officer', 'inspector'),
+      is: Joi.any().valid('dtam_officer', 'inspector'),
       then: Joi.required(),
       otherwise: Joi.optional(),
     }),

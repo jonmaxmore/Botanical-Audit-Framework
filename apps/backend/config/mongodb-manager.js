@@ -39,6 +39,11 @@ try {
     mongodb: {
       uri: mongoUri,
       options: {
+        // Connection Pool Configuration (Task 1.2 - INTEGRATIVE REFINEMENT)
+        maxPoolSize: 10,           // Limit max connections (prevent Atlas M0 exhaustion)
+        minPoolSize: 2,            // Keep warm connections for faster requests
+        serverSelectionTimeoutMS: 5000,  // Fail fast if server unreachable
+        socketTimeoutMS: 45000,    // Close sockets after 45s of inactivity
         // Remove deprecated options
         // useNewUrlParser: true,
         // useUnifiedTopology: true,

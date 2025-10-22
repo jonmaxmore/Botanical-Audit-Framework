@@ -13,7 +13,8 @@ const User = require('../models/user');
 const { authenticate, authorize, rateLimitSensitive } = require('../middleware/auth');
 const { validateRequest, validateUserRegistration } = require('../middleware/validation');
 const { handleAsync, createError, sendError } = require('../middleware/error-handler');
-const logger = require('../shared/logger');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('auth');
 
 // Rate limiting for auth endpoints
 const authLimiter = rateLimit({
@@ -82,18 +83,28 @@ router.post(
   handleAsync(async (req, res) => {
     const { email, password, fullName, phone, nationalId, role, ...roleSpecificData } = req.body;
 
-    // Check if user already exists
+    // Check if user already exists (Task 1.3 - Add 5s query timeout)
     const existingUser = await User.findOne({
       $or: [{ email: email.toLowerCase() }, { nationalId }],
-    });
+    }).maxTimeMS(5000); // Prevent hanging queries
 
     if (existingUser) {
       if (existingUser.email === email.toLowerCase()) {
-        return sendError.validation(res, 'Email already registered', 'email');
+        return res.status(400).json({
+          success: false,
+          message: 'อีเมลนี้ถูกใช้แล้ว',
+          code: 'EMAIL_EXISTS',
+          field: 'email',
+        });
       }
 
       if (existingUser.nationalId === nationalId) {
-        return sendError.validation(res, 'National ID already registered', 'nationalId');
+        return res.status(400).json({
+          success: false,
+          message: 'เลขประจำตัวประชาชนนี้ถูกใช้แล้ว',
+          code: 'NATIONAL_ID_EXISTS',
+          field: 'nationalId',
+        });
       }
     }
 
@@ -164,11 +175,13 @@ router.post(
   handleAsync(async (req, res) => {
     const { email, password, rememberMe = false } = req.body;
 
-    // Find user with password
+    // Find user with password (Task 1.3 - Add 5s query timeout)
     const user = await User.findOne({
       email: email.toLowerCase(),
       isActive: true,
-    }).select('+password');
+    })
+      .select('+password')
+      .maxTimeMS(5000); // Prevent hanging queries
 
     if (!user) {
       return sendError.authentication(res, 'Invalid email or password');
@@ -263,7 +276,8 @@ router.post(
         throw new Error('Invalid token type');
       }
 
-      const user = await User.findById(decoded.userId);
+      // Find user with 5s query timeout (Task 1.3)
+      const user = await User.findById(decoded.userId).maxTimeMS(5000);
 
       if (!user || !user.isActive) {
         return sendError.authentication(res, 'Invalid refresh token');
@@ -322,7 +336,8 @@ router.get(
   '/me',
   authenticate,
   handleAsync(async (req, res) => {
-    const user = await User.findById(req.user.id);
+    // Get user with 5s query timeout (Task 1.3)
+    const user = await User.findById(req.user.id).maxTimeMS(5000);
 
     if (!user) {
       return sendError.notFound(res, 'User');
@@ -352,7 +367,8 @@ router.put(
     notifications: 'object',
   }),
   handleAsync(async (req, res) => {
-    const user = await User.findById(req.user.id);
+    // Get user with 5s query timeout (Task 1.3)
+    const user = await User.findById(req.user.id).maxTimeMS(5000);
 
     if (!user) {
       return sendError.notFound(res, 'User');
@@ -408,7 +424,8 @@ router.post(
   handleAsync(async (req, res) => {
     const { currentPassword, newPassword } = req.body;
 
-    const user = await User.findById(req.user.id).select('+password');
+    // Get user with password field and 5s query timeout (Task 1.3)
+    const user = await User.findById(req.user.id).select('+password').maxTimeMS(5000);
 
     if (!user) {
       return sendError.notFound(res, 'User');
@@ -455,10 +472,11 @@ router.post(
   handleAsync(async (req, res) => {
     const { email } = req.body;
 
+    // Find user with 5s query timeout (Task 1.3)
     const user = await User.findOne({
       email: email.toLowerCase(),
       isActive: true,
-    });
+    }).maxTimeMS(5000);
 
     // Always return success to prevent email enumeration
     if (!user) {
@@ -505,11 +523,12 @@ router.post(
     // Hash the token to match stored version
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
+    // Find user with valid reset token and 5s query timeout (Task 1.3)
     const user = await User.findOne({
       passwordResetToken: hashedToken,
       passwordResetExpires: { $gt: Date.now() },
       isActive: true,
-    });
+    }).maxTimeMS(5000);
 
     if (!user) {
       return sendError.validation(res, 'Invalid or expired reset token');
@@ -551,10 +570,11 @@ router.post(
     // Hash the token to match stored version
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
+    // Find user with valid verification token and 5s query timeout (Task 1.3)
     const user = await User.findOne({
       emailVerificationToken: hashedToken,
       emailVerificationExpires: { $gt: Date.now() },
-    });
+    }).maxTimeMS(5000);
 
     if (!user) {
       return sendError.validation(res, 'Invalid or expired verification token');
@@ -588,7 +608,8 @@ router.post(
   authenticate,
   authLimiter,
   handleAsync(async (req, res) => {
-    const user = await User.findById(req.user.id);
+    // Get user with 5s query timeout (Task 1.3)
+    const user = await User.findById(req.user.id).maxTimeMS(5000);
 
     if (!user) {
       return sendError.notFound(res, 'User');
@@ -624,7 +645,8 @@ router.get(
   '/login-history',
   authenticate,
   handleAsync(async (req, res) => {
-    const user = await User.findById(req.user.id).select('loginHistory lastLogin');
+    // Get user with login history and 5s query timeout (Task 1.3)
+    const user = await User.findById(req.user.id).select('loginHistory lastLogin').maxTimeMS(5000);
 
     if (!user) {
       return sendError.notFound(res, 'User');
@@ -650,7 +672,8 @@ router.post(
   authorize(['admin', 'dtam_officer']),
   rateLimitSensitive(24 * 60 * 60 * 1000, 3), // 3 per day
   handleAsync(async (req, res) => {
-    const user = await User.findById(req.user.id);
+    // Get user with 5s query timeout (Task 1.3)
+    const user = await User.findById(req.user.id).maxTimeMS(5000);
 
     if (!user) {
       return sendError.notFound(res, 'User');

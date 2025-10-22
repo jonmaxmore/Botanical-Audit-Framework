@@ -19,7 +19,12 @@
   },
   "mongodb": {
     "uri": "mongodb+srv://gacp-premierprime:qwer1234@thai-gacp.re1651p.mongodb.net/gacp-development?retryWrites=true&w=majority&ssl=true&authSource=admin",
-    "options": {},
+    "options": {
+      "maxPoolSize": 10,
+      "minPoolSize": 2,
+      "serverSelectionTimeoutMS": 5000,
+      "socketTimeoutMS": 45000
+    },
     "reconnectInterval": 5000,
     "reconnectAttempts": 5
   },
