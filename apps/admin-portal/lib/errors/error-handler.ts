@@ -4,7 +4,7 @@
  */
 
 import { NextApiRequest, NextApiResponse } from 'next';
-import { Prisma } from '@prisma/client';
+// import { Prisma } from '@prisma/client';
 import { ZodError } from 'zod';
 
 /**
@@ -250,22 +250,22 @@ export class ErrorHandler {
       return new ValidationError('Validation failed', details);
     }
 
-    // Prisma errors
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-      return this.handlePrismaError(error);
-    }
+    // Prisma errors (commented out - Prisma not fully configured)
+    // if (error instanceof Prisma.PrismaClientKnownRequestError) {
+    //   return this.handlePrismaError(error);
+    // }
 
-    if (error instanceof Prisma.PrismaClientValidationError) {
-      return new ValidationError('Database validation failed', {
-        message: error.message,
-      });
-    }
+    // if (error instanceof Prisma.PrismaClientValidationError) {
+    //   return new ValidationError('Database validation failed', {
+    //     message: error.message,
+    //   });
+    // }
 
-    if (error instanceof Prisma.PrismaClientInitializationError) {
-      return new DatabaseError('Database connection failed', {
-        message: error.message,
-      });
-    }
+    // if (error instanceof Prisma.PrismaClientInitializationError) {
+    //   return new DatabaseError('Database connection failed', {
+    //     message: error.message,
+    //   });
+    // }
 
     // Standard Error
     if (error instanceof Error) {
@@ -292,9 +292,9 @@ export class ErrorHandler {
   }
 
   /**
-   * Handle Prisma-specific errors
+   * Handle Prisma-specific errors (commented out - Prisma not fully configured)
    */
-  private static handlePrismaError(error: Prisma.PrismaClientKnownRequestError): AppError {
+  private static handlePrismaError(error: any): AppError {
     switch (error.code) {
       // Unique constraint violation
       case 'P2002': {

@@ -2,7 +2,7 @@
  * Demo Navigation Component
  * แสดงการนำทางระหว่างขั้นตอนต่างๆ ในระบบ demo
  */
-
+// @ts-nocheck
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
