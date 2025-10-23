@@ -144,11 +144,42 @@ export default function ApplicationDetailPage() {
     setReviewDialogOpen(true);
   };
 
-  const handleReviewSubmit = (data: ReviewData) => {
-    console.log('Review submitted:', data);
-    // TODO: Send to API
-    alert(`ดำเนินการเรียบร้อย: ${data.decision}`);
-    setReviewDialogOpen(false);
+  const handleReviewSubmit = async (data: ReviewData) => {
+    try {
+      if (!params?.id) {
+        throw new Error('Application ID is missing');
+      }
+
+      console.log('Review submitted:', data);
+
+      // Submit review to API
+      const response = await fetch(`/api/applications/${params.id}/review`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          decision: data.decision,
+          comment: data.comment,
+          rating: data.rating,
+          reviewedBy: 'current-user-id', // TODO: Get from auth context
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit review');
+      }
+
+      const result = await response.json();
+      alert(`ดำเนินการเรียบร้อย: ${data.decision}`);
+      setReviewDialogOpen(false);
+
+      // Refresh application data
+      window.location.reload();
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('เกิดข้อผิดพลาดในการส่งรีวิว กรุณาลองใหม่อีกครั้ง');
+    }
   };
 
   const handleAddComment = (content: string) => {

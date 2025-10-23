@@ -2,16 +2,31 @@
  * Demo Dashboard Component
  * แสดงภาพรวมของระบบในโหมด demo
  */
-// @ts-nocheck
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { getDemoController } from '../lib/demoController';
-import { demoUsers, demoApplications, demoInspections, demoCertificates } from '../lib/demoData';
+import {
+  demoUsers,
+  demoApplications,
+  demoInspections,
+  demoCertificates,
+  DemoUser,
+  DemoApplication,
+  DemoInspection,
+  DemoCertificate,
+} from '../lib/demoData';
 
 interface DemoDashboardProps {
   userRole?: string;
   className?: string;
+}
+
+interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
 }
 
 interface DashboardStats {
@@ -41,46 +56,51 @@ interface DashboardStats {
 
 export default function DemoDashboard({ userRole = 'farmer', className = '' }: DemoDashboardProps) {
   const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [currentUser, setCurrentUser] = useState<any>(null);
-  const demoController = getDemoController();
+  const [currentUser, setCurrentUser] = useState<DemoUser | null>(null);
+  const _demoController = getDemoController();
+
+  const updateCurrentUser = useCallback(() => {
+    const user = demoUsers.find((u: DemoUser) => u.role === userRole) || null;
+    setCurrentUser(user);
+  }, [userRole]);
+
+  const calculateStats = useCallback(() => {
+    const dashboardStats: DashboardStats = {
+      applications: {
+        total: demoApplications.length,
+        pending: demoApplications.filter((app: DemoApplication) => app.status === 'pending').length,
+        approved: demoApplications.filter((app: DemoApplication) => app.status === 'approved')
+          .length,
+        rejected: demoApplications.filter((app: DemoApplication) => app.status === 'rejected')
+          .length,
+      },
+      inspections: {
+        scheduled: demoInspections.filter((ins: DemoInspection) => ins.status === 'scheduled')
+          .length,
+        completed: demoInspections.filter((ins: DemoInspection) => ins.status === 'completed')
+          .length,
+        pending: demoInspections.filter((ins: DemoInspection) => ins.status === 'pending').length,
+      },
+      certificates: {
+        active: demoCertificates.filter((cert: DemoCertificate) => cert.status === 'active').length,
+        expired: demoCertificates.filter((cert: DemoCertificate) => cert.status === 'expired')
+          .length,
+        total: demoCertificates.length,
+      },
+      users: {
+        farmers: demoUsers.filter((user: DemoUser) => user.role === 'farmer').length,
+        inspectors: demoUsers.filter((user: DemoUser) => user.role === 'inspector').length,
+        reviewers: demoUsers.filter((user: DemoUser) => user.role === 'reviewer').length,
+        admins: demoUsers.filter((user: DemoUser) => user.role === 'admin').length,
+      },
+    };
+    setStats(dashboardStats);
+  }, []);
 
   useEffect(() => {
     calculateStats();
     updateCurrentUser();
-  }, [userRole]);
-
-  const calculateStats = () => {
-    const dashboardStats: DashboardStats = {
-      applications: {
-        total: demoApplications.length,
-        pending: demoApplications.filter(app => app.status === 'pending').length,
-        approved: demoApplications.filter(app => app.status === 'approved').length,
-        rejected: demoApplications.filter(app => app.status === 'rejected').length,
-      },
-      inspections: {
-        scheduled: demoInspections.filter(ins => ins.status === 'scheduled').length,
-        completed: demoInspections.filter(ins => ins.status === 'completed').length,
-        pending: demoInspections.filter(ins => ins.status === 'pending').length,
-      },
-      certificates: {
-        active: demoCertificates.filter(cert => cert.status === 'active').length,
-        expired: demoCertificates.filter(cert => cert.status === 'expired').length,
-        total: demoCertificates.length,
-      },
-      users: {
-        farmers: demoUsers.filter(user => user.role === 'farmer').length,
-        inspectors: demoUsers.filter(user => user.role === 'inspector').length,
-        reviewers: demoUsers.filter(user => user.role === 'reviewer').length,
-        admins: demoUsers.filter(user => user.role === 'admin').length,
-      },
-    };
-    setStats(dashboardStats);
-  };
-
-  const updateCurrentUser = () => {
-    const user = demoUsers.find(u => u.role === userRole) || demoUsers[0];
-    setCurrentUser(user);
-  };
+  }, [userRole, updateCurrentUser, calculateStats]);
 
   if (!stats || !currentUser) {
     return <div className="animate-pulse bg-gray-100 rounded-lg h-64"></div>;

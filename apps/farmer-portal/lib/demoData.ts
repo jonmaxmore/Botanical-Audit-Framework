@@ -3,7 +3,40 @@
  * Sample data for demonstrating the farmer portal features
  */
 
-export const demoUsers = [
+export interface DemoUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
+export interface DemoApplication {
+  id: string;
+  farmName: string;
+  farmerId: string;
+  status: string;
+  submittedDate: string;
+}
+
+export interface DemoInspection {
+  id: string;
+  applicationId: string;
+  farmerId: string;
+  inspectorId: string;
+  date: string;
+  status: string;
+}
+
+export interface DemoCertificate {
+  id: string;
+  applicationId: string;
+  farmerId: string;
+  issuedDate: string;
+  expiryDate: string;
+  status: string;
+}
+
+export const demoUsers: DemoUser[] = [
   {
     id: '1',
     name: 'นายสมชาย ใจดี',
@@ -12,7 +45,7 @@ export const demoUsers = [
   },
 ];
 
-export const demoApplications = [
+export const demoApplications: DemoApplication[] = [
   {
     id: 'APP-001',
     farmName: 'ฟาร์มทดสอบ A',
@@ -22,7 +55,7 @@ export const demoApplications = [
   },
 ];
 
-export const demoInspections = [
+export const demoInspections: DemoInspection[] = [
   {
     id: 'INS-001',
     applicationId: 'APP-001',
@@ -33,7 +66,7 @@ export const demoInspections = [
   },
 ];
 
-export const demoCertificates = [
+export const demoCertificates: DemoCertificate[] = [
   {
     id: 'CERT-001',
     applicationId: 'APP-001',

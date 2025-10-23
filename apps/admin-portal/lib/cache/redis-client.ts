@@ -350,6 +350,53 @@ class RedisClient {
   }
 
   /**
+   * Push element to the head of a list
+   */
+  public async lpush(key: string, ...values: string[]): Promise<number> {
+    try {
+      return await this.client.lpush(key, ...values);
+    } catch (error) {
+      console.error(`Redis LPUSH error for key "${key}":`, error);
+      return 0;
+    }
+  }
+
+  /**
+   * Trim a list to specified range
+   */
+  public async ltrim(key: string, start: number, stop: number): Promise<void> {
+    try {
+      await this.client.ltrim(key, start, stop);
+    } catch (error) {
+      console.error(`Redis LTRIM error for key "${key}":`, error);
+    }
+  }
+
+  /**
+   * Get a range of elements from a list
+   */
+  public async lrange(key: string, start: number, stop: number): Promise<string[]> {
+    try {
+      return await this.client.lrange(key, start, stop);
+    } catch (error) {
+      console.error(`Redis LRANGE error for key "${key}":`, error);
+      return [];
+    }
+  }
+
+  /**
+   * Remove elements from a list
+   */
+  public async lrem(key: string, count: number, value: string): Promise<number> {
+    try {
+      return await this.client.lrem(key, count, value);
+    } catch (error) {
+      console.error(`Redis LREM error for key "${key}":`, error);
+      return 0;
+    }
+  }
+
+  /**
    * Get raw Redis client for advanced operations
    */
   public getClient(): Redis {

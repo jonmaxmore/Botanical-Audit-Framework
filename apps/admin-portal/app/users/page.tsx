@@ -121,10 +121,26 @@ export default function UsersPage() {
     router.push(`/users/${userId}`);
   };
 
-  const handleDeleteUser = (userId: string) => {
+  const handleDeleteUser = async (userId: string) => {
     if (confirm('คุณต้องการลบผู้ใช้งานนี้หรือไม่?')) {
-      setUsers(users.filter(u => u.id !== userId));
-      alert('ลบผู้ใช้งานเรียบร้อย');
+      try {
+        const response = await fetch(`/api/users/${userId}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to delete user');
+        }
+
+        setUsers(users.filter(u => u.id !== userId));
+        alert('ลบผู้ใช้งานเรียบร้อย');
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        alert('เกิดข้อผิดพลาดในการลบผู้ใช้งาน กรุณาลองใหม่อีกครั้ง');
+      }
     }
   };
 

@@ -196,18 +196,58 @@ export default function UserDetailPage() {
     setDeleteDialogOpen(true);
   };
 
-  const handleSuspendConfirm = () => {
-    // TODO: API call to suspend user
-    console.log('Suspending user:', params?.id);
-    setSuspendDialogOpen(false);
-    alert('ระงับการใช้งานผู้ใช้เรียบร้อย');
+  const handleSuspendConfirm = async () => {
+    try {
+      console.log('Suspending user:', params?.id);
+
+      const response = await fetch(`/api/users/${params?.id}/suspend`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          reason: 'Admin suspended',
+          suspendedBy: 'current-user-id', // TODO: Get from auth context
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to suspend user');
+      }
+
+      setSuspendDialogOpen(false);
+      alert('ระงับการใช้งานผู้ใช้เรียบร้อย');
+
+      // Refresh page to show updated status
+      window.location.reload();
+    } catch (error) {
+      console.error('Error suspending user:', error);
+      alert('เกิดข้อผิดพลาดในการระงับผู้ใช้งาน กรุณาลองใหม่อีกครั้ง');
+    }
   };
 
-  const handleDeleteConfirm = () => {
-    // TODO: API call to delete user
-    console.log('Deleting user:', params?.id);
-    setDeleteDialogOpen(false);
-    router.push('/users');
+  const handleDeleteConfirm = async () => {
+    try {
+      console.log('Deleting user:', params?.id);
+
+      const response = await fetch(`/api/users/${params?.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete user');
+      }
+
+      setDeleteDialogOpen(false);
+      router.push('/users');
+    } catch (error) {
+      console.error('Error deleting user:', error);
+      alert('เกิดข้อผิดพลาดในการลบผู้ใช้งาน กรุณาลองใหม่อีกครั้ง');
+      setDeleteDialogOpen(false);
+    }
   };
 
   const getRoleLabel = (role: string) => {
