@@ -22,8 +22,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+interface DialogWrapperProps {
+  maxReschedule?: number;
+  isLoading?: boolean;
+  applicationId?: string;
+  currentInspection?: { date: string; time: string };
+  rescheduleCount?: number;
+  onConfirm?: (date: Date, reason: string) => void;
+}
+
 // Wrapper component for interactive state
-const DialogWrapper = (args: any) => {
+const DialogWrapper = (args: DialogWrapperProps) => {
   const [isOpen, setIsOpen] = useState(true);
 
   return (

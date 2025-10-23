@@ -83,7 +83,7 @@ function formatTime(date: Date): string {
   });
 }
 
-function isDateAvailable(date: Date, availableDates?: Date[]): boolean {
+function _isDateAvailable(date: Date, availableDates?: Date[]): boolean {
   if (!availableDates || availableDates.length === 0) return true;
 
   const dateStr = date.toISOString().split('T')[0];
@@ -103,7 +103,7 @@ export function RescheduleDialog({
   currentInspection,
   rescheduleCount,
   maxReschedule = 1,
-  availableDates,
+  availableDates: _availableDates,
   onConfirm,
   isLoading = false,
 }: RescheduleDialogProps) {

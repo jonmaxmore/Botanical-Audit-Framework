@@ -28,16 +28,15 @@ export enum NotificationPriority {
 }
 
 // Notification interface
-export interface Notification {
-  id: string;
-  notificationId: string;
+interface Notification {
+  _id: string;
   userId: string;
   applicationId?: string;
   type: NotificationType;
   priority: NotificationPriority;
   title: string;
   message: string;
-  data?: Record<string, any>;
+  data?: Record<string, unknown>;
   actionUrl?: string;
   read: boolean;
   readAt?: Date;
@@ -52,7 +51,11 @@ interface NotificationPanelProps {
   onClose: () => void;
 }
 
-export default function NotificationPanel({ userId, isOpen, onClose }: NotificationPanelProps) {
+export default function NotificationPanel({
+  userId: _userId,
+  isOpen,
+  onClose,
+}: NotificationPanelProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);

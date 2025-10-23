@@ -129,7 +129,7 @@ export function CountdownTimer({
   }, [state.isRunning, state.isPaused, state.hasTimedOut, onTimeout, onTick]);
 
   // Control functions
-  const start = useCallback(() => {
+  const _start = useCallback(() => {
     setState(prev => ({ ...prev, isRunning: true, isPaused: false }));
   }, []);
 
