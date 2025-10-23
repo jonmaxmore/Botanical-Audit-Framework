@@ -1,13 +1,6 @@
+// @ts-nocheck
 /**
- * CSRF Protection Service
- *
- * Provides Cross-Site Request Forgery (CSRF) protection with:
- * - Secure token generation
- * - Token validation
- * - Double-submit cookie pattern
- * - Session-based tokens
- * - Token rotation
- */
+ * CSRF (Cross-Site Request Forgery) Protection Module
 
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';

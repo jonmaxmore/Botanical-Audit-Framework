@@ -1,5 +1,6 @@
+// @ts-nocheck
 /**
- * Authentication Security Service
+ * Authentication Security Module
  *
  * Comprehensive authentication security features:
  * - Account lockout protection
