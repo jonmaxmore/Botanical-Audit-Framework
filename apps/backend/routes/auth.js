@@ -8,6 +8,7 @@ const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
+const Joi = require('joi');
 
 const User = require('../models/user');
 const { authenticate, authorize, rateLimitSensitive } = require('../middleware/auth');
@@ -15,6 +16,17 @@ const { validateRequest, validateUserRegistration } = require('../middleware/val
 const { handleAsync, createError, sendError } = require('../middleware/error-handler');
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('auth');
+
+// Validation schemas
+const loginSchema = Joi.object({
+  email: Joi.string().email().required(),
+  password: Joi.string().min(8).required(),
+  rememberMe: Joi.boolean().optional(),
+});
+
+const refreshTokenSchema = Joi.object({
+  refreshToken: Joi.string().required(),
+});
 
 // Rate limiting for auth endpoints
 // Higher limits in development for testing
@@ -171,10 +183,7 @@ router.post(
 router.post(
   '/login',
   loginLimiter,
-  validateRequest({
-    email: 'required|email',
-    password: 'required|string|min:8',
-  }),
+  validateRequest(loginSchema),
   handleAsync(async (req, res) => {
     const { email, password, rememberMe = false } = req.body;
 
@@ -263,9 +272,7 @@ router.post(
  */
 router.post(
   '/refresh',
-  validateRequest({
-    refreshToken: 'required|string',
-  }),
+  validateRequest(refreshTokenSchema),
   handleAsync(async (req, res) => {
     const { refreshToken } = req.body;
 
