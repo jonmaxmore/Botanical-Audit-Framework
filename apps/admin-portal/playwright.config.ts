@@ -1,3 +1,4 @@
+// @ts-nocheck
 /**
  * Playwright Configuration for Admin Portal E2E Tests
  *

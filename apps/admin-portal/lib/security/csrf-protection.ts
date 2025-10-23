@@ -1,6 +1,7 @@
 // @ts-nocheck
 /**
  * CSRF (Cross-Site Request Forgery) Protection Module
+ */
 
 import crypto from 'crypto';
 import { NextApiRequest, NextApiResponse } from 'next';

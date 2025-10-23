@@ -11,7 +11,7 @@
  * - IP-based security
  */
 
-import { RedisClient } from '../cache/redis-client';
+import { redisClient, type RedisClient } from '../cache/redis-client';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
@@ -69,7 +69,7 @@ export class AuthSecurityService {
   private readonly MAX_SESSIONS_PER_USER = 5;
 
   constructor() {
-    this.redis = RedisClient.getInstance();
+    this.redis = redisClient;
     this.jwtSecret = process.env.JWT_SECRET || 'your-secret-key-change-in-production';
     this.jwtRefreshSecret = process.env.JWT_REFRESH_SECRET || 'your-refresh-secret';
   }
