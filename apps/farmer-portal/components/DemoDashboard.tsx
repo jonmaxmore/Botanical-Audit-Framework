@@ -22,11 +22,11 @@ interface DemoDashboardProps {
   className?: string;
 }
 
-interface User {
+interface Activity {
   id: string;
-  name: string;
-  email: string;
-  role: string;
+  type: string;
+  message: string;
+  timestamp: string;
 }
 
 interface DashboardStats {
@@ -112,14 +112,17 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
         return [
           {
             title: 'คำขอของฉัน',
-            value: demoApplications.filter(app => app.farmerId === currentUser.id).length,
+            value: demoApplications.filter(
+              (app: DemoApplication) => app.farmerId === currentUser.id,
+            ).length,
             subtitle: 'คำขอทั้งหมด',
             icon: '📝',
             color: 'bg-blue-50 border-blue-200 text-blue-600',
           },
           {
             title: 'การตรวจสอบ',
-            value: demoInspections.filter(ins => ins.farmerId === currentUser.id).length,
+            value: demoInspections.filter((ins: DemoInspection) => ins.farmerId === currentUser.id)
+              .length,
             subtitle: 'รอตรวจสอบ',
             icon: '🔍',
             color: 'bg-yellow-50 border-yellow-200 text-yellow-600',
@@ -127,7 +130,8 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           {
             title: 'ใบรับรอง',
             value: demoCertificates.filter(
-              cert => cert.farmerId === currentUser.id && cert.status === 'active',
+              (cert: DemoCertificate) =>
+                cert.farmerId === currentUser.id && cert.status === 'active',
             ).length,
             subtitle: 'ใบรับรองที่ใช้งานได้',
             icon: '🏆',
@@ -140,7 +144,8 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           {
             title: 'งานตรวจสอบ',
             value: demoInspections.filter(
-              ins => ins.inspectorId === currentUser.id && ins.status === 'scheduled',
+              (ins: DemoInspection) =>
+                ins.inspectorId === currentUser.id && ins.status === 'scheduled',
             ).length,
             subtitle: 'ที่ได้รับมอบหมาย',
             icon: '📋',
@@ -149,7 +154,8 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           {
             title: 'ตรวจสอบแล้ว',
             value: demoInspections.filter(
-              ins => ins.inspectorId === currentUser.id && ins.status === 'completed',
+              (ins: DemoInspection) =>
+                ins.inspectorId === currentUser.id && ins.status === 'completed',
             ).length,
             subtitle: 'ในเดือนนี้',
             icon: '✅',
@@ -168,15 +174,17 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
         return [
           {
             title: 'รอการประเมิน',
-            value: demoApplications.filter(app => app.status === 'under_review').length,
+            value: demoApplications.filter((app: DemoApplication) => app.status === 'under_review')
+              .length,
             subtitle: 'คำขอที่ต้องประเมิน',
             icon: '📊',
             color: 'bg-blue-50 border-blue-200 text-blue-600',
           },
           {
             title: 'ประเมินแล้ว',
-            value: demoApplications.filter(app => ['approved', 'rejected'].includes(app.status))
-              .length,
+            value: demoApplications.filter((app: DemoApplication) =>
+              ['approved', 'rejected'].includes(app.status),
+            ).length,
             subtitle: 'ในเดือนนี้',
             icon: '📈',
             color: 'bg-green-50 border-green-200 text-green-600',
@@ -219,38 +227,37 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
   };
 
   const getRecentActivities = () => {
-    const activities: any[] = [];
+    const activities: Activity[] = [];
 
     // Add recent applications
     demoApplications
       .filter(
-        app => userRole === 'admin' || (userRole === 'farmer' && app.farmerId === currentUser.id),
+        (app: DemoApplication) =>
+          userRole === 'admin' || (userRole === 'farmer' && app.farmerId === currentUser.id),
       )
       .slice(0, 3)
-      .forEach(app => {
+      .forEach((app: DemoApplication) => {
         activities.push({
+          id: app.id,
           type: 'application',
-          title: `คำขอ GACP #${app.id}`,
-          description: `สถานะ: ${app.status}`,
-          time: '2 ชั่วโมงที่แล้ว',
-          icon: '📝',
+          message: `คำขอ GACP #${app.id} สถานะ: ${app.status}`,
+          timestamp: app.submittedDate,
         });
       });
 
     // Add recent inspections
     demoInspections
       .filter(
-        ins =>
+        (ins: DemoInspection) =>
           userRole === 'admin' || (userRole === 'inspector' && ins.inspectorId === currentUser.id),
       )
       .slice(0, 2)
-      .forEach(ins => {
+      .forEach((ins: DemoInspection) => {
         activities.push({
+          id: ins.id,
           type: 'inspection',
-          title: `การตรวจสอบ #${ins.id}`,
-          description: `กำหนดการ: ${ins.scheduledDate}`,
-          time: '4 ชั่วโมงที่แล้ว',
-          icon: '🔍',
+          message: `การตรวจสอบ #${ins.id}`,
+          timestamp: ins.date,
         });
       });
 
@@ -312,14 +319,16 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           <h3 className="text-lg font-semibold text-gray-900">กิจกรรมล่าสุด</h3>
         </div>
         <div className="divide-y">
-          {activities.map((activity, index) => (
-            <div key={index} className="p-4 flex items-center space-x-3">
-              <div className="text-xl">{activity.icon}</div>
+          {activities.map(activity => (
+            <div key={activity.id} className="p-4 flex items-center space-x-3">
+              <div className="text-xl">{activity.type === 'application' ? '📝' : '🔍'}</div>
               <div className="flex-1">
-                <p className="font-medium text-gray-900">{activity.title}</p>
-                <p className="text-sm text-gray-600">{activity.description}</p>
+                <p className="font-medium text-gray-900">{activity.message}</p>
+                <p className="text-sm text-gray-600">{activity.type}</p>
               </div>
-              <div className="text-xs text-gray-500">{activity.time}</div>
+              <div className="text-xs text-gray-500">
+                {new Date(activity.timestamp).toLocaleDateString('th-TH')}
+              </div>
             </div>
           ))}
         </div>

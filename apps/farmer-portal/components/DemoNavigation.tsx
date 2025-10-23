@@ -7,20 +7,38 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { getDemoController } from '../lib/demoController';
+import { DemoUser } from '../lib/demoData';
 
-interface DemoNavigationProps {
-  onStepChange?: (step: any) => void;
-  className?: string;
+interface DemoStep {
+  action: string;
+  role: string;
+  title?: string;
+  description?: string;
+}
+
+interface StepData {
+  scenario: {
+    title: string;
+    steps: DemoStep[];
+  };
+  currentStepIndex: number;
+  totalSteps: number;
+  currentStepData: DemoStep;
 }
 
 interface DemoStatus {
   hasActiveSession: boolean;
-  stepData?: any;
-  currentUser?: any;
+  stepData?: StepData;
+  currentUser?: DemoUser;
+}
+
+interface DemoNavigationProps {
+  onStepChange?: (step: StepData) => void;
+  className?: string;
 }
 
 export default function DemoNavigation({ onStepChange, className = '' }: DemoNavigationProps) {
-  const [demoStatus, setDemoStatus] = useState<any>(null);
+  const [demoStatus, setDemoStatus] = useState<DemoStatus | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const demoController = getDemoController();
 
@@ -163,7 +181,7 @@ export default function DemoNavigation({ onStepChange, className = '' }: DemoNav
           <div className="bg-white rounded p-3 border">
             <div className="font-medium text-gray-900 mb-3">ความคืบหน้า:</div>
             <div className="space-y-2">
-              {stepData?.scenario.steps.map((step: any, index: number) => (
+              {stepData?.scenario.steps.map((step: DemoStep, index: number) => (
                 <button
                   key={index}
                   onClick={() => handleGoToStep(index)}
