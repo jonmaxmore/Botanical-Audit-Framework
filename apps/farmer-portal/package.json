@@ -41,6 +41,7 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@sentry/nextjs": "^10.21.0",
     "@storybook/nextjs": "^9.1.10",
     "@storybook/react": "^9.1.10",
     "@testing-library/jest-dom": "^6.9.1",

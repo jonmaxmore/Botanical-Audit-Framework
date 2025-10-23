@@ -64,20 +64,8 @@ const config = {
     },
   },
 
-  // Transform files
-  transform: {
-    '^.+\\.(ts|tsx)$': [
-      'ts-jest',
-      {
-        tsconfig: {
-          jsx: 'react',
-        },
-      },
-    ],
-  },
-
-  // Module file extensions
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
+  // Ignore transform for these patterns
+  transformIgnorePatterns: ['node_modules/(?!(@gacp)/)', '^.+\\.module\\.(css|sass|scss)$'],
 
   // Verbose output
   verbose: true,
