@@ -94,7 +94,7 @@ export default function UserDetailPage() {
     const timer = setTimeout(() => {
       // Mock user data
       setUser({
-        id: params.id as string,
+        id: params?.id as string,
         name: 'นายสมชาย ผู้ตรวจสอบ',
         email: 'somchai.reviewer@gacp.go.th',
         phone: '081-234-5678',
@@ -163,7 +163,7 @@ export default function UserDetailPage() {
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [params.id]);
+  }, [params?.id]);
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -183,7 +183,7 @@ export default function UserDetailPage() {
 
   const handleEdit = () => {
     handleMenuClose();
-    router.push(`/users/${params.id}/edit`);
+    router.push(`/users/${params?.id}/edit`);
   };
 
   const handleSuspend = () => {
@@ -198,14 +198,14 @@ export default function UserDetailPage() {
 
   const handleSuspendConfirm = () => {
     // TODO: API call to suspend user
-    console.log('Suspending user:', params.id);
+    console.log('Suspending user:', params?.id);
     setSuspendDialogOpen(false);
     alert('ระงับการใช้งานผู้ใช้เรียบร้อย');
   };
 
   const handleDeleteConfirm = () => {
     // TODO: API call to delete user
-    console.log('Deleting user:', params.id);
+    console.log('Deleting user:', params?.id);
     setDeleteDialogOpen(false);
     router.push('/users');
   };

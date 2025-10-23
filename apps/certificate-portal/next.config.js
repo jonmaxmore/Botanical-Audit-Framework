@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
 
   // Environment variables
   env: {
@@ -10,12 +9,20 @@ const nextConfig = {
     NEXT_PUBLIC_APP_VERSION: '1.0.0',
   },
 
-  // Image optimization
+  // Image optimization (migrated to remotePatterns for Next.js 16)
   images: {
-    domains: ['localhost'],
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
+    ],
   },
 
-  // Webpack configuration
+  // Turbopack configuration for Next.js 16
+  turbopack: {},
+
+  // Webpack configuration (fallback for non-Turbopack builds)
   webpack: config => {
     config.resolve.fallback = { fs: false, net: false, tls: false };
     return config;

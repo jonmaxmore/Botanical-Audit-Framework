@@ -46,7 +46,7 @@ export default function ReviewDetailPage({ params }: { params: { id: string } })
 
   // Mock data
   const reviewData = {
-    id: params.id,
+    id: params?.id,
     applicationNumber: 'GACP-2025-0001',
     status: 'pending',
     submittedDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),

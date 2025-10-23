@@ -193,10 +193,7 @@ export class ErrorResponse {
    * Send validation error
    */
   static validation(res: NextApiResponse, message: string, details?: any): void {
-    const error = ErrorHandler.normalizeError(new Error(message));
-    error.statusCode = 400;
-    error.code = 'VALIDATION_ERROR';
-    if (details) error.details = details;
+    const error = new AppError(message, 400, 'VALIDATION_ERROR', details);
     ErrorHandler.sendErrorResponse(res, error);
   }
 
@@ -204,9 +201,7 @@ export class ErrorResponse {
    * Send not found error
    */
   static notFound(res: NextApiResponse, resource: string = 'Resource'): void {
-    const error = ErrorHandler.normalizeError(new Error(`${resource} not found`));
-    error.statusCode = 404;
-    error.code = 'NOT_FOUND';
+    const error = new AppError(`${resource} not found`, 404, 'NOT_FOUND');
     ErrorHandler.sendErrorResponse(res, error);
   }
 
@@ -214,9 +209,7 @@ export class ErrorResponse {
    * Send unauthorized error
    */
   static unauthorized(res: NextApiResponse, message: string = 'Unauthorized'): void {
-    const error = ErrorHandler.normalizeError(new Error(message));
-    error.statusCode = 401;
-    error.code = 'UNAUTHORIZED';
+    const error = new AppError(message, 401, 'UNAUTHORIZED');
     ErrorHandler.sendErrorResponse(res, error);
   }
 
@@ -224,9 +217,7 @@ export class ErrorResponse {
    * Send forbidden error
    */
   static forbidden(res: NextApiResponse, message: string = 'Forbidden'): void {
-    const error = ErrorHandler.normalizeError(new Error(message));
-    error.statusCode = 403;
-    error.code = 'FORBIDDEN';
+    const error = new AppError(message, 403, 'FORBIDDEN');
     ErrorHandler.sendErrorResponse(res, error);
   }
 
@@ -234,9 +225,7 @@ export class ErrorResponse {
    * Send internal server error
    */
   static internal(res: NextApiResponse, message: string = 'Internal server error'): void {
-    const error = ErrorHandler.normalizeError(new Error(message));
-    error.statusCode = 500;
-    error.code = 'INTERNAL_ERROR';
+    const error = new AppError(message, 500, 'INTERNAL_ERROR');
     ErrorHandler.sendErrorResponse(res, error);
   }
 
@@ -250,10 +239,7 @@ export class ErrorResponse {
     message: string,
     details?: any,
   ): void {
-    const error = ErrorHandler.normalizeError(new Error(message));
-    error.statusCode = statusCode;
-    error.code = code;
-    if (details) error.details = details;
+    const error = new AppError(message, statusCode, code, details);
     ErrorHandler.sendErrorResponse(res, error);
   }
 }

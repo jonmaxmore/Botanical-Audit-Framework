@@ -14,6 +14,7 @@
 const nextConfig = {
   // Performance: Standalone output for production
   output: 'standalone',
+  turbopack: {},
 
   // Compiler optimizations
   compiler: {
@@ -85,12 +86,6 @@ const nextConfig = {
 
   // React strict mode
   reactStrictMode: true,
-
-  // Experimental features for performance
-  experimental: {
-    optimizeCss: true, // CSS optimization
-    optimizePackageImports: ['@mui/material', '@mui/icons-material'], // Tree shaking
-  },
 };
 
 module.exports = nextConfig;

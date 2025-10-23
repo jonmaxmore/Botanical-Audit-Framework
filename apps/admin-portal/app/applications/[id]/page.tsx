@@ -74,7 +74,7 @@ export default function ApplicationDetailPage() {
     const timer = setTimeout(() => {
       // Mock application data
       setApplication({
-        id: params.id as string,
+        id: params?.id as string,
         farmName: 'ฟาร์มทดสอบ A',
         farmer: {
           name: 'นายสมชาย ใจดี',
@@ -130,7 +130,7 @@ export default function ApplicationDetailPage() {
       setLoading(false);
     }, 800);
     return () => clearTimeout(timer);
-  }, [params.id]);
+  }, [params?.id]);
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
