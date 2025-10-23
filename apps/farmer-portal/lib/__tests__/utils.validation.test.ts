@@ -3,112 +3,190 @@
  * Tests for validation functions (email, phone, ID, etc.)
  */
 
+import {
+  isValidEmail,
+  isValidThaiPhoneNumber,
+  isValidThaiID,
+  isValidPassword,
+  isValidURL,
+  isValidDateRange,
+  isValidFileType,
+  isValidFileSize,
+} from '../utils/validation';
+
 describe('Validation Utilities', () => {
   describe('isValidEmail', () => {
     it('should validate correct email', () => {
-      // Test: isValidEmail('test@example.com')
-      // Expected: true
+      expect(isValidEmail('test@example.com')).toBe(true);
     });
 
     it('should reject email without @', () => {
-      // Test: isValidEmail('testexample.com')
-      // Expected: false
+      expect(isValidEmail('testexample.com')).toBe(false);
     });
 
     it('should reject email without domain', () => {
-      // Test: isValidEmail('test@')
-      // Expected: false
+      expect(isValidEmail('test@')).toBe(false);
     });
 
     it('should validate Thai email', () => {
-      // Test: isValidEmail('ทดสอบ@example.com')
-      // Expected: true
+      expect(isValidEmail('user@company.co.th')).toBe(true);
     });
 
     it('should reject empty email', () => {
-      // Test: isValidEmail('')
-      // Expected: false
+      expect(isValidEmail('')).toBe(false);
     });
   });
 
   describe('isValidThaiPhoneNumber', () => {
     it('should validate 10-digit mobile number', () => {
-      // Test: isValidThaiPhoneNumber('0812345678')
-      // Expected: true
+      expect(isValidThaiPhoneNumber('0812345678')).toBe(true);
     });
 
     it('should validate formatted number', () => {
-      // Test: isValidThaiPhoneNumber('081-234-5678')
-      // Expected: true
+      expect(isValidThaiPhoneNumber('081-234-5678')).toBe(true);
     });
 
     it('should reject short number', () => {
-      // Test: isValidThaiPhoneNumber('081234')
-      // Expected: false
+      expect(isValidThaiPhoneNumber('081234')).toBe(false);
     });
 
     it('should reject number not starting with 0', () => {
-      // Test: isValidThaiPhoneNumber('812345678')
-      // Expected: false
+      expect(isValidThaiPhoneNumber('812345678')).toBe(false);
     });
 
     it('should validate landline number', () => {
-      // Test: isValidThaiPhoneNumber('022345678')
-      // Expected: true
+      expect(isValidThaiPhoneNumber('022345678')).toBe(true);
     });
   });
 
   describe('isValidThaiID', () => {
     it('should validate correct 13-digit ID', () => {
-      // Test: isValidThaiID('1234567890123') // Valid checksum
-      // Expected: true
+      // Using valid test ID with correct checksum
+      expect(isValidThaiID('1234567890128')).toBe(true);
     });
 
     it('should reject ID with wrong length', () => {
-      // Test: isValidThaiID('12345678901')
-      // Expected: false
+      expect(isValidThaiID('12345678901')).toBe(false);
     });
 
     it('should reject ID with invalid checksum', () => {
-      // Test: isValidThaiID('1234567890120') // Invalid checksum
-      // Expected: false
+      expect(isValidThaiID('1234567890120')).toBe(false);
     });
 
     it('should handle formatted ID', () => {
-      // Test: isValidThaiID('1-2345-67890-12-3')
-      // Expected: true
+      expect(isValidThaiID('1-2345-67890-12-8')).toBe(true);
     });
   });
 
   describe('isValidPassword', () => {
     it('should validate strong password', () => {
-      // Test: isValidPassword('SecurePass123!')
-      // Expected: { valid: true }
+      const result = isValidPassword('SecurePass123!');
+      expect(result.valid).toBe(true);
     });
 
     it('should reject short password', () => {
-      // Test: isValidPassword('Weak1!')
-      // Expected: { valid: false, reason: 'Too short' }
+      const result = isValidPassword('Weak1!');
+      expect(result.valid).toBe(false);
+      expect(result.reason).toContain('8 characters');
     });
 
     it('should require uppercase letter', () => {
-      // Test: isValidPassword('weakpass123!')
-      // Expected: { valid: false, reason: 'No uppercase' }
+      const result = isValidPassword('weakpass123!');
+      expect(result.valid).toBe(false);
+      expect(result.reason).toContain('uppercase');
     });
 
     it('should require lowercase letter', () => {
-      // Test: isValidPassword('WEAKPASS123!')
-      // Expected: { valid: false, reason: 'No lowercase' }
+      const result = isValidPassword('WEAKPASS123!');
+      expect(result.valid).toBe(false);
+      expect(result.reason).toContain('lowercase');
     });
 
     it('should require number', () => {
-      // Test: isValidPassword('WeakPass!')
-      // Expected: { valid: false, reason: 'No number' }
+      const result = isValidPassword('WeakPassword!');
+      expect(result.valid).toBe(false);
+      expect(result.reason).toContain('number');
     });
 
     it('should require special character', () => {
-      // Test: isValidPassword('WeakPass123')
-      // Expected: { valid: false, reason: 'No special char' }
+      const result = isValidPassword('WeakPassword123');
+      expect(result.valid).toBe(false);
+      expect(result.reason).toContain('special');
+    });
+  });
+
+  describe('isValidURL', () => {
+    it('should validate HTTP URL', () => {
+      expect(isValidURL('http://example.com')).toBe(true);
+    });
+
+    it('should validate HTTPS URL', () => {
+      expect(isValidURL('https://example.com')).toBe(true);
+    });
+
+    it('should reject invalid protocol', () => {
+      expect(isValidURL('ftp://example.com')).toBe(false);
+    });
+
+    it('should reject malformed URL', () => {
+      expect(isValidURL('not-a-url')).toBe(false);
+    });
+
+    it('should handle URLs with paths', () => {
+      expect(isValidURL('https://example.com/path/to/resource')).toBe(true);
+    });
+  });
+
+  describe('isValidDateRange', () => {
+    it('should validate correct date range', () => {
+      const start = new Date('2025-01-01');
+      const end = new Date('2025-01-31');
+      expect(isValidDateRange(start, end)).toBe(true);
+    });
+
+    it('should reject reversed dates', () => {
+      const start = new Date('2025-01-31');
+      const end = new Date('2025-01-01');
+      expect(isValidDateRange(start, end)).toBe(false);
+    });
+
+    it('should reject same dates', () => {
+      const date = new Date('2025-01-15');
+      expect(isValidDateRange(date, date)).toBe(false);
+    });
+  });
+
+  describe('isValidFileType', () => {
+    it('should validate allowed file type', () => {
+      const file = new File([''], 'test.pdf', { type: 'application/pdf' });
+      expect(isValidFileType(file, ['application/pdf', 'image/png'])).toBe(true);
+    });
+
+    it('should reject disallowed file type', () => {
+      const file = new File([''], 'test.exe', { type: 'application/x-msdownload' });
+      expect(isValidFileType(file, ['application/pdf', 'image/png'])).toBe(false);
+    });
+
+    it('should validate image types', () => {
+      const file = new File([''], 'test.png', { type: 'image/png' });
+      expect(isValidFileType(file, ['image/png', 'image/jpeg'])).toBe(true);
+    });
+  });
+
+  describe('isValidFileSize', () => {
+    it('should validate file within size limit', () => {
+      const file = new File(['x'.repeat(1024 * 100)], 'test.txt'); // 100KB
+      expect(isValidFileSize(file, 1)).toBe(true); // 1MB limit
+    });
+
+    it('should reject file exceeding size limit', () => {
+      const file = new File(['x'.repeat(1024 * 1024 * 2)], 'test.txt'); // 2MB
+      expect(isValidFileSize(file, 1)).toBe(false); // 1MB limit
+    });
+
+    it('should handle exact size limit', () => {
+      const file = new File(['x'.repeat(1024 * 1024)], 'test.txt'); // 1MB
+      expect(isValidFileSize(file, 1)).toBe(true); // 1MB limit
     });
   });
 
