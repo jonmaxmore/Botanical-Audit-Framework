@@ -204,7 +204,7 @@ export class SecurityMonitor {
   async detectUnusualLocation(
     userId: string,
     ip: string,
-    country: string,
+    country: string
   ): Promise<SecurityThreat | null> {
     const key = `monitor:locations:${userId}`;
 
@@ -238,7 +238,7 @@ export class SecurityMonitor {
           ip,
           userAgent: 'monitor',
           details: { country, knownCountries },
-        },
+        }
       );
 
       return threat;
@@ -263,7 +263,7 @@ export class SecurityMonitor {
       emailChanged?: boolean;
       phoneChanged?: boolean;
       rapidTransactions?: boolean;
-    },
+    }
   ): Promise<SecurityThreat | null> {
     const suspiciousChanges: string[] = [];
 
@@ -300,7 +300,7 @@ export class SecurityMonitor {
     userId: string,
     ip: string,
     dataVolume: number, // in MB
-    timeWindow: number, // in seconds
+    timeWindow: number // in seconds
   ): Promise<SecurityThreat | null> {
     const threshold = 100; // 100 MB in short time
     const windowThreshold = 60; // 1 minute
@@ -333,7 +333,7 @@ export class SecurityMonitor {
     userId: string,
     attemptedAction: string,
     currentRole: string,
-    requiredRole: string,
+    requiredRole: string
   ): Promise<SecurityThreat | null> {
     const key = `monitor:privilege:${userId}`;
 
@@ -480,7 +480,7 @@ export class SecurityMonitor {
           indicators: threat.indicators,
           automatedResponse: threat.automatedResponse,
         },
-      },
+      }
     );
 
     console.error('🚨 Security threat detected:', threat);

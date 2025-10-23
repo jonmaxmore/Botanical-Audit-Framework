@@ -178,7 +178,7 @@ export default function ApplicationDetailPage() {
     };
 
     setComments(
-      comments.map(c => (c.id === parentId ? { ...c, replies: [...(c.replies || []), reply] } : c)),
+      comments.map(c => (c.id === parentId ? { ...c, replies: [...(c.replies || []), reply] } : c))
     );
   };
 

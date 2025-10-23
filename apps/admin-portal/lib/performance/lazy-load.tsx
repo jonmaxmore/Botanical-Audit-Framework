@@ -51,7 +51,7 @@ const preloadCache = new Map<string, Promise<unknown>>();
  */
 export function lazyLoad<T = Record<string, unknown>>(
   importFn: ComponentImportFn<T>,
-  options: LazyLoadOptions = {},
+  options: LazyLoadOptions = {}
 ): ComponentType<T> {
   const { fallback = null, preload = 'none', retryAttempts = 3, delay = 200 } = options;
 
@@ -97,7 +97,7 @@ export function lazyLoad<T = Record<string, unknown>>(
  * Lazy load route component
  */
 export function lazyLoadRoute<T = Record<string, unknown>>(
-  importFn: ComponentImportFn<T>,
+  importFn: ComponentImportFn<T>
 ): ComponentType<T> {
   return lazyLoad(importFn, {
     fallback: <RouteLoadingFallback />,
@@ -110,7 +110,7 @@ export function lazyLoadRoute<T = Record<string, unknown>>(
  * Lazy load modal/dialog component
  */
 export function lazyLoadModal<T = Record<string, unknown>>(
-  importFn: ComponentImportFn<T>,
+  importFn: ComponentImportFn<T>
 ): ComponentType<T> {
   return lazyLoad(importFn, {
     fallback: <ModalLoadingFallback />,
@@ -123,7 +123,7 @@ export function lazyLoadModal<T = Record<string, unknown>>(
  * Lazy load heavy component (charts, editors, etc.)
  */
 export function lazyLoadHeavy<T = Record<string, unknown>>(
-  importFn: ComponentImportFn<T>,
+  importFn: ComponentImportFn<T>
 ): ComponentType<T> {
   return lazyLoad(importFn, {
     fallback: <HeavyLoadingFallback />,
@@ -155,7 +155,7 @@ export function preloadOnIdle(preloadFn: () => Promise<unknown>): void {
  */
 export function preloadOnHover(
   element: HTMLElement,
-  preloadFn: () => Promise<unknown>,
+  preloadFn: () => Promise<unknown>
 ): () => void {
   let hasPreloaded = false;
 
@@ -181,7 +181,7 @@ export function preloadOnHover(
  */
 export function preloadOnVisible(
   element: HTMLElement,
-  preloadFn: () => Promise<unknown>,
+  preloadFn: () => Promise<unknown>
 ): () => void {
   if (typeof window === 'undefined' || !('IntersectionObserver' in window)) {
     return () => {};
@@ -201,7 +201,7 @@ export function preloadOnVisible(
     },
     {
       rootMargin: '50px', // Preload before fully visible
-    },
+    }
   );
 
   observer.observe(element);

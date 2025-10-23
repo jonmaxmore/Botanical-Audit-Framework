@@ -317,7 +317,7 @@ export async function compressImage(
   file: File,
   maxWidth: number = 1920,
   maxHeight: number = 1080,
-  quality: number = 0.8,
+  quality: number = 0.8
 ): Promise<Blob> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -359,7 +359,7 @@ export async function compressImage(
             }
           },
           'image/jpeg',
-          quality,
+          quality
         );
       };
 

@@ -59,7 +59,7 @@ export default function NotificationSettings({
 
   const handleChange = (
     field: keyof NotificationSettingsData,
-    value: boolean | string[] | string,
+    value: boolean | string[] | string
   ) => {
     setSettings(prev => ({ ...prev, [field]: value }));
     setHasChanges(true);
@@ -75,7 +75,7 @@ export default function NotificationSettings({
   const handleRemoveEmail = (email: string) => {
     handleChange(
       'emailRecipients',
-      settings.emailRecipients.filter(e => e !== email),
+      settings.emailRecipients.filter(e => e !== email)
     );
   };
 
@@ -89,7 +89,7 @@ export default function NotificationSettings({
   const handleRemovePhone = (phone: string) => {
     handleChange(
       'smsRecipients',
-      settings.smsRecipients.filter(p => p !== phone),
+      settings.smsRecipients.filter(p => p !== phone)
     );
   };
 

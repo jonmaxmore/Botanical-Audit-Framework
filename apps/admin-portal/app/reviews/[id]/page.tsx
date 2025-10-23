@@ -35,7 +35,7 @@ export default function ReviewDetailPage({ params }: { params: { id: string } })
     console.log('Decision:', decision);
     console.log('Comment:', comment);
     alert(
-      `ส่งผลการตรวจสอบ: ${decision === 'approve' ? 'อนุมัติ' : decision === 'reject' ? 'ไม่อนุมัติ' : 'ส่งกลับแก้ไข'}\n\nความเห็น: ${comment}`,
+      `ส่งผลการตรวจสอบ: ${decision === 'approve' ? 'อนุมัติ' : decision === 'reject' ? 'ไม่อนุมัติ' : 'ส่งกลับแก้ไข'}\n\nความเห็น: ${comment}`
     );
     router.push('/reviews');
   };

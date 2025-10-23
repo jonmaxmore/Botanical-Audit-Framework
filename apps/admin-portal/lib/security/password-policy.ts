@@ -136,7 +136,7 @@ export class PasswordPolicyService {
       firstName?: string;
       lastName?: string;
       username?: string;
-    },
+    }
   ): { valid: boolean; errors: string[] } {
     const errors: string[] = [];
 
@@ -168,7 +168,7 @@ export class PasswordPolicyService {
 
       if (count < this.policy.minSpecialChars) {
         errors.push(
-          `Password must contain at least ${this.policy.minSpecialChars} special character(s)`,
+          `Password must contain at least ${this.policy.minSpecialChars} special character(s)`
         );
       }
     }
@@ -376,7 +376,7 @@ export class PasswordPolicyService {
     }
 
     const daysSinceChange = Math.floor(
-      (Date.now() - lastChangedDate.getTime()) / (1000 * 60 * 60 * 24),
+      (Date.now() - lastChangedDate.getTime()) / (1000 * 60 * 60 * 24)
     );
 
     return daysSinceChange >= this.policy.expirationDays;
@@ -391,7 +391,7 @@ export class PasswordPolicyService {
     }
 
     const daysSinceChange = Math.floor(
-      (Date.now() - lastChangedDate.getTime()) / (1000 * 60 * 60 * 24),
+      (Date.now() - lastChangedDate.getTime()) / (1000 * 60 * 60 * 24)
     );
 
     return Math.max(0, this.policy.expirationDays - daysSinceChange);

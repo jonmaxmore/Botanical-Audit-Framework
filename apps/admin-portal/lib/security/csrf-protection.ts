@@ -260,7 +260,7 @@ export type NextApiHandler = (req: NextApiRequest, res: NextApiResponse) => Prom
  */
 export function withCSRFProtection(
   handler: NextApiHandler,
-  options: CSRFMiddlewareOptions = {},
+  options: CSRFMiddlewareOptions = {}
 ): NextApiHandler {
   const csrf = new CSRFProtection(options);
 

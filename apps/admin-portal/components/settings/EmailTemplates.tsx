@@ -146,7 +146,7 @@ export default function EmailTemplates({ onSave, loading = false }: EmailTemplat
   const handleTemplateChange = (
     templateKey: keyof EmailTemplatesData,
     field: 'subject' | 'body',
-    value: string,
+    value: string
   ) => {
     setTemplates(prev => ({
       ...prev,

@@ -1,4 +1,3 @@
-// @ts-nocheck
 /**
  * Authentication Security Module
  *
@@ -6,7 +5,7 @@
  * - Account lockout protection
  * - Session management
  * - JWT security
- * - 2FA preparation
+ * - 2FA/TOTP verification
  * - Login attempt tracking
  * - IP-based security
  */
@@ -14,6 +13,8 @@
 import { redisClient, type RedisClient } from '../cache/redis-client';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
+import speakeasy from 'speakeasy';
+import QRCode from 'qrcode';
 
 export interface LoginAttempt {
   ip: string;
@@ -86,7 +87,7 @@ export class AuthSecurityService {
     success: boolean,
     ip: string,
     userAgent: string,
-    userId?: string,
+    userId?: string
   ): Promise<void> {
     const key = `login:attempts:${identifier}`;
     const attempt: LoginAttempt = {
@@ -516,18 +517,23 @@ export class AuthSecurityService {
   }
 
   /**
-   * Verify 2FA token (placeholder - implement with speakeasy or similar)
+   * Verify 2FA token using TOTP
    */
   async verify2FAToken(userId: string, token: string): Promise<boolean> {
-    // This is a placeholder
-    // In production, use a library like speakeasy to verify TOTP tokens
     const secret = await this.get2FASecret(userId);
     if (!secret) {
       return false;
     }
 
-    // TODO: Implement actual TOTP verification
-    return token.length === 6 && /^\d{6}$/.test(token);
+    // Verify TOTP token using speakeasy
+    const verified = speakeasy.totp.verify({
+      secret: secret,
+      encoding: 'base32',
+      token: token,
+      window: 2, // Allow 2 time steps before/after for clock drift
+    });
+
+    return verified;
   }
 
   // ============================================================================
@@ -544,7 +550,7 @@ export class AuthSecurityService {
       JSON.stringify({
         ip,
         timestamp: new Date().toISOString(),
-      }),
+      })
     );
     await this.redis.ltrim(key, 0, 49); // Keep last 50
     await this.redis.expire(key, 90 * 24 * 60 * 60); // 90 days

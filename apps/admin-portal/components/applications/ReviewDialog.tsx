@@ -45,7 +45,7 @@ export default function ReviewDialog({
   applicationName,
 }: ReviewDialogProps) {
   const [decision, setDecision] = React.useState<'approve' | 'reject' | 'request_changes'>(
-    'approve',
+    'approve'
   );
   const [comment, setComment] = React.useState('');
   const [rating, setRating] = React.useState<number>(4);

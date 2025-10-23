@@ -147,7 +147,7 @@ export class RateLimiter {
     identifier: string,
     namespace: string,
     tokensPerSecond: number,
-    bucketSize: number,
+    bucketSize: number
   ): Promise<RateLimitResult> {
     const key = this.generateKey(identifier, namespace, 'tokenbucket');
     const now = Date.now() / 1000; // Convert to seconds
@@ -188,7 +188,7 @@ export class RateLimiter {
       await this.redis.set(
         key,
         JSON.stringify({ tokens, lastRefill: now }),
-        Math.ceil(bucketSize / tokensPerSecond) + 60,
+        Math.ceil(bucketSize / tokensPerSecond) + 60
       );
 
       return {
@@ -277,7 +277,7 @@ export class RateLimiter {
   private async logRateLimitExceeded(
     identifier: string,
     namespace: string,
-    requestCount: number,
+    requestCount: number
   ): Promise<void> {
     const logKey = `ratelimit:exceeded:${namespace}`;
     const logEntry = JSON.stringify({
@@ -323,7 +323,7 @@ export class RateLimiter {
    */
   async detectAttack(
     namespace: string,
-    threshold: number = 100,
+    threshold: number = 100
   ): Promise<{
     isAttack: boolean;
     attackers: string[];
@@ -369,7 +369,7 @@ export class RateLimiter {
     identifier: string,
     namespace: string,
     durationMs: number,
-    reason?: string,
+    reason?: string
   ): Promise<void> {
     const key = this.generateKey(identifier, namespace, 'blocked');
     const blockData = JSON.stringify({

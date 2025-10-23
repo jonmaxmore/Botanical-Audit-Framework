@@ -21,7 +21,7 @@ interface ErrorMiddlewareOptions {
  */
 export function withErrorHandler(
   handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>,
-  options: ErrorMiddlewareOptions = {},
+  options: ErrorMiddlewareOptions = {}
 ) {
   const {
     logErrors = true,
@@ -74,7 +74,7 @@ export function withErrorHandler(
  */
 export function withCustomErrorHandler(
   handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>,
-  errorTransformer: (error: unknown) => AppError,
+  errorTransformer: (error: unknown) => AppError
 ) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
     try {
@@ -142,7 +142,7 @@ function generateRequestId(): string {
  */
 export function withBodyValidation<T>(
   handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>,
-  validator: (body: any) => T,
+  validator: (body: any) => T
 ) {
   return withErrorHandler(async (req, res) => {
     // Validate body
@@ -159,7 +159,7 @@ export function withBodyValidation<T>(
  */
 export function withMethodValidation(
   handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>,
-  allowedMethods: string[],
+  allowedMethods: string[]
 ) {
   return withErrorHandler(async (req, res) => {
     if (!allowedMethods.includes(req.method || '')) {
@@ -176,7 +176,7 @@ export function withMethodValidation(
 export function composeMiddleware(
   ...middlewares: Array<
     (
-      handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>,
+      handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>
     ) => (req: NextApiRequest, res: NextApiResponse) => Promise<void>
   >
 ) {
@@ -237,7 +237,7 @@ export class ErrorResponse {
     statusCode: number,
     code: string,
     message: string,
-    details?: any,
+    details?: any
   ): void {
     const error = new AppError(message, statusCode, code, details);
     ErrorHandler.sendErrorResponse(res, error);
@@ -294,8 +294,8 @@ export function createApiRoute(config: {
 export function apiHandler<TRequest = any, TResponse = any>(
   handler: (
     req: NextApiRequest & { body: TRequest },
-    res: NextApiResponse<TResponse>,
-  ) => Promise<void>,
+    res: NextApiResponse<TResponse>
+  ) => Promise<void>
 ) {
   return withErrorHandler(async (req, res) => {
     await handler(req as any, res);
@@ -348,7 +348,7 @@ export class SuccessResponse {
       pageSize: number;
       total: number;
       totalPages: number;
-    },
+    }
   ): void {
     res.status(200).json({
       success: true,
@@ -365,7 +365,7 @@ export class SuccessResponse {
 export async function handleApiError(
   error: unknown,
   req: NextApiRequest,
-  res: NextApiResponse,
+  res: NextApiResponse
 ): Promise<void> {
   const normalizedError = ErrorHandler.normalizeError(error);
 
@@ -388,7 +388,7 @@ export async function handleApiError(
  * Development-only error details middleware
  */
 export function withDetailedErrors(
-  handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>,
+  handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void>
 ) {
   if (process.env.NODE_ENV !== 'development') {
     return handler;

@@ -125,7 +125,7 @@ function shouldCacheResponse(statusCode: number, options: CacheOptions): boolean
  */
 function wrapResponse(
   res: NextApiResponse,
-  onResponse: (cached: CachedResponse) => void,
+  onResponse: (cached: CachedResponse) => void
 ): NextApiResponse {
   const originalJson = res.json.bind(res);
   const originalSend = res.send.bind(res);
@@ -176,7 +176,7 @@ function wrapResponse(
  */
 export function withCache<T = unknown>(
   handler: (req: NextApiRequest, res: NextApiResponse<T>) => Promise<void> | void,
-  options: CacheOptions = {},
+  options: CacheOptions = {}
 ): (req: NextApiRequest, res: NextApiResponse<T>) => Promise<void> {
   const finalOptions = { ...DEFAULT_OPTIONS, ...options };
 
@@ -255,7 +255,7 @@ export async function invalidateCache(namespace: string, pattern?: string): Prom
 export function Cacheable(
   namespace: string,
   ttl: number,
-  keyGenerator?: (...args: unknown[]) => string,
+  keyGenerator?: (...args: unknown[]) => string
 ) {
   return function (target: unknown, propertyKey: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value;
@@ -294,7 +294,7 @@ export async function warmCache(
     key: string;
     fetcher: () => Promise<unknown>;
     ttl?: number;
-  }>,
+  }>
 ): Promise<void> {
   console.log(`🔥 Warming cache for ${routes.length} routes...`);
 
@@ -303,7 +303,7 @@ export async function warmCache(
       const value = await route.fetcher();
       await cacheService.set(route.namespace, route.key, value, route.ttl);
       return route;
-    }),
+    })
   );
 
   const succeeded = results.filter(r => r.status === 'fulfilled').length;

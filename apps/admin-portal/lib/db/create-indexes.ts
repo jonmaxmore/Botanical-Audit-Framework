@@ -3,4 +3,4 @@
  * Create Indexes - STUB
  * Prisma not configured
  */
-export default function() {}
+export default function () {}

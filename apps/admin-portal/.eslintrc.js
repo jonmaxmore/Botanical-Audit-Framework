@@ -1,5 +1,6 @@
 module.exports = {
-  extends: ['eslint:recommended'],
+  extends: ['next/core-web-vitals', 'prettier'],
+  plugins: ['prettier'],
   env: {
     browser: true,
     es6: true,
@@ -10,9 +11,11 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {
+    'prettier/prettier': 'error',
     'no-unused-vars': 'warn',
     'no-console': 'warn',
     'no-undef': 'error',
+    '@next/next/no-html-link-for-pages': 'off',
   },
   ignorePatterns: ['node_modules/', '.next/', 'dist/'],
 };

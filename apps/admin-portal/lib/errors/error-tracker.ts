@@ -156,7 +156,7 @@ export class ErrorTracker {
       tags?: Record<string, string>;
       extra?: Record<string, any>;
       level?: 'fatal' | 'error' | 'warning';
-    },
+    }
   ): Promise<string> {
     if (!this.config.enabled || !this.isInitialized) {
       return '';
@@ -539,7 +539,7 @@ export function captureDatabaseError(error: Error, query?: string): Promise<stri
 export function captureExternalApiError(
   error: Error,
   service: string,
-  endpoint: string,
+  endpoint: string
 ): Promise<string> {
   return captureError(error, {
     tags: {

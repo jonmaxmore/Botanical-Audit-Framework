@@ -157,7 +157,7 @@ export class ErrorLogger {
       user?: any;
       tags?: string[];
       additionalData?: Record<string, any>;
-    },
+    }
   ): Promise<string> {
     const logEntry = this.createLogEntry(error, context);
 
@@ -266,7 +266,7 @@ export class ErrorLogger {
       'UNKNOWN_ERROR',
       ErrorCategory.INTERNAL,
       ErrorSeverity.MEDIUM,
-      false,
+      false
     );
   }
 
