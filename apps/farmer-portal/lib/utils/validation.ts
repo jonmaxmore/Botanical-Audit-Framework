@@ -25,14 +25,25 @@ export function isValidThaiPhoneNumber(phone: string): boolean {
 
   const cleaned = phone.replace(/\D/g, '');
 
-  // Must be 10 digits starting with 0
-  if (!/^0\d{9}$/.test(cleaned)) {
+  // Must be 9-10 digits starting with 0
+  if (cleaned.length < 9 || cleaned.length > 10 || !cleaned.startsWith('0')) {
     return false;
   }
 
-  // Valid prefixes: 02 (landline), 06/08/09 (mobile)
+  // Valid prefixes
   const prefix = cleaned.substring(0, 2);
-  return ['02', '06', '08', '09'].includes(prefix);
+  
+  // Mobile: 06/08/09 (must be 10 digits)
+  if (['06', '08', '09'].includes(prefix)) {
+    return cleaned.length === 10;
+  }
+  
+  // Landline: 02/03/04/05/07 (can be 9 or 10 digits)
+  if (['02', '03', '04', '05', '07'].includes(prefix)) {
+    return cleaned.length === 9 || cleaned.length === 10;
+  }
+  
+  return false;
 }
 
 /**

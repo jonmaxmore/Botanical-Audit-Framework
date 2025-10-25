@@ -6,7 +6,8 @@ const nextConfig = {
   turbopack: {},
   // Disable instrumentation for development to avoid conflicts
   experimental: {
-    instrumentationHook: process.env.NODE_ENV === 'production',
+    // instrumentation.js is now available by default in Next.js 16
+    clientTraceMetadata: ['baggage', 'sentry-trace', 'traceparent'],
   },
 };
 

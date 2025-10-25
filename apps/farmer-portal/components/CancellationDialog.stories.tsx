@@ -23,9 +23,17 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 interface DialogWrapperProps {
+  applicationId: string;
+  applicationStatus: string;
   hasPaidFee?: boolean;
+  paidAmount?: number;
   isLoading?: boolean;
-  onCancel?: () => void;
+  onConfirm: (data: {
+    applicationId: string;
+    reason: string;
+    acknowledgedNoRefund: boolean;
+    additionalNotes?: string;
+  }) => Promise<void>;
 }
 
 // Wrapper component for interactive state
@@ -40,7 +48,16 @@ const DialogWrapper = (args: DialogWrapperProps) => {
       >
         เปิด Dialog
       </button>
-      <CancellationDialog {...args} isOpen={isOpen} onClose={() => setIsOpen(false)} />
+      <CancellationDialog
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        applicationId={args.applicationId}
+        applicationStatus={args.applicationStatus}
+        hasPaidFee={args.hasPaidFee ?? false}
+        paidAmount={args.paidAmount}
+        isLoading={args.isLoading}
+        onConfirm={args.onConfirm}
+      />
     </div>
   );
 };

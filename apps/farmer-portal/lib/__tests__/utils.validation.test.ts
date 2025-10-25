@@ -61,20 +61,20 @@ describe('Validation Utilities', () => {
 
   describe('isValidThaiID', () => {
     it('should validate correct 13-digit ID', () => {
-      // Using valid test ID with correct checksum
-      expect(isValidThaiID('1234567890128')).toBe(true);
+      // Using valid test ID with correct checksum (1234567890121)
+      expect(isValidThaiID('1234567890121')).toBe(true);
     });
 
     it('should reject ID with wrong length', () => {
-      expect(isValidThaiID('12345678901')).toBe(false);
+      expect(isValidThaiID('12345')).toBe(false);
     });
 
     it('should reject ID with invalid checksum', () => {
-      expect(isValidThaiID('1234567890120')).toBe(false);
+      expect(isValidThaiID('1234567890128')).toBe(false);
     });
 
     it('should handle formatted ID', () => {
-      expect(isValidThaiID('1-2345-67890-12-8')).toBe(true);
+      expect(isValidThaiID('1-2345-67890-12-1')).toBe(true);
     });
   });
 

@@ -124,7 +124,7 @@ export default function NotificationPanel({
 
       if (response.ok) {
         setNotifications(prev =>
-          prev.map(n => (n.id === notificationId ? { ...n, read: true, readAt: new Date() } : n)),
+          prev.map(n => (n._id === notificationId ? { ...n, read: true, readAt: new Date() } : n)),
         );
       }
     } catch (error) {
@@ -155,7 +155,7 @@ export default function NotificationPanel({
       });
 
       if (response.ok) {
-        setNotifications(prev => prev.filter(n => n.id !== notificationId));
+        setNotifications(prev => prev.filter(n => n._id !== notificationId));
       }
     } catch (error) {
       console.error('Failed to delete notification:', error);
@@ -321,7 +321,7 @@ export default function NotificationPanel({
             <div className="divide-y divide-gray-100">
               {notifications.map(notification => (
                 <div
-                  key={notification.id}
+                  key={notification._id}
                   className={`p-4 hover:bg-gray-50 transition-colors ${
                     !notification.read ? 'bg-blue-50/30' : ''
                   }`}
@@ -361,7 +361,7 @@ export default function NotificationPanel({
                         <div className="flex items-center gap-1">
                           {!notification.read && (
                             <button
-                              onClick={() => markAsRead(notification.id)}
+                              onClick={() => markAsRead(notification._id)}
                               className="p-1 hover:bg-white rounded transition-colors"
                               title="ทำเครื่องหมายว่าอ่านแล้ว"
                             >
@@ -369,7 +369,7 @@ export default function NotificationPanel({
                             </button>
                           )}
                           <button
-                            onClick={() => deleteNotification(notification.id)}
+                            onClick={() => deleteNotification(notification._id)}
                             className="p-1 hover:bg-white rounded transition-colors"
                             title="ลบ"
                           >

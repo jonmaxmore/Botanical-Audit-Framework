@@ -25,10 +25,20 @@ type Story = StoryObj<typeof meta>;
 interface DialogWrapperProps {
   maxReschedule?: number;
   isLoading?: boolean;
-  applicationId?: string;
-  currentInspection?: { date: string; time: string };
-  rescheduleCount?: number;
-  onConfirm?: (date: Date, reason: string) => void;
+  applicationId: string; // Required
+  currentInspection: { id: string; scheduledDate: Date; inspectorName: string }; // Required
+  rescheduleCount: number; // Required
+  availableDates?: Date[];
+  onConfirm: (data: RescheduleData) => Promise<void>; // Required
+}
+
+// RescheduleData interface from RescheduleDialog.tsx
+interface RescheduleData {
+  applicationId: string;
+  inspectionId: string;
+  newDate: Date;
+  reason: string;
+  notes?: string;
 }
 
 // Wrapper component for interactive state
