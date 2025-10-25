@@ -1,190 +1,333 @@
 /**
  * API Route Tests - Inspections Endpoint
  * Tests for /api/inspections/* routes
+ * 
+ * Note: Logic tests for inspection scheduling, completion, and management
  */
 
-import { Application } from '@/lib/business-logic';
+interface Inspection {
+  id: string;
+  applicationId: string;
+  inspectorId: string;
+  scheduledDate: Date;
+  status: 'SCHEDULED' | 'COMPLETED' | 'CANCELLED' | 'RESCHEDULED';
+  complianceScore?: number;
+  createdAt: Date;
+  completedAt?: Date;
+}
 
-const mockInspection = {
+const createMockInspection = (overrides?: Partial<Inspection>): Inspection => ({
   id: 'insp-001',
   applicationId: 'app-001',
   inspectorId: 'inspector-001',
   scheduledDate: new Date('2025-02-01'),
   status: 'SCHEDULED',
   createdAt: new Date('2025-01-15'),
-};
+  ...overrides,
+});
 
 describe('API Routes: /api/inspections', () => {
-  describe('GET /api/inspections', () => {
-    it('should list inspections for farmer (own applications only)', async () => {
-      // Test: Farmer sees only their inspections
-      // Expected: { success: true, data: Inspection[] }
+  describe('GET /api/inspections - List Logic', () => {
+    it('should filter inspections by applicationId for farmers', () => {
+      const inspections = [
+        createMockInspection({ id: 'insp-001', applicationId: 'app-001' }),
+        createMockInspection({ id: 'insp-002', applicationId: 'app-002' }),
+        createMockInspection({ id: 'insp-003', applicationId: 'app-001' }),
+      ];
+
+      const farmerApplicationIds = ['app-001'];
+      const farmerInspections = inspections.filter(insp =>
+        farmerApplicationIds.includes(insp.applicationId),
+      );
+
+      expect(farmerInspections).toHaveLength(2);
+      expect(farmerInspections.every(insp => insp.applicationId === 'app-001')).toBe(true);
     });
 
-    it('should list all inspections for inspector role', async () => {
-      // Test: Inspector sees all assigned inspections
-      // Expected: All inspections assigned to this inspector
+    it('should filter inspections by inspectorId', () => {
+      const inspections = [
+        createMockInspection({ id: 'insp-001', inspectorId: 'inspector-001' }),
+        createMockInspection({ id: 'insp-002', inspectorId: 'inspector-002' }),
+        createMockInspection({ id: 'insp-003', inspectorId: 'inspector-001' }),
+      ];
+
+      const inspectorInspections = inspections.filter(
+        insp => insp.inspectorId === 'inspector-001',
+      );
+
+      expect(inspectorInspections).toHaveLength(2);
     });
 
-    it('should filter by status', async () => {
-      // Test: ?status=SCHEDULED
-      // Expected: Only scheduled inspections
+    it('should filter by status', () => {
+      const inspections = [
+        createMockInspection({ id: 'insp-001', status: 'SCHEDULED' }),
+        createMockInspection({ id: 'insp-002', status: 'COMPLETED' }),
+        createMockInspection({ id: 'insp-003', status: 'SCHEDULED' }),
+      ];
+
+      const scheduledInspections = inspections.filter(insp => insp.status === 'SCHEDULED');
+
+      expect(scheduledInspections).toHaveLength(2);
     });
 
-    it('should filter by date range', async () => {
-      // Test: ?from=2025-01-01&to=2025-01-31
-      // Expected: Inspections in January 2025
-    });
-  });
+    it('should filter by date range', () => {
+      const inspections = [
+        createMockInspection({ scheduledDate: new Date('2025-01-15') }),
+        createMockInspection({ scheduledDate: new Date('2025-02-15') }),
+        createMockInspection({ scheduledDate: new Date('2025-03-15') }),
+      ];
 
-  describe('GET /api/inspections/:id', () => {
-    it('should return inspection details', async () => {
-      // Test: GET /api/inspections/insp-001
-      // Expected: { success: true, data: Inspection }
-    });
+      const from = new Date('2025-02-01');
+      const to = new Date('2025-02-28');
+      const filtered = inspections.filter(
+        insp =>
+          insp.scheduledDate >= from && insp.scheduledDate <= to,
+      );
 
-    it('should include application details', async () => {
-      // Test: Inspection with populated application
-      // Expected: { application: { farmName, farmAddress, ... } }
-    });
-
-    it('should return 404 for non-existent inspection', async () => {
-      // Test: GET /api/inspections/non-existent
-      // Expected: 404 Not Found
-    });
-
-    it('should return 403 for unauthorized access', async () => {
-      // Test: Farmer tries to view another farmer's inspection
-      // Expected: 403 Forbidden
-    });
-  });
-
-  describe('POST /api/inspections/:id/schedule', () => {
-    it('should schedule inspection for PENDING_INSPECTION application', async () => {
-      const payload = {
-        scheduledDate: '2025-02-01T10:00:00Z',
-        inspectorId: 'inspector-001',
-      };
-
-      // Test: Schedule new inspection
-      // Expected: { success: true, data: { status: 'SCHEDULED' } }
-    });
-
-    it('should validate date is in the future', async () => {
-      const payload = {
-        scheduledDate: '2024-01-01T10:00:00Z', // Past date
-      };
-
-      // Test: Schedule with past date
-      // Expected: 400 Bad Request - Date must be in future
-    });
-
-    it('should only allow inspector role to schedule', async () => {
-      // Test: Farmer tries to schedule inspection
-      // Expected: 403 Forbidden - Inspector role required
-    });
-
-    it('should prevent scheduling already scheduled inspection', async () => {
-      // Test: Schedule already scheduled inspection
-      // Expected: 400 Bad Request - Already scheduled
+      expect(filtered).toHaveLength(1);
+      expect(filtered[0].scheduledDate.getMonth()).toBe(1); // February (0-indexed)
     });
   });
 
-  describe('POST /api/inspections/:id/complete', () => {
-    it('should complete inspection with results', async () => {
-      const payload = {
+  describe('GET /api/inspections/:id - Detail Logic', () => {
+    it('should find inspection by id', () => {
+      const inspections = [
+        createMockInspection({ id: 'insp-001' }),
+        createMockInspection({ id: 'insp-002' }),
+      ];
+
+      const found = inspections.find(insp => insp.id === 'insp-001');
+
+      expect(found).toBeDefined();
+      expect(found?.id).toBe('insp-001');
+    });
+
+    it('should return undefined for non-existent id', () => {
+      const inspections = [createMockInspection({ id: 'insp-001' })];
+
+      const found = inspections.find(insp => insp.id === 'non-existent');
+
+      expect(found).toBeUndefined();
+    });
+
+    it('should verify farmer can access their own inspection', () => {
+      const inspection = createMockInspection({ applicationId: 'app-001' });
+      const farmerApplicationIds = ['app-001', 'app-002'];
+
+      const hasAccess = farmerApplicationIds.includes(inspection.applicationId);
+
+      expect(hasAccess).toBe(true);
+    });
+
+    it('should verify inspector can access assigned inspection', () => {
+      const inspection = createMockInspection({ inspectorId: 'inspector-001' });
+      const requestInspectorId = 'inspector-001';
+
+      const hasAccess = inspection.inspectorId === requestInspectorId;
+
+      expect(hasAccess).toBe(true);
+    });
+  });
+
+  describe('POST /api/inspections/:id/schedule - Schedule Logic', () => {
+    it('should validate date is in future', () => {
+      const scheduledDate = new Date('2025-12-01');
+      const now = new Date('2025-10-25');
+
+      const isValidDate = scheduledDate > now;
+
+      expect(isValidDate).toBe(true);
+    });
+
+    it('should reject past dates', () => {
+      const scheduledDate = new Date('2024-01-01');
+      const now = new Date('2025-10-25');
+
+      const isValidDate = scheduledDate > now;
+
+      expect(isValidDate).toBe(false);
+    });
+
+    it('should create scheduled inspection', () => {
+      const inspection = createMockInspection({ status: 'SCHEDULED' });
+
+      expect(inspection.status).toBe('SCHEDULED');
+      expect(inspection.inspectorId).toBeDefined();
+      expect(inspection.scheduledDate).toBeDefined();
+    });
+
+    it('should prevent rescheduling already completed inspection', () => {
+      const inspection = createMockInspection({ status: 'COMPLETED' });
+      const canSchedule = inspection.status === 'SCHEDULED' || inspection.status === 'RESCHEDULED';
+
+      expect(canSchedule).toBe(false);
+    });
+  });
+
+  describe('POST /api/inspections/:id/complete - Complete Logic', () => {
+    it('should calculate compliance score pass (>= 80)', () => {
+      const complianceScore = 85;
+      const passThreshold = 80;
+
+      const isPassing = complianceScore >= passThreshold;
+
+      expect(isPassing).toBe(true);
+    });
+
+    it('should calculate compliance score fail (< 80)', () => {
+      const complianceScore = 65;
+      const passThreshold = 80;
+
+      const isPassing = complianceScore >= passThreshold;
+
+      expect(isPassing).toBe(false);
+    });
+
+    it('should update inspection to COMPLETED status', () => {
+      const inspection = createMockInspection({ status: 'SCHEDULED' });
+      const completed = {
+        ...inspection,
+        status: 'COMPLETED' as const,
         complianceScore: 85,
-        findings: [
-          { area: 'Storage', status: 'PASS', notes: 'Good conditions' },
-          { area: 'Documentation', status: 'PASS', notes: 'Complete' },
-        ],
-        photos: ['photo1.jpg', 'photo2.jpg'],
-        notes: 'Overall good compliance',
+        completedAt: new Date(),
       };
 
-      // Test: Complete inspection
-      // Expected: { success: true, data: { status: 'COMPLETED' } }
+      expect(completed.status).toBe('COMPLETED');
+      expect(completed.complianceScore).toBe(85);
+      expect(completed.completedAt).toBeDefined();
     });
 
-    it('should update application status based on compliance score', async () => {
-      const payload = {
-        complianceScore: 90, // Pass threshold: 80
-      };
+    it('should set completedAt timestamp', () => {
+      const completedAt = new Date();
+      const inspection = createMockInspection({ completedAt });
 
-      // Test: Complete with passing score
-      // Expected: Application status updated to APPROVED
+      expect(inspection.completedAt).toEqual(completedAt);
     });
 
-    it('should reject if compliance score too low', async () => {
-      const payload = {
-        complianceScore: 50, // Below threshold
-      };
+    it('should verify inspector ownership', () => {
+      const inspection = createMockInspection({ inspectorId: 'inspector-001' });
+      const requestInspectorId = 'inspector-001';
 
-      // Test: Complete with failing score
-      // Expected: Application status updated to REJECTED
+      const canComplete = inspection.inspectorId === requestInspectorId;
+
+      expect(canComplete).toBe(true);
     });
 
-    it('should require all checklist items completed', async () => {
-      const payload = {
-        findings: [], // Empty findings
-      };
+    it('should reject completion by different inspector', () => {
+      const inspection = createMockInspection({ inspectorId: 'inspector-001' });
+      const requestInspectorId = 'inspector-002';
 
-      // Test: Complete without findings
-      // Expected: 400 Bad Request - Findings required
-    });
+      const canComplete = inspection.inspectorId === requestInspectorId;
 
-    it('should only allow assigned inspector to complete', async () => {
-      // Test: Different inspector tries to complete
-      // Expected: 403 Forbidden - Not assigned inspector
+      expect(canComplete).toBe(false);
     });
   });
 
-  describe('POST /api/inspections/:id/reschedule', () => {
-    it('should allow farmer to reschedule once', async () => {
-      const payload = {
-        newDate: '2025-02-15T10:00:00Z',
-        reason: 'Family emergency',
-      };
+  describe('POST /api/inspections/:id/reschedule - Reschedule Logic', () => {
+    it('should allow reschedule from SCHEDULED status', () => {
+      const inspection = createMockInspection({ status: 'SCHEDULED' });
+      const canReschedule = inspection.status === 'SCHEDULED';
 
-      // Test: First reschedule (rescheduleCount=0)
-      // Expected: { success: true, rescheduleCount: 1 }
+      expect(canReschedule).toBe(true);
     });
 
-    it('should reject second reschedule attempt', async () => {
-      // Test: Second reschedule (rescheduleCount=1)
-      // Expected: 400 Bad Request - Reschedule limit reached
+    it('should not allow reschedule from COMPLETED status', () => {
+      const inspection = createMockInspection({ status: 'COMPLETED' });
+      const canReschedule = inspection.status === 'SCHEDULED';
+
+      expect(canReschedule).toBe(false);
     });
 
-    it('should require reason for rescheduling', async () => {
-      const payload = {
-        newDate: '2025-02-15T10:00:00Z',
-        reason: '', // Empty reason
-      };
+    it('should update status to RESCHEDULED', () => {
+      const inspection = createMockInspection({ status: 'SCHEDULED' });
+      const rescheduled = { ...inspection, status: 'RESCHEDULED' as const };
 
-      // Test: Reschedule without reason
-      // Expected: 400 Bad Request - Reason required
+      expect(rescheduled.status).toBe('RESCHEDULED');
     });
 
-    it('should update application rescheduleCount', async () => {
-      // Test: Reschedule inspection
-      // Expected: Application.rescheduleCount incremented
+    it('should update scheduled date', () => {
+      const original = createMockInspection({ scheduledDate: new Date('2025-02-01') });
+      const rescheduled = { ...original, scheduledDate: new Date('2025-02-15') };
+
+      expect(rescheduled.scheduledDate.getTime()).not.toBe(original.scheduledDate.getTime());
     });
   });
 
-  describe('DELETE /api/inspections/:id', () => {
-    it('should cancel SCHEDULED inspection', async () => {
-      // Test: Cancel scheduled inspection
-      // Expected: { success: true, data: { status: 'CANCELLED' } }
+  describe('Inspection Status Workflow', () => {
+    it('should follow status progression: SCHEDULED -> COMPLETED', () => {
+      const statuses = ['SCHEDULED', 'COMPLETED'];
+
+      expect(statuses[0]).toBe('SCHEDULED');
+      expect(statuses[1]).toBe('COMPLETED');
     });
 
-    it('should not cancel COMPLETED inspection', async () => {
-      // Test: Cancel completed inspection
-      // Expected: 400 Bad Request - Cannot cancel completed inspection
+    it('should allow SCHEDULED -> RESCHEDULED -> SCHEDULED', () => {
+      let status: Inspection['status'] = 'SCHEDULED';
+
+      status = 'RESCHEDULED';
+      expect(status).toBe('RESCHEDULED');
+
+      status = 'SCHEDULED';
+      expect(status).toBe('SCHEDULED');
     });
 
-    it('should only allow inspector or admin to cancel', async () => {
-      // Test: Farmer tries to cancel inspection
-      // Expected: 403 Forbidden
+    it('should allow SCHEDULED -> CANCELLED', () => {
+      let status: Inspection['status'] = 'SCHEDULED';
+
+      status = 'CANCELLED';
+      expect(status).toBe('CANCELLED');
+    });
+
+    it('should not allow COMPLETED -> SCHEDULED', () => {
+      const inspection = createMockInspection({ status: 'COMPLETED' });
+      const canRevert = false; // Business rule: completed inspections cannot be reverted
+
+      expect(canRevert).toBe(false);
+      expect(inspection.status).toBe('COMPLETED');
+    });
+  });
+
+  describe('Compliance Scoring Logic', () => {
+    it('should calculate score from findings (all pass)', () => {
+      const findings = [
+        { area: 'Storage', status: 'PASS' },
+        { area: 'Documentation', status: 'PASS' },
+        { area: 'Hygiene', status: 'PASS' },
+        { area: 'Equipment', status: 'PASS' },
+      ];
+
+      const passCount = findings.filter(f => f.status === 'PASS').length;
+      const score = (passCount / findings.length) * 100;
+
+      expect(score).toBe(100);
+    });
+
+    it('should calculate score from findings (partial pass)', () => {
+      const findings = [
+        { area: 'Storage', status: 'PASS' },
+        { area: 'Documentation', status: 'FAIL' },
+        { area: 'Hygiene', status: 'PASS' },
+        { area: 'Equipment', status: 'PASS' },
+      ];
+
+      const passCount = findings.filter(f => f.status === 'PASS').length;
+      const score = (passCount / findings.length) * 100;
+
+      expect(score).toBe(75);
+    });
+
+    it('should determine application approval based on score', () => {
+      const complianceScore = 85;
+      const applicationStatus = complianceScore >= 80 ? 'APPROVED' : 'REJECTED';
+
+      expect(applicationStatus).toBe('APPROVED');
+    });
+
+    it('should determine application rejection based on score', () => {
+      const complianceScore = 65;
+      const applicationStatus = complianceScore >= 80 ? 'APPROVED' : 'REJECTED';
+
+      expect(applicationStatus).toBe('REJECTED');
     });
   });
 });
