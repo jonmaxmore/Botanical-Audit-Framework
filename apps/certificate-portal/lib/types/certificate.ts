@@ -16,7 +16,7 @@ export interface Certificate {
   farmArea: number; // in Rai
   cropType: string;
   certificationStandard: 'GACP' | 'GAP' | 'Organic';
-  status: 'pending' | 'approved' | 'rejected' | 'expired' | 'revoked';
+  status: 'pending' | 'approved' | 'rejected' | 'expired' | 'revoked' | 'active';
   issuedBy: string;
   issuedDate: string; // ISO date
   expiryDate: string; // ISO date
@@ -26,6 +26,11 @@ export interface Certificate {
   inspectorName: string;
   inspectionReport?: string;
   notes?: string;
+  // Revocation fields
+  revokedDate?: string; // ISO date
+  revokedReason?: string;
+  revokedBy?: string;
+  // Metadata
   createdAt: string;
   updatedAt: string;
 }
