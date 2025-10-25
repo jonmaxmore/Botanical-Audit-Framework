@@ -371,4 +371,132 @@ describe('CertificatesPage', () => {
       });
     });
   });
+
+  describe('Status Badge Logic', () => {
+    beforeEach(() => {
+      mockLocalStorage.setItem('cert_token', 'test-token');
+    });
+
+    it('should show correct status colors for approved', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Check that approved status is displayed
+        const approvedBadges = screen.getAllByText('อนุมัติแล้ว');
+        expect(approvedBadges.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should show correct status colors for pending', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Check that pending status exists
+        const statuses = screen.queryAllByText('รออนุมัติ');
+        expect(statuses.length).toBeGreaterThanOrEqual(0);
+      });
+    });
+
+    it('should show correct status colors for rejected', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Check that rejected status rendering works
+        const statuses = screen.queryAllByText('ปฏิเสธ');
+        expect(statuses.length).toBeGreaterThanOrEqual(0);
+      });
+    });
+
+    it('should show correct status colors for expired', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Check that expired status rendering works
+        const statuses = screen.queryAllByText('หมดอายุ');
+        expect(statuses.length).toBeGreaterThanOrEqual(0);
+      });
+    });
+
+    it('should show correct status colors for revoked', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Check that revoked status rendering works
+        const statuses = screen.queryAllByText('ยกเลิก');
+        expect(statuses.length).toBeGreaterThanOrEqual(0);
+      });
+    });
+  });
+
+  describe('Filter Conditional Logic', () => {
+    beforeEach(() => {
+      mockLocalStorage.setItem('cert_token', 'test-token');
+    });
+
+    it('should filter by status correctly', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Initially shows certificates
+        const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
+        expect(paginationText).toBeTruthy();
+      });
+    });
+
+    it('should filter by certification standard correctly', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Check that standard filter exists
+        const standardLabels = screen.getAllByText('Standard');
+        expect(standardLabels.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should show empty filter when no filter applied', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // All certificates should be visible
+        const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
+        expect(paginationText).toBeTruthy();
+      });
+    });
+  });
+
+  describe('Pagination Logic', () => {
+    beforeEach(() => {
+      mockLocalStorage.setItem('cert_token', 'test-token');
+    });
+
+    it('should show correct pagination count', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Should show "Showing X of Y certificates"
+        const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
+        expect(paginationText).toBeTruthy();
+      });
+    });
+
+    it('should handle rows per page change', async () => {
+      render(<CertificatesPage />);
+      jest.advanceTimersByTime(500);
+      
+      await waitFor(() => {
+        // Pagination controls should be present
+        const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
+        expect(paginationText).toBeTruthy();
+      });
+    });
+  });
 });

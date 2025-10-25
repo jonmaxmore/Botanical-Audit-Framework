@@ -203,4 +203,56 @@ describe('NewCertificatePage', () => {
       expect(backButton).toBeDisabled();
     });
   });
+
+  describe('Form Validation', () => {
+    beforeEach(() => {
+      mockLocalStorage.setItem('cert_token', 'test-token');
+    });
+
+    it('should show Next button on initial render', () => {
+      render(<NewCertificatePage />);
+      expect(screen.getByRole('button', { name: /next/i })).toBeInTheDocument();
+    });
+
+    it('should have all required fields on step 1', () => {
+      render(<NewCertificatePage />);
+      expect(screen.getByLabelText(/Farm ID/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Farm Name/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Farmer Name/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/National ID/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Farm Area/i)).toBeInTheDocument();
+    });
+
+    it('should have address fields', () => {
+      render(<NewCertificatePage />);
+      expect(screen.getByLabelText(/House Number/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Village/i)).toBeInTheDocument();
+      expect(screen.getByLabelText(/Postal Code/i)).toBeInTheDocument();
+    });
+  });
+
+  describe('UI Components', () => {
+    beforeEach(() => {
+      mockLocalStorage.setItem('cert_token', 'test-token');
+    });
+
+    it('should show stepper component', () => {
+      render(<NewCertificatePage />);
+      expect(screen.getAllByText('Farm Information').length).toBeGreaterThan(0);
+    });
+
+    it('should show paper container', () => {
+      const { container } = render(<NewCertificatePage />);
+      // Check for MUI Paper component
+      expect(container.querySelector('.MuiPaper-root')).toBeInTheDocument();
+    });
+
+    it('should show action buttons section', () => {
+      render(<NewCertificatePage />);
+      const backButton = screen.getByRole('button', { name: /^back$/i });
+      const nextButton = screen.getByRole('button', { name: /next/i });
+      expect(backButton).toBeInTheDocument();
+      expect(nextButton).toBeInTheDocument();
+    });
+  });
 });
