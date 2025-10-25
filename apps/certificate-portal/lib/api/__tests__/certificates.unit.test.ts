@@ -15,6 +15,15 @@ const mockPost = mockedAxios.mockPost;
 const mockPut = mockedAxios.mockPut;
 const mockDelete = mockedAxios.mockDelete;
 
+// Mock certificate data
+const mockCertificate = {
+  id: '1',
+  certificateNumber: 'CERT-001',
+  farmName: 'Test Farm',
+  farmerName: 'John Doe',
+  status: 'approved' as const,
+};
+
 describe('Certificate API', () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -287,9 +296,9 @@ describe('Certificate API', () => {
 
       await certificateApi.getAll();
       
-      // Check that Authorization header would be added
-      // (In actual interceptor, this happens automatically)
+      // Token is in localStorage, interceptor would use it
       expect(localStorage.getItem('cert_token')).toBe('test-token-123');
+      expect(mockGet).toHaveBeenCalled();
     });
 
     it('should not add token when token does not exist', async () => {
@@ -302,9 +311,15 @@ describe('Certificate API', () => {
       expect(localStorage.getItem('cert_token')).toBeNull();
     });
 
-    it('should handle 401 error and redirect to login', async () => {
-      localStorage.setItem('cert_token', 'expired-token');
+    it('should reject request interceptor error', async () => {
+      const requestError = new Error('Request interceptor error');
       
+      mockGet.mockRejectedValue(requestError);
+
+      await expect(certificateApi.getAll()).rejects.toThrow('Request interceptor error');
+    });
+
+    it('should handle 401 error by rejecting', async () => {
       const error401 = {
         response: { status: 401 },
         config: {},
@@ -312,40 +327,38 @@ describe('Certificate API', () => {
       };
       mockGet.mockRejectedValue(error401);
 
-      // Mock window.location
-      delete (window as any).location;
-      window.location = { href: '' } as any;
-
-      try {
-        await certificateApi.getAll();
-      } catch (e) {
-        // Expected to throw
-      }
-      
-      // Verify token would be removed (handled by interceptor)
-      // In real scenario, interceptor removes token and redirects
+      await expect(certificateApi.getAll()).rejects.toMatchObject({
+        response: { status: 401 }
+      });
     });
 
-    it('should retry on network error', async () => {
+    it('should handle 401 with retry flag', async () => {
+      const error401 = {
+        response: { status: 401 },
+        config: { _retry: true },
+        message: 'Unauthorized',
+      };
+      mockGet.mockRejectedValue(error401);
+
+      await expect(certificateApi.getAll()).rejects.toMatchObject({
+        response: { status: 401 }
+      });
+    });
+
+    it('should handle network errors', async () => {
       const networkError = {
         message: 'Network Error',
         config: {},
       };
       
-      // First call fails, would retry after delay
-      mockGet.mockRejectedValueOnce(networkError);
-      mockGet.mockResolvedValueOnce({
-        data: { success: true, data: [] }
-      });
+      mockGet.mockRejectedValue(networkError);
 
-      try {
-        await certificateApi.getAll();
-      } catch (e) {
-        // May throw on first attempt
-      }
+      await expect(certificateApi.getAll()).rejects.toMatchObject({
+        message: 'Network Error'
+      });
     });
 
-    it('should not retry when already retried', async () => {
+    it('should handle network error with retry flag', async () => {
       const networkError = {
         message: 'Network Error',
         config: { _retry: true },
@@ -353,11 +366,33 @@ describe('Certificate API', () => {
       
       mockGet.mockRejectedValue(networkError);
 
-      try {
-        await certificateApi.getAll();
-      } catch (e) {
-        // Expected to throw without retry
-      }
+      await expect(certificateApi.getAll()).rejects.toMatchObject({
+        message: 'Network Error'
+      });
+    });
+
+    it('should pass through other errors', async () => {
+      const otherError = {
+        message: 'Server Error',
+        response: { status: 500 },
+        config: {},
+      };
+      
+      mockGet.mockRejectedValue(otherError);
+
+      await expect(certificateApi.getAll()).rejects.toMatchObject({
+        message: 'Server Error'
+      });
+    });
+
+    it('should handle response success', async () => {
+      mockGet.mockResolvedValue({
+        data: { success: true, data: [] }
+      });
+
+      const result = await certificateApi.getAll();
+      
+      expect(result).toEqual([]);
     });
   });
 
@@ -432,6 +467,95 @@ describe('Certificate API', () => {
 
       await expect(certificateApi.update('1', {}))
         .rejects.toThrow('Update failed');
+    });
+  });
+
+  // === verify Tests ===
+  describe('verify', () => {
+    it('should verify certificate by certificate number', async () => {
+      const mockVerify = {
+        isValid: true,
+        certificate: mockCertificate,
+        message: 'Valid certificate'
+      };
+      mockGet.mockResolvedValue({
+        data: { success: true, data: mockVerify }
+      });
+
+      const result = await certificateApi.verify('CERT-001');
+      
+      expect(result).toEqual(mockVerify);
+      expect(mockGet).toHaveBeenCalledWith('/certificates/verify/CERT-001');
+    });
+
+    it('should handle verify error', async () => {
+      mockGet.mockRejectedValue(new Error('Verification failed'));
+
+      await expect(certificateApi.verify('INVALID'))
+        .rejects.toThrow('Verification failed');
+    });
+  });
+
+  // === getStats Tests ===
+  describe('getStats', () => {
+    it('should fetch certificate statistics', async () => {
+      const mockStats = {
+        total: 100,
+        approved: 80,
+        pending: 15,
+        rejected: 5
+      };
+      mockGet.mockResolvedValue({
+        data: { success: true, data: mockStats }
+      });
+
+      const result = await certificateApi.getStats();
+      
+      expect(result).toEqual(mockStats);
+      expect(mockGet).toHaveBeenCalledWith('/certificates/stats');
+    });
+
+    it('should handle getStats error', async () => {
+      mockGet.mockRejectedValue(new Error('Stats fetch failed'));
+
+      await expect(certificateApi.getStats())
+        .rejects.toThrow('Stats fetch failed');
+    });
+  });
+
+  // === getExpiring Tests ===
+  describe('getExpiring', () => {
+    it('should fetch expiring certificates with default days', async () => {
+      mockGet.mockResolvedValue({
+        data: { success: true, data: [mockCertificate] }
+      });
+
+      const result = await certificateApi.getExpiring();
+      
+      expect(result).toEqual([mockCertificate]);
+      expect(mockGet).toHaveBeenCalledWith('/certificates/expiring', {
+        params: { days: 30 }
+      });
+    });
+
+    it('should fetch expiring certificates with custom days', async () => {
+      mockGet.mockResolvedValue({
+        data: { success: true, data: [mockCertificate] }
+      });
+
+      const result = await certificateApi.getExpiring(60);
+      
+      expect(result).toEqual([mockCertificate]);
+      expect(mockGet).toHaveBeenCalledWith('/certificates/expiring', {
+        params: { days: 60 }
+      });
+    });
+
+    it('should handle getExpiring error', async () => {
+      mockGet.mockRejectedValue(new Error('Expiring fetch failed'));
+
+      await expect(certificateApi.getExpiring())
+        .rejects.toThrow('Expiring fetch failed');
     });
   });
 });
