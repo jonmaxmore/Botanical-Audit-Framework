@@ -558,4 +558,98 @@ describe('Certificate API', () => {
         .rejects.toThrow('Expiring fetch failed');
     });
   });
+
+  describe('Additional Branch Coverage', () => {
+    it('should handle revoke() API call', async () => {
+      const mockRevoked = { data: { data: { ...mockCertificate, status: 'revoked' } } };
+      mockPost.mockResolvedValue(mockRevoked);
+      
+      const result = await certificateApi.revoke('CERT-001', 'Violation');
+      expect(result.status).toBe('revoked');
+    });
+
+    it('should handle downloadPDF() blob response', async () => {
+      const mockBlob = new Blob(['PDF'], { type: 'application/pdf' });
+      mockGet.mockResolvedValue({ data: mockBlob });
+      
+      const result = await certificateApi.downloadPDF('CERT-001');
+      expect(result).toBeInstanceOf(Blob);
+    });
+
+    it('should handle getById() error flow', async () => {
+      mockGet.mockRejectedValue({ response: { status: 500 }, message: 'Server error' });
+      
+      await expect(certificateApi.getById('INVALID')).rejects.toEqual({
+        response: { status: 500 },
+        message: 'Server error'
+      });
+    });
+
+    it('should handle getByCertificateNumber() error flow', async () => {
+      mockGet.mockRejectedValue({ response: { status: 404 }, message: 'Not found' });
+      
+      await expect(certificateApi.getByCertificateNumber('INVALID')).rejects.toEqual({
+        response: { status: 404 },
+        message: 'Not found'
+      });
+    });
+
+    it('should handle renew() success path', async () => {
+      const mockRenewed = { data: { data: { ...mockCertificate, expiryDate: '2026-01-01' } } };
+      mockPost.mockResolvedValue(mockRenewed);
+      
+      const result = await certificateApi.renew('CERT-001');
+      expect(result.expiryDate).toBe('2026-01-01');
+    });
+
+    it('should handle approve() via revoke endpoint', async () => {
+      const mockApproved = { data: { data: { ...mockCertificate, status: 'approved' } } };
+      mockPost.mockResolvedValue(mockApproved);
+      
+      const result = await certificateApi.revoke('CERT-001', 'approved');
+      expect(result).toBeDefined();
+    });
+
+    it('should handle getAll() with multiple parameters', async () => {
+      mockGet.mockResolvedValue({ data: { data: [mockCertificate] } });
+      
+      await certificateApi.getAll({
+        status: 'approved',
+        searchQuery: 'test',
+        province: 'Bangkok'
+      });
+      
+      expect(mockGet).toHaveBeenCalledWith('/certificates', {
+        params: {
+          status: 'approved',
+          searchQuery: 'test',
+          province: 'Bangkok'
+        }
+      });
+    });
+
+    it('should handle create() success', async () => {
+      const newCert = { farmName: 'New Farm', farmerName: 'New Farmer' };
+      mockPost.mockResolvedValue({ data: { data: mockCertificate } });
+      
+      const result = await certificateApi.create(newCert as any);
+      expect(result).toEqual(mockCertificate);
+    });
+
+    it('should handle update() success', async () => {
+      const updates = { status: 'approved' };
+      mockPut.mockResolvedValue({ data: { data: { ...mockCertificate, ...updates } } });
+      
+      const result = await certificateApi.update('CERT-001', updates as any);
+      expect(result.status).toBe('approved');
+    });
+
+    it('should handle delete() success', async () => {
+      mockDelete.mockResolvedValue({ data: { success: true } });
+      
+      await certificateApi.delete('CERT-001');
+      expect(mockDelete).toHaveBeenCalledWith('/certificates/CERT-001');
+    });
+  });
 });
+

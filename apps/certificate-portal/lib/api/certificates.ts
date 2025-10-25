@@ -17,6 +17,9 @@ const api = axios.create({
   },
 });
 
+// TODO: Refactor interceptor tests to achieve 70% branch coverage
+// Current approach with full axios mocks bypasses interceptor logic
+// Consider: Integration tests or partial mocks for interceptor branches
 // Add token to requests
 api.interceptors.request.use(
   config => {
