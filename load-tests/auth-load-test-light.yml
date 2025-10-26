@@ -40,14 +40,14 @@ scenarios:
             email: "{{ email }}"
             password: "{{ password }}"
           capture:
-            - json: "$.data.accessToken"
+            - json: "$.data.tokens.accessToken"
               as: "accessToken"
-            - json: "$.data.refreshToken"
+            - json: "$.data.tokens.refreshToken"
               as: "refreshToken"
           expect:
             - statusCode: 200
             - contentType: json
-            - hasProperty: data.accessToken
+            - hasProperty: data.tokens.accessToken
 
   # Secondary scenario: Token refresh
   - name: "Token Refresh"
@@ -60,9 +60,9 @@ scenarios:
             email: "{{ email }}"
             password: "{{ password }}"
           capture:
-            - json: "$.data.accessToken"
+            - json: "$.data.tokens.accessToken"
               as: "accessToken"
-            - json: "$.data.refreshToken"
+            - json: "$.data.tokens.refreshToken"
               as: "refreshToken"
       # Then refresh the token
       - post:
@@ -84,7 +84,7 @@ scenarios:
             email: "{{ email }}"
             password: "{{ password }}"
           capture:
-            - json: "$.data.accessToken"
+            - json: "$.data.tokens.accessToken"
               as: "accessToken"
       # Get profile
       - get:

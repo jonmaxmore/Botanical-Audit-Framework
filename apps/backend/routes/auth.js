@@ -13,7 +13,7 @@ const Joi = require('joi');
 const User = require('../models/user');
 const { authenticate, authorize, rateLimitSensitive } = require('../middleware/auth');
 const { validateRequest, validateUserRegistration } = require('../middleware/validation');
-const { handleAsync, createError, sendError } = require('../middleware/error-handler');
+const { handleAsync, sendError } = require('../middleware/error-handler');
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('auth');
 
@@ -29,13 +29,13 @@ const refreshTokenSchema = Joi.object({
 });
 
 // Rate limiting for auth endpoints
-// Higher limits in development for testing
+// OWASP A05:2021 - Security Misconfiguration: Remove load test bypass
+// OWASP A07:2021 - Identification and Authentication Failures: Strict rate limiting
 const isDevelopment = process.env.NODE_ENV !== 'production';
-const isLoadTesting = process.env.LOAD_TEST_MODE === 'true';
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isLoadTesting ? 999999 : (isDevelopment ? 100 : 5), // Much higher for load testing
+  max: isDevelopment ? 100 : 5, // Stricter in production
   message: {
     success: false,
     message: 'Too many authentication attempts, please try again later',
@@ -47,7 +47,7 @@ const authLimiter = rateLimit({
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isLoadTesting ? 999999 : (isDevelopment ? 100 : 10), // Much higher for load testing
+  max: isDevelopment ? 100 : 10, // Stricter in production
   message: {
     success: false,
     message: 'Too many login attempts, please try again later',
@@ -57,8 +57,14 @@ const loginLimiter = rateLimit({
 
 /**
  * Helper function to generate JWT token
+ * OWASP A02:2021 - Cryptographic Failures: Never use default secrets
  */
 const generateToken = user => {
+  // OWASP A05:2021 - Security Misconfiguration: Validate secret exists
+  if (!process.env.JWT_SECRET) {
+    throw new Error('JWT_SECRET must be configured in environment variables');
+  }
+
   const payload = {
     userId: user._id,
     email: user.email,
@@ -66,7 +72,7 @@ const generateToken = user => {
     permissions: user.permissions,
   };
 
-  return jwt.sign(payload, process.env.JWT_SECRET || 'default-secret', {
+  return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: '24h',
     issuer: 'gacp-platform',
     audience: 'gacp-users',
@@ -75,14 +81,20 @@ const generateToken = user => {
 
 /**
  * Helper function to generate refresh token
+ * OWASP A02:2021 - Cryptographic Failures: Never use default secrets
  */
 const generateRefreshToken = user => {
+  // OWASP A05:2021 - Security Misconfiguration: Validate secret exists
+  if (!process.env.JWT_REFRESH_SECRET) {
+    throw new Error('JWT_REFRESH_SECRET must be configured in environment variables');
+  }
+
   const payload = {
     userId: user._id,
     type: 'refresh',
   };
 
-  return jwt.sign(payload, process.env.JWT_REFRESH_SECRET || 'default-refresh-secret', {
+  return jwt.sign(payload, process.env.JWT_REFRESH_SECRET, {
     expiresIn: '7d',
     issuer: 'gacp-platform',
   });
@@ -100,28 +112,18 @@ router.post(
     const { email, password, fullName, phone, nationalId, role, ...roleSpecificData } = req.body;
 
     // Check if user already exists (Task 1.3 - Add 5s query timeout)
+    // OWASP A05:2021 - Security Misconfiguration: Prevent user enumeration
     const existingUser = await User.findOne({
       $or: [{ email: email.toLowerCase() }, { nationalId }],
     }).maxTimeMS(5000); // Prevent hanging queries
 
     if (existingUser) {
-      if (existingUser.email === email.toLowerCase()) {
-        return res.status(400).json({
-          success: false,
-          message: 'อีเมลนี้ถูกใช้แล้ว',
-          code: 'EMAIL_EXISTS',
-          field: 'email',
-        });
-      }
-
-      if (existingUser.nationalId === nationalId) {
-        return res.status(400).json({
-          success: false,
-          message: 'เลขประจำตัวประชาชนนี้ถูกใช้แล้ว',
-          code: 'NATIONAL_ID_EXISTS',
-          field: 'nationalId',
-        });
-      }
+      // Generic error message to prevent user enumeration attacks
+      return res.status(400).json({
+        success: false,
+        message: 'การลงทะเบียนไม่สำเร็จ กรุณาตรวจสอบข้อมูล',
+        code: 'REGISTRATION_FAILED',
+      });
     }
 
     // Create new user
@@ -139,8 +141,8 @@ router.post(
     const user = new User(userData);
     await user.save();
 
-    // Generate email verification token
-    const verificationToken = user.generateEmailVerificationToken();
+    // Generate email verification token (will be used for email verification feature)
+    user.generateEmailVerificationToken();
     await user.save();
 
     // Generate tokens
@@ -391,7 +393,7 @@ router.put(
   authenticate,
   validateRequest({
     fullName: 'string|min:2|max:100',
-    phone: 'string|regex:/^[\+]?[0-9\-\(\)\s]+$/',
+    phone: 'string|regex:/^[+]?[0-9()\\s-]+$/',
     notifications: 'object',
   }),
   handleAsync(async (req, res) => {
@@ -446,8 +448,7 @@ router.post(
   rateLimitSensitive(),
   validateRequest({
     currentPassword: 'required|string',
-    newPassword:
-      'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/',
+    newPassword: 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/',
   }),
   handleAsync(async (req, res) => {
     const { currentPassword, newPassword } = req.body;
@@ -514,8 +515,8 @@ router.post(
       });
     }
 
-    // Generate reset token
-    const resetToken = user.generatePasswordResetToken();
+    // Generate reset token (will be used for email sending feature)
+    user.generatePasswordResetToken();
     await user.save();
 
     logger.info('Password reset requested', {
@@ -542,8 +543,7 @@ router.post(
   authLimiter,
   validateRequest({
     token: 'required|string',
-    newPassword:
-      'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/',
+    newPassword: 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/',
   }),
   handleAsync(async (req, res) => {
     const { token, newPassword } = req.body;
@@ -647,8 +647,8 @@ router.post(
       return sendError.validation(res, 'Email is already verified');
     }
 
-    // Generate new verification token
-    const verificationToken = user.generateEmailVerificationToken();
+    // Generate new verification token (will be used for email sending feature)
+    user.generateEmailVerificationToken();
     await user.save();
 
     logger.info('Email verification resent', {
