@@ -6,6 +6,9 @@
 const express = require('express');
 const router = express.Router();
 const cannabisSurveyService = require('../services/cannabis-survey');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('cannabis-surveys');
+
 const {
   CannabisSurveyTemplate,
   CannabisQuestion,

@@ -8,6 +8,9 @@
 
 const fs = require('fs').promises;
 const path = require('path');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('report-generator');
+
 
 class SimpleReportGeneratorService {
   constructor() {

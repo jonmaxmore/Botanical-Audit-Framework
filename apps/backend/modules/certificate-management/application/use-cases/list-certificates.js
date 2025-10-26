@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('certificate-management-list-certificates');
+
 /**
  * List Certificates Use Case
  *

@@ -1,3 +1,6 @@
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('auth-proxy');
+
 // Auth Service (Port 3001) - Proxy to main backend
 const authApp = express();
 

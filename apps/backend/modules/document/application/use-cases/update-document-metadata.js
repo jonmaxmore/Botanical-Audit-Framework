@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-update-document-metadata');
+
 /**
  * Update Document Metadata Use Case
  *

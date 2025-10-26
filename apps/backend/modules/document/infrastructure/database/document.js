@@ -7,6 +7,9 @@
 
 const mongoose = require('mongoose');
 const Document = require('../../domain/entities/Document');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-document');
+
 
 // Mongoose Schema
 const documentSchema = new mongoose.Schema(

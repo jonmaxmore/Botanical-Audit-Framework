@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-delete-document');
+
 /**
  * Delete Document Use Case
  *

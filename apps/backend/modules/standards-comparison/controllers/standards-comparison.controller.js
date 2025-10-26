@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../shared/logger');
+const logger = createLogger('standards-comparison-standards-comparison.controller');
+
 /**
  * Standards Comparison Controller
  *

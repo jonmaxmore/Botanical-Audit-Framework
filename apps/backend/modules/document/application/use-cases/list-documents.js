@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-list-documents');
+
 /**
  * List Documents Use Case
  *

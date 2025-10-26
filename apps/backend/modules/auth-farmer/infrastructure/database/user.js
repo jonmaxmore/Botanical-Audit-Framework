@@ -11,6 +11,9 @@
 const mongoose = require('mongoose');
 const User = require('../../domain/entities/User');
 const IUserRepository = require('../../domain/interfaces/IUserRepository');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('auth-farmer-user');
+
 
 // Mongoose Schema
 const userSchema = new mongoose.Schema(

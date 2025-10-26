@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../shared/logger');
+const logger = createLogger('dashboard-dashboard.controller');
+
 /**
  * Dashboard Controller
  *

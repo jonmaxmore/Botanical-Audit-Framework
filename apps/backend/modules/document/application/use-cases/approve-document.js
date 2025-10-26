@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-approve-document');
+
 /**
  * Approve Document Use Case
  *

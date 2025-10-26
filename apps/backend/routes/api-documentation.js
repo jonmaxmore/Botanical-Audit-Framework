@@ -8,6 +8,9 @@
  */
 
 const express = require('express');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('api-documentation');
+
 const router = express.Router();
 
 // API Documentation Configuration

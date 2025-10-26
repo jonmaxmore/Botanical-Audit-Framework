@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-get-pending-documents');
+
 /**
  * Get Pending Documents Use Case
  *

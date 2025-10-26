@@ -10,6 +10,9 @@
 
 const crypto = require('crypto');
 const bcrypt = require('bcrypt');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('security-compliance');
+
 
 class EncryptionService {
   constructor() {

@@ -19,6 +19,9 @@
 
 const express = require('express');
 const { body, query, param } = require('express-validator');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('audit-enhanced-audit.routes');
+
 
 /**
  * Create enhanced audit routes

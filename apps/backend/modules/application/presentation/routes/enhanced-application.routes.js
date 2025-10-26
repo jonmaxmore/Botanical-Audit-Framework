@@ -27,6 +27,9 @@ const express = require('express');
 const multer = require('multer');
 const { body, query, param } = require('express-validator');
 const rateLimit = require('express-rate-limit');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('application-enhanced-application.routes');
+
 
 /**
  * Create enhanced application processing routes with comprehensive functionality

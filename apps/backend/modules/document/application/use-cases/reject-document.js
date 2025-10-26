@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-reject-document');
+
 /**
  * Reject Document Use Case
  *

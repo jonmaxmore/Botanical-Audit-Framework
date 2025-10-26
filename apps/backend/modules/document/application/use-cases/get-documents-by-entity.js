@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-get-documents-by-entity');
+
 /**
  * Get Documents By Related Entity Use Case
  *

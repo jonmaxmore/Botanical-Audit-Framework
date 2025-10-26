@@ -1,3 +1,6 @@
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('compliance');
+
 /**
  * GACP Quality Compliance Comparator - API Routes
  * Routes for the compliance comparison system

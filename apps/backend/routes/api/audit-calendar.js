@@ -14,6 +14,9 @@ const router = express.Router();
 // Middleware
 const authenticate = require('../middleware/auth');
 const authorizeRoles = require('../middleware/rbac');
+const { createLogger } = require('../../shared/logger');
+const logger = createLogger('audit-calendar');
+
 
 const handleValidationErrors = (req, res, next) => {
   const errors = validationResult(req);

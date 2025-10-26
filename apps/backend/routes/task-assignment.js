@@ -10,6 +10,9 @@ const { BlitzzIntegrationService, TaskAssignment } = require('../services/blitzz
 const auth = require('../middleware/auth');
 const rbac = require('../middleware/rbac');
 const auditMiddleware = require('../middleware/audit');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('task-assignment');
+
 
 // Initialize Blitzz service
 const blitzzService = new BlitzzIntegrationService();

@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('farm-management-farm');
+
 /**
  * FarmController (Presentation Layer)
  *

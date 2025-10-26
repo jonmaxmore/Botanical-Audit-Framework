@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('auth-dtam-dtam-auth');
+
 /**
  * DTAM Staff Auth Controller
  * Presentation Layer - Clean Architecture

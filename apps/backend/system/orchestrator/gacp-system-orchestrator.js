@@ -1,3 +1,6 @@
+const { createLogger } = require('../../shared/logger');
+const logger = createLogger('gacp-system-orchestrator');
+
 /**
  * GACP Platform System Integration Orchestrator
  *

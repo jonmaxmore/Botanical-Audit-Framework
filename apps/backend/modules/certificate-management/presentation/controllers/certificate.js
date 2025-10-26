@@ -17,6 +17,9 @@ const {
   RenewCertificateRequestDTO,
   CertificateListQueryDTO,
 } = require('../dto/CertificateDTO');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('certificate-management-certificate');
+
 
 class CertificateController {
   constructor({

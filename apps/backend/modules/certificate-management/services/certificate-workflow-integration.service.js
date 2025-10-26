@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../shared/logger');
+const logger = createLogger('certificate-management-certificate-workflow-integration.service');
+
 /**
  * Certificate Workflow Integration Service
  *

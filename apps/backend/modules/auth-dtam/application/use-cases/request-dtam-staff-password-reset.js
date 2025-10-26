@@ -10,6 +10,9 @@
  */
 
 const DTAMStaffPasswordResetRequested = require('../../domain/events/DTAMStaffPasswordResetRequested');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('auth-dtam-request-dtam-staff-password-reset');
+
 
 class RequestDTAMStaffPasswordResetUseCase {
   constructor({ staffRepository, tokenGenerator, eventBus }) {

@@ -369,6 +369,9 @@ class ComplianceSeeder {
 // Export for CLI usage
 if (require.main === module) {
   const mongoose = require('mongoose');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('compliance-seeder');
+
 
   // Simple CLI interface
   const command = process.argv[2] || 'seed';

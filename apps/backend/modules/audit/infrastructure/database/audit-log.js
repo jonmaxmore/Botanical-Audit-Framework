@@ -9,6 +9,9 @@
 
 const mongoose = require('mongoose');
 const IAuditLogRepository = require('../../domain/interfaces/IAuditLogRepository');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('audit-audit-log');
+
 const {
   AuditLog,
   ACTION_TYPE,

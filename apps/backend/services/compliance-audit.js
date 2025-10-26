@@ -10,6 +10,9 @@
 
 const mongoose = require('mongoose');
 const crypto = require('crypto');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('compliance-audit');
+
 
 // Audit Log Schema
 const auditLogSchema = new mongoose.Schema(

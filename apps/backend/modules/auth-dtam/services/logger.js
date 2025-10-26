@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../shared/logger');
+const logger = createLogger('auth-dtam-logger');
+
 /**
  * Logger Service for Auth DTAM Module
  * Simple logging utility with different log levels

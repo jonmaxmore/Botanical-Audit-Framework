@@ -8,6 +8,9 @@ const mongoose = require('mongoose');
 const { body, param, query, validationResult } = require('express-validator');
 const SOP = require('../models/mongodb/SOP');
 const EnhancedCultivationRecord = require('../models/mongodb/EnhancedCultivationRecord');
+const { createLogger } = require('../../shared/logger');
+const logger = createLogger('sop');
+
 
 const router = express.Router();
 

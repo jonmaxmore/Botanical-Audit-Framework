@@ -30,6 +30,9 @@
 
 const express = require('express');
 const { createAuthRateLimiters } = require('../../../../middleware/auth-rate-limiters');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('user-management-authRoutes');
+
 const {
   checkTokenBlacklist,
   checkTokenVersion,

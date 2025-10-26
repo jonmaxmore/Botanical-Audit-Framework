@@ -1,3 +1,6 @@
+const { createLogger } = require('../../shared/logger');
+const logger = createLogger('business-rules-engine');
+
 /**
  * Business Rules Engine
  *

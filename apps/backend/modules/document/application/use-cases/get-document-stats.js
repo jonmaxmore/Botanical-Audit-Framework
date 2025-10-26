@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('document-get-document-stats');
+
 /**
  * Get Document Statistics Use Case
  *

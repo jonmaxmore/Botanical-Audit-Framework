@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('application-government-api-integration');
+
 /**
  * Government API Integration Service
  *

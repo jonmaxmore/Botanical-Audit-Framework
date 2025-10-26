@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../shared/logger');
+const logger = createLogger('document-management-document-security.service');
+
 /**
  * Document Security Service
  *

@@ -9,6 +9,9 @@
  */
 
 const bcrypt = require('bcrypt');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('auth-farmer-password');
+
 
 class BcryptPasswordHasher {
   constructor(saltRounds = 12) {

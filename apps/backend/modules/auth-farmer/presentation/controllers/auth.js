@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('auth-farmer-auth');
+
 /**
  * Auth Controller
  * Presentation Layer - Clean Architecture

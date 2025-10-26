@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('report-delete-report');
+
 /**
  * Delete Report Use Case
  *

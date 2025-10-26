@@ -1,3 +1,6 @@
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('application-document-management-integration');
+
 /**
  * Document Management Integration System
  *

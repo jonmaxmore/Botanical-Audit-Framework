@@ -9,6 +9,9 @@
  */
 
 const jwt = require('jsonwebtoken');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('auth-farmer-token');
+
 
 class JWTService {
   constructor(secret, expiresIn = '24h') {
