@@ -44,6 +44,7 @@ const UserAuthenticationController = require('./presentation/controllers/UserAut
 const UserRepository = require('./infrastructure/repositories/UserRepository');
 const User = require('./infrastructure/models/User');
 const createAuthRoutes = require('./presentation/routes/authRoutes');
+const { JWTTokenManager } = require('../../middleware/jwt-token-manager');
 
 class UserManagementModule {
   constructor(dependencies = {}) {
@@ -52,6 +53,7 @@ class UserManagementModule {
     this.auditService = dependencies.auditService;
     this.notificationService = dependencies.notificationService;
     this.database = dependencies.database; // MongoDB connection
+    this.redisClient = dependencies.redisClient; // Redis client for rate limiting
 
     // Initialize module components
     this._initializeComponents();
@@ -64,6 +66,9 @@ class UserManagementModule {
    * @private
    */
   _initializeComponents() {
+    // Initialize token manager
+    this.tokenManager = new JWTTokenManager(this.cacheService);
+
     // Initialize repository
     this.userRepository = new UserRepository({
       cacheService: this.cacheService,
@@ -96,6 +101,8 @@ class UserManagementModule {
     this.authRoutes = createAuthRoutes({
       userAuthenticationController: this.authenticationController,
       authenticationMiddleware: this.authenticationMiddleware,
+      tokenManager: this.tokenManager,
+      redisClient: this.redisClient,
     });
   }
 

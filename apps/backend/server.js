@@ -18,6 +18,7 @@ const morgan = require('morgan');
 const http = require('http');
 const helmet = require('helmet');
 const compression = require('compression');
+const { createCorsOptions, corsLoggingMiddleware } = require('./middleware/cors-config');
 const mongoManager = require('./config/mongodb-manager');
 const redisManager = require('./config/redis-manager');
 const configManager = require('./config/config-manager');
@@ -66,16 +67,17 @@ app.use(
   }),
 ); // Security headers with HSTS
 app.use(compression()); // Response compression
-app.use(
-  cors({
-    origin: config.server.cors?.allowedOrigins ||
-      process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000', 'http://127.0.0.1:3000'],
-    methods: config.server.cors?.allowedMethods || ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['Content-Length', 'X-Request-Id'],
-  }),
-);
+
+// Enhanced CORS configuration (Phase 3.3)
+const corsOptions = createCorsOptions({
+  environment: config.app.environment,
+  customOrigins: process.env.ALLOWED_ORIGINS?.split(',') || [],
+  allowPatterns: process.env.NODE_ENV !== 'production',
+  logRejected: true,
+});
+app.use(cors(corsOptions));
+app.use(corsLoggingMiddleware()); // Log CORS requests
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 

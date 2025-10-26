@@ -5,18 +5,19 @@
  * Integrates controller with middleware stack for complete security.
  *
  * Route Structure:
- * POST   /auth/login           - User authentication
- * POST   /auth/refresh         - Token refresh
+ * POST   /auth/login           - User authentication (5/15min per IP)
+ * POST   /auth/refresh         - Token refresh (10/min per IP)
  * POST   /auth/logout          - User logout (protected)
- * POST   /auth/change-password - Password change (protected)
+ * POST   /auth/change-password - Password change (10/15min per IP)
  * GET    /auth/profile         - Get user profile (protected)
- * PUT    /auth/profile         - Update user profile (protected)
- * POST   /auth/forgot-password - Password reset request
- * POST   /auth/reset-password  - Password reset confirmation
+ * PUT    /auth/profile         - Update user profile (20/15min per IP)
+ * POST   /auth/forgot-password - Password reset request (3/hour per IP)
+ * POST   /auth/reset-password  - Password reset confirmation (5/15min per IP)
  * GET    /auth/verify          - Token verification (protected)
  *
  * Security Features:
- * - Rate limiting per endpoint
+ * - Tiered rate limiting per endpoint (Phase 3.1)
+ * - Redis-backed rate limit store
  * - Input validation
  * - Authentication middleware
  * - Authorization checks
@@ -24,36 +25,23 @@
  *
  * @author GACP Platform Team
  * @version 1.0.0
- * @date 2025-10-18
+ * @date 2025-10-26
  */
 
 const express = require('express');
+const { createAuthRateLimiters } = require('../../../../middleware/auth-rate-limiters');
+const { checkTokenBlacklist, checkTokenVersion } = require('../../../../middleware/jwt-token-manager');
 const router = express.Router();
 
 function createAuthRoutes(dependencies = {}) {
-  const { userAuthenticationController, authenticationMiddleware } = dependencies;
+  const { userAuthenticationController, authenticationMiddleware, redisClient, tokenManager } =
+    dependencies;
 
   // Validation rules
   const validationRules = userAuthenticationController.constructor.getValidationRules();
 
-  // Rate limiting configurations for different endpoints
-  const strictRateLimit = authenticationMiddleware.rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 5, // 5 attempts per window
-    message: 'Too many authentication attempts, please try again later',
-  });
-
-  const moderateRateLimit = authenticationMiddleware.rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 20, // 20 requests per window
-    message: 'Too many requests, please try again later',
-  });
-
-  const normalRateLimit = authenticationMiddleware.rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100, // 100 requests per window
-    message: 'Too many requests, please try again later',
-  });
+  // Specialized rate limiters for auth endpoints (Phase 3.1)
+  const rateLimiters = createAuthRateLimiters(redisClient);
 
   // Security headers for all routes
   router.use(authenticationMiddleware.securityHeaders());
@@ -62,73 +50,85 @@ function createAuthRoutes(dependencies = {}) {
    * Public Routes (No authentication required)
    */
 
-  // User login
-  router.post('/login', strictRateLimit, validationRules.login, (req, res) =>
+  // User login - Very strict (5 attempts per 15min, skip successful)
+  router.post('/login', rateLimiters.loginLimiter, validationRules.login, (req, res) =>
     userAuthenticationController.login(req, res),
   );
 
-  // Token refresh
-  router.post('/refresh', moderateRateLimit, validationRules.refreshToken, (req, res) =>
+  // Token refresh - Moderate (10 per minute)
+  router.post('/refresh', rateLimiters.refreshLimiter, validationRules.refreshToken, (req, res) =>
     userAuthenticationController.refreshToken(req, res),
   );
 
-  // Forgot password
-  router.post('/forgot-password', strictRateLimit, validationRules.forgotPassword, (req, res) =>
-    userAuthenticationController.forgotPassword(req, res),
+  // Forgot password - Very strict (3 per hour)
+  router.post(
+    '/forgot-password',
+    rateLimiters.passwordResetRequestLimiter,
+    validationRules.forgotPassword,
+    (req, res) => userAuthenticationController.forgotPassword(req, res),
   );
 
-  // Reset password
-  router.post('/reset-password', moderateRateLimit, validationRules.resetPassword, (req, res) =>
-    userAuthenticationController.resetPassword(req, res),
+  // Reset password - Strict (5 per 15min, skip successful)
+  router.post(
+    '/reset-password',
+    rateLimiters.passwordResetConfirmLimiter,
+    validationRules.resetPassword,
+    (req, res) => userAuthenticationController.resetPassword(req, res),
   );
 
   /**
    * Protected Routes (Authentication required)
    */
 
-  // User logout
+  // User logout - Normal rate
   router.post(
     '/logout',
-    normalRateLimit,
+    rateLimiters.generalAuthLimiter,
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
     (req, res) => userAuthenticationController.logout(req, res),
   );
 
-  // Change password
+  // Change password - Moderate (10 per 15min)
   router.post(
     '/change-password',
-    moderateRateLimit,
+    rateLimiters.passwordChangeLimiter,
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
     validationRules.changePassword,
     (req, res) => userAuthenticationController.changePassword(req, res),
   );
 
-  // Get user profile
+  // Get user profile - Normal rate (with token validation)
   router.get(
     '/profile',
-    normalRateLimit,
+    rateLimiters.generalAuthLimiter,
     authenticationMiddleware.extractToken(),
+    checkTokenBlacklist(tokenManager),
+    checkTokenVersion(tokenManager),
     authenticationMiddleware.authenticate(),
     (req, res) => userAuthenticationController.getProfile(req, res),
   );
 
-  // Update user profile
+  // Update user profile - Moderate (20 per 15min, with token validation)
   router.put(
     '/profile',
-    moderateRateLimit,
+    rateLimiters.profileUpdateLimiter,
     authenticationMiddleware.extractToken(),
+    checkTokenBlacklist(tokenManager),
+    checkTokenVersion(tokenManager),
     authenticationMiddleware.authenticate(),
     validationRules.updateProfile,
     (req, res) => userAuthenticationController.updateProfile(req, res),
   );
 
-  // Token verification endpoint
+  // Token verification endpoint - Normal rate (with token validation)
   router.get(
     '/verify',
-    normalRateLimit,
+    rateLimiters.generalAuthLimiter,
     authenticationMiddleware.extractToken(),
+    checkTokenBlacklist(tokenManager),
+    checkTokenVersion(tokenManager),
     authenticationMiddleware.authenticate(),
     (req, res) => {
       // If we reach here, token is valid
@@ -151,10 +151,10 @@ function createAuthRoutes(dependencies = {}) {
    * Admin Routes (Admin role required)
    */
 
-  // Get all users (Admin only)
+  // Get all users (Admin only) - Normal rate
   router.get(
     '/users',
-    normalRateLimit,
+    rateLimiters.generalAuthLimiter,
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
     authenticationMiddleware.requireRole('DTAM_ADMIN'),
@@ -185,10 +185,10 @@ function createAuthRoutes(dependencies = {}) {
     },
   );
 
-  // Update user status (Admin only)
+  // Update user status (Admin only) - Moderate rate
   router.patch(
     '/users/:userId/status',
-    moderateRateLimit,
+    rateLimiters.profileUpdateLimiter,
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
     authenticationMiddleware.requireRole('DTAM_ADMIN'),

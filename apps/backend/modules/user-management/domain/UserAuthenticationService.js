@@ -30,6 +30,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const EventEmitter = require('events');
 const zxcvbn = require('zxcvbn');
+const { JWTTokenManager } = require('../../../middleware/jwt-token-manager');
 
 class UserAuthenticationService extends EventEmitter {
   constructor(dependencies = {}) {
@@ -40,6 +41,7 @@ class UserAuthenticationService extends EventEmitter {
     this.auditService = dependencies.auditService;
     this.notificationService = dependencies.notificationService;
     this.cacheService = dependencies.cacheService; // Redis for session management
+    this.tokenManager = new JWTTokenManager(dependencies.cacheService);
 
     // Configuration - SECURITY: JWT_SECRET is required from environment
     if (!process.env.JWT_SECRET) {
@@ -244,11 +246,39 @@ class UserAuthenticationService extends EventEmitter {
    */
   async refreshToken(refreshToken, context = {}) {
     try {
+      // Check if token is blacklisted
+      const isBlacklisted = await this.tokenManager.isTokenBlacklisted(refreshToken);
+      if (isBlacklisted) {
+        throw new Error('Token has been revoked');
+      }
+
       // Verify refresh token
       const decoded = jwt.verify(refreshToken, this.config.jwt.secret);
 
       if (decoded.type !== 'refresh') {
         throw new Error('Invalid token type');
+      }
+
+      // Check token version
+      const currentVersion = await this.tokenManager.getTokenVersion(decoded.userId);
+      if (decoded.version && decoded.version < currentVersion) {
+        throw new Error('Token version outdated');
+      }
+
+      // Check if token family is compromised
+      if (decoded.familyId) {
+        const isCompromised = await this.tokenManager.isTokenFamilyCompromised(decoded.familyId);
+        if (isCompromised) {
+          await this._logSecurityEvent('COMPROMISED_TOKEN_USED', {
+            userId: decoded.userId,
+            familyId: decoded.familyId,
+            ...context,
+          });
+          throw new Error('Token family compromised');
+        }
+
+        // Update family usage
+        await this.tokenManager.updateTokenFamilyUsage(decoded.familyId);
       }
 
       // Check if session exists
@@ -263,13 +293,15 @@ class UserAuthenticationService extends EventEmitter {
         throw new Error('User not found or inactive');
       }
 
-      // Generate new access token
+      // Generate new access token (with same familyId and version)
       const accessToken = jwt.sign(
         {
           userId: user.id,
           email: user.email,
           role: user.role,
           sessionId: decoded.sessionId,
+          familyId: decoded.familyId,
+          version: decoded.version || currentVersion,
           type: 'access',
         },
         this.config.jwt.secret,
@@ -387,6 +419,22 @@ class UserAuthenticationService extends EventEmitter {
    */
   async logout(userId, sessionId, context = {}) {
     try {
+      // Blacklist the current tokens if provided
+      if (context.accessToken) {
+        const accessTokenExpiry = this._getTokenExpirySeconds(context.accessToken);
+        await this.tokenManager.blacklistToken(context.accessToken, accessTokenExpiry, 'LOGOUT');
+      }
+
+      if (context.refreshToken) {
+        const refreshTokenExpiry = this._getTokenExpirySeconds(context.refreshToken);
+        await this.tokenManager.blacklistToken(context.refreshToken, refreshTokenExpiry, 'LOGOUT');
+      }
+
+      // Invalidate token family if present
+      if (context.familyId) {
+        await this.tokenManager.invalidateTokenFamily(context.familyId, 'USER_LOGOUT');
+      }
+
       // Invalidate session
       await this._invalidateSession(sessionId);
 
@@ -480,6 +528,9 @@ class UserAuthenticationService extends EventEmitter {
         passwordHistory: trimmedHistory,
       });
 
+      // Rotate all tokens for this user (increments token version)
+      await this.tokenManager.incrementTokenVersion(userId, 'PASSWORD_CHANGED');
+
       // Invalidate all sessions except current
       await this._invalidateAllUserSessions(userId, context.sessionId);
 
@@ -507,6 +558,8 @@ class UserAuthenticationService extends EventEmitter {
    */
   async _generateTokens(user) {
     const sessionId = crypto.randomUUID();
+    const familyId = this.tokenManager.createTokenFamily();
+    const tokenVersion = await this.tokenManager.getTokenVersion(user.id);
 
     const accessToken = jwt.sign(
       {
@@ -514,6 +567,8 @@ class UserAuthenticationService extends EventEmitter {
         email: user.email,
         role: user.role,
         sessionId,
+        familyId,
+        version: tokenVersion,
         type: 'access',
       },
       this.config.jwt.secret,
@@ -524,13 +579,28 @@ class UserAuthenticationService extends EventEmitter {
       {
         userId: user.id,
         sessionId,
+        familyId,
+        version: tokenVersion,
         type: 'refresh',
       },
       this.config.jwt.secret,
       { expiresIn: this.config.jwt.refreshExpiresIn },
     );
 
-    return { accessToken, refreshToken, sessionId };
+    // Store token family
+    await this.tokenManager.storeTokenFamily(
+      familyId,
+      {
+        userId: user.id,
+        sessionId,
+        version: tokenVersion,
+        createdAt: new Date(),
+        useCount: 0,
+      },
+      7 * 24 * 60 * 60, // 7 days
+    );
+
+    return { accessToken, refreshToken, sessionId, familyId, version: tokenVersion };
   }
 
   /**
@@ -738,6 +808,23 @@ class UserAuthenticationService extends EventEmitter {
     console.log(
       `[UserAuthenticationService] Invalidating all sessions for user ${userId} except ${exceptSessionId}`,
     );
+  }
+
+  /**
+   * Get token expiry time in seconds
+   * @private
+   */
+  _getTokenExpirySeconds(token) {
+    try {
+      const decoded = jwt.decode(token);
+      if (decoded && decoded.exp) {
+        return decoded.exp - Math.floor(Date.now() / 1000);
+      }
+      // Default to 24 hours if can't decode
+      return 24 * 60 * 60;
+    } catch (error) {
+      return 24 * 60 * 60;
+    }
   }
 
   /**
