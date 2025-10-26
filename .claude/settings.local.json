@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "Bash(git log:*)",
+      "Bash(npm run lint)",
+      "Bash(pnpm add:*)",
+      "Bash(npx husky init)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

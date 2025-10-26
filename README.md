@@ -1,11 +1,25 @@
-# GACP Certification Flow Platform (Botanical Audit Framework)
+# 🏆 GACP Certification Flow Platform (Botanical Audit Framework)
 
-**Version**: 2.0.0  
-**Status**: ✅ Production Ready  
-**Last Updated**: January 21, 2025  
-**Production Readiness**: 95%
+**Version**: 2.0.0
+**Status**: ✅ Production Ready → 🚀 **National Platform in Development**
+**Last Updated**: October 26, 2025
+**Production Readiness**: 95% (Core) | 40% (National Features)
 
 A comprehensive digital platform for managing **GACP (Good Agricultural and Collection Practices)** certification process for cannabis farms in Thailand, serving farmers and DTAM (Department of Thai Traditional and Alternative Medicine) staff.
+
+## 🎯 **Vision: Thailand's National Agricultural Platform**
+
+We are evolving into a **National Platform for Smart Cannabis Farming** with:
+
+- 🌱 **IoT-enabled Farm Monitoring** (Soil, Water, Environmental Sensors)
+- 🧬 **Seed Genetics Management** (Complete Traceability, Thai FDA Integration)
+- 🤖 **AI-Powered Recommendations** (Fertilizer, Irrigation, Pest Management)
+- 📊 **Research & Analytics** (National Agricultural Database)
+- 📱 **Mobile Apps** (Farmer & Inspector Apps)
+
+**Target**: 5,000-10,000 farms nationwide by 2027 (18-month development roadmap)
+
+**See**: [National Platform Roadmap](./docs/NATIONAL_PLATFORM_ROADMAP.md) for full development plan
 
 ---
 
@@ -15,10 +29,20 @@ A comprehensive digital platform for managing **GACP (Good Agricultural and Coll
 
 ### Important Guides
 
-📖 **[Server Management Guide](./SERVER_MANAGEMENT_GUIDE.md)** - Complete guide for dev and production  
-📊 **[Production Final Report](./PRODUCTION_FINAL_REPORT.md)** - Latest production readiness report  
-🔧 **[PM2 Guide](./PM2_GUIDE.md)** - Process management for production  
-🏢 **[Main Services Catalog](./docs/MAIN_SERVICES_CATALOG.md)** - Complete list of all 6 main services  
+#### 🚀 National Platform Development
+
+🗺️ **[National Platform Roadmap](./docs/NATIONAL_PLATFORM_ROADMAP.md)** - 18-month development plan (5 phases)
+🔬 **[Research Findings Summary](./docs/RESEARCH_FINDINGS_SUMMARY.md)** - Current capabilities analysis
+📋 **[Linting Guide](./docs/LINTING_GUIDE.md)** - Auto-lint on every commit (NEW!)
+
+#### 📖 System Documentation
+
+📖 **[Server Management Guide](./SERVER_MANAGEMENT_GUIDE.md)** - Complete guide for dev and production
+📊 **[Production Final Report](./PRODUCTION_FINAL_REPORT.md)** - Latest production readiness report
+🔧 **[PM2 Guide](./PM2_GUIDE.md)** - Process management for production
+🏗️ **[Architecture Documentation](./docs/ARCHITECTURE.md)** - System architecture, modules, and design decisions
+🗑️ **[Deprecated Files](./docs/DEPRECATED.md)** - List of deprecated code and migration guides
+🏢 **[Main Services Catalog](./docs/MAIN_SERVICES_CATALOG.md)** - Complete list of all 6 main services
 📇 **[Quick Reference Services](./docs/QUICK_REFERENCE_SERVICES.md)** - Quick reference card for services
 
 ---

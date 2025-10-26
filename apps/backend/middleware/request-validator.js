@@ -48,7 +48,7 @@ function findMatchingSchema(path, method) {
 
     // Convert route patterns to regex
     // e.g. /users/:id becomes /users/([^/]+)
-    const patternRegex = new RegExp('^' + schemaPath.replace(/:[^\/]+/g, '([^/]+)') + '$');
+    const patternRegex = new RegExp('^' + schemaPath.replace(/:[^/]+/g, '([^/]+)') + '$');
 
     if (patternRegex.test(path)) {
       return value;

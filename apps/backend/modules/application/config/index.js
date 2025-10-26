@@ -1026,7 +1026,7 @@ class EnhancedApplicationModuleConfig {
     const result = { ...base };
 
     for (const key in override) {
-      if (override.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(override, key)) {
         if (
           typeof override[key] === 'object' &&
           !Array.isArray(override[key]) &&

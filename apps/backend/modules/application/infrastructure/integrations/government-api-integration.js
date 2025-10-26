@@ -249,7 +249,7 @@ class GovernmentApiIntegrationService {
 
       // Generate overall submission result
       const successfulSubmissions = submissionResults.filter(r => r.status === 'SUCCESS');
-      const overallStatus = successfulSubmissions.length > 0 ? 'PARTIAL_SUCCESS' : 'FAILED';
+      let overallStatus = successfulSubmissions.length > 0 ? 'PARTIAL_SUCCESS' : 'FAILED';
 
       if (successfulSubmissions.length === targetSystems.length) {
         overallStatus = 'SUCCESS';

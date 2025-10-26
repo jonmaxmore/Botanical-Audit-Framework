@@ -84,6 +84,10 @@ backup/
 *-backup/
 archive/
 
+# Archived legacy code
+backend.archived*/
+*.archived/
+
 # Package manager files (will be regenerated)
 package-lock.json
 yarn.lock
