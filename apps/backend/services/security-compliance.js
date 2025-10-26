@@ -13,7 +13,6 @@ const bcrypt = require('bcrypt');
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('security-compliance');
 
-
 class EncryptionService {
   constructor() {
     this.algorithm = 'aes-256-gcm';

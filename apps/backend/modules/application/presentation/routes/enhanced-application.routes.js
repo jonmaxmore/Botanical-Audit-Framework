@@ -30,7 +30,6 @@ const rateLimit = require('express-rate-limit');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('application-enhanced-application.routes');
 
-
 /**
  * Create enhanced application processing routes with comprehensive functionality
  */
@@ -899,7 +898,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
   };
 
   // Global error handler for enhanced application routes
-  const errorHandler = (error, req, res, next) => {
+  const errorHandler = (error, req, res, _next) => {
     logger.error('[EnhancedApplicationRoutes] Unhandled error:', error);
 
     const statusCode = error.statusCode || error.status || 500;

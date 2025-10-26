@@ -125,7 +125,7 @@ class TrackSeedUseCase {
       );
 
       // Step 1: Validate distribution request
-      const validationResult = await this.validateSeedDistribution(
+      // const validationResult = await this.validateSeedDistribution(
         seedId,
         farmId,
         distributionDetails,
@@ -639,52 +639,52 @@ class TrackSeedUseCase {
   }
 
   // Placeholder methods for complex operations
-  async verifyFarmCompliance(farm) {
+  async verifyFarmCompliance(_farm) {
     /* Implement farm compliance verification */
   }
-  async generateDistributionCertificate(seed, farm, distributionRecord) {
+  async generateDistributionCertificate(_seed, _farm, _distributionRecord) {
     return { certificateNumber: 'CERT-001' };
   }
-  async initializeFarmMonitoring(seed, farm, distributionRecord) {
+  async initializeFarmMonitoring(_seed, _farm, _distributionRecord) {
     /* Implement monitoring setup */
   }
-  async initializePlantTracking(seed, plantingRecord) {
+  async initializePlantTracking(_seed, _plantingRecord) {
     return { plantId: 'PLANT-001' };
   }
-  async setupPlantingMonitoringAlerts(plantingRecord, plantTrackingData) {
+  async setupPlantingMonitoringAlerts(_plantingRecord, _plantTrackingData) {
     /* Implement alert setup */
   }
-  async initializeComplianceMonitoring(seed) {
+  async initializeComplianceMonitoring(_seed) {
     /* Implement compliance monitoring */
   }
-  async validatePlantingInfo(plantingInfo) {
+  async validatePlantingInfo(_plantingInfo) {
     /* Validate planting information */
   }
-  async validatePlotConditions(plotId, soilConditions) {
+  async validatePlotConditions(_plotId, _soilConditions) {
     /* Validate plot and soil */
   }
-  async getRelatedTrackingData(seed) {
+  async getRelatedTrackingData(_seed) {
     return { plants: [] };
   }
-  async getAuditTrail(seedId) {
+  async getAuditTrail(_seedId) {
     return [];
   }
-  calculateDataCompleteness(seed) {
+  calculateDataCompleteness(_seed) {
     return 95;
   }
-  async verifyDataIntegrity(seed) {
+  async verifyDataIntegrity(_seed) {
     return 'VERIFIED';
   }
-  async validateQualityMetrics(metrics, testingInfo) {
+  async validateQualityMetrics(_metrics, _testingInfo) {
     /* Validate quality data */
   }
-  analyzeQualityChanges(previous, current) {
+  analyzeQualityChanges(_previous, _current) {
     return { significantChanges: [] };
   }
-  async handleQualityAlerts(seed, changes) {
+  async handleQualityAlerts(_seed, _changes) {
     /* Handle quality alerts */
   }
-  calculateNextAuditDate(seed) {
+  calculateNextAuditDate(_seed) {
     return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
   }
 
@@ -700,16 +700,16 @@ class TrackSeedUseCase {
     }
   }
 
-  async sendRegistrationNotifications(seed, qualityAssessment) {
+  async sendRegistrationNotifications(_seed, _qualityAssessment) {
     /* Implement notifications */
   }
-  async sendDistributionNotifications(seed, farm, distributionRecord) {
+  async sendDistributionNotifications(_seed, _farm, _distributionRecord) {
     /* Implement notifications */
   }
-  async sendPlantingNotifications(seed, plantingRecord) {
+  async sendPlantingNotifications(_seed, _plantingRecord) {
     /* Implement notifications */
   }
-  async sendQualityUpdateNotifications(seed, qualityChanges) {
+  async sendQualityUpdateNotifications(_seed, _qualityChanges) {
     /* Implement notifications */
   }
 }

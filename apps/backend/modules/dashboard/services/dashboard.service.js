@@ -132,7 +132,7 @@ class DashboardService {
     try {
       const now = new Date();
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      // const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
       const [
         totalApplications,
@@ -200,7 +200,7 @@ class DashboardService {
   /**
    * Get DTAM staff statistics
    */
-  async getDTAMStats(role) {
+  async getDTAMStats(_role) {
     try {
       const now = new Date();
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());

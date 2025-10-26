@@ -434,7 +434,7 @@ class TrainingWorkflowIntegrationManager {
         this.analyticsService.processTrainingMetrics(dataCollection.data),
       );
 
-      const dashboardUpdate = await this.executeWorkflowStep(workflowId, 'updateDashboard', () =>
+      // const dashboardUpdate = await this.executeWorkflowStep(workflowId, 'updateDashboard', () =>
         this.analyticsService.updateDashboard(metricsProcessing.data),
       );
 
@@ -521,7 +521,7 @@ class TrainingWorkflowIntegrationManager {
         this.governmentService.trackSubmissionStatus(systemSubmission.data),
       );
 
-      const auditUpdate = await this.executeWorkflowStep(workflowId, 'updateAuditTrail', () =>
+      // const auditUpdate = await this.executeWorkflowStep(workflowId, 'updateAuditTrail', () =>
         this.auditService.updateGovernmentAuditTrail(statusTracking.data),
       );
 
@@ -728,7 +728,7 @@ class TrainingWorkflowIntegrationManager {
     }
   }
 
-  async handleWorkflowFailure(workflowId, error, originalData) {
+  async handleWorkflowFailure(workflowId, error, _originalData) {
     const workflowExecution = this.executionTracking.activeWorkflows.get(workflowId);
     if (workflowExecution) {
       workflowExecution.status = 'FAILED';
@@ -768,15 +768,15 @@ class TrainingWorkflowIntegrationManager {
   }
 
   // Placeholder methods for complex operations
-  async validateCourseCompletion(data) {
+  async validateCourseCompletion(_data) {
     return { eligibleForCertificate: true, score: 85, completionDate: new Date() };
   }
 
-  async sendCompletionNotifications(data) {
+  async sendCompletionNotifications(_data) {
     return { notificationsSent: 3, recipients: ['farmer', 'admin', 'government'] };
   }
 
-  async updateCompletionRecords(data) {
+  async updateCompletionRecords(_data) {
     return { recordsUpdated: 5, auditTrailCreated: true };
   }
 }

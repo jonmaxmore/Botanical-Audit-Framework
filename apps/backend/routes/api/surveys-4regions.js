@@ -764,7 +764,7 @@ router.put('/admin/:surveyId/review', auth, async (req, res) => {
 // ERROR HANDLING MIDDLEWARE
 // ============================================================================
 
-router.use((error, req, res, next) => {
+router.use((error, req, res, _next) => {
   logger.error('Survey API Error:', error);
   res.status(500).json({
     success: false,

@@ -425,7 +425,7 @@ class DocumentRoutes {
    * Error handling middleware
    * @private
    */
-  _handleErrors(error, req, res, next) {
+  _handleErrors(error, req, res, _next) {
     logger.error('[DocumentRoutes] Unhandled error:', error);
 
     // Don't log stack trace in production

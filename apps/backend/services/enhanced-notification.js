@@ -691,7 +691,7 @@ class EnhancedNotificationService extends EventEmitter {
   }
 
   // Channel delivery methods
-  async deliverToDatabase(notification) {
+  async deliverToDatabase(_notification) {
     // Already saved to database
     return true;
   }
@@ -727,7 +727,7 @@ class EnhancedNotificationService extends EventEmitter {
   /**
    * Get user notification preferences
    */
-  async getUserPreferences(userId) {
+  async getUserPreferences(_userId) {
     // Mock implementation - would typically fetch from database
     return {
       email: {

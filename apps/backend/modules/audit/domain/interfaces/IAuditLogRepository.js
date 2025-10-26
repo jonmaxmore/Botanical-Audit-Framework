@@ -13,7 +13,7 @@ class IAuditLogRepository {
    * @param {AuditLog} auditLog - Audit log entity
    * @returns {Promise<AuditLog>}
    */
-  async save(auditLog) {
+  async save(_auditLog) {
     throw new Error('Method not implemented');
   }
 
@@ -22,7 +22,7 @@ class IAuditLogRepository {
    * @param {string} id - Audit log ID
    * @returns {Promise<AuditLog|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -130,7 +130,7 @@ class IAuditLogRepository {
    * @param {Date} endDate - End date
    * @returns {Promise<Object>}
    */
-  async getActivitySummary(actorId, startDate, endDate) {
+  async getActivitySummary(_actorId, _startDate, _endDate) {
     throw new Error('Method not implemented');
   }
 
@@ -139,7 +139,7 @@ class IAuditLogRepository {
    * @param {Date} beforeDate - Delete logs before this date
    * @returns {Promise<number>} - Number of deleted records
    */
-  async deleteOldLogs(beforeDate) {
+  async deleteOldLogs(_beforeDate) {
     throw new Error('Method not implemented');
   }
 }

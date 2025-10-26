@@ -18,10 +18,9 @@
  */
 
 const ApplicationWorkflowEngine = require('../domain/WorkflowEngine');
-const { validateRequest, handleApiError } = require('../../shared/middleware');
+const { _validateRequest, handleApiError } = require('../../shared/middleware');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('application-controller');
-
 
 class ApplicationController {
   constructor(dependencies = {}) {

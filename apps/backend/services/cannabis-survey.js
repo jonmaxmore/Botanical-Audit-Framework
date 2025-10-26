@@ -495,7 +495,7 @@ class CannabisSurveyService {
   // Notification and Task Management
   async processResponseNotifications(response, user) {
     try {
-      const template = await CannabisSurveyTemplate.findById(response.templateId);
+      // const template = await CannabisSurveyTemplate.findById(response.templateId);
 
       // High-risk notification
       if (

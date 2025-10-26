@@ -671,44 +671,44 @@ class ComplianceReportService {
   }
 
   // Data collection methods
-  async _collectDTAMComplianceData(criteria) {
+  async _collectDTAMComplianceData(_criteria) {
     return {};
   }
-  async _collectAuditTrailData(criteria) {
+  async _collectAuditTrailData(_criteria) {
     return {};
   }
-  async _collectPrivacyComplianceData(criteria) {
+  async _collectPrivacyComplianceData(_criteria) {
     return {};
   }
-  async _collectSecurityComplianceData(criteria) {
+  async _collectSecurityComplianceData(_criteria) {
     return {};
   }
 
   // Compliance validation methods
-  async _validateDTAMCompliance(data, criteria) {
+  async _validateDTAMCompliance(_data, _criteria) {
     return {};
   }
-  async _analyzePDPACompliance(data) {
+  async _analyzePDPACompliance(_data) {
     return {};
   }
-  async _analyzeSecurityCompliance(data) {
+  async _analyzeSecurityCompliance(_data) {
     return {};
   }
-  async _analyzeAuditTrail(data) {
+  async _analyzeAuditTrail(_data) {
     return {};
   }
 
   // Compliance scoring methods
-  async _calculateDTAMComplianceScores(data, validation) {
+  async _calculateDTAMComplianceScores(_data, _validation) {
     return { overall: 92 };
   }
-  async _performComplianceRiskAssessment(data, scores) {
+  async _performComplianceRiskAssessment(_data, _scores) {
     return {};
   }
-  async _compileAuditTrail(data, criteria) {
+  async _compileAuditTrail(_data, _criteria) {
     return {};
   }
-  async _generateComplianceRecommendations(scores, risks) {
+  async _generateComplianceRecommendations(_scores, _risks) {
     return {};
   }
 
@@ -738,10 +738,10 @@ class ComplianceReportService {
   async _exportComplianceReport(report, format) {
     return { format, report };
   }
-  async _logComplianceReportGeneration(criteria, metadata) {
+  async _logComplianceReportGeneration(_criteria, _metadata) {
     return;
   }
-  async _scheduleReportDelivery(report, recipients) {
+  async _scheduleReportDelivery(_report, _recipients) {
     return;
   }
 

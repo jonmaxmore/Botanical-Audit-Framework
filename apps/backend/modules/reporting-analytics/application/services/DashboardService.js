@@ -440,7 +440,7 @@ class DashboardService {
    * Generate real-time alerts based on threshold monitoring
    * @private
    */
-  async _generateAlerts(kpis, criteria) {
+  async _generateAlerts(kpis, _criteria) {
     const alerts = {
       critical: [],
       warnings: [],
@@ -617,43 +617,43 @@ class DashboardService {
   async _initializeAlertMonitoring() {
     logger.info('[DashboardService] Alert monitoring enabled');
   }
-  async _collectRealTimeMetrics(criteria) {
+  async _collectRealTimeMetrics(_criteria) {
     return {};
   }
-  async _calculateKPIs(metrics, criteria) {
+  async _calculateKPIs(_metrics, _criteria) {
     return {};
   }
   _generateMetricsCacheKey(criteria) {
     return `dashboard:${JSON.stringify(criteria)}`;
   }
-  async _getCachedMetrics(key) {
+  async _getCachedMetrics(_key) {
     return null;
   }
-  _isCacheValid(metrics) {
+  _isCacheValid(_metrics) {
     return false;
   }
   _enrichMetricsWithRealTime(metrics) {
     return metrics;
   }
-  async _cacheMetrics(key, data) {
+  async _cacheMetrics(_key, _data) {
     return;
   }
-  _calculateDataFreshness(metrics) {
+  _calculateDataFreshness(_metrics) {
     return 100;
   }
-  async _logDashboardAccess(criteria, metadata) {
+  async _logDashboardAccess(_criteria, _metadata) {
     return;
   }
-  _getTimeframeForCriteria(criteria) {
+  _getTimeframeForCriteria(_criteria) {
     return { start: new Date(), end: new Date() };
   }
-  async _collectWorkflowData(timeframe) {
+  async _collectWorkflowData(_timeframe) {
     return { stateDistribution: {}, applications: [] };
   }
-  async _collectFinancialData(timeframe) {
+  async _collectFinancialData(_timeframe) {
     return {};
   }
-  async _collectUserActivityData(timeframe) {
+  async _collectUserActivityData(_timeframe) {
     return {};
   }
   async _collectSystemData() {
@@ -664,94 +664,94 @@ class DashboardService {
   }
 
   // Additional calculation methods...
-  _calculateAverageProcessingTime(applications) {
+  _calculateAverageProcessingTime(_applications) {
     return 24;
   }
-  _calculateCompletionRate(applications) {
+  _calculateCompletionRate(_applications) {
     return 85;
   }
-  _identifyBottleneckStates(distribution) {
+  _identifyBottleneckStates(_distribution) {
     return [];
   }
-  _calculateSLACompliance(applications) {
+  _calculateSLACompliance(_applications) {
     return 95;
   }
-  _calculateSubmissionTrend(applications, timeframe) {
+  _calculateSubmissionTrend(_applications, _timeframe) {
     return [];
   }
-  _calculateCompletionTrend(applications, timeframe) {
+  _calculateCompletionTrend(_applications, _timeframe) {
     return [];
   }
-  _calculateRejectionTrend(applications, timeframe) {
+  _calculateRejectionTrend(_applications, _timeframe) {
     return [];
   }
-  _generateWorkflowAlerts(data) {
+  _generateWorkflowAlerts(_data) {
     return [];
   }
-  _calculateRevenueGrowth(data) {
+  _calculateRevenueGrowth(_data) {
     return 5.2;
   }
-  _generateRevenueForecast(data) {
+  _generateRevenueForecast(_data) {
     return {};
   }
-  _calculatePaymentSuccessRate(payments) {
+  _calculatePaymentSuccessRate(_payments) {
     return 96;
   }
-  _calculateAveragePaymentValue(payments) {
+  _calculateAveragePaymentValue(_payments) {
     return 500;
   }
-  _calculatePaymentProcessingTime(payments) {
+  _calculatePaymentProcessingTime(_payments) {
     return 15;
   }
-  _analyzePaymentFailures(payments) {
+  _analyzePaymentFailures(_payments) {
     return [];
   }
-  _calculateCollectionEfficiency(data) {
+  _calculateCollectionEfficiency(_data) {
     return 92;
   }
-  _calculateHourlyRevenueTrend(data, timeframe) {
+  _calculateHourlyRevenueTrend(_data, _timeframe) {
     return [];
   }
-  _calculatePaymentMethodDistribution(payments) {
+  _calculatePaymentMethodDistribution(_payments) {
     return {};
   }
-  _identifySeasonalPatterns(data) {
+  _identifySeasonalPatterns(_data) {
     return {};
   }
-  _generateFinancialAlerts(data) {
+  _generateFinancialAlerts(_data) {
     return [];
   }
-  _calculateAverageSessionDuration(sessions) {
+  _calculateAverageSessionDuration(_sessions) {
     return 25;
   }
-  _calculateLoginFrequency(logins) {
+  _calculateLoginFrequency(_logins) {
     return {};
   }
-  _calculateFeatureUsage(activities) {
+  _calculateFeatureUsage(_activities) {
     return {};
   }
-  _calculateTaskCompletionRates(tasks) {
+  _calculateTaskCompletionRates(_tasks) {
     return {};
   }
-  _calculateRoleDistribution(users) {
+  _calculateRoleDistribution(_users) {
     return {};
   }
-  _calculateGeographicDistribution(users) {
+  _calculateGeographicDistribution(_users) {
     return {};
   }
-  _calculateDeviceUsage(sessions) {
+  _calculateDeviceUsage(_sessions) {
     return {};
   }
-  _calculateNPSScore(feedback) {
+  _calculateNPSScore(_feedback) {
     return 8.5;
   }
-  _calculateSupportRating(support) {
+  _calculateSupportRating(_support) {
     return 4.2;
   }
-  _calculateFeatureSatisfaction(feedback) {
+  _calculateFeatureSatisfaction(_feedback) {
     return {};
   }
-  _generateUserEngagementAlerts(data) {
+  _generateUserEngagementAlerts(_data) {
     return [];
   }
   async _checkDatabaseHealth() {
@@ -766,10 +766,10 @@ class DashboardService {
   async _checkExternalServicesHealth() {
     return 'healthy';
   }
-  _generateSystemAlerts(data) {
+  _generateSystemAlerts(_data) {
     return [];
   }
-  _calculateOverallHealthScore(metrics) {
+  _calculateOverallHealthScore(_metrics) {
     return 92;
   }
 

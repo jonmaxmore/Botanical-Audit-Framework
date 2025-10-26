@@ -904,7 +904,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     return { valid: true, issues: [] };
   }
 
-  async _performSecurityScan(document) {
+  async _performSecurityScan(_document) {
     // Security scanning implementation
     return {
       virusScanResult: 'CLEAN',
@@ -914,7 +914,7 @@ class DocumentManagementIntegrationSystem extends EventEmitter {
     };
   }
 
-  async _extractMetadata(document) {
+  async _extractMetadata(_document) {
     // Metadata extraction implementation
     return {
       extractedText: '',

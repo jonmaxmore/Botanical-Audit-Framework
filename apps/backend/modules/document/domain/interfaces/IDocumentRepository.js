@@ -11,7 +11,7 @@ class IDocumentRepository {
    * @param {Document} document - Document entity
    * @returns {Promise<Document>} Saved document
    */
-  async save(document) {
+  async save(_document) {
     throw new Error('Method not implemented');
   }
 
@@ -20,7 +20,7 @@ class IDocumentRepository {
    * @param {string} id - Document ID
    * @returns {Promise<Document|null>} Document or null
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -31,7 +31,7 @@ class IDocumentRepository {
    * @param {Object} options - Pagination and sorting options
    * @returns {Promise<Object>} { documents, total, page, limit }
    */
-  async findByUploader(uploaderId, filters, options) {
+  async findByUploader(_uploaderId, _filters, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -42,7 +42,7 @@ class IDocumentRepository {
    * @param {Object} options - Optional filters and pagination
    * @returns {Promise<Array<Document>>} Array of documents
    */
-  async findByRelatedEntity(entityType, entityId, options) {
+  async findByRelatedEntity(_entityType, _entityId, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -52,7 +52,7 @@ class IDocumentRepository {
    * @param {Object} options - Pagination and sorting options
    * @returns {Promise<Object>} { documents, total, page, limit }
    */
-  async findByStatus(status, options) {
+  async findByStatus(_status, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -62,7 +62,7 @@ class IDocumentRepository {
    * @param {Object} options - Pagination and sorting options
    * @returns {Promise<Object>} { documents, total, page, limit }
    */
-  async findByType(type, options) {
+  async findByType(_type, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -72,7 +72,7 @@ class IDocumentRepository {
    * @param {Object} options - Pagination and sorting options
    * @returns {Promise<Object>} { documents, total, page, limit }
    */
-  async findByCategory(category, options) {
+  async findByCategory(_category, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -82,7 +82,7 @@ class IDocumentRepository {
    * @param {Object} options - Pagination and sorting options
    * @returns {Promise<Object>} { documents, total, page, limit }
    */
-  async findWithFilters(filters, options) {
+  async findWithFilters(_filters, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -91,7 +91,7 @@ class IDocumentRepository {
    * @param {Object} options - Pagination and sorting options
    * @returns {Promise<Object>} { documents, total, page, limit }
    */
-  async findPendingReview(options) {
+  async findPendingReview(_options) {
     throw new Error('Method not implemented');
   }
 
@@ -100,7 +100,7 @@ class IDocumentRepository {
    * @param {Object} options - Optional filters
    * @returns {Promise<Array<Document>>} Array of expired documents
    */
-  async findExpired(options) {
+  async findExpired(_options) {
     throw new Error('Method not implemented');
   }
 
@@ -109,7 +109,7 @@ class IDocumentRepository {
    * @param {string} documentId - Original document ID
    * @returns {Promise<Array<Document>>} Array of document versions
    */
-  async findVersionHistory(documentId) {
+  async findVersionHistory(_documentId) {
     throw new Error('Method not implemented');
   }
 
@@ -118,7 +118,7 @@ class IDocumentRepository {
    * @param {string} originalDocumentId - ID of any version
    * @returns {Promise<Document|null>} Latest version or null
    */
-  async findLatestVersion(originalDocumentId) {
+  async findLatestVersion(_originalDocumentId) {
     throw new Error('Method not implemented');
   }
 
@@ -127,7 +127,7 @@ class IDocumentRepository {
    * @param {Object} criteria - Count criteria
    * @returns {Promise<number>} Count
    */
-  async count(criteria) {
+  async count(_criteria) {
     throw new Error('Method not implemented');
   }
 
@@ -137,7 +137,7 @@ class IDocumentRepository {
    * @param {Object} filters - Optional filters (status, type, category)
    * @returns {Promise<number>} Count
    */
-  async countByUploader(uploaderId, filters) {
+  async countByUploader(_uploaderId, _filters) {
     throw new Error('Method not implemented');
   }
 
@@ -154,7 +154,7 @@ class IDocumentRepository {
    * @param {Object} filters - Optional filters (uploaderId, dateRange, etc.)
    * @returns {Promise<Object>} Statistics object
    */
-  async getStatistics(filters) {
+  async getStatistics(_filters) {
     throw new Error('Method not implemented');
   }
 
@@ -163,7 +163,7 @@ class IDocumentRepository {
    * @param {string} id - Document ID
    * @returns {Promise<boolean>} Success status
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -173,7 +173,7 @@ class IDocumentRepository {
    * @param {Object} options - Search options and pagination
    * @returns {Promise<Object>} { documents, total, page, limit }
    */
-  async searchDocuments(searchText, options) {
+  async searchDocuments(_searchText, _options) {
     throw new Error('Method not implemented');
   }
 }

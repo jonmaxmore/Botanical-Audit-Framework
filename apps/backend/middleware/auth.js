@@ -247,7 +247,7 @@ module.exports = {
 
     next();
   },
-  rateLimitSensitive: (windowMs, max) => {
+  rateLimitSensitive: (_windowMs, _max) => {
     // Simple rate limiting placeholder
     // In production, use express-rate-limit
     return (req, res, next) => next();

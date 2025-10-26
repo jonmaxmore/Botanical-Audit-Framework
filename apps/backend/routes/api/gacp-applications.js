@@ -322,7 +322,7 @@ router.post('/demo/analyze-coa', upload.single('coa'), async (req, res) => {
 });
 
 // Error handling middleware
-router.use((error, req, res, next) => {
+router.use((error, req, res, _next) => {
   if (error instanceof multer.MulterError) {
     if (error.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).json({

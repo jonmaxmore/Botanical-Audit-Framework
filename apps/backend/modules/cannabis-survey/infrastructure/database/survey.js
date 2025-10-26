@@ -13,7 +13,6 @@ const { Survey, STATUS, PURPOSE, PLANT_TYPE } = require('../../domain/entities/S
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('cannabis-survey-survey');
 
-
 // Mongoose Schema
 const surveySchema = new mongoose.Schema(
   {

@@ -20,7 +20,6 @@ const {
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('certificate-management-certificate');
 
-
 class CertificateController {
   constructor({
     generateCertificateUseCase,

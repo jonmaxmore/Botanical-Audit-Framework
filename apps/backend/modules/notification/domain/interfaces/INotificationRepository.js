@@ -13,7 +13,7 @@ class INotificationRepository {
    * @param {Notification} notification - Notification entity
    * @returns {Promise<Notification>} Saved notification
    */
-  async save(notification) {
+  async save(_notification) {
     throw new Error('Method not implemented');
   }
 
@@ -22,7 +22,7 @@ class INotificationRepository {
    * @param {string} id - Notification ID
    * @returns {Promise<Notification|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -42,7 +42,7 @@ class INotificationRepository {
    * @param {string} recipientId - Recipient user ID
    * @returns {Promise<Notification[]>}
    */
-  async findUnreadByRecipient(recipientId) {
+  async findUnreadByRecipient(_recipientId) {
     throw new Error('Method not implemented');
   }
 
@@ -102,7 +102,7 @@ class INotificationRepository {
    * @param {string} recipientId - Recipient user ID
    * @returns {Promise<number>}
    */
-  async countUnread(recipientId) {
+  async countUnread(_recipientId) {
     throw new Error('Method not implemented');
   }
 
@@ -120,7 +120,7 @@ class INotificationRepository {
    * @param {string} recipientId - Recipient user ID
    * @returns {Promise<number>} Number of notifications marked as read
    */
-  async markAllAsRead(recipientId) {
+  async markAllAsRead(_recipientId) {
     throw new Error('Method not implemented');
   }
 
@@ -146,7 +146,7 @@ class INotificationRepository {
    * @param {string} id - Notification ID
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 }

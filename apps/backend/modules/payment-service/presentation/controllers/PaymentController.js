@@ -425,7 +425,7 @@ class PaymentController {
       logger.info(`[PaymentController] Cancelling payment ${paymentId}`, { userId, reason });
 
       // This would be implemented in PaymentService
-      const result = await this.paymentService.cancelPayment(paymentId, userId, reason);
+      // const result = await this.paymentService.cancelPayment(paymentId, userId, reason);
 
       res.status(200).json({
         success: true,

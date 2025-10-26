@@ -13,7 +13,6 @@ const auditMiddleware = require('../middleware/audit');
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('task-assignment');
 
-
 // Initialize Blitzz service
 const blitzzService = new BlitzzIntegrationService();
 

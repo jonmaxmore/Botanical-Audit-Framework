@@ -12,7 +12,7 @@ const {
   AuthenticationError,
   NotFoundError,
 } = require('../utils/errorHandler');
-const { validateRequest, schemas, isValidEmail } = require('../utils/validation');
+const { _validateRequest, _schemas, isValidEmail } = require('../utils/validation');
 const logger = require('../utils/logger');
 const config = require('../config/environment');
 
@@ -69,7 +69,7 @@ class AuthController {
     const user = await User.createSafe(userData);
 
     // Generate email verification token
-    const verificationToken = user.generateEmailVerificationToken();
+    // const verificationToken = user.generateEmailVerificationToken();
     await user.save();
 
     // Generate JWT token for immediate login (optional)

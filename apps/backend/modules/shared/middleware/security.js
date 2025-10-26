@@ -307,7 +307,7 @@ const securityMiddleware = {
   },
 
   // File Upload Security
-  secureFileUpload: (req, res, next) => {
+  secureFileUpload: (_req, _res, _next) => {
     const multer = require('multer');
     const path = require('path');
     const fs = require('fs');

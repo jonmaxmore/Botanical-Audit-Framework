@@ -306,7 +306,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     async (req, res) => {
       try {
         // Placeholder for compliance trends analysis
-        const trends = await auditController.getComplianceAnalytics(req, res);
+        // const trends = await auditController.getComplianceAnalytics(req, res);
         // This would be enhanced with trend-specific analysis
       } catch (error) {
         res.status(500).json({
@@ -383,7 +383,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     async (req, res) => {
       try {
         // This would integrate with reporting service
-        const reportData = {
+        // const reportData = {
           type: req.body.reportType,
           period: {
             start: new Date(req.body.startDate),
@@ -459,7 +459,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
   // ============================================================================
 
   // Global error handler for audit routes
-  dtamRouter.use((error, req, res, next) => {
+  dtamRouter.use((error, req, res, _next) => {
     logger.error('[AuditRoutes] Unhandled error:', error);
 
     res.status(500).json({

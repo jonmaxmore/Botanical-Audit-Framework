@@ -11,7 +11,6 @@ const path = require('path');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('report-generator');
 
-
 class SimpleReportGeneratorService {
   constructor() {
     this.reportsDir = path.join(process.cwd(), 'reports');
@@ -273,7 +272,7 @@ class SimpleReportGeneratorService {
     return JSON.stringify(output, null, 2);
   }
 
-  async saveToFile(content, fileName, format) {
+  async saveToFile(content, fileName, _format) {
     await this._ensureReportsDirectory();
 
     const filePath = path.join(this.reportsDir, fileName);

@@ -239,7 +239,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
    */
   async trackCourseEnrollment(enrollmentData) {
     try {
-      const { userId, courseId, enrollmentType, timestamp } = enrollmentData;
+      const { userId, courseId, _enrollmentType, timestamp } = enrollmentData;
 
       // Identify relevant certification pathways
       const certificationPathways = await this.identifyCertificationPathways(courseId);
@@ -320,7 +320,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
    */
   async trackLessonProgress(progressData) {
     try {
-      const { userId, courseId, lessonId, progressPercentage, completionStatus } = progressData;
+      const { userId, courseId, _lessonId, progressPercentage, completionStatus } = progressData;
 
       // Find relevant certification tracking records
       const trackingRecords = await this.findCertificationTrackingRecords(userId, courseId);
@@ -432,7 +432,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
    */
   async processAssessmentCompletion(assessmentData) {
     try {
-      const { userId, assessmentId, score, maxScore, assessmentType, courseId } = assessmentData;
+      const { userId, assessmentId, score, maxScore, _assessmentType, courseId } = assessmentData;
       const percentage = (score / maxScore) * 100;
 
       // Find certification tracking record

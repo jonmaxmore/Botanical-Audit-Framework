@@ -373,7 +373,7 @@ class PaymentRoutes {
    * Error handling middleware
    * @private
    */
-  _handleErrors(error, req, res, next) {
+  _handleErrors(error, req, res, _next) {
     logger.error('[PaymentRoutes] Unhandled error:', error);
 
     // Log error details for debugging

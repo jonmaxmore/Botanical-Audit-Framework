@@ -455,7 +455,7 @@ class Plant {
    */
   checkEnvironmentalRanges(envRecord) {
     const alerts = [];
-    const currentPhase = this.growthPhases.current;
+    // const currentPhase = this.growthPhases.current;
 
     // Temperature checks
     const tempReq = this.environmentalRequirements.temperature;
@@ -774,19 +774,19 @@ class Plant {
   createFloweringMonitoringSchedule() {
     return [];
   }
-  updateEnvironmentalRequirements(phase) {
+  updateEnvironmentalRequirements(_phase) {
     /* Implementation */
   }
-  detectGrowthAnomalies(type, value) {
+  detectGrowthAnomalies(_type, _value) {
     return [];
   }
-  calculateEnvironmentalStress(envRecord) {
+  calculateEnvironmentalStress(_envRecord) {
     return 0;
   }
-  updateHealthBasedOnEnvironment(envRecord) {
+  updateHealthBasedOnEnvironment(_envRecord) {
     /* Implementation */
   }
-  generateEnvironmentalRecommendations(envRecord) {
+  generateEnvironmentalRecommendations(_envRecord) {
     return [];
   }
   calculateGrowthScore() {
@@ -801,7 +801,7 @@ class Plant {
   determineHealthTrend(score) {
     return score > 80 ? 'IMPROVING' : 'STABLE';
   }
-  calculatePhaseAge(phase) {
+  calculatePhaseAge(_phase) {
     return 25;
   }
   getMinimumVegetativeAge() {
@@ -810,7 +810,7 @@ class Plant {
   calculateTotalAge() {
     return 45;
   }
-  calculateDaysFromGermination(date) {
+  calculateDaysFromGermination(_date) {
     return 35;
   }
   getRecentEnvironmentalAlerts() {

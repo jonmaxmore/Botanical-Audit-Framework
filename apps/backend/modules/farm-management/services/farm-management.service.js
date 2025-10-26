@@ -87,7 +87,7 @@ class FarmManagementService {
    */
   async recordActivity(cycleId, activityData) {
     try {
-      const cycle = await this.getCycle(cycleId);
+      // const cycle = await this.getCycle(cycleId);
 
       const activity = {
         id: uuidv4(),
@@ -184,7 +184,7 @@ class FarmManagementService {
    */
   async recordComplianceCheck(cycleId, checkData) {
     try {
-      const cycle = await this.getCycle(cycleId);
+      // const cycle = await this.getCycle(cycleId);
 
       const check = {
         id: uuidv4(),
@@ -283,7 +283,7 @@ class FarmManagementService {
    */
   async recordQualityTest(cycleId, testData) {
     try {
-      const cycle = await this.getCycle(cycleId);
+      // const cycle = await this.getCycle(cycleId);
 
       const test = {
         id: uuidv4(),

@@ -722,73 +722,73 @@ class PlantRepository {
   }
 
   // Placeholder methods for complex operations
-  async enrichPlantData(plantDocument, options) {
+  async enrichPlantData(_plantDocument, _options) {
     return {};
   }
-  async getRecentTimeSeriesData(plantId) {
+  async getRecentTimeSeriesData(_plantId) {
     return {};
   }
-  processBatchAnalytics(analytics, plants) {
+  processBatchAnalytics(_analytics, _plants) {
     return {};
   }
-  async validatePlantForSave(plant) {
+  async validatePlantForSave(_plant) {
     /* Validation */
   }
-  async saveTimeSeriesData(plant, session) {
+  async saveTimeSeriesData(_plant, _session) {
     /* Time-series handling */
   }
-  async createPlantAuditLog(auditData, session) {
+  async createPlantAuditLog(_auditData, _session) {
     /* Audit logging */
   }
-  async updatePlantCaches(plant) {
+  async updatePlantCaches(_plant) {
     /* Cache management */
   }
-  calculatePlantChanges(oldDoc, newDoc) {
+  calculatePlantChanges(_oldDoc, _newDoc) {
     return {};
   }
-  async getHealthTrendsAnalytics(plantId, fromDate) {
+  async getHealthTrendsAnalytics(_plantId, _fromDate) {
     return [];
   }
-  async getEnvironmentalAnalytics(plantId, fromDate) {
+  async getEnvironmentalAnalytics(_plantId, _fromDate) {
     return [];
   }
-  async getBatchComparisonAnalytics(batchId, plantId) {
+  async getBatchComparisonAnalytics(_batchId, _plantId) {
     return {};
   }
-  calculateGrowthTrends(timeSeriesData) {
+  calculateGrowthTrends(_timeSeriesData) {
     return {};
   }
-  calculateHealthTrends(healthData) {
+  calculateHealthTrends(_healthData) {
     return {};
   }
-  calculateEnvironmentalTrends(environmentalData) {
+  calculateEnvironmentalTrends(_environmentalData) {
     return {};
   }
-  calculateBenchmarkPosition(plant, batchComparison) {
+  calculateBenchmarkPosition(_plant, _batchComparison) {
     return 'AVERAGE';
   }
-  calculatePerformanceScore(plant, timeSeriesData) {
+  calculatePerformanceScore(_plant, _timeSeriesData) {
     return 85;
   }
-  predictNextMilestone(plant, timeSeriesData) {
+  predictNextMilestone(_plant, _timeSeriesData) {
     return {};
   }
-  projectHarvestDate(plant, timeSeriesData) {
+  projectHarvestDate(_plant, _timeSeriesData) {
     return new Date();
   }
-  estimateYield(plant, timeSeriesData) {
+  estimateYield(_plant, _timeSeriesData) {
     return 'MEDIUM';
   }
-  assessAnalysisQuality(timeSeriesData) {
+  assessAnalysisQuality(_timeSeriesData) {
     return 'HIGH';
   }
   preparePlantUpdateDocument(update) {
     return update;
   }
-  async createBulkAuditLogs(batch, session) {
+  async createBulkAuditLogs(_batch, _session) {
     /* Bulk audit logging */
   }
-  async invalidateBulkCaches(updates) {
+  async invalidateBulkCaches(_updates) {
     /* Bulk cache invalidation */
   }
   aggregateBulkResults(results) {
@@ -799,10 +799,10 @@ class PlantRepository {
   }
 
   // Cache management methods (inherited from base)
-  async getCachedData(key) {
+  async getCachedData(_key) {
     return null;
   } // Implement with cache service
-  async setCachedData(key, data, ttl) {
+  async setCachedData(_key, _data, _ttl) {
     /* Cache implementation */
   }
 

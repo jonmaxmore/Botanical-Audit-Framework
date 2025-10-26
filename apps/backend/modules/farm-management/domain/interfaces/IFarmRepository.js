@@ -12,7 +12,7 @@ class IFarmRepository {
    * @param {string} id - Farm ID
    * @returns {Promise<Farm|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -74,7 +74,7 @@ class IFarmRepository {
    * @param {Farm} farm - Farm entity
    * @returns {Promise<Farm>}
    */
-  async save(farm) {
+  async save(_farm) {
     throw new Error('Method not implemented');
   }
 
@@ -83,7 +83,7 @@ class IFarmRepository {
    * @param {string} id - Farm ID
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -92,7 +92,7 @@ class IFarmRepository {
    * @param {string} status - Farm status
    * @returns {Promise<number>}
    */
-  async countByStatus(status) {
+  async countByStatus(_status) {
     throw new Error('Method not implemented');
   }
 
@@ -101,7 +101,7 @@ class IFarmRepository {
    * @param {string} ownerId - Owner ID
    * @returns {Promise<number>}
    */
-  async countByOwner(ownerId) {
+  async countByOwner(_ownerId) {
     throw new Error('Method not implemented');
   }
 

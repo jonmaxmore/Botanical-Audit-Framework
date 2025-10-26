@@ -12,7 +12,7 @@ class IReportRepository {
    * @param {Report} report - Report entity to save
    * @returns {Promise<Report>}
    */
-  async save(report) {
+  async save(_report) {
     throw new Error('Method not implemented');
   }
 
@@ -21,7 +21,7 @@ class IReportRepository {
    * @param {string} id - Report ID
    * @returns {Promise<Report|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -151,7 +151,7 @@ class IReportRepository {
    * @param {string} id - Report ID
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 

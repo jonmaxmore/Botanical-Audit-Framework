@@ -53,7 +53,7 @@ class AppError extends Error {
  * Error middleware factory function
  */
 module.exports = function () {
-  return (err, req, res, next) => {
+  return (err, req, res, _next) => {
     // Default to 500 if statusCode not set
     const statusCode = err.statusCode || 500;
     const errorCode = err.code || 'INTERNAL_ERROR';

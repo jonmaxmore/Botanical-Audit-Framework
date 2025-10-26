@@ -14,7 +14,7 @@ class IUserRepository {
    * @param {string} id - User ID
    * @returns {Promise<User|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented: findById');
   }
 
@@ -23,7 +23,7 @@ class IUserRepository {
    * @param {string} email - User email
    * @returns {Promise<User|null>}
    */
-  async findByEmail(email) {
+  async findByEmail(_email) {
     throw new Error('Method not implemented: findByEmail');
   }
 
@@ -32,7 +32,7 @@ class IUserRepository {
    * @param {string} idCard - Thai ID card number
    * @returns {Promise<User|null>}
    */
-  async findByIdCard(idCard) {
+  async findByIdCard(_idCard) {
     throw new Error('Method not implemented: findByIdCard');
   }
 
@@ -41,7 +41,7 @@ class IUserRepository {
    * @param {string} token - Email verification token
    * @returns {Promise<User|null>}
    */
-  async findByEmailVerificationToken(token) {
+  async findByEmailVerificationToken(_token) {
     throw new Error('Method not implemented: findByEmailVerificationToken');
   }
 
@@ -50,7 +50,7 @@ class IUserRepository {
    * @param {string} token - Password reset token
    * @returns {Promise<User|null>}
    */
-  async findByPasswordResetToken(token) {
+  async findByPasswordResetToken(_token) {
     throw new Error('Method not implemented: findByPasswordResetToken');
   }
 
@@ -59,7 +59,7 @@ class IUserRepository {
    * @param {User} user - User entity
    * @returns {Promise<User>}
    */
-  async save(user) {
+  async save(_user) {
     throw new Error('Method not implemented: save');
   }
 
@@ -68,7 +68,7 @@ class IUserRepository {
    * @param {string} id - User ID
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented: delete');
   }
 
@@ -77,7 +77,7 @@ class IUserRepository {
    * @param {Object} filters - Query filters
    * @returns {Promise<Array<User>>}
    */
-  async findWithFilters(filters) {
+  async findWithFilters(_filters) {
     throw new Error('Method not implemented: findWithFilters');
   }
 
@@ -86,7 +86,7 @@ class IUserRepository {
    * @param {string} status - User status
    * @returns {Promise<number>}
    */
-  async countByStatus(status) {
+  async countByStatus(_status) {
     throw new Error('Method not implemented: countByStatus');
   }
 
@@ -95,7 +95,7 @@ class IUserRepository {
    * @param {string} email - Email to check
    * @returns {Promise<boolean>}
    */
-  async emailExists(email) {
+  async emailExists(_email) {
     throw new Error('Method not implemented: emailExists');
   }
 
@@ -104,7 +104,7 @@ class IUserRepository {
    * @param {string} idCard - ID card to check
    * @returns {Promise<boolean>}
    */
-  async idCardExists(idCard) {
+  async idCardExists(_idCard) {
     throw new Error('Method not implemented: idCardExists');
   }
 
@@ -113,7 +113,7 @@ class IUserRepository {
    * @param {number} days - Number of days
    * @returns {Promise<Array<User>>}
    */
-  async findRecentlyRegistered(days) {
+  async findRecentlyRegistered(_days) {
     throw new Error('Method not implemented: findRecentlyRegistered');
   }
 }

@@ -447,7 +447,7 @@ class Survey {
     }
 
     // Check if each section has questions
-    this.sections.forEach((section, index) => {
+    this.sections.forEach((section, _index) => {
       if (section.questions.length === 0) {
         validation.isComplete = false;
         validation.issues.push(`หมวด "${section.title}" ต้องมีอย่างน้อย 1 คำถาม`);
@@ -705,7 +705,7 @@ class Survey {
     return translations[category] || category;
   }
 
-  getCategoryRecommendation(category, percentage) {
+  getCategoryRecommendation(category, _percentage) {
     const recommendations = {
       CULTIVATION: 'ปรับปรุงเทคนิคการปลูกและการดูแลพืช',
       HARVESTING: 'พัฒนาวิธีการเก็บเกี่ยวให้ถูกต้อง',
@@ -763,52 +763,52 @@ class Survey {
   }
 
   // Placeholder methods for complex business logic
-  generateSectionAnalysis(section) {
+  generateSectionAnalysis(_section) {
     return 'การวิเคราะห์หมวด';
   }
-  generateSectionRecommendations(section) {
+  generateSectionRecommendations(_section) {
     return [];
   }
-  interpretCategoryScore(category, score) {
+  interpretCategoryScore(_category, _score) {
     return 'การตีความคะแนน';
   }
-  calculateCategoryPriority(category, score) {
+  calculateCategoryPriority(_category, _score) {
     return 'MEDIUM';
   }
-  assessMandatoryRequirements(scoring) {
+  assessMandatoryRequirements(_scoring) {
     return {};
   }
-  assessOptionalRequirements(scoring) {
+  assessOptionalRequirements(_scoring) {
     return {};
   }
-  identifyEvidenceGaps(scoring) {
+  identifyEvidenceGaps(_scoring) {
     return [];
   }
-  identifyComplianceGaps(scoring) {
+  identifyComplianceGaps(_scoring) {
     return [];
   }
-  generateShortTermActions(scoring) {
+  generateShortTermActions(_scoring) {
     return [];
   }
-  generateLongTermGoals(scoring) {
+  generateLongTermGoals(_scoring) {
     return [];
   }
-  generateActionTimeline(scoring) {
+  generateActionTimeline(_scoring) {
     return {};
   }
-  identifyRequiredResources(scoring) {
+  identifyRequiredResources(_scoring) {
     return [];
   }
   calculateNextReviewDate() {
     return new Date(Date.now() + 365 * 24 * 60 * 60 * 1000);
   }
-  generateProgressMilestones(scoring) {
+  generateProgressMilestones(_scoring) {
     return [];
   }
-  defineSuccessMetrics(scoring) {
+  defineSuccessMetrics(_scoring) {
     return [];
   }
-  createMonitoringPlan(scoring) {
+  createMonitoringPlan(_scoring) {
     return {};
   }
   getRelevantGACPReferences() {
@@ -817,10 +817,10 @@ class Survey {
   getAdditionalResources() {
     return [];
   }
-  generateTrainingRecommendations(scoring) {
+  generateTrainingRecommendations(_scoring) {
     return [];
   }
-  generateConsultationSuggestions(scoring) {
+  generateConsultationSuggestions(_scoring) {
     return [];
   }
 }

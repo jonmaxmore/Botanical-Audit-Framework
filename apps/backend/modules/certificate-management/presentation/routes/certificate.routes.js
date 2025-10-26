@@ -33,7 +33,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
   const {
     authenticateFarmer = (req, res, next) => next(), // Default: no-op
     authenticateDTAM = (req, res, next) => next(),
-    authorizeRoles = (...roles) =>
+    authorizeRoles = (..._roles) =>
       (req, res, next) =>
         next(),
   } = middleware;

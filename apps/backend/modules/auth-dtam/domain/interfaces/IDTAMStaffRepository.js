@@ -14,7 +14,7 @@ class IDTAMStaffRepository {
    * @param {string} id - Staff ID
    * @returns {Promise<DTAMStaff|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -23,7 +23,7 @@ class IDTAMStaffRepository {
    * @param {string} email - Staff email
    * @returns {Promise<DTAMStaff|null>}
    */
-  async findByEmail(email) {
+  async findByEmail(_email) {
     throw new Error('Method not implemented');
   }
 
@@ -32,7 +32,7 @@ class IDTAMStaffRepository {
    * @param {string} employeeId - Employee ID
    * @returns {Promise<DTAMStaff|null>}
    */
-  async findByEmployeeId(employeeId) {
+  async findByEmployeeId(_employeeId) {
     throw new Error('Method not implemented');
   }
 
@@ -41,7 +41,7 @@ class IDTAMStaffRepository {
    * @param {string} token - Password reset token
    * @returns {Promise<DTAMStaff|null>}
    */
-  async findByPasswordResetToken(token) {
+  async findByPasswordResetToken(_token) {
     throw new Error('Method not implemented');
   }
 
@@ -50,7 +50,7 @@ class IDTAMStaffRepository {
    * @param {DTAMStaff} staff - Staff entity
    * @returns {Promise<DTAMStaff>}
    */
-  async save(staff) {
+  async save(_staff) {
     throw new Error('Method not implemented');
   }
 
@@ -59,7 +59,7 @@ class IDTAMStaffRepository {
    * @param {string} id - Staff ID
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -69,7 +69,7 @@ class IDTAMStaffRepository {
    * @param {Object} pagination - Pagination options
    * @returns {Promise<{items: DTAMStaff[], total: number}>}
    */
-  async findWithFilters(filters, pagination) {
+  async findWithFilters(_filters, _pagination) {
     throw new Error('Method not implemented');
   }
 
@@ -78,7 +78,7 @@ class IDTAMStaffRepository {
    * @param {string} status - Staff status
    * @returns {Promise<number>}
    */
-  async countByStatus(status) {
+  async countByStatus(_status) {
     throw new Error('Method not implemented');
   }
 
@@ -87,7 +87,7 @@ class IDTAMStaffRepository {
    * @param {string} role - Staff role
    * @returns {Promise<number>}
    */
-  async countByRole(role) {
+  async countByRole(_role) {
     throw new Error('Method not implemented');
   }
 
@@ -125,7 +125,7 @@ class IDTAMStaffRepository {
    * @param {string} role - Staff role
    * @returns {Promise<DTAMStaff[]>}
    */
-  async findByRole(role) {
+  async findByRole(_role) {
     throw new Error('Method not implemented');
   }
 
@@ -134,7 +134,7 @@ class IDTAMStaffRepository {
    * @param {string} department - Department name
    * @returns {Promise<DTAMStaff[]>}
    */
-  async findByDepartment(department) {
+  async findByDepartment(_department) {
     throw new Error('Method not implemented');
   }
 }

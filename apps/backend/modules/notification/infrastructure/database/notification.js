@@ -10,7 +10,6 @@ const Notification = require('../../domain/entities/Notification');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('notification-notification');
 
-
 // Mongoose Schema
 const notificationSchema = new mongoose.Schema(
   {

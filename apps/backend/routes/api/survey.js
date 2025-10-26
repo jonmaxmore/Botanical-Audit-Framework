@@ -514,7 +514,7 @@ function getResponsesByMonth(responses) {
   };
 }
 
-function getCommonIssues(responses) {
+function getCommonIssues(_responses) {
   return [
     'Water scarcity during dry season',
     'Lack of organic certification knowledge',

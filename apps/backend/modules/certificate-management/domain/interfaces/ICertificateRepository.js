@@ -10,7 +10,7 @@ class ICertificateRepository {
    * @param {string} id
    * @returns {Promise<Certificate|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -19,7 +19,7 @@ class ICertificateRepository {
    * @param {string} certificateNumber
    * @returns {Promise<Certificate|null>}
    */
-  async findByCertificateNumber(certificateNumber) {
+  async findByCertificateNumber(_certificateNumber) {
     throw new Error('Method not implemented');
   }
 
@@ -28,7 +28,7 @@ class ICertificateRepository {
    * @param {string} userId
    * @returns {Promise<Certificate[]>}
    */
-  async findByUserId(userId) {
+  async findByUserId(_userId) {
     throw new Error('Method not implemented');
   }
 
@@ -37,7 +37,7 @@ class ICertificateRepository {
    * @param {string} farmId
    * @returns {Promise<Certificate[]>}
    */
-  async findByFarmId(farmId) {
+  async findByFarmId(_farmId) {
     throw new Error('Method not implemented');
   }
 
@@ -46,7 +46,7 @@ class ICertificateRepository {
    * @param {Certificate} certificate
    * @returns {Promise<Certificate>}
    */
-  async save(certificate) {
+  async save(_certificate) {
     throw new Error('Method not implemented');
   }
 
@@ -55,7 +55,7 @@ class ICertificateRepository {
    * @param {string} id
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -64,7 +64,7 @@ class ICertificateRepository {
    * @param {Object} filters
    * @returns {Promise<Certificate[]>}
    */
-  async findWithFilters(filters) {
+  async findWithFilters(_filters) {
     throw new Error('Method not implemented');
   }
 
@@ -73,7 +73,7 @@ class ICertificateRepository {
    * @param {string} status
    * @returns {Promise<number>}
    */
-  async countByStatus(status) {
+  async countByStatus(_status) {
     throw new Error('Method not implemented');
   }
 
@@ -82,7 +82,7 @@ class ICertificateRepository {
    * @param {number} days
    * @returns {Promise<Certificate[]>}
    */
-  async findExpiringSoon(days) {
+  async findExpiringSoon(_days) {
     throw new Error('Method not implemented');
   }
 }

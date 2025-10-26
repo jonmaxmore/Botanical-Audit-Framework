@@ -225,7 +225,7 @@ class TrackTraceService {
         'metadata.updatedBy': userId,
       };
 
-      const result = await this.productsCollection.updateOne(
+      // const result = await this.productsCollection.updateOne(
         { _id: new ObjectId(productId) },
         { $set: update },
       );

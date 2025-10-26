@@ -253,7 +253,7 @@ router.use('*', (req, res) => {
 });
 
 // Handle errors in compliance routes
-router.use((error, req, res, next) => {
+router.use((error, req, res, _next) => {
   logger.error('Compliance API Error:', error);
 
   res.status(500).json({

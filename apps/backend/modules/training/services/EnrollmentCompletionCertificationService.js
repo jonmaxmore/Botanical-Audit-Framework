@@ -410,7 +410,7 @@ class EnrollmentCompletionCertificationService {
         certificationLevel = 'BASIC';
       }
 
-      const levelConfig = this.certificationLevels[certificationLevel];
+      // const levelConfig = this.certificationLevels[certificationLevel];
 
       // Apply performance adjustments
       const adjustedLevel = this.applyPerformanceAdjustments(certificationLevel, performanceData);
@@ -720,25 +720,25 @@ class EnrollmentCompletionCertificationService {
   }
 
   // Placeholder methods for complex operations
-  async assessCompetencies(enrollment, course, completionData) {
+  async assessCompetencies(_enrollment, _course, _completionData) {
     return {};
   }
-  identifyStrengths(performanceData) {
+  identifyStrengths(_performanceData) {
     return ['Consistent performance', 'Good engagement'];
   }
-  identifyImprovements(performanceData) {
+  identifyImprovements(_performanceData) {
     return ['Time management'];
   }
-  applyPerformanceAdjustments(level, performanceData) {
+  applyPerformanceAdjustments(level, _performanceData) {
     return level;
   }
-  generateLevelJustification(level, performanceData) {
+  generateLevelJustification(level, _performanceData) {
     return `Qualified for ${level} certification`;
   }
-  async processCompletionAnalytics(data) {
+  async processCompletionAnalytics(_data) {
     return { processed: true };
   }
-  async sendCompletionNotifications(data) {
+  async sendCompletionNotifications(_data) {
     return { sent: true };
   }
 }

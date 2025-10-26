@@ -11,7 +11,7 @@ const logger = createLogger('cannabis-surveys');
 
 const {
   CannabisSurveyTemplate,
-  CannabisQuestion,
+  _CannabisQuestion,
   CannabisSurveyResponse,
 } = require('../models/CannabisSurvey');
 const authMiddleware = require('../middleware/authMiddleware');
@@ -601,7 +601,7 @@ router.get('/admin/responses', async (req, res) => {
       riskLevel,
       complianceThreshold,
       farmCode,
-      region,
+      _region,
       startDate,
       endDate,
     } = req.query;

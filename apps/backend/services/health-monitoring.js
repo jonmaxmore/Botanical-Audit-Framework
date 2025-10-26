@@ -194,7 +194,7 @@ class HealthMonitoringService {
    */
   checkDiskSpace() {
     try {
-      const stats = fs.statSync(process.cwd());
+      // const stats = fs.statSync(process.cwd());
 
       // Basic disk check (can be enhanced with disk usage libraries)
       return {

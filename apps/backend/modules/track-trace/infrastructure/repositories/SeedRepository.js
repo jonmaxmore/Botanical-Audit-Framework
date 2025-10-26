@@ -674,31 +674,31 @@ class SeedRepository {
   async enrichSeedData(seedDocument) {
     return seedDocument;
   }
-  async getBatchMetadata(batchNumber, seedDocuments) {
+  async getBatchMetadata(_batchNumber, _seedDocuments) {
     return {};
   }
-  async buildSearchQuery(searchCriteria) {
+  async buildSearchQuery(_searchCriteria) {
     return {};
   }
-  async validateSeedForSave(seed) {
+  async validateSeedForSave(_seed) {
     /* Validation */
   }
-  async createSeedAuditLog(auditData, session) {
+  async createSeedAuditLog(_auditData, _session) {
     /* Audit logging */
   }
-  async updateSearchIndexes(seed, session) {
+  async updateSearchIndexes(_seed, _session) {
     /* Index updates */
   }
-  async updateRelatedCollections(seed, changes, session) {
+  async updateRelatedCollections(_seed, _changes, _session) {
     /* Related updates */
   }
-  async checkSeedDependencies(seedId, session) {
+  async checkSeedDependencies(_seedId, _session) {
     return [];
   }
-  async deleteRelatedSeedRecords(seedId, session) {
+  async deleteRelatedSeedRecords(_seedId, _session) {
     /* Cleanup */
   }
-  calculateChanges(oldDoc, newDoc) {
+  calculateChanges(_oldDoc, _newDoc) {
     return {};
   }
   hashOptions(options) {
@@ -747,7 +747,7 @@ class SeedRepository {
     );
   }
 
-  async invalidateAllSeedCaches(seedId) {
+  async invalidateAllSeedCaches(_seedId) {
     if (!this.cache) return;
 
     try {

@@ -338,7 +338,7 @@ class BusinessRulesEngine {
       severity: 'HIGH',
       description: 'Farm must not be too close to water sources',
       dependencies: ['FARM_LOCATION_VALID'],
-      executor: async (data, metadata) => {
+      executor: async (data, _metadata) => {
         const coordinates = data.farmProfile?.location?.coordinates;
         if (!coordinates) {
           return {
@@ -377,7 +377,7 @@ class BusinessRulesEngine {
       severity: 'CRITICAL',
       description: 'Farm must not be within 1km of schools',
       dependencies: ['FARM_LOCATION_VALID'],
-      executor: async (data, metadata) => {
+      executor: async (data, _metadata) => {
         const coordinates = data.farmProfile?.location?.coordinates;
         if (!coordinates) return { passed: true }; // Will be caught by coordinate requirement rule
 
@@ -470,10 +470,10 @@ class BusinessRulesEngine {
   /**
    * Get applicable rules for context
    */
-  _getApplicableRules(context, data) {
+  _getApplicableRules(context, _data) {
     const applicableRules = [];
 
-    for (const [ruleName, rule] of this.rules) {
+    for (const [_ruleName, rule] of this.rules) {
       if (rule.context.includes(context)) {
         applicableRules.push(rule);
       }

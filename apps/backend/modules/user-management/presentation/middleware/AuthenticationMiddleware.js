@@ -450,7 +450,7 @@ class AuthenticationMiddleware {
    * Check resource ownership (simplified implementation)
    * @private
    */
-  _checkResourceOwnership(resourceId, userId, ownerField) {
+  _checkResourceOwnership(resourceId, userId, _ownerField) {
     // This is a simplified check. In real implementation, you would:
     // 1. Fetch the resource from database
     // 2. Check if resource[ownerField] === userId

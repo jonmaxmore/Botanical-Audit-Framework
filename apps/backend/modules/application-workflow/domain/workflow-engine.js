@@ -961,12 +961,12 @@ class ApplicationWorkflowEngine extends EventEmitter {
     return new Date() > new Date(application.expiresAt);
   }
 
-  _estimateCompletion(application) {
+  _estimateCompletion(_application) {
     // Implementation for completion estimation based on current state and SLA
     return null; // Placeholder
   }
 
-  _checkSLAStatus(application) {
+  _checkSLAStatus(_application) {
     // Implementation for SLA monitoring
     return 'on_time'; // Placeholder
   }

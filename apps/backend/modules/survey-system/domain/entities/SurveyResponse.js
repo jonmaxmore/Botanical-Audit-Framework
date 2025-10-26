@@ -628,7 +628,7 @@ class SurveyResponse {
 
   // Helper methods
 
-  updateSectionProgress(sectionId, questionInfo) {
+  updateSectionProgress(sectionId, _questionInfo) {
     const progress = this.sectionProgress.get(sectionId);
     if (!progress) return;
 
@@ -639,7 +639,7 @@ class SurveyResponse {
 
     // Count answered questions in this section
     let answeredInSection = 0;
-    for (const [qId, answer] of this.answers) {
+    for (const [_qId, answer] of this.answers) {
       // Find question by ID (would need survey data for this)
       if (answer && answer.answer && answer.answer.trim() !== '') {
         answeredInSection++;
@@ -671,7 +671,7 @@ class SurveyResponse {
     this.overallProgress = totalQuestions > 0 ? (totalAnswered / totalQuestions) * 100 : 0;
   }
 
-  calculateFinalScoring(surveyData) {
+  calculateFinalScoring(_surveyData) {
     // This would integrate with Survey entity's scoring method
     return {
       totalScore: 85,
@@ -741,34 +741,34 @@ class SurveyResponse {
   }
 
   // Placeholder methods for complex business logic
-  estimateTimeRemaining(surveyData) {
+  estimateTimeRemaining(_surveyData) {
     return 1800;
   } // 30 minutes
   getNextSection() {
     return null;
   }
-  getNextQuestion(sectionId) {
+  getNextQuestion(_sectionId) {
     return null;
   }
-  validateQuestionAnswer(questionInfo, answerRecord) {
+  validateQuestionAnswer(_questionInfo, _answerRecord) {
     return { isValid: true };
   }
   determineGrade(percentage) {
     return percentage >= 80 ? 'A' : percentage >= 70 ? 'B' : 'C';
   }
-  generateImprovementPlan(scoring, surveyData) {
+  generateImprovementPlan(_scoring, _surveyData) {
     return null;
   }
-  calculateNextReviewDate(scoring) {
+  calculateNextReviewDate(_scoring) {
     return new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
   }
-  generateTrainingRecommendations(scoring) {
+  generateTrainingRecommendations(_scoring) {
     return [];
   }
-  identifyPriorityActions(scoring) {
+  identifyPriorityActions(_scoring) {
     return [];
   }
-  performFinalValidation(surveyData) {
+  performFinalValidation(_surveyData) {
     return { isValid: true, errors: [], warnings: [] };
   }
   performQualityCheck() {
@@ -789,61 +789,61 @@ class SurveyResponse {
   assessResponseDetailLevel() {
     return 'GOOD';
   }
-  calculateEfficiencyScore(surveyData) {
+  calculateEfficiencyScore(_surveyData) {
     return 85;
   }
-  calculateIndustryPercentile(percentage) {
+  calculateIndustryPercentile(_percentage) {
     return 75;
   }
-  getSectionStatus(sectionId) {
+  getSectionStatus(_sectionId) {
     return 'IN_PROGRESS';
   }
-  getSectionRecommendations(section) {
+  getSectionRecommendations(_section) {
     return [];
   }
-  getSectionNextSteps(sectionId) {
+  getSectionNextSteps(_sectionId) {
     return [];
   }
   generateProgressMilestones() {
     return [];
   }
-  identifyAchievements(metrics) {
+  identifyAchievements(_metrics) {
     return [];
   }
-  identifyChallenges(metrics) {
+  identifyChallenges(_metrics) {
     return [];
   }
-  identifyStrengths(metrics) {
+  identifyStrengths(_metrics) {
     return [];
   }
-  identifyImprovementAreas(metrics) {
+  identifyImprovementAreas(_metrics) {
     return [];
   }
-  analyzeTimeEfficiency(metrics) {
+  analyzeTimeEfficiency(_metrics) {
     return {};
   }
-  analyzeResponseQuality(metrics) {
+  analyzeResponseQuality(_metrics) {
     return {};
   }
-  generateImmediateRecommendations(metrics) {
+  generateImmediateRecommendations(_metrics) {
     return [];
   }
-  generateShortTermRecommendations(metrics) {
+  generateShortTermRecommendations(_metrics) {
     return [];
   }
-  generateCompletionPreparation(surveyData, metrics) {
+  generateCompletionPreparation(_surveyData, _metrics) {
     return [];
   }
-  getPriorityQuestions(surveyData) {
+  getPriorityQuestions(_surveyData) {
     return [];
   }
-  getPreparationNeeded(surveyData) {
+  getPreparationNeeded(_surveyData) {
     return [];
   }
-  estimateCompletionDate(metrics) {
+  estimateCompletionDate(_metrics) {
     return new Date();
   }
-  isReadyToComplete(surveyData) {
+  isReadyToComplete(_surveyData) {
     return this.overallProgress >= 80;
   }
 }

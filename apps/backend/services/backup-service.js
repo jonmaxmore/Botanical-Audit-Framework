@@ -72,7 +72,7 @@ class BackupService {
 
       // Parse connection string to get credentials and database
       const parsedUri = new URL(uri);
-      const database = parsedUri.pathname.substring(1);
+      // const database = parsedUri.pathname.substring(1);
 
       // Build mongodump command
       const cmd = 'mongodump';
@@ -84,7 +84,7 @@ class BackupService {
       return new Promise((resolve, reject) => {
         const process = spawn(cmd, args);
 
-        let stdoutData = '';
+        // let stdoutData = '';
         let stderrData = '';
 
         process.stdout.on('data', data => {

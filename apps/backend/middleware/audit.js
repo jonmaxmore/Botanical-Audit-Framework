@@ -591,7 +591,7 @@ class AuditMiddleware {
   /**
    * Extract changes for modification actions
    */
-  static extractChanges(req, responseData) {
+  static extractChanges(req, _responseData) {
     if (req.method === 'PUT' || req.method === 'PATCH') {
       return {
         modifiedFields: Object.keys(req.body || {}),
@@ -605,7 +605,7 @@ class AuditMiddleware {
   /**
    * Determine legal basis for PDPA compliance
    */
-  static determineLegalBasis(actionType, userRole) {
+  static determineLegalBasis(actionType, _userRole) {
     // Map actions to legal basis
     const legalBasisMap = {
       login: 'contract',

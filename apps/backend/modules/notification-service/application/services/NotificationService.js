@@ -578,7 +578,7 @@ class NotificationService {
    */
   async _initializeTemplates() {
     try {
-      const templatesPath = path.join(__dirname, '../templates');
+      // const templatesPath = path.join(__dirname, '../templates');
 
       // Register common Handlebars helpers
       Handlebars.registerHelper('formatDate', date => {
@@ -599,7 +599,7 @@ class NotificationService {
    * Get workflow notification configuration
    * @private
    */
-  _getWorkflowNotificationConfig(eventType, status) {
+  _getWorkflowNotificationConfig(eventType, _status) {
     const configs = {
       APPLICATION_SUBMITTED: {
         type: 'APPLICATION_SUBMITTED',

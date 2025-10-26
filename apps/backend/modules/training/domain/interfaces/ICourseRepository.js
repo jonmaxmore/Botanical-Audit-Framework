@@ -13,7 +13,7 @@ class ICourseRepository {
    * @param {Course} course - Course entity
    * @returns {Promise<Course>} Saved course
    */
-  async save(course) {
+  async save(_course) {
     throw new Error('Method not implemented');
   }
 
@@ -22,7 +22,7 @@ class ICourseRepository {
    * @param {string} id - Course ID
    * @returns {Promise<Course|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -31,7 +31,7 @@ class ICourseRepository {
    * @param {string} code - Unique course code
    * @returns {Promise<Course|null>}
    */
-  async findByCode(code) {
+  async findByCode(_code) {
     throw new Error('Method not implemented');
   }
 
@@ -99,7 +99,7 @@ class ICourseRepository {
    * @param {string[]} courseIds - Array of course IDs
    * @returns {Promise<Course[]>}
    */
-  async findByIds(courseIds) {
+  async findByIds(_courseIds) {
     throw new Error('Method not implemented');
   }
 
@@ -135,7 +135,7 @@ class ICourseRepository {
    * @param {string} id - Course ID
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 }

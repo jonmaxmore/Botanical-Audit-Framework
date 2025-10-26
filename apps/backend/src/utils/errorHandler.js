@@ -185,7 +185,7 @@ const formatErrorResponse = (error, includeStack = false) => {
 /**
  * Global Error Handler Middleware
  */
-const globalErrorHandler = (error, req, res, next) => {
+const globalErrorHandler = (error, req, res, _next) => {
   let err = error;
 
   // Handle known error types

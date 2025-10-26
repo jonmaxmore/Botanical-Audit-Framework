@@ -13,7 +13,7 @@ class IEnrollmentRepository {
    * @param {Enrollment} enrollment - Enrollment entity
    * @returns {Promise<Enrollment>} Saved enrollment
    */
-  async save(enrollment) {
+  async save(_enrollment) {
     throw new Error('Method not implemented');
   }
 
@@ -22,7 +22,7 @@ class IEnrollmentRepository {
    * @param {string} id - Enrollment ID
    * @returns {Promise<Enrollment|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -32,7 +32,7 @@ class IEnrollmentRepository {
    * @param {string} courseId - Course ID
    * @returns {Promise<Enrollment|null>}
    */
-  async findByFarmerAndCourse(farmerId, courseId) {
+  async findByFarmerAndCourse(_farmerId, _courseId) {
     throw new Error('Method not implemented');
   }
 
@@ -73,7 +73,7 @@ class IEnrollmentRepository {
    * @param {string} farmerId - Farmer ID
    * @returns {Promise<Enrollment[]>}
    */
-  async findActiveCyFarmer(farmerId) {
+  async findActiveCyFarmer(_farmerId) {
     throw new Error('Method not implemented');
   }
 
@@ -82,7 +82,7 @@ class IEnrollmentRepository {
    * @param {string} farmerId - Farmer ID
    * @returns {Promise<Enrollment[]>}
    */
-  async findCompletedByFarmer(farmerId) {
+  async findCompletedByFarmer(_farmerId) {
     throw new Error('Method not implemented');
   }
 
@@ -101,7 +101,7 @@ class IEnrollmentRepository {
    * @param {string} courseId - Course ID
    * @returns {Promise<boolean>}
    */
-  async isEnrolled(farmerId, courseId) {
+  async isEnrolled(_farmerId, _courseId) {
     throw new Error('Method not implemented');
   }
 
@@ -111,7 +111,7 @@ class IEnrollmentRepository {
    * @param {string} courseId - Course ID
    * @returns {Promise<boolean>}
    */
-  async hasCompleted(farmerId, courseId) {
+  async hasCompleted(_farmerId, _courseId) {
     throw new Error('Method not implemented');
   }
 
@@ -138,7 +138,7 @@ class IEnrollmentRepository {
    * @param {string} farmerId - Farmer ID
    * @returns {Promise<Object>}
    */
-  async getFarmerProgressSummary(farmerId) {
+  async getFarmerProgressSummary(_farmerId) {
     throw new Error('Method not implemented');
   }
 
@@ -147,7 +147,7 @@ class IEnrollmentRepository {
    * @param {string} courseId - Course ID
    * @returns {Promise<Object>}
    */
-  async getCourseEnrollmentSummary(courseId) {
+  async getCourseEnrollmentSummary(_courseId) {
     throw new Error('Method not implemented');
   }
 
@@ -156,7 +156,7 @@ class IEnrollmentRepository {
    * @param {string} id - Enrollment ID
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 }

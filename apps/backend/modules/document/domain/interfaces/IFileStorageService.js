@@ -15,7 +15,7 @@ class IFileStorageService {
    * @param {Object} options - Upload options (folder, access level, etc.)
    * @returns {Promise<Object>} { filePath, fileUrl, fileName, checksum }
    */
-  async uploadFile(fileData, options) {
+  async uploadFile(_fileData, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -24,7 +24,7 @@ class IFileStorageService {
    * @param {string} filePath - File path in storage
    * @returns {Promise<Buffer>} File buffer
    */
-  async downloadFile(filePath) {
+  async downloadFile(_filePath) {
     throw new Error('Method not implemented');
   }
 
@@ -33,7 +33,7 @@ class IFileStorageService {
    * @param {string} filePath - File path in storage
    * @returns {Promise<boolean>} Success status
    */
-  async deleteFile(filePath) {
+  async deleteFile(_filePath) {
     throw new Error('Method not implemented');
   }
 
@@ -42,7 +42,7 @@ class IFileStorageService {
    * @param {string} filePath - File path in storage
    * @returns {Promise<boolean>} Exists status
    */
-  async fileExists(filePath) {
+  async fileExists(_filePath) {
     throw new Error('Method not implemented');
   }
 
@@ -52,7 +52,7 @@ class IFileStorageService {
    * @param {Object} options - URL options (expiration, etc.)
    * @returns {Promise<string>} File URL
    */
-  async getFileUrl(filePath, options) {
+  async getFileUrl(_filePath, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -62,7 +62,7 @@ class IFileStorageService {
    * @param {Object} options - Thumbnail options (width, height)
    * @returns {Promise<Object>} { thumbnailPath, thumbnailUrl }
    */
-  async generateThumbnail(filePath, options) {
+  async generateThumbnail(_filePath, _options) {
     throw new Error('Method not implemented');
   }
 
@@ -71,7 +71,7 @@ class IFileStorageService {
    * @param {Buffer} buffer - File buffer
    * @returns {Promise<string>} Checksum
    */
-  async calculateChecksum(buffer) {
+  async calculateChecksum(_buffer) {
     throw new Error('Method not implemented');
   }
 
@@ -82,7 +82,7 @@ class IFileStorageService {
    * @param {Object} options - Validation options
    * @returns {Promise<Object>} { valid, errors }
    */
-  async validateFile(buffer, mimeType, options) {
+  async validateFile(_buffer, _mimeType, _options) {
     throw new Error('Method not implemented');
   }
 }

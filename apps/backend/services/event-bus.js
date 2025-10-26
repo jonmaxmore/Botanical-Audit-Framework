@@ -309,7 +309,7 @@ class EventBusService extends EventEmitter {
    * Subscribe to Kafka events
    * @private
    */
-  async _subscribeKafka(eventTypes, handler, options) {
+  async _subscribeKafka(eventTypes, handler, _options) {
     // Subscribe to topics
     for (const eventType of eventTypes) {
       await this.consumer.subscribe({ topic: eventType });
@@ -317,7 +317,7 @@ class EventBusService extends EventEmitter {
 
     // Run consumer
     await this.consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
+      eachMessage: async ({ _topic, _partition, message }) => {
         try {
           const event = JSON.parse(message.value.toString());
           logger.debug(`[EventBusService] Received event: ${event.type}`);

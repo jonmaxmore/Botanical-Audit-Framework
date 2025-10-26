@@ -15,7 +15,6 @@ const IDTAMStaffRepository = require('../../domain/interfaces/IDTAMStaffReposito
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('auth-dtam-dtam-staff');
 
-
 // Mongoose Schema
 const dtamStaffSchema = new mongoose.Schema(
   {

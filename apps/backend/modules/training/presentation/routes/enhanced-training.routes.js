@@ -717,7 +717,7 @@ function createEnhancedTrainingRoutes(enhancedTrainingController, authMiddleware
   // ============================================================================
 
   // Global error handler for enhanced training routes
-  const errorHandler = (error, req, res, next) => {
+  const errorHandler = (error, req, res, _next) => {
     logger.error('[EnhancedTrainingRoutes] Unhandled error:', error);
 
     res.status(500).json({

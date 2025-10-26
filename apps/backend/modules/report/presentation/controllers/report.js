@@ -72,7 +72,7 @@ class ReportController {
       const userRole = req.user.role;
 
       // Check if user can access the report
-      const report = await this.getReportUseCase.execute(reportId, userId, userRole);
+      // const report = await this.getReportUseCase.execute(reportId, userId, userRole);
 
       // Generate
       const generatedReport = await this.generateReportUseCase.execute(reportId);

@@ -16,7 +16,7 @@ class INotificationService {
    * @param {string} emailData.text - Plain text content
    * @returns {Promise<boolean>}
    */
-  async sendEmail(emailData) {
+  async sendEmail(_emailData) {
     throw new Error('Method not implemented');
   }
 
@@ -27,7 +27,7 @@ class INotificationService {
    * @param {string} smsData.message - SMS message
    * @returns {Promise<boolean>}
    */
-  async sendSMS(smsData) {
+  async sendSMS(_smsData) {
     throw new Error('Method not implemented');
   }
 
@@ -36,7 +36,7 @@ class INotificationService {
    * @param {Object} pushData - Push notification data
    * @returns {Promise<boolean>}
    */
-  async sendPush(pushData) {
+  async sendPush(_pushData) {
     throw new Error('Method not implemented');
   }
 }

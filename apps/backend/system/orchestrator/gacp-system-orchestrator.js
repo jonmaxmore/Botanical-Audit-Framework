@@ -486,7 +486,7 @@ class GACPSystemOrchestrator {
   /**
    * Trigger QC Review Process
    */
-  async _triggerQCReview(applicationId, userId) {
+  async _triggerQCReview(applicationId, _userId) {
     // 1. Find available QC officer
     const qcOfficer = await this.services.userManagement.findAvailableQCOfficer({
       workload: 'LIGHT',

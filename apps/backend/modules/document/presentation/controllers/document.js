@@ -9,7 +9,6 @@ const multer = require('multer');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('document-document');
 
-
 class DocumentController {
   constructor({
     uploadDocumentUseCase,

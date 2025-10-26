@@ -469,42 +469,42 @@ class AnalyticsEngine {
     };
   }
 
-  async getProcessingTimeStats(query) {
+  async getProcessingTimeStats(_query) {
     // Implementation for processing time statistics
     return { average: 0, median: 0, distribution: {} };
   }
 
-  async getUserRegistrationTrend(dateRange, filters) {
+  async getUserRegistrationTrend(_dateRange, _filters) {
     // Implementation for user registration trend
     return [];
   }
 
-  async getUserRoleDistribution(query) {
+  async getUserRoleDistribution(_query) {
     // Implementation for user role distribution
     return {};
   }
 
-  async getUserActivityStats(dateRange, filters) {
+  async getUserActivityStats(_dateRange, _filters) {
     // Implementation for user activity statistics
     return {};
   }
 
-  async getComplianceScores(query) {
+  async getComplianceScores(_query) {
     // Implementation for compliance scores
     return { average: 0, distribution: {} };
   }
 
-  async getNonComplianceIssues(query) {
+  async getNonComplianceIssues(_query) {
     // Implementation for non-compliance issues
     return [];
   }
 
-  async getImprovementTrends(dateRange, filters) {
+  async getImprovementTrends(_dateRange, _filters) {
     // Implementation for improvement trends
     return [];
   }
 
-  async getInspectionResults(query) {
+  async getInspectionResults(_query) {
     // Implementation for inspection results
     return {};
   }

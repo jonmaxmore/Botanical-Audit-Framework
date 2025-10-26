@@ -923,10 +923,10 @@ class TrackTraceController {
   }
 
   // Placeholder methods for search operations
-  async executeMultiEntitySearch(searchParams, userContext) {
+  async executeMultiEntitySearch(_searchParams, _userContext) {
     return { results: [], totalResults: 0 };
   }
-  async executeSingleEntitySearch(searchParams, userContext) {
+  async executeSingleEntitySearch(_searchParams, _userContext) {
     return { results: [], totalResults: 0 };
   }
 }

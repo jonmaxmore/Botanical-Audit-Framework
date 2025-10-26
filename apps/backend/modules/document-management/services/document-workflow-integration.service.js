@@ -163,7 +163,7 @@ class DocumentWorkflowIntegration {
       logger.info(`📝 Updated application progress: ${applicationId}`);
 
       // 2. ตรวจสอบว่าเอกสารครบหรือยัง
-      const application = await this.applicationService.getApplicationById(applicationId);
+      // const application = await this.applicationService.getApplicationById(applicationId);
       const completenessCheck =
         await this.applicationService.checkDocumentCompleteness(applicationId);
 

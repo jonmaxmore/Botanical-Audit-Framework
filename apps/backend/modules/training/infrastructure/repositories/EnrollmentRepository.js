@@ -553,7 +553,7 @@ class EnrollmentRepository {
   /**
    * Initialize progress tracking for new enrollment
    */
-  async initializeProgressTracking(enrollmentId, courseId) {
+  async initializeProgressTracking(enrollmentId, _courseId) {
     // Initialize analytics tracking, milestone setup, etc.
     this.logger.log(`[EnrollmentRepository] Progress tracking initialized for: ${enrollmentId}`);
   }
@@ -582,7 +582,7 @@ class EnrollmentRepository {
   /**
    * Calculate expected completion date based on course and farmer data
    */
-  calculateExpectedCompletion(enrollment) {
+  calculateExpectedCompletion(_enrollment) {
     const expectedDate = new Date();
     expectedDate.setDate(expectedDate.getDate() + this.businessConfig.enrollmentExpiryDays);
     return expectedDate;
@@ -591,7 +591,7 @@ class EnrollmentRepository {
   /**
    * Assess enrollment risk factors
    */
-  async assessEnrollmentRisk(enrollmentData) {
+  async assessEnrollmentRisk(_enrollmentData) {
     // Analyze farmer history, course difficulty, etc.
     return {
       riskLevel: 'LOW',
@@ -718,40 +718,40 @@ class EnrollmentRepository {
   }
 
   // Placeholder methods for complex business operations
-  async validateEnrollmentUpdate(enrollmentId, updateData) {
+  async validateEnrollmentUpdate(_enrollmentId, _updateData) {
     /* Implementation */
   }
-  determineUpdateAction(updateData) {
+  determineUpdateAction(_updateData) {
     return 'UPDATED';
   }
-  generateUpdateSummary(current, update) {
+  generateUpdateSummary(_current, _update) {
     return 'Enrollment updated';
   }
-  async handleStatusChangeEffects(enrollmentId, oldStatus, newStatus) {
+  async handleStatusChangeEffects(_enrollmentId, _oldStatus, _newStatus) {
     /* Implementation */
   }
-  async getEnrollmentStatusSummary(query) {
+  async getEnrollmentStatusSummary(_query) {
     return {};
   }
-  async validateAssessmentAttempt(enrollment, assessmentData) {
+  async validateAssessmentAttempt(_enrollment, _assessmentData) {
     /* Implementation */
   }
   async processAssessmentScoring(assessmentData) {
     return { ...assessmentData, score: 85 };
   }
-  async checkCompletionQualification(enrollment, assessment) {
+  async checkCompletionQualification(_enrollment, _assessment) {
     return { eligible: false };
   }
-  buildAnalyticsQuery(criteria) {
+  buildAnalyticsQuery(_criteria) {
     return {};
   }
-  determineCurrentPhase(progress) {
+  determineCurrentPhase(_progress) {
     return 'LEARNING';
   }
-  getNextMilestone(progress) {
+  getNextMilestone(_progress) {
     return 'COMPLETE_MODULE_2';
   }
-  estimateCompletionDate(enrollment) {
+  estimateCompletionDate(_enrollment) {
     return new Date();
   }
 }

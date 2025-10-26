@@ -7,7 +7,7 @@ const logger = require('../shared/logger/logger');
 const axios = require('axios');
 const {
   CannabisSurveyTemplate,
-  CannabisQuestion,
+  _CannabisQuestion,
   CannabisSurveyResponse,
 } = require('../models/CannabisSurvey');
 const cannabisSurveyService = require('./cannabis-survey');

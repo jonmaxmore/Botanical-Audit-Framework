@@ -127,7 +127,7 @@ class MockDatabaseService {
         }
 
         // Simple query matching
-        for (const [id, doc] of collection.entries()) {
+        for (const [_id, doc] of collection.entries()) {
           let matches = true;
           for (const [key, value] of Object.entries(query)) {
             if (doc[key] !== value) {
@@ -144,7 +144,7 @@ class MockDatabaseService {
         const collection = this.collections.get(name);
         const results = [];
 
-        for (const [id, doc] of collection.entries()) {
+        for (const [_id, doc] of collection.entries()) {
           let matches = true;
           for (const [key, value] of Object.entries(query)) {
             if (doc[key] !== value) {

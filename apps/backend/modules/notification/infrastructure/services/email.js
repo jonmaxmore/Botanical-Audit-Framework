@@ -37,7 +37,7 @@ class EmailNotificationService {
       });
 
       // Verify connection
-      this.transporter.verify((error, success) => {
+      this.transporter.verify((error, _success) => {
         if (error) {
           logger.error('Email service verification failed:', error);
         } else {

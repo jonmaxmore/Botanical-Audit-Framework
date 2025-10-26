@@ -144,7 +144,7 @@ class IDataAggregationService {
    * @param {number} month - Month (1-12)
    * @returns {Promise<Object>} - Monthly summary
    */
-  async getMonthlySummary(year, month) {
+  async getMonthlySummary(_year, _month) {
     throw new Error('Method not implemented');
   }
 
@@ -154,7 +154,7 @@ class IDataAggregationService {
    * @param {number} quarter - Quarter (1-4)
    * @returns {Promise<Object>} - Quarterly summary
    */
-  async getQuarterlySummary(year, quarter) {
+  async getQuarterlySummary(_year, _quarter) {
     throw new Error('Method not implemented');
   }
 
@@ -163,7 +163,7 @@ class IDataAggregationService {
    * @param {number} year - Year
    * @returns {Promise<Object>} - Annual summary
    */
-  async getAnnualSummary(year) {
+  async getAnnualSummary(_year) {
     throw new Error('Method not implemented');
   }
 
@@ -172,7 +172,7 @@ class IDataAggregationService {
    * @param {Object} query - Custom query parameters
    * @returns {Promise<Array>} - Query results
    */
-  async exportCustomData(query) {
+  async exportCustomData(_query) {
     throw new Error('Method not implemented');
   }
 }

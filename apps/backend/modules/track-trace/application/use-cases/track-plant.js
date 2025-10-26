@@ -146,7 +146,7 @@ class TrackPlantUseCase {
       const monitoringSetup = await this.initializeMonitoringSystem(savedPlant);
 
       // Step 7: Create baseline environmental assessment
-      const baselineAssessment = await this.createBaselineAssessment(savedPlant, plantingData);
+      // const baselineAssessment = await this.createBaselineAssessment(savedPlant, plantingData);
 
       // Step 8: Set up compliance tracking
       await this.initializeComplianceTracking(savedPlant);
@@ -725,7 +725,7 @@ class TrackPlantUseCase {
   }
 
   // Placeholder methods for complex operations
-  async initializeMonitoringSystem(plant) {
+  async initializeMonitoringSystem(_plant) {
     return {
       schedule: [],
       milestones: [],
@@ -734,92 +734,92 @@ class TrackPlantUseCase {
     };
   }
 
-  async createBaselineAssessment(plant, plantingData) {
+  async createBaselineAssessment(_plant, _plantingData) {
     return {};
   }
-  async initializeComplianceTracking(plant) {
+  async initializeComplianceTracking(_plant) {
     /* Implementation */
   }
-  async analyzeGrowthPatterns(plant, measurementType) {
+  async analyzeGrowthPatterns(_plant, _measurementType) {
     return {};
   }
-  async detectGrowthAnomalies(plant, measurementResult) {
+  async detectGrowthAnomalies(_plant, _measurementResult) {
     return [];
   }
-  async handleGrowthAlerts(plant, anomalies, healthAssessment) {
+  async handleGrowthAlerts(_plant, _anomalies, _healthAssessment) {
     /* Implementation */
   }
-  async adjustMonitoringSchedule(plant, measurementResult) {
+  async adjustMonitoringSchedule(_plant, _measurementResult) {
     return { nextMeasurement: new Date() };
   }
-  async validateEnvironmentalData(environmentalData) {
+  async validateEnvironmentalData(_environmentalData) {
     /* Validation */
   }
-  async analyzeEnvironmentalImpact(plant, environmentalData) {
+  async analyzeEnvironmentalImpact(_plant, _environmentalData) {
     return {};
   }
-  async checkEnvironmentalCompliance(plant, environmentalData) {
+  async checkEnvironmentalCompliance(_plant, _environmentalData) {
     return {};
   }
-  async handleEnvironmentalAlerts(plant, alerts) {
+  async handleEnvironmentalAlerts(_plant, _alerts) {
     /* Implementation */
   }
-  async generateEnvironmentalRecommendations(plant, result, impact) {
+  async generateEnvironmentalRecommendations(_plant, _result, _impact) {
     return [];
   }
-  async validatePhaseTransition(transitionData) {
+  async validatePhaseTransition(_transitionData) {
     /* Validation */
   }
-  async validateTransitionEligibility(plant, newPhase) {
+  async validateTransitionEligibility(plant, _newPhase) {
     return { eligible: true, currentPhase: plant.growthPhases.current };
   }
-  async updateMonitoringForPhase(plant, phase) {
+  async updateMonitoringForPhase(_plant, _phase) {
     return {};
   }
-  async generatePhaseTransitionDocumentation(plant, result, data) {
+  async generatePhaseTransitionDocumentation(_plant, _result, _data) {
     return {};
   }
-  async updateComplianceForPhase(plant, phase) {
+  async updateComplianceForPhase(_plant, _phase) {
     /* Implementation */
   }
-  async getRelatedPlantData(plant) {
+  async getRelatedPlantData(_plant) {
     return { seed: null, farm: null };
   }
-  async calculatePlantPerformanceMetrics(plant) {
+  async calculatePlantPerformanceMetrics(_plant) {
     return {
       currentHealthScore: 85,
       growthTrend: 'POSITIVE',
       environmentalComplianceScore: 90,
     };
   }
-  async generateComplianceSummary(plant) {
+  async generateComplianceSummary(_plant) {
     return {};
   }
-  calculateDailyGrowthRate(heightData, date) {
+  calculateDailyGrowthRate(_heightData, _date) {
     return 0.5;
   }
-  getActiveCriticalAlerts(plant) {
+  getActiveCriticalAlerts(_plant) {
     return [];
   }
-  predictHarvestDate(plant) {
+  predictHarvestDate(_plant) {
     return new Date();
   }
-  predictYield(plant) {
+  predictYield(_plant) {
     return 'MEDIUM';
   }
-  predictQuality(plant) {
+  predictQuality(_plant) {
     return 'HIGH';
   }
-  calculatePlantDataCompleteness(plant) {
+  calculatePlantDataCompleteness(_plant) {
     return 95;
   }
-  countPlantRecords(plant) {
+  countPlantRecords(_plant) {
     return 150;
   }
-  calculateNextEnvironmentalMonitoring(plant) {
+  calculateNextEnvironmentalMonitoring(_plant) {
     return new Date();
   }
-  generateGrowthRecommendations(plant, analysis) {
+  generateGrowthRecommendations(_plant, _analysis) {
     return [];
   }
 
@@ -835,10 +835,10 @@ class TrackPlantUseCase {
     }
   }
 
-  async sendInitializationNotifications(plant, monitoringSetup) {
+  async sendInitializationNotifications(_plant, _monitoringSetup) {
     /* Implementation */
   }
-  async sendPhaseTransitionNotifications(plant, transitionResult, transitionData) {
+  async sendPhaseTransitionNotifications(_plant, _transitionResult, _transitionData) {
     /* Implementation */
   }
 }

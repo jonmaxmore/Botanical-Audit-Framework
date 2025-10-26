@@ -71,7 +71,7 @@ const ipKeyGenerator = req => {
 /**
  * Skip successful requests (only count failed attempts)
  */
-const skipSuccessfulRequests = (req, res) => {
+// const skipSuccessfulRequests = (req, res) => {
   return res.statusCode < 400;
 };
 

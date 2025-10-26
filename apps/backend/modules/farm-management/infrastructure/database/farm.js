@@ -12,7 +12,6 @@ const IFarmRepository = require('../../domain/interfaces/IFarmRepository');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('farm-management-farm');
 
-
 // Mongoose Schema
 const farmSchema = new mongoose.Schema(
   {

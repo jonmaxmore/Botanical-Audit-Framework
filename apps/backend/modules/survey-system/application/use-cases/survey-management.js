@@ -919,85 +919,85 @@ class SurveyManagementUseCase {
   }
 
   // Placeholder methods for complex operations
-  async validateSurveyCreationData(surveyData) {
+  async validateSurveyCreationData(_surveyData) {
     /* Validation logic */
   }
   async processCustomSection(customSection) {
     return customSection;
   }
-  async validateGACPCompliance(survey) {
+  async validateGACPCompliance(_survey) {
     return { compliant: true, warnings: [], recommendations: [] };
   }
-  async validateSessionStartData(sessionData) {
+  async validateSessionStartData(_sessionData) {
     /* Validation logic */
   }
-  async checkUserEligibility(userId, survey) {
+  async checkUserEligibility(_userId, _survey) {
     return { eligible: true };
   }
-  async setupProgressTracking(response, survey) {
+  async setupProgressTracking(_response, _survey) {
     /* Setup tracking */
   }
-  async sendSessionStartNotifications(response, survey) {
+  async sendSessionStartNotifications(_response, _survey) {
     /* Send notifications */
   }
-  async validateAnswerData(answerData) {
+  async validateAnswerData(_answerData) {
     /* Validation logic */
   }
-  async performBusinessValidation(answerData, questionInfo, response) {
+  async performBusinessValidation(_answerData, _questionInfo, _response) {
     return { isValid: true };
   }
-  async calculateProvisionalScoring(response, survey) {
+  async calculateProvisionalScoring(_response, _survey) {
     return null;
   }
-  async generateAnswerFeedback(questionInfo, answerData, validation) {
+  async generateAnswerFeedback(_questionInfo, _answerData, _validation) {
     return {};
   }
-  async generateProgressRecommendations(response, survey) {
+  async generateProgressRecommendations(_response, _survey) {
     return [];
   }
-  canProceedToNextSection(response, sectionId) {
+  canProceedToNextSection(_response, _sectionId) {
     return true;
   }
-  canCompleteResponse(response, survey) {
+  canCompleteResponse(response, _survey) {
     return response.overallProgress >= 80;
   }
-  shouldSuggestBreak(response) {
+  shouldSuggestBreak(_response) {
     return false;
   }
-  estimateTimeRemaining(response, survey) {
+  estimateTimeRemaining(_response, _survey) {
     return 30;
   }
-  async validateCompletionData(completionData) {
+  async validateCompletionData(_completionData) {
     /* Validation logic */
   }
-  async generateGACPAssessment(response, survey) {
+  async generateGACPAssessment(_response, _survey) {
     return {};
   }
-  async createImprovementActionPlan(response, assessment) {
+  async createImprovementActionPlan(_response, _assessment) {
     return {};
   }
-  async generateComplianceCertificate(response, assessment) {
+  async generateComplianceCertificate(_response, _assessment) {
     return null;
   }
-  async createFollowUpPlan(response, assessment, actionPlan) {
+  async createFollowUpPlan(_response, _assessment, _actionPlan) {
     return {};
   }
-  async generateAssessmentReport(response, survey, assessment) {
+  async generateAssessmentReport(_response, _survey, _assessment) {
     return { reportId: 'RPT-001', url: '/report', downloadUrl: '/download' };
   }
-  async sendCompletionNotifications(response, survey, result) {
+  async sendCompletionNotifications(_response, _survey, _result) {
     /* Send notifications */
   }
-  async analyzeGACPProgress(response, survey) {
+  async analyzeGACPProgress(_response, _survey) {
     return {};
   }
-  async assessCompletionReadiness(response, survey) {
+  async assessCompletionReadiness(_response, _survey) {
     return { ready: false, percentage: 75, blockers: [] };
   }
-  async generateTargetedRecommendations(response, survey, analysis) {
+  async generateTargetedRecommendations(_response, _survey, _analysis) {
     return [];
   }
-  async estimateCompletionTimeline(response, survey) {
+  async estimateCompletionTimeline(_response, _survey) {
     return { completionDate: new Date(), effortHours: 5, schedule: [], milestones: [] };
   }
   prioritizeRecommendations(recommendations) {

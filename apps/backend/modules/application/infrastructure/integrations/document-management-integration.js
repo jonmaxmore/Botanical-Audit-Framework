@@ -381,22 +381,22 @@ class DocumentManagementIntegrationSystem {
     };
   }
 
-  async checkReadability(processingResult) {
+  async checkReadability(_processingResult) {
     // Simulate readability check
     return 0.92;
   }
 
-  async checkCompleteness(processingResult, typeConfig) {
+  async checkCompleteness(_processingResult, _typeConfig) {
     // Simulate completeness check
     return 0.88;
   }
 
-  async checkAuthenticity(processingResult) {
+  async checkAuthenticity(_processingResult) {
     // Simulate authenticity check
     return 0.95;
   }
 
-  async checkCompliance(processingResult, typeConfig) {
+  async checkCompliance(_processingResult, _typeConfig) {
     // Simulate compliance check
     return 0.91;
   }

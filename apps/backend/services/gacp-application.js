@@ -524,7 +524,7 @@ class GACPApplicationService {
     return score;
   }
 
-  assessFarmingPractices(practicesData) {
+  assessFarmingPractices(_practicesData) {
     // Implement farming practices assessment
     // This would be based on submitted cultivation records and management plans
     return 75; // Placeholder

@@ -465,7 +465,7 @@ class GACPEnhancedInspectionService {
   /**
    * Calculate Weighted CCP Score using Thai FDA Methodology
    */
-  calculateWeightedCCPScore(ccpEvaluation, ccp) {
+  calculateWeightedCCPScore(ccpEvaluation, _ccp) {
     const criteriaScores = Object.values(ccpEvaluation.criteriaResults).map(
       result => result.compliance,
     );
@@ -549,7 +549,7 @@ class GACPEnhancedInspectionService {
     };
   }
 
-  createComprehensiveInspectionFramework(application, inspector) {
+  createComprehensiveInspectionFramework(_application, _inspector) {
     return {
       inspectionType: 'comprehensive_gacp',
       standards: ['WHO-GACP-2003', 'Thai-FDA-2018', 'FAO-GAP', 'ASEAN-TM'],
@@ -658,7 +658,7 @@ class GACPEnhancedInspectionService {
     return Math.ceil(baseDuration * sizeMultiplier * complexityMultiplier);
   }
 
-  performInitialRiskAssessment(application) {
+  performInitialRiskAssessment(_application) {
     return {
       farmLocation: 'low_risk',
       cropType: 'medium_risk',
@@ -668,7 +668,7 @@ class GACPEnhancedInspectionService {
     };
   }
 
-  getInspectionNextSteps(inspection) {
+  getInspectionNextSteps(_inspection) {
     return [
       'Confirm inspection date with farmer',
       'Review application documents thoroughly',
@@ -678,7 +678,7 @@ class GACPEnhancedInspectionService {
     ];
   }
 
-  getPreparationRequirements(application) {
+  getPreparationRequirements(_application) {
     return [
       'Farm records for past 12 months available',
       'All required documents organized',

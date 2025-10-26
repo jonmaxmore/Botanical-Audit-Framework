@@ -123,7 +123,7 @@ const createErrorResponse = (errorCode, message, details = null, statusCode = 50
 /**
  * Express error handler middleware
  */
-const errorHandler = (err, req, res, next) => {
+const errorHandler = (err, req, res, _next) => {
   console.error('Error occurred:', {
     message: err.message,
     stack: err.stack,

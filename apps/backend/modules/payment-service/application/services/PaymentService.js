@@ -290,7 +290,7 @@ class PaymentService {
    */
   async processPaymentWebhook(webhookData) {
     try {
-      const { paymentId, referenceNumber, status, transactionId, amount, timestamp, signature } =
+      const { paymentId, referenceNumber, status, transactionId, amount, _timestamp, signature } =
         webhookData;
 
       console.log(`[PaymentService] Processing webhook for payment ${paymentId}`, {
@@ -553,7 +553,7 @@ class PaymentService {
   _buildPromptPayQRString(data) {
     // Simplified PromptPay QR string generation
     // In production, use proper EMV QR code library
-    const { merchantId, amount, referenceNumber } = data;
+    const { merchantId, _amount, referenceNumber } = data;
 
     return `00020101021229370016A000000677010112${merchantId.padStart(13, '0')}53037645802TH5909GACP DTAM6007Bangkok62${referenceNumber.length.toString().padStart(2, '0')}${referenceNumber}6304`;
   }

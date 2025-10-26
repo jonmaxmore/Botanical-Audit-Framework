@@ -26,7 +26,7 @@ class GetDTAMDashboardUseCase {
     this.auditRepository = auditRepository;
   }
 
-  async execute(staffId) {
+  async execute(_staffId) {
     try {
       // Get all data in parallel
       const [systemStats, pendingTasks, recentActivity, trends] = await Promise.all([

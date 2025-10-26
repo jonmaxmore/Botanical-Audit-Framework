@@ -237,7 +237,7 @@ class TrackHarvestUseCase {
       }
 
       // Step 4: Record harvest start and environmental conditions
-      const harvestStart = await this.recordHarvestStart(harvestBatch, harvestExecutionData);
+      // const harvestStart = await this.recordHarvestStart(harvestBatch, harvestExecutionData);
 
       // Step 5: Process harvest for each plant
       const plantHarvestResults = await Promise.all(
@@ -782,130 +782,130 @@ class TrackHarvestUseCase {
   }
 
   // Placeholder methods for complex operations
-  async conductPreHarvestAssessments(plantIds) {
+  async conductPreHarvestAssessments(_plantIds) {
     return [];
   }
-  async validateHarvestReadiness(assessments) {
+  async validateHarvestReadiness(_assessments) {
     return { allReady: true, notReadyPlants: [], readinessStatus: 'READY' };
   }
-  async createHarvestBatch(initData, assessments) {
+  async createHarvestBatch(_initData, _assessments) {
     return { batchId: 'BATCH-' + Date.now() };
   }
-  async initializePlantHarvest(plantId, batchId, initData) {
+  async initializePlantHarvest(_plantId, _batchId, _initData) {
     return {};
   }
-  async setupHarvestEnvironmentalMonitoring(harvestBatch) {
+  async setupHarvestEnvironmentalMonitoring(_harvestBatch) {
     return {};
   }
-  async createHarvestExecutionPlan(harvestBatch, initData) {
+  async createHarvestExecutionPlan(_harvestBatch, _initData) {
     return {};
   }
-  async initializeChainOfCustody(harvestBatch, harvestTeam) {
+  async initializeChainOfCustody(_harvestBatch, _harvestTeam) {
     return {};
   }
-  async validateHarvestTiming(harvestBatch, executionData) {
+  async validateHarvestTiming(_harvestBatch, _executionData) {
     return { valid: true };
   }
-  async recordHarvestStart(harvestBatch, executionData) {
+  async recordHarvestStart(_harvestBatch, _executionData) {
     return {};
   }
-  async processSinglePlantHarvest(batchId, plantHarvest) {
+  async processSinglePlantHarvest(_batchId, _plantHarvest) {
     return {};
   }
-  calculateHarvestBatchTotals(plantResults) {
+  calculateHarvestBatchTotals(_plantResults) {
     return { totalYield: 100, qualityMetrics: { averageQuality: 85 } };
   }
-  async prepareDryingProcess(harvestBatch, batchTotals) {
+  async prepareDryingProcess(_harvestBatch, _batchTotals) {
     return {};
   }
-  async updateChainOfCustodyHarvestComplete(harvestBatch, batchTotals) {
+  async updateChainOfCustodyHarvestComplete(_harvestBatch, _batchTotals) {
     /* Implementation */
   }
-  async generateHarvestCompletionDocumentation(harvestBatch, plantResults, batchTotals) {
+  async generateHarvestCompletionDocumentation(_harvestBatch, _plantResults, _batchTotals) {
     return {};
   }
-  async validateDryingData(dryingData) {
+  async validateDryingData(_dryingData) {
     /* Validation */
   }
-  async initializeDryingProcess(harvestBatch, dryingData) {
+  async initializeDryingProcess(_harvestBatch, _dryingData) {
     return { status: 'INITIALIZED' };
   }
-  async updateDryingMonitoring(harvestBatch, dryingData) {
+  async updateDryingMonitoring(_harvestBatch, _dryingData) {
     return { status: 'MONITORING' };
   }
-  async checkDryingCompletion(harvestBatch, dryingData) {
+  async checkDryingCompletion(_harvestBatch, _dryingData) {
     return { status: 'CHECKING' };
   }
-  async validateDryingConditions(conditions) {
+  async validateDryingConditions(_conditions) {
     return { valid: true };
   }
-  async handleDryingAlerts(harvestBatch, issues) {
+  async handleDryingAlerts(_harvestBatch, _issues) {
     /* Implementation */
   }
-  async generateDryingRecommendations(harvestBatch, dryingResult) {
+  async generateDryingRecommendations(_harvestBatch, _dryingResult) {
     return [];
   }
-  async validateCuringData(curingData) {
+  async validateCuringData(_curingData) {
     /* Validation */
   }
-  async initializeCuringProcess(harvestBatch, curingData) {
+  async initializeCuringProcess(_harvestBatch, _curingData) {
     return { status: 'INITIALIZED' };
   }
-  async updateCuringMonitoring(harvestBatch, curingData) {
+  async updateCuringMonitoring(_harvestBatch, _curingData) {
     return { status: 'MONITORING' };
   }
-  async conductCuringQualityCheck(harvestBatch, curingData) {
+  async conductCuringQualityCheck(_harvestBatch, _curingData) {
     return { status: 'QUALITY_CHECK' };
   }
-  async assessCuringCompletion(harvestBatch, curingData) {
+  async assessCuringCompletion(_harvestBatch, _curingData) {
     return { status: 'ASSESSMENT' };
   }
-  async validateCuringConditions(conditions) {
+  async validateCuringConditions(_conditions) {
     return { valid: true };
   }
-  async handleCuringAlerts(harvestBatch, issues) {
+  async handleCuringAlerts(_harvestBatch, _issues) {
     /* Implementation */
   }
-  async generateCuringRecommendations(harvestBatch, curingResult) {
+  async generateCuringRecommendations(_harvestBatch, _curingResult) {
     return [];
   }
-  async assessTestingReadiness(harvestBatch, curingResult) {
+  async assessTestingReadiness(_harvestBatch, _curingResult) {
     return { ready: false };
   }
-  async getRelatedHarvestData(harvestBatch) {
+  async getRelatedHarvestData(_harvestBatch) {
     return {};
   }
-  async calculateHarvestPerformanceMetrics(harvestBatch) {
+  async calculateHarvestPerformanceMetrics(_harvestBatch) {
     return {};
   }
-  async generateHarvestComplianceQualitySummary(harvestBatch) {
+  async generateHarvestComplianceQualitySummary(_harvestBatch) {
     return {};
   }
-  summarizeEnvironmentalConditions(environmentalHistory) {
+  summarizeEnvironmentalConditions(_environmentalHistory) {
     return {};
   }
-  identifyCriticalEnvironmentalDeviations(harvestBatch) {
+  identifyCriticalEnvironmentalDeviations(_harvestBatch) {
     return [];
   }
-  async compareToBenchmarks(harvestBatch) {
+  async compareToBenchmarks(_harvestBatch) {
     return {};
   }
-  async generateImprovementRecommendations(harvestBatch) {
+  async generateImprovementRecommendations(_harvestBatch) {
     return [];
   }
-  calculateCompletionPercentage(harvestBatch) {
+  calculateCompletionPercentage(_harvestBatch) {
     return 85;
   }
-  identifyNextMilestone(harvestBatch) {
+  identifyNextMilestone(_harvestBatch) {
     return 'QUALITY_TESTING';
   }
-  assessDistributionReadiness(harvestBatch) {
+  assessDistributionReadiness(_harvestBatch) {
     return false;
   }
-  calculateHarvestDataCompleteness(harvestBatch) {
+  calculateHarvestDataCompleteness(_harvestBatch) {
     return 95;
   }
-  calculateTotalProcessingDays(harvestBatch) {
+  calculateTotalProcessingDays(_harvestBatch) {
     return 21;
   }
 
@@ -922,10 +922,10 @@ class TrackHarvestUseCase {
     }
   }
 
-  async sendHarvestInitializationNotifications(harvestBatch, executionPlan) {
+  async sendHarvestInitializationNotifications(_harvestBatch, _executionPlan) {
     /* Implementation */
   }
-  async sendHarvestCompletionNotifications(harvestBatch, batchTotals) {
+  async sendHarvestCompletionNotifications(_harvestBatch, _batchTotals) {
     /* Implementation */
   }
 }

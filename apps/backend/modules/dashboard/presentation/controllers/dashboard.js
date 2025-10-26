@@ -11,7 +11,6 @@ const { DashboardDTO } = require('../dto/DashboardDTO');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('dashboard-dashboard');
 
-
 class DashboardController {
   constructor(getFarmerDashboardUseCase, getDTAMDashboardUseCase, getSystemStatisticsUseCase) {
     this.getFarmerDashboardUseCase = getFarmerDashboardUseCase;

@@ -458,7 +458,7 @@ class EnhancedApplicationProcessingController {
   }
 
   // Analytics and Monitoring Methods
-  async generateAnalytics(applicationId) {
+  async generateAnalytics(_applicationId) {
     return {
       processingTime: '5 days',
       completionRate: '85%',

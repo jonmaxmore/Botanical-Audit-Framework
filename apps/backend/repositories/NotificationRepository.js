@@ -246,7 +246,7 @@ class NotificationRepository {
    * @param {Object} options - Optional filters
    * @returns {Promise<Array>} List of user IDs with role
    */
-  async findUsersByRole(role) {
+  async findUsersByRole(_role) {
     try {
       // This would typically query the users collection
       // For now, return empty array - implement when user repository is available

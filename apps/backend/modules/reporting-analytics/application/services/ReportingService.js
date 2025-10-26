@@ -697,101 +697,101 @@ class ReportingService {
   }
 
   // Additional utility methods would be implemented here...
-  _calculateAverageProcessingTime(applications) {
+  _calculateAverageProcessingTime(_applications) {
     return 24;
   } // hours
-  _calculateCompletionRate(applications) {
+  _calculateCompletionRate(_applications) {
     return 85;
   } // percentage
-  _calculateRejectionRate(applications) {
+  _calculateRejectionRate(_applications) {
     return 5;
   } // percentage
-  _calculateStateDistribution(applications) {
+  _calculateStateDistribution(_applications) {
     return {};
   }
-  _calculateThroughput(applications, criteria) {
+  _calculateThroughput(_applications, _criteria) {
     return 50;
   } // per day
-  _identifyBottlenecks(applications) {
+  _identifyBottlenecks(_applications) {
     return [];
   }
-  _calculateEfficiency(applications) {
+  _calculateEfficiency(_applications) {
     return 92;
   } // percentage
-  _calculateWorkflowEfficiencyScore(metrics) {
+  _calculateWorkflowEfficiencyScore(_metrics) {
     return 88;
   }
-  _generateEfficiencyRecommendations(metrics) {
+  _generateEfficiencyRecommendations(_metrics) {
     return [];
   }
-  _assessBottleneckImpact(applications, bottlenecks) {
+  _assessBottleneckImpact(_applications, _bottlenecks) {
     return {};
   }
-  _suggestBottleneckSolutions(bottlenecks) {
+  _suggestBottleneckSolutions(_bottlenecks) {
     return [];
   }
-  _calculateAverageComplianceScore(applications) {
+  _calculateAverageComplianceScore(_applications) {
     return 82;
   }
-  _analyzeComplianceTrends(applications) {
+  _analyzeComplianceTrends(_applications) {
     return {};
   }
-  _suggestComplianceImprovements(applications) {
+  _suggestComplianceImprovements(_applications) {
     return [];
   }
-  _identifySeasonalPatterns(applications) {
+  _identifySeasonalPatterns(_applications) {
     return {};
   }
-  _identifyPeakPeriods(applications) {
+  _identifyPeakPeriods(_applications) {
     return [];
   }
-  _generateProcessingForecast(applications) {
+  _generateProcessingForecast(_applications) {
     return {};
   }
 
-  async _getCachedReport(key) {
+  async _getCachedReport(_key) {
     return null;
   }
-  async _cacheReport(key, report) {
+  async _cacheReport(_key, _report) {
     return;
   }
-  async _exportToPDF(data, timestamp) {
+  async _exportToPDF(data, _timestamp) {
     return { format: 'pdf', data };
   }
-  async _exportToExcel(data, timestamp) {
+  async _exportToExcel(data, _timestamp) {
     return { format: 'excel', data };
   }
-  async _exportToCSV(data, timestamp) {
+  async _exportToCSV(data, _timestamp) {
     return { format: 'csv', data };
   }
-  async _exportToJSON(data, timestamp) {
+  async _exportToJSON(data, _timestamp) {
     return { format: 'json', data };
   }
-  async _collectPaymentData(criteria) {
+  async _collectPaymentData(_criteria) {
     return [];
   }
-  async _calculateFinancialMetrics(data, criteria) {
+  async _calculateFinancialMetrics(_data, _criteria) {
     return {};
   }
-  async _generateRevenueInsights(data, metrics) {
+  async _generateRevenueInsights(_data, _metrics) {
     return {};
   }
-  async _collectUserActivityData(criteria) {
+  async _collectUserActivityData(_criteria) {
     return {};
   }
-  async _calculateEngagementMetrics(data, criteria) {
+  async _calculateEngagementMetrics(_data, _criteria) {
     return {};
   }
-  async _generateBehavioralInsights(data, metrics) {
+  async _generateBehavioralInsights(_data, _metrics) {
     return {};
   }
-  async _collectComplianceData(criteria) {
+  async _collectComplianceData(_criteria) {
     return {};
   }
-  async _analyzeComplianceAdherence(data) {
+  async _analyzeComplianceAdherence(_data) {
     return {};
   }
-  async _generateAuditInsights(data, metrics) {
+  async _generateAuditInsights(_data, _metrics) {
     return {};
   }
 

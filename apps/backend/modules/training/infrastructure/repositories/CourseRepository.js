@@ -512,7 +512,7 @@ class CourseRepository {
   /**
    * Validate prerequisites for enrollment
    */
-  async validatePrerequisites(prerequisites, farmerId) {
+  async validatePrerequisites(_prerequisites, _farmerId) {
     // Simplified implementation - would check completion records
     return {
       satisfied: true,
@@ -523,7 +523,7 @@ class CourseRepository {
   /**
    * Get farmer's active enrollment count
    */
-  async getFarmerActiveEnrollmentCount(farmerId) {
+  async getFarmerActiveEnrollmentCount(_farmerId) {
     // Would query enrollment collection
     return 0; // Simplified for now
   }
@@ -531,7 +531,7 @@ class CourseRepository {
   /**
    * Get active enrollment count for course
    */
-  async getActiveEnrollmentCount(courseId) {
+  async getActiveEnrollmentCount(_courseId) {
     // Would query enrollment collection
     return 0; // Simplified for now
   }
@@ -539,7 +539,7 @@ class CourseRepository {
   /**
    * Get average completion time
    */
-  async getAverageCompletionTime(courseId) {
+  async getAverageCompletionTime(_courseId) {
     // Would calculate from enrollment completion data
     return 0; // Simplified for now
   }
@@ -547,7 +547,7 @@ class CourseRepository {
   /**
    * Get dropout rate
    */
-  async getDropoutRate(courseId) {
+  async getDropoutRate(_courseId) {
     // Would calculate from enrollment data
     return 0; // Simplified for now
   }
@@ -555,7 +555,7 @@ class CourseRepository {
   /**
    * Get satisfaction score
    */
-  async getSatisfactionScore(courseId) {
+  async getSatisfactionScore(_courseId) {
     // Would calculate from feedback data
     return 0; // Simplified for now
   }

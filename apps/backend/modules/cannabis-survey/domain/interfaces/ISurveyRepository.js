@@ -13,7 +13,7 @@ class ISurveyRepository {
    * @param {string} id - Survey ID
    * @returns {Promise<Survey|null>}
    */
-  async findById(id) {
+  async findById(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -83,7 +83,7 @@ class ISurveyRepository {
    * @param {Survey} survey - Survey entity
    * @returns {Promise<Survey>}
    */
-  async save(survey) {
+  async save(_survey) {
     throw new Error('Method not implemented');
   }
 
@@ -92,7 +92,7 @@ class ISurveyRepository {
    * @param {string} id - Survey ID
    * @returns {Promise<boolean>}
    */
-  async delete(id) {
+  async delete(_id) {
     throw new Error('Method not implemented');
   }
 
@@ -101,7 +101,7 @@ class ISurveyRepository {
    * @param {string} status - Survey status
    * @returns {Promise<number>}
    */
-  async countByStatus(status) {
+  async countByStatus(_status) {
     throw new Error('Method not implemented');
   }
 
@@ -110,7 +110,7 @@ class ISurveyRepository {
    * @param {string} farmerId - Farmer ID
    * @returns {Promise<number>}
    */
-  async countByFarmer(farmerId) {
+  async countByFarmer(_farmerId) {
     throw new Error('Method not implemented');
   }
 
@@ -135,7 +135,7 @@ class ISurveyRepository {
    * @param {number} year - Survey year
    * @returns {Promise<Object>}
    */
-  async getStatisticsByYear(year) {
+  async getStatisticsByYear(_year) {
     throw new Error('Method not implemented');
   }
 

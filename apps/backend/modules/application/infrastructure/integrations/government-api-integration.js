@@ -524,7 +524,7 @@ class GovernmentApiIntegrationService {
     };
   }
 
-  async submitToGovernmentSystem(system, submissionData) {
+  async submitToGovernmentSystem(system, _submissionData) {
     // Simulate government system submission
     return {
       submissionId: `${system.toUpperCase()}-${Date.now()}`,
@@ -542,7 +542,7 @@ class GovernmentApiIntegrationService {
     };
   }
 
-  async checkServiceHealth(serviceName) {
+  async checkServiceHealth(_serviceName) {
     // Simulate service health check
     return {
       status: 'healthy',

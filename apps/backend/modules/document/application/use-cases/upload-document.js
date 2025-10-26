@@ -9,7 +9,6 @@ const Document = require('../../domain/entities/Document');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('document-upload-document');
 
-
 class UploadDocumentUseCase {
   constructor(documentRepository, fileStorageService) {
     this.documentRepository = documentRepository;

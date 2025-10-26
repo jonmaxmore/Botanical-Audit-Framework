@@ -132,7 +132,7 @@ class Enrollment {
   /**
    * Complete a module
    */
-  completeModule(moduleId, totalLessons) {
+  completeModule(moduleId, _totalLessons) {
     if (this.status !== Enrollment.STATUS.ACTIVE) {
       throw new Error('Cannot complete module in inactive enrollment');
     }

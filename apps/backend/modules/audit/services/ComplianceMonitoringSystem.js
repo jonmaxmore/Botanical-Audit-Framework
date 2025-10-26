@@ -272,7 +272,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
    */
   async checkApplicationCompliance(eventData) {
     try {
-      const { applicationId, timestamp, actor } = eventData;
+      const { applicationId, _timestamp, actor } = eventData;
 
       // Check processing time compliance
       const application = await this.database.collection('applications').findOne({
@@ -317,7 +317,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
    */
   async checkPaymentCompliance(eventData) {
     try {
-      const { paymentId, timestamp, actor } = eventData;
+      const { paymentId, _timestamp, actor } = eventData;
 
       const payment = await this.database.collection('payments').findOne({
         _id: paymentId,
@@ -406,7 +406,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
    */
   async checkCertificateCompliance(eventData) {
     try {
-      const { certificateId, applicationId, timestamp, actor } = eventData;
+      const { certificateId, applicationId, _timestamp, actor } = eventData;
 
       // Get application data
       const application = await this.database.collection('applications').findOne({
@@ -715,7 +715,7 @@ class ComplianceMonitoringSystem extends EventEmitter {
   /**
    * Helper methods
    */
-  async checkDataAccessAuthorization(user, dataType, accessType) {
+  async checkDataAccessAuthorization(user, dataType, _accessType) {
     // Implementation of data access authorization check
     const authorizedRoles = {
       personal_data: ['admin', 'compliance_officer', 'dtam_staff'],

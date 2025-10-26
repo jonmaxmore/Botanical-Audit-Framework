@@ -31,7 +31,6 @@ const crypto = require('crypto');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('advanced-application-processing');
 
-
 class AdvancedApplicationProcessingService extends EventEmitter {
   constructor({
     applicationRepository,
@@ -1240,7 +1239,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     };
   }
 
-  async _validateRegulatoryRequirements(applicationData) {
+  async _validateRegulatoryRequirements(_applicationData) {
     return {
       valid: true,
       details: 'Regulatory compliance validation completed',
@@ -1248,7 +1247,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     };
   }
 
-  async _checkExistingApplications(citizenId) {
+  async _checkExistingApplications(_citizenId) {
     return {
       valid: true,
       details: 'No conflicting applications found',
@@ -1265,7 +1264,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     }));
   }
 
-  async _getStateAnalysis(timeframe) {
+  async _getStateAnalysis(_timeframe) {
     return {
       distribution: this._getStateDistribution(),
       total: 100,
@@ -1275,7 +1274,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     };
   }
 
-  async _getProcessingTimeAnalytics(timeframe) {
+  async _getProcessingTimeAnalytics(_timeframe) {
     return {
       average: 15.5,
       range: { min: 5, max: 45 },
@@ -1319,7 +1318,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     };
   }
 
-  async _getUserActivityAnalytics(timeframe) {
+  async _getUserActivityAnalytics(_timeframe) {
     return {
       summary: { activeUsers: 150, totalSessions: 1200 },
       detailed: {
@@ -1328,23 +1327,23 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     };
   }
 
-  async _getApplicationTrends(timeframe) {
+  async _getApplicationTrends(_timeframe) {
     return { trend: 'increasing', growthRate: 12.5 };
   }
 
-  async _getStateTrends(timeframe) {
+  async _getStateTrends(_timeframe) {
     return {
       /* state trends analysis */
     };
   }
 
-  async _getPerformanceTrends(timeframe) {
+  async _getPerformanceTrends(_timeframe) {
     return {
       /* performance trends analysis */
     };
   }
 
-  async _generateDashboardRecommendations(analyticsData) {
+  async _generateDashboardRecommendations(_analyticsData) {
     return [
       {
         type: 'PERFORMANCE',
@@ -1359,7 +1358,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
     ];
   }
 
-  _calculateAnalyticsQuality(analyticsData) {
+  _calculateAnalyticsQuality(_analyticsData) {
     return {
       score: 92,
       completeness: 95,

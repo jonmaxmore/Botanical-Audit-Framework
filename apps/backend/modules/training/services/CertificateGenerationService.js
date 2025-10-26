@@ -279,7 +279,7 @@ class CertificateGenerationService {
   /**
    * Get certificate customizations based on course and farmer data
    */
-  async getCertificateCustomizations(completionData, certificateType) {
+  async getCertificateCustomizations(_completionData, _certificateType) {
     return {
       logoUrl: this.config.organizationLogo || '/assets/gacp-logo.png',
       organizationName: this.config.organizationName || 'GACP Certification Authority',
@@ -579,7 +579,7 @@ class CertificateGenerationService {
   /**
    * Send certificate completion notifications
    */
-  async sendCertificateNotifications(certificate, completionData) {
+  async sendCertificateNotifications(certificate, _completionData) {
     try {
       if (!this.notificationService) {
         return;

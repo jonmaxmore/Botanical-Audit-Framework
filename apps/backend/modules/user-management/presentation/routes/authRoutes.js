@@ -263,7 +263,7 @@ function createAuthRoutes(dependencies = {}) {
   /**
    * Error handling middleware
    */
-  router.use((error, req, res, next) => {
+  router.use((error, req, res, _next) => {
     logger.error('[AuthRoutes] Unhandled error:', error);
 
     // Don't expose internal errors in production

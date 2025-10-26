@@ -82,7 +82,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
   /**
    * Validate individual workflow step business logic
    */
-  async validateWorkflowStep(step, index) {
+  async validateWorkflowStep(step, _index) {
     // Simulate business rule validation
     switch (step.name) {
       case 'Application Submission':
@@ -388,7 +388,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
     // Simulate event publishing and subscriber responses
     const subscriberResponses = test.subscribers.map(subscriber => {
       // Simulate processing time and success rate
-      const processingTime = Math.random() * 100;
+      // const processingTime = Math.random() * 100;
       const successRate = 0.95; // 95% success rate
 
       return Math.random() < successRate;
@@ -438,7 +438,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
    * Measure performance metrics
    */
   async measurePerformance(operation) {
-    const start = Date.now();
+    // const start = Date.now();
 
     // Simulate operation processing time
     const baseTime = {

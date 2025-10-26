@@ -694,43 +694,43 @@ class AnalyticsProcessingWorkflowService {
   }
 
   // Placeholder methods for complex analytics operations
-  async calculateCoursePopularity(courseId) {
+  async calculateCoursePopularity(_courseId) {
     return Math.random() * 100;
   }
-  async calculateEnrollmentTrend(courseId) {
+  async calculateEnrollmentTrend(_courseId) {
     return 'INCREASING';
   }
-  async getFarmerLearningHistory(farmerId) {
+  async getFarmerLearningHistory(_farmerId) {
     return [];
   }
-  async predictEnrollmentSuccess(enrollment, course) {
+  async predictEnrollmentSuccess(_enrollment, _course) {
     return 0.8;
   }
-  async updateCourseEnrollmentStats(courseId, operation) {
+  async updateCourseEnrollmentStats(_courseId, _operation) {
     /* Implementation */
   }
-  async checkEnrollmentAlerts(analytics) {
+  async checkEnrollmentAlerts(_analytics) {
     /* Implementation */
   }
-  async calculateLearningVelocity(enrollmentId, timeSpent) {
+  async calculateLearningVelocity(_enrollmentId, _timeSpent) {
     return 'NORMAL';
   }
-  async calculateEngagementScore(enrollmentId, timeSpent, performance) {
+  async calculateEngagementScore(_enrollmentId, _timeSpent, _performance) {
     return 0.75;
   }
-  async predictProgressCompletion(enrollmentId) {
+  async predictProgressCompletion(_enrollmentId) {
     return new Date();
   }
-  async updateEnrollmentProgressMetrics(enrollmentId, analytics) {
+  async updateEnrollmentProgressMetrics(_enrollmentId, _analytics) {
     /* Implementation */
   }
-  async checkProgressAlerts(enrollmentId, analytics) {
+  async checkProgressAlerts(_enrollmentId, _analytics) {
     /* Implementation */
   }
-  async storeAnalyticsEvent(event, result) {
+  async storeAnalyticsEvent(_event, _result) {
     /* Implementation */
   }
-  async storeReport(reportData) {
+  async storeReport(_reportData) {
     /* Implementation */
   }
 
@@ -752,7 +752,7 @@ class AnalyticsProcessingWorkflowService {
   }
 
   // Additional analytics methods
-  async processGenericEvent(eventData) {
+  async processGenericEvent(_eventData) {
     return {};
   }
   async aggregateCourseMetrics() {
@@ -767,10 +767,10 @@ class AnalyticsProcessingWorkflowService {
   async calculateSystemKPIs() {
     return {};
   }
-  async updateReportingDatabase(data) {
+  async updateReportingDatabase(_data) {
     /* Implementation */
   }
-  async updateBatchDashboardData(data) {
+  async updateBatchDashboardData(_data) {
     /* Implementation */
   }
   async processAlerts() {

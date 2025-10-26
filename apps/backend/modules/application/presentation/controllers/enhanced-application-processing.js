@@ -24,7 +24,7 @@
  * comprehensive audit trails, and optimal user experience.
  */
 
-const { body, query, param } = require('express-validator');
+const { _body, _query, param } = require('express-validator');
 
 class EnhancedApplicationProcessingController {
   constructor({
@@ -726,7 +726,7 @@ class EnhancedApplicationProcessingController {
       );
 
       const { applicationId } = req.params;
-      const submissionOptions = req.body;
+      // const submissionOptions = req.body;
 
       // Authorize government submission
       const authorizationResult = await this.authorizationService.authorizeGovernmentSubmission(

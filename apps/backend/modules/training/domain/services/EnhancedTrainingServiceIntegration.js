@@ -851,7 +851,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     }
   }
 
-  async _validateEnrollmentEligibility(userId, courseId, options) {
+  async _validateEnrollmentEligibility(_userId, _courseId, _options) {
     // Enhanced eligibility validation logic would go here
     // This is a placeholder for more complex validation
 
@@ -862,7 +862,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     };
   }
 
-  async _validateCompletionCriteria(userId, courseId, completionData) {
+  async _validateCompletionCriteria(_userId, _courseId, _completionData) {
     // Enhanced completion validation logic would go here
     // This is a placeholder for more complex validation
 
@@ -873,7 +873,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     };
   }
 
-  async _generateEnrollmentPredictions(userId, courseId, enrollmentResult) {
+  async _generateEnrollmentPredictions(_userId, _courseId, _enrollmentResult) {
     // Generate predictions based on enrollment data
     // This would use machine learning models from the analytics system
 
@@ -885,7 +885,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     };
   }
 
-  async _generateAchievementAnalysis(userId, courseId, completionResult) {
+  async _generateAchievementAnalysis(_userId, _courseId, _completionResult) {
     // Generate achievement analysis and next steps
     // This would analyze completion data and provide insights
 
@@ -897,7 +897,7 @@ class EnhancedTrainingServiceIntegration extends EventEmitter {
     };
   }
 
-  async _generatePersonalizedRecommendations(userId, dashboardData) {
+  async _generatePersonalizedRecommendations(_userId, _dashboardData) {
     // Generate personalized recommendations based on learner data
     // This would use analytics and performance data
 

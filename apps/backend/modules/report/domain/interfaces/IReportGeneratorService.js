@@ -74,7 +74,7 @@ class IReportGeneratorService {
    * @param {string} format - Report format
    * @returns {Promise<{filePath: string, fileSize: number}>}
    */
-  async saveToFile(content, fileName, format) {
+  async saveToFile(_content, _fileName, _format) {
     throw new Error('Method not implemented');
   }
 
@@ -83,7 +83,7 @@ class IReportGeneratorService {
    * @param {string} filePath - Path to the report file
    * @returns {Promise<boolean>}
    */
-  async deleteFile(filePath) {
+  async deleteFile(_filePath) {
     throw new Error('Method not implemented');
   }
 }

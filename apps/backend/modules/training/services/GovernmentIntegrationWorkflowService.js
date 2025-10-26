@@ -511,7 +511,7 @@ class GovernmentIntegrationWorkflowService {
   /**
    * Format certificate data for government systems
    */
-  async formatCertificateForGovernment(certificateData, validation) {
+  async formatCertificateForGovernment(certificateData, _validation) {
     try {
       // Standard government format
       const governmentFormat = {
@@ -714,7 +714,7 @@ class GovernmentIntegrationWorkflowService {
   async checkSystemHealth(systemCode) {
     try {
       const systemConfig = this.governmentSystems[systemCode];
-      const healthEndpoint = systemConfig.endpoint + '/health';
+      // const healthEndpoint = systemConfig.endpoint + '/health';
 
       const response = await this.makeAuthenticatedRequest(systemCode, '/health', 'GET', {});
 
@@ -783,49 +783,49 @@ class GovernmentIntegrationWorkflowService {
     return { Authorization: `Bearer ${authConfig.token || 'placeholder'}` };
   }
 
-  async getGovernmentSpecificRequirements(certificateData) {
+  async getGovernmentSpecificRequirements(_certificateData) {
     return [];
   }
-  async formatForSpecificSystem(standardFormat, systemCode, systemConfig) {
+  async formatForSpecificSystem(standardFormat, _systemCode, _systemConfig) {
     return standardFormat;
   }
-  async collectComplianceData(period) {
+  async collectComplianceData(_period) {
     return {};
   }
-  async calculateComplianceMetrics(data) {
+  async calculateComplianceMetrics(_data) {
     return {};
   }
-  async generateReportContent(data, metrics, period) {
+  async generateReportContent(_data, _metrics, _period) {
     return {};
   }
-  async formatComplianceReport(content, period) {
+  async formatComplianceReport(content, _period) {
     return content;
   }
-  async submitComplianceReport(systemCode, report, reportId) {
+  async submitComplianceReport(_systemCode, _report, _reportId) {
     return {};
   }
-  async checkCertificateStatusInSystem(systemCode, certificateNumber) {
+  async checkCertificateStatusInSystem(_systemCode, _certificateNumber) {
     return { status: 'ACTIVE' };
   }
-  async storeSubmissionRecord(record) {
+  async storeSubmissionRecord(_record) {
     /* Implementation */
   }
-  async storeComplianceReport(record) {
+  async storeComplianceReport(_record) {
     /* Implementation */
   }
-  async updateAuditTrail(action, data) {
+  async updateAuditTrail(_action, _data) {
     /* Implementation */
   }
-  async handleFailedSubmissions(failures, certificateData, submissionId) {
+  async handleFailedSubmissions(_failures, _certificateData, _submissionId) {
     /* Implementation */
   }
   async setupComplianceMonitoring() {
     /* Implementation */
   }
-  determineOverallStatus(statusResults) {
+  determineOverallStatus(_statusResults) {
     return 'ACTIVE';
   }
-  determineComplianceStatus(statusResults) {
+  determineComplianceStatus(_statusResults) {
     return 'COMPLIANT';
   }
 }

@@ -688,7 +688,7 @@ class SurveySystemService {
   /**
    * Get regional recommendations
    */
-  _getRegionalRecommendations(region, avgScore) {
+  _getRegionalRecommendations(region, _avgScore) {
     const regionalRecs = {
       northern: [
         'Implement terraced farming for mountain terrain',

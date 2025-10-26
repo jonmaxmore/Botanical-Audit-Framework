@@ -11,7 +11,6 @@ const EnhancedCultivationRecord = require('../models/mongodb/EnhancedCultivation
 const { createLogger } = require('../../shared/logger');
 const logger = createLogger('sop');
 
-
 const router = express.Router();
 
 // Middleware for validation error handling
