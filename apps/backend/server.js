@@ -37,8 +37,34 @@ const server = http.createServer(app);
 // Observability: Request tracking
 metrics.initRequestTracking(app);
 
+// HTTPS enforcement for production
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      return res.redirect(301, `https://${req.header('host')}${req.url}`);
+    }
+    next();
+  });
+}
+
 // Security and performance middleware
-app.use(helmet()); // Security headers
+app.use(
+  helmet({
+    hsts: {
+      maxAge: 31536000, // 1 year in seconds
+      includeSubDomains: true,
+      preload: true,
+    },
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
+    },
+  }),
+); // Security headers with HSTS
 app.use(compression()); // Response compression
 app.use(
   cors({

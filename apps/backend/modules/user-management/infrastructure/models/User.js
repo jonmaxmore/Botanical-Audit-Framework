@@ -95,6 +95,13 @@ const userSchema = new mongoose.Schema(
       default: Date.now,
     },
 
+    passwordHistory: [
+      {
+        hash: { type: String, required: true },
+        changedAt: { type: Date, default: Date.now },
+      },
+    ],
+
     passwordResetToken: {
       type: String,
       select: false, // Don't include in queries by default

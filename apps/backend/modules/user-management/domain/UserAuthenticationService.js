@@ -29,6 +29,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const EventEmitter = require('events');
+const zxcvbn = require('zxcvbn');
 
 class UserAuthenticationService extends EventEmitter {
   constructor(dependencies = {}) {
@@ -56,16 +57,17 @@ class UserAuthenticationService extends EventEmitter {
         refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
       },
       password: {
-        minLength: 8,
+        minLength: 12,
         requireUppercase: true,
         requireLowercase: true,
         requireNumbers: true,
         requireSpecialChars: true,
         maxAge: 90 * 24 * 60 * 60 * 1000, // 90 days
+        historyCount: 5, // Remember last 5 passwords
       },
       security: {
         maxLoginAttempts: 5,
-        lockoutDuration: 30 * 60 * 1000, // 30 minutes
+        lockoutDuration: 15 * 60 * 1000, // 15 minutes
         passwordResetExpiry: 60 * 60 * 1000, // 1 hour
         sessionTimeout: 24 * 60 * 60 * 1000, // 24 hours
       },
@@ -427,8 +429,12 @@ class UserAuthenticationService extends EventEmitter {
         throw new Error('Current password is incorrect');
       }
 
-      // Validate new password
-      const passwordValidation = this._validatePassword(newPassword);
+      // Validate new password with user info
+      const passwordValidation = this._validatePassword(newPassword, {
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
       if (!passwordValidation.valid) {
         throw new Error(passwordValidation.message);
       }
@@ -439,15 +445,39 @@ class UserAuthenticationService extends EventEmitter {
         throw new Error('New password must be different from current password');
       }
 
+      // Check password history (last 5 passwords)
+      if (user.passwordHistory && user.passwordHistory.length > 0) {
+        const historyToCheck = user.passwordHistory.slice(-this.config.password.historyCount);
+        for (const oldPassword of historyToCheck) {
+          const isReused = await bcrypt.compare(newPassword, oldPassword.hash);
+          if (isReused) {
+            throw new Error(
+              `New password must be different from your last ${this.config.password.historyCount} passwords`,
+            );
+          }
+        }
+      }
+
       // Hash new password
       const saltRounds = 12;
       const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
+
+      // Add current password to history before updating
+      const passwordHistory = user.passwordHistory || [];
+      passwordHistory.push({
+        hash: user.passwordHash,
+        changedAt: user.passwordUpdatedAt || new Date(),
+      });
+
+      // Keep only last historyCount passwords
+      const trimmedHistory = passwordHistory.slice(-this.config.password.historyCount);
 
       // Update password
       await this.userRepository.update(userId, {
         passwordHash: newPasswordHash,
         passwordUpdatedAt: new Date(),
         requirePasswordChange: false,
+        passwordHistory: trimmedHistory,
       });
 
       // Invalidate all sessions except current
@@ -579,13 +609,15 @@ class UserAuthenticationService extends EventEmitter {
    * Validate password complexity
    * @private
    */
-  _validatePassword(password) {
+  _validatePassword(password, userInfo = {}) {
     const errors = [];
 
+    // Basic length check
     if (password.length < this.config.password.minLength) {
       errors.push(`Password must be at least ${this.config.password.minLength} characters long`);
     }
 
+    // Character requirements
     if (this.config.password.requireUppercase && !/[A-Z]/.test(password)) {
       errors.push('Password must contain at least one uppercase letter');
     }
@@ -605,9 +637,39 @@ class UserAuthenticationService extends EventEmitter {
       errors.push('Password must contain at least one special character');
     }
 
+    // Use zxcvbn to check password strength and common passwords
+    const strengthResult = zxcvbn(
+      password,
+      [userInfo.email, userInfo.firstName, userInfo.lastName].filter(Boolean),
+    );
+
+    // Reject weak passwords (score < 3)
+    if (strengthResult.score < 3) {
+      if (strengthResult.feedback.warning) {
+        errors.push(strengthResult.feedback.warning);
+      }
+      if (strengthResult.feedback.suggestions.length > 0) {
+        errors.push(strengthResult.feedback.suggestions[0]);
+      }
+    }
+
+    // Check for personal information in password
+    if (userInfo.email && password.toLowerCase().includes(userInfo.email.split('@')[0].toLowerCase())) {
+      errors.push('Password must not contain your email address');
+    }
+
+    if (userInfo.firstName && password.toLowerCase().includes(userInfo.firstName.toLowerCase())) {
+      errors.push('Password must not contain your first name');
+    }
+
+    if (userInfo.lastName && password.toLowerCase().includes(userInfo.lastName.toLowerCase())) {
+      errors.push('Password must not contain your last name');
+    }
+
     return {
       valid: errors.length === 0,
       message: errors.join('. '),
+      strength: strengthResult.score, // 0-4 scale
     };
   }
 
