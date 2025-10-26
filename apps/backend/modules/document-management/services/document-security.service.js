@@ -249,8 +249,9 @@ class DocumentSecurityService {
       let riskLevel = 'LOW';
 
       // 1. ตรวจสอบ embedded objects (สำหรับ PDF)
+      let embeddedObjects = null;
       if (documentType === 'application/pdf') {
-        const embeddedObjects = await this._checkPDFEmbeddedObjects(fileBuffer);
+        embeddedObjects = await this._checkPDFEmbeddedObjects(fileBuffer);
         if (embeddedObjects.hasJavaScript) {
           threats.push('PDF contains JavaScript');
           riskLevel = 'HIGH';

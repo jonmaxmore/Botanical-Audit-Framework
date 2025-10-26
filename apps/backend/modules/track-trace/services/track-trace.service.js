@@ -226,9 +226,9 @@ class TrackTraceService {
       };
 
       // const result = await this.productsCollection.updateOne(
-        { _id: new ObjectId(productId) },
-        { $set: update },
-      );
+      //   { _id: new ObjectId(productId) },
+      //   { $set: update },
+      // );
 
       return {
         success: true,

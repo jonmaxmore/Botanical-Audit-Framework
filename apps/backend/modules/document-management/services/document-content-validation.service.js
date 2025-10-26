@@ -493,9 +493,9 @@ class DocumentContentValidationService {
    */
   _parseDate(dateString) {
     const formats = [
-      /(.{1,2})/(.{1,2})/(.{4})/,
-      /(.{1,2})-(.{1,2})-(.{4})/,
-      /(.{1,2}).(.{1,2}).(.{4})/,
+      /(\d{1,2})\/(\d{1,2})\/(\d{4})/,
+      /(\d{1,2})-(\d{1,2})-(\d{4})/,
+      /(\d{1,2})\.(\d{1,2})\.(\d{4})/,
     ];
 
     for (const format of formats) {

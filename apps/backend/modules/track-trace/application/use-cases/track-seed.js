@@ -126,10 +126,10 @@ class TrackSeedUseCase {
 
       // Step 1: Validate distribution request
       // const validationResult = await this.validateSeedDistribution(
-        seedId,
-        farmId,
-        distributionDetails,
-      );
+      //   seedId,
+      //   farmId,
+      //   distributionDetails,
+      // );
 
       // Step 2: Get seed and farm information
       const seed = await this.seedRepository.findById(seedId);

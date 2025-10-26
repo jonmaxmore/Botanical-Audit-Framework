@@ -400,6 +400,7 @@ class EnhancedAuditController {
         data: result,
       });
     } catch (error) {
+      const { action } = req.params;
       logger.error('[EnhancedAuditController] Monitoring control error:', error);
       res.status(500).json({
         success: false,

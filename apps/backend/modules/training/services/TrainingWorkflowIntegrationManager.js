@@ -435,8 +435,8 @@ class TrainingWorkflowIntegrationManager {
       );
 
       // const dashboardUpdate = await this.executeWorkflowStep(workflowId, 'updateDashboard', () =>
-        this.analyticsService.updateDashboard(metricsProcessing.data),
-      );
+      //   this.analyticsService.updateDashboard(metricsProcessing.data),
+      // );
 
       const insightsGeneration = await this.executeWorkflowStep(
         workflowId,
@@ -522,8 +522,8 @@ class TrainingWorkflowIntegrationManager {
       );
 
       // const auditUpdate = await this.executeWorkflowStep(workflowId, 'updateAuditTrail', () =>
-        this.auditService.updateGovernmentAuditTrail(statusTracking.data),
-      );
+      //   this.auditService.updateGovernmentAuditTrail(statusTracking.data),
+      // );
 
       const responseHandling = await this.executeWorkflowStep(workflowId, 'handleResponses', () =>
         this.governmentService.handleSystemResponses(statusTracking.data),

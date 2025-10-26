@@ -839,7 +839,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     await this._checkRateLimit(systemName);
 
     // Prepare authentication
-    const authHeaders = await this._prepareAuthentication(systemName);
+    const authHeaders = await this._prepareAuthentication(systemName, data);
 
     // Prepare request
     const requestConfig = {
@@ -883,7 +883,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     }
   }
 
-  async _prepareAuthentication(systemName) {
+  async _prepareAuthentication(systemName, data = null) {
     const config = this.governmentEndpoints[systemName];
     const authType = config.authentication.type;
 
@@ -893,31 +893,36 @@ class GovernmentApiIntegrationService extends EventEmitter {
           [config.authentication.apiKeyHeader]: config.authentication.apiKey,
         };
 
-      case 'API_KEY_AND_OAUTH2':
+      case 'API_KEY_AND_OAUTH2': {
         const oauthToken = await this._getOAuthToken(systemName);
         return {
           [config.authentication.apiKeyHeader]: process.env[`${systemName}_API_KEY`],
           Authorization: `Bearer ${oauthToken}`,
         };
+      }
 
-      case 'JWT_TOKEN':
+      case 'JWT_TOKEN': {
         const jwtToken = await this._getJwtToken(systemName);
         return {
           Authorization: `Bearer ${jwtToken}`,
         };
+      }
 
-      case 'OAUTH2_CLIENT_CREDENTIALS':
+      case 'OAUTH2_CLIENT_CREDENTIALS': {
         const clientToken = await this._getClientCredentialsToken(systemName);
         return {
           Authorization: `Bearer ${clientToken}`,
         };
+      }
 
-      case 'HMAC_SIGNATURE':
+      case 'HMAC_SIGNATURE': {
         return this._generateHmacSignature(systemName, data);
+      }
 
-      case 'MUTUAL_TLS':
+      case 'MUTUAL_TLS': {
         // Mutual TLS is handled at the HTTP client level
         return {};
+      }
 
       default:
         throw new Error(`Unsupported authentication type: ${authType}`);
