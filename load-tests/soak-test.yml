@@ -1,0 +1,191 @@
+# Soak Test (Endurance Test) - 1 Hour Duration
+# Tests system stability under sustained load over extended period
+# Identifies memory leaks, resource exhaustion, degradation
+
+config:
+  target: "http://localhost:5000"
+  phases:
+    # Ramp up: 2 minutes
+    - duration: 120
+      arrivalRate: 10
+      rampTo: 50
+      name: "Ramp-up"
+    
+    # Sustained load: 1 hour at 50 RPS
+    - duration: 3600
+      arrivalRate: 50
+      name: "Sustained load (1 hour)"
+    
+    # Cool down: 2 minutes
+    - duration: 120
+      arrivalRate: 50
+      rampTo: 10
+      name: "Cool-down"
+  
+  http:
+    timeout: 15
+  
+  plugins:
+    expect: {}
+    metrics-by-endpoint: {}
+  
+  variables:
+    testUser:
+      email: "loadtest@gacp.dtam.go.th"
+      password: "LoadTest123456!"
+  
+  ensure:
+    maxErrorRate: 1 # Max 1% error over 1 hour
+    p95: 150 # Response time should not degrade
+    p99: 300
+
+scenarios:
+  # Realistic user behavior patterns
+  - name: "Complete User Journey"
+    weight: 40
+    flow:
+      # Login
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ testUser.email }}"
+            password: "{{ testUser.password }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "token"
+          expect:
+            - statusCode: 200
+      
+      # User activities
+      - loop:
+          - get:
+              url: "/api/farmers"
+              headers:
+                Authorization: "Bearer {{ token }}"
+              qs:
+                page: "{{ $randomNumber(1, 5) }}"
+                limit: 20
+          - think: "{{ $randomNumber(2, 5) }}"
+          
+          - get:
+              url: "/api/inspections"
+              headers:
+                Authorization: "Bearer {{ token }}"
+              qs:
+                status: "PENDING"
+          - think: "{{ $randomNumber(1, 3) }}"
+          
+          - get:
+              url: "/api/auth/profile"
+              headers:
+                Authorization: "Bearer {{ token }}"
+          - think: "{{ $randomNumber(1, 2) }}"
+        count: 5
+      
+      # Logout
+      - post:
+          url: "/api/auth/logout"
+          headers:
+            Authorization: "Bearer {{ token }}"
+  
+  - name: "Certificate Verification"
+    weight: 35
+    flow:
+      - get:
+          url: "/api/certificates/qr/{{ $randomString() }}"
+      - think: "{{ $randomNumber(1, 3) }}"
+      
+      - post:
+          url: "/api/certificates/verify"
+          json:
+            certificateNumber: "GACP-{{ $randomNumber(1000, 9999) }}-2025"
+      - think: "{{ $randomNumber(1, 2) }}"
+  
+  - name: "Token Refresh Pattern"
+    weight: 15
+    flow:
+      # Login
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ testUser.email }}"
+            password: "{{ testUser.password }}"
+          capture:
+            - json: "$.data.refreshToken"
+              as: "refreshToken"
+      
+      # Wait longer (simulate token near expiry)
+      - think: 30
+      
+      # Refresh token
+      - post:
+          url: "/api/auth/refresh"
+          json:
+            refreshToken: "{{ refreshToken }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "newToken"
+      
+      # Use new token
+      - get:
+          url: "/api/auth/profile"
+          headers:
+            Authorization: "Bearer {{ newToken }}"
+  
+  - name: "Search Operations"
+    weight: 10
+    flow:
+      # Login
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ testUser.email }}"
+            password: "{{ testUser.password }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "token"
+      
+      # Various searches
+      - loop:
+          - get:
+              url: "/api/farmers/search"
+              headers:
+                Authorization: "Bearer {{ token }}"
+              qs:
+                q: "{{ $randomString() }}"
+                limit: 10
+          - think: 2
+        count: 3
+
+before:
+  flow:
+    - log: "==========================================="
+    - log: "Starting SOAK TEST - 1 HOUR DURATION"
+    - log: "==========================================="
+    - log: "Monitor throughout test:"
+    - log: "  - Memory usage (should be stable)"
+    - log: "  - Response times (should not degrade)"
+    - log: "  - Error rates (should stay low)"
+    - log: "  - Database connections"
+    - log: "  - Redis memory"
+    - log: "  - CPU utilization"
+    - log: "==========================================="
+    - log: "This test will run for approximately:"
+    - log: "  • Ramp-up: 2 minutes"
+    - log: "  • Sustained: 60 minutes"
+    - log: "  • Cool-down: 2 minutes"
+    - log: "  • Total: ~64 minutes"
+    - log: "==========================================="
+
+after:
+  flow:
+    - log: "==========================================="
+    - log: "Soak test completed"
+    - log: "==========================================="
+    - log: "Analysis checklist:"
+    - log: "  □ Memory usage trend (leak detection)"
+    - log: "  □ Response time degradation"
+    - log: "  □ Error rate over time"
+    - log: "  □ Resource cleanup"
+    - log: "  □ Database connection pool"
+    - log: "==========================================="

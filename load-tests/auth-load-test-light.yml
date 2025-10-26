@@ -1,0 +1,97 @@
+# Light Authentication Load Test - For Development Environment
+# This test uses much lower load to avoid overwhelming the dev server
+# Target: Baseline performance metrics without server crashes
+
+config:
+  target: "http://localhost:3004"
+  phases:
+    - duration: 30
+      arrivalRate: 2
+      name: "Warm-up - 2 RPS"
+    - duration: 60
+      arrivalRate: 5
+      name: "Light Load - 5 RPS"
+    - duration: 60
+      arrivalRate: 10
+      name: "Moderate Load - 10 RPS"
+    - duration: 30
+      arrivalRate: 5
+      name: "Cool-down - 5 RPS"
+  payload:
+    path: "./test-users.csv"
+    fields:
+      - email
+      - password
+  http:
+    timeout: 30
+  ensure:
+    maxErrorRate: 5 # Allow 5% error rate for dev environment
+    p95: 500 # 500ms for dev environment (more lenient)
+    p99: 1000 # 1 second for dev environment
+
+scenarios:
+  # Primary scenario: User login
+  - name: "User Login"
+    weight: 60
+    flow:
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "accessToken"
+            - json: "$.data.refreshToken"
+              as: "refreshToken"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: data.accessToken
+
+  # Secondary scenario: Token refresh
+  - name: "Token Refresh"
+    weight: 25
+    flow:
+      # First login to get tokens
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "accessToken"
+            - json: "$.data.refreshToken"
+              as: "refreshToken"
+      # Then refresh the token
+      - post:
+          url: "/api/auth/refresh"
+          json:
+            refreshToken: "{{ refreshToken }}"
+          expect:
+            - statusCode: 200
+            - contentType: json
+
+  # Tertiary scenario: Get profile
+  - name: "Profile Fetch"
+    weight: 15
+    flow:
+      # Login first
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ email }}"
+            password: "{{ password }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "accessToken"
+      # Get profile
+      - get:
+          url: "/api/auth/profile"
+          headers:
+            Authorization: "Bearer {{ accessToken }}"
+          expect:
+            - statusCode: 200
+            - contentType: json
+            - hasProperty: data.email

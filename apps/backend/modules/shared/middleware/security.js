@@ -4,7 +4,7 @@ const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const validator = require('validator');
 const crypto = require('crypto');
 

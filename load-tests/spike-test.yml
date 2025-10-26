@@ -1,0 +1,108 @@
+# Spike Test - Sudden Traffic Surge
+# Tests system behavior under sudden massive load increase
+# Simulates events like viral certificate sharing, press releases
+
+config:
+  target: "http://localhost:5000"
+  phases:
+    # Normal operation: 20 RPS for 2 minutes
+    - duration: 120
+      arrivalRate: 20
+      name: "Normal traffic"
+    
+    # Sudden spike: 500 RPS for 1 minute
+    - duration: 60
+      arrivalRate: 500
+      name: "SPIKE - 500 RPS"
+    
+    # Recovery period: Back to 20 RPS for 2 minutes
+    - duration: 120
+      arrivalRate: 20
+      name: "Recovery"
+    
+    # Second spike: 1000 RPS for 30 seconds
+    - duration: 30
+      arrivalRate: 1000
+      name: "MEGA SPIKE - 1000 RPS"
+    
+    # Final recovery: 20 RPS for 1 minute
+    - duration: 60
+      arrivalRate: 20
+      name: "Final recovery"
+  
+  http:
+    timeout: 20
+  
+  plugins:
+    expect: {}
+    metrics-by-endpoint: {}
+  
+  ensure:
+    maxErrorRate: 5 # Allow up to 5% error during spikes
+
+scenarios:
+  # Spike test focuses on public endpoints (certificate verification)
+  # as this is most likely scenario for viral traffic
+  - name: "Public Certificate Verification"
+    weight: 70
+    flow:
+      # Public certificate lookup (no auth)
+      - get:
+          url: "/api/certificates/qr/GACP-{{ $randomNumber(1000, 9999) }}"
+          expect:
+            - statusCode: [200, 404, 429, 503] # Allow rate limiting
+      
+      # Certificate verification
+      - post:
+          url: "/api/certificates/verify"
+          json:
+            certificateNumber: "GACP-{{ $randomNumber(1000, 9999) }}-2025"
+          expect:
+            - statusCode: [200, 404, 429, 503]
+  
+  # Some authenticated traffic continues
+  - name: "Authenticated Users"
+    weight: 30
+    flow:
+      # Login
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "loadtest@gacp.dtam.go.th"
+            password: "LoadTest123456!"
+          capture:
+            - json: "$.data.accessToken"
+              as: "token"
+          expect:
+            - statusCode: [200, 429] # May be rate limited
+      
+      # Get profile
+      - get:
+          url: "/api/auth/profile"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: [200, 401, 429]
+
+before:
+  flow:
+    - log: "==========================================="
+    - log: "Starting SPIKE TEST"
+    - log: "Simulating viral certificate verification"
+    - log: "Monitor:"
+    - log: "  - Response times during spike"
+    - log: "  - Error rates"
+    - log: "  - System recovery time"
+    - log: "  - Rate limiting effectiveness"
+    - log: "==========================================="
+
+after:
+  flow:
+    - log: "==========================================="
+    - log: "Spike test completed"
+    - log: "Check if system:"
+    - log: "  ✓ Handled spike without crashing"
+    - log: "  ✓ Recovered to normal operation"
+    - log: "  ✓ Rate limiting prevented abuse"
+    - log: "  ✓ Response times acceptable"
+    - log: "==========================================="

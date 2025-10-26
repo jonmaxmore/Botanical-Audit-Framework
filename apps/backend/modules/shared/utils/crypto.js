@@ -3,7 +3,7 @@
  * Password hashing and token generation
  */
 
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 /**

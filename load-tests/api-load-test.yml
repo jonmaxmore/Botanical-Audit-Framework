@@ -1,0 +1,231 @@
+# API Endpoints Load Test
+# Tests main API endpoints with application usage patterns
+# Target: <200ms p95 latency, >500 RPS throughput
+
+config:
+  target: "http://localhost:3004"
+  phases:
+    # Warm-up: 5 users for 30 seconds
+    - duration: 30
+      arrivalRate: 5
+      name: "Warm-up"
+    
+    # Ramp-up: Increase to 30 users over 1 minute
+    - duration: 60
+      arrivalRate: 5
+      rampTo: 30
+      name: "Ramp-up"
+    
+    # Sustained load: 50 users for 3 minutes
+    - duration: 180
+      arrivalRate: 50
+      name: "Sustained load"
+    
+    # Spike test: 100 users for 30 seconds
+    - duration: 30
+      arrivalRate: 100
+      name: "Spike test"
+    
+    # Recovery: Back to 30 users for 1 minute
+    - duration: 60
+      arrivalRate: 50
+      rampTo: 30
+      name: "Recovery"
+  
+  http:
+    timeout: 15
+  
+  plugins:
+    expect: {}
+    metrics-by-endpoint:
+      stripQueryString: true
+  
+  variables:
+    apiUser:
+      email: "loadtest@gacp.dtam.go.th"
+      password: "LoadTest123456!"
+  
+  ensure:
+    maxErrorRate: 2 # Max 2% error rate for API endpoints
+    p95: 200 # 95th percentile < 200ms
+    p99: 500 # 99th percentile < 500ms
+
+scenarios:
+  # Scenario 1: Farmer Management Flow (40% of traffic)
+  - name: "Farmer Management"
+    weight: 40
+    flow:
+      # Login to get access token
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ apiUser.email }}"
+            password: "{{ apiUser.password }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "token"
+          expect:
+            - statusCode: 200
+      
+      # List farmers (GET /api/farmers)
+      - get:
+          url: "/api/farmers"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          qs:
+            page: 1
+            limit: 20
+          expect:
+            - statusCode: 200
+            - hasProperty: "data.farmers"
+      
+      # Think time: User reviews list
+      - think: 2
+      
+      # Get specific farmer details (GET /api/farmers/:id)
+      - get:
+          url: "/api/farmers/{{ $randomString() }}"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: [200, 404] # Might not exist
+      
+      # Search farmers (GET /api/farmers/search)
+      - get:
+          url: "/api/farmers/search"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          qs:
+            q: "farm"
+            limit: 10
+          expect:
+            - statusCode: 200
+  
+  # Scenario 2: Certificate Verification Flow (30% of traffic)
+  - name: "Certificate Verification"
+    weight: 30
+    flow:
+      # Public endpoint - no auth required
+      # Get certificate by QR code (GET /api/certificates/qr/:qrCode)
+      - get:
+          url: "/api/certificates/qr/{{ $randomString() }}"
+          expect:
+            - statusCode: [200, 404]
+      
+      # Think time
+      - think: 1
+      
+      # Verify certificate authenticity (POST /api/certificates/verify)
+      - post:
+          url: "/api/certificates/verify"
+          json:
+            certificateNumber: "GACP-{{ $randomNumber(1000, 9999) }}-{{ $randomNumber(2024, 2025) }}"
+          expect:
+            - statusCode: [200, 404]
+      
+      # Public certificate list (GET /api/certificates/public)
+      - get:
+          url: "/api/certificates/public"
+          qs:
+            status: "ACTIVE"
+            limit: 10
+          expect:
+            - statusCode: 200
+  
+  # Scenario 3: Inspection Management Flow (20% of traffic)
+  - name: "Inspection Management"
+    weight: 20
+    flow:
+      # Login
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ apiUser.email }}"
+            password: "{{ apiUser.password }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "token"
+          expect:
+            - statusCode: 200
+      
+      # List inspections (GET /api/inspections)
+      - get:
+          url: "/api/inspections"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          qs:
+            status: "PENDING"
+            page: 1
+            limit: 20
+          expect:
+            - statusCode: 200
+      
+      # Think time
+      - think: 2
+      
+      # Get inspection details (GET /api/inspections/:id)
+      - get:
+          url: "/api/inspections/{{ $randomString() }}"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: [200, 404]
+      
+      # Get inspection statistics (GET /api/inspections/stats)
+      - get:
+          url: "/api/inspections/stats"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+  
+  # Scenario 4: Dashboard and Reports (10% of traffic)
+  - name: "Dashboard and Reports"
+    weight: 10
+    flow:
+      # Login
+      - post:
+          url: "/api/auth/login"
+          json:
+            email: "{{ apiUser.email }}"
+            password: "{{ apiUser.password }}"
+          capture:
+            - json: "$.data.accessToken"
+              as: "token"
+          expect:
+            - statusCode: 200
+      
+      # Get dashboard statistics (GET /api/dashboard/stats)
+      - get:
+          url: "/api/dashboard/stats"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: [200, 404]
+      
+      # Get monthly reports (GET /api/reports/monthly)
+      - get:
+          url: "/api/reports/monthly"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          qs:
+            year: 2025
+            month: 10
+          expect:
+            - statusCode: [200, 404]
+      
+      # Get certificate statistics (GET /api/certificates/stats)
+      - get:
+          url: "/api/certificates/stats"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: [200, 404]
+
+before:
+  flow:
+    - log: "Starting API endpoints load test..."
+
+after:
+  flow:
+    - log: "API load test completed"

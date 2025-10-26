@@ -16,7 +16,7 @@
  * @date 2025-10-26
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 
 /**
  * Production allowed origins (strict whitelist)

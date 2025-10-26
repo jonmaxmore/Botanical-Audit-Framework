@@ -8,7 +8,7 @@
  * - Implements password hashing interface
  */
 
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 class BcryptPasswordHasher {
   constructor(saltRounds = 12) {

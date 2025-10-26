@@ -31,10 +31,11 @@ const refreshTokenSchema = Joi.object({
 // Rate limiting for auth endpoints
 // Higher limits in development for testing
 const isDevelopment = process.env.NODE_ENV !== 'production';
+const isLoadTesting = process.env.LOAD_TEST_MODE === 'true';
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isDevelopment ? 100 : 5, // 100 attempts in dev, 5 in production
+  max: isLoadTesting ? 999999 : (isDevelopment ? 100 : 5), // Much higher for load testing
   message: {
     success: false,
     message: 'Too many authentication attempts, please try again later',
@@ -46,7 +47,7 @@ const authLimiter = rateLimit({
 
 const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isDevelopment ? 100 : 10, // 100 attempts in dev, 10 in production
+  max: isLoadTesting ? 999999 : (isDevelopment ? 100 : 10), // Much higher for load testing
   message: {
     success: false,
     message: 'Too many login attempts, please try again later',
@@ -190,20 +191,23 @@ router.post(
     // Find user with password (Task 1.3 - Add 5s query timeout)
     const user = await User.findOne({
       email: email.toLowerCase(),
-      isActive: true,
+      status: 'active',
     })
       .select('+password')
       .maxTimeMS(5000); // Prevent hanging queries
 
     if (!user) {
-      return sendError.authentication(res, 'Invalid email or password');
+      return sendError(res, 'LOGIN_FAILED', 'Invalid email or password', null, 401);
     }
 
     // Check if account is locked
     if (user.isLocked) {
-      return sendError.authentication(
+      return sendError(
         res,
+        'ACCOUNT_LOCKED',
         'Account is temporarily locked due to too many failed login attempts',
+        null,
+        403,
       );
     }
 
@@ -220,7 +224,7 @@ router.post(
         attempts: user.loginAttempts + 1,
       });
 
-      return sendError.authentication(res, 'Invalid email or password');
+      return sendError(res, 'LOGIN_FAILED', 'Invalid email or password', null, 401);
     }
 
     // Reset login attempts on successful login
@@ -228,13 +232,27 @@ router.post(
       await user.resetLoginAttempts();
     }
 
-    // Update login history
-    user.addLoginHistory(
-      req.ip,
-      req.get('User-Agent'),
-      req.get('X-Forwarded-For') || req.connection.remoteAddress,
+    // Update login history (use updateOne to avoid validation on partial document)
+    const loginHistoryEntry = {
+      timestamp: new Date(),
+      ip: req.ip,
+      userAgent: req.get('User-Agent'),
+      location: req.get('X-Forwarded-For') || req.connection.remoteAddress,
+    };
+    
+    await User.updateOne(
+      { _id: user._id },
+      {
+        $push: {
+          loginHistory: {
+            $each: [loginHistoryEntry],
+            $position: 0,
+            $slice: 10, // Keep only last 10 entries
+          },
+        },
+        $set: { lastLogin: new Date() },
+      },
     );
-    await user.save();
 
     // Generate tokens
     const accessToken = generateToken(user);
@@ -290,7 +308,7 @@ router.post(
       const user = await User.findById(decoded.userId).maxTimeMS(5000);
 
       if (!user || !user.isActive) {
-        return sendError.authentication(res, 'Invalid refresh token');
+        return sendError(res, 'INVALID_TOKEN', 'Invalid refresh token', null, 401);
       }
 
       // Generate new access token
@@ -310,7 +328,7 @@ router.post(
         ip: req.ip,
       });
 
-      return sendError.authentication(res, 'Invalid refresh token');
+      return sendError(res, 'INVALID_TOKEN', 'Invalid refresh token', null, 401);
     }
   }),
 );
@@ -450,7 +468,7 @@ router.post(
         ip: req.ip,
       });
 
-      return sendError.authentication(res, 'Current password is incorrect');
+      return sendError(res, 'LOGIN_FAILED', 'Current password is incorrect', null, 401);
     }
 
     // Update password
