@@ -1,6 +1,6 @@
 /**
  * Applications API Integration Tests
- * 
+ *
  * Tests application lifecycle: create, list, update, submit, status transitions
  */
 
@@ -95,7 +95,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
 
       // Verify farmer can retrieve their applications
       const farmerApps = await mockDb.findApplicationsByFarmerId(farmer.farmerId);
-      
+
       expect(farmerApps).toHaveLength(1);
       expect(farmerApps[0].id).toBe(application.id);
     });

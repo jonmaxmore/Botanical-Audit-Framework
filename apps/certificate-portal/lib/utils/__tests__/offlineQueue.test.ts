@@ -82,7 +82,7 @@ describe('Offline Queue', () => {
           method: 'POST',
           url: '/api/test',
           data: { value: 'test' },
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         }
       ];
 
@@ -113,7 +113,7 @@ describe('Offline Queue', () => {
       const complexData = {
         farmName: 'Test',
         nested: { deep: { value: 123 } },
-        array: [1, 2, 3]
+        array: [1, 2, 3],
       };
 
       offlineQueue.store('POST', '/api/test', complexData);

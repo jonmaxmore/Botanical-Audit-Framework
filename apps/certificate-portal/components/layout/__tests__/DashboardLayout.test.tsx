@@ -78,8 +78,15 @@ describe('DashboardLayout', () => {
       );
 
       // All menu items - use getAllByText to handle potential duplicates
-      const menuItems = ['Dashboard', 'Certificates', 'QR Scanner', 'Search', 'Reports', 'Settings'];
-      menuItems.forEach((item) => {
+      const menuItems = [
+        'Dashboard',
+        'Certificates',
+        'QR Scanner',
+        'Search',
+        'Reports',
+        'Settings',
+      ];
+      menuItems.forEach(item => {
         expect(screen.getAllByText(item).length).toBeGreaterThan(0);
       });
     });

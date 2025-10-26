@@ -1,7 +1,7 @@
 /**
  * API Route Tests - Users Endpoint
  * Tests for /api/users/* routes
- * 
+ *
  * Note: Logic tests for user profile management and authentication
  */
 
@@ -105,11 +105,7 @@ describe('API Routes: /api/users', () => {
     });
 
     it('should validate phone number format (Thai)', () => {
-      const validFormats = [
-        '0812345678',
-        '081-234-5678',
-        '02-123-4567',
-      ];
+      const validFormats = ['0812345678', '081-234-5678', '02-123-4567'];
 
       validFormats.forEach(phone => {
         const isValid = /^0[0-9-]{8,11}$/.test(phone);
@@ -129,7 +125,7 @@ describe('API Routes: /api/users', () => {
     it('should validate current password before change', () => {
       const storedPasswordHash = 'hashed_password';
       const providedPassword = 'oldPassword123';
-      
+
       // Simulate password verification
       const isCurrentPasswordCorrect = true; // Mock verification
 
@@ -149,11 +145,7 @@ describe('API Routes: /api/users', () => {
       const hasLowerCase = /[a-z]/.test(newPassword);
       const hasNumber = /[0-9]/.test(newPassword);
 
-      const isStrong =
-        newPassword.length >= minLength &&
-        hasUpperCase &&
-        hasLowerCase &&
-        hasNumber;
+      const isStrong = newPassword.length >= minLength && hasUpperCase && hasLowerCase && hasNumber;
 
       expect(isStrong).toBe(true);
     });
@@ -180,7 +172,7 @@ describe('API Routes: /api/users', () => {
       const newPassword = 'newPassword456';
       const confirmPassword = 'differentPassword';
 
-      const passwordsMatch = newPassword === confirmPassword;
+      const passwordsMatch = newPassword === (confirmPassword as string);
 
       expect(passwordsMatch).toBe(false);
     });
@@ -194,9 +186,7 @@ describe('API Routes: /api/users', () => {
         createMockNotification({ userId: 'user-001', id: 'notif-003' }),
       ];
 
-      const userNotifications = notifications.filter(
-        notif => notif.userId === 'user-001',
-      );
+      const userNotifications = notifications.filter(notif => notif.userId === 'user-001');
 
       expect(userNotifications).toHaveLength(2);
     });

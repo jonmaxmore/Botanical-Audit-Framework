@@ -1,6 +1,6 @@
 /**
  * Inspections, Certificates, and Users API Integration Tests
- * 
+ *
  * Combined test suite for remaining APIs to efficiently cover critical workflows
  */
 

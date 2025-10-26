@@ -1,13 +1,13 @@
 /**
  * Certificate API Integration Tests
- * 
+ *
  * Tests real API calls to backend certificate endpoints
  * Requires backend running on http://localhost:3004
- * 
+ *
  * To run these tests:
  * 1. Start backend: cd apps/backend && npm start
  * 2. Run tests: npm test
- * 
+ *
  * To skip these tests (default): They are skipped when backend is not available
  */
 
@@ -180,7 +180,7 @@ describeIfBackend('Certificate API Integration Tests', () => {
       expect(renewed.id).toBe(operationCertId);
       // Backend should extend expiry date
       expect(new Date(renewed.expiryDate).getTime()).toBeGreaterThan(
-        new Date(renewed.issuedDate).getTime()
+        new Date(renewed.issuedDate).getTime(),
       );
     });
 

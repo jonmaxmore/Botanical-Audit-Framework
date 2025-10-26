@@ -72,9 +72,9 @@ describe('DashboardPage', () => {
     it('should show dashboard after loading', async () => {
       mockLocalStorage.setItem('cert_token', 'test-token');
       render(<DashboardPage />);
-      
+
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Dashboard')).toBeInTheDocument();
       });
@@ -89,7 +89,7 @@ describe('DashboardPage', () => {
     it('should render page title', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Dashboard')).toBeInTheDocument();
       });
@@ -98,7 +98,7 @@ describe('DashboardPage', () => {
     it('should render Total Certificates stat', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Total Certificates')).toBeInTheDocument();
         expect(screen.getByText('1,234')).toBeInTheDocument();
@@ -108,7 +108,7 @@ describe('DashboardPage', () => {
     it('should render Pending stat', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Pending')).toBeInTheDocument();
         expect(screen.getByText('45')).toBeInTheDocument();
@@ -118,7 +118,7 @@ describe('DashboardPage', () => {
     it('should render Approved stat', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Approved')).toBeInTheDocument();
         expect(screen.getByText('1,156')).toBeInTheDocument();
@@ -128,7 +128,7 @@ describe('DashboardPage', () => {
     it('should render Expiring Soon stat', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('Expiring Soon')).toBeInTheDocument();
         expect(screen.getByText('33')).toBeInTheDocument();
@@ -138,7 +138,7 @@ describe('DashboardPage', () => {
     it('should render recent certificates section', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/CERT-2025-001/)).toBeInTheDocument();
         expect(screen.getByText(/สวนทดสอบ A/)).toBeInTheDocument();
@@ -148,7 +148,7 @@ describe('DashboardPage', () => {
     it('should display multiple recent certificates', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/CERT-2025-001/)).toBeInTheDocument();
         expect(screen.getByText(/CERT-2025-002/)).toBeInTheDocument();
@@ -165,7 +165,7 @@ describe('DashboardPage', () => {
     it('should display change percentages', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/\+12%/)).toBeInTheDocument();
         expect(screen.getByText(/\+8%/)).toBeInTheDocument();
@@ -176,7 +176,7 @@ describe('DashboardPage', () => {
     it('should render all 4 stat cards', async () => {
       render(<DashboardPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const statCards = [
           screen.getByText('Total Certificates'),

@@ -14,7 +14,7 @@ const api = axios.create({
   timeout: 30000, // 30 seconds for large PDF/QR operations
   headers: {
     'Content-Type': 'application/json',
-  },
+  }
 });
 
 // TODO: Refactor interceptor tests to achieve 70% branch coverage
@@ -119,10 +119,7 @@ export const certificateApi = {
    */
   create: async (data: CertificateFormData) => {
     try {
-      const response = await api.post<{ success: boolean; data: Certificate }>(
-        API_BASE_PATH,
-        data,
-      );
+      const response = await api.post<{ success: boolean; data: Certificate }>(API_BASE_PATH, data);
       return response.data.data;
     } catch (error) {
       console.error('Failed to create certificate:', error);

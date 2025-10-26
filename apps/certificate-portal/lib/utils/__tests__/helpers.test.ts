@@ -19,7 +19,7 @@ import {
   getStatusLabelThai,
   debounce,
   deepClone,
-  isEmpty
+  isEmpty,
 } from '../helpers';
 
 describe('Helper Functions', () => {
@@ -219,7 +219,7 @@ describe('Helper Functions', () => {
       expect(result).toEqual({
         standard: 'GACP',
         year: 2025,
-        sequence: 1
+        sequence: 1,
       });
     });
 
@@ -228,7 +228,7 @@ describe('Helper Functions', () => {
       expect(result).toEqual({
         standard: 'GAP',
         year: 2024,
-        sequence: 9999
+        sequence: 9999,
       });
     });
 

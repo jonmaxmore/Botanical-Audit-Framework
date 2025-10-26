@@ -1,6 +1,6 @@
 /**
  * API Client with Retry and Offline Queue Support
- * 
+ *
  * Features:
  * - Exponential backoff retry
  * - Offline queue (localStorage)
@@ -17,7 +17,7 @@ const api = axios.create({
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
-  },
+  }
 });
 
 // Request interceptor - Add auth token
@@ -29,25 +29,28 @@ api.interceptors.request.use(
     }
     return config;
   },
-  error => Promise.reject(error)
+  error => Promise.reject(error),
 );
 
 // Response interceptor - Handle errors with retry
 api.interceptors.response.use(
   response => response,
   async (error: AxiosError) => {
-    const originalRequest = error.config as AxiosRequestConfig & { _retry?: boolean; _retryCount?: number };
+    const originalRequest = error.config as AxiosRequestConfig & {
+      _retry?: boolean;
+      _retryCount?: number;
+    };
 
     // Handle 401 - Redirect to login
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       localStorage.removeItem('cert_token');
-      
+
       // Only redirect if we're in the browser
       if (typeof window !== 'undefined') {
         window.location.href = '/login';
       }
-      
+
       return Promise.reject(error);
     }
 
@@ -60,18 +63,18 @@ api.interceptors.response.use(
 
     if (isRetryable && (!originalRequest._retryCount || originalRequest._retryCount < 3)) {
       originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;
-      
+
       // Exponential backoff: 1s, 2s, 4s
       const delay = 1000 * Math.pow(2, originalRequest._retryCount - 1);
-      
+
       console.log(`Retrying request (attempt ${originalRequest._retryCount}/3) after ${delay}ms`);
-      
+
       await new Promise(resolve => setTimeout(resolve, delay));
       return api(originalRequest);
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 // Offline queue management
@@ -122,15 +125,15 @@ export const offlineQueue = {
    */
   async sync(): Promise<number> {
     const actions = this.getAll();
-    
+
     if (actions.length === 0) {
       return 0;
     }
 
     console.log(`[Offline Queue] Syncing ${actions.length} actions...`);
-    
+
     const completedActions: OfflineAction[] = [];
-    
+
     for (const action of actions) {
       try {
         await api.request({
@@ -138,7 +141,7 @@ export const offlineQueue = {
           url: action.url,
           data: action.data,
         });
-        
+
         completedActions.push(action);
         console.log(`[Offline Queue] Synced ${action.method} ${action.url}`);
       } catch (error) {
@@ -153,14 +156,14 @@ export const offlineQueue = {
           completed =>
             completed.url === action.url &&
             completed.method === action.method &&
-            completed.timestamp === action.timestamp
+            completed.timestamp === action.timestamp,
         )
     );
-    
+
     localStorage.setItem('offline_actions', JSON.stringify(remaining));
-    
+
     console.log(`[Offline Queue] Synced ${completedActions.length}/${actions.length} actions`);
-    
+
     return completedActions.length;
   },
 };

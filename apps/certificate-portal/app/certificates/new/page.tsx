@@ -84,7 +84,7 @@ export default function NewCertificatePage() {
       inspectorName: '',
       inspectionReport: '',
       notes: '',
-    },
+    }
   });
 
   useEffect(() => {
@@ -196,7 +196,7 @@ export default function NewCertificatePage() {
                   pattern: {
                     value: /^\d{13}$/,
                     message: 'National ID must be 13 digits',
-                  },
+                },
                 }}
                 render={({ field }) => (
                   <TextField
@@ -239,7 +239,7 @@ export default function NewCertificatePage() {
                 rules={{
                   required: 'Farm area is required',
                   min: { value: 0.1, message: 'Farm area must be greater than 0' },
-                }}
+              }}
                 render={({ field }) => (
                   <TextField
                     {...field}
@@ -375,8 +375,8 @@ export default function NewCertificatePage() {
                   pattern: {
                     value: /^\d{5}$/,
                     message: 'Postal code must be 5 digits',
-                  },
-                }}
+                },
+              }}
                 render={({ field }) => (
                   <TextField
                     {...field}

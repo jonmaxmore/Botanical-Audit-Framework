@@ -1,6 +1,6 @@
 /**
  * Certificate Verification Page Tests
- * 
+ *
  * Tests the public certificate verification page
  */
 
@@ -29,7 +29,7 @@ describe('VerifyCertificatePage', () => {
 
   it('should show loading state initially', () => {
     (certificateApi.verify as jest.Mock).mockImplementation(
-      () => new Promise(() => {}) // Never resolves
+      () => new Promise(() => {}), // Never resolves
     );
 
     render(<VerifyCertificatePage />);
@@ -141,9 +141,7 @@ describe('VerifyCertificatePage', () => {
   });
 
   it('should handle API errors gracefully', async () => {
-    (certificateApi.verify as jest.Mock).mockRejectedValue(
-      new Error('Network error')
-    );
+    (certificateApi.verify as jest.Mock).mockRejectedValue(new Error('Network error'));
 
     render(<VerifyCertificatePage />);
 

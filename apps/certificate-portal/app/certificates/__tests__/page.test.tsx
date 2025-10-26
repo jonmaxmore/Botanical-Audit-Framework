@@ -11,7 +11,9 @@ jest.mock('next/navigation', () => ({
 // Mock DashboardLayout
 jest.mock('@/components/layout/DashboardLayout', () => ({
   __esModule: true,
-  default: ({ children }: { children: React.ReactNode }) => <div data-testid="dashboard-layout">{children}</div>,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="dashboard-layout">{children}</div>
+  ),
 }));
 
 // Mock localStorage
@@ -19,9 +21,15 @@ const mockLocalStorage = (() => {
   let store: Record<string, string> = {};
   return {
     getItem: (key: string) => store[key] || null,
-    setItem: (key: string, value: string) => { store[key] = value; },
-    removeItem: (key: string) => { delete store[key]; },
-    clear: () => { store = {}; },
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      store = {};
+    },
   };
 })();
 
@@ -149,9 +157,11 @@ describe('CertificatesPage', () => {
     it('should update search query on input', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
-        const searchInput = screen.getByPlaceholderText('Search certificates...') as HTMLInputElement;
+        const searchInput = screen.getByPlaceholderText(
+          'Search certificates...',
+        ) as HTMLInputElement;
         fireEvent.change(searchInput, { target: { value: 'GACP-2025-0001' } });
         expect(searchInput.value).toBe('GACP-2025-0001');
       });
@@ -160,7 +170,7 @@ describe('CertificatesPage', () => {
     it('should trigger search on Enter key', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText('Search certificates...');
         fireEvent.change(searchInput, { target: { value: 'มะม่วง' } });
@@ -172,11 +182,11 @@ describe('CertificatesPage', () => {
     it('should trigger search on button click', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText('Search certificates...');
         fireEvent.change(searchInput, { target: { value: 'ทุเรียน' } });
-        
+
         const searchButton = screen.getAllByText('Search')[0];
         fireEvent.click(searchButton);
         // Search is triggered
@@ -186,11 +196,11 @@ describe('CertificatesPage', () => {
     it('should filter certificates by search query', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(async () => {
         const searchInput = screen.getByPlaceholderText('Search certificates...');
         fireEvent.change(searchInput, { target: { value: 'มะม่วง' } });
-        
+
         const searchButton = screen.getAllByText('Search')[0];
         fireEvent.click(searchButton);
 
@@ -210,7 +220,7 @@ describe('CertificatesPage', () => {
     it('should render status filter', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Multiple elements with "Status" (label + table header)
         expect(screen.getAllByText('Status').length).toBeGreaterThan(0);
@@ -220,7 +230,7 @@ describe('CertificatesPage', () => {
     it('should render standard filter', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Multiple elements with "Standard" (label + table header)
         expect(screen.getAllByText('Standard').length).toBeGreaterThan(0);
@@ -236,7 +246,7 @@ describe('CertificatesPage', () => {
     it('should render pagination controls', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Rows per page/i)).toBeInTheDocument();
       });
@@ -245,7 +255,7 @@ describe('CertificatesPage', () => {
     it('should display results count', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Showing .* of .* certificates/)).toBeInTheDocument();
       });
@@ -254,7 +264,7 @@ describe('CertificatesPage', () => {
     it('should change page when pagination clicked', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const nextPageButton = screen.getByLabelText(/next page/i);
         if (nextPageButton) {
@@ -272,7 +282,7 @@ describe('CertificatesPage', () => {
     it('should navigate to new certificate page on button click', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const newButton = screen.getByText('New Certificate');
         fireEvent.click(newButton);
@@ -283,7 +293,7 @@ describe('CertificatesPage', () => {
     it('should navigate to certificate detail on view click', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const viewButtons = screen.getAllByLabelText('View Details');
         if (viewButtons.length > 0) {
@@ -302,7 +312,7 @@ describe('CertificatesPage', () => {
     it('should refresh certificates on refresh button click', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const refreshButton = screen.getByLabelText('Refresh');
         fireEvent.click(refreshButton);
@@ -310,7 +320,7 @@ describe('CertificatesPage', () => {
 
       // Should trigger loading again
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('GACP-2025-0001')).toBeInTheDocument();
       });
@@ -325,7 +335,7 @@ describe('CertificatesPage', () => {
     it('should display status chips', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Check for at least one status chip
         const statusChips = screen.getAllByText(/อนุมัติแล้ว|รออนุมัติ|ปฏิเสธ|หมดอายุ|ยกเลิก/);
@@ -336,7 +346,7 @@ describe('CertificatesPage', () => {
     it('should display certification standard chips', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const gacpChips = screen.getAllByText('GACP');
         expect(gacpChips.length).toBeGreaterThan(0);
@@ -352,7 +362,7 @@ describe('CertificatesPage', () => {
     it('should render action buttons for each certificate', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getAllByLabelText('View Details').length).toBeGreaterThan(0);
         expect(screen.getAllByLabelText('Download PDF').length).toBeGreaterThan(0);
@@ -363,7 +373,7 @@ describe('CertificatesPage', () => {
     it('should display formatted dates', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Dates should be formatted in Thai locale
         const dateElements = screen.getAllByText(/\d{1,2}\/\d{1,2}\/\d{4}/);
@@ -380,7 +390,7 @@ describe('CertificatesPage', () => {
     it('should show correct status colors for approved', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Check that approved status is displayed
         const approvedBadges = screen.getAllByText('อนุมัติแล้ว');
@@ -391,7 +401,7 @@ describe('CertificatesPage', () => {
     it('should show correct status colors for pending', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Check that pending status exists
         const statuses = screen.queryAllByText('รออนุมัติ');
@@ -402,7 +412,7 @@ describe('CertificatesPage', () => {
     it('should show correct status colors for rejected', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Check that rejected status rendering works
         const statuses = screen.queryAllByText('ปฏิเสธ');
@@ -413,7 +423,7 @@ describe('CertificatesPage', () => {
     it('should show correct status colors for expired', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Check that expired status rendering works
         const statuses = screen.queryAllByText('หมดอายุ');
@@ -424,7 +434,7 @@ describe('CertificatesPage', () => {
     it('should show correct status colors for revoked', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Check that revoked status rendering works
         const statuses = screen.queryAllByText('ยกเลิก');
@@ -441,7 +451,7 @@ describe('CertificatesPage', () => {
     it('should filter by status correctly', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Initially shows certificates
         const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
@@ -452,7 +462,7 @@ describe('CertificatesPage', () => {
     it('should filter by certification standard correctly', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Check that standard filter exists
         const standardLabels = screen.getAllByText('Standard');
@@ -463,7 +473,7 @@ describe('CertificatesPage', () => {
     it('should show empty filter when no filter applied', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // All certificates should be visible
         const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
@@ -480,7 +490,7 @@ describe('CertificatesPage', () => {
     it('should show correct pagination count', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Should show "Showing X of Y certificates"
         const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
@@ -491,7 +501,7 @@ describe('CertificatesPage', () => {
     it('should handle rows per page change', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Pagination controls should be present
         const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
@@ -508,7 +518,7 @@ describe('CertificatesPage', () => {
     it('should filter with status but no search query', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Filters render correctly
         const statusLabels = screen.getAllByText('Status');
@@ -519,7 +529,7 @@ describe('CertificatesPage', () => {
     it('should filter with certification standard but no status', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const standardLabels = screen.getAllByText('Standard');
         expect(standardLabels.length).toBeGreaterThan(0);
@@ -529,11 +539,11 @@ describe('CertificatesPage', () => {
     it('should handle search query matching certificate number', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText('Search certificates...');
         fireEvent.change(searchInput, { target: { value: 'GACP' } });
-        
+
         // Search input accepts value
         expect((searchInput as HTMLInputElement).value).toBe('GACP');
       });
@@ -542,11 +552,11 @@ describe('CertificatesPage', () => {
     it('should handle search query matching farm name', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText('Search certificates...');
         fireEvent.change(searchInput, { target: { value: 'ฟาร์ม' } });
-        
+
         expect((searchInput as HTMLInputElement).value).toBe('ฟาร์ม');
       });
     });
@@ -554,11 +564,11 @@ describe('CertificatesPage', () => {
     it('should handle search query matching farmer name', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText('Search certificates...');
         fireEvent.change(searchInput, { target: { value: 'สมชาย' } });
-        
+
         expect((searchInput as HTMLInputElement).value).toBe('สมชาย');
       });
     });
@@ -566,7 +576,7 @@ describe('CertificatesPage', () => {
     it('should return false when status filter does not match', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Page loads successfully
         expect(screen.getByText(/Showing \d+ of \d+ certificates/)).toBeTruthy();
@@ -576,7 +586,7 @@ describe('CertificatesPage', () => {
     it('should return false when standard filter does not match', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Showing \d+ of \d+ certificates/)).toBeTruthy();
       });
@@ -585,7 +595,7 @@ describe('CertificatesPage', () => {
     it('should return true when no filters applied', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // All certificates visible when no filter
         const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
@@ -602,7 +612,7 @@ describe('CertificatesPage', () => {
     it('should handle approved status case', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Approved status should be displayed
         const approvedElements = screen.queryAllByText('อนุมัติแล้ว');
@@ -613,7 +623,7 @@ describe('CertificatesPage', () => {
     it('should handle pending status case', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const pendingElements = screen.queryAllByText('รออนุมัติ');
         expect(pendingElements.length).toBeGreaterThanOrEqual(0);
@@ -623,7 +633,7 @@ describe('CertificatesPage', () => {
     it('should handle rejected status case', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const rejectedElements = screen.queryAllByText('ปฏิเสธ');
         expect(rejectedElements.length).toBeGreaterThanOrEqual(0);
@@ -633,7 +643,7 @@ describe('CertificatesPage', () => {
     it('should handle expired status case', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const expiredElements = screen.queryAllByText('หมดอายุ');
         expect(expiredElements.length).toBeGreaterThanOrEqual(0);
@@ -643,7 +653,7 @@ describe('CertificatesPage', () => {
     it('should handle revoked status case', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const revokedElements = screen.queryAllByText('ยกเลิก');
         expect(revokedElements.length).toBeGreaterThanOrEqual(0);
@@ -653,7 +663,7 @@ describe('CertificatesPage', () => {
     it('should handle default status case', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Default case returns status as-is
         expect(screen.getByText(/Showing \d+ of \d+ certificates/)).toBeTruthy();
@@ -665,11 +675,11 @@ describe('CertificatesPage', () => {
     it('should handle search with certificateNumber match', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText('Search certificates...');
         fireEvent.change(searchInput, { target: { value: 'CERT' } });
-        
+
         expect((searchInput as HTMLInputElement).value).toBe('CERT');
       });
     });
@@ -677,11 +687,11 @@ describe('CertificatesPage', () => {
     it('should handle search with farmName match', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const searchInput = screen.getByPlaceholderText('Search certificates...');
         fireEvent.change(searchInput, { target: { value: 'Test' } });
-        
+
         expect((searchInput as HTMLInputElement).value).toBe('Test');
       });
     });
@@ -689,7 +699,7 @@ describe('CertificatesPage', () => {
     it('should handle empty filter state', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/Showing \d+ of \d+ certificates/)).toBeTruthy();
       });
@@ -698,7 +708,7 @@ describe('CertificatesPage', () => {
     it('should paginate filtered results', async () => {
       render(<CertificatesPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const paginationText = screen.getByText(/Showing \d+ of \d+ certificates/);
         expect(paginationText).toBeTruthy();

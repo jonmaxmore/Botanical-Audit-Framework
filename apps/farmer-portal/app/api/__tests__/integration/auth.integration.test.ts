@@ -1,9 +1,9 @@
 /**
  * Authentication API Integration Tests
- * 
+ *
  * Enhanced integration tests that validate full business flows
  * including validation, database operations, and cross-module interactions.
- * 
+ *
  * Approach: Test API business logic with comprehensive flow validation
  * rather than HTTP layer (which requires running server or complex mocking).
  */
@@ -105,7 +105,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       expect(uniqueIds.size).toBe(5);
 
       // Verify IDs follow correct format
-      farmerIds.forEach((id) => {
+      farmerIds.forEach(id => {
         expect(id).toMatch(/^F\d+$/);
       });
     });
@@ -163,7 +163,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
 
       // Search with lowercase
       const foundUser = await mockDb.findUserByEmail('casesensitive@test.com');
-      
+
       // Should find user regardless of case
       // Note: Real implementation would normalize email in findUserByEmail
       expect(foundUser).toBeDefined();
@@ -300,4 +300,3 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
     });
   });
 });
-

@@ -9,11 +9,7 @@
  * - Refund policy
  */
 
-import {
-  createPaymentSession,
-  isPaymentSessionValid,
-  generateReceipt,
-} from '../payment';
+import { createPaymentSession, isPaymentSessionValid, generateReceipt } from '../payment';
 import {
   PAYMENT_TIMEOUT_MINUTES,
   isPaymentTimedOut,

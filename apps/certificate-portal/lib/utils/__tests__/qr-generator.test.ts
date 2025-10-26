@@ -89,8 +89,12 @@ describe('QR Code Generator', () => {
       };
 
       createElementSpy = jest.spyOn(document, 'createElement').mockReturnValue(mockLink as any);
-      appendChildSpy = jest.spyOn(document.body, 'appendChild').mockImplementation(() => mockLink as any);
-      removeChildSpy = jest.spyOn(document.body, 'removeChild').mockImplementation(() => mockLink as any);
+      appendChildSpy = jest
+        .spyOn(document.body, 'appendChild')
+        .mockImplementation(() => mockLink as any);
+      removeChildSpy = jest
+        .spyOn(document.body, 'removeChild')
+        .mockImplementation(() => mockLink as any);
     });
 
     afterEach(() => {

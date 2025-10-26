@@ -57,7 +57,7 @@ export default function DashboardPage() {
       icon: <Schedule sx={{ fontSize: 40 }} />,
       color: '#f44336',
       change: '-5%',
-    },
+    }
   ];
 
   const recentCertificates = [
@@ -81,7 +81,7 @@ export default function DashboardPage() {
       farmer: 'นายสมศักดิ์ ใจกล้า',
       status: 'approved',
       date: '2025-10-12',
-    },
+    }
   ];
 
   if (loading) {

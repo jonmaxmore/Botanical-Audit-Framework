@@ -1,7 +1,7 @@
 /**
  * API Route Tests - Applications Endpoint
  * Tests for /api/applications/* routes
- * 
+ *
  * Note: Logic tests for application CRUD operations and status transitions
  */
 
@@ -69,9 +69,7 @@ describe('API Routes: /api/applications', () => {
         createMockApplication({ id: 'app-003', createdAt: new Date('2025-02-01') }),
       ];
 
-      const sorted = applications.sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
-      );
+      const sorted = applications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
       expect(sorted[0].id).toBe('app-002'); // March (newest)
       expect(sorted[1].id).toBe('app-003'); // February

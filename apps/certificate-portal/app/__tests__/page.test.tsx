@@ -7,7 +7,7 @@ const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
     push: mockPush,
-  }),
+  })
 }));
 
 describe('HomePage', () => {
@@ -73,17 +73,13 @@ describe('HomePage', () => {
       render(<HomePage />);
       const uploadTexts = screen.getAllByText(/อัปโหลดเอกสาร/i);
       expect(uploadTexts.length).toBeGreaterThan(0);
-      expect(
-        screen.getByText(/แนบเอกสารประกอบคำขอได้อย่างปลอดภัยและสะดวก/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/แนบเอกสารประกอบคำขอได้อย่างปลอดภัยและสะดวก/i)).toBeInTheDocument();
     });
 
     it('should render "ติดตามสถานะ" feature', () => {
       render(<HomePage />);
       expect(screen.getByText(/ติดตามสถานะ/i)).toBeInTheDocument();
-      expect(
-        screen.getByText(/ตรวจสอบสถานะคำขอและความคืบหน้าแบบ Real-time/i),
-      ).toBeInTheDocument();
+      expect(screen.getByText(/ตรวจสอบสถานะคำขอและความคืบหน้าแบบ Real-time/i)).toBeInTheDocument();
     });
 
     it('should render all 3 feature icons', () => {
@@ -93,7 +89,7 @@ describe('HomePage', () => {
         screen.getByTestId('PictureAsPdfIcon'),
         screen.getByTestId('CheckCircleIcon'),
       ];
-      icons.forEach((icon) => expect(icon).toBeInTheDocument());
+      icons.forEach(icon => expect(icon).toBeInTheDocument());
     });
   });
 

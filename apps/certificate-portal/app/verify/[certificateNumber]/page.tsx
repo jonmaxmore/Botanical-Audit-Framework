@@ -1,6 +1,6 @@
 /**
  * Public Certificate Verification Page
- * 
+ *
  * No authentication required - public can scan QR and verify certificates
  * Rate limiting should be applied at backend level
  */
@@ -200,8 +200,7 @@ export default function VerifyCertificatePage() {
                   This certificate has expired
                 </Typography>
                 <Typography variant="body2">
-                  Expiry Date:{' '}
-                  {new Date(result.certificate.expiryDate).toLocaleDateString('en-US')}
+                  Expiry Date: {new Date(result.certificate.expiryDate).toLocaleDateString('en-US')}
                 </Typography>
               </Alert>
             )}
@@ -277,8 +276,7 @@ export default function VerifyCertificatePage() {
                       {result.certificate.address.houseNumber}{' '}
                       {result.certificate.address.village || ''}{' '}
                       {result.certificate.address.subdistrict},{' '}
-                      {result.certificate.address.district},{' '}
-                      {result.certificate.address.province}{' '}
+                      {result.certificate.address.district}, {result.certificate.address.province}{' '}
                       {result.certificate.address.postalCode}
                     </Typography>
                   </Grid>

@@ -40,7 +40,7 @@ const theme = createTheme({
     background: {
       default: '#f5f5f5',
       paper: '#ffffff',
-    },
+    }
   },
   typography: {
     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
@@ -71,7 +71,7 @@ const theme = createTheme({
     button: {
       textTransform: 'none',
       fontWeight: 600,
-    },
+    }
   },
   shape: {
     borderRadius: 8,
@@ -87,8 +87,8 @@ const theme = createTheme({
           boxShadow: 'none',
           '&:hover': {
             boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-          },
-        },
+          }
+        }
       },
     },
     MuiCard: {
@@ -96,25 +96,25 @@ const theme = createTheme({
         root: {
           borderRadius: 12,
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-        },
-      },
+        }
+      }
     },
     MuiPaper: {
       styleOverrides: {
         root: {
           borderRadius: 12,
-        },
-      },
+        }
+      }
     },
     MuiTextField: {
       styleOverrides: {
         root: {
           '& .MuiOutlinedInput-root': {
             borderRadius: 8,
-          },
-        },
+          }
+        }
       },
-    },
+    }
   },
 });
 

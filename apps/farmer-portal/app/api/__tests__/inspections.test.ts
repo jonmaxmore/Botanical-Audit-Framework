@@ -1,7 +1,7 @@
 /**
  * API Route Tests - Inspections Endpoint
  * Tests for /api/inspections/* routes
- * 
+ *
  * Note: Logic tests for inspection scheduling, completion, and management
  */
 
@@ -51,9 +51,7 @@ describe('API Routes: /api/inspections', () => {
         createMockInspection({ id: 'insp-003', inspectorId: 'inspector-001' }),
       ];
 
-      const inspectorInspections = inspections.filter(
-        insp => insp.inspectorId === 'inspector-001',
-      );
+      const inspectorInspections = inspections.filter(insp => insp.inspectorId === 'inspector-001');
 
       expect(inspectorInspections).toHaveLength(2);
     });
@@ -80,8 +78,7 @@ describe('API Routes: /api/inspections', () => {
       const from = new Date('2025-02-01');
       const to = new Date('2025-02-28');
       const filtered = inspections.filter(
-        insp =>
-          insp.scheduledDate >= from && insp.scheduledDate <= to,
+        insp => insp.scheduledDate >= from && insp.scheduledDate <= to,
       );
 
       expect(filtered).toHaveLength(1);

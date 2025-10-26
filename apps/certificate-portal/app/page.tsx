@@ -28,7 +28,7 @@ export default function HomePage() {
       icon: <CheckCircle sx={{ fontSize: 48, color: '#2196f3' }} />,
       title: 'ติดตามสถานะ',
       description: 'ตรวจสอบสถานะคำขอและความคืบหน้าแบบ Real-time',
-    },
+    }
   ];
 
   return (
@@ -63,7 +63,7 @@ export default function HomePage() {
                   fontWeight: 600,
                   '&:hover': {
                     bgcolor: '#f5f5f5',
-                  },
+                  }
                 }}
               >
                 ยื่นคำขอใหม่
@@ -82,7 +82,7 @@ export default function HomePage() {
                   '&:hover': {
                     borderColor: '#f5f5f5',
                     bgcolor: 'rgba(255, 255, 255, 0.1)',
-                  },
+                  }
                 }}
               >
                 คำขอของฉัน
@@ -111,7 +111,7 @@ export default function HomePage() {
                   '&:hover': {
                     transform: 'translateY(-8px)',
                     boxShadow: 6,
-                  },
+                  }
                 }}
               >
                 <CardContent sx={{ textAlign: 'center', py: 4 }}>

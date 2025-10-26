@@ -20,7 +20,9 @@ jest.mock('notistack', () => ({
 // Mock DashboardLayout
 jest.mock('@/components/layout/DashboardLayout', () => ({
   __esModule: true,
-  default: ({ children }: { children: React.ReactNode }) => <div data-testid="dashboard-layout">{children}</div>,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="dashboard-layout">{children}</div>
+  ),
 }));
 
 // Mock localStorage
@@ -50,7 +52,6 @@ beforeAll(() => {
 afterAll(() => {
   console.log = originalLog;
 });
-
 
 describe('NewCertificatePage', () => {
   beforeEach(() => {
@@ -293,7 +294,7 @@ describe('NewCertificatePage', () => {
 
     it('should handle successful submission', async () => {
       render(<NewCertificatePage />);
-      
+
       // Form exists
       const form = screen.getByTestId('dashboard-layout');
       expect(form).toBeInTheDocument();
@@ -301,7 +302,7 @@ describe('NewCertificatePage', () => {
 
     it('should handle submission error', async () => {
       render(<NewCertificatePage />);
-      
+
       // Form can handle errors gracefully
       const backButton = screen.getByRole('button', { name: /^back$/i });
       expect(backButton).toBeTruthy();
@@ -309,7 +310,7 @@ describe('NewCertificatePage', () => {
 
     it('should show loading state during submission', () => {
       render(<NewCertificatePage />);
-      
+
       // Page renders without loading initially
       const nextButton = screen.getByRole('button', { name: /next/i });
       expect(nextButton).not.toBeDisabled();
@@ -317,7 +318,7 @@ describe('NewCertificatePage', () => {
 
     it('should redirect after successful submission', () => {
       render(<NewCertificatePage />);
-      
+
       // Router push would be called on success
       expect(mockPush).not.toHaveBeenCalled();
     });
@@ -335,7 +336,7 @@ describe('NewCertificatePage', () => {
 
     it('should render correct fields for each step', () => {
       render(<NewCertificatePage />);
-      
+
       // Step 0 should have farm fields
       expect(screen.getByLabelText(/Farm ID/i)).toBeTruthy();
       expect(screen.getByLabelText(/Farm Name/i)).toBeTruthy();
@@ -349,7 +350,7 @@ describe('NewCertificatePage', () => {
 
     it('should show validation errors when present', () => {
       render(<NewCertificatePage />);
-      
+
       // Form fields render without errors initially
       const farmIdInput = screen.getByLabelText(/Farm ID/i);
       expect(farmIdInput).toBeInTheDocument();
@@ -357,7 +358,7 @@ describe('NewCertificatePage', () => {
 
     it('should clear errors when field is corrected', () => {
       render(<NewCertificatePage />);
-      
+
       // Fields can be interacted with
       const farmNameInput = screen.getByLabelText(/Farm Name/i);
       fireEvent.change(farmNameInput, { target: { value: 'Test Farm' } });
@@ -372,17 +373,17 @@ describe('NewCertificatePage', () => {
 
     it('should show different content based on active step', () => {
       render(<NewCertificatePage />);
-      
+
       // Step 0 shows farm information
       expect(screen.getAllByText('Farm Information').length).toBeGreaterThan(0);
     });
 
     it('should conditionally enable/disable buttons', () => {
       render(<NewCertificatePage />);
-      
+
       const backButton = screen.getByRole('button', { name: /^back$/i });
       const nextButton = screen.getByRole('button', { name: /next/i });
-      
+
       // Back disabled on first step
       expect(backButton).toBeDisabled();
       // Next is enabled

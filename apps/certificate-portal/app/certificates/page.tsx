@@ -112,7 +112,7 @@ const mockCertificates: Certificate[] = [
     inspectorName: 'นางสมจิตร ตรวจสอบ',
     createdAt: '2025-03-10T09:15:00Z',
     updatedAt: '2025-03-10T09:15:00Z',
-  },
+  }
 ];
 
 export default function CertificatesPage() {

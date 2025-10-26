@@ -439,7 +439,7 @@ describe('VerifyPage', () => {
           expect.objectContaining({
             width: 200,
             margin: 2,
-          }),
+          })
         );
       });
     });

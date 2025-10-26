@@ -32,17 +32,17 @@ export function isValidThaiPhoneNumber(phone: string): boolean {
 
   // Valid prefixes
   const prefix = cleaned.substring(0, 2);
-  
+
   // Mobile: 06/08/09 (must be 10 digits)
   if (['06', '08', '09'].includes(prefix)) {
     return cleaned.length === 10;
   }
-  
+
   // Landline: 02/03/04/05/07 (can be 9 or 10 digits)
   if (['02', '03', '04', '05', '07'].includes(prefix)) {
     return cleaned.length === 9 || cleaned.length === 10;
   }
-  
+
   return false;
 }
 

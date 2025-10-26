@@ -1,7 +1,7 @@
 /**
  * API Route Tests - Certificates Endpoint
  * Tests for /api/certificates/* routes
- * 
+ *
  * Note: Logic tests for certificate issuance, verification, and revocation
  */
 
@@ -240,8 +240,7 @@ describe('API Routes: /api/certificates', () => {
       });
       const now = new Date('2025-10-01');
 
-      const isValid =
-        certificate.status === 'ACTIVE' && certificate.expiryDate > now;
+      const isValid = certificate.status === 'ACTIVE' && certificate.expiryDate > now;
 
       expect(isValid).toBe(true);
     });
@@ -272,9 +271,7 @@ describe('API Routes: /api/certificates', () => {
         createMockCertificate({ certificateNumber: 'GACP-2025-0002' }),
       ];
 
-      const found = certificates.find(
-        cert => cert.certificateNumber === 'GACP-2025-0001',
-      );
+      const found = certificates.find(cert => cert.certificateNumber === 'GACP-2025-0001');
 
       expect(found).toBeDefined();
       expect(found?.id).toBe('cert-001');

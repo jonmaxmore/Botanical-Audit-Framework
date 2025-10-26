@@ -18,7 +18,7 @@ jest.mock('jspdf', () => {
       pageSize: {
         getWidth: () => 210,
         getHeight: () => 297,
-      },
+      }
     },
     setFillColor: jest.fn(),
     rect: jest.fn(),
@@ -98,7 +98,7 @@ describe('PDF Generator', () => {
         expect.any(Number),
         expect.any(Number),
         expect.any(Number),
-        expect.any(Number)
+        expect.any(Number),
       );
     });
 
@@ -121,7 +121,7 @@ describe('PDF Generator', () => {
         expect.stringContaining('GACP-2025-001'),
         expect.any(Number),
         expect.any(Number),
-        expect.any(Object)
+        expect.any(Object),
       );
     });
   });

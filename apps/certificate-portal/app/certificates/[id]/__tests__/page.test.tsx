@@ -93,9 +93,9 @@ describe('CertificateDetailPage', () => {
 
     it('should show certificate after loading', async () => {
       render(<CertificateDetailPage />);
-      
+
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getAllByText('GACP-2025-0001').length).toBeGreaterThan(0);
       });
@@ -110,7 +110,7 @@ describe('CertificateDetailPage', () => {
     it('should render certificate number', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getAllByText('GACP-2025-0001').length).toBeGreaterThan(0);
       });
@@ -119,7 +119,7 @@ describe('CertificateDetailPage', () => {
     it('should render farm information', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('สวนมะม่วงทองดี')).toBeInTheDocument();
         expect(screen.getByText('นายสมชาย ใจดี')).toBeInTheDocument();
@@ -129,7 +129,7 @@ describe('CertificateDetailPage', () => {
     it('should render action buttons', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByRole('button', { name: /print/i })).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /download pdf/i })).toBeInTheDocument();
@@ -140,7 +140,7 @@ describe('CertificateDetailPage', () => {
     it('should render back button', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const buttons = screen.getAllByRole('button');
         const backButton = buttons.find(btn => btn.querySelector('[data-testid="ArrowBackIcon"]'));
@@ -151,7 +151,7 @@ describe('CertificateDetailPage', () => {
     it('should render status chip', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('อนุมัติแล้ว')).toBeInTheDocument();
       });
@@ -166,13 +166,13 @@ describe('CertificateDetailPage', () => {
     it('should navigate back to certificates list on back button click', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const buttons = screen.getAllByRole('button');
         const backButton = buttons.find(btn => btn.querySelector('[data-testid="ArrowBackIcon"]'));
         if (backButton) fireEvent.click(backButton);
       });
-      
+
       expect(mockPush).toHaveBeenCalledWith('/certificates');
     });
   });
@@ -185,36 +185,36 @@ describe('CertificateDetailPage', () => {
     it('should call window.print when print button clicked', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const printButton = screen.getByRole('button', { name: /print/i });
         fireEvent.click(printButton);
       });
-      
+
       expect(window.print).toHaveBeenCalled();
     });
 
     it('should show notification when download PDF clicked', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const downloadButton = screen.getByRole('button', { name: /download pdf/i });
         fireEvent.click(downloadButton);
       });
-      
+
       expect(mockEnqueueSnackbar).toHaveBeenCalledWith('Downloading PDF...', { variant: 'info' });
     });
 
     it('should open QR dialog when QR button clicked', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const qrButton = screen.getByRole('button', { name: /qr code/i });
         fireEvent.click(qrButton);
       });
-      
+
       await waitFor(() => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
@@ -229,7 +229,7 @@ describe('CertificateDetailPage', () => {
     it('should display approved status with correct label', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('อนุมัติแล้ว')).toBeInTheDocument();
       });
@@ -244,7 +244,7 @@ describe('CertificateDetailPage', () => {
     it('should display farm area', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText(/15.5/)).toBeInTheDocument();
       });
@@ -253,7 +253,7 @@ describe('CertificateDetailPage', () => {
     it('should display crop type', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('มะม่วง')).toBeInTheDocument();
       });
@@ -262,7 +262,7 @@ describe('CertificateDetailPage', () => {
     it('should display certification standard', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('GACP')).toBeInTheDocument();
       });
@@ -271,7 +271,7 @@ describe('CertificateDetailPage', () => {
     it('should display farmer name', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('นายสมชาย ใจดี')).toBeInTheDocument();
       });
@@ -280,7 +280,7 @@ describe('CertificateDetailPage', () => {
     it('should display certificate ID prominently', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const certNumbers = screen.getAllByText('GACP-2025-0001');
         expect(certNumbers.length).toBeGreaterThan(0);
@@ -295,10 +295,10 @@ describe('CertificateDetailPage', () => {
 
     it('should handle certificate loading gracefully', async () => {
       render(<CertificateDetailPage />);
-      
+
       // Should show loading initially
       expect(screen.getByText('Loading...')).toBeInTheDocument();
-      
+
       // Then show content after timer
       jest.advanceTimersByTime(500);
       await waitFor(() => {
@@ -315,7 +315,7 @@ describe('CertificateDetailPage', () => {
     it('should close QR dialog when close button clicked', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const qrButton = screen.getByText('QR Code');
         fireEvent.click(qrButton);
@@ -323,8 +323,9 @@ describe('CertificateDetailPage', () => {
 
       await waitFor(() => {
         const closeButtons = screen.getAllByRole('button');
-        const closeButton = closeButtons.find(btn => 
-          btn.textContent?.includes('Close') || btn.querySelector('[data-testid="CloseIcon"]')
+        const closeButton = closeButtons.find(
+          btn =>
+            btn.textContent?.includes('Close') || btn.querySelector('[data-testid="CloseIcon"]'),
         );
         if (closeButton) {
           fireEvent.click(closeButton);
@@ -341,7 +342,7 @@ describe('CertificateDetailPage', () => {
     it('should show correct color for approved status', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         expect(screen.getByText('อนุมัติแล้ว')).toBeTruthy();
       });
@@ -350,7 +351,7 @@ describe('CertificateDetailPage', () => {
     it('should handle pending status', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Test that status rendering works for any status
         const statusElements = screen.queryAllByText(/อนุมัติ|รออนุมัติ|ปฏิเสธ|หมดอายุ|ยกเลิก/);
@@ -361,7 +362,7 @@ describe('CertificateDetailPage', () => {
     it('should handle rejected status', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Test status rendering system works
         const statusChip = screen.getByText('อนุมัติแล้ว');
@@ -372,7 +373,7 @@ describe('CertificateDetailPage', () => {
     it('should handle expired status', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Verify status system is functional
         expect(screen.getByText('อนุมัติแล้ว')).toBeTruthy();
@@ -382,7 +383,7 @@ describe('CertificateDetailPage', () => {
     it('should handle revoked status', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Verify status rendering handles all cases
         expect(screen.getByText('อนุมัติแล้ว')).toBeTruthy();
@@ -392,7 +393,7 @@ describe('CertificateDetailPage', () => {
     it('should handle default status case', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Verify default case is handled
         const statusElement = screen.getByText('อนุมัติแล้ว');
@@ -409,12 +410,12 @@ describe('CertificateDetailPage', () => {
     it('should show error if reject reason is empty', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const rejectButton = screen.queryByText(/reject|ปฏิเสธ/i);
         if (rejectButton) {
           fireEvent.click(rejectButton);
-          
+
           // Try to submit without reason
           const confirmButtons = screen.queryAllByText(/confirm|ตกลง/i);
           if (confirmButtons.length > 0) {
@@ -428,7 +429,7 @@ describe('CertificateDetailPage', () => {
     it('should accept reject with valid reason', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         // Page loaded successfully
         const certElements = screen.getAllByText('GACP-2025-0001');
@@ -445,7 +446,7 @@ describe('CertificateDetailPage', () => {
     it('should update status on approve', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const approveButton = screen.queryByText(/approve|อนุมัติ/i);
         if (approveButton) {
@@ -463,12 +464,12 @@ describe('CertificateDetailPage', () => {
 
     it('should handle certificate not found', async () => {
       render(<CertificateDetailPage />);
-      
+
       // Should show loading first
       expect(screen.getByText('Loading...')).toBeTruthy();
-      
+
       jest.advanceTimersByTime(500);
-      
+
       // Should show content after loading
       await waitFor(() => {
         expect(screen.queryByText('Loading...')).toBeFalsy();
@@ -478,7 +479,7 @@ describe('CertificateDetailPage', () => {
     it('should show content when certificate exists', async () => {
       render(<CertificateDetailPage />);
       jest.advanceTimersByTime(500);
-      
+
       await waitFor(() => {
         const certElements = screen.getAllByText('GACP-2025-0001');
         expect(certElements.length).toBeGreaterThan(0);

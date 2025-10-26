@@ -1,6 +1,6 @@
 /**
  * HTTP Integration Test Helpers
- * 
+ *
  * Utilities for testing Next.js API routes with actual HTTP layer execution.
  * These helpers mock NextRequest/NextResponse to test full request/response cycle.
  */
@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 /**
  * Create a mock NextRequest for testing API routes
- * 
+ *
  * @example
  * const request = createMockNextRequest('/api/auth/login', {
  *   method: 'POST',
@@ -23,14 +23,9 @@ export function createMockNextRequest(
     body?: any;
     headers?: Record<string, string>;
     searchParams?: Record<string, string>;
-  } = {}
+  } = {},
 ): NextRequest {
-  const {
-    method = 'GET',
-    body,
-    headers = {},
-    searchParams = {},
-  } = options;
+  const { method = 'GET', body, headers = {}, searchParams = {} } = options;
 
   // Build full URL with search params
   const urlObj = new URL(url, 'http://localhost:3000');
@@ -57,7 +52,7 @@ export function createMockNextRequest(
 
 /**
  * Parse NextResponse to get JSON body and status
- * 
+ *
  * @example
  * const response = await POST(request);
  * const { status, body } = await parseNextResponse(response);
@@ -69,7 +64,7 @@ export async function parseNextResponse(response: NextResponse): Promise<{
 }> {
   const status = response.status;
   const bodyText = await response.text();
-  
+
   let body: any;
   try {
     body = JSON.parse(bodyText);
@@ -88,7 +83,7 @@ export async function parseNextResponse(response: NextResponse): Promise<{
 
 /**
  * Create authenticated request with JWT token
- * 
+ *
  * @example
  * const request = createAuthenticatedRequest('/api/users/profile', token, {
  *   method: 'GET'
@@ -97,7 +92,7 @@ export async function parseNextResponse(response: NextResponse): Promise<{
 export function createAuthenticatedRequest(
   url: string,
   token: string,
-  options: Parameters<typeof createMockNextRequest>[1] = {}
+  options: Parameters<typeof createMockNextRequest>[1] = {},
 ): NextRequest {
   return createMockNextRequest(url, {
     ...options,
@@ -139,9 +134,7 @@ export class MockDatabase {
 
   async findUserByEmail(email: string) {
     // Case-insensitive email search
-    return Array.from(this.users.values()).find(
-      u => u.email.toLowerCase() === email.toLowerCase()
-    );
+    return Array.from(this.users.values()).find(u => u.email.toLowerCase() === email.toLowerCase());
   }
 
   async findUserById(id: string) {
@@ -157,9 +150,7 @@ export class MockDatabase {
   }
 
   async findApplicationsByFarmerId(farmerId: string) {
-    return Array.from(this.applications.values()).filter(
-      a => a.farmerId === farmerId
-    );
+    return Array.from(this.applications.values()).filter(a => a.farmerId === farmerId);
   }
 
   async findApplicationById(id: string) {
@@ -183,15 +174,11 @@ export class MockDatabase {
   }
 
   async findInspectionsByFarmerId(farmerId: string) {
-    return Array.from(this.inspections.values()).filter(
-      i => i.farmerId === farmerId
-    );
+    return Array.from(this.inspections.values()).filter(i => i.farmerId === farmerId);
   }
 
   async findInspectionsByInspectorId(inspectorId: string) {
-    return Array.from(this.inspections.values()).filter(
-      i => i.inspectorId === inspectorId
-    );
+    return Array.from(this.inspections.values()).filter(i => i.inspectorId === inspectorId);
   }
 
   async updateInspection(id: string, updates: any) {
@@ -211,20 +198,16 @@ export class MockDatabase {
   }
 
   async findCertificatesByFarmerId(farmerId: string) {
-    return Array.from(this.certificates.values()).filter(
-      c => c.farmerId === farmerId
-    );
+    return Array.from(this.certificates.values()).filter(c => c.farmerId === farmerId);
   }
 
   async findCertificatesByUserId(userId: string) {
-    return Array.from(this.certificates.values()).filter(
-      c => c.userId === userId
-    );
+    return Array.from(this.certificates.values()).filter(c => c.userId === userId);
   }
 
   async findCertificateByCertificateNumber(certificateNumber: string) {
     return Array.from(this.certificates.values()).find(
-      c => c.certificateNumber === certificateNumber
+      c => c.certificateNumber === certificateNumber,
     );
   }
 
@@ -246,9 +229,7 @@ export class MockDatabase {
   }
 
   async findUsersByRole(role: string) {
-    return Array.from(this.users.values()).filter(
-      u => u.role === role
-    );
+    return Array.from(this.users.values()).filter(u => u.role === role);
   }
 
   // Sequence operations (for generating IDs)
@@ -294,7 +275,7 @@ export function teardownIntegrationTest() {
 
 /**
  * Generate test JWT token for authenticated requests
- * 
+ *
  * @example
  * const token = generateTestToken({ userId: '123', role: 'farmer' });
  */
@@ -322,7 +303,7 @@ export function decodeTestToken(token: string): any {
 
 /**
  * Assert response status and structure
- * 
+ *
  * @example
  * await assertResponseStatus(response, 200, {
  *   success: true,
@@ -332,7 +313,7 @@ export function decodeTestToken(token: string): any {
 export async function assertResponseStatus(
   response: NextResponse,
   expectedStatus: number,
-  expectedBody?: any
+  expectedBody?: any,
 ) {
   const { status, body } = await parseNextResponse(response);
 
@@ -382,7 +363,7 @@ export async function createTestApplication(farmerId: string, overrides: any = {
 export async function createTestInspection(
   applicationId: string,
   inspectorId: string,
-  overrides: any = {}
+  overrides: any = {},
 ) {
   const defaultInspection = {
     applicationId,

@@ -33,11 +33,11 @@ describe('Certificate API', () => {
     it('should fetch all certificates', async () => {
       const mockData = [
         { id: '1', farmName: 'Farm 1' },
-        { id: '2', farmName: 'Farm 2' }
+        { id: '2', farmName: 'Farm 2' },
       ];
 
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockData }
+        data: { success: true, data: mockData },
       });
 
       const result = await certificateApi.getAll();
@@ -55,7 +55,7 @@ describe('Certificate API', () => {
     it('should fetch certificate by ID', async () => {
       const mockCert = { id: '123', farmName: 'Test Farm' };
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockCert }
+        data: { success: true, data: mockCert },
       });
 
       const result = await certificateApi.getById('123');
@@ -75,19 +75,19 @@ describe('Certificate API', () => {
           subdistrict: 'Test',
           district: 'Test',
           province: 'Bangkok',
-          postalCode: '10100'
+          postalCode: '10100',
         },
         farmArea: 10,
         cropType: 'Rice',
         certificationStandard: 'GACP' as const,
         inspectionDate: '2025-10-25',
-        inspectorName: 'Inspector'
+        inspectorName: 'Inspector',
       };
 
       mockPost.mockResolvedValue({
         data: {
           success: true,
-          data: { id: '123', ...newCert }
+          data: { id: '123', ...newCert },
         }
       });
 
@@ -101,7 +101,7 @@ describe('Certificate API', () => {
     it('should update certificate', async () => {
       const updateData = { farmName: 'Updated Farm' };
       mockPut.mockResolvedValue({
-        data: { success: true, data: { id: '123', ...updateData } }
+        data: { success: true, data: { id: '123', ...updateData } },
       });
 
       const result = await certificateApi.update('123', updateData);
@@ -112,7 +112,7 @@ describe('Certificate API', () => {
   describe('delete', () => {
     it('should delete certificate', async () => {
       mockDelete.mockResolvedValue({
-        data: { success: true }
+        data: { success: true },
       });
 
       await certificateApi.delete('123');
@@ -127,7 +127,7 @@ describe('Certificate API', () => {
           success: true,
           data: {
             valid: true,
-            certificate: { id: '123', farmName: 'Test' }
+            certificate: { id: '123', farmName: 'Test' },
           }
         }
       });
@@ -140,7 +140,7 @@ describe('Certificate API', () => {
       mockGet.mockResolvedValue({
         data: {
           success: false,
-          data: { valid: false, message: 'Not found' }
+          data: { valid: false, message: 'Not found' },
         }
       });
 
@@ -158,11 +158,11 @@ describe('Certificate API', () => {
         rejected: 5,
         expired: 5,
         expiringThisMonth: 3,
-        issuedThisMonth: 15
+        issuedThisMonth: 15,
       };
 
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockStats }
+        data: { success: true, data: mockStats },
       });
 
       const result = await certificateApi.getStats();
@@ -174,7 +174,7 @@ describe('Certificate API', () => {
     it('should renew certificate', async () => {
       const mockRenewed = { id: '123', status: 'approved', expiryDate: '2026-10-25' };
       mockPost.mockResolvedValue({
-        data: { success: true, data: mockRenewed }
+        data: { success: true, data: mockRenewed },
       });
 
       const result = await certificateApi.renew('123');
@@ -192,7 +192,7 @@ describe('Certificate API', () => {
     it('should revoke certificate with reason', async () => {
       const mockRevoked = { id: '123', status: 'revoked', revokedAt: '2025-10-25' };
       mockPost.mockResolvedValue({
-        data: { success: true, data: mockRevoked }
+        data: { success: true, data: mockRevoked },
       });
 
       const result = await certificateApi.revoke('123', 'Fraudulent');
@@ -243,7 +243,7 @@ describe('Certificate API', () => {
     it('should fetch certificates with status filter', async () => {
       const mockData = [{ id: '1', status: 'approved' }];
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockData }
+        data: { success: true, data: mockData },
       });
 
       await certificateApi.getAll({ status: 'approved' });
@@ -253,7 +253,7 @@ describe('Certificate API', () => {
     it('should fetch certificates with search query', async () => {
       const mockData = [{ id: '1', farmName: 'Test Farm' }];
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockData }
+        data: { success: true, data: mockData },
       });
 
       await certificateApi.getAll({ searchQuery: 'Test' });
@@ -263,7 +263,7 @@ describe('Certificate API', () => {
     it('should fetch certificates with province filter', async () => {
       const mockData = [{ id: '1', address: { province: 'Bangkok' } }];
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockData }
+        data: { success: true, data: mockData },
       });
 
       await certificateApi.getAll({ province: 'Bangkok' });
@@ -273,7 +273,7 @@ describe('Certificate API', () => {
     it('should fetch certificates with date range', async () => {
       const mockData = [{ id: '1', createdAt: '2025-10-01' }];
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockData }
+        data: { success: true, data: mockData },
       });
 
       await certificateApi.getAll({ dateFrom: '2025-10-01', dateTo: '2025-10-31' });
@@ -289,13 +289,13 @@ describe('Certificate API', () => {
 
     it('should add token to request headers when token exists', async () => {
       localStorage.setItem('cert_token', 'test-token-123');
-      
+
       mockGet.mockResolvedValue({
-        data: { success: true, data: [] }
+        data: { success: true, data: [] },
       });
 
       await certificateApi.getAll();
-      
+
       // Token is in localStorage, interceptor would use it
       expect(localStorage.getItem('cert_token')).toBe('test-token-123');
       expect(mockGet).toHaveBeenCalled();
@@ -303,17 +303,17 @@ describe('Certificate API', () => {
 
     it('should not add token when token does not exist', async () => {
       mockGet.mockResolvedValue({
-        data: { success: true, data: [] }
+        data: { success: true, data: [] },
       });
 
       await certificateApi.getAll();
-      
+
       expect(localStorage.getItem('cert_token')).toBeNull();
     });
 
     it('should reject request interceptor error', async () => {
       const requestError = new Error('Request interceptor error');
-      
+
       mockGet.mockRejectedValue(requestError);
 
       await expect(certificateApi.getAll()).rejects.toThrow('Request interceptor error');
@@ -328,7 +328,7 @@ describe('Certificate API', () => {
       mockGet.mockRejectedValue(error401);
 
       await expect(certificateApi.getAll()).rejects.toMatchObject({
-        response: { status: 401 }
+        response: { status: 401 },
       });
     });
 
@@ -341,7 +341,7 @@ describe('Certificate API', () => {
       mockGet.mockRejectedValue(error401);
 
       await expect(certificateApi.getAll()).rejects.toMatchObject({
-        response: { status: 401 }
+        response: { status: 401 },
       });
     });
 
@@ -350,11 +350,11 @@ describe('Certificate API', () => {
         message: 'Network Error',
         config: {},
       };
-      
+
       mockGet.mockRejectedValue(networkError);
 
       await expect(certificateApi.getAll()).rejects.toMatchObject({
-        message: 'Network Error'
+        message: 'Network Error',
       });
     });
 
@@ -363,11 +363,11 @@ describe('Certificate API', () => {
         message: 'Network Error',
         config: { _retry: true },
       };
-      
+
       mockGet.mockRejectedValue(networkError);
 
       await expect(certificateApi.getAll()).rejects.toMatchObject({
-        message: 'Network Error'
+        message: 'Network Error',
       });
     });
 
@@ -377,21 +377,21 @@ describe('Certificate API', () => {
         response: { status: 500 },
         config: {},
       };
-      
+
       mockGet.mockRejectedValue(otherError);
 
       await expect(certificateApi.getAll()).rejects.toMatchObject({
-        message: 'Server Error'
+        message: 'Server Error',
       });
     });
 
     it('should handle response success', async () => {
       mockGet.mockResolvedValue({
-        data: { success: true, data: [] }
+        data: { success: true, data: [] },
       });
 
       const result = await certificateApi.getAll();
-      
+
       expect(result).toEqual([]);
     });
   });
@@ -401,11 +401,11 @@ describe('Certificate API', () => {
     it('should fetch certificate by certificate number', async () => {
       const mockCert = { id: '1', certificateNumber: 'CERT-001' };
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockCert }
+        data: { success: true, data: mockCert },
       });
 
       const result = await certificateApi.getByCertificateNumber('CERT-001');
-      
+
       expect(result).toEqual(mockCert);
       expect(mockGet).toHaveBeenCalledWith('/certificates/number/CERT-001');
     });
@@ -413,8 +413,7 @@ describe('Certificate API', () => {
     it('should handle error when certificate not found', async () => {
       mockGet.mockRejectedValue(new Error('Not found'));
 
-      await expect(certificateApi.getByCertificateNumber('INVALID'))
-        .rejects.toThrow('Not found');
+      await expect(certificateApi.getByCertificateNumber('INVALID')).rejects.toThrow('Not found');
     });
   });
 
@@ -422,16 +421,16 @@ describe('Certificate API', () => {
   describe('create', () => {
     it('should create new certificate', async () => {
       const formData = {
-        farmerInfo: { firstName: 'John' }
+        farmerInfo: { firstName: 'John' },
       };
       const mockCert = { id: '1', ...formData };
-      
+
       mockPost.mockResolvedValue({
-        data: { success: true, data: mockCert }
+        data: { success: true, data: mockCert },
       });
 
       const result = await certificateApi.create(formData as any);
-      
+
       expect(result).toEqual(mockCert);
       expect(mockPost).toHaveBeenCalledWith('/certificates', formData);
     });
@@ -439,25 +438,24 @@ describe('Certificate API', () => {
     it('should handle create error', async () => {
       mockPost.mockRejectedValue(new Error('Creation failed'));
 
-      await expect(certificateApi.create({} as any))
-        .rejects.toThrow('Creation failed');
+      await expect(certificateApi.create({} as any)).rejects.toThrow('Creation failed');
     });
   });
 
   // === update Tests ===
   describe('update', () => {
     it('should update certificate', async () => {
-      const updateData = { 
-        farmerInfo: { firstName: 'John Updated' }
+      const updateData = {
+        farmerInfo: { firstName: 'John Updated' },
       };
       const mockCert = { id: '1', farmerInfo: { firstName: 'John Updated' } };
-      
+
       mockPut.mockResolvedValue({
-        data: { success: true, data: mockCert }
+        data: { success: true, data: mockCert },
       });
 
       const result = await certificateApi.update('1', updateData as any);
-      
+
       expect(result).toEqual(mockCert);
       expect(mockPut).toHaveBeenCalledWith('/certificates/1', updateData);
     });
@@ -465,8 +463,7 @@ describe('Certificate API', () => {
     it('should handle update error', async () => {
       mockPut.mockRejectedValue(new Error('Update failed'));
 
-      await expect(certificateApi.update('1', {}))
-        .rejects.toThrow('Update failed');
+      await expect(certificateApi.update('1', {})).rejects.toThrow('Update failed');
     });
   });
 
@@ -476,14 +473,14 @@ describe('Certificate API', () => {
       const mockVerify = {
         isValid: true,
         certificate: mockCertificate,
-        message: 'Valid certificate'
+        message: 'Valid certificate',
       };
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockVerify }
+        data: { success: true, data: mockVerify },
       });
 
       const result = await certificateApi.verify('CERT-001');
-      
+
       expect(result).toEqual(mockVerify);
       expect(mockGet).toHaveBeenCalledWith('/certificates/verify/CERT-001');
     });
@@ -491,8 +488,7 @@ describe('Certificate API', () => {
     it('should handle verify error', async () => {
       mockGet.mockRejectedValue(new Error('Verification failed'));
 
-      await expect(certificateApi.verify('INVALID'))
-        .rejects.toThrow('Verification failed');
+      await expect(certificateApi.verify('INVALID')).rejects.toThrow('Verification failed');
     });
   });
 
@@ -503,14 +499,14 @@ describe('Certificate API', () => {
         total: 100,
         approved: 80,
         pending: 15,
-        rejected: 5
+        rejected: 5,
       };
       mockGet.mockResolvedValue({
-        data: { success: true, data: mockStats }
+        data: { success: true, data: mockStats },
       });
 
       const result = await certificateApi.getStats();
-      
+
       expect(result).toEqual(mockStats);
       expect(mockGet).toHaveBeenCalledWith('/certificates/stats');
     });
@@ -518,8 +514,7 @@ describe('Certificate API', () => {
     it('should handle getStats error', async () => {
       mockGet.mockRejectedValue(new Error('Stats fetch failed'));
 
-      await expect(certificateApi.getStats())
-        .rejects.toThrow('Stats fetch failed');
+      await expect(certificateApi.getStats()).rejects.toThrow('Stats fetch failed');
     });
   });
 
@@ -527,35 +522,34 @@ describe('Certificate API', () => {
   describe('getExpiring', () => {
     it('should fetch expiring certificates with default days', async () => {
       mockGet.mockResolvedValue({
-        data: { success: true, data: [mockCertificate] }
+        data: { success: true, data: [mockCertificate] },
       });
 
       const result = await certificateApi.getExpiring();
-      
+
       expect(result).toEqual([mockCertificate]);
       expect(mockGet).toHaveBeenCalledWith('/certificates/expiring', {
-        params: { days: 30 }
+        params: { days: 30 },
       });
     });
 
     it('should fetch expiring certificates with custom days', async () => {
       mockGet.mockResolvedValue({
-        data: { success: true, data: [mockCertificate] }
+        data: { success: true, data: [mockCertificate] },
       });
 
       const result = await certificateApi.getExpiring(60);
-      
+
       expect(result).toEqual([mockCertificate]);
       expect(mockGet).toHaveBeenCalledWith('/certificates/expiring', {
-        params: { days: 60 }
+        params: { days: 60 },
       });
     });
 
     it('should handle getExpiring error', async () => {
       mockGet.mockRejectedValue(new Error('Expiring fetch failed'));
 
-      await expect(certificateApi.getExpiring())
-        .rejects.toThrow('Expiring fetch failed');
+      await expect(certificateApi.getExpiring()).rejects.toThrow('Expiring fetch failed');
     });
   });
 
@@ -563,7 +557,7 @@ describe('Certificate API', () => {
     it('should handle revoke() API call', async () => {
       const mockRevoked = { data: { data: { ...mockCertificate, status: 'revoked' } } };
       mockPost.mockResolvedValue(mockRevoked);
-      
+
       const result = await certificateApi.revoke('CERT-001', 'Violation');
       expect(result.status).toBe('revoked');
     });
@@ -571,33 +565,33 @@ describe('Certificate API', () => {
     it('should handle downloadPDF() blob response', async () => {
       const mockBlob = new Blob(['PDF'], { type: 'application/pdf' });
       mockGet.mockResolvedValue({ data: mockBlob });
-      
+
       const result = await certificateApi.downloadPDF('CERT-001');
       expect(result).toBeInstanceOf(Blob);
     });
 
     it('should handle getById() error flow', async () => {
       mockGet.mockRejectedValue({ response: { status: 500 }, message: 'Server error' });
-      
+
       await expect(certificateApi.getById('INVALID')).rejects.toEqual({
         response: { status: 500 },
-        message: 'Server error'
+        message: 'Server error',
       });
     });
 
     it('should handle getByCertificateNumber() error flow', async () => {
       mockGet.mockRejectedValue({ response: { status: 404 }, message: 'Not found' });
-      
+
       await expect(certificateApi.getByCertificateNumber('INVALID')).rejects.toEqual({
         response: { status: 404 },
-        message: 'Not found'
+        message: 'Not found',
       });
     });
 
     it('should handle renew() success path', async () => {
       const mockRenewed = { data: { data: { ...mockCertificate, expiryDate: '2026-01-01' } } };
       mockPost.mockResolvedValue(mockRenewed);
-      
+
       const result = await certificateApi.renew('CERT-001');
       expect(result.expiryDate).toBe('2026-01-01');
     });
@@ -605,25 +599,25 @@ describe('Certificate API', () => {
     it('should handle approve() via revoke endpoint', async () => {
       const mockApproved = { data: { data: { ...mockCertificate, status: 'approved' } } };
       mockPost.mockResolvedValue(mockApproved);
-      
+
       const result = await certificateApi.revoke('CERT-001', 'approved');
       expect(result).toBeDefined();
     });
 
     it('should handle getAll() with multiple parameters', async () => {
       mockGet.mockResolvedValue({ data: { data: [mockCertificate] } });
-      
+
       await certificateApi.getAll({
         status: 'approved',
         searchQuery: 'test',
-        province: 'Bangkok'
+        province: 'Bangkok',
       });
-      
+
       expect(mockGet).toHaveBeenCalledWith('/certificates', {
         params: {
           status: 'approved',
           searchQuery: 'test',
-          province: 'Bangkok'
+          province: 'Bangkok',
         }
       });
     });
@@ -631,7 +625,7 @@ describe('Certificate API', () => {
     it('should handle create() success', async () => {
       const newCert = { farmName: 'New Farm', farmerName: 'New Farmer' };
       mockPost.mockResolvedValue({ data: { data: mockCertificate } });
-      
+
       const result = await certificateApi.create(newCert as any);
       expect(result).toEqual(mockCertificate);
     });
@@ -639,17 +633,16 @@ describe('Certificate API', () => {
     it('should handle update() success', async () => {
       const updates = { status: 'approved' };
       mockPut.mockResolvedValue({ data: { data: { ...mockCertificate, ...updates } } });
-      
+
       const result = await certificateApi.update('CERT-001', updates as any);
       expect(result.status).toBe('approved');
     });
 
     it('should handle delete() success', async () => {
       mockDelete.mockResolvedValue({ data: { success: true } });
-      
+
       await certificateApi.delete('CERT-001');
       expect(mockDelete).toHaveBeenCalledWith('/certificates/CERT-001');
     });
   });
 });
-
