@@ -71,7 +71,7 @@ describe('calculateChange', () => {
 describe('generateApplicationStats', () => {
   it('should generate application stats with all required fields', () => {
     const stats = generateApplicationStats();
-    
+
     expect(stats).toHaveProperty('total');
     expect(stats).toHaveProperty('pending');
     expect(stats).toHaveProperty('approved');
@@ -81,7 +81,7 @@ describe('generateApplicationStats', () => {
 
   it('should generate positive numbers', () => {
     const stats = generateApplicationStats();
-    
+
     expect(stats.total).toBeGreaterThan(0);
     expect(stats.pending).toBeGreaterThan(0);
     expect(stats.approved).toBeGreaterThan(0);
@@ -92,23 +92,23 @@ describe('generateApplicationStats', () => {
   it('should have total equal to sum of all statuses', () => {
     const stats = generateApplicationStats();
     const sum = stats.pending + stats.approved + stats.rejected + stats.reviewing;
-    
+
     expect(stats.total).toBe(sum);
   });
 
   it('should generate numbers within expected ranges', () => {
     const stats = generateApplicationStats();
-    
+
     // Based on randomInRange calls in implementation
     expect(stats.pending).toBeGreaterThanOrEqual(25);
     expect(stats.pending).toBeLessThanOrEqual(40);
-    
+
     expect(stats.approved).toBeGreaterThanOrEqual(40);
     expect(stats.approved).toBeLessThanOrEqual(60);
-    
+
     expect(stats.rejected).toBeGreaterThanOrEqual(5);
     expect(stats.rejected).toBeLessThanOrEqual(15);
-    
+
     expect(stats.reviewing).toBeGreaterThanOrEqual(10);
     expect(stats.reviewing).toBeLessThanOrEqual(20);
   });
@@ -117,12 +117,14 @@ describe('generateApplicationStats', () => {
     const stats1 = generateApplicationStats();
     const stats2 = generateApplicationStats();
     const stats3 = generateApplicationStats();
-    
+
     // At least one call should produce different results
-    const allSame = 
-      stats1.pending === stats2.pending && stats2.pending === stats3.pending &&
-      stats1.approved === stats2.approved && stats2.approved === stats3.approved;
-    
+    const allSame =
+      stats1.pending === stats2.pending &&
+      stats2.pending === stats3.pending &&
+      stats1.approved === stats2.approved &&
+      stats2.approved === stats3.approved;
+
     expect(allSame).toBe(false);
   });
 });
@@ -136,7 +138,7 @@ describe('generateDailyStats', () => {
   it('should include Thai day names', () => {
     const stats = generateDailyStats();
     const thaiDays = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
-    
+
     stats.forEach((stat, index) => {
       expect(stat.date).toBe(thaiDays[index]);
     });
@@ -144,7 +146,7 @@ describe('generateDailyStats', () => {
 
   it('should have all required fields for each day', () => {
     const stats = generateDailyStats();
-    
+
     stats.forEach(stat => {
       expect(stat).toHaveProperty('date');
       expect(stat).toHaveProperty('newApplications');
@@ -155,7 +157,7 @@ describe('generateDailyStats', () => {
 
   it('should generate positive numbers for all metrics', () => {
     const stats = generateDailyStats();
-    
+
     stats.forEach(stat => {
       expect(stat.newApplications).toBeGreaterThan(0);
       expect(stat.approved).toBeGreaterThan(0);
@@ -165,15 +167,15 @@ describe('generateDailyStats', () => {
 
   it('should generate numbers within expected ranges', () => {
     const stats = generateDailyStats();
-    
+
     stats.forEach(stat => {
       // Based on randomInRange calls
       expect(stat.newApplications).toBeGreaterThanOrEqual(8);
       expect(stat.newApplications).toBeLessThanOrEqual(25);
-      
+
       expect(stat.approved).toBeGreaterThanOrEqual(5);
       expect(stat.approved).toBeLessThanOrEqual(18);
-      
+
       expect(stat.rejected).toBeGreaterThanOrEqual(1);
       expect(stat.rejected).toBeLessThanOrEqual(5);
     });
@@ -182,7 +184,7 @@ describe('generateDailyStats', () => {
   it('should maintain consistent day order', () => {
     const stats1 = generateDailyStats();
     const stats2 = generateDailyStats();
-    
+
     expect(stats1.map(s => s.date)).toEqual(stats2.map(s => s.date));
   });
 });
@@ -190,7 +192,7 @@ describe('generateDailyStats', () => {
 describe('generateKPIData', () => {
   it('should generate KPI data with all required fields', () => {
     const kpi = generateKPIData();
-    
+
     expect(kpi).toHaveProperty('total');
     expect(kpi).toHaveProperty('pending');
     expect(kpi).toHaveProperty('approved');
@@ -203,7 +205,7 @@ describe('generateKPIData', () => {
 
   it('should generate positive numbers for metrics', () => {
     const kpi = generateKPIData();
-    
+
     expect(kpi.total).toBeGreaterThan(0);
     expect(kpi.pending).toBeGreaterThan(0);
     expect(kpi.approved).toBeGreaterThan(0);
@@ -211,26 +213,26 @@ describe('generateKPIData', () => {
 
   it('should format revenue as Thai Baht string', () => {
     const kpi = generateKPIData();
-    
+
     expect(kpi.revenue).toMatch(/^฿[\d,]+$/);
   });
 
   it('should generate numbers within expected ranges', () => {
     const kpi = generateKPIData();
-    
+
     expect(kpi.total).toBeGreaterThanOrEqual(80);
     expect(kpi.total).toBeLessThanOrEqual(120);
-    
+
     expect(kpi.pending).toBeGreaterThanOrEqual(25);
     expect(kpi.pending).toBeLessThanOrEqual(40);
-    
+
     expect(kpi.approved).toBeGreaterThanOrEqual(15);
     expect(kpi.approved).toBeLessThanOrEqual(25);
   });
 
   it('should generate change values as decimals', () => {
     const kpi = generateKPIData();
-    
+
     // Change values should be decimals (divided by 10)
     expect(Math.abs(kpi.totalChange)).toBeLessThanOrEqual(2);
     expect(Math.abs(kpi.pendingChange)).toBeLessThanOrEqual(1);
@@ -242,19 +244,21 @@ describe('generateKPIData', () => {
     const kpi1 = generateKPIData();
     const kpi2 = generateKPIData();
     const kpi3 = generateKPIData();
-    
+
     // At least one call should produce different results
-    const allSame = 
-      kpi1.total === kpi2.total && kpi2.total === kpi3.total &&
-      kpi1.revenue === kpi2.revenue && kpi2.revenue === kpi3.revenue;
-    
+    const allSame =
+      kpi1.total === kpi2.total &&
+      kpi2.total === kpi3.total &&
+      kpi1.revenue === kpi2.revenue &&
+      kpi2.revenue === kpi3.revenue;
+
     expect(allSame).toBe(false);
   });
 
   it('should allow negative change values for totalChange and pendingChange', () => {
     // Run multiple times to check for negative values
     let foundNegative = false;
-    
+
     for (let i = 0; i < 50; i++) {
       const kpi = generateKPIData();
       if (kpi.totalChange < 0 || kpi.pendingChange < 0) {
@@ -262,7 +266,7 @@ describe('generateKPIData', () => {
         break;
       }
     }
-    
+
     // This test might occasionally fail due to randomness, but it's unlikely
     expect(foundNegative).toBe(true);
   });

@@ -72,73 +72,73 @@ describe('UsersPage', () => {
 
   it('should render loading spinner initially', () => {
     render(<UsersPage />);
-    
+
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
   it('should render users table after loading', async () => {
     render(<UsersPage />);
-    
+
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByTestId('users-table')).toBeInTheDocument();
   });
 
   it('should display user data', async () => {
     render(<UsersPage />);
-    
+
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByText(/นายสมชาย ผู้ตรวจสอบ/)).toBeInTheDocument();
     expect(screen.getByText(/somchai@gacp.go.th/)).toBeInTheDocument();
   });
 
   it('should open dialog when add button is clicked', async () => {
     render(<UsersPage />);
-    
+
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     const addButton = screen.getByRole('button', { name: /เพิ่มผู้ใช้งาน/i });
     fireEvent.click(addButton);
-    
+
     expect(screen.getByTestId('user-form-dialog')).toBeInTheDocument();
   });
 
   it('should close dialog when close button is clicked', async () => {
     render(<UsersPage />);
-    
+
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     const addButton = screen.getByRole('button', { name: /เพิ่มผู้ใช้งาน/i });
     fireEvent.click(addButton);
-    
+
     const closeButton = screen.getByRole('button', { name: /Close/i });
     fireEvent.click(closeButton);
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('user-form-dialog')).not.toBeInTheDocument();
     });
@@ -146,17 +146,17 @@ describe('UsersPage', () => {
 
   it('should render admin header and sidebar', async () => {
     render(<UsersPage />);
-    
+
     jest.advanceTimersByTime(1000);
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByTestId('admin-header')).toBeInTheDocument();
-    
-  // Sidebar may appear once or twice (desktop & mobile). Assert at least one.
-  const sidebars = screen.getAllByTestId('admin-sidebar');
-  expect(sidebars.length).toBeGreaterThanOrEqual(1);
+
+    // Sidebar may appear once or twice (desktop & mobile). Assert at least one.
+    const sidebars = screen.getAllByTestId('admin-sidebar');
+    expect(sidebars.length).toBeGreaterThanOrEqual(1);
   });
 });

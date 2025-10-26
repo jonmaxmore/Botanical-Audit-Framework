@@ -42,38 +42,38 @@ jest.mock('@/components/dashboard/StatisticsCard', () => {
 describe('StatisticsPage', () => {
   it('should render statistics page', () => {
     render(<StatisticsPage />);
-    
+
     expect(screen.getByTestId('admin-header')).toBeInTheDocument();
   });
 
   it('should render statistics table', () => {
     render(<StatisticsPage />);
-    
+
     expect(screen.getByTestId('statistics-table')).toBeInTheDocument();
   });
 
   it('should render analytics charts', () => {
     render(<StatisticsPage />);
-    
+
     expect(screen.getByTestId('analytics-charts')).toBeInTheDocument();
   });
 
   it('should render sidebar', () => {
     render(<StatisticsPage />);
-    
+
     const sidebars = screen.getAllByTestId('admin-sidebar');
     expect(sidebars.length).toBeGreaterThanOrEqual(1);
   });
 
   it('should render page title', () => {
     render(<StatisticsPage />);
-    
+
     expect(screen.getByText(/สถิติและการวิเคราะห์/i)).toBeInTheDocument();
   });
 
   it('should render statistics cards', () => {
     render(<StatisticsPage />);
-    
+
     const statsCards = screen.getAllByTestId('statistics-card');
     expect(statsCards.length).toBeGreaterThan(0);
   });

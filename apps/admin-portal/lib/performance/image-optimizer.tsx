@@ -24,7 +24,7 @@
  */
 
 import Image, { ImageProps } from 'next/image';
-import { useState, useEffect, CSSProperties } from 'react';
+import React, { useState, useEffect, CSSProperties } from 'react';
 
 /**
  * CDN configuration

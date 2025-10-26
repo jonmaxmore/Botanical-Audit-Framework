@@ -34,26 +34,26 @@ jest.mock('@/components/users/RoleManagement', () => {
 describe('RolesPage', () => {
   it('should render roles page', () => {
     render(<RolesPage />);
-    
+
     expect(screen.getByTestId('admin-header')).toBeInTheDocument();
   });
 
   it('should render role management component', () => {
     render(<RolesPage />);
-    
+
     expect(screen.getByTestId('role-management')).toBeInTheDocument();
   });
 
   it('should render sidebar', () => {
     render(<RolesPage />);
-    
+
     const sidebars = screen.getAllByTestId('admin-sidebar');
     expect(sidebars.length).toBeGreaterThanOrEqual(1);
   });
 
   it('should render admin header with title', () => {
     render(<RolesPage />);
-    
+
     // Header is rendered (title passed as prop to AdminHeader)
     expect(screen.getByTestId('admin-header')).toBeInTheDocument();
   });

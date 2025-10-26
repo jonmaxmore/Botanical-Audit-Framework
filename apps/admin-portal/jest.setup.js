@@ -1,5 +1,5 @@
 // Learn more: https://github.com/testing-library/jest-dom
-import '@testing-library/jest-dom'
+import '@testing-library/jest-dom';
 
 // Mock Next.js router
 jest.mock('next/navigation', () => ({
@@ -12,40 +12,40 @@ jest.mock('next/navigation', () => ({
       pathname: '/',
       query: {},
       asPath: '/',
-    }
+    };
   },
   usePathname() {
-    return '/'
+    return '/';
   },
   useSearchParams() {
-    return new URLSearchParams()
+    return new URLSearchParams();
   },
   useParams() {
-    return {}
+    return {};
   },
-}))
+}));
 
 // Mock localStorage
 const localStorageMock = (() => {
-  let store = {}
+  let store = {};
 
   return {
-    getItem: (key) => store[key] || null,
+    getItem: key => store[key] || null,
     setItem: (key, value) => {
-      store[key] = value.toString()
+      store[key] = value.toString();
     },
-    removeItem: (key) => {
-      delete store[key]
+    removeItem: key => {
+      delete store[key];
     },
     clear: () => {
-      store = {}
+      store = {};
     },
-  }
-})()
+  };
+})();
 
 Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
-})
+});
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
@@ -60,7 +60,7 @@ Object.defineProperty(window, 'matchMedia', {
     removeEventListener: jest.fn(),
     dispatchEvent: jest.fn(),
   })),
-})
+});
 
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
@@ -68,10 +68,10 @@ global.IntersectionObserver = class IntersectionObserver {
   disconnect() {}
   observe() {}
   takeRecords() {
-    return []
+    return [];
   }
   unobserve() {}
-}
+};
 
 // Mock ResizeObserver
 global.ResizeObserver = class ResizeObserver {
@@ -79,14 +79,14 @@ global.ResizeObserver = class ResizeObserver {
   disconnect() {}
   observe() {}
   unobserve() {}
-}
+};
 
 // Mock fetch for tests
-global.fetch = jest.fn()
+global.fetch = jest.fn();
 
 // Suppress console errors/warnings in tests
-const originalError = console.error
-const originalWarn = console.warn
+const originalError = console.error;
+const originalWarn = console.warn;
 
 beforeAll(() => {
   console.error = (...args) => {
@@ -95,29 +95,26 @@ beforeAll(() => {
       (args[0].includes('Warning: ReactDOM.render') ||
         args[0].includes('Not implemented: HTMLFormElement.prototype.submit'))
     ) {
-      return
+      return;
     }
-    originalError.call(console, ...args)
-  }
+    originalError.call(console, ...args);
+  };
 
   console.warn = (...args) => {
-    if (
-      typeof args[0] === 'string' &&
-      args[0].includes('componentWillReceiveProps')
-    ) {
-      return
+    if (typeof args[0] === 'string' && args[0].includes('componentWillReceiveProps')) {
+      return;
     }
-    originalWarn.call(console, ...args)
-  }
-})
+    originalWarn.call(console, ...args);
+  };
+});
 
 afterAll(() => {
-  console.error = originalError
-  console.warn = originalWarn
-})
+  console.error = originalError;
+  console.warn = originalWarn;
+});
 
 // Clear mocks after each test
 afterEach(() => {
-  jest.clearAllMocks()
-  localStorage.clear()
-})
+  jest.clearAllMocks();
+  localStorage.clear();
+});

@@ -14,7 +14,7 @@ describe('StatisticsCard', () => {
         iconColor="primary"
       />
     );
-    
+
     expect(screen.getByText('Total Applications')).toBeInTheDocument();
     expect(screen.getByText('1,248')).toBeInTheDocument();
   });
@@ -29,7 +29,7 @@ describe('StatisticsCard', () => {
         iconColor="primary"
       />
     );
-    
+
     expect(screen.getByText('Test subtitle')).toBeInTheDocument();
   });
 
@@ -44,7 +44,7 @@ describe('StatisticsCard', () => {
         trend={{ value: 12.5, isPositive: true }}
       />
     );
-    
+
     expect(screen.getByText(/12.5%/)).toBeInTheDocument();
   });
 
@@ -59,7 +59,7 @@ describe('StatisticsCard', () => {
         trend={{ value: 8.2, isPositive: false }}
       />
     );
-    
+
     expect(screen.getByText(/8.2%/)).toBeInTheDocument();
   });
 });

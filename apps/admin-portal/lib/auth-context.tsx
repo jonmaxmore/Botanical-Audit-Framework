@@ -89,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const mockToken = btoa(JSON.stringify({ userId: foundUser.id, email: foundUser.email }));
 
       // Remove password from user object
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line no-unused-vars
       const { password: _, ...userWithoutPassword } = foundUser;
 
       // Store in localStorage

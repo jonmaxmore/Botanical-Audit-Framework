@@ -61,66 +61,66 @@ describe('ReviewsPage', () => {
 
   it('should render loading spinner initially', () => {
     render(<ReviewsPage />);
-    
+
     expect(screen.getByTestId('loading-spinner')).toBeInTheDocument();
   });
 
   it('should render review queue after loading', async () => {
     render(<ReviewsPage />);
-    
+
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByTestId('review-queue')).toBeInTheDocument();
   });
 
   it('should display application data', async () => {
     render(<ReviewsPage />);
-    
+
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByText(/GACP-2025-0001/)).toBeInTheDocument();
     expect(screen.getByText(/นายสมชาย ใจดี/)).toBeInTheDocument();
   });
 
   it('should render admin header and sidebar', async () => {
     render(<ReviewsPage />);
-    
+
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByTestId('admin-header')).toBeInTheDocument();
-  const sidebars = screen.getAllByTestId('admin-sidebar');
-  expect(sidebars.length).toBeGreaterThanOrEqual(1);
+    const sidebars = screen.getAllByTestId('admin-sidebar');
+    expect(sidebars.length).toBeGreaterThanOrEqual(1);
   });
 
   it('should display multiple applications', async () => {
     render(<ReviewsPage />);
-    
+
     act(() => {
       jest.advanceTimersByTime(1000);
     });
-    
+
     await waitFor(() => {
       expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
     });
-    
+
     expect(screen.getByTestId('application-1')).toBeInTheDocument();
     expect(screen.getByTestId('application-2')).toBeInTheDocument();
     expect(screen.getByTestId('application-3')).toBeInTheDocument();

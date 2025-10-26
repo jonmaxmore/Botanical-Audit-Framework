@@ -30,26 +30,26 @@ jest.mock('@/components/reports/ReportGenerator', () => {
 describe('ReportsPage', () => {
   it('should render reports page', () => {
     render(<ReportsPage />);
-    
+
     expect(screen.getByTestId('admin-header')).toBeInTheDocument();
   });
 
   it('should render report generator component', () => {
     render(<ReportsPage />);
-    
+
     expect(screen.getByTestId('report-generator')).toBeInTheDocument();
   });
 
   it('should render sidebar', () => {
     render(<ReportsPage />);
-    
+
     const sidebars = screen.getAllByTestId('admin-sidebar');
     expect(sidebars.length).toBeGreaterThanOrEqual(1);
   });
 
   it('should render header and generator', () => {
     render(<ReportsPage />);
-    
+
     expect(screen.getByTestId('admin-header')).toBeInTheDocument();
     expect(screen.getByTestId('report-generator')).toBeInTheDocument();
   });

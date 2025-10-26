@@ -24,27 +24,27 @@ describe('ActivitySummary', () => {
 
   it('should render activity summary', () => {
     render(<ActivitySummary activities={mockActivities} />);
-    
+
     expect(screen.getByText('New Application')).toBeInTheDocument();
     expect(screen.getByText('Application Approved')).toBeInTheDocument();
   });
 
   it('should render activity descriptions', () => {
     render(<ActivitySummary activities={mockActivities} />);
-    
+
     expect(screen.getByText(/John submitted application/i)).toBeInTheDocument();
     expect(screen.getByText(/was approved/i)).toBeInTheDocument();
   });
 
   it('should render empty state when no activities', () => {
     render(<ActivitySummary activities={[]} />);
-    
+
     expect(screen.getByText(/ไม่มีกิจกรรม/i)).toBeInTheDocument();
   });
 
   it('should display user names', () => {
     render(<ActivitySummary activities={mockActivities} />);
-    
+
     expect(screen.getByText(/John Doe/i)).toBeInTheDocument();
     expect(screen.getByText(/Admin/i)).toBeInTheDocument();
   });
@@ -62,7 +62,7 @@ describe('ActivitySummary', () => {
     ];
 
     render(<ActivitySummary activities={activitiesWithoutUser} />);
-    
+
     expect(screen.getByText('System Comment')).toBeInTheDocument();
     expect(screen.getByText('Auto-generated comment')).toBeInTheDocument();
   });
@@ -79,7 +79,7 @@ describe('ActivitySummary', () => {
     ];
 
     render(<ActivitySummary activities={unknownTypeActivity} />);
-    
+
     expect(screen.getByText('Unknown Activity')).toBeInTheDocument();
   });
 
@@ -116,7 +116,7 @@ describe('ActivitySummary', () => {
     ];
 
     render(<ActivitySummary activities={allTypes} />);
-    
+
     expect(screen.getByText('Application')).toBeInTheDocument();
     expect(screen.getByText('Comment')).toBeInTheDocument();
     expect(screen.getByText('Approval')).toBeInTheDocument();
@@ -135,7 +135,7 @@ describe('ActivitySummary', () => {
     ];
 
     render(<ActivitySummary activities={recentActivity} />);
-    
+
     expect(screen.getByText(/เมื่อสักครู่/i)).toBeInTheDocument();
   });
 
@@ -152,7 +152,7 @@ describe('ActivitySummary', () => {
     ];
 
     render(<ActivitySummary activities={minuteActivity} />);
-    
+
     expect(screen.getByText(/นาทีที่แล้ว/i)).toBeInTheDocument();
   });
 
@@ -169,7 +169,7 @@ describe('ActivitySummary', () => {
     ];
 
     render(<ActivitySummary activities={hourActivity} />);
-    
+
     expect(screen.getByText(/ชั่วโมงที่แล้ว/i)).toBeInTheDocument();
   });
 
@@ -186,7 +186,7 @@ describe('ActivitySummary', () => {
     ];
 
     render(<ActivitySummary activities={dayActivity} />);
-    
+
     expect(screen.getByText(/วันที่แล้ว/i)).toBeInTheDocument();
   });
 
@@ -216,7 +216,7 @@ describe('ActivitySummary', () => {
     ];
 
     const { container } = render(<ActivitySummary activities={multipleActivities} />);
-    
+
     // Should have dividers between activities
     const dividers = container.querySelectorAll('hr');
     expect(dividers.length).toBeGreaterThan(0);

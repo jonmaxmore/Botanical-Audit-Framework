@@ -13,13 +13,13 @@ jest.mock('next/navigation', () => ({
 
 // Mock localStorage
 const localStorageMock = (() => {
-  let store = {};
+  let store: Record<string, string | null> = {};
   return {
-    getItem: jest.fn((key) => store[key] || null),
-    setItem: jest.fn((key, value) => {
+    getItem: jest.fn((key: string) => store[key] || null),
+    setItem: jest.fn((key: string, value: string) => {
       store[key] = value.toString();
     }),
-    removeItem: jest.fn((key) => {
+    removeItem: jest.fn((key: string) => {
       delete store[key];
     }),
     clear: jest.fn(() => {
@@ -102,7 +102,7 @@ describe('AuthContext', () => {
       const mockUser = { id: '1', email: 'admin@gacp.th', name: 'Admin User', role: 'admin' };
       const mockToken = 'mock-token';
 
-      localStorageMock.getItem.mockImplementation((key) => {
+      localStorageMock.getItem.mockImplementation(key => {
         if (key === 'token') return mockToken;
         if (key === 'user') return JSON.stringify(mockUser);
         return null;
@@ -122,7 +122,7 @@ describe('AuthContext', () => {
     });
 
     it('should handle invalid JSON in localStorage', async () => {
-      localStorageMock.getItem.mockImplementation((key) => {
+      localStorageMock.getItem.mockImplementation(key => {
         if (key === 'token') return 'mock-token';
         if (key === 'user') return 'invalid-json{';
         return null;
@@ -162,7 +162,10 @@ describe('AuthContext', () => {
         expect(screen.getByTestId('user')).toHaveTextContent('admin@gacp.th');
         expect(screen.getByTestId('isAuthenticated')).toHaveTextContent('true');
         expect(localStorageMock.setItem).toHaveBeenCalledWith('token', expect.any(String));
-        expect(localStorageMock.setItem).toHaveBeenCalledWith('user', expect.stringContaining('admin@gacp.th'));
+        expect(localStorageMock.setItem).toHaveBeenCalledWith(
+          'user',
+          expect.stringContaining('admin@gacp.th')
+        );
         expect(mockPush).toHaveBeenCalledWith('/dashboard');
       });
     });
@@ -184,8 +187,11 @@ describe('AuthContext', () => {
 
       await waitFor(() => {
         expect(localStorageMock.setItem).toHaveBeenCalledWith('token', expect.any(String));
-        const tokenCall = localStorageMock.setItem.mock.calls.find(call => call[0] === 'token');
-        expect(tokenCall[1]).toBeTruthy();
+        const tokenCall = localStorageMock.setItem.mock.calls.find(
+          (call: any) => call[0] === 'token'
+        );
+        expect(tokenCall).toBeDefined();
+        expect(tokenCall && tokenCall[1]).toBeTruthy();
       });
     });
 
@@ -205,9 +211,11 @@ describe('AuthContext', () => {
       });
 
       await waitFor(() => {
-        const userCall = localStorageMock.setItem.mock.calls.find(call => call[0] === 'user');
+        const userCall = localStorageMock.setItem.mock.calls.find(
+          (call: any) => call[0] === 'user'
+        );
         expect(userCall).toBeDefined();
-        const userData = JSON.parse(userCall[1]);
+        const userData = JSON.parse((userCall && userCall[1]) as string);
         expect(userData.password).toBeUndefined();
         expect(userData.email).toBe('admin@gacp.th');
         expect(userData.name).toBe('Admin User');
@@ -244,7 +252,8 @@ describe('AuthContext', () => {
           try {
             await auth.login('wrong@email.com', 'wrongpassword');
           } catch (err) {
-            setError(err.message);
+            // err has unknown type in TS; cast to any to access message
+            setError((err as any).message);
           }
         };
 
@@ -314,7 +323,7 @@ describe('AuthContext', () => {
       const mockUser = { id: '1', email: 'admin@gacp.th', name: 'Admin User', role: 'admin' };
       const mockToken = 'mock-token';
 
-      localStorageMock.getItem.mockImplementation((key) => {
+      localStorageMock.getItem.mockImplementation(key => {
         if (key === 'token') return mockToken;
         if (key === 'user') return JSON.stringify(mockUser);
         return null;
@@ -345,7 +354,7 @@ describe('AuthContext', () => {
       const mockUser = { id: '1', email: 'admin@gacp.th', name: 'Admin User', role: 'admin' };
       const mockToken = 'mock-token';
 
-      localStorageMock.getItem.mockImplementation((key) => {
+      localStorageMock.getItem.mockImplementation(key => {
         if (key === 'token') return mockToken;
         if (key === 'user') return JSON.stringify(mockUser);
         return null;
@@ -375,7 +384,7 @@ describe('AuthContext', () => {
       const mockUser = { id: '1', email: 'admin@gacp.th', name: 'Admin User', role: 'admin' };
       const mockToken = 'mock-token';
 
-      localStorageMock.getItem.mockImplementation((key) => {
+      localStorageMock.getItem.mockImplementation(key => {
         if (key === 'token') return mockToken;
         if (key === 'user') return JSON.stringify(mockUser);
         return null;
@@ -438,7 +447,7 @@ describe('AuthContext', () => {
       const mockUser = { id: '1', email: 'admin@gacp.th', name: 'Admin User', role: 'admin' };
       const mockToken = 'mock-token';
 
-      localStorageMock.getItem.mockImplementation((key) => {
+      localStorageMock.getItem.mockImplementation(key => {
         if (key === 'token') return mockToken;
         if (key === 'user') return JSON.stringify(mockUser);
         return null;
@@ -545,7 +554,7 @@ describe('AuthContext', () => {
       const mockUser = { id: '1', email: 'admin@gacp.th', name: 'Admin User', role: 'admin' };
       const mockToken = 'mock-token';
 
-      localStorageMock.getItem.mockImplementation((key) => {
+      localStorageMock.getItem.mockImplementation(key => {
         if (key === 'token') return mockToken;
         if (key === 'user') return JSON.stringify(mockUser);
         return null;

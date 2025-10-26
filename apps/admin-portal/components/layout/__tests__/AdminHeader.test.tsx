@@ -23,13 +23,13 @@ describe('AdminHeader', () => {
 
   it('should render header with default title', () => {
     render(<AdminHeader onMenuClick={mockMenuClick} />);
-    
+
     expect(screen.getByText('แดชบอร์ด')).toBeInTheDocument();
   });
 
   it('should render header with custom title', () => {
     render(<AdminHeader onMenuClick={mockMenuClick} title="จัดการผู้ใช้" />);
-    
+
     expect(screen.getByText('จัดการผู้ใช้')).toBeInTheDocument();
   });
 
@@ -56,7 +56,7 @@ describe('AdminHeader', () => {
 
   it('should call onMenuClick when menu button is clicked', () => {
     render(<AdminHeader onMenuClick={mockMenuClick} />);
-    
+
     const menuButton = screen.getByLabelText('menu');
     fireEvent.click(menuButton);
 
@@ -65,10 +65,10 @@ describe('AdminHeader', () => {
 
   it('should display notification badge with count', () => {
     render(<AdminHeader onMenuClick={mockMenuClick} />);
-    
+
     const notificationButton = screen.getByLabelText('notifications');
     expect(notificationButton).toBeInTheDocument();
-    
+
     // Badge should show 3 notifications
     const badge = notificationButton.querySelector('.MuiBadge-badge');
     expect(badge).toHaveTextContent('3');
@@ -76,7 +76,7 @@ describe('AdminHeader', () => {
 
   it('should open and close notification menu', async () => {
     render(<AdminHeader onMenuClick={mockMenuClick} />);
-    
+
     const notificationButton = screen.getByLabelText('notifications');
     fireEvent.click(notificationButton);
 
@@ -99,7 +99,7 @@ describe('AdminHeader', () => {
 
   it('should navigate to settings when settings button is clicked', () => {
     render(<AdminHeader onMenuClick={mockMenuClick} />);
-    
+
     const settingsButton = screen.getByLabelText('settings');
     fireEvent.click(settingsButton);
 
@@ -115,7 +115,7 @@ describe('AdminHeader', () => {
     localStorage.setItem('user', JSON.stringify(mockUser));
 
     render(<AdminHeader onMenuClick={mockMenuClick} />);
-    
+
     // Click on avatar to open menu
     const avatar = screen.getByText('ส').closest('div');
     if (avatar?.parentElement) {
@@ -134,7 +134,7 @@ describe('AdminHeader', () => {
 
   it('should navigate to settings from profile menu', async () => {
     render(<AdminHeader onMenuClick={mockMenuClick} />);
-    
+
     // Open profile menu
     const avatar = screen.getByText('A').closest('div');
     if (avatar?.parentElement) {
@@ -162,7 +162,7 @@ describe('AdminHeader', () => {
     localStorage.setItem('token', 'mock-token-123');
 
     render(<AdminHeader onMenuClick={mockMenuClick} />);
-    
+
     // Open profile menu
     const avatar = screen.getByText('ส').closest('div');
     if (avatar?.parentElement) {

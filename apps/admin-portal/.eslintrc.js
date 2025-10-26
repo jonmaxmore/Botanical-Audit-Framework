@@ -1,6 +1,5 @@
 module.exports = {
   extends: ['next/core-web-vitals', 'prettier'],
-  plugins: ['prettier'],
   env: {
     browser: true,
     es6: true,

@@ -516,7 +516,7 @@ export class ErrorLogger {
    * Clear old logs
    */
   async clearOldLogs(daysToKeep: number = 30): Promise<number> {
-    let clearedCount = 0;
+    const clearedCount = 0;
 
     // TODO: Implement log file cleanup
     // Read directory, delete files older than daysToKeep

@@ -68,7 +68,7 @@ describe('AdminSidebar', () => {
     // The selected state is shown via MUI's selected prop
     // Check that the users navigation item exists (it should be visually highlighted)
     expect(screen.getByText('ผู้ใช้งาน')).toBeInTheDocument();
-    
+
     // Verify the component rendered (the highlight is handled by MUI internally)
     const usersText = screen.getByText('ผู้ใช้งาน');
     expect(usersText).toBeVisible();
@@ -144,7 +144,7 @@ describe('AdminSidebar', () => {
     expect(screen.getByText('ผู้ใช้งาน')).toBeInTheDocument();
     expect(screen.getByText('รายงาน')).toBeInTheDocument();
     expect(screen.getByText('ตั้งค่า')).toBeInTheDocument();
-    
+
     // Verify logout button is also present
     const logoutButtons = screen.getAllByText('ออกจากระบบ');
     expect(logoutButtons.length).toBeGreaterThan(0);
