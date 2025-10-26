@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [farmer-portal, admin-portal, backend]
+        app: [farmer-portal, admin-portal, certificate-portal, backend]
 
     steps:
       - name: 📥 Checkout code
@@ -61,7 +61,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [farmer-portal, admin-portal, backend]
+        app: [farmer-portal, admin-portal, certificate-portal, backend]
 
     steps:
       - name: 📥 Checkout code
@@ -151,18 +151,43 @@ jobs:
           context: .
           file: ./Dockerfile.backend
           push: true
-          tags: ${{ steps.meta.outputs.tags }}-backend
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-backend
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-backend
           labels: ${{ steps.meta.outputs.labels }}
 
-      - name: 🏗️ Build and push Frontend images
-        run: |
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-farmer-portal \
-            --build-arg APP_NAME=farmer-portal .
-          docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-admin-portal \
-            --build-arg APP_NAME=admin-portal .
+      - name: 🏗️ Build and push Farmer Portal image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/farmer-portal/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-farmer-portal
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-farmer-portal
+          labels: ${{ steps.meta.outputs.labels }}
 
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-farmer-portal
-          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-admin-portal
+      - name: 🏗️ Build and push Admin Portal image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/admin-portal/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-admin-portal
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-admin-portal
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: 🏗️ Build and push Certificate Portal image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./apps/certificate-portal/Dockerfile
+          push: true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}-certificate-portal
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest-certificate-portal
+          labels: ${{ steps.meta.outputs.labels }}
 
   # Phase 5: Deploy to Staging
   deploy-staging:

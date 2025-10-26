@@ -8,6 +8,10 @@
 // Load environment variables FIRST
 require('dotenv').config();
 
+// 🔒 CRITICAL: Validate all secrets BEFORE starting server
+const { validateAllSecrets } = require('./modules/shared/utils/validateSecrets');
+validateAllSecrets(); // Will exit process if any secret is invalid
+
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');

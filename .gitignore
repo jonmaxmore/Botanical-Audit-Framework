@@ -26,6 +26,11 @@ out/
 .env.development.local
 .env.test.local
 .env.production.local
+.env.production
+**/apps/**/.env
+**/apps/**/.env.*
+!**/apps/**/.env.example
+!**/apps/**/.env.*.example
 
 # IDE files
 .vscode/settings.json

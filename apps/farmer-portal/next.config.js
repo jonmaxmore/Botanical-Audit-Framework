@@ -4,6 +4,8 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const nextConfig = {
   transpilePackages: ['@gacp/ui', '@gacp/types', '@gacp/utils'],
   turbopack: {},
+  // Enable standalone output for Docker deployment
+  output: 'standalone',
   // Disable instrumentation for development to avoid conflicts
   experimental: {
     // instrumentation.js is now available by default in Next.js 16
