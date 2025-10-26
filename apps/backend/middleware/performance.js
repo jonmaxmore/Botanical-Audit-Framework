@@ -234,7 +234,7 @@ const optimizeApiResponse = {
 
     const result = {};
     fields.forEach(field => {
-      if (obj.hasOwnProperty(field)) {
+      if (Object.prototype.hasOwnProperty.call(obj, field)) {
         result[field] = obj[field];
       }
     });

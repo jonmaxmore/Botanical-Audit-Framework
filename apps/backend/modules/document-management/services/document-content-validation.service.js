@@ -129,7 +129,7 @@ class DocumentContentValidationService {
 
     try {
       // 1. ตรวจสอบเลขที่ใบอนุญาต
-      const licenseNumberPattern = /(?:เลขที่|ใบอนุญาต|License\s*No)[:\s]*([A-Z0-9\-\/]+)/i;
+      const licenseNumberPattern = /(?:เลขที่|ใบอนุญาต|License.*No)[:.]*([A-Z0-9./]+)/i;
       const licenseMatch = text.match(licenseNumberPattern);
 
       if (licenseMatch) {
@@ -144,7 +144,7 @@ class DocumentContentValidationService {
       // 2. ตรวจสอบชื่อเกษตรกร
       if (applicationData.farmerProfile?.fullName) {
         const farmerName = applicationData.farmerProfile.fullName;
-        const namePattern = new RegExp(farmerName.replace(/\s+/g, '\\s*'), 'i');
+        const namePattern = new RegExp(farmerName.replace(/.+/g, '.s*'), 'i');
 
         if (namePattern.test(text)) {
           extractedData.farmerName = farmerName;
@@ -158,7 +158,7 @@ class DocumentContentValidationService {
 
       // 3. ตรวจสอบวันหมดอายุ
       const expiryPattern =
-        /(?:หมดอายุ|วันที่สิ้นสุด|Expires?)[:\s]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.](?:\d{2}|\d{4}))/i;
+        /(?:หมดอายุ|วันที่สิ้นสุด|Expires?)[:.]*(.{1,2}[/..].{1,2}[/..](?:.{2}|.{4}))/i;
       const expiryMatch = text.match(expiryPattern);
 
       if (expiryMatch) {
@@ -233,11 +233,11 @@ class DocumentContentValidationService {
 
     try {
       // 1. ตรวจสอบเลขบัตรประชาชน
-      const idPattern = /(?:เลขประจำตัว|ID\s*No)[:\s]*(\d{1}-?\d{4}-?\d{5}-?\d{2}-?\d{1})/i;
+      const idPattern = /(?:เลขประจำตัว|ID.*No)[:.]*(.{1}-?.{4}-?.{5}-?.{2}-?.{1})/i;
       const idMatch = text.match(idPattern);
 
       if (idMatch) {
-        const idNumber = idMatch[1].replace(/\-/g, '');
+        const idNumber = idMatch[1].replace(/./g, '');
         extractedData.idNumber = idNumber;
 
         // ตรวจสอบ checksum เลขบัตรประชาชน
@@ -256,7 +256,7 @@ class DocumentContentValidationService {
       // 2. ตรวจสอบชื่อ-นามสกุล
       if (applicationData.farmerProfile?.fullName) {
         const farmerName = applicationData.farmerProfile.fullName;
-        const namePattern = new RegExp(farmerName.replace(/\s+/g, '\\s*'), 'i');
+        const namePattern = new RegExp(farmerName.replace(/.+/g, '.s*'), 'i');
 
         if (namePattern.test(text)) {
           extractedData.fullName = farmerName;
@@ -270,7 +270,7 @@ class DocumentContentValidationService {
 
       // 3. ตรวจสอบวันหมดอายุ
       const expiryPattern =
-        /(?:หมดอายุ|Expires?)[:\s]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.](?:\d{2}|\d{4}))/i;
+        /(?:หมดอายุ|Expires?)[:.]*(.{1,2}[/..].{1,2}[/..](?:.{2}|.{4}))/i;
       const expiryMatch = text.match(expiryPattern);
 
       if (expiryMatch) {
@@ -289,7 +289,7 @@ class DocumentContentValidationService {
       }
 
       // 4. ตรวจสอบวันเกิด
-      const birthPattern = /(?:เกิด|Birth)[:\s]*(\d{1,2}[\/\-\.]\d{1,2}[\/\-\.](?:\d{2}|\d{4}))/i;
+      const birthPattern = /(?:เกิด|Birth)[:.]*(.{1,2}[/..].{1,2}[/..](?:.{2}|.{4}))/i;
       const birthMatch = text.match(birthPattern);
 
       if (birthMatch) {
@@ -341,7 +341,7 @@ class DocumentContentValidationService {
 
     try {
       // 1. ตรวจสอบเลขที่โฉนด/เลขที่ดิน
-      const landNumberPattern = /(?:เลขที่|โฉนดเลขที่|ส\.ป\.ก\.|Land\s*No)[:\s]*([0-9A-Z\-\/]+)/i;
+      const landNumberPattern = /(?:เลขที่|โฉนดเลขที่|ส.ป.ก.|Land.*No)[:.]*([0-9A-Z./]+)/i;
       const landMatch = text.match(landNumberPattern);
 
       if (landMatch) {
@@ -354,7 +354,7 @@ class DocumentContentValidationService {
       }
 
       // 2. ตรวจสอบเนื้อที่
-      const areaPattern = /(?:เนื้อที่|จำนวน|Area)[:\s]*(\d+(?:\.\d+)?)\s*(?:ไร่|rai|hectare|ha)/i;
+      const areaPattern = /(?:เนื้อที่|จำนวน|Area)[:.]*(.+(?:..+)?).*(?:ไร่|rai|hectare|ha)/i;
       const areaMatch = text.match(areaPattern);
 
       if (areaMatch) {
@@ -396,7 +396,7 @@ class DocumentContentValidationService {
       // 4. ตรวจสอบชื่อเจ้าของ
       if (applicationData.farmerProfile?.fullName) {
         const ownerName = applicationData.farmerProfile.fullName;
-        const namePattern = new RegExp(ownerName.replace(/\s+/g, '\\s*'), 'i');
+        const namePattern = new RegExp(ownerName.replace(/.+/g, '.s*'), 'i');
 
         if (namePattern.test(text)) {
           extractedData.ownerName = ownerName;
@@ -477,7 +477,7 @@ class DocumentContentValidationService {
    * ตรวจสอบ checksum เลขบัตรประชาชนไทย
    */
   _validateThaiIdChecksum(idNumber) {
-    if (!/^\d{13}$/.test(idNumber)) return false;
+    if (!/^.{13}$/.test(idNumber)) return false;
 
     let sum = 0;
     for (let i = 0; i < 12; i++) {
@@ -493,9 +493,9 @@ class DocumentContentValidationService {
    */
   _parseDate(dateString) {
     const formats = [
-      /(\d{1,2})\/(\d{1,2})\/(\d{4})/,
-      /(\d{1,2})-(\d{1,2})-(\d{4})/,
-      /(\d{1,2})\.(\d{1,2})\.(\d{4})/,
+      /(.{1,2})/(.{1,2})/(.{4})/,
+      /(.{1,2})-(.{1,2})-(.{4})/,
+      /(.{1,2}).(.{1,2}).(.{4})/,
     ];
 
     for (const format of formats) {

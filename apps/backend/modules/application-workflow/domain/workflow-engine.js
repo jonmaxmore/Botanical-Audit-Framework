@@ -1240,10 +1240,10 @@ class ApplicationWorkflowEngine extends EventEmitter {
   }
 
   /**
-   * Enhanced compliance score calculation with detailed breakdown
+   * Enhanced compliance score calculation with detailed breakdown (v2)
    * @private
    */
-  _calculateComplianceScore(inspectionReport) {
+  _calculateComplianceScoreDetailed(inspectionReport) {
     if (!inspectionReport.checklist) return 0;
 
     const categories = {

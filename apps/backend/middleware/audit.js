@@ -1,5 +1,6 @@
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('audit');
+const { AuditLog } = require('../modules/audit/domain/entities/AuditLog');
 
 /**
  * Audit Middleware for GACP Platform

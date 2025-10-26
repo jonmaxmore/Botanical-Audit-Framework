@@ -22,7 +22,6 @@ const { body, query, param } = require('express-validator');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('audit-enhanced-audit.routes');
 
-
 /**
  * Create enhanced audit routes
  */
@@ -383,7 +382,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     async (req, res) => {
       try {
         // This would integrate with reporting service
-        // const reportData = {
+        const reportData = {
           type: req.body.reportType,
           period: {
             start: new Date(req.body.startDate),

@@ -481,7 +481,7 @@ ApplicationSchema.pre('save', function (next) {
   // Validate status transitions
   if (this.isModified('currentStatus')) {
     // Add validation logic for valid status transitions
-    // const validTransitions = {
+    const validTransitions = {
       [ApplicationStatus.DRAFT]: [ApplicationStatus.SUBMITTED],
       [ApplicationStatus.SUBMITTED]: [ApplicationStatus.UNDER_REVIEW],
       [ApplicationStatus.UNDER_REVIEW]: [

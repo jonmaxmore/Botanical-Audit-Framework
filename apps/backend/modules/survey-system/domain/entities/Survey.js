@@ -308,39 +308,40 @@ class Survey {
       return questionScore;
     }
 
+    let scoreResult = questionScore;
     switch (question.type) {
       case 'MULTIPLE_CHOICE':
-        questionScore = this.scoreMultipleChoice(question, response.answer);
+        scoreResult = this.scoreMultipleChoice(question, response.answer);
         break;
 
       case 'YES_NO':
-        questionScore = this.scoreYesNo(question, response.answer);
+        scoreResult = this.scoreYesNo(question, response.answer);
         break;
 
       case 'RATING':
-        questionScore = this.scoreRating(question, response.answer);
+        scoreResult = this.scoreRating(question, response.answer);
         break;
 
       case 'NUMERIC':
-        questionScore = this.scoreNumeric(question, response.answer);
+        scoreResult = this.scoreNumeric(question, response.answer);
         break;
 
       case 'TEXT':
-        questionScore = this.scoreText(question, response.answer);
+        scoreResult = this.scoreText(question, response.answer);
         break;
 
       default:
-        questionScore.feedback = 'ประเภทคำถามไม่รองรับ';
+        scoreResult.feedback = 'ประเภทคำถามไม่รองรับ';
     }
 
     // Add GACP compliance feedback
-    if (questionScore.isCorrect) {
-      questionScore.explanation = `ตอบถูกต้องตามมาตรฐาน GACP ${question.gacpReference.standardSection}`;
+    if (scoreResult.isCorrect) {
+      scoreResult.explanation = `ตอบถูกต้องตามมาตรฐาน GACP ${question.gacpReference.standardSection}`;
     } else {
-      questionScore.explanation = `ต้องปรับปรุงให้ตรงตามมาตรฐาน GACP ${question.gacpReference.standardSection}`;
+      scoreResult.explanation = `ต้องปรับปรุงให้ตรงตามมาตรฐาน GACP ${question.gacpReference.standardSection}`;
     }
 
-    return questionScore;
+    return scoreResult;
   }
 
   /**

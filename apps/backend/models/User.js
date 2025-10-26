@@ -38,7 +38,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      match: [/^[\+]?[0-9\-\(\)\s]+$/, 'Please enter a valid phone number'],
+      match: [/^[+]?[0-9\-()s]+$/, 'Please enter a valid phone number'],
     },
 
     nationalId: {

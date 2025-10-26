@@ -281,11 +281,11 @@ const schemas = {
     email: Joi.string().email().required(),
     password: Joi.string()
       .min(8)
-      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])'))
+      .pattern(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])'))
       .required(),
     fullName: Joi.string().min(2).max(100).required(),
     phone: Joi.string()
-      .pattern(/^[\+]?[0-9\-\(\)\s]+$/)
+      .pattern(/^[+]?[0-9\-()s]+$/)
       .required(),
     nationalId: Joi.string()
       .pattern(/^\d{13}$/)
