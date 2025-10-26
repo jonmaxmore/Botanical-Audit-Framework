@@ -18,7 +18,7 @@ async function fixNationalIdIndex() {
 
     // Update users with null nationalId
     const User = mongoose.connection.collection('users');
-    
+
     // eslint-disable-next-line no-console
     console.log('🔍 Finding users with null nationalId...');
     const nullUsers = await User.find({ nationalId: null }).toArray();
@@ -28,32 +28,28 @@ async function fixNationalIdIndex() {
     if (nullUsers.length > 0) {
       // eslint-disable-next-line no-console
       console.log('🔧 Generating unique nationalIds for existing users...');
-      
+
       // Find max existing nationalId to avoid conflicts
       const maxUser = await User.find({ nationalId: { $ne: null } })
         .sort({ nationalId: -1 })
         .limit(1)
         .toArray();
-      
+
       let counter = maxUser.length > 0 ? parseInt(maxUser[0].nationalId, 10) : 9000000000000;
-      
+
       for (const user of nullUsers) {
         counter++;
-        await User.updateOne(
-          { _id: user._id },
-          { $set: { nationalId: counter.toString() } }
-        );
+        await User.updateOne({ _id: user._id }, { $set: { nationalId: counter.toString() } });
         // eslint-disable-next-line no-console
         console.log(`✅ Updated ${user.email} with nationalId: ${counter}`);
       }
-      
+
       // eslint-disable-next-line no-console
       console.log('\n✅ All users updated successfully!');
     } else {
       // eslint-disable-next-line no-console
       console.log('✅ No users need updating');
     }
-
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('❌ Error:', error.message);

@@ -28,6 +28,9 @@
 
 const EventEmitter = require('events');
 const crypto = require('crypto');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('advanced-application-processing');
+
 
 class AdvancedApplicationProcessingService extends EventEmitter {
   constructor({

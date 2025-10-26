@@ -32,9 +32,7 @@ const logger = require('../shared/logger/logger');
  */
 const MAGIC_BYTES = {
   // PDF: %PDF-
-  pdf: [
-    [0x25, 0x50, 0x44, 0x46, 0x2d],
-  ],
+  pdf: [[0x25, 0x50, 0x44, 0x46, 0x2d]],
   // JPEG: FF D8 FF
   jpeg: [
     [0xff, 0xd8, 0xff, 0xdb], // JPEG raw
@@ -42,9 +40,7 @@ const MAGIC_BYTES = {
     [0xff, 0xd8, 0xff, 0xe1], // JPEG/Exif
   ],
   // PNG: 89 50 4E 47 0D 0A 1A 0A
-  png: [
-    [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a],
-  ],
+  png: [[0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]],
   // WebP: RIFF....WEBP
   webp: [
     [0x52, 0x49, 0x46, 0x46], // Check first 4 bytes (RIFF), then check bytes 8-11 for WEBP
@@ -100,7 +96,7 @@ const ALLOWED_FILE_TYPES = {
  * @returns {boolean}
  */
 function checkMagicBytes(buffer, magicBytesList) {
-  return magicBytesList.some((magicBytes) => {
+  return magicBytesList.some(magicBytes => {
     for (let i = 0; i < magicBytes.length; i++) {
       if (buffer[i] !== magicBytes[i]) {
         return false;
@@ -191,8 +187,8 @@ function validateFile(file, options = {}) {
 
     // 3. Check file extension
     const ext = path.extname(sanitizedFilename).toLowerCase();
-    const fileTypeEntry = Object.entries(ALLOWED_FILE_TYPES).find(
-      ([, config]) => config.extensions.includes(ext),
+    const fileTypeEntry = Object.entries(ALLOWED_FILE_TYPES).find(([, config]) =>
+      config.extensions.includes(ext),
     );
 
     if (!fileTypeEntry) {
@@ -340,7 +336,7 @@ function validateFileUpload(options = {}) {
       req.fileValidations = validations;
       logger.info('[FileUploadValidator] Multiple files validated:', {
         count: files.length,
-        types: validations.map((v) => v.fileType),
+        types: validations.map(v => v.fileType),
       });
     }
 

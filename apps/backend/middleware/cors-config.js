@@ -70,7 +70,7 @@ function isOriginAllowed(origin, allowedOrigins, allowedPatterns = []) {
   }
 
   // Check pattern matches
-  return allowedPatterns.some((pattern) => pattern.test(origin));
+  return allowedPatterns.some(pattern => pattern.test(origin));
 }
 
 /**
@@ -95,7 +95,8 @@ function createCorsOptions(options = {}) {
   }
 
   // Allowed patterns (only in non-production or if explicitly enabled)
-  const allowedPatterns = environment !== 'production' || allowPatterns ? ALLOWED_ORIGIN_PATTERNS : [];
+  const allowedPatterns =
+    environment !== 'production' || allowPatterns ? ALLOWED_ORIGIN_PATTERNS : [];
 
   return {
     /**

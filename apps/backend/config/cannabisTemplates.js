@@ -3,7 +3,10 @@
  * Ready-to-use cannabis survey templates for different purposes and regions
  */
 
+const mongoose = require('mongoose');
 const { CannabisSurveyTemplate, CannabisQuestion } = require('../models/CannabisSurvey');
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('cannabisTemplates');
 
 // Template definitions with comprehensive cannabis-specific questions
 const cannabisTemplates = [
@@ -774,7 +777,7 @@ async function createCannabisTemplates(createdBy = null) {
         questionCount: createdQuestions.length,
       });
 
-      console.log(
+      logger.info(
         `Created cannabis survey template: ${template.title} with ${createdQuestions.length} questions`,
       );
     }

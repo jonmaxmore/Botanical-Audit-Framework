@@ -5,6 +5,9 @@
  * Part of Clean Architecture - Presentation Layer
  */
 
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('training-controller');
+
 class TrainingController {
   constructor(useCases) {
     this.useCases = useCases;

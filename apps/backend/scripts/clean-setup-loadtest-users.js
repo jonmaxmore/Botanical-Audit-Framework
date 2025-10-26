@@ -20,8 +20,8 @@ async function cleanAndSetup() {
     // Delete all existing loadtest users
     // eslint-disable-next-line no-console
     console.log('🗑️  Deleting existing loadtest users...');
-    const deleteResult = await User.deleteMany({ 
-      email: { $regex: /^loadtest.*@gacp\.dtam\.go\.th$/ } 
+    const deleteResult = await User.deleteMany({
+      email: { $regex: /^loadtest.*@gacp\.dtam\.go\.th$/ },
     });
     // eslint-disable-next-line no-console
     console.log(`✅ Deleted ${deleteResult.deletedCount} users\n`);
@@ -29,9 +29,9 @@ async function cleanAndSetup() {
     // Create fresh test users
     // eslint-disable-next-line no-console
     console.log('👤 Creating test users...\n');
-    
+
     const testUsers = [];
-    
+
     for (let i = 0; i <= 10; i++) {
       testUsers.push({
         email: i === 0 ? 'loadtest@gacp.dtam.go.th' : `loadtest${i}@gacp.dtam.go.th`,
@@ -40,7 +40,7 @@ async function cleanAndSetup() {
         lastName: i === 0 ? 'Test' : `Test ${i}`,
         role: i < 5 ? 'farmer' : i < 7 ? 'inspector' : i < 9 ? 'auditor' : 'admin',
         status: 'active',
-        isEmailVerified: true
+        isEmailVerified: true,
       });
     }
 
@@ -61,7 +61,7 @@ async function cleanAndSetup() {
     console.log(`✅ Successfully created ${testUsers.length} test users`);
     // eslint-disable-next-line no-console
     console.log('='.repeat(60) + '\n');
-    
+
     // eslint-disable-next-line no-console
     console.log('Test Credentials:');
     // eslint-disable-next-line no-console
@@ -70,7 +70,6 @@ async function cleanAndSetup() {
     console.log('  Password: LoadTest123456!');
     // eslint-disable-next-line no-console
     console.log('  (Same password for all test users)\n');
-
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('❌ Error:', error.message);

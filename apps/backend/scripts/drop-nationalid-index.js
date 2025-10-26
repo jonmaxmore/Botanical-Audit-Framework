@@ -39,7 +39,6 @@ async function dropIndex() {
 
     // eslint-disable-next-line no-console
     console.log('\n✅ Done');
-
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('❌ Error:', error.message);

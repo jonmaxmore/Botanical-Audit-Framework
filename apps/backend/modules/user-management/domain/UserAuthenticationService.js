@@ -724,7 +724,10 @@ class UserAuthenticationService extends EventEmitter {
     }
 
     // Check for personal information in password
-    if (userInfo.email && password.toLowerCase().includes(userInfo.email.split('@')[0].toLowerCase())) {
+    if (
+      userInfo.email &&
+      password.toLowerCase().includes(userInfo.email.split('@')[0].toLowerCase())
+    ) {
       errors.push('Password must not contain your email address');
     }
 

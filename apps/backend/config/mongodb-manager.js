@@ -28,24 +28,28 @@ try {
   dbLogger.info('Loaded MongoDB config from app-config.json');
 } catch (error) {
   // Fallback to environment variables (dotenv already loaded at top of file)
-  dbLogger.warn(`Could not load MongoDB config from file: ${error.message}. Using environment variables.`);
-  
+  dbLogger.warn(
+    `Could not load MongoDB config from file: ${error.message}. Using environment variables.`,
+  );
+
   // Read MONGODB_URI from environment (should be loaded by dotenv at top)
   const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/botanical-audit';
-  
-  dbLogger.info(`Using MongoDB URI from environment: ${mongoUri.includes('mongodb+srv') ? 'Atlas' : 'Local'}`);
-  
+
+  dbLogger.info(
+    `Using MongoDB URI from environment: ${mongoUri.includes('mongodb+srv') ? 'Atlas' : 'Local'}`,
+  );
+
   config = {
     mongodb: {
       uri: mongoUri,
       options: {
         // Connection Pool Configuration (Task 1.2 - INTEGRATIVE REFINEMENT)
         // OPTIMIZED for load testing (Oct 26, 2025)
-        maxPoolSize: 50,           // Increased to handle concurrent requests (was 10)
-        minPoolSize: 5,            // More warm connections for faster response (was 2)
-        serverSelectionTimeoutMS: 5000,  // Fail fast if server unreachable
-        socketTimeoutMS: 45000,    // Close sockets after 45s of inactivity
-        maxIdleTimeMS: 60000,      // Close idle connections after 60s
+        maxPoolSize: 50, // Increased to handle concurrent requests (was 10)
+        minPoolSize: 5, // More warm connections for faster response (was 2)
+        serverSelectionTimeoutMS: 5000, // Fail fast if server unreachable
+        socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+        maxIdleTimeMS: 60000, // Close idle connections after 60s
         waitQueueTimeoutMS: 10000, // Fail if can't get connection in 10s
         // Remove deprecated options
         // useNewUrlParser: true,

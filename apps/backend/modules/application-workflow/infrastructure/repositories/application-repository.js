@@ -19,6 +19,9 @@
 
 const mongoose = require('mongoose');
 const Application = require('../infrastructure/models/Application');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('application-repository');
+
 
 class ApplicationRepository {
   constructor() {

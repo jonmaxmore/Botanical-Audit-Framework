@@ -8,13 +8,14 @@ const mongoose = require('mongoose');
 const User = require('../models/user');
 const Application = require('../models/application');
 
-const MONGODB_URI = process.env.MONGODB_URI || 
+const MONGODB_URI =
+  process.env.MONGODB_URI ||
   'mongodb+srv://gacp-premierprime:qwer1234@thai-gacp.re1651p.mongodb.net/gacp-development';
 
 async function quickSeed() {
   try {
     console.log('🌱 Starting quick seed...');
-    
+
     // Connect to MongoDB
     await mongoose.connect(MONGODB_URI);
     console.log('✅ Connected to MongoDB Atlas');
@@ -41,12 +42,12 @@ async function quickSeed() {
           subdistrict: 'ริมใต้',
           address: '123 หมู่ 5',
           latitude: 18.8826,
-          longitude: 98.9191
+          longitude: 98.9191,
         },
         farmSize: 5.5,
         crops: ['กัญชา', 'กัญชง'],
-        organicCertified: false
-      }
+        organicCertified: false,
+      },
     });
 
     await farmer.save();
@@ -67,23 +68,25 @@ async function quickSeed() {
           province: 'เชียงใหม่',
           district: 'แม่ริม',
           subdistrict: 'ริมใต้',
-          postalCode: '50180'
+          postalCode: '50180',
         },
         farmSize: 5.5,
         landOwnership: 'owned',
         waterSource: 'well',
-        soilType: 'clay'
+        soilType: 'clay',
       },
-      cropInformation: [{
-        cropType: 'cannabis_sativa',
-        variety: 'Thai Stick',
-        plantingMethod: 'direct_seeding',
-        cultivationArea: 3.0,
-        expectedYield: 500,
-        harvestSeason: '2025-11-01T00:00:00.000Z',
-        organicCertification: false
-      }],
-      documents: []
+      cropInformation: [
+        {
+          cropType: 'cannabis_sativa',
+          variety: 'Thai Stick',
+          plantingMethod: 'direct_seeding',
+          cultivationArea: 3.0,
+          expectedYield: 500,
+          harvestSeason: '2025-11-01T00:00:00.000Z',
+          organicCertification: false,
+        },
+      ],
+      documents: [],
     });
 
     await application.save();
@@ -102,9 +105,9 @@ async function quickSeed() {
         position: 'Senior Officer',
         workLocation: {
           province: 'เชียงใหม่',
-          office: 'DTAM Chiang Mai Branch'
-        }
-      }
+          office: 'DTAM Chiang Mai Branch',
+        },
+      },
     });
 
     const inspector = new User({
@@ -119,9 +122,9 @@ async function quickSeed() {
         specialization: ['cannabis', 'herbs'],
         certifications: ['WHO-GACP', 'ASEAN-GACP'],
         workArea: {
-          provinces: ['เชียงใหม่', 'ลำพูน', 'ลำปาง']
-        }
-      }
+          provinces: ['เชียงใหม่', 'ลำพูน', 'ลำปาง'],
+        },
+      },
     });
 
     const admin = new User({
@@ -131,13 +134,13 @@ async function quickSeed() {
       phone: '084-567-8901',
       nationalId: '4567890123456',
       role: 'admin',
-      permissions: ['all']
+      permissions: ['all'],
     });
 
     await officer.save();
     await inspector.save();
     await admin.save();
-    
+
     console.log('✅ Created all demo users');
     console.log('\n📋 Demo Accounts:');
     console.log('   Farmer:    farmer@gacp.th / demo1234');

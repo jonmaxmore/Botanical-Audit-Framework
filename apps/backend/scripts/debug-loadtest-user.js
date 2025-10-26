@@ -11,22 +11,22 @@ async function debugUser() {
 
     // Try to find the test user
     console.log('🔍 Looking for user: loadtest@gacp.dtam.go.th');
-    const user = await User.findOne({ 
-      email: 'loadtest@gacp.dtam.go.th' 
+    const user = await User.findOne({
+      email: 'loadtest@gacp.dtam.go.th',
     }).select('+password');
 
     if (!user) {
       console.log('❌ User NOT found in database!');
-      
+
       // Check if any loadtest users exist
-      const count = await User.countDocuments({ 
-        email: { $regex: /^loadtest/i } 
+      const count = await User.countDocuments({
+        email: { $regex: /^loadtest/i },
       });
       console.log(`Found ${count} users with email starting with "loadtest"`);
-      
+
       if (count > 0) {
-        const users = await User.find({ 
-          email: { $regex: /^loadtest/i } 
+        const users = await User.find({
+          email: { $regex: /^loadtest/i },
         }).limit(3);
         console.log('\nFirst 3 loadtest users:');
         users.forEach(u => {
@@ -45,31 +45,31 @@ async function debugUser() {
     console.log(`  Active: ${user.isActive}`);
     console.log(`  Email Verified: ${user.isEmailVerified}`);
     console.log(`  Locked: ${user.isLocked || false}`);
-    
+
     console.log('\n🔐 Password Field:');
     console.log(`  Exists: ${!!user.password}`);
     console.log(`  Type: ${typeof user.password}`);
     console.log(`  Length: ${user.password?.length || 0}`);
     console.log(`  Starts with $2a$ or $2b$: ${user.password?.startsWith('$2')}`);
     console.log(`  First 10 chars: ${user.password?.substring(0, 10)}`);
-    
+
     // Test password comparison
     console.log('\n🧪 Testing Password Comparison:');
     const testPassword = 'LoadTest123456!';
     console.log(`  Test password: "${testPassword}"`);
-    
+
     try {
       const isMatch = await bcrypt.compare(testPassword, user.password);
       console.log(`  ✅ bcrypt.compare result: ${isMatch}`);
-      
+
       if (!isMatch) {
         console.log('\n❌ PASSWORD DOES NOT MATCH!');
         console.log('This is why login is failing.');
-        
+
         // Try comparing with plain text (shouldn't match, but let's check)
         const plainMatch = testPassword === user.password;
         console.log(`\nIs password stored as plain text? ${plainMatch}`);
-        
+
         if (plainMatch) {
           console.log('🚨 PASSWORD IS STORED AS PLAIN TEXT!');
           console.log('The pre-save hook is not working.');
@@ -90,7 +90,6 @@ async function debugUser() {
     } catch (error) {
       console.log(`  ❌ Error: ${error.message}`);
     }
-
   } catch (error) {
     console.error('❌ Error:', error);
   } finally {

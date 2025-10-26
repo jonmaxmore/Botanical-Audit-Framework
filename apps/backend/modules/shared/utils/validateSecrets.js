@@ -32,8 +32,8 @@ function validateJWTSecret(secret, secretName = 'JWT_SECRET') {
   if (!secret) {
     throw new Error(
       `❌ SECURITY ERROR: ${secretName} is required but not set!\n` +
-      `   Generate a strong secret with: openssl rand -base64 64\n` +
-      `   Then add it to your .env file.`
+        `   Generate a strong secret with: openssl rand -base64 64\n` +
+        `   Then add it to your .env file.`,
     );
   }
 
@@ -41,9 +41,9 @@ function validateJWTSecret(secret, secretName = 'JWT_SECRET') {
   if (secret.length < 64) {
     throw new Error(
       `❌ SECURITY ERROR: ${secretName} is too short (${secret.length} characters)!\n` +
-      `   Minimum: 64 characters\n` +
-      `   Current: ${secret.length} characters\n` +
-      `   Generate a strong secret with: openssl rand -base64 64`
+        `   Minimum: 64 characters\n` +
+        `   Current: ${secret.length} characters\n` +
+        `   Generate a strong secret with: openssl rand -base64 64`,
     );
   }
 
@@ -53,9 +53,9 @@ function validateJWTSecret(secret, secretName = 'JWT_SECRET') {
     if (secret === forbidden || secretLower.includes(forbidden.toLowerCase())) {
       throw new Error(
         `❌ SECURITY ERROR: ${secretName} is using a known weak/example secret!\n` +
-        `   Detected: "${forbidden}"\n` +
-        `   This secret is either from development or commonly known.\n` +
-        `   Generate a NEW strong secret with: openssl rand -base64 64`
+          `   Detected: "${forbidden}"\n` +
+          `   This secret is either from development or commonly known.\n` +
+          `   Generate a NEW strong secret with: openssl rand -base64 64`,
       );
     }
   }
@@ -64,20 +64,21 @@ function validateJWTSecret(secret, secretName = 'JWT_SECRET') {
   if (/^(secret|password|key|token|dev|test|demo)/i.test(secret)) {
     throw new Error(
       `❌ SECURITY ERROR: ${secretName} starts with a common weak pattern!\n` +
-      `   Avoid: secret*, password*, key*, token*, dev*, test*, demo*\n` +
-      `   Generate a strong secret with: openssl rand -base64 64`
+        `   Avoid: secret*, password*, key*, token*, dev*, test*, demo*\n` +
+        `   Generate a strong secret with: openssl rand -base64 64`,
     );
   }
 
   // 5. Check entropy (randomness)
   const uniqueChars = new Set(secret).size;
   const entropyRatio = uniqueChars / secret.length;
-  
-  if (entropyRatio < 0.5) { // At least 50% unique characters
+
+  if (entropyRatio < 0.5) {
+    // At least 50% unique characters
     console.warn(
       `⚠️  WARNING: ${secretName} has low entropy (${Math.round(entropyRatio * 100)}%)!\n` +
-      `   This secret might not be random enough.\n` +
-      `   Consider generating a new one with: openssl rand -base64 64`
+        `   This secret might not be random enough.\n` +
+        `   Consider generating a new one with: openssl rand -base64 64`,
     );
   }
 
@@ -87,9 +88,9 @@ function validateJWTSecret(secret, secretName = 'JWT_SECRET') {
     if (/sprint|sprint1|sprint2|dev|development|test|localhost/i.test(secret)) {
       throw new Error(
         `❌ SECURITY ERROR: ${secretName} contains development-related keywords!\n` +
-        `   Found: sprint, dev, test, or localhost\n` +
-        `   This is NOT safe for production!\n` +
-        `   Generate a production secret with: openssl rand -base64 64`
+          `   Found: sprint, dev, test, or localhost\n` +
+          `   This is NOT safe for production!\n` +
+          `   Generate a production secret with: openssl rand -base64 64`,
       );
     }
   }
@@ -106,15 +107,15 @@ function validateSessionSecret(secret) {
   if (!secret) {
     throw new Error(
       `❌ SECURITY ERROR: SESSION_SECRET is required!\n` +
-      `   Generate with: openssl rand -base64 32`
+        `   Generate with: openssl rand -base64 32`,
     );
   }
 
   if (secret.length < 32) {
     throw new Error(
       `❌ SECURITY ERROR: SESSION_SECRET is too short (${secret.length} characters)!\n` +
-      `   Minimum: 32 characters\n` +
-      `   Generate with: openssl rand -base64 32`
+        `   Minimum: 32 characters\n` +
+        `   Generate with: openssl rand -base64 32`,
     );
   }
 
@@ -123,7 +124,7 @@ function validateSessionSecret(secret) {
     if (secret === forbidden) {
       throw new Error(
         `❌ SECURITY ERROR: SESSION_SECRET is using a known weak secret!\n` +
-        `   Generate a NEW strong secret with: openssl rand -base64 32`
+          `   Generate a NEW strong secret with: openssl rand -base64 32`,
       );
     }
   }
@@ -143,8 +144,8 @@ function validateSecretsAreDifferent(secret1, secret2, name1, name2) {
   if (secret1 === secret2) {
     throw new Error(
       `❌ SECURITY ERROR: ${name1} and ${name2} must be different!\n` +
-      `   Using the same secret for both defeats the purpose of having two secrets.\n` +
-      `   Generate different secrets with: openssl rand -base64 64`
+        `   Using the same secret for both defeats the purpose of having two secrets.\n` +
+        `   Generate different secrets with: openssl rand -base64 64`,
     );
   }
   return true;
@@ -170,12 +171,7 @@ function validateAllSecrets() {
       console.log('✅ JWT_REFRESH_SECRET: Valid');
 
       // 3. Ensure JWT secrets are different
-      validateSecretsAreDifferent(
-        jwtSecret,
-        jwtRefreshSecret,
-        'JWT_SECRET',
-        'JWT_REFRESH_SECRET'
-      );
+      validateSecretsAreDifferent(jwtSecret, jwtRefreshSecret, 'JWT_SECRET', 'JWT_REFRESH_SECRET');
       console.log('✅ JWT secrets are different');
     } else {
       console.warn('⚠️  JWT_REFRESH_SECRET not set (using same as JWT_SECRET)');
@@ -188,12 +184,7 @@ function validateAllSecrets() {
       console.log('✅ DTAM_JWT_SECRET: Valid');
 
       // Ensure DTAM secret is different from Farmer secret
-      validateSecretsAreDifferent(
-        jwtSecret,
-        dtamJwtSecret,
-        'JWT_SECRET',
-        'DTAM_JWT_SECRET'
-      );
+      validateSecretsAreDifferent(jwtSecret, dtamJwtSecret, 'JWT_SECRET', 'DTAM_JWT_SECRET');
       console.log('✅ DTAM_JWT_SECRET is different from JWT_SECRET');
     }
 
@@ -215,21 +206,20 @@ function validateAllSecrets() {
       if (mongoUri && (mongoUri.includes('admin:admin') || mongoUri.includes('password'))) {
         throw new Error(
           `❌ SECURITY ERROR: MONGODB_URI contains weak credentials!\n` +
-          `   Do not use 'admin:admin' or 'password' in production.`
+            `   Do not use 'admin:admin' or 'password' in production.`,
         );
       }
 
       // Ensure Redis password is strong
       const redisPassword = process.env.REDIS_PASSWORD;
-      if (redisPassword && (
-        redisPassword === 'password' ||
-        redisPassword === 'redis' ||
-        redisPassword.length < 16
-      )) {
+      if (
+        redisPassword &&
+        (redisPassword === 'password' || redisPassword === 'redis' || redisPassword.length < 16)
+      ) {
         throw new Error(
           `❌ SECURITY ERROR: REDIS_PASSWORD is too weak!\n` +
-          `   Minimum: 16 characters\n` +
-          `   Generate with: openssl rand -base64 24`
+            `   Minimum: 16 characters\n` +
+            `   Generate with: openssl rand -base64 24`,
         );
       }
 
@@ -238,7 +228,6 @@ function validateAllSecrets() {
 
     console.log('\n✅ ALL SECRETS VALIDATED SUCCESSFULLY\n');
     return true;
-
   } catch (error) {
     console.error('\n' + '='.repeat(80));
     console.error('🚨 SECURITY VALIDATION FAILED');
@@ -246,7 +235,7 @@ function validateAllSecrets() {
     console.error(error.message);
     console.error('='.repeat(80));
     console.error('\n❌ Server startup aborted for security reasons.\n');
-    
+
     // Exit process - DO NOT start server with invalid secrets
     process.exit(1);
   }

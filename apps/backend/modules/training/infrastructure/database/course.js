@@ -7,6 +7,8 @@
 
 const mongoose = require('mongoose');
 const Course = require('../../domain/entities/Course');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('training-course-db');
 
 // Mongoose Schema
 const courseSchema = new mongoose.Schema(

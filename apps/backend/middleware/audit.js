@@ -1,3 +1,6 @@
+const { createLogger } = require('../shared/logger');
+const logger = createLogger('audit');
+
 /**
  * Audit Middleware for GACP Platform
  * Automatically logs all user actions for PDPA/ISO27001 compliance

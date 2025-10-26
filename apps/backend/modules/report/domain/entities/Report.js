@@ -218,7 +218,7 @@ class Report {
     }
 
     const now = new Date();
-    let nextRun = new Date(this.lastRunAt || now);
+    const nextRun = new Date(this.lastRunAt || now);
 
     switch (this.schedule) {
       case Report.SCHEDULE.DAILY:

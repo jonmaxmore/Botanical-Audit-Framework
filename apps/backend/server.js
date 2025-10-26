@@ -79,16 +79,18 @@ app.use(cors(corsOptions));
 app.use(corsLoggingMiddleware()); // Log CORS requests
 
 // Add compression middleware (Phase 1 Optimization)
-app.use(compression({
-  level: 6,             // Compression level (1-9)
-  threshold: 1024,      // Only compress responses > 1KB
-  filter: (req, res) => {
-    if (req.headers['x-no-compression']) {
-      return false;
-    }
-    return compression.filter(req, res);
-  }
-}));
+app.use(
+  compression({
+    level: 6, // Compression level (1-9)
+    threshold: 1024, // Only compress responses > 1KB
+    filter: (req, res) => {
+      if (req.headers['x-no-compression']) {
+        return false;
+      }
+      return compression.filter(req, res);
+    },
+  }),
+);
 
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -101,7 +103,7 @@ app.use((req, res, next) => {
       appLogger.warn('Request timeout', {
         method: req.method,
         url: req.url,
-        ip: req.ip
+        ip: req.ip,
       });
       res.status(408).json({
         success: false,
@@ -110,14 +112,14 @@ app.use((req, res, next) => {
       });
     }
   });
-  
+
   // Set response timeout
   res.setTimeout(30000, () => {
     if (!res.headersSent) {
       appLogger.error('Response timeout', {
         method: req.method,
         url: req.url,
-        ip: req.ip
+        ip: req.ip,
       });
       res.status(503).json({
         success: false,
@@ -126,7 +128,7 @@ app.use((req, res, next) => {
       });
     }
   });
-  
+
   next();
 });
 

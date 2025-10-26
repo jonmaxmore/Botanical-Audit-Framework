@@ -207,7 +207,7 @@ class TrainingModuleStatusAnalyzer {
 
     for (const workflow of workflowChecks) {
       let workflowImplemented = true;
-      let missingComponents = [];
+      const missingComponents = [];
 
       // ตรวจสอบว่ามี component ที่จำเป็นครบหรือไม่
       for (const component of workflow.components) {

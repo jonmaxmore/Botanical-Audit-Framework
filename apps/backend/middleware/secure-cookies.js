@@ -66,7 +66,7 @@ function secureCookies(options = {}) {
 function clearAllCookies(req, res, next) {
   const cookies = req.cookies || {};
 
-  Object.keys(cookies).forEach((cookieName) => {
+  Object.keys(cookies).forEach(cookieName => {
     res.clearCookie(cookieName, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

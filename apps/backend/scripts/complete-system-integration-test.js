@@ -57,7 +57,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
     };
 
     let passed = 0;
-    let total = workflow.steps.length;
+    const total = workflow.steps.length;
 
     for (const [index, step] of workflow.steps.entries()) {
       try {
@@ -240,7 +240,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
     ];
 
     let passed = 0;
-    let total = integrationTests.length;
+    const total = integrationTests.length;
 
     for (const test of integrationTests) {
       try {
@@ -298,7 +298,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
     ];
 
     let passed = 0;
-    let total = ruleTests.length;
+    const total = ruleTests.length;
 
     for (const test of ruleTests) {
       try {
@@ -360,7 +360,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
     ];
 
     let passed = 0;
-    let total = eventTests.length;
+    const total = eventTests.length;
 
     for (const test of eventTests) {
       try {
@@ -413,7 +413,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
     ];
 
     let passed = 0;
-    let total = performanceTests.length;
+    const total = performanceTests.length;
 
     for (const test of performanceTests) {
       try {

@@ -87,7 +87,7 @@ const generateToken = user => {
 const generateRefreshToken = user => {
   // In production, require separate refresh secret
   const refreshSecret = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET;
-  
+
   if (!refreshSecret) {
     throw new Error('JWT_SECRET or JWT_REFRESH_SECRET must be configured in environment variables');
   }
@@ -244,7 +244,7 @@ router.post(
       userAgent: req.get('User-Agent'),
       location: req.get('X-Forwarded-For') || req.connection.remoteAddress,
     };
-    
+
     await User.updateOne(
       { _id: user._id },
       {

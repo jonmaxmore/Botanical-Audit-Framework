@@ -64,7 +64,7 @@ const standardHandler = (req, res) => {
 /**
  * Key generator based on IP address
  */
-const ipKeyGenerator = (req) => {
+const ipKeyGenerator = req => {
   return req.ip || req.connection.remoteAddress || 'unknown';
 };
 

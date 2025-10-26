@@ -28,6 +28,8 @@
 
 const express = require('express');
 const { body, query, param } = require('express-validator');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('enhanced-training-routes');
 
 /**
  * Create enhanced training routes with full system integration

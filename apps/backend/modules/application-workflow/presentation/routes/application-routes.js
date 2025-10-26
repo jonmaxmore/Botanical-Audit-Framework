@@ -23,6 +23,9 @@
 
 const express = require('express');
 const ApplicationController = require('../controllers/ApplicationController');
+const { createLogger } = require('../../../../shared/logger');
+const logger = createLogger('application-routes');
+
 const {
   authenticate,
   authorize,

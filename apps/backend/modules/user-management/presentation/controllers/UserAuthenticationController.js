@@ -459,7 +459,7 @@ class UserAuthenticationController {
       }
 
       // Hash new password
-  const bcrypt = require('bcrypt');
+      const bcrypt = require('bcrypt');
       const saltRounds = 12;
       const newPasswordHash = await bcrypt.hash(newPassword, saltRounds);
 

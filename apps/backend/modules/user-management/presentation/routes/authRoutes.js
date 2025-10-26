@@ -30,7 +30,10 @@
 
 const express = require('express');
 const { createAuthRateLimiters } = require('../../../../middleware/auth-rate-limiters');
-const { checkTokenBlacklist, checkTokenVersion } = require('../../../../middleware/jwt-token-manager');
+const {
+  checkTokenBlacklist,
+  checkTokenVersion,
+} = require('../../../../middleware/jwt-token-manager');
 const router = express.Router();
 
 function createAuthRoutes(dependencies = {}) {
