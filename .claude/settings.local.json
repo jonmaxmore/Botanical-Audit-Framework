@@ -5,7 +5,10 @@
       "Bash(git log:*)",
       "Bash(npm run lint)",
       "Bash(pnpm add:*)",
-      "Bash(npx husky init)"
+      "Bash(npx husky init)",
+      "Bash(npx prettier --write \"docs/NATIONAL_PLATFORM_ROADMAP.md\")",
+      "Bash(npx prettier --write \"docs/ARCHITECTURE.md\")",
+      "Bash(npx prettier:*)"
     ],
     "deny": [],
     "ask": []

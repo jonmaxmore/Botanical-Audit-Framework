@@ -25,7 +25,7 @@
 
 ### Investment Required
 
-**Total Budget**: 14-20 Million THB
+**Total Budget**: 12.5-18.5 Million THB
 **Duration**: 18 months (5 phases)
 **Team Size**: 8-12 people
 **Expected ROI**: 300% over 3 years
@@ -72,8 +72,8 @@ Phase 5: National Platform Features (Months 13-18) 🟢 STRATEGIC
     └─ Government Integration (FDA, MOA)
     └─ Research & Analytics Platform
     └─ Mobile App (iOS/Android)
-    └─ Advanced Analytics & Blockchain
-    Budget: 5-7M THB
+    └─ Advanced Security & Verification
+    Budget: 3.5-5.5M THB
 ```
 
 ---
@@ -1227,7 +1227,7 @@ APIs to Integrate:
 
 ---
 
-#### 5.4 Advanced Analytics & Blockchain (8 weeks)
+#### 5.4 Advanced Security & Verification System (8 weeks)
 
 **Advanced Analytics**:
 
@@ -1236,14 +1236,130 @@ APIs to Integrate:
 - Anomaly detection
 - Business intelligence dashboard
 
-**Blockchain Integration** (Optional):
+**Digital Signature & Event Sourcing** (Replaces Blockchain):
 
-- Certificate verification on blockchain
-- Immutable audit trail
-- Smart contracts for compliance
-- NFT certificates
+**Why Not Blockchain**: Blockchain สร้างความซับซ้อนและค่าใช้จ่ายสูง (1.5M THB+) โดยไม่จำเป็น
 
-**Budget**: 2M THB
+**Alternative Solution - Event Sourcing + Digital Signatures**:
+
+```javascript
+// Immutable Event Store (แทน Blockchain)
+certificateEvents: {
+  eventId: UUID,
+  eventType: 'CERTIFICATE_ISSUED' | 'CERTIFICATE_VERIFIED' | 'CERTIFICATE_RENEWED',
+  timestamp: Date,
+  certificateId: String,
+
+  // Digital Signature for Verification
+  digitalSignature: {
+    algorithm: 'RSA-SHA256',
+    signature: String, // Signed with DTAM private key
+    publicKey: String, // DTAM public key for verification
+    signedBy: String,
+    signerRole: 'INSPECTOR' | 'ADMIN' | 'DIRECTOR'
+  },
+
+  // Cryptographic Hash Chain (like blockchain)
+  previousEventHash: String, // Hash of previous event (creates chain)
+  currentEventHash: String,  // SHA-256 hash of current event
+
+  // Event Data (Immutable)
+  data: {
+    farmId: String,
+    farmName: String,
+    certificateNumber: String,
+    issuedDate: Date,
+    expiryDate: Date,
+    status: String,
+    inspector: String,
+    verificationUrl: String
+  },
+
+  // Tamper Detection
+  verified: Boolean,
+  verifiedAt: Date,
+  integrityCheck: {
+    hashMatch: Boolean,
+    signatureValid: Boolean,
+    chainIntact: Boolean
+  }
+}
+```
+
+**Implementation**:
+
+1. **Event Store**:
+   - All certificate actions stored as immutable events
+   - Cannot delete or modify past events
+   - Hash chain prevents tampering
+
+2. **Digital Signatures**:
+   - DTAM signs all certificates with private key
+   - Anyone can verify with public key
+   - Legally binding in Thailand (Electronic Transactions Act 2001)
+
+3. **Public Verification API**:
+
+```
+GET /api/public/verify/certificate/:certificateNumber
+Returns:
+{
+  valid: true,
+  certificateNumber: "GACP-2025-001234",
+  farmName: "ฟาร์มสมุนไพรไทย",
+  issuedDate: "2025-01-15",
+  expiryDate: "2026-01-15",
+  signatureValid: true,
+  integrityVerified: true,
+  eventChainIntact: true,
+  qrCodeUrl: "https://gacp.go.th/verify/GACP-2025-001234"
+}
+```
+
+4. **Tamper Detection**:
+
+```javascript
+// Verify event chain integrity
+function verifyEventChain(events) {
+  for (let i = 1; i < events.length; i++) {
+    const prev = events[i - 1];
+    const curr = events[i];
+
+    // Check if current event's previousHash matches previous event's hash
+    if (curr.previousEventHash !== prev.currentEventHash) {
+      return { tampered: true, eventIndex: i };
+    }
+
+    // Verify digital signature
+    if (!verifySignature(curr.data, curr.digitalSignature)) {
+      return { tampered: true, reason: 'Invalid signature' };
+    }
+  }
+
+  return { tampered: false, integrityVerified: true };
+}
+```
+
+**Benefits over Blockchain**:
+
+| Feature            | Blockchain             | Event Sourcing + Digital Signatures |
+| ------------------ | ---------------------- | ----------------------------------- |
+| **Cost**           | 1.5-2M THB             | 500K THB                            |
+| **Complexity**     | Very High              | Medium                              |
+| **Performance**    | Slow (minutes)         | Fast (<1 sec)                       |
+| **Immutability**   | ✅ Yes                 | ✅ Yes (event store)                |
+| **Verification**   | ✅ Yes                 | ✅ Yes (digital signatures)         |
+| **Tamper-proof**   | ✅ Yes                 | ✅ Yes (hash chain + signatures)    |
+| **Legal Validity** | ❓ Unclear in Thailand | ✅ Yes (E-Transaction Act 2001)     |
+| **Scalability**    | Limited                | Unlimited                           |
+| **Maintenance**    | High                   | Low                                 |
+
+**Cost Savings**: 1-1.5M THB
+**Same Security**: Yes
+**Better Performance**: Yes
+**Easier to Audit**: Yes
+
+**Budget**: 500K THB (saves 1-1.5M THB vs blockchain)
 
 ---
 
@@ -1251,7 +1367,7 @@ APIs to Integrate:
 
 - Duration: 6 months
 - Team: 8-10 people
-- Budget: 5-7M THB
+- Budget: 3.5-5.5M THB (reduced from 5-7M by removing blockchain)
 - Risk: HIGH (Government integration delays)
 
 ---
@@ -1284,14 +1400,16 @@ APIs to Integrate:
 
 ## 💰 Budget Summary
 
-| Phase     | Duration      | Team                | Budget (THB)   |
-| --------- | ------------- | ------------------- | -------------- |
-| Phase 1   | 3 months      | 4-5 people          | 2-3M           |
-| Phase 2   | 3 months      | 5-6 people          | 3-4M           |
-| Phase 3   | 3 months      | 4-5 people          | 2-3M           |
-| Phase 4   | 3 months      | 4-5 people          | 2-3M           |
-| Phase 5   | 6 months      | 8-10 people         | 5-7M           |
-| **TOTAL** | **18 months** | **Peak: 10 people** | **14-20M THB** |
+| Phase     | Duration      | Team                | Budget (THB)       |
+| --------- | ------------- | ------------------- | ------------------ |
+| Phase 1   | 3 months      | 4-5 people          | 2-3M               |
+| Phase 2   | 3 months      | 5-6 people          | 3-4M               |
+| Phase 3   | 3 months      | 4-5 people          | 2-3M               |
+| Phase 4   | 3 months      | 4-5 people          | 2-3M               |
+| Phase 5   | 6 months      | 8-10 people         | 3.5-5.5M           |
+| **TOTAL** | **18 months** | **Peak: 10 people** | **12.5-18.5M THB** |
+
+**Cost Savings**: 1.5M THB saved by replacing blockchain with Event Sourcing + Digital Signatures
 
 ---
 
