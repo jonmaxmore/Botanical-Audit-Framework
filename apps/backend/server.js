@@ -256,6 +256,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/health', require('./routes/health'));
 app.use('/api/applications', require('./routes/applications')); // ✅ Enabled for real API
 app.use('/api/dashboard', require('./routes/dashboard'));
+app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ✅ Smart Agriculture APIs
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
 // app.use('/api/notifications', require('./routes/notifications')); // Commented - needs check
 // app.use('/api/farm-management', require('./routes/farm-management')); // Commented - needs check

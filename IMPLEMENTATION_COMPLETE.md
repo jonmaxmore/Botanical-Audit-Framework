@@ -58,26 +58,32 @@ apps/backend/
 
 ## 🚀 Next Steps
 
-### Immediate (This Week)
+### ✅ Completed (Just Now)
 
-1. **Add API Routes**
-   ```javascript
-   // apps/backend/routes/smart-agriculture.routes.js
-   GET  /api/weather/:lat/:lon
-   GET  /api/soil/recommend
-   GET  /api/provinces/:name
-   GET  /api/irrigation/calculate
-   GET  /api/calendar/:crop/:province
-   ```
+1. **API Routes** ✅
+   - Created `routes/smart-agriculture.routes.js`
+   - Integrated into `server.js`
+   - 7 endpoints ready
 
-2. **Get OpenWeatherMap API Key**
+2. **Environment Config** ✅
+   - Added `OPENWEATHER_API_KEY` to `.env.example`
+
+3. **API Documentation** ✅
+   - Created `API_ENDPOINTS.md`
+   - Includes cURL examples
+
+### Immediate (Today)
+
+1. **Get OpenWeatherMap API Key**
    - Sign up: https://openweathermap.org/api
-   - Add to `.env`: `OPENWEATHER_KEY=your_key`
+   - Copy `.env.example` to `.env`
+   - Add key: `OPENWEATHER_API_KEY=your_key`
 
-3. **Test Services**
+2. **Test APIs**
    ```bash
    cd apps/backend
-   node -e "const W = require('./services/weather/weather.service'); console.log('OK')"
+   npm run dev
+   # Test: curl http://localhost:3000/api/smart-agriculture/provinces
    ```
 
 ### Short-term (Next Week)
