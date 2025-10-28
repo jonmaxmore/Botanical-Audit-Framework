@@ -456,6 +456,22 @@ app.get('/api/db/test', async (req, res) => {
   }
 });
 
+// ============================================================================
+// AUTHENTICATION MODULES
+// ============================================================================
+
+// Mount Farmer Authentication Routes
+app.use('/api/auth-farmer', require('./modules/auth-farmer/routes/farmer-auth'));
+appLogger.info('✅ Farmer Auth routes mounted at /api/auth-farmer');
+
+// Mount DTAM Staff Authentication Routes
+app.use('/api/auth-dtam', require('./modules/auth-dtam/routes/dtam-auth'));
+appLogger.info('✅ DTAM Auth routes mounted at /api/auth-dtam');
+
+// ============================================================================
+// BUSINESS LOGIC MODULES
+// ============================================================================
+
 // Mount RHDA Analytics Routes
 app.use('/api/rhda', require('./routes/rhda-analytics'));
 
@@ -468,9 +484,74 @@ app.use('/api/monitoring', require('./routes/health-monitoring'));
 // Mount API Documentation Routes
 app.use('/api/docs', require('./routes/api-documentation'));
 
+// ============================================================================
+// AI & SMART FARMING MODULES
+// ============================================================================
+
 // Mount AI Fertilizer Recommendation Routes
 app.use('/api/ai/fertilizer', require('./routes/ai/fertilizer.routes'));
 app.use('/api/fertilizer-products', require('./routes/ai/fertilizer-products.routes'));
+appLogger.info('✅ AI Fertilizer routes mounted');
+
+// ============================================================================
+// MODULE INTEGRATIONS (Pending Configuration)
+// ============================================================================
+//
+// The following modules require additional configuration and dependencies:
+//
+// 1. Farm Management Module
+//    - Requires: farmService, auth middleware, mongoose models
+//    - Routes: POST /api/farm/cycles, GET /api/farm/cycles
+//    - Location: ./modules/farm-management/routes/farm.routes.js
+//
+// 2. Dashboard Module
+//    - Requires: dashboardController, authMiddleware
+//    - Routes: GET /api/dashboard/stats/realtime, GET /api/dashboard/:role
+//    - Location: ./modules/dashboard/routes/dashboard.routes.js
+//
+// 3. Document Management Module
+//    - Requires: documentController, authMiddleware
+//    - Routes: POST /api/documents/upload, GET /api/documents/:id
+//    - Location: ./modules/document/presentation/routes/
+//
+// 4. Certificate Management Module
+//    - Requires: certificateService, authMiddleware
+//    - Routes: GET /api/certificates/stats, POST /api/certificates/issue
+//    - Location: ./modules/certificate-management/routes/certificate.routes.js
+//
+// 5. Payment Service Module (PromptPay)
+//    - Requires: mongooseConnection, paymentRepository, applicationRepository
+//    - Routes: POST /api/payments/create, POST /api/payments/webhook
+//    - Location: ./modules/payment-service/
+//    - Status: Complex dependencies - needs full initialization
+//
+// 6. Track & Trace Module (QR Codes)
+//    - Requires: db, authenticateToken
+//    - Routes: GET /api/track-trace/lookup/:batchCode, POST /api/track-trace/products
+//    - Location: ./modules/track-trace/
+//    - Status: Ready for integration
+//
+// 7. Cannabis Survey Module
+//    - Requires: surveyController, authMiddleware
+//    - Routes: POST /api/surveys/create, GET /api/surveys
+//    - Location: ./modules/cannabis-survey/presentation/routes/survey.routes.js
+//
+// 8. Notification Service
+//    - Requires: notificationService
+//    - Routes: POST /api/notifications/send, GET /api/notifications/history
+//    - Location: ./modules/notification-service/
+//
+// To integrate these modules, uncomment and configure the appropriate sections below:
+//
+// Example for Track & Trace:
+// const { initializeTrackTrace } = require('./modules/track-trace');
+// const trackTrace = await initializeTrackTrace({
+//   db: mongoManager.getDb(),
+//   authenticateToken: require('./modules/shared').middleware.auth
+// });
+// app.use('/api/track-trace', trackTrace.router);
+//
+// ============================================================================
 
 // Error handling middleware
 app.use((req, res) => {
@@ -479,36 +560,62 @@ app.use((req, res) => {
     message: 'Route not found',
     path: req.originalUrl,
     method: req.method,
-    available_routes: [
-      'GET /',
-      'GET /health',
-      'GET /api',
-      'POST /api/auth/test-login',
-      'GET /api/dashboard/test-stats',
-      'GET /api/db/test',
-      'GET /api/rhda/workplace-stats',
-      'GET /api/rhda/analytics',
-      'GET /api/rhda/warnings',
-      'GET /api/rhda/status',
-      'GET /api/rhda/config',
-      'POST /api/rhda/warnings/resolve',
-      'GET /api/gacp/workflow',
-      'GET /api/gacp/ccps',
-      'POST /api/gacp/test/score-calculation',
-      'GET /api/gacp/workflow/:state/requirements',
-      'POST /api/gacp/workflow/transition',
-      'GET /api/gacp/compliance',
-      'GET /api/monitoring/health',
-      'GET /api/monitoring/health/detailed',
-      'GET /api/monitoring/health/database',
-      'POST /api/monitoring/health/database/reconnect',
-      'GET /api/monitoring/health/metrics',
-      'GET /api/monitoring/health/history',
-      'GET /api/monitoring/status',
-      'GET /api/docs/docs',
-      'GET /api/docs/openapi',
-      'GET /api/docs/health',
-    ],
+    available_routes: {
+      core: [
+        'GET / - API information',
+        'GET /health - System health check',
+        'GET /api - API documentation',
+      ],
+      authentication: [
+        'POST /api/auth-farmer/register - Farmer registration',
+        'POST /api/auth-farmer/login - Farmer login',
+        'GET /api/auth-farmer/profile - Get farmer profile (requires auth)',
+        'PUT /api/auth-farmer/profile - Update farmer profile (requires auth)',
+        'POST /api/auth-farmer/change-password - Change password (requires auth)',
+        'POST /api/auth-farmer/logout - Logout (requires auth)',
+        'GET /api/auth-farmer/verify - Verify token',
+        'POST /api/auth-dtam/login - DTAM staff login',
+        'GET /api/auth-dtam/profile - Get DTAM profile (requires auth)',
+        'GET /api/auth-dtam/staff-list - List all staff (admin only)',
+        'POST /api/auth-dtam/create-staff - Create staff account (admin only)',
+        'GET /api/auth-dtam/verify - Verify DTAM token',
+        'GET /api/auth-dtam/health - DTAM auth health check',
+      ],
+      gacp: [
+        'GET /api/gacp/workflow - GACP workflow information',
+        'GET /api/gacp/ccps - Critical Control Points framework',
+        'POST /api/gacp/workflow/transition - Validate workflow transition',
+        'GET /api/gacp/compliance - GACP compliance standards',
+      ],
+      ai: [
+        'POST /api/ai/fertilizer/recommend - Generate fertilizer recommendation',
+        'GET /api/fertilizer-products - List GACP-approved fertilizers',
+        'GET /api/fertilizer-products/search - Search fertilizer products',
+        'GET /api/fertilizer-products/top-rated - Get top-rated products',
+        'GET /api/fertilizer-products/:id - Get product details',
+        'POST /api/fertilizer-products - Create product (admin)',
+        'PUT /api/fertilizer-products/:id - Update product (admin)',
+        'DELETE /api/fertilizer-products/:id - Delete product (admin)',
+        'POST /api/fertilizer-products/:id/reviews - Add review',
+      ],
+      monitoring: [
+        'GET /api/monitoring/health - System health',
+        'GET /api/monitoring/health/detailed - Detailed health metrics',
+        'GET /api/monitoring/health/database - Database health',
+        'POST /api/monitoring/health/database/reconnect - Reconnect database',
+        'GET /api/monitoring/status - Service status',
+      ],
+      analytics: [
+        'GET /api/rhda/workplace-stats - Workplace statistics',
+        'GET /api/rhda/analytics - RHDA analytics',
+        'GET /api/rhda/warnings - System warnings',
+        'POST /api/rhda/warnings/resolve - Resolve warnings',
+      ],
+      documentation: [
+        'GET /api/docs/docs - API documentation',
+        'GET /api/docs/openapi - OpenAPI specification',
+      ],
+    },
   });
 });
 
