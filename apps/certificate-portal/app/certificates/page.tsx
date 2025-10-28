@@ -27,8 +27,43 @@ import {
   Tooltip,
 } from '@mui/material';
 import { Add, Search, Visibility, GetApp, QrCode2, FilterList, Refresh } from '@mui/icons-material';
-import DashboardLayout from '@/components/layout/DashboardLayout';
-import { Certificate, CertificateFilters } from '@/lib/types/certificate';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+
+type CertificateStatus = 'pending' | 'approved' | 'rejected' | 'expired' | 'revoked';
+
+interface Certificate {
+  id: string;
+  certificateNumber: string;
+  farmId: string;
+  farmName: string;
+  farmerName: string;
+  farmerNationalId: string;
+  address: {
+    houseNumber: string;
+    village: string;
+    subdistrict: string;
+    district: string;
+    province: string;
+    postalCode: string;
+  };
+  farmArea: number;
+  cropType: string;
+  certificationStandard: string;
+  status: CertificateStatus;
+  issuedBy: string;
+  issuedDate: string;
+  expiryDate: string;
+  inspectionDate: string;
+  inspectorName: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface CertificateFilters {
+  status?: CertificateStatus;
+  certificationStandard?: string;
+  searchQuery?: string;
+}
 
 // Mock data for development
 const mockCertificates: Certificate[] = [
@@ -219,7 +254,7 @@ export default function CertificatesPage() {
   );
 
   return (
-    <DashboardLayout>
+    <ErrorBoundary>
       <Box>
         {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -385,6 +420,6 @@ export default function CertificatesPage() {
           />
         </Card>
       </Box>
-    </DashboardLayout>
+    </ErrorBoundary>
   );
 }

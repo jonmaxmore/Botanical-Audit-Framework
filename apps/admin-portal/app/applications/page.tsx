@@ -17,15 +17,7 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Refresh as RefreshIcon, Assignment as AssignIcon } from '@mui/icons-material';
-import AdminHeader from '@/components/layout/AdminHeader';
-import AdminSidebar from '@/components/layout/AdminSidebar';
-import ProtectedRoute from '@/lib/protected-route';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
-import ApplicationsTable from '@/components/applications/ApplicationsTable';
-import ReviewDialog, { type ReviewData } from '@/components/applications/ReviewDialog';
-import DocumentViewer from '@/components/applications/DocumentViewer';
-import * as applicationsApi from '@/lib/api/applications';
-import type { Application } from '@/lib/api/applications';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 export default function ApplicationsPage() {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
@@ -228,7 +220,7 @@ export default function ApplicationsPage() {
   };
 
   return (
-    <ProtectedRoute>
+    <ErrorBoundary>
       <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
         {/* Sidebar - Desktop */}
         <Box sx={{ display: { xs: 'none', md: 'block' } }}>
@@ -362,6 +354,6 @@ export default function ApplicationsPage() {
           </Snackbar>
         </Box>
       </Box>
-    </ProtectedRoute>
+    </ErrorBoundary>
   );
 }

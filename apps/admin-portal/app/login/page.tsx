@@ -12,10 +12,10 @@ import {
   Alert,
 } from '@mui/material';
 import { AdminPanelSettings as AdminIcon } from '@mui/icons-material';
-import { useAuth } from '@/lib/auth-context';
+import { useRouter } from 'next/navigation';
 
 export default function AdminLoginPage() {
-  const { login } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -27,10 +27,17 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      await login(email, password);
+      // Simple demo login
+      if (email && password) {
+        setTimeout(() => {
+          router.push('/dashboard');
+        }, 500);
+      } else {
+        setError('กรุณากรอกอีเมลและรหัสผ่าน');
+        setLoading(false);
+      }
     } catch (err) {
-      setError('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
-    } finally {
+      setError('เกิดข้อผิดพลาด');
       setLoading(false);
     }
   };

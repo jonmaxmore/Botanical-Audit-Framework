@@ -11,7 +11,7 @@ import {
   TrendingUp,
   Add,
 } from '@mui/icons-material';
-import DashboardLayout from '@/components/layout/DashboardLayout';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -89,7 +89,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <DashboardLayout>
+    <ErrorBoundary>
       <Container maxWidth="xl" sx={{ py: 4 }}>
         {/* Header */}
         <Box sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -206,6 +206,6 @@ export default function DashboardPage() {
           </Box>
         </Paper>
       </Container>
-    </DashboardLayout>
+    </ErrorBoundary>
   );
 }

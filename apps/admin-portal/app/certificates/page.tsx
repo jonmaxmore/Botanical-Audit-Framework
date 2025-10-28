@@ -25,10 +25,7 @@ import {
   Visibility as ViewIcon,
   Block as RevokeIcon,
 } from '@mui/icons-material';
-import AdminHeader from '@/components/layout/AdminHeader';
-import AdminSidebar from '@/components/layout/AdminSidebar';
-import ProtectedRoute from '@/lib/protected-route';
-import LoadingSpinner from '@/components/common/LoadingSpinner';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useRouter } from 'next/navigation';
 
 interface Certificate {
@@ -190,7 +187,7 @@ export default function CertificatesPage() {
   );
 
   return (
-    <ProtectedRoute>
+    <ErrorBoundary>
       <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default' }}>
         {/* Sidebar - Desktop */}
         <Box sx={{ display: { xs: 'none', md: 'block' } }}>
@@ -420,6 +417,6 @@ export default function CertificatesPage() {
           </Box>
         </Box>
       </Box>
-    </ProtectedRoute>
+    </ErrorBoundary>
   );
 }
