@@ -21,7 +21,9 @@
       "Bash(npm run lint:*)",
       "Bash(npm run lint:fix:*)",
       "Bash(git add:*)",
-      "Bash(if exist \"NUL\" del /F \"NUL\")"
+      "Bash(if exist \"NUL\" del /F \"NUL\")",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
