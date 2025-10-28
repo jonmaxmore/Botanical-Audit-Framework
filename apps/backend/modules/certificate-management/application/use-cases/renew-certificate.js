@@ -35,7 +35,7 @@ class RenewCertificateUseCase {
     certificateId,
     renewedBy,
     validityPeriod = 36,
-    renewalReason = 'Regular renewal',
+    renewalReason = 'Regular renewal'
   }) {
     try {
       logger.info(`🔄 Starting certificate renewal for: ${certificateId}`);
@@ -58,7 +58,7 @@ class RenewCertificateUseCase {
 
       if (daysUntilExpiry > 90) {
         throw new Error(
-          `Certificate renewal is only allowed within 90 days of expiry. Current days until expiry: ${daysUntilExpiry}`,
+          `Certificate renewal is only allowed within 90 days of expiry. Current days until expiry: ${daysUntilExpiry}`
         );
       }
 
@@ -71,7 +71,7 @@ class RenewCertificateUseCase {
       // 4. ตรวจสอบสถานะฟาร์ม (optional verification)
       if (this.farmVerificationService) {
         const farmStatus = await this.farmVerificationService.verifyFarmStatus(
-          existingCertificate.farmId,
+          existingCertificate.farmId
         );
         if (!farmStatus.isActive) {
           throw new Error(`Farm is not active: ${farmStatus.reason}`);
@@ -89,7 +89,7 @@ class RenewCertificateUseCase {
         renewedAt: renewalDate,
         renewedBy,
         renewalReason,
-        newCertificateId: null, // จะอัปเดตหลังจากสร้างใบรับรองใหม่
+        newCertificateId: null // จะอัปเดตหลังจากสร้างใบรับรองใหม่
       };
 
       await this.certificateRepository.save(existingCertificate);
@@ -109,7 +109,7 @@ class RenewCertificateUseCase {
         issuedDate: renewalDate,
         expiryDate: newExpiryDate,
         renewedBy,
-        renewalReason,
+        renewalReason
       });
 
       const savedRenewedCertificate = await this.certificateRepository.save(renewedCertificate);
@@ -132,13 +132,13 @@ class RenewCertificateUseCase {
           renewedBy,
           renewalDate,
           newExpiryDate,
-          validityPeriod,
+          validityPeriod
         },
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       console.log(
-        `✅ Certificate renewal completed: ${existingCertificate.certificateNumber} → ${savedRenewedCertificate.certificateNumber}`,
+        `✅ Certificate renewal completed: ${existingCertificate.certificateNumber} → ${savedRenewedCertificate.certificateNumber}`
       );
       return savedRenewedCertificate;
     } catch (error) {
@@ -150,9 +150,9 @@ class RenewCertificateUseCase {
         payload: {
           certificateId,
           error: error.message,
-          renewedBy,
+          renewedBy
         },
-        timestamp: new Date(),
+        timestamp: new Date()
       });
 
       throw error;
@@ -182,7 +182,7 @@ class RenewCertificateUseCase {
       if (daysUntilExpiry > 90) {
         return {
           eligible: false,
-          reason: `Renewal available within 90 days of expiry. Days remaining: ${daysUntilExpiry}`,
+          reason: `Renewal available within 90 days of expiry. Days remaining: ${daysUntilExpiry}`
         };
       }
 
@@ -193,7 +193,7 @@ class RenewCertificateUseCase {
       return {
         eligible: true,
         daysUntilExpiry,
-        certificate: certificate.toJSON(),
+        certificate: certificate.toJSON()
       };
     } catch (error) {
       logger.error('Error checking renewal eligibility:', error);

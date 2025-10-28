@@ -31,12 +31,12 @@ class UserLoggedIn {
         email: this.email,
         ipAddress: this.ipAddress,
         userAgent: this.userAgent,
-        loggedInAt: this.loggedInAt,
+        loggedInAt: this.loggedInAt
       },
       metadata: {
         occurredAt: this.occurredAt,
-        version: '1.0',
-      },
+        version: '1.0'
+      }
     };
   }
 }

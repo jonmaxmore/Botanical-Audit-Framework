@@ -29,7 +29,7 @@ router.post(
     body('password').isLength({ min: 8 }).withMessage('รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร'),
     body('firstName').trim().isLength({ min: 2 }).withMessage('กรุณาใส่ชื่อ'),
     body('lastName').trim().isLength({ min: 2 }).withMessage('กรุณาใส่นามสกุล'),
-    body('phoneNumber').isMobilePhone('th-TH').withMessage('กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง'),
+    body('phoneNumber').isMobilePhone('th-TH').withMessage('กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง')
   ],
   async (req, res) => {
     try {
@@ -40,7 +40,7 @@ router.post(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array(),
+          errors.array()
         );
       }
 
@@ -52,7 +52,7 @@ router.post(
         return utils.response.error(
           res,
           'อีเมลนี้ถูกใช้งานแล้ว',
-          shared.constants.statusCodes.CONFLICT,
+          shared.constants.statusCodes.CONFLICT
         );
       }
 
@@ -67,7 +67,7 @@ router.post(
         organizationType: 'farmer',
         organizationName: organizationName || `${firstName} ${lastName} Farm`,
         accountStatus: 'active',
-        isVerified: false,
+        isVerified: false
       });
 
       await newUser.save();
@@ -79,10 +79,10 @@ router.post(
         {
           userId: newUser._id,
           email: newUser.email,
-          role: newUser.role,
+          role: newUser.role
         },
         config.environment.jwtSecret || 'fallback-secret-key',
-        { expiresIn: config.environment.jwtExpiry || '7d' },
+        { expiresIn: config.environment.jwtExpiry || '7d' }
       );
 
       return utils.response.success(
@@ -98,21 +98,21 @@ router.post(
             role: newUser.role,
             organizationType: newUser.organizationType,
             permissions: newUser.getPermissions(),
-            accountStatus: newUser.accountStatus,
-          },
+            accountStatus: newUser.accountStatus
+          }
         },
         'ลงทะเบียนสำเร็จ',
-        shared.constants.statusCodes.CREATED,
+        shared.constants.statusCodes.CREATED
       );
     } catch (error) {
       logger.error('Registration error:', error);
       return utils.response.error(
         res,
         'ไม่สามารถลงทะเบียนได้ในขณะนี้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
       );
     }
-  },
+  }
 );
 
 /**
@@ -124,7 +124,7 @@ router.post(
   '/login',
   [
     body('email').isEmail().normalizeEmail().withMessage('กรุณาใส่อีเมลที่ถูกต้อง'),
-    body('password').notEmpty().withMessage('กรุณาใส่รหัสผ่าน'),
+    body('password').notEmpty().withMessage('กรุณาใส่รหัสผ่าน')
   ],
   async (req, res) => {
     try {
@@ -135,7 +135,7 @@ router.post(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array(),
+          errors.array()
         );
       }
 
@@ -147,7 +147,7 @@ router.post(
         return utils.response.error(
           res,
           'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-          shared.constants.statusCodes.UNAUTHORIZED,
+          shared.constants.statusCodes.UNAUTHORIZED
         );
       }
 
@@ -174,7 +174,7 @@ router.post(
         return utils.response.error(
           res,
           'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
-          shared.constants.statusCodes.UNAUTHORIZED,
+          shared.constants.statusCodes.UNAUTHORIZED
         );
       }
 
@@ -188,10 +188,10 @@ router.post(
         {
           userId: user._id,
           email: user.email,
-          role: user.role,
+          role: user.role
         },
         config.environment.jwtSecret || 'fallback-secret-key',
-        { expiresIn: config.environment.jwtExpiry || '7d' },
+        { expiresIn: config.environment.jwtExpiry || '7d' }
       );
 
       logger.info(`Farmer logged in: ${user.email}`);
@@ -209,20 +209,20 @@ router.post(
             role: user.role,
             organizationType: user.organizationType,
             permissions: user.getPermissions(),
-            accountStatus: user.accountStatus,
-          },
+            accountStatus: user.accountStatus
+          }
         },
-        'เข้าสู่ระบบสำเร็จ',
+        'เข้าสู่ระบบสำเร็จ'
       );
     } catch (error) {
       logger.error('Login error:', error);
       return utils.response.error(
         res,
         'ไม่สามารถเข้าสู่ระบบได้ในขณะนี้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
       );
     }
-  },
+  }
 );
 
 /**
@@ -250,14 +250,14 @@ router.get('/profile', middleware.auth, async (req, res) => {
       permissions: user.getPermissions(),
       accountStatus: user.accountStatus,
       lastLoginAt: user.lastLoginAt,
-      createdAt: user.createdAt,
+      createdAt: user.createdAt
     });
   } catch (error) {
     logger.error('Get profile error:', error);
     return utils.response.error(
       res,
       'ไม่สามารถดึงข้อมูลโปรไฟล์ได้',
-      shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
+      shared.constants.statusCodes.INTERNAL_SERVER_ERROR
     );
   }
 });
@@ -276,7 +276,7 @@ router.put(
     body('phoneNumber')
       .optional()
       .isMobilePhone('th-TH')
-      .withMessage('กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง'),
+      .withMessage('กรุณาใส่เบอร์โทรศัพท์ที่ถูกต้อง')
   ],
   async (req, res) => {
     try {
@@ -287,7 +287,7 @@ router.put(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array(),
+          errors.array()
         );
       }
 
@@ -322,19 +322,19 @@ router.put(
           organizationType: user.organizationType,
           organizationName: user.organizationName,
           permissions: user.getPermissions(),
-          accountStatus: user.accountStatus,
+          accountStatus: user.accountStatus
         },
-        'อัปเดตโปรไฟล์สำเร็จ',
+        'อัปเดตโปรไฟล์สำเร็จ'
       );
     } catch (error) {
       logger.error('Update profile error:', error);
       return utils.response.error(
         res,
         'ไม่สามารถอัปเดตโปรไฟล์ได้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
       );
     }
-  },
+  }
 );
 
 /**
@@ -347,7 +347,7 @@ router.post(
   [
     middleware.auth,
     body('currentPassword').notEmpty().withMessage('กรุณาใส่รหัสผ่านปัจจุบัน'),
-    body('newPassword').isLength({ min: 8 }).withMessage('รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร'),
+    body('newPassword').isLength({ min: 8 }).withMessage('รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร')
   ],
   async (req, res) => {
     try {
@@ -358,7 +358,7 @@ router.post(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
-          errors.array(),
+          errors.array()
         );
       }
 
@@ -376,7 +376,7 @@ router.post(
         return utils.response.error(
           res,
           'รหัสผ่านปัจจุบันไม่ถูกต้อง',
-          shared.constants.statusCodes.BAD_REQUEST,
+          shared.constants.statusCodes.BAD_REQUEST
         );
       }
 
@@ -392,10 +392,10 @@ router.post(
       return utils.response.error(
         res,
         'ไม่สามารถเปลี่ยนรหัสผ่านได้',
-        shared.constants.statusCodes.INTERNAL_SERVER_ERROR,
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
       );
     }
-  },
+  }
 );
 
 /**
@@ -425,7 +425,7 @@ router.get('/verify', (req, res) => {
     const decoded = jwt.verify(token, config.environment.jwtSecret || 'fallback-secret-key');
     return utils.response.success(res, {
       valid: true,
-      user: decoded,
+      user: decoded
     });
   } catch (error) {
     return utils.response.error(res, 'Token ไม่ถูกต้อง', shared.constants.statusCodes.UNAUTHORIZED);

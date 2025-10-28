@@ -25,7 +25,7 @@ const collections = [
       { key: { nationalId: 1 }, unique: true, sparse: true, name: 'idx_users_nationalId' },
       { key: { phoneNumber: 1 }, name: 'idx_users_phone' },
       { key: { role: 1, isActive: 1 }, name: 'idx_users_role_active' },
-      { key: { createdAt: -1 }, name: 'idx_users_created' },
+      { key: { createdAt: -1 }, name: 'idx_users_created' }
     ],
     validator: {
       $jsonSchema: {
@@ -34,12 +34,12 @@ const collections = [
         properties: {
           email: {
             bsonType: 'string',
-            pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
+            pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
           },
-          role: { enum: ['farmer', 'inspector', 'admin', 'super_admin'] },
-        },
-      },
-    },
+          role: { enum: ['farmer', 'inspector', 'admin', 'super_admin'] }
+        }
+      }
+    }
   },
   {
     name: 'applications',
@@ -47,8 +47,8 @@ const collections = [
       { key: { applicationNumber: 1 }, unique: true, name: 'idx_applications_number' },
       { key: { farmerId: 1, status: 1 }, name: 'idx_applications_farmer_status' },
       { key: { status: 1, createdAt: -1 }, name: 'idx_applications_status_date' },
-      { key: { 'farm.province': 1 }, name: 'idx_applications_province' },
-    ],
+      { key: { 'farm.province': 1 }, name: 'idx_applications_province' }
+    ]
   },
   {
     name: 'certificates',
@@ -57,8 +57,8 @@ const collections = [
       { key: { applicationId: 1 }, unique: true, name: 'idx_certificates_application' },
       { key: { farmerId: 1, status: 1 }, name: 'idx_certificates_farmer_status' },
       { key: { expiryDate: 1 }, name: 'idx_certificates_expiry' },
-      { key: { status: 1, issueDate: -1 }, name: 'idx_certificates_status_date' },
-    ],
+      { key: { status: 1, issueDate: -1 }, name: 'idx_certificates_status_date' }
+    ]
   },
   {
     name: 'qrCodes',
@@ -66,8 +66,8 @@ const collections = [
       { key: { qrCode: 1 }, unique: true, name: 'idx_qr_code' },
       { key: { certificateId: 1 }, name: 'idx_qr_certificate' },
       { key: { scannedCount: -1 }, name: 'idx_qr_scanned' },
-      { key: { createdAt: -1 }, name: 'idx_qr_created' },
-    ],
+      { key: { createdAt: -1 }, name: 'idx_qr_created' }
+    ]
   },
   {
     name: 'farms',
@@ -75,16 +75,16 @@ const collections = [
       { key: { farmCode: 1 }, unique: true, sparse: true, name: 'idx_farms_code' },
       { key: { ownerId: 1 }, name: 'idx_farms_owner' },
       { key: { 'address.province': 1, 'address.district': 1 }, name: 'idx_farms_location' },
-      { key: { status: 1 }, name: 'idx_farms_status' },
-    ],
+      { key: { status: 1 }, name: 'idx_farms_status' }
+    ]
   },
   {
     name: 'inspections',
     indexes: [
       { key: { applicationId: 1 }, name: 'idx_inspections_application' },
       { key: { inspectorId: 1, scheduledDate: -1 }, name: 'idx_inspections_inspector_date' },
-      { key: { status: 1, scheduledDate: 1 }, name: 'idx_inspections_status_date' },
-    ],
+      { key: { status: 1, scheduledDate: 1 }, name: 'idx_inspections_status_date' }
+    ]
   },
   {
     name: 'payments',
@@ -92,16 +92,16 @@ const collections = [
       { key: { paymentNumber: 1 }, unique: true, name: 'idx_payments_number' },
       { key: { applicationId: 1 }, name: 'idx_payments_application' },
       { key: { status: 1, createdAt: -1 }, name: 'idx_payments_status_date' },
-      { key: { userId: 1 }, name: 'idx_payments_user' },
-    ],
+      { key: { userId: 1 }, name: 'idx_payments_user' }
+    ]
   },
   {
     name: 'documents',
     indexes: [
       { key: { entityType: 1, entityId: 1 }, name: 'idx_documents_entity' },
       { key: { uploadedBy: 1, createdAt: -1 }, name: 'idx_documents_uploader' },
-      { key: { status: 1 }, name: 'idx_documents_status' },
-    ],
+      { key: { status: 1 }, name: 'idx_documents_status' }
+    ]
   },
   {
     name: 'auditLogs',
@@ -109,32 +109,32 @@ const collections = [
       { key: { userId: 1, timestamp: -1 }, name: 'idx_audit_user_time' },
       { key: { action: 1, timestamp: -1 }, name: 'idx_audit_action_time' },
       { key: { entityType: 1, entityId: 1 }, name: 'idx_audit_entity' },
-      { key: { timestamp: -1 }, name: 'idx_audit_time', expireAfterSeconds: 7776000 }, // 90 days
-    ],
+      { key: { timestamp: -1 }, name: 'idx_audit_time', expireAfterSeconds: 7776000 } // 90 days
+    ]
   },
   {
     name: 'notifications',
     indexes: [
       { key: { userId: 1, read: 1, createdAt: -1 }, name: 'idx_notifications_user' },
       { key: { type: 1, createdAt: -1 }, name: 'idx_notifications_type' },
-      { key: { createdAt: -1 }, name: 'idx_notifications_cleanup', expireAfterSeconds: 2592000 }, // 30 days
-    ],
+      { key: { createdAt: -1 }, name: 'idx_notifications_cleanup', expireAfterSeconds: 2592000 } // 30 days
+    ]
   },
   {
     name: 'sessions',
     indexes: [
       { key: { sessionId: 1 }, unique: true, name: 'idx_sessions_id' },
       { key: { userId: 1 }, name: 'idx_sessions_user' },
-      { key: { expiresAt: 1 }, name: 'idx_sessions_ttl', expireAfterSeconds: 0 },
-    ],
+      { key: { expiresAt: 1 }, name: 'idx_sessions_ttl', expireAfterSeconds: 0 }
+    ]
   },
   {
     name: 'otpRecords',
     indexes: [
       { key: { identifier: 1, type: 1 }, name: 'idx_otp_identifier' },
-      { key: { createdAt: 1 }, name: 'idx_otp_ttl', expireAfterSeconds: 600 }, // 10 minutes
-    ],
-  },
+      { key: { createdAt: 1 }, name: 'idx_otp_ttl', expireAfterSeconds: 600 } // 10 minutes
+    ]
+  }
 ];
 
 async function setupProductionDatabase() {
@@ -165,7 +165,7 @@ async function setupProductionDatabase() {
     client = new MongoClient(process.env.MONGODB_URI, {
       maxPoolSize: 10,
       serverSelectionTimeoutMS: 30000,
-      socketTimeoutMS: 120000,
+      socketTimeoutMS: 120000
     });
 
     await client.connect();
@@ -210,7 +210,7 @@ async function setupProductionDatabase() {
             await db.command({
               collMod: name,
               validator: validator,
-              validationLevel: 'moderate',
+              validationLevel: 'moderate'
             });
             logger.info('     📝 Updated validator');
           }
@@ -258,7 +258,7 @@ async function setupProductionDatabase() {
         isVerified: true,
         mustChangePassword: true,
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       });
 
       logger.info('   ✅ Admin user created');

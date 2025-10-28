@@ -110,7 +110,7 @@ const requireRole = (...roles) => {
         requiredRoles: roles,
         endpoint: req.originalUrl,
         method: req.method,
-        ip: req.ip,
+        ip: req.ip
       });
 
       return next(new AuthorizationError('Insufficient privileges'));
@@ -138,7 +138,7 @@ const requirePermission = (...permissions) => {
         requiredPermissions: permissions,
         endpoint: req.originalUrl,
         method: req.method,
-        ip: req.ip,
+        ip: req.ip
       });
 
       return next(new AuthorizationError('Insufficient permissions'));
@@ -195,7 +195,7 @@ const requireOwnerOrAdmin = (userIdField = 'userId') => {
         resourceUserId,
         endpoint: req.originalUrl,
         method: req.method,
-        ip: req.ip,
+        ip: req.ip
       });
 
       return next(new AuthorizationError('Can only access your own resources'));
@@ -238,7 +238,7 @@ const rateLimitByUser = (maxRequests = 100, windowMs = 15 * 60 * 1000) => {
         requestCount: recentRequests.length,
         maxRequests,
         endpoint: req.originalUrl,
-        ip: req.ip,
+        ip: req.ip
       });
 
       return res.status(429).json({
@@ -246,8 +246,8 @@ const rateLimitByUser = (maxRequests = 100, windowMs = 15 * 60 * 1000) => {
         error: {
           message: 'Too many requests',
           type: 'rate_limit_error',
-          retryAfter: Math.ceil(windowMs / 1000),
-        },
+          retryAfter: Math.ceil(windowMs / 1000)
+        }
       });
     }
 
@@ -276,7 +276,7 @@ const authenticateApiKey = async (req, res, next) => {
       logger.security('Invalid API key attempt', {
         apiKey: apiKey.substring(0, 8) + '...',
         endpoint: req.originalUrl,
-        ip: req.ip,
+        ip: req.ip
       });
 
       throw new AuthenticationError('Invalid API key');
@@ -285,7 +285,7 @@ const authenticateApiKey = async (req, res, next) => {
     // Set API client info
     req.apiClient = {
       type: 'external',
-      key: apiKey,
+      key: apiKey
     };
 
     next();
@@ -310,5 +310,5 @@ module.exports = {
   requireActiveUser,
   requireOwnerOrAdmin,
   rateLimitByUser,
-  authenticateApiKey,
+  authenticateApiKey
 };

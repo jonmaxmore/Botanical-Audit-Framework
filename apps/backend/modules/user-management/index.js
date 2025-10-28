@@ -72,7 +72,7 @@ class UserManagementModule {
     // Initialize repository
     this.userRepository = new UserRepository({
       cacheService: this.cacheService,
-      auditService: this.auditService,
+      auditService: this.auditService
     });
 
     // Initialize authentication service
@@ -80,13 +80,13 @@ class UserManagementModule {
       userRepository: this.userRepository,
       auditService: this.auditService,
       notificationService: this.notificationService,
-      cacheService: this.cacheService,
+      cacheService: this.cacheService
     });
 
     // Initialize middleware
     this.authenticationMiddleware = new AuthenticationMiddleware({
       userAuthenticationService: this.authenticationService,
-      auditService: this.auditService,
+      auditService: this.auditService
     });
 
     // Initialize controller
@@ -94,7 +94,7 @@ class UserManagementModule {
       userAuthenticationService: this.authenticationService,
       userRepository: this.userRepository,
       auditService: this.auditService,
-      notificationService: this.notificationService,
+      notificationService: this.notificationService
     });
 
     // Create routes
@@ -102,7 +102,7 @@ class UserManagementModule {
       userAuthenticationController: this.authenticationController,
       authenticationMiddleware: this.authenticationMiddleware,
       tokenManager: this.tokenManager,
-      redisClient: this.redisClient,
+      redisClient: this.redisClient
     });
   }
 
@@ -117,13 +117,13 @@ class UserManagementModule {
       authorize: this.authenticationMiddleware.authorize.bind(this.authenticationMiddleware),
       requireRole: this.authenticationMiddleware.requireRole.bind(this.authenticationMiddleware),
       validateResourceOwnership: this.authenticationMiddleware.validateResourceOwnership.bind(
-        this.authenticationMiddleware,
+        this.authenticationMiddleware
       ),
       rateLimit: this.authenticationMiddleware.rateLimit.bind(this.authenticationMiddleware),
       optionalAuth: this.authenticationMiddleware.optionalAuth.bind(this.authenticationMiddleware),
       securityHeaders: this.authenticationMiddleware.securityHeaders.bind(
-        this.authenticationMiddleware,
-      ),
+        this.authenticationMiddleware
+      )
     };
   }
 
@@ -178,7 +178,7 @@ class UserManagementModule {
         role: 'DTAM_ADMIN',
         isActive: true,
         isVerified: true,
-        requirePasswordChange: true, // Force password change on first login
+        requirePasswordChange: true // Force password change on first login
       });
 
       logger.info('[UserManagementModule] Initial admin user created:', adminUser.email);
@@ -216,7 +216,7 @@ class UserManagementModule {
 
     return {
       valid: issues.length === 0,
-      issues,
+      issues
     };
   }
 
@@ -230,7 +230,7 @@ class UserManagementModule {
         module: 'UserManagement',
         status: 'healthy',
         timestamp: new Date(),
-        components: {},
+        components: {}
       };
 
       // Check database connectivity
@@ -269,7 +269,7 @@ class UserManagementModule {
         module: 'UserManagement',
         status: 'unhealthy',
         timestamp: new Date(),
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -311,7 +311,7 @@ module.exports = {
   UserAuthenticationController,
   UserRepository,
   User,
-  createAuthRoutes,
+  createAuthRoutes
 };
 
 /**

@@ -31,46 +31,46 @@ const EnvironmentalDataSchema = new mongoose.Schema({
     average: Number, // °C
     min: Number,
     max: Number,
-    optimal_days: Number, // Days within optimal range
+    optimal_days: Number // Days within optimal range
   },
   humidity: {
     average: Number, // %
     min: Number,
     max: Number,
-    optimal_days: Number,
+    optimal_days: Number
   },
   rainfall: {
     total: Number, // mm
     distribution: String, // e.g., "evenly distributed", "heavy early season"
-    rainyDays: Number,
+    rainyDays: Number
   },
   sunlight: {
     averageHoursPerDay: Number,
     totalHours: Number,
-    cloudyDays: Number,
+    cloudyDays: Number
   },
   soilMoisture: {
     average: Number, // %
     min: Number,
     max: Number,
     dryPeriods: Number, // Days below threshold
-    wetPeriods: Number, // Days above threshold
+    wetPeriods: Number // Days above threshold
   },
   soilPH: {
     initial: Number,
     final: Number,
-    average: Number,
+    average: Number
   },
   soilTemperature: {
-    average: Number, // °C
+    average: Number // °C
   },
   airQuality: {
     rating: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent'],
+      enum: ['poor', 'fair', 'good', 'excellent']
     },
-    notes: String,
-  },
+    notes: String
+  }
 });
 
 const InputDataSchema = new mongoose.Schema({
@@ -81,7 +81,7 @@ const InputDataSchema = new mongoose.Schema({
       growthStage: String,
       type: {
         type: String,
-        enum: ['organic', 'synthetic', 'hybrid'],
+        enum: ['organic', 'synthetic', 'hybrid']
       },
       product: String,
       npkRatio: String, // e.g., "20-10-20"
@@ -92,13 +92,13 @@ const InputDataSchema = new mongoose.Schema({
         {
           name: String,
           amount: Number,
-          unit: String,
-        },
+          unit: String
+        }
       ],
       applicationMethod: String,
       cost: Number, // THB
-      gacpCompliant: Boolean,
-    },
+      gacpCompliant: Boolean
+    }
   ],
   totalFertilizerCost: Number, // THB
 
@@ -106,13 +106,13 @@ const InputDataSchema = new mongoose.Schema({
   irrigation: {
     method: {
       type: String,
-      enum: ['drip', 'sprinkler', 'flood', 'manual', 'rain_fed', 'mixed'],
+      enum: ['drip', 'sprinkler', 'flood', 'manual', 'rain_fed', 'mixed']
     },
     totalWaterUsed: Number, // liters or m³
     frequency: String,
     scheduling: String, // e.g., "fixed schedule", "sensor-based", "manual"
     efficiency: Number, // % (estimated water use efficiency)
-    cost: Number, // THB
+    cost: Number // THB
   },
 
   // Pest & disease management
@@ -121,13 +121,13 @@ const InputDataSchema = new mongoose.Schema({
       date: Date,
       issue: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'DiseasePest',
+        ref: 'DiseasePest'
       },
       issueName: String,
       issueType: String, // "disease", "pest", "deficiency"
       severity: {
         type: String,
-        enum: ['mild', 'moderate', 'severe'],
+        enum: ['mild', 'moderate', 'severe']
       },
       treatment: String,
       product: String,
@@ -135,8 +135,8 @@ const InputDataSchema = new mongoose.Schema({
       gacpCompliant: Boolean,
       cost: Number, // THB
       effective: Boolean,
-      notes: String,
-    },
+      notes: String
+    }
   ],
   totalPestControlCost: Number, // THB
 
@@ -147,8 +147,8 @@ const InputDataSchema = new mongoose.Schema({
     totalLaborCost: Number, // THB
     mechanization: {
       type: String,
-      enum: ['none', 'low', 'medium', 'high'],
-    },
+      enum: ['none', 'low', 'medium', 'high']
+    }
   },
 
   // Other inputs
@@ -156,12 +156,12 @@ const InputDataSchema = new mongoose.Schema({
     {
       category: String, // e.g., "seeds", "equipment", "utilities"
       description: String,
-      cost: Number, // THB
-    },
+      cost: Number // THB
+    }
   ],
 
   // Total cost calculation
-  totalCost: Number, // THB (sum of all costs)
+  totalCost: Number // THB (sum of all costs)
 });
 
 const YieldDataSchema = new mongoose.Schema({
@@ -170,8 +170,8 @@ const YieldDataSchema = new mongoose.Schema({
     totalWeight: Number, // kg
     quality: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent', 'premium'],
-    },
+      enum: ['poor', 'fair', 'good', 'excellent', 'premium']
+    }
   },
   dried: {
     totalWeight: Number, // kg
@@ -179,8 +179,8 @@ const YieldDataSchema = new mongoose.Schema({
     moistureContent: Number, // %
     quality: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent', 'premium'],
-    },
+      enum: ['poor', 'fair', 'good', 'excellent', 'premium']
+    }
   },
 
   // For cannabis specifically
@@ -193,13 +193,13 @@ const YieldDataSchema = new mongoose.Schema({
     terpeneProfile: String,
     visualQuality: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent', 'premium'],
+      enum: ['poor', 'fair', 'good', 'excellent', 'premium']
     },
     aromaQuality: Number, // 0-10
     trichomeDevelopment: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent'],
-    },
+      enum: ['poor', 'fair', 'good', 'excellent']
+    }
   },
 
   // Yield per area
@@ -212,16 +212,16 @@ const YieldDataSchema = new mongoose.Schema({
     {
       grade: String, // e.g., "A", "B", "C" or "Premium", "Standard"
       weight: Number, // kg
-      percentage: Number, // % of total
-    },
+      percentage: Number // % of total
+    }
   ],
 
   // Market data
   sellingPrice: {
     averagePerKg: Number, // THB/kg
     totalRevenue: Number, // THB
-    buyer: String,
-  },
+    buyer: String
+  }
 });
 
 const OutcomeDataSchema = new mongoose.Schema({
@@ -230,15 +230,15 @@ const OutcomeDataSchema = new mongoose.Schema({
     overall: {
       type: String,
       enum: ['failed', 'poor', 'below_average', 'average', 'above_average', 'excellent'],
-      required: true,
+      required: true
     },
     successScore: {
       type: Number,
       min: 0,
-      max: 100,
+      max: 100
     },
     metExpectations: Boolean,
-    exceededExpectations: Boolean,
+    exceededExpectations: Boolean
   },
 
   // Financial outcomes
@@ -248,7 +248,7 @@ const OutcomeDataSchema = new mongoose.Schema({
     netProfit: Number, // THB
     profitMargin: Number, // %
     roi: Number, // % (Return on Investment)
-    breakEven: Boolean,
+    breakEven: Boolean
   },
 
   // Efficiency metrics
@@ -257,19 +257,19 @@ const OutcomeDataSchema = new mongoose.Schema({
     nutrientUseEfficiency: Number, // kg yield per kg NPK
     laborProductivity: Number, // kg yield per hour
     landProductivity: Number, // THB per rai
-    energyEfficiency: Number, // kg yield per kWh (if tracked)
+    energyEfficiency: Number // kg yield per kWh (if tracked)
   },
 
   // Quality outcomes
   quality: {
     overallQuality: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent', 'premium'],
+      enum: ['poor', 'fair', 'good', 'excellent', 'premium']
     },
     gacpCompliant: Boolean,
     certificationAchieved: Boolean,
     certification: String,
-    qualityScore: Number, // 0-100
+    qualityScore: Number // 0-100
   },
 
   // Comparison metrics
@@ -277,7 +277,7 @@ const OutcomeDataSchema = new mongoose.Schema({
     vsRegionalAverage: Number, // % difference
     vsPreviousCycle: Number, // % difference
     vsExpectedYield: Number, // % difference
-    ranking: String, // e.g., "top 10%", "average", "below average"
+    ranking: String // e.g., "top 10%", "average", "below average"
   },
 
   // Challenges encountered
@@ -294,20 +294,20 @@ const OutcomeDataSchema = new mongoose.Schema({
           'labor',
           'equipment',
           'market',
-          'other',
-        ],
+          'other'
+        ]
       },
       description: String,
       descriptionThai: String,
       severity: {
         type: String,
-        enum: ['minor', 'moderate', 'major', 'critical'],
+        enum: ['minor', 'moderate', 'major', 'critical']
       },
       impact: String, // Impact on yield/quality
       resolution: String, // How it was resolved
       lessonsLearned: String,
-      lessonsLearnedThai: String,
-    },
+      lessonsLearnedThai: String
+    }
   ],
 
   // Success factors
@@ -317,12 +317,12 @@ const OutcomeDataSchema = new mongoose.Schema({
       factorThai: String,
       importance: {
         type: String,
-        enum: ['minor', 'moderate', 'major', 'critical'],
+        enum: ['minor', 'moderate', 'major', 'critical']
       },
       description: String,
-      descriptionThai: String,
-    },
-  ],
+      descriptionThai: String
+    }
+  ]
 });
 
 const HistoricalYieldSchema = new mongoose.Schema(
@@ -331,7 +331,7 @@ const HistoricalYieldSchema = new mongoose.Schema(
     recordId: {
       type: String,
       required: true,
-      unique: true,
+      unique: true
       // e.g., "hist-yield-2024-001"
     },
 
@@ -346,49 +346,49 @@ const HistoricalYieldSchema = new mongoose.Schema(
           'government_stats', // From DoA statistics
           'estimated', // Estimated from literature
           'partner_farm', // From partner organizations
-          'survey', // From farmer surveys
-        ],
+          'survey' // From farmer surveys
+        ]
       },
       sourceId: String, // ID of source record (if applicable)
       reliability: {
         type: String,
         enum: ['low', 'medium', 'high', 'verified'],
-        default: 'medium',
+        default: 'medium'
       },
       verified: {
         type: Boolean,
-        default: false,
+        default: false
       },
       verifiedBy: String,
-      verifiedDate: Date,
+      verifiedDate: Date
     },
 
     // === Farm & Location Data ===
     farm: {
       farmId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Farm',
+        ref: 'Farm'
       },
       farmType: {
         type: String,
-        enum: ['conventional', 'organic', 'gapHybrid', 'hydroponic', 'mixed'],
+        enum: ['conventional', 'organic', 'gapHybrid', 'hydroponic', 'mixed']
       },
       farmSize: {
         value: Number,
-        unit: String,
+        unit: String
       },
       anonymous: {
         type: Boolean,
-        default: false,
+        default: false
         // TRUE if farmer wants to stay anonymous
-      },
+      }
     },
 
     location: {
       region: {
         type: String,
         enum: ['north', 'northeast', 'central', 'east', 'west', 'south'],
-        required: true,
+        required: true
       },
       province: String,
       district: String,
@@ -396,12 +396,12 @@ const HistoricalYieldSchema = new mongoose.Schema(
         type: {
           type: String,
           enum: ['Point'],
-          default: 'Point',
+          default: 'Point'
         },
-        coordinates: [Number], // [longitude, latitude]
+        coordinates: [Number] // [longitude, latitude]
       },
       elevation: Number, // meters
-      terrainType: String,
+      terrainType: String
     },
 
     // === Plant Data ===
@@ -409,18 +409,18 @@ const HistoricalYieldSchema = new mongoose.Schema(
       plantType: {
         type: String,
         required: true,
-        enum: ['cannabis', 'turmeric', 'ginger', 'black_galingale', 'plai', 'kratom'],
+        enum: ['cannabis', 'turmeric', 'ginger', 'black_galingale', 'plai', 'kratom']
       },
       plantCatalog: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'PlantCatalog',
+        ref: 'PlantCatalog'
       },
       cultivar: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'PlantCultivar',
+        ref: 'PlantCultivar'
       },
       cultivarName: String,
-      genetics: String, // For cannabis: "indica", "sativa", "hybrid"
+      genetics: String // For cannabis: "indica", "sativa", "hybrid"
     },
 
     // === Cultivation Details ===
@@ -428,43 +428,43 @@ const HistoricalYieldSchema = new mongoose.Schema(
       method: {
         type: String,
         enum: ['outdoor', 'indoor', 'greenhouse', 'hydroponic', 'mixed'],
-        required: true,
+        required: true
       },
       area: {
         value: Number,
         unit: {
           type: String,
           enum: ['rai', 'sqm', 'hectare', 'acre'],
-          default: 'rai',
-        },
+          default: 'rai'
+        }
       },
       numberOfPlants: Number,
       plantDensity: {
         value: Number,
-        unit: String, // e.g., "plants/sqm"
+        unit: String // e.g., "plants/sqm"
       },
 
       // Timing
       plantingDate: {
         type: Date,
-        required: true,
+        required: true
       },
       harvestDate: {
         type: Date,
-        required: true,
+        required: true
       },
       totalDays: Number, // Days from planting to harvest
       growthStages: {
         seedling: Number, // days
         vegetative: Number,
         flowering: Number,
-        harvest: Number,
+        harvest: Number
       },
 
       // Soil
       soilType: String,
       soilPreparation: String,
-      amendments: [String],
+      amendments: [String]
     },
 
     // === Environmental Data ===
@@ -490,7 +490,7 @@ const HistoricalYieldSchema = new mongoose.Schema(
         diseaseFreeSeason: Number, // % of season without disease
         yieldPerformance: Number, // vs expected yield
         qualityScore: Number,
-        profitability: Number,
+        profitability: Number
       },
 
       // Categorical features
@@ -498,12 +498,12 @@ const HistoricalYieldSchema = new mongoose.Schema(
         season: String, // "hot", "rainy", "cool"
         experienceLevel: {
           type: String,
-          enum: ['beginner', 'intermediate', 'advanced', 'expert'],
+          enum: ['beginner', 'intermediate', 'advanced', 'expert']
         },
         technology: {
           type: String,
-          enum: ['traditional', 'basic', 'moderate', 'advanced', 'cutting_edge'],
-        },
+          enum: ['traditional', 'basic', 'moderate', 'advanced', 'cutting_edge']
+        }
       },
 
       // Computed features
@@ -515,7 +515,7 @@ const HistoricalYieldSchema = new mongoose.Schema(
         optimalConditionDays: Number, // Days with all conditions optimal
         problemFreeDays: Number, // Days without issues
         inputCostPerKg: Number, // THB per kg yield
-        revenuePerRai: Number, // THB per rai
+        revenuePerRai: Number // THB per rai
       },
 
       // Success indicators
@@ -526,7 +526,7 @@ const HistoricalYieldSchema = new mongoose.Schema(
         profitable: Boolean,
         gacpCompliant: Boolean,
         sustainable: Boolean,
-        replicable: Boolean, // Can other farms replicate this?
+        replicable: Boolean // Can other farms replicate this?
       },
 
       // Clustering features (for similarity analysis)
@@ -535,10 +535,10 @@ const HistoricalYieldSchema = new mongoose.Schema(
         similarRecords: [
           {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'HistoricalYield',
-          },
-        ],
-      },
+            ref: 'HistoricalYield'
+          }
+        ]
+      }
     },
 
     // === Farmer Feedback ===
@@ -546,7 +546,7 @@ const HistoricalYieldSchema = new mongoose.Schema(
       satisfaction: {
         type: Number,
         min: 0,
-        max: 10,
+        max: 10
       },
       wouldRepeat: Boolean,
       wouldRecommend: Boolean,
@@ -555,7 +555,7 @@ const HistoricalYieldSchema = new mongoose.Schema(
       lessonsLearned: String,
       lessonsLearnedThai: String,
       improvements: String,
-      improvementsThai: String,
+      improvementsThai: String
     },
 
     // === Research Notes ===
@@ -566,27 +566,27 @@ const HistoricalYieldSchema = new mongoose.Schema(
       controlVariables: [String],
       hypothesisTested: String,
       findings: String,
-      publications: [String],
+      publications: [String]
     },
 
     // === Privacy & Sharing ===
     privacy: {
       public: {
         type: Boolean,
-        default: false,
+        default: false
       },
       shareWithResearchers: {
         type: Boolean,
-        default: false,
+        default: false
       },
       shareForML: {
         type: Boolean,
-        default: true,
+        default: true
       },
       anonymize: {
         type: Boolean,
-        default: true,
-      },
+        default: true
+      }
     },
 
     // === Data Quality ===
@@ -594,21 +594,21 @@ const HistoricalYieldSchema = new mongoose.Schema(
       completeness: {
         type: Number,
         min: 0,
-        max: 100,
+        max: 100
       },
       accuracy: {
         type: String,
-        enum: ['low', 'medium', 'high', 'verified'],
+        enum: ['low', 'medium', 'high', 'verified']
       },
       hasIoTData: Boolean, // Was IoT used to collect data?
       iotDataQuality: {
         type: String,
-        enum: ['none', 'limited', 'good', 'excellent'],
+        enum: ['none', 'limited', 'good', 'excellent']
       },
       manualDataEntry: Boolean,
       missingFields: [String],
       estimatedFields: [String],
-      notes: String,
+      notes: String
     },
 
     // === Tags & Categories ===
@@ -616,12 +616,12 @@ const HistoricalYieldSchema = new mongoose.Schema(
 
     featured: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     caseStudy: {
       type: Boolean,
-      default: false,
+      default: false
       // Mark as case study for educational purposes
     },
 
@@ -629,20 +629,20 @@ const HistoricalYieldSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ['draft', 'pending_review', 'verified', 'published', 'archived'],
-      default: 'pending_review',
+      default: 'pending_review'
     },
 
     version: {
       type: Number,
-      default: 1,
+      default: 1
     },
 
     notes: String,
-    notesThai: String,
+    notesThai: String
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // === Indexes ===
@@ -662,14 +662,14 @@ HistoricalYieldSchema.index({ 'privacy.shareForML': 1 });
  */
 HistoricalYieldSchema.statics.getMLTrainingData = function (
   plantType = 'cannabis',
-  minCompleteness = 70,
+  minCompleteness = 70
 ) {
   return this.find({
     'plant.plantType': plantType,
     'privacy.shareForML': true,
     'dataQuality.completeness': { $gte: minCompleteness },
     'dataSource.reliability': { $in: ['high', 'verified'] },
-    status: { $in: ['verified', 'published'] },
+    status: { $in: ['verified', 'published'] }
   });
 };
 
@@ -680,7 +680,7 @@ HistoricalYieldSchema.statics.getTopPerformers = function (plantType, region = n
   const query = {
     'plant.plantType': plantType,
     'outcome.success.successScore': { $gte: 80 },
-    status: { $in: ['verified', 'published'] },
+    status: { $in: ['verified', 'published'] }
   };
 
   if (region) {
@@ -697,7 +697,7 @@ HistoricalYieldSchema.statics.getByRegionAndPlant = function (region, plantType)
   return this.find({
     'location.region': region,
     'plant.plantType': plantType,
-    status: { $in: ['verified', 'published'] },
+    status: { $in: ['verified', 'published'] }
   }).sort({ 'cultivation.harvestDate': -1 });
 };
 
@@ -711,7 +711,7 @@ HistoricalYieldSchema.statics.getRecent = function (plantType, months = 12) {
   return this.find({
     'plant.plantType': plantType,
     'cultivation.harvestDate': { $gte: cutoffDate },
-    status: { $in: ['verified', 'published'] },
+    status: { $in: ['verified', 'published'] }
   }).sort({ 'cultivation.harvestDate': -1 });
 };
 
@@ -723,7 +723,7 @@ HistoricalYieldSchema.statics.getSimilarRecords = function (conditions, limit = 
 
   const query = {
     'plant.plantType': plantType,
-    status: { $in: ['verified', 'published'] },
+    status: { $in: ['verified', 'published'] }
   };
 
   if (region) query['location.region'] = region;
@@ -739,7 +739,7 @@ HistoricalYieldSchema.statics.getSimilarRecords = function (conditions, limit = 
 HistoricalYieldSchema.statics.getStatistics = async function (plantType, region = null) {
   const matchStage = {
     'plant.plantType': plantType,
-    status: { $in: ['verified', 'published'] },
+    status: { $in: ['verified', 'published'] }
   };
 
   if (region) {
@@ -758,9 +758,9 @@ HistoricalYieldSchema.statics.getStatistics = async function (plantType, region 
         avgSuccessScore: { $avg: '$outcome.success.successScore' },
         avgProfitMargin: { $avg: '$outcome.financial.profitMargin' },
         avgCost: { $avg: '$inputs.totalCost' },
-        avgRevenue: { $avg: '$outcome.financial.totalRevenue' },
-      },
-    },
+        avgRevenue: { $avg: '$outcome.financial.totalRevenue' }
+      }
+    }
   ]);
 };
 
@@ -782,7 +782,7 @@ HistoricalYieldSchema.methods.calculateCompleteness = function () {
     'inputs.totalCost',
     'outcome.financial.totalRevenue',
     'environment.temperature.average',
-    'environment.humidity.average',
+    'environment.humidity.average'
   ];
 
   fields.forEach(field => {
@@ -810,7 +810,7 @@ HistoricalYieldSchema.methods.generateMLFeatures = function () {
       this.outcome.challenges.filter(c => c.type === 'disease').length === 0 ? 1 : 0.5,
     yieldPerformance: this.outcome.comparison.vsExpectedYield || 0,
     qualityScore: this.outcome.quality.qualityScore || 0,
-    profitability: Math.min(1, Math.max(0, this.outcome.financial.profitMargin / 100)),
+    profitability: Math.min(1, Math.max(0, this.outcome.financial.profitMargin / 100))
   };
 
   return this.mlFeatures;

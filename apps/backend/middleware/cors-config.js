@@ -28,7 +28,7 @@ const PRODUCTION_ORIGINS = [
   'https://admin.gacp.go.th',
   'https://certificate.gacp.go.th',
   'https://inspector.gacp.go.th',
-  'https://reviewer.gacp.go.th',
+  'https://reviewer.gacp.go.th'
 ];
 
 /**
@@ -44,7 +44,7 @@ const DEVELOPMENT_ORIGINS = [
   'http://127.0.0.1:3001',
   'http://127.0.0.1:3002',
   'http://127.0.0.1:3003',
-  'http://127.0.0.1:5000',
+  'http://127.0.0.1:5000'
 ];
 
 /**
@@ -52,7 +52,7 @@ const DEVELOPMENT_ORIGINS = [
  */
 const ALLOWED_ORIGIN_PATTERNS = [
   /^https:\/\/.*\.gacp\.go\.th$/, // Any subdomain of gacp.go.th
-  /^https:\/\/gacp-.*\.vercel\.app$/, // Vercel preview deployments
+  /^https:\/\/gacp-.*\.vercel\.app$/ // Vercel preview deployments
 ];
 
 /**
@@ -83,7 +83,7 @@ function createCorsOptions(options = {}) {
     environment = process.env.NODE_ENV || 'development',
     customOrigins = [],
     allowPatterns = true,
-    logRejected = true,
+    logRejected = true
   } = options;
 
   // Determine allowed origins based on environment
@@ -117,7 +117,7 @@ function createCorsOptions(options = {}) {
           logger.warn('[CORS] Blocked request from unauthorized origin:', {
             origin,
             environment,
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
 
@@ -147,7 +147,7 @@ function createCorsOptions(options = {}) {
       'Accept',
       'Origin',
       'X-Request-Id',
-      'X-Client-Version',
+      'X-Client-Version'
     ],
 
     /**
@@ -160,7 +160,7 @@ function createCorsOptions(options = {}) {
       'X-Response-Time',
       'X-RateLimit-Limit',
       'X-RateLimit-Remaining',
-      'X-RateLimit-Reset',
+      'X-RateLimit-Reset'
     ],
 
     /**
@@ -184,7 +184,7 @@ function createCorsOptions(options = {}) {
     /**
      * Provide successful OPTIONS response status
      */
-    optionsSuccessStatus: 204,
+    optionsSuccessStatus: 204
   };
 }
 
@@ -203,7 +203,7 @@ function corsLoggingMiddleware() {
           origin,
           method: req.method,
           path: req.path,
-          ip: req.ip,
+          ip: req.ip
         });
       }
     }
@@ -233,5 +233,5 @@ module.exports = {
   isOriginAllowed,
   PRODUCTION_ORIGINS,
   DEVELOPMENT_ORIGINS,
-  ALLOWED_ORIGIN_PATTERNS,
+  ALLOWED_ORIGIN_PATTERNS
 };

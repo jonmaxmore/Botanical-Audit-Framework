@@ -19,7 +19,7 @@ const ApplicationStatus = {
   DECISION_PENDING: 'decision_pending',
   APPROVED: 'approved',
   REJECTED: 'rejected',
-  CERTIFICATE_ISSUED: 'certificate_issued',
+  CERTIFICATE_ISSUED: 'certificate_issued'
 };
 
 // Risk Assessment Levels
@@ -27,7 +27,7 @@ const RiskLevel = {
   LOW: 'low',
   MEDIUM: 'medium',
   HIGH: 'high',
-  CRITICAL: 'critical',
+  CRITICAL: 'critical'
 };
 
 // Farm Information Schema
@@ -37,7 +37,7 @@ const FarmInformationSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxLength: 200,
+      maxLength: 200
     },
     location: {
       address: { type: String, required: true },
@@ -47,40 +47,40 @@ const FarmInformationSchema = new mongoose.Schema(
       postalCode: { type: String, required: true, match: /^[0-9]{5}$/ },
       coordinates: {
         latitude: { type: Number, required: true, min: -90, max: 90 },
-        longitude: { type: Number, required: true, min: -180, max: 180 },
-      },
+        longitude: { type: Number, required: true, min: -180, max: 180 }
+      }
     },
     farmSize: {
       totalArea: { type: Number, required: true, min: 0.1 }, // in rai
       cultivatedArea: { type: Number, required: true, min: 0.1 },
-      unit: { type: String, default: 'rai', enum: ['rai', 'hectare', 'sqm'] },
+      unit: { type: String, default: 'rai', enum: ['rai', 'hectare', 'sqm'] }
     },
     landOwnership: {
       type: {
         type: String,
         required: true,
-        enum: ['owned', 'rented', 'cooperative', 'contract'],
+        enum: ['owned', 'rented', 'cooperative', 'contract']
       },
       documents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
-      landRightsCertificate: String,
+      landRightsCertificate: String
     },
     waterSource: {
       primary: {
         type: String,
         required: true,
-        enum: ['well', 'river', 'canal', 'rainwater', 'municipal'],
+        enum: ['well', 'river', 'canal', 'rainwater', 'municipal']
       },
       quality: { type: String, enum: ['good', 'fair', 'poor', 'unknown'] },
-      testResults: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabResult' }],
+      testResults: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabResult' }]
     },
     soilType: {
       type: { type: String, enum: ['clay', 'sandy', 'loam', 'mixed'] },
       ph: { type: Number, min: 0, max: 14 },
       organicMatter: Number,
-      testResults: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabResult' }],
-    },
+      testResults: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabResult' }]
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 // Crop Information Schema
@@ -100,29 +100,29 @@ const CropInformationSchema = new mongoose.Schema(
         'andrographis', // ฟ้าทลายโจร
         'centella', // บัวบก
         'butterfly_pea', // อัญชัน
-        'other', // อื่นๆ
-      ],
+        'other' // อื่นๆ
+      ]
     },
     variety: String,
     plantingArea: { type: Number, required: true, min: 0.1 },
     plantingMethod: {
       type: String,
-      enum: ['seeds', 'seedlings', 'cuttings', 'rhizomes', 'other'],
+      enum: ['seeds', 'seedlings', 'cuttings', 'rhizomes', 'other']
     },
     plantingDate: Date,
     expectedHarvestDate: Date,
     productionCycle: {
       type: String,
-      enum: ['annual', 'biennial', 'perennial'],
+      enum: ['annual', 'biennial', 'perennial']
     },
     organicCertification: {
       certified: { type: Boolean, default: false },
       certifyingBody: String,
       certificateNumber: String,
-      validUntil: Date,
-    },
+      validUntil: Date
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 // Document Reference Schema
@@ -141,8 +141,8 @@ const DocumentReferenceSchema = new mongoose.Schema(
         'organic_certificate',
         'training_certificate',
         'identification_document',
-        'other',
-      ],
+        'other'
+      ]
     },
     fileName: String,
     fileSize: Number,
@@ -150,13 +150,13 @@ const DocumentReferenceSchema = new mongoose.Schema(
     verificationStatus: {
       type: String,
       default: 'pending',
-      enum: ['pending', 'verified', 'rejected'],
+      enum: ['pending', 'verified', 'rejected']
     },
     verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     verificationDate: Date,
-    notes: String,
+    notes: String
   },
-  { _id: false },
+  { _id: false }
 );
 
 // Assessment Score Schema
@@ -174,17 +174,17 @@ const AssessmentScoreSchema = new mongoose.Schema(
         'post_harvest',
         'storage',
         'record_keeping',
-        'worker_training',
-      ],
+        'worker_training'
+      ]
     },
     maxScore: { type: Number, required: true },
     achievedScore: { type: Number, required: true, min: 0 },
     assessor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     assessmentDate: { type: Date, default: Date.now },
     notes: String,
-    recommendations: [String],
+    recommendations: [String]
   },
-  { _id: false },
+  { _id: false }
 );
 
 // Status History Schema
@@ -193,19 +193,19 @@ const StatusHistorySchema = new mongoose.Schema(
     status: {
       type: String,
       required: true,
-      enum: Object.values(ApplicationStatus),
+      enum: Object.values(ApplicationStatus)
     },
     changedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: true
     },
     changedAt: { type: Date, default: Date.now },
     reason: String,
     notes: String,
-    systemGenerated: { type: Boolean, default: false },
+    systemGenerated: { type: Boolean, default: false }
   },
-  { _id: false },
+  { _id: false }
 );
 
 // Main Application Schema
@@ -216,19 +216,19 @@ const ApplicationSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      match: /^GACP-\d{4}-\d{6}$/, // Format: GACP-YYYY-NNNNNN
+      match: /^GACP-\d{4}-\d{6}$/ // Format: GACP-YYYY-NNNNNN
     },
 
     applicant: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: true
     },
 
     // Application Details
     farmInformation: {
       type: FarmInformationSchema,
-      required: true,
+      required: true
     },
 
     cropInformation: [CropInformationSchema],
@@ -238,7 +238,7 @@ const ApplicationSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: Object.values(ApplicationStatus),
-      default: ApplicationStatus.DRAFT,
+      default: ApplicationStatus.DRAFT
     },
 
     statusHistory: [StatusHistorySchema],
@@ -252,12 +252,12 @@ const ApplicationSchema = new mongoose.Schema(
     riskAssessment: {
       level: {
         type: String,
-        enum: Object.values(RiskLevel),
+        enum: Object.values(RiskLevel)
       },
       factors: [String],
       assessedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       assessmentDate: Date,
-      notes: String,
+      notes: String
     },
 
     assessmentScores: [AssessmentScoreSchema],
@@ -265,7 +265,7 @@ const ApplicationSchema = new mongoose.Schema(
     totalScore: {
       type: Number,
       min: 0,
-      max: 100,
+      max: 100
     },
 
     // Documentation
@@ -280,21 +280,21 @@ const ApplicationSchema = new mongoose.Schema(
     inspectionCompleted: Date,
     inspectionReport: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'InspectionReport',
+      ref: 'InspectionReport'
     },
 
     // Decision & Certificate
     decision: {
       result: {
         type: String,
-        enum: ['approved', 'conditional_approval', 'rejected'],
+        enum: ['approved', 'conditional_approval', 'rejected']
       },
       decisionDate: Date,
       decisionBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       reasons: [String],
       conditions: [String],
       validityPeriod: Number, // in months
-      appealDeadline: Date,
+      appealDeadline: Date
     },
 
     certificate: { type: mongoose.Schema.Types.ObjectId, ref: 'Certificate' },
@@ -311,9 +311,9 @@ const ApplicationSchema = new mongoose.Schema(
         targetDate: Date,
         status: {
           type: String,
-          enum: ['open', 'in_progress', 'resolved', 'overdue'],
-        },
-      },
+          enum: ['open', 'in_progress', 'resolved', 'overdue']
+        }
+      }
     ],
 
     // Financial
@@ -326,27 +326,27 @@ const ApplicationSchema = new mongoose.Schema(
       paymentStatus: {
         type: String,
         default: 'pending',
-        enum: ['pending', 'partial', 'paid', 'refunded'],
+        enum: ['pending', 'partial', 'paid', 'refunded']
       },
       paymentHistory: [
         {
           amount: Number,
           date: Date,
           method: String,
-          reference: String,
-        },
-      ],
+          reference: String
+        }
+      ]
     },
 
     // System Fields
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    version: { type: Number, default: 1 },
+    version: { type: Number, default: 1 }
   },
   {
     timestamps: true,
-    collection: 'gacp_applications',
-  },
+    collection: 'gacp_applications'
+  }
 );
 
 // Indexes for Performance
@@ -376,7 +376,7 @@ ApplicationSchema.methods.updateStatus = function (newStatus, userId, reason, no
     changedBy: userId,
     changedAt: new Date(),
     reason,
-    notes,
+    notes
   });
 
   this.currentStatus = newStatus;
@@ -436,7 +436,7 @@ ApplicationSchema.methods.assessRisk = function () {
   this.riskAssessment = {
     level: riskLevel,
     factors: riskFactors,
-    assessmentDate: new Date(),
+    assessmentDate: new Date()
   };
 
   return riskLevel;
@@ -463,9 +463,9 @@ ApplicationSchema.statics.getOverdueApplications = function () {
       $nin: [
         ApplicationStatus.APPROVED,
         ApplicationStatus.REJECTED,
-        ApplicationStatus.CERTIFICATE_ISSUED,
-      ],
-    },
+        ApplicationStatus.CERTIFICATE_ISSUED
+      ]
+    }
   });
 };
 
@@ -486,8 +486,8 @@ ApplicationSchema.pre('save', function (next) {
       [ApplicationStatus.SUBMITTED]: [ApplicationStatus.UNDER_REVIEW],
       [ApplicationStatus.UNDER_REVIEW]: [
         ApplicationStatus.INSPECTION_SCHEDULED,
-        ApplicationStatus.REJECTED,
-      ],
+        ApplicationStatus.REJECTED
+      ]
       // ... add more transition rules
     };
 

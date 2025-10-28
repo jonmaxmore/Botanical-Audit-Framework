@@ -23,111 +23,111 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      index: true,
+      index: true
     },
     password: {
       type: String,
-      required: true,
+      required: true
     },
     firstName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     lastName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     phoneNumber: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     idCard: {
       type: String,
       required: true,
       unique: true,
       trim: true,
-      index: true,
+      index: true
     },
     address: {
       type: String,
-      default: '',
+      default: ''
     },
     province: {
       type: String,
-      default: '',
+      default: ''
     },
     district: {
       type: String,
-      default: '',
+      default: ''
     },
     subdistrict: {
       type: String,
-      default: '',
+      default: ''
     },
     zipCode: {
       type: String,
-      default: '',
+      default: ''
     },
     role: {
       type: String,
       enum: ['FARMER', 'ADMIN'],
       default: 'FARMER',
-      index: true,
+      index: true
     },
     status: {
       type: String,
       enum: ['PENDING_VERIFICATION', 'ACTIVE', 'SUSPENDED', 'INACTIVE'],
       default: 'PENDING_VERIFICATION',
-      index: true,
+      index: true
     },
     isEmailVerified: {
       type: Boolean,
       default: false,
-      index: true,
+      index: true
     },
     emailVerificationToken: {
       type: String,
       sparse: true,
-      index: true,
+      index: true
     },
     emailVerificationExpiry: {
-      type: Date,
+      type: Date
     },
     passwordResetToken: {
       type: String,
       sparse: true,
-      index: true,
+      index: true
     },
     passwordResetExpiry: {
-      type: Date,
+      type: Date
     },
     lastLoginAt: {
-      type: Date,
+      type: Date
     },
     loginAttempts: {
       type: Number,
-      default: 0,
+      default: 0
     },
     isLocked: {
       type: Boolean,
       default: false,
-      index: true,
+      index: true
     },
     lockedUntil: {
-      type: Date,
+      type: Date
     },
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
-    },
+      default: {}
+    }
   },
   {
     timestamps: true,
-    collection: 'users_farmer',
-  },
+    collection: 'users_farmer'
+  }
 );
 
 // Indexes for performance
@@ -176,7 +176,7 @@ class MongoDBUserRepository extends IUserRepository {
       lockedUntil: doc.lockedUntil,
       metadata: doc.metadata,
       createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
+      updatedAt: doc.updatedAt
     });
   }
 
@@ -210,7 +210,7 @@ class MongoDBUserRepository extends IUserRepository {
       isLocked: user.isLocked,
       lockedUntil: user.lockedUntil,
       metadata: user.metadata,
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
   }
 
@@ -260,7 +260,7 @@ class MongoDBUserRepository extends IUserRepository {
     try {
       const doc = await this.model.findOne({
         emailVerificationToken: token,
-        emailVerificationExpiry: { $gt: new Date() },
+        emailVerificationExpiry: { $gt: new Date() }
       });
       return this.toDomain(doc);
     } catch (error) {
@@ -276,7 +276,7 @@ class MongoDBUserRepository extends IUserRepository {
     try {
       const doc = await this.model.findOne({
         passwordResetToken: token,
-        passwordResetExpiry: { $gt: new Date() },
+        passwordResetExpiry: { $gt: new Date() }
       });
       return this.toDomain(doc);
     } catch (error) {
@@ -297,7 +297,7 @@ class MongoDBUserRepository extends IUserRepository {
         // Update existing user
         doc = await this.model.findByIdAndUpdate(user.id, mongoData, {
           new: true,
-          runValidators: true,
+          runValidators: true
         });
       } else {
         // Create new user
@@ -367,7 +367,7 @@ class MongoDBUserRepository extends IUserRepository {
   async emailExists(email) {
     try {
       const count = await this.model.countDocuments({
-        email: email.toLowerCase(),
+        email: email.toLowerCase()
       });
       return count > 0;
     } catch (error) {

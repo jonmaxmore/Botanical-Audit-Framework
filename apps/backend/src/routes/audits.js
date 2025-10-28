@@ -19,7 +19,7 @@ const {
   scheduleFieldAudit,
   getAuditorSchedule,
   submitAuditReport,
-  getAuditStats,
+  getAuditStats
 } = require('../controllers/auditController');
 
 // Audit list and search
@@ -33,7 +33,7 @@ router.get(
   '/schedule/:auditorId',
   authenticate,
   authorize(['director', 'auditor']),
-  getAuditorSchedule,
+  getAuditorSchedule
 );
 
 // Get specific audit
@@ -45,7 +45,7 @@ router.post(
   authenticate,
   authorize(['director', 'auditor']),
   validateRequest('auditSchedule'),
-  scheduleFieldAudit,
+  scheduleFieldAudit
 );
 
 // Create new audit
@@ -54,7 +54,7 @@ router.post(
   authenticate,
   authorize(['director', 'auditor']),
   validateRequest('audit'),
-  createAudit,
+  createAudit
 );
 
 // Submit audit report
@@ -63,7 +63,7 @@ router.post(
   authenticate,
   authorize(['auditor']),
   validateRequest('auditReport'),
-  submitAuditReport,
+  submitAuditReport
 );
 
 // Update audit
@@ -72,7 +72,7 @@ router.put(
   authenticate,
   authorize(['director', 'auditor']),
   validateRequest('audit'),
-  updateAudit,
+  updateAudit
 );
 
 // Delete audit

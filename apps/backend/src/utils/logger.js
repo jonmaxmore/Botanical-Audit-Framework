@@ -13,7 +13,7 @@ const logLevels = {
   warn: 1,
   info: 2,
   http: 3,
-  debug: 4,
+  debug: 4
 };
 
 // Define colors for each level
@@ -22,7 +22,7 @@ const logColors = {
   warn: 'yellow',
   info: 'green',
   http: 'magenta',
-  debug: 'blue',
+  debug: 'blue'
 };
 
 // Tell winston that you want to link the colors
@@ -33,7 +33,7 @@ const customFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.errors({ stack: true }),
   winston.format.json(),
-  winston.format.prettyPrint(),
+  winston.format.prettyPrint()
 );
 
 // Console format for development
@@ -54,7 +54,7 @@ const consoleFormat = winston.format.combine(
     }
 
     return msg;
-  }),
+  })
 );
 
 // Create logs directory if it doesn't exist
@@ -68,8 +68,8 @@ if (config.environment === 'development' || config.logging.console) {
   transports.push(
     new winston.transports.Console({
       level: config.logging.level,
-      format: consoleFormat,
-    }),
+      format: consoleFormat
+    })
   );
 }
 
@@ -82,8 +82,8 @@ if (config.environment === 'production' || config.logging.file) {
       level: config.logging.level,
       format: customFormat,
       maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
+      maxFiles: 5
+    })
   );
 
   // Error log file
@@ -93,8 +93,8 @@ if (config.environment === 'production' || config.logging.file) {
       level: 'error',
       format: customFormat,
       maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
+      maxFiles: 5
+    })
   );
 }
 
@@ -107,16 +107,16 @@ const logger = winston.createLogger({
   exceptionHandlers: [
     new winston.transports.File({
       filename: path.join(logsDir, 'exceptions.log'),
-      format: customFormat,
-    }),
+      format: customFormat
+    })
   ],
   rejectionHandlers: [
     new winston.transports.File({
       filename: path.join(logsDir, 'rejections.log'),
-      format: customFormat,
-    }),
+      format: customFormat
+    })
   ],
-  exitOnError: false,
+  exitOnError: false
 });
 
 // HTTP request logger middleware
@@ -134,14 +134,14 @@ const httpLogger = (req, res, next) => {
         statusCode: res.statusCode,
         duration,
         userAgent: req.get('User-Agent'),
-        ip: req.ip,
+        ip: req.ip
       });
     } else {
       logger.http(message, {
         method: req.method,
         url: req.originalUrl,
         statusCode: res.statusCode,
-        duration,
+        duration
       });
     }
   });
@@ -167,14 +167,14 @@ const enhancedLogger = {
       ip: req.ip,
       body: req.body,
       query: req.query,
-      params: req.params,
+      params: req.params
     });
   },
 
   response: (res, message = 'Response sent') => {
     logger.info(message, {
       statusCode: res.statusCode,
-      statusMessage: res.statusMessage,
+      statusMessage: res.statusMessage
     });
   },
 
@@ -184,7 +184,7 @@ const enhancedLogger = {
       operation,
       collection,
       query,
-      result: typeof result === 'object' ? JSON.stringify(result) : result,
+      result: typeof result === 'object' ? JSON.stringify(result) : result
     });
   },
 
@@ -194,7 +194,7 @@ const enhancedLogger = {
       action,
       userId: user?.id || user?._id,
       username: user?.username || user?.email,
-      ...details,
+      ...details
     });
   },
 
@@ -204,7 +204,7 @@ const enhancedLogger = {
     logger[level](`Performance: ${operation} took ${duration}ms`, {
       operation,
       duration,
-      ...details,
+      ...details
     });
   },
 
@@ -213,7 +213,7 @@ const enhancedLogger = {
     logger.warn(`Security: ${event}`, {
       event,
       timestamp: new Date().toISOString(),
-      ...details,
+      ...details
     });
   },
 
@@ -223,9 +223,9 @@ const enhancedLogger = {
       error: {
         name: error.name,
         message: error.message,
-        stack: error.stack,
+        stack: error.stack
       },
-      context,
+      context
     });
   },
 
@@ -236,9 +236,9 @@ const enhancedLogger = {
       warn: (message, meta = {}) => logger.warn(message, { ...defaultMeta, ...meta }),
       info: (message, meta = {}) => logger.info(message, { ...defaultMeta, ...meta }),
       http: (message, meta = {}) => logger.http(message, { ...defaultMeta, ...meta }),
-      debug: (message, meta = {}) => logger.debug(message, { ...defaultMeta, ...meta }),
+      debug: (message, meta = {}) => logger.debug(message, { ...defaultMeta, ...meta })
     };
-  },
+  }
 };
 
 // Add HTTP middleware to enhanced logger

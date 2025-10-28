@@ -44,11 +44,11 @@ class GACAApplication {
             fontSrc: ["'self'", 'https://fonts.gstatic.com'],
             imgSrc: ["'self'", 'data:', 'https:'],
             scriptSrc: ["'self'"],
-            connectSrc: ["'self'"],
-          },
+            connectSrc: ["'self'"]
+          }
         },
-        crossOriginEmbedderPolicy: false,
-      }),
+        crossOriginEmbedderPolicy: false
+      })
     );
 
     // CORS configuration
@@ -57,8 +57,8 @@ class GACAApplication {
         origin: config.cors?.origin || '*',
         credentials: true,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-        allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
-      }),
+        allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key']
+      })
     );
 
     // Compression and parsing
@@ -92,7 +92,7 @@ class GACAApplication {
         timestamp: new Date().toISOString(),
         uptime: process.uptime(),
         environment: this.environment,
-        version: '2.0.0',
+        version: '2.0.0'
       });
     });
 
@@ -110,9 +110,9 @@ class GACAApplication {
           Authentication: '/api/v1/auth',
           Users: '/api/v1/users',
           'Health Check': '/health',
-          'API Documentation': '/api/v1/docs',
+          'API Documentation': '/api/v1/docs'
         },
-        documentation: '/api/v1/docs',
+        documentation: '/api/v1/docs'
       });
     });
 

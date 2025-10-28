@@ -37,15 +37,15 @@ class AnalyticsProcessingWorkflowService {
         lowCompletionRate: 0.6,
         highDropoutRate: 0.3,
         lowEngagement: 0.4,
-        performanceDecline: 0.2,
+        performanceDecline: 0.2
       },
       reportingFrequency: {
         daily: true,
         weekly: true,
-        monthly: true,
+        monthly: true
       },
       dataRetentionDays: 365,
-      predictionModelEnabled: true,
+      predictionModelEnabled: true
     };
 
     // Analytics metrics tracking
@@ -55,7 +55,7 @@ class AnalyticsProcessingWorkflowService {
       alertsTriggered: 0,
       lastProcessingTime: null,
       averageProcessingLatency: 0,
-      errorCount: 0,
+      errorCount: 0
     };
 
     // Processing queues
@@ -108,7 +108,7 @@ class AnalyticsProcessingWorkflowService {
         'ASSESSMENT_TAKEN',
         'COURSE_COMPLETED',
         'CERTIFICATE_GENERATED',
-        'PROGRESS_UPDATED',
+        'PROGRESS_UPDATED'
       ];
 
       trainingEvents.forEach(eventType => {
@@ -189,7 +189,7 @@ class AnalyticsProcessingWorkflowService {
         eventData: eventData,
         timestamp: new Date(),
         processed: false,
-        processingAttempts: 0,
+        processingAttempts: 0
       };
 
       // Process event based on type
@@ -217,7 +217,7 @@ class AnalyticsProcessingWorkflowService {
     } catch (error) {
       this.logger.error(
         `[AnalyticsProcessing] Real-time event processing failed for ${eventType}:`,
-        error,
+        error
       );
       this.metrics.errorCount++;
 
@@ -282,7 +282,7 @@ class AnalyticsProcessingWorkflowService {
 
         // Farmer analytics
         farmerLearningHistory: await this.getFarmerLearningHistory(enrollment.farmerId),
-        predictedSuccessRate: await this.predictEnrollmentSuccess(enrollment, course),
+        predictedSuccessRate: await this.predictEnrollmentSuccess(enrollment, course)
       };
 
       // Update course statistics
@@ -320,7 +320,7 @@ class AnalyticsProcessingWorkflowService {
         engagementScore: await this.calculateEngagementScore(enrollmentId, timeSpent, performance),
 
         // Progress prediction
-        progressPrediction: await this.predictProgressCompletion(enrollmentId),
+        progressPrediction: await this.predictProgressCompletion(enrollmentId)
       };
 
       // Update enrollment progress metrics
@@ -359,7 +359,7 @@ class AnalyticsProcessingWorkflowService {
         assessmentDifficultyScore: await this.calculateAssessmentDifficulty(assessmentId, score),
 
         // Success probability
-        completionProbability: await this.predictCompletionProbability(enrollmentId, score),
+        completionProbability: await this.predictCompletionProbability(enrollmentId, score)
       };
 
       // Update assessment statistics
@@ -402,8 +402,8 @@ class AnalyticsProcessingWorkflowService {
         performanceRanking: await this.calculatePerformanceRanking(
           enrollmentId,
           courseId,
-          finalScore,
-        ),
+          finalScore
+        )
       };
 
       // Update course completion statistics
@@ -455,21 +455,21 @@ class AnalyticsProcessingWorkflowService {
         courseMetrics,
         learningPatterns,
         predictions,
-        systemKPIs,
+        systemKPIs
       });
 
       // 7. Update dashboard data
       await this.updateBatchDashboardData({
         enrollmentMetrics,
         courseMetrics,
-        systemKPIs,
+        systemKPIs
       });
 
       const processingTime = Date.now() - batchStartTime;
       this.metrics.lastProcessingTime = new Date();
 
       this.logger.log(
-        `[AnalyticsProcessing] Batch analytics processing completed in ${processingTime}ms`,
+        `[AnalyticsProcessing] Batch analytics processing completed in ${processingTime}ms`
       );
     } catch (error) {
       this.logger.error('[AnalyticsProcessing] Batch analytics processing failed:', error);
@@ -492,26 +492,26 @@ class AnalyticsProcessingWorkflowService {
         .aggregate([
           {
             $match: {
-              createdAt: { $gte: thirtyDaysAgo },
-            },
+              createdAt: { $gte: thirtyDaysAgo }
+            }
           },
           {
             $group: {
               _id: null,
               totalEnrollments: { $sum: 1 },
               activeEnrollments: {
-                $sum: { $cond: [{ $eq: ['$status', 'ACTIVE'] }, 1, 0] },
+                $sum: { $cond: [{ $eq: ['$status', 'ACTIVE'] }, 1, 0] }
               },
               completedEnrollments: {
-                $sum: { $cond: [{ $eq: ['$status', 'COMPLETED'] }, 1, 0] },
+                $sum: { $cond: [{ $eq: ['$status', 'COMPLETED'] }, 1, 0] }
               },
               failedEnrollments: {
-                $sum: { $cond: [{ $eq: ['$status', 'FAILED'] }, 1, 0] },
+                $sum: { $cond: [{ $eq: ['$status', 'FAILED'] }, 1, 0] }
               },
               averageFinalScore: { $avg: '$finalScore' },
-              totalStudyTime: { $sum: '$progress.totalTimeSpentMinutes' },
-            },
-          },
+              totalStudyTime: { $sum: '$progress.totalTimeSpentMinutes' }
+            }
+          }
         ])
         .toArray();
 
@@ -545,17 +545,17 @@ class AnalyticsProcessingWorkflowService {
           enrollments: await this.getDailyEnrollmentSummary(),
           completions: await this.getDailyCompletionSummary(),
           assessments: await this.getDailyAssessmentSummary(),
-          certificates: await this.getDailyCertificateSummary(),
+          certificates: await this.getDailyCertificateSummary()
         },
         trends: {
           enrollmentTrend: await this.calculateDailyEnrollmentTrend(),
           completionTrend: await this.calculateDailyCompletionTrend(),
-          performanceTrend: await this.calculateDailyPerformanceTrend(),
+          performanceTrend: await this.calculateDailyPerformanceTrend()
         },
         alerts: {
           criticalAlerts: await this.getCriticalAlerts('daily'),
-          warningAlerts: await this.getWarningAlerts('daily'),
-        },
+          warningAlerts: await this.getWarningAlerts('daily')
+        }
       };
 
       // Store report
@@ -587,7 +587,7 @@ class AnalyticsProcessingWorkflowService {
         eventType: eventType,
         timestamp: new Date(),
         data: processingResult,
-        metrics: this.getCurrentMetrics(),
+        metrics: this.getCurrentMetrics()
       };
 
       await this.dashboardService.updateRealTimeData(dashboardUpdate);
@@ -613,7 +613,7 @@ class AnalyticsProcessingWorkflowService {
           type: 'LOW_COMPLETION_RATE',
           severity: 'WARNING',
           message: `Completion rate below threshold: ${processingResult.completionRate}%`,
-          data: processingResult,
+          data: processingResult
         });
       }
 
@@ -626,7 +626,7 @@ class AnalyticsProcessingWorkflowService {
           type: 'HIGH_DROPOUT_RATE',
           severity: 'CRITICAL',
           message: `Dropout rate above threshold: ${processingResult.dropoutRate}%`,
-          data: processingResult,
+          data: processingResult
         });
       }
 
@@ -666,9 +666,9 @@ class AnalyticsProcessingWorkflowService {
       queueSizes: {
         eventQueue: this.eventQueue.length,
         reportingQueue: this.reportingQueue.length,
-        alertQueue: this.alertQueue.length,
+        alertQueue: this.alertQueue.length
       },
-      lastUpdated: new Date(),
+      lastUpdated: new Date()
     };
   }
 
@@ -689,7 +689,7 @@ class AnalyticsProcessingWorkflowService {
       status: this.metrics.errorCount < 10 ? 'HEALTHY' : 'DEGRADED',
       metrics: this.getCurrentMetrics(),
       configuration: this.analyticsConfig,
-      lastHealthCheck: new Date(),
+      lastHealthCheck: new Date()
     };
   }
 
@@ -740,7 +740,7 @@ class AnalyticsProcessingWorkflowService {
       () => {
         this.generateDailyReport();
       },
-      24 * 60 * 60 * 1000,
+      24 * 60 * 60 * 1000
     ); // Daily
   }
 

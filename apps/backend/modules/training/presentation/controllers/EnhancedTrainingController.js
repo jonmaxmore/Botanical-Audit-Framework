@@ -44,7 +44,7 @@ class EnhancedTrainingController extends TrainingController {
     this.enhancedFeaturesActive = {
       analytics: !!this.analyticsSystem,
       certificationTracking: !!this.certificationTracking,
-      performanceAssessment: !!this.performanceAssessment,
+      performanceAssessment: !!this.performanceAssessment
     };
   }
 
@@ -70,7 +70,7 @@ class EnhancedTrainingController extends TrainingController {
         return res.status(503).json({
           success: false,
           error: 'ANALYTICS_UNAVAILABLE',
-          message: 'Advanced analytics system is not available',
+          message: 'Advanced analytics system is not available'
         });
       }
 
@@ -94,7 +94,7 @@ class EnhancedTrainingController extends TrainingController {
         overview: {
           systemStatus: this.getSystemHealthStatus(),
           activeFeatures: this.enhancedFeaturesActive,
-          lastUpdate: new Date(),
+          lastUpdate: new Date()
         },
 
         trainingAnalytics: analyticsData,
@@ -104,9 +104,9 @@ class EnhancedTrainingController extends TrainingController {
         insights: await this.generateTrainingInsights(
           analyticsData,
           certificationAnalytics,
-          performanceAnalytics,
+          performanceAnalytics
         ),
-        recommendations: await this.generateSystemRecommendations(analyticsData),
+        recommendations: await this.generateSystemRecommendations(analyticsData)
       };
 
       // Log analytics access for audit
@@ -116,21 +116,21 @@ class EnhancedTrainingController extends TrainingController {
         resource: 'training_analytics_dashboard',
         details: {
           accessTime: new Date(),
-          dataScope: 'comprehensive_dashboard',
-        },
+          dataScope: 'comprehensive_dashboard'
+        }
       });
 
       res.json({
         success: true,
         message: 'Training analytics dashboard retrieved successfully',
-        data: combinedDashboard,
+        data: combinedDashboard
       });
     } catch (error) {
       logger.error('[EnhancedTraining] Analytics dashboard error:', error);
       res.status(500).json({
         success: false,
         error: 'ANALYTICS_ERROR',
-        message: 'Failed to retrieve analytics dashboard',
+        message: 'Failed to retrieve analytics dashboard'
       });
     }
   };
@@ -156,7 +156,7 @@ class EnhancedTrainingController extends TrainingController {
         return res.status(503).json({
           success: false,
           error: 'ANALYTICS_UNAVAILABLE',
-          message: 'Predictive analytics system is not available',
+          message: 'Predictive analytics system is not available'
         });
       }
 
@@ -168,7 +168,7 @@ class EnhancedTrainingController extends TrainingController {
       if (this.performanceAssessment && competencyId) {
         performancePredictions = await this.performanceAssessment.predictCompetencySuccess(
           userId,
-          competencyId,
+          competencyId
         );
       }
 
@@ -186,13 +186,13 @@ class EnhancedTrainingController extends TrainingController {
         predictions: {
           learning: predictions,
           performance: performancePredictions,
-          certification: certificationPredictions,
+          certification: certificationPredictions
         },
         interventionRecommendations: await this.generateInterventionRecommendations(
           userId,
-          predictions,
+          predictions
         ),
-        generatedAt: new Date(),
+        generatedAt: new Date()
       };
 
       // Log prediction access
@@ -201,20 +201,20 @@ class EnhancedTrainingController extends TrainingController {
         action: 'VIEW_LEARNER_PREDICTIONS',
         resource: 'learner_predictions',
         targetUserId: userId,
-        details: response,
+        details: response
       });
 
       res.json({
         success: true,
         message: 'Learner predictions retrieved successfully',
-        data: response,
+        data: response
       });
     } catch (error) {
       logger.error('[EnhancedTraining] Predictions error:', error);
       res.status(500).json({
         success: false,
         error: 'PREDICTIONS_ERROR',
-        message: 'Failed to retrieve learner predictions',
+        message: 'Failed to retrieve learner predictions'
       });
     }
   };
@@ -241,7 +241,7 @@ class EnhancedTrainingController extends TrainingController {
         return res.status(503).json({
           success: false,
           error: 'CERTIFICATION_UNAVAILABLE',
-          message: 'Certification tracking system is not available',
+          message: 'Certification tracking system is not available'
         });
       }
 
@@ -268,21 +268,21 @@ class EnhancedTrainingController extends TrainingController {
         resource: 'certification_dashboard',
         details: {
           accessTime: new Date(),
-          dataScope: 'full_dashboard',
-        },
+          dataScope: 'full_dashboard'
+        }
       });
 
       res.json({
         success: true,
         message: 'Certification dashboard retrieved successfully',
-        data: certificationData,
+        data: certificationData
       });
     } catch (error) {
       logger.error('[EnhancedTraining] Certification dashboard error:', error);
       res.status(500).json({
         success: false,
         error: 'CERTIFICATION_ERROR',
-        message: 'Failed to retrieve certification dashboard',
+        message: 'Failed to retrieve certification dashboard'
       });
     }
   };
@@ -308,7 +308,7 @@ class EnhancedTrainingController extends TrainingController {
         return res.status(503).json({
           success: false,
           error: 'CERTIFICATION_UNAVAILABLE',
-          message: 'Certification tracking system is not available',
+          message: 'Certification tracking system is not available'
         });
       }
 
@@ -330,7 +330,7 @@ class EnhancedTrainingController extends TrainingController {
       // Generate personalized recommendations
       certificationProgress.recommendations = await this.generateCertificationRecommendations(
         userId,
-        certificationProgress,
+        certificationProgress
       );
 
       // Log progress access
@@ -341,21 +341,21 @@ class EnhancedTrainingController extends TrainingController {
         targetUserId: userId,
         details: {
           includeAnalytics: includeAnalytics === 'true',
-          includePredictions: includePredictions === 'true',
-        },
+          includePredictions: includePredictions === 'true'
+        }
       });
 
       res.json({
         success: true,
         message: 'Learner certification progress retrieved successfully',
-        data: certificationProgress,
+        data: certificationProgress
       });
     } catch (error) {
       logger.error('[EnhancedTraining] Certification progress error:', error);
       res.status(500).json({
         success: false,
         error: 'PROGRESS_ERROR',
-        message: 'Failed to retrieve certification progress',
+        message: 'Failed to retrieve certification progress'
       });
     }
   };
@@ -384,7 +384,7 @@ class EnhancedTrainingController extends TrainingController {
         return res.status(503).json({
           success: false,
           error: 'ASSESSMENT_UNAVAILABLE',
-          message: 'Performance assessment system is not available',
+          message: 'Performance assessment system is not available'
         });
       }
 
@@ -398,8 +398,8 @@ class EnhancedTrainingController extends TrainingController {
         creationContext: {
           requestTime: new Date(),
           clientInfo: req.headers['user-agent'],
-          sessionId: req.sessionID,
-        },
+          sessionId: req.sessionID
+        }
       };
 
       // Create performance assessment
@@ -410,7 +410,7 @@ class EnhancedTrainingController extends TrainingController {
       if (this.analyticsSystem) {
         await this.analyticsSystem.initializeAssessmentTracking(
           assessment.assessmentId,
-          assessmentRequest,
+          assessmentRequest
         );
       }
 
@@ -419,7 +419,7 @@ class EnhancedTrainingController extends TrainingController {
         await this.certificationTracking.registerAssessmentStart(
           assessment.assessmentId,
           userId,
-          competencyId,
+          competencyId
         );
       }
 
@@ -433,8 +433,8 @@ class EnhancedTrainingController extends TrainingController {
           targetUserId: userId,
           competencyId,
           assessmentType,
-          assessmentConfiguration: assessment.configuration,
-        },
+          assessmentConfiguration: assessment.configuration
+        }
       });
 
       res.json({
@@ -444,15 +444,15 @@ class EnhancedTrainingController extends TrainingController {
           assessmentId: assessment.assessmentId,
           configuration: assessment.configuration,
           startInstructions: assessment.startInstructions,
-          estimatedDuration: assessment.estimatedDuration,
-        },
+          estimatedDuration: assessment.estimatedDuration
+        }
       });
     } catch (error) {
       logger.error('[EnhancedTraining] Assessment creation error:', error);
       res.status(500).json({
         success: false,
         error: 'ASSESSMENT_CREATION_ERROR',
-        message: 'Failed to create performance assessment',
+        message: 'Failed to create performance assessment'
       });
     }
   };
@@ -478,7 +478,7 @@ class EnhancedTrainingController extends TrainingController {
         return res.status(503).json({
           success: false,
           error: 'ASSESSMENT_UNAVAILABLE',
-          message: 'Performance assessment system is not available',
+          message: 'Performance assessment system is not available'
         });
       }
 
@@ -492,8 +492,8 @@ class EnhancedTrainingController extends TrainingController {
           ...contextData,
           submittedBy: req.user.id,
           submissionTime: new Date(),
-          clientInfo: req.headers['user-agent'],
-        },
+          clientInfo: req.headers['user-agent']
+        }
       };
 
       // Process assessment response
@@ -506,7 +506,7 @@ class EnhancedTrainingController extends TrainingController {
           assessmentId,
           userId: req.user.id,
           responseData,
-          processingResult,
+          processingResult
         });
       }
 
@@ -517,7 +517,7 @@ class EnhancedTrainingController extends TrainingController {
           userId: req.user.id,
           itemId,
           score: processingResult.score,
-          processingResult,
+          processingResult
         });
       }
 
@@ -526,7 +526,7 @@ class EnhancedTrainingController extends TrainingController {
         await this.triggerLearnerIntervention(
           req.user.id,
           assessmentId,
-          processingResult.interventionType,
+          processingResult.interventionType
         );
       }
 
@@ -540,8 +540,8 @@ class EnhancedTrainingController extends TrainingController {
           itemId,
           responseTime,
           score: processingResult.score,
-          interventionTriggered: processingResult.interventionNeeded,
-        },
+          interventionTriggered: processingResult.interventionNeeded
+        }
       });
 
       res.json({
@@ -554,15 +554,15 @@ class EnhancedTrainingController extends TrainingController {
           feedback: processingResult.immediateFeedback,
           continuationDecision: processingResult.continuationDecision,
           interventionNeeded: processingResult.interventionNeeded,
-          currentPerformance: processingResult.currentPerformance,
-        },
+          currentPerformance: processingResult.currentPerformance
+        }
       });
     } catch (error) {
       logger.error('[EnhancedTraining] Response submission error:', error);
       res.status(500).json({
         success: false,
         error: 'RESPONSE_PROCESSING_ERROR',
-        message: 'Failed to process assessment response',
+        message: 'Failed to process assessment response'
       });
     }
   };
@@ -589,7 +589,7 @@ class EnhancedTrainingController extends TrainingController {
         coreTrainingSystem: {
           status: 'ACTIVE',
           version: '2.0.0',
-          lastUpdate: new Date(),
+          lastUpdate: new Date()
         },
 
         enhancedSystems: {
@@ -601,7 +601,7 @@ class EnhancedTrainingController extends TrainingController {
             : { status: 'UNAVAILABLE' },
           performanceAssessment: this.performanceAssessment
             ? this.performanceAssessment.getSystemStatus()
-            : { status: 'UNAVAILABLE' },
+            : { status: 'UNAVAILABLE' }
         },
 
         integrationHealth: await this.getIntegrationHealthStatus(),
@@ -610,7 +610,7 @@ class EnhancedTrainingController extends TrainingController {
 
         capacityMetrics: await this.getSystemCapacityMetrics(),
 
-        systemDiagnostics: await this.runSystemDiagnostics(),
+        systemDiagnostics: await this.runSystemDiagnostics()
       };
 
       // Log system status access
@@ -620,21 +620,21 @@ class EnhancedTrainingController extends TrainingController {
         resource: 'training_system_status',
         details: {
           accessTime: new Date(),
-          systemHealth: systemStatus.integrationHealth.overall,
-        },
+          systemHealth: systemStatus.integrationHealth.overall
+        }
       });
 
       res.json({
         success: true,
         message: 'Enhanced training system status retrieved successfully',
-        data: systemStatus,
+        data: systemStatus
       });
     } catch (error) {
       logger.error('[EnhancedTraining] System status error:', error);
       res.status(500).json({
         success: false,
         error: 'SYSTEM_STATUS_ERROR',
-        message: 'Failed to retrieve system status',
+        message: 'Failed to retrieve system status'
       });
     }
   };
@@ -653,15 +653,15 @@ class EnhancedTrainingController extends TrainingController {
         coreTraining: 'HEALTHY',
         analytics: this.analyticsSystem ? 'HEALTHY' : 'UNAVAILABLE',
         certification: this.certificationTracking ? 'HEALTHY' : 'UNAVAILABLE',
-        performance: this.performanceAssessment ? 'HEALTHY' : 'UNAVAILABLE',
+        performance: this.performanceAssessment ? 'HEALTHY' : 'UNAVAILABLE'
       },
       activeFeatures: this.enhancedFeaturesActive,
-      lastCheck: new Date(),
+      lastCheck: new Date()
     };
 
     // Determine overall health
     const unavailableCount = Object.values(healthStatus.components).filter(
-      status => status === 'UNAVAILABLE',
+      status => status === 'UNAVAILABLE'
     ).length;
     if (unavailableCount > 0) {
       healthStatus.overall = unavailableCount > 2 ? 'DEGRADED' : 'PARTIAL';
@@ -679,7 +679,7 @@ class EnhancedTrainingController extends TrainingController {
       trends: [],
       opportunities: [],
       recommendations: [],
-      alerts: [],
+      alerts: []
     };
 
     // Analyze training effectiveness
@@ -689,7 +689,7 @@ class EnhancedTrainingController extends TrainingController {
           type: 'LOW_COMPLETION_RATE',
           message: 'Training completion rate is below target threshold',
           severity: 'HIGH',
-          recommendation: 'Review course content and engagement strategies',
+          recommendation: 'Review course content and engagement strategies'
         });
       }
     }
@@ -701,7 +701,7 @@ class EnhancedTrainingController extends TrainingController {
           type: 'COMPLIANCE_CONCERN',
           message: 'Certification compliance rate needs improvement',
           severity: 'MEDIUM',
-          recommendation: 'Strengthen compliance monitoring and support',
+          recommendation: 'Strengthen compliance monitoring and support'
         });
       }
     }
@@ -712,7 +712,7 @@ class EnhancedTrainingController extends TrainingController {
         insights.keyFindings.push({
           type: 'HIGH_PERFORMANCE',
           message: 'Learner performance is consistently high across assessments',
-          impact: 'POSITIVE',
+          impact: 'POSITIVE'
         });
       }
     }
@@ -734,7 +734,7 @@ class EnhancedTrainingController extends TrainingController {
         title: 'Improve Learner Engagement',
         description: 'Implement interactive content and gamification elements',
         expectedImpact: 'Increase engagement by 15-20%',
-        implementationEffort: 'MEDIUM',
+        implementationEffort: 'MEDIUM'
       });
     }
 
@@ -746,7 +746,7 @@ class EnhancedTrainingController extends TrainingController {
         title: 'Proactive Learner Support',
         description: 'Implement early intervention system for at-risk learners',
         expectedImpact: 'Reduce dropout rate by 25%',
-        implementationEffort: 'LOW',
+        implementationEffort: 'LOW'
       });
     }
 
@@ -765,7 +765,7 @@ class EnhancedTrainingController extends TrainingController {
         priority: 'CRITICAL',
         action: 'Schedule mentoring session within 24 hours',
         rationale: 'High dropout risk detected',
-        expectedOutcome: 'Reduce dropout probability by 50%',
+        expectedOutcome: 'Reduce dropout probability by 50%'
       });
     }
 
@@ -775,7 +775,7 @@ class EnhancedTrainingController extends TrainingController {
         priority: 'HIGH',
         action: 'Provide personalized learning content',
         rationale: 'Declining engagement trend detected',
-        expectedOutcome: 'Restore engagement to baseline levels',
+        expectedOutcome: 'Restore engagement to baseline levels'
       });
     }
 
@@ -793,7 +793,7 @@ class EnhancedTrainingController extends TrainingController {
         interventionType,
         triggeredAt: new Date(),
         triggeredBy: 'system_automatic',
-        status: 'PENDING',
+        status: 'PENDING'
       };
 
       // Send notification to appropriate personnel
@@ -807,11 +807,11 @@ class EnhancedTrainingController extends TrainingController {
         action: 'TRIGGER_LEARNER_INTERVENTION',
         resource: 'learner_intervention',
         targetUserId: userId,
-        details: interventionData,
+        details: interventionData
       });
 
       console.log(
-        `[EnhancedTraining] Intervention triggered for learner ${userId}: ${interventionType}`,
+        `[EnhancedTraining] Intervention triggered for learner ${userId}: ${interventionType}`
       );
     } catch (error) {
       logger.error('[EnhancedTraining] Intervention trigger error:', error);
@@ -827,7 +827,7 @@ class EnhancedTrainingController extends TrainingController {
       performance: await this.testSystemPerformance(),
       dataIntegrity: await this.testDataIntegrity(),
       resourceUsage: await this.getResourceUsage(),
-      lastDiagnostic: new Date(),
+      lastDiagnostic: new Date()
     };
 
     return diagnostics;

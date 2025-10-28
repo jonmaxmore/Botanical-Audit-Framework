@@ -23,7 +23,7 @@ const testUsers = [
     lastName: 'Test',
     role: 'farmer',
     status: 'active',
-    nationalId: '1000000000001',
+    nationalId: '1000000000001'
   },
   {
     email: 'loadtest1@gacp.dtam.go.th',
@@ -32,7 +32,7 @@ const testUsers = [
     lastName: 'Test 1',
     role: 'farmer',
     status: 'active',
-    nationalId: '1000000000002',
+    nationalId: '1000000000002'
   },
   {
     email: 'loadtest2@gacp.dtam.go.th',
@@ -41,7 +41,7 @@ const testUsers = [
     lastName: 'Test 2',
     role: 'farmer',
     status: 'active',
-    nationalId: '1000000000003',
+    nationalId: '1000000000003'
   },
   {
     email: 'loadtest3@gacp.dtam.go.th',
@@ -50,7 +50,7 @@ const testUsers = [
     lastName: 'Test 3',
     role: 'farmer',
     status: 'active',
-    nationalId: '1000000000004',
+    nationalId: '1000000000004'
   },
   {
     email: 'loadtest4@gacp.dtam.go.th',
@@ -59,7 +59,7 @@ const testUsers = [
     lastName: 'Test 4',
     role: 'farmer',
     status: 'active',
-    nationalId: '1000000000005',
+    nationalId: '1000000000005'
   },
   {
     email: 'loadtest5@gacp.dtam.go.th',
@@ -68,7 +68,7 @@ const testUsers = [
     lastName: 'Test 5',
     role: 'inspector',
     status: 'active',
-    nationalId: '1000000000006',
+    nationalId: '1000000000006'
   },
   {
     email: 'loadtest6@gacp.dtam.go.th',
@@ -77,7 +77,7 @@ const testUsers = [
     lastName: 'Test 6',
     role: 'inspector',
     status: 'active',
-    nationalId: '1000000000007',
+    nationalId: '1000000000007'
   },
   {
     email: 'loadtest7@gacp.dtam.go.th',
@@ -86,7 +86,7 @@ const testUsers = [
     lastName: 'Test 7',
     role: 'auditor',
     status: 'active',
-    nationalId: '1000000000008',
+    nationalId: '1000000000008'
   },
   {
     email: 'loadtest8@gacp.dtam.go.th',
@@ -95,7 +95,7 @@ const testUsers = [
     lastName: 'Test 8',
     role: 'auditor',
     status: 'active',
-    nationalId: '1000000000009',
+    nationalId: '1000000000009'
   },
   {
     email: 'loadtest9@gacp.dtam.go.th',
@@ -104,7 +104,7 @@ const testUsers = [
     lastName: 'Test 9',
     role: 'admin',
     status: 'active',
-    nationalId: '1000000000010',
+    nationalId: '1000000000010'
   },
   {
     email: 'loadtest10@gacp.dtam.go.th',
@@ -113,8 +113,8 @@ const testUsers = [
     lastName: 'Test 10',
     role: 'admin',
     status: 'active',
-    nationalId: '1000000000011',
-  },
+    nationalId: '1000000000011'
+  }
 ];
 
 async function setupTestUsers() {
@@ -149,7 +149,7 @@ async function setupTestUsers() {
           role: testUser.role,
           status: testUser.status,
           nationalId: testUser.nationalId,
-          isEmailVerified: true, // Skip verification for test users
+          isEmailVerified: true // Skip verification for test users
         });
 
         // eslint-disable-next-line no-console

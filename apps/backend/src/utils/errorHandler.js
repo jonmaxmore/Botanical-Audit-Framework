@@ -113,7 +113,7 @@ const handleMongoError = error => {
     const errors = Object.values(error.errors).map(err => ({
       field: err.path,
       message: err.message,
-      value: err.value,
+      value: err.value
     }));
 
     return new ValidationError('Validation failed', errors);
@@ -155,8 +155,8 @@ const formatErrorResponse = (error, includeStack = false) => {
     error: {
       message: error.message,
       type: error.type || 'unknown_error',
-      timestamp: error.timestamp || new Date().toISOString(),
-    },
+      timestamp: error.timestamp || new Date().toISOString()
+    }
   };
 
   // Add field information for validation errors
@@ -205,15 +205,15 @@ const globalErrorHandler = (error, req, res, _next) => {
       name: err.name,
       message: err.message,
       statusCode: err.statusCode,
-      stack: err.stack,
+      stack: err.stack
     },
     request: {
       method: req.method,
       url: req.originalUrl,
       ip: req.ip,
-      userAgent: req.get('User-Agent'),
+      userAgent: req.get('User-Agent')
     },
-    user: req.user ? { id: req.user.id, username: req.user.username } : null,
+    user: req.user ? { id: req.user.id, username: req.user.username } : null
   });
 
   // Send error response
@@ -282,7 +282,7 @@ const withRetry = async (fn, maxRetries = 3, delayMs = 1000) => {
       logger.warn(`Attempt ${attempt} failed, retrying in ${delayMs}ms:`, {
         error: error.message,
         attempt,
-        maxRetries,
+        maxRetries
       });
 
       await new Promise(resolve => setTimeout(resolve, delayMs));
@@ -316,5 +316,5 @@ module.exports = {
   formatErrorResponse,
   validateRequired,
   safeJSONParse,
-  withRetry,
+  withRetry
 };

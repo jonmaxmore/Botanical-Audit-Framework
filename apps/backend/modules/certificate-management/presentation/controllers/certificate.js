@@ -15,7 +15,7 @@ const {
   VerifyCertificateResponseDTO,
   RevokeCertificateRequestDTO,
   RenewCertificateRequestDTO,
-  CertificateListQueryDTO,
+  CertificateListQueryDTO
 } = require('../dto/CertificateDTO');
 const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('certificate-management-certificate');
@@ -27,7 +27,7 @@ class CertificateController {
     revokeCertificateUseCase,
     renewCertificateUseCase,
     listCertificatesUseCase,
-    getCertificateUseCase,
+    getCertificateUseCase
   }) {
     this.generateCertificateUseCase = generateCertificateUseCase;
     this.verifyCertificateUseCase = verifyCertificateUseCase;
@@ -51,18 +51,18 @@ class CertificateController {
         return res.status(400).json({
           success: false,
           error: 'Validation Error',
-          details: validationErrors,
+          details: validationErrors
         });
       }
 
       const certificate = await this.generateCertificateUseCase.execute(
-        requestDTO.toApplicationRequest(),
+        requestDTO.toApplicationRequest()
       );
 
       return res.status(201).json({
         success: true,
         message: 'Certificate generated successfully',
-        data: CertificateResponseDTO.fromDomain(certificate),
+        data: CertificateResponseDTO.fromDomain(certificate)
       });
     } catch (error) {
       logger.error('Error generating certificate:', error);
@@ -71,14 +71,14 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Resource Not Found',
-          message: error.message,
+          message: error.message
         });
       }
 
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to generate certificate',
+        message: 'Failed to generate certificate'
       });
     }
   }
@@ -97,20 +97,20 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Not Found',
-          message: 'Certificate not found',
+          message: 'Certificate not found'
         });
       }
 
       return res.status(200).json({
         success: true,
-        data: CertificateResponseDTO.fromDomain(certificate),
+        data: CertificateResponseDTO.fromDomain(certificate)
       });
     } catch (error) {
       logger.error('Error getting certificate:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to retrieve certificate',
+        message: 'Failed to retrieve certificate'
       });
     }
   }
@@ -128,7 +128,7 @@ class CertificateController {
         return res.status(400).json({
           success: false,
           error: 'Validation Error',
-          details: validationErrors,
+          details: validationErrors
         });
       }
 
@@ -141,15 +141,15 @@ class CertificateController {
           page: queryDTO.page,
           limit: queryDTO.limit,
           total: result.total,
-          totalPages: Math.ceil(result.total / queryDTO.limit),
-        },
+          totalPages: Math.ceil(result.total / queryDTO.limit)
+        }
       });
     } catch (error) {
       logger.error('Error listing certificates:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to retrieve certificates',
+        message: 'Failed to retrieve certificates'
       });
     }
   }
@@ -164,21 +164,21 @@ class CertificateController {
       const identifier = req.params.id || req.params.number;
 
       const result = await this.verifyCertificateUseCase.execute({
-        identifier,
+        identifier
       });
 
       const responseDTO = VerifyCertificateResponseDTO.fromVerificationResult(result);
 
       return res.status(200).json({
         success: true,
-        data: responseDTO,
+        data: responseDTO
       });
     } catch (error) {
       logger.error('Error verifying certificate:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to verify certificate',
+        message: 'Failed to verify certificate'
       });
     }
   }
@@ -197,19 +197,19 @@ class CertificateController {
         return res.status(400).json({
           success: false,
           error: 'Validation Error',
-          details: validationErrors,
+          details: validationErrors
         });
       }
 
       const certificate = await this.revokeCertificateUseCase.execute({
         id,
-        ...requestDTO.toApplicationRequest(),
+        ...requestDTO.toApplicationRequest()
       });
 
       return res.status(200).json({
         success: true,
         message: 'Certificate revoked successfully',
-        data: CertificateResponseDTO.fromDomain(certificate),
+        data: CertificateResponseDTO.fromDomain(certificate)
       });
     } catch (error) {
       logger.error('Error revoking certificate:', error);
@@ -218,7 +218,7 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Not Found',
-          message: 'Certificate not found',
+          message: 'Certificate not found'
         });
       }
 
@@ -226,14 +226,14 @@ class CertificateController {
         return res.status(400).json({
           success: false,
           error: 'Bad Request',
-          message: error.message,
+          message: error.message
         });
       }
 
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to revoke certificate',
+        message: 'Failed to revoke certificate'
       });
     }
   }
@@ -252,19 +252,19 @@ class CertificateController {
         return res.status(400).json({
           success: false,
           error: 'Validation Error',
-          details: validationErrors,
+          details: validationErrors
         });
       }
 
       const certificate = await this.renewCertificateUseCase.execute({
         id,
-        ...requestDTO.toApplicationRequest(),
+        ...requestDTO.toApplicationRequest()
       });
 
       return res.status(200).json({
         success: true,
         message: 'Certificate renewed successfully',
-        data: CertificateResponseDTO.fromDomain(certificate),
+        data: CertificateResponseDTO.fromDomain(certificate)
       });
     } catch (error) {
       logger.error('Error renewing certificate:', error);
@@ -273,14 +273,14 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Not Found',
-          message: 'Certificate not found',
+          message: 'Certificate not found'
         });
       }
 
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to renew certificate',
+        message: 'Failed to renew certificate'
       });
     }
   }
@@ -299,7 +299,7 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Not Found',
-          message: 'Certificate not found',
+          message: 'Certificate not found'
         });
       }
 
@@ -307,7 +307,7 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Not Found',
-          message: 'PDF not available for this certificate',
+          message: 'PDF not available for this certificate'
         });
       }
 
@@ -318,7 +318,7 @@ class CertificateController {
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to download PDF',
+        message: 'Failed to download PDF'
       });
     }
   }
@@ -337,7 +337,7 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Not Found',
-          message: 'Certificate not found',
+          message: 'Certificate not found'
         });
       }
 
@@ -345,7 +345,7 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Not Found',
-          message: 'QR code not available for this certificate',
+          message: 'QR code not available for this certificate'
         });
       }
 
@@ -356,7 +356,7 @@ class CertificateController {
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to retrieve QR code',
+        message: 'Failed to retrieve QR code'
       });
     }
   }
@@ -377,7 +377,7 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           error: 'Not Found',
-          message: 'Certificate not found',
+          message: 'Certificate not found'
         });
       }
 
@@ -389,7 +389,7 @@ class CertificateController {
             {
               action: 'ISSUED',
               timestamp: certificate.issuedDate,
-              by: certificate.issuedBy,
+              by: certificate.issuedBy
             },
             ...(certificate.revokedDate
               ? [
@@ -397,8 +397,8 @@ class CertificateController {
                     action: 'REVOKED',
                     timestamp: certificate.revokedDate,
                     by: certificate.revokedBy,
-                    reason: certificate.revocationReason,
-                  },
+                    reason: certificate.revocationReason
+                  }
                 ]
               : []),
             ...(certificate.renewedDate
@@ -406,19 +406,19 @@ class CertificateController {
                   {
                     action: 'RENEWED',
                     timestamp: certificate.renewedDate,
-                    by: certificate.renewedBy,
-                  },
+                    by: certificate.renewedBy
+                  }
                 ]
-              : []),
-          ],
-        },
+              : [])
+          ]
+        }
       });
     } catch (error) {
       logger.error('Error getting certificate history:', error);
       return res.status(500).json({
         success: false,
         error: 'Internal Server Error',
-        message: 'Failed to retrieve certificate history',
+        message: 'Failed to retrieve certificate history'
       });
     }
   }

@@ -35,7 +35,7 @@ class DatabaseManager {
 
       // Auto Index
       autoIndex: false, // Don't build indexes in production
-      autoCreate: false, // Don't automatically create collections
+      autoCreate: false // Don't automatically create collections
     };
 
     try {
@@ -108,7 +108,7 @@ class DatabaseManager {
       keepAlive: 30000,
       family: 4, // IPv4
       connectTimeout: 10000,
-      commandTimeout: 5000,
+      commandTimeout: 5000
     };
 
     try {
@@ -159,7 +159,7 @@ class DatabaseManager {
   async healthCheck() {
     const health = {
       mongodb: { status: 'disconnected', latency: null },
-      redis: { status: 'disconnected', latency: null },
+      redis: { status: 'disconnected', latency: null }
     };
 
     // MongoDB Health Check
@@ -169,7 +169,7 @@ class DatabaseManager {
       health.mongodb = {
         status: 'connected',
         latency: Date.now() - startTime,
-        readyState: mongoose.connection.readyState,
+        readyState: mongoose.connection.readyState
       };
     } catch (error) {
       health.mongodb.error = error.message;
@@ -182,7 +182,7 @@ class DatabaseManager {
         await this.redisClient.ping();
         health.redis = {
           status: 'connected',
-          latency: Date.now() - startTime,
+          latency: Date.now() - startTime
         };
       } catch (error) {
         health.redis.error = error.message;
@@ -251,7 +251,7 @@ class CacheManager {
 
       this.memoryCache.set(key, {
         value,
-        expiry: Date.now() + ttl * 1000,
+        expiry: Date.now() + ttl * 1000
       });
 
       return true;
@@ -294,11 +294,11 @@ class CacheManager {
     return {
       memoryCache: {
         size: this.memoryCache.size,
-        maxSize: this.maxMemoryCacheSize,
+        maxSize: this.maxMemoryCacheSize
       },
       redis: {
-        connected: !!this.redis,
-      },
+        connected: !!this.redis
+      }
     };
   }
 }
@@ -317,7 +317,7 @@ const createIndexes = async () => {
     await Standards.collection.createIndex({
       title: 'text',
       description: 'text',
-      'requirements.requirement_text': 'text',
+      'requirements.requirement_text': 'text'
     });
 
     // Assessments Collection Indexes
@@ -369,7 +369,7 @@ const queryHelpers = {
   // Aggregation with timeout
   aggregateWithTimeout: (model, pipeline, timeout = 30000) => {
     return model.aggregate(pipeline).maxTimeMS(timeout);
-  },
+  }
 };
 
 // Database Transaction Helper
@@ -398,7 +398,7 @@ const monitorConnectionPool = connection => {
       const stats = {
         totalConnections: connection.db?.serverConfig?.connections?.length || 0,
         availableConnections: connection.db?.serverConfig?.availableConnections?.length || 0,
-        currentOp: connection.db?.serverConfig?.currentOp || 0,
+        currentOp: connection.db?.serverConfig?.currentOp || 0
       };
 
       logger.info('📊 Connection Pool Stats:', stats);
@@ -412,5 +412,5 @@ module.exports = {
   createIndexes,
   queryHelpers,
   withTransaction,
-  monitorConnectionPool,
+  monitorConnectionPool
 };

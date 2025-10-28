@@ -24,7 +24,7 @@ class DashboardController {
       if (!userId) {
         return res.status(401).json({
           success: false,
-          message: 'User ID not found in request',
+          message: 'User ID not found in request'
         });
       }
 
@@ -33,14 +33,14 @@ class DashboardController {
       res.json({
         success: true,
         role,
-        ...dashboard,
+        ...dashboard
       });
     } catch (error) {
       logger.error('Error getting dashboard by role:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve dashboard data',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -58,7 +58,7 @@ class DashboardController {
       if (requestUserId !== userId && req.user?.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied',
+          message: 'Access denied'
         });
       }
 
@@ -67,14 +67,14 @@ class DashboardController {
       res.json({
         success: true,
         userId,
-        ...dashboard,
+        ...dashboard
       });
     } catch (error) {
       logger.error('Error getting farmer dashboard:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve farmer dashboard',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -93,14 +93,14 @@ class DashboardController {
       res.json({
         success: true,
         role,
-        ...dashboard,
+        ...dashboard
       });
     } catch (error) {
       logger.error('Error getting reviewer dashboard:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve reviewer dashboard',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -119,14 +119,14 @@ class DashboardController {
       res.json({
         success: true,
         role,
-        ...dashboard,
+        ...dashboard
       });
     } catch (error) {
       logger.error('Error getting auditor dashboard:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve auditor dashboard',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -141,7 +141,7 @@ class DashboardController {
       if (req.user?.role !== 'admin' && req.user?.role !== 'super_admin') {
         return res.status(403).json({
           success: false,
-          message: 'Admin access required',
+          message: 'Admin access required'
         });
       }
 
@@ -150,14 +150,14 @@ class DashboardController {
       res.json({
         success: true,
         role: 'admin',
-        ...dashboard,
+        ...dashboard
       });
     } catch (error) {
       logger.error('Error getting admin dashboard:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve admin dashboard',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -172,14 +172,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        ...stats,
+        ...stats
       });
     } catch (error) {
       logger.error('Error getting realtime stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve realtime statistics',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -194,14 +194,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        ...health,
+        ...health
       });
     } catch (error) {
       logger.error('Error getting system health:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve system health',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -219,7 +219,7 @@ class DashboardController {
       if (requestUserId !== userId && req.user?.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied',
+          message: 'Access denied'
         });
       }
 
@@ -228,14 +228,14 @@ class DashboardController {
       res.json({
         success: true,
         userId,
-        stats,
+        stats
       });
     } catch (error) {
       logger.error('Error getting farmer stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve farmer statistics',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -252,14 +252,14 @@ class DashboardController {
       res.json({
         success: true,
         role,
-        stats,
+        stats
       });
     } catch (error) {
       logger.error('Error getting DTAM stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve DTAM statistics',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -274,7 +274,7 @@ class DashboardController {
       if (req.user?.role !== 'admin' && req.user?.role !== 'super_admin') {
         return res.status(403).json({
           success: false,
-          message: 'Admin access required',
+          message: 'Admin access required'
         });
       }
 
@@ -282,14 +282,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        stats,
+        stats
       });
     } catch (error) {
       logger.error('Error getting admin stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve admin statistics',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -311,14 +311,14 @@ class DashboardController {
       res.json({
         success: true,
         count: activities.length,
-        activities,
+        activities
       });
     } catch (error) {
       logger.error('Error getting recent activities:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve recent activities',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -337,14 +337,14 @@ class DashboardController {
       res.json({
         success: true,
         count: applications.length,
-        applications,
+        applications
       });
     } catch (error) {
       logger.error('Error getting pending applications:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve pending applications',
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -372,14 +372,14 @@ class DashboardController {
       res.json({
         success: true,
         count: notifications.length,
-        notifications,
+        notifications
       });
     } catch (error) {
       logger.error('Error getting notifications:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve notifications',
-        error: error.message,
+        error: error.message
       });
     }
   }

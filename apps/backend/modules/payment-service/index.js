@@ -66,7 +66,7 @@ class PaymentServiceModule {
       // Initialize presentation layer
       const controllerDependencies = {
         ...this.dependencies,
-        paymentService: this.service,
+        paymentService: this.service
       };
 
       this.controller = new PaymentController(controllerDependencies);
@@ -99,7 +99,7 @@ class PaymentServiceModule {
 
     if (!process.env.PROMPTPAY_WEBHOOK_SECRET) {
       console.warn(
-        '[PaymentServiceModule] PROMPTPAY_WEBHOOK_SECRET not configured - webhook security disabled',
+        '[PaymentServiceModule] PROMPTPAY_WEBHOOK_SECRET not configured - webhook security disabled'
       );
     }
 
@@ -109,13 +109,13 @@ class PaymentServiceModule {
       'auditService',
       'notificationService',
       'receiptService',
-      'promptPayGateway',
+      'promptPayGateway'
     ];
 
     optional.forEach(dep => {
       if (!this.dependencies[dep]) {
         console.warn(
-          `[PaymentServiceModule] Optional dependency '${dep}' not provided - related features will be disabled`,
+          `[PaymentServiceModule] Optional dependency '${dep}' not provided - related features will be disabled`
         );
       }
     });
@@ -164,7 +164,7 @@ class PaymentServiceModule {
         refundProcessing: true,
         paymentRetry: true,
         auditLogging: !!this.dependencies.auditService,
-        notifications: !!this.dependencies.notificationService,
+        notifications: !!this.dependencies.notificationService
       },
       businessRules: {
         fees: {
@@ -174,31 +174,31 @@ class PaymentServiceModule {
           AMENDMENT_FEE: 1000,
           EXPEDITED_FEE_RATE: 0.5,
           PROCESSING_FEE: 100,
-          VAT_RATE: 0.07,
+          VAT_RATE: 0.07
         },
         limits: {
           maxRetryAttempts: 3,
           paymentExpiryMinutes: 15,
-          refundWindowDays: 30,
+          refundWindowDays: 30
         },
         currency: 'THB',
-        paymentMethods: ['QR_CODE', 'BANK_TRANSFER', 'MOBILE_BANKING'],
+        paymentMethods: ['QR_CODE', 'BANK_TRANSFER', 'MOBILE_BANKING']
       },
       security: {
         webhookSignatureVerification: !!process.env.PROMPTPAY_WEBHOOK_SECRET,
         rateLimiting: true,
         inputValidation: true,
-        auditLogging: !!this.dependencies.auditService,
+        auditLogging: !!this.dependencies.auditService
       },
       integration: {
         promptPay: {
           merchantId: process.env.PROMPTPAY_MERCHANT_ID || 'not-configured',
           webhookEndpoint: '/api/payments/webhook',
-          qrCodeFormat: 'EMV',
+          qrCodeFormat: 'EMV'
         },
         bankingPartner: 'PromptPay Thailand',
-        receiptFormat: 'PDF',
-      },
+        receiptFormat: 'PDF'
+      }
     };
   }
 
@@ -211,7 +211,7 @@ class PaymentServiceModule {
         module: 'PaymentService',
         status: 'healthy',
         timestamp: new Date().toISOString(),
-        components: {},
+        components: {}
       };
 
       // Check service health
@@ -224,7 +224,7 @@ class PaymentServiceModule {
         health.components.database = {
           status:
             this.dependencies.mongooseConnection.readyState === 1 ? 'connected' : 'disconnected',
-          readyState: this.dependencies.mongooseConnection.readyState,
+          readyState: this.dependencies.mongooseConnection.readyState
         };
       }
 
@@ -236,7 +236,7 @@ class PaymentServiceModule {
         } catch (error) {
           health.components.promptPayGateway = {
             status: 'error',
-            error: error.message,
+            error: error.message
           };
         }
       } else {
@@ -248,7 +248,7 @@ class PaymentServiceModule {
         merchantIdConfigured: !!process.env.PROMPTPAY_MERCHANT_ID,
         webhookSecretConfigured: !!process.env.PROMPTPAY_WEBHOOK_SECRET,
         receiptServiceAvailable: !!this.dependencies.receiptService,
-        notificationServiceAvailable: !!this.dependencies.notificationService,
+        notificationServiceAvailable: !!this.dependencies.notificationService
       };
 
       // Overall health status
@@ -265,7 +265,7 @@ class PaymentServiceModule {
         module: 'PaymentService',
         status: 'error',
         timestamp: new Date().toISOString(),
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -293,16 +293,16 @@ class PaymentServiceModule {
       const stats = await Payment.aggregate([
         {
           $match: {
-            createdAt: { $gte: startDate },
-          },
+            createdAt: { $gte: startDate }
+          }
         },
         {
           $group: {
             _id: '$status',
             count: { $sum: 1 },
-            totalAmount: { $sum: '$amount' },
-          },
-        },
+            totalAmount: { $sum: '$amount' }
+          }
+        }
       ]);
 
       const summary = {
@@ -313,7 +313,7 @@ class PaymentServiceModule {
         totalPayments: stats.reduce((sum, stat) => sum + stat.count, 0),
         totalRevenue: stats
           .filter(stat => stat._id === 'COMPLETED')
-          .reduce((sum, stat) => sum + stat.totalAmount, 0),
+          .reduce((sum, stat) => sum + stat.totalAmount, 0)
       };
 
       return summary;
@@ -333,7 +333,7 @@ class PaymentServiceModule {
       // Find expired payments
       const expiredPayments = await Payment.find({
         status: 'PENDING',
-        expiresAt: { $lte: new Date() },
+        expiresAt: { $lte: new Date() }
       });
 
       let cleanupCount = 0;
@@ -347,7 +347,7 @@ class PaymentServiceModule {
           if (this.dependencies.notificationService) {
             await this.dependencies.notificationService.sendPaymentExpired({
               userId: payment.userId,
-              payment,
+              payment
             });
           }
 
@@ -355,7 +355,7 @@ class PaymentServiceModule {
         } catch (error) {
           console.error(
             `[PaymentServiceModule] Error cleaning up payment ${payment.paymentId}:`,
-            error,
+            error
           );
         }
       }
@@ -364,7 +364,7 @@ class PaymentServiceModule {
 
       return {
         cleanupCount,
-        processedAt: new Date(),
+        processedAt: new Date()
       };
     } catch (error) {
       logger.error('[PaymentServiceModule] Cleanup error:', error);
@@ -391,7 +391,7 @@ class PaymentServiceModule {
         paymentId,
         applicationId: payment.applicationId,
         amount: payment.amount,
-        completedAt: payment.paidAt,
+        completedAt: payment.paidAt
       };
     } catch (error) {
       logger.error('[PaymentServiceModule] Payment notification error:', error);
@@ -455,8 +455,8 @@ module.exports.metadata = {
       'auditService',
       'notificationService',
       'receiptService',
-      'promptPayGateway',
-    ],
+      'promptPayGateway'
+    ]
   },
   features: [
     'fee-calculation',
@@ -468,7 +468,7 @@ module.exports.metadata = {
     'receipt-generation',
     'audit-logging',
     'rate-limiting',
-    'payment-statistics',
+    'payment-statistics'
   ],
   businessRules: {
     paymentTypes: [
@@ -477,12 +477,12 @@ module.exports.metadata = {
       'RENEWAL_FEE',
       'AMENDMENT_FEE',
       'EXPEDITED_FEE',
-      'PENALTY_FEE',
+      'PENALTY_FEE'
     ],
     currency: 'THB',
     vatRate: 0.07,
     paymentExpiry: '15 minutes',
     maxRetryAttempts: 3,
-    refundWindow: '30 days',
-  },
+    refundWindow: '30 days'
+  }
 };

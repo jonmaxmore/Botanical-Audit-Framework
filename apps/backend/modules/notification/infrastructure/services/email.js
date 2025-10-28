@@ -16,10 +16,10 @@ class EmailNotificationService {
       secure: config.secure !== undefined ? config.secure : false,
       auth: {
         user: config.user || process.env.SMTP_USER,
-        pass: config.pass || process.env.SMTP_PASS,
+        pass: config.pass || process.env.SMTP_PASS
       },
       from: config.from || process.env.SMTP_FROM || 'noreply@gacp-platform.com',
-      fromName: config.fromName || process.env.SMTP_FROM_NAME || 'GACP Platform',
+      fromName: config.fromName || process.env.SMTP_FROM_NAME || 'GACP Platform'
     };
 
     // Create transporter
@@ -33,7 +33,7 @@ class EmailNotificationService {
         host: this.config.host,
         port: this.config.port,
         secure: this.config.secure,
-        auth: this.config.auth,
+        auth: this.config.auth
       });
 
       // Verify connection
@@ -69,7 +69,7 @@ class EmailNotificationService {
         text: text || this._stripHtml(html),
         cc,
         bcc,
-        attachments,
+        attachments
       };
 
       const info = await this.transporter.sendMail(mailOptions);
@@ -77,13 +77,13 @@ class EmailNotificationService {
       console.log('Email sent successfully:', {
         messageId: info.messageId,
         to,
-        subject,
+        subject
       });
 
       return {
         success: true,
         messageId: info.messageId,
-        response: info.response,
+        response: info.response
       };
     } catch (error) {
       logger.error('Failed to send email:', error);
@@ -98,7 +98,7 @@ class EmailNotificationService {
 
     return {
       success: false,
-      error: 'SMS service not implemented',
+      error: 'SMS service not implemented'
     };
   }
 
@@ -109,7 +109,7 @@ class EmailNotificationService {
 
     return {
       success: false,
-      error: 'Push notification service not implemented',
+      error: 'Push notification service not implemented'
     };
   }
 
@@ -164,7 +164,7 @@ class EmailNotificationService {
           </div>
         </body>
         </html>
-      `,
+      `
     };
   }
 
@@ -206,7 +206,7 @@ class EmailNotificationService {
           </div>
         </body>
         </html>
-      `,
+      `
     };
   }
 
@@ -249,7 +249,7 @@ class EmailNotificationService {
           </div>
         </body>
         </html>
-      `,
+      `
     };
   }
 
@@ -289,7 +289,7 @@ class EmailNotificationService {
           </div>
         </body>
         </html>
-      `,
+      `
     };
   }
 
@@ -326,7 +326,7 @@ class EmailNotificationService {
           </div>
         </body>
         </html>
-      `,
+      `
     };
   }
 }

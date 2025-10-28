@@ -26,7 +26,7 @@ function initializeDashboardDTAMRoutes(dashboardController) {
    * GET /api/dtam/dashboard/statistics
    */
   router.get('/statistics', authenticateDTAM, (req, res) =>
-    dashboardController.getSystemStatistics(req, res),
+    dashboardController.getSystemStatistics(req, res)
   );
 
   /**
@@ -34,7 +34,7 @@ function initializeDashboardDTAMRoutes(dashboardController) {
    * GET /api/dtam/dashboard/quick-stats
    */
   router.get('/quick-stats', authenticateDTAM, (req, res) =>
-    dashboardController.getQuickStats(req, res),
+    dashboardController.getQuickStats(req, res)
   );
 
   /**
@@ -42,7 +42,7 @@ function initializeDashboardDTAMRoutes(dashboardController) {
    * GET /api/dtam/dashboard/pending-tasks
    */
   router.get('/pending-tasks', authenticateDTAM, (req, res) =>
-    dashboardController.getPendingTasks(req, res),
+    dashboardController.getPendingTasks(req, res)
   );
 
   /**
@@ -50,7 +50,7 @@ function initializeDashboardDTAMRoutes(dashboardController) {
    * GET /api/dtam/dashboard/recent-activity
    */
   router.get('/recent-activity', authenticateDTAM, (req, res) =>
-    dashboardController.getRecentActivity(req, res),
+    dashboardController.getRecentActivity(req, res)
   );
 
   /**

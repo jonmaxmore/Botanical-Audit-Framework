@@ -11,24 +11,24 @@ const cultivationCycleSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
     farmerId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
     farmerEmail: {
       type: String,
-      required: true,
+      required: true
     },
     farmId: {
       type: String,
-      required: false,
+      required: false
     },
     farmName: {
       type: String,
-      required: false,
+      required: false
     },
     cropType: {
       type: String,
@@ -43,52 +43,52 @@ const cultivationCycleSchema = new mongoose.Schema(
         'ginger', // ขิง
         'black_galingale', // กระชายดำ
         'plai', // ไพล
-        'kratom', // กระท่อม
-      ],
+        'kratom' // กระท่อม
+      ]
     },
     variety: {
       type: String,
-      required: true,
+      required: true
     },
     plantingDate: {
       type: Date,
-      required: true,
+      required: true
     },
     expectedHarvestDate: {
       type: Date,
-      required: false,
+      required: false
     },
     status: {
       type: String,
       required: true,
       enum: ['planning', 'active', 'harvesting', 'completed', 'cancelled'],
       default: 'planning',
-      index: true,
+      index: true
     },
     phase: {
       type: String,
       required: true,
       enum: ['germination', 'vegetative', 'flowering', 'harvest', 'post-harvest'],
-      default: 'germination',
+      default: 'germination'
     },
     area: {
       value: Number,
       unit: {
         type: String,
         enum: ['sqm', 'rai', 'hectare'],
-        default: 'rai',
-      },
+        default: 'rai'
+      }
     },
     plantCount: {
       type: Number,
-      required: false,
+      required: false
     },
     activities: [
       {
         id: String,
         type: {
           type: String,
-          enum: ['watering', 'fertilizing', 'pruning', 'pest_control', 'inspection', 'other'],
+          enum: ['watering', 'fertilizing', 'pruning', 'pest_control', 'inspection', 'other']
         },
         description: String,
         date: Date,
@@ -96,8 +96,8 @@ const cultivationCycleSchema = new mongoose.Schema(
         userName: String,
         notes: String,
         sopCompliance: Boolean,
-        recordedAt: Date,
-      },
+        recordedAt: Date
+      }
     ],
     complianceChecks: [
       {
@@ -107,7 +107,7 @@ const cultivationCycleSchema = new mongoose.Schema(
         checkDate: Date,
         checkType: {
           type: String,
-          enum: ['routine', 'spot_check', 'certification', 'follow_up'],
+          enum: ['routine', 'spot_check', 'certification', 'follow_up']
         },
         findings: [
           {
@@ -115,21 +115,21 @@ const cultivationCycleSchema = new mongoose.Schema(
             finding: String,
             severity: {
               type: String,
-              enum: ['minor', 'major', 'critical'],
+              enum: ['minor', 'major', 'critical']
             },
             status: {
               type: String,
-              enum: ['open', 'resolved', 'pending'],
-            },
-          },
+              enum: ['open', 'resolved', 'pending']
+            }
+          }
         ],
         overallCompliance: {
           type: String,
-          enum: ['compliant', 'non_compliant', 'partially_compliant'],
+          enum: ['compliant', 'non_compliant', 'partially_compliant']
         },
         notes: String,
-        recordedAt: Date,
-      },
+        recordedAt: Date
+      }
     ],
     complianceScore: {
       score: Number,
@@ -138,21 +138,21 @@ const cultivationCycleSchema = new mongoose.Schema(
         sopCompliance: Number,
         gacpStandards: Number,
         safetyProtocols: Number,
-        recordKeeping: Number,
-      },
+        recordKeeping: Number
+      }
     },
     harvestData: {
       harvestDate: Date,
       totalYield: Number,
       yieldUnit: {
         type: String,
-        enum: ['kg', 'ton', 'gram'],
+        enum: ['kg', 'ton', 'gram']
       },
       qualityGrade: {
         type: String,
-        enum: ['A', 'B', 'C', 'D'],
+        enum: ['A', 'B', 'C', 'D']
       },
-      notes: String,
+      notes: String
     },
     completionData: {
       completedDate: Date,
@@ -160,9 +160,9 @@ const cultivationCycleSchema = new mongoose.Schema(
       finalComplianceScore: Number,
       certification: {
         eligible: Boolean,
-        reason: String,
+        reason: String
       },
-      notes: String,
+      notes: String
     },
 
     // === Phase 3: AI-Powered Recommendations ===
@@ -179,15 +179,15 @@ const cultivationCycleSchema = new mongoose.Schema(
           growthStage: String,
           applied: {
             type: Boolean,
-            default: false,
+            default: false
           },
           appliedDate: Date,
           appliedBy: String,
           gacpApproved: {
             type: Boolean,
-            default: true,
-          },
-        },
+            default: true
+          }
+        }
       ],
       irrigation: [
         {
@@ -196,16 +196,16 @@ const cultivationCycleSchema = new mongoose.Schema(
           duration: Number, // minutes
           method: {
             type: String,
-            enum: ['drip', 'sprinkler', 'flood', 'manual'],
+            enum: ['drip', 'sprinkler', 'flood', 'manual']
           },
           reason: String,
           growthStage: String,
           applied: {
             type: Boolean,
-            default: false,
+            default: false
           },
-          appliedDate: Date,
-        },
+          appliedDate: Date
+        }
       ],
       actions: [
         {
@@ -213,23 +213,23 @@ const cultivationCycleSchema = new mongoose.Schema(
           description: String,
           priority: {
             type: String,
-            enum: ['low', 'medium', 'high', 'urgent'],
+            enum: ['low', 'medium', 'high', 'urgent']
           },
           dueDate: Date,
           growthStage: String,
           sopCompliance: {
             type: Boolean,
-            default: true,
+            default: true
           },
           completed: {
             type: Boolean,
-            default: false,
+            default: false
           },
           completedDate: Date,
           completedBy: String,
-          notes: String,
-        },
-      ],
+          notes: String
+        }
+      ]
     },
 
     // === Phase 3: Environmental Data Summary (from sensors) ===
@@ -245,15 +245,15 @@ const cultivationCycleSchema = new mongoose.Schema(
       npkLevels: {
         nitrogen: Number, // ppm
         phosphorus: Number, // ppm
-        potassium: Number, // ppm
+        potassium: Number // ppm
       },
       ec: Number, // Electrical Conductivity (mS/cm)
       sunlightHours: Number, // hours/day average
       dataCollectionPeriod: {
         start: Date,
-        end: Date,
+        end: Date
       },
-      lastUpdated: Date,
+      lastUpdated: Date
     },
 
     // === Phase 3: AI Insights & Predictions ===
@@ -262,7 +262,7 @@ const cultivationCycleSchema = new mongoose.Schema(
         predicted: Number, // kg
         confidence: Number, // 0-100
         generatedAt: Date,
-        factors: [String],
+        factors: [String]
       },
       diseaseRisk: {
         overallRisk: Number, // 0-100
@@ -271,17 +271,17 @@ const cultivationCycleSchema = new mongoose.Schema(
             diseaseId: String,
             diseaseName: String,
             probability: Number, // 0-100
-            peakRiskDate: Date,
-          },
+            peakRiskDate: Date
+          }
         ],
-        lastAssessment: Date,
+        lastAssessment: Date
       },
       resourceOptimization: {
         waterEfficiency: Number, // %
         fertilizerEfficiency: Number, // %
         potentialSavings: Number, // THB
-        suggestions: [String],
-      },
+        suggestions: [String]
+      }
     },
 
     metadata: {
@@ -291,14 +291,14 @@ const cultivationCycleSchema = new mongoose.Schema(
       updatedAt: Date,
       version: {
         type: Number,
-        default: 1,
-      },
-    },
+        default: 1
+      }
+    }
   },
   {
     timestamps: true,
-    collection: 'cultivationcycles',
-  },
+    collection: 'cultivationcycles'
+  }
 );
 
 // Indexes for performance
@@ -345,7 +345,7 @@ cultivationCycleSchema.methods.calculateComplianceScore = function () {
 cultivationCycleSchema.statics.findActiveCyclesForFarmer = function (farmerId) {
   return this.find({
     farmerId,
-    status: 'active',
+    status: 'active'
   }).sort({ plantingDate: -1 });
 };
 

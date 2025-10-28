@@ -13,7 +13,7 @@ class EnvironmentConfig {
     this.optional = {
       REDIS_URL: 'redis://localhost:6379',
       LOG_LEVEL: 'info',
-      API_TIMEOUT: '30000',
+      API_TIMEOUT: '30000'
     };
   }
 
@@ -32,7 +32,7 @@ class EnvironmentConfig {
     if (missing.length > 0) {
       throw new Error(
         `Missing required environment variables: ${missing.join(', ')}\n` +
-          'Please check your .env file or environment configuration.',
+          'Please check your .env file or environment configuration.'
       );
     }
 
@@ -52,12 +52,12 @@ class EnvironmentConfig {
   getDatabaseConfig() {
     const timeout = {
       server: parseInt(this.get('DB_TIMEOUT', '5000')),
-      socket: parseInt(this.get('DB_SOCKET_TIMEOUT', '45000')),
+      socket: parseInt(this.get('DB_SOCKET_TIMEOUT', '45000'))
     };
 
     const pool = {
       max: parseInt(this.get('DB_POOL_SIZE', '10')),
-      min: parseInt(this.get('DB_MIN_POOL_SIZE', '2')),
+      min: parseInt(this.get('DB_MIN_POOL_SIZE', '2'))
     };
 
     return {
@@ -66,8 +66,8 @@ class EnvironmentConfig {
         serverSelectionTimeoutMS: timeout.server,
         socketTimeoutMS: timeout.socket,
         maxPoolSize: pool.max,
-        minPoolSize: pool.min,
-      },
+        minPoolSize: pool.min
+      }
     };
   }
 
@@ -82,8 +82,8 @@ class EnvironmentConfig {
       url: redisUrl,
       options: {
         connectTimeout: parseInt(this.get('REDIS_TIMEOUT', '5000')),
-        maxRetriesPerRequest: 3,
-      },
+        maxRetriesPerRequest: 3
+      }
     };
   }
 
@@ -123,7 +123,7 @@ class EnvironmentConfig {
       '',
       '# Logging',
       'LOG_LEVEL=info',
-      '',
+      ''
     ].join('\n');
 
     fs.writeFileSync(path.join(__dirname, '.env.example'), example, 'utf-8');

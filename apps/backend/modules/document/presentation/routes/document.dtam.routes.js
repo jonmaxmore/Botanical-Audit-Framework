@@ -16,19 +16,19 @@ module.exports = (documentController, authenticateDTAM) => {
   // Get pending documents for review
   // GET /api/dtam/documents/pending?page=1&limit=20
   router.get('/pending', authenticateDTAM, (req, res) =>
-    documentController.getPendingDocuments(req, res),
+    documentController.getPendingDocuments(req, res)
   );
 
   // Get document statistics
   // GET /api/dtam/documents/statistics?startDate=2024-01-01&endDate=2024-12-31
   router.get('/statistics', authenticateDTAM, (req, res) =>
-    documentController.getStatistics(req, res),
+    documentController.getStatistics(req, res)
   );
 
   // Upload document (DTAM can also upload)
   // POST /api/dtam/documents/upload
   router.post('/upload', authenticateDTAM, documentController.upload.single('file'), (req, res) =>
-    documentController.uploadDocument(req, res),
+    documentController.uploadDocument(req, res)
   );
 
   // Get document by ID
@@ -38,27 +38,27 @@ module.exports = (documentController, authenticateDTAM) => {
   // Download document
   // GET /api/dtam/documents/:id/download
   router.get('/:id/download', authenticateDTAM, (req, res) =>
-    documentController.downloadDocument(req, res),
+    documentController.downloadDocument(req, res)
   );
 
   // Get documents by related entity
   // GET /api/dtam/documents/entity/:entityType/:entityId
   router.get('/entity/:entityType/:entityId', authenticateDTAM, (req, res) =>
-    documentController.getDocumentsByEntity(req, res),
+    documentController.getDocumentsByEntity(req, res)
   );
 
   // Approve document
   // PUT /api/dtam/documents/:id/approve
   // Body: { notes: "Approved - all requirements met" }
   router.put('/:id/approve', authenticateDTAM, (req, res) =>
-    documentController.approveDocument(req, res),
+    documentController.approveDocument(req, res)
   );
 
   // Reject document
   // PUT /api/dtam/documents/:id/reject
   // Body: { reason: "Document is not clear, please re-upload" }
   router.put('/:id/reject', authenticateDTAM, (req, res) =>
-    documentController.rejectDocument(req, res),
+    documentController.rejectDocument(req, res)
   );
 
   // Update document metadata
@@ -68,7 +68,7 @@ module.exports = (documentController, authenticateDTAM) => {
   // Delete document (archive or hard delete)
   // DELETE /api/dtam/documents/:id?hard=true
   router.delete('/:id', authenticateDTAM, (req, res) =>
-    documentController.deleteDocument(req, res),
+    documentController.deleteDocument(req, res)
   );
 
   return router;

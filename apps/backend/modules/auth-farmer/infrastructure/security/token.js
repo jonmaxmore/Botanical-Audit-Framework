@@ -30,12 +30,12 @@ class JWTService {
   sign(payload, options = {}) {
     try {
       const defaultOptions = {
-        expiresIn: this.expiresIn,
+        expiresIn: this.expiresIn
       };
 
       const jwtOptions = {
         ...defaultOptions,
-        ...options,
+        ...options
       };
 
       return jwt.sign(payload, this.secret, jwtOptions);
@@ -90,7 +90,7 @@ class JWTService {
       userId: user.id,
       email: user.email,
       type: 'farmer',
-      role: user.role || 'farmer',
+      role: user.role || 'farmer'
     };
 
     return this.sign(payload);
@@ -104,7 +104,7 @@ class JWTService {
   generateRefreshToken(user) {
     const payload = {
       userId: user.id,
-      type: 'refresh',
+      type: 'refresh'
     };
 
     return this.sign(payload, { expiresIn: '7d' });
@@ -119,7 +119,7 @@ class JWTService {
     const payload = {
       userId: user.id,
       email: user.email,
-      type: 'verification',
+      type: 'verification'
     };
 
     return this.sign(payload, { expiresIn: '24h' });
@@ -134,7 +134,7 @@ class JWTService {
     const payload = {
       userId: user.id,
       email: user.email,
-      type: 'password-reset',
+      type: 'password-reset'
     };
 
     return this.sign(payload, { expiresIn: '1h' });

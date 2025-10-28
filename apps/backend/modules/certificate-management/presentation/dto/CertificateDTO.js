@@ -50,7 +50,7 @@ class GenerateCertificateRequestDTO {
       farmId: this.farmId,
       certificateType: this.certificateType,
       validityPeriod: this.validityPeriod,
-      metadata: this.metadata,
+      metadata: this.metadata
     };
   }
 }
@@ -78,7 +78,7 @@ class CertificateResponseDTO {
       isValid: certificate.isValid(),
       isExpired: certificate.isExpired(),
       isNearExpiry: certificate.isNearExpiry(),
-      daysUntilExpiry: certificate.getDaysUntilExpiry ? certificate.getDaysUntilExpiry() : null,
+      daysUntilExpiry: certificate.getDaysUntilExpiry ? certificate.getDaysUntilExpiry() : null
     };
   }
 
@@ -97,7 +97,7 @@ class VerifyCertificateResponseDTO {
         ? CertificateResponseDTO.fromDomain(result.certificate)
         : null,
       verifiedAt: new Date(),
-      verificationCount: result.certificate?.verificationCount || 0,
+      verificationCount: result.certificate?.verificationCount || 0
     };
   }
 }
@@ -129,7 +129,7 @@ class RevokeCertificateRequestDTO {
   toApplicationRequest() {
     return {
       reason: this.reason,
-      revokedBy: this.revokedBy,
+      revokedBy: this.revokedBy
     };
   }
 }
@@ -157,7 +157,7 @@ class RenewCertificateRequestDTO {
   toApplicationRequest() {
     return {
       validityPeriod: this.newValidityPeriod,
-      renewedBy: this.renewedBy,
+      renewedBy: this.renewedBy
     };
   }
 }
@@ -208,12 +208,12 @@ class CertificateListQueryDTO {
       filters: query,
       pagination: {
         page: this.page,
-        limit: this.limit,
+        limit: this.limit
       },
       sort: {
         field: this.sortBy,
-        order: this.sortOrder,
-      },
+        order: this.sortOrder
+      }
     };
   }
 }
@@ -224,5 +224,5 @@ module.exports = {
   VerifyCertificateResponseDTO,
   RevokeCertificateRequestDTO,
   RenewCertificateRequestDTO,
-  CertificateListQueryDTO,
+  CertificateListQueryDTO
 };

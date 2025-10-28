@@ -29,14 +29,14 @@ try {
 } catch (error) {
   // Fallback to environment variables (dotenv already loaded at top of file)
   dbLogger.warn(
-    `Could not load MongoDB config from file: ${error.message}. Using environment variables.`,
+    `Could not load MongoDB config from file: ${error.message}. Using environment variables.`
   );
 
   // Read MONGODB_URI from environment (should be loaded by dotenv at top)
   const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/botanical-audit';
 
   dbLogger.info(
-    `Using MongoDB URI from environment: ${mongoUri.includes('mongodb+srv') ? 'Atlas' : 'Local'}`,
+    `Using MongoDB URI from environment: ${mongoUri.includes('mongodb+srv') ? 'Atlas' : 'Local'}`
   );
 
   config = {
@@ -50,14 +50,14 @@ try {
         serverSelectionTimeoutMS: 5000, // Fail fast if server unreachable
         socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
         maxIdleTimeMS: 60000, // Close idle connections after 60s
-        waitQueueTimeoutMS: 10000, // Fail if can't get connection in 10s
+        waitQueueTimeoutMS: 10000 // Fail if can't get connection in 10s
         // Remove deprecated options
         // useNewUrlParser: true,
         // useUnifiedTopology: true,
       },
       reconnectInterval: 5000,
-      reconnectAttempts: 5,
-    },
+      reconnectAttempts: 5
+    }
   };
 }
 
@@ -126,13 +126,13 @@ function scheduleReconnect() {
   reconnectAttempts++;
   const interval = config.mongodb.reconnectInterval || 5000;
   dbLogger.info(
-    `Scheduling MongoDB reconnection attempt ${reconnectAttempts}/${maxAttempts} in ${interval}ms`,
+    `Scheduling MongoDB reconnection attempt ${reconnectAttempts}/${maxAttempts} in ${interval}ms`
   );
 
   reconnectTimer = setTimeout(async () => {
     try {
       dbLogger.info(
-        `Attempting to reconnect to MongoDB (attempt ${reconnectAttempts}/${maxAttempts})`,
+        `Attempting to reconnect to MongoDB (attempt ${reconnectAttempts}/${maxAttempts})`
       );
       await connect();
     } catch (error) {
@@ -176,7 +176,7 @@ function getStatus() {
     isConnecting,
     readyState: mongoose.connection.readyState,
     reconnectAttempts,
-    dbName: mongoose.connection.name || null,
+    dbName: mongoose.connection.name || null
   };
 }
 
@@ -190,8 +190,8 @@ async function healthCheck() {
       message: 'Not connected to MongoDB',
       details: {
         readyState: mongoose.connection.readyState,
-        reconnectAttempts,
-      },
+        reconnectAttempts
+      }
     };
   }
 
@@ -204,8 +204,8 @@ async function healthCheck() {
       details: {
         dbName: mongoose.connection.name,
         host: mongoose.connection.host,
-        readyState: mongoose.connection.readyState,
-      },
+        readyState: mongoose.connection.readyState
+      }
     };
   } catch (error) {
     return {
@@ -213,8 +213,8 @@ async function healthCheck() {
       message: `MongoDB health check failed: ${error.message}`,
       details: {
         readyState: mongoose.connection.readyState,
-        error: error.message,
-      },
+        error: error.message
+      }
     };
   }
 }
@@ -261,5 +261,5 @@ module.exports = {
   forceReconnect,
   getStatus,
   healthCheck,
-  connection: mongoose.connection,
+  connection: mongoose.connection
 };

@@ -68,7 +68,7 @@ class ReportDTO {
       isScheduled: report.isScheduled(),
       isDueForGeneration: report.isDueForGeneration(),
       canRetry: report.canRetry(),
-      generationDuration: report.getGenerationDuration(),
+      generationDuration: report.getGenerationDuration()
     };
   }
 
@@ -83,8 +83,8 @@ class ReportDTO {
         total: result.total,
         page: result.page,
         limit: result.limit,
-        totalPages: Math.ceil(result.total / result.limit),
-      },
+        totalPages: Math.ceil(result.total / result.limit)
+      }
     };
   }
 
@@ -102,7 +102,7 @@ class ReportDTO {
       createdAt: report.createdAt,
       completedAt: report.completedAt,
       isCompleted: report.isCompleted(),
-      downloadUrl: report.downloadUrl,
+      downloadUrl: report.downloadUrl
     };
   }
 
@@ -118,7 +118,7 @@ class ReportDTO {
       totalFileSize: statistics.totalFileSize || 0,
       totalFileSizeMB: statistics.totalFileSize
         ? (statistics.totalFileSize / 1024 / 1024).toFixed(2)
-        : '0',
+        : '0'
     };
   }
 }

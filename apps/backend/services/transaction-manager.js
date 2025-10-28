@@ -47,7 +47,7 @@ class TransactionManager {
           executedOperations.push({
             name: operation.name,
             duration,
-            result: 'success',
+            result: 'success'
           });
         }
 
@@ -64,13 +64,13 @@ class TransactionManager {
             {
               type: 'transaction',
               id: session.id.toString(),
-              after: { operations: executedOperations, results },
+              after: { operations: executedOperations, results }
             },
             {
               ...metadata,
               attempt: attempt + 1,
-              operationCount: operations.length,
-            },
+              operationCount: operations.length
+            }
           );
         }
 
@@ -78,12 +78,12 @@ class TransactionManager {
           success: true,
           results,
           operations: executedOperations,
-          attempt: attempt + 1,
+          attempt: attempt + 1
         };
       } catch (error) {
         console.error(
           `❌ Transaction failed (attempt ${attempt + 1}/${this.maxRetries}):`,
-          error.message,
+          error.message
         );
 
         // Abort transaction
@@ -96,15 +96,15 @@ class TransactionManager {
             { userId: metadata.userId || 'system', role: metadata.role || 'system' },
             {
               type: 'transaction',
-              id: session.id.toString(),
+              id: session.id.toString()
             },
             error,
             {
               ...metadata,
               attempt: attempt + 1,
               operationCount: operations.length,
-              operations: operations.map(op => op.name),
-            },
+              operations: operations.map(op => op.name)
+            }
           );
         }
 
@@ -118,10 +118,10 @@ class TransactionManager {
             error: {
               message: error.message,
               code: error.code,
-              stack: error.stack,
+              stack: error.stack
             },
             rollback: true,
-            attempts: attempt,
+            attempts: attempt
           };
         }
 
@@ -156,7 +156,7 @@ class TransactionManager {
           name: operation.name,
           duration,
           result: 'success',
-          compensate: operation.compensate || null,
+          compensate: operation.compensate || null
         });
       }
 
@@ -165,7 +165,7 @@ class TransactionManager {
       return {
         success: true,
         results,
-        operations: executedOperations,
+        operations: executedOperations
       };
     } catch (error) {
       logger.error('❌ Operation failed, executing compensations:', error.message);
@@ -181,7 +181,7 @@ class TransactionManager {
           } catch (compensationError) {
             console.error(
               `❌ Compensation failed for ${operation.name}:`,
-              compensationError.message,
+              compensationError.message
             );
             // Continue with other compensations
           }
@@ -193,10 +193,10 @@ class TransactionManager {
         error: {
           message: error.message,
           code: error.code,
-          stack: error.stack,
+          stack: error.stack
         },
         compensated: true,
-        executedOperations: executedOperations.map(op => op.name),
+        executedOperations: executedOperations.map(op => op.name)
       };
     }
   }
@@ -215,7 +215,7 @@ class TransactionManager {
     return {
       name,
       execute: executeFunc,
-      compensate: compensateFunc,
+      compensate: compensateFunc
     };
   }
 }
@@ -243,9 +243,9 @@ class ApplicationService {
           {
             status: 'approved',
             approvedBy: approverId,
-            approvedAt: new Date(),
+            approvedAt: new Date()
           },
-          { session, new: true },
+          { session, new: true }
         );
 
         if (!application) {
@@ -260,7 +260,7 @@ class ApplicationService {
 
         const certificate = await this.certificateService.generateCertificate(
           session.getClient().db(),
-          application,
+          application
         );
 
         return certificate;
@@ -274,11 +274,11 @@ class ApplicationService {
           const application = await Application.findByIdAndUpdate(
             applicationId,
             { certificateNumber: certificate.certificateNumber },
-            { session, new: true },
+            { session, new: true }
           );
 
           return application;
-        },
+        }
       ),
 
       this.transactionManager.createOperation('Send approval notification', async session => {
@@ -289,8 +289,8 @@ class ApplicationService {
           userId: application.farmerId,
           data: {
             applicationId: application.id,
-            certificateNumber: application.certificateNumber,
-          },
+            certificateNumber: application.certificateNumber
+          }
         });
 
         return { notificationSent: true };
@@ -303,18 +303,18 @@ class ApplicationService {
           {
             type: 'application',
             id: applicationId,
-            after: { status: 'approved' },
-          },
+            after: { status: 'approved' }
+          }
         );
 
         return { auditLogCreated: true };
-      }),
+      })
     ];
 
     return await this.transactionManager.executeWithRollback(operations, {
       userId: approverId,
       role: 'approver',
-      action: 'approve_application',
+      action: 'approve_application'
     });
   }
 
@@ -335,9 +335,9 @@ class ApplicationService {
               rejectedBy: reviewerId,
               rejectedAt: new Date(),
               lockedUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
-              rejectionReason: reason,
+              rejectionReason: reason
             },
-            { new: true },
+            { new: true }
           );
 
           if (!application) {
@@ -353,10 +353,10 @@ class ApplicationService {
               rejectedBy: '',
               rejectedAt: '',
               lockedUntil: '',
-              rejectionReason: '',
-            },
+              rejectionReason: ''
+            }
           });
-        },
+        }
       ),
 
       this.transactionManager.createOperation(
@@ -370,14 +370,14 @@ class ApplicationService {
             data: {
               applicationId: application.id,
               reason,
-              canResubmitAt: application.lockedUntil,
-            },
+              canResubmitAt: application.lockedUntil
+            }
           });
 
           return { notificationSent: true };
         },
         // No compensation needed for notifications
-        null,
+        null
       ),
 
       this.transactionManager.createOperation('Create audit log', async () => {
@@ -387,12 +387,12 @@ class ApplicationService {
           {
             type: 'application',
             id: applicationId,
-            after: { status: 'rejected', reason },
-          },
+            after: { status: 'rejected', reason }
+          }
         );
 
         return { auditLogCreated: true };
-      }),
+      })
     ];
 
     return await this.transactionManager.executeWithCompensation(operations);
@@ -401,7 +401,7 @@ class ApplicationService {
 
 module.exports = {
   TransactionManager,
-  ApplicationService,
+  ApplicationService
 };
 
 // Example usage
@@ -417,7 +417,7 @@ if (require.main === module) {
     const transactionManager = new TransactionManager({
       maxRetries: 3,
       retryDelay: 1000,
-      auditService,
+      auditService
     });
 
     // Test transaction
@@ -429,12 +429,12 @@ if (require.main === module) {
       transactionManager.createOperation('Operation 2', async session => {
         logger.info('Executing operation 2');
         return { result: 'success' };
-      }),
+      })
     ];
 
     const result = await transactionManager.executeWithRollback(operations, {
       userId: 'test-user',
-      role: 'admin',
+      role: 'admin'
     });
 
     logger.info('Transaction result:', result);

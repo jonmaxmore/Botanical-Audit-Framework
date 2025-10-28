@@ -51,7 +51,7 @@ class TrackPlantUseCase {
 
       // Compliance requirements
       auditFrequencyDays: 15, // Audit every 15 days during growth
-      documentationRetentionDays: 2555, // Keep records for 7 years
+      documentationRetentionDays: 2555 // Keep records for 7 years
     };
 
     // Growth phase configurations
@@ -60,13 +60,13 @@ class TrackPlantUseCase {
         expectedDuration: 7, // days
         monitoringFrequency: 'DAILY',
         criticalCheckpoints: ['soil_moisture', 'temperature', 'germination_progress'],
-        environmentalPriority: ['temperature', 'humidity', 'soil_moisture'],
+        environmentalPriority: ['temperature', 'humidity', 'soil_moisture']
       },
       VEGETATIVE: {
         expectedDuration: 30, // days
         monitoringFrequency: 'WEEKLY',
         criticalCheckpoints: ['height', 'leaf_development', 'pest_check', 'nutrient_levels'],
-        environmentalPriority: ['light_intensity', 'nutrients', 'ph_levels'],
+        environmentalPriority: ['light_intensity', 'nutrients', 'ph_levels']
       },
       FLOWERING: {
         expectedDuration: 60, // days
@@ -75,10 +75,10 @@ class TrackPlantUseCase {
           'flower_development',
           'trichome_development',
           'pest_disease',
-          'environmental_stress',
+          'environmental_stress'
         ],
-        environmentalPriority: ['photoperiod', 'humidity', 'air_circulation'],
-      },
+        environmentalPriority: ['photoperiod', 'humidity', 'air_circulation']
+      }
     };
   }
 
@@ -96,7 +96,7 @@ class TrackPlantUseCase {
   async initializePlantTracking(plantingData) {
     try {
       this.logger.log(
-        `[TrackPlant] Initializing plant tracking for planting: ${plantingData.plantingId}`,
+        `[TrackPlant] Initializing plant tracking for planting: ${plantingData.plantingId}`
       );
 
       // Step 1: Validate planting data
@@ -126,7 +126,7 @@ class TrackPlantUseCase {
           initialSeedCount: plantingData.seedsPlanted,
           plantingDepth: plantingData.plantingDepth,
           soilType: plantingData.soilConditions?.soilType,
-          plantedBy: plantingData.plantedBy,
+          plantedBy: plantingData.plantedBy
         },
         strainInfo: {
           strainName: seed.strain?.strainName,
@@ -135,8 +135,8 @@ class TrackPlantUseCase {
           expectedFloweringDays: seed.strain?.expectedFloweringDays || 60,
           expectedHarvestDays: seed.strain?.expectedHarvestDays || 90,
           thcContent: seed.strain?.thcContent,
-          cbdContent: seed.strain?.cbdContent,
-        },
+          cbdContent: seed.strain?.cbdContent
+        }
       });
 
       // Step 5: Store plant in repository
@@ -157,7 +157,7 @@ class TrackPlantUseCase {
         seedId: savedPlant.seedId,
         farmId: savedPlant.farmId,
         plotId: savedPlant.plotId,
-        plantingDate: plantingData.plantingDate,
+        plantingDate: plantingData.plantingDate
       });
 
       // Step 10: Send initialization notifications
@@ -172,14 +172,14 @@ class TrackPlantUseCase {
         monitoringSchedule: monitoringSetup.schedule,
         expectedMilestones: monitoringSetup.milestones,
         complianceCheckpoints: monitoringSetup.complianceCheckpoints,
-        nextMonitoring: monitoringSetup.nextMonitoring,
+        nextMonitoring: monitoringSetup.nextMonitoring
       };
     } catch (error) {
       this.logger.error(`[TrackPlant] Plant tracking initialization failed: ${error.message}`);
 
       await this.createAuditTrail('PLANT_TRACKING_INIT_FAILED', {
         plantingId: plantingData?.plantingId,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -217,7 +217,7 @@ class TrackPlantUseCase {
       // Step 4: Analyze growth patterns and trends
       const growthAnalysis = await this.analyzeGrowthPatterns(
         plant,
-        measurementData.measurementType,
+        measurementData.measurementType
       );
 
       // Step 5: Update plant health assessment
@@ -246,7 +246,7 @@ class TrackPlantUseCase {
         measurementType: measurementData.measurementType,
         value: measurementData.value,
         growthRate: measurementResult.growthRate,
-        healthScore: healthAssessment.overallScore,
+        healthScore: healthAssessment.overallScore
       });
 
       this.logger.log(`[TrackPlant] Growth measurement recorded for plant: ${plantId}`);
@@ -258,18 +258,18 @@ class TrackPlantUseCase {
         healthAssessment: {
           overallScore: healthAssessment.overallScore,
           trend: healthAssessment.trend,
-          components: healthAssessment.components,
+          components: healthAssessment.components
         },
         anomalies: anomalies,
         recommendations: this.generateGrowthRecommendations(updatedPlant, growthAnalysis),
-        nextMeasurement: updatedSchedule.nextMeasurement,
+        nextMeasurement: updatedSchedule.nextMeasurement
       };
     } catch (error) {
       this.logger.error(`[TrackPlant] Growth measurement recording failed: ${error.message}`);
 
       await this.createAuditTrail('GROWTH_MEASUREMENT_FAILED', {
         plantId: plantId,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -322,7 +322,7 @@ class TrackPlantUseCase {
       const environmentalRecommendations = await this.generateEnvironmentalRecommendations(
         updatedPlant,
         environmentalResult,
-        environmentalImpact,
+        environmentalImpact
       );
 
       // Step 9: Create audit trail
@@ -331,7 +331,7 @@ class TrackPlantUseCase {
         temperature: environmentalData.temperature,
         humidity: environmentalData.humidity,
         stressFactor: environmentalResult.stressFactor,
-        alertCount: environmentalResult.alerts.length,
+        alertCount: environmentalResult.alerts.length
       });
 
       this.logger.log(`[TrackPlant] Environmental conditions recorded for plant: ${plantId}`);
@@ -344,14 +344,14 @@ class TrackPlantUseCase {
         alerts: environmentalResult.alerts,
         recommendations: environmentalRecommendations,
         stressFactor: environmentalResult.stressFactor,
-        nextMonitoring: this.calculateNextEnvironmentalMonitoring(updatedPlant),
+        nextMonitoring: this.calculateNextEnvironmentalMonitoring(updatedPlant)
       };
     } catch (error) {
       this.logger.error(`[TrackPlant] Environmental recording failed: ${error.message}`);
 
       await this.createAuditTrail('ENVIRONMENTAL_RECORDING_FAILED', {
         plantId: plantId,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -385,7 +385,7 @@ class TrackPlantUseCase {
       // Step 3: Validate transition eligibility
       const eligibilityCheck = await this.validateTransitionEligibility(
         plant,
-        transitionData.newPhase,
+        transitionData.newPhase
       );
 
       if (!eligibilityCheck.eligible) {
@@ -399,7 +399,7 @@ class TrackPlantUseCase {
         case 'FLOWERING':
           transitionResult = plant.transitionToFloweringPhase(
             transitionData.transitionDate,
-            transitionData.trigger || 'PHOTOPERIOD_CHANGE',
+            transitionData.trigger || 'PHOTOPERIOD_CHANGE'
           );
           break;
 
@@ -419,7 +419,7 @@ class TrackPlantUseCase {
       const transitionDocumentation = await this.generatePhaseTransitionDocumentation(
         plant,
         transitionResult,
-        transitionData,
+        transitionData
       );
 
       // Step 7: Update plant in repository
@@ -434,14 +434,14 @@ class TrackPlantUseCase {
         fromPhase: eligibilityCheck.currentPhase,
         toPhase: transitionData.newPhase,
         transitionDate: transitionData.transitionDate,
-        milestone: transitionResult.milestone?.milestone,
+        milestone: transitionResult.milestone?.milestone
       });
 
       // Step 10: Send phase transition notifications
       await this.sendPhaseTransitionNotifications(updatedPlant, transitionResult, transitionData);
 
       this.logger.log(
-        `[TrackPlant] Phase transition recorded for plant: ${plantId} - ${transitionData.newPhase}`,
+        `[TrackPlant] Phase transition recorded for plant: ${plantId} - ${transitionData.newPhase}`
       );
 
       return {
@@ -451,7 +451,7 @@ class TrackPlantUseCase {
         monitoring: updatedMonitoring,
         documentation: transitionDocumentation,
         expectedHarvest: transitionResult.expectedHarvest,
-        complianceRequirements: updatedMonitoring.complianceRequirements,
+        complianceRequirements: updatedMonitoring.complianceRequirements
       };
     } catch (error) {
       this.logger.error(`[TrackPlant] Phase transition recording failed: ${error.message}`);
@@ -459,7 +459,7 @@ class TrackPlantUseCase {
       await this.createAuditTrail('PHASE_TRANSITION_FAILED', {
         plantId: plantId,
         targetPhase: transitionData?.newPhase,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -505,7 +505,7 @@ class TrackPlantUseCase {
           farmId: plant.farmId,
           plotId: plant.plotId,
           strain: plant.strainInfo.strainName,
-          geneticLineage: plant.strainInfo.geneticLineage,
+          geneticLineage: plant.strainInfo.geneticLineage
         },
 
         // Current status summary
@@ -518,11 +518,11 @@ class TrackPlantUseCase {
             startDate: phase.startDate,
             endDate: phase.endDate,
             duration: phase.actualDuration || phase.expectedDuration,
-            status: phase.status,
+            status: phase.status
           })),
           milestones: plant.growthPhases.milestones,
           currentPhase: plant.growthPhases.current,
-          ageInDays: this.calculatePlantAge(plant),
+          ageInDays: this.calculatePlantAge(plant)
         },
 
         // Growth measurements and trends
@@ -530,11 +530,11 @@ class TrackPlantUseCase {
           heightProgression: plant.growthMetrics.height.map(h => ({
             date: h.date,
             height: h.height_cm,
-            growthRate: this.calculateDailyGrowthRate(plant.growthMetrics.height, h.date),
+            growthRate: this.calculateDailyGrowthRate(plant.growthMetrics.height, h.date)
           })),
           nodesDevelopment: plant.growthMetrics.nodeCount,
           overallGrowthRate: plant.growthMetrics.overallGrowthRate,
-          growthTrend: performanceMetrics.growthTrend,
+          growthTrend: performanceMetrics.growthTrend
         },
 
         // Health assessment history
@@ -544,21 +544,21 @@ class TrackPlantUseCase {
           history: plant.growthMetrics.healthScores.map(h => ({
             date: h.date,
             score: h.overallScore,
-            components: h.components,
+            components: h.components
           })),
           pestIssues: plant.growthMetrics.pestIssues,
-          diseaseIssues: plant.growthMetrics.diseaseIssues,
+          diseaseIssues: plant.growthMetrics.diseaseIssues
         },
 
         // Environmental conditions summary
         environment: {
           currentConditions: {
             temperature: plant.environmentalRequirements.temperature.current,
-            humidity: plant.environmentalRequirements.humidity.current,
+            humidity: plant.environmentalRequirements.humidity.current
           },
           history: plant.growthMetrics.environmentalData.slice(-30), // Last 30 records
           complianceScore: performanceMetrics.environmentalComplianceScore,
-          criticalAlerts: this.getActiveCriticalAlerts(plant),
+          criticalAlerts: this.getActiveCriticalAlerts(plant)
         },
 
         // Performance metrics and predictions
@@ -566,7 +566,7 @@ class TrackPlantUseCase {
           ...performanceMetrics,
           predictedHarvest: this.predictHarvestDate(plant),
           expectedYield: this.predictYield(plant),
-          qualityProjection: this.predictQuality(plant),
+          qualityProjection: this.predictQuality(plant)
         },
 
         // Compliance and audit information
@@ -574,7 +574,7 @@ class TrackPlantUseCase {
           ...complianceSummary,
           gacpCompliance: plant.compliance.gacpStandards.compliant,
           violations: plant.compliance.gacpStandards.violations,
-          nextAudit: plant.compliance.gacpStandards.nextAudit,
+          nextAudit: plant.compliance.gacpStandards.nextAudit
         },
 
         // Traceability information
@@ -583,16 +583,16 @@ class TrackPlantUseCase {
             ? {
                 batchNumber: relatedData.seed.batchNumber,
                 supplier: relatedData.seed.supplier.supplierName,
-                qualityScore: relatedData.seed.qualityMetrics.overallQualityScore,
+                qualityScore: relatedData.seed.qualityMetrics.overallQualityScore
               }
             : null,
           farmInfo: relatedData.farm
             ? {
                 farmName: relatedData.farm.farmName,
                 licenseNumber: relatedData.farm.licenseNumber,
-                location: relatedData.farm.location,
+                location: relatedData.farm.location
               }
-            : null,
+            : null
         },
 
         // Report metadata
@@ -601,15 +601,15 @@ class TrackPlantUseCase {
           generatedBy: 'TRACK_PLANT_USE_CASE',
           reportVersion: '1.0',
           dataCompleteness: this.calculatePlantDataCompleteness(plant),
-          totalRecords: this.countPlantRecords(plant),
-        },
+          totalRecords: this.countPlantRecords(plant)
+        }
       };
 
       // Step 6: Create audit trail for report access
       await this.createAuditTrail('PLANT_TRACKING_REPORT_GENERATED', {
         plantId: plantId,
         reportSize: JSON.stringify(trackingReport).length,
-        dataCompleteness: trackingReport.reportMetadata.dataCompleteness,
+        dataCompleteness: trackingReport.reportMetadata.dataCompleteness
       });
 
       this.logger.log(`[TrackPlant] Tracking report generated for plant: ${plantId}`);
@@ -730,7 +730,7 @@ class TrackPlantUseCase {
       schedule: [],
       milestones: [],
       complianceCheckpoints: [],
-      nextMonitoring: new Date(),
+      nextMonitoring: new Date()
     };
   }
 
@@ -789,7 +789,7 @@ class TrackPlantUseCase {
     return {
       currentHealthScore: 85,
       growthTrend: 'POSITIVE',
-      environmentalComplianceScore: 90,
+      environmentalComplianceScore: 90
     };
   }
   async generateComplianceSummary(_plant) {
@@ -830,7 +830,7 @@ class TrackPlantUseCase {
         module: 'TRACK_TRACE',
         action: action,
         data: data,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
     }
   }

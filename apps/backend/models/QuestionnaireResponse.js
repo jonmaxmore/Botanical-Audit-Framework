@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const AnswerSchema = new mongoose.Schema({
   questionId: {
     type: String,
-    required: true,
+    required: true
   },
   questionText: String,
   value: mongoose.Schema.Types.Mixed, // Can be String, Number, Boolean, Array, etc.
@@ -12,25 +12,25 @@ const AnswerSchema = new mongoose.Schema({
     {
       fileName: String,
       fileUrl: String,
-      mimeType: String,
-    },
+      mimeType: String
+    }
   ],
-  score: Number,
+  score: Number
 });
 
 const SectionResponseSchema = new mongoose.Schema({
   sectionId: {
     type: String,
-    required: true,
+    required: true
   },
   title: String,
   answers: [AnswerSchema],
   completionStatus: {
     type: String,
     enum: ['notStarted', 'inProgress', 'completed'],
-    default: 'notStarted',
+    default: 'notStarted'
   },
-  score: Number,
+  score: Number
 });
 
 const QuestionnaireResponseSchema = new mongoose.Schema(
@@ -38,26 +38,26 @@ const QuestionnaireResponseSchema = new mongoose.Schema(
     questionnaire: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Questionnaire',
-      required: true,
+      required: true
     },
     farm: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
-      required: true,
+      required: true
     },
     respondent: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: true
     },
     inspector: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User'
     },
     status: {
       type: String,
       enum: ['draft', 'submitted', 'inReview', 'approved', 'rejected', 'needsRevision'],
-      default: 'draft',
+      default: 'draft'
     },
     responses: [SectionResponseSchema],
     overallScore: Number,
@@ -65,41 +65,41 @@ const QuestionnaireResponseSchema = new mongoose.Schema(
     result: {
       type: String,
       enum: ['pass', 'fail', 'na'],
-      default: 'na',
+      default: 'na'
     },
     submittedAt: Date,
     reviewedAt: Date,
     reviewComments: String,
     reviewedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      ref: 'User'
     },
     region: {
       type: String,
-      enum: ['north', 'northeast', 'central', 'south'],
+      enum: ['north', 'northeast', 'central', 'south']
     },
     location: {
       type: {
         type: String,
         enum: ['Point'],
-        default: 'Point',
+        default: 'Point'
       },
       coordinates: {
-        type: [Number], // [longitude, latitude]
-      },
+        type: [Number] // [longitude, latitude]
+      }
     },
     createdAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
     updatedAt: {
       type: Date,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // Create geo-spatial index for location

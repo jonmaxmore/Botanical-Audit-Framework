@@ -40,7 +40,7 @@ class ApplicationRepository {
       // Populate references for return
       await savedApplication.populate([
         { path: 'farmerId', select: 'firstName lastName email phone' },
-        { path: 'documents.uploadedBy', select: 'firstName lastName' },
+        { path: 'documents.uploadedBy', select: 'firstName lastName' }
       ]);
 
       return savedApplication.toObject();
@@ -71,7 +71,7 @@ class ApplicationRepository {
           { path: 'documents.uploadedBy', select: 'firstName lastName' },
           { path: 'review.reviewerId', select: 'firstName lastName role' },
           { path: 'inspection.inspectorId', select: 'firstName lastName role' },
-          { path: 'approval.adminId', select: 'firstName lastName role' },
+          { path: 'approval.adminId', select: 'firstName lastName role' }
         ]);
       }
 
@@ -94,7 +94,7 @@ class ApplicationRepository {
         .findOne({ applicationNumber })
         .populate([
           { path: 'farmerId', select: 'firstName lastName email phone' },
-          { path: 'documents.uploadedBy', select: 'firstName lastName' },
+          { path: 'documents.uploadedBy', select: 'firstName lastName' }
         ])
         .lean();
 
@@ -125,11 +125,11 @@ class ApplicationRepository {
         .findByIdAndUpdate(id, updateData, {
           new: true,
           runValidators: true,
-          ...options,
+          ...options
         })
         .populate([
           { path: 'farmerId', select: 'firstName lastName email phone' },
-          { path: 'documents.uploadedBy', select: 'firstName lastName' },
+          { path: 'documents.uploadedBy', select: 'firstName lastName' }
         ])
         .lean();
 
@@ -159,9 +159,9 @@ class ApplicationRepository {
         id,
         {
           deletedAt: new Date(),
-          isDeleted: true,
+          isDeleted: true
         },
-        { new: true },
+        { new: true }
       );
 
       return !!result;
@@ -184,7 +184,7 @@ class ApplicationRepository {
         limit = 10,
         sortBy = 'createdAt',
         sortOrder = 'desc',
-        populate = true,
+        populate = true
       } = options;
 
       // Build query filters
@@ -197,7 +197,7 @@ class ApplicationRepository {
       // Execute queries in parallel
       const [applications, totalCount] = await Promise.all([
         this._buildFindQuery(query, { skip, limit, sort: sortOptions, populate }),
-        this.model.countDocuments(query),
+        this.model.countDocuments(query)
       ]);
 
       const totalPages = Math.ceil(totalCount / limit);
@@ -210,8 +210,8 @@ class ApplicationRepository {
           totalItems: totalCount,
           itemsPerPage: limit,
           hasNextPage: page < totalPages,
-          hasPrevPage: page > 1,
-        },
+          hasPrevPage: page > 1
+        }
       };
     } catch (error) {
       logger.error('[ApplicationRepository] Error in findWithPagination:', error);
@@ -269,9 +269,9 @@ class ApplicationRepository {
       const count = await this.model.countDocuments({
         createdAt: {
           $gte: today,
-          $lt: tomorrow,
+          $lt: tomorrow
         },
-        isDeleted: { $ne: true },
+        isDeleted: { $ne: true }
       });
 
       return count;
@@ -302,25 +302,25 @@ class ApplicationRepository {
             payment_pending: { $sum: { $cond: [{ $eq: ['$status', 'payment_pending'] }, 1, 0] } },
             payment_verified: { $sum: { $cond: [{ $eq: ['$status', 'payment_verified'] }, 1, 0] } },
             inspection_scheduled: {
-              $sum: { $cond: [{ $eq: ['$status', 'inspection_scheduled'] }, 1, 0] },
+              $sum: { $cond: [{ $eq: ['$status', 'inspection_scheduled'] }, 1, 0] }
             },
             inspection_completed: {
-              $sum: { $cond: [{ $eq: ['$status', 'inspection_completed'] }, 1, 0] },
+              $sum: { $cond: [{ $eq: ['$status', 'inspection_completed'] }, 1, 0] }
             },
             phase2_payment_pending: {
-              $sum: { $cond: [{ $eq: ['$status', 'phase2_payment_pending'] }, 1, 0] },
+              $sum: { $cond: [{ $eq: ['$status', 'phase2_payment_pending'] }, 1, 0] }
             },
             phase2_payment_verified: {
-              $sum: { $cond: [{ $eq: ['$status', 'phase2_payment_verified'] }, 1, 0] },
+              $sum: { $cond: [{ $eq: ['$status', 'phase2_payment_verified'] }, 1, 0] }
             },
             approved: { $sum: { $cond: [{ $eq: ['$status', 'approved'] }, 1, 0] } },
             certificate_issued: {
-              $sum: { $cond: [{ $eq: ['$status', 'certificate_issued'] }, 1, 0] },
+              $sum: { $cond: [{ $eq: ['$status', 'certificate_issued'] }, 1, 0] }
             },
             rejected: { $sum: { $cond: [{ $eq: ['$status', 'rejected'] }, 1, 0] } },
-            expired: { $sum: { $cond: [{ $eq: ['$status', 'expired'] }, 1, 0] } },
-          },
-        },
+            expired: { $sum: { $cond: [{ $eq: ['$status', 'expired'] }, 1, 0] } }
+          }
+        }
       ]);
 
       return (
@@ -338,7 +338,7 @@ class ApplicationRepository {
           approved: 0,
           certificate_issued: 0,
           rejected: 0,
-          expired: 0,
+          expired: 0
         }
       );
     } catch (error) {
@@ -377,7 +377,7 @@ class ApplicationRepository {
 
       const filters = {
         status: { $in: statusFilters },
-        isDeleted: { $ne: true },
+        isDeleted: { $ne: true }
       };
 
       return await this.findWithPagination(filters, options);
@@ -397,7 +397,7 @@ class ApplicationRepository {
       const filters = {
         expiresAt: { $lt: new Date() },
         status: { $nin: ['certificate_issued', 'rejected', 'expired'] },
-        isDeleted: { $ne: true },
+        isDeleted: { $ne: true }
       };
 
       return await this.findWithPagination(filters, options);
@@ -457,7 +457,7 @@ class ApplicationRepository {
         { path: 'documents.uploadedBy', select: 'firstName lastName' },
         { path: 'review.reviewerId', select: 'firstName lastName' },
         { path: 'inspection.inspectorId', select: 'firstName lastName' },
-        { path: 'approval.adminId', select: 'firstName lastName' },
+        { path: 'approval.adminId', select: 'firstName lastName' }
       ]);
     }
 
@@ -468,7 +468,7 @@ class ApplicationRepository {
     if (error.name === 'ValidationError') {
       const validationErrors = Object.values(error.errors).map(err => ({
         field: err.path,
-        message: err.message,
+        message: err.message
       }));
       return new Error(`Validation failed: ${validationErrors.map(e => e.message).join(', ')}`);
     }

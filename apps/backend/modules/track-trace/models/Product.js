@@ -12,12 +12,12 @@ const ProductSchema = new mongoose.Schema(
       type: String,
       required: true,
       index: true,
-      description: 'Owner user ID',
+      description: 'Owner user ID'
     },
     farmId: {
       type: String,
       index: true,
-      description: 'Associated farm ID',
+      description: 'Associated farm ID'
     },
 
     // Product identification
@@ -26,16 +26,16 @@ const ProductSchema = new mongoose.Schema(
       required: true,
       unique: true,
       index: true,
-      description: 'Unique batch code (e.g., OR2024-001)',
+      description: 'Unique batch code (e.g., OR2024-001)'
     },
     productName: {
       type: String,
       required: true,
-      description: 'Product name (e.g., Organic Rice)',
+      description: 'Product name (e.g., Organic Rice)'
     },
     variety: {
       type: String,
-      description: 'Product variety (e.g., Jasmine Rice)',
+      description: 'Product variety (e.g., Jasmine Rice)'
     },
 
     // Quantity
@@ -43,13 +43,13 @@ const ProductSchema = new mongoose.Schema(
       type: Number,
       required: true,
       min: 0,
-      description: 'Product quantity',
+      description: 'Product quantity'
     },
     unit: {
       type: String,
       required: true,
       enum: ['kg', 'ton', 'gram', 'piece', 'liter'],
-      description: 'Quantity unit',
+      description: 'Quantity unit'
     },
 
     // Status
@@ -63,18 +63,18 @@ const ProductSchema = new mongoose.Schema(
         'PROCESSING',
         'PACKAGING',
         'DISTRIBUTION',
-        'COMPLETED',
+        'COMPLETED'
       ],
       default: 'PLANTING',
       index: true,
-      description: 'Current stage in supply chain',
+      description: 'Current stage in supply chain'
     },
     certificationStatus: {
       type: String,
       enum: ['PENDING', 'IN_REVIEW', 'CERTIFIED', 'REJECTED', 'EXPIRED'],
       default: 'PENDING',
       index: true,
-      description: 'Certification status',
+      description: 'Certification status'
     },
 
     // Certification details
@@ -84,7 +84,7 @@ const ProductSchema = new mongoose.Schema(
       issuedDate: Date,
       expiryDate: Date,
       authority: String,
-      updatedAt: Date,
+      updatedAt: Date
     },
 
     // Origin information
@@ -94,19 +94,19 @@ const ProductSchema = new mongoose.Schema(
       location: String,
       coordinates: {
         lat: Number,
-        lng: Number,
-      },
+        lng: Number
+      }
     },
 
     // Product details
     grade: {
       type: String,
       enum: ['A', 'B', 'C', 'D', 'Premium', 'Standard'],
-      description: 'Quality grade',
+      description: 'Quality grade'
     },
     description: {
       type: String,
-      description: 'Product description',
+      description: 'Product description'
     },
 
     // Metadata
@@ -114,20 +114,20 @@ const ProductSchema = new mongoose.Schema(
       createdAt: {
         type: Date,
         default: Date.now,
-        index: true,
+        index: true
       },
       lastUpdated: {
         type: Date,
-        default: Date.now,
+        default: Date.now
       },
       createdBy: String,
-      updatedBy: String,
-    },
+      updatedBy: String
+    }
   },
   {
     collection: 'products',
-    timestamps: false,
-  },
+    timestamps: false
+  }
 );
 
 // Indexes for performance
@@ -155,7 +155,7 @@ ProductSchema.virtual('progress').get(function () {
     'PROCESSING',
     'PACKAGING',
     'DISTRIBUTION',
-    'COMPLETED',
+    'COMPLETED'
   ];
   const currentIndex = stages.indexOf(this.stage);
   return Math.round((currentIndex / (stages.length - 1)) * 100);
@@ -174,7 +174,7 @@ ProductSchema.methods.updateCertification = function (certData) {
   this.certification = {
     ...this.certification,
     ...certData,
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
   this.metadata.lastUpdated = new Date();
   return this.save();
@@ -204,13 +204,13 @@ ProductSchema.statics.getUserStats = async function (userId) {
         _id: null,
         total: { $sum: 1 },
         certified: {
-          $sum: { $cond: [{ $eq: ['$certificationStatus', 'CERTIFIED'] }, 1, 0] },
+          $sum: { $cond: [{ $eq: ['$certificationStatus', 'CERTIFIED'] }, 1, 0] }
         },
         pending: {
-          $sum: { $cond: [{ $eq: ['$certificationStatus', 'PENDING'] }, 1, 0] },
-        },
-      },
-    },
+          $sum: { $cond: [{ $eq: ['$certificationStatus', 'PENDING'] }, 1, 0] }
+        }
+      }
+    }
   ]);
 
   return stats[0] || { total: 0, certified: 0, pending: 0 };

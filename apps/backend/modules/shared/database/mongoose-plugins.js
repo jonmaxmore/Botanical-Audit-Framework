@@ -11,12 +11,12 @@ const timestampPlugin = schema => {
   schema.add({
     createdAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
     updatedAt: {
       type: Date,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   });
 
   schema.pre('save', function (next) {
@@ -38,12 +38,12 @@ const softDeletePlugin = schema => {
   schema.add({
     deletedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     isDeleted: {
       type: Boolean,
-      default: false,
-    },
+      default: false
+    }
   });
 
   // Override remove method
@@ -72,7 +72,7 @@ const paginationPlugin = schema => {
 
     const [data, total] = await Promise.all([
       this.find(query).sort(sort).skip(skip).limit(limit).lean(),
-      this.countDocuments(query),
+      this.countDocuments(query)
     ]);
 
     return {
@@ -83,8 +83,8 @@ const paginationPlugin = schema => {
         total,
         totalPages: Math.ceil(total / limit),
         hasNext: page * limit < total,
-        hasPrev: page > 1,
-      },
+        hasPrev: page > 1
+      }
     };
   };
 };
@@ -92,5 +92,5 @@ const paginationPlugin = schema => {
 module.exports = {
   timestampPlugin,
   softDeletePlugin,
-  paginationPlugin,
+  paginationPlugin
 };

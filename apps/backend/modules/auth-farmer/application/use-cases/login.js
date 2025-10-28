@@ -76,7 +76,7 @@ class LoginUserUseCase {
       userId: user.id,
       email: user.email,
       role: user.role,
-      status: user.status,
+      status: user.status
     });
 
     // 8. Publish UserLoggedIn event
@@ -86,7 +86,7 @@ class LoginUserUseCase {
         email: user.email,
         ipAddress: ipAddress || 'unknown',
         userAgent: userAgent || 'unknown',
-        loggedInAt: new Date(),
+        loggedInAt: new Date()
       });
 
       await this.eventBus.publish(event.toEventPayload());
@@ -95,7 +95,7 @@ class LoginUserUseCase {
     // 9. Return user and token
     return {
       user: user.toJSON(),
-      token,
+      token
     };
   }
 }

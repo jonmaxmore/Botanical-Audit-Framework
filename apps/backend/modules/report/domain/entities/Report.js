@@ -36,7 +36,7 @@ class Report {
 
     // Export Reports
     DATA_EXPORT: 'DATA_EXPORT', // ส่งออกข้อมูล
-    CUSTOM_REPORT: 'CUSTOM_REPORT', // รายงานกำหนดเอง
+    CUSTOM_REPORT: 'CUSTOM_REPORT' // รายงานกำหนดเอง
   };
 
   // Report Formats
@@ -45,7 +45,7 @@ class Report {
     EXCEL: 'EXCEL', // Excel spreadsheet
     CSV: 'CSV', // CSV file
     JSON: 'JSON', // JSON data
-    HTML: 'HTML', // HTML page
+    HTML: 'HTML' // HTML page
   };
 
   // Report Status
@@ -54,7 +54,7 @@ class Report {
     GENERATING: 'GENERATING', // กำลังสร้าง
     COMPLETED: 'COMPLETED', // เสร็จสิ้น
     FAILED: 'FAILED', // ล้มเหลว
-    EXPIRED: 'EXPIRED', // หมดอายุ
+    EXPIRED: 'EXPIRED' // หมดอายุ
   };
 
   // Report Categories
@@ -63,7 +63,7 @@ class Report {
     DTAM: 'DTAM', // รายงาน DTAM
     ANALYTICS: 'ANALYTICS', // รายงานวิเคราะห์
     COMPLIANCE: 'COMPLIANCE', // รายงานการปฏิบัติตาม
-    EXPORT: 'EXPORT', // ส่งออกข้อมูล
+    EXPORT: 'EXPORT' // ส่งออกข้อมูล
   };
 
   // Report Scheduling
@@ -73,7 +73,7 @@ class Report {
     WEEKLY: 'WEEKLY', // รายสัปดาห์
     MONTHLY: 'MONTHLY', // รายเดือน
     QUARTERLY: 'QUARTERLY', // รายไตรมาส
-    ANNUALLY: 'ANNUALLY', // รายปี
+    ANNUALLY: 'ANNUALLY' // รายปี
   };
 
   constructor(data) {
@@ -149,7 +149,7 @@ class Report {
       'CERTIFICATE_STATUS',
       'TRAINING_PROGRESS',
       'DOCUMENT_LIST',
-      'SURVEY_RESULTS',
+      'SURVEY_RESULTS'
     ];
     const dtamTypes = [
       'APPLICATIONS_SUMMARY',
@@ -157,14 +157,14 @@ class Report {
       'AUDIT_LOG',
       'FARMER_STATISTICS',
       'TRAINING_STATISTICS',
-      'SYSTEM_ACTIVITY',
+      'SYSTEM_ACTIVITY'
     ];
     const analyticsTypes = [
       'PERFORMANCE_DASHBOARD',
       'COMPLIANCE_REPORT',
       'MONTHLY_SUMMARY',
       'QUARTERLY_SUMMARY',
-      'ANNUAL_SUMMARY',
+      'ANNUAL_SUMMARY'
     ];
     const exportTypes = ['DATA_EXPORT', 'CUSTOM_REPORT'];
 

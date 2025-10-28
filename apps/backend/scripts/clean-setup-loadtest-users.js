@@ -21,7 +21,7 @@ async function cleanAndSetup() {
     // eslint-disable-next-line no-console
     console.log('🗑️  Deleting existing loadtest users...');
     const deleteResult = await User.deleteMany({
-      email: { $regex: /^loadtest.*@gacp\.dtam\.go\.th$/ },
+      email: { $regex: /^loadtest.*@gacp\.dtam\.go\.th$/ }
     });
     // eslint-disable-next-line no-console
     console.log(`✅ Deleted ${deleteResult.deletedCount} users\n`);
@@ -40,7 +40,7 @@ async function cleanAndSetup() {
         lastName: i === 0 ? 'Test' : `Test ${i}`,
         role: i < 5 ? 'farmer' : i < 7 ? 'inspector' : i < 9 ? 'auditor' : 'admin',
         status: 'active',
-        isEmailVerified: true,
+        isEmailVerified: true
       });
     }
 

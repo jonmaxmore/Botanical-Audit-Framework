@@ -45,11 +45,11 @@ class TrainingWorkflowIntegrationManager {
           'processAnalytics',
           'submitToGovernment',
           'sendNotifications',
-          'updateRecords',
+          'updateRecords'
         ],
         timeout: 300000, // 5 minutes
         retryLimit: 3,
-        requiredServices: ['certificate', 'analytics', 'government'],
+        requiredServices: ['certificate', 'analytics', 'government']
       },
       certificateGeneration: {
         name: 'Certificate Generation Workflow',
@@ -60,11 +60,11 @@ class TrainingWorkflowIntegrationManager {
           'addDigitalSignature',
           'storeSecurely',
           'updateDatabase',
-          'triggerAnalytics',
+          'triggerAnalytics'
         ],
         timeout: 180000, // 3 minutes
         retryLimit: 2,
-        requiredServices: ['certificate', 'analytics'],
+        requiredServices: ['certificate', 'analytics']
       },
       analyticsProcessing: {
         name: 'Analytics Processing Workflow',
@@ -75,11 +75,11 @@ class TrainingWorkflowIntegrationManager {
           'updateDashboard',
           'generateInsights',
           'triggerAlerts',
-          'storeResults',
+          'storeResults'
         ],
         timeout: 120000, // 2 minutes
         retryLimit: 3,
-        requiredServices: ['analytics'],
+        requiredServices: ['analytics']
       },
       governmentCompliance: {
         name: 'Government Compliance Workflow',
@@ -90,11 +90,11 @@ class TrainingWorkflowIntegrationManager {
           'submitToSystems',
           'trackStatus',
           'updateAuditTrail',
-          'handleResponses',
+          'handleResponses'
         ],
         timeout: 600000, // 10 minutes
         retryLimit: 2,
-        requiredServices: ['government', 'analytics'],
+        requiredServices: ['government', 'analytics']
       },
       monthlyReporting: {
         name: 'Monthly Reporting Workflow',
@@ -105,12 +105,12 @@ class TrainingWorkflowIntegrationManager {
           'generateReports',
           'submitToGovernment',
           'distributeReports',
-          'updateMetrics',
+          'updateMetrics'
         ],
         timeout: 1800000, // 30 minutes
         retryLimit: 1,
-        requiredServices: ['analytics', 'government'],
-      },
+        requiredServices: ['analytics', 'government']
+      }
     };
 
     // Workflow execution tracking
@@ -123,8 +123,8 @@ class TrainingWorkflowIntegrationManager {
         successfulExecutions: 0,
         failedExecutions: 0,
         averageExecutionTime: 0,
-        lastExecution: null,
-      },
+        lastExecution: null
+      }
     };
 
     // Event handlers
@@ -189,7 +189,7 @@ class TrainingWorkflowIntegrationManager {
         status: 'RUNNING',
         steps: [],
         data: completionData,
-        results: {},
+        results: {}
       };
 
       this.executionTracking.activeWorkflows.set(workflowId, workflowExecution);
@@ -200,7 +200,7 @@ class TrainingWorkflowIntegrationManager {
         'validateCompletion',
         async () => {
           return await this.validateCourseCompletion(completionData);
-        },
+        }
       );
 
       if (!validationResult.success) {
@@ -218,9 +218,9 @@ class TrainingWorkflowIntegrationManager {
               enrollmentId: completionData.enrollmentId,
               courseId: completionData.courseId,
               farmerId: completionData.farmerId,
-              completionData: completionData,
+              completionData: completionData
             });
-          },
+          }
         );
       }
 
@@ -233,9 +233,9 @@ class TrainingWorkflowIntegrationManager {
             eventType: 'COURSE_COMPLETION',
             data: completionData,
             certificate: certificateResult?.data,
-            timestamp: new Date(),
+            timestamp: new Date()
           });
-        },
+        }
       );
 
       // Step 4: Submit to government systems if certificate was generated
@@ -246,7 +246,7 @@ class TrainingWorkflowIntegrationManager {
           'submitToGovernment',
           async () => {
             return await this.governmentService.submitCertificate(certificateResult.data);
-          },
+          }
         );
       }
 
@@ -259,9 +259,9 @@ class TrainingWorkflowIntegrationManager {
             completionData: completionData,
             certificate: certificateResult?.data,
             analytics: analyticsResult?.data,
-            government: governmentResult?.data,
+            government: governmentResult?.data
           });
-        },
+        }
       );
 
       // Step 6: Update all records
@@ -274,8 +274,8 @@ class TrainingWorkflowIntegrationManager {
             certificate: certificateResult?.data,
             analytics: analyticsResult?.data,
             government: governmentResult?.data,
-            notifications: notificationResult?.data,
-          },
+            notifications: notificationResult?.data
+          }
         });
       });
 
@@ -289,7 +289,7 @@ class TrainingWorkflowIntegrationManager {
         analytics: analyticsResult?.data,
         government: governmentResult?.data,
         notifications: notificationResult?.data,
-        updates: updateResult?.data,
+        updates: updateResult?.data
       };
 
       // Move to completed workflows
@@ -302,7 +302,7 @@ class TrainingWorkflowIntegrationManager {
       // Trigger completion event
       await this.triggerWorkflowEvent('COURSE_COMPLETION_WORKFLOW_COMPLETED', {
         workflowId: workflowId,
-        execution: workflowExecution,
+        execution: workflowExecution
       });
 
       this.logger.log(`[WorkflowManager] Course completion workflow completed - ID: ${workflowId}`);
@@ -311,12 +311,12 @@ class TrainingWorkflowIntegrationManager {
         success: true,
         workflowId: workflowId,
         processingTime: workflowExecution.processingTime,
-        results: workflowExecution.results,
+        results: workflowExecution.results
       };
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Course completion workflow failed - ID: ${workflowId}`,
-        error,
+        error
       );
 
       // Handle workflow failure
@@ -334,7 +334,7 @@ class TrainingWorkflowIntegrationManager {
 
     try {
       this.logger.log(
-        `[WorkflowManager] Starting certificate generation workflow - ID: ${workflowId}`,
+        `[WorkflowManager] Starting certificate generation workflow - ID: ${workflowId}`
       );
 
       const workflowExecution = {
@@ -343,7 +343,7 @@ class TrainingWorkflowIntegrationManager {
         startTime: new Date(),
         status: 'RUNNING',
         steps: [],
-        data: certificateRequest,
+        data: certificateRequest
       };
 
       this.executionTracking.activeWorkflows.set(workflowId, workflowExecution);
@@ -352,29 +352,29 @@ class TrainingWorkflowIntegrationManager {
       const eligibilityCheck = await this.executeWorkflowStep(
         workflowId,
         'validateEligibility',
-        () => this.certificateService.validateEligibility(certificateRequest),
+        () => this.certificateService.validateEligibility(certificateRequest)
       );
 
       const pdfGeneration = await this.executeWorkflowStep(workflowId, 'generatePDF', () =>
-        this.certificateService.generatePDFCertificate(eligibilityCheck.data),
+        this.certificateService.generatePDFCertificate(eligibilityCheck.data)
       );
 
       const digitalSignature = await this.executeWorkflowStep(
         workflowId,
         'addDigitalSignature',
-        () => this.certificateService.addDigitalSignature(pdfGeneration.data),
+        () => this.certificateService.addDigitalSignature(pdfGeneration.data)
       );
 
       const secureStorage = await this.executeWorkflowStep(workflowId, 'storeSecurely', () =>
-        this.certificateService.storeSecurely(digitalSignature.data),
+        this.certificateService.storeSecurely(digitalSignature.data)
       );
 
       const databaseUpdate = await this.executeWorkflowStep(workflowId, 'updateDatabase', () =>
-        this.certificateService.updateCertificateRecord(secureStorage.data),
+        this.certificateService.updateCertificateRecord(secureStorage.data)
       );
 
       const analyticsUpdate = await this.executeWorkflowStep(workflowId, 'triggerAnalytics', () =>
-        this.analyticsService.processCertificateGeneration(databaseUpdate.data),
+        this.analyticsService.processCertificateGeneration(databaseUpdate.data)
       );
 
       // Complete workflow
@@ -382,7 +382,7 @@ class TrainingWorkflowIntegrationManager {
       workflowExecution.endTime = new Date();
       workflowExecution.results = {
         certificate: databaseUpdate.data,
-        analytics: analyticsUpdate.data,
+        analytics: analyticsUpdate.data
       };
 
       this.executionTracking.activeWorkflows.delete(workflowId);
@@ -391,12 +391,12 @@ class TrainingWorkflowIntegrationManager {
       return {
         success: true,
         workflowId: workflowId,
-        certificate: workflowExecution.results.certificate,
+        certificate: workflowExecution.results.certificate
       };
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Certificate generation workflow failed - ID: ${workflowId}`,
-        error,
+        error
       );
       await this.handleWorkflowFailure(workflowId, error, certificateRequest);
       throw error;
@@ -411,7 +411,7 @@ class TrainingWorkflowIntegrationManager {
 
     try {
       this.logger.log(
-        `[WorkflowManager] Starting analytics processing workflow - ID: ${workflowId}`,
+        `[WorkflowManager] Starting analytics processing workflow - ID: ${workflowId}`
       );
 
       const workflowExecution = {
@@ -420,18 +420,18 @@ class TrainingWorkflowIntegrationManager {
         startTime: new Date(),
         status: 'RUNNING',
         steps: [],
-        data: analyticsData,
+        data: analyticsData
       };
 
       this.executionTracking.activeWorkflows.set(workflowId, workflowExecution);
 
       // Execute analytics processing steps
       const dataCollection = await this.executeWorkflowStep(workflowId, 'collectData', () =>
-        this.analyticsService.collectTrainingData(analyticsData),
+        this.analyticsService.collectTrainingData(analyticsData)
       );
 
       const metricsProcessing = await this.executeWorkflowStep(workflowId, 'processMetrics', () =>
-        this.analyticsService.processTrainingMetrics(dataCollection.data),
+        this.analyticsService.processTrainingMetrics(dataCollection.data)
       );
 
       // const dashboardUpdate = await this.executeWorkflowStep(workflowId, 'updateDashboard', () =>
@@ -441,15 +441,15 @@ class TrainingWorkflowIntegrationManager {
       const insightsGeneration = await this.executeWorkflowStep(
         workflowId,
         'generateInsights',
-        () => this.analyticsService.generateTrainingInsights(metricsProcessing.data),
+        () => this.analyticsService.generateTrainingInsights(metricsProcessing.data)
       );
 
       const alertTriggering = await this.executeWorkflowStep(workflowId, 'triggerAlerts', () =>
-        this.analyticsService.checkAndTriggerAlerts(insightsGeneration.data),
+        this.analyticsService.checkAndTriggerAlerts(insightsGeneration.data)
       );
 
       const resultsStorage = await this.executeWorkflowStep(workflowId, 'storeResults', () =>
-        this.analyticsService.storeAnalyticsResults(insightsGeneration.data),
+        this.analyticsService.storeAnalyticsResults(insightsGeneration.data)
       );
 
       // Complete workflow
@@ -459,7 +459,7 @@ class TrainingWorkflowIntegrationManager {
         metrics: metricsProcessing.data,
         insights: insightsGeneration.data,
         alerts: alertTriggering.data,
-        storage: resultsStorage.data,
+        storage: resultsStorage.data
       };
 
       this.executionTracking.activeWorkflows.delete(workflowId);
@@ -468,12 +468,12 @@ class TrainingWorkflowIntegrationManager {
       return {
         success: true,
         workflowId: workflowId,
-        results: workflowExecution.results,
+        results: workflowExecution.results
       };
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Analytics processing workflow failed - ID: ${workflowId}`,
-        error,
+        error
       );
       await this.handleWorkflowFailure(workflowId, error, analyticsData);
       throw error;
@@ -488,7 +488,7 @@ class TrainingWorkflowIntegrationManager {
 
     try {
       this.logger.log(
-        `[WorkflowManager] Starting government compliance workflow - ID: ${workflowId}`,
+        `[WorkflowManager] Starting government compliance workflow - ID: ${workflowId}`
       );
 
       const workflowExecution = {
@@ -497,7 +497,7 @@ class TrainingWorkflowIntegrationManager {
         startTime: new Date(),
         status: 'RUNNING',
         steps: [],
-        data: complianceData,
+        data: complianceData
       };
 
       this.executionTracking.activeWorkflows.set(workflowId, workflowExecution);
@@ -506,19 +506,19 @@ class TrainingWorkflowIntegrationManager {
       const complianceValidation = await this.executeWorkflowStep(
         workflowId,
         'validateCompliance',
-        () => this.governmentService.validateCompliance(complianceData),
+        () => this.governmentService.validateCompliance(complianceData)
       );
 
       const dataFormatting = await this.executeWorkflowStep(workflowId, 'formatData', () =>
-        this.governmentService.formatForGovernment(complianceValidation.data),
+        this.governmentService.formatForGovernment(complianceValidation.data)
       );
 
       const systemSubmission = await this.executeWorkflowStep(workflowId, 'submitToSystems', () =>
-        this.governmentService.submitToAllSystems(dataFormatting.data),
+        this.governmentService.submitToAllSystems(dataFormatting.data)
       );
 
       const statusTracking = await this.executeWorkflowStep(workflowId, 'trackStatus', () =>
-        this.governmentService.trackSubmissionStatus(systemSubmission.data),
+        this.governmentService.trackSubmissionStatus(systemSubmission.data)
       );
 
       // const auditUpdate = await this.executeWorkflowStep(workflowId, 'updateAuditTrail', () =>
@@ -526,7 +526,7 @@ class TrainingWorkflowIntegrationManager {
       // );
 
       const responseHandling = await this.executeWorkflowStep(workflowId, 'handleResponses', () =>
-        this.governmentService.handleSystemResponses(statusTracking.data),
+        this.governmentService.handleSystemResponses(statusTracking.data)
       );
 
       // Complete workflow
@@ -535,7 +535,7 @@ class TrainingWorkflowIntegrationManager {
       workflowExecution.results = {
         submission: systemSubmission.data,
         tracking: statusTracking.data,
-        responses: responseHandling.data,
+        responses: responseHandling.data
       };
 
       this.executionTracking.activeWorkflows.delete(workflowId);
@@ -544,12 +544,12 @@ class TrainingWorkflowIntegrationManager {
       return {
         success: true,
         workflowId: workflowId,
-        results: workflowExecution.results,
+        results: workflowExecution.results
       };
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Government compliance workflow failed - ID: ${workflowId}`,
-        error,
+        error
       );
       await this.handleWorkflowFailure(workflowId, error, complianceData);
       throw error;
@@ -573,7 +573,7 @@ class TrainingWorkflowIntegrationManager {
         startTime: new Date(stepStartTime),
         endTime: new Date(),
         processingTime: Date.now() - stepStartTime,
-        result: stepResult,
+        result: stepResult
       };
 
       // Add step to workflow tracking
@@ -585,12 +585,12 @@ class TrainingWorkflowIntegrationManager {
       return {
         success: true,
         data: stepResult,
-        step: stepExecution,
+        step: stepExecution
       };
     } catch (error) {
       this.logger.error(
         `[WorkflowManager] Step ${stepName} failed for workflow ${workflowId}:`,
-        error,
+        error
       );
 
       const stepExecution = {
@@ -599,7 +599,7 @@ class TrainingWorkflowIntegrationManager {
         startTime: new Date(stepStartTime),
         endTime: new Date(),
         processingTime: Date.now() - stepStartTime,
-        error: error.message,
+        error: error.message
       };
 
       // Add failed step to workflow tracking
@@ -650,7 +650,7 @@ class TrainingWorkflowIntegrationManager {
 
     // Check completed workflows
     const completed = this.executionTracking.completedWorkflows.find(
-      w => w.workflowId === workflowId,
+      w => w.workflowId === workflowId
     );
     if (completed) return completed;
 
@@ -678,7 +678,7 @@ class TrainingWorkflowIntegrationManager {
       totalWorkflows: totalCount,
       successRate: totalCount > 0 ? ((completedCount / totalCount) * 100).toFixed(2) + '%' : 'N/A',
       metrics: this.executionTracking.metrics,
-      lastUpdate: new Date(),
+      lastUpdate: new Date()
     };
   }
 

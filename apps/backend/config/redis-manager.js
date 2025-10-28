@@ -39,7 +39,7 @@ async function connect() {
         const delay = Math.min(times * 50, 2000);
         return delay;
       },
-      maxRetriesPerRequest: 3,
+      maxRetriesPerRequest: 3
     };
 
     redisClient = new Redis(options);
@@ -66,7 +66,7 @@ async function connect() {
     // Create pub/sub client for messaging
     pubSub = {
       publisher: new Redis(options),
-      subscriber: new Redis(options),
+      subscriber: new Redis(options)
     };
 
     pubSub.subscriber.on('message', (channel, message) => {
@@ -174,7 +174,7 @@ const cache = {
       redisLogger.error(`Cache flush error: ${error.message}`);
       return false;
     }
-  },
+  }
 };
 
 // Message handlers
@@ -200,7 +200,7 @@ const messaging = {
     pubSub.subscriber.unsubscribe(channel);
 
     const index = messageHandlers.findIndex(
-      h => h.channel === channel && (!callback || h.callback === callback),
+      h => h.channel === channel && (!callback || h.callback === callback)
     );
 
     if (index !== -1) {
@@ -220,7 +220,7 @@ const messaging = {
 
     pubSub.publisher.publish(channel, serialized);
     return true;
-  },
+  }
 };
 
 // In-memory fallback for when Redis is disabled
@@ -265,14 +265,14 @@ async function healthCheck() {
   if (!config.enabled) {
     return {
       status: 'disabled',
-      message: 'Redis is disabled in configuration',
+      message: 'Redis is disabled in configuration'
     };
   }
 
   if (!isConnected) {
     return {
       status: 'unhealthy',
-      message: 'Not connected to Redis',
+      message: 'Not connected to Redis'
     };
   }
 
@@ -288,13 +288,13 @@ async function healthCheck() {
       details: {
         latency: `${latency}ms`,
         host: config.host,
-        port: config.port,
-      },
+        port: config.port
+      }
     };
   } catch (error) {
     return {
       status: 'unhealthy',
-      message: `Redis health check failed: ${error.message}`,
+      message: `Redis health check failed: ${error.message}`
     };
   }
 }
@@ -306,5 +306,5 @@ module.exports = {
   healthCheck,
   cache,
   messaging,
-  getClient: () => redisClient,
+  getClient: () => redisClient
 };

@@ -23,17 +23,17 @@ const certificateSchema = new mongoose.Schema(
       required: true,
       enum: ['ACTIVE', 'EXPIRED', 'REVOKED', 'SUSPENDED'],
       default: 'ACTIVE',
-      index: true,
+      index: true
     },
     qrCode: { type: String },
     pdfUrl: { type: String },
     issuedBy: { type: mongoose.Schema.Types.ObjectId, required: true },
     verificationCount: { type: Number, default: 0 },
-    metadata: { type: mongoose.Schema.Types.Mixed, default: {} },
+    metadata: { type: mongoose.Schema.Types.Mixed, default: {} }
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // Indexes for performance
@@ -67,7 +67,7 @@ class MongoDBCertificateRepository extends ICertificateRepository {
       verificationCount: doc.verificationCount,
       metadata: doc.metadata,
       createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
+      updatedAt: doc.updatedAt
     });
   }
 
@@ -89,7 +89,7 @@ class MongoDBCertificateRepository extends ICertificateRepository {
       pdfUrl: certificate.pdfUrl,
       issuedBy: certificate.issuedBy,
       verificationCount: certificate.verificationCount,
-      metadata: certificate.metadata,
+      metadata: certificate.metadata
     };
   }
 
@@ -121,7 +121,7 @@ class MongoDBCertificateRepository extends ICertificateRepository {
       // Update existing
       doc = await CertificateModel.findByIdAndUpdate(certificate.id, data, {
         new: true,
-        runValidators: true,
+        runValidators: true
       });
     } else {
       // Create new
@@ -183,8 +183,8 @@ class MongoDBCertificateRepository extends ICertificateRepository {
       status: 'ACTIVE',
       expiryDate: {
         $gte: now,
-        $lte: futureDate,
-      },
+        $lte: futureDate
+      }
     }).sort({ expiryDate: 1 });
 
     return docs.map(doc => this.toDomain(doc));

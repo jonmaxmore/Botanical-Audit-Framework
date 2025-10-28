@@ -25,14 +25,14 @@ exports.generateRecommendation = async (req, res) => {
     if (!farmId) {
       return res.status(400).json({
         success: false,
-        error: 'farmId is required',
+        error: 'farmId is required'
       });
     }
 
     if (!cultivationCycleId) {
       return res.status(400).json({
         success: false,
-        error: 'cultivationCycleId is required',
+        error: 'cultivationCycleId is required'
       });
     }
 
@@ -41,7 +41,7 @@ exports.generateRecommendation = async (req, res) => {
       farmId,
       cultivationCycleId,
       growthStage,
-      options: options || {},
+      options: options || {}
     });
 
     if (!recommendation.success) {
@@ -52,14 +52,14 @@ exports.generateRecommendation = async (req, res) => {
     return res.status(200).json({
       success: true,
       data: recommendation.recommendation,
-      message: 'Fertilizer recommendation generated successfully',
+      message: 'Fertilizer recommendation generated successfully'
     });
   } catch (error) {
     console.error('Error generating fertilizer recommendation:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -83,7 +83,7 @@ exports.listProducts = async (req, res) => {
     // Build query
     const query = {
       status: 'active',
-      'compliance.gacpApproved': true,
+      'compliance.gacpApproved': true
     };
 
     if (plantType) {
@@ -121,16 +121,16 @@ exports.listProducts = async (req, res) => {
           page: parseInt(page),
           limit: parseInt(limit),
           total,
-          pages: Math.ceil(total / parseInt(limit)),
-        },
-      },
+          pages: Math.ceil(total / parseInt(limit))
+        }
+      }
     });
   } catch (error) {
     console.error('Error listing fertilizer products:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -148,20 +148,20 @@ exports.getProduct = async (req, res) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        error: 'Product not found',
+        error: 'Product not found'
       });
     }
 
     return res.status(200).json({
       success: true,
-      data: product,
+      data: product
     });
   } catch (error) {
     console.error('Error getting fertilizer product:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -180,7 +180,7 @@ exports.searchProducts = async (req, res) => {
     if (!q || q.trim().length < 2) {
       return res.status(400).json({
         success: false,
-        error: 'Search query must be at least 2 characters',
+        error: 'Search query must be at least 2 characters'
       });
     }
 
@@ -190,15 +190,15 @@ exports.searchProducts = async (req, res) => {
       success: true,
       data: {
         products,
-        count: products.length,
-      },
+        count: products.length
+      }
     });
   } catch (error) {
     console.error('Error searching fertilizer products:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -221,15 +221,15 @@ exports.getProductsForStage = async (req, res) => {
         count: products.length,
         plantType,
         growthStage: stage,
-        region: region || 'all',
-      },
+        region: region || 'all'
+      }
     });
   } catch (error) {
     console.error('Error getting products for growth stage:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -248,15 +248,15 @@ exports.getTopRated = async (req, res) => {
       success: true,
       data: {
         products,
-        count: products.length,
-      },
+        count: products.length
+      }
     });
   } catch (error) {
     console.error('Error getting top-rated products:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -281,21 +281,21 @@ exports.createProduct = async (req, res) => {
     if (!productData.productId) {
       return res.status(400).json({
         success: false,
-        error: 'productId is required',
+        error: 'productId is required'
       });
     }
 
     if (!productData.productName) {
       return res.status(400).json({
         success: false,
-        error: 'productName is required',
+        error: 'productName is required'
       });
     }
 
     if (!productData.npkRatio) {
       return res.status(400).json({
         success: false,
-        error: 'npkRatio is required',
+        error: 'npkRatio is required'
       });
     }
 
@@ -306,7 +306,7 @@ exports.createProduct = async (req, res) => {
     return res.status(201).json({
       success: true,
       data: product,
-      message: 'Fertilizer product created successfully',
+      message: 'Fertilizer product created successfully'
     });
   } catch (error) {
     console.error('Error creating fertilizer product:', error);
@@ -315,14 +315,14 @@ exports.createProduct = async (req, res) => {
     if (error.code === 11000) {
       return res.status(400).json({
         success: false,
-        error: 'Product with this ID or registration number already exists',
+        error: 'Product with this ID or registration number already exists'
       });
     }
 
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -345,27 +345,27 @@ exports.updateProduct = async (req, res) => {
 
     const product = await FertilizerProduct.findByIdAndUpdate(id, updateData, {
       new: true,
-      runValidators: true,
+      runValidators: true
     });
 
     if (!product) {
       return res.status(404).json({
         success: false,
-        error: 'Product not found',
+        error: 'Product not found'
       });
     }
 
     return res.status(200).json({
       success: true,
       data: product,
-      message: 'Product updated successfully',
+      message: 'Product updated successfully'
     });
   } catch (error) {
     console.error('Error updating fertilizer product:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -384,26 +384,26 @@ exports.deleteProduct = async (req, res) => {
     const product = await FertilizerProduct.findByIdAndUpdate(
       id,
       { status: 'discontinued' },
-      { new: true },
+      { new: true }
     );
 
     if (!product) {
       return res.status(404).json({
         success: false,
-        error: 'Product not found',
+        error: 'Product not found'
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: 'Product discontinued successfully',
+      message: 'Product discontinued successfully'
     });
   } catch (error) {
     console.error('Error deleting fertilizer product:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };
@@ -425,7 +425,7 @@ exports.addReview = async (req, res) => {
     if (!product) {
       return res.status(404).json({
         success: false,
-        error: 'Product not found',
+        error: 'Product not found'
       });
     }
 
@@ -433,7 +433,7 @@ exports.addReview = async (req, res) => {
     if (!reviewData.rating || reviewData.rating < 1 || reviewData.rating > 5) {
       return res.status(400).json({
         success: false,
-        error: 'Rating must be between 1 and 5',
+        error: 'Rating must be between 1 and 5'
       });
     }
 
@@ -445,15 +445,15 @@ exports.addReview = async (req, res) => {
       message: 'Review added successfully',
       data: {
         newRating: product.performance.userSatisfaction.rating,
-        numberOfReviews: product.performance.userSatisfaction.numberOfReviews,
-      },
+        numberOfReviews: product.performance.userSatisfaction.numberOfReviews
+      }
     });
   } catch (error) {
     console.error('Error adding review:', error);
     return res.status(500).json({
       success: false,
       error: 'Internal server error',
-      message: error.message,
+      message: error.message
     });
   }
 };

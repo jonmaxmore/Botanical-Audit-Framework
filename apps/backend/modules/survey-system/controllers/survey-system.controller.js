@@ -31,7 +31,7 @@ class SurveySystemController {
         return errorResponse(res, {
           message: 'Invalid region',
           statusCode: 400,
-          data: { validRegions },
+          data: { validRegions }
         });
       }
 
@@ -42,7 +42,7 @@ class SurveySystemController {
         surveyId,
         userId,
         region,
-        farmId,
+        farmId
       });
 
       if (!result.success) {
@@ -56,10 +56,10 @@ class SurveySystemController {
           region: result.data.region,
           currentStep: result.data.currentStep,
           progress: result.data.progress,
-          totalSteps: 7,
+          totalSteps: 7
         },
         'Survey wizard started',
-        201,
+        201
       );
     } catch (error) {
       logger.error('[SurveyController] Start wizard error:', error);
@@ -78,7 +78,7 @@ class SurveySystemController {
 
       const { ObjectId } = require('mongodb');
       const response = await this.surveyService.responsesCollection.findOne({
-        _id: new ObjectId(surveyId),
+        _id: new ObjectId(surveyId)
       });
 
       if (!response) {
@@ -96,7 +96,7 @@ class SurveySystemController {
         progress: response.progress,
         totalSteps: 7,
         region: response.region,
-        state: response.state,
+        state: response.state
       });
     } catch (error) {
       logger.error('[SurveyController] Get current step error:', error);
@@ -118,7 +118,7 @@ class SurveySystemController {
         surveyId,
         parseInt(stepId),
         stepData,
-        userId,
+        userId
       );
 
       return successResponse(
@@ -128,9 +128,9 @@ class SurveySystemController {
           stepId: parseInt(stepId),
           currentStep: result.currentStep,
           progress: result.progress,
-          isComplete: result.isComplete,
+          isComplete: result.isComplete
         },
-        autoSave ? 'Progress auto-saved' : 'Step updated successfully',
+        autoSave ? 'Progress auto-saved' : 'Step updated successfully'
       );
     } catch (error) {
       logger.error('[SurveyController] Update step error:', error);
@@ -158,9 +158,9 @@ class SurveySystemController {
           regionalBonus: result.regionalBonus,
           totalScore: result.totalScore,
           recommendations: result.recommendations,
-          submittedAt: result.submittedAt,
+          submittedAt: result.submittedAt
         },
-        'Survey submitted successfully',
+        'Survey submitted successfully'
       );
     } catch (error) {
       logger.error('[SurveyController] Submit wizard error:', error);
@@ -179,7 +179,7 @@ class SurveySystemController {
 
       const { ObjectId } = require('mongodb');
       const response = await this.surveyService.responsesCollection.findOne({
-        _id: new ObjectId(surveyId),
+        _id: new ObjectId(surveyId)
       });
 
       if (!response) {
@@ -199,7 +199,7 @@ class SurveySystemController {
         step4: { name: 'Management', completed: !!response.managementProduction },
         step5: { name: 'Cost & Revenue', completed: !!response.costRevenue },
         step6: { name: 'Market & Sales', completed: !!response.marketSales },
-        step7: { name: 'Problems & Needs', completed: !!response.problemsNeeds },
+        step7: { name: 'Problems & Needs', completed: !!response.problemsNeeds }
       };
 
       const completedSteps = Object.values(stepCompletion).filter(s => s.completed).length;
@@ -213,7 +213,7 @@ class SurveySystemController {
         completedSteps,
         totalSteps: 7,
         status: response.state,
-        lastSaved: response.metadata.lastSavedAt,
+        lastSaved: response.metadata.lastSavedAt
       });
     } catch (error) {
       logger.error('[SurveyController] Get progress error:', error);
@@ -247,9 +247,9 @@ class SurveySystemController {
           progress: s.progress,
           totalScore: s.scores?.total || 0,
           createdAt: s.metadata.createdAt,
-          submittedAt: s.metadata.submittedAt,
+          submittedAt: s.metadata.submittedAt
         })),
-        total: surveys.length,
+        total: surveys.length
       });
     } catch (error) {
       logger.error('[SurveyController] Get my surveys error:', error);
@@ -268,7 +268,7 @@ class SurveySystemController {
 
       const { ObjectId } = require('mongodb');
       const survey = await this.surveyService.responsesCollection.findOne({
-        _id: new ObjectId(surveyId),
+        _id: new ObjectId(surveyId)
       });
 
       if (!survey) {
@@ -298,7 +298,7 @@ class SurveySystemController {
 
       const { ObjectId } = require('mongodb');
       const survey = await this.surveyService.responsesCollection.findOne({
-        _id: new ObjectId(surveyId),
+        _id: new ObjectId(surveyId)
       });
 
       if (!survey) {
@@ -314,12 +314,12 @@ class SurveySystemController {
       if (survey.state !== 'DRAFT') {
         return errorResponse(res, {
           message: 'Can only delete draft surveys',
-          statusCode: 400,
+          statusCode: 400
         });
       }
 
       await this.surveyService.responsesCollection.deleteOne({
-        _id: new ObjectId(surveyId),
+        _id: new ObjectId(surveyId)
       });
 
       return successResponse(res, null, 'Survey deleted successfully');
@@ -347,7 +347,7 @@ class SurveySystemController {
 
       return successResponse(res, {
         region,
-        ...analytics,
+        ...analytics
       });
     } catch (error) {
       logger.error('[SurveyController] Get regional analytics error:', error);
@@ -366,7 +366,7 @@ class SurveySystemController {
       if (!regions || !Array.isArray(regions) || regions.length < 2) {
         return errorResponse(res, {
           message: 'Please provide at least 2 regions to compare',
-          statusCode: 400,
+          statusCode: 400
         });
       }
 

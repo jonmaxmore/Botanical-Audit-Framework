@@ -54,7 +54,7 @@ class DownloadReportUseCase {
         buffer: fileBuffer,
         fileName: report.fileName,
         mimeType: this._getMimeType(report.format),
-        fileSize: report.fileSize,
+        fileSize: report.fileSize
       };
     } catch (error) {
       throw new Error(`Failed to download report file: ${error.message}`);

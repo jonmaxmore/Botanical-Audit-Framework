@@ -270,7 +270,7 @@ class PaymentWorkflowVerifier {
       passed: this.passed.length,
       warnings: this.warnings.length,
       errors: this.errors.length,
-      successRate: successRate,
+      successRate: successRate
     };
   }
 }

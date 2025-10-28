@@ -19,7 +19,7 @@ const {
   validateRevokeCertificate,
   validateRenewCertificate,
   validateListCertificates,
-  checkValidationResult,
+  checkValidationResult
 } = require('../validators/certificate.validator');
 
 /**
@@ -35,7 +35,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authenticateDTAM = (req, res, next) => next(),
     authorizeRoles = (..._roles) =>
       (req, res, next) =>
-        next(),
+        next()
   } = middleware;
 
   // ============================================
@@ -50,7 +50,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     '/public/verify/:number',
     validateCertificateNumber,
     checkValidationResult,
-    (req, res) => controller.verifyCertificate(req, res),
+    (req, res) => controller.verifyCertificate(req, res)
   );
 
   // ============================================
@@ -62,7 +62,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
    * GET /api/certificates
    */
   router.get('/', authenticateFarmer, validateListCertificates, checkValidationResult, (req, res) =>
-    controller.listCertificates(req, res),
+    controller.listCertificates(req, res)
   );
 
   /**
@@ -70,7 +70,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
    * GET /api/certificates/:id
    */
   router.get('/:id', authenticateFarmer, validateCertificateId, checkValidationResult, (req, res) =>
-    controller.getCertificateById(req, res),
+    controller.getCertificateById(req, res)
   );
 
   /**
@@ -82,7 +82,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authenticateFarmer,
     validateCertificateId,
     checkValidationResult,
-    (req, res) => controller.downloadPDF(req, res),
+    (req, res) => controller.downloadPDF(req, res)
   );
 
   /**
@@ -94,7 +94,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authenticateFarmer,
     validateCertificateId,
     checkValidationResult,
-    (req, res) => controller.getQRCode(req, res),
+    (req, res) => controller.getQRCode(req, res)
   );
 
   /**
@@ -106,7 +106,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authenticateFarmer,
     validateCertificateId,
     checkValidationResult,
-    (req, res) => controller.getCertificateHistory(req, res),
+    (req, res) => controller.getCertificateHistory(req, res)
   );
 
   /**
@@ -118,7 +118,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authenticateFarmer,
     validateCertificateId,
     checkValidationResult,
-    (req, res) => controller.verifyCertificate(req, res),
+    (req, res) => controller.verifyCertificate(req, res)
   );
 
   // ============================================
@@ -136,7 +136,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authorizeRoles('ADMIN', 'MANAGER'),
     validateGenerateCertificate,
     checkValidationResult,
-    (req, res) => controller.generateCertificate(req, res),
+    (req, res) => controller.generateCertificate(req, res)
   );
 
   /**
@@ -150,7 +150,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authorizeRoles('ADMIN', 'MANAGER'),
     validateRevokeCertificate,
     checkValidationResult,
-    (req, res) => controller.revokeCertificate(req, res),
+    (req, res) => controller.revokeCertificate(req, res)
   );
 
   /**
@@ -164,7 +164,7 @@ function setupCertificateRoutes(controller, middleware = {}) {
     authorizeRoles('ADMIN', 'MANAGER'),
     validateRenewCertificate,
     checkValidationResult,
-    (req, res) => controller.renewCertificate(req, res),
+    (req, res) => controller.renewCertificate(req, res)
   );
 
   return router;

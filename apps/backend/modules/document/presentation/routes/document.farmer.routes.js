@@ -13,7 +13,7 @@ module.exports = (documentController, authenticateFarmer) => {
   // POST /api/farmer/documents/upload
   // Form data: file, name, description, type, category, relatedEntity, tags, metadata
   router.post('/upload', authenticateFarmer, documentController.upload.single('file'), (req, res) =>
-    documentController.uploadDocument(req, res),
+    documentController.uploadDocument(req, res)
   );
 
   // Get all documents for logged-in farmer
@@ -27,13 +27,13 @@ module.exports = (documentController, authenticateFarmer) => {
   // Download document
   // GET /api/farmer/documents/:id/download
   router.get('/:id/download', authenticateFarmer, (req, res) =>
-    documentController.downloadDocument(req, res),
+    documentController.downloadDocument(req, res)
   );
 
   // Get documents by related entity (farm, survey, etc.)
   // GET /api/farmer/documents/entity/:entityType/:entityId
   router.get('/entity/:entityType/:entityId', authenticateFarmer, (req, res) =>
-    documentController.getDocumentsByEntity(req, res),
+    documentController.getDocumentsByEntity(req, res)
   );
 
   // Update document metadata
@@ -43,7 +43,7 @@ module.exports = (documentController, authenticateFarmer) => {
   // Delete (archive) document
   // DELETE /api/farmer/documents/:id
   router.delete('/:id', authenticateFarmer, (req, res) =>
-    documentController.deleteDocument(req, res),
+    documentController.deleteDocument(req, res)
   );
 
   return router;

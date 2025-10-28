@@ -63,5 +63,5 @@ module.exports = {
   comparePassword,
   generateToken,
   generateVerificationCode,
-  sha256Hash,
+  sha256Hash
 };

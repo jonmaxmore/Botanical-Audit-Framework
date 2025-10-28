@@ -28,76 +28,76 @@ const SymptomSchema = new mongoose.Schema({
   symptomType: {
     type: String,
     enum: ['visual', 'growth', 'structural', 'behavioral'],
-    required: true,
+    required: true
   },
   location: {
     type: String,
-    enum: ['leaves', 'stems', 'roots', 'flowers', 'buds', 'fruits', 'whole_plant', 'soil'],
+    enum: ['leaves', 'stems', 'roots', 'flowers', 'buds', 'fruits', 'whole_plant', 'soil']
   },
   description: {
     type: String,
-    required: true,
+    required: true
   },
   descriptionThai: String,
   visualIndicators: {
     color: [String], // e.g., ["yellow", "brown", "white spots"]
     pattern: String, // e.g., "spots", "streaks", "coating", "wilting"
     texture: String, // e.g., "fuzzy", "powdery", "slimy", "dry"
-    progression: String, // How it spreads
+    progression: String // How it spreads
   },
   severity: {
     type: String,
-    enum: ['mild', 'moderate', 'severe', 'critical'],
+    enum: ['mild', 'moderate', 'severe', 'critical']
   },
   stageMostCommon: {
     type: String,
-    enum: ['seedling', 'vegetative', 'flowering', 'harvest', 'any'],
-  },
+    enum: ['seedling', 'vegetative', 'flowering', 'harvest', 'any']
+  }
 });
 
 const EnvironmentalConditionsSchema = new mongoose.Schema({
   temperature: {
     optimal: {
       min: Number, // °C
-      max: Number,
+      max: Number
     },
-    description: String,
+    description: String
   },
   humidity: {
     optimal: {
       min: Number, // %
-      max: Number,
+      max: Number
     },
-    description: String,
+    description: String
   },
   moisture: {
     level: {
       type: String,
-      enum: ['very_dry', 'dry', 'moderate', 'moist', 'wet', 'very_wet'],
+      enum: ['very_dry', 'dry', 'moderate', 'moist', 'wet', 'very_wet']
     },
-    description: String,
+    description: String
   },
   airflow: {
     type: String,
-    enum: ['stagnant', 'poor', 'moderate', 'good', 'excellent'],
+    enum: ['stagnant', 'poor', 'moderate', 'good', 'excellent']
   },
   soilConditions: {
     ph: String,
     drainage: String,
-    other: String,
+    other: String
   },
-  stressFactors: [String], // e.g., ["overwatering", "poor drainage", "high humidity"]
+  stressFactors: [String] // e.g., ["overwatering", "poor drainage", "high humidity"]
 });
 
 const TreatmentSchema = new mongoose.Schema({
   treatmentMethod: {
     type: String,
     required: true,
-    enum: ['cultural', 'biological', 'chemical', 'physical', 'integrated', 'preventive'],
+    enum: ['cultural', 'biological', 'chemical', 'physical', 'integrated', 'preventive']
   },
   treatmentName: {
     type: String,
-    required: true,
+    required: true
   },
   treatmentNameThai: String,
   description: String,
@@ -107,11 +107,11 @@ const TreatmentSchema = new mongoose.Schema({
   gacpCompliant: {
     type: Boolean,
     default: false,
-    required: true,
+    required: true
   },
   organicCertifiable: {
     type: Boolean,
-    default: false,
+    default: false
   },
 
   // Products/Materials
@@ -126,14 +126,14 @@ const TreatmentSchema = new mongoose.Schema({
       organicCertified: Boolean,
       availability: {
         type: String,
-        enum: ['unavailable', 'rare', 'limited', 'available', 'common'],
+        enum: ['unavailable', 'rare', 'limited', 'available', 'common']
       },
       estimatedCost: {
         value: Number,
         unit: String,
-        currency: { type: String, default: 'THB' },
-      },
-    },
+        currency: { type: String, default: 'THB' }
+      }
+    }
   ],
 
   // Application Details
@@ -144,85 +144,85 @@ const TreatmentSchema = new mongoose.Schema({
     timing: String, // When to apply
     safetyPrecautions: [String],
     safetyPrecautionsThai: [String],
-    preharvest_interval: Number, // days before harvest
+    preharvest_interval: Number // days before harvest
   },
 
   // Effectiveness
   effectiveness: {
     rating: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent'],
+      enum: ['poor', 'fair', 'good', 'excellent']
     },
     percentage: Number, // % success rate
     timeToResults: String, // e.g., "2-3 days", "1 week"
-    conditions: String, // Conditions for effectiveness
+    conditions: String // Conditions for effectiveness
   },
 
   // Priority and Stage
   priority: {
     type: String,
-    enum: ['first_line', 'secondary', 'last_resort', 'preventive'],
+    enum: ['first_line', 'secondary', 'last_resort', 'preventive']
   },
   applicableStages: [
     {
       type: String,
-      enum: ['prevention', 'early', 'moderate', 'severe', 'recovery'],
-    },
+      enum: ['prevention', 'early', 'moderate', 'severe', 'recovery']
+    }
   ],
 
   notes: String,
-  notesThai: String,
+  notesThai: String
 });
 
 const PreventionSchema = new mongoose.Schema({
   method: {
     type: String,
-    required: true,
+    required: true
   },
   methodThai: String,
   category: {
     type: String,
-    enum: ['cultural', 'environmental', 'sanitation', 'monitoring', 'genetic', 'biological'],
+    enum: ['cultural', 'environmental', 'sanitation', 'monitoring', 'genetic', 'biological']
   },
   description: String,
   descriptionThai: String,
   effectiveness: {
     type: String,
-    enum: ['low', 'medium', 'high', 'very_high'],
+    enum: ['low', 'medium', 'high', 'very_high']
   },
   implementationDifficulty: {
     type: String,
-    enum: ['easy', 'moderate', 'difficult'],
+    enum: ['easy', 'moderate', 'difficult']
   },
   cost: {
     type: String,
-    enum: ['free', 'low', 'medium', 'high'],
+    enum: ['free', 'low', 'medium', 'high']
   },
   gacpRecommended: {
     type: Boolean,
-    default: false,
-  },
+    default: false
+  }
 });
 
 const RegionalPrevalenceSchema = new mongoose.Schema({
   region: {
     type: String,
     enum: ['north', 'northeast', 'central', 'east', 'west', 'south'],
-    required: true,
+    required: true
   },
   prevalence: {
     type: String,
     enum: ['rare', 'uncommon', 'occasional', 'common', 'very_common'],
-    required: true,
+    required: true
   },
   seasonality: [
     {
       month: Number, // 1-12
       riskLevel: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
-      },
-    },
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      }
+    }
   ],
   peakMonths: [Number], // Months with highest risk
   environmentalTriggers: [String],
@@ -231,11 +231,11 @@ const RegionalPrevalenceSchema = new mongoose.Schema({
       year: Number,
       severity: {
         type: String,
-        enum: ['minor', 'moderate', 'major', 'severe'],
+        enum: ['minor', 'moderate', 'major', 'severe']
       },
-      notes: String,
-    },
-  ],
+      notes: String
+    }
+  ]
 });
 
 const DiseasePestSchema = new mongoose.Schema(
@@ -244,7 +244,7 @@ const DiseasePestSchema = new mongoose.Schema(
     issueId: {
       type: String,
       required: true,
-      unique: true,
+      unique: true
       // e.g., "disease-001", "pest-042", "deficiency-015"
     },
 
@@ -262,24 +262,24 @@ const DiseasePestSchema = new mongoose.Schema(
         'nutrient_toxicity',
         'environmental_stress',
         'physiological_disorder',
-        'other',
-      ],
+        'other'
+      ]
     },
 
     // === Names ===
     name: {
       common: {
         type: String,
-        required: true,
+        required: true
         // e.g., "Powdery Mildew", "Spider Mites"
       },
       thai: {
         type: String,
-        required: true,
+        required: true
         // e.g., "โรคราแป้ง", "ไรแดง"
       },
       scientific: String, // e.g., "Podosphaera macularis"
-      aliases: [String],
+      aliases: [String]
     },
 
     // === Affected Plants ===
@@ -288,34 +288,34 @@ const DiseasePestSchema = new mongoose.Schema(
         plantType: {
           type: String,
           enum: ['cannabis', 'turmeric', 'ginger', 'black_galingale', 'plai', 'kratom'],
-          required: true,
+          required: true
         },
         susceptibility: {
           type: String,
-          enum: ['resistant', 'low', 'moderate', 'high', 'very_high'],
+          enum: ['resistant', 'low', 'moderate', 'high', 'very_high']
         },
         commonCultivars: [
           {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'PlantCultivar',
-          },
+            ref: 'PlantCultivar'
+          }
         ],
         resistantCultivars: [
           {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'PlantCultivar',
-          },
+            ref: 'PlantCultivar'
+          }
         ],
         notes: String,
-        notesThai: String,
-      },
+        notesThai: String
+      }
     ],
 
     // === Description ===
     description: {
       short: {
         type: String,
-        required: true,
+        required: true
       },
       shortThai: String,
       detailed: String,
@@ -323,7 +323,7 @@ const DiseasePestSchema = new mongoose.Schema(
       lifecycle: String, // How the disease/pest develops
       lifecycleThai: String,
       spread: String, // How it spreads
-      spreadThai: String,
+      spreadThai: String
     },
 
     // === Severity ===
@@ -331,24 +331,24 @@ const DiseasePestSchema = new mongoose.Schema(
       potential: {
         type: String,
         enum: ['negligible', 'minor', 'moderate', 'major', 'devastating'],
-        required: true,
+        required: true
       },
       speed: {
         type: String,
-        enum: ['very_slow', 'slow', 'moderate', 'fast', 'very_fast'],
+        enum: ['very_slow', 'slow', 'moderate', 'fast', 'very_fast']
       },
       mortality: {
         type: String,
-        enum: ['none', 'low', 'moderate', 'high', 'very_high'],
+        enum: ['none', 'low', 'moderate', 'high', 'very_high']
       },
       yieldImpact: {
         percentage: Number, // % yield loss if untreated
-        description: String,
+        description: String
       },
       qualityImpact: {
         type: String,
-        enum: ['none', 'minimal', 'moderate', 'significant', 'severe'],
-      },
+        enum: ['none', 'minimal', 'moderate', 'significant', 'severe']
+      }
     },
 
     // === Symptoms ===
@@ -361,19 +361,19 @@ const DiseasePestSchema = new mongoose.Schema(
     identification: {
       difficulty: {
         type: String,
-        enum: ['easy', 'moderate', 'difficult', 'requires_expert'],
+        enum: ['easy', 'moderate', 'difficult', 'requires_expert']
       },
       confusionWith: [
         {
           issueId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'DiseasePest',
+            ref: 'DiseasePest'
           },
           name: String,
           nameThai: String,
           howToDistinguish: String,
-          howToDistinguishThai: String,
-        },
+          howToDistinguishThai: String
+        }
       ],
       diagnosticTests: [
         {
@@ -381,9 +381,9 @@ const DiseasePestSchema = new mongoose.Schema(
           testNameThai: String,
           availability: String,
           cost: String,
-          accuracy: Number, // %
-        },
-      ],
+          accuracy: Number // %
+        }
+      ]
     },
 
     // === Images ===
@@ -396,10 +396,10 @@ const DiseasePestSchema = new mongoose.Schema(
         plantPart: String, // Which part of plant shown
         quality: {
           type: String,
-          enum: ['poor', 'fair', 'good', 'excellent'],
+          enum: ['poor', 'fair', 'good', 'excellent']
         },
-        verified: Boolean,
-      },
+        verified: Boolean
+      }
     ],
 
     // === Treatment ===
@@ -416,20 +416,20 @@ const DiseasePestSchema = new mongoose.Schema(
       averageCostToTreat: {
         value: Number,
         unit: String,
-        currency: { type: String, default: 'THB' },
+        currency: { type: String, default: 'THB' }
       },
       potentialYieldLoss: {
         min: Number, // %
         max: Number, // %
-        average: Number, // %
+        average: Number // %
       },
       potentialRevenueLoss: {
         min: Number, // THB
         max: Number,
         average: Number,
-        unit: String,
+        unit: String
       },
-      treatmentSuccess: Number, // % successful treatment
+      treatmentSuccess: Number // % successful treatment
     },
 
     // === For Pests Only ===
@@ -438,16 +438,16 @@ const DiseasePestSchema = new mongoose.Schema(
         size: String,
         color: String,
         shape: String,
-        distinguishingFeatures: [String],
+        distinguishingFeatures: [String]
       },
       behavior: {
         activity: String, // e.g., "feeds on leaf undersides"
         movementPattern: String,
         reproductionRate: {
           type: String,
-          enum: ['very_slow', 'slow', 'moderate', 'fast', 'very_fast'],
+          enum: ['very_slow', 'slow', 'moderate', 'fast', 'very_fast']
         },
-        generationTime: String, // e.g., "7-10 days"
+        generationTime: String // e.g., "7-10 days"
       },
       naturalPredators: [
         {
@@ -455,11 +455,11 @@ const DiseasePestSchema = new mongoose.Schema(
           nameThai: String,
           effectiveness: {
             type: String,
-            enum: ['low', 'moderate', 'high', 'very_high'],
+            enum: ['low', 'moderate', 'high', 'very_high']
           },
-          availability: String,
-        },
-      ],
+          availability: String
+        }
+      ]
     },
 
     // === For Diseases Only ===
@@ -467,7 +467,7 @@ const DiseasePestSchema = new mongoose.Schema(
       pathogen: {
         type: String,
         genus: String,
-        species: String,
+        species: String
       },
       transmissionMethods: [String], // e.g., ["airborne", "waterborne", "contact"]
       survivalMechanism: String, // How pathogen survives between crops
@@ -475,10 +475,10 @@ const DiseasePestSchema = new mongoose.Schema(
       resistanceDevelopment: {
         risk: {
           type: String,
-          enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+          enum: ['very_low', 'low', 'medium', 'high', 'very_high']
         },
-        notes: String,
-      },
+        notes: String
+      }
     },
 
     // === ML Features ===
@@ -500,31 +500,31 @@ const DiseasePestSchema = new mongoose.Schema(
       reportedIncidents: Number, // Total reported cases
       successfulTreatments: Number,
       preventionSuccesses: Number,
-      commonMistakes: [String], // Common treatment mistakes
+      commonMistakes: [String] // Common treatment mistakes
     },
 
     // === GACP Compliance ===
     gacpConsiderations: {
       monitoringRequired: {
         type: Boolean,
-        default: false,
+        default: false
       },
       recordKeepingRequired: {
         type: Boolean,
-        default: false,
+        default: false
       },
       approvedTreatments: [String], // List of GACP-approved treatments
       prohibitedTreatments: [String], // Treatments NOT allowed under GACP
       quarantineRequired: {
         type: Boolean,
-        default: false,
+        default: false
       },
       reportingRequired: {
         type: Boolean,
-        default: false,
+        default: false
       },
       notes: String,
-      notesThai: String,
+      notesThai: String
     },
 
     // === References & Resources ===
@@ -536,8 +536,8 @@ const DiseasePestSchema = new mongoose.Schema(
           year: Number,
           journal: String,
           doi: String,
-          url: String,
-        },
+          url: String
+        }
       ],
       governmentGuidelines: [
         {
@@ -545,16 +545,16 @@ const DiseasePestSchema = new mongoose.Schema(
           titleThai: String,
           issuingBody: String,
           year: Number,
-          url: String,
-        },
+          url: String
+        }
       ],
       expertSources: [
         {
           name: String,
           organization: String,
-          contact: String,
-        },
-      ],
+          contact: String
+        }
+      ]
     },
 
     // === User Reports ===
@@ -562,11 +562,11 @@ const DiseasePestSchema = new mongoose.Schema(
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
+          ref: 'User'
         },
         farmId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Farm',
+          ref: 'Farm'
         },
         region: String,
         province: String,
@@ -575,50 +575,50 @@ const DiseasePestSchema = new mongoose.Schema(
         notes: String,
         treatmentUsed: String,
         treatmentEffective: Boolean,
-        verified: Boolean,
-      },
+        verified: Boolean
+      }
     ],
 
     // === Status & Metadata ===
     status: {
       type: String,
       enum: ['active', 'monitoring', 'emerging', 'historical', 'research'],
-      default: 'active',
+      default: 'active'
     },
 
     priority: {
       type: String,
       enum: ['low', 'medium', 'high', 'critical'],
-      default: 'medium',
+      default: 'medium'
     },
 
     featured: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     dataQuality: {
       completeness: Number, // 0-100
       accuracy: {
         type: String,
-        enum: ['low', 'medium', 'high', 'verified'],
+        enum: ['low', 'medium', 'high', 'verified']
       },
       lastVerified: Date,
       verifiedBy: String,
-      needsUpdate: Boolean,
+      needsUpdate: Boolean
     },
 
     version: {
       type: Number,
-      default: 1,
+      default: 1
     },
 
     notes: String,
-    notesThai: String,
+    notesThai: String
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // === Indexes ===
@@ -633,7 +633,7 @@ DiseasePestSchema.index({
   'name.common': 'text',
   'name.thai': 'text',
   'description.short': 'text',
-  'description.detailed': 'text',
+  'description.detailed': 'text'
 });
 
 // === Static Methods ===
@@ -644,7 +644,7 @@ DiseasePestSchema.index({
 DiseasePestSchema.statics.getByPlantType = function (plantType, limit = null) {
   const query = this.find({
     status: 'active',
-    'affectedPlants.plantType': plantType,
+    'affectedPlants.plantType': plantType
   }).sort({ 'mlFeatures.overallRiskScore': -1 });
 
   return limit ? query.limit(limit) : query;
@@ -657,7 +657,7 @@ DiseasePestSchema.statics.getHighRiskByRegion = function (region, plantType = nu
   const query = {
     status: 'active',
     'regionalPrevalence.region': region,
-    'regionalPrevalence.prevalence': { $in: ['common', 'very_common'] },
+    'regionalPrevalence.prevalence': { $in: ['common', 'very_common'] }
   };
 
   if (plantType) {
@@ -677,7 +677,7 @@ DiseasePestSchema.statics.getCurrentSeasonalRisks = function (region, plantType,
     status: 'active',
     'affectedPlants.plantType': plantType,
     'regionalPrevalence.region': region,
-    'regionalPrevalence.peakMonths': currentMonth,
+    'regionalPrevalence.peakMonths': currentMonth
   }).sort({ 'mlFeatures.overallRiskScore': -1 });
 };
 
@@ -688,11 +688,11 @@ DiseasePestSchema.statics.searchIssues = function (query) {
   return this.find(
     {
       $text: { $search: query },
-      status: 'active',
+      status: 'active'
     },
     {
-      score: { $meta: 'textScore' },
-    },
+      score: { $meta: 'textScore' }
+    }
   ).sort({ score: { $meta: 'textScore' } });
 };
 
@@ -757,7 +757,7 @@ DiseasePestSchema.methods.getRiskLevel = function (conditions) {
         uncommon: 10,
         occasional: 20,
         common: 30,
-        very_common: 40,
+        very_common: 40
       };
       riskScore += prevalenceScore[regionData.prevalence] || 0;
       factors.push(`${regionData.prevalence} in this region`);
@@ -785,7 +785,7 @@ DiseasePestSchema.methods.getRiskLevel = function (conditions) {
             : riskScore >= 10
               ? 'low'
               : 'very_low',
-    factors,
+    factors
   };
 };
 

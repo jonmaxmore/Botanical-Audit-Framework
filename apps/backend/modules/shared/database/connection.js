@@ -26,7 +26,7 @@ class DatabaseConnection {
     try {
       const conn = await mongoose.connect(
         config.database.mongodb.uri,
-        config.database.mongodb.options,
+        config.database.mongodb.options
       );
 
       this.connection = conn.connection;
@@ -114,7 +114,7 @@ class DatabaseConnection {
         collections: stats.collections,
         dataSize: stats.dataSize,
         indexSize: stats.indexSize,
-        storageSize: stats.storageSize,
+        storageSize: stats.storageSize
       };
     } catch (error) {
       logger.error('Error getting database stats:', error);

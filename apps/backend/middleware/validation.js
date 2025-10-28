@@ -25,20 +25,20 @@ const validateRequest = (schema, source = 'body') => {
     const { error, value } = joiSchema.validate(data, {
       abortEarly: false,
       allowUnknown: false,
-      stripUnknown: true,
+      stripUnknown: true
     });
 
     if (error) {
       const errorDetails = error.details.map(detail => ({
         field: detail.path.join('.'),
         message: detail.message,
-        value: detail.context?.value,
+        value: detail.context?.value
       }));
 
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
-        errors: errorDetails,
+        errors: errorDetails
       });
     }
 
@@ -66,14 +66,14 @@ const schemas = {
         .required(),
       coordinates: Joi.object({
         latitude: Joi.number().min(-90).max(90).required(),
-        longitude: Joi.number().min(-180).max(180).required(),
-      }).optional(),
+        longitude: Joi.number().min(-180).max(180).required()
+      }).optional()
     }).required(),
 
     farmSize: Joi.object({
       totalArea: Joi.number().positive().required(),
       cultivatedArea: Joi.number().positive().required(),
-      unit: Joi.string().valid('rai', 'hectare', 'sqm').default('rai'),
+      unit: Joi.string().valid('rai', 'hectare', 'sqm').default('rai')
     }).required(),
 
     landOwnership: Joi.object({
@@ -82,13 +82,13 @@ const schemas = {
       ownerName: Joi.string().when('type', {
         is: 'owned',
         then: Joi.required(),
-        otherwise: Joi.optional(),
+        otherwise: Joi.optional()
       }),
       contractDetails: Joi.string().when('type', {
         is: 'rented',
         then: Joi.required(),
-        otherwise: Joi.optional(),
-      }),
+        otherwise: Joi.optional()
+      })
     }).required(),
 
     waterSource: Joi.object({
@@ -103,22 +103,22 @@ const schemas = {
             parameter: Joi.string().required(),
             value: Joi.number().required(),
             unit: Joi.string().required(),
-            date: Joi.date().required(),
-          }),
+            date: Joi.date().required()
+          })
         )
-        .optional(),
+        .optional()
     }).required(),
 
     soilType: Joi.object({
       type: Joi.string().valid('clay', 'sandy', 'loam', 'silt', 'mixed').required(),
       ph: Joi.number().min(0).max(14).required(),
       organicMatter: Joi.number().min(0).max(100).optional(),
-      testDate: Joi.date().required(),
+      testDate: Joi.date().required()
     }).required(),
 
     farmingSystem: Joi.string()
       .valid('conventional', 'organic', 'integrated', 'traditional')
-      .required(),
+      .required()
   }),
 
   // Crop Information Validation
@@ -135,7 +135,7 @@ const schemas = {
             'root_crops',
             'cereals',
             'spices',
-            'medicinal_plants',
+            'medicinal_plants'
           )
           .required(),
 
@@ -159,8 +159,8 @@ const schemas = {
 
         intendedUse: Joi.string()
           .valid('fresh_consumption', 'processing', 'export', 'seed_production', 'medicinal')
-          .required(),
-      }),
+          .required()
+      })
     )
     .min(1)
     .required(),
@@ -183,8 +183,8 @@ const schemas = {
         Joi.object({
           category: Joi.string().required(),
           requirement: Joi.string().required(),
-          priority: Joi.string().valid('high', 'medium', 'low').default('medium'),
-        }),
+          priority: Joi.string().valid('high', 'medium', 'low').default('medium')
+        })
       )
       .optional(),
 
@@ -192,8 +192,8 @@ const schemas = {
       pestManagement: Joi.string().valid('excellent', 'good', 'fair', 'poor').optional(),
       waterManagement: Joi.string().valid('excellent', 'good', 'fair', 'poor').optional(),
       soilManagement: Joi.string().valid('excellent', 'good', 'fair', 'poor').optional(),
-      recordKeeping: Joi.string().valid('excellent', 'good', 'fair', 'poor').optional(),
-    }).optional(),
+      recordKeeping: Joi.string().valid('excellent', 'good', 'fair', 'poor').optional()
+    }).optional()
   }),
 
   // Inspection Assessment Schema
@@ -207,7 +207,7 @@ const schemas = {
         'post_harvest_handling',
         'storage_transportation',
         'record_keeping',
-        'worker_training',
+        'worker_training'
       )
       .required(),
 
@@ -226,8 +226,8 @@ const schemas = {
         Joi.object({
           type: Joi.string().valid('photo', 'document', 'measurement', 'observation').required(),
           description: Joi.string().required(),
-          value: Joi.alternatives().try(Joi.string(), Joi.number()).optional(),
-        }),
+          value: Joi.alternatives().try(Joi.string(), Joi.number()).optional()
+        })
       )
       .optional(),
 
@@ -238,17 +238,17 @@ const schemas = {
         Joi.object({
           action: Joi.string().required(),
           timeline: Joi.string().required(),
-          priority: Joi.string().valid('immediate', 'short_term', 'long_term').required(),
-        }),
+          priority: Joi.string().valid('immediate', 'short_term', 'long_term').required()
+        })
       )
       .optional(),
 
     gpsLocation: Joi.object({
       latitude: Joi.number().min(-90).max(90).required(),
-      longitude: Joi.number().min(-180).max(180).required(),
+      longitude: Joi.number().min(-180).max(180).required()
     }).optional(),
 
-    photos: Joi.array().items(Joi.string().uri()).optional(),
+    photos: Joi.array().items(Joi.string().uri()).optional()
   }),
 
   // Inspection Completion Schema
@@ -262,7 +262,7 @@ const schemas = {
     weatherConditions: Joi.object({
       temperature: Joi.number().min(-50).max(50).optional(),
       humidity: Joi.number().min(0).max(100).optional(),
-      weather: Joi.string().valid('sunny', 'cloudy', 'rainy', 'windy', 'stormy').optional(),
+      weather: Joi.string().valid('sunny', 'cloudy', 'rainy', 'windy', 'stormy').optional()
     }).optional(),
 
     inspectionDuration: Joi.number().positive().optional(),
@@ -272,8 +272,8 @@ const schemas = {
     followUpDate: Joi.date().when('followUpRequired', {
       is: true,
       then: Joi.required(),
-      otherwise: Joi.optional(),
-    }),
+      otherwise: Joi.optional()
+    })
   }),
 
   // User Registration Schema
@@ -296,33 +296,33 @@ const schemas = {
     farmingExperience: Joi.number().min(0).max(100).when('role', {
       is: 'farmer',
       then: Joi.required(),
-      otherwise: Joi.optional(),
+      otherwise: Joi.optional()
     }),
 
     farmerType: Joi.string().valid('individual', 'cooperative', 'enterprise').when('role', {
       is: 'farmer',
       then: Joi.optional(),
-      otherwise: Joi.forbidden(),
+      otherwise: Joi.forbidden()
     }),
 
     workLocation: Joi.object({
       provinces: Joi.array().items(Joi.string()).min(1).required(),
-      districts: Joi.array().items(Joi.string()).optional(),
+      districts: Joi.array().items(Joi.string()).optional()
     }).when('role', {
       is: Joi.any().valid('dtam_officer', 'inspector'),
       then: Joi.required(),
-      otherwise: Joi.optional(),
+      otherwise: Joi.optional()
     }),
 
     expertise: Joi.object({
       cropTypes: Joi.array().items(Joi.string()).min(1).required(),
       certifications: Joi.array().items(Joi.string()).optional(),
-      experience: Joi.number().min(0).required(),
+      experience: Joi.number().min(0).required()
     }).when('role', {
       is: 'inspector',
       then: Joi.required(),
-      otherwise: Joi.optional(),
-    }),
+      otherwise: Joi.optional()
+    })
   }),
 
   // Query Parameters Schema
@@ -339,7 +339,7 @@ const schemas = {
         'approved',
         'rejected',
         'certificate_issued',
-        'certificate_revoked',
+        'certificate_revoked'
       )
       .optional(),
 
@@ -357,8 +357,8 @@ const schemas = {
     endDate: Joi.date().iso().min(Joi.ref('startDate')).optional(),
 
     // Search
-    search: Joi.string().min(2).max(100).optional(),
-  }),
+    search: Joi.string().min(2).max(100).optional()
+  })
 };
 
 // Add createApplication schema after schemas object is complete
@@ -375,14 +375,14 @@ schemas.createApplication = Joi.object({
             'farming_plan',
             'cultivation_record',
             'input_record',
-            'other',
+            'other'
           )
           .required(),
         filename: Joi.string().required(),
-        description: Joi.string().max(200).optional(),
-      }),
+        description: Joi.string().max(200).optional()
+      })
     )
-    .optional(),
+    .optional()
 });
 
 /**
@@ -405,7 +405,7 @@ const validateFileUpload = (allowedTypes = [], maxSize = 10 * 1024 * 1024) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'No files uploaded',
+        message: 'No files uploaded'
       });
     }
 
@@ -415,7 +415,7 @@ const validateFileUpload = (allowedTypes = [], maxSize = 10 * 1024 * 1024) => {
       // Check file type
       if (allowedTypes.length > 0 && !allowedTypes.includes(file.mimetype)) {
         errors.push(
-          `File ${index + 1}: Invalid file type. Allowed types: ${allowedTypes.join(', ')}`,
+          `File ${index + 1}: Invalid file type. Allowed types: ${allowedTypes.join(', ')}`
         );
       }
 
@@ -434,7 +434,7 @@ const validateFileUpload = (allowedTypes = [], maxSize = 10 * 1024 * 1024) => {
       return res.status(400).json({
         success: false,
         message: 'File validation failed',
-        errors,
+        errors
       });
     }
 
@@ -534,5 +534,5 @@ module.exports = {
   sanitizeInput,
   validateThaiNationalId,
   validateThaiPostalCode,
-  validateThailandCoordinates,
+  validateThailandCoordinates
 };

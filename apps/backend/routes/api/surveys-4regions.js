@@ -15,7 +15,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const SurveyProcessEngine = require(
-  path.join(__dirname, '../../services/survey-process-engine-4regions'),
+  path.join(__dirname, '../../services/survey-process-engine-4regions')
 );
 const Survey = require(path.join(__dirname, '../../models/mongodb/Survey'));
 
@@ -66,7 +66,7 @@ const checkEngineInitialized = (req, res, next) => {
   if (!surveyEngine) {
     return res.status(503).json({
       success: false,
-      error: 'Survey engine not initialized. Please wait for database connection.',
+      error: 'Survey engine not initialized. Please wait for database connection.'
     });
   }
   next();
@@ -84,20 +84,20 @@ router.get('/templates', async (req, res) => {
   try {
     const templates = await Survey.find({
       status: 'active',
-      templateId: { $regex: /^SURVEY_TEMPLATE_/ },
+      templateId: { $regex: /^SURVEY_TEMPLATE_/ }
     }).select('templateId region title description totalQuestions metadata');
 
     res.json({
       success: true,
       count: templates.length,
-      data: templates,
+      data: templates
     });
   } catch (error) {
     logger.error('Error fetching templates:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch survey templates',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -117,33 +117,33 @@ router.get('/templates/:region', async (req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Invalid region',
-        validRegions,
+        validRegions
       });
     }
 
     const template = await Survey.findOne({
       region: region.toLowerCase(),
       status: 'active',
-      templateId: { $regex: /^SURVEY_TEMPLATE_/ },
+      templateId: { $regex: /^SURVEY_TEMPLATE_/ }
     });
 
     if (!template) {
       return res.status(404).json({
         success: false,
-        error: `Template not found for region: ${region}`,
+        error: `Template not found for region: ${region}`
       });
     }
 
     res.json({
       success: true,
-      data: template,
+      data: template
     });
   } catch (error) {
     logger.error('Error fetching template:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch survey template',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -167,20 +167,20 @@ router.post('/wizard/start', auth, checkEngineInitialized, async (req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Missing required fields',
-        required: ['region'],
+        required: ['region']
       });
     }
 
     // Get template for this region
     const template = await Survey.findOne({
       templateId: `SURVEY_TEMPLATE_${region.toUpperCase()}`,
-      status: 'active',
+      status: 'active'
     });
 
     if (!template) {
       return res.status(404).json({
         success: false,
-        error: `No template found for region: ${region}`,
+        error: `No template found for region: ${region}`
       });
     }
 
@@ -189,14 +189,14 @@ router.post('/wizard/start', auth, checkEngineInitialized, async (req, res) => {
       surveyId: template._id,
       userId,
       region,
-      farmId,
+      farmId
     });
 
     // Check if engine returned success
     if (!result.success || !result.data) {
       return res.status(500).json({
         success: false,
-        error: result.error || 'Failed to create survey response',
+        error: result.error || 'Failed to create survey response'
       });
     }
 
@@ -210,15 +210,15 @@ router.post('/wizard/start', auth, checkEngineInitialized, async (req, res) => {
         region: surveyResponse.region,
         currentStep: surveyResponse.currentStep,
         progress: surveyResponse.progress,
-        totalSteps: 7,
-      },
+        totalSteps: 7
+      }
     });
   } catch (error) {
     logger.error('Error starting wizard:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to start survey wizard',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -237,7 +237,7 @@ router.get('/wizard/:surveyId/current', auth, async (req, res) => {
     if (!survey) {
       return res.status(404).json({
         success: false,
-        error: 'Survey not found',
+        error: 'Survey not found'
       });
     }
 
@@ -245,18 +245,18 @@ router.get('/wizard/:surveyId/current', auth, async (req, res) => {
     if (survey.userId.toString() !== userId) {
       return res.status(403).json({
         success: false,
-        error: 'Unauthorized access to survey',
+        error: 'Unauthorized access to survey'
       });
     }
 
     // Get current step questions
     const template = await Survey.findOne({
       region: survey.region,
-      templateId: { $regex: /^SURVEY_TEMPLATE_/ },
+      templateId: { $regex: /^SURVEY_TEMPLATE_/ }
     });
 
     const currentStepQuestions = template.sections.find(
-      section => section.id === survey.wizardData.currentStep,
+      section => section.id === survey.wizardData.currentStep
     );
 
     res.json({
@@ -268,15 +268,15 @@ router.get('/wizard/:surveyId/current', auth, async (req, res) => {
         totalSteps: 7,
         stepData: survey.wizardData.stepData[survey.wizardData.currentStep] || {},
         questions: currentStepQuestions?.questions || [],
-        region: survey.region,
-      },
+        region: survey.region
+      }
     });
   } catch (error) {
     logger.error('Error fetching wizard state:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch wizard state',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -297,7 +297,7 @@ router.put('/wizard/:surveyId/step/:stepId', auth, async (req, res) => {
       surveyId,
       parseInt(stepId),
       stepData,
-      userId,
+      userId
     );
 
     res.json({
@@ -308,15 +308,15 @@ router.put('/wizard/:surveyId/step/:stepId', auth, async (req, res) => {
         stepId: parseInt(stepId),
         currentStep: result.currentStep,
         progress: result.progress,
-        isComplete: result.isComplete,
-      },
+        isComplete: result.isComplete
+      }
     });
   } catch (error) {
     logger.error('Error updating wizard step:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to update wizard step',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -343,15 +343,15 @@ router.post('/wizard/:surveyId/submit', auth, async (req, res) => {
         regionalBonus: result.regionalBonus,
         totalScore: result.totalScore,
         recommendations: result.recommendations,
-        submittedAt: result.submittedAt,
-      },
+        submittedAt: result.submittedAt
+      }
     });
   } catch (error) {
     logger.error('Error submitting wizard:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to submit survey',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -369,13 +369,13 @@ router.get('/wizard/:surveyId/progress', auth, checkEngineInitialized, async (re
 
     // Get survey response from engine
     const surveyResponse = await surveyEngine.surveyResponses.findOne({
-      _id: new ObjectId(surveyId),
+      _id: new ObjectId(surveyId)
     });
 
     if (!surveyResponse) {
       return res.status(404).json({
         success: false,
-        error: 'Survey not found',
+        error: 'Survey not found'
       });
     }
 
@@ -383,7 +383,7 @@ router.get('/wizard/:surveyId/progress', auth, checkEngineInitialized, async (re
     if (surveyResponse.userId !== userId) {
       return res.status(403).json({
         success: false,
-        error: 'Unauthorized access',
+        error: 'Unauthorized access'
       });
     }
 
@@ -395,7 +395,7 @@ router.get('/wizard/:surveyId/progress', auth, checkEngineInitialized, async (re
       step4: { name: 'Management', completed: !!surveyResponse.managementProduction },
       step5: { name: 'Cost & Revenue', completed: !!surveyResponse.costRevenue },
       step6: { name: 'Market & Sales', completed: !!surveyResponse.marketSales },
-      step7: { name: 'Problems & Needs', completed: !!surveyResponse.problemsNeeds },
+      step7: { name: 'Problems & Needs', completed: !!surveyResponse.problemsNeeds }
     };
 
     const completedSteps = Object.values(stepCompletion).filter(s => s.completed).length;
@@ -412,15 +412,15 @@ router.get('/wizard/:surveyId/progress', auth, checkEngineInitialized, async (re
         completedSteps,
         totalSteps,
         status: surveyResponse.state,
-        lastSaved: surveyResponse.lastSavedAt,
-      },
+        lastSaved: surveyResponse.lastSavedAt
+      }
     });
   } catch (error) {
     logger.error('Error fetching progress:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch progress',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -449,14 +449,14 @@ router.get('/my-surveys', auth, async (req, res) => {
     res.json({
       success: true,
       count: surveys.length,
-      data: surveys,
+      data: surveys
     });
   } catch (error) {
     logger.error('Error fetching surveys:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch surveys',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -475,7 +475,7 @@ router.get('/:surveyId', auth, async (req, res) => {
     if (!survey) {
       return res.status(404).json({
         success: false,
-        error: 'Survey not found',
+        error: 'Survey not found'
       });
     }
 
@@ -483,20 +483,20 @@ router.get('/:surveyId', auth, async (req, res) => {
     if (survey.userId.toString() !== userId && req.user.role !== 'admin') {
       return res.status(403).json({
         success: false,
-        error: 'Unauthorized access',
+        error: 'Unauthorized access'
       });
     }
 
     res.json({
       success: true,
-      data: survey,
+      data: survey
     });
   } catch (error) {
     logger.error('Error fetching survey:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch survey',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -515,7 +515,7 @@ router.delete('/:surveyId', auth, async (req, res) => {
     if (!survey) {
       return res.status(404).json({
         success: false,
-        error: 'Survey not found',
+        error: 'Survey not found'
       });
     }
 
@@ -523,7 +523,7 @@ router.delete('/:surveyId', auth, async (req, res) => {
     if (survey.userId.toString() !== userId) {
       return res.status(403).json({
         success: false,
-        error: 'Unauthorized',
+        error: 'Unauthorized'
       });
     }
 
@@ -531,7 +531,7 @@ router.delete('/:surveyId', auth, async (req, res) => {
     if (survey.status !== 'DRAFT') {
       return res.status(400).json({
         success: false,
-        error: 'Can only delete draft surveys',
+        error: 'Can only delete draft surveys'
       });
     }
 
@@ -539,14 +539,14 @@ router.delete('/:surveyId', auth, async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Survey deleted successfully',
+      message: 'Survey deleted successfully'
     });
   } catch (error) {
     logger.error('Error deleting survey:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to delete survey',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -568,14 +568,14 @@ router.get('/analytics/regional/:region', auth, async (req, res) => {
     res.json({
       success: true,
       region,
-      data: analytics,
+      data: analytics
     });
   } catch (error) {
     logger.error('Error fetching regional analytics:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch analytics',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -592,7 +592,7 @@ router.post('/analytics/compare', auth, async (req, res) => {
     if (!regions || !Array.isArray(regions) || regions.length < 2) {
       return res.status(400).json({
         success: false,
-        error: 'Please provide at least 2 regions to compare',
+        error: 'Please provide at least 2 regions to compare'
       });
     }
 
@@ -600,14 +600,14 @@ router.post('/analytics/compare', auth, async (req, res) => {
 
     res.json({
       success: true,
-      data: comparison,
+      data: comparison
     });
   } catch (error) {
     logger.error('Error comparing regions:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to compare regions',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -631,19 +631,19 @@ router.get('/analytics/overview', auth, async (req, res) => {
       regions: regions.reduce((obj, region, index) => {
         obj[region] = results[index];
         return obj;
-      }, {}),
+      }, {})
     };
 
     res.json({
       success: true,
-      data: overview,
+      data: overview
     });
   } catch (error) {
     logger.error('Error fetching overview:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch overview',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -662,7 +662,7 @@ router.get('/admin/all', auth, async (req, res) => {
     if (req.user.role !== 'admin' && req.user.role !== 'reviewer') {
       return res.status(403).json({
         success: false,
-        error: 'Admin access required',
+        error: 'Admin access required'
       });
     }
 
@@ -687,15 +687,15 @@ router.get('/admin/all', auth, async (req, res) => {
       pagination: {
         total: count,
         page: parseInt(page),
-        pages: Math.ceil(count / limit),
-      },
+        pages: Math.ceil(count / limit)
+      }
     });
   } catch (error) {
     logger.error('Error fetching all surveys:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to fetch surveys',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -710,7 +710,7 @@ router.put('/admin/:surveyId/review', auth, async (req, res) => {
     if (req.user.role !== 'admin' && req.user.role !== 'reviewer') {
       return res.status(403).json({
         success: false,
-        error: 'Reviewer access required',
+        error: 'Reviewer access required'
       });
     }
 
@@ -722,7 +722,7 @@ router.put('/admin/:surveyId/review', auth, async (req, res) => {
     if (!survey) {
       return res.status(404).json({
         success: false,
-        error: 'Survey not found',
+        error: 'Survey not found'
       });
     }
 
@@ -747,15 +747,15 @@ router.put('/admin/:surveyId/review', auth, async (req, res) => {
       data: {
         surveyId,
         status: survey.status,
-        reviewedAt: survey.reviewedAt,
-      },
+        reviewedAt: survey.reviewedAt
+      }
     });
   } catch (error) {
     logger.error('Error reviewing survey:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to review survey',
-      message: error.message,
+      message: error.message
     });
   }
 });
@@ -769,7 +769,7 @@ router.use((error, req, res, _next) => {
   res.status(500).json({
     success: false,
     error: 'Internal server error',
-    message: process.env.NODE_ENV === 'development' ? error.message : undefined,
+    message: process.env.NODE_ENV === 'development' ? error.message : undefined
   });
 });
 

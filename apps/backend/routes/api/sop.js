@@ -20,7 +20,7 @@ const handleValidationErrors = (req, res, next) => {
     return res.status(400).json({
       success: false,
       message: 'Validation errors',
-      errors: errors.array(),
+      errors: errors.array()
     });
   }
   next();
@@ -49,7 +49,7 @@ router.get(
         'rice',
         'flower',
         'spice',
-        'other',
+        'other'
       ]),
     query('status')
       .optional()
@@ -59,7 +59,7 @@ router.get(
     query('medicalPurpose').optional().isString(),
     query('page').optional().isInt({ min: 1 }),
     query('limit').optional().isInt({ min: 1, max: 100 }),
-    query('search').optional().isString(),
+    query('search').optional().isString()
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -72,7 +72,7 @@ router.get(
         medicalPurpose,
         page = 1,
         limit = 20,
-        search,
+        search
       } = req.query;
 
       // Build query
@@ -88,7 +88,7 @@ router.get(
           { title: { $regex: search, $options: 'i' } },
           { titleTH: { $regex: search, $options: 'i' } },
           { description: { $regex: search, $options: 'i' } },
-          { tags: { $in: [new RegExp(search, 'i')] } },
+          { tags: { $in: [new RegExp(search, 'i')] } }
         ];
       }
 
@@ -98,7 +98,7 @@ router.get(
         limit: parseInt(limit),
         sort: { 'usage.timesUsed': -1, createdAt: -1 },
         select:
-          'sopCode title titleTH description cropType cannabisDetails.strain difficulty status usage.timesUsed createdAt versionString',
+          'sopCode title titleTH description cropType cannabisDetails.strain difficulty status usage.timesUsed createdAt versionString'
       };
 
       const result = await SOP.paginate(query, options);
@@ -112,19 +112,19 @@ router.get(
             pages: result.totalPages,
             total: result.totalDocs,
             hasNext: result.hasNextPage,
-            hasPrev: result.hasPrevPage,
-          },
-        },
+            hasPrev: result.hasPrevPage
+          }
+        }
       });
     } catch (error) {
       logger.error('Error fetching SOPs:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching SOPs',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 /**
@@ -139,7 +139,7 @@ router.get(
     query('strain').optional().isIn(['indica', 'sativa', 'hybrid', 'cbd_dominant', 'thc_dominant']),
     query('medicalPurpose')
       .optional()
-      .isIn(['pain_relief', 'anxiety', 'epilepsy', 'cancer_treatment', 'sleep_disorder', 'other']),
+      .isIn(['pain_relief', 'anxiety', 'epilepsy', 'cancer_treatment', 'sleep_disorder', 'other'])
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -152,18 +152,18 @@ router.get(
         success: true,
         data: {
           sops,
-          count: sops.length,
-        },
+          count: sops.length
+        }
       });
     } catch (error) {
       logger.error('Error fetching cannabis SOPs:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching cannabis SOPs',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 /**
@@ -185,7 +185,7 @@ router.get(
       if (!sop) {
         return res.status(404).json({
           success: false,
-          message: 'SOP not found',
+          message: 'SOP not found'
         });
       }
 
@@ -194,23 +194,23 @@ router.get(
         { sopCode },
         {
           $inc: { 'usage.timesUsed': 1 },
-          $set: { 'usage.lastUsed': new Date() },
-        },
+          $set: { 'usage.lastUsed': new Date() }
+        }
       );
 
       res.json({
         success: true,
-        data: { sop },
+        data: { sop }
       });
     } catch (error) {
       logger.error('Error fetching SOP:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching SOP',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 /**
@@ -234,10 +234,10 @@ router.post(
       'rice',
       'flower',
       'spice',
-      'other',
+      'other'
     ]),
     body('phases').isArray({ min: 1 }),
-    body('difficulty').optional().isIn(['easy', 'medium', 'hard', 'expert']),
+    body('difficulty').optional().isIn(['easy', 'medium', 'hard', 'expert'])
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -249,9 +249,9 @@ router.post(
             userId: req.user.id,
             name: req.user.firstName + ' ' + req.user.lastName,
             role: req.user.role,
-            createdAt: new Date(),
-          },
-        },
+            createdAt: new Date()
+          }
+        }
       };
 
       const sop = new SOP(sopData);
@@ -263,18 +263,18 @@ router.post(
         data: {
           sopCode: sop.sopCode,
           title: sop.title,
-          status: sop.status,
-        },
+          status: sop.status
+        }
       });
     } catch (error) {
       logger.error('Error creating SOP:', error);
       res.status(500).json({
         success: false,
         message: 'Error creating SOP',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 /**
@@ -296,7 +296,7 @@ router.put(
       if (!sop) {
         return res.status(404).json({
           success: false,
-          message: 'SOP not found',
+          message: 'SOP not found'
         });
       }
 
@@ -309,7 +309,7 @@ router.put(
       if (!canEdit) {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions to edit this SOP',
+          message: 'Insufficient permissions to edit this SOP'
         });
       }
 
@@ -328,18 +328,18 @@ router.put(
         message: 'SOP updated successfully',
         data: {
           sopCode: sop.sopCode,
-          version: sop.versionString,
-        },
+          version: sop.versionString
+        }
       });
     } catch (error) {
       logger.error('Error updating SOP:', error);
       res.status(500).json({
         success: false,
         message: 'Error updating SOP',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 /**
@@ -354,7 +354,7 @@ router.post(
     param('sopCode').isString().notEmpty(),
     body('farmCode').isString().notEmpty(),
     body('rating').isInt({ min: 1, max: 5 }),
-    body('comment').optional().isString().isLength({ max: 500 }),
+    body('comment').optional().isString().isLength({ max: 500 })
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -367,7 +367,7 @@ router.post(
       if (!sop) {
         return res.status(404).json({
           success: false,
-          message: 'SOP not found',
+          message: 'SOP not found'
         });
       }
 
@@ -378,17 +378,17 @@ router.post(
 
       res.json({
         success: true,
-        message: 'Feedback added successfully',
+        message: 'Feedback added successfully'
       });
     } catch (error) {
       logger.error('Error adding SOP feedback:', error);
       res.status(500).json({
         success: false,
         message: 'Error adding feedback',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 /**
@@ -403,7 +403,7 @@ router.post(
   [
     param('sopCode').isString().notEmpty(),
     body('cultivationRecordCode').isString().notEmpty(),
-    body('customizations').optional().isArray(),
+    body('customizations').optional().isArray()
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -416,18 +416,18 @@ router.post(
       if (!sop) {
         return res.status(404).json({
           success: false,
-          message: 'SOP not found',
+          message: 'SOP not found'
         });
       }
 
       // Find cultivation record
       const cultivationRecord = await EnhancedCultivationRecord.findOne({
-        recordCode: cultivationRecordCode,
+        recordCode: cultivationRecordCode
       });
       if (!cultivationRecord) {
         return res.status(404).json({
           success: false,
-          message: 'Cultivation record not found',
+          message: 'Cultivation record not found'
         });
       }
 
@@ -438,7 +438,7 @@ router.post(
           sopTitle: sop.title,
           sopVersion: sop.versionString,
           adoptedAt: new Date(),
-          customizations,
+          customizations
         },
         complianceTracking: {
           overallCompliance: 0,
@@ -448,10 +448,10 @@ router.post(
             completedSteps: 0,
             totalSteps: phase.steps ? phase.steps.length : 0,
             compliancePercentage: 0,
-            status: 'not_started',
+            status: 'not_started'
           })),
-          deviations: [],
-        },
+          deviations: []
+        }
       };
 
       // Generate activities from SOP steps
@@ -468,9 +468,9 @@ router.post(
                 {
                   userId: req.user.id,
                   name: req.user.firstName + ' ' + req.user.lastName,
-                  role: req.user.role,
-                },
-              ],
+                  role: req.user.role
+                }
+              ]
             });
           }
         }
@@ -487,18 +487,18 @@ router.post(
         data: {
           cultivationRecordCode,
           sopCode,
-          activitiesGenerated: cultivationRecord.sopActivities.length,
-        },
+          activitiesGenerated: cultivationRecord.sopActivities.length
+        }
       });
     } catch (error) {
       logger.error('Error adopting SOP:', error);
       res.status(500).json({
         success: false,
         message: 'Error adopting SOP',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 /**
@@ -514,7 +514,7 @@ router.get(
     query('status')
       .optional()
       .isIn(['planned', 'in_progress', 'completed', 'skipped', 'failed', 'rescheduled']),
-    query('phase').optional().isString(),
+    query('phase').optional().isString()
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -527,7 +527,7 @@ router.get(
       if (!cultivationRecord) {
         return res.status(404).json({
           success: false,
-          message: 'Cultivation record not found',
+          message: 'Cultivation record not found'
         });
       }
 
@@ -550,18 +550,18 @@ router.get(
           compliance: cultivationRecord.sopCompliancePercentage,
           totalActivities: cultivationRecord.sopActivities.length,
           completedActivities: cultivationRecord.sopActivities.filter(a => a.status === 'completed')
-            .length,
-        },
+            .length
+        }
       });
     } catch (error) {
       logger.error('Error fetching SOP activities:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching activities',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 /**
@@ -581,12 +581,12 @@ router.put(
       'completed',
       'skipped',
       'failed',
-      'rescheduled',
+      'rescheduled'
     ]),
     body('notes').optional().isString(),
     body('photos').optional().isArray(),
     body('materialsUsed').optional().isArray(),
-    body('qualityMeasurements').optional().isArray(),
+    body('qualityMeasurements').optional().isArray()
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -599,7 +599,7 @@ router.put(
       if (!cultivationRecord) {
         return res.status(404).json({
           success: false,
-          message: 'Cultivation record not found',
+          message: 'Cultivation record not found'
         });
       }
 
@@ -608,7 +608,7 @@ router.put(
       if (!activity) {
         return res.status(404).json({
           success: false,
-          message: 'Activity not found',
+          message: 'Activity not found'
         });
       }
 
@@ -621,8 +621,8 @@ router.put(
           {
             userId: req.user.id,
             name: req.user.firstName + ' ' + req.user.lastName,
-            timestamp: new Date(),
-          },
+            timestamp: new Date()
+          }
         ];
       }
 
@@ -637,18 +637,18 @@ router.put(
         data: {
           activityId,
           status: activity.status,
-          compliance: cultivationRecord.sopCompliancePercentage,
-        },
+          compliance: cultivationRecord.sopCompliancePercentage
+        }
       });
     } catch (error) {
       logger.error('Error updating SOP activity:', error);
       res.status(500).json({
         success: false,
         message: 'Error updating activity',
-        error: error.message,
+        error: error.message
       });
     }
-  },
+  }
 );
 
 module.exports = router;

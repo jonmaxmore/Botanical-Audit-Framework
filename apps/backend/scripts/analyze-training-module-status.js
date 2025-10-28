@@ -16,7 +16,7 @@ class TrainingModuleStatusAnalyzer {
       missingComponents: [],
       businessLogicGaps: [],
       workflowIssues: [],
-      recommendations: [],
+      recommendations: []
     };
 
     this.trainingModulePath = path.join(__dirname, '../modules/training');
@@ -67,7 +67,7 @@ class TrainingModuleStatusAnalyzer {
         'CreateCourseUseCase.js',
         'EnrollInCourseUseCase.js',
         'UpdateProgressUseCase.js',
-        'CompleteCourseUseCase.js',
+        'CompleteCourseUseCase.js'
       ],
       'infrastructure/repositories': ['CourseRepository.js', 'EnrollmentRepository.js'],
       'presentation/controllers': ['EnhancedTrainingController.js'],
@@ -75,9 +75,9 @@ class TrainingModuleStatusAnalyzer {
       services: [
         'AdvancedTrainingAnalyticsSystem.js',
         'CertificationTrackingIntegrationSystem.js',
-        'PerformanceAssessmentToolsSystem.js',
+        'PerformanceAssessmentToolsSystem.js'
       ],
-      '__tests__/integration': ['enhanced-training-module.integration.test.js'],
+      '__tests__/integration': ['enhanced-training-module.integration.test.js']
     };
 
     let totalFiles = 0;
@@ -104,14 +104,14 @@ class TrainingModuleStatusAnalyzer {
 
     const completionRate = Math.round((existingFiles / totalFiles) * 100);
     console.log(
-      `\n  📊 File Structure Completion: ${completionRate}% (${existingFiles}/${totalFiles})`,
+      `\n  📊 File Structure Completion: ${completionRate}% (${existingFiles}/${totalFiles})`
     );
 
     this.results.currentStatus.fileStructure = {
       completionRate,
       existingFiles,
       totalFiles,
-      missingFiles: totalFiles - existingFiles,
+      missingFiles: totalFiles - existingFiles
     };
   }
 
@@ -123,23 +123,23 @@ class TrainingModuleStatusAnalyzer {
       {
         name: 'Course Management Logic',
         file: 'domain/entities/Course.js',
-        keywords: ['validate', 'business rules', 'status', 'prerequisites'],
+        keywords: ['validate', 'business rules', 'status', 'prerequisites']
       },
       {
         name: 'Enrollment Workflow',
         file: 'domain/entities/Enrollment.js',
-        keywords: ['progress tracking', 'completion', 'assessment', 'certificate'],
+        keywords: ['progress tracking', 'completion', 'assessment', 'certificate']
       },
       {
         name: 'Enhanced Service Integration',
         file: 'domain/services/EnhancedTrainingServiceIntegration.js',
-        keywords: ['analytics integration', 'certification tracking', 'performance assessment'],
+        keywords: ['analytics integration', 'certification tracking', 'performance assessment']
       },
       {
         name: 'Analytics System',
         file: 'services/AdvancedTrainingAnalyticsSystem.js',
-        keywords: ['predictive analytics', 'learning patterns', 'performance metrics'],
-      },
+        keywords: ['predictive analytics', 'learning patterns', 'performance metrics']
+      }
     ];
 
     let implementedLogic = 0;
@@ -150,7 +150,7 @@ class TrainingModuleStatusAnalyzer {
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, 'utf8');
         const hasBusinessLogic = check.keywords.some(keyword =>
-          content.toLowerCase().includes(keyword.toLowerCase()),
+          content.toLowerCase().includes(keyword.toLowerCase())
         );
 
         if (hasBusinessLogic) {
@@ -172,7 +172,7 @@ class TrainingModuleStatusAnalyzer {
     this.results.currentStatus.businessLogic = {
       score: businessLogicScore,
       implementedChecks: implementedLogic,
-      totalChecks: businessLogicChecks.length,
+      totalChecks: businessLogicChecks.length
     };
   }
 
@@ -184,23 +184,23 @@ class TrainingModuleStatusAnalyzer {
       {
         name: 'Enrollment Workflow',
         description: 'Complete enrollment process from registration to completion',
-        components: ['enrollment creation', 'progress tracking', 'completion certification'],
+        components: ['enrollment creation', 'progress tracking', 'completion certification']
       },
       {
         name: 'Assessment Workflow',
         description: 'Assessment and certification process',
-        components: ['assessment creation', 'scoring logic', 'certificate generation'],
+        components: ['assessment creation', 'scoring logic', 'certificate generation']
       },
       {
         name: 'Analytics Integration',
         description: 'Integration with analytics and performance systems',
-        components: ['data collection', 'analytics processing', 'reporting dashboard'],
+        components: ['data collection', 'analytics processing', 'reporting dashboard']
       },
       {
         name: 'Government Integration',
         description: 'Integration with government certification systems',
-        components: ['compliance reporting', 'certificate submission', 'status tracking'],
-      },
+        components: ['compliance reporting', 'certificate submission', 'status tracking']
+      }
     ];
 
     let implementedWorkflows = 0;
@@ -225,7 +225,7 @@ class TrainingModuleStatusAnalyzer {
         logger.info(`    ❌ ${workflow.name} - Missing: ${missingComponents.join(', ')}`);
         this.results.workflowIssues.push({
           workflow: workflow.name,
-          missingComponents,
+          missingComponents
         });
       }
     }
@@ -236,7 +236,7 @@ class TrainingModuleStatusAnalyzer {
     this.results.currentStatus.workflowIntegration = {
       score: workflowScore,
       implementedWorkflows,
-      totalWorkflows: workflowChecks.length,
+      totalWorkflows: workflowChecks.length
     };
   }
 
@@ -255,8 +255,8 @@ class TrainingModuleStatusAnalyzer {
           'completeCourse',
           'getAnalytics',
           'getCertificationStatus',
-          'getSystemStatus',
-        ],
+          'getSystemStatus'
+        ]
       },
       {
         name: 'Enhanced Training Routes',
@@ -267,9 +267,9 @@ class TrainingModuleStatusAnalyzer {
           'PUT /progress',
           'GET /analytics',
           'GET /certifications',
-          'GET /system/status',
-        ],
-      },
+          'GET /system/status'
+        ]
+      }
     ];
 
     let implementedAPIs = 0;
@@ -303,7 +303,7 @@ class TrainingModuleStatusAnalyzer {
     this.results.currentStatus.apiImplementation = {
       score: apiScore,
       implementedAPIs,
-      totalAPIs: apiComponents.length,
+      totalAPIs: apiComponents.length
     };
   }
 
@@ -361,7 +361,7 @@ class TrainingModuleStatusAnalyzer {
         (scores.businessLogic?.score || 0) +
         (scores.workflowIntegration?.score || 0) +
         (scores.apiImplementation?.score || 0)) /
-        4,
+        4
     );
 
     this.results.currentStatus.overallScore = overallScore;
@@ -371,40 +371,40 @@ class TrainingModuleStatusAnalyzer {
       this.results.recommendations = [
         'Training Module มีความสมบูรณ์สูง - พร้อม Production',
         'ควรทำการ Integration Testing เพื่อยืนยันการทำงาน',
-        'เพิ่ม Performance Optimization และ Monitoring',
+        'เพิ่ม Performance Optimization และ Monitoring'
       ];
     } else if (overallScore >= 75) {
       this.results.recommendations = [
         'Training Module ใกล้เสร็จสมบูรณ์ - ต้องการการพัฒนาเพิ่มเติม',
         'เพิ่มเติม Business Logic ที่ขาดหายไป',
         'ปรับปรุง Workflow Integration ให้สมบูรณ์',
-        'เสริม API Implementation ให้ครบถ้วน',
+        'เสริม API Implementation ให้ครบถ้วน'
       ];
     } else {
       this.results.recommendations = [
         'Training Module ต้องการการพัฒนาเพิ่มเติมอย่างมาก',
         'เริ่มจากการสร้าง Missing Components ที่จำเป็น',
         'พัฒนา Business Logic และ Workflow Integration',
-        'สร้าง API Layer ที่สมบูรณ์',
+        'สร้าง API Layer ที่สมบูรณ์'
       ];
     }
 
     // เพิ่มข้อเสนะแนะเฉพาะ
     if (this.results.missingComponents.length > 0) {
       this.results.recommendations.push(
-        `สร้างไฟล์ที่ขาดหายไป: ${this.results.missingComponents.length} ไฟล์`,
+        `สร้างไฟล์ที่ขาดหายไป: ${this.results.missingComponents.length} ไฟล์`
       );
     }
 
     if (this.results.businessLogicGaps.length > 0) {
       this.results.recommendations.push(
-        'เสริม Business Logic ใน: ' + this.results.businessLogicGaps.join(', '),
+        'เสริม Business Logic ใน: ' + this.results.businessLogicGaps.join(', ')
       );
     }
 
     if (this.results.workflowIssues.length > 0) {
       this.results.recommendations.push(
-        'แก้ไข Workflow Issues: ' + this.results.workflowIssues.length + ' workflow',
+        'แก้ไข Workflow Issues: ' + this.results.workflowIssues.length + ' workflow'
       );
     }
   }

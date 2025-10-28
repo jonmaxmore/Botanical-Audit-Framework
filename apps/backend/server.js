@@ -54,17 +54,17 @@ app.use(
     hsts: {
       maxAge: 31536000, // 1 year in seconds
       includeSubDomains: true,
-      preload: true,
+      preload: true
     },
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
         scriptSrc: ["'self'"],
-        imgSrc: ["'self'", 'data:', 'https:'],
-      },
-    },
-  }),
+        imgSrc: ["'self'", 'data:', 'https:']
+      }
+    }
+  })
 ); // Security headers with HSTS
 app.use(compression()); // Response compression
 
@@ -73,7 +73,7 @@ const corsOptions = createCorsOptions({
   environment: config.app.environment,
   customOrigins: process.env.ALLOWED_ORIGINS?.split(',') || [],
   allowPatterns: process.env.NODE_ENV !== 'production',
-  logRejected: true,
+  logRejected: true
 });
 app.use(cors(corsOptions));
 app.use(corsLoggingMiddleware()); // Log CORS requests
@@ -88,8 +88,8 @@ app.use(
         return false;
       }
       return compression.filter(req, res);
-    },
-  }),
+    }
+  })
 );
 
 app.use(express.json({ limit: '10mb' }));
@@ -103,12 +103,12 @@ app.use((req, res, next) => {
       appLogger.warn('Request timeout', {
         method: req.method,
         url: req.url,
-        ip: req.ip,
+        ip: req.ip
       });
       res.status(408).json({
         success: false,
         error: 'REQUEST_TIMEOUT',
-        message: 'Request took too long to process',
+        message: 'Request took too long to process'
       });
     }
   });
@@ -119,12 +119,12 @@ app.use((req, res, next) => {
       appLogger.error('Response timeout', {
         method: req.method,
         url: req.url,
-        ip: req.ip,
+        ip: req.ip
       });
       res.status(503).json({
         success: false,
         error: 'SERVICE_UNAVAILABLE',
-        message: 'Server is overloaded',
+        message: 'Server is overloaded'
       });
     }
   });
@@ -135,8 +135,8 @@ app.use((req, res, next) => {
 // Logging middleware
 app.use(
   morgan('combined', {
-    stream: { write: message => appLogger.info(message.trim()) },
-  }),
+    stream: { write: message => appLogger.info(message.trim()) }
+  })
 );
 
 // Request validation middleware
@@ -156,7 +156,7 @@ app.use((req, res, next) => {
         path: req.path,
         duration,
         query: req.query,
-        userAgent: req.get('User-Agent'),
+        userAgent: req.get('User-Agent')
       });
     }
   });
@@ -173,7 +173,7 @@ app.use((req, res, next) => {
       status: 'error',
       message: 'Internal server error',
       code: 'INTERNAL_ERROR',
-      requestId: req.id,
+      requestId: req.id
     });
   }
 });
@@ -195,7 +195,7 @@ app.get('/api/status', (req, res) => {
     mongodb: mongoManager.getStatus(),
     redis: redisManager.getStatus(),
     uptime: process.uptime(),
-    requestId: req.id,
+    requestId: req.id
   });
 });
 
@@ -210,7 +210,7 @@ app.get('/api/health', async (req, res) => {
     cache: redisHealth.status,
     notifications: io ? 'operational' : 'unavailable',
     fileStorage: await metrics.checkStorageHealth(),
-    system: systemHealth.status,
+    system: systemHealth.status
   };
 
   // Consider system healthy if critical services (database, system) are healthy
@@ -231,11 +231,11 @@ app.get('/api/health', async (req, res) => {
     details: {
       mongodb: mongoHealth,
       redis: redisHealth,
-      system: systemHealth,
+      system: systemHealth
     },
     timestamp: new Date(),
     version: config.app.version,
-    environment: config.app.environment,
+    environment: config.app.environment
   };
 
   res.status(isHealthy ? 200 : 503).json(health);

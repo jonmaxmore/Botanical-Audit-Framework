@@ -23,7 +23,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
         'document-management',
         'payment-service',
         'notification-service',
-        'reporting-analytics',
+        'reporting-analytics'
       ],
       extensions: ['certificate-management', 'system-integration'],
       additional: [
@@ -32,8 +32,8 @@ class GACPSystemIntegrationTest extends EventEmitter {
         'survey-system',
         'track-trace',
         'standards-comparison',
-        'farm-management',
-      ],
+        'farm-management'
+      ]
     };
   }
 
@@ -52,8 +52,8 @@ class GACPSystemIntegrationTest extends EventEmitter {
         { name: 'DTAM Approval', status: 'DTAM_APPROVED', payment: null },
         { name: 'Payment Phase 2', status: 'PAYMENT_PENDING_2', payment: 25000 },
         { name: 'Field Inspection', status: 'FIELD_INSPECTION', payment: null },
-        { name: 'Certificate Generation', status: 'CERTIFICATE_READY', payment: null },
-      ],
+        { name: 'Certificate Generation', status: 'CERTIFICATE_READY', payment: null }
+      ]
     };
 
     let passed = 0;
@@ -123,7 +123,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       age: 25,
       nationality: 'THAI',
       farmSize: 2.5,
-      location: 'CHIANG_MAI',
+      location: 'CHIANG_MAI'
     };
 
     const rules = {
@@ -131,7 +131,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       maxAge: 70,
       validNationalities: ['THAI'],
       minFarmSize: 0.25,
-      validProvinces: ['CHIANG_MAI', 'BANGKOK', 'KHON_KAEN'],
+      validProvinces: ['CHIANG_MAI', 'BANGKOK', 'KHON_KAEN']
     };
 
     return (
@@ -150,7 +150,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       'FARM_REGISTRATION',
       'LAND_OWNERSHIP',
       'WATER_ANALYSIS',
-      'SOIL_ANALYSIS',
+      'SOIL_ANALYSIS'
     ];
 
     const uploadedDocuments = [
@@ -158,7 +158,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       'FARM_REGISTRATION',
       'LAND_OWNERSHIP',
       'WATER_ANALYSIS',
-      'SOIL_ANALYSIS',
+      'SOIL_ANALYSIS'
     ];
 
     return requiredDocuments.every(doc => uploadedDocuments.includes(doc));
@@ -167,7 +167,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
   validatePaymentLogic(amount, phase) {
     const feeStructure = {
       1: 5000, // Document review fee
-      2: 25000, // Field inspection + certificate fee
+      2: 25000 // Field inspection + certificate fee
     };
 
     return feeStructure[phase] === amount;
@@ -180,7 +180,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       farmRegistrationValid: true,
       landOwnershipValid: true,
       waterAnalysisValid: true,
-      soilAnalysisValid: true,
+      soilAnalysisValid: true
     };
 
     return Object.values(documents).every(isValid => isValid);
@@ -192,7 +192,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       documentsComplete: true,
       paymentReceived: true,
       farmEligible: true,
-      noViolations: true,
+      noViolations: true
     };
 
     return Object.values(criteria).every(criterion => criterion);
@@ -205,7 +205,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       cropVarietiesValid: true,
       practicesCompliant: true,
       recordsAccurate: true,
-      facilitiesAdequate: true,
+      facilitiesAdequate: true
     };
 
     return Object.values(inspection).every(check => check);
@@ -217,7 +217,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       inspectionPassed: true,
       allPaymentsReceived: true,
       documentsApproved: true,
-      complianceVerified: true,
+      complianceVerified: true
     };
 
     return Object.values(requirements).every(req => req);
@@ -236,7 +236,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       { from: 'Application Workflow', to: 'Notification Service', event: 'status_changed' },
       { from: 'Certificate Management', to: 'Document Management', event: 'certificate_generated' },
       { from: 'All Modules', to: 'Audit', event: 'activity_logged' },
-      { from: 'All Modules', to: 'Reporting Analytics', event: 'metrics_collected' },
+      { from: 'All Modules', to: 'Reporting Analytics', event: 'metrics_collected' }
     ];
 
     let passed = 0;
@@ -273,7 +273,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       'Application Workflow → Notification Service': true,
       'Certificate Management → Document Management': true,
       'All Modules → Audit': true,
-      'All Modules → Reporting Analytics': true,
+      'All Modules → Reporting Analytics': true
     };
 
     const key = `${test.from} → ${test.to}`;
@@ -294,7 +294,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       { rule: 'CANNABIS_THC_COMPLIANCE', input: { thc: 0.15 }, expected: true },
       { rule: 'CANNABIS_THC_COMPLIANCE', input: { thc: 0.25 }, expected: false },
       { rule: 'FARM_WATER_SOURCE_PROXIMITY', input: { distance: 600 }, expected: true },
-      { rule: 'FARM_SCHOOL_PROXIMITY', input: { distance: 1200 }, expected: true },
+      { rule: 'FARM_SCHOOL_PROXIMITY', input: { distance: 1200 }, expected: true }
     ];
 
     let passed = 0;
@@ -356,7 +356,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       { event: 'PaymentCompleted', subscribers: ['Application', 'Notification', 'Audit'] },
       { event: 'DocumentValidated', subscribers: ['Application', 'Payment', 'Notification'] },
       { event: 'CertificateGenerated', subscribers: ['Document', 'Notification', 'Audit'] },
-      { event: 'InspectionCompleted', subscribers: ['Application', 'Certificate', 'Notification'] },
+      { event: 'InspectionCompleted', subscribers: ['Application', 'Certificate', 'Notification'] }
     ];
 
     let passed = 0;
@@ -409,7 +409,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       { name: 'Payment Processing', target: 1000, unit: 'ms' },
       { name: 'Certificate Generation', target: 3000, unit: 'ms' },
       { name: 'Database Query', target: 200, unit: 'ms' },
-      { name: 'API Response', target: 300, unit: 'ms' },
+      { name: 'API Response', target: 300, unit: 'ms' }
     ];
 
     let passed = 0;
@@ -447,7 +447,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       'Payment Processing': 800,
       'Certificate Generation': 2500,
       'Database Query': 150,
-      'API Response': 200,
+      'API Response': 200
     };
 
     // Add some randomness to simulate real conditions
@@ -468,7 +468,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       passed,
       total,
       successRate,
-      status: passed === total ? 'PASS' : passed > total * 0.8 ? 'WARNING' : 'FAIL',
+      status: passed === total ? 'PASS' : passed > total * 0.8 ? 'WARNING' : 'FAIL'
     });
   }
 
@@ -489,7 +489,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
     this.testResults.forEach(result => {
       const status = result.status === 'PASS' ? '✅' : result.status === 'WARNING' ? '⚠️' : '❌';
       console.log(
-        `   ${status} ${result.suite}: ${result.passed}/${result.total} (${result.successRate}%)`,
+        `   ${status} ${result.suite}: ${result.passed}/${result.total} (${result.successRate}%)`
       );
     });
 
@@ -561,7 +561,7 @@ class GACPSystemIntegrationTest extends EventEmitter {
       totalTests: overallTotal,
       passedTests: overallPassed,
       executionTime: totalTime,
-      detailed: this.testResults,
+      detailed: this.testResults
     };
   }
 

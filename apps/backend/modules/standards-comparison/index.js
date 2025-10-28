@@ -36,7 +36,7 @@ async function initializeStandardsComparison(db, authMiddleware) {
     return {
       router,
       service,
-      controller,
+      controller
     };
   } catch (error) {
     logger.error('✗ Failed to initialize Standards Comparison module:', error);
@@ -47,5 +47,5 @@ async function initializeStandardsComparison(db, authMiddleware) {
 module.exports = {
   initializeStandardsComparison,
   StandardsComparisonService,
-  StandardsComparisonController,
+  StandardsComparisonController
 };

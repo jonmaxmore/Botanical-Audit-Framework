@@ -21,7 +21,7 @@ class FarmManagementController {
       const cycleData = {
         ...req.body,
         farmerId: req.user.id,
-        farmerEmail: req.user.email,
+        farmerEmail: req.user.email
       };
 
       const cycle = await this.farmService.createCultivationCycle(cycleData);
@@ -59,7 +59,7 @@ class FarmManagementController {
 
       return successResponse(res, {
         cycles,
-        total: cycles.length,
+        total: cycles.length
       });
     } catch (error) {
       logger.error('[FarmController] List cycles error:', error);
@@ -103,7 +103,7 @@ class FarmManagementController {
       const activityData = {
         ...req.body,
         userId: req.user.id,
-        userName: req.user.name || req.user.email,
+        userName: req.user.name || req.user.email
       };
 
       const activity = await this.farmService.recordActivity(req.params.id, activityData);
@@ -130,7 +130,7 @@ class FarmManagementController {
 
       return successResponse(res, {
         activities: cycle.activities || [],
-        total: cycle.activities?.length || 0,
+        total: cycle.activities?.length || 0
       });
     } catch (error) {
       logger.error('[FarmController] Get activities error:', error);
@@ -152,12 +152,12 @@ class FarmManagementController {
       const checkData = {
         ...req.body,
         inspectorId: req.user.id,
-        inspectorName: req.user.name || req.user.email,
+        inspectorName: req.user.name || req.user.email
       };
 
       const complianceCheck = await this.farmService.recordComplianceCheck(
         req.params.id,
-        checkData,
+        checkData
       );
 
       return successResponse(res, complianceCheck, 'Compliance check recorded', 201);
@@ -182,7 +182,7 @@ class FarmManagementController {
 
       return successResponse(res, {
         checks: cycle.complianceChecks || [],
-        score: cycle.complianceScore || null,
+        score: cycle.complianceScore || null
       });
     } catch (error) {
       logger.error('[FarmController] Get compliance error:', error);
@@ -206,7 +206,7 @@ class FarmManagementController {
       const harvestData = {
         ...req.body,
         userId: req.user.id,
-        userName: req.user.name || req.user.email,
+        userName: req.user.name || req.user.email
       };
 
       const harvest = await this.farmService.recordHarvest(req.params.id, harvestData);
@@ -256,7 +256,7 @@ class FarmManagementController {
       const testData = {
         ...req.body,
         laboratorianId: req.user.id,
-        laboratorianName: req.user.name || req.user.email,
+        laboratorianName: req.user.name || req.user.email
       };
 
       const qualityTest = await this.farmService.recordQualityTest(req.params.id, testData);

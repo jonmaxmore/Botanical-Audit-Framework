@@ -19,7 +19,7 @@ const enrollmentSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: Object.values(Enrollment.STATUS),
-      default: Enrollment.STATUS.ACTIVE,
+      default: Enrollment.STATUS.ACTIVE
     },
 
     progress: {
@@ -28,7 +28,7 @@ const enrollmentSchema = new mongoose.Schema(
       currentModuleId: String,
       currentLessonId: String,
       progressPercentage: { type: Number, default: 0, min: 0, max: 100 },
-      totalTimeSpentMinutes: { type: Number, default: 0 },
+      totalTimeSpentMinutes: { type: Number, default: 0 }
     },
 
     assessments: [
@@ -37,8 +37,8 @@ const enrollmentSchema = new mongoose.Schema(
         score: Number,
         answers: mongoose.Schema.Types.Mixed,
         timeSpentMinutes: Number,
-        submittedAt: Date,
-      },
+        submittedAt: Date
+      }
     ],
 
     finalScore: { type: Number, min: 0, max: 100 },
@@ -56,12 +56,12 @@ const enrollmentSchema = new mongoose.Schema(
     lastAccessedAt: Date,
 
     enrolledBy: mongoose.Schema.Types.ObjectId,
-    notes: String,
+    notes: String
   },
   {
     timestamps: true,
-    collection: 'enrollments',
-  },
+    collection: 'enrollments'
+  }
 );
 
 // Indexes
@@ -89,7 +89,7 @@ class MongoDBEnrollmentRepository {
       farmerId: data.farmerId?.toString(),
       courseId: data.courseId?.toString(),
       certificateId: data.certificateId?.toString(),
-      enrolledBy: data.enrolledBy?.toString(),
+      enrolledBy: data.enrolledBy?.toString()
     });
   }
 
@@ -123,7 +123,7 @@ class MongoDBEnrollmentRepository {
         // Update existing
         const updated = await this.EnrollmentModel.findByIdAndUpdate(data._id, data, {
           new: true,
-          runValidators: true,
+          runValidators: true
         });
         return this.toDomain(updated);
       } else {
@@ -151,7 +151,7 @@ class MongoDBEnrollmentRepository {
     try {
       const doc = await this.EnrollmentModel.findOne({
         farmerId: mongoose.Types.ObjectId(farmerId),
-        courseId: mongoose.Types.ObjectId(courseId),
+        courseId: mongoose.Types.ObjectId(courseId)
       });
       return this.toDomain(doc);
     } catch (error) {
@@ -177,14 +177,14 @@ class MongoDBEnrollmentRepository {
           .skip(skip)
           .limit(limit)
           .populate('courseId', 'code title titleEn thumbnailUrl'),
-        this.EnrollmentModel.countDocuments(query),
+        this.EnrollmentModel.countDocuments(query)
       ]);
 
       return {
         enrollments: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit,
+        limit
       };
     } catch (error) {
       logger.error('Error finding enrollments by farmer:', error);
@@ -209,14 +209,14 @@ class MongoDBEnrollmentRepository {
           .skip(skip)
           .limit(limit)
           .populate('farmerId', 'firstName lastName email phoneNumber'),
-        this.EnrollmentModel.countDocuments(query),
+        this.EnrollmentModel.countDocuments(query)
       ]);
 
       return {
         enrollments: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit,
+        limit
       };
     } catch (error) {
       logger.error('Error finding enrollments by course:', error);
@@ -240,14 +240,14 @@ class MongoDBEnrollmentRepository {
           .limit(limit)
           .populate('courseId', 'code title')
           .populate('farmerId', 'firstName lastName'),
-        this.EnrollmentModel.countDocuments(query),
+        this.EnrollmentModel.countDocuments(query)
       ]);
 
       return {
         enrollments: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit,
+        limit
       };
     } catch (error) {
       logger.error('Error finding enrollments by status:', error);
@@ -259,7 +259,7 @@ class MongoDBEnrollmentRepository {
     try {
       const docs = await this.EnrollmentModel.find({
         farmerId: mongoose.Types.ObjectId(farmerId),
-        status: Enrollment.STATUS.ACTIVE,
+        status: Enrollment.STATUS.ACTIVE
       })
         .sort({ lastAccessedAt: -1 })
         .populate('courseId', 'code title titleEn thumbnailUrl');
@@ -275,7 +275,7 @@ class MongoDBEnrollmentRepository {
     try {
       const docs = await this.EnrollmentModel.find({
         farmerId: mongoose.Types.ObjectId(farmerId),
-        status: Enrollment.STATUS.COMPLETED,
+        status: Enrollment.STATUS.COMPLETED
       })
         .sort({ completedAt: -1 })
         .populate('courseId', 'code title titleEn');
@@ -297,8 +297,8 @@ class MongoDBEnrollmentRepository {
         expiresAt: {
           $ne: null,
           $lte: thresholdDate,
-          $gt: new Date(),
-        },
+          $gt: new Date()
+        }
       })
         .sort({ expiresAt: 1 })
         .populate('courseId', 'code title')
@@ -316,7 +316,7 @@ class MongoDBEnrollmentRepository {
       const count = await this.EnrollmentModel.countDocuments({
         farmerId: mongoose.Types.ObjectId(farmerId),
         courseId: mongoose.Types.ObjectId(courseId),
-        status: { $in: [Enrollment.STATUS.ACTIVE, Enrollment.STATUS.COMPLETED] },
+        status: { $in: [Enrollment.STATUS.ACTIVE, Enrollment.STATUS.COMPLETED] }
       });
       return count > 0;
     } catch (error) {
@@ -330,7 +330,7 @@ class MongoDBEnrollmentRepository {
       const count = await this.EnrollmentModel.countDocuments({
         farmerId: mongoose.Types.ObjectId(farmerId),
         courseId: mongoose.Types.ObjectId(courseId),
-        status: Enrollment.STATUS.COMPLETED,
+        status: Enrollment.STATUS.COMPLETED
       });
       return count > 0;
     } catch (error) {
@@ -372,7 +372,7 @@ class MongoDBEnrollmentRepository {
         cancelledEnrollments,
         avgProgress,
         avgScore,
-        byStatus,
+        byStatus
       ] = await Promise.all([
         this.EnrollmentModel.countDocuments(matchStage),
         this.EnrollmentModel.countDocuments({ ...matchStage, status: Enrollment.STATUS.ACTIVE }),
@@ -381,16 +381,16 @@ class MongoDBEnrollmentRepository {
         this.EnrollmentModel.countDocuments({ ...matchStage, status: Enrollment.STATUS.CANCELLED }),
         this.EnrollmentModel.aggregate([
           { $match: matchStage },
-          { $group: { _id: null, avg: { $avg: '$progress.progressPercentage' } } },
+          { $group: { _id: null, avg: { $avg: '$progress.progressPercentage' } } }
         ]),
         this.EnrollmentModel.aggregate([
           { $match: { ...matchStage, finalScore: { $ne: null } } },
-          { $group: { _id: null, avg: { $avg: '$finalScore' } } },
+          { $group: { _id: null, avg: { $avg: '$finalScore' } } }
         ]),
         this.EnrollmentModel.aggregate([
           { $match: matchStage },
-          { $group: { _id: '$status', count: { $sum: 1 } } },
-        ]),
+          { $group: { _id: '$status', count: { $sum: 1 } } }
+        ])
       ]);
 
       const completionRate =
@@ -408,7 +408,7 @@ class MongoDBEnrollmentRepository {
         byStatus: byStatus.reduce((acc, item) => {
           acc[item._id] = item.count;
           return acc;
-        }, {}),
+        }, {})
       };
     } catch (error) {
       logger.error('Error getting enrollment statistics:', error);
@@ -421,16 +421,16 @@ class MongoDBEnrollmentRepository {
       const [activeEnrollments, completedEnrollments, totalTimeSpent] = await Promise.all([
         this.EnrollmentModel.countDocuments({
           farmerId: mongoose.Types.ObjectId(farmerId),
-          status: Enrollment.STATUS.ACTIVE,
+          status: Enrollment.STATUS.ACTIVE
         }),
         this.EnrollmentModel.countDocuments({
           farmerId: mongoose.Types.ObjectId(farmerId),
-          status: Enrollment.STATUS.COMPLETED,
+          status: Enrollment.STATUS.COMPLETED
         }),
         this.EnrollmentModel.aggregate([
           { $match: { farmerId: mongoose.Types.ObjectId(farmerId) } },
-          { $group: { _id: null, total: { $sum: '$progress.totalTimeSpentMinutes' } } },
-        ]),
+          { $group: { _id: null, total: { $sum: '$progress.totalTimeSpentMinutes' } } }
+        ])
       ]);
 
       return {
@@ -438,7 +438,7 @@ class MongoDBEnrollmentRepository {
         activeEnrollments,
         completedEnrollments,
         totalEnrollments: activeEnrollments + completedEnrollments,
-        totalTimeSpentMinutes: totalTimeSpent[0]?.total || 0,
+        totalTimeSpentMinutes: totalTimeSpent[0]?.total || 0
       };
     } catch (error) {
       logger.error('Error getting farmer progress summary:', error);
@@ -449,7 +449,7 @@ class MongoDBEnrollmentRepository {
   async getCourseEnrollmentSummary(courseId) {
     try {
       const enrollments = await this.EnrollmentModel.find({
-        courseId: mongoose.Types.ObjectId(courseId),
+        courseId: mongoose.Types.ObjectId(courseId)
       });
 
       const active = enrollments.filter(e => e.status === Enrollment.STATUS.ACTIVE).length;
@@ -479,7 +479,7 @@ class MongoDBEnrollmentRepository {
         completionRate:
           enrollments.length > 0 ? Math.round((completed / enrollments.length) * 100) : 0,
         averageProgress: Math.round(avgProgress),
-        averageScore: Math.round(avgScore),
+        averageScore: Math.round(avgScore)
       };
     } catch (error) {
       logger.error('Error getting course enrollment summary:', error);

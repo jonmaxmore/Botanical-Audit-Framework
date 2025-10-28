@@ -27,7 +27,7 @@ const Application = require('./infrastructure/models/Application');
 const ApplicationController = require('./presentation/controllers/ApplicationController');
 const {
   createApplicationRoutes,
-  routeDocumentation,
+  routeDocumentation
 } = require('./presentation/routes/applicationRoutes');
 
 /**
@@ -50,20 +50,20 @@ function createApplicationWorkflowModule(dependencies = {}) {
     paymentService: dependencies.paymentService,
     auditService: dependencies.auditService,
     jobTicketService: dependencies.jobTicketService,
-    certificateService: dependencies.certificateService,
+    certificateService: dependencies.certificateService
   });
 
   // Initialize controller
   const applicationController = new ApplicationController({
     workflowEngine,
-    applicationRepository,
+    applicationRepository
   });
 
   // Create routes
   const applicationRoutes = createApplicationRoutes({
     workflowEngine,
     applicationRepository,
-    applicationController,
+    applicationController
   });
 
   return {
@@ -104,7 +104,7 @@ function createApplicationWorkflowModule(dependencies = {}) {
       getWorkflowStatus: applicationId => workflowEngine.getWorkflowStatus(applicationId),
 
       confirmPayment: (applicationId, paymentData) =>
-        workflowEngine.confirmPayment(applicationId, paymentData),
+        workflowEngine.confirmPayment(applicationId, paymentData)
     },
 
     // Queries
@@ -117,7 +117,7 @@ function createApplicationWorkflowModule(dependencies = {}) {
         applicationRepository.findRequiringAction(role, options),
       findExpired: options => applicationRepository.findExpired(options),
       getDashboardStats: filters => applicationRepository.getDashboardStats(filters),
-      search: (filters, options) => applicationRepository.findWithPagination(filters, options),
+      search: (filters, options) => applicationRepository.findWithPagination(filters, options)
     },
 
     // Utilities
@@ -143,11 +143,11 @@ function createApplicationWorkflowModule(dependencies = {}) {
           'phase2_payment_pending',
           'phase2_payment_verified',
           'approved',
-          'certificate_issued',
+          'certificate_issued'
         ];
         const currentIndex = stateOrder.indexOf(status);
         return currentIndex >= 0 ? Math.round(((currentIndex + 1) / stateOrder.length) * 100) : 0;
-      },
+      }
     },
 
     // Configuration
@@ -155,8 +155,8 @@ function createApplicationWorkflowModule(dependencies = {}) {
       states: new ApplicationStateMachine().getAllStates(),
       transitions: new ApplicationStateMachine().TRANSITIONS,
       rolePermissions: new ApplicationStateMachine().ROLE_PERMISSIONS,
-      documentation: routeDocumentation,
-    },
+      documentation: routeDocumentation
+    }
   };
 }
 
@@ -203,8 +203,8 @@ module.exports = {
       'DocumentModule',
       'NotificationModule',
       'PaymentModule',
-      'CertificateModule',
+      'CertificateModule'
     ],
-    apiEndpoints: Object.keys(routeDocumentation || {}),
-  },
+    apiEndpoints: Object.keys(routeDocumentation || {})
+  }
 };

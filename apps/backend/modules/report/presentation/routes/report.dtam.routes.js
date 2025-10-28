@@ -17,7 +17,7 @@ module.exports = (reportController, authenticateDTAM) => {
 
   // Get report statistics
   router.get('/statistics', authenticateDTAM, (req, res) =>
-    reportController.getStatistics(req, res),
+    reportController.getStatistics(req, res)
   );
 
   // Get report details
@@ -25,22 +25,22 @@ module.exports = (reportController, authenticateDTAM) => {
 
   // Download report file
   router.get('/:reportId/download', authenticateDTAM, (req, res) =>
-    reportController.downloadReport(req, res),
+    reportController.downloadReport(req, res)
   );
 
   // Generate report manually
   router.post('/:reportId/generate', authenticateDTAM, (req, res) =>
-    reportController.generateReport(req, res),
+    reportController.generateReport(req, res)
   );
 
   // Retry failed report
   router.post('/:reportId/retry', authenticateDTAM, (req, res) =>
-    reportController.retryReport(req, res),
+    reportController.retryReport(req, res)
   );
 
   // Delete report
   router.delete('/:reportId', authenticateDTAM, (req, res) =>
-    reportController.deleteReport(req, res),
+    reportController.deleteReport(req, res)
   );
 
   return router;

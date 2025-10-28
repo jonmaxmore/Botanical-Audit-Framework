@@ -20,14 +20,14 @@ class Password {
         value: value,
         writable: false,
         enumerable: false,
-        configurable: false,
+        configurable: false
       });
 
       Object.defineProperty(this, 'isHashed', {
         value: true,
         writable: false,
         enumerable: true,
-        configurable: false,
+        configurable: false
       });
     } else {
       // Validate plain text password
@@ -40,14 +40,14 @@ class Password {
         value: value,
         writable: false,
         enumerable: false,
-        configurable: false,
+        configurable: false
       });
 
       Object.defineProperty(this, 'isHashed', {
         value: false,
         writable: false,
         enumerable: true,
-        configurable: false,
+        configurable: false
       });
     }
 

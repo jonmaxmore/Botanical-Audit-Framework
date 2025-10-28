@@ -16,7 +16,7 @@ router.get('/dashboard', [auth, inspectorAuth], async (req, res) => {
     // Get counts of tasks by status for the inspector
     const taskCounts = await Task.aggregate([
       { $match: { assignedTo: req.user.id } },
-      { $group: { _id: '$status', count: { $sum: 1 } } },
+      { $group: { _id: '$status', count: { $sum: 1 } } }
     ]);
 
     // Format task counts
@@ -25,7 +25,7 @@ router.get('/dashboard', [auth, inspectorAuth], async (req, res) => {
       'in-progress': 0,
       completed: 0,
       rejected: 0,
-      total: 0,
+      total: 0
     };
 
     taskCounts.forEach(item => {
@@ -40,14 +40,14 @@ router.get('/dashboard', [auth, inspectorAuth], async (req, res) => {
     const upcomingTasks = await Task.find({
       assignedTo: req.user.id,
       status: { $in: ['pending', 'in-progress'] },
-      dueDate: { $lte: nextWeek, $gte: new Date() },
+      dueDate: { $lte: nextWeek, $gte: new Date() }
     })
       .sort({ dueDate: 1 })
       .limit(5);
 
     // Get latest submitted reports
     const latestReports = await Report.find({
-      submittedBy: req.user.id,
+      submittedBy: req.user.id
     })
       .sort({ submittedAt: -1 })
       .limit(5);
@@ -55,7 +55,7 @@ router.get('/dashboard', [auth, inspectorAuth], async (req, res) => {
     res.json({
       taskStats,
       upcomingTasks,
-      latestReports,
+      latestReports
     });
   } catch (err) {
     inspectorLogger.error('Error fetching inspector dashboard data:', err);
@@ -78,7 +78,7 @@ router.get('/tasks', [auth, inspectorAuth], async (req, res) => {
     if (sortBy === 'priority') {
       sort = {
         priority: -1, // High priority first
-        dueDate: 1,
+        dueDate: 1
       };
     } else if (sortBy === 'recent') {
       sort = { createdAt: -1 };
@@ -115,7 +115,7 @@ router.post('/reports', [auth, inspectorAuth], async (req, res) => {
       compliance: compliance || 'compliant',
       images: images || [],
       submittedBy: req.user.id,
-      submittedAt: new Date(),
+      submittedAt: new Date()
     });
 
     const report = await newReport.save();
@@ -132,7 +132,7 @@ router.post('/reports', [auth, inspectorAuth], async (req, res) => {
         taskId: task._id,
         reportId: report._id,
         submittedBy: req.user.id,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
     }
 

@@ -36,12 +36,12 @@ class ListCertificatesUseCase {
       // 1. ตั้งค่า default values
       const defaultPagination = {
         page: pagination.page || 1,
-        limit: Math.min(pagination.limit || 20, 100), // จำกัดไม่เกิน 100 รายการต่อหน้า
+        limit: Math.min(pagination.limit || 20, 100) // จำกัดไม่เกิน 100 รายการต่อหน้า
       };
 
       const defaultSort = {
         field: sort.field || 'issuedDate',
-        order: sort.order || 'desc',
+        order: sort.order || 'desc'
       };
 
       // 2. ตรวจสอบสิทธิ์และปรับ filters ตามบทบาท
@@ -55,7 +55,7 @@ class ListCertificatesUseCase {
         ...queryCriteria,
         skip: (defaultPagination.page - 1) * defaultPagination.limit,
         limit: defaultPagination.limit,
-        sort: { [defaultSort.field]: defaultSort.order === 'asc' ? 1 : -1 },
+        sort: { [defaultSort.field]: defaultSort.order === 'asc' ? 1 : -1 }
       });
 
       // 5. นับจำนวนทั้งหมด
@@ -79,11 +79,11 @@ class ListCertificatesUseCase {
           totalCount,
           limit: defaultPagination.limit,
           hasNext,
-          hasPrev,
+          hasPrev
         },
         sort: defaultSort,
         filters: authorizedFilters,
-        statistics,
+        statistics
       };
     } catch (error) {
       logger.error('❌ Failed to list certificates:', error);
@@ -194,7 +194,7 @@ class ListCertificatesUseCase {
       criteria.$or = [
         { certificateNumber: searchRegex },
         { farmerName: searchRegex },
-        { farmName: searchRegex },
+        { farmName: searchRegex }
       ];
     }
 
@@ -206,7 +206,7 @@ class ListCertificatesUseCase {
 
       criteria.expiryDate = {
         $gte: new Date(),
-        $lte: futureDate,
+        $lte: futureDate
       };
       criteria.status = 'ACTIVE';
     }
@@ -226,13 +226,13 @@ class ListCertificatesUseCase {
         activeCertificates,
         expiredCertificates,
         revokedCertificates,
-        expiringSoon,
+        expiringSoon
       ] = await Promise.all([
         this.certificateRepository.countWithFilters(baseFilters),
         this.certificateRepository.countWithFilters({ ...baseFilters, status: 'ACTIVE' }),
         this.certificateRepository.countWithFilters({ ...baseFilters, status: 'EXPIRED' }),
         this.certificateRepository.countWithFilters({ ...baseFilters, status: 'REVOKED' }),
-        this.certificateRepository.countExpiringSoon(30, baseFilters),
+        this.certificateRepository.countExpiringSoon(30, baseFilters)
       ]);
 
       return {
@@ -240,7 +240,7 @@ class ListCertificatesUseCase {
         active: activeCertificates,
         expired: expiredCertificates,
         revoked: revokedCertificates,
-        expiringSoon,
+        expiringSoon
       };
     } catch (error) {
       logger.error('Failed to gather statistics:', error);

@@ -43,7 +43,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'compliance_officer']),
     param('id').isUUID().withMessage('Invalid audit log ID'),
-    auditController.getAuditLogDetails.bind(auditController),
+    auditController.getAuditLogDetails.bind(auditController)
   );
 
   /**
@@ -62,9 +62,9 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       query('actionType').optional().isString(),
       query('entityType').optional().isString(),
       query('startDate').optional().isISO8601(),
-      query('endDate').optional().isISO8601(),
+      query('endDate').optional().isISO8601()
     ],
-    auditController.listAuditLogs.bind(auditController),
+    auditController.listAuditLogs.bind(auditController)
   );
 
   /**
@@ -79,9 +79,9 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     authMiddleware.requireRole(['admin', 'dtam_staff', 'compliance_officer']),
     [
       query('period').optional().isIn(['last_7_days', 'last_30_days', 'last_90_days', 'last_year']),
-      query('entityType').optional().isString(),
+      query('entityType').optional().isString()
     ],
-    auditController.getAuditStatistics.bind(auditController),
+    auditController.getAuditStatistics.bind(auditController)
   );
 
   /**
@@ -98,9 +98,9 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       param('userId').isUUID().withMessage('Invalid user ID'),
       query('startDate').optional().isISO8601(),
       query('endDate').optional().isISO8601(),
-      query('limit').optional().isInt({ min: 1, max: 200 }),
+      query('limit').optional().isInt({ min: 1, max: 200 })
     ],
-    auditController.getUserActivity.bind(auditController),
+    auditController.getUserActivity.bind(auditController)
   );
 
   // ============================================================================
@@ -120,7 +120,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     '/compliance/dashboard',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'compliance_officer']),
-    auditController.getComplianceDashboard.bind(auditController),
+    auditController.getComplianceDashboard.bind(auditController)
   );
 
   /**
@@ -145,9 +145,9 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
         .optional()
         .isIn(['OPEN', 'ACKNOWLEDGED', 'IN_PROGRESS', 'RESOLVED', 'DISMISSED']),
       query('startDate').optional().isISO8601(),
-      query('endDate').optional().isISO8601(),
+      query('endDate').optional().isISO8601()
     ],
-    auditController.getComplianceViolations.bind(auditController),
+    auditController.getComplianceViolations.bind(auditController)
   );
 
   /**
@@ -167,9 +167,9 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       param('id').isUUID().withMessage('Invalid violation ID'),
       body('status').isIn(['ACKNOWLEDGED', 'IN_PROGRESS', 'RESOLVED', 'DISMISSED']),
       body('resolution').optional().isString().isLength({ min: 10, max: 1000 }),
-      body('correctiveActions').optional().isArray(),
+      body('correctiveActions').optional().isArray()
     ],
-    auditController.updateViolationStatus.bind(auditController),
+    auditController.updateViolationStatus.bind(auditController)
   );
 
   /**
@@ -188,9 +188,9 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     authMiddleware.requireRole(['admin', 'dtam_staff', 'compliance_officer']),
     [
       query('period').optional().isIn(['7d', '30d', '90d', '1y']),
-      query('category').optional().isString(),
+      query('category').optional().isString()
     ],
-    auditController.getComplianceAnalytics.bind(auditController),
+    auditController.getComplianceAnalytics.bind(auditController)
   );
 
   /**
@@ -207,7 +207,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'system_admin']),
     param('action').isIn(['start', 'stop', 'restart']),
-    auditController.controlComplianceMonitoring.bind(auditController),
+    auditController.controlComplianceMonitoring.bind(auditController)
   );
 
   // ============================================================================
@@ -227,7 +227,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     '/government/status',
     authMiddleware.requireAuth,
     authMiddleware.requireRole(['admin', 'dtam_staff', 'compliance_officer']),
-    auditController.getGovernmentIntegrationStatus.bind(auditController),
+    auditController.getGovernmentIntegrationStatus.bind(auditController)
   );
 
   /**
@@ -246,9 +246,9 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     [
       body('reportType').isIn(['CERTIFICATE_REPORT', 'COMPLIANCE_REPORT']),
       body('system').isIn(['DOA', 'FDA', 'DIGITAL_GOVERNMENT']),
-      body('data').isObject().notEmpty(),
+      body('data').isObject().notEmpty()
     ],
-    auditController.submitGovernmentReport.bind(auditController),
+    auditController.submitGovernmentReport.bind(auditController)
   );
 
   /**
@@ -271,13 +271,13 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       query('type').optional().isString(),
       query('status').optional().isIn(['SUBMITTED', 'ACKNOWLEDGED', 'PROCESSED', 'FAILED']),
       query('startDate').optional().isISO8601(),
-      query('endDate').optional().isISO8601(),
+      query('endDate').optional().isISO8601()
     ],
     async (req, res) => {
       // This would be implemented as a separate method
       // For now, redirect to existing functionality
       res.redirect('/api/dtam/audit/government/status');
-    },
+    }
   );
 
   // ============================================================================
@@ -300,7 +300,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     [
       query('period').optional().isIn(['7d', '30d', '90d', '1y']),
       query('category').optional().isString(),
-      query('granularity').optional().isIn(['daily', 'weekly', 'monthly']),
+      query('granularity').optional().isIn(['daily', 'weekly', 'monthly'])
     ],
     async (req, res) => {
       try {
@@ -311,10 +311,10 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
         res.status(500).json({
           success: false,
           error: 'TRENDS_ERROR',
-          message: 'Failed to get compliance trends',
+          message: 'Failed to get compliance trends'
         });
       }
-    },
+    }
   );
 
   /**
@@ -332,9 +332,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     authMiddleware.requireRole(['admin', 'system_admin']),
     [
       query('period').optional().isIn(['1h', '24h', '7d', '30d']),
-      query('metric')
-        .optional()
-        .isIn(['response_time', 'throughput', 'error_rate', 'availability']),
+      query('metric').optional().isIn(['response_time', 'throughput', 'error_rate', 'availability'])
     ],
     async (req, res) => {
       try {
@@ -345,17 +343,17 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
           data: {
             metrics: performanceMetrics,
             period: req.query.period || '24h',
-            generatedAt: new Date(),
-          },
+            generatedAt: new Date()
+          }
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'PERFORMANCE_ERROR',
-          message: 'Failed to get performance metrics',
+          message: 'Failed to get performance metrics'
         });
       }
-    },
+    }
   );
 
   /**
@@ -377,7 +375,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       body('endDate').isISO8601(),
       body('format').optional().isIn(['PDF', 'EXCEL', 'JSON']),
       body('includeViolations').optional().isBoolean(),
-      body('includeResolutions').optional().isBoolean(),
+      body('includeResolutions').optional().isBoolean()
     ],
     async (req, res) => {
       try {
@@ -386,13 +384,13 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
           type: req.body.reportType,
           period: {
             start: new Date(req.body.startDate),
-            end: new Date(req.body.endDate),
+            end: new Date(req.body.endDate)
           },
           format: req.body.format || 'PDF',
           options: {
             includeViolations: req.body.includeViolations !== false,
-            includeResolutions: req.body.includeResolutions !== false,
-          },
+            includeResolutions: req.body.includeResolutions !== false
+          }
         };
 
         res.json({
@@ -401,17 +399,17 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
           data: {
             reportId: require('crypto').randomUUID(),
             status: 'GENERATING',
-            estimatedCompletion: new Date(Date.now() + 5 * 60 * 1000), // 5 minutes
-          },
+            estimatedCompletion: new Date(Date.now() + 5 * 60 * 1000) // 5 minutes
+          }
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'REPORT_ERROR',
-          message: 'Failed to generate compliance report',
+          message: 'Failed to generate compliance report'
         });
       }
-    },
+    }
   );
 
   // ============================================================================
@@ -440,17 +438,17 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
           data: {
             status: 'HEALTHY', // This would be calculated based on metrics
             components: health,
-            timestamp: new Date(),
-          },
+            timestamp: new Date()
+          }
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'HEALTH_CHECK_ERROR',
-          message: 'System health check failed',
+          message: 'System health check failed'
         });
       }
-    },
+    }
   );
 
   // ============================================================================
@@ -465,7 +463,7 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
       success: false,
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred in the audit system',
-      requestId: req.id || 'unknown',
+      requestId: req.id || 'unknown'
     });
   });
 
@@ -484,7 +482,7 @@ function getRouteDocumentation() {
     categories: {
       'Audit Logs': {
         description: 'Traditional audit log management',
-        routes: ['GET /logs', 'GET /logs/:id', 'GET /statistics', 'GET /users/:userId/activity'],
+        routes: ['GET /logs', 'GET /logs/:id', 'GET /statistics', 'GET /users/:userId/activity']
       },
 
       'Compliance Monitoring': {
@@ -494,8 +492,8 @@ function getRouteDocumentation() {
           'GET /compliance/violations',
           'PUT /compliance/violations/:id',
           'GET /compliance/analytics',
-          'POST /compliance/monitoring/:action',
-        ],
+          'POST /compliance/monitoring/:action'
+        ]
       },
 
       'Government Integration': {
@@ -503,8 +501,8 @@ function getRouteDocumentation() {
         routes: [
           'GET /government/status',
           'POST /government/submit-report',
-          'GET /government/submissions',
-        ],
+          'GET /government/submissions'
+        ]
       },
 
       'Advanced Analytics': {
@@ -512,14 +510,14 @@ function getRouteDocumentation() {
         routes: [
           'GET /analytics/compliance-trends',
           'GET /analytics/performance',
-          'POST /reports/compliance',
-        ],
+          'POST /reports/compliance'
+        ]
       },
 
       'System Health': {
         description: 'System monitoring and health checks',
-        routes: ['GET /system/health'],
-      },
+        routes: ['GET /system/health']
+      }
     },
 
     businessLogic: {
@@ -527,12 +525,12 @@ function getRouteDocumentation() {
         'Real-time monitoring of all system activities for compliance violations',
       governmentIntegration: 'Automated submission of regulatory reports to government systems',
       auditTrail: 'Comprehensive audit trail for all system activities and user actions',
-      performanceMetrics: 'System performance monitoring and analytics for optimization',
-    },
+      performanceMetrics: 'System performance monitoring and analytics for optimization'
+    }
   };
 }
 
 module.exports = {
   createEnhancedAuditRoutes,
-  getRouteDocumentation,
+  getRouteDocumentation
 };

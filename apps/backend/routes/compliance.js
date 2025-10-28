@@ -143,7 +143,7 @@ router.get('/parameters/:id', authenticateToken, ParametersController.getParamet
 router.post(
   '/parameters/:id/validate',
   authenticateToken,
-  ParametersController.validateParameterValue,
+  ParametersController.validateParameterValue
 );
 
 /**
@@ -173,7 +173,7 @@ router.post(
   '/admin/standards',
   authenticateToken,
   requireAdmin,
-  StandardsController.createStandard,
+  StandardsController.createStandard
 );
 
 /**
@@ -185,7 +185,7 @@ router.put(
   '/admin/standards/:id',
   authenticateToken,
   requireAdmin,
-  StandardsController.updateStandard,
+  StandardsController.updateStandard
 );
 
 /**
@@ -197,7 +197,7 @@ router.delete(
   '/admin/standards/:id',
   authenticateToken,
   requireAdmin,
-  StandardsController.deleteStandard,
+  StandardsController.deleteStandard
 );
 
 /**
@@ -209,7 +209,7 @@ router.post(
   '/admin/parameters',
   authenticateToken,
   requireAdmin,
-  ParametersController.createParameter,
+  ParametersController.createParameter
 );
 
 /**
@@ -221,7 +221,7 @@ router.put(
   '/admin/parameters/:id',
   authenticateToken,
   requireAdmin,
-  ParametersController.updateParameter,
+  ParametersController.updateParameter
 );
 
 /**
@@ -233,7 +233,7 @@ router.delete(
   '/admin/parameters/:id',
   authenticateToken,
   requireAdmin,
-  ParametersController.deleteParameter,
+  ParametersController.deleteParameter
 );
 
 // ============================================================================
@@ -247,8 +247,8 @@ router.use('*', (req, res) => {
     error: {
       code: 'NOT_FOUND',
       message: 'Compliance API endpoint not found',
-      details: `Route ${req.method} ${req.originalUrl} not found`,
-    },
+      details: `Route ${req.method} ${req.originalUrl} not found`
+    }
   });
 });
 
@@ -261,8 +261,8 @@ router.use((error, req, res, _next) => {
     error: {
       code: 'INTERNAL_ERROR',
       message: 'Internal server error in compliance API',
-      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
-    },
+      details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    }
   });
 });
 

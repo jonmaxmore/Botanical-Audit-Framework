@@ -14,7 +14,7 @@ class GetFarmerDashboardUseCase {
     surveyRepository,
     trainingEnrollmentRepository,
     documentRepository,
-    notificationRepository,
+    notificationRepository
   ) {
     this.farmRepository = farmRepository;
     this.certificateRepository = certificateRepository;
@@ -34,7 +34,7 @@ class GetFarmerDashboardUseCase {
           this._getSurveyStats(farmerId),
           this._getTrainingStats(farmerId),
           this._getDocumentStats(farmerId),
-          this._getNotificationStats(farmerId),
+          this._getNotificationStats(farmerId)
         ]);
 
       return {
@@ -43,7 +43,7 @@ class GetFarmerDashboardUseCase {
           activeCertificates: certificates.active,
           pendingSurveys: surveys.pending,
           trainingProgress: enrollments.averageProgress,
-          unreadNotifications: notifications.unread,
+          unreadNotifications: notifications.unread
         },
         farms,
         certificates,
@@ -52,7 +52,7 @@ class GetFarmerDashboardUseCase {
         documents,
         notifications,
         quickActions: this._getQuickActions(certificates, surveys, enrollments),
-        alerts: this._getAlerts(certificates, surveys, enrollments),
+        alerts: this._getAlerts(certificates, surveys, enrollments)
       };
     } catch (error) {
       throw new Error(`Failed to get farmer dashboard: ${error.message}`);
@@ -69,8 +69,8 @@ class GetFarmerDashboardUseCase {
         name: f.name,
         area: f.area,
         status: f.status,
-        location: f.address,
-      })),
+        location: f.address
+      }))
     };
   }
 
@@ -95,8 +95,8 @@ class GetFarmerDashboardUseCase {
         type: c.type,
         status: c.status,
         expiryDate: c.expiryDate,
-        daysUntilExpiry: c.getDaysUntilExpiry(),
-      })),
+        daysUntilExpiry: c.getDaysUntilExpiry()
+      }))
     };
   }
 
@@ -124,8 +124,8 @@ class GetFarmerDashboardUseCase {
         farmName: s.farmName,
         surveyDate: s.surveyDate,
         status: s.status,
-        cultivationType: s.cultivationType,
-      })),
+        cultivationType: s.cultivationType
+      }))
     };
   }
 
@@ -148,8 +148,8 @@ class GetFarmerDashboardUseCase {
         courseName: e.courseName,
         status: e.status,
         progress: e.progressPercentage,
-        enrolledAt: e.enrolledAt,
-      })),
+        enrolledAt: e.enrolledAt
+      }))
     };
   }
 
@@ -173,8 +173,8 @@ class GetFarmerDashboardUseCase {
         name: d.name,
         type: d.type,
         status: d.status,
-        uploadedAt: d.uploadedAt,
-      })),
+        uploadedAt: d.uploadedAt
+      }))
     };
   }
 
@@ -197,8 +197,8 @@ class GetFarmerDashboardUseCase {
         title: n.title,
         message: n.message,
         isRead: n.isRead(),
-        createdAt: n.createdAt,
-      })),
+        createdAt: n.createdAt
+      }))
     };
   }
 
@@ -212,7 +212,7 @@ class GetFarmerDashboardUseCase {
         title: 'ต่ออายุใบรับรอง',
         description: `มีใบรับรอง ${certificates.expiringSoon} ใบที่ใกล้หมดอายุ`,
         priority: 'high',
-        action: '/certificates/renew',
+        action: '/certificates/renew'
       });
     }
 
@@ -223,7 +223,7 @@ class GetFarmerDashboardUseCase {
         title: 'กรอกแบบสำรวจ',
         description: `มีแบบสำรวจ ${surveys.pending} รายการที่รอดำเนินการ`,
         priority: 'medium',
-        action: '/surveys',
+        action: '/surveys'
       });
     }
 
@@ -234,7 +234,7 @@ class GetFarmerDashboardUseCase {
         title: 'เรียนหลักสูตร',
         description: `มีหลักสูตร ${enrollments.active} หลักสูตรที่กำลังเรียน`,
         priority: 'medium',
-        action: '/training',
+        action: '/training'
       });
     }
 
@@ -249,7 +249,7 @@ class GetFarmerDashboardUseCase {
       alerts.push({
         type: 'warning',
         message: `มีใบรับรอง ${certificates.expired} ใบที่หมดอายุแล้ว กรุณาดำเนินการต่ออายุ`,
-        action: '/certificates',
+        action: '/certificates'
       });
     }
 
@@ -258,7 +258,7 @@ class GetFarmerDashboardUseCase {
       alerts.push({
         type: 'info',
         message: `มีใบรับรอง ${certificates.expiringSoon} ใบที่ใกล้หมดอายุภายใน 30 วัน`,
-        action: '/certificates',
+        action: '/certificates'
       });
     }
 
@@ -267,7 +267,7 @@ class GetFarmerDashboardUseCase {
       alerts.push({
         type: 'info',
         message: `ความคืบหน้าการเรียนเฉลี่ย ${enrollments.averageProgress}% แนะนำให้เรียนให้จบ`,
-        action: '/training',
+        action: '/training'
       });
     }
 

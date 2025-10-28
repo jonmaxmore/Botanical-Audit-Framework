@@ -32,7 +32,7 @@ const PAYMENT_FEES = {
       when_en: 'After application submission',
       triggers: ['APPLICATION_SUBMITTED'],
       next_states: ['DOCUMENT_REVIEW'],
-      required: true,
+      required: true
     },
     PHASE_2: {
       phase: 2,
@@ -43,8 +43,8 @@ const PAYMENT_FEES = {
       when_en: 'After document approval',
       triggers: ['DOCUMENT_APPROVED'],
       next_states: ['INSPECTION_SCHEDULED'],
-      required: true,
-    },
+      required: true
+    }
   },
 
   // กฎการชำระเงินใหม่
@@ -56,9 +56,9 @@ const PAYMENT_FEES = {
         description: 'เอกสารถูกปฏิเสธครบ 2 ครั้ง',
         action: 'REQUIRE_NEW_PHASE_1_PAYMENT',
         amount: 5000,
-        reset_rejection_count: true,
-      },
-    ],
+        reset_rejection_count: true
+      }
+    ]
   },
 
   // สถานะการชำระเงิน
@@ -69,13 +69,13 @@ const PAYMENT_FEES = {
     FAILED: 'failed', // ชำระไม่สำเร็จ
     EXPIRED: 'expired', // หมดอายุ
     REFUNDED: 'refunded', // คืนเงินแล้ว
-    CANCELLED: 'cancelled', // ยกเลิก
+    CANCELLED: 'cancelled' // ยกเลิก
   },
 
   // ระยะเวลาชำระเงิน
   PAYMENT_TIMEOUT: {
     PHASE_1: 7 * 24 * 60 * 60 * 1000, // 7 วัน
-    PHASE_2: 14 * 24 * 60 * 60 * 1000, // 14 วัน
+    PHASE_2: 14 * 24 * 60 * 60 * 1000 // 14 วัน
   },
 
   // Gateway และช่องทางการชำระเงิน
@@ -85,7 +85,7 @@ const PAYMENT_FEES = {
     MOBILE_BANKING: 'mobile_banking',
     QR_CODE: 'qr_code',
     BANK_TRANSFER: 'bank_transfer',
-    COUNTER_SERVICE: 'counter_service',
+    COUNTER_SERVICE: 'counter_service'
   },
 
   // ข้อมูลธนาคารรับเงิน
@@ -94,9 +94,9 @@ const PAYMENT_FEES = {
       bank: 'ธนาคารกรุงไทย',
       account_number: '123-4-56789-0',
       account_name: 'กรมวิชาการเกษตร',
-      branch: 'สำนักงานใหญ่',
-    },
-  },
+      branch: 'สำนักงานใหญ่'
+    }
+  }
 };
 
 module.exports = {
@@ -162,5 +162,5 @@ module.exports = {
     const now = new Date();
     const expiry = new Date(paymentDate.getTime() + PAYMENT_FEES.PAYMENT_TIMEOUT[`PHASE_${phase}`]);
     return now > expiry;
-  },
+  }
 };

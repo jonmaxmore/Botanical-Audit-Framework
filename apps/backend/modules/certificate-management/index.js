@@ -47,7 +47,7 @@ async function initializeCertificateManagement(db, authMiddleware) {
     return {
       router,
       service: certificateService,
-      controller: certificateController,
+      controller: certificateController
     };
   } catch (error) {
     logger.error('Failed to initialize Certificate Management module:', error);
@@ -75,7 +75,7 @@ function getModuleInfo() {
       'POST /api/certificates/:id/revoke - Revoke certificate',
       'PUT /api/certificates/:id/pdf - Update PDF info',
       'GET /api/certificates/stats - Get statistics',
-      'GET /api/certificates/expiring - Get expiring certificates',
+      'GET /api/certificates/expiring - Get expiring certificates'
     ],
     features: [
       'Certificate generation with auto-incrementing numbers (GACP-YYYY-NNNN)',
@@ -88,13 +88,13 @@ function getModuleInfo() {
       'PDF generation and download',
       'Public verification endpoint',
       'Certificate statistics and reporting',
-      'Expiring certificate alerts',
+      'Expiring certificate alerts'
     ],
-    dependencies: ['MongoDB database', 'Authentication middleware'],
+    dependencies: ['MongoDB database', 'Authentication middleware']
   };
 }
 
 module.exports = {
   initializeCertificateManagement,
-  getModuleInfo,
+  getModuleInfo
 };

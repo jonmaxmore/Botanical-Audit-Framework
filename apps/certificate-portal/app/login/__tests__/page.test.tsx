@@ -132,11 +132,13 @@ describe('LoginPage', () => {
           'cert_token',
           'demo-token-certificate-officer',
         );
+      });
 
       await waitFor(() => {
         expect(mockEnqueueSnackbar).toHaveBeenCalledWith('เข้าสู่ระบบสำเร็จ!', {
           variant: 'success',
         });
+      });
 
       await waitFor(() => {
         expect(mockPush).toHaveBeenCalledWith('/dashboard');

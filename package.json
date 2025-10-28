@@ -7,6 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "type-check": "tsc --noEmit && cd apps/farmer-portal && tsc --noEmit && cd ../admin-portal && tsc --noEmit && cd ../certificate-portal && tsc --noEmit",
+    "type-check:watch": "tsc --noEmit --watch",
     "lint": "pnpm --filter frontend lint",
     "lint:backend": "cd apps/backend && eslint . --ext .js",
     "lint:backend:fix": "cd apps/backend && eslint . --ext .js --fix",

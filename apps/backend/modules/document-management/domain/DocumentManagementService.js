@@ -62,7 +62,7 @@ class DocumentManagementService extends EventEmitter {
         'image/jpg',
         'image/png',
         'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       ],
       allowedExtensions: ['.pdf', '.jpg', '.jpeg', '.png', '.doc', '.docx'],
       storageBasePath: 'gacp-documents',
@@ -70,7 +70,7 @@ class DocumentManagementService extends EventEmitter {
       requireVirusScan: true,
       enableOCR: true,
       documentRetentionYears: 7,
-      maxVersionsPerDocument: 10,
+      maxVersionsPerDocument: 10
     };
 
     // Document type requirements
@@ -84,8 +84,8 @@ class DocumentManagementService extends EventEmitter {
         requiresOCR: true,
         validationRules: {
           mustContainText: ['license', 'registration', 'farm'],
-          minimumPages: 1,
-        },
+          minimumPages: 1
+        }
       },
       land_deed: {
         name: 'Land Ownership Document',
@@ -96,8 +96,8 @@ class DocumentManagementService extends EventEmitter {
         requiresOCR: true,
         validationRules: {
           mustContainText: ['land', 'deed', 'ownership'],
-          minimumPages: 1,
-        },
+          minimumPages: 1
+        }
       },
       farmer_id: {
         name: 'Farmer Identification Card',
@@ -108,8 +108,8 @@ class DocumentManagementService extends EventEmitter {
         requiresOCR: true,
         validationRules: {
           mustContainText: ['identification', 'citizen'],
-          imageQualityCheck: true,
-        },
+          imageQualityCheck: true
+        }
       },
       farm_photos: {
         name: 'Farm Site Photos',
@@ -122,8 +122,8 @@ class DocumentManagementService extends EventEmitter {
         validationRules: {
           imageQualityCheck: true,
           gpsMetadataRequired: true,
-          minimumResolution: { width: 1024, height: 768 },
-        },
+          minimumResolution: { width: 1024, height: 768 }
+        }
       },
       water_test_report: {
         name: 'Water Quality Test Report',
@@ -135,8 +135,8 @@ class DocumentManagementService extends EventEmitter {
         requiresOCR: true,
         validationRules: {
           mustContainText: ['water', 'test', 'quality', 'analysis'],
-          dateValidation: true,
-        },
+          dateValidation: true
+        }
       },
       soil_test_report: {
         name: 'Soil Analysis Report',
@@ -148,8 +148,8 @@ class DocumentManagementService extends EventEmitter {
         requiresOCR: true,
         validationRules: {
           mustContainText: ['soil', 'analysis', 'test'],
-          dateValidation: true,
-        },
+          dateValidation: true
+        }
       },
       inspection_photos: {
         name: 'Inspection Photos',
@@ -160,8 +160,8 @@ class DocumentManagementService extends EventEmitter {
         uploadedBy: ['DTAM_INSPECTOR'],
         validationRules: {
           imageQualityCheck: true,
-          timestampRequired: true,
-        },
+          timestampRequired: true
+        }
       },
       inspection_report: {
         name: 'Inspection Report',
@@ -172,9 +172,9 @@ class DocumentManagementService extends EventEmitter {
         requiresSignature: true,
         validationRules: {
           mustContainText: ['inspection', 'report', 'compliance'],
-          digitalSignatureRequired: true,
-        },
-      },
+          digitalSignatureRequired: true
+        }
+      }
     };
 
     logger.info('[DocumentManagementService] Initialized successfully');
@@ -195,7 +195,7 @@ class DocumentManagementService extends EventEmitter {
         applicationId,
         description = '',
         expiryDate = null,
-        version = 1,
+        version = 1
       } = uploadData;
 
       // 1. Validate user permissions
@@ -213,7 +213,7 @@ class DocumentManagementService extends EventEmitter {
         documentType,
         applicationId,
         userId,
-        version,
+        version
       );
 
       // 4. Virus scan (if enabled)
@@ -242,8 +242,8 @@ class DocumentManagementService extends EventEmitter {
           documentType,
           applicationId,
           uploadedBy: userId,
-          encrypted: documentMetadata.encrypted,
-        },
+          encrypted: documentMetadata.encrypted
+        }
       });
 
       documentMetadata.storageUrl = uploadResult.url;
@@ -271,7 +271,7 @@ class DocumentManagementService extends EventEmitter {
         description,
         expiryDate,
         uploadedAt: new Date(),
-        status: 'ACTIVE',
+        status: 'ACTIVE'
       });
 
       // 9. Create audit log
@@ -280,7 +280,7 @@ class DocumentManagementService extends EventEmitter {
         applicationId,
         uploadedBy: userId,
         originalName: file.originalname,
-        fileSize: file.size,
+        fileSize: file.size
       });
 
       // 10. Emit event for workflow integration
@@ -288,7 +288,7 @@ class DocumentManagementService extends EventEmitter {
         documentId: savedDocument.id,
         documentType,
         applicationId,
-        uploadedBy: userId,
+        uploadedBy: userId
       });
 
       // 11. Check if all required documents are uploaded
@@ -304,8 +304,8 @@ class DocumentManagementService extends EventEmitter {
           uploadedAt: savedDocument.uploadedAt,
           downloadUrl: await this._generateSecureDownloadUrl(savedDocument.id, userId),
           thumbnailUrl: savedDocument.thumbnailUrl,
-          ocrAvailable: !!savedDocument.ocrText,
-        },
+          ocrAvailable: !!savedDocument.ocrText
+        }
       };
     } catch (error) {
       logger.error('[DocumentService] Upload error:', error);
@@ -340,14 +340,14 @@ class DocumentManagementService extends EventEmitter {
       // 3. Generate secure download URL with expiry
       const downloadUrl = await this._generateSecureDownloadUrl(documentId, userId, {
         expiresIn: 3600, // 1 hour
-        downloadOnce: false,
+        downloadOnce: false
       });
 
       // 4. Log document access
       await this._createAuditLog(documentId, 'DOCUMENT_ACCESSED', {
         accessedBy: userId,
         userRole,
-        accessType: 'DOWNLOAD',
+        accessType: 'DOWNLOAD'
       });
 
       // 5. Decrypt if necessary
@@ -365,8 +365,8 @@ class DocumentManagementService extends EventEmitter {
           documentType: document.documentType,
           fileSize: document.fileSize,
           uploadedAt: document.uploadedAt,
-          expiresAt: document.expiryDate,
-        },
+          expiresAt: document.expiryDate
+        }
       };
     } catch (error) {
       logger.error('[DocumentService] Download error:', error);
@@ -388,12 +388,12 @@ class DocumentManagementService extends EventEmitter {
 
       // 2. Get documents with role-based filtering
       const documents = await this.documentRepository.findByApplication(applicationId, {
-        includeDeleted: false,
+        includeDeleted: false
       });
 
       // 3. Filter documents based on user role
       const filteredDocuments = documents.filter(doc =>
-        this._canUserAccessDocument(doc, userId, userRole),
+        this._canUserAccessDocument(doc, userId, userRole)
       );
 
       // 4. Enrich with download URLs and metadata
@@ -413,14 +413,14 @@ class DocumentManagementService extends EventEmitter {
           thumbnailUrl: doc.thumbnailUrl,
           ocrAvailable: !!doc.ocrText,
           isExpired: doc.expiryDate && new Date(doc.expiryDate) < new Date(),
-          validationStatus: doc.validationStatus,
-        })),
+          validationStatus: doc.validationStatus
+        }))
       );
 
       return {
         success: true,
         documents: enrichedDocuments,
-        summary: this._generateDocumentSummary(enrichedDocuments, applicationId),
+        summary: this._generateDocumentSummary(enrichedDocuments, applicationId)
       };
     } catch (error) {
       logger.error('[DocumentService] Get application documents error:', error);
@@ -460,13 +460,13 @@ class DocumentManagementService extends EventEmitter {
         status: 'DELETED',
         deletedAt: new Date(),
         deletedBy: userId,
-        deletionReason: reason,
+        deletionReason: reason
       });
 
       // 5. Archive in storage (move to deleted folder)
       await this.storageService.move(
         document.storageKey,
-        `${this.config.storageBasePath}/deleted/${document.storageKey}`,
+        `${this.config.storageBasePath}/deleted/${document.storageKey}`
       );
 
       // 6. Create audit log
@@ -474,7 +474,7 @@ class DocumentManagementService extends EventEmitter {
         deletedBy: userId,
         userRole,
         reason,
-        originalName: document.originalName,
+        originalName: document.originalName
       });
 
       // 7. Emit event
@@ -482,7 +482,7 @@ class DocumentManagementService extends EventEmitter {
         documentId,
         documentType: document.documentType,
         applicationId: document.applicationId,
-        deletedBy: userId,
+        deletedBy: userId
       });
 
       return true;
@@ -534,7 +534,7 @@ class DocumentManagementService extends EventEmitter {
     if (docConfig.validationRules) {
       const specificValidation = await this._performSpecificValidation(
         file,
-        docConfig.validationRules,
+        docConfig.validationRules
       );
       if (!specificValidation.valid) {
         result.errors.push(...specificValidation.errors);
@@ -568,7 +568,7 @@ class DocumentManagementService extends EventEmitter {
       mimeType: file.mimetype,
       checksum: await this._calculateChecksum(file.buffer),
       encryptionKey: this.config.encryptDocuments ? crypto.randomBytes(32).toString('hex') : null,
-      version,
+      version
     };
   }
 

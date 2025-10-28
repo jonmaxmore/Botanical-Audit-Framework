@@ -25,7 +25,7 @@ class Email {
       value: normalized,
       writable: false,
       enumerable: true,
-      configurable: false,
+      configurable: false
     });
 
     Object.freeze(this);

@@ -36,7 +36,7 @@ class CertificateGenerationService {
       renewalReminderMonths: 2,
       requiredCompetencies: ['GACP_BASICS', 'COMPLIANCE_UNDERSTANDING'],
       governmentSubmissionRequired: true,
-      auditTrailRequired: true,
+      auditTrailRequired: true
     };
 
     // Certificate templates
@@ -46,29 +46,29 @@ class CertificateGenerationService {
         title: 'Good Agricultural and Collection Practices (GACP) - Basic Certification',
         validityPeriod: 24,
         minimumScore: 70,
-        competencies: ['GACP_BASICS', 'DOCUMENTATION', 'QUALITY_CONTROL'],
+        competencies: ['GACP_BASICS', 'DOCUMENTATION', 'QUALITY_CONTROL']
       },
       GACP_ADVANCED: {
         templateId: 'GACP_ADV_V2.0',
         title: 'Good Agricultural and Collection Practices (GACP) - Advanced Certification',
         validityPeriod: 36,
         minimumScore: 85,
-        competencies: ['GACP_ADVANCED', 'AUDIT_PREPARATION', 'CONTINUOUS_IMPROVEMENT'],
+        competencies: ['GACP_ADVANCED', 'AUDIT_PREPARATION', 'CONTINUOUS_IMPROVEMENT']
       },
       GACP_INSPECTOR: {
         templateId: 'GACP_INSP_V2.0',
         title: 'GACP Inspector Certification',
         validityPeriod: 12,
         minimumScore: 90,
-        competencies: ['INSPECTION_SKILLS', 'REGULATION_KNOWLEDGE', 'REPORT_WRITING'],
-      },
+        competencies: ['INSPECTION_SKILLS', 'REGULATION_KNOWLEDGE', 'REPORT_WRITING']
+      }
     };
 
     this.metrics = {
       certificatesGenerated: 0,
       governmentSubmissions: 0,
       validationFailures: 0,
-      averageProcessingTime: 0,
+      averageProcessingTime: 0
     };
   }
 
@@ -90,7 +90,7 @@ class CertificateGenerationService {
 
     try {
       this.logger.log(
-        `[CertificateGeneration] Starting certificate generation - Operation: ${operationId}`,
+        `[CertificateGeneration] Starting certificate generation - Operation: ${operationId}`
       );
 
       // 1. Validate completion eligibility
@@ -102,20 +102,20 @@ class CertificateGenerationService {
       // 2. Determine certificate type and template
       const certificateTemplate = await this.determineCertificateTemplate(
         completionData,
-        eligibilityValidation,
+        eligibilityValidation
       );
 
       // 3. Generate certificate data and metadata
       const certificateData = await this.generateCertificateData(
         completionData,
         certificateTemplate,
-        operationId,
+        operationId
       );
 
       // 4. Create digital certificate (PDF)
       const certificatePdf = await this.createDigitalCertificate(
         certificateData,
-        certificateTemplate,
+        certificateTemplate
       );
 
       // 5. Store certificate in database
@@ -142,17 +142,17 @@ class CertificateGenerationService {
         certificate: storedCertificate,
         governmentSubmission: governmentSubmission,
         processingTime: processingTime,
-        operationId: operationId,
+        operationId: operationId
       };
 
       this.logger.log(
-        `[CertificateGeneration] Certificate generated successfully - ID: ${storedCertificate.id}`,
+        `[CertificateGeneration] Certificate generated successfully - ID: ${storedCertificate.id}`
       );
       return result;
     } catch (error) {
       this.logger.error(
         `[CertificateGeneration] Certificate generation failed - Operation: ${operationId}`,
-        error,
+        error
       );
       this.updateMetrics('FAILURE', Date.now() - startTime);
       throw error;
@@ -169,7 +169,7 @@ class CertificateGenerationService {
         reason: null,
         details: {},
         certificateType: null,
-        requirements: [],
+        requirements: []
       };
 
       // Check completion status
@@ -199,7 +199,7 @@ class CertificateGenerationService {
       const courseCompetencies = course.learningObjectives || [];
       const requiredCompetencies = this.certificateRules.requiredCompetencies;
       const missingCompetencies = requiredCompetencies.filter(
-        req => !courseCompetencies.some(comp => comp.toLowerCase().includes(req.toLowerCase())),
+        req => !courseCompetencies.some(comp => comp.toLowerCase().includes(req.toLowerCase()))
       );
 
       if (missingCompetencies.length > 0) {
@@ -215,7 +215,7 @@ class CertificateGenerationService {
       const existingCertificate = await this.checkExistingValidCertificate(
         completionData.enrollment.farmerId,
         course.id,
-        validation.certificateType,
+        validation.certificateType
       );
 
       if (existingCertificate) {
@@ -231,7 +231,7 @@ class CertificateGenerationService {
         courseId: course.id,
         courseName: course.name,
         farmerId: completionData.enrollment.farmerId,
-        completionDate: completionData.enrollment.completedAt,
+        completionDate: completionData.enrollment.completedAt
       };
 
       return validation;
@@ -240,7 +240,7 @@ class CertificateGenerationService {
       return {
         eligible: false,
         reason: `Validation failed: ${error.message}`,
-        details: {},
+        details: {}
       };
     }
   }
@@ -272,7 +272,7 @@ class CertificateGenerationService {
 
     return {
       ...template,
-      customizations: await this.getCertificateCustomizations(completionData, certificateType),
+      customizations: await this.getCertificateCustomizations(completionData, certificateType)
     };
   }
 
@@ -290,8 +290,8 @@ class CertificateGenerationService {
       securityFeatures: {
         hologram: true,
         serialNumber: true,
-        verificationUrl: true,
-      },
+        verificationUrl: true
+      }
     };
   }
 
@@ -315,7 +315,7 @@ class CertificateGenerationService {
           completionData.farmer?.firstName + ' ' + completionData.farmer?.lastName ||
           'Certificate Holder',
         farmerCode: completionData.farmer?.farmerCode || '',
-        nationalId: completionData.farmer?.nationalId || '',
+        nationalId: completionData.farmer?.nationalId || ''
       },
 
       // Course information
@@ -324,7 +324,7 @@ class CertificateGenerationService {
         courseName: completionData.course.name,
         courseCode: completionData.course.code,
         courseType: completionData.course.type,
-        courseLevel: completionData.course.level,
+        courseLevel: completionData.course.level
       },
 
       // Performance data
@@ -332,7 +332,7 @@ class CertificateGenerationService {
         finalScore: completionData.enrollment.finalScore,
         completionDate: completionData.enrollment.completedAt,
         studyDuration: completionData.enrollment.progress?.totalTimeSpentMinutes || 0,
-        assessmentAttempts: completionData.enrollment.assessments?.length || 1,
+        assessmentAttempts: completionData.enrollment.assessments?.length || 1
       },
 
       // Certificate metadata
@@ -344,7 +344,7 @@ class CertificateGenerationService {
         operationId: operationId,
         version: '2.0',
         issuingAuthority: template.customizations.organizationName,
-        certificateTemplate: template.templateId,
+        certificateTemplate: template.templateId
       },
 
       // Security features
@@ -353,7 +353,7 @@ class CertificateGenerationService {
         verificationUrl: `${this.config.baseUrl}/verify-certificate/${certificateNumber}`,
         qrCodeData: '', // Will be generated
         digitalSignature: '', // Will be generated
-        tamperProofSeal: '', // Will be generated
+        tamperProofSeal: '' // Will be generated
       },
 
       // Compliance and audit
@@ -362,8 +362,8 @@ class CertificateGenerationService {
         regulatoryCompliance: true,
         auditTrailId: operationId,
         governmentSubmissionRequired: this.certificateRules.governmentSubmissionRequired,
-        renewalEligible: true,
-      },
+        renewalEligible: true
+      }
     };
 
     // Generate QR code data
@@ -404,7 +404,7 @@ class CertificateGenerationService {
       sc: certificateData.performance.finalScore,
       id: certificateData.metadata.issuedDate.getTime(),
       ex: certificateData.metadata.expiryDate.getTime(),
-      vf: certificateData.security.verificationUrl,
+      vf: certificateData.security.verificationUrl
     });
   }
 
@@ -419,7 +419,7 @@ class CertificateGenerationService {
           pdfData: Buffer.from('PDF_CERTIFICATE_DATA_PLACEHOLDER'),
           pdfUrl: `/certificates/${certificateData.certificateNumber}.pdf`,
           fileSize: 1024000, // 1MB
-          mimeType: 'application/pdf',
+          mimeType: 'application/pdf'
         };
       }
 
@@ -435,8 +435,8 @@ class CertificateGenerationService {
         security: {
           watermark: template.customizations.watermarkText,
           qrCode: certificateData.security.qrCodeData,
-          digitalSignature: true,
-        },
+          digitalSignature: true
+        }
       });
 
       return pdfResult;
@@ -459,7 +459,7 @@ class CertificateGenerationService {
           url: pdfData.pdfUrl,
           fileSize: pdfData.fileSize,
           mimeType: pdfData.mimeType,
-          storedAt: new Date(),
+          storedAt: new Date()
         },
         status: 'ACTIVE',
         createdAt: new Date(),
@@ -469,16 +469,16 @@ class CertificateGenerationService {
             action: 'CERTIFICATE_GENERATED',
             timestamp: new Date(),
             operationId: certificateData.metadata.operationId,
-            details: 'Certificate successfully generated and stored',
-          },
-        ],
+            details: 'Certificate successfully generated and stored'
+          }
+        ]
       };
 
       const result = await collection.insertOne(certificateDocument);
 
       return {
         ...certificateDocument,
-        id: result.insertedId.toString(),
+        id: result.insertedId.toString()
       };
     } catch (error) {
       this.logger.error('[CertificateGeneration] Certificate storage failed:', error);
@@ -495,7 +495,7 @@ class CertificateGenerationService {
         return {
           submitted: false,
           reason: 'Government integration service not available',
-          submissionId: null,
+          submissionId: null
         };
       }
 
@@ -508,7 +508,7 @@ class CertificateGenerationService {
         finalScore: certificate.performance.finalScore,
         issuedDate: certificate.metadata.issuedDate,
         expiryDate: certificate.metadata.expiryDate,
-        issuingAuthority: certificate.metadata.issuingAuthority,
+        issuingAuthority: certificate.metadata.issuingAuthority
       };
 
       const submission = await this.governmentIntegration.submitCertificate(submissionData);
@@ -518,7 +518,7 @@ class CertificateGenerationService {
         submissionId: submission.submissionId,
         governmentReference: submission.reference,
         submittedAt: new Date(),
-        status: submission.status || 'SUBMITTED',
+        status: submission.status || 'SUBMITTED'
       };
     } catch (error) {
       this.logger.error('[CertificateGeneration] Government submission failed:', error);
@@ -526,7 +526,7 @@ class CertificateGenerationService {
         submitted: false,
         reason: error.message,
         submissionId: null,
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -546,7 +546,7 @@ class CertificateGenerationService {
         renewalReminderDate: this.calculateReminderDate(certificate.metadata.expiryDate),
         governmentSubmission: governmentSubmission,
         trackingEnabled: true,
-        monitoringActive: true,
+        monitoringActive: true
       };
 
       // Store in certificate tracking system
@@ -556,12 +556,12 @@ class CertificateGenerationService {
       }
 
       this.logger.log(
-        `[CertificateGeneration] Certificate tracking initialized: ${certificate.certificateNumber}`,
+        `[CertificateGeneration] Certificate tracking initialized: ${certificate.certificateNumber}`
       );
     } catch (error) {
       this.logger.error(
         '[CertificateGeneration] Certificate tracking initialization failed:',
-        error,
+        error
       );
       // Don't fail the main process
     }
@@ -595,9 +595,9 @@ class CertificateGenerationService {
           certificateId: certificate.id,
           certificateNumber: certificate.certificateNumber,
           downloadUrl: certificate.pdf.url,
-          expiryDate: certificate.metadata.expiryDate,
+          expiryDate: certificate.metadata.expiryDate
         },
-        channels: ['EMAIL', 'SMS', 'IN_APP'],
+        channels: ['EMAIL', 'SMS', 'IN_APP']
       });
 
       // Notification to administrators
@@ -610,9 +610,9 @@ class CertificateGenerationService {
           certificateId: certificate.id,
           certificateNumber: certificate.certificateNumber,
           farmerName: certificate.recipient.farmerName,
-          courseName: certificate.course.courseName,
+          courseName: certificate.course.courseName
         },
-        channels: ['IN_APP', 'EMAIL'],
+        channels: ['IN_APP', 'EMAIL']
       });
     } catch (error) {
       this.logger.error('[CertificateGeneration] Notification sending failed:', error);
@@ -633,7 +633,7 @@ class CertificateGenerationService {
         'course.courseId': courseId,
         certificateType: certificateType,
         status: 'ACTIVE',
-        'metadata.expiryDate': { $gt: new Date() },
+        'metadata.expiryDate': { $gt: new Date() }
       });
 
       return existingCertificate;
@@ -672,9 +672,9 @@ class CertificateGenerationService {
         governmentIntegrationEnabled: !!this.governmentIntegration,
         pdfGenerationEnabled: !!this.pdfGenerator,
         notificationEnabled: !!this.notificationService,
-        auditTrailEnabled: this.certificateRules.auditTrailRequired,
+        auditTrailEnabled: this.certificateRules.auditTrailRequired
       },
-      lastUpdated: new Date(),
+      lastUpdated: new Date()
     };
   }
 }

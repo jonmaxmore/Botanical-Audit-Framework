@@ -43,14 +43,14 @@ module.exports = {
   // Config exports
   config: {
     environment,
-    database,
+    database
   },
 
   // Middleware exports
   middleware: {
     errorHandler,
     auth: authMiddleware,
-    security: securityMiddleware,
+    security: securityMiddleware
   },
 
   // Utils exports
@@ -58,20 +58,20 @@ module.exports = {
     response: responseUtils,
     validation: validationUtils,
     crypto: cryptoUtils,
-    date: dateUtils,
+    date: dateUtils
   },
 
   // Constants exports
   constants: {
     statusCodes,
     userRoles,
-    errorMessages,
+    errorMessages
   },
 
   // Database exports
   database: {
     connection: dbConnection,
-    plugins: mongoosePlugins,
+    plugins: mongoosePlugins
   },
 
   // Health check
@@ -79,7 +79,7 @@ module.exports = {
     return {
       status: 'healthy',
       module: 'shared',
-      database: dbConnection.getStatus(),
+      database: dbConnection.getStatus()
     };
-  },
+  }
 };

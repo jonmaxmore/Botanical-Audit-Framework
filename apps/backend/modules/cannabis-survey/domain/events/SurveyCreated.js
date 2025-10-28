@@ -13,7 +13,7 @@ class SurveyCreated {
     surveyPeriod,
     purpose,
     plantType,
-    createdAt,
+    createdAt
   }) {
     this.surveyId = surveyId;
     this.farmId = farmId;

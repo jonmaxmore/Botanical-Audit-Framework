@@ -37,20 +37,20 @@ const MAGIC_BYTES = {
   jpeg: [
     [0xff, 0xd8, 0xff, 0xdb], // JPEG raw
     [0xff, 0xd8, 0xff, 0xe0], // JPEG/JFIF
-    [0xff, 0xd8, 0xff, 0xe1], // JPEG/Exif
+    [0xff, 0xd8, 0xff, 0xe1] // JPEG/Exif
   ],
   // PNG: 89 50 4E 47 0D 0A 1A 0A
   png: [[0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]],
   // WebP: RIFF....WEBP
   webp: [
-    [0x52, 0x49, 0x46, 0x46], // Check first 4 bytes (RIFF), then check bytes 8-11 for WEBP
+    [0x52, 0x49, 0x46, 0x46] // Check first 4 bytes (RIFF), then check bytes 8-11 for WEBP
   ],
   // ZIP: PK (50 4B)
   zip: [
     [0x50, 0x4b, 0x03, 0x04], // ZIP local file header
     [0x50, 0x4b, 0x05, 0x06], // ZIP empty archive
-    [0x50, 0x4b, 0x07, 0x08], // ZIP spanned archive
-  ],
+    [0x50, 0x4b, 0x07, 0x08] // ZIP spanned archive
+  ]
 };
 
 /**
@@ -61,32 +61,32 @@ const ALLOWED_FILE_TYPES = {
     mimeTypes: ['application/pdf'],
     extensions: ['.pdf'],
     maxSize: 10 * 1024 * 1024, // 10 MB
-    category: 'document',
+    category: 'document'
   },
   jpeg: {
     mimeTypes: ['image/jpeg', 'image/jpg'],
     extensions: ['.jpg', '.jpeg'],
     maxSize: 5 * 1024 * 1024, // 5 MB
-    category: 'image',
+    category: 'image'
   },
   png: {
     mimeTypes: ['image/png'],
     extensions: ['.png'],
     maxSize: 5 * 1024 * 1024, // 5 MB
-    category: 'image',
+    category: 'image'
   },
   webp: {
     mimeTypes: ['image/webp'],
     extensions: ['.webp'],
     maxSize: 5 * 1024 * 1024, // 5 MB
-    category: 'image',
+    category: 'image'
   },
   zip: {
     mimeTypes: ['application/zip', 'application/x-zip-compressed'],
     extensions: ['.zip'],
     maxSize: 50 * 1024 * 1024, // 50 MB
-    category: 'archive',
-  },
+    category: 'archive'
+  }
 };
 
 /**
@@ -172,7 +172,7 @@ function validateFile(file, options = {}) {
   const {
     allowedTypes = Object.keys(ALLOWED_FILE_TYPES),
     maxSize = null,
-    requireMagicByteCheck = true,
+    requireMagicByteCheck = true
   } = options;
 
   try {
@@ -188,13 +188,13 @@ function validateFile(file, options = {}) {
     // 3. Check file extension
     const ext = path.extname(sanitizedFilename).toLowerCase();
     const fileTypeEntry = Object.entries(ALLOWED_FILE_TYPES).find(([, config]) =>
-      config.extensions.includes(ext),
+      config.extensions.includes(ext)
     );
 
     if (!fileTypeEntry) {
       return {
         valid: false,
-        error: `File extension ${ext} is not allowed`,
+        error: `File extension ${ext} is not allowed`
       };
     }
 
@@ -204,7 +204,7 @@ function validateFile(file, options = {}) {
     if (!allowedTypes.includes(detectedType)) {
       return {
         valid: false,
-        error: `File type ${detectedType} is not allowed in this context`,
+        error: `File type ${detectedType} is not allowed in this context`
       };
     }
 
@@ -212,7 +212,7 @@ function validateFile(file, options = {}) {
     if (!typeConfig.mimeTypes.includes(file.mimetype)) {
       return {
         valid: false,
-        error: `MIME type ${file.mimetype} does not match extension ${ext}`,
+        error: `MIME type ${file.mimetype} does not match extension ${ext}`
       };
     }
 
@@ -221,7 +221,7 @@ function validateFile(file, options = {}) {
     if (file.size > sizeLimit) {
       return {
         valid: false,
-        error: `File size ${(file.size / 1024 / 1024).toFixed(2)}MB exceeds limit ${(sizeLimit / 1024 / 1024).toFixed(2)}MB`,
+        error: `File size ${(file.size / 1024 / 1024).toFixed(2)}MB exceeds limit ${(sizeLimit / 1024 / 1024).toFixed(2)}MB`
       };
     }
 
@@ -232,14 +232,14 @@ function validateFile(file, options = {}) {
       if (!fileTypeFromMagicBytes) {
         return {
           valid: false,
-          error: 'Unable to verify file type from content (invalid file signature)',
+          error: 'Unable to verify file type from content (invalid file signature)'
         };
       }
 
       if (fileTypeFromMagicBytes !== detectedType) {
         return {
           valid: false,
-          error: `File content (${fileTypeFromMagicBytes}) does not match extension (${ext})`,
+          error: `File content (${fileTypeFromMagicBytes}) does not match extension (${ext})`
         };
       }
     }
@@ -254,13 +254,13 @@ function validateFile(file, options = {}) {
       valid: true,
       fileType: detectedType,
       category: typeConfig.category,
-      sanitizedFilename,
+      sanitizedFilename
     };
   } catch (error) {
     logger.error('[FileUploadValidator] Validation error:', error);
     return {
       valid: false,
-      error: 'File validation failed',
+      error: 'File validation failed'
     };
   }
 }
@@ -277,7 +277,7 @@ function validateFileUpload(options = {}) {
       return res.status(400).json({
         success: false,
         error: 'FILE_REQUIRED',
-        message: 'No file uploaded',
+        message: 'No file uploaded'
       });
     }
 
@@ -289,13 +289,13 @@ function validateFileUpload(options = {}) {
         logger.warn('[FileUploadValidator] File validation failed:', {
           filename: req.file.originalname,
           error: validation.error,
-          ip: req.ip,
+          ip: req.ip
         });
 
         return res.status(400).json({
           success: false,
           error: 'FILE_VALIDATION_FAILED',
-          message: validation.error,
+          message: validation.error
         });
       }
 
@@ -304,7 +304,7 @@ function validateFileUpload(options = {}) {
       logger.info('[FileUploadValidator] File validated successfully:', {
         filename: req.file.sanitizedFilename,
         type: validation.fileType,
-        size: req.file.size,
+        size: req.file.size
       });
     }
 
@@ -320,13 +320,13 @@ function validateFileUpload(options = {}) {
           logger.warn('[FileUploadValidator] File validation failed:', {
             filename: file.originalname,
             error: validation.error,
-            ip: req.ip,
+            ip: req.ip
           });
 
           return res.status(400).json({
             success: false,
             error: 'FILE_VALIDATION_FAILED',
-            message: `${file.originalname}: ${validation.error}`,
+            message: `${file.originalname}: ${validation.error}`
           });
         }
 
@@ -336,7 +336,7 @@ function validateFileUpload(options = {}) {
       req.fileValidations = validations;
       logger.info('[FileUploadValidator] Multiple files validated:', {
         count: files.length,
-        types: validations.map(v => v.fileType),
+        types: validations.map(v => v.fileType)
       });
     }
 
@@ -357,5 +357,5 @@ module.exports = {
   validateFile,
   sanitizeFilename,
   getAllowedFileTypes,
-  ALLOWED_FILE_TYPES,
+  ALLOWED_FILE_TYPES
 };

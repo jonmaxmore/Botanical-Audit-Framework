@@ -10,7 +10,7 @@ const LOG_LEVELS = {
   ERROR: 'ERROR',
   WARN: 'WARN',
   INFO: 'INFO',
-  DEBUG: 'DEBUG',
+  DEBUG: 'DEBUG'
 };
 
 /**
@@ -38,7 +38,7 @@ class Logger {
     const metadata = error
       ? {
           error: error.message,
-          stack: error.stack,
+          stack: error.stack
         }
       : {};
     logger.error(formatLog(LOG_LEVELS.ERROR, `[${this.context}] ${message}`, metadata));
@@ -75,7 +75,7 @@ class Logger {
       staffId: staff._id || staff.id || staff.userId,
       username: staff.username,
       role: staff.role,
-      ...metadata,
+      ...metadata
     });
   }
 }

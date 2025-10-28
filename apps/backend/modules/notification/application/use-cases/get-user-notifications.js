@@ -15,7 +15,7 @@ class GetUserNotificationsUseCase {
     const personalNotifications = await this.notificationRepository.findByRecipientId(
       userId,
       filters,
-      options,
+      options
     );
 
     // Note: Broadcast notifications would be fetched separately based on user's role

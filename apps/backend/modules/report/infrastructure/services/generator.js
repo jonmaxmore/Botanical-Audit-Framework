@@ -266,7 +266,7 @@ class SimpleReportGeneratorService {
       generated: new Date().toISOString(),
       parameters: options.parameters,
       filters: options.filters,
-      data: data,
+      data: data
     };
 
     return JSON.stringify(output, null, 2);
@@ -287,7 +287,7 @@ class SimpleReportGeneratorService {
 
     return {
       filePath,
-      fileSize: stats.size,
+      fileSize: stats.size
     };
   }
 

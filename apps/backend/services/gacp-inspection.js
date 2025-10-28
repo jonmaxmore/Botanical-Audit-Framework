@@ -24,19 +24,19 @@ class GACPInspectionService {
         {
           id: 'seed_quality',
           weight: 0.4,
-          description: 'Quality and authenticity of seeds/planting materials',
+          description: 'Quality and authenticity of seeds/planting materials'
         },
         {
           id: 'seed_storage',
           weight: 0.3,
-          description: 'Proper storage conditions for seeds',
+          description: 'Proper storage conditions for seeds'
         },
         {
           id: 'seed_documentation',
           weight: 0.3,
-          description: 'Documentation and traceability',
-        },
-      ],
+          description: 'Documentation and traceability'
+        }
+      ]
     },
 
     // CCP2: Soil Management (15 points)
@@ -46,19 +46,19 @@ class GACPInspectionService {
         {
           id: 'soil_testing',
           weight: 0.3,
-          description: 'Regular soil testing and analysis',
+          description: 'Regular soil testing and analysis'
         },
         {
           id: 'fertilizer_use',
           weight: 0.4,
-          description: 'Appropriate fertilizer application',
+          description: 'Appropriate fertilizer application'
         },
         {
           id: 'soil_conservation',
           weight: 0.3,
-          description: 'Soil conservation practices',
-        },
-      ],
+          description: 'Soil conservation practices'
+        }
+      ]
     },
 
     // CCP3: Pest and Disease Management (15 points)
@@ -68,19 +68,19 @@ class GACPInspectionService {
         {
           id: 'ipm_practices',
           weight: 0.4,
-          description: 'Integrated Pest Management implementation',
+          description: 'Integrated Pest Management implementation'
         },
         {
           id: 'pesticide_use',
           weight: 0.3,
-          description: 'Proper pesticide application and safety',
+          description: 'Proper pesticide application and safety'
         },
         {
           id: 'monitoring_system',
           weight: 0.3,
-          description: 'Pest monitoring and early warning system',
-        },
-      ],
+          description: 'Pest monitoring and early warning system'
+        }
+      ]
     },
 
     // CCP4: Harvesting Practices (15 points)
@@ -90,19 +90,19 @@ class GACPInspectionService {
         {
           id: 'harvest_timing',
           weight: 0.3,
-          description: 'Optimal harvest timing',
+          description: 'Optimal harvest timing'
         },
         {
           id: 'harvest_method',
           weight: 0.4,
-          description: 'Appropriate harvesting methods',
+          description: 'Appropriate harvesting methods'
         },
         {
           id: 'field_hygiene',
           weight: 0.3,
-          description: 'Field hygiene during harvest',
-        },
-      ],
+          description: 'Field hygiene during harvest'
+        }
+      ]
     },
 
     // CCP5: Post-Harvest Handling (15 points)
@@ -112,19 +112,19 @@ class GACPInspectionService {
         {
           id: 'cleaning_sorting',
           weight: 0.3,
-          description: 'Proper cleaning and sorting procedures',
+          description: 'Proper cleaning and sorting procedures'
         },
         {
           id: 'contamination_prevention',
           weight: 0.4,
-          description: 'Prevention of contamination',
+          description: 'Prevention of contamination'
         },
         {
           id: 'processing_equipment',
           weight: 0.3,
-          description: 'Clean and maintained equipment',
-        },
-      ],
+          description: 'Clean and maintained equipment'
+        }
+      ]
     },
 
     // CCP6: Storage and Transportation (10 points)
@@ -134,19 +134,19 @@ class GACPInspectionService {
         {
           id: 'storage_conditions',
           weight: 0.4,
-          description: 'Appropriate storage environment',
+          description: 'Appropriate storage environment'
         },
         {
           id: 'packaging_labeling',
           weight: 0.3,
-          description: 'Proper packaging and labeling',
+          description: 'Proper packaging and labeling'
         },
         {
           id: 'transport_hygiene',
           weight: 0.3,
-          description: 'Clean transportation vehicles',
-        },
-      ],
+          description: 'Clean transportation vehicles'
+        }
+      ]
     },
 
     // CCP7: Record Keeping (10 points)
@@ -156,19 +156,19 @@ class GACPInspectionService {
         {
           id: 'cultivation_records',
           weight: 0.4,
-          description: 'Complete cultivation records',
+          description: 'Complete cultivation records'
         },
         {
           id: 'input_records',
           weight: 0.3,
-          description: 'Input usage documentation',
+          description: 'Input usage documentation'
         },
         {
           id: 'traceability',
           weight: 0.3,
-          description: 'Product traceability system',
-        },
-      ],
+          description: 'Product traceability system'
+        }
+      ]
     },
 
     // CCP8: Worker Training and Hygiene (5 points)
@@ -178,15 +178,15 @@ class GACPInspectionService {
         {
           id: 'training_programs',
           weight: 0.5,
-          description: 'Worker training programs',
+          description: 'Worker training programs'
         },
         {
           id: 'hygiene_practices',
           weight: 0.5,
-          description: 'Personal hygiene practices',
-        },
-      ],
-    },
+          description: 'Personal hygiene practices'
+        }
+      ]
+    }
   };
 
   /**
@@ -221,33 +221,33 @@ class GACPInspectionService {
         photos: [],
         gpsCoordinates: null,
         weatherConditions: null,
-        notes: {},
+        notes: {}
       };
 
       // Update application status
       await application.updateStatus(
         'inspection_in_progress',
         inspectorId,
-        'Field inspection started',
+        'Field inspection started'
       );
 
       logger.info('Inspection initialized', {
         applicationId,
         inspectorId,
         farmSize: application.farmInformation.farmSize.totalArea,
-        cropTypes: application.cropInformation.map(c => c.cropType),
+        cropTypes: application.cropInformation.map(c => c.cropType)
       });
 
       return {
         application,
         inspectionData,
         checklist: inspectionChecklist,
-        estimatedDuration: this.calculateInspectionDuration(application),
+        estimatedDuration: this.calculateInspectionDuration(application)
       };
     } catch (error) {
       logger.error('Error initializing inspection', {
         applicationId,
-        error: error.message,
+        error: error.message
       });
       throw error;
     }
@@ -273,9 +273,9 @@ class GACPInspectionService {
             compliance: 'not_assessed', // not_assessed, compliant, minor_issue, major_issue, critical_issue
             evidence: [],
             notes: '',
-            recommendations: [],
-          },
-        })),
+            recommendations: []
+          }
+        }))
       };
     });
 
@@ -285,7 +285,7 @@ class GACPInspectionService {
       if (cropSpecificCriteria) {
         checklist.crop_specific = checklist.crop_specific || {
           maxScore: 10,
-          criteria: [],
+          criteria: []
         };
         checklist.crop_specific.criteria.push(...cropSpecificCriteria);
       }
@@ -325,7 +325,7 @@ class GACPInspectionService {
         gpsLocation: assessmentData.gpsLocation,
         notes: assessmentData.notes || '',
         recommendations: assessmentData.recommendations || [],
-        correctiveActions: assessmentData.correctiveActions || [],
+        correctiveActions: assessmentData.correctiveActions || []
       };
 
       // Add to application assessment scores
@@ -337,20 +337,20 @@ class GACPInspectionService {
         category,
         criterionId,
         score: complianceScore.score,
-        compliance: complianceScore.compliance,
+        compliance: complianceScore.compliance
       });
 
       return {
         assessment,
         complianceScore,
-        categoryProgress: this.calculateCategoryProgress(application, category),
+        categoryProgress: this.calculateCategoryProgress(application, category)
       };
     } catch (error) {
       logger.error('Error assessing control point', {
         applicationId,
         category,
         criterionId,
-        error: error.message,
+        error: error.message
       });
       throw error;
     }
@@ -379,14 +379,14 @@ class GACPInspectionService {
       // Determine certification recommendation
       const recommendation = this.determineCertificationRecommendation(
         overallScore,
-        complianceReport,
+        complianceReport
       );
 
       // Update application with inspection results
       application.inspectionCompleted = new Date();
       application.inspectionDuration = this.calculateActualDuration(
         application.inspectionScheduled,
-        new Date(),
+        new Date()
       );
 
       // Add final inspection assessment
@@ -398,7 +398,7 @@ class GACPInspectionService {
         assessmentDate: new Date(),
         notes: inspectionData.finalNotes || '',
         recommendations: recommendation.recommendations,
-        correctiveActions: recommendation.correctiveActions || [],
+        correctiveActions: recommendation.correctiveActions || []
       });
 
       await application.save();
@@ -408,13 +408,13 @@ class GACPInspectionService {
         await application.updateStatus(
           'inspection_completed',
           inspectorId,
-          `Inspection completed - Recommended for approval (Score: ${overallScore})`,
+          `Inspection completed - Recommended for approval (Score: ${overallScore})`
         );
       } else {
         await application.updateStatus(
           'inspection_completed',
           inspectorId,
-          `Inspection completed - ${recommendation.decision} (Score: ${overallScore})`,
+          `Inspection completed - ${recommendation.decision} (Score: ${overallScore})`
         );
       }
 
@@ -422,7 +422,7 @@ class GACPInspectionService {
         applicationId,
         overallScore,
         recommendation: recommendation.decision,
-        duration: application.inspectionDuration,
+        duration: application.inspectionDuration
       });
 
       return {
@@ -430,12 +430,12 @@ class GACPInspectionService {
         complianceReport,
         overallScore,
         recommendation,
-        inspectionSummary: this.generateInspectionSummary(application, complianceReport),
+        inspectionSummary: this.generateInspectionSummary(application, complianceReport)
       };
     } catch (error) {
       logger.error('Error completing inspection', {
         applicationId,
-        error: error.message,
+        error: error.message
       });
       throw error;
     }
@@ -470,7 +470,7 @@ class GACPInspectionService {
         frequency: surveillanceFrequency,
         focusAreas: this.identifyFocusAreas(complianceReport),
         schedule: this.generateSurveillanceSchedule(surveillanceFrequency),
-        requirements: this.determineSurveillanceRequirements(riskLevel, complianceLevel),
+        requirements: this.determineSurveillanceRequirements(riskLevel, complianceLevel)
       };
 
       application.surveillancePlan = surveillancePlan;
@@ -479,14 +479,14 @@ class GACPInspectionService {
       logger.info('Surveillance plan generated', {
         applicationId,
         frequency: surveillanceFrequency,
-        focusAreas: surveillancePlan.focusAreas.length,
+        focusAreas: surveillancePlan.focusAreas.length
       });
 
       return surveillancePlan;
     } catch (error) {
       logger.error('Error generating surveillance plan', {
         applicationId,
-        error: error.message,
+        error: error.message
       });
       throw error;
     }
@@ -519,53 +519,53 @@ class GACPInspectionService {
         {
           id: 'water_management',
           weight: 0.4,
-          description: 'Water management in rice fields',
+          description: 'Water management in rice fields'
         },
         {
           id: 'disease_resistance',
           weight: 0.3,
-          description: 'Disease resistant varieties',
+          description: 'Disease resistant varieties'
         },
         {
           id: 'drying_process',
           weight: 0.3,
-          description: 'Proper drying process',
-        },
+          description: 'Proper drying process'
+        }
       ],
       vegetables: [
         {
           id: 'irrigation_system',
           weight: 0.3,
-          description: 'Drip irrigation system',
+          description: 'Drip irrigation system'
         },
         {
           id: 'greenhouse_management',
           weight: 0.4,
-          description: 'Greenhouse/shelter management',
+          description: 'Greenhouse/shelter management'
         },
         {
           id: 'harvest_frequency',
           weight: 0.3,
-          description: 'Optimal harvest frequency',
-        },
+          description: 'Optimal harvest frequency'
+        }
       ],
       herbs: [
         {
           id: 'active_compounds',
           weight: 0.4,
-          description: 'Active compound preservation',
+          description: 'Active compound preservation'
         },
         {
           id: 'drying_curing',
           weight: 0.3,
-          description: 'Proper drying and curing',
+          description: 'Proper drying and curing'
         },
         {
           id: 'contamination_control',
           weight: 0.3,
-          description: 'Heavy metal contamination control',
-        },
-      ],
+          description: 'Heavy metal contamination control'
+        }
+      ]
     };
 
     return cropCriteria[cropType] || null;
@@ -602,7 +602,7 @@ class GACPInspectionService {
       compliant: 1.0, // 100% of points
       minor_issue: 0.8, // 80% of points
       major_issue: 0.5, // 50% of points
-      critical_issue: 0.0, // 0% of points
+      critical_issue: 0.0 // 0% of points
     };
 
     const scoreMultiplier = complianceScores[assessmentData.compliance] || 0;
@@ -612,13 +612,13 @@ class GACPInspectionService {
       score,
       maxScore,
       compliance: assessmentData.compliance,
-      percentage: Math.round((score / maxScore) * 100),
+      percentage: Math.round((score / maxScore) * 100)
     };
   }
 
   calculateCategoryProgress(application, category) {
     const categoryAssessments = application.assessmentScores.filter(
-      score => score.category === category,
+      score => score.category === category
     );
 
     const categoryConfig = this.constructor.CRITICAL_CONTROL_POINTS[category];
@@ -629,7 +629,7 @@ class GACPInspectionService {
       assessed: assessedCriteria,
       total: totalCriteria,
       percentage: totalCriteria > 0 ? Math.round((assessedCriteria / totalCriteria) * 100) : 0,
-      completed: assessedCriteria === totalCriteria,
+      completed: assessedCriteria === totalCriteria
     };
   }
 
@@ -639,16 +639,16 @@ class GACPInspectionService {
     const assessedCategories = new Set(
       application.assessmentScores
         .filter(score => requiredCategories.includes(score.category))
-        .map(score => score.category),
+        .map(score => score.category)
     );
 
     const missingCategories = requiredCategories.filter(
-      category => !assessedCategories.has(category),
+      category => !assessedCategories.has(category)
     );
 
     if (missingCategories.length > 0) {
       throw new ValidationError(
-        `Incomplete inspection: Missing assessments for ${missingCategories.join(', ')}`,
+        `Incomplete inspection: Missing assessments for ${missingCategories.join(', ')}`
       );
     }
 
@@ -665,17 +665,17 @@ class GACPInspectionService {
       totalMaxScore: 0,
       criticalIssues: [],
       majorIssues: [],
-      recommendations: [],
+      recommendations: []
     };
 
     Object.entries(this.constructor.CRITICAL_CONTROL_POINTS).forEach(([category, config]) => {
       const categoryAssessments = application.assessmentScores.filter(
-        score => score.category === category,
+        score => score.category === category
       );
 
       const categoryScore = categoryAssessments.reduce(
         (sum, assessment) => sum + assessment.achievedScore,
-        0,
+        0
       );
       const categoryMaxScore = config.maxScore;
 
@@ -684,7 +684,7 @@ class GACPInspectionService {
         maxScore: categoryMaxScore,
         percentage: Math.round((categoryScore / categoryMaxScore) * 100),
         assessments: categoryAssessments.length,
-        issues: categoryAssessments.filter(a => a.compliance !== 'compliant').length,
+        issues: categoryAssessments.filter(a => a.compliance !== 'compliant').length
       };
 
       report.overallScore += categoryScore;
@@ -696,13 +696,13 @@ class GACPInspectionService {
           report.criticalIssues.push({
             category,
             criterion: assessment.criterionId,
-            description: assessment.notes,
+            description: assessment.notes
           });
         } else if (assessment.compliance === 'major_issue') {
           report.majorIssues.push({
             category,
             criterion: assessment.criterionId,
-            description: assessment.notes,
+            description: assessment.notes
           });
         }
 
@@ -729,8 +729,8 @@ class GACPInspectionService {
         reason: 'Critical compliance issues identified',
         recommendations: ['Address all critical issues before reapplication'],
         correctiveActions: complianceReport.criticalIssues.map(
-          issue => `Resolve critical issue in ${issue.category}: ${issue.description}`,
-        ),
+          issue => `Resolve critical issue in ${issue.category}: ${issue.description}`
+        )
       };
     }
 
@@ -739,7 +739,7 @@ class GACPInspectionService {
         decision: 'approve',
         reason: 'Full compliance with GACP standards',
         validityPeriod: 24, // 2 years
-        recommendations: ['Maintain current practices', 'Continue regular monitoring'],
+        recommendations: ['Maintain current practices', 'Continue regular monitoring']
       };
     }
 
@@ -750,8 +750,8 @@ class GACPInspectionService {
         validityPeriod: 12, // 1 year
         recommendations: complianceReport.recommendations,
         correctiveActions: complianceReport.majorIssues.map(
-          issue => `Address major issue in ${issue.category}: ${issue.description}`,
-        ),
+          issue => `Address major issue in ${issue.category}: ${issue.description}`
+        )
       };
     }
 
@@ -761,9 +761,9 @@ class GACPInspectionService {
       recommendations: [
         'Improve farming practices',
         'Address identified deficiencies',
-        'Consider additional training',
+        'Consider additional training'
       ],
-      correctiveActions: [...complianceReport.recommendations],
+      correctiveActions: [...complianceReport.recommendations]
     };
   }
 
@@ -779,7 +779,7 @@ class GACPInspectionService {
       categoryScores: complianceReport.categories,
       criticalIssues: complianceReport.criticalIssues.length,
       majorIssues: complianceReport.majorIssues.length,
-      recommendations: complianceReport.recommendations.length,
+      recommendations: complianceReport.recommendations.length
     };
   }
 
@@ -799,7 +799,7 @@ class GACPInspectionService {
         focusAreas.push({
           category,
           priority: data.percentage < 60 ? 'high' : 'medium',
-          reason: `Low compliance score: ${data.percentage}%`,
+          reason: `Low compliance score: ${data.percentage}%`
         });
       }
     });
@@ -814,7 +814,7 @@ class GACPInspectionService {
     const intervals = {
       quarterly: 3,
       semi_annual: 6,
-      annual: 12,
+      annual: 12
     };
 
     const intervalMonths = intervals[frequency] || 12;

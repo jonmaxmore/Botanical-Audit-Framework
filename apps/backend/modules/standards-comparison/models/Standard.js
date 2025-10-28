@@ -10,43 +10,43 @@ const criterionSchema = new mongoose.Schema(
   {
     id: {
       type: String,
-      required: true,
+      required: true
     },
     requirement: {
       type: String,
-      required: true,
+      required: true
     },
     priority: {
       type: String,
       enum: ['critical', 'important', 'optional'],
-      required: true,
+      required: true
     },
     weight: {
       type: Number,
       required: true,
       min: 1,
-      max: 10,
+      max: 10
     },
     description: String,
-    examples: [String],
+    examples: [String]
   },
-  { _id: false },
+  { _id: false }
 );
 
 const requirementSchema = new mongoose.Schema(
   {
     category: {
       type: String,
-      required: true,
+      required: true
     },
     title: {
       type: String,
-      required: true,
+      required: true
     },
     description: String,
-    criteria: [criterionSchema],
+    criteria: [criterionSchema]
   },
-  { _id: false },
+  { _id: false }
 );
 
 const standardSchema = new mongoose.Schema(
@@ -56,15 +56,15 @@ const standardSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
     name: {
       type: String,
-      required: true,
+      required: true
     },
     version: {
       type: String,
-      required: true,
+      required: true
     },
     description: String,
 
@@ -76,7 +76,7 @@ const standardSchema = new mongoose.Schema(
     active: {
       type: Boolean,
       default: true,
-      index: true,
+      index: true
     },
 
     // Requirements
@@ -87,22 +87,22 @@ const standardSchema = new mongoose.Schema(
     applicableCropTypes: [String],
     certificationDuration: {
       years: Number,
-      description: String,
+      description: String
     },
 
     // Timestamps
     createdAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
     updatedAt: {
       type: Date,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   },
   {
-    collection: 'standards',
-  },
+    collection: 'standards'
+  }
 );
 
 // Indexes
@@ -135,8 +135,8 @@ standardSchema.methods.getCriteriaByPriority = function (priority) {
       ...filteredCriteria.map(c => ({
         ...c.toObject(),
         category: requirement.category,
-        categoryTitle: requirement.title,
-      })),
+        categoryTitle: requirement.title
+      }))
     );
   }
 
@@ -175,7 +175,7 @@ standardSchema.statics.findActive = function () {
 standardSchema.statics.findByCropType = function (cropType) {
   return this.find({
     active: true,
-    applicableCropTypes: cropType,
+    applicableCropTypes: cropType
   });
 };
 
@@ -186,8 +186,8 @@ standardSchema.statics.search = function (query) {
     $or: [
       { name: { $regex: query, $options: 'i' } },
       { description: { $regex: query, $options: 'i' } },
-      { issuingOrganization: { $regex: query, $options: 'i' } },
-    ],
+      { issuingOrganization: { $regex: query, $options: 'i' } }
+    ]
   });
 };
 

@@ -24,7 +24,7 @@ class CertificateWorkflowIntegration {
     applicationService,
     notificationService,
     auditService,
-    eventBus,
+    eventBus
   }) {
     this.certificateService = certificateService;
     this.applicationService = applicationService;
@@ -68,7 +68,7 @@ class CertificateWorkflowIntegration {
       // 1. ตรวจสอบว่า application อยู่ในสถานะที่ถูกต้อง
       if (applicationData.status !== 'DTAM_APPROVED') {
         console.warn(
-          `⚠️ Application ${applicationId} is not in DTAM_APPROVED status: ${applicationData.status}`,
+          `⚠️ Application ${applicationId} is not in DTAM_APPROVED status: ${applicationData.status}`
         );
         return;
       }
@@ -87,7 +87,7 @@ class CertificateWorkflowIntegration {
         applicationId,
         applicationData,
         issuedBy: approvedBy,
-        validityPeriod: 36, // 3 years
+        validityPeriod: 36 // 3 years
       });
 
       logger.info(`✅ Certificate generated successfully: ${certificate.certificateNumber}`);
@@ -101,14 +101,14 @@ class CertificateWorkflowIntegration {
           applicationId,
           userId: certificate.userId,
           farmId: certificate.farmId,
-          issuedBy: approvedBy,
+          issuedBy: approvedBy
         },
-        timestamp: new Date(),
+        timestamp: new Date()
       });
     } catch (error) {
       console.error(
         `❌ Failed to process approved application: ${event.payload.applicationId}`,
-        error,
+        error
       );
 
       // ส่ง event แจ้งการล้มเหลว
@@ -117,8 +117,8 @@ class CertificateWorkflowIntegration {
         payload: {
           applicationId: event.payload.applicationId,
           error: error.message,
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       });
     }
   }
@@ -137,7 +137,7 @@ class CertificateWorkflowIntegration {
       await this.applicationService.updateStatus(applicationId, 'CERTIFICATE_ISSUED', {
         certificateId,
         certificateNumber,
-        issuedAt: new Date(),
+        issuedAt: new Date()
       });
 
       logger.info(`📝 Updated application status to CERTIFICATE_ISSUED: ${applicationId}`);
@@ -148,7 +148,7 @@ class CertificateWorkflowIntegration {
         farmId,
         certificateNumber,
         applicationId,
-        channels: ['email', 'sms', 'in-app'],
+        channels: ['email', 'sms', 'in-app']
       });
 
       logger.info(`📧 Sent certificate issued notification to user: ${userId}`);
@@ -162,15 +162,15 @@ class CertificateWorkflowIntegration {
         metadata: {
           applicationId,
           certificateNumber,
-          farmId,
-        },
+          farmId
+        }
       });
 
       logger.info(`📋 Audit log recorded for certificate issuance: ${certificateNumber}`);
     } catch (error) {
       console.error(
         `❌ Failed to process certificate generation: ${event.payload.certificateNumber}`,
-        error,
+        error
       );
     }
   }
@@ -192,11 +192,11 @@ class CertificateWorkflowIntegration {
         certificateId,
         certificateNumber,
         daysUntilExpiry,
-        channels: ['email', 'sms', 'in-app'],
+        channels: ['email', 'sms', 'in-app']
       });
 
       console.log(
-        `📨 Sent renewal reminder for certificate: ${certificateNumber} (${daysUntilExpiry} days)`,
+        `📨 Sent renewal reminder for certificate: ${certificateNumber} (${daysUntilExpiry} days)`
       );
 
       // บันทึก audit log
@@ -208,13 +208,13 @@ class CertificateWorkflowIntegration {
         metadata: {
           certificateNumber,
           daysUntilExpiry,
-          farmId,
-        },
+          farmId
+        }
       });
     } catch (error) {
       console.error(
         `❌ Failed to process expiring certificate: ${event.payload.certificateNumber}`,
-        error,
+        error
       );
     }
   }
@@ -238,7 +238,7 @@ class CertificateWorkflowIntegration {
         farmId,
         certificateId,
         certificateNumber,
-        channels: ['email', 'sms', 'in-app'],
+        channels: ['email', 'sms', 'in-app']
       });
 
       logger.info(`📧 Sent expiration notification for certificate: ${certificateNumber}`);
@@ -252,13 +252,13 @@ class CertificateWorkflowIntegration {
         metadata: {
           certificateNumber,
           farmId,
-          expiredAt: new Date(),
-        },
+          expiredAt: new Date()
+        }
       });
     } catch (error) {
       console.error(
         `❌ Failed to process expired certificate: ${event.payload.certificateNumber}`,
-        error,
+        error
       );
     }
   }
@@ -286,14 +286,14 @@ class CertificateWorkflowIntegration {
               userId: certificate.userId,
               farmId: certificate.farmId,
               daysUntilExpiry: days,
-              expiryDate: certificate.expiryDate,
+              expiryDate: certificate.expiryDate
             },
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
 
         console.log(
-          `📊 Found ${expiringCertificates.length} certificates expiring in ${days} days`,
+          `📊 Found ${expiringCertificates.length} certificates expiring in ${days} days`
         );
       }
     } catch (error) {
@@ -319,9 +319,9 @@ class CertificateWorkflowIntegration {
             certificateNumber: certificate.certificateNumber,
             userId: certificate.userId,
             farmId: certificate.farmId,
-            expiredAt: new Date(),
+            expiredAt: new Date()
           },
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 

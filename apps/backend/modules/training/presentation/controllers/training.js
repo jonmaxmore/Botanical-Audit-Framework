@@ -33,7 +33,7 @@ class TrainingController {
       const options = {
         page: parseInt(page) || 1,
         limit: parseInt(limit) || 20,
-        sort: sort ? JSON.parse(sort) : { createdAt: -1 },
+        sort: sort ? JSON.parse(sort) : { createdAt: -1 }
       };
 
       const userRole = req.user.role || 'FARMER';
@@ -47,9 +47,9 @@ class TrainingController {
             total: result.total,
             page: result.page,
             limit: result.limit,
-            totalPages: Math.ceil(result.total / result.limit),
-          },
-        }),
+            totalPages: Math.ceil(result.total / result.limit)
+          }
+        })
       );
     } catch (error) {
       logger.error('List courses error:', error);
@@ -72,8 +72,8 @@ class TrainingController {
       const CourseDTO = require('../dto/CourseDTO');
       res.json(
         CourseDTO.successResponse('Course retrieved successfully', {
-          course: CourseDTO.toDetailedDTO(course),
-        }),
+          course: CourseDTO.toDetailedDTO(course)
+        })
       );
     } catch (error) {
       logger.error('Get course details error:', error);
@@ -99,8 +99,8 @@ class TrainingController {
       const CourseDTO = require('../dto/CourseDTO');
       res.status(201).json(
         CourseDTO.successResponse('Course created successfully', {
-          course: CourseDTO.toDetailedDTO(course),
-        }),
+          course: CourseDTO.toDetailedDTO(course)
+        })
       );
     } catch (error) {
       logger.error('Create course error:', error);
@@ -124,8 +124,8 @@ class TrainingController {
       const CourseDTO = require('../dto/CourseDTO');
       res.json(
         CourseDTO.successResponse('Course updated successfully', {
-          course: CourseDTO.toDetailedDTO(course),
-        }),
+          course: CourseDTO.toDetailedDTO(course)
+        })
       );
     } catch (error) {
       logger.error('Update course error:', error);
@@ -148,8 +148,8 @@ class TrainingController {
       const CourseDTO = require('../dto/CourseDTO');
       res.json(
         CourseDTO.successResponse('Course published successfully', {
-          course: CourseDTO.toSummaryDTO(course),
-        }),
+          course: CourseDTO.toSummaryDTO(course)
+        })
       );
     } catch (error) {
       logger.error('Publish course error:', error);
@@ -172,14 +172,14 @@ class TrainingController {
       const enrollment = await this.useCases.enrollInCourse.execute({
         farmerId,
         courseId,
-        enrolledBy: farmerId,
+        enrolledBy: farmerId
       });
 
       const EnrollmentDTO = require('../dto/EnrollmentDTO');
       res.status(201).json(
         EnrollmentDTO.successResponse('Enrolled successfully', {
-          enrollment: EnrollmentDTO.toDetailedDTO(enrollment),
-        }),
+          enrollment: EnrollmentDTO.toDetailedDTO(enrollment)
+        })
       );
     } catch (error) {
       logger.error('Enroll in course error:', error);
@@ -208,7 +208,7 @@ class TrainingController {
 
       const options = {
         page: parseInt(page) || 1,
-        limit: parseInt(limit) || 20,
+        limit: parseInt(limit) || 20
       };
 
       const result = await this.useCases.getFarmerEnrollments.execute(farmerId, filters, options);
@@ -221,9 +221,9 @@ class TrainingController {
             total: result.total,
             page: result.page,
             limit: result.limit,
-            totalPages: Math.ceil(result.total / result.limit),
-          },
-        }),
+            totalPages: Math.ceil(result.total / result.limit)
+          }
+        })
       );
     } catch (error) {
       logger.error('Get enrollments error:', error);
@@ -247,8 +247,8 @@ class TrainingController {
       const EnrollmentDTO = require('../dto/EnrollmentDTO');
       res.json(
         EnrollmentDTO.successResponse('Progress updated successfully', {
-          enrollment: EnrollmentDTO.toDetailedDTO(enrollment),
-        }),
+          enrollment: EnrollmentDTO.toDetailedDTO(enrollment)
+        })
       );
     } catch (error) {
       logger.error('Update progress error:', error);
@@ -275,8 +275,8 @@ class TrainingController {
 
       res.json(
         EnrollmentDTO.successResponse(message, {
-          enrollment: EnrollmentDTO.toDetailedDTO(enrollment),
-        }),
+          enrollment: EnrollmentDTO.toDetailedDTO(enrollment)
+        })
       );
     } catch (error) {
       logger.error('Submit assessment error:', error);
@@ -300,14 +300,14 @@ class TrainingController {
       res.json({
         success: true,
         message: 'Statistics retrieved successfully',
-        data: statistics,
+        data: statistics
       });
     } catch (error) {
       logger.error('Get statistics error:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve statistics',
-        errors: [error.message],
+        errors: [error.message]
       });
     }
   };

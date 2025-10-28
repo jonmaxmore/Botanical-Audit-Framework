@@ -12,7 +12,7 @@ async function debugUser() {
     // Try to find the test user
     console.log('🔍 Looking for user: loadtest@gacp.dtam.go.th');
     const user = await User.findOne({
-      email: 'loadtest@gacp.dtam.go.th',
+      email: 'loadtest@gacp.dtam.go.th'
     }).select('+password');
 
     if (!user) {
@@ -20,13 +20,13 @@ async function debugUser() {
 
       // Check if any loadtest users exist
       const count = await User.countDocuments({
-        email: { $regex: /^loadtest/i },
+        email: { $regex: /^loadtest/i }
       });
       console.log(`Found ${count} users with email starting with "loadtest"`);
 
       if (count > 0) {
         const users = await User.find({
-          email: { $regex: /^loadtest/i },
+          email: { $regex: /^loadtest/i }
         }).limit(3);
         console.log('\nFirst 3 loadtest users:');
         users.forEach(u => {

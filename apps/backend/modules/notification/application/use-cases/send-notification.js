@@ -36,10 +36,10 @@ class SendNotificationUseCase {
             to: notificationData.recipientEmail,
             subject: notification.title,
             html: this._generateEmailHTML(notification),
-            text: notification.message,
+            text: notification.message
           })
           .then(() => savedNotification.markChannelDelivered('EMAIL'))
-          .catch(error => savedNotification.markChannelDelivered('EMAIL', error.message)),
+          .catch(error => savedNotification.markChannelDelivered('EMAIL', error.message))
       );
     }
 
@@ -48,10 +48,10 @@ class SendNotificationUseCase {
         this.notificationService
           .sendSMS({
             to: notificationData.recipientPhone,
-            message: `${notification.title}: ${notification.message}`,
+            message: `${notification.title}: ${notification.message}`
           })
           .then(() => savedNotification.markChannelDelivered('SMS'))
-          .catch(error => savedNotification.markChannelDelivered('SMS', error.message)),
+          .catch(error => savedNotification.markChannelDelivered('SMS', error.message))
       );
     }
 

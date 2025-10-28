@@ -30,12 +30,12 @@ class UserRegistered {
         email: this.email,
         firstName: this.firstName,
         lastName: this.lastName,
-        registeredAt: this.registeredAt,
+        registeredAt: this.registeredAt
       },
       metadata: {
         occurredAt: this.occurredAt,
-        version: '1.0',
-      },
+        version: '1.0'
+      }
     };
   }
 }

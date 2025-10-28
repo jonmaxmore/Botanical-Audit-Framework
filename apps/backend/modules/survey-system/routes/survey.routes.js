@@ -30,39 +30,39 @@ function createSurveyRoutes(surveyService) {
           region: 'central',
           name: 'Central Region Survey',
           description: 'Survey for central region farms',
-          totalSteps: 7,
+          totalSteps: 7
         },
         {
           id: 'template-southern',
           region: 'southern',
           name: 'Southern Region Survey',
           description: 'Survey for southern region farms',
-          totalSteps: 7,
+          totalSteps: 7
         },
         {
           id: 'template-northern',
           region: 'northern',
           name: 'Northern Region Survey',
           description: 'Survey for northern region farms',
-          totalSteps: 7,
+          totalSteps: 7
         },
         {
           id: 'template-northeastern',
           region: 'northeastern',
           name: 'Northeastern Region Survey',
           description: 'Survey for northeastern region farms',
-          totalSteps: 7,
-        },
+          totalSteps: 7
+        }
       ];
 
       res.json({
         success: true,
-        data: templates,
+        data: templates
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -81,7 +81,7 @@ function createSurveyRoutes(surveyService) {
         return res.status(400).json({
           success: false,
           message: 'Invalid region',
-          validRegions,
+          validRegions
         });
       }
 
@@ -99,18 +99,18 @@ function createSurveyRoutes(surveyService) {
           { step: 4, name: 'managementProduction', title: 'Management & Production' },
           { step: 5, name: 'costRevenue', title: 'Cost & Revenue' },
           { step: 6, name: 'marketSales', title: 'Market & Sales' },
-          { step: 7, name: 'problemsNeeds', title: 'Problems & Needs' },
-        ],
+          { step: 7, name: 'problemsNeeds', title: 'Problems & Needs' }
+        ]
       };
 
       res.json({
         success: true,
-        data: template,
+        data: template
       });
     } catch (error) {
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });

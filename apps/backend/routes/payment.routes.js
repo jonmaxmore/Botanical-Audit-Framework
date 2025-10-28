@@ -33,7 +33,7 @@ function initializePaymentRoutes(dependencies) {
       if (!applicationId || !farmerId || !type) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: applicationId, farmerId, type',
+          message: 'Missing required fields: applicationId, farmerId, type'
         });
       }
 
@@ -41,26 +41,26 @@ function initializePaymentRoutes(dependencies) {
       if (!['initial', 'resubmission'].includes(type)) {
         return res.status(400).json({
           success: false,
-          message: 'Invalid payment type. Must be "initial" or "resubmission"',
+          message: 'Invalid payment type. Must be "initial" or "resubmission"'
         });
       }
 
       const payment = await paymentService.createPayment({
         applicationId,
         farmerId,
-        type,
+        type
       });
 
       res.status(201).json({
         success: true,
         message: 'Payment created successfully',
-        data: payment,
+        data: payment
       });
     } catch (error) {
       logger.error('[Payment API] Create payment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to create payment',
+        message: error.message || 'Failed to create payment'
       });
     }
   });
@@ -79,19 +79,19 @@ function initializePaymentRoutes(dependencies) {
       if (!payment) {
         return res.status(404).json({
           success: false,
-          message: 'Payment not found',
+          message: 'Payment not found'
         });
       }
 
       res.json({
         success: true,
-        data: payment,
+        data: payment
       });
     } catch (error) {
       logger.error('[Payment API] Get payment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get payment',
+        message: error.message || 'Failed to get payment'
       });
     }
   });
@@ -110,7 +110,7 @@ function initializePaymentRoutes(dependencies) {
       if (!transactionId || !method) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: transactionId, method',
+          message: 'Missing required fields: transactionId, method'
         });
       }
 
@@ -118,19 +118,19 @@ function initializePaymentRoutes(dependencies) {
         transactionId,
         method,
         receiptNumber,
-        receiptUrl,
+        receiptUrl
       });
 
       res.json({
         success: true,
         message: 'Payment completed successfully',
-        data: payment,
+        data: payment
       });
     } catch (error) {
       logger.error('[Payment API] Complete payment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to complete payment',
+        message: error.message || 'Failed to complete payment'
       });
     }
   });
@@ -150,13 +150,13 @@ function initializePaymentRoutes(dependencies) {
       res.json({
         success: true,
         message: 'Payment cancelled successfully',
-        data: payment,
+        data: payment
       });
     } catch (error) {
       logger.error('[Payment API] Cancel payment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to cancel payment',
+        message: error.message || 'Failed to cancel payment'
       });
     }
   });
@@ -175,13 +175,13 @@ function initializePaymentRoutes(dependencies) {
       res.json({
         success: true,
         count: payments.length,
-        data: payments,
+        data: payments
       });
     } catch (error) {
       logger.error('[Payment API] Get application payments error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get application payments',
+        message: error.message || 'Failed to get application payments'
       });
     }
   });
@@ -205,13 +205,13 @@ function initializePaymentRoutes(dependencies) {
       res.json({
         success: true,
         count: payments.length,
-        data: payments,
+        data: payments
       });
     } catch (error) {
       logger.error('[Payment API] Get farmer payments error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get farmer payments',
+        message: error.message || 'Failed to get farmer payments'
       });
     }
   });
@@ -229,13 +229,13 @@ function initializePaymentRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: status,
+        data: status
       });
     } catch (error) {
       logger.error('[Payment API] Get payment status error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get payment status',
+        message: error.message || 'Failed to get payment status'
       });
     }
   });
@@ -259,13 +259,13 @@ function initializePaymentRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: statistics,
+        data: statistics
       });
     } catch (error) {
       logger.error('[Payment API] Get statistics error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get payment statistics',
+        message: error.message || 'Failed to get payment statistics'
       });
     }
   });
@@ -284,13 +284,13 @@ function initializePaymentRoutes(dependencies) {
       res.json({
         success: true,
         count: overduePayments.length,
-        data: overduePayments,
+        data: overduePayments
       });
     } catch (error) {
       logger.error('[Payment API] Get overdue payments error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get overdue payments',
+        message: error.message || 'Failed to get overdue payments'
       });
     }
   });
@@ -308,7 +308,7 @@ function initializePaymentRoutes(dependencies) {
       if (!applicationId) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required field: applicationId',
+          message: 'Missing required field: applicationId'
         });
       }
 
@@ -322,14 +322,14 @@ function initializePaymentRoutes(dependencies) {
         data: {
           initialRequired,
           resubmissionRequired,
-          anyRequired: initialRequired || resubmissionRequired,
-        },
+          anyRequired: initialRequired || resubmissionRequired
+        }
       });
     } catch (error) {
       logger.error('[Payment API] Check payment required error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to check payment requirement',
+        message: error.message || 'Failed to check payment requirement'
       });
     }
   });

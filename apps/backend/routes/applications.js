@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  },
+  }
 });
 
 const upload = multer({
@@ -41,7 +41,7 @@ const upload = multer({
     } else {
       cb(new Error('Invalid file type'));
     }
-  },
+  }
 });
 
 // === APPLICATION MANAGEMENT ROUTES ===
@@ -56,7 +56,7 @@ router.post(
   authorize(['farmer']),
   validateRequest({
     farmInformation: 'required|object',
-    cropInformation: 'required|array|min:1',
+    cropInformation: 'required|array|min:1'
   }),
   handleAsync(async (req, res) => {
     const application = await GACPApplicationService.createApplication(req.user.id, req.body);
@@ -69,11 +69,11 @@ router.post(
         nextSteps: [
           'Upload required documents',
           'Pay application fee',
-          'Submit application for review',
-        ],
-      },
+          'Submit application for review'
+        ]
+      }
     });
-  }),
+  })
 );
 
 /**
@@ -91,7 +91,7 @@ router.get(
       page = 1,
       limit = 10,
       sortBy = 'createdAt',
-      sortOrder = 'desc',
+      sortOrder = 'desc'
     } = req.query;
 
     // Build filter based on user role
@@ -125,11 +125,11 @@ router.get(
           current: parseInt(page),
           total: Math.ceil(total / limit),
           count: applications.length,
-          totalRecords: total,
-        },
-      },
+          totalRecords: total
+        }
+      }
     });
-  }),
+  })
 );
 
 /**
@@ -148,7 +148,7 @@ router.get(
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
@@ -156,15 +156,15 @@ router.get(
     if (req.user.role === 'farmer' && application.applicant._id.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: 'Access denied'
       });
     }
 
     res.json({
       success: true,
-      data: { application },
+      data: { application }
     });
-  }),
+  })
 );
 
 /**
@@ -181,21 +181,21 @@ router.put(
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
     if (application.applicant.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: 'Access denied'
       });
     }
 
     if (application.currentStatus !== 'draft') {
       return res.status(400).json({
         success: false,
-        message: 'Only draft applications can be updated',
+        message: 'Only draft applications can be updated'
       });
     }
 
@@ -215,9 +215,9 @@ router.put(
     res.json({
       success: true,
       message: 'Application updated successfully',
-      data: { application },
+      data: { application }
     });
-  }),
+  })
 );
 
 /**
@@ -235,14 +235,14 @@ router.post(
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
     if (application.applicant.toString() !== req.user.id) {
       return res.status(403).json({
         success: false,
-        message: 'Access denied',
+        message: 'Access denied'
       });
     }
 
@@ -255,7 +255,7 @@ router.post(
       size: file.size,
       uploadedAt: new Date(),
       uploadedBy: req.user.id,
-      verificationStatus: 'pending',
+      verificationStatus: 'pending'
     }));
 
     application.documents.push(...documents);
@@ -266,10 +266,10 @@ router.post(
       message: 'Documents uploaded successfully',
       data: {
         uploadedDocuments: documents.length,
-        totalDocuments: application.documents.length,
-      },
+        totalDocuments: application.documents.length
+      }
     });
-  }),
+  })
 );
 
 /**
@@ -288,10 +288,10 @@ router.post(
       message: 'Application submitted successfully',
       data: {
         application,
-        estimatedReviewTime: '7-14 working days',
-      },
+        estimatedReviewTime: '7-14 working days'
+      }
     });
-  }),
+  })
 );
 
 // === REVIEW WORKFLOW ROUTES ===
@@ -306,21 +306,21 @@ router.post(
   authorize(['dtam_officer', 'admin']),
   validateRequest({
     decision: 'required|in:approved_for_inspection,revision_required,rejected',
-    notes: 'required|string|min:10',
+    notes: 'required|string|min:10'
   }),
   handleAsync(async (req, res) => {
     const result = await GACPApplicationService.reviewApplication(
       req.params.id,
       req.user.id,
-      req.body,
+      req.body
     );
 
     res.json({
       success: true,
       message: 'Application review completed',
-      data: result,
+      data: result
     });
-  }),
+  })
 );
 
 /**
@@ -337,21 +337,21 @@ router.post(
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
 
     const inspectionDetails = await GACPApplicationService.scheduleInspection(
       application,
-      req.body.preferredDate,
+      req.body.preferredDate
     );
 
     res.json({
       success: true,
       message: 'Inspection scheduled successfully',
-      data: inspectionDetails,
+      data: inspectionDetails
     });
-  }),
+  })
 );
 
 // === INSPECTION ROUTES ===
@@ -367,15 +367,15 @@ router.post(
   handleAsync(async (req, res) => {
     const inspectionData = await GACPInspectionService.initializeInspection(
       req.params.applicationId,
-      req.user.id,
+      req.user.id
     );
 
     res.json({
       success: true,
       message: 'Inspection initialized',
-      data: inspectionData,
+      data: inspectionData
     });
-  }),
+  })
 );
 
 /**
@@ -390,7 +390,7 @@ router.post(
     category: 'required|string',
     criterionId: 'required|string',
     compliance: 'required|in:compliant,minor_issue,major_issue,critical_issue',
-    notes: 'required|string|min:5',
+    notes: 'required|string|min:5'
   }),
   handleAsync(async (req, res) => {
     const assessment = await GACPInspectionService.assessControlPoint(
@@ -398,15 +398,15 @@ router.post(
       req.user.id,
       req.body.category,
       req.body.criterionId,
-      req.body,
+      req.body
     );
 
     res.json({
       success: true,
       message: 'Control point assessed',
-      data: assessment,
+      data: assessment
     });
-  }),
+  })
 );
 
 /**
@@ -418,21 +418,21 @@ router.post(
   authenticate,
   authorize(['inspector', 'admin']),
   validateRequest({
-    finalNotes: 'required|string|min:20',
+    finalNotes: 'required|string|min:20'
   }),
   handleAsync(async (req, res) => {
     const inspectionResult = await GACPInspectionService.completeInspection(
       req.params.applicationId,
       req.user.id,
-      req.body,
+      req.body
     );
 
     res.json({
       success: true,
       message: 'Inspection completed',
-      data: inspectionResult,
+      data: inspectionResult
     });
-  }),
+  })
 );
 
 // === CERTIFICATE ROUTES ===
@@ -448,15 +448,15 @@ router.post(
   handleAsync(async (req, res) => {
     const certificateData = await GACPCertificateService.generateCertificate(
       req.params.id,
-      req.user.id,
+      req.user.id
     );
 
     res.json({
       success: true,
       message: 'Certificate generated successfully',
-      data: certificateData,
+      data: certificateData
     });
-  }),
+  })
 );
 
 /**
@@ -468,14 +468,14 @@ router.get(
   handleAsync(async (req, res) => {
     const verification = await GACPCertificateService.verifyCertificate(
       req.params.certificateNumber,
-      req.query.code,
+      req.query.code
     );
 
     res.json({
       success: true,
-      data: verification,
+      data: verification
     });
-  }),
+  })
 );
 
 /**
@@ -486,14 +486,14 @@ router.get(
   '/certificates/:certificateNumber/page',
   handleAsync(async (req, res) => {
     const verificationPage = await GACPCertificateService.generateVerificationPage(
-      req.params.certificateNumber,
+      req.params.certificateNumber
     );
 
     res.json({
       success: true,
-      data: verificationPage,
+      data: verificationPage
     });
-  }),
+  })
 );
 
 /**
@@ -508,15 +508,15 @@ router.post(
     const renewalResult = await GACPCertificateService.renewCertificate(
       req.params.certificateNumber,
       req.user.id,
-      req.body,
+      req.body
     );
 
     res.json({
       success: true,
       message: 'Certificate renewed successfully',
-      data: renewalResult,
+      data: renewalResult
     });
-  }),
+  })
 );
 
 /**
@@ -528,21 +528,21 @@ router.post(
   authenticate,
   authorize(['dtam_officer', 'admin']),
   validateRequest({
-    reason: 'required|string|min:10',
+    reason: 'required|string|min:10'
   }),
   handleAsync(async (req, res) => {
     const revocationResult = await GACPCertificateService.revokeCertificate(
       req.params.certificateNumber,
       req.user.id,
-      req.body.reason,
+      req.body.reason
     );
 
     res.json({
       success: true,
       message: 'Certificate revoked successfully',
-      data: revocationResult,
+      data: revocationResult
     });
-  }),
+  })
 );
 
 // === DASHBOARD & ANALYTICS ROUTES ===
@@ -572,18 +572,18 @@ router.get(
       Application.countDocuments({ ...filter, currentStatus: 'under_review' }),
       Application.countDocuments({
         ...filter,
-        currentStatus: 'inspection_scheduled',
+        currentStatus: 'inspection_scheduled'
       }),
       Application.countDocuments({
         ...filter,
-        currentStatus: 'inspection_completed',
+        currentStatus: 'inspection_completed'
       }),
       Application.countDocuments({ ...filter, currentStatus: 'approved' }),
       Application.countDocuments({
         ...filter,
-        currentStatus: 'certificate_issued',
+        currentStatus: 'certificate_issued'
       }),
-      Application.countDocuments({ ...filter, currentStatus: 'rejected' }),
+      Application.countDocuments({ ...filter, currentStatus: 'rejected' })
     ]);
 
     res.json({
@@ -597,10 +597,10 @@ router.get(
         approved: stats[5],
         certificate_issued: stats[6],
         rejected: stats[7],
-        total: stats.reduce((sum, count) => sum + count, 0),
-      },
+        total: stats.reduce((sum, count) => sum + count, 0)
+      }
     });
-  }),
+  })
 );
 
 /**
@@ -629,9 +629,9 @@ router.get(
 
     res.json({
       success: true,
-      data: { recentApplications },
+      data: { recentApplications }
     });
-  }),
+  })
 );
 
 module.exports = router;

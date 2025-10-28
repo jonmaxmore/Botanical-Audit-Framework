@@ -36,8 +36,8 @@ class TrackTraceController {
       rateLimits: {
         standard: 100, // requests per minute
         bulk: 10, // bulk operations per minute
-        reporting: 20, // report generations per minute
-      },
+        reporting: 20 // report generations per minute
+      }
     };
 
     // Response formats and templates
@@ -48,8 +48,8 @@ class TrackTraceController {
         metadata: {
           timestamp: new Date(),
           requestId: metadata.requestId,
-          ...metadata,
-        },
+          ...metadata
+        }
       }),
 
       error: (message, code = 'GENERAL_ERROR', details = {}) => ({
@@ -58,8 +58,8 @@ class TrackTraceController {
           code: code,
           message: message,
           details: details,
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       }),
 
       pagination: (data, pagination) => ({
@@ -67,9 +67,9 @@ class TrackTraceController {
         data: data,
         pagination: pagination,
         metadata: {
-          timestamp: new Date(),
-        },
-      }),
+          timestamp: new Date()
+        }
+      })
     };
 
     // Error codes for consistent error handling
@@ -81,7 +81,7 @@ class TrackTraceController {
       BUSINESS_RULE_VIOLATION: 'BUSINESS_RULE_VIOLATION',
       SYSTEM_ERROR: 'SYSTEM_ERROR',
       RATE_LIMIT_EXCEEDED: 'RATE_LIMIT_EXCEEDED',
-      TIMEOUT: 'OPERATION_TIMEOUT',
+      TIMEOUT: 'OPERATION_TIMEOUT'
     };
   }
 
@@ -115,8 +115,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid seed initialization data',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors,
-            ),
+              validationResult.errors
+            )
           );
       }
 
@@ -131,8 +131,8 @@ class TrackTraceController {
         data: {
           seedId: seedTrackingResult.seedId,
           batchNumber: req.body.batchNumber,
-          supplierId: req.body.supplier?.supplierId,
-        },
+          supplierId: req.body.supplier?.supplierId
+        }
       });
 
       // Step 5: Performance monitoring
@@ -140,17 +140,17 @@ class TrackTraceController {
       this.performanceMonitor.recordMetric('api.seed.initialize', {
         duration: executionTime,
         success: true,
-        userId: userContext.userId,
+        userId: userContext.userId
       });
 
       // Step 6: Format successful response
       const response = this.responseFormats.success(seedTrackingResult, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
-        `[TrackTrace] Seed tracking initialized successfully - Request: ${requestId}, Duration: ${executionTime}ms`,
+        `[TrackTrace] Seed tracking initialized successfully - Request: ${requestId}, Duration: ${executionTime}ms`
       );
 
       res.status(201).json(response);
@@ -175,7 +175,7 @@ class TrackTraceController {
 
     try {
       this.logger.log(
-        `[TrackTrace] Get seed tracking - Seed: ${req.params.seedId}, Request: ${requestId}`,
+        `[TrackTrace] Get seed tracking - Seed: ${req.params.seedId}, Request: ${requestId}`
       );
 
       // Step 1: Authenticate and authorize
@@ -187,7 +187,7 @@ class TrackTraceController {
         return res
           .status(400)
           .json(
-            this.responseFormats.error('Invalid seed ID format', this.errorCodes.VALIDATION_ERROR),
+            this.responseFormats.error('Invalid seed ID format', this.errorCodes.VALIDATION_ERROR)
           );
       }
 
@@ -198,7 +198,7 @@ class TrackTraceController {
       const seedTracking = await this.trackSeedUseCase.getSeedTrackingInfo(req.params.seedId, {
         includeHistory: includeHistory,
         includeQualityData: includeQualityData,
-        userContext: userContext,
+        userContext: userContext
       });
 
       if (!seedTracking) {
@@ -211,7 +211,7 @@ class TrackTraceController {
       res.set({
         'Cache-Control': 'public, max-age=300', // 5 minutes
         ETag: this.generateETag(seedTracking),
-        'Last-Modified': seedTracking.updatedAt,
+        'Last-Modified': seedTracking.updatedAt
       });
 
       // Step 5: Check conditional requests
@@ -224,17 +224,17 @@ class TrackTraceController {
       this.performanceMonitor.recordMetric('api.seed.get', {
         duration: executionTime,
         cacheHit: false,
-        dataSize: JSON.stringify(seedTracking).length,
+        dataSize: JSON.stringify(seedTracking).length
       });
 
       // Step 7: Format response
       const response = this.responseFormats.success(seedTracking, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
-        `[TrackTrace] Seed tracking retrieved - Request: ${requestId}, Duration: ${executionTime}ms`,
+        `[TrackTrace] Seed tracking retrieved - Request: ${requestId}, Duration: ${executionTime}ms`
       );
 
       res.status(200).json(response);
@@ -273,8 +273,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid plant initialization data',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors,
-            ),
+              validationResult.errors
+            )
           );
       }
 
@@ -287,8 +287,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Seed not available for planting',
               this.errorCodes.BUSINESS_RULE_VIOLATION,
-              seedValidation.issues,
-            ),
+              seedValidation.issues
+            )
           );
       }
 
@@ -299,7 +299,7 @@ class TrackTraceController {
       await this.trackSeedUseCase.recordSeedUsage(req.body.seedId, {
         plantId: plantTrackingResult.plantId,
         plantingDate: req.body.plantingDate,
-        quantityUsed: req.body.seedsPlanted,
+        quantityUsed: req.body.seedsPlanted
       });
 
       // Step 6: Create audit trail
@@ -311,25 +311,25 @@ class TrackTraceController {
           plantId: plantTrackingResult.plantId,
           seedId: req.body.seedId,
           farmId: req.body.farmId,
-          plotId: req.body.plotId,
-        },
+          plotId: req.body.plotId
+        }
       });
 
       // Step 7: Performance monitoring
       const executionTime = Date.now() - startTime;
       this.performanceMonitor.recordMetric('api.plant.initialize', {
         duration: executionTime,
-        success: true,
+        success: true
       });
 
       // Step 8: Format response
       const response = this.responseFormats.success(plantTrackingResult, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
-        `[TrackTrace] Plant tracking initialized - Plant: ${plantTrackingResult.plantId}, Request: ${requestId}`,
+        `[TrackTrace] Plant tracking initialized - Plant: ${plantTrackingResult.plantId}, Request: ${requestId}`
       );
 
       res.status(201).json(response);
@@ -354,7 +354,7 @@ class TrackTraceController {
 
     try {
       this.logger.log(
-        `[TrackTrace] Record plant measurement - Plant: ${req.params.plantId}, Request: ${requestId}`,
+        `[TrackTrace] Record plant measurement - Plant: ${req.params.plantId}, Request: ${requestId}`
       );
 
       // Step 1: Authenticate and authorize
@@ -370,8 +370,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid measurement data',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors,
-            ),
+              validationResult.errors
+            )
           );
       }
 
@@ -381,8 +381,8 @@ class TrackTraceController {
         {
           ...req.body,
           recordedBy: userContext.userId,
-          recordedAt: new Date(),
-        },
+          recordedAt: new Date()
+        }
       );
 
       // Step 4: Handle alerts if any anomalies detected
@@ -390,7 +390,7 @@ class TrackTraceController {
         await this.handleMeasurementAnomalies(
           req.params.plantId,
           measurementResult.anomalies,
-          userContext,
+          userContext
         );
       }
 
@@ -403,25 +403,25 @@ class TrackTraceController {
           plantId: req.params.plantId,
           measurementType: req.body.measurementType,
           value: req.body.value,
-          growthRate: measurementResult.measurement?.growthRate,
-        },
+          growthRate: measurementResult.measurement?.growthRate
+        }
       });
 
       // Step 6: Performance monitoring
       const executionTime = Date.now() - startTime;
       this.performanceMonitor.recordMetric('api.plant.measurement', {
         duration: executionTime,
-        measurementType: req.body.measurementType,
+        measurementType: req.body.measurementType
       });
 
       // Step 7: Format response
       const response = this.responseFormats.success(measurementResult, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
-        `[TrackTrace] Plant measurement recorded - Plant: ${req.params.plantId}, Request: ${requestId}`,
+        `[TrackTrace] Plant measurement recorded - Plant: ${req.params.plantId}, Request: ${requestId}`
       );
 
       res.status(200).json(response);
@@ -446,7 +446,7 @@ class TrackTraceController {
 
     try {
       this.logger.log(
-        `[TrackTrace] Initialize harvest tracking - Plants: ${req.body.plantIds?.length || 0}, Request: ${requestId}`,
+        `[TrackTrace] Initialize harvest tracking - Plants: ${req.body.plantIds?.length || 0}, Request: ${requestId}`
       );
 
       // Step 1: Authenticate and authorize
@@ -462,14 +462,14 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid harvest initialization data',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors,
-            ),
+              validationResult.errors
+            )
           );
       }
 
       // Step 3: Validate plant readiness for harvest
       const plantsValidation = await Promise.all(
-        req.body.plantIds.map(plantId => this.trackPlantUseCase.validateHarvestReadiness(plantId)),
+        req.body.plantIds.map(plantId => this.trackPlantUseCase.validateHarvestReadiness(plantId))
       );
 
       const notReadyPlants = plantsValidation
@@ -483,15 +483,15 @@ class TrackTraceController {
             this.responseFormats.error(
               'Some plants are not ready for harvest',
               this.errorCodes.BUSINESS_RULE_VIOLATION,
-              { notReadyPlants: notReadyPlants },
-            ),
+              { notReadyPlants: notReadyPlants }
+            )
           );
       }
 
       // Step 4: Initialize harvest tracking
       const harvestTrackingResult = await this.trackHarvestUseCase.initializeHarvestTracking({
         ...req.body,
-        initiatedBy: userContext.userId,
+        initiatedBy: userContext.userId
       });
 
       // Step 5: Create comprehensive audit log
@@ -503,25 +503,25 @@ class TrackTraceController {
           batchId: harvestTrackingResult.harvestBatch.batchId,
           plantCount: req.body.plantIds.length,
           estimatedYield: harvestTrackingResult.preHarvestSummary.estimatedTotalYield,
-          farmId: req.body.farmId,
-        },
+          farmId: req.body.farmId
+        }
       });
 
       // Step 6: Performance monitoring
       const executionTime = Date.now() - startTime;
       this.performanceMonitor.recordMetric('api.harvest.initialize', {
         duration: executionTime,
-        plantCount: req.body.plantIds.length,
+        plantCount: req.body.plantIds.length
       });
 
       // Step 7: Format response
       const response = this.responseFormats.success(harvestTrackingResult, {
         requestId: requestId,
-        executionTime: executionTime,
+        executionTime: executionTime
       });
 
       this.logger.log(
-        `[TrackTrace] Harvest tracking initialized - Batch: ${harvestTrackingResult.harvestBatch.batchId}, Request: ${requestId}`,
+        `[TrackTrace] Harvest tracking initialized - Batch: ${harvestTrackingResult.harvestBatch.batchId}, Request: ${requestId}`
       );
 
       res.status(201).json(response);
@@ -548,7 +548,7 @@ class TrackTraceController {
       const { entityType, entityId } = req.params;
 
       this.logger.log(
-        `[TrackTrace] Generate tracking report - Type: ${entityType}, ID: ${entityId}, Request: ${requestId}`,
+        `[TrackTrace] Generate tracking report - Type: ${entityType}, ID: ${entityId}, Request: ${requestId}`
       );
 
       // Step 1: Authenticate and authorize
@@ -556,7 +556,7 @@ class TrackTraceController {
       await this.authService.authorizeResourceAccess(
         userContext,
         entityType.toUpperCase(),
-        entityId,
+        entityId
       );
 
       // Step 2: Validate entity type and ID
@@ -564,7 +564,7 @@ class TrackTraceController {
         return res
           .status(400)
           .json(
-            this.responseFormats.error('Invalid entity type', this.errorCodes.VALIDATION_ERROR),
+            this.responseFormats.error('Invalid entity type', this.errorCodes.VALIDATION_ERROR)
           );
       }
 
@@ -587,8 +587,8 @@ class TrackTraceController {
             .json(
               this.responseFormats.error(
                 'Unsupported entity type for reporting',
-                this.errorCodes.VALIDATION_ERROR,
-              ),
+                this.errorCodes.VALIDATION_ERROR
+              )
             );
       }
 
@@ -613,8 +613,8 @@ class TrackTraceController {
         data: {
           entityType: entityType,
           entityId: entityId,
-          reportSize: JSON.stringify(reportData).length,
-        },
+          reportSize: JSON.stringify(reportData).length
+        }
       });
 
       // Step 6: Performance monitoring
@@ -622,24 +622,24 @@ class TrackTraceController {
       this.performanceMonitor.recordMetric('api.report.generate', {
         duration: executionTime,
         entityType: entityType,
-        reportSize: JSON.stringify(reportData).length,
+        reportSize: JSON.stringify(reportData).length
       });
 
       // Step 7: Format response with caching headers
       res.set({
         'Cache-Control': 'private, max-age=300', // 5 minutes private cache
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       });
 
       const response = this.responseFormats.success(reportData, {
         requestId: requestId,
         executionTime: executionTime,
         entityType: entityType,
-        entityId: entityId,
+        entityId: entityId
       });
 
       this.logger.log(
-        `[TrackTrace] Tracking report generated - Type: ${entityType}, ID: ${entityId}, Request: ${requestId}, Duration: ${executionTime}ms`,
+        `[TrackTrace] Tracking report generated - Type: ${entityType}, ID: ${entityId}, Request: ${requestId}, Duration: ${executionTime}ms`
       );
 
       res.status(200).json(response);
@@ -678,10 +678,10 @@ class TrackTraceController {
           page: parseInt(req.query.page) || 1,
           limit: Math.min(
             parseInt(req.query.limit) || this.apiConfig.defaultPageSize,
-            this.apiConfig.maxPageSize,
-          ),
+            this.apiConfig.maxPageSize
+          )
         },
-        sort: req.query.sort || 'relevance',
+        sort: req.query.sort || 'relevance'
       };
 
       const validationResult = await this.validationService.validateSearchParams(searchParams);
@@ -692,8 +692,8 @@ class TrackTraceController {
             this.responseFormats.error(
               'Invalid search parameters',
               this.errorCodes.VALIDATION_ERROR,
-              validationResult.errors,
-            ),
+              validationResult.errors
+            )
           );
       }
 
@@ -713,7 +713,7 @@ class TrackTraceController {
       this.performanceMonitor.recordMetric('api.search', {
         duration: executionTime,
         entityType: searchParams.entityType,
-        resultsCount: searchResults.totalResults,
+        resultsCount: searchResults.totalResults
       });
 
       // Step 5: Format paginated response
@@ -723,7 +723,7 @@ class TrackTraceController {
         total: searchResults.totalResults,
         totalPages: Math.ceil(searchResults.totalResults / searchParams.pagination.limit),
         hasNext: searchResults.hasNext,
-        hasPrev: searchParams.pagination.page > 1,
+        hasPrev: searchParams.pagination.page > 1
       });
 
       // Add search metadata
@@ -732,11 +732,11 @@ class TrackTraceController {
         entityType: searchParams.entityType,
         filtersApplied: Object.keys(searchParams.filters).length,
         executionTime: executionTime,
-        facets: searchResults.facets || null,
+        facets: searchResults.facets || null
       };
 
       this.logger.log(
-        `[TrackTrace] Search completed - Results: ${searchResults.totalResults}, Request: ${requestId}, Duration: ${executionTime}ms`,
+        `[TrackTrace] Search completed - Results: ${searchResults.totalResults}, Request: ${requestId}, Duration: ${executionTime}ms`
       );
 
       res.status(200).json(response);
@@ -759,15 +759,15 @@ class TrackTraceController {
         error: error.stack,
         requestBody: req.body,
         requestParams: req.params,
-        requestQuery: req.query,
-      },
+        requestQuery: req.query
+      }
     );
 
     // Record error metrics
     this.performanceMonitor.recordError(operation.toLowerCase(), {
       duration: executionTime,
       errorType: error.name,
-      errorMessage: error.message,
+      errorMessage: error.message
     });
 
     // Audit error occurrence
@@ -778,8 +778,8 @@ class TrackTraceController {
         error: {
           message: error.message,
           type: error.name,
-          operation: operation,
-        },
+          operation: operation
+        }
       });
     } catch (auditError) {
       this.logger.error(`[TrackTrace] Audit logging failed: ${auditError.message}`);
@@ -819,7 +819,7 @@ class TrackTraceController {
     const errorResponse = this.responseFormats.error(errorMessage, errorCode, {
       requestId: requestId,
       operation: operation,
-      executionTime: executionTime,
+      executionTime: executionTime
     });
 
     res.status(statusCode).json(errorResponse);
@@ -838,7 +838,7 @@ class TrackTraceController {
             plantId: plantId,
             anomaly: anomaly,
             detectedBy: userContext.userId,
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
       }
@@ -878,8 +878,8 @@ class TrackTraceController {
             .json(
               this.responseFormats.error(
                 'Unsupported export format',
-                this.errorCodes.VALIDATION_ERROR,
-              ),
+                this.errorCodes.VALIDATION_ERROR
+              )
             );
       }
 
@@ -888,7 +888,7 @@ class TrackTraceController {
       res.set({
         'Content-Type': contentType,
         'Content-Disposition': `attachment; filename="${filename}"`,
-        'Content-Length': exportResult.length,
+        'Content-Length': exportResult.length
       });
 
       res.send(exportResult);

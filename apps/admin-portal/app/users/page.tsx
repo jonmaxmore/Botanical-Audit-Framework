@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Box, Container, Typography, Button } from '@mui/material';
+import { Box, Container, Typography, Button, Alert, Snackbar } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import AdminHeader from '@/components/layout/AdminHeader';
@@ -10,13 +10,14 @@ import ProtectedRoute from '@/lib/protected-route';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import UsersTable from '@/components/users/UsersTable';
 import UserFormDialog, { UserFormData } from '@/components/users/UserFormDialog';
+import * as usersApi from '@/lib/api/users';
 
 interface User {
   id: string;
   name: string;
   email: string;
   avatar?: string;
-  role: 'admin' | 'reviewer' | 'manager' | 'viewer';
+  role: 'admin' | 'reviewer' | 'manager' | 'viewer' | 'inspector' | 'approver' | 'farmer';
   department: string;
   status: 'active' | 'inactive' | 'suspended';
   lastLogin: string;
@@ -29,10 +30,29 @@ export default function UsersPage() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [editingUser, setEditingUser] = React.useState<User | null>(null);
   const [users, setUsers] = React.useState<User[]>([]);
+  const [error, setError] = React.useState<string | null>(null);
+  const [snackbar, setSnackbar] = React.useState<{
+    open: boolean;
+    message: string;
+    severity: 'success' | 'error' | 'info' | 'warning';
+  }>({ open: false, message: '', severity: 'success' });
 
+  // Load users from API
   React.useEffect(() => {
-    // Simulate data loading with mock data
-    const timer = setTimeout(() => {
+    loadUsers();
+  }, []);
+
+  const loadUsers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await usersApi.getUsers();
+      setUsers(response.data || []);
+    } catch (err) {
+      console.error('Error loading users:', err);
+      setError('ไม่สามารถโหลดข้อมูลผู้ใช้งานได้ กรุณาลองใหม่อีกครั้ง');
+
+      // Fallback to mock data for development
       setUsers([
         {
           id: '1',
@@ -95,10 +115,10 @@ export default function UsersPage() {
           lastLogin: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toISOString(),
         },
       ]);
+    } finally {
       setLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, []);
+    }
+  };
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -124,59 +144,62 @@ export default function UsersPage() {
   const handleDeleteUser = async (userId: string) => {
     if (confirm('คุณต้องการลบผู้ใช้งานนี้หรือไม่?')) {
       try {
-        const response = await fetch(`/api/users/${userId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to delete user');
-        }
-
+        await usersApi.deleteUser(userId);
         setUsers(users.filter(u => u.id !== userId));
-        alert('ลบผู้ใช้งานเรียบร้อย');
+        setSnackbar({
+          open: true,
+          message: 'ลบผู้ใช้งานเรียบร้อย',
+          severity: 'success',
+        });
       } catch (error) {
         console.error('Error deleting user:', error);
-        alert('เกิดข้อผิดพลาดในการลบผู้ใช้งาน กรุณาลองใหม่อีกครั้ง');
+        setSnackbar({
+          open: true,
+          message: 'เกิดข้อผิดพลาดในการลบผู้ใช้งาน กรุณาลองใหม่อีกครั้ง',
+          severity: 'error',
+        });
       }
     }
   };
 
-  const handleFormSubmit = (data: UserFormData) => {
-    if (editingUser) {
-      // Edit existing user
-      setUsers(
-        users.map(u =>
-          u.id === editingUser.id
-            ? {
-                ...u,
-                name: data.name,
-                phone: data.phone,
-                role: data.role,
-                department: data.department,
-                avatar: data.avatar,
-              }
-            : u
-        )
-      );
-      alert(`แก้ไขข้อมูล "${data.name}" เรียบร้อย`);
-    } else {
-      // Create new user
-      const newUser: User = {
-        id: Date.now().toString(),
-        name: data.name,
-        email: data.email,
-        avatar: data.avatar,
-        role: data.role,
-        department: data.department,
-        status: 'active',
-        lastLogin: new Date().toISOString(),
-      };
-      setUsers([newUser, ...users]);
-      alert(`เพิ่มผู้ใช้งาน "${data.name}" เรียบร้อย`);
+  const handleFormSubmit = async (data: UserFormData) => {
+    try {
+      if (editingUser) {
+        // Edit existing user
+        const response = await usersApi.updateUser(editingUser.id, data);
+        setUsers(
+          users.map(u => (u.id === editingUser.id ? { ...u, ...response.data } : u))
+        );
+        setSnackbar({
+          open: true,
+          message: `แก้ไขข้อมูล "${data.name}" เรียบร้อย`,
+          severity: 'success',
+        });
+      } else {
+        // Create new user
+        const response = await usersApi.createUser(data);
+        setUsers([response.data, ...users]);
+        setSnackbar({
+          open: true,
+          message: `เพิ่มผู้ใช้งาน "${data.name}" เรียบร้อย`,
+          severity: 'success',
+        });
+      }
+      setDialogOpen(false);
+    } catch (error) {
+      console.error('Error saving user:', error);
+      setSnackbar({
+        open: true,
+        message: editingUser
+          ? 'เกิดข้อผิดพลาดในการแก้ไขข้อมูล'
+          : 'เกิดข้อผิดพลาดในการเพิ่มผู้ใช้งาน',
+        severity: 'error',
+      });
     }
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbar({ ...snackbar, open: false });
   };
 
   if (loading) {
@@ -192,6 +215,13 @@ export default function UsersPage() {
           <AdminHeader onMenuClick={handleSidebarToggle} />
 
           <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+            {/* Error Alert */}
+            {error && (
+              <Alert severity="warning" sx={{ mb: 3 }} onClose={() => setError(null)}>
+                {error} (กำลังแสดงข้อมูลตัวอย่าง)
+              </Alert>
+            )}
+
             {/* Header */}
             <Box
               sx={{ mb: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
@@ -246,6 +276,18 @@ export default function UsersPage() {
           </Container>
         </Box>
       </Box>
+
+      {/* Success/Error Snackbar */}
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={6000}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+      >
+        <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: '100%' }}>
+          {snackbar.message}
+        </Alert>
+      </Snackbar>
     </ProtectedRoute>
   );
 }

@@ -15,14 +15,14 @@ const NotificationSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
 
     // User reference
     userId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     // Notification type
@@ -41,9 +41,9 @@ const NotificationSchema = new mongoose.Schema(
         'inspection_completed',
         'certificate_issued',
         'application_rejected',
-        'system_alert',
+        'system_alert'
       ],
-      index: true,
+      index: true
     },
 
     // Priority level
@@ -52,43 +52,43 @@ const NotificationSchema = new mongoose.Schema(
       required: true,
       enum: ['low', 'medium', 'high', 'critical'],
       default: 'medium',
-      index: true,
+      index: true
     },
 
     // Notification content
     title: {
       type: String,
-      required: true,
+      required: true
     },
 
     message: {
       type: String,
-      required: true,
+      required: true
     },
 
     // Related data
     data: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     // Application reference (optional)
     applicationId: {
       type: String,
       default: null,
-      index: true,
+      index: true
     },
 
     // Action URL (optional)
     actionUrl: {
       type: String,
-      default: null,
+      default: null
     },
 
     // Action label (optional)
     actionLabel: {
       type: String,
-      default: null,
+      default: null
     },
 
     // Read status
@@ -96,42 +96,42 @@ const NotificationSchema = new mongoose.Schema(
       type: Boolean,
       required: true,
       default: false,
-      index: true,
+      index: true
     },
 
     readAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Delivery status
     delivered: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     deliveredAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Metadata
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
-    },
+      index: true
+    }
   },
   {
     timestamps: { createdAt: true, updatedAt: false },
-    collection: 'notifications',
-  },
+    collection: 'notifications'
+  }
 );
 
 // Compound indexes for better query performance
@@ -189,9 +189,9 @@ NotificationSchema.statics.markAllAsReadForUser = function (userId) {
     {
       $set: {
         read: true,
-        readAt: new Date(),
-      },
-    },
+        readAt: new Date()
+      }
+    }
   );
 };
 
@@ -202,7 +202,7 @@ NotificationSchema.statics.deleteOldRead = function (daysOld = 30) {
 
   return this.deleteMany({
     read: true,
-    readAt: { $lte: cutoffDate },
+    readAt: { $lte: cutoffDate }
   });
 };
 
@@ -215,22 +215,22 @@ NotificationSchema.statics.getUserStatistics = function (userId) {
         _id: null,
         total: { $sum: 1 },
         unread: {
-          $sum: { $cond: [{ $eq: ['$read', false] }, 1, 0] },
+          $sum: { $cond: [{ $eq: ['$read', false] }, 1, 0] }
         },
         byType: {
           $push: {
             type: '$type',
-            read: '$read',
-          },
+            read: '$read'
+          }
         },
         byPriority: {
           $push: {
             priority: '$priority',
-            read: '$read',
-          },
-        },
-      },
-    },
+            read: '$read'
+          }
+        }
+      }
+    }
   ]);
 };
 
@@ -240,7 +240,7 @@ NotificationSchema.statics.createNotification = function (data) {
   return this.create({
     notificationId,
     ...data,
-    createdAt: new Date(),
+    createdAt: new Date()
   });
 };
 
@@ -250,7 +250,7 @@ NotificationSchema.statics.createMany = function (notificationsData) {
     notificationId: `NOTIF-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
     ...data,
     read: false,
-    createdAt: new Date(),
+    createdAt: new Date()
   }));
 
   return this.insertMany(notifications);

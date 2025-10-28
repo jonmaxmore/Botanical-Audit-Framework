@@ -18,8 +18,8 @@ const validate = (req, res, next) => {
       message: 'Validation failed',
       errors: errors.array().map(error => ({
         field: error.path,
-        message: error.msg,
-      })),
+        message: error.msg
+      }))
     });
   }
   next();
@@ -95,7 +95,7 @@ const validateCreateStaff = [
 
   body('permissions').optional().isArray().withMessage('Permissions must be an array'),
 
-  validate,
+  validate
 ];
 
 /**
@@ -112,7 +112,7 @@ const validateLogin = [
 
   body('password').notEmpty().withMessage('Password is required'),
 
-  validate,
+  validate
 ];
 
 /**
@@ -127,7 +127,7 @@ const validateRequestPasswordReset = [
     .normalizeEmail()
     .toLowerCase(),
 
-  validate,
+  validate
 ];
 
 /**
@@ -148,7 +148,7 @@ const validateResetPassword = [
     .matches(/[0-9]/)
     .withMessage('Password must contain at least one number'),
 
-  validate,
+  validate
 ];
 
 /**
@@ -184,7 +184,7 @@ const validateUpdateProfile = [
     .isLength({ max: 200 })
     .withMessage('Position must not exceed 200 characters'),
 
-  validate,
+  validate
 ];
 
 /**
@@ -199,7 +199,7 @@ const validateUpdateRole = [
 
   body('permissions').optional().isArray().withMessage('Permissions must be an array'),
 
-  validate,
+  validate
 ];
 
 module.exports = {
@@ -208,5 +208,5 @@ module.exports = {
   validateRequestPasswordReset,
   validateResetPassword,
   validateUpdateProfile,
-  validateUpdateRole,
+  validateUpdateRole
 };

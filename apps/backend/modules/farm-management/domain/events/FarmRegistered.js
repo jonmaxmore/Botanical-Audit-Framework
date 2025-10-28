@@ -13,7 +13,7 @@ class FarmRegistered {
     district,
     totalArea,
     createdAt,
-    timestamp = new Date(),
+    timestamp = new Date()
   }) {
     this.eventType = 'FarmRegistered';
     this.farmId = farmId;

@@ -15,27 +15,27 @@ const JobAssignmentSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
 
     // Application reference
     applicationId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     // User assignment
     assignedTo: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     assignedBy: {
       type: String,
       required: true,
-      default: 'system',
+      default: 'system'
     },
 
     // Role
@@ -43,7 +43,7 @@ const JobAssignmentSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['reviewer', 'inspector', 'approver'],
-      index: true,
+      index: true
     },
 
     // Assignment status
@@ -57,10 +57,10 @@ const JobAssignmentSchema = new mongoose.Schema(
         'completed',
         'rejected',
         'cancelled',
-        'reassigned',
+        'reassigned'
       ],
       default: 'assigned',
-      index: true,
+      index: true
     },
 
     // Priority level
@@ -69,7 +69,7 @@ const JobAssignmentSchema = new mongoose.Schema(
       required: true,
       enum: ['low', 'medium', 'high', 'urgent'],
       default: 'medium',
-      index: true,
+      index: true
     },
 
     // Assignment strategy
@@ -77,7 +77,7 @@ const JobAssignmentSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['round_robin', 'workload_based', 'performance_based', 'manual'],
-      default: 'workload_based',
+      default: 'workload_based'
     },
 
     // Time tracking
@@ -85,84 +85,84 @@ const JobAssignmentSchema = new mongoose.Schema(
       type: Date,
       required: true,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     acceptedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     startedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     completedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Reassignment tracking
     reassignedTo: {
       type: String,
-      default: null,
+      default: null
     },
 
     reassignedBy: {
       type: String,
-      default: null,
+      default: null
     },
 
     reassignReason: {
       type: String,
-      default: null,
+      default: null
     },
 
     reassignedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Cancellation tracking
     cancellationReason: {
       type: String,
-      default: null,
+      default: null
     },
 
     cancelledAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // Notes and comments
     notes: {
       type: String,
-      default: null,
+      default: null
     },
 
     // Metadata
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   },
   {
     timestamps: true,
-    collection: 'job_assignments',
-  },
+    collection: 'job_assignments'
+  }
 );
 
 // Compound indexes for better query performance
@@ -279,7 +279,7 @@ JobAssignmentSchema.methods.reassign = function (newUserId, reassignedBy, reason
 JobAssignmentSchema.statics.findActiveByUser = function (userId) {
   return this.find({
     assignedTo: userId,
-    status: { $in: ['assigned', 'accepted', 'in_progress'] },
+    status: { $in: ['assigned', 'accepted', 'in_progress'] }
   }).sort({ assignedAt: -1 });
 };
 
@@ -290,7 +290,7 @@ JobAssignmentSchema.statics.findOverdue = function (hoursThreshold = 24) {
 
   return this.find({
     status: { $in: ['assigned', 'accepted'] },
-    assignedAt: { $lte: cutoffDate },
+    assignedAt: { $lte: cutoffDate }
   }).sort({ assignedAt: 1 });
 };
 
@@ -300,8 +300,8 @@ JobAssignmentSchema.statics.getUserWorkload = function (userId) {
     {
       $match: {
         assignedTo: userId,
-        status: { $in: ['assigned', 'accepted', 'in_progress'] },
-      },
+        status: { $in: ['assigned', 'accepted', 'in_progress'] }
+      }
     },
     {
       $group: {
@@ -310,11 +310,11 @@ JobAssignmentSchema.statics.getUserWorkload = function (userId) {
         byStatus: {
           $push: {
             status: '$status',
-            priority: '$priority',
-          },
-        },
-      },
-    },
+            priority: '$priority'
+          }
+        }
+      }
+    }
   ]);
 };
 
@@ -344,30 +344,30 @@ JobAssignmentSchema.statics.getStatistics = function (filters = {}) {
         total: { $sum: 1 },
         byStatus: {
           $push: {
-            status: '$status',
-          },
+            status: '$status'
+          }
         },
         byRole: {
           $push: {
-            role: '$role',
-          },
+            role: '$role'
+          }
         },
         byStrategy: {
           $push: {
-            strategy: '$strategy',
-          },
+            strategy: '$strategy'
+          }
         },
         avgTimeToComplete: {
           $avg: {
             $cond: [
               { $and: [{ $eq: ['$status', 'completed'] }, { $ifNull: ['$completedAt', false] }] },
               { $subtract: ['$completedAt', '$assignedAt'] },
-              null,
-            ],
-          },
-        },
-      },
-    },
+              null
+            ]
+          }
+        }
+      }
+    }
   ]);
 };
 

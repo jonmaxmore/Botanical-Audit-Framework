@@ -15,7 +15,7 @@ class GetDTAMDashboardUseCase {
     trainingCourseRepository,
     trainingEnrollmentRepository,
     documentRepository,
-    auditRepository,
+    auditRepository
   ) {
     this.farmRepository = farmRepository;
     this.certificateRepository = certificateRepository;
@@ -33,7 +33,7 @@ class GetDTAMDashboardUseCase {
         this._getSystemStats(),
         this._getPendingTasks(),
         this._getRecentActivity(),
-        this._getTrends(),
+        this._getTrends()
       ]);
 
       return {
@@ -41,7 +41,7 @@ class GetDTAMDashboardUseCase {
         pendingTasks,
         recentActivity,
         trends,
-        quickStats: this._getQuickStats(systemStats, pendingTasks),
+        quickStats: this._getQuickStats(systemStats, pendingTasks)
       };
     } catch (error) {
       throw new Error(`Failed to get DTAM dashboard: ${error.message}`);
@@ -55,7 +55,7 @@ class GetDTAMDashboardUseCase {
       totalSurveys,
       totalCourses,
       totalEnrollments,
-      totalDocuments,
+      totalDocuments
     ] = await Promise.all([
       this.farmRepository.count(),
       this.certificateRepository.count(),
@@ -64,7 +64,7 @@ class GetDTAMDashboardUseCase {
       this.trainingEnrollmentRepository
         ? this.trainingEnrollmentRepository.count()
         : Promise.resolve(0),
-      this.documentRepository ? this.documentRepository.count() : Promise.resolve(0),
+      this.documentRepository ? this.documentRepository.count() : Promise.resolve(0)
     ]);
 
     return {
@@ -73,7 +73,7 @@ class GetDTAMDashboardUseCase {
       totalSurveys,
       totalCourses,
       totalEnrollments,
-      totalDocuments,
+      totalDocuments
     };
   }
 
@@ -98,8 +98,8 @@ class GetDTAMDashboardUseCase {
           certificateNumber: c.certificateNumber,
           farmerName: c.farmerName,
           type: c.type,
-          submittedAt: c.createdAt,
-        })),
+          submittedAt: c.createdAt
+        }))
       },
       surveys: {
         count: pendingSurveys.total,
@@ -108,8 +108,8 @@ class GetDTAMDashboardUseCase {
           farmName: s.farmName,
           surveyDate: s.surveyDate,
           cultivationType: s.cultivationType,
-          submittedAt: s.submittedAt,
-        })),
+          submittedAt: s.submittedAt
+        }))
       },
       documents: {
         count: pendingDocuments.total,
@@ -119,11 +119,11 @@ class GetDTAMDashboardUseCase {
               name: d.name,
               type: d.type,
               uploadedBy: d.uploadedBy,
-              uploadedAt: d.uploadedAt,
+              uploadedAt: d.uploadedAt
             }))
-          : [],
+          : []
       },
-      totalPending: pendingCertificates.total + pendingSurveys.total + pendingDocuments.total,
+      totalPending: pendingCertificates.total + pendingSurveys.total + pendingDocuments.total
     };
   }
 
@@ -135,7 +135,7 @@ class GetDTAMDashboardUseCase {
 
     const result = await this.auditRepository.findWithFilters(
       {},
-      { page: 1, limit: 20, sort: { performedAt: -1 } },
+      { page: 1, limit: 20, sort: { performedAt: -1 } }
     );
 
     return result.logs.map(log => ({
@@ -144,7 +144,7 @@ class GetDTAMDashboardUseCase {
       entityType: log.entityType,
       performedBy: log.performedBy,
       performedAt: log.performedAt,
-      description: log.getDescription(),
+      description: log.getDescription()
     }));
   }
 
@@ -157,17 +157,17 @@ class GetDTAMDashboardUseCase {
     // Get this month's stats
     const [thisMonthCerts, thisMonthSurveys, lastMonthCerts, lastMonthSurveys] = await Promise.all([
       this.certificateRepository.count({
-        createdAt: { $gte: thisMonth },
+        createdAt: { $gte: thisMonth }
       }),
       this.surveyRepository.count({
-        createdAt: { $gte: thisMonth },
+        createdAt: { $gte: thisMonth }
       }),
       this.certificateRepository.count({
-        createdAt: { $gte: lastMonth, $lt: thisMonth },
+        createdAt: { $gte: lastMonth, $lt: thisMonth }
       }),
       this.surveyRepository.count({
-        createdAt: { $gte: lastMonth, $lt: thisMonth },
-      }),
+        createdAt: { $gte: lastMonth, $lt: thisMonth }
+      })
     ]);
 
     return {
@@ -175,14 +175,14 @@ class GetDTAMDashboardUseCase {
         thisMonth: thisMonthCerts,
         lastMonth: lastMonthCerts,
         change: this._calculateChange(thisMonthCerts, lastMonthCerts),
-        trend: thisMonthCerts >= lastMonthCerts ? 'up' : 'down',
+        trend: thisMonthCerts >= lastMonthCerts ? 'up' : 'down'
       },
       surveys: {
         thisMonth: thisMonthSurveys,
         lastMonth: lastMonthSurveys,
         change: this._calculateChange(thisMonthSurveys, lastMonthSurveys),
-        trend: thisMonthSurveys >= lastMonthSurveys ? 'up' : 'down',
-      },
+        trend: thisMonthSurveys >= lastMonthSurveys ? 'up' : 'down'
+      }
     };
   }
 
@@ -198,29 +198,29 @@ class GetDTAMDashboardUseCase {
         value: pendingTasks.totalPending,
         icon: 'pending',
         color: 'warning',
-        action: '/pending-tasks',
+        action: '/pending-tasks'
       },
       {
         label: 'ฟาร์มทั้งหมด',
         value: systemStats.totalFarms,
         icon: 'farm',
         color: 'success',
-        action: '/farms',
+        action: '/farms'
       },
       {
         label: 'ใบรับรองทั้งหมด',
         value: systemStats.totalCertificates,
         icon: 'certificate',
         color: 'primary',
-        action: '/certificates',
+        action: '/certificates'
       },
       {
         label: 'แบบสำรวจทั้งหมด',
         value: systemStats.totalSurveys,
         icon: 'survey',
         color: 'info',
-        action: '/surveys',
-      },
+        action: '/surveys'
+      }
     ];
   }
 }

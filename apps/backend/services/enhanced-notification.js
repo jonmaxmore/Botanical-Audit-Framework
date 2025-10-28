@@ -16,7 +16,7 @@ const EnhancedNotificationSchema = new mongoose.Schema(
       unique: true,
       default: function () {
         return `NOTIF-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-      },
+      }
     },
 
     // Recipient information
@@ -25,7 +25,7 @@ const EnhancedNotificationSchema = new mongoose.Schema(
       userRole: { type: String, required: true },
       userName: String,
       userEmail: String,
-      userPhone: String,
+      userPhone: String
     },
 
     // Notification content
@@ -43,8 +43,8 @@ const EnhancedNotificationSchema = new mongoose.Schema(
           filename: String,
           url: String,
           type: String,
-          size: Number,
-        },
+          size: Number
+        }
       ],
 
       // Action buttons
@@ -55,9 +55,9 @@ const EnhancedNotificationSchema = new mongoose.Schema(
           labelTH: String,
           actionType: { type: String, enum: ['url', 'api', 'modal', 'download'] },
           actionData: Object,
-          style: { type: String, enum: ['primary', 'secondary', 'success', 'warning', 'danger'] },
-        },
-      ],
+          style: { type: String, enum: ['primary', 'secondary', 'success', 'warning', 'danger'] }
+        }
+      ]
     },
 
     // Notification classification
@@ -78,8 +78,8 @@ const EnhancedNotificationSchema = new mongoose.Schema(
           'certificate', // ใบรับรอง
           'training', // การฝึกอบรม
           'maintenance', // การบำรุงรักษา
-          'emergency', // เหตุฉุกเฉิน
-        ],
+          'emergency' // เหตุฉุกเฉิน
+        ]
       },
 
       subcategory: String,
@@ -143,21 +143,21 @@ const EnhancedNotificationSchema = new mongoose.Schema(
           'certificate_expiring',
           'training_due',
           'payment_received',
-          'custom',
-        ],
+          'custom'
+        ]
       },
 
       priority: {
         type: String,
         enum: ['low', 'medium', 'high', 'urgent', 'critical'],
-        default: 'medium',
+        default: 'medium'
       },
 
       urgency: {
         type: String,
         enum: ['routine', 'standard', 'urgent', 'emergency'],
-        default: 'standard',
-      },
+        default: 'standard'
+      }
     },
 
     // Context and links
@@ -176,7 +176,7 @@ const EnhancedNotificationSchema = new mongoose.Schema(
       triggeredBy: {
         userId: String,
         userName: String,
-        userRole: String,
+        userRole: String
       },
 
       // Deep links
@@ -185,12 +185,12 @@ const EnhancedNotificationSchema = new mongoose.Schema(
           label: String,
           labelTH: String,
           url: String,
-          target: { type: String, enum: ['_self', '_blank', 'modal'], default: '_self' },
-        },
+          target: { type: String, enum: ['_self', '_blank', 'modal'], default: '_self' }
+        }
       ],
 
       // Additional metadata
-      metadata: Object,
+      metadata: Object
     },
 
     // Delivery settings
@@ -200,19 +200,19 @@ const EnhancedNotificationSchema = new mongoose.Schema(
           channel: {
             type: String,
             enum: ['database', 'email', 'sms', 'push', 'webhook', 'line', 'telegram'],
-            required: true,
+            required: true
           },
           status: {
             type: String,
             enum: ['pending', 'sent', 'delivered', 'failed', 'bounced'],
-            default: 'pending',
+            default: 'pending'
           },
           sentAt: Date,
           deliveredAt: Date,
           failureReason: String,
           retryCount: { type: Number, default: 0 },
-          maxRetries: { type: Number, default: 3 },
-        },
+          maxRetries: { type: Number, default: 3 }
+        }
       ],
 
       scheduledFor: Date,
@@ -221,8 +221,8 @@ const EnhancedNotificationSchema = new mongoose.Schema(
       deliveryPreferences: {
         immediate: { type: Boolean, default: true },
         digest: { type: Boolean, default: false },
-        batchWith: [String], // Batch with other notification types
-      },
+        batchWith: [String] // Batch with other notification types
+      }
     },
 
     // User interaction
@@ -244,16 +244,16 @@ const EnhancedNotificationSchema = new mongoose.Schema(
         {
           actionId: String,
           takenAt: { type: Date, default: Date.now },
-          result: String,
-        },
+          result: String
+        }
       ],
 
       feedback: {
         helpful: Boolean,
         rating: { type: Number, min: 1, max: 5 },
         comment: String,
-        submittedAt: Date,
-      },
+        submittedAt: Date
+      }
     },
 
     // Status and lifecycle
@@ -267,9 +267,9 @@ const EnhancedNotificationSchema = new mongoose.Schema(
         'read',
         'acknowledged',
         'expired',
-        'cancelled',
+        'cancelled'
       ],
-      default: 'pending',
+      default: 'pending'
     },
 
     // Tracking and analytics
@@ -280,14 +280,14 @@ const EnhancedNotificationSchema = new mongoose.Schema(
 
       userAgent: String,
       ipAddress: String,
-      deviceInfo: Object,
-    },
+      deviceInfo: Object
+    }
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    toObject: { virtuals: true },
-  },
+    toObject: { virtuals: true }
+  }
 );
 
 // Indexes
@@ -337,7 +337,7 @@ EnhancedNotificationSchema.methods.recordAction = function (actionId, result) {
   this.interaction.actionsTaken.push({
     actionId,
     takenAt: new Date(),
-    result,
+    result
   });
   this.tracking.clicks += 1;
   return this.save();
@@ -365,31 +365,31 @@ class EnhancedNotificationService extends EventEmitter {
     // Database channel (always available)
     this.channels.set('database', {
       enabled: true,
-      deliver: this.deliverToDatabase.bind(this),
+      deliver: this.deliverToDatabase.bind(this)
     });
 
     // Email channel
     this.channels.set('email', {
       enabled: process.env.EMAIL_ENABLED === 'true',
-      deliver: this.deliverToEmail.bind(this),
+      deliver: this.deliverToEmail.bind(this)
     });
 
     // SMS channel
     this.channels.set('sms', {
       enabled: process.env.SMS_ENABLED === 'true',
-      deliver: this.deliverToSMS.bind(this),
+      deliver: this.deliverToSMS.bind(this)
     });
 
     // Push notification channel
     this.channels.set('push', {
       enabled: process.env.PUSH_ENABLED === 'true',
-      deliver: this.deliverToPush.bind(this),
+      deliver: this.deliverToPush.bind(this)
     });
 
     // LINE channel
     this.channels.set('line', {
       enabled: process.env.LINE_ENABLED === 'true',
-      deliver: this.deliverToLine.bind(this),
+      deliver: this.deliverToLine.bind(this)
     });
   }
 
@@ -411,9 +411,9 @@ class EnhancedNotificationService extends EventEmitter {
           label: 'View Activity',
           labelTH: 'ดูกิจกรรม',
           actionType: 'url',
-          style: 'primary',
-        },
-      ],
+          style: 'primary'
+        }
+      ]
     });
 
     // Cannabis License Templates
@@ -430,9 +430,9 @@ class EnhancedNotificationService extends EventEmitter {
           label: 'Renew License',
           labelTH: 'ต่ออายุใบอนุญาต',
           actionType: 'url',
-          style: 'warning',
-        },
-      ],
+          style: 'warning'
+        }
+      ]
     });
 
     // Audit Templates
@@ -449,16 +449,16 @@ class EnhancedNotificationService extends EventEmitter {
           label: 'View Details',
           labelTH: 'ดูรายละเอียด',
           actionType: 'url',
-          style: 'primary',
+          style: 'primary'
         },
         {
           actionId: 'prepare_checklist',
           label: 'Preparation Checklist',
           labelTH: 'รายการเตรียมความพร้อม',
           actionType: 'url',
-          style: 'secondary',
-        },
-      ],
+          style: 'secondary'
+        }
+      ]
     });
 
     // Task Assignment Templates
@@ -475,16 +475,16 @@ class EnhancedNotificationService extends EventEmitter {
           label: 'View Task',
           labelTH: 'ดูงาน',
           actionType: 'url',
-          style: 'primary',
+          style: 'primary'
         },
         {
           actionId: 'accept_task',
           label: 'Accept',
           labelTH: 'รับงาน',
           actionType: 'api',
-          style: 'success',
-        },
-      ],
+          style: 'success'
+        }
+      ]
     });
   }
 
@@ -506,8 +506,8 @@ class EnhancedNotificationService extends EventEmitter {
         ...notificationData,
         delivery: {
           ...notificationData.delivery,
-          channels: this.determineChannels(notificationData, userPrefs),
-        },
+          channels: this.determineChannels(notificationData, userPrefs)
+        }
       });
 
       await notification.save();
@@ -542,16 +542,16 @@ class EnhancedNotificationService extends EventEmitter {
         titleTH: this.interpolateString(template.titleTH, data.variables || {}),
         message: this.interpolateString(template.message, data.variables || {}),
         messageTH: this.interpolateString(template.messageTH, data.variables || {}),
-        actions: template.actions,
+        actions: template.actions
       },
       classification: {
         ...data.classification,
-        priority: data.classification?.priority || template.priority,
+        priority: data.classification?.priority || template.priority
       },
       delivery: {
         ...data.delivery,
-        channels: template.channels.map(channel => ({ channel, status: 'pending' })),
-      },
+        channels: template.channels.map(channel => ({ channel, status: 'pending' }))
+      }
     };
 
     return merged;
@@ -682,7 +682,7 @@ class EnhancedNotificationService extends EventEmitter {
             channelConfig.status = 'pending';
             this.queueForDelivery(notification);
           },
-          Math.pow(2, channelConfig.retryCount) * 1000,
+          Math.pow(2, channelConfig.retryCount) * 1000
         ); // Exponential backoff
       }
     }
@@ -732,16 +732,16 @@ class EnhancedNotificationService extends EventEmitter {
     return {
       email: {
         enabled: true,
-        categories: ['audit', 'sop_compliance', 'deadline', 'task_assignment'],
+        categories: ['audit', 'sop_compliance', 'deadline', 'task_assignment']
       },
       sms: {
         enabled: true,
-        categories: ['urgent', 'cannabis_compliance', 'emergency'],
+        categories: ['urgent', 'cannabis_compliance', 'emergency']
       },
       push: {
         enabled: true,
-        categories: ['all'],
-      },
+        categories: ['all']
+      }
     };
   }
 
@@ -753,11 +753,11 @@ class EnhancedNotificationService extends EventEmitter {
       templateId: 'sop_activity_due',
       recipient: {
         userId: userId,
-        userRole: activityData.userRole,
+        userRole: activityData.userRole
       },
       variables: {
         activityName: activityData.stepName,
-        dueDate: activityData.scheduledDate.toLocaleDateString('th-TH'),
+        dueDate: activityData.scheduledDate.toLocaleDateString('th-TH')
       },
       context: {
         cultivationRecordCode: activityData.cultivationRecordCode,
@@ -766,10 +766,10 @@ class EnhancedNotificationService extends EventEmitter {
           {
             label: 'View Activity',
             labelTH: 'ดูกิจกรรม',
-            url: `/cultivation/${activityData.cultivationRecordCode}/activities/${activityData.activityId}`,
-          },
-        ],
-      },
+            url: `/cultivation/${activityData.cultivationRecordCode}/activities/${activityData.activityId}`
+          }
+        ]
+      }
     });
   }
 
@@ -781,10 +781,10 @@ class EnhancedNotificationService extends EventEmitter {
       templateId: 'license_expiry_warning',
       recipient: {
         userId: userId,
-        userRole: 'farmer',
+        userRole: 'farmer'
       },
       variables: {
-        daysUntilExpiry: licenseData.daysUntilExpiry,
+        daysUntilExpiry: licenseData.daysUntilExpiry
       },
       context: {
         farmCode: licenseData.farmCode,
@@ -792,10 +792,10 @@ class EnhancedNotificationService extends EventEmitter {
           {
             label: 'Renew License',
             labelTH: 'ต่ออายุใบอนุญาต',
-            url: `/cannabis/license/renew/${licenseData.licenseNumber}`,
-          },
-        ],
-      },
+            url: `/cannabis/license/renew/${licenseData.licenseNumber}`
+          }
+        ]
+      }
     });
   }
 
@@ -807,11 +807,11 @@ class EnhancedNotificationService extends EventEmitter {
       templateId: 'audit_scheduled',
       recipient: {
         userId: userId,
-        userRole: auditData.userRole,
+        userRole: auditData.userRole
       },
       variables: {
         auditDate: auditData.scheduledDate.toLocaleDateString('th-TH'),
-        farmName: auditData.farmName,
+        farmName: auditData.farmName
       },
       context: {
         auditId: auditData.auditId,
@@ -820,10 +820,10 @@ class EnhancedNotificationService extends EventEmitter {
           {
             label: 'View Details',
             labelTH: 'ดูรายละเอียด',
-            url: `/audits/${auditData.auditId}`,
-          },
-        ],
-      },
+            url: `/audits/${auditData.auditId}`
+          }
+        ]
+      }
     });
   }
 
@@ -835,10 +835,10 @@ class EnhancedNotificationService extends EventEmitter {
       templateId: 'task_assigned',
       recipient: {
         userId: userId,
-        userRole: taskData.userRole,
+        userRole: taskData.userRole
       },
       variables: {
-        taskTitle: taskData.title,
+        taskTitle: taskData.title
       },
       context: {
         taskId: taskData.taskId,
@@ -846,10 +846,10 @@ class EnhancedNotificationService extends EventEmitter {
           {
             label: 'View Task',
             labelTH: 'ดูงาน',
-            url: `/tasks/${taskData.taskId}`,
-          },
-        ],
-      },
+            url: `/tasks/${taskData.taskId}`
+          }
+        ]
+      }
     });
   }
 }
@@ -859,5 +859,5 @@ const EnhancedNotification = mongoose.model('EnhancedNotification', EnhancedNoti
 
 module.exports = {
   EnhancedNotification,
-  EnhancedNotificationService,
+  EnhancedNotificationService
 };

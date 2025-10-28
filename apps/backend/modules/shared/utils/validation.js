@@ -94,5 +94,5 @@ module.exports = {
   sanitizeString,
   isValidObjectId,
   isValidLatitude,
-  isValidLongitude,
+  isValidLongitude
 };

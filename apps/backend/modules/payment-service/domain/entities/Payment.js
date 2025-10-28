@@ -32,21 +32,21 @@ const PaymentSchema = new mongoose.Schema(
       required: true,
       unique: true,
       index: true,
-      default: () => `PAY_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+      default: () => `PAY_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`
     },
 
     applicationId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Application',
       required: true,
-      index: true,
+      index: true
     },
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      index: true,
+      index: true
     },
 
     // Payment Details
@@ -58,9 +58,9 @@ const PaymentSchema = new mongoose.Schema(
         'RENEWAL_FEE', // ค่าธรรมเนียมการต่ออายุ
         'AMENDMENT_FEE', // ค่าธรรมเนียมการแก้ไข
         'EXPEDITED_FEE', // ค่าธรรมเนียมการเร่งด่วน
-        'PENALTY_FEE', // ค่าปรับ
+        'PENALTY_FEE' // ค่าปรับ
       ],
-      required: true,
+      required: true
     },
 
     amount: {
@@ -72,15 +72,15 @@ const PaymentSchema = new mongoose.Schema(
           // Amount must be positive and max 2 decimal places
           return value > 0 && Number.isInteger(value * 100);
         },
-        message: 'Amount must be positive with maximum 2 decimal places',
-      },
+        message: 'Amount must be positive with maximum 2 decimal places'
+      }
     },
 
     currency: {
       type: String,
       default: 'THB',
       enum: ['THB'],
-      required: true,
+      required: true
     },
 
     // Payment Status Tracking
@@ -94,34 +94,34 @@ const PaymentSchema = new mongoose.Schema(
         'CANCELLED', // ยกเลิกการชำระเงิน
         'EXPIRED', // หมดอายุ
         'REFUNDED', // คืนเงินแล้ว
-        'PARTIAL_REFUNDED', // คืนเงินบางส่วน
+        'PARTIAL_REFUNDED' // คืนเงินบางส่วน
       ],
       default: 'PENDING',
       required: true,
-      index: true,
+      index: true
     },
 
     // PromptPay Integration
     promptPay: {
       qrCode: {
         type: String,
-        sparse: true, // Allows null values but ensures uniqueness when present
+        sparse: true // Allows null values but ensures uniqueness when present
       },
 
       qrCodeImage: {
         type: String, // Base64 encoded QR code image
-        sparse: true,
+        sparse: true
       },
 
       referenceNumber: {
         type: String,
         sparse: true,
-        unique: true,
+        unique: true
       },
 
       bankTransactionId: {
         type: String,
-        sparse: true,
+        sparse: true
       },
 
       expiryDate: {
@@ -130,15 +130,15 @@ const PaymentSchema = new mongoose.Schema(
           validator: function (value) {
             return !value || value > new Date();
           },
-          message: 'Expiry date must be in the future',
-        },
+          message: 'Expiry date must be in the future'
+        }
       },
 
       paymentMethod: {
         type: String,
         enum: ['QR_CODE', 'BANK_TRANSFER', 'MOBILE_BANKING'],
-        default: 'QR_CODE',
-      },
+        default: 'QR_CODE'
+      }
     },
 
     // Transaction Details
@@ -149,7 +149,7 @@ const PaymentSchema = new mongoose.Schema(
       transactionTime: Date, // เวลาการทำธุรกรรม
       approvalCode: String, // รหัสอนุมัติ
       terminalId: String, // รหัสเครื่อง
-      merchantId: String, // รหัสร้านค้า
+      merchantId: String // รหัสร้านค้า
     },
 
     // Fee Calculation Breakdown
@@ -157,38 +157,38 @@ const PaymentSchema = new mongoose.Schema(
       baseFee: {
         type: Number,
         required: true,
-        min: 0,
+        min: 0
       },
 
       processingFee: {
         type: Number,
         default: 0,
-        min: 0,
+        min: 0
       },
 
       expeditedFee: {
         type: Number,
         default: 0,
-        min: 0,
+        min: 0
       },
 
       vatAmount: {
         type: Number,
         default: 0,
-        min: 0,
+        min: 0
       },
 
       discountAmount: {
         type: Number,
         default: 0,
-        min: 0,
+        min: 0
       },
 
       totalAmount: {
         type: Number,
         required: true,
-        min: 0,
-      },
+        min: 0
+      }
     },
 
     // Payment Attempts & Retry Logic
@@ -196,18 +196,18 @@ const PaymentSchema = new mongoose.Schema(
       {
         attemptNumber: {
           type: Number,
-          required: true,
+          required: true
         },
 
         attemptDate: {
           type: Date,
-          default: Date.now,
+          default: Date.now
         },
 
         status: {
           type: String,
           enum: ['PENDING', 'SUCCESS', 'FAILED'],
-          required: true,
+          required: true
         },
 
         errorCode: String,
@@ -215,9 +215,9 @@ const PaymentSchema = new mongoose.Schema(
 
         responseData: {
           type: mongoose.Schema.Types.Mixed,
-          default: {},
-        },
-      },
+          default: {}
+        }
+      }
     ],
 
     // Webhook & Notification Tracking
@@ -232,32 +232,32 @@ const PaymentSchema = new mongoose.Schema(
             'PAYMENT_FAILED',
             'PAYMENT_EXPIRED',
             'REFUND_INITIATED',
-            'REFUND_COMPLETED',
+            'REFUND_COMPLETED'
           ],
-          required: true,
+          required: true
         },
 
         eventDate: {
           type: Date,
-          default: Date.now,
+          default: Date.now
         },
 
         eventData: {
           type: mongoose.Schema.Types.Mixed,
-          default: {},
+          default: {}
         },
 
         webhookSource: {
           type: String,
           enum: ['PROMPTPAY_GATEWAY', 'BANK_NOTIFICATION', 'MANUAL_UPDATE'],
-          required: true,
+          required: true
         },
 
         processed: {
           type: Boolean,
-          default: false,
-        },
-      },
+          default: false
+        }
+      }
     ],
 
     // Receipt & Documentation
@@ -265,7 +265,7 @@ const PaymentSchema = new mongoose.Schema(
       receiptNumber: {
         type: String,
         unique: true,
-        sparse: true,
+        sparse: true
       },
 
       receiptUrl: String, // URL to PDF receipt
@@ -273,7 +273,7 @@ const PaymentSchema = new mongoose.Schema(
       receiptGeneratedAt: Date,
 
       taxInvoiceNumber: String,
-      taxInvoiceUrl: String,
+      taxInvoiceUrl: String
     },
 
     // Refund Information
@@ -286,8 +286,8 @@ const PaymentSchema = new mongoose.Schema(
           'USER_REQUEST',
           'SYSTEM_ERROR',
           'OVERPAYMENT',
-          'ADMIN_ADJUSTMENT',
-        ],
+          'ADMIN_ADJUSTMENT'
+        ]
       },
 
       refundAmount: {
@@ -297,23 +297,23 @@ const PaymentSchema = new mongoose.Schema(
           validator: function (value) {
             return !value || value <= this.amount;
           },
-          message: 'Refund amount cannot exceed payment amount',
-        },
+          message: 'Refund amount cannot exceed payment amount'
+        }
       },
 
       refundDate: Date,
       refundMethod: {
         type: String,
-        enum: ['BANK_TRANSFER', 'ORIGINAL_PAYMENT_METHOD'],
+        enum: ['BANK_TRANSFER', 'ORIGINAL_PAYMENT_METHOD']
       },
 
       refundTransactionId: String,
       refundApprovedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
       },
 
-      refundNotes: String,
+      refundNotes: String
     },
 
     // Metadata & Audit
@@ -326,40 +326,40 @@ const PaymentSchema = new mongoose.Schema(
       // Fee calculation details
       feeCalculationVersion: {
         type: String,
-        default: '1.0',
+        default: '1.0'
       },
 
       // Promotional codes or discounts applied
       promoCode: String,
       discountApplied: {
         type: Number,
-        default: 0,
-      },
+        default: 0
+      }
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
 
     paidAt: Date,
 
     expiresAt: {
       type: Date,
-      index: { expireAfterSeconds: 0 }, // TTL index for automatic cleanup
-    },
+      index: { expireAfterSeconds: 0 } // TTL index for automatic cleanup
+    }
   },
   {
     timestamps: true,
-    collection: 'payments',
-  },
+    collection: 'payments'
+  }
 );
 
 // Indexes for Performance
@@ -387,7 +387,7 @@ PaymentSchema.virtual('isRefundable').get(function () {
 PaymentSchema.virtual('formattedAmount').get(function () {
   return new Intl.NumberFormat('th-TH', {
     style: 'currency',
-    currency: 'THB',
+    currency: 'THB'
   }).format(this.amount);
 });
 
@@ -403,7 +403,7 @@ PaymentSchema.methods.markAsCompleted = function (transactionDetails = {}) {
     eventType: 'PAYMENT_SUCCESS',
     eventData: transactionDetails,
     webhookSource: 'PROMPTPAY_GATEWAY',
-    processed: false,
+    processed: false
   });
 
   return this.save();
@@ -418,7 +418,7 @@ PaymentSchema.methods.markAsFailed = function (errorCode, errorMessage) {
     eventType: 'PAYMENT_FAILED',
     eventData: { errorCode, errorMessage },
     webhookSource: 'PROMPTPAY_GATEWAY',
-    processed: false,
+    processed: false
   });
 
   return this.save();
@@ -432,7 +432,7 @@ PaymentSchema.methods.addPaymentAttempt = function (status, errorData = {}) {
     status,
     errorCode: errorData.errorCode,
     errorMessage: errorData.errorMessage,
-    responseData: errorData.responseData || {},
+    responseData: errorData.responseData || {}
   });
 
   this.updatedAt = new Date();
@@ -479,14 +479,14 @@ PaymentSchema.statics.findByApplicationId = function (applicationId) {
 PaymentSchema.statics.findPendingPayments = function () {
   return this.find({
     status: 'PENDING',
-    expiresAt: { $gt: new Date() },
+    expiresAt: { $gt: new Date() }
   });
 };
 
 PaymentSchema.statics.findExpiredPayments = function () {
   return this.find({
     status: 'PENDING',
-    expiresAt: { $lte: new Date() },
+    expiresAt: { $lte: new Date() }
   });
 };
 
@@ -494,16 +494,16 @@ PaymentSchema.statics.getPaymentStatistics = function (startDate, endDate) {
   return this.aggregate([
     {
       $match: {
-        createdAt: { $gte: startDate, $lte: endDate },
-      },
+        createdAt: { $gte: startDate, $lte: endDate }
+      }
     },
     {
       $group: {
         _id: '$status',
         count: { $sum: 1 },
-        totalAmount: { $sum: '$amount' },
-      },
-    },
+        totalAmount: { $sum: '$amount' }
+      }
+    }
   ]);
 };
 

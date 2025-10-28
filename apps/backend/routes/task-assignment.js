@@ -21,10 +21,10 @@ const taskCreationLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 50, // Limit each IP to 50 task creations per windowMs
   message: {
-    error: 'Too many task creation requests, please try again later.',
+    error: 'Too many task creation requests, please try again later.'
   },
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 
 // Rate limiting for task updates
@@ -32,8 +32,8 @@ const taskUpdateLimiter = rateLimit({
   windowMs: 5 * 60 * 1000, // 5 minutes
   max: 100, // Limit each IP to 100 updates per windowMs
   message: {
-    error: 'Too many task update requests, please try again later.',
-  },
+    error: 'Too many task update requests, please try again later.'
+  }
 });
 
 /**
@@ -54,14 +54,14 @@ router.post(
         scheduling,
         context,
         requirements,
-        syncWithBlitzz = true,
+        syncWithBlitzz = true
       } = req.body;
 
       // Validate required fields
       if (!taskInfo.title || !assignment.assignedTo.userId) {
         return res.status(400).json({
           success: false,
-          error: 'Task title and assignee are required',
+          error: 'Task title and assignee are required'
         });
       }
 
@@ -74,17 +74,17 @@ router.post(
             userId: req.user.userId,
             userName: req.user.userName,
             userRole: req.user.role,
-            assignedAt: new Date(),
-          },
+            assignedAt: new Date()
+          }
         },
         scheduling,
         context: {
           ...context,
           sourceSystem: 'gacp-platform',
-          sourceEvent: 'manual_creation',
+          sourceEvent: 'manual_creation'
         },
         requirements,
-        syncWithBlitzz,
+        syncWithBlitzz
       };
 
       const task = await blitzzService.createTask(taskData);
@@ -96,8 +96,8 @@ router.post(
           taskId: task.taskId,
           assignedTo: assignment.assignedTo.userId,
           category: taskInfo.category,
-          priority: taskInfo.priority,
-        },
+          priority: taskInfo.priority
+        }
       };
 
       res.status(201).json({
@@ -111,20 +111,20 @@ router.post(
             status: task.status.current,
             assignedTo: task.assignment.assignedTo,
             dueDate: task.scheduling.dueDate,
-            blitzzSynced: task.blitzzIntegration.syncStatus === 'synced',
-          },
+            blitzzSynced: task.blitzzIntegration.syncStatus === 'synced'
+          }
         },
-        message: 'Task created successfully',
+        message: 'Task created successfully'
       });
     } catch (error) {
       logger.error('Error creating task:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to create task',
-        details: process.env.NODE_ENV === 'development' ? error.message : undefined,
+        details: process.env.NODE_ENV === 'development' ? error.message : undefined
       });
     }
-  },
+  }
 );
 
 /**
@@ -140,7 +140,7 @@ router.get('/', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, res) =>
       includeTeam = 'false',
       page = 1,
       limit = 20,
-      viewAll = 'false',
+      viewAll = 'false'
     } = req.query;
 
     let result;
@@ -166,8 +166,8 @@ router.get('/', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, res) =>
           current: parseInt(page),
           total: Math.ceil(total / parseInt(limit)),
           hasNext: parseInt(page) < Math.ceil(total / parseInt(limit)),
-          hasPrev: parseInt(page) > 1,
-        },
+          hasPrev: parseInt(page) > 1
+        }
       };
     } else {
       // Get tasks for specific user
@@ -177,19 +177,19 @@ router.get('/', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, res) =>
         priority,
         includeTeam: includeTeam === 'true',
         page: parseInt(page),
-        limit: parseInt(limit),
+        limit: parseInt(limit)
       });
     }
 
     res.json({
       success: true,
-      data: result,
+      data: result
     });
   } catch (error) {
     logger.error('Error fetching tasks:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch tasks',
+      error: 'Failed to fetch tasks'
     });
   }
 });
@@ -207,7 +207,7 @@ router.get('/:taskId', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, 
     if (!task) {
       return res.status(404).json({
         success: false,
-        error: 'Task not found',
+        error: 'Task not found'
       });
     }
 
@@ -221,7 +221,7 @@ router.get('/:taskId', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, 
     if (!hasAccess) {
       return res.status(403).json({
         success: false,
-        error: 'Access denied',
+        error: 'Access denied'
       });
     }
 
@@ -232,13 +232,13 @@ router.get('/:taskId', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, 
 
     res.json({
       success: true,
-      data: { task },
+      data: { task }
     });
   } catch (error) {
     logger.error('Error fetching task:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch task',
+      error: 'Failed to fetch task'
     });
   }
 });
@@ -268,13 +268,13 @@ router.patch(
         'revision',
         'completed',
         'cancelled',
-        'rejected',
+        'rejected'
       ];
 
       if (!validStatuses.includes(status)) {
         return res.status(400).json({
           success: false,
-          error: 'Invalid status',
+          error: 'Invalid status'
         });
       }
 
@@ -283,7 +283,7 @@ router.patch(
         status,
         req.user.userId,
         reason,
-        notes,
+        notes
       );
 
       // Log audit trail
@@ -294,8 +294,8 @@ router.patch(
           oldStatus: task.status.statusHistory[task.status.statusHistory.length - 2]?.status,
           newStatus: status,
           reason,
-          notes,
-        },
+          notes
+        }
       };
 
       res.json({
@@ -305,19 +305,19 @@ router.patch(
             taskId: task.taskId,
             status: task.status.current,
             completionPercentage: task.progress.completionPercentage,
-            lastUpdated: new Date(),
-          },
+            lastUpdated: new Date()
+          }
         },
-        message: 'Task status updated successfully',
+        message: 'Task status updated successfully'
       });
     } catch (error) {
       logger.error('Error updating task status:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to update task status',
+        error: 'Failed to update task status'
       });
     }
-  },
+  }
 );
 
 /**
@@ -340,7 +340,7 @@ router.patch(
       if (!task) {
         return res.status(404).json({
           success: false,
-          error: 'Task not found',
+          error: 'Task not found'
         });
       }
 
@@ -350,7 +350,7 @@ router.patch(
         toUserId: newAssigneeId,
         reason,
         reassignedBy: req.user.userId,
-        reassignedAt: new Date(),
+        reassignedAt: new Date()
       });
 
       // Update assignment
@@ -371,8 +371,8 @@ router.patch(
           taskId,
           fromUserId: oldAssignee.userId,
           toUserId: newAssigneeId,
-          reason,
-        },
+          reason
+        }
       };
 
       res.json({
@@ -381,19 +381,19 @@ router.patch(
           task: {
             taskId: task.taskId,
             assignedTo: task.assignment.assignedTo,
-            reassignedAt: new Date(),
-          },
+            reassignedAt: new Date()
+          }
         },
-        message: 'Task reassigned successfully',
+        message: 'Task reassigned successfully'
       });
     } catch (error) {
       logger.error('Error reassigning task:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to reassign task',
+        error: 'Failed to reassign task'
       });
     }
-  },
+  }
 );
 
 /**
@@ -415,7 +415,7 @@ router.post(
       if (!task) {
         return res.status(404).json({
           success: false,
-          error: 'Task not found',
+          error: 'Task not found'
         });
       }
 
@@ -428,7 +428,7 @@ router.post(
       if (!hasAccess) {
         return res.status(403).json({
           success: false,
-          error: 'Access denied',
+          error: 'Access denied'
         });
       }
 
@@ -437,7 +437,7 @@ router.post(
         userId: req.user.userId,
         userName: req.user.userName,
         comment,
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       task.communication.comments.push(newComment);
@@ -446,16 +446,16 @@ router.post(
       res.status(201).json({
         success: true,
         data: { comment: newComment },
-        message: 'Comment added successfully',
+        message: 'Comment added successfully'
       });
     } catch (error) {
       logger.error('Error adding comment:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to add comment',
+        error: 'Failed to add comment'
       });
     }
-  },
+  }
 );
 
 /**
@@ -477,7 +477,7 @@ router.post(
       if (!task) {
         return res.status(404).json({
           success: false,
-          error: 'Task not found',
+          error: 'Task not found'
         });
       }
 
@@ -488,7 +488,7 @@ router.post(
       if (start >= end) {
         return res.status(400).json({
           success: false,
-          error: 'End time must be after start time',
+          error: 'End time must be after start time'
         });
       }
 
@@ -501,7 +501,7 @@ router.post(
         duration,
         description,
         billable,
-        entryDate: new Date(),
+        entryDate: new Date()
       };
 
       task.scheduling.timeEntries.push(timeEntry);
@@ -509,7 +509,7 @@ router.post(
       // Update actual hours
       const totalMinutes = task.scheduling.timeEntries.reduce(
         (sum, entry) => sum + entry.duration,
-        0,
+        0
       );
       task.taskInfo.actualHours = Math.round((totalMinutes / 60) * 10) / 10; // Round to 1 decimal
 
@@ -519,18 +519,18 @@ router.post(
         success: true,
         data: {
           timeEntry,
-          totalHours: task.taskInfo.actualHours,
+          totalHours: task.taskInfo.actualHours
         },
-        message: 'Time entry added successfully',
+        message: 'Time entry added successfully'
       });
     } catch (error) {
       logger.error('Error adding time entry:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to add time entry',
+        error: 'Failed to add time entry'
       });
     }
-  },
+  }
 );
 
 /**
@@ -556,8 +556,8 @@ router.post(
           auditId: auditData.auditId,
           farmCode: auditData.farmCode,
           tasksCreated: tasks.length,
-          taskIds: tasks.map(task => task.taskId),
-        },
+          taskIds: tasks.map(task => task.taskId)
+        }
       };
 
       res.status(201).json({
@@ -568,19 +568,19 @@ router.post(
             title: task.taskInfo.title,
             category: task.taskInfo.category,
             dueDate: task.scheduling.dueDate,
-            assignedTo: task.assignment.assignedTo,
-          })),
+            assignedTo: task.assignment.assignedTo
+          }))
         },
-        message: `${tasks.length} audit preparation tasks created successfully`,
+        message: `${tasks.length} audit preparation tasks created successfully`
       });
     } catch (error) {
       logger.error('Error creating audit preparation tasks:', error);
       res.status(500).json({
         success: false,
-        error: 'Failed to create audit preparation tasks',
+        error: 'Failed to create audit preparation tasks'
       });
     }
-  },
+  }
 );
 
 /**
@@ -593,13 +593,13 @@ router.get('/dashboard/summary', auth, rbac(['admin', 'reviewer']), async (req, 
 
     res.json({
       success: true,
-      data: dashboardData,
+      data: dashboardData
     });
   } catch (error) {
     logger.error('Error fetching dashboard data:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch dashboard data',
+      error: 'Failed to fetch dashboard data'
     });
   }
 });
@@ -612,7 +612,7 @@ router.get('/overdue', auth, rbac(['admin', 'reviewer']), async (req, res) => {
   try {
     const overdueTasks = await TaskAssignment.find({
       'scheduling.dueDate': { $lt: new Date() },
-      'status.current': { $nin: ['completed', 'cancelled'] },
+      'status.current': { $nin: ['completed', 'cancelled'] }
     })
       .sort({ 'scheduling.dueDate': 1 })
       .limit(50);
@@ -621,14 +621,14 @@ router.get('/overdue', auth, rbac(['admin', 'reviewer']), async (req, res) => {
       success: true,
       data: {
         tasks: overdueTasks,
-        count: overdueTasks.length,
-      },
+        count: overdueTasks.length
+      }
     });
   } catch (error) {
     logger.error('Error fetching overdue tasks:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch overdue tasks',
+      error: 'Failed to fetch overdue tasks'
     });
   }
 });
@@ -646,7 +646,7 @@ router.post('/:taskId/sync-blitzz', auth, rbac(['admin']), async (req, res) => {
     if (!task) {
       return res.status(404).json({
         success: false,
-        error: 'Task not found',
+        error: 'Task not found'
       });
     }
 
@@ -663,15 +663,15 @@ router.post('/:taskId/sync-blitzz', auth, rbac(['admin']), async (req, res) => {
       data: {
         syncStatus: task.blitzzIntegration.syncStatus,
         lastSyncAt: task.blitzzIntegration.lastSyncAt,
-        externalTaskId: task.blitzzIntegration.externalTaskId,
+        externalTaskId: task.blitzzIntegration.externalTaskId
       },
-      message: 'Task synced with Blitzz successfully',
+      message: 'Task synced with Blitzz successfully'
     });
   } catch (error) {
     logger.error('Error syncing with Blitzz:', error);
     res.status(500).json({
       success: false,
-      error: 'Failed to sync with Blitzz',
+      error: 'Failed to sync with Blitzz'
     });
   }
 });

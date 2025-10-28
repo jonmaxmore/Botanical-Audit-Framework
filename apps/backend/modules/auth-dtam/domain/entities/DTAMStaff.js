@@ -38,7 +38,7 @@ class DTAMStaff {
     createdBy = null,
     updatedBy = null,
     createdAt = new Date(),
-    updatedAt = new Date(),
+    updatedAt = new Date()
   }) {
     this.id = id;
     this.email = email;
@@ -73,7 +73,7 @@ class DTAMStaff {
   static STATUS = {
     ACTIVE: 'ACTIVE',
     SUSPENDED: 'SUSPENDED',
-    INACTIVE: 'INACTIVE',
+    INACTIVE: 'INACTIVE'
   };
 
   // Role constants
@@ -81,7 +81,7 @@ class DTAMStaff {
     ADMIN: 'ADMIN',
     MANAGER: 'MANAGER',
     REVIEWER: 'REVIEWER',
-    AUDITOR: 'AUDITOR',
+    AUDITOR: 'AUDITOR'
   };
 
   // Permission constants
@@ -111,7 +111,7 @@ class DTAMStaff {
     // System permissions
     VIEW_REPORTS: 'view_reports',
     EXPORT_DATA: 'export_data',
-    MANAGE_SETTINGS: 'manage_settings',
+    MANAGE_SETTINGS: 'manage_settings'
   };
 
   // Default permissions by role
@@ -134,7 +134,7 @@ class DTAMStaff {
         DTAMStaff.PERMISSIONS.DELETE_STAFF,
         DTAMStaff.PERMISSIONS.VIEW_REPORTS,
         DTAMStaff.PERMISSIONS.EXPORT_DATA,
-        DTAMStaff.PERMISSIONS.MANAGE_SETTINGS,
+        DTAMStaff.PERMISSIONS.MANAGE_SETTINGS
       ],
       MANAGER: [
         DTAMStaff.PERMISSIONS.VIEW_APPLICATIONS,
@@ -147,22 +147,22 @@ class DTAMStaff {
         DTAMStaff.PERMISSIONS.APPROVE_AUDITS,
         DTAMStaff.PERMISSIONS.VIEW_STAFF,
         DTAMStaff.PERMISSIONS.VIEW_REPORTS,
-        DTAMStaff.PERMISSIONS.EXPORT_DATA,
+        DTAMStaff.PERMISSIONS.EXPORT_DATA
       ],
       REVIEWER: [
         DTAMStaff.PERMISSIONS.VIEW_APPLICATIONS,
         DTAMStaff.PERMISSIONS.REVIEW_APPLICATIONS,
         DTAMStaff.PERMISSIONS.VIEW_CERTIFICATES,
         DTAMStaff.PERMISSIONS.VIEW_AUDITS,
-        DTAMStaff.PERMISSIONS.VIEW_REPORTS,
+        DTAMStaff.PERMISSIONS.VIEW_REPORTS
       ],
       AUDITOR: [
         DTAMStaff.PERMISSIONS.VIEW_APPLICATIONS,
         DTAMStaff.PERMISSIONS.VIEW_CERTIFICATES,
         DTAMStaff.PERMISSIONS.VIEW_AUDITS,
         DTAMStaff.PERMISSIONS.CREATE_AUDITS,
-        DTAMStaff.PERMISSIONS.VIEW_REPORTS,
-      ],
+        DTAMStaff.PERMISSIONS.VIEW_REPORTS
+      ]
     };
 
     return permissions[role] || [];
@@ -397,7 +397,7 @@ class DTAMStaff {
       createdBy: this.createdBy,
       updatedBy: this.updatedBy,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt,
+      updatedAt: this.updatedAt
     };
   }
 
@@ -415,7 +415,7 @@ class DTAMStaff {
       department: this.department,
       position: this.position,
       role: this.role,
-      status: this.status,
+      status: this.status
     };
   }
 }

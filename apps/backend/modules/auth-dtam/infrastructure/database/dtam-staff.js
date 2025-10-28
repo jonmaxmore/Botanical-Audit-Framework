@@ -24,106 +24,106 @@ const dtamStaffSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      index: true,
+      index: true
     },
     password: {
       type: String,
-      required: true,
+      required: true
     },
     firstName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     lastName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     employeeId: {
       type: String,
       required: true,
       unique: true,
       trim: true,
-      index: true,
+      index: true
     },
     department: {
       type: String,
-      trim: true,
+      trim: true
     },
     position: {
       type: String,
-      trim: true,
+      trim: true
     },
     role: {
       type: String,
       required: true,
       enum: Object.values(DTAMStaff.ROLES),
-      index: true,
+      index: true
     },
     permissions: [
       {
-        type: String,
-      },
+        type: String
+      }
     ],
     phoneNumber: {
       type: String,
-      trim: true,
+      trim: true
     },
     status: {
       type: String,
       required: true,
       enum: Object.values(DTAMStaff.STATUS),
       default: DTAMStaff.STATUS.ACTIVE,
-      index: true,
+      index: true
     },
     isEmailVerified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     emailVerificationToken: {
-      type: String,
+      type: String
     },
     emailVerifiedAt: {
-      type: Date,
+      type: Date
     },
     passwordResetToken: {
       type: String,
-      index: true,
+      index: true
     },
     passwordResetTokenExpiresAt: {
-      type: Date,
+      type: Date
     },
     failedLoginAttempts: {
       type: Number,
-      default: 0,
+      default: 0
     },
     lastFailedLoginAt: {
-      type: Date,
+      type: Date
     },
     accountLockedUntil: {
-      type: Date,
+      type: Date
     },
     lastLoginAt: {
-      type: Date,
+      type: Date
     },
     lastLoginIp: {
-      type: String,
+      type: String
     },
     lastLoginUserAgent: {
-      type: String,
+      type: String
     },
     createdBy: {
-      type: String,
+      type: String
     },
     updatedBy: {
-      type: String,
-    },
+      type: String
+    }
   },
   {
     timestamps: true,
-    collection: 'dtam_staff',
-  },
+    collection: 'dtam_staff'
+  }
 );
 
 // Indexes
@@ -172,7 +172,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       createdBy: doc.createdBy,
       updatedBy: doc.updatedBy,
       createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt,
+      updatedAt: doc.updatedAt
     });
   }
 
@@ -204,7 +204,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
       lastLoginIp: staff.lastLoginIp,
       lastLoginUserAgent: staff.lastLoginUserAgent,
       createdBy: staff.createdBy,
-      updatedBy: staff.updatedBy,
+      updatedBy: staff.updatedBy
     };
   }
 
@@ -242,7 +242,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
     try {
       const doc = await this.model.findOne({
         passwordResetToken: token,
-        passwordResetTokenExpiresAt: { $gt: new Date() },
+        passwordResetTokenExpiresAt: { $gt: new Date() }
       });
       return this.toDomain(doc);
     } catch (error) {
@@ -260,7 +260,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
         // Update existing
         doc = await this.model.findByIdAndUpdate(staff.id, mongoData, {
           new: true,
-          runValidators: true,
+          runValidators: true
         });
       } else {
         // Create new
@@ -305,7 +305,7 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
           { firstName: { $regex: filters.search, $options: 'i' } },
           { lastName: { $regex: filters.search, $options: 'i' } },
           { email: { $regex: filters.search, $options: 'i' } },
-          { employeeId: { $regex: filters.search, $options: 'i' } },
+          { employeeId: { $regex: filters.search, $options: 'i' } }
         ];
       }
 
@@ -313,12 +313,12 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
 
       const [docs, total] = await Promise.all([
         this.model.find(query).sort({ createdAt: -1 }).skip(skip).limit(pagination.limit),
-        this.model.countDocuments(query),
+        this.model.countDocuments(query)
       ]);
 
       return {
         items: docs.map(doc => this.toDomain(doc)),
-        total,
+        total
       };
     } catch (error) {
       logger.error('Error finding staff with filters:', error);

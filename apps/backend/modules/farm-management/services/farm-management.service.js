@@ -30,8 +30,8 @@ class FarmManagementService {
         metadata: {
           createdAt: new Date(),
           updatedAt: new Date(),
-          version: 1,
-        },
+          version: 1
+        }
       };
 
       // Validate required fields
@@ -50,7 +50,7 @@ class FarmManagementService {
 
       logger.info(`[FarmService] Cultivation cycle created: ${cycle.id}`, {
         farmerId: cycle.farmerId,
-        cropType: cycle.cropType,
+        cropType: cycle.cropType
       });
 
       return cycle;
@@ -92,7 +92,7 @@ class FarmManagementService {
       const activity = {
         id: uuidv4(),
         ...activityData,
-        recordedAt: new Date(),
+        recordedAt: new Date()
       };
 
       // Validate activity type - Extended for GACP SOP Integration
@@ -137,7 +137,7 @@ class FarmManagementService {
         'processing',
         'final_packaging',
         'storage_conditions',
-        'quality_testing',
+        'quality_testing'
       ];
 
       if (!validTypes.includes(activity.type)) {
@@ -151,7 +151,7 @@ class FarmManagementService {
         'pruning',
         'pest_control',
         'inspection',
-        'other',
+        'other'
       ].includes(activity.type);
       if (isSOPActivity) {
         activity.isSOPActivity = true;
@@ -163,13 +163,13 @@ class FarmManagementService {
         { id: cycleId },
         {
           $push: { activities: activity },
-          $set: { 'metadata.updatedAt': new Date() },
-        },
+          $set: { 'metadata.updatedAt': new Date() }
+        }
       );
 
       logger.info(`[FarmService] Activity recorded for cycle ${cycleId}`, {
         activityType: activity.type,
-        userId: activity.userId,
+        userId: activity.userId
       });
 
       return activity;
@@ -189,7 +189,7 @@ class FarmManagementService {
       const check = {
         id: uuidv4(),
         ...checkData,
-        recordedAt: new Date(),
+        recordedAt: new Date()
       };
 
       // Validate check type
@@ -209,14 +209,14 @@ class FarmManagementService {
           $set: {
             'complianceScore.score': score,
             'complianceScore.lastUpdated': new Date(),
-            'metadata.updatedAt': new Date(),
-          },
-        },
+            'metadata.updatedAt': new Date()
+          }
+        }
       );
 
       logger.info(`[FarmService] Compliance check recorded for cycle ${cycleId}`, {
         inspectorId: check.inspectorId,
-        score,
+        score
       });
 
       return { ...check, score };
@@ -241,7 +241,7 @@ class FarmManagementService {
         id: uuidv4(),
         cycleId,
         ...harvestData,
-        recordedAt: new Date(),
+        recordedAt: new Date()
       };
 
       // Update cycle status
@@ -256,9 +256,9 @@ class FarmManagementService {
             'harvestData.yieldUnit': harvest.yieldUnit || 'kg',
             'harvestData.qualityGrade': harvest.qualityGrade,
             'harvestData.notes': harvest.notes,
-            'metadata.updatedAt': new Date(),
-          },
-        },
+            'metadata.updatedAt': new Date()
+          }
+        }
       );
 
       // Also save to harvestrecords collection
@@ -268,7 +268,7 @@ class FarmManagementService {
       }
 
       logger.info(`[FarmService] Harvest recorded for cycle ${cycleId}`, {
-        totalYield: harvest.totalYield,
+        totalYield: harvest.totalYield
       });
 
       return harvest;
@@ -289,7 +289,7 @@ class FarmManagementService {
         id: uuidv4(),
         cycleId,
         ...testData,
-        recordedAt: new Date(),
+        recordedAt: new Date()
       };
 
       // Save to qualitytests collection
@@ -299,7 +299,7 @@ class FarmManagementService {
       }
 
       logger.info(`[FarmService] Quality test recorded for cycle ${cycleId}`, {
-        laboratorianId: test.laboratorianId,
+        laboratorianId: test.laboratorianId
       });
 
       return test;
@@ -323,7 +323,7 @@ class FarmManagementService {
       const completion = {
         completedDate: new Date(),
         ...completionData,
-        finalComplianceScore: cycle.complianceScore?.score || null,
+        finalComplianceScore: cycle.complianceScore?.score || null
       };
 
       // Determine certification eligibility
@@ -334,7 +334,7 @@ class FarmManagementService {
         eligible: certificationEligible,
         reason: certificationEligible
           ? 'Meets GACP compliance standards'
-          : 'Compliance score below minimum threshold (80%)',
+          : 'Compliance score below minimum threshold (80%)'
       };
 
       // Update cycle
@@ -345,14 +345,14 @@ class FarmManagementService {
             status: 'completed',
             phase: 'post-harvest',
             completionData: completion,
-            'metadata.updatedAt': new Date(),
-          },
-        },
+            'metadata.updatedAt': new Date()
+          }
+        }
       );
 
       logger.info(`[FarmService] Cycle completed: ${cycleId}`, {
         certificationEligible,
-        finalScore: completion.finalComplianceScore,
+        finalScore: completion.finalComplianceScore
       });
 
       return { ...cycle, status: 'completed', completionData: completion };
@@ -395,16 +395,16 @@ class FarmManagementService {
       return {
         activeCycles: {
           count: activeCycles.length,
-          cycles: activeCycles,
+          cycles: activeCycles
         },
         completedCycles: {
           count: completedCycles.length,
-          cycles: completedCycles,
+          cycles: completedCycles
         },
         statistics: {
           totalYield,
-          avgComplianceScore: Math.round(avgComplianceScore),
-        },
+          avgComplianceScore: Math.round(avgComplianceScore)
+        }
       };
     } catch (error) {
       logger.error(`[FarmService] Error getting dashboard for farmer ${farmerId}:`, error);
@@ -470,7 +470,7 @@ class FarmManagementService {
       processing: { requirement: 'GACP-13.2', points: 15, phase: 'post_harvest' },
       final_packaging: { requirement: 'GACP-12.2', points: 15, phase: 'post_harvest' },
       storage_conditions: { requirement: 'GACP-14.1', points: 10, phase: 'post_harvest' },
-      quality_testing: { requirement: 'GACP-14.2', points: 25, phase: 'post_harvest' },
+      quality_testing: { requirement: 'GACP-14.2', points: 25, phase: 'post_harvest' }
     };
 
     return gacpMapping[activityType] || { requirement: 'GACP-GEN', points: 0, phase: 'general' };

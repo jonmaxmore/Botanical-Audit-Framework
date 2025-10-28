@@ -16,14 +16,14 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'],
+      match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
     },
 
     password: {
       type: String,
       required: true,
       minlength: 8,
-      select: false, // Don't include password in queries by default
+      select: false // Don't include password in queries by default
     },
 
     fullName: {
@@ -31,21 +31,21 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       minlength: 2,
-      maxlength: 100,
+      maxlength: 100
     },
 
     phone: {
       type: String,
       required: true,
       trim: true,
-      match: [/^[+]?[0-9\-()s]+$/, 'Please enter a valid phone number'],
+      match: [/^[+]?[0-9\-()s]+$/, 'Please enter a valid phone number']
     },
 
     nationalId: {
       type: String,
       required: true,
       unique: true,
-      match: [/^\d{13}$/, 'Please enter a valid Thai national ID'],
+      match: [/^\d{13}$/, 'Please enter a valid Thai national ID']
     },
 
     // Role and Permissions
@@ -53,7 +53,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['farmer', 'dtam_officer', 'inspector', 'admin'],
-      default: 'farmer',
+      default: 'farmer'
     },
 
     permissions: [
@@ -75,25 +75,25 @@ const userSchema = new mongoose.Schema(
           'renew_certificate',
           'manage_users',
           'view_reports',
-          'system_admin',
-        ],
-      },
+          'system_admin'
+        ]
+      }
     ],
 
     // Account Status
     isActive: {
       type: Boolean,
-      default: true,
+      default: true
     },
 
     isEmailVerified: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     isPhoneVerified: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     // Profile Picture
@@ -101,7 +101,7 @@ const userSchema = new mongoose.Schema(
       filename: String,
       path: String,
       size: Number,
-      uploadedAt: Date,
+      uploadedAt: Date
     },
 
     // Role-specific Information
@@ -113,7 +113,7 @@ const userSchema = new mongoose.Schema(
       max: 100,
       required: function () {
         return this.role === 'farmer';
-      },
+      }
     },
 
     farmerType: {
@@ -121,7 +121,7 @@ const userSchema = new mongoose.Schema(
       enum: ['individual', 'cooperative', 'company'],
       required: function () {
         return this.role === 'farmer';
-      },
+      }
     },
 
     // DTAM Officer & Inspector fields
@@ -131,8 +131,8 @@ const userSchema = new mongoose.Schema(
           type: String,
           required: function () {
             return this.role === 'dtam_officer' || this.role === 'inspector';
-          },
-        },
+          }
+        }
       ],
 
       districts: [String],
@@ -140,8 +140,8 @@ const userSchema = new mongoose.Schema(
       office: {
         name: String,
         address: String,
-        phone: String,
-      },
+        phone: String
+      }
     },
 
     // Inspector-specific fields
@@ -158,12 +158,12 @@ const userSchema = new mongoose.Schema(
             'root_crops',
             'cereals',
             'spices',
-            'medicinal_plants',
+            'medicinal_plants'
           ],
           required: function () {
             return this.role === 'inspector';
-          },
-        },
+          }
+        }
       ],
 
       certifications: [String],
@@ -173,33 +173,33 @@ const userSchema = new mongoose.Schema(
         min: 0,
         required: function () {
           return this.role === 'inspector';
-        },
+        }
       },
 
-      languages: [String],
+      languages: [String]
     },
 
     // Work tracking (for officers and inspectors)
     workload: {
       activeApplications: {
         type: Number,
-        default: 0,
+        default: 0
       },
 
       scheduledInspections: {
         type: Number,
-        default: 0,
+        default: 0
       },
 
       completedThisMonth: {
         type: Number,
-        default: 0,
+        default: 0
       },
 
       averageProcessingTime: {
         type: Number, // in hours
-        default: 0,
-      },
+        default: 0
+      }
     },
 
     // Authentication & Security
@@ -207,7 +207,7 @@ const userSchema = new mongoose.Schema(
 
     loginAttempts: {
       type: Number,
-      default: 0,
+      default: 0
     },
 
     lockUntil: Date,
@@ -229,7 +229,7 @@ const userSchema = new mongoose.Schema(
     twoFactorSecret: String,
     twoFactorEnabled: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     // Notification preferences
@@ -238,18 +238,18 @@ const userSchema = new mongoose.Schema(
         applicationUpdates: { type: Boolean, default: true },
         inspectionReminders: { type: Boolean, default: true },
         certificateExpiry: { type: Boolean, default: true },
-        systemAnnouncements: { type: Boolean, default: true },
+        systemAnnouncements: { type: Boolean, default: true }
       },
 
       sms: {
         urgentAlerts: { type: Boolean, default: true },
-        inspectionScheduled: { type: Boolean, default: true },
+        inspectionScheduled: { type: Boolean, default: true }
       },
 
       inApp: {
         enabled: { type: Boolean, default: true },
-        sound: { type: Boolean, default: true },
-      },
+        sound: { type: Boolean, default: true }
+      }
     },
 
     // Activity tracking
@@ -259,23 +259,23 @@ const userSchema = new mongoose.Schema(
         timestamp: Date,
         ip: String,
         userAgent: String,
-        location: String,
-      },
+        location: String
+      }
     ],
 
     // Additional metadata
     registrationSource: {
       type: String,
       enum: ['web', 'mobile', 'admin', 'import'],
-      default: 'web',
+      default: 'web'
     },
 
     notes: String, // Admin notes about the user
 
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-    },
+      ref: 'User'
+    }
   },
   {
     timestamps: true,
@@ -289,10 +289,10 @@ const userSchema = new mongoose.Schema(
         delete ret.twoFactorSecret;
         delete ret.apiKey;
         return ret;
-      },
+      }
     },
-    toObject: { virtuals: true },
-  },
+    toObject: { virtuals: true }
+  }
 );
 
 // Indexes for performance
@@ -375,7 +375,7 @@ userSchema.methods.getDefaultPermissions = function () {
       'approve_application',
       'reject_application',
       'schedule_inspection',
-      'view_reports',
+      'view_reports'
     ],
     inspector: ['view_application', 'conduct_inspection', 'complete_inspection'],
     admin: [
@@ -394,8 +394,8 @@ userSchema.methods.getDefaultPermissions = function () {
       'renew_certificate',
       'manage_users',
       'view_reports',
-      'system_admin',
-    ],
+      'system_admin'
+    ]
   };
 
   return permissionMap[this.role] || [];
@@ -410,7 +410,7 @@ userSchema.methods.incrementLoginAttempts = function () {
   if (this.lockUntil && this.lockUntil < Date.now()) {
     return this.updateOne({
       $unset: { lockUntil: 1 },
-      $set: { loginAttempts: 1 },
+      $set: { loginAttempts: 1 }
     });
   }
 
@@ -426,7 +426,7 @@ userSchema.methods.incrementLoginAttempts = function () {
 
 userSchema.methods.resetLoginAttempts = function () {
   return this.updateOne({
-    $unset: { loginAttempts: 1, lockUntil: 1 },
+    $unset: { loginAttempts: 1, lockUntil: 1 }
   });
 };
 
@@ -473,7 +473,7 @@ userSchema.methods.addLoginHistory = function (ip, userAgent, location = null) {
     timestamp: new Date(),
     ip,
     userAgent,
-    location,
+    location
   });
 
   // Keep only last 10 login records
@@ -499,7 +499,7 @@ userSchema.methods.toPublicProfile = function () {
     expertise: this.role === 'inspector' ? this.expertise : undefined,
     workLocation: ['dtam_officer', 'inspector'].includes(this.role) ? this.workLocation : undefined,
     profileCompleteness: this.profileCompleteness,
-    lastActivity: this.lastActivity,
+    lastActivity: this.lastActivity
   };
 };
 
@@ -507,7 +507,7 @@ userSchema.methods.toPublicProfile = function () {
 userSchema.statics.findByEmail = function (email) {
   return this.findOne({
     email: email.toLowerCase(),
-    isActive: true,
+    isActive: true
   });
 };
 
@@ -515,7 +515,7 @@ userSchema.statics.findAvailableOfficers = function (province) {
   return this.find({
     role: 'dtam_officer',
     'workLocation.provinces': province,
-    isActive: true,
+    isActive: true
   }).sort({ 'workload.activeApplications': 1 });
 };
 
@@ -523,7 +523,7 @@ userSchema.statics.findAvailableInspectors = function (province, cropTypes = [])
   const query = {
     role: 'inspector',
     'workLocation.provinces': province,
-    isActive: true,
+    isActive: true
   };
 
   if (cropTypes.length > 0) {
@@ -540,9 +540,9 @@ userSchema.statics.getActiveUserStats = function () {
       $group: {
         _id: '$role',
         count: { $sum: 1 },
-        avgWorkload: { $avg: '$workload.activeApplications' },
-      },
-    },
+        avgWorkload: { $avg: '$workload.activeApplications' }
+      }
+    }
   ]);
 };
 

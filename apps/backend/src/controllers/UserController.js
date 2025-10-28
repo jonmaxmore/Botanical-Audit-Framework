@@ -20,7 +20,7 @@ class UserController {
       status,
       search,
       sortBy = 'createdAt',
-      sortOrder = 'desc',
+      sortOrder = 'desc'
     } = req.query;
 
     // Build filter
@@ -37,7 +37,7 @@ class UserController {
       page: parseInt(page),
       limit: parseInt(limit),
       sort,
-      select: '-password -passwordResetToken -emailVerificationToken',
+      select: '-password -passwordResetToken -emailVerificationToken'
     };
 
     let result;
@@ -51,14 +51,14 @@ class UserController {
       userId: req.user?.id,
       page,
       limit,
-      total: result.pagination.total,
+      total: result.pagination.total
     });
 
     res.status(200).json({
       success: true,
       message: 'Users retrieved successfully',
       data: result.documents,
-      pagination: result.pagination,
+      pagination: result.pagination
     });
   });
 
@@ -78,13 +78,13 @@ class UserController {
 
     logger.info('User retrieved by ID', {
       userId: req.user?.id,
-      targetUserId: id,
+      targetUserId: id
     });
 
     res.status(200).json({
       success: true,
       message: 'User retrieved successfully',
-      data: user.getSafeProfile(),
+      data: user.getSafeProfile()
     });
   });
 
@@ -101,13 +101,13 @@ class UserController {
     }
 
     logger.info('User profile retrieved', {
-      userId: user.id,
+      userId: user.id
     });
 
     res.status(200).json({
       success: true,
       message: 'Profile retrieved successfully',
-      data: user.getSafeProfile(),
+      data: user.getSafeProfile()
     });
   });
 
@@ -124,7 +124,7 @@ class UserController {
       'dateOfBirth',
       'gender',
       'preferences',
-      'avatar',
+      'avatar'
     ];
 
     // Filter allowed fields
@@ -139,13 +139,13 @@ class UserController {
 
     logger.info('User profile updated', {
       userId: user.id,
-      updatedFields: Object.keys(updates),
+      updatedFields: Object.keys(updates)
     });
 
     res.status(200).json({
       success: true,
       message: 'Profile updated successfully',
-      data: user.getSafeProfile(),
+      data: user.getSafeProfile()
     });
   });
 
@@ -164,7 +164,7 @@ class UserController {
       'status',
       'permissions',
       'dateOfBirth',
-      'gender',
+      'gender'
     ];
 
     // Filter allowed fields
@@ -180,13 +180,13 @@ class UserController {
     logger.info('User updated by admin', {
       adminId: req.user.id,
       targetUserId: id,
-      updatedFields: Object.keys(updates),
+      updatedFields: Object.keys(updates)
     });
 
     res.status(200).json({
       success: true,
       message: 'User updated successfully',
-      data: user.getSafeProfile(),
+      data: user.getSafeProfile()
     });
   });
 
@@ -206,12 +206,12 @@ class UserController {
     logger.warn('User deleted', {
       adminId: req.user.id,
       deletedUserId: id,
-      deletedUserEmail: user.email,
+      deletedUserEmail: user.email
     });
 
     res.status(200).json({
       success: true,
-      message: 'User deleted successfully',
+      message: 'User deleted successfully'
     });
   });
 
@@ -243,12 +243,12 @@ class UserController {
     await user.save();
 
     logger.info('Password changed', {
-      userId: user.id,
+      userId: user.id
     });
 
     res.status(200).json({
       success: true,
-      message: 'Password changed successfully',
+      message: 'Password changed successfully'
     });
   });
 
@@ -265,7 +265,7 @@ class UserController {
 
     res.status(200).json({
       success: true,
-      message: 'Activity updated successfully',
+      message: 'Activity updated successfully'
     });
   });
 
@@ -276,13 +276,13 @@ class UserController {
     const stats = await User.getUserStats();
 
     logger.info('User statistics retrieved', {
-      adminId: req.user.id,
+      adminId: req.user.id
     });
 
     res.status(200).json({
       success: true,
       message: 'User statistics retrieved successfully',
-      data: stats,
+      data: stats
     });
   });
 
@@ -299,7 +299,7 @@ class UserController {
     const options = {
       page: parseInt(page),
       limit: parseInt(limit),
-      select: '-password -passwordResetToken -emailVerificationToken',
+      select: '-password -passwordResetToken -emailVerificationToken'
     };
 
     const result = await User.searchUsers(searchTerm.trim(), options);
@@ -307,14 +307,14 @@ class UserController {
     logger.info('Users searched', {
       userId: req.user?.id,
       searchTerm,
-      resultsCount: result.documents.length,
+      resultsCount: result.documents.length
     });
 
     res.status(200).json({
       success: true,
       message: 'Search completed successfully',
       data: result.documents,
-      pagination: result.pagination,
+      pagination: result.pagination
     });
   });
 
@@ -335,7 +335,7 @@ class UserController {
     const user = await User.findOne({
       emailVerificationToken: hashedToken,
       emailVerificationExpires: { $gt: Date.now() },
-      isDeleted: false,
+      isDeleted: false
     });
 
     if (!user) {
@@ -352,12 +352,12 @@ class UserController {
 
     logger.info('Email verified', {
       userId: user.id,
-      email: user.email,
+      email: user.email
     });
 
     res.status(200).json({
       success: true,
-      message: 'Email verified successfully',
+      message: 'Email verified successfully'
     });
   });
 }

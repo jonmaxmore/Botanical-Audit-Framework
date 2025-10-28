@@ -32,7 +32,7 @@ function initializeAssignmentRoutes(dependencies) {
       if (!applicationId || !role) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: applicationId, role',
+          message: 'Missing required fields: applicationId, role'
         });
       }
 
@@ -41,19 +41,19 @@ function initializeAssignmentRoutes(dependencies) {
         role,
         priority,
         strategy,
-        assignedBy,
+        assignedBy
       });
 
       res.status(201).json({
         success: true,
         message: 'Job auto-assigned successfully',
-        data: assignment,
+        data: assignment
       });
     } catch (error) {
       logger.error('[Assignment API] Auto-assign error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to auto-assign job',
+        message: error.message || 'Failed to auto-assign job'
       });
     }
   });
@@ -71,7 +71,7 @@ function initializeAssignmentRoutes(dependencies) {
       if (!applicationId || !assignedTo || !role) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: applicationId, assignedTo, role',
+          message: 'Missing required fields: applicationId, assignedTo, role'
         });
       }
 
@@ -80,19 +80,19 @@ function initializeAssignmentRoutes(dependencies) {
         assignedTo,
         role,
         priority,
-        assignedBy: assignedBy || req.user.id,
+        assignedBy: assignedBy || req.user.id
       });
 
       res.status(201).json({
         success: true,
         message: 'Job assigned successfully',
-        data: assignment,
+        data: assignment
       });
     } catch (error) {
       logger.error('[Assignment API] Create assignment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to create assignment',
+        message: error.message || 'Failed to create assignment'
       });
     }
   });
@@ -112,13 +112,13 @@ function initializeAssignmentRoutes(dependencies) {
       res.json({
         success: true,
         message: 'Assignment accepted',
-        data: assignment,
+        data: assignment
       });
     } catch (error) {
       logger.error('[Assignment API] Accept assignment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to accept assignment',
+        message: error.message || 'Failed to accept assignment'
       });
     }
   });
@@ -138,13 +138,13 @@ function initializeAssignmentRoutes(dependencies) {
       res.json({
         success: true,
         message: 'Assignment started',
-        data: assignment,
+        data: assignment
       });
     } catch (error) {
       logger.error('[Assignment API] Start assignment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to start assignment',
+        message: error.message || 'Failed to start assignment'
       });
     }
   });
@@ -163,19 +163,19 @@ function initializeAssignmentRoutes(dependencies) {
 
       const assignment = await jobAssignmentService.completeAssignment(id, userId, {
         comments,
-        feedbackScore,
+        feedbackScore
       });
 
       res.json({
         success: true,
         message: 'Assignment completed',
-        data: assignment,
+        data: assignment
       });
     } catch (error) {
       logger.error('[Assignment API] Complete assignment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to complete assignment',
+        message: error.message || 'Failed to complete assignment'
       });
     }
   });
@@ -195,7 +195,7 @@ function initializeAssignmentRoutes(dependencies) {
       if (!newUserId) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required field: newUserId',
+          message: 'Missing required field: newUserId'
         });
       }
 
@@ -203,19 +203,19 @@ function initializeAssignmentRoutes(dependencies) {
         id,
         newUserId,
         reason || 'Reassigned by admin',
-        reassignedBy,
+        reassignedBy
       );
 
       res.json({
         success: true,
         message: 'Assignment reassigned successfully',
-        data: assignment,
+        data: assignment
       });
     } catch (error) {
       logger.error('[Assignment API] Reassign error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to reassign assignment',
+        message: error.message || 'Failed to reassign assignment'
       });
     }
   });
@@ -233,19 +233,19 @@ function initializeAssignmentRoutes(dependencies) {
 
       const assignment = await jobAssignmentService.cancelAssignment(
         id,
-        reason || 'Assignment cancelled',
+        reason || 'Assignment cancelled'
       );
 
       res.json({
         success: true,
         message: 'Assignment cancelled',
-        data: assignment,
+        data: assignment
       });
     } catch (error) {
       logger.error('[Assignment API] Cancel assignment error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to cancel assignment',
+        message: error.message || 'Failed to cancel assignment'
       });
     }
   });
@@ -270,13 +270,13 @@ function initializeAssignmentRoutes(dependencies) {
       res.json({
         success: true,
         count: assignments.length,
-        data: assignments,
+        data: assignments
       });
     } catch (error) {
       logger.error('[Assignment API] Get user assignments error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get user assignments',
+        message: error.message || 'Failed to get user assignments'
       });
     }
   });
@@ -295,13 +295,13 @@ function initializeAssignmentRoutes(dependencies) {
       res.json({
         success: true,
         count: assignments.length,
-        data: assignments,
+        data: assignments
       });
     } catch (error) {
       logger.error('[Assignment API] Get application assignments error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get application assignments',
+        message: error.message || 'Failed to get application assignments'
       });
     }
   });
@@ -325,13 +325,13 @@ function initializeAssignmentRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: statistics,
+        data: statistics
       });
     } catch (error) {
       logger.error('[Assignment API] Get statistics error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get assignment statistics',
+        message: error.message || 'Failed to get assignment statistics'
       });
     }
   });
@@ -355,13 +355,13 @@ function initializeAssignmentRoutes(dependencies) {
       res.json({
         success: true,
         count: assignments.length,
-        data: assignments,
+        data: assignments
       });
     } catch (error) {
       logger.error('[Assignment API] Get my assignments error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get assignments',
+        message: error.message || 'Failed to get assignments'
       });
     }
   });
@@ -379,13 +379,13 @@ function initializeAssignmentRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: workload,
+        data: workload
       });
     } catch (error) {
       logger.error('[Assignment API] Get workload error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get workload',
+        message: error.message || 'Failed to get workload'
       });
     }
   });
@@ -401,19 +401,19 @@ function initializeAssignmentRoutes(dependencies) {
       const { hours = 24 } = req.query;
 
       const overdueAssignments = await jobAssignmentService.assignmentRepository.findOverdue(
-        Number(hours),
+        Number(hours)
       );
 
       res.json({
         success: true,
         count: overdueAssignments.length,
-        data: overdueAssignments,
+        data: overdueAssignments
       });
     } catch (error) {
       logger.error('[Assignment API] Get overdue assignments error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get overdue assignments',
+        message: error.message || 'Failed to get overdue assignments'
       });
     }
   });

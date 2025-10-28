@@ -12,7 +12,7 @@ const notifLogger = logger.createLogger('notifications');
 router.get('/', auth, async (req, res) => {
   try {
     const notifications = await Notification.find({
-      recipient: req.user.id,
+      recipient: req.user.id
     }).sort({ createdAt: -1 });
 
     res.json(notifications);
@@ -52,12 +52,12 @@ router.post('/read-all', auth, async (req, res) => {
   try {
     const result = await Notification.updateMany(
       { recipient: req.user.id, read: false },
-      { $set: { read: true, readAt: new Date() } },
+      { $set: { read: true, readAt: new Date() } }
     );
 
     res.json({
       success: true,
-      count: result.modifiedCount,
+      count: result.modifiedCount
     });
   } catch (err) {
     notifLogger.error('Error marking all notifications as read:', err);

@@ -16,31 +16,31 @@ let metrics = {
     total: 0,
     byEndpoint: {},
     byStatusCode: {},
-    byMethod: {},
+    byMethod: {}
   },
   responseTimes: {
-    byEndpoint: {},
+    byEndpoint: {}
   },
   errors: {
     count: 0,
-    byType: {},
+    byType: {}
   },
   system: {
     lastCheck: null,
     cpuUsage: [],
     memoryUsage: [],
-    activeConnections: 0,
+    activeConnections: 0
   },
   socketIO: {
     connections: 0,
     messagesSent: 0,
-    messagesReceived: 0,
+    messagesReceived: 0
   },
   database: {
     operations: 0,
     errors: 0,
-    slowQueries: 0,
-  },
+    slowQueries: 0
+  }
 };
 
 // Initialize request tracking middleware
@@ -71,7 +71,7 @@ function recordResponseTime(path, method, statusCode, duration) {
       totalTime: 0,
       average: 0,
       min: Number.MAX_SAFE_INTEGER,
-      max: 0,
+      max: 0
     };
   }
 
@@ -110,7 +110,7 @@ function recordError(type, error) {
   metricsLogger.error(`Error - ${type}: ${error.message}`, {
     type,
     stack: error.stack,
-    code: error.code,
+    code: error.code
   });
 }
 
@@ -155,7 +155,7 @@ function recordDatabaseError(operation, error) {
   metricsLogger.error(`Database error during ${operation}: ${error.message}`, {
     operation,
     errorCode: error.code,
-    stack: error.stack,
+    stack: error.stack
   });
 }
 
@@ -174,7 +174,7 @@ function getMetrics() {
     system: metrics.system,
     socketIO: metrics.socketIO,
     database: metrics.database,
-    timestamp: now,
+    timestamp: now
   };
 }
 
@@ -194,7 +194,7 @@ async function getSystemHealth() {
     metrics.system.lastCheck = new Date();
     metrics.system.cpuUsage.push({
       timestamp: new Date(),
-      value: cpuPercent,
+      value: cpuPercent
     });
 
     // Keep only the last 60 readings
@@ -204,7 +204,7 @@ async function getSystemHealth() {
 
     metrics.system.memoryUsage.push({
       timestamp: new Date(),
-      value: memUsagePercent,
+      value: memUsagePercent
     });
 
     if (metrics.system.memoryUsage.length > 60) {
@@ -218,7 +218,7 @@ async function getSystemHealth() {
       status: isHealthy ? 'healthy' : 'warning',
       cpu: {
         usage: cpuPercent,
-        cores: os.cpus().length,
+        cores: os.cpus().length
       },
       memory: {
         usage: memUsagePercent,
@@ -226,25 +226,25 @@ async function getSystemHealth() {
         totalBytes: totalMem,
         rss: memUsage.rss,
         heapTotal: memUsage.heapTotal,
-        heapUsed: memUsage.heapUsed,
+        heapUsed: memUsage.heapUsed
       },
       os: {
         platform: os.platform(),
         release: os.release(),
         hostname: os.hostname(),
-        uptime: os.uptime(),
+        uptime: os.uptime()
       },
       process: {
         pid: process.pid,
         uptime: process.uptime(),
-        version: process.version,
-      },
+        version: process.version
+      }
     };
   } catch (error) {
     metricsLogger.error('Failed to check system health:', error);
     return {
       status: 'error',
-      error: error.message,
+      error: error.message
     };
   }
 }
@@ -295,31 +295,31 @@ function resetMetrics() {
       total: 0,
       byEndpoint: {},
       byStatusCode: {},
-      byMethod: {},
+      byMethod: {}
     },
     responseTimes: {
-      byEndpoint: {},
+      byEndpoint: {}
     },
     errors: {
       count: 0,
-      byType: {},
+      byType: {}
     },
     system: {
       lastCheck: null,
       cpuUsage: [],
       memoryUsage: [],
-      activeConnections: 0,
+      activeConnections: 0
     },
     socketIO: {
       connections: 0,
       messagesSent: 0,
-      messagesReceived: 0,
+      messagesReceived: 0
     },
     database: {
       operations: 0,
       errors: 0,
-      slowQueries: 0,
-    },
+      slowQueries: 0
+    }
   };
 }
 
@@ -334,5 +334,5 @@ module.exports = {
   getMetrics,
   getSystemHealth,
   checkStorageHealth,
-  resetMetrics,
+  resetMetrics
 };

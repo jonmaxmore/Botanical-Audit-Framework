@@ -13,7 +13,7 @@ const config = {
   // CORS Configuration
   cors: {
     origin: process.env.CORS_ORIGIN || '*',
-    credentials: true,
+    credentials: true
   },
 
   // Database Configuration
@@ -25,15 +25,15 @@ const config = {
         useUnifiedTopology: true,
         maxPoolSize: 10,
         serverSelectionTimeoutMS: 5000,
-        socketTimeoutMS: 45000,
-      },
+        socketTimeoutMS: 45000
+      }
     },
     redis: {
       host: process.env.REDIS_HOST || 'localhost',
       port: process.env.REDIS_PORT || 6379,
       password: process.env.REDIS_PASSWORD || null,
-      db: process.env.REDIS_DB || 0,
-    },
+      db: process.env.REDIS_DB || 0
+    }
   },
 
   // Security Configuration
@@ -42,7 +42,7 @@ const config = {
     jwtExpiry: process.env.JWT_EXPIRY || '24h',
     refreshTokenExpiry: process.env.REFRESH_TOKEN_EXPIRY || '7d',
     bcryptRounds: parseInt(process.env.BCRYPT_ROUNDS) || 12,
-    sessionSecret: process.env.SESSION_SECRET || 'your-session-secret-change-in-production',
+    sessionSecret: process.env.SESSION_SECRET || 'your-session-secret-change-in-production'
   },
 
   // CORS Configuration
@@ -55,7 +55,7 @@ const config = {
     windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
     max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // limit each IP to 100 requests per windowMs
     standardHeaders: true,
-    legacyHeaders: false,
+    legacyHeaders: false
   },
 
   // File Upload Configuration
@@ -67,9 +67,9 @@ const config = {
       'image/gif',
       'application/pdf',
       'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
     ],
-    uploadPath: process.env.UPLOAD_PATH || './uploads',
+    uploadPath: process.env.UPLOAD_PATH || './uploads'
   },
 
   // Email Configuration
@@ -80,9 +80,9 @@ const config = {
     secure: process.env.EMAIL_SECURE === 'true',
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASSWORD,
+      pass: process.env.EMAIL_PASSWORD
     },
-    from: process.env.EMAIL_FROM || 'noreply@gacpplatform.com',
+    from: process.env.EMAIL_FROM || 'noreply@gacpplatform.com'
   },
 
   // Logging Configuration
@@ -92,11 +92,11 @@ const config = {
       enabled: process.env.LOG_FILE_ENABLED === 'true',
       filename: process.env.LOG_FILENAME || 'logs/app.log',
       maxsize: parseInt(process.env.LOG_MAX_SIZE) || 5242880, // 5MB
-      maxFiles: parseInt(process.env.LOG_MAX_FILES) || 5,
+      maxFiles: parseInt(process.env.LOG_MAX_FILES) || 5
     },
     console: {
-      enabled: process.env.LOG_CONSOLE_ENABLED !== 'false',
-    },
+      enabled: process.env.LOG_CONSOLE_ENABLED !== 'false'
+    }
   },
 
   // API Configuration
@@ -105,8 +105,8 @@ const config = {
     prefix: '/api/v1',
     documentation: {
       enabled: process.env.API_DOCS_ENABLED !== 'false',
-      path: '/api/v1/docs',
-    },
+      path: '/api/v1/docs'
+    }
   },
 
   // External Services
@@ -115,7 +115,7 @@ const config = {
     payment: {
       provider: process.env.PAYMENT_PROVIDER || 'stripe',
       apiKey: process.env.PAYMENT_API_KEY,
-      webhookSecret: process.env.PAYMENT_WEBHOOK_SECRET,
+      webhookSecret: process.env.PAYMENT_WEBHOOK_SECRET
     },
 
     // SMS service configuration
@@ -123,7 +123,7 @@ const config = {
       provider: process.env.SMS_PROVIDER || 'twilio',
       accountSid: process.env.SMS_ACCOUNT_SID,
       authToken: process.env.SMS_AUTH_TOKEN,
-      fromNumber: process.env.SMS_FROM_NUMBER,
+      fromNumber: process.env.SMS_FROM_NUMBER
     },
 
     // Cloud storage configuration
@@ -133,9 +133,9 @@ const config = {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
         region: process.env.AWS_REGION || 'us-east-1',
-        bucket: process.env.AWS_S3_BUCKET,
-      },
-    },
+        bucket: process.env.AWS_S3_BUCKET
+      }
+    }
   },
 
   // Application Specific Configuration
@@ -146,8 +146,8 @@ const config = {
     author: 'GACP Development Team',
     support: {
       email: process.env.SUPPORT_EMAIL || 'support@gacpplatform.com',
-      phone: process.env.SUPPORT_PHONE || '+66-xxx-xxx-xxxx',
-    },
+      phone: process.env.SUPPORT_PHONE || '+66-xxx-xxx-xxxx'
+    }
   },
 
   // Feature Flags
@@ -158,8 +158,8 @@ const config = {
     enableFileUpload: process.env.ENABLE_FILE_UPLOAD !== 'false',
     enableNotifications: process.env.ENABLE_NOTIFICATIONS !== 'false',
     enableAnalytics: process.env.ENABLE_ANALYTICS === 'true',
-    enableCaching: process.env.ENABLE_CACHING !== 'false',
-  },
+    enableCaching: process.env.ENABLE_CACHING !== 'false'
+  }
 };
 
 // Environment-specific overrides

@@ -50,7 +50,7 @@ class ReportModuleContainer {
       this.otherRepositories.surveyRepository,
       this.otherRepositories.trainingEnrollmentRepository,
       this.otherRepositories.documentRepository,
-      this.otherRepositories.auditRepository,
+      this.otherRepositories.auditRepository
     );
 
     // Application Layer - Use Cases
@@ -59,7 +59,7 @@ class ReportModuleContainer {
     this.generateReportUseCase = new GenerateReportUseCase(
       this.reportRepository,
       this.dataAggregationService,
-      this.reportGeneratorService,
+      this.reportGeneratorService
     );
 
     this.getReportUseCase = new GetReportUseCase(this.reportRepository);
@@ -70,19 +70,19 @@ class ReportModuleContainer {
 
     this.deleteReportUseCase = new DeleteReportUseCase(
       this.reportRepository,
-      this.reportGeneratorService,
+      this.reportGeneratorService
     );
 
     this.getReportStatisticsUseCase = new GetReportStatisticsUseCase(this.reportRepository);
 
     this.processScheduledReportsUseCase = new ProcessScheduledReportsUseCase(
       this.reportRepository,
-      this.generateReportUseCase,
+      this.generateReportUseCase
     );
 
     this.retryFailedReportUseCase = new RetryFailedReportUseCase(
       this.reportRepository,
-      this.generateReportUseCase,
+      this.generateReportUseCase
     );
 
     // Presentation Layer - Controller
@@ -94,7 +94,7 @@ class ReportModuleContainer {
       this.listReportsUseCase,
       this.deleteReportUseCase,
       this.getReportStatisticsUseCase,
-      this.retryFailedReportUseCase,
+      this.retryFailedReportUseCase
     );
   }
 
@@ -156,5 +156,5 @@ function getReportModuleContainer(config = {}) {
 
 module.exports = {
   ReportModuleContainer,
-  getReportModuleContainer,
+  getReportModuleContainer
 };

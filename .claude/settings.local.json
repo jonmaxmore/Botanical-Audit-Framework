@@ -10,7 +10,18 @@
       "Bash(npx prettier --write \"docs/ARCHITECTURE.md\")",
       "Bash(npx prettier:*)",
       "Bash(findstr:*)",
-      "Bash(copy:*)"
+      "Bash(copy:*)",
+      "Bash(for dir in */)",
+      "Bash(do echo \"=== $dir ===\")",
+      "Bash(head:*)",
+      "Bash(done)",
+      "Bash(npm run type-check:*)",
+      "Bash(npx tsc:*)",
+      "Bash(if not exist \"c:\\Users\\charo\\Botanical-Audit-Framework\\archive\" mkdir \"c:\\Users\\charo\\Botanical-Audit-Framework\\archive\")",
+      "Bash(npm run lint:*)",
+      "Bash(npm run lint:fix:*)",
+      "Bash(git add:*)",
+      "Bash(if exist \"NUL\" del /F \"NUL\")"
     ],
     "deny": [],
     "ask": []

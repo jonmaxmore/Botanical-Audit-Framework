@@ -38,7 +38,7 @@ module.exports = (dependencies = {}) => {
       const applicationData = {
         ...req.body,
         farmerId: req.user.id,
-        farmerEmail: req.user.email,
+        farmerEmail: req.user.email
       };
 
       const application = await workflowEngine.createApplication(applicationData);
@@ -46,13 +46,13 @@ module.exports = (dependencies = {}) => {
       res.status(201).json({
         success: true,
         message: 'Application created successfully',
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Create error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -68,13 +68,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Application submitted successfully',
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Submit error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -89,7 +89,7 @@ module.exports = (dependencies = {}) => {
       if (req.user.role !== 'admin' && req.user.role !== 'reviewer') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
@@ -98,13 +98,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Document review started',
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Review error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -118,13 +118,13 @@ module.exports = (dependencies = {}) => {
       if (req.user.role !== 'admin' && req.user.role !== 'reviewer') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       const reviewResult = {
         ...req.body,
-        reviewerId: req.user.id,
+        reviewerId: req.user.id
       };
 
       const application = await workflowEngine.completeDocumentReview(req.params.id, reviewResult);
@@ -132,13 +132,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Document review completed',
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Review complete error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -152,7 +152,7 @@ module.exports = (dependencies = {}) => {
       if (req.user.role !== 'admin' && req.user.role !== 'inspector') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
@@ -161,13 +161,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         message: 'Field inspection started',
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Inspection start error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -181,30 +181,30 @@ module.exports = (dependencies = {}) => {
       if (req.user.role !== 'admin' && req.user.role !== 'inspector') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       const inspectionReport = {
         ...req.body,
-        inspectorId: req.user.id,
+        inspectorId: req.user.id
       };
 
       const application = await workflowEngine.completeFieldInspection(
         req.params.id,
-        inspectionReport,
+        inspectionReport
       );
 
       res.json({
         success: true,
         message: 'Field inspection completed',
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Inspection complete error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -218,26 +218,26 @@ module.exports = (dependencies = {}) => {
       if (req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       const application = await workflowEngine.approveApplication(
         req.params.id,
         req.user.id,
-        req.body.note,
+        req.body.note
       );
 
       res.json({
         success: true,
         message: 'Application approved successfully',
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Approve error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -251,26 +251,26 @@ module.exports = (dependencies = {}) => {
       if (req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       const application = await workflowEngine.rejectApplication(
         req.params.id,
         req.body.reason,
-        req.user.id,
+        req.user.id
       );
 
       res.json({
         success: true,
         message: 'Application rejected',
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Reject error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -291,19 +291,19 @@ module.exports = (dependencies = {}) => {
       ) {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
       res.json({
         success: true,
-        data: application,
+        data: application
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Get error:', error);
       res.status(404).json({
         success: false,
-        message: 'Application not found',
+        message: 'Application not found'
       });
     }
   });
@@ -324,7 +324,7 @@ module.exports = (dependencies = {}) => {
       if (application.farmerId !== req.user.id) {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
@@ -332,33 +332,33 @@ module.exports = (dependencies = {}) => {
       const stepKey = `step${stepId}`;
       const updateData = {
         [stepKey]: stepData,
-        updatedAt: new Date(),
+        updatedAt: new Date()
       };
 
       const Application = require('../../models/mongodb/Application');
       const updatedApplication = await Application.findOneAndUpdate(
         { id: id },
         { $set: updateData },
-        { new: true },
+        { new: true }
       );
 
       if (!updatedApplication) {
         return res.status(404).json({
           success: false,
-          message: 'Application not found',
+          message: 'Application not found'
         });
       }
 
       res.json({
         success: true,
         message: `Step ${stepId} saved successfully`,
-        data: updatedApplication,
+        data: updatedApplication
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Save step error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -387,13 +387,13 @@ module.exports = (dependencies = {}) => {
       res.json({
         success: true,
         data: applications,
-        total: applications.length,
+        total: applications.length
       });
     } catch (error) {
       logger.error('[ApplicationAPI] List error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });
@@ -407,7 +407,7 @@ module.exports = (dependencies = {}) => {
       if (req.user.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions',
+          message: 'Insufficient permissions'
         });
       }
 
@@ -415,13 +415,13 @@ module.exports = (dependencies = {}) => {
 
       res.json({
         success: true,
-        data: stats,
+        data: stats
       });
     } catch (error) {
       logger.error('[ApplicationAPI] Statistics error:', error);
       res.status(500).json({
         success: false,
-        message: error.message,
+        message: error.message
       });
     }
   });

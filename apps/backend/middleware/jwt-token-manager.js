@@ -46,15 +46,15 @@ class JWTTokenManager {
       {
         blacklistedAt: new Date(),
         reason,
-        expiresAt: new Date(Date.now() + expiresIn * 1000),
+        expiresAt: new Date(Date.now() + expiresIn * 1000)
       },
-      expiresIn,
+      expiresIn
     );
 
     logger.info('[JWTTokenManager] Token blacklisted:', {
       tokenHash: tokenHash.substring(0, 16),
       reason,
-      expiresIn,
+      expiresIn
     });
   }
 
@@ -100,7 +100,7 @@ class JWTTokenManager {
       userId,
       oldVersion: currentVersion,
       newVersion,
-      reason,
+      reason
     });
 
     return newVersion;
@@ -130,9 +130,9 @@ class JWTTokenManager {
       {
         ...data,
         createdAt: new Date(),
-        lastUsed: new Date(),
+        lastUsed: new Date()
       },
-      expiresIn,
+      expiresIn
     );
   }
 
@@ -185,7 +185,7 @@ class JWTTokenManager {
       logger.warn('[JWTTokenManager] Token family invalidated:', {
         familyId,
         reason,
-        userId: family.userId,
+        userId: family.userId
       });
     }
   }
@@ -214,7 +214,7 @@ class JWTTokenManager {
       'ROLE_CHANGED',
       'SUSPICIOUS_ACTIVITY',
       'ACCOUNT_COMPROMISED',
-      'MULTIPLE_FAILED_LOGINS',
+      'MULTIPLE_FAILED_LOGINS'
     ];
 
     if (rotationTriggers.includes(event)) {
@@ -255,7 +255,7 @@ class JWTTokenManager {
       blacklistedTokens: 0, // Would need to count keys
       activeVersions: 0,
       activeFamilies: 0,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
   }
 }
@@ -279,13 +279,13 @@ function checkTokenBlacklist(tokenManager) {
       if (isBlacklisted) {
         logger.warn('[JWTTokenManager] Blacklisted token used:', {
           ip: req.ip,
-          path: req.path,
+          path: req.path
         });
 
         return res.status(401).json({
           success: false,
           error: 'TOKEN_REVOKED',
-          message: 'This token has been revoked',
+          message: 'This token has been revoked'
         });
       }
 
@@ -317,13 +317,13 @@ function checkTokenVersion(tokenManager) {
           userId: req.user.userId,
           tokenVersion,
           currentVersion,
-          ip: req.ip,
+          ip: req.ip
         });
 
         return res.status(401).json({
           success: false,
           error: 'TOKEN_OUTDATED',
-          message: 'Please log in again',
+          message: 'Please log in again'
         });
       }
 
@@ -338,5 +338,5 @@ function checkTokenVersion(tokenManager) {
 module.exports = {
   JWTTokenManager,
   checkTokenBlacklist,
-  checkTokenVersion,
+  checkTokenVersion
 };

@@ -84,7 +84,7 @@ class NotificationRepository {
     try {
       return await this.collection.countDocuments({
         userId,
-        read: false,
+        read: false
       });
     } catch (error) {
       logger.error('[NotificationRepository] getUnreadCount error:', error);
@@ -102,14 +102,14 @@ class NotificationRepository {
       const result = await this.collection.insertOne({
         ...notificationData,
         read: false,
-        createdAt: new Date(),
+        createdAt: new Date()
       });
 
       return {
         id: result.insertedId,
         ...notificationData,
         read: false,
-        createdAt: new Date(),
+        createdAt: new Date()
       };
     } catch (error) {
       logger.error('[NotificationRepository] create error:', error);
@@ -127,14 +127,14 @@ class NotificationRepository {
       const notifications = notificationsData.map(data => ({
         ...data,
         read: false,
-        createdAt: new Date(),
+        createdAt: new Date()
       }));
 
       const result = await this.collection.insertMany(notifications);
 
       return notifications.map((notification, index) => ({
         id: result.insertedIds[index],
-        ...notification,
+        ...notification
       }));
     } catch (error) {
       logger.error('[NotificationRepository] createMany error:', error);
@@ -153,15 +153,15 @@ class NotificationRepository {
       const result = await this.collection.findOneAndUpdate(
         {
           _id: notificationId,
-          userId, // Ensure user owns this notification
+          userId // Ensure user owns this notification
         },
         {
           $set: {
             read: true,
-            readAt: new Date(),
-          },
+            readAt: new Date()
+          }
         },
-        { returnDocument: 'after' },
+        { returnDocument: 'after' }
       );
 
       return result.value;
@@ -181,14 +181,14 @@ class NotificationRepository {
       const result = await this.collection.updateMany(
         {
           userId,
-          read: false,
+          read: false
         },
         {
           $set: {
             read: true,
-            readAt: new Date(),
-          },
-        },
+            readAt: new Date()
+          }
+        }
       );
 
       return result.modifiedCount;
@@ -208,7 +208,7 @@ class NotificationRepository {
     try {
       const result = await this.collection.deleteOne({
         _id: notificationId,
-        userId, // Ensure user owns this notification
+        userId // Ensure user owns this notification
       });
 
       return result.deletedCount > 0;
@@ -230,7 +230,7 @@ class NotificationRepository {
 
       const result = await this.collection.deleteMany({
         read: true,
-        readAt: { $lte: cutoffDate },
+        readAt: { $lte: cutoffDate }
       });
 
       return result.deletedCount;
@@ -283,10 +283,10 @@ class NotificationRepository {
                 _id: '$type',
                 count: { $sum: 1 },
                 unread: {
-                  $sum: { $cond: [{ $eq: ['$read', false] }, 1, 0] },
-                },
-              },
-            },
+                  $sum: { $cond: [{ $eq: ['$read', false] }, 1, 0] }
+                }
+              }
+            }
           ])
           .toArray(),
 
@@ -299,12 +299,12 @@ class NotificationRepository {
                 _id: '$priority',
                 count: { $sum: 1 },
                 unread: {
-                  $sum: { $cond: [{ $eq: ['$read', false] }, 1, 0] },
-                },
-              },
-            },
+                  $sum: { $cond: [{ $eq: ['$read', false] }, 1, 0] }
+                }
+              }
+            }
           ])
-          .toArray(),
+          .toArray()
       ]);
 
       return {
@@ -313,17 +313,17 @@ class NotificationRepository {
         byType: byType.reduce((acc, item) => {
           acc[item._id] = {
             total: item.count,
-            unread: item.unread,
+            unread: item.unread
           };
           return acc;
         }, {}),
         byPriority: byPriority.reduce((acc, item) => {
           acc[item._id] = {
             total: item.count,
-            unread: item.unread,
+            unread: item.unread
           };
           return acc;
-        }, {}),
+        }, {})
       };
     } catch (error) {
       logger.error('[NotificationRepository] getStatistics error:', error);

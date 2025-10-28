@@ -34,7 +34,7 @@ const NotificationSchema = new mongoose.Schema(
       required: true,
       unique: true,
       index: true,
-      default: () => `NOTIF_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`,
+      default: () => `NOTIF_${Date.now()}_${Math.random().toString(36).substr(2, 9).toUpperCase()}`
     },
 
     // Recipient Information
@@ -42,13 +42,13 @@ const NotificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      index: true,
+      index: true
     },
 
     recipientRole: {
       type: String,
       enum: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN'],
-      required: true,
+      required: true
     },
 
     recipientEmail: {
@@ -57,8 +57,8 @@ const NotificationSchema = new mongoose.Schema(
         validator: function (email) {
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         },
-        message: 'Invalid email format',
-      },
+        message: 'Invalid email format'
+      }
     },
 
     recipientPhone: {
@@ -68,8 +68,8 @@ const NotificationSchema = new mongoose.Schema(
           // Thai mobile number format: 08XXXXXXXX or 09XXXXXXXX
           return !phone || /^(08|09)\d{8}$/.test(phone.replace(/[-\s]/g, ''));
         },
-        message: 'Invalid Thai mobile number format',
-      },
+        message: 'Invalid Thai mobile number format'
+      }
     },
 
     // Notification Content & Type
@@ -109,17 +109,17 @@ const NotificationSchema = new mongoose.Schema(
         // Admin Notifications
         'NEW_APPLICATION_ALERT',
         'BULK_NOTIFICATION',
-        'SYSTEM_ERROR_ALERT',
+        'SYSTEM_ERROR_ALERT'
       ],
       required: true,
-      index: true,
+      index: true
     },
 
     priority: {
       type: String,
       enum: ['LOW', 'NORMAL', 'HIGH', 'CRITICAL'],
       default: 'NORMAL',
-      index: true,
+      index: true
     },
 
     // Content & Messaging
@@ -127,35 +127,35 @@ const NotificationSchema = new mongoose.Schema(
       type: String,
       required: true,
       maxlength: 200,
-      trim: true,
+      trim: true
     },
 
     message: {
       type: String,
       required: true,
       maxlength: 2000,
-      trim: true,
+      trim: true
     },
 
     messageHtml: {
       type: String,
-      maxlength: 5000, // For rich HTML email content
+      maxlength: 5000 // For rich HTML email content
     },
 
     // Template Information
     templateId: {
       type: String,
-      index: true,
+      index: true
     },
 
     templateVersion: {
       type: String,
-      default: '1.0',
+      default: '1.0'
     },
 
     templateVariables: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     // Delivery Channels
@@ -163,13 +163,13 @@ const NotificationSchema = new mongoose.Schema(
       email: {
         enabled: {
           type: Boolean,
-          default: false,
+          default: false
         },
 
         status: {
           type: String,
           enum: ['PENDING', 'SENT', 'DELIVERED', 'FAILED', 'BOUNCED'],
-          default: 'PENDING',
+          default: 'PENDING'
         },
 
         sentAt: Date,
@@ -179,7 +179,7 @@ const NotificationSchema = new mongoose.Schema(
         emailProvider: {
           type: String,
           enum: ['SES', 'SENDGRID', 'SMTP'],
-          default: 'SES',
+          default: 'SES'
         },
 
         messageId: String, // Provider message ID
@@ -189,19 +189,19 @@ const NotificationSchema = new mongoose.Schema(
         openedAt: Date,
         clickedAt: Date,
 
-        trackingPixelId: String,
+        trackingPixelId: String
       },
 
       sms: {
         enabled: {
           type: Boolean,
-          default: false,
+          default: false
         },
 
         status: {
           type: String,
           enum: ['PENDING', 'SENT', 'DELIVERED', 'FAILED'],
-          default: 'PENDING',
+          default: 'PENDING'
         },
 
         sentAt: Date,
@@ -210,7 +210,7 @@ const NotificationSchema = new mongoose.Schema(
         smsProvider: {
           type: String,
           enum: ['TWILIO', 'AWS_SNS', 'THAI_SMS_GATEWAY'],
-          default: 'THAI_SMS_GATEWAY',
+          default: 'THAI_SMS_GATEWAY'
         },
 
         messageId: String,
@@ -220,20 +220,20 @@ const NotificationSchema = new mongoose.Schema(
         cost: {
           type: Number,
           min: 0,
-          default: 0,
-        },
+          default: 0
+        }
       },
 
       inApp: {
         enabled: {
           type: Boolean,
-          default: true,
+          default: true
         },
 
         status: {
           type: String,
           enum: ['PENDING', 'DELIVERED', 'READ', 'DISMISSED'],
-          default: 'PENDING',
+          default: 'PENDING'
         },
 
         deliveredAt: Date,
@@ -245,34 +245,34 @@ const NotificationSchema = new mongoose.Schema(
 
         expiresAt: {
           type: Date,
-          default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
-        },
-      },
+          default: () => new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+        }
+      }
     },
 
     // Context & Related Entities
     relatedEntities: {
       applicationId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Application',
+        ref: 'Application'
       },
 
       paymentId: String,
 
       documentId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Document',
+        ref: 'Document'
       },
 
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
       },
 
       inspectionId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Inspection',
-      },
+        ref: 'Inspection'
+      }
     },
 
     // Delivery & Retry Logic
@@ -280,24 +280,24 @@ const NotificationSchema = new mongoose.Schema(
       {
         attemptNumber: {
           type: Number,
-          required: true,
+          required: true
         },
 
         channel: {
           type: String,
           enum: ['email', 'sms', 'inApp'],
-          required: true,
+          required: true
         },
 
         attemptedAt: {
           type: Date,
-          default: Date.now,
+          default: Date.now
         },
 
         status: {
           type: String,
           enum: ['SUCCESS', 'FAILED', 'RETRY'],
-          required: true,
+          required: true
         },
 
         errorCode: String,
@@ -305,28 +305,28 @@ const NotificationSchema = new mongoose.Schema(
 
         providerResponse: {
           type: mongoose.Schema.Types.Mixed,
-          default: {},
+          default: {}
         },
 
-        nextRetryAt: Date,
-      },
+        nextRetryAt: Date
+      }
     ],
 
     // Scheduling & Timing
     scheduledFor: {
       type: Date,
-      index: true,
+      index: true
     },
 
     timezone: {
       type: String,
-      default: 'Asia/Bangkok',
+      default: 'Asia/Bangkok'
     },
 
     // Batch Processing
     batchId: {
       type: String,
-      index: true,
+      index: true
     },
 
     batchSize: Number,
@@ -337,16 +337,16 @@ const NotificationSchema = new mongoose.Schema(
       language: {
         type: String,
         enum: ['th', 'en'],
-        default: 'th',
+        default: 'th'
       },
 
       emailFormat: {
         type: String,
         enum: ['text', 'html'],
-        default: 'html',
+        default: 'html'
       },
 
-      timezone: String,
+      timezone: String
     },
 
     // Analytics & Tracking
@@ -354,43 +354,43 @@ const NotificationSchema = new mongoose.Schema(
       opened: {
         count: {
           type: Number,
-          default: 0,
+          default: 0
         },
         firstOpenedAt: Date,
-        lastOpenedAt: Date,
+        lastOpenedAt: Date
       },
 
       clicked: {
         count: {
           type: Number,
-          default: 0,
+          default: 0
         },
         firstClickedAt: Date,
         lastClickedAt: Date,
-        clickedUrls: [String],
+        clickedUrls: [String]
       },
 
       bounced: {
         type: Boolean,
-        default: false,
+        default: false
       },
 
       marked_as_spam: {
         type: Boolean,
-        default: false,
+        default: false
       },
 
       unsubscribed: {
         type: Boolean,
-        default: false,
-      },
+        default: false
+      }
     },
 
     // Metadata & Tags
     metadata: {
       source: {
         type: String,
-        default: 'SYSTEM',
+        default: 'SYSTEM'
       },
 
       campaign: String,
@@ -399,8 +399,8 @@ const NotificationSchema = new mongoose.Schema(
 
       customData: {
         type: mongoose.Schema.Types.Mixed,
-        default: {},
-      },
+        default: {}
+      }
     },
 
     // Status & Lifecycle
@@ -414,23 +414,23 @@ const NotificationSchema = new mongoose.Schema(
         'PARTIALLY_SENT', // ส่งได้บาง channel
         'FAILED', // ส่งไม่สำเร็จ
         'CANCELLED', // ยกเลิกการส่ง
-        'EXPIRED', // หมดอายุ
+        'EXPIRED' // หมดอายุ
       ],
       default: 'DRAFT',
       required: true,
-      index: true,
+      index: true
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
 
     sentAt: Date,
@@ -440,13 +440,13 @@ const NotificationSchema = new mongoose.Schema(
     // TTL for cleanup
     expiresAt: {
       type: Date,
-      index: { expireAfterSeconds: 0 },
-    },
+      index: { expireAfterSeconds: 0 }
+    }
   },
   {
     timestamps: true,
-    collection: 'notifications',
-  },
+    collection: 'notifications'
+  }
 );
 
 // Indexes for Performance
@@ -511,7 +511,7 @@ NotificationSchema.methods.addDeliveryAttempt = function (channel, status, error
     errorCode: errorData.errorCode,
     errorMessage: errorData.errorMessage,
     providerResponse: errorData.providerResponse || {},
-    nextRetryAt: errorData.nextRetryAt,
+    nextRetryAt: errorData.nextRetryAt
   });
 
   this.updatedAt = new Date();
@@ -617,7 +617,7 @@ NotificationSchema.methods.recordAnalytics = function (event, data = {}) {
 NotificationSchema.statics.findPendingNotifications = function () {
   return this.find({
     status: { $in: ['SCHEDULED', 'PROCESSING'] },
-    scheduledFor: { $lte: new Date() },
+    scheduledFor: { $lte: new Date() }
   }).sort({ priority: -1, scheduledFor: 1 });
 };
 
@@ -637,19 +637,19 @@ NotificationSchema.statics.getStatistics = function (startDate, endDate) {
   return this.aggregate([
     {
       $match: {
-        createdAt: { $gte: startDate, $lte: endDate },
-      },
+        createdAt: { $gte: startDate, $lte: endDate }
+      }
     },
     {
       $group: {
         _id: {
           type: '$notificationType',
-          status: '$status',
+          status: '$status'
         },
         count: { $sum: 1 },
-        totalCost: { $sum: '$channels.sms.cost' },
-      },
-    },
+        totalCost: { $sum: '$channels.sms.cost' }
+      }
+    }
   ]);
 };
 

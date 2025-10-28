@@ -22,8 +22,8 @@ const SUBSCRIPTION_FEATURES = {
       // Limits
       maxDevices: 5,
       maxAlerts: 10,
-      aiRequestsPerMonth: 100,
-    },
+      aiRequestsPerMonth: 100
+    }
   },
   basic: {
     name: 'Basic Plan',
@@ -35,8 +35,8 @@ const SUBSCRIPTION_FEATURES = {
       aiRecommendations: true,
       maxDevices: 20,
       maxAlerts: 50,
-      aiRequestsPerMonth: 500,
-    },
+      aiRequestsPerMonth: 500
+    }
   },
   premium: {
     name: 'Premium Plan',
@@ -51,8 +51,8 @@ const SUBSCRIPTION_FEATURES = {
       prioritySupport: true,
       maxDevices: 100,
       maxAlerts: 500,
-      aiRequestsPerMonth: 5000,
-    },
+      aiRequestsPerMonth: 5000
+    }
   },
   enterprise: {
     name: 'Enterprise Plan',
@@ -69,9 +69,9 @@ const SUBSCRIPTION_FEATURES = {
       whiteLabel: true,
       maxDevices: -1, // Unlimited
       maxAlerts: -1, // Unlimited
-      aiRequestsPerMonth: -1, // Unlimited
-    },
-  },
+      aiRequestsPerMonth: -1 // Unlimited
+    }
+  }
 };
 
 /**
@@ -129,7 +129,7 @@ function checkFeatureAccess(featureName) {
       if (!farmId) {
         return res.status(400).json({
           success: false,
-          message: 'Farm ID is required',
+          message: 'Farm ID is required'
         });
       }
 
@@ -140,7 +140,7 @@ function checkFeatureAccess(featureName) {
       if (!farm) {
         return res.status(404).json({
           success: false,
-          message: 'Farm not found',
+          message: 'Farm not found'
         });
       }
 
@@ -149,7 +149,7 @@ function checkFeatureAccess(featureName) {
         return res.status(403).json({
           success: false,
           message: 'Subscription expired. Please renew your subscription.',
-          code: 'SUBSCRIPTION_EXPIRED',
+          code: 'SUBSCRIPTION_EXPIRED'
         });
       }
 
@@ -162,7 +162,7 @@ function checkFeatureAccess(featureName) {
           code: 'FEATURE_NOT_AVAILABLE',
           currentTier: tier,
           requiredTier: getRequiredTier(featureName),
-          upgradeUrl: '/api/subscriptions/upgrade',
+          upgradeUrl: '/api/subscriptions/upgrade'
         });
       }
 
@@ -174,7 +174,7 @@ function checkFeatureAccess(featureName) {
       return res.status(500).json({
         success: false,
         message: 'Error checking feature access',
-        error: error.message,
+        error: error.message
       });
     }
   };
@@ -203,7 +203,7 @@ function checkUsageLimit(farm, limitType) {
     return {
       allowed: true,
       limit: SUBSCRIPTION_FEATURES.free.features[limitType],
-      current: 0,
+      current: 0
     };
   }
 
@@ -214,7 +214,7 @@ function checkUsageLimit(farm, limitType) {
     return {
       allowed: true,
       limit: 'unlimited',
-      current: 0,
+      current: 0
     };
   }
 
@@ -225,7 +225,7 @@ function checkUsageLimit(farm, limitType) {
     allowed: currentUsage < limit,
     limit,
     current: currentUsage,
-    remaining: limit - currentUsage,
+    remaining: limit - currentUsage
   };
 }
 
@@ -240,7 +240,7 @@ function requireFeatureEnabled(featurePath) {
       if (!farm) {
         return res.status(400).json({
           success: false,
-          message: 'Farm context is required. Use checkFeatureAccess middleware first.',
+          message: 'Farm context is required. Use checkFeatureAccess middleware first.'
         });
       }
 
@@ -263,7 +263,7 @@ function requireFeatureEnabled(featurePath) {
           success: false,
           message: `Feature "${featurePath}" is not enabled for this farm`,
           code: 'FEATURE_NOT_ENABLED',
-          hint: 'Please enable this feature in farm settings first',
+          hint: 'Please enable this feature in farm settings first'
         });
       }
 
@@ -273,7 +273,7 @@ function requireFeatureEnabled(featurePath) {
       return res.status(500).json({
         success: false,
         message: 'Error checking if feature is enabled',
-        error: error.message,
+        error: error.message
       });
     }
   };
@@ -303,7 +303,7 @@ async function enableFeature(farmId, featurePath) {
 
   await Farm.findByIdAndUpdate(farmId, {
     [updatePath]: true,
-    [activatedAtPath]: new Date(),
+    [activatedAtPath]: new Date()
   });
 
   return true;
@@ -317,7 +317,7 @@ async function disableFeature(farmId, featurePath) {
   const updatePath = `featureAccess.${featurePath}.enabled`;
 
   await Farm.findByIdAndUpdate(farmId, {
-    [updatePath]: false,
+    [updatePath]: false
   });
 
   return true;
@@ -332,5 +332,5 @@ module.exports = {
   requireFeatureEnabled,
   enableFeature,
   disableFeature,
-  getRequiredTier,
+  getRequiredTier
 };

@@ -15,20 +15,20 @@ const certificateSchema = new mongoose.Schema(
       unique: true,
       index: true,
       match: /^GACP-\d{4}-\d{4}$/,
-      description: 'Unique certificate number in format GACP-YYYY-NNNN',
+      description: 'Unique certificate number in format GACP-YYYY-NNNN'
     },
 
     verificationCode: {
       type: String,
       required: true,
       index: true,
-      description: 'Cryptographic verification code for public verification',
+      description: 'Cryptographic verification code for public verification'
     },
 
     qrData: {
       type: String,
       required: true,
-      description: 'QR code data containing verification URL',
+      description: 'QR code data containing verification URL'
     },
 
     // Related entities
@@ -36,67 +36,67 @@ const certificateSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       index: true,
-      description: 'Reference to the approved application',
+      description: 'Reference to the approved application'
     },
 
     farmId: {
       type: String,
       required: true,
       index: true,
-      description: 'Farm identification number',
+      description: 'Farm identification number'
     },
 
     userId: {
       type: String,
       required: true,
       index: true,
-      description: 'User/Farmer identification number',
+      description: 'User/Farmer identification number'
     },
 
     // Farm information
     farmName: {
       type: String,
       required: true,
-      description: 'Name of the certified farm',
+      description: 'Name of the certified farm'
     },
 
     farmerName: {
       type: String,
       required: true,
-      description: 'Name of the farmer/owner',
+      description: 'Name of the farmer/owner'
     },
 
     location: {
       province: { type: String, required: true },
       district: { type: String, required: true },
       subDistrict: { type: String, required: true },
-      address: { type: String },
+      address: { type: String }
     },
 
     cropType: {
       type: String,
       required: true,
-      description: 'Type of crop/cannabis cultivated',
+      description: 'Type of crop/cannabis cultivated'
     },
 
     farmSize: {
       type: Number,
       required: true,
       min: 0,
-      description: 'Farm size in rai',
+      description: 'Farm size in rai'
     },
 
     // Standard information
     standardId: {
       type: String,
       required: true,
-      description: 'Standard identification (GAP/GACP)',
+      description: 'Standard identification (GAP/GACP)'
     },
 
     standardName: {
       type: String,
       required: true,
-      description: 'Full name of the standard',
+      description: 'Full name of the standard'
     },
 
     score: {
@@ -104,7 +104,7 @@ const certificateSchema = new mongoose.Schema(
       required: true,
       min: 0,
       max: 100,
-      description: 'Certification score/rating',
+      description: 'Certification score/rating'
     },
 
     // Certificate status
@@ -114,7 +114,7 @@ const certificateSchema = new mongoose.Schema(
       enum: ['active', 'expired', 'revoked', 'renewed'],
       default: 'active',
       index: true,
-      description: 'Current status of the certificate',
+      description: 'Current status of the certificate'
     },
 
     // Dates
@@ -122,45 +122,45 @@ const certificateSchema = new mongoose.Schema(
       type: Date,
       required: true,
       default: Date.now,
-      description: 'Date certificate was issued',
+      description: 'Date certificate was issued'
     },
 
     expiryDate: {
       type: Date,
       required: true,
       index: true,
-      description: 'Date certificate expires',
+      description: 'Date certificate expires'
     },
 
     validityYears: {
       type: Number,
       required: true,
       default: 3,
-      description: 'Number of years certificate is valid',
+      description: 'Number of years certificate is valid'
     },
 
     // Issuing authority
     issuedBy: {
       type: String,
       required: true,
-      description: 'Authority or person who issued the certificate',
+      description: 'Authority or person who issued the certificate'
     },
 
     // PDF information
     pdfGenerated: {
       type: Boolean,
       default: false,
-      description: 'Whether PDF certificate has been generated',
+      description: 'Whether PDF certificate has been generated'
     },
 
     pdfUrl: {
       type: String,
-      description: 'URL to the PDF certificate file',
+      description: 'URL to the PDF certificate file'
     },
 
     pdfGeneratedAt: {
       type: Date,
-      description: 'Timestamp when PDF was generated',
+      description: 'Timestamp when PDF was generated'
     },
 
     // Usage tracking
@@ -168,68 +168,68 @@ const certificateSchema = new mongoose.Schema(
       type: Number,
       default: 0,
       min: 0,
-      description: 'Number of times certificate was downloaded',
+      description: 'Number of times certificate was downloaded'
     },
 
     verificationCount: {
       type: Number,
       default: 0,
       min: 0,
-      description: 'Number of times certificate was verified',
+      description: 'Number of times certificate was verified'
     },
 
     lastDownloadedAt: {
       type: Date,
-      description: 'Timestamp of last download',
+      description: 'Timestamp of last download'
     },
 
     lastVerifiedAt: {
       type: Date,
-      description: 'Timestamp of last verification',
+      description: 'Timestamp of last verification'
     },
 
     // Revocation information
     revokedAt: {
       type: Date,
-      description: 'Timestamp when certificate was revoked',
+      description: 'Timestamp when certificate was revoked'
     },
 
     revokedBy: {
       type: String,
-      description: 'User who revoked the certificate',
+      description: 'User who revoked the certificate'
     },
 
     revokedReason: {
       type: String,
-      description: 'Reason for revocation',
+      description: 'Reason for revocation'
     },
 
     // Renewal information
     renewedCertificateId: {
       type: mongoose.Schema.Types.ObjectId,
-      description: 'Reference to the renewed certificate',
+      description: 'Reference to the renewed certificate'
     },
 
     previousCertificateId: {
       type: mongoose.Schema.Types.ObjectId,
-      description: 'Reference to the previous certificate (if renewal)',
+      description: 'Reference to the previous certificate (if renewal)'
     },
 
     // Additional metadata
     notes: {
       type: String,
-      description: 'Additional notes or comments',
+      description: 'Additional notes or comments'
     },
 
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      description: 'Additional flexible metadata',
-    },
+      description: 'Additional flexible metadata'
+    }
   },
   {
     timestamps: true,
-    collection: 'certificates',
-  },
+    collection: 'certificates'
+  }
 );
 
 // Indexes for performance
@@ -294,7 +294,7 @@ certificateSchema.methods.verify = function (code) {
       valid: false,
       reason: 'Certificate has been revoked',
       revokedAt: this.revokedAt,
-      revokedReason: this.revokedReason,
+      revokedReason: this.revokedReason
     };
   }
 
@@ -303,7 +303,7 @@ certificateSchema.methods.verify = function (code) {
     return {
       valid: false,
       reason: 'Certificate has expired',
-      expiryDate: this.expiryDate,
+      expiryDate: this.expiryDate
     };
   }
 
@@ -311,7 +311,7 @@ certificateSchema.methods.verify = function (code) {
   if (code && this.verificationCode !== code) {
     return {
       valid: false,
-      reason: 'Invalid verification code',
+      reason: 'Invalid verification code'
     };
   }
 
@@ -324,8 +324,8 @@ certificateSchema.methods.verify = function (code) {
       standardName: this.standardName,
       issuedDate: this.issuedDate,
       expiryDate: this.expiryDate,
-      status: this.status,
-    },
+      status: this.status
+    }
   };
 };
 
@@ -363,7 +363,7 @@ certificateSchema.methods.markAsRenewed = async function (newCertificateId) {
 certificateSchema.statics.findActive = function () {
   return this.find({
     status: 'active',
-    expiryDate: { $gt: new Date() },
+    expiryDate: { $gt: new Date() }
   });
 };
 
@@ -377,8 +377,8 @@ certificateSchema.statics.findExpiring = function (days = 90) {
     status: 'active',
     expiryDate: {
       $gt: now,
-      $lte: futureDate,
-    },
+      $lte: futureDate
+    }
   }).sort({ expiryDate: 1 });
 };
 
@@ -386,7 +386,7 @@ certificateSchema.statics.findExpiring = function (days = 90) {
 certificateSchema.statics.findExpired = function () {
   return this.find({
     status: 'active',
-    expiryDate: { $lte: new Date() },
+    expiryDate: { $lte: new Date() }
   });
 };
 
@@ -439,14 +439,14 @@ certificateSchema.statics.getStats = async function () {
           {
             $match: {
               status: 'active',
-              expiryDate: { $gt: now, $lte: expiringDate },
-            },
+              expiryDate: { $gt: now, $lte: expiringDate }
+            }
           },
-          { $count: 'count' },
+          { $count: 'count' }
         ],
-        byStandard: [{ $group: { _id: '$standardId', count: { $sum: 1 } } }],
-      },
-    },
+        byStandard: [{ $group: { _id: '$standardId', count: { $sum: 1 } } }]
+      }
+    }
   ]);
 
   return {
@@ -456,7 +456,7 @@ certificateSchema.statics.getStats = async function () {
     revoked: stats.revoked[0]?.count || 0,
     thisMonth: stats.thisMonth[0]?.count || 0,
     expiringSoon: stats.expiringSoon[0]?.count || 0,
-    byStandard: stats.byStandard || [],
+    byStandard: stats.byStandard || []
   };
 };
 
@@ -475,11 +475,11 @@ certificateSchema.set('toJSON', {
   transform: function (doc, ret) {
     delete ret.__v;
     return ret;
-  },
+  }
 });
 
 certificateSchema.set('toObject', {
-  virtuals: true,
+  virtuals: true
 });
 
 const Certificate = mongoose.model('Certificate', certificateSchema);

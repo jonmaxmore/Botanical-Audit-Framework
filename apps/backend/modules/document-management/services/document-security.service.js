@@ -44,7 +44,7 @@ class DocumentSecurityService {
         fileSizeCheck: null,
         virusScan: null,
         contentAnalysis: null,
-        metadataSanitization: null,
+        metadataSanitization: null
       };
 
       let overallScore = 100;
@@ -56,7 +56,7 @@ class DocumentSecurityService {
       securityChecks.fileTypeCheck = await this._validateFileType(
         fileBuffer,
         fileMetadata,
-        documentType,
+        documentType
       );
       if (!securityChecks.fileTypeCheck.valid) {
         overallScore -= 50;
@@ -84,7 +84,7 @@ class DocumentSecurityService {
         logger.info('🔍 Analyzing content security...');
         securityChecks.contentAnalysis = await this._analyzeContentSecurity(
           fileBuffer,
-          documentType,
+          documentType
         );
         if (securityChecks.contentAnalysis.riskLevel === 'HIGH') {
           overallScore -= 30;
@@ -114,7 +114,7 @@ class DocumentSecurityService {
         threats,
         warnings,
         securityChecks,
-        recommendation: this._getSecurityRecommendation(overallScore, threats, warnings),
+        recommendation: this._getSecurityRecommendation(overallScore, threats, warnings)
       };
     } catch (error) {
       logger.error('❌ Security check failed:', error);
@@ -124,7 +124,7 @@ class DocumentSecurityService {
         threats: ['System error during security check'],
         warnings: [],
         securityChecks: {},
-        recommendation: 'BLOCK',
+        recommendation: 'BLOCK'
       };
     }
   }
@@ -138,7 +138,7 @@ class DocumentSecurityService {
         'application/pdf',
         'image/jpeg',
         'image/png',
-        'image/tiff',
+        'image/tiff'
       ];
 
       const detectedType = await this._detectFileType(fileBuffer);
@@ -168,14 +168,14 @@ class DocumentSecurityService {
         detectedType,
         declaredType,
         threats,
-        warnings,
+        warnings
       };
     } catch (error) {
       logger.error('File type validation error:', error);
       return {
         valid: false,
         threats: ['File type validation failed'],
-        warnings: [],
+        warnings: []
       };
     }
   }
@@ -202,7 +202,7 @@ class DocumentSecurityService {
       fileSize: fileMetadata.size,
       maxAllowed: maxSize,
       minRequired: minSize,
-      warnings,
+      warnings
     };
   }
 
@@ -216,7 +216,7 @@ class DocumentSecurityService {
         return {
           clean: true,
           threats: [],
-          scanResult: 'MOCK_CLEAN',
+          scanResult: 'MOCK_CLEAN'
         };
       }
 
@@ -227,14 +227,14 @@ class DocumentSecurityService {
         threats: scanResult.threats || [],
         scanResult: scanResult.result,
         scanTime: scanResult.scanTime,
-        scanEngine: scanResult.engine,
+        scanEngine: scanResult.engine
       };
     } catch (error) {
       logger.error('Virus scan error:', error);
       return {
         clean: false,
         threats: ['Virus scan failed'],
-        scanResult: 'SCAN_ERROR',
+        scanResult: 'SCAN_ERROR'
       };
     }
   }
@@ -281,14 +281,14 @@ class DocumentSecurityService {
         threats,
         warnings,
         embeddedObjects: documentType === 'application/pdf' ? embeddedObjects : null,
-        complexityScore: complexityCheck.score,
+        complexityScore: complexityCheck.score
       };
     } catch (error) {
       logger.error('Content security analysis error:', error);
       return {
         riskLevel: 'HIGH',
         threats: ['Content analysis failed'],
-        warnings: [],
+        warnings: []
       };
     }
   }
@@ -320,7 +320,7 @@ class DocumentSecurityService {
     return {
       hasPrivacyRisks,
       warnings,
-      sanitizedMetadata: this._stripSensitiveMetadata(fileMetadata),
+      sanitizedMetadata: this._stripSensitiveMetadata(fileMetadata)
     };
   }
 
@@ -364,7 +364,7 @@ class DocumentSecurityService {
       hasJavaScript: /\/JavaScript/.test(content) || /\/JS/.test(content),
       hasEmbeddedFiles: /\/EmbeddedFile/.test(content),
       hasActions: /\/Action/.test(content),
-      hasAnnotations: /\/Annot/.test(content),
+      hasAnnotations: /\/Annot/.test(content)
     };
   }
 
@@ -379,7 +379,7 @@ class DocumentSecurityService {
     const shellcodePatterns = [
       '90909090', // NOP sled
       '31c0', // XOR EAX, EAX
-      'eb', // JMP short
+      'eb' // JMP short
     ];
 
     for (const pattern of shellcodePatterns) {
@@ -413,7 +413,7 @@ class DocumentSecurityService {
     return {
       score,
       isUnusuallyComplex: score > 50,
-      entropy,
+      entropy
     };
   }
 
@@ -473,28 +473,28 @@ class DocumentSecurityService {
       FARM_LICENSE: {
         allowedTypes: ['application/pdf', 'image/jpeg', 'image/png'],
         maxSize: 10 * 1024 * 1024, // 10MB
-        minSize: 50 * 1024, // 50KB
+        minSize: 50 * 1024 // 50KB
       },
       ID_CARD: {
         allowedTypes: ['image/jpeg', 'image/png'],
         maxSize: 5 * 1024 * 1024, // 5MB
-        minSize: 100 * 1024, // 100KB
+        minSize: 100 * 1024 // 100KB
       },
       LAND_DOCUMENT: {
         allowedTypes: ['application/pdf', 'image/jpeg', 'image/png'],
         maxSize: 15 * 1024 * 1024, // 15MB
-        minSize: 50 * 1024, // 50KB
+        minSize: 50 * 1024 // 50KB
       },
       GAP_CERTIFICATE: {
         allowedTypes: ['application/pdf', 'image/jpeg', 'image/png'],
         maxSize: 10 * 1024 * 1024, // 10MB
-        minSize: 50 * 1024, // 50KB
+        minSize: 50 * 1024 // 50KB
       },
       CROP_DETAILS: {
         allowedTypes: ['application/pdf', 'image/jpeg', 'image/png', 'application/vnd.ms-excel'],
         maxSize: 20 * 1024 * 1024, // 20MB
-        minSize: 10 * 1024, // 10KB
-      },
+        minSize: 10 * 1024 // 10KB
+      }
     };
   }
 }

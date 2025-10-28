@@ -16,7 +16,7 @@ const mockStats = {
     activeUsers: 1,
     todayApplications: 0,
     averageProcessingTime: 15,
-    totalRevenue: 0,
+    totalRevenue: 0
   },
   reviewer: {
     totalApplications: 25,
@@ -26,7 +26,7 @@ const mockStats = {
     activeUsers: 12,
     todayApplications: 3,
     averageProcessingTime: 12,
-    totalRevenue: 0,
+    totalRevenue: 0
   },
   auditor: {
     totalApplications: 45,
@@ -36,7 +36,7 @@ const mockStats = {
     activeUsers: 25,
     todayApplications: 2,
     averageProcessingTime: 18,
-    totalRevenue: 0,
+    totalRevenue: 0
   },
   admin: {
     totalApplications: 128,
@@ -46,8 +46,8 @@ const mockStats = {
     activeUsers: 45,
     todayApplications: 7,
     averageProcessingTime: 14,
-    totalRevenue: 2580000,
-  },
+    totalRevenue: 2580000
+  }
 };
 
 const mockActivities = {
@@ -58,7 +58,7 @@ const mockActivities = {
       action: 'ส่งคำขอรับรอง',
       description: 'ส่งคำขอรับรอง GACP สำหรับกัญชาทางการแพทย์',
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      type: 'application',
+      type: 'application'
     },
     {
       id: '2',
@@ -66,8 +66,8 @@ const mockActivities = {
       action: 'อัพโหลดเอกสาร',
       description: 'อัพโหลดใบรับรองการปลูก',
       timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
-      type: 'document',
-    },
+      type: 'document'
+    }
   ],
   reviewer: [
     {
@@ -76,7 +76,7 @@ const mockActivities = {
       action: 'ตรวจสอบเอกสาร',
       description: 'ตรวจสอบเอกสารคำขอ GACP-2025-003',
       timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
-      type: 'review',
+      type: 'review'
     },
     {
       id: '2',
@@ -84,8 +84,8 @@ const mockActivities = {
       action: 'อนุมัติคำขอ',
       description: 'อนุมัติคำขอรับรอง GACP-2025-002',
       timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-      type: 'approval',
-    },
+      type: 'approval'
+    }
   ],
   auditor: [
     {
@@ -94,8 +94,8 @@ const mockActivities = {
       action: 'ตรวจสอบภาคสนาม',
       description: 'ตรวจสอบฟาร์มสำหรับคำขอ GACP-2025-001',
       timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-      type: 'review',
-    },
+      type: 'review'
+    }
   ],
   admin: [
     {
@@ -104,7 +104,7 @@ const mockActivities = {
       action: 'สร้างผู้ใช้ใหม่',
       description: 'สร้างบัญชีผู้ตรวจสอบใหม่',
       timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-      type: 'application',
+      type: 'application'
     },
     {
       id: '2',
@@ -112,9 +112,9 @@ const mockActivities = {
       action: 'อัพเดทระบบ',
       description: 'อัพเดทระบบรายงานและวิเคราะห์',
       timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString(),
-      type: 'application',
-    },
-  ],
+      type: 'application'
+    }
+  ]
 };
 
 const mockApplications = {
@@ -126,8 +126,8 @@ const mockApplications = {
       farmName: 'ฟาร์มกัญชาอินทรีย์',
       status: 'under_review',
       submittedAt: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
-      type: 'กัญชาทางการแพทย์',
-    },
+      type: 'กัญชาทางการแพทย์'
+    }
   ],
   reviewer: [
     {
@@ -137,7 +137,7 @@ const mockApplications = {
       farmName: 'ฟาร์มสมุนไพรธรรมชาติ',
       status: 'pending',
       submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      type: 'สมุนไพรพื้นบ้าน',
+      type: 'สมุนไพรพื้นบ้าน'
     },
     {
       id: 'app3',
@@ -146,8 +146,8 @@ const mockApplications = {
       farmName: 'สวนผักปลอดสาร',
       status: 'under_review',
       submittedAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      type: 'ผักสมุนไพร',
-    },
+      type: 'ผักสมุนไพร'
+    }
   ],
   auditor: [
     {
@@ -158,10 +158,10 @@ const mockApplications = {
       status: 'under_review',
       submittedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000).toISOString(),
       reviewedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-      type: 'กัญชาทางการแพทย์',
-    },
+      type: 'กัญชาทางการแพทย์'
+    }
   ],
-  admin: [],
+  admin: []
 };
 
 const mockNotifications = {
@@ -171,8 +171,8 @@ const mockNotifications = {
       title: 'การรับรองในระหว่างการตรวจสอบ',
       message: 'คำขอรับรอง GACP-2025-001 อยู่ในระหว่างการตรวจสอบโดยผู้ตรวจ',
       type: 'info',
-      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-    },
+      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+    }
   ],
   reviewer: [
     {
@@ -180,8 +180,8 @@ const mockNotifications = {
       title: 'คำขอใหม่ต้องตรวจสอบ',
       message: 'มีคำขอรับรอง 3 รายการรอการตรวจสอบ',
       type: 'warning',
-      timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
-    },
+      timestamp: new Date(Date.now() - 15 * 60 * 1000).toISOString()
+    }
   ],
   auditor: [
     {
@@ -189,8 +189,8 @@ const mockNotifications = {
       title: 'กำหนดการตรวจสอบภาคสนาม',
       message: 'มีการตรวจสอบภาคสนาม 2 แห่งในสัปดาห์หน้า',
       type: 'info',
-      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString(),
-    },
+      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+    }
   ],
   admin: [
     {
@@ -198,16 +198,16 @@ const mockNotifications = {
       title: 'รายงานประจำเดือน',
       message: 'รายงานประจำเดือนกันยายน พร้อมแล้ว',
       type: 'success',
-      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
     },
     {
       id: 'n5',
       title: 'ระบบบำรุงรักษา',
       message: 'ระบบจะหยุดให้บริการเพื่อบำรุงรักษาในวันอาทิตย์',
       type: 'warning',
-      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString(),
-    },
-  ],
+      timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000).toISOString()
+    }
+  ]
 };
 
 /**
@@ -229,7 +229,7 @@ router.get('/:role', (req, res) => {
       stats: mockStats[userRole] || mockStats.farmer,
       recentActivities: mockActivities[userRole] || [],
       applications: mockApplications[userRole] || [],
-      notifications: mockNotifications[userRole] || [],
+      notifications: mockNotifications[userRole] || []
     };
 
     res.json(dashboardData);
@@ -250,7 +250,7 @@ router.get('/farmer/:userId', (req, res) => {
       stats: mockStats.farmer,
       recentActivities: mockActivities.farmer,
       applications: mockApplications.farmer,
-      notifications: mockNotifications.farmer,
+      notifications: mockNotifications.farmer
     };
 
     res.json(dashboardData);
@@ -269,7 +269,7 @@ router.get('/reviewer', (req, res) => {
       stats: mockStats.reviewer,
       recentActivities: mockActivities.reviewer,
       applications: mockApplications.reviewer,
-      notifications: mockNotifications.reviewer,
+      notifications: mockNotifications.reviewer
     };
 
     res.json(dashboardData);
@@ -288,7 +288,7 @@ router.get('/auditor', (req, res) => {
       stats: mockStats.auditor,
       recentActivities: mockActivities.auditor,
       applications: mockApplications.auditor,
-      notifications: mockNotifications.auditor,
+      notifications: mockNotifications.auditor
     };
 
     res.json(dashboardData);
@@ -307,7 +307,7 @@ router.get('/admin', (req, res) => {
       stats: mockStats.admin,
       recentActivities: mockActivities.admin,
       applications: mockApplications.admin,
-      notifications: mockNotifications.admin,
+      notifications: mockNotifications.admin
     };
 
     res.json(dashboardData);
@@ -328,7 +328,7 @@ router.get('/stats/realtime', (req, res) => {
       activeInspections: 5,
       recentLogins: 12,
       systemHealth: 'healthy',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     res.json(stats);

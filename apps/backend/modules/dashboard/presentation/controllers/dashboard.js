@@ -30,14 +30,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: DashboardDTO.toFarmerDashboard(dashboard),
+        data: DashboardDTO.toFarmerDashboard(dashboard)
       });
     } catch (error) {
       logger.error('Error getting farmer dashboard:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load dashboard',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -54,14 +54,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: DashboardDTO.toDTAMDashboard(dashboard),
+        data: DashboardDTO.toDTAMDashboard(dashboard)
       });
     } catch (error) {
       logger.error('Error getting DTAM dashboard:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load dashboard',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -78,14 +78,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: DashboardDTO.toSystemStatistics(statistics),
+        data: DashboardDTO.toSystemStatistics(statistics)
       });
     } catch (error) {
       logger.error('Error getting system statistics:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load statistics',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -102,14 +102,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: dashboard.quickStats,
+        data: dashboard.quickStats
       });
     } catch (error) {
       logger.error('Error getting quick stats:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load quick stats',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -126,14 +126,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: dashboard.alerts,
+        data: dashboard.alerts
       });
     } catch (error) {
       logger.error('Error getting farmer alerts:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load alerts',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -150,14 +150,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: dashboard.quickActions,
+        data: dashboard.quickActions
       });
     } catch (error) {
       logger.error('Error getting farmer quick actions:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load quick actions',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -174,14 +174,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: dashboard.pendingTasks,
+        data: dashboard.pendingTasks
       });
     } catch (error) {
       logger.error('Error getting pending tasks:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load pending tasks',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -199,14 +199,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: dashboard.recentActivity.slice(0, limit),
+        data: dashboard.recentActivity.slice(0, limit)
       });
     } catch (error) {
       logger.error('Error getting recent activity:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load recent activity',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -223,14 +223,14 @@ class DashboardController {
 
       res.json({
         success: true,
-        data: dashboard.trends,
+        data: dashboard.trends
       });
     } catch (error) {
       logger.error('Error getting trends:', error);
       res.status(500).json({
         success: false,
         error: 'Failed to load trends',
-        message: error.message,
+        message: error.message
       });
     }
   }

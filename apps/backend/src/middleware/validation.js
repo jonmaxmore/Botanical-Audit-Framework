@@ -20,5 +20,5 @@ function validateRequest(schemaName) {
 }
 
 module.exports = {
-  validateRequest,
+  validateRequest
 };

@@ -24,7 +24,7 @@ function createTrainingRoutes(controller, authMiddleware) {
   farmerRouter.post(
     '/enrollments/:id/submit',
     authenticateFarmer,
-    controller.submitFinalAssessment,
+    controller.submitFinalAssessment
   );
 
   // ============ DTAM ROUTES ============
@@ -35,35 +35,35 @@ function createTrainingRoutes(controller, authMiddleware) {
     '/courses',
     authenticateDTAMStaff,
     requireAnyPermission(['view_training', 'manage_training']),
-    controller.listCourses,
+    controller.listCourses
   );
 
   dtamRouter.get(
     '/courses/:id',
     authenticateDTAMStaff,
     requireAnyPermission(['view_training', 'manage_training']),
-    controller.getCourseDetails,
+    controller.getCourseDetails
   );
 
   dtamRouter.post(
     '/courses',
     authenticateDTAMStaff,
     requireAnyPermission(['manage_training', 'create_course']),
-    controller.createCourse,
+    controller.createCourse
   );
 
   dtamRouter.put(
     '/courses/:id',
     authenticateDTAMStaff,
     requireAnyPermission(['manage_training', 'update_course']),
-    controller.updateCourse,
+    controller.updateCourse
   );
 
   dtamRouter.post(
     '/courses/:id/publish',
     authenticateDTAMStaff,
     requireAnyPermission(['manage_training', 'publish_course']),
-    controller.publishCourse,
+    controller.publishCourse
   );
 
   // Statistics
@@ -71,7 +71,7 @@ function createTrainingRoutes(controller, authMiddleware) {
     '/statistics',
     authenticateDTAMStaff,
     requireAnyPermission(['view_training', 'manage_training', 'view_reports']),
-    controller.getStatistics,
+    controller.getStatistics
   );
 
   return { farmerRouter, dtamRouter };

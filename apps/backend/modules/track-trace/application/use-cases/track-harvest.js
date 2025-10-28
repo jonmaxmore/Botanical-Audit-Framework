@@ -62,7 +62,7 @@ class TrackHarvestUseCase {
       // Compliance requirements
       auditRetentionDays: 2555, // Keep harvest records for 7 years
       chainOfCustodyRequired: true, // Chain of custody documentation required
-      temperatureLoggingInterval: 30, // Minutes between temperature logs
+      temperatureLoggingInterval: 30 // Minutes between temperature logs
     };
 
     // Harvest process configurations
@@ -74,27 +74,27 @@ class TrackHarvestUseCase {
         environmentalRequirements: [
           'temperature_check',
           'humidity_check',
-          'cleanliness_verification',
-        ],
+          'cleanliness_verification'
+        ]
       },
       DRYING: {
         requiredEquipment: ['drying_racks', 'environmental_controls', 'monitoring_sensors'],
         monitoringFrequency: 'HOURLY',
         qualityCheckpoints: ['moisture_content', 'mold_inspection', 'color_assessment'],
-        criticalControlPoints: ['temperature', 'humidity', 'air_circulation'],
+        criticalControlPoints: ['temperature', 'humidity', 'air_circulation']
       },
       CURING: {
         requiredContainers: ['airtight_containers', 'humidity_packs', 'monitoring_devices'],
         monitoringFrequency: 'DAILY',
         qualityCheckpoints: ['aroma_development', 'texture_assessment', 'moisture_stability'],
-        criticalControlPoints: ['container_seal', 'humidity_control', 'temperature_stability'],
+        criticalControlPoints: ['container_seal', 'humidity_control', 'temperature_stability']
       },
       TESTING: {
         requiredTests: ['potency_analysis', 'contaminant_screening', 'terpene_profile'],
         sampleSize: 'minimum_10g_per_batch',
         testingLabs: 'certified_third_party_only',
-        documentationRequired: ['chain_of_custody', 'test_results', 'compliance_certificate'],
-      },
+        documentationRequired: ['chain_of_custody', 'test_results', 'compliance_certificate']
+      }
     };
   }
 
@@ -112,7 +112,7 @@ class TrackHarvestUseCase {
   async initializeHarvestTracking(harvestInitData) {
     try {
       this.logger.log(
-        `[TrackHarvest] Initializing harvest tracking for: ${harvestInitData.plantIds?.length || 0} plants`,
+        `[TrackHarvest] Initializing harvest tracking for: ${harvestInitData.plantIds?.length || 0} plants`
       );
 
       // Step 1: Validate harvest initialization data
@@ -120,7 +120,7 @@ class TrackHarvestUseCase {
 
       // Step 2: Conduct pre-harvest assessment for all plants
       const preHarvestAssessments = await this.conductPreHarvestAssessments(
-        harvestInitData.plantIds,
+        harvestInitData.plantIds
       );
 
       // Step 3: Validate harvest readiness
@@ -128,7 +128,7 @@ class TrackHarvestUseCase {
 
       if (!readinessValidation.allReady) {
         throw new Error(
-          `Some plants not ready for harvest: ${readinessValidation.notReadyPlants.join(', ')}`,
+          `Some plants not ready for harvest: ${readinessValidation.notReadyPlants.join(', ')}`
         );
       }
 
@@ -138,8 +138,8 @@ class TrackHarvestUseCase {
       // Step 5: Initialize harvest tracking for each plant
       const plantHarvestRecords = await Promise.all(
         harvestInitData.plantIds.map(plantId =>
-          this.initializePlantHarvest(plantId, harvestBatch.batchId, harvestInitData),
-        ),
+          this.initializePlantHarvest(plantId, harvestBatch.batchId, harvestInitData)
+        )
       );
 
       // Step 6: Set up environmental monitoring
@@ -151,7 +151,7 @@ class TrackHarvestUseCase {
       // Step 8: Initialize chain of custody documentation
       const chainOfCustody = await this.initializeChainOfCustody(
         harvestBatch,
-        harvestInitData.harvestTeam,
+        harvestInitData.harvestTeam
       );
 
       // Step 9: Store harvest batch in repository
@@ -163,9 +163,9 @@ class TrackHarvestUseCase {
         plantCount: harvestInitData.plantIds.length,
         estimatedYield: preHarvestAssessments.reduce(
           (total, assessment) => total + assessment.estimatedYield,
-          0,
+          0
         ),
-        harvestStartDate: harvestInitData.plannedHarvestDate,
+        harvestStartDate: harvestInitData.plannedHarvestDate
       });
 
       // Step 11: Send harvest initialization notifications
@@ -178,7 +178,7 @@ class TrackHarvestUseCase {
         harvestBatch: {
           batchId: savedHarvestBatch.batchId,
           batchNumber: savedHarvestBatch.batchNumber,
-          trackingUrl: this.generateHarvestTrackingUrl(savedHarvestBatch.batchId),
+          trackingUrl: this.generateHarvestTrackingUrl(savedHarvestBatch.batchId)
         },
         executionPlan: executionPlan,
         plantRecords: plantHarvestRecords,
@@ -188,18 +188,18 @@ class TrackHarvestUseCase {
           totalPlants: harvestInitData.plantIds.length,
           estimatedTotalYield: preHarvestAssessments.reduce(
             (total, assessment) => total + assessment.estimatedYield,
-            0,
+            0
           ),
           averageQualityScore: this.calculateAverageQualityScore(preHarvestAssessments),
-          readinessStatus: readinessValidation.readinessStatus,
-        },
+          readinessStatus: readinessValidation.readinessStatus
+        }
       };
     } catch (error) {
       this.logger.error(`[TrackHarvest] Harvest tracking initialization failed: ${error.message}`);
 
       await this.createAuditTrail('HARVEST_TRACKING_INIT_FAILED', {
         plantIds: harvestInitData?.plantIds,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -242,8 +242,8 @@ class TrackHarvestUseCase {
       // Step 5: Process harvest for each plant
       const plantHarvestResults = await Promise.all(
         harvestExecutionData.plantHarvests.map(plantHarvest =>
-          this.processSinglePlantHarvest(batchId, plantHarvest),
-        ),
+          this.processSinglePlantHarvest(batchId, plantHarvest)
+        )
       );
 
       // Step 6: Calculate batch totals and quality metrics
@@ -257,7 +257,7 @@ class TrackHarvestUseCase {
         environmentalConditions: harvestExecutionData.environmentalConditions,
         actualYield: batchTotals.totalYield,
         qualityMetrics: batchTotals.qualityMetrics,
-        plantHarvestResults: plantHarvestResults,
+        plantHarvestResults: plantHarvestResults
       });
 
       // Step 8: Initialize drying process preparation
@@ -273,7 +273,7 @@ class TrackHarvestUseCase {
       const harvestDocumentation = await this.generateHarvestCompletionDocumentation(
         updatedHarvestBatch,
         plantHarvestResults,
-        batchTotals,
+        batchTotals
       );
 
       // Step 12: Create audit trail
@@ -282,7 +282,7 @@ class TrackHarvestUseCase {
         actualYield: batchTotals.totalYield,
         plantsHarvested: plantHarvestResults.length,
         averageQuality: batchTotals.qualityMetrics.averageQuality,
-        harvestDuration: this.calculateHarvestDuration(harvestExecutionData),
+        harvestDuration: this.calculateHarvestDuration(harvestExecutionData)
       });
 
       // Step 13: Send harvest completion notifications
@@ -296,7 +296,7 @@ class TrackHarvestUseCase {
           batchId: batchId,
           totalYield: batchTotals.totalYield,
           plantsHarvested: plantHarvestResults.length,
-          qualityScore: batchTotals.qualityMetrics.averageQuality,
+          qualityScore: batchTotals.qualityMetrics.averageQuality
         },
         plantResults: plantHarvestResults,
         batchTotals: batchTotals,
@@ -305,15 +305,15 @@ class TrackHarvestUseCase {
         nextProcess: {
           process: 'DRYING',
           scheduledStart: dryingPreparation.scheduledStartTime,
-          requirements: dryingPreparation.requirements,
-        },
+          requirements: dryingPreparation.requirements
+        }
       };
     } catch (error) {
       this.logger.error(`[TrackHarvest] Harvest execution recording failed: ${error.message}`);
 
       await this.createAuditTrail('HARVEST_EXECUTION_FAILED', {
         batchId: batchId,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -359,7 +359,7 @@ class TrackHarvestUseCase {
 
       // Step 4: Validate drying conditions against business rules
       const conditionValidation = await this.validateDryingConditions(
-        dryingResult.currentConditions,
+        dryingResult.currentConditions
       );
 
       // Step 5: Handle alerts if conditions are out of range
@@ -376,7 +376,7 @@ class TrackHarvestUseCase {
       // Step 8: Generate drying process recommendations
       const dryingRecommendations = await this.generateDryingRecommendations(
         updatedHarvestBatch,
-        dryingResult,
+        dryingResult
       );
 
       // Step 9: Create audit trail
@@ -386,11 +386,11 @@ class TrackHarvestUseCase {
         temperature: dryingData.environmentalConditions?.temperature,
         humidity: dryingData.environmentalConditions?.humidity,
         moistureContent: dryingData.moistureContent,
-        alerts: conditionValidation.issues?.length || 0,
+        alerts: conditionValidation.issues?.length || 0
       });
 
       this.logger.log(
-        `[TrackHarvest] Drying process tracked for batch: ${batchId} - ${dryingData.processStage}`,
+        `[TrackHarvest] Drying process tracked for batch: ${batchId} - ${dryingData.processStage}`
       );
 
       return {
@@ -403,7 +403,7 @@ class TrackHarvestUseCase {
         recommendations: dryingRecommendations,
         alerts: conditionValidation.issues || [],
         nextCheck: dryingResult.nextMonitoringTime,
-        readyForCuring: dryingResult.readyForNextProcess || false,
+        readyForCuring: dryingResult.readyForNextProcess || false
       };
     } catch (error) {
       this.logger.error(`[TrackHarvest] Drying process tracking failed: ${error.message}`);
@@ -411,7 +411,7 @@ class TrackHarvestUseCase {
       await this.createAuditTrail('DRYING_PROCESS_FAILED', {
         batchId: batchId,
         stage: dryingData?.processStage,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -459,7 +459,7 @@ class TrackHarvestUseCase {
 
       // Step 4: Validate curing conditions
       const conditionValidation = await this.validateCuringConditions(
-        curingResult.currentConditions,
+        curingResult.currentConditions
       );
 
       // Step 5: Handle curing alerts if needed
@@ -476,7 +476,7 @@ class TrackHarvestUseCase {
       // Step 8: Generate curing process recommendations
       const curingRecommendations = await this.generateCuringRecommendations(
         updatedHarvestBatch,
-        curingResult,
+        curingResult
       );
 
       // Step 9: Check if ready for quality testing
@@ -489,11 +489,11 @@ class TrackHarvestUseCase {
         curingDays: curingResult.curingDays,
         aromaScore: curingResult.qualityMetrics?.aromaScore,
         textureScore: curingResult.qualityMetrics?.textureScore,
-        moistureStability: curingResult.moistureStability,
+        moistureStability: curingResult.moistureStability
       });
 
       this.logger.log(
-        `[TrackHarvest] Curing process tracked for batch: ${batchId} - ${curingData.processStage}`,
+        `[TrackHarvest] Curing process tracked for batch: ${batchId} - ${curingData.processStage}`
       );
 
       return {
@@ -508,7 +508,7 @@ class TrackHarvestUseCase {
         alerts: conditionValidation.issues || [],
         testingReadiness: testingReadiness,
         nextAssessment: curingResult.nextAssessmentTime,
-        estimatedCompletion: curingResult.estimatedCompletionDate,
+        estimatedCompletion: curingResult.estimatedCompletionDate
       };
     } catch (error) {
       this.logger.error(`[TrackHarvest] Curing process tracking failed: ${error.message}`);
@@ -516,7 +516,7 @@ class TrackHarvestUseCase {
       await this.createAuditTrail('CURING_PROCESS_FAILED', {
         batchId: batchId,
         stage: curingData?.processStage,
-        error: error.message,
+        error: error.message
       });
 
       throw error;
@@ -562,7 +562,7 @@ class TrackHarvestUseCase {
           batchNumber: harvestBatch.batchNumber,
           farmId: harvestBatch.farmId,
           harvestDate: harvestBatch.harvestExecutionInfo?.executionStartTime,
-          completionDate: harvestBatch.processingStatus?.completionDate,
+          completionDate: harvestBatch.processingStatus?.completionDate
         },
 
         // Plant traceability information
@@ -571,7 +571,7 @@ class TrackHarvestUseCase {
           seedBatches: relatedData.uniqueSeedBatches,
           strains: relatedData.uniqueStrains,
           plantSources: relatedData.plantSources,
-          geneticLineage: relatedData.geneticLineage,
+          geneticLineage: relatedData.geneticLineage
         },
 
         // Harvest execution summary
@@ -585,8 +585,8 @@ class TrackHarvestUseCase {
             plannedYield: harvestBatch.estimatedYield,
             actualYield: harvestBatch.harvestExecutionInfo?.actualYield,
             yieldEfficiency: performanceMetrics.yieldEfficiency,
-            qualityGrade: harvestBatch.qualityMetrics?.overallGrade,
-          },
+            qualityGrade: harvestBatch.qualityMetrics?.overallGrade
+          }
         },
 
         // Processing lifecycle (drying and curing)
@@ -597,7 +597,7 @@ class TrackHarvestUseCase {
             duration: harvestBatch.dryingProcess?.actualDuration,
             environmentalConditions: harvestBatch.dryingProcess?.environmentalHistory,
             moistureProgression: harvestBatch.dryingProcess?.moistureProgression,
-            qualityMaintained: harvestBatch.dryingProcess?.qualityScore >= 80,
+            qualityMaintained: harvestBatch.dryingProcess?.qualityScore >= 80
           },
           curing: {
             startDate: harvestBatch.curingProcess?.startDate,
@@ -605,8 +605,8 @@ class TrackHarvestUseCase {
             curingDays: harvestBatch.curingProcess?.curingDays,
             qualityDevelopment: harvestBatch.curingProcess?.qualityProgression,
             aromaProfile: harvestBatch.curingProcess?.aromaProfile,
-            textureAssessment: harvestBatch.curingProcess?.textureAssessment,
-          },
+            textureAssessment: harvestBatch.curingProcess?.textureAssessment
+          }
         },
 
         // Quality metrics and testing results
@@ -615,11 +615,11 @@ class TrackHarvestUseCase {
           harvestQuality: harvestBatch.qualityMetrics,
           processingQuality: {
             dryingQuality: harvestBatch.dryingProcess?.qualityScore,
-            curingQuality: harvestBatch.curingProcess?.qualityMetrics,
+            curingQuality: harvestBatch.curingProcess?.qualityMetrics
           },
           finalTestResults: harvestBatch.qualityTestResults || null,
           overallQualityScore: performanceMetrics.overallQualityScore,
-          certificationStatus: complianceQualitySummary.certificationStatus,
+          certificationStatus: complianceQualitySummary.certificationStatus
         },
 
         // Compliance and regulatory information
@@ -627,27 +627,27 @@ class TrackHarvestUseCase {
           ...complianceQualitySummary,
           gacpCompliance: harvestBatch.compliance?.gacpStandards,
           chainOfCustody: harvestBatch.chainOfCustody,
-          auditTrail: harvestBatch.auditHistory?.slice(-20), // Last 20 audit entries
+          auditTrail: harvestBatch.auditHistory?.slice(-20) // Last 20 audit entries
         },
 
         // Environmental conditions summary
         environmental: {
           harvestConditions: harvestBatch.harvestExecutionInfo?.environmentalConditions,
           dryingConditions: this.summarizeEnvironmentalConditions(
-            harvestBatch.dryingProcess?.environmentalHistory,
+            harvestBatch.dryingProcess?.environmentalHistory
           ),
           curingConditions: this.summarizeEnvironmentalConditions(
-            harvestBatch.curingProcess?.environmentalHistory,
+            harvestBatch.curingProcess?.environmentalHistory
           ),
           complianceScore: performanceMetrics.environmentalComplianceScore,
-          criticalDeviations: this.identifyCriticalEnvironmentalDeviations(harvestBatch),
+          criticalDeviations: this.identifyCriticalEnvironmentalDeviations(harvestBatch)
         },
 
         // Performance analysis
         performance: {
           ...performanceMetrics,
           benchmarkComparison: await this.compareToBenchmarks(harvestBatch),
-          improvementRecommendations: await this.generateImprovementRecommendations(harvestBatch),
+          improvementRecommendations: await this.generateImprovementRecommendations(harvestBatch)
         },
 
         // Current status and next steps
@@ -656,7 +656,7 @@ class TrackHarvestUseCase {
           completionPercentage: this.calculateCompletionPercentage(harvestBatch),
           nextMilestone: this.identifyNextMilestone(harvestBatch),
           readyForDistribution: this.assessDistributionReadiness(harvestBatch),
-          inventoryStatus: harvestBatch.inventoryInfo || null,
+          inventoryStatus: harvestBatch.inventoryInfo || null
         },
 
         // Report metadata
@@ -665,15 +665,15 @@ class TrackHarvestUseCase {
           generatedBy: 'TRACK_HARVEST_USE_CASE',
           reportVersion: '1.0',
           dataCompleteness: this.calculateHarvestDataCompleteness(harvestBatch),
-          totalProcessingDays: this.calculateTotalProcessingDays(harvestBatch),
-        },
+          totalProcessingDays: this.calculateTotalProcessingDays(harvestBatch)
+        }
       };
 
       // Step 6: Create audit trail for report access
       await this.createAuditTrail('HARVEST_BATCH_REPORT_GENERATED', {
         batchId: batchId,
         reportSize: JSON.stringify(harvestReport).length,
-        dataCompleteness: harvestReport.reportMetadata.dataCompleteness,
+        dataCompleteness: harvestReport.reportMetadata.dataCompleteness
       });
 
       this.logger.log(`[TrackHarvest] Harvest batch report generated for: ${batchId}`);
@@ -706,7 +706,7 @@ class TrackHarvestUseCase {
       harvestInitData.harvestTeam.length < this.businessRules.minHarvestTeamSize
     ) {
       errors.push(
-        `Harvest team must have at least ${this.businessRules.minHarvestTeamSize} members`,
+        `Harvest team must have at least ${this.businessRules.minHarvestTeamSize} members`
       );
     }
 
@@ -748,7 +748,7 @@ class TrackHarvestUseCase {
       const temp = harvestExecutionData.environmentalConditions.temperature;
       if (temp > this.businessRules.maxHarvestTemperature) {
         errors.push(
-          `Harvest temperature (${temp}°C) exceeds maximum allowed (${this.businessRules.maxHarvestTemperature}°C)`,
+          `Harvest temperature (${temp}°C) exceeds maximum allowed (${this.businessRules.maxHarvestTemperature}°C)`
         );
       }
     }
@@ -917,7 +917,7 @@ class TrackHarvestUseCase {
         subModule: 'HARVEST',
         action: action,
         data: data,
-        timestamp: new Date(),
+        timestamp: new Date()
       });
     }
   }

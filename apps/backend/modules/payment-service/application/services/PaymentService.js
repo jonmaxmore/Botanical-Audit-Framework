@@ -49,13 +49,13 @@ class PaymentService {
         AMENDMENT_FEE: 1000, // ค่าธรรมเนียมการแก้ไข 1,000 บาท
         EXPEDITED_FEE_RATE: 0.5, // ค่าธรรมเนียมเร่งด่วน 50% ของค่าปกติ
         PROCESSING_FEE: 100, // ค่าธรรมเนียมการประมวลผล 100 บาท
-        VAT_RATE: 0.07, // อัตรา VAT 7%
+        VAT_RATE: 0.07 // อัตรา VAT 7%
       },
       limits: {
         maxRetryAttempts: 3,
         paymentExpiryMinutes: 15,
-        refundWindowDays: 30,
-      },
+        refundWindowDays: 30
+      }
     };
 
     logger.info('[PaymentService] Initialized successfully');
@@ -75,13 +75,13 @@ class PaymentService {
         isExpedited = false,
         requiresInspection = true,
         promoCode = null,
-        applicationId = null,
+        applicationId = null
       } = options;
 
       console.log(`[PaymentService] Calculating fees for ${applicationType}`, {
         isExpedited,
         requiresInspection,
-        promoCode,
+        promoCode
       });
 
       // Base fee calculation based on application type
@@ -143,7 +143,7 @@ class PaymentService {
         currency: 'THB',
         paymentType,
         calculatedAt: new Date(),
-        calculationVersion: '1.0',
+        calculationVersion: '1.0'
       };
 
       // Log fee calculation for audit
@@ -154,7 +154,7 @@ class PaymentService {
           applicationType,
           feeBreakdown,
           options,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -162,7 +162,7 @@ class PaymentService {
       return {
         success: true,
         feeBreakdown,
-        expiryMinutes: this.config.limits.paymentExpiryMinutes,
+        expiryMinutes: this.config.limits.paymentExpiryMinutes
       };
     } catch (error) {
       logger.error('[PaymentService] Fee calculation error:', error);
@@ -185,7 +185,7 @@ class PaymentService {
       console.log(`[PaymentService] Initiating payment for application ${applicationId}`, {
         paymentType,
         amount,
-        userId,
+        userId
       });
 
       // Validate application exists and belongs to user
@@ -195,14 +195,14 @@ class PaymentService {
       const existingPayment = await Payment.findOne({
         applicationId,
         status: 'PENDING',
-        expiresAt: { $gt: new Date() },
+        expiresAt: { $gt: new Date() }
       });
 
       if (existingPayment) {
         return {
           success: true,
           payment: existingPayment,
-          message: 'Using existing pending payment',
+          message: 'Using existing pending payment'
         };
       }
 
@@ -218,9 +218,9 @@ class PaymentService {
         metadata: {
           ...metadata,
           applicationStatus: application.status,
-          initiatedAt: new Date(),
+          initiatedAt: new Date()
         },
-        expiresAt: new Date(Date.now() + this.config.limits.paymentExpiryMinutes * 60 * 1000),
+        expiresAt: new Date(Date.now() + this.config.limits.paymentExpiryMinutes * 60 * 1000)
       };
 
       const payment = new Payment(paymentData);
@@ -243,7 +243,7 @@ class PaymentService {
           applicationId,
           userId,
           amount,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -252,7 +252,7 @@ class PaymentService {
         await this.notificationService.sendPaymentInitiated({
           userId,
           payment,
-          qrCodeData: promptPayData,
+          qrCodeData: promptPayData
         });
       }
 
@@ -270,10 +270,10 @@ class PaymentService {
             qrCode: payment.promptPay.qrCode,
             qrCodeImage: payment.promptPay.qrCodeImage,
             referenceNumber: payment.promptPay.referenceNumber,
-            expiryDate: payment.promptPay.expiryDate,
+            expiryDate: payment.promptPay.expiryDate
           },
-          feeBreakdown: payment.feeBreakdown,
-        },
+          feeBreakdown: payment.feeBreakdown
+        }
       };
     } catch (error) {
       logger.error('[PaymentService] Payment initiation error:', error);
@@ -296,7 +296,7 @@ class PaymentService {
       console.log(`[PaymentService] Processing webhook for payment ${paymentId}`, {
         status,
         transactionId,
-        amount,
+        amount
       });
 
       // Verify webhook signature for security
@@ -307,7 +307,7 @@ class PaymentService {
 
       // Find payment by ID or reference number
       const payment = await Payment.findOne({
-        $or: [{ paymentId }, { 'promptPay.referenceNumber': referenceNumber }],
+        $or: [{ paymentId }, { 'promptPay.referenceNumber': referenceNumber }]
       });
 
       if (!payment) {
@@ -344,7 +344,7 @@ class PaymentService {
           paymentId: payment.paymentId,
           webhookStatus: status,
           transactionId,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -352,7 +352,7 @@ class PaymentService {
         success: true,
         paymentId: payment.paymentId,
         status: payment.status,
-        message: updateResult.message,
+        message: updateResult.message
       };
     } catch (error) {
       logger.error('[PaymentService] Webhook processing error:', error);
@@ -363,7 +363,7 @@ class PaymentService {
           type: 'WEBHOOK_ERROR',
           error: error.message,
           webhookData,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -408,8 +408,8 @@ class PaymentService {
           canRetry: payment.canRetry,
           feeBreakdown: payment.feeBreakdown,
           receipt: payment.receipt,
-          lastAttempt: payment.paymentAttempts[payment.paymentAttempts.length - 1],
-        },
+          lastAttempt: payment.paymentAttempts[payment.paymentAttempts.length - 1]
+        }
       };
     } catch (error) {
       logger.error('[PaymentService] Get payment status error:', error);
@@ -463,7 +463,7 @@ class PaymentService {
         refundDate: new Date(),
         refundMethod: 'BANK_TRANSFER',
         refundApprovedBy: adminUserId,
-        refundNotes: notes,
+        refundNotes: notes
       };
 
       payment.status = refundAmount === payment.amount ? 'REFUNDED' : 'PARTIAL_REFUNDED';
@@ -477,7 +477,7 @@ class PaymentService {
           refundAmount,
           reason,
           adminUserId,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
 
@@ -486,7 +486,7 @@ class PaymentService {
         await this.notificationService.sendRefundNotification({
           userId: payment.userId,
           payment,
-          refundAmount,
+          refundAmount
         });
       }
 
@@ -494,7 +494,7 @@ class PaymentService {
         success: true,
         refundAmount,
         refundDate: payment.refund.refundDate,
-        message: 'Refund processed successfully',
+        message: 'Refund processed successfully'
       };
     } catch (error) {
       logger.error('[PaymentService] Refund processing error:', error);
@@ -517,7 +517,7 @@ class PaymentService {
         merchantId: process.env.PROMPTPAY_MERCHANT_ID || '0123456789012',
         amount: payment.amount,
         referenceNumber,
-        expiryDate: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes
+        expiryDate: new Date(Date.now() + 15 * 60 * 1000) // 15 minutes
       };
 
       // Generate QR code string (EMV format for PromptPay)
@@ -529,8 +529,8 @@ class PaymentService {
         margin: 2,
         color: {
           dark: '#000000',
-          light: '#FFFFFF',
-        },
+          light: '#FFFFFF'
+        }
       });
 
       return {
@@ -538,7 +538,7 @@ class PaymentService {
         qrCodeImage,
         referenceNumber,
         expiryDate: promptPayData.expiryDate,
-        paymentMethod: 'QR_CODE',
+        paymentMethod: 'QR_CODE'
       };
     } catch (error) {
       logger.error('[PaymentService] QR generation error:', error);
@@ -590,7 +590,7 @@ class PaymentService {
     // Update payment status
     await payment.markAsCompleted({
       bankTransactionId: transactionId,
-      transactionTime: new Date(timestamp),
+      transactionTime: new Date(timestamp)
     });
 
     // Generate receipt
@@ -609,7 +609,7 @@ class PaymentService {
     if (this.notificationService) {
       await this.notificationService.sendPaymentSuccess({
         userId: payment.userId,
-        payment,
+        payment
       });
     }
 
@@ -631,7 +631,7 @@ class PaymentService {
       if (this.notificationService) {
         await this.notificationService.sendPaymentRetryAvailable({
           userId: payment.userId,
-          payment,
+          payment
         });
       }
     }
@@ -650,7 +650,7 @@ class PaymentService {
     if (this.notificationService) {
       await this.notificationService.sendPaymentExpired({
         userId: payment.userId,
-        payment,
+        payment
       });
     }
 
@@ -670,7 +670,7 @@ class PaymentService {
 
     return crypto.timingSafeEqual(
       Buffer.from(signature, 'hex'),
-      Buffer.from(expectedSignature, 'hex'),
+      Buffer.from(expectedSignature, 'hex')
     );
   }
 
@@ -683,7 +683,7 @@ class PaymentService {
     const promoCodes = {
       WELCOME10: 0.1, // 10% discount
       EARLY50: 50, // 50 THB discount
-      RENEWAL20: 0.2, // 20% discount for renewals
+      RENEWAL20: 0.2 // 20% discount for renewals
     };
 
     const discount = promoCodes[promoCode];
@@ -710,13 +710,13 @@ class PaymentService {
         status: 'healthy',
         database: 'connected',
         pendingPayments,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     } catch (error) {
       return {
         status: 'unhealthy',
         error: error.message,
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       };
     }
   }

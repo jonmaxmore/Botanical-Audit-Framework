@@ -47,7 +47,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
     storage: multer.memoryStorage(),
     limits: {
       fileSize: 50 * 1024 * 1024, // 50MB max file size
-      files: 1, // Single file upload
+      files: 1 // Single file upload
     },
     fileFilter: (req, file, cb) => {
       // Allowed file types for documents
@@ -59,7 +59,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       ];
 
       if (allowedMimeTypes.includes(file.mimetype)) {
@@ -67,7 +67,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       } else {
         cb(new Error(`Invalid file type. Allowed types: ${allowedMimeTypes.join(', ')}`), false);
       }
-    },
+    }
   });
 
   // ============================================================================
@@ -82,8 +82,8 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       success: false,
       error: 'RATE_LIMIT_EXCEEDED',
       message: 'Too many requests. Please try again later.',
-      retryAfter: '15 minutes',
-    },
+      retryAfter: '15 minutes'
+    }
   });
 
   // Stricter rate limit for resource-intensive operations
@@ -94,8 +94,8 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       success: false,
       error: 'RATE_LIMIT_EXCEEDED',
       message: 'Too many resource-intensive requests. Please try again later.',
-      retryAfter: '15 minutes',
-    },
+      retryAfter: '15 minutes'
+    }
   });
 
   // File upload rate limit
@@ -106,8 +106,8 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       success: false,
       error: 'UPLOAD_RATE_LIMIT_EXCEEDED',
       message: 'Too many file uploads. Please try again later.',
-      retryAfter: '15 minutes',
-    },
+      retryAfter: '15 minutes'
+    }
   });
 
   // ============================================================================
@@ -208,9 +208,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       body('certificationGoals.*')
         .optional()
         .isIn(['GACP', 'ORGANIC', 'GMP', 'HALAL'])
-        .withMessage('Invalid certification goal'),
+        .withMessage('Invalid certification goal')
     ],
-    enhancedApplicationController.createApplication,
+    enhancedApplicationController.createApplication
   );
 
   // DTAM can create applications on behalf of farmers
@@ -233,9 +233,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .isIn(['LOW', 'STANDARD', 'HIGH', 'URGENT'])
         .withMessage('Invalid priority level'),
 
-      body('fastTrack').optional().isBoolean().withMessage('Fast track must be boolean'),
+      body('fastTrack').optional().isBoolean().withMessage('Fast track must be boolean')
     ],
-    enhancedApplicationController.createApplication,
+    enhancedApplicationController.createApplication
   );
 
   /**
@@ -270,9 +270,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .isBoolean()
         .withMessage('Include documents must be boolean'),
 
-      query('includeHistory').optional().isBoolean().withMessage('Include history must be boolean'),
+      query('includeHistory').optional().isBoolean().withMessage('Include history must be boolean')
     ],
-    enhancedApplicationController.getApplicationDashboard,
+    enhancedApplicationController.getApplicationDashboard
   );
 
   dtamRouter.get(
@@ -298,9 +298,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       query('includeGovernmentData')
         .optional()
         .isBoolean()
-        .withMessage('Include government data must be boolean'),
+        .withMessage('Include government data must be boolean')
     ],
-    enhancedApplicationController.getApplicationDashboard,
+    enhancedApplicationController.getApplicationDashboard
   );
 
   /**
@@ -336,7 +336,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           'CERTIFICATE_ISSUED',
           'REJECTED',
           'APPEAL_SUBMITTED',
-          'CANCELLED',
+          'CANCELLED'
         ])
         .withMessage('Invalid target state'),
 
@@ -362,9 +362,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       body('assignedInspector')
         .optional()
         .isUUID()
-        .withMessage('Assigned inspector must be valid UUID'),
+        .withMessage('Assigned inspector must be valid UUID')
     ],
-    enhancedApplicationController.processStateTransition,
+    enhancedApplicationController.processStateTransition
   );
 
   // ============================================================================
@@ -402,7 +402,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           'SOIL_TEST_REPORT',
           'WATER_SOURCE_PERMIT',
           'ENVIRONMENTAL_ASSESSMENT',
-          'SUPPORTING_DOCUMENTS',
+          'SUPPORTING_DOCUMENTS'
         ])
         .withMessage('Invalid document type'),
 
@@ -416,9 +416,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .matches(/^\d+\.\d+$/)
         .withMessage('Version must be in format X.Y'),
 
-      body('replaces').optional().isUUID().withMessage('Replaces must be valid document ID'),
+      body('replaces').optional().isUUID().withMessage('Replaces must be valid document ID')
     ],
-    enhancedApplicationController.uploadDocument,
+    enhancedApplicationController.uploadDocument
   );
 
   /**
@@ -457,31 +457,31 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           'SOIL_TEST_REPORT',
           'WATER_SOURCE_PERMIT',
           'ENVIRONMENTAL_ASSESSMENT',
-          'SUPPORTING_DOCUMENTS',
+          'SUPPORTING_DOCUMENTS'
         ])
-        .withMessage('Invalid document type filter'),
+        .withMessage('Invalid document type filter')
     ],
     async (req, res) => {
       try {
         const documentStatus =
           await enhancedApplicationController.documentManagementIntegrationSystem.getDocumentStatus(
             req.params.applicationId,
-            req.user.role,
+            req.user.role
           );
 
         res.json({
           success: true,
           message: 'Document status retrieved successfully',
-          data: documentStatus.data,
+          data: documentStatus.data
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'DOCUMENT_STATUS_ERROR',
-          message: 'Failed to retrieve document status',
+          message: 'Failed to retrieve document status'
         });
       }
-    },
+    }
   );
 
   dtamRouter.get(
@@ -507,29 +507,29 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       query('includeGovernmentStatus')
         .optional()
         .isBoolean()
-        .withMessage('Include government status must be boolean'),
+        .withMessage('Include government status must be boolean')
     ],
     async (req, res) => {
       try {
         const documentStatus =
           await enhancedApplicationController.documentManagementIntegrationSystem.getDocumentStatus(
             req.params.applicationId,
-            req.user.role,
+            req.user.role
           );
 
         res.json({
           success: true,
           message: 'Document status retrieved successfully',
-          data: documentStatus.data,
+          data: documentStatus.data
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'DOCUMENT_STATUS_ERROR',
-          message: 'Failed to retrieve document status',
+          message: 'Failed to retrieve document status'
         });
       }
-    },
+    }
   );
 
   // ============================================================================
@@ -580,9 +580,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       body('verificationLevel')
         .optional()
         .isIn(['BASIC', 'STANDARD', 'ENHANCED'])
-        .withMessage('Invalid verification level'),
+        .withMessage('Invalid verification level')
     ],
-    enhancedApplicationController.verifyFarmerIdentity,
+    enhancedApplicationController.verifyFarmerIdentity
   );
 
   /**
@@ -638,9 +638,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       body('ownerData.lastName')
         .isLength({ min: 2, max: 50 })
         .matches(/^[ก-๙a-zA-Z\s]+$/)
-        .withMessage('Owner last name must be 2-50 characters (Thai/English only)'),
+        .withMessage('Owner last name must be 2-50 characters (Thai/English only)')
     ],
-    enhancedApplicationController.verifyLandOwnership,
+    enhancedApplicationController.verifyLandOwnership
   );
 
   /**
@@ -688,9 +688,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       body('requestedDeadline')
         .optional()
         .isISO8601()
-        .withMessage('Requested deadline must be valid ISO8601 format'),
+        .withMessage('Requested deadline must be valid ISO8601 format')
     ],
-    enhancedApplicationController.submitToGovernment,
+    enhancedApplicationController.submitToGovernment
   );
 
   /**
@@ -720,9 +720,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
 
       query('includeHistory').optional().isBoolean().withMessage('Include history must be boolean'),
 
-      query('forceRefresh').optional().isBoolean().withMessage('Force refresh must be boolean'),
+      query('forceRefresh').optional().isBoolean().withMessage('Force refresh must be boolean')
     ],
-    enhancedApplicationController.checkGovernmentStatus,
+    enhancedApplicationController.checkGovernmentStatus
   );
 
   // ============================================================================
@@ -760,9 +760,9 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         .isBoolean()
         .withMessage('Include performance must be boolean'),
 
-      query('includeErrors').optional().isBoolean().withMessage('Include errors must be boolean'),
+      query('includeErrors').optional().isBoolean().withMessage('Include errors must be boolean')
     ],
-    enhancedApplicationController.getAnalyticsDashboard,
+    enhancedApplicationController.getAnalyticsDashboard
   );
 
   /**
@@ -787,16 +787,16 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
         res.json({
           success: true,
           message: 'System health retrieved successfully',
-          data: healthResult.data,
+          data: healthResult.data
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'HEALTH_CHECK_ERROR',
-          message: 'Failed to retrieve system health',
+          message: 'Failed to retrieve system health'
         });
       }
-    },
+    }
   );
 
   /**
@@ -823,7 +823,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           'force_gc',
           'maintenance_mode',
           'emergency_shutdown',
-          'performance_optimization',
+          'performance_optimization'
         ])
         .withMessage('Invalid system action'),
 
@@ -839,7 +839,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       body('affectedServices')
         .optional()
         .isArray()
-        .withMessage('Affected services must be an array'),
+        .withMessage('Affected services must be an array')
     ],
     async (req, res) => {
       try {
@@ -850,17 +850,17 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
           data: {
             action: req.params.action,
             executedAt: new Date(),
-            reason: req.body.reason,
-          },
+            reason: req.body.reason
+          }
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'SYSTEM_CONTROL_ERROR',
-          message: 'Failed to execute system control action',
+          message: 'Failed to execute system control action'
         });
       }
-    },
+    }
   );
 
   // ============================================================================
@@ -890,7 +890,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       return res.status(statusCode).json({
         success: false,
         error: 'FILE_UPLOAD_ERROR',
-        message: message,
+        message: message
       });
     }
 
@@ -909,7 +909,7 @@ function createEnhancedApplicationRoutes(enhancedApplicationController, authMidd
       error: errorType,
       message: error.message || 'An unexpected error occurred in the application processing system',
       requestId: req.id || 'unknown',
-      timestamp: new Date(),
+      timestamp: new Date()
     });
   };
 
@@ -930,7 +930,7 @@ function getRouteDocumentation() {
     basePath: {
       dtam: '/api/dtam/applications',
       farmer: '/api/farmer/applications',
-      admin: '/api/admin/applications',
+      admin: '/api/admin/applications'
     },
     version: '2.0.0',
     description: 'Enhanced application processing system with comprehensive government integration',
@@ -941,8 +941,8 @@ function getRouteDocumentation() {
         routes: [
           'POST /applications - Create new application',
           'GET /:id/dashboard - Get comprehensive dashboard',
-          'PUT /:id/state - Process state transition',
-        ],
+          'PUT /:id/state - Process state transition'
+        ]
       },
 
       'Document Management': {
@@ -950,8 +950,8 @@ function getRouteDocumentation() {
         routes: [
           'POST /:id/documents - Upload application document',
           'GET /:id/documents - Get document status',
-          'PUT /:id/documents/:docId/state - Update document state',
-        ],
+          'PUT /:id/documents/:docId/state - Update document state'
+        ]
       },
 
       'Government Integration': {
@@ -960,8 +960,8 @@ function getRouteDocumentation() {
           'POST /:id/verify-identity - Verify farmer identity',
           'POST /:id/verify-land - Verify land ownership',
           'POST /:id/submit-government - Submit to government systems',
-          'GET /:id/government-status - Check government status',
-        ],
+          'GET /:id/government-status - Check government status'
+        ]
       },
 
       'Analytics & Monitoring': {
@@ -969,9 +969,9 @@ function getRouteDocumentation() {
         routes: [
           'GET /analytics/dashboard - Comprehensive analytics',
           'GET /system/health - System health status',
-          'POST /system/control/:action - System control operations',
-        ],
-      },
+          'POST /system/control/:action - System control operations'
+        ]
+      }
     },
 
     businessLogicIntegration: {
@@ -979,7 +979,7 @@ function getRouteDocumentation() {
       documentWorkflow: 'Automated document processing with OCR and quality assurance',
       governmentIntegration: 'Real-time verification and compliance with multiple ministries',
       auditCompliance: 'Complete audit trails for regulatory compliance',
-      performanceMonitoring: 'Real-time metrics and health monitoring across all services',
+      performanceMonitoring: 'Real-time metrics and health monitoring across all services'
     },
 
     securityFeatures: {
@@ -987,12 +987,12 @@ function getRouteDocumentation() {
       authorization: 'Fine-grained permissions for different user roles',
       rateLimiting: 'Tiered rate limiting based on operation complexity',
       fileUploadSecurity: 'Comprehensive file validation and virus scanning',
-      auditLogging: 'Complete request/response logging for compliance',
-    },
+      auditLogging: 'Complete request/response logging for compliance'
+    }
   };
 }
 
 module.exports = {
   createEnhancedApplicationRoutes,
-  getRouteDocumentation,
+  getRouteDocumentation
 };

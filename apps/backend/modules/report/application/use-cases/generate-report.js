@@ -48,7 +48,7 @@ class GenerateReportUseCase {
       const content = await this.reportGeneratorService.generate(report.format, data, {
         title: report.title,
         parameters: report.parameters,
-        filters: report.filters,
+        filters: report.filters
       });
 
       // Save to file
@@ -56,7 +56,7 @@ class GenerateReportUseCase {
       const { filePath, fileSize } = await this.reportGeneratorService.saveToFile(
         content,
         fileName,
-        report.format,
+        report.format
       );
 
       // Update report with file information
@@ -131,13 +131,13 @@ class GenerateReportUseCase {
       case Report.TYPE.MONTHLY_SUMMARY:
         return await this.dataAggregationService.getMonthlySummary(
           parameters.year,
-          parameters.month,
+          parameters.month
         );
 
       case Report.TYPE.QUARTERLY_SUMMARY:
         return await this.dataAggregationService.getQuarterlySummary(
           parameters.year,
-          parameters.quarter,
+          parameters.quarter
         );
 
       case Report.TYPE.ANNUAL_SUMMARY:

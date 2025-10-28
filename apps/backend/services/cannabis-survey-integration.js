@@ -8,7 +8,7 @@ const axios = require('axios');
 const {
   CannabisSurveyTemplate,
   _CannabisQuestion,
-  CannabisSurveyResponse,
+  CannabisSurveyResponse
 } = require('../models/CannabisSurvey');
 const cannabisSurveyService = require('./cannabis-survey');
 // Farm management is now a module - use module instead
@@ -71,18 +71,18 @@ class CannabisSurveyIntegrationService {
           // Check if template exists in microservice
           const existingResponse = await axios.get(
             `${this.surveyMicroserviceUrl}/api/admin/templates`,
-            { params: { title: template.title } },
+            { params: { title: template.title } }
           );
 
           const existingTemplate = existingResponse.data.data?.find(
-            t => t.title === template.title,
+            t => t.title === template.title
           );
 
           if (existingTemplate) {
             // Update existing template
             await axios.put(
               `${this.surveyMicroserviceUrl}/api/admin/templates/${existingTemplate._id}`,
-              standardTemplate,
+              standardTemplate
             );
             logger.info(`📝 Updated template: ${template.title}`);
           } else {
@@ -119,7 +119,7 @@ class CannabisSurveyIntegrationService {
         targetAudience: {
           farmers: true,
           cannabis_farmers: true,
-          licensed_cultivators: true,
+          licensed_cultivators: true
         },
         category: 'cannabis_compliance',
         tags: [
@@ -127,11 +127,11 @@ class CannabisSurveyIntegrationService {
           'gacp',
           'compliance',
           cannabisTemplate.cannabisMetadata.cannabisCategory,
-          cannabisTemplate.cannabisMetadata.surveyType,
+          cannabisTemplate.cannabisMetadata.surveyType
         ],
         estimatedTime: this.calculateEstimatedTime(cannabisTemplate),
         difficulty: this.assessDifficulty(cannabisTemplate),
-        complianceLevel: cannabisTemplate.cannabisMetadata.gacpCompliance.certificationLevel,
+        complianceLevel: cannabisTemplate.cannabisMetadata.gacpCompliance.certificationLevel
       },
 
       settings: {
@@ -142,18 +142,18 @@ class CannabisSurveyIntegrationService {
         encryptResponses: cannabisTemplate.settings.encryptSensitiveData,
         auditTrail: cannabisTemplate.settings.auditTrail,
         publicAccess: false,
-        adminOnly: false,
+        adminOnly: false
       },
 
       accessControl: {
         roles: cannabisTemplate.accessControl.allowedRoles,
         restrictions: cannabisTemplate.accessControl.restrictedAccess,
-        verificationRequired: cannabisTemplate.accessControl.licenseVerificationRequired,
+        verificationRequired: cannabisTemplate.accessControl.licenseVerificationRequired
       },
 
       createdBy: cannabisTemplate.createdBy,
       reviewedBy: cannabisTemplate.reviewedBy,
-      approvedBy: cannabisTemplate.approvedBy,
+      approvedBy: cannabisTemplate.approvedBy
     };
   }
 
@@ -190,14 +190,14 @@ class CannabisSurveyIntegrationService {
           metadata: {
             farmDetails: cannabisResponse.respondent.farmDetails,
             cannabisLicense: cannabisResponse.respondent.cannabisLicense,
-            verificationStatus: cannabisResponse.respondent.cannabisLicense?.verificationStatus,
-          },
+            verificationStatus: cannabisResponse.respondent.cannabisLicense?.verificationStatus
+          }
         },
         answers: cannabisResponse.answers.map(answer => ({
           questionId: answer.questionId,
           answer: answer.answer,
           metadata: answer.metadata,
-          cannabisData: answer.cannabisData,
+          cannabisData: answer.cannabisData
         })),
         submittedAt: cannabisResponse.createdAt,
         status: cannabisResponse.status,
@@ -206,14 +206,14 @@ class CannabisSurveyIntegrationService {
           complianceScore: cannabisResponse.analytics.complianceScore.overall,
           riskLevel: cannabisResponse.analytics.riskProfile.overallRisk,
           qualityMetrics: cannabisResponse.analytics.qualityMetrics,
-          sopCompliance: cannabisResponse.analytics.sopAdherence,
+          sopCompliance: cannabisResponse.analytics.sopAdherence
         },
         integration: {
           sourceSystem: 'cannabis_survey_enhanced',
           linkedApplications: cannabisResponse.integration?.linkedApplication,
           linkedAudits: cannabisResponse.integration?.linkedAudit,
-          linkedSOPs: cannabisResponse.integration?.linkedSOPs,
-        },
+          linkedSOPs: cannabisResponse.integration?.linkedSOPs
+        }
       };
 
       // Send to microservice
@@ -233,8 +233,8 @@ class CannabisSurveyIntegrationService {
       const response = await axios.get(`${this.surveyMicroserviceUrl}/api/responses`, {
         params: {
           category: 'cannabis_compliance',
-          limit: 100,
-        },
+          limit: 100
+        }
       });
 
       const microserviceResponses = response.data.data || [];
@@ -242,7 +242,7 @@ class CannabisSurveyIntegrationService {
       for (const msResponse of microserviceResponses) {
         // Check if response already exists in cannabis system
         const existingResponse = await CannabisSurveyResponse.findOne({
-          responseId: msResponse.responseId,
+          responseId: msResponse.responseId
         });
 
         if (
@@ -264,7 +264,7 @@ class CannabisSurveyIntegrationService {
     try {
       // Find corresponding cannabis template
       const template = await CannabisSurveyTemplate.findOne({
-        title: { $regex: new RegExp(msResponse.templateTitle, 'i') },
+        title: { $regex: new RegExp(msResponse.templateTitle, 'i') }
       });
 
       if (!template) {
@@ -280,55 +280,55 @@ class CannabisSurveyIntegrationService {
           userId: msResponse.respondent?.userId,
           personalInfo: {
             email: msResponse.respondent?.email,
-            ...msResponse.respondent?.metadata?.personalInfo,
+            ...msResponse.respondent?.metadata?.personalInfo
           },
           farmCode: msResponse.respondent?.farmCode,
           farmDetails: msResponse.respondent?.metadata?.farmDetails,
-          cannabisLicense: msResponse.respondent?.metadata?.cannabisLicense,
+          cannabisLicense: msResponse.respondent?.metadata?.cannabisLicense
         },
         answers:
           msResponse.answers?.map(answer => ({
             questionId: answer.questionId,
             answer: answer.answer,
             metadata: answer.metadata || {},
-            cannabisData: answer.cannabisData || {},
+            cannabisData: answer.cannabisData || {}
           })) || [],
         status: msResponse.status || 'submitted',
         analytics: {
           completionRate: msResponse.analytics?.completionRate || 1.0,
           complianceScore: {
             overall: msResponse.analytics?.complianceScore || 0,
-            byCategory: [],
+            byCategory: []
           },
           riskProfile: {
             overallRisk: msResponse.analytics?.riskLevel || 'medium',
-            riskFactors: [],
+            riskFactors: []
           },
           sopAdherence: msResponse.analytics?.sopCompliance || {
             adoptedSOPs: [],
             complianceLevel: 0,
             gaps: [],
-            recommendations: [],
+            recommendations: []
           },
           qualityMetrics: msResponse.analytics?.qualityMetrics || {
             overallQuality: 0,
-            qualityParameters: [],
-          },
+            qualityParameters: []
+          }
         },
         integration: {
           linkedApplication: msResponse.integration?.linkedApplications,
           linkedAudit: msResponse.integration?.linkedAudits,
-          linkedSOPs: msResponse.integration?.linkedSOPs || [],
+          linkedSOPs: msResponse.integration?.linkedSOPs || []
         },
         security: {
           auditTrail: [
             {
               action: 'imported_from_microservice',
               timestamp: new Date(),
-              details: { sourceResponseId: msResponse._id },
-            },
-          ],
-        },
+              details: { sourceResponseId: msResponse._id }
+            }
+          ]
+        }
       });
 
       await cannabisResponse.save();
@@ -345,18 +345,18 @@ class CannabisSurveyIntegrationService {
         {
           event: 'response.created',
           url: `${this.gacpApiUrl}/api/webhooks/cannabis-survey/response-created`,
-          description: 'Cannabis survey response created',
+          description: 'Cannabis survey response created'
         },
         {
           event: 'response.updated',
           url: `${this.gacpApiUrl}/api/webhooks/cannabis-survey/response-updated`,
-          description: 'Cannabis survey response updated',
+          description: 'Cannabis survey response updated'
         },
         {
           event: 'template.published',
           url: `${this.gacpApiUrl}/api/webhooks/cannabis-survey/template-published`,
-          description: 'Cannabis survey template published',
-        },
+          description: 'Cannabis survey template published'
+        }
       ];
 
       for (const webhook of webhookEndpoints) {
@@ -385,7 +385,7 @@ class CannabisSurveyIntegrationService {
         // Update farm cultivation records
         await enhancedFarmManagementService.updateCultivationRecord(
           response.respondent.farmCode,
-          cultivationData,
+          cultivationData
         );
 
         logger.info(`🌱 Updated farm cultivation data for ${response.respondent.farmCode}`);
@@ -407,7 +407,7 @@ class CannabisSurveyIntegrationService {
       thcContent: null,
       cbdContent: null,
       harvestData: null,
-      qualityMetrics: response.analytics.qualityMetrics,
+      qualityMetrics: response.analytics.qualityMetrics
     };
 
     // Extract specific data from answers
@@ -469,8 +469,8 @@ class CannabisSurveyIntegrationService {
             metadata: {
               licenseNumber: response.respondent.cannabisLicense.licenseNumber,
               expiryDate: expiryDate,
-              daysRemaining: daysUntilExpiry,
-            },
+              daysRemaining: daysUntilExpiry
+            }
           });
         }
       }
@@ -492,8 +492,8 @@ class CannabisSurveyIntegrationService {
           metadata: {
             thcLevels: highThcLevels,
             maxAllowed: 0.2,
-            responseId: response._id,
-          },
+            responseId: response._id
+          }
         });
       }
 
@@ -501,12 +501,12 @@ class CannabisSurveyIntegrationService {
       for (const notification of notifications) {
         await enhancedNotificationService.createNotification({
           ...notification,
-          recipientId: response.respondent.userId,
+          recipientId: response.respondent.userId
         });
       }
 
       console.log(
-        `📧 Sent ${notifications.length} compliance notifications for response ${responseId}`,
+        `📧 Sent ${notifications.length} compliance notifications for response ${responseId}`
       );
     } catch (error) {
       logger.error('❌ Error triggering compliance notifications:', error);
@@ -534,8 +534,8 @@ class CannabisSurveyIntegrationService {
           metadata: {
             surveyResponseId: responseId,
             riskFactors: response.analytics.riskProfile.riskFactors,
-            farmCode: response.respondent.farmCode,
-          },
+            farmCode: response.respondent.farmCode
+          }
         });
       }
 
@@ -552,8 +552,8 @@ class CannabisSurveyIntegrationService {
           metadata: {
             currentScore: response.analytics.complianceScore.overall,
             targetScore: 85,
-            recommendations: response.analytics.sopAdherence.recommendations,
-          },
+            recommendations: response.analytics.sopAdherence.recommendations
+          }
         });
       }
 
@@ -576,7 +576,7 @@ class CannabisSurveyIntegrationService {
         lastSync: null,
         totalTemplatesSynced: 0,
         totalResponsesSynced: 0,
-        integrationHealth: 'unknown',
+        integrationHealth: 'unknown'
       };
 
       // Check microservice status
@@ -602,7 +602,7 @@ class CannabisSurveyIntegrationService {
         isConnected: false,
         microserviceStatus: 'error',
         error: error.message,
-        integrationHealth: 'unhealthy',
+        integrationHealth: 'unhealthy'
       };
     }
   }

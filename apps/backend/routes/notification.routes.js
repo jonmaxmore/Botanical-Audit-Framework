@@ -32,7 +32,7 @@ function initializeNotificationRoutes(dependencies) {
 
       const options = {
         limit: Number(limit),
-        skip: Number(skip),
+        skip: Number(skip)
       };
 
       if (read !== undefined) {
@@ -47,13 +47,13 @@ function initializeNotificationRoutes(dependencies) {
       res.json({
         success: true,
         count: notifications.length,
-        data: notifications,
+        data: notifications
       });
     } catch (error) {
       logger.error('[Notification API] Get notifications error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get notifications',
+        message: error.message || 'Failed to get notifications'
       });
     }
   });
@@ -72,7 +72,7 @@ function initializeNotificationRoutes(dependencies) {
       if (!userId || !type || !title || !message) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: userId, type, title, message',
+          message: 'Missing required fields: userId, type, title, message'
         });
       }
 
@@ -84,19 +84,19 @@ function initializeNotificationRoutes(dependencies) {
         priority: priority || 'medium',
         data: data || {},
         actionUrl,
-        actionLabel,
+        actionLabel
       });
 
       res.status(201).json({
         success: true,
         message: 'Notification created successfully',
-        data: notification,
+        data: notification
       });
     } catch (error) {
       logger.error('[Notification API] Create notification error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to create notification',
+        message: error.message || 'Failed to create notification'
       });
     }
   });
@@ -114,13 +114,13 @@ function initializeNotificationRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: { count },
+        data: { count }
       });
     } catch (error) {
       logger.error('[Notification API] Get unread count error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get unread count',
+        message: error.message || 'Failed to get unread count'
       });
     }
   });
@@ -140,20 +140,20 @@ function initializeNotificationRoutes(dependencies) {
       if (!notification) {
         return res.status(404).json({
           success: false,
-          message: 'Notification not found or unauthorized',
+          message: 'Notification not found or unauthorized'
         });
       }
 
       res.json({
         success: true,
         message: 'Notification marked as read',
-        data: notification,
+        data: notification
       });
     } catch (error) {
       logger.error('[Notification API] Mark as read error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to mark notification as read',
+        message: error.message || 'Failed to mark notification as read'
       });
     }
   });
@@ -172,13 +172,13 @@ function initializeNotificationRoutes(dependencies) {
       res.json({
         success: true,
         message: `Marked ${count} notifications as read`,
-        data: { count },
+        data: { count }
       });
     } catch (error) {
       logger.error('[Notification API] Mark all as read error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to mark all as read',
+        message: error.message || 'Failed to mark all as read'
       });
     }
   });
@@ -198,19 +198,19 @@ function initializeNotificationRoutes(dependencies) {
       if (!deleted) {
         return res.status(404).json({
           success: false,
-          message: 'Notification not found or unauthorized',
+          message: 'Notification not found or unauthorized'
         });
       }
 
       res.json({
         success: true,
-        message: 'Notification deleted successfully',
+        message: 'Notification deleted successfully'
       });
     } catch (error) {
       logger.error('[Notification API] Delete notification error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to delete notification',
+        message: error.message || 'Failed to delete notification'
       });
     }
   });
@@ -228,7 +228,7 @@ function initializeNotificationRoutes(dependencies) {
       if (!role || !type || !title || !message) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: role, type, title, message',
+          message: 'Missing required fields: role, type, title, message'
         });
       }
 
@@ -237,20 +237,20 @@ function initializeNotificationRoutes(dependencies) {
         title,
         message,
         priority: priority || 'medium',
-        data: data || {},
+        data: data || {}
       });
 
       res.status(201).json({
         success: true,
         message: `Broadcast sent to role: ${role}`,
         count: notifications.length,
-        data: notifications,
+        data: notifications
       });
     } catch (error) {
       logger.error('[Notification API] Broadcast notification error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to broadcast notification',
+        message: error.message || 'Failed to broadcast notification'
       });
     }
   });
@@ -268,7 +268,7 @@ function initializeNotificationRoutes(dependencies) {
       if (!userId || !jobData) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: userId, jobData',
+          message: 'Missing required fields: userId, jobData'
         });
       }
 
@@ -277,13 +277,13 @@ function initializeNotificationRoutes(dependencies) {
       res.status(201).json({
         success: true,
         message: 'Job assignment notification sent',
-        data: notification,
+        data: notification
       });
     } catch (error) {
       logger.error('[Notification API] Job assignment notification error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to send job assignment notification',
+        message: error.message || 'Failed to send job assignment notification'
       });
     }
   });
@@ -301,7 +301,7 @@ function initializeNotificationRoutes(dependencies) {
       if (!userId || !taskData) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: userId, taskData',
+          message: 'Missing required fields: userId, taskData'
         });
       }
 
@@ -310,13 +310,13 @@ function initializeNotificationRoutes(dependencies) {
       res.status(201).json({
         success: true,
         message: 'Delay alert notification sent',
-        data: notification,
+        data: notification
       });
     } catch (error) {
       logger.error('[Notification API] Delay alert notification error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to send delay alert notification',
+        message: error.message || 'Failed to send delay alert notification'
       });
     }
   });
@@ -334,7 +334,7 @@ function initializeNotificationRoutes(dependencies) {
       if (!userId || !paymentData) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: userId, paymentData',
+          message: 'Missing required fields: userId, paymentData'
         });
       }
 
@@ -343,13 +343,13 @@ function initializeNotificationRoutes(dependencies) {
       res.status(201).json({
         success: true,
         message: 'Payment alert notification sent',
-        data: notification,
+        data: notification
       });
     } catch (error) {
       logger.error('[Notification API] Payment alert notification error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to send payment alert notification',
+        message: error.message || 'Failed to send payment alert notification'
       });
     }
   });
@@ -369,13 +369,13 @@ function initializeNotificationRoutes(dependencies) {
       res.json({
         success: true,
         message: `Cleaned up ${count} old notifications`,
-        data: { count },
+        data: { count }
       });
     } catch (error) {
       logger.error('[Notification API] Cleanup notifications error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to cleanup notifications',
+        message: error.message || 'Failed to cleanup notifications'
       });
     }
   });

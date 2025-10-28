@@ -127,24 +127,24 @@ class ReportingService {
           generatedAt: new Date(),
           period: {
             start: normalizedCriteria.startDate,
-            end: normalizedCriteria.endDate,
+            end: normalizedCriteria.endDate
           },
           criteria: normalizedCriteria,
-          dataPoints: applicationData.length,
+          dataPoints: applicationData.length
         },
         summary: {
           totalApplications: applicationData.length,
           processingMetrics: metrics.processing,
           stateDistribution: metrics.stateDistribution,
-          performanceIndicators: metrics.performance,
+          performanceIndicators: metrics.performance
         },
         detailedAnalysis: {
           workflowEfficiency: insights.workflowEfficiency,
           bottleneckAnalysis: insights.bottlenecks,
           complianceMetrics: insights.compliance,
-          timelineAnalysis: insights.timeline,
+          timelineAnalysis: insights.timeline
         },
-        rawData: normalizedCriteria.includeRawData ? applicationData : null,
+        rawData: normalizedCriteria.includeRawData ? applicationData : null
       };
 
       // Step 7: Generate export format
@@ -157,11 +157,11 @@ class ReportingService {
       await this._logReportGeneration(
         'APPLICATION_REPORT',
         normalizedCriteria,
-        reportData.metadata,
+        reportData.metadata
       );
 
       console.log(
-        `[ReportingService] Application report generated successfully (${applicationData.length} applications)`,
+        `[ReportingService] Application report generated successfully (${applicationData.length} applications)`
       );
 
       return exportedReport;
@@ -190,7 +190,7 @@ class ReportingService {
       // Calculate financial metrics
       const financialMetrics = await this._calculateFinancialMetrics(
         paymentData,
-        normalizedCriteria,
+        normalizedCriteria
       );
 
       // Generate revenue insights and forecasting
@@ -203,23 +203,23 @@ class ReportingService {
           generatedAt: new Date(),
           period: {
             start: normalizedCriteria.startDate,
-            end: normalizedCriteria.endDate,
+            end: normalizedCriteria.endDate
           },
-          totalTransactions: paymentData.length,
+          totalTransactions: paymentData.length
         },
         summary: {
           totalRevenue: financialMetrics.totalRevenue,
           successRate: financialMetrics.successRate,
           averageTransactionValue: financialMetrics.averageTransaction,
-          paymentMethodDistribution: financialMetrics.methodDistribution,
+          paymentMethodDistribution: financialMetrics.methodDistribution
         },
         analysis: {
           revenueGrowth: revenueInsights.growth,
           seasonalTrends: revenueInsights.seasonal,
           paymentPerformance: revenueInsights.performance,
-          forecasting: revenueInsights.forecast,
+          forecasting: revenueInsights.forecast
         },
-        rawData: normalizedCriteria.includeRawData ? paymentData : null,
+        rawData: normalizedCriteria.includeRawData ? paymentData : null
       };
 
       const exportedReport = await this._exportReport(reportData, normalizedCriteria.format);
@@ -227,7 +227,7 @@ class ReportingService {
       await this._logReportGeneration('FINANCIAL_REPORT', normalizedCriteria, reportData.metadata);
 
       console.log(
-        `[ReportingService] Financial report generated (${paymentData.length} transactions, ${financialMetrics.totalRevenue} THB revenue)`,
+        `[ReportingService] Financial report generated (${paymentData.length} transactions, ${financialMetrics.totalRevenue} THB revenue)`
       );
 
       return exportedReport;
@@ -256,13 +256,13 @@ class ReportingService {
       // Calculate engagement metrics
       const engagementMetrics = await this._calculateEngagementMetrics(
         userData,
-        normalizedCriteria,
+        normalizedCriteria
       );
 
       // Generate behavioral insights
       const behavioralInsights = await this._generateBehavioralInsights(
         userData,
-        engagementMetrics,
+        engagementMetrics
       );
 
       const reportData = {
@@ -272,24 +272,24 @@ class ReportingService {
           generatedAt: new Date(),
           period: {
             start: normalizedCriteria.startDate,
-            end: normalizedCriteria.endDate,
+            end: normalizedCriteria.endDate
           },
-          activeUsers: userData.activeUsers.length,
+          activeUsers: userData.activeUsers.length
         },
         summary: {
           totalUsers: userData.totalUsers,
           activeUsers: userData.activeUsers.length,
           newRegistrations: userData.newRegistrations,
           engagementRate: engagementMetrics.overallEngagement,
-          averageSessionDuration: engagementMetrics.averageSession,
+          averageSessionDuration: engagementMetrics.averageSession
         },
         analysis: {
           userBehavior: behavioralInsights.behavior,
           usagePatterns: behavioralInsights.patterns,
           featureAdoption: behavioralInsights.featureUsage,
-          retentionMetrics: behavioralInsights.retention,
+          retentionMetrics: behavioralInsights.retention
         },
-        rawData: normalizedCriteria.includeRawData ? userData : null,
+        rawData: normalizedCriteria.includeRawData ? userData : null
       };
 
       const exportedReport = await this._exportReport(reportData, normalizedCriteria.format);
@@ -297,11 +297,11 @@ class ReportingService {
       await this._logReportGeneration(
         'USER_ACTIVITY_REPORT',
         normalizedCriteria,
-        reportData.metadata,
+        reportData.metadata
       );
 
       console.log(
-        `[ReportingService] User activity report generated (${userData.activeUsers.length} active users)`,
+        `[ReportingService] User activity report generated (${userData.activeUsers.length} active users)`
       );
 
       return exportedReport;
@@ -340,24 +340,24 @@ class ReportingService {
           generatedAt: new Date(),
           period: {
             start: normalizedCriteria.startDate,
-            end: normalizedCriteria.endDate,
+            end: normalizedCriteria.endDate
           },
           complianceScope: 'GACP Cannabis Certification',
-          auditTrailEntries: complianceData.auditEntries.length,
+          auditTrailEntries: complianceData.auditEntries.length
         },
         summary: {
           overallCompliance: complianceMetrics.overallScore,
           criticalIssues: complianceMetrics.criticalIssues,
           recommendedActions: complianceMetrics.recommendations,
-          auditTrailHealth: complianceMetrics.auditHealth,
+          auditTrailHealth: complianceMetrics.auditHealth
         },
         analysis: {
           complianceBreakdown: auditInsights.breakdown,
           riskAssessment: auditInsights.risks,
           auditTrailAnalysis: auditInsights.auditTrail,
-          improvementOpportunities: auditInsights.improvements,
+          improvementOpportunities: auditInsights.improvements
         },
-        rawData: normalizedCriteria.includeRawData ? complianceData : null,
+        rawData: normalizedCriteria.includeRawData ? complianceData : null
       };
 
       const exportedReport = await this._exportReport(reportData, normalizedCriteria.format);
@@ -365,7 +365,7 @@ class ReportingService {
       await this._logReportGeneration('COMPLIANCE_REPORT', normalizedCriteria, reportData.metadata);
 
       console.log(
-        `[ReportingService] Compliance report generated (Score: ${complianceMetrics.overallScore}%)`,
+        `[ReportingService] Compliance report generated (Score: ${complianceMetrics.overallScore}%)`
       );
 
       return exportedReport;
@@ -415,34 +415,34 @@ class ReportingService {
           $match: {
             createdAt: {
               $gte: criteria.startDate,
-              $lte: criteria.endDate,
+              $lte: criteria.endDate
             },
-            ...(criteria.includeStates && { currentState: { $in: criteria.includeStates } }),
-          },
+            ...(criteria.includeStates && { currentState: { $in: criteria.includeStates } })
+          }
         },
         {
           $lookup: {
             from: 'users',
             localField: 'farmerId',
             foreignField: '_id',
-            as: 'farmer',
-          },
+            as: 'farmer'
+          }
         },
         {
           $lookup: {
             from: 'payments',
             localField: '_id',
             foreignField: 'applicationId',
-            as: 'payments',
-          },
+            as: 'payments'
+          }
         },
         {
           $lookup: {
             from: 'documents',
             localField: '_id',
             foreignField: 'applicationId',
-            as: 'documents',
-          },
+            as: 'documents'
+          }
         },
         {
           $project: {
@@ -455,16 +455,16 @@ class ReportingService {
             processingTimeHours: {
               $divide: [
                 { $subtract: ['$completedAt', '$submittedAt'] },
-                1000 * 60 * 60, // Convert to hours
-              ],
+                1000 * 60 * 60 // Convert to hours
+              ]
             },
             farmer: { $arrayElemAt: ['$farmer', 0] },
             paymentStatus: { $arrayElemAt: ['$payments.status', 0] },
             documentCount: { $size: '$documents' },
             complianceScore: 1,
-            stateTransitions: 1,
-          },
-        },
+            stateTransitions: 1
+          }
+        }
       ];
 
       const applications = await this.applicationRepository.aggregate(pipeline);
@@ -488,14 +488,14 @@ class ReportingService {
         processing: {
           averageProcessingTime: this._calculateAverageProcessingTime(applicationData),
           completionRate: this._calculateCompletionRate(applicationData),
-          rejectionRate: this._calculateRejectionRate(applicationData),
+          rejectionRate: this._calculateRejectionRate(applicationData)
         },
         stateDistribution: this._calculateStateDistribution(applicationData),
         performance: {
           throughput: this._calculateThroughput(applicationData, criteria),
           bottlenecks: this._identifyBottlenecks(applicationData),
-          efficiency: this._calculateEfficiency(applicationData),
-        },
+          efficiency: this._calculateEfficiency(applicationData)
+        }
       };
 
       logger.info('[ReportingService] Application metrics calculated successfully');
@@ -516,23 +516,23 @@ class ReportingService {
       const insights = {
         workflowEfficiency: {
           score: this._calculateWorkflowEfficiencyScore(metrics),
-          recommendations: this._generateEfficiencyRecommendations(metrics),
+          recommendations: this._generateEfficiencyRecommendations(metrics)
         },
         bottlenecks: {
           identified: metrics.performance.bottlenecks,
           impact: this._assessBottleneckImpact(applicationData, metrics.performance.bottlenecks),
-          solutions: this._suggestBottleneckSolutions(metrics.performance.bottlenecks),
+          solutions: this._suggestBottleneckSolutions(metrics.performance.bottlenecks)
         },
         compliance: {
           averageScore: this._calculateAverageComplianceScore(applicationData),
           trends: this._analyzeComplianceTrends(applicationData),
-          improvements: this._suggestComplianceImprovements(applicationData),
+          improvements: this._suggestComplianceImprovements(applicationData)
         },
         timeline: {
           seasonalPatterns: this._identifySeasonalPatterns(applicationData),
           peakPeriods: this._identifyPeakPeriods(applicationData),
-          forecasting: this._generateProcessingForecast(applicationData),
-        },
+          forecasting: this._generateProcessingForecast(applicationData)
+        }
       };
 
       logger.info('[ReportingService] Application insights generated successfully');
@@ -554,7 +554,7 @@ class ReportingService {
       endDate: criteria.endDate || moment().tz(this.timezone).toDate(),
       format: criteria.format || 'json',
       includeRawData: criteria.includeRawData || false,
-      includeMetrics: criteria.includeMetrics !== false,
+      includeMetrics: criteria.includeMetrics !== false
     };
 
     // Validate date range
@@ -581,7 +581,7 @@ class ReportingService {
       start: criteria.startDate.toISOString(),
       end: criteria.endDate.toISOString(),
       format: criteria.format,
-      includeRawData: criteria.includeRawData,
+      includeRawData: criteria.includeRawData
     };
 
     return `report:${Buffer.from(JSON.stringify(keyData)).toString('base64')}`;
@@ -607,7 +607,7 @@ class ReportingService {
           reportType,
           criteria,
           metadata,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
     } catch (error) {
@@ -627,8 +627,8 @@ class ReportingService {
         services: {
           database: 'unknown',
           cache: 'unknown',
-          export: 'unknown',
-        },
+          export: 'unknown'
+        }
       };
 
       // Check database connection
@@ -654,7 +654,7 @@ class ReportingService {
       return {
         status: 'unhealthy',
         error: error.message,
-        timestamp: new Date(),
+        timestamp: new Date()
       };
     }
   }

@@ -67,7 +67,7 @@ class ResetPasswordUseCase {
 
     return {
       success: true,
-      message: 'Password has been reset successfully',
+      message: 'Password has been reset successfully'
     };
   }
 }

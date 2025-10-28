@@ -21,17 +21,17 @@ class MonitoringService {
         lastMetricTime: Date.now(),
         cpuUsage: [],
         memoryUsage: [],
-        activeConnections: 0,
+        activeConnections: 0
       },
       mongodb: {
         isConnected: false,
         reconnectAttempts: 0,
-        lastReconnectTime: null,
+        lastReconnectTime: null
       },
       errors: {
         count: 0,
-        last: null,
-      },
+        last: null
+      }
     };
   }
 
@@ -87,17 +87,17 @@ class MonitoringService {
       // Keep only last 24 hours of metrics
       const oneDayAgo = now - 24 * 60 * 60 * 1000;
       this.metrics.system.cpuUsage = this.metrics.system.cpuUsage.filter(
-        m => m.timestamp > oneDayAgo,
+        m => m.timestamp > oneDayAgo
       );
       this.metrics.system.memoryUsage = this.metrics.system.memoryUsage.filter(
-        m => m.timestamp > oneDayAgo,
+        m => m.timestamp > oneDayAgo
       );
 
       // Log current status
       monitorLogger.debug(
         `Metrics collected: CPU: ${cpuLoad.toFixed(2)}, Memory: ${memUsage.toFixed(2)}%, MongoDB: ${
           mongoStatus.isConnected ? 'connected' : 'disconnected'
-        }`,
+        }`
       );
 
       // Save metrics to file periodically (every hour)
@@ -156,14 +156,14 @@ class MonitoringService {
         memory: {
           usage: ((os.totalmem() - os.freemem()) / os.totalmem()) * 100,
           free: os.freemem(),
-          total: os.totalmem(),
-        },
+          total: os.totalmem()
+        }
       };
     } catch (error) {
       monitorLogger.error('Error checking system health:', error);
       return {
         status: 'error',
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -182,13 +182,13 @@ class MonitoringService {
         status: percentFree > 10 ? 'healthy' : 'warning',
         freeSpace: percentFree.toFixed(2),
         totalBytes: totalSpace,
-        freeBytes: freeSpace,
+        freeBytes: freeSpace
       };
     } catch (error) {
       // Fallback for environments where statfs isn't available
       return {
         status: 'unknown',
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -199,7 +199,7 @@ class MonitoringService {
       type,
       message: error.message,
       stack: error.stack,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     monitorLogger.error(`${type}: ${error.message}`);
@@ -211,8 +211,8 @@ class MonitoringService {
       system: {
         ...this.metrics.system,
         uptime: process.uptime(),
-        totalUptime: (Date.now() - this.metrics.system.startTime) / 1000,
-      },
+        totalUptime: (Date.now() - this.metrics.system.startTime) / 1000
+      }
     };
   }
 

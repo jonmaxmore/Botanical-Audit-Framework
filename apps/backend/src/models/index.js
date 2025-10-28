@@ -10,5 +10,5 @@ const BaseModel = require('./BaseModel');
 module.exports = {
   User,
   Farmer,
-  BaseModel,
+  BaseModel
 };

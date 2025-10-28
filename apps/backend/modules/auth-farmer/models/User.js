@@ -25,123 +25,123 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      index: true,
+      index: true
     },
     password: {
       type: String,
       required: true,
       minlength: 8,
-      select: false, // Don't return password by default
+      select: false // Don't return password by default
     },
     firstName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     lastName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     phoneNumber: {
       type: String,
-      trim: true,
+      trim: true
     },
     organizationType: {
       type: String,
       enum: ['farmer', 'government', 'certifier', 'inspector', 'admin'],
-      default: 'farmer',
+      default: 'farmer'
     },
     role: {
       type: String,
       enum: Object.values(constants.userRoles),
-      default: constants.userRoles.FARMER,
+      default: constants.userRoles.FARMER
     },
     organizationName: {
       type: String,
-      trim: true,
+      trim: true
     },
     accountStatus: {
       type: String,
       enum: ['active', 'pending', 'suspended', 'locked', 'inactive'],
-      default: 'active',
+      default: 'active'
     },
     isVerified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     isActive: {
       type: Boolean,
-      default: true,
+      default: true
     },
     emailVerified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     phoneVerified: {
       type: Boolean,
-      default: false,
+      default: false
     },
     twoFactorEnabled: {
       type: Boolean,
-      default: false,
+      default: false
     },
     twoFactorSecret: {
       type: String,
-      select: false,
+      select: false
     },
     lastLoginAt: {
-      type: Date,
+      type: Date
     },
     loginCount: {
       type: Number,
-      default: 0,
+      default: 0
     },
     loginAttempts: {
       type: Number,
-      default: 0,
+      default: 0
     },
     failedLoginAttempts: {
       type: Number,
-      default: 0,
+      default: 0
     },
     lockedAt: {
-      type: Date,
+      type: Date
     },
     accountLockedUntil: {
-      type: Date,
+      type: Date
     },
     passwordChangedAt: {
       type: Date,
-      default: Date.now,
+      default: Date.now
     },
     permissions: [
       {
-        type: String,
-      },
+        type: String
+      }
     ],
     profile: {
       bio: String,
       avatar: String,
       language: {
         type: String,
-        default: 'th',
+        default: 'th'
       },
       timezone: {
         type: String,
-        default: 'Asia/Bangkok',
-      },
+        default: 'Asia/Bangkok'
+      }
     },
     metadata: {
       registrationSource: String,
       userAgent: String,
-      ipAddress: String,
-    },
+      ipAddress: String
+    }
   },
   {
     timestamps: true,
-    collection: 'users',
-  },
+    collection: 'users'
+  }
 );
 
 // Apply shared mongoose plugins
@@ -168,7 +168,7 @@ userSchema.set('toJSON', {
     delete ret.password;
     delete ret.twoFactorSecret;
     return ret;
-  },
+  }
 });
 
 userSchema.set('toObject', { virtuals: true });
@@ -232,17 +232,17 @@ userSchema.methods.getPermissions = function () {
       'view_profile',
       'edit_profile',
       'submit_application',
-      'view_analytics',
+      'view_analytics'
     ],
     [constants.userRoles.INSPECTOR]: ['view_all', 'review_applications', 'generate_reports'],
     [constants.userRoles.DTAM_ADMIN]: [
       'view_all',
       'edit_all',
       'manage_users',
-      'approve_applications',
+      'approve_applications'
     ],
     [constants.userRoles.OPERATOR]: ['view_all', 'edit_all', 'manage_system'],
-    [constants.userRoles.SUPER_ADMIN]: ['*'], // All permissions
+    [constants.userRoles.SUPER_ADMIN]: ['*'] // All permissions
   };
 
   return rolePermissions[this.role] || rolePermissions[constants.userRoles.FARMER];
@@ -257,15 +257,15 @@ userSchema.methods.incrementLoginAttempts = async function () {
   if (this.accountLockedUntil && this.accountLockedUntil < Date.now()) {
     return this.updateOne({
       $unset: { accountLockedUntil: 1 },
-      $set: { failedLoginAttempts: 1, loginAttempts: 1 },
+      $set: { failedLoginAttempts: 1, loginAttempts: 1 }
     });
   }
 
   const updates = {
     $inc: {
       failedLoginAttempts: 1,
-      loginAttempts: 1,
-    },
+      loginAttempts: 1
+    }
   };
 
   // Lock account after 5 failed attempts for 2 hours
@@ -273,7 +273,7 @@ userSchema.methods.incrementLoginAttempts = async function () {
     updates.$set = {
       accountLockedUntil: Date.now() + 2 * 60 * 60 * 1000, // 2 hours
       accountStatus: 'locked',
-      lockedAt: new Date(),
+      lockedAt: new Date()
     };
   }
 
@@ -288,11 +288,11 @@ userSchema.methods.resetLoginAttempts = async function () {
   return this.updateOne({
     $set: {
       failedLoginAttempts: 0,
-      loginAttempts: 0,
+      loginAttempts: 0
     },
     $unset: {
-      accountLockedUntil: 1,
-    },
+      accountLockedUntil: 1
+    }
   });
 };
 
@@ -303,7 +303,7 @@ userSchema.methods.resetLoginAttempts = async function () {
 userSchema.methods.updateLastLogin = async function () {
   return this.updateOne({
     $set: { lastLoginAt: new Date() },
-    $inc: { loginCount: 1 },
+    $inc: { loginCount: 1 }
   });
 };
 
@@ -348,13 +348,13 @@ userSchema.statics.createUser = async function (userData) {
     // Create new user
     const user = new this({
       ...userData,
-      email: userData.email.toLowerCase(),
+      email: userData.email.toLowerCase()
     });
     await user.save();
 
     logger.info('User created successfully', {
       userId: user._id,
-      email: user.email,
+      email: user.email
     });
 
     return user.getSafeProfile();
@@ -381,7 +381,7 @@ userSchema.statics.authenticate = async function (email, password) {
     if (user.isAccountLocked()) {
       return {
         success: false,
-        message: 'Account temporarily locked. Try again later.',
+        message: 'Account temporarily locked. Try again later.'
       };
     }
 
@@ -403,13 +403,13 @@ userSchema.statics.authenticate = async function (email, password) {
 
     return {
       success: true,
-      user: user.getSafeProfile(),
+      user: user.getSafeProfile()
     };
   } catch (error) {
     logger.error('Authentication error:', error);
     return {
       success: false,
-      message: 'Authentication failed',
+      message: 'Authentication failed'
     };
   }
 };
@@ -432,7 +432,7 @@ userSchema.statics.getUsers = async function (options = {}) {
     query.$or = [
       { firstName: { $regex: search, $options: 'i' } },
       { lastName: { $regex: search, $options: 'i' } },
-      { email: { $regex: search, $options: 'i' } },
+      { email: { $regex: search, $options: 'i' } }
     ];
   }
 
@@ -444,7 +444,7 @@ userSchema.statics.getUsers = async function (options = {}) {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit),
-    this.countDocuments(query),
+    this.countDocuments(query)
   ]);
 
   return {
@@ -453,8 +453,8 @@ userSchema.statics.getUsers = async function (options = {}) {
       page: Number(page),
       limit: Number(limit),
       total,
-      pages: Math.ceil(total / limit),
-    },
+      pages: Math.ceil(total / limit)
+    }
   };
 };
 

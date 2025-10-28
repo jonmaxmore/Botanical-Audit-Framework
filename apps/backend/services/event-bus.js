@@ -29,7 +29,7 @@ class EventBusService extends EventEmitter {
       password: config.password || 'guest',
       vhost: config.vhost || '/',
       exchange: config.exchange || 'gacp.events',
-      ...config,
+      ...config
     };
 
     // Event types
@@ -49,7 +49,7 @@ class EventBusService extends EventEmitter {
       JOB_ASSIGNED: 'job.assigned',
       JOB_COMPLETED: 'job.completed',
       DELAY_DETECTED: 'delay.detected',
-      SYSTEM_ALERT: 'system.alert',
+      SYSTEM_ALERT: 'system.alert'
     };
 
     this.connection = null;
@@ -102,7 +102,7 @@ class EventBusService extends EventEmitter {
 
       // Declare exchange
       await this.channel.assertExchange(this.config.exchange, 'topic', {
-        durable: true,
+        durable: true
       });
 
       // Handle connection errors
@@ -135,7 +135,7 @@ class EventBusService extends EventEmitter {
 
       const kafka = new Kafka({
         clientId: 'gacp-platform',
-        brokers: [`${this.config.host}:${this.config.port}`],
+        brokers: [`${this.config.host}:${this.config.port}`]
       });
 
       this.producer = kafka.producer();
@@ -173,7 +173,7 @@ class EventBusService extends EventEmitter {
         data,
         timestamp: new Date().toISOString(),
         eventId: this._generateEventId(),
-        ...options,
+        ...options
       };
 
       logger.info(`[EventBusService] Publishing event: ${eventType}`);
@@ -203,7 +203,7 @@ class EventBusService extends EventEmitter {
     this.channel.publish(this.config.exchange, eventType, message, {
       persistent: true,
       contentType: 'application/json',
-      timestamp: Date.now(),
+      timestamp: Date.now()
     });
 
     logger.debug(`[EventBusService] RabbitMQ message published: ${eventType}`);
@@ -219,9 +219,9 @@ class EventBusService extends EventEmitter {
       messages: [
         {
           key: event.eventId,
-          value: JSON.stringify(event),
-        },
-      ],
+          value: JSON.stringify(event)
+        }
+      ]
     });
 
     logger.debug(`[EventBusService] Kafka message published: ${eventType}`);
@@ -269,7 +269,7 @@ class EventBusService extends EventEmitter {
     const queueName = options.queueName || `gacp.queue.${this._generateQueueId()}`;
     const { queue } = await this.channel.assertQueue(queueName, {
       durable: true,
-      autoDelete: options.autoDelete || false,
+      autoDelete: options.autoDelete || false
     });
 
     // Bind queue to event types
@@ -299,7 +299,7 @@ class EventBusService extends EventEmitter {
           this.channel.nack(msg, false, true);
         }
       },
-      { noAck: false },
+      { noAck: false }
     );
 
     logger.info(`[EventBusService] RabbitMQ subscribed to queue: ${queue}`);
@@ -327,7 +327,7 @@ class EventBusService extends EventEmitter {
         } catch (error) {
           logger.error('[EventBusService] Handler error:', error);
         }
-      },
+      }
     });
 
     logger.info(`[EventBusService] Kafka subscribed to topics: ${eventTypes.join(', ')}`);
@@ -409,7 +409,7 @@ class EventBusService extends EventEmitter {
       connected: this.isConnected,
       type: this.config.type,
       host: this.config.host,
-      subscriberCount: this.subscribers.size,
+      subscriberCount: this.subscribers.size
     };
   }
 
