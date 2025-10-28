@@ -251,15 +251,11 @@ async function getSystemHealth() {
 
 // Check storage health
 async function checkStorageHealth() {
-  try {
-    // This would be replaced with actual storage checks
-    // For local storage, check disk space
-    // For cloud storage, check connectivity
-    return 'operational';
-  } catch (error) {
-    metricsLogger.error('Storage health check failed:', error);
-    return 'unavailable';
-  }
+  // This would be replaced with actual storage checks
+  // For local storage, check disk space
+  // For cloud storage, check connectivity
+  // TODO: Implement actual storage health checks
+  return 'operational';
 }
 
 // Normalize paths to group similar routes

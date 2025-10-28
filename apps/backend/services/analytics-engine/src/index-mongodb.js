@@ -4,7 +4,16 @@
  * ระบบวิเคราะห์ข้อมูลและรายงานแบบเรียลไทม์ด้วย MongoDB
  */
 
+const express = require('express');
+const winston = require('winston');
+const helmet = require('helmet');
+const compression = require('compression');
+const cors = require('cors');
+const cron = require('node-cron');
+
 // Import MongoDB models
+const Application = require('../../../models/Application');
+const User = require('../../../models/User');
 
 class AnalyticsEngine {
   constructor() {

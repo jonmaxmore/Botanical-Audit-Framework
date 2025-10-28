@@ -408,7 +408,7 @@ module.exports = {
 if (require.main === module) {
   const { MongoClient } = require('mongodb');
 
-  async function test() {
+  const test = async function () {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_platform');
 
     const AuditService = require('./AuditService');
@@ -440,7 +440,7 @@ if (require.main === module) {
     logger.info('Transaction result:', result);
 
     await mongoose.connection.close();
-  }
+  };
 
   test().catch(console.error);
 }

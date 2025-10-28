@@ -170,7 +170,7 @@ class VerifyCertificateUseCase {
 
     // ตรวจสอบสถานะ
     switch (certificate.status) {
-      case 'ACTIVE':
+      case 'ACTIVE': {
         // ตรวจสอบว่าหมดอายุหรือยัง
         if (expiryDate < now) {
           return {
@@ -200,6 +200,7 @@ class VerifyCertificateUseCase {
           status: 'VALID',
           message: 'ใบรับรองถูกต้องและใช้งานได้'
         };
+      }
 
       case 'REVOKED':
         return {

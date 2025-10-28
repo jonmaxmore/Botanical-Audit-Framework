@@ -1,0 +1,24 @@
+# AWS Secrets Manager Variables
+# Copy to terraform.tfvars and fill with actual values
+
+aws_region = "ap-southeast-1"
+
+# JWT Secrets (generate with: node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
+farmer_jwt_secret = "your-farmer-jwt-secret-here"
+dtam_jwt_secret   = "your-dtam-jwt-secret-here"
+
+# Database
+mongodb_uri = "mongodb+srv://username:password@cluster.mongodb.net/gacp-platform"
+redis_url   = "redis://your-redis-host:6379"
+
+# Email
+smtp_password = "your-smtp-password"
+
+# SMS
+sms_api_key = "your-sms-api-key"
+
+# LINE Notify
+line_notify_token = "your-line-notify-token"
+
+# Payment Gateway
+payment_secret_key = "your-payment-secret-key"

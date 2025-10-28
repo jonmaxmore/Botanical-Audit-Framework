@@ -84,7 +84,7 @@ class BackupService {
       return new Promise((resolve, reject) => {
         const process = spawn(cmd, args);
 
-        // let stdoutData = '';
+        let stdoutData = '';
         let stderrData = '';
 
         process.stdout.on('data', data => {

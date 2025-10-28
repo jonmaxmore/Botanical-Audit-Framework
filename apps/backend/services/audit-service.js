@@ -400,7 +400,7 @@ module.exports = AuditService;
 if (require.main === module) {
   const { MongoClient } = require('mongodb');
 
-  async function test() {
+  const test = async function () {
     const client = await MongoClient.connect(
       process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_platform'
     );
@@ -471,7 +471,7 @@ if (require.main === module) {
     logger.info('Recent critical actions:', critical.length);
 
     await client.close();
-  }
+  };
 
   test().catch(console.error);
 }

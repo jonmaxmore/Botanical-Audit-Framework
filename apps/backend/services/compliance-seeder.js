@@ -3,6 +3,19 @@
  * Service to populate database with initial standards, parameters, and values
  */
 
+const mongoose = require('mongoose');
+const Standard = require('../models/Standard');
+const Parameter = require('../models/Parameter');
+const StandardValue = require('../models/StandardValue');
+const logger = require('../shared/logger');
+
+// Import seed data
+const {
+  seedStandards,
+  seedParameters,
+  seedStandardValues
+} = require('../data/compliance-seed-data');
+
 class ComplianceSeeder {
   /**
    * Seed all compliance data
@@ -57,6 +70,7 @@ class ComplianceSeeder {
         createdStandards.set(standardData.abbreviation, standard);
 
         if (verbose) {
+          logger.info(`✅ Created standard: ${standardData.name}`);
         }
       }
 
@@ -74,6 +88,7 @@ class ComplianceSeeder {
         createdParameters.set(parameterData.code, parameter);
 
         if (verbose) {
+          logger.info(`✅ Created parameter: ${parameterData.name}`);
         }
       }
 
@@ -113,6 +128,9 @@ class ComplianceSeeder {
         standardValuesCreated++;
 
         if (verbose) {
+          logger.info(
+            `✅ Created standard value for ${valueData.standardRef}/${valueData.parameterRef}`
+          );
         }
       }
 
@@ -213,6 +231,7 @@ class ComplianceSeeder {
         parametersMap.set(paramData.code, parameter);
 
         if (verbose) {
+          logger.info(`✅ Created additional parameter: ${paramData.name}`);
         }
       }
 
@@ -274,6 +293,7 @@ class ComplianceSeeder {
           await standardValue.save();
 
           if (verbose) {
+            logger.info(`✅ Created value for ${standard.abbreviation}/${param.code}`);
           }
         }
       }
@@ -320,6 +340,7 @@ class ComplianceSeeder {
       if (orphanedValues.length > 0) {
         logger.warn(`⚠️  Found ${orphanedValues.length} orphaned standard values`);
       } else {
+        logger.info('✅ No orphaned standard values found');
       }
 
       // Verify each standard has at least one parameter
@@ -377,7 +398,7 @@ if (require.main === module) {
   const force = process.argv.includes('--force');
   const verbose = !process.argv.includes('--quiet');
 
-  async function runCommand() {
+  const runCommand = async function () {
     try {
       // Connect to MongoDB (use existing connection if available)
       if (mongoose.connection.readyState === 0) {
@@ -407,7 +428,7 @@ if (require.main === module) {
       logger.error('Command failed:', error);
       process.exit(1);
     }
-  }
+  };
 
   runCommand();
 }

@@ -17,6 +17,10 @@
 
 require('dotenv').config();
 
+// Initialize AWS Secrets Manager (must be before other imports)
+const secretsManager = require('./config/secrets-manager');
+const { validateEnvironment } = require('./config/env-validator');
+
 const express = require('express');
 const cors = require('cors');
 const { logger } = require('./shared');
@@ -632,6 +636,12 @@ app.use((err, req, res, next) => {
 // Start server with database connection
 async function startServer() {
   try {
+    // Load secrets from AWS if in production
+    await secretsManager.initialize();
+    
+    // Validate required environment variables
+    validateEnvironment();
+    
     appLogger.info('🔗 Connecting to MongoDB Atlas...');
     const connected = await mongoManager.connect();
 

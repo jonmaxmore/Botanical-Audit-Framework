@@ -453,7 +453,7 @@ class ComplianceAuditService {
     return async (req, res, next) => {
       // Capture original res.json to log responses
       const originalJson = res.json;
-      // let responseData = null;
+      let responseData = null;
 
       res.json = function (data) {
         responseData = data;

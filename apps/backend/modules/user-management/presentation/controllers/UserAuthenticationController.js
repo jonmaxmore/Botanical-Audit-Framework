@@ -524,7 +524,7 @@ class UserAuthenticationController {
         body('newPassword')
           .isLength({ min: 8 })
           .withMessage('New password must be at least 8 characters')
-          .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/)
+          .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/)
           .withMessage(
             'New password must contain uppercase, lowercase, number and special character'
           )
@@ -558,7 +558,7 @@ class UserAuthenticationController {
         body('newPassword')
           .isLength({ min: 8 })
           .withMessage('New password must be at least 8 characters')
-          .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/)
+          .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/)
           .withMessage(
             'New password must contain uppercase, lowercase, number and special character'
           )

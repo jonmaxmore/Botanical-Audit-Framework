@@ -1,6 +1,13 @@
 // 🚀 GACP Platform - Performance Optimization Engine
 // ระบบเพิ่มประสิทธิภาพแบบ Enterprise-grade
 
+const NodeCache = require('node-cache');
+const winston = require('winston');
+const Redis = require('ioredis');
+const compression = require('compression');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+
 class PerformanceOptimizer {
   constructor() {
     this.memoryCache = new NodeCache({

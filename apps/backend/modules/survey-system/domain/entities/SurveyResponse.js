@@ -555,7 +555,7 @@ class SurveyResponse {
         }
         break;
 
-      case 'TEXT':
+      case 'TEXT': {
         const textLength = answerData.value?.length || 0;
         if (questionInfo.validation.minLength && textLength < questionInfo.validation.minLength) {
           validation.isValid = false;
@@ -565,6 +565,7 @@ class SurveyResponse {
           validation.warnings.push(`ควรไม่เกิน ${questionInfo.validation.maxLength} ตัวอักษร`);
         }
         break;
+      }
 
       case 'EMAIL':
         if (answerData.value && !this.isValidEmail(answerData.value)) {

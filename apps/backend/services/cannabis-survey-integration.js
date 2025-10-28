@@ -383,7 +383,7 @@ class CannabisSurveyIntegrationService {
 
       if (cultivationData && response.respondent.farmCode) {
         // Update farm cultivation records
-        await enhancedFarmManagementService.updateCultivationRecord(
+        await farmManagementModule.updateCultivationRecord(
           response.respondent.farmCode,
           cultivationData
         );

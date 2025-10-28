@@ -64,7 +64,6 @@ class BusinessRulesEngine {
         failed: 0,
         warnings: 0,
         violations: [],
-        warnings: [],
         metadata: {}
       };
 

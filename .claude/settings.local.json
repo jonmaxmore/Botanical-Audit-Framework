@@ -23,7 +23,11 @@
       "Bash(git add:*)",
       "Bash(if exist \"NUL\" del /F \"NUL\")",
       "Bash(git commit:*)",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(pnpm install:*)",
+      "Bash(npm run lint:all:*)",
+      "Bash(npx eslint:*)",
+      "Bash(npm run lint:backend:*)"
     ],
     "deny": [],
     "ask": []

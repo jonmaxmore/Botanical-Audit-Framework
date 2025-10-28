@@ -1,5 +1,16 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-# Run lint-staged to check and fix code before commit
+echo "🔍 Running pre-commit checks..."
+
+# TypeScript type checking
+echo "📘 TypeScript check..."
+npm run type-check || exit 1
+
+# ESLint
+echo "🔧 ESLint check..."
+npm run lint:all || exit 1
+
+# Lint-staged for formatting
+echo "✨ Formatting staged files..."
 npx lint-staged

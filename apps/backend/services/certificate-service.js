@@ -452,7 +452,7 @@ module.exports = CertificateService;
 if (require.main === module) {
   const { MongoClient } = require('mongodb');
 
-  async function test() {
+  const test = async function () {
     const client = await MongoClient.connect(
       process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_platform'
     );
@@ -502,7 +502,7 @@ if (require.main === module) {
     logger.info('Certificate stats:', stats);
 
     await client.close();
-  }
+  };
 
   test().catch(console.error);
 }

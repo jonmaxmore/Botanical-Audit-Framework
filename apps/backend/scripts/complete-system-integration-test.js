@@ -327,9 +327,10 @@ class GACPSystemIntegrationTest extends EventEmitter {
       case 'FARMER_MINIMUM_AGE':
         return input.age >= 18;
 
-      case 'FARM_MINIMUM_SIZE':
+      case 'FARM_MINIMUM_SIZE': {
         const minSizes = { cannabis: 0.25, herbs: 0.5, vegetables: 1.0 };
         return input.size >= (minSizes[input.crop] || 0.25);
+      }
 
       case 'CANNABIS_THC_COMPLIANCE':
         return input.thc <= 0.2;
