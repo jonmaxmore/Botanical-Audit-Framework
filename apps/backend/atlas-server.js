@@ -497,6 +497,12 @@ app.use('/api/ai/fertilizer', require('./routes/ai/fertilizer.routes'));
 app.use('/api/fertilizer-products', require('./routes/ai/fertilizer-products.routes'));
 appLogger.info('✅ AI Fertilizer routes mounted');
 
+// Mount Video Inspection Routes
+app.use('/api/video', require('./routes/video-inspection.routes'));
+app.use('/api', require('./routes/inspection-snapshots.routes'));
+app.use('/api', require('./routes/inspection-report.routes'));
+appLogger.info('✅ Video Inspection routes mounted');
+
 // ============================================================================
 // MODULE INTEGRATIONS (Pending Configuration)
 // ============================================================================
