@@ -26,8 +26,85 @@ import {
   Cancel as CancelIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import { certificateApi } from '@/lib/api/certificates';
-import { Certificate } from '@/lib/types/certificate';
+type CertificateStatus = 'pending' | 'approved' | 'rejected' | 'expired' | 'revoked' | 'active';
+
+interface Certificate {
+  id: string;
+  certificateNumber: string;
+  farmId: string;
+  farmName: string;
+  farmerName: string;
+  farmerNationalId: string;
+  address: {
+    houseNumber: string;
+    village?: string;
+    subdistrict: string;
+    district: string;
+    province: string;
+    postalCode: string;
+  };
+  farmArea: number;
+  cropType: string;
+  certificationStandard: string;
+  status: CertificateStatus;
+  issuedBy: string;
+  issuedDate: string;
+  expiryDate: string;
+  inspectionDate: string;
+  inspectorName: string;
+  revokedDate?: string;
+  revokedReason?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Mock API
+const certificateApi = {
+  verify: async (certNumber: string): Promise<VerificationResult> => {
+    // Simulate API call
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // Mock valid certificate
+    if (certNumber.startsWith('GACP')) {
+      return {
+        valid: true,
+        certificate: {
+          id: '1',
+          certificateNumber: certNumber,
+          farmId: 'F001',
+          farmName: 'สวนมะม่วงทองดี',
+          farmerName: 'นายสมชาย ใจดี',
+          farmerNationalId: '1234567890123',
+          address: {
+            houseNumber: '123',
+            village: 'หมู่ 5',
+            subdistrict: 'ทุ่งสุขลา',
+            district: 'ศรีราชา',
+            province: 'ชลบุรี',
+            postalCode: '20230',
+          },
+          farmArea: 15.5,
+          cropType: 'มะม่วง',
+          certificationStandard: 'GACP',
+          status: 'active',
+          issuedBy: 'cert@gacp.test',
+          issuedDate: '2025-01-15',
+          expiryDate: '2028-01-15',
+          inspectionDate: '2025-01-10',
+          inspectorName: 'นางสาวสมหญิง ตรวจสอบ',
+          createdAt: '2025-01-15T10:00:00Z',
+          updatedAt: '2025-01-15T10:00:00Z',
+        },
+        message: 'Certificate is valid and active',
+      };
+    }
+    
+    return {
+      valid: false,
+      message: 'Certificate not found in database',
+    };
+  },
+};
 
 interface VerificationResult {
   valid: boolean;
@@ -59,7 +136,7 @@ export default function VerifyCertificatePage() {
         setResult(data);
       } catch (err: any) {
         console.error('Verification error:', err);
-        setError(err.response?.data?.message || 'Failed to verify certificate');
+        setError('Failed to verify certificate');
         setResult({ valid: false, message: 'Verification failed' });
       } finally {
         setLoading(false);

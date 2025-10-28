@@ -30,9 +30,39 @@ import {
   Delete,
   Print,
 } from '@mui/icons-material';
-import { useSnackbar } from 'notistack';
-import DashboardLayout from '@/components/layout/DashboardLayout';
-import { Certificate } from '@/lib/types/certificate';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
+
+type CertificateStatus = 'pending' | 'approved' | 'rejected' | 'expired' | 'revoked';
+
+interface Certificate {
+  id: string;
+  certificateNumber: string;
+  farmId: string;
+  farmName: string;
+  farmerName: string;
+  farmerNationalId: string;
+  address: {
+    houseNumber: string;
+    village: string;
+    subdistrict: string;
+    district: string;
+    province: string;
+    postalCode: string;
+  };
+  farmArea: number;
+  cropType: string;
+  certificationStandard: string;
+  status: CertificateStatus;
+  issuedBy: string;
+  issuedDate: string;
+  expiryDate: string;
+  inspectionDate: string;
+  inspectorName: string;
+  inspectionReport?: string;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
+}
 
 // Mock certificate data
 const mockCertificate: Certificate = {
@@ -68,7 +98,6 @@ const mockCertificate: Certificate = {
 export default function CertificateDetailPage() {
   const router = useRouter();
   const params = useParams();
-  const { enqueueSnackbar } = useSnackbar();
   const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [loading, setLoading] = useState(true);
   const [showQRDialog, setShowQRDialog] = useState(false);
@@ -92,7 +121,7 @@ export default function CertificateDetailPage() {
   }, [router, params]);
 
   const handleApprove = () => {
-    enqueueSnackbar('Certificate approved successfully!', { variant: 'success' });
+    alert('Certificate approved successfully!');
     if (certificate) {
       setCertificate({ ...certificate, status: 'approved' });
     }
@@ -100,10 +129,10 @@ export default function CertificateDetailPage() {
 
   const handleReject = () => {
     if (!rejectReason.trim()) {
-      enqueueSnackbar('Please provide a reason for rejection', { variant: 'error' });
+      alert('Please provide a reason for rejection');
       return;
     }
-    enqueueSnackbar('Certificate rejected', { variant: 'warning' });
+    alert('Certificate rejected');
     if (certificate) {
       setCertificate({ ...certificate, status: 'rejected' });
     }
@@ -112,7 +141,7 @@ export default function CertificateDetailPage() {
   };
 
   const handleDownloadPDF = () => {
-    enqueueSnackbar('Downloading PDF...', { variant: 'info' });
+    alert('Downloading PDF...');
     // PDF download logic here
   };
 
@@ -156,16 +185,16 @@ export default function CertificateDetailPage() {
 
   if (loading || !certificate) {
     return (
-      <DashboardLayout>
+      <ErrorBoundary>
         <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
           <Typography>Loading...</Typography>
         </Box>
-      </DashboardLayout>
+      </ErrorBoundary>
     );
   }
 
   return (
-    <DashboardLayout>
+    <ErrorBoundary>
       <Box>
         {/* Header */}
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
@@ -475,6 +504,6 @@ export default function CertificateDetailPage() {
           </DialogActions>
         </Dialog>
       </Box>
-    </DashboardLayout>
+    </ErrorBoundary>
   );
 }
