@@ -41,7 +41,7 @@ import {
   Badge,
   Tooltip,
   CircularProgress,
-  Fab,
+  Fab
 } from '@mui/material';
 
 import {
@@ -64,7 +64,7 @@ import {
   Add,
   Visibility,
   Edit,
-  Assessment,
+  Assessment
 } from '@mui/icons-material';
 
 // Type definitions for dashboard data
@@ -115,7 +115,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
     success: '#4caf50',
     warning: '#ff9800',
     error: '#f44336',
-    info: '#2196f3',
+    info: '#2196f3'
   };
 
   // Load dashboard data
@@ -138,7 +138,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         fetch(`/api/sop/dashboard/${userId}`).then(r => r.json()),
         fetch(`/api/survey/statistics/${userId}`).then(r => r.json()),
         fetch(`/api/track-trace/statistics/${userId}`).then(r => r.json()),
-        fetch(`/api/compliance/scores/${userId}?range=${selectedTimeRange}`).then(r => r.json()),
+        fetch(`/api/compliance/scores/${userId}?range=${selectedTimeRange}`).then(r => r.json())
       ]);
 
       setDashboardData({
@@ -147,7 +147,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         survey: surveyData,
         trackTrace: trackTraceData,
         compliance: complianceData,
-        lastUpdated: new Date(),
+        lastUpdated: new Date()
       });
     } catch (error) {
       console.error('Error loading dashboard data:', error);
@@ -180,7 +180,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         icon: <Agriculture />,
         color: CHART_COLORS.success,
         trend: '+5%',
-        subtitle: 'cultivation cycles',
+        subtitle: 'cultivation cycles'
       },
       {
         title: 'SOP Progress',
@@ -188,7 +188,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         icon: <Assignment />,
         color: CHART_COLORS.primary,
         trend: '+12%',
-        subtitle: 'avg compliance',
+        subtitle: 'avg compliance'
       },
       {
         title: 'Certified Products',
@@ -196,7 +196,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         icon: <Verified />,
         color: CHART_COLORS.success,
         trend: '+8%',
-        subtitle: 'total batches',
+        subtitle: 'total batches'
       },
       {
         title: 'Survey Score',
@@ -204,8 +204,8 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         icon: <Analytics />,
         color: CHART_COLORS.warning,
         trend: '+3%',
-        subtitle: 'regional average',
-      },
+        subtitle: 'regional average'
+      }
     ];
 
     return (
@@ -220,7 +220,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
                       bgcolor: card.color,
                       width: 48,
                       height: 48,
-                      mr: 2,
+                      mr: 2
                     }}
                   >
                     {card.icon}
@@ -331,7 +331,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         description: 'pH level: 6.8 - Optimal range',
         timestamp: '2 hours ago',
         status: 'completed',
-        points: 20,
+        points: 20
       },
       {
         id: 2,
@@ -340,7 +340,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         description: 'Strain: Northern Lights - Area: 500 sqm',
         timestamp: '1 day ago',
         status: 'in_progress',
-        points: 0,
+        points: 0
       },
       {
         id: 3,
@@ -349,7 +349,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         description: 'Score: 85/100 - Northern Region',
         timestamp: '2 days ago',
         status: 'completed',
-        points: 15,
+        points: 15
       },
       {
         id: 4,
@@ -358,8 +358,8 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         description: 'Batch: NL2024-001 - QR Code Generated',
         timestamp: '3 days ago',
         status: 'certified',
-        points: 25,
-      },
+        points: 25
+      }
     ];
 
     const getStatusColor = (status: string): 'success' | 'primary' | 'warning' | 'default' => {
@@ -557,26 +557,26 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
                         name: 'Farm Management',
                         status: 'Active',
                         progress: 85,
-                        lastUpdate: '2 hours ago',
+                        lastUpdate: '2 hours ago'
                       },
                       {
                         name: 'SOP Wizard',
                         status: 'In Progress',
                         progress: 70,
-                        lastUpdate: '1 hour ago',
+                        lastUpdate: '1 hour ago'
                       },
                       {
                         name: 'Track & Trace',
                         status: 'Active',
                         progress: 90,
-                        lastUpdate: '30 minutes ago',
+                        lastUpdate: '30 minutes ago'
                       },
                       {
                         name: 'Survey System',
                         status: 'Completed',
                         progress: 100,
-                        lastUpdate: '1 day ago',
-                      },
+                        lastUpdate: '1 day ago'
+                      }
                     ].map((system, index) => (
                       <TableRow key={index}>
                         <TableCell>{system.name}</TableCell>

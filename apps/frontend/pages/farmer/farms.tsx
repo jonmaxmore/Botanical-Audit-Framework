@@ -26,7 +26,7 @@ import {
   TextField,
   useMediaQuery,
   useTheme,
-  Divider,
+  Divider
 } from '@mui/material';
 import {
   Agriculture,
@@ -41,7 +41,7 @@ import {
   Verified,
   Description,
   Person,
-  Logout,
+  Logout
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -77,7 +77,7 @@ export default function FarmerFarms() {
       size: '15 ไร่',
       crops: 'กัญชา, ขมิ้นชัน',
       status: 'active',
-      certified: true,
+      certified: true
     },
     {
       id: 2,
@@ -86,7 +86,7 @@ export default function FarmerFarms() {
       size: '10 ไร่',
       crops: 'กัญชาทางการแพทย์',
       status: 'active',
-      certified: false,
+      certified: false
     },
     {
       id: 3,
@@ -95,8 +95,8 @@ export default function FarmerFarms() {
       size: '20 ไร่',
       crops: 'ฟ้าทะลายโจร, ว่านหางจระเข้',
       status: 'active',
-      certified: true,
-    },
+      certified: true
+    }
   ];
 
   const menuItems = [
@@ -105,7 +105,7 @@ export default function FarmerFarms() {
     { text: 'คำขอรับรอง', icon: <Assignment />, path: '/farmer/applications' },
     { text: 'ใบรับรอง', icon: <Verified />, path: '/farmer/certificates' },
     { text: 'เอกสาร', icon: <Description />, path: '/farmer/documents' },
-    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' },
+    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' }
   ];
 
   const handleLogout = () => {

@@ -32,7 +32,7 @@ import {
   ListItemIcon,
   ListItemText,
   Alert,
-  CircularProgress,
+  CircularProgress
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -41,7 +41,7 @@ import {
   Description as DescriptionIcon,
   Person as PersonIcon,
   Agriculture as AgricultureIcon,
-  LocationOn as LocationOnIcon,
+  LocationOn as LocationOnIcon
 } from '@mui/icons-material';
 import { ApplicationApi } from '../../../lib/api.service';
 import { GACPApplication, ApplicationStatus } from '../../../types/application.types';
@@ -64,7 +64,7 @@ export default function DocumentReviewPage() {
     farmerID: false,
     cropPlan: false,
     previousCertificates: false,
-    photos: false,
+    photos: false
   });
 
   useEffect(() => {
@@ -90,7 +90,7 @@ export default function DocumentReviewPage() {
   const handleChecklistChange = (key: string) => {
     setDocumentChecklist(prev => ({
       ...prev,
-      [key]: !prev[key],
+      [key]: !prev[key]
     }));
   };
 
@@ -121,7 +121,7 @@ export default function DocumentReviewPage() {
           checkResult === 'approved'
             ? ApplicationStatus.DOCUMENT_APPROVED
             : ApplicationStatus.DOCUMENT_REJECTED,
-        notes,
+        notes
       });
 
       alert('บันทึกผลการตรวจสอบเรียบร้อยแล้ว');
@@ -165,7 +165,7 @@ export default function DocumentReviewPage() {
     { key: 'farmerID', label: 'สำเนาบัตรประชาชนเกษตรกร' },
     { key: 'cropPlan', label: 'แผนการปลูก / ปฏิทินการผลิต' },
     { key: 'previousCertificates', label: 'ใบรับรองมาตรฐานอื่นๆ (ถ้ามี)' },
-    { key: 'photos', label: 'รูปถ่ายฟาร์ม / แปลงปลูก' },
+    { key: 'photos', label: 'รูปถ่ายฟาร์ม / แปลงปลูก' }
   ];
 
   return (
@@ -192,7 +192,7 @@ export default function DocumentReviewPage() {
             label={WorkflowService.getStatusLabel(application.status)}
             sx={{
               backgroundColor: WorkflowService.getStatusColor(application.status),
-              color: '#fff',
+              color: '#fff'
             }}
           />
         </Toolbar>
@@ -275,7 +275,7 @@ export default function DocumentReviewPage() {
                       ? new Date(application.submittedAt).toLocaleDateString('th-TH', {
                           year: 'numeric',
                           month: 'long',
-                          day: 'numeric',
+                          day: 'numeric'
                         })
                       : '-'}
                   </Typography>
@@ -299,7 +299,7 @@ export default function DocumentReviewPage() {
                     sx={{
                       borderBottom:
                         index < checklistItems.length - 1 ? '1px solid #e0e0e0' : 'none',
-                      py: 2,
+                      py: 2
                     }}
                   >
                     <ListItemIcon>

@@ -24,7 +24,7 @@ import {
   useTheme,
   Divider,
   Stack,
-  Chip,
+  Chip
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -40,7 +40,7 @@ import {
   ContactMail as ContactMailIcon,
   QrCode as QrCodeIcon,
   Assignment as AssignmentIcon,
-  CompareArrows as CompareIcon,
+  CompareArrows as CompareIcon
 } from '@mui/icons-material';
 
 export default function HomePage() {
@@ -70,7 +70,7 @@ export default function HomePage() {
         sx={{
           backgroundColor: '#fff',
           color: '#333',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between', py: 1 }}>
@@ -83,7 +83,7 @@ export default function HomePage() {
                 sx={{
                   fontWeight: 700,
                   color: '#2e7d32',
-                  lineHeight: 1.2,
+                  lineHeight: 1.2
                 }}
               >
                 ระบบตรวจสอบและรับรองมาตรฐาน GACP
@@ -115,7 +115,7 @@ export default function HomePage() {
                 href="/login"
                 sx={{
                   backgroundColor: '#2e7d32',
-                  '&:hover': { backgroundColor: '#1b5e20' },
+                  '&:hover': { backgroundColor: '#1b5e20' }
                 }}
               >
                 เข้าสู่ระบบ
@@ -184,8 +184,8 @@ export default function HomePage() {
             bottom: 0,
             backgroundImage: 'url(/images/leaf-pattern.svg)',
             opacity: 0.1,
-            backgroundSize: 'cover',
-          },
+            backgroundSize: 'cover'
+          }
         }}
       >
         <Container maxWidth="lg" sx={{ position: 'relative', zIndex: 1 }}>
@@ -197,7 +197,7 @@ export default function HomePage() {
                 sx={{
                   fontWeight: 700,
                   fontSize: { xs: '2rem', md: '3rem' },
-                  textShadow: '2px 2px 4px rgba(0,0,0,0.2)',
+                  textShadow: '2px 2px 4px rgba(0,0,0,0.2)'
                 }}
               >
                 ระบบบริหารจัดการและรับรอง
@@ -210,7 +210,7 @@ export default function HomePage() {
                 sx={{
                   mb: 3,
                   fontSize: { xs: '1.1rem', md: '1.5rem' },
-                  opacity: 0.95,
+                  opacity: 0.95
                 }}
               >
                 Good Agricultural and Collection Practices
@@ -232,8 +232,8 @@ export default function HomePage() {
                     fontSize: '1.1rem',
                     fontWeight: 600,
                     '&:hover': {
-                      backgroundColor: '#f1f1f1',
-                    },
+                      backgroundColor: '#f1f1f1'
+                    }
                   }}
                 >
                   ลงทะเบียนเกษตรกร
@@ -251,8 +251,8 @@ export default function HomePage() {
                     fontWeight: 600,
                     '&:hover': {
                       borderColor: '#fff',
-                      backgroundColor: 'rgba(255,255,255,0.1)',
-                    },
+                      backgroundColor: 'rgba(255,255,255,0.1)'
+                    }
                   }}
                 >
                   เรียนรู้เพิ่มเติม
@@ -267,7 +267,7 @@ export default function HomePage() {
                   height: { xs: 250, md: 350 },
                   borderRadius: 2,
                   overflow: 'hidden',
-                  boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+                  boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
                 }}
               >
                 <Image
@@ -291,23 +291,23 @@ export default function HomePage() {
               {
                 number: '10',
                 label: 'เกษตรกรที่ลงทะเบียน',
-                icon: <AgricultureIcon />,
+                icon: <AgricultureIcon />
               },
               {
                 number: '0',
                 label: 'ฟาร์มที่ได้รับการรับรอง',
-                icon: <VerifiedIcon />,
+                icon: <VerifiedIcon />
               },
               {
                 number: '0',
                 label: 'การตรวจประเมินทั้งหมด',
-                icon: <AssessmentIcon />,
+                icon: <AssessmentIcon />
               },
               {
                 number: '0%',
                 label: 'อัตราการผ่านการประเมิน',
-                icon: <TrendingUpIcon />,
-              },
+                icon: <TrendingUpIcon />
+              }
             ].map((stat, index) => (
               <Grid item xs={6} md={3} key={index}>
                 <Card
@@ -317,8 +317,8 @@ export default function HomePage() {
                     transition: 'all 0.3s',
                     '&:hover': {
                       transform: 'translateY(-5px)',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                    },
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
+                    }
                   }}
                 >
                   <Box sx={{ color: '#2e7d32', mb: 1 }}>{stat.icon}</Box>
@@ -436,36 +436,36 @@ export default function HomePage() {
                 title: 'สำหรับเกษตรกร',
                 description: 'ลงทะเบียนฟาร์ม ยื่นคำขอรับรอง ติดตามสถานะ และดาวน์โหลดใบรับรอง',
                 color: '#4caf50',
-                link: '/login?role=farmer',
+                link: '/login?role=farmer'
               },
               {
                 icon: <DescriptionIcon sx={{ fontSize: 50 }} />,
                 title: 'ผู้ตรวจสอบเอกสาร',
                 description: 'ตรวจสอบความถูกต้องของเอกสาร อนุมัติหรือส่งกลับแก้ไข',
                 color: '#2196f3',
-                link: '/login?role=document_checker',
+                link: '/login?role=document_checker'
               },
               {
                 icon: <AssessmentIcon sx={{ fontSize: 50 }} />,
                 title: 'ผู้ตรวจประเมิน',
                 description: 'ตรวจประเมินฟาร์มตามมาตรฐาน GACP บันทึกผลและสรุปรายงาน',
                 color: '#ff9800',
-                link: '/login?role=inspector',
+                link: '/login?role=inspector'
               },
               {
                 icon: <VerifiedIcon sx={{ fontSize: 50 }} />,
                 title: 'ผู้อนุมัติ',
                 description: 'พิจารณาอนุมัติการรับรอง ออกใบรับรอง GACP',
                 color: '#9c27b0',
-                link: '/login?role=approver',
+                link: '/login?role=approver'
               },
               {
                 icon: <TrendingUpIcon sx={{ fontSize: 50 }} />,
                 title: 'แอดมิน',
                 description: 'จัดการระบบทั้งหมด วิเคราะห์ข้อมูล Power BI และจัดการสิทธิ์ผู้ใช้',
                 color: '#f44336',
-                link: '/login?role=admin',
-              },
+                link: '/login?role=admin'
+              }
             ].map((service, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card
@@ -476,8 +476,8 @@ export default function HomePage() {
                     transition: 'all 0.3s',
                     '&:hover': {
                       transform: 'translateY(-8px)',
-                      boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
-                    },
+                      boxShadow: '0 12px 32px rgba(0,0,0,0.15)'
+                    }
                   }}
                 >
                   <CardContent sx={{ flexGrow: 1, textAlign: 'center', pt: 4 }}>
@@ -528,7 +528,7 @@ export default function HomePage() {
                 description:
                   'บันทึกข้อมูลการเพาะปลูก การดูแล การเก็บเกี่ยว และบริหารต้นทุนอย่างมีประสิทธิภาพ',
                 color: '#009688',
-                link: '/services/farm-management',
+                link: '/services/farm-management'
               },
               {
                 icon: <QrCodeIcon sx={{ fontSize: 50 }} />,
@@ -536,7 +536,7 @@ export default function HomePage() {
                 description:
                   'QR Code สำหรับผลิตภัณฑ์ เพื่อติดตามย้อนกลับตั้งแต่แหล่งที่มาจนถึงผู้บริโภค',
                 color: '#3f51b5',
-                link: '/services/traceability',
+                link: '/services/traceability'
               },
               {
                 icon: <AssignmentIcon sx={{ fontSize: 50 }} />,
@@ -544,15 +544,15 @@ export default function HomePage() {
                 description:
                   'เก็บข้อมูลการทำเกษตรกรรมในพื้นที่ต่างๆ เพื่อวิเคราะห์และพัฒนาองค์ความรู้',
                 color: '#795548',
-                link: '/services/survey',
+                link: '/services/survey'
               },
               {
                 icon: <CompareIcon sx={{ fontSize: 50 }} />,
                 title: 'ระบบเปรียบเทียบมาตรฐาน',
                 description: 'เปรียบเทียบมาตรฐาน GACP กับมาตรฐานอื่นๆ เช่น Organic, GAP และ GMP',
                 color: '#607d8b',
-                link: '/services/standard-comparison',
-              },
+                link: '/services/standard-comparison'
+              }
             ].map((service, index) => (
               <Grid item xs={12} sm={6} md={3} key={index}>
                 <Card
@@ -563,8 +563,8 @@ export default function HomePage() {
                     transition: 'all 0.3s',
                     '&:hover': {
                       transform: 'translateY(-8px)',
-                      boxShadow: '0 12px 32px rgba(0,0,0,0.15)',
-                    },
+                      boxShadow: '0 12px 32px rgba(0,0,0,0.15)'
+                    }
                   }}
                 >
                   <CardContent sx={{ flexGrow: 1, textAlign: 'center', pt: 4 }}>
@@ -613,22 +613,22 @@ export default function HomePage() {
                 category: 'ประกาศ',
                 title: 'เปิดรับสมัครเกษตรกรเข้าร่วมโครงการรับรอง GACP รุ่นที่ 12',
                 image: '/images/news-1.jpg',
-                tag: 'ใหม่',
+                tag: 'ใหม่'
               },
               {
                 date: '10 ต.ค. 2568',
                 category: 'อบรม',
                 title: 'อบรมเชิงปฏิบัติการ "การจัดการฟาร์มสมุนไพรตามมาตรฐาน GACP"',
                 image: '/images/news-2.jpg',
-                tag: 'กำลังดำเนินการ',
+                tag: 'กำลังดำเนินการ'
               },
               {
                 date: '5 ต.ค. 2568',
                 category: 'ข่าวสาร',
                 title: 'กระทรวงสาธารณสุขมอบรางวัลเกษตรกรดีเด่น ด้านการผลิตสมุนไพร',
                 image: '/images/news-3.jpg',
-                tag: null,
-              },
+                tag: null
+              }
             ].map((news, index) => (
               <Grid item xs={12} md={4} key={index}>
                 <Card
@@ -637,8 +637,8 @@ export default function HomePage() {
                     transition: 'all 0.3s',
                     '&:hover': {
                       transform: 'translateY(-5px)',
-                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
-                    },
+                      boxShadow: '0 8px 24px rgba(0,0,0,0.15)'
+                    }
                   }}
                 >
                   <Box sx={{ position: 'relative' }}>
@@ -653,7 +653,7 @@ export default function HomePage() {
                           right: 10,
                           backgroundColor: '#f44336',
                           color: '#fff',
-                          fontWeight: 600,
+                          fontWeight: 600
                         }}
                       />
                     )}
@@ -687,7 +687,7 @@ export default function HomePage() {
         sx={{
           py: 8,
           backgroundColor: '#2e7d32',
-          color: '#fff',
+          color: '#fff'
         }}
       >
         <Container maxWidth="lg">
@@ -822,7 +822,7 @@ export default function HomePage() {
           py: 3,
           backgroundColor: '#1b5e20',
           color: '#fff',
-          textAlign: 'center',
+          textAlign: 'center'
         }}
       >
         <Container maxWidth="lg">

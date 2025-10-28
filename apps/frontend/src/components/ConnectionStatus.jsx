@@ -6,7 +6,7 @@ const ConnectionStatus = () => {
     isConnected: false,
     mongodb: 'checking',
     lastChecked: null,
-    isChecking: false,
+    isChecking: false
   });
 
   const checkHealth = async () => {
@@ -18,14 +18,14 @@ const ConnectionStatus = () => {
         isConnected: true,
         mongodb: response.data.mongodb.status,
         lastChecked: new Date(),
-        isChecking: false,
+        isChecking: false
       });
     } catch (error) {
       setStatus({
         isConnected: false,
         mongodb: 'unhealthy',
         lastChecked: new Date(),
-        isChecking: false,
+        isChecking: false
       });
     }
   };

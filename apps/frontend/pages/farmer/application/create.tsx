@@ -27,14 +27,14 @@ import {
   StepLabel,
   Alert,
   CircularProgress,
-  Divider,
+  Divider
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
   Agriculture as AgricultureIcon,
   Person as PersonIcon,
   Save as SaveIcon,
-  Send as SendIcon,
+  Send as SendIcon
 } from '@mui/icons-material';
 
 // Types
@@ -76,7 +76,7 @@ const provinces = [
   'พะเยา',
   'แพร่',
   'แม่ฮ่องสอน',
-  'ลำพูน',
+  'ลำพูน'
   // เพิ่มจังหวัดอื่นๆ ตามต้องการ
 ];
 
@@ -84,7 +84,7 @@ const cultivationTypes = [
   { value: 'OUTDOOR', label: 'กลางแจ้ง (Outdoor)' },
   { value: 'INDOOR', label: 'ในโรงเรือน (Indoor)' },
   { value: 'GREENHOUSE', label: 'โรงเรือนเกษตร (Greenhouse)' },
-  { value: 'MIXED', label: 'แบบผสม (Mixed)' },
+  { value: 'MIXED', label: 'แบบผสม (Mixed)' }
 ];
 
 const cropTypes = [
@@ -94,7 +94,7 @@ const cropTypes = [
   'ขมิ้นชัน',
   'ว่านหางจระเข้',
   'มะรุม',
-  'อื่นๆ',
+  'อื่นๆ'
 ];
 
 export default function CreateApplicationPage() {
@@ -114,7 +114,7 @@ export default function CreateApplicationPage() {
     province: '',
     district: '',
     subdistrict: '',
-    postalCode: '',
+    postalCode: ''
   });
 
   const [farmData, setFarmData] = useState<FarmData>({
@@ -129,7 +129,7 @@ export default function CreateApplicationPage() {
     cultivationType: '',
     cropType: '',
     latitude: '',
-    longitude: '',
+    longitude: ''
   });
 
   // Load user data on mount
@@ -150,7 +150,7 @@ export default function CreateApplicationPage() {
       province: user.province || '',
       district: user.district || '',
       subdistrict: user.subdistrict || '',
-      postalCode: user.postalCode || '',
+      postalCode: user.postalCode || ''
     });
   }, [router]);
 
@@ -206,13 +206,13 @@ export default function CreateApplicationPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           farmer: farmerData,
           farm: farmData,
-          status: 'DRAFT',
-        }),
+          status: 'DRAFT'
+        })
       });
 
       if (!response.ok) {
@@ -242,13 +242,13 @@ export default function CreateApplicationPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
           farmer: farmerData,
           farm: farmData,
-          status: 'SUBMITTED',
-        }),
+          status: 'SUBMITTED'
+        })
       });
 
       if (!response.ok) {

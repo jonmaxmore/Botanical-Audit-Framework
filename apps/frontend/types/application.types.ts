@@ -12,7 +12,7 @@ export enum ApplicationStatus {
   PENDING_APPROVAL = 'pending_approval',
   APPROVED = 'approved',
   REJECTED = 'rejected',
-  CERTIFICATE_ISSUED = 'certificate_issued',
+  CERTIFICATE_ISSUED = 'certificate_issued'
 }
 
 export interface GACPApplication {

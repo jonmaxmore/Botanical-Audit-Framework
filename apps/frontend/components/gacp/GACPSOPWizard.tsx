@@ -48,7 +48,7 @@ import {
   Fab,
   Accordion,
   AccordionSummary,
-  AccordionDetails,
+  AccordionDetails
 } from '@mui/material';
 
 import {
@@ -70,14 +70,14 @@ import {
   ExpandMore,
   Analytics,
   Star,
-  Verified,
+  Verified
 } from '@mui/icons-material';
 
 // Import AI Assistant and SOP System
 import { GACPAIAssistantSystem } from '../../../business-logic/gacp-ai-assistant-system';
 import {
   GACPSOPWizardSystem,
-  GACP_SOP_ACTIVITIES,
+  GACP_SOP_ACTIVITIES
 } from '../../../business-logic/gacp-sop-wizard-system';
 
 // Phase Configuration
@@ -87,36 +87,36 @@ const SOP_PHASES = [
     name: 'ขั้นตอนก่อนปลูก',
     icon: <Eco />,
     color: '#8BC34A',
-    description: 'เตรียมความพร้อมก่อนการปลูก',
+    description: 'เตรียมความพร้อมก่อนการปลูก'
   },
   {
     id: 'planting',
     name: 'ขั้นตอนการปลูก',
     icon: <LocalFlorist />,
     color: '#4CAF50',
-    description: 'กระบวนการปลูกและเริ่มต้น',
+    description: 'กระบวนการปลูกและเริ่มต้น'
   },
   {
     id: 'growing',
     name: 'ขั้นตอนการเพาะปลูก',
     icon: <Grass />,
     color: '#2E7D32',
-    description: 'การดูแลระหว่างการเจริญเติบโต',
+    description: 'การดูแลระหว่างการเจริญเติบโต'
   },
   {
     id: 'harvesting',
     name: 'ขั้นตอนการเก็บเกี่ยว',
     icon: <Agriculture />,
     color: '#FF9800',
-    description: 'การเก็บเกี่ยวผลผลิต',
+    description: 'การเก็บเกี่ยวผลผลิต'
   },
   {
     id: 'post_harvest',
     name: 'ขั้นตอนหลังการเก็บเกี่ยว',
     icon: <Inventory />,
     color: '#795548',
-    description: 'การแปรรูปและเก็บรักษา',
-  },
+    description: 'การแปรรูปและเก็บรักษา'
+  }
 ];
 
 const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }) => {
@@ -160,8 +160,8 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
             farmId,
             cultivationCycleId,
             userId,
-            sessionName: `SOP Session ${new Date().toLocaleDateString('th-TH')}`,
-          }),
+            sessionName: `SOP Session ${new Date().toLocaleDateString('th-TH')}`
+          })
         });
 
         if (sessionResult.ok) {
@@ -187,10 +187,10 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
           setGPSLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            accuracy: position.coords.accuracy,
+            accuracy: position.coords.accuracy
           });
         },
-        error => console.warn('GPS not available:', error),
+        error => console.warn('GPS not available:', error)
       );
     }
   }, []);
@@ -215,7 +215,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
     const activities = Object.entries(phaseActivities).map(([id, activity]) => ({
       id,
       ...activity,
-      phase: phaseId,
+      phase: phaseId
     }));
     setAvailableActivities(activities);
   };
@@ -240,8 +240,8 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
             id: Date.now() + Math.random(),
             file,
             preview: e.target.result,
-            timestamp: new Date(),
-          },
+            timestamp: new Date()
+          }
         ]);
       };
       reader.readAsDataURL(file);
@@ -261,21 +261,21 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
           name: p.file.name,
           size: p.file.size,
           type: p.file.type,
-          timestamp: p.timestamp,
+          timestamp: p.timestamp
         })),
         gpsLocation,
         userId,
         notes: activityData.notes || '',
         deviceInfo: {
           userAgent: navigator.userAgent,
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       };
 
       const response = await fetch(`/api/sop/sessions/${sopSession.id}/activities`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(payload)
       });
 
       if (response.ok) {
@@ -328,8 +328,8 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
             borderRadius: 4,
             backgroundColor: 'rgba(0,0,0,0.1)',
             '& .MuiLinearProgress-bar': {
-              backgroundColor: phase.color,
-            },
+              backgroundColor: phase.color
+            }
           }}
         />
         <Typography variant="caption" color="text.secondary">
@@ -347,7 +347,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
         mb: 2,
         border: isCompleted ? '2px solid #4CAF50' : '1px solid #ddd',
         cursor: isCompleted ? 'default' : 'pointer',
-        opacity: isCompleted ? 0.8 : 1,
+        opacity: isCompleted ? 0.8 : 1
       }}
       onClick={() => !isCompleted && handleActivitySelect(activity)}
     >
@@ -417,7 +417,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
                 onChange={e =>
                   setActivityData(prev => ({
                     ...prev,
-                    [field]: e.target.value,
+                    [field]: e.target.value
                   }))
                 }
                 margin="normal"
@@ -435,7 +435,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
               onChange={e =>
                 setActivityData(prev => ({
                   ...prev,
-                  notes: e.target.value,
+                  notes: e.target.value
                 }))
               }
               margin="normal"
@@ -472,7 +472,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
                           width: '100%',
                           height: 120,
                           objectFit: 'cover',
-                          borderRadius: 8,
+                          borderRadius: 8
                         }}
                       />
                     </Grid>
@@ -575,7 +575,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
                             p: 1,
                             borderRadius: '50%',
                             backgroundColor: phase.color,
-                            color: 'white',
+                            color: 'white'
                           }}
                         >
                           {phase.icon}
@@ -635,8 +635,8 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
                 availableActivities.map(activity =>
                   renderActivityCard(
                     activity,
-                    completedActivities.some(ca => ca.activityId === activity.id),
-                  ),
+                    completedActivities.some(ca => ca.activityId === activity.id)
+                  )
                 )
               ) : (
                 <Alert severity="info">

@@ -29,9 +29,9 @@ if (isDev) {
       target: 'http://localhost:5000',
       changeOrigin: true,
       pathRewrite: {
-        '^/api': '/api', // No rewrite needed in this case
-      },
-    }),
+        '^/api': '/api' // No rewrite needed in this case
+      }
+    })
   );
 
   // Serve static assets from public folder for development

@@ -14,7 +14,7 @@ import {
   StepLabel,
   Paper,
   AppBar,
-  Toolbar,
+  Toolbar
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -22,7 +22,7 @@ import {
   Eco as EcoIcon,
   LocalShipping as LocalShippingIcon,
   Store as StoreIcon,
-  Person as PersonIcon,
+  Person as PersonIcon
 } from '@mui/icons-material';
 
 export default function TraceabilityPage() {

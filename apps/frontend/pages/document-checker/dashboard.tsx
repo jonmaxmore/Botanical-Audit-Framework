@@ -24,7 +24,7 @@ import {
   MenuItem,
   Button,
   Tabs,
-  Tab,
+  Tab
 } from '@mui/material';
 import {
   Logout as LogoutIcon,
@@ -32,7 +32,7 @@ import {
   Description as DescriptionIcon,
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
-  HourglassEmpty as HourglassEmptyIcon,
+  HourglassEmpty as HourglassEmptyIcon
 } from '@mui/icons-material';
 import { DocumentChecker } from '../../types/user.types';
 import { ApplicationStatus } from '../../types/application.types';
@@ -69,15 +69,15 @@ export default function DocumentCheckerDashboard() {
       farmName: 'ฟาร์มสมุนไพรสมชาย',
       cropType: 'ฟ้าทะลายโจร',
       status: ApplicationStatus.SUBMITTED,
-      submittedAt: new Date('2025-01-15'),
-    },
+      submittedAt: new Date('2025-01-15')
+    }
   ];
 
   const stats = [
     { label: 'รอตรวจสอบ', value: '1', icon: <HourglassEmptyIcon />, color: '#ff9800' },
     { label: 'อนุมัติแล้ว', value: '0', icon: <CheckCircleIcon />, color: '#4caf50' },
     { label: 'ส่งกลับแก้ไข', value: '0', icon: <CancelIcon />, color: '#f44336' },
-    { label: 'ทั้งหมด', value: '1', icon: <DescriptionIcon />, color: '#2196f3' },
+    { label: 'ทั้งหมด', value: '1', icon: <DescriptionIcon />, color: '#2196f3' }
   ];
 
   return (
@@ -130,7 +130,7 @@ export default function DocumentCheckerDashboard() {
                         color: stat.color,
                         p: 1,
                         borderRadius: 1,
-                        mr: 2,
+                        mr: 2
                       }}
                     >
                       {stat.icon}
@@ -190,7 +190,7 @@ export default function DocumentCheckerDashboard() {
                           size="small"
                           sx={{
                             backgroundColor: WorkflowService.getStatusColor(app.status),
-                            color: '#fff',
+                            color: '#fff'
                           }}
                         />
                       </TableCell>

@@ -16,7 +16,7 @@ import {
   Grid,
   MenuItem,
   FormControlLabel,
-  Checkbox,
+  Checkbox
 } from '@mui/material';
 import {
   Visibility,
@@ -28,7 +28,7 @@ import {
   Person,
   Home,
   Business,
-  Map,
+  Map
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -60,7 +60,7 @@ export default function RegisterPage() {
     subDistrict: '',
     zipCode: '',
     farmSize: '',
-    acceptTerms: false,
+    acceptTerms: false
   });
 
   const provinces = [
@@ -72,13 +72,13 @@ export default function RegisterPage() {
     'พะเยา',
     'แพร่',
     'อุตรดิตถ์',
-    'กรุงเทพมหานคร',
+    'กรุงเทพมหานคร'
   ];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value,
+      [e.target.name]: e.target.value
     });
     setError('');
   };
@@ -86,7 +86,7 @@ export default function RegisterPage() {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.checked,
+      [e.target.name]: e.target.checked
     });
   };
 
@@ -158,7 +158,7 @@ export default function RegisterPage() {
       const response = await fetch('http://localhost:3001/api/auth/register', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email: formData.email,
@@ -173,8 +173,8 @@ export default function RegisterPage() {
           district: formData.district,
           subDistrict: formData.subDistrict,
           zipCode: formData.zipCode,
-          farmSize: parseFloat(formData.farmSize),
-        }),
+          farmSize: parseFloat(formData.farmSize)
+        })
       });
 
       if (!response.ok) {
@@ -187,7 +187,7 @@ export default function RegisterPage() {
     } catch (err: any) {
       if (err.message === 'Failed to fetch') {
         setError(
-          '⚠️ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาเริ่มเซิร์ฟเวอร์ backend หรือใช้บัญชีทดสอบที่มีอยู่แล้วเพื่อเข้าสู่ระบบ',
+          '⚠️ ไม่สามารถเชื่อมต่อกับเซิร์ฟเวอร์ได้ กรุณาเริ่มเซิร์ฟเวอร์ backend หรือใช้บัญชีทดสอบที่มีอยู่แล้วเพื่อเข้าสู่ระบบ'
         );
       } else {
         setError(err.message || 'เกิดข้อผิดพลาดในการลงทะเบียน');
@@ -219,7 +219,7 @@ export default function RegisterPage() {
                   <InputAdornment position="start">
                     <Email color="action" />
                   </InputAdornment>
-                ),
+                )
               }}
             />
             <TextField
@@ -244,7 +244,7 @@ export default function RegisterPage() {
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
             <TextField
@@ -271,7 +271,7 @@ export default function RegisterPage() {
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                ),
+                )
               }}
             />
           </Box>
@@ -298,7 +298,7 @@ export default function RegisterPage() {
                       <InputAdornment position="start">
                         <Person color="action" />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
               </Grid>
@@ -316,7 +316,7 @@ export default function RegisterPage() {
                       <InputAdornment position="start">
                         <Person color="action" />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
               </Grid>
@@ -336,7 +336,7 @@ export default function RegisterPage() {
                   <InputAdornment position="start">
                     <Person color="action" />
                   </InputAdornment>
-                ),
+                )
               }}
             />
             <TextField
@@ -352,7 +352,7 @@ export default function RegisterPage() {
                   <InputAdornment position="start">
                     <Phone color="action" />
                   </InputAdornment>
-                ),
+                )
               }}
             />
           </Box>
@@ -377,7 +377,7 @@ export default function RegisterPage() {
                   <InputAdornment position="start">
                     <Business color="action" />
                   </InputAdornment>
-                ),
+                )
               }}
             />
             <TextField
@@ -395,7 +395,7 @@ export default function RegisterPage() {
                   <InputAdornment position="start">
                     <Home color="action" />
                   </InputAdornment>
-                ),
+                )
               }}
             />
             <Grid container spacing={2}>
@@ -414,7 +414,7 @@ export default function RegisterPage() {
                       <InputAdornment position="start">
                         <Map color="action" />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 >
                   {provinces.map(province => (
@@ -509,7 +509,7 @@ export default function RegisterPage() {
         sx={{
           minHeight: '100vh',
           background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
-          py: 4,
+          py: 4
         }}
       >
         <Container maxWidth="md">
@@ -527,7 +527,7 @@ export default function RegisterPage() {
                   justifyContent: 'center',
                   borderRadius: '50%',
                   background: 'linear-gradient(135deg, #2e7d32 0%, #4caf50 100%)',
-                  color: 'white',
+                  color: 'white'
                 }}
               >
                 <PersonAdd sx={{ fontSize: 40 }} />
@@ -595,7 +595,7 @@ export default function RegisterPage() {
                     color: 'primary.main',
                     textDecoration: 'none',
                     fontWeight: 600,
-                    '&:hover': { textDecoration: 'underline' },
+                    '&:hover': { textDecoration: 'underline' }
                   }}
                 >
                   เข้าสู่ระบบ
@@ -613,8 +613,8 @@ export default function RegisterPage() {
                 color: 'white',
                 textTransform: 'none',
                 '&:hover': {
-                  bgcolor: 'rgba(255, 255, 255, 0.1)',
-                },
+                  bgcolor: 'rgba(255, 255, 255, 0.1)'
+                }
               }}
             >
               ← กลับหน้าหลัก

@@ -4,7 +4,7 @@ export enum UserRole {
   INSPECTOR = 'inspector',
   APPROVER = 'approver',
   TRAINING_MANAGER = 'training_manager',
-  ADMIN = 'admin',
+  ADMIN = 'admin'
 }
 
 export interface User {

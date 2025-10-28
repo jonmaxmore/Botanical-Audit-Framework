@@ -43,7 +43,7 @@ export class ApplicationService {
         app.status === ApplicationStatus.DOCUMENT_APPROVED ||
         app.status === ApplicationStatus.INSPECTION_SCHEDULED ||
         app.status === ApplicationStatus.INSPECTING ||
-        (inspectorId && app.inspectorId === inspectorId),
+        (inspectorId && app.inspectorId === inspectorId)
     );
   }
 
@@ -61,7 +61,7 @@ export class ApplicationService {
       status: ApplicationStatus.DRAFT,
       createdAt: new Date(),
       updatedAt: new Date(),
-      ...data,
+      ...data
     } as GACPApplication;
 
     applications.push(newApp);
@@ -75,7 +75,7 @@ export class ApplicationService {
       performedByName: data.farmerName || '',
       performedByRole: UserRole.FARMER,
       notes: 'สร้างใบสมัครใหม่',
-      timestamp: new Date(),
+      timestamp: new Date()
     });
 
     return newApp;
@@ -89,7 +89,7 @@ export class ApplicationService {
     performedByName: string,
     performedByRole: UserRole,
     notes?: string,
-    additionalData?: Partial<GACPApplication>,
+    additionalData?: Partial<GACPApplication>
   ): boolean {
     const applications = this.getAllApplications();
     const appIndex = applications.findIndex(app => app.id === applicationId);
@@ -115,7 +115,7 @@ export class ApplicationService {
       ...app,
       ...additionalData,
       status: newStatus,
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     this.saveApplications(applications);
@@ -128,7 +128,7 @@ export class ApplicationService {
       performedByName,
       performedByRole,
       notes,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
 
     return true;
@@ -144,7 +144,7 @@ export class ApplicationService {
     applications[appIndex] = {
       ...applications[appIndex],
       ...data,
-      updatedAt: new Date(),
+      updatedAt: new Date()
     };
 
     this.saveApplications(applications);
@@ -190,7 +190,7 @@ export class ApplicationService {
 
     const newHistory: WorkflowHistory = {
       id: `WH${(allHistory.length + 1).toString().padStart(6, '0')}`,
-      ...history,
+      ...history
     };
 
     allHistory.push(newHistory);
@@ -212,7 +212,7 @@ export class ApplicationService {
       documentRejected: applications.filter(a => a.status === ApplicationStatus.DOCUMENT_REJECTED)
         .length,
       inspectionScheduled: applications.filter(
-        a => a.status === ApplicationStatus.INSPECTION_SCHEDULED,
+        a => a.status === ApplicationStatus.INSPECTION_SCHEDULED
       ).length,
       inspecting: applications.filter(a => a.status === ApplicationStatus.INSPECTING).length,
       inspectionPassed: applications.filter(a => a.status === ApplicationStatus.INSPECTION_PASSED)
@@ -224,7 +224,7 @@ export class ApplicationService {
       approved: applications.filter(a => a.status === ApplicationStatus.APPROVED).length,
       rejected: applications.filter(a => a.status === ApplicationStatus.REJECTED).length,
       certificateIssued: applications.filter(a => a.status === ApplicationStatus.CERTIFICATE_ISSUED)
-        .length,
+        .length
     };
   }
 }

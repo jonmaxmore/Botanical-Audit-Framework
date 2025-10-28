@@ -18,7 +18,7 @@ import {
   ListItemText,
   useMediaQuery,
   useTheme,
-  Divider,
+  Divider
 } from '@mui/material';
 import {
   Agriculture,
@@ -29,7 +29,7 @@ import {
   Person,
   Logout,
   Menu as MenuIcon,
-  Save,
+  Save
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -62,7 +62,7 @@ export default function FarmerProfile() {
     { text: 'คำขอรับรอง', icon: <Assignment />, path: '/farmer/applications' },
     { text: 'ใบรับรอง', icon: <Verified />, path: '/farmer/certificates' },
     { text: 'เอกสาร', icon: <Description />, path: '/farmer/documents' },
-    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' },
+    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' }
   ];
 
   const drawer = (

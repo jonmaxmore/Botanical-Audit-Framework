@@ -48,7 +48,7 @@ import {
   AccordionSummary,
   AccordionDetails,
   Tooltip,
-  IconButton,
+  IconButton
 } from '@mui/material';
 
 import {
@@ -68,7 +68,7 @@ import {
   Description,
   Verified,
   Schedule,
-  MonetizationOn,
+  MonetizationOn
 } from '@mui/icons-material';
 
 // Import AI Assistant System
@@ -81,50 +81,50 @@ const WIZARD_STEPS = [
     label: 'ประเภทผู้ขอ',
     title: 'เลือกประเภทผู้ยื่นขอใบรับรอง GACP',
     icon: <AccountCircle />,
-    required: true,
+    required: true
   },
   {
     id: 'applicant_info',
     label: 'ข้อมูลผู้ขอ',
     title: 'กรอกข้อมูลส่วนตัวและการติดต่อ',
     icon: <Business />,
-    required: true,
+    required: true
   },
   {
     id: 'land_info',
     label: 'ข้อมูลที่ดิน',
     title: 'ข้อมูลสถานที่เพาะปลูกและเอกสารสิทธิ์',
     icon: <LocationOn />,
-    required: true,
+    required: true
   },
   {
     id: 'cultivation_plan',
     label: 'แผนการเพาะปลูก',
     title: 'รายละเอียดการเพาะปลูกและพันธุ์กัญชา',
     icon: <Eco />,
-    required: true,
+    required: true
   },
   {
     id: 'pest_control',
     label: 'การควบคุมศัตรูพืช',
     title: 'แผนการจัดการศัตรูพืชและโรคพืช',
     icon: <BugReport />,
-    required: true,
+    required: true
   },
   {
     id: 'documents',
     label: 'เอกสารประกอบ',
     title: 'อัปโหลดเอกสารที่จำเป็นตามประเภทผู้ขอ',
     icon: <CloudUpload />,
-    required: true,
+    required: true
   },
   {
     id: 'review',
     label: 'ตรวจสอบและยืนยัน',
     title: 'ตรวจสอบข้อมูลทั้งหมดก่อนส่งคำขอ',
     icon: <Assignment />,
-    required: true,
-  },
+    required: true
+  }
 ];
 
 // Applicant types with specific requirements
@@ -138,10 +138,10 @@ const APPLICANT_TYPES = {
       'บัญชีรายชื่อสมาชิก',
       'หนังสือยินยอมจากหน่วยงานรัฐ',
       'เอกสารสิทธิ์ที่ดิน',
-      'แผนที่แสดงตำแหน่งฟาร์ม',
+      'แผนที่แสดงตำแหน่งฟาร์ม'
     ],
     cooperation: 'หน่วยงานรัฐหรือสถาบันอุดมศึกษา',
-    fees: { phase1: 5000, phase2: 25000 },
+    fees: { phase1: 5000, phase2: 25000 }
   },
   individual: {
     id: 'individual',
@@ -151,10 +151,10 @@ const APPLICANT_TYPES = {
       'บัตรประจำตัวประชาชน',
       'หนังสือยินยอมจากผู้รับอนุญาตผลิตยา',
       'เอกสารสิทธิ์ที่ดิน',
-      'แผนที่แสดงตำแหน่งฟาร์ม',
+      'แผนที่แสดงตำแหน่งฟาร์ม'
     ],
     cooperation: 'ผู้รับอนุญาตผลิตยาแผนปัจจุบัน/แผนโบราณ/ผลิตภัณฑ์สมุนไพร',
-    fees: { phase1: 5000, phase2: 25000 },
+    fees: { phase1: 5000, phase2: 25000 }
   },
   juristic_person: {
     id: 'juristic_person',
@@ -164,11 +164,11 @@ const APPLICANT_TYPES = {
       'หนังสือรับรองการจดทะเบียนนิติบุคคล (ไม่เกิน 6 เดือน)',
       'หนังสือมอบอำนาจ',
       'เอกสารสิทธิ์ที่ดิน',
-      'แผนที่แสดงตำแหน่งฟาร์ม',
+      'แผนที่แสดงตำแหน่งฟาร์ม'
     ],
     cooperation: 'หน่วยงานรัฐ/สถาบันอุดมศึกษา/ผู้รับอนุญาตผลิตยา',
-    fees: { phase1: 5000, phase2: 25000 },
-  },
+    fees: { phase1: 5000, phase2: 25000 }
+  }
 };
 
 const GACPApplicationWizard = () => {
@@ -196,7 +196,7 @@ const GACPApplicationWizard = () => {
     ai.on('form_data_extracted', data => {
       setFormData(prev => ({
         ...prev,
-        ...data.extractedData,
+        ...data.extractedData
       }));
     });
 
@@ -213,7 +213,7 @@ const GACPApplicationWizard = () => {
   useEffect(() => {
     const totalFields = 20; // Estimated total required fields
     const completedFields = Object.keys(formData).filter(
-      key => formData[key] && formData[key] !== '',
+      key => formData[key] && formData[key] !== ''
     ).length;
     setCompletionPercentage(Math.min((completedFields / totalFields) * 100, 100));
   }, [formData]);
@@ -223,13 +223,13 @@ const GACPApplicationWizard = () => {
     async (fieldName, value) => {
       setFormData(prev => ({
         ...prev,
-        [fieldName]: value,
+        [fieldName]: value
       }));
 
       // Clear previous errors for this field
       setErrors(prev => ({
         ...prev,
-        [fieldName]: null,
+        [fieldName]: null
       }));
 
       // Real-time AI validation
@@ -239,13 +239,13 @@ const GACPApplicationWizard = () => {
 
           setValidationResults(prev => ({
             ...prev,
-            [fieldName]: result,
+            [fieldName]: result
           }));
 
           if (!result.valid) {
             setErrors(prev => ({
               ...prev,
-              [fieldName]: result.errors[0],
+              [fieldName]: result.errors[0]
             }));
           }
         } catch (error) {
@@ -253,7 +253,7 @@ const GACPApplicationWizard = () => {
         }
       }
     },
-    [aiAssistant, formData],
+    [aiAssistant, formData]
   );
 
   // Handle document upload with AI processing
@@ -270,7 +270,7 @@ const GACPApplicationWizard = () => {
           ...prev,
           ...result.extractedData,
           [`${documentType}_uploaded`]: true,
-          [`${documentType}_confidence`]: result.validation.ocrConfidence,
+          [`${documentType}_confidence`]: result.validation.ocrConfidence
         }));
       }
     } catch (error) {
@@ -341,7 +341,7 @@ const GACPApplicationWizard = () => {
       cultivation_plan: ['cultivation_area', 'plant_quantity', 'cultivation_type', 'plant_variety'],
       pest_control: ['pest_control_method', 'approved_substances', 'ipm_plan'],
       documents: ['uploaded_documents'],
-      review: [],
+      review: []
     };
     return fieldMap[stepId] || [];
   };
@@ -364,13 +364,13 @@ const GACPApplicationWizard = () => {
       const response = await fetch('/api/gacp/applications', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           ...formData,
           aiAnalysis: finalAnalysis,
-          submittedAt: new Date().toISOString(),
-        }),
+          submittedAt: new Date().toISOString()
+        })
       });
 
       if (response.ok) {
@@ -614,7 +614,7 @@ const ApplicantTypeStep = ({ formData, onChange, errors, aiGuidance }) => (
             sx={{
               mb: 2,
               border: formData.applicant_type === type.id ? 2 : 1,
-              borderColor: formData.applicant_type === type.id ? 'primary.main' : 'divider',
+              borderColor: formData.applicant_type === type.id ? 'primary.main' : 'divider'
             }}
           >
             <CardContent sx={{ pb: 2 }}>

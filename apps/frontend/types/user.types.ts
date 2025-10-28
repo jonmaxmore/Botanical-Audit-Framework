@@ -3,7 +3,7 @@ export enum UserRole {
   DOCUMENT_CHECKER = 'document_checker',
   INSPECTOR = 'inspector',
   APPROVER = 'approver',
-  ADMIN = 'admin',
+  ADMIN = 'admin'
 }
 
 export interface BaseUser {

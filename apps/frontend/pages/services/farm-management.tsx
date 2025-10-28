@@ -15,7 +15,7 @@ import {
   ListItemIcon,
   ListItemText,
   AppBar,
-  Toolbar,
+  Toolbar
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -24,7 +24,7 @@ import {
   Timeline as TimelineIcon,
   ReceiptLong as ReceiptLongIcon,
   ShowChart as ShowChartIcon,
-  Cloud as CloudIcon,
+  Cloud as CloudIcon
 } from '@mui/icons-material';
 
 export default function FarmManagementPage() {
@@ -34,28 +34,28 @@ export default function FarmManagementPage() {
     {
       title: 'บันทึกกิจกรรมในฟาร์ม',
       description: 'บันทึกการปลูก การให้น้ำ การใส่ปุ๋ย และการใช้สารป้องกันกำจัดศัตรูพืช',
-      icon: <CheckCircleIcon color="primary" />,
+      icon: <CheckCircleIcon color="primary" />
     },
     {
       title: 'ติดตามการเจริญเติบโต',
       description: 'ติดตามการเจริญเติบโตของพืชตั้งแต่เริ่มปลูกจนถึงเก็บเกี่ยว',
-      icon: <TimelineIcon color="primary" />,
+      icon: <TimelineIcon color="primary" />
     },
     {
       title: 'บริหารต้นทุนและรายได้',
       description: 'คำนวณต้นทุน ประมาณการรายได้ และวิเคราะห์ความคุ้มค่า',
-      icon: <ReceiptLongIcon color="primary" />,
+      icon: <ReceiptLongIcon color="primary" />
     },
     {
       title: 'รายงานและการวิเคราะห์',
       description: 'สรุปผลการดำเนินงาน ผลผลิต และคุณภาพตามมาตรฐาน',
-      icon: <ShowChartIcon color="primary" />,
+      icon: <ShowChartIcon color="primary" />
     },
     {
       title: 'ข้อมูลสภาพอากาศ',
       description: 'แสดงข้อมูลสภาพอากาศล่าสุดและพยากรณ์อากาศสำหรับพื้นที่ของคุณ',
-      icon: <CloudIcon color="primary" />,
-    },
+      icon: <CloudIcon color="primary" />
+    }
   ];
 
   return (
@@ -106,7 +106,7 @@ export default function FarmManagementPage() {
                   width: '100%',
                   height: 'auto',
                   borderRadius: 2,
-                  boxShadow: 3,
+                  boxShadow: 3
                 }}
               />
             </Grid>

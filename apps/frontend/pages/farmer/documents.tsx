@@ -16,7 +16,7 @@ import {
   Drawer,
   useMediaQuery,
   useTheme,
-  Divider,
+  Divider
 } from '@mui/material';
 import {
   Agriculture,
@@ -30,7 +30,7 @@ import {
   PictureAsPdf,
   Image,
   InsertDriveFile,
-  Download,
+  Download
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -60,7 +60,7 @@ export default function FarmerDocuments() {
   const documents = [
     { id: 1, name: 'สำเนาบัตรประชาชน.pdf', type: 'pdf', date: '2025-10-01', size: '2.5 MB' },
     { id: 2, name: 'แผนที่ฟาร์ม.jpg', type: 'image', date: '2025-09-28', size: '1.8 MB' },
-    { id: 3, name: 'เอกสารกรรมสิทธิ์ที่ดิน.pdf', type: 'pdf', date: '2025-09-25', size: '3.2 MB' },
+    { id: 3, name: 'เอกสารกรรมสิทธิ์ที่ดิน.pdf', type: 'pdf', date: '2025-09-25', size: '3.2 MB' }
   ];
 
   const getFileIcon = (type: string) => {
@@ -75,7 +75,7 @@ export default function FarmerDocuments() {
     { text: 'คำขอรับรอง', icon: <Assignment />, path: '/farmer/applications' },
     { text: 'ใบรับรอง', icon: <Verified />, path: '/farmer/certificates' },
     { text: 'เอกสาร', icon: <Description />, path: '/farmer/documents' },
-    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' },
+    { text: 'โปรไฟล์', icon: <Person />, path: '/farmer/profile' }
   ];
 
   const drawer = (

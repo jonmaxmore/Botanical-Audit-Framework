@@ -5,8 +5,8 @@ const api = axios.create({
   baseURL: '/api',
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
 // Request interceptor for auth tokens, etc
@@ -18,7 +18,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  error => Promise.reject(error),
+  error => Promise.reject(error)
 );
 
 // Response interceptor for error handling
@@ -54,7 +54,7 @@ api.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 // Create wrapped API methods with retry and offline handling
@@ -104,7 +104,7 @@ const apiClient = {
       method,
       url,
       data,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
     localStorage.setItem('offline_actions', JSON.stringify(offlineActions));
     console.log('Action stored for offline use');
@@ -137,13 +137,13 @@ const apiClient = {
           completed =>
             completed.url === action.url &&
             completed.method === action.method &&
-            completed.timestamp === action.timestamp,
-        ),
+            completed.timestamp === action.timestamp
+        )
     );
 
     localStorage.setItem('offline_actions', JSON.stringify(remaining));
     return completedActions.length;
-  },
+  }
 };
 
 // Add auto sync on online event

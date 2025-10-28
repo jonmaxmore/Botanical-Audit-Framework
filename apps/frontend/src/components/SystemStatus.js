@@ -16,13 +16,13 @@ const SystemStatus = () => {
           connected: true,
           message: `Connected to backend. MongoDB: ${
             data.mongodb?.isConnected ? 'Connected' : 'Disconnected'
-          }`,
+          }`
         });
       } catch (error) {
         setStatus({
           loading: false,
           connected: false,
-          message: `Cannot connect to backend: ${error.message}`,
+          message: `Cannot connect to backend: ${error.message}`
         });
       }
     };

@@ -25,7 +25,7 @@ const AuthContext = createContext<AuthContextType>({
   isAuthenticated: false,
   hasRole: () => false,
   hasAnyRole: () => false,
-  refreshUser: async () => {},
+  refreshUser: async () => {}
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -122,7 +122,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAuthenticated: !!user,
     hasRole,
     hasAnyRole,
-    refreshUser,
+    refreshUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

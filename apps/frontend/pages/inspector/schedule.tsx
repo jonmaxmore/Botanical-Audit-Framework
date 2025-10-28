@@ -20,7 +20,7 @@ import {
   Card,
   CardContent,
   Grid,
-  Button,
+  Button
 } from '@mui/material';
 import {
   Dashboard as DashboardIcon,
@@ -35,7 +35,7 @@ import {
   NavigateNext,
   LocationOn,
   AccessTime,
-  Event,
+  Event
 } from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
@@ -74,7 +74,7 @@ export default function InspectorSchedule() {
         farmerName: 'นายสมชาย ใจดี',
         location: 'เชียงใหม่',
         type: 'ตรวจสอบครั้งแรก',
-        status: 'scheduled',
+        status: 'scheduled'
       },
       {
         id: 2,
@@ -83,8 +83,8 @@ export default function InspectorSchedule() {
         farmerName: 'นางสาวจิตรา สวยงาม',
         location: 'เชียงใหม่',
         type: 'ตรวจสอบติดตาม',
-        status: 'scheduled',
-      },
+        status: 'scheduled'
+      }
     ],
     '2025-10-23': [
       {
@@ -94,8 +94,8 @@ export default function InspectorSchedule() {
         farmerName: 'นางสาวสมหญิง ดีมาก',
         location: 'เชียงราย',
         type: 'ตรวจสอบติดตาม',
-        status: 'scheduled',
-      },
+        status: 'scheduled'
+      }
     ],
     '2025-10-24': [
       {
@@ -105,8 +105,8 @@ export default function InspectorSchedule() {
         farmerName: 'นายประเสริฐ เก่งดี',
         location: 'ลำปาง',
         type: 'ตรวจสอบเพื่อต่ออายุ',
-        status: 'scheduled',
-      },
+        status: 'scheduled'
+      }
     ],
     '2025-10-25': [
       {
@@ -116,7 +116,7 @@ export default function InspectorSchedule() {
         farmerName: 'นายวิทยา เรียนดี',
         location: 'นครสวรรค์',
         type: 'ตรวจสอบครั้งแรก',
-        status: 'scheduled',
+        status: 'scheduled'
       },
       {
         id: 6,
@@ -125,8 +125,8 @@ export default function InspectorSchedule() {
         farmerName: 'นางสาววิภา ใจดี',
         location: 'อุตรดิตถ์',
         type: 'ตรวจสอบครั้งแรก',
-        status: 'scheduled',
-      },
+        status: 'scheduled'
+      }
     ],
     '2025-10-28': [
       {
@@ -136,9 +136,9 @@ export default function InspectorSchedule() {
         farmerName: 'นายสุรชัย เจริญ',
         location: 'พิษณุโลก',
         type: 'ตรวจสอบเพื่อต่ออายุ',
-        status: 'scheduled',
-      },
-    ],
+        status: 'scheduled'
+      }
+    ]
   };
 
   const menuItems = [
@@ -147,7 +147,7 @@ export default function InspectorSchedule() {
     { text: 'ตารางนัดหมาย', icon: <CalendarToday />, path: '/inspector/schedule' },
     { text: 'รายงานการตรวจสอบ', icon: <Assessment />, path: '/inspector/reports' },
     { text: 'ค้นหาฟาร์ม', icon: <Search />, path: '/inspector/farms' },
-    { text: 'โปรไฟล์', icon: <Person />, path: '/inspector/profile' },
+    { text: 'โปรไฟล์', icon: <Person />, path: '/inspector/profile' }
   ];
 
   const handleLogout = () => {
@@ -241,7 +241,7 @@ export default function InspectorSchedule() {
             sx={{
               cursor: 'pointer',
               bgcolor: router.pathname === item.path ? 'primary.light' : 'transparent',
-              '&:hover': { bgcolor: 'action.hover' },
+              '&:hover': { bgcolor: 'action.hover' }
             }}
             onClick={() => router.push(item.path)}
           >
@@ -305,8 +305,8 @@ export default function InspectorSchedule() {
                   width: 260,
                   top: 64,
                   height: 'calc(100% - 64px)',
-                  borderRight: '2px solid #e0e0e0',
-                },
+                  borderRight: '2px solid #e0e0e0'
+                }
               }}
             >
               {drawer}
@@ -335,7 +335,7 @@ export default function InspectorSchedule() {
                       display: 'flex',
                       justifyContent: 'space-between',
                       alignItems: 'center',
-                      mb: 3,
+                      mb: 3
                     }}
                   >
                     <IconButton onClick={() => navigateMonth('prev')}>
@@ -392,10 +392,10 @@ export default function InspectorSchedule() {
                               borderRadius: 1,
                               '&:hover': date
                                 ? {
-                                    bgcolor: isSelected ? 'primary.dark' : 'action.hover',
+                                    bgcolor: isSelected ? 'primary.dark' : 'action.hover'
                                   }
                                 : {},
-                              position: 'relative',
+                              position: 'relative'
                             }}
                           >
                             {date && (
@@ -415,7 +415,7 @@ export default function InspectorSchedule() {
                                       fontSize: '0.65rem',
                                       mt: 0.5,
                                       bgcolor: isSelected ? 'rgba(255,255,255,0.3)' : 'error.main',
-                                      color: 'white',
+                                      color: 'white'
                                     }}
                                   />
                                 )}
@@ -438,7 +438,7 @@ export default function InspectorSchedule() {
                       นัดหมายวันที่{' '}
                       {selectedDate.toLocaleDateString('th-TH', {
                         day: 'numeric',
-                        month: 'long',
+                        month: 'long'
                       })}
                     </Typography>
                   </Box>
@@ -461,7 +461,7 @@ export default function InspectorSchedule() {
                                   p: 1.5,
                                   borderRadius: 2,
                                   minWidth: 60,
-                                  textAlign: 'center',
+                                  textAlign: 'center'
                                 }}
                               >
                                 <AccessTime sx={{ fontSize: 20 }} />
