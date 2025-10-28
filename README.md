@@ -1,89 +1,166 @@
-# 🏆 GACP Certification Flow Platform (Botanical Audit Framework)
+# GACP Platform - Cannabis & Medicinal Plants Certification System
 
-**Version**: 2.0.0
-**Status**: ✅ Production Ready → 🚀 **National Platform in Development**
-**Last Updated**: October 26, 2025
-**Production Readiness**: 95% (Core) | 40% (National Features)
+**Thailand's National Platform for Smart Cannabis Farming & GACP Compliance**
 
-A comprehensive digital platform for managing **GACP (Good Agricultural and Collection Practices)** certification process for cannabis farms in Thailand, serving farmers and DTAM (Department of Thai Traditional and Alternative Medicine) staff.
-
-## 🎯 **Vision: Thailand's National Agricultural Platform**
-
-We are evolving into a **National Platform for Smart Cannabis Farming** with:
-
-- 🌱 **IoT-enabled Farm Monitoring** (Soil, Water, Environmental Sensors)
-- 🧬 **Seed Genetics Management** (Complete Traceability, Thai FDA Integration)
-- 🤖 **AI-Powered Recommendations** (Fertilizer, Irrigation, Pest Management)
-- 📊 **Research & Analytics** (National Agricultural Database)
-- 📱 **Mobile Apps** (Farmer & Inspector Apps)
-
-**Target**: 5,000-10,000 farms nationwide by 2027 (18-month development roadmap)
-
-**See**: [National Platform Roadmap](./docs/NATIONAL_PLATFORM_ROADMAP.md) for full development plan
+[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/jonmaxmore/Botanical-Audit-Framework)
+[![Status](https://img.shields.io/badge/status-Phase%203%20Development-green.svg)](https://github.com/jonmaxmore/Botanical-Audit-Framework)
+[![License](https://img.shields.io/badge/license-Proprietary-red.svg)](https://github.com/jonmaxmore/Botanical-Audit-Framework)
 
 ---
 
-## 🎯 New to the Project?
+## 📋 Table of Contents
 
-**Start here**: [QUICK_START.md](./QUICK_START.md) - Get up and running in 2 minutes!
-
-### Important Guides
-
-#### 🚀 National Platform Development
-
-🗺️ **[National Platform Roadmap](./docs/NATIONAL_PLATFORM_ROADMAP.md)** - 18-month development plan (5 phases)
-🔬 **[Research Findings Summary](./docs/RESEARCH_FINDINGS_SUMMARY.md)** - Current capabilities analysis
-📋 **[Linting Guide](./docs/LINTING_GUIDE.md)** - Auto-lint on every commit (NEW!)
-
-#### 📖 System Documentation
-
-📖 **[Server Management Guide](./SERVER_MANAGEMENT_GUIDE.md)** - Complete guide for dev and production
-📊 **[Production Final Report](./PRODUCTION_FINAL_REPORT.md)** - Latest production readiness report
-🔧 **[PM2 Guide](./PM2_GUIDE.md)** - Process management for production
-🏗️ **[Architecture Documentation](./docs/ARCHITECTURE.md)** - System architecture, modules, and design decisions
-🗑️ **[Deprecated Files](./docs/DEPRECATED.md)** - List of deprecated code and migration guides
-🏢 **[Main Services Catalog](./docs/MAIN_SERVICES_CATALOG.md)** - Complete list of all 6 main services
-📇 **[Quick Reference Services](./docs/QUICK_REFERENCE_SERVICES.md)** - Quick reference card for services
+- [Overview](#-overview)
+- [Key Features](#-key-features)
+- [Supported Plants](#-supported-plants)
+- [Technology Stack](#️-technology-stack)
+- [Getting Started](#-getting-started)
+- [Documentation](#-documentation)
+- [Development Roadmap](#-development-roadmap)
+- [License](#-license)
 
 ---
 
-## 🏢 Main Services (6 Core Services)
+## 🎯 Overview
 
-GACP Platform provides **6 main services** with 4 supporting services:
+The **GACP Platform** is a comprehensive digital ecosystem for managing **GACP (Good Agricultural and Collection Practices)** certification for **cannabis** and **medicinal plants** in Thailand. The platform serves farmers, regulatory authorities (DTAM), and agricultural stakeholders with intelligent farm management tools, IoT integration, and AI-powered recommendations.
 
-| #   | Service                     | Type                 | Status        |
-| --- | --------------------------- | -------------------- | ------------- |
-| 1   | **Authentication & SSO**    | Infrastructure       | ✅ Production |
-| 2   | **GACP Application System** | Business             | ✅ Production |
-| 3   | **Farm Management**         | Standalone + Control | ✅ Production |
-| 4   | **Track & Trace**           | Business             | ✅ Production |
-| 5   | **Survey System**           | Standalone           | ✅ Production |
-| 6   | **Standards Comparison**    | Standalone           | ✅ Production |
+### Mission
 
-**Quick Command**: `node config/services-catalog.js` to see complete catalog
+To modernize Thailand's cannabis and medicinal plant industry by providing farmers with world-class digital tools for:
 
-📖 **Full Documentation**: [Main Services Catalog](./docs/MAIN_SERVICES_CATALOG.md)
+- **GACP Compliance**: Streamlined certification process aligned with DTAM standards
+- **Smart Farming**: IoT sensor integration and real-time monitoring
+- **AI Recommendations**: Data-driven insights for fertilizer, irrigation, and crop management
+- **Traceability**: Complete seed-to-sale tracking for regulatory compliance
+- **Market Access**: Quality assurance and certification for domestic and export markets
+
+### Platform Positioning
+
+Unlike government portals that provide **regulations and information** (DTAM, HerbCtrl, PanThai), we provide **operational farm management tools** that help farmers actually implement GACP standards in daily operations. See [Competitive Analysis](./docs/COMPETITIVE_ANALYSIS.md) for detailed comparison.
 
 ---
 
-## 🚀 Quick Start
+## ✨ Key Features
+
+### Phase 1: GACP Certification Management ✅ Complete
+
+- **Dual-Portal System**
+  - Farmer Portal: Application submission, document upload, status tracking
+  - DTAM Portal: Application review, farm inspection, certificate issuance
+- **Role-Based Access Control**: Admin, Reviewer, Inspector, Approver roles
+- **Document Management**: Upload, verify, and store GACP-required documents
+- **Certificate Generation**: Automated certificate issuance upon approval
+- **Payment Integration**: PromptPay integration for application fees
+- **Audit Trail**: Complete seed-to-sale tracking for regulatory compliance
+
+### Phase 2: IoT & Smart Farming ✅ Complete
+
+- **IoT Integration**: Real-time monitoring of soil, water, and environmental conditions
+- **Sensor Dashboard**: Live data visualization and alerts
+- **Farm Management**: Multi-farm management with crop rotation tracking
+- **SOP Tracking**: 5-step Standard Operating Procedures (Seed → Cultivation → Harvest → Processing → Sale)
+- **Chemical Registry**: Track and manage pesticide, fertilizer usage (GACP compliant)
+- **QR Code Generation**: Traceability labels for products
+
+### Phase 3: AI Recommendations & Analytics 🚀 In Development
+
+- **Fertilizer Recommendation Engine**: AI-powered NPK recommendations based on:
+  - Growth stage (seedling, vegetative, flowering)
+  - Soil conditions (pH, existing nutrients, soil type)
+  - Environmental factors (temperature, humidity, moisture)
+  - Regional data (77 Thai provinces)
+  - Historical yield data (machine learning)
+- **Irrigation Optimization**: Smart water management recommendations
+- **Disease Prediction**: Early warning system based on environmental conditions
+- **Yield Forecasting**: ML-based predictions for harvest planning
+- **Thai NLP Assistant**: Natural language Q&A for farmers (Thai language)
+- **Central Plant Database**: Knowledge base for cannabis and 5 medicinal plants
+
+**Current Status**: Fertilizer recommendation engine functional (rule-based + ML-ready architecture). See [Phase 3 Guide](./docs/PHASE3_SMART_RECOMMENDATIONS_AI_GUIDE.md) and [Research](./docs/FERTILIZER_RECOMMENDATION_RESEARCH.md).
+
+---
+
+## 🌿 Supported Plants
+
+The platform focuses on **cannabis** as the primary crop, with support for 5 additional economically important medicinal plants:
+
+### 1. 🥇 Cannabis (กัญชา) - **PRIMARY FOCUS**
+
+- **Medical cannabis** (high CBD, low THC < 0.2%)
+- **Hemp** (industrial, fiber, seed)
+- **GACP certification required** by DTAM (กรมแพทย์แผนไทยและการแพทย์ทางเลือก)
+- **Complete traceability** from seed to sale
+- **40+ cultivars** supported with detailed growing profiles
+
+**Platform Mission**: Bring cannabis producers into Thailand's legal system through simplified GACP compliance and smart farming tools.
+
+### 2-6. Secondary Economic Crops (Future Phases)
+
+| Plant           | Thai Name | Development Phase |
+| --------------- | --------- | ----------------- |
+| Turmeric        | ขมิ้นชัน  | Future            |
+| Ginger          | ขิง       | Future            |
+| Black Galingale | กระชายดำ  | Future            |
+| Plai            | ไพล       | Future            |
+| Kratom          | กระท่อม   | Research          |
+
+**Note**: Cannabis is **always prioritized** as the first option in all menus, forms, and displays across the platform.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend
+
+- **Framework**: Next.js 14.2 (React 18) with TypeScript
+- **UI Library**: Material-UI (MUI) 5.x + TailwindCSS
+- **State Management**: React Context API + Zustand
+- **Forms**: React Hook Form + Zod validation
+- **HTTP**: Axios + React Query
+
+### Backend
+
+- **Runtime**: Node.js 24.9.0 LTS
+- **Framework**: Express.js 5.1.0
+- **Database**: MongoDB 6+ with Mongoose ODM
+- **Authentication**: JWT (separate systems for Farmers and DTAM)
+- **Real-time**: WebSocket support for live updates
+- **Cache**: Redis (optional)
+
+### AI & Data Science
+
+- **ML Framework**: (Planned) XGBoost, Random Forest for predictions
+- **NLP**: Thai language processing for farmer Q&A
+- **Data Storage**: Historical yield data, regional conditions, plant database
+
+### Infrastructure
+
+- **Containerization**: Docker + Docker Compose
+- **Process Manager**: PM2 for production
+- **CI/CD**: GitHub Actions
+- **Monitoring**: Application logs with rotation
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js >= 18.0.0 (recommended: 24.9.0)
-- MongoDB >= 6.0
-- npm or pnpm package manager
-- Git
+- **Node.js** >= 18.0.0 (recommended: 24.9.0)
+- **MongoDB** >= 6.0
+- **npm** or **pnpm** package manager
+- **Git**
 
-### Installation
+### Quick Installation
 
 ```bash
 # 1. Clone repository
-git clone https://github.com/jonmaxmore/gacp-certify-flow-main.git
-cd gacp-certify-flow-main
+git clone https://github.com/jonmaxmore/Botanical-Audit-Framework.git
+cd Botanical-Audit-Framework
 
 # 2. Install backend dependencies
-pnpm install
+npm install
 
 # 3. Install frontend dependencies
 cd frontend-nextjs
@@ -92,1291 +169,419 @@ cd ..
 
 # 4. Setup environment variables
 cp .env.example .env
-# Edit .env with your configuration (see Configuration section)
+# Edit .env with your configuration
 
-# 5. Start MongoDB
+# 5. Start MongoDB (Docker)
 docker-compose up -d mongodb
-# Or start local MongoDB instance
 
-# 6. Start backend server (port 3004)
+# 6. Start backend (port 3004)
 cd apps/backend
 node atlas-server.js
 
-# 7. Start frontend (port 3000) - in another terminal
+# 7. Start frontend (port 3000) - new terminal
 cd frontend-nextjs
 npm run dev
 ```
 
 ### Access Application
 
-- **Farmer Portal**: http://localhost:3000/farmer
-- **DTAM Portal**: http://localhost:3000/dtam
-- **API**: http://localhost:3004
-- **Health Check**: http://localhost:3004/health
+- **Farmer Portal**: [http://localhost:3000/farmer](http://localhost:3000/farmer)
+- **DTAM Portal**: [http://localhost:3000/dtam](http://localhost:3000/dtam)
+- **API Health**: [http://localhost:3004/health](http://localhost:3004/health)
 
----
+### Environment Configuration
 
-## 📋 Overview
-
-The GACP Certification Flow Platform streamlines the entire certification process for cannabis cultivation, from initial application through final certificate issuance.
-
-### 👨‍🌾 Farmers (Public Portal)
-
-- Submit certification applications
-- Upload required documentation
-- Track application status
-- Receive certificates upon approval
-- Generate reports
-
-### 🏛️ DTAM Staff (Department Portal)
-
-- Review and approve applications
-- Conduct farm inspections
-- Manage farmer accounts
-- Generate system reports
-- Monitor certification standards
-
----
-
-## ✨ Features
-
-### Core Functionality
-
-- ✅ **Two-Portal System**: Separate interfaces for farmers and DTAM staff
-- ✅ **Application Workflow**: Multi-step certification process with review stages
-- ✅ **Document Management**: Upload, verify, and store required documents
-- ✅ **Authentication & Authorization**: JWT-based security with RBAC
-- ✅ **Dashboard Analytics**: Real-time statistics and insights
-- ✅ **Certificate Generation**: Automated certificate issuance
-- ✅ **Report Generation**: Comprehensive reporting tools
-
-### Security Features
-
-- 🔒 **Separate Authentication**: Distinct login systems for farmers and DTAM
-- 🔒 **Role-Based Access Control (RBAC)**: Admin, Reviewer, Manager roles
-- 🔒 **JWT Token Security**: Secure token-based authentication
-- 🔒 **Password Hashing**: bcrypt password encryption
-- 🔒 **Input Validation**: Comprehensive request validation
-
----
-
-## 🛠️ Technology Stack
-
-### Frontend
-
-- **Framework**: Next.js 14.2 (React 18)
-- **Language**: TypeScript
-- **UI Library**: Material-UI (MUI) 5.x
-- **State Management**: React Context API
-- **HTTP Client**: Axios
-- **Form Handling**: React Hook Form + Yup validation
-
-### Backend
-
-- **Runtime**: Node.js 24.9.0
-- **Framework**: Express 5.1.0
-- **Database**: MongoDB 6+
-- **ODM**: Mongoose 8.x
-- **Authentication**: JWT (jsonwebtoken)
-- **Password**: bcrypt
-- **Validation**: Custom validation middleware
-
-### DevOps
-
-- **Containerization**: Docker + Docker Compose
-- **Process Manager**: PM2
-- **Version Control**: Git + GitHub
-- **Environment**: dotenv for configuration
-
----
-
-## ⚙️ Configuration
-
-### Environment Variables (.env)
+Key environment variables (`.env`):
 
 ```bash
-# ═══════════════════════════════════════════════════════════════
-# GACP Platform Environment Configuration
-# ═══════════════════════════════════════════════════════════════
-
-# Server Configuration
+# Server
 PORT=3004
 NODE_ENV=development
 
-# Database Configuration
-MONGODB_URI=mongodb+srv://user:password@cluster.mongodb.net/gacp_development
+# Database
+MONGODB_URI=mongodb://localhost:27017/gacp_development
 DB_NAME=gacp_development
 
-# JWT Authentication
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
+# Authentication
+JWT_SECRET=your-secret-key-change-this
 JWT_EXPIRES_IN=7d
-
-# DTAM JWT (separate system)
-DTAM_JWT_SECRET=your-dtam-jwt-secret-key-change-this
+DTAM_JWT_SECRET=your-dtam-secret-key
 DTAM_JWT_EXPIRES_IN=24h
 
-# CORS Configuration
-ALLOWED_ORIGINS=http://localhost:3000,https://yourdomain.com
-
-# File Upload
-MAX_FILE_SIZE=10485760
-UPLOAD_PATH=./uploads
-
-# Government API Configuration
-DOA_API_URL=https://api.doa.go.th/v1
-FDA_API_URL=https://api.fda.moph.go.th/v1
-DGA_API_URL=https://api.dga.or.th/v1
-DTAM_API_URL=https://api.dtam.go.th/v1
-
-# Payment Configuration (PromptPay)
-PROMPTPAY_API_URL=https://api.promptpay.io/v1
-PROMPTPAY_MERCHANT_ID=your-merchant-id
-
-# Email Configuration
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=your-email@gmail.com
-SMTP_PASS=your-app-password
-
-# Notification Configuration
-LINE_NOTIFY_TOKEN=your-line-notify-token
-SMS_API_URL=https://api.sms.co.th/v1
-SMS_API_KEY=your-sms-api-key
-
-# File Storage Configuration
-STORAGE_TYPE=local
-AWS_S3_BUCKET=gacp-documents
-AWS_ACCESS_KEY_ID=your-aws-access-key
-AWS_SECRET_ACCESS_KEY=your-aws-secret-key
-
-# Security Configuration
-BCRYPT_ROUNDS=12
-RATE_LIMIT_MAX_REQUESTS=100
-RATE_LIMIT_WINDOW_MS=900000
-
-# Logging Configuration
-LOG_LEVEL=info
-LOG_FILE=./logs/app.log
+# CORS
+ALLOWED_ORIGINS=http://localhost:3000
 ```
+
+For complete configuration guide, see [Environment Config](./docs/ENVIRONMENT_CONFIG.md).
 
 ---
 
-## � Running the Application
+## 📚 Documentation
 
-### Development Mode
+### 🚀 Getting Started
 
-**Backend**:
+- **[Quick Start Guide](./docs/QUICK_START_GUIDE.md)** - Get running in 2 minutes
+- **[Development Setup](./docs/DEVELOPER_SETUP.md)** - Full development environment setup
+- **[Deployment Guide](./docs/05_DEPLOYMENT/DEPLOYMENT_GUIDE.md)** - Production deployment instructions
 
-```bash
-# Start backend server with auto-reload
-cd apps/backend
-npm run dev
+### 🎯 System Architecture
 
-# Or manually
-node atlas-server.js
+- **[Architecture Overview](./docs/ARCHITECTURE.md)** - System design and component architecture
+- **[Competitive Analysis](./docs/COMPETITIVE_ANALYSIS.md)** - Market positioning vs government platforms
+- **[Central Database Design](./docs/CENTRAL_DATABASE_DESIGN.md)** - 6-plant knowledge base with ML integration
+
+### 📖 Phase-Specific Guides
+
+| Phase   | Guide                                                                             | Status            |
+| ------- | --------------------------------------------------------------------------------- | ----------------- |
+| Phase 1 | [GACP Certification & Admin Portal](./docs/PHASE1_IMPLEMENTATION_GUIDE.md)        | ✅ Complete       |
+| Phase 2 | [IoT & Smart Farming](./docs/PHASE2_IOT_SMART_FARMING_GUIDE.md)                   | ✅ Complete       |
+| Phase 3 | [AI Recommendations & Analytics](./docs/PHASE3_SMART_RECOMMENDATIONS_AI_GUIDE.md) | 🚀 In Development |
+
+### 🔬 Research & Analysis
+
+- **[Fertilizer Recommendation Research](./docs/FERTILIZER_RECOMMENDATION_RESEARCH.md)** - DTAM standards, competitors, ML approaches
+- **[Codebase Inventory](./docs/CODEBASE_INVENTORY_PHASE3.md)** - What exists vs what to build
+- **[Subscription Features](./docs/SUBSCRIPTION_FEATURE_ACCESS.md)** - Future monetization strategy
+
+### 🔧 Technical Documentation
+
+- **[API Documentation](./docs/API_DOCUMENTATION.md)** - Complete API reference
+- **[Database Schema](./docs/04_DATABASE/README.md)** - MongoDB collections and relationships
+- **[Linting Guide](./docs/LINTING_GUIDE.md)** - Code quality and auto-formatting
+
+### 👥 User Guides
+
+- **[User Manual](./docs/07_USER_GUIDES/USER_MANUAL.md)** - For farmers and DTAM staff
+- **[Testing Guide](./docs/08_TESTING/README.md)** - UAT and QA procedures
+
+---
+
+## 🗺️ Development Roadmap
+
+### Phase 1: GACP Certification Management ✅ Complete (Oct 2025)
+
+- Dual-portal architecture (Farmer + DTAM)
+- Application workflow with multi-stage approval
+- Document upload and verification
+- Certificate generation
+- Payment integration (PromptPay)
+- Audit trail and compliance tracking
+
+### Phase 2: IoT & Smart Farming ✅ Complete (Oct 2025)
+
+- Real-time sensor integration (soil, water, environmental)
+- Farm dashboard with live data visualization
+- SOP tracking (5-step seed-to-sale process)
+- Chemical registry for GACP compliance
+- QR code traceability
+- Multi-farm management
+
+### Phase 3: AI Recommendations & Analytics 🚀 In Development (Current)
+
+**Completed:**
+
+- ✅ Central plant database (6 plants: PlantCatalog, PlantCultivar, RegionalConditions, DiseasePest, HistoricalYield)
+- ✅ Fertilizer recommendation engine (rule-based + ML-ready)
+- ✅ GACP compliance integration (DTAM standards)
+- ✅ Regional data (77 Thai provinces)
+- ✅ NPK calculation algorithms
+
+**In Progress:**
+
+- 🔄 ML model training (XGBoost, Random Forest)
+- 🔄 Irrigation optimization engine
+- 🔄 Disease prediction system
+- 🔄 Thai NLP assistant
+
+**Planned:**
+
+- ⏳ Yield forecasting
+- ⏳ Market price predictions
+- ⏳ Resource optimization (water, fertilizer)
+
+### Phase 4: National Expansion (2026)
+
+- Mobile apps (iOS, Android) for farmers and inspectors
+- Government API integration (DOA, FDA, DGA)
+- Export certification support
+- Research collaboration platform
+- Advanced traceability and audit trail features
+
+### Phase 5: Advanced Features (2027+)
+
+- Drone integration for farm monitoring
+- Satellite imagery analysis
+- Supply chain management
+- Marketplace integration
+- Cooperative management tools
+
+**Detailed Roadmap**: See [National Platform Roadmap](./docs/NATIONAL_PLATFORM_ROADMAP.md) for 18-month development plan.
+
+---
+
+## 🏗️ System Architecture
+
+### Service-Based Architecture
+
+The platform is built using a **modular service-based architecture** with clearly separated concerns:
+
 ```
-
-**Frontend**:
-
-```bash
-cd frontend-nextjs
-npm run dev
-```
-
-├── apps/ # Applications (Monorepo)- Node.js >= 18.0.0 (recommended: 24.9.0)
-
-│ ├── farmer-portal/ # Farmer portal (Next.js 15)
-
-│ ├── dtam-portal/ # DTAM portal (Next.js 15)- MongoDB >= 6.0### 🏛️ **DTAM Staff** (Department of Thai Traditional and Alternative Medicine)
-
-│ ├── public-services/ # Public services (Next.js 15)
-
-│ └── backend/ # Backend services (Node.js 20)- npm or yarn- Review and approve applications
-
+Botanical-Audit-Framework/
 │
-
-├── packages/ # Shared packages- Git- Conduct farm inspections
-
-│ ├── ui/ # Shared UI components
-
-│ ├── config/ # Shared configuration- Manage farmer accounts
-
-│ ├── types/ # TypeScript types
-
-│ └── utils/ # Shared utilities### Installation- Generate system reports
-
+├── apps/
+│   └── backend/                      # Node.js/Express Backend
+│       │
+│       ├── services/                 # 🔧 Business Logic Services (Separable)
+│       │   ├── ai/                   # AI/ML Services
+│       │   │   ├── fertilizer-recommendation.service.js
+│       │   │   ├── irrigation-optimization.service.js (planned)
+│       │   │   ├── disease-prediction.service.js (planned)
+│       │   │   └── yield-forecasting.service.js (planned)
+│       │   │
+│       │   ├── iot/                  # IoT Integration Services
+│       │   │   ├── sensor-data.service.js
+│       │   │   └── alert-notification.service.js
+│       │   │
+│       │   └── payment/              # Payment Services
+│       │       └── promptpay.service.js
+│       │
+│       ├── modules/                  # 📦 Feature Modules (Separable)
+│       │   ├── auth-dtam/            # DTAM Authentication Module
+│       │   │   ├── auth.routes.js
+│       │   │   ├── auth.controller.js
+│       │   │   └── auth.service.js
+│       │   │
+│       │   ├── farm-management/      # Farm Management Module
+│       │   │   ├── farm.routes.js
+│       │   │   ├── farm.controller.js
+│       │   │   └── farm.service.js
+│       │   │
+│       │   ├── document/             # Document Management Module
+│       │   │   ├── document.routes.js
+│       │   │   ├── document.controller.js
+│       │   │   └── document.service.js
+│       │   │
+│       │   └── certification/        # GACP Certification Module
+│       │       ├── application.routes.js
+│       │       ├── application.controller.js
+│       │       └── application.service.js
+│       │
+│       ├── routes/                   # 🌐 API Route Handlers
+│       │   ├── ai/                   # AI service routes
+│       │   │   ├── fertilizer.routes.js
+│       │   │   └── fertilizer-products.routes.js
+│       │   └── [other route files]
+│       │
+│       ├── controllers/              # 🎮 Request Controllers
+│       │   ├── ai/                   # AI controllers
+│       │   │   └── fertilizer.controller.js
+│       │   └── [other controllers]
+│       │
+│       ├── models/                   # 🗄️ Database Models
+│       │   ├── PlantCatalog.js       # Central plant database
+│       │   ├── PlantCultivar.js      # 40+ cultivar profiles
+│       │   ├── RegionalConditions.js # 77 Thai provinces
+│       │   ├── DiseasePest.js        # Disease database
+│       │   ├── HistoricalYield.js    # ML training data
+│       │   ├── FertilizerProduct.js  # GACP-approved products
+│       │   ├── Farm.js               # Farm management
+│       │   └── Crop.js               # Crop tracking
+│       │
+│       ├── middleware/               # ⚙️ Middleware
+│       │   ├── auth.middleware.js
+│       │   ├── validation.middleware.js
+│       │   └── feature-access.middleware.js
+│       │
+│       └── atlas-server.js           # Main server entry point
 │
-
-├── docs/ # 📚 Documentation (NEW!)- Monitor certification standards
-
-│ ├── 00_PROJECT_OVERVIEW/ # Project planning
-
-│ ├── 01_SYSTEM_ARCHITECTURE/ # System design```bash
-
-│ ├── 02_TEAM_DISCUSSIONS/ # Team decisions
-
-│ ├── 03_WORKFLOWS/ # Business workflows# 1. Clone repository---
-
-│ ├── 04_DATABASE/ # Database docs
-
-│ ├── 05_DEPLOYMENT/ # Deployment guidesgit clone https://github.com/jonmaxmore/gacp-certify-flow-main.git
-
-│ ├── 06_FRONTEND/ # Frontend docs
-
-│ ├── 07_USER_GUIDES/ # User manualscd gacp-certify-flow-main## ✨ Features
-
-│ └── 08_TESTING/ # Testing docs
-
+├── frontend-nextjs/                  # 🎨 Next.js Frontend
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── farmer/               # Farmer Portal
+│   │   │   └── dtam/                 # DTAM Portal
+│   │   ├── components/               # Shared UI components
+│   │   └── contexts/                 # React state contexts
+│   └── public/                       # Static assets
 │
-
-├── scripts/ # Utility scripts
-
-├── tests/ # Test suites# 2. Install backend dependencies### Core Functionality
-
-├── k8s/ # Kubernetes configs
-
-└── archive/ # 📦 Old reports (NEW!)npm install- ✅ **Two-Portal System**: Separate interfaces for farmers and DTAM staff
-
+├── docs/                             # 📚 Documentation
+│   ├── PHASE1_IMPLEMENTATION_GUIDE.md
+│   ├── PHASE2_IOT_SMART_FARMING_GUIDE.md
+│   ├── PHASE3_SMART_RECOMMENDATIONS_AI_GUIDE.md
+│   ├── API_FERTILIZER_ENDPOINTS.md
+│   ├── FERTILIZER_RECOMMENDATION_RESEARCH.md
+│   ├── COMPETITIVE_ANALYSIS.md
+│   ├── CENTRAL_DATABASE_DESIGN.md
+│   └── ARCHITECTURE.md
+│
+├── archive/                          # Old documentation (timestamped)
+├── .env.example                      # Environment configuration template
+├── docker-compose.yml                # Docker services
+├── ecosystem.config.js               # PM2 process manager config
+└── README.md                         # This file
 ```
 
-- ✅ **Application Workflow**: Multi-step application process with review stages
+### Key Architectural Principles
+
+1. **Modular Services**: Each service (AI, IoT, Payment, etc.) is independently deployable and maintainable
+2. **Separation of Concerns**: Clear boundaries between routes, controllers, services, and models
+3. **Feature Modules**: Self-contained feature modules with their own routes, controllers, and services
+4. **Scalability**: Services can be scaled independently based on load
+5. **Database-Driven**: MongoDB with Mongoose ODM for flexible schema design
+6. **API-First**: RESTful API design for easy frontend integration and future mobile apps
 
 ---
-
-# 3. Install frontend dependencies- ✅ **Document Management**: Upload, verify, and store required documents
-
-## 🎯 System Overview
-
-cd frontend-nextjs- ✅ **Authentication & Authorization**: Separate JWT-based authentication systems
-
-### Architecture: 2 Builds
-
-npm install- ✅ **Dashboard Analytics**: Real-time statistics and insights
-
-#### 1. Farmer Portal (Port 3001)
-
-- **Login 1**: Application Submissioncd ..- ✅ **Certificate Generation**: Automated certificate issuance
-
-  - Submit GACP application
-
-  - Upload documents- ✅ **Report Generation**: Comprehensive reporting tools
-
-  - Payment (PromptPay)
-
-  - Track status# 4. Configure environment
-
-  - Download certificate
-
-cp .env.example .env### Security Features
-
-- **Login 2**: Farm Management
-
-  - Create/manage farms# Edit .env with your settings- 🔒 **Separate Authentication**: Distinct login systems for farmers and DTAM
-
-  - SOP Tracking (5 steps: Seed to Sale)
-
-  - Chemical registry- 🔒 **Role-Based Access Control (RBAC)**: Admin, Reviewer, Manager roles
-
-  - QR Code generation
-
-  - Compliance checking# 5. Start MongoDB- 🔒 **JWT Token Security**: Secure token-based authentication
-
-
-
-#### 2. DTAM Portal (Port 3002)docker-compose up -d mongodb- 🔒 **Password Hashing**: bcrypt password encryption
-
-- **4 Roles** (Single portal):
-
-  - **Reviewer**: Review applications# Or start local MongoDB instance- 🔒 **Input Validation**: Comprehensive request validation
-
-  - **Inspector**: Farm inspection (30+ checklist)
-
-  - **Approver**: Final approval
-
-  - **Admin**: System management, reports
-
-# 6. Start backend server (port 3004)### Technical Features
-
-#### 3. Free Services (Public)
-
-- Survey systemnode app.js- ⚡ **Modern Stack**: Next.js 14 + Express 5 + MongoDB 6
-
-- Standards comparison (GACP vs others)
-
-- Track & Trace (QR scanner)- ⚡ **Clean Architecture**: Modular, maintainable codebase
-
-
-
----# 7. Start frontend (port 3000) - in another terminal- ⚡ **TypeScript**: Type-safe frontend development
-
-
-
-## 💻 Tech Stackcd frontend-nextjs- ⚡ **Material-UI**: Professional, responsive design
-
-
-
-### Frontend:npm run dev- ⚡ **Docker Support**: Containerized deployment
-
-```
-
-Framework: Next.js 15 (React 18)```- ⚡ **PM2 Process Management**: Production-ready process management
-
-Styling: TailwindCSS + Material-UI
-
-Language: TypeScript
-
-State: Zustand
-
-Forms: React Hook Form + Zod### Access Application---
-
-HTTP: Axios + React Query
-
-```
-
-
-
-### Backend:- **Farmer Portal**: http://localhost:3000/farmer## 🛠️ Technology Stack
-
-```
-
-Runtime: Node.js 20 LTS- **DTAM Portal**: http://localhost:3000/dtam
-
-Framework: Express.js
-
-Database: MongoDB 7.0- **API**: http://localhost:3004### Frontend
-
-Cache: Redis 7.2
-
-Queue: RabbitMQ 3.12- **Health Check**: http://localhost:3004/health- **Framework**: Next.js 14.2 (React 18)
-
-ORM: Mongoose
-
-Testing: Jest + Supertest- **Language**: TypeScript
-
-````
-
----- **UI Library**: Material-UI (MUI) 5.x
-
-### Infrastructure:
-
-```- **State Management**: React Context API
-
-Container: Docker + Kubernetes
-
-CI/CD: GitHub Actions## ⚙️ Configuration- **HTTP Client**: Axios
-
-Monitoring: Prometheus + Grafana
-
-Logging: ELK Stack- **Form Handling**: React Hook Form + Yup validation
-
-API Gateway: Kong
-
-```### Environment Variables (.env)
-
-
-
----### Backend
-
-
-
-## 👥 Team Structure```bash- **Runtime**: Node.js 24.9.0
-
-
-
-- **Project Manager (PM)**: 2 คน# Server- **Framework**: Express 5.1.0
-
-- **System Analyst (SA)**: 3 คน
-
-- **Software Engineer (SE)**: 8 คน (4 Backend + 4 Frontend)PORT=3004- **Database**: MongoDB 6+
-
-- **MIS**: 2 คน
-
-- **UX/UI Designer**: 3 คนNODE_ENV=production- **ODM**: Mongoose 8.x
-
-- **QA Engineer**: 3 คน
-
-- **Authentication**: JWT (jsonwebtoken)
-
-**Total Team**: 21 members
-
-# Database- **Password**: bcrypt
-
----
-
-MONGODB_URI=mongodb://localhost:27017/gacp_production- **Validation**: Custom validation middleware
-
-## 📅 Project Timeline
-
-DB_NAME=gacp_production
-
-**Duration**: 6 months (October 2025 - March 2026)
-
-### DevOps
-
-````
-
-Phase 0: Setup (Week 1-2) ✅ Completed# JWT Authentication- **Containerization**: Docker + Docker Compose
-
-Phase 1: MVP (Week 3-10) ⏳ In Progress
-
-Phase 2: Farm Management (Week 11-16) 📋 PlannedJWT_SECRET=your-secret-key-change-this- **Process Manager**: PM2
-
-Phase 3: Free Services (Week 17-18) 📋 Planned
-
-Phase 4: Polish & Testing (Week 19-22) 📋 PlannedJWT_EXPIRES_IN=7d- **Version Control**: Git + GitHub
-
-Phase 5: Launch (Week 23-24) 📋 Planned
-
-````- **Environment**: dotenv for configuration
-
-
-
----# DTAM JWT (separate system)
-
-
-
-## 💰 BudgetDTAM_JWT_SECRET=your-dtam-secret-key---
-
-
-
-```DTAM_JWT_EXPIRES_IN=24h
-
-Team Salaries:         5,670,000 THB
-
-Infrastructure:          490,000 THB## 🚀 Quick Start
-
-Software Licenses:        20,650 THB
-
-External Services:       180,000 THB# CORS
-
-Miscellaneous:           721,000 THB
-
-──────────────────────────────────ALLOWED_ORIGINS=http://localhost:3000,https://yourdomain.com### Prerequisites
-
-Total:                 7,081,650 THB
-
-```- Node.js >= 18.0.0 (recommended: 24.9.0)
-
-
-
----# File Upload- MongoDB >= 6.0
-
-
-
-## 🚀 Development CommandsMAX_FILE_SIZE=10485760- npm or yarn package manager
-
-
-
-```bashUPLOAD_PATH=./uploads- Git
-
-# Development
-
-pnpm dev              # Start all apps in dev mode```
-
-pnpm dev:farmer       # Start farmer portal only
-
-pnpm dev:dtam         # Start DTAM portal only### 1. Clone Repository
-
-pnpm dev:backend      # Start backend only
-
----```bash
-
-# Build
-
-pnpm build            # Build all appsgit clone https://github.com/jonmaxmore/gacp-certify-flow-main.git
-
-pnpm build:farmer     # Build farmer portal
-
-pnpm build:dtam       # Build DTAM portal## 📁 Project Structurecd gacp-certify-flow-main
-
-
-
-# Testing```
-
-pnpm test             # Run all tests
-
-pnpm test:unit        # Unit tests only```
-
-pnpm test:e2e         # E2E tests only
-
-pnpm test:load        # Load testinggacp-certify-flow-main/### 2. Install Dependencies
-
-
-
-# Database├── app.js                      # Main Express application```bash
-
-pnpm db:seed          # Seed database
-
-pnpm db:migrate       # Run migrations├── package.json                # Backend dependencies# Install backend dependencies
-
-pnpm db:backup        # Backup database
-
-├── ecosystem.config.js         # PM2 configurationnpm install
-
-# Linting
-
-pnpm lint             # Lint all code├── docker-compose.yml          # Docker services
-
-pnpm format           # Format with Prettier
-
-```├── Dockerfile.backend          # Backend container# Install frontend dependencies
-
-
-
----│cd frontend-nextjs
-
-
-
-## 📖 API Documentation├── src/                        # Backend sourcenpm install
-
-
-
-- **Swagger UI**: http://localhost:3000/api-docs│   ├── controllers/            # Request handlerscd ..
-
-- **Postman Collection**: [docs/api-postman.json](./docs/api-postman.json)
-
-- **OpenAPI Spec**: [docs/openapi.yaml](./docs/openapi.yaml)│   ├── models/                 # MongoDB models```
-
-
-
----│   ├── routes/                 # API routes
-
-
-
-## 🔒 Security│   ├── middleware/             # Custom middleware### 3. Configure Environment
-
-
-
-### Authentication:│   └── utils/                  # Utilities```bash
-
-- JWT tokens (15 min access + 7 day refresh)
-
-- OTP verification (SMS)│# Copy environment template
-
-- Role-based access control (RBAC)
-
-├── modules/                    # Clean architecture modulescp .env.example .env
-
-### Data Protection:
-
-- SSL/TLS encryption│   ├── auth-dtam/              # DTAM authentication
-
-- Data encryption at rest
-
-- PDPA compliance│   ├── document/               # Document management# Edit .env with your configuration
-
-- ISO 27001 standards
-
-│   ├── dashboard/              # Dashboard module# (See Configuration section below)
-
----
-
-│   └── shared/                 # Shared utilities```
 
 ## 🧪 Testing
 
-│
-
-### Test Coverage:
-
-```├── frontend-nextjs/            # Next.js frontend### 4. Start MongoDB
-
-Unit Tests:        80% coverage
-
-Integration Tests: 70% coverage│   ├── src/app/```bash
-
-E2E Tests:         60% coverage
-
-Overall:           75% coverage│   │   ├── farmer/             # Farmer portal# Using Docker
-
-````
-
-│ │ └── dtam/ # DTAM portaldocker-compose up -d mongodb
-
-### Load Testing:
-
-- Target: 10,000 concurrent users│ ├── components/ # Shared components
-
-- API Response: < 500ms (p95)
-
-- Page Load: < 3s│ └── public/ # Static assets# Or start local MongoDB
-
----│mongod --dbpath /path/to/data
-
-## 📊 Monitoring└── docs/```
-
-### Metrics: ├── DEPLOYMENT_GUIDE.md # Deployment instructions
-
-- Prometheus + Grafana dashboards
-
-- Real-time alerts (Slack/PagerDuty) └── USER_MANUAL.md # User documentation### 5. Start Application
-
-- Application metrics
-
-- Infrastructure metrics``````bash
-
-### Logging:# Start backend (port 3004)
-
-- ELK Stack (Elasticsearch, Logstash, Kibana)
-
-- Centralized logging---node app.js
-
-- Log retention: 90 days
-
----
-
-## 🎮 Running the Application# In another terminal, start frontend (port 3000)
-
-## 🔧 Troubleshooting
-
-cd frontend-nextjs
-
-### Common Issues:
-
-### Development Modenpm run dev
-
-**1. MongoDB connection failed:**
-
-`bash`
-
-# Check if MongoDB is running
-
-docker ps | grep mongodb```bash
-
-# Restart MongoDB# Backend### 6. Access Application
-
-docker-compose restart mongodb
-
-````node app.js- **Farmer Portal**: http://localhost:3000/farmer
-
-
-
-**2. Port already in use:**- **DTAM Portal**: http://localhost:3000/dtam
+### Running Tests
 
 ```bash
+# Unit tests
+npm test
 
-# Check what's using the port# Frontend (separate terminal)- **API**: http://localhost:3004
+# E2E tests
+npm run test:e2e
 
-netstat -ano | findstr :3000
+# Test coverage
+npm run test:coverage
+```
 
-cd frontend-nextjs- **Health Check**: http://localhost:3004/health
+### Test Coverage Goals
 
-# Kill the process (replace PID)
+- **Unit Tests**: > 80%
+- **Integration Tests**: > 70%
+- **E2E Tests**: > 60%
 
-taskkill /PID <PID> /Fnpm run dev
+See [Testing Guide](./docs/08_TESTING/README.md) for complete testing procedures.
 
-````
+---
 
-````---
+## 🚀 Deployment
 
-**3. Dependencies not installing:**
+### Production Deployment
+
+**Using PM2** (Recommended):
 
 ```bash
-
-# Clear cache and reinstall
-
-rm -rf node_modules### Production Mode## 📦 Installation
-
-rm pnpm-lock.yaml
-
-pnpm install
-
-````
-
-**Using PM2** (Recommended):### Development Setup
-
----
-
-## 📞 Support
-
-`bash`bash
-
-### Documentation:
-
-- **Project Plan**: [docs/00_PROJECT_OVERVIEW/](./docs/00_PROJECT_OVERVIEW/)# Install PM2# 1. Install backend dependencies
-
-- **Technical Docs**: [docs/01_SYSTEM_ARCHITECTURE/](./docs/01_SYSTEM_ARCHITECTURE/)
-
-- **User Guides**: [docs/07_USER_GUIDES/](./docs/07_USER_GUIDES/)npm install -g pm2npm install
-
-### Contact:
-
-- **PM Lead**: คุณสมชาย - somchai@gacp.go.th
-
-- **SE Lead**: คุณสมบูรณ์ - somboon@gacp.go.th# Start application# 2. Install frontend dependencies
-
-- **UX Lead**: คุณสมนิด - somnit@gacp.go.th
-
-pm2 start ecosystem.config.jscd frontend-nextjs
-
-### Communication:
-
-- Slack: #gacp-devnpm install
-
-- Jira: https://gacp.atlassian.net
-
-- Wiki: https://wiki.gacp.go.th# View logscd ..
-
----pm2 logs gacp-backend
-
-## 📜 License# 3. Setup environment variables
-
-Copyright © 2025 DTAM (กรมการปกครอง) # Monitorcp .env.example .env
-
-All rights reserved.
-
-pm2 monit
-
----
-
-````# 4. Initialize database (optional - auto-created on first run)
-
-## 🔗 Quick Links
-
-# The application will create collections automatically
-
-- [Complete Project Plan](./docs/00_PROJECT_OVERVIEW/COMPLETE_TEAM_PROJECT_PLAN.md) ⭐
-
-- [System Architecture](./docs/01_SYSTEM_ARCHITECTURE/SA_SE_SYSTEM_ARCHITECTURE.md)**Using Docker**:
-
-- [Microservices Guide](./docs/01_SYSTEM_ARCHITECTURE/MICROSERVICES_ARCHITECTURE_GUIDE.md)
-
-- [Quick Start Guide](./QUICK_START_GUIDE.md)# 5. Create initial DTAM admin user (if needed)
-
-- [User Manual](./docs/07_USER_GUIDES/USER_MANUAL.md)
-
-- [API Documentation](./docs/API_DOCUMENTATION.md)```bash# Use the user creation API or MongoDB directly
-
-- [Deployment Guide](./docs/05_DEPLOYMENT/DEPLOYMENT_GUIDE.md)
-
-# Start all services```
-
----
-
-docker-compose up -d
-
-**🎉 Ready to build something amazing!** 🚀
-
-### Production Setup
-
-Last updated: October 15, 2025
-
-# View logs
-
-docker-compose logs -f```bash
-
-# 1. Clone and install
-
-# Stop servicesgit clone https://github.com/jonmaxmore/gacp-certify-flow-main.git
-
-docker-compose downcd gacp-certify-flow-main
-
-```npm install
-
-
-
----# 2. Build frontend for production
-
-cd frontend-nextjs
-
-## 📚 API Documentationnpm run build
-
-cd ..
-
-### Key Endpoints
-
-# 3. Configure environment
-
-**Authentication**:cp .env.example .env
-
-- `POST /api/auth/register` - Register new farmer# Edit .env for production
-
-- `POST /api/auth/login` - Farmer login
-
-- `POST /api/auth/dtam/login` - DTAM staff login# 4. Start with PM2
-
+# Install PM2
 npm install -g pm2
 
-**Applications**:pm2 start ecosystem.config.js
+# Start application
+pm2 start ecosystem.config.js
 
-- `GET /api/applications` - List applications```
+# Monitor
+pm2 monit
 
-- `POST /api/applications` - Create application
+# View logs
+pm2 logs gacp-backend
+```
 
-- `PUT /api/applications/:id` - Update application---
+**Using Docker**:
 
+```bash
+# Build and start
+docker-compose -f docker-compose.prod.yml up -d
 
+# View logs
+docker-compose logs -f
 
-**Documents**:## ⚙️ Configuration
+# Stop
+docker-compose down
+```
 
-- `POST /api/documents/upload` - Upload document
-
-- `GET /api/documents` - List documents### Environment Variables (.env)
-
-
-
-**Dashboard**:```bash
-
-- `GET /api/dashboard/stats` - Get statistics# ═══════════════════════════════════════════════════════════════
-
-# APPLICATION CONFIGURATION
-
-**DTAM Management**:# ═══════════════════════════════════════════════════════════════
-
-- `GET /api/dtam/applications` - Review applications
-
-- `PUT /api/dtam/applications/:id/review` - Review application# Server Configuration
-
-PORT=3004
-
----NODE_ENV=production
-
-
-
-## 🚢 Deployment# Database Configuration
-
-MONGODB_URI=mongodb://localhost:27017/gacp_production
-
-See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for detailed instructions.DB_NAME=gacp_production
-
-
-
-### Quick Deploy with Docker# JWT Authentication
-
-JWT_SECRET=your-super-secret-jwt-key-change-this-in-production
-
-```bashJWT_EXPIRES_IN=7d
-
-# 1. Configure environment
-
-cp .env.example .env# DTAM JWT (separate system)
-
-# Edit .env for productionDTAM_JWT_SECRET=your-dtam-jwt-secret-key-change-this
-
-DTAM_JWT_EXPIRES_IN=24h
-
-# 2. Build and start
-
-docker-compose up -d# CORS Configuration
-
-ALLOWED_ORIGINS=http://localhost:3000,https://yourdomain.com
-
-# 3. Check status
-
-docker-compose ps# File Upload
-
-docker-compose logs -fMAX_FILE_SIZE=10485760
-
-```UPLOAD_PATH=./uploads
-
-
-
----# Logging
-
-LOG_LEVEL=info
-
-## 🔧 TroubleshootingLOG_FILE=./logs/app.log
-
-
-
-### MongoDB Connection Failed# Email Configuration (optional)
-
-SMTP_HOST=smtp.gmail.com
-
-```bashSMTP_PORT=587
-
-# Check MongoDB is runningSMTP_USER=your-email@gmail.com
-
-mongod --versionSMTP_PASS=your-app-password
-
-
-
-# Start MongoDB# Redis (optional - for caching)
-
-sudo systemctl start mongodREDIS_HOST=localhost
-
-REDIS_PORT=6379
-
-# Or with Docker```
-
-docker-compose up -d mongodb
-
-```### Database Configuration
-
-
-
-### Port Already in UseMongoDB will automatically create the database and collections on first run. The default database name is `gacp_production`.
-
-
-
-```bash**Collections**:
-
-# Windows: Find process using port 3004- `users` - Farmer accounts
-
-netstat -ano | findstr :3004- `farmers` - Farmer profile data
-
-taskkill /PID <PID> /F- `applications` - Certification applications
-
-- `certificates` - Issued certificates
-
-# Linux/Mac- `documents` - Uploaded documents
-
-lsof -i :3004- `surveys` - Survey responses
-
-kill -9 <PID>- `auditlogs` - System audit trail
-
-````
+See [Deployment Guide](./docs/05_DEPLOYMENT/DEPLOYMENT_GUIDE.md) for detailed instructions.
 
 ---
 
-### Application Won't Start
+## 📊 Current Status
 
-## 🎮 Running the Application
+### Phase 1 & 2: Production Ready ✅
 
-````bash
+- **GACP Certification**: Fully functional with 95%+ uptime
+- **IoT Integration**: Real-time monitoring operational
+- **Farm Management**: Supporting multiple farms
 
-# Check Node version### Development Mode
+### Phase 3: Active Development 🚀
 
-node --version  # Should be >= 18
+- **Central Database**: 5 models created (PlantCatalog, PlantCultivar, RegionalConditions, DiseasePest, HistoricalYield)
+- **Fertilizer Engine**: Rule-based system operational, ML integration in progress
+- **GACP Compliance**: 100% compliant with DTAM standards
+- **Research Complete**: Competitive analysis, algorithms, data sources identified
 
-**Backend**:
+**Next Steps:**
 
-# Reinstall dependencies```bash
+1. ML model training with historical data
+2. Irrigation optimization engine
+3. Disease prediction system
+4. API endpoints for AI services
+5. Thai NLP assistant
 
-rm -rf node_modules package-lock.json# Start backend server with auto-reload
+---
 
-npm installnpm run dev
+## 🤝 Contributing
 
+This is a proprietary platform developed for Thailand's Department of Thai Traditional and Alternative Medicine (DTAM). External contributions are not currently accepted.
 
+For internal development team:
 
-# Check MongoDB connection# Or manually
+- Follow the [Development Setup](./docs/DEVELOPER_SETUP.md) guide
+- Review [Linting Guide](./docs/LINTING_GUIDE.md) for code standards
+- Check [Architecture Documentation](./docs/ARCHITECTURE.md) before major changes
 
-# Verify MONGODB_URI in .envnode app.js
-
-````
-
----**Frontend**:
-
-````bash
-
-## 📞 Supportcd frontend-nextjs
-
-npm run dev
-
-### Getting Help```
-
-
-
-- **Documentation**: Check `DEPLOYMENT_GUIDE.md` and `USER_MANUAL.md`### Production Mode
-
-- **Issues**: Report bugs via GitHub Issues
-
-- **Email**: Contact development team**Using PM2** (Recommended):
-
-```bash
-
-### System Requirements# Start with PM2
-
-pm2 start ecosystem.config.js
-
-**Minimum**:
-
-- Node.js 18+# View logs
-
-- MongoDB 6+pm2 logs gacp-backend
-
-- 2GB RAM
-
-- 10GB disk space# Monitor
-
-pm2 monit
-
-**Recommended**:
-
-- Node.js 24+# Stop
-
-- MongoDB 6+pm2 stop gacp-backend
-
-- 4GB RAM```
-
-- 20GB disk space
-
-- SSD storage**Using Docker**:
-
-```bash
-
----# Start all services
-
-docker-compose up -d
+---
 
 ## 📄 License
 
-# View logs
+**Proprietary Software** - All rights reserved.
 
-Proprietary software developed for the Department of Thai Traditional and Alternative Medicine (DTAM).docker-compose logs -f
+Developed for the Department of Thai Traditional and Alternative Medicine (DTAM), Ministry of Public Health, Thailand.
 
-
-
----# Stop
-
-docker-compose down
-
-## 🎯 User Portals```
-
-
-
-### 👨‍🌾 Farmer Portal (`/farmer`)---
-
-
-
-- Submit certification applications## 📁 Project Structure
-
-- Upload required documents
-
-- Track application status```
-
-- View certificatesgacp-certify-flow-main/
-
-- Generate reports│
-
-├── app.js                          # Main Express application
-
-### 🏛️ DTAM Staff Portal (`/dtam`)├── ecosystem.config.js             # PM2 configuration
-
-├── package.json                    # Backend dependencies
-
-- Review applications├── .env.example                    # Environment template
-
-- Conduct farm inspections├── docker-compose.yml              # Docker services
-
-- Manage farmer accounts├── Dockerfile.backend              # Backend container
-
-- Issue certificates│
-
-- Generate system reports├── src/                            # Backend source code
-
-│   ├── controllers/                # Request handlers
-
----│   │   ├── AuthController.js
-
-│   │   ├── FarmerController.js
-
-**Status**: ✅ **Production Ready**  │   │   └── ...
-
-**Version**: 2.0.0  │   │
-
-**Maintained by**: Development Team  │   ├── models/                     # MongoDB models
-
-**Last Updated**: October 13, 2025│   │   ├── User.js
-
-│   │   ├── Farmer.js
-│   │   ├── Application.js
-│   │   └── ...
-│   │
-│   ├── routes/                     # API routes
-│   │   ├── auth.js
-│   │   ├── farmers.js
-│   │   └── ...
-│   │
-│   ├── middleware/                 # Custom middleware
-│   │   ├── auth.js
-│   │   ├── errorHandler.js
-│   │   └── ...
-│   │
-│   └── utils/                      # Utility functions
-│       ├── logger.js
-│       ├── validation.js
-│       └── ...
-│
-├── modules/                        # Clean architecture modules
-│   ├── auth-dtam/                  # DTAM authentication
-│   ├── document/                   # Document management
-│   ├── dashboard/                  # Dashboard module
-│   ├── report/                     # Report generation
-│   └── shared/                     # Shared utilities
-│
-├── frontend-nextjs/                # Next.js frontend
-│   ├── src/
-│   │   ├── app/                    # App router pages
-│   │   │   ├── farmer/             # Farmer portal
-│   │   │   └── dtam/               # DTAM portal
-│   │   │
-│   │   ├── components/             # Shared components
-│   │   ├── contexts/               # React contexts
-│   │   └── utils/                  # Frontend utilities
-│   │
-│   ├── public/                     # Static assets
-│   ├── package.json                # Frontend dependencies
-│   └── next.config.js              # Next.js configuration
-│
-└── docs/                           # Documentation
-    ├── API_DOCUMENTATION.md
-    ├── DEPLOYMENT_GUIDE.md
-    └── USER_MANUAL.md
-````
-
----
-
-## 📚 API Documentation
-
-See [API_DOCUMENTATION.md](./API_DOCUMENTATION.md) for complete API reference.
-
-### Key Endpoints
-
-**Authentication**:
-
-- `POST /api/auth/register` - Register new farmer
-- `POST /api/auth/login` - Farmer login
-- `POST /api/auth/dtam/login` - DTAM staff login
-
-**Applications**:
-
-- `GET /api/applications` - List applications
-- `POST /api/applications` - Create application
-- `PUT /api/applications/:id` - Update application
-- `GET /api/applications/:id` - Get application details
-
-**Documents**:
-
-- `POST /api/documents/upload` - Upload document
-- `GET /api/documents` - List documents
-- `DELETE /api/documents/:id` - Delete document
-
-**Dashboard**:
-
-- `GET /api/dashboard/stats` - Get statistics
-- `GET /api/dashboard/farmer` - Farmer dashboard data
-
-**DTAM Management**:
-
-- `GET /api/dtam/applications` - Review applications
-- `PUT /api/dtam/applications/:id/review` - Review application
-- `POST /api/dtam/staff/create` - Create DTAM staff
-
----
-
-## 🚢 Deployment
-
-See [DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md) for detailed deployment instructions.
-
-### Quick Deployment
-
-**Docker Deployment**:
-
-```bash
-# 1. Configure environment
-cp .env.example .env
-# Edit .env for production
-
-# 2. Build and start
-docker-compose -f docker-compose.prod.yml up -d
-
-# 3. Check status
-docker-compose ps
-docker-compose logs -f
-```
-
-**PM2 Deployment**:
-
-```bash
-# 1. Install PM2 globally
-npm install -g pm2
-
-# 2. Start application
-pm2 start ecosystem.config.js
-
-# 3. Save PM2 process list
-pm2 save
-
-# 4. Setup PM2 startup script
-pm2 startup
-```
-
----
-
-## 🔧 Troubleshooting
-
-### Common Issues
-
-**1. MongoDB Connection Failed**
-
-```bash
-# Check MongoDB is running
-mongod --version
-
-# Start MongoDB
-sudo systemctl start mongod
-
-# Or with Docker
-docker-compose up -d mongodb
-```
-
-**2. Port Already in Use**
-
-```bash
-# Find process using port 3004
-netstat -ano | findstr :3004
-
-# Kill process (Windows)
-taskkill /PID <PID> /F
-
-# Kill process (Linux/Mac)
-kill -9 <PID>
-```
-
-**3. JWT Token Issues**
-
-- Ensure `JWT_SECRET` is set in `.env`
-- Check token expiration time
-- Verify CORS settings for frontend
-
-**4. File Upload Errors**
-
-- Check `UPLOAD_PATH` directory exists
-- Verify file permissions
-- Check `MAX_FILE_SIZE` setting
+Unauthorized use, distribution, or reproduction is strictly prohibited.
 
 ---
 
 ## 📞 Support
 
-### Getting Help
+### For Development Team
 
-- **Documentation**: Check this README and other docs
-- **Issues**: Report bugs via GitHub Issues
-- **Email**: Contact development team
+- **Documentation**: Check `docs/` folder for comprehensive guides
+- **Issues**: Report via GitHub Issues (internal repository)
+- **Architecture Questions**: See [Architecture Documentation](./docs/ARCHITECTURE.md)
 
 ### System Requirements
 
-**Minimum**:
+**Minimum:**
 
 - Node.js 18+
 - MongoDB 6+
 - 2GB RAM
 - 10GB disk space
 
-**Recommended**:
+**Recommended:**
 
 - Node.js 24+
 - MongoDB 6+
 - 4GB RAM
-- 20GB disk space
-- SSD storage
+- 20GB SSD storage
 
 ---
 
-## 📄 License
+## 🎯 Vision
 
-This project is proprietary software developed for GACP certification management.
+To become **Thailand's national platform** for smart cannabis and medicinal plant farming, combining:
+
+- **Regulatory Compliance** (GACP standards)
+- **Smart Agriculture** (IoT sensors, real-time monitoring)
+- **Artificial Intelligence** (predictive analytics, recommendations)
+- **Traceability** (complete seed-to-sale tracking for regulatory compliance)
+- **Market Access** (quality assurance for export)
+
+**Target**: 5,000-10,000 farms nationwide by 2027
 
 ---
 
-## 👥 Credits
-
-Developed for the Department of Thai Traditional and Alternative Medicine (DTAM)
-
----
-
-**Status**: ✅ Production Ready  
-**Version**: 2.0.0  
-**Last Updated**: October 13, 2025
+**Version**: 3.0.0
+**Last Updated**: October 28, 2025
+**Status**: Phase 3 Development (AI Recommendations)
+**Maintained by**: GACP Platform Development Team

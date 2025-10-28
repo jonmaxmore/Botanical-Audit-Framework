@@ -468,6 +468,10 @@ app.use('/api/monitoring', require('./routes/health-monitoring'));
 // Mount API Documentation Routes
 app.use('/api/docs', require('./routes/api-documentation'));
 
+// Mount AI Fertilizer Recommendation Routes
+app.use('/api/ai/fertilizer', require('./routes/ai/fertilizer.routes'));
+app.use('/api/fertilizer-products', require('./routes/ai/fertilizer-products.routes'));
+
 // Error handling middleware
 app.use((req, res) => {
   res.status(404).json({

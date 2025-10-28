@@ -33,7 +33,18 @@ const cultivationCycleSchema = new mongoose.Schema(
     cropType: {
       type: String,
       required: true,
-      enum: ['cannabis', 'hemp', 'medicinal_cannabis'],
+      enum: [
+        // Primary Crop (Cannabis Focus)
+        'cannabis',
+        'hemp',
+        'medicinal_cannabis',
+        // Secondary Economic Crops (Phase 3 Support)
+        'turmeric', // ขมิ้นชัน
+        'ginger', // ขิง
+        'black_galingale', // กระชายดำ
+        'plai', // ไพล
+        'kratom', // กระท่อม
+      ],
     },
     variety: {
       type: String,
@@ -153,6 +164,126 @@ const cultivationCycleSchema = new mongoose.Schema(
       },
       notes: String,
     },
+
+    // === Phase 3: AI-Powered Recommendations ===
+    recommendations: {
+      fertilizer: [
+        {
+          date: Date,
+          product: String,
+          npkRatio: String,
+          amount: Number, // kg or liters
+          unit: String,
+          cost: Number, // THB
+          reason: String,
+          growthStage: String,
+          applied: {
+            type: Boolean,
+            default: false,
+          },
+          appliedDate: Date,
+          appliedBy: String,
+          gacpApproved: {
+            type: Boolean,
+            default: true,
+          },
+        },
+      ],
+      irrigation: [
+        {
+          date: Date,
+          amount: Number, // liters or mm
+          duration: Number, // minutes
+          method: {
+            type: String,
+            enum: ['drip', 'sprinkler', 'flood', 'manual'],
+          },
+          reason: String,
+          growthStage: String,
+          applied: {
+            type: Boolean,
+            default: false,
+          },
+          appliedDate: Date,
+        },
+      ],
+      actions: [
+        {
+          type: String, // 'pruning', 'pest_control', 'disease_treatment', 'other'
+          description: String,
+          priority: {
+            type: String,
+            enum: ['low', 'medium', 'high', 'urgent'],
+          },
+          dueDate: Date,
+          growthStage: String,
+          sopCompliance: {
+            type: Boolean,
+            default: true,
+          },
+          completed: {
+            type: Boolean,
+            default: false,
+          },
+          completedDate: Date,
+          completedBy: String,
+          notes: String,
+        },
+      ],
+    },
+
+    // === Phase 3: Environmental Data Summary (from sensors) ===
+    environmentalSummary: {
+      avgTemperature: Number, // Celsius
+      minTemperature: Number,
+      maxTemperature: Number,
+      avgHumidity: Number, // %
+      totalRainfall: Number, // mm
+      avgSoilMoisture: Number, // %
+      avgSoilPH: Number,
+      avgSoilTemperature: Number, // Celsius
+      npkLevels: {
+        nitrogen: Number, // ppm
+        phosphorus: Number, // ppm
+        potassium: Number, // ppm
+      },
+      ec: Number, // Electrical Conductivity (mS/cm)
+      sunlightHours: Number, // hours/day average
+      dataCollectionPeriod: {
+        start: Date,
+        end: Date,
+      },
+      lastUpdated: Date,
+    },
+
+    // === Phase 3: AI Insights & Predictions ===
+    aiInsights: {
+      yieldPrediction: {
+        predicted: Number, // kg
+        confidence: Number, // 0-100
+        generatedAt: Date,
+        factors: [String],
+      },
+      diseaseRisk: {
+        overallRisk: Number, // 0-100
+        predictedDiseases: [
+          {
+            diseaseId: String,
+            diseaseName: String,
+            probability: Number, // 0-100
+            peakRiskDate: Date,
+          },
+        ],
+        lastAssessment: Date,
+      },
+      resourceOptimization: {
+        waterEfficiency: Number, // %
+        fertilizerEfficiency: Number, // %
+        potentialSavings: Number, // THB
+        suggestions: [String],
+      },
+    },
+
     metadata: {
       createdBy: String,
       createdAt: Date,

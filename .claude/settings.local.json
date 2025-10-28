@@ -8,7 +8,9 @@
       "Bash(npx husky init)",
       "Bash(npx prettier --write \"docs/NATIONAL_PLATFORM_ROADMAP.md\")",
       "Bash(npx prettier --write \"docs/ARCHITECTURE.md\")",
-      "Bash(npx prettier:*)"
+      "Bash(npx prettier:*)",
+      "Bash(findstr:*)",
+      "Bash(copy:*)"
     ],
     "deny": [],
     "ask": []
