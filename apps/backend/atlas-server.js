@@ -506,6 +506,10 @@ app.use('/api', require('./routes/inspection-upcoming.routes'));
 app.use('/api', require('./routes/inspection-kpi.routes'));
 appLogger.info('✅ Video Inspection routes mounted');
 
+// Mount PDF Export Routes
+app.use('/api/pdf', require('./routes/pdf-export.routes'));
+appLogger.info('✅ PDF Export routes mounted');
+
 // ============================================================================
 // MODULE INTEGRATIONS (Pending Configuration)
 // ============================================================================
