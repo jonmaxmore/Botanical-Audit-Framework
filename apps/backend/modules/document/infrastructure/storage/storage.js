@@ -10,6 +10,13 @@ const path = require('path');
 const crypto = require('crypto');
 const sharp = require('sharp'); // For image processing
 
+// Simple logger fallback
+const logger = {
+  error: (msg, err) => console.error(msg, err),
+  info: msg => console.log(msg),
+  warn: msg => console.warn(msg)
+};
+
 class LocalFileStorageService {
   constructor(config = {}) {
     this.config = {

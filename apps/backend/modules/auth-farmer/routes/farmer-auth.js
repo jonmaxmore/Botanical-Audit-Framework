@@ -230,37 +230,41 @@ router.post(
  * @desc ดึงข้อมูลโปรไฟล์เกษตรกร (Get farmer profile)
  * @access Private
  */
-router.get('/profile', middleware.auth.authenticateToken || ((req, res, next) => next()), async (req, res) => {
-  try {
-    const user = await User.findById(req.user.userId).select('-password');
+router.get(
+  '/profile',
+  middleware.auth.authenticateToken || ((req, res, next) => next()),
+  async (req, res) => {
+    try {
+      const user = await User.findById(req.user.userId).select('-password');
 
-    if (!user || user.accountStatus !== 'active') {
-      return utils.response.error(res, 'ไม่พบผู้ใช้งาน', shared.constants.statusCodes.NOT_FOUND);
+      if (!user || user.accountStatus !== 'active') {
+        return utils.response.error(res, 'ไม่พบผู้ใช้งาน', shared.constants.statusCodes.NOT_FOUND);
+      }
+
+      return utils.response.success(res, {
+        id: user._id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        fullName: user.fullName,
+        role: user.role,
+        organizationType: user.organizationType,
+        organizationName: user.organizationName,
+        permissions: user.getPermissions(),
+        accountStatus: user.accountStatus,
+        lastLoginAt: user.lastLoginAt,
+        createdAt: user.createdAt
+      });
+    } catch (error) {
+      logger.error('Get profile error:', error);
+      return utils.response.error(
+        res,
+        'ไม่สามารถดึงข้อมูลโปรไฟล์ได้',
+        shared.constants.statusCodes.INTERNAL_SERVER_ERROR
+      );
     }
-
-    return utils.response.success(res, {
-      id: user._id,
-      email: user.email,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      fullName: user.fullName,
-      role: user.role,
-      organizationType: user.organizationType,
-      organizationName: user.organizationName,
-      permissions: user.getPermissions(),
-      accountStatus: user.accountStatus,
-      lastLoginAt: user.lastLoginAt,
-      createdAt: user.createdAt
-    });
-  } catch (error) {
-    logger.error('Get profile error:', error);
-    return utils.response.error(
-      res,
-      'ไม่สามารถดึงข้อมูลโปรไฟล์ได้',
-      shared.constants.statusCodes.INTERNAL_SERVER_ERROR
-    );
   }
-});
+);
 
 /**
  * @route PUT /api/auth-farmer/profile
@@ -403,11 +407,15 @@ router.post(
  * @desc ออกจากระบบ (Logout)
  * @access Private
  */
-router.post('/logout', middleware.auth.authenticateToken || ((req, res, next) => next()), (req, res) => {
-  // In production, add token to blacklist
-  logger.info(`User logged out: ${req.user.email || req.user.userId}`);
-  return utils.response.success(res, { success: true }, 'ออกจากระบบสำเร็จ');
-});
+router.post(
+  '/logout',
+  middleware.auth.authenticateToken || ((req, res, next) => next()),
+  (req, res) => {
+    // In production, add token to blacklist
+    logger.info(`User logged out: ${req.user.email || req.user.userId}`);
+    return utils.response.success(res, { success: true }, 'ออกจากระบบสำเร็จ');
+  }
+);
 
 /**
  * @route GET /api/auth-farmer/verify
