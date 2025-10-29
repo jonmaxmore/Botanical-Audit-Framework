@@ -1,12 +1,16 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, Button, CircularProgress, Alert } from '@mui/material';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import { getApplications } from '@/lib/api/applications';
+import { useRouter } from 'next/navigation';
 
 export default function ReviewsPage() {
+  const router = useRouter();
   const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchReviews();
@@ -14,23 +18,26 @@ export default function ReviewsPage() {
 
   const fetchReviews = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}/api/reviews`);
-      const data = await response.json();
-      setReviews(data);
-    } catch (err) {
+      setLoading(true);
+      setError(null);
+      const response = await getApplications({ status: 'under_review', limit: 50 });
+      setReviews(response.data || []);
+    } catch (err: any) {
       console.error('Failed to fetch reviews:', err);
+      setError(err.message || 'ไม่สามารถโหลดข้อมูลได้');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress /></Box>;
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}><CircularProgress /></Box>;
 
   return (
     <ErrorBoundary>
       <Box sx={{ p: 3 }}>
         <Typography variant="h4" sx={{ mb: 3 }}>Document Reviews</Typography>
+        
+        {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
         
         <TableContainer component={Paper}>
           <Table>
@@ -52,15 +59,15 @@ export default function ReviewsPage() {
               ) : (
                 reviews.map((review) => (
                   <TableRow key={review.id}>
-                    <TableCell>{review.applicationId}</TableCell>
+                    <TableCell>{review.applicationNumber || review.id}</TableCell>
                     <TableCell>{review.farmName}</TableCell>
-                    <TableCell>{review.reviewer}</TableCell>
+                    <TableCell>{review.assignedReviewer?.name || '-'}</TableCell>
                     <TableCell>
                       <Chip label={review.status} color={review.status === 'approved' ? 'success' : 'warning'} size="small" />
                     </TableCell>
-                    <TableCell>{new Date(review.date).toLocaleDateString()}</TableCell>
+                    <TableCell>{new Date(review.submittedAt || review.createdAt).toLocaleDateString('th-TH')}</TableCell>
                     <TableCell>
-                      <Button size="small">View</Button>
+                      <Button size="small" onClick={() => router.push(`/applications/${review.id}`)}>View</Button>
                     </TableCell>
                   </TableRow>
                 ))

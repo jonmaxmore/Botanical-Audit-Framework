@@ -31,6 +31,8 @@ import StatusTimeline, { StatusHistory } from '@/components/applications/StatusT
 import ReviewDialog, { ReviewData } from '@/components/applications/ReviewDialog';
 import CommentsList, { Comment } from '@/components/applications/CommentsList';
 import ActivityLog, { Activity } from '@/components/applications/ActivityLog';
+import { getApplicationById, completeReview, approveApplication, rejectApplication, addComment } from '@/lib/api/applications';
+import { Alert, Snackbar } from '@mui/material';
 
 interface Application {
   id: string;
@@ -68,69 +70,51 @@ export default function ApplicationDetailPage() {
   const [reviewDialogOpen, setReviewDialogOpen] = React.useState(false);
   const [comments, setComments] = React.useState<Comment[]>([]);
   const [activities, setActivities] = React.useState<Activity[]>([]);
+  const [error, setError] = React.useState<string | null>(null);
+  const [snackbar, setSnackbar] = React.useState({ open: false, message: '', severity: 'success' as 'success' | 'error' });
 
   React.useEffect(() => {
-    // Simulate data loading
-    const timer = setTimeout(() => {
-      // Mock application data
+    loadApplicationData();
+  }, [params?.id]);
+
+  const loadApplicationData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await getApplicationById(params?.id as string);
+      const appData = response.data;
+      
       setApplication({
-        id: params?.id as string,
-        farmName: 'ฟาร์มทดสอบ A',
+        id: appData.id,
+        farmName: appData.farmName,
         farmer: {
-          name: 'นายสมชาย ใจดี',
-          email: 'somchai@example.com',
-          phone: '081-234-5678',
-          address: '123 ถนนสุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพมหานคร 10110',
+          name: appData.farmerName || appData.farmerFirstName + ' ' + appData.farmerLastName,
+          email: appData.farmerEmail,
+          phone: appData.farmerPhoneNumber,
+          address: `${appData.farmAddress?.subDistrict || ''} ${appData.farmAddress?.district || ''} ${appData.farmAddress?.province || ''}`,
         },
         farm: {
-          size: '50 ไร่',
-          location: 'จังหวัดนครปฐม อำเภอนครชัยศรี',
-          cropType: 'มะม่วงน้ำดอกไม้',
+          size: `${appData.farmSize} ${appData.farmSizeUnit}`,
+          location: `${appData.farmLocation?.province || ''} ${appData.farmLocation?.district || ''}`,
+          cropType: appData.cropType,
           certification: 'GACP (Good Agricultural and Collection Practices)',
         },
-        status: 'pending',
-        submittedDate: '2025-10-10',
-        documents: [
-          { id: '1', name: 'แผนที่ฟาร์ม.pdf', type: 'pdf', uploadDate: '2025-10-10' },
-          { id: '2', name: 'ใบอนุญาตประกอบการ.pdf', type: 'pdf', uploadDate: '2025-10-10' },
-          { id: '3', name: 'รูปถ่ายแปลงปลูก.jpg', type: 'image', uploadDate: '2025-10-10' },
-        ],
+        status: appData.status,
+        submittedDate: appData.submittedAt,
+        documents: appData.documents || [],
       });
 
-      // Mock comments
-      setComments([
-        {
-          id: '1',
-          user: { name: 'ผู้ตรวจสอบ A', role: 'Reviewer' },
-          content: 'เอกสารครบถ้วนและชัดเจนดี รอตรวจสอบข้อมูลเพิ่มเติม',
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
-        },
-      ]);
-
-      // Mock activities
-      setActivities([
-        {
-          id: '1',
-          type: 'document_upload',
-          user: { name: 'นายสมชาย ใจดี' },
-          action: 'อัพโหลดเอกสาร',
-          timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-          metadata: { fileName: 'แผนที่ฟาร์ม.pdf' },
-        },
-        {
-          id: '2',
-          type: 'user_action',
-          user: { name: 'นายสมชาย ใจดี' },
-          action: 'ยื่นคำขอรับรอง',
-          description: 'ยื่นคำขอรับรองมาตรฐาน GACP',
-          timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-      ]);
-
+      setComments(appData.comments || []);
+      setActivities(appData.timeline || []);
+      
+    } catch (err: any) {
+      console.error('Failed to load application:', err);
+      setError(err.message || 'ไม่สามารถโหลดข้อมูลคำขอได้');
+    } finally {
       setLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
-  }, [params?.id]);
+    }
+  };
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -146,50 +130,36 @@ export default function ApplicationDetailPage() {
 
   const handleReviewSubmit = async (data: ReviewData) => {
     try {
-      if (!params?.id) {
-        throw new Error('Application ID is missing');
-      }
+      if (!params?.id) throw new Error('Application ID is missing');
 
-      console.log('Review submitted:', data);
-
-      // Submit review to API
-      const response = await fetch(`/api/applications/${params.id}/review`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          decision: data.decision,
-          comment: data.comment,
-          rating: data.rating,
-          reviewedBy: 'current-user-id', // TODO: Get from auth context
-        }),
+      await completeReview(params.id as string, {
+        decision: data.decision === 'approve' ? 'approve' : data.decision === 'reject' ? 'reject' : 'request_changes',
+        comments: data.comment,
+        documentsVerified: true,
+        inspectionRequired: data.decision === 'approve',
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to submit review');
-      }
-
-      const result = await response.json();
-      alert(`ดำเนินการเรียบร้อย: ${data.decision}`);
+      setSnackbar({ open: true, message: 'บันทึกผลการตรวจสอบสำเร็จ', severity: 'success' });
       setReviewDialogOpen(false);
-
-      // Refresh application data
-      window.location.reload();
-    } catch (error) {
-      console.error('Error submitting review:', error);
-      alert('เกิดข้อผิดพลาดในการส่งรีวิว กรุณาลองใหม่อีกครั้ง');
+      loadApplicationData();
+    } catch (error: any) {
+      setSnackbar({ open: true, message: error.message || 'เกิดข้อผิดพลาด', severity: 'error' });
     }
   };
 
-  const handleAddComment = (content: string) => {
-    const newComment: Comment = {
-      id: Date.now().toString(),
-      user: { name: 'Admin User', role: 'Administrator' },
-      content,
-      timestamp: new Date().toISOString(),
-    };
-    setComments([...comments, newComment]);
+  const handleAddComment = async (content: string) => {
+    try {
+      if (!params?.id) throw new Error('Application ID is missing');
+      
+      await addComment(params.id as string, {
+        message: content,
+        type: 'general',
+      });
+      
+      loadApplicationData();
+    } catch (error: any) {
+      setSnackbar({ open: true, message: error.message || 'เกิดข้อผิดพลาด', severity: 'error' });
+    }
   };
 
   const handleEditComment = (id: string, content: string) => {
@@ -211,6 +181,41 @@ export default function ApplicationDetailPage() {
     setComments(
       comments.map(c => (c.id === parentId ? { ...c, replies: [...(c.replies || []), reply] } : c))
     );
+  };
+
+  const handleApprove = async () => {
+    try {
+      if (!params?.id) throw new Error('Application ID is missing');
+      
+      await approveApplication(params.id as string, {
+        comments: 'อนุมัติคำขอ',
+        certificateData: {
+          certificateType: 'gacp',
+          validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+        },
+      });
+      
+      setSnackbar({ open: true, message: 'อนุมัติคำขอสำเร็จ', severity: 'success' });
+      loadApplicationData();
+    } catch (error: any) {
+      setSnackbar({ open: true, message: error.message || 'เกิดข้อผิดพลาด', severity: 'error' });
+    }
+  };
+
+  const handleReject = async () => {
+    try {
+      if (!params?.id) throw new Error('Application ID is missing');
+      
+      await rejectApplication(params.id as string, {
+        reason: 'ไม่ผ่านการตรวจสอบ',
+        comments: 'ไม่ผ่านการตรวจสอบ',
+      });
+      
+      setSnackbar({ open: true, message: 'ปฏิเสธคำขอสำเร็จ', severity: 'success' });
+      loadApplicationData();
+    } catch (error: any) {
+      setSnackbar({ open: true, message: error.message || 'เกิดข้อผิดพลาด', severity: 'error' });
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -345,7 +350,7 @@ export default function ApplicationDetailPage() {
                       variant="outlined"
                       color="error"
                       startIcon={<RejectIcon />}
-                      onClick={handleOpenReviewDialog}
+                      onClick={handleReject}
                     >
                       ไม่อนุมัติ
                     </Button>
@@ -353,7 +358,7 @@ export default function ApplicationDetailPage() {
                       variant="contained"
                       color="success"
                       startIcon={<ApproveIcon />}
-                      onClick={handleOpenReviewDialog}
+                      onClick={handleApprove}
                     >
                       อนุมัติ
                     </Button>
@@ -558,6 +563,22 @@ export default function ApplicationDetailPage() {
               </Grid>
             </Container>
           </Box>
+          
+          {/* Snackbar */}
+          <Snackbar
+            open={snackbar.open}
+            autoHideDuration={6000}
+            onClose={() => setSnackbar({ ...snackbar, open: false })}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+          >
+            <Alert
+              onClose={() => setSnackbar({ ...snackbar, open: false })}
+              severity={snackbar.severity}
+              sx={{ width: '100%' }}
+            >
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
         </Box>
       </Box>
     </ProtectedRoute>

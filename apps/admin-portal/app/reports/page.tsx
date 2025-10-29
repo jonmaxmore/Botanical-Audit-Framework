@@ -1,33 +1,31 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Typography, Card, CardContent, Button, Grid, TextField, MenuItem } from '@mui/material';
+import { Box, Typography, Card, CardContent, Button, Grid, TextField, MenuItem, Alert } from '@mui/material';
 import { Download as DownloadIcon } from '@mui/icons-material';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import { exportApplicationsCSV } from '@/lib/api/applications';
 
 export default function ReportsPage() {
   const [reportType, setReportType] = useState('applications');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
   const [generating, setGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleGenerate = async () => {
     setGenerating(true);
+    setError(null);
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}/api/reports/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reportType, dateFrom, dateTo }),
-      });
-      const blob = await response.blob();
+      const blob = await exportApplicationsCSV({ startDate: dateFrom, endDate: dateTo });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `report-${reportType}-${Date.now()}.pdf`;
+      a.download = `report-${reportType}-${Date.now()}.csv`;
       a.click();
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to generate report:', err);
+      setError(err.message || 'ไม่สามารถสร้างรายงานได้');
     } finally {
       setGenerating(false);
     }
@@ -37,6 +35,8 @@ export default function ReportsPage() {
     <ErrorBoundary>
       <Box sx={{ p: 3 }}>
         <Typography variant="h4" sx={{ mb: 3 }}>Report Generation</Typography>
+        
+        {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
         
         <Card>
           <CardContent>

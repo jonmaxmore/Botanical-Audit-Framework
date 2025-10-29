@@ -14,6 +14,8 @@ import {
 import { AdminPanelSettings as AdminIcon } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('');
@@ -27,17 +29,27 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      // Simple demo login
-      if (email && password) {
-        setTimeout(() => {
-          router.push('/dashboard');
-        }, 500);
-      } else {
-        setError('กรุณากรอกอีเมลและรหัสผ่าน');
-        setLoading(false);
+      const response = await fetch(`${API_BASE_URL}/api/auth/dtam/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'เข้าสู่ระบบไม่สำเร็จ');
       }
-    } catch (err) {
-      setError('เกิดข้อผิดพลาด');
+
+      // Store token and user data
+      localStorage.setItem('admin_token', data.token);
+      localStorage.setItem('dtam_token', data.token);
+      localStorage.setItem('admin_user', JSON.stringify(data.user));
+
+      // Redirect to dashboard
+      router.push('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
       setLoading(false);
     }
   };

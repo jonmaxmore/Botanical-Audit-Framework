@@ -501,6 +501,8 @@ appLogger.info('✅ AI Fertilizer routes mounted');
 app.use('/api/video', require('./routes/video-inspection.routes'));
 app.use('/api', require('./routes/inspection-snapshots.routes'));
 app.use('/api', require('./routes/inspection-report.routes'));
+app.use('/api', require('./routes/inspection-scheduling.routes'));
+app.use('/api', require('./routes/inspection-upcoming.routes'));
 appLogger.info('✅ Video Inspection routes mounted');
 
 // ============================================================================

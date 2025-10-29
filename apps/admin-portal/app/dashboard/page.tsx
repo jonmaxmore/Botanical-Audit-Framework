@@ -1,12 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Box, Grid, Card, CardContent, Typography, CircularProgress } from '@mui/material';
+import { Box, Grid, Card, CardContent, Typography, CircularProgress, Alert } from '@mui/material';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import { getApplicationStats } from '@/lib/api/applications';
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchStats();
@@ -14,12 +16,13 @@ export default function DashboardPage() {
 
   const fetchStats = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}/api/dashboard/stats`);
-      const data = await response.json();
+      setLoading(true);
+      setError(null);
+      const data = await getApplicationStats();
       setStats(data);
-    } catch (err) {
+    } catch (err: any) {
       console.error('Failed to fetch stats:', err);
+      setError(err.message || 'ไม่สามารถโหลดข้อมูลสถิติได้');
     } finally {
       setLoading(false);
     }
@@ -27,7 +30,7 @@ export default function DashboardPage() {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
         <CircularProgress />
       </Box>
     );
@@ -37,6 +40,12 @@ export default function DashboardPage() {
     <ErrorBoundary>
       <Box sx={{ p: 3 }}>
         <Typography variant="h4" sx={{ mb: 3 }}>Dashboard</Typography>
+        
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
         
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>

@@ -52,14 +52,20 @@ export default function ApplicationsPage() {
     try {
       setLoading(true);
       setError(null);
-      const response = await applicationsApi.getApplications();
-      setApplications(response.data);
-    } catch (err) {
+      
+      // Load applications with proper error handling
+      const response = await applicationsApi.getApplications({
+        page: 1,
+        limit: 50,
+        sortBy: 'submittedAt',
+        sortOrder: 'desc'
+      });
+      
+      setApplications(response.data || []);
+    } catch (err: any) {
       console.error('Error loading applications:', err);
-      setError('ไม่สามารถโหลดข้อมูลคำขอได้ กำลังใช้ข้อมูลจำลอง');
-      // Fallback to mock data
-      const mockData = await applicationsApi.getMockApplicationsData();
-      setApplications(mockData);
+      setError(err.message || 'ไม่สามารถโหลดข้อมูลคำขอได้');
+      setApplications([]);
     } finally {
       setLoading(false);
     }

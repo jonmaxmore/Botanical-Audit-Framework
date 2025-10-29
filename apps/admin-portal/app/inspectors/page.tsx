@@ -1,13 +1,15 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Box, Typography, Grid, Card, CardContent, Avatar, Chip, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Grid, Card, CardContent, Avatar, Chip, Button, CircularProgress, Alert } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
+import { getUsers } from '@/lib/api/users';
 
 export default function InspectorsPage() {
   const [inspectors, setInspectors] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchInspectors();
@@ -15,18 +17,19 @@ export default function InspectorsPage() {
 
   const fetchInspectors = async () => {
     try {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
-      const response = await fetch(`${apiUrl}/api/inspectors`);
-      const data = await response.json();
-      setInspectors(data);
-    } catch (err) {
+      setLoading(true);
+      setError(null);
+      const response = await getUsers({ role: 'inspector', limit: 50 });
+      setInspectors(response.data || []);
+    } catch (err: any) {
       console.error('Failed to fetch inspectors:', err);
+      setError(err.message || 'ไม่สามารถโหลดข้อมูลได้');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress /></Box>;
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}><CircularProgress /></Box>;
 
   return (
     <ErrorBoundary>
@@ -35,6 +38,8 @@ export default function InspectorsPage() {
           <Typography variant="h4">Inspectors</Typography>
           <Button variant="contained" startIcon={<AddIcon />}>Add Inspector</Button>
         </Box>
+        
+        {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
         
         <Grid container spacing={3}>
           {inspectors.length === 0 ? (

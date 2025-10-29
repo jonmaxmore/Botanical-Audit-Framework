@@ -72,6 +72,40 @@ class InspectionNotificationService {
       timestamp: new Date()
     });
   }
+
+  async notifyScheduleReminder(inspectionId, userId, scheduledDate, type) {
+    const message = `เตือน: พรุ่งนี้มีการตรวจสอบ ${type === 'video_call' ? 'Video Call' : 'Onsite'}`;
+    
+    this.io.to(`user_${userId}`).emit('notification', {
+      type: 'schedule_reminder',
+      inspectionId,
+      message,
+      scheduledDate,
+      timestamp: new Date()
+    });
+
+    // TODO: Send email/SMS
+  }
+
+  async notifyScheduleConfirmation(inspectionId, farmerId, inspectorId, schedule) {
+    this.io.to(`user_${farmerId}`).emit('notification', {
+      type: 'schedule_confirmed',
+      inspectionId,
+      message: `ยืนยันการนัดหมาย ${schedule.type === 'video_call' ? 'Video Call' : 'Onsite'} วันที่ ${schedule.scheduledDate}`,
+      schedule,
+      timestamp: new Date()
+    });
+
+    this.io.to(`user_${inspectorId}`).emit('notification', {
+      type: 'schedule_confirmed',
+      inspectionId,
+      message: 'เกษตรกรยืนยันการนัดหมายแล้ว',
+      schedule,
+      timestamp: new Date()
+    });
+
+    // TODO: Send calendar invite via email
+  }
 }
 
 module.exports = InspectionNotificationService;

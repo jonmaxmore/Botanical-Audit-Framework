@@ -20,7 +20,7 @@ The system delivers an end-to-end digital workflow for growers, inspectors, and 
 
 - **Farm & Cultivation Management** – Digital farm registry, field/plot tracking, cultivation cycle recording, harvest management, and comprehensive cannabis cultivation support.
 
-- **Operations & Traceability** – Seed-to-sale tracking, QR code generation for products and certificates, blockchain-ready architecture, public verification endpoints, and complete chain of custody.
+- **Operations & Traceability** – Seed-to-sale tracking, QR code generation for products and certificates, database-backed audit trails, public verification endpoints, and complete chain of custody.
 
 - **IoT Smart Farming** – Real-time sensor data ingestion (soil moisture, pH, temperature, humidity), automated alerting for anomalies, and live dashboards for farm monitoring.
 
@@ -124,7 +124,7 @@ All portals are complete and functional with comprehensive error handling, testi
 | Phase 3 | AI recommendations & code quality         | 🔄 **95% Complete** – Fertilizer AI live, code cleanup done     |
 | Phase 4 | Portal completion & government integration| ✅ **Complete** – Admin portal (100%), Certificate portal (100%) |
 | Phase 5 | National expansion & mobile tools         | 📋 **Planned** – Mobile inspector app, ministry API integration |
-| Phase 6 | Advanced supply chain & marketplace       | 📋 **Future** – Cooperative services, remote sensing, trading   |
+| Phase 6 | Advanced supply chain & marketplace       | 📋 **Future** – Cooperative services, remote sensing, trading, mobile apps |
 
 ### ✅ Completed Development (Phase 4)
 

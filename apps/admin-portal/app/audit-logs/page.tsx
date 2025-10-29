@@ -1,12 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, CircularProgress } from '@mui/material';
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Chip, CircularProgress, Alert } from '@mui/material';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 
 export default function AuditLogsPage() {
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchLogs();
@@ -14,23 +15,29 @@ export default function AuditLogsPage() {
 
   const fetchLogs = async () => {
     try {
+      setLoading(true);
+      setError(null);
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
       const response = await fetch(`${apiUrl}/api/audit-logs`);
+      if (!response.ok) throw new Error('Failed to fetch audit logs');
       const data = await response.json();
-      setLogs(data);
-    } catch (err) {
+      setLogs(data.data || data || []);
+    } catch (err: any) {
       console.error('Failed to fetch logs:', err);
+      setError(err.message || 'ไม่สามารถโหลดข้อมูลได้');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress /></Box>;
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}><CircularProgress /></Box>;
 
   return (
     <ErrorBoundary>
       <Box sx={{ p: 3 }}>
         <Typography variant="h4" sx={{ mb: 3 }}>Audit Logs</Typography>
+        
+        {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
         
         <TableContainer component={Paper}>
           <Table>
@@ -46,7 +53,9 @@ export default function AuditLogsPage() {
             <TableBody>
               {logs.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={5} align="center">No audit logs found</TableCell>
+                  <TableCell colSpan={5} align="center">
+                    <Alert severity="info">No audit logs found - Logs will appear as users perform actions</Alert>
+                  </TableCell>
                 </TableRow>
               ) : (
                 logs.map((log) => (

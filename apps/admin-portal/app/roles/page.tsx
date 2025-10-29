@@ -1,13 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Box, Typography, Card, CardContent, Grid, List, ListItem, ListItemText, Chip, Button, CircularProgress } from '@mui/material';
+import { Box, Typography, Card, CardContent, Grid, List, ListItem, ListItemText, Chip, Button, CircularProgress, Alert } from '@mui/material';
 import { Add as AddIcon } from '@mui/icons-material';
 import { ErrorBoundary } from '@/components/common/ErrorBoundary';
 
 export default function RolesPage() {
   const [roles, setRoles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchRoles();
@@ -15,18 +16,22 @@ export default function RolesPage() {
 
   const fetchRoles = async () => {
     try {
+      setLoading(true);
+      setError(null);
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
       const response = await fetch(`${apiUrl}/api/roles`);
+      if (!response.ok) throw new Error('Failed to fetch roles');
       const data = await response.json();
-      setRoles(data);
-    } catch (err) {
+      setRoles(data.data || data || []);
+    } catch (err: any) {
       console.error('Failed to fetch roles:', err);
+      setError(err.message || 'ไม่สามารถโหลดข้อมูลได้');
     } finally {
       setLoading(false);
     }
   };
 
-  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}><CircularProgress /></Box>;
+  if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}><CircularProgress /></Box>;
 
   return (
     <ErrorBoundary>
@@ -36,10 +41,12 @@ export default function RolesPage() {
           <Button variant="contained" startIcon={<AddIcon />}>Add Role</Button>
         </Box>
         
+        {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
+        
         <Grid container spacing={3}>
           {roles.length === 0 ? (
             <Grid item xs={12}>
-              <Typography>No roles configured</Typography>
+              <Alert severity="info">No roles configured - Please create roles via API</Alert>
             </Grid>
           ) : (
             roles.map((role) => (

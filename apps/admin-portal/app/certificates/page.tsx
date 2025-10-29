@@ -27,6 +27,8 @@ import {
 } from '@mui/icons-material';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import { useRouter } from 'next/navigation';
+import { getApplications } from '@/lib/api/applications';
+import { Alert } from '@mui/material';
 
 interface Certificate {
   id: string;
@@ -46,68 +48,36 @@ export default function CertificatesPage() {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [selectedCertId, setSelectedCertId] = React.useState<string | null>(null);
-
-  // Mock data for certificates
-  const [certificates, setCertificates] = React.useState<Certificate[]>([
-    {
-      id: '1',
-      certificateNumber: 'GACP-2025-0001',
-      farmName: 'ฟาร์มสมชาย',
-      farmerName: 'นายสมชาย ใจดี',
-      issuedDate: '2025-01-15',
-      expiryDate: '2027-01-15',
-      status: 'active',
-      issuer: 'นายสมศักดิ์ ผู้อนุมัติ',
-    },
-    {
-      id: '2',
-      certificateNumber: 'GACP-2025-0002',
-      farmName: 'ฟาร์มสมหญิง',
-      farmerName: 'นางสมหญิง ใจงาม',
-      issuedDate: '2025-02-20',
-      expiryDate: '2027-02-20',
-      status: 'active',
-      issuer: 'นายสมศักดิ์ ผู้อนุมัติ',
-    },
-    {
-      id: '3',
-      certificateNumber: 'GACP-2024-0156',
-      farmName: 'ฟาร์มประสิทธิ์',
-      farmerName: 'นายประสิทธิ์ มั่นคง',
-      issuedDate: '2024-10-10',
-      expiryDate: '2026-10-10',
-      status: 'active',
-      issuer: 'นางวิภา ผู้อนุมัติ',
-    },
-    {
-      id: '4',
-      certificateNumber: 'GACP-2023-0089',
-      farmName: 'ฟาร์มสุรชัย',
-      farmerName: 'นายสุรชัย เก่งกาจ',
-      issuedDate: '2023-06-15',
-      expiryDate: '2025-06-15',
-      status: 'expired',
-      issuer: 'นายสมศักดิ์ ผู้อนุมัติ',
-    },
-    {
-      id: '5',
-      certificateNumber: 'GACP-2024-0120',
-      farmName: 'ฟาร์มวิไล',
-      farmerName: 'นางวิไล สบายดี',
-      issuedDate: '2024-08-01',
-      expiryDate: '2026-08-01',
-      status: 'revoked',
-      issuer: 'นางวิภา ผู้อนุมัติ',
-    },
-  ]);
+  const [error, setError] = React.useState<string | null>(null);
+  const [certificates, setCertificates] = React.useState<Certificate[]>([]);
 
   React.useEffect(() => {
-    // Simulate data loading
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 800);
-    return () => clearTimeout(timer);
+    loadCertificates();
   }, []);
+
+  const loadCertificates = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await getApplications({ status: 'certificate_issued', limit: 100 });
+      const certs = (response.data || []).map((app: any) => ({
+        id: app.id,
+        certificateNumber: app.applicationNumber || app.id,
+        farmName: app.farmName,
+        farmerName: app.farmerName,
+        issuedDate: app.approvedAt || app.createdAt,
+        expiryDate: new Date(new Date(app.approvedAt || app.createdAt).getTime() + 730 * 24 * 60 * 60 * 1000).toISOString(),
+        status: 'active' as const,
+        issuer: app.assignedApprover?.name || 'Admin',
+      }));
+      setCertificates(certs);
+    } catch (err: any) {
+      console.error('Failed to load certificates:', err);
+      setError(err.message || 'ไม่สามารถโหลดข้อมูลได้');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -240,6 +210,9 @@ export default function CertificatesPage() {
                   </Button>
                 </Box>
               </Box>
+
+              {/* Error Alert */}
+              {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
 
               {/* Search Bar */}
               <Box sx={{ mb: 3 }}>
