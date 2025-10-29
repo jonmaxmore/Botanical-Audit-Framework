@@ -1,5 +1,5 @@
 // Database Optimization and Connection Management
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const mongoose = require('mongoose');
 const redis = require('redis');
 

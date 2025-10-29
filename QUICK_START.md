@@ -1,105 +1,157 @@
-# 🚀 Quick Start Guide
+# 🚀 GACP Platform - Quick Start Guide
 
-## Development Mode (แนะนำสำหรับการพัฒนา)
+## สถานะปัจจุบัน
 
-### 1. Start Servers
-
-```powershell
-.\start-dev-simple.ps1
-```
-
-This will open 2 PowerShell windows:
-
-- **Backend** on port 5000
-- **Frontend** on port 3000
-
-### 2. Access Application
-
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
-- Health Check: http://localhost:5000/health
-
-### 3. Stop Servers
-
-Close both PowerShell windows or press `Ctrl+C` in each window.
+✅ **Backend Code:** 95% พร้อม (แก้ไข bugs แล้ว)  
+✅ **MongoDB Atlas:** Connected  
+✅ **Docker Config:** พร้อม  
+✅ **Terraform Config:** พร้อม  
+⏳ **AWS Deployment:** รอ prerequisites
 
 ---
 
-## Production Mode (สำหรับ Production/Staging)
+## ขั้นตอนที่เหลือ
 
-### 1. Build Frontend (First Time Only)
+### 1. ติดตั้ง AWS CLI
 
-```powershell
-cd apps/frontend
-pnpm build
-cd ..\..
+**Download:**
+```
+https://awscli.amazonaws.com/AWSCLIV2.msi
 ```
 
-### 2. Start Production Servers
-
+**ติดตั้งแล้ว ทดสอบ:**
 ```powershell
-.\start-production.ps1
+aws --version
+# Expected: aws-cli/2.x.x
 ```
 
-### 3. Monitor with PM2
-
+**Configure:**
 ```powershell
-# View status
-pnpm exec pm2 status
-
-# View logs
-pnpm exec pm2 logs
-
-# Restart all
-pnpm exec pm2 restart all
-
-# Stop all
-pnpm exec pm2 stop all
+aws configure
 ```
 
-### 4. Stop Servers
+ใส่:
+- AWS Access Key ID: `[จาก AWS Console]`
+- AWS Secret Access Key: `[จาก AWS Console]`
+- Region: `ap-southeast-1`
+- Output: `json`
 
+**ทดสอบ:**
 ```powershell
-pnpm exec pm2 delete all
+aws sts get-caller-identity
 ```
 
 ---
 
-## Troubleshooting
+### 2. ติดตั้ง Terraform
 
-### Port Already in Use
-
-```powershell
-# Find and kill process
-netstat -ano | findstr ":3000"
-netstat -ano | findstr ":5000"
-Stop-Process -Id <PID> -Force
+**Download:**
+```
+https://www.terraform.io/downloads
 ```
 
-### MongoDB Not Running
-
+**ทดสอบ:**
 ```powershell
-# Start MongoDB
-Start-Service MongoDB
-
-# Check status
-Get-Service | Where-Object { $_.DisplayName -like "*MongoDB*" }
-```
-
-### Check for Zombie Processes
-
-```powershell
-.\monitor-zombies.ps1 -DurationMinutes 5
+terraform --version
 ```
 
 ---
 
-## 📚 Full Documentation
+### 3. ติดตั้ง Docker Desktop
 
-- [SERVER_MANAGEMENT_GUIDE.md](./SERVER_MANAGEMENT_GUIDE.md) - Complete server management guide
-- [PRODUCTION_FINAL_REPORT.md](./PRODUCTION_FINAL_REPORT.md) - Final production report
-- [PM2_GUIDE.md](./PM2_GUIDE.md) - PM2 detailed usage
+**Download:**
+```
+https://www.docker.com/products/docker-desktop
+```
+
+**เปิด Docker Desktop แล้วทดสอบ:**
+```powershell
+docker --version
+docker ps
+```
 
 ---
 
-**Note**: Always use `start-dev-simple.ps1` for development. Only use PM2 (`start-production.ps1`) for production builds!
+### 4. Deploy to AWS
+
+**เมื่อติดตั้งครบทั้ง 3 ตัว:**
+
+```powershell
+# Run deployment script
+.\deploy.ps1
+```
+
+**หรือ Manual:**
+```powershell
+# 1. Get Account ID
+$ACCOUNT_ID = aws sts get-caller-identity --query Account --output text
+
+# 2. Generate secrets
+$FARMER_SECRET = node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+$DTAM_SECRET = node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+
+# 3. Create ECR
+aws ecr create-repository --repository-name gacp-backend --region ap-southeast-1
+
+# 4. Build Docker
+cd apps\backend
+docker build -t gacp-backend .
+
+# 5. Login to ECR
+aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin "$ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com"
+
+# 6. Push Docker
+docker tag gacp-backend:latest "$ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/gacp-backend:latest"
+docker push "$ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/gacp-backend:latest"
+
+# 7. Deploy Terraform
+cd ..\..\infrastructure\aws
+terraform init
+terraform plan
+terraform apply
+```
+
+---
+
+## ⏱️ เวลาที่ใช้
+
+- Install prerequisites: 10 นาที
+- Deploy to AWS: 20 นาที
+- **รวม: 30 นาที**
+
+---
+
+## 💰 ค่าใช้จ่าย
+
+- **ปีแรก:** $50-80/เดือน (Free Tier)
+- **หลังปีแรก:** $107-127/เดือน
+
+---
+
+## 📞 ติดปัญหา?
+
+**ถ้า AWS CLI ไม่ติดตั้ง:**
+- Download: https://awscli.amazonaws.com/AWSCLIV2.msi
+- Restart PowerShell หลังติดตั้ง
+
+**ถ้าไม่มี AWS Account:**
+- สมัครที่: https://aws.amazon.com/free/
+- ใช้เวลา 5 นาที
+
+**ถ้า Docker ไม่ทำงาน:**
+- เปิด Docker Desktop
+- รอจน status เป็น "Running"
+
+---
+
+## 🎯 Next Steps
+
+1. ✅ ติดตั้ง AWS CLI
+2. ✅ Configure AWS credentials
+3. ✅ ติดตั้ง Terraform
+4. ✅ ติดตั้ง Docker Desktop
+5. 🚀 Run `.\deploy.ps1`
+
+---
+
+**พร้อมแล้ว?** รัน `.\deploy.ps1`

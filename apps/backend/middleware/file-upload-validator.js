@@ -24,7 +24,7 @@
  */
 
 const path = require('path');
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 
 /**
  * Magic bytes (file signatures) for supported file types

@@ -3,7 +3,7 @@
  * Sets up the complete cannabis survey system with templates, questions, and configurations
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const { createCannabisTemplates } = require('../config/cannabisTemplates');
 const { CannabisSurveyTemplate, CannabisQuestion } = require('../models/CannabisSurvey');
 const User = require('../models/user');

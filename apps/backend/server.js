@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Botanical Audit Framework - Backend Server
  *
  * Enterprise-grade application server designed for scalability,
@@ -8,7 +8,7 @@
 // Load environment variables FIRST
 require('dotenv').config();
 
-// 🔒 CRITICAL: Validate all secrets BEFORE starting server
+// ?? CRITICAL: Validate all secrets BEFORE starting server
 const { validateAllSecrets } = require('./modules/shared/utils/validateSecrets');
 validateAllSecrets(); // Will exit process if any secret is invalid
 
@@ -254,9 +254,9 @@ app.get('/api/health', async (req, res) => {
 // Basic API routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/health', require('./routes/health'));
-app.use('/api/applications', require('./routes/applications')); // ✅ Enabled for real API
+app.use('/api/applications', require('./routes/applications')); // ? Enabled for real API
 app.use('/api/dashboard', require('./routes/dashboard'));
-app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ✅ Smart Agriculture APIs
+app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ? Smart Agriculture APIs
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
 // app.use('/api/notifications', require('./routes/notifications')); // Commented - needs check
 // app.use('/api/farm-management', require('./routes/farm-management')); // Commented - needs check
@@ -360,7 +360,7 @@ async function startServer() {
 
     // Continue with limited functionality
     server.listen(PORT, () => {
-      appLogger.warn(`⚠️ Backend server running in limited mode on http://localhost:${PORT}`);
+      appLogger.warn(`?? Backend server running in limited mode on http://localhost:${PORT}`);
       appLogger.warn(`Some services may be unavailable`);
 
       // Record degraded startup

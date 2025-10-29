@@ -9,7 +9,7 @@
  * - SIEM integration (optional)
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const { v4: uuidv4 } = require('uuid');
 
 class AuditService {

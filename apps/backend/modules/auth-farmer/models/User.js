@@ -54,8 +54,8 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: Object.values(constants.userRoles),
-      default: constants.userRoles.FARMER
+      enum: ['farmer', 'premium_farmer', 'inspector', 'dtam_admin', 'operator', 'super_admin'],
+      default: 'farmer'
     },
     organizationName: {
       type: String,
@@ -145,8 +145,8 @@ const userSchema = new mongoose.Schema(
 );
 
 // Apply shared mongoose plugins
-userSchema.plugin(shared.database.mongoosePlugins.timestampPlugin);
-userSchema.plugin(shared.database.mongoosePlugins.paginationPlugin);
+// userSchema.plugin(shared.database.mongoosePlugins.timestampPlugin); // Temporarily disabled
+// userSchema.plugin(shared.database.mongoosePlugins.paginationPlugin); // Temporarily disabled
 
 // Indexes for performance
 userSchema.index({ email: 1 }, { unique: true });

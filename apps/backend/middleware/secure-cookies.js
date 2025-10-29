@@ -9,7 +9,7 @@
  * @date 2025-10-26
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 
 /**
  * Configure secure cookie defaults

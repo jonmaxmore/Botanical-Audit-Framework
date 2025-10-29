@@ -10,7 +10,7 @@
  * - Auto-restart if needed
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const http = require('http');
 const https = require('https');
 

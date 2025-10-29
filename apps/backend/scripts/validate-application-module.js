@@ -17,7 +17,7 @@
  * เพื่อให้แน่ใจว่าทุก component มี logic ที่สมเหตุสมผล
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const fs = require('fs');
 const path = require('path');
 

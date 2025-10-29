@@ -40,7 +40,7 @@ const {
   GACPScoringSystem
 } = require('./models/gacp-business-logic');
 
-const GACPWorkflowEngine = require('../../business-logic/gacp-workflow-engine');
+const { GACPWorkflowEngine } = require('../../business-logic/gacp-workflow-engine');
 const GACPEnhancedInspectionService = require('./services/gacp-enhanced-inspection');
 
 // Import Database Health Monitor

@@ -7,7 +7,7 @@
  * @date 2025-10-19
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const mongoose = require('mongoose');
 const mongoManager = require('../config/mongodb-manager');
 

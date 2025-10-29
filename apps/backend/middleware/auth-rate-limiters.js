@@ -25,7 +25,7 @@
 
 const rateLimit = require('express-rate-limit');
 const RedisStore = require('rate-limit-redis');
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 
 /**
  * Create Redis store for rate limiting (if Redis is available)

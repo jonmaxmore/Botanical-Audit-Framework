@@ -9,7 +9,7 @@
  * - Public verification API
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const QRCode = require('qrcode');
 const crypto = require('crypto');
 const PDFDocument = require('pdfkit');

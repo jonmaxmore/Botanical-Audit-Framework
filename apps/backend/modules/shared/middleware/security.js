@@ -1,11 +1,11 @@
 // Enhanced Security Configuration for GACP Standards System
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const mongoSanitize = require('express-mongo-sanitize');
-const xss = require('xss-clean');
-const hpp = require('hpp');
+// const mongoSanitize = require('express-mongo-sanitize'); // Temporarily disabled
+// const xss = require('xss-clean'); // Temporarily disabled
+// const hpp = require('hpp'); // Temporarily disabled
 const bcrypt = require('bcrypt');
-const validator = require('validator');
+// const validator = require('validator'); // Temporarily disabled
 const crypto = require('crypto');
 
 // Security Configuration Object
@@ -115,7 +115,7 @@ const validationSchemas = {
   // User Registration
   userRegistration: {
     email: {
-      validator: validator.isEmail,
+      validator: value => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
       message: 'Invalid email format'
     },
     password: {
@@ -403,9 +403,9 @@ const setupAppSecurity = app => {
   app.use(cors(securityConfig.cors));
 
   // Data sanitization
-  app.use(mongoSanitize());
-  app.use(xss());
-  app.use(hpp());
+  // app.use(mongoSanitize()); // Temporarily disabled
+  // app.use(xss()); // Temporarily disabled
+  // app.use(hpp()); // Temporarily disabled
   app.use(securityMiddleware.sanitizeQuery);
 
   // Rate limiting

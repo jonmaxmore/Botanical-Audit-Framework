@@ -4,7 +4,7 @@
  * Requires DTAM authentication
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const express = require('express');
 const router = express.Router();
 const {

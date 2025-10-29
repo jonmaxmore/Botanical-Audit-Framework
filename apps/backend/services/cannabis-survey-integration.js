@@ -3,7 +3,7 @@
  * Integrates the enhanced cannabis survey system with existing survey microservice and GACP systems
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const axios = require('axios');
 const {
   CannabisSurveyTemplate,

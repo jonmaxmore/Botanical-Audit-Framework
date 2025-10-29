@@ -5,7 +5,7 @@
  * เพื่อยืนยันว่าระบบใช้ 2-Phase Payment เท่านั้น
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const { PAYMENT_FEES } = require('../config/payment-fees');
 
 class PaymentWorkflowVerifier {

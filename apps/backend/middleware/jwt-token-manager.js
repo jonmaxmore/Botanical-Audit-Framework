@@ -17,7 +17,7 @@
  */
 
 const crypto = require('crypto');
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 
 /**
  * JWT Token Manager Class

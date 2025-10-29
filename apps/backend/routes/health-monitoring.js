@@ -7,7 +7,7 @@
  * @date 2025-10-19
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const express = require('express');
 const router = express.Router();
 const dbHealthMonitor = require('../services/database-health-monitor');

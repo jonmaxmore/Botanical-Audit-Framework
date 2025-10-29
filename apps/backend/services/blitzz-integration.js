@@ -3,7 +3,7 @@
  * External task management system integration for GACP platform
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const axios = require('axios');
 const mongoose = require('mongoose');
 const EventEmitter = require('events');

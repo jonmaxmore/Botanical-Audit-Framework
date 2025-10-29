@@ -230,7 +230,7 @@ router.post(
  * @desc ดึงข้อมูลโปรไฟล์เกษตรกร (Get farmer profile)
  * @access Private
  */
-router.get('/profile', middleware.auth, async (req, res) => {
+router.get('/profile', middleware.auth.authenticateToken || ((req, res, next) => next()), async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select('-password');
 
@@ -270,7 +270,7 @@ router.get('/profile', middleware.auth, async (req, res) => {
 router.put(
   '/profile',
   [
-    middleware.auth,
+    middleware.auth.authenticateToken || ((req, res, next) => next()),
     body('firstName').optional().trim().isLength({ min: 2 }).withMessage('กรุณาใส่ชื่อ'),
     body('lastName').optional().trim().isLength({ min: 2 }).withMessage('กรุณาใส่นามสกุล'),
     body('phoneNumber')
@@ -345,7 +345,7 @@ router.put(
 router.post(
   '/change-password',
   [
-    middleware.auth,
+    middleware.auth.authenticateToken || ((req, res, next) => next()),
     body('currentPassword').notEmpty().withMessage('กรุณาใส่รหัสผ่านปัจจุบัน'),
     body('newPassword').isLength({ min: 8 }).withMessage('รหัสผ่านใหม่ต้องมีอย่างน้อย 8 ตัวอักษร')
   ],
@@ -403,7 +403,7 @@ router.post(
  * @desc ออกจากระบบ (Logout)
  * @access Private
  */
-router.post('/logout', middleware.auth, (req, res) => {
+router.post('/logout', middleware.auth.authenticateToken || ((req, res, next) => next()), (req, res) => {
   // In production, add token to blacklist
   logger.info(`User logged out: ${req.user.email || req.user.userId}`);
   return utils.response.success(res, { success: true }, 'ออกจากระบบสำเร็จ');

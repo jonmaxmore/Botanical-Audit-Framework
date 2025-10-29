@@ -5,7 +5,7 @@
  * มุ่งเน้นให้มี logic, workflow และ process ที่ชัดเจน
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const fs = require('fs');
 const path = require('path');
 

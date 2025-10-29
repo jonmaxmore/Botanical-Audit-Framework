@@ -3,7 +3,7 @@
  * Comprehensive notification management with role-based preferences and real-time delivery
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const EventEmitter = require('events');
 const mongoose = require('mongoose');
 

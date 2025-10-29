@@ -9,7 +9,7 @@
  * - Error recovery
  */
 
-const logger = require('../shared/logger/logger');
+const logger = require('../shared/logger');
 const mongoose = require('mongoose');
 
 class TransactionManager {
