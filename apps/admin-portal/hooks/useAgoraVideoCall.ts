@@ -1,12 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
-// @ts-ignore - Agora SDK is optional and may not be installed
-import AgoraRTC, {
-  IAgoraRTCClient,
-  ICameraVideoTrack,
-  IMicrophoneAudioTrack,
-  IRemoteVideoTrack,
-  IRemoteAudioTrack,
-} from 'agora-rtc-sdk-ng';
+// Mock types for Agora SDK when not installed
+type IAgoraRTCClient = any;
+type ICameraVideoTrack = any;
+type IMicrophoneAudioTrack = any;
+type IRemoteVideoTrack = any;
+type IRemoteAudioTrack = any;
+
+// Optional Agora SDK import
+let AgoraRTC: any = null;
+try {
+  AgoraRTC = require('agora-rtc-sdk-ng');
+} catch (e) {
+  console.warn('Agora SDK not installed - video calls disabled');
+}
 import axios from 'axios';
 
 interface UseAgoraVideoCallProps {
@@ -28,6 +34,11 @@ export const useAgoraVideoCall = ({ inspectionId, role }: UseAgoraVideoCallProps
   useEffect(() => {
     const init = async () => {
       try {
+        if (!AgoraRTC) {
+          setError('Video call feature not available - Agora SDK not installed');
+          return;
+        }
+
         const uid = Math.floor(Math.random() * 100000);
 
         const response = await axios.post(
