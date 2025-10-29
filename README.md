@@ -37,6 +37,7 @@ The system delivers an end-to-end digital workflow for growers, inspectors, and 
 ## Architecture Overview
 
 ### Directory Structure
+
 ```
 Botanical-Audit-Framework/
 ├── apps/
@@ -55,6 +56,7 @@ Botanical-Audit-Framework/
 ### Technology Stack
 
 **Backend:**
+
 - Node.js 18+ with Express 5.1.0
 - MongoDB 6.20.0 + Mongoose 8.0.3 (Atlas-ready)
 - Redis 5.8.3 (caching, sessions, Socket.IO adapter)
@@ -64,6 +66,7 @@ Botanical-Audit-Framework/
 - PM2 6.0.13 (production process management)
 
 **Frontend:**
+
 - Next.js 15.1.3 with React 18.3.1
 - TypeScript 5.7.2 (strict mode enabled)
 - Material-UI (MUI) for component library
@@ -73,6 +76,7 @@ Botanical-Audit-Framework/
 - Zod for schema validation
 
 **DevOps & Quality:**
+
 - PNPM workspaces for monorepo management
 - Husky 9.1.7 + lint-staged 16.2.6 (pre-commit hooks)
 - ESLint 8.57.1 + Prettier 3.6.2 (code quality)
@@ -90,6 +94,7 @@ Botanical-Audit-Framework/
 All portals are complete and functional with comprehensive error handling, testing, and deployment infrastructure:
 
 ### Production Environment Setup
+
 - **Backend Server:** Production-ready Express server with security middleware, health check endpoints, graceful shutdown handling, and Redis-enabled Socket.IO clustering
 - **Process Management:** PM2 ecosystem configuration for multi-process deployment with auto-restart, log rotation, and monitoring
 - **Containerization:** Docker Compose for local development, Dockerfile for each app, Kubernetes manifests for orchestrated deployment
@@ -97,12 +102,14 @@ All portals are complete and functional with comprehensive error handling, testi
 - **Database:** MongoDB Atlas integration with connection pooling, replica set support, and automated backups
 
 ### Observability & Monitoring
+
 - **Logging:** Structured JSON logging via Winston with configurable log levels and file rotation
 - **Health Checks:** `/health` and `/api/health` endpoints for load balancer integration
 - **Metrics:** Request tracking, response times, error rates, and business metrics
 - **Alerting:** Integration points for monitoring systems (Prometheus, Grafana, DataDog)
 
 ### Security Measures
+
 - **Authentication:** Dual JWT system with separate secrets for farmer and DTAM authentication domains
 - **Rate Limiting:** Redis-backed rate limiting on sensitive endpoints (login, registration, payments)
 - **Input Validation:** File upload validation with magic byte verification, XSS protection, MongoDB injection prevention
@@ -110,6 +117,7 @@ All portals are complete and functional with comprehensive error handling, testi
 - **Audit Trails:** Comprehensive logging of all certification workflow actions
 
 ### Documentation
+
 - Deployment guides: `docs/05_DEPLOYMENT/` and `docs/deployment/`
 - Infrastructure setup: `docs/ARCHITECTURE.md`
 - Environment configuration: `.env.example` files in each app
@@ -117,14 +125,14 @@ All portals are complete and functional with comprehensive error handling, testi
 
 ## Development Roadmap
 
-| Phase   | Focus Areas                               | Status & Completion                                              |
-| ------- | ----------------------------------------- | ---------------------------------------------------------------- |
-| Phase 1 | Core certification workflow & portals     | ✅ **Complete** – Farmer portal production-ready (100%)         |
-| Phase 2 | IoT integration & farm operations         | ✅ **Complete** – Sensor ingestion, alerts, dashboards live     |
-| Phase 3 | AI recommendations & code quality         | 🔄 **95% Complete** – Fertilizer AI live, code cleanup done     |
-| Phase 4 | Portal completion & government integration| ✅ **Complete** – Admin portal (100%), Certificate portal (100%) |
-| Phase 5 | National expansion & mobile tools         | 📋 **Planned** – Mobile inspector app, ministry API integration |
-| Phase 6 | Advanced supply chain & marketplace       | 📋 **Future** – Cooperative services, remote sensing, trading, mobile apps |
+| Phase   | Focus Areas                                | Status & Completion                                                        |
+| ------- | ------------------------------------------ | -------------------------------------------------------------------------- |
+| Phase 1 | Core certification workflow & portals      | ✅ **Complete** – Farmer portal production-ready (100%)                    |
+| Phase 2 | IoT integration & farm operations          | ✅ **Complete** – Sensor ingestion, alerts, dashboards live                |
+| Phase 3 | AI recommendations & code quality          | 🔄 **95% Complete** – Fertilizer AI live, code cleanup done                |
+| Phase 4 | Portal completion & government integration | ✅ **Complete** – Admin portal (100%), Certificate portal (100%)           |
+| Phase 5 | National expansion & mobile tools          | 📋 **Planned** – Mobile inspector app, ministry API integration            |
+| Phase 6 | Advanced supply chain & marketplace        | 📋 **Future** – Cooperative services, remote sensing, trading, mobile apps |
 
 ### ✅ Completed Development (Phase 4)
 
@@ -157,19 +165,20 @@ All portals are complete and functional with comprehensive error handling, testi
 
 ### Current Status Summary
 
-| Component | Status | Completion |
-|-----------|--------|------------|
-| Backend API | ✅ Ready | 100% (16+ services) |
-| Farmer Portal | ✅ Ready | 100% (31 routes, 97.6% tests) |
-| Admin Portal | ✅ Ready | 100% (12 pages) |
-| Certificate Portal | ✅ Ready | 100% (5 pages) |
-| Infrastructure | ✅ Ready | 100% (AWS configs) |
-| Documentation | ✅ Ready | 100% (comprehensive) |
-| **Overall Platform** | **✅ READY** | **100% PRODUCTION-READY** |
+| Component            | Status       | Completion                    |
+| -------------------- | ------------ | ----------------------------- |
+| Backend API          | ✅ Ready     | 100% (16+ services)           |
+| Farmer Portal        | ✅ Ready     | 100% (31 routes, 97.6% tests) |
+| Admin Portal         | ✅ Ready     | 100% (12 pages)               |
+| Certificate Portal   | ✅ Ready     | 100% (5 pages)                |
+| Infrastructure       | ✅ Ready     | 100% (AWS configs)            |
+| Documentation        | ✅ Ready     | 100% (comprehensive)          |
+| **Overall Platform** | **✅ READY** | **100% PRODUCTION-READY**     |
 
 ### Development Philosophy
 
 **Before adding new features, always:**
+
 1. Check `docs/EXISTING_MODULES_INVENTORY.md` to prevent duplicate development
 2. Review existing code and determine if enhancement is preferable to new implementation
 3. Refactor and harden current modules before introducing new components
@@ -179,6 +188,7 @@ All portals are complete and functional with comprehensive error handling, testi
 ## Getting Started
 
 ### Prerequisites
+
 - **Node.js:** 18.0.0 or higher
 - **PNPM:** 8.0.0 or higher (`npm install -g pnpm`)
 - **MongoDB:** Local instance or MongoDB Atlas connection string
@@ -257,6 +267,7 @@ npm run test:e2e
 ## Quality Assurance & Operations
 
 ### Code Quality Standards
+
 - **TypeScript:** Strict mode enabled, no implicit any, comprehensive type coverage
 - **Linting:** ESLint with Prettier integration, enforced via pre-commit hooks
 - **Testing:** 97.6% test pass rate on farmer portal, Jest for unit tests, Playwright for E2E
@@ -264,6 +275,7 @@ npm run test:e2e
 - **Pre-commit Hooks:** Automatic linting, formatting, and type checking via Husky
 
 ### Security Practices
+
 - **OWASP Compliance:** 8/10 OWASP Top 10 compliance achieved
 - **Authentication:** Dual JWT architecture with token rotation
 - **Input Validation:** Comprehensive validation using Zod schemas
@@ -272,6 +284,7 @@ npm run test:e2e
 - **Security Headers:** Helmet middleware with strict CSP policies
 
 ### Operational Excellence
+
 - **Disaster Recovery:** Automated MongoDB Atlas backups, documented recovery procedures
 - **Monitoring:** Health check endpoints, structured logging, error tracking
 - **Documentation:** Architecture Decision Records (ADRs) for significant design changes
@@ -281,6 +294,7 @@ npm run test:e2e
 ### File Management Guidelines
 
 **When updating or replacing documentation:**
+
 1. **Delete** old, redundant files that are no longer needed
 2. **Archive** files that must be kept for reference → move to `archive/` with timestamp
    - Example: `archive/README_2025-10-28_v1.md`
@@ -290,20 +304,22 @@ npm run test:e2e
 ## Contributing
 
 Before submitting changes:
+
 1. Review [docs/EXISTING_MODULES_INVENTORY.md](docs/EXISTING_MODULES_INVENTORY.md) to prevent duplicate work
 2. Run all quality gates: `npm run type-check && npm run lint:all && npm run test`
 3. Ensure cannabis-first ordering in all UI components
 4. Update relevant documentation
 5. Add/update tests for new functionality
 
-## Support & Resources
+## Documentation
 
-- **Documentation:** All documentation in [docs/](docs/) directory
-- **Issues:** Track bugs and features via project management system
-- **Architecture Questions:** Refer to ADRs in `docs/01_SYSTEM_ARCHITECTURE/`
-- **Deployment Help:** See [docs/05_DEPLOYMENT/](docs/05_DEPLOYMENT/)
+- **Quick Start:** [docs/DEV_ENVIRONMENT_QUICK_START.md](docs/DEV_ENVIRONMENT_QUICK_START.md)
+- **Architecture:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- **Deployment:** [docs/05_DEPLOYMENT/](docs/05_DEPLOYMENT/)
+- **API Reference:** [docs/API_DOCUMENTATION.md](docs/API_DOCUMENTATION.md)
+- **Competitor Research:** [docs/GLOBAL_COMPETITOR_RESEARCH_PLAN.md](docs/GLOBAL_COMPETITOR_RESEARCH_PLAN.md)
+- **System Audit:** [docs/EXISTING_SYSTEM_AUDIT.md](docs/EXISTING_SYSTEM_AUDIT.md)
 
 ## License
 
 Proprietary software – all rights reserved.
-For internal use only. Unauthorized distribution prohibited.

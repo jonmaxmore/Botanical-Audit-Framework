@@ -35,7 +35,9 @@ class PDFGeneratorService {
         printBackground: true,
         displayHeaderFooter: true,
         headerTemplate: options.headerTemplate || '<div></div>',
-        footerTemplate: options.footerTemplate || `
+        footerTemplate:
+          options.footerTemplate ||
+          `
           <div style="font-size: 10px; text-align: center; width: 100%; padding: 5px;">
             <span class="pageNumber"></span> / <span class="totalPages"></span>
           </div>
@@ -57,8 +59,8 @@ class PDFGeneratorService {
   }
 
   replaceTemplateVariables(template, data) {
-    return template.replace(/\{\{(\w+(?:\.\w+)*)\}\}/g, (match, path) => {
-      const value = path.split('.').reduce((obj, key) => obj?.[key], data);
+    return template.replace(/\{\{(\w+(?:\.\w+)*)\}\}/g, (match, keyPath) => {
+      const value = keyPath.split('.').reduce((obj, key) => obj?.[key], data);
       return value !== undefined ? value : match;
     });
   }
