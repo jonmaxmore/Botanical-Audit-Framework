@@ -1,18 +1,18 @@
-const nextJest = require('next/jest')
+const nextJest = require('next/jest');
 
 const createJestConfig = nextJest({
   // Provide the path to your Next.js app to load next.config.js and .env files in your test environment
   dir: './',
-})
+});
 
 // Add any custom config to be passed to Jest
 const customJestConfig = {
   // Setup files
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  
+
   // Test environment
   testEnvironment: 'jest-environment-jsdom',
-  
+
   // Module paths
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
@@ -20,7 +20,7 @@ const customJestConfig = {
     '^@/components/(.*)$': '<rootDir>/components/$1',
     '^@/app/(.*)$': '<rootDir>/app/$1',
   },
-  
+
   // Coverage configuration
   collectCoverageFrom: [
     'lib/**/*.{js,jsx,ts,tsx}',
@@ -32,7 +32,7 @@ const customJestConfig = {
     '!**/coverage/**',
     '!**/jest.config.js',
   ],
-  
+
   // Coverage thresholds
   // Note: Branch coverage at 66% due to axios interceptors requiring integration tests
   // TODO: Refactor interceptor tests to increase branch coverage to 70%
@@ -44,24 +44,19 @@ const customJestConfig = {
       statements: 70,
     },
   },
-  
+
   // Test match patterns
-  testMatch: [
-    '**/__tests__/**/*.[jt]s?(x)',
-    '**/?(*.)+(spec|test).[jt]s?(x)',
-  ],
-  
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+
   // Transform ignore patterns
-  transformIgnorePatterns: [
-    'node_modules/(?!(qrcode|axios)/)',
-  ],
-  
+  transformIgnorePatterns: ['node_modules/(?!(qrcode|axios)/)'],
+
   // Module file extensions
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  
+
   // Verbose output
   verbose: true,
-}
+};
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
-module.exports = createJestConfig(customJestConfig)
+module.exports = createJestConfig(customJestConfig);

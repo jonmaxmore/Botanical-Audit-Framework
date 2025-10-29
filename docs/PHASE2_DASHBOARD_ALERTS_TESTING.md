@@ -607,20 +607,20 @@ const IoTAlertSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      default: () => `ALERT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      default: () => `ALERT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
     },
 
     farmId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: true,
-      index: true,
+      index: true
     },
 
     deviceId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     alertType: {
@@ -639,21 +639,21 @@ const IoTAlertSchema = new mongoose.Schema(
         'low_battery',
         'device_offline',
         'sensor_error',
-        'calibration_due',
+        'calibration_due'
       ],
-      index: true,
+      index: true
     },
 
     severity: {
       type: String,
       enum: ['critical', 'warning', 'info'],
       required: true,
-      index: true,
+      index: true
     },
 
     message: {
       type: String,
-      required: true,
+      required: true
     },
 
     recommendation: String,
@@ -664,7 +664,7 @@ const IoTAlertSchema = new mongoose.Schema(
     acknowledged: {
       type: Boolean,
       default: false,
-      index: true,
+      index: true
     },
 
     acknowledgedBy: mongoose.Schema.Types.ObjectId,
@@ -672,7 +672,7 @@ const IoTAlertSchema = new mongoose.Schema(
 
     resolved: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     resolvedAt: Date,
@@ -682,13 +682,13 @@ const IoTAlertSchema = new mongoose.Schema(
         channel: { type: String, enum: ['email', 'sms', 'websocket', 'push'] },
         sentAt: Date,
         success: Boolean,
-        error: String,
-      },
-    ],
+        error: String
+      }
+    ]
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // Indexes
@@ -699,7 +699,7 @@ IoTAlertSchema.index({ severity: 1, acknowledged: 1 });
 // Auto-resolve old acknowledged alerts after 7 days
 IoTAlertSchema.index(
   { acknowledgedAt: 1 },
-  { expireAfterSeconds: 7 * 24 * 60 * 60, partialFilterExpression: { acknowledged: true } },
+  { expireAfterSeconds: 7 * 24 * 60 * 60, partialFilterExpression: { acknowledged: true } }
 );
 
 // Method: Acknowledge alert
@@ -733,9 +733,9 @@ IoTAlertSchema.statics.getAlertSummary = function (farmId) {
       $group: {
         _id: '$severity',
         count: { $sum: 1 },
-        types: { $addToSet: '$alertType' },
-      },
-    },
+        types: { $addToSet: '$alertType' }
+      }
+    }
   ]);
 };
 
@@ -762,8 +762,8 @@ describe('IoTDevice Model', () => {
         farmId: 'farm123',
         location: { plotName: 'Plot 1', gps: { lat: 13.7, lng: 100.5 } },
         connectivity: {
-          lastSeen: new Date(),
-        },
+          lastSeen: new Date()
+        }
       });
 
       expect(device.isOnline).toBe(true);
@@ -776,8 +776,8 @@ describe('IoTDevice Model', () => {
         farmId: 'farm123',
         location: { plotName: 'Plot 1', gps: { lat: 13.7, lng: 100.5 } },
         connectivity: {
-          lastSeen: new Date(Date.now() - 10 * 60 * 1000), // 10 minutes ago
-        },
+          lastSeen: new Date(Date.now() - 10 * 60 * 1000) // 10 minutes ago
+        }
       });
 
       expect(device.isOnline).toBe(false);
@@ -792,8 +792,8 @@ describe('IoTDevice Model', () => {
         farmId: 'farm123',
         location: { plotName: 'Plot 1', gps: { lat: 13.7, lng: 100.5 } },
         calibration: {
-          nextCalibration: new Date(Date.now() - 24 * 60 * 60 * 1000), // Yesterday
-        },
+          nextCalibration: new Date(Date.now() - 24 * 60 * 60 * 1000) // Yesterday
+        }
       });
 
       expect(device.calibrationStatus).toBe('overdue');
@@ -806,8 +806,8 @@ describe('IoTDevice Model', () => {
         farmId: 'farm123',
         location: { plotName: 'Plot 1', gps: { lat: 13.7, lng: 100.5 } },
         calibration: {
-          nextCalibration: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
-        },
+          nextCalibration: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000) // 3 days from now
+        }
       });
 
       expect(device.calibrationStatus).toBe('due_soon');
@@ -840,7 +840,7 @@ describe('Soil Monitoring API Integration Tests', () => {
     const farm = await Farm.create({
       farmName: 'Test IoT Farm',
       farmNumber: 'FARM-TEST-001',
-      ownerId: 'owner123',
+      ownerId: 'owner123'
     });
     farmId = farm.id;
 
@@ -851,8 +851,8 @@ describe('Soil Monitoring API Integration Tests', () => {
       farmId,
       location: {
         plotName: 'Test Plot',
-        gps: { lat: 13.7, lng: 100.5 },
-      },
+        gps: { lat: 13.7, lng: 100.5 }
+      }
     });
     deviceId = device.deviceId;
 
@@ -877,15 +877,15 @@ describe('Soil Monitoring API Integration Tests', () => {
           sensorType: 'moisture',
           value: 55,
           unit: '%',
-          timestamp: new Date(),
+          timestamp: new Date()
         },
         {
           deviceId,
           farmId,
           sensorType: 'ph',
           value: 6.5,
-          timestamp: new Date(),
-        },
+          timestamp: new Date()
+        }
       ]);
     });
 
@@ -921,8 +921,8 @@ describe('Soil Monitoring API Integration Tests', () => {
       await Farm.findByIdAndUpdate(farmId, {
         'soilMonitoring.realTimeData.ph': {
           current: 5.2,
-          optimal: { min: 6.0, max: 7.0 },
-        },
+          optimal: { min: 6.0, max: 7.0 }
+        }
       });
 
       const response = await request(app)
@@ -935,7 +935,7 @@ describe('Soil Monitoring API Integration Tests', () => {
 
       // Should recommend lime for acidic soil
       const limeRecommendation = response.body.data.recommendations.find(r =>
-        r.solution.includes('ปูนขาว'),
+        r.solution.includes('ปูนขาว')
       );
       expect(limeRecommendation).toBeDefined();
       expect(limeRecommendation.priority).toBe('high');
@@ -967,7 +967,7 @@ async function runLoadTest() {
     const client = mqtt.connect('mqtt://localhost:1883', {
       clientId: `load-test-${i}`,
       username: 'gacp_bridge',
-      password: process.env.MQTT_PASSWORD,
+      password: process.env.MQTT_PASSWORD
     });
 
     client.on('connect', () => {
@@ -995,8 +995,8 @@ async function runLoadTest() {
         quality: 'good',
         metadata: {
           batteryLevel: 80,
-          signalStrength: -65,
-        },
+          signalStrength: -65
+        }
       };
 
       client.publish(
@@ -1008,7 +1008,7 @@ async function runLoadTest() {
             clients.find(c => c.deviceId === deviceId).sent++;
             totalSent++;
           }
-        },
+        }
       );
     });
 
@@ -1116,7 +1116,7 @@ module.exports = {
         MQTT_PASSWORD: process.env.MQTT_PASSWORD,
         MONGODB_URI: process.env.MONGODB_URI,
         REDIS_HOST: 'localhost',
-        REDIS_PORT: 6379,
+        REDIS_PORT: 6379
       },
       error_file: './logs/mqtt-bridge-error.log',
       out_file: './logs/mqtt-bridge-out.log',
@@ -1125,9 +1125,9 @@ module.exports = {
       autorestart: true,
       max_restarts: 10,
       min_uptime: '10s',
-      watch: false,
-    },
-  ],
+      watch: false
+    }
+  ]
 };
 ```
 

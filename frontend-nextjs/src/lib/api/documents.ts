@@ -47,7 +47,7 @@ export interface DocumentFilterParams {
 
 // Upload document
 export const uploadDocument = async (
-  params: DocumentUploadParams,
+  params: DocumentUploadParams
 ): Promise<ApiResponse<Document>> => {
   try {
     const formData = new FormData();
@@ -65,7 +65,7 @@ export const uploadDocument = async (
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-      },
+      }
     );
 
     return response.data;
@@ -77,7 +77,7 @@ export const uploadDocument = async (
 
 // Get documents list
 export const getDocuments = async (
-  params?: DocumentFilterParams,
+  params?: DocumentFilterParams
 ): Promise<ApiResponse<DocumentListResponse>> => {
   try {
     const response = await apiClient.get<ApiResponse<DocumentListResponse>>('/api/documents', {
@@ -145,7 +145,7 @@ export interface DocumentStatistics {
 export const getDocumentStatistics = async (): Promise<ApiResponse<DocumentStatistics>> => {
   try {
     const response = await apiClient.get<ApiResponse<DocumentStatistics>>(
-      '/api/documents/statistics',
+      '/api/documents/statistics'
     );
     return response.data;
   } catch (error) {

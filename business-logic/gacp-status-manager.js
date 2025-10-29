@@ -23,7 +23,7 @@ const USER_FRIENDLY_STATES = {
     progress: 0,
     nextStep: 'ส่งใบสมัครและชำระเงินงวดแรก',
     estimatedDays: null,
-    userAction: 'กรุณาตรวจสอบเอกสารให้ครบถ้วนและส่งใบสมัคร',
+    userAction: 'กรุณาตรวจสอบเอกสารให้ครบถ้วนและส่งใบสมัคร'
   },
 
   submitted: {
@@ -35,7 +35,7 @@ const USER_FRIENDLY_STATES = {
     progress: 12.5,
     nextStep: 'รอเจ้าหน้าที่ตรวจสอบเอกสาร',
     estimatedDays: 2,
-    userAction: 'รอการแจ้งผลการตรวจสอบเอกสารเบื้องต้น',
+    userAction: 'รอการแจ้งผลการตรวจสอบเอกสารเบื้องต้น'
   },
 
   payment_first_pending: {
@@ -47,7 +47,7 @@ const USER_FRIENDLY_STATES = {
     progress: 12.5,
     nextStep: 'ชำระเงิน 5,000 บาท',
     estimatedDays: null,
-    userAction: 'กรุณาชำระเงินตามช่องทางที่กำหนดภายใน 7 วัน',
+    userAction: 'กรุณาชำระเงินตามช่องทางที่กำหนดภายใน 7 วัน'
   },
 
   payment_first_paid: {
@@ -59,7 +59,7 @@ const USER_FRIENDLY_STATES = {
     progress: 25,
     nextStep: 'ตรวจสอบเอกสารโดยเจ้าหน้าที่',
     estimatedDays: 5,
-    userAction: 'รอผลการตรวจสอบเอกสาร (ใช้เวลา 3-5 วันทำการ)',
+    userAction: 'รอผลการตรวจสอบเอกสาร (ใช้เวลา 3-5 วันทำการ)'
   },
 
   document_review: {
@@ -71,7 +71,7 @@ const USER_FRIENDLY_STATES = {
     progress: 37.5,
     nextStep: 'รอผลการตรวจสอบเอกสาร',
     estimatedDays: 3,
-    userAction: 'รอผลการตรวจสอบ หากมีปัญหาจะแจ้งให้ทราบ',
+    userAction: 'รอผลการตรวจสอบ หากมีปัญหาจะแจ้งให้ทราบ'
   },
 
   document_approved: {
@@ -83,7 +83,7 @@ const USER_FRIENDLY_STATES = {
     progress: 50,
     nextStep: 'ชำระเงินงวดที่สอง 25,000 บาท',
     estimatedDays: null,
-    userAction: 'กรุณาชำระเงินงวดที่สองเพื่อเข้าสู่ขั้นตอนตรวจฟาร์ม',
+    userAction: 'กรุณาชำระเงินงวดที่สองเพื่อเข้าสู่ขั้นตอนตรวจฟาร์ม'
   },
 
   document_rejected: {
@@ -95,7 +95,7 @@ const USER_FRIENDLY_STATES = {
     progress: 25,
     nextStep: 'แก้ไขเอกสารตามที่แจ้ง',
     estimatedDays: null,
-    userAction: 'แก้ไขเอกสารตามคำแนะนำและส่งใหม่',
+    userAction: 'แก้ไขเอกสารตามคำแนะนำและส่งใหม่'
   },
 
   payment_second_pending: {
@@ -107,7 +107,7 @@ const USER_FRIENDLY_STATES = {
     progress: 50,
     nextStep: 'ชำระเงิน 25,000 บาท',
     estimatedDays: null,
-    userAction: 'ชำระเงินเพื่อให้เจ้าหน้าที่มาตรวจฟาร์ม',
+    userAction: 'ชำระเงินเพื่อให้เจ้าหน้าที่มาตรวจฟาร์ม'
   },
 
   payment_second_paid: {
@@ -119,7 +119,7 @@ const USER_FRIENDLY_STATES = {
     progress: 62.5,
     nextStep: 'นัดหมายตรวจฟาร์ม',
     estimatedDays: 3,
-    userAction: 'รอเจ้าหน้าที่ติดต่อนัดหมายวันตรวจฟาร์ม',
+    userAction: 'รอเจ้าหน้าที่ติดต่อนัดหมายวันตรวจฟาร์ม'
   },
 
   inspection_scheduled: {
@@ -131,7 +131,7 @@ const USER_FRIENDLY_STATES = {
     progress: 75,
     nextStep: 'เจ้าหน้าที่มาตรวจฟาร์ม',
     estimatedDays: 7,
-    userAction: 'เตรียมฟาร์มและเอกสารให้พร้อมสำหรับวันตรวจ',
+    userAction: 'เตรียมฟาร์มและเอกสารให้พร้อมสำหรับวันตรวจ'
   },
 
   inspection_in_progress: {
@@ -143,7 +143,7 @@ const USER_FRIENDLY_STATES = {
     progress: 87.5,
     nextStep: 'รอผลการตรวจฟาร์ม',
     estimatedDays: 1,
-    userAction: 'ให้ความร่วมมือกับเจ้าหน้าที่ในการตรวจสอบ',
+    userAction: 'ให้ความร่วมมือกับเจ้าหน้าที่ในการตรวจสอบ'
   },
 
   inspection_passed: {
@@ -155,7 +155,7 @@ const USER_FRIENDLY_STATES = {
     progress: 100,
     nextStep: 'รับใบรับรอง GACP',
     estimatedDays: 2,
-    userAction: 'รอรับใบรับรอง GACP ภายใน 2-3 วันทำการ',
+    userAction: 'รอรับใบรับรอง GACP ภายใน 2-3 วันทำการ'
   },
 
   inspection_failed: {
@@ -167,7 +167,7 @@ const USER_FRIENDLY_STATES = {
     progress: 75,
     nextStep: 'ปรับปรุงฟาร์มตามคำแนะนำ',
     estimatedDays: null,
-    userAction: 'ปรับปรุงฟาร์มและขอตรวจใหม่ (ไม่เสียค่าใช้จ่ายเพิ่ม)',
+    userAction: 'ปรับปรุงฟาร์มและขอตรวจใหม่ (ไม่เสียค่าใช้จ่ายเพิ่ม)'
   },
 
   certificate_issued: {
@@ -179,7 +179,7 @@ const USER_FRIENDLY_STATES = {
     progress: 100,
     nextStep: 'เสร็จสิ้นกระบวนการ',
     estimatedDays: null,
-    userAction: 'ดาวน์โหลดใบรับรองและเริ่มใช้งาน',
+    userAction: 'ดาวน์โหลดใบรับรองและเริ่มใช้งาน'
   },
 
   certificate_expired: {
@@ -191,7 +191,7 @@ const USER_FRIENDLY_STATES = {
     progress: 0,
     nextStep: 'ต่ออายุใบรับรอง',
     estimatedDays: null,
-    userAction: 'ติดต่อเจ้าหน้าที่เพื่อขอต่ออายุใบรับรอง',
+    userAction: 'ติดต่อเจ้าหน้าที่เพื่อขอต่ออายุใบรับรอง'
   },
 
   cancelled: {
@@ -203,8 +203,8 @@ const USER_FRIENDLY_STATES = {
     progress: 0,
     nextStep: 'สมัครใหม่ (หากต้องการ)',
     estimatedDays: null,
-    userAction: 'หากต้องการสมัครใหม่ กรุณาเริ่มกระบวนการใหม่',
-  },
+    userAction: 'หากต้องการสมัครใหม่ กรุณาเริ่มกระบวนการใหม่'
+  }
 };
 
 // สีสำหรับ Progress Bar
@@ -212,7 +212,7 @@ const PROGRESS_COLORS = {
   low: '#EF4444', // แดง (0-33%)
   medium: '#F59E0B', // เหลือง (34-66%)
   high: '#10B981', // เขียว (67-89%)
-  complete: '#059669', // เขียวเข้ม (90-100%)
+  complete: '#059669' // เขียวเข้ม (90-100%)
 };
 
 class GACPStatusManager extends EventEmitter {
@@ -238,7 +238,7 @@ class GACPStatusManager extends EventEmitter {
         progress: 0,
         nextStep: 'ติดต่อเจ้าหน้าที่',
         estimatedDays: null,
-        userAction: 'กรุณาติดต่อเจ้าหน้าที่เพื่อสอบถามสถานะ',
+        userAction: 'กรุณาติดต่อเจ้าหน้าที่เพื่อสอบถามสถานะ'
       };
     }
 
@@ -247,7 +247,7 @@ class GACPStatusManager extends EventEmitter {
       ...status,
       technicalStatus,
       timestamp: new Date(),
-      ...additionalData,
+      ...additionalData
     };
   }
 
@@ -260,7 +260,7 @@ class GACPStatusManager extends EventEmitter {
       height = 24,
       showPercentage = true,
       showText = true,
-      animated = true,
+      animated = true
     } = options;
 
     // เลือกสี
@@ -295,7 +295,7 @@ class GACPStatusManager extends EventEmitter {
       return {
         message: 'ไม่สามารถประมาณเวลาได้',
         daysRemaining: null,
-        estimatedDate: null,
+        estimatedDate: null
       };
     }
 
@@ -309,8 +309,8 @@ class GACPStatusManager extends EventEmitter {
       estimatedDate: estimatedDate.toLocaleDateString('th-TH', {
         year: 'numeric',
         month: 'long',
-        day: 'numeric',
-      }),
+        day: 'numeric'
+      })
     };
   }
 
@@ -332,7 +332,7 @@ class GACPStatusManager extends EventEmitter {
       urgency: this.getUrgencyLevel(currentStatus),
       showInApp: true,
       sendEmail: this.shouldSendEmail(currentStatus),
-      sendSMS: this.shouldSendSMS(currentStatus),
+      sendSMS: this.shouldSendSMS(currentStatus)
     };
   }
 
@@ -395,7 +395,7 @@ class GACPStatusManager extends EventEmitter {
       'inspection_passed',
       'inspection_failed',
       'certificate_issued',
-      'certificate_expired',
+      'certificate_expired'
     ];
 
     return emailStatuses.includes(status);
@@ -409,7 +409,7 @@ class GACPStatusManager extends EventEmitter {
       'payment_first_pending',
       'payment_second_pending',
       'inspection_scheduled',
-      'certificate_issued',
+      'certificate_issued'
     ];
 
     return smsStatuses.includes(status);
@@ -435,7 +435,7 @@ class GACPStatusManager extends EventEmitter {
         isCurrent: index === statusHistory.length - 1,
         details: entry.details || null,
         actor: entry.actor || 'system',
-        note: entry.note || null,
+        note: entry.note || null
       };
     });
   }
@@ -453,9 +453,9 @@ class GACPStatusManager extends EventEmitter {
       status: {
         ...statusInfo,
         progressBar,
-        estimation,
+        estimation
       },
-      html: this.generateStatusCardHTML(statusInfo, progressBar, estimation),
+      html: this.generateStatusCardHTML(statusInfo, progressBar, estimation)
     };
   }
 
@@ -500,18 +500,18 @@ class GACPStatusManager extends EventEmitter {
         total: 21, // วัน
         documentReview: 5,
         farmInspection: 7,
-        certificateIssue: 3,
+        certificateIssue: 3
       },
       successRate: {
         overall: 85, // %
         documentApproval: 92,
-        farmInspection: 87,
+        farmInspection: 87
       },
       currentBacklog: {
         documentReview: 45,
         farmInspection: 23,
-        certificateIssue: 12,
-      },
+        certificateIssue: 12
+      }
     };
   }
 
@@ -527,7 +527,7 @@ class GACPStatusManager extends EventEmitter {
     const slaTargets = {
       document_review: 5,
       inspection_scheduled: 14,
-      certificate_issued: 21,
+      certificate_issued: 21
     };
 
     const currentTarget = slaTargets[currentStatus] || 21;
@@ -540,7 +540,7 @@ class GACPStatusManager extends EventEmitter {
       remainingDays,
       isWithinSLA,
       slaPercentage: Math.min(100, (daysPassed / currentTarget) * 100),
-      status: isWithinSLA ? 'within_sla' : 'overdue',
+      status: isWithinSLA ? 'within_sla' : 'overdue'
     };
   }
 }
@@ -562,5 +562,5 @@ module.exports = {
   USER_FRIENDLY_STATES,
   PROGRESS_COLORS,
   getStatusDisplay,
-  createProgressBar,
+  createProgressBar
 };

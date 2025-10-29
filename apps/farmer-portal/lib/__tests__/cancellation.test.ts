@@ -10,7 +10,7 @@
 import {
   canCancelApplication as canCancelApp,
   type Application,
-  type ApplicationStatus,
+  type ApplicationStatus
 } from '../business-logic';
 
 // Helper: Create mock application
@@ -23,7 +23,7 @@ function createMockApplication(status: ApplicationStatus): Application {
     rejectionCount: 0,
     rescheduleCount: 0,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 }
 
@@ -37,14 +37,14 @@ function canCancelApplication(status: ApplicationStatus): boolean {
 function calculateCancellationRefund(
   amount: number,
   paidAt: Date,
-  cancelledAt: Date,
+  cancelledAt: Date
 ): {
   refundAmount: number;
   refundPercentage: number;
   canRefund: boolean;
 } {
   const daysSincePaid = Math.floor(
-    (cancelledAt.getTime() - paidAt.getTime()) / (1000 * 60 * 60 * 24),
+    (cancelledAt.getTime() - paidAt.getTime()) / (1000 * 60 * 60 * 24)
   );
 
   // Refund policy:
@@ -66,7 +66,7 @@ function calculateCancellationRefund(
   return {
     refundAmount,
     refundPercentage,
-    canRefund: refundPercentage > 0,
+    canRefund: refundPercentage > 0
   };
 }
 

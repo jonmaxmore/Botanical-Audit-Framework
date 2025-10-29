@@ -8,13 +8,13 @@
 
 ## 📋 Tasks Overview
 
-| # | Task | Status | Time | Priority |
-|---|------|--------|------|----------|
-| 1 | Reduce MD files (90%) | ⏳ Ready | 2-3h | 🔴 High |
-| 2 | Remove blockchain references | ⏳ Ready | 1h | 🔴 High |
-| 3 | Update documentation | ⏳ Ready | 1h | 🟡 Medium |
-| 4 | Verify system integrity | ⏳ Ready | 30m | 🔴 High |
-| 5 | Deploy to production | ⏳ Ready | - | 🟢 Low |
+| #   | Task                         | Status   | Time | Priority  |
+| --- | ---------------------------- | -------- | ---- | --------- |
+| 1   | Reduce MD files (90%)        | ⏳ Ready | 2-3h | 🔴 High   |
+| 2   | Remove blockchain references | ⏳ Ready | 1h   | 🔴 High   |
+| 3   | Update documentation         | ⏳ Ready | 1h   | 🟡 Medium |
+| 4   | Verify system integrity      | ⏳ Ready | 30m  | 🔴 High   |
+| 5   | Deploy to production         | ⏳ Ready | -    | 🟢 Low    |
 
 **Total Time:** ~5 hours
 
@@ -25,6 +25,7 @@
 ### Files to KEEP (Essential):
 
 #### Root Level (10 files)
+
 - ✅ README.md
 - ✅ FINAL_VERIFICATION_REPORT.md
 - ✅ PRODUCTION_DEPLOYMENT_READY.md
@@ -37,6 +38,7 @@
 - ✅ pnpm-workspace.yaml
 
 #### Documentation (20 files)
+
 - ✅ docs/EXISTING_MODULES_INVENTORY.md
 - ✅ docs/ARCHITECTURE.md
 - ✅ docs/API_DOCUMENTATION.md
@@ -59,6 +61,7 @@
 - ✅ docs/QUICK_DEPLOY.md (root)
 
 #### App-Specific (8 files)
+
 - ✅ apps/backend/README.md
 - ✅ apps/backend/MODULE_STRUCTURE_RECOMMENDATION.md
 - ✅ apps/farmer-portal/README.md
@@ -69,6 +72,7 @@
 - ✅ apps/certificate-portal/COMPLETION_REPORT.md
 
 #### Infrastructure (6 files)
+
 - ✅ infrastructure/aws/README.md
 - ✅ terraform/README.md
 - ✅ k8s/README.md
@@ -79,6 +83,7 @@
 **Total Essential Files: ~50 files**
 
 ### Files to ARCHIVE (Move to archive/):
+
 - ❌ Duplicate files
 - ❌ Old versions (with dates)
 - ❌ Progress reports (except Week 1 & 2)
@@ -115,6 +120,7 @@
    - Update: System architecture overview
 
 ### Search & Replace:
+
 ```
 Find: "blockchain"
 Replace: (remove or replace with "database-backed")
@@ -154,6 +160,7 @@ Replace: "audit trail"
 ## 4️⃣ Verify System Integrity
 
 ### Checklist:
+
 - [ ] All 48 pages still working
 - [ ] No broken links in documentation
 - [ ] All essential files present
@@ -166,12 +173,14 @@ Replace: "audit trail"
 ## 5️⃣ Deploy to Production
 
 ### Pre-Deployment:
+
 - [ ] Run integration tests
 - [ ] Verify all services
 - [ ] Check AWS configs
 - [ ] Review security settings
 
 ### Deployment Steps:
+
 1. Deploy backend to AWS ECS
 2. Deploy frontend applications
 3. Configure monitoring
@@ -183,11 +192,13 @@ Replace: "audit trail"
 ## 📊 Expected Results
 
 ### Before Cleanup:
+
 - **MD Files:** 14,990
 - **Total Size:** ~500MB (estimated)
 - **Blockchain Refs:** 50+ mentions
 
 ### After Cleanup:
+
 - **MD Files:** ~100-200 (98% reduction)
 - **Total Size:** ~50MB (90% reduction)
 - **Blockchain Refs:** 0 mentions
@@ -207,21 +218,25 @@ Replace: "audit trail"
 ## 🚀 Execution Commands
 
 ### Step 1: Dry Run (Review Only)
+
 ```bash
 node scripts/cleanup-documentation.js
 ```
 
 ### Step 2: Execute Cleanup
+
 ```bash
 node scripts/cleanup-documentation.js --execute
 ```
 
 ### Step 3: Remove Blockchain References
+
 ```bash
 node scripts/remove-blockchain-refs.js
 ```
 
 ### Step 4: Verify & Commit
+
 ```bash
 git add .
 git commit -m "chore: Cleanup documentation and remove blockchain references"

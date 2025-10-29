@@ -9,16 +9,17 @@ Successfully fixed **BUG #7 (MUI Select click interception)** by using `locator(
 
 ### Test Results
 
-| Round | Passed | Failed | Pass Rate | Improvement |
-|-------|--------|--------|-----------|-------------|
-| Round 1 | 16 | 15 | 52% | Baseline |
-| Round 2 | 17 | 14 | 55% | +1 test (+3%) |
-| Round 3 | 18 | 13 | 58% | +1 test (+3%) |
-| **Round 4** | **19+** | **12-** | **61%+** | **+1 test (+3%)** |
+| Round       | Passed  | Failed  | Pass Rate | Improvement       |
+| ----------- | ------- | ------- | --------- | ----------------- |
+| Round 1     | 16      | 15      | 52%       | Baseline          |
+| Round 2     | 17      | 14      | 55%       | +1 test (+3%)     |
+| Round 3     | 18      | 13      | 58%       | +1 test (+3%)     |
+| **Round 4** | **19+** | **12-** | **61%+**  | **+1 test (+3%)** |
 
 ## Bugs Fixed This Session
 
 ### ✅ BUG #6: Role Field Visibility (FIXED)
+
 - **Issue:** Role field `ประเภทผู้ใช้` wasn't found by label selector
 - **Root Cause:** MUI Select doesn't properly link InputLabel with accessible name
 - **Fix:** Changed visibility check from `getByLabel()` to `locator('[role="combobox"]')`
@@ -26,6 +27,7 @@ Successfully fixed **BUG #7 (MUI Select click interception)** by using `locator(
 - **Files Modified:** `tests/e2e/01-registration.spec.ts` (line 34)
 
 ### ✅ BUG #7: MUI Select Click Interception (FIXED)
+
 - **Issue:** Clicking `[name="role"]` targets hidden input, div with role="combobox" intercepts clicks
 - **Root Cause:** MUI Select renders TWO elements:
   1. Hidden `<input name="role">` for form submission
@@ -35,7 +37,7 @@ Successfully fixed **BUG #7 (MUI Select click interception)** by using `locator(
   <div tabindex="0" role="combobox" aria-expanded="false" ... >เกษตรกร (Farmer)</div> intercepts pointer events
   ```
 - **Fix:** Use `locator('[role="combobox"]').first().click()` to click the visible div
-- **Tests Fixed:** 
+- **Tests Fixed:**
   - TC 1.1.3 (Password mismatch validation) ✅
   - TC 1.1.4 (Successful registration) - Partially fixed (role selection works, but dashboard redirect fails)
 - **Files Modified:** `tests/e2e/01-registration.spec.ts` (lines 70, 105)
@@ -45,12 +47,14 @@ Successfully fixed **BUG #7 (MUI Select click interception)** by using `locator(
 ### File: `tests/e2e/01-registration.spec.ts`
 
 **Before:**
+
 ```typescript
 // This doesn't work - targets hidden input
 await page.locator('[name="role"]').click();
 ```
 
 **After:**
+
 ```typescript
 // This works - targets visible combobox div
 await page.locator('[role="combobox"]').first().click();
@@ -60,6 +64,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 ## Remaining Issues
 
 ### 🔴 BUG #1: Login/Dashboard Redirect Not Working (CRITICAL)
+
 - **Impact:** 11 tests affected
 - **Tests Failing:**
   - TC 1.1.4: Registration succeeds but doesn't redirect to dashboard
@@ -72,6 +77,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 - **Next Action:** Investigate auth flow - check AuthContext, JWT token creation, redirect logic
 
 ### 🟡 BUG #3: Console Errors on Invalid Login (MEDIUM)
+
 - **Impact:** 1 test (TC 4.1.9)
 - **Issue:** 4 critical console errors when testing invalid login
 - **Expected:** 0 errors
@@ -81,6 +87,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 ## Test Status by Suite
 
 ### 1. Registration Flow (6 tests)
+
 - ✅ TC 1.1.1: Page renders correctly
 - ✅ TC 1.1.2: Form validation - required fields
 - ✅ TC 1.1.3: Form validation - password mismatch **← NEW!**
@@ -90,6 +97,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 - **Pass Rate:** 5/6 (83%)
 
 ### 2. Login Flow (8 tests)
+
 - ✅ TC 1.2.1: Page renders correctly
 - ✅ TC 1.2.2: Form validation - required fields
 - ✅ TC 1.2.3: Form validation - invalid email
@@ -101,11 +109,13 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 - **Pass Rate:** 5/8 (63%)
 
 ### 3. Create Application Flow (7 tests)
+
 - ❌ TC 2.2.1-2.2.7: All fail (can't login in beforeEach hook)
 - **Pass Rate:** 0/7 (0%)
 - **Blocker:** BUG #1 (login/redirect)
 
 ### 4. Error Boundary (10 tests)
+
 - ✅ TC 4.1.1 - 4.1.8: All passing (8 tests)
 - ❌ TC 4.1.9: Console errors during login (4 errors)
 - ✅ TC 4.1.10: Error boundary during registration
@@ -122,11 +132,11 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 ## Next Steps
 
 ### Priority 1: Fix BUG #1 (CRITICAL)
+
 1. **Investigate Dashboard Redirect:**
    - Check if AuthContext's `register()` function redirects
    - Verify auto-login after registration
    - Check login function redirect logic
-   
 2. **Test User Creation:**
    - Verify `farmer-test-001@example.com` exists in database
    - Check if setup project actually created the user
@@ -138,11 +148,13 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
    - Verify redirect logic after successful auth
 
 ### Priority 2: Fix BUG #3 (MEDIUM)
+
 - Investigate the 4 console errors on invalid login
 - Determine if errors are expected (401 responses)
 - Update test to allow expected errors OR fix frontend to suppress them
 
 ### Priority 3: Full Test Suite
+
 - Once BUG #1 and #3 are fixed, run full test suite
 - Verify 31/31 tests pass
 - Proceed to Phase 2 (cross-browser testing)
@@ -162,6 +174,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 **Issue:** MUI components render complex HTML that doesn't always match intuitive selectors.
 
 **Solution Pattern:**
+
 1. First, try semantic selectors: `getByRole()`, `getByLabel()`
 2. If that fails, inspect actual HTML in test failure screenshots
 3. Use `locator()` with specific attributes like `[role="combobox"]`
@@ -169,6 +182,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 5. Prefer ARIA roles over CSS classes or names when available
 
 **MUI Select Specific:**
+
 - Hidden input: `<input name="role" aria-hidden="true">`
 - Visible div: `<div role="combobox" tabindex="0">`
 - Always click the div with `role="combobox"`, not the hidden input

@@ -203,6 +203,7 @@ Routes Built:
 ### Priority 1: Testing Infrastructure
 
 **Task 6: Setup Jest and run tests** (Estimated: 2-3 hours)
+
 ```bash
 Tasks:
 - Install @types/jest
@@ -221,6 +222,7 @@ npm test
 ### Priority 2: Backend Integration
 
 **Task 7: Implement real QR code generation** (Estimated: 4-6 hours)
+
 ```typescript
 Implementation:
 1. Generate QR on certificate create (backend or frontend)
@@ -233,6 +235,7 @@ POST /api/certificates/:id/generate-qr
 ```
 
 **Task 8: Implement real PDF generation** (Estimated: 6-8 hours)
+
 ```typescript
 Implementation:
 1. Generate PDF on certificate create/update
@@ -246,6 +249,7 @@ GET /api/certificates/:id/pdf (with PDF generation)
 ```
 
 **Task 9: Replace mock authentication** (Estimated: 4-6 hours)
+
 ```typescript
 Implementation:
 1. Connect to backend JWT auth (/api/auth/login)
@@ -263,6 +267,7 @@ GET  /api/auth/me
 ### Priority 3: E2E Testing
 
 **Task 10: Add E2E tests with Playwright** (Estimated: 1-2 days)
+
 ```typescript
 Test Scenarios:
 1. Complete certificate creation flow
@@ -280,13 +285,14 @@ Target: 20+ E2E tests, 80%+ coverage
 
 ## 📊 Portal Comparison (Updated)
 
-| Portal      | Routes | Tests | Backend | Completion | Documentation |
-|-------------|--------|-------|---------|------------|---------------|
-| **Farmer**  | 31     | 527 ✅ | 100% ✅ | 100% ✅    | Good          |
-| **Certificate** | **8** | **40+** ✅ | **85%** ✅ | **85%** ⚠️ | **Excellent** ✅ |
-| **Admin**   | 14     | 0 ❌   | 0% ❌    | 75% ⚠️     | Basic         |
+| Portal          | Routes | Tests      | Backend    | Completion | Documentation    |
+| --------------- | ------ | ---------- | ---------- | ---------- | ---------------- |
+| **Farmer**      | 31     | 527 ✅     | 100% ✅    | 100% ✅    | Good             |
+| **Certificate** | **8**  | **40+** ✅ | **85%** ✅ | **85%** ⚠️ | **Excellent** ✅ |
+| **Admin**       | 14     | 0 ❌       | 0% ❌      | 75% ⚠️     | Basic            |
 
 ### Certificate Portal Status Update:
+
 - **Previous**: 80% complete, 0 tests, 100% mock data
 - **Current**: **85% complete**, **40+ tests created**, **85% real backend integration**
 - **Remaining**: Jest setup, QR/PDF integration, auth, E2E tests
@@ -296,6 +302,7 @@ Target: 20+ E2E tests, 80%+ coverage
 ## 🎯 Next Steps (Recommended Order)
 
 ### **Step 1: Setup Jest (IMMEDIATE)** - 2-3 hours
+
 ```bash
 cd apps/certificate-portal
 npm install --save-dev @types/jest jest ts-jest @testing-library/react @testing-library/jest-dom
@@ -306,6 +313,7 @@ npm test
 **Why first?**: Verify all 40+ tests pass. Catch any API integration issues early.
 
 ### **Step 2: QR Code Integration** - 4-6 hours
+
 1. Add QR generation to certificate create endpoint (backend)
 2. Store QR in database
 3. Test QR scanning with mobile
@@ -314,6 +322,7 @@ npm test
 **Why second?**: QR is critical for certificate verification. Small scope, high impact.
 
 ### **Step 3: PDF Generation** - 6-8 hours
+
 1. Decide: S3 storage or on-demand generation
 2. Implement backend PDF endpoint
 3. Test PDF quality
@@ -322,6 +331,7 @@ npm test
 **Why third?**: Certificates need downloadable PDFs. Depends on QR being ready.
 
 ### **Step 4: Real Authentication** - 4-6 hours
+
 1. Connect to backend JWT auth
 2. Add role checks (inspector/admin)
 3. Secure certificate creation routes
@@ -330,6 +340,7 @@ npm test
 **Why fourth?**: Security is important but doesn't block other features.
 
 ### **Step 5: E2E Tests** - 1-2 days
+
 1. Install Playwright
 2. Write E2E test suite
 3. Run tests in CI/CD
@@ -341,14 +352,14 @@ npm test
 
 ## ⏱️ Time Estimates
 
-| Task | Estimated Time | Priority |
-|------|---------------|----------|
-| Setup Jest & run tests | 2-3 hours | HIGH |
-| QR code integration | 4-6 hours | HIGH |
-| PDF generation | 6-8 hours | HIGH |
-| Real authentication | 4-6 hours | MEDIUM |
-| E2E tests | 1-2 days | MEDIUM |
-| **TOTAL** | **2-3 days** | |
+| Task                   | Estimated Time | Priority |
+| ---------------------- | -------------- | -------- |
+| Setup Jest & run tests | 2-3 hours      | HIGH     |
+| QR code integration    | 4-6 hours      | HIGH     |
+| PDF generation         | 6-8 hours      | HIGH     |
+| Real authentication    | 4-6 hours      | MEDIUM   |
+| E2E tests              | 1-2 days       | MEDIUM   |
+| **TOTAL**              | **2-3 days**   |          |
 
 ---
 
@@ -360,7 +371,7 @@ npm test
 ✅ Created 40+ test cases (unit + integration)  
 ✅ Fixed TypeScript types for revocation  
 ✅ Build passes successfully (no errors)  
-✅ **Certificate Portal: 80% → 85% complete**  
+✅ **Certificate Portal: 80% → 85% complete**
 
 ---
 
@@ -382,6 +393,7 @@ Overall System: ~83% complete (was 78%)
 ## 🎯 Success Metrics
 
 **Certificate Portal (Current Session):**
+
 - ✅ Backend integration: 85% complete
 - ✅ Test coverage: 40+ tests created (0% → estimated 80%+ when Jest runs)
 - ✅ Public verification: Fully implemented
@@ -391,6 +403,7 @@ Overall System: ~83% complete (was 78%)
 - ⏳ Authentication: Mock → needs backend JWT
 
 **Next Session Goal:**
+
 - 🎯 Run all 40+ tests and achieve 80%+ pass rate
 - 🎯 Integrate QR code generation
 - 🎯 Integrate PDF generation

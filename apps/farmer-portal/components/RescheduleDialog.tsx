@@ -72,14 +72,14 @@ function formatThaiDate(date: Date): string {
   return date.toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric',
+    day: 'numeric'
   });
 }
 
 function formatTime(date: Date): string {
   return date.toLocaleTimeString('th-TH', {
     hour: '2-digit',
-    minute: '2-digit',
+    minute: '2-digit'
   });
 }
 
@@ -88,7 +88,7 @@ function _isDateAvailable(date: Date, availableDates?: Date[]): boolean {
 
   const dateStr = date.toISOString().split('T')[0];
   return availableDates.some(
-    availableDate => availableDate.toISOString().split('T')[0] === dateStr,
+    availableDate => availableDate.toISOString().split('T')[0] === dateStr
   );
 }
 
@@ -105,7 +105,7 @@ export function RescheduleDialog({
   maxReschedule = 1,
   availableDates: _availableDates,
   onConfirm,
-  isLoading = false,
+  isLoading = false
 }: RescheduleDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [reason, setReason] = useState<RescheduleReason>('personal');
@@ -134,7 +134,7 @@ export function RescheduleDialog({
     { value: 'personal', label: 'ติดธุระส่วนตัว', icon: '👤' },
     { value: 'emergency', label: 'เหตุฉุกเฉิน', icon: '🚨' },
     { value: 'technical', label: 'ปัญหาทางเทคนิค', icon: '🔧' },
-    { value: 'other', label: 'อื่นๆ', icon: '📝' },
+    { value: 'other', label: 'อื่นๆ', icon: '📝' }
   ];
 
   // Handle confirm
@@ -155,7 +155,7 @@ export function RescheduleDialog({
         inspectionId: currentInspection.id,
         newDate: selectedDate,
         reason,
-        notes: notes || undefined,
+        notes: notes || undefined
       });
 
       setStep('success');

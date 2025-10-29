@@ -12,7 +12,7 @@ const mockPayment = {
   amount: 5000,
   status: 'PENDING' as const,
   expiresAt: new Date(Date.now() + 15 * 60 * 1000), // 15 minutes from now
-  createdAt: new Date(),
+  createdAt: new Date()
 };
 
 describe('PaymentModal Component', () => {
@@ -52,7 +52,7 @@ describe('PaymentModal Component', () => {
     it('should show warning when < 5 minutes remain', () => {
       const expiringPayment = {
         ...mockPayment,
-        expiresAt: new Date(Date.now() + 4 * 60 * 1000), // 4 minutes
+        expiresAt: new Date(Date.now() + 4 * 60 * 1000) // 4 minutes
       };
 
       // Test: Render with 4 minutes remaining
@@ -69,7 +69,7 @@ describe('PaymentModal Component', () => {
     it('should disable payment button when timed out', () => {
       const timedOutPayment = {
         ...mockPayment,
-        status: 'TIMEOUT' as const,
+        status: 'TIMEOUT' as const
       };
 
       // Test: Render with TIMEOUT status
@@ -111,7 +111,7 @@ describe('PaymentModal Component', () => {
     it('should show success message for PAID status', () => {
       const paidPayment = {
         ...mockPayment,
-        status: 'PAID' as const,
+        status: 'PAID' as const
       };
 
       // Test: Render with PAID status
@@ -121,7 +121,7 @@ describe('PaymentModal Component', () => {
     it('should show error message for TIMEOUT status', () => {
       const timedOutPayment = {
         ...mockPayment,
-        status: 'TIMEOUT' as const,
+        status: 'TIMEOUT' as const
       };
 
       // Test: Render with TIMEOUT status
@@ -131,7 +131,7 @@ describe('PaymentModal Component', () => {
     it('should show cancelled message for CANCELLED status', () => {
       const cancelledPayment = {
         ...mockPayment,
-        status: 'CANCELLED' as const,
+        status: 'CANCELLED' as const
       };
 
       // Test: Render with CANCELLED status

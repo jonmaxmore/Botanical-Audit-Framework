@@ -34,7 +34,7 @@ import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**
  * DTAM Officer Dashboard
- * 
+ *
  * หน้า Dashboard สำหรับ DTAM_OFFICER (พนักงานตรวจสอบเอกสาร)
  * แสดง:
  * - Pending Reviews (จำนวนใบสมัครรอตรวจ)
@@ -66,7 +66,7 @@ interface Statistics {
 const OfficerDashboardPage: React.FC = () => {
   const router = useRouter();
   const { applications } = useApplicationContext();
-  
+
   const [loading, setLoading] = useState(true);
   const [pendingApplications, setPendingApplications] = useState<PendingApplication[]>([]);
   const [statistics, setStatistics] = useState<Statistics>({
@@ -87,15 +87,18 @@ const OfficerDashboardPage: React.FC = () => {
     try {
       // กรองใบสมัครที่รอตรวจ
       const pending = applications
-        .filter(app => 
-          app.workflowState === 'PAYMENT_PROCESSING_1' ||
-          app.workflowState === 'DOCUMENT_REVIEW' ||
-          app.workflowState === 'DOCUMENT_REVISION'
+        .filter(
+          (app) =>
+            app.workflowState === 'PAYMENT_PROCESSING_1' ||
+            app.workflowState === 'DOCUMENT_REVIEW' ||
+            app.workflowState === 'DOCUMENT_REVISION'
         )
-        .map(app => {
+        .map((app) => {
           const submittedDate = new Date(app.submittedDate || Date.now());
-          const daysWaiting = Math.floor((Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24));
-          
+          const daysWaiting = Math.floor(
+            (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
+          );
+
           // กำหนด priority ตามจำนวนวันที่รอ
           let priority: 'high' | 'medium' | 'low' = 'low';
           if (daysWaiting > 5) priority = 'high';
@@ -117,15 +120,22 @@ const OfficerDashboardPage: React.FC = () => {
       setPendingApplications(pending);
 
       // คำนวณสถิติ (Mock data - ต้องเชื่อม API จริง)
-      const reviewed = applications.filter(app => 
-        app.workflowState === 'DOCUMENT_APPROVED' ||
-        app.workflowState === 'DOCUMENT_REVISION' ||
-        app.workflowState === 'DOCUMENT_REJECTED'
+      const reviewed = applications.filter(
+        (app) =>
+          app.workflowState === 'DOCUMENT_APPROVED' ||
+          app.workflowState === 'DOCUMENT_REVISION' ||
+          app.workflowState === 'DOCUMENT_REJECTED'
       );
 
-      const approved = applications.filter(app => app.workflowState === 'DOCUMENT_APPROVED').length;
-      const revision = applications.filter(app => app.workflowState === 'DOCUMENT_REVISION').length;
-      const rejected = applications.filter(app => app.workflowState === 'DOCUMENT_REJECTED').length;
+      const approved = applications.filter(
+        (app) => app.workflowState === 'DOCUMENT_APPROVED'
+      ).length;
+      const revision = applications.filter(
+        (app) => app.workflowState === 'DOCUMENT_REVISION'
+      ).length;
+      const rejected = applications.filter(
+        (app) => app.workflowState === 'DOCUMENT_REJECTED'
+      ).length;
       const total = reviewed.length || 1; // หาร 0 ไม่ได้
 
       setStatistics({
@@ -154,32 +164,44 @@ const OfficerDashboardPage: React.FC = () => {
 
   const getPriorityColor = (priority: 'high' | 'medium' | 'low') => {
     switch (priority) {
-      case 'high': return 'error';
-      case 'medium': return 'warning';
-      case 'low': return 'success';
+      case 'high':
+        return 'error';
+      case 'medium':
+        return 'warning';
+      case 'low':
+        return 'success';
     }
   };
 
   const getPriorityLabel = (priority: 'high' | 'medium' | 'low') => {
     switch (priority) {
-      case 'high': return 'ด่วนมาก';
-      case 'medium': return 'ปานกลาง';
-      case 'low': return 'ปกติ';
+      case 'high':
+        return 'ด่วนมาก';
+      case 'medium':
+        return 'ปานกลาง';
+      case 'low':
+        return 'ปกติ';
     }
   };
 
   const getStateLabel = (state: string) => {
     switch (state) {
-      case 'PAYMENT_PROCESSING_1': return 'รอชำระเงิน';
-      case 'DOCUMENT_REVIEW': return 'รอตรวจเอกสาร';
-      case 'DOCUMENT_REVISION': return 'รอแก้ไข';
-      default: return state;
+      case 'PAYMENT_PROCESSING_1':
+        return 'รอชำระเงิน';
+      case 'DOCUMENT_REVIEW':
+        return 'รอตรวจเอกสาร';
+      case 'DOCUMENT_REVISION':
+        return 'รอแก้ไข';
+      default:
+        return state;
     }
   };
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -193,7 +215,8 @@ const OfficerDashboardPage: React.FC = () => {
           📋 DTAM Officer Dashboard
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          แดชบอร์ดสำหรับพนักงานตรวจสอบเอกสาร - ตรวจสอบความครบถ้วนและความถูกต้องของเอกสารคำขอรับรอง GACP
+          แดชบอร์ดสำหรับพนักงานตรวจสอบเอกสาร - ตรวจสอบความครบถ้วนและความถูกต้องของเอกสารคำขอรับรอง
+          GACP
         </Typography>
       </Box>
 
@@ -201,9 +224,18 @@ const OfficerDashboardPage: React.FC = () => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* Pending Reviews */}
         <Grid item xs={12} md={3}>
-          <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+          <Card
+            sx={{ height: '100%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
                 <DescriptionIcon sx={{ fontSize: 40, color: 'white', opacity: 0.9 }} />
                 <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>
                   {pendingApplications.length}
@@ -221,9 +253,18 @@ const OfficerDashboardPage: React.FC = () => {
 
         {/* Reviewed This Week */}
         <Grid item xs={12} md={3}>
-          <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
+          <Card
+            sx={{ height: '100%', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
                 <AssignmentIcon sx={{ fontSize: 40, color: 'white', opacity: 0.9 }} />
                 <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>
                   {statistics.reviewedThisWeek}
@@ -241,9 +282,18 @@ const OfficerDashboardPage: React.FC = () => {
 
         {/* Approval Rate */}
         <Grid item xs={12} md={3}>
-          <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
+          <Card
+            sx={{ height: '100%', background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
                 <CheckCircleIcon sx={{ fontSize: 40, color: 'white', opacity: 0.9 }} />
                 <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>
                   {statistics.approvalRate}%
@@ -261,9 +311,18 @@ const OfficerDashboardPage: React.FC = () => {
 
         {/* Average Review Time */}
         <Grid item xs={12} md={3}>
-          <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }}>
+          <Card
+            sx={{ height: '100%', background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
                 <ScheduleIcon sx={{ fontSize: 40, color: 'white', opacity: 0.9 }} />
                 <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>
                   {statistics.averageReviewTime}
@@ -284,15 +343,13 @@ const OfficerDashboardPage: React.FC = () => {
         {/* Today's Tasks - Pending Reviews */}
         <Grid item xs={12} md={8}>
           <Paper sx={{ p: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+            >
               <Typography variant="h6" fontWeight="bold">
                 📝 ใบสมัครรอตรวจสอบ
               </Typography>
-              <Button 
-                variant="outlined" 
-                size="small" 
-                onClick={handleViewAllApplications}
-              >
+              <Button variant="outlined" size="small" onClick={handleViewAllApplications}>
                 ดูทั้งหมด
               </Button>
             </Box>
@@ -319,7 +376,14 @@ const OfficerDashboardPage: React.FC = () => {
                         <ListItemButton onClick={() => handleStartReview(app.id)}>
                           <ListItemText
                             primary={
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 1,
+                                  flexWrap: 'wrap',
+                                }}
+                              >
                                 <Typography variant="body1" fontWeight="bold">
                                   {app.applicationNumber}
                                 </Typography>
@@ -338,7 +402,8 @@ const OfficerDashboardPage: React.FC = () => {
                             secondary={
                               <Box sx={{ mt: 0.5 }}>
                                 <Typography variant="body2" color="text.secondary">
-                                  <strong>ฟาร์ม:</strong> {app.farmName} | <strong>เกษตรกร:</strong> {app.farmerName}
+                                  <strong>ฟาร์ม:</strong> {app.farmName} | <strong>เกษตรกร:</strong>{' '}
+                                  {app.farmerName}
                                 </Typography>
                                 <Typography variant="caption" color="text.secondary">
                                   ยื่นเมื่อ: {app.submittedDate} ({app.daysWaiting} วันที่แล้ว)
@@ -406,9 +471,9 @@ const OfficerDashboardPage: React.FC = () => {
                     {statistics.approvalRate}%
                   </Typography>
                 </Box>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={statistics.approvalRate} 
+                <LinearProgress
+                  variant="determinate"
+                  value={statistics.approvalRate}
                   color="success"
                   sx={{ height: 8, borderRadius: 1 }}
                 />
@@ -422,9 +487,9 @@ const OfficerDashboardPage: React.FC = () => {
                     {statistics.revisionRate}%
                   </Typography>
                 </Box>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={statistics.revisionRate} 
+                <LinearProgress
+                  variant="determinate"
+                  value={statistics.revisionRate}
                   color="warning"
                   sx={{ height: 8, borderRadius: 1 }}
                 />
@@ -438,9 +503,9 @@ const OfficerDashboardPage: React.FC = () => {
                     {statistics.rejectionRate}%
                   </Typography>
                 </Box>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={statistics.rejectionRate} 
+                <LinearProgress
+                  variant="determinate"
+                  value={statistics.rejectionRate}
                   color="error"
                   sx={{ height: 8, borderRadius: 1 }}
                 />
@@ -474,14 +539,8 @@ const OfficerDashboardPage: React.FC = () => {
               </Box>
 
               {/* Performance Indicator */}
-              <Alert 
-                severity="info" 
-                icon={<TrendingUpIcon />}
-                sx={{ mt: 3 }}
-              >
-                <Typography variant="body2">
-                  คุณทำงานได้ดีกว่าค่าเฉลี่ย 15% 🎯
-                </Typography>
+              <Alert severity="info" icon={<TrendingUpIcon />} sx={{ mt: 3 }}>
+                <Typography variant="body2">คุณทำงานได้ดีกว่าค่าเฉลี่ย 15% 🎯</Typography>
               </Alert>
             </Box>
           </Paper>
@@ -499,22 +558,20 @@ const OfficerDashboardPage: React.FC = () => {
         <Box component="ul" sx={{ pl: 2 }}>
           <li>
             <Typography variant="body2">
-              ตรวจสอบความครบถ้วนของเอกสาร 5 ชนิด (บัตรประชาชน, ทะเบียนบ้าน, โฉนดที่ดิน, แผนที่ฟาร์ม, ใบอนุญาตแหล่งน้ำ)
+              ตรวจสอบความครบถ้วนของเอกสาร 5 ชนิด (บัตรประชาชน, ทะเบียนบ้าน, โฉนดที่ดิน, แผนที่ฟาร์ม,
+              ใบอนุญาตแหล่งน้ำ)
             </Typography>
           </li>
           <li>
-            <Typography variant="body2">
-              ตรวจสอบความถูกต้องของข้อมูลในเอกสาร
-            </Typography>
+            <Typography variant="body2">ตรวจสอบความถูกต้องของข้อมูลในเอกสาร</Typography>
+          </li>
+          <li>
+            <Typography variant="body2">ประเมินความเสี่ยง (Risk Assessment)</Typography>
           </li>
           <li>
             <Typography variant="body2">
-              ประเมินความเสี่ยง (Risk Assessment)
-            </Typography>
-          </li>
-          <li>
-            <Typography variant="body2">
-              ตัดสินใจ: <strong>อนุมัติ</strong> / <strong>ขอแก้ไข</strong> (สูงสุด 2 ครั้ง) / <strong>ปฏิเสธ</strong>
+              ตัดสินใจ: <strong>อนุมัติ</strong> / <strong>ขอแก้ไข</strong> (สูงสุด 2 ครั้ง) /{' '}
+              <strong>ปฏิเสธ</strong>
             </Typography>
           </li>
         </Box>

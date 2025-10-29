@@ -81,7 +81,7 @@ export default function DocumentUploadPage() {
       }, 2000);
     } catch (error) {
       setUploadError(
-        error instanceof Error ? error.message : 'Failed to upload document. Please try again.',
+        error instanceof Error ? error.message : 'Failed to upload document. Please try again.'
       );
     }
   };
@@ -154,7 +154,7 @@ export default function DocumentUploadPage() {
                     <InputLabel>Document Type</InputLabel>
                     <Select {...field} label="Document Type" disabled={isSubmitting}>
                       <MenuItem value="">Select document type...</MenuItem>
-                      {DOCUMENT_TYPES.map(type => (
+                      {DOCUMENT_TYPES.map((type) => (
                         <MenuItem key={type} value={type}>
                           {type}
                         </MenuItem>
@@ -225,7 +225,7 @@ export default function DocumentUploadPage() {
                         className="hidden"
                         id="file-upload"
                         value=""
-                        onChange={e => {
+                        onChange={(e) => {
                           handleFileChange(e);
                           onChange(e.target.files?.[0]);
                         }}

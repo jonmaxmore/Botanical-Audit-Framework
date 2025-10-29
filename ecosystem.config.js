@@ -15,12 +15,12 @@ module.exports = {
       // Environment
       env: {
         NODE_ENV: 'development',
-        PORT: 5000,
+        PORT: 5000
       },
 
       env_production: {
         NODE_ENV: 'production',
-        PORT: 5000,
+        PORT: 5000
       },
 
       // Auto-restart on crash
@@ -45,7 +45,7 @@ module.exports = {
       watch: false,
 
       // Ignore watch
-      ignore_watch: ['node_modules', 'logs', '.git'],
+      ignore_watch: ['node_modules', 'logs', '.git']
     },
 
     // Frontend Next.js Server
@@ -63,12 +63,12 @@ module.exports = {
       // Environment
       env: {
         NODE_ENV: 'development',
-        PORT: 3000,
+        PORT: 3000
       },
 
       env_production: {
         NODE_ENV: 'production',
-        PORT: 3000,
+        PORT: 3000
       },
 
       // Auto-restart on crash
@@ -93,7 +93,7 @@ module.exports = {
       watch: false,
 
       // Ignore watch
-      ignore_watch: ['node_modules', '.next', 'logs', '.git'],
-    },
-  ],
+      ignore_watch: ['node_modules', '.next', 'logs', '.git']
+    }
+  ]
 };

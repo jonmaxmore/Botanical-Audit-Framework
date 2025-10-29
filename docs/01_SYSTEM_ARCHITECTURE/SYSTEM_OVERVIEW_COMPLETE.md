@@ -765,22 +765,22 @@ surveys: [
     title: 'แบบสอบถามความพึงพอใจระบบ GACP',
     type: 'satisfaction',
     questions: 10,
-    responses: 350,
+    responses: 350
   },
   {
     id: 2,
     title: 'แบบสอบถามการใช้กัญชาทางการแพทย์',
     type: 'medical_cannabis',
     questions: 15,
-    responses: 520,
+    responses: 520
   },
   {
     id: 3,
     title: 'แบบสอบถามความต้องการของเกษตรกร',
     type: 'farmer_needs',
     questions: 12,
-    responses: 280,
-  },
+    responses: 280
+  }
 ];
 ```
 
@@ -824,20 +824,20 @@ comparison: {
       topic: 'Facility Requirements',
       gacp: 'ต้องมีพื้นที่ปลูกอย่างน้อย 5 ไร่',
       who: 'GMP facility requirements',
-      asean: 'ASEAN GAP standards',
+      asean: 'ASEAN GAP standards'
     },
     {
       topic: 'Cultivation Practices',
       gacp: 'บันทึก SOP ทุกขั้นตอน',
       who: 'WHO good cultivation practices',
-      asean: 'ASEAN cultivation guidelines',
+      asean: 'ASEAN cultivation guidelines'
     },
     {
       topic: 'Quality Control',
       gacp: 'ตรวจสอบคุณภาพทุก 3 เดือน',
       who: 'WHO quality standards',
-      asean: 'ASEAN quality requirements',
-    },
+      asean: 'ASEAN quality requirements'
+    }
   ];
 }
 ```

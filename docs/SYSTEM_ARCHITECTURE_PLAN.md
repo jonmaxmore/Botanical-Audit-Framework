@@ -11,6 +11,7 @@
 ### 1. ปัญหาที่พบ (Current Issues)
 
 #### ❌ Critical Issues:
+
 1. **Landing Page ไม่สอดคล้องกับ Workflow**
    - แสดง 9 บริการแบบ static
    - ไม่ดึงข้อมูลจาก backend
@@ -181,6 +182,7 @@
 ### 3. User Roles & Permissions
 
 #### Role 1: FARMER (เกษตรกร)
+
 ```
 Dashboard Components:
 ├── My Applications Card
@@ -217,6 +219,7 @@ Pages Accessible:
 ```
 
 #### Role 2: DTAM_OFFICER (เจ้าหน้าที่)
+
 ```
 Dashboard Components:
 ├── Pending Reviews Card
@@ -246,6 +249,7 @@ Pages Accessible:
 ```
 
 #### Role 3: INSPECTOR (ผู้ตรวจสอบ)
+
 ```
 Dashboard Components:
 ├── Upcoming Inspections Card
@@ -276,6 +280,7 @@ Pages Accessible:
 ```
 
 #### Role 4: ADMIN (ผู้ดูแลระบบ)
+
 ```
 Dashboard Components:
 ├── System Overview Card
@@ -318,6 +323,7 @@ Pages Accessible:
 ### 4. Page Architecture & Routes
 
 #### Public Pages (ไม่ต้อง login)
+
 ```
 / (Landing Page)
 ├── IF NOT LOGGED IN:
@@ -362,6 +368,7 @@ Pages Accessible:
 #### Protected Pages (ต้อง login)
 
 **Farmer Routes:**
+
 ```
 /farmer/dashboard
 /farmer/applications
@@ -379,6 +386,7 @@ Pages Accessible:
 ```
 
 **Officer Routes:**
+
 ```
 /officer/dashboard
 /officer/applications (queue)
@@ -392,6 +400,7 @@ Pages Accessible:
 ```
 
 **Inspector Routes:**
+
 ```
 /inspector/dashboard
 /inspector/schedule
@@ -404,6 +413,7 @@ Pages Accessible:
 ```
 
 **Admin Routes:**
+
 ```
 /admin/dashboard
 /admin/applications
@@ -535,6 +545,7 @@ GET    /api/monitoring/health/database
 ## ✅ DO (ปฏิบัติ) - Implementation Steps
 
 ### Phase 1: Foundation (2-3 hours)
+
 1. ✅ สร้าง AuthContext provider
 2. ✅ สร้าง ApplicationContext provider
 3. ✅ สร้าง API client utilities
@@ -542,17 +553,20 @@ GET    /api/monitoring/health/database
 5. ✅ สร้าง Layout components (Farmer/Officer/Inspector/Admin)
 
 ### Phase 2: Authentication (1-2 hours)
+
 6. ✅ สร้างหน้า /register
 7. ✅ สร้างหน้า /login
 8. ✅ เชื่อมต่อ API authentication
 9. ✅ ทดสอบ login flow
 
 ### Phase 3: Landing Page (1-2 hours)
+
 10. ✅ สร้าง Landing Page แบบ conditional:
     - Guest: Hero + Workflow + Benefits + CTA
     - Logged In: Welcome + Applications + Quick Actions
 
 ### Phase 4: Farmer Pages (3-4 hours)
+
 11. ✅ /farmer/dashboard (role-based)
 12. ✅ /farmer/applications/new (form)
 13. ✅ /farmer/applications/[id] (detail + actions)
@@ -561,22 +575,26 @@ GET    /api/monitoring/health/database
 16. ✅ /farmer/certificates
 
 ### Phase 5: Officer Pages (2-3 hours)
+
 17. ✅ /officer/dashboard
 18. ✅ /officer/applications (queue)
 19. ✅ /officer/applications/[id]/review
 
 ### Phase 6: Inspector Pages (2-3 hours)
+
 20. ✅ /inspector/dashboard
 21. ✅ /inspector/inspections/[id]/vdo-call
 22. ✅ /inspector/inspections/[id]/on-site
 
 ### Phase 7: Admin Pages (2-3 hours)
+
 23. ✅ /admin/dashboard (overview)
 24. ✅ /admin/applications (all)
 25. ✅ /admin/users (management)
 26. ✅ /admin/certificates
 
 ### Phase 8: Integration & Testing (2-3 hours)
+
 27. ✅ เชื่อมต่อ API ทุกหน้า
 28. ✅ ทดสอบ workflow ทั้ง 8 steps
 29. ✅ ทดสอบทุก role
@@ -587,6 +605,7 @@ GET    /api/monitoring/health/database
 ## 🔍 CHECK (ตรวจสอบ) - Quality Checklist
 
 ### Functionality Checks
+
 - [ ] ทุกหน้าโหลดได้ (ไม่มี 404)
 - [ ] Authentication ทำงานถูกต้อง
 - [ ] Role-based access control ทำงานถูกต้อง
@@ -597,6 +616,7 @@ GET    /api/monitoring/health/database
 - [ ] Error handling เหมาะสม
 
 ### User Experience Checks
+
 - [ ] Navigation ชัดเจน
 - [ ] Current step indicator แสดงถูกต้อง
 - [ ] Loading states แสดงเหมาะสม
@@ -605,6 +625,7 @@ GET    /api/monitoring/health/database
 - [ ] Responsive design ทำงานทุก device
 
 ### Performance Checks
+
 - [ ] Page load time < 3 seconds
 - [ ] API response time เหมาะสม
 - [ ] No memory leaks

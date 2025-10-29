@@ -13,7 +13,6 @@
  * Request → Extract Token → Verify with DTAM Secret → Check User Type → Attach User Data → Continue
  */
 
-const jwt = require('jsonwebtoken');
 const shared = require('../../shared');
 const { utils, constants } = shared;
 const logger = require('../services/logger');

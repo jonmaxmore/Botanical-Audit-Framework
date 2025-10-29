@@ -115,6 +115,7 @@ apps/backend/
 ## 📊 Value Delivered
 
 Farmers can now:
+
 - ✅ Check weather (current + 7-day forecast)
 - ✅ Get soil recommendations
 - ✅ See province suitability

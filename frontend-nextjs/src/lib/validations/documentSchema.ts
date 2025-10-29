@@ -30,7 +30,7 @@ export const validateFile = (file: File | null | undefined): boolean => {
 
   // Check file extension
   const fileName = file.name.toLowerCase();
-  const hasValidExtension = ALLOWED_FILE_EXTENSIONS.some(ext => fileName.endsWith(ext));
+  const hasValidExtension = ALLOWED_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext));
 
   return hasValidExtension;
 };
@@ -59,18 +59,18 @@ export const documentUploadSchema = yup
     file: yup
       .mixed<File>()
       .required('File is required')
-      .test('fileSize', 'File size must not exceed 10MB', value => {
+      .test('fileSize', 'File size must not exceed 10MB', (value) => {
         if (!value) return false;
         return value.size <= MAX_FILE_SIZE;
       })
-      .test('fileType', 'Only PDF, JPG, JPEG, and PNG files are allowed', value => {
+      .test('fileType', 'Only PDF, JPG, JPEG, and PNG files are allowed', (value) => {
         if (!value) return false;
         return ALLOWED_FILE_TYPES.includes(value.type);
       })
-      .test('fileExtension', 'Invalid file extension', value => {
+      .test('fileExtension', 'Invalid file extension', (value) => {
         if (!value) return false;
         const fileName = value.name.toLowerCase();
-        return ALLOWED_FILE_EXTENSIONS.some(ext => fileName.endsWith(ext));
+        return ALLOWED_FILE_EXTENSIONS.some((ext) => fileName.endsWith(ext));
       }),
   })
   .required();

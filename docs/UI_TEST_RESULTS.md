@@ -9,90 +9,101 @@
 
 ## 🎯 Scenario 1: Farmer Flow
 
-**Duration**: _____ minutes
+**Duration**: **\_** minutes
 
 ### Login Page
+
 - [ ] ✅ Login works with farmer@example.com
 - [ ] ✅ Redirects to dashboard
 - [ ] ⚠️ Error shows for invalid credentials
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Dashboard
+
 - [ ] ✅ Welcome message displays
 - [ ] ✅ Application cards show
 - [ ] ✅ "ยื่นใบสมัครใหม่" button works
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Application Form (Wizard)
 
 **Step 1: Farm Info**
+
 - [ ] ✅ Form fields work
 - [ ] ✅ Validation shows errors
 - [ ] ✅ "ถัดไป" enabled
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Step 2: Farmer Info**
+
 - [ ] ✅ All fields work
 - [ ] ✅ Validation works
 - [ ] ✅ "ถัดไป" works
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Step 3: Confirmation**
+
 - [ ] ✅ Summary displays correctly
 - [ ] ✅ "บันทึกแบบร่าง" creates draft
 - [ ] ✅ "ยื่นคำขอ" submits
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### View Application
+
 - [ ] ✅ Application number shows
 - [ ] ✅ Workflow stepper (8 steps) displays
 - [ ] ✅ Farm + Farmer info correct
 - [ ] ✅ Status chip shows
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Upload Documents
+
 - [ ] ✅ 5 document sections visible
 - [ ] ⚠️ File upload works (MOCK - no real file)
 - [ ] ✅ Progress shows
 - [ ] ✅ "ยืนยันและส่งเอกสาร" works
 - [ ] ✅ Status changes to PAYMENT_PROCESSING_1
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Payment
+
 - [ ] ✅ Payment summary 5,000 THB
 - [ ] ✅ QR code displays
 - [ ] ⚠️ Slip upload works (MOCK)
 - [ ] ✅ "ยืนยันการชำระเงิน" works
 - [ ] ✅ Status → DOCUMENT_REVIEW
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Scenario 1 Result**: ✅ Pass / ❌ Fail  
-**Total Tests**: ___ | **Passed**: ___ | **Failed**: ___
+**Total Tests**: **_ | **Passed**: _** | **Failed**: \_\_\_
 
 ---
 
 ## 🎯 Scenario 2: Officer Review
 
-**Duration**: _____ minutes
+**Duration**: **\_** minutes
 
 ### Dashboard
+
 - [ ] ✅ Login with officer@example.com
 - [ ] ✅ 4 cards display
 - [ ] ✅ Today's tasks list
 - [ ] ✅ Statistics panel
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Applications List
+
 - [ ] ✅ Table displays
 - [ ] ✅ Search works
 - [ ] ✅ Filter by status works
 - [ ] ✅ Pagination works
 - [ ] ✅ Click row navigates
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Review Page
 
 **Document Review (5 Documents)**
+
 - [ ] ✅ ID_CARD section shows
 - [ ] ✅ HOUSE_REGISTRATION shows
 - [ ] ✅ LAND_DEED shows
@@ -101,16 +112,18 @@
 - [ ] ⚠️ View button works (MOCK - no real viewer)
 - [ ] ✅ Approve/Reject per document
 - [ ] ✅ Notes textarea works
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Review Form**
+
 - [ ] ✅ Completeness rating (stars)
 - [ ] ✅ Accuracy rating (stars)
 - [ ] ✅ Risk level dropdown
 - [ ] ✅ Comments textarea
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Decision Buttons**
+
 - [ ] ✅ "อนุมัติทั้งหมด" (all approved)
   - [ ] ✅ Confirmation dialog
   - [ ] ✅ Status → DOCUMENT_APPROVED
@@ -120,33 +133,36 @@
   - [ ] ✅ Status → DOCUMENT_REVISION
 - [ ] ✅ "ปฏิเสธคำขอ" (always available)
   - [ ] ✅ Status → DOCUMENT_REJECTED
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Scenario 2 Result**: ✅ Pass / ❌ Fail  
-**Total Tests**: ___ | **Passed**: ___ | **Failed**: ___
+**Total Tests**: **_ | **Passed**: _** | **Failed**: \_\_\_
 
 ---
 
 ## 🎯 Scenario 3: Inspector Inspection
 
-**Duration**: _____ minutes
+**Duration**: **\_** minutes
 
 ### Dashboard
+
 - [ ] ✅ Login with inspector@example.com
 - [ ] ✅ 4 summary cards
 - [ ] ✅ Today badge on cards
 - [ ] ✅ Type chips (VDO/On-Site)
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Schedule Page
+
 - [ ] ✅ Filter All/VDO/On-Site
 - [ ] ✅ Cards display (not table)
 - [ ] ✅ "รับงาน" button
 - [ ] ✅ "นัดหมายใหม่" + dialog
 - [ ] ✅ "เริ่มตรวจสอบ" navigates
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### VDO Call Inspection
+
 - [ ] ✅ Application details (left)
 - [ ] ✅ 8 checklist items
 - [ ] ⚠️ Photo upload (MOCK)
@@ -158,11 +174,12 @@
 - **Validation**:
   - [ ] ✅ Warning <6/8 checked
   - [ ] ✅ Warning <3 photos
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### On-Site Inspection ⭐ (CRITICAL TEST)
 
 **Left Sidebar (Sticky)**
+
 - [ ] ✅ Total score displays
 - [ ] ✅ Progress bar
 - [ ] ✅ Color changes:
@@ -171,22 +188,23 @@
   - [ ] Red (<70)
 - [ ] ✅ Pass status badge
 - [ ] ✅ 8 mini progress bars
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **8 CCPs - Real-time Scoring Test**
 
-| CCP | Max Points | Slider Works | Real-time Update | Notes | Photos | Result |
-|-----|-----------|--------------|------------------|-------|--------|--------|
-| 1. Seed | 15 | [ ] | [ ] | [ ] | [ ] | ✅/❌ |
-| 2. Soil | 15 | [ ] | [ ] | [ ] | [ ] | ✅/❌ |
-| 3. Pest | 15 | [ ] | [ ] | [ ] | [ ] | ✅/❌ |
-| 4. Harvest | 15 | [ ] | [ ] | [ ] | [ ] | ✅/❌ |
-| 5. Post-Harvest | 15 | [ ] | [ ] | [ ] | [ ] | ✅/❌ |
-| 6. Storage | 10 | [ ] | [ ] | [ ] | [ ] | ✅/❌ |
-| 7. Records | 10 | [ ] | [ ] | [ ] | [ ] | ✅/❌ |
-| 8. Safety | 5 | [ ] | [ ] | [ ] | [ ] | ✅/❌ |
+| CCP             | Max Points | Slider Works | Real-time Update | Notes | Photos | Result |
+| --------------- | ---------- | ------------ | ---------------- | ----- | ------ | ------ |
+| 1. Seed         | 15         | [ ]          | [ ]              | [ ]   | [ ]    | ✅/❌  |
+| 2. Soil         | 15         | [ ]          | [ ]              | [ ]   | [ ]    | ✅/❌  |
+| 3. Pest         | 15         | [ ]          | [ ]              | [ ]   | [ ]    | ✅/❌  |
+| 4. Harvest      | 15         | [ ]          | [ ]              | [ ]   | [ ]    | ✅/❌  |
+| 5. Post-Harvest | 15         | [ ]          | [ ]              | [ ]   | [ ]    | ✅/❌  |
+| 6. Storage      | 10         | [ ]          | [ ]              | [ ]   | [ ]    | ✅/❌  |
+| 7. Records      | 10         | [ ]          | [ ]              | [ ]   | [ ]    | ✅/❌  |
+| 8. Safety       | 5          | [ ]          | [ ]              | [ ]   | [ ]    | ✅/❌  |
 
 **Score Calculation Test**
+
 - [ ] Set all max → Total = 100 ✅/❌
 - [ ] Set to 88 → Green (Pass) ✅/❌
 - [ ] Set to 78 → Yellow (Conditional) ✅/❌
@@ -194,21 +212,23 @@
 - [ ] Real-time accurate ✅/❌
 
 **Submit**
+
 - [ ] ✅ "ส่งรายงาน" button
 - [ ] ✅ Status → INSPECTION_COMPLETED
 - [ ] ✅ currentStep → 7
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Scenario 3 Result**: ✅ Pass / ❌ Fail  
-**Total Tests**: ___ | **Passed**: ___ | **Failed**: ___
+**Total Tests**: **_ | **Passed**: _** | **Failed**: \_\_\_
 
 ---
 
 ## 🎯 Scenario 4: Admin Approval
 
-**Duration**: _____ minutes
+**Duration**: **\_** minutes
 
 ### Dashboard
+
 - [ ] ✅ Login with admin@example.com
 - [ ] ✅ System health alert
 - [ ] ✅ 4 summary cards
@@ -221,38 +241,43 @@
   - [ ] Financial stats
   - [ ] User counts
   - [ ] Performance metrics
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Approval Page ⭐
 
 **Workflow Stepper**
+
 - [ ] ✅ 8 steps display
 - [ ] ✅ Current step highlighted
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Left Column - Review**
 
 **Application Info**
+
 - [ ] ✅ Farm info displays
 - [ ] ✅ Farmer info displays
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Document Review (Step 3)**
+
 - [ ] ✅ 3 cards: Completeness, Accuracy, Risk
 - [ ] ✅ Star ratings correct
 - [ ] ✅ Risk chip color-coded
 - [ ] ✅ Officer comments show
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Farm Inspection (Step 6)** 🌟
 
 **If VDO_CALL**:
+
 - [ ] ✅ Type chip shows
 - [ ] ✅ Decision displays
 - [ ] ✅ Mock score 85
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **If ON_SITE**:
+
 - [ ] ✅ Large score alert X/100
 - [ ] ✅ Pass/Conditional/Fail badge
 - **8 CCPs in Accordions**:
@@ -269,19 +294,21 @@
     - [ ] 8. Safety (X/5)
   - [ ] ✅ Notes + Photos count per CCP
 - [ ] ✅ Final notes from inspector
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Right Sidebar - Decision**
 
 **Auto-Recommendation**
+
 - [ ] ✅ Score ≥90: "อนุมัติเป็นพิเศษ ⭐" (green)
 - [ ] ✅ Score ≥80: "อนุมัติ" (green)
 - [ ] ✅ Score ≥70: "มีเงื่อนไข" (yellow)
 - [ ] ✅ Score <70: "ปฏิเสธ" (red)
 - [ ] ✅ Criteria list
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Decision Form**
+
 - [ ] ✅ Notes textarea
 - [ ] ✅ "✅ อนุมัติ" button
   - [ ] Confirmation dialog
@@ -294,11 +321,12 @@
 - [ ] ✅ "ℹ️ ขอข้อมูลเพิ่มเติม" button
   - [ ] Info request field
   - [ ] Status → PENDING_APPROVAL
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 ### Management Page
 
 **Tab 1: Certificates**
+
 - [ ] ✅ Tab switches
 - [ ] ✅ Search works
 - [ ] ✅ Table 9 columns display
@@ -307,18 +335,20 @@
 - [ ] ✅ Actions menu: View/Download/Revoke
 - [ ] ⚠️ Download PDF (MOCK - placeholder)
 - [ ] ✅ Pagination works
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Tab 2: Users**
+
 - [ ] ✅ Tab switches
 - [ ] ✅ Search works
 - [ ] ✅ "เพิ่มผู้ใช้" button
 - [ ] ✅ Table 6 columns
 - [ ] ✅ Role chips (4 types)
 - [ ] ✅ Actions: Edit/Delete
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Add/Edit Dialog**
+
 - [ ] ✅ Dialog opens
 - [ ] ✅ Name field
 - [ ] ✅ Email field
@@ -327,126 +357,139 @@
 - [ ] ✅ Validation: name + email required
 - [ ] ✅ "บันทึก" saves (mock)
 - [ ] ✅ "ยกเลิก" closes
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Mock Users (5 users)**
+
 - [ ] ✅ สมชาย ใจดี - FARMER
 - [ ] ✅ สมหญิง รักษ์ดี - FARMER
 - [ ] ✅ วิชัย ตรวจสอบ - DTAM_OFFICER
 - [ ] ✅ สุดา ลงพื้นที่ - INSPECTOR
 - [ ] ✅ ผู้จัดการ ระบบ - ADMIN
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Delete Confirmation**
+
 - [ ] ✅ Dialog shows
 - [ ] ✅ "ยืนยัน" deletes (mock)
 - [ ] ✅ "ยกเลิก" closes
-- **Issues**: _______________________
+- **Issues**: **********\_\_\_**********
 
 **Scenario 4 Result**: ✅ Pass / ❌ Fail  
-**Total Tests**: ___ | **Passed**: ___ | **Failed**: ___
+**Total Tests**: **_ | **Passed**: _** | **Failed**: \_\_\_
 
 ---
 
 ## 🐛 Known Issues Verification
 
 ### Critical Issues (จาก Guide)
+
 - [ ] ❌ **Data หายหลัง refresh**
   - Test: Create application → F5 → Check if data persists
   - Result: ✅ Fixed / ❌ Still broken / ⚠️ Partial
-  - Notes: _______________________
+  - Notes: **********\_\_\_**********
 
 - [ ] ❌ **Mock file upload (ไม่มีไฟล์จริง)**
   - Test: Upload file → Check if saved to storage
   - Result: ⚠️ Expected (Mock) / ❌ Broken
-  - Notes: _______________________
+  - Notes: **********\_\_\_**********
 
 - [ ] ❌ **Mock authentication (no backend)**
   - Test: Login with wrong password → Should fail
   - Result: ⚠️ Expected (Mock accepts any) / ❌ Security issue
-  - Notes: _______________________
+  - Notes: **********\_\_\_**********
 
 ### UI Issues
+
 - [ ] ⚠️ **Document viewer ยังไม่ทำ**
   - Test: Click "View" on document → Should open viewer
   - Result: ❌ Not implemented / ⚠️ Shows placeholder
-  - Notes: _______________________
+  - Notes: **********\_\_\_**********
 
 - [ ] ⚠️ **Certificate PDF ยังไม่ generate**
   - Test: Click "Download PDF" → Should download
   - Result: ❌ Not implemented / ⚠️ Shows placeholder
-  - Notes: _______________________
+  - Notes: **********\_\_\_**********
 
 - [ ] ⚠️ **No real-time updates**
   - Test: Open 2 tabs → Update in one → Check other
   - Result: ❌ Not synced (Expected - no Socket.IO)
-  - Notes: _______________________
+  - Notes: **********\_\_\_**********
 
 ### Additional Issues Found
 
 **🔴 Critical**:
-1. _______________________
-2. _______________________
-3. _______________________
+
+1. ***
+2. ***
+3. ***
 
 **🟡 Medium**:
-1. _______________________
-2. _______________________
-3. _______________________
+
+1. ***
+2. ***
+3. ***
 
 **🟢 Low**:
-1. _______________________
-2. _______________________
-3. _______________________
+
+1. ***
+2. ***
+3. ***
 
 ---
 
 ## 📊 Overall Summary
 
 **Testing Date**: October 22, 2025  
-**Total Duration**: _____ minutes  
-**Browser**: Chrome / Firefox / Edge / Safari (version: _____)  
-**Screen**: Desktop / Laptop / Tablet / Mobile (resolution: _______)
+**Total Duration**: **\_** minutes  
+**Browser**: Chrome / Firefox / Edge / Safari (version: **\_**)  
+**Screen**: Desktop / Laptop / Tablet / Mobile (resolution: **\_\_\_**)
 
 ### Results
 
-| Scenario | Total Tests | Passed | Failed | Pass Rate |
-|----------|-------------|--------|--------|-----------|
-| 1. Farmer Flow | ___ | ___ | ___ | ___% |
-| 2. Officer Review | ___ | ___ | ___ | ___% |
-| 3. Inspector Inspection | ___ | ___ | ___ | ___% |
-| 4. Admin Approval | ___ | ___ | ___ | ___% |
-| **Overall** | **___** | **___** | **___** | **___%** |
+| Scenario                | Total Tests | Passed     | Failed     | Pass Rate   |
+| ----------------------- | ----------- | ---------- | ---------- | ----------- |
+| 1. Farmer Flow          | \_\_\_      | \_\_\_     | \_\_\_     | \_\_\_%     |
+| 2. Officer Review       | \_\_\_      | \_\_\_     | \_\_\_     | \_\_\_%     |
+| 3. Inspector Inspection | \_\_\_      | \_\_\_     | \_\_\_     | \_\_\_%     |
+| 4. Admin Approval       | \_\_\_      | \_\_\_     | \_\_\_     | \_\_\_%     |
+| **Overall**             | **\_\_\_**  | **\_\_\_** | **\_\_\_** | **\_\_\_%** |
 
 ### Critical Findings
 
 **Must Fix Before Phase 5**:
-1. _______________________
-2. _______________________
-3. _______________________
+
+1. ***
+2. ***
+3. ***
 
 **Should Fix in Phase 5**:
-1. _______________________
-2. _______________________
-3. _______________________
+
+1. ***
+2. ***
+3. ***
 
 **Can Fix Later**:
-1. _______________________
-2. _______________________
+
+1. ***
+2. ***
 
 ### Recommendations
 
 **High Priority**:
-- [ ] _______________________
-- [ ] _______________________
+
+- [ ] ***
+- [ ] ***
 
 **Medium Priority**:
-- [ ] _______________________
-- [ ] _______________________
+
+- [ ] ***
+- [ ] ***
 
 **Low Priority**:
-- [ ] _______________________
-- [ ] _______________________
+
+- [ ] ***
+- [ ] ***
 
 ### Next Steps
 
@@ -461,15 +504,19 @@
 
 ## 📝 Additional Notes
 
-_______________________
-_______________________
-_______________________
-_______________________
-_______________________
+---
+
+---
+
+---
+
+---
+
+---
 
 ---
 
 **Testing Complete**: [ ] Yes [ ] No  
 **Ready for Backend Integration**: [ ] Yes [ ] No  
-**Tester Signature**: _______________  
-**Date**: _______________
+**Tester Signature**: ******\_\_\_******  
+**Date**: ******\_\_\_******

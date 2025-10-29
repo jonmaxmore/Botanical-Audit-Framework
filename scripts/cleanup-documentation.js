@@ -16,23 +16,23 @@ const ESSENTIAL_FILES = [
   'INTEGRATION_TESTING_CHECKLIST.md',
   'WEEK1_COMPLETE_SUMMARY.md',
   'WEEK2_DAY4_PROGRESS.md',
-  
+
   // Documentation
   'docs/EXISTING_MODULES_INVENTORY.md',
   'docs/ARCHITECTURE.md',
   'docs/API_DOCUMENTATION.md',
   'docs/DEV_ENVIRONMENT_QUICK_START.md',
-  
+
   // Deployment
   'docs/05_DEPLOYMENT/DEPLOYMENT_GUIDE.md',
   'docs/deployment/PRODUCTION_SETUP_GUIDE.md',
-  
+
   // App-specific
   'apps/backend/README.md',
   'apps/farmer-portal/README.md',
   'apps/admin-portal/README.md',
   'apps/certificate-portal/README.md',
-  
+
   // Infrastructure
   'infrastructure/aws/README.md',
   'terraform/README.md',
@@ -40,15 +40,7 @@ const ESSENTIAL_FILES = [
 ];
 
 // Directories to SKIP (don't touch)
-const SKIP_DIRS = [
-  'node_modules',
-  '.git',
-  '.next',
-  'dist',
-  'build',
-  'out',
-  '.trunk'
-];
+const SKIP_DIRS = ['node_modules', '.git', '.next', 'dist', 'build', 'out', '.trunk'];
 
 console.log('🧹 Starting documentation cleanup...\n');
 console.log(`📝 Essential files to keep: ${ESSENTIAL_FILES.length}`);

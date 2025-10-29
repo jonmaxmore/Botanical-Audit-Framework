@@ -12,12 +12,14 @@
 Load testing infrastructure successfully established with Artillery 2.0.26. Critical authentication bug discovered and fixed during initial testing. Baseline performance metrics collected, revealing server resource optimization opportunities.
 
 ### Key Achievements ✅
+
 1. **Authentication Bug Fixed**: Login route corrected from `isActive: true` to `status: 'active'`
 2. **Load Test Infrastructure**: 6 comprehensive test scenarios created
 3. **Test Users**: 11 users created with proper bcrypt password hashing
 4. **Baseline Metrics**: Initial performance data collected
 
 ### Key Findings ⚠️
+
 1. **Server Resource Constraints**: Development server overwhelmed at 100+ RPS
 2. **Memory Usage**: Backend consuming 1.2GB during moderate load
 3. **Timeout Issues**: 92.3% timeout rate even at light load (2-10 RPS)
@@ -47,18 +49,19 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
    - Identified query mismatch: `isActive` is a **method**, not a field
 
 3. **Solution**
+
    ```javascript
    // BEFORE (apps/backend/routes/auth.js line 194)
    const user = await User.findOne({
      email: email.toLowerCase(),
-     isActive: true,  // ❌ Querying non-existent field
-   })
+     isActive: true // ❌ Querying non-existent field
+   });
 
    // AFTER
    const user = await User.findOne({
      email: email.toLowerCase(),
-     status: 'active',  // ✅ Correct field query
-   })
+     status: 'active' // ✅ Correct field query
+   });
    ```
 
 4. **Verification**
@@ -80,6 +83,7 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
 ## Load Test Scenarios
 
 ### 1. Authentication Load Test (Light) ⭐ RECOMMENDED for Dev
+
 - **File:** `auth-load-test-light.yml`
 - **Duration:** 3 minutes
 - **Load Profile:** 2 RPS → 5 RPS → 10 RPS → 5 RPS
@@ -87,6 +91,7 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
 - **Target:** < 5% error rate, P95 < 500ms
 
 ### 2. Authentication Load Test (Full)
+
 - **File:** `auth-load-test.yml`
 - **Duration:** 5 minutes
 - **Load Profile:** 5 RPS → 100 RPS → 200 RPS
@@ -95,6 +100,7 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
 - **Status:** ⚠️ Too aggressive for dev environment
 
 ### 3-6. Additional Tests
+
 - API Endpoints Load Test (6 min)
 - Stress Test (7 min)
 - Spike Test (5 min)
@@ -111,28 +117,29 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
 
 ### Overall Metrics
 
-| Metric | Value | Status |
-|--------|-------|--------|
-| **Total Requests** | 1,110 | - |
-| **Successful Responses** | 85 (7.7%) | ❌ LOW |
-| **Timeouts (ETIMEDOUT)** | 1,025 (92.3%) | ❌ HIGH |
-| **Bad Requests (400)** | 85 (7.7%) | ⚠️ MODERATE |
-| **Request Rate** | 3/sec (avg) | ⚠️ LOW |
+| Metric                   | Value         | Status      |
+| ------------------------ | ------------- | ----------- |
+| **Total Requests**       | 1,110         | -           |
+| **Successful Responses** | 85 (7.7%)     | ❌ LOW      |
+| **Timeouts (ETIMEDOUT)** | 1,025 (92.3%) | ❌ HIGH     |
+| **Bad Requests (400)**   | 85 (7.7%)     | ⚠️ MODERATE |
+| **Request Rate**         | 3/sec (avg)   | ⚠️ LOW      |
 
 ### Performance Metrics (Successful Requests Only)
 
-| Metric | Value | Target | Status |
-|--------|-------|--------|--------|
-| **Response Time (Min)** | 0ms | - | ✅ |
-| **Response Time (Mean)** | 1.5ms | - | ✅ EXCELLENT |
-| **Response Time (Median)** | 1ms | - | ✅ EXCELLENT |
-| **Response Time (P95)** | 2ms | < 500ms | ✅ EXCELLENT |
-| **Response Time (P99)** | 7.9ms | < 1000ms | ✅ EXCELLENT |
-| **Response Time (Max)** | 32ms | - | ✅ |
+| Metric                     | Value | Target   | Status       |
+| -------------------------- | ----- | -------- | ------------ |
+| **Response Time (Min)**    | 0ms   | -        | ✅           |
+| **Response Time (Mean)**   | 1.5ms | -        | ✅ EXCELLENT |
+| **Response Time (Median)** | 1ms   | -        | ✅ EXCELLENT |
+| **Response Time (P95)**    | 2ms   | < 500ms  | ✅ EXCELLENT |
+| **Response Time (P99)**    | 7.9ms | < 1000ms | ✅ EXCELLENT |
+| **Response Time (Max)**    | 32ms  | -        | ✅           |
 
 ### Error Analysis
 
 #### 1. Timeouts (ETIMEDOUT) - 92.3%
+
 - **Count:** 1,025 errors
 - **Cause:** Server overwhelmed or connection pool exhausted
 - **Observations:**
@@ -141,12 +148,14 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
   - Suggests deeper infrastructure issue
 
 **Recommendations:**
+
 - Investigate connection pool settings
 - Check for synchronous blocking operations
 - Review database connection handling
 - Add request queueing/throttling
 
 #### 2. Bad Requests (400) - 7.7%
+
 - **Count:** 85 errors
 - **Likely Causes:**
   - Token refresh without valid refresh token
@@ -154,6 +163,7 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
   - Failed capture from previous requests
 
 **Recommendations:**
+
 - Add better error handling in test scenarios
 - Implement token persistence across scenario steps
 - Add validation for captured variables
@@ -161,11 +171,13 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
 ### Resource Utilization
 
 **Backend Server (PID 24756):**
+
 - **Memory:** 1.2GB (1,199,652,864 bytes)
 - **CPU Time:** 2,104 seconds
 - **Status:** Running but heavily loaded
 
 **Concerns:**
+
 - Memory usage very high for light load
 - Possible memory leak or inefficient caching
 - May not scale to production levels
@@ -174,13 +186,13 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
 
 ## Comparison: Light vs Full Load Test
 
-| Metric | Light (2-10 RPS) | Full (100-200 RPS) | Difference |
-|--------|------------------|-------------------|------------|
-| **Total Requests** | 1,110 | 28,015 | 25x more |
-| **Success Rate** | 7.7% | 3.6% | -53% worse |
-| **Timeout Errors** | 1,025 | 26,048 | 25x more |
-| **Server Errors (500)** | 0 | 742 | Crashes at high load |
-| **Memory Usage** | 1.2GB | 1.2GB+ | Server crashed |
+| Metric                  | Light (2-10 RPS) | Full (100-200 RPS) | Difference           |
+| ----------------------- | ---------------- | ------------------ | -------------------- |
+| **Total Requests**      | 1,110            | 28,015             | 25x more             |
+| **Success Rate**        | 7.7%             | 3.6%               | -53% worse           |
+| **Timeout Errors**      | 1,025            | 26,048             | 25x more             |
+| **Server Errors (500)** | 0                | 742                | Crashes at high load |
+| **Memory Usage**        | 1.2GB            | 1.2GB+             | Server crashed       |
 
 **Conclusion:** Server cannot handle production-level load in current state.
 
@@ -189,6 +201,7 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
 ## Performance Bottlenecks Identified
 
 ### 1. High Timeout Rate (92.3%)
+
 - **Severity:** CRITICAL
 - **Impact:** Most requests never complete
 - **Possible Causes:**
@@ -198,6 +211,7 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
   - Rate limiter overhead
 
 ### 2. Memory Consumption (1.2GB)
+
 - **Severity:** HIGH
 - **Impact:** Server may crash under sustained load
 - **Possible Causes:**
@@ -207,6 +221,7 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
   - Connection objects not properly released
 
 ### 3. Limited Concurrency
+
 - **Severity:** MEDIUM
 - **Impact:** Can only handle 2-3 RPS effectively
 - **Possible Causes:**
@@ -278,12 +293,14 @@ Load testing infrastructure successfully established with Artillery 2.0.26. Crit
 ## Test Infrastructure
 
 ### Tools & Versions
+
 - **Artillery:** 2.0.26
 - **Node.js:** 22.20.0
 - **pnpm:** Latest
 - **Test Runner:** Custom Node.js script
 
 ### Test Files Location
+
 ```
 load-tests/
 ├── auth-load-test-light.yml     # Light load for dev (2-10 RPS)
@@ -297,6 +314,7 @@ load-tests/
 ```
 
 ### Test Users
+
 - **Count:** 11 users
 - **Roles:** 5 farmers, 2 inspectors, 2 auditors, 2 admins
 - **Password:** LoadTest123456! (same for all)
@@ -304,6 +322,7 @@ load-tests/
 - **Hashing:** bcrypt with 12 rounds
 
 ### Running Tests
+
 ```bash
 # Interactive mode
 node run-load-tests.js
@@ -322,6 +341,7 @@ pnpm exec artillery run load-tests/auth-load-test-light.yml
 ## Next Steps
 
 ### Task 11: Load Testing (Current - 95% Complete)
+
 - ✅ Infrastructure created
 - ✅ Bug fixed (authentication query)
 - ✅ Baseline metrics collected
@@ -329,6 +349,7 @@ pnpm exec artillery run load-tests/auth-load-test-light.yml
 - ⏳ **Pending:** Re-test after optimizations
 
 ### Task 12: Inspector Mobile App (Next Priority)
+
 - **Status:** Not started
 - **Priority:** CRITICAL
 - **Blocking:** 3 field inspectors
@@ -336,6 +357,7 @@ pnpm exec artillery run load-tests/auth-load-test-light.yml
 - **Type:** React Native offline-first app
 
 ### Task 13-14: Portal Development
+
 - Reviewer Portal (2-3 weeks)
 - Approver Portal (2-3 weeks)
 
@@ -354,16 +376,18 @@ pnpm exec artillery run load-tests/auth-load-test-light.yml
 ## Appendix
 
 ### Rate Limiter Configuration
+
 ```javascript
 // apps/backend/routes/auth.js
 const isLoadTesting = process.env.LOAD_TEST_MODE === 'true';
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: isLoadTesting ? 999999 : isDevelopment ? 100 : 5,
+  max: isLoadTesting ? 999999 : isDevelopment ? 100 : 5
 });
 ```
 
 ### Environment Variables
+
 ```properties
 LOAD_TEST_MODE=true               # Disable rate limiting for tests
 JWT_SECRET=s++PAm92qxk...         # 88 characters (secure)
@@ -372,7 +396,9 @@ PORT=3004                         # Backend port
 ```
 
 ### Debug Script
+
 Location: `apps/backend/scripts/debug-loadtest-user.js`
+
 - Verifies user existence
 - Checks password hashing
 - Tests bcrypt.compare()

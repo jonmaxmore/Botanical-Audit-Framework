@@ -37,13 +37,13 @@ Sentry.init({
   integrations: [
     Sentry.replayIntegration({
       maskAllText: true,
-      blockAllMedia: true,
+      blockAllMedia: true
     }),
     Sentry.browserTracingIntegration(),
     Sentry.feedbackIntegration({
       colorScheme: 'light',
-      showBranding: false,
-    }),
+      showBranding: false
+    })
   ],
 
   // Release tracking
@@ -64,6 +64,6 @@ Sentry.init({
     'Request aborted',
     // React hydration mismatches (usually not critical)
     'Hydration failed',
-    'Text content does not match',
-  ],
+    'Text content does not match'
+  ]
 });

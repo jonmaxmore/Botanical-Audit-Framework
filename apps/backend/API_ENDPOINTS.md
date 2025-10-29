@@ -1,6 +1,7 @@
 # Smart Agriculture API Endpoints
 
 ## Base URL
+
 ```
 http://localhost:3000/api/smart-agriculture
 ```
@@ -10,15 +11,18 @@ http://localhost:3000/api/smart-agriculture
 ## 1. Weather APIs
 
 ### Get Current Weather
+
 ```http
 GET /weather/:lat/:lon
 ```
 
 **Parameters:**
+
 - `lat` (path) - Latitude (e.g., 18.7883)
 - `lon` (path) - Longitude (e.g., 98.9853)
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -32,11 +36,13 @@ GET /weather/:lat/:lon
 ```
 
 ### Get 7-Day Forecast
+
 ```http
 GET /weather/:lat/:lon/forecast
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -57,11 +63,13 @@ GET /weather/:lat/:lon/forecast
 ## 2. Soil Guide API
 
 ### Get Soil Recommendation
+
 ```http
 POST /soil/recommend
 ```
 
 **Body:**
+
 ```json
 {
   "soilType": "clay",
@@ -71,6 +79,7 @@ POST /soil/recommend
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -94,11 +103,13 @@ POST /soil/recommend
 ## 3. Province APIs
 
 ### Get All Provinces
+
 ```http
 GET /provinces
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -116,11 +127,13 @@ GET /provinces
 ```
 
 ### Get Province by Name
+
 ```http
 GET /provinces/:name
 ```
 
 **Parameters:**
+
 - `name` (path) - Province name (e.g., "เชียงใหม่")
 
 ---
@@ -128,11 +141,13 @@ GET /provinces/:name
 ## 4. Irrigation Calculator API
 
 ### Calculate Water Needs
+
 ```http
 POST /irrigation/calculate
 ```
 
 **Body:**
+
 ```json
 {
   "crop": "cannabis",
@@ -145,16 +160,14 @@ POST /irrigation/calculate
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
   "data": {
     "waterPerDay": 4.5,
     "frequency": "ทุกวัน",
-    "tips": [
-      "รดน้ำตอนเช้าหรือเย็น",
-      "ตรวจสอบความชื้นดินก่อนรดน้ำ"
-    ]
+    "tips": ["รดน้ำตอนเช้าหรือเย็น", "ตรวจสอบความชื้นดินก่อนรดน้ำ"]
   }
 }
 ```
@@ -164,15 +177,18 @@ POST /irrigation/calculate
 ## 5. Crop Calendar API
 
 ### Get Planting Calendar
+
 ```http
 GET /calendar/:crop/:province
 ```
 
 **Parameters:**
+
 - `crop` (path) - Crop name (e.g., "cannabis")
 - `province` (path) - Province name (e.g., "เชียงใหม่")
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -209,11 +225,13 @@ GET /calendar/:crop/:province
 ## Testing with cURL
 
 ### Weather
+
 ```bash
 curl http://localhost:3000/api/smart-agriculture/weather/18.7883/98.9853
 ```
 
 ### Soil
+
 ```bash
 curl -X POST http://localhost:3000/api/smart-agriculture/soil/recommend \
   -H "Content-Type: application/json" \
@@ -221,11 +239,13 @@ curl -X POST http://localhost:3000/api/smart-agriculture/soil/recommend \
 ```
 
 ### Provinces
+
 ```bash
 curl http://localhost:3000/api/smart-agriculture/provinces
 ```
 
 ### Irrigation
+
 ```bash
 curl -X POST http://localhost:3000/api/smart-agriculture/irrigation/calculate \
   -H "Content-Type: application/json" \
@@ -233,6 +253,7 @@ curl -X POST http://localhost:3000/api/smart-agriculture/irrigation/calculate \
 ```
 
 ### Calendar
+
 ```bash
 curl http://localhost:3000/api/smart-agriculture/calendar/cannabis/เชียงใหม่
 ```

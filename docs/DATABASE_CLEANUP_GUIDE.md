@@ -46,7 +46,7 @@ const CONFIG = {
 
   // Safety
   BACKUP_BEFORE_CLEANUP: true,
-  MAX_BATCH_SIZE: 1000,
+  MAX_BATCH_SIZE: 1000
 };
 ```
 
@@ -587,7 +587,7 @@ MONGODB_PASSWORD=secure_password
 const CONFIG = {
   EXPIRED_TOKEN_RETENTION: 7, // Change to your needs
   DRAFT_APPLICATION_RETENTION: 90, // Change to your needs
-  AUDIT_LOG_RETENTION: 365, // Change to your needs
+  AUDIT_LOG_RETENTION: 365 // Change to your needs
 };
 ```
 

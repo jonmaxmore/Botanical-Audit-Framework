@@ -10,13 +10,13 @@ const meta = {
   title: 'Components/RescheduleDialog',
   component: RescheduleDialog,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
   tags: ['autodocs'],
   argTypes: {
     maxReschedule: { control: 'number' },
-    isLoading: { control: 'boolean' },
-  },
+    isLoading: { control: 'boolean' }
+  }
 } satisfies Meta<typeof RescheduleDialog>;
 
 export default meta;
@@ -67,7 +67,7 @@ export const FirstReschedule: Story = {
     currentInspection: {
       id: 'INSP-001',
       scheduledDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-      inspectorName: 'นายสมชาย ใจดี',
+      inspectorName: 'นายสมชาย ใจดี'
     },
     rescheduleCount: 0,
     maxReschedule: 1,
@@ -75,9 +75,9 @@ export const FirstReschedule: Story = {
     onConfirm: async data => {
       console.log('Reschedule confirmed', data);
       await new Promise(resolve => setTimeout(resolve, 1000));
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // Last chance - warning shown
@@ -89,7 +89,7 @@ export const LastChance: Story = {
     currentInspection: {
       id: 'INSP-002',
       scheduledDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
-      inspectorName: 'นางสาวมาลี สวยงาม',
+      inspectorName: 'นางสาวมาลี สวยงาม'
     },
     rescheduleCount: 0,
     maxReschedule: 1,
@@ -97,9 +97,9 @@ export const LastChance: Story = {
     onConfirm: async data => {
       console.log('Last reschedule', data);
       await new Promise(resolve => setTimeout(resolve, 1000));
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // Limit reached - cannot reschedule
@@ -111,16 +111,16 @@ export const LimitReached: Story = {
     currentInspection: {
       id: 'INSP-003',
       scheduledDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
-      inspectorName: 'นายวิชัย ขยัน',
+      inspectorName: 'นายวิชัย ขยัน'
     },
     rescheduleCount: 1,
     maxReschedule: 1,
     isLoading: false,
     onConfirm: async data => {
       console.log('Should not be called', data);
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // Loading state
@@ -132,16 +132,16 @@ export const Loading: Story = {
     currentInspection: {
       id: 'INSP-004',
       scheduledDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000),
-      inspectorName: 'นายประสิทธิ์ เก่งดี',
+      inspectorName: 'นายประสิทธิ์ เก่งดี'
     },
     rescheduleCount: 0,
     maxReschedule: 1,
     isLoading: true,
     onConfirm: async data => {
       console.log('Loading', data);
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // With error
@@ -153,7 +153,7 @@ export const WithError: Story = {
     currentInspection: {
       id: 'INSP-005',
       scheduledDate: new Date(Date.now() + 14 * 24 * 60 * 60 * 1000),
-      inspectorName: 'นางสมหวัง ทำดี',
+      inspectorName: 'นางสมหวัง ทำดี'
     },
     rescheduleCount: 0,
     maxReschedule: 1,
@@ -161,7 +161,7 @@ export const WithError: Story = {
     onConfirm: async data => {
       console.log('Error will be thrown', data);
       throw new Error('ไม่สามารถเลื่อนการตรวจได้ กรุณาลองใหม่อีกครั้ง');
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };

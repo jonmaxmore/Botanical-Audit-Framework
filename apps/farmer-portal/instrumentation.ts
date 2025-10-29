@@ -33,7 +33,7 @@ export async function onRequestError(
       | 'server-rendering';
     revalidateReason: 'on-demand' | 'stale' | undefined;
     renderType: 'dynamic' | 'dynamic-resume';
-  },
+  }
 ) {
   // You can add custom logic here to process errors before they're sent to Sentry
   // For example, you might want to log additional context or filter certain errors
@@ -44,6 +44,6 @@ export async function onRequestError(
     path: request.path,
     method: request.method,
     routePath: context.routePath,
-    routeType: context.routeType,
+    routeType: context.routeType
   });
 }

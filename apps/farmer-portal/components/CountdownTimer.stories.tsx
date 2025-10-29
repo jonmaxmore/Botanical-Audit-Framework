@@ -9,7 +9,7 @@ const meta = {
   title: 'Components/CountdownTimer',
   component: CountdownTimer,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
   tags: ['autodocs'],
   argTypes: {
@@ -17,8 +17,8 @@ const meta = {
     warningThreshold: { control: 'number' },
     criticalThreshold: { control: 'number' },
     autoStart: { control: 'boolean' },
-    showPauseButton: { control: 'boolean' },
-  },
+    showPauseButton: { control: 'boolean' }
+  }
 } satisfies Meta<typeof CountdownTimer>;
 
 export default meta;
@@ -28,24 +28,24 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     initialSeconds: 900, // 15 minutes
-    autoStart: true,
-  },
+    autoStart: true
+  }
 };
 
 // Warning state - 2 minutes remaining
 export const WarningState: Story = {
   args: {
     initialSeconds: 120,
-    autoStart: true,
-  },
+    autoStart: true
+  }
 };
 
 // Critical state - 30 seconds remaining
 export const CriticalState: Story = {
   args: {
     initialSeconds: 30,
-    autoStart: true,
-  },
+    autoStart: true
+  }
 };
 
 // With pause button
@@ -53,21 +53,21 @@ export const WithPauseButton: Story = {
   args: {
     initialSeconds: 900,
     autoStart: true,
-    showPauseButton: true,
-  },
+    showPauseButton: true
+  }
 };
 
 // Compact version
 export const Compact: Story = {
   args: {
     initialSeconds: 900,
-    autoStart: true,
+    autoStart: true
   },
   render: args => (
     <div className="flex items-center gap-2 bg-gray-800 text-white p-2 rounded">
       <CountdownTimer {...args} />
     </div>
-  ),
+  )
 };
 
 // With callbacks
@@ -76,6 +76,6 @@ export const WithCallbacks: Story = {
     initialSeconds: 10,
     autoStart: true,
     onTimeout: () => alert('⏰ เวลาหมด!'),
-    onTick: remaining => console.log('Remaining:', remaining),
-  },
+    onTick: remaining => console.log('Remaining:', remaining)
+  }
 };

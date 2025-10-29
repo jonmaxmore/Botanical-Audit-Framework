@@ -25,26 +25,26 @@ const PromptPaySchema = new Schema(
     qrCode: {
       type: String,
       required: true,
-      description: 'Base64-encoded PNG image',
+      description: 'Base64-encoded PNG image'
     },
     qrData: {
       type: String,
       required: true,
-      description: 'EMVCo QR format (BOT v2.1)',
+      description: 'EMVCo QR format (BOT v2.1)'
     },
     promptPayId: {
       type: String,
       required: true,
       match: /^[0-9]{10,13}$/,
-      description: 'Phone number or Thai ID',
+      description: 'Phone number or Thai ID'
     },
     expiresAt: {
       type: Date,
       required: true,
-      description: '15 minutes from generation',
-    },
+      description: '15 minutes from generation'
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 /**
@@ -56,25 +56,25 @@ const CreditCardSchema = new Schema(
     omiseChargeId: {
       type: String,
       required: true,
-      description: 'Omise charge ID',
+      description: 'Omise charge ID'
     },
     cardLastDigits: {
       type: String,
       required: true,
-      match: /^[0-9]{4}$/,
+      match: /^[0-9]{4}$/
     },
     cardBrand: {
       type: String,
       required: true,
-      enum: ['Visa', 'Mastercard', 'JCB', 'American Express'],
+      enum: ['Visa', 'Mastercard', 'JCB', 'American Express']
     },
     threeDSecure: {
       type: Boolean,
       required: true,
-      default: false,
-    },
+      default: false
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 /**
@@ -86,7 +86,7 @@ const InvoiceSchema = new Schema(
     // === PRIMARY KEY ===
     _id: {
       type: Schema.Types.ObjectId,
-      auto: true,
+      auto: true
     },
 
     // === UNIQUE IDENTIFIERS ===
@@ -94,7 +94,7 @@ const InvoiceSchema = new Schema(
       type: String,
       required: true,
       match: /^INV-\d{4}-\d{6}$/,
-      description: 'Format: INV-YYYY-NNNNNN',
+      description: 'Format: INV-YYYY-NNNNNN'
     },
 
     invoiceNumber: { type: String, required: true, description: 'Public-facing invoice number' },
@@ -104,20 +104,20 @@ const InvoiceSchema = new Schema(
       type: String,
       required: true,
       index: true,
-      ref: 'Application',
+      ref: 'Application'
     },
 
     applicationNumber: {
       type: String,
       required: true,
-      description: 'Denormalized for performance',
+      description: 'Denormalized for performance'
     },
 
     userId: {
       type: String,
       required: true,
       index: true,
-      ref: 'User',
+      ref: 'User'
     },
 
     // === INVOICE TYPE ===
@@ -126,7 +126,7 @@ const InvoiceSchema = new Schema(
       required: true,
       enum: ['PHASE1_FEE', 'PHASE2_FEE'],
       index: true,
-      description: 'PHASE1_FEE: ฿5,000 | PHASE2_FEE: ฿25,000',
+      description: 'PHASE1_FEE: ฿5,000 | PHASE2_FEE: ฿25,000'
     },
 
     // === AMOUNT (Thai Baht) ===
@@ -134,14 +134,14 @@ const InvoiceSchema = new Schema(
       type: Number,
       required: true,
       min: 0,
-      description: 'Base amount (before VAT if applicable)',
+      description: 'Base amount (before VAT if applicable)'
     },
 
     currency: {
       type: String,
       required: true,
       enum: ['THB'],
-      default: 'THB',
+      default: 'THB'
     },
 
     // === VAT CALCULATION ===
@@ -151,21 +151,21 @@ const InvoiceSchema = new Schema(
       default: 0.07,
       min: 0,
       max: 1,
-      description: '7% VAT rate',
+      description: '7% VAT rate'
     },
 
     vatAmount: {
       type: Number,
       required: true,
       min: 0,
-      description: 'Calculated VAT amount',
+      description: 'Calculated VAT amount'
     },
 
     totalAmount: {
       type: Number,
       required: true,
       min: 0,
-      description: 'Total amount including VAT',
+      description: 'Total amount including VAT'
     },
 
     // === STATUS ===
@@ -175,68 +175,68 @@ const InvoiceSchema = new Schema(
       enum: ['PENDING', 'PAID', 'EXPIRED'],
       default: 'PENDING',
       index: true,
-      description: 'NO REFUNDED status (no refunds policy)',
+      description: 'NO REFUNDED status (no refunds policy)'
     },
 
     // === PAYMENT METHOD ===
     paymentMethod: {
       type: String,
       enum: [null, 'PROMPTPAY', 'CREDIT_CARD'],
-      default: null,
+      default: null
     },
 
     // === PROMPTPAY DATA ===
     promptPay: {
       type: PromptPaySchema,
-      default: null,
+      default: null
     },
 
     // === CREDIT CARD DATA ===
     creditCard: {
       type: CreditCardSchema,
-      default: null,
+      default: null
     },
 
     // === PAYMENT CONFIRMATION ===
     paidAt: {
       type: Date,
       default: null,
-      index: true,
+      index: true
     },
 
     paymentConfirmedBy: {
       type: String,
       default: null,
-      description: 'userId who confirmed payment',
+      description: 'userId who confirmed payment'
     },
 
     paymentConfirmationNotes: {
       type: String,
       maxlength: 500,
-      default: null,
+      default: null
     },
 
     // === THAI TAX RECEIPT ===
     receiptNumber: {
       type: String,
-      default: null,
+      default: null
     },
 
     receiptIssuedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     receiptS3Key: {
       type: String,
       default: null,
-      description: 'S3 key for PDF receipt',
+      description: 'S3 key for PDF receipt'
     },
 
     receiptUrl: {
       type: String,
       default: null,
-      description: 'Public URL for receipt download',
+      description: 'Public URL for receipt download'
     },
 
     // === EXPIRY ===
@@ -244,7 +244,7 @@ const InvoiceSchema = new Schema(
       type: Date,
       required: true,
       index: true,
-      description: '7 days from creation',
+      description: '7 days from creation'
     },
 
     // === TIMESTAMPS ===
@@ -252,20 +252,20 @@ const InvoiceSchema = new Schema(
       type: Date,
       required: true,
       default: Date.now,
-      immutable: true,
+      immutable: true
     },
 
     updatedAt: {
       type: Date,
       required: true,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   },
   {
     timestamps: true,
     collection: 'invoices',
-    versionKey: false,
-  },
+    versionKey: false
+  }
 );
 
 // ========================================
@@ -283,8 +283,8 @@ InvoiceSchema.index(
   { expiresAt: 1 },
   {
     partialFilterExpression: { status: 'PENDING' },
-    name: 'pending_invoice_expiry',
-  },
+    name: 'pending_invoice_expiry'
+  }
 );
 
 // ========================================
@@ -356,7 +356,7 @@ InvoiceSchema.methods.markAsPaid = async function (paymentMethod, confirmedBy, p
       omiseChargeId: paymentData.chargeId,
       cardLastDigits: paymentData.cardLastDigits,
       cardBrand: paymentData.cardBrand,
-      threeDSecure: paymentData.threeDSecure || false,
+      threeDSecure: paymentData.threeDSecure || false
     };
   }
 
@@ -416,7 +416,7 @@ InvoiceSchema.statics.generateInvoiceId = async function () {
   const prefix = `INV-${year}-`;
 
   const lastInvoice = await this.findOne({
-    invoiceId: new RegExp(`^${prefix}`),
+    invoiceId: new RegExp(`^${prefix}`)
   }).sort({ invoiceId: -1 });
 
   let nextNumber = 1;
@@ -437,7 +437,7 @@ InvoiceSchema.statics.generateReceiptNumber = async function () {
   const prefix = `RCPT-${year}-`;
 
   const lastReceipt = await this.findOne({
-    receiptNumber: new RegExp(`^${prefix}`),
+    receiptNumber: new RegExp(`^${prefix}`)
   }).sort({ receiptNumber: -1 });
 
   let nextNumber = 1;
@@ -456,7 +456,7 @@ InvoiceSchema.statics.generateReceiptNumber = async function () {
 InvoiceSchema.statics.findExpired = function () {
   return this.find({
     status: 'PENDING',
-    expiresAt: { $lt: new Date() },
+    expiresAt: { $lt: new Date() }
   });
 };
 
@@ -470,7 +470,7 @@ InvoiceSchema.statics.findExpired = function () {
 InvoiceSchema.statics.createPhase1Invoice = async function (
   applicationId,
   applicationNumber,
-  userId,
+  userId
 ) {
   const baseAmount = 5000;
   const vatAmount = baseAmount * 0.07;
@@ -492,7 +492,7 @@ InvoiceSchema.statics.createPhase1Invoice = async function (
     vatAmount,
     totalAmount,
     status: 'PENDING',
-    expiresAt,
+    expiresAt
   });
 };
 
@@ -506,7 +506,7 @@ InvoiceSchema.statics.createPhase1Invoice = async function (
 InvoiceSchema.statics.createPhase2Invoice = async function (
   applicationId,
   applicationNumber,
-  userId,
+  userId
 ) {
   const baseAmount = 25000;
   const vatAmount = baseAmount * 0.07;
@@ -528,7 +528,7 @@ InvoiceSchema.statics.createPhase2Invoice = async function (
     vatAmount,
     totalAmount,
     status: 'PENDING',
-    expiresAt,
+    expiresAt
   });
 };
 
@@ -580,11 +580,11 @@ InvoiceSchema.set('toJSON', {
   transform: function (doc, ret) {
     delete ret.__v;
     return ret;
-  },
+  }
 });
 
 InvoiceSchema.set('toObject', {
-  virtuals: true,
+  virtuals: true
 });
 
 // ========================================

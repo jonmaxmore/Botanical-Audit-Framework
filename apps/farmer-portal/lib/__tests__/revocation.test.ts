@@ -10,7 +10,7 @@
 import {
   canApplyAfterRevocation,
   REVOCATION_WAIT_PERIOD_DAYS,
-  type Certificate,
+  type Certificate
 } from '../business-logic';
 
 // Alias for test consistency
@@ -30,7 +30,7 @@ function createMockCertificate(revokedDate: Date): Certificate {
     revokedDate,
     revokedAt: revokedDate,
     createdAt: new Date('2024-01-01'),
-    updatedAt: revokedDate,
+    updatedAt: revokedDate
   };
 }
 

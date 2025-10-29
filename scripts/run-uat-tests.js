@@ -23,7 +23,7 @@ console.log('');
 // Run UAT tests
 const testProcess = spawn('node', [uatTestPath], {
   stdio: 'inherit',
-  shell: true,
+  shell: true
 });
 
 testProcess.on('error', error => {

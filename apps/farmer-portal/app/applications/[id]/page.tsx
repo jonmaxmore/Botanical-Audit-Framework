@@ -8,25 +8,37 @@ export default function ApplicationDetailPage({ params }: { params: { id: string
     { status: 'ชำระเงินงวดที่ 1', date: '16/01/2025 14:20', completed: true },
     { status: 'ตรวจสอบเอกสาร', date: 'กำลังดำเนินการ', completed: false, active: true },
     { status: 'นัดตรวจสอบสถานที่', date: 'รอดำเนินการ', completed: false },
-    { status: 'อนุมัติ', date: 'รอดำเนินการ', completed: false },
+    { status: 'อนุมัติ', date: 'รอดำเนินการ', completed: false }
   ];
 
   const comments = [
-    { user: 'Reviewer', message: 'กรุณาเพิ่มเอกสารใบอนุญาตปลูก', date: '17/01/2025 09:15', type: 'staff' },
-    { user: 'คุณ', message: 'อัปโหลดเอกสารเพิ่มเติมแล้วครับ', date: '17/01/2025 15:30', type: 'farmer' },
+    {
+      user: 'Reviewer',
+      message: 'กรุณาเพิ่มเอกสารใบอนุญาตปลูก',
+      date: '17/01/2025 09:15',
+      type: 'staff'
+    },
+    {
+      user: 'คุณ',
+      message: 'อัปโหลดเอกสารเพิ่มเติมแล้วครับ',
+      date: '17/01/2025 15:30',
+      type: 'farmer'
+    }
   ];
 
   const documents = [
     { name: 'ใบอนุญาตปลูก.pdf', size: '2.5 MB', date: '15/01/2025' },
     { name: 'แผนที่ฟาร์ม.pdf', size: '1.8 MB', date: '15/01/2025' },
-    { name: 'ใบรับรองที่ดิน.pdf', size: '3.2 MB', date: '15/01/2025' },
+    { name: 'ใบรับรองที่ดิน.pdf', size: '3.2 MB', date: '15/01/2025' }
   ];
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        <Link href="/applications" className="text-green-600 hover:underline mb-4 inline-block">← กลับ</Link>
-        
+        <Link href="/applications" className="text-green-600 hover:underline mb-4 inline-block">
+          ← กลับ
+        </Link>
+
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <div className="flex justify-between items-start mb-6">
             <div>
@@ -70,9 +82,15 @@ export default function ApplicationDetailPage({ params }: { params: { id: string
               <div className="space-y-4">
                 {timeline.map((item, idx) => (
                   <div key={idx} className="flex items-start space-x-3">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${
-                      item.completed ? 'bg-green-500' : item.active ? 'bg-yellow-500' : 'bg-gray-300'
-                    }`}>
+                    <div
+                      className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                        item.completed
+                          ? 'bg-green-500'
+                          : item.active
+                            ? 'bg-yellow-500'
+                            : 'bg-gray-300'
+                      }`}
+                    >
                       {item.completed && <span className="text-white text-xs">✓</span>}
                     </div>
                     <div className="flex-1">
@@ -91,7 +109,10 @@ export default function ApplicationDetailPage({ params }: { params: { id: string
             <h3 className="font-bold text-gray-900 mb-4">💬 ความคิดเห็น</h3>
             <div className="space-y-4 mb-4">
               {comments.map((comment, idx) => (
-                <div key={idx} className={`p-3 rounded-lg ${comment.type === 'staff' ? 'bg-blue-50' : 'bg-green-50'}`}>
+                <div
+                  key={idx}
+                  className={`p-3 rounded-lg ${comment.type === 'staff' ? 'bg-blue-50' : 'bg-green-50'}`}
+                >
                   <div className="flex justify-between items-start mb-1">
                     <span className="font-semibold text-sm">{comment.user}</span>
                     <span className="text-xs text-gray-500">{comment.date}</span>
@@ -114,12 +135,17 @@ export default function ApplicationDetailPage({ params }: { params: { id: string
             <h3 className="font-bold text-gray-900 mb-4">📎 เอกสารแนบ ({documents.length})</h3>
             <div className="space-y-3">
               {documents.map((doc, idx) => (
-                <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div
+                  key={idx}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
                   <div className="flex items-center space-x-3">
                     <span className="text-2xl">📄</span>
                     <div>
                       <div className="font-medium text-sm">{doc.name}</div>
-                      <div className="text-xs text-gray-500">{doc.size} • {doc.date}</div>
+                      <div className="text-xs text-gray-500">
+                        {doc.size} • {doc.date}
+                      </div>
                     </div>
                   </div>
                   <button className="text-green-600 hover:underline text-sm">ดาวน์โหลด</button>

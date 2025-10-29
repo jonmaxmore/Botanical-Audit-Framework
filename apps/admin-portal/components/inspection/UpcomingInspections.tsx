@@ -1,7 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Box, Card, CardContent, Typography, Chip, Button, List, ListItem, ListItemText } from '@mui/material';
+import {
+  Box,
+  Card,
+  CardContent,
+  Typography,
+  Chip,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material';
 import { Videocam, LocationOn, AccessTime } from '@mui/icons-material';
 import { format, isToday, isTomorrow } from 'date-fns';
 import axios from 'axios';
@@ -43,8 +53,10 @@ export default function UpcomingInspections() {
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6" gutterBottom>การตรวจสอบที่กำลังจะมาถึง</Typography>
-        
+        <Typography variant="h6" gutterBottom>
+          การตรวจสอบที่กำลังจะมาถึง
+        </Typography>
+
         {inspections.length === 0 ? (
           <Typography color="text.secondary">ไม่มีการนัดหมาย</Typography>
         ) : (
@@ -61,7 +73,7 @@ export default function UpcomingInspections() {
               >
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, width: '100%' }}>
                   {inspection.type === 'video_call' ? <Videocam /> : <LocationOn />}
-                  
+
                   <ListItemText
                     primary={inspection.farmerName}
                     secondary={
@@ -73,13 +85,13 @@ export default function UpcomingInspections() {
                       </Box>
                     }
                   />
-                  
+
                   <Chip
                     label={inspection.type === 'video_call' ? 'Video Call' : 'Onsite'}
                     size="small"
                     color={inspection.type === 'video_call' ? 'primary' : 'secondary'}
                   />
-                  
+
                   <Button size="small" variant="outlined">
                     เข้าร่วม
                   </Button>

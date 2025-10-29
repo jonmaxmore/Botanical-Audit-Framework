@@ -11,6 +11,7 @@
 ### ✅ ที่มีอยู่แล้ว:
 
 #### 1. Field Inspection Workflow
+
 - ✅ Schedule field inspections
 - ✅ Assign inspector to applications
 - ✅ Complete inspection with results
@@ -18,12 +19,14 @@
 - ✅ Record inspection findings
 
 #### 2. Document Management
+
 - ✅ Upload documents (PDF, images)
 - ✅ Document verification
 - ✅ Version control
 - ✅ S3-compatible storage
 
 #### 3. Real-time Features
+
 - ✅ Socket.IO for notifications
 - ✅ Real-time status updates
 - ✅ Live dashboards
@@ -58,10 +61,12 @@
 > **Inspectors & Reviewers** conduct document verification, schedule field inspections **(VDO + on-site)**, and validate GACP compliance criteria.
 
 **คำว่า "VDO + on-site" หมายถึง:**
+
 - ✅ **VDO** = Video recordings/photos ที่ Inspector ถ่ายระหว่างตรวจสอบภาคสนาม
 - ✅ **On-site** = การตรวจสอบแบบไปที่ฟาร์มจริง
 
 **ไม่ได้หมายถึง:**
+
 - ❌ Video call แบบ real-time
 - ❌ Remote inspection ผ่าน video conference
 
@@ -97,6 +102,7 @@
 ### Phase 5 (Planned) - Mobile Inspector App
 
 จาก README:
+
 > Phase 5: National expansion & mobile tools - **Mobile inspector app**, ministry API integration
 
 **ควรเพิ่ม Video Inspection Features:**
@@ -104,12 +110,14 @@
 ### 1. Video Call Integration (Priority: High)
 
 **Use Cases:**
+
 - Remote pre-inspection consultation
 - Real-time guidance during on-site inspection
 - Expert consultation for complex cases
 - Follow-up inspections without travel
 
 **Technology Options:**
+
 - **WebRTC** (Open source, free)
 - **Agora.io** (Scalable, reliable)
 - **Twilio Video** (Enterprise-grade)
@@ -117,6 +125,7 @@
 - **Microsoft Teams API** (Government-friendly)
 
 **Implementation:**
+
 ```typescript
 // Suggested structure
 apps/
@@ -138,12 +147,14 @@ apps/
 ### 2. Visual Remote Support (Priority: Medium)
 
 **Features:**
+
 - Screen annotation tools
 - Photo/video capture during call
 - AR markers for measurements
 - Real-time document sharing
 
 **Technology Options:**
+
 - **AR.js** for AR features
 - **Fabric.js** for annotations
 - **MediaRecorder API** for recording
@@ -153,16 +164,18 @@ apps/
 ### 3. Hybrid Inspection Model (Priority: High)
 
 **Inspection Types:**
+
 ```typescript
 enum InspectionType {
-  ON_SITE = 'on_site',           // Traditional on-site
-  REMOTE = 'remote',             // Video call only
-  HYBRID = 'hybrid',             // Video + on-site
+  ON_SITE = 'on_site', // Traditional on-site
+  REMOTE = 'remote', // Video call only
+  HYBRID = 'hybrid', // Video + on-site
   FOLLOW_UP_REMOTE = 'follow_up' // Remote follow-up
 }
 ```
 
 **Benefits:**
+
 - ✅ Reduce travel costs
 - ✅ Faster inspection scheduling
 - ✅ Expert consultation from anywhere
@@ -176,12 +189,14 @@ enum InspectionType {
 ### Phase 1: Basic Video Call (2-3 weeks)
 
 **Features:**
+
 - 1-to-1 video call (Inspector ↔ Farmer)
 - Basic camera controls
 - Chat messaging
 - Call recording
 
 **Effort:**
+
 - Backend: 3-4 days
 - Frontend: 5-7 days
 - Testing: 2-3 days
@@ -191,12 +206,14 @@ enum InspectionType {
 ### Phase 2: Advanced Features (2-3 weeks)
 
 **Features:**
+
 - Screen sharing
 - Photo capture during call
 - Annotation tools
 - Multi-party calls (Inspector + Expert + Farmer)
 
 **Effort:**
+
 - Backend: 4-5 days
 - Frontend: 7-10 days
 - Testing: 3-4 days
@@ -206,12 +223,14 @@ enum InspectionType {
 ### Phase 3: Mobile Integration (3-4 weeks)
 
 **Features:**
+
 - Mobile inspector app with video
 - Offline recording capability
 - GPS tagging
 - AR measurement tools
 
 **Effort:**
+
 - Mobile app: 10-15 days
 - Backend integration: 3-5 days
 - Testing: 5-7 days
@@ -273,14 +292,15 @@ interface VideoInspection {
 
 ### Video Call Service Costs:
 
-| Service | Free Tier | Paid Tier | Notes |
-|---------|-----------|-----------|-------|
-| **Agora.io** | 10,000 min/month | $0.99/1000 min | Recommended |
-| **Twilio Video** | Trial only | $0.004/min/participant | Enterprise |
-| **WebRTC (Self-hosted)** | Free | Server costs only | Complex setup |
-| **Zoom SDK** | No free tier | Custom pricing | Familiar UX |
+| Service                  | Free Tier        | Paid Tier              | Notes         |
+| ------------------------ | ---------------- | ---------------------- | ------------- |
+| **Agora.io**             | 10,000 min/month | $0.99/1000 min         | Recommended   |
+| **Twilio Video**         | Trial only       | $0.004/min/participant | Enterprise    |
+| **WebRTC (Self-hosted)** | Free             | Server costs only      | Complex setup |
+| **Zoom SDK**             | No free tier     | Custom pricing         | Familiar UX   |
 
 **Recommendation:** Start with **Agora.io**
+
 - Free tier sufficient for testing
 - Scalable pricing
 - Good documentation
@@ -337,11 +357,13 @@ interface VideoInspection {
 ## 📞 Conclusion
 
 ### Current Status:
+
 - ❌ **No video call features** in current system
 - ✅ **"VDO"** refers to video recordings, not video calls
 - ✅ **On-site inspection** is the current method
 
 ### Recommendation:
+
 - ✅ **Add video call features in Phase 5**
 - ✅ **High priority** for cost reduction and efficiency
 - ✅ **Estimated 6-10 weeks** for full implementation

@@ -1,6 +1,6 @@
 /**
  * Playwright Configuration for GACP System E2E Tests
- * 
+ *
  * This configuration handles end-to-end testing across all three portals:
  * - Farmer Portal (localhost:3001)
  * - Admin/DTAM Portal (localhost:3002)
@@ -32,7 +32,7 @@ export default defineConfig({
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['json', { outputFile: 'test-results/e2e-results.json' }],
     ['junit', { outputFile: 'test-results/e2e-junit.xml' }],
-    ['list'],
+    ['list']
   ],
 
   /* Shared settings for all the projects below */
@@ -53,7 +53,7 @@ export default defineConfig({
     actionTimeout: 15000,
 
     /* Navigation timeout */
-    navigationTimeout: 30000,
+    navigationTimeout: 30000
   },
 
   /* Configure projects for major browsers */
@@ -61,17 +61,17 @@ export default defineConfig({
     // Setup project - authenticate users
     {
       name: 'setup',
-      testMatch: /.*\.setup\.ts/,
+      testMatch: /.*\.setup\.ts/
     },
 
     // Main E2E tests
     {
       name: 'e2e-chromium',
       use: {
-        ...devices['Desktop Chrome'],
+        ...devices['Desktop Chrome']
       },
-      dependencies: ['setup'],
-    },
+      dependencies: ['setup']
+    }
 
     // Optional: Test on Firefox
     // {
@@ -88,7 +88,7 @@ export default defineConfig({
 
   /* Expect timeout for assertions */
   expect: {
-    timeout: 10000,
+    timeout: 10000
   },
 
   /* Output folder for test artifacts */
@@ -98,5 +98,5 @@ export default defineConfig({
   snapshotDir: 'tests/e2e/__snapshots__',
 
   /* Whether to preserve output between test runs */
-  preserveOutput: 'failures-only',
+  preserveOutput: 'failures-only'
 });

@@ -458,7 +458,9 @@ class CourseRepository {
 
     if (enrollmentCount > 0) {
       const restrictedFields = ['code', 'type', 'passingScore'];
-      const hasRestrictedChanges = restrictedFields.some(field => Object.prototype.hasOwnProperty.call(updateData, field));
+      const hasRestrictedChanges = restrictedFields.some(field =>
+        Object.prototype.hasOwnProperty.call(updateData, field)
+      );
 
       if (hasRestrictedChanges) {
         throw new Error('Cannot modify course structure after enrollments exist');

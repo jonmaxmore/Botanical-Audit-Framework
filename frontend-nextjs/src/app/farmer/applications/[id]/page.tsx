@@ -40,11 +40,11 @@ const ApplicationDetailPage = () => {
   const router = useRouter();
   const params = useParams();
   const { fetchApplicationById, submitApplication, currentApplication } = useApplication();
-  
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  
+
   const applicationId = params.id as string;
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const ApplicationDetailPage = () => {
   const loadApplication = async () => {
     setLoading(true);
     setError('');
-    
+
     try {
       await fetchApplicationById(applicationId);
     } catch (err: any) {
@@ -66,10 +66,10 @@ const ApplicationDetailPage = () => {
 
   const handleSubmit = async () => {
     if (!currentApplication) return;
-    
+
     setSubmitting(true);
     setError('');
-    
+
     try {
       await submitApplication(currentApplication.id);
       alert('ยื่นคำขอสำเร็จ! กำลังไปหน้า Dashboard...');
@@ -82,7 +82,10 @@ const ApplicationDetailPage = () => {
   };
 
   const getStatusColor = (status: string) => {
-    const statusMap: Record<string, 'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'> = {
+    const statusMap: Record<
+      string,
+      'default' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'
+    > = {
       DRAFT: 'default',
       SUBMITTED: 'info',
       PAYMENT_PENDING_1: 'warning',
@@ -144,9 +147,9 @@ const ApplicationDetailPage = () => {
 
   const getSmartNextAction = () => {
     if (!currentApplication) return null;
-    
+
     const { workflowState } = currentApplication;
-    
+
     switch (workflowState) {
       case 'DRAFT':
         return (
@@ -160,7 +163,7 @@ const ApplicationDetailPage = () => {
             แก้ไขใบสมัคร
           </Button>
         );
-        
+
       case 'SUBMITTED':
       case 'PAYMENT_PENDING_1':
         return (
@@ -174,14 +177,10 @@ const ApplicationDetailPage = () => {
             ชำระเงิน 5,000 บาท
           </Button>
         );
-        
+
       case 'DOCUMENT_REVIEW':
-        return (
-          <Alert severity="info">
-            เจ้าหน้าที่กำลังตรวจสอบเอกสาร กรุณารอ 3-5 วันทำการ
-          </Alert>
-        );
-        
+        return <Alert severity="info">เจ้าหน้าที่กำลังตรวจสอบเอกสาร กรุณารอ 3-5 วันทำการ</Alert>;
+
       case 'DOCUMENT_REVISION':
         return (
           <Button
@@ -194,7 +193,7 @@ const ApplicationDetailPage = () => {
             แก้ไขและอัปโหลดเอกสารใหม่
           </Button>
         );
-        
+
       case 'DOCUMENT_APPROVED':
       case 'PAYMENT_PENDING_2':
         return (
@@ -208,31 +207,19 @@ const ApplicationDetailPage = () => {
             ชำระเงิน 25,000 บาท
           </Button>
         );
-        
+
       case 'INSPECTION_SCHEDULED':
       case 'INSPECTION_VDO_CALL':
       case 'INSPECTION_ON_SITE':
-        return (
-          <Alert severity="info">
-            กำลังอยู่ระหว่างการตรวจฟาร์ม กรุณารอผลการตรวจสอบ
-          </Alert>
-        );
-        
+        return <Alert severity="info">กำลังอยู่ระหว่างการตรวจฟาร์ม กรุณารอผลการตรวจสอบ</Alert>;
+
       case 'PENDING_APPROVAL':
-        return (
-          <Alert severity="info">
-            เจ้าหน้าที่กำลังพิจารณาผลการตรวจ กรุณารอ 5-7 วันทำการ
-          </Alert>
-        );
-        
+        return <Alert severity="info">เจ้าหน้าที่กำลังพิจารณาผลการตรวจ กรุณารอ 5-7 วันทำการ</Alert>;
+
       case 'APPROVED':
       case 'CERTIFICATE_GENERATING':
-        return (
-          <Alert severity="success">
-            คุณได้รับการอนุมัติ! กำลังออกใบรับรอง GACP
-          </Alert>
-        );
-        
+        return <Alert severity="success">คุณได้รับการอนุมัติ! กำลังออกใบรับรอง GACP</Alert>;
+
       case 'CERTIFICATE_ISSUED':
         return (
           <Button
@@ -245,14 +232,14 @@ const ApplicationDetailPage = () => {
             ดาวน์โหลดใบรับรอง GACP
           </Button>
         );
-        
+
       case 'REJECTED':
         return (
           <Alert severity="error">
             ใบสมัครของคุณไม่ได้รับการอนุมัติ กรุณาติดต่อเจ้าหน้าที่เพื่อขอคำแนะนำ
           </Alert>
         );
-        
+
       default:
         return null;
     }
@@ -286,7 +273,16 @@ const ApplicationDetailPage = () => {
     );
   }
 
-  const { workflowState, currentStep, createdAt, farmInfo, farmerInfo, documents, payments, inspection } = currentApplication;
+  const {
+    workflowState,
+    currentStep,
+    createdAt,
+    farmInfo,
+    farmerInfo,
+    documents,
+    payments,
+    inspection,
+  } = currentApplication;
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -348,10 +344,7 @@ const ApplicationDetailPage = () => {
         <Typography variant="h6" gutterBottom>
           ความคืบหน้า
         </Typography>
-        <WorkflowProgress
-          currentState={workflowState}
-          currentStep={currentStep}
-        />
+        <WorkflowProgress currentState={workflowState} currentStep={currentStep} />
       </Paper>
 
       {/* Smart Next Action */}
@@ -446,9 +439,7 @@ const ApplicationDetailPage = () => {
           <List>
             {documents.map((doc: any, index: number) => (
               <ListItem key={index}>
-                <ListItemIcon>
-                  {getDocumentStatusIcon(doc.status)}
-                </ListItemIcon>
+                <ListItemIcon>{getDocumentStatusIcon(doc.status)}</ListItemIcon>
                 <ListItemText
                   primary={doc.documentType}
                   secondary={`สถานะ: ${doc.status === 'APPROVED' ? 'อนุมัติ' : doc.status === 'REJECTED' ? 'ไม่อนุมัติ' : 'รอตรวจสอบ'}`}

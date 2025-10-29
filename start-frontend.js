@@ -24,8 +24,8 @@ const child = spawn(npmCmd, ['run', 'dev'], {
     ...process.env,
     NODE_ENV: 'development',
     PORT: '3000',
-    FORCE_COLOR: '1',
-  },
+    FORCE_COLOR: '1'
+  }
 });
 
 child.on('error', error => {

@@ -9,13 +9,13 @@ const meta = {
   title: 'Components/RevocationBanner',
   component: RevocationBanner,
   parameters: {
-    layout: 'padded',
+    layout: 'padded'
   },
   tags: ['autodocs'],
   argTypes: {
     waitPeriodDays: { control: 'number' },
-    dismissible: { control: 'boolean' },
-  },
+    dismissible: { control: 'boolean' }
+  }
 } satisfies Meta<typeof RevocationBanner>;
 
 export default meta;
@@ -28,8 +28,8 @@ export const DuringWaitPeriod: Story = {
     revokedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000), // 10 days ago
     revocationReason: 'ตรวจพบการไม่ปฏิบัติตามมาตรฐาน GAP',
     waitPeriodDays: 30,
-    userId: 'user-123',
-  },
+    userId: 'user-123'
+  }
 };
 
 // Just revoked - 30 days remaining
@@ -39,8 +39,8 @@ export const JustRevoked: Story = {
     revokedAt: new Date(), // Today
     revocationReason: 'ใบรับรองหมดอายุและไม่ต่ออายุ',
     waitPeriodDays: 30,
-    userId: 'user-123',
-  },
+    userId: 'user-123'
+  }
 };
 
 // Almost ready - 2 days remaining
@@ -50,8 +50,8 @@ export const AlmostReady: Story = {
     revokedAt: new Date(Date.now() - 28 * 24 * 60 * 60 * 1000), // 28 days ago
     revocationReason: 'พบสารเคมีต้องห้ามในการตรวจสอบ',
     waitPeriodDays: 30,
-    userId: 'user-123',
-  },
+    userId: 'user-123'
+  }
 };
 
 // Can apply now
@@ -61,8 +61,8 @@ export const CanApplyNow: Story = {
     revokedAt: new Date(Date.now() - 31 * 24 * 60 * 60 * 1000), // 31 days ago
     revocationReason: 'เกษตรกรขอยกเลิกด้วยเหตุผลส่วนตัว',
     waitPeriodDays: 30,
-    userId: 'user-123',
-  },
+    userId: 'user-123'
+  }
 };
 
 // Dismissible version
@@ -73,8 +73,8 @@ export const Dismissible: Story = {
     revocationReason: 'ตรวจพบการไม่ปฏิบัติตามมาตรฐาน GAP',
     waitPeriodDays: 30,
     userId: 'user-123',
-    dismissible: true,
-  },
+    dismissible: true
+  }
 };
 
 // Compact version (dashboard widget)
@@ -84,11 +84,11 @@ export const CompactWidget: Story = {
     revokedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
     revocationReason: 'ตรวจพบการไม่ปฏิบัติตามมาตรฐาน GAP',
     waitPeriodDays: 30,
-    userId: 'user-123',
+    userId: 'user-123'
   },
   render: args => (
     <div className="max-w-md">
       <RevocationBanner {...args} />
     </div>
-  ),
+  )
 };

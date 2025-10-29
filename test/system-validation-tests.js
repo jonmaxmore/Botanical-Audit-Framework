@@ -13,13 +13,13 @@ class SystemValidationTester {
       surveySystem: {
         passed: 0,
         failed: 0,
-        errors: [],
+        errors: []
       },
       standardsComparison: {
         passed: 0,
         failed: 0,
-        errors: [],
-      },
+        errors: []
+      }
     };
   }
 
@@ -57,14 +57,14 @@ class SystemValidationTester {
       const expectedRegions = ['เหนือ', 'อีสาน', 'กลาง', 'ใต้'];
       this.assert(
         expectedRegions.every(region => regionStats.hasOwnProperty(region)),
-        '4-Region analytics support',
+        '4-Region analytics support'
       );
 
       // Test 4: Survey Creation
       const survey = await this.surveySystem.createSurvey('gacp-basic-th', {
         title: 'Test Survey - Standalone',
         region: 'เหนือ',
-        language: 'th',
+        language: 'th'
       });
       this.assert(survey && survey.surveyId, 'Standalone survey creation');
 
@@ -73,7 +73,7 @@ class SystemValidationTester {
       const englishSurvey = await this.surveySystem.createSurvey('gacp-basic-en');
       this.assert(
         thaiSurvey.language === 'th' && englishSurvey.language === 'en',
-        'Multi-language survey support',
+        'Multi-language survey support'
       );
 
       // Test 6: 7-Step Survey Wizard
@@ -84,14 +84,14 @@ class SystemValidationTester {
       // Test 7: Survey Response Handling
       const response = await this.surveySystem.recordResponse(session.sessionId, {
         step: 1,
-        responses: { question1: 'test answer' },
+        responses: { question1: 'test answer' }
       });
       this.assert(response.success, 'Survey response recording');
 
       // Test 8: Analytics & Reporting
       const analytics = await this.surveySystem.generateAnalytics({
         region: 'เหนือ',
-        dateRange: { start: new Date('2025-01-01'), end: new Date() },
+        dateRange: { start: new Date('2025-01-01'), end: new Date() }
       });
       this.assert(analytics && analytics.totalSurveys !== undefined, 'Survey analytics generation');
 
@@ -121,7 +121,7 @@ class SystemValidationTester {
       // Test 1: System Initialization
       this.assert(
         this.standardsComparison instanceof GACPStandardsComparisonSystem,
-        'Standards Comparison system initialization',
+        'Standards Comparison system initialization'
       );
 
       // Test 2: Available Standards
@@ -134,49 +134,49 @@ class SystemValidationTester {
         'USP',
         'WHO-GMP',
         'ISO-22000',
-        'HACCP',
+        'HACCP'
       ];
       this.assert(
         expectedStandards.every(std => standards.find(s => s.code === std)),
-        '8 Standards availability',
+        '8 Standards availability'
       );
 
       // Test 3: Standards Comparison
       const comparison = await this.standardsComparison.compareStandards([
         'GACP',
         'GAP',
-        'Organic',
+        'Organic'
       ]);
       this.assert(comparison && comparison.comparisonResults, 'Multi-standards comparison');
 
       // Test 4: Gap Analysis
       const gapAnalysis = await this.standardsComparison.performGapAnalysis('GACP', {
         currentPractices: ['basic-documentation', 'pest-control'],
-        targetStandard: 'GAP',
+        targetStandard: 'GAP'
       });
       this.assert(
         gapAnalysis && gapAnalysis.gaps && Array.isArray(gapAnalysis.gaps),
-        'Gap analysis functionality',
+        'Gap analysis functionality'
       );
 
       // Test 5: Implementation Roadmap
       const roadmap = await this.standardsComparison.generateImplementationRoadmap([
         'GACP',
-        'Organic',
+        'Organic'
       ]);
       this.assert(
         roadmap && roadmap.phases && roadmap.phases.length > 0,
-        'Implementation roadmap generation',
+        'Implementation roadmap generation'
       );
 
       // Test 6: Cost Analysis
       const costAnalysis = await this.standardsComparison.calculateImplementationCost([
         'GACP',
-        'GAP',
+        'GAP'
       ]);
       this.assert(
         costAnalysis && costAnalysis.totalCost !== undefined,
-        'Implementation cost analysis',
+        'Implementation cost analysis'
       );
 
       // Test 7: Certification Planning
@@ -189,7 +189,7 @@ class SystemValidationTester {
 
       // Test 9: Compliance Assessment
       const assessment = await this.standardsComparison.assessCompliance('GACP', {
-        practices: ['documentation', 'traceability', 'quality-control'],
+        practices: ['documentation', 'traceability', 'quality-control']
       });
       this.assert(assessment && assessment.complianceScore !== undefined, 'Compliance assessment');
 
@@ -197,7 +197,7 @@ class SystemValidationTester {
       const progress = await this.standardsComparison.trackImplementationProgress('project-123');
       this.assert(
         progress && progress.completionPercentage !== undefined,
-        'Implementation progress tracking',
+        'Implementation progress tracking'
       );
 
       console.log('✅ Standards Comparison: All tests passed');
@@ -221,19 +221,19 @@ class SystemValidationTester {
 
       this.assert(
         surveyStats && standardsStats && surveyStats !== standardsStats,
-        'Systems operate independently',
+        'Systems operate independently'
       );
 
       // Test 2: No Cross-Dependencies
       const surveyMethods = Object.getOwnPropertyNames(Object.getPrototypeOf(this.surveySystem));
       const standardsMethods = Object.getOwnPropertyNames(
-        Object.getPrototypeOf(this.standardsComparison),
+        Object.getPrototypeOf(this.standardsComparison)
       );
 
       this.assert(
         !surveyMethods.some(method => method.includes('standards')) &&
           !standardsMethods.some(method => method.includes('survey')),
-        'No cross-system dependencies',
+        'No cross-system dependencies'
       );
 
       // Test 3: Event System Independence

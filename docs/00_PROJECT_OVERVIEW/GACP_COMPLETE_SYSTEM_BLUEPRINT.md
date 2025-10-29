@@ -575,8 +575,8 @@ const ApplicationSchema = new Schema({
       rejectedAt: Date,
       rejectedBy: { type: String, enum: ['reviewer', 'inspector', 'approver'] },
       reason: String,
-      rejectionCount: Number,
-    },
+      rejectionCount: Number
+    }
   ],
 
   // NEW: Lock System
@@ -590,7 +590,7 @@ const ApplicationSchema = new Schema({
       startedAt: Date,
       completedAt: Date,
       decision: { type: String, enum: ['approve', 'need_onsite', 'reject'] },
-      notes: String,
+      notes: String
     },
     onsiteInspection: {
       scheduledDate: Date,
@@ -599,9 +599,9 @@ const ApplicationSchema = new Schema({
       confirmedAt: Date,
       completedAt: Date,
       photos: [String],
-      gpsLocation: { lat: Number, lng: Number },
-    },
-  },
+      gpsLocation: { lat: Number, lng: Number }
+    }
+  }
 });
 ```
 

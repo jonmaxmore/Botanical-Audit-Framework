@@ -3,18 +3,21 @@
 ## 🎉 All Phases Complete!
 
 ### Phase 1: Core Video Inspection ✅
+
 - Video call with Agora SDK
 - Snapshot management with gallery
 - GACP inspection report form
 - Basic notifications
 
 ### Phase 2: Calendar & Scheduling ✅
+
 - Scheduling system (video call/onsite)
 - Calendar view with monthly navigation
 - Upcoming inspections list
 - Advanced notifications with reminders
 
 ### Phase 3: Inspector Dashboard ✅
+
 - KPI cards (completed today, upcoming, video/onsite counts)
 - Quick actions panel
 - Integrated calendar view
@@ -61,59 +64,70 @@ apps/backend/
 ## 🚀 API Endpoints
 
 ### Video Call
+
 - `POST /api/video/inspections/:id/video-token` - Generate Agora token
 
 ### Snapshots
+
 - `POST /api/inspections/:id/snapshots` - Upload snapshots
 - `GET /api/inspections/:id/snapshots` - Fetch snapshots
 
 ### Reports
+
 - `POST /api/inspections/:id/report` - Submit report
 - `GET /api/inspections/:id/report` - Fetch report
 
 ### Scheduling
+
 - `POST /api/inspections/:id/schedule` - Schedule inspection
 - `PUT /api/inspections/:id/schedule/confirm` - Confirm schedule
 - `GET /api/inspections/:id/schedule` - Get schedule
 - `GET /api/inspections/calendar` - Calendar view
 
 ### Dashboard
+
 - `GET /api/inspections/upcoming` - Upcoming inspections
 - `GET /api/inspections/kpi` - KPI metrics
 
 ## 💡 Features Summary
 
 ### ✅ Video Inspection
+
 - Real-time video call with Agora SDK
 - Video/Audio toggle
 - Snapshot capture during call
 - Remote user detection
 
 ### ✅ Snapshot Management
+
 - Gallery view with thumbnails
 - Add/edit captions
 - Delete snapshots
 - Upload to backend
 
 ### ✅ Inspection Report
+
 - GACP checklist (8 CCPs)
 - Summary + Strengths/Weaknesses
 - Decision: Approve/Need Onsite/Reject
 - Attach snapshots
 
 ### ✅ Scheduling
+
 - Schedule video call or onsite
 - Date & time picker
 - Farmer confirmation workflow
 - Status tracking
 
 ### ✅ Calendar
+
 - Monthly view
 - Visual indicators (video/onsite)
 - Navigate months
 - Show schedules per day
 
 ### ✅ Dashboard
+
 - KPI cards (4 metrics)
 - Quick actions (4 buttons)
 - Upcoming inspections list
@@ -121,6 +135,7 @@ apps/backend/
 - Performance tracking
 
 ### ✅ Notifications
+
 - Real-time Socket.IO
 - Schedule confirmations
 - Reminders (1 day before)
@@ -171,12 +186,14 @@ apps/backend/
 ### Environment Variables
 
 **Backend (.env)**
+
 ```env
 AGORA_APP_ID=20028831
 AGORA_APP_CERTIFICATE=4a458225df3358aee176b10efcca32869070dcbf1411175731e8639402e90d3b
 ```
 
 **Frontend (.env.local)**
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:3000
 ```
@@ -184,12 +201,14 @@ NEXT_PUBLIC_API_URL=http://localhost:3000
 ## 🧪 Testing
 
 1. Start backend:
+
 ```bash
 cd apps/backend
 node atlas-server.js
 ```
 
 2. Start admin portal:
+
 ```bash
 cd apps/admin-portal
 npm run dev

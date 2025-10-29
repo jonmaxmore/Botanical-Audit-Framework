@@ -5,19 +5,19 @@ import { Providers } from './providers';
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-inter'
 });
 
 const notoSansThai = Noto_Sans_Thai({
   subsets: ['thai'],
-  variable: '--font-noto-sans-thai',
+  variable: '--font-noto-sans-thai'
 });
 
 export const metadata: Metadata = {
   title: 'GACP Platform - ระบบรับรองมาตรฐาน GACP',
   description:
     'ระบบการรับรองมาตรฐาน GACP (Good Agricultural and Collection Practices) สำหรับเกษตรกรผู้ปลูกพืชสมุนไพร',
-  keywords: ['GACP', 'มาตรฐาน GACP', 'สมุนไพร', 'เกษตรอินทรีย์', 'DTAM'],
+  keywords: ['GACP', 'มาตรฐาน GACP', 'สมุนไพร', 'เกษตรอินทรีย์', 'DTAM']
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

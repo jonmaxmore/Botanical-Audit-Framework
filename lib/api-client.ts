@@ -3,7 +3,7 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || '/api';
 export class ApiError extends Error {
   constructor(
     public status: number,
-    message: string,
+    message: string
   ) {
     super(message);
     this.name = 'ApiError';
@@ -28,7 +28,7 @@ export const apiClient = {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
     return handleResponse<T>(response);
   },
@@ -37,15 +37,15 @@ export const apiClient = {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
     return handleResponse<T>(response);
   },
 
   async delete<T>(endpoint: string): Promise<T> {
     const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: 'DELETE',
+      method: 'DELETE'
     });
     return handleResponse<T>(response);
-  },
+  }
 };

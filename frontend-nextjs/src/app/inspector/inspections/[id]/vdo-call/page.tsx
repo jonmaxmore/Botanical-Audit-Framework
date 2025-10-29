@@ -42,7 +42,7 @@ import { useApplicationContext, type Application } from '@/contexts/ApplicationC
 
 /**
  * VDO Call Inspection Page
- * 
+ *
  * หน้าบันทึกผลการตรวจสอบผ่าน VDO Call
  * - แสดงข้อมูลใบสมัคร
  * - Checklist การตรวจเบื้องต้น
@@ -62,7 +62,7 @@ const VdoCallInspectionPage: React.FC = () => {
   const params = useParams();
   const applicationId = params?.id as string;
   const { applications, updateApplication } = useApplicationContext();
-  
+
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
   const [checklist, setChecklist] = useState<ChecklistItem[]>([
@@ -88,7 +88,7 @@ const VdoCallInspectionPage: React.FC = () => {
   }, [applicationId, applications]);
 
   const loadApplication = () => {
-    const app = applications.find(a => a.id === applicationId);
+    const app = applications.find((a) => a.id === applicationId);
     if (app) {
       setApplication(app);
       setLoading(false);
@@ -98,17 +98,15 @@ const VdoCallInspectionPage: React.FC = () => {
   };
 
   const handleChecklistChange = (id: string) => {
-    setChecklist(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, checked: !item.checked } : item
-      )
+    setChecklist((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
     );
   };
 
   const handlePhotoUpload = () => {
     // Mock photo upload
     const mockPhotoUrl = `https://via.placeholder.com/300x200?text=VDO+Screenshot+${photos.length + 1}`;
-    setPhotos(prev => [...prev, mockPhotoUrl]);
+    setPhotos((prev) => [...prev, mockPhotoUrl]);
     alert('อัปโหลดรูปภาพสำเร็จ (Mock)');
   };
 
@@ -131,7 +129,7 @@ const VdoCallInspectionPage: React.FC = () => {
 
     try {
       // Determine new workflow state
-      const newState: Application['workflowState'] = 
+      const newState: Application['workflowState'] =
         decision === 'sufficient' ? 'INSPECTION_COMPLETED' : 'INSPECTION_ON_SITE';
 
       // Update application
@@ -171,13 +169,15 @@ const VdoCallInspectionPage: React.FC = () => {
     }
   };
 
-  const checkedCount = checklist.filter(item => item.checked).length;
+  const checkedCount = checklist.filter((item) => item.checked).length;
   const totalCount = checklist.length;
   const completionRate = Math.round((checkedCount / totalCount) * 100);
 
   if (loading || !application) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -187,11 +187,7 @@ const VdoCallInspectionPage: React.FC = () => {
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => router.back()}
-          sx={{ mb: 2 }}
-        >
+        <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()} sx={{ mb: 2 }}>
           กลับ
         </Button>
         <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
@@ -212,19 +208,29 @@ const VdoCallInspectionPage: React.FC = () => {
             <Divider sx={{ mb: 2 }} />
             <Box sx={{ '& > div': { mb: 1.5 } }}>
               <Box>
-                <Typography variant="caption" color="text.secondary">ชื่อฟาร์ม:</Typography>
-                <Typography variant="body2" fontWeight="medium">{application.farmInfo?.name}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ชื่อฟาร์ม:
+                </Typography>
+                <Typography variant="body2" fontWeight="medium">
+                  {application.farmInfo?.name}
+                </Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">ขนาดพื้นที่:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ขนาดพื้นที่:
+                </Typography>
                 <Typography variant="body2">{application.farmInfo?.size} ไร่</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">ประเภทพืช:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ประเภทพืช:
+                </Typography>
                 <Typography variant="body2">{application.farmInfo?.cropType}</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">จังหวัด:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  จังหวัด:
+                </Typography>
                 <Typography variant="body2">{application.farmInfo?.province}</Typography>
               </Box>
             </Box>
@@ -237,15 +243,23 @@ const VdoCallInspectionPage: React.FC = () => {
             <Divider sx={{ mb: 2 }} />
             <Box sx={{ '& > div': { mb: 1.5 } }}>
               <Box>
-                <Typography variant="caption" color="text.secondary">ชื่อ-นามสกุล:</Typography>
-                <Typography variant="body2" fontWeight="medium">{application.farmerInfo?.name}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ชื่อ-นามสกุล:
+                </Typography>
+                <Typography variant="body2" fontWeight="medium">
+                  {application.farmerInfo?.name}
+                </Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">โทรศัพท์:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  โทรศัพท์:
+                </Typography>
                 <Typography variant="body2">{application.farmerInfo?.phone}</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">ประสบการณ์:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ประสบการณ์:
+                </Typography>
                 <Typography variant="body2">{application.farmerInfo?.experience} ปี</Typography>
               </Box>
             </Box>
@@ -260,9 +274,13 @@ const VdoCallInspectionPage: React.FC = () => {
               ✅ Checklist การตรวจเบื้องต้น
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            
+
             <Alert severity="info" sx={{ mb: 2 }}>
-              ความสมบูรณ์: <strong>{checkedCount}/{totalCount}</strong> รายการ ({completionRate}%)
+              ความสมบูรณ์:{' '}
+              <strong>
+                {checkedCount}/{totalCount}
+              </strong>{' '}
+              รายการ ({completionRate}%)
             </Alert>
 
             <List>
@@ -358,9 +376,7 @@ const VdoCallInspectionPage: React.FC = () => {
             <Divider sx={{ mb: 3 }} />
 
             <FormControl component="fieldset">
-              <FormLabel component="legend">
-                จากการตรวจผ่าน VDO Call คุณเห็นว่า:
-              </FormLabel>
+              <FormLabel component="legend">จากการตรวจผ่าน VDO Call คุณเห็นว่า:</FormLabel>
               <RadioGroup
                 value={decision}
                 onChange={(e) => setDecision(e.target.value as 'sufficient' | 'on_site')}
@@ -405,7 +421,8 @@ const VdoCallInspectionPage: React.FC = () => {
             </FormControl>
 
             <Alert severity="warning" sx={{ mt: 3 }}>
-              <strong>หมายเหตุ:</strong> หากเลือก "เพียงพอ" - ระบบจะปิดการตรวจและส่งไปขั้นตอนอนุมัติ (Step 7)
+              <strong>หมายเหตุ:</strong> หากเลือก "เพียงพอ" - ระบบจะปิดการตรวจและส่งไปขั้นตอนอนุมัติ
+              (Step 7)
               <br />
               หากเลือก "ต้องลงพื้นที่" - จะต้องนัดหมายและลงพื้นที่ตรวจฟาร์มจริง (Step 6B)
             </Alert>
@@ -442,9 +459,7 @@ const VdoCallInspectionPage: React.FC = () => {
               คุณกำลังกำหนดให้ต้องลงพื้นที่ตรวจ - จะต้องนัดหมายและตรวจฟาร์มจริง พร้อมให้คะแนน 8 CCPs
             </Alert>
           )}
-          <Typography variant="body2">
-            กรุณาตรวจสอบข้อมูลอีกครั้งก่อนยืนยัน:
-          </Typography>
+          <Typography variant="body2">กรุณาตรวจสอบข้อมูลอีกครั้งก่อนยืนยัน:</Typography>
           <List dense>
             <ListItem>
               <ListItemIcon>

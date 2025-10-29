@@ -13,7 +13,7 @@ import {
   Grid,
   Chip,
   Alert,
-  CircularProgress,
+  CircularProgress
 } from '@mui/material';
 import {
   Search,
@@ -22,7 +22,7 @@ import {
   VerifiedUser,
   LocationOn,
   Event,
-  Person,
+  Person
 } from '@mui/icons-material';
 import QRCode from 'qrcode';
 import { useEffect, useRef } from 'react';
@@ -72,7 +72,7 @@ export default function VerifyPage() {
           issuedDate: '2025-01-15',
           expiryDate: '2028-01-15',
           status: 'active',
-          address: '123 หมู่ 5 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี 20230',
+          address: '123 หมู่ 5 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี 20230'
         });
       } else {
         setResult({
@@ -85,7 +85,7 @@ export default function VerifyPage() {
           issuedDate: '',
           expiryDate: '',
           status: 'revoked',
-          address: '',
+          address: ''
         });
       }
       setLoading(false);
@@ -98,7 +98,7 @@ export default function VerifyPage() {
       const qrData = JSON.stringify({
         certNumber: result.certificateNumber,
         farmName: result.farmName,
-        issuedDate: result.issuedDate,
+        issuedDate: result.issuedDate
       });
 
       QRCode.toCanvas(canvasRef.current, qrData, {
@@ -106,7 +106,7 @@ export default function VerifyPage() {
         margin: 2,
         color: {
           dark: '#000000',
-          light: '#ffffff',
+          light: '#ffffff'
         }
       });
     }
@@ -143,7 +143,7 @@ export default function VerifyPage() {
       sx={{
         minHeight: '100vh',
         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        py: 8,
+        py: 8
       }}
     >
       <Container maxWidth="md">
@@ -230,14 +230,14 @@ export default function VerifyPage() {
                           bgcolor: 'grey.50',
                           borderRadius: 2,
                           border: '2px solid',
-                          borderColor: 'success.main',
+                          borderColor: 'success.main'
                         }}
                       >
                         <Box
                           sx={{
                             display: 'flex',
                             justifyContent: 'space-between',
-                            alignItems: 'center',
+                            alignItems: 'center'
                           }}
                         >
                           <Box>
@@ -355,7 +355,7 @@ export default function VerifyPage() {
                             p: 2,
                             bgcolor: 'white',
                             borderRadius: 2,
-                            boxShadow: 2,
+                            boxShadow: 2
                           }}
                         >
                           <canvas ref={canvasRef} />

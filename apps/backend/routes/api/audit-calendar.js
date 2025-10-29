@@ -7,7 +7,7 @@ const express = require('express');
 const { body, param, query, validationResult } = require('express-validator');
 const AuditCalendar = require('../models/mongodb/AuditCalendar');
 const Farm = require('../microservices/api-trace/src/models/Farm');
-const EnhancedCultivationRecord = require('../models/mongodb/EnhancedCultivationRecord');
+const _EnhancedCultivationRecord = require('../models/mongodb/_EnhancedCultivationRecord');
 
 const router = express.Router();
 

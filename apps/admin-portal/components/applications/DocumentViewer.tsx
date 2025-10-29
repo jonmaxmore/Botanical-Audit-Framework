@@ -172,7 +172,7 @@ export default function DocumentViewer({
       <DialogActions sx={{ p: 2 }}>
         <Typography variant="body2" color="text.secondary" sx={{ flexGrow: 1 }}>
           เอกสารทั้งหมด: {application.documents?.length || 0} ไฟล์ | ตรวจสอบแล้ว:{' '}
-          {application.documents?.filter((d) => d.verifiedBy).length || 0} ไฟล์
+          {application.documents?.filter(d => d.verifiedBy).length || 0} ไฟล์
         </Typography>
         <Button onClick={onClose}>ปิด</Button>
       </DialogActions>

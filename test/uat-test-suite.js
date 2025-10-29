@@ -24,7 +24,7 @@ class GACPUATTester {
         documentReviewer: { scenarios: [], passed: 0, failed: 0 },
         inspector: { scenarios: [], passed: 0, failed: 0 },
         approver: { scenarios: [], passed: 0, failed: 0 },
-        admin: { scenarios: [], passed: 0, failed: 0 },
+        admin: { scenarios: [], passed: 0, failed: 0 }
       },
       systems: {
         auth: { scenarios: [], passed: 0, failed: 0 },
@@ -36,8 +36,8 @@ class GACPUATTester {
         documentManagement: { scenarios: [], passed: 0, failed: 0 },
         notification: { scenarios: [], passed: 0, failed: 0 },
         certificate: { scenarios: [], passed: 0, failed: 0 },
-        reporting: { scenarios: [], passed: 0, failed: 0 },
-      },
+        reporting: { scenarios: [], passed: 0, failed: 0 }
+      }
     };
     this.tokens = {};
     this.testData = {};
@@ -101,7 +101,7 @@ class GACPUATTester {
           lastName: 'เกษตรกร',
           phoneNumber: '0891234567',
           role: 'farmer',
-          province: 'เชียงใหม่',
+          province: 'เชียงใหม่'
         };
 
         const registerResponse = await axios.post(`${this.baseURL}/api/auth/register`, userData);
@@ -113,14 +113,14 @@ class GACPUATTester {
         // Step 2: Login
         const loginResponse = await axios.post(`${this.baseURL}/api/auth/login`, {
           email: userData.email,
-          password: userData.password,
+          password: userData.password
         });
 
         this.tokens.farmer = loginResponse.data.token;
 
         // Step 3: View Dashboard
         const dashboardResponse = await axios.get(`${this.baseURL}/api/farmer/dashboard`, {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
         });
 
         // Step 4: Register Farm
@@ -132,19 +132,19 @@ class GACPUATTester {
             subdistrict: 'ริมใต้',
             address: '123 ถนนทดสอบ UAT',
             latitude: 18.8832,
-            longitude: 98.9847,
+            longitude: 98.9847
           },
           area: 10.5,
           cropType: 'กัญชา',
-          varieties: ['พันธุ์ไทย', 'พันธุ์ลูกผสม'],
+          varieties: ['พันธุ์ไทย', 'พันธุ์ลูกผสม']
         };
 
         const farmResponse = await axios.post(
           `${this.baseURL}/api/farm-management/farms`,
           farmData,
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         this.testData.farmId = farmResponse.data.data.farmId;
@@ -158,16 +158,16 @@ class GACPUATTester {
             plantingDate: new Date().toISOString(),
             expectedHarvest: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000).toISOString(),
             cultivationMethod: 'organic',
-            estimatedYield: 500,
-          },
+            estimatedYield: 500
+          }
         };
 
         const appResponse = await axios.post(
           `${this.baseURL}/api/applications/create`,
           applicationData,
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         this.testData.applicationId = appResponse.data.data.applicationId;
@@ -180,7 +180,7 @@ class GACPUATTester {
           farmResponse.status === 201 &&
           appResponse.status === 201
         );
-      },
+      }
     );
 
     // Scenario 2: Document Upload and Submission
@@ -194,7 +194,7 @@ class GACPUATTester {
           { type: 'farm_plan', name: 'แผนผังฟาร์ม.pdf' },
           { type: 'id_card', name: 'บัตรประชาชน.pdf' },
           { type: 'water_test', name: 'ผลตรวจน้ำ.pdf' },
-          { type: 'soil_test', name: 'ผลตรวจดิน.pdf' },
+          { type: 'soil_test', name: 'ผลตรวจดิน.pdf' }
         ];
 
         for (const doc of documents) {
@@ -204,11 +204,11 @@ class GACPUATTester {
               applicationId: this.testData.applicationId,
               documentType: doc.type,
               fileName: doc.name,
-              fileSize: 2048000,
+              fileSize: 2048000
             },
             {
-              headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-            },
+              headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+            }
           );
         }
 
@@ -217,12 +217,12 @@ class GACPUATTester {
           `${this.baseURL}/api/applications/${this.testData.applicationId}/submit`,
           {},
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         return submitResponse.status === 200;
-      },
+      }
     );
 
     // Scenario 3: Survey and Standards Comparison
@@ -240,13 +240,13 @@ class GACPUATTester {
               experience_years: '5',
               cultivation_type: 'organic',
               farm_size: '10-20 rai',
-              previous_certification: 'no',
+              previous_certification: 'no'
             },
-            region: 'เหนือ',
+            region: 'เหนือ'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         // Compare standards
@@ -254,15 +254,15 @@ class GACPUATTester {
           `${this.baseURL}/api/standards-comparison/compare`,
           {
             standards: ['GACP', 'GAP', 'Organic'],
-            farmId: this.testData.farmId,
+            farmId: this.testData.farmId
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         return surveyResponse.status === 201 && comparisonResponse.status === 200;
-      },
+      }
     );
 
     // Scenario 4: Track Application Status
@@ -274,16 +274,16 @@ class GACPUATTester {
         const statusResponse = await axios.get(
           `${this.baseURL}/api/applications/${this.testData.applicationId}/status`,
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         const notificationsResponse = await axios.get(`${this.baseURL}/api/notifications`, {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
         });
 
         return statusResponse.status === 200 && notificationsResponse.status === 200;
-      },
+      }
     );
   }
 
@@ -297,7 +297,7 @@ class GACPUATTester {
     // Login as Document Reviewer
     const loginResponse = await axios.post(`${this.baseURL}/api/auth/dtam/login`, {
       email: 'reviewer@dtam.go.th',
-      password: 'DTAM123456!',
+      password: 'DTAM123456!'
     });
     this.tokens.reviewer = loginResponse.data.token;
 
@@ -308,21 +308,21 @@ class GACPUATTester {
       'UAT-DR-001: พนักงานตรวจสอบเอกสารคำขอรับรอง',
       async () => {
         const pendingResponse = await axios.get(`${this.baseURL}/api/dtam/applications/pending`, {
-          headers: { Authorization: `Bearer ${this.tokens.reviewer}` },
+          headers: { Authorization: `Bearer ${this.tokens.reviewer}` }
         });
 
         const detailsResponse = await axios.get(
           `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}`,
           {
-            headers: { Authorization: `Bearer ${this.tokens.reviewer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.reviewer}` }
+          }
         );
 
         const documentsResponse = await axios.get(
           `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}/documents`,
           {
-            headers: { Authorization: `Bearer ${this.tokens.reviewer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.reviewer}` }
+          }
         );
 
         return (
@@ -330,7 +330,7 @@ class GACPUATTester {
           detailsResponse.status === 200 &&
           documentsResponse.status === 200
         );
-      },
+      }
     );
 
     // Scenario 2: Approve and Request Revisions
@@ -345,11 +345,11 @@ class GACPUATTester {
           {
             documentId: 'doc-001',
             status: 'approved',
-            comments: 'เอกสารครบถ้วนถูกต้อง',
+            comments: 'เอกสารครบถ้วนถูกต้อง'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.reviewer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.reviewer}` }
+          }
         );
 
         // Request revision for others
@@ -358,11 +358,11 @@ class GACPUATTester {
           {
             documentId: 'doc-002',
             status: 'revision_required',
-            comments: 'กรุณาส่งเอกสารใหม่ที่ชัดเจนกว่า',
+            comments: 'กรุณาส่งเอกสารใหม่ที่ชัดเจนกว่า'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.reviewer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.reviewer}` }
+          }
         );
 
         // Complete review
@@ -370,15 +370,15 @@ class GACPUATTester {
           `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}/document-review-complete`,
           {
             overallStatus: 'approved',
-            notes: 'เอกสารผ่านการตรวจสอบ',
+            notes: 'เอกสารผ่านการตรวจสอบ'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.reviewer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.reviewer}` }
+          }
         );
 
         return completeResponse.status === 200;
-      },
+      }
     );
   }
 
@@ -392,7 +392,7 @@ class GACPUATTester {
     // Login as Inspector
     const loginResponse = await axios.post(`${this.baseURL}/api/auth/dtam/login`, {
       email: 'inspector@dtam.go.th',
-      password: 'DTAM123456!',
+      password: 'DTAM123456!'
     });
     this.tokens.inspector = loginResponse.data.token;
 
@@ -409,11 +409,11 @@ class GACPUATTester {
             farmId: this.testData.farmId,
             applicationId: this.testData.applicationId,
             inspectionType: 'online',
-            scheduledDate: new Date().toISOString(),
+            scheduledDate: new Date().toISOString()
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+          }
         );
 
         this.testData.inspectionId = startResponse.data.data.inspectionId;
@@ -427,23 +427,23 @@ class GACPUATTester {
               {
                 category: 'soil_management',
                 status: 'compliant',
-                notes: 'การจัดการดินเป็นไปตามมาตรฐาน GACP',
+                notes: 'การจัดการดินเป็นไปตามมาตรฐาน GACP'
               },
               {
                 category: 'water_management',
                 status: 'compliant',
-                notes: 'ระบบน้ำดี มีแหล่งน้ำสะอาด',
+                notes: 'ระบบน้ำดี มีแหล่งน้ำสะอาด'
               },
               {
                 category: 'pest_management',
                 status: 'compliant',
-                notes: 'ใช้วิธีป้องกันศัตรูพืชแบบชีววิธี',
-              },
-            ],
+                notes: 'ใช้วิธีป้องกันศัตรูพืชแบบชีววิธี'
+              }
+            ]
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+          }
         );
 
         // Check compliance
@@ -454,12 +454,12 @@ class GACPUATTester {
             criteria: [
               { code: 'GACP-01', compliant: true },
               { code: 'GACP-02', compliant: true },
-              { code: 'GACP-03', compliant: true },
-            ],
+              { code: 'GACP-03', compliant: true }
+            ]
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+          }
         );
 
         // Complete inspection
@@ -468,15 +468,15 @@ class GACPUATTester {
           {
             inspectionId: this.testData.inspectionId,
             overallResult: 'pass',
-            recommendations: ['ควรปรับปรุงระบบจัดเก็บบันทึก'],
+            recommendations: ['ควรปรับปรุงระบบจัดเก็บบันทึก']
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+          }
         );
 
         return startResponse.status === 201 && completeResponse.status === 200;
-      },
+      }
     );
   }
 
@@ -490,7 +490,7 @@ class GACPUATTester {
     // Login as Approver
     const loginResponse = await axios.post(`${this.baseURL}/api/auth/dtam/login`, {
       email: 'approver@dtam.go.th',
-      password: 'DTAM123456!',
+      password: 'DTAM123456!'
     });
     this.tokens.approver = loginResponse.data.token;
 
@@ -504,8 +504,8 @@ class GACPUATTester {
         await axios.get(
           `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}/summary`,
           {
-            headers: { Authorization: `Bearer ${this.tokens.approver}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.approver}` }
+          }
         );
 
         // Approve
@@ -515,11 +515,11 @@ class GACPUATTester {
             applicationId: this.testData.applicationId,
             decision: 'approved',
             comments: 'อนุมัติการรับรอง GACP',
-            certificateValidity: '3_years',
+            certificateValidity: '3_years'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.approver}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.approver}` }
+          }
         );
 
         // Generate certificate
@@ -528,17 +528,17 @@ class GACPUATTester {
           {
             applicationId: this.testData.applicationId,
             farmId: this.testData.farmId,
-            validityPeriod: 3,
+            validityPeriod: 3
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.approver}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.approver}` }
+          }
         );
 
         this.testData.certificateId = certResponse.data.data.certificateId;
 
         return certResponse.status === 201;
-      },
+      }
     );
   }
 
@@ -552,7 +552,7 @@ class GACPUATTester {
     // Login as Admin
     const loginResponse = await axios.post(`${this.baseURL}/api/auth/dtam/login`, {
       email: 'admin@dtam.go.th',
-      password: 'Admin123456!',
+      password: 'Admin123456!'
     });
     this.tokens.admin = loginResponse.data.token;
 
@@ -564,7 +564,7 @@ class GACPUATTester {
       async () => {
         // View dashboard
         await axios.get(`${this.baseURL}/api/admin/dashboard`, {
-          headers: { Authorization: `Bearer ${this.tokens.admin}` },
+          headers: { Authorization: `Bearer ${this.tokens.admin}` }
         });
 
         // Create staff
@@ -574,11 +574,11 @@ class GACPUATTester {
             email: `staff_${Date.now()}@dtam.go.th`,
             firstName: 'สมหญิง',
             lastName: 'ทดสอบ',
-            role: 'reviewer',
+            role: 'reviewer'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.admin}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.admin}` }
+          }
         );
 
         // Update settings
@@ -586,26 +586,26 @@ class GACPUATTester {
           `${this.baseURL}/api/admin/settings`,
           {
             maintenance_mode: false,
-            max_applications_per_month: 100,
+            max_applications_per_month: 100
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.admin}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.admin}` }
+          }
         );
 
         // Generate reports
         const reportResponse = await axios.post(
           `${this.baseURL}/api/admin/reports/generate`,
           {
-            reportType: 'monthly_summary',
+            reportType: 'monthly_summary'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.admin}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.admin}` }
+          }
         );
 
         return reportResponse.status === 200;
-      },
+      }
     );
   }
 
@@ -627,19 +627,19 @@ class GACPUATTester {
           password: 'Test123456!',
           firstName: 'Test',
           lastName: 'Auth',
-          role: 'farmer',
+          role: 'farmer'
         });
 
         // Test login
         const loginResponse = await axios.post(`${this.baseURL}/api/auth/login`, {
           email: regResponse.data.data.email || `auth_test_${Date.now()}@test.com`,
-          password: 'Test123456!',
+          password: 'Test123456!'
         });
 
         // Test token validation
         const token = loginResponse.data.token;
         const validateResponse = await axios.get(`${this.baseURL}/api/farmer/dashboard`, {
-          headers: { Authorization: `Bearer ${token}` },
+          headers: { Authorization: `Bearer ${token}` }
         });
 
         return (
@@ -647,7 +647,7 @@ class GACPUATTester {
           loginResponse.status === 200 &&
           validateResponse.status === 200
         );
-      },
+      }
     );
   }
 
@@ -668,11 +668,11 @@ class GACPUATTester {
           `${this.baseURL}/api/applications/create`,
           {
             farmId: this.testData.farmId,
-            applicationType: 'new',
+            applicationType: 'new'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         const appId = createResponse.data.data.applicationId;
@@ -681,16 +681,16 @@ class GACPUATTester {
           `${this.baseURL}/api/applications/${appId}/submit`,
           {},
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         const statusResponse = await axios.get(`${this.baseURL}/api/applications/${appId}/status`, {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
         });
 
         return createResponse.status === 201 && statusResponse.status === 200;
-      },
+      }
     );
   }
 
@@ -712,18 +712,18 @@ class GACPUATTester {
           {
             farmName: 'ฟาร์ม UAT Test',
             location: { province: 'กรุงเทพ', district: 'บางแค' },
-            area: 5.0,
+            area: 5.0
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         const farmId = createResponse.data.data.farmId;
 
         // Read farm
         await axios.get(`${this.baseURL}/api/farm-management/farms/${farmId}`, {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
         });
 
         // Update farm
@@ -731,23 +731,23 @@ class GACPUATTester {
           `${this.baseURL}/api/farm-management/farms/${farmId}`,
           { area: 6.0 },
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         // Delete farm (with validation)
         const deleteResponse = await axios.delete(
           `${this.baseURL}/api/farm-management/farms/${farmId}`,
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         return (
           createResponse.status === 201 &&
           (deleteResponse.status === 200 || deleteResponse.status === 403)
         );
-      },
+      }
     );
   }
 
@@ -766,12 +766,12 @@ class GACPUATTester {
         const statusResponse = await axios.get(
           `${this.baseURL}/api/applications/${this.testData.applicationId}/status`,
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         return statusResponse.status === 200 && statusResponse.data.data.status;
-      },
+      }
     );
   }
 
@@ -792,15 +792,15 @@ class GACPUATTester {
           {
             surveyId: 'uat-survey',
             responses: { q1: 'answer1', q2: 'answer2' },
-            region: 'กลาง',
+            region: 'กลาง'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         return surveyResponse.status === 201;
-      },
+      }
     );
   }
 
@@ -820,15 +820,15 @@ class GACPUATTester {
           `${this.baseURL}/api/standards-comparison/compare`,
           {
             standards: ['GACP', 'GAP', 'Organic', 'EU-GMP'],
-            farmId: this.testData.farmId,
+            farmId: this.testData.farmId
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         return comparisonResponse.status === 200 && comparisonResponse.data.data.results;
-      },
+      }
     );
   }
 
@@ -850,11 +850,11 @@ class GACPUATTester {
           {
             applicationId: this.testData.applicationId,
             documentType: 'uat_test_doc',
-            fileName: 'uat_test.pdf',
+            fileName: 'uat_test.pdf'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+          }
         );
 
         // Review
@@ -862,15 +862,15 @@ class GACPUATTester {
           `${this.baseURL}/api/dtam/documents/review`,
           {
             documentId: 'uat-doc-001',
-            status: 'approved',
+            status: 'approved'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.reviewer}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.reviewer}` }
+          }
         );
 
         return uploadResponse.status === 201;
-      },
+      }
     );
   }
 
@@ -888,7 +888,7 @@ class GACPUATTester {
       async () => {
         // Get notifications
         const notifResponse = await axios.get(`${this.baseURL}/api/notifications`, {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
         });
 
         // Send notification (admin)
@@ -896,15 +896,15 @@ class GACPUATTester {
           `${this.baseURL}/api/admin/notifications/send`,
           {
             type: 'uat_test',
-            message: 'UAT Test Notification',
+            message: 'UAT Test Notification'
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.admin}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.admin}` }
+          }
         );
 
         return notifResponse.status === 200;
-      },
+      }
     );
   }
 
@@ -925,15 +925,15 @@ class GACPUATTester {
           {
             applicationId: this.testData.applicationId,
             farmId: this.testData.farmId,
-            validityPeriod: 3,
+            validityPeriod: 3
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.approver}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.approver}` }
+          }
         );
 
         return certResponse.status === 201 && certResponse.data.data.certificateId;
-      },
+      }
     );
   }
 
@@ -955,16 +955,16 @@ class GACPUATTester {
             reportType: 'uat_monthly_summary',
             dateRange: {
               start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-              end: new Date().toISOString(),
-            },
+              end: new Date().toISOString()
+            }
           },
           {
-            headers: { Authorization: `Bearer ${this.tokens.admin}` },
-          },
+            headers: { Authorization: `Bearer ${this.tokens.admin}` }
+          }
         );
 
         return reportResponse.status === 200 && reportResponse.data.data.reportId;
-      },
+      }
     );
   }
 
@@ -981,7 +981,7 @@ class GACPUATTester {
         this.uatResults[category][type].scenarios.push({
           name,
           status: 'PASS',
-          duration: `${duration}ms`,
+          duration: `${duration}ms`
         });
         this.uatResults[category][type].passed++;
         console.log(`  ✓ ${name} (${duration}ms)`);
@@ -994,7 +994,7 @@ class GACPUATTester {
         name,
         status: 'FAIL',
         error: error.message,
-        duration: `${duration}ms`,
+        duration: `${duration}ms`
       });
       this.uatResults[category][type].failed++;
       console.log(`  ✗ ${name} (${error.message})`);
@@ -1015,7 +1015,7 @@ class GACPUATTester {
       const percentage = total > 0 ? ((results.passed / total) * 100).toFixed(1) : 0;
       console.log(`${this.getRoleIcon(role)} ${this.getRoleName(role)}`);
       console.log(
-        `  ✓ Passed: ${results.passed} | ✗ Failed: ${results.failed} | Success: ${percentage}%`,
+        `  ✓ Passed: ${results.passed} | ✗ Failed: ${results.failed} | Success: ${percentage}%`
       );
     });
 
@@ -1026,7 +1026,7 @@ class GACPUATTester {
       const percentage = total > 0 ? ((results.passed / total) * 100).toFixed(1) : 0;
       console.log(`${this.getSystemIcon(system)} ${this.getSystemName(system)}`);
       console.log(
-        `  ✓ Passed: ${results.passed} | ✗ Failed: ${results.failed} | Success: ${percentage}%`,
+        `  ✓ Passed: ${results.passed} | ✗ Failed: ${results.failed} | Success: ${percentage}%`
       );
     });
 
@@ -1072,7 +1072,7 @@ class GACPUATTester {
       documentReviewer: '📄',
       inspector: '🔍',
       approver: '✅',
-      admin: '⚙️',
+      admin: '⚙️'
     };
     return icons[role] || '👤';
   }
@@ -1083,7 +1083,7 @@ class GACPUATTester {
       documentReviewer: 'พนักงานตรวจเอกสาร (Document Reviewer)',
       inspector: 'พนักงานตรวจสอบฟาร์ม (Farm Inspector)',
       approver: 'พนักงานอนุมัติ (Approver)',
-      admin: 'ผู้ดูแลระบบ (Admin)',
+      admin: 'ผู้ดูแลระบบ (Admin)'
     };
     return names[role] || role;
   }
@@ -1099,7 +1099,7 @@ class GACPUATTester {
       documentManagement: '📁',
       notification: '🔔',
       certificate: '🎓',
-      reporting: '📈',
+      reporting: '📈'
     };
     return icons[system] || '🔧';
   }
@@ -1115,7 +1115,7 @@ class GACPUATTester {
       documentManagement: 'Document Management',
       notification: 'Notification System',
       certificate: 'Certificate Generation',
-      reporting: 'Reporting System',
+      reporting: 'Reporting System'
     };
     return names[system] || system;
   }

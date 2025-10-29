@@ -1,10 +1,10 @@
 /**
  * 🤖 Automated UI Testing Script
  * Run automated tests and generate screenshots
- * 
+ *
  * Usage:
  *   node scripts/automated-ui-test.js
- * 
+ *
  * Requirements:
  *   npm install puppeteer
  */
@@ -22,14 +22,14 @@ const CONFIG = {
   slowMo: 100, // Slow down by 100ms for visibility
   viewport: {
     width: 1920,
-    height: 1080,
+    height: 1080
   },
   users: {
     farmer: { email: 'farmer@example.com', password: 'test123' },
     officer: { email: 'officer@example.com', password: 'test123' },
     inspector: { email: 'inspector@example.com', password: 'test123' },
-    admin: { email: 'admin@example.com', password: 'test123' },
-  },
+    admin: { email: 'admin@example.com', password: 'test123' }
+  }
 };
 
 // Test results storage
@@ -39,7 +39,7 @@ const testResults = {
   failed: 0,
   scenarios: [],
   startTime: new Date(),
-  endTime: null,
+  endTime: null
 };
 
 // Utility functions
@@ -117,9 +117,9 @@ const utils = {
       name: testName,
       passed,
       error,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
-  },
+  }
 };
 
 // Test Scenarios
@@ -147,7 +147,7 @@ const scenarios = {
       // New Application Form
       console.log('\n📝 Testing Application Form...');
       await page.goto(`${CONFIG.baseUrl}/farmer/applications/new`, {
-        waitUntil: 'networkidle2',
+        waitUntil: 'networkidle2'
       });
       await utils.wait(1000);
       await utils.takeScreenshot(page, 'application-form-step1');
@@ -155,7 +155,7 @@ const scenarios = {
       // Step 1: Farm Info
       console.log('  Step 1: Farm Information');
       await page.type('input[name="farmName"], input[value=""]', 'ฟาร์มทดสอบอัตโนมัติ', {
-        delay: 50,
+        delay: 50
       });
       await page.type('input[type="number"]', '10');
       await page.type('textarea', '123 หมู่ 5 ถนนทดสอบ');
@@ -215,7 +215,7 @@ const scenarios = {
       // Review Page (mock ID)
       console.log('\n✅ Testing Review Page...');
       await page.goto(`${CONFIG.baseUrl}/officer/applications/app-001/review`, {
-        waitUntil: 'networkidle2',
+        waitUntil: 'networkidle2'
       });
       await utils.wait(1000);
       await utils.takeScreenshot(page, 'officer-review-page');
@@ -256,22 +256,18 @@ const scenarios = {
       // VDO Call Inspection
       console.log('\n📹 Testing VDO Call Inspection...');
       await page.goto(`${CONFIG.baseUrl}/inspector/inspections/insp-001/vdo-call`, {
-        waitUntil: 'networkidle2',
+        waitUntil: 'networkidle2'
       });
       await utils.wait(1000);
       await utils.takeScreenshot(page, 'inspector-vdo-call');
 
       const hasChecklist = await page.$$('input[type="checkbox"]');
-      utils.recordTest(
-        'Inspector Flow',
-        'VDO Call has checklist',
-        hasChecklist.length >= 8
-      );
+      utils.recordTest('Inspector Flow', 'VDO Call has checklist', hasChecklist.length >= 8);
 
       // On-Site Inspection (Most Important)
       console.log('\n🏭 Testing On-Site Inspection (8 CCPs)...');
       await page.goto(`${CONFIG.baseUrl}/inspector/inspections/insp-001/on-site`, {
-        waitUntil: 'networkidle2',
+        waitUntil: 'networkidle2'
       });
       await utils.wait(2000);
       await utils.takeScreenshot(page, 'inspector-onsite-initial');
@@ -324,7 +320,7 @@ const scenarios = {
       // Approval Page
       console.log('\n✅ Testing Approval Page...');
       await page.goto(`${CONFIG.baseUrl}/admin/applications/app-001/approve`, {
-        waitUntil: 'networkidle2',
+        waitUntil: 'networkidle2'
       });
       await utils.wait(2000);
       await utils.takeScreenshot(page, 'admin-approval-page');
@@ -353,7 +349,7 @@ const scenarios = {
       await utils.takeScreenshot(page, 'admin-flow-error');
       utils.recordTest('Admin Flow', 'Overall Flow', false, error.message);
     }
-  },
+  }
 };
 
 // Generate HTML Report
@@ -552,7 +548,7 @@ async function runTests() {
     browser = await puppeteer.launch({
       headless: CONFIG.headless,
       slowMo: CONFIG.slowMo,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
     const page = await browser.newPage();
@@ -579,9 +575,7 @@ async function runTests() {
     console.log(`Total Tests: ${testResults.total}`);
     console.log(`✅ Passed: ${testResults.passed}`);
     console.log(`❌ Failed: ${testResults.failed}`);
-    console.log(
-      `Pass Rate: ${((testResults.passed / testResults.total) * 100).toFixed(2)}%`
-    );
+    console.log(`Pass Rate: ${((testResults.passed / testResults.total) * 100).toFixed(2)}%`);
     console.log(`Duration: ${((testResults.endTime - testResults.startTime) / 1000).toFixed(2)}s`);
     console.log('\n✅ Testing complete!');
     console.log(`📸 Screenshots: ${CONFIG.screenshotDir}`);

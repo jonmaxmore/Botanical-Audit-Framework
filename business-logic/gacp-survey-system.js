@@ -50,11 +50,11 @@ class GACPSurveySystem extends EventEmitter {
       id: 'gacp-farm-survey-2024',
       title: {
         th: 'แบบสำรวจการปฏิบัติ GACP ในฟาร์มกัญชา',
-        en: 'GACP Cannabis Farm Practices Survey',
+        en: 'GACP Cannabis Farm Practices Survey'
       },
       description: {
         th: 'สำรวจการปฏิบัติตามมาตรฐาน GACP ในฟาร์มกัญชาเพื่อการแพทย์',
-        en: 'Survey on GACP compliance practices in medical cannabis farms',
+        en: 'Survey on GACP compliance practices in medical cannabis farms'
       },
       version: '2.0',
       estimatedTime: 15, // minutes
@@ -63,7 +63,7 @@ class GACPSurveySystem extends EventEmitter {
           stepId: 1,
           title: {
             th: 'ข้อมูลทั่วไปของฟาร์ม',
-            en: 'General Farm Information',
+            en: 'General Farm Information'
           },
           fields: [
             {
@@ -71,7 +71,7 @@ class GACPSurveySystem extends EventEmitter {
               type: 'text',
               label: { th: 'ชื่อฟาร์ม', en: 'Farm Name' },
               required: true,
-              validation: { minLength: 2, maxLength: 100 },
+              validation: { minLength: 2, maxLength: 100 }
             },
             {
               id: 'farm_region',
@@ -82,30 +82,30 @@ class GACPSurveySystem extends EventEmitter {
                 { value: 'northern', label: { th: 'ภาคเหนือ', en: 'Northern' } },
                 { value: 'northeastern', label: { th: 'ภาคอีสาน', en: 'Northeastern' } },
                 { value: 'central', label: { th: 'ภาคกลาง', en: 'Central' } },
-                { value: 'southern', label: { th: 'ภาคใต้', en: 'Southern' } },
-              ],
+                { value: 'southern', label: { th: 'ภาคใต้', en: 'Southern' } }
+              ]
             },
             {
               id: 'farm_size',
               type: 'number',
               label: { th: 'ขนาดพื้นที่ (ตร.ม.)', en: 'Farm Size (sq.m.)' },
               required: true,
-              validation: { min: 1, max: 1000000 },
+              validation: { min: 1, max: 1000000 }
             },
             {
               id: 'years_experience',
               type: 'number',
               label: { th: 'ประสบการณ์ปลูกกัญชา (ปี)', en: 'Cannabis Growing Experience (years)' },
               required: true,
-              validation: { min: 0, max: 50 },
-            },
-          ],
+              validation: { min: 0, max: 50 }
+            }
+          ]
         },
         {
           stepId: 2,
           title: {
             th: 'การจัดการดินและน้ำ',
-            en: 'Soil and Water Management',
+            en: 'Soil and Water Management'
           },
           fields: [
             {
@@ -117,8 +117,8 @@ class GACPSurveySystem extends EventEmitter {
                 { value: 'monthly', label: { th: 'ทุกเดือน', en: 'Monthly' } },
                 { value: 'quarterly', label: { th: 'ทุก 3 เดือน', en: 'Quarterly' } },
                 { value: 'annually', label: { th: 'ทุกปี', en: 'Annually' } },
-                { value: 'never', label: { th: 'ไม่เคยตรวจ', en: 'Never' } },
-              ],
+                { value: 'never', label: { th: 'ไม่เคยตรวจ', en: 'Never' } }
+              ]
             },
             {
               id: 'water_source',
@@ -129,8 +129,8 @@ class GACPSurveySystem extends EventEmitter {
                 { value: 'tap_water', label: { th: 'น้ำประปา', en: 'Tap Water' } },
                 { value: 'well_water', label: { th: 'น้ำบาดาล', en: 'Well Water' } },
                 { value: 'river_water', label: { th: 'น้ำแม่น้ำ', en: 'River Water' } },
-                { value: 'rainwater', label: { th: 'น้ำฝน', en: 'Rainwater' } },
-              ],
+                { value: 'rainwater', label: { th: 'น้ำฝน', en: 'Rainwater' } }
+              ]
             },
             {
               id: 'irrigation_system',
@@ -141,16 +141,16 @@ class GACPSurveySystem extends EventEmitter {
                 { value: 'drip', label: { th: 'ระบบน้ำหยด', en: 'Drip System' } },
                 { value: 'sprinkler', label: { th: 'ระบบสปริงเกลอร์', en: 'Sprinkler System' } },
                 { value: 'manual', label: { th: 'รดน้ำด้วยมือ', en: 'Manual Watering' } },
-                { value: 'flood', label: { th: 'ระบบน้ำท่วม', en: 'Flood System' } },
-              ],
-            },
-          ],
+                { value: 'flood', label: { th: 'ระบบน้ำท่วม', en: 'Flood System' } }
+              ]
+            }
+          ]
         },
         {
           stepId: 3,
           title: {
             th: 'การจัดการพันธุ์และการปลูก',
-            en: 'Genetics and Cultivation Management',
+            en: 'Genetics and Cultivation Management'
           },
           fields: [
             {
@@ -161,15 +161,15 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 {
                   value: 'licensed_supplier',
-                  label: { th: 'ผู้จำหน่ายที่ได้รับใบอนุญาต', en: 'Licensed Supplier' },
+                  label: { th: 'ผู้จำหน่ายที่ได้รับใบอนุญาต', en: 'Licensed Supplier' }
                 },
                 {
                   value: 'government_agency',
-                  label: { th: 'หน่วยงานรัฐ', en: 'Government Agency' },
+                  label: { th: 'หน่วยงานรัฐ', en: 'Government Agency' }
                 },
                 { value: 'self_bred', label: { th: 'พัฒนาพันธุ์เอง', en: 'Self-bred' } },
-                { value: 'other', label: { th: 'อื่นๆ', en: 'Other' } },
-              ],
+                { value: 'other', label: { th: 'อื่นๆ', en: 'Other' } }
+              ]
             },
             {
               id: 'cultivation_method',
@@ -180,8 +180,8 @@ class GACPSurveySystem extends EventEmitter {
                 { value: 'indoor', label: { th: 'ในอาคาร', en: 'Indoor' } },
                 { value: 'greenhouse', label: { th: 'เรือนกระจก', en: 'Greenhouse' } },
                 { value: 'outdoor', label: { th: 'กลางแจ้ง', en: 'Outdoor' } },
-                { value: 'mixed', label: { th: 'แบบผสม', en: 'Mixed' } },
-              ],
+                { value: 'mixed', label: { th: 'แบบผสม', en: 'Mixed' } }
+              ]
             },
             {
               id: 'plant_training_techniques',
@@ -192,22 +192,22 @@ class GACPSurveySystem extends EventEmitter {
                 { value: 'topping', label: { th: 'การตัดยอด (Topping)', en: 'Topping' } },
                 {
                   value: 'lst',
-                  label: { th: 'การผูกโค้ง (LST)', en: 'Low Stress Training (LST)' },
+                  label: { th: 'การผูกโค้ง (LST)', en: 'Low Stress Training (LST)' }
                 },
                 {
                   value: 'scrog',
-                  label: { th: 'การใช้ตาข่าย (SCROG)', en: 'Screen of Green (SCROG)' },
+                  label: { th: 'การใช้ตาข่าย (SCROG)', en: 'Screen of Green (SCROG)' }
                 },
-                { value: 'defoliation', label: { th: 'การตัดใบ', en: 'Defoliation' } },
-              ],
-            },
-          ],
+                { value: 'defoliation', label: { th: 'การตัดใบ', en: 'Defoliation' } }
+              ]
+            }
+          ]
         },
         {
           stepId: 4,
           title: {
             th: 'การจัดการศัตรูพืชและโรค',
-            en: 'Pest and Disease Management',
+            en: 'Pest and Disease Management'
           },
           fields: [
             {
@@ -218,21 +218,21 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 {
                   value: 'organic_pesticides',
-                  label: { th: 'ยาฆ่าแมลงอินทรีย์', en: 'Organic Pesticides' },
+                  label: { th: 'ยาฆ่าแมลงอินทรีย์', en: 'Organic Pesticides' }
                 },
                 {
                   value: 'beneficial_insects',
-                  label: { th: 'แมลงผู้ช่วย', en: 'Beneficial Insects' },
+                  label: { th: 'แมลงผู้ช่วย', en: 'Beneficial Insects' }
                 },
                 {
                   value: 'companion_planting',
-                  label: { th: 'การปลูกพืชแบบเกื้อกูล', en: 'Companion Planting' },
+                  label: { th: 'การปลูกพืชแบบเกื้อกูล', en: 'Companion Planting' }
                 },
                 {
                   value: 'physical_barriers',
-                  label: { th: 'การป้องกันด้วยกายภาพ', en: 'Physical Barriers' },
-                },
-              ],
+                  label: { th: 'การป้องกันด้วยกายภาพ', en: 'Physical Barriers' }
+                }
+              ]
             },
             {
               id: 'disease_prevention',
@@ -242,23 +242,23 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 {
                   value: 'proper_ventilation',
-                  label: { th: 'การระบายอากาศที่เหมาะสม', en: 'Proper Ventilation' },
+                  label: { th: 'การระบายอากาศที่เหมาะสม', en: 'Proper Ventilation' }
                 },
                 {
                   value: 'humidity_control',
-                  label: { th: 'การควบคุมความชื้น', en: 'Humidity Control' },
+                  label: { th: 'การควบคุมความชื้น', en: 'Humidity Control' }
                 },
                 { value: 'sterilization', label: { th: 'การฆ่าเชื้อ', en: 'Sterilization' } },
-                { value: 'quarantine', label: { th: 'การกักกัน', en: 'Quarantine' } },
-              ],
-            },
-          ],
+                { value: 'quarantine', label: { th: 'การกักกัน', en: 'Quarantine' } }
+              ]
+            }
+          ]
         },
         {
           stepId: 5,
           title: {
             th: 'การเก็บเกี่ยวและการแปรรูป',
-            en: 'Harvesting and Processing',
+            en: 'Harvesting and Processing'
           },
           fields: [
             {
@@ -269,18 +269,18 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 {
                   value: 'trichome_inspection',
-                  label: { th: 'ตรวจดูไตรโคม', en: 'Trichome Inspection' },
+                  label: { th: 'ตรวจดูไตรโคม', en: 'Trichome Inspection' }
                 },
                 {
                   value: 'flowering_days',
-                  label: { th: 'นับวันออกดอก', en: 'Flowering Days Count' },
+                  label: { th: 'นับวันออกดอก', en: 'Flowering Days Count' }
                 },
                 {
                   value: 'visual_appearance',
-                  label: { th: 'ดูลักษณะภายนอก', en: 'Visual Appearance' },
+                  label: { th: 'ดูลักษณะภายนอก', en: 'Visual Appearance' }
                 },
-                { value: 'experience', label: { th: 'ประสบการณ์', en: 'Experience' } },
-              ],
+                { value: 'experience', label: { th: 'ประสบการณ์', en: 'Experience' } }
+              ]
             },
             {
               id: 'drying_method',
@@ -290,8 +290,8 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 { value: 'hang_dry', label: { th: 'แขวนอบแห้ง', en: 'Hang Dry' } },
                 { value: 'rack_dry', label: { th: 'อบบนชั้นวาง', en: 'Rack Dry' } },
-                { value: 'machine_dry', label: { th: 'เครื่องอบแห้ง', en: 'Machine Dry' } },
-              ],
+                { value: 'machine_dry', label: { th: 'เครื่องอบแห้ง', en: 'Machine Dry' } }
+              ]
             },
             {
               id: 'curing_duration',
@@ -302,16 +302,16 @@ class GACPSurveySystem extends EventEmitter {
                 { value: '1-2weeks', label: { th: '1-2 สัปดาห์', en: '1-2 weeks' } },
                 { value: '3-4weeks', label: { th: '3-4 สัปดาห์', en: '3-4 weeks' } },
                 { value: '1-2months', label: { th: '1-2 เดือน', en: '1-2 months' } },
-                { value: 'longer', label: { th: 'มากกว่า 2 เดือน', en: 'Longer than 2 months' } },
-              ],
-            },
-          ],
+                { value: 'longer', label: { th: 'มากกว่า 2 เดือน', en: 'Longer than 2 months' } }
+              ]
+            }
+          ]
         },
         {
           stepId: 6,
           title: {
             th: 'การจัดเก็บและการขนส่ง',
-            en: 'Storage and Transportation',
+            en: 'Storage and Transportation'
           },
           fields: [
             {
@@ -322,18 +322,18 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 {
                   value: 'climate_controlled',
-                  label: { th: 'ควบคุมอุณหภูมิและความชื้น', en: 'Climate Controlled' },
+                  label: { th: 'ควบคุมอุณหภูมิและความชื้น', en: 'Climate Controlled' }
                 },
                 {
                   value: 'airtight_containers',
-                  label: { th: 'ภาชนะปิดสนิท', en: 'Airtight Containers' },
+                  label: { th: 'ภาชนะปิดสนิท', en: 'Airtight Containers' }
                 },
                 { value: 'light_protection', label: { th: 'ป้องกันแสง', en: 'Light Protection' } },
                 {
                   value: 'pest_protection',
-                  label: { th: 'ป้องกันศัตรูพืช', en: 'Pest Protection' },
-                },
-              ],
+                  label: { th: 'ป้องกันศัตรูพืช', en: 'Pest Protection' }
+                }
+              ]
             },
             {
               id: 'transportation_method',
@@ -343,22 +343,22 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 {
                   value: 'refrigerated_truck',
-                  label: { th: 'รถห้องเย็น', en: 'Refrigerated Truck' },
+                  label: { th: 'รถห้องเย็น', en: 'Refrigerated Truck' }
                 },
                 { value: 'regular_vehicle', label: { th: 'รถยนต์ทั่วไป', en: 'Regular Vehicle' } },
                 {
                   value: 'specialized_courier',
-                  label: { th: 'บริษัทขนส่งเฉพาะทาง', en: 'Specialized Courier' },
-                },
-              ],
-            },
-          ],
+                  label: { th: 'บริษัทขนส่งเฉพาะทาง', en: 'Specialized Courier' }
+                }
+              ]
+            }
+          ]
         },
         {
           stepId: 7,
           title: {
             th: 'การปฏิบัติตามมาตรฐาน GACP',
-            en: 'GACP Compliance Practices',
+            en: 'GACP Compliance Practices'
           },
           fields: [
             {
@@ -371,13 +371,13 @@ class GACPSurveySystem extends EventEmitter {
                 { value: 'batch_records', label: { th: 'บันทึกชุดการผลิต', en: 'Batch Records' } },
                 {
                   value: 'quality_tests',
-                  label: { th: 'ผลการทดสอบคุณภาพ', en: 'Quality Test Results' },
+                  label: { th: 'ผลการทดสอบคุณภาพ', en: 'Quality Test Results' }
                 },
                 {
                   value: 'traceability_system',
-                  label: { th: 'ระบบตรวจสอบย้อนกลับ', en: 'Traceability System' },
-                },
-              ],
+                  label: { th: 'ระบบตรวจสอบย้อนกลับ', en: 'Traceability System' }
+                }
+              ]
             },
             {
               id: 'staff_training',
@@ -387,12 +387,12 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 {
                   value: 'regular_monthly',
-                  label: { th: 'สม่ำเสมอทุกเดือน', en: 'Regular Monthly' },
+                  label: { th: 'สม่ำเสมอทุกเดือน', en: 'Regular Monthly' }
                 },
                 { value: 'quarterly', label: { th: 'ทุกไตรมาส', en: 'Quarterly' } },
                 { value: 'annually', label: { th: 'ทุกปี', en: 'Annually' } },
-                { value: 'none', label: { th: 'ไม่มี', en: 'None' } },
-              ],
+                { value: 'none', label: { th: 'ไม่มี', en: 'None' } }
+              ]
             },
             {
               id: 'gacp_compliance_level',
@@ -402,24 +402,24 @@ class GACPSurveySystem extends EventEmitter {
               options: [
                 {
                   value: 'full_compliance',
-                  label: { th: 'ปฏิบัติตามครบถ้วน 100%', en: 'Full Compliance 100%' },
+                  label: { th: 'ปฏิบัติตามครบถ้วน 100%', en: 'Full Compliance 100%' }
                 },
                 {
                   value: 'mostly_compliant',
-                  label: { th: 'ปฏิบัติตามส่วนใหญ่ 80%+', en: 'Mostly Compliant 80%+' },
+                  label: { th: 'ปฏิบัติตามส่วนใหญ่ 80%+', en: 'Mostly Compliant 80%+' }
                 },
                 {
                   value: 'partially_compliant',
-                  label: { th: 'ปฏิบัติตามบางส่วน 50-80%', en: 'Partially Compliant 50-80%' },
+                  label: { th: 'ปฏิบัติตามบางส่วน 50-80%', en: 'Partially Compliant 50-80%' }
                 },
                 {
                   value: 'minimal_compliance',
-                  label: { th: 'ปฏิบัติตามน้อย <50%', en: 'Minimal Compliance <50%' },
-                },
-              ],
-            },
-          ],
-        },
+                  label: { th: 'ปฏิบัติตามน้อย <50%', en: 'Minimal Compliance <50%' }
+                }
+              ]
+            }
+          ]
+        }
       ],
       scoring: {
         maxScore: 100,
@@ -430,9 +430,9 @@ class GACPSurveySystem extends EventEmitter {
           step4: 15, // Pest & Disease
           step5: 15, // Harvest & Process
           step6: 15, // Storage & Transport
-          step7: 15, // GACP Compliance
-        },
-      },
+          step7: 15 // GACP Compliance
+        }
+      }
     };
 
     this.templates.set('gacp-farm-survey-2024', farmSurveyTemplate);
@@ -442,7 +442,7 @@ class GACPSurveySystem extends EventEmitter {
       id: 'regional-analytics-2024',
       title: {
         th: 'การวิเคราะห์ข้อมูลแยกตามภูมิภาค',
-        en: 'Regional Analytics Dashboard',
+        en: 'Regional Analytics Dashboard'
       },
       metrics: [
         'average_farm_size',
@@ -450,14 +450,14 @@ class GACPSurveySystem extends EventEmitter {
         'cultivation_method_popularity',
         'pest_control_preferences',
         'harvest_timing_accuracy',
-        'documentation_completeness',
+        'documentation_completeness'
       ],
       visualizations: [
         'regional_comparison_chart',
         'compliance_heatmap',
         'practice_adoption_rates',
-        'seasonal_trends',
-      ],
+        'seasonal_trends'
+      ]
     };
 
     this.templates.set('regional-analytics-2024', analyticsTemplate);
@@ -471,7 +471,7 @@ class GACPSurveySystem extends EventEmitter {
         completionRate: 0,
         topPractices: [],
         improvementAreas: [],
-        lastUpdated: new Date(),
+        lastUpdated: new Date()
       });
     });
   }
@@ -499,11 +499,11 @@ class GACPSurveySystem extends EventEmitter {
           farm_size: 2500,
           years_experience: 8,
           soil_testing_frequency: 'quarterly',
-          gacp_compliance_level: 'mostly_compliant',
+          gacp_compliance_level: 'mostly_compliant'
         },
         score: 85,
         completedAt: new Date('2024-01-15'),
-        language: 'th',
+        language: 'th'
       },
       {
         id: uuidv4(),
@@ -516,12 +516,12 @@ class GACPSurveySystem extends EventEmitter {
           farm_size: 1800,
           years_experience: 5,
           soil_testing_frequency: 'monthly',
-          gacp_compliance_level: 'full_compliance',
+          gacp_compliance_level: 'full_compliance'
         },
         score: 92,
         completedAt: new Date('2024-01-20'),
-        language: 'en',
-      },
+        language: 'en'
+      }
     ];
 
     sampleResponses.forEach(response => {
@@ -554,8 +554,8 @@ class GACPSurveySystem extends EventEmitter {
         totalStarted: 0,
         totalCompleted: 0,
         averageCompletionTime: 0,
-        dropoffPoints: [],
-      },
+        dropoffPoints: []
+      }
     };
 
     this.surveyData.set(surveyId, survey);
@@ -581,7 +581,7 @@ class GACPSurveySystem extends EventEmitter {
       startedAt: new Date(),
       lastUpdated: new Date(),
       status: 'in_progress',
-      completionPercentage: 0,
+      completionPercentage: 0
     };
 
     this.responses.set(responseId, response);
@@ -634,7 +634,7 @@ class GACPSurveySystem extends EventEmitter {
       success: true,
       response,
       nextStep: stepId < survey.steps.length ? stepId + 1 : null,
-      isComplete: stepId === survey.steps.length,
+      isComplete: stepId === survey.steps.length
     };
   }
 
@@ -674,7 +674,7 @@ class GACPSurveySystem extends EventEmitter {
 
     // Update average completion time
     const allCompletedResponses = Array.from(this.responses.values()).filter(
-      r => r.surveyId === survey.id && r.status === 'completed',
+      r => r.surveyId === survey.id && r.status === 'completed'
     );
 
     const totalTime = allCompletedResponses.reduce((sum, r) => sum + r.completionTimeMinutes, 0);
@@ -709,12 +709,12 @@ class GACPSurveySystem extends EventEmitter {
         case 'text':
           if (field.validation?.minLength && value.length < field.validation.minLength) {
             errors.push(
-              `Field '${field.id}' must be at least ${field.validation.minLength} characters`,
+              `Field '${field.id}' must be at least ${field.validation.minLength} characters`
             );
           }
           if (field.validation?.maxLength && value.length > field.validation.maxLength) {
             errors.push(
-              `Field '${field.id}' must not exceed ${field.validation.maxLength} characters`,
+              `Field '${field.id}' must not exceed ${field.validation.maxLength} characters`
             );
           }
           break;
@@ -748,7 +748,7 @@ class GACPSurveySystem extends EventEmitter {
             const invalidOptions = value.filter(v => !validOptions.includes(v));
             if (invalidOptions.length > 0) {
               errors.push(
-                `Field '${field.id}' contains invalid options: ${invalidOptions.join(', ')}`,
+                `Field '${field.id}' contains invalid options: ${invalidOptions.join(', ')}`
               );
             }
           }
@@ -758,7 +758,7 @@ class GACPSurveySystem extends EventEmitter {
 
     return {
       isValid: errors.length === 0,
-      errors,
+      errors
     };
   }
 
@@ -790,7 +790,7 @@ class GACPSurveySystem extends EventEmitter {
               monthly: 1.0,
               quarterly: 0.8,
               annually: 0.6,
-              never: 0.0,
+              never: 0.0
             };
             stepScore += complianceValues[value] || 0.7; // Default medium score
           } else if (field.type === 'checkbox') {
@@ -821,7 +821,7 @@ class GACPSurveySystem extends EventEmitter {
 
     // Update average score
     const allRegionalResponses = Array.from(this.responses.values()).filter(
-      r => r.region === region && r.status === 'completed',
+      r => r.region === region && r.status === 'completed'
     );
 
     const totalScore = allRegionalResponses.reduce((sum, r) => sum + (r.score || 0), 0);
@@ -830,7 +830,7 @@ class GACPSurveySystem extends EventEmitter {
     // Update completion rate
     const startedResponses = Array.from(this.responses.values()).filter(r => r.region === region);
     analytics.completionRate = Math.round(
-      (allRegionalResponses.length / startedResponses.length) * 100,
+      (allRegionalResponses.length / startedResponses.length) * 100
     );
 
     analytics.lastUpdated = new Date();
@@ -860,7 +860,7 @@ class GACPSurveySystem extends EventEmitter {
     }
 
     const responses = Array.from(this.responses.values()).filter(
-      r => r.surveyId === surveyId && r.status === 'completed',
+      r => r.surveyId === surveyId && r.status === 'completed'
     );
 
     const report = {
@@ -868,7 +868,7 @@ class GACPSurveySystem extends EventEmitter {
         id: survey.id,
         title: survey.title,
         totalResponses: responses.length,
-        generatedAt: new Date(),
+        generatedAt: new Date()
       },
       overview: {
         averageScore:
@@ -876,11 +876,11 @@ class GACPSurveySystem extends EventEmitter {
             ? Math.round(responses.reduce((sum, r) => sum + r.score, 0) / responses.length)
             : 0,
         averageCompletionTime: survey.analytics.averageCompletionTime,
-        completionRate: (survey.analytics.totalCompleted / survey.analytics.totalStarted) * 100,
+        completionRate: (survey.analytics.totalCompleted / survey.analytics.totalStarted) * 100
       },
       regionalBreakdown: {},
       practiceAnalysis: {},
-      recommendations: [],
+      recommendations: []
     };
 
     // Regional breakdown
@@ -890,9 +890,9 @@ class GACPSurveySystem extends EventEmitter {
         report.regionalBreakdown[region] = {
           count: regionalResponses.length,
           averageScore: Math.round(
-            regionalResponses.reduce((sum, r) => sum + r.score, 0) / regionalResponses.length,
+            regionalResponses.reduce((sum, r) => sum + r.score, 0) / regionalResponses.length
           ),
-          percentage: ((regionalResponses.length / responses.length) * 100).toFixed(1),
+          percentage: ((regionalResponses.length / responses.length) * 100).toFixed(1)
         };
       }
     });
@@ -911,7 +911,7 @@ class GACPSurveySystem extends EventEmitter {
       soilTesting: {},
       cultivationMethods: {},
       pestControl: {},
-      gacpCompliance: {},
+      gacpCompliance: {}
     };
 
     responses.forEach(response => {
@@ -961,12 +961,12 @@ class GACPSurveySystem extends EventEmitter {
         priority: 'high',
         title: {
           th: 'ปรับปรุงคะแนนโดยรวม',
-          en: 'Improve Overall Score',
+          en: 'Improve Overall Score'
         },
         description: {
           th: 'คะแนนเฉลี่ยต่ำกว่า 70% ควรปรับปรุงการปฏิบัติตามมาตรฐาน GACP',
-          en: 'Average score below 70%, should improve GACP compliance practices',
-        },
+          en: 'Average score below 70%, should improve GACP compliance practices'
+        }
       });
     }
 
@@ -979,12 +979,12 @@ class GACPSurveySystem extends EventEmitter {
         priority: 'medium',
         title: {
           th: 'ลดความแตกต่างระหว่างภูมิภาค',
-          en: 'Reduce Regional Disparities',
+          en: 'Reduce Regional Disparities'
         },
         description: {
           th: 'มีความแตกต่างคะแนนระหว่างภูมิภาคมาก ควรจัดการฝึกอบรมเฉพาะพื้นที่',
-          en: 'Large score differences between regions, consider region-specific training',
-        },
+          en: 'Large score differences between regions, consider region-specific training'
+        }
       });
     }
 
@@ -1029,7 +1029,7 @@ class GACPSurveySystem extends EventEmitter {
 
   async exportSurveyData(surveyId, format = 'json') {
     const responses = Array.from(this.responses.values()).filter(
-      r => r.surveyId === surveyId && r.status === 'completed',
+      r => r.surveyId === surveyId && r.status === 'completed'
     );
 
     switch (format.toLowerCase()) {
@@ -1067,7 +1067,7 @@ class GACPSurveySystem extends EventEmitter {
         response.id,
         response.region || '',
         response.score || '',
-        response.completedAt ? response.completedAt.toISOString() : '',
+        response.completedAt ? response.completedAt.toISOString() : ''
       ];
 
       // Add field values
@@ -1103,7 +1103,7 @@ class GACPSurveySystem extends EventEmitter {
       title: template.title,
       description: template.description,
       steps: template.steps.length,
-      estimatedTime: template.estimatedTime,
+      estimatedTime: template.estimatedTime
     }));
   }
 
@@ -1119,7 +1119,7 @@ class GACPSurveySystem extends EventEmitter {
     const totalSurveys = this.surveyData.size;
     const totalResponses = this.responses.size;
     const completedResponses = Array.from(this.responses.values()).filter(
-      r => r.status === 'completed',
+      r => r.status === 'completed'
     ).length;
 
     return {
@@ -1129,7 +1129,7 @@ class GACPSurveySystem extends EventEmitter {
       completionRate:
         totalResponses > 0 ? ((completedResponses / totalResponses) * 100).toFixed(1) : 0,
       regionalBreakdown: await this.getRegionalAnalytics(),
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: new Date().toISOString()
     };
   }
 }

@@ -73,18 +73,21 @@
 ## 🎨 UI/UX Features ที่ใช้
 
 ### Dashboard-First Design
+
 - ✅ Task-oriented interface
 - ✅ Real-time status updates
 - ✅ Quick actions
 - ✅ Stats cards
 
 ### ERP-Style Components
+
 - ✅ Sortable tables
 - ✅ Filterable data
 - ✅ Search functionality
 - ✅ Pagination ready
 
 ### Modern UI Elements
+
 - ✅ Kanban boards
 - ✅ Timeline views
 - ✅ Progress bars
@@ -93,6 +96,7 @@
 - ✅ Tab navigation
 
 ### Responsive Design
+
 - ✅ Mobile-friendly
 - ✅ Grid layouts
 - ✅ Tailwind CSS
@@ -124,6 +128,7 @@
 ## 🎯 Workflow Coverage
 
 ### Farmer Journey
+
 1. ✅ ลงทะเบียน → Login
 2. ✅ สร้างฟาร์ม → จัดการฟาร์ม
 3. ✅ ยื่นคำขอ → ติดตามสถานะ
@@ -132,12 +137,14 @@
 6. ✅ ได้ใบรับรอง → ดาวน์โหลด
 
 ### Task Management
+
 - ✅ แสดงงานที่ต้องทำ
 - ✅ Priority + Deadline
 - ✅ Kanban + List view
 - ✅ Link to details
 
 ### Real-time Updates
+
 - ✅ Status changes
 - ✅ Notifications
 - ✅ Comments
@@ -148,6 +155,7 @@
 ## 🚀 Next Steps
 
 ### 1. เชื่อม Backend APIs
+
 - [ ] Connect to `/api/applications`
 - [ ] Connect to `/api/farms`
 - [ ] Connect to `/api/certificates`
@@ -155,16 +163,19 @@
 - [ ] Connect to `/api/smart-agriculture`
 
 ### 2. Add Authentication
+
 - [ ] Protected routes
 - [ ] User context
 - [ ] JWT tokens
 
 ### 3. Add Real-time Features
+
 - [ ] Socket.IO integration
 - [ ] Live notifications
 - [ ] Status updates
 
 ### 4. Testing
+
 - [ ] Unit tests
 - [ ] Integration tests
 - [ ] E2E tests
@@ -173,13 +184,13 @@
 
 ## 📈 Statistics
 
-| Metric | Value |
-|--------|-------|
-| Total Pages Created | 10 |
-| Lines of Code | ~2,500 |
-| Components | 10 |
-| Time Taken | ~1 hour |
-| Status | ✅ Complete |
+| Metric              | Value       |
+| ------------------- | ----------- |
+| Total Pages Created | 10          |
+| Lines of Code       | ~2,500      |
+| Components          | 10          |
+| Time Taken          | ~1 hour     |
+| Status              | ✅ Complete |
 
 ---
 
@@ -190,6 +201,7 @@
 ทุกหน้าพร้อมใช้งาน สามารถเริ่มเชื่อม Backend APIs ได้เลย!
 
 **ทดสอบได้ที่:**
+
 ```bash
 cd apps/farmer-portal
 npm run dev
@@ -197,6 +209,7 @@ npm run dev
 ```
 
 **หน้าที่ทดสอบได้:**
+
 - http://localhost:3001/tasks
 - http://localhost:3001/applications
 - http://localhost:3001/application

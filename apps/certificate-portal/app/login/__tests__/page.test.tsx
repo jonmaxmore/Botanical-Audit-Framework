@@ -76,7 +76,7 @@ describe('LoginPage', () => {
   });
 
   describe('Form Interaction', () => {
-    it('should allow typing in email field', async() => {
+    it('should allow typing in email field', async () => {
       const user = userEvent.setup({ delay: null });
       render(<LoginPage />);
       const emailInput = screen.getByLabelText(/อีเมล/i);
@@ -84,7 +84,7 @@ describe('LoginPage', () => {
       expect(emailInput).toHaveValue('test@example.com');
     });
 
-    it('should allow typing in password field', async() => {
+    it('should allow typing in password field', async () => {
       const user = userEvent.setup({ delay: null });
       render(<LoginPage />);
       const passwordInput = screen.getByLabelText(/รหัสผ่าน/i);
@@ -92,7 +92,7 @@ describe('LoginPage', () => {
       expect(passwordInput).toHaveValue('password123');
     });
 
-    it('should toggle password visibility', async() => {
+    it('should toggle password visibility', async () => {
       const user = userEvent.setup({ delay: null });
       render(<LoginPage />);
       const passwordInput = screen.getByLabelText(/รหัสผ่าน/i);
@@ -100,7 +100,7 @@ describe('LoginPage', () => {
       const visibilityToggle = toggleButtons.find(
         btn =>
           btn.querySelector('[data-testid="VisibilityOffIcon"]') ||
-          btn.querySelector('[data-testid="VisibilityIcon"]'),
+          btn.querySelector('[data-testid="VisibilityIcon"]')
       );
 
       expect(passwordInput).toHaveAttribute('type', 'password');
@@ -113,7 +113,7 @@ describe('LoginPage', () => {
   });
 
   describe('Login Success', () => {
-    it('should login successfully with correct credentials', async() => {
+    it('should login successfully with correct credentials', async () => {
       const user = userEvent.setup({ delay: null });
       render(<LoginPage />);
 
@@ -130,13 +130,13 @@ describe('LoginPage', () => {
       await waitFor(() => {
         expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
           'cert_token',
-          'demo-token-certificate-officer',
+          'demo-token-certificate-officer'
         );
       });
 
       await waitFor(() => {
         expect(mockEnqueueSnackbar).toHaveBeenCalledWith('เข้าสู่ระบบสำเร็จ!', {
-          variant: 'success',
+          variant: 'success'
         });
       });
 
@@ -145,7 +145,7 @@ describe('LoginPage', () => {
       });
     });
 
-    it('should store user data in localStorage', async() => {
+    it('should store user data in localStorage', async () => {
       const user = userEvent.setup({ delay: null });
       render(<LoginPage />);
 
@@ -158,14 +158,14 @@ describe('LoginPage', () => {
       await waitFor(() => {
         expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
           'cert_user',
-          expect.stringContaining('certificate_officer'),
+          expect.stringContaining('certificate_officer')
         );
       });
     });
   });
 
   describe('Login Failure', () => {
-    it('should show error with incorrect credentials', async() => {
+    it('should show error with incorrect credentials', async () => {
       const user = userEvent.setup({ delay: null });
       render(<LoginPage />);
 
@@ -180,7 +180,7 @@ describe('LoginPage', () => {
       });
     });
 
-    it('should not redirect on failed login', async() => {
+    it('should not redirect on failed login', async () => {
       const user = userEvent.setup({ delay: null });
       render(<LoginPage />);
 
@@ -199,7 +199,7 @@ describe('LoginPage', () => {
   });
 
   describe('Loading State', () => {
-    it('should show loading state during login', async() => {
+    it('should show loading state during login', async () => {
       const user = userEvent.setup({ delay: null });
       render(<LoginPage />);
 

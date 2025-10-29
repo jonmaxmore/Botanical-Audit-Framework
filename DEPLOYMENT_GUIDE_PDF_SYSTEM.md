@@ -3,6 +3,7 @@
 ## 🚀 Pre-Deployment Checklist
 
 ### ✅ Prerequisites
+
 - [x] Node.js 18+ installed
 - [x] MongoDB Atlas connection ready
 - [x] Redis instance available
@@ -24,6 +25,7 @@ npm list puppeteer qrcode
 ```
 
 **Expected Output:**
+
 ```
 ├── puppeteer@22.0.0
 └── qrcode@1.5.3
@@ -34,6 +36,7 @@ npm list puppeteer qrcode
 ## 🔧 Step 2: Environment Configuration
 
 ### Backend (.env)
+
 ```env
 # Existing variables
 NODE_ENV=production
@@ -48,6 +51,7 @@ JWT_SECRET_DTAM=...
 ```
 
 ### Frontend (.env.local)
+
 ```env
 # Admin Portal
 NEXT_PUBLIC_API_URL=https://api.gacp.dtam.go.th
@@ -81,6 +85,7 @@ npm run start # Test production build
 ## 🧪 Step 4: Testing
 
 ### Local Testing
+
 ```bash
 # Start backend
 cd apps/backend
@@ -98,6 +103,7 @@ curl -X POST http://localhost:3000/api/pdf/inspection-report/TEST001 \
 ```
 
 ### Frontend Testing
+
 ```bash
 # Test in browser
 http://localhost:3002 # Admin Portal
@@ -112,6 +118,7 @@ http://localhost:3001 # Farmer Portal
 ## 🐳 Step 5: Docker Deployment (Recommended)
 
 ### Create Dockerfile for Backend
+
 ```dockerfile
 # apps/backend/Dockerfile
 FROM node:18-alpine
@@ -141,6 +148,7 @@ CMD ["node", "atlas-server.js"]
 ```
 
 ### Build and Run
+
 ```bash
 # Build image
 docker build -t gacp-backend:latest -f apps/backend/Dockerfile apps/backend
@@ -213,6 +221,7 @@ vercel --prod
 ## 🔒 Step 7: Security Configuration
 
 ### Nginx Reverse Proxy
+
 ```nginx
 # /etc/nginx/sites-available/gacp-api
 server {
@@ -232,7 +241,7 @@ server {
         proxy_set_header Connection 'upgrade';
         proxy_set_header Host $host;
         proxy_cache_bypass $http_upgrade;
-        
+
         # Timeout for PDF generation
         proxy_read_timeout 60s;
         proxy_connect_timeout 60s;
@@ -242,6 +251,7 @@ server {
 ```
 
 ### Rate Limiting
+
 ```javascript
 // Already implemented in backend
 // apps/backend/atlas-server.js uses express-rate-limit
@@ -252,6 +262,7 @@ server {
 ## 📊 Step 8: Monitoring Setup
 
 ### PM2 Monitoring
+
 ```bash
 # Install PM2
 npm install -g pm2
@@ -267,6 +278,7 @@ pm2 set pm2-logrotate:retain 7
 ```
 
 ### Health Check Endpoint
+
 ```bash
 # Add to monitoring system
 curl https://api.gacp.dtam.go.th/api/pdf/health
@@ -286,6 +298,7 @@ curl https://api.gacp.dtam.go.th/api/pdf/health
 ## 🧹 Step 9: Cleanup & Optimization
 
 ### Puppeteer Optimization
+
 ```javascript
 // Already implemented in pdf-generator.service.js
 // - Browser instance caching
@@ -294,6 +307,7 @@ curl https://api.gacp.dtam.go.th/api/pdf/health
 ```
 
 ### Disk Space Management
+
 ```bash
 # Clean old PDFs (if storing temporarily)
 find /tmp -name "*.pdf" -mtime +1 -delete
@@ -330,6 +344,7 @@ echo "✅ Deployment complete!"
 ```
 
 **Make executable:**
+
 ```bash
 chmod +x deploy-pdf-system.sh
 ./deploy-pdf-system.sh
@@ -340,6 +355,7 @@ chmod +x deploy-pdf-system.sh
 ## 📝 Step 11: Post-Deployment Verification
 
 ### Test All Endpoints
+
 ```bash
 # Health check
 curl https://api.gacp.dtam.go.th/api/pdf/health
@@ -357,6 +373,7 @@ curl -X POST https://api.gacp.dtam.go.th/api/pdf/certificate/TEST001 \
 ```
 
 ### Frontend Testing
+
 ```bash
 # Test in production
 https://admin.gacp.dtam.go.th
@@ -376,6 +393,7 @@ https://farmer.gacp.dtam.go.th
 ### Issue: Puppeteer fails to launch
 
 **Solution:**
+
 ```bash
 # Install missing dependencies
 sudo apt-get install -y \
@@ -400,6 +418,7 @@ sudo apt-get install -y \
 ### Issue: Thai fonts not rendering
 
 **Solution:**
+
 ```bash
 # Install Thai fonts
 sudo apt-get install -y fonts-thai-tlwg
@@ -411,6 +430,7 @@ sudo apt-get install -y fonts-thai-tlwg
 ### Issue: PDF generation timeout
 
 **Solution:**
+
 ```javascript
 // Increase timeout in nginx
 proxy_read_timeout 120s;
@@ -422,6 +442,7 @@ proxy_read_timeout 120s;
 ### Issue: Memory issues
 
 **Solution:**
+
 ```bash
 # Increase Node.js memory
 node --max-old-space-size=4096 atlas-server.js
@@ -435,6 +456,7 @@ pm2 start atlas-server.js --node-args="--max-old-space-size=4096"
 ## 📈 Performance Optimization
 
 ### CDN for Static Assets
+
 ```javascript
 // Use CDN for fonts
 // Already implemented in templates
@@ -442,6 +464,7 @@ pm2 start atlas-server.js --node-args="--max-old-space-size=4096"
 ```
 
 ### Caching Strategy
+
 ```nginx
 # Cache PDF responses (optional)
 location /api/pdf/ {
@@ -469,6 +492,7 @@ location /api/pdf/ {
 ## 📊 Monitoring & Alerts
 
 ### Setup Alerts
+
 ```bash
 # PM2 monitoring
 pm2 install pm2-server-monit
@@ -478,6 +502,7 @@ pm2 set pm2-server-monit:email your@email.com
 ```
 
 ### Log Monitoring
+
 ```bash
 # View logs
 pm2 logs gacp-backend
@@ -491,6 +516,7 @@ pm2 logs gacp-backend | grep "PDF generation error"
 ## 🎉 Deployment Complete!
 
 ### Verify Everything Works
+
 - [ ] Health check returns OK
 - [ ] All 17 PDF endpoints working
 - [ ] Frontend components load
@@ -501,6 +527,7 @@ pm2 logs gacp-backend | grep "PDF generation error"
 - [ ] Performance acceptable (<5s per PDF)
 
 ### Next Steps
+
 1. Monitor logs for 24 hours
 2. Check error rates
 3. Verify user feedback

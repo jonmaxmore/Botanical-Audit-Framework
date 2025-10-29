@@ -10,13 +10,13 @@
 
 ระบบ GACP Botanical Audit Framework ประกอบด้วย **5 applications** หลัก:
 
-| Application | Status | Build | Tests | Routes | Progress |
-|-------------|--------|-------|-------|---------|----------|
-| **Farmer Portal** | ✅ **PRODUCTION READY** | ✅ Pass (31 routes) | ✅ 527/540 (97.6%) | 31 | **100%** |
-| **Admin Portal** | ⚠️ **NEEDS REVIEW** | ✅ Pass (2 routes) | ❓ Unknown | 2 | **~40%** |
-| **Certificate Portal** | ⚠️ **NEEDS REVIEW** | ✅ Pass (2 routes) | ❓ Unknown | 2 | **~60%** |
-| **Backend API** | ✅ **FUNCTIONAL** | N/A (No build script) | ✅ Has tests | - | **~80%** |
-| **Frontend (Legacy)** | ⚠️ **DEPRECATED?** | ❓ Unknown | ❓ Unknown | ? | **Unknown** |
+| Application            | Status                  | Build                 | Tests              | Routes | Progress    |
+| ---------------------- | ----------------------- | --------------------- | ------------------ | ------ | ----------- |
+| **Farmer Portal**      | ✅ **PRODUCTION READY** | ✅ Pass (31 routes)   | ✅ 527/540 (97.6%) | 31     | **100%**    |
+| **Admin Portal**       | ⚠️ **NEEDS REVIEW**     | ✅ Pass (2 routes)    | ❓ Unknown         | 2      | **~40%**    |
+| **Certificate Portal** | ⚠️ **NEEDS REVIEW**     | ✅ Pass (2 routes)    | ❓ Unknown         | 2      | **~60%**    |
+| **Backend API**        | ✅ **FUNCTIONAL**       | N/A (No build script) | ✅ Has tests       | -      | **~80%**    |
+| **Frontend (Legacy)**  | ⚠️ **DEPRECATED?**      | ❓ Unknown            | ❓ Unknown         | ?      | **Unknown** |
 
 ---
 
@@ -52,6 +52,7 @@
 **Status:** ✅ **PRODUCTION READY++**
 
 #### Build Status
+
 ```bash
 ✓ Compiled successfully in 4.7s
 ✓ 31 routes generated
@@ -59,6 +60,7 @@
 ```
 
 #### Routes (31 Total)
+
 ```
 ✓ ○ /                          # Landing page
 ✓ ƒ /api/auth/login            # Login API
@@ -98,6 +100,7 @@ Legend:
 ```
 
 #### Test Coverage
+
 ```bash
 Test Suites: 23 passed, 23 total
 Tests:       527 passed, 527 total
@@ -109,6 +112,7 @@ Coverage:    13.2% (business logic validated 100%)
 ```
 
 #### Features Implemented
+
 - ✅ User authentication (register, login, logout)
 - ✅ Multi-role dashboards (farmer, inspector, reviewer, approver, admin)
 - ✅ Application management (create, submit, track)
@@ -120,6 +124,7 @@ Coverage:    13.2% (business logic validated 100%)
 - ✅ Reports and settings
 
 #### Production Readiness Checklist
+
 - ✅ Build passes
 - ✅ All tests pass (527/540 = 97.6%)
 - ✅ TypeScript compilation successful
@@ -136,24 +141,28 @@ Coverage:    13.2% (business logic validated 100%)
 **Status:** ⚠️ **NEEDS REVIEW & COMPLETION**
 
 #### Build Status
+
 ```bash
 ✓ Compiled successfully in 2.2s
 ⚠️ Only 2 routes detected (expected 10-15)
 ```
 
 #### Routes (2 Total) - **INCOMPLETE**
+
 ```
 Route (app)   - 1 route
 Route (pages) - 1 route
 ```
 
 #### Issues Identified
+
 - ⚠️ Very few routes (only 2 vs expected 10-15)
 - ❓ No test suite found
 - ❓ Functionality unclear
 - ⚠️ May be incomplete implementation
 
 #### Expected Features (Based on System Design)
+
 - ❌ User management (CRUD users, roles)
 - ❌ Application approval workflow
 - ❌ Certificate management
@@ -164,6 +173,7 @@ Route (pages) - 1 route
 - ❌ Document review queue
 
 #### Recommendations
+
 1. **Verify admin portal requirements** - Check if it's actually needed or merged into farmer portal
 2. **Complete missing features** - Implement user management, reports, settings
 3. **Add tests** - Write unit and integration tests
@@ -179,21 +189,25 @@ Route (pages) - 1 route
 **Status:** ⚠️ **PARTIALLY IMPLEMENTED**
 
 #### Build Status
+
 ```bash
 ✓ Compiled successfully in 2.4s
 ⚠️ Only 2 routes detected (expected 5-8)
 ```
 
 #### Routes (2 Total) - **INCOMPLETE**
+
 ```
 Route (app) - 2 routes detected
 ```
 
 #### Documentation Found
+
 - ✅ `INSTALLATION.md` exists with detailed setup guide
 - ✅ Test scenarios documented
 
 #### Expected Features (From Documentation)
+
 - ✅ Landing page with public verification
 - ✅ Login page
 - ⚠️ Dashboard (status unknown)
@@ -205,6 +219,7 @@ Route (app) - 2 routes detected
 - ❌ Print functionality
 
 #### Test Scenarios Defined (From INSTALLATION.md)
+
 1. ✅ Landing page test
 2. ✅ Login test
 3. ⚠️ Dashboard test (7 menu items expected)
@@ -213,6 +228,7 @@ Route (app) - 2 routes detected
 6. ⚠️ New certificate test (3-step form)
 
 #### Next Steps (From Documentation)
+
 - Week 1 Day 3-4: Connect to backend API
 - Week 1 Day 5: Write tests (Jest, RTL, Playwright)
 - Week 2: Implement QR & PDF generation
@@ -227,6 +243,7 @@ Route (app) - 2 routes detected
 **Status:** ✅ **FUNCTIONAL**
 
 #### Structure
+
 ```bash
 Type: Backend/API Service
 Build Script: Not found (not required for Node.js API)
@@ -234,6 +251,7 @@ Test Files: Multiple test suites exist
 ```
 
 #### Modules Identified (From Search Results)
+
 1. ✅ **Dashboard Module** - Farmer, inspector, admin dashboards
 2. ✅ **Certificate Management** - Generate, verify, list certificates
 3. ✅ **Notification System** - Email, SMS, push notifications
@@ -244,6 +262,7 @@ Test Files: Multiple test suites exist
 8. ✅ **Inspection Module** - Schedule, conduct, complete inspections
 
 #### Test Coverage
+
 - ✅ **QA Test Suite** (`test/comprehensive-qa-test.js`)
   - Farmer role: 16 tests
   - Document reviewer: Tests exist
@@ -258,6 +277,7 @@ Test Files: Multiple test suites exist
   - End-to-end workflow validation
 
 #### API Endpoints Working
+
 ```
 POST   /api/auth/register
 POST   /api/auth/login
@@ -274,6 +294,7 @@ POST   /api/notifications/test
 ```
 
 #### Issues
+
 - ⚠️ No centralized test command
 - ⚠️ Test coverage % unknown
 - ⚠️ API documentation not centralized (scattered in module READMEs)
@@ -287,11 +308,13 @@ POST   /api/notifications/test
 **Status:** ⚠️ **DEPRECATED OR REPLACED?**
 
 #### Issues
+
 - ❓ No package.json found at first check
 - ❓ Purpose unclear (may be replaced by farmer-portal)
 - ❓ No build or test info available
 
 #### Recommendations
+
 1. **Determine if still needed** - May be legacy/deprecated
 2. **If needed:** Add to build/test pipeline
 3. **If deprecated:** Remove or clearly mark as archived
@@ -303,11 +326,13 @@ POST   /api/notifications/test
 ## 🔗 System Integration Status
 
 ### Backend ↔ Frontend Integration
+
 - ✅ Farmer Portal → Backend API (working)
 - ⚠️ Admin Portal → Backend API (unknown)
 - ⚠️ Certificate Portal → Backend API (documented but not confirmed)
 
 ### Inter-Module Communication
+
 - ✅ Auth → Dashboard (working)
 - ✅ Farm Management → Applications (working)
 - ✅ Applications → Inspections (working)
@@ -315,6 +340,7 @@ POST   /api/notifications/test
 - ✅ Notifications (event-driven system working)
 
 ### Database
+
 - ✅ MongoDB connection working
 - ✅ Data models defined
 - ✅ Seed data available
@@ -325,20 +351,24 @@ POST   /api/notifications/test
 ## 🧪 Testing Status
 
 ### Unit Tests
+
 - ✅ **Farmer Portal:** 486 logic tests
 - ❓ **Admin Portal:** Not found
 - ❓ **Certificate Portal:** Not found
 - ✅ **Backend:** Multiple test files exist
 
 ### Integration Tests
+
 - ✅ **Farmer Portal:** 41 comprehensive workflow tests
 - ✅ **Backend:** QA and UAT test suites
 
 ### E2E Tests
+
 - ⚠️ **Only backend E2E tests exist**
 - ❌ **No Playwright/Cypress cross-portal E2E tests**
 
 ### Performance/Load Tests
+
 - ❌ **Not implemented**
 
 ---
@@ -346,6 +376,7 @@ POST   /api/notifications/test
 ## 📚 Documentation Status
 
 ### Complete Documentation ✅
+
 1. ✅ `COMPLETE_SYSTEM_INVENTORY.md`
 2. ✅ `PROJECT_COMPLETION_SUMMARY.md`
 3. ✅ `INTEGRATION_TESTS_COMPLETION_REPORT.md`
@@ -357,6 +388,7 @@ POST   /api/notifications/test
 9. ✅ Backend modules: Individual READMEs
 
 ### Missing Documentation ⚠️
+
 - ❌ Admin Portal usage guide
 - ❌ Complete API documentation (OpenAPI/Swagger)
 - ❌ Deployment guide for all portals
@@ -368,15 +400,18 @@ POST   /api/notifications/test
 ## 🚀 Deployment Readiness
 
 ### Ready for Production ✅
+
 - ✅ **Farmer Portal** - Can deploy immediately
 - ✅ **Backend API** - Can deploy with monitoring
 
 ### Needs Work Before Production ⚠️
+
 - ⚠️ **Admin Portal** - Complete missing features first
 - ⚠️ **Certificate Portal** - Complete backend integration
 - ⚠️ **Frontend (Legacy)** - Clarify purpose or remove
 
 ### Pre-Deployment Checklist
+
 - ✅ Farmer portal tests passing (527/540)
 - ⚠️ Admin portal tests needed
 - ⚠️ Certificate portal tests needed
@@ -391,6 +426,7 @@ POST   /api/notifications/test
 ## 🎯 Priority Recommendations
 
 ### 🔴 CRITICAL (Before Production)
+
 1. **Complete Admin Portal**
    - Implement missing features (user management, reports)
    - Add comprehensive tests
@@ -413,6 +449,7 @@ POST   /api/notifications/test
    - SSL/TLS certificates
 
 ### 🟡 HIGH PRIORITY (Post-Launch)
+
 1. **Cross-Portal E2E Tests**
    - User journey tests across all portals
    - Integration workflow validation
@@ -428,6 +465,7 @@ POST   /api/notifications/test
    - Operations manual
 
 ### 🟢 MEDIUM PRIORITY (Enhancement)
+
 1. **Admin Portal Enhancement**
    - Advanced analytics
    - Bulk operations
@@ -464,24 +502,28 @@ Deployment Ready:   ████████████         60%  ⚠️ NEE
 ## 🎓 Next Steps (Recommended Order)
 
 ### Phase 1: Complete Core System (2-3 weeks)
+
 1. Complete Admin Portal implementation
 2. Complete Certificate Portal backend integration
 3. Add tests for Admin and Certificate portals
 4. Create OpenAPI documentation
 
 ### Phase 2: Testing & Security (1-2 weeks)
+
 1. Implement cross-portal E2E tests
 2. Conduct security audit
 3. Fix critical vulnerabilities
 4. Load testing and optimization
 
 ### Phase 3: Production Preparation (1 week)
+
 1. Setup production environment
 2. Configure CI/CD pipeline
 3. Deploy to staging
 4. UAT testing
 
 ### Phase 4: Launch (1 week)
+
 1. Deploy to production
 2. Monitor and fix issues
 3. User training
@@ -492,12 +534,14 @@ Deployment Ready:   ████████████         60%  ⚠️ NEE
 ## ✅ Final Assessment
 
 ### What's Working Well ✅
+
 1. ✅ Farmer Portal is production-ready with comprehensive tests
 2. ✅ Backend API is functional with good test coverage
 3. ✅ Integration tests validate complete workflows
 4. ✅ Documentation is detailed and helpful
 
 ### What Needs Attention ⚠️
+
 1. ⚠️ Admin Portal needs completion (only 40% done)
 2. ⚠️ Certificate Portal needs backend integration
 3. ⚠️ Missing cross-portal E2E tests
@@ -505,6 +549,7 @@ Deployment Ready:   ████████████         60%  ⚠️ NEE
 5. ⚠️ Load testing not done
 
 ### Risk Assessment 🎯
+
 - **LOW RISK:** Farmer Portal deployment
 - **MEDIUM RISK:** Backend API deployment (needs monitoring)
 - **HIGH RISK:** Admin & Certificate Portal deployment (incomplete)
@@ -517,16 +562,19 @@ Deployment Ready:   ████████████         60%  ⚠️ NEE
 **ระบบของคุณยังไม่เสร็จสมบูรณ์ 100%**
 
 ### สิ่งที่เสร็จแล้ว (Ready):
+
 - ✅ **Farmer Portal** - พร้อม deploy ได้เลย (100%)
 - ✅ **Backend API** - ใช้งานได้ แต่ควรมี monitoring (80%)
 
 ### สิ่งที่ยังไม่เสร็จ (Not Ready):
+
 - ⚠️ **Admin Portal** - ยังทำไม่เสร็จ (40%)
 - ⚠️ **Certificate Portal** - ยังต้อง integrate backend (60%)
 - ❌ **Security Audit** - ยังไม่ได้ทำ (0%)
 - ❌ **Load Testing** - ยังไม่ได้ทำ (0%)
 
 ### คำแนะนำ:
+
 1. **ถ้าต้องการ deploy ด่วน:** Deploy เฉพาะ Farmer Portal + Backend (ใช้เวลา 1 สัปดาห์)
 2. **ถ้าต้องการระบบสมบูรณ์:** ทำให้ครบทั้งหมดก่อน (ใช้เวลา 4-6 สัปดาห์)
 

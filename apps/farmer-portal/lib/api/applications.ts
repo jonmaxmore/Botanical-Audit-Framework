@@ -59,7 +59,7 @@ export interface ApplicationStatistics {
 
 // Get applications list (DTAM only)
 export const getApplications = async (
-  params?: ApplicationFilterParams,
+  params?: ApplicationFilterParams
 ): Promise<ApiResponse<ApplicationListResponse>> => {
   try {
     const response = await apiClient.get<ApiResponse<ApplicationListResponse>>(
@@ -73,9 +73,9 @@ export const getApplications = async (
           documentType: params?.documentType,
           search: params?.search,
           startDate: params?.startDate,
-          endDate: params?.endDate,
-        },
-      },
+          endDate: params?.endDate
+        }
+      }
     );
 
     return response.data;
@@ -87,11 +87,11 @@ export const getApplications = async (
 
 // Get single application by ID (DTAM only)
 export const getApplicationById = async (
-  applicationId: string,
+  applicationId: string
 ): Promise<ApiResponse<Application>> => {
   try {
     const response = await apiClient.get<ApiResponse<Application>>(
-      `/api/dtam/applications/${applicationId}`,
+      `/api/dtam/applications/${applicationId}`
     );
     return response.data;
   } catch (error) {
@@ -102,15 +102,15 @@ export const getApplicationById = async (
 
 // Review application (DTAM only)
 export const reviewApplication = async (
-  params: ReviewApplicationParams,
+  params: ReviewApplicationParams
 ): Promise<ApiResponse<Application>> => {
   try {
     const response = await apiClient.put<ApiResponse<Application>>(
       `/api/dtam/applications/${params.applicationId}/review`,
       {
         status: params.status,
-        reviewComment: params.reviewComment,
-      },
+        reviewComment: params.reviewComment
+      }
     );
 
     return response.data;
@@ -124,7 +124,7 @@ export const reviewApplication = async (
 export const getApplicationStatistics = async (): Promise<ApiResponse<ApplicationStatistics>> => {
   try {
     const response = await apiClient.get<ApiResponse<ApplicationStatistics>>(
-      '/api/dtam/applications/statistics',
+      '/api/dtam/applications/statistics'
     );
     return response.data;
   } catch (error) {
@@ -137,7 +137,7 @@ export const getApplicationStatistics = async (): Promise<ApiResponse<Applicatio
 export const downloadApplicationDocument = async (applicationId: string): Promise<Blob> => {
   try {
     const response = await apiClient.get(`/api/dtam/applications/${applicationId}/download`, {
-      responseType: 'blob',
+      responseType: 'blob'
     });
 
     return response.data;

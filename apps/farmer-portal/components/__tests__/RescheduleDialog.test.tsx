@@ -9,7 +9,7 @@ import '@testing-library/jest-dom';
 const mockApplication = {
   id: 'app-001',
   rescheduleCount: 0,
-  status: 'PENDING_INSPECTION' as const,
+  status: 'PENDING_INSPECTION' as const
 };
 
 describe('RescheduleDialog Component', () => {

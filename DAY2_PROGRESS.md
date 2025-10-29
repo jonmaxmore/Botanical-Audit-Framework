@@ -3,30 +3,36 @@
 ## ✅ สิ่งที่ทำเสร็จแล้ว (Day 2)
 
 ### 1. Dashboard Page Integration ✅
+
 **File:** `apps/admin-portal/app/dashboard/page.tsx`
 
 **การเปลี่ยนแปลง:**
+
 - ✅ เชื่อมต่อ `getApplicationStats()` API
 - ✅ เพิ่ม Error handling
 - ✅ เพิ่ม Loading state
 - ✅ แสดง Alert เมื่อเกิด error
 
 **API ที่ใช้:**
+
 ```typescript
 import { getApplicationStats } from '@/lib/api/applications';
 const data = await getApplicationStats();
 ```
 
 ### 2. Application Detail Page Integration (เริ่มแล้ว) 🔄
+
 **File:** `apps/admin-portal/app/applications/[id]/page.tsx`
 
 **การเปลี่ยนแปลง:**
+
 - ✅ Import API functions
 - ✅ เพิ่ม Error state
 - ✅ เพิ่ม Snackbar notification
 - 🔄 กำลังแก้ไข loadApplicationData()
 
 **API ที่ใช้:**
+
 ```typescript
 import {
   getApplicationById,
@@ -41,12 +47,12 @@ import {
 
 ## 📊 Progress Summary (Day 2)
 
-| Task | Status | Completion |
-|------|--------|------------|
-| Dashboard Integration | ✅ Complete | 100% |
-| Application Detail Integration | 🔄 In Progress | 30% |
-| Reviews Page Integration | ⏳ Pending | 0% |
-| Users Page Integration | ⏳ Pending | 0% |
+| Task                           | Status         | Completion |
+| ------------------------------ | -------------- | ---------- |
+| Dashboard Integration          | ✅ Complete    | 100%       |
+| Application Detail Integration | 🔄 In Progress | 30%        |
+| Reviews Page Integration       | ⏳ Pending     | 0%         |
+| Users Page Integration         | ⏳ Pending     | 0%         |
 
 ---
 
@@ -55,6 +61,7 @@ import {
 ### Week 3: Detail + QR + Public (180K THB)
 
 **งานที่ต้องทำ:**
+
 1. **Detail Pages** - หน้ารายละเอียด
    - ✅ Dashboard (เสร็จแล้ว)
    - 🔄 Application Detail (กำลังทำ 30%)
@@ -78,12 +85,13 @@ import {
 ### ต้องแก้ไขต่อ:
 
 #### 1. Load Application Data (50% เสร็จ)
+
 ```typescript
 const loadApplicationData = async () => {
   try {
     const response = await getApplicationById(params?.id as string);
     const appData = response.data;
-    
+
     // Map API data to component state
     setApplication({
       id: appData.id,
@@ -104,13 +112,12 @@ const loadApplicationData = async () => {
       submittedDate: appData.submittedAt,
       documents: appData.documents || []
     });
-    
+
     // Load comments
     setComments(appData.comments || []);
-    
+
     // Load timeline
     setActivities(appData.timeline || []);
-    
   } catch (err: any) {
     setError(err.message);
   } finally {
@@ -120,6 +127,7 @@ const loadApplicationData = async () => {
 ```
 
 #### 2. Review Submit Handler (ยังไม่แก้)
+
 ```typescript
 const handleReviewSubmit = async (data: ReviewData) => {
   try {
@@ -129,13 +137,13 @@ const handleReviewSubmit = async (data: ReviewData) => {
       documentsVerified: true,
       inspectionRequired: data.decision === 'approve'
     });
-    
+
     setSnackbar({
       open: true,
       message: 'บันทึกผลการตรวจสอบสำเร็จ',
       severity: 'success'
     });
-    
+
     loadApplicationData(); // Reload data
   } catch (err: any) {
     setSnackbar({
@@ -148,6 +156,7 @@ const handleReviewSubmit = async (data: ReviewData) => {
 ```
 
 #### 3. Approve/Reject Handlers (ยังไม่แก้)
+
 ```typescript
 const handleApprove = async () => {
   try {
@@ -158,13 +167,13 @@ const handleApprove = async () => {
         validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString()
       }
     });
-    
+
     setSnackbar({
       open: true,
       message: 'อนุมัติคำขอสำเร็จ',
       severity: 'success'
     });
-    
+
     loadApplicationData();
   } catch (err: any) {
     setSnackbar({
@@ -181,13 +190,13 @@ const handleReject = async () => {
       reason: 'ไม่ผ่านการตรวจสอบ',
       comments: 'ไม่ผ่านการตรวจสอบ'
     });
-    
+
     setSnackbar({
       open: true,
       message: 'ปฏิเสธคำขอสำเร็จ',
       severity: 'success'
     });
-    
+
     loadApplicationData();
   } catch (err: any) {
     setSnackbar({
@@ -200,6 +209,7 @@ const handleReject = async () => {
 ```
 
 #### 4. Add Comment Handler (ยังไม่แก้)
+
 ```typescript
 const handleAddComment = async (content: string) => {
   try {
@@ -207,7 +217,7 @@ const handleAddComment = async (content: string) => {
       message: content,
       type: 'general'
     });
-    
+
     loadApplicationData(); // Reload to get new comment
   } catch (err: any) {
     setSnackbar({
@@ -224,6 +234,7 @@ const handleAddComment = async (content: string) => {
 ## 📝 Next Steps (Day 2 Afternoon)
 
 ### Immediate Tasks:
+
 1. ✅ ~~Dashboard Integration~~ - เสร็จแล้ว
 2. 🔄 **Application Detail Integration** - กำลังทำ (30%)
    - [ ] แก้ไข loadApplicationData() ให้ครบ
@@ -235,6 +246,7 @@ const handleAddComment = async (content: string) => {
    - [ ] ทดสอบ Integration
 
 ### Tomorrow (Day 3):
+
 1. Reviews Page Integration
 2. Users Page Integration
 3. Settings Page Integration
@@ -249,26 +261,26 @@ const handleAddComment = async (content: string) => {
 
 ## 📊 Overall Progress Update
 
-| Component | Day 1 | Day 2 | Total |
-|-----------|-------|-------|-------|
-| Login | ✅ 100% | - | ✅ 100% |
-| Applications List | ✅ 100% | - | ✅ 100% |
-| Dashboard | - | ✅ 100% | ✅ 100% |
-| Application Detail | - | 🔄 30% | 🔄 30% |
-| Reviews | - | - | ⏳ 0% |
-| Users | - | - | ⏳ 0% |
-| **Overall** | **15%** | **+10%** | **25%** |
+| Component          | Day 1   | Day 2    | Total   |
+| ------------------ | ------- | -------- | ------- |
+| Login              | ✅ 100% | -        | ✅ 100% |
+| Applications List  | ✅ 100% | -        | ✅ 100% |
+| Dashboard          | -       | ✅ 100%  | ✅ 100% |
+| Application Detail | -       | 🔄 30%   | 🔄 30%  |
+| Reviews            | -       | -        | ⏳ 0%   |
+| Users              | -       | -        | ⏳ 0%   |
+| **Overall**        | **15%** | **+10%** | **25%** |
 
 ---
 
 ## 🎯 Week 3 Progress
 
-| Task Category | Progress | Status |
-|---------------|----------|--------|
-| **Detail Pages** | 40% | 🔄 In Progress |
-| **QR Code System** | 0% | ⏳ Pending |
-| **Public Pages** | 0% | ⏳ Pending |
-| **Week 3 Total** | **13%** | 🔄 In Progress |
+| Task Category      | Progress | Status         |
+| ------------------ | -------- | -------------- |
+| **Detail Pages**   | 40%      | 🔄 In Progress |
+| **QR Code System** | 0%       | ⏳ Pending     |
+| **Public Pages**   | 0%       | ⏳ Pending     |
+| **Week 3 Total**   | **13%**  | 🔄 In Progress |
 
 ---
 

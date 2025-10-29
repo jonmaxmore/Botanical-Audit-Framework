@@ -41,8 +41,8 @@ export const demoUsers: DemoUser[] = [
     id: '1',
     name: 'นายสมชาย ใจดี',
     email: 'somchai@example.com',
-    role: 'farmer',
-  },
+    role: 'farmer'
+  }
 ];
 
 export const demoApplications: DemoApplication[] = [
@@ -51,8 +51,8 @@ export const demoApplications: DemoApplication[] = [
     farmName: 'ฟาร์มทดสอบ A',
     farmerId: '1',
     status: 'pending',
-    submittedDate: new Date().toISOString(),
-  },
+    submittedDate: new Date().toISOString()
+  }
 ];
 
 export const demoInspections: DemoInspection[] = [
@@ -62,8 +62,8 @@ export const demoInspections: DemoInspection[] = [
     farmerId: '1',
     inspectorId: '2',
     date: new Date().toISOString(),
-    status: 'scheduled',
-  },
+    status: 'scheduled'
+  }
 ];
 
 export const demoCertificates: DemoCertificate[] = [
@@ -73,6 +73,6 @@ export const demoCertificates: DemoCertificate[] = [
     farmerId: '1',
     issuedDate: new Date().toISOString(),
     expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-    status: 'active',
-  },
+    status: 'active'
+  }
 ];

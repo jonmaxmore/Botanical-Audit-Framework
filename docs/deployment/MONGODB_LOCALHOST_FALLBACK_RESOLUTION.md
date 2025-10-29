@@ -35,7 +35,7 @@ const MONGODB_URI =
 
 if (!MONGODB_URI) {
   throw new Error(
-    'MongoDB URI is required. Please set MONGODB_URI_SIMPLE, MONGODB_URI, or MONGODB_URL environment variable.',
+    'MongoDB URI is required. Please set MONGODB_URI_SIMPLE, MONGODB_URI, or MONGODB_URL environment variable.'
   );
 }
 ```

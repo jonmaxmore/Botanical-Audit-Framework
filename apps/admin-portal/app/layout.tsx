@@ -1,6 +1,5 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import Providers from './providers';
 
 export const metadata: Metadata = {
   title: 'GACP Admin Portal - ระบบจัดการผู้ดูแลระบบ',
@@ -17,9 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&display=swap"
         />
       </head>
-      <body>
-        <Providers>{children}</Providers>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

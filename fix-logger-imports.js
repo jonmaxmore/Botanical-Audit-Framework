@@ -14,7 +14,7 @@ const filesToFix = [
   'modules/application-workflow/presentation/controllers/application-controller.js',
   'modules/application-workflow/presentation/routes/application-routes.js',
   'modules/application/application/controllers/enhanced-application-processing.js',
-  'modules/application/domain/services/advanced-application-processing.js',
+  'modules/application/domain/services/advanced-application-processing.js'
 ];
 
 function getRelativePath(filePath) {
@@ -24,16 +24,20 @@ function getRelativePath(filePath) {
 
 function addLoggerImport(filePath) {
   const fullPath = path.join(__dirname, 'apps', 'backend', filePath);
-  
+
   if (!fs.existsSync(fullPath)) {
     console.log(`❌ File not found: ${filePath}`);
     return false;
   }
 
   let content = fs.readFileSync(fullPath, 'utf8');
-  
+
   // Check if logger is already imported
-  if (content.includes('createLogger') || content.includes("require('../shared/logger')") || content.includes("require('./shared/logger')")) {
+  if (
+    content.includes('createLogger') ||
+    content.includes("require('../shared/logger')") ||
+    content.includes("require('./shared/logger')")
+  ) {
     console.log(`✓ Logger already imported in: ${filePath}`);
     return true;
   }
@@ -68,12 +72,12 @@ function addLoggerImport(filePath) {
 
   // Insert logger import
   const loggerImport = `const { createLogger } = require('${relativePath}');\nconst logger = createLogger('${moduleName}');\n`;
-  
+
   lines.splice(insertIndex, 0, loggerImport);
-  
+
   const newContent = lines.join('\n');
   fs.writeFileSync(fullPath, newContent, 'utf8');
-  
+
   console.log(`✓ Added logger import to: ${filePath}`);
   return true;
 }
@@ -96,7 +100,7 @@ console.log(`\n✨ Fixed ${fixed} files, ${failed} failed`);
 // Run lint again to see improvements
 console.log('\n📊 Running ESLint to check improvements...');
 try {
-  execSync('cd apps/backend && pnpm run lint 2>&1 | Select-String "problems"', { 
+  execSync('cd apps/backend && pnpm run lint 2>&1 | Select-String "problems"', {
     stdio: 'inherit',
     shell: 'powershell.exe'
   });

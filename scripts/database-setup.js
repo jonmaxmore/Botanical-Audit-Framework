@@ -26,7 +26,7 @@ class GACPDatabaseSetup {
         useNewUrlParser: true,
         useUnifiedTopology: true,
         serverSelectionTimeoutMS: 5000,
-        connectTimeoutMS: 10000,
+        connectTimeoutMS: 10000
       });
 
       await this.client.connect();
@@ -116,20 +116,20 @@ class GACPDatabaseSetup {
         ownerId: 'USER001',
         location: {
           type: 'Point',
-          coordinates: [100.5018, 13.7563], // Bangkok coordinates
+          coordinates: [100.5018, 13.7563] // Bangkok coordinates
         },
         address: {
           district: 'บางรัก',
           province: 'กรุงเทพมหานคร',
           postalCode: '10500',
-          coordinates: [100.5018, 13.7563],
+          coordinates: [100.5018, 13.7563]
         },
         farmSize: 50.5,
         cropTypes: ['herbal_medicine', 'vegetable'],
         organicCertified: true,
         status: 'active',
         createdAt: new Date(),
-        updatedAt: new Date(),
+        updatedAt: new Date()
       },
       {
         farmId: 'FARM002',
@@ -138,13 +138,13 @@ class GACPDatabaseSetup {
         ownerId: 'USER002',
         location: {
           type: 'Point',
-          coordinates: [98.9817, 18.7883], // Chiang Mai coordinates
+          coordinates: [98.9817, 18.7883] // Chiang Mai coordinates
         },
         address: {
           district: 'เมืองเชียงใหม่',
           province: 'เชียงใหม่',
           postalCode: '50000',
-          coordinates: [98.9817, 18.7883],
+          coordinates: [98.9817, 18.7883]
         },
         farmSize: 25.0,
         cropTypes: ['cannabis'],
@@ -152,8 +152,8 @@ class GACPDatabaseSetup {
         medicalLicense: 'MED-CNB-2025-001',
         status: 'active',
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
 
     // Sample users data
@@ -168,13 +168,13 @@ class GACPDatabaseSetup {
           firstNameEN: 'Somchai',
           lastNameEN: 'Farmer',
           phone: '+66812345678',
-          idCard: '1234567890123',
+          idCard: '1234567890123'
         },
         role: 'farmer',
         status: 'active',
         emailVerified: true,
         createdAt: new Date(),
-        lastLogin: new Date(),
+        lastLogin: new Date()
       },
       {
         userId: 'USER002',
@@ -186,14 +186,14 @@ class GACPDatabaseSetup {
           firstNameEN: 'Dr. Wichai',
           lastNameEN: 'Medical Cannabis',
           phone: '+66812345679',
-          idCard: '9876543210987',
+          idCard: '9876543210987'
         },
         role: 'medical_farmer',
         medicalLicense: 'MED-DOC-2025-001',
         status: 'active',
         emailVerified: true,
         createdAt: new Date(),
-        lastLogin: new Date(),
+        lastLogin: new Date()
       },
       {
         userId: 'USER003',
@@ -204,7 +204,7 @@ class GACPDatabaseSetup {
           firstNameEN: 'Suree',
           lastNameEN: 'Inspector',
           phone: '+66812345680',
-          idCard: '5555555555555',
+          idCard: '5555555555555'
         },
         role: 'inspector',
         department: 'DTAM',
@@ -212,8 +212,8 @@ class GACPDatabaseSetup {
         status: 'active',
         emailVerified: true,
         createdAt: new Date(),
-        lastLogin: new Date(),
-      },
+        lastLogin: new Date()
+      }
     ];
 
     // Sample applications
@@ -228,12 +228,12 @@ class GACPDatabaseSetup {
         documents: [
           { type: 'farm_registration', status: 'approved' },
           { type: 'land_ownership', status: 'approved' },
-          { type: 'water_quality_test', status: 'pending' },
+          { type: 'water_quality_test', status: 'pending' }
         ],
         inspectionScheduled: false,
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
 
     // Sample certificates
@@ -253,11 +253,11 @@ class GACPDatabaseSetup {
           waterQuality: 'passed',
           pesticides: 'passed',
           heavyMetals: 'passed',
-          microbiology: 'passed',
+          microbiology: 'passed'
         },
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
 
     // Sample track & trace data
@@ -281,11 +281,11 @@ class GACPDatabaseSetup {
           { phase: 'growing', date: new Date('2024-02-15'), status: 'completed' },
           { phase: 'harvesting', date: new Date('2024-04-15'), status: 'completed' },
           { phase: 'processing', date: new Date('2024-04-20'), status: 'completed' },
-          { phase: 'packaging', date: new Date('2024-04-25'), status: 'completed' },
+          { phase: 'packaging', date: new Date('2024-04-25'), status: 'completed' }
         ],
         createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+        updatedAt: new Date()
+      }
     ];
 
     // Insert sample data
@@ -325,7 +325,7 @@ class GACPDatabaseSetup {
       'applications',
       'certificates',
       'tracktraces',
-      'auditlogs',
+      'auditlogs'
     ];
     const exportData = {};
 
@@ -397,7 +397,7 @@ async function main() {
     await dbSetup.setupDatabase({
       clearFirst: false, // Set to true to clear existing data
       createSample: true,
-      createIndexes: true,
+      createIndexes: true
     });
 
     // Export data for backup

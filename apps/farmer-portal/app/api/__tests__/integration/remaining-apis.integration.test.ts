@@ -7,7 +7,7 @@
 import {
   setupIntegrationTest,
   teardownIntegrationTest,
-  mockDb,
+  mockDb
 } from '@/lib/test-utils/http-test-helpers';
 
 describe('Inspections API Integration Tests', () => {
@@ -26,13 +26,13 @@ describe('Inspections API Integration Tests', () => {
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const application = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
-        status: 'submitted',
+        status: 'submitted'
       });
 
       // Schedule inspection
@@ -41,14 +41,14 @@ describe('Inspections API Integration Tests', () => {
         farmerId: farmer.farmerId,
         scheduledDate: new Date('2024-12-01'),
         status: 'scheduled',
-        inspector: 'INSP001',
+        inspector: 'INSP001'
       });
 
       expect(inspection).toMatchObject({
         applicationId: application.id,
         farmerId: 'F101',
         status: 'scheduled',
-        inspector: 'INSP001',
+        inspector: 'INSP001'
       });
       expect(inspection.scheduledDate).toBeDefined();
     });
@@ -58,12 +58,12 @@ describe('Inspections API Integration Tests', () => {
         applicationId: 'app_123',
         farmerId: 'F101',
         scheduledDate: new Date(),
-        status: 'scheduled',
+        status: 'scheduled'
       });
 
       const updated = await mockDb.updateInspection(inspection.id, {
         status: 'in-progress',
-        startedAt: new Date(),
+        startedAt: new Date()
       });
 
       expect(updated?.status).toBe('in-progress');
@@ -75,7 +75,7 @@ describe('Inspections API Integration Tests', () => {
         applicationId: 'app_123',
         farmerId: 'F101',
         scheduledDate: new Date(),
-        status: 'in-progress',
+        status: 'in-progress'
       });
 
       const completed = await mockDb.updateInspection(inspection.id, {
@@ -84,8 +84,8 @@ describe('Inspections API Integration Tests', () => {
         findings: {
           compliance: true,
           issues: [],
-          recommendations: ['Maintain good practices'],
-        },
+          recommendations: ['Maintain good practices']
+        }
       });
 
       expect(completed?.status).toBe('completed');
@@ -98,7 +98,7 @@ describe('Inspections API Integration Tests', () => {
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       // Create multiple inspections
@@ -106,14 +106,14 @@ describe('Inspections API Integration Tests', () => {
         applicationId: 'app_1',
         farmerId: farmer.farmerId,
         scheduledDate: new Date(),
-        status: 'scheduled',
+        status: 'scheduled'
       });
 
       await mockDb.createInspection({
         applicationId: 'app_2',
         farmerId: farmer.farmerId,
         scheduledDate: new Date(),
-        status: 'completed',
+        status: 'completed'
       });
 
       const inspections = await mockDb.findInspectionsByFarmerId(farmer.farmerId);
@@ -141,13 +141,13 @@ describe('Certificates API Integration Tests', () => {
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const application = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
-        status: 'approved',
+        status: 'approved'
       });
 
       const inspection = await mockDb.createInspection({
@@ -155,7 +155,7 @@ describe('Certificates API Integration Tests', () => {
         farmerId: farmer.farmerId,
         scheduledDate: new Date(),
         status: 'completed',
-        findings: { compliance: true, issues: [] },
+        findings: { compliance: true, issues: [] }
       });
 
       // Generate certificate
@@ -166,7 +166,7 @@ describe('Certificates API Integration Tests', () => {
         certificateNumber: 'CERT-2024-001',
         issuedDate: new Date(),
         expiryDate: new Date('2025-12-31'),
-        status: 'active',
+        status: 'active'
       });
 
       expect(certificate).toMatchObject({
@@ -174,7 +174,7 @@ describe('Certificates API Integration Tests', () => {
         farmerId: 'F101',
         inspectionId: inspection.id,
         certificateNumber: 'CERT-2024-001',
-        status: 'active',
+        status: 'active'
       });
       expect(certificate.issuedDate).toBeDefined();
       expect(certificate.expiryDate).toBeDefined();
@@ -188,7 +188,7 @@ describe('Certificates API Integration Tests', () => {
         certificateNumber: 'CERT-VERIFY-001',
         issuedDate: new Date(),
         expiryDate: new Date('2025-12-31'),
-        status: 'active',
+        status: 'active'
       });
 
       const found = await mockDb.findCertificateByCertificateNumber('CERT-VERIFY-001');
@@ -203,7 +203,7 @@ describe('Certificates API Integration Tests', () => {
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       // Generate multiple certificates
@@ -214,7 +214,7 @@ describe('Certificates API Integration Tests', () => {
         certificateNumber: 'CERT-001',
         issuedDate: new Date('2024-01-01'),
         expiryDate: new Date('2025-01-01'),
-        status: 'active',
+        status: 'active'
       });
 
       await mockDb.createCertificate({
@@ -224,7 +224,7 @@ describe('Certificates API Integration Tests', () => {
         certificateNumber: 'CERT-002',
         issuedDate: new Date('2024-06-01'),
         expiryDate: new Date('2025-06-01'),
-        status: 'active',
+        status: 'active'
       });
 
       const certificates = await mockDb.findCertificatesByFarmerId(farmer.farmerId);
@@ -242,12 +242,12 @@ describe('Certificates API Integration Tests', () => {
         certificateNumber: 'CERT-EXPIRED-001',
         issuedDate: new Date('2023-01-01'),
         expiryDate: new Date('2024-01-01'),
-        status: 'active',
+        status: 'active'
       });
 
       // Update to expired
       const expired = await mockDb.updateCertificate(certificate.id, {
-        status: 'expired',
+        status: 'expired'
       });
 
       expect(expired?.status).toBe('expired');
@@ -271,7 +271,7 @@ describe('Users API Integration Tests', () => {
         password: 'hashed',
         name: 'Profile User',
         role: 'farmer',
-        farmerId: 'F201',
+        farmerId: 'F201'
       });
 
       const profile = await mockDb.findUserById(user.id);
@@ -287,12 +287,12 @@ describe('Users API Integration Tests', () => {
         email: 'update@test.com',
         password: 'hashed',
         name: 'Original Name',
-        role: 'farmer',
+        role: 'farmer'
       });
 
       const updated = await mockDb.updateUser(user.id, {
         name: 'Updated Name',
-        phone: '0898765432',
+        phone: '0898765432'
       });
 
       expect(updated?.name).toBe('Updated Name');
@@ -314,7 +314,7 @@ describe('Users API Integration Tests', () => {
         password: 'hashed',
         name: 'Farmer 1',
         role: 'farmer',
-        farmerId: 'F301',
+        farmerId: 'F301'
       });
 
       await mockDb.createUser({
@@ -322,14 +322,14 @@ describe('Users API Integration Tests', () => {
         password: 'hashed',
         name: 'Farmer 2',
         role: 'farmer',
-        farmerId: 'F302',
+        farmerId: 'F302'
       });
 
       await mockDb.createUser({
         email: 'inspector@test.com',
         password: 'hashed',
         name: 'Inspector',
-        role: 'inspector',
+        role: 'inspector'
       });
 
       const farmers = await mockDb.findUsersByRole('farmer');
@@ -360,7 +360,7 @@ describe('Cross-Module Integration Workflows', () => {
         password: 'hashed_Test123!',
         name: 'Complete Workflow Farmer',
         role: 'farmer',
-        farmerId: `F${mockDb.getNextSequence('farmer')}`,
+        farmerId: `F${mockDb.getNextSequence('farmer')}`
       });
 
       expect(farmer).toBeDefined();
@@ -375,8 +375,8 @@ describe('Cross-Module Integration Workflows', () => {
           farmName: 'Complete Workflow Farm',
           farmSize: '15 rai',
           location: 'Chiang Mai',
-          crops: ['Cannabis'],
-        },
+          crops: ['Cannabis']
+        }
       });
 
       expect(application.farmerId).toBe(farmer.farmerId);
@@ -384,7 +384,7 @@ describe('Cross-Module Integration Workflows', () => {
       // Step 3: Submit application
       const submitted = await mockDb.updateApplication(application.id, {
         status: 'submitted',
-        submittedAt: new Date(),
+        submittedAt: new Date()
       });
 
       expect(submitted?.status).toBe('submitted');
@@ -395,7 +395,7 @@ describe('Cross-Module Integration Workflows', () => {
         farmerId: farmer.farmerId,
         scheduledDate: new Date('2024-12-15'),
         status: 'scheduled',
-        inspector: 'INSP001',
+        inspector: 'INSP001'
       });
 
       expect(inspection.applicationId).toBe(application.id);
@@ -407,8 +407,8 @@ describe('Cross-Module Integration Workflows', () => {
         findings: {
           compliance: true,
           issues: [],
-          recommendations: ['Excellent practices maintained'],
-        },
+          recommendations: ['Excellent practices maintained']
+        }
       });
 
       expect(completedInspection?.status).toBe('completed');
@@ -417,7 +417,7 @@ describe('Cross-Module Integration Workflows', () => {
       // Step 6: Approve application
       const approved = await mockDb.updateApplication(application.id, {
         status: 'approved',
-        approvedAt: new Date(),
+        approvedAt: new Date()
       });
 
       expect(approved?.status).toBe('approved');
@@ -430,7 +430,7 @@ describe('Cross-Module Integration Workflows', () => {
         certificateNumber: `CERT-${Date.now()}`,
         issuedDate: new Date(),
         expiryDate: new Date('2025-12-31'),
-        status: 'active',
+        status: 'active'
       });
 
       expect(certificate.farmerId).toBe(farmer.farmerId);

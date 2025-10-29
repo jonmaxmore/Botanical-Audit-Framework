@@ -27,25 +27,27 @@ const DEFAULT_ITEMS = [
 
 export default function GACPChecklist({ items = DEFAULT_ITEMS, onChange }: GACPChecklistProps) {
   const handleCheck = (id: string, checked: boolean) => {
-    onChange(items.map(item => item.id === id ? { ...item, checked } : item));
+    onChange(items.map(item => (item.id === id ? { ...item, checked } : item)));
   };
 
   const handleNotes = (id: string, notes: string) => {
-    onChange(items.map(item => item.id === id ? { ...item, notes } : item));
+    onChange(items.map(item => (item.id === id ? { ...item, notes } : item)));
   };
 
   return (
     <Box>
-      <Typography variant="h6" gutterBottom>GACP Compliance Checklist</Typography>
+      <Typography variant="h6" gutterBottom>
+        GACP Compliance Checklist
+      </Typography>
       <Divider sx={{ mb: 2 }} />
 
-      {items.map((item) => (
+      {items.map(item => (
         <Box key={item.id} sx={{ mb: 3 }}>
           <FormControlLabel
             control={
               <Checkbox
                 checked={item.checked}
-                onChange={(e) => handleCheck(item.id, e.target.checked)}
+                onChange={e => handleCheck(item.id, e.target.checked)}
               />
             }
             label={item.label}
@@ -57,7 +59,7 @@ export default function GACPChecklist({ items = DEFAULT_ITEMS, onChange }: GACPC
             rows={2}
             placeholder="หมายเหตุ..."
             value={item.notes}
-            onChange={(e) => handleNotes(item.id, e.target.value)}
+            onChange={e => handleNotes(item.id, e.target.value)}
             sx={{ mt: 1, ml: 4 }}
           />
         </Box>

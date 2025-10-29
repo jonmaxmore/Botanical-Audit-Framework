@@ -16,7 +16,7 @@ import {
   ListItemText,
   Avatar,
   Menu,
-  MenuItem,
+  MenuItem
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -26,7 +26,7 @@ import {
   Settings,
   Logout,
   Person,
-  Notifications,
+  Notifications
 } from '@mui/icons-material';
 import { usePathname, useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -67,7 +67,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
     { text: 'Dashboard', icon: <Dashboard />, path: '/farmer/dashboard' },
     { text: 'Documents', icon: <Description />, path: '/farmer/documents' },
     { text: 'Reports', icon: <Assessment />, path: '/farmer/reports' },
-    { text: 'Settings', icon: <Settings />, path: '/farmer/settings' },
+    { text: 'Settings', icon: <Settings />, path: '/farmer/settings' }
   ];
 
   // Menu items for DTAM
@@ -76,7 +76,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
     { text: 'Applications', icon: <Description />, path: '/dtam/documents' },
     { text: 'System Reports', icon: <Assessment />, path: '/dtam/reports' },
     { text: 'User Management', icon: <Person />, path: '/dtam/users' },
-    { text: 'Settings', icon: <Settings />, path: '/dtam/settings' },
+    { text: 'Settings', icon: <Settings />, path: '/dtam/settings' }
   ];
 
   const menuItems = userRole === 'farmer' ? farmerMenuItems : dtamMenuItems;
@@ -132,9 +132,9 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
                     backgroundColor: `${primaryColor}15`,
                     borderLeft: `4px solid ${primaryColor}`,
                     '&:hover': {
-                      backgroundColor: `${primaryColor}25`,
-                    },
-                  },
+                      backgroundColor: `${primaryColor}25`
+                    }
+                  }
                 }}
               >
                 <ListItemIcon sx={{ color: isActive ? primaryColor : 'inherit' }}>
@@ -144,7 +144,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
                   primary={item.text}
                   primaryTypographyProps={{
                     fontWeight: isActive ? 600 : 400,
-                    color: isActive ? primaryColor : 'inherit',
+                    color: isActive ? primaryColor : 'inherit'
                   }}
                 />
               </ListItemButton>
@@ -165,7 +165,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
           ml: { md: `${drawerWidth}px` },
           bgcolor: 'white',
           color: 'text.primary',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.08)'
         }}
       >
         <Toolbar>
@@ -220,7 +220,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
           ModalProps={{ keepMounted: true }}
           sx={{
             display: { xs: 'block', md: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
           }}
         >
           {drawer}
@@ -231,7 +231,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
           variant="permanent"
           sx={{
             display: { xs: 'none', md: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
           }}
           open
         >
@@ -248,7 +248,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
           width: { md: `calc(100% - ${drawerWidth}px)` },
           mt: 8,
           bgcolor: '#f5f5f5',
-          minHeight: 'calc(100vh - 64px)',
+          minHeight: 'calc(100vh - 64px)'
         }}
       >
         {children}

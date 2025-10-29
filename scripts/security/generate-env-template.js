@@ -62,7 +62,7 @@ BCRYPT_ROUNDS=12
 LOG_LEVEL=info
 LOG_FILE_PATH=./logs
 `,
-  
+
   frontend: `# Frontend Environment Configuration
 # Generated: ${new Date().toISOString()}
 
@@ -77,16 +77,16 @@ NEXT_PUBLIC_APP_VERSION=1.0.0
 # Feature Flags
 NEXT_PUBLIC_ENABLE_ANALYTICS=false
 NEXT_PUBLIC_ENABLE_CHAT=false
-`,
+`
 };
 
 function createEnvFile(appPath, template) {
   const envPath = path.join(appPath, '.env.example');
   const envLocalPath = path.join(appPath, '.env.local.example');
-  
+
   fs.writeFileSync(envPath, template, 'utf8');
   console.log(`✅ Created ${envPath}`);
-  
+
   if (!fs.existsSync(path.join(appPath, '.env'))) {
     fs.writeFileSync(path.join(appPath, '.env'), template, 'utf8');
     console.log(`✅ Created ${path.join(appPath, '.env')}`);

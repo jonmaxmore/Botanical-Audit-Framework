@@ -13,7 +13,7 @@ import {
   teardownIntegrationTest,
   mockDb,
   generateTestToken,
-  decodeTestToken,
+  decodeTestToken
 } from '@/lib/test-utils/http-test-helpers';
 
 describe('Auth API Integration Tests - Business Flow Validation', () => {
@@ -33,7 +33,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
         password: 'Test123!',
         name: 'Test Farmer',
         role: 'farmer',
-        phone: '0812345678',
+        phone: '0812345678'
       };
 
       // Hash password (simulated)
@@ -46,7 +46,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       const user = await mockDb.createUser({
         ...userData,
         password: hashedPassword,
-        farmerId,
+        farmerId
       });
 
       // Verify user created correctly
@@ -54,7 +54,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
         email: 'farmer@test.com',
         name: 'Test Farmer',
         role: 'farmer',
-        farmerId: expect.stringMatching(/^F\d+$/),
+        farmerId: expect.stringMatching(/^F\d+$/)
       });
 
       // Verify password is hashed
@@ -72,7 +72,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       await mockDb.createUser({
         email: 'unique@test.com',
         password: 'hashed_password',
-        name: 'First User',
+        name: 'First User'
       });
 
       // Try to create second user with same email
@@ -95,7 +95,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
           password: 'hashed_password',
           name: `Farmer ${i}`,
           role: 'farmer',
-          farmerId,
+          farmerId
         });
         farmerIds.push(user.farmerId);
       }
@@ -119,7 +119,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
         password: 'hashed_Test123!',
         name: 'Login User',
         role: 'farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       // Simulate login validation
@@ -134,7 +134,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       const token = generateTestToken({
         userId: foundUser!.id,
         email: foundUser!.email,
-        role: foundUser!.role,
+        role: foundUser!.role
       });
 
       expect(token).toBeDefined();
@@ -145,7 +145,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       expect(decoded).toMatchObject({
         userId: user.id,
         email: 'login@test.com',
-        role: 'farmer',
+        role: 'farmer'
       });
     });
 
@@ -158,7 +158,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       await mockDb.createUser({
         email: 'CaseSensitive@Test.COM',
         password: 'hashed_password',
-        name: 'Test User',
+        name: 'Test User'
       });
 
       // Search with lowercase
@@ -179,7 +179,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
         password: 'hashed_Test123!',
         name: 'Full Flow User',
         role: 'farmer',
-        farmerId,
+        farmerId
       });
 
       expect(registeredUser).toBeDefined();
@@ -194,7 +194,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       const token = generateTestToken({
         userId: loginUser!.id,
         email: loginUser!.email,
-        role: loginUser!.role,
+        role: loginUser!.role
       });
 
       expect(token).toBeDefined();
@@ -212,7 +212,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
         email: 'inspector@test.com',
         password: 'hashed_password',
         name: 'Test Inspector',
-        role: 'inspector',
+        role: 'inspector'
       });
 
       expect(user.role).toBe('inspector');
@@ -224,7 +224,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
         email: 'admin@test.com',
         password: 'hashed_password',
         name: 'Test Admin',
-        role: 'admin',
+        role: 'admin'
       });
 
       expect(user.role).toBe('admin');
@@ -234,7 +234,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       const user = await mockDb.createUser({
         email: 'default@test.com',
         password: 'hashed_password',
-        name: 'Default User',
+        name: 'Default User'
         // role not specified
       });
 
@@ -247,7 +247,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       const payload = {
         userId: 'user_123',
         email: 'test@example.com',
-        role: 'farmer',
+        role: 'farmer'
       };
 
       const token = generateTestToken(payload);
@@ -269,7 +269,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
       const user = await mockDb.createUser({
         email: 'persist@test.com',
         password: 'hashed_password',
-        name: 'Persist User',
+        name: 'Persist User'
       });
 
       const userId = user.id;
@@ -288,7 +288,7 @@ describe('Auth API Integration Tests - Business Flow Validation', () => {
         email: 'integrity@test.com',
         password: 'hashed_password',
         name: 'Integrity User',
-        farmerId: 'F999',
+        farmerId: 'F999'
       });
 
       // User ID should be consistent across lookups

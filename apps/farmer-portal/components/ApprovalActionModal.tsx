@@ -46,7 +46,7 @@ export default function ApprovalActionModal({
   onClose,
   applicationId,
   applicationData,
-  onSubmit,
+  onSubmit
 }: ApprovalActionModalProps) {
   const [loading, setLoading] = useState(false);
   const [decision, setDecision] = useState<'approve' | 'reject' | 'send_back'>('approve');
@@ -54,7 +54,7 @@ export default function ApprovalActionModal({
   const [comments, setComments] = useState('');
   const [feedbackScore, setFeedbackScore] = useState(3);
   const [certificateNumber, setCertificateNumber] = useState(
-    `GACP-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`,
+    `GACP-${new Date().getFullYear()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`
   );
 
   const handleSubmit = async () => {
@@ -76,7 +76,7 @@ export default function ApprovalActionModal({
         stage: decision === 'send_back' ? sendBackStage : undefined,
         comments: comments.trim(),
         feedbackScore,
-        certificateNumber: decision === 'approve' ? certificateNumber : undefined,
+        certificateNumber: decision === 'approve' ? certificateNumber : undefined
       };
 
       await onSubmit(formData);

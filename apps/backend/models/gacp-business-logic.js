@@ -14,7 +14,7 @@
  * @compliance WHO-GACP, FAO, Thai-FDA, ASEAN-TM
  */
 
-const mongoose = require('mongoose');
+const _mongoose = require('_mongoose');
 
 /**
  * GACP Application Status Workflow

@@ -25,7 +25,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'การปรับปรุงดิน ไถกลบ และเตรียมแปลงปลูก',
         requiredFields: ['soil_type', 'ph_level', 'organic_matter'],
         gacp_requirement: 'GACP-05.1',
-        compliance_points: 15,
+        compliance_points: 15
       },
       soil_testing: {
         id: 'soil_testing',
@@ -33,7 +33,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'วิเคราะห์คุณภาพดิน pH และธาตุอาหาร',
         requiredFields: ['lab_report', 'test_date', 'results'],
         gacp_requirement: 'GACP-05.2',
-        compliance_points: 20,
+        compliance_points: 20
       },
       water_testing: {
         id: 'water_testing',
@@ -41,7 +41,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'ทดสอบคุณภาพน้ำสำหรับการเพาะปลูก',
         requiredFields: ['water_source', 'test_results', 'contamination_check'],
         gacp_requirement: 'GACP-06.1',
-        compliance_points: 20,
+        compliance_points: 20
       },
       seed_selection: {
         id: 'seed_selection',
@@ -49,7 +49,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'เลือกเมล็ดพันธุ์คุณภาพและจดบันทึกแหล่งที่มา',
         requiredFields: ['variety', 'source', 'quality_certificate'],
         gacp_requirement: 'GACP-04.1',
-        compliance_points: 15,
+        compliance_points: 15
       },
       area_measurement: {
         id: 'area_measurement',
@@ -57,9 +57,9 @@ const GACP_SOP_ACTIVITIES = {
         description: 'วัดและทำแผนที่พื้นที่ปลูก',
         requiredFields: ['area_size', 'gps_coordinates', 'layout_plan'],
         gacp_requirement: 'GACP-03.2',
-        compliance_points: 10,
-      },
-    },
+        compliance_points: 10
+      }
+    }
   },
 
   // 🌿 Phase 2: Planting (ขั้นตอนการปลูก)
@@ -72,7 +72,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'กระบวนการงอกเมล็ดในสภาพแวดล้อมที่เหมาะสม',
         requiredFields: ['germination_method', 'temperature', 'humidity', 'success_rate'],
         gacp_requirement: 'GACP-04.2',
-        compliance_points: 15,
+        compliance_points: 15
       },
       seedling_transplant: {
         id: 'seedling_transplant',
@@ -80,7 +80,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'ย้ายกล้าไปปลูกในแปลงถาวร',
         requiredFields: ['transplant_date', 'spacing', 'plant_count', 'survival_rate'],
         gacp_requirement: 'GACP-04.3',
-        compliance_points: 15,
+        compliance_points: 15
       },
       irrigation_setup: {
         id: 'irrigation_setup',
@@ -88,7 +88,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'ติดตั้งและทดสอบระบบให้น้ำ',
         requiredFields: ['system_type', 'coverage_area', 'water_pressure'],
         gacp_requirement: 'GACP-06.2',
-        compliance_points: 10,
+        compliance_points: 10
       },
       plant_tagging: {
         id: 'plant_tagging',
@@ -96,9 +96,9 @@ const GACP_SOP_ACTIVITIES = {
         description: 'ติดรหัสและป้ายข้อมูลแต่ละต้น',
         requiredFields: ['plant_id', 'variety', 'planting_date'],
         gacp_requirement: 'GACP-10.1',
-        compliance_points: 10,
-      },
-    },
+        compliance_points: 10
+      }
+    }
   },
 
   // 🌱 Phase 3: Growing (ขั้นตอนการเพาะปลูก)
@@ -112,7 +112,7 @@ const GACP_SOP_ACTIVITIES = {
         requiredFields: ['water_amount', 'watering_time', 'soil_moisture'],
         gacp_requirement: 'GACP-06.3',
         compliance_points: 5,
-        frequency: 'daily',
+        frequency: 'daily'
       },
       weekly_fertilizing: {
         id: 'weekly_fertilizing',
@@ -121,7 +121,7 @@ const GACP_SOP_ACTIVITIES = {
         requiredFields: ['fertilizer_type', 'amount', 'npk_ratio', 'application_method'],
         gacp_requirement: 'GACP-07.1',
         compliance_points: 10,
-        frequency: 'weekly',
+        frequency: 'weekly'
       },
       monthly_pruning: {
         id: 'monthly_pruning',
@@ -130,7 +130,7 @@ const GACP_SOP_ACTIVITIES = {
         requiredFields: ['pruning_type', 'removed_parts', 'plant_condition'],
         gacp_requirement: 'GACP-08.1',
         compliance_points: 10,
-        frequency: 'monthly',
+        frequency: 'monthly'
       },
       pest_monitoring: {
         id: 'pest_monitoring',
@@ -139,7 +139,7 @@ const GACP_SOP_ACTIVITIES = {
         requiredFields: ['pest_type', 'severity_level', 'affected_area', 'control_action'],
         gacp_requirement: 'GACP-09.1',
         compliance_points: 15,
-        frequency: 'weekly',
+        frequency: 'weekly'
       },
       disease_inspection: {
         id: 'disease_inspection',
@@ -148,7 +148,7 @@ const GACP_SOP_ACTIVITIES = {
         requiredFields: ['disease_type', 'symptoms', 'prevention_method'],
         gacp_requirement: 'GACP-09.2',
         compliance_points: 15,
-        frequency: 'weekly',
+        frequency: 'weekly'
       },
       growth_measurement: {
         id: 'growth_measurement',
@@ -157,9 +157,9 @@ const GACP_SOP_ACTIVITIES = {
         requiredFields: ['plant_height', 'stem_diameter', 'leaf_count', 'growth_stage'],
         gacp_requirement: 'GACP-08.2',
         compliance_points: 10,
-        frequency: 'weekly',
-      },
-    },
+        frequency: 'weekly'
+      }
+    }
   },
 
   // 🌾 Phase 4: Harvesting (ขั้นตอนการเก็บเกี่ยว)
@@ -172,7 +172,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'ตรวจสอบความพร้อมสำหรับการเก็บเกี่ยว',
         requiredFields: ['maturity_indicators', 'trichome_color', 'harvest_readiness'],
         gacp_requirement: 'GACP-11.1',
-        compliance_points: 15,
+        compliance_points: 15
       },
       harvesting_process: {
         id: 'harvesting_process',
@@ -180,7 +180,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'กระบวนการเก็บเกี่ยวและจัดการผลผลิต',
         requiredFields: ['harvest_date', 'harvest_method', 'weather_conditions', 'harvester_info'],
         gacp_requirement: 'GACP-11.2',
-        compliance_points: 20,
+        compliance_points: 20
       },
       fresh_weight_recording: {
         id: 'fresh_weight_recording',
@@ -188,7 +188,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'ชั่งและบันทึกน้ำหนักสดทันทีหลังเก็บเกี่ยว',
         requiredFields: ['fresh_weight', 'moisture_content', 'quality_grade'],
         gacp_requirement: 'GACP-11.3',
-        compliance_points: 10,
+        compliance_points: 10
       },
       initial_packaging: {
         id: 'initial_packaging',
@@ -196,9 +196,9 @@ const GACP_SOP_ACTIVITIES = {
         description: 'บรรจุและติดป้ายข้อมูลเบื้องต้น',
         requiredFields: ['packaging_type', 'batch_number', 'packaging_date'],
         gacp_requirement: 'GACP-12.1',
-        compliance_points: 10,
-      },
-    },
+        compliance_points: 10
+      }
+    }
   },
 
   // 📦 Phase 5: Post-Harvest (ขั้นตอนหลังการเก็บเกี่ยว)
@@ -214,10 +214,10 @@ const GACP_SOP_ACTIVITIES = {
           'temperature',
           'humidity',
           'drying_duration',
-          'final_moisture',
+          'final_moisture'
         ],
         gacp_requirement: 'GACP-13.1',
-        compliance_points: 20,
+        compliance_points: 20
       },
       processing: {
         id: 'processing',
@@ -225,7 +225,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'การแปรรูปผลิตภัณฑ์ตามต้องการ',
         requiredFields: ['processing_type', 'equipment_used', 'processing_conditions'],
         gacp_requirement: 'GACP-13.2',
-        compliance_points: 15,
+        compliance_points: 15
       },
       final_packaging: {
         id: 'final_packaging',
@@ -233,7 +233,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'บรรจุผลิตภัณฑ์สำเร็จพร้อมจำหน่าย',
         requiredFields: ['final_package_type', 'net_weight', 'expiry_date', 'qr_code'],
         gacp_requirement: 'GACP-12.2',
-        compliance_points: 15,
+        compliance_points: 15
       },
       storage_conditions: {
         id: 'storage_conditions',
@@ -241,7 +241,7 @@ const GACP_SOP_ACTIVITIES = {
         description: 'จัดการเก็บรักษาในสภาพแวดล้อมที่เหมาะสม',
         requiredFields: ['storage_type', 'temperature_range', 'humidity_range', 'storage_duration'],
         gacp_requirement: 'GACP-14.1',
-        compliance_points: 10,
+        compliance_points: 10
       },
       quality_testing: {
         id: 'quality_testing',
@@ -249,10 +249,10 @@ const GACP_SOP_ACTIVITIES = {
         description: 'ทดสอบคุณภาพผลิตภัณฑ์สำเร็จ',
         requiredFields: ['test_parameters', 'lab_results', 'certificate_number'],
         gacp_requirement: 'GACP-14.2',
-        compliance_points: 25,
-      },
-    },
-  },
+        compliance_points: 25
+      }
+    }
+  }
 };
 
 // SOP Workflow State Machine
@@ -261,7 +261,7 @@ const SOP_WORKFLOW_STATES = {
   IN_PROGRESS: 'in_progress',
   PENDING_REVIEW: 'pending_review',
   COMPLETED: 'completed',
-  REJECTED: 'rejected',
+  REJECTED: 'rejected'
 };
 
 class GACPSOPWizardSystem extends EventEmitter {
@@ -302,7 +302,7 @@ class GACPSOPWizardSystem extends EventEmitter {
           planting: { completed: 0, total: 4, percentage: 0 },
           growing: { completed: 0, total: 6, percentage: 0 },
           harvesting: { completed: 0, total: 4, percentage: 0 },
-          post_harvest: { completed: 0, total: 5, percentage: 0 },
+          post_harvest: { completed: 0, total: 5, percentage: 0 }
         },
 
         // Compliance Tracking
@@ -313,10 +313,10 @@ class GACPSOPWizardSystem extends EventEmitter {
             planting: 0,
             growing: 0,
             harvesting: 0,
-            post_harvest: 0,
+            post_harvest: 0
           },
           maxPossible: 345, // Total compliance points
-          lastUpdated: new Date(),
+          lastUpdated: new Date()
         },
 
         // AI Guidance History
@@ -325,8 +325,8 @@ class GACPSOPWizardSystem extends EventEmitter {
         metadata: {
           createdAt: new Date(),
           lastActivity: new Date(),
-          status: SOP_WORKFLOW_STATES.IN_PROGRESS,
-        },
+          status: SOP_WORKFLOW_STATES.IN_PROGRESS
+        }
       };
 
       if (this.sopSessionsCollection) {
@@ -338,7 +338,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         const guidance = await this.aiAssistant.provideSOPGuidance({
           action: 'session_start',
           phase: 'pre_planting',
-          farmData: data,
+          farmData: data
         });
 
         session.aiGuidanceHistory.push(guidance);
@@ -347,18 +347,18 @@ class GACPSOPWizardSystem extends EventEmitter {
       this.emit('sop_session_started', {
         sessionId: session.id,
         farmId: session.farmId,
-        phase: session.currentPhase,
+        phase: session.currentPhase
       });
 
       return {
         success: true,
-        session,
+        session
       };
     } catch (error) {
       console.error('[SOPWizard] Error starting session:', error);
       return {
         success: false,
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -410,8 +410,8 @@ class GACPSOPWizardSystem extends EventEmitter {
         metadata: {
           deviceInfo: activityData.deviceInfo || null,
           weather: activityData.weather || null,
-          notes: activityData.notes || '',
-        },
+          notes: activityData.notes || ''
+        }
       };
 
       // AI Validation if available
@@ -419,7 +419,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         const validation = await this.aiAssistant.validateSOPActivity({
           activity,
           activityDefinition: activityDef,
-          sessionContext: session,
+          sessionContext: session
         });
 
         activity.aiValidation = validation;
@@ -431,7 +431,7 @@ class GACPSOPWizardSystem extends EventEmitter {
             timestamp: new Date(),
             type: 'activity_validation',
             activityId: activity.activityId,
-            guidance: validation.guidance,
+            guidance: validation.guidance
           });
         }
       }
@@ -450,10 +450,10 @@ class GACPSOPWizardSystem extends EventEmitter {
             sessionId,
             activityId: activity.activityId,
             activityName: activity.activityName,
-            compliancePoints: activity.compliancePoints,
+            compliancePoints: activity.compliancePoints
           },
           userId: activityData.userId,
-          farmId: session.farmId,
+          farmId: session.farmId
         });
       }
 
@@ -464,19 +464,19 @@ class GACPSOPWizardSystem extends EventEmitter {
         sessionId,
         activityId: activity.id,
         phase,
-        compliancePoints: activity.compliancePoints,
+        compliancePoints: activity.compliancePoints
       });
 
       return {
         success: true,
         activity,
-        sessionProgress: await this.getSessionProgress(sessionId),
+        sessionProgress: await this.getSessionProgress(sessionId)
       };
     } catch (error) {
       console.error('[SOPWizard] Error recording activity:', error);
       return {
         success: false,
-        error: error.message,
+        error: error.message
       };
     }
   }
@@ -494,22 +494,22 @@ class GACPSOPWizardSystem extends EventEmitter {
       const completedActivities = await this.sopActivitiesCollection.countDocuments({
         sessionId,
         phase,
-        complianceStatus: { $in: ['approved', 'completed'] },
+        complianceStatus: { $in: ['approved', 'completed'] }
       });
 
       session.phaseProgress[phase].completed = completedActivities;
       session.phaseProgress[phase].percentage = Math.round(
-        (completedActivities / session.phaseProgress[phase].total) * 100,
+        (completedActivities / session.phaseProgress[phase].total) * 100
       );
 
       // Calculate overall progress
       const totalCompleted = Object.values(session.phaseProgress).reduce(
         (sum, p) => sum + p.completed,
-        0,
+        0
       );
       const totalPossible = Object.values(session.phaseProgress).reduce(
         (sum, p) => sum + p.total,
-        0,
+        0
       );
       session.overallProgress = Math.round((totalCompleted / totalPossible) * 100);
 
@@ -529,7 +529,7 @@ class GACPSOPWizardSystem extends EventEmitter {
               action: 'phase_transition',
               fromPhase: phase,
               toPhase: nextPhase,
-              sessionContext: session,
+              sessionContext: session
             });
 
             session.aiGuidanceHistory.push(guidance);
@@ -549,7 +549,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         sessionId,
         phase,
         overallProgress: session.overallProgress,
-        complianceScore: session.complianceScore.overall,
+        complianceScore: session.complianceScore.overall
       });
     } catch (error) {
       console.error('[SOPWizard] Error updating progress:', error);
@@ -564,7 +564,7 @@ class GACPSOPWizardSystem extends EventEmitter {
       const activities = await this.sopActivitiesCollection
         .find({
           sessionId,
-          complianceStatus: { $in: ['approved', 'completed'] },
+          complianceStatus: { $in: ['approved', 'completed'] }
         })
         .toArray();
 
@@ -583,7 +583,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         byPhase: scoreByPhase,
         maxPossible: 345,
         percentage: Math.round((totalScore / 345) * 100),
-        lastUpdated: new Date(),
+        lastUpdated: new Date()
       };
     } catch (error) {
       console.error('[SOPWizard] Error calculating compliance:', error);
@@ -613,7 +613,7 @@ class GACPSOPWizardSystem extends EventEmitter {
       // Get recent activities
       const recentActivities = await this.sopActivitiesCollection
         .find({
-          sessionId,
+          sessionId
         })
         .sort({ recordedAt: -1 })
         .limit(10)
@@ -627,7 +627,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         session,
         recentActivities,
         availableActivities,
-        nextSteps: await this.getNextSteps(sessionId),
+        nextSteps: await this.getNextSteps(sessionId)
       };
     } catch (error) {
       console.error('[SOPWizard] Error getting progress:', error);
@@ -650,7 +650,7 @@ class GACPSOPWizardSystem extends EventEmitter {
       const completedActivityIds = await this.sopActivitiesCollection.distinct('activityId', {
         sessionId,
         phase: currentPhase,
-        complianceStatus: { $in: ['approved', 'completed'] },
+        complianceStatus: { $in: ['approved', 'completed'] }
       });
 
       const pendingActivities = Object.entries(phaseActivities)
@@ -658,7 +658,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         .map(([id, activity]) => ({
           id,
           ...activity,
-          phase: currentPhase,
+          phase: currentPhase
         }));
 
       return pendingActivities.slice(0, 3); // Next 3 steps
@@ -676,25 +676,25 @@ class GACPSOPWizardSystem extends EventEmitter {
       // Active sessions
       const activeSessions = await this.sopSessionsCollection.countDocuments({
         farmId,
-        'metadata.status': SOP_WORKFLOW_STATES.IN_PROGRESS,
+        'metadata.status': SOP_WORKFLOW_STATES.IN_PROGRESS
       });
 
       // Completed sessions
       const completedSessions = await this.sopSessionsCollection.countDocuments({
         farmId,
-        'metadata.status': SOP_WORKFLOW_STATES.COMPLETED,
+        'metadata.status': SOP_WORKFLOW_STATES.COMPLETED
       });
 
       // Total activities recorded
       const totalActivities = await this.sopActivitiesCollection.countDocuments({
-        farmId,
+        farmId
       });
 
       // Average compliance score
       const sessions = await this.sopSessionsCollection
         .find({
           farmId,
-          'complianceScore.overall': { $gt: 0 },
+          'complianceScore.overall': { $gt: 0 }
         })
         .toArray();
 
@@ -716,7 +716,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         activitiesByPhase: activitiesByPhase.reduce((acc, item) => {
           acc[item._id] = item.count;
           return acc;
-        }, {}),
+        }, {})
       };
     } catch (error) {
       console.error('[SOPWizard] Error getting statistics:', error);
@@ -725,7 +725,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         completedSessions: 0,
         totalActivities: 0,
         avgCompliance: 0,
-        activitiesByPhase: {},
+        activitiesByPhase: {}
       };
     }
   }
@@ -740,7 +740,7 @@ class GACPSOPWizardSystem extends EventEmitter {
       // Recent sessions
       const recentSessions = await this.sopSessionsCollection
         .find({
-          farmId,
+          farmId
         })
         .sort({ 'metadata.lastActivity': -1 })
         .limit(5)
@@ -749,7 +749,7 @@ class GACPSOPWizardSystem extends EventEmitter {
       // Pending reviews
       const pendingReviews = await this.sopActivitiesCollection.countDocuments({
         farmId,
-        complianceStatus: 'requires_review',
+        complianceStatus: 'requires_review'
       });
 
       // Compliance trends (last 6 months)
@@ -761,20 +761,20 @@ class GACPSOPWizardSystem extends EventEmitter {
           {
             $match: {
               farmId,
-              'metadata.createdAt': { $gte: sixMonthsAgo },
-            },
+              'metadata.createdAt': { $gte: sixMonthsAgo }
+            }
           },
           {
             $group: {
               _id: {
                 year: { $year: '$metadata.createdAt' },
-                month: { $month: '$metadata.createdAt' },
+                month: { $month: '$metadata.createdAt' }
               },
               avgCompliance: { $avg: '$complianceScore.overall' },
-              sessionCount: { $sum: 1 },
-            },
+              sessionCount: { $sum: 1 }
+            }
           },
-          { $sort: { '_id.year': 1, '_id.month': 1 } },
+          { $sort: { '_id.year': 1, '_id.month': 1 } }
         ])
         .toArray();
 
@@ -782,7 +782,7 @@ class GACPSOPWizardSystem extends EventEmitter {
         statistics,
         recentSessions,
         pendingReviews,
-        complianceTrends,
+        complianceTrends
       };
     } catch (error) {
       console.error('[SOPWizard] Error getting dashboard:', error);
@@ -794,5 +794,5 @@ class GACPSOPWizardSystem extends EventEmitter {
 module.exports = {
   GACPSOPWizardSystem,
   GACP_SOP_ACTIVITIES,
-  SOP_WORKFLOW_STATES,
+  SOP_WORKFLOW_STATES
 };

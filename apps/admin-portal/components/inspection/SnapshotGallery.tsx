@@ -19,7 +19,11 @@ interface SnapshotGalleryProps {
   onUpdateCaption: (id: string, caption: string) => void;
 }
 
-export default function SnapshotGallery({ snapshots, onDelete, onUpdateCaption }: SnapshotGalleryProps) {
+export default function SnapshotGallery({
+  snapshots,
+  onDelete,
+  onUpdateCaption,
+}: SnapshotGalleryProps) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editCaption, setEditCaption] = useState('');
 
@@ -41,7 +45,7 @@ export default function SnapshotGallery({ snapshots, onDelete, onUpdateCaption }
       </Box>
 
       <Grid container spacing={2}>
-        {snapshots.map((snapshot) => (
+        {snapshots.map(snapshot => (
           <Grid item xs={12} sm={6} md={4} key={snapshot.id}>
             <Card>
               <CardMedia
@@ -54,14 +58,14 @@ export default function SnapshotGallery({ snapshots, onDelete, onUpdateCaption }
                 <Typography variant="caption" color="text.secondary">
                   {format(snapshot.timestamp, 'dd/MM/yyyy HH:mm:ss')}
                 </Typography>
-                
+
                 {editingId === snapshot.id ? (
                   <Box sx={{ mt: 1 }}>
                     <TextField
                       fullWidth
                       size="small"
                       value={editCaption}
-                      onChange={(e) => setEditCaption(e.target.value)}
+                      onChange={e => setEditCaption(e.target.value)}
                       placeholder="เพิ่มคำอธิบาย..."
                     />
                     <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
@@ -75,9 +79,7 @@ export default function SnapshotGallery({ snapshots, onDelete, onUpdateCaption }
                   </Box>
                 ) : (
                   <Box sx={{ mt: 1 }}>
-                    <Typography variant="body2">
-                      {snapshot.caption || 'ไม่มีคำอธิบาย'}
-                    </Typography>
+                    <Typography variant="body2">{snapshot.caption || 'ไม่มีคำอธิบาย'}</Typography>
                     <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
                       <IconButton size="small" onClick={() => handleEdit(snapshot)}>
                         <Edit />

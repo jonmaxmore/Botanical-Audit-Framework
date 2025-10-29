@@ -17,7 +17,7 @@ export default function DemoInspectorPage() {
     { id: 'assigned', name: 'งานที่ได้รับมอบหมาย', icon: '📋' },
     { id: 'calendar', name: 'ปCalendar', icon: '📅' },
     { id: 'reports', name: 'รายงานการตรวจสอบ', icon: '📊' },
-    { id: 'profile', name: 'ข้อมูลส่วนตัว', icon: '👤' },
+    { id: 'profile', name: 'ข้อมูลส่วนตัว', icon: '👤' }
   ];
 
   const renderTabContent = () => {

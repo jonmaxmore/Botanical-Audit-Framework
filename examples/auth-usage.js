@@ -12,9 +12,9 @@ router.get(
   (req, res) => {
     res.standardSuccess({
       message: 'Welcome admin!',
-      user: req.user,
+      user: req.user
     });
-  },
+  }
 );
 
 // Example: Login endpoint
@@ -37,13 +37,13 @@ router.post('/login', validation.validationRules.userLogin, async (req, res, nex
         user: {
           id: user._id,
           email: user.email,
-          role: user.role,
-        },
+          role: user.role
+        }
       },
       {
         message: 'Login successful',
-        messageThTh: 'เข้าสู่ระบบสำเร็จ',
-      },
+        messageThTh: 'เข้าสู่ระบบสำเร็จ'
+      }
     );
   } catch (error) {
     next(error);

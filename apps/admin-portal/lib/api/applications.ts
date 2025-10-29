@@ -454,7 +454,9 @@ export function getMockApplicationsData(): Application[] {
       status: 'submitted',
       submittedAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
       documents: [],
-      payments: [{ id: 'p1', phase: 1, amount: 5000, status: 'paid', paidAt: new Date().toISOString() }],
+      payments: [
+        { id: 'p1', phase: 1, amount: 5000, status: 'paid', paidAt: new Date().toISOString() },
+      ],
       comments: [],
       timeline: [],
       createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),

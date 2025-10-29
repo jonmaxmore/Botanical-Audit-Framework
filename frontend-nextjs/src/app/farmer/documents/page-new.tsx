@@ -49,8 +49,9 @@ const DOCUMENT_TYPES = [
 const DocumentsPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { applications, fetchApplicationById, uploadDocument, currentApplication } = useApplication();
-  
+  const { applications, fetchApplicationById, uploadDocument, currentApplication } =
+    useApplication();
+
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
@@ -58,7 +59,7 @@ const DocumentsPage = () => {
   const [selectedDocType, setSelectedDocType] = useState('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [remarks, setRemarks] = useState('');
-  
+
   const applicationId = searchParams.get('app');
 
   useEffect(() => {
@@ -68,7 +69,7 @@ const DocumentsPage = () => {
   const loadData = async () => {
     setLoading(true);
     setError('');
-    
+
     try {
       if (applicationId) {
         await fetchApplicationById(applicationId);
@@ -97,36 +98,36 @@ const DocumentsPage = () => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    
+
     // Validate file type
     const allowedTypes = ['application/pdf', 'image/jpeg', 'image/png', 'image/jpg'];
     if (!allowedTypes.includes(file.type)) {
       alert('กรุณาอัปโหลดไฟล์ PDF, JPG หรือ PNG เท่านั้น');
       return;
     }
-    
+
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert('ขนาดไฟล์ต้องไม่เกิน 5 MB');
       return;
     }
-    
+
     setSelectedFile(file);
   };
 
   const handleUpload = async () => {
     if (!selectedFile || !applicationId) return;
-    
+
     setUploading(true);
     setError('');
-    
+
     try {
       await uploadDocument(applicationId, {
         documentType: selectedDocType,
         file: selectedFile,
         remarks,
       });
-      
+
       alert('อัปโหลดเอกสารสำเร็จ!');
       handleCloseUploadDialog();
       await loadData(); // Reload to show updated documents
@@ -166,7 +167,7 @@ const DocumentsPage = () => {
 
   const calculateProgress = () => {
     if (!currentApplication?.documents) return 0;
-    const uploadedCount = DOCUMENT_TYPES.filter(dt => 
+    const uploadedCount = DOCUMENT_TYPES.filter((dt) =>
       currentApplication.documents.some((doc: any) => doc.documentType === dt.id)
     ).length;
     return (uploadedCount / DOCUMENT_TYPES.length) * 100;
@@ -279,11 +280,11 @@ const DocumentsPage = () => {
           เอกสารที่ต้องอัปโหลด
         </Typography>
         <Divider sx={{ mb: 2 }} />
-        
+
         <List>
           {DOCUMENT_TYPES.map((docType, index) => {
             const uploadedDoc = getDocumentStatus(docType.id);
-            
+
             return (
               <React.Fragment key={docType.id}>
                 <ListItem
@@ -299,12 +300,8 @@ const DocumentsPage = () => {
                   <ListItemText
                     primary={
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                        <Typography variant="body1">
-                          {docType.label}
-                        </Typography>
-                        {docType.required && (
-                          <Chip label="จำเป็น" size="small" color="error" />
-                        )}
+                        <Typography variant="body1">{docType.label}</Typography>
+                        {docType.required && <Chip label="จำเป็น" size="small" color="error" />}
                         {uploadedDoc && getStatusChip(uploadedDoc.status)}
                       </Box>
                     }
@@ -334,7 +331,7 @@ const DocumentsPage = () => {
       {/* Upload Dialog */}
       <Dialog open={uploadDialogOpen} onClose={handleCloseUploadDialog} maxWidth="sm" fullWidth>
         <DialogTitle>
-          อัปโหลดเอกสาร: {DOCUMENT_TYPES.find(dt => dt.id === selectedDocType)?.label}
+          อัปโหลดเอกสาร: {DOCUMENT_TYPES.find((dt) => dt.id === selectedDocType)?.label}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
@@ -346,20 +343,15 @@ const DocumentsPage = () => {
               sx={{ mb: 2 }}
             >
               เลือกไฟล์
-              <input
-                type="file"
-                hidden
-                accept=".pdf,.jpg,.jpeg,.png"
-                onChange={handleFileSelect}
-              />
+              <input type="file" hidden accept=".pdf,.jpg,.jpeg,.png" onChange={handleFileSelect} />
             </Button>
-            
+
             {selectedFile && (
               <Alert severity="success" sx={{ mb: 2 }}>
                 เลือกไฟล์: {selectedFile.name} ({(selectedFile.size / 1024 / 1024).toFixed(2)} MB)
               </Alert>
             )}
-            
+
             <TextField
               fullWidth
               multiline

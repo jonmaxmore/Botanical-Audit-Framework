@@ -23,43 +23,43 @@ const tests = [
     file: 'auth-load-test-light.yml',
     description: 'Light load test for dev environment (2-10 RPS)',
     duration: '3 minutes',
-    recommended: true,
+    recommended: true
   },
   {
     name: 'Authentication Load Test (Full)',
     file: 'auth-load-test.yml',
     description: 'Full authentication load test (100-200 RPS) - Use in staging/production',
     duration: '5 minutes',
-    recommended: false,
+    recommended: false
   },
   {
     name: 'API Endpoints Load Test',
     file: 'api-load-test.yml',
     description: 'Tests main API endpoints with application usage patterns',
     duration: '6 minutes',
-    recommended: false,
+    recommended: false
   },
   {
     name: 'Stress Test',
     file: 'stress-test.yml',
     description: 'Finds system breaking point by gradually increasing load',
     duration: '7 minutes',
-    recommended: false,
+    recommended: false
   },
   {
     name: 'Spike Test',
     file: 'spike-test.yml',
     description: 'Tests sudden traffic surge (viral content scenario)',
     duration: '5 minutes',
-    recommended: false,
+    recommended: false
   },
   {
     name: 'Soak Test',
     file: 'soak-test.yml',
     description: 'Tests system stability over 1 hour sustained load',
     duration: '64 minutes',
-    recommended: false,
-  },
+    recommended: false
+  }
 ];
 
 function runTest(test) {
@@ -70,10 +70,7 @@ function runTest(test) {
   console.log('='.repeat(60) + '\n');
 
   const testFile = path.join(TESTS_DIR, test.file);
-  const reportFile = path.join(
-    REPORTS_DIR,
-    `${test.file.replace('.yml', '')}-${Date.now()}.json`,
-  );
+  const reportFile = path.join(REPORTS_DIR, `${test.file.replace('.yml', '')}-${Date.now()}.json`);
 
   try {
     // Run Artillery test using pnpm exec
@@ -82,17 +79,17 @@ function runTest(test) {
 
     execSync(command, {
       stdio: 'inherit',
-      cwd: process.cwd(),
+      cwd: process.cwd()
     });
 
     // Generate HTML report
     const htmlReport = reportFile.replace('.json', '.html');
     const reportCommand = `pnpm exec artillery report "${reportFile}" --output "${htmlReport}"`;
-    
+
     console.log(`\nGenerating HTML report...`);
     execSync(reportCommand, {
       stdio: 'inherit',
-      cwd: process.cwd(),
+      cwd: process.cwd()
     });
 
     console.log(`\n✅ Test completed successfully!`);
@@ -126,11 +123,11 @@ function showMenu() {
 function runAllRecommended() {
   console.log('\n🚀 Running all recommended tests...\n');
 
-  const recommendedTests = tests.filter((t) => t.recommended);
+  const recommendedTests = tests.filter(t => t.recommended);
   let passed = 0;
   let failed = 0;
 
-  recommendedTests.forEach((test) => {
+  recommendedTests.forEach(test => {
     const success = runTest(test);
     if (success) {
       passed++;
@@ -154,14 +151,14 @@ const args = process.argv.slice(2);
 if (args.length === 0) {
   // Interactive mode
   showMenu();
-  
+
   const readline = require('readline');
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout,
+    output: process.stdout
   });
 
-  rl.question('\nSelect test to run (0-5, q): ', (answer) => {
+  rl.question('\nSelect test to run (0-5, q): ', answer => {
     rl.close();
 
     if (answer.toLowerCase() === 'q') {

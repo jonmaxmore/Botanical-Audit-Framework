@@ -6,9 +6,36 @@ export default function FarmsPage() {
   const [view, setView] = useState<'grid' | 'list'>('grid');
 
   const farms = [
-    { id: 1, name: 'ฟาร์มสุขใจ', province: 'เชียงใหม่', area: 5, plots: 2, crop: 'กัญชา', lat: 18.7883, lon: 98.9853 },
-    { id: 2, name: 'ฟาร์มปลอดภัย', province: 'เชียงราย', area: 10, plots: 3, crop: 'ขมิ้น', lat: 19.9105, lon: 99.8406 },
-    { id: 3, name: 'ฟาร์มอินทรีย์', province: 'ลำปาง', area: 3, plots: 1, crop: 'กัญชา', lat: 18.2888, lon: 99.4919 },
+    {
+      id: 1,
+      name: 'ฟาร์มสุขใจ',
+      province: 'เชียงใหม่',
+      area: 5,
+      plots: 2,
+      crop: 'กัญชา',
+      lat: 18.7883,
+      lon: 98.9853
+    },
+    {
+      id: 2,
+      name: 'ฟาร์มปลอดภัย',
+      province: 'เชียงราย',
+      area: 10,
+      plots: 3,
+      crop: 'ขมิ้น',
+      lat: 19.9105,
+      lon: 99.8406
+    },
+    {
+      id: 3,
+      name: 'ฟาร์มอินทรีย์',
+      province: 'ลำปาง',
+      area: 3,
+      plots: 1,
+      crop: 'กัญชา',
+      lat: 18.2888,
+      lon: 99.4919
+    }
   ];
 
   return (
@@ -40,8 +67,11 @@ export default function FarmsPage() {
 
         {view === 'grid' ? (
           <div className="grid md:grid-cols-3 gap-6">
-            {farms.map((farm) => (
-              <div key={farm.id} className="bg-white rounded-lg shadow hover:shadow-lg transition p-6">
+            {farms.map(farm => (
+              <div
+                key={farm.id}
+                className="bg-white rounded-lg shadow hover:shadow-lg transition p-6"
+              >
                 <div className="flex justify-between items-start mb-4">
                   <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center text-2xl">
                     🌱
@@ -69,7 +99,9 @@ export default function FarmsPage() {
                   </div>
                 </div>
                 <div className="mt-4 flex space-x-2">
-                  <button className="flex-1 py-2 border rounded-lg hover:bg-gray-50 text-sm">แก้ไข</button>
+                  <button className="flex-1 py-2 border rounded-lg hover:bg-gray-50 text-sm">
+                    แก้ไข
+                  </button>
                   <button className="flex-1 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
                     ดูรายละเอียด
                   </button>
@@ -82,16 +114,28 @@ export default function FarmsPage() {
             <table className="min-w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ชื่อฟาร์ม</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">จังหวัด</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">พื้นที่</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">แปลง</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">พืช</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">การดำเนินการ</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    ชื่อฟาร์ม
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    จังหวัด
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    พื้นที่
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    แปลง
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    พืช
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    การดำเนินการ
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {farms.map((farm) => (
+                {farms.map(farm => (
                   <tr key={farm.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap font-medium">{farm.name}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-gray-600">{farm.province}</td>

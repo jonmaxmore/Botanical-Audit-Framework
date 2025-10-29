@@ -17,7 +17,7 @@ content = content.replace(
     if (lg) props += ` lg={${lg}}`;
     if (xl) props += ` xl={${xl}}`;
     return props + ' ';
-  },
+  }
 );
 
 // Write back

@@ -16,7 +16,7 @@ import {
   FormControl,
   InputLabel,
   Select,
-  MenuItem
+  MenuItem,
 } from '@mui/material';
 import { Visibility, VisibilityOff, PersonAdd } from '@mui/icons-material';
 import { useAuth, UserRole } from '@/contexts/AuthContext';
@@ -36,15 +36,17 @@ export default function RegisterPage() {
     confirmPassword: '',
     name: '',
     phoneNumber: '',
-    role: 'FARMER' as UserRole
+    role: 'FARMER' as UserRole,
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>
+  ) => {
     const name = e.target.name as string;
     const value = e.target.value;
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
     setError(null);
   };
@@ -88,7 +90,7 @@ export default function RegisterPage() {
         password: formData.password,
         name: formData.name,
         phoneNumber: formData.phoneNumber || undefined,
-        role: formData.role
+        role: formData.role,
       });
       setSuccess(true);
     } catch (err) {
@@ -118,7 +120,7 @@ export default function RegisterPage() {
           minHeight: '100vh',
           display: 'flex',
           alignItems: 'center',
-          background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)'
+          background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
         }}
       >
         <Container maxWidth="sm">
@@ -143,7 +145,7 @@ export default function RegisterPage() {
         display: 'flex',
         alignItems: 'center',
         py: 4,
-        background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)'
+        background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
       }}
     >
       <Container maxWidth="sm">
@@ -227,14 +229,11 @@ export default function RegisterPage() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
 
@@ -258,7 +257,7 @@ export default function RegisterPage() {
                       {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
 
@@ -277,22 +276,14 @@ export default function RegisterPage() {
           <Box sx={{ textAlign: 'center', mt: 2 }}>
             <Typography variant="body2" color="text.secondary">
               มีบัญชีอยู่แล้ว?{' '}
-              <MuiLink
-                component={Link}
-                href="/login"
-                sx={{ fontWeight: 600, cursor: 'pointer' }}
-              >
+              <MuiLink component={Link} href="/login" sx={{ fontWeight: 600, cursor: 'pointer' }}>
                 เข้าสู่ระบบ
               </MuiLink>
             </Typography>
           </Box>
 
           <Box sx={{ textAlign: 'center', mt: 3 }}>
-            <Button
-              variant="text"
-              onClick={() => router.push('/')}
-              sx={{ textTransform: 'none' }}
-            >
+            <Button variant="text" onClick={() => router.push('/')} sx={{ textTransform: 'none' }}>
               ← กลับหน้าหลัก
             </Button>
           </Box>

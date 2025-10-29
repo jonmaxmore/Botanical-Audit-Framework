@@ -33,7 +33,7 @@ export default function ReviewActionModal({
   onClose,
   applicationId,
   applicationData,
-  onSubmit,
+  onSubmit
 }: ReviewActionModalProps) {
   const [loading, setLoading] = useState(false);
   const [decision, setDecision] = useState<'approve' | 'reject' | 'request_info'>('approve');
@@ -48,7 +48,7 @@ export default function ReviewActionModal({
     'บัตรประชาชน',
     'สำเนาโฉนดที่ดิน',
     'ใบอนุญาตประกอบกิจการ',
-    'อื่นๆ',
+    'อื่นๆ'
   ];
 
   const handleSubmit = async () => {
@@ -64,7 +64,7 @@ export default function ReviewActionModal({
         decision,
         comments: comments.trim(),
         feedbackScore,
-        requestedDocuments: decision === 'request_info' ? requestedDocuments : undefined,
+        requestedDocuments: decision === 'request_info' ? requestedDocuments : undefined
       };
 
       await onSubmit(formData);

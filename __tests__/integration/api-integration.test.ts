@@ -12,7 +12,7 @@ describe('API Integration Tests', () => {
         scientificName: 'Rosa canina',
         commonName: 'Dog Rose',
         family: 'Rosaceae',
-        status: 'active',
+        status: 'active'
       };
 
       const created = await apiClient.post('/plants', newPlant);
@@ -23,7 +23,7 @@ describe('API Integration Tests', () => {
     it('should handle validation errors', async () => {
       const invalidPlant = {
         scientificName: '',
-        commonName: '',
+        commonName: ''
       };
 
       await expect(apiClient.post('/plants', invalidPlant)).rejects.toThrow();
@@ -41,7 +41,7 @@ describe('API Integration Tests', () => {
         plantId: 'plant-123',
         auditDate: new Date().toISOString(),
         auditor: 'John Doe',
-        status: 'pending',
+        status: 'pending'
       };
 
       const created = await apiClient.post('/audits', newAudit);

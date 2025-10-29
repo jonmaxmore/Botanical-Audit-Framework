@@ -1092,8 +1092,8 @@ class EmailService {
           region: process.env.AWS_REGION || 'us-east-1',
           credentials: {
             accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-          },
+            secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+          }
         });
         logger.info('[EmailService] AWS SES initialized');
         break;
@@ -1105,8 +1105,8 @@ class EmailService {
           secure: process.env.SMTP_SECURE === 'true',
           auth: {
             user: process.env.SMTP_USER,
-            pass: process.env.SMTP_PASS,
-          },
+            pass: process.env.SMTP_PASS
+          }
         });
         logger.info('[EmailService] SMTP initialized');
         break;
@@ -1136,7 +1136,7 @@ class EmailService {
       if (!amount) return '0.00';
       return parseFloat(amount).toLocaleString('th-TH', {
         minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
+        maximumFractionDigits: 2
       });
     });
 
@@ -1172,11 +1172,11 @@ class EmailService {
         to,
         from: {
           email: this.fromEmail,
-          name: this.fromName,
+          name: this.fromName
         },
         subject,
         html,
-        attachments,
+        attachments
       };
 
       // Send via provider
@@ -1197,7 +1197,7 @@ class EmailService {
       return {
         success: true,
         messageId: result.messageId,
-        provider: this.provider,
+        provider: this.provider
       };
     } catch (error) {
       logger.error('[EmailService] Failed to send email:', error);
@@ -1223,7 +1223,7 @@ class EmailService {
         logoUrl: process.env.EMAIL_LOGO_URL || 'https://gacp.doa.go.th/logo.png',
         websiteUrl: process.env.WEBSITE_URL || 'https://gacp.doa.go.th',
         supportEmail: process.env.SUPPORT_EMAIL || 'support@gacp.doa.go.th',
-        unsubscribeUrl: `${process.env.WEBSITE_URL}/unsubscribe?email=${data.email}`,
+        unsubscribeUrl: `${process.env.WEBSITE_URL}/unsubscribe?email=${data.email}`
       };
 
       const template = handlebars.compile(templateContent);
@@ -1241,7 +1241,7 @@ class EmailService {
   async _sendViaSendGrid(message) {
     const response = await sgMail.send(message);
     return {
-      messageId: response[0].headers['x-message-id'],
+      messageId: response[0].headers['x-message-id']
     };
   }
 
@@ -1253,25 +1253,25 @@ class EmailService {
     const params = {
       Source: `${message.from.name} <${message.from.email}>`,
       Destination: {
-        ToAddresses: [message.to],
+        ToAddresses: [message.to]
       },
       Message: {
         Subject: {
           Data: message.subject,
-          Charset: 'UTF-8',
+          Charset: 'UTF-8'
         },
         Body: {
           Html: {
             Data: message.html,
-            Charset: 'UTF-8',
-          },
-        },
-      },
+            Charset: 'UTF-8'
+          }
+        }
+      }
     };
 
     const response = await this.sesClient.sendEmail(params);
     return {
-      messageId: response.MessageId,
+      messageId: response.MessageId
     };
   }
 
@@ -1285,7 +1285,7 @@ class EmailService {
       to: message.to,
       subject: message.subject,
       html: message.html,
-      attachments: message.attachments,
+      attachments: message.attachments
     };
 
     const info = await this.transporter.sendMail(mailOptions);
@@ -1296,7 +1296,7 @@ class EmailService {
     }
 
     return {
-      messageId: info.messageId,
+      messageId: info.messageId
     };
   }
 
@@ -1311,7 +1311,7 @@ class EmailService {
     return results.map((result, index) => ({
       email: emails[index].to,
       success: result.status === 'fulfilled',
-      error: result.status === 'rejected' ? result.reason.message : null,
+      error: result.status === 'rejected' ? result.reason.message : null
     }));
   }
 
@@ -1371,7 +1371,7 @@ const connection = new IORedis({
   host: process.env.REDIS_HOST || 'localhost',
   port: parseInt(process.env.REDIS_PORT) || 6379,
   password: process.env.REDIS_PASSWORD,
-  maxRetriesPerRequest: null,
+  maxRetriesPerRequest: null
 });
 
 // Email queue
@@ -1381,16 +1381,16 @@ const emailQueue = new Queue('emails', {
     attempts: 3,
     backoff: {
       type: 'exponential',
-      delay: 5000, // 5 seconds, then 10s, then 20s
+      delay: 5000 // 5 seconds, then 10s, then 20s
     },
     removeOnComplete: {
       age: 24 * 3600, // Keep completed jobs for 24 hours
-      count: 1000,
+      count: 1000
     },
     removeOnFail: {
-      age: 7 * 24 * 3600, // Keep failed jobs for 7 days
-    },
-  },
+      age: 7 * 24 * 3600 // Keep failed jobs for 7 days
+    }
+  }
 });
 
 // Email service instance
@@ -1410,7 +1410,7 @@ const emailWorker = new Worker(
         subject,
         template,
         data,
-        attachments,
+        attachments
       });
 
       logger.info(`[EmailQueue] Job ${job.id} completed successfully`);
@@ -1422,8 +1422,8 @@ const emailWorker = new Worker(
   },
   {
     connection,
-    concurrency: parseInt(process.env.EMAIL_CONCURRENCY) || 5,
-  },
+    concurrency: parseInt(process.env.EMAIL_CONCURRENCY) || 5
+  }
 );
 
 // Worker event handlers
@@ -1473,7 +1473,7 @@ async function addEmailToQueue(emailData) {
 
   return {
     jobId: job.id,
-    priority,
+    priority
   };
 }
 
@@ -1487,8 +1487,8 @@ async function addBulkEmailsToQueue(emails) {
     name: 'send-email',
     data: email,
     opts: {
-      priority: email.priority === 'high' ? 1 : email.priority === 'low' ? 10 : 5,
-    },
+      priority: email.priority === 'high' ? 1 : email.priority === 'low' ? 10 : 5
+    }
   }));
 
   const addedJobs = await emailQueue.addBulk(jobs);
@@ -1496,7 +1496,7 @@ async function addBulkEmailsToQueue(emails) {
   logger.info(`[EmailQueue] ${addedJobs.length} bulk email jobs added`);
 
   return addedJobs.map(job => ({
-    jobId: job.id,
+    jobId: job.id
   }));
 }
 
@@ -1510,7 +1510,7 @@ async function getQueueStats() {
     emailQueue.getActiveCount(),
     emailQueue.getCompletedCount(),
     emailQueue.getFailedCount(),
-    emailQueue.getDelayedCount(),
+    emailQueue.getDelayedCount()
   ]);
 
   return {
@@ -1519,7 +1519,7 @@ async function getQueueStats() {
     completed,
     failed,
     delayed,
-    total: waiting + active + completed + failed + delayed,
+    total: waiting + active + completed + failed + delayed
   };
 }
 
@@ -1557,7 +1557,7 @@ module.exports = {
   getQueueStats,
   pauseQueue,
   resumeQueue,
-  cleanQueue,
+  cleanQueue
 };
 ```
 
@@ -1626,9 +1626,9 @@ class EmailEventHandler extends EventEmitter {
           farmName: data.farmName,
           registrationDate: new Date().toISOString(),
           loginUrl: `${process.env.FARMER_PORTAL_URL}/login`,
-          supportUrl: `${process.env.WEBSITE_URL}/support`,
+          supportUrl: `${process.env.WEBSITE_URL}/support`
         },
-        priority: 'high',
+        priority: 'high'
       });
 
       logger.info(`[EmailEventHandler] Registration email queued for: ${data.email}`);
@@ -1653,13 +1653,13 @@ class EmailEventHandler extends EventEmitter {
           standardName: data.standardName,
           farmName: data.farmName,
           submittedDate: new Date().toISOString(),
-          trackingUrl: `${process.env.FARMER_PORTAL_URL}/applications/${data.applicationId}`,
+          trackingUrl: `${process.env.FARMER_PORTAL_URL}/applications/${data.applicationId}`
         },
-        priority: 'high',
+        priority: 'high'
       });
 
       logger.info(
-        `[EmailEventHandler] Application submitted email queued for: ${data.farmerEmail}`,
+        `[EmailEventHandler] Application submitted email queued for: ${data.farmerEmail}`
       );
     } catch (error) {
       logger.error('[EmailEventHandler] Failed to queue application submitted email:', error);
@@ -1689,17 +1689,17 @@ class EmailEventHandler extends EventEmitter {
           vatAmount: data.vatAmount,
           totalAmount: data.totalAmount,
           receiptPdfUrl: data.receiptPdfUrl,
-          trackingUrl: `${process.env.FARMER_PORTAL_URL}/applications/${data.applicationId}`,
+          trackingUrl: `${process.env.FARMER_PORTAL_URL}/applications/${data.applicationId}`
         },
         attachments: data.receiptPdfUrl
           ? [
               {
                 filename: `receipt-${data.receiptNumber}.pdf`,
-                path: data.receiptPdfUrl,
-              },
+                path: data.receiptPdfUrl
+              }
             ]
           : [],
-        priority: 'high',
+        priority: 'high'
       });
 
       logger.info(`[EmailEventHandler] Payment confirmed email queued for: ${data.farmerEmail}`);
@@ -1729,15 +1729,15 @@ class EmailEventHandler extends EventEmitter {
           certificatePdfUrl: data.certificatePdfUrl,
           qrCodeUrl: data.qrCodeUrl,
           qrDownloadUrl: data.qrDownloadUrl,
-          verificationUrl: data.verificationUrl,
+          verificationUrl: data.verificationUrl
         },
         attachments: [
           {
             filename: `certificate-${data.certificateNumber}.pdf`,
-            path: data.certificatePdfUrl,
-          },
+            path: data.certificatePdfUrl
+          }
         ],
-        priority: 'high',
+        priority: 'high'
       });
 
       logger.info(`[EmailEventHandler] Certificate issued email queued for: ${data.farmerEmail}`);
@@ -1769,14 +1769,14 @@ class EmailEventHandler extends EventEmitter {
             farmName: data.farmName,
             standardName: data.standardName,
             submittedDate: data.submittedDate,
-            applicationUrl: `${process.env.ADMIN_PORTAL_URL}/applications/${data.applicationId}`,
+            applicationUrl: `${process.env.ADMIN_PORTAL_URL}/applications/${data.applicationId}`
           },
-          priority: 'normal',
+          priority: 'normal'
         });
       }
 
       logger.info(
-        `[EmailEventHandler] New application emails queued for ${recipients.length} admins`,
+        `[EmailEventHandler] New application emails queued for ${recipients.length} admins`
       );
     } catch (error) {
       logger.error('[EmailEventHandler] Failed to queue new application emails:', error);
@@ -1814,7 +1814,7 @@ class ApplicationController {
       const application = await this.applicationService.createApplication({
         farmerId: userId,
         standardId,
-        farmData,
+        farmData
       });
 
       // Trigger email notification
@@ -1824,7 +1824,7 @@ class ApplicationController {
         applicationId: application.applicationId,
         applicationNumber: application.applicationNumber,
         standardName: application.standardName,
-        farmName: farmData.farmName,
+        farmName: farmData.farmName
       });
 
       // Also notify admin
@@ -1835,20 +1835,20 @@ class ApplicationController {
         farmName: farmData.farmName,
         standardName: application.standardName,
         submittedDate: application.submittedDate,
-        allAdminEmails: await this.adminService.getAdminEmails(),
+        allAdminEmails: await this.adminService.getAdminEmails()
       });
 
       res.status(201).json({
         success: true,
         data: application,
-        message: 'Application submitted successfully',
+        message: 'Application submitted successfully'
       });
     } catch (error) {
       logger.error('[ApplicationController] Submit application error:', error);
       res.status(500).json({
         success: false,
         error: 'APPLICATION_SUBMIT_ERROR',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -1864,7 +1864,7 @@ class ApplicationController {
       const application = await this.applicationService.approveApplication(
         applicationId,
         req.userId,
-        remarks,
+        remarks
       );
 
       // Trigger email notification
@@ -1873,20 +1873,20 @@ class ApplicationController {
         farmerName: application.farmerName,
         applicationNumber: application.applicationNumber,
         standardName: application.standardName,
-        remarks,
+        remarks
       });
 
       res.json({
         success: true,
         data: application,
-        message: 'Application approved successfully',
+        message: 'Application approved successfully'
       });
     } catch (error) {
       logger.error('[ApplicationController] Approve application error:', error);
       res.status(500).json({
         success: false,
         error: 'APPLICATION_APPROVE_ERROR',
-        message: error.message,
+        message: error.message
       });
     }
   }
@@ -1912,16 +1912,16 @@ const notificationPreferencesSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
     userType: {
       type: String,
       enum: ['FARMER', 'ADMIN', 'AUDITOR'],
-      required: true,
+      required: true
     },
     email: {
       type: String,
-      required: true,
+      required: true
     },
 
     // Email preferences
@@ -1932,34 +1932,34 @@ const notificationPreferencesSchema = new mongoose.Schema(
       auditUpdates: { type: Boolean, default: true },
       certificateUpdates: { type: Boolean, default: true },
       marketingEmails: { type: Boolean, default: false },
-      weeklyDigest: { type: Boolean, default: true },
+      weeklyDigest: { type: Boolean, default: true }
     },
 
     // Frequency settings
     frequency: {
       type: String,
       enum: ['IMMEDIATE', 'DAILY_DIGEST', 'WEEKLY_DIGEST'],
-      default: 'IMMEDIATE',
+      default: 'IMMEDIATE'
     },
 
     // Quiet hours (no emails)
     quietHours: {
       enabled: { type: Boolean, default: false },
       startHour: { type: Number, default: 22 }, // 10 PM
-      endHour: { type: Number, default: 8 }, // 8 AM
+      endHour: { type: Number, default: 8 } // 8 AM
     },
 
     // Unsubscribe tokens
     unsubscribeToken: {
       type: String,
       unique: true,
-      sparse: true,
+      sparse: true
     },
-    unsubscribedAt: Date,
+    unsubscribedAt: Date
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 module.exports = mongoose.model('NotificationPreferences', notificationPreferencesSchema);
@@ -1995,8 +1995,8 @@ describe('EmailService', () => {
         data: {
           farmerName: 'John Doe',
           email: 'test@example.com',
-          farmName: 'Test Farm',
-        },
+          farmName: 'Test Farm'
+        }
       });
 
       expect(result.success).toBe(true);
@@ -2010,8 +2010,8 @@ describe('EmailService', () => {
           to: 'test@example.com',
           subject: 'Test',
           template: 'invalid/template',
-          data: {},
-        }),
+          data: {}
+        })
       ).rejects.toThrow('Template rendering failed');
     });
   });
@@ -2021,7 +2021,7 @@ describe('EmailService', () => {
       const html = await emailService.renderTemplate('farmer/registration-confirmation', {
         farmerName: 'John Doe',
         email: 'test@example.com',
-        farmName: 'Test Farm',
+        farmName: 'Test Farm'
       });
 
       expect(html).toContain('John Doe');
@@ -2031,7 +2031,7 @@ describe('EmailService', () => {
 
     it('should include common data in template', async () => {
       const html = await emailService.renderTemplate('farmer/registration-confirmation', {
-        farmerName: 'John',
+        farmerName: 'John'
       });
 
       expect(html).toContain(new Date().getFullYear().toString());
@@ -2062,7 +2062,7 @@ describe('EmailQueue', () => {
         subject: 'Test',
         template: 'farmer/registration-confirmation',
         data: {},
-        priority: 'high',
+        priority: 'high'
       });
 
       expect(result.jobId).toBeDefined();
@@ -2074,7 +2074,7 @@ describe('EmailQueue', () => {
         to: 'test@example.com',
         subject: 'Test',
         template: 'farmer/registration-confirmation',
-        data: {},
+        data: {}
       });
 
       expect(result.priority).toBe('normal');
@@ -2114,7 +2114,7 @@ describe('EmailEventHandler Integration', () => {
     emailEvents.emit('farmer:registered', {
       email: 'test@example.com',
       farmerName: 'John Doe',
-      farmName: 'Test Farm',
+      farmName: 'Test Farm'
     });
 
     // Wait for event processing
@@ -2135,7 +2135,7 @@ describe('EmailEventHandler Integration', () => {
       applicationNumber: 'APP-2025-0001',
       standardName: 'GACP',
       farmName: 'Test Farm',
-      applicationId: 'abc123',
+      applicationId: 'abc123'
     });
 
     await new Promise(resolve => setTimeout(resolve, 100));
@@ -2250,14 +2250,14 @@ const templateSamples = {
     farmerName: 'นายสมชาย ใจดี',
     email: 'somchai@example.com',
     farmName: 'ฟาร์มสมชาย',
-    registrationDate: new Date().toISOString(),
+    registrationDate: new Date().toISOString()
   },
   'farmer/application-submitted': {
     farmerName: 'นายสมชาย ใจดี',
     applicationNumber: 'APP-2025-0001',
     standardName: 'GACP Standard',
     farmName: 'ฟาร์มสมชาย',
-    submittedDate: new Date().toISOString(),
+    submittedDate: new Date().toISOString()
   },
   'farmer/payment-confirmed': {
     farmerName: 'นายสมชาย ใจดี',
@@ -2270,7 +2270,7 @@ const templateSamples = {
     phase1Amount: 5000,
     phase2Amount: 25000,
     vatAmount: 2100,
-    totalAmount: 32100,
+    totalAmount: 32100
   },
   'farmer/certificate-issued': {
     farmerName: 'นายสมชาย ใจดี',
@@ -2279,8 +2279,8 @@ const templateSamples = {
     standardName: 'GACP Standard',
     score: 92,
     issuedDate: new Date().toISOString(),
-    expiryDate: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toISOString(),
-  },
+    expiryDate: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toISOString()
+  }
 };
 
 // Create HTTP server to preview templates
@@ -2478,7 +2478,7 @@ async function testEmailConfiguration() {
     const html = await emailService.renderTemplate('farmer/registration-confirmation', {
       farmerName: 'Test User',
       email: 'test@example.com',
-      farmName: 'Test Farm',
+      farmName: 'Test Farm'
     });
     console.log('✅ Template rendering works\n');
   } catch (error) {
@@ -2496,8 +2496,8 @@ async function testEmailConfiguration() {
       data: {
         farmerName: 'Test User',
         email: 'test@example.com',
-        farmName: 'Test Farm',
-      },
+        farmName: 'Test Farm'
+      }
     });
 
     console.log('✅ Test email sent successfully');
@@ -2538,13 +2538,13 @@ async function monitorQueue() {
         completed: stats.completed,
         failed: stats.failed,
         delayed: stats.delayed,
-        total: stats.total,
+        total: stats.total
       });
 
       // Alert if too many failed jobs
       if (stats.failed > 100) {
         logger.error('[EmailQueueMonitor] High number of failed jobs!', {
-          count: stats.failed,
+          count: stats.failed
         });
         // Send alert to admin
       }
@@ -2552,7 +2552,7 @@ async function monitorQueue() {
       // Alert if queue is backed up
       if (stats.waiting > 1000) {
         logger.warn('[EmailQueueMonitor] Queue backlog detected!', {
-          waiting: stats.waiting,
+          waiting: stats.waiting
         });
       }
     } catch (error) {
@@ -2608,7 +2608,7 @@ pm2 start apps/backend/workers/email-worker.js -i 3
 // Limit to 100 emails per second
 const rateLimiter = new Bottleneck({
   minTime: 10, // 10ms between emails
-  maxConcurrent: 5,
+  maxConcurrent: 5
 });
 ```
 

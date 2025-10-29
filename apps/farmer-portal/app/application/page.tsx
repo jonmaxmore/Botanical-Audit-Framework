@@ -9,7 +9,7 @@ export default function NewApplicationPage() {
     farm: '',
     crop: '',
     area: '',
-    documents: [] as string[],
+    documents: [] as string[]
   });
 
   const crops = ['กัญชา', 'ขมิ้น', 'ขิง', 'กระชาย', 'ไพล', 'กระท่อม'];
@@ -17,22 +17,28 @@ export default function NewApplicationPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
-        <Link href="/applications" className="text-green-600 hover:underline mb-4 inline-block">← กลับ</Link>
-        
+        <Link href="/applications" className="text-green-600 hover:underline mb-4 inline-block">
+          ← กลับ
+        </Link>
+
         <div className="bg-white rounded-lg shadow p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">📝 ยื่นคำขอใบรับรอง GACP</h1>
           <p className="text-gray-600 mb-8">กรอกข้อมูลเพื่อยื่นคำขอใบรับรอง</p>
 
           {/* Progress */}
           <div className="flex items-center justify-between mb-8">
-            {[1, 2, 3, 4].map((s) => (
+            {[1, 2, 3, 4].map(s => (
               <div key={s} className="flex items-center">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
-                  step >= s ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-600'
-                }`}>
+                <div
+                  className={`w-10 h-10 rounded-full flex items-center justify-center font-bold ${
+                    step >= s ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-600'
+                  }`}
+                >
                   {s}
                 </div>
-                {s < 4 && <div className={`w-24 h-1 ${step > s ? 'bg-green-600' : 'bg-gray-200'}`} />}
+                {s < 4 && (
+                  <div className={`w-24 h-1 ${step > s ? 'bg-green-600' : 'bg-gray-200'}`} />
+                )}
               </div>
             ))}
           </div>
@@ -43,20 +49,33 @@ export default function NewApplicationPage() {
               <h2 className="text-xl font-bold mb-4">Step 1: เลือกฟาร์ม</h2>
               <div className="space-y-3">
                 <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:border-green-500">
-                  <input type="radio" name="farm" className="mr-3" onChange={() => setFormData({...formData, farm: 'สุขใจ'})} />
+                  <input
+                    type="radio"
+                    name="farm"
+                    className="mr-3"
+                    onChange={() => setFormData({ ...formData, farm: 'สุขใจ' })}
+                  />
                   <div>
                     <div className="font-semibold">ฟาร์มสุขใจ</div>
                     <div className="text-sm text-gray-600">เชียงใหม่ • 5 ไร่</div>
                   </div>
                 </label>
                 <label className="flex items-center p-4 border-2 rounded-lg cursor-pointer hover:border-green-500">
-                  <input type="radio" name="farm" className="mr-3" onChange={() => setFormData({...formData, farm: 'ปลอดภัย'})} />
+                  <input
+                    type="radio"
+                    name="farm"
+                    className="mr-3"
+                    onChange={() => setFormData({ ...formData, farm: 'ปลอดภัย' })}
+                  />
                   <div>
                     <div className="font-semibold">ฟาร์มปลอดภัย</div>
                     <div className="text-sm text-gray-600">เชียงราย • 10 ไร่</div>
                   </div>
                 </label>
-                <Link href="/farms" className="flex items-center justify-center p-4 border-2 border-dashed rounded-lg text-green-600 hover:border-green-500">
+                <Link
+                  href="/farms"
+                  className="flex items-center justify-center p-4 border-2 border-dashed rounded-lg text-green-600 hover:border-green-500"
+                >
                   + สร้างฟาร์มใหม่
                 </Link>
               </div>
@@ -68,12 +87,14 @@ export default function NewApplicationPage() {
             <div>
               <h2 className="text-xl font-bold mb-4">Step 2: เลือกพืชที่ต้องการขอรับรอง</h2>
               <div className="grid grid-cols-3 gap-4 mb-4">
-                {crops.map((crop) => (
+                {crops.map(crop => (
                   <button
                     key={crop}
-                    onClick={() => setFormData({...formData, crop})}
+                    onClick={() => setFormData({ ...formData, crop })}
                     className={`p-4 border-2 rounded-lg font-semibold ${
-                      formData.crop === crop ? 'border-green-600 bg-green-50 text-green-700' : 'border-gray-200 hover:border-green-500'
+                      formData.crop === crop
+                        ? 'border-green-600 bg-green-50 text-green-700'
+                        : 'border-gray-200 hover:border-green-500'
                     }`}
                   >
                     {crop}
@@ -85,7 +106,7 @@ export default function NewApplicationPage() {
                 <input
                   type="number"
                   value={formData.area}
-                  onChange={(e) => setFormData({...formData, area: e.target.value})}
+                  onChange={e => setFormData({ ...formData, area: e.target.value })}
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="เช่น 5"
                 />
@@ -98,7 +119,7 @@ export default function NewApplicationPage() {
             <div>
               <h2 className="text-xl font-bold mb-4">Step 3: อัปโหลดเอกสาร</h2>
               <div className="space-y-4">
-                {['ใบอนุญาตปลูก', 'แผนที่ฟาร์ม', 'ใบรับรองที่ดิน', 'แผนการปลูก'].map((doc) => (
+                {['ใบอนุญาตปลูก', 'แผนที่ฟาร์ม', 'ใบรับรองที่ดิน', 'แผนการปลูก'].map(doc => (
                   <div key={doc} className="border-2 border-dashed rounded-lg p-4">
                     <div className="flex justify-between items-center">
                       <span className="font-medium">{doc}</span>

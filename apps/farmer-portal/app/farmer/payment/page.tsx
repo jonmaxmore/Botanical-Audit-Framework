@@ -21,7 +21,7 @@ import {
   FormLabel,
   Chip,
   IconButton,
-  Stack,
+  Stack
 } from '@mui/material';
 import {
   Payment as PaymentIcon,
@@ -32,7 +32,7 @@ import {
   ArrowBack as ArrowBackIcon,
   ContentCopy as CopyIcon,
   Info as InfoIcon,
-  Timer as TimerIcon,
+  Timer as TimerIcon
 } from '@mui/icons-material';
 import { useRouter, useSearchParams } from 'next/navigation';
 import QRCode from 'qrcode';
@@ -110,7 +110,7 @@ const PaymentPage = () => {
         status: 'pending',
         promptPayId: '0123456789012',
         referenceNumber: `GACP${applicationId?.slice(-6)}P${phase}`,
-        expiresAt: new Date(Date.now() + 15 * 60 * 1000),
+        expiresAt: new Date(Date.now() + 15 * 60 * 1000)
       };
 
       setPaymentData(mockPayment);
@@ -132,7 +132,7 @@ const PaymentPage = () => {
         merchantId: paymentData.promptPayId,
         amount: paymentData.amount,
         reference: paymentData.referenceNumber,
-        currency: 'THB',
+        currency: 'THB'
       });
 
       // Generate QR code on canvas
@@ -141,8 +141,8 @@ const PaymentPage = () => {
         margin: 2,
         color: {
           dark: '#000000',
-          light: '#ffffff',
-        },
+          light: '#ffffff'
+        }
       });
     } catch (err) {
       console.error('QR Code generation error:', err);
@@ -195,8 +195,8 @@ const PaymentPage = () => {
         message: 'บันทึกข้อมูลการชำระเงินสำเร็จ',
         data: {
           paymentId: `PAY-${Date.now()}`,
-          status: 'processing',
-        },
+          status: 'processing'
+        }
       };
 
       if (mockResponse.success) {
@@ -276,7 +276,7 @@ const PaymentPage = () => {
         sx={{
           mb: 3,
           background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          color: 'white',
+          color: 'white'
         }}
       >
         <CardContent>
@@ -356,7 +356,7 @@ const PaymentPage = () => {
                   style={{
                     border: '2px solid #e0e0e0',
                     borderRadius: '8px',
-                    maxWidth: '100%',
+                    maxWidth: '100%'
                   }}
                 />
                 <Typography

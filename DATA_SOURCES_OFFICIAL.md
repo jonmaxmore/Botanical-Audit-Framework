@@ -13,6 +13,7 @@
 **Website:** https://www.ldd.go.th  
 **API:** Available upon request  
 **Data Available:**
+
 - ✅ Soil maps (1:25,000 scale)
 - ✅ Soil classification (Thai Soil Taxonomy)
 - ✅ Soil fertility data by province
@@ -20,6 +21,7 @@
 - ✅ Soil improvement guidelines
 
 **Contact:**
+
 - Email: ldd@ldd.go.th
 - Tel: 0-2579-4000
 - Address: 2003 Phahonyothin Rd, Chatuchak, Bangkok 10900
@@ -35,6 +37,7 @@
 **Website:** https://www.tmd.go.th  
 **API:** https://data.tmd.go.th/api  
 **Data Available:**
+
 - ✅ Real-time weather data
 - ✅ 7-day weather forecast
 - ✅ Historical climate data (30+ years)
@@ -43,6 +46,7 @@
 - ✅ Extreme weather warnings
 
 **API Access:**
+
 - Register at: https://data.tmd.go.th/register
 - Free tier: 1,000 requests/day
 - Premium: Unlimited access
@@ -57,6 +61,7 @@
 
 **Website:** https://www.doa.go.th  
 **Data Available:**
+
 - ✅ Crop cultivation guidelines
 - ✅ Pest and disease management
 - ✅ Fertilizer recommendations
@@ -65,6 +70,7 @@
 - ✅ Seed certification
 
 **Contact:**
+
 - Email: info@doa.in.th
 - Tel: 0-2579-0121
 - Address: 50 Phahonyothin Rd, Chatuchak, Bangkok 10900
@@ -79,6 +85,7 @@
 
 **Website:** https://www.acfs.go.th  
 **Data Available:**
+
 - ✅ Agricultural standards (มกษ.)
 - ✅ Food safety standards
 - ✅ Organic certification requirements
@@ -86,6 +93,7 @@
 - ✅ Cannabis cultivation standards
 
 **Contact:**
+
 - Email: acfs@acfs.go.th
 - Tel: 0-2561-2277
 - Address: 50 Phahonyothin Rd, Chatuchak, Bangkok 10900
@@ -100,6 +108,7 @@
 
 **Website:** https://www.fda.moph.go.th  
 **Data Available:**
+
 - ✅ Cannabis regulations
 - ✅ Medicinal plant standards
 - ✅ GACP guidelines (Thai version)
@@ -107,6 +116,7 @@
 - ✅ Quality control standards
 
 **Contact:**
+
 - Email: info@fda.moph.go.th
 - Tel: 0-2590-7000
 - Address: 88/24 Tiwanon Rd, Nonthaburi 11000
@@ -121,6 +131,7 @@
 
 **Website:** https://www.doae.go.th  
 **Data Available:**
+
 - ✅ Extension services information
 - ✅ Farmer training materials
 - ✅ Best practice guidelines
@@ -128,6 +139,7 @@
 - ✅ Provincial agricultural data
 
 **Contact:**
+
 - Email: doae@doae.go.th
 - Tel: 0-2579-3936
 - Address: 3 Ratchadamnoen Nok Ave, Bangkok 10200
@@ -143,6 +155,7 @@
 **Website:** https://www.oae.go.th  
 **API:** https://www.oae.go.th/view/1/API/TH-TH  
 **Data Available:**
+
 - ✅ Agricultural statistics
 - ✅ Crop prices
 - ✅ Production volumes
@@ -150,6 +163,7 @@
 - ✅ Economic analysis
 
 **API Access:**
+
 - Free and open
 - No registration required
 - RESTful API
@@ -166,18 +180,21 @@
 
 **Website:** https://www.ku.ac.th  
 **Research Centers:**
+
 - ✅ Soil Science Division
 - ✅ Plant Science Department
 - ✅ Agricultural Engineering
 - ✅ Biotechnology Center
 
 **Data Available:**
+
 - ✅ Research papers (Thai & English)
 - ✅ Soil analysis protocols
 - ✅ Plant genetics database
 - ✅ Agricultural technology innovations
 
 **Contact:**
+
 - Email: research@ku.ac.th
 - Tel: 0-2942-8200
 - Address: 50 Ngamwongwan Rd, Chatuchak, Bangkok 10900
@@ -191,16 +208,19 @@
 
 **Website:** https://www.cmu.ac.th  
 **Research Centers:**
+
 - ✅ Highland Agriculture Research Center
 - ✅ Sustainable Agriculture Center
 - ✅ Plant Genetics Research
 
 **Data Available:**
+
 - ✅ Highland crop research
 - ✅ Climate adaptation studies
 - ✅ Sustainable farming practices
 
 **Contact:**
+
 - Email: research@cmu.ac.th
 - Tel: 0-5394-3000
 - Address: 239 Huay Kaew Rd, Chiang Mai 50200
@@ -213,17 +233,20 @@
 
 **Website:** https://www.nstda.or.th  
 **Research Centers:**
+
 - ✅ BIOTEC (Biotechnology)
 - ✅ NECTEC (Electronics & Computer)
 - ✅ MTEC (Materials Technology)
 
 **Data Available:**
+
 - ✅ Agricultural biotechnology research
 - ✅ Smart farming technology
 - ✅ IoT sensor development
 - ✅ AI/ML applications
 
 **Contact:**
+
 - Email: info@nstda.or.th
 - Tel: 0-2564-7000
 - Address: 111 Thailand Science Park, Pathum Thani 12120
@@ -239,6 +262,7 @@
 **Website:** https://www.fao.org  
 **Regional Office:** https://www.fao.org/asiapacific  
 **Data Available:**
+
 - ✅ Global agricultural statistics
 - ✅ Best practice guidelines
 - ✅ Climate-smart agriculture
@@ -256,12 +280,14 @@
 
 **Website:** https://www.irri.org  
 **Data Available:**
+
 - ✅ Rice genetics database
 - ✅ Crop management practices
 - ✅ Climate adaptation research
 - ✅ Soil fertility management
 
 **Contact:**
+
 - Email: irri@irri.org
 - Regional Office: Bangkok, Thailand
 
@@ -273,6 +299,7 @@
 
 **Website:** https://www.cgiar.org  
 **Data Available:**
+
 - ✅ Crop improvement research
 - ✅ Climate change adaptation
 - ✅ Sustainable agriculture
@@ -290,6 +317,7 @@
 
 **Website:** https://www.gistda.or.th  
 **Data Available:**
+
 - ✅ Satellite imagery (THEOS)
 - ✅ Land use maps
 - ✅ NDVI analysis
@@ -297,6 +325,7 @@
 - ✅ Disaster monitoring
 
 **Contact:**
+
 - Email: info@gistda.or.th
 - Tel: 0-2141-4444
 - Address: 120 The Government Complex, Chaeng Watthana Rd, Bangkok 10210
@@ -310,6 +339,7 @@
 
 **Website:** https://scihub.copernicus.eu  
 **Data Available:**
+
 - ✅ Sentinel-2 imagery (10m resolution)
 - ✅ NDVI, EVI indices
 - ✅ Soil moisture
@@ -329,12 +359,14 @@
 **Website:** https://openweathermap.org  
 **API:** https://api.openweathermap.org  
 **Data Available:**
+
 - ✅ Current weather
 - ✅ 7-day forecast
 - ✅ Historical data
 - ✅ Weather alerts
 
 **Cost:**
+
 - Free tier: 1,000 calls/day
 - Startup: $40/month (100,000 calls/day)
 - Professional: $180/month (1M calls/day)
@@ -349,12 +381,14 @@
 **Website:** https://www.weatherapi.com  
 **API:** https://api.weatherapi.com  
 **Data Available:**
+
 - ✅ Real-time weather
 - ✅ 14-day forecast
 - ✅ Historical weather
 - ✅ Astronomy data
 
 **Cost:**
+
 - Free tier: 1M calls/month
 - Pro: $35/month (10M calls/month)
 
@@ -369,6 +403,7 @@
 
 **Website:** https://pubmed.ncbi.nlm.nih.gov  
 **Data Available:**
+
 - ✅ Agricultural research papers
 - ✅ Plant genetics studies
 - ✅ Soil science research
@@ -384,6 +419,7 @@
 
 **Website:** https://scholar.google.com  
 **Data Available:**
+
 - ✅ Academic papers
 - ✅ Research citations
 - ✅ Thai agricultural research
@@ -397,6 +433,7 @@
 
 **Website:** https://www.sciencedirect.com  
 **Data Available:**
+
 - ✅ Peer-reviewed journals
 - ✅ Agricultural science
 - ✅ Soil science
@@ -413,6 +450,7 @@
 
 **Website:** https://www.isric.org  
 **Data Available:**
+
 - ✅ Global soil database
 - ✅ Soil properties
 - ✅ Soil maps
@@ -428,6 +466,7 @@
 
 **Website:** http://www.fao.org/soils-portal  
 **Data Available:**
+
 - ✅ Soil classification
 - ✅ Soil fertility
 - ✅ Soil management practices
@@ -441,22 +480,26 @@
 ## 📊 Data Integration Plan
 
 ### Priority 1 (Immediate - Free Sources)
+
 1. ✅ กรมอุตุนิยมวิทยา (TMD) - Weather API
 2. ✅ สำนักงานเศรษฐกิจการเกษตร (OAE) - Agricultural statistics
 3. ✅ Sentinel-2 - Satellite imagery
 4. ✅ FAO - Global agricultural data
 
 ### Priority 2 (Short-term - Government Partnership)
+
 1. ✅ กรมพัฒนาที่ดิน (LDD) - Soil data
 2. ✅ กรมวิชาการเกษตร (DOA) - Cultivation guidelines
 3. ✅ GISTDA - Thai satellite data
 
 ### Priority 3 (Medium-term - Academic Collaboration)
+
 1. ✅ Kasetsart University - Research data
 2. ✅ Chiang Mai University - Highland agriculture
 3. ✅ NSTDA - Technology development
 
 ### Priority 4 (Long-term - Commercial Services)
+
 1. ✅ OpenWeatherMap Premium - Advanced weather
 2. ✅ High-resolution satellite imagery
 3. ✅ Specialized databases
@@ -466,18 +509,21 @@
 ## 📝 Data Usage Guidelines
 
 ### Legal Compliance
+
 - ✅ Cite all data sources properly
 - ✅ Follow data usage terms
 - ✅ Respect copyright and licenses
 - ✅ Obtain necessary permissions
 
 ### Data Quality
+
 - ✅ Verify data accuracy
 - ✅ Cross-reference multiple sources
 - ✅ Update data regularly
 - ✅ Document data provenance
 
 ### Privacy & Security
+
 - ✅ Protect farmer data
 - ✅ Comply with PDPA (Personal Data Protection Act)
 - ✅ Secure data transmission
@@ -488,18 +534,21 @@
 ## 🤝 Partnership Opportunities
 
 ### Government Agencies
+
 - Joint research projects
 - Data sharing agreements
 - Technology transfer
 - Pilot programs
 
 ### Universities
+
 - Research collaboration
 - Student internships
 - Joint publications
 - Technology validation
 
 ### International Organizations
+
 - Knowledge exchange
 - Best practice sharing
 - Funding opportunities

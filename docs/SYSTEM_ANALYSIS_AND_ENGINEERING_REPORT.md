@@ -1,4 +1,5 @@
 # System Analysis and Engineering Report
+
 ## GACP Botanical Audit Framework - Front-End/Back-End Integration Stability
 
 **Report Date:** October 22, 2025  
@@ -13,12 +14,14 @@
 This report provides a comprehensive analysis of the current GACP Botanical Audit Framework system architecture and identifies critical stability issues in the front-end/back-end integration layer. The analysis reveals **seven major architectural vulnerabilities** that contribute to system instability and server crashes.
 
 **Key Findings:**
+
 - **Current Status:** System experiences frequent crashes due to synchronous blocking operations, missing error boundaries, and lack of resilience patterns
 - **Root Cause:** Integration layer lacks circuit breakers, retry mechanisms, and proper timeout handling
 - **Impact:** Business operations disrupted, manual intervention required for recovery
 - **Recommended Solution:** Implement resilience patterns, asynchronous communication, and comprehensive monitoring
 
 **Critical Severity Issues Identified:**
+
 1. ✅ **RESOLVED**: Mock authentication replaced with real API calls
 2. ❌ **CRITICAL**: No circuit breaker pattern for API failures
 3. ❌ **HIGH**: Missing request timeout configuration
@@ -148,6 +151,7 @@ The GACP Botanical Audit Framework is a full-stack web application designed to m
 #### 1.1.3 Deployment Architecture
 
 **Current Environment:**
+
 - **Development Mode:** localhost (Frontend: 3000, Backend: 3004)
 - **Database:** MongoDB Atlas (Cloud) - `thai-gacp.re1651p.mongodb.net`
 - **Caching:** Redis disabled (using in-memory fallback)
@@ -155,6 +159,7 @@ The GACP Botanical Audit Framework is a full-stack web application designed to m
 - **Load Balancer:** None (single instance)
 
 **Server Specifications (Development):**
+
 - CPU: 28 threads available
 - Memory: Not specified (requires profiling)
 - OS: Windows (PowerShell detected)
@@ -166,16 +171,17 @@ The GACP Botanical Audit Framework is a full-stack web application designed to m
 
 #### 1.2.1 Front-End Stack
 
-| Technology | Version | Purpose | Status |
-|------------|---------|---------|--------|
-| Next.js | 14.2.18 | React framework with SSR | ✅ Active |
-| React | 18 | UI component library | ✅ Active |
-| TypeScript | Latest | Type safety | ✅ Active |
-| Tailwind CSS | Latest | Styling | ✅ Active |
-| Context API | Native | State management | ✅ Active |
-| fetch API | Native | HTTP client | ⚠️ No timeout |
+| Technology   | Version | Purpose                  | Status        |
+| ------------ | ------- | ------------------------ | ------------- |
+| Next.js      | 14.2.18 | React framework with SSR | ✅ Active     |
+| React        | 18      | UI component library     | ✅ Active     |
+| TypeScript   | Latest  | Type safety              | ✅ Active     |
+| Tailwind CSS | Latest  | Styling                  | ✅ Active     |
+| Context API  | Native  | State management         | ✅ Active     |
+| fetch API    | Native  | HTTP client              | ⚠️ No timeout |
 
 **Key Issues:**
+
 1. **No HTTP timeout configuration** - Requests can hang indefinitely
 2. **No retry mechanism** - Single point of failure for network issues
 3. **Hardcoded localhost URLs** - Not environment-aware
@@ -183,19 +189,20 @@ The GACP Botanical Audit Framework is a full-stack web application designed to m
 
 #### 1.2.2 Back-End Stack
 
-| Technology | Version | Purpose | Status |
-|------------|---------|---------|--------|
-| Node.js | Not logged | Runtime environment | ✅ Active |
-| Express.js | 5.1.0 | Web framework | ✅ Active |
-| Mongoose | 8.19.2 | MongoDB ODM | ✅ Active |
-| Socket.IO | Latest | WebSocket real-time | ✅ Active |
-| ioredis | Latest | Redis client | ⚠️ Disabled |
-| helmet | Latest | Security headers | ✅ Active |
-| compression | Latest | Response compression | ✅ Active |
-| express-rate-limit | Latest | Rate limiting | ✅ Active |
-| winston | Latest | Logging framework | ✅ Active |
+| Technology         | Version    | Purpose              | Status      |
+| ------------------ | ---------- | -------------------- | ----------- |
+| Node.js            | Not logged | Runtime environment  | ✅ Active   |
+| Express.js         | 5.1.0      | Web framework        | ✅ Active   |
+| Mongoose           | 8.19.2     | MongoDB ODM          | ✅ Active   |
+| Socket.IO          | Latest     | WebSocket real-time  | ✅ Active   |
+| ioredis            | Latest     | Redis client         | ⚠️ Disabled |
+| helmet             | Latest     | Security headers     | ✅ Active   |
+| compression        | Latest     | Response compression | ✅ Active   |
+| express-rate-limit | Latest     | Rate limiting        | ✅ Active   |
+| winston            | Latest     | Logging framework    | ✅ Active   |
 
 **Key Issues:**
+
 1. **No connection pool limits** - Can exhaust database connections
 2. **No query timeout** - Long-running queries can block threads
 3. **Process-level error handlers** - Graceful shutdown configured but untested
@@ -203,13 +210,13 @@ The GACP Botanical Audit Framework is a full-stack web application designed to m
 
 #### 1.2.3 Database & Infrastructure
 
-| Component | Technology | Status | Configuration |
-|-----------|-----------|--------|---------------|
-| Primary DB | MongoDB Atlas | ✅ Connected | M0 Free Tier (assumed) |
-| Cache | Redis | ⚠️ Disabled | In-memory fallback |
-| Session Store | In-memory | ⚠️ Not scalable | Single-instance only |
-| File Storage | Not configured | ❌ Missing | Planned: S3 or local |
-| Monitoring | Winston logs | ⚠️ Partial | No APM, no metrics |
+| Component     | Technology     | Status          | Configuration          |
+| ------------- | -------------- | --------------- | ---------------------- |
+| Primary DB    | MongoDB Atlas  | ✅ Connected    | M0 Free Tier (assumed) |
+| Cache         | Redis          | ⚠️ Disabled     | In-memory fallback     |
+| Session Store | In-memory      | ⚠️ Not scalable | Single-instance only   |
+| File Storage  | Not configured | ❌ Missing      | Planned: S3 or local   |
+| Monitoring    | Winston logs   | ⚠️ Partial      | No APM, no metrics     |
 
 ---
 
@@ -249,6 +256,7 @@ The GACP Botanical Audit Framework is a full-stack web application designed to m
 ```
 
 **⚠️ Identified Issues:**
+
 1. **No request timeout**: If MongoDB is slow, browser hangs
 2. **No retry on network error**: Transient failures result in login failure
 3. **No circuit breaker**: Repeated failures don't trigger fallback
@@ -279,6 +287,7 @@ The GACP Botanical Audit Framework is a full-stack web application designed to m
 ```
 
 **⚠️ Identified Issues:**
+
 1. **Missing pagination**: Large datasets can cause memory issues
 2. **No query timeout**: Complex queries can block event loop
 3. **No caching**: Same data fetched repeatedly
@@ -295,6 +304,7 @@ Based on terminal history and code analysis, the following crash patterns were i
 #### 2.1.1 Pattern 1: MongoDB Connection Failures
 
 **Symptoms:**
+
 ```
 Exit Code: 1
 Terminal: powershell
@@ -302,11 +312,13 @@ Last Command: cd apps/backend; node server.js
 ```
 
 **Root Cause:**
+
 - MongoDB Atlas connection string hardcoded in `app-config.json`
 - `.env` file loaded **AFTER** config file is read
 - Connection attempts fail silently during startup
 
 **Evidence from Code:**
+
 ```javascript
 // apps/backend/config/mongodb-manager.js (Lines 18-33)
 try {
@@ -321,6 +333,7 @@ try {
 ```
 
 **Impact:**
+
 - Server fails to start if `app-config.json` has incorrect URI
 - No graceful degradation - application exits with code 1
 - Requires manual intervention to fix configuration
@@ -330,6 +343,7 @@ try {
 #### 2.1.2 Pattern 2: Unhandled Promise Rejections
 
 **Symptoms:**
+
 ```
 process.on('unhandledRejection', (reason, promise) => {
   appLogger.error('Unhandled Promise Rejection at:', promise);
@@ -339,20 +353,23 @@ process.on('unhandledRejection', (reason, promise) => {
 ```
 
 **Root Cause:**
+
 - Async operations in routes don't always have proper error handling
 - Some middleware chains missing `handleAsync` wrapper
 - Database queries can fail without catching errors
 
 **Evidence from Code:**
+
 ```javascript
 // apps/backend/routes/auth.js (Lines 78-88)
 const existingUser = await User.findOne({
-  $or: [{ email: email.toLowerCase() }, { nationalId }],
+  $or: [{ email: email.toLowerCase() }, { nationalId }]
 });
 // ⚠️ If MongoDB connection drops here, unhandled rejection occurs
 ```
 
 **Impact:**
+
 - Silent failures logged but not surfaced to user
 - Inconsistent application state
 - Memory leaks from unclosed connections
@@ -362,33 +379,37 @@ const existingUser = await User.findOne({
 #### 2.1.3 Pattern 3: Frontend Fetch Failures
 
 **Symptoms:**
+
 ```
 Failed to fetch
 TypeError: NetworkError when attempting to fetch resource
 ```
 
 **Root Cause:**
+
 - Frontend uses `fetch()` without timeout configuration
 - No retry logic for transient network errors
 - Hardcoded `localhost:3004` URLs
 
 **Evidence from Code:**
+
 ```typescript
 // frontend-nextjs/src/contexts/AuthContext.tsx (Lines 79-87)
 const response = await fetch('http://localhost:3004/api/auth/login', {
   method: 'POST',
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   },
   body: JSON.stringify({
     email: credentials.email,
-    password: credentials.password,
-  }),
+    password: credentials.password
+  })
 });
 // ⚠️ No timeout, no retry, no circuit breaker
 ```
 
 **Impact:**
+
 - User sees "Failed to fetch" error
 - Login/registration fails even for transient issues
 - Poor user experience
@@ -403,29 +424,33 @@ const response = await fetch('http://localhost:3004/api/auth/login', {
 
 **Problem Statement:**
 When the backend is down or slow, the frontend continues to send requests indefinitely, leading to:
+
 - Browser tab freezing
 - Excessive server load when it comes back online (thundering herd)
 - Poor user experience
 
 **Current Behavior:**
+
 ```typescript
 // Every login attempt hits the backend directly
 const response = await fetch('http://localhost:3004/api/auth/login', {...});
 ```
 
 **Expected Behavior:**
+
 ```typescript
 // Circuit breaker should detect failures and fail-fast
 if (circuitBreaker.isOpen()) {
   throw new Error('Service temporarily unavailable. Please try again later.');
 }
-const response = await circuitBreaker.execute(() => 
+const response = await circuitBreaker.execute(() =>
   fetch('http://localhost:3004/api/auth/login', {...})
 );
 ```
 
 **Recommendation:**
 Implement circuit breaker pattern with:
+
 - **Closed State**: Normal operation, requests pass through
 - **Open State**: After N failures, block requests for X seconds
 - **Half-Open State**: Allow 1 test request to check if service recovered
@@ -434,25 +459,29 @@ Implement circuit breaker pattern with:
 
 **Problem Statement:**
 Requests can hang indefinitely if:
+
 - Backend server is slow to respond
 - MongoDB query takes too long
 - Network latency is high
 
 **Current Code:**
+
 ```typescript
 // frontend-nextjs/src/contexts/AuthContext.tsx
 const response = await fetch('http://localhost:3004/api/auth/login', {
-  method: 'POST',
+  method: 'POST'
   // ⚠️ Missing: timeout, signal (AbortController)
 });
 ```
 
 **Impact:**
+
 - User stares at loading spinner forever
 - No way to cancel the request
 - Browser may timeout after 5+ minutes
 
 **Recommendation:**
+
 ```typescript
 const controller = new AbortController();
 const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
@@ -462,7 +491,7 @@ try {
     method: 'POST',
     signal: controller.signal,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password })
   });
   clearTimeout(timeoutId);
 } catch (error) {
@@ -479,6 +508,7 @@ try {
 Backend performs synchronous operations that block the event loop:
 
 **Evidence from Code:**
+
 ```javascript
 // apps/backend/config/mongodb-manager.js (Lines 19-22)
 const configFile = fs.readFileSync(configPath, 'utf8'); // ⚠️ Synchronous file read
@@ -486,12 +516,14 @@ config = JSON.parse(configFile);
 ```
 
 **Impact:**
+
 - Event loop blocked during file I/O
 - Other requests queued and delayed
 - Under high load, server becomes unresponsive
 
 **Recommendation:**
 Replace with async versions:
+
 ```javascript
 const configFile = await fs.promises.readFile(configPath, 'utf8');
 config = JSON.parse(configFile);
@@ -512,17 +544,19 @@ await mongoose.connect(config.mongodb.uri, config.mongodb.options);
 ```
 
 **Impact:**
+
 - Under heavy load, 100+ connections can exhaust MongoDB Atlas M0 tier (max 500 connections)
 - Other services starved of connections
 - Database performance degrades
 
 **Recommendation:**
+
 ```javascript
 await mongoose.connect(config.mongodb.uri, {
-  maxPoolSize: 10,    // Limit to 10 connections
-  minPoolSize: 2,     // Keep 2 warm connections
+  maxPoolSize: 10, // Limit to 10 connections
+  minPoolSize: 2, // Keep 2 warm connections
   serverSelectionTimeoutMS: 5000,
-  socketTimeoutMS: 45000,
+  socketTimeoutMS: 45000
 });
 ```
 
@@ -531,20 +565,22 @@ await mongoose.connect(config.mongodb.uri, {
 ```javascript
 // apps/backend/routes/auth.js
 const existingUser = await User.findOne({
-  $or: [{ email: email.toLowerCase() }, { nationalId }],
+  $or: [{ email: email.toLowerCase() }, { nationalId }]
 });
 // ⚠️ No maxTimeMS specified, can run indefinitely
 ```
 
 **Impact:**
+
 - Slow queries block event loop
 - Memory accumulates waiting for query to finish
 - User experiences timeout
 
 **Recommendation:**
+
 ```javascript
 const existingUser = await User.findOne({
-  $or: [{ email: email.toLowerCase() }, { nationalId }],
+  $or: [{ email: email.toLowerCase() }, { nationalId }]
 }).maxTimeMS(5000); // 5 second timeout
 ```
 
@@ -559,11 +595,13 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 ```
 
 **Problem:**
+
 - 10MB limit is generous for JSON payloads
 - Malicious actors can send 10MB requests repeatedly
 - Under attack, server memory exhausted
 
 **Recommendation:**
+
 - Reduce to 1MB for most endpoints
 - Use streaming for file uploads
 - Implement request validation middleware
@@ -576,14 +614,14 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 **Estimated Capacity (Based on Code Analysis):**
 
-| Metric | Current | Recommended | Gap |
-|--------|---------|-------------|-----|
-| Concurrent Users | ~50 | 1,000 | 20x |
-| Requests/Second | ~10 | 500 | 50x |
-| Response Time (p95) | ~500ms | <200ms | 2.5x improvement |
-| Database Connections | 100 (default) | 10-20 | Over-provisioned |
-| Memory Usage | Unknown | <512MB | Requires profiling |
-| Uptime Target | Not defined | 99.9% | SLA needed |
+| Metric               | Current       | Recommended | Gap                |
+| -------------------- | ------------- | ----------- | ------------------ |
+| Concurrent Users     | ~50           | 1,000       | 20x                |
+| Requests/Second      | ~10           | 500         | 50x                |
+| Response Time (p95)  | ~500ms        | <200ms      | 2.5x improvement   |
+| Database Connections | 100 (default) | 10-20       | Over-provisioned   |
+| Memory Usage         | Unknown       | <512MB      | Requires profiling |
+| Uptime Target        | Not defined   | 99.9%       | SLA needed         |
 
 ### 3.2 Load Testing Requirements
 
@@ -605,6 +643,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
    - Current: No caching, likely slow
 
 **Recommended Tools:**
+
 - Apache JMeter or k6 for load testing
 - Artillery.io for API testing
 - Clinic.js for Node.js profiling
@@ -692,8 +731,8 @@ The proposed solution implements a **multi-layered resilience architecture** wit
 // frontend-nextjs/src/lib/api/circuit-breaker.ts
 
 enum CircuitState {
-  CLOSED = 'CLOSED',     // Normal operation
-  OPEN = 'OPEN',         // Blocking requests
+  CLOSED = 'CLOSED', // Normal operation
+  OPEN = 'OPEN', // Blocking requests
   HALF_OPEN = 'HALF_OPEN' // Testing recovery
 }
 
@@ -702,11 +741,11 @@ class CircuitBreaker {
   private failureCount = 0;
   private successCount = 0;
   private lastFailureTime?: number;
-  
+
   // Configuration
-  private readonly failureThreshold = 5;      // Open after 5 failures
-  private readonly successThreshold = 2;      // Close after 2 successes
-  private readonly timeout = 60000;           // Reset after 60 seconds
+  private readonly failureThreshold = 5; // Open after 5 failures
+  private readonly successThreshold = 2; // Close after 2 successes
+  private readonly timeout = 60000; // Reset after 60 seconds
 
   async execute<T>(fn: () => Promise<T>): Promise<T> {
     if (this.state === CircuitState.OPEN) {
@@ -730,7 +769,7 @@ class CircuitBreaker {
 
   private onSuccess(): void {
     this.failureCount = 0;
-    
+
     if (this.state === CircuitState.HALF_OPEN) {
       this.successCount++;
       if (this.successCount >= this.successThreshold) {
@@ -744,7 +783,7 @@ class CircuitBreaker {
   private onFailure(): void {
     this.failureCount++;
     this.lastFailureTime = Date.now();
-    
+
     if (this.failureCount >= this.failureThreshold) {
       console.log('Circuit breaker: Transitioning to OPEN');
       this.state = CircuitState.OPEN;
@@ -769,18 +808,18 @@ import { circuitBreaker } from '@/lib/api/circuit-breaker';
 const login = async (credentials: LoginCredentials) => {
   try {
     setIsLoading(true);
-    
+
     // Circuit breaker wraps the fetch call
     const response = await circuitBreaker.execute(async () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000);
-      
+
       try {
         return await fetch('http://localhost:3004/api/auth/login', {
           method: 'POST',
           signal: controller.signal,
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: credentials.email, password: credentials.password }),
+          body: JSON.stringify({ email: credentials.email, password: credentials.password })
         });
       } finally {
         clearTimeout(timeoutId);
@@ -793,7 +832,6 @@ const login = async (credentials: LoginCredentials) => {
 
     const data = await response.json();
     // ... rest of login logic
-    
   } catch (error) {
     if (error.message.includes('Circuit breaker is OPEN')) {
       setError('Service temporarily unavailable. Please try again in a few moments.');
@@ -824,12 +862,11 @@ interface RetryOptions {
 
 const defaultRetryOptions: RetryOptions = {
   maxAttempts: 3,
-  baseDelay: 1000,      // 1 second
-  maxDelay: 10000,      // 10 seconds
-  shouldRetry: (error) => {
+  baseDelay: 1000, // 1 second
+  maxDelay: 10000, // 10 seconds
+  shouldRetry: error => {
     // Retry on network errors and 5xx server errors
-    return error.name === 'TypeError' || 
-           (error.response && error.response.status >= 500);
+    return error.name === 'TypeError' || (error.response && error.response.status >= 500);
   }
 };
 
@@ -845,17 +882,14 @@ export async function retryWithBackoff<T>(
       return await fn();
     } catch (error) {
       lastError = error;
-      
+
       if (attempt === opts.maxAttempts || !opts.shouldRetry(error)) {
         throw error;
       }
 
       // Exponential backoff: 1s, 2s, 4s, 8s (capped at maxDelay)
-      const delay = Math.min(
-        opts.baseDelay * Math.pow(2, attempt - 1),
-        opts.maxDelay
-      );
-      
+      const delay = Math.min(opts.baseDelay * Math.pow(2, attempt - 1), opts.maxDelay);
+
       console.log(`Retry attempt ${attempt}/${opts.maxAttempts} after ${delay}ms`);
       await new Promise(resolve => setTimeout(resolve, delay));
     }
@@ -888,9 +922,7 @@ export function withTimeout<T>(
 ): Promise<T> {
   return Promise.race([
     promise,
-    new Promise<T>((_, reject) =>
-      setTimeout(() => reject(new Error(errorMessage)), timeoutMs)
-    )
+    new Promise<T>((_, reject) => setTimeout(() => reject(new Error(errorMessage)), timeoutMs))
   ]);
 }
 ```
@@ -937,11 +969,11 @@ const redisClient = new Redis({
 });
 
 // Sliding window rate limiter
-const createRateLimiter = (options) => {
+const createRateLimiter = options => {
   return rateLimit({
     store: new RedisStore({
       client: redisClient,
-      prefix: 'rl:',
+      prefix: 'rl:'
     }),
     windowMs: options.windowMs,
     max: options.max,
@@ -968,13 +1000,13 @@ const rateLimiters = {
     max: 5,
     skipSuccessful: true // Only count failed attempts
   }),
-  
+
   // Moderate limit for API calls
   api: createRateLimiter({
     windowMs: 1 * 60 * 1000,
     max: 100
   }),
-  
+
   // Generous limit for read operations
   readOnly: createRateLimiter({
     windowMs: 1 * 60 * 1000,
@@ -1002,7 +1034,7 @@ const cacheMiddleware = (duration = 300) => {
     }
 
     const key = `cache:${req.originalUrl}`;
-    
+
     try {
       // Check cache
       const cached = await redis.cache.get(key);
@@ -1010,16 +1042,16 @@ const cacheMiddleware = (duration = 300) => {
         console.log(`Cache HIT: ${key}`);
         return res.json(cached);
       }
-      
+
       // Cache miss - intercept response
       const originalJson = res.json.bind(res);
-      res.json = async (data) => {
+      res.json = async data => {
         // Store in cache
         await redis.cache.set(key, data, duration);
         console.log(`Cache MISS: ${key} - Stored for ${duration}s`);
         return originalJson(data);
       };
-      
+
       next();
     } catch (error) {
       // Cache failure shouldn't break the request
@@ -1097,11 +1129,11 @@ router.get('/metrics', authenticate, cacheMiddleware(300), async (req, res) => {
 
 #### 5.2.1 Multi-Environment Setup
 
-| Environment | Purpose | Configuration |
-|-------------|---------|---------------|
-| **Development** | Local testing | Single instance, SQLite fallback |
-| **Staging** | Integration testing | 2 instances, MongoDB Atlas M10 |
-| **Production** | Live traffic | 3+ instances, MongoDB Atlas M30+, Redis Sentinel |
+| Environment     | Purpose             | Configuration                                    |
+| --------------- | ------------------- | ------------------------------------------------ |
+| **Development** | Local testing       | Single instance, SQLite fallback                 |
+| **Staging**     | Integration testing | 2 instances, MongoDB Atlas M10                   |
+| **Production**  | Live traffic        | 3+ instances, MongoDB Atlas M30+, Redis Sentinel |
 
 #### 5.2.2 Container Orchestration (Docker + Kubernetes)
 
@@ -1151,40 +1183,40 @@ spec:
         app: gacp-backend
     spec:
       containers:
-      - name: backend
-        image: gacp-backend:1.0.0
-        ports:
-        - containerPort: 3004
-        env:
-        - name: MONGODB_URI
-          valueFrom:
-            secretKeyRef:
-              name: gacp-secrets
-              key: mongodb-uri
-        - name: JWT_SECRET
-          valueFrom:
-            secretKeyRef:
-              name: gacp-secrets
-              key: jwt-secret
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "250m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
-        livenessProbe:
-          httpGet:
-            path: /api/health
-            port: 3004
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /api/health
-            port: 3004
-          initialDelaySeconds: 10
-          periodSeconds: 5
+        - name: backend
+          image: gacp-backend:1.0.0
+          ports:
+            - containerPort: 3004
+          env:
+            - name: MONGODB_URI
+              valueFrom:
+                secretKeyRef:
+                  name: gacp-secrets
+                  key: mongodb-uri
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: gacp-secrets
+                  key: jwt-secret
+          resources:
+            requests:
+              memory: '256Mi'
+              cpu: '250m'
+            limits:
+              memory: '512Mi'
+              cpu: '500m'
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3004
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3004
+            initialDelaySeconds: 10
+            periodSeconds: 5
 ```
 
 ---
@@ -1195,16 +1227,17 @@ spec:
 
 **Priority: CRITICAL**
 
-| Task | Effort | Owner | Status |
-|------|--------|-------|--------|
-| ✅ Replace mock auth with real API | 4h | Frontend | ✅ DONE |
-| 🔧 Implement request timeout (10s) | 2h | Frontend | NOT STARTED |
-| 🔧 Add circuit breaker pattern | 4h | Frontend | NOT STARTED |
-| 🔧 Add MongoDB connection pool limits | 1h | Backend | NOT STARTED |
-| 🔧 Add query timeout (maxTimeMS) | 2h | Backend | NOT STARTED |
-| 🔧 Implement graceful shutdown testing | 3h | Backend | NOT STARTED |
+| Task                                   | Effort | Owner    | Status      |
+| -------------------------------------- | ------ | -------- | ----------- |
+| ✅ Replace mock auth with real API     | 4h     | Frontend | ✅ DONE     |
+| 🔧 Implement request timeout (10s)     | 2h     | Frontend | NOT STARTED |
+| 🔧 Add circuit breaker pattern         | 4h     | Frontend | NOT STARTED |
+| 🔧 Add MongoDB connection pool limits  | 1h     | Backend  | NOT STARTED |
+| 🔧 Add query timeout (maxTimeMS)       | 2h     | Backend  | NOT STARTED |
+| 🔧 Implement graceful shutdown testing | 3h     | Backend  | NOT STARTED |
 
 **Deliverables:**
+
 - Frontend with timeout + circuit breaker
 - Backend with connection pooling
 - Zero unhandled promise rejections
@@ -1215,15 +1248,16 @@ spec:
 
 **Priority: HIGH**
 
-| Task | Effort | Owner | Status |
-|------|--------|-------|--------|
-| Implement retry with exponential backoff | 4h | Frontend | NOT STARTED |
-| Add React error boundaries | 3h | Frontend | NOT STARTED |
-| Enable Redis for caching | 2h | Backend | NOT STARTED |
-| Implement cache middleware | 4h | Backend | NOT STARTED |
-| Add rate limiting (Redis-backed) | 3h | Backend | NOT STARTED |
+| Task                                     | Effort | Owner    | Status      |
+| ---------------------------------------- | ------ | -------- | ----------- |
+| Implement retry with exponential backoff | 4h     | Frontend | NOT STARTED |
+| Add React error boundaries               | 3h     | Frontend | NOT STARTED |
+| Enable Redis for caching                 | 2h     | Backend  | NOT STARTED |
+| Implement cache middleware               | 4h     | Backend  | NOT STARTED |
+| Add rate limiting (Redis-backed)         | 3h     | Backend  | NOT STARTED |
 
 **Deliverables:**
+
 - Resilient HTTP client wrapper
 - Response caching operational
 - Rate limiting per user/IP
@@ -1234,14 +1268,15 @@ spec:
 
 **Priority: MEDIUM**
 
-| Task | Effort | Owner | Status |
-|------|--------|-------|--------|
-| Set up Bull.js queue (Redis) | 4h | Backend | NOT STARTED |
-| Move PDF generation to queue | 3h | Backend | NOT STARTED |
-| Move email sending to queue | 2h | Backend | NOT STARTED |
-| Implement job retry logic | 3h | Backend | NOT STARTED |
+| Task                         | Effort | Owner   | Status      |
+| ---------------------------- | ------ | ------- | ----------- |
+| Set up Bull.js queue (Redis) | 4h     | Backend | NOT STARTED |
+| Move PDF generation to queue | 3h     | Backend | NOT STARTED |
+| Move email sending to queue  | 2h     | Backend | NOT STARTED |
+| Implement job retry logic    | 3h     | Backend | NOT STARTED |
 
 **Deliverables:**
+
 - Background job processing
 - Non-blocking API responses
 - Failed job monitoring
@@ -1252,14 +1287,15 @@ spec:
 
 **Priority: MEDIUM**
 
-| Task | Effort | Owner | Status |
-|------|--------|-------|--------|
-| Integrate Prometheus metrics | 4h | DevOps | NOT STARTED |
-| Set up Grafana dashboards | 4h | DevOps | NOT STARTED |
-| Configure error tracking (Sentry) | 2h | DevOps | NOT STARTED |
-| Set up APM (New Relic/DataDog) | 6h | DevOps | NOT STARTED |
+| Task                              | Effort | Owner  | Status      |
+| --------------------------------- | ------ | ------ | ----------- |
+| Integrate Prometheus metrics      | 4h     | DevOps | NOT STARTED |
+| Set up Grafana dashboards         | 4h     | DevOps | NOT STARTED |
+| Configure error tracking (Sentry) | 2h     | DevOps | NOT STARTED |
+| Set up APM (New Relic/DataDog)    | 6h     | DevOps | NOT STARTED |
 
 **Deliverables:**
+
 - Real-time metrics dashboard
 - Error tracking & alerting
 - Performance monitoring
@@ -1270,15 +1306,16 @@ spec:
 
 **Priority: LOW**
 
-| Task | Effort | Owner | Status |
-|------|--------|-------|--------|
-| Create load test scenarios (k6) | 4h | QA | NOT STARTED |
-| Run baseline load tests | 3h | QA | NOT STARTED |
-| Identify bottlenecks | 4h | Dev | NOT STARTED |
-| Optimize slow queries | 6h | Dev | NOT STARTED |
-| Re-run load tests & compare | 2h | QA | NOT STARTED |
+| Task                            | Effort | Owner | Status      |
+| ------------------------------- | ------ | ----- | ----------- |
+| Create load test scenarios (k6) | 4h     | QA    | NOT STARTED |
+| Run baseline load tests         | 3h     | QA    | NOT STARTED |
+| Identify bottlenecks            | 4h     | Dev   | NOT STARTED |
+| Optimize slow queries           | 6h     | Dev   | NOT STARTED |
+| Re-run load tests & compare     | 2h     | QA    | NOT STARTED |
 
 **Deliverables:**
+
 - Load test suite
 - Performance baseline
 - Optimization report
@@ -1290,6 +1327,7 @@ spec:
 ### 7.1 Unit Testing
 
 **Backend:**
+
 ```javascript
 // apps/backend/tests/unit/circuit-breaker.test.js
 const CircuitBreaker = require('../../lib/circuit-breaker');
@@ -1297,19 +1335,21 @@ const CircuitBreaker = require('../../lib/circuit-breaker');
 describe('CircuitBreaker', () => {
   it('should transition to OPEN after 5 failures', async () => {
     const cb = new CircuitBreaker({ failureThreshold: 5 });
-    
+
     for (let i = 0; i < 5; i++) {
       await expect(cb.execute(() => Promise.reject(new Error('fail')))).rejects.toThrow();
     }
-    
+
     expect(cb.getState()).toBe('OPEN');
   });
-  
+
   it('should fail-fast when OPEN', async () => {
     const cb = new CircuitBreaker({ failureThreshold: 1 });
-    
+
     await expect(cb.execute(() => Promise.reject(new Error('fail')))).rejects.toThrow();
-    await expect(cb.execute(() => Promise.resolve('ok'))).rejects.toThrow('Circuit breaker is OPEN');
+    await expect(cb.execute(() => Promise.resolve('ok'))).rejects.toThrow(
+      'Circuit breaker is OPEN'
+    );
   });
 });
 ```
@@ -1317,6 +1357,7 @@ describe('CircuitBreaker', () => {
 ### 7.2 Integration Testing
 
 **Frontend:**
+
 ```typescript
 // frontend-nextjs/tests/integration/auth.test.tsx
 import { render, screen, waitFor } from '@testing-library/react';
@@ -1326,18 +1367,18 @@ import LoginPage from '@/app/login/page';
 describe('Login Page', () => {
   it('should handle timeout gracefully', async () => {
     // Mock fetch to simulate timeout
-    global.fetch = jest.fn(() => 
-      new Promise((_, reject) => 
+    global.fetch = jest.fn(() =>
+      new Promise((_, reject) =>
         setTimeout(() => reject(new Error('timeout')), 11000)
       )
     );
-    
+
     render(<LoginPage />);
-    
+
     await userEvent.type(screen.getByLabelText('Email'), 'test@example.com');
     await userEvent.type(screen.getByLabelText('Password'), 'password');
     await userEvent.click(screen.getByRole('button', { name: 'Login' }));
-    
+
     await waitFor(() => {
       expect(screen.getByText(/Request timed out/i)).toBeInTheDocument();
     }, { timeout: 12000 });
@@ -1356,33 +1397,33 @@ import { check, sleep } from 'k6';
 
 export let options = {
   stages: [
-    { duration: '2m', target: 50 },  // Ramp up to 50 users
-    { duration: '5m', target: 50 },  // Stay at 50 users
+    { duration: '2m', target: 50 }, // Ramp up to 50 users
+    { duration: '5m', target: 50 }, // Stay at 50 users
     { duration: '2m', target: 100 }, // Ramp up to 100 users
     { duration: '5m', target: 100 }, // Stay at 100 users
-    { duration: '2m', target: 0 },   // Ramp down
+    { duration: '2m', target: 0 } // Ramp down
   ],
   thresholds: {
     http_req_duration: ['p(95)<500'], // 95% of requests under 500ms
-    http_req_failed: ['rate<0.01'],   // Less than 1% failure rate
-  },
+    http_req_failed: ['rate<0.01'] // Less than 1% failure rate
+  }
 };
 
 export default function () {
   const payload = JSON.stringify({
     email: `user${__VU}@example.com`,
-    password: 'password123',
+    password: 'password123'
   });
 
   const params = {
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json' }
   };
 
   const res = http.post('http://localhost:3004/api/auth/login', payload, params);
 
   check(res, {
-    'status is 200': (r) => r.status === 200,
-    'response time < 500ms': (r) => r.timings.duration < 500,
+    'status is 200': r => r.status === 200,
+    'response time < 500ms': r => r.timings.duration < 500
   });
 
   sleep(1);
@@ -1390,6 +1431,7 @@ export default function () {
 ```
 
 **Run:**
+
 ```bash
 k6 run tests/load/auth-load-test.js
 ```
@@ -1511,27 +1553,27 @@ NEW_RELIC_LICENSE_KEY=your-new-relic-key
 
 ### Expected Impact
 
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| Uptime | ~95% (frequent crashes) | 99.9% | +4.9% |
-| p95 Response Time | ~2000ms | <200ms | 10x faster |
-| Error Rate | ~5% | <0.1% | 50x reduction |
-| Concurrent Users | ~50 | 1,000+ | 20x capacity |
-| Recovery Time | Manual (hours) | Auto (seconds) | 100x faster |
+| Metric            | Before                  | After          | Improvement   |
+| ----------------- | ----------------------- | -------------- | ------------- |
+| Uptime            | ~95% (frequent crashes) | 99.9%          | +4.9%         |
+| p95 Response Time | ~2000ms                 | <200ms         | 10x faster    |
+| Error Rate        | ~5%                     | <0.1%          | 50x reduction |
+| Concurrent Users  | ~50                     | 1,000+         | 20x capacity  |
+| Recovery Time     | Manual (hours)          | Auto (seconds) | 100x faster   |
 
 ---
 
 **Report Prepared By:** GitHub Copilot System Analysis Team  
 **Review Status:** Draft v1.0  
-**Next Review Date:** 2025-11-01  
+**Next Review Date:** 2025-11-01
 
 ---
 
 ## Revision History
 
-| Version | Date | Author | Changes |
-|---------|------|--------|---------|
-| 1.0 | 2025-10-22 | System Analysis Team | Initial report creation |
+| Version | Date       | Author               | Changes                 |
+| ------- | ---------- | -------------------- | ----------------------- |
+| 1.0     | 2025-10-22 | System Analysis Team | Initial report creation |
 
 ---
 

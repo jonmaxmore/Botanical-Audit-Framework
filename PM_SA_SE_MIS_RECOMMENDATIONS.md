@@ -10,23 +10,23 @@
 
 ### ✅ จุดแข็ง (Strengths)
 
-| หมวด | คะแนน | สถานะ | หมายเหตุ |
-|------|-------|-------|----------|
-| **Business Logic** | 98/100 | ✅ ดีเยี่ยม | ครบ 6 ระบบ ถูกต้องสมบูรณ์ |
-| **Security** | 95/100 | ✅ แข็งแรง | JWT + RBAC + Data Isolation |
-| **Architecture** | 92/100 | ✅ ดี | Clean Architecture + Modular |
-| **Documentation** | 90/100 | ✅ ดี | มีเอกสารครบทุกระบบ |
-| **Database Design** | 88/100 | ✅ ดี | MongoDB schema ครบถ้วน |
+| หมวด                | คะแนน  | สถานะ       | หมายเหตุ                     |
+| ------------------- | ------ | ----------- | ---------------------------- |
+| **Business Logic**  | 98/100 | ✅ ดีเยี่ยม | ครบ 6 ระบบ ถูกต้องสมบูรณ์    |
+| **Security**        | 95/100 | ✅ แข็งแรง  | JWT + RBAC + Data Isolation  |
+| **Architecture**    | 92/100 | ✅ ดี       | Clean Architecture + Modular |
+| **Documentation**   | 90/100 | ✅ ดี       | มีเอกสารครบทุกระบบ           |
+| **Database Design** | 88/100 | ✅ ดี       | MongoDB schema ครบถ้วน       |
 
 ### ⚠️ จุดอ่อน (Weaknesses) - **ต้องแก้ก่อน Go-Live**
 
-| หมวด | คะแนน | สถานะ | ความเร่งด่วน |
-|------|-------|-------|-------------|
-| **Code Quality** | 62/100 | ⚠️ ต้องแก้ | 🔴 สูง - 686 lint errors |
-| **Test Coverage** | 45/100 | ⚠️ ต้องเพิ่ม | 🔴 สูง - ขาด unit tests |
-| **Production Config** | 70/100 | ⚠️ ต้องปรับ | 🟡 กลาง - ขาด env vars |
-| **Monitoring** | 40/100 | ⚠️ ต้องเพิ่ม | 🟡 กลาง - ยังไม่มี APM |
-| **API Integration** | 55/100 | ⚠️ ต้องทำ | 🔴 สูง - TODO comments |
+| หมวด                  | คะแนน  | สถานะ        | ความเร่งด่วน             |
+| --------------------- | ------ | ------------ | ------------------------ |
+| **Code Quality**      | 62/100 | ⚠️ ต้องแก้   | 🔴 สูง - 686 lint errors |
+| **Test Coverage**     | 45/100 | ⚠️ ต้องเพิ่ม | 🔴 สูง - ขาด unit tests  |
+| **Production Config** | 70/100 | ⚠️ ต้องปรับ  | 🟡 กลาง - ขาด env vars   |
+| **Monitoring**        | 40/100 | ⚠️ ต้องเพิ่ม | 🟡 กลาง - ยังไม่มี APM   |
+| **API Integration**   | 55/100 | ⚠️ ต้องทำ    | 🔴 สูง - TODO comments   |
 
 ---
 
@@ -37,10 +37,11 @@
 **ปัญหา:** พบ lint errors กระจายทั่วโค้ดเบส
 
 **ตัวอย่าง errors:**
+
 ```typescript
 // ❌ Trailing commas (300+ occurrences)
 width: { xs: '100%', md: 'calc(100% - 280px)' },
-                                                 ^ 
+                                                 ^
 
 // ❌ Unexpected console.log (50+ occurrences)
 console.log('Review submitted:', data);
@@ -51,11 +52,13 @@ console.log('Review submitted:', data);
 ```
 
 **ผลกระทบ:**
+
 - ❌ Code ไม่เป็นมาตรฐาน
 - ❌ ทีมทำงานยาก (inconsistent style)
 - ❌ Production build อาจมีปัญหา
 
 **วิธีแก้:**
+
 ```bash
 # ติดตั้ง prettier
 pnpm add -D prettier eslint-config-prettier
@@ -116,11 +119,13 @@ getMetrics() {
 ```
 
 **ผลกระทบ:**
+
 - 🔴 **Security Risk:** TOTP fake verification
 - 🔴 **Functionality Broken:** User management ไม่ทำงาน
 - 🟡 **Monitoring Broken:** Metrics ไม่ถูกต้อง
 
 **วิธีแก้:** ต้องทำให้เสร็จก่อน Go-Live
+
 - [ ] Implement API endpoints สำหรับ user management
 - [ ] Implement TOTP verification จริง (speakeasy library)
 - [ ] Implement metrics collection (Prometheus/StatsD)
@@ -133,6 +138,7 @@ getMetrics() {
 ### 3. **ขาด Unit Tests** ⚠️
 
 **สถานะปัจจุบัน:**
+
 - ✅ มี E2E tests (Playwright) - 4 test suites
 - ✅ มี Integration tests - 2 test suites
 - ❌ **ไม่มี Unit tests** สำหรับ Business Logic!
@@ -148,6 +154,7 @@ business-logic/gacp-standards-comparison-system.js (1,452 lines)
 ```
 
 **ความเสี่ยง:**
+
 - 🔴 เปลี่ยน code แล้ว business logic พัง
 - 🔴 ไม่มั่นใจว่าคำนวณถูกต้อง (scoring, payments, etc.)
 - 🔴 Regression bugs ตอน refactor
@@ -181,11 +188,11 @@ describe('GACPWorkflowEngine', () => {
     expect(workflowEngine.calculatePayment('phase1')).toBe(5000);
     expect(workflowEngine.calculatePayment('phase2')).toBe(25000);
   });
-  
+
   it('should reject after 2 document rejections', async () => {
     await workflowEngine.rejectDocument(appId); // 1st rejection
     await workflowEngine.rejectDocument(appId); // 2nd rejection
-    
+
     const app = await workflowEngine.getApplication(appId);
     expect(app.currentState).toBe('REJECTED');
   });
@@ -232,6 +239,7 @@ SENTRY_DSN=${SENTRY_DSN}
 ```
 
 **วิธีแก้:**
+
 1. สร้าง `.env.example` พร้อม documentation
 2. ใช้ `dotenv-vault` หรือ AWS Secrets Manager สำหรับ production
 3. เพิ่ม environment validation ตอน startup
@@ -246,6 +254,7 @@ SENTRY_DSN=${SENTRY_DSN}
 **ปัญหา:** ไม่รู้ว่าระบบมีปัญหาหรือไม่
 
 **ที่ขาดหายไป:**
+
 - ❌ Application Performance Monitoring (APM)
 - ❌ Error Tracking & Alerting
 - ❌ Log Aggregation
@@ -278,10 +287,7 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.NODE_ENV,
   tracesSampleRate: 1.0,
-  integrations: [
-    new Sentry.BrowserTracing(),
-    new Sentry.Replay(),
-  ],
+  integrations: [new Sentry.BrowserTracing(), new Sentry.Replay()]
 });
 
 // lib/monitoring/metrics.ts
@@ -290,13 +296,13 @@ import { Counter, Histogram } from 'prom-client';
 export const httpRequestDuration = new Histogram({
   name: 'http_request_duration_seconds',
   help: 'Duration of HTTP requests in seconds',
-  labelNames: ['method', 'route', 'status_code'],
+  labelNames: ['method', 'route', 'status_code']
 });
 
 export const applicationSubmissions = new Counter({
   name: 'gacp_application_submissions_total',
   help: 'Total GACP application submissions',
-  labelNames: ['status'],
+  labelNames: ['status']
 });
 ```
 
@@ -310,6 +316,7 @@ export const applicationSubmissions = new Counter({
 **ปัญหา:** ปิดการตรวจสอบ TypeScript → Type errors ซ่อนอยู่
 
 **รายการไฟล์:**
+
 ```
 apps/admin-portal/lib/security/auth-security.ts       ⚠️ CRITICAL
 apps/admin-portal/lib/security/rate-limiter.ts        ⚠️ CRITICAL
@@ -362,7 +369,7 @@ db.applications.createIndex({ userId: 1, status: 1 });
 db.applications.createIndex({ createdAt: -1 });
 db.applications.createIndex({ applicationNumber: 1 }, { unique: true });
 db.farms.createIndex({ userId: 1 });
-db.farms.createIndex({ location: "2dsphere" });  // For geo queries
+db.farms.createIndex({ location: '2dsphere' }); // For geo queries
 db.products.createIndex({ batchCode: 1 }, { unique: true });
 db.products.createIndex({ userId: 1, stage: 1 });
 db.users.createIndex({ email: 1 }, { unique: true });
@@ -485,14 +492,14 @@ module.exports = swaggerJsdoc(options);
 
 ### 🎯 ตารางการทำงาน
 
-| Week | Focus | Deliverables | Owner |
-|------|-------|-------------|-------|
-| **Week 1** | Fix CRITICAL Issues | Lint errors fixed, TODO items done | SE Team |
-| **Week 2** | Unit Testing | 80% test coverage achieved | SE + QA |
-| **Week 3** | Monitoring Setup | Sentry + APM + Logging working | DevOps + SE |
+| Week       | Focus                   | Deliverables                            | Owner         |
+| ---------- | ----------------------- | --------------------------------------- | ------------- |
+| **Week 1** | Fix CRITICAL Issues     | Lint errors fixed, TODO items done      | SE Team       |
+| **Week 2** | Unit Testing            | 80% test coverage achieved              | SE + QA       |
+| **Week 3** | Monitoring Setup        | Sentry + APM + Logging working          | DevOps + SE   |
 | **Week 4** | Security & Load Testing | Security audit passed, load test passed | Security + QA |
-| **Week 5** | UAT & Bug Fixes | All UAT bugs fixed | Full Team |
-| **Week 6** | Go-Live Prep | Production deployment ready | Full Team |
+| **Week 5** | UAT & Bug Fixes         | All UAT bugs fixed                      | Full Team     |
+| **Week 6** | Go-Live Prep            | Production deployment ready             | Full Team     |
 
 **Total Time to Production:** 6 สัปดาห์
 
@@ -503,28 +510,31 @@ module.exports = swaggerJsdoc(options);
 ### 1. **Resource Allocation**
 
 **ทีมที่ต้องการ:**
+
 - **2 Senior Developers** (Fix critical bugs + Unit tests)
 - **1 DevOps Engineer** (Monitoring + Infrastructure)
 - **1 QA Engineer** (Testing + Quality assurance)
 - **1 Security Specialist** (Security audit, part-time)
 
 **Budget:**
+
 - Development: 40-50 man-days
 - Infrastructure: ฿50,000 (Monitoring tools)
 - Security Audit: ฿80,000-฿100,000
 
 ### 2. **Risk Management**
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| Bugs in Production | 🔴 High | Critical | Add more tests, thorough QA |
-| Performance Issues | 🟡 Medium | High | Load testing, optimization |
-| Security Breach | 🟢 Low | Critical | Security audit, pen testing |
-| Data Loss | 🟢 Low | Critical | Backup strategy, replication |
+| Risk               | Probability | Impact   | Mitigation                   |
+| ------------------ | ----------- | -------- | ---------------------------- |
+| Bugs in Production | 🔴 High     | Critical | Add more tests, thorough QA  |
+| Performance Issues | 🟡 Medium   | High     | Load testing, optimization   |
+| Security Breach    | 🟢 Low      | Critical | Security audit, pen testing  |
+| Data Loss          | 🟢 Low      | Critical | Backup strategy, replication |
 
 ### 3. **Go/No-Go Criteria**
 
 **✅ GO Decision Criteria:**
+
 - [ ] Zero CRITICAL bugs
 - [ ] Test coverage ≥ 80%
 - [ ] All TODO items completed
@@ -533,6 +543,7 @@ module.exports = swaggerJsdoc(options);
 - [ ] UAT sign-off from stakeholders
 
 **❌ NO-GO if:**
+
 - ⚠️ CRITICAL bugs still exist
 - ⚠️ Test coverage < 70%
 - ⚠️ Security vulnerabilities found
@@ -563,6 +574,7 @@ services/
 ```
 
 **Benefits:**
+
 - Independent scaling
 - Technology flexibility
 - Better fault isolation
@@ -579,13 +591,13 @@ const cacheConfig = {
     ttl: 60,
     endpoints: ['/api/dashboard', '/api/farms']
   },
-  
+
   // Layer 2: Database Query Cache (5 minutes)
   dbCache: {
     ttl: 300,
     queries: ['getApplications', 'getFarms']
   },
-  
+
   // Layer 3: Session Cache (15 minutes)
   sessionCache: {
     ttl: 900,
@@ -605,7 +617,7 @@ const dbConfig = {
   },
   replicas: [
     { host: 'mongodb-replica-1.gacp.com', role: 'read' },
-    { host: 'mongodb-replica-2.gacp.com', role: 'read' },
+    { host: 'mongodb-replica-2.gacp.com', role: 'read' }
   ]
 };
 
@@ -620,6 +632,7 @@ mongoose.connect(primaryUrl, { readPreference: 'secondaryPreferred' });
 ### 1. **Code Quality Standards**
 
 **ต้องมี:**
+
 - ✅ ESLint + Prettier (Auto-format on save)
 - ✅ Husky pre-commit hooks
 - ✅ TypeScript strict mode
@@ -708,14 +721,14 @@ throw new AppError(400, 'Invalid input', 'INVALID_INPUT', {
     systemUptime: '99.95%',
     avgResponseTime: '124ms'
   },
-  
+
   daily: {
     newRegistrations: 45,
     applicationsSubmitted: 23,
     certificatesIssued: 12,
     revenue: 850000  // THB
   },
-  
+
   monthly: {
     totalUsers: 5678,
     totalApplications: 890,
@@ -726,6 +739,7 @@ throw new AppError(400, 'Invalid input', 'INVALID_INPUT', {
 ```
 
 **Tools แนะนำ:**
+
 - **Metabase** or **Redash** (Business Intelligence)
 - **Google Data Studio** (Visual Reports)
 - **Grafana** (Technical Metrics)
@@ -772,15 +786,15 @@ throw new AppError(400, 'Invalid input', 'INVALID_INPUT', {
 
 ## 📊 Summary Scorecard
 
-| Category | Current | Target | Gap | Priority |
-|----------|---------|--------|-----|----------|
-| **Business Logic** | 98% | 98% | ✅ 0% | - |
-| **Code Quality** | 62% | 95% | ⚠️ 33% | 🔴 CRITICAL |
-| **Test Coverage** | 45% | 80% | ⚠️ 35% | 🔴 CRITICAL |
-| **Security** | 85% | 95% | ⚠️ 10% | 🟡 HIGH |
-| **Performance** | 70% | 90% | ⚠️ 20% | 🟡 HIGH |
-| **Monitoring** | 40% | 90% | ⚠️ 50% | 🟡 HIGH |
-| **Documentation** | 75% | 90% | ⚠️ 15% | 🟢 MEDIUM |
+| Category           | Current | Target | Gap    | Priority    |
+| ------------------ | ------- | ------ | ------ | ----------- |
+| **Business Logic** | 98%     | 98%    | ✅ 0%  | -           |
+| **Code Quality**   | 62%     | 95%    | ⚠️ 33% | 🔴 CRITICAL |
+| **Test Coverage**  | 45%     | 80%    | ⚠️ 35% | 🔴 CRITICAL |
+| **Security**       | 85%     | 95%    | ⚠️ 10% | 🟡 HIGH     |
+| **Performance**    | 70%     | 90%    | ⚠️ 20% | 🟡 HIGH     |
+| **Monitoring**     | 40%     | 90%    | ⚠️ 50% | 🟡 HIGH     |
+| **Documentation**  | 75%     | 90%    | ⚠️ 15% | 🟢 MEDIUM   |
 
 ---
 
@@ -791,6 +805,7 @@ throw new AppError(400, 'Invalid input', 'INVALID_INPUT', {
 **คำตอบ:** **ยังไม่พร้อม 100%** แต่ใกล้แล้ว (85%)
 
 **เหตุผล:**
+
 1. ✅ **Business Logic สมบูรณ์** - พร้อมใช้งาน
 2. ⚠️ **Code Quality ต้องปรับปรุง** - 686 errors
 3. ⚠️ **Test Coverage ต่ำเกินไป** - 45% (ต้อง 80%)
@@ -800,18 +815,21 @@ throw new AppError(400, 'Invalid input', 'INVALID_INPUT', {
 ### 📅 Timeline แนะนำ
 
 **แผน A: Standard (Recommended)**
+
 - **6 สัปดาห์** - แก้ CRITICAL + HIGH priority ทั้งหมด
 - **Go-Live:** 4 ธันวาคม 2025
 - **Risk Level:** 🟢 Low
 - **Confidence:** 95%
 
 **แผน B: Fast Track (Risky)**
+
 - **3 สัปดาห์** - แก้เฉพาะ CRITICAL only
 - **Go-Live:** 13 พฤศจิกายน 2025
 - **Risk Level:** 🟡 Medium
 - **Confidence:** 75%
 
 **แผน C: Safe & Sound (Best Practice)**
+
 - **8 สัปดาห์** - แก้ทุกอย่าง + Optimize
 - **Go-Live:** 18 ธันวาคม 2025
 - **Risk Level:** 🟢 Very Low
@@ -822,12 +840,14 @@ throw new AppError(400, 'Invalid input', 'INVALID_INPUT', {
 **แนะนำให้เลือก:** **แผน A (6 สัปดาห์)**
 
 **เพราะ:**
+
 - ✅ ครอบคลุมปัญหาสำคัญทั้งหมด
 - ✅ มีเวลาเพียงพอสำหรับ testing
 - ✅ Risk ต่ำ แต่ไม่ช้าเกินไป
 - ✅ Budget และ Resource พอดี
 
 **ขั้นตอนถัดไป:**
+
 1. **Week 1-2:** Fix CRITICAL issues (Lint + TODO + Tests)
 2. **Week 3-4:** Setup Monitoring + Security audit
 3. **Week 5:** Load testing + UAT
@@ -844,21 +864,25 @@ throw new AppError(400, 'Invalid input', 'INVALID_INPUT', {
 ## 📞 Next Actions
 
 **สำหรับ PM:**
+
 - [ ] Review timeline และ approve plan
 - [ ] Allocate resources (2 Devs + 1 DevOps + 1 QA)
 - [ ] Setup weekly status meetings
 
 **สำหรับ SA:**
+
 - [ ] Review architecture recommendations
 - [ ] Design caching strategy
 - [ ] Plan microservices migration (Phase 2)
 
 **สำหรับ SE:**
+
 - [ ] Start fixing lint errors (Day 1)
 - [ ] Setup Husky + ESLint auto-fix
 - [ ] Begin unit test writing
 
 **สำหรับ MIS:**
+
 - [ ] Setup monitoring dashboards
 - [ ] Design audit log schema
 - [ ] Plan backup procedures

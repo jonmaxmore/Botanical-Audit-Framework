@@ -112,7 +112,7 @@ export default function ApplicationsTable({
   };
 
   // Filter applications
-  const filteredApplications = applications.filter((app) => {
+  const filteredApplications = applications.filter(app => {
     const matchesSearch =
       searchTerm === '' ||
       app.applicationNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -151,7 +151,7 @@ export default function ApplicationsTable({
   // Paginate applications
   const paginatedApplications = sortedApplications.slice(
     page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage,
+    page * rowsPerPage + rowsPerPage
   );
 
   const getActionButtons = (application: Application) => {
@@ -162,7 +162,7 @@ export default function ApplicationsTable({
         <IconButton size="small" onClick={() => onViewApplication(application)} color="primary">
           <ViewIcon fontSize="small" />
         </IconButton>
-      </Tooltip>,
+      </Tooltip>
     );
 
     if (application.status === 'submitted') {
@@ -171,7 +171,7 @@ export default function ApplicationsTable({
           <IconButton size="small" onClick={() => onAssignReviewer(application)} color="info">
             <AssignIcon fontSize="small" />
           </IconButton>
-        </Tooltip>,
+        </Tooltip>
       );
     }
 
@@ -181,7 +181,7 @@ export default function ApplicationsTable({
           <IconButton size="small" onClick={() => onStartReview(application)} color="primary">
             <EditIcon fontSize="small" />
           </IconButton>
-        </Tooltip>,
+        </Tooltip>
       );
     }
 
@@ -191,7 +191,7 @@ export default function ApplicationsTable({
           <IconButton size="small" onClick={() => onCompleteReview(application)} color="warning">
             <EditIcon fontSize="small" />
           </IconButton>
-        </Tooltip>,
+        </Tooltip>
       );
     }
 
@@ -209,7 +209,7 @@ export default function ApplicationsTable({
           <IconButton size="small" onClick={() => onReject(application)} color="error">
             <RejectIcon fontSize="small" />
           </IconButton>
-        </Tooltip>,
+        </Tooltip>
       );
     }
 
@@ -226,7 +226,7 @@ export default function ApplicationsTable({
             variant="outlined"
             size="small"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             sx={{ flexGrow: 1 }}
           />
 
@@ -235,7 +235,7 @@ export default function ApplicationsTable({
             <Select
               value={cropTypeFilter}
               label="ประเภทพืช"
-              onChange={(e) => setCropTypeFilter(e.target.value)}
+              onChange={e => setCropTypeFilter(e.target.value)}
             >
               <MenuItem value="all">ทั้งหมด</MenuItem>
               <MenuItem value="cannabis">กัญชา</MenuItem>
@@ -252,7 +252,7 @@ export default function ApplicationsTable({
             <Select
               value={statusFilter}
               label="สถานะ"
-              onChange={(e) => setStatusFilter(e.target.value)}
+              onChange={e => setStatusFilter(e.target.value)}
             >
               <MenuItem value="all">ทั้งหมด</MenuItem>
               <MenuItem value="submitted">ส่งแล้ว</MenuItem>
@@ -334,7 +334,7 @@ export default function ApplicationsTable({
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedApplications.map((application) => (
+              paginatedApplications.map(application => (
                 <TableRow key={application.id} hover>
                   <TableCell>{application.applicationNumber}</TableCell>
                   <TableCell>{application.farmerName}</TableCell>
@@ -366,7 +366,11 @@ export default function ApplicationsTable({
                   </TableCell>
                   <TableCell>
                     {application.assignedReviewer ? (
-                      application.assignedReviewer
+                      <Typography variant="body2">
+                        {typeof application.assignedReviewer === 'object' && application.assignedReviewer !== null
+                          ? (application.assignedReviewer as any).name || String(application.assignedReviewer)
+                          : String(application.assignedReviewer)}
+                      </Typography>
                     ) : (
                       <Typography variant="body2" color="text.secondary">
                         ยังไม่มอบหมาย

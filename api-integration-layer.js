@@ -55,16 +55,16 @@ class GACPAPIIntegrationLayer {
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.errors({ stack: true }),
-        winston.format.json(),
+        winston.format.json()
       ),
       defaultMeta: { service: 'gacp-api-integration' },
       transports: [
         new winston.transports.File({ filename: 'logs/gacp-api-error.log', level: 'error' }),
         new winston.transports.File({ filename: 'logs/gacp-api-combined.log' }),
         new winston.transports.Console({
-          format: winston.format.simple(),
-        }),
-      ],
+          format: winston.format.simple()
+        })
+      ]
     });
   }
 
@@ -77,8 +77,8 @@ class GACPAPIIntegrationLayer {
     this.app.use(
       cors({
         origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],
-        credentials: true,
-      }),
+        credentials: true
+      })
     );
 
     // Rate limiting
@@ -87,7 +87,7 @@ class GACPAPIIntegrationLayer {
       max: 1000, // limit each IP to 1000 requests per windowMs
       message: 'Too many requests from this IP, please try again later.',
       standardHeaders: true,
-      legacyHeaders: false,
+      legacyHeaders: false
     });
     this.app.use(limiter);
 
@@ -100,7 +100,7 @@ class GACPAPIIntegrationLayer {
       this.logger.info(`${req.method} ${req.path}`, {
         ip: req.ip,
         userAgent: req.get('User-Agent'),
-        timestamp: new Date().toISOString(),
+        timestamp: new Date().toISOString()
       });
       next();
     });
@@ -148,9 +148,9 @@ class GACPAPIIntegrationLayer {
         res.json({
           success: true,
           data: farms,
-          timestamp: new Date().toISOString(),
+          timestamp: new Date().toISOString()
         });
-      }),
+      })
     );
 
     // Create new farm
@@ -159,14 +159,14 @@ class GACPAPIIntegrationLayer {
       [
         body('name').notEmpty().withMessage('Farm name is required'),
         body('userId').notEmpty().withMessage('User ID is required'),
-        body('location').isObject().withMessage('Location object is required'),
+        body('location').isObject().withMessage('Location object is required')
       ],
       this.asyncHandler(async (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           return res.status(400).json({
             success: false,
-            errors: errors.array(),
+            errors: errors.array()
           });
         }
 
@@ -178,9 +178,9 @@ class GACPAPIIntegrationLayer {
         res.status(201).json({
           success: true,
           data: farm,
-          message: 'Farm created successfully',
+          message: 'Farm created successfully'
         });
-      }),
+      })
     );
 
     // Record farm activity
@@ -188,7 +188,7 @@ class GACPAPIIntegrationLayer {
       '/farms/:farmId/activities',
       [
         body('type').notEmpty().withMessage('Activity type is required'),
-        body('phase').notEmpty().withMessage('Activity phase is required'),
+        body('phase').notEmpty().withMessage('Activity phase is required')
       ],
       this.asyncHandler(async (req, res) => {
         const { farmId } = req.params;
@@ -201,16 +201,16 @@ class GACPAPIIntegrationLayer {
             activityType: req.body.type,
             phase: req.body.phase,
             data: req.body,
-            completedAt: new Date(),
+            completedAt: new Date()
           });
         }
 
         res.json({
           success: true,
           data: activity,
-          sopUpdated: !!sopSession,
+          sopUpdated: !!sopSession
         });
-      }),
+      })
     );
 
     // Get farm dashboard data
@@ -230,9 +230,9 @@ class GACPAPIIntegrationLayer {
         res.json({
           success: true,
           data,
-          cached: !!data.fromCache,
+          cached: !!data.fromCache
         });
-      }),
+      })
     );
 
     this.app.use('/api/farm-management', router);
@@ -246,7 +246,7 @@ class GACPAPIIntegrationLayer {
       '/sessions',
       [
         body('userId').notEmpty().withMessage('User ID is required'),
-        body('farmId').notEmpty().withMessage('Farm ID is required'),
+        body('farmId').notEmpty().withMessage('Farm ID is required')
       ],
       this.asyncHandler(async (req, res) => {
         const { userId, farmId } = req.body;
@@ -257,9 +257,9 @@ class GACPAPIIntegrationLayer {
         res.status(201).json({
           success: true,
           data: session,
-          message: 'SOP session started successfully',
+          message: 'SOP session started successfully'
         });
-      }),
+      })
     );
 
     // Get active session
@@ -271,9 +271,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: session,
+          data: session
         });
-      }),
+      })
     );
 
     // Record SOP activity
@@ -281,7 +281,7 @@ class GACPAPIIntegrationLayer {
       '/sessions/:sessionId/activities',
       [
         body('activityType').notEmpty().withMessage('Activity type is required'),
-        body('phase').notEmpty().withMessage('Phase is required'),
+        body('phase').notEmpty().withMessage('Phase is required')
       ],
       this.asyncHandler(async (req, res) => {
         const { sessionId } = req.params;
@@ -290,9 +290,9 @@ class GACPAPIIntegrationLayer {
         res.json({
           success: true,
           data: result,
-          message: 'Activity recorded successfully',
+          message: 'Activity recorded successfully'
         });
-      }),
+      })
     );
 
     // Get SOP dashboard data
@@ -304,9 +304,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data,
+          data
         });
-      }),
+      })
     );
 
     this.app.use('/api/sop', router);
@@ -324,9 +324,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: qrData,
+          data: qrData
         });
-      }),
+      })
     );
 
     // Track batch movement
@@ -334,7 +334,7 @@ class GACPAPIIntegrationLayer {
       '/batches/:batchId/track',
       [
         body('stage').notEmpty().withMessage('Stage is required'),
-        body('location').isObject().withMessage('Location is required'),
+        body('location').isObject().withMessage('Location is required')
       ],
       this.asyncHandler(async (req, res) => {
         const { batchId } = req.params;
@@ -342,9 +342,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: trackingUpdate,
+          data: trackingUpdate
         });
-      }),
+      })
     );
 
     // Get statistics
@@ -356,9 +356,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: stats,
+          data: stats
         });
-      }),
+      })
     );
 
     this.app.use('/api/track-trace', router);
@@ -377,9 +377,9 @@ class GACPAPIIntegrationLayer {
         res.status(201).json({
           success: true,
           data: survey,
-          message: 'Survey created successfully',
+          message: 'Survey created successfully'
         });
-      }),
+      })
     );
 
     // Get survey templates
@@ -390,9 +390,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: templates,
+          data: templates
         });
-      }),
+      })
     );
 
     // Start survey response
@@ -401,22 +401,22 @@ class GACPAPIIntegrationLayer {
       [
         body('surveyId').notEmpty().withMessage('Survey ID is required'),
         body('respondentId').notEmpty().withMessage('Respondent ID is required'),
-        body('language').optional().isIn(['th', 'en']).withMessage('Language must be th or en'),
+        body('language').optional().isIn(['th', 'en']).withMessage('Language must be th or en')
       ],
       this.asyncHandler(async (req, res) => {
         const { surveyId, respondentId, language } = req.body;
         const response = await this.surveySystem.startSurveyResponse(
           surveyId,
           respondentId,
-          language,
+          language
         );
 
         res.status(201).json({
           success: true,
           data: response,
-          message: 'Survey response started successfully',
+          message: 'Survey response started successfully'
         });
-      }),
+      })
     );
 
     // Submit step response
@@ -428,7 +428,7 @@ class GACPAPIIntegrationLayer {
         const result = await this.surveySystem.submitStepResponse(
           responseId,
           parseInt(stepId),
-          req.body,
+          req.body
         );
 
         res.json({
@@ -436,9 +436,9 @@ class GACPAPIIntegrationLayer {
           data: result,
           message: result.isComplete
             ? 'Survey completed successfully'
-            : 'Step submitted successfully',
+            : 'Step submitted successfully'
         });
-      }),
+      })
     );
 
     // Get survey statistics
@@ -449,9 +449,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: stats,
+          data: stats
         });
-      }),
+      })
     );
 
     // Get regional analytics
@@ -463,9 +463,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: analytics,
+          data: analytics
         });
-      }),
+      })
     );
 
     // Generate survey report
@@ -477,9 +477,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: report,
+          data: report
         });
-      }),
+      })
     );
 
     // Export survey data
@@ -493,7 +493,7 @@ class GACPAPIIntegrationLayer {
         res.setHeader('Content-Type', format === 'csv' ? 'text/csv' : 'application/json');
         res.setHeader('Content-Disposition', `attachment; filename=survey_${surveyId}.${format}`);
         res.send(exportData);
-      }),
+      })
     );
 
     this.app.use('/api/survey', router);
@@ -510,9 +510,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: standards,
+          data: standards
         });
-      }),
+      })
     );
 
     // Get standard details
@@ -525,15 +525,15 @@ class GACPAPIIntegrationLayer {
         if (!standard) {
           return res.status(404).json({
             success: false,
-            message: 'Standard not found',
+            message: 'Standard not found'
           });
         }
 
         res.json({
           success: true,
-          data: standard,
+          data: standard
         });
-      }),
+      })
     );
 
     // Compare two standards
@@ -542,22 +542,22 @@ class GACPAPIIntegrationLayer {
       [
         body('standardA').notEmpty().withMessage('Standard A ID is required'),
         body('standardB').notEmpty().withMessage('Standard B ID is required'),
-        body('options').optional().isObject(),
+        body('options').optional().isObject()
       ],
       this.asyncHandler(async (req, res) => {
         const { standardA, standardB, options } = req.body;
         const comparison = await this.standardsComparison.compareStandards(
           standardA,
           standardB,
-          options,
+          options
         );
 
         res.json({
           success: true,
           data: comparison,
-          message: 'Standards comparison completed successfully',
+          message: 'Standards comparison completed successfully'
         });
-      }),
+      })
     );
 
     // Get comparison by ID
@@ -570,15 +570,15 @@ class GACPAPIIntegrationLayer {
         if (!comparison) {
           return res.status(404).json({
             success: false,
-            message: 'Comparison not found',
+            message: 'Comparison not found'
           });
         }
 
         res.json({
           success: true,
-          data: comparison,
+          data: comparison
         });
-      }),
+      })
     );
 
     // Search standards
@@ -604,9 +604,9 @@ class GACPAPIIntegrationLayer {
           success: true,
           data: results,
           query: query || null,
-          filters,
+          filters
         });
-      }),
+      })
     );
 
     // Find similar requirements
@@ -619,14 +619,14 @@ class GACPAPIIntegrationLayer {
         const similarRequirements = await this.standardsComparison.findSimilarRequirements(
           requirementId,
           standardId,
-          parseFloat(threshold),
+          parseFloat(threshold)
         );
 
         res.json({
           success: true,
-          data: similarRequirements,
+          data: similarRequirements
         });
-      }),
+      })
     );
 
     // Generate compliance profile
@@ -634,21 +634,21 @@ class GACPAPIIntegrationLayer {
       '/compliance-profile',
       [
         body('organizationId').notEmpty().withMessage('Organization ID is required'),
-        body('currentCompliance').isObject().withMessage('Current compliance data is required'),
+        body('currentCompliance').isObject().withMessage('Current compliance data is required')
       ],
       this.asyncHandler(async (req, res) => {
         const { organizationId, currentCompliance } = req.body;
         const profile = await this.standardsComparison.generateComplianceProfile(
           organizationId,
-          currentCompliance,
+          currentCompliance
         );
 
         res.status(201).json({
           success: true,
           data: profile,
-          message: 'Compliance profile generated successfully',
+          message: 'Compliance profile generated successfully'
         });
-      }),
+      })
     );
 
     // Export comparison
@@ -663,10 +663,10 @@ class GACPAPIIntegrationLayer {
         res.setHeader('Content-Type', format === 'csv' ? 'text/csv' : 'application/json');
         res.setHeader(
           'Content-Disposition',
-          `attachment; filename=comparison_${comparisonId}.${format}`,
+          `attachment; filename=comparison_${comparisonId}.${format}`
         );
         res.send(exportData);
-      }),
+      })
     );
 
     // Get system statistics
@@ -677,9 +677,9 @@ class GACPAPIIntegrationLayer {
 
         res.json({
           success: true,
-          data: stats,
+          data: stats
         });
-      }),
+      })
     );
 
     this.app.use('/api/standards-comparison', router);
@@ -693,16 +693,16 @@ class GACPAPIIntegrationLayer {
       '/guidance',
       [
         body('query').notEmpty().withMessage('Query is required'),
-        body('context').optional().isObject(),
+        body('context').optional().isObject()
       ],
       this.asyncHandler(async (req, res) => {
         const guidance = await this.aiAssistant.getGuidance(req.body.query, req.body.context);
 
         res.json({
           success: true,
-          data: guidance,
+          data: guidance
         });
-      }),
+      })
     );
 
     // Validate SOP activity
@@ -710,19 +710,19 @@ class GACPAPIIntegrationLayer {
       '/validate-sop',
       [
         body('activityType').notEmpty().withMessage('Activity type is required'),
-        body('data').isObject().withMessage('Activity data is required'),
+        body('data').isObject().withMessage('Activity data is required')
       ],
       this.asyncHandler(async (req, res) => {
         const validation = await this.aiAssistant.validateSOPActivity(
           req.body.activityType,
-          req.body.data,
+          req.body.data
         );
 
         res.json({
           success: true,
-          data: validation,
+          data: validation
         });
-      }),
+      })
     );
 
     this.app.use('/api/ai-assistant', router);
@@ -747,7 +747,7 @@ class GACPAPIIntegrationLayer {
             this.sopWizard.getUserStatistics(userId),
             this.surveySystem.getSystemStatistics(),
             this.trackTraceService.getUserStatistics(userId),
-            this.standardsComparison.getSystemStatistics(),
+            this.standardsComparison.getSystemStatistics()
           ]);
 
           data = {
@@ -756,7 +756,7 @@ class GACPAPIIntegrationLayer {
             survey: surveyData,
             trackTrace: trackTraceData,
             standards: standardsData,
-            lastUpdated: new Date().toISOString(),
+            lastUpdated: new Date().toISOString()
           };
 
           await this.setCache(cacheKey, data, 300); // Cache for 5 minutes
@@ -765,9 +765,9 @@ class GACPAPIIntegrationLayer {
         res.json({
           success: true,
           data,
-          cached: !!data.fromCache,
+          cached: !!data.fromCache
         });
-      }),
+      })
     );
 
     // Get notifications
@@ -786,7 +786,7 @@ class GACPAPIIntegrationLayer {
             type: 'warning',
             title: 'Pending SOP Activities',
             message: `You have ${sopSession.pendingActivities.length} pending activities`,
-            timestamp: new Date().toISOString(),
+            timestamp: new Date().toISOString()
           });
         }
 
@@ -797,15 +797,15 @@ class GACPAPIIntegrationLayer {
             type: 'warning',
             title: 'Low Compliance Score',
             message: `Current compliance: ${complianceScore}%. Improve to meet GACP standards.`,
-            timestamp: new Date().toISOString(),
+            timestamp: new Date().toISOString()
           });
         }
 
         res.json({
           success: true,
-          data: { notifications },
+          data: { notifications }
         });
-      }),
+      })
     );
 
     this.app.use('/api/dashboard', router);
@@ -823,7 +823,7 @@ class GACPAPIIntegrationLayer {
         if (!query) {
           return res.status(400).json({
             success: false,
-            message: 'Search query is required',
+            message: 'Search query is required'
           });
         }
 
@@ -847,9 +847,9 @@ class GACPAPIIntegrationLayer {
         res.json({
           success: true,
           data: results,
-          query,
+          query
         });
-      }),
+      })
     );
 
     this.app.use('/api/search', router);
@@ -860,7 +860,7 @@ class GACPAPIIntegrationLayer {
     this.app.use('*', (req, res) => {
       res.status(404).json({
         success: false,
-        message: 'API endpoint not found',
+        message: 'API endpoint not found'
       });
     });
 
@@ -871,7 +871,7 @@ class GACPAPIIntegrationLayer {
         stack: error.stack,
         url: req.url,
         method: req.method,
-        ip: req.ip,
+        ip: req.ip
       });
 
       const isDevelopment = process.env.NODE_ENV === 'development';
@@ -879,7 +879,7 @@ class GACPAPIIntegrationLayer {
       res.status(error.statusCode || 500).json({
         success: false,
         message: error.message || 'Internal Server Error',
-        ...(isDevelopment && { stack: error.stack }),
+        ...(isDevelopment && { stack: error.stack })
       });
     });
   }
@@ -899,8 +899,8 @@ class GACPAPIIntegrationLayer {
       services: {
         database: 'unknown',
         cache: 'unknown',
-        ai: 'unknown',
-      },
+        ai: 'unknown'
+      }
     };
 
     try {

@@ -267,7 +267,7 @@ const farmerPermissions = {
   sop_activities: ['create', 'read', 'update_own'],
   quality_records: ['read_own'],
   reports: ['generate_own'],
-  mobile_app: ['full_access'],
+  mobile_app: ['full_access']
 };
 ```
 
@@ -280,7 +280,7 @@ const inspectorPermissions = {
   sop_activities: ['read', 'audit', 'approve'],
   quality_records: ['read', 'verify'],
   reports: ['generate', 'export'],
-  audit_trail: ['read'],
+  audit_trail: ['read']
 };
 ```
 
@@ -292,7 +292,7 @@ const adminPermissions = {
   farms: ['create', 'read', 'update', 'delete'],
   system_config: ['full_access'],
   reports: ['full_access'],
-  audit_trail: ['full_access'],
+  audit_trail: ['full_access']
 };
 ```
 

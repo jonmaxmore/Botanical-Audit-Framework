@@ -35,7 +35,7 @@ import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**
  * DTAM Officer Applications List
- * 
+ *
  * หน้ารายการใบสมัครสำหรับ DTAM_OFFICER
  * - แสดงใบสมัครทั้งหมดที่รอตรวจ
  * - Filter by status
@@ -60,7 +60,7 @@ type FilterStatus = 'all' | 'PAYMENT_PROCESSING_1' | 'DOCUMENT_REVIEW' | 'DOCUME
 const OfficerApplicationsPage: React.FC = () => {
   const router = useRouter();
   const { applications } = useApplicationContext();
-  
+
   const [loading, setLoading] = useState(true);
   const [filteredApplications, setFilteredApplications] = useState<TableApplication[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -75,34 +75,38 @@ const OfficerApplicationsPage: React.FC = () => {
   const loadApplications = () => {
     try {
       // กรองใบสมัครที่เกี่ยวข้องกับ DTAM_OFFICER
-      let filtered = applications.filter(app => 
-        app.workflowState === 'PAYMENT_PROCESSING_1' ||
-        app.workflowState === 'DOCUMENT_REVIEW' ||
-        app.workflowState === 'DOCUMENT_REVISION' ||
-        app.workflowState === 'DOCUMENT_APPROVED' ||
-        app.workflowState === 'DOCUMENT_REJECTED'
+      let filtered = applications.filter(
+        (app) =>
+          app.workflowState === 'PAYMENT_PROCESSING_1' ||
+          app.workflowState === 'DOCUMENT_REVIEW' ||
+          app.workflowState === 'DOCUMENT_REVISION' ||
+          app.workflowState === 'DOCUMENT_APPROVED' ||
+          app.workflowState === 'DOCUMENT_REJECTED'
       );
 
       // Filter by status
       if (filterStatus !== 'all') {
-        filtered = filtered.filter(app => app.workflowState === filterStatus);
+        filtered = filtered.filter((app) => app.workflowState === filterStatus);
       }
 
       // Search by application number or farmer name
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
-        filtered = filtered.filter(app => 
-          app.applicationNumber.toLowerCase().includes(query) ||
-          app.farmerInfo?.name.toLowerCase().includes(query) ||
-          app.farmInfo?.name.toLowerCase().includes(query)
+        filtered = filtered.filter(
+          (app) =>
+            app.applicationNumber.toLowerCase().includes(query) ||
+            app.farmerInfo?.name.toLowerCase().includes(query) ||
+            app.farmInfo?.name.toLowerCase().includes(query)
         );
       }
 
       // Map to table format
-      const tableData = filtered.map(app => {
+      const tableData = filtered.map((app) => {
         const submittedDate = new Date(app.submittedDate || Date.now());
-        const daysWaiting = Math.floor((Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24));
-        
+        const daysWaiting = Math.floor(
+          (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
+        );
+
         let priority: 'high' | 'medium' | 'low' = 'low';
         if (daysWaiting > 5) priority = 'high';
         else if (daysWaiting > 2) priority = 'medium';
@@ -145,51 +149,72 @@ const OfficerApplicationsPage: React.FC = () => {
 
   const getStateLabel = (state: string) => {
     switch (state) {
-      case 'PAYMENT_PROCESSING_1': return 'รอชำระเงิน';
-      case 'DOCUMENT_REVIEW': return 'รอตรวจเอกสาร';
-      case 'DOCUMENT_REVISION': return 'รอแก้ไข';
-      case 'DOCUMENT_APPROVED': return 'อนุมัติแล้ว';
-      case 'DOCUMENT_REJECTED': return 'ปฏิเสธแล้ว';
-      default: return state;
+      case 'PAYMENT_PROCESSING_1':
+        return 'รอชำระเงิน';
+      case 'DOCUMENT_REVIEW':
+        return 'รอตรวจเอกสาร';
+      case 'DOCUMENT_REVISION':
+        return 'รอแก้ไข';
+      case 'DOCUMENT_APPROVED':
+        return 'อนุมัติแล้ว';
+      case 'DOCUMENT_REJECTED':
+        return 'ปฏิเสธแล้ว';
+      default:
+        return state;
     }
   };
 
-  const getStateColor = (state: string): 'default' | 'primary' | 'warning' | 'success' | 'error' => {
+  const getStateColor = (
+    state: string
+  ): 'default' | 'primary' | 'warning' | 'success' | 'error' => {
     switch (state) {
-      case 'PAYMENT_PROCESSING_1': return 'default';
-      case 'DOCUMENT_REVIEW': return 'primary';
-      case 'DOCUMENT_REVISION': return 'warning';
-      case 'DOCUMENT_APPROVED': return 'success';
-      case 'DOCUMENT_REJECTED': return 'error';
-      default: return 'default';
+      case 'PAYMENT_PROCESSING_1':
+        return 'default';
+      case 'DOCUMENT_REVIEW':
+        return 'primary';
+      case 'DOCUMENT_REVISION':
+        return 'warning';
+      case 'DOCUMENT_APPROVED':
+        return 'success';
+      case 'DOCUMENT_REJECTED':
+        return 'error';
+      default:
+        return 'default';
     }
   };
 
   const getPriorityColor = (priority: 'high' | 'medium' | 'low') => {
     switch (priority) {
-      case 'high': return 'error';
-      case 'medium': return 'warning';
-      case 'low': return 'success';
+      case 'high':
+        return 'error';
+      case 'medium':
+        return 'warning';
+      case 'low':
+        return 'success';
     }
   };
 
   const getPriorityLabel = (priority: 'high' | 'medium' | 'low') => {
     switch (priority) {
-      case 'high': return 'ด่วนมาก';
-      case 'medium': return 'ปานกลาง';
-      case 'low': return 'ปกติ';
+      case 'high':
+        return 'ด่วนมาก';
+      case 'medium':
+        return 'ปานกลาง';
+      case 'low':
+        return 'ปกติ';
     }
   };
 
   // Get pending count
-  const pendingCount = filteredApplications.filter(app => 
-    app.workflowState === 'DOCUMENT_REVIEW' || 
-    app.workflowState === 'DOCUMENT_REVISION'
+  const pendingCount = filteredApplications.filter(
+    (app) => app.workflowState === 'DOCUMENT_REVIEW' || app.workflowState === 'DOCUMENT_REVISION'
   ).length;
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -252,7 +277,8 @@ const OfficerApplicationsPage: React.FC = () => {
         {/* Info Alert */}
         {pendingCount > 0 && (
           <Alert severity="info" sx={{ mb: 2 }}>
-            มีใบสมัครรอตรวจสอบ <strong>{pendingCount} รายการ</strong> - กรุณาดำเนินการให้เสร็จภายใน 3-5 วันทำการ
+            มีใบสมัครรอตรวจสอบ <strong>{pendingCount} รายการ</strong> - กรุณาดำเนินการให้เสร็จภายใน
+            3-5 วันทำการ
           </Alert>
         )}
 
@@ -267,24 +293,40 @@ const OfficerApplicationsPage: React.FC = () => {
               <Table>
                 <TableHead>
                   <TableRow sx={{ bgcolor: 'grey.100' }}>
-                    <TableCell><strong>เลขใบสมัคร</strong></TableCell>
-                    <TableCell><strong>ชื่อฟาร์ม</strong></TableCell>
-                    <TableCell><strong>เกษตรกร</strong></TableCell>
-                    <TableCell><strong>วันที่ยื่น</strong></TableCell>
-                    <TableCell><strong>รอมาแล้ว</strong></TableCell>
-                    <TableCell><strong>ความเร่งด่วน</strong></TableCell>
-                    <TableCell><strong>สถานะ</strong></TableCell>
-                    <TableCell align="center"><strong>การกระทำ</strong></TableCell>
+                    <TableCell>
+                      <strong>เลขใบสมัคร</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>ชื่อฟาร์ม</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>เกษตรกร</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>วันที่ยื่น</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>รอมาแล้ว</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>ความเร่งด่วน</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>สถานะ</strong>
+                    </TableCell>
+                    <TableCell align="center">
+                      <strong>การกระทำ</strong>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {filteredApplications
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                     .map((app) => (
-                      <TableRow 
+                      <TableRow
                         key={app.id}
                         hover
-                        sx={{ 
+                        sx={{
                           '&:hover': { bgcolor: 'grey.50', cursor: 'pointer' },
                           ...(app.priority === 'high' && { bgcolor: 'error.lighter' }),
                         }}
@@ -296,19 +338,13 @@ const OfficerApplicationsPage: React.FC = () => {
                           </Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant="body2">
-                            {app.farmName}
-                          </Typography>
+                          <Typography variant="body2">{app.farmName}</Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant="body2">
-                            {app.farmerName}
-                          </Typography>
+                          <Typography variant="body2">{app.farmerName}</Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant="body2">
-                            {app.submittedDate}
-                          </Typography>
+                          <Typography variant="body2">{app.submittedDate}</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography variant="body2" fontWeight="medium">

@@ -23,7 +23,7 @@ export function createMockNextRequest(
     body?: any;
     headers?: Record<string, string>;
     searchParams?: Record<string, string>;
-  } = {},
+  } = {}
 ): NextRequest {
   const { method = 'GET', body, headers = {}, searchParams = {} } = options;
 
@@ -38,8 +38,8 @@ export function createMockNextRequest(
     method,
     headers: {
       'Content-Type': 'application/json',
-      ...headers,
-    },
+      ...headers
+    }
   };
 
   // Add body for non-GET requests
@@ -92,14 +92,14 @@ export async function parseNextResponse(response: NextResponse): Promise<{
 export function createAuthenticatedRequest(
   url: string,
   token: string,
-  options: Parameters<typeof createMockNextRequest>[1] = {},
+  options: Parameters<typeof createMockNextRequest>[1] = {}
 ): NextRequest {
   return createMockNextRequest(url, {
     ...options,
     headers: {
       ...options.headers,
-      Authorization: `Bearer ${token}`,
-    },
+      Authorization: `Bearer ${token}`
+    }
   });
 }
 
@@ -207,7 +207,7 @@ export class MockDatabase {
 
   async findCertificateByCertificateNumber(certificateNumber: string) {
     return Array.from(this.certificates.values()).find(
-      c => c.certificateNumber === certificateNumber,
+      c => c.certificateNumber === certificateNumber
     );
   }
 
@@ -313,7 +313,7 @@ export function decodeTestToken(token: string): any {
 export async function assertResponseStatus(
   response: NextResponse,
   expectedStatus: number,
-  expectedBody?: any,
+  expectedBody?: any
 ) {
   const { status, body } = await parseNextResponse(response);
 
@@ -335,7 +335,7 @@ export async function createTestUser(overrides: any = {}) {
     password: 'Test123!',
     name: 'Test User',
     role: 'farmer',
-    phone: '0812345678',
+    phone: '0812345678'
   };
 
   return mockDb.createUser({ ...defaultUser, ...overrides });
@@ -351,7 +351,7 @@ export async function createTestApplication(farmerId: string, overrides: any = {
     cropType: 'cannabis',
     farmSize: 10.5,
     status: 'DRAFT',
-    submittedAt: new Date(),
+    submittedAt: new Date()
   };
 
   return mockDb.createApplication({ ...defaultApp, ...overrides });
@@ -363,14 +363,14 @@ export async function createTestApplication(farmerId: string, overrides: any = {
 export async function createTestInspection(
   applicationId: string,
   inspectorId: string,
-  overrides: any = {},
+  overrides: any = {}
 ) {
   const defaultInspection = {
     applicationId,
     inspectorId,
     inspectionNumber: `INS-2025-${mockDb.getNextSequence('inspection')}`,
     scheduledDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 7 days from now
-    status: 'SCHEDULED',
+    status: 'SCHEDULED'
   };
 
   return mockDb.createInspection({ ...defaultInspection, ...overrides });
@@ -385,7 +385,7 @@ export async function createTestCertificate(userId: string, overrides: any = {})
     certificateNumber: `GACP-2025-${mockDb.getNextSequence('certificate')}`,
     issuedDate: new Date(),
     expiryDate: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000), // 3 years
-    status: 'ACTIVE',
+    status: 'ACTIVE'
   };
 
   return mockDb.createCertificate({ ...defaultCert, ...overrides });

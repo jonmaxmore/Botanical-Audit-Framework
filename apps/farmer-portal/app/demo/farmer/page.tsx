@@ -17,7 +17,7 @@ export default function DemoFarmerPage() {
     { id: 'applications', name: 'คำขอของฉัน', icon: '📝' },
     { id: 'inspections', name: 'การตรวจสอบ', icon: '🔍' },
     { id: 'certificates', name: 'ใบรับรอง', icon: '🏆' },
-    { id: 'profile', name: 'ข้อมูลส่วนตัว', icon: '👤' },
+    { id: 'profile', name: 'ข้อมูลส่วนตัว', icon: '👤' }
   ];
 
   const renderTabContent = () => {

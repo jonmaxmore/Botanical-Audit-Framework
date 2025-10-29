@@ -32,7 +32,7 @@ enum ApplicationStatus {
   REQUIRES_ONSITE = 'ต้องลงพื้นที่ตรวจสอบ',
   APPROVED = 'อนุมัติ',
   CERTIFICATE_ISSUED = 'ออกใบรับรองแล้ว',
-  REJECTED = 'ไม่อนุมัติ',
+  REJECTED = 'ไม่อนุมัติ'
 }
 ```
 
@@ -77,7 +77,7 @@ enum PaymentStatus {
   RECEIPT_UPLOADED = 'อัพโหลดหลักฐานแล้ว',
   UNDER_VERIFICATION = 'กำลังตรวจสอบ',
   VERIFIED = 'ยืนยันแล้ว',
-  REJECTED = 'ไม่ถูกต้อง',
+  REJECTED = 'ไม่ถูกต้อง'
 }
 ```
 

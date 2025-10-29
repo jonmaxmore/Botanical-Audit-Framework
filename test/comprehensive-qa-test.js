@@ -24,7 +24,7 @@ class GACPQATester {
       documentReviewer: { passed: 0, failed: 0, tests: [] },
       inspector: { passed: 0, failed: 0, tests: [] },
       approver: { passed: 0, failed: 0, tests: [] },
-      admin: { passed: 0, failed: 0, tests: [] },
+      admin: { passed: 0, failed: 0, tests: [] }
     };
     this.tokens = {};
     this.testData = {};
@@ -80,7 +80,7 @@ class GACPQATester {
         firstName: 'สมชาย',
         lastName: 'ใจดี',
         phoneNumber: '0812345678',
-        role: 'farmer',
+        role: 'farmer'
       };
       this.testData.farmerEmail = userData.email;
       this.testData.farmerPassword = userData.password;
@@ -93,7 +93,7 @@ class GACPQATester {
     await this.test(role, 'Login as Farmer', async () => {
       const response = await axios.post(`${this.baseURL}/api/auth/login`, {
         email: this.testData.farmerEmail,
-        password: this.testData.farmerPassword,
+        password: this.testData.farmerPassword
       });
       this.tokens.farmer = response.data.token;
       return response.status === 200 && response.data.token;
@@ -102,7 +102,7 @@ class GACPQATester {
     // 1.3 View Dashboard
     await this.test(role, 'View Farmer Dashboard', async () => {
       const response = await axios.get(`${this.baseURL}/api/farmer/dashboard`, {
-        headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+        headers: { Authorization: `Bearer ${this.tokens.farmer}` }
       });
       return response.status === 200;
     });
@@ -115,13 +115,13 @@ class GACPQATester {
           province: 'เชียงใหม่',
           district: 'แม่ริม',
           subdistrict: 'ริมใต้',
-          address: '123 ถนนทดสอบ',
+          address: '123 ถนนทดสอบ'
         },
         area: 5.5,
-        cropType: 'กัญชา',
+        cropType: 'กัญชา'
       };
       const response = await axios.post(`${this.baseURL}/api/farm-management/farms`, farmData, {
-        headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+        headers: { Authorization: `Bearer ${this.tokens.farmer}` }
       });
       this.testData.farmId = response.data.data.farmId;
       return response.status === 201;
@@ -132,8 +132,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/farm-management/farms/${this.testData.farmId}`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       return response.status === 200;
     });
@@ -142,14 +142,14 @@ class GACPQATester {
     await this.test(role, 'Update Farm Information', async () => {
       const updateData = {
         area: 6.0,
-        notes: 'อัปเดตข้อมูลพื้นที่ฟาร์ม',
+        notes: 'อัปเดตข้อมูลพื้นที่ฟาร์ม'
       };
       const response = await axios.put(
         `${this.baseURL}/api/farm-management/farms/${this.testData.farmId}`,
         updateData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       return response.status === 200;
     });
@@ -162,15 +162,15 @@ class GACPQATester {
         cropDetails: {
           strain: 'พันธุ์ทดสอบ',
           plantingDate: new Date().toISOString(),
-          expectedHarvest: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString(),
-        },
+          expectedHarvest: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000).toISOString()
+        }
       };
       const response = await axios.post(
         `${this.baseURL}/api/applications/create`,
         applicationData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       this.testData.applicationId = response.data.data.applicationId;
       return response.status === 201;
@@ -183,10 +183,10 @@ class GACPQATester {
         documentType: 'land_ownership',
         fileName: 'เอกสารสิทธิ์ที่ดิน.pdf',
         fileSize: 1024000,
-        uploadDate: new Date().toISOString(),
+        uploadDate: new Date().toISOString()
       };
       const response = await axios.post(`${this.baseURL}/api/documents/upload`, documentData, {
-        headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+        headers: { Authorization: `Bearer ${this.tokens.farmer}` }
       });
       return response.status === 201;
     });
@@ -197,8 +197,8 @@ class GACPQATester {
         `${this.baseURL}/api/applications/${this.testData.applicationId}/submit`,
         {},
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       return response.status === 200;
     });
@@ -208,8 +208,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/applications/${this.testData.applicationId}/status`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       return response.status === 200 && response.data.data.status === 'submitted';
     });
@@ -217,7 +217,7 @@ class GACPQATester {
     // 1.11 View Notifications
     await this.test(role, 'View Notifications', async () => {
       const response = await axios.get(`${this.baseURL}/api/notifications`, {
-        headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+        headers: { Authorization: `Bearer ${this.tokens.farmer}` }
       });
       return response.status === 200;
     });
@@ -228,12 +228,12 @@ class GACPQATester {
         surveyId: 'gacp-basic-survey',
         responses: {
           question1: 'มีประสบการณ์ปลูกกัญชา 5 ปี',
-          question2: 'ใช้ปุ๋ยอินทรีย์',
+          question2: 'ใช้ปุ๋ยอินทรีย์'
         },
-        region: 'เหนือ',
+        region: 'เหนือ'
       };
       const response = await axios.post(`${this.baseURL}/api/survey/submit`, surveyData, {
-        headers: { Authorization: `Bearer ${this.tokens.farmer}` },
+        headers: { Authorization: `Bearer ${this.tokens.farmer}` }
       });
       return response.status === 201;
     });
@@ -242,14 +242,14 @@ class GACPQATester {
     await this.test(role, 'Compare GACP Standards (Standalone System)', async () => {
       const comparisonData = {
         standards: ['GACP', 'GAP', 'Organic'],
-        farmId: this.testData.farmId,
+        farmId: this.testData.farmId
       };
       const response = await axios.post(
         `${this.baseURL}/api/standards-comparison/compare`,
         comparisonData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       return response.status === 200;
     });
@@ -260,8 +260,8 @@ class GACPQATester {
         `${this.baseURL}/api/auth/logout`,
         {},
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       return response.status === 200;
     });
@@ -273,7 +273,7 @@ class GACPQATester {
       // Login again
       const loginResponse = await axios.post(`${this.baseURL}/api/auth/login`, {
         email: this.testData.farmerEmail,
-        password: this.testData.farmerPassword,
+        password: this.testData.farmerPassword
       });
       this.tokens.farmer = loginResponse.data.token;
 
@@ -281,8 +281,8 @@ class GACPQATester {
         `${this.baseURL}/api/applications/${this.testData.applicationId}/cancel`,
         { reason: 'ทดสอบการยกเลิก' },
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       return response.status === 200;
     });
@@ -291,8 +291,8 @@ class GACPQATester {
       const response = await axios.delete(
         `${this.baseURL}/api/farm-management/farms/${this.testData.farmId}`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.farmer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.farmer}` }
+        }
       );
       return response.status === 200 || response.status === 403; // 403 if has active applications
     });
@@ -311,7 +311,7 @@ class GACPQATester {
     await this.test(role, 'Login as Document Reviewer', async () => {
       const response = await axios.post(`${this.baseURL}/api/auth/dtam/login`, {
         email: 'document_reviewer@dtam.go.th',
-        password: 'DTAM123456!',
+        password: 'DTAM123456!'
       });
       this.tokens.documentReviewer = response.data.token;
       return response.status === 200 && response.data.token;
@@ -320,7 +320,7 @@ class GACPQATester {
     // 2.2 View Pending Applications
     await this.test(role, 'View Pending Applications for Review', async () => {
       const response = await axios.get(`${this.baseURL}/api/dtam/applications/pending`, {
-        headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
+        headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
       });
       return response.status === 200;
     });
@@ -330,8 +330,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
+        }
       );
       return response.status === 200;
     });
@@ -341,8 +341,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}/documents`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
+        }
       );
       return response.status === 200;
     });
@@ -352,10 +352,10 @@ class GACPQATester {
       const reviewData = {
         documentId: 'doc-001',
         status: 'approved',
-        comments: 'เอกสารครบถ้วนและถูกต้อง',
+        comments: 'เอกสารครบถ้วนและถูกต้อง'
       };
       const response = await axios.post(`${this.baseURL}/api/dtam/documents/review`, reviewData, {
-        headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
+        headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
       });
       return response.status === 200;
     });
@@ -366,14 +366,14 @@ class GACPQATester {
         documentId: 'doc-002',
         status: 'revision_required',
         comments: 'กรุณาส่งเอกสารใหม่ที่ชัดเจนกว่านี้',
-        requiredChanges: ['ภาพถ่ายไม่ชัด', 'ขาดข้อมูลสำคัญ'],
+        requiredChanges: ['ภาพถ่ายไม่ชัด', 'ขาดข้อมูลสำคัญ']
       };
       const response = await axios.post(
         `${this.baseURL}/api/dtam/documents/request-revision`,
         revisionData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
+        }
       );
       return response.status === 200;
     });
@@ -384,8 +384,8 @@ class GACPQATester {
         `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}/document-review-complete`,
         { overallStatus: 'approved', notes: 'เอกสารผ่านการตรวจสอบแล้ว' },
         {
-          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
+        }
       );
       return response.status === 200;
     });
@@ -393,7 +393,7 @@ class GACPQATester {
     // 2.8 View Review History
     await this.test(role, 'View Review History', async () => {
       const response = await axios.get(`${this.baseURL}/api/dtam/reviews/history`, {
-        headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
+        headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
       });
       return response.status === 200;
     });
@@ -403,8 +403,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}/review-report`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
+        }
       );
       return response.status === 200;
     });
@@ -417,11 +417,11 @@ class GACPQATester {
         `${this.baseURL}/api/dtam/documents/revert-approval`,
         {
           documentId: 'doc-001',
-          reason: 'พบข้อผิดพลาดในการตรวจสอบ',
+          reason: 'พบข้อผิดพลาดในการตรวจสอบ'
         },
         {
-          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.documentReviewer}` }
+        }
       );
       return response.status === 200;
     });
@@ -440,7 +440,7 @@ class GACPQATester {
     await this.test(role, 'Login as Farm Inspector', async () => {
       const response = await axios.post(`${this.baseURL}/api/auth/dtam/login`, {
         email: 'inspector@dtam.go.th',
-        password: 'DTAM123456!',
+        password: 'DTAM123456!'
       });
       this.tokens.inspector = response.data.token;
       return response.status === 200 && response.data.token;
@@ -449,7 +449,7 @@ class GACPQATester {
     // 3.2 View Assigned Inspections
     await this.test(role, 'View Assigned Farm Inspections', async () => {
       const response = await axios.get(`${this.baseURL}/api/dtam/inspections/assigned`, {
-        headers: { Authorization: `Bearer ${this.tokens.inspector}` },
+        headers: { Authorization: `Bearer ${this.tokens.inspector}` }
       });
       return response.status === 200;
     });
@@ -459,8 +459,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/dtam/farms/${this.testData.farmId}/inspection-details`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       return response.status === 200;
     });
@@ -471,14 +471,14 @@ class GACPQATester {
         farmId: this.testData.farmId,
         applicationId: this.testData.applicationId,
         inspectionType: 'online',
-        scheduledDate: new Date().toISOString(),
+        scheduledDate: new Date().toISOString()
       };
       const response = await axios.post(
         `${this.baseURL}/api/dtam/inspections/start`,
         inspectionData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       this.testData.inspectionId = response.data.data.inspectionId;
       return response.status === 201;
@@ -493,22 +493,22 @@ class GACPQATester {
             category: 'soil_management',
             status: 'compliant',
             notes: 'การจัดการดินเป็นไปตามมาตรฐาน GACP',
-            photos: ['photo1.jpg', 'photo2.jpg'],
+            photos: ['photo1.jpg', 'photo2.jpg']
           },
           {
             category: 'water_management',
             status: 'compliant',
             notes: 'ระบบน้ำและการจัดการน้ำดี',
-            photos: ['water1.jpg'],
-          },
-        ],
+            photos: ['water1.jpg']
+          }
+        ]
       };
       const response = await axios.post(
         `${this.baseURL}/api/dtam/inspections/record-findings`,
         findingsData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       return response.status === 200;
     });
@@ -520,15 +520,15 @@ class GACPQATester {
         criteria: [
           { code: 'GACP-01', compliant: true, evidence: 'มีเอกสารครบถ้วน' },
           { code: 'GACP-02', compliant: true, evidence: 'พื้นที่ปลอดสารเคมี' },
-          { code: 'GACP-03', compliant: true, evidence: 'มีระบบติดตามผลผลิต' },
-        ],
+          { code: 'GACP-03', compliant: true, evidence: 'มีระบบติดตามผลผลิต' }
+        ]
       };
       const response = await axios.post(
         `${this.baseURL}/api/dtam/inspections/check-compliance`,
         complianceData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       return response.status === 200;
     });
@@ -539,15 +539,15 @@ class GACPQATester {
         inspectionId: this.testData.inspectionId,
         photos: [
           { fileName: 'farm_overview.jpg', category: 'general' },
-          { fileName: 'soil_sample.jpg', category: 'soil' },
-        ],
+          { fileName: 'soil_sample.jpg', category: 'soil' }
+        ]
       };
       const response = await axios.post(
         `${this.baseURL}/api/dtam/inspections/upload-photos`,
         photoData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       return response.status === 200;
     });
@@ -558,14 +558,14 @@ class GACPQATester {
         inspectionId: this.testData.inspectionId,
         overallResult: 'pass',
         recommendations: ['ควรปรับปรุงระบบจัดเก็บบันทึก', 'แนะนำให้มีการฝึกอบรม GAP เพิ่มเติม'],
-        nextSteps: 'พร้อมสำหรับขั้นตอนการอนุมัติ',
+        nextSteps: 'พร้อมสำหรับขั้นตอนการอนุมัติ'
       };
       const response = await axios.post(
         `${this.baseURL}/api/dtam/inspections/complete`,
         completionData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       return response.status === 200;
     });
@@ -575,8 +575,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/dtam/inspections/${this.testData.inspectionId}/report`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       return response.status === 200;
     });
@@ -584,7 +584,7 @@ class GACPQATester {
     // 3.10 View Inspection History
     await this.test(role, 'View Inspection History', async () => {
       const response = await axios.get(`${this.baseURL}/api/dtam/inspections/history`, {
-        headers: { Authorization: `Bearer ${this.tokens.inspector}` },
+        headers: { Authorization: `Bearer ${this.tokens.inspector}` }
       });
       return response.status === 200;
     });
@@ -598,15 +598,15 @@ class GACPQATester {
         findingId: 'finding-001',
         updates: {
           status: 'non_compliant',
-          notes: 'พบข้อบกพร่องเพิ่มเติม',
-        },
+          notes: 'พบข้อบกพร่องเพิ่มเติม'
+        }
       };
       const response = await axios.put(
         `${this.baseURL}/api/dtam/inspections/edit-finding`,
         editData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       return response.status === 200;
     });
@@ -616,8 +616,8 @@ class GACPQATester {
         `${this.baseURL}/api/dtam/inspections/${this.testData.inspectionId}/reopen`,
         { reason: 'พบข้อมูลเพิ่มเติมที่ต้องตรวจสอบ' },
         {
-          headers: { Authorization: `Bearer ${this.tokens.inspector}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.inspector}` }
+        }
       );
       return response.status === 200;
     });
@@ -636,7 +636,7 @@ class GACPQATester {
     await this.test(role, 'Login as Approver', async () => {
       const response = await axios.post(`${this.baseURL}/api/auth/dtam/login`, {
         email: 'approver@dtam.go.th',
-        password: 'DTAM123456!',
+        password: 'DTAM123456!'
       });
       this.tokens.approver = response.data.token;
       return response.status === 200 && response.data.token;
@@ -645,7 +645,7 @@ class GACPQATester {
     // 4.2 View Pending Approvals
     await this.test(role, 'View Pending Approvals', async () => {
       const response = await axios.get(`${this.baseURL}/api/dtam/approvals/pending`, {
-        headers: { Authorization: `Bearer ${this.tokens.approver}` },
+        headers: { Authorization: `Bearer ${this.tokens.approver}` }
       });
       return response.status === 200;
     });
@@ -655,8 +655,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}/summary`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.approver}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.approver}` }
+        }
       );
       return response.status === 200;
     });
@@ -666,8 +666,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/dtam/applications/${this.testData.applicationId}/all-documents`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.approver}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.approver}` }
+        }
       );
       return response.status === 200;
     });
@@ -677,8 +677,8 @@ class GACPQATester {
       const response = await axios.get(
         `${this.baseURL}/api/dtam/inspections/${this.testData.inspectionId}/full-report`,
         {
-          headers: { Authorization: `Bearer ${this.tokens.approver}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.approver}` }
+        }
       );
       return response.status === 200;
     });
@@ -690,14 +690,14 @@ class GACPQATester {
         decision: 'approved',
         comments: 'อนุมัติการรับรอง GACP',
         certificateValidity: '3_years',
-        conditions: ['ต้องมีการตรวจสอบประจำปี', 'รักษามาตรฐานตามที่กำหนด'],
+        conditions: ['ต้องมีการตรวจสอบประจำปี', 'รักษามาตรฐานตามที่กำหนด']
       };
       const response = await axios.post(
         `${this.baseURL}/api/dtam/approvals/approve`,
         approvalData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.approver}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.approver}` }
+        }
       );
       return response.status === 200;
     });
@@ -708,10 +708,10 @@ class GACPQATester {
         applicationId: this.testData.applicationId,
         farmId: this.testData.farmId,
         validityPeriod: 3,
-        issueDate: new Date().toISOString(),
+        issueDate: new Date().toISOString()
       };
       const response = await axios.post(`${this.baseURL}/api/certificates/generate`, certData, {
-        headers: { Authorization: `Bearer ${this.tokens.approver}` },
+        headers: { Authorization: `Bearer ${this.tokens.approver}` }
       });
       this.testData.certificateId = response.data.data.certificateId;
       return response.status === 201;
@@ -720,7 +720,7 @@ class GACPQATester {
     // 4.8 View Approval History
     await this.test(role, 'View Approval History', async () => {
       const response = await axios.get(`${this.baseURL}/api/dtam/approvals/history`, {
-        headers: { Authorization: `Bearer ${this.tokens.approver}` },
+        headers: { Authorization: `Bearer ${this.tokens.approver}` }
       });
       return response.status === 200;
     });
@@ -734,14 +734,14 @@ class GACPQATester {
         applicationId: 'test-app-002',
         decision: 'rejected',
         reasons: ['เอกสารไม่ครบถ้วน', 'ไม่ผ่านการตรวจสอบฟาร์ม'],
-        recommendations: ['ปรับปรุงเอกสาร', 'แก้ไขข้อบกพร่องในฟาร์ม'],
+        recommendations: ['ปรับปรุงเอกสาร', 'แก้ไขข้อบกพร่องในฟาร์ม']
       };
       const response = await axios.post(
         `${this.baseURL}/api/dtam/approvals/reject`,
         rejectionData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.approver}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.approver}` }
+        }
       );
       return response.status === 200;
     });
@@ -750,10 +750,10 @@ class GACPQATester {
       const revokeData = {
         certificateId: 'cert-test-001',
         reason: 'พบการละเมิดมาตรฐาน',
-        effectiveDate: new Date().toISOString(),
+        effectiveDate: new Date().toISOString()
       };
       const response = await axios.post(`${this.baseURL}/api/certificates/revoke`, revokeData, {
-        headers: { Authorization: `Bearer ${this.tokens.approver}` },
+        headers: { Authorization: `Bearer ${this.tokens.approver}` }
       });
       return response.status === 200;
     });
@@ -772,7 +772,7 @@ class GACPQATester {
     await this.test(role, 'Login as System Admin', async () => {
       const response = await axios.post(`${this.baseURL}/api/auth/dtam/login`, {
         email: 'admin@dtam.go.th',
-        password: 'Admin123456!',
+        password: 'Admin123456!'
       });
       this.tokens.admin = response.data.token;
       return response.status === 200 && response.data.token;
@@ -781,7 +781,7 @@ class GACPQATester {
     // 5.2 View System Dashboard
     await this.test(role, 'View System Dashboard', async () => {
       const response = await axios.get(`${this.baseURL}/api/admin/dashboard`, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       return response.status === 200;
     });
@@ -789,7 +789,7 @@ class GACPQATester {
     // 5.3 View All Users
     await this.test(role, 'View All Users', async () => {
       const response = await axios.get(`${this.baseURL}/api/admin/users`, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       return response.status === 200;
     });
@@ -801,10 +801,10 @@ class GACPQATester {
         firstName: 'สมหญิง',
         lastName: 'ทดสอบ',
         role: 'document_reviewer',
-        department: 'Document Review',
+        department: 'Document Review'
       };
       const response = await axios.post(`${this.baseURL}/api/admin/staff/create`, staffData, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       this.testData.staffId = response.data.data.staffId;
       return response.status === 201;
@@ -815,14 +815,14 @@ class GACPQATester {
       const permissionData = {
         userId: this.testData.staffId,
         permissions: ['read', 'write', 'review', 'approve'],
-        role: 'senior_reviewer',
+        role: 'senior_reviewer'
       };
       const response = await axios.put(
         `${this.baseURL}/api/admin/users/permissions`,
         permissionData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.admin}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.admin}` }
+        }
       );
       return response.status === 200;
     });
@@ -830,7 +830,7 @@ class GACPQATester {
     // 5.6 View System Statistics
     await this.test(role, 'View System Statistics', async () => {
       const response = await axios.get(`${this.baseURL}/api/admin/statistics`, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       return response.status === 200;
     });
@@ -838,7 +838,7 @@ class GACPQATester {
     // 5.7 View All Applications (All Statuses)
     await this.test(role, 'View All Applications', async () => {
       const response = await axios.get(`${this.baseURL}/api/admin/applications/all`, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       return response.status === 200;
     });
@@ -849,11 +849,11 @@ class GACPQATester {
         reportType: 'monthly_summary',
         dateRange: {
           start: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-          end: new Date().toISOString(),
-        },
+          end: new Date().toISOString()
+        }
       };
       const response = await axios.post(`${this.baseURL}/api/admin/reports/generate`, reportData, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       return response.status === 200;
     });
@@ -864,10 +864,10 @@ class GACPQATester {
         maintenance_mode: false,
         max_applications_per_month: 100,
         certificate_validity_years: 3,
-        notification_email: 'noreply@dtam.go.th',
+        notification_email: 'noreply@dtam.go.th'
       };
       const response = await axios.put(`${this.baseURL}/api/admin/settings`, settingsData, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       return response.status === 200;
     });
@@ -878,16 +878,16 @@ class GACPQATester {
         templateName: 'GACP Survey 2025',
         questions: [
           { id: 1, question: 'ประสบการณ์การปลูก', type: 'text' },
-          { id: 2, question: 'ประเภทปุ๋ย', type: 'multiple_choice' },
+          { id: 2, question: 'ประเภทปุ๋ย', type: 'multiple_choice' }
         ],
-        region: 'ทุกภูมิภาค',
+        region: 'ทุกภูมิภาค'
       };
       const response = await axios.post(
         `${this.baseURL}/api/admin/survey/templates`,
         templateData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.admin}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.admin}` }
+        }
       );
       return response.status === 201;
     });
@@ -899,15 +899,15 @@ class GACPQATester {
         version: '2025',
         criteria: [
           { code: 'GACP-01', description: 'การจัดการดิน', mandatory: true },
-          { code: 'GACP-02', description: 'การจัดการน้ำ', mandatory: true },
-        ],
+          { code: 'GACP-02', description: 'การจัดการน้ำ', mandatory: true }
+        ]
       };
       const response = await axios.put(
         `${this.baseURL}/api/admin/standards/update`,
         standardsData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.admin}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.admin}` }
+        }
       );
       return response.status === 200;
     });
@@ -916,7 +916,7 @@ class GACPQATester {
     await this.test(role, 'View System Logs', async () => {
       const response = await axios.get(`${this.baseURL}/api/admin/logs`, {
         headers: { Authorization: `Bearer ${this.tokens.admin}` },
-        params: { limit: 100, level: 'info' },
+        params: { limit: 100, level: 'info' }
       });
       return response.status === 200;
     });
@@ -927,14 +927,14 @@ class GACPQATester {
         type: 'system_announcement',
         title: 'ประกาศปรับปรุงระบบ',
         message: 'ระบบจะปิดปรับปรุงในวันที่ 1 พฤศจิกายน 2025',
-        recipients: 'all',
+        recipients: 'all'
       };
       const response = await axios.post(
         `${this.baseURL}/api/admin/notifications/send`,
         notificationData,
         {
-          headers: { Authorization: `Bearer ${this.tokens.admin}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.admin}` }
+        }
       );
       return response.status === 200;
     });
@@ -944,10 +944,10 @@ class GACPQATester {
       const backupData = {
         backupType: 'full',
         includeDatabase: true,
-        includeFiles: true,
+        includeFiles: true
       };
       const response = await axios.post(`${this.baseURL}/api/admin/backup/create`, backupData, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       return response.status === 200;
     });
@@ -958,10 +958,10 @@ class GACPQATester {
         primaryColor: '#2E7D32',
         secondaryColor: '#66BB6A',
         fontFamily: 'Prompt, sans-serif',
-        customCSS: '.btn-primary { background-color: #2E7D32; }',
+        customCSS: '.btn-primary { background-color: #2E7D32; }'
       };
       const response = await axios.put(`${this.baseURL}/api/admin/theme/update`, themeData, {
-        headers: { Authorization: `Bearer ${this.tokens.admin}` },
+        headers: { Authorization: `Bearer ${this.tokens.admin}` }
       });
       return response.status === 200;
     });
@@ -974,8 +974,8 @@ class GACPQATester {
         `${this.baseURL}/api/admin/users/${this.testData.staffId}/deactivate`,
         { reason: 'ทดสอบการปิดใช้งาน' },
         {
-          headers: { Authorization: `Bearer ${this.tokens.admin}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.admin}` }
+        }
       );
       return response.status === 200;
     });
@@ -985,8 +985,8 @@ class GACPQATester {
         `${this.baseURL}/api/admin/users/${this.testData.staffId}/activate`,
         {},
         {
-          headers: { Authorization: `Bearer ${this.tokens.admin}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.admin}` }
+        }
       );
       return response.status === 200;
     });
@@ -996,8 +996,8 @@ class GACPQATester {
         `${this.baseURL}/api/admin/settings/rollback`,
         { version: 'previous' },
         {
-          headers: { Authorization: `Bearer ${this.tokens.admin}` },
-        },
+          headers: { Authorization: `Bearer ${this.tokens.admin}` }
+        }
       );
       return response.status === 200;
     });
@@ -1017,7 +1017,7 @@ class GACPQATester {
         this.testResults[role].tests.push({
           name: testName,
           status: 'PASS',
-          duration: `${duration}ms`,
+          duration: `${duration}ms`
         });
         console.log(chalk.green(`  ✓ ${testName}`), chalk.gray(`(${duration}ms)`));
       } else {
@@ -1028,7 +1028,7 @@ class GACPQATester {
       this.testResults[role].tests.push({
         name: testName,
         status: 'FAIL',
-        error: error.message,
+        error: error.message
       });
       console.log(chalk.red(`  ✗ ${testName}`), chalk.gray(`(${error.message})`));
     }
@@ -1055,7 +1055,7 @@ class GACPQATester {
       console.log(
         chalk.green(`  ✓ Passed: ${results.passed}`) +
           chalk.red(` | ✗ Failed: ${results.failed}`) +
-          chalk.cyan(` | Success Rate: ${percentage}%`),
+          chalk.cyan(` | Success Rate: ${percentage}%`)
       );
     });
 
@@ -1068,7 +1068,7 @@ class GACPQATester {
         chalk.green(`\n  ✓ Total Passed: ${totalPassed}`) +
         chalk.red(`\n  ✗ Total Failed: ${totalFailed}`) +
         chalk.cyan(`\n  📊 Success Rate: ${overallPercentage}%`) +
-        chalk.white(`\n  📝 Total Tests: ${grandTotal}`),
+        chalk.white(`\n  📝 Total Tests: ${grandTotal}`)
     );
 
     if (overallPercentage >= 90) {
@@ -1089,7 +1089,7 @@ class GACPQATester {
       documentReviewer: '📄',
       inspector: '🔍',
       approver: '✅',
-      admin: '⚙️',
+      admin: '⚙️'
     };
     return icons[role] || '👤';
   }
@@ -1100,7 +1100,7 @@ class GACPQATester {
       documentReviewer: 'พนักงานตรวจเอกสาร (Document Reviewer)',
       inspector: 'พนักงานตรวจสอบฟาร์ม (Farm Inspector)',
       approver: 'พนักงานอนุมัติ (Approver)',
-      admin: 'ผู้ดูแลระบบ (Admin/System Manager)',
+      admin: 'ผู้ดูแลระบบ (Admin/System Manager)'
     };
     return names[role] || role;
   }

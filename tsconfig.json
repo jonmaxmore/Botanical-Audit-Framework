@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -23,9 +19,7 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
     }
   },
   "include": [
@@ -38,6 +32,32 @@
     ".next\\dev/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "apps/frontend",
+    "frontend-nextjs",
+    "archive",
+    "docs",
+    "scripts",
+    "tests",
+    "test",
+    "__tests__",
+    "load-tests",
+    "business-logic",
+    "config",
+    "database",
+    "examples",
+    "infrastructure",
+    "k8s",
+    "middleware",
+    "monitoring",
+    "nginx",
+    "openapi",
+    "packages",
+    "terraform",
+    "test-data",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx"
   ]
 }

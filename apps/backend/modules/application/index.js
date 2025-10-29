@@ -29,12 +29,9 @@
 
 // Core Node.js modules
 const logger = require('../../shared/logger/logger');
-const path = require('path');
-const fs = require('fs');
 const EventEmitter = require('events');
 
 // External dependencies
-const express = require('express');
 const mongoose = require('mongoose');
 
 // ============================================================================

@@ -7,12 +7,12 @@
 
 ## 📊 Coverage Summary
 
-| Metric | Coverage | Threshold | Status |
-|--------|----------|-----------|--------|
-| **Statements** | 76.47% | 70% | ✅ +6.47% |
-| **Branches** | 66.29% | 66% | ✅ +0.29% |
-| **Functions** | 72.26% | 70% | ✅ +2.26% |
-| **Lines** | 77.27% | 70% | ✅ +7.27% |
+| Metric         | Coverage | Threshold | Status    |
+| -------------- | -------- | --------- | --------- |
+| **Statements** | 76.47%   | 70%       | ✅ +6.47% |
+| **Branches**   | 66.29%   | 66%       | ✅ +0.29% |
+| **Functions**  | 72.26%   | 70%       | ✅ +2.26% |
+| **Lines**      | 77.27%   | 70%       | ✅ +7.27% |
 
 ---
 
@@ -29,7 +29,9 @@
 ## 📁 Test Distribution
 
 ### Unit Tests (50 tests)
+
 **File**: `lib/api/__tests__/certificates.unit.test.ts`
+
 - API CRUD operations
 - Error handling
 - Interceptor behavior
@@ -38,7 +40,9 @@
 ### Component Tests (56 tests)
 
 #### Certificate List Page (36 tests)
+
 **File**: `app/certificates/__tests__/page.test.tsx`
+
 - Authentication checks
 - Certificate display
 - Filter functionality
@@ -47,7 +51,9 @@
 - Refresh functionality
 
 #### Certificate Detail Page (32 tests)
+
 **File**: `app/certificates/[id]/__tests__/page.test.tsx`
+
 - Certificate loading
 - Status display
 - Action buttons
@@ -56,7 +62,9 @@
 - Navigation
 
 #### Certificate Form Page (39 tests)
+
 **File**: `app/certificates/new/__tests__/page.test.tsx`
+
 - Multi-step form
 - Form validation
 - Step transitions
@@ -64,25 +72,32 @@
 - Error states
 
 ### Dashboard Tests (12 tests)
+
 **File**: `app/dashboard/__tests__/page.test.tsx`
+
 - Statistics display
 - Recent certificates
 - Card rendering
 
 ### Utility Tests (36 tests)
+
 - QR Code generation (12 tests)
 - PDF generation (12 tests)
 - Offline queue (12 tests)
 
 ### Helper Tests (53 tests)
+
 **File**: `lib/utils/__tests__/helpers.test.ts`
+
 - Date formatting
 - Validation functions
 - String utilities
 - Debounce/throttle
 
 ### Verification Tests (5 tests)
+
 **File**: `app/verify/[certificateNumber]/__tests__/page.test.tsx`
+
 - Certificate verification
 - QR code scanning
 
@@ -97,6 +112,7 @@
 **Current Achievement**: 66.29%
 
 #### Reason for Adjustment:
+
 Axios interceptors in `lib/api/certificates.ts` (lines 22-52) have low branch coverage (30%) because:
 
 1. **Request Interceptor** (lines 22-30)
@@ -109,6 +125,7 @@ Axios interceptors in `lib/api/certificates.ts` (lines 22-52) have low branch co
    - Full mocks bypass interceptor execution
 
 #### Future Improvements:
+
 ```typescript
 // TODO: Refactor interceptor tests to achieve 70% branch coverage
 // Consider:
@@ -131,16 +148,19 @@ Axios interceptors in `lib/api/certificates.ts` (lines 22-52) have low branch co
 ## 📈 Coverage by File Type
 
 ### High Coverage (>80%)
+
 - `lib/utils/helpers.ts` - 95.2%
 - `app/dashboard/page.tsx` - 88.4%
 - `lib/utils/qr-generator.ts` - 92.1%
 
 ### Medium Coverage (70-80%)
+
 - `app/certificates/page.tsx` - 77.6%
 - `lib/api/certificates.ts` - 73.6%
 - `app/certificates/new/page.tsx` - 62.8%
 
 ### Low Coverage (<70%) - Interceptors Only
+
 - `lib/api/certificates.ts` (interceptors) - 30%
 
 ---
@@ -148,6 +168,7 @@ Axios interceptors in `lib/api/certificates.ts` (lines 22-52) have low branch co
 ## ✅ Quality Assurance
 
 ### Test Quality Metrics:
+
 - ✅ No flaky tests
 - ✅ All assertions meaningful
 - ✅ Proper mock cleanup
@@ -156,6 +177,7 @@ Axios interceptors in `lib/api/certificates.ts` (lines 22-52) have low branch co
 - ✅ Error boundary testing
 
 ### Code Quality:
+
 - ✅ TypeScript strict mode
 - ✅ ESLint compliant (minor formatting warnings)
 - ✅ Proper test isolation
@@ -187,16 +209,19 @@ cf45245 - test: เพิ่ม tests สำหรับ API methods และ f
 ## 🔮 Future Work
 
 ### Priority 1: Increase Branch Coverage to 70%
+
 - [ ] Refactor interceptor tests
 - [ ] Add integration tests for auth flow
 - [ ] Test network retry scenarios
 
 ### Priority 2: Enable Skipped Tests
+
 - [ ] Set up test backend/API
 - [ ] Enable 17 integration tests
 - [ ] Add E2E test suite
 
 ### Priority 3: Performance
+
 - [ ] Reduce test runtime (<5s target)
 - [ ] Optimize large test suites
 - [ ] Parallelize slow tests
@@ -205,11 +230,11 @@ cf45245 - test: เพิ่ม tests สำหรับ API methods และ f
 
 ## 📊 Trend Analysis
 
-| Iteration | Tests | Statements | Branches | Functions | Lines |
-|-----------|-------|------------|----------|-----------|-------|
-| Initial | 265 | 60.63% | 65.74% | 68.12% | 62.45% |
-| +32 tests | 297 | 73.75% | 65.74% | 70.88% | 74.82% |
-| +24 tests | 321 | 75.21% | 66.29% | 71.43% | 76.15% |
+| Iteration | Tests   | Statements | Branches   | Functions  | Lines      |
+| --------- | ------- | ---------- | ---------- | ---------- | ---------- |
+| Initial   | 265     | 60.63%     | 65.74%     | 68.12%     | 62.45%     |
+| +32 tests | 297     | 73.75%     | 65.74%     | 70.88%     | 74.82%     |
+| +24 tests | 321     | 75.21%     | 66.29%     | 71.43%     | 76.15%     |
 | +28 tests | **349** | **76.47%** | **66.29%** | **72.26%** | **77.27%** |
 
 **Total Improvement**: +84 tests, +15.84% statements, +0.55% branches, +4.14% functions, +14.82% lines
@@ -224,6 +249,6 @@ The certificate portal now has **comprehensive test coverage** meeting all adjus
 
 ---
 
-*Generated: October 25, 2025*  
-*Repository: Botanical-Audit-Framework*  
-*Branch: main*
+_Generated: October 25, 2025_  
+_Repository: Botanical-Audit-Framework_  
+_Branch: main_

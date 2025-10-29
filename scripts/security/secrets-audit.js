@@ -8,7 +8,7 @@ const PATTERNS = {
   password: /password\s*[:=]\s*['"][^'"]{8,}['"]/gi,
   mongo_uri: /mongodb(\+srv)?:\/\/[^'"]+/gi,
   redis_url: /redis:\/\/[^'"]+/gi,
-  aws_key: /(AWS|aws)_(ACCESS_KEY|SECRET|KEY_ID)\s*=\s*['"][^'"]+['"]/gi,
+  aws_key: /(AWS|aws)_(ACCESS_KEY|SECRET|KEY_ID)\s*=\s*['"][^'"]+['"]/gi
 };
 
 const EXCLUDE_DIRS = ['node_modules', '.git', 'dist', 'build', 'coverage', 'archive'];
@@ -21,7 +21,12 @@ function scanFile(filePath) {
   Object.entries(PATTERNS).forEach(([type, pattern]) => {
     lines.forEach((line, idx) => {
       if (pattern.test(line)) {
-        findings.push({ file: filePath, line: idx + 1, type, snippet: line.trim().substring(0, 80) });
+        findings.push({
+          file: filePath,
+          line: idx + 1,
+          type,
+          snippet: line.trim().substring(0, 80)
+        });
       }
     });
   });
@@ -32,7 +37,7 @@ function scanFile(filePath) {
 function scanDirectory(dir, findings = []) {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
-  entries.forEach((entry) => {
+  entries.forEach(entry => {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory() && !EXCLUDE_DIRS.includes(entry.name)) {
       scanDirectory(fullPath, findings);
@@ -64,7 +69,7 @@ const grouped = findings.reduce((acc, f) => {
 
 Object.entries(grouped).forEach(([type, items]) => {
   console.log(`📌 ${type.toUpperCase()}: ${items.length} occurrences`);
-  items.slice(0, 3).forEach((item) => console.log(`   ${item.file}:${item.line}`));
+  items.slice(0, 3).forEach(item => console.log(`   ${item.file}:${item.line}`));
   if (items.length > 3) console.log(`   ... and ${items.length - 3} more`);
 });
 

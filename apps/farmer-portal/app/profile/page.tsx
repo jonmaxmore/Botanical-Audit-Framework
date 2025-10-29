@@ -42,7 +42,9 @@ export default function ProfilePage() {
                   <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center text-4xl">
                     👤
                   </div>
-                  <button className="px-4 py-2 border rounded-lg hover:bg-gray-50">เปลี่ยนรูปโปรไฟล์</button>
+                  <button className="px-4 py-2 border rounded-lg hover:bg-gray-50">
+                    เปลี่ยนรูปโปรไฟล์
+                  </button>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
@@ -97,21 +99,27 @@ export default function ProfilePage() {
             {activeTab === 'password' && (
               <div className="space-y-4 max-w-md">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">รหัสผ่านปัจจุบัน</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    รหัสผ่านปัจจุบัน
+                  </label>
                   <input
                     type="password"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">รหัสผ่านใหม่</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    รหัสผ่านใหม่
+                  </label>
                   <input
                     type="password"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">ยืนยันรหัสผ่านใหม่</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    ยืนยันรหัสผ่านใหม่
+                  </label>
                   <input
                     type="password"
                     className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
@@ -129,9 +137,12 @@ export default function ProfilePage() {
                   { action: 'เข้าสู่ระบบ', time: '15/01/2025 10:30', ip: '192.168.1.1' },
                   { action: 'ยื่นคำขอ #001', time: '15/01/2025 11:00', ip: '192.168.1.1' },
                   { action: 'อัปโหลดเอกสาร', time: '15/01/2025 14:20', ip: '192.168.1.1' },
-                  { action: 'ชำระเงิน', time: '16/01/2025 09:15', ip: '192.168.1.1' },
+                  { action: 'ชำระเงิน', time: '16/01/2025 09:15', ip: '192.168.1.1' }
                 ].map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <div
+                    key={idx}
+                    className="flex justify-between items-center p-3 bg-gray-50 rounded-lg"
+                  >
                     <div>
                       <div className="font-medium">{item.action}</div>
                       <div className="text-sm text-gray-600">{item.time}</div>

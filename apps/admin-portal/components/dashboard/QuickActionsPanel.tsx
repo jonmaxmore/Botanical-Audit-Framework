@@ -8,16 +8,30 @@ export default function QuickActionsPanel() {
   const router = useRouter();
 
   const actions = [
-    { label: 'เริ่ม Video Call', icon: <VideoCall />, onClick: () => router.push('/inspections/video') },
-    { label: 'ดูปฏิทิน', icon: <CalendarMonth />, onClick: () => router.push('/inspections/calendar') },
-    { label: 'นัดหมายใหม่', icon: <Schedule />, onClick: () => router.push('/inspections/schedule') },
+    {
+      label: 'เริ่ม Video Call',
+      icon: <VideoCall />,
+      onClick: () => router.push('/inspections/video'),
+    },
+    {
+      label: 'ดูปฏิทิน',
+      icon: <CalendarMonth />,
+      onClick: () => router.push('/inspections/calendar'),
+    },
+    {
+      label: 'นัดหมายใหม่',
+      icon: <Schedule />,
+      onClick: () => router.push('/inspections/schedule'),
+    },
     { label: 'รายงานผล', icon: <Assessment />, onClick: () => router.push('/inspections/reports') },
   ];
 
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6" gutterBottom>Quick Actions</Typography>
+        <Typography variant="h6" gutterBottom>
+          Quick Actions
+        </Typography>
         <Stack spacing={1}>
           {actions.map((action, index) => (
             <Button

@@ -15,9 +15,11 @@
 **Port:** 3000 (development)
 
 #### Purpose
+
 Portal สำหรับเกษตรกร เพื่อจัดการใบสมัคร เอกสาร และติดตามสถานะการรับรอง GACP
 
 #### Features (31 Routes)
+
 ```
 Landing & Authentication:
 ├── /                          - หน้าแรก
@@ -57,6 +59,7 @@ Demo & Examples:
 ```
 
 #### Tech Stack
+
 ```json
 {
   "framework": "Next.js 15.1.3",
@@ -72,11 +75,13 @@ Demo & Examples:
 ```
 
 #### Tests
+
 - **Total:** 540 test suites
 - **Passing:** 527 (97.6%)
 - **Coverage:** ~85%
 
 #### Environment Variables
+
 ```bash
 NEXT_PUBLIC_API_URL=http://localhost:5000
 NEXT_PUBLIC_APP_NAME=GACP Farmer Portal
@@ -84,6 +89,7 @@ NEXT_PUBLIC_SENTRY_DSN=your-sentry-dsn
 ```
 
 #### Deployment
+
 ```bash
 # Development
 pnpm run dev
@@ -106,15 +112,18 @@ docker run -p 3000:3000 farmer-portal
 **Port:** 3001 (development)
 
 #### Purpose
+
 Portal สำหรับผู้ดูแลระบบ เพื่อจัดการผู้ใช้ รีวิวใบสมัคร และสร้างรายงาน
 
 #### Existing Features (2 Routes)
+
 ```
 ✅ /admin/dashboard             - Dashboard หลัก
 ✅ /admin/applications          - รายการใบสมัคร
 ```
 
 #### Missing Features (60%)
+
 ```
 ❌ User Management:
    ├── /admin/users             - จัดการผู้ใช้
@@ -141,9 +150,11 @@ Portal สำหรับผู้ดูแลระบบ เพื่อจั
 ```
 
 #### Tech Stack
+
 Similar to Farmer Portal (Next.js 15 + React 18 + TypeScript)
 
 #### Required Development
+
 - **Time Estimate:** 2-3 weeks
 - **Priority:** HIGH
 - **Dependencies:** Backend APIs, Role-based access control
@@ -157,15 +168,18 @@ Similar to Farmer Portal (Next.js 15 + React 18 + TypeScript)
 **Port:** 3002 (development)
 
 #### Purpose
+
 Portal สำหรับการขอและตรวจสอบใบรับรอง GACP
 
 #### Existing Features (2 Routes)
+
 ```
 ✅ /certificate/request         - แบบฟอร์มขอใบรับรอง (70% complete)
 ✅ /certificate/verify          - ตรวจสอบใบรับรอง (50% complete)
 ```
 
 #### Missing Features (40%)
+
 ```
 ❌ Certificate Management:
    ├── /certificate/my-certificates     - รายการใบรับรอง
@@ -181,14 +195,17 @@ Portal สำหรับการขอและตรวจสอบใบร�
 ```
 
 #### Special Features
+
 - **Blockchain Verification:** ใช้ blockchain เพื่อตรวจสอบความถูกต้อง
 - **QR Code:** สร้างและสแกน QR code สำหรับตรวจสอบ
 - **PDF Download:** ดาวน์โหลดใบรับรองเป็น PDF
 
 #### Tech Stack
+
 Similar to Farmer Portal + blockchain integration libraries
 
 #### Required Development
+
 - **Time Estimate:** 1-2 weeks
 - **Priority:** HIGH
 - **Dependencies:** Blockchain service, PDF generation library
@@ -202,11 +219,13 @@ Similar to Farmer Portal + blockchain integration libraries
 **Port:** 5000 (development)
 
 #### Purpose
+
 RESTful API สำหรับทุก portal รองรับการจัดการข้อมูล authentication และ business logic
 
 #### API Modules
 
 ##### Authentication & Authorization
+
 ```
 POST   /api/auth/register       - ลงทะเบียนผู้ใช้
 POST   /api/auth/login          - เข้าสู่ระบบ
@@ -216,6 +235,7 @@ GET    /api/auth/me             - ข้อมูลผู้ใช้ปัจ�
 ```
 
 ##### User Management
+
 ```
 GET    /api/users               - รายการผู้ใช้
 GET    /api/users/:id           - รายละเอียดผู้ใช้
@@ -225,6 +245,7 @@ DELETE /api/users/:id           - ลบผู้ใช้
 ```
 
 ##### Applications (GACP)
+
 ```
 GET    /api/applications        - รายการใบสมัคร
 GET    /api/applications/:id    - รายละเอียดใบสมัคร
@@ -235,6 +256,7 @@ POST   /api/applications/:id/submit - ส่งใบสมัคร
 ```
 
 ##### Inspections
+
 ```
 GET    /api/inspections         - รายการตรวจสอบ
 POST   /api/inspections         - สร้างรายงานตรวจสอบ
@@ -243,6 +265,7 @@ PUT    /api/inspections/:id     - อัปเดต
 ```
 
 ##### Certificates
+
 ```
 GET    /api/certificates        - รายการใบรับรอง
 POST   /api/certificates        - สร้างใบรับรอง
@@ -252,6 +275,7 @@ GET    /api/certificates/:id/download - ดาวน์โหลด PDF
 ```
 
 ##### Documents
+
 ```
 GET    /api/documents           - รายการเอกสาร
 POST   /api/documents/upload    - อัปโหลดเอกสาร
@@ -260,6 +284,7 @@ DELETE /api/documents/:id       - ลบเอกสาร
 ```
 
 ##### Audit Logs
+
 ```
 GET    /api/audit-logs          - ดู audit logs
 GET    /api/audit-logs/:id      - รายละเอียด log
@@ -267,6 +292,7 @@ POST   /api/audit-logs          - บันทึก action
 ```
 
 ##### Compliance & Reports
+
 ```
 GET    /api/compliance/status   - สถานะการปฏิบัติตาม
 GET    /api/reports/applications - รายงานใบสมัคร
@@ -275,6 +301,7 @@ POST   /api/reports/custom      - สร้างรายงานแบบก�
 ```
 
 ##### Government Integration
+
 ```
 POST   /api/government/submit    - ส่งข้อมูลไปยังหน่วยงาน
 GET    /api/government/status    - ตรวจสอบสถานะ
@@ -282,6 +309,7 @@ POST   /api/government/sync      - ซิงค์ข้อมูล
 ```
 
 #### Tech Stack
+
 ```json
 {
   "runtime": "Node.js 18+",
@@ -297,6 +325,7 @@ POST   /api/government/sync      - ซิงค์ข้อมูล
 ```
 
 #### Database Collections
+
 ```
 - users                    - ผู้ใช้ระบบ
 - applications             - ใบสมัคร GACP
@@ -310,16 +339,19 @@ POST   /api/government/sync      - ซิงค์ข้อมูล
 ```
 
 #### Tests
+
 - **API Tests:** 160/160 passing ✅
 - **Load Tests:** 91.1% success rate ✅
 - **Coverage:** ~75%
 
 #### Code Quality
+
 - **Current:** 395 problems (182 errors, 213 warnings)
 - **Progress:** -82% from initial 2163 problems
 - **Target:** <50 problems
 
 #### Security
+
 - **OWASP Compliance:** 8/10 ✅
 - **Vulnerabilities:** 1 HIGH (Playwright - fixed)
 - **Rate Limiting:** ✅ Implemented
@@ -328,6 +360,7 @@ POST   /api/government/sync      - ซิงค์ข้อมูล
 - **XSS Protection:** ✅ (Helmet)
 
 #### Environment Variables
+
 ```bash
 NODE_ENV=development
 PORT=5000
@@ -348,9 +381,11 @@ SENTRY_DSN=your-sentry-dsn
 **Port:** Unknown
 
 #### Purpose
+
 อาจเป็น frontend เดิมก่อนแยก multi-portal หรือเป็น shared components
 
 #### Action Required
+
 - [ ] ตรวจสอบว่ายังใช้งานหรือไม่
 - [ ] ถ้าไม่ใช้แล้ว → ลบออก
 - [ ] ถ้ายังใช้ → อัปเดต documentation
@@ -366,12 +401,15 @@ SENTRY_DSN=your-sentry-dsn
 **Port:** 27017
 
 #### Purpose
+
 ฐานข้อมูลหลักของระบบ เก็บข้อมูลผู้ใช้ ใบสมัคร เอกสาร และ audit logs
 
 #### Collections
+
 See Backend API section above
 
 #### Backup Strategy
+
 ```bash
 # Daily backup at 2 AM
 mongodump --uri="mongodb://localhost:27017/gacp" --out=/backup/$(date +%Y%m%d)
@@ -389,6 +427,7 @@ mongodump --uri="mongodb://localhost:27017/gacp" --out=/backup/$(date +%Y%m%d)
 **Implementation:** Built into Backend API
 
 #### Features
+
 - User registration & login
 - Password hashing (bcrypt)
 - JWT token generation
@@ -404,6 +443,7 @@ mongodump --uri="mongodb://localhost:27017/gacp" --out=/backup/$(date +%Y%m%d)
 **Provider:** AWS S3 / MinIO (self-hosted)
 
 #### Features
+
 - Document upload
 - Virus scanning
 - File type validation
@@ -411,6 +451,7 @@ mongodump --uri="mongodb://localhost:27017/gacp" --out=/backup/$(date +%Y%m%d)
 - Secure download links (presigned URLs)
 
 #### Storage Structure
+
 ```
 gacp-storage/
 ├── documents/
@@ -429,6 +470,7 @@ gacp-storage/
 **Purpose:** ส่งอีเมลแจ้งเตือนและยืนยันตัวตน
 
 #### Email Templates
+
 - Welcome email
 - Email verification
 - Password reset
@@ -437,6 +479,7 @@ gacp-storage/
 - Inspection scheduled
 
 #### Configuration
+
 ```javascript
 {
   "provider": "AWS SES",
@@ -454,6 +497,7 @@ gacp-storage/
 **Channels:** Email, SMS, In-app
 
 #### Features
+
 - Real-time notifications (WebSocket)
 - Push notifications
 - SMS alerts (Twilio)
@@ -468,12 +512,14 @@ gacp-storage/
 **Purpose:** บันทึกและตรวจสอบใบรับรอง
 
 #### Features
+
 - Certificate recording on blockchain
 - Immutable audit trail
 - Public verification
 - Hash generation and storage
 
 #### Tech Stack
+
 ```javascript
 {
   "blockchain": "Ethereum / Hyperledger",
@@ -490,12 +536,14 @@ gacp-storage/
 **Purpose:** ส่งข้อมูลไปยังหน่วยงานภาครัฐ
 
 #### Integrated Systems
+
 - กรมวิชาการเกษตร (DOA)
 - กรมส่งเสริมการเกษตร
 - กระทรวงพาณิชย์
 - ระบบ Single Sign-On (SSO)
 
 #### Features
+
 - Data synchronization
 - Status tracking
 - Error handling and retry
@@ -509,6 +557,7 @@ gacp-storage/
 **Tools:** MongoDB Aggregation + Chart.js
 
 #### Metrics Tracked
+
 - User activity
 - Application submissions
 - Approval rates
@@ -524,6 +573,7 @@ gacp-storage/
 **Tools:** Sentry + Winston + CloudWatch
 
 #### Features
+
 - Error tracking (Sentry)
 - Application logs (Winston)
 - Performance monitoring
@@ -538,6 +588,7 @@ gacp-storage/
 **Implementation:** Bull + Redis
 
 #### Job Types
+
 - Email sending
 - File processing
 - Report generation
@@ -592,6 +643,7 @@ External Integrations:
 ## 🚀 Deployment Architecture (Planned)
 
 ### Development Environment
+
 ```
 Local Machine:
 ├── All portals (pnpm workspace)
@@ -601,6 +653,7 @@ Local Machine:
 ```
 
 ### Staging Environment
+
 ```
 AWS EC2 / ECS:
 ├── Farmer Portal (staging.farmer.gacp.go.th)
@@ -612,6 +665,7 @@ AWS EC2 / ECS:
 ```
 
 ### Production Environment
+
 ```
 AWS Production:
 ├── Multi-AZ deployment
@@ -628,6 +682,7 @@ AWS Production:
 ## 📊 Resource Requirements
 
 ### Development
+
 ```
 CPU: 8 cores minimum
 RAM: 16 GB minimum
@@ -636,6 +691,7 @@ Network: 100 Mbps
 ```
 
 ### Production (Estimated)
+
 ```
 App Servers: 4x t3.large (8GB RAM, 2 vCPUs)
 Database: db.r5.xlarge (32GB RAM, 4 vCPUs)
@@ -651,6 +707,7 @@ Total Est. Cost: $800-1000/month
 ## 🔗 Quick Links
 
 ### Development
+
 - **Farmer Portal:** http://localhost:3000
 - **Admin Portal:** http://localhost:3001
 - **Certificate Portal:** http://localhost:3002
@@ -658,12 +715,14 @@ Total Est. Cost: $800-1000/month
 - **MongoDB:** mongodb://localhost:27017
 
 ### Documentation
+
 - [PROJECT_TODO_LIST.md](./PROJECT_TODO_LIST.md) - Complete TODO list
 - [COMPLETE_SYSTEM_STATUS_REPORT.md](./COMPLETE_SYSTEM_STATUS_REPORT.md) - System status
 - [PRODUCTION_READINESS_REPORT.md](./PRODUCTION_READINESS_REPORT.md) - Production checklist
 - [OWASP_SECURITY_AUDIT_REPORT.md](./OWASP_SECURITY_AUDIT_REPORT.md) - Security audit
 
 ### Commands
+
 ```bash
 # Start all services
 pnpm run dev

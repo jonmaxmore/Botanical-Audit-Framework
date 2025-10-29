@@ -183,7 +183,7 @@ router.post(
   '/staff',
   auth.authenticateDTAMStaff,
   auth.requirePermission('create_staff'),
-  staffController.createStaff,
+  staffController.createStaff
 );
 
 // Multiple permissions (ALL required)
@@ -191,7 +191,7 @@ router.put(
   '/certificate/:id/approve',
   auth.authenticateDTAMStaff,
   auth.requireAllPermissions(['view_certificates', 'issue_certificates']),
-  certificateController.approveCertificate,
+  certificateController.approveCertificate
 );
 
 // Any permission (at least ONE required)
@@ -199,7 +199,7 @@ router.get(
   '/reports',
   auth.authenticateDTAMStaff,
   auth.requireAnyPermission(['view_reports', 'export_data']),
-  reportController.getReports,
+  reportController.getReports
 );
 ```
 
@@ -211,7 +211,7 @@ router.delete(
   '/staff/:id',
   auth.authenticateDTAMStaff,
   auth.requireRole('ADMIN'),
-  staffController.deleteStaff,
+  staffController.deleteStaff
 );
 
 // Multiple roles
@@ -219,7 +219,7 @@ router.get(
   '/applications',
   auth.authenticateDTAMStaff,
   auth.requireAnyRole(['ADMIN', 'MANAGER', 'REVIEWER']),
-  applicationController.listApplications,
+  applicationController.listApplications
 );
 
 // Admin shorthand
@@ -227,7 +227,7 @@ router.post(
   '/system/settings',
   auth.authenticateDTAMStaff,
   auth.requireAdmin,
-  systemController.updateSettings,
+  systemController.updateSettings
 );
 ```
 
@@ -278,14 +278,14 @@ const { router: farmerRouter } = require('./modules/auth-farmer/module.container
   database: mongoose.connection.db,
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
-  bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || '12'),
+  bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || '12')
 });
 
 const { router: dtamRouter } = require('./modules/auth-dtam/module.container')({
   database: mongoose.connection.db,
   jwtSecret: process.env.JWT_SECRET,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
-  bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || '12'),
+  bcryptSaltRounds: parseInt(process.env.BCRYPT_SALT_ROUNDS || '12')
 });
 
 // Mount routes
@@ -299,8 +299,8 @@ app.get('/health', (req, res) => {
     timestamp: new Date(),
     authentication: {
       farmer: 'enabled',
-      dtam_staff: 'enabled',
-    },
+      dtam_staff: 'enabled'
+    }
   });
 });
 
@@ -331,14 +331,14 @@ router.get(
   '/farms',
   auth.authenticateDTAMStaff,
   auth.requireAnyPermission(['view_applications', 'review_applications']),
-  farmController.listAllFarms,
+  farmController.listAllFarms
 );
 
 router.put(
   '/farms/:id/verify',
   auth.authenticateDTAMStaff,
   auth.requirePermission('review_applications'),
-  farmController.verifyFarm,
+  farmController.verifyFarm
 );
 
 module.exports = router;
@@ -353,7 +353,7 @@ module.exports = router;
 const response = await fetch('http://localhost:3004/api/farmers/login', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email, password }),
+  body: JSON.stringify({ email, password })
 });
 
 const data = await response.json();
@@ -366,8 +366,8 @@ if (data.success) {
 // Use token in subsequent requests
 fetch('http://localhost:3004/api/farmers/profile', {
   headers: {
-    Authorization: `Bearer ${localStorage.getItem('farmerToken')}`,
-  },
+    Authorization: `Bearer ${localStorage.getItem('farmerToken')}`
+  }
 });
 ```
 
@@ -378,7 +378,7 @@ fetch('http://localhost:3004/api/farmers/profile', {
 const response = await fetch('http://localhost:3004/api/dtam/login', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ email, password }),
+  body: JSON.stringify({ email, password })
 });
 
 const data = await response.json();
@@ -393,8 +393,8 @@ if (data.success) {
 // Use token in subsequent requests
 fetch('http://localhost:3004/api/dtam/profile', {
   headers: {
-    Authorization: `Bearer ${localStorage.getItem('dtamToken')}`,
-  },
+    Authorization: `Bearer ${localStorage.getItem('dtamToken')}`
+  }
 });
 
 // Check permissions in frontend

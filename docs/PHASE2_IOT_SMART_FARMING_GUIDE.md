@@ -395,7 +395,7 @@ const IoTDeviceSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
 
     deviceType: {
@@ -416,27 +416,27 @@ const IoTDeviceSchema = new mongoose.Schema(
         'environment_humidity',
         'environment_light',
         'environment_co2',
-        'camera',
+        'camera'
       ],
-      index: true,
+      index: true
     },
 
     farmId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: true,
-      index: true,
+      index: true
     },
 
     location: {
       plotName: { type: String, required: true },
       gps: {
         lat: { type: Number, required: true },
-        lng: { type: Number, required: true },
+        lng: { type: Number, required: true }
       },
       zone: String,
       depth: Number, // cm (for soil sensors)
-      description: String,
+      description: String
     },
 
     manufacturer: {
@@ -444,28 +444,28 @@ const IoTDeviceSchema = new mongoose.Schema(
       model: String,
       serialNumber: String,
       manufactureDate: Date,
-      warrantyExpiry: Date,
+      warrantyExpiry: Date
     },
 
     firmware: {
       version: { type: String, default: '1.0.0' },
       lastUpdate: Date,
       updateAvailable: Boolean,
-      releaseNotes: String,
+      releaseNotes: String
     },
 
     authentication: {
       apiKey: { type: String, required: true, unique: true },
       apiKeyExpiry: Date,
       mqttClientId: String,
-      lastRotation: Date,
+      lastRotation: Date
     },
 
     status: {
       type: String,
       enum: ['active', 'offline', 'maintenance', 'error', 'disabled'],
       default: 'active',
-      index: true,
+      index: true
     },
 
     connectivity: {
@@ -473,11 +473,11 @@ const IoTDeviceSchema = new mongoose.Schema(
       lastData: Date,
       connectionType: {
         type: String,
-        enum: ['wifi', 'ethernet', 'cellular', 'lora', 'zigbee'],
+        enum: ['wifi', 'ethernet', 'cellular', 'lora', 'zigbee']
       },
       signalStrength: Number, // dBm
       ipAddress: String,
-      mqttConnected: { type: Boolean, default: false },
+      mqttConnected: { type: Boolean, default: false }
     },
 
     power: {
@@ -486,9 +486,9 @@ const IoTDeviceSchema = new mongoose.Schema(
       lastCharged: Date,
       powerSource: {
         type: String,
-        enum: ['battery', 'solar', 'ac', 'hybrid'],
+        enum: ['battery', 'solar', 'ac', 'hybrid']
       },
-      lowBatteryAlert: { type: Boolean, default: false },
+      lowBatteryAlert: { type: Boolean, default: false }
     },
 
     calibration: {
@@ -497,7 +497,7 @@ const IoTDeviceSchema = new mongoose.Schema(
       calibratedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
       calibrationCertificate: String,
       calibrationData: mongoose.Schema.Types.Mixed,
-      accuracy: Number, // %
+      accuracy: Number // %
     },
 
     configuration: {
@@ -513,14 +513,14 @@ const IoTDeviceSchema = new mongoose.Schema(
         npk: {
           nitrogen: { min: Number, max: Number },
           phosphorus: { min: Number, max: Number },
-          potassium: { min: Number, max: Number },
+          potassium: { min: Number, max: Number }
         },
         ec: { min: Number, max: Number },
-        tds: { min: Number, max: Number },
+        tds: { min: Number, max: Number }
       },
 
       // Sensor-specific settings
-      sensorSettings: mongoose.Schema.Types.Mixed,
+      sensorSettings: mongoose.Schema.Types.Mixed
     },
 
     statistics: {
@@ -528,7 +528,7 @@ const IoTDeviceSchema = new mongoose.Schema(
       failedReadings: { type: Number, default: 0 },
       lastReading: mongoose.Schema.Types.Mixed,
       uptime: Number, // hours
-      dataQuality: { type: Number, min: 0, max: 100 }, // %
+      dataQuality: { type: Number, min: 0, max: 100 } // %
     },
 
     maintenance: {
@@ -540,18 +540,18 @@ const IoTDeviceSchema = new mongoose.Schema(
           type: String,
           performedBy: mongoose.Schema.Types.ObjectId,
           notes: String,
-          cost: Number,
-        },
-      ],
+          cost: Number
+        }
+      ]
     },
 
     notes: String,
     tags: [String],
-    active: { type: Boolean, default: true },
+    active: { type: Boolean, default: true }
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // Indexes
@@ -629,7 +629,7 @@ IoTDeviceSchema.statics.findNeedingCalibration = function (daysAhead = 7) {
 
   return this.find({
     active: true,
-    'calibration.nextCalibration': { $lte: targetDate },
+    'calibration.nextCalibration': { $lte: targetDate }
   }).populate('farmId');
 };
 
@@ -637,7 +637,7 @@ IoTDeviceSchema.statics.findNeedingCalibration = function (daysAhead = 7) {
 IoTDeviceSchema.statics.findLowBattery = function (threshold = 20) {
   return this.find({
     active: true,
-    'power.batteryLevel': { $lte: threshold },
+    'power.batteryLevel': { $lte: threshold }
   }).populate('farmId');
 };
 
@@ -648,7 +648,7 @@ IoTDeviceSchema.statics.findOffline = function (minutesThreshold = 10) {
   return this.find({
     active: true,
     status: { $ne: 'maintenance' },
-    'connectivity.lastSeen': { $lt: cutoff },
+    'connectivity.lastSeen': { $lt: cutoff }
   }).populate('farmId');
 };
 
@@ -667,21 +667,21 @@ const SensorReadingSchema = new mongoose.Schema(
     deviceId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
 
     farmId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: true,
-      index: true,
+      index: true
     },
 
     timestamp: {
       type: Date,
       required: true,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     sensorType: {
@@ -697,9 +697,9 @@ const SensorReadingSchema = new mongoose.Schema(
         'humidity',
         'light',
         'co2',
-        'dissolved_oxygen',
+        'dissolved_oxygen'
       ],
-      index: true,
+      index: true
     },
 
     // Single value readings (moisture, pH, temperature, etc.)
@@ -712,7 +712,7 @@ const SensorReadingSchema = new mongoose.Schema(
     quality: {
       type: String,
       enum: ['excellent', 'good', 'fair', 'poor', 'error'],
-      default: 'good',
+      default: 'good'
     },
 
     metadata: {
@@ -721,24 +721,24 @@ const SensorReadingSchema = new mongoose.Schema(
       firmwareVersion: String,
       calibrationDate: Date,
       temperature: Number, // ambient temperature during reading
-      humidity: Number, // ambient humidity during reading
+      humidity: Number // ambient humidity during reading
     },
 
     processed: {
       type: Boolean,
-      default: false,
+      default: false
     },
 
     alerts: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'IoTAlert',
-      },
-    ],
+        ref: 'IoTAlert'
+      }
+    ]
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // Compound indexes for efficient queries
@@ -761,7 +761,7 @@ SensorReadingSchema.statics.getLatest = function (deviceId, sensorType = null) {
 SensorReadingSchema.statics.getRange = function (deviceId, startDate, endDate, sensorType = null) {
   const query = {
     deviceId,
-    timestamp: { $gte: startDate, $lte: endDate },
+    timestamp: { $gte: startDate, $lte: endDate }
   };
 
   if (sensorType) query.sensorType = sensorType;
@@ -779,8 +779,8 @@ SensorReadingSchema.statics.getStats = function (deviceId, sensorType, hours = 2
         deviceId,
         sensorType,
         timestamp: { $gte: since },
-        quality: { $in: ['excellent', 'good', 'fair'] },
-      },
+        quality: { $in: ['excellent', 'good', 'fair'] }
+      }
     },
     {
       $group: {
@@ -788,9 +788,9 @@ SensorReadingSchema.statics.getStats = function (deviceId, sensorType, hours = 2
         avg: { $avg: '$value' },
         min: { $min: '$value' },
         max: { $max: '$value' },
-        count: { $sum: 1 },
-      },
-    },
+        count: { $sum: 1 }
+      }
+    }
   ]);
 };
 
@@ -841,7 +841,7 @@ exports.registerDevice = async (req, res) => {
       manufacturer,
       firmware,
       configuration: configuration || {},
-      status: 'active',
+      status: 'active'
     });
 
     // Generate API key
@@ -853,7 +853,7 @@ exports.registerDevice = async (req, res) => {
       deviceId,
       farmId,
       deviceType,
-      userId: req.user.id,
+      userId: req.user.id
     });
 
     res.status(201).json(
@@ -863,14 +863,14 @@ exports.registerDevice = async (req, res) => {
         mqttConfig: {
           broker: process.env.MQTT_BROKER || 'mqtt://localhost:1883',
           clientId: device.authentication.mqttClientId || deviceId,
-          topic: `farm/${farm.farmNumber}/device/${deviceId}/+`,
-        },
-      }),
+          topic: `farm/${farm.farmNumber}/device/${deviceId}/+`
+        }
+      })
     );
   } catch (error) {
     logger.error('Failed to register device', {
       error: error.message,
-      userId: req.user.id,
+      userId: req.user.id
     });
 
     res.status(500).json(ApiResponse.error('Failed to register device', 500, error.message));
@@ -901,7 +901,7 @@ exports.getFarmDevices = async (req, res) => {
       ...device,
       isOnline: device.connectivity.lastSeen > new Date(Date.now() - 5 * 60 * 1000),
       batteryStatus:
-        device.power.batteryLevel > 50 ? 'good' : device.power.batteryLevel > 20 ? 'medium' : 'low',
+        device.power.batteryLevel > 50 ? 'good' : device.power.batteryLevel > 20 ? 'medium' : 'low'
     }));
 
     res.json(ApiResponse.success(enrichedDevices));
@@ -937,11 +937,11 @@ exports.getDevice = async (req, res) => {
       ApiResponse.success({
         device: {
           ...device,
-          isOnline: device.connectivity.lastSeen > new Date(Date.now() - 5 * 60 * 1000),
+          isOnline: device.connectivity.lastSeen > new Date(Date.now() - 5 * 60 * 1000)
         },
         latestReading,
-        stats: stats[0] || null,
-      }),
+        stats: stats[0] || null
+      })
     );
   } catch (error) {
     logger.error('Failed to get device', { error: error.message, deviceId: req.params.deviceId });
@@ -965,7 +965,7 @@ exports.updateDeviceConfig = async (req, res) => {
     // Update configuration
     device.configuration = {
       ...device.configuration,
-      ...configuration,
+      ...configuration
     };
 
     await device.save();
@@ -976,19 +976,19 @@ exports.updateDeviceConfig = async (req, res) => {
 
     mqtt.publish(
       `farm/${farm.farmNumber}/commands/${deviceId}/config`,
-      JSON.stringify(device.configuration),
+      JSON.stringify(device.configuration)
     );
 
     logger.info('Device configuration updated', {
       deviceId,
-      userId: req.user.id,
+      userId: req.user.id
     });
 
     res.json(ApiResponse.success(device));
   } catch (error) {
     logger.error('Failed to update device config', {
       error: error.message,
-      deviceId: req.params.deviceId,
+      deviceId: req.params.deviceId
     });
     res.status(500).json(ApiResponse.error('Failed to update configuration', 500, error.message));
   }
@@ -1017,7 +1017,7 @@ exports.recordCalibration = async (req, res) => {
       calibratedBy: req.user.id,
       calibrationData,
       accuracy,
-      calibrationCertificate: certificate,
+      calibrationCertificate: certificate
     };
 
     await device.save();
@@ -1025,21 +1025,21 @@ exports.recordCalibration = async (req, res) => {
     logger.info('Device calibrated', {
       deviceId,
       calibratedBy: req.user.id,
-      nextCalibration,
+      nextCalibration
     });
 
     res.json(
       ApiResponse.success({
         device,
         message: `อุปกรณ์ได้รับการสอบเทียบแล้ว กำหนดสอบเทียบครั้งถัดไป: ${nextCalibration.toLocaleDateString(
-          'th-TH',
-        )}`,
-      }),
+          'th-TH'
+        )}`
+      })
     );
   } catch (error) {
     logger.error('Failed to record calibration', {
       error: error.message,
-      deviceId: req.params.deviceId,
+      deviceId: req.params.deviceId
     });
     res.status(500).json(ApiResponse.error('Failed to record calibration', 500, error.message));
   }
@@ -1067,19 +1067,19 @@ exports.deactivateDevice = async (req, res) => {
     logger.info('Device deactivated', {
       deviceId,
       reason,
-      userId: req.user.id,
+      userId: req.user.id
     });
 
     res.json(
       ApiResponse.success({
         device,
-        message: 'อุปกรณ์ถูกปิดการใช้งานแล้ว',
-      }),
+        message: 'อุปกรณ์ถูกปิดการใช้งานแล้ว'
+      })
     );
   } catch (error) {
     logger.error('Failed to deactivate device', {
       error: error.message,
-      deviceId: req.params.deviceId,
+      deviceId: req.params.deviceId
     });
     res.status(500).json(ApiResponse.error('Failed to deactivate device', 500, error.message));
   }
@@ -1145,13 +1145,13 @@ const registerDeviceRules = [
     'environment_humidity',
     'environment_light',
     'environment_co2',
-    'camera',
+    'camera'
   ]),
   body('farmId').isMongoId().withMessage('Invalid farm ID'),
   body('location.plotName').notEmpty().withMessage('Plot name is required'),
   body('location.gps.lat').isFloat({ min: -90, max: 90 }).withMessage('Invalid latitude'),
   body('location.gps.lng').isFloat({ min: -180, max: 180 }).withMessage('Invalid longitude'),
-  handleValidationErrors,
+  handleValidationErrors
 ];
 
 // Routes
@@ -1160,7 +1160,7 @@ router.post(
   authenticate,
   authorize(['FARMER', 'ADMIN']),
   registerDeviceRules,
-  deviceController.registerDevice,
+  deviceController.registerDevice
 );
 
 router.get(
@@ -1168,7 +1168,7 @@ router.get(
   authenticate,
   param('farmId').isMongoId(),
   handleValidationErrors,
-  deviceController.getFarmDevices,
+  deviceController.getFarmDevices
 );
 
 router.get(
@@ -1176,7 +1176,7 @@ router.get(
   authenticate,
   param('deviceId').notEmpty(),
   handleValidationErrors,
-  deviceController.getDevice,
+  deviceController.getDevice
 );
 
 router.put(
@@ -1186,7 +1186,7 @@ router.put(
   param('deviceId').notEmpty(),
   body('configuration').isObject(),
   handleValidationErrors,
-  deviceController.updateDeviceConfig,
+  deviceController.updateDeviceConfig
 );
 
 router.post(
@@ -1196,7 +1196,7 @@ router.post(
   param('deviceId').notEmpty(),
   body('accuracy').isFloat({ min: 0, max: 100 }).optional(),
   handleValidationErrors,
-  deviceController.recordCalibration,
+  deviceController.recordCalibration
 );
 
 router.delete(
@@ -1205,14 +1205,14 @@ router.delete(
   authorize(['ADMIN']),
   param('deviceId').notEmpty(),
   handleValidationErrors,
-  deviceController.deactivateDevice,
+  deviceController.deactivateDevice
 );
 
 router.get(
   '/devices/maintenance/needed',
   authenticate,
   authorize(['ADMIN', 'INSPECTOR']),
-  deviceController.getMaintenanceNeeded,
+  deviceController.getMaintenanceNeeded
 );
 
 module.exports = router;
@@ -1245,15 +1245,15 @@ const config = {
     broker: process.env.MQTT_BROKER || 'mqtt://localhost:1883',
     username: process.env.MQTT_USERNAME,
     password: process.env.MQTT_PASSWORD,
-    clientId: `gacp-bridge-${Date.now()}`,
+    clientId: `gacp-bridge-${Date.now()}`
   },
   mongodb: {
-    uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp',
+    uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp'
   },
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT) || 6379,
-  },
+    port: parseInt(process.env.REDIS_PORT) || 6379
+  }
 };
 
 class MQTTBridgeService {
@@ -1282,7 +1282,7 @@ class MQTTBridgeService {
         password: config.mqtt.password,
         clean: false, // Persistent session
         reconnectPeriod: 5000,
-        connectTimeout: 30000,
+        connectTimeout: 30000
       });
 
       this.setupMQTTHandlers();
@@ -1315,7 +1315,7 @@ class MQTTBridgeService {
       } catch (error) {
         logger.error('Failed to handle MQTT message', {
           topic,
-          error: error.message,
+          error: error.message
         });
       }
     });
@@ -1388,7 +1388,7 @@ class MQTTBridgeService {
     } catch (error) {
       logger.error('Failed to handle device status', {
         deviceId,
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -1409,7 +1409,7 @@ class MQTTBridgeService {
           severity: 'warning',
           message: `แบตเตอรี่ของเซ็นเซอร์เหลือ ${data.batteryLevel}%`,
           currentValue: data.batteryLevel,
-          threshold: 20,
+          threshold: 20
         });
       }
 
@@ -1417,7 +1417,7 @@ class MQTTBridgeService {
     } catch (error) {
       logger.error('Failed to handle battery update', {
         deviceId,
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -1441,7 +1441,7 @@ class MQTTBridgeService {
         values: data.values,
         unit: data.unit,
         quality: data.quality || 'good',
-        metadata: data.metadata || {},
+        metadata: data.metadata || {}
       };
 
       // Add to buffer for bulk insert
@@ -1463,7 +1463,7 @@ class MQTTBridgeService {
       logger.debug('Sensor reading processed', {
         deviceId,
         sensorType,
-        value: data.value,
+        value: data.value
       });
 
       // Flush buffer if full
@@ -1474,7 +1474,7 @@ class MQTTBridgeService {
       logger.error('Failed to handle sensor reading', {
         deviceId,
         sensorType,
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -1505,7 +1505,7 @@ class MQTTBridgeService {
             severity: this.getSeverity(sensorType, 'low'),
             message: `${this.getSensorName(sensorType)}ต่ำ (${value} ${reading.unit})`,
             currentValue: value,
-            threshold: min,
+            threshold: min
           });
         }
 
@@ -1515,7 +1515,7 @@ class MQTTBridgeService {
             severity: this.getSeverity(sensorType, 'high'),
             message: `${this.getSensorName(sensorType)}สูง (${value} ${reading.unit})`,
             currentValue: value,
-            threshold: max,
+            threshold: max
           });
         }
       }
@@ -1533,7 +1533,7 @@ class MQTTBridgeService {
                 severity: 'warning',
                 message: `${nutrient} ในดินต่ำ (${val} ppm)`,
                 currentValue: val,
-                threshold: thresh.min,
+                threshold: thresh.min
               });
             }
 
@@ -1543,7 +1543,7 @@ class MQTTBridgeService {
                 severity: 'info',
                 message: `${nutrient} ในดินสูง (${val} ppm)`,
                 currentValue: val,
-                threshold: thresh.max,
+                threshold: thresh.max
               });
             }
           }
@@ -1555,7 +1555,7 @@ class MQTTBridgeService {
         await this.createAlert({
           deviceId: device.deviceId,
           farmId: device.farmId,
-          ...alert,
+          ...alert
         });
       }
     } catch (error) {
@@ -1575,14 +1575,14 @@ class MQTTBridgeService {
       if (farm) {
         this.mqttClient.publish(
           `farm/${farm.farmNumber}/alerts/${alertData.severity}`,
-          JSON.stringify(alert),
+          JSON.stringify(alert)
         );
       }
 
       logger.info('Alert created', {
         deviceId: alertData.deviceId,
         alertType: alertData.alertType,
-        severity: alertData.severity,
+        severity: alertData.severity
       });
     } catch (error) {
       logger.error('Failed to create alert', { error: error.message });
@@ -1598,8 +1598,8 @@ class MQTTBridgeService {
           farmId,
           deviceId,
           sensorType,
-          reading,
-        }),
+          reading
+        })
       );
     } catch (error) {
       logger.error('Failed to publish to WebSocket', { error: error.message });
@@ -1635,7 +1635,7 @@ class MQTTBridgeService {
       temperature: 'อุณหภูมิ',
       ec: 'ค่า EC',
       tds: 'ค่า TDS',
-      humidity: 'ความชื้นในอากาศ',
+      humidity: 'ความชื้นในอากาศ'
     };
     return names[sensorType] || sensorType;
   }
@@ -1931,7 +1931,7 @@ exports.getSoilConditions = async (req, res) => {
     const soilDevices = await IoTDevice.find({
       farmId,
       deviceType: { $in: ['soil_moisture', 'soil_ph', 'soil_npk', 'soil_temperature', 'soil_ec'] },
-      active: true,
+      active: true
     });
 
     const latestReadings = await Promise.all(
@@ -1942,11 +1942,11 @@ exports.getSoilConditions = async (req, res) => {
             deviceId: device.deviceId,
             type: device.deviceType,
             plotName: device.location.plotName,
-            depth: device.location.depth,
+            depth: device.location.depth
           },
-          reading,
+          reading
         };
-      }),
+      })
     );
 
     res.json(
@@ -1954,17 +1954,17 @@ exports.getSoilConditions = async (req, res) => {
         farm: {
           farmId: farm._id,
           farmName: farm.farmName,
-          farmNumber: farm.farmNumber,
+          farmNumber: farm.farmNumber
         },
         realTimeData: farm.soilMonitoring?.realTimeData || {},
         sensors: latestReadings,
-        alerts: farm.soilMonitoring?.alerts?.slice(0, 10) || [],
-      }),
+        alerts: farm.soilMonitoring?.alerts?.slice(0, 10) || []
+      })
     );
   } catch (error) {
     logger.error('Failed to get soil conditions', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('Failed to get soil conditions', 500, error.message));
   }
@@ -1987,7 +1987,7 @@ exports.getSoilHistory = async (req, res) => {
     const query = {
       farmId,
       sensorType: sensorType === 'npk' ? 'npk' : sensorType,
-      timestamp: { $gte: new Date(Date.now() - hours * 60 * 60 * 1000) },
+      timestamp: { $gte: new Date(Date.now() - hours * 60 * 60 * 1000) }
     };
 
     if (deviceId) {
@@ -2001,7 +2001,7 @@ exports.getSoilHistory = async (req, res) => {
       avg: 0,
       min: Infinity,
       max: -Infinity,
-      count: readings.length,
+      count: readings.length
     };
 
     readings.forEach(reading => {
@@ -2019,8 +2019,8 @@ exports.getSoilHistory = async (req, res) => {
       ApiResponse.success({
         readings,
         stats,
-        period: { hours, from: query.timestamp.$gte, to: new Date() },
-      }),
+        period: { hours, from: query.timestamp.$gte, to: new Date() }
+      })
     );
   } catch (error) {
     logger.error('Failed to get soil history', { error: error.message, farmId: req.params.farmId });
@@ -2043,7 +2043,7 @@ exports.submitLabTest = async (req, res) => {
       organicMatter,
       cec,
       recommendations,
-      certificate,
+      certificate
     } = req.body;
 
     const farm = await Farm.findById(farmId);
@@ -2059,7 +2059,7 @@ exports.submitLabTest = async (req, res) => {
         realTimeData: {},
         alerts: [],
         manualTests: [],
-        improvements: [],
+        improvements: []
       };
     }
 
@@ -2074,7 +2074,7 @@ exports.submitLabTest = async (req, res) => {
       recommendations,
       certificate,
       uploadedBy: req.user.id,
-      verified: false,
+      verified: false
     });
 
     await farm.save();
@@ -2082,14 +2082,14 @@ exports.submitLabTest = async (req, res) => {
     logger.info('Lab test submitted', {
       farmId,
       labName,
-      userId: req.user.id,
+      userId: req.user.id
     });
 
     res.status(201).json(
       ApiResponse.success({
         message: 'ผลการทดสอบดินจากห้องปฏิบัติการถูกบันทึกแล้ว',
-        test: farm.soilMonitoring.manualTests[farm.soilMonitoring.manualTests.length - 1],
-      }),
+        test: farm.soilMonitoring.manualTests[farm.soilMonitoring.manualTests.length - 1]
+      })
     );
   } catch (error) {
     logger.error('Failed to submit lab test', { error: error.message, farmId: req.params.farmId });
@@ -2118,7 +2118,7 @@ exports.recordSoilImprovement = async (req, res) => {
         realTimeData: {},
         alerts: [],
         manualTests: [],
-        improvements: [],
+        improvements: []
       };
     }
 
@@ -2134,7 +2134,7 @@ exports.recordSoilImprovement = async (req, res) => {
       notes,
       beforePH,
       afterPH,
-      effectiveDate: new Date(date),
+      effectiveDate: new Date(date)
     });
 
     await farm.save();
@@ -2143,19 +2143,19 @@ exports.recordSoilImprovement = async (req, res) => {
       farmId,
       type,
       product,
-      userId: req.user.id,
+      userId: req.user.id
     });
 
     res.status(201).json(
       ApiResponse.success({
         message: 'บันทึกการปรับปรุงดินเรียบร้อยแล้ว',
-        improvement: farm.soilMonitoring.improvements[farm.soilMonitoring.improvements.length - 1],
-      }),
+        improvement: farm.soilMonitoring.improvements[farm.soilMonitoring.improvements.length - 1]
+      })
     );
   } catch (error) {
     logger.error('Failed to record soil improvement', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res
       .status(500)
@@ -2194,7 +2194,7 @@ exports.getSoilRecommendations = async (req, res) => {
           method: 'โรยทั่วแปลง พรวนดินให้เข้ากัน',
           frequency: 'ครั้งเดียว แล้วรอ 2-4 สัปดาห์ ก่อนวัด pH อีกครั้ง',
           cost: `${Math.ceil((6.5 - ph) * 500 * 15)} บาท`,
-          benefit: 'ช่วยให้พืชดูดซึมธาตุอาหารได้ดีขึ้น เพิ่มกิจกรรมของจุลินทรีย์ในดิน',
+          benefit: 'ช่วยให้พืชดูดซึมธาตุอาหารได้ดีขึ้น เพิ่มกิจกรรมของจุลินทรีย์ในดิน'
         });
       } else if (ph > 7.5) {
         recommendations.push({
@@ -2208,7 +2208,7 @@ exports.getSoilRecommendations = async (req, res) => {
           method: 'ผสมดิน รดน้ำให้ชุ่ม',
           frequency: 'ครั้งเดียว รอ 3-4 สัปดาห์',
           cost: `${Math.ceil((ph - 6.5) * 300 * 25)} บาท`,
-          benefit: 'ลด pH ให้เหมาะสม เพิ่มการดูดซึมธาตุเหล็กและแมงกานีส',
+          benefit: 'ลด pH ให้เหมาะสม เพิ่มการดูดซึมธาตุเหล็กและแมงกานีส'
         });
       }
     }
@@ -2230,7 +2230,7 @@ exports.getSoilRecommendations = async (req, res) => {
           frequency: 'ทุก 7-10 วัน (ระยะเจริญเติบโต)',
           cost: '450-750 บาท',
           benefit: 'เพิ่มการเจริญเติบโตของใบ สร้างคลอโรฟิลล์',
-          caution: 'ระวังใส่มากเกินไป อาจทำให้ใบไหม้',
+          caution: 'ระวังใส่มากเกินไป อาจทำให้ใบไหม้'
         });
       }
 
@@ -2246,7 +2246,7 @@ exports.getSoilRecommendations = async (req, res) => {
           method: 'ผสมดิน หรือละลายน้ำรด',
           frequency: 'ทุก 14 วัน',
           cost: '600-1,200 บาท',
-          benefit: 'ส่งเสริมการพัฒนาราก กระตุ้นการออกดอก',
+          benefit: 'ส่งเสริมการพัฒนาราก กระตุ้นการออกดอก'
         });
       }
 
@@ -2263,7 +2263,7 @@ exports.getSoilRecommendations = async (req, res) => {
           frequency: 'ทุก 7-10 วัน (ระยะออกดอก)',
           cost: '750-1,350 บาท',
           benefit: 'เพิ่มคุณภาพผลผลิต ทนทานต่อโรค',
-          note: 'สำคัญมากในช่วงออกดอกและติดผล',
+          note: 'สำคัญมากในช่วงออกดอกและติดผล'
         });
       }
     }
@@ -2284,7 +2284,7 @@ exports.getSoilRecommendations = async (req, res) => {
           method: 'ระบบ Drip irrigation (ประหยัดน้ำ 40%)',
           frequency: 'วันละ 1-2 ครั้ง (เช้า-เย็น)',
           urgency: 'ภายใน 6 ชั่วโมง',
-          benefit: 'ป้องกันพืชเหี่ยว เพิ่มการดูดซึมธาตุอาหาร',
+          benefit: 'ป้องกันพืชเหี่ยว เพิ่มการดูดซึมธาตุอาหาร'
         });
       }
     }
@@ -2302,7 +2302,7 @@ exports.getSoilRecommendations = async (req, res) => {
         method: 'ผสมคลุกเคล้าดิน',
         frequency: 'ทุก 3-6 เดือน',
         cost: '2,500-5,000 บาท',
-        benefit: 'เพิ่มความอุดมสมบูรณ์ ปรับโครงสร้างดิน เก็บน้ำได้ดีขึ้น',
+        benefit: 'เพิ่มความอุดมสมบูรณ์ ปรับโครงสร้างดิน เก็บน้ำได้ดีขึ้น'
       });
     }
 
@@ -2320,14 +2320,14 @@ exports.getSoilRecommendations = async (req, res) => {
           estimatedCost: recommendations.reduce((sum, r) => {
             const cost = parseInt(r.cost?.replace(/[^0-9]/g, '') || 0);
             return sum + cost;
-          }, 0),
-        },
-      }),
+          }, 0)
+        }
+      })
     );
   } catch (error) {
     logger.error('Failed to get soil recommendations', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('Failed to get recommendations', 500, error.message));
   }
@@ -2533,13 +2533,13 @@ router.post(
   '/soil/:farmId/lab-test',
   authenticate,
   authorize(['FARMER', 'INSPECTOR', 'ADMIN']),
-  soilController.submitLabTest,
+  soilController.submitLabTest
 );
 router.post(
   '/soil/:farmId/improvement',
   authenticate,
   authorize(['FARMER', 'ADMIN']),
-  soilController.recordSoilImprovement,
+  soilController.recordSoilImprovement
 );
 router.get('/soil/:farmId/recommendations', authenticate, soilController.getSoilRecommendations);
 
@@ -2550,24 +2550,24 @@ router.post(
   '/water/:farmId/quality-test',
   authenticate,
   authorize(['FARMER', 'INSPECTOR', 'ADMIN']),
-  waterController.submitQualityTest,
+  waterController.submitQualityTest
 );
 router.get(
   '/water/:farmId/irrigation-schedule',
   authenticate,
-  waterController.getIrrigationSchedule,
+  waterController.getIrrigationSchedule
 );
 router.post(
   '/water/:farmId/irrigation-schedule',
   authenticate,
   authorize(['FARMER', 'ADMIN']),
-  waterController.createIrrigationSchedule,
+  waterController.createIrrigationSchedule
 );
 router.put(
   '/water/:farmId/irrigation-schedule/:scheduleId',
   authenticate,
   authorize(['FARMER', 'ADMIN']),
-  waterController.updateIrrigationSchedule,
+  waterController.updateIrrigationSchedule
 );
 
 // Sensor Data Routes

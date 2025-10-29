@@ -52,7 +52,7 @@ export async function login(email: string, password: string): Promise<AuthSessio
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password })
     });
 
     if (!response.ok) {
@@ -104,7 +104,7 @@ export async function register(data: {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     });
 
     if (!response.ok) {
@@ -244,13 +244,13 @@ export function setMockSession(role: UserRole): void {
     name: `Test ${role}`,
     role,
     createdAt: new Date(),
-    lastLogin: new Date(),
+    lastLogin: new Date()
   };
 
   const mockSession: AuthSession = {
     user: mockUser,
     token: 'mock-token-' + role,
-    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
   };
 
   setSessionInStorage(mockSession);

@@ -27,7 +27,7 @@ describe('useAuth Hook', () => {
     it('should login with valid credentials', async () => {
       const credentials = {
         email: 'farmer@example.com',
-        password: 'password123',
+        password: 'password123'
       };
 
       // Test: act(() => result.current.login(credentials))
@@ -47,7 +47,7 @@ describe('useAuth Hook', () => {
     it('should handle login failure', async () => {
       const credentials = {
         email: 'wrong@example.com',
-        password: 'wrongpass',
+        password: 'wrongpass'
       };
 
       // Test: login with wrong credentials
@@ -102,7 +102,7 @@ describe('useAuth Hook', () => {
       const userData = {
         email: 'newuser@example.com',
         password: 'SecurePass123!',
-        name: 'นายทดสอบ',
+        name: 'นายทดสอบ'
       };
 
       // Test: act(() => result.current.register(userData))
@@ -131,7 +131,7 @@ describe('useAuth Hook', () => {
     it('should reset password with token', async () => {
       const data = {
         token: 'reset-token',
-        newPassword: 'NewPass123!',
+        newPassword: 'NewPass123!'
       };
 
       // Test: act(() => result.current.resetPassword(data))
@@ -143,7 +143,7 @@ describe('useAuth Hook', () => {
     it('should update user profile', async () => {
       const updates = {
         name: 'นายทดสอบ แก้ไขแล้ว',
-        phoneNumber: '0898765432',
+        phoneNumber: '0898765432'
       };
 
       // Test: act(() => result.current.updateProfile(updates))

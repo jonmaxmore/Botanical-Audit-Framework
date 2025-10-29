@@ -25,8 +25,8 @@ const config = {
     env: {
       ...process.env,
       NODE_ENV: 'development',
-      PATH: process.env.PATH + ';C:\\Program Files\\nodejs',
-    },
+      PATH: process.env.PATH + ';C:\\Program Files\\nodejs'
+    }
   },
   frontend: {
     cwd: path.join(__dirname, 'frontend-nextjs'),
@@ -35,9 +35,9 @@ const config = {
     env: {
       ...process.env,
       NODE_ENV: 'development',
-      PATH: process.env.PATH + ';C:\\Program Files\\nodejs',
-    },
-  },
+      PATH: process.env.PATH + ';C:\\Program Files\\nodejs'
+    }
+  }
 };
 
 // Process tracking
@@ -72,7 +72,7 @@ function startProcess(name, { cwd, command, args, env }) {
     env,
     stdio: ['inherit', 'pipe', 'pipe'],
     shell: true,
-    windowsVerbatimArguments: false,
+    windowsVerbatimArguments: false
   });
 
   // Handle process output

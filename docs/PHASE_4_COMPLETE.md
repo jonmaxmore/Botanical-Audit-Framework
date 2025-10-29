@@ -3,13 +3,14 @@
 **Status**: 100% Complete  
 **Date**: October 22, 2025  
 **Total Pages Created**: 10 pages  
-**Total Lines of Code**: ~5,550 lines  
+**Total Lines of Code**: ~5,550 lines
 
 ---
 
 ## 📊 Overview
 
 Phase 4 ครอบคลุมการสร้าง Dashboard และหน้าจัดการสำหรับ 3 บทบาทหลัก:
+
 - **Phase 4A**: DTAM_OFFICER (เจ้าหน้าที่ตรวจเอกสาร) - Step 3
 - **Phase 4B**: INSPECTOR (เจ้าหน้าที่ตรวจฟาร์ม) - Step 6
 - **Phase 4C**: ADMIN (ผู้อนุมัติ) - Step 7
@@ -21,10 +22,12 @@ Phase 4 ครอบคลุมการสร้าง Dashboard และห�
 ### Pages Created: 3
 
 ### 1. Officer Dashboard
+
 **Path**: `/frontend-nextjs/src/app/officer/dashboard/page.tsx`  
-**Lines**: ~450 lines  
+**Lines**: ~450 lines
 
 **Features**:
+
 - ✅ 4 Gradient Summary Cards:
   - Pending Reviews
   - Reviewed This Week
@@ -44,11 +47,10 @@ Phase 4 ครอบคลุมการสร้าง Dashboard และห�
 - ✅ Protected Route: `withAuth(['DTAM_OFFICER'])`
 
 **Mock Data Logic**:
+
 ```typescript
 // Filter applications for document review
-const pendingReviewApps = applications.filter(app => 
-  app.workflowState === 'DOCUMENT_REVIEW'
-);
+const pendingReviewApps = applications.filter(app => app.workflowState === 'DOCUMENT_REVIEW');
 
 // Priority calculation
 const daysWaiting = Math.floor((Date.now() - submittedDate) / (1000 * 60 * 60 * 24));
@@ -58,10 +60,12 @@ priority = daysWaiting > 5 ? 'high' : daysWaiting > 2 ? 'medium' : 'low';
 ---
 
 ### 2. Applications List
+
 **Path**: `/frontend-nextjs/src/app/officer/applications/page.tsx`  
-**Lines**: ~350 lines  
+**Lines**: ~350 lines
 
 **Features**:
+
 - ✅ Search Bar:
   - Search by Application Number
   - Search by Farmer Name
@@ -94,15 +98,16 @@ priority = daysWaiting > 5 ? 'high' : daysWaiting > 2 ? 'medium' : 'low';
   - Eye icon button → same action
 
 **Search Logic**:
+
 ```typescript
 const filteredApplications = applications.filter(app => {
-  const matchesSearch = 
+  const matchesSearch =
     app.applicationNumber.toLowerCase().includes(searchTerm.toLowerCase()) ||
     app.farmerInfo?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     app.farmInfo?.name.toLowerCase().includes(searchTerm.toLowerCase());
-  
+
   const matchesFilter = filterStatus === 'all' || app.workflowState === filterStatus;
-  
+
   return matchesSearch && matchesFilter;
 });
 ```
@@ -110,23 +115,25 @@ const filteredApplications = applications.filter(app => {
 ---
 
 ### 3. Review Page (Most Complex)
+
 **Path**: `/frontend-nextjs/src/app/officer/applications/[id]/review/page.tsx`  
-**Lines**: ~650 lines  
+**Lines**: ~650 lines
 
 **Features**:
+
 - ✅ **Left Column** - Application Details:
   - Farm Information:
-    * Farm Name
-    * Size (ไร่)
-    * Crop Type
-    * Province
-    * Address
+    - Farm Name
+    - Size (ไร่)
+    - Crop Type
+    - Province
+    - Address
   - Farmer Information:
-    * Full Name
-    * ID Card Number
-    * Phone
-    * Email
-    * Farming Experience (years)
+    - Full Name
+    - ID Card Number
+    - Phone
+    - Email
+    - Farming Experience (years)
 
 - ✅ **Right Column** - Document Review:
   - **5 Documents** to review:
@@ -135,14 +142,13 @@ const filteredApplications = applications.filter(app => {
     3. LAND_DEED (โฉนดที่ดิน)
     4. FARM_MAP (แผนที่ฟาร์ม)
     5. WATER_PERMIT (ใบอนุญาตใช้น้ำ)
-  
   - **For Each Document**:
-    * View Button (opens modal - not implemented)
-    * Download Button (mock)
-    * Approve Button (green)
-    * Reject Button (red)
-    * Notes TextField (shows when rejected)
-    * Status Chip (Approved/Rejected/Pending)
+    - View Button (opens modal - not implemented)
+    - Download Button (mock)
+    - Approve Button (green)
+    - Reject Button (red)
+    - Notes TextField (shows when rejected)
+    - Status Chip (Approved/Rejected/Pending)
 
 - ✅ **Review Form**:
   - Completeness Rating (1-5 stars)
@@ -155,12 +161,10 @@ const filteredApplications = applications.filter(app => {
      - Enabled: All 5 documents approved
      - Action: `workflowState = 'DOCUMENT_APPROVED'`, `currentStep = 4`
      - Navigate: `/officer/dashboard`
-  
   2. **Request Revision** (yellow):
      - Enabled: At least 1 document rejected
      - Action: `workflowState = 'DOCUMENT_REVISION'`, `currentStep = 3`
      - Farmer re-uploads rejected documents
-  
   3. **Reject Application** (red):
      - Enabled: Always
      - Action: `workflowState = 'DOCUMENT_REJECTED'`, `currentStep = 3`
@@ -172,6 +176,7 @@ const filteredApplications = applications.filter(app => {
   - Checks document status consistency
 
 **Data Structure Saved**:
+
 ```typescript
 reviewData: {
   completeness: number;        // 1-5
@@ -196,10 +201,12 @@ reviewData: {
 ### Pages Created: 4
 
 ### 1. Inspector Dashboard
+
 **Path**: `/frontend-nextjs/src/app/inspector/dashboard/page.tsx`  
-**Lines**: ~500 lines  
+**Lines**: ~500 lines
 
 **Features**:
+
 - ✅ 4 Gradient Summary Cards:
   - Upcoming Inspections (with today count badge)
   - Completed This Week
@@ -209,12 +216,12 @@ reviewData: {
 - ✅ Today's Schedule Section:
   - Top 5 upcoming inspections
   - Priority Indicators:
-    * Red badge: Today
-    * Yellow badge: Tomorrow
-    * Normal: >1 day away
+    - Red badge: Today
+    - Yellow badge: Tomorrow
+    - Normal: >1 day away
   - Type Chips:
-    * Blue: VDO Call
-    * Purple: On-Site
+    - Blue: VDO Call
+    - Purple: On-Site
   - Click to start inspection
   - "View Calendar" button → `/inspector/schedule`
 
@@ -228,9 +235,9 @@ reviewData: {
   - Pass Rate progress bar (≥80 points)
   - Inspection Types count (VDO vs On-Site)
   - Performance Metrics:
-    * Completed this week
-    * Completed this month
-    * Performance indicator: "เร็วกว่าค่าเฉลี่ย 10%"
+    - Completed this week
+    - Completed this month
+    - Performance indicator: "เร็วกว่าค่าเฉลี่ย 10%"
 
 - ✅ Help Section:
   - Inspector duties explanation
@@ -239,27 +246,29 @@ reviewData: {
   - Pass criteria
 
 **Filter Logic**:
+
 ```typescript
-const inspectionApplications = applications.filter(app => 
-  app.workflowState === 'INSPECTION_SCHEDULED' ||
-  app.workflowState === 'INSPECTION_VDO_CALL' ||
-  app.workflowState === 'INSPECTION_ON_SITE' ||
-  app.workflowState === 'INSPECTION_COMPLETED'
+const inspectionApplications = applications.filter(
+  app =>
+    app.workflowState === 'INSPECTION_SCHEDULED' ||
+    app.workflowState === 'INSPECTION_VDO_CALL' ||
+    app.workflowState === 'INSPECTION_ON_SITE' ||
+    app.workflowState === 'INSPECTION_COMPLETED'
 );
 
 // Sort by date (upcoming first)
-inspections.sort((a, b) => 
-  new Date(a.scheduledDate) - new Date(b.scheduledDate)
-);
+inspections.sort((a, b) => new Date(a.scheduledDate) - new Date(b.scheduledDate));
 ```
 
 ---
 
 ### 2. Inspector Schedule
+
 **Path**: `/frontend-nextjs/src/app/inspector/schedule/page.tsx`  
-**Lines**: ~400 lines  
+**Lines**: ~400 lines
 
 **Features**:
+
 - ✅ Filter Buttons (with counts):
   - All Inspections
   - VDO Call Only
@@ -267,21 +276,21 @@ inspections.sort((a, b) =>
 
 - ✅ Inspection Cards (not table):
   - **Card Display**:
-    * Farm Name (header)
-    * Type Chip (VDO Call / On-Site)
-    * Status Chip (Pending / Accepted / Scheduled)
-    * Today Indicator (blue border + background)
-    * Details:
+    - Farm Name (header)
+    - Type Chip (VDO Call / On-Site)
+    - Status Chip (Pending / Accepted / Scheduled)
+    - Today Indicator (blue border + background)
+    - Details:
       - Farmer Name
       - Application Number
       - Date & Time (Thai format with weekday)
       - Address (for on-site only)
 
   - **Actions Based on Status**:
-    * **Pending** (yellow):
+    - **Pending** (yellow):
       - Accept Button (green)
       - Reschedule Button (outlined)
-    * **Accepted** (green):
+    - **Accepted** (green):
       - Start Inspection Button → navigate to `/inspector/inspections/[id]/vdo-call` or `/on-site`
 
 - ✅ Reschedule Dialog:
@@ -299,6 +308,7 @@ inspections.sort((a, b) =>
   - On-Site: 2-3 hours
 
 **Date Formatting**:
+
 ```typescript
 new Date(scheduledDate).toLocaleDateString('th-TH', {
   weekday: 'long',
@@ -312,15 +322,16 @@ new Date(scheduledDate).toLocaleDateString('th-TH', {
 ---
 
 ### 3. VDO Call Inspection
+
 **Path**: `/frontend-nextjs/src/app/inspector/inspections/[id]/vdo-call/page.tsx`  
-**Lines**: ~450 lines  
+**Lines**: ~450 lines
 
 **Features**:
+
 - ✅ **Left Column** - Application Details:
   - Same as Officer Review (Farm + Farmer Info)
 
 - ✅ **Right Column** - Inspection Form:
-  
   - **Checklist (8 Items)**:
     1. เกษตรกรแสดงพื้นที่ฟาร์มผ่านกล้อง
     2. สามารถเห็นแปลงปลูกได้ชัดเจน
@@ -346,7 +357,6 @@ new Date(scheduledDate).toLocaleDateString('th-TH', {
        - Action: `workflowState = 'INSPECTION_COMPLETED'`, `currentStep = 7`
        - Skips on-site inspection
        - Mock score: 85
-    
     2. **Need On-Site** (ต้องลงพื้นที่ตรวจ):
        - Icon: LocationOn (purple)
        - Action: `workflowState = 'INSPECTION_ON_SITE'`, `currentStep = 6`
@@ -355,11 +365,12 @@ new Date(scheduledDate).toLocaleDateString('th-TH', {
 - ✅ **Confirmation Dialog**:
   - Shows decision impact
   - Validation warnings:
-    * Checklist: <6/8 items → warning
-    * Photos: <3 photos → warning
+    - Checklist: <6/8 items → warning
+    - Photos: <3 photos → warning
   - Submit Button → updates application
 
 **Data Structure Saved**:
+
 ```typescript
 inspectionData: {
   type: 'VDO_CALL';
@@ -376,73 +387,65 @@ inspectionData: {
 ---
 
 ### 4. On-Site Inspection (8 CCPs Scoring) ⭐ **Most Complex**
+
 **Path**: `/frontend-nextjs/src/app/inspector/inspections/[id]/on-site/page.tsx`  
-**Lines**: ~700 lines  
+**Lines**: ~700 lines
 
 **Features**:
+
 - ✅ **Left Column** - Score Summary (Sticky):
   - **Total Score Display**:
-    * Large number: X/100
-    * Progress bar (color-coded)
-    * Pass/Fail Status Badge
-  
+    - Large number: X/100
+    - Progress bar (color-coded)
+    - Pass/Fail Status Badge
   - **Pass/Fail Criteria**:
-    * ≥80 = Pass (green) ✅
-    * 70-79 = Conditional (yellow) ⚠️
-    * <70 = Fail (red) ❌
-  
+    - ≥80 = Pass (green) ✅
+    - 70-79 = Conditional (yellow) ⚠️
+    - <70 = Fail (red) ❌
   - **CCP Scores Breakdown**:
-    * 8 mini progress bars
-    * Shows: Name + Score/Max
-    * Color-coded by percentage
+    - 8 mini progress bars
+    - Shows: Name + Score/Max
+    - Color-coded by percentage
 
   - **Farm Information**:
-    * Farm Name
-    * Size (ไร่)
-    * Crop Type
+    - Farm Name
+    - Size (ไร่)
+    - Crop Type
 
 - ✅ **Right Column** - 8 CCPs Scoring:
 
   **8 Critical Control Points**:
   1. **Seed/Planting Material Quality** (15 pts)
      - Description: การเลือกเมล็ดพันธุ์ดี แหล่งที่มา การจัดเก็บ
-  
   2. **Soil Management & Fertilizer** (15 pts)
      - Description: การวิเคราะห์ดิน ปุ๋ยที่ใช้ อัตราการใช้ การบันทึก
-  
   3. **Pest & Disease Management** (15 pts)
      - Description: การป้องกัน ใช้สารเคมี การบันทึก ระยะปลอดสาร
-  
   4. **Harvesting Practices** (15 pts)
      - Description: จังหวะการเก็บ เครื่องมือ การขนย้าย ความสะอาด
-  
   5. **Post-Harvest Handling** (15 pts)
      - Description: การคัดแยก การทำความสะอาด การบ่ม การอบแห้ง
-  
   6. **Storage & Transportation** (10 pts)
      - Description: คลังสินค้า อุณหภูมิ ความชื้น ยานพาหนะ
-  
   7. **Record Keeping** (10 pts)
      - Description: ปูมการปลูก การใช้ปุ๋ย/สารเคมี การเก็บเกี่ยว การขาย
-  
   8. **Worker Training & Safety** (5 pts)
      - Description: พนักงาน อุปกรณ์ป้องกัน ปฐมพยาบาล
 
   **For Each CCP (Accordion)**:
   - ✅ Score Slider (0 to maxScore):
-    * Real-time update
-    * Marks display
-    * Color: Green (≥80%), Yellow (≥60%), Red (<60%)
-  
+    - Real-time update
+    - Marks display
+    - Color: Green (≥80%), Yellow (≥60%), Red (<60%)
   - ✅ Notes Textarea:
-    * Observations for this CCP
-  
+    - Observations for this CCP
   - ✅ Photo Upload:
-    * Multiple photos per CCP
-    * Grid display
-    * Warning if no photos
+    - Multiple photos per CCP
+    - Grid display
+    - Warning if no photos
 
 - ✅ **Auto Score Calculation**:
+
   ```typescript
   const totalScore = ccps.reduce((sum, ccp) => sum + ccp.score, 0);
   // Real-time update when any CCP score changes
@@ -459,6 +462,7 @@ inspectionData: {
   - Action: `workflowState = 'INSPECTION_COMPLETED'`, `currentStep = 7`
 
 **Data Structure Saved**:
+
 ```typescript
 inspectionData: {
   type: 'ON_SITE';
@@ -489,10 +493,12 @@ inspectionData: {
 ### Pages Created: 3
 
 ### 1. Admin Dashboard
+
 **Path**: `/frontend-nextjs/src/app/admin/dashboard/page.tsx`  
-**Lines**: ~580 lines  
+**Lines**: ~580 lines
 
 **Features**:
+
 - ✅ **System Health Alert**:
   - Green: "ระบบทำงานปกติ - Uptime: 99.8% | Response Time: 245ms"
   - Warning: "ระบบมีปัญหา - โปรดตรวจสอบ"
@@ -500,30 +506,28 @@ inspectionData: {
 - ✅ **4 Gradient Summary Cards**:
   1. **Total Applications** (purple):
      - Count + In Progress
-  
   2. **Pending Approvals** (pink):
      - Count + Urgent count (>3 days)
-  
   3. **Approval Rate** (blue):
      - Percentage
      - Approved / Rejected counts
-  
   4. **Certificates Issued** (green):
      - Total count
 
 - ✅ **Pending Approvals List**:
   - Top 5 applications
   - **For Each Application**:
-    * Application Number
-    * Priority Chip (สูง/ปานกลาง/ปกติ)
-    * Score Chip (⭐ if ≥90)
-    * Farm + Farmer names
-    * Days waiting
-    * "อนุมัติ" button
+    - Application Number
+    - Priority Chip (สูง/ปานกลาง/ปกติ)
+    - Score Chip (⭐ if ≥90)
+    - Farm + Farmer names
+    - Days waiting
+    - "อนุมัติ" button
   - Click to approval page
   - "ดูทั้งหมด" button
 
 - ✅ **Priority Logic**:
+
   ```typescript
   if (score >= 90 && daysWaiting > 3) return 'high';
   if (score >= 80 && daysWaiting > 5) return 'medium';
@@ -557,10 +561,12 @@ inspectionData: {
 ---
 
 ### 2. Admin Approval Page ⭐ **Most Important**
+
 **Path**: `/frontend-nextjs/src/app/admin/applications/[id]/approve/page.tsx`  
-**Lines**: ~670 lines  
+**Lines**: ~670 lines
 
 **Features**:
+
 - ✅ **Workflow Stepper**:
   - Visual progress (8 steps)
   - Highlights current step
@@ -582,76 +588,70 @@ inspectionData: {
 
   **Farm Inspection Section (Step 6)** 🌟:
   - Inspection Type Chip (VDO Call / On-Site)
-  
   - **If ON_SITE**:
-    * **Score Display** (Large Alert):
+    - **Score Display** (Large Alert):
       - Total Score: X/100
       - Status: Pass ✅ / Conditional ⚠️ / Fail ❌
-    
-    * **8 CCPs Breakdown** (Accordions):
+    - **8 CCPs Breakdown** (Accordions):
       - Each CCP shows:
-        * Name + Score Chip (X/maxScore)
-        * Description
-        * Notes (if any)
-        * Photos count (if any)
+        - Name + Score Chip (X/maxScore)
+        - Description
+        - Notes (if any)
+        - Photos count (if any)
       - Color-coded chips:
-        * Green: ≥80% of max
-        * Yellow: ≥60% of max
-        * Red: <60% of max
-    
-    * **Final Notes** (Inspector's summary)
-  
+        - Green: ≥80% of max
+        - Yellow: ≥60% of max
+        - Red: <60% of max
+    - **Final Notes** (Inspector's summary)
+
   - **If VDO_CALL**:
-    * Shows VDO-only decision
-    * Mock score: 85/100
+    - Shows VDO-only decision
+    - Mock score: 85/100
 
 - ✅ **Right Column** - Decision Panel:
 
   **Recommendation Card**:
   - Auto-generated based on inspection score:
-    * ≥90: "แนะนำอนุมัติเป็นพิเศษ ⭐" (green)
-    * ≥80: "แนะนำอนุมัติ" (green)
-    * ≥70: "พิจารณาอนุมัติแบบมีเงื่อนไข" (yellow)
-    * <70: "แนะนำปฏิเสธ" (red)
-  
+    - ≥90: "แนะนำอนุมัติเป็นพิเศษ ⭐" (green)
+    - ≥80: "แนะนำอนุมัติ" (green)
+    - ≥70: "พิจารณาอนุมัติแบบมีเงื่อนไข" (yellow)
+    - <70: "แนะนำปฏิเสธ" (red)
   - **Criteria List**:
-    * ≥80 คะแนน = อนุมัติ
-    * 70-79 คะแนน = มีเงื่อนไข
-    * <70 คะแนน = ปฏิเสธ
+    - ≥80 คะแนน = อนุมัติ
+    - 70-79 คะแนน = มีเงื่อนไข
+    - <70 คะแนน = ปฏิเสธ
 
   **Decision Form**:
   - **3 Decision Buttons**:
     1. ✅ **Approve** (green):
        - Action: `workflowState = 'APPROVED'`, `currentStep = 8`
        - Triggers certificate generation
-    
     2. ❌ **Reject** (red):
        - Action: `workflowState = 'REJECTED'`, `currentStep = 7`
        - Closes application
-    
     3. ℹ️ **Request More Info** (yellow):
        - Action: `workflowState = 'PENDING_APPROVAL'`, `currentStep = 7`
        - Requests additional information
-  
+
   - **Notes Textarea**:
-    * Reason for decision
-    * Recommendations
-    * Additional info
-  
+    - Reason for decision
+    - Recommendations
+    - Additional info
   - **Submit Button**:
-    * Disabled until decision selected
-    * Shows confirmation dialog
+    - Disabled until decision selected
+    - Shows confirmation dialog
 
 - ✅ **Confirmation Dialog**:
   - Shows decision impact
   - Summary:
-    * Application Number
-    * Farm Name
-    * Inspection Score
-    * Admin Notes
+    - Application Number
+    - Farm Name
+    - Inspection Score
+    - Admin Notes
   - Confirm/Cancel buttons
 
 **Data Structure Saved**:
+
 ```typescript
 approvalData: {
   decision: 'approve' | 'reject' | 'info';
@@ -664,23 +664,22 @@ approvalData: {
 ---
 
 ### 3. Certificate & User Management
+
 **Path**: `/frontend-nextjs/src/app/admin/management/page.tsx`  
-**Lines**: ~640 lines  
+**Lines**: ~640 lines
 
 **Features**:
+
 - ✅ **2 Tabs**:
 
   **Tab 1: Certificate Management** 📜:
-  
   - **Search Bar**:
-    * Search by Certificate Number
-    * Search by Farm Name
-    * Search by Farmer Name
-  
+    - Search by Certificate Number
+    - Search by Farm Name
+    - Search by Farmer Name
   - **Statistics Alert**:
-    * Total certificates issued
-    * Active certificates count
-  
+    - Total certificates issued
+    - Active certificates count
   - **Table (9 columns)**:
     1. Certificate Number (GACP-2025-0001)
     2. Application Number
@@ -691,27 +690,22 @@ approvalData: {
     7. Expiry Date (1 year from issue)
     8. Status Chip (ใช้งาน/ยกเลิก)
     9. Actions Menu
-  
   - **Actions Menu** (3 dots):
-    * 👁️ View Certificate (modal)
-    * 📥 Download PDF
-    * 🚫 Revoke Certificate
-  
+    - 👁️ View Certificate (modal)
+    - 📥 Download PDF
+    - 🚫 Revoke Certificate
   - **Pagination**:
-    * 5/10/25/50 rows per page
-    * Thai labels
+    - 5/10/25/50 rows per page
+    - Thai labels
 
   **Tab 2: User Management** 👥:
-  
   - **Search & Add**:
-    * Search bar (name, email, role)
-    * "เพิ่มผู้ใช้" button (top-right)
-  
+    - Search bar (name, email, role)
+    - "เพิ่มผู้ใช้" button (top-right)
   - **Statistics Alert**:
-    * Total users
-    * Farmers count
-    * Officers count
-  
+    - Total users
+    - Farmers count
+    - Officers count
   - **Table (6 columns)**:
     1. Name
     2. Email
@@ -723,32 +717,29 @@ approvalData: {
     4. Status Chip (ใช้งาน/ระงับ)
     5. Created Date
     6. Actions Menu
-  
   - **Actions Menu**:
-    * ✏️ Edit User
-    * 🗑️ Delete User
-  
+    - ✏️ Edit User
+    - 🗑️ Delete User
   - **Add/Edit User Dialog**:
-    * Name TextField
-    * Email TextField
-    * Role Dropdown (4 options)
-    * Status Dropdown (active/inactive)
-    * Save Button (validation: name + email required)
-  
+    - Name TextField
+    - Email TextField
+    - Role Dropdown (4 options)
+    - Status Dropdown (active/inactive)
+    - Save Button (validation: name + email required)
   - **Mock Users** (5):
     1. สมชาย ใจดี - FARMER
     2. สมหญิง รักษ์ดี - FARMER
     3. วิชัย ตรวจสอบ - DTAM_OFFICER
     4. สุดา ลงพื้นที่ - INSPECTOR
     5. ผู้จัดการ ระบบ - ADMIN
-  
   - **CRUD Operations**:
-    * Create: Add new user with validation
-    * Read: List all users with search/filter
-    * Update: Edit user details
-    * Delete: Remove user with confirmation
+    - Create: Add new user with validation
+    - Read: List all users with search/filter
+    - Update: Edit user details
+    - Delete: Remove user with confirmation
 
 **Role Labels**:
+
 ```typescript
 FARMER → 'เกษตรกร'
 DTAM_OFFICER → 'เจ้าหน้าที่ตรวจเอกสาร'
@@ -764,27 +755,28 @@ All pages use `withAuth` HOC:
 
 ```typescript
 // Phase 4A
-withAuth(['DTAM_OFFICER'])
+withAuth(['DTAM_OFFICER']);
 
 // Phase 4B
-withAuth(['INSPECTOR'])
+withAuth(['INSPECTOR']);
 
 // Phase 4C
-withAuth(['ADMIN'])
+withAuth(['ADMIN']);
 ```
 
 ---
 
 ## 📊 Statistics Summary
 
-| Phase | Role | Pages | Lines | Complexity |
-|-------|------|-------|-------|------------|
-| 4A | DTAM_OFFICER | 3 | ~1,450 | ⭐⭐⭐ |
-| 4B | INSPECTOR | 4 | ~2,250 | ⭐⭐⭐⭐⭐ |
-| 4C | ADMIN | 3 | ~1,850 | ⭐⭐⭐⭐ |
-| **Total** | **3 Roles** | **10** | **~5,550** | - |
+| Phase     | Role         | Pages  | Lines      | Complexity |
+| --------- | ------------ | ------ | ---------- | ---------- |
+| 4A        | DTAM_OFFICER | 3      | ~1,450     | ⭐⭐⭐     |
+| 4B        | INSPECTOR    | 4      | ~2,250     | ⭐⭐⭐⭐⭐ |
+| 4C        | ADMIN        | 3      | ~1,850     | ⭐⭐⭐⭐   |
+| **Total** | **3 Roles**  | **10** | **~5,550** | -          |
 
 **Complexity Rating**:
+
 - Most Complex: On-Site Inspection (8 CCPs Scoring) ⭐⭐⭐⭐⭐
 - Second: Admin Approval Page (Multi-step review) ⭐⭐⭐⭐
 - Third: Officer Review Page (5 docs + decision) ⭐⭐⭐⭐
@@ -794,11 +786,13 @@ withAuth(['ADMIN'])
 ## 🎨 UI/UX Highlights
 
 ### Color Scheme:
+
 - **DTAM_OFFICER**: Purple/Blue gradients (Professional)
 - **INSPECTOR**: Blue/Purple (Technical)
 - **ADMIN**: Multi-color (Authoritative)
 
 ### Common Patterns:
+
 - ✅ Gradient summary cards (4 per dashboard)
 - ✅ Material-UI components throughout
 - ✅ Responsive design (Grid system)
@@ -808,6 +802,7 @@ withAuth(['ADMIN'])
 - ✅ Error handling
 
 ### Icons Used:
+
 - Dashboard: DashboardIcon
 - Documents: DescriptionIcon
 - People: PeopleIcon
@@ -824,6 +819,7 @@ withAuth(['ADMIN'])
 ## 🔄 Workflow Integration
 
 ### DTAM_OFFICER (Step 3):
+
 ```
 DOCUMENT_REVIEW → [Review] → DOCUMENT_APPROVED (Step 4)
                            → DOCUMENT_REVISION (Farmer re-upload)
@@ -831,12 +827,14 @@ DOCUMENT_REVIEW → [Review] → DOCUMENT_APPROVED (Step 4)
 ```
 
 ### INSPECTOR (Step 6):
+
 ```
 INSPECTION_SCHEDULED → [VDO Call] → INSPECTION_COMPLETED (Step 7)
                                   → INSPECTION_ON_SITE → [On-Site 8 CCPs] → INSPECTION_COMPLETED (Step 7)
 ```
 
 ### ADMIN (Step 7):
+
 ```
 PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
                 → [Reject] → REJECTED (Close)
@@ -848,6 +846,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ## 📦 Data Structures
 
 ### reviewData (Officer):
+
 ```typescript
 {
   completeness: 1-5;
@@ -864,19 +863,20 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ```
 
 ### inspectionData (Inspector):
+
 ```typescript
 {
   type: 'VDO_CALL' | 'ON_SITE';
-  
+
   // VDO_CALL
   checklist?: ChecklistItem[];
   decision?: 'sufficient' | 'on_site';
-  
+
   // ON_SITE
   ccps?: CCP[];  // 8 CCPs with scores
   totalScore?: number;  // 0-100
   passStatus?: 'pass' | 'conditional' | 'fail';
-  
+
   // Common
   notes: string;
   photos: string[];
@@ -886,6 +886,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ```
 
 ### approvalData (Admin):
+
 ```typescript
 {
   decision: 'approve' | 'reject' | 'info';
@@ -900,18 +901,21 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ## ⚠️ Known Issues
 
 ### Phase 4A (Officer):
+
 1. ❌ Document viewer modal not implemented (View button exists)
 2. ❌ Document download handler not working (mock alert)
 3. ⚠️ Mock statistics (not from real API)
 4. ⚠️ No revision limit check (should max at 2 times)
 
 ### Phase 4B (Inspector):
+
 1. ❌ Photo upload is mock (generates placeholder URLs)
 2. ❌ Calendar integration not implemented (button exists)
 3. ⚠️ Mock inspection data (not from real API)
 4. ⚠️ Reschedule only updates state (doesn't save to backend)
 
 ### Phase 4C (Admin):
+
 1. ❌ Certificate PDF generation not implemented
 2. ❌ Certificate viewer modal not implemented
 3. ❌ User password management not implemented
@@ -919,6 +923,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 5. ⚠️ System health metrics are hardcoded
 
 ### All Phases:
+
 1. ⚠️ All data uses ApplicationContext (mock state)
 2. ⚠️ No backend API integration yet (Phase 5)
 3. ⚠️ No file upload functionality (documents, photos)
@@ -930,6 +935,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ## ✅ Testing Checklist
 
 ### Phase 4A - DTAM_OFFICER:
+
 - [ ] Login as DTAM_OFFICER
 - [ ] View Dashboard (check cards, tasks, statistics)
 - [ ] View Applications List (search, filter, pagination)
@@ -943,6 +949,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 - [ ] Verify workflow state changes
 
 ### Phase 4B - INSPECTOR:
+
 - [ ] Login as INSPECTOR
 - [ ] View Dashboard (check cards, schedule, statistics)
 - [ ] View Schedule (filter, accept, reschedule)
@@ -963,6 +970,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 - [ ] Verify workflow state changes
 
 ### Phase 4C - ADMIN:
+
 - [ ] Login as ADMIN
 - [ ] View Dashboard (check cards, pending list, statistics)
 - [ ] Approval Page:
@@ -997,6 +1005,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ## 🚀 Next Phase: Backend API Integration
 
 ### Phase 5 Tasks:
+
 1. **Authentication API**:
    - POST /api/auth/login
    - POST /api/auth/register
@@ -1051,6 +1060,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ## 🎓 Lessons Learned
 
 ### What Worked Well:
+
 - ✅ Consistent UI/UX patterns across all roles
 - ✅ Material-UI components for rapid development
 - ✅ Mock data in ApplicationContext for prototyping
@@ -1059,12 +1069,14 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 - ✅ Responsive design from the start
 
 ### Challenges:
+
 - ⚠️ 8 CCPs scoring UI complexity (sliders + photos + notes)
 - ⚠️ Multi-step workflow state management
 - ⚠️ Large files (700+ lines for complex pages)
 - ⚠️ Mock data consistency across contexts
 
 ### Improvements for Phase 5:
+
 - 🔄 Replace ApplicationContext with real API calls
 - 🔄 Implement proper file upload (documents, photos)
 - 🔄 Add loading states and error handling
@@ -1079,18 +1091,21 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ## 📈 Progress Overview
 
 **Completed Phases**:
+
 - ✅ Phase 1: Planning & Analysis (100%)
 - ✅ Phase 2: Foundation (100%)
 - ✅ Phase 3: Farmer Application Flow (100%)
 - ✅ Phase 4: Other Roles Dashboards (100%)
 
 **Remaining Phases**:
+
 - 🔴 Phase 5: Backend API Integration (0%)
 - 🔴 Phase 6: Testing & Deployment (0%)
 
 **Overall Project Progress**: **~68%** (4 out of 6 phases complete)
 
 **Estimated Time to Complete**:
+
 - Phase 5: 16-20 hours (API integration)
 - Phase 6: 8-12 hours (testing + deployment)
 - **Total Remaining**: 24-32 hours
@@ -1100,6 +1115,7 @@ PENDING_APPROVAL → [Approve] → APPROVED (Step 8 - Certificate)
 ## 🎉 Conclusion
 
 Phase 4 is **100% complete** with all 10 pages implemented across 3 roles:
+
 - **DTAM_OFFICER**: Document review workflow (3 pages)
 - **INSPECTOR**: Farm inspection with 8 CCPs scoring (4 pages)
 - **ADMIN**: Final approval and management (3 pages)

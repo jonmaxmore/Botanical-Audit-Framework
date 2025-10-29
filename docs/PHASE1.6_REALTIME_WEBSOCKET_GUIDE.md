@@ -153,11 +153,11 @@ class WebSocketServer {
     this.io = new Server(httpServer, {
       cors: {
         origin: process.env.CORS_ORIGINS?.split(',') || '*',
-        credentials: true,
+        credentials: true
       },
       transports: ['websocket', 'polling'],
       pingTimeout: 60000,
-      pingInterval: 25000,
+      pingInterval: 25000
     });
 
     // Redis adapter for multi-server support
@@ -183,7 +183,7 @@ class WebSocketServer {
     const pubClient = new IORedis({
       host: process.env.REDIS_HOST || 'localhost',
       port: parseInt(process.env.REDIS_PORT) || 6379,
-      password: process.env.REDIS_PASSWORD,
+      password: process.env.REDIS_PASSWORD
     });
 
     const subClient = pubClient.duplicate();
@@ -238,7 +238,7 @@ class WebSocketServer {
     this.connections.set(socket.id, {
       userId,
       userRole,
-      connectedAt: new Date(),
+      connectedAt: new Date()
     });
 
     // Join user-specific room
@@ -252,7 +252,7 @@ class WebSocketServer {
       message: 'Connected to GACP WebSocket server',
       userId,
       userRole,
-      rooms: Array.from(socket.rooms),
+      rooms: Array.from(socket.rooms)
     });
 
     // Handle events
@@ -310,7 +310,7 @@ class WebSocketServer {
 
     // Check if user has other connections
     const hasOtherConnections = Array.from(this.connections.values()).some(
-      conn => conn.userId === userId,
+      conn => conn.userId === userId
     );
 
     if (!hasOtherConnections) {
@@ -385,7 +385,7 @@ class WebSocketServer {
     this.io.to('admin:system').emit('user:presence', {
       userId,
       status,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
   }
 
@@ -395,7 +395,7 @@ class WebSocketServer {
   emitToUser(userId, event, data) {
     this.io.to(`user:${userId}`).emit(event, {
       ...data,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
     logger.info(`[WebSocketServer] Emitted ${event} to user: ${userId}`);
   }
@@ -406,7 +406,7 @@ class WebSocketServer {
   emitToRoom(room, event, data) {
     this.io.to(room).emit(event, {
       ...data,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
     logger.info(`[WebSocketServer] Emitted ${event} to room: ${room}`);
   }
@@ -417,7 +417,7 @@ class WebSocketServer {
   broadcast(event, data) {
     this.io.emit(event, {
       ...data,
-      timestamp: new Date(),
+      timestamp: new Date()
     });
     logger.info(`[WebSocketServer] Broadcasted ${event} to all clients`);
   }
@@ -434,8 +434,8 @@ class WebSocketServer {
       rooms: this.io.sockets.adapter.rooms.size,
       connections: Array.from(this.connections.entries()).map(([socketId, info]) => ({
         socketId,
-        ...info,
-      })),
+        ...info
+      }))
     };
   }
 }
@@ -506,7 +506,7 @@ class WebSocketEventHandler extends EventEmitter {
       applicationId: data.applicationId,
       applicationNumber: data.applicationNumber,
       standardName: data.standardName,
-      status: data.status,
+      status: data.status
     });
 
     // Notify admins
@@ -516,11 +516,11 @@ class WebSocketEventHandler extends EventEmitter {
       farmerName: data.farmerName,
       farmName: data.farmName,
       standardName: data.standardName,
-      submittedDate: data.submittedDate,
+      submittedDate: data.submittedDate
     });
 
     logger.info(
-      `[WebSocketEventHandler] Application created notification sent: ${data.applicationId}`,
+      `[WebSocketEventHandler] Application created notification sent: ${data.applicationId}`
     );
   }
 
@@ -534,7 +534,7 @@ class WebSocketEventHandler extends EventEmitter {
       applicationId: data.applicationId,
       applicationNumber: data.applicationNumber,
       status: data.status,
-      updatedFields: data.updatedFields,
+      updatedFields: data.updatedFields
     });
 
     // Notify assigned admin if exists
@@ -542,7 +542,7 @@ class WebSocketEventHandler extends EventEmitter {
       this.wsServer.emitToUser(data.assignedAdminId, 'application:updated', {
         applicationId: data.applicationId,
         applicationNumber: data.applicationNumber,
-        status: data.status,
+        status: data.status
       });
     }
   }
@@ -557,7 +557,7 @@ class WebSocketEventHandler extends EventEmitter {
       paymentId: data.paymentId,
       applicationNumber: data.applicationNumber,
       amount: data.amount,
-      receiptNumber: data.receiptNumber,
+      receiptNumber: data.receiptNumber
     });
 
     // Notify admins
@@ -565,7 +565,7 @@ class WebSocketEventHandler extends EventEmitter {
       paymentId: data.paymentId,
       applicationNumber: data.applicationNumber,
       farmerName: data.farmerName,
-      amount: data.amount,
+      amount: data.amount
     });
 
     logger.info(`[WebSocketEventHandler] Payment confirmed notification sent: ${data.paymentId}`);
@@ -585,11 +585,11 @@ class WebSocketEventHandler extends EventEmitter {
       issuedDate: data.issuedDate,
       expiryDate: data.expiryDate,
       pdfUrl: data.pdfUrl,
-      celebration: true, // Trigger celebration animation
+      celebration: true // Trigger celebration animation
     });
 
     logger.info(
-      `[WebSocketEventHandler] Certificate issued notification sent: ${data.certificateId}`,
+      `[WebSocketEventHandler] Certificate issued notification sent: ${data.certificateId}`
     );
   }
 
@@ -604,7 +604,7 @@ class WebSocketEventHandler extends EventEmitter {
       message: data.message,
       type: data.type, // info, warning, error, success
       priority: data.priority, // low, normal, high
-      actionUrl: data.actionUrl,
+      actionUrl: data.actionUrl
     });
 
     logger.info('[WebSocketEventHandler] System announcement broadcasted');
@@ -657,7 +657,7 @@ app.get('/api/websocket/stats', (req, res) => {
   const stats = wsServer.getStats();
   res.json({
     success: true,
-    data: stats,
+    data: stats
   });
 });
 ```
@@ -720,13 +720,13 @@ export function useWebSocket(options: WebSocketOptions = {}): UseWebSocketReturn
 
     const socket = io(process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:3000', {
       auth: {
-        token,
+        token
       },
       transports: ['websocket', 'polling'],
       reconnection: true,
       reconnectionDelay: 1000,
       reconnectionDelayMax: 5000,
-      reconnectionAttempts: 5,
+      reconnectionAttempts: 5
     });
 
     // Connection events
@@ -795,7 +795,7 @@ export function useWebSocket(options: WebSocketOptions = {}): UseWebSocketReturn
     disconnect,
     emit,
     on,
-    off,
+    off
   };
 }
 ```
@@ -1297,7 +1297,7 @@ useEffect(() => {
       setApplication(prev => ({
         ...prev,
         status: data.status,
-        updatedAt: data.timestamp,
+        updatedAt: data.timestamp
       }));
 
       // Show toast
@@ -1408,8 +1408,8 @@ describe('WebSocketServer', () => {
       const port = httpServer.address().port;
       clientSocket = new Client(`http://localhost:${port}`, {
         auth: {
-          token: 'valid-jwt-token',
-        },
+          token: 'valid-jwt-token'
+        }
       });
       clientSocket.on('connect', done);
     });
@@ -1483,7 +1483,7 @@ describe('WebSocketServer', () => {
     it('should broadcast to all clients', done => {
       wsServer.broadcast('system:announcement', {
         title: 'Test',
-        message: 'Test message',
+        message: 'Test message'
       });
 
       clientSocket.on('system:announcement', data => {
@@ -1525,7 +1525,7 @@ describe('useWebSocket', () => {
       on: vi.fn(),
       off: vi.fn(),
       emit: vi.fn(),
-      disconnect: vi.fn(),
+      disconnect: vi.fn()
     };
 
     (io as any).mockReturnValue(mockSocket);
@@ -1597,14 +1597,14 @@ describe('WebSocket Event Integration', () => {
     // Login to get token
     const loginResponse = await request(server).post('/api/auth/login').send({
       email: 'farmer@test.com',
-      password: 'password123',
+      password: 'password123'
     });
 
     authToken = loginResponse.body.data.token;
 
     // Connect WebSocket client
     clientSocket = new Client(`http://localhost:${port}`, {
-      auth: { token: authToken },
+      auth: { token: authToken }
     });
 
     await new Promise(resolve => {
@@ -1630,8 +1630,8 @@ describe('WebSocket Event Integration', () => {
         standardId: 'std-001',
         farmData: {
           farmName: 'Test Farm',
-          cropType: 'Rice',
-        },
+          cropType: 'Rice'
+        }
       });
 
     const notification = await notificationPromise;
@@ -1647,7 +1647,7 @@ describe('WebSocket Event Integration', () => {
     await request(server).post('/api/webhooks/payment').send({
       paymentId: 'pay-123',
       status: 'completed',
-      amount: 5000,
+      amount: 5000
     });
 
     const notification = await notificationPromise;
@@ -1666,7 +1666,7 @@ describe('WebSocket Event Integration', () => {
       .set('Authorization', `Bearer ${authToken}`)
       .send({
         title: 'Test Announcement',
-        message: 'This is a test',
+        message: 'This is a test'
       })
       .end();
   });
@@ -1708,8 +1708,8 @@ test.describe('Real-time Notifications', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        }
       });
     });
 
@@ -1750,7 +1750,7 @@ test.describe('Real-time Notifications', () => {
     await page.evaluate(async () => {
       await fetch('/api/test/trigger-payment', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json' }
       });
     });
 
@@ -1790,7 +1790,7 @@ async function runLoadTest() {
   // Create connections
   for (let i = 0; i < CONCURRENT_CONNECTIONS; i++) {
     const client = new Client(SERVER_URL, {
-      auth: { token: 'test-token' },
+      auth: { token: 'test-token' }
     });
 
     clients.push(client);
@@ -1806,8 +1806,8 @@ async function runLoadTest() {
       client =>
         new Promise(resolve => {
           client.on('connect', resolve);
-        }),
-    ),
+        })
+    )
   );
 
   console.log(`All clients connected in ${Date.now() - startTime}ms`);
@@ -1998,8 +1998,8 @@ module.exports = {
       instances: 1,
       env: {
         NODE_ENV: 'production',
-        PORT: 3000,
-      },
+        PORT: 3000
+      }
     },
     {
       name: 'gacp-websocket-2',
@@ -2007,8 +2007,8 @@ module.exports = {
       instances: 1,
       env: {
         NODE_ENV: 'production',
-        PORT: 3001,
-      },
+        PORT: 3001
+      }
     },
     {
       name: 'gacp-websocket-3',
@@ -2016,10 +2016,10 @@ module.exports = {
       instances: 1,
       env: {
         NODE_ENV: 'production',
-        PORT: 3002,
-      },
-    },
-  ],
+        PORT: 3002
+      }
+    }
+  ]
 };
 ```
 
@@ -2052,13 +2052,13 @@ setInterval(async () => {
     logger.info('[WebSocketMonitor] Connection Stats:', {
       totalConnections: stats.totalConnections,
       uniqueUsers: stats.uniqueUsers,
-      rooms: stats.rooms,
+      rooms: stats.rooms
     });
 
     // Alert if too many connections
     if (stats.totalConnections > 10000) {
       logger.warn('[WebSocketMonitor] High connection count!', {
-        count: stats.totalConnections,
+        count: stats.totalConnections
       });
     }
 
@@ -2135,7 +2135,7 @@ const rateLimit = require('express-rate-limit');
 const wsRateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 1000, // Max 1000 messages per window
-  message: 'Too many messages, please try again later',
+  message: 'Too many messages, please try again later'
 });
 ```
 

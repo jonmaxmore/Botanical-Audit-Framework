@@ -198,7 +198,7 @@ test('should detect payment timeout after 15 minutes', () => {
     status: 'PENDING',
     reason: 'RESUBMISSION_FEE',
     createdAt: new Date('2025-10-14T10:00:00Z'),
-    expiresAt: new Date('2025-10-14T10:15:00Z'), // 15 min later
+    expiresAt: new Date('2025-10-14T10:15:00Z') // 15 min later
   };
 
   // Mock current time to 16 minutes later
@@ -228,7 +228,7 @@ test('should NOT timeout before 15 minutes', () => {
     status: 'PENDING',
     reason: 'RESUBMISSION_FEE',
     createdAt: new Date('2025-10-14T10:00:00Z'),
-    expiresAt: new Date('2025-10-14T10:15:00Z'),
+    expiresAt: new Date('2025-10-14T10:15:00Z')
   };
 
   // Mock current time to 14 minutes later
@@ -258,7 +258,7 @@ test('should calculate remaining payment time correctly', () => {
     status: 'PENDING',
     reason: 'RESUBMISSION_FEE',
     createdAt: new Date('2025-10-14T10:00:00Z'),
-    expiresAt: new Date('2025-10-14T10:15:00Z'),
+    expiresAt: new Date('2025-10-14T10:15:00Z')
   };
 
   // 5 minutes left
@@ -291,7 +291,7 @@ test('should allow first reschedule', () => {
     rejectionCount: 0,
     rescheduleCount: 0,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   const result = canReschedule(application);
@@ -318,7 +318,7 @@ test('should block second reschedule', () => {
     rejectionCount: 0,
     rescheduleCount: 1, // Already rescheduled once
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   const result = canReschedule(application);
@@ -345,7 +345,7 @@ test('should block reschedule if status is not PENDING_INSPECTION', () => {
     rejectionCount: 0,
     rescheduleCount: 0,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   const result = canReschedule(application);
@@ -372,7 +372,7 @@ test('should increment reschedule count', () => {
     rejectionCount: 0,
     rescheduleCount: 0,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   const updated = recordReschedule(application);
@@ -399,7 +399,7 @@ test('should block application during 30-day wait period', () => {
     status: 'REVOKED',
     revokedAt: new Date('2025-10-01'), // Revoked 1 day ago
     expiresAt: new Date('2026-10-01'),
-    createdAt: new Date(),
+    createdAt: new Date()
   };
 
   // Mock current time to 1 day after revocation
@@ -432,7 +432,7 @@ test('should allow application after 30-day wait period', () => {
     status: 'REVOKED',
     revokedAt: new Date('2025-09-01'), // Revoked 31 days ago
     expiresAt: new Date('2026-09-01'),
-    createdAt: new Date(),
+    createdAt: new Date()
   };
 
   // Mock current time to 31 days after revocation
@@ -464,7 +464,7 @@ test('should allow application for non-revoked certificate', () => {
     status: 'ACTIVE',
     revokedAt: undefined,
     expiresAt: new Date('2026-10-01'),
-    createdAt: new Date(),
+    createdAt: new Date()
   };
 
   const result = canApplyAfterRevocation(certificate);
@@ -524,7 +524,7 @@ test('should allow cancellation for PENDING_INSPECTION status', () => {
     rejectionCount: 0,
     rescheduleCount: 0,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   const result = canCancelApplication(application);
@@ -551,7 +551,7 @@ test('should block cancellation for APPROVED status', () => {
     rejectionCount: 0,
     rescheduleCount: 0,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 
   const result = canCancelApplication(application);
@@ -584,9 +584,9 @@ module.exports = {
       branches: 80,
       functions: 80,
       lines: 80,
-      statements: 80,
-    },
-  },
+      statements: 80
+    }
+  }
 };
 ```
 

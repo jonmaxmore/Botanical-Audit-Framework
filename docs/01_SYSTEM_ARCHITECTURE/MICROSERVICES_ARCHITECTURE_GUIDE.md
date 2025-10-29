@@ -836,7 +836,7 @@ GET http://document-service:3008/documents/:docId
 // Application Service → RabbitMQ
 publish('application.submitted', {
   application_id: 'APP-001',
-  farmer_id: 'F-123',
+  farmer_id: 'F-123'
 });
 
 // Notification Service ← RabbitMQ
@@ -1168,7 +1168,7 @@ export async function connectDatabase() {
   try {
     await mongoose.connect(MONGO_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     });
 
     logger.info('✅ Connected to MongoDB (auth_db)');
@@ -1220,7 +1220,7 @@ export async function publish(eventName: string, data: any) {
   const message = JSON.stringify({
     event: eventName,
     data,
-    timestamp: new Date(),
+    timestamp: new Date()
   });
 
   channel.publish('gacp.events', eventName, Buffer.from(message));
@@ -1277,18 +1277,18 @@ export class AuthController {
       // Publish event
       await publish('user.logged_in', {
         user_id: result.user.id,
-        email: result.user.email,
+        email: result.user.email
       });
 
       res.json({
         success: true,
-        data: result,
+        data: result
       });
     } catch (error) {
       logger.error('Login error:', error);
       res.status(401).json({
         success: false,
-        error: { message: 'Invalid credentials' },
+        error: { message: 'Invalid credentials' }
       });
     }
   }
@@ -1302,18 +1302,18 @@ export class AuthController {
       // Publish event
       await publish('user.registered', {
         user_id: user.id,
-        email: user.email,
+        email: user.email
       });
 
       res.status(201).json({
         success: true,
-        data: user,
+        data: user
       });
     } catch (error) {
       logger.error('Register error:', error);
       res.status(400).json({
         success: false,
-        error: { message: error.message },
+        error: { message: error.message }
       });
     }
   }
@@ -1608,8 +1608,8 @@ await consul.agent.service.register({
   port: 3001,
   check: {
     http: 'http://10.0.0.1:3001/health',
-    interval: '10s',
-  },
+    interval: '10s'
+  }
 });
 
 // Discover service
@@ -1763,14 +1763,14 @@ const tracer = initTracer(
     serviceName: 'auth-service',
     sampler: {
       type: 'const',
-      param: 1,
+      param: 1
     },
     reporter: {
       agentHost: 'jaeger-agent',
-      agentPort: 6831,
-    },
+      agentPort: 6831
+    }
   },
-  {},
+  {}
 );
 
 // Middleware
@@ -1797,13 +1797,13 @@ const client = require('prom-client');
 const httpRequestDuration = new client.Histogram({
   name: 'http_request_duration_seconds',
   help: 'Duration of HTTP requests in seconds',
-  labelNames: ['method', 'route', 'status_code'],
+  labelNames: ['method', 'route', 'status_code']
 });
 
 const httpRequestTotal = new client.Counter({
   name: 'http_requests_total',
   help: 'Total number of HTTP requests',
-  labelNames: ['method', 'route', 'status_code'],
+  labelNames: ['method', 'route', 'status_code']
 });
 
 // Middleware
@@ -1815,13 +1815,13 @@ app.use((req, res, next) => {
 
     httpRequestDuration.observe(
       { method: req.method, route: req.route?.path || req.path, status_code: res.statusCode },
-      duration,
+      duration
     );
 
     httpRequestTotal.inc({
       method: req.method,
       route: req.route?.path || req.path,
-      status_code: res.statusCode,
+      status_code: res.statusCode
     });
   });
 
@@ -1848,30 +1848,30 @@ const logger = winston.createLogger({
   format: winston.format.json(),
   defaultMeta: {
     service: 'auth-service',
-    environment: process.env.NODE_ENV,
+    environment: process.env.NODE_ENV
   },
   transports: [
     // Console
     new winston.transports.Console({
-      format: winston.format.simple(),
+      format: winston.format.simple()
     }),
 
     // Elasticsearch
     new ElasticsearchTransport({
       level: 'info',
       clientOpts: {
-        node: 'http://elasticsearch:9200',
+        node: 'http://elasticsearch:9200'
       },
-      index: 'gacp-logs',
-    }),
-  ],
+      index: 'gacp-logs'
+    })
+  ]
 });
 
 // Usage
 logger.info('User logged in', {
   user_id: 'F-123',
   ip_address: req.ip,
-  user_agent: req.get('User-Agent'),
+  user_agent: req.get('User-Agent')
 });
 ```
 

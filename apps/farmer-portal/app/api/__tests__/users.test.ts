@@ -32,7 +32,7 @@ const createMockUser = (overrides?: Partial<User>): User => ({
   phoneNumber: '0812345678',
   avatarUrl: null,
   createdAt: new Date('2025-01-01'),
-  ...overrides,
+  ...overrides
 });
 
 const createMockNotification = (overrides?: Partial<UserNotification>): UserNotification => ({
@@ -42,7 +42,7 @@ const createMockNotification = (overrides?: Partial<UserNotification>): UserNoti
   message: 'Your application has been approved',
   read: false,
   createdAt: new Date('2025-10-01'),
-  ...overrides,
+  ...overrides
 });
 
 describe('API Routes: /api/users', () => {
@@ -65,7 +65,7 @@ describe('API Routes: /api/users', () => {
       const stats = {
         applications: 5,
         certificates: 2,
-        inspections: 3,
+        inspections: 3
       };
 
       expect(stats.applications).toBe(5);
@@ -183,7 +183,7 @@ describe('API Routes: /api/users', () => {
       const notifications = [
         createMockNotification({ userId: 'user-001', id: 'notif-001' }),
         createMockNotification({ userId: 'user-002', id: 'notif-002' }),
-        createMockNotification({ userId: 'user-001', id: 'notif-003' }),
+        createMockNotification({ userId: 'user-001', id: 'notif-003' })
       ];
 
       const userNotifications = notifications.filter(notif => notif.userId === 'user-001');
@@ -195,7 +195,7 @@ describe('API Routes: /api/users', () => {
       const notifications = [
         createMockNotification({ read: false }),
         createMockNotification({ read: true }),
-        createMockNotification({ read: false }),
+        createMockNotification({ read: false })
       ];
 
       const unreadNotifications = notifications.filter(notif => !notif.read);
@@ -205,7 +205,7 @@ describe('API Routes: /api/users', () => {
 
     it('should paginate notifications', () => {
       const notifications = Array.from({ length: 25 }, (_, i) =>
-        createMockNotification({ id: `notif-${i}` }),
+        createMockNotification({ id: `notif-${i}` })
       );
 
       const page = 2;
@@ -221,11 +221,11 @@ describe('API Routes: /api/users', () => {
       const notifications = [
         createMockNotification({ createdAt: new Date('2025-09-01') }),
         createMockNotification({ createdAt: new Date('2025-10-01') }),
-        createMockNotification({ createdAt: new Date('2025-08-01') }),
+        createMockNotification({ createdAt: new Date('2025-08-01') })
       ];
 
       const sorted = [...notifications].sort(
-        (a, b) => b.createdAt.getTime() - a.createdAt.getTime(),
+        (a, b) => b.createdAt.getTime() - a.createdAt.getTime()
       );
 
       expect(sorted[0].createdAt.getMonth()).toBe(9); // October (0-indexed)
@@ -244,7 +244,7 @@ describe('API Routes: /api/users', () => {
     it('should find notification by id', () => {
       const notifications = [
         createMockNotification({ id: 'notif-001' }),
-        createMockNotification({ id: 'notif-002' }),
+        createMockNotification({ id: 'notif-002' })
       ];
 
       const found = notifications.find(notif => notif.id === 'notif-001');

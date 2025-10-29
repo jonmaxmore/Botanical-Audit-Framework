@@ -7,7 +7,7 @@
 import {
   setupIntegrationTest,
   teardownIntegrationTest,
-  mockDb,
+  mockDb
 } from '@/lib/test-utils/http-test-helpers';
 
 describe('Applications API Integration Tests - Business Flow Validation', () => {
@@ -27,7 +27,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         password: 'hashed_password',
         name: 'Test Farmer',
         role: 'farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       // Create application
@@ -39,15 +39,15 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
           farmName: 'Test Farm',
           farmSize: '10 rai',
           location: 'Chiang Mai',
-          crops: ['Cannabis'],
-        },
+          crops: ['Cannabis']
+        }
       });
 
       // Verify application created correctly
       expect(application).toMatchObject({
         farmerId: 'F101',
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
       expect(application.farmDetails.farmName).toBe('Test Farm');
       expect(application.id).toBeDefined();
@@ -59,7 +59,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const appIds = [];
@@ -69,7 +69,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         const app = await mockDb.createApplication({
           farmerId: farmer.farmerId,
           type: 'initial',
-          status: 'draft',
+          status: 'draft'
         });
         appIds.push(app.id);
       }
@@ -84,13 +84,13 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const application = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
 
       // Verify farmer can retrieve their applications
@@ -107,19 +107,19 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       // Create multiple applications
       await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
       await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'renewal',
-        status: 'submitted',
+        status: 'submitted'
       });
 
       const applications = await mockDb.findApplicationsByFarmerId(farmer.farmerId);
@@ -134,14 +134,14 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const app = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
         status: 'draft',
-        farmDetails: { farmName: 'Test Farm' },
+        farmDetails: { farmName: 'Test Farm' }
       });
 
       const retrieved = await mockDb.findApplicationById(app.id);
@@ -162,27 +162,27 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer1@test.com',
         password: 'hashed',
         name: 'Farmer 1',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const farmer2 = await mockDb.createUser({
         email: 'farmer2@test.com',
         password: 'hashed',
         name: 'Farmer 2',
-        farmerId: 'F102',
+        farmerId: 'F102'
       });
 
       // Create applications for each
       await mockDb.createApplication({
         farmerId: farmer1.farmerId,
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
 
       await mockDb.createApplication({
         farmerId: farmer2.farmerId,
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
 
       // Verify isolation
@@ -202,20 +202,20 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const app = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
         status: 'draft',
-        farmDetails: { farmName: 'Original Name' },
+        farmDetails: { farmName: 'Original Name' }
       });
 
       // Update application
       const updated = await mockDb.updateApplication(app.id, {
         farmDetails: { farmName: 'Updated Name' },
-        status: 'in-progress',
+        status: 'in-progress'
       });
 
       expect(updated).toBeDefined();
@@ -226,7 +226,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
 
     it('should return null when updating non-existent application', async () => {
       const result = await mockDb.updateApplication('nonexistent_id', {
-        status: 'updated',
+        status: 'updated'
       });
 
       expect(result).toBeNull();
@@ -237,18 +237,18 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const app = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
 
       // Update without changing farmerId
       const updated = await mockDb.updateApplication(app.id, {
-        status: 'submitted',
+        status: 'submitted'
       });
 
       expect(updated?.farmerId).toBe('F101');
@@ -261,13 +261,13 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const app = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
 
       expect(app.status).toBe('draft');
@@ -275,7 +275,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
       // Submit application
       const submitted = await mockDb.updateApplication(app.id, {
         status: 'submitted',
-        submittedAt: new Date(),
+        submittedAt: new Date()
       });
 
       expect(submitted?.status).toBe('submitted');
@@ -287,30 +287,30 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const app = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
 
       // Transition: draft -> submitted -> under-review -> approved
       const submitted = await mockDb.updateApplication(app.id, {
-        status: 'submitted',
+        status: 'submitted'
       });
       expect(submitted?.status).toBe('submitted');
 
       const underReview = await mockDb.updateApplication(app.id, {
         status: 'under-review',
-        assignedInspector: 'INSP001',
+        assignedInspector: 'INSP001'
       });
       expect(underReview?.status).toBe('under-review');
 
       const approved = await mockDb.updateApplication(app.id, {
         status: 'approved',
-        approvedAt: new Date(),
+        approvedAt: new Date()
       });
       expect(approved?.status).toBe('approved');
       expect(approved?.approvedAt).toBeDefined();
@@ -323,7 +323,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const app = await mockDb.createApplication({
@@ -334,8 +334,8 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
           farmName: 'Test Farm',
           farmSize: '10 rai',
           location: 'Chiang Mai',
-          crops: ['Cannabis'],
-        },
+          crops: ['Cannabis']
+        }
       });
 
       // Validate required fields
@@ -350,7 +350,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
       // Should allow submission
       if (hasRequiredFields) {
         const submitted = await mockDb.updateApplication(app.id, {
-          status: 'submitted',
+          status: 'submitted'
         });
         expect(submitted?.status).toBe('submitted');
       }
@@ -361,7 +361,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
         email: 'farmer@test.com',
         password: 'hashed',
         name: 'Farmer',
-        farmerId: 'F101',
+        farmerId: 'F101'
       });
 
       const beforeCreate = new Date();
@@ -369,7 +369,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
       const app = await mockDb.createApplication({
         farmerId: farmer.farmerId,
         type: 'initial',
-        status: 'draft',
+        status: 'draft'
       });
 
       const afterCreate = new Date();
@@ -380,7 +380,7 @@ describe('Applications API Integration Tests - Business Flow Validation', () => 
 
       // Update application
       const updated = await mockDb.updateApplication(app.id, {
-        status: 'submitted',
+        status: 'submitted'
       });
 
       expect(updated?.modifiedAt).toBeDefined();

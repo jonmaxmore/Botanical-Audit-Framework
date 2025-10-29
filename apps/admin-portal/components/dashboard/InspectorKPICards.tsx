@@ -18,8 +18,18 @@ interface InspectorKPICardsProps {
 
 export default function InspectorKPICards({ data }: InspectorKPICardsProps) {
   const cards = [
-    { title: 'ตรวจสอบวันนี้', value: data.completedToday, icon: <CheckCircle />, color: 'success.main' },
-    { title: 'นัดหมายสัปดาห์นี้', value: data.upcomingThisWeek, icon: <Schedule />, color: 'warning.main' },
+    {
+      title: 'ตรวจสอบวันนี้',
+      value: data.completedToday,
+      icon: <CheckCircle />,
+      color: 'success.main',
+    },
+    {
+      title: 'นัดหมายสัปดาห์นี้',
+      value: data.upcomingThisWeek,
+      icon: <Schedule />,
+      color: 'warning.main',
+    },
     { title: 'Video Call', value: data.videoCallCount, icon: <VideoCall />, color: 'primary.main' },
     { title: 'Onsite', value: data.onsiteCount, icon: <LocationOn />, color: 'secondary.main' },
   ];

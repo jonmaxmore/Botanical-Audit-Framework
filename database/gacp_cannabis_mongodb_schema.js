@@ -17,33 +17,33 @@ db.createCollection('cannabis_farms', {
         farm_id: {
           bsonType: 'string',
           pattern: '^FARM-[0-9]{4}-[0-9]{3}$',
-          description: 'Unique farm identifier',
+          description: 'Unique farm identifier'
         },
         farm_name: {
           bsonType: 'string',
           minLength: 1,
-          maxLength: 255,
+          maxLength: 255
         },
         license_number: {
           bsonType: 'string',
           minLength: 1,
-          maxLength: 50,
+          maxLength: 50
         },
         owner_name: {
           bsonType: 'string',
           minLength: 1,
-          maxLength: 255,
+          maxLength: 255
         },
         owner_id_card: {
           bsonType: 'string',
-          pattern: '^[0-9]{13}$',
+          pattern: '^[0-9]{13}$'
         },
         contact: {
           bsonType: 'object',
           properties: {
             phone: { bsonType: 'string' },
-            email: { bsonType: 'string' },
-          },
+            email: { bsonType: 'string' }
+          }
         },
         location: {
           bsonType: 'object',
@@ -58,10 +58,10 @@ db.createCollection('cannabis_farms', {
               bsonType: 'object',
               properties: {
                 latitude: { bsonType: 'double' },
-                longitude: { bsonType: 'double' },
-              },
-            },
-          },
+                longitude: { bsonType: 'double' }
+              }
+            }
+          }
         },
         farm_details: {
           bsonType: 'object',
@@ -69,12 +69,12 @@ db.createCollection('cannabis_farms', {
             total_area: { bsonType: 'double', minimum: 0 },
             cultivation_area: { bsonType: 'double', minimum: 0 },
             greenhouse_area: { bsonType: 'double', minimum: 0 },
-            outdoor_area: { bsonType: 'double', minimum: 0 },
-          },
+            outdoor_area: { bsonType: 'double', minimum: 0 }
+          }
         },
         gacp_status: {
           bsonType: 'string',
-          enum: ['pending', 'under_review', 'certified', 'expired', 'suspended', 'revoked'],
+          enum: ['pending', 'under_review', 'certified', 'expired', 'suspended', 'revoked']
         },
         certification: {
           bsonType: 'object',
@@ -82,15 +82,15 @@ db.createCollection('cannabis_farms', {
             date: { bsonType: 'date' },
             expiry_date: { bsonType: 'date' },
             inspector_id: { bsonType: 'string' },
-            compliance_score: { bsonType: 'int', minimum: 0, maximum: 100 },
-          },
+            compliance_score: { bsonType: 'int', minimum: 0, maximum: 100 }
+          }
         },
         created_at: { bsonType: 'date' },
         updated_at: { bsonType: 'date' },
-        is_active: { bsonType: 'bool' },
-      },
-    },
-  },
+        is_active: { bsonType: 'bool' }
+      }
+    }
+  }
 });
 
 // Create indexes for cannabis_farms
@@ -108,7 +108,7 @@ const sampleFarm = {
   owner_id_card: '1234567890123',
   contact: {
     phone: '081-234-5678',
-    email: 'somchai@farm.com',
+    email: 'somchai@farm.com'
   },
   location: {
     address: '123 หมู่ 5 ต.ในเมือง',
@@ -118,25 +118,25 @@ const sampleFarm = {
     postal_code: '36000',
     gps: {
       latitude: 15.8059,
-      longitude: 102.0285,
-    },
+      longitude: 102.0285
+    }
   },
   farm_details: {
     total_area: 10.5,
     cultivation_area: 8.0,
     greenhouse_area: 5.0,
-    outdoor_area: 3.0,
+    outdoor_area: 3.0
   },
   gacp_status: 'certified',
   certification: {
     date: new Date('2025-01-15'),
     expiry_date: new Date('2026-01-15'),
     inspector_id: 'INSP-001',
-    compliance_score: 92,
+    compliance_score: 92
   },
   created_at: new Date(),
   updated_at: new Date(),
-  is_active: true,
+  is_active: true
 };
 
 // ======================================================================
@@ -151,7 +151,7 @@ db.createCollection('cultivation_cycles', {
       properties: {
         cycle_id: {
           bsonType: 'string',
-          pattern: '^CYCLE-[0-9]{4}-[0-9]{3}$',
+          pattern: '^CYCLE-[0-9]{4}-[0-9]{3}$'
         },
         farm_id: { bsonType: 'string' },
         plot_name: { bsonType: 'string' },
@@ -162,12 +162,12 @@ db.createCollection('cultivation_cycles', {
             name: { bsonType: 'string' },
             type: {
               bsonType: 'string',
-              enum: ['indica', 'sativa', 'hybrid'],
+              enum: ['indica', 'sativa', 'hybrid']
             },
             seed_source: { bsonType: 'string' },
             certificate_number: { bsonType: 'string' },
-            genetics_info: { bsonType: 'string' },
-          },
+            genetics_info: { bsonType: 'string' }
+          }
         },
         timeline: {
           bsonType: 'object',
@@ -175,8 +175,8 @@ db.createCollection('cultivation_cycles', {
             planned_start_date: { bsonType: 'date' },
             actual_start_date: { bsonType: 'date' },
             planned_harvest_date: { bsonType: 'date' },
-            actual_harvest_date: { bsonType: 'date' },
-          },
+            actual_harvest_date: { bsonType: 'date' }
+          }
         },
         plant_info: {
           bsonType: 'object',
@@ -186,9 +186,9 @@ db.createCollection('cultivation_cycles', {
             cultivation_area: { bsonType: 'double', minimum: 0 },
             method: {
               bsonType: 'string',
-              enum: ['indoor', 'greenhouse', 'outdoor', 'hydroponic', 'soil'],
-            },
-          },
+              enum: ['indoor', 'greenhouse', 'outdoor', 'hydroponic', 'soil']
+            }
+          }
         },
         status: {
           bsonType: 'string',
@@ -201,12 +201,12 @@ db.createCollection('cultivation_cycles', {
             'drying',
             'cured',
             'completed',
-            'failed',
-          ],
+            'failed'
+          ]
         },
         current_phase: {
           bsonType: 'string',
-          enum: ['pre_planting', 'planting', 'growing', 'flowering', 'harvesting', 'post_harvest'],
+          enum: ['pre_planting', 'planting', 'growing', 'flowering', 'harvesting', 'post_harvest']
         },
         production_results: {
           bsonType: 'object',
@@ -215,17 +215,17 @@ db.createCollection('cultivation_cycles', {
             total_yield_dry: { bsonType: 'double', minimum: 0 },
             quality_grade: {
               bsonType: 'string',
-              enum: ['Grade A', 'Grade B', 'Grade C', 'Below Standard'],
+              enum: ['Grade A', 'Grade B', 'Grade C', 'Below Standard']
             },
             thc_content: { bsonType: 'double', minimum: 0, maximum: 100 },
-            cbd_content: { bsonType: 'double', minimum: 0, maximum: 100 },
-          },
+            cbd_content: { bsonType: 'double', minimum: 0, maximum: 100 }
+          }
         },
         created_at: { bsonType: 'date' },
-        updated_at: { bsonType: 'date' },
-      },
-    },
-  },
+        updated_at: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.cultivation_cycles.createIndex({ farm_id: 1, status: 1 });
@@ -244,7 +244,7 @@ db.createCollection('sop_activities', {
       properties: {
         activity_id: {
           bsonType: 'string',
-          pattern: '^ACT-[0-9]{4}-[0-9]{6}$',
+          pattern: '^ACT-[0-9]{4}-[0-9]{6}$'
         },
         cycle_id: { bsonType: 'string' },
         template_id: { bsonType: 'string' },
@@ -254,18 +254,18 @@ db.createCollection('sop_activities', {
             scheduled_date: { bsonType: 'date' },
             scheduled_time: { bsonType: 'string' },
             completed_date: { bsonType: 'date' },
-            completed_time: { bsonType: 'string' },
-          },
+            completed_time: { bsonType: 'string' }
+          }
         },
         execution: {
           bsonType: 'object',
           properties: {
             status: {
               bsonType: 'string',
-              enum: ['pending', 'in_progress', 'completed', 'skipped', 'failed'],
+              enum: ['pending', 'in_progress', 'completed', 'skipped', 'failed']
             },
-            performed_by: { bsonType: 'string' },
-          },
+            performed_by: { bsonType: 'string' }
+          }
         },
         measurements: {
           bsonType: 'object',
@@ -273,42 +273,42 @@ db.createCollection('sop_activities', {
             temperature: { bsonType: 'double' },
             humidity: { bsonType: 'double' },
             ph: { bsonType: 'double' },
-            ec: { bsonType: 'double' },
-          },
+            ec: { bsonType: 'double' }
+          }
         },
         compliance: {
           bsonType: 'object',
           properties: {
             status: {
               bsonType: 'string',
-              enum: ['compliant', 'minor_deviation', 'major_deviation', 'non_compliant'],
+              enum: ['compliant', 'minor_deviation', 'major_deviation', 'non_compliant']
             },
             score: { bsonType: 'int', minimum: 0, maximum: 100 },
             deviation_reason: { bsonType: 'string' },
-            corrective_action: { bsonType: 'string' },
-          },
+            corrective_action: { bsonType: 'string' }
+          }
         },
         documentation: {
           bsonType: 'object',
           properties: {
             notes: { bsonType: 'string' },
             photos: { bsonType: 'array', items: { bsonType: 'string' } },
-            documents: { bsonType: 'array', items: { bsonType: 'string' } },
-          },
+            documents: { bsonType: 'array', items: { bsonType: 'string' } }
+          }
         },
         weather: {
           bsonType: 'object',
           properties: {
             conditions: { bsonType: 'string' },
             outdoor_temperature: { bsonType: 'double' },
-            outdoor_humidity: { bsonType: 'double' },
-          },
+            outdoor_humidity: { bsonType: 'double' }
+          }
         },
         created_at: { bsonType: 'date' },
-        updated_at: { bsonType: 'date' },
-      },
-    },
-  },
+        updated_at: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.sop_activities.createIndex({ cycle_id: 1, 'execution.status': 1 });
@@ -328,7 +328,7 @@ db.createCollection('sop_activity_templates', {
         template_id: { bsonType: 'string' },
         phase: {
           bsonType: 'string',
-          enum: ['pre_planting', 'planting', 'growing', 'flowering', 'harvesting', 'post_harvest'],
+          enum: ['pre_planting', 'planting', 'growing', 'flowering', 'harvesting', 'post_harvest']
         },
         category: {
           bsonType: 'string',
@@ -340,8 +340,8 @@ db.createCollection('sop_activity_templates', {
             'quality_testing',
             'documentation',
             'harvesting',
-            'processing',
-          ],
+            'processing'
+          ]
         },
         activity_name: { bsonType: 'string' },
         description: { bsonType: 'string' },
@@ -351,10 +351,10 @@ db.createCollection('sop_activity_templates', {
             is_mandatory: { bsonType: 'bool' },
             frequency: {
               bsonType: 'string',
-              enum: ['daily', 'weekly', 'biweekly', 'monthly', 'phase_based', 'as_needed'],
+              enum: ['daily', 'weekly', 'biweekly', 'monthly', 'phase_based', 'as_needed']
             },
-            compliance_weight: { bsonType: 'int', minimum: 1, maximum: 10 },
-          },
+            compliance_weight: { bsonType: 'int', minimum: 1, maximum: 10 }
+          }
         },
         standards: {
           bsonType: 'object',
@@ -363,44 +363,44 @@ db.createCollection('sop_activity_templates', {
               bsonType: 'object',
               properties: {
                 min: { bsonType: 'double' },
-                max: { bsonType: 'double' },
-              },
+                max: { bsonType: 'double' }
+              }
             },
             humidity: {
               bsonType: 'object',
               properties: {
                 min: { bsonType: 'double' },
-                max: { bsonType: 'double' },
-              },
+                max: { bsonType: 'double' }
+              }
             },
             ph: {
               bsonType: 'object',
               properties: {
                 min: { bsonType: 'double' },
-                max: { bsonType: 'double' },
-              },
+                max: { bsonType: 'double' }
+              }
             },
             ec: {
               bsonType: 'object',
               properties: {
                 min: { bsonType: 'double' },
-                max: { bsonType: 'double' },
-              },
-            },
-          },
+                max: { bsonType: 'double' }
+              }
+            }
+          }
         },
         documentation_requirements: {
           bsonType: 'object',
           properties: {
             photo_required: { bsonType: 'bool' },
             measurement_required: { bsonType: 'bool' },
-            lab_test_required: { bsonType: 'bool' },
-          },
+            lab_test_required: { bsonType: 'bool' }
+          }
         },
-        created_at: { bsonType: 'date' },
-      },
-    },
-  },
+        created_at: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.sop_activity_templates.createIndex({ phase: 1, category: 1 });
@@ -417,7 +417,7 @@ db.createCollection('quality_tests', {
       properties: {
         test_id: {
           bsonType: 'string',
-          pattern: '^TEST-[0-9]{4}-[0-9]{4}$',
+          pattern: '^TEST-[0-9]{4}-[0-9]{4}$'
         },
         cycle_id: { bsonType: 'string' },
         test_type: {
@@ -430,8 +430,8 @@ db.createCollection('quality_tests', {
             'environmental',
             'residue',
             'microbiology',
-            'potency',
-          ],
+            'potency'
+          ]
         },
         test_details: {
           bsonType: 'object',
@@ -440,25 +440,25 @@ db.createCollection('quality_tests', {
             laboratory_name: { bsonType: 'string' },
             laboratory_license: { bsonType: 'string' },
             sample_collection_date: { bsonType: 'date' },
-            sample_id: { bsonType: 'string' },
-          },
+            sample_id: { bsonType: 'string' }
+          }
         },
         test_parameters: {
           bsonType: 'array',
-          items: { bsonType: 'string' },
+          items: { bsonType: 'string' }
         },
         test_results: {
-          bsonType: 'object',
+          bsonType: 'object'
         },
         compliance: {
           bsonType: 'object',
           properties: {
             status: {
               bsonType: 'string',
-              enum: ['passed', 'failed', 'conditional', 'pending'],
+              enum: ['passed', 'failed', 'conditional', 'pending']
             },
-            gacp_standards_met: { bsonType: 'bool' },
-          },
+            gacp_standards_met: { bsonType: 'bool' }
+          }
         },
         certification: {
           bsonType: 'object',
@@ -466,21 +466,21 @@ db.createCollection('quality_tests', {
             certificate_number: { bsonType: 'string' },
             issue_date: { bsonType: 'date' },
             expiry_date: { bsonType: 'date' },
-            file_path: { bsonType: 'string' },
-          },
+            file_path: { bsonType: 'string' }
+          }
         },
         cannabis_specific: {
           bsonType: 'object',
           properties: {
             thc_percentage: { bsonType: 'double', minimum: 0, maximum: 100 },
             cbd_percentage: { bsonType: 'double', minimum: 0, maximum: 100 },
-            moisture_content: { bsonType: 'double', minimum: 0, maximum: 100 },
-          },
+            moisture_content: { bsonType: 'double', minimum: 0, maximum: 100 }
+          }
         },
-        created_at: { bsonType: 'date' },
-      },
-    },
-  },
+        created_at: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.quality_tests.createIndex({ cycle_id: 1, test_type: 1 });
@@ -499,7 +499,7 @@ db.createCollection('harvest_records', {
       properties: {
         harvest_id: {
           bsonType: 'string',
-          pattern: '^HARV-[0-9]{4}-[0-9]{4}$',
+          pattern: '^HARV-[0-9]{4}-[0-9]{4}$'
         },
         cycle_id: { bsonType: 'string' },
         harvest_details: {
@@ -507,8 +507,8 @@ db.createCollection('harvest_records', {
           properties: {
             harvest_date: { bsonType: 'date' },
             harvest_time: { bsonType: 'string' },
-            harvested_by: { bsonType: 'string' },
-          },
+            harvested_by: { bsonType: 'string' }
+          }
         },
         plant_info: {
           bsonType: 'object',
@@ -516,50 +516,50 @@ db.createCollection('harvest_records', {
             plants_harvested: { bsonType: 'int', minimum: 1 },
             method: {
               bsonType: 'string',
-              enum: ['whole_plant', 'selective', 'wet_trim', 'dry_trim'],
-            },
-          },
+              enum: ['whole_plant', 'selective', 'wet_trim', 'dry_trim']
+            }
+          }
         },
         weight_records: {
           bsonType: 'object',
           properties: {
             fresh_weight: { bsonType: 'double', minimum: 0 },
             estimated_dry_weight: { bsonType: 'double', minimum: 0 },
-            actual_dry_weight: { bsonType: 'double', minimum: 0 },
-          },
+            actual_dry_weight: { bsonType: 'double', minimum: 0 }
+          }
         },
         quality_assessment: {
           bsonType: 'object',
           properties: {
             visual_quality: {
               bsonType: 'string',
-              enum: ['excellent', 'good', 'fair', 'poor'],
+              enum: ['excellent', 'good', 'fair', 'poor']
             },
             trichome_development: {
               bsonType: 'string',
-              enum: ['clear', 'cloudy', 'amber', 'mixed'],
+              enum: ['clear', 'cloudy', 'amber', 'mixed']
             },
-            aroma_profile: { bsonType: 'string' },
-          },
+            aroma_profile: { bsonType: 'string' }
+          }
         },
         environmental_conditions: {
           bsonType: 'object',
           properties: {
             temperature: { bsonType: 'double' },
-            humidity: { bsonType: 'double' },
-          },
+            humidity: { bsonType: 'double' }
+          }
         },
         storage: {
           bsonType: 'object',
           properties: {
             location: { bsonType: 'string' },
-            conditions: { bsonType: 'string' },
-          },
+            conditions: { bsonType: 'string' }
+          }
         },
-        created_at: { bsonType: 'date' },
-      },
-    },
-  },
+        created_at: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.harvest_records.createIndex({ cycle_id: 1, 'harvest_details.harvest_date': -1 });
@@ -576,7 +576,7 @@ db.createCollection('compliance_assessments', {
       properties: {
         assessment_id: {
           bsonType: 'string',
-          pattern: '^COMP-[0-9]{4}-[0-9]{4}$',
+          pattern: '^COMP-[0-9]{4}-[0-9]{4}$'
         },
         farm_id: { bsonType: 'string' },
         cycle_id: { bsonType: 'string' },
@@ -586,11 +586,11 @@ db.createCollection('compliance_assessments', {
             assessment_date: { bsonType: 'date' },
             type: {
               bsonType: 'string',
-              enum: ['initial', 'periodic', 'follow_up', 'complaint_based', 'random'],
+              enum: ['initial', 'periodic', 'follow_up', 'complaint_based', 'random']
             },
             assessor_name: { bsonType: 'string' },
-            assessor_license: { bsonType: 'string' },
-          },
+            assessor_license: { bsonType: 'string' }
+          }
         },
         compliance_scores: {
           bsonType: 'object',
@@ -600,12 +600,12 @@ db.createCollection('compliance_assessments', {
             documentation: { bsonType: 'int', minimum: 0, maximum: 100 },
             quality_control: { bsonType: 'int', minimum: 0, maximum: 100 },
             traceability: { bsonType: 'int', minimum: 0, maximum: 100 },
-            overall: { bsonType: 'int', minimum: 0, maximum: 100 },
-          },
+            overall: { bsonType: 'int', minimum: 0, maximum: 100 }
+          }
         },
         compliance_level: {
           bsonType: 'string',
-          enum: ['excellent', 'good', 'satisfactory', 'needs_improvement', 'non_compliant'],
+          enum: ['excellent', 'good', 'satisfactory', 'needs_improvement', 'non_compliant']
         },
         violations: {
           bsonType: 'object',
@@ -613,8 +613,8 @@ db.createCollection('compliance_assessments', {
             total: { bsonType: 'int', minimum: 0 },
             critical: { bsonType: 'int', minimum: 0 },
             major: { bsonType: 'int', minimum: 0 },
-            minor: { bsonType: 'int', minimum: 0 },
-          },
+            minor: { bsonType: 'int', minimum: 0 }
+          }
         },
         recommendations: { bsonType: 'string' },
         corrective_actions_required: { bsonType: 'string' },
@@ -622,23 +622,23 @@ db.createCollection('compliance_assessments', {
           bsonType: 'object',
           properties: {
             required: { bsonType: 'bool' },
-            date: { bsonType: 'date' },
-          },
+            date: { bsonType: 'date' }
+          }
         },
         certification_decision: {
           bsonType: 'object',
           properties: {
             decision: {
               bsonType: 'string',
-              enum: ['approved', 'conditional', 'denied', 'suspended', 'revoked'],
+              enum: ['approved', 'conditional', 'denied', 'suspended', 'revoked']
             },
-            reason: { bsonType: 'string' },
-          },
+            reason: { bsonType: 'string' }
+          }
         },
-        created_at: { bsonType: 'date' },
-      },
-    },
-  },
+        created_at: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.compliance_assessments.createIndex({ farm_id: 1, 'assessment_details.assessment_date': -1 });
@@ -656,7 +656,7 @@ db.createCollection('cannabis_users', {
       properties: {
         user_id: {
           bsonType: 'string',
-          pattern: '^USER-[0-9]{4}$',
+          pattern: '^USER-[0-9]{4}$'
         },
         username: { bsonType: 'string', minLength: 3, maxLength: 100 },
         email: { bsonType: 'string', pattern: '^[^@]+@[^@]+\\.[^@]+$' },
@@ -667,20 +667,20 @@ db.createCollection('cannabis_users', {
             first_name: { bsonType: 'string' },
             last_name: { bsonType: 'string' },
             id_card_number: { bsonType: 'string', pattern: '^[0-9]{13}$' },
-            phone_number: { bsonType: 'string' },
-          },
+            phone_number: { bsonType: 'string' }
+          }
         },
         role_permissions: {
           bsonType: 'object',
           properties: {
             role: {
               bsonType: 'string',
-              enum: ['farmer', 'inspector', 'admin', 'lab_technician', 'auditor'],
+              enum: ['farmer', 'inspector', 'admin', 'lab_technician', 'auditor']
             },
             department: { bsonType: 'string' },
             license_number: { bsonType: 'string' },
-            authority_level: { bsonType: 'int', minimum: 1, maximum: 5 },
-          },
+            authority_level: { bsonType: 'int', minimum: 1, maximum: 5 }
+          }
         },
         farm_id: { bsonType: 'string' },
         account_status: {
@@ -688,14 +688,14 @@ db.createCollection('cannabis_users', {
           properties: {
             is_active: { bsonType: 'bool' },
             email_verified: { bsonType: 'bool' },
-            last_login: { bsonType: 'date' },
-          },
+            last_login: { bsonType: 'date' }
+          }
         },
         created_at: { bsonType: 'date' },
-        updated_at: { bsonType: 'date' },
-      },
-    },
-  },
+        updated_at: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.cannabis_users.createIndex({ username: 1 }, { unique: true });
@@ -714,13 +714,13 @@ db.createCollection('audit_trail', {
       properties: {
         audit_id: {
           bsonType: 'string',
-          pattern: '^AUDIT-[0-9]{4}-[0-9]{6}$',
+          pattern: '^AUDIT-[0-9]{4}-[0-9]{6}$'
         },
         collection_name: { bsonType: 'string' },
         record_id: { bsonType: 'string' },
         action: {
           bsonType: 'string',
-          enum: ['create', 'update', 'delete', 'view', 'export', 'approve', 'reject'],
+          enum: ['create', 'update', 'delete', 'view', 'export', 'approve', 'reject']
         },
         user_info: {
           bsonType: 'object',
@@ -728,29 +728,29 @@ db.createCollection('audit_trail', {
             user_id: { bsonType: 'string' },
             role: { bsonType: 'string' },
             ip: { bsonType: 'string' },
-            user_agent: { bsonType: 'string' },
-          },
+            user_agent: { bsonType: 'string' }
+          }
         },
         changes: {
           bsonType: 'object',
           properties: {
             old_values: { bsonType: 'object' },
             new_values: { bsonType: 'object' },
-            summary: { bsonType: 'string' },
-          },
+            summary: { bsonType: 'string' }
+          }
         },
         context: {
           bsonType: 'object',
           properties: {
             reason: { bsonType: 'string' },
             session_id: { bsonType: 'string' },
-            endpoint: { bsonType: 'string' },
-          },
+            endpoint: { bsonType: 'string' }
+          }
         },
-        timestamp: { bsonType: 'date' },
-      },
-    },
-  },
+        timestamp: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.audit_trail.createIndex({ collection_name: 1, record_id: 1 });
@@ -769,14 +769,14 @@ db.createCollection('system_notifications', {
       properties: {
         notification_id: {
           bsonType: 'string',
-          pattern: '^NOTIF-[0-9]{6}$',
+          pattern: '^NOTIF-[0-9]{6}$'
         },
         recipient: {
           bsonType: 'object',
           properties: {
             user_id: { bsonType: 'string' },
-            role: { bsonType: 'string' },
-          },
+            role: { bsonType: 'string' }
+          }
         },
         content: {
           bsonType: 'object',
@@ -789,39 +789,39 @@ db.createCollection('system_notifications', {
                 'test_due',
                 'certification_expiry',
                 'violation_found',
-                'system_update',
-              ],
+                'system_update'
+              ]
             },
             title: { bsonType: 'string' },
             message: { bsonType: 'string' },
             severity: {
               bsonType: 'string',
-              enum: ['info', 'warning', 'error', 'critical'],
-            },
-          },
+              enum: ['info', 'warning', 'error', 'critical']
+            }
+          }
         },
         related_record: {
           bsonType: 'object',
           properties: {
             collection: { bsonType: 'string' },
-            record_id: { bsonType: 'string' },
-          },
+            record_id: { bsonType: 'string' }
+          }
         },
         status: {
           bsonType: 'object',
           properties: {
             current: {
               bsonType: 'string',
-              enum: ['pending', 'sent', 'read', 'dismissed'],
+              enum: ['pending', 'sent', 'read', 'dismissed']
             },
             sent_at: { bsonType: 'date' },
-            read_at: { bsonType: 'date' },
-          },
+            read_at: { bsonType: 'date' }
+          }
         },
-        created_at: { bsonType: 'date' },
-      },
-    },
-  },
+        created_at: { bsonType: 'date' }
+      }
+    }
+  }
 });
 
 db.system_notifications.createIndex({ 'recipient.user_id': 1, 'status.current': 1 });
@@ -842,14 +842,14 @@ db.sop_activity_templates.insertMany([
     requirements: {
       is_mandatory: true,
       frequency: 'phase_based',
-      compliance_weight: 8,
+      compliance_weight: 8
     },
     documentation_requirements: {
       photo_required: true,
       measurement_required: true,
-      lab_test_required: false,
+      lab_test_required: false
     },
-    created_at: new Date(),
+    created_at: new Date()
   },
   {
     template_id: 'SOP-PP-002',
@@ -860,14 +860,14 @@ db.sop_activity_templates.insertMany([
     requirements: {
       is_mandatory: true,
       frequency: 'phase_based',
-      compliance_weight: 8,
+      compliance_weight: 8
     },
     documentation_requirements: {
       photo_required: true,
       measurement_required: true,
-      lab_test_required: true,
+      lab_test_required: true
     },
-    created_at: new Date(),
+    created_at: new Date()
   },
   {
     template_id: 'SOP-GR-001',
@@ -878,18 +878,18 @@ db.sop_activity_templates.insertMany([
     requirements: {
       is_mandatory: true,
       frequency: 'daily',
-      compliance_weight: 7,
+      compliance_weight: 7
     },
     standards: {
       ph: { min: 6.0, max: 7.5 },
-      ec: { min: 0.8, max: 2.5 },
+      ec: { min: 0.8, max: 2.5 }
     },
     documentation_requirements: {
       photo_required: false,
       measurement_required: true,
-      lab_test_required: false,
+      lab_test_required: false
     },
-    created_at: new Date(),
+    created_at: new Date()
   },
   {
     template_id: 'SOP-GR-002',
@@ -900,14 +900,14 @@ db.sop_activity_templates.insertMany([
     requirements: {
       is_mandatory: true,
       frequency: 'weekly',
-      compliance_weight: 6,
+      compliance_weight: 6
     },
     documentation_requirements: {
       photo_required: false,
       measurement_required: true,
-      lab_test_required: false,
+      lab_test_required: false
     },
-    created_at: new Date(),
+    created_at: new Date()
   },
   {
     template_id: 'SOP-GR-003',
@@ -918,19 +918,19 @@ db.sop_activity_templates.insertMany([
     requirements: {
       is_mandatory: true,
       frequency: 'daily',
-      compliance_weight: 7,
+      compliance_weight: 7
     },
     standards: {
       temperature: { min: 20, max: 28 },
-      humidity: { min: 40, max: 60 },
+      humidity: { min: 40, max: 60 }
     },
     documentation_requirements: {
       photo_required: false,
       measurement_required: true,
-      lab_test_required: false,
+      lab_test_required: false
     },
-    created_at: new Date(),
-  },
+    created_at: new Date()
+  }
 ]);
 
 // Insert sample farm
@@ -944,52 +944,52 @@ db.cannabis_farms.insertOne(sampleFarm);
 function calculateFarmComplianceScore(farmId) {
   const pipeline = [
     {
-      $match: { farm_id: farmId },
+      $match: { farm_id: farmId }
     },
     {
       $lookup: {
         from: 'cultivation_cycles',
         localField: 'farm_id',
         foreignField: 'farm_id',
-        as: 'cycles',
-      },
+        as: 'cycles'
+      }
     },
     {
       $lookup: {
         from: 'sop_activities',
         localField: 'cycles.cycle_id',
         foreignField: 'cycle_id',
-        as: 'activities',
-      },
+        as: 'activities'
+      }
     },
     {
       $lookup: {
         from: 'compliance_assessments',
         localField: 'farm_id',
         foreignField: 'farm_id',
-        as: 'assessments',
-      },
+        as: 'assessments'
+      }
     },
     {
       $project: {
         farm_id: 1,
         farm_name: 1,
         sop_compliance: {
-          $avg: '$activities.compliance.score',
+          $avg: '$activities.compliance.score'
         },
         latest_assessment: {
           $arrayElemAt: [
             {
               $sortArray: {
                 input: '$assessments',
-                sortBy: { 'assessment_details.assessment_date': -1 },
-              },
+                sortBy: { 'assessment_details.assessment_date': -1 }
+              }
             },
-            0,
-          ],
-        },
-      },
-    },
+            0
+          ]
+        }
+      }
+    }
   ];
 
   return db.cannabis_farms.aggregate(pipeline);
@@ -1002,12 +1002,12 @@ function getFarmSummaryStats() {
       $group: {
         _id: '$gacp_status',
         count: { $sum: 1 },
-        avg_compliance: { $avg: '$certification.compliance_score' },
-      },
+        avg_compliance: { $avg: '$certification.compliance_score' }
+      }
     },
     {
-      $sort: { count: -1 },
-    },
+      $sort: { count: -1 }
+    }
   ]);
 }
 
@@ -1016,7 +1016,7 @@ function getOverdueSOPActivities() {
   return db.sop_activities
     .find({
       'execution.status': { $in: ['pending', 'in_progress'] },
-      'scheduling.scheduled_date': { $lt: new Date() },
+      'scheduling.scheduled_date': { $lt: new Date() }
     })
     .sort({ 'scheduling.scheduled_date': 1 });
 }

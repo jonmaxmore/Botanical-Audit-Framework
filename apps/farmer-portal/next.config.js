@@ -9,8 +9,8 @@ const nextConfig = {
   // Disable instrumentation for development to avoid conflicts
   experimental: {
     // instrumentation.js is now available by default in Next.js 16
-    clientTraceMetadata: ['baggage', 'sentry-trace', 'traceparent'],
-  },
+    clientTraceMetadata: ['baggage', 'sentry-trace', 'traceparent']
+  }
 };
 
 // Wrap the config with Sentry
@@ -29,7 +29,7 @@ module.exports = withSentryConfig(
 
     // Only upload source maps in production
     disableServerWebpackPlugin: process.env.NODE_ENV !== 'production',
-    disableClientWebpackPlugin: process.env.NODE_ENV !== 'production',
+    disableClientWebpackPlugin: process.env.NODE_ENV !== 'production'
   },
   {
     // For all available options, see:
@@ -40,7 +40,7 @@ module.exports = withSentryConfig(
 
     // Automatically annotate React components with origin information
     reactComponentAnnotation: {
-      enabled: true,
+      enabled: true
     },
 
     // Hides source maps from generated client bundles
@@ -50,6 +50,6 @@ module.exports = withSentryConfig(
     disableLogger: true,
 
     // Automatically instrument API routes and server actions
-    automaticVercelMonitors: true,
-  },
+    automaticVercelMonitors: true
+  }
 );

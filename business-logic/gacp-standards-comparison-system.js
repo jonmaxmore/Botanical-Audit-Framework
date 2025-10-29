@@ -30,7 +30,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       'USP',
       'WHO_GMP',
       'ISO_22000',
-      'HACCP',
+      'HACCP'
     ];
 
     this.initializeStandards();
@@ -58,11 +58,11 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       id: 'GACP',
       name: {
         th: 'มาตรฐานการปฏิบัติทางการเกษตรและการเก็บรวบรวมที่ดี',
-        en: 'Good Agricultural and Collection Practices',
+        en: 'Good Agricultural and Collection Practices'
       },
       description: {
         th: 'มาตรฐานสำหรับการปลูกและเก็บรวบรวมพืชสมุนไพรเพื่อการแพทย์',
-        en: 'Standards for cultivation and collection of medicinal plants',
+        en: 'Standards for cultivation and collection of medicinal plants'
       },
       version: '2024.1',
       applicableProducts: ['cannabis', 'herbs', 'medicinal_plants'],
@@ -77,24 +77,24 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'การฝึกอบรมบุคลากร', en: 'Personnel Training' },
               description: {
                 th: 'บุคลากรต้องได้รับการฝึกอบรมเกี่ยวกับ GACP',
-                en: 'Personnel must be trained in GACP practices',
+                en: 'Personnel must be trained in GACP practices'
               },
               mandatory: true,
               verificationMethod: ['documents', 'interview', 'observation'],
-              points: 20,
+              points: 20
             },
             {
               id: 'hygiene_practices',
               title: { th: 'การปฏิบัติด้านสุขอนามัย', en: 'Hygiene Practices' },
               description: {
                 th: 'บุคลากรต้องปฏิบัติตามหลักสุขอนามัยที่กำหนด',
-                en: 'Personnel must follow established hygiene practices',
+                en: 'Personnel must follow established hygiene practices'
               },
               mandatory: true,
               verificationMethod: ['observation', 'records'],
-              points: 15,
-            },
-          ],
+              points: 15
+            }
+          ]
         },
         {
           id: 'premises',
@@ -106,24 +106,24 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'การออกแบบสิ่งปลูกสร้าง', en: 'Facility Design' },
               description: {
                 th: 'สิ่งปลูกสร้างต้องออกแบบให้เหมาะสมกับการปลูกพืช',
-                en: 'Facilities must be designed appropriately for plant cultivation',
+                en: 'Facilities must be designed appropriately for plant cultivation'
               },
               mandatory: true,
               verificationMethod: ['inspection', 'blueprints'],
-              points: 25,
+              points: 25
             },
             {
               id: 'environmental_control',
               title: { th: 'การควบคุมสภาพแวดล้อม', en: 'Environmental Control' },
               description: {
                 th: 'มีระบบควบคุมอุณหภูมิ ความชื้น และการระบายอากาศ',
-                en: 'Systems for controlling temperature, humidity, and ventilation',
+                en: 'Systems for controlling temperature, humidity, and ventilation'
               },
               mandatory: true,
               verificationMethod: ['monitoring_data', 'calibration_records'],
-              points: 30,
-            },
-          ],
+              points: 30
+            }
+          ]
         },
         {
           id: 'cultivation',
@@ -135,35 +135,35 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'การเลือกเมล็ดพันธุ์', en: 'Seed Selection' },
               description: {
                 th: 'ใช้เมล็ดพันธุ์ที่ได้รับการรับรองคุณภาพ',
-                en: 'Use quality-certified seeds',
+                en: 'Use quality-certified seeds'
               },
               mandatory: true,
               verificationMethod: ['certificates', 'supplier_audit'],
-              points: 20,
+              points: 20
             },
             {
               id: 'soil_management',
               title: { th: 'การจัดการดิน', en: 'Soil Management' },
               description: {
                 th: 'ตรวจสอบและจัดการคุณภาพดินอย่างสม่ำเสมอ',
-                en: 'Regular soil quality testing and management',
+                en: 'Regular soil quality testing and management'
               },
               mandatory: true,
               verificationMethod: ['soil_test_reports', 'treatment_records'],
-              points: 25,
+              points: 25
             },
             {
               id: 'water_quality',
               title: { th: 'คุณภาพน้ำ', en: 'Water Quality' },
               description: {
                 th: 'ใช้น้ำที่มีคุณภาพเหมาะสมสำหรับการปลูก',
-                en: 'Use water of appropriate quality for cultivation',
+                en: 'Use water of appropriate quality for cultivation'
               },
               mandatory: true,
               verificationMethod: ['water_test_reports', 'source_monitoring'],
-              points: 25,
-            },
-          ],
+              points: 25
+            }
+          ]
         },
         {
           id: 'harvesting',
@@ -175,24 +175,24 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'จังหวะการเก็บเกี่ยว', en: 'Harvest Timing' },
               description: {
                 th: 'เก็บเกี่ยวในช่วงเวลาที่เหมาะสมเพื่อคุณภาพสูงสุด',
-                en: 'Harvest at optimal timing for maximum quality',
+                en: 'Harvest at optimal timing for maximum quality'
               },
               mandatory: true,
               verificationMethod: ['harvest_records', 'quality_tests'],
-              points: 20,
+              points: 20
             },
             {
               id: 'harvest_methods',
               title: { th: 'วิธีการเก็บเกี่ยว', en: 'Harvest Methods' },
               description: {
                 th: 'ใช้วิธีการเก็บเกี่ยวที่ไม่ทำลายคุณภาพ',
-                en: 'Use harvesting methods that preserve quality',
+                en: 'Use harvesting methods that preserve quality'
               },
               mandatory: true,
               verificationMethod: ['procedures', 'training_records'],
-              points: 15,
-            },
-          ],
+              points: 15
+            }
+          ]
         },
         {
           id: 'post_harvest',
@@ -204,24 +204,24 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'การอบแห้งและบ่ม', en: 'Drying and Curing' },
               description: {
                 th: 'กระบวนการอบแห้งและบ่มที่เหมาะสม',
-                en: 'Appropriate drying and curing processes',
+                en: 'Appropriate drying and curing processes'
               },
               mandatory: true,
               verificationMethod: ['process_records', 'environmental_monitoring'],
-              points: 25,
+              points: 25
             },
             {
               id: 'storage_conditions',
               title: { th: 'สภาพการเก็บรักษา', en: 'Storage Conditions' },
               description: {
                 th: 'จัดเก็บในสภาพแวดล้อมที่เหมาะสม',
-                en: 'Store in appropriate environmental conditions',
+                en: 'Store in appropriate environmental conditions'
               },
               mandatory: true,
               verificationMethod: ['storage_monitoring', 'inventory_records'],
-              points: 20,
-            },
-          ],
+              points: 20
+            }
+          ]
         },
         {
           id: 'quality_assurance',
@@ -233,17 +233,17 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'ขั้นตอนการทดสอบ', en: 'Testing Procedures' },
               description: {
                 th: 'มีขั้นตอนการทดสอบคุณภาพที่เหมาะสม',
-                en: 'Appropriate quality testing procedures',
+                en: 'Appropriate quality testing procedures'
               },
               mandatory: true,
               verificationMethod: ['sop_documents', 'test_results'],
-              points: 30,
-            },
-          ],
-        },
+              points: 30
+            }
+          ]
+        }
       ],
       totalPoints: 345,
-      passingScore: 70,
+      passingScore: 70
     };
 
     this.standards.set('GACP', gacpStandard);
@@ -253,11 +253,11 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       id: 'GAP',
       name: {
         th: 'มาตรฐานการปฏิบัติทางการเกษตรที่ดี',
-        en: 'Good Agricultural Practices',
+        en: 'Good Agricultural Practices'
       },
       description: {
         th: 'มาตรฐานการเกษตรทั่วไปเพื่อความปลอดภัยของอาหาร',
-        en: 'General agricultural standards for food safety',
+        en: 'General agricultural standards for food safety'
       },
       version: '2023.2',
       applicableProducts: ['fruits', 'vegetables', 'grains', 'cannabis'],
@@ -272,13 +272,13 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'การเลือกพื้นที่', en: 'Site Selection' },
               description: {
                 th: 'เลือกพื้นที่ที่เหมาะสมสำหรับการปลูก',
-                en: 'Select appropriate sites for cultivation',
+                en: 'Select appropriate sites for cultivation'
               },
               mandatory: true,
               verificationMethod: ['site_assessment', 'soil_analysis'],
-              points: 25,
-            },
-          ],
+              points: 25
+            }
+          ]
         },
         {
           id: 'crop_management',
@@ -290,17 +290,17 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'การเลือกพันธุ์', en: 'Variety Selection' },
               description: {
                 th: 'เลือกพันธุ์ที่เหมาะสมกับสภาพแวดล้อม',
-                en: 'Select varieties suitable for local conditions',
+                en: 'Select varieties suitable for local conditions'
               },
               mandatory: true,
               verificationMethod: ['variety_records', 'performance_data'],
-              points: 20,
-            },
-          ],
-        },
+              points: 20
+            }
+          ]
+        }
       ],
       totalPoints: 200,
-      passingScore: 80,
+      passingScore: 80
     };
 
     this.standards.set('GAP', gapStandard);
@@ -310,11 +310,11 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       id: 'ORGANIC',
       name: {
         th: 'มาตรฐานอินทรีย์',
-        en: 'Organic Standards',
+        en: 'Organic Standards'
       },
       description: {
         th: 'มาตรฐานการผลิตอินทรีย์ที่ไม่ใช้สารเคมีสังเคราะห์',
-        en: 'Organic production standards without synthetic chemicals',
+        en: 'Organic production standards without synthetic chemicals'
       },
       version: '2024.1',
       applicableProducts: ['all_crops'],
@@ -329,13 +329,13 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'ไม่ใช้ยาฆ่าแมลงสังเคราะห์', en: 'No Synthetic Pesticides' },
               description: {
                 th: 'ห้ามใช้ยาฆ่าแมลงสังเคราะห์ทุกชนิด',
-                en: 'Prohibition of all synthetic pesticides',
+                en: 'Prohibition of all synthetic pesticides'
               },
               mandatory: true,
               verificationMethod: ['residue_testing', 'input_records'],
-              points: 50,
-            },
-          ],
+              points: 50
+            }
+          ]
         },
         {
           id: 'natural_inputs',
@@ -348,13 +348,13 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               description: { th: 'ใช้ปุ่ยอินทรีย์เท่านั้น', en: 'Use only organic fertilizers' },
               mandatory: true,
               verificationMethod: ['supplier_certificates', 'application_records'],
-              points: 30,
-            },
-          ],
-        },
+              points: 30
+            }
+          ]
+        }
       ],
       totalPoints: 250,
-      passingScore: 95,
+      passingScore: 95
     };
 
     this.standards.set('ORGANIC', organicStandard);
@@ -364,11 +364,11 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       id: 'EU_GMP',
       name: {
         th: 'มาตรฐานการผลิตที่ดีของสหภาพยุโรป',
-        en: 'European Union Good Manufacturing Practices',
+        en: 'European Union Good Manufacturing Practices'
       },
       description: {
         th: 'มาตรฐานการผลิตยาและผลิตภัณฑ์สุขภาพของ EU',
-        en: 'EU standards for pharmaceutical and health product manufacturing',
+        en: 'EU standards for pharmaceutical and health product manufacturing'
       },
       version: '2024.1',
       applicableProducts: ['pharmaceuticals', 'medical_cannabis', 'health_products'],
@@ -383,13 +383,13 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'ระบบคุณภาพ', en: 'Quality System' },
               description: {
                 th: 'มีระบบการจัดการคุณภาพที่ครบถ้วน',
-                en: 'Comprehensive quality management system',
+                en: 'Comprehensive quality management system'
               },
               mandatory: true,
               verificationMethod: ['documentation_review', 'audit'],
-              points: 40,
-            },
-          ],
+              points: 40
+            }
+          ]
         },
         {
           id: 'premises_equipment',
@@ -401,17 +401,17 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'การรับรองสถานที่', en: 'Facility Qualification' },
               description: {
                 th: 'สถานที่ผลิตต้องได้รับการรับรองมาตรฐาน',
-                en: 'Manufacturing facilities must be qualified',
+                en: 'Manufacturing facilities must be qualified'
               },
               mandatory: true,
               verificationMethod: ['qualification_documents', 'inspection'],
-              points: 35,
-            },
-          ],
-        },
+              points: 35
+            }
+          ]
+        }
       ],
       totalPoints: 400,
-      passingScore: 85,
+      passingScore: 85
     };
 
     this.standards.set('EU_GMP', euGmpStandard);
@@ -421,11 +421,11 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       id: 'USP',
       name: {
         th: 'เภสัชตำรับสหรัฐอเมริกา',
-        en: 'United States Pharmacopeia',
+        en: 'United States Pharmacopeia'
       },
       description: {
         th: 'มาตรฐานเภสัชกรรมของสหรัฐอเมริกา',
-        en: 'US pharmaceutical standards and monographs',
+        en: 'US pharmaceutical standards and monographs'
       },
       version: 'USP-NF 2024',
       applicableProducts: ['pharmaceuticals', 'dietary_supplements', 'medical_cannabis'],
@@ -440,17 +440,17 @@ class GACPStandardsComparisonSystem extends EventEmitter {
               title: { th: 'วิธีการวิเคราะห์', en: 'Analytical Methods' },
               description: {
                 th: 'ใช้วิธีการวิเคราะห์ที่ได้รับการรับรอง',
-                en: 'Use validated analytical methods',
+                en: 'Use validated analytical methods'
               },
               mandatory: true,
               verificationMethod: ['method_validation', 'test_results'],
-              points: 60,
-            },
-          ],
-        },
+              points: 60
+            }
+          ]
+        }
       ],
       totalPoints: 300,
-      passingScore: 90,
+      passingScore: 90
     };
 
     this.standards.set('USP', uspStandard);
@@ -474,7 +474,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
                     standard2Req: req2,
                     similarity,
                     category1: cat1.name,
-                    category2: cat2.name,
+                    category2: cat2.name
                   });
                 }
               });
@@ -507,7 +507,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
                 requirement: targetReq,
                 category: targetCat.name,
                 priority: targetReq.mandatory ? 'high' : 'medium',
-                estimatedEffort: this.estimateImplementationEffort(targetReq),
+                estimatedEffort: this.estimateImplementationEffort(targetReq)
               });
             }
           });
@@ -528,7 +528,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         const mappedScore = toPassing + normalizedScore * (100 - toPassing);
 
         return Math.max(0, Math.min(100, Math.round(mappedScore)));
-      },
+      }
     };
   }
 
@@ -559,7 +559,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       'with',
       'by',
       'a',
-      'an',
+      'an'
     ];
     const words = text
       .toLowerCase()
@@ -578,7 +578,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       equipment: 3,
       facility: 4,
       testing: 3,
-      certification: 2,
+      certification: 2
     };
 
     let effort = 1; // Base effort
@@ -593,7 +593,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
     return {
       level: effort <= 1 ? 'low' : effort <= 2 ? 'medium' : effort <= 3 ? 'high' : 'very_high',
       estimatedDays: effort * 5,
-      estimatedCost: effort * 10000, // Base cost in THB
+      estimatedCost: effort * 10000 // Base cost in THB
     };
   }
 
@@ -619,11 +619,11 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         commonRequirements: 24,
         totalRequirements: {
           standardA: 32,
-          standardB: 18,
-        },
+          standardB: 18
+        }
       },
       createdAt: new Date(),
-      lastUpdated: new Date(),
+      lastUpdated: new Date()
     };
 
     this.comparisons.set(gacpGapComparison.id, gacpGapComparison);
@@ -648,18 +648,18 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         name: standardA.name,
         version: standardA.version,
         totalPoints: standardA.totalPoints,
-        passingScore: standardA.passingScore,
+        passingScore: standardA.passingScore
       },
       standardBInfo: {
         name: standardB.name,
         version: standardB.version,
         totalPoints: standardB.totalPoints,
-        passingScore: standardB.passingScore,
+        passingScore: standardB.passingScore
       },
       comparisonType: options.type || 'full_comparison',
       results: {},
       createdAt: new Date(),
-      options,
+      options
     };
 
     // Find overlapping requirements
@@ -680,12 +680,12 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         commonRequirements: commonReqs,
         totalRequirements: {
           [standardAId]: totalReqA,
-          [standardBId]: totalReqB,
+          [standardBId]: totalReqB
         },
         gapCounts: {
           fromAToB: gapsAToB.length,
-          fromBToA: gapsBToA.length,
-        },
+          fromBToA: gapsBToA.length
+        }
       },
       overlaps: overlaps.map(overlap => ({
         similarity: Math.round(overlap.similarity * 100),
@@ -693,15 +693,15 @@ class GACPStandardsComparisonSystem extends EventEmitter {
           id: overlap.standard1Req.id,
           title: overlap.standard1Req.title,
           category: overlap.category1.en,
-          points: overlap.standard1Req.points,
+          points: overlap.standard1Req.points
         },
         requirementB: {
           id: overlap.standard2Req.id,
           title: overlap.standard2Req.title,
           category: overlap.category2.en,
-          points: overlap.standard2Req.points,
+          points: overlap.standard2Req.points
         },
-        mapping: this.createRequirementMapping(overlap.standard1Req, overlap.standard2Req),
+        mapping: this.createRequirementMapping(overlap.standard1Req, overlap.standard2Req)
       })),
       gaps: {
         [standardAId]: gapsBToA.map(gap => ({
@@ -711,11 +711,11 @@ class GACPStandardsComparisonSystem extends EventEmitter {
             description: gap.requirement.description,
             category: gap.category.en,
             mandatory: gap.requirement.mandatory,
-            points: gap.requirement.points,
+            points: gap.requirement.points
           },
           priority: gap.priority,
           estimatedEffort: gap.estimatedEffort,
-          recommendations: this.generateGapRecommendations(gap.requirement),
+          recommendations: this.generateGapRecommendations(gap.requirement)
         })),
         [standardBId]: gapsAToB.map(gap => ({
           requirement: {
@@ -724,19 +724,19 @@ class GACPStandardsComparisonSystem extends EventEmitter {
             description: gap.requirement.description,
             category: gap.category.en,
             mandatory: gap.requirement.mandatory,
-            points: gap.requirement.points,
+            points: gap.requirement.points
           },
           priority: gap.priority,
           estimatedEffort: gap.estimatedEffort,
-          recommendations: this.generateGapRecommendations(gap.requirement),
-        })),
+          recommendations: this.generateGapRecommendations(gap.requirement)
+        }))
       },
       scoreMapping: {
         fromAToB: this.createScoreMapping(standardA, standardB),
-        fromBToA: this.createScoreMapping(standardB, standardA),
+        fromBToA: this.createScoreMapping(standardB, standardA)
       },
       implementationRoadmap: this.generateImplementationRoadmap(gapsAToB, standardBId),
-      costAnalysis: this.generateCostAnalysis(gapsAToB, gapsBToA),
+      costAnalysis: this.generateCostAnalysis(gapsAToB, gapsBToA)
     };
 
     this.comparisons.set(comparisonId, comparison);
@@ -756,12 +756,12 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       equivalence: 'partial', // can be 'full', 'partial', 'none'
       mappingNotes: {
         th: 'ข้อกำหนดมีความคล้ายคลึงกันในเรื่องหลักการแต่อาจแตกต่างในรายละเอียด',
-        en: 'Requirements share core principles but may differ in details',
+        en: 'Requirements share core principles but may differ in details'
       },
       implementationGuidance: {
         th: 'สามารถใช้ระบบเดียวกันตอบสนองทั้งสองข้อกำหนดได้โดยปรับเพิ่มเติมบางส่วน',
-        en: 'Can use the same system to address both requirements with some modifications',
-      },
+        en: 'Can use the same system to address both requirements with some modifications'
+      }
     };
   }
 
@@ -769,7 +769,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
     const baseRecommendations = {
       immediate: [],
       shortTerm: [],
-      longTerm: [],
+      longTerm: []
     };
 
     // Generate recommendations based on requirement type
@@ -780,7 +780,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         action: 'Develop training program',
         description: 'Create comprehensive training materials and schedule',
         timeframe: '2-4 weeks',
-        resources: ['Training materials', 'Qualified instructor'],
+        resources: ['Training materials', 'Qualified instructor']
       });
     }
 
@@ -789,7 +789,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         action: 'Create documentation',
         description: 'Develop required procedures and record-keeping systems',
         timeframe: '1-3 weeks',
-        resources: ['Technical writer', 'Subject matter expert'],
+        resources: ['Technical writer', 'Subject matter expert']
       });
     }
 
@@ -798,7 +798,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         action: 'Establish testing capability',
         description: 'Set up testing procedures or identify qualified laboratory',
         timeframe: '4-8 weeks',
-        resources: ['Testing equipment', 'Laboratory partnership'],
+        resources: ['Testing equipment', 'Laboratory partnership']
       });
     }
 
@@ -807,7 +807,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         action: 'Facility/Equipment upgrade',
         description: 'Plan and implement necessary facility or equipment changes',
         timeframe: '3-6 months',
-        resources: ['Capital investment', 'Engineering support'],
+        resources: ['Capital investment', 'Engineering support']
       });
     }
 
@@ -821,13 +821,13 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       const mappedScore = this.comparisonAlgorithms.mapComplianceScores(
         fromStandard,
         toStandard,
-        score,
+        score
       );
 
       mappingTable.push({
         original: score,
         mapped: mappedScore,
-        interpretation: this.getScoreInterpretation(mappedScore, toStandard),
+        interpretation: this.getScoreInterpretation(mappedScore, toStandard)
       });
     }
 
@@ -836,14 +836,14 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       conversionFormula: {
         description: {
           th: 'การแปลงคะแนนใช้การปรับสเกลเชิงเส้นตามค่าขั้นต่ำที่ผ่านเกณฑ์',
-          en: 'Score conversion uses linear scaling based on passing thresholds',
+          en: 'Score conversion uses linear scaling based on passing thresholds'
         },
         passingScoreEquivalent: this.comparisonAlgorithms.mapComplianceScores(
           fromStandard,
           toStandard,
-          fromStandard.passingScore,
-        ),
-      },
+          fromStandard.passingScore
+        )
+      }
     };
   }
 
@@ -866,7 +866,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       phases: [],
       totalTimeframe: '6-12 months',
       criticalPath: [],
-      milestones: [],
+      milestones: []
     };
 
     // Sort gaps by priority and effort
@@ -890,30 +890,30 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         gaps: [],
         objectives: [
           { th: 'วิเคราะห์ช่องว่างและจัดลำดับความสำคัญ', en: 'Analyze gaps and prioritize' },
-          { th: 'จัดทำแผนการดำเนินงานรายละเอียด', en: 'Create detailed implementation plan' },
-        ],
+          { th: 'จัดทำแผนการดำเนินงานรายละเอียด', en: 'Create detailed implementation plan' }
+        ]
       },
       {
         id: 2,
         name: { th: 'การดำเนินงานเร่งด่วน', en: 'Critical Implementation' },
         duration: '4-8 weeks',
         gaps: [],
-        objectives: [],
+        objectives: []
       },
       {
         id: 3,
         name: { th: 'การพัฒนาระบบหลัก', en: 'Core System Development' },
         duration: '8-16 weeks',
         gaps: [],
-        objectives: [],
+        objectives: []
       },
       {
         id: 4,
         name: { th: 'การตรวจสอบและปรับปรุง', en: 'Verification and Improvement' },
         duration: '4-8 weeks',
         gaps: [],
-        objectives: [],
-      },
+        objectives: []
+      }
     ];
 
     // Distribute gaps across phases
@@ -935,7 +935,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         title: gap.requirement.title,
         priority: gap.priority,
         effort: gap.estimatedEffort,
-        dependencies: this.identifyDependencies(gap, sortedGaps),
+        dependencies: this.identifyDependencies(gap, sortedGaps)
       });
     });
 
@@ -950,26 +950,26 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         id: 1,
         name: { th: 'เสร็จสิ้นการวางแผน', en: 'Planning Complete' },
         targetWeek: 4,
-        deliverables: ['Implementation plan', 'Resource allocation', 'Timeline'],
+        deliverables: ['Implementation plan', 'Resource allocation', 'Timeline']
       },
       {
         id: 2,
         name: { th: 'ข้อกำหนดเร่งด่วนเสร็จสิ้น', en: 'Critical Requirements Complete' },
         targetWeek: 12,
-        deliverables: ['High priority items', 'Basic compliance', 'Documentation'],
+        deliverables: ['High priority items', 'Basic compliance', 'Documentation']
       },
       {
         id: 3,
         name: { th: 'ระบบหลักพร้อมใช้งาน', en: 'Core Systems Operational' },
         targetWeek: 28,
-        deliverables: ['All major systems', 'Training completed', 'Initial certification'],
+        deliverables: ['All major systems', 'Training completed', 'Initial certification']
       },
       {
         id: 4,
         name: { th: 'การรับรองเสร็จสิ้น', en: 'Certification Complete' },
         targetWeek: 36,
-        deliverables: ['Full compliance', 'Final audit', 'Certificate issued'],
-      },
+        deliverables: ['Full compliance', 'Final audit', 'Certificate issued']
+      }
     ];
 
     return roadmap;
@@ -991,7 +991,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         dependencies.push({
           requirementId: otherGap.requirement.id,
           type: 'prerequisite',
-          reason: 'Equipment needed before testing can be implemented',
+          reason: 'Equipment needed before testing can be implemented'
         });
       }
 
@@ -999,7 +999,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         dependencies.push({
           requirementId: otherGap.requirement.id,
           type: 'prerequisite',
-          reason: 'Basic processes must be established first',
+          reason: 'Basic processes must be established first'
         });
       }
     });
@@ -1030,7 +1030,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
     phases.forEach(phase => {
       const highPriorityItems = phase.gaps.filter(gap => gap.priority === 'high');
       const longEffortItems = phase.gaps.filter(
-        gap => gap.effort.level === 'high' || gap.effort.level === 'very_high',
+        gap => gap.effort.level === 'high' || gap.effort.level === 'very_high'
       );
 
       [...highPriorityItems, ...longEffortItems].forEach(item => {
@@ -1047,7 +1047,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
     const analysis = {
       standardAToB: this.calculateImplementationCost(gapsAToB),
       standardBToA: this.calculateImplementationCost(gapsBToA),
-      summary: {},
+      summary: {}
     };
 
     analysis.summary = {
@@ -1057,7 +1057,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       recommendedPath:
         analysis.standardAToB.total < analysis.standardBToA.total
           ? 'Implement standard B requirements'
-          : 'Implement standard A requirements',
+          : 'Implement standard A requirements'
     };
 
     return analysis;
@@ -1074,8 +1074,8 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         documentation: 0,
         equipment: 0,
         certification: 0,
-        consulting: 0,
-      },
+        consulting: 0
+      }
     };
 
     gaps.forEach(gap => {
@@ -1122,7 +1122,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       recommendations: [],
       roadmap: null,
       createdAt: new Date(),
-      lastUpdated: new Date(),
+      lastUpdated: new Date()
     };
 
     // Analyze current vs target standards
@@ -1136,10 +1136,10 @@ class GACPStandardsComparisonSystem extends EventEmitter {
             toStandard: targetStandardId,
             gapCount: comparison.results.gaps[targetStandardId].length,
             criticalGaps: comparison.results.gaps[targetStandardId].filter(
-              g => g.priority === 'high',
+              g => g.priority === 'high'
             ).length,
             estimatedCost: comparison.results.costAnalysis.standardAToB.total,
-            estimatedTimeframe: '6-12 months',
+            estimatedTimeframe: '6-12 months'
           });
         }
       }
@@ -1166,17 +1166,17 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         priority: 'high',
         title: {
           th: `ควรเริ่มดำเนินการปรับปรุงเพื่อให้ตรงตามมาตรฐาน ${highestPriorityGap.toStandard} ก่อน`,
-          en: `Should prioritize compliance with ${highestPriorityGap.toStandard} standard first`,
+          en: `Should prioritize compliance with ${highestPriorityGap.toStandard} standard first`
         },
         reasoning: {
           th: 'มีช่องว่างสำคัญน้อยที่สุดและสามารถดำเนินการได้เร็วที่สุด',
-          en: 'Has the fewest critical gaps and can be implemented most quickly',
+          en: 'Has the fewest critical gaps and can be implemented most quickly'
         },
         expectedBenefits: [
           { th: 'ลดความเสี่ยงด้านกฎระเบียบ', en: 'Reduce regulatory risk' },
           { th: 'เพิ่มความน่าเชื่อถือของผลิตภัณฑ์', en: 'Increase product credibility' },
-          { th: 'เตรียมพร้อมสำหรับมาตรฐานอื่น', en: 'Prepare for other standards' },
-        ],
+          { th: 'เตรียมพร้อมสำหรับมาตรฐานอื่น', en: 'Prepare for other standards' }
+        ]
       });
     }
 
@@ -1189,17 +1189,17 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         priority: 'medium',
         title: {
           th: 'พิจารณาการดำเนินการแบบเป็นขั้นตอน',
-          en: 'Consider phased implementation approach',
+          en: 'Consider phased implementation approach'
         },
         reasoning: {
           th: 'ค่าใช้จ่ายรวมสูง ควรแบ่งการดำเนินการเป็นระยะเพื่อกระจายต้นทุน',
-          en: 'High total cost suggests phased approach to spread investment',
+          en: 'High total cost suggests phased approach to spread investment'
         },
         suggestedPhases: [
           { phase: 1, focus: 'Critical requirements', budget: '30%' },
           { phase: 2, focus: 'Core systems', budget: '50%' },
-          { phase: 3, focus: 'Enhancement', budget: '20%' },
-        ],
+          { phase: 3, focus: 'Enhancement', budget: '20%' }
+        ]
       });
     }
 
@@ -1234,7 +1234,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       // Apply filters
       if (filters.applicableProducts && filters.applicableProducts.length > 0) {
         const hasMatchingProduct = filters.applicableProducts.some(product =>
-          standard.applicableProducts.includes(product),
+          standard.applicableProducts.includes(product)
         );
         matches = matches && hasMatchingProduct;
       }
@@ -1257,7 +1257,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
           passingScore: standard.passingScore,
           applicableProducts: standard.applicableProducts,
           categoryCount: standard.categories.length,
-          requirementCount: this.getTotalRequirements(standard),
+          requirementCount: this.getTotalRequirements(standard)
         });
       }
     });
@@ -1305,10 +1305,10 @@ class GACPStandardsComparisonSystem extends EventEmitter {
                 title: requirement.title,
                 description: requirement.description,
                 mandatory: requirement.mandatory,
-                points: requirement.points,
+                points: requirement.points
               },
               similarity: Math.round(similarity * 100),
-              mappingPotential: similarity > 0.9 ? 'high' : similarity > 0.8 ? 'medium' : 'low',
+              mappingPotential: similarity > 0.9 ? 'high' : similarity > 0.8 ? 'medium' : 'low'
             });
           }
         });
@@ -1323,13 +1323,13 @@ class GACPStandardsComparisonSystem extends EventEmitter {
         id: targetRequirement.id,
         title: targetRequirement.title,
         description: targetRequirement.description,
-        standardId: standardId,
+        standardId: standardId
       },
       similarRequirements,
       searchParameters: {
         threshold: threshold * 100,
-        standardsSearched: this.standards.size - 1,
-      },
+        standardsSearched: this.standards.size - 1
+      }
     };
   }
 
@@ -1369,22 +1369,22 @@ class GACPStandardsComparisonSystem extends EventEmitter {
             recommendation:
               comparison.results.overview.overlapPercentage > 70
                 ? 'High compatibility - implementation feasible'
-                : 'Significant differences - thorough planning required',
-          },
+                : 'Significant differences - thorough planning required'
+          }
         },
         {
           title: 'Detailed Gap Analysis',
-          content: comparison.results.gaps,
+          content: comparison.results.gaps
         },
         {
           title: 'Implementation Roadmap',
-          content: comparison.results.implementationRoadmap,
+          content: comparison.results.implementationRoadmap
         },
         {
           title: 'Cost Analysis',
-          content: comparison.results.costAnalysis,
-        },
-      ],
+          content: comparison.results.costAnalysis
+        }
+      ]
     };
   }
 
@@ -1423,7 +1423,7 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       totalPoints: standard.totalPoints,
       passingScore: standard.passingScore,
       applicableProducts: standard.applicableProducts,
-      categoryCount: standard.categories.length,
+      categoryCount: standard.categories.length
     }));
   }
 
@@ -1441,9 +1441,9 @@ class GACPStandardsComparisonSystem extends EventEmitter {
       totalComparisons: this.comparisons.size,
       totalComplianceProfiles: this.complianceProfiles.size,
       supportedProducts: [
-        ...new Set(Array.from(this.standards.values()).flatMap(s => s.applicableProducts)),
+        ...new Set(Array.from(this.standards.values()).flatMap(s => s.applicableProducts))
       ],
-      lastUpdated: new Date().toISOString(),
+      lastUpdated: new Date().toISOString()
     };
   }
 }

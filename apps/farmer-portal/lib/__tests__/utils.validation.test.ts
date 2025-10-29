@@ -11,7 +11,7 @@ import {
   isValidURL,
   isValidDateRange,
   isValidFileType,
-  isValidFileSize,
+  isValidFileSize
 } from '../utils/validation';
 
 describe('Validation Utilities', () => {

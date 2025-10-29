@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'Botanical Audit Framework',
-  description: 'GACP Platform for Botanical Auditing',
+  description: 'GACP Platform for Botanical Auditing'
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

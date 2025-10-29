@@ -104,7 +104,7 @@ class ProjectCleaner {
       '*_SUMMARY.md',
       '*.json.bak',
       '*-report-*.json',
-      '*-analysis-*.json',
+      '*-analysis-*.json'
     ];
 
     const files = await fs.readdir(this.rootDir);
@@ -142,7 +142,7 @@ class ProjectCleaner {
       '*-simulation*.js',
       'pm-*.js',
       'check-*.js',
-      'verify-*.js',
+      'verify-*.js'
     ];
 
     const files = await fs.readdir(this.rootDir);
@@ -186,7 +186,7 @@ class ProjectCleaner {
       'gacp-certification-system',
       'traditional-medicine-docs',
       'frontend-old',
-      'frontend-backup',
+      'frontend-backup'
     ];
 
     for (const dir of oldFrontends) {
@@ -207,7 +207,7 @@ class ProjectCleaner {
       'docker-compose.prod.yml',
       'docker-compose.production.yml',
       'Dockerfile.backend.clean',
-      'Dockerfile.microservice',
+      'Dockerfile.microservice'
     ];
 
     for (const file of oldDockerFiles) {
@@ -231,7 +231,7 @@ class ProjectCleaner {
       'frontend-dtam/vite.config.ts',
       'frontend-dtam/postcss.config.js',
       'frontend-dtam/tsconfig.app.json',
-      'microservices/api-trace/frontend/vite.config.js',
+      'microservices/api-trace/frontend/vite.config.js'
     ];
 
     for (const file of viteFiles) {
@@ -252,7 +252,7 @@ class ProjectCleaner {
       'modules', // Old modular structure
       'routes', // If moved to microservices
       'controllers', // If moved to microservices
-      'services', // If moved to microservices (keep shared/)
+      'services' // If moved to microservices (keep shared/)
     ];
 
     for (const dir of oldDirs) {
@@ -350,13 +350,13 @@ class ProjectCleaner {
     console.log('═══════════════════════════════════════════════════════\n');
 
     console.log(
-      `📁 Directories ${this.dryRun ? 'to be deleted' : 'deleted'}: ${this.deletedDirs.length}`,
+      `📁 Directories ${this.dryRun ? 'to be deleted' : 'deleted'}: ${this.deletedDirs.length}`
     );
     this.deletedDirs.forEach(dir => console.log(`   - ${dir}/`));
     console.log('');
 
     console.log(
-      `📄 Files ${this.dryRun ? 'to be deleted/moved' : 'deleted/moved'}: ${this.deletedFiles.length}`,
+      `📄 Files ${this.dryRun ? 'to be deleted/moved' : 'deleted/moved'}: ${this.deletedFiles.length}`
     );
     if (this.deletedFiles.length > 20) {
       console.log(`   (${this.deletedFiles.length} files - showing first 20)`);

@@ -35,9 +35,9 @@ const FarmSchema = {
         confidence: Number, // 0-100
         verificationStatus: String, // 'verified', 'pending', 'failed'
         ocrEngine: String,
-        nlpEngine: String,
-      },
-    },
+        nlpEngine: String
+      }
+    }
   },
 
   // Location & Geographic Data
@@ -49,23 +49,23 @@ const FarmSchema = {
       district: String,
       province: String,
       postalCode: String,
-      country: { type: String, default: 'Thailand' },
+      country: { type: String, default: 'Thailand' }
     },
     coordinates: {
       type: { type: String, enum: ['Point'], default: 'Point' },
-      coordinates: [Number], // [longitude, latitude]
+      coordinates: [Number] // [longitude, latitude]
     },
     elevationMeters: Number,
     landSize: {
       totalArea: Number, // square meters
       cultivationArea: Number,
       storageArea: Number,
-      processingArea: Number,
+      processingArea: Number
     },
     boundaries: {
       type: String, // GeoJSON Polygon
-      coordinates: [[Number]], // Array of coordinate arrays
-    },
+      coordinates: [[Number]] // Array of coordinate arrays
+    }
   },
 
   // Enhanced Cultivation Data
@@ -82,9 +82,9 @@ const FarmSchema = {
           supplier: String,
           certificationNumber: String,
           batchNumber: String,
-          purchaseDate: Date,
-        },
-      },
+          purchaseDate: Date
+        }
+      }
     ],
 
     // Cultivation Systems
@@ -94,8 +94,8 @@ const FarmSchema = {
         systemType: String, // 'hydroponic', 'soil', 'aeroponic'
         capacity: Number,
         installationDate: Date,
-        specifications: Object,
-      },
+        specifications: Object
+      }
     ],
 
     // Production Planning
@@ -106,9 +106,9 @@ const FarmSchema = {
         expectedYield: Number,
         plantingSchedule: Date,
         harvestSchedule: Date,
-        marketTarget: String,
-      },
-    ],
+        marketTarget: String
+      }
+    ]
   },
 
   // IoT Integration (Phase 3)
@@ -122,16 +122,16 @@ const FarmSchema = {
       installationDate: Date,
       location: {
         area: String,
-        coordinates: [Number],
+        coordinates: [Number]
       },
       calibrationData: {
         lastCalibration: Date,
         nextCalibration: Date,
-        calibrationCertificate: String,
+        calibrationCertificate: String
       },
       dataEndpoint: String, // API endpoint for real-time data
-      status: String, // 'active', 'maintenance', 'offline'
-    },
+      status: String // 'active', 'maintenance', 'offline'
+    }
   ],
 
   // Compliance & Certifications
@@ -144,8 +144,8 @@ const FarmSchema = {
         expiryDate: Date,
         issuingBody: String,
         certificateType: String,
-        status: String,
-      },
+        status: String
+      }
     ],
 
     // Compliance Scoring (AI-driven)
@@ -159,17 +159,17 @@ const FarmSchema = {
         storage: Number,
         processing: Number,
         quality: Number,
-        documentation: Number,
+        documentation: Number
       },
       riskFactors: [
         {
           category: String,
           description: String,
           severity: String, // 'low', 'medium', 'high', 'critical'
-          detectedAt: Date,
-        },
-      ],
-    },
+          detectedAt: Date
+        }
+      ]
+    }
   },
 
   // Audit Trail (Immutable Records)
@@ -183,20 +183,20 @@ const FarmSchema = {
         name: String,
         role: String,
         ipAddress: String,
-        userAgent: String,
+        userAgent: String
       },
       changes: {
         field: String,
         oldValue: Object,
         newValue: Object,
-        changeReason: String,
+        changeReason: String
       },
       verification: {
         checksum: String,
         digitalSignature: String,
-        blockchainHash: String, // For future blockchain integration
-      },
-    },
+        blockchainHash: String // For future blockchain integration
+      }
+    }
   ],
 
   // System Metadata
@@ -209,9 +209,9 @@ const FarmSchema = {
     dataIntegrity: {
       checksum: String,
       lastVerified: Date,
-      verificationStatus: String,
-    },
-  },
+      verificationStatus: String
+    }
+  }
 };
 
 // Enhanced Application Schema
@@ -243,11 +243,11 @@ const ApplicationSchema = {
           aiAssistance: {
             suggestionsProvided: Number,
             errorsDetected: Number,
-            autoCompleteUsed: Boolean,
-          },
-        },
-      ],
-    },
+            autoCompleteUsed: Boolean
+          }
+        }
+      ]
+    }
   },
 
   // AI-Enhanced Data Processing
@@ -266,18 +266,18 @@ const ApplicationSchema = {
               entity: String,
               value: String,
               confidence: Number,
-              position: Object,
-            },
-          ],
+              position: Object
+            }
+          ]
         },
         nlpResults: {
           entities: Object,
           sentiment: Object,
           categories: [String],
-          keyPhrases: [String],
+          keyPhrases: [String]
         },
-        validationStatus: String, // 'valid', 'requires_review', 'invalid'
-      },
+        validationStatus: String // 'valid', 'requires_review', 'invalid'
+      }
     ],
 
     // Real-time Validation Results
@@ -289,8 +289,8 @@ const ApplicationSchema = {
         message: String,
         suggestions: [String],
         validatedAt: Date,
-        validator: String, // AI model or rule engine
-      },
+        validator: String // AI model or rule engine
+      }
     ],
 
     // Contextual Guidance History
@@ -301,9 +301,9 @@ const ApplicationSchema = {
         guidance: String,
         gacpReference: String,
         providedAt: Date,
-        userFeedback: String, // 'helpful', 'not_helpful', 'incorrect'
-      },
-    ],
+        userFeedback: String // 'helpful', 'not_helpful', 'incorrect'
+      }
+    ]
   },
 
   // Application Status & Workflow
@@ -315,8 +315,8 @@ const ApplicationSchema = {
         timestamp: Date,
         actor: ObjectId,
         comments: String,
-        attachments: [String],
-      },
+        attachments: [String]
+      }
     ],
 
     // Workflow Integration
@@ -329,10 +329,10 @@ const ApplicationSchema = {
           issue: String,
           detectedAt: Date,
           severity: String,
-          resolution: String,
-        },
-      ],
-    },
+          resolution: String
+        }
+      ]
+    }
   },
 
   // Documents & Evidence
@@ -355,14 +355,14 @@ const ApplicationSchema = {
       encryption: {
         encrypted: Boolean,
         algorithm: String,
-        keyId: String,
+        keyId: String
       },
       integrity: {
         checksum: String,
         digitalSignature: String,
-        tamperDetected: Boolean,
-      },
-    },
+        tamperDetected: Boolean
+      }
+    }
   ],
 
   // Fees & Payments
@@ -377,18 +377,18 @@ const ApplicationSchema = {
         paymentDate: Date,
         paymentMethod: String,
         transactionId: String,
-        status: String,
-      },
+        status: String
+      }
     ],
     discounts: [
       {
         discountType: String,
         discountAmount: Number,
         reason: String,
-        approvedBy: ObjectId,
-      },
-    ],
-  },
+        approvedBy: ObjectId
+      }
+    ]
+  }
 };
 
 // Enhanced Batch Tracking Schema (Seed-to-Sale)
@@ -405,7 +405,7 @@ const BatchSchema = {
     harvestDate: Date,
     expectedYield: Number,
     actualYield: Number,
-    qualityGrade: String,
+    qualityGrade: String
   },
 
   // Traceability Graph
@@ -416,7 +416,7 @@ const BatchSchema = {
       supplier: String,
       certificationNumber: String,
       geneticProfile: Object,
-      parentBatches: [String], // For breeding programs
+      parentBatches: [String] // For breeding programs
     },
 
     // Production Journey
@@ -432,7 +432,7 @@ const BatchSchema = {
           humidity: Object,
           lightCycle: String,
           nutrients: [Object],
-          treatments: [Object],
+          treatments: [Object]
         },
 
         // IoT Data Integration
@@ -445,10 +445,10 @@ const BatchSchema = {
                 parameter: String,
                 value: Number,
                 unit: String,
-                quality: String, // 'good', 'questionable', 'bad'
-              },
-            ],
-          },
+                quality: String // 'good', 'questionable', 'bad'
+              }
+            ]
+          }
         ],
 
         // Quality Control
@@ -460,10 +460,10 @@ const BatchSchema = {
             parameters: Object,
             results: Object,
             photos: [String],
-            notes: String,
-          },
-        ],
-      },
+            notes: String
+          }
+        ]
+      }
     ],
 
     // Post-Harvest Processing
@@ -477,8 +477,8 @@ const BatchSchema = {
         outputWeight: Number,
         lossPercentage: Number,
         conditions: Object,
-        qualityTests: Object,
-      },
+        qualityTests: Object
+      }
     ],
 
     // Distribution Chain
@@ -490,9 +490,9 @@ const BatchSchema = {
         quantity: Number,
         transportConditions: Object,
         deliveryStatus: String,
-        trackingNumber: String,
-      },
-    ],
+        trackingNumber: String
+      }
+    ]
   },
 
   // QR Code Information
@@ -512,9 +512,9 @@ const BatchSchema = {
         scannedBy: String,
         location: Object,
         verificationResult: String,
-        additionalData: Object,
-      },
-    ],
+        additionalData: Object
+      }
+    ]
   },
 
   // Compliance Records
@@ -528,8 +528,8 @@ const BatchSchema = {
         evidence: [String],
         checkedBy: String,
         checkedAt: Date,
-        notes: String,
-      },
+        notes: String
+      }
     ],
 
     // Testing Results
@@ -542,9 +542,9 @@ const BatchSchema = {
         sampleId: String,
         results: Object,
         passed: Boolean,
-        certificate: String,
-      },
-    ],
+        certificate: String
+      }
+    ]
   },
 
   // Immutable Record Chain
@@ -557,9 +557,9 @@ const BatchSchema = {
       data: Object,
       previousHash: String,
       currentHash: String,
-      digitalSignature: String,
-    },
-  ],
+      digitalSignature: String
+    }
+  ]
 };
 
 // VRS Session Schema
@@ -576,7 +576,7 @@ const VRSSessionSchema = {
     actualStartTime: Date,
     actualEndTime: Date,
     estimatedDuration: Number,
-    actualDuration: Number,
+    actualDuration: Number
   },
 
   // Participants
@@ -589,8 +589,8 @@ const VRSSessionSchema = {
       joinedAt: Date,
       leftAt: Date,
       connectionQuality: String,
-      permissions: Object,
-    },
+      permissions: Object
+    }
   ],
 
   // Inspection Checklist
@@ -609,9 +609,9 @@ const VRSSessionSchema = {
         endTime: Date,
         findings: [String],
         evidence: [String],
-        notes: String,
-      },
-    ],
+        notes: String
+      }
+    ]
   },
 
   // Evidence Collection
@@ -629,17 +629,17 @@ const VRSSessionSchema = {
         fileSize: Number,
         mimeType: String,
         resolution: String,
-        compression: String,
+        compression: String
       },
       metadata: {
         location: Object,
         cameraSettings: Object,
-        deviceInfo: Object,
+        deviceInfo: Object
       },
       security: {
         encrypted: Boolean,
         checksum: String,
-        digitalSignature: String,
+        digitalSignature: String
       },
       annotations: [
         {
@@ -648,10 +648,10 @@ const VRSSessionSchema = {
           coordinates: Object,
           text: String,
           createdBy: String,
-          createdAt: Date,
-        },
-      ],
-    },
+          createdAt: Date
+        }
+      ]
+    }
   ],
 
   // AR Annotations
@@ -666,8 +666,8 @@ const VRSSessionSchema = {
       createdBy: String,
       createdAt: Date,
       visible: Boolean,
-      persistent: Boolean,
-    },
+      persistent: Boolean
+    }
   ],
 
   // Video Recordings
@@ -684,15 +684,15 @@ const VRSSessionSchema = {
         videoFile: String,
         audioFile: String,
         metadataFile: String,
-        totalSize: Number,
+        totalSize: Number
       },
       security: {
         encrypted: Boolean,
         encryptionKey: String,
         accessControl: Object,
-        retentionPolicy: Object,
-      },
-    },
+        retentionPolicy: Object
+      }
+    }
   ],
 
   // Session Results
@@ -703,7 +703,7 @@ const VRSSessionSchema = {
     recommendations: [String],
     followUpRequired: Boolean,
     reportGenerated: Boolean,
-    reportId: String,
+    reportId: String
   },
 
   // Technical Metadata
@@ -713,18 +713,18 @@ const VRSSessionSchema = {
         timestamp: Date,
         participantId: String,
         event: String,
-        data: Object,
-      },
+        data: Object
+      }
     ],
     performanceMetrics: {
       averageLatency: Number,
       averageBandwidth: Number,
       connectionDrops: Number,
-      qualityIssues: Number,
+      qualityIssues: Number
     },
     systemVersion: String,
-    clientVersions: Object,
-  },
+    clientVersions: Object
+  }
 };
 
 // Predictive Analytics Schema (Phase 3)
@@ -742,8 +742,8 @@ const PredictiveAnalyticsSchema = {
       accuracy: Number,
       features: [String],
       algorithm: String,
-      hyperparameters: Object,
-    },
+      hyperparameters: Object
+    }
   ],
 
   // Historical Data
@@ -757,8 +757,8 @@ const PredictiveAnalyticsSchema = {
         sunlight: Number,
         windSpeed: Number,
         soilMoisture: Number,
-        soilPH: Number,
-      },
+        soilPH: Number
+      }
     ],
 
     productionData: [
@@ -770,8 +770,8 @@ const PredictiveAnalyticsSchema = {
         yield: Number,
         quality: String,
         costs: Object,
-        revenue: Number,
-      },
+        revenue: Number
+      }
     ],
 
     treatmentData: [
@@ -782,9 +782,9 @@ const PredictiveAnalyticsSchema = {
         dosage: Number,
         method: String,
         reason: String,
-        effectiveness: Number,
-      },
-    ],
+        effectiveness: Number
+      }
+    ]
   },
 
   // Predictions
@@ -803,8 +803,8 @@ const PredictiveAnalyticsSchema = {
           scenarioName: String,
           conditions: Object,
           predictedOutcome: Object,
-          probability: Number,
-        },
+          probability: Number
+        }
       ],
 
       // Recommendations
@@ -813,10 +813,10 @@ const PredictiveAnalyticsSchema = {
           action: String,
           timing: Date,
           expectedImpact: Object,
-          priority: String,
-        },
-      ],
-    },
+          priority: String
+        }
+      ]
+    }
   ],
 
   // Risk Assessment
@@ -828,8 +828,8 @@ const PredictiveAnalyticsSchema = {
         probability: Number,
         impact: String,
         mitigation: [String],
-        monitoringRequired: Boolean,
-      },
+        monitoringRequired: Boolean
+      }
     ],
 
     // Early Warning System
@@ -842,10 +842,10 @@ const PredictiveAnalyticsSchema = {
         triggeredAt: Date,
         conditions: Object,
         recommendations: [String],
-        acknowledged: Boolean,
-      },
-    ],
-  },
+        acknowledged: Boolean
+      }
+    ]
+  }
 };
 
 // Supply Chain Integration Schema (Phase 3)
@@ -862,9 +862,9 @@ const SupplyChainSchema = {
         organizationName: String,
         role: String, // 'producer', 'processor', 'distributor', 'retailer'
         certifications: [String],
-        contactInfo: Object,
-      },
-    ],
+        contactInfo: Object
+      }
+    ]
   },
 
   // Product Journey
@@ -879,7 +879,7 @@ const SupplyChainSchema = {
         quantity: Number,
         unit: String,
         quality: String,
-        packaging: String,
+        packaging: String
       },
 
       // Documentation
@@ -888,8 +888,8 @@ const SupplyChainSchema = {
           documentType: String,
           documentId: String,
           verificationStatus: String,
-          digitalSignature: String,
-        },
+          digitalSignature: String
+        }
       ],
 
       // Transportation
@@ -903,9 +903,9 @@ const SupplyChainSchema = {
             timestamp: Date,
             location: Object,
             temperature: Number,
-            humidity: Number,
-          },
-        ],
+            humidity: Number
+          }
+        ]
       },
 
       // Verification
@@ -914,9 +914,9 @@ const SupplyChainSchema = {
         verifiedBy: String,
         verificationMethod: String,
         verificationData: Object,
-        blockchainHash: String,
-      },
-    },
+        blockchainHash: String
+      }
+    }
   ],
 
   // Consumer Interface
@@ -929,14 +929,14 @@ const SupplyChainSchema = {
       certifications: [String],
       harvestDate: Date,
       processingDate: Date,
-      qualityTests: Object,
+      qualityTests: Object
     },
 
     // Transparency Score
     transparencyScore: Number, // 0-100
     traceabilityDepth: Number, // How far back traceability goes
-    verificationLevel: String, // 'basic', 'enhanced', 'premium'
-  },
+    verificationLevel: String // 'basic', 'enhanced', 'premium'
+  }
 };
 
 // Database Indexes for Performance
@@ -948,7 +948,7 @@ const DatabaseIndexes = {
     { 'location.coordinates': '2dsphere' }, // Geospatial
     { 'compliance.gacpStatus': 1 },
     { 'metadata.createdAt': -1 },
-    { 'iotDevices.deviceId': 1 },
+    { 'iotDevices.deviceId': 1 }
   ],
 
   // Application Collection Indexes
@@ -957,7 +957,7 @@ const DatabaseIndexes = {
     { farmId: 1 },
     { 'status.currentStatus': 1 },
     { 'applicationInfo.submissionDate': -1 },
-    { 'wizardProgress.currentStep': 1 },
+    { 'wizardProgress.currentStep': 1 }
   ],
 
   // Batch Collection Indexes
@@ -967,7 +967,7 @@ const DatabaseIndexes = {
     { 'batchInfo.harvestDate': -1 },
     { 'qrCode.qrId': 1 }, // Unique
     { 'compliance.gacpCompliant': 1 },
-    { 'traceabilityGraph.source.seedId': 1 },
+    { 'traceabilityGraph.source.seedId': 1 }
   ],
 
   // VRS Session Collection Indexes
@@ -975,15 +975,15 @@ const DatabaseIndexes = {
     { sessionNumber: 1 }, // Unique
     { farmId: 1 },
     { 'sessionInfo.scheduledDate': -1 },
-    { 'results.overallResult': 1 },
+    { 'results.overallResult': 1 }
   ],
 
   // Predictive Analytics Indexes
   predictiveAnalytics: [
     { farmId: 1 },
     { 'predictions.targetDate': -1 },
-    { 'riskAssessment.alerts.triggeredAt': -1 },
-  ],
+    { 'riskAssessment.alerts.triggeredAt': -1 }
+  ]
 };
 
 module.exports = {
@@ -993,5 +993,5 @@ module.exports = {
   VRSSessionSchema,
   PredictiveAnalyticsSchema,
   SupplyChainSchema,
-  DatabaseIndexes,
+  DatabaseIndexes
 };

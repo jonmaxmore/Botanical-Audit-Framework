@@ -167,7 +167,7 @@ graph TB
   { title: 'หน้าหลัก', path: '/dashboard/reviewer', icon: Dashboard },
   { title: 'รอตรวจสอบ', path: '/dashboard/reviewer/pending', icon: Assignment, badge: 12 },
   { title: 'กำลังดำเนินการ', path: '/dashboard/reviewer/inprogress', icon: RateReview, badge: 5 },
-  { title: 'ตรวจสอบแล้ว', path: '/dashboard/reviewer/completed', icon: CheckCircle },
+  { title: 'ตรวจสอบแล้ว', path: '/dashboard/reviewer/completed', icon: CheckCircle }
 ];
 ```
 
@@ -250,7 +250,7 @@ graph TB
   { title: 'ตารางตรวจฟาร์ม', path: '/dashboard/inspector/schedule', icon: Schedule, badge: 3 },
   { title: 'Video Call', path: '/dashboard/inspector/videocall', icon: VideoCall },
   { title: 'รายงานการตรวจ', path: '/dashboard/inspector/reports', icon: Search },
-  { title: 'แผนที่ฟาร์ม', path: '/dashboard/inspector/map', icon: Map },
+  { title: 'แผนที่ฟาร์ม', path: '/dashboard/inspector/map', icon: Map }
 ];
 ```
 
@@ -334,7 +334,7 @@ graph TB
   { title: 'รออนุมัติ', path: '/dashboard/approver/pending', icon: Verified, badge: 8 },
   { title: 'อนุมัติแล้ว', path: '/dashboard/approver/approved', icon: CardMembership },
   { title: 'ปฏิเสธ', path: '/dashboard/approver/rejected', icon: Cancel },
-  { title: 'รายงาน', path: '/dashboard/approver/reports', icon: Assessment },
+  { title: 'รายงาน', path: '/dashboard/approver/reports', icon: Assessment }
 ];
 ```
 
@@ -423,7 +423,7 @@ graph TB
   { title: 'ความปลอดภัย', path: '/dashboard/admin/security', icon: Security },
   { title: 'สำรองข้อมูล', path: '/dashboard/admin/backup', icon: Backup },
   { title: 'Analytics', path: '/dashboard/admin/analytics', icon: Analytics }, // NEW
-  { title: 'Payments', path: '/dashboard/admin/payments', icon: Payment }, // NEW
+  { title: 'Payments', path: '/dashboard/admin/payments', icon: Payment } // NEW
 ];
 ```
 
@@ -453,14 +453,14 @@ if (application.status === 'submitted') {
     farmerId: farmer.id,
     amount: 5000,
     type: 'initial',
-    status: 'pending',
+    status: 'pending'
   });
 
   // Send notification to farmer
   await NotificationService.notify({
     userId: farmer.id,
     type: 'payment_required',
-    message: 'กรุณาชำระค่าธรรมเนียม 5,000 บาท',
+    message: 'กรุณาชำระค่าธรรมเนียม 5,000 บาท'
   });
 
   // Publish event
@@ -479,14 +479,14 @@ if (application.status === 'rejected' && application.submissionCount >= 3) {
     amount: 5000,
     type: 'resubmission',
     status: 'pending',
-    submissionCount: application.submissionCount,
+    submissionCount: application.submissionCount
   });
 
   // Send notification to farmer
   await NotificationService.notify({
     userId: farmer.id,
     type: 'payment_required',
-    message: 'เนื่องจากถูกปฏิเสธครั้งที่ 3 กรุณาชำระค่าธรรมเนียมเพิ่มเติม 5,000 บาท',
+    message: 'เนื่องจากถูกปฏิเสธครั้งที่ 3 กรุณาชำระค่าธรรมเนียมเพิ่มเติม 5,000 บาท'
   });
 
   // Lock application until payment

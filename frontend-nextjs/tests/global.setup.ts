@@ -2,7 +2,7 @@ import { test as setup } from '@playwright/test';
 
 /**
  * Global Setup: Create Test Users
- * 
+ *
  * This runs once before all tests to ensure test users exist in the database.
  * Fixes BUG #1: Login test user doesn't exist
  */
@@ -18,7 +18,7 @@ const TEST_USERS = [
     nationalId: '1234567890123', // Required 13-digit Thai national ID
     role: 'farmer',
     farmingExperience: 5,
-    farmerType: 'individual'
+    farmerType: 'individual',
   },
   {
     email: 'officer-test-001@example.com',
@@ -29,9 +29,9 @@ const TEST_USERS = [
     role: 'dtam_officer',
     workLocation: {
       provinces: ['กรุงเทพมหานคร'],
-      districts: []
-    }
-  }
+      districts: [],
+    },
+  },
 ];
 
 setup('create test users', async ({ request }) => {
@@ -43,9 +43,9 @@ setup('create test users', async ({ request }) => {
       const response = await request.post(`${BACKEND_URL}/api/auth/register`, {
         data: user,
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        timeout: 10000
+        timeout: 10000,
       });
 
       if (response.ok()) {

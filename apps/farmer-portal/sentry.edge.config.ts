@@ -18,5 +18,5 @@ Sentry.init({
   debug: false,
 
   // Release tracking
-  release: process.env.NEXT_PUBLIC_APP_VERSION || 'development',
+  release: process.env.NEXT_PUBLIC_APP_VERSION || 'development'
 });

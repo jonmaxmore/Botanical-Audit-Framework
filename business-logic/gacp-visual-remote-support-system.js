@@ -24,7 +24,7 @@ const VRS_SESSION_STATES = {
   PAUSED: 'paused',
   COMPLETED: 'completed',
   FAILED: 'failed',
-  CANCELLED: 'cancelled',
+  CANCELLED: 'cancelled'
 };
 
 // Audit Checklist Templates based on GACP requirements
@@ -40,7 +40,7 @@ const AUDIT_CHECKLISTS = {
         title: 'ภาพรวมสถานที่',
         description: 'แสดงภาพรวมพื้นที่ฟาร์มและสิ่งแวดล้อม',
         evidenceRequired: ['video', 'photos'],
-        timeRequired: 10, // minutes
+        timeRequired: 10 // minutes
       },
       {
         id: 'cultivation_area',
@@ -48,7 +48,7 @@ const AUDIT_CHECKLISTS = {
         title: 'พื้นที่เพาะปลูก',
         description: 'ตรวจสอบพื้นที่ปลูกและโครงสร้าง',
         evidenceRequired: ['video', 'photos', 'measurements'],
-        timeRequired: 15,
+        timeRequired: 15
       },
       {
         id: 'water_source',
@@ -56,7 +56,7 @@ const AUDIT_CHECKLISTS = {
         title: 'แหล่งน้ำ',
         description: 'ตรวจสอบแหล่งน้ำและระบบการให้น้ำ',
         evidenceRequired: ['video', 'water_sample'],
-        timeRequired: 10,
+        timeRequired: 10
       },
       {
         id: 'storage_facility',
@@ -64,7 +64,7 @@ const AUDIT_CHECKLISTS = {
         title: 'สถานที่เก็บรักษา',
         description: 'ตรวจสอบคลังเก็บวัตถุดิบและผลิตภัณฑ์',
         evidenceRequired: ['video', 'photos', 'temperature_log'],
-        timeRequired: 15,
+        timeRequired: 15
       },
       {
         id: 'documentation_review',
@@ -72,12 +72,12 @@ const AUDIT_CHECKLISTS = {
         title: 'ตรวจสอบเอกสาร',
         description: 'ตรวจสอบสมุดบันทึกและเอกสารประกอบ',
         evidenceRequired: ['document_photos', 'record_review'],
-        timeRequired: 20,
-      },
+        timeRequired: 20
+      }
     ],
     totalTimeEstimate: 70, // minutes
     requiredParticipants: ['auditor', 'farmer', 'witness'],
-    gacpRequirements: ['SITE', 'CULTIVATION', 'WATER', 'STORAGE', 'DOCUMENTATION'],
+    gacpRequirements: ['SITE', 'CULTIVATION', 'WATER', 'STORAGE', 'DOCUMENTATION']
   },
 
   FOLLOW_UP_INSPECTION: {
@@ -91,7 +91,7 @@ const AUDIT_CHECKLISTS = {
         title: 'ทบทวนการปฏิบัติตามข้อกำหนด',
         description: 'ตรวจสอบการปฏิบัติตาม GACP ในช่วงที่ผ่านมา',
         evidenceRequired: ['record_review', 'photos'],
-        timeRequired: 20,
+        timeRequired: 20
       },
       {
         id: 'batch_traceability',
@@ -99,7 +99,7 @@ const AUDIT_CHECKLISTS = {
         title: 'การตรวจสอบย้อนกลับ',
         description: 'ตรวจสอบ Batch และ Traceability',
         evidenceRequired: ['batch_records', 'qr_verification'],
-        timeRequired: 15,
+        timeRequired: 15
       },
       {
         id: 'corrective_actions',
@@ -107,13 +107,13 @@ const AUDIT_CHECKLISTS = {
         title: 'การแก้ไขปรับปรุง',
         description: 'ตรวจสอบการดำเนินการแก้ไขจากครั้งก่อน',
         evidenceRequired: ['before_after_photos', 'implementation_evidence'],
-        timeRequired: 10,
-      },
+        timeRequired: 10
+      }
     ],
     totalTimeEstimate: 45,
     requiredParticipants: ['auditor', 'farmer'],
-    gacpRequirements: ['QUALITY_ASSURANCE', 'HARVESTING', 'DOCUMENTATION'],
-  },
+    gacpRequirements: ['QUALITY_ASSURANCE', 'HARVESTING', 'DOCUMENTATION']
+  }
 };
 
 // AR Annotation Types
@@ -124,7 +124,7 @@ const AR_ANNOTATION_TYPES = {
   TEXT: 'text',
   MEASUREMENT: 'measurement',
   WARNING: 'warning',
-  CHECKMARK: 'checkmark',
+  CHECKMARK: 'checkmark'
 };
 
 // VRS Security Configuration
@@ -132,20 +132,20 @@ const VRS_SECURITY_CONFIG = {
   encryption: {
     algorithm: 'AES-256-GCM',
     keyRotationInterval: 3600000, // 1 hour
-    requireEndToEndEncryption: true,
+    requireEndToEndEncryption: true
   },
   access: {
     maxParticipants: 5,
     requireAuthentication: true,
     sessionTimeout: 7200000, // 2 hours
-    requireConsent: true,
+    requireConsent: true
   },
   recording: {
     maxDuration: 14400000, // 4 hours
     compressionLevel: 'medium',
     autoDeleteAfter: 2592000000, // 30 days
-    requireApproval: true,
-  },
+    requireApproval: true
+  }
 };
 
 class VRSSession extends EventEmitter {
@@ -165,7 +165,7 @@ class VRSSession extends EventEmitter {
       scheduledStartTime: sessionConfig.scheduledStartTime,
       estimatedDuration: sessionConfig.estimatedDuration,
       participants: sessionConfig.participants || [],
-      ...sessionConfig,
+      ...sessionConfig
     };
 
     // Session State
@@ -241,7 +241,7 @@ class VRSSession extends EventEmitter {
           endTime: null,
           evidence: [],
           notes: '',
-          completed: false,
+          completed: false
         });
       }
     }
@@ -249,7 +249,7 @@ class VRSSession extends EventEmitter {
     this.emit('session_starting', {
       sessionId: this.id,
       sessionNumber: this.sessionNumber,
-      checklist: this.config.checklist,
+      checklist: this.config.checklist
     });
 
     console.log(`📹 VRS Session starting: ${this.sessionNumber}`);
@@ -278,7 +278,7 @@ class VRSSession extends EventEmitter {
       connection: connection,
       joinedAt: new Date(),
       isActive: true,
-      permissions: this.getParticipantPermissions(participantInfo.role),
+      permissions: this.getParticipantPermissions(participantInfo.role)
     };
 
     this.participants.set(participantId, participant);
@@ -291,7 +291,7 @@ class VRSSession extends EventEmitter {
 
     this.emit('participant_joined', {
       sessionId: this.id,
-      participant: participant,
+      participant: participant
     });
 
     console.log(`👤 Participant joined VRS: ${participant.name} (${participant.role})`);
@@ -312,8 +312,8 @@ class VRSSession extends EventEmitter {
       quality: 'HD',
       encryption: {
         enabled: true,
-        algorithm: VRS_SECURITY_CONFIG.encryption.algorithm,
-      },
+        algorithm: VRS_SECURITY_CONFIG.encryption.algorithm
+      }
     };
 
     // Simulate connection establishment
@@ -321,7 +321,7 @@ class VRSSession extends EventEmitter {
       connection.state = 'connected';
       this.emit('connection_established', {
         participantId,
-        connection,
+        connection
       });
     }, 2000);
 
@@ -339,7 +339,7 @@ class VRSSession extends EventEmitter {
         canCaptureEvidence: true,
         canAccessChecklist: true,
         canStartRecording: true,
-        canEndSession: true,
+        canEndSession: true
       },
       farmer: {
         canControlSession: false,
@@ -347,7 +347,7 @@ class VRSSession extends EventEmitter {
         canCaptureEvidence: true,
         canAccessChecklist: true,
         canStartRecording: false,
-        canEndSession: false,
+        canEndSession: false
       },
       witness: {
         canControlSession: false,
@@ -355,8 +355,8 @@ class VRSSession extends EventEmitter {
         canCaptureEvidence: false,
         canAccessChecklist: true,
         canStartRecording: false,
-        canEndSession: false,
-      },
+        canEndSession: false
+      }
     };
 
     return permissions[role] || permissions.witness;
@@ -371,7 +371,7 @@ class VRSSession extends EventEmitter {
     const participantRoles = Array.from(this.participants.values()).map(p => p.role);
 
     return this.config.checklist.requiredParticipants.every(role =>
-      participantRoles.includes(role),
+      participantRoles.includes(role)
     );
   }
 
@@ -392,7 +392,7 @@ class VRSSession extends EventEmitter {
     this.emit('inspection_started', {
       sessionId: this.id,
       checklist: this.config.checklist,
-      participants: Array.from(this.participants.values()),
+      participants: Array.from(this.participants.values())
     });
 
     console.log(`🔍 Inspection began: ${this.sessionNumber}`);
@@ -424,14 +424,14 @@ class VRSSession extends EventEmitter {
       sessionId: this.id,
       checkpoint: checkpoint,
       participantId: participantId,
-      startTime: progress.startTime,
+      startTime: progress.startTime
     });
 
     console.log(`✓ Checkpoint started: ${checkpoint.title}`);
     return {
       checkpoint,
       progress,
-      estimatedTime: checkpoint.timeRequired,
+      estimatedTime: checkpoint.timeRequired
     };
   }
 
@@ -454,7 +454,7 @@ class VRSSession extends EventEmitter {
       createdBy: participantId,
       createdAt: new Date(),
       visible: true,
-      persistent: annotationData.persistent || false,
+      persistent: annotationData.persistent || false
     };
 
     this.arAnnotations.push(annotation);
@@ -463,7 +463,7 @@ class VRSSession extends EventEmitter {
     this.emit('ar_annotation_added', {
       sessionId: this.id,
       annotation: annotation,
-      participantId: participantId,
+      participantId: participantId
     });
 
     console.log(`📍 AR Annotation added: ${annotation.type} by ${participant.name}`);
@@ -493,7 +493,7 @@ class VRSSession extends EventEmitter {
         location: evidenceData.location,
         cameraSettings: evidenceData.cameraSettings,
         participantId: participantId,
-        sessionId: this.id,
+        sessionId: this.id
       },
 
       // Security
@@ -501,7 +501,7 @@ class VRSSession extends EventEmitter {
       checksum: this.calculateChecksum(evidenceData.data),
 
       // Annotations
-      annotations: evidenceData.annotations || [],
+      annotations: evidenceData.annotations || []
     };
 
     this.evidenceCollection.push(evidence);
@@ -518,7 +518,7 @@ class VRSSession extends EventEmitter {
     this.emit('evidence_captured', {
       sessionId: this.id,
       evidence: evidence,
-      participantId: participantId,
+      participantId: participantId
     });
 
     console.log(`📸 Evidence captured: ${evidence.type} - ${evidence.title}`);
@@ -560,7 +560,7 @@ class VRSSession extends EventEmitter {
       compression: VRS_SECURITY_CONFIG.recording.compressionLevel,
       encryption: {
         enabled: true,
-        key: this.generateEncryptionKey(),
+        key: this.generateEncryptionKey()
       },
 
       // Participants being recorded
@@ -569,7 +569,7 @@ class VRSSession extends EventEmitter {
       // Files
       videoFile: null,
       audioFile: null,
-      metadataFile: null,
+      metadataFile: null
     };
 
     this.recordings.push(recording);
@@ -579,7 +579,7 @@ class VRSSession extends EventEmitter {
     this.emit('recording_started', {
       sessionId: this.id,
       recording: recording,
-      participantId: participantId,
+      participantId: participantId
     });
 
     console.log(`🎥 Recording started by ${participant.name}`);
@@ -616,7 +616,7 @@ class VRSSession extends EventEmitter {
     this.emit('recording_stopped', {
       sessionId: this.id,
       recording: completedRecording,
-      participantId: participantId,
+      participantId: participantId
     });
 
     console.log(`🎥 Recording stopped: ${completedRecording.duration}ms`);
@@ -651,7 +651,7 @@ class VRSSession extends EventEmitter {
       sessionId: this.id,
       checkpoint: checkpoint,
       progress: progress,
-      participantId: participantId,
+      participantId: participantId
     });
 
     console.log(`✅ Checkpoint completed: ${checkpoint.title} - ${progress.result}`);
@@ -701,7 +701,7 @@ class VRSSession extends EventEmitter {
       sessionId: this.id,
       completedAt: this.endedAt,
       duration: this.actualDuration,
-      report: finalReport,
+      report: finalReport
     });
 
     console.log(`🏁 Inspection completed: ${this.sessionNumber}`);
@@ -725,15 +725,15 @@ class VRSSession extends EventEmitter {
           id: checkpoint.id,
           title: checkpoint.title,
           category: checkpoint.category,
-          description: checkpoint.description,
+          description: checkpoint.description
         },
         progress: {
           result: progress.result,
           notes: progress.notes,
           findings: progress.findings,
           evidenceCount: progress.evidence.length,
-          timeSpent: progress.endTime - progress.startTime,
-        },
+          timeSpent: progress.endTime - progress.startTime
+        }
       };
 
       checkpointResults.push(result);
@@ -757,7 +757,7 @@ class VRSSession extends EventEmitter {
         sessionNumber: this.sessionNumber,
         farmId: this.config.farmId,
         applicationId: this.config.applicationId,
-        inspectionType: this.config.inspectionType,
+        inspectionType: this.config.inspectionType
       },
 
       timing: {
@@ -765,21 +765,21 @@ class VRSSession extends EventEmitter {
         actualStartTime: this.startedAt,
         actualEndTime: this.endedAt,
         estimatedDuration: this.config.estimatedDuration,
-        actualDuration: this.actualDuration,
+        actualDuration: this.actualDuration
       },
 
       participants: Array.from(this.participants.values()).map(p => ({
         name: p.name,
         role: p.role,
         joinedAt: p.joinedAt,
-        isActive: p.isActive,
+        isActive: p.isActive
       })),
 
       results: {
         overallResult: overallResult,
         totalScore: maxScore > 0 ? (totalScore / maxScore) * 100 : 0,
         checkpointResults: checkpointResults,
-        complianceStatus: overallResult === 'pass' ? 'compliant' : 'non-compliant',
+        complianceStatus: overallResult === 'pass' ? 'compliant' : 'non-compliant'
       },
 
       evidence: {
@@ -787,17 +787,17 @@ class VRSSession extends EventEmitter {
         photos: this.evidenceCollection.filter(e => e.type === 'photo').length,
         videos: this.evidenceCollection.filter(e => e.type === 'video').length,
         documents: this.evidenceCollection.filter(e => e.type === 'document').length,
-        recordings: this.recordings.length,
+        recordings: this.recordings.length
       },
 
       technical: {
         arAnnotations: this.arAnnotations.length,
         connectionQuality: this.getAverageConnectionQuality(),
-        encryptionUsed: true,
+        encryptionUsed: true
       },
 
       generatedAt: new Date(),
-      reportId: uuidv4(),
+      reportId: uuidv4()
     };
 
     return inspectionReport;
@@ -814,7 +814,7 @@ class VRSSession extends EventEmitter {
       HD: 100,
       SD: 75,
       low: 50,
-      poor: 25,
+      poor: 25
     };
 
     const totalScore = connections.reduce((sum, conn) => {
@@ -842,14 +842,14 @@ class VRSSession extends EventEmitter {
       timestamp: new Date(),
       ipAddress: consentData.ipAddress,
       userAgent: consentData.userAgent,
-      signature: consentData.signature, // Digital signature if available
+      signature: consentData.signature // Digital signature if available
     };
 
     this.consentRecords.set(userId, consent);
 
     this.emit('consent_recorded', {
       sessionId: this.id,
-      consent: consent,
+      consent: consent
     });
 
     console.log(`📝 Consent recorded for user: ${userId}`);
@@ -886,7 +886,7 @@ class VRSSession extends EventEmitter {
       sessionId: this.id,
       reason: reason,
       cancelledBy: participantId,
-      cancelledAt: this.endedAt,
+      cancelledAt: this.endedAt
     });
 
     console.log(`❌ Session cancelled: ${this.sessionNumber} - ${reason}`);
@@ -911,8 +911,8 @@ class VRSSession extends EventEmitter {
         createdAt: this.createdAt,
         startedAt: this.startedAt,
         endedAt: this.endedAt,
-        actualDuration: this.actualDuration,
-      },
+        actualDuration: this.actualDuration
+      }
     };
   }
 
@@ -921,7 +921,7 @@ class VRSSession extends EventEmitter {
    */
   getCurrentStatus() {
     const completedCheckpoints = Array.from(this.checklistProgress.values()).filter(
-      p => p.completed,
+      p => p.completed
     ).length;
     const totalCheckpoints = this.checklistProgress.size;
 
@@ -931,11 +931,11 @@ class VRSSession extends EventEmitter {
       progress: {
         completed: completedCheckpoints,
         total: totalCheckpoints,
-        percentage: totalCheckpoints > 0 ? (completedCheckpoints / totalCheckpoints) * 100 : 0,
+        percentage: totalCheckpoints > 0 ? (completedCheckpoints / totalCheckpoints) * 100 : 0
       },
       activeParticipants: Array.from(this.participants.values()).filter(p => p.isActive).length,
       isRecording: this.state === VRS_SESSION_STATES.RECORDING,
-      currentCheckpoint: this.getCurrentCheckpoint(),
+      currentCheckpoint: this.getCurrentCheckpoint()
     };
   }
 
@@ -949,7 +949,7 @@ class VRSSession extends EventEmitter {
         return {
           checkpoint,
           progress,
-          timeElapsed: new Date() - progress.startTime,
+          timeElapsed: new Date() - progress.startTime
         };
       }
     }
@@ -967,7 +967,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
       totalSessions: 0,
       activeSessions: 0,
       completedInspections: 0,
-      totalParticipants: 0,
+      totalParticipants: 0
     };
 
     console.log('📹 Visual Remote Support System initialized');
@@ -1077,7 +1077,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
       averageSessionDuration: this.getAverageSessionDuration(),
       participantsByRole: this.getParticipantsByRole(),
       evidenceStatistics: this.getEvidenceStatistics(),
-      lastUpdated: new Date(),
+      lastUpdated: new Date()
     };
   }
 
@@ -1103,7 +1103,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
    */
   getAverageSessionDuration() {
     const completedSessions = Array.from(this.sessions.values()).filter(
-      s => s.state === VRS_SESSION_STATES.COMPLETED && s.actualDuration > 0,
+      s => s.state === VRS_SESSION_STATES.COMPLETED && s.actualDuration > 0
     );
 
     if (completedSessions.length === 0) return 0;
@@ -1119,7 +1119,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
     const roleCount = {
       auditor: 0,
       farmer: 0,
-      witness: 0,
+      witness: 0
     };
 
     for (const session of this.sessions.values()) {
@@ -1155,7 +1155,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
       totalVideos,
       totalRecordings,
       averageEvidencePerSession:
-        this.systemStats.totalSessions > 0 ? totalEvidence / this.systemStats.totalSessions : 0,
+        this.systemStats.totalSessions > 0 ? totalEvidence / this.systemStats.totalSessions : 0
     };
   }
 
@@ -1169,7 +1169,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
       systemLoad: this.calculateSystemLoad(),
       memoryUsage: this.getMemoryUsage(),
       connectionQuality: this.getOverallConnectionQuality(),
-      lastHealthCheck: new Date(),
+      lastHealthCheck: new Date()
     };
   }
 
@@ -1189,7 +1189,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
     return {
       used: Math.floor(Math.random() * 1000) + 500, // MB
       available: 2048, // MB
-      percentage: Math.floor(Math.random() * 50) + 25,
+      percentage: Math.floor(Math.random() * 50) + 25
     };
   }
 
@@ -1198,7 +1198,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
    */
   getOverallConnectionQuality() {
     const activeSessions = Array.from(this.sessions.values()).filter(
-      s => s.state === VRS_SESSION_STATES.IN_PROGRESS || s.state === VRS_SESSION_STATES.RECORDING,
+      s => s.state === VRS_SESSION_STATES.IN_PROGRESS || s.state === VRS_SESSION_STATES.RECORDING
     );
 
     if (activeSessions.length === 0) return 'no_active_sessions';
@@ -1208,7 +1208,7 @@ class VisualRemoteSupportSystem extends EventEmitter {
       excellent: 100,
       good: 75,
       fair: 50,
-      poor: 25,
+      poor: 25
     };
 
     const totalScore = qualityScores.reduce((sum, quality) => {
@@ -1230,5 +1230,5 @@ module.exports = {
   VRS_SESSION_STATES,
   AUDIT_CHECKLISTS,
   AR_ANNOTATION_TYPES,
-  VRS_SECURITY_CONFIG,
+  VRS_SECURITY_CONFIG
 };

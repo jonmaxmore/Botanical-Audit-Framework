@@ -571,7 +571,7 @@
        public code: string,
        public message: string,
        public statusCode: number,
-       public details?: any,
+       public details?: any
      ) {
        super(message);
      }
@@ -585,8 +585,8 @@
          error: {
            code: err.code,
            message: err.message,
-           details: err.details,
-         },
+           details: err.details
+         }
        });
      }
 
@@ -596,8 +596,8 @@
        success: false,
        error: {
          code: 'INTERNAL_ERROR',
-         message: 'An unexpected error occurred',
-       },
+         message: 'An unexpected error occurred'
+       }
      });
    });
    ```
@@ -610,7 +610,7 @@
      application_id: 'APP-001',
      farmer_id: 'F-123',
      payment_amount: 5000,
-     timestamp: new Date(),
+     timestamp: new Date()
    });
 
    // Log Levels:

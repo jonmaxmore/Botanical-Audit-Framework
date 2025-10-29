@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * Notification Repository Interface
  *

@@ -398,11 +398,11 @@ class SoilDataAnalyzer {
       npk: this.analyzeNPK(soilData.npk, cropRequirements.npk),
       micronutrients: this.analyzeMicronutrients(
         soilData.micronutrients,
-        cropRequirements.micronutrients,
+        cropRequirements.micronutrients
       ),
       organicMatter: this.analyzeOrganicMatter(soilData.organicMatter),
       overallHealth: 'good', // Will be calculated
-      score: 0, // 0-100
+      score: 0 // 0-100
     };
 
     // Calculate overall health score
@@ -420,7 +420,7 @@ class SoilDataAnalyzer {
       return {
         status: 'unknown',
         message: 'ไม่มีข้อมูลค่า pH',
-        action: 'required',
+        action: 'required'
       };
     }
 
@@ -436,7 +436,7 @@ class SoilDataAnalyzer {
         message: `ดินเป็นกรดจัด (pH ${currentPH})`,
         severity: 'high',
         impact: 'ธาตุอาหารหลายชนิดดูดซึมได้ยาก โดยเฉพาะ N, P, K, Ca, Mg',
-        action: 'urgent',
+        action: 'urgent'
       };
     }
 
@@ -450,7 +450,7 @@ class SoilDataAnalyzer {
         message: `ดินเป็นกรดเล็กน้อย (pH ${currentPH})`,
         severity: 'medium',
         impact: 'การดูดซึมธาตุอาหารลดลง 20-30%',
-        action: 'recommended',
+        action: 'recommended'
       };
     }
 
@@ -464,7 +464,7 @@ class SoilDataAnalyzer {
         message: `ดินเป็นด่างจัด (pH ${currentPH})`,
         severity: 'high',
         impact: 'เหล็ก แมงกานีส สังกะสี ดูดซึมได้ยากมาก',
-        action: 'urgent',
+        action: 'urgent'
       };
     }
 
@@ -478,7 +478,7 @@ class SoilDataAnalyzer {
         message: `ดินเป็นด่างเล็กน้อย (pH ${currentPH})`,
         severity: 'medium',
         impact: 'ธาตุรองบางชนิดดูดซึมได้ยาก',
-        action: 'recommended',
+        action: 'recommended'
       };
     }
 
@@ -488,7 +488,7 @@ class SoilDataAnalyzer {
       currentValue: currentPH,
       targetValue: ideal,
       message: `ค่า pH เหมาะสม (${currentPH})`,
-      action: 'maintain',
+      action: 'maintain'
     };
   }
 
@@ -500,10 +500,10 @@ class SoilDataAnalyzer {
       nitrogen: this.analyzeNutrient('nitrogen', 'N', currentNPK.nitrogen, optimalNPK.nitrogen, {
         symptoms: {
           deficient: ['ใบเหลือง', 'เจริญเติบโตช้า', 'ลำต้นเล็ก'],
-          excessive: ['ใบเขียวเข้มผิดปกติ', 'ลำต้นอ่อนแอ', 'โรคมากขึ้น'],
+          excessive: ['ใบเขียวเข้มผิดปกติ', 'ลำต้นอ่อนแอ', 'โรคมากขึ้น']
         },
         functions: 'สร้างโปรตีน คลอโรฟิลล์ ส่งเสริมการเจริญเติบโต',
-        criticalStages: ['vegetative', 'early_flowering'],
+        criticalStages: ['vegetative', 'early_flowering']
       }),
 
       phosphorus: this.analyzeNutrient(
@@ -514,11 +514,11 @@ class SoilDataAnalyzer {
         {
           symptoms: {
             deficient: ['ใบมืด', 'ระบบรากไม่แข็งแรง', 'ออกดอกช้า'],
-            excessive: ['ขัดขวางการดูดซึมสังกะสีและเหล็ก'],
+            excessive: ['ขัดขวางการดูดซึมสังกะสีและเหล็ก']
           },
           functions: 'พัฒนาราก ส่งเสริมการออกดอกและติดผล สะสมพลังงาน',
-          criticalStages: ['seedling', 'flowering', 'fruiting'],
-        },
+          criticalStages: ['seedling', 'flowering', 'fruiting']
+        }
       ),
 
       potassium: this.analyzeNutrient(
@@ -529,12 +529,12 @@ class SoilDataAnalyzer {
         {
           symptoms: {
             deficient: ['ขอบใบไหม้', 'ต้านทานโรคต่ำ', 'คุณภาพผลผลิตต่ำ'],
-            excessive: ['ขัดขวางการดูดซึมแคลเซียมและแมกนีเซียม'],
+            excessive: ['ขัดขวางการดูดซึมแคลเซียมและแมกนีเซียม']
           },
           functions: 'คุณภาพผลผลิต ภูมิคุ้มกัน การสังเคราะห์แสง',
-          criticalStages: ['flowering', 'fruiting', 'ripening'],
-        },
-      ),
+          criticalStages: ['flowering', 'fruiting', 'ripening']
+        }
+      )
     };
 
     // Calculate NPK ratio
@@ -544,13 +544,13 @@ class SoilDataAnalyzer {
       analysis.ratio = {
         n: Math.round((currentNPK.nitrogen / total) * 100),
         p: Math.round((currentNPK.phosphorus / total) * 100),
-        k: Math.round((currentNPK.potassium / total) * 100),
+        k: Math.round((currentNPK.potassium / total) * 100)
       };
     }
 
     // Overall NPK balance
     const deficiencies = [analysis.nitrogen, analysis.phosphorus, analysis.potassium].filter(
-      n => n.status === 'deficient' || n.status === 'very_deficient',
+      n => n.status === 'deficient' || n.status === 'very_deficient'
     );
 
     analysis.balanceStatus = deficiencies.length === 0 ? 'balanced' : 'imbalanced';
@@ -570,7 +570,7 @@ class SoilDataAnalyzer {
         status: 'unknown',
         message: `ไม่มีข้อมูล${symbol}`,
         action: 'test_required',
-        metadata,
+        metadata
       };
     }
 
@@ -593,7 +593,7 @@ class SoilDataAnalyzer {
         symptoms: metadata.symptoms.deficient,
         impact: `ผลผลิตลดลง 40-60%, ${metadata.functions}ไม่เพียงพอ`,
         action: 'urgent',
-        metadata,
+        metadata
       };
     }
 
@@ -613,7 +613,7 @@ class SoilDataAnalyzer {
         symptoms: metadata.symptoms.deficient,
         impact: `ผลผลิตลดลง 20-40%, ${metadata.functions}จำกัด`,
         action: 'recommended',
-        metadata,
+        metadata
       };
     }
 
@@ -632,7 +632,7 @@ class SoilDataAnalyzer {
         priority: 3,
         impact: `ผลผลิตอาจลดลง 10-20%`,
         action: 'optional',
-        metadata,
+        metadata
       };
     }
 
@@ -652,7 +652,7 @@ class SoilDataAnalyzer {
         symptoms: metadata.symptoms.excessive,
         impact: 'อาจเกิดความเป็นพิษ เสียเงินซื้อปุ๋ยโดยเปล่าประโยชน์',
         action: 'reduce',
-        metadata,
+        metadata
       };
     }
 
@@ -671,7 +671,7 @@ class SoilDataAnalyzer {
         priority: 4,
         impact: 'สิ้นเปลืองปุ๋ย อาจขัดขวางการดูดซึมธาตุอื่น',
         action: 'reduce',
-        metadata,
+        metadata
       };
     }
 
@@ -687,7 +687,7 @@ class SoilDataAnalyzer {
       severity: 'none',
       priority: 5,
       action: 'maintain',
-      metadata,
+      metadata
     };
   }
 
@@ -699,7 +699,7 @@ class SoilDataAnalyzer {
       return {
         status: 'unknown',
         message: 'ไม่มีข้อมูลธาตุรอง',
-        nutrients: [],
+        nutrients: []
       };
     }
 
@@ -723,7 +723,7 @@ class SoilDataAnalyzer {
       deficiencies,
       details: analysis,
       message:
-        deficiencies.length === 0 ? 'ธาตุรองครบถ้วน' : `ธาตุรองขาด: ${deficiencies.join(', ')}`,
+        deficiencies.length === 0 ? 'ธาตุรองครบถ้วน' : `ธาตุรองขาด: ${deficiencies.join(', ')}`
     };
   }
 
@@ -736,7 +736,7 @@ class SoilDataAnalyzer {
         status: 'low',
         currentValue: current,
         targetValue: min,
-        action: 'supplement',
+        action: 'supplement'
       };
     }
 
@@ -746,7 +746,7 @@ class SoilDataAnalyzer {
         status: 'high',
         currentValue: current,
         targetValue: max,
-        action: 'reduce',
+        action: 'reduce'
       };
     }
 
@@ -754,7 +754,7 @@ class SoilDataAnalyzer {
       deficient: false,
       status: 'adequate',
       currentValue: current,
-      action: 'maintain',
+      action: 'maintain'
     };
   }
 
@@ -766,7 +766,7 @@ class SoilDataAnalyzer {
       return {
         status: 'unknown',
         message: 'ไม่มีข้อมูลอินทรียวัตถุ',
-        action: 'test_required',
+        action: 'test_required'
       };
     }
 
@@ -781,15 +781,15 @@ class SoilDataAnalyzer {
           'ดินแห้ง เก็บน้ำได้น้อย',
           'โครงสร้างดินไม่ดี',
           'จุลินทรีย์มีชีวิตต่ำ',
-          'CEC ต่ำ เก็บธาตุอาหารไม่ได้',
+          'CEC ต่ำ เก็บธาตุอาหารไม่ได้'
         ],
         benefits: [
           'ช่วยเก็บน้ำได้ดีขึ้น 30-40%',
           'เพิ่มความอุดมสมบูรณ์',
           'ปรับปรุงโครงสร้างดิน',
-          'เพิ่มจุลินทรีย์ที่เป็นประโยชน์',
+          'เพิ่มจุลินทรีย์ที่เป็นประโยชน์'
         ],
-        action: 'urgent',
+        action: 'urgent'
       };
     }
 
@@ -801,7 +801,7 @@ class SoilDataAnalyzer {
         message: `อินทรียวัตถุต่ำ (${percentage}%)`,
         severity: 'medium',
         impact: ['โครงสร้างดินพอใช้', 'เก็บน้ำได้ปานกลาง'],
-        action: 'recommended',
+        action: 'recommended'
       };
     }
 
@@ -813,7 +813,7 @@ class SoilDataAnalyzer {
         message: `อินทรียวัตถุสูง (${percentage}%)`,
         severity: 'low',
         impact: ['อาจเกิด N immobilization', 'ดินอาจเป็นกรด'],
-        action: 'monitor',
+        action: 'monitor'
       };
     }
 
@@ -822,7 +822,7 @@ class SoilDataAnalyzer {
       percentage,
       targetRange: '4-6%',
       message: `อินทรียวัตถุเหมาะสม (${percentage}%)`,
-      action: 'maintain',
+      action: 'maintain'
     };
   }
 
@@ -898,38 +898,38 @@ const CANNABIS_PROFILE = {
       stage: 'germination',
       duration: { days: 3 - 10 },
       thaiName: 'งอก',
-      description: 'เมล็ดงอกและแตกรากแรก',
+      description: 'เมล็ดงอกและแตกรากแรก'
     },
     {
       stage: 'seedling',
       duration: { weeks: 2 - 3 },
       thaiName: 'ต้นกล้า',
-      description: 'ใบแท้เริ่มออก 2-6 ใบ',
+      description: 'ใบแท้เริ่มออก 2-6 ใบ'
     },
     {
       stage: 'vegetative',
       duration: { weeks: 4 - 8 },
       thaiName: 'เจริญเติบโต',
-      description: 'ลำต้นและใบเจริญเติบโตเต็มที่',
+      description: 'ลำต้นและใบเจริญเติบโตเต็มที่'
     },
     {
       stage: 'pre_flowering',
       duration: { weeks: 1 - 2 },
       thaiName: 'ก่อนออกดอก',
-      description: 'เริ่มเห็นเพศพืช',
+      description: 'เริ่มเห็นเพศพืช'
     },
     {
       stage: 'flowering',
       duration: { weeks: 6 - 12 },
       thaiName: 'ออกดอก',
-      description: 'ดอกเจริญเติบโตและสะสม cannabinoids',
+      description: 'ดอกเจริญเติบโตและสะสม cannabinoids'
     },
     {
       stage: 'ripening',
       duration: { weeks: 1 - 2 },
       thaiName: 'สุกงอม',
-      description: 'ดอกสุกเต็มที่ พร้อมเก็บเกี่ยว',
-    },
+      description: 'ดอกสุกเต็มที่ พร้อมเก็บเกี่ยว'
+    }
   ],
 
   // Soil requirements
@@ -938,7 +938,7 @@ const CANNABIS_PROFILE = {
       min: 6.0,
       max: 7.0,
       ideal: 6.5,
-      notes: 'Cannabis ชอบดินเป็นกลางเล็กน้อย',
+      notes: 'Cannabis ชอบดินเป็นกลางเล็กน้อย'
     },
 
     // NPK by growth stage
@@ -947,32 +947,32 @@ const CANNABIS_PROFILE = {
         nitrogen: { min: 0, max: 50, ideal: 20 },
         phosphorus: { min: 20, max: 60, ideal: 40 },
         potassium: { min: 10, max: 40, ideal: 20 },
-        ratio: '1-2-1',
+        ratio: '1-2-1'
       },
       seedling: {
         nitrogen: { min: 50, max: 100, ideal: 80 },
         phosphorus: { min: 40, max: 80, ideal: 60 },
         potassium: { min: 40, max: 80, ideal: 60 },
-        ratio: '2-1-1',
+        ratio: '2-1-1'
       },
       vegetative: {
         nitrogen: { min: 100, max: 200, ideal: 150 },
         phosphorus: { min: 40, max: 80, ideal: 60 },
         potassium: { min: 80, max: 150, ideal: 120 },
-        ratio: '3-1-2',
+        ratio: '3-1-2'
       },
       flowering: {
         nitrogen: { min: 50, max: 100, ideal: 80 },
         phosphorus: { min: 80, max: 150, ideal: 120 },
         potassium: { min: 150, max: 250, ideal: 200 },
-        ratio: '1-3-3',
+        ratio: '1-3-3'
       },
       ripening: {
         nitrogen: { min: 20, max: 50, ideal: 30 },
         phosphorus: { min: 60, max: 120, ideal: 90 },
         potassium: { min: 180, max: 280, ideal: 220 },
-        ratio: '0-1-3',
-      },
+        ratio: '0-1-3'
+      }
     },
 
     // Micronutrients (ppm)
@@ -985,22 +985,22 @@ const CANNABIS_PROFILE = {
       molybdenum: { min: 0.01, max: 0.05, ideal: 0.02 },
       calcium: { min: 150, max: 300, ideal: 200 },
       magnesium: { min: 40, max: 100, ideal: 60 },
-      sulfur: { min: 20, max: 50, ideal: 30 },
+      sulfur: { min: 20, max: 50, ideal: 30 }
     },
 
     organicMatter: {
       min: 3,
       ideal: 5,
       max: 8,
-      unit: '%',
+      unit: '%'
     },
 
     ec: {
       min: 1.0,
       ideal: 1.5,
       max: 2.2,
-      unit: 'mS/cm',
-    },
+      unit: 'mS/cm'
+    }
   },
 
   // Water requirements
@@ -1008,29 +1008,29 @@ const CANNABIS_PROFILE = {
     germination: {
       moisture: { min: 60, max: 80, ideal: 70 },
       frequency: 'keep moist, not wet',
-      amount: { min: 0.1, max: 0.3, unit: 'L/plant/day' },
+      amount: { min: 0.1, max: 0.3, unit: 'L/plant/day' }
     },
     seedling: {
       moisture: { min: 50, max: 70, ideal: 60 },
       frequency: 'once daily',
-      amount: { min: 0.3, max: 0.5, unit: 'L/plant/day' },
+      amount: { min: 0.3, max: 0.5, unit: 'L/plant/day' }
     },
     vegetative: {
       moisture: { min: 40, max: 60, ideal: 50 },
       frequency: 'once or twice daily',
-      amount: { min: 1, max: 3, unit: 'L/plant/day' },
+      amount: { min: 1, max: 3, unit: 'L/plant/day' }
     },
     flowering: {
       moisture: { min: 35, max: 55, ideal: 45 },
       frequency: 'once or twice daily',
-      amount: { min: 2, max: 5, unit: 'L/plant/day' },
+      amount: { min: 2, max: 5, unit: 'L/plant/day' }
     },
     ripening: {
       moisture: { min: 30, max: 50, ideal: 40 },
       frequency: 'reduce gradually',
       amount: { min: 0.5, max: 2, unit: 'L/plant/day' },
-      notes: 'ลดน้ำเพื่อเพิ่มความเข้มข้นของ resin',
-    },
+      notes: 'ลดน้ำเพื่อเพิ่มความเข้มข้นของ resin'
+    }
   },
 
   // Environmental requirements
@@ -1038,18 +1038,18 @@ const CANNABIS_PROFILE = {
     temperature: {
       day: { min: 20, ideal: 26, max: 30, unit: 'C' },
       night: { min: 16, ideal: 20, max: 24, unit: 'C' },
-      notes: 'อุณหภูมิกลางวัน-กลางคืนควรต่างกัน 4-6°C',
+      notes: 'อุณหภูมิกลางวัน-กลางคืนควรต่างกัน 4-6°C'
     },
     humidity: {
       vegetative: { min: 50, ideal: 60, max: 70, unit: '%' },
       flowering: { min: 40, ideal: 50, max: 60, unit: '%' },
-      notes: 'ลดความชื้นในช่วงดอกเพื่อป้องกันเชื้อรา',
+      notes: 'ลดความชื้นในช่วงดอกเพื่อป้องกันเชื้อรา'
     },
     light: {
       vegetative: { hours: 18, intensity: 'high' },
       flowering: { hours: 12, intensity: 'high' },
-      notes: 'ต้องการแสงแรง 600-1000 µmol/m²/s',
-    },
+      notes: 'ต้องการแสงแรง 600-1000 µmol/m²/s'
+    }
   },
 
   // Common deficiency symptoms
@@ -1058,45 +1058,45 @@ const CANNABIS_PROFILE = {
       symptoms: ['ใบล่างเหลือง', 'เจริญเติบโตช้า', 'ลำต้นเล็ก', 'ใบมีขนาดเล็ก'],
       progression: 'ใบล่างเหลืองก่อน แล้วลามไปใบบน',
       urgency: 'high',
-      reversible: true,
+      reversible: true
     },
     phosphorus: {
       symptoms: ['ใบมืดหรือเขียวอมน้ำเงิน', 'ใบปลายแห้ง', 'ราก<red', 'เจริญเติบโตช้า'],
       progression: 'ใบล่างได้รับผลกระทบก่อน',
       urgency: 'high',
-      reversible: true,
+      reversible: true
     },
     potassium: {
       symptoms: ['ขอบใบเหลืองหรือไหม้', 'จุดสีน้ำตาลบนใบ', 'ลำต้นอ่อนแอ', 'ต้านทานโรคต่ำ'],
       progression: 'ใบล่างและขอบใบได้รับผลกระทบก่อน',
       urgency: 'medium',
-      reversible: true,
+      reversible: true
     },
     calcium: {
       symptoms: ['ยอดอ่อนตาย', 'ขอบใบงอหรือม้วน', 'จุดสีน้ำตาลบนผล'],
       progression: 'ยอดอ่อนและใบอ่อนได้รับผลกระทบก่อน',
       urgency: 'medium',
-      reversible: false,
+      reversible: false
     },
     magnesium: {
       symptoms: ['ใบเหลืองแต่เส้นใบยังเขียว', 'ใบล่างแห้ง', 'ใบม้วน'],
       progression: 'ใบล่างได้รับผลกระทบก่อน',
       urgency: 'medium',
-      reversible: true,
+      reversible: true
     },
     iron: {
       symptoms: ['ใบอ่อนเหลือง', 'เส้นใบยังเขียว', 'ยอดอ่อนซีด'],
       progression: 'ใบอ่อนและยอดได้รับผลกระทบก่อน',
       urgency: 'medium',
-      reversible: true,
+      reversible: true
     },
     zinc: {
       symptoms: ['ใบเล็ก', 'ระยะห่างข้อสั้น', 'ใบบิดเบี้ยว'],
       progression: 'ยอดและใบอ่อนได้รับผลกระทบ',
       urgency: 'low',
-      reversible: true,
-    },
-  },
+      reversible: true
+    }
+  }
 };
 
 /**
@@ -1117,7 +1117,7 @@ const TURMERIC_PROFILE = {
     { stage: 'sprouting', duration: { weeks: 2 - 3 }, thaiName: 'งอก' },
     { stage: 'vegetative', duration: { months: 3 - 4 }, thaiName: 'เจริญเติบโต' },
     { stage: 'rhizome_development', duration: { months: 3 - 4 }, thaiName: 'พัฒนาเหง้า' },
-    { stage: 'maturity', duration: { months: 1 - 2 }, thaiName: 'สุกแก่' },
+    { stage: 'maturity', duration: { months: 1 - 2 }, thaiName: 'สุกแก่' }
   ],
 
   soilRequirements: {
@@ -1127,25 +1127,25 @@ const TURMERIC_PROFILE = {
         nitrogen: { min: 80, max: 120, ideal: 100 },
         phosphorus: { min: 60, max: 100, ideal: 80 },
         potassium: { min: 100, max: 150, ideal: 120 },
-        ratio: '1-1-1.5',
+        ratio: '1-1-1.5'
       },
       rhizome_development: {
         nitrogen: { min: 60, max: 100, ideal: 80 },
         phosphorus: { min: 80, max: 120, ideal: 100 },
         potassium: { min: 120, max: 180, ideal: 150 },
-        ratio: '1-1.5-2',
-      },
+        ratio: '1-1.5-2'
+      }
     },
     micronutrients: {
       zinc: { min: 5, max: 15, ideal: 10 },
-      boron: { min: 0.5, max: 2, ideal: 1 },
-    },
+      boron: { min: 0.5, max: 2, ideal: 1 }
+    }
   },
 
   waterRequirements: {
     vegetative: { mmPerWeek: 40 - 50 },
     rhizome_development: { mmPerWeek: 30 - 40 },
-    maturity: { mmPerWeek: 20 - 30 },
+    maturity: { mmPerWeek: 20 - 30 }
   },
 
   harvestTime: '8-10 months after planting',
@@ -1154,8 +1154,8 @@ const TURMERIC_PROFILE = {
     'ใช้เหง้าพันธุ์ขนาด 20-30 กรัม',
     'ใส่ปุ๋ยคอก 2-3 ตัน/ไร่ก่อนปลูก',
     'รดน้ำสม่ำเสมอ หลีกเลี่ยงน้ำขัง',
-    'เก็บเกี่ยวเมื่อใบเริ่มเหลืองแห้ง',
-  ],
+    'เก็บเกี่ยวเมื่อใบเริ่มเหลืองแห้ง'
+  ]
 };
 
 /**
@@ -1174,7 +1174,7 @@ const GINGER_PROFILE = {
     { stage: 'sprouting', duration: { weeks: 2 - 4 }, thaiName: 'งอก' },
     { stage: 'vegetative', duration: { months: 4 - 5 }, thaiName: 'เจริญเติบโต' },
     { stage: 'rhizome_formation', duration: { months: 3 - 4 }, thaiName: 'สร้างเหง้า' },
-    { stage: 'maturity', duration: { months: 1 - 2 }, thaiName: 'สุกแก่' },
+    { stage: 'maturity', duration: { months: 1 - 2 }, thaiName: 'สุกแก่' }
   ],
 
   soilRequirements: {
@@ -1184,21 +1184,21 @@ const GINGER_PROFILE = {
         nitrogen: { min: 100, max: 150, ideal: 120 },
         phosphorus: { min: 50, max: 80, ideal: 60 },
         potassium: { min: 80, max: 120, ideal: 100 },
-        ratio: '2-1-1.5',
+        ratio: '2-1-1.5'
       },
       rhizome_formation: {
         nitrogen: { min: 80, max: 120, ideal: 100 },
         phosphorus: { min: 60, max: 100, ideal: 80 },
         potassium: { min: 120, max: 180, ideal: 150 },
-        ratio: '1-1-2',
-      },
-    },
+        ratio: '1-1-2'
+      }
+    }
   },
 
   waterRequirements: {
     vegetative: { mmPerWeek: 50 - 60 },
     rhizome_formation: { mmPerWeek: 40 - 50 },
-    maturity: { mmPerWeek: 20 - 30 },
+    maturity: { mmPerWeek: 20 - 30 }
   },
 
   harvestTime: '10-12 months for mature rhizomes, 4-6 months for young ginger',
@@ -1207,8 +1207,8 @@ const GINGER_PROFILE = {
     'ปลูกในดินร่วนปนทราย อินทรีย์สูง',
     'ระยะปลูก 30x30 cm หรือ 40x40 cm',
     'รดน้ำสม่ำเสมอ ไม่ให้ดินแห้งจัด',
-    'เก็บเกี่ยวขิงอ่อนได้หลังปลูก 4-5 เดือน',
-  ],
+    'เก็บเกี่ยวขิงอ่อนได้หลังปลูก 4-5 เดือน'
+  ]
 };
 
 /**
@@ -1227,7 +1227,7 @@ const BLACK_GALINGALE_PROFILE = {
     { stage: 'sprouting', duration: { weeks: 3 - 4 }, thaiName: 'งอก' },
     { stage: 'vegetative', duration: { months: 5 - 6 }, thaiName: 'เจริญเติบโต' },
     { stage: 'rhizome_development', duration: { months: 4 - 5 }, thaiName: 'พัฒนาเหง้า' },
-    { stage: 'dormancy', duration: { months: 2 - 3 }, thaiName: 'พักตัว' },
+    { stage: 'dormancy', duration: { months: 2 - 3 }, thaiName: 'พักตัว' }
   ],
 
   soilRequirements: {
@@ -1237,21 +1237,21 @@ const BLACK_GALINGALE_PROFILE = {
         nitrogen: { min: 60, max: 100, ideal: 80 },
         phosphorus: { min: 40, max: 70, ideal: 50 },
         potassium: { min: 80, max: 120, ideal: 100 },
-        ratio: '1.5-1-2',
+        ratio: '1.5-1-2'
       },
       rhizome_development: {
         nitrogen: { min: 40, max: 80, ideal: 60 },
         phosphorus: { min: 60, max: 100, ideal: 80 },
         potassium: { min: 100, max: 150, ideal: 120 },
-        ratio: '1-1.5-2',
-      },
-    },
+        ratio: '1-1.5-2'
+      }
+    }
   },
 
   waterRequirements: {
     vegetative: { mmPerWeek: 35 - 45 },
     rhizome_development: { mmPerWeek: 30 - 40 },
-    dormancy: { mmPerWeek: 10 - 20 },
+    dormancy: { mmPerWeek: 10 - 20 }
   },
 
   harvestTime: '12-15 months after planting',
@@ -1260,8 +1260,8 @@ const BLACK_GALINGALE_PROFILE = {
     'ต้องการความชื้นสม่ำเสมอ',
     'ดินต้องมีอินทรีย์วัตถุสูง',
     'เก็บเกี่ยวหลังใบเหลือง ยกแปลง',
-    'ราคาสูง ต้องการตลาดแน่นอน',
-  ],
+    'ราคาสูง ต้องการตลาดแน่นอน'
+  ]
 };
 
 /**
@@ -1280,7 +1280,7 @@ const PLAI_PROFILE = {
     { stage: 'sprouting', duration: { weeks: 2 - 3 }, thaiName: 'งอก' },
     { stage: 'vegetative', duration: { months: 3 - 4 }, thaiName: 'เจริญเติบโต' },
     { stage: 'rhizome_formation', duration: { months: 3 - 4 }, thaiName: 'สร้างเหง้า' },
-    { stage: 'maturity', duration: { months: 1 - 2 }, thaiName: 'สุกแก่' },
+    { stage: 'maturity', duration: { months: 1 - 2 }, thaiName: 'สุกแก่' }
   ],
 
   soilRequirements: {
@@ -1290,21 +1290,21 @@ const PLAI_PROFILE = {
         nitrogen: { min: 80, max: 120, ideal: 100 },
         phosphorus: { min: 50, max: 80, ideal: 60 },
         potassium: { min: 80, max: 120, ideal: 100 },
-        ratio: '1.5-1-1.5',
+        ratio: '1.5-1-1.5'
       },
       rhizome_formation: {
         nitrogen: { min: 60, max: 100, ideal: 80 },
         phosphorus: { min: 60, max: 100, ideal: 80 },
         potassium: { min: 100, max: 150, ideal: 120 },
-        ratio: '1-1-1.5',
-      },
-    },
+        ratio: '1-1-1.5'
+      }
+    }
   },
 
   waterRequirements: {
     vegetative: { mmPerWeek: 40 - 50 },
     rhizome_formation: { mmPerWeek: 35 - 45 },
-    maturity: { mmPerWeek: 25 - 35 },
+    maturity: { mmPerWeek: 25 - 35 }
   },
 
   harvestTime: '8-10 months after planting',
@@ -1313,8 +1313,8 @@ const PLAI_PROFILE = {
     'ต้องการดินร่วน มีอินทรีย์วัตถุ',
     'รดน้ำสม่ำเสมอ ไม่ให้แห้งจัด',
     'ใช้เหง้าพันธุ์น้ำหนัก 30-40 กรัม',
-    'นิยมแปรรูปเป็นผลิตภัณฑ์สมุนไพร',
-  ],
+    'นิยมแปรรูปเป็นผลิตภัณฑ์สมุนไพร'
+  ]
 };
 
 /**
@@ -1334,7 +1334,7 @@ const KRATOM_PROFILE = {
     { stage: 'seedling', duration: { months: 3 - 6 }, thaiName: 'ต้นกล้า' },
     { stage: 'young_tree', duration: { years: 1 - 2 }, thaiName: 'ต้นอ่อน' },
     { stage: 'mature_tree', duration: { years: 2 - 3 }, thaiName: 'ต้นโต' },
-    { stage: 'production', duration: { years: '3+' }, thaiName: 'ให้ผลผลิต' },
+    { stage: 'production', duration: { years: '3+' }, thaiName: 'ให้ผลผลิต' }
   ],
 
   soilRequirements: {
@@ -1344,25 +1344,25 @@ const KRATOM_PROFILE = {
         nitrogen: { min: 100, max: 150, ideal: 120 },
         phosphorus: { min: 40, max: 70, ideal: 50 },
         potassium: { min: 80, max: 120, ideal: 100 },
-        ratio: '2-1-2',
+        ratio: '2-1-2'
       },
       mature_tree: {
         nitrogen: { min: 120, max: 180, ideal: 150 },
         phosphorus: { min: 50, max: 80, ideal: 60 },
         potassium: { min: 100, max: 150, ideal: 120 },
-        ratio: '2.5-1-2',
-      },
+        ratio: '2.5-1-2'
+      }
     },
     micronutrients: {
       iron: { min: 20, max: 50, ideal: 30 },
-      magnesium: { min: 30, max: 60, ideal: 40 },
-    },
+      magnesium: { min: 30, max: 60, ideal: 40 }
+    }
   },
 
   waterRequirements: {
     young_tree: { mmPerWeek: 50 - 70 },
     mature_tree: { mmPerWeek: 60 - 80 },
-    production: { mmPerWeek: 70 - 90 },
+    production: { mmPerWeek: 70 - 90 }
   },
 
   harvestTime: 'Leaf harvest every 3-4 months after 3 years',
@@ -1372,8 +1372,8 @@ const KRATOM_PROFILE = {
     'ปลูกในพื้นที่ป่าหรือสวนผสมผสาน',
     'เก็บใบ 3-4 เดือน/ครั้ง หลังต้นโต',
     '⚠️ ต้องปฏิบัติตามกฎหมายการปลูกกระท่อม',
-    'มีข้อกำหนดเฉพาะสำหรับการขออนุญาต',
-  ],
+    'มีข้อกำหนดเฉพาะสำหรับการขออนุญาต'
+  ]
 };
 
 module.exports = {
@@ -1428,9 +1428,9 @@ module.exports = {
     return {
       npk: cropProfile.soilRequirements.npk[stage],
       water: cropProfile.waterRequirements[stage],
-      environment: cropProfile.environment,
+      environment: cropProfile.environment
     };
-  },
+  }
 };
 ```
 
@@ -1469,7 +1469,7 @@ class FertilizerRecommendationService {
       ph: cropProfile.soilRequirements.ph,
       npk: requirements.npk,
       micronutrients: cropProfile.soilRequirements.micronutrients,
-      organicMatter: cropProfile.soilRequirements.organicMatter,
+      organicMatter: cropProfile.soilRequirements.organicMatter
     });
 
     // Generate recommendations
@@ -1486,7 +1486,7 @@ class FertilizerRecommendationService {
       soilAnalysis.npk,
       requirements.npk,
       growthStage,
-      farmSize,
+      farmSize
     );
     recommendations.push(...npkRecs);
 
@@ -1500,7 +1500,7 @@ class FertilizerRecommendationService {
     if (soilAnalysis.micronutrients.deficiencies.length > 0) {
       const microRec = this.generateMicronutrientRecommendation(
         soilAnalysis.micronutrients,
-        farmSize,
+        farmSize
       );
       if (microRec) recommendations.push(microRec);
     }
@@ -1520,8 +1520,8 @@ class FertilizerRecommendationService {
         totalRecommendations: recommendations.length,
         estimatedCost: totalCost,
         expectedImprovements: this.calculateExpectedImprovements(soilAnalysis, recommendations),
-        applicationSchedule: this.generateApplicationSchedule(recommendations, growthStage),
-      },
+        applicationSchedule: this.generateApplicationSchedule(recommendations, growthStage)
+      }
     };
   }
 
@@ -1544,7 +1544,7 @@ class FertilizerRecommendationService {
           name: 'ปูนขาว (Agricultural Lime)',
           type: 'pH Amendment',
           composition: 'CaCO3',
-          form: 'powder',
+          form: 'powder'
         },
 
         application: {
@@ -1555,7 +1555,7 @@ class FertilizerRecommendationService {
           methodThai: 'โรยทั่วแปลง แล้วพรวนดินให้เข้ากัน',
           timing: 'ก่อนปลูก 2-4 สัปดาห์',
           frequency: 'ครั้งเดียว',
-          waterAfter: true,
+          waterAfter: true
         },
 
         estimatedCost: limeAmount * 15, // 15 baht/kg
@@ -1564,13 +1564,13 @@ class FertilizerRecommendationService {
           'เพิ่มการดูดซึมธาตุอาหารทั้งหมด',
           'กระตุ้นกิจกรรมจุลินทรีย์ที่เป็นประโยชน์',
           'ปรับปรุงโครงสร้างดิน',
-          'ให้แคลเซียมแก่พืช',
+          'ให้แคลเซียมแก่พืช'
         ],
         warnings: [
           'ไม่ควรใส่มากเกินไป อาจทำให้ดินเป็นด่าง',
           'ควรตรวจ pH อีกครั้งหลัง 2 สัปดาห์',
-          'อย่าใส่พร้อมกับปุ๋ยยูเรีย (รอ 1 สัปดาห์)',
-        ],
+          'อย่าใส่พร้อมกับปุ๋ยยูเรีย (รอ 1 สัปดาห์)'
+        ]
       };
     }
 
@@ -1589,7 +1589,7 @@ class FertilizerRecommendationService {
           name: 'กำมะถัน (Elemental Sulfur)',
           type: 'pH Amendment',
           composition: 'S',
-          form: 'powder',
+          form: 'powder'
         },
 
         application: {
@@ -1600,7 +1600,7 @@ class FertilizerRecommendationService {
           methodThai: 'ผสมคลุกเคล้าดิน รดน้ำให้ชุ่ม',
           timing: 'ก่อนปลูก 3-4 สัปดาห์',
           frequency: 'ครั้งเดียว',
-          waterAfter: true,
+          waterAfter: true
         },
 
         estimatedCost: sulfurAmount * 25, // 25 baht/kg
@@ -1609,8 +1609,8 @@ class FertilizerRecommendationService {
         warnings: [
           'ใช้เวลานาน 3-4 สัปดาห์กว่าจะเห็นผล',
           'อาจทำให้เชื้อราเพิ่มขึ้นชั่วคราว',
-          'ตรวจสอบ pH อย่างสม่ำเสมอ',
-        ],
+          'ตรวจสอบ pH อย่างสม่ำเสมอ'
+        ]
       };
     }
 
@@ -1671,7 +1671,7 @@ class FertilizerRecommendationService {
         npk: '46-0-0',
         nContent: 46,
         form: 'granular',
-        price: 15, // baht/kg
+        price: 15 // baht/kg
       };
     } else {
       product = {
@@ -1679,7 +1679,7 @@ class FertilizerRecommendationService {
         npk: '12-0-0',
         nContent: 12,
         form: 'powder',
-        price: 35,
+        price: 35
       };
     }
 
@@ -1697,7 +1697,7 @@ class FertilizerRecommendationService {
         name: product.name,
         type: 'Nitrogen Fertilizer',
         npk: product.npk,
-        form: product.form,
+        form: product.form
       },
 
       application: {
@@ -1708,7 +1708,7 @@ class FertilizerRecommendationService {
         methodThai: growthStage === 'vegetative' ? 'โรยรอบโคนต้น หรือละลายน้ำรด' : 'โรยทั่วแปลง',
         timing: growthStage === 'vegetative' ? 'ทุก 7-10 วัน' : 'ทุก 14 วัน',
         frequency: '3-4 ครั้ง',
-        splitApplication: true,
+        splitApplication: true
       },
 
       estimatedCost: productAmount * product.price,
@@ -1716,13 +1716,13 @@ class FertilizerRecommendationService {
       benefits: [
         'ใบเขียวเข้ม มีคลอโรฟิลล์เพิ่มขึ้น',
         'เจริญเติบโตเร็วขึ้น',
-        'ผลผลิตเพิ่มขึ้น 20-40%',
+        'ผลผลิตเพิ่มขึ้น 20-40%'
       ],
       warnings: [
         'แบ่งใส่หลายครั้ง อย่าใส่ครั้งเดียวทั้งหมด',
         'ระวังใส่มากเกินไป อาจทำให้ใบไหม้',
-        'ลดปริมาณลงในช่วงดอก',
-      ],
+        'ลดปริมาณลงในช่วงดอก'
+      ]
     };
   }
 
@@ -1735,7 +1735,7 @@ class FertilizerRecommendationService {
       npk: '0-20-0',
       pContent: 20,
       form: 'granular',
-      price: 18,
+      price: 18
     };
 
     const productAmount = Math.ceil((amountKg * 100) / product.pContent);
@@ -1751,7 +1751,7 @@ class FertilizerRecommendationService {
         name: product.name,
         type: 'Phosphorus Fertilizer',
         npk: product.npk,
-        form: product.form,
+        form: product.form
       },
 
       application: {
@@ -1762,12 +1762,12 @@ class FertilizerRecommendationService {
         methodThai: 'ผสมคลุกเคล้าดินรอบโคนต้น',
         timing: 'ช่วงปลูกและก่อนออกดอก',
         frequency: 'ทุก 14-21 วัน',
-        waterAfter: true,
+        waterAfter: true
       },
 
       estimatedCost: productAmount * product.price,
       expectedResult: `ระดับ P จะเพิ่มขึ้นเป็น ${pAnalysis.targetValue} ppm`,
-      benefits: ['ระบบรากแข็งแรง', 'ออกดอกเร็วขึ้น', 'ผลผลิตมีคุณภาพดีขึ้น'],
+      benefits: ['ระบบรากแข็งแรง', 'ออกดอกเร็วขึ้น', 'ผลผลิตมีคุณภาพดีขึ้น']
     };
   }
 
@@ -1780,7 +1780,7 @@ class FertilizerRecommendationService {
       npk: '0-0-50',
       kContent: 50,
       form: 'crystal',
-      price: 30,
+      price: 30
     };
 
     const productAmount = Math.ceil((amountKg * 100) / product.kContent);
@@ -1797,7 +1797,7 @@ class FertilizerRecommendationService {
         type: 'Potassium Fertilizer',
         npk: product.npk,
         form: product.form,
-        note: 'ละลายน้ำได้ดี เหมาะสำหรับช่วงดอก',
+        note: 'ละลายน้ำได้ดี เหมาะสำหรับช่วงดอก'
       },
 
       application: {
@@ -1808,13 +1808,13 @@ class FertilizerRecommendationService {
         methodThai: 'ละลายน้ำรดโคนต้น หรือพ่นใบ',
         timing: 'ช่วงออกดอกและติดผล',
         frequency: 'ทุก 7-10 วัน',
-        concentration: '0.5-1% สำหรับพ่นใบ',
+        concentration: '0.5-1% สำหรับพ่นใบ'
       },
 
       estimatedCost: productAmount * product.price,
       expectedResult: `ระดับ K จะเพิ่มขึ้นเป็น ${kAnalysis.targetValue} ppm`,
       benefits: ['คุณภาพผลผลิตดีขึ้น', 'ทนทานต่อโรคและแมลง', 'cannabinoid content เพิ่มขึ้น'],
-      warnings: ['สำคัญมากในช่วงออกดอก', 'อย่าใส่พร้อมกับปุ๋ยแคลเซียม'],
+      warnings: ['สำคัญมากในช่วงออกดอก', 'อย่าใส่พร้อมกับปุ๋ยแคลเซียม']
     };
   }
 
@@ -1838,7 +1838,7 @@ class FertilizerRecommendationService {
         name: 'คอมโพสต์คุณภาพดี',
         type: 'Organic Amendment',
         composition: 'Composted organic matter',
-        form: 'decomposed',
+        form: 'decomposed'
       },
 
       alternatives: ['มูลไส้เดือน (Vermicompost)', 'มูลไก่หมัก', 'มูลโคหมัก', 'ชีวภาพ EM'],
@@ -1851,7 +1851,7 @@ class FertilizerRecommendationService {
         methodThai: 'ผสมคลุกเคล้าดินให้ทั่ว',
         timing: 'ก่อนปลูก 2-4 สัปดาห์',
         frequency: 'ทุก 3-6 เดือน',
-        depth: '10-15 cm',
+        depth: '10-15 cm'
       },
 
       estimatedCost: compostAmount * 5, // 5 baht/kg
@@ -1861,8 +1861,8 @@ class FertilizerRecommendationService {
         'เพิ่มความอุดมสมบูรณ์',
         'ปรับปรุงโครงสร้างดิน',
         'เพิ่มจุลินทรีย์ที่เป็นประโยชน์',
-        'ลด soil compaction',
-      ],
+        'ลด soil compaction'
+      ]
     };
   }
 
@@ -1897,7 +1897,7 @@ class FertilizerRecommendationService {
           product: rec.product.name,
           amount: rec.application.perArea,
           method: rec.application.methodThai,
-          priority: rec.priority,
+          priority: rec.priority
         });
       }
     });
@@ -1913,17 +1913,17 @@ class FertilizerRecommendationService {
       soilHealth: {
         current: soilAnalysis.score,
         expected: Math.min(100, soilAnalysis.score + 20),
-        improvement: '+20 points',
+        improvement: '+20 points'
       },
       yieldIncrease: {
         percentage: '15-30%',
-        reason: 'Optimal nutrient levels',
+        reason: 'Optimal nutrient levels'
       },
       costSavings: {
         fertilizer: '20-30%',
         water: '15-25%',
-        reason: 'Efficient resource use',
-      },
+        reason: 'Efficient resource use'
+      }
     };
 
     return improvements;
@@ -1967,15 +1967,15 @@ exports.getRecommendations = async (req, res) => {
         npk: {
           nitrogen: farm.soilMonitoring?.realTimeData?.npk?.nitrogen?.current,
           phosphorus: farm.soilMonitoring?.realTimeData?.npk?.phosphorus?.current,
-          potassium: farm.soilMonitoring?.realTimeData?.npk?.potassium?.current,
+          potassium: farm.soilMonitoring?.realTimeData?.npk?.potassium?.current
         },
         organicMatter: farm.soilMonitoring?.realTimeData?.organicMatter,
-        micronutrients: farm.soilMonitoring?.manualTests?.[0]?.micronutrients,
+        micronutrients: farm.soilMonitoring?.manualTests?.[0]?.micronutrients
       },
       cropType: farm.crops?.[0]?.cropType || 'cannabis',
       growthStage: growthStage || farm.crops?.[0]?.growthStage || 'vegetative',
       farmSize: farm.area || 1,
-      budget: budget ? parseFloat(budget) : null,
+      budget: budget ? parseFloat(budget) : null
     };
 
     // Generate recommendations
@@ -1985,14 +1985,14 @@ exports.getRecommendations = async (req, res) => {
       farmId,
       recommendationsCount: result.recommendations.length,
       totalCost: result.summary.estimatedCost,
-      userId: req.user.id,
+      userId: req.user.id
     });
 
     res.json(ApiResponse.success(result));
   } catch (error) {
     logger.error('Failed to generate fertilizer recommendations', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res
       .status(500)
@@ -2048,7 +2048,7 @@ exports.recordApplication = async (req, res) => {
       cost,
       appliedBy: req.user.id,
       notes,
-      method,
+      method
     });
 
     await farm.save();
@@ -2057,19 +2057,19 @@ exports.recordApplication = async (req, res) => {
       farmId,
       product,
       amount,
-      userId: req.user.id,
+      userId: req.user.id
     });
 
     res.status(201).json(
       ApiResponse.success({
         message: 'บันทึกการใส่ปุ๋ยเรียบร้อยแล้ว',
-        application: farm.soilMonitoring.improvements[farm.soilMonitoring.improvements.length - 1],
-      }),
+        application: farm.soilMonitoring.improvements[farm.soilMonitoring.improvements.length - 1]
+      })
     );
   } catch (error) {
     logger.error('Failed to record fertilizer application', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('Failed to record application', 500, error.message));
   }
@@ -2159,7 +2159,7 @@ class ETCalculator {
       solarRadiation, // พลังงานแสงอาทิตย์ (MJ/m²/day)
       elevation, // ความสูง (m)
       latitude, // ละติจูด (degrees)
-      date, // วันที่
+      date // วันที่
     } = weatherData;
 
     // 1. คำนวณ Saturation Vapor Pressure (es)
@@ -2181,7 +2181,7 @@ class ETCalculator {
       temperatureMin,
       ea,
       latitude,
-      date,
+      date
     );
 
     // 6. คำนวณ Soil Heat Flux (G) - สำหรับรายวันให้ G = 0
@@ -2307,20 +2307,20 @@ class ETCalculator {
         seedling: 0.7, // ต้นกล้า
         vegetative: 1.0, // เจริญเติบโต
         flowering: 1.1, // ออกดอก
-        ripening: 0.8, // สุกแก่
+        ripening: 0.8 // สุกแก่
       },
       rice: {
         initial: 1.05,
         development: 1.1,
         mid: 1.2,
-        late: 0.95,
+        late: 0.95
       },
       vegetables: {
         initial: 0.7,
         development: 0.9,
         mid: 1.05,
-        late: 0.95,
-      },
+        late: 0.95
+      }
     };
 
     return cropCoefficients[cropType]?.[growthStage] || 1.0;
@@ -2354,13 +2354,13 @@ class WeatherService {
       tmd: {
         name: 'Thai Meteorological Department',
         baseURL: process.env.TMD_API_URL || 'https://data.tmd.go.th/api',
-        apiKey: process.env.TMD_API_KEY,
+        apiKey: process.env.TMD_API_KEY
       },
       openweather: {
         name: 'OpenWeatherMap',
         baseURL: 'https://api.openweathermap.org/data/2.5',
-        apiKey: process.env.OPENWEATHER_API_KEY,
-      },
+        apiKey: process.env.OPENWEATHER_API_KEY
+      }
     };
   }
 
@@ -2414,9 +2414,9 @@ class WeatherService {
           lon: longitude,
           exclude: 'minutely,hourly,alerts',
           units: 'metric',
-          appid: this.sources.openweather.apiKey,
+          appid: this.sources.openweather.apiKey
         },
-        timeout: 10000,
+        timeout: 10000
       });
 
       const forecast = response.data.daily.slice(0, days).map(day => ({
@@ -2431,7 +2431,7 @@ class WeatherService {
         cloudCover: day.clouds,
         uvIndex: day.uvi,
         description: day.weather[0].description,
-        icon: day.weather[0].icon,
+        icon: day.weather[0].icon
       }));
 
       this.cache.set(cacheKey, forecast);
@@ -2453,14 +2453,14 @@ class WeatherService {
         params: {
           lat: latitude,
           lon: longitude,
-          appid: this.sources.tmd.apiKey,
+          appid: this.sources.tmd.apiKey
         },
-        timeout: 10000,
+        timeout: 10000
       });
 
       return {
         source: 'tmd',
-        data: response.data,
+        data: response.data
       };
     } catch (error) {
       logger.warn('TMD API failed', { error: error.message });
@@ -2478,14 +2478,14 @@ class WeatherService {
           lat: latitude,
           lon: longitude,
           units: 'metric',
-          appid: this.sources.openweather.apiKey,
+          appid: this.sources.openweather.apiKey
         },
-        timeout: 10000,
+        timeout: 10000
       });
 
       return {
         source: 'openweather',
-        data: response.data,
+        data: response.data
       };
     } catch (error) {
       logger.error('OpenWeatherMap API failed', { error: error.message });
@@ -2506,7 +2506,7 @@ class WeatherService {
         location: {
           name: data.name,
           latitude: data.coord.lat,
-          longitude: data.coord.lon,
+          longitude: data.coord.lon
         },
         temperature: data.main.temp,
         temperatureFeelsLike: data.main.feels_like,
@@ -2523,14 +2523,14 @@ class WeatherService {
         descriptionThai: this.translateWeatherDescription(data.weather[0].description),
         icon: data.weather[0].icon,
         sunrise: new Date(data.sys.sunrise * 1000),
-        sunset: new Date(data.sys.sunset * 1000),
+        sunset: new Date(data.sys.sunset * 1000)
       };
     }
 
     // สำหรับ TMD API (ถ้ามี)
     return {
       source,
-      ...data,
+      ...data
     };
   }
 
@@ -2549,7 +2549,7 @@ class WeatherService {
       'heavy rain': 'ฝนตกหนัก',
       thunderstorm: 'พายุฝนฟ้าคะนอง',
       mist: 'มีหมอก',
-      fog: 'หมอกหนา',
+      fog: 'หมอกหนา'
     };
 
     return translations[description.toLowerCase()] || description;
@@ -2614,7 +2614,7 @@ class IrrigationScheduler {
       latitude,
       longitude,
       elevation = 0,
-      farmSize, // rai
+      farmSize // rai
     } = farmData;
 
     try {
@@ -2630,7 +2630,7 @@ class IrrigationScheduler {
         ...currentWeather,
         elevation,
         latitude,
-        date: new Date(),
+        date: new Date()
       };
 
       // ประมาณ Solar Radiation ถ้าไม่มี
@@ -2647,7 +2647,7 @@ class IrrigationScheduler {
         ETc,
         precipitation: currentWeather.precipitation || 0,
         soilType,
-        farmSize,
+        farmSize
       });
 
       // 5. สร้างตารางการให้น้ำ 7 วันข้างหน้า
@@ -2658,7 +2658,7 @@ class IrrigationScheduler {
         cropType,
         growthStage,
         currentSoilMoisture: soilMoisture.current,
-        waterBalance,
+        waterBalance
       });
 
       // 6. คำนวณปริมาณน้ำรวมและต้นทุน
@@ -2672,15 +2672,15 @@ class IrrigationScheduler {
           weather: {
             temperature: currentWeather.temperature,
             humidity: currentWeather.humidity,
-            description: currentWeather.descriptionThai,
+            description: currentWeather.descriptionThai
           },
           ET0,
           ETc,
-          waterBalance,
+          waterBalance
         },
         schedule,
         summary,
-        recommendations: this.generateRecommendations(waterBalance, schedule),
+        recommendations: this.generateRecommendations(waterBalance, schedule)
       };
     } catch (error) {
       logger.error('Failed to generate irrigation schedule', { error: error.message, farmId });
@@ -2696,7 +2696,7 @@ class IrrigationScheduler {
       const readings = await SensorReading.find({
         farmId,
         sensorType: 'soil_moisture',
-        timestamp: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) },
+        timestamp: { $gte: new Date(Date.now() - 24 * 60 * 60 * 1000) }
       })
         .sort({ timestamp: -1 })
         .limit(24)
@@ -2707,7 +2707,7 @@ class IrrigationScheduler {
           current: 50, // default
           average24h: 50,
           trend: 'stable',
-          hasData: false,
+          hasData: false
         };
       }
 
@@ -2720,7 +2720,7 @@ class IrrigationScheduler {
         average24h,
         trend,
         hasData: true,
-        lastUpdated: readings[0].timestamp,
+        lastUpdated: readings[0].timestamp
       };
     } catch (error) {
       logger.warn('Failed to get soil moisture data', { error: error.message });
@@ -2728,7 +2728,7 @@ class IrrigationScheduler {
         current: 50,
         average24h: 50,
         trend: 'stable',
-        hasData: false,
+        hasData: false
       };
     }
   }
@@ -2761,7 +2761,7 @@ class IrrigationScheduler {
       clay: 200, // ดินเหนียว (mm)
       loam: 170, // ดินร่วน (mm)
       sandy_loam: 130, // ดินร่วนปนทราย (mm)
-      sand: 80, // ดินทราย (mm)
+      sand: 80 // ดินทราย (mm)
     };
 
     const capacity = AWC[soilType] || 170; // default = loam
@@ -2777,7 +2777,7 @@ class IrrigationScheduler {
     // คำนวณความชื้นคาดการณ์พรุ่งนี้
     const projectedMoisture = Math.max(
       0,
-      Math.min(100, soilMoisture.current + (netChange / capacity) * 100),
+      Math.min(100, soilMoisture.current + (netChange / capacity) * 100)
     );
 
     // Management Allowed Depletion (MAD)
@@ -2816,8 +2816,8 @@ class IrrigationScheduler {
         soilMoisture.current,
         ETc,
         precipitation,
-        capacity,
-      ),
+        capacity
+      )
     };
   }
 
@@ -2876,7 +2876,7 @@ class IrrigationScheduler {
         ETc: dailyETc,
         precipitation: expectedRain,
         precipitationProbability: dayForecast.precipitationProbability,
-        growthStage,
+        growthStage
       });
 
       let irrigationAmount = 0;
@@ -2907,20 +2907,20 @@ class IrrigationScheduler {
           amount: Math.round(irrigationAmount), // mm
           method,
           duration, // minutes
-          timing: needsIrrigation ? this.getOptimalTiming(dayForecast) : null,
+          timing: needsIrrigation ? this.getOptimalTiming(dayForecast) : null
         },
         conditions: {
           temperature: dayForecast.temperature,
           humidity: dayForecast.humidity,
           precipitation: expectedRain,
           precipitationProbability: dayForecast.precipitationProbability,
-          ETc: Math.round(dailyETc * 10) / 10,
+          ETc: Math.round(dailyETc * 10) / 10
         },
         soilMoisture: {
           morning: Math.round(simulatedMoisture - moistureChange),
           evening: Math.round(simulatedMoisture),
-          status: this.getMoistureStatus(simulatedMoisture),
-        },
+          status: this.getMoistureStatus(simulatedMoisture)
+        }
       });
     }
 
@@ -2942,7 +2942,7 @@ class IrrigationScheduler {
       seedling: 65,
       vegetative: 60,
       flowering: 55,
-      ripening: 50,
+      ripening: 50
     };
 
     const threshold = thresholds[growthStage] || 60;
@@ -2981,7 +2981,7 @@ class IrrigationScheduler {
     if (temperature > 35) {
       return {
         time: '05:00-07:00',
-        reason: 'อากาศร้อนมาก ให้น้ำเช้ามืดเพื่อลดการคายระเหย',
+        reason: 'อากาศร้อนมาก ให้น้ำเช้ามืดเพื่อลดการคายระเหย'
       };
     }
 
@@ -2989,14 +2989,14 @@ class IrrigationScheduler {
     if (humidity < 50) {
       return {
         time: '06:00-08:00',
-        reason: 'ความชื้นต่ำ ให้น้ำตอนเช้าเพื่อให้พืชดูดซึมได้ดี',
+        reason: 'ความชื้นต่ำ ให้น้ำตอนเช้าเพื่อให้พืชดูดซึมได้ดี'
       };
     }
 
     // ปกติให้น้ำเช้าหรือเย็น
     return {
       time: '06:00-08:00 หรือ 16:00-18:00',
-      reason: 'ให้น้ำตอนเช้าหรือเย็นเพื่อประสิทธิภาพสูงสุด',
+      reason: 'ให้น้ำตอนเช้าหรือเย็นเพื่อประสิทธิภาพสูงสุด'
     };
   }
 
@@ -3048,7 +3048,7 @@ class IrrigationScheduler {
       waterCost: Math.round(totalCost),
       electricityCost: Math.round(electricityCost),
       totalCost: Math.round(totalCost + electricityCost),
-      estimatedSavings: this.calculateSavings(schedule, farmSize),
+      estimatedSavings: this.calculateSavings(schedule, farmSize)
     };
   }
 
@@ -3069,7 +3069,7 @@ class IrrigationScheduler {
       waterSaved: Math.round(savedMM), // mm
       volumeSaved: Math.round(savedM3), // m³
       percentSaved: Math.round(savedPercent), // %
-      costSaved: Math.round(savedCost), // บาท
+      costSaved: Math.round(savedCost) // บาท
     };
   }
 
@@ -3085,7 +3085,7 @@ class IrrigationScheduler {
         priority: 'urgent',
         category: 'ความชื้นในดิน',
         message: 'ความชื้นในดินอยู่ในระดับวิกฤต ต้องให้น้ำทันที!',
-        action: 'ให้น้ำอย่างน้อย 15-20 mm เพื่อฟื้นฟูความชื้น',
+        action: 'ให้น้ำอย่างน้อย 15-20 mm เพื่อฟื้นฟูความชื้น'
       });
     }
 
@@ -3094,7 +3094,7 @@ class IrrigationScheduler {
         priority: 'high',
         category: 'เตือนล่วงหน้า',
         message: `คาดการณ์ว่าจะถึงระดับวิกฤตใน ${waterBalance.daysUntilCritical} วัน`,
-        action: 'วางแผนการให้น้ำล่วงหน้า',
+        action: 'วางแผนการให้น้ำล่วงหน้า'
       });
     }
 
@@ -3105,7 +3105,7 @@ class IrrigationScheduler {
         priority: 'medium',
         category: 'พยากรณ์อากาศ',
         message: `คาดว่าจะมีฝนตก ${rainyDays} วัน ในสัปดาห์นี้`,
-        action: 'อาจลดการให้น้ำได้ ตรวจสอบความชื้นอย่างสม่ำเสมอ',
+        action: 'อาจลดการให้น้ำได้ ตรวจสอบความชื้นอย่างสม่ำเสมอ'
       });
     }
 
@@ -3116,7 +3116,7 @@ class IrrigationScheduler {
         priority: 'medium',
         category: 'การจัดการน้ำ',
         message: 'ต้องให้น้ำบ่อยในสัปดาห์นี้ (มากกว่า 5 วัน)',
-        action: 'พิจารณาเพิ่ม mulch เพื่อลดการคายระเหย',
+        action: 'พิจารณาเพิ่ม mulch เพื่อลดการคายระเหย'
       });
     }
 
@@ -3151,7 +3151,7 @@ class WaterOptimizer {
       // ดึงข้อมูลการให้น้ำ
       const irrigationLogs = await IrrigationLog.find({
         farmId,
-        timestamp: { $gte: startDate, $lte: endDate },
+        timestamp: { $gte: startDate, $lte: endDate }
       })
         .sort({ timestamp: 1 })
         .lean();
@@ -3159,7 +3159,7 @@ class WaterOptimizer {
       if (irrigationLogs.length === 0) {
         return {
           hasData: false,
-          message: 'ไม่มีข้อมูลการให้น้ำในช่วงเวลาที่เลือก',
+          message: 'ไม่มีข้อมูลการให้น้ำในช่วงเวลาที่เลือก'
         };
       }
 
@@ -3182,7 +3182,7 @@ class WaterOptimizer {
       const comparison = {
         waterUsage: ((avgDaily / benchmark.avgDaily - 1) * 100).toFixed(1),
         efficiency: efficiency.score,
-        status: efficiency.score >= 80 ? 'ดีมาก' : efficiency.score >= 60 ? 'ดี' : 'ต้องปรับปรุง',
+        status: efficiency.score >= 80 ? 'ดีมาก' : efficiency.score >= 60 ? 'ดี' : 'ต้องปรับปรุง'
       };
 
       return {
@@ -3190,19 +3190,19 @@ class WaterOptimizer {
         period: {
           start: startDate,
           end: endDate,
-          days: this.getDaysBetween(startDate, endDate),
+          days: this.getDaysBetween(startDate, endDate)
         },
         summary: {
           totalWater,
           avgDaily: Math.round(avgDaily * 10) / 10,
           totalCost: Math.round(totalCost),
-          totalEvents: irrigationLogs.length,
+          totalEvents: irrigationLogs.length
         },
         patterns,
         efficiency,
         comparison,
         issues,
-        recommendations: this.generateOptimizationRecommendations(patterns, efficiency, issues),
+        recommendations: this.generateOptimizationRecommendations(patterns, efficiency, issues)
       };
     } catch (error) {
       logger.error('Failed to analyze water usage', { error: error.message });
@@ -3219,7 +3219,7 @@ class WaterOptimizer {
       morning: 0, // 05:00-09:00
       midday: 0, // 09:00-15:00
       afternoon: 0, // 15:00-19:00
-      night: 0, // 19:00-05:00
+      night: 0 // 19:00-05:00
     };
 
     // แยกตามวันในสัปดาห์
@@ -3230,7 +3230,7 @@ class WaterOptimizer {
       thu: 0,
       fri: 0,
       sat: 0,
-      sun: 0,
+      sun: 0
     };
 
     logs.forEach(log => {
@@ -3257,7 +3257,7 @@ class WaterOptimizer {
 
     const avgInterval = intervals.reduce((sum, i) => sum + i, 0) / intervals.length;
     const stdDev = Math.sqrt(
-      intervals.reduce((sum, i) => sum + Math.pow(i - avgInterval, 2), 0) / intervals.length,
+      intervals.reduce((sum, i) => sum + Math.pow(i - avgInterval, 2), 0) / intervals.length
     );
 
     const consistency =
@@ -3274,7 +3274,7 @@ class WaterOptimizer {
       dayDistribution,
       consistency,
       avgInterval: Math.round(avgInterval * 10) / 10,
-      stdDev: Math.round(stdDev * 10) / 10,
+      stdDev: Math.round(stdDev * 10) / 10
     };
   }
 
@@ -3328,10 +3328,10 @@ class WaterOptimizer {
         excellent: 'ดีเยี่ยม',
         good: 'ดี',
         fair: 'พอใช้',
-        poor: 'ต้องปรับปรุง',
+        poor: 'ต้องปรับปรุง'
       }[rating],
       issues,
-      dataPoints: efficiencyScores.length,
+      dataPoints: efficiencyScores.length
     };
   }
 
@@ -3345,8 +3345,8 @@ class WaterOptimizer {
       sensorType: 'soil_moisture',
       timestamp: {
         $gte: new Date(targetTime.getTime() - 15 * 60000),
-        $lte: new Date(targetTime.getTime() + 15 * 60000),
-      },
+        $lte: new Date(targetTime.getTime() + 15 * 60000)
+      }
     })
       .sort({ timestamp: 1 })
       .lean();
@@ -3367,7 +3367,7 @@ class WaterOptimizer {
         category: 'เวลาให้น้ำ',
         issue: 'ให้น้ำเวลากลางวันมากเกินไป',
         impact: 'น้ำคายระเหยสูง ประสิทธิภาพต่ำ',
-        recommendation: 'ควรเปลี่ยนมาให้น้ำตอนเช้าหรือเย็น',
+        recommendation: 'ควรเปลี่ยนมาให้น้ำตอนเช้าหรือเย็น'
       });
     }
 
@@ -3378,7 +3378,7 @@ class WaterOptimizer {
         category: 'ความสม่ำเสมอ',
         issue: 'การให้น้ำไม่สม่ำเสมอ',
         impact: 'พืชเครียด ผลผลิตไม่สม่ำเสมอ',
-        recommendation: 'ควรสร้างตารางการให้น้ำที่แน่นอน',
+        recommendation: 'ควรสร้างตารางการให้น้ำที่แน่นอน'
       });
     }
 
@@ -3390,7 +3390,7 @@ class WaterOptimizer {
         category: 'ปริมาณน้ำ',
         issue: 'ให้น้ำแต่ละครั้งน้อยเกินไป',
         impact: 'น้ำไม่ซึมลึก รากพืชตื้น',
-        recommendation: 'ควรให้น้ำมากขึ้นแต่ถี่น้อยลง',
+        recommendation: 'ควรให้น้ำมากขึ้นแต่ถี่น้อยลง'
       });
     } else if (avgAmount > 30) {
       issues.push({
@@ -3398,7 +3398,7 @@ class WaterOptimizer {
         category: 'ปริมาณน้ำ',
         issue: 'ให้น้ำแต่ละครั้งมากเกินไป',
         impact: 'น้ำท่วมขัง เสี่ยงโรคราก',
-        recommendation: 'ควรแบ่งให้น้ำหลายครั้ง',
+        recommendation: 'ควรแบ่งให้น้ำหลายครั้ง'
       });
     }
 
@@ -3421,9 +3421,9 @@ class WaterOptimizer {
           'ตรวจสอบระบบท่อและหัวน้ำหยด อาจมีการรั่วไหล',
           'ใช้ Mulch คลุมดินเพื่อลดการคายระเหย',
           'ปรับแรงดันน้ำให้เหมาะสม',
-          'ตรวจสอบเซ็นเซอร์ความชื้นว่าทำงานถูกต้อง',
+          'ตรวจสอบเซ็นเซอร์ความชื้นว่าทำงานถูกต้อง'
         ],
-        expectedBenefit: 'ประหยัดน้ำได้ 15-25%',
+        expectedBenefit: 'ประหยัดน้ำได้ 15-25%'
       });
     }
 
@@ -3434,7 +3434,7 @@ class WaterOptimizer {
         category: issue.category,
         title: issue.issue,
         actions: [issue.recommendation],
-        expectedBenefit: 'ลดปัญหา: ' + issue.impact,
+        expectedBenefit: 'ลดปัญหา: ' + issue.impact
       });
     });
 
@@ -3447,9 +3447,9 @@ class WaterOptimizer {
         actions: [
           'ให้น้ำตอนเช้า 06:00-08:00 เป็นหลัก',
           'หลีกเลี่ยงการให้น้ำเวลา 11:00-15:00',
-          'สามารถให้น้ำเย็นได้ถ้าจำเป็น (16:00-18:00)',
+          'สามารถให้น้ำเย็นได้ถ้าจำเป็น (16:00-18:00)'
         ],
-        expectedBenefit: 'ลดการคายระเหยได้ 20-30%',
+        expectedBenefit: 'ลดการคายระเหยได้ 20-30%'
       });
     }
 
@@ -3464,18 +3464,18 @@ class WaterOptimizer {
       cannabis: {
         avgDaily: 5, // mm/day
         efficiency: 75, // %
-        costPerRai: 500, // บาท/เดือน
+        costPerRai: 500 // บาท/เดือน
       },
       rice: {
         avgDaily: 8,
         efficiency: 60,
-        costPerRai: 300,
+        costPerRai: 300
       },
       vegetables: {
         avgDaily: 6,
         efficiency: 70,
-        costPerRai: 400,
-      },
+        costPerRai: 400
+      }
     };
 
     return benchmarks[cropType] || benchmarks.cannabis;
@@ -3540,7 +3540,7 @@ exports.getIrrigationSchedule = async (req, res) => {
       latitude,
       longitude,
       elevation: farm.location?.elevation || 0,
-      farmSize: farm.area || 1,
+      farmSize: farm.area || 1
     };
 
     // สร้างตารางการให้น้ำ
@@ -3550,7 +3550,7 @@ exports.getIrrigationSchedule = async (req, res) => {
   } catch (error) {
     logger.error('Failed to generate irrigation schedule', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('ไม่สามารถสร้างตารางการให้น้ำได้', 500, error.message));
   }
@@ -3567,7 +3567,7 @@ exports.logIrrigation = async (req, res) => {
       amount, // mm
       duration, // minutes
       method, // drip_regular, drip_slow, flood, sprinkler
-      notes,
+      notes
     } = req.body;
 
     // Validate
@@ -3583,7 +3583,7 @@ exports.logIrrigation = async (req, res) => {
       method: method || 'manual',
       notes,
       timestamp: new Date(),
-      userId: req.user.userId,
+      userId: req.user.userId
     });
 
     await log.save();
@@ -3594,7 +3594,7 @@ exports.logIrrigation = async (req, res) => {
   } catch (error) {
     logger.error('Failed to log irrigation', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('ไม่สามารถบันทึกการให้น้ำได้', 500, error.message));
   }
@@ -3633,14 +3633,14 @@ exports.getIrrigationHistory = async (req, res) => {
         statistics: {
           totalEntries: history.length,
           totalWater: Math.round(totalWater),
-          avgDaily: Math.round(avgDaily * 10) / 10,
-        },
-      }),
+          avgDaily: Math.round(avgDaily * 10) / 10
+        }
+      })
     );
   } catch (error) {
     logger.error('Failed to get irrigation history', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('ไม่สามารถดึงประวัติการให้น้ำได้', 500, error.message));
   }
@@ -3665,8 +3665,8 @@ exports.getWaterAnalysis = async (req, res) => {
       return res.json(
         ApiResponse.success({
           hasData: false,
-          message: analysis.message,
-        }),
+          message: analysis.message
+        })
       );
     }
 
@@ -3674,7 +3674,7 @@ exports.getWaterAnalysis = async (req, res) => {
   } catch (error) {
     logger.error('Failed to analyze water usage', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('ไม่สามารถวิเคราะห์การใช้น้ำได้', 500, error.message));
   }
@@ -3696,8 +3696,8 @@ exports.detectWaterStress = async (req, res) => {
         ApiResponse.success({
           hasStress: false,
           message: 'ไม่มีข้อมูลเซ็นเซอร์ความชื้นในดิน',
-          recommendation: 'ติดตั้งเซ็นเซอร์เพื่อเฝ้าระวังสถานะน้ำ',
-        }),
+          recommendation: 'ติดตั้งเซ็นเซอร์เพื่อเฝ้าระวังสถานะน้ำ'
+        })
       );
     }
 
@@ -3715,7 +3715,7 @@ exports.detectWaterStress = async (req, res) => {
         'ให้น้ำทันที 15-20 mm',
         'ตรวจสอบระบบน้ำหยดว่าทำงานปกติหรือไม่',
         'เฝ้าระวังอาการเหี่ยวของพืช',
-        'หลีกเลี่ยงการให้น้ำเวลากลางวัน',
+        'หลีกเลี่ยงการให้น้ำเวลากลางวัน'
       ];
     } else if (soilMoisture.current < 45) {
       hasStress = true;
@@ -3724,7 +3724,7 @@ exports.detectWaterStress = async (req, res) => {
       recommendations = [
         'ให้น้ำ 10-15 mm ภายในวันนี้',
         'เพิ่มความถี่ในการตรวจสอบความชื้น',
-        'พิจารณาใช้ mulch เพื่อรักษาความชื้น',
+        'พิจารณาใช้ mulch เพื่อรักษาความชื้น'
       ];
     } else if (soilMoisture.current < 55) {
       hasStress = true;
@@ -3751,13 +3751,13 @@ exports.detectWaterStress = async (req, res) => {
         average24h: soilMoisture.average24h,
         trend: soilMoisture.trend,
         lastUpdated: soilMoisture.lastUpdated,
-        recommendations,
-      }),
+        recommendations
+      })
     );
   } catch (error) {
     logger.error('Failed to detect water stress', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('ไม่สามารถตรวจจับสัญญาณขาดน้ำได้', 500, error.message));
   }
@@ -3779,10 +3779,10 @@ exports.toggleAutoIrrigation = async (req, res) => {
           enabled: enabled === true,
           settings: settings || {},
           lastUpdated: new Date(),
-          updatedBy: req.user.userId,
-        },
+          updatedBy: req.user.userId
+        }
       },
-      { new: true },
+      { new: true }
     );
 
     if (!farm) {
@@ -3795,15 +3795,15 @@ exports.toggleAutoIrrigation = async (req, res) => {
       ApiResponse.success(
         {
           farmId,
-          autoIrrigation: farm.settings.autoIrrigation,
+          autoIrrigation: farm.settings.autoIrrigation
         },
-        `${enabled ? 'เปิด' : 'ปิด'}ระบบให้น้ำอัตโนมัติสำเร็จ`,
-      ),
+        `${enabled ? 'เปิด' : 'ปิด'}ระบบให้น้ำอัตโนมัติสำเร็จ`
+      )
     );
   } catch (error) {
     logger.error('Failed to toggle auto irrigation', {
       error: error.message,
-      farmId: req.params.farmId,
+      farmId: req.params.farmId
     });
     res.status(500).json(ApiResponse.error('ไม่สามารถเปลี่ยนการตั้งค่าได้', 500, error.message));
   }
@@ -3835,7 +3835,7 @@ router.get(
   '/:farmId/schedule',
   [param('farmId').isMongoId().withMessage('Invalid farm ID')],
   validateRequest,
-  waterController.getIrrigationSchedule,
+  waterController.getIrrigationSchedule
 );
 
 /**
@@ -3853,10 +3853,10 @@ router.post(
     body('method')
       .optional()
       .isIn(['drip_regular', 'drip_slow', 'flood', 'sprinkler', 'manual'])
-      .withMessage('วิธีการให้น้ำไม่ถูกต้อง'),
+      .withMessage('วิธีการให้น้ำไม่ถูกต้อง')
   ],
   validateRequest,
-  waterController.logIrrigation,
+  waterController.logIrrigation
 );
 
 /**
@@ -3869,10 +3869,10 @@ router.get(
     param('farmId').isMongoId().withMessage('Invalid farm ID'),
     query('startDate').optional().isISO8601().withMessage('Invalid start date'),
     query('endDate').optional().isISO8601().withMessage('Invalid end date'),
-    query('limit').optional().isInt({ min: 1, max: 100 }),
+    query('limit').optional().isInt({ min: 1, max: 100 })
   ],
   validateRequest,
-  waterController.getIrrigationHistory,
+  waterController.getIrrigationHistory
 );
 
 /**
@@ -3886,10 +3886,10 @@ router.get(
     query('days')
       .optional()
       .isInt({ min: 7, max: 90 })
-      .withMessage('ระยะเวลาต้องอยู่ระหว่าง 7-90 วัน'),
+      .withMessage('ระยะเวลาต้องอยู่ระหว่าง 7-90 วัน')
   ],
   validateRequest,
-  waterController.getWaterAnalysis,
+  waterController.getWaterAnalysis
 );
 
 /**
@@ -3900,7 +3900,7 @@ router.get(
   '/:farmId/stress-detection',
   [param('farmId').isMongoId().withMessage('Invalid farm ID')],
   validateRequest,
-  waterController.detectWaterStress,
+  waterController.detectWaterStress
 );
 
 /**
@@ -3911,11 +3911,11 @@ router.post(
   '/:farmId/auto-irrigation',
   [
     param('farmId').isMongoId().withMessage('Invalid farm ID'),
-    body('enabled').isBoolean().withMessage('enabled ต้องเป็น true/false'),
+    body('enabled').isBoolean().withMessage('enabled ต้องเป็น true/false')
   ],
   validateRequest,
   authorize(['farmer', 'admin']),
-  waterController.toggleAutoIrrigation,
+  waterController.toggleAutoIrrigation
 );
 
 module.exports = router;
@@ -3934,64 +3934,64 @@ const irrigationLogSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: true,
-      index: true,
+      index: true
     },
 
     amount: {
       type: Number,
       required: true,
-      min: 0,
+      min: 0
       // ปริมาณน้ำ (mm)
     },
 
     duration: {
       type: Number,
-      default: 0,
+      default: 0
       // ระยะเวลา (minutes)
     },
 
     method: {
       type: String,
       enum: ['drip_regular', 'drip_slow', 'flood', 'sprinkler', 'manual'],
-      default: 'manual',
+      default: 'manual'
     },
 
     cost: {
       type: Number,
-      default: 0,
+      default: 0
       // ต้นทุน (บาท)
     },
 
     notes: {
       type: String,
-      maxlength: 500,
+      maxlength: 500
     },
 
     timestamp: {
       type: Date,
       default: Date.now,
-      index: true,
+      index: true
     },
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true,
+      required: true
     },
 
     cropType: {
-      type: String,
+      type: String
     },
 
     automated: {
       type: Boolean,
-      default: false,
+      default: false
       // true = ระบบอัตโนมัติ, false = manual
-    },
+    }
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // Index สำหรับ query
@@ -4110,7 +4110,7 @@ class ThaiNLPService {
       'จะ',
       'ไป',
       'มา',
-      'ให้',
+      'ให้'
     ]);
 
     // Intent keywords
@@ -4119,7 +4119,7 @@ class ThaiNLPService {
       advice: ['แนะนำ', 'ควร', 'ดีไหม', 'เหมาะสม', 'วิธี', 'ช่วย', 'สอน'],
       problem: ['ปัญหา', 'เสีย', 'ตาย', 'เหี่ยว', 'เหลือง', 'ด่าง', 'แมลง', 'โรค', 'ช่วย'],
       status: ['สถานะ', 'เป็นยังไง', 'อย่างไร', 'ตอนนี้', 'ปัจจุบัน'],
-      schedule: ['เมื่อไร', 'กี่โมง', 'วันไหน', 'ตาราง', 'เวลา'],
+      schedule: ['เมื่อไร', 'กี่โมง', 'วันไหน', 'ตาราง', 'เวลา']
     };
   }
 
@@ -4132,7 +4132,7 @@ class ThaiNLPService {
       const response = await axios.post(
         `${this.pythainlpUrl}/tokenize`,
         { text },
-        { timeout: 5000 },
+        { timeout: 5000 }
       );
       return response.data.tokens;
     } catch (error) {
@@ -4170,7 +4170,7 @@ class ThaiNLPService {
       problems: [],
       nutrients: [],
       numbers: [],
-      locations: [],
+      locations: []
     };
 
     const lowerText = text.toLowerCase();
@@ -4190,7 +4190,7 @@ class ThaiNLPService {
       'ไพล',
       'plai',
       'กระท่อม',
-      'kratom',
+      'kratom'
     ];
     crops.forEach(crop => {
       if (lowerText.includes(crop)) {
@@ -4210,7 +4210,7 @@ class ThaiNLPService {
       'หนอน',
       'เพลี้ย',
       'ไรแดง',
-      'เชื้อรา',
+      'เชื้อรา'
     ];
     problems.forEach(problem => {
       if (lowerText.includes(problem)) {
@@ -4248,7 +4248,7 @@ class ThaiNLPService {
       status: 0,
       schedule: 0,
       greeting: 0,
-      unknown: 0,
+      unknown: 0
     };
 
     // Check for greeting
@@ -4284,7 +4284,7 @@ class ThaiNLPService {
     return {
       intent: topIntent[1] > 0 ? topIntent[0] : 'unknown',
       confidence: Math.min(topIntent[1] / 10, 1.0),
-      allScores: scores,
+      allScores: scores
     };
   }
 
@@ -4327,7 +4327,7 @@ class ThaiNLPService {
       intent,
       confidence,
       sentiment,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
   }
 }
@@ -4381,7 +4381,7 @@ class ConversationManager {
     let conversation = await Conversation.findOne({
       userId,
       farmId: farmId || null,
-      active: true,
+      active: true
     })
       .sort({ lastActivity: -1 })
       .lean();
@@ -4394,7 +4394,7 @@ class ConversationManager {
         messages: [],
         context: {},
         active: true,
-        lastActivity: new Date(),
+        lastActivity: new Date()
       });
     }
 
@@ -4405,7 +4405,7 @@ class ConversationManager {
       farmId,
       messages: conversation.messages || [],
       context: conversation.context || {},
-      lastActivity: Date.now(),
+      lastActivity: Date.now()
     };
 
     // Store in memory
@@ -4422,7 +4422,7 @@ class ConversationManager {
       role, // 'user' or 'assistant'
       content,
       metadata,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     // Add to context
@@ -4439,11 +4439,11 @@ class ConversationManager {
       $push: {
         messages: {
           $each: [message],
-          $slice: -20,
-        },
+          $slice: -20
+        }
       },
       lastActivity: new Date(),
-      $inc: { messageCount: 1 },
+      $inc: { messageCount: 1 }
     });
 
     return message;
@@ -4455,7 +4455,7 @@ class ConversationManager {
   async updateContext(context, updates) {
     context.context = {
       ...context.context,
-      ...updates,
+      ...updates
     };
 
     await Conversation.findByIdAndUpdate(context.conversationId, { context: context.context });
@@ -4479,10 +4479,10 @@ class ConversationManager {
       entities: {
         crops: new Set(),
         problems: new Set(),
-        nutrients: new Set(),
+        nutrients: new Set()
       },
       lastIntent: null,
-      hasUnresolvedIssue: false,
+      hasUnresolvedIssue: false
     };
 
     history.forEach(msg => {
@@ -4511,10 +4511,10 @@ class ConversationManager {
       entities: {
         crops: Array.from(extracted.entities.crops),
         problems: Array.from(extracted.entities.problems),
-        nutrients: Array.from(extracted.entities.nutrients),
+        nutrients: Array.from(extracted.entities.nutrients)
       },
       lastIntent: extracted.lastIntent,
-      hasUnresolvedIssue: extracted.hasUnresolvedIssue,
+      hasUnresolvedIssue: extracted.hasUnresolvedIssue
     };
   }
 
@@ -4532,7 +4532,7 @@ class ConversationManager {
 
     logger.info('Conversation ended', {
       conversationId: context.conversationId,
-      messageCount: context.messages.length,
+      messageCount: context.messages.length
     });
   }
 
@@ -4557,7 +4557,7 @@ setInterval(
   () => {
     manager.cleanupExpiredContexts();
   },
-  10 * 60 * 1000,
+  10 * 60 * 1000
 );
 
 module.exports = ConversationManager;
@@ -4581,7 +4581,7 @@ class KnowledgeBase {
       problems: this.getProblemKnowledge(),
       nutrients: this.getNutrientKnowledge(),
       techniques: this.getTechniqueKnowledge(),
-      general: this.getGeneralKnowledge(),
+      general: this.getGeneralKnowledge()
     };
   }
 
@@ -4609,7 +4609,7 @@ class KnowledgeBase {
           '✅ บันทึกการใช้ปุ๋ยและสารเคมี (Input records)',
           '✅ ตรวจสอบดินและน้ำตามกำหนด (Testing schedule)',
           '✅ เก็บบันทึกการเก็บเกี่ยว (Harvest documentation)',
-          '✅ ใช้เฉพาะปุ๋ยที่อนุมัติ (Approved products only)',
+          '✅ ใช้เฉพาะปุ๋ยที่อนุมัติ (Approved products only)'
         ],
         tips: [
           'ควบคุม pH ดินให้อยู่ระหว่าง 6.0-7.0 (GACP Required)',
@@ -4618,8 +4618,8 @@ class KnowledgeBase {
           'ตรวจสอบความชื้นในดินสม่ำเสมอ',
           '📝 บันทึกทุกขั้นตอนเพื่อ GACP certification',
           '🔬 ส่งตรวจ cannabinoids ก่อนเก็บเกี่ยว',
-          '⚖️ ปฏิบัติตาม SOP อย่างเคร่งครัดเพื่อความถูกกฎหมาย',
-        ],
+          '⚖️ ปฏิบัติตาม SOP อย่างเคร่งครัดเพื่อความถูกกฎหมาย'
+        ]
       },
 
       // 💰 SECONDARY ECONOMIC CROPS (Optional - Basic Support)
@@ -4638,8 +4638,8 @@ class KnowledgeBase {
           'ใช้เหง้าพันธุ์ขนาด 20-30 กรัม',
           'ใส่ปุ๋ยคอก 2-3 ตัน/ไร่ก่อนปลูก',
           'รดน้ำสม่ำเสมอ หลีกเลี่ยงน้ำขัง',
-          'เก็บเกี่ยวเมื่อใบเริ่มเหลืองแห้ง',
-        ],
+          'เก็บเกี่ยวเมื่อใบเริ่มเหลืองแห้ง'
+        ]
       },
       ขิง: {
         name: 'ขิง',
@@ -4656,8 +4656,8 @@ class KnowledgeBase {
           'ปลูกในดินร่วนปนทราย อินทรีย์สูง',
           'ระยะปลูก 30x30 cm หรือ 40x40 cm',
           'รดน้ำสม่ำเสมอ ไม่ให้ดินแห้งจัด',
-          'เก็บเกี่ยวขิงอ่อนได้หลังปลูก 4-5 เดือน',
-        ],
+          'เก็บเกี่ยวขิงอ่อนได้หลังปลูก 4-5 เดือน'
+        ]
       },
       กระชายดำ: {
         name: 'กระชายดำ',
@@ -4674,8 +4674,8 @@ class KnowledgeBase {
           'ต้องการความชื้นสม่ำเสมอ',
           'ดินต้องมีอินทรีย์วัตถุสูง',
           'เก็บเกี่ยวหลังใบเหลือง ยกแปลง',
-          'ราคาสูง ต้องการตลาดแน่นอน',
-        ],
+          'ราคาสูง ต้องการตลาดแน่นอน'
+        ]
       },
       ไพล: {
         name: 'ไพล',
@@ -4692,8 +4692,8 @@ class KnowledgeBase {
           'ต้องการดินร่วน มีอินทรีย์วัตถุ',
           'รดน้ำสม่ำเสมอ ไม่ให้แห้งจัด',
           'ใช้เหง้าพันธุ์น้ำหนัก 30-40 กรัม',
-          'นิยมแปรรูปเป็นผลิตภัณฑ์สมุนไพร',
-        ],
+          'นิยมแปรรูปเป็นผลิตภัณฑ์สมุนไพร'
+        ]
       },
       กระท่อม: {
         name: 'กระท่อม',
@@ -4711,9 +4711,9 @@ class KnowledgeBase {
           'ปลูกในพื้นที่ป่าหรือสวนผสมผสาน',
           'เก็บใบ 3-4 เดือน/ครั้ง หลังต้นโต',
           '⚠️ ต้องปฏิบัติตามกฎหมายการปลูกกระท่อม',
-          'มีข้อกำหนดเฉพาะสำหรับการขออนุญาต',
-        ],
-      },
+          'มีข้อกำหนดเฉพาะสำหรับการขออนุญาต'
+        ]
+      }
     };
   }
 
@@ -4730,9 +4730,9 @@ class KnowledgeBase {
           'ใส่ปุ๋ยยูเรียหรือ blood meal',
           'ตรวจสอบ pH ดิน ปรับให้เหมาะสม',
           'ตรวจสอบความชื้นในดิน',
-          'ตรวจหาเชื้อโรค',
+          'ตรวจหาเชื้อโรค'
         ],
-        urgency: 'medium',
+        urgency: 'medium'
       },
       เหี่ยว: {
         problem: 'ต้นเหี่ยว',
@@ -4742,9 +4742,9 @@ class KnowledgeBase {
           'ย้ายไปร่มเงา (ถ้าร้อนเกินไป)',
           'ตรวจสอบรากว่ามีปัญหาหรือไม่',
           'ตรวจหาแมลงศัตรู',
-          'ลดการใส่ปุ๋ย (ถ้าใส่มากเกินไป)',
+          'ลดการใส่ปุ๋ย (ถ้าใส่มากเกินไป)'
         ],
-        urgency: 'high',
+        urgency: 'high'
       },
       เชื้อรา: {
         problem: 'เชื้อรา',
@@ -4754,10 +4754,10 @@ class KnowledgeBase {
           'ฉีดพ่นสารกำจัดเชื้อราอินทรีย์',
           'ตัดใบที่ติดเชื้อทิ้ง',
           'หลีกเลี่ยงการให้น้ำโดนใบ',
-          'ใช้ neem oil หรือ ทองแดง',
+          'ใช้ neem oil หรือ ทองแดง'
         ],
-        urgency: 'high',
-      },
+        urgency: 'high'
+      }
     };
   }
 
@@ -4771,22 +4771,22 @@ class KnowledgeBase {
         functions: 'ส่งเสริมการเจริญเติบโตของใบและลำต้น สร้างคลอโรฟิลล์',
         deficiencySymptoms: 'ใบแก่เหลือง การเจริญเติบโตช้า',
         sources: ['ยูเรีย', 'Blood Meal', 'ปุ๋ยคอก'],
-        applicationTiming: 'ช่วงเจริญเติบโต (vegetative stage)',
+        applicationTiming: 'ช่วงเจริญเติบโต (vegetative stage)'
       },
       ฟอสฟอรัส: {
         symbol: 'P',
         functions: 'ส่งเสริมการออกดอก ออกผล และพัฒนาราก',
         deficiencySymptoms: 'ใบมีสีม่วง การออกดอกช้า รากพัฒนาไม่ดี',
         sources: ['โบนมีล', 'ปุ๋ยสูตร 15-15-15'],
-        applicationTiming: 'ช่วงออกดอก (flowering stage)',
+        applicationTiming: 'ช่วงออกดอก (flowering stage)'
       },
       โพแทสเซียม: {
         symbol: 'K',
         functions: 'เพิ่มความแข็งแรง ทนโรค และคุณภาพผลผลิต',
         deficiencySymptoms: 'ขอบใบไหม้ ใบม้วน ผลผลิตคุณภาพต่ำ',
         sources: ['โพแทสเซียมซัลเฟต', 'กล้วยหิน'],
-        applicationTiming: 'ช่วงออกดอกและสุกแก่',
-      },
+        applicationTiming: 'ช่วงออกดอกและสุกแก่'
+      }
     };
   }
 
@@ -4803,8 +4803,8 @@ class KnowledgeBase {
           'หลีกเลี่ยงการให้น้ำเวลากลางวัน (คายระเหยสูง)',
           'ใช้ระบบน้ำหยด ประหยัดน้ำได้ถึง 50%',
           'ตรวจสอบความชื้นในดินก่อนให้น้ำ',
-          'ให้น้ำลึกแต่ถี่น้อยดีกว่าตื้นแต่บ่อย',
-        ],
+          'ให้น้ำลึกแต่ถี่น้อยดีกว่าตื้นแต่บ่อย'
+        ]
       },
       การใส่ปุ๋ย: {
         technique: 'Fertilization',
@@ -4814,9 +4814,9 @@ class KnowledgeBase {
           'ใส่ปุ๋ยช้าๆ แบบค่อยเป็นค่อยไป',
           'ผสมปุ๋ยกับน้ำก่อนให้พืช (fertigation)',
           'ปรับสูตรตามระยะการเจริญเติบโต',
-          'หลีกเลี่ยงการใส่ปุ๋ยมากเกินไป (overfertilization)',
-        ],
-      },
+          'หลีกเลี่ยงการใส่ปุ๋ยมากเกินไป (overfertilization)'
+        ]
+      }
     };
   }
 
@@ -4828,18 +4828,18 @@ class KnowledgeBase {
       greetings: [
         'สวัสดีครับ ผมคือผู้ช่วยเกษตรอัจฉริยะ พร้อมช่วยเหลือคุณ',
         'ยินดีให้บริการครับ มีอะไรให้ช่วยไหมครับ',
-        'สวัสดีค่ะ ต้องการคำแนะนำด้านการเกษตรอะไรคะ',
+        'สวัสดีค่ะ ต้องการคำแนะนำด้านการเกษตรอะไรคะ'
       ],
       farewells: [
         'ขอบคุณที่ใช้บริการครับ ขอให้ทำการเกษตรราบรื่น',
         'ยินดีให้บริการครับ หากมีคำถามเพิ่มเติมอย่าลังเลที่จะถามได้เลยครับ',
-        'โชคดีกับการทำการเกษตรนะครับ',
+        'โชคดีกับการทำการเกษตรนะครับ'
       ],
       encouragement: [
         'คุณทำได้ดีมากครับ',
         'ขอชื่นชมในความพยายามของคุณครับ',
-        'การเกษตรต้องใช้ความอดทน คุณทำได้ดีแล้วครับ',
-      ],
+        'การเกษตรต้องใช้ความอดทน คุณทำได้ดีแล้วครับ'
+      ]
     };
   }
 
@@ -4886,7 +4886,7 @@ class KnowledgeBase {
               category,
               key,
               data: value,
-              relevance: keyMatch ? 1.0 : 0.5,
+              relevance: keyMatch ? 1.0 : 0.5
             });
           }
         });
@@ -4981,8 +4981,8 @@ class ResponseGenerator {
         'ตรวจสอบสถานะฟาร์ม',
         'ตารางการให้น้ำ',
         'ใบกัญชาเหลือง ทำยังไง',
-        'ควรใส่ปุ๋ยอะไร',
-      ],
+        'ควรใส่ปุ๋ยอะไร'
+      ]
     };
   }
 
@@ -5011,7 +5011,7 @@ class ResponseGenerator {
 
         return {
           text: response,
-          suggestions: ['ปัญหาที่พบบ่อย', 'ควรใส่ปุ๋ยอะไร', 'ตารางการให้น้ำ'],
+          suggestions: ['ปัญหาที่พบบ่อย', 'ควรใส่ปุ๋ยอะไร', 'ตารางการให้น้ำ']
         };
       }
     }
@@ -5039,7 +5039,7 @@ class ResponseGenerator {
 
         return {
           text: response,
-          suggestions: ['ต้องการความช่วยเหลือเพิ่ม', 'มีปัญหาอื่นอีก'],
+          suggestions: ['ต้องการความช่วยเหลือเพิ่ม', 'มีปัญหาอื่นอีก']
         };
       }
     }
@@ -5058,7 +5058,7 @@ class ResponseGenerator {
 
         return {
           text: response,
-          suggestions: ['ตรวจสอบดิน', 'แนะนำปุ๋ย'],
+          suggestions: ['ตรวจสอบดิน', 'แนะนำปุ๋ย']
         };
       }
     }
@@ -5085,7 +5085,7 @@ class ResponseGenerator {
 
       return {
         text: response,
-        suggestions: ['ขอคำแนะนำเพิ่ม', 'มีคำถามอื่น'],
+        suggestions: ['ขอคำแนะนำเพิ่ม', 'มีคำถามอื่น']
       };
     }
 
@@ -5100,7 +5100,7 @@ class ResponseGenerator {
     if (!farmData) {
       return {
         text: 'ต้องการคำแนะนำเฉพาะสำหรับฟาร์มของคุณไหมครับ? กรุณาเลือกฟาร์มก่อนนะครับ',
-        suggestions: ['เลือกฟาร์ม', 'ต้องการคำแนะนำทั่วไป'],
+        suggestions: ['เลือกฟาร์ม', 'ต้องการคำแนะนำทั่วไป']
       };
     }
 
@@ -5114,7 +5114,7 @@ class ResponseGenerator {
           soilData: farmData.soilMonitoring?.realTimeData || {},
           cropType: farmData.crops?.[0]?.cropType || 'cannabis',
           growthStage: farmData.crops?.[0]?.currentStage || 'vegetative',
-          farmSize: farmData.area || 1,
+          farmSize: farmData.area || 1
         });
 
         let response = '📊 **คำแนะนำการใส่ปุ๋ยสำหรับฟาร์มของคุณ**\n\n';
@@ -5136,12 +5136,12 @@ class ResponseGenerator {
 
         return {
           text: response,
-          suggestions: ['ดูคำแนะนำทั้งหมด', 'ตารางการใส่ปุ๋ย'],
+          suggestions: ['ดูคำแนะนำทั้งหมด', 'ตารางการใส่ปุ๋ย']
         };
       } catch (error) {
         return {
           text: 'ขออภัยครับ ไม่สามารถสร้างคำแนะนำได้ กรุณาตรวจสอบข้อมูลฟาร์มครับ',
-          suggestions: ['ตรวจสอบข้อมูลฟาร์ม'],
+          suggestions: ['ตรวจสอบข้อมูลฟาร์ม']
         };
       }
     }
@@ -5150,7 +5150,7 @@ class ResponseGenerator {
     if (entities.nutrients.includes('น้ำ') || nlpResult.originalText.includes('น้ำ')) {
       return {
         text: 'คุณต้องการดูตารางการให้น้ำไหมครับ? ระบบจะคำนวณจากสภาพอากาศและความชื้นในดินปัจจุบัน',
-        suggestions: ['ดูตารางการให้น้ำ', 'ตรวจสอบความชื้น'],
+        suggestions: ['ดูตารางการให้น้ำ', 'ตรวจสอบความชื้น']
       };
     }
 
@@ -5166,13 +5166,13 @@ class ResponseGenerator {
 
       return {
         text: response,
-        suggestions: ['ตารางการดูแล', 'ปัญหาที่พบบ่อย'],
+        suggestions: ['ตารางการดูแล', 'ปัญหาที่พบบ่อย']
       };
     }
 
     return {
       text: 'มีอะไรให้ผมช่วยเฉพาะเจาะจงไหมครับ? เช่น การใส่ปุ๋ย การให้น้ำ หรือการแก้ปัญหา',
-      suggestions: ['การใส่ปุ๋ย', 'การให้น้ำ', 'แก้ปัญหา'],
+      suggestions: ['การใส่ปุ๋ย', 'การให้น้ำ', 'แก้ปัญหา']
     };
   }
 
@@ -5210,7 +5210,7 @@ class ResponseGenerator {
 
         return {
           text: response,
-          suggestions: ['ดูวิธีแก้ทั้งหมด', 'ต้องการคำปรึกษาเพิ่ม', 'บันทึกปัญหา'],
+          suggestions: ['ดูวิธีแก้ทั้งหมด', 'ต้องการคำปรึกษาเพิ่ม', 'บันทึกปัญหา']
         };
       }
     }
@@ -5223,7 +5223,7 @@ class ResponseGenerator {
 
     return {
       text: response,
-      suggestions: ['ส่งรูปภาพ', 'อธิบายอาการเพิ่ม'],
+      suggestions: ['ส่งรูปภาพ', 'อธิบายอาการเพิ่ม']
     };
   }
 
@@ -5234,7 +5234,7 @@ class ResponseGenerator {
     if (!farmData) {
       return {
         text: 'กรุณาเลือกฟาร์มก่อนนะครับ',
-        suggestions: ['เลือกฟาร์ม'],
+        suggestions: ['เลือกฟาร์ม']
       };
     }
 
@@ -5269,7 +5269,7 @@ class ResponseGenerator {
 
     return {
       text: response,
-      suggestions: ['ดูคำแนะนำการดูแล', 'ตรวจสอบปัญหา', 'ตารางการให้น้ำ'],
+      suggestions: ['ดูคำแนะนำการดูแล', 'ตรวจสอบปัญหา', 'ตารางการให้น้ำ']
     };
   }
 
@@ -5280,13 +5280,13 @@ class ResponseGenerator {
     if (!farmData) {
       return {
         text: 'กรุณาเลือกฟาร์มเพื่อดูตารางครับ',
-        suggestions: ['เลือกฟาร์ม'],
+        suggestions: ['เลือกฟาร์ม']
       };
     }
 
     return {
       text: 'คุณต้องการดูตารางอะไรครับ?',
-      suggestions: ['ตารางการให้น้ำ', 'ตารางการใส่ปุ๋ย', 'กำหนดการเก็บเกี่ยว'],
+      suggestions: ['ตารางการให้น้ำ', 'ตารางการใส่ปุ๋ย', 'กำหนดการเก็บเกี่ยว']
     };
   }
 
@@ -5296,7 +5296,7 @@ class ResponseGenerator {
   handleUnknown(nlpResult) {
     return {
       text: 'ขออภัยครับ ผมไม่ค่อยเข้าใจคำถามนี้ ช่วยถามใหม่ได้ไหมครับ หรือเลือกจากหัวข้อด้านล่าง',
-      suggestions: ['ตรวจสอบสถานะฟาร์ม', 'คำแนะนำการดูแล', 'แก้ปัญหา', 'ติดต่อผู้ดูแล'],
+      suggestions: ['ตรวจสอบสถานะฟาร์ม', 'คำแนะนำการดูแล', 'แก้ปัญหา', 'ติดต่อผู้ดูแล']
     };
   }
 }
@@ -5343,7 +5343,7 @@ exports.chat = async (req, res) => {
     await conversationManager.addMessage(context, 'user', message, {
       intent: nlpResult.intent,
       entities: nlpResult.entities,
-      sentiment: nlpResult.sentiment,
+      sentiment: nlpResult.sentiment
     });
 
     // Get farm data if farmId provided
@@ -5359,13 +5359,13 @@ exports.chat = async (req, res) => {
 
     // Add assistant message to conversation
     await conversationManager.addMessage(context, 'assistant', response.text, {
-      suggestions: response.suggestions,
+      suggestions: response.suggestions
     });
 
     logger.info('AI chat completed', {
       userId,
       intent: nlpResult.intent,
-      farmId: farmId || 'none',
+      farmId: farmId || 'none'
     });
 
     res.json(
@@ -5375,9 +5375,9 @@ exports.chat = async (req, res) => {
         metadata: {
           intent: nlpResult.intent,
           confidence: nlpResult.confidence,
-          conversationId: context.conversationId,
-        },
-      }),
+          conversationId: context.conversationId
+        }
+      })
     );
   } catch (error) {
     logger.error('AI chat failed', { error: error.message });
@@ -5399,7 +5399,7 @@ exports.getConversation = async (req, res) => {
     const Conversation = require('../models/Conversation');
     const conversation = await Conversation.findOne({
       _id: conversationId,
-      userId,
+      userId
     })
       .select('messages context createdAt lastActivity')
       .lean();
@@ -5413,8 +5413,8 @@ exports.getConversation = async (req, res) => {
         conversationId,
         messages: conversation.messages,
         createdAt: conversation.createdAt,
-        lastActivity: conversation.lastActivity,
-      }),
+        lastActivity: conversation.lastActivity
+      })
     );
   } catch (error) {
     logger.error('Failed to get conversation', { error: error.message });
@@ -5434,7 +5434,7 @@ exports.deleteConversation = async (req, res) => {
     const Conversation = require('../models/Conversation');
     const conversation = await Conversation.findOneAndDelete({
       _id: conversationId,
-      userId,
+      userId
     });
 
     if (!conversation) {
@@ -5446,8 +5446,8 @@ exports.deleteConversation = async (req, res) => {
     res.json(
       ApiResponse.success({
         message: 'ลบการสนทนาสำเร็จ',
-        conversationId,
-      }),
+        conversationId
+      })
     );
   } catch (error) {
     logger.error('Failed to delete conversation', { error: error.message });
@@ -5467,7 +5467,7 @@ exports.getConversations = async (req, res) => {
     const Conversation = require('../models/Conversation');
     const conversations = await Conversation.find({
       userId,
-      active: active === 'true',
+      active: active === 'true'
     })
       .select('farmId messageCount lastActivity createdAt')
       .populate('farmId', 'farmName')
@@ -5478,8 +5478,8 @@ exports.getConversations = async (req, res) => {
     res.json(
       ApiResponse.success({
         conversations,
-        total: conversations.length,
-      }),
+        total: conversations.length
+      })
     );
   } catch (error) {
     logger.error('Failed to get conversations', { error: error.message });
@@ -5503,14 +5503,14 @@ const conversationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      index: true,
+      index: true
     },
 
     farmId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       default: null,
-      index: true,
+      index: true
     },
 
     messages: [
@@ -5518,48 +5518,48 @@ const conversationSchema = new mongoose.Schema(
         role: {
           type: String,
           enum: ['user', 'assistant'],
-          required: true,
+          required: true
         },
         content: {
           type: String,
-          required: true,
+          required: true
         },
         metadata: {
           type: mongoose.Schema.Types.Mixed,
-          default: {},
+          default: {}
         },
         timestamp: {
           type: Date,
-          default: Date.now,
-        },
-      },
+          default: Date.now
+        }
+      }
     ],
 
     context: {
       type: mongoose.Schema.Types.Mixed,
-      default: {},
+      default: {}
     },
 
     messageCount: {
       type: Number,
-      default: 0,
+      default: 0
     },
 
     active: {
       type: Boolean,
       default: true,
-      index: true,
+      index: true
     },
 
     lastActivity: {
       type: Date,
       default: Date.now,
-      index: true,
-    },
+      index: true
+    }
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // Index for queries
@@ -5570,8 +5570,8 @@ conversationSchema.index(
   { lastActivity: 1 },
   {
     expireAfterSeconds: 30 * 24 * 60 * 60,
-    partialFilterExpression: { active: false },
-  },
+    partialFilterExpression: { active: false }
+  }
 );
 
 module.exports = mongoose.model('Conversation', conversationSchema);

@@ -11,6 +11,7 @@
 ### 1. ✅ Setup Prettier & ESLint Auto-fix (COMPLETED)
 
 **สิ่งที่ทำแล้ว:**
+
 - [x] ติดตั้ง Prettier, ESLint plugins
 - [x] สร้าง `.prettierrc` config
 - [x] สร้าง `.prettierignore`
@@ -19,12 +20,14 @@
 - [x] Auto-format `lib/**/*.{ts,tsx}` ทั้งหมด
 
 **ผลลัพธ์:**
+
 ```
 ✅ apps/admin-portal/app/applications/[id]/page.tsx - No errors found!
 ✅ Lint errors ลดลงจาก 686 → ประมาณ 400-500 (ประมาณ 30% fixed)
 ```
 
 **ไฟล์ที่สร้าง:**
+
 - `apps/admin-portal/.prettierrc`
 - `apps/admin-portal/.prettierignore`
 - `apps/admin-portal/.eslintrc.js` (updated)
@@ -34,6 +37,7 @@
 ### 2. ✅ Fix TOTP Security Vulnerability (COMPLETED)
 
 **ปัญหาที่พบ:**
+
 ```typescript
 // ❌ BEFORE - Fake implementation!
 async verify2FAToken(userId: string, token: string): Promise<boolean> {
@@ -45,12 +49,14 @@ async verify2FAToken(userId: string, token: string): Promise<boolean> {
 **การแก้ไข:**
 
 **สิ่งที่ทำแล้ว:**
+
 - [x] ติดตั้ง `speakeasy` library (TOTP verification)
 - [x] ติดตั้ง `qrcode` library (QR code generation)
 - [x] ติดตั้ง `@types/speakeasy`, `@types/qrcode`
 - [x] Implement TOTP verification จริง
 
 **โค้ดใหม่:**
+
 ```typescript
 // ✅ AFTER - Real TOTP verification!
 import speakeasy from 'speakeasy';
@@ -75,6 +81,7 @@ async verify2FAToken(userId: string, token: string): Promise<boolean> {
 ```
 
 **ผลลัพธ์:**
+
 - ✅ Security vulnerability แก้แล้ว
 - ✅ TOTP verification ทำงานจริง
 - ✅ รองรับ clock drift (window: 2)
@@ -86,6 +93,7 @@ async verify2FAToken(userId: string, token: string): Promise<boolean> {
 **TODO Comments ที่ยังต้องแก้:** (10 items remaining)
 
 #### Frontend API Integration (4 items)
+
 ```typescript
 // apps/admin-portal/app/applications/[id]/page.tsx:149
 ❌ TODO: Send to API - handleReviewSubmit()
@@ -98,6 +106,7 @@ async verify2FAToken(userId: string, token: string): Promise<boolean> {
 ```
 
 #### Backend Integration (3 items)
+
 ```typescript
 // apps/admin-portal/lib/errors/api-error-middleware.ts:122
 ❌ TODO: Close database connections, finish pending requests
@@ -110,6 +119,7 @@ async verify2FAToken(userId: string, token: string): Promise<boolean> {
 ```
 
 #### Monitoring (3 items)
+
 ```typescript
 // apps/admin-portal/lib/security/security-monitor.ts:587-591
 ❌ TODO: Implement request counter
@@ -121,11 +131,11 @@ async verify2FAToken(userId: string, token: string): Promise<boolean> {
 
 ## 📊 Scorecard Update
 
-| Item | Before | After | Progress |
-|------|--------|-------|----------|
-| **Lint Errors** | 686 | ~400-500 | 🟡 30% fixed |
-| **TOTP Security** | ❌ Fake | ✅ Real | ✅ 100% fixed |
-| **TODO Items** | 12 | 10 | 🟡 17% done |
+| Item              | Before  | After    | Progress      |
+| ----------------- | ------- | -------- | ------------- |
+| **Lint Errors**   | 686     | ~400-500 | 🟡 30% fixed  |
+| **TOTP Security** | ❌ Fake | ✅ Real  | ✅ 100% fixed |
+| **TODO Items**    | 12      | 10       | 🟡 17% done   |
 
 ---
 
@@ -142,26 +152,31 @@ async verify2FAToken(userId: string, token: string): Promise<boolean> {
 ### Step 3: Fix Remaining TODO Items (ประมาณ 2-3 ชั่วโมง)
 
 **Priority 1: API Integrations** (1-1.5 ชั่วโมง)
+
 - [ ] Implement `handleReviewSubmit()` API call
 - [ ] Implement `handleSuspendUser()` API call
 - [ ] Implement `handleDeleteUser()` API call
 
 **Priority 2: Backend Integrations** (30-45 นาที)
+
 - [ ] Implement graceful shutdown
 - [ ] Integrate auth middleware
 - [ ] Integrate rate limiter
 
 **Priority 3: Monitoring Metrics** (30-45 นาที)
+
 - [ ] Implement request counter (use Prometheus client)
 - [ ] Integrate security logger
 - [ ] Implement response time tracking
 
 ### Step 4: Complete Lint Fixes (1-2 ชั่วโมง)
+
 - [ ] Run `npx prettier --write "**/*.{ts,tsx}"` ทั้ง workspace
 - [ ] Fix remaining TypeScript errors
 - [ ] Remove all `@ts-nocheck` comments
 
 ### Step 5: Unit Tests (3-5 วัน)
+
 - [ ] Install Jest
 - [ ] Write workflow engine tests
 - [ ] Write digital logbook tests
@@ -173,11 +188,13 @@ async verify2FAToken(userId: string, token: string): Promise<boolean> {
 ## 💡 Recommendations
 
 **ควรทำต่อทันที:**
+
 1. ✅ **Prettier auto-fix** - ใช้เวลาน้อย ได้ผลเยอะ (30% errors fixed!)
 2. ✅ **TOTP security** - Critical แก้เสร็จแล้ว
 3. 🔄 **API Integration** - ทำต่อเลยเพื่อให้ frontend ใช้งานได้
 
 **แนะนำ Git Commit:**
+
 ```bash
 git add .
 git commit -m "fix: Phase 1 CRITICAL issues - Prettier setup + TOTP security

@@ -10,13 +10,9 @@ const {
 } = require('../models/CannabisSurvey');
 const SOP = require('../models/SOP');
 const User = require('../models/user');
-const Farm = require('../models/Farm');
-const EnhancedCultivationRecord = require('../models/EnhancedCultivationRecord');
 const AuditCalendar = require('../models/AuditCalendar');
 const enhancedNotificationService = require('./enhancedNotificationService');
 const blitzzIntegrationService = require('./blitzzIntegrationService');
-const mongoose = require('mongoose');
-
 class CannabisSurveyService {
   // Template Management
   async createTemplate(templateData, createdBy) {

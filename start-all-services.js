@@ -22,11 +22,11 @@ function checkPort(port) {
         port: port,
         method: 'GET',
         path: '/health',
-        timeout: 3000,
+        timeout: 3000
       },
       res => {
         resolve(res.statusCode === 200);
-      },
+      }
     );
 
     req.on('error', () => resolve(false));
@@ -71,19 +71,19 @@ function startService(config) {
       '--port',
       config.port,
       '--name',
-      config.name,
+      config.name
     ],
     {
       cwd: process.cwd(),
       stdio: 'inherit',
-      shell: true,
-    },
+      shell: true
+    }
   );
 
   services.push({
     name: config.name,
     process: child,
-    port: config.port,
+    port: config.port
   });
 
   child.on('error', error => {
@@ -104,7 +104,7 @@ async function startAll() {
     name: 'Backend',
     script: 'server.js',
     cwd: 'apps/backend',
-    port: 5001,
+    port: 5001
   });
 
   // Wait for backend

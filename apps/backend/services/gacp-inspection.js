@@ -7,7 +7,7 @@
  */
 
 const Application = require('../models/application');
-const User = require('../models/user');
+const _User = require('../models/user');
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
 

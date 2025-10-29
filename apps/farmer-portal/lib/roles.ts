@@ -9,7 +9,7 @@ export enum UserRole {
   INSPECTOR = 'inspector',
   APPROVER = 'approver',
   ADMIN = 'admin',
-  PUBLIC = 'public',
+  PUBLIC = 'public'
 }
 
 export interface RoleConfig {
@@ -34,10 +34,10 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
       'application:create',
       'application:read',
       'survey:submit',
-      'trace:read',
+      'trace:read'
     ],
     color: '#4caf50',
-    icon: 'agriculture',
+    icon: 'agriculture'
   },
   [UserRole.REVIEWER]: {
     name: UserRole.REVIEWER,
@@ -49,10 +49,10 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
       'application:review',
       'application:comment',
       'farm:read',
-      'document:verify',
+      'document:verify'
     ],
     color: '#2196f3',
-    icon: 'assignment',
+    icon: 'assignment'
   },
   [UserRole.INSPECTOR]: {
     name: UserRole.INSPECTOR,
@@ -66,10 +66,10 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
       'inspection:create',
       'inspection:update',
       'trace:read',
-      'trace:verify',
+      'trace:verify'
     ],
     color: '#ff9800',
-    icon: 'search',
+    icon: 'search'
   },
   [UserRole.APPROVER]: {
     name: UserRole.APPROVER,
@@ -83,10 +83,10 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
       'certificate:issue',
       'certificate:revoke',
       'farm:read',
-      'inspection:read',
+      'inspection:read'
     ],
     color: '#9c27b0',
-    icon: 'verified',
+    icon: 'verified'
   },
   [UserRole.ADMIN]: {
     name: UserRole.ADMIN,
@@ -102,10 +102,10 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
       'system:settings',
       'audit:read',
       'logs:read',
-      'reports:all',
+      'reports:all'
     ],
     color: '#f44336',
-    icon: 'admin_panel_settings',
+    icon: 'admin_panel_settings'
   },
   [UserRole.PUBLIC]: {
     name: UserRole.PUBLIC,
@@ -114,8 +114,8 @@ export const ROLE_CONFIGS: Record<UserRole, RoleConfig> = {
     dashboardRoute: '/',
     permissions: ['trace:read'],
     color: '#757575',
-    icon: 'public',
-  },
+    icon: 'public'
+  }
 };
 
 /**

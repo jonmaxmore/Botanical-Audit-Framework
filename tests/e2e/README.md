@@ -5,7 +5,7 @@
 This directory contains comprehensive end-to-end tests for the GACP Botanical Audit Framework system. These tests validate the complete workflows across all three portals:
 
 - **Farmer Portal** (localhost:3001)
-- **Admin/DTAM Portal** (localhost:3002)  
+- **Admin/DTAM Portal** (localhost:3002)
 - **Certificate Verification Portal** (localhost:3003)
 
 ## Test Structure
@@ -21,12 +21,14 @@ tests/e2e/
 ## Prerequisites
 
 1. **Install Dependencies**
+
    ```bash
    pnpm install
    npx playwright install chromium
    ```
 
 2. **Start All Services**
+
    ```bash
    # Terminal 1: Start all portals
    pnpm run start:all
@@ -47,27 +49,32 @@ tests/e2e/
 ## Running Tests
 
 ### Run All E2E Tests
+
 ```bash
 pnpm run test:e2e
 ```
 
 ### Run Specific Test File
+
 ```bash
 npx playwright test application-workflow
 npx playwright test cross-portal-integration
 ```
 
 ### Run Tests in UI Mode (Interactive)
+
 ```bash
 npx playwright test --ui
 ```
 
 ### Run Tests in Headed Mode (See Browser)
+
 ```bash
 npx playwright test --headed
 ```
 
 ### Debug Tests
+
 ```bash
 npx playwright test --debug
 ```
@@ -157,19 +164,23 @@ These are created by `auth.setup.ts` before tests run.
 After running tests, view reports:
 
 ### HTML Report
+
 ```bash
 npx playwright show-report
 ```
 
 ### JSON Report
+
 Located at: `test-results/e2e-results.json`
 
 ### JUnit Report (for CI/CD)
+
 Located at: `test-results/e2e-junit.xml`
 
 ## Screenshots and Videos
 
 On test failure:
+
 - Screenshots: `test-results/e2e-artifacts/`
 - Videos: `test-results/e2e-artifacts/`
 - Traces: `test-results/e2e-artifacts/`
@@ -177,11 +188,13 @@ On test failure:
 ## Debugging Tips
 
 1. **Use UI Mode**
+
    ```bash
    npx playwright test --ui
    ```
 
 2. **Slow Motion**
+
    ```bash
    npx playwright test --headed --slow-mo=1000
    ```
@@ -190,6 +203,7 @@ On test failure:
    Add `await page.pause()` in your test
 
 4. **View Trace**
+
    ```bash
    npx playwright show-trace test-results/trace.zip
    ```
@@ -216,21 +230,21 @@ jobs:
         with:
           node-version: '20'
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install
-      
+
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      
+
       - name: Start services
         run: |
           pnpm run start:all &
           sleep 30
-      
+
       - name: Run E2E tests
         run: pnpm run test:e2e
-      
+
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4

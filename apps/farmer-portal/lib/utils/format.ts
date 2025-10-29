@@ -17,7 +17,7 @@ export function formatCurrency(amount: number): string {
     style: 'currency',
     currency: 'THB',
     minimumFractionDigits: 0,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   }).format(amount);
 }
 
@@ -29,7 +29,7 @@ export function formatCurrency(amount: number): string {
  */
 export function formatDate(
   date: Date | string,
-  format: 'short' | 'full' | 'medium' = 'medium',
+  format: 'short' | 'full' | 'medium' = 'medium'
 ): string {
   const d = typeof date === 'string' ? new Date(date) : date;
 
@@ -37,7 +37,7 @@ export function formatDate(
     return d.toLocaleDateString('th-TH', {
       year: '2-digit',
       month: '2-digit',
-      day: '2-digit',
+      day: '2-digit'
     });
   }
 
@@ -46,7 +46,7 @@ export function formatDate(
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric',
+      day: 'numeric'
     });
   }
 
@@ -54,7 +54,7 @@ export function formatDate(
   return d.toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric',
+    day: 'numeric'
   });
 }
 

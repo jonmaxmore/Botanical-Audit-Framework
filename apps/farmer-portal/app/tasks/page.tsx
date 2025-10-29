@@ -10,16 +10,16 @@ export default function TasksPage() {
     todo: [
       { id: 1, title: 'อัปโหลดเอกสารเพิ่มเติม', app: '#001', deadline: '3 วัน', priority: 'high' },
       { id: 2, title: 'นัดตรวจสอบสถานที่', app: '#004', deadline: '20/01 10:00', priority: 'high' },
-      { id: 3, title: 'ตอบคำถามจากเจ้าหน้าที่', app: '#007', deadline: '5 วัน', priority: 'medium' },
+      { id: 3, title: 'ตอบคำถามจากเจ้าหน้าที่', app: '#007', deadline: '5 วัน', priority: 'medium' }
     ],
     doing: [
       { id: 4, title: 'ชำระเงินงวดที่ 1', app: '#002', deadline: '7 วัน', priority: 'high' },
-      { id: 5, title: 'แก้ไขข้อมูลฟาร์ม', app: '#005', deadline: '10 วัน', priority: 'low' },
+      { id: 5, title: 'แก้ไขข้อมูลฟาร์ม', app: '#005', deadline: '10 วัน', priority: 'low' }
     ],
     done: [
       { id: 6, title: 'ยื่นคำขอใบรับรอง', app: '#003', deadline: 'เสร็จแล้ว', priority: 'high' },
-      { id: 7, title: 'อัปโหลดเอกสารครบ', app: '#006', deadline: 'เสร็จแล้ว', priority: 'medium' },
-    ],
+      { id: 7, title: 'อัปโหลดเอกสารครบ', app: '#006', deadline: 'เสร็จแล้ว', priority: 'medium' }
+    ]
   };
 
   return (
@@ -70,8 +70,11 @@ export default function TasksPage() {
             <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-bold text-gray-900 mb-4">รอดำเนินการ ({tasks.todo.length})</h3>
               <div className="space-y-3">
-                {tasks.todo.map((task) => (
-                  <div key={task.id} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+                {tasks.todo.map(task => (
+                  <div
+                    key={task.id}
+                    className="bg-white p-4 rounded-lg shadow hover:shadow-md transition"
+                  >
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="font-semibold text-gray-900">{task.title}</h4>
                       {task.priority === 'high' && <span className="text-red-500">🔴</span>}
@@ -79,7 +82,10 @@ export default function TasksPage() {
                     <p className="text-sm text-gray-600 mb-2">คำขอ {task.app}</p>
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">⏰ {task.deadline}</span>
-                      <Link href={`/applications/${task.app.replace('#', '')}`} className="text-xs text-green-600 hover:underline">
+                      <Link
+                        href={`/applications/${task.app.replace('#', '')}`}
+                        className="text-xs text-green-600 hover:underline"
+                      >
                         ดูรายละเอียด →
                       </Link>
                     </div>
@@ -92,8 +98,11 @@ export default function TasksPage() {
             <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-bold text-gray-900 mb-4">กำลังทำ ({tasks.doing.length})</h3>
               <div className="space-y-3">
-                {tasks.doing.map((task) => (
-                  <div key={task.id} className="bg-white p-4 rounded-lg shadow hover:shadow-md transition">
+                {tasks.doing.map(task => (
+                  <div
+                    key={task.id}
+                    className="bg-white p-4 rounded-lg shadow hover:shadow-md transition"
+                  >
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="font-semibold text-gray-900">{task.title}</h4>
                       {task.priority === 'high' && <span className="text-red-500">🔴</span>}
@@ -101,7 +110,10 @@ export default function TasksPage() {
                     <p className="text-sm text-gray-600 mb-2">คำขอ {task.app}</p>
                     <div className="flex justify-between items-center">
                       <span className="text-xs text-gray-500">⏰ {task.deadline}</span>
-                      <Link href={`/applications/${task.app.replace('#', '')}`} className="text-xs text-green-600 hover:underline">
+                      <Link
+                        href={`/applications/${task.app.replace('#', '')}`}
+                        className="text-xs text-green-600 hover:underline"
+                      >
                         ดูรายละเอียด →
                       </Link>
                     </div>
@@ -114,7 +126,7 @@ export default function TasksPage() {
             <div className="bg-gray-100 p-4 rounded-lg">
               <h3 className="font-bold text-gray-900 mb-4">เสร็จแล้ว ({tasks.done.length})</h3>
               <div className="space-y-3">
-                {tasks.done.map((task) => (
+                {tasks.done.map(task => (
                   <div key={task.id} className="bg-white p-4 rounded-lg shadow opacity-75">
                     <div className="flex justify-between items-start mb-2">
                       <h4 className="font-semibold text-gray-900 line-through">{task.title}</h4>
@@ -135,15 +147,25 @@ export default function TasksPage() {
             <table className="min-w-full">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">งาน</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">คำขอ</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">สถานะ</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">กำหนดเวลา</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">การดำเนินการ</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    งาน
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    คำขอ
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    สถานะ
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    กำหนดเวลา
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                    การดำเนินการ
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {[...tasks.todo, ...tasks.doing, ...tasks.done].map((task) => (
+                {[...tasks.todo, ...tasks.doing, ...tasks.done].map(task => (
                   <tr key={task.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -151,20 +173,34 @@ export default function TasksPage() {
                         <span className="font-medium text-gray-900">{task.title}</span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{task.app}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {task.app}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 py-1 text-xs rounded-full ${
-                        tasks.todo.includes(task) ? 'bg-red-100 text-red-800' :
-                        tasks.doing.includes(task) ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {tasks.todo.includes(task) ? 'รอดำเนินการ' :
-                         tasks.doing.includes(task) ? 'กำลังทำ' : 'เสร็จแล้ว'}
+                      <span
+                        className={`px-2 py-1 text-xs rounded-full ${
+                          tasks.todo.includes(task)
+                            ? 'bg-red-100 text-red-800'
+                            : tasks.doing.includes(task)
+                              ? 'bg-yellow-100 text-yellow-800'
+                              : 'bg-green-100 text-green-800'
+                        }`}
+                      >
+                        {tasks.todo.includes(task)
+                          ? 'รอดำเนินการ'
+                          : tasks.doing.includes(task)
+                            ? 'กำลังทำ'
+                            : 'เสร็จแล้ว'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{task.deadline}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      {task.deadline}
+                    </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm">
-                      <Link href={`/applications/${task.app.replace('#', '')}`} className="text-green-600 hover:underline">
+                      <Link
+                        href={`/applications/${task.app.replace('#', '')}`}
+                        className="text-green-600 hover:underline"
+                      >
                         ดูรายละเอียด
                       </Link>
                     </td>

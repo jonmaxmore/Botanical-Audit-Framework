@@ -1,4 +1,5 @@
 # COMPREHENSIVE END-TO-END TESTING PLAN
+
 ## GACP Botanical Audit Framework - 100% Frontend Coverage
 
 **Test Plan Version:** 1.0  
@@ -24,7 +25,7 @@
 ✅ **Every Interactive Element** - All buttons, links, forms, dropdowns, modals  
 ✅ **All User Workflows** - Complete end-to-end journeys  
 ✅ **Full Regression** - Existing functionality validated  
-✅ **Cross-Browser/Device** - Chrome, Firefox, Safari + Desktop, Mobile, Tablet  
+✅ **Cross-Browser/Device** - Chrome, Firefox, Safari + Desktop, Mobile, Tablet
 
 ---
 
@@ -32,79 +33,79 @@
 
 ### **Public Routes (Unauthenticated)**
 
-| # | URL | Page Name | Purpose | Status |
-|---|-----|-----------|---------|--------|
-| 1 | `/` | Landing/Home | Entry point | ⏳ |
-| 2 | `/login` | Login Page | User authentication | ⏳ |
-| 3 | `/register` | Registration | New user signup | ⏳ |
-| 4 | `/forgot-password` | Password Recovery | Reset password request | ⏳ |
-| 5 | `/reset-password/:token` | Password Reset | Set new password | ⏳ |
-| 6 | `/verify-email/:token` | Email Verification | Confirm email address | ⏳ |
+| #   | URL                      | Page Name          | Purpose                | Status |
+| --- | ------------------------ | ------------------ | ---------------------- | ------ |
+| 1   | `/`                      | Landing/Home       | Entry point            | ⏳     |
+| 2   | `/login`                 | Login Page         | User authentication    | ⏳     |
+| 3   | `/register`              | Registration       | New user signup        | ⏳     |
+| 4   | `/forgot-password`       | Password Recovery  | Reset password request | ⏳     |
+| 5   | `/reset-password/:token` | Password Reset     | Set new password       | ⏳     |
+| 6   | `/verify-email/:token`   | Email Verification | Confirm email address  | ⏳     |
 
 ### **Farmer Routes (Role: FARMER)**
 
-| # | URL | Page Name | Purpose | Status |
-|---|-----|-----------|---------|--------|
-| 7 | `/farmer/dashboard` | Farmer Dashboard | Main farmer home | ⏳ |
-| 8 | `/farmer/applications` | Applications List | View all applications | ⏳ |
-| 9 | `/farmer/applications/new` | New Application | Create application | ⏳ |
-| 10 | `/farmer/applications/:id` | Application Detail | View single application | ⏳ |
-| 11 | `/farmer/applications/:id/edit` | Edit Application | Modify application | ⏳ |
-| 12 | `/farmer/profile` | Farmer Profile | View/edit profile | ⏳ |
-| 13 | `/farmer/documents` | Documents | Upload documents | ⏳ |
-| 14 | `/farmer/payments` | Payments | Payment history | ⏳ |
-| 15 | `/farmer/certificates` | Certificates | View issued certificates | ⏳ |
+| #   | URL                             | Page Name          | Purpose                  | Status |
+| --- | ------------------------------- | ------------------ | ------------------------ | ------ |
+| 7   | `/farmer/dashboard`             | Farmer Dashboard   | Main farmer home         | ⏳     |
+| 8   | `/farmer/applications`          | Applications List  | View all applications    | ⏳     |
+| 9   | `/farmer/applications/new`      | New Application    | Create application       | ⏳     |
+| 10  | `/farmer/applications/:id`      | Application Detail | View single application  | ⏳     |
+| 11  | `/farmer/applications/:id/edit` | Edit Application   | Modify application       | ⏳     |
+| 12  | `/farmer/profile`               | Farmer Profile     | View/edit profile        | ⏳     |
+| 13  | `/farmer/documents`             | Documents          | Upload documents         | ⏳     |
+| 14  | `/farmer/payments`              | Payments           | Payment history          | ⏳     |
+| 15  | `/farmer/certificates`          | Certificates       | View issued certificates | ⏳     |
 
 ### **DTAM Officer Routes (Role: DTAM_OFFICER)**
 
-| # | URL | Page Name | Purpose | Status |
-|---|-----|-----------|---------|--------|
-| 16 | `/officer/dashboard` | Officer Dashboard | Main officer home | ⏳ |
-| 17 | `/officer/applications` | Applications Queue | Review applications | ⏳ |
-| 18 | `/officer/applications/:id` | Application Review | Review single application | ⏳ |
-| 19 | `/officer/documents/:id` | Document Review | Review documents | ⏳ |
-| 20 | `/officer/approvals` | Approvals | Pending approvals | ⏳ |
-| 21 | `/officer/profile` | Officer Profile | View/edit profile | ⏳ |
+| #   | URL                         | Page Name          | Purpose                   | Status |
+| --- | --------------------------- | ------------------ | ------------------------- | ------ |
+| 16  | `/officer/dashboard`        | Officer Dashboard  | Main officer home         | ⏳     |
+| 17  | `/officer/applications`     | Applications Queue | Review applications       | ⏳     |
+| 18  | `/officer/applications/:id` | Application Review | Review single application | ⏳     |
+| 19  | `/officer/documents/:id`    | Document Review    | Review documents          | ⏳     |
+| 20  | `/officer/approvals`        | Approvals          | Pending approvals         | ⏳     |
+| 21  | `/officer/profile`          | Officer Profile    | View/edit profile         | ⏳     |
 
 ### **Inspector Routes (Role: INSPECTOR)**
 
-| # | URL | Page Name | Purpose | Status |
-|---|-----|-----------|---------|--------|
-| 22 | `/inspector/dashboard` | Inspector Dashboard | Main inspector home | ⏳ |
-| 23 | `/inspector/inspections` | Inspections List | View all inspections | ⏳ |
-| 24 | `/inspector/inspections/:id` | Inspection Detail | View single inspection | ⏳ |
-| 25 | `/inspector/schedule` | Schedule | Inspection calendar | ⏳ |
-| 26 | `/inspector/reports` | Reports | Submit reports | ⏳ |
-| 27 | `/inspector/profile` | Inspector Profile | View/edit profile | ⏳ |
+| #   | URL                          | Page Name           | Purpose                | Status |
+| --- | ---------------------------- | ------------------- | ---------------------- | ------ |
+| 22  | `/inspector/dashboard`       | Inspector Dashboard | Main inspector home    | ⏳     |
+| 23  | `/inspector/inspections`     | Inspections List    | View all inspections   | ⏳     |
+| 24  | `/inspector/inspections/:id` | Inspection Detail   | View single inspection | ⏳     |
+| 25  | `/inspector/schedule`        | Schedule            | Inspection calendar    | ⏳     |
+| 26  | `/inspector/reports`         | Reports             | Submit reports         | ⏳     |
+| 27  | `/inspector/profile`         | Inspector Profile   | View/edit profile      | ⏳     |
 
 ### **Admin Routes (Role: ADMIN)**
 
-| # | URL | Page Name | Purpose | Status |
-|---|-----|-----------|---------|--------|
-| 28 | `/admin/dashboard` | Admin Dashboard | Main admin home | ⏳ |
-| 29 | `/admin/users` | User Management | Manage all users | ⏳ |
-| 30 | `/admin/users/:id` | User Detail | View single user | ⏳ |
-| 31 | `/admin/applications` | Applications Admin | Manage applications | ⏳ |
-| 32 | `/admin/reports` | System Reports | Analytics & reports | ⏳ |
-| 33 | `/admin/settings` | System Settings | Configure system | ⏳ |
+| #   | URL                   | Page Name          | Purpose             | Status |
+| --- | --------------------- | ------------------ | ------------------- | ------ |
+| 28  | `/admin/dashboard`    | Admin Dashboard    | Main admin home     | ⏳     |
+| 29  | `/admin/users`        | User Management    | Manage all users    | ⏳     |
+| 30  | `/admin/users/:id`    | User Detail        | View single user    | ⏳     |
+| 31  | `/admin/applications` | Applications Admin | Manage applications | ⏳     |
+| 32  | `/admin/reports`      | System Reports     | Analytics & reports | ⏳     |
+| 33  | `/admin/settings`     | System Settings    | Configure system    | ⏳     |
 
 ### **Shared Routes (All Authenticated Users)**
 
-| # | URL | Page Name | Purpose | Status |
-|---|-----|-----------|---------|--------|
-| 34 | `/profile` | User Profile | Edit user profile | ⏳ |
-| 35 | `/settings` | User Settings | User preferences | ⏳ |
-| 36 | `/notifications` | Notifications | View notifications | ⏳ |
-| 37 | `/help` | Help & Support | Documentation | ⏳ |
+| #   | URL              | Page Name      | Purpose            | Status |
+| --- | ---------------- | -------------- | ------------------ | ------ |
+| 34  | `/profile`       | User Profile   | Edit user profile  | ⏳     |
+| 35  | `/settings`      | User Settings  | User preferences   | ⏳     |
+| 36  | `/notifications` | Notifications  | View notifications | ⏳     |
+| 37  | `/help`          | Help & Support | Documentation      | ⏳     |
 
 ### **Error/Special Routes**
 
-| # | URL | Page Name | Purpose | Status |
-|---|-----|-----------|---------|--------|
-| 38 | `/404` | Not Found | 404 error page | ⏳ |
-| 39 | `/403` | Forbidden | Access denied | ⏳ |
-| 40 | `/500` | Server Error | Server error page | ⏳ |
-| 41 | `/maintenance` | Maintenance | Maintenance mode | ⏳ |
+| #   | URL            | Page Name    | Purpose           | Status |
+| --- | -------------- | ------------ | ----------------- | ------ |
+| 38  | `/404`         | Not Found    | 404 error page    | ⏳     |
+| 39  | `/403`         | Forbidden    | Access denied     | ⏳     |
+| 40  | `/500`         | Server Error | Server error page | ⏳     |
+| 41  | `/maintenance` | Maintenance  | Maintenance mode  | ⏳     |
 
 **Total URLs to Test: 41**
 
@@ -121,6 +122,7 @@
 **Complexity:** High
 
 **Preconditions:**
+
 - [ ] Backend server running on port 3004
 - [ ] Frontend server running on port 3000
 - [ ] MongoDB connected
@@ -202,6 +204,7 @@
 **Expected Result:** ✅ All validations work, registration succeeds, retry logic active
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 - [ ] Safari (Desktop)
@@ -284,17 +287,17 @@
    - [ ] Re-enable network
 
 8. **Test Role-Based Redirects**
-   
+
    **a) DTAM Officer Login:**
    - [ ] Logout
    - [ ] Login as: `officer@test.com` / `password`
    - [ ] **VERIFY:** Redirected to `/officer/dashboard`
-   
+
    **b) Inspector Login:**
    - [ ] Logout
    - [ ] Login as: `inspector@test.com` / `password`
    - [ ] **VERIFY:** Redirected to `/inspector/dashboard`
-   
+
    **c) Admin Login:**
    - [ ] Logout
    - [ ] Login as: `admin@test.com` / `password`
@@ -303,6 +306,7 @@
 **Expected Result:** ✅ All login scenarios work, retry logic active, role redirects correct
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 - [ ] Safari (Desktop)
@@ -369,6 +373,7 @@
 **Expected Result:** ✅ Password reset flow complete, validation works
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 
@@ -385,6 +390,7 @@
 **Complexity:** Medium
 
 **Preconditions:**
+
 - [ ] Logged in as FARMER
 
 **Test Steps:**
@@ -402,7 +408,6 @@
    - [ ] **VERIFY:** Quick action buttons visible:
      - [ ] "Create New Application" button
      - [ ] "View All Applications" button
-   
 3. **Dashboard Statistics**
    - [ ] **VERIFY:** Total applications count
    - [ ] **VERIFY:** Pending applications count
@@ -425,6 +430,7 @@
 **Expected Result:** ✅ Dashboard loads, all widgets work, navigation functions
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 - [ ] Safari (Desktop)
@@ -441,6 +447,7 @@
 **Complexity:** Very High
 
 **Preconditions:**
+
 - [ ] Logged in as FARMER
 - [ ] On farmer dashboard
 
@@ -544,6 +551,7 @@
 **Expected Result:** ✅ Application creation flow complete, retry logic prevents data loss
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 - [ ] Safari (Desktop)
@@ -619,6 +627,7 @@
 **Expected Result:** ✅ List displays correctly, filtering/sorting works, retry logic active
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 - [ ] Chrome (Mobile)
@@ -662,12 +671,12 @@
    - [ ] **VERIFY:** Dates/timestamps displayed
 
 5. **Test Action Buttons (Based on Status)**
-   
+
    **If DRAFT:**
    - [ ] **VERIFY:** "Edit" button visible
    - [ ] **VERIFY:** "Submit" button visible
    - [ ] **VERIFY:** "Delete" button visible
-   
+
    **If SUBMITTED:**
    - [ ] **VERIFY:** "View Only" mode
    - [ ] **VERIFY:** No edit buttons
@@ -702,6 +711,7 @@
 **Expected Result:** ✅ Detail page shows all data, actions work, retry logic active
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 - [ ] Safari (Desktop)
@@ -802,6 +812,7 @@
 **Expected Result:** ✅ Document upload complete, validation works, actions functional
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 - [ ] Safari (Desktop)
@@ -819,6 +830,7 @@
 **Complexity:** High
 
 **Preconditions:**
+
 - [ ] Logged in as DTAM_OFFICER
 - [ ] At least one submitted application exists
 
@@ -906,6 +918,7 @@
 **Expected Result:** ✅ Complete review workflow functional, all actions work
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 
@@ -922,6 +935,7 @@
 **Complexity:** Medium
 
 **Preconditions:**
+
 - [ ] ErrorBoundaryTest component available
 - [ ] Error boundary wrapped around app in layout.tsx
 
@@ -1004,6 +1018,7 @@
 **Expected Result:** ✅ Error boundary catches errors, Thai UI displays, recovery works
 
 **Cross-Browser Testing:**
+
 - [ ] Chrome (Desktop)
 - [ ] Firefox (Desktop)
 - [ ] Safari (Desktop)
@@ -1021,6 +1036,7 @@
 **Complexity:** Medium
 
 **Devices to Test:**
+
 - iPhone 13 Pro (iOS Safari)
 - iPhone 13 Pro (iOS Chrome)
 - Samsung Galaxy S21 (Android Chrome)
@@ -1094,12 +1110,14 @@
 **Browsers to Test:**
 
 **Desktop:**
+
 - Chrome (latest)
 - Firefox (latest)
 - Safari (macOS latest)
 - Edge (latest)
 
 **Mobile:**
+
 - iOS Safari (latest)
 - iOS Chrome (latest)
 - Android Chrome (latest)
@@ -1107,15 +1125,15 @@
 
 **Test Matrix:**
 
-| Feature | Chrome | Firefox | Safari | Edge | iOS Safari | iOS Chrome | Android Chrome | Android Firefox |
-|---------|--------|---------|--------|------|------------|------------|----------------|-----------------|
-| Login | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
-| Registration | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
-| Create Application | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
-| Document Upload | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
-| Error Boundary | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
-| Retry Logic | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
-| Timeouts | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ | ⏳ |
+| Feature            | Chrome | Firefox | Safari | Edge | iOS Safari | iOS Chrome | Android Chrome | Android Firefox |
+| ------------------ | ------ | ------- | ------ | ---- | ---------- | ---------- | -------------- | --------------- |
+| Login              | ⏳     | ⏳      | ⏳     | ⏳   | ⏳         | ⏳         | ⏳             | ⏳              |
+| Registration       | ⏳     | ⏳      | ⏳     | ⏳   | ⏳         | ⏳         | ⏳             | ⏳              |
+| Create Application | ⏳     | ⏳      | ⏳     | ⏳   | ⏳         | ⏳         | ⏳             | ⏳              |
+| Document Upload    | ⏳     | ⏳      | ⏳     | ⏳   | ⏳         | ⏳         | ⏳             | ⏳              |
+| Error Boundary     | ⏳     | ⏳      | ⏳     | ⏳   | ⏳         | ⏳         | ⏳             | ⏳              |
+| Retry Logic        | ⏳     | ⏳      | ⏳     | ⏳   | ⏳         | ⏳         | ⏳             | ⏳              |
+| Timeouts           | ⏳     | ⏳      | ⏳     | ⏳   | ⏳         | ⏳         | ⏳             | ⏳              |
 
 **Status:** ⏳ Not Started
 
@@ -1132,6 +1150,7 @@
 **Objective:** Ensure Week 3-4 improvements (retry logic, error boundaries) didn't break existing functionality
 
 **Pre-Implementation Baseline (Before Week 3-4):**
+
 - [ ] Document baseline functionality state
 - [ ] List all known working features
 - [ ] Capture screenshots of working UI
@@ -1188,39 +1207,43 @@
 
 ### **Overall Progress**
 
-| Section | Test Cases | Completed | Pass | Fail | Blocked | Coverage |
-|---------|------------|-----------|------|------|---------|----------|
-| Authentication & Authorization | 3 | 0 | 0 | 0 | 0 | 0% |
-| Farmer Workflows | 5 | 0 | 0 | 0 | 0 | 0% |
-| Officer Workflows | 1 | 0 | 0 | 0 | 0 | 0% |
-| Error Boundary Testing | 1 | 0 | 0 | 0 | 0 | 0% |
-| Cross-Browser/Device | 2 | 0 | 0 | 0 | 0 | 0% |
-| Regression Testing | 1 | 0 | 0 | 0 | 0 | 0% |
-| **TOTAL** | **13** | **0** | **0** | **0** | **0** | **0%** |
+| Section                        | Test Cases | Completed | Pass  | Fail  | Blocked | Coverage |
+| ------------------------------ | ---------- | --------- | ----- | ----- | ------- | -------- |
+| Authentication & Authorization | 3          | 0         | 0     | 0     | 0       | 0%       |
+| Farmer Workflows               | 5          | 0         | 0     | 0     | 0       | 0%       |
+| Officer Workflows              | 1          | 0         | 0     | 0     | 0       | 0%       |
+| Error Boundary Testing         | 1          | 0         | 0     | 0     | 0       | 0%       |
+| Cross-Browser/Device           | 2          | 0         | 0     | 0     | 0       | 0%       |
+| Regression Testing             | 1          | 0         | 0     | 0     | 0       | 0%       |
+| **TOTAL**                      | **13**     | **0**     | **0** | **0** | **0**   | **0%**   |
 
 ---
 
 ## 🐛 DEFECT TRACKING
 
 ### **Critical Defects**
-| ID | Title | Description | Steps to Reproduce | Status |
-|----|-------|-------------|-------------------|--------|
-| - | - | - | - | - |
+
+| ID  | Title | Description | Steps to Reproduce | Status |
+| --- | ----- | ----------- | ------------------ | ------ |
+| -   | -     | -           | -                  | -      |
 
 ### **High Priority Defects**
-| ID | Title | Description | Steps to Reproduce | Status |
-|----|-------|-------------|-------------------|--------|
-| - | - | - | - | - |
+
+| ID  | Title | Description | Steps to Reproduce | Status |
+| --- | ----- | ----------- | ------------------ | ------ |
+| -   | -     | -           | -                  | -      |
 
 ### **Medium Priority Defects**
-| ID | Title | Description | Steps to Reproduce | Status |
-|----|-------|-------------|-------------------|--------|
-| - | - | - | - | - |
+
+| ID  | Title | Description | Steps to Reproduce | Status |
+| --- | ----- | ----------- | ------------------ | ------ |
+| -   | -     | -           | -                  | -      |
 
 ### **Low Priority Defects**
-| ID | Title | Description | Steps to Reproduce | Status |
-|----|-------|-------------|-------------------|--------|
-| - | - | - | - | - |
+
+| ID  | Title | Description | Steps to Reproduce | Status |
+| --- | ----- | ----------- | ------------------ | ------ |
+| -   | -     | -           | -                  | -      |
 
 ---
 
@@ -1272,7 +1295,7 @@ Testing is **COMPLETE** when:
 ✅ **Mobile Verified** - iOS and Android tested  
 ✅ **Regression Clean** - No new bugs in existing features  
 ✅ **Performance Acceptable** - No degradation from baseline  
-✅ **Documentation Complete** - All defects documented  
+✅ **Documentation Complete** - All defects documented
 
 ### **Production Readiness Criteria**
 
@@ -1283,7 +1306,7 @@ Code is **READY FOR PRODUCTION** when:
 ✅ **Stakeholder Sign-Off** - Product owner approves  
 ✅ **Performance Targets Met** - Response times within SLA  
 ✅ **Security Verified** - No security vulnerabilities  
-✅ **Rollback Plan Ready** - Reversion strategy documented  
+✅ **Rollback Plan Ready** - Reversion strategy documented
 
 ---
 
@@ -1294,11 +1317,12 @@ Code is **READY FOR PRODUCTION** when:
 **Immediate Actions:**
 
 1. **Start Servers**
+
    ```powershell
    # Terminal 1 - Backend
    cd apps/backend
    node server.js
-   
+
    # Terminal 2 - Frontend
    cd frontend-nextjs
    npm run dev
@@ -1364,6 +1388,7 @@ Code is **READY FOR PRODUCTION** when:
 ### **Appendix A: Test Data**
 
 **Test Users:**
+
 ```javascript
 // FARMER
 Email: farmer1@test.com
@@ -1385,11 +1410,13 @@ Password: AdminPass123!
 ### **Appendix B: Test Environment**
 
 **Backend:**
+
 - URL: http://localhost:3004
 - Database: MongoDB Atlas (gacp-development)
 - Connection Pool: maxPoolSize=10
 
 **Frontend:**
+
 - URL: http://localhost:3000
 - Framework: Next.js 14.2.18
 - Build: Development

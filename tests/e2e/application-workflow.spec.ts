@@ -1,9 +1,9 @@
 /**
  * End-to-End Test: Complete Application Workflow
- * 
+ *
  * Tests the complete workflow from farmer application submission through
  * payment, DTAM review, admin approval, and certificate issuance.
- * 
+ *
  * Flow:
  * 1. Farmer submits application
  * 2. Farmer completes payment
@@ -29,7 +29,7 @@ test.describe('Complete Application Workflow', () => {
   test('Step 1: Farmer submits GACP application', async ({ browser }) => {
     // Use farmer auth context
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/farmer.json',
+      storageState: 'tests/e2e/.auth/farmer.json'
     });
     const page = await context.newPage();
 
@@ -64,12 +64,12 @@ test.describe('Complete Application Workflow', () => {
 
     // Wait for success and capture application ID
     await expect(page.locator('text=สำเร็จ')).toBeVisible({ timeout: 10000 });
-    
+
     // Get application ID from URL or page content
     await page.waitForURL(/\/applications\/\w+/);
     const url = page.url();
     applicationId = url.split('/applications/')[1];
-    
+
     expect(applicationId).toBeTruthy();
     console.log(`✓ Application submitted: ${applicationId}`);
 
@@ -80,7 +80,7 @@ test.describe('Complete Application Workflow', () => {
     test.skip(!applicationId, 'Application ID not available');
 
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/farmer.json',
+      storageState: 'tests/e2e/.auth/farmer.json'
     });
     const page = await context.newPage();
 
@@ -116,7 +116,7 @@ test.describe('Complete Application Workflow', () => {
     test.skip(!applicationId, 'Application ID not available');
 
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/dtam.json',
+      storageState: 'tests/e2e/.auth/dtam.json'
     });
     const page = await context.newPage();
 
@@ -140,7 +140,7 @@ test.describe('Complete Application Workflow', () => {
 
     // Review documents
     await page.click('button:has-text("ตรวจสอบเอกสาร")');
-    
+
     // Approve each document
     const approveButtons = await page.locator('button:has-text("อนุมัติ")').all();
     for (const button of approveButtons) {
@@ -150,7 +150,7 @@ test.describe('Complete Application Workflow', () => {
 
     // Schedule inspection
     await page.click('button:has-text("กำหนดการตรวจสอบ")');
-    
+
     // Select inspector
     await page.click('select[name="inspector"]');
     await page.selectOption('select[name="inspector"]', { index: 1 });
@@ -176,7 +176,7 @@ test.describe('Complete Application Workflow', () => {
     test.skip(!applicationId, 'Application ID not available');
 
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/dtam.json',
+      storageState: 'tests/e2e/.auth/dtam.json'
     });
     const page = await context.newPage();
 
@@ -226,7 +226,7 @@ test.describe('Complete Application Workflow', () => {
     test.skip(!applicationId, 'Application ID not available');
 
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/admin.json',
+      storageState: 'tests/e2e/.auth/admin.json'
     });
     const page = await context.newPage();
 
@@ -261,8 +261,8 @@ test.describe('Complete Application Workflow', () => {
 
     // Capture certificate number
     const certElement = await page.locator('text=/GACP-\\d{4}-\\d+/').first();
-    certificateNumber = await certElement.textContent() || '';
-    
+    certificateNumber = (await certElement.textContent()) || '';
+
     expect(certificateNumber).toMatch(/GACP-\d{4}-\d+/);
     console.log(`✓ Certificate issued: ${certificateNumber}`);
 
@@ -273,7 +273,7 @@ test.describe('Complete Application Workflow', () => {
     test.skip(!certificateNumber, 'Certificate number not available');
 
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/farmer.json',
+      storageState: 'tests/e2e/.auth/farmer.json'
     });
     const page = await context.newPage();
 
@@ -334,7 +334,7 @@ test.describe('Complete Application Workflow', () => {
     test.skip(!applicationId, 'Application ID not available');
 
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/admin.json',
+      storageState: 'tests/e2e/.auth/admin.json'
     });
     const page = await context.newPage();
 
@@ -369,16 +369,16 @@ test.describe('Complete Application Workflow', () => {
 test.describe('Error Handling and Edge Cases', () => {
   test('Reject application with incomplete documents', async ({ browser }) => {
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/farmer.json',
+      storageState: 'tests/e2e/.auth/farmer.json'
     });
     const page = await context.newPage();
 
     // Submit application without required documents
     await page.goto('http://localhost:3001/applications/new');
-    
+
     await page.fill('input[name="farmName"]', 'ฟาร์มเอกสารไม่ครบ');
     await page.fill('input[name="cropType"]', 'ข้าว');
-    
+
     // Try to submit without uploading documents
     await page.click('button[type="submit"]');
 
@@ -401,7 +401,7 @@ test.describe('Error Handling and Edge Cases', () => {
 
   test('Duplicate application prevention', async ({ browser }) => {
     const context = await browser.newContext({
-      storageState: 'tests/e2e/.auth/farmer.json',
+      storageState: 'tests/e2e/.auth/farmer.json'
     });
     const page = await context.newPage();
 

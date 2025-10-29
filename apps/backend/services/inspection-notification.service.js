@@ -5,7 +5,7 @@ class InspectionNotificationService {
 
   async notifyInspectionStarted(inspectionId, farmerId, inspectorName) {
     const message = `Inspector ${inspectorName} กำลังตรวจสอบคำขอของคุณ`;
-    
+
     this.io.to(`user_${farmerId}`).emit('notification', {
       type: 'inspection_started',
       inspectionId,
@@ -18,7 +18,7 @@ class InspectionNotificationService {
 
   async notifyVideoCallScheduled(inspectionId, farmerId, scheduledTime) {
     const message = `นัดหมาย Video Call วันที่ ${scheduledTime}`;
-    
+
     this.io.to(`user_${farmerId}`).emit('notification', {
       type: 'video_call_scheduled',
       inspectionId,
@@ -75,7 +75,7 @@ class InspectionNotificationService {
 
   async notifyScheduleReminder(inspectionId, userId, scheduledDate, type) {
     const message = `เตือน: พรุ่งนี้มีการตรวจสอบ ${type === 'video_call' ? 'Video Call' : 'Onsite'}`;
-    
+
     this.io.to(`user_${userId}`).emit('notification', {
       type: 'schedule_reminder',
       inspectionId,

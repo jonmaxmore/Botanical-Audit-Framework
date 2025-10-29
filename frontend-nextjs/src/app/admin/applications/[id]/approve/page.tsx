@@ -48,7 +48,7 @@ import { useApplicationContext, type Application } from '@/contexts/ApplicationC
 
 /**
  * Admin Approval Page
- * 
+ *
  * หน้าอนุมัติสุดท้าย (Step 7)
  * - ดูข้อมูลใบสมัคร
  * - ดูผลการตรวจเอกสาร (Step 3)
@@ -61,7 +61,7 @@ const AdminApprovalPage: React.FC = () => {
   const params = useParams();
   const applicationId = params?.id as string;
   const { applications, updateApplication } = useApplicationContext();
-  
+
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
   const [decision, setDecision] = useState<'approve' | 'reject' | 'info' | ''>('');
@@ -76,7 +76,7 @@ const AdminApprovalPage: React.FC = () => {
   }, [applicationId, applications]);
 
   const loadApplication = () => {
-    const app = applications.find(a => a.id === applicationId);
+    const app = applications.find((a) => a.id === applicationId);
     if (app) {
       setApplication(app);
       setLoading(false);
@@ -151,7 +151,9 @@ const AdminApprovalPage: React.FC = () => {
 
   if (loading || !application) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -159,7 +161,7 @@ const AdminApprovalPage: React.FC = () => {
 
   // Get review data (Step 3)
   const reviewData = application.reviewData;
-  
+
   // Get inspection data (Step 6)
   const inspectionData = application.inspectionData;
   const inspectionScore = inspectionData?.totalScore || 0;
@@ -167,9 +169,11 @@ const AdminApprovalPage: React.FC = () => {
 
   // Determine recommendation based on inspection score
   const getRecommendation = () => {
-    if (inspectionScore >= 90) return { text: 'แนะนำอนุมัติเป็นพิเศษ ⭐', color: 'success', icon: '✅' };
+    if (inspectionScore >= 90)
+      return { text: 'แนะนำอนุมัติเป็นพิเศษ ⭐', color: 'success', icon: '✅' };
     if (inspectionScore >= 80) return { text: 'แนะนำอนุมัติ', color: 'success', icon: '✅' };
-    if (inspectionScore >= 70) return { text: 'พิจารณาอนุมัติแบบมีเงื่อนไข', color: 'warning', icon: '⚠️' };
+    if (inspectionScore >= 70)
+      return { text: 'พิจารณาอนุมัติแบบมีเงื่อนไข', color: 'warning', icon: '⚠️' };
     return { text: 'แนะนำปฏิเสธ', color: 'error', icon: '❌' };
   };
 
@@ -191,11 +195,7 @@ const AdminApprovalPage: React.FC = () => {
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => router.back()}
-          sx={{ mb: 2 }}
-        >
+        <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()} sx={{ mb: 2 }}>
           กลับ
         </Button>
         <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
@@ -321,11 +321,14 @@ const AdminApprovalPage: React.FC = () => {
                         <Typography variant="caption" color="text.secondary">
                           ความเสี่ยง
                         </Typography>
-                        <Chip 
+                        <Chip
                           label={reviewData.riskLevel || 'N/A'}
                           color={
-                            reviewData.riskLevel === 'Low' ? 'success' :
-                            reviewData.riskLevel === 'Medium' ? 'warning' : 'error'
+                            reviewData.riskLevel === 'Low'
+                              ? 'success'
+                              : reviewData.riskLevel === 'Medium'
+                                ? 'warning'
+                                : 'error'
                           }
                           size="small"
                         />
@@ -343,9 +346,7 @@ const AdminApprovalPage: React.FC = () => {
                 )}
               </Box>
             ) : (
-              <Alert severity="warning">
-                ยังไม่มีข้อมูลการตรวจเอกสาร
-              </Alert>
+              <Alert severity="warning">ยังไม่มีข้อมูลการตรวจเอกสาร</Alert>
             )}
           </Paper>
 
@@ -360,8 +361,10 @@ const AdminApprovalPage: React.FC = () => {
               <Box>
                 {/* Inspection Type */}
                 <Box sx={{ mb: 2 }}>
-                  <Chip 
-                    label={inspectionData.type === 'VDO_CALL' ? '📹 VDO Call' : '📍 On-Site Inspection'}
+                  <Chip
+                    label={
+                      inspectionData.type === 'VDO_CALL' ? '📹 VDO Call' : '📍 On-Site Inspection'
+                    }
                     color={inspectionData.type === 'ON_SITE' ? 'primary' : 'secondary'}
                   />
                 </Box>
@@ -369,10 +372,13 @@ const AdminApprovalPage: React.FC = () => {
                 {/* Score Summary */}
                 {inspectionData.type === 'ON_SITE' && (
                   <Box>
-                    <Alert 
+                    <Alert
                       severity={
-                        inspectionPass === 'pass' ? 'success' :
-                        inspectionPass === 'conditional' ? 'warning' : 'error'
+                        inspectionPass === 'pass'
+                          ? 'success'
+                          : inspectionPass === 'conditional'
+                            ? 'warning'
+                            : 'error'
                       }
                       icon={<StarIcon />}
                       sx={{ mb: 3 }}
@@ -381,11 +387,12 @@ const AdminApprovalPage: React.FC = () => {
                         คะแนนรวม: {inspectionScore} / 100
                       </Typography>
                       <Typography variant="body2">
-                        สถานะ: {
-                          inspectionPass === 'pass' ? 'ผ่าน (Pass) ✅' :
-                          inspectionPass === 'conditional' ? 'มีเงื่อนไข (Conditional) ⚠️' :
-                          'ไม่ผ่าน (Fail) ❌'
-                        }
+                        สถานะ:{' '}
+                        {inspectionPass === 'pass'
+                          ? 'ผ่าน (Pass) ✅'
+                          : inspectionPass === 'conditional'
+                            ? 'มีเงื่อนไข (Conditional) ⚠️'
+                            : 'ไม่ผ่าน (Fail) ❌'}
                       </Typography>
                     </Alert>
 
@@ -398,15 +405,25 @@ const AdminApprovalPage: React.FC = () => {
                         <Grid item xs={12} md={6} key={ccp.id}>
                           <Accordion>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 1,
+                                  width: '100%',
+                                }}
+                              >
                                 <Typography variant="body2" sx={{ flexGrow: 1 }}>
                                   {ccp.name}
                                 </Typography>
-                                <Chip 
+                                <Chip
                                   label={`${ccp.score}/${ccp.maxScore}`}
                                   color={
-                                    ccp.score >= ccp.maxScore * 0.8 ? 'success' :
-                                    ccp.score >= ccp.maxScore * 0.6 ? 'warning' : 'error'
+                                    ccp.score >= ccp.maxScore * 0.8
+                                      ? 'success'
+                                      : ccp.score >= ccp.maxScore * 0.6
+                                        ? 'warning'
+                                        : 'error'
                                   }
                                   size="small"
                                 />
@@ -457,9 +474,7 @@ const AdminApprovalPage: React.FC = () => {
                 )}
               </Box>
             ) : (
-              <Alert severity="warning">
-                ยังไม่มีข้อมูลการตรวจฟาร์ม
-              </Alert>
+              <Alert severity="warning">ยังไม่มีข้อมูลการตรวจฟาร์ม</Alert>
             )}
           </Paper>
         </Grid>
@@ -477,9 +492,7 @@ const AdminApprovalPage: React.FC = () => {
               <Typography variant="body2" fontWeight="bold">
                 {recommendation.icon} {recommendation.text}
               </Typography>
-              <Typography variant="caption">
-                อิงจากคะแนนตรวจฟาร์ม: {inspectionScore}/100
-              </Typography>
+              <Typography variant="caption">อิงจากคะแนนตรวจฟาร์ม: {inspectionScore}/100</Typography>
             </Alert>
 
             <Box sx={{ mt: 2 }}>
@@ -491,7 +504,7 @@ const AdminApprovalPage: React.FC = () => {
                   <ListItemIcon>
                     <CheckCircleIcon color="success" fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText 
+                  <ListItemText
                     primary="≥80 คะแนน = อนุมัติ"
                     primaryTypographyProps={{ variant: 'caption' }}
                   />
@@ -500,7 +513,7 @@ const AdminApprovalPage: React.FC = () => {
                   <ListItemIcon>
                     <WarningIcon color="warning" fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText 
+                  <ListItemText
                     primary="70-79 คะแนน = มีเงื่อนไข"
                     primaryTypographyProps={{ variant: 'caption' }}
                   />
@@ -509,7 +522,7 @@ const AdminApprovalPage: React.FC = () => {
                   <ListItemIcon>
                     <CancelIcon color="error" fontSize="small" />
                   </ListItemIcon>
-                  <ListItemText 
+                  <ListItemText
                     primary="<70 คะแนน = ปฏิเสธ"
                     primaryTypographyProps={{ variant: 'caption' }}
                   />
@@ -591,10 +604,9 @@ const AdminApprovalPage: React.FC = () => {
           {decision === 'info' && 'ℹ️ ยืนยันขอข้อมูลเพิ่ม'}
         </DialogTitle>
         <DialogContent>
-          <Alert 
+          <Alert
             severity={
-              decision === 'approve' ? 'success' :
-              decision === 'reject' ? 'error' : 'warning'
+              decision === 'approve' ? 'success' : decision === 'reject' ? 'error' : 'warning'
             }
             sx={{ mb: 2 }}
           >
@@ -626,10 +638,7 @@ const AdminApprovalPage: React.FC = () => {
           </Button>
           <Button
             variant="contained"
-            color={
-              decision === 'approve' ? 'success' :
-              decision === 'reject' ? 'error' : 'warning'
-            }
+            color={decision === 'approve' ? 'success' : decision === 'reject' ? 'error' : 'warning'}
             onClick={handleSubmit}
             disabled={submitting}
           >

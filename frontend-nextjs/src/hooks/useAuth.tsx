@@ -159,7 +159,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    */
   const login = useCallback(async (email: string, password: string, role?: string) => {
     try {
-      setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
+      setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const response = await gacpAuthService.login({
         email,
@@ -185,7 +185,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       console.error('[Auth Hook] Login failed:', error);
-      setAuthState(prev => ({
+      setAuthState((prev) => ({
         ...prev,
         isLoading: false,
         error: error.message || 'Login failed',
@@ -199,7 +199,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    */
   const register = useCallback(async (userData: any) => {
     try {
-      setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
+      setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const response = await gacpAuthService.register(userData);
 
@@ -221,7 +221,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       console.error('[Auth Hook] Registration failed:', error);
-      setAuthState(prev => ({
+      setAuthState((prev) => ({
         ...prev,
         isLoading: false,
         error: error.message || 'Registration failed',
@@ -235,7 +235,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    */
   const logout = useCallback(async () => {
     try {
-      setAuthState(prev => ({ ...prev, isLoading: true }));
+      setAuthState((prev) => ({ ...prev, isLoading: true }));
 
       await gacpAuthService.logout();
 
@@ -269,7 +269,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const response = await gacpAuthService.refreshToken();
 
       if (response.success && response.data) {
-        setAuthState(prev => ({
+        setAuthState((prev) => ({
           ...prev,
           user: response.data.user as AuthUser,
           token: response.data.token,
@@ -291,12 +291,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    */
   const updateProfile = useCallback(async (profileData: any) => {
     try {
-      setAuthState(prev => ({ ...prev, isLoading: true, error: null }));
+      setAuthState((prev) => ({ ...prev, isLoading: true, error: null }));
 
       const response = await gacpAuthService.updateProfile(profileData);
 
       if (response.success && response.data) {
-        setAuthState(prev => ({
+        setAuthState((prev) => ({
           ...prev,
           user: response.data as AuthUser,
           isLoading: false,
@@ -308,7 +308,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       }
     } catch (error: any) {
       console.error('[Auth Hook] Profile update failed:', error);
-      setAuthState(prev => ({
+      setAuthState((prev) => ({
         ...prev,
         isLoading: false,
         error: error.message || 'Profile update failed',
@@ -321,7 +321,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    * Clear authentication error
    */
   const clearError = useCallback(() => {
-    setAuthState(prev => ({ ...prev, error: null }));
+    setAuthState((prev) => ({ ...prev, error: null }));
   }, []);
 
   /**
@@ -331,7 +331,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     (role: string): boolean => {
       return authState.user?.role === role;
     },
-    [authState.user],
+    [authState.user]
   );
 
   /**
@@ -341,7 +341,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     (permission: string): boolean => {
       return authState.user?.permissions?.includes(permission) || false;
     },
-    [authState.user],
+    [authState.user]
   );
 
   // Context value
@@ -430,7 +430,7 @@ export const useProfile = () => {
 export const withAuth = <P extends object>(
   Component: React.ComponentType<P>,
   requiredRole?: string,
-  requiredPermission?: string,
+  requiredPermission?: string
 ) => {
   return (props: P) => {
     const { isAuthenticated, isLoading, hasRole, hasPermission, user } = useAuth();
@@ -474,7 +474,7 @@ export const useTokenRefresh = () => {
           console.error('[Auth Hook] Automatic token refresh failed:', error);
         }
       },
-      14 * 60 * 1000,
+      14 * 60 * 1000
     ); // 14 minutes
 
     return () => clearInterval(interval);

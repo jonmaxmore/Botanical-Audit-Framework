@@ -25,7 +25,6 @@ Wait for: `✓ Ready on http://localhost:3000`
   - [ ] Loads without errors
   - [ ] Logo displays
   - [ ] "เข้าสู่ระบบ" button works → redirects to /login
-  
 - [ ] **Login Page** (/login)
   - [ ] Email input works
   - [ ] Password input works
@@ -47,7 +46,7 @@ Wait for: `✓ Ready on http://localhost:3000`
 - [ ] **/farmer/applications/app-001/upload** - 5 upload sections display
 - [ ] **/farmer/applications/app-001/payment** - QR code shows
 
-**Result**: ✅ All Load / ❌ Errors: _____________
+**Result**: ✅ All Load / ❌ Errors: ******\_******
 
 ---
 
@@ -60,7 +59,7 @@ Wait for: `✓ Ready on http://localhost:3000`
 - [ ] **/officer/applications/app-001/review** - 5 documents show
   - [ ] Click "อนุมัติ" on ID_CARD → Status changes to Approved
 
-**Result**: ✅ All Load / ❌ Errors: _____________
+**Result**: ✅ All Load / ❌ Errors: ******\_******
 
 ---
 
@@ -75,7 +74,7 @@ Wait for: `✓ Ready on http://localhost:3000`
   - [ ] Move CCP 1 slider → Sidebar score updates (real-time)
   - [ ] Move all sliders to max → Total = 100
 
-**Result**: ✅ All Load / ❌ Errors: _____________
+**Result**: ✅ All Load / ❌ Errors: ******\_******
 
 ---
 
@@ -92,22 +91,22 @@ Wait for: `✓ Ready on http://localhost:3000`
   - [ ] Click Tab 2 → Users table shows
   - [ ] Click "เพิ่มผู้ใช้" → Dialog opens
 
-**Result**: ✅ All Load / ❌ Errors: _____________
+**Result**: ✅ All Load / ❌ Errors: ******\_******
 
 ---
 
 ## 📊 Quick Results
 
-| Role | Pages Tested | Pass | Fail | Issues |
-|------|-------------|------|------|--------|
-| Farmer | 6 | ___ | ___ | _______ |
-| Officer | 3 | ___ | ___ | _______ |
-| Inspector | 4 | ___ | ___ | _______ |
-| Admin | 3 | ___ | ___ | _______ |
-| **Total** | **16** | **___** | **___** | **_______** |
+| Role      | Pages Tested | Pass       | Fail       | Issues         |
+| --------- | ------------ | ---------- | ---------- | -------------- |
+| Farmer    | 6            | \_\_\_     | \_\_\_     | **\_\_\_**     |
+| Officer   | 3            | \_\_\_     | \_\_\_     | **\_\_\_**     |
+| Inspector | 4            | \_\_\_     | \_\_\_     | **\_\_\_**     |
+| Admin     | 3            | \_\_\_     | \_\_\_     | **\_\_\_**     |
+| **Total** | **16**       | **\_\_\_** | **\_\_\_** | ****\_\_\_**** |
 
 **Overall Status**: ✅ PASS / ❌ FAIL  
-**Critical Issues**: _______________________  
+**Critical Issues**: **********\_\_\_**********  
 **Ready for Full Testing**: [ ] Yes [ ] No
 
 ---
@@ -117,11 +116,13 @@ Wait for: `✓ Ready on http://localhost:3000`
 Open DevTools (F12) → Console tab
 
 **Errors Found**:
-1. _______________________
-2. _______________________
-3. _______________________
+
+1. ***
+2. ***
+3. ***
 
 **Warnings** (can ignore):
+
 - React hydration warnings
 - Material-UI prop warnings
 
@@ -130,17 +131,19 @@ Open DevTools (F12) → Console tab
 ## ✅ Next Steps
 
 If Smoke Test **PASSES**:
+
 - [ ] Proceed to Full UI Testing (use UI_TEST_RESULTS.md)
 - [ ] Test all scenarios thoroughly
 - [ ] Document all issues found
 
 If Smoke Test **FAILS**:
+
 - [ ] Fix critical errors first
 - [ ] Re-run smoke test
 - [ ] Then proceed to full testing
 
 ---
 
-**Tested By**: _______________  
-**Date**: _______________  
-**Time**: _______________
+**Tested By**: ******\_\_\_******  
+**Date**: ******\_\_\_******  
+**Time**: ******\_\_\_******

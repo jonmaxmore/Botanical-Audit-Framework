@@ -1,4 +1,5 @@
 # Testing and Deployment Guide
+
 **GACP Botanical Audit Framework - INTEGRATIVE REFINEMENT Phase**
 
 **Date:** October 22, 2025  
@@ -12,6 +13,7 @@
 This guide provides step-by-step instructions for testing the Week 1-2 and Week 3-4 improvements before deploying to production.
 
 **What Was Implemented:**
+
 - ✅ Week 1-2: Request timeouts, connection pooling, query timeouts
 - ✅ Week 3-4: Retry logic with exponential backoff, error boundaries
 
@@ -34,11 +36,13 @@ node server.js
 ```
 
 **Verify Backend Health:**
+
 ```powershell
 curl http://localhost:3004/api/health -UseBasicParsing
 ```
 
 **Expected Response:**
+
 ```json
 {
   "status": "healthy",
@@ -67,6 +71,7 @@ npm run dev
 ### Step 3: Verify System is Running
 
 **Both servers should be running:**
+
 - ✅ Backend: `http://localhost:3004` (API server)
 - ✅ Frontend: `http://localhost:3000` (Next.js app)
 
@@ -81,6 +86,7 @@ npm run dev
 **Steps:**
 
 1. **Open the application in Chrome/Edge:**
+
    ```
    http://localhost:3000/login
    ```
@@ -101,9 +107,10 @@ npm run dev
    - Click "Login"
 
 5. **Verify Retry Behavior in Console:**
+
    ```
    Expected console output:
-   
+
    🔄 Login retry 1/3: Network request failed
    (after 1 second delay)
    🔄 Login retry 2/3: Network request failed
@@ -116,6 +123,7 @@ npm run dev
    - Try login again - should succeed immediately
 
 **Success Criteria:**
+
 - ✅ Console shows retry attempts with increasing delays
 - ✅ Login eventually succeeds despite poor network
 - ✅ User sees loading state during retries
@@ -130,6 +138,7 @@ npm run dev
 **Steps:**
 
 1. **Navigate to registration page:**
+
    ```
    http://localhost:3000/register
    ```
@@ -155,6 +164,7 @@ npm run dev
    ```
 
 **Success Criteria:**
+
 - ✅ Registration retries on network failures
 - ✅ Auto-login works after successful registration
 - ✅ User redirected to appropriate dashboard
@@ -170,6 +180,7 @@ npm run dev
 1. **Login as Farmer** (from Test 1)
 
 2. **Navigate to Applications:**
+
    ```
    http://localhost:3000/farmer/applications
    ```
@@ -182,6 +193,7 @@ npm run dev
    - Click "Submit"
 
 5. **Verify Console:**
+
    ```
    Expected:
    🔄 Create application retry 1/3: ...
@@ -195,6 +207,7 @@ npm run dev
    - No data loss occurred
 
 **Success Criteria:**
+
 - ✅ Application creation retries on failure
 - ✅ Data is saved after retries
 - ✅ No duplicate applications created
@@ -214,12 +227,12 @@ npm run dev
 
    ```typescript
    import ErrorBoundaryTest from '@/components/ErrorBoundaryTest';
-   
+
    // In the component return:
    return (
      <div>
        {/* ...existing dashboard code... */}
-       
+
        {/* Add at bottom for testing */}
        <ErrorBoundaryTest />
      </div>
@@ -231,6 +244,7 @@ npm run dev
 **Test Steps:**
 
 1. **Navigate to Farmer Dashboard:**
+
    ```
    http://localhost:3000/farmer/dashboard
    ```
@@ -260,6 +274,7 @@ npm run dev
    - Verify error details are shown
 
 **Success Criteria:**
+
 - ✅ Error caught by boundary (no white screen)
 - ✅ Thai language error UI displays
 - ✅ "Try Again" button recovers without page reload
@@ -303,6 +318,7 @@ artillery quick --count 50 --num 10 http://localhost:3004/api/health
 ```
 
 **Success Criteria:**
+
 - ✅ Queries timeout after 5 seconds (not hanging)
 - ✅ Connection pool limits concurrent connections
 - ✅ No MongoDB connection exhaustion errors
@@ -313,29 +329,30 @@ artillery quick --count 50 --num 10 http://localhost:3004/api/health
 
 ### Before Improvements (Baseline)
 
-| Metric | Value |
-|--------|-------|
-| Network Success Rate (Poor Network) | 60% |
-| Login Failures (Timeouts) | 15% |
-| Component Crash Rate | 10/week |
-| Data Loss Events | 5/week |
-| Average Response Time (p95) | 2000ms |
+| Metric                              | Value   |
+| ----------------------------------- | ------- |
+| Network Success Rate (Poor Network) | 60%     |
+| Login Failures (Timeouts)           | 15%     |
+| Component Crash Rate                | 10/week |
+| Data Loss Events                    | 5/week  |
+| Average Response Time (p95)         | 2000ms  |
 
 ### After Improvements (Target)
 
-| Metric | Target | Expected |
-|--------|--------|----------|
-| Network Success Rate | 85% | **95%** ✅ |
-| Login Failures | <5% | **<1%** ✅ |
-| Component Crash Rate | <2/week | **<1/month** ✅ |
-| Data Loss Events | 0/week | **0** ✅ |
-| Average Response Time (p95) | <500ms | **<200ms** ✅ |
+| Metric                      | Target  | Expected        |
+| --------------------------- | ------- | --------------- |
+| Network Success Rate        | 85%     | **95%** ✅      |
+| Login Failures              | <5%     | **<1%** ✅      |
+| Component Crash Rate        | <2/week | **<1/month** ✅ |
+| Data Loss Events            | 0/week  | **0** ✅        |
+| Average Response Time (p95) | <500ms  | **<200ms** ✅   |
 
 ---
 
 ## 🚢 Pre-Deployment Checklist
 
 ### Code Review
+
 - [ ] All retry logic implementations reviewed
 - [ ] Error boundary catches all component errors
 - [ ] Thai language text verified
@@ -343,6 +360,7 @@ artillery quick --count 50 --num 10 http://localhost:3004/api/health
 - [ ] No sensitive data in error messages
 
 ### Testing
+
 - [ ] Manual testing completed (Tests 1-5)
 - [ ] Retry logic works on login
 - [ ] Retry logic works on registration
@@ -352,6 +370,7 @@ artillery quick --count 50 --num 10 http://localhost:3004/api/health
 - [ ] Query timeout prevents hanging
 
 ### Performance
+
 - [ ] Backend health check responds < 100ms
 - [ ] Frontend loads in < 2 seconds
 - [ ] Login completes in < 3 seconds (normal network)
@@ -359,6 +378,7 @@ artillery quick --count 50 --num 10 http://localhost:3004/api/health
 - [ ] No excessive retry loops
 
 ### Documentation
+
 - [ ] Implementation summary created
 - [ ] Testing guide created
 - [ ] Deployment guide created
@@ -366,6 +386,7 @@ artillery quick --count 50 --num 10 http://localhost:3004/api/health
 - [ ] Error boundary usage documented
 
 ### Environment
+
 - [ ] Development environment tested ✅
 - [ ] Staging environment ready (if applicable)
 - [ ] Production environment configured
@@ -436,6 +457,7 @@ curl https://yourdomain.com
 ### Key Metrics to Track
 
 **1. Retry Success Rate:**
+
 ```javascript
 // Monitor in Application Insights or similar
 {
@@ -446,6 +468,7 @@ curl https://yourdomain.com
 ```
 
 **2. Error Boundary Triggers:**
+
 ```javascript
 {
   "metric": "error_boundary_triggers",
@@ -455,6 +478,7 @@ curl https://yourdomain.com
 ```
 
 **3. Response Times:**
+
 ```javascript
 {
   "metric": "api_response_time_p95",
@@ -464,6 +488,7 @@ curl https://yourdomain.com
 ```
 
 **4. Connection Pool Usage:**
+
 ```javascript
 {
   "metric": "mongodb_active_connections",
@@ -486,10 +511,12 @@ curl https://yourdomain.com
 ### Issue: Retries Not Working
 
 **Symptoms:**
+
 - No retry messages in console
 - Immediate failure on network error
 
 **Solutions:**
+
 1. Check browser console for errors
 2. Verify `retry.ts` is imported correctly
 3. Check network tab - verify fetch calls are being made
@@ -503,10 +530,12 @@ console.log('🔍 Retry attempt:', attempt, 'Error:', error);
 ### Issue: Error Boundary Not Catching Errors
 
 **Symptoms:**
+
 - Component error crashes entire app
 - White screen instead of error UI
 
 **Solutions:**
+
 1. Verify ErrorBoundary wraps the component
 2. Check layout.tsx has ErrorBoundary wrapper
 3. Ensure error is thrown during render (not in event handler)
@@ -515,11 +544,13 @@ console.log('🔍 Retry attempt:', attempt, 'Error:', error);
 ### Issue: Connection Pool Exhaustion
 
 **Symptoms:**
+
 - "Too many connections" errors
 - Slow database queries
 - MongoDB Atlas shows > 10 connections
 
 **Solutions:**
+
 1. Check `mongodb-manager.js` has `maxPoolSize: 10`
 2. Verify connections are being released (no leaks)
 3. Check for long-running queries
@@ -532,6 +563,7 @@ console.log('🔍 Retry attempt:', attempt, 'Error:', error);
 **Deployment is READY when:**
 
 ✅ **All 5 tests pass**
+
 - Login retry works
 - Registration retry works
 - Application CRUD retry works
@@ -539,16 +571,19 @@ console.log('🔍 Retry attempt:', attempt, 'Error:', error);
 - Connection pool limits connections
 
 ✅ **Performance targets met**
+
 - Response time < 200ms (p95)
 - Success rate > 95% (poor network)
 - No data loss events
 
 ✅ **Production environment ready**
+
 - Environment variables configured
 - Build completes successfully
 - Health checks pass
 
 ✅ **Monitoring in place**
+
 - Retry success rate tracked
 - Error boundary triggers tracked
 - Response times monitored
@@ -558,12 +593,14 @@ console.log('🔍 Retry attempt:', attempt, 'Error:', error);
 ## 📞 Support
 
 **For Issues:**
+
 1. Check this troubleshooting guide first
 2. Review console logs and error messages
 3. Check MongoDB Atlas metrics
 4. Review code changes in GitHub
 
 **Documentation:**
+
 - Implementation Summary: `docs/WEEK_3-4_RESILIENCE_IMPLEMENTATION_SUMMARY.md`
 - System Analysis: `docs/SYSTEM_ANALYSIS_AND_ENGINEERING_REPORT.md`
 - This Guide: `docs/TESTING_AND_DEPLOYMENT_GUIDE.md`

@@ -8,14 +8,14 @@
 
 ## 🎯 สรุปผลการตรวจสอบ
 
-| ระบบ | สถานะ | Business Logic | Workflow | Data Isolation | หมายเหตุ |
-|------|-------|----------------|----------|----------------|----------|
-| **1. ระบบสมาชิก** | ✅ ผ่าน | ✅ ถูกต้อง | ✅ ครบถ้วน | ✅ ปลอดภัย | Role-based access ครบ 5 roles |
-| **2. ระบบยื่นเอกสาร** | ✅ ผ่าน | ✅ ถูกต้อง | ✅ ครบถ้วน | ✅ ปลอดภัย | 8-step workflow พร้อม 2 payment phases |
-| **3. ระบบบริหารฟาร์ม** | ✅ ผ่าน | ✅ ถูกต้อง | ✅ ครบถ้วน | ✅ ปลอดภัย | ครอบคลุม GACP 14 ข้อกำหนด |
-| **4. ระบบติดตามย้อนกลับ** | ✅ ผ่าน | ✅ ถูกต้อง | ✅ ครบถ้วน | ✅ ปลอดภัย | Batch tracking + QR Code พร้อมใช้งาน |
-| **5. ระบบแบบสอบถาม** | ✅ ผ่าน | ✅ ถูกต้อง | ✅ ครบถ้วน | ✅ ปลอดภัย | 7-step wizard + analytics |
-| **6. ระบบเปรียบเทียบมาตรฐาน** | ✅ ผ่าน | ✅ ถูกต้อง | ✅ ครบถ้วน | ✅ ปลอดภัย | รองรับ 8 มาตรฐานสากล |
+| ระบบ                          | สถานะ   | Business Logic | Workflow   | Data Isolation | หมายเหตุ                               |
+| ----------------------------- | ------- | -------------- | ---------- | -------------- | -------------------------------------- |
+| **1. ระบบสมาชิก**             | ✅ ผ่าน | ✅ ถูกต้อง     | ✅ ครบถ้วน | ✅ ปลอดภัย     | Role-based access ครบ 5 roles          |
+| **2. ระบบยื่นเอกสาร**         | ✅ ผ่าน | ✅ ถูกต้อง     | ✅ ครบถ้วน | ✅ ปลอดภัย     | 8-step workflow พร้อม 2 payment phases |
+| **3. ระบบบริหารฟาร์ม**        | ✅ ผ่าน | ✅ ถูกต้อง     | ✅ ครบถ้วน | ✅ ปลอดภัย     | ครอบคลุม GACP 14 ข้อกำหนด              |
+| **4. ระบบติดตามย้อนกลับ**     | ✅ ผ่าน | ✅ ถูกต้อง     | ✅ ครบถ้วน | ✅ ปลอดภัย     | Batch tracking + QR Code พร้อมใช้งาน   |
+| **5. ระบบแบบสอบถาม**          | ✅ ผ่าน | ✅ ถูกต้อง     | ✅ ครบถ้วน | ✅ ปลอดภัย     | 7-step wizard + analytics              |
+| **6. ระบบเปรียบเทียบมาตรฐาน** | ✅ ผ่าน | ✅ ถูกต้อง     | ✅ ครบถ้วน | ✅ ปลอดภัย     | รองรับ 8 มาตรฐานสากล                   |
 
 ---
 
@@ -24,6 +24,7 @@
 ### 1️⃣ ระบบสมาชิก (Membership System) ✅
 
 **ไฟล์หลักที่ตรวจสอบ:**
+
 - `apps/farmer-portal/lib/roles.ts` - Role configuration
 - `apps/backend/modules/user-management/` - User management module
 - `apps/backend/modules/auth-farmer/` - Farmer authentication
@@ -33,6 +34,7 @@
 **🔍 ผลการตรวจสอบ:**
 
 #### ✅ Roles และ Permissions
+
 ```typescript
 // พบ 5 roles หลักที่ครบถ้วน:
 FARMER:    /dashboard/farmer    - farm:*, application:create, survey:submit
@@ -43,18 +45,21 @@ ADMIN:     /dashboard/admin     - user:*, system:*, audit:read, logs:read
 ```
 
 #### ✅ Data Isolation
+
 - **Farmer Dashboard:** แสดงเฉพาะข้อมูล `userId === currentUser.id` ✅
 - **Reviewer Dashboard:** แสดงเฉพาะเอกสารที่ assign ให้ ✅
 - **Inspector Dashboard:** แสดงเฉพาะงานตรวจที่มอบหมาย ✅
 - **Admin Dashboard:** เห็นทั้งหมดแต่มี audit trail ✅
 
 #### ✅ Authentication & Security
+
 - **JWT Tokens:** Access token (15 min) + Refresh token (7 days)
 - **Password:** bcrypt 12 rounds + complexity requirements
 - **Account Lockout:** 5 failed attempts = 15-minute lockout
 - **Rate Limiting:** ป้องกัน brute force
 
 #### 📊 Database Queries ตรวจสอบแล้ว
+
 ```javascript
 // ✅ CORRECT - Filtered queries
 await applicationsCollection.find({ userId });
@@ -69,6 +74,7 @@ await productsCollection.find({ userId, stage: 'CERTIFIED' });
 ### 2️⃣ ระบบยื่นเอกสารขอปลูกกัญชา (Application Workflow System) ✅
 
 **ไฟล์หลักที่ตรวจสอบ:**
+
 - `business-logic/gacp-workflow-engine.js` (1,041 lines) - Core workflow
 - `apps/backend/modules/application-workflow/` - Complete module
 - `apps/backend/models/Application.js` - Application schema
@@ -106,7 +112,7 @@ Step 5: จ่ายเงินรอบสอง - ฿25,000 (Second Payment)
 Step 6: ตรวจฟาร์ม (Field Inspection)
   States: INSPECTION_SCHEDULED → INSPECTION_VDO_CALL → INSPECTION_ON_SITE → INSPECTION_COMPLETED
   Actor: DTAM_INSPECTOR
-  Actions: 
+  Actions:
     - schedule_inspection()
     - conduct_vdo_call() (required)
     - conduct_on_site_inspection() (if needed)
@@ -124,11 +130,13 @@ Step 8: รับใบรับรอง (Certificate Issuance)
 ```
 
 #### ✅ State Transitions ถูกต้อง
+
 - **Total States:** 17 states (DRAFT, SUBMITTED, PAYMENT_PENDING_1, ... CERTIFICATE_ISSUED)
 - **State Machine:** Finite State Machine (FSM) with validation
 - **History Tracking:** All transitions logged with timestamp + actor
 
 #### ✅ Payment Integration
+
 ```javascript
 payments: {
   phase1: { amount: 5000, status: 'pending', paidAt: null },
@@ -137,6 +145,7 @@ payments: {
 ```
 
 #### ✅ Rejection Handling
+
 ```javascript
 documentReview: {
   rejectionCount: 0,
@@ -152,6 +161,7 @@ documentReview: {
 ### 3️⃣ ระบบบริหารจัดการฟาร์มกัญชา (Farm Management System) ✅
 
 **ไฟล์หลักที่ตรวจสอบ:**
+
 - `business-logic/gacp-digital-logbook-system.js` (1,029 lines) - Digital logbook
 - `apps/backend/modules/farm-management/` - Farm management module
 - `docs/GACP_CANNABIS_FARM_MANAGEMENT_DESIGN.md` - Design doc
@@ -180,21 +190,27 @@ documentReview: {
 #### ✅ SOP Activity Types (40+ types)
 
 **Pre-Planting Phase:**
+
 - soil_preparation, soil_testing, water_testing, seed_selection, area_measurement
 
 **Planting Phase:**
+
 - seed_germination, seedling_transplant, irrigation_setup, plant_tagging
 
 **Growing Phase:**
+
 - daily_watering, weekly_fertilizing, pest_monitoring, pruning, health_inspection
 
 **Harvesting Phase:**
+
 - harvest_timing, harvest_method, post_harvest_handling
 
 **Post-Harvest Phase:**
+
 - drying, curing, packaging, storage, quality_testing
 
 #### ✅ Cultivation Cycle Management
+
 ```javascript
 // Cultivation Cycle Schema
 {
@@ -212,6 +228,7 @@ documentReview: {
 ```
 
 #### ✅ Role-Based Access
+
 ```javascript
 FARMER: {
   createCycle: true,
@@ -234,6 +251,7 @@ INSPECTOR: {
 ### 4️⃣ ระบบติดตามย้อนกลับ (Traceability System) ✅
 
 **ไฟล์หลักที่ตรวจสอบ:**
+
 - `business-logic/gacp-digital-logbook-system.js` - Batch management + QR
 - `apps/backend/modules/track-trace/` - Track & trace module
 
@@ -268,7 +286,7 @@ generateBatchNumber(productType) {
   quality: 0.92,
   margin: 1,
   content: 'https://gacp-platform.com/verify/{batchCode}',
-  
+
   // Generated with QRCode library
   generateBatchQRCode(batchCode) {
     const url = `https://gacp-platform.com/verify/${batchCode}`;
@@ -350,6 +368,7 @@ Response:
 ### 5️⃣ ระบบทำแบบสอบถาม (Survey System) ✅
 
 **ไฟล์หลักที่ตรวจสอบ:**
+
 - `business-logic/gacp-survey-system.js` (1,138 lines) - Survey platform
 - `apps/backend/modules/survey-system/` - Survey module
 
@@ -386,11 +405,11 @@ Step 7: ตรวจสอบและยืนยัน (Review & Confirmation)
 
 ```javascript
 regions: [
-  { id: 'northern',     name: { th: 'ภาคเหนือ', en: 'Northern' } },
+  { id: 'northern', name: { th: 'ภาคเหนือ', en: 'Northern' } },
   { id: 'northeastern', name: { th: 'ภาคอีสาน', en: 'Northeastern' } },
-  { id: 'central',      name: { th: 'ภาคกลาง', en: 'Central' } },
-  { id: 'southern',     name: { th: 'ภาคใต้', en: 'Southern' } }
-]
+  { id: 'central', name: { th: 'ภาคกลาง', en: 'Central' } },
+  { id: 'southern', name: { th: 'ภาคใต้', en: 'Southern' } }
+];
 ```
 
 #### ✅ GACP Assessment Survey
@@ -410,7 +429,7 @@ calculateGACPScore(surveyResponse) {
     { id: 'cultivation',         weight: 0.10, points: 0 },
     { id: 'harvesting',          weight: 0.12, points: 0 }
   ];
-  
+
   // Total Score: 0-100
   // Passing Score: 70
 }
@@ -460,6 +479,7 @@ analyticsData = {
 ### 6️⃣ ระบบเปรียบเทียบมาตรฐาน GACP (Standards Comparison System) ✅
 
 **ไฟล์หลักที่ตรวจสอบ:**
+
 - `business-logic/gacp-standards-comparison-system.js` (1,452 lines)
 - `apps/backend/modules/standards-comparison/` - Standards module
 
@@ -592,14 +612,14 @@ analyzeGaps(userComplianceProfile, targetStandard) {
 // Calculate compliance score per standard
 calculateComplianceScore(userProfile, standardId) {
   const standard = this.standards.get(standardId);
-  
+
   let totalPoints = 0;
   let earnedPoints = 0;
-  
+
   standard.categories.forEach(category => {
     category.requirements.forEach(req => {
       totalPoints += req.points;
-      
+
       // Check user compliance
       const userCompliance = userProfile.compliance[req.id];
       if (userCompliance === 'full') {
@@ -610,7 +630,7 @@ calculateComplianceScore(userProfile, standardId) {
       // else: 'none' = 0 points
     });
   });
-  
+
   return {
     totalPoints,
     earnedPoints,
@@ -685,6 +705,7 @@ generateRoadmap(gapAnalysis) {
 #### 1. ไฟล์ @ts-nocheck (13 files) - ⚠️ ต้องทบทวน
 
 **Admin Portal (11 files):**
+
 ```
 apps/admin-portal/lib/monitoring/health-check.ts
 apps/admin-portal/lib/performance/lazy-load.tsx
@@ -700,12 +721,14 @@ apps/admin-portal/playwright.config.ts
 ```
 
 **Farmer Portal (2 files):**
+
 ```
 apps/farmer-portal/components/DemoDashboard.tsx
 apps/farmer-portal/components/DemoNavigation.tsx
 ```
 
 **สถานะ:** ⚠️ **ต้องทบทวนและเพิ่ม proper types**
+
 - ไฟล์เหล่านี้ใช้ `@ts-nocheck` เพื่อปิดการตรวจสอบ TypeScript
 - ไม่พบ syntax error แต่ควรเพิ่ม type definitions
 - **แนะนำ:** Remove `@ts-nocheck` ทีละไฟล์และแก้ type errors
@@ -718,6 +741,7 @@ apps/farmer-portal/components/DemoNavigation.tsx
 ```
 
 **สถานะ:** ✅ **OK - Intentional stubs**
+
 - Stub files หลังจากลบ Prisma dependency
 - เป็นส่วนของ refactor ที่เสร็จแล้ว
 - **ไม่ต้องทำอะไร**
@@ -725,6 +749,7 @@ apps/farmer-portal/components/DemoNavigation.tsx
 #### 3. ไฟล์ Test/Demo (36 files) - ✅ OK
 
 **Test Files (อยู่ใน `/test/` และ `/scripts/`):**
+
 ```
 test/uat-test-suite.js
 test/gacp-platform-integration.test.js
@@ -737,6 +762,7 @@ scripts/run-uat-tests.js
 ```
 
 **Demo Components (อยู่ใน `/apps/farmer-portal/lib/`):**
+
 ```
 apps/farmer-portal/lib/demoData.ts
 apps/farmer-portal/lib/demoController.ts
@@ -744,6 +770,7 @@ apps/admin-portal/lib/mock-data.ts
 ```
 
 **สถานะ:** ✅ **OK - Valid test/demo files**
+
 - อยู่ในโฟลเดอร์ที่ถูกต้อง (`/test/`, `/scripts/`)
 - ใช้สำหรับ testing และ demo
 - **ไม่ต้องลบ**
@@ -761,6 +788,7 @@ apps/admin-portal/lib/mock-data.ts
 ### ✅ ตรวจสอบ Database Queries
 
 **Farmer Queries (userId filter):**
+
 ```javascript
 // ✅ CORRECT - All queries filtered by userId
 applicationsCollection.find({ userId });
@@ -771,24 +799,27 @@ certificatesCollection.find({ userId }).sort({ createdAt: -1 });
 ```
 
 **Reviewer Queries (role-based filter):**
+
 ```javascript
 // ✅ CORRECT - Only assigned applications
-applicationsCollection.find({ 
-  status: 'pending', 
-  assignedReviewer: userId 
+applicationsCollection.find({
+  status: 'pending',
+  assignedReviewer: userId
 });
 ```
 
 **Inspector Queries (role-based filter):**
+
 ```javascript
 // ✅ CORRECT - Only assigned inspections
-inspectionsCollection.find({ 
+inspectionsCollection.find({
   assignedInspector: userId,
   status: { $in: ['scheduled', 'in_progress'] }
 });
 ```
 
 **Admin Queries (all access with audit trail):**
+
 ```javascript
 // ✅ CORRECT - Can see all but logged
 if (userRole === 'admin') {
@@ -808,9 +839,11 @@ if (userRole === 'admin') {
 ### ⚠️ สิ่งที่ควรปรับปรุง (ไม่มีผลต่อ Business Logic)
 
 #### 1. ไฟล์ @ts-nocheck (13 files)
+
 **ปัญหา:** ปิดการตรวจสอบ TypeScript → อาจมี type errors ซ่อนอยู่
 
 **แนะนำ:**
+
 ```bash
 # Remove @ts-nocheck ทีละไฟล์และแก้ type errors
 1. Remove `// @ts-nocheck` from file
@@ -820,21 +853,38 @@ if (userRole === 'admin') {
 ```
 
 **ลำดับความสำคัญ:**
+
 1. Security files (rate-limiter, auth-security, etc.) - **สำคัญสุด**
 2. Monitoring files (health-check, monitoring)
 3. Performance files (lazy-load)
 4. Demo components - **ไม่สำคัญ**
 
 #### 2. Unit Tests ขาดหาย
+
 **ปัญหา:** มี integration tests แต่ยังขาด unit tests สำหรับ business logic
 
 **แนะนำ:**
+
 ```javascript
 // เพิ่ม unit tests สำหรับ:
-- business-logic/gacp-workflow-engine.js
-- business-logic/gacp-digital-logbook-system.js
-- business-logic/gacp-survey-system.js
-- business-logic/gacp-standards-comparison-system.js
+-business -
+  logic / gacp -
+  workflow -
+  engine.js -
+  business -
+  logic / gacp -
+  digital -
+  logbook -
+  system.js -
+  business -
+  logic / gacp -
+  survey -
+  system.js -
+  business -
+  logic / gacp -
+  standards -
+  comparison -
+  system.js;
 
 // ตัวอย่าง test:
 describe('GACPWorkflowEngine', () => {
@@ -852,18 +902,19 @@ describe('GACPWorkflowEngine', () => {
 
 ### 🎉 ระบบทั้ง 6 ระบบ: **ผ่านการตรวจสอบทุกข้อ**
 
-| เกณฑ์การตรวจสอบ | สถานะ | รายละเอียด |
-|-----------------|-------|-----------|
+| เกณฑ์การตรวจสอบ            | สถานะ   | รายละเอียด                                            |
+| -------------------------- | ------- | ----------------------------------------------------- |
 | **Business Logic ถูกต้อง** | ✅ ผ่าน | ทั้ง 6 ระบบมี business logic ที่ถูกต้องตามเอกสารกำหนด |
-| **Workflow ครบถ้วน** | ✅ ผ่าน | Workflow ครบทุก step พร้อม state transitions |
-| **Data Isolation ปลอดภัย** | ✅ ผ่าน | ทุก query ใช้ userId filter หรือ role-based access |
-| **Role-Based Access** | ✅ ผ่าน | 5 roles ครบถ้วน พร้อม permissions ชัดเจน |
-| **GACP Compliance** | ✅ ผ่าน | ครอบคลุม GACP 14 ข้อกำหนด |
-| **ไฟล์เสีย/ซ้ำซ้อน** | ✅ ผ่าน | ไม่พบไฟล์ backup/corrupted |
+| **Workflow ครบถ้วน**       | ✅ ผ่าน | Workflow ครบทุก step พร้อม state transitions          |
+| **Data Isolation ปลอดภัย** | ✅ ผ่าน | ทุก query ใช้ userId filter หรือ role-based access    |
+| **Role-Based Access**      | ✅ ผ่าน | 5 roles ครบถ้วน พร้อม permissions ชัดเจน              |
+| **GACP Compliance**        | ✅ ผ่าน | ครอบคลุม GACP 14 ข้อกำหนด                             |
+| **ไฟล์เสีย/ซ้ำซ้อน**       | ✅ ผ่าน | ไม่พบไฟล์ backup/corrupted                            |
 
 ### 📈 คะแนนรวม: **98/100**
 
 **หัก 2 คะแนนเนื่องจาก:**
+
 - มีไฟล์ @ts-nocheck 13 files (ไม่ได้ส่งผลต่อ business logic แต่ควรแก้ไข)
 
 ---
@@ -875,6 +926,7 @@ describe('GACPWorkflowEngine', () => {
 **เวลาที่ใช้:** ~45 นาที
 
 **ไฟล์ที่ตรวจสอบทั้งหมด:**
+
 - Documentation: 5 files
 - Business Logic: 14 files
 - Backend Modules: 16+ modules

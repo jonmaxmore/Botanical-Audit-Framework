@@ -3,7 +3,16 @@
 import { useState, useEffect } from 'react';
 import { Box, Card, CardContent, Typography, Chip, IconButton } from '@mui/material';
 import { ChevronLeft, ChevronRight, Videocam, LocationOn } from '@mui/icons-material';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, addMonths, subMonths } from 'date-fns';
+import {
+  format,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  addMonths,
+  subMonths,
+} from 'date-fns';
 import axios from 'axios';
 
 interface Schedule {
@@ -28,12 +37,12 @@ export default function InspectionCalendar() {
     try {
       const start = startOfMonth(currentMonth);
       const end = endOfMonth(currentMonth);
-      
+
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_API_URL}/api/inspections/calendar`,
         { params: { startDate: start.toISOString(), endDate: end.toISOString() } }
       );
-      
+
       setSchedules(response.data.schedules || []);
     } catch (error) {
       console.error('Failed to fetch schedules:', error);
@@ -55,9 +64,7 @@ export default function InspectionCalendar() {
         <IconButton onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
           <ChevronLeft />
         </IconButton>
-        <Typography variant="h5">
-          {format(currentMonth, 'MMMM yyyy')}
-        </Typography>
+        <Typography variant="h5">{format(currentMonth, 'MMMM yyyy')}</Typography>
         <IconButton onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
           <ChevronRight />
         </IconButton>

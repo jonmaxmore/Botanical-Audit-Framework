@@ -155,7 +155,7 @@ class UploadDocumentUseCase {
     const document = new Document({
       ...input,
       fileUrl,
-      status: 'pending',
+      status: 'pending'
     });
 
     // 4. Save to repository
@@ -226,18 +226,18 @@ class DocumentController {
     try {
       const input = {
         title: req.body.title,
-        ownerId: req.user._id,
+        ownerId: req.user._id
       };
       const document = await this.uploadDocumentUseCase.execute(input, req.file);
 
       res.status(201).json({
         success: true,
-        data: document,
+        data: document
       });
     } catch (error) {
       res.status(400).json({
         success: false,
-        error: error.message,
+        error: error.message
       });
     }
   }
@@ -274,13 +274,13 @@ class DocumentModuleContainer {
     // Application
     this.uploadDocumentUseCase = new UploadDocumentUseCase(
       this.documentRepository,
-      this.storageService,
+      this.storageService
     );
 
     // Presentation
     this.documentController = new DocumentController(
       this.uploadDocumentUseCase,
-      this.listDocumentsUseCase,
+      this.listDocumentsUseCase
     );
   }
 
@@ -576,7 +576,7 @@ mongoose.connect(mongoURI).then(() => {
 // Dashboard module needs data from document and report modules
 const dashboardModule = initializeDashboardModule({
   documentRepository: documentModule.getRepository(),
-  reportRepository: reportModule.getRepository(),
+  reportRepository: reportModule.getRepository()
   // ... other repositories
 });
 ```
@@ -840,7 +840,7 @@ const uploadSchema = Joi.object({
   title: Joi.string().min(3).max(200).required(),
   description: Joi.string().max(2000),
   documentType: Joi.string().valid('certificate', 'license', 'report').required(),
-  category: Joi.string().valid('compliance', 'quality', 'safety').required(),
+  category: Joi.string().valid('compliance', 'quality', 'safety').required()
 });
 
 // Validate in use case
@@ -889,7 +889,7 @@ events.append({
   type: 'DocumentApproved',
   aggregateId: document.id,
   data: { approvedBy, approvedAt },
-  version: document.version + 1,
+  version: document.version + 1
 });
 ```
 

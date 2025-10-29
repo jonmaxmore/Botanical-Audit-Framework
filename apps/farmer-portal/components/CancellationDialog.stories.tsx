@@ -10,13 +10,13 @@ const meta = {
   title: 'Components/CancellationDialog',
   component: CancellationDialog,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
   tags: ['autodocs'],
   argTypes: {
     hasPaidFee: { control: 'boolean' },
-    isLoading: { control: 'boolean' },
-  },
+    isLoading: { control: 'boolean' }
+  }
 } satisfies Meta<typeof CancellationDialog>;
 
 export default meta;
@@ -75,9 +75,9 @@ export const PendingNoPay: Story = {
     onConfirm: async data => {
       console.log('Cancellation confirmed', data);
       await new Promise(resolve => setTimeout(resolve, 1000));
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // With payment - shows no refund policy
@@ -93,9 +93,9 @@ export const WithPayment: Story = {
     onConfirm: async data => {
       console.log('Cancellation with payment', data);
       await new Promise(resolve => setTimeout(resolve, 1000));
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // Multiple payments
@@ -111,9 +111,9 @@ export const MultiplePayments: Story = {
     onConfirm: async data => {
       console.log('Cancel with multiple payments', data);
       await new Promise(resolve => setTimeout(resolve, 1000));
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // Loading state
@@ -128,9 +128,9 @@ export const Loading: Story = {
     isLoading: true,
     onConfirm: async data => {
       console.log('Loading', data);
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // With error
@@ -146,9 +146,9 @@ export const WithError: Story = {
     onConfirm: async data => {
       console.log('Error will be thrown', data);
       throw new Error('ไม่สามารถยกเลิกใบสมัครได้ กรุณาติดต่อเจ้าหน้าที่');
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };
 
 // Different cancellation reasons
@@ -164,7 +164,7 @@ export const DifferentReasons: Story = {
     onConfirm: async data => {
       console.log('Reason selected', { reason: data.reason, notes: data.additionalNotes });
       await new Promise(resolve => setTimeout(resolve, 1000));
-    },
+    }
   },
-  render: args => <DialogWrapper {...args} />,
+  render: args => <DialogWrapper {...args} />
 };

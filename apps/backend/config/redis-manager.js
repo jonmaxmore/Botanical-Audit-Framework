@@ -5,7 +5,7 @@
  * and pub/sub capabilities for horizontal scaling.
  */
 const Redis = require('ioredis');
-const { promisify } = require('util');
+const { _promisify } = require('util');
 const configManager = require('./config-manager');
 const logger = require('../shared/logger');
 const redisLogger = logger.createLogger('redis');

@@ -19,12 +19,12 @@ import {
   Chip,
   Grid,
   Divider,
-  Paper,
+  Paper
 } from '@mui/material';
 import {
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
-  Warning as WarningIcon,
+  Warning as WarningIcon
 } from '@mui/icons-material';
 type CertificateStatus = 'pending' | 'approved' | 'rejected' | 'expired' | 'revoked' | 'active';
 
@@ -63,7 +63,7 @@ const certificateApi = {
   verify: async (certNumber: string): Promise<VerificationResult> => {
     // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     // Mock valid certificate
     if (certNumber.startsWith('GACP')) {
       return {
@@ -81,7 +81,7 @@ const certificateApi = {
             subdistrict: 'ทุ่งสุขลา',
             district: 'ศรีราชา',
             province: 'ชลบุรี',
-            postalCode: '20230',
+            postalCode: '20230'
           },
           farmArea: 15.5,
           cropType: 'มะม่วง',
@@ -93,17 +93,17 @@ const certificateApi = {
           inspectionDate: '2025-01-10',
           inspectorName: 'นางสาวสมหญิง ตรวจสอบ',
           createdAt: '2025-01-15T10:00:00Z',
-          updatedAt: '2025-01-15T10:00:00Z',
+          updatedAt: '2025-01-15T10:00:00Z'
         },
-        message: 'Certificate is valid and active',
+        message: 'Certificate is valid and active'
       };
     }
-    
+
     return {
       valid: false,
-      message: 'Certificate not found in database',
+      message: 'Certificate not found in database'
     };
-  },
+  }
 };
 
 interface VerificationResult {
@@ -157,7 +157,7 @@ export default function VerifyCertificatePage() {
           justifyContent: 'center',
           minHeight: '100vh',
           bgcolor: '#f5f5f5',
-          p: 3,
+          p: 3
         }}
       >
         <CircularProgress size={60} />
@@ -179,7 +179,7 @@ export default function VerifyCertificatePage() {
           justifyContent: 'center',
           minHeight: '100vh',
           bgcolor: '#f5f5f5',
-          p: 3,
+          p: 3
         }}
       >
         <Alert severity="error" sx={{ maxWidth: 600, width: '100%' }}>
@@ -199,7 +199,7 @@ export default function VerifyCertificatePage() {
         minHeight: '100vh',
         bgcolor: '#f5f5f5',
         py: 4,
-        px: 2,
+        px: 2
       }}
     >
       <Box sx={{ maxWidth: 900, mx: 'auto' }}>
@@ -210,7 +210,7 @@ export default function VerifyCertificatePage() {
             p: 3,
             mb: 3,
             background: 'linear-gradient(135deg, #2196f3 0%, #1976d2 100%)',
-            color: 'white',
+            color: 'white'
           }}
         >
           <Typography variant="h4" gutterBottom>

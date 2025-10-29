@@ -44,7 +44,7 @@ import { useApplicationContext, type Application } from '@/contexts/ApplicationC
 
 /**
  * DTAM Officer Review Page
- * 
+ *
  * หน้าตรวจสอบเอกสารสำหรับ DTAM_OFFICER
  * - แสดงข้อมูลใบสมัคร
  * - ตรวจเอกสาร 5 ชนิด (แต่ละชนิด: View + Approve/Reject)
@@ -73,7 +73,7 @@ const OfficerReviewPage: React.FC = () => {
   const params = useParams();
   const applicationId = params?.id as string;
   const { applications, updateApplication } = useApplicationContext();
-  
+
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
   const [reviewForm, setReviewForm] = useState<ReviewFormData>({
@@ -102,7 +102,7 @@ const OfficerReviewPage: React.FC = () => {
   }, [applicationId, applications]);
 
   const loadApplication = () => {
-    const app = applications.find(a => a.id === applicationId);
+    const app = applications.find((a) => a.id === applicationId);
     if (app) {
       setApplication(app);
       setLoading(false);
@@ -122,13 +122,15 @@ const OfficerReviewPage: React.FC = () => {
     return names[type];
   };
 
-  const handleDocumentReview = (type: DocumentType, status: 'approved' | 'rejected', notes?: string) => {
-    setReviewForm(prev => ({
+  const handleDocumentReview = (
+    type: DocumentType,
+    status: 'approved' | 'rejected',
+    notes?: string
+  ) => {
+    setReviewForm((prev) => ({
       ...prev,
-      documents: prev.documents.map(doc => 
-        doc.type === type 
-          ? { ...doc, status, notes: notes || doc.notes }
-          : doc
+      documents: prev.documents.map((doc) =>
+        doc.type === type ? { ...doc, status, notes: notes || doc.notes } : doc
       ),
     }));
   };
@@ -149,7 +151,7 @@ const OfficerReviewPage: React.FC = () => {
     try {
       // Validate
       if (confirmDialog.decision === 'approve') {
-        const allApproved = reviewForm.documents.every(doc => doc.status === 'approved');
+        const allApproved = reviewForm.documents.every((doc) => doc.status === 'approved');
         if (!allApproved) {
           alert('กรุณาอนุมัติเอกสารทั้งหมดก่อนอนุมัติใบสมัคร');
           setSubmitting(false);
@@ -158,7 +160,7 @@ const OfficerReviewPage: React.FC = () => {
       }
 
       if (confirmDialog.decision === 'revision') {
-        const hasRejected = reviewForm.documents.some(doc => doc.status === 'rejected');
+        const hasRejected = reviewForm.documents.some((doc) => doc.status === 'rejected');
         if (!hasRejected) {
           alert('กรุณาระบุเอกสารที่ต้องแก้ไข');
           setSubmitting(false);
@@ -189,12 +191,16 @@ const OfficerReviewPage: React.FC = () => {
           reviewedAt: new Date().toISOString(),
           reviewedBy: 'DTAM_OFFICER', // In real app: get from auth context
         },
-        documents: application.documents.map(doc => {
-          const review = reviewForm.documents.find(r => r.type === doc.type);
+        documents: application.documents.map((doc) => {
+          const review = reviewForm.documents.find((r) => r.type === doc.type);
           return {
             ...doc,
-            status: review?.status === 'approved' ? 'APPROVED' : 
-                    review?.status === 'rejected' ? 'REJECTED' : 'PENDING',
+            status:
+              review?.status === 'approved'
+                ? 'APPROVED'
+                : review?.status === 'rejected'
+                  ? 'REJECTED'
+                  : 'PENDING',
             reviewNotes: review?.notes || '',
           };
         }),
@@ -203,10 +209,15 @@ const OfficerReviewPage: React.FC = () => {
       updateApplication(updatedApp);
 
       // Show success message
-      alert(`บันทึกผลการตรวจสอบเรียบร้อย: ${
-        confirmDialog.decision === 'approve' ? 'อนุมัติ' :
-        confirmDialog.decision === 'revision' ? 'ขอแก้ไข' : 'ปฏิเสธ'
-      }`);
+      alert(
+        `บันทึกผลการตรวจสอบเรียบร้อย: ${
+          confirmDialog.decision === 'approve'
+            ? 'อนุมัติ'
+            : confirmDialog.decision === 'revision'
+              ? 'ขอแก้ไข'
+              : 'ปฏิเสธ'
+        }`
+      );
 
       // Navigate back
       router.push('/officer/applications');
@@ -219,19 +230,21 @@ const OfficerReviewPage: React.FC = () => {
     }
   };
 
-  const canApprove = reviewForm.documents.every(doc => doc.status === 'approved');
-  const canRevision = reviewForm.documents.some(doc => doc.status === 'rejected');
+  const canApprove = reviewForm.documents.every((doc) => doc.status === 'approved');
+  const canRevision = reviewForm.documents.some((doc) => doc.status === 'rejected');
 
   if (loading || !application) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
   }
 
   // Check if can review
-  const canReview = 
+  const canReview =
     application.workflowState === 'DOCUMENT_REVIEW' ||
     application.workflowState === 'DOCUMENT_REVISION';
 
@@ -239,11 +252,7 @@ const OfficerReviewPage: React.FC = () => {
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => router.back()}
-          sx={{ mb: 2 }}
-        >
+        <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()} sx={{ mb: 2 }}>
           กลับ
         </Button>
         <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
@@ -272,23 +281,35 @@ const OfficerReviewPage: React.FC = () => {
             <Divider sx={{ mb: 2 }} />
             <Box sx={{ '& > div': { mb: 1.5 } }}>
               <Box>
-                <Typography variant="caption" color="text.secondary">ชื่อฟาร์ม:</Typography>
-                <Typography variant="body2" fontWeight="medium">{application.farmInfo?.name}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ชื่อฟาร์ม:
+                </Typography>
+                <Typography variant="body2" fontWeight="medium">
+                  {application.farmInfo?.name}
+                </Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">ขนาดพื้นที่:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ขนาดพื้นที่:
+                </Typography>
                 <Typography variant="body2">{application.farmInfo?.size} ไร่</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">ประเภทพืช:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ประเภทพืช:
+                </Typography>
                 <Typography variant="body2">{application.farmInfo?.cropType}</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">จังหวัด:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  จังหวัด:
+                </Typography>
                 <Typography variant="body2">{application.farmInfo?.province}</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">ที่อยู่:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ที่อยู่:
+                </Typography>
                 <Typography variant="body2">{application.farmInfo?.address}</Typography>
               </Box>
             </Box>
@@ -302,23 +323,35 @@ const OfficerReviewPage: React.FC = () => {
             <Divider sx={{ mb: 2 }} />
             <Box sx={{ '& > div': { mb: 1.5 } }}>
               <Box>
-                <Typography variant="caption" color="text.secondary">ชื่อ-นามสกุล:</Typography>
-                <Typography variant="body2" fontWeight="medium">{application.farmerInfo?.name}</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ชื่อ-นามสกุล:
+                </Typography>
+                <Typography variant="body2" fontWeight="medium">
+                  {application.farmerInfo?.name}
+                </Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">เลขบัตรประชาชน:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  เลขบัตรประชาชน:
+                </Typography>
                 <Typography variant="body2">{application.farmerInfo?.idCard}</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">โทรศัพท์:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  โทรศัพท์:
+                </Typography>
                 <Typography variant="body2">{application.farmerInfo?.phone}</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">อีเมล:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  อีเมล:
+                </Typography>
                 <Typography variant="body2">{application.farmerInfo?.email || '-'}</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">ประสบการณ์:</Typography>
+                <Typography variant="caption" color="text.secondary">
+                  ประสบการณ์:
+                </Typography>
                 <Typography variant="body2">{application.farmerInfo?.experience} ปี</Typography>
               </Box>
             </Box>
@@ -333,10 +366,10 @@ const OfficerReviewPage: React.FC = () => {
               📄 ตรวจสอบเอกสาร (5 ชนิด)
             </Typography>
             <Divider sx={{ mb: 2 }} />
-            
+
             <List>
               {reviewForm.documents.map((doc, index) => {
-                const appDoc = application.documents.find(d => d.type === doc.type);
+                const appDoc = application.documents.find((d) => d.type === doc.type);
                 return (
                   <React.Fragment key={doc.type}>
                     <ListItem
@@ -361,26 +394,19 @@ const OfficerReviewPage: React.FC = () => {
                         <ListItemText
                           primary={getDocumentName(doc.type)}
                           secondary={
-                            appDoc?.uploadedAt 
+                            appDoc?.uploadedAt
                               ? `อัปโหลดเมื่อ: ${new Date(appDoc.uploadedAt).toLocaleString('th-TH')}`
                               : 'ยังไม่อัปโหลด'
                           }
                         />
                         <Box sx={{ display: 'flex', gap: 1 }}>
                           <Tooltip title="ดูเอกสาร">
-                            <IconButton 
-                              size="small" 
-                              color="primary"
-                              disabled={!appDoc?.fileUrl}
-                            >
+                            <IconButton size="small" color="primary" disabled={!appDoc?.fileUrl}>
                               <VisibilityIcon />
                             </IconButton>
                           </Tooltip>
                           <Tooltip title="ดาวน์โหลด">
-                            <IconButton 
-                              size="small"
-                              disabled={!appDoc?.fileUrl}
-                            >
+                            <IconButton size="small" disabled={!appDoc?.fileUrl}>
                               <DownloadIcon />
                             </IconButton>
                           </Tooltip>
@@ -416,9 +442,9 @@ const OfficerReviewPage: React.FC = () => {
                               label="หมายเหตุ / เหตุผลที่ปฏิเสธ"
                               value={doc.notes}
                               onChange={(e) => {
-                                setReviewForm(prev => ({
+                                setReviewForm((prev) => ({
                                   ...prev,
-                                  documents: prev.documents.map(d => 
+                                  documents: prev.documents.map((d) =>
                                     d.type === doc.type ? { ...d, notes: e.target.value } : d
                                   ),
                                 }));
@@ -453,7 +479,9 @@ const OfficerReviewPage: React.FC = () => {
                   </Typography>
                   <Rating
                     value={reviewForm.completeness}
-                    onChange={(_, value) => setReviewForm(prev => ({ ...prev, completeness: value || 3 }))}
+                    onChange={(_, value) =>
+                      setReviewForm((prev) => ({ ...prev, completeness: value || 3 }))
+                    }
                     size="large"
                   />
                   <Typography variant="caption" color="text.secondary">
@@ -468,7 +496,9 @@ const OfficerReviewPage: React.FC = () => {
                   </Typography>
                   <Rating
                     value={reviewForm.accuracy}
-                    onChange={(_, value) => setReviewForm(prev => ({ ...prev, accuracy: value || 3 }))}
+                    onChange={(_, value) =>
+                      setReviewForm((prev) => ({ ...prev, accuracy: value || 3 }))
+                    }
                     size="large"
                   />
                   <Typography variant="caption" color="text.secondary">
@@ -483,7 +513,9 @@ const OfficerReviewPage: React.FC = () => {
                     fullWidth
                     label="ประเมินความเสี่ยง (Risk Assessment)"
                     value={reviewForm.riskLevel}
-                    onChange={(e) => setReviewForm(prev => ({ ...prev, riskLevel: e.target.value as any }))}
+                    onChange={(e) =>
+                      setReviewForm((prev) => ({ ...prev, riskLevel: e.target.value as any }))
+                    }
                   >
                     <MenuItem value="low">
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -512,7 +544,9 @@ const OfficerReviewPage: React.FC = () => {
                     fullWidth
                     label="ความคิดเห็น / หมายเหตุ"
                     value={reviewForm.comments}
-                    onChange={(e) => setReviewForm(prev => ({ ...prev, comments: e.target.value }))}
+                    onChange={(e) =>
+                      setReviewForm((prev) => ({ ...prev, comments: e.target.value }))
+                    }
                     multiline
                     rows={4}
                     placeholder="ระบุข้อสังเกต, คำแนะนำ, หรือข้อควรระวัง..."
@@ -545,7 +579,11 @@ const OfficerReviewPage: React.FC = () => {
                     อนุมัติทั้งหมด
                   </Button>
                   {!canApprove && (
-                    <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ mt: 0.5, display: 'block' }}
+                    >
                       อนุมัติเอกสารทั้ง 5 ชนิดก่อน
                     </Typography>
                   )}
@@ -564,7 +602,11 @@ const OfficerReviewPage: React.FC = () => {
                     ขอแก้ไข
                   </Button>
                   {!canRevision && (
-                    <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block' }}>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ mt: 0.5, display: 'block' }}
+                    >
                       ปฏิเสธเอกสารที่ต้องแก้ไข
                     </Typography>
                   )}
@@ -626,8 +668,11 @@ const OfficerReviewPage: React.FC = () => {
           <Button
             variant="contained"
             color={
-              confirmDialog.decision === 'approve' ? 'success' :
-              confirmDialog.decision === 'revision' ? 'warning' : 'error'
+              confirmDialog.decision === 'approve'
+                ? 'success'
+                : confirmDialog.decision === 'revision'
+                  ? 'warning'
+                  : 'error'
             }
             onClick={handleSubmitReview}
             disabled={submitting}

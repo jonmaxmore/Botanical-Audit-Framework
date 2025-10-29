@@ -327,7 +327,7 @@ class GACPApiClient {
       // Enable automatic compression
       decompress: true,
       // Validate status codes
-      validateStatus: status => status >= 200 && status < 300,
+      validateStatus: (status) => status >= 200 && status < 300,
     });
   }
 
@@ -365,7 +365,7 @@ class GACPApiClient {
       (error: AxiosError) => {
         console.error('[GACP API] Request Error:', error);
         return Promise.reject(this.formatError(error));
-      },
+      }
     );
 
     // Response interceptor - Handle common responses and errors
@@ -422,7 +422,7 @@ class GACPApiClient {
         }
 
         return Promise.reject(this.formatError(error));
-      },
+      }
     );
   }
 
@@ -496,7 +496,7 @@ class GACPApiClient {
   async uploadFile<T>(
     url: string,
     file: File,
-    onProgress?: (progress: number) => void,
+    onProgress?: (progress: number) => void
   ): Promise<GACPApiResponse<T>> {
     try {
       const formData = new FormData();
@@ -506,7 +506,7 @@ class GACPApiClient {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: progressEvent => {
+        onUploadProgress: (progressEvent) => {
           if (onProgress && progressEvent.total) {
             const progress = (progressEvent.loaded / progressEvent.total) * 100;
             onProgress(Math.round(progress));
@@ -548,7 +548,7 @@ class GACPApiClient {
       to: string;
       actor: string;
       data?: any;
-    },
+    }
   ): Promise<GACPApiResponse<any>> {
     return this.post(GACP_API_CONFIG.ENDPOINTS.GACP.TRANSITION, {
       applicationId,

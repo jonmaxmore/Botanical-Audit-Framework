@@ -3,24 +3,28 @@
 ## สิ่งที่สร้างเสร็จแล้ว
 
 ### 1. ✅ Scheduling System
+
 - `routes/inspection-scheduling.routes.js` - Schedule/confirm/fetch API
 - `components/inspection/InspectionScheduler.tsx` - Schedule form with date/time picker
 - Support both video_call and onsite inspection types
 - Pending confirmation status workflow
 
 ### 2. ✅ Calendar View
+
 - `components/inspection/InspectionCalendar.tsx` - Monthly calendar view
 - Visual indicators for video call vs onsite
 - Navigate between months
 - Show schedules per day
 
 ### 3. ✅ Upcoming Inspections
+
 - `routes/inspection-upcoming.routes.js` - Fetch upcoming inspections API
 - `components/inspection/UpcomingInspections.tsx` - List view of upcoming inspections
 - Today/Tomorrow labels
 - Quick join button
 
 ### 4. ✅ Advanced Notifications
+
 - Schedule confirmation notifications
 - Reminder notifications (1 day before)
 - Calendar invite support (TODO: email integration)
@@ -29,6 +33,7 @@
 ## API Endpoints
 
 ### Scheduling
+
 - `POST /api/inspections/:id/schedule` - Schedule inspection
 - `PUT /api/inspections/:id/schedule/confirm` - Confirm/reject schedule
 - `GET /api/inspections/:id/schedule` - Get schedule details

@@ -242,8 +242,8 @@ const mongoConfig = {
     maxIdleTimeMS: 30000,
     serverSelectionTimeoutMS: 5000,
     retryWrites: true,
-    w: 'majority',
-  },
+    w: 'majority'
+  }
 };
 ```
 

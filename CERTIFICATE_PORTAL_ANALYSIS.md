@@ -5,6 +5,7 @@
 **Status:** ⚠️ **80% Complete** - Well-structured with comprehensive features, but using mock data
 
 **Build Status:** ✅ **7 Routes Building Successfully**
+
 - 6 app routes (pages)
 - 1 not-found route
 
@@ -30,6 +31,7 @@ Legend:
 ```
 
 **Comparison:**
+
 - Farmer Portal: 31 routes (multi-step application forms)
 - Admin Portal: 14 routes (admin management)
 - Certificate Portal: 7 routes (certificate management) ✅ Appropriate scope
@@ -41,7 +43,9 @@ Legend:
 ### ✅ FULLY IMPLEMENTED PAGES
 
 #### 1. **Landing Page** (`app/page.tsx`)
+
 **Status:** ✅ Complete & Functional - 232 lines
+
 - Hero section with gradient background
 - Call-to-action buttons
 - 3 feature cards (Apply, Upload, Track)
@@ -49,6 +53,7 @@ Legend:
 - Responsive design
 
 **Features:**
+
 ```typescript
 Features:
 - Hero: "ระบบยื่นขอใบรับรอง GACP"
@@ -61,7 +66,9 @@ Features:
 ```
 
 #### 2. **Login Page** (`app/login/page.tsx`)
+
 **Status:** ✅ Complete (Mock Auth)
+
 - Login form with email/password
 - Demo credentials box
 - JWT token generation (mock)
@@ -70,14 +77,17 @@ Features:
 - Show/hide password toggle
 
 **Demo Account:**
+
 ```
 Email: cert@gacp.test
 Password: password123
 ```
 
 #### 3. **Dashboard Page** (`app/dashboard/page.tsx`)
+
 **Status:** ✅ Complete (Mock Data) - 212 lines
 **Features:**
+
 - Protected route (checks 'cert_token')
 - DashboardLayout with sidebar
 - 4 KPI statistics cards:
@@ -90,6 +100,7 @@ Password: password123
 - Responsive layout
 
 **Mock Data:**
+
 ```typescript
 3 recent certificates:
 - CERT-2025-001: สวนทดสอบ A - นายสมชาย (approved)
@@ -98,8 +109,10 @@ Password: password123
 ```
 
 #### 4. **Certificates List** (`app/certificates/page.tsx`)
+
 **Status:** ✅ Complete (Mock Data) - 391 lines
 **Features:**
+
 - Search bar with text input
 - 2 filter dropdowns:
   - Status: All, Pending, Approved, Rejected, Expired
@@ -120,6 +133,7 @@ Password: password123
 - Protected route
 
 **Mock Data:**
+
 ```typescript
 3 certificates:
 1. GACP-2025-0001 - สวนมะม่วงทองดี (Mango, Approved)
@@ -131,8 +145,10 @@ All with complete address data (Thai format):
 ```
 
 #### 5. **Certificate Detail** (`app/certificates/[id]/page.tsx`)
+
 **Status:** ✅ Complete (Mock Data)
 **Features:**
+
 - Certificate information card
 - Farm information section
 - Address display (Thai format)
@@ -149,8 +165,10 @@ All with complete address data (Thai format):
 - Dynamic route parameter handling
 
 #### 6. **New Certificate Form** (`app/certificates/new/page.tsx`)
+
 **Status:** ✅ Complete (Form Validation)
 **Features:**
+
 - **3-step stepper wizard:**
   1. **Step 1: Farm Information**
      - Farm ID (required)
@@ -160,19 +178,17 @@ All with complete address data (Thai format):
      - Crop Type dropdown (required)
      - Farm Area in Rai (required, number)
      - Address fields (Thai format)
-  
   2. **Step 2: Inspection Details**
      - Inspection Date (required)
      - Inspector Name (required)
      - Inspection Report (optional, textarea)
      - Notes (optional, textarea)
-  
   3. **Step 3: Review & Submit**
      - Display all entered data
      - Review before submission
      - Edit buttons to go back
      - Submit button
-     
+
 - Form validation with react-hook-form + zod
 - Next/Back/Submit buttons
 - Progress indicator
@@ -187,6 +203,7 @@ All with complete address data (Thai format):
 ### ✅ VERIFIED COMPONENTS
 
 #### **Layout Components** (`components/layout/`)
+
 1. **DashboardLayout.tsx** - Complete sidebar layout
    - Sidebar with 7 menu items:
      - Dashboard
@@ -208,24 +225,26 @@ All with complete address data (Thai format):
 ## Utility Libraries (READY FOR USE)
 
 ### ✅ **QR Code Generation** (`lib/utils/qr-generator.ts`)
+
 **Status:** ✅ Fully Implemented - 105 lines
 
 **Functions:**
+
 ```typescript
 1. generateQRCode(data, options)
    - Returns: Promise<string> (data URL)
    - Options: width, margin, color, errorCorrectionLevel
-   
+
 2. generateQRCodeCanvas(data, canvas, options)
    - Renders to canvas element
-   
+
 3. generateCertificateQR(certificateNumber, options)
    - Generates verification URL QR code
    - URL format: {API_URL}/verify/{certificateNumber}
-   
+
 4. downloadQRCode(dataURL, filename)
    - Downloads QR as PNG image
-   
+
 5. isValidQRData(data)
    - Validates QR data (max 4296 chars)
 ```
@@ -236,14 +255,16 @@ All with complete address data (Thai format):
 ---
 
 ### ✅ **PDF Generation** (`lib/utils/pdf-generator.ts`)
+
 **Status:** ✅ Fully Implemented - 218 lines
 
 **Functions:**
+
 ```typescript
 1. generateCertificatePDF(certificate, elementId, options)
    - Converts HTML element to PDF using html2canvas
    - Returns: Promise<jsPDF>
-   
+
 2. generateSimpleCertificatePDF(certificate, qrCodeDataURL, options)
    - Creates PDF programmatically (no HTML needed)
    - Professional certificate layout:
@@ -255,21 +276,22 @@ All with complete address data (Thai format):
      * Footer with issuer info
    - A4 portrait format
    - Returns: jsPDF
-   
+
 3. downloadPDF(pdf, filename)
    - Saves PDF file
-   
+
 4. openPDFInNewWindow(pdf)
    - Opens PDF in new browser tab
-   
+
 5. getPDFBlob(pdf)
    - Returns PDF as Blob
-   
+
 6. getPDFDataURL(pdf)
    - Returns PDF as data URL
 ```
 
-**Technology:** 
+**Technology:**
+
 - jspdf@2.5.1 (PDF generation)
 - html2canvas@1.4.1 (HTML to image conversion)
 
@@ -280,9 +302,11 @@ All with complete address data (Thai format):
 ## Type Definitions
 
 ### ✅ **Certificate Types** (`lib/types/certificate.ts`)
+
 **Status:** ✅ Complete - 75 lines
 
 **Interfaces:**
+
 ```typescript
 1. Certificate (Main interface)
    - id, certificateNumber
@@ -324,9 +348,11 @@ All with complete address data (Thai format):
 ## API Client Structure
 
 ### ✅ **API Client** (`lib/api/certificates.ts`)
+
 **Status:** ✅ Structure Complete (Mock Implementation)
 
 **Configured:**
+
 ```typescript
 - Base URL: process.env.NEXT_PUBLIC_API_URL
 - Axios interceptors:
@@ -336,37 +362,38 @@ All with complete address data (Thai format):
 ```
 
 **API Methods Defined:**
+
 ```typescript
 1. getCertificates(filters?: CertificateFilters)
    - GET /certificates with query params
-   
+
 2. getCertificateById(id: string)
    - GET /certificates/{id}
-   
+
 3. createCertificate(data: CertificateFormData)
    - POST /certificates
-   
+
 4. updateCertificate(id: string, data: Partial<Certificate>)
    - PUT /certificates/{id}
-   
+
 5. deleteCertificate(id: string)
    - DELETE /certificates/{id}
-   
+
 6. approveCertificate(id: string)
    - POST /certificates/{id}/approve
-   
+
 7. rejectCertificate(id: string, reason: string)
    - POST /certificates/{id}/reject
-   
+
 8. generateCertificatePDF(id: string)
    - GET /certificates/{id}/pdf
-   
+
 9. generateCertificateQR(id: string)
    - GET /certificates/{id}/qr
-   
+
 10. validateCertificate(certificateNumber: string)
     - POST /certificates/validate
-    
+
 11. getCertificateStats()
     - GET /certificates/stats
 ```
@@ -378,32 +405,38 @@ All with complete address data (Thai format):
 ## Technology Stack (Verified)
 
 ### **Frontend Framework**
+
 - ✅ Next.js 16.0.0 (Turbopack)
 - ✅ React 18.3.1
 - ✅ TypeScript 5.9.3
 
 ### **UI Framework**
+
 - ✅ Material-UI v5.15.15
 - ✅ @mui/icons-material v5.15.15
 - ✅ Tailwind CSS 3.4.3
 
 ### **Certificate Features**
+
 - ✅ qrcode@1.5.3 (QR generation)
 - ✅ jspdf@3.0.3 (PDF generation) - **Newer version than Admin Portal**
 - ✅ html2canvas@1.4.1 (HTML to image)
 
 ### **Form Handling**
+
 - ✅ react-hook-form@7.51.3
 - ✅ zod@3.23.4 (validation)
 - ✅ @hookform/resolvers@3.3.4
 
 ### **HTTP & State**
+
 - ✅ axios@1.6.8 (API client)
 - ✅ notistack@3.0.1 (notifications)
 - ✅ jwt-decode@4.0.0 (token parsing)
 - ✅ date-fns@3.6.0 (date utilities)
 
 ### **Testing (Configured but No Tests)**
+
 - ✅ jest@29.7.0
 - ✅ @testing-library/react@15.0.2
 - ✅ @testing-library/jest-dom@6.4.2
@@ -416,6 +449,7 @@ All with complete address data (Thai format):
 ### Current State: 100% Mock Data
 
 #### **Pages Using Mock Data:**
+
 1. ✅ **Dashboard** - Mock KPIs and recent certificates
 2. ✅ **Certificates List** - Mock 3 certificates
 3. ✅ **Certificate Detail** - Fetches from mock array by ID
@@ -423,6 +457,7 @@ All with complete address data (Thai format):
 5. ✅ **Login** - Mock JWT generation
 
 #### **API Endpoints Needed:**
+
 ```typescript
 Authentication:
 - POST /api/auth/login              # Real JWT authentication
@@ -455,6 +490,7 @@ Statistics:
 ### ✅ FULLY IMPLEMENTED FEATURES
 
 #### **Certificate Management**
+
 - [x] List certificates with table
 - [x] Search certificates by text
 - [x] Filter by status (5 options)
@@ -469,6 +505,7 @@ Statistics:
 - [x] Status indicators with colors
 
 #### **Dashboard**
+
 - [x] 4 KPI statistics cards
 - [x] Trend indicators (percentage change)
 - [x] Recent certificates list
@@ -476,6 +513,7 @@ Statistics:
 - [x] Quick actions (New Certificate button)
 
 #### **QR Code Features**
+
 - [x] QR code generation utility (ready)
 - [x] Certificate verification URL format
 - [x] QR code download function
@@ -484,6 +522,7 @@ Statistics:
 - [x] Customizable QR options (size, color, error correction)
 
 #### **PDF Export**
+
 - [x] PDF generation utility (ready)
 - [x] Professional certificate template
 - [x] A4 portrait format
@@ -497,6 +536,7 @@ Statistics:
 - [x] HTML to PDF conversion (html2canvas)
 
 #### **Form & Validation**
+
 - [x] 3-step wizard (Farm → Inspection → Review)
 - [x] React Hook Form integration
 - [x] Zod schema validation
@@ -509,6 +549,7 @@ Statistics:
 - [x] Review step before submit
 
 #### **Authentication**
+
 - [x] Login page with form
 - [x] JWT token generation (mock)
 - [x] Token storage (localStorage 'cert_token')
@@ -518,6 +559,7 @@ Statistics:
 - [x] Demo credentials
 
 #### **UI/UX**
+
 - [x] Material-UI design system
 - [x] Tailwind CSS utilities
 - [x] Blue theme (#2196f3)
@@ -533,6 +575,7 @@ Statistics:
 ### ⚠️ PARTIALLY IMPLEMENTED FEATURES
 
 #### **Backend Integration**
+
 - [x] API client structure (axios + interceptors)
 - [x] All API methods defined
 - [x] Error handling structure
@@ -540,6 +583,7 @@ Statistics:
 - [ ] Environment variables configured but not connected
 
 #### **Certificate Verification**
+
 - [x] QR code generation utility ready
 - [x] Verification URL format defined
 - [ ] Public verification page (not created)
@@ -550,6 +594,7 @@ Statistics:
 ### ❌ NOT IMPLEMENTED FEATURES
 
 #### **Advanced Features (From README - "Upcoming")**
+
 - [ ] Certificate search with advanced filters (basic search exists)
 - [ ] Batch certificate generation
 - [ ] Email notifications on certificate issuance
@@ -562,6 +607,7 @@ Statistics:
 - [ ] Multi-language support (currently Thai only)
 
 #### **Testing**
+
 - [ ] Unit tests (0 test files found)
 - [ ] Component tests (0 test files found)
 - [ ] Integration tests (0 test files found)
@@ -578,6 +624,7 @@ Statistics:
 **Required Coverage:** 80% (matching farmer portal standards)
 
 **Test Infrastructure:**
+
 - ✅ Jest configured
 - ✅ React Testing Library installed
 - ✅ Playwright installed
@@ -592,7 +639,6 @@ Statistics:
    - Helper functions
    - Form validation
    - API client interceptors
-   
 2. **Component Tests**
    - Landing page rendering
    - Login form validation
@@ -601,14 +647,12 @@ Statistics:
    - Certificate detail display
    - New certificate form (3 steps)
    - DashboardLayout navigation
-   
 3. **Integration Tests**
    - Login → Dashboard flow
    - Create certificate workflow
    - Certificate approval flow
    - QR code generation + PDF export
    - Filter and search functionality
-   
 4. **E2E Tests (Playwright)**
    - Full certificate creation journey
    - Certificate approval workflow
@@ -625,6 +669,7 @@ Statistics:
 ### ✅ EXCELLENT DOCUMENTATION
 
 #### **README.md** - Comprehensive project overview
+
 - Project description
 - Features list (core + upcoming)
 - Quick start guide
@@ -639,6 +684,7 @@ Statistics:
 - Sprint status
 
 #### **INSTALLATION.md** - Detailed setup guide
+
 - Step-by-step installation (6 steps)
 - Testing scenarios (6 scenarios)
 - TypeScript error resolution
@@ -647,6 +693,7 @@ Statistics:
 - Next steps roadmap
 
 #### **COMPLETION_REPORT.md** - Sprint progress report
+
 - 80% completion status
 - 24 files created
 - ~4,500 lines of code
@@ -665,6 +712,7 @@ Statistics:
 ### **Certificate Portal Completion: 80%** (Accurate from docs)
 
 #### **What's Complete (80%):**
+
 - ✅ All 7 routes building successfully
 - ✅ All page files created and functional
 - ✅ Component library (1 layout component)
@@ -684,6 +732,7 @@ Statistics:
 - ✅ Excellent documentation (3 comprehensive files)
 
 #### **What's Missing (20%):**
+
 - ❌ Backend API integration (100% mock data)
 - ❌ Real authentication server
 - ❌ Unit tests (0% coverage, need 80%)
@@ -698,18 +747,18 @@ Statistics:
 
 ## Comparison: All Three Portals
 
-| Feature | Farmer Portal | Admin Portal | Certificate Portal | Status |
-|---------|--------------|--------------|-------------------|---------|
-| **Routes** | 31 | 14 | 7 | ✅ Appropriate for each |
-| **Tests** | 527 (97.6%) | 0 (0%) | 0 (0%) | ❌ Cert needs 216+ tests |
-| **Coverage** | 97.6% | 0% | 0% | ❌ Cert needs 80% |
-| **Backend Integration** | ✅ Real APIs | ❌ Mock | ❌ Mock | ❌ Both need integration |
-| **Authentication** | ✅ Real JWT | ⚠️ Mock | ⚠️ Mock | ⚠️ Both need real auth |
-| **Components** | 50+ | 20+ | 1 | ⚠️ Cert minimalist design |
-| **Build Status** | ✅ Compiles | ✅ Compiles | ✅ Compiles | ✅ All build |
-| **Documentation** | ✅ Good | ⚠️ Basic | ✅ Excellent | ✅ Cert best docs |
-| **Special Features** | Multi-step forms | User management | QR + PDF | ✅ All have unique features |
-| **Production Ready** | ✅ YES | ❌ NO | ❌ NO | ❌ 2 portals not ready |
+| Feature                 | Farmer Portal    | Admin Portal    | Certificate Portal | Status                      |
+| ----------------------- | ---------------- | --------------- | ------------------ | --------------------------- |
+| **Routes**              | 31               | 14              | 7                  | ✅ Appropriate for each     |
+| **Tests**               | 527 (97.6%)      | 0 (0%)          | 0 (0%)             | ❌ Cert needs 216+ tests    |
+| **Coverage**            | 97.6%            | 0%              | 0%                 | ❌ Cert needs 80%           |
+| **Backend Integration** | ✅ Real APIs     | ❌ Mock         | ❌ Mock            | ❌ Both need integration    |
+| **Authentication**      | ✅ Real JWT      | ⚠️ Mock         | ⚠️ Mock            | ⚠️ Both need real auth      |
+| **Components**          | 50+              | 20+             | 1                  | ⚠️ Cert minimalist design   |
+| **Build Status**        | ✅ Compiles      | ✅ Compiles     | ✅ Compiles        | ✅ All build                |
+| **Documentation**       | ✅ Good          | ⚠️ Basic        | ✅ Excellent       | ✅ Cert best docs           |
+| **Special Features**    | Multi-step forms | User management | QR + PDF           | ✅ All have unique features |
+| **Production Ready**    | ✅ YES           | ❌ NO           | ❌ NO              | ❌ 2 portals not ready      |
 
 ---
 
@@ -733,6 +782,7 @@ Statistics:
 ### **Phase 1: Backend Integration (1 week)**
 
 #### **Day 1-2: Authentication**
+
 ```typescript
 Priority: HIGH
 Tasks:
@@ -749,6 +799,7 @@ Files to Modify:
 ```
 
 #### **Day 3-4: Certificate APIs**
+
 ```typescript
 Priority: HIGH
 Tasks:
@@ -767,6 +818,7 @@ Files to Modify:
 ```
 
 #### **Day 5: QR & PDF Integration**
+
 ```typescript
 Priority: MEDIUM
 Tasks:
@@ -783,6 +835,7 @@ Files to Modify:
 ```
 
 #### **Day 6-7: Testing & Polish**
+
 ```typescript
 Priority: MEDIUM
 Tasks:
@@ -798,6 +851,7 @@ Tasks:
 ### **Phase 2: Testing (2-3 days)**
 
 #### **Day 1: Unit Tests**
+
 ```typescript
 Tests to Create:
 1. lib/utils/qr-generator.test.ts
@@ -818,6 +872,7 @@ Target: 20-30 unit tests
 ```
 
 #### **Day 2: Component Tests**
+
 ```typescript
 Tests to Create:
 1. app/page.test.tsx (Landing page)
@@ -832,6 +887,7 @@ Target: 50-70 component tests
 ```
 
 #### **Day 3: Integration & E2E Tests**
+
 ```typescript
 Integration Tests:
 1. Login → Dashboard flow
@@ -854,6 +910,7 @@ Total Target: 100-150 tests (80% coverage)
 ### **Phase 3: Advanced Features (1 week)**
 
 #### **Day 1-2: Certificate Verification**
+
 ```typescript
 Priority: HIGH
 Tasks:
@@ -869,6 +926,7 @@ New Files:
 ```
 
 #### **Day 3-4: Advanced Features**
+
 ```typescript
 Priority: MEDIUM
 Tasks:
@@ -885,6 +943,7 @@ New Files:
 ```
 
 #### **Day 5: Polish & Optimization**
+
 ```typescript
 Priority: MEDIUM
 Tasks:
@@ -905,19 +964,19 @@ Tasks:
    - Production .env setup
    - API URL configuration
    - SSL certificate setup
-   
+
 2. Deployment
    - Build optimization
    - Docker setup
    - CI/CD pipeline
    - Staging deployment
-   
+
 3. Monitoring
    - Error tracking (Sentry)
    - Performance monitoring
    - Uptime monitoring
    - Log aggregation
-   
+
 4. Documentation
    - API documentation
    - Deployment guide
@@ -943,18 +1002,21 @@ Tasks:
 ## Critical Issues to Address
 
 ### **High Priority**
+
 1. ⚠️ **All data is mock** - Need backend integration
 2. ⚠️ **No tests** - Need 80% coverage (100-150 tests)
 3. ⚠️ **Mock authentication** - Need real JWT server
 4. ⚠️ **No verification page** - QR codes can't be verified publicly
 
 ### **Medium Priority**
+
 1. ⚠️ Missing advanced features (batch, email, audit logs)
 2. ⚠️ No error handling for API failures
 3. ⚠️ Only 1 layout component (minimalist but may need more)
 4. ⚠️ No caching strategy
 
 ### **Low Priority**
+
 1. ℹ️ No certificate templates (currently hardcoded)
 2. ℹ️ No multi-language support (Thai only)
 3. ℹ️ No Excel export (only PDF)
@@ -1011,6 +1073,7 @@ Tasks:
 ### **Overall Strategy:**
 
 Certificate Portal is in **excellent shape** structurally. The main blockers are:
+
 - Backend integration (1 week)
 - Testing (2-3 days)
 - Production configuration (2-3 days)
@@ -1022,6 +1085,7 @@ With **2-3 weeks focused work**, Certificate Portal can be production-ready.
 ## Conclusion
 
 ### **Good News 👍**
+
 - ✅ Certificate portal is 80% complete (most complete after Farmer Portal)
 - ✅ QR and PDF utilities are production-ready
 - ✅ All 7 routes build successfully
@@ -1032,6 +1096,7 @@ With **2-3 weeks focused work**, Certificate Portal can be production-ready.
 - ✅ Latest dependencies and modern stack
 
 ### **Challenges 👎**
+
 - ❌ 100% mock data (no backend integration)
 - ❌ 0% test coverage (need 100-150 tests)
 - ❌ Mock authentication (not production safe)
@@ -1039,14 +1104,17 @@ With **2-3 weeks focused work**, Certificate Portal can be production-ready.
 - ❌ Missing advanced features (batch, email, audit logs)
 
 ### **Final Assessment**
+
 Certificate Portal has the **best code structure and documentation** of the 3 portals. The QR and PDF utilities are production-ready and well-implemented. With 2-3 weeks of work (backend integration, testing, production setup), this portal will be fully production-ready.
 
 **Comparison to Admin Portal:**
+
 - Certificate Portal: Better documentation, cleaner code, focused features
 - Admin Portal: More routes (14 vs 7), more components (20+ vs 1)
 - Both: Need backend integration and tests
 
 **Priority Order for Completion:**
+
 1. Farmer Portal ✅ (Already production-ready)
 2. Certificate Portal ⚠️ (80% complete, 2-3 weeks to finish)
 3. Admin Portal ⚠️ (75% complete, 3 weeks to finish)

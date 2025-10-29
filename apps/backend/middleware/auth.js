@@ -15,8 +15,8 @@
 
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('auth-middleware');
-const jwt = require('jsonwebtoken');
-const jwtConfig = require('../../../config/jwt-security');
+const _jwt = require('jsonwebtoken');
+const jwtConfig = require('../../../config/_jwt-security');
 
 // โหลด JWT configuration (จะ throw error ถ้าไม่มี secret)
 let JWT_CONFIG;

@@ -18,11 +18,13 @@ npm run dev
 ## Test APIs
 
 ### 1. Provinces (No API key needed)
+
 ```bash
 curl http://localhost:3000/api/smart-agriculture/provinces
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -42,11 +44,13 @@ curl http://localhost:3000/api/smart-agriculture/provinces
 ---
 
 ### 2. Weather (Chiang Mai)
+
 ```bash
 curl http://localhost:3000/api/smart-agriculture/weather/18.7883/98.9853
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -62,6 +66,7 @@ curl http://localhost:3000/api/smart-agriculture/weather/18.7883/98.9853
 ---
 
 ### 3. Soil Recommendation
+
 ```bash
 curl -X POST http://localhost:3000/api/smart-agriculture/soil/recommend \
   -H "Content-Type: application/json" \
@@ -69,6 +74,7 @@ curl -X POST http://localhost:3000/api/smart-agriculture/soil/recommend \
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -90,6 +96,7 @@ curl -X POST http://localhost:3000/api/smart-agriculture/soil/recommend \
 ---
 
 ### 4. Irrigation Calculator
+
 ```bash
 curl -X POST http://localhost:3000/api/smart-agriculture/irrigation/calculate \
   -H "Content-Type: application/json" \
@@ -97,16 +104,14 @@ curl -X POST http://localhost:3000/api/smart-agriculture/irrigation/calculate \
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
   "data": {
     "waterPerDay": 4.5,
     "frequency": "ทุกวัน",
-    "tips": [
-      "รดน้ำตอนเช้าหรือเย็น",
-      "ตรวจสอบความชื้นดินก่อนรดน้ำ"
-    ]
+    "tips": ["รดน้ำตอนเช้าหรือเย็น", "ตรวจสอบความชื้นดินก่อนรดน้ำ"]
   }
 }
 ```
@@ -114,11 +119,13 @@ curl -X POST http://localhost:3000/api/smart-agriculture/irrigation/calculate \
 ---
 
 ### 5. Crop Calendar
+
 ```bash
 curl http://localhost:3000/api/smart-agriculture/calendar/cannabis/เชียงใหม่
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -144,6 +151,7 @@ curl http://localhost:3000/api/smart-agriculture/calendar/cannabis/เชีย�
 ## Troubleshooting
 
 ### Server not starting?
+
 ```bash
 # Check if port 3000 is in use
 netstat -ano | findstr :3000
@@ -153,6 +161,7 @@ taskkill /PID <PID> /F
 ```
 
 ### API Key not working?
+
 - Check `.env` file exists in `apps/backend/`
 - Verify key: `d1fcda4879642ac49a91e3e04384ee77`
 - Restart server after changing `.env`

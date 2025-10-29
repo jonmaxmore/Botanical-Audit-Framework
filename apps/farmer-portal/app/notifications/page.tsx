@@ -6,11 +6,46 @@ export default function NotificationsPage() {
   const [filter, setFilter] = useState('all');
 
   const notifications = [
-    { id: 1, title: 'คำขอ #001 เปลี่ยนสถานะ', message: 'คำขอของคุณเปลี่ยนเป็น "ตรวจเอกสาร"', time: '2 ชั่วโมงที่แล้ว', read: false, type: 'status' },
-    { id: 2, title: 'กรุณาอัปโหลดเอกสาร', message: 'กรุณาอัปโหลดเอกสารเพิ่มเติมสำหรับคำขอ #001', time: '5 ชั่วโมงที่แล้ว', read: false, type: 'action' },
-    { id: 3, title: 'นัดตรวจสอบสถานที่', message: 'นัดตรวจสอบวันที่ 20/01 เวลา 10:00 น.', time: '1 วันที่แล้ว', read: true, type: 'schedule' },
-    { id: 4, title: 'ชำระเงินสำเร็จ', message: 'ชำระเงินงวดที่ 1 จำนวน 15,000 บาท สำเร็จ', time: '2 วันที่แล้ว', read: true, type: 'payment' },
-    { id: 5, title: 'ใบรับรองออกแล้ว', message: 'ใบรับรอง GACP-003 ออกแล้ว สามารถดาวน์โหลดได้', time: '3 วันที่แล้ว', read: true, type: 'certificate' },
+    {
+      id: 1,
+      title: 'คำขอ #001 เปลี่ยนสถานะ',
+      message: 'คำขอของคุณเปลี่ยนเป็น "ตรวจเอกสาร"',
+      time: '2 ชั่วโมงที่แล้ว',
+      read: false,
+      type: 'status'
+    },
+    {
+      id: 2,
+      title: 'กรุณาอัปโหลดเอกสาร',
+      message: 'กรุณาอัปโหลดเอกสารเพิ่มเติมสำหรับคำขอ #001',
+      time: '5 ชั่วโมงที่แล้ว',
+      read: false,
+      type: 'action'
+    },
+    {
+      id: 3,
+      title: 'นัดตรวจสอบสถานที่',
+      message: 'นัดตรวจสอบวันที่ 20/01 เวลา 10:00 น.',
+      time: '1 วันที่แล้ว',
+      read: true,
+      type: 'schedule'
+    },
+    {
+      id: 4,
+      title: 'ชำระเงินสำเร็จ',
+      message: 'ชำระเงินงวดที่ 1 จำนวน 15,000 บาท สำเร็จ',
+      time: '2 วันที่แล้ว',
+      read: true,
+      type: 'payment'
+    },
+    {
+      id: 5,
+      title: 'ใบรับรองออกแล้ว',
+      message: 'ใบรับรอง GACP-003 ออกแล้ว สามารถดาวน์โหลดได้',
+      time: '3 วันที่แล้ว',
+      read: true,
+      type: 'certificate'
+    }
   ];
 
   const filteredNotifs = notifications.filter(n => {
@@ -26,7 +61,7 @@ export default function NotificationsPage() {
     action: '⚠️',
     schedule: '📅',
     payment: '💰',
-    certificate: '🏆',
+    certificate: '🏆'
   };
 
   return (
@@ -61,7 +96,7 @@ export default function NotificationsPage() {
         </div>
 
         <div className="space-y-3">
-          {filteredNotifs.map((notif) => (
+          {filteredNotifs.map(notif => (
             <div
               key={notif.id}
               className={`bg-white rounded-lg shadow p-4 hover:shadow-md transition ${
@@ -72,12 +107,12 @@ export default function NotificationsPage() {
                 <div className="text-3xl">{typeIcons[notif.type]}</div>
                 <div className="flex-1">
                   <div className="flex justify-between items-start mb-1">
-                    <h3 className={`font-semibold ${!notif.read ? 'text-gray-900' : 'text-gray-600'}`}>
+                    <h3
+                      className={`font-semibold ${!notif.read ? 'text-gray-900' : 'text-gray-600'}`}
+                    >
                       {notif.title}
                     </h3>
-                    {!notif.read && (
-                      <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                    )}
+                    {!notif.read && <span className="w-2 h-2 bg-green-500 rounded-full"></span>}
                   </div>
                   <p className="text-sm text-gray-600 mb-2">{notif.message}</p>
                   <div className="flex justify-between items-center">

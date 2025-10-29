@@ -19,7 +19,7 @@ router.get(
     }
 
     res.standardSuccess(user);
-  }),
+  })
 );
 
 // Example: Validation error
@@ -32,9 +32,9 @@ router.post(
     const user = await User.create(req.body);
     res.standardSuccess(user, {
       message: 'User created successfully',
-      messageThTh: 'สร้างผู้ใช้สำเร็จ',
+      messageThTh: 'สร้างผู้ใช้สำเร็จ'
     });
-  }),
+  })
 );
 
 module.exports = router;

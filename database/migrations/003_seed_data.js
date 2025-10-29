@@ -51,7 +51,7 @@ module.exports = {
         loginHistory: [],
         createdAt: new Date(),
         updatedAt: new Date(),
-        deletedAt: null,
+        deletedAt: null
       });
 
       console.log('    ✅ Admin user created');
@@ -69,20 +69,20 @@ module.exports = {
           userId: 'USR-2025-DTAM001',
           email: 'dtam.reviewer1@gacp.platform',
           fullName: 'วิชัย ทีมงาน',
-          phoneNumber: '0821234567',
+          phoneNumber: '0821234567'
         },
         {
           userId: 'USR-2025-DTAM002',
           email: 'dtam.reviewer2@gacp.platform',
           fullName: 'สมหญิง ตรวจสอบ',
-          phoneNumber: '0821234568',
+          phoneNumber: '0821234568'
         },
         {
           userId: 'USR-2025-DTAM003',
           email: 'dtam.inspector@gacp.platform',
           fullName: 'ประเสริฐ ตรวจเยี่ยม',
-          phoneNumber: '0821234569',
-        },
+          phoneNumber: '0821234569'
+        }
       ];
 
       const dtamPasswordHash = await bcrypt.hash('DTAM@GACP2025', 12);
@@ -107,7 +107,7 @@ module.exports = {
             'application:review',
             'application:approve',
             'certificate:issue',
-            'certificate:revoke',
+            'certificate:revoke'
           ],
           status: 'ACTIVE',
           emailVerified: true,
@@ -120,7 +120,7 @@ module.exports = {
           loginHistory: [],
           createdAt: new Date(),
           updatedAt: new Date(),
-          deletedAt: null,
+          deletedAt: null
         });
 
         console.log(`    ✅ DTAM user created: ${dtamUser.email}`);
@@ -140,15 +140,15 @@ module.exports = {
           email: 'farmer1@example.com',
           fullName: 'สมชาย ใจดี',
           phoneNumber: '0812345678',
-          thaiId: '1234567890123',
+          thaiId: '1234567890123'
         },
         {
           userId: 'USR-2025-FARMER02',
           email: 'farmer2@example.com',
           fullName: 'สมหมาย รักษ์สวน',
           phoneNumber: '0812345679',
-          thaiId: '1234567890124',
-        },
+          thaiId: '1234567890124'
+        }
       ];
 
       const farmerPasswordHash = await bcrypt.hash('Farmer@123', 12);
@@ -173,7 +173,7 @@ module.exports = {
             'application:read:own',
             'application:update:own',
             'document:upload:own',
-            'certificate:read:own',
+            'certificate:read:own'
           ],
           status: 'ACTIVE',
           emailVerified: true,
@@ -186,7 +186,7 @@ module.exports = {
           loginHistory: [],
           createdAt: new Date(),
           updatedAt: new Date(),
-          deletedAt: null,
+          deletedAt: null
         });
 
         console.log(`    ✅ Farmer user created: ${farmerUser.email}`);
@@ -219,7 +219,7 @@ module.exports = {
         metadata: {
           version: '1.0.0',
           environment: process.env.NODE_ENV || 'development',
-          message: 'GACP Platform initialized successfully',
+          message: 'GACP Platform initialized successfully'
         },
         result: 'SUCCESS',
         errorCode: null,
@@ -227,7 +227,7 @@ module.exports = {
         previousHash: '0'.repeat(64), // Genesis block
         currentHash: '',
         hashAlgorithm: 'SHA-256',
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       // Calculate genesis hash
@@ -241,7 +241,7 @@ module.exports = {
         resourceId: genesisLog.resourceId,
         timestamp: genesisLog.timestamp.toISOString(),
         previousHash: genesisLog.previousHash,
-        result: genesisLog.result,
+        result: genesisLog.result
       };
 
       genesisLog.currentHash = crypto
@@ -288,18 +288,18 @@ module.exports = {
         'USR-2025-DTAM002',
         'USR-2025-DTAM003',
         'USR-2025-FARMER01',
-        'USR-2025-FARMER02',
+        'USR-2025-FARMER02'
       ];
 
       const deleteResult = await db.collection('users').deleteMany({
-        userId: { $in: userIds },
+        userId: { $in: userIds }
       });
 
       console.log(`  ✅ Deleted ${deleteResult.deletedCount} seed users`);
 
       // Delete genesis audit log
       await db.collection('audit_logs').deleteOne({
-        logId: 'LOG-2025-GENESIS01',
+        logId: 'LOG-2025-GENESIS01'
       });
 
       console.log('  ✅ Deleted genesis audit log');
@@ -308,5 +308,5 @@ module.exports = {
       console.error('❌ Rollback failed:', error.message);
       throw error;
     }
-  },
+  }
 };

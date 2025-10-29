@@ -14,7 +14,7 @@ export default function LotIDBadge({
   lotId,
   applicationId,
   showQR = false,
-  className = '',
+  className = ''
 }: LotIDBadgeProps) {
   const [copied, setCopied] = useState(false);
   const [showQRModal, setShowQRModal] = useState(false);
@@ -36,7 +36,7 @@ export default function LotIDBadge({
       lotId,
       applicationId,
       type: 'inspection',
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
     return `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(data)}`;
   };

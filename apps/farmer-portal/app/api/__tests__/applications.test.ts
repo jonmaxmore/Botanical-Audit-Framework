@@ -17,7 +17,7 @@ const createMockApplication = (overrides?: Partial<Application>): Application =>
   rescheduleCount: 0,
   createdAt: new Date('2025-01-01'),
   updatedAt: new Date('2025-01-01'),
-  ...overrides,
+  ...overrides
 });
 
 describe('API Routes: /api/applications', () => {
@@ -26,7 +26,7 @@ describe('API Routes: /api/applications', () => {
       const applications = [
         createMockApplication({ id: 'app-001', userId: 'user-001' }),
         createMockApplication({ id: 'app-002', userId: 'user-002' }),
-        createMockApplication({ id: 'app-003', userId: 'user-001' }),
+        createMockApplication({ id: 'app-003', userId: 'user-001' })
       ];
 
       const userApps = applications.filter(app => app.userId === 'user-001');
@@ -39,7 +39,7 @@ describe('API Routes: /api/applications', () => {
       const applications = [
         createMockApplication({ id: 'app-001', status: 'DRAFT' }),
         createMockApplication({ id: 'app-002', status: 'SUBMITTED' }),
-        createMockApplication({ id: 'app-003', status: 'DRAFT' }),
+        createMockApplication({ id: 'app-003', status: 'DRAFT' })
       ];
 
       const draftApps = applications.filter(app => app.status === 'DRAFT');
@@ -50,7 +50,7 @@ describe('API Routes: /api/applications', () => {
 
     it('should paginate results', () => {
       const applications = Array.from({ length: 25 }, (_, i) =>
-        createMockApplication({ id: `app-${i}` }),
+        createMockApplication({ id: `app-${i}` })
       );
 
       const page = 2;
@@ -66,7 +66,7 @@ describe('API Routes: /api/applications', () => {
       const applications = [
         createMockApplication({ id: 'app-001', createdAt: new Date('2025-01-01') }),
         createMockApplication({ id: 'app-002', createdAt: new Date('2025-03-01') }),
-        createMockApplication({ id: 'app-003', createdAt: new Date('2025-02-01') }),
+        createMockApplication({ id: 'app-003', createdAt: new Date('2025-02-01') })
       ];
 
       const sorted = applications.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
@@ -78,7 +78,7 @@ describe('API Routes: /api/applications', () => {
 
     it('should calculate total count', () => {
       const applications = Array.from({ length: 42 }, (_, i) =>
-        createMockApplication({ id: `app-${i}` }),
+        createMockApplication({ id: `app-${i}` })
       );
 
       expect(applications.length).toBe(42);
@@ -89,7 +89,7 @@ describe('API Routes: /api/applications', () => {
     it('should find application by id', () => {
       const applications = [
         createMockApplication({ id: 'app-001' }),
-        createMockApplication({ id: 'app-002' }),
+        createMockApplication({ id: 'app-002' })
       ];
 
       const found = applications.find(app => app.id === 'app-001');
@@ -177,7 +177,7 @@ describe('API Routes: /api/applications', () => {
       const timestamp = new Date();
       const newApplication = createMockApplication({
         createdAt: timestamp,
-        updatedAt: timestamp,
+        updatedAt: timestamp
       });
 
       expect(newApplication.updatedAt).toEqual(newApplication.createdAt);
@@ -330,7 +330,7 @@ describe('API Routes: /api/applications', () => {
         SUBMITTED: ['UNDER_REVIEW'],
         UNDER_REVIEW: ['APPROVED', 'REJECTED'],
         REJECTED: ['SUBMITTED'],
-        APPROVED: ['ACTIVE'],
+        APPROVED: ['ACTIVE']
       };
 
       const canTransition = validTransitions.DRAFT?.includes('SUBMITTED');
@@ -340,7 +340,7 @@ describe('API Routes: /api/applications', () => {
 
     it('should transition REJECTED -> SUBMITTED', () => {
       const validTransitions: Record<string, string[]> = {
-        REJECTED: ['SUBMITTED'],
+        REJECTED: ['SUBMITTED']
       };
 
       const canTransition = validTransitions.REJECTED?.includes('SUBMITTED');
@@ -350,7 +350,7 @@ describe('API Routes: /api/applications', () => {
 
     it('should not transition APPROVED -> DRAFT', () => {
       const validTransitions: Record<string, string[]> = {
-        APPROVED: ['ACTIVE'],
+        APPROVED: ['ACTIVE']
       };
 
       const canTransition = validTransitions.APPROVED?.includes('DRAFT');

@@ -36,11 +36,11 @@ router.post('/inspections/:id/report', async (req, res) => {
       decision,
       reason,
       snapshotCount,
-      submittedAt: new Date(),
+      submittedAt: new Date()
     };
 
     // TODO: Save to database and update application status
-    
+
     // Send notifications
     if (req.app.get('io')) {
       const notificationService = new InspectionNotificationService(req.app.get('io'));

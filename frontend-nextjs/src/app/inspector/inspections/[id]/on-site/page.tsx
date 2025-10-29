@@ -42,7 +42,7 @@ import { useApplicationContext, type Application } from '@/contexts/ApplicationC
 
 /**
  * On-Site Inspection Page
- * 
+ *
  * หน้าตรวจสอบฟาร์มลงพื้นที่ (Phase 6B)
  * - ให้คะแนน 8 Critical Control Points (CCPs)
  * - Total: 100 points
@@ -66,7 +66,7 @@ const OnSiteInspectionPage: React.FC = () => {
   const params = useParams();
   const applicationId = params?.id as string;
   const { applications, updateApplication } = useApplicationContext();
-  
+
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
   const [ccps, setCcps] = useState<CCP[]>([
@@ -154,7 +154,7 @@ const OnSiteInspectionPage: React.FC = () => {
   }, [applicationId, applications]);
 
   const loadApplication = () => {
-    const app = applications.find(a => a.id === applicationId);
+    const app = applications.find((a) => a.id === applicationId);
     if (app) {
       setApplication(app);
       setLoading(false);
@@ -164,26 +164,18 @@ const OnSiteInspectionPage: React.FC = () => {
   };
 
   const handleScoreChange = (ccpId: string, newScore: number) => {
-    setCcps(prev =>
-      prev.map(ccp =>
-        ccp.id === ccpId ? { ...ccp, score: newScore } : ccp
-      )
-    );
+    setCcps((prev) => prev.map((ccp) => (ccp.id === ccpId ? { ...ccp, score: newScore } : ccp)));
   };
 
   const handleNotesChange = (ccpId: string, notes: string) => {
-    setCcps(prev =>
-      prev.map(ccp =>
-        ccp.id === ccpId ? { ...ccp, notes } : ccp
-      )
-    );
+    setCcps((prev) => prev.map((ccp) => (ccp.id === ccpId ? { ...ccp, notes } : ccp)));
   };
 
   const handlePhotoUpload = (ccpId: string) => {
     // Mock photo upload
     const mockPhotoUrl = `https://via.placeholder.com/200x150?text=CCP+Photo`;
-    setCcps(prev =>
-      prev.map(ccp =>
+    setCcps((prev) =>
+      prev.map((ccp) =>
         ccp.id === ccpId ? { ...ccp, photos: [...ccp.photos, mockPhotoUrl] } : ccp
       )
     );
@@ -191,7 +183,7 @@ const OnSiteInspectionPage: React.FC = () => {
   };
 
   const handleOpenConfirm = () => {
-    const allScored = ccps.every(ccp => ccp.score > 0);
+    const allScored = ccps.every((ccp) => ccp.score > 0);
     if (!allScored) {
       alert('กรุณาให้คะแนนทุก CCP ก่อนส่งรายงาน');
       return;
@@ -267,7 +259,9 @@ const OnSiteInspectionPage: React.FC = () => {
 
   if (loading || !application) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -277,11 +271,7 @@ const OnSiteInspectionPage: React.FC = () => {
     <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Header */}
       <Box sx={{ mb: 4 }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => router.back()}
-          sx={{ mb: 2 }}
-        >
+        <Button startIcon={<ArrowBackIcon />} onClick={() => router.back()} sx={{ mb: 2 }}>
           กลับ
         </Button>
         <Typography variant="h4" component="h1" gutterBottom fontWeight="bold">
@@ -319,7 +309,11 @@ const OnSiteInspectionPage: React.FC = () => {
                 color={getPassColor()}
                 sx={{ height: 10, borderRadius: 1 }}
               />
-              <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: 'block', textAlign: 'right' }}>
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ mt: 0.5, display: 'block', textAlign: 'right' }}
+              >
                 {scorePercentage.toFixed(1)}%
               </Typography>
             </Box>
@@ -355,7 +349,13 @@ const OnSiteInspectionPage: React.FC = () => {
                 <LinearProgress
                   variant="determinate"
                   value={(ccp.score / ccp.maxScore) * 100}
-                  color={ccp.score >= ccp.maxScore * 0.8 ? 'success' : ccp.score >= ccp.maxScore * 0.6 ? 'warning' : 'error'}
+                  color={
+                    ccp.score >= ccp.maxScore * 0.8
+                      ? 'success'
+                      : ccp.score >= ccp.maxScore * 0.6
+                        ? 'warning'
+                        : 'error'
+                  }
                   sx={{ height: 4, borderRadius: 1 }}
                 />
               </Box>
@@ -394,7 +394,15 @@ const OnSiteInspectionPage: React.FC = () => {
             {ccps.map((ccp, index) => (
               <Accordion key={ccp.id} sx={{ mb: 2 }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', mr: 2 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      width: '100%',
+                      mr: 2,
+                    }}
+                  >
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Typography variant="body1" fontWeight="bold">
                         {ccp.name}
@@ -430,11 +438,21 @@ const OnSiteInspectionPage: React.FC = () => {
                         step={1}
                         marks
                         valueLabelDisplay="auto"
-                        color={ccp.score >= ccp.maxScore * 0.8 ? 'success' : ccp.score >= ccp.maxScore * 0.6 ? 'warning' : 'error'}
+                        color={
+                          ccp.score >= ccp.maxScore * 0.8
+                            ? 'success'
+                            : ccp.score >= ccp.maxScore * 0.6
+                              ? 'warning'
+                              : 'error'
+                        }
                       />
                       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="caption" color="text.secondary">0</Typography>
-                        <Typography variant="caption" color="text.secondary">{ccp.maxScore}</Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          0
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {ccp.maxScore}
+                        </Typography>
                       </Box>
                     </Box>
 
@@ -478,7 +496,12 @@ const OnSiteInspectionPage: React.FC = () => {
                                   alt={`CCP ${index + 1} Photo ${photoIndex + 1}`}
                                   style={{ width: '100%', height: 'auto', borderRadius: 4 }}
                                 />
-                                <Typography variant="caption" color="text.secondary" display="block" textAlign="center">
+                                <Typography
+                                  variant="caption"
+                                  color="text.secondary"
+                                  display="block"
+                                  textAlign="center"
+                                >
                                   รูปที่ {photoIndex + 1}
                                 </Typography>
                               </Paper>
@@ -559,9 +582,7 @@ const OnSiteInspectionPage: React.FC = () => {
             <Typography variant="body2" fontWeight="bold">
               คะแนนรวม: {totalScore}/{maxTotalScore} คะแนน
             </Typography>
-            <Typography variant="body2">
-              สถานะ: {getPassLabel()}
-            </Typography>
+            <Typography variant="body2">สถานะ: {getPassLabel()}</Typography>
           </Alert>
           <Typography variant="body2" paragraph>
             คุณกำลังส่งรายงานการตรวจสอบฟาร์ม - ระบบจะส่งไปขั้นตอนอนุมัติ (Step 7: PENDING_APPROVAL)
@@ -573,7 +594,10 @@ const OnSiteInspectionPage: React.FC = () => {
             {ccps.map((ccp) => (
               <ListItem key={ccp.id}>
                 <ListItemIcon>
-                  <CheckCircleIcon color={ccp.score >= ccp.maxScore * 0.8 ? 'success' : 'warning'} fontSize="small" />
+                  <CheckCircleIcon
+                    color={ccp.score >= ccp.maxScore * 0.8 ? 'success' : 'warning'}
+                    fontSize="small"
+                  />
                 </ListItemIcon>
                 <ListItemText
                   primary={`${ccp.name.split('.')[1]} - ${ccp.score}/${ccp.maxScore}`}

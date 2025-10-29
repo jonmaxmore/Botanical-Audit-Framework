@@ -28,15 +28,15 @@ let totalChanges = 0;
 
 FILES_TO_UPDATE.forEach(file => {
   const filePath = path.join(__dirname, '..', file);
-  
+
   if (!fs.existsSync(filePath)) {
     console.log(`⏭️  Skipping ${file} (not found)`);
     return;
   }
-  
+
   let content = fs.readFileSync(filePath, 'utf8');
   let fileChanges = 0;
-  
+
   REPLACEMENTS.forEach(({ find, replace }) => {
     const matches = content.match(find);
     if (matches) {
@@ -44,7 +44,7 @@ FILES_TO_UPDATE.forEach(file => {
       content = content.replace(find, replace);
     }
   });
-  
+
   if (fileChanges > 0) {
     console.log(`✅ ${file}: ${fileChanges} changes`);
     totalChanges += fileChanges;

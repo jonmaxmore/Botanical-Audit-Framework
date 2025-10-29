@@ -5,12 +5,14 @@
 ### 1. 👨‍🌾 **FARMER (เกษตรกร)**
 
 #### สิ่งที่ต้องเพิ่ม:
+
 - ✅ **Video Call Component** - เข้าร่วม video call กับ inspector
 - ✅ **Schedule Confirmation** - ยืนยัน/ปฏิเสธการนัดหมาย
 - ✅ **Notification Panel** - รับแจ้งเตือนการนัดหมาย
 - ✅ **Inspection Status** - ดูสถานะการตรวจสอบ
 
 #### Components ที่ต้องสร้าง:
+
 ```
 apps/farmer-portal/
 ├── components/
@@ -23,6 +25,7 @@ apps/farmer-portal/
 ```
 
 #### API Endpoints ที่ใช้:
+
 - `POST /api/video/inspections/:id/video-token` - Get video token
 - `GET /api/inspections/:id/schedule` - View schedule
 - `PUT /api/inspections/:id/schedule/confirm` - Confirm schedule
@@ -33,11 +36,13 @@ apps/farmer-portal/
 ### 2. 📋 **REVIEWER (ผู้ตรวจสอบเอกสาร)**
 
 #### สิ่งที่ต้องเพิ่ม:
+
 - ✅ **Assign Inspector** - มอบหมายงานให้ inspector
 - ✅ **View Inspection Reports** - ดูรายงานการตรวจสอบ
 - ✅ **Track Progress** - ติดตามความคืบหน้า
 
 #### Components ที่ต้องสร้าง:
+
 ```
 apps/admin-portal/
 ├── components/
@@ -48,6 +53,7 @@ apps/admin-portal/
 ```
 
 #### API Endpoints ที่ต้องเพิ่ม:
+
 - `POST /api/applications/:id/assign-inspector` - Assign inspector
 - `GET /api/applications/:id/inspection-report` - Get report
 - `GET /api/applications/:id/inspection-progress` - Track progress
@@ -57,11 +63,13 @@ apps/admin-portal/
 ### 3. ✅ **APPROVER (ผู้อนุมัติ)**
 
 #### สิ่งที่ต้องเพิ่ม:
+
 - ✅ **View Inspection Results** - ดูผลการตรวจสอบ
 - ✅ **View Snapshots** - ดูภาพถ่ายจากการตรวจสอบ
 - ✅ **Final Decision** - ตัดสินใจอนุมัติ/ปฏิเสธ
 
 #### Components ที่ต้องสร้าง:
+
 ```
 apps/admin-portal/
 ├── components/
@@ -72,6 +80,7 @@ apps/admin-portal/
 ```
 
 #### API Endpoints ที่ใช้:
+
 - `GET /api/inspections/:id/report` - Get inspection report
 - `GET /api/inspections/:id/snapshots` - Get snapshots
 - `POST /api/applications/:id/final-decision` - Final approval
@@ -109,6 +118,7 @@ apps/admin-portal/
 ## 🔧 Backend Updates Required
 
 ### 1. Application Status Updates
+
 ```javascript
 // apps/backend/routes/application-status.routes.js
 - Update status when inspector assigned
@@ -118,6 +128,7 @@ apps/admin-portal/
 ```
 
 ### 2. Notification Integration
+
 ```javascript
 // apps/backend/services/inspection-notification.service.js
 - Notify farmer when schedule created
@@ -128,6 +139,7 @@ apps/admin-portal/
 ```
 
 ### 3. Database Schema
+
 ```javascript
 // Add to Application model
 {
@@ -152,24 +164,28 @@ apps/admin-portal/
 ## 📝 Priority Implementation Order
 
 ### Phase 4: Farmer Integration (HIGH PRIORITY)
+
 1. ✅ FarmerVideoCallRoom component
 2. ✅ ScheduleConfirmation component
 3. ✅ InspectionNotifications component
 4. ✅ Backend: Schedule confirmation endpoint
 
 ### Phase 5: Reviewer Integration (MEDIUM PRIORITY)
+
 1. ✅ AssignInspector component
 2. ✅ InspectionReports viewer
 3. ✅ ProgressTracker component
 4. ✅ Backend: Assignment endpoints
 
 ### Phase 6: Approver Integration (MEDIUM PRIORITY)
+
 1. ✅ InspectionResults viewer
 2. ✅ SnapshotViewer component
 3. ✅ FinalDecision component
 4. ✅ Backend: Final decision endpoint
 
 ### Phase 7: Complete Integration (HIGH PRIORITY)
+
 1. ✅ Application status workflow
 2. ✅ Complete notification flow
 3. ✅ Database schema updates
@@ -180,22 +196,26 @@ apps/admin-portal/
 ## 🎯 Missing Components Summary
 
 ### Farmer Portal (4 components)
+
 - [ ] FarmerVideoCallRoom.tsx
 - [ ] ScheduleConfirmation.tsx
 - [ ] InspectionStatus.tsx
 - [ ] InspectionNotifications.tsx
 
 ### Admin Portal - Reviewer (3 components)
+
 - [ ] AssignInspector.tsx
 - [ ] InspectionReports.tsx
 - [ ] ProgressTracker.tsx
 
 ### Admin Portal - Approver (3 components)
+
 - [ ] InspectionResults.tsx
 - [ ] SnapshotViewer.tsx
 - [ ] FinalDecision.tsx
 
 ### Backend APIs (8 endpoints)
+
 - [ ] POST /api/applications/:id/assign-inspector
 - [ ] GET /api/applications/:id/inspection-progress
 - [ ] POST /api/applications/:id/final-decision
@@ -212,7 +232,6 @@ apps/admin-portal/
 1. **Start with Farmer Integration** (Most Critical)
    - Farmers need to confirm schedules
    - Farmers need to join video calls
-   
 2. **Then Reviewer Integration**
    - Reviewers need to assign inspectors
    - Reviewers need to track progress
@@ -229,6 +248,7 @@ apps/admin-portal/
 ---
 
 **Total Estimated Work:**
+
 - Components: 10
 - API Endpoints: 8
 - Database Updates: 2 models

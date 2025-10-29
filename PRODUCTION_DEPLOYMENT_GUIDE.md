@@ -5,6 +5,7 @@ Complete guide for deploying the Botanical Audit Framework to production with Do
 ## 🏗️ Architecture Overview
 
 The GACP Platform consists of:
+
 - **3 Next.js Portals**: Farmer (3001), Admin (3002), Certificate (3003)
 - **Backend API**: Node.js/Express (3004)
 - **Databases**: MongoDB (27017), Redis (6379)
@@ -13,12 +14,14 @@ The GACP Platform consists of:
 ## 📋 Prerequisites
 
 ### Required Software
+
 - Docker v24.0+
 - Docker Compose v2.20+
 - Domain with DNS control
 - SSL certificates (Let's Encrypt recommended)
 
 ### System Requirements
+
 - **Production Server**: 4 CPU cores, 8GB RAM, 100GB SSD
 - **Minimum**: 2 CPU cores, 4GB RAM, 50GB SSD
 - **OS**: Ubuntu 22.04 LTS or compatible Linux
@@ -26,12 +29,14 @@ The GACP Platform consists of:
 ## 🚀 Quick Start (Production)
 
 ### 1. Clone Repository
+
 ```bash
 git clone https://github.com/your-org/botanical-audit-framework.git
 cd botanical-audit-framework
 ```
 
 ### 2. Configure Environment
+
 ```bash
 # Copy environment template
 cp .env.production.template .env.production
@@ -48,7 +53,9 @@ nano .env.production
 ```
 
 ### 3. Update Domain Configuration
+
 Edit `.env.production`:
+
 ```env
 DOMAIN=yourdomain.com
 FARMER_API_URL=https://api.yourdomain.com
@@ -58,7 +65,9 @@ ALLOWED_ORIGINS=https://farmer.yourdomain.com,https://admin.yourdomain.com,https
 ```
 
 ### 4. Configure DNS Records
+
 Add these A/CNAME records to your DNS:
+
 ```
 farmer.yourdomain.com    → Your Server IP
 admin.yourdomain.com     → Your Server IP
@@ -69,6 +78,7 @@ api.yourdomain.com       → Your Server IP
 ### 5. Set Up SSL Certificates
 
 **Option A: Let's Encrypt (Recommended)**
+
 ```bash
 # Install certbot
 sudo apt install certbot
@@ -89,6 +99,7 @@ sudo cp /etc/letsencrypt/live/farmer.yourdomain.com/privkey.pem nginx/ssl/
 ```
 
 **Option B: Self-Signed (Development/Testing)**
+
 ```bash
 mkdir -p nginx/ssl
 cd nginx/ssl
@@ -101,6 +112,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 ```
 
 ### 6. Validate Configuration
+
 ```bash
 # Check Docker Compose syntax
 docker-compose -f docker-compose.prod.yml config
@@ -111,6 +123,7 @@ docker-compose -f docker-compose.prod.yml config | grep -i "CHANGE_ME"
 ```
 
 ### 7. Deploy Services
+
 ```bash
 # Pull/build images
 docker-compose -f docker-compose.prod.yml build
@@ -126,6 +139,7 @@ docker-compose -f docker-compose.prod.yml logs -f
 ```
 
 ### 8. Verify Deployment
+
 ```bash
 # Health checks
 curl -f http://localhost:3001/api/health  # Farmer Portal
@@ -143,6 +157,7 @@ curl -f https://api.yourdomain.com/api/monitoring/health
 ## 📊 Monitoring & Maintenance
 
 ### View Service Status
+
 ```bash
 # All services
 docker-compose -f docker-compose.prod.yml ps
@@ -155,6 +170,7 @@ docker stats
 ```
 
 ### View Logs
+
 ```bash
 # All services
 docker-compose -f docker-compose.prod.yml logs -f
@@ -167,6 +183,7 @@ docker-compose -f docker-compose.prod.yml logs --since 30m farmer-portal
 ```
 
 ### Restart Services
+
 ```bash
 # Restart all services
 docker-compose -f docker-compose.prod.yml restart
@@ -179,6 +196,7 @@ docker-compose -f docker-compose.prod.yml up -d --build gacp-backend
 ```
 
 ### Update Application
+
 ```bash
 # Pull latest code
 git pull origin main
@@ -195,6 +213,7 @@ docker-compose -f docker-compose.prod.yml ps
 ## 🔒 Security Hardening
 
 ### 1. Firewall Configuration
+
 ```bash
 # Allow only necessary ports
 sudo ufw allow 80/tcp   # HTTP
@@ -207,12 +226,14 @@ sudo ufw status
 ```
 
 ### 2. SSL/TLS Best Practices
+
 - Use TLS 1.2+ only (configured in nginx.production.conf)
 - Enable HTTP/2 (configured)
 - Implement HSTS headers
 - Regular certificate renewal (Let's Encrypt auto-renews)
 
 ### 3. Database Security
+
 - Strong passwords (32+ characters)
 - MongoDB authentication enabled
 - Redis password protection
@@ -220,6 +241,7 @@ sudo ufw status
 - Regular backups
 
 ### 4. Application Security
+
 - JWT secrets rotation (every 90 days)
 - Session timeout configuration
 - Rate limiting (configured in Nginx)
@@ -229,6 +251,7 @@ sudo ufw status
 ## 💾 Backup & Recovery
 
 ### Manual Backup
+
 ```bash
 # MongoDB backup
 docker exec gacp-mongodb mongodump \
@@ -245,6 +268,7 @@ docker cp gacp-backend:/app/uploads ./backups/uploads-$(date +%Y%m%d)
 ```
 
 ### Restore from Backup
+
 ```bash
 # Stop services
 docker-compose -f docker-compose.prod.yml stop
@@ -266,6 +290,7 @@ docker-compose -f docker-compose.prod.yml start
 ## 🔧 Troubleshooting
 
 ### Service Won't Start
+
 ```bash
 # Check logs for errors
 docker-compose -f docker-compose.prod.yml logs gacp-backend
@@ -282,6 +307,7 @@ docker-compose -f docker-compose.prod.yml exec gacp-backend \
 ```
 
 ### High Memory Usage
+
 ```bash
 # Check resource usage
 docker stats
@@ -297,6 +323,7 @@ docker-compose -f docker-compose.prod.yml up -d
 ```
 
 ### SSL Certificate Issues
+
 ```bash
 # Verify certificate expiry
 openssl x509 -in nginx/ssl/fullchain.pem -noout -dates
@@ -312,6 +339,7 @@ docker-compose -f docker-compose.prod.yml exec nginx nginx -s reload
 ```
 
 ### Database Connection Errors
+
 ```bash
 # Test MongoDB connection
 docker-compose -f docker-compose.prod.yml exec mongodb \
@@ -327,13 +355,17 @@ docker network inspect botanical-audit-framework_gacp-network
 ## 📈 Performance Optimization
 
 ### Enable HTTP/2
+
 Already configured in `nginx.production.conf`:
+
 ```nginx
 listen 443 ssl http2;
 ```
 
 ### Enable Gzip Compression
+
 Already configured in `nginx.production.conf`:
+
 ```nginx
 gzip on;
 gzip_comp_level 6;
@@ -341,13 +373,17 @@ gzip_types text/plain text/css application/json application/javascript;
 ```
 
 ### Redis Caching
+
 Ensure Redis is used for session storage and caching:
+
 ```env
 REDIS_URL=redis://:${REDIS_PASSWORD}@redis:6379
 ```
 
 ### Database Indexing
+
 MongoDB indexes should be created in `mongo-init.js`:
+
 ```javascript
 db.users.createIndex({ email: 1 }, { unique: true });
 db.certificates.createIndex({ certificateId: 1 }, { unique: true });
@@ -357,6 +393,7 @@ db.inspections.createIndex({ createdAt: -1 });
 ## 🚨 Emergency Procedures
 
 ### Complete System Failure
+
 ```bash
 # Stop all services
 docker-compose -f docker-compose.prod.yml down
@@ -376,6 +413,7 @@ docker-compose -f docker-compose.prod.yml up -d
 ```
 
 ### Database Corruption
+
 ```bash
 # Stop application servers
 docker-compose -f docker-compose.prod.yml stop farmer-portal admin-portal certificate-portal gacp-backend
@@ -416,6 +454,7 @@ Before deploying to production:
 ## 🔄 CI/CD Pipeline
 
 The project includes GitHub Actions workflows:
+
 - **Lint & Test**: Automatic on all PRs
 - **Build**: Creates artifacts for all apps
 - **Security Scan**: Snyk + npm audit

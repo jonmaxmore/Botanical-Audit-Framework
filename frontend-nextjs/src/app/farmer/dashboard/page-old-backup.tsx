@@ -18,17 +18,17 @@ import {
 } from '@/lib/chart-config';
 
 // Dynamic imports for charts (code splitting)
-const Line = dynamic(() => import('react-chartjs-2').then(mod => mod.Line), {
+const Line = dynamic(() => import('react-chartjs-2').then((mod) => mod.Line), {
   ssr: false,
   loading: () => <Skeleton variant="rectangular" width="100%" height={300} />,
 });
 
-const Bar = dynamic(() => import('react-chartjs-2').then(mod => mod.Bar), {
+const Bar = dynamic(() => import('react-chartjs-2').then((mod) => mod.Bar), {
   ssr: false,
   loading: () => <Skeleton variant="rectangular" width="100%" height={300} />,
 });
 
-const Doughnut = dynamic(() => import('react-chartjs-2').then(mod => mod.Doughnut), {
+const Doughnut = dynamic(() => import('react-chartjs-2').then((mod) => mod.Doughnut), {
   ssr: false,
   loading: () => <Skeleton variant="circular" width={200} height={200} />,
 });

@@ -24,7 +24,7 @@ const GACP_REQUIREMENTS = {
     name: 'การประกันคุณภาพ',
     description: 'บันทึกมาตรการควบคุมการผลิตในแต่ละขั้นตอน',
     logTypes: ['quality_control', 'process_monitoring', 'batch_testing'],
-    required: true,
+    required: true
   },
 
   // 2. สุขลักษณะส่วนบุคคล (Personal Hygiene)
@@ -33,7 +33,7 @@ const GACP_REQUIREMENTS = {
     name: 'สุขลักษณะส่วนบุคคล',
     description: 'บันทึกการฝึกอบรมพนักงานและการตรวจสุขภาพ',
     logTypes: ['staff_training', 'health_checkup', 'hygiene_compliance'],
-    required: true,
+    required: true
   },
 
   // 3. บันทึกเอกสาร (Documentation)
@@ -42,7 +42,7 @@ const GACP_REQUIREMENTS = {
     name: 'บันทึกเอกสาร',
     description: 'สมุดบันทึกหลักสำหรับกิจกรรมทั้งหมด',
     logTypes: ['daily_activities', 'batch_records', 'document_control'],
-    required: true,
+    required: true
   },
 
   // 4. อุปกรณ์ (Equipment)
@@ -51,7 +51,7 @@ const GACP_REQUIREMENTS = {
     name: 'อุปกรณ์',
     description: 'บันทึกการดูแลรักษาและสอบเทียบอุปกรณ์',
     logTypes: ['equipment_maintenance', 'calibration', 'cleaning_schedule'],
-    required: true,
+    required: true
   },
 
   // 5. พื้นที่ปลูก (Site)
@@ -60,7 +60,7 @@ const GACP_REQUIREMENTS = {
     name: 'พื้นที่ปลูก',
     description: 'บันทึกผลการวิเคราะห์ดินและการจัดการพื้นที่',
     logTypes: ['soil_analysis', 'site_management', 'environmental_monitoring'],
-    required: true,
+    required: true
   },
 
   // 6. น้ำ (Water)
@@ -69,7 +69,7 @@ const GACP_REQUIREMENTS = {
     name: 'น้ำ',
     description: 'บันทึกคุณภาพน้ำและการใช้น้ำ',
     logTypes: ['water_quality', 'irrigation', 'water_usage'],
-    required: true,
+    required: true
   },
 
   // 7. ปุ๋ย (Fertilizer)
@@ -78,7 +78,7 @@ const GACP_REQUIREMENTS = {
     name: 'ปุ๋ย',
     description: 'บันทึกการใช้ปุ๋ยและสารอินทรีย์',
     logTypes: ['fertilizer_usage', 'organic_inputs', 'nutrient_management'],
-    required: true,
+    required: true
   },
 
   // 8. เมล็ดพันธุ์และส่วนขยายพันธุ์ (Seeds & Propagation)
@@ -87,7 +87,7 @@ const GACP_REQUIREMENTS = {
     name: 'เมล็ดพันธุ์',
     description: 'บันทึกแหล่งที่มาและคุณภาพพันธุ์',
     logTypes: ['seed_source', 'propagation', 'variety_records'],
-    required: true,
+    required: true
   },
 
   // 9. การเพาะปลูก (Cultivation)
@@ -96,7 +96,7 @@ const GACP_REQUIREMENTS = {
     name: 'การเพาะปลูก',
     description: 'บันทึกกิจกรรมการปลูกและ IPM',
     logTypes: ['planting', 'crop_care', 'ipm_activities'],
-    required: true,
+    required: true
   },
 
   // 10. การเก็บเกี่ยว (Harvesting)
@@ -105,7 +105,7 @@ const GACP_REQUIREMENTS = {
     name: 'การเก็บเกี่ยว',
     description: 'บันทึกการเก็บเกี่ยวและ Batch Number',
     logTypes: ['harvest_record', 'batch_creation', 'yield_tracking'],
-    required: true,
+    required: true
   },
 
   // 11. กระบวนการแปรรูปเบื้องต้น (Primary Processing)
@@ -114,7 +114,7 @@ const GACP_REQUIREMENTS = {
     name: 'การแปรรูป',
     description: 'บันทึกขั้นตอนการแปรรูปและควบคุมคุณภาพ',
     logTypes: ['drying', 'curing', 'processing_control'],
-    required: true,
+    required: true
   },
 
   // 12. สถานที่ (Premises)
@@ -123,7 +123,7 @@ const GACP_REQUIREMENTS = {
     name: 'สถานที่',
     description: 'บันทึกการดูแลรักษาสถานที่และความสะอาด',
     logTypes: ['facility_maintenance', 'cleaning', 'security'],
-    required: true,
+    required: true
   },
 
   // 13. การบรรจุและการติดฉลาก (Packaging & Labeling)
@@ -132,7 +132,7 @@ const GACP_REQUIREMENTS = {
     name: 'การบรรจุและฉลาก',
     description: 'บันทึกการบรรจุและสร้างฉลากสินค้า',
     logTypes: ['packaging', 'labeling', 'product_coding'],
-    required: true,
+    required: true
   },
 
   // 14. การจัดเก็บและการขนย้าย (Storage & Transportation)
@@ -141,8 +141,8 @@ const GACP_REQUIREMENTS = {
     name: 'การจัดเก็บและขนส่ง',
     description: 'บันทึกสภาพแวดล้อมการเก็บและการขนส่ง',
     logTypes: ['storage_conditions', 'inventory', 'transportation'],
-    required: true,
-  },
+    required: true
+  }
 };
 
 // Batch Management System
@@ -174,7 +174,7 @@ class BatchManager {
       indica: 'IND',
       sativa: 'SAT',
       hybrid: 'HYB',
-      ruderalis: 'RUD',
+      ruderalis: 'RUD'
     };
 
     return varietyMap[variety.toLowerCase()] || 'UNK';
@@ -188,7 +188,7 @@ class BatchManager {
     const batchNumber = this.generateBatchNumber(
       farmId,
       batchData.plantVariety,
-      batchData.harvestDate,
+      batchData.harvestDate
     );
 
     const batch = {
@@ -229,7 +229,7 @@ class BatchManager {
       // Metadata
       createdAt: new Date(),
       updatedAt: new Date(),
-      createdBy: batchData.createdBy,
+      createdBy: batchData.createdBy
     };
 
     // Generate QR Code for traceability
@@ -244,8 +244,8 @@ class BatchManager {
       data: {
         batchNumber,
         plantVariety: batchData.plantVariety,
-        harvestDate: batchData.harvestDate,
-      },
+        harvestDate: batchData.harvestDate
+      }
     });
 
     this.batches.set(batchId, batch);
@@ -265,7 +265,7 @@ class BatchManager {
       variety: batch.plantVariety,
       harvestDate: batch.harvestDate.toISOString(),
       verificationUrl: `https://gacp-platform.com/verify/${batch.batchNumber}`,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
 
     try {
@@ -273,7 +273,7 @@ class BatchManager {
       return {
         data: qrData,
         imageUrl: qrCodeUrl,
-        generatedAt: new Date(),
+        generatedAt: new Date()
       };
     } catch (error) {
       console.error('QR Code generation failed:', error);
@@ -300,7 +300,7 @@ class BatchManager {
       timestamp: new Date(),
       actor,
       updates: Object.keys(updates),
-      data: updates,
+      data: updates
     });
 
     this.batches.set(batchId, batch);
@@ -407,7 +407,7 @@ class GACPDigitalLogbook extends EventEmitter {
       // Metadata
       createdAt: new Date(),
       updatedAt: new Date(),
-      isImmutable: false, // Will be set to true after approval
+      isImmutable: false // Will be set to true after approval
     };
 
     // Validate compliance
@@ -456,7 +456,7 @@ class GACPDigitalLogbook extends EventEmitter {
       return {
         compliant: false,
         status: 'non-compliant',
-        reason: 'ไม่พบข้อกำหนด GACP ที่ระบุ',
+        reason: 'ไม่พบข้อกำหนด GACP ที่ระบุ'
       };
     }
 
@@ -489,7 +489,7 @@ class GACPDigitalLogbook extends EventEmitter {
           logEntry.data.applicationRate &&
           logEntry.data.registrationNumber
         );
-      },
+      }
     };
 
     const validator = validationRules[requirement.id];
@@ -497,14 +497,14 @@ class GACPDigitalLogbook extends EventEmitter {
       return {
         compliant: false,
         status: 'non-compliant',
-        reason: `ข้อมูลไม่ครบถ้วนตามข้อกำหนด ${requirement.name}`,
+        reason: `ข้อมูลไม่ครบถ้วนตามข้อกำหนด ${requirement.name}`
       };
     }
 
     return {
       compliant: true,
       status: 'compliant',
-      reason: null,
+      reason: null
     };
   }
 
@@ -530,9 +530,9 @@ class GACPDigitalLogbook extends EventEmitter {
         soilConditions: plantingData.soilConditions,
         weatherConditions: plantingData.weatherConditions,
         plantingMethod: plantingData.plantingMethod,
-        spacingDistance: plantingData.spacingDistance,
+        spacingDistance: plantingData.spacingDistance
       },
-      photos: plantingData.photos || [],
+      photos: plantingData.photos || []
     };
 
     return await this.createLogEntry(farmId, logData);
@@ -559,8 +559,8 @@ class GACPDigitalLogbook extends EventEmitter {
         waterQuality: irrigationData.waterQuality,
         pH: irrigationData.pH,
         EC: irrigationData.EC,
-        qualityParameters: irrigationData.qualityParameters,
-      },
+        qualityParameters: irrigationData.qualityParameters
+      }
     };
 
     return await this.createLogEntry(farmId, logData);
@@ -589,9 +589,9 @@ class GACPDigitalLogbook extends EventEmitter {
         applicationMethod: fertilizerData.applicationMethod,
         targetCrop: fertilizerData.targetCrop,
         cropStage: fertilizerData.cropStage,
-        weatherConditions: fertilizerData.weatherConditions,
+        weatherConditions: fertilizerData.weatherConditions
       },
-      documents: fertilizerData.registrationDocuments || [],
+      documents: fertilizerData.registrationDocuments || []
     };
 
     return await this.createLogEntry(farmId, logData);
@@ -619,9 +619,9 @@ class GACPDigitalLogbook extends EventEmitter {
         organicSubstance: ipmData.organicSubstance,
         applicationRate: ipmData.applicationRate,
         safetyPeriod: ipmData.safetyPeriod,
-        effectivenessRating: ipmData.effectivenessRating,
+        effectivenessRating: ipmData.effectivenessRating
       },
-      photos: ipmData.photos || [],
+      photos: ipmData.photos || []
     };
 
     return await this.createLogEntry(farmId, logData);
@@ -644,7 +644,7 @@ class GACPDigitalLogbook extends EventEmitter {
       harvestMethod: harvestData.harvestMethod,
       harvestWeather: harvestData.weatherConditions,
       createdBy: harvestData.recordedBy,
-      location: harvestData.location,
+      location: harvestData.location
     });
 
     // Create harvest log
@@ -668,13 +668,13 @@ class GACPDigitalLogbook extends EventEmitter {
           weather: harvestData.weatherConditions,
           temperature: harvestData.temperature,
           humidity: harvestData.humidity,
-          timeOfDay: harvestData.timeOfDay,
+          timeOfDay: harvestData.timeOfDay
         },
         qualityObservations: harvestData.qualityObservations,
         plantHealth: harvestData.plantHealth,
-        maturityLevel: harvestData.maturityLevel,
+        maturityLevel: harvestData.maturityLevel
       },
-      photos: harvestData.photos || [],
+      photos: harvestData.photos || []
     };
 
     const harvestLog = await this.createLogEntry(farmId, logData);
@@ -683,14 +683,14 @@ class GACPDigitalLogbook extends EventEmitter {
     await this.batchManager.updateBatch(
       batch.id,
       {
-        harvestLogId: harvestLog.id,
+        harvestLogId: harvestLog.id
       },
-      harvestData.recordedBy,
+      harvestData.recordedBy
     );
 
     return {
       harvestLog,
-      batch,
+      batch
     };
   }
 
@@ -714,8 +714,8 @@ class GACPDigitalLogbook extends EventEmitter {
         initialMoisture: processingData.initialMoisture,
         finalMoisture: processingData.finalMoisture,
         qualityParameters: processingData.qualityParameters,
-        yieldLoss: processingData.yieldLoss,
-      },
+        yieldLoss: processingData.yieldLoss
+      }
     };
 
     const processingLog = await this.createLogEntry(farmId, logData);
@@ -730,9 +730,9 @@ class GACPDigitalLogbook extends EventEmitter {
             processingLogId: processingLog.id,
             dryingMethod: processingData.processingMethod,
             dryingDuration: processingData.duration,
-            finalMoisture: processingData.finalMoisture,
+            finalMoisture: processingData.finalMoisture
           },
-          processingData.recordedBy,
+          processingData.recordedBy
         );
       }
     }
@@ -763,10 +763,10 @@ class GACPDigitalLogbook extends EventEmitter {
           harvestDate: packagingData.harvestDate,
           packagingDate: packagingData.packagingDate,
           expiryDate: packagingData.expiryDate,
-          storageInstructions: packagingData.storageInstructions,
+          storageInstructions: packagingData.storageInstructions
         },
-        qrCodes: packagingData.qrCodes || [],
-      },
+        qrCodes: packagingData.qrCodes || []
+      }
     };
 
     return await this.createLogEntry(farmId, logData);
@@ -823,7 +823,7 @@ class GACPDigitalLogbook extends EventEmitter {
         farmId: batch.farmId,
         variety: batch.plantVariety,
         harvestDate: batch.harvestDate,
-        yieldAmount: batch.yieldAmount,
+        yieldAmount: batch.yieldAmount
       },
 
       seedToSaleChain: [
@@ -831,42 +831,42 @@ class GACPDigitalLogbook extends EventEmitter {
           stage: 'seed_source',
           date: batch.plantingDate,
           description: `เมล็ดพันธุ์จาก: ${batch.seedSource}`,
-          logs: batchLogs.filter(log => log.requirement === 'SEEDS'),
+          logs: batchLogs.filter(log => log.requirement === 'SEEDS')
         },
         {
           stage: 'planting',
           date: batch.plantingDate,
           description: `ปลูกพันธุ์ ${batch.plantVariety}`,
-          logs: batchLogs.filter(log => log.logType === 'planting'),
+          logs: batchLogs.filter(log => log.logType === 'planting')
         },
         {
           stage: 'cultivation',
           description: 'การดูแลรักษา',
           logs: batchLogs.filter(log =>
-            ['irrigation', 'fertilizer_usage', 'ipm_activities'].includes(log.logType),
-          ),
+            ['irrigation', 'fertilizer_usage', 'ipm_activities'].includes(log.logType)
+          )
         },
         {
           stage: 'harvesting',
           date: batch.harvestDate,
           description: 'การเก็บเกี่ยว',
-          logs: batchLogs.filter(log => log.logType === 'harvest_record'),
+          logs: batchLogs.filter(log => log.logType === 'harvest_record')
         },
         {
           stage: 'processing',
           description: 'การแปรรูป',
-          logs: batchLogs.filter(log => log.requirement === 'PROCESSING'),
+          logs: batchLogs.filter(log => log.requirement === 'PROCESSING')
         },
         {
           stage: 'packaging',
           description: 'การบรรจุ',
-          logs: batchLogs.filter(log => log.requirement === 'PACKAGING'),
-        },
+          logs: batchLogs.filter(log => log.requirement === 'PACKAGING')
+        }
       ],
 
       complianceStatus: this.checkBatchCompliance(batchLogs),
       qrCode: batch.qrCode,
-      generatedAt: new Date(),
+      generatedAt: new Date()
     };
 
     return traceabilityReport;
@@ -881,7 +881,7 @@ class GACPDigitalLogbook extends EventEmitter {
     const compliance = {
       overall: 'compliant',
       details: {},
-      score: 0,
+      score: 0
     };
 
     for (const req of requiredRequirements) {
@@ -892,7 +892,7 @@ class GACPDigitalLogbook extends EventEmitter {
         required: true,
         totalLogs: reqLogs.length,
         compliantLogs: compliantLogs.length,
-        status: compliantLogs.length > 0 ? 'compliant' : 'non-compliant',
+        status: compliantLogs.length > 0 ? 'compliant' : 'non-compliant'
       };
 
       if (compliantLogs.length === 0) {
@@ -903,7 +903,7 @@ class GACPDigitalLogbook extends EventEmitter {
     // Calculate compliance score
     const totalCategories = Object.keys(compliance.details).length;
     const compliantCategories = Object.values(compliance.details).filter(
-      detail => detail.status === 'compliant',
+      detail => detail.status === 'compliant'
     ).length;
 
     compliance.score = (compliantCategories / totalCategories) * 100;
@@ -922,14 +922,14 @@ class GACPDigitalLogbook extends EventEmitter {
         return {
           verified: true,
           type: 'batch',
-          data: traceabilityReport,
+          data: traceabilityReport
         };
       }
     }
 
     return {
       verified: false,
-      error: 'ไม่พบข้อมูลที่ตรงกับ QR Code',
+      error: 'ไม่พบข้อมูลที่ตรงกับ QR Code'
     };
   }
 
@@ -943,7 +943,7 @@ class GACPDigitalLogbook extends EventEmitter {
       requirements: {},
       overallCompliance: 'compliant',
       complianceScore: 0,
-      generatedAt: new Date(),
+      generatedAt: new Date()
     };
 
     let totalScore = 0;
@@ -962,7 +962,7 @@ class GACPDigitalLogbook extends EventEmitter {
         nonCompliantLogs: logs.length - compliantLogs.length,
         status: compliantLogs.length > 0 ? 'compliant' : 'non-compliant',
         score: logs.length > 0 ? (compliantLogs.length / logs.length) * 100 : 0,
-        recentLogs: logs.slice(0, 5), // Latest 5 logs
+        recentLogs: logs.slice(0, 5) // Latest 5 logs
       };
 
       report.requirements[reqKey] = reqReport;
@@ -993,7 +993,7 @@ class GACPDigitalLogbook extends EventEmitter {
       logsByRequirement: {},
       logsByMonth: {},
       batchesByStatus: {},
-      averageComplianceScore: 0,
+      averageComplianceScore: 0
     };
 
     // Group by requirement
@@ -1024,5 +1024,5 @@ class GACPDigitalLogbook extends EventEmitter {
 module.exports = {
   GACPDigitalLogbook,
   BatchManager,
-  GACP_REQUIREMENTS,
+  GACP_REQUIREMENTS
 };

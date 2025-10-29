@@ -1,8 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, Button, Dialog, Stepper, Step, StepLabel } from '@mui/material';
-import VideoCallRoom from '../video-inspection/VideoCallRoom';
+import { Box, Button, Dialog, Stepper, Step, StepLabel, Alert } from '@mui/material';
 import SnapshotGallery from './SnapshotGallery';
 import InspectionReportForm from './InspectionReportForm';
 import axios from 'axios';
@@ -20,7 +19,10 @@ interface VideoInspectionSessionProps {
   onComplete: () => void;
 }
 
-export default function VideoInspectionSession({ inspectionId, onComplete }: VideoInspectionSessionProps) {
+export default function VideoInspectionSession({
+  inspectionId,
+  onComplete,
+}: VideoInspectionSessionProps) {
   const [step, setStep] = useState(0);
   const [inCall, setInCall] = useState(false);
   const [snapshots, setSnapshots] = useState<Snapshot[]>([]);
@@ -42,7 +44,7 @@ export default function VideoInspectionSession({ inspectionId, onComplete }: Vid
   };
 
   const handleUpdateCaption = (id: string, caption: string) => {
-    setSnapshots(prev => prev.map(s => s.id === id ? { ...s, caption } : s));
+    setSnapshots(prev => prev.map(s => (s.id === id ? { ...s, caption } : s)));
   };
 
   const handleEndCall = () => {
@@ -75,7 +77,7 @@ export default function VideoInspectionSession({ inspectionId, onComplete }: Vid
   return (
     <Box sx={{ p: 3 }}>
       <Stepper activeStep={step} sx={{ mb: 4 }}>
-        {steps.map((label) => (
+        {steps.map(label => (
           <Step key={label}>
             <StepLabel>{label}</StepLabel>
           </Step>
@@ -99,7 +101,11 @@ export default function VideoInspectionSession({ inspectionId, onComplete }: Vid
           />
           <Box sx={{ mt: 3, display: 'flex', gap: 2, justifyContent: 'center' }}>
             <Button onClick={() => setInCall(true)}>ถ่ายภาพเพิ่ม</Button>
-            <Button variant="contained" onClick={handleContinueToReport} disabled={snapshots.length === 0}>
+            <Button
+              variant="contained"
+              onClick={handleContinueToReport}
+              disabled={snapshots.length === 0}
+            >
               ดำเนินการต่อ
             </Button>
           </Box>
@@ -116,12 +122,10 @@ export default function VideoInspectionSession({ inspectionId, onComplete }: Vid
 
       {inCall && (
         <Dialog open fullScreen>
-          <VideoCallRoom
-            inspectionId={inspectionId}
-            role="inspector"
-            onEnd={handleEndCall}
-            onSnapshot={handleSnapshot}
-          />
+          <Box sx={{ p: 3 }}>
+            <Alert severity="info">Video call feature is under development</Alert>
+            <Button onClick={handleEndCall} sx={{ mt: 2 }}>End Call</Button>
+          </Box>
         </Dialog>
       )}
     </Box>

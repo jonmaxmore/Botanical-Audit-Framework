@@ -13,7 +13,7 @@ const app = express();
 // For API services
 const apiSecurity = securityPresets.api({
   rateLimitMax: 1000,
-  domain: 'gacp-platform.com',
+  domain: 'gacp-platform.com'
 });
 
 // Apply all security middleware
@@ -44,8 +44,8 @@ app.post(
       password: apiSecurity.schemas.password,
       firstName: apiSecurity.schemas.name,
       lastName: apiSecurity.schemas.name,
-      phone: apiSecurity.schemas.phone,
-    }),
+      phone: apiSecurity.schemas.phone
+    })
   }),
   async (req, res) => {
     try {
@@ -60,28 +60,28 @@ app.post(
         password: hashedPassword,
         firstName,
         lastName,
-        phone,
+        phone
       });
 
       // Generate JWT
       const token = securityUtils.generateJWT(
         { userId: user.id, email: user.email },
-        process.env.JWT_SECRET,
+        process.env.JWT_SECRET
       );
 
       res.json({
         success: true,
         message: 'User registered successfully',
-        token: token,
+        token: token
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         error: 'REGISTRATION_FAILED',
-        message: error.message,
+        message: error.message
       });
     }
-  },
+  }
 );
 
 // Example 4: Farm application with comprehensive validation
@@ -94,8 +94,8 @@ app.post(
       coordinates: apiSecurity.schemas.coordinates,
       applicationTitle: apiSecurity.schemas.applicationTitle,
       description: apiSecurity.schemas.description.optional(),
-      documents: Joi.array().items(apiSecurity.schemas.fileUpload).max(10),
-    }),
+      documents: Joi.array().items(apiSecurity.schemas.fileUpload).max(10)
+    })
   }),
   async (req, res) => {
     try {
@@ -105,16 +105,16 @@ app.post(
       res.json({
         success: true,
         message: 'Application submitted successfully',
-        applicationId: application.id,
+        applicationId: application.id
       });
     } catch (error) {
       res.status(500).json({
         success: false,
         error: 'APPLICATION_FAILED',
-        message: error.message,
+        message: error.message
       });
     }
-  },
+  }
 );
 
 // Example 5: Different security for admin routes
@@ -125,7 +125,7 @@ app.use('/api/admin', adminSecurity.stack());
 app.get(
   '/api/admin/users',
   adminSecurity.validate({
-    query: adminSecurity.schemas.pagination,
+    query: adminSecurity.schemas.pagination
   }),
   async (req, res) => {
     // Admin-only functionality with strict security
@@ -134,9 +134,9 @@ app.get(
 
     res.json({
       success: true,
-      data: users,
+      data: users
     });
-  },
+  }
 );
 
 // Example 6: Public routes with lenient security
@@ -149,17 +149,17 @@ app.get(
   publicSecurity.validate({
     query: Joi.object({
       category: Joi.string().max(50).optional(),
-      search: Joi.string().max(100).optional(),
-    }),
+      search: Joi.string().max(100).optional()
+    })
   }),
   async (req, res) => {
     const standards = await getPublicStandards(req.query);
 
     res.json({
       success: true,
-      data: standards,
+      data: standards
     });
-  },
+  }
 );
 
 // Example 7: Custom validation schemas
@@ -174,7 +174,7 @@ const customValidation = apiSecurity.validate({
       province: Joi.string().max(100).required(),
       postalCode: Joi.string()
         .pattern(/^\d{5}$/)
-        .required(),
+        .required()
     }),
 
     // Custom certification type validation
@@ -183,14 +183,14 @@ const customValidation = apiSecurity.validate({
         'ORGANIC_CERTIFICATION',
         'GAP_CERTIFICATION',
         'HACCP_CERTIFICATION',
-        'ISO_CERTIFICATION',
+        'ISO_CERTIFICATION'
       )
       .required(),
 
     // Custom date validation
     applicationDate: Joi.date().min('now').required(),
-    expectedCompletionDate: Joi.date().min(Joi.ref('applicationDate')).required(),
-  }),
+    expectedCompletionDate: Joi.date().min(Joi.ref('applicationDate')).required()
+  })
 });
 
 // Example 8: Error handling with security context
@@ -206,7 +206,7 @@ app.use((error, req, res, next) => {
       path: req.path,
       ip: req.ip,
       userAgent: req.get('User-Agent'),
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
   }
 
@@ -214,7 +214,7 @@ app.use((error, req, res, next) => {
   res.status(error.status || 500).json({
     success: false,
     error: error.code || 'INTERNAL_ERROR',
-    message: error.message || 'An error occurred',
+    message: error.message || 'An error occurred'
   });
 });
 

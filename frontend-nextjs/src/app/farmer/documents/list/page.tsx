@@ -95,7 +95,7 @@ export default function DocumentListPage() {
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>(
-    'all',
+    'all'
   );
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchDebounce, setSearchDebounce] = useState<NodeJS.Timeout | null>(null);
@@ -113,7 +113,7 @@ export default function DocumentListPage() {
 
       if (response.success) {
         // Trigger refresh by incrementing counter
-        setRefreshTrigger(prev => prev + 1);
+        setRefreshTrigger((prev) => prev + 1);
       }
     } catch (err) {
       alert('Failed to delete document. Please try again.');
@@ -156,7 +156,7 @@ export default function DocumentListPage() {
 
   // Handle refresh
   const handleRefresh = () => {
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Handle search with debounce
@@ -172,7 +172,7 @@ export default function DocumentListPage() {
     // Set new timeout for debounced search
     const timeout = setTimeout(() => {
       setPage(0); // Reset to first page on search
-      setRefreshTrigger(prev => prev + 1);
+      setRefreshTrigger((prev) => prev + 1);
     }, 500);
 
     setSearchDebounce(timeout);
@@ -182,14 +182,14 @@ export default function DocumentListPage() {
   const handleStatusFilterChange = (event: SelectChangeEvent<string>) => {
     setStatusFilter(event.target.value as 'all' | 'pending' | 'approved' | 'rejected');
     setPage(0); // Reset to first page
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Handle document type filter change
   const handleTypeFilterChange = (event: SelectChangeEvent<string>) => {
     setTypeFilter(event.target.value as string);
     setPage(0); // Reset to first page
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Handle clear filters
@@ -198,7 +198,7 @@ export default function DocumentListPage() {
     setStatusFilter('all');
     setTypeFilter('all');
     setPage(0);
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Check if any filters are active
@@ -373,7 +373,7 @@ export default function DocumentListPage() {
                   size="small"
                   onDelete={() => {
                     setSearchQuery('');
-                    setRefreshTrigger(prev => prev + 1);
+                    setRefreshTrigger((prev) => prev + 1);
                   }}
                 />
               )}
@@ -383,7 +383,7 @@ export default function DocumentListPage() {
                   size="small"
                   onDelete={() => {
                     setStatusFilter('all');
-                    setRefreshTrigger(prev => prev + 1);
+                    setRefreshTrigger((prev) => prev + 1);
                   }}
                 />
               )}
@@ -393,7 +393,7 @@ export default function DocumentListPage() {
                   size="small"
                   onDelete={() => {
                     setTypeFilter('all');
-                    setRefreshTrigger(prev => prev + 1);
+                    setRefreshTrigger((prev) => prev + 1);
                   }}
                 />
               )}
@@ -518,7 +518,7 @@ export default function DocumentListPage() {
                   </TableRow>
                 ) : (
                   // Document rows
-                  documents.map(doc => (
+                  documents.map((doc) => (
                     <TableRow key={doc._id} hover>
                       <TableCell>
                         <Typography variant="body2" className="font-medium">

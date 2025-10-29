@@ -28,9 +28,7 @@ function getFilesWithLoggerErrors() {
         currentFile = line.trim();
       } else if (currentFile && line.includes("'logger' is not defined")) {
         // Convert absolute path to relative
-        const relativePath = currentFile
-          .replace(/\\/g, '/')
-          .replace(/.*apps\/backend\//, '');
+        const relativePath = currentFile.replace(/\\/g, '/').replace(/.*apps\/backend\//, '');
         files.add(relativePath);
       }
     }
@@ -47,9 +45,7 @@ function getFilesWithLoggerErrors() {
       if (line.match(/^[A-Z]:\\.*\.js$/)) {
         currentFile = line.trim();
       } else if (currentFile && line.includes("'logger' is not defined")) {
-        const relativePath = currentFile
-          .replace(/\\/g, '/')
-          .replace(/.*apps\/backend\//, '');
+        const relativePath = currentFile.replace(/\\/g, '/').replace(/.*apps\/backend\//, '');
         files.add(relativePath);
       }
     }
@@ -66,7 +62,7 @@ function getRelativePath(filePath) {
 function getModuleName(filePath) {
   const basename = path.basename(filePath, '.js');
   const dirname = path.dirname(filePath);
-  
+
   // Create descriptive module name
   if (dirname.includes('modules/')) {
     const parts = dirname.split('/');
@@ -74,20 +70,20 @@ function getModuleName(filePath) {
     const moduleName = parts[moduleIndex + 1];
     return `${moduleName}-${basename}`;
   }
-  
+
   return basename;
 }
 
 function addLoggerImport(filePath) {
   const fullPath = path.join(backendPath, filePath);
-  
+
   if (!fs.existsSync(fullPath)) {
     console.log(`❌ File not found: ${filePath}`);
     return false;
   }
 
   let content = fs.readFileSync(fullPath, 'utf8');
-  
+
   // Check if logger is already imported
   if (content.includes('createLogger') || content.match(/const logger = require/)) {
     console.log(`✓ Logger already imported: ${filePath}`);
@@ -108,11 +104,11 @@ function addLoggerImport(filePath) {
   // Find the right place to insert (after last require, before first non-import code)
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
-    
+
     // Track multi-line comments
     if (line.includes('/*')) inComment = true;
     if (line.includes('*/')) inComment = false;
-    
+
     if (inComment || line.startsWith('//') || line.startsWith('*')) {
       continue;
     }
@@ -120,7 +116,7 @@ function addLoggerImport(filePath) {
     if (line.includes('require(') && !line.startsWith('//')) {
       lastRequireIndex = i;
     }
-    
+
     // Stop at first substantial code after requires
     if (lastRequireIndex >= 0 && i > lastRequireIndex + 2) {
       if (line && !line.startsWith('//') && !line.startsWith('/*')) {
@@ -137,12 +133,12 @@ function addLoggerImport(filePath) {
 
   // Insert logger import with proper formatting
   const loggerImport = `const { createLogger } = require('${relativePath}');\nconst logger = createLogger('${moduleName}');\n`;
-  
+
   lines.splice(insertIndex, 0, loggerImport);
-  
+
   const newContent = lines.join('\n');
   fs.writeFileSync(fullPath, newContent, 'utf8');
-  
+
   console.log(`✓ Added logger import: ${filePath}`);
   return true;
 }

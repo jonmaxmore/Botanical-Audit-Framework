@@ -271,24 +271,24 @@ db.runCommand({
       properties: {
         email: {
           bsonType: 'string',
-          pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$',
+          pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$'
         },
         thaiId: {
           bsonType: 'string',
-          pattern: '^[0-9]{13}$',
+          pattern: '^[0-9]{13}$'
         },
         phoneNumber: {
           bsonType: 'string',
-          pattern: '^0[0-9]{9}$',
+          pattern: '^0[0-9]{9}$'
         },
         role: {
-          enum: ['FARMER', 'DTAM', 'ADMIN'],
-        },
-      },
-    },
+          enum: ['FARMER', 'DTAM', 'ADMIN']
+        }
+      }
+    }
   },
   validationLevel: 'strict',
-  validationAction: 'error',
+  validationAction: 'error'
 });
 ```
 
@@ -509,13 +509,13 @@ db.applications.createIndex({ 'farmAddress.gpsCoordinates': '2dsphere' });
 db.applications.createIndex({
   farmName: 'text',
   farmerName: 'text',
-  'farmAddress.province': 'text',
+  'farmAddress.province': 'text'
 });
 
 // Partial index (active applications only)
 db.applications.createIndex(
   { state: 1, submittedAt: -1 },
-  { partialFilterExpression: { isActive: true, isDeleted: false } },
+  { partialFilterExpression: { isActive: true, isDeleted: false } }
 );
 ```
 
@@ -532,7 +532,7 @@ db.runCommand({
         'userId',
         'farmName',
         'farmAddress',
-        'state',
+        'state'
       ],
       properties: {
         state: {
@@ -550,13 +550,13 @@ db.runCommand({
             'CERTIFICATE_ISSUED',
             'REJECTED',
             'REVISION_REQUIRED',
-            'EXPIRED',
-          ],
+            'EXPIRED'
+          ]
         },
         farmSize: {
           bsonType: 'number',
           minimum: 0.1,
-          maximum: 1000,
+          maximum: 1000
         },
         'farmAddress.gpsCoordinates': {
           bsonType: 'object',
@@ -566,13 +566,13 @@ db.runCommand({
             coordinates: {
               bsonType: 'array',
               minItems: 2,
-              maxItems: 2,
-            },
-          },
-        },
-      },
-    },
-  },
+              maxItems: 2
+            }
+          }
+        }
+      }
+    }
+  }
 });
 ```
 
@@ -658,7 +658,7 @@ db.application_documents.createIndex({ status: 1, uploadedAt: -1 });
 // TTL Index (auto-delete expired documents)
 db.application_documents.createIndex(
   { expiresAt: 1 },
-  { expireAfterSeconds: 0, partialFilterExpression: { expiresAt: { $ne: null } } },
+  { expireAfterSeconds: 0, partialFilterExpression: { expiresAt: { $ne: null } } }
 );
 ```
 
@@ -910,7 +910,7 @@ db.certificates.createIndex({ issuedAt: -1 });
 // Partial index (active certificates only)
 db.certificates.createIndex(
   { expiresAt: 1 },
-  { partialFilterExpression: { status: { $in: ['ACTIVE', 'EXPIRING_SOON'] } } },
+  { partialFilterExpression: { status: { $in: ['ACTIVE', 'EXPIRING_SOON'] } } }
 );
 ```
 
@@ -992,9 +992,9 @@ db.createCollection('audit_logs', {
   timeseries: {
     timeField: 'timestamp',
     metaField: 'metadata',
-    granularity: 'seconds',
+    granularity: 'seconds'
   },
-  expireAfterSeconds: 220752000, // 7 years (Thai tax law)
+  expireAfterSeconds: 220752000 // 7 years (Thai tax law)
 });
 ```
 
@@ -1082,7 +1082,7 @@ Audit Logging:
 db.applications
   .find({
     userId: 'USR-2025-A3B4C5D6',
-    isActive: true,
+    isActive: true
   })
   .sort({ createdAt: -1 });
 
@@ -1092,7 +1092,7 @@ db.applications
 db.applications
   .find({
     state: 'UNDER_REVIEW',
-    isActive: true,
+    isActive: true
   })
   .sort({ submittedAt: 1 }); // FIFO
 
@@ -1102,7 +1102,7 @@ db.applications
 db.certificates
   .find({
     status: 'ACTIVE',
-    expiresAt: { $lt: ISODate('2025-11-16T00:00:00Z') },
+    expiresAt: { $lt: ISODate('2025-11-16T00:00:00Z') }
   })
   .sort({ expiresAt: 1 });
 
@@ -1123,17 +1123,17 @@ db.applications.aggregate([
       _id: '$farmAddress.province',
       totalApplications: { $sum: 1 },
       approvedCount: {
-        $sum: { $cond: [{ $eq: ['$state', 'APPROVED'] }, 1, 0] },
+        $sum: { $cond: [{ $eq: ['$state', 'APPROVED'] }, 1, 0] }
       },
-      avgFarmSize: { $avg: '$farmSize' },
-    },
+      avgFarmSize: { $avg: '$farmSize' }
+    }
   },
 
   // Stage 3: Sort by count
   { $sort: { totalApplications: -1 } },
 
   // Stage 4: Limit to top 10
-  { $limit: 10 },
+  { $limit: 10 }
 ]);
 
 // Optimization: Use index on { isActive: 1, state: 1, "farmAddress.province": 1 }
@@ -1179,7 +1179,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 
   // Write Concern
   w: 'majority', // Wait for majority of replica set
-  journal: true, // Wait for journal commit
+  journal: true // Wait for journal commit
 });
 ```
 
@@ -1194,7 +1194,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 const encryptedFields = {
   users: ['thaiId', 'passwordHash'],
   applications: ['farmAddress.gpsCoordinates'],
-  payments: ['creditCard.cardLastDigits'],
+  payments: ['creditCard.cardLastDigits']
 };
 
 // MongoDB Client-Side Field Level Encryption (CSFLE)
@@ -1210,8 +1210,8 @@ db.createUser({
   pwd: 'strong_password_here',
   roles: [
     { role: 'readWrite', db: 'gacp_production' },
-    { role: 'dbAdmin', db: 'gacp_production' },
-  ],
+    { role: 'dbAdmin', db: 'gacp_production' }
+  ]
 });
 
 // Application-Level RBAC (enforced in API)
@@ -1221,16 +1221,16 @@ const permissions = {
     'application:read:own',
     'application:update:own',
     'document:upload:own',
-    'certificate:read:own',
+    'certificate:read:own'
   ],
   DTAM: [
     'application:read:all',
     'application:review',
     'application:approve',
     'certificate:issue',
-    'certificate:revoke',
+    'certificate:revoke'
   ],
-  ADMIN: ['*'], // All permissions
+  ADMIN: ['*'] // All permissions
 };
 ```
 
@@ -1249,9 +1249,9 @@ async function anonymizeUserData(userId) {
         email: `deleted_${userId}@anonymized.local`,
         fullName: 'Anonymized User',
         thaiId: null,
-        phoneNumber: null,
-      },
-    },
+        phoneNumber: null
+      }
+    }
   );
 
   // Step 2: Anonymize applications (keep for business records)
@@ -1261,9 +1261,9 @@ async function anonymizeUserData(userId) {
       $set: {
         farmerName: 'Anonymized User',
         farmerEmail: `deleted_${userId}@anonymized.local`,
-        farmerPhone: null,
-      },
-    },
+        farmerPhone: null
+      }
+    }
   );
 
   // Step 3: Log anonymization
@@ -1274,7 +1274,7 @@ async function anonymizeUserData(userId) {
     resourceType: 'USER',
     resourceId: userId,
     metadata: { reason: 'GDPR_RIGHT_TO_ERASURE' },
-    timestamp: new Date(),
+    timestamp: new Date()
   });
 }
 ```
@@ -1348,7 +1348,7 @@ Cache Strategy:
 try {
   await db.applications.insertOne({
     applicationId: 'APP-TEST-001',
-    state: 'INVALID_STATE', // Should fail validation
+    state: 'INVALID_STATE' // Should fail validation
   });
 } catch (error) {
   console.log('✅ Schema validation works');
@@ -1359,7 +1359,7 @@ try {
   await db.users.insertOne({
     userId: 'USR-TEST-001',
     email: 'test@example.com',
-    thaiId: '123', // Should fail (must be 13 digits)
+    thaiId: '123' // Should fail (must be 13 digits)
   });
 } catch (error) {
   console.log('✅ Thai ID validation works');
@@ -1392,7 +1392,7 @@ assert(duration2 > duration1 * 10, 'Index performance improvement validated');
 async function verifyHashChain(startDate, endDate) {
   const logs = await db.audit_logs
     .find({
-      timestamp: { $gte: startDate, $lte: endDate },
+      timestamp: { $gte: startDate, $lte: endDate }
     })
     .sort({ sequenceNumber: 1 })
     .toArray();
@@ -1445,8 +1445,8 @@ module.exports = {
       timeseries: {
         timeField: 'timestamp',
         metaField: 'metadata',
-        granularity: 'seconds',
-      },
+        granularity: 'seconds'
+      }
     });
 
     console.log('✅ Collections created');
@@ -1462,7 +1462,7 @@ module.exports = {
     await db.dropCollection('payments');
     await db.dropCollection('certificates');
     await db.dropCollection('audit_logs');
-  },
+  }
 };
 ```
 
@@ -1507,7 +1507,7 @@ module.exports = {
     await db.collection('applications').dropIndexes();
     await db.collection('certificates').dropIndexes();
     await db.collection('audit_logs').dropIndexes();
-  },
+  }
 };
 ```
 
@@ -1531,7 +1531,7 @@ module.exports = {
       emailVerified: true,
       permissions: ['*'],
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     });
 
     // Create DTAM test user
@@ -1545,7 +1545,7 @@ module.exports = {
       emailVerified: true,
       permissions: ['application:read:all', 'application:review', 'application:approve'],
       createdAt: new Date(),
-      updatedAt: new Date(),
+      updatedAt: new Date()
     });
 
     console.log('✅ Seed data created');
@@ -1554,9 +1554,9 @@ module.exports = {
   async down(db) {
     // Rollback: Delete seed data
     await db.collection('users').deleteMany({
-      userId: { $in: ['USR-2025-ADMIN001', 'USR-2025-DTAM001'] },
+      userId: { $in: ['USR-2025-ADMIN001', 'USR-2025-DTAM001'] }
     });
-  },
+  }
 };
 ```
 

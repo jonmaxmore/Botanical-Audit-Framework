@@ -53,8 +53,8 @@ module.exports = {
         { email: 1 },
         {
           partialFilterExpression: { status: 'ACTIVE' },
-          name: 'users_active_email',
-        },
+          name: 'users_active_email'
+        }
       );
 
       console.log('    ✅ 7 indexes created for users\n');
@@ -98,14 +98,14 @@ module.exports = {
         .collection('applications')
         .createIndex(
           { applicationId: 1 },
-          { unique: true, name: 'applications_applicationId_unique' },
+          { unique: true, name: 'applications_applicationId_unique' }
         );
 
       await db
         .collection('applications')
         .createIndex(
           { applicationNumber: 1 },
-          { unique: true, name: 'applications_applicationNumber_unique' },
+          { unique: true, name: 'applications_applicationNumber_unique' }
         );
 
       // ESR Rule: Equality, Sort, Range
@@ -113,7 +113,7 @@ module.exports = {
         .collection('applications')
         .createIndex(
           { userId: 1, state: 1, createdAt: -1 },
-          { name: 'applications_userId_state_createdAt' },
+          { name: 'applications_userId_state_createdAt' }
         );
 
       await db
@@ -124,7 +124,7 @@ module.exports = {
         .collection('applications')
         .createIndex(
           { 'farmAddress.province': 1, state: 1 },
-          { name: 'applications_province_state' },
+          { name: 'applications_province_state' }
         );
 
       // Geospatial index (2dsphere for GPS queries)
@@ -132,7 +132,7 @@ module.exports = {
         .collection('applications')
         .createIndex(
           { 'farmAddress.gpsCoordinates': '2dsphere' },
-          { name: 'applications_gps_2dsphere' },
+          { name: 'applications_gps_2dsphere' }
         );
 
       // Text search index
@@ -140,9 +140,9 @@ module.exports = {
         {
           farmName: 'text',
           farmerName: 'text',
-          'farmAddress.province': 'text',
+          'farmAddress.province': 'text'
         },
-        { name: 'applications_text_search' },
+        { name: 'applications_text_search' }
       );
 
       // Partial index (active applications only)
@@ -151,10 +151,10 @@ module.exports = {
         {
           partialFilterExpression: {
             isActive: true,
-            isDeleted: false,
+            isDeleted: false
           },
-          name: 'applications_active_queue',
-        },
+          name: 'applications_active_queue'
+        }
       );
 
       console.log('    ✅ 8 indexes created for applications\n');
@@ -169,14 +169,14 @@ module.exports = {
         .collection('application_documents')
         .createIndex(
           { documentId: 1 },
-          { unique: true, name: 'application_documents_documentId_unique' },
+          { unique: true, name: 'application_documents_documentId_unique' }
         );
 
       await db
         .collection('application_documents')
         .createIndex(
           { applicationId: 1, type: 1 },
-          { name: 'application_documents_applicationId_type' },
+          { name: 'application_documents_applicationId_type' }
         );
 
       await db
@@ -187,7 +187,7 @@ module.exports = {
         .collection('application_documents')
         .createIndex(
           { status: 1, uploadedAt: -1 },
-          { name: 'application_documents_status_uploadedAt' },
+          { name: 'application_documents_status_uploadedAt' }
         );
 
       // TTL Index (auto-delete expired documents)
@@ -196,8 +196,8 @@ module.exports = {
         {
           expireAfterSeconds: 0,
           partialFilterExpression: { expiresAt: { $ne: null } },
-          name: 'application_documents_ttl',
-        },
+          name: 'application_documents_ttl'
+        }
       );
 
       console.log('    ✅ 5 indexes created for application_documents\n');
@@ -220,7 +220,7 @@ module.exports = {
         .collection('invoices')
         .createIndex(
           { applicationId: 1, invoiceType: 1 },
-          { name: 'invoices_applicationId_invoiceType' },
+          { name: 'invoices_applicationId_invoiceType' }
         );
 
       await db
@@ -236,8 +236,8 @@ module.exports = {
         { expiresAt: 1 },
         {
           partialFilterExpression: { status: 'PENDING' },
-          name: 'invoices_pending_expiry',
-        },
+          name: 'invoices_pending_expiry'
+        }
       );
 
       console.log('    ✅ 6 indexes created for invoices\n');
@@ -282,14 +282,14 @@ module.exports = {
         .collection('certificates')
         .createIndex(
           { certificateId: 1 },
-          { unique: true, name: 'certificates_certificateId_unique' },
+          { unique: true, name: 'certificates_certificateId_unique' }
         );
 
       await db
         .collection('certificates')
         .createIndex(
           { certificateNumber: 1 },
-          { unique: true, name: 'certificates_certificateNumber_unique' },
+          { unique: true, name: 'certificates_certificateNumber_unique' }
         );
 
       await db
@@ -313,10 +313,10 @@ module.exports = {
         { expiresAt: 1 },
         {
           partialFilterExpression: {
-            status: { $in: ['ACTIVE', 'EXPIRING_SOON'] },
+            status: { $in: ['ACTIVE', 'EXPIRING_SOON'] }
           },
-          name: 'certificates_active_expiry',
-        },
+          name: 'certificates_active_expiry'
+        }
       );
 
       console.log('    ✅ 7 indexes created for certificates\n');
@@ -335,7 +335,7 @@ module.exports = {
         .collection('audit_logs')
         .createIndex(
           { sequenceNumber: 1 },
-          { unique: true, name: 'audit_logs_sequenceNumber_unique' },
+          { unique: true, name: 'audit_logs_sequenceNumber_unique' }
         );
 
       await db
@@ -346,14 +346,14 @@ module.exports = {
         .collection('audit_logs')
         .createIndex(
           { resourceType: 1, resourceId: 1, timestamp: -1 },
-          { name: 'audit_logs_resourceType_resourceId_timestamp' },
+          { name: 'audit_logs_resourceType_resourceId_timestamp' }
         );
 
       await db
         .collection('audit_logs')
         .createIndex(
           { category: 1, severity: 1, timestamp: -1 },
-          { name: 'audit_logs_category_severity_timestamp' },
+          { name: 'audit_logs_category_severity_timestamp' }
         );
 
       // Hash chain verification indexes
@@ -370,7 +370,7 @@ module.exports = {
         .collection('audit_logs')
         .createIndex(
           { category: 1, action: 1, timestamp: -1 },
-          { name: 'audit_logs_category_action_timestamp' },
+          { name: 'audit_logs_category_action_timestamp' }
         );
 
       console.log('    ✅ 8 indexes created for audit_logs\n');
@@ -410,7 +410,7 @@ module.exports = {
         'invoices',
         'payments',
         'certificates',
-        'audit_logs',
+        'audit_logs'
       ];
 
       for (const collectionName of collections) {
@@ -431,5 +431,5 @@ module.exports = {
       console.error('❌ Rollback failed:', error.message);
       throw error;
     }
-  },
+  }
 };

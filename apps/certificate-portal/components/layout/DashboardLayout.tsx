@@ -17,7 +17,7 @@ import {
   ListItemText,
   Avatar,
   Menu,
-  MenuItem,
+  MenuItem
 } from '@mui/material';
 import {
   Menu as MenuIcon,
@@ -28,7 +28,7 @@ import {
   Assessment,
   Settings,
   Logout,
-  AccountCircle,
+  AccountCircle
 } from '@mui/icons-material';
 
 const drawerWidth = 260;
@@ -67,7 +67,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
     { text: 'QR Scanner', icon: <QrCode2 />, path: '/scanner' },
     { text: 'Search', icon: <Search />, path: '/search' },
     { text: 'Reports', icon: <Assessment />, path: '/reports' },
-    { text: 'Settings', icon: <Settings />, path: '/settings' },
+    { text: 'Settings', icon: <Settings />, path: '/settings' }
   ];
 
   const drawer = (
@@ -107,7 +107,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           ml: { sm: `${drawerWidth}px` },
           bgcolor: 'white',
           color: 'text.primary',
-          boxShadow: 1,
+          boxShadow: 1
         }}
       >
         <Toolbar>
@@ -146,11 +146,11 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           open={mobileOpen}
           onClose={handleDrawerToggle}
           ModalProps={{
-            keepMounted: true,
+            keepMounted: true
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
           }}
         >
           {drawer}
@@ -161,7 +161,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
           }}
           open
         >
@@ -177,7 +177,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           minHeight: '100vh',
-          bgcolor: '#f5f5f5',
+          bgcolor: '#f5f5f5'
         }}
       >
         <Toolbar />

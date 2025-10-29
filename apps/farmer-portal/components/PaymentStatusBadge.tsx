@@ -17,7 +17,7 @@ export default function PaymentStatusBadge({
   amount,
   dueDate,
   onClick,
-  className = '',
+  className = ''
 }: PaymentStatusBadgeProps) {
   // Get status color and text
   const getStatusConfig = (status: PaymentStatus) => {
@@ -27,42 +27,42 @@ export default function PaymentStatusBadge({
           color: 'bg-green-100 text-green-800 border-green-200',
           icon: '✅',
           text: 'ชำระแล้ว',
-          textColor: 'text-green-700',
+          textColor: 'text-green-700'
         };
       case 'pending':
         return {
           color: 'bg-yellow-100 text-yellow-800 border-yellow-200',
           icon: '⏳',
           text: 'รอชำระ',
-          textColor: 'text-yellow-700',
+          textColor: 'text-yellow-700'
         };
       case 'overdue':
         return {
           color: 'bg-red-100 text-red-800 border-red-200',
           icon: '⚠️',
           text: 'เกินกำหนด',
-          textColor: 'text-red-700',
+          textColor: 'text-red-700'
         };
       case 'failed':
         return {
           color: 'bg-red-100 text-red-800 border-red-200',
           icon: '❌',
           text: 'ล้มเหลว',
-          textColor: 'text-red-700',
+          textColor: 'text-red-700'
         };
       case 'cancelled':
         return {
           color: 'bg-gray-100 text-gray-800 border-gray-200',
           icon: '🚫',
           text: 'ยกเลิก',
-          textColor: 'text-gray-700',
+          textColor: 'text-gray-700'
         };
       default:
         return {
           color: 'bg-gray-100 text-gray-800 border-gray-200',
           icon: '❓',
           text: 'ไม่ทราบ',
-          textColor: 'text-gray-700',
+          textColor: 'text-gray-700'
         };
     }
   };
@@ -75,7 +75,7 @@ export default function PaymentStatusBadge({
       style: 'currency',
       currency: 'THB',
       minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
+      maximumFractionDigits: 0
     }).format(amount);
   };
 
@@ -122,7 +122,7 @@ export function PaymentStatusLabel({ status }: { status: PaymentStatus }) {
     pending: { color: 'text-yellow-600', icon: '⏳', text: 'รอชำระ' },
     overdue: { color: 'text-red-600', icon: '⚠️', text: 'เกินกำหนด' },
     failed: { color: 'text-red-600', icon: '❌', text: 'ล้มเหลว' },
-    cancelled: { color: 'text-gray-600', icon: '🚫', text: 'ยกเลิก' },
+    cancelled: { color: 'text-gray-600', icon: '🚫', text: 'ยกเลิก' }
   }[status];
 
   return (

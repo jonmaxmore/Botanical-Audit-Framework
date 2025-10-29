@@ -27,36 +27,36 @@ const DigitalSignatureSchema = new Schema(
       type: String,
       required: true,
       enum: ['RSA-SHA256'],
-      default: 'RSA-SHA256',
+      default: 'RSA-SHA256'
     },
     keySize: {
       type: Number,
       required: true,
       enum: [2048],
-      default: 2048,
+      default: 2048
     },
     signature: {
       type: String,
       required: true,
-      description: 'Base64-encoded signature',
+      description: 'Base64-encoded signature'
     },
     signedAt: {
       type: Date,
       required: true,
-      default: Date.now,
+      default: Date.now
     },
     signedBy: {
       type: String,
       required: true,
-      default: 'DTAM (Department of Thai Autonomous Medicine)',
+      default: 'DTAM (Department of Thai Autonomous Medicine)'
     },
     signerCertificate: {
       type: String,
       required: true,
-      description: 'Base64-encoded X.509 certificate',
-    },
+      description: 'Base64-encoded X.509 certificate'
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 /**
@@ -68,7 +68,7 @@ const CertificateSchema = new Schema(
     // === PRIMARY KEY ===
     _id: {
       type: Schema.Types.ObjectId,
-      auto: true,
+      auto: true
     },
 
     // === UNIQUE IDENTIFIERS ===
@@ -76,14 +76,14 @@ const CertificateSchema = new Schema(
       type: String,
       required: true,
       match: /^CERT-\d{4}-[A-Z0-9]{8}$/,
-      description: 'Format: CERT-YYYY-XXXXXXXX',
+      description: 'Format: CERT-YYYY-XXXXXXXX'
     },
 
     certificateNumber: {
       type: String,
       required: true,
       match: /^GACP-CERT-\d{4}-\d{6}$/,
-      description: 'Public verification number: GACP-CERT-YYYY-NNNNNN',
+      description: 'Public verification number: GACP-CERT-YYYY-NNNNNN'
     },
 
     // === ASSOCIATIONS ===
@@ -92,34 +92,34 @@ const CertificateSchema = new Schema(
     applicationNumber: {
       type: String,
       required: true,
-      description: 'Denormalized for performance',
+      description: 'Denormalized for performance'
     },
 
     userId: {
       type: String,
       required: true,
       index: true,
-      ref: 'User',
+      ref: 'User'
     },
 
     // === FARMER INFORMATION (Denormalized) ===
     farmerName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
 
     farmName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
 
     farmAddress: {
       type: String,
       required: true,
       maxlength: 500,
-      description: 'Full formatted address for certificate display',
+      description: 'Full formatted address for certificate display'
     },
 
     // === CERTIFICATE DETAILS ===
@@ -128,7 +128,7 @@ const CertificateSchema = new Schema(
       required: true,
       enum: ['ACTIVE', 'EXPIRING_SOON', 'EXPIRED', 'REVOKED'],
       default: 'ACTIVE',
-      index: true,
+      index: true
     },
 
     // === VALIDITY PERIOD ===
@@ -137,52 +137,52 @@ const CertificateSchema = new Schema(
       required: true,
       default: Date.now,
       immutable: true,
-      index: true,
+      index: true
     },
 
     expiresAt: {
       type: Date,
       required: true,
       index: true,
-      description: '3 years from issuance',
+      description: '3 years from issuance'
     },
 
     validityPeriod: {
       type: Number,
       required: true,
       default: 3,
-      description: 'Validity period in years',
+      description: 'Validity period in years'
     },
 
     daysUntilExpiry: {
       type: Number,
       default: null,
-      description: 'Calculated field, updated daily',
+      description: 'Calculated field, updated daily'
     },
 
     // === PDF GENERATION ===
     pdfS3Bucket: {
       type: String,
       required: true,
-      default: 'gacp-platform-certificates-production',
+      default: 'gacp-platform-certificates-production'
     },
 
     pdfS3Key: {
       type: String,
       required: true,
-      description: 'S3 key: certificates/YYYY/CERT-YYYY-XXXXXXXX.pdf',
+      description: 'S3 key: certificates/YYYY/CERT-YYYY-XXXXXXXX.pdf'
     },
 
     pdfUrl: {
       type: String,
       required: true,
-      description: 'CloudFront CDN URL for certificate download',
+      description: 'CloudFront CDN URL for certificate download'
     },
 
     pdfGeneratedAt: {
       type: Date,
       required: true,
-      default: Date.now,
+      default: Date.now
     },
 
     pdfFormat: {
@@ -190,32 +190,32 @@ const CertificateSchema = new Schema(
       required: true,
       enum: ['PDF/A-1b'],
       default: 'PDF/A-1b',
-      description: 'ISO 19005-1 long-term archival format',
+      description: 'ISO 19005-1 long-term archival format'
     },
 
     // === DIGITAL SIGNATURE ===
     digitalSignature: {
       type: DigitalSignatureSchema,
-      required: true,
+      required: true
     },
 
     // === QR CODE VERIFICATION ===
     qrCode: {
       type: String,
       required: true,
-      description: 'Base64-encoded PNG QR code',
+      description: 'Base64-encoded PNG QR code'
     },
 
     qrData: {
       type: String,
       required: true,
-      description: 'Public verification URL',
+      description: 'Public verification URL'
     },
 
     verificationUrl: {
       type: String,
       required: true,
-      description: 'https://gacp.platform/verify/GACP-CERT-YYYY-NNNNNN',
+      description: 'https://gacp.platform/verify/GACP-CERT-YYYY-NNNNNN'
     },
 
     // === REVOCATION ===
@@ -223,49 +223,49 @@ const CertificateSchema = new Schema(
       type: Boolean,
       required: true,
       default: false,
-      index: true,
+      index: true
     },
 
     revokedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     revokedBy: {
       type: String,
       default: null,
-      description: 'userId who revoked the certificate',
+      description: 'userId who revoked the certificate'
     },
 
     revocationReason: {
       type: String,
       enum: [null, 'FRAUD', 'VIOLATION', 'INSPECTION_FAILURE', 'REQUEST'],
-      default: null,
+      default: null
     },
 
     revocationNotes: {
       type: String,
       maxlength: 1000,
-      default: null,
+      default: null
     },
 
     // === RENEWAL ===
     isRenewal: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
 
     originalCertificateId: {
       type: String,
       default: null,
-      description: 'Reference to original certificate if this is a renewal',
+      description: 'Reference to original certificate if this is a renewal'
     },
 
     renewalApplicationId: {
       type: String,
       default: null,
-      description: 'Application ID of renewal application',
+      description: 'Application ID of renewal application'
     },
 
     // === TIMESTAMPS ===
@@ -273,20 +273,20 @@ const CertificateSchema = new Schema(
       type: Date,
       required: true,
       default: Date.now,
-      immutable: true,
+      immutable: true
     },
 
     updatedAt: {
       type: Date,
       required: true,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   },
   {
     timestamps: true,
     collection: 'certificates',
-    versionKey: false,
-  },
+    versionKey: false
+  }
 );
 
 // ========================================
@@ -305,10 +305,10 @@ CertificateSchema.index(
   { expiresAt: 1 },
   {
     partialFilterExpression: {
-      status: { $in: ['ACTIVE', 'EXPIRING_SOON'] },
+      status: { $in: ['ACTIVE', 'EXPIRING_SOON'] }
     },
-    name: 'active_certificates_expiry',
-  },
+    name: 'active_certificates_expiry'
+  }
 );
 
 // ========================================
@@ -421,7 +421,7 @@ CertificateSchema.methods.getVerificationData = function () {
     revoked: this.revoked,
     revokedAt: this.revokedAt,
     revocationReason: this.revocationReason,
-    verificationUrl: this.verificationUrl,
+    verificationUrl: this.verificationUrl
   };
 };
 
@@ -455,7 +455,7 @@ CertificateSchema.statics.generateCertificateNumber = async function () {
   const prefix = `GACP-CERT-${year}-`;
 
   const lastCert = await this.findOne({
-    certificateNumber: new RegExp(`^${prefix}`),
+    certificateNumber: new RegExp(`^${prefix}`)
   }).sort({ certificateNumber: -1 });
 
   let nextNumber = 1;
@@ -478,14 +478,14 @@ CertificateSchema.statics.verifyByNumber = async function (certificateNumber) {
   if (!certificate) {
     return {
       valid: false,
-      message: 'Certificate not found',
+      message: 'Certificate not found'
     };
   }
 
   return {
     valid: certificate.isValid,
     message: certificate.isValid ? 'Certificate is valid' : 'Certificate is not valid',
-    data: certificate.getVerificationData(),
+    data: certificate.getVerificationData()
   };
 };
 
@@ -502,7 +502,7 @@ CertificateSchema.statics.findExpiring = function (days = 30) {
   return this.find({
     status: { $in: ['ACTIVE', 'EXPIRING_SOON'] },
     revoked: false,
-    expiresAt: { $gte: now, $lte: futureDate },
+    expiresAt: { $gte: now, $lte: futureDate }
   }).sort({ expiresAt: 1 });
 };
 
@@ -514,7 +514,7 @@ CertificateSchema.statics.findExpired = function () {
   return this.find({
     status: { $ne: 'EXPIRED' },
     revoked: false,
-    expiresAt: { $lt: new Date() },
+    expiresAt: { $lt: new Date() }
   });
 };
 
@@ -607,11 +607,11 @@ CertificateSchema.set('toJSON', {
   transform: function (doc, ret) {
     delete ret.__v;
     return ret;
-  },
+  }
 });
 
 CertificateSchema.set('toObject', {
-  virtuals: true,
+  virtuals: true
 });
 
 // ========================================

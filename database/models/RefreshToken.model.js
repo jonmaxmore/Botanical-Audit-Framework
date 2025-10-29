@@ -15,45 +15,45 @@ const refreshTokenSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true,
+      index: true
     },
     userId: {
       type: String,
       required: true,
-      index: true,
+      index: true
     },
     tokenHash: {
       type: String,
-      required: true,
+      required: true
       // Hash of the actual token (security best practice)
       // Never store raw tokens in database
     },
     isUsed: {
       type: Boolean,
       default: false,
-      index: true,
+      index: true
       // Token rotation: Mark as used after single use
       // Reuse detection: If used token is reused → security breach
     },
     usedAt: {
-      type: Date,
+      type: Date
       // Timestamp when token was used
     },
     expiresAt: {
       type: Date,
       required: true,
-      index: true,
+      index: true
       // TTL index will automatically delete expired tokens
     },
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true,
-    },
+      index: true
+    }
   },
   {
-    timestamps: true,
-  },
+    timestamps: true
+  }
 );
 
 // Indexes

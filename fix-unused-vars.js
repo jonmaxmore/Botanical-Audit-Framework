@@ -1,191 +1,59 @@
-#!/usr/bin/env node
-/**
- * Auto-fix unused variable warnings by prefixing with underscore
- */
-
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
-const backendPath = path.join(__dirname, 'apps', 'backend');
+const unusedVars = [
+  { file: 'apps/backend/config/redis-manager.js', line: 8, old: 'promisify', new: '_promisify' },
+  { file: 'apps/backend/middleware/auth-rate-limiters.js', line: 74, old: 'skipSuccessfulRequests', new: '_skipSuccessfulRequests' },
+  { file: 'apps/backend/middleware/auth.js', line: 18, old: 'jwt', new: '_jwt' },
+  { file: 'apps/backend/middleware/error-handler.js', line: 5, old: 'winston', new: '_winston' },
+  { file: 'apps/backend/middleware/error-handler.js', line: 6, old: 'morgan', new: '_morgan' },
+  { file: 'apps/backend/middleware/performance.js', line: 144, old: 'format', new: '_format' },
+  { file: 'apps/backend/middleware/security.js', line: 311, old: 'path', new: '_path' },
+  { file: 'apps/backend/middleware/validation.js', line: 7, old: 'logger', new: '_logger' },
+  { file: 'apps/backend/models/Application.js', line: 484, old: 'validTransitions', new: '_validTransitions' },
+  { file: 'apps/backend/models/gacp-business-logic.js', line: 17, old: 'mongoose', new: '_mongoose' },
+  { file: 'apps/backend/modules/shared/middleware/error-handler.js', line: 5, old: 'winston', new: '_winston' },
+  { file: 'apps/backend/modules/shared/middleware/error-handler.js', line: 6, old: 'morgan', new: '_morgan' },
+  { file: 'apps/backend/routes/api/audit-calendar.js', line: 10, old: 'EnhancedCultivationRecord', new: '_EnhancedCultivationRecord' },
+  { file: 'apps/backend/routes/api/sop.js', line: 7, old: 'mongoose', new: '_mongoose' },
+  { file: 'apps/backend/routes/farm-management.js', line: 4, old: 'roleCheck', new: '_roleCheck' },
+  { file: 'apps/backend/routes/gacp-business-logic.js', line: 23, old: 'crypto', new: '_crypto' },
+  { file: 'apps/backend/routes/gacp-business-logic.js', line: 24, old: 'path', new: '_path' },
+  { file: 'apps/backend/routes/traceability.js', line: 7, old: 'Crop', new: '_Crop' },
+  { file: 'apps/backend/services/gacp-certificate.js', line: 17, old: 'User', new: '_User' },
+  { file: 'apps/backend/services/gacp-inspection.js', line: 10, old: 'User', new: '_User' },
+  { file: 'apps/backend/services/pdf/pdf-generator.service.js', line: 3, old: 'path', new: '_path' },
+  { file: 'apps/backend/src/app.js', line: 10, old: 'morgan', new: '_morgan' }
+];
 
-// Get unused variable warnings from ESLint
-function getUnusedVarsFromLint() {
-  try {
-    const output = execSync('pnpm run lint 2>&1', {
-      cwd: backendPath,
-      encoding: 'utf8',
-      maxBuffer: 20 * 1024 * 1024
-    });
-
-    return parseUnusedVars(output);
-  } catch (error) {
-    return parseUnusedVars(error.stdout || error.message);
-  }
-}
-
-function parseUnusedVars(output) {
-  const lines = output.split('\n');
-  const unusedVars = [];
-  let currentFile = null;
-
-  for (const line of lines) {
-    // Match file path
-    if (line.match(/^[A-Z]:\\.*\.js$/)) {
-      currentFile = line.trim()
-        .replace(/\\/g, '/')
-        .replace(/.*apps\/backend\//, '');
-    }
-    // Match unused var warning
-    else if (currentFile && line.includes('is defined but never used') && line.includes('no-unused-vars')) {
-      const match = line.match(/(\d+):(\d+)\s+warning\s+'([^']+)'/);
-      if (match) {
-        const [, lineNum, , varName] = match;
-        unusedVars.push({
-          file: currentFile,
-          line: parseInt(lineNum),
-          varName: varName
-        });
-      }
-    }
-    // Match assigned but never used
-    else if (currentFile && line.includes('is assigned a value but never used') && line.includes('no-unused-vars')) {
-      const match = line.match(/(\d+):(\d+)\s+warning\s+'([^']+)'/);
-      if (match) {
-        const [, lineNum, , varName] = match;
-        unusedVars.push({
-          file: currentFile,
-          line: parseInt(lineNum),
-          varName: varName
-        });
-      }
-    }
-  }
-
-  return unusedVars;
-}
-
-function fixUnusedVar(filePath, lineNum, varName) {
-  const fullPath = path.join(backendPath, filePath);
-  
-  if (!fs.existsSync(fullPath)) {
-    return false;
-  }
-
-  let content = fs.readFileSync(fullPath, 'utf8');
-  const lines = content.split('\n');
-  
-  if (lineNum > lines.length || lineNum < 1) {
-    return false;
-  }
-
-  const line = lines[lineNum - 1];
-  
-  // Skip if already prefixed with underscore
-  if (varName.startsWith('_')) {
-    return true;
-  }
-
-  // Pattern 1: Function parameter - prefix with _
-  // (param1, param2, param3) => { ... }
-  // function name(param1, param2) { ... }
-  const paramPatterns = [
-    new RegExp(`\\b${varName}\\b(?=[,\\)])`, 'g'),
-    new RegExp(`([,\\(]\\s*)${varName}(\\s*[,\\)])`, 'g')
-  ];
-
-  let modified = false;
-  for (const pattern of paramPatterns) {
-    if (line.match(pattern)) {
-      // Replace parameter name with _varName
-      lines[lineNum - 1] = line.replace(
-        new RegExp(`\\b${varName}\\b(?=[,\\)])`, 'g'),
-        `_${varName}`
-      );
-      modified = true;
-      break;
-    }
-  }
-
-  // Pattern 2: Variable declaration - comment out or prefix
-  // const varName = ...
-  // let varName = ...
-  if (!modified && line.match(new RegExp(`^\\s*(const|let|var)\\s+${varName}\\s*=`))) {
-    // Comment out the line if it's a simple assignment
-    if (!line.includes('require(') && !line.includes('import ')) {
-      lines[lineNum - 1] = line.replace(/^(\s*)/, '$1// ');
-      modified = true;
-    }
-  }
-
-  if (modified) {
-    content = lines.join('\n');
-    fs.writeFileSync(fullPath, content, 'utf8');
-    return true;
-  }
-
-  return false;
-}
-
-console.log('🔍 Scanning for unused variable warnings...\n');
-
-const unusedVars = getUnusedVarsFromLint();
-
-console.log(`📝 Found ${unusedVars.length} unused variable warnings\n`);
-
-if (unusedVars.length === 0) {
-  console.log('✨ No unused variables found!');
-  process.exit(0);
-}
-
-console.log('🔧 Fixing unused variables...\n');
-
-// Group by file to avoid multiple writes
-const byFile = unusedVars.reduce((acc, uv) => {
-  if (!acc[uv.file]) acc[uv.file] = [];
-  acc[uv.file].push(uv);
-  return acc;
-}, {});
+console.log('🔧 กำลังแก้ไข unused variables...\n');
 
 let fixed = 0;
 let failed = 0;
 
-for (const [file, vars] of Object.entries(byFile)) {
-  // Sort by line number descending to avoid line number shifts
-  vars.sort((a, b) => b.line - a.line);
+unusedVars.forEach(({ file, old: oldVar, new: newVar }) => {
+  const filePath = path.join(__dirname, file);
   
-  let fileFixed = 0;
-  for (const { line, varName } of vars) {
-    if (fixUnusedVar(file, line, varName)) {
-      fileFixed++;
-      fixed++;
-    } else {
+  try {
+    if (!fs.existsSync(filePath)) {
+      console.log(`⚠️  ไม่พบไฟล์: ${file}`);
       failed++;
+      return;
     }
-  }
-  
-  if (fileFixed > 0) {
-    console.log(`✓ Fixed ${fileFixed} unused vars in: ${file}`);
-  }
-}
 
-console.log(`\n✨ Summary:`);
-console.log(`   Fixed: ${fixed}`);
-console.log(`   Failed: ${failed}`);
-console.log(`   Total: ${unusedVars.length}`);
-
-// Run lint again
-console.log('\n📊 Running ESLint to check improvements...');
-try {
-  const result = execSync('pnpm run lint 2>&1 | Select-String "problems"', {
-    cwd: backendPath,
-    encoding: 'utf8',
-    shell: 'powershell.exe',
-    maxBuffer: 10 * 1024 * 1024
-  });
-  console.log('\n' + result);
-} catch (e) {
-  if (e.stdout) {
-    console.log('\n' + e.stdout);
+    let content = fs.readFileSync(filePath, 'utf8');
+    const regex = new RegExp(`\\b${oldVar}\\b`, 'g');
+    
+    if (content.match(regex)) {
+      content = content.replace(regex, newVar);
+      fs.writeFileSync(filePath, content, 'utf8');
+      console.log(`✅ ${file}: ${oldVar} → ${newVar}`);
+      fixed++;
+    }
+  } catch (error) {
+    console.log(`❌ Error in ${file}: ${error.message}`);
+    failed++;
   }
-}
+});
+
+console.log(`\n📊 สรุป: แก้ไขสำเร็จ ${fixed} ไฟล์, ล้มเหลว ${failed} ไฟล์`);

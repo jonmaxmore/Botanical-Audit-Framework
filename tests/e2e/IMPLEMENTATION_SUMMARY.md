@@ -7,6 +7,7 @@ Comprehensive end-to-end test suite implemented for the GACP Botanical Audit Fra
 ## Test Files Created
 
 ### 1. Authentication Setup (`tests/e2e/auth.setup.ts`)
+
 - Authenticates users for all three portals before tests run
 - Creates reusable storage states for:
   - Farmer user (`farmer@test.com`)
@@ -15,9 +16,11 @@ Comprehensive end-to-end test suite implemented for the GACP Botanical Audit Fra
 - Verifies successful login for each role
 
 ### 2. Complete Application Workflow (`tests/e2e/application-workflow.spec.ts`)
+
 Comprehensive 8-step workflow test covering the entire application lifecycle:
 
 #### Step 1: Farmer submits GACP application
+
 - Navigate to applications page
 - Fill farm information (name, size, crop type)
 - Fill farmer details (name, ID, phone)
@@ -25,6 +28,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 - Submit application and capture ID
 
 #### Step 2: Farmer completes payment
+
 - Navigate to payment page
 - Verify payment amount (฿500)
 - Generate QR code
@@ -32,6 +36,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 - Verify payment success
 
 #### Step 3: DTAM reviews application
+
 - Access review queue
 - Search for submitted application
 - Review documents and approve each
@@ -40,6 +45,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 - Set inspection date
 
 #### Step 4: Inspector completes field inspection
+
 - Navigate to inspections page
 - Open scheduled inspection
 - Complete inspection checklist
@@ -48,6 +54,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 - Recommend approval
 
 #### Step 5: Admin approves and issues certificate
+
 - Access applications review
 - Filter for approved inspections
 - Review inspection report
@@ -56,12 +63,14 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 - Capture certificate number
 
 #### Step 6: Farmer views certificate
+
 - Navigate to certificates page
 - Verify certificate appears
 - View certificate details
 - Download PDF
 
 #### Step 7: Public certificate verification
+
 - Access public verification portal (no auth)
 - Enter certificate number
 - Verify certificate validity
@@ -69,6 +78,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 - Verify QR code generation
 
 #### Step 8: Admin monitors audit logs
+
 - Navigate to audit logs
 - Search by application ID
 - Verify all activities logged:
@@ -79,6 +89,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 - Filter by success status
 
 #### Error Handling Tests
+
 - **Incomplete documents**: Test rejection of application without required files
 - **Invalid certificate**: Test verification of non-existent certificate
 - **Duplicate prevention**: Test system prevents duplicate applications
@@ -86,41 +97,49 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 ### 3. Cross-Portal Integration (`tests/e2e/cross-portal-integration.spec.ts`)
 
 #### Application Data Synchronization
+
 - Farmer creates application
 - Verify application appears in admin portal immediately
 - Test data consistency across portals
 
 #### Real-time Status Updates
+
 - Admin updates application status
 - Verify farmer sees updated status
 - Test bi-directional data flow
 
 #### Certificate Verification After Issuance
+
 - Admin issues certificate
 - Public portal can verify immediately
 - Test certificate data propagation
 
 #### Payment Integration
+
 - QR code generation test
 - Payment details verification
 - Payment status synchronization between portals
 
 #### Document Management
+
 - Document upload workflow
 - Cross-portal document visibility
 - Review workflow integration
 
 #### Notification System
+
 - Cross-portal notification delivery
 - Notification badge functionality
 - Real-time notification updates
 
 #### Search and Filter
+
 - Global search across portals
 - Advanced filtering capabilities
 - Multi-criteria search results
 
 #### Performance Tests
+
 - Page load time measurements (< 5 seconds)
 - Concurrent user simulation (5 users)
 - Resource usage monitoring
@@ -128,6 +147,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 ## Configuration
 
 ### Playwright Configuration (`playwright.config.ts`)
+
 ```typescript
 - Test directory: tests/e2e
 - Timeout: 120 seconds per test
@@ -142,6 +162,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 ```
 
 ### Browser Support
+
 - **Primary**: Chromium (Desktop Chrome)
 - **Optional**: Firefox, Safari (commented out)
 - **Mobile**: Pixel 5, iPhone 13 (configured)
@@ -149,6 +170,7 @@ Comprehensive 8-step workflow test covering the entire application lifecycle:
 ## Test Execution
 
 ### Commands Added to package.json
+
 ```bash
 pnpm run test:e2e         # Run all E2E tests
 pnpm run test:e2e:ui      # Run with UI mode (interactive)
@@ -158,6 +180,7 @@ pnpm run test:e2e:report  # View HTML report
 ```
 
 ### Running Tests
+
 ```bash
 # Install dependencies
 pnpm install
@@ -175,6 +198,7 @@ pnpm run test:e2e
 ## Test Coverage
 
 ### Workflows Tested
+
 ✅ Complete application submission to certificate issuance
 ✅ Payment processing with QR code
 ✅ Document upload and review
@@ -185,6 +209,7 @@ pnpm run test:e2e
 ✅ Audit logging and monitoring
 
 ### Integration Points Tested
+
 ✅ Farmer Portal ↔ Admin Portal data sync
 ✅ Admin Portal ↔ Certificate Portal integration
 ✅ Payment system integration
@@ -194,6 +219,7 @@ pnpm run test:e2e
 ✅ Document management workflow
 
 ### Security Tests
+
 ✅ Authentication for each role
 ✅ Authorization for protected routes
 ✅ Public access for verification portal
@@ -201,6 +227,7 @@ pnpm run test:e2e
 ✅ Storage state persistence
 
 ### Performance Tests
+
 ✅ Page load times (< 5 seconds)
 ✅ Concurrent user handling (5 users)
 ✅ Database query performance
@@ -209,11 +236,13 @@ pnpm run test:e2e
 ## Test Data Management
 
 ### Dynamic Test Data
+
 - Uses timestamps for unique identifiers
 - Prevents test conflicts with existing data
 - Format: `ฟาร์มทดสอบ E2E {timestamp}`
 
 ### Cleanup Strategy
+
 - Each test is independent
 - No test depends on previous test data
 - Unique IDs prevent data pollution
@@ -221,16 +250,19 @@ pnpm run test:e2e
 ## Reporting
 
 ### HTML Report
+
 - Visual test results with screenshots
 - Failure traces with step-by-step replay
 - Performance metrics
 
 ### JSON Report
+
 - Machine-readable test results
 - Location: `test-results/e2e-results.json`
 - For CI/CD integration
 
 ### JUnit Report
+
 - CI/CD compatible format
 - Location: `test-results/e2e-junit.xml`
 - For Jenkins, GitLab CI, GitHub Actions
@@ -238,7 +270,9 @@ pnpm run test:e2e
 ## Documentation
 
 ### README.md (`tests/e2e/README.md`)
+
 Comprehensive documentation including:
+
 - Prerequisites and setup instructions
 - Running tests guide
 - Test scenarios explanation
@@ -251,6 +285,7 @@ Comprehensive documentation including:
 ## CI/CD Integration
 
 ### GitHub Actions Example Provided
+
 ```yaml
 - Install dependencies
 - Install Playwright browsers
@@ -260,6 +295,7 @@ Comprehensive documentation including:
 ```
 
 ### Recommended CI Pipeline
+
 1. Build all applications
 2. Start database and services
 3. Run unit tests
@@ -270,21 +306,25 @@ Comprehensive documentation including:
 ## Benefits
 
 ### Comprehensive Coverage
+
 - Tests entire user journeys
 - Validates cross-portal integration
 - Ensures data consistency
 
 ### Early Bug Detection
+
 - Catches integration issues early
 - Validates workflows end-to-end
 - Tests real user scenarios
 
 ### Regression Prevention
+
 - Automated testing on every PR
 - Catches breaking changes
 - Maintains system stability
 
 ### Documentation
+
 - Tests serve as living documentation
 - Shows how system should work
 - Guides new developers
@@ -292,6 +332,7 @@ Comprehensive documentation including:
 ## Next Steps
 
 ### Recommended Additions
+
 1. **Visual Regression Testing**: Screenshot comparison
 2. **API Testing**: Direct API endpoint tests
 3. **Load Testing**: Stress test with many concurrent users
@@ -301,6 +342,7 @@ Comprehensive documentation including:
 7. **Email Testing**: Notification email validation
 
 ### Enhancement Opportunities
+
 1. Add more error scenarios
 2. Test offline functionality
 3. Add network failure simulations
@@ -322,6 +364,7 @@ Comprehensive documentation including:
 ## Maintenance
 
 ### Regular Updates Needed
+
 - Update selectors if UI changes
 - Adjust timeouts if performance changes
 - Update test data if schema changes
@@ -329,6 +372,7 @@ Comprehensive documentation including:
 - Review and update documentation
 
 ### Monitoring
+
 - Track test execution times
 - Monitor failure rates
 - Review flaky tests

@@ -174,7 +174,7 @@ enum UserRole {
   INSPECTOR = 'inspector',
   APPROVER = 'approver',
   ADMIN = 'admin',
-  PUBLIC = 'public',
+  PUBLIC = 'public'
 }
 ```
 
@@ -321,7 +321,7 @@ const COLORS = {
   inspector: '#ff9800', // Orange
   approver: '#9c27b0', // Purple
   admin: '#f44336', // Red
-  public: '#757575', // Gray
+  public: '#757575' // Gray
 };
 ```
 

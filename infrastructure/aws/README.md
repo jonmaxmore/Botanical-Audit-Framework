@@ -177,6 +177,7 @@ aws ecs update-service \
 ### Auto-scaling
 
 Auto-scaling is configured to:
+
 - Scale up when CPU > 70%
 - Scale down when CPU < 30%
 - Min: 2 tasks
@@ -341,6 +342,7 @@ aws ecr batch-delete-image \
 ## Support
 
 For issues:
+
 1. Check CloudWatch logs
 2. Review ECS task status
 3. Verify security group rules

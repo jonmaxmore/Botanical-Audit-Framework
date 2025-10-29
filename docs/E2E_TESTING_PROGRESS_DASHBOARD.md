@@ -22,6 +22,7 @@
 ## 🎯 Test Suite Status
 
 ### ✅ Registration Flow (83% - 5/6 passing)
+
 ```
 TC 1.1.1: Page renders               [✓] PASS
 TC 1.1.2: Required field validation   [✓] PASS
@@ -32,6 +33,7 @@ TC 1.1.6: No console errors           [✓] PASS
 ```
 
 ### 🟡 Login Flow (63% - 5/8 passing)
+
 ```
 TC 1.2.1: Page renders               [✓] PASS
 TC 1.2.2: Required field validation   [✓] PASS
@@ -44,6 +46,7 @@ TC 1.2.8: No console errors           [✓] PASS
 ```
 
 ### 🔴 Create Application (0% - 0/7 passing)
+
 ```
 TC 2.2.1: Navigate to create page     [✗] FAIL (BUG #1 - can't login)
 TC 2.2.2: Form renders                [✗] FAIL (BUG #1 - can't login)
@@ -53,9 +56,11 @@ TC 2.2.5: Appears in list             [✗] FAIL (BUG #1 - can't login)
 TC 2.2.6: Retry logic                 [✗] FAIL (BUG #1 - can't login)
 TC 2.2.7: No console errors           [✗] FAIL (BUG #1 - can't login)
 ```
+
 **Blocker:** All tests require successful login first!
 
 ### ✅ Error Boundary (90% - 9/10 passing)
+
 ```
 TC 4.1.1: Catches errors              [✓] PASS
 TC 4.1.2: Thai error message          [✓] PASS
@@ -75,19 +80,19 @@ TC 4.1.10: Registration errors        [✓] PASS
 
 ### ✅ FIXED (4 bugs)
 
-| Bug | Name | Impact | Status |
-|-----|------|--------|--------|
-| #4 | Submit Button Text | 1 test | ✅ FIXED Round 1 |
-| #5 | Password Selector | 3 tests | ✅ FIXED Round 2 |
-| #6 | Role Field Visibility | 1 test | ✅ FIXED Round 3 |
-| #7 | MUI Select Click | 2 tests | ✅ FIXED Round 4 |
+| Bug | Name                  | Impact  | Status           |
+| --- | --------------------- | ------- | ---------------- |
+| #4  | Submit Button Text    | 1 test  | ✅ FIXED Round 1 |
+| #5  | Password Selector     | 3 tests | ✅ FIXED Round 2 |
+| #6  | Role Field Visibility | 1 test  | ✅ FIXED Round 3 |
+| #7  | MUI Select Click      | 2 tests | ✅ FIXED Round 4 |
 
 ### 🔴 REMAINING (2 bugs)
 
-| Bug | Name | Impact | Priority | Est. Time |
-|-----|------|--------|----------|-----------|
-| #1 | Dashboard Redirect | 11 tests | 🔴 CRITICAL | 45-90 min |
-| #3 | Console Errors | 1 test | 🟡 MEDIUM | 15 min |
+| Bug | Name               | Impact   | Priority    | Est. Time |
+| --- | ------------------ | -------- | ----------- | --------- |
+| #1  | Dashboard Redirect | 11 tests | 🔴 CRITICAL | 45-90 min |
+| #3  | Console Errors     | 1 test   | 🟡 MEDIUM   | 15 min    |
 
 ---
 
@@ -115,6 +120,7 @@ Next: Fix BUG #3 → 31/31 (100%) 🎉
 ## 🎯 Critical Path to 100%
 
 ### Step 1: Fix BUG #1 (Dashboard Redirect)
+
 - **Impact:** +11 tests (+35%)
 - **Time:** 45-90 minutes
 - **Actions:**
@@ -127,6 +133,7 @@ Next: Fix BUG #3 → 31/31 (100%) 🎉
 **Expected Result:** 30/31 tests passing (97%)
 
 ### Step 2: Fix BUG #3 (Console Errors)
+
 - **Impact:** +1 test (+3%)
 - **Time:** 15 minutes
 - **Actions:**
@@ -137,6 +144,7 @@ Next: Fix BUG #3 → 31/31 (100%) 🎉
 **Expected Result:** 31/31 tests passing (100%) 🎉
 
 ### Step 3: Cross-Browser Testing
+
 - **Impact:** Validate across all browsers
 - **Time:** 4-6 hours
 - **Actions:**
@@ -149,6 +157,7 @@ Next: Fix BUG #3 → 31/31 (100%) 🎉
 **Expected Result:** 155 passing tests (31 × 5 browsers)
 
 ### Step 4: QA Handoff
+
 - **Impact:** Production readiness
 - **Time:** 1 hour
 - **Actions:**
@@ -178,17 +187,20 @@ Next: Fix BUG #3 → 31/31 (100%) 🎉
 ## 📊 Key Metrics
 
 ### Test Execution Performance
+
 - **Duration:** 4 minutes 6 seconds (full suite)
 - **Tests per minute:** ~7.5 tests
 - **Time savings vs manual:** 97% (4 min vs 155 min)
 
 ### Code Coverage
+
 - **Test code:** 940 lines
 - **Test cases:** 31
 - **Pages tested:** 4 (register, login, dashboard, applications)
 - **Components tested:** 10+ (forms, buttons, inputs, selects, error boundaries)
 
 ### Quality Impact
+
 - **Bugs found:** 7
 - **Bugs fixed:** 4
 - **Bugs remaining:** 2
@@ -199,6 +211,7 @@ Next: Fix BUG #3 → 31/31 (100%) 🎉
 ## 🎓 Knowledge Base
 
 ### MUI Select Testing Pattern
+
 ```typescript
 // ✅ Correct way to interact with MUI Select
 await page.locator('[role="combobox"]').first().click();
@@ -206,6 +219,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 ```
 
 ### Selector Priority Order
+
 1. Semantic roles: `getByRole('button')`
 2. Labels: `getByLabel('Email')`
 3. ARIA attributes: `locator('[role="combobox"]')`
@@ -213,6 +227,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 5. CSS classes: ❌ Avoid
 
 ### Common Pitfalls
+
 - ❌ Using `getByLabel()` when label matches multiple elements
 - ❌ Clicking hidden inputs instead of visible controls
 - ❌ Forgetting to wait for dropdowns to open
@@ -223,6 +238,7 @@ await page.getByRole('option', { name: 'เกษตรกร (Farmer)' }).click
 ## 📞 Quick Reference
 
 ### Run Tests
+
 ```bash
 cd frontend-nextjs
 npm run test:e2e              # Run all tests
@@ -232,11 +248,13 @@ npm run test:e2e:report       # View HTML report
 ```
 
 ### View Results
+
 - Screenshots: `frontend-nextjs/test-results/*/test-failed-*.png`
 - Videos: `frontend-nextjs/test-results/*/video.webm`
 - HTML Report: `npm run test:e2e:report`
 
 ### Documentation
+
 - Test Plan: `docs/COMPREHENSIVE_E2E_TESTING_PLAN.md`
 - Bug Report: `docs/BUGS_FOUND_E2E_TESTING.md`
 - Fix Progress: `docs/BUG_FIX_PROGRESS.md`

@@ -284,9 +284,7 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
 
       const updatedApplication = responseData.application;
 
-      setApplications((prev) =>
-        prev.map((app) => (app.id === id ? updatedApplication : app))
-      );
+      setApplications((prev) => prev.map((app) => (app.id === id ? updatedApplication : app)));
 
       if (currentApplication?.id === id) {
         setCurrentApplication(updatedApplication);
@@ -319,9 +317,7 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
       const data = await response.json();
       const submittedApplication = data.application;
 
-      setApplications((prev) =>
-        prev.map((app) => (app.id === id ? submittedApplication : app))
-      );
+      setApplications((prev) => prev.map((app) => (app.id === id ? submittedApplication : app)));
 
       if (currentApplication?.id === id) {
         setCurrentApplication(submittedApplication);

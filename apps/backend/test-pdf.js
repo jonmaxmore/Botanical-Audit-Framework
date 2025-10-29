@@ -1,6 +1,6 @@
 /**
  * Test PDF Generation
- * 
+ *
  * ทดสอบการสร้าง PDF จาก HTML template
  */
 
@@ -10,7 +10,7 @@ const path = require('path');
 
 async function testPDFGeneration() {
   console.log('🧪 Testing PDF Generation...\n');
-  
+
   try {
     // Test 1: Simple HTML to PDF
     console.log('📝 Test 1: Simple HTML to PDF');
@@ -36,11 +36,11 @@ async function testPDFGeneration() {
         </body>
       </html>
     `;
-    
+
     const simplePdf = await PDFGenerator.generatePDF(simpleHtml);
     await fs.writeFile('test-simple.pdf', simplePdf);
     console.log('✅ Simple PDF created: test-simple.pdf\n');
-    
+
     // Test 2: Certificate Template
     console.log('📝 Test 2: Certificate Template');
     const certificateHtml = `
@@ -129,7 +129,9 @@ async function testPDFGeneration() {
               
               <div class="field">
                 <span class="label">วันหมดอายุ:</span>
-                <span class="value">${new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toLocaleDateString('th-TH', {
+                <span class="value">${new Date(
+                  Date.now() + 3 * 365 * 24 * 60 * 60 * 1000
+                ).toLocaleDateString('th-TH', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
@@ -146,18 +148,18 @@ async function testPDFGeneration() {
         </body>
       </html>
     `;
-    
+
     const certPdf = await PDFGenerator.generatePDF(certificateHtml, {
       format: 'A4',
       landscape: false
     });
     await fs.writeFile('test-certificate.pdf', certPdf);
     console.log('✅ Certificate PDF created: test-certificate.pdf\n');
-    
+
     // Test 3: Template with variables
     console.log('📝 Test 3: Template with variables');
     const templatePath = path.join(__dirname, 'services/pdf/templates/approver/certificate.html');
-    
+
     try {
       const templateData = {
         certificateNumber: 'GACP-2025-TEST-001',
@@ -168,23 +170,22 @@ async function testPDFGeneration() {
         issuedDate: new Date().toLocaleDateString('th-TH'),
         expiryDate: new Date(Date.now() + 3 * 365 * 24 * 60 * 60 * 1000).toLocaleDateString('th-TH')
       };
-      
+
       const templatePdf = await PDFGenerator.generateFromTemplate(templatePath, templateData);
       await fs.writeFile('test-template.pdf', templatePdf);
       console.log('✅ Template PDF created: test-template.pdf\n');
     } catch (error) {
       console.log('⚠️  Template test skipped (template file not found)\n');
     }
-    
+
     // Close browser
     await PDFGenerator.close();
-    
+
     console.log('✅ All PDF tests passed!');
     console.log('\n📁 Generated files:');
     console.log('  - test-simple.pdf');
     console.log('  - test-certificate.pdf');
     console.log('  - test-template.pdf (if template exists)');
-    
   } catch (error) {
     console.error('\n❌ Test failed:', error.message);
     console.error(error.stack);
@@ -199,7 +200,7 @@ if (require.main === module) {
       console.log('\n🎉 Test completed successfully!');
       process.exit(0);
     })
-    .catch((error) => {
+    .catch(error => {
       console.error('\n💥 Test failed:', error);
       process.exit(1);
     });

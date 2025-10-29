@@ -27,7 +27,7 @@ const createMockCertificate = (overrides?: Partial<Certificate>): Certificate =>
   issuedDate: new Date('2025-01-15'),
   expiryDate: new Date('2028-01-15'), // 3 years
   createdAt: new Date('2025-01-15'),
-  ...overrides,
+  ...overrides
 });
 
 describe('API Routes: /api/certificates', () => {
@@ -36,7 +36,7 @@ describe('API Routes: /api/certificates', () => {
       const certificates = [
         createMockCertificate({ userId: 'user-001', id: 'cert-001' }),
         createMockCertificate({ userId: 'user-002', id: 'cert-002' }),
-        createMockCertificate({ userId: 'user-001', id: 'cert-003' }),
+        createMockCertificate({ userId: 'user-001', id: 'cert-003' })
       ];
 
       const userCertificates = certificates.filter(cert => cert.userId === 'user-001');
@@ -48,7 +48,7 @@ describe('API Routes: /api/certificates', () => {
       const certificates = [
         createMockCertificate({ status: 'ACTIVE' }),
         createMockCertificate({ status: 'REVOKED' }),
-        createMockCertificate({ status: 'ACTIVE' }),
+        createMockCertificate({ status: 'ACTIVE' })
       ];
 
       const activeCertificates = certificates.filter(cert => cert.status === 'ACTIVE');
@@ -60,11 +60,11 @@ describe('API Routes: /api/certificates', () => {
       const certificates = [
         createMockCertificate({ issuedDate: new Date('2024-01-01') }),
         createMockCertificate({ issuedDate: new Date('2025-01-01') }),
-        createMockCertificate({ issuedDate: new Date('2023-01-01') }),
+        createMockCertificate({ issuedDate: new Date('2023-01-01') })
       ];
 
       const sorted = [...certificates].sort(
-        (a, b) => b.issuedDate.getTime() - a.issuedDate.getTime(),
+        (a, b) => b.issuedDate.getTime() - a.issuedDate.getTime()
       );
 
       expect(sorted[0].issuedDate.getFullYear()).toBe(2025);
@@ -73,11 +73,11 @@ describe('API Routes: /api/certificates', () => {
 
     it('should calculate days remaining until expiry', () => {
       const certificate = createMockCertificate({
-        expiryDate: new Date('2025-12-31'),
+        expiryDate: new Date('2025-12-31')
       });
       const now = new Date('2025-10-01');
       const daysRemaining = Math.ceil(
-        (certificate.expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+        (certificate.expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
       );
 
       expect(daysRemaining).toBe(91); // Oct 1 to Dec 31
@@ -94,7 +94,7 @@ describe('API Routes: /api/certificates', () => {
     it('should find certificate by id', () => {
       const certificates = [
         createMockCertificate({ id: 'cert-001' }),
-        createMockCertificate({ id: 'cert-002' }),
+        createMockCertificate({ id: 'cert-002' })
       ];
 
       const found = certificates.find(cert => cert.id === 'cert-001');
@@ -124,7 +124,7 @@ describe('API Routes: /api/certificates', () => {
       const certificate = createMockCertificate({
         status: 'REVOKED',
         revokedDate: new Date('2025-06-15'),
-        revokedReason: 'Non-compliance during audit',
+        revokedReason: 'Non-compliance during audit'
       });
 
       expect(certificate.status).toBe('REVOKED');
@@ -181,7 +181,7 @@ describe('API Routes: /api/certificates', () => {
         ...certificate,
         status: 'REVOKED' as const,
         revokedDate: new Date(),
-        revokedReason: 'Non-compliance',
+        revokedReason: 'Non-compliance'
       };
 
       expect(revoked.status).toBe('REVOKED');
@@ -198,7 +198,7 @@ describe('API Routes: /api/certificates', () => {
 
     it('should require reason for revocation', () => {
       const revokePayload = {
-        reason: 'Non-compliance found during audit',
+        reason: 'Non-compliance found during audit'
       };
 
       expect(revokePayload.reason).toBeDefined();
@@ -211,7 +211,7 @@ describe('API Routes: /api/certificates', () => {
       const waitPeriodDays = 30;
 
       const daysSinceRevocation = Math.ceil(
-        (now.getTime() - revokedDate.getTime()) / (1000 * 60 * 60 * 24),
+        (now.getTime() - revokedDate.getTime()) / (1000 * 60 * 60 * 24)
       );
       const canReapply = daysSinceRevocation >= waitPeriodDays;
 
@@ -224,7 +224,7 @@ describe('API Routes: /api/certificates', () => {
       const waitPeriodDays = 30;
 
       const daysSinceRevocation = Math.ceil(
-        (now.getTime() - revokedDate.getTime()) / (1000 * 60 * 60 * 24),
+        (now.getTime() - revokedDate.getTime()) / (1000 * 60 * 60 * 24)
       );
       const canReapply = daysSinceRevocation >= waitPeriodDays;
 
@@ -236,7 +236,7 @@ describe('API Routes: /api/certificates', () => {
     it('should verify valid ACTIVE certificate', () => {
       const certificate = createMockCertificate({
         status: 'ACTIVE',
-        expiryDate: new Date('2028-01-15'),
+        expiryDate: new Date('2028-01-15')
       });
       const now = new Date('2025-10-01');
 
@@ -256,7 +256,7 @@ describe('API Routes: /api/certificates', () => {
     it('should reject EXPIRED certificate', () => {
       const certificate = createMockCertificate({
         status: 'ACTIVE',
-        expiryDate: new Date('2024-01-01'), // Past date
+        expiryDate: new Date('2024-01-01') // Past date
       });
       const now = new Date('2025-10-01');
 
@@ -268,7 +268,7 @@ describe('API Routes: /api/certificates', () => {
     it('should find certificate by number', () => {
       const certificates = [
         createMockCertificate({ certificateNumber: 'GACP-2025-0001' }),
-        createMockCertificate({ certificateNumber: 'GACP-2025-0002' }),
+        createMockCertificate({ certificateNumber: 'GACP-2025-0002' })
       ];
 
       const found = certificates.find(cert => cert.certificateNumber === 'GACP-2025-0001');
@@ -289,7 +289,7 @@ describe('API Routes: /api/certificates', () => {
   describe('Certificate Expiry Logic', () => {
     it('should detect expired certificate', () => {
       const certificate = createMockCertificate({
-        expiryDate: new Date('2024-01-01'),
+        expiryDate: new Date('2024-01-01')
       });
       const now = new Date('2025-10-01');
 
@@ -300,7 +300,7 @@ describe('API Routes: /api/certificates', () => {
 
     it('should detect active certificate (not expired)', () => {
       const certificate = createMockCertificate({
-        expiryDate: new Date('2028-01-01'),
+        expiryDate: new Date('2028-01-01')
       });
       const now = new Date('2025-10-01');
 
@@ -314,7 +314,7 @@ describe('API Routes: /api/certificates', () => {
       const now = new Date('2025-12-01');
 
       const daysUntilExpiry = Math.ceil(
-        (expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+        (expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
       );
 
       expect(daysUntilExpiry).toBe(30);
@@ -322,12 +322,12 @@ describe('API Routes: /api/certificates', () => {
 
     it('should identify certificates expiring soon (< 90 days)', () => {
       const certificate = createMockCertificate({
-        expiryDate: new Date('2025-12-15'),
+        expiryDate: new Date('2025-12-15')
       });
       const now = new Date('2025-10-01'); // 75 days before expiry
 
       const daysUntilExpiry = Math.ceil(
-        (certificate.expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
+        (certificate.expiryDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
       );
       const isExpiringSoon = daysUntilExpiry < 90;
 
@@ -338,7 +338,7 @@ describe('API Routes: /api/certificates', () => {
   describe('GET /api/certificates/:id/download - Download Logic', () => {
     it('should generate filename from certificate number', () => {
       const certificate = createMockCertificate({
-        certificateNumber: 'GACP-2025-0042',
+        certificateNumber: 'GACP-2025-0042'
       });
       const filename = `${certificate.certificateNumber}.pdf`;
 

@@ -22,7 +22,7 @@ const MAIN_SERVICES = {
     modules: [
       'apps/backend/modules/auth-farmer/',
       'apps/backend/modules/auth-dtam/',
-      'apps/backend/modules/user-management/',
+      'apps/backend/modules/user-management/'
     ],
     apiEndpoints: ['/api/auth/*', '/api/users/*'],
     features: [
@@ -30,10 +30,10 @@ const MAIN_SERVICES = {
       'JWT Authentication',
       'Role-based Access Control',
       'Multi-factor Authentication',
-      'Session Management',
+      'Session Management'
     ],
     usedBy: 'ALL_SERVICES',
-    dependencies: [],
+    dependencies: []
   },
 
   // 2. ระบบยื่นเอกสารขอรับรอง GACP
@@ -48,11 +48,11 @@ const MAIN_SERVICES = {
       'apps/backend/modules/application-workflow/',
       'apps/backend/modules/cannabis-survey/',
       'apps/backend/modules/document-management/',
-      'business-logic/gacp-workflow-engine.js',
+      'business-logic/gacp-workflow-engine.js'
     ],
     portals: {
       farmer: 'apps/farmer-portal/',
-      admin: 'apps/admin-portal/',
+      admin: 'apps/admin-portal/'
     },
     apiEndpoints: ['/api/applications/*', '/api/cannabis-survey/*'],
     features: [
@@ -61,11 +61,11 @@ const MAIN_SERVICES = {
       'Multi-stage Approval Workflow',
       'Payment Integration',
       'Notification System',
-      'Status Tracking',
+      'Status Tracking'
     ],
     workflow: ['เกษตรกรยื่นคำขอ', 'ตรวจสอบเอกสาร', 'ตรวจสอบภาคสนาม', 'อนุมัติ', 'ออกใบรับรอง'],
     usedBy: ['CERTIFICATE_MANAGEMENT'],
-    dependencies: ['AUTH-SSO-001', 'FARM-MGT-003', 'TRACK-004'],
+    dependencies: ['AUTH-SSO-001', 'FARM-MGT-003', 'TRACK-004']
   },
 
   // 3. ระบบบริหารจัดการฟาร์ม
@@ -80,7 +80,7 @@ const MAIN_SERVICES = {
     modules: [
       'apps/backend/modules/farm-management/',
       'business-logic/gacp-business-rules-engine.js',
-      'business-logic/gacp-field-inspection-system.js',
+      'business-logic/gacp-field-inspection-system.js'
     ],
     apiEndpoints: ['/api/farm-management/*', '/api/farms/*'],
     features: [
@@ -90,14 +90,14 @@ const MAIN_SERVICES = {
       'GAP/GACP Compliance',
       'Inspection Scheduling',
       'Digital Documentation',
-      'Backend Control Panel',
+      'Backend Control Panel'
     ],
     controlFeatures: {
       farmer: 'จัดการฟาร์มของตัวเอง (Standalone)',
-      admin: 'ควบคุม/ตรวจสอบฟาร์มทั้งหมด (Backend Control)',
+      admin: 'ควบคุม/ตรวจสอบฟาร์มทั้งหมด (Backend Control)'
     },
     usedBy: ['GACP-APP-002', 'TRACK-004'],
-    dependencies: ['AUTH-SSO-001', 'TRACK-004'],
+    dependencies: ['AUTH-SSO-001', 'TRACK-004']
   },
 
   // 4. ระบบ Track and Trace
@@ -117,11 +117,11 @@ const MAIN_SERVICES = {
       'Real-time Location Tracking',
       'Supply Chain Visibility',
       'Product Genealogy',
-      'Compliance Reporting',
+      'Compliance Reporting'
     ],
     trackingFlow: ['เมล็ด', 'การปลูก', 'การเก็บเกี่ยว', 'การแปรรูป', 'การจำหน่าย'],
     usedBy: ['GACP-APP-002', 'FARM-MGT-003'],
-    dependencies: ['AUTH-SSO-001', 'FARM-MGT-003'],
+    dependencies: ['AUTH-SSO-001', 'FARM-MGT-003']
   },
 
   // 5. ระบบสำรวจและแบบสอบถาม
@@ -143,12 +143,12 @@ const MAIN_SERVICES = {
       'Real-time Analytics',
       'Response Management',
       'Data Export (Excel, PDF, CSV)',
-      'Custom Survey Builder',
+      'Custom Survey Builder'
     ],
     regions: ['เหนือ', 'อีสาน', 'กลาง', 'ใต้'],
     standaloneNote: '100% Standalone - ไม่เชื่อมต่อกับระบบอื่น ใช้เฉพาะ Auth สำหรับ Login',
     usedBy: [],
-    dependencies: ['AUTH-SSO-001'], // Only for login
+    dependencies: ['AUTH-SSO-001'] // Only for login
   },
 
   // 6. ระบบเปรียบเทียบมาตรฐาน GACP
@@ -162,7 +162,7 @@ const MAIN_SERVICES = {
     hasBackendControl: false,
     modules: [
       'business-logic/gacp-standards-comparison-system.js',
-      'apps/backend/modules/standards-comparison/',
+      'apps/backend/modules/standards-comparison/'
     ],
     apiEndpoints: ['/api/standards-comparison/*', '/api/standards/*'],
     supportedStandards: [
@@ -173,7 +173,7 @@ const MAIN_SERVICES = {
       { code: 'USP', name: 'United States Pharmacopeia' },
       { code: 'WHO-GMP', name: 'World Health Organization GMP' },
       { code: 'ISO-22000', name: 'Food Safety Management' },
-      { code: 'HACCP', name: 'Hazard Analysis Critical Control Points' },
+      { code: 'HACCP', name: 'Hazard Analysis Critical Control Points' }
     ],
     features: [
       'Multi-Standards Comparison',
@@ -182,12 +182,12 @@ const MAIN_SERVICES = {
       'Cost Analysis',
       'Compliance Assessment',
       'Certification Planning',
-      'Requirements Mapping',
+      'Requirements Mapping'
     ],
     standaloneNote: '100% Standalone - ไม่เชื่อมต่อกับระบบอื่น ใช้เฉพาะ Auth สำหรับ Login',
     usedBy: [],
-    dependencies: ['AUTH-SSO-001'], // Only for login
-  },
+    dependencies: ['AUTH-SSO-001'] // Only for login
+  }
 };
 
 /**
@@ -201,7 +201,7 @@ const SUPPORTING_SERVICES = {
     nameTH: 'ระบบออกใบรับรอง',
     type: 'SUPPORTING',
     modules: ['apps/certificate-portal/', 'apps/backend/modules/certificate-management/'],
-    dependencies: ['GACP-APP-002'],
+    dependencies: ['GACP-APP-002']
   },
   NOTIFICATION: {
     id: 'NOTIFY-008',
@@ -209,7 +209,7 @@ const SUPPORTING_SERVICES = {
     nameTH: 'ระบบแจ้งเตือน',
     type: 'SUPPORTING',
     modules: ['apps/backend/modules/notification/'],
-    usedBy: 'ALL_SERVICES',
+    usedBy: 'ALL_SERVICES'
   },
   REPORTING: {
     id: 'REPORT-009',
@@ -217,7 +217,7 @@ const SUPPORTING_SERVICES = {
     nameTH: 'ระบบรายงานและวิเคราะห์',
     type: 'SUPPORTING',
     modules: ['apps/backend/modules/reporting-analytics/'],
-    usedBy: 'ALL_SERVICES',
+    usedBy: 'ALL_SERVICES'
   },
   SOP_WIZARD: {
     id: 'SOP-010',
@@ -225,8 +225,8 @@ const SUPPORTING_SERVICES = {
     nameTH: 'ระบบ SOP Wizard',
     type: 'SUPPORTING',
     modules: ['business-logic/gacp-sop-wizard-system.js'],
-    dependencies: ['FARM-MGT-003'],
-  },
+    dependencies: ['FARM-MGT-003']
+  }
 };
 
 /**
@@ -237,7 +237,7 @@ const SERVICE_TYPES = {
   CORE_BUSINESS: 'Core Business Service',
   STANDALONE: 'Standalone Service',
   STANDALONE_WITH_CONTROL: 'Standalone Service with Backend Control',
-  SUPPORTING: 'Supporting Service',
+  SUPPORTING: 'Supporting Service'
 };
 
 /**
@@ -247,7 +247,7 @@ const SERVICE_STATUS = {
   PRODUCTION: 'Production Ready',
   BETA: 'Beta Testing',
   DEVELOPMENT: 'In Development',
-  DEPRECATED: 'Deprecated',
+  DEPRECATED: 'Deprecated'
 };
 
 /**
@@ -302,7 +302,7 @@ function getServiceConsumers(serviceId) {
   return Object.values(allServices).filter(
     service =>
       service.usedBy === 'ALL_SERVICES' ||
-      (Array.isArray(service.usedBy) && service.usedBy.includes(serviceId)),
+      (Array.isArray(service.usedBy) && service.usedBy.includes(serviceId))
   );
 }
 
@@ -319,7 +319,7 @@ function generateServiceSummary() {
       totalSupportingServices: supportingServices.length,
       totalServices: mainServices.length + supportingServices.length,
       standaloneServices: getStandaloneServices().length,
-      productionServices: mainServices.filter(s => s.status === 'PRODUCTION').length,
+      productionServices: mainServices.filter(s => s.status === 'PRODUCTION').length
     },
     mainServices: mainServices.map(service => ({
       id: service.id,
@@ -328,14 +328,14 @@ function generateServiceSummary() {
       type: service.type,
       status: service.status,
       standalone: service.standalone,
-      features: service.features?.length || 0,
+      features: service.features?.length || 0
     })),
     supportingServices: supportingServices.map(service => ({
       id: service.id,
       name: service.name,
       nameTH: service.nameTH,
-      type: service.type,
-    })),
+      type: service.type
+    }))
   };
 }
 
@@ -386,7 +386,7 @@ module.exports = {
   getServiceDependencies,
   getServiceConsumers,
   generateServiceSummary,
-  displayServiceCatalog,
+  displayServiceCatalog
 };
 
 // Display catalog if run directly

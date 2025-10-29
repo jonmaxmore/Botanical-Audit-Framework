@@ -13,7 +13,7 @@ import {
   Chip,
   Alert,
   CircularProgress,
-  LinearProgress
+  LinearProgress,
 } from '@mui/material';
 import {
   Agriculture,
@@ -27,7 +27,7 @@ import {
   PersonAdd,
   ArrowForward,
   Description,
-  Timeline
+  Timeline,
 } from '@mui/icons-material';
 import { useAuth } from '@/contexts/AuthContext';
 import { useApplication } from '@/contexts/ApplicationContext';
@@ -39,14 +39,44 @@ function GuestLandingPage() {
   const router = useRouter();
 
   const workflowSteps = [
-    { step: 1, icon: <Assignment />, title: 'ยื่นคำขอ', description: 'กรอกข้อมูลฟาร์มและอัปโหลดเอกสาร' },
-    { step: 2, icon: <Payment />, title: 'ชำระเงินรอบแรก', description: '5,000 บาท (ค่าตรวจเอกสาร)' },
-    { step: 3, icon: <Description />, title: 'ตรวจสอบเอกสาร', description: 'เจ้าหน้าที่ DTAM ตรวจสอบ' },
+    {
+      step: 1,
+      icon: <Assignment />,
+      title: 'ยื่นคำขอ',
+      description: 'กรอกข้อมูลฟาร์มและอัปโหลดเอกสาร',
+    },
+    {
+      step: 2,
+      icon: <Payment />,
+      title: 'ชำระเงินรอบแรก',
+      description: '5,000 บาท (ค่าตรวจเอกสาร)',
+    },
+    {
+      step: 3,
+      icon: <Description />,
+      title: 'ตรวจสอบเอกสาร',
+      description: 'เจ้าหน้าที่ DTAM ตรวจสอบ',
+    },
     { step: 4, icon: <FactCheck />, title: 'เอกสารผ่าน', description: 'พร้อมต่อขั้นตอนถัดไป' },
-    { step: 5, icon: <Payment />, title: 'ชำระเงินรอบสอง', description: '25,000 บาท (ค่าตรวจฟาร์ม)' },
-    { step: 6, icon: <LocationOn />, title: 'ตรวจสอบฟาร์ม', description: 'VDO Call และ/หรือลงพื้นที่' },
+    {
+      step: 5,
+      icon: <Payment />,
+      title: 'ชำระเงินรอบสอง',
+      description: '25,000 บาท (ค่าตรวจฟาร์ม)',
+    },
+    {
+      step: 6,
+      icon: <LocationOn />,
+      title: 'ตรวจสอบฟาร์ม',
+      description: 'VDO Call และ/หรือลงพื้นที่',
+    },
     { step: 7, icon: <CheckCircle />, title: 'อนุมัติผล', description: 'ตัดสินผลการรับรอง' },
-    { step: 8, icon: <CardMembership />, title: 'รับใบรับรอง', description: 'ดาวน์โหลด Certificate' }
+    {
+      step: 8,
+      icon: <CardMembership />,
+      title: 'รับใบรับรอง',
+      description: 'ดาวน์โหลด Certificate',
+    },
   ];
 
   return (
@@ -56,7 +86,7 @@ function GuestLandingPage() {
           background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
           color: 'white',
           py: 8,
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
         <Container maxWidth="lg">
@@ -80,7 +110,7 @@ function GuestLandingPage() {
                 bgcolor: 'white',
                 color: '#2e7d32',
                 mr: 2,
-                '&:hover': { bgcolor: '#f5f5f5' }
+                '&:hover': { bgcolor: '#f5f5f5' },
               }}
             >
               สมัครสมาชิก
@@ -90,7 +120,11 @@ function GuestLandingPage() {
               size="large"
               startIcon={<Login />}
               onClick={() => router.push('/login')}
-              sx={{ borderColor: 'white', color: 'white', '&:hover': { borderColor: 'white', bgcolor: 'rgba(255,255,255,0.1)' } }}
+              sx={{
+                borderColor: 'white',
+                color: 'white',
+                '&:hover': { borderColor: 'white', bgcolor: 'rgba(255,255,255,0.1)' },
+              }}
             >
               เข้าสู่ระบบ
             </Button>
@@ -121,7 +155,7 @@ function GuestLandingPage() {
                   border: '2px solid',
                   borderColor: 'primary.main',
                   transition: 'transform 0.2s',
-                  '&:hover': { transform: 'translateY(-4px)' }
+                  '&:hover': { transform: 'translateY(-4px)' },
                 }}
               >
                 <Box
@@ -134,7 +168,7 @@ function GuestLandingPage() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    mb: 2
+                    mb: 2,
                   }}
                 >
                   {step.icon}
@@ -205,7 +239,9 @@ function AuthenticatedLandingPage() {
 
   useEffect(() => {
     if (applications && applications.length > 0) {
-      const active = applications.find((app) => app.currentState !== 'CERTIFICATE_ISSUED' && app.currentState !== 'REJECTED');
+      const active = applications.find(
+        (app) => app.currentState !== 'CERTIFICATE_ISSUED' && app.currentState !== 'REJECTED'
+      );
       setActiveApp(active || applications[0]);
     }
   }, [applications]);
@@ -229,25 +265,45 @@ function AuthenticatedLandingPage() {
     switch (user?.role) {
       case 'FARMER':
         return [
-          { label: 'ยื่นคำขอใหม่', path: '/farmer/applications/new', color: 'primary', show: !activeApp },
-          { label: 'อัปโหลดเอกสาร', path: '/farmer/documents', color: 'warning', show: activeApp?.currentState === 'DRAFT' },
-          { label: 'ชำระเงิน', path: '/farmer/payments', color: 'error', show: activeApp?.currentState?.includes('PAYMENT_PENDING') },
-          { label: 'ดูใบรับรอง', path: '/farmer/certificates', color: 'success', show: activeApp?.currentState === 'CERTIFICATE_ISSUED' }
+          {
+            label: 'ยื่นคำขอใหม่',
+            path: '/farmer/applications/new',
+            color: 'primary',
+            show: !activeApp,
+          },
+          {
+            label: 'อัปโหลดเอกสาร',
+            path: '/farmer/documents',
+            color: 'warning',
+            show: activeApp?.currentState === 'DRAFT',
+          },
+          {
+            label: 'ชำระเงิน',
+            path: '/farmer/payments',
+            color: 'error',
+            show: activeApp?.currentState?.includes('PAYMENT_PENDING'),
+          },
+          {
+            label: 'ดูใบรับรอง',
+            path: '/farmer/certificates',
+            color: 'success',
+            show: activeApp?.currentState === 'CERTIFICATE_ISSUED',
+          },
         ];
       case 'DTAM_OFFICER':
         return [
           { label: 'รายการรอตรวจ', path: '/officer/applications', color: 'primary', show: true },
-          { label: 'รายงาน', path: '/officer/reports', color: 'secondary', show: true }
+          { label: 'รายงาน', path: '/officer/reports', color: 'secondary', show: true },
         ];
       case 'INSPECTOR':
         return [
           { label: 'ตารางตรวจสอบ', path: '/inspector/schedule', color: 'primary', show: true },
-          { label: 'ส่งรายงาน', path: '/inspector/inspections', color: 'warning', show: true }
+          { label: 'ส่งรายงาน', path: '/inspector/inspections', color: 'warning', show: true },
         ];
       case 'ADMIN':
         return [
           { label: 'จัดการผู้ใช้', path: '/admin/users', color: 'primary', show: true },
-          { label: 'สถิติระบบ', path: '/admin/statistics', color: 'secondary', show: true }
+          { label: 'สถิติระบบ', path: '/admin/statistics', color: 'secondary', show: true },
         ];
       default:
         return [];
@@ -271,7 +327,9 @@ function AuthenticatedLandingPage() {
 
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -279,7 +337,14 @@ function AuthenticatedLandingPage() {
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Paper sx={{ p: 4, mb: 4, background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)', color: 'white' }}>
+      <Paper
+        sx={{
+          p: 4,
+          mb: 4,
+          background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+          color: 'white',
+        }}
+      >
         <Typography variant="h4" fontWeight={600} gutterBottom>
           สวัสดี, {user?.name}
         </Typography>
@@ -303,7 +368,10 @@ function AuthenticatedLandingPage() {
             sx={{ mb: 3 }}
           />
 
-          <WorkflowProgress currentState={activeApp.currentState} currentStep={activeApp.currentStep} />
+          <WorkflowProgress
+            currentState={activeApp.currentState}
+            currentStep={activeApp.currentStep}
+          />
 
           <Box sx={{ mt: 3 }}>
             <LinearProgress
@@ -312,7 +380,8 @@ function AuthenticatedLandingPage() {
               sx={{ height: 8, borderRadius: 4 }}
             />
             <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-              ความคืบหน้า: {Math.round((activeApp.currentStep / 8) * 100)}% ({activeApp.currentStep}/8 ขั้นตอน)
+              ความคืบหน้า: {Math.round((activeApp.currentStep / 8) * 100)}% ({activeApp.currentStep}
+              /8 ขั้นตอน)
             </Typography>
           </Box>
         </Paper>
@@ -368,7 +437,9 @@ export default function HomePage() {
 
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh' }}
+      >
         <CircularProgress size={60} />
       </Box>
     );

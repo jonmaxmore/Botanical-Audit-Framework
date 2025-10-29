@@ -441,7 +441,7 @@ class ApiError extends Error {
   constructor(
     public status: number,
     public message: string,
-    public data?: any,
+    public data?: any
   ) {
     super(message);
     this.name = 'ApiError';
@@ -451,7 +451,7 @@ class ApiError extends Error {
 async function apiClient<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
-    ...(options.headers || {}),
+    ...(options.headers || {})
   };
 
   // Add authentication token
@@ -462,7 +462,7 @@ async function apiClient<T = any>(endpoint: string, options: RequestInit = {}): 
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    headers,
+    headers
   });
 
   if (!response.ok) {
@@ -470,7 +470,7 @@ async function apiClient<T = any>(endpoint: string, options: RequestInit = {}): 
     throw new ApiError(
       response.status,
       errorData.message || `Request failed with status ${response.status}`,
-      errorData,
+      errorData
     );
   }
 
@@ -486,8 +486,8 @@ export const paymentApi = {
       '/api/payments/calculate-fees',
       {
         method: 'POST',
-        body: JSON.stringify(request),
-      },
+        body: JSON.stringify(request)
+      }
     );
   },
 
@@ -497,7 +497,7 @@ export const paymentApi = {
   initiatePayment: async (request: PaymentInitiationRequest) => {
     return apiClient<{ success: boolean; data: Payment }>('/api/payments/initiate', {
       method: 'POST',
-      body: JSON.stringify(request),
+      body: JSON.stringify(request)
     });
   },
 
@@ -525,12 +525,12 @@ export const paymentApi = {
           if (value !== undefined) acc[key] = String(value);
           return acc;
         },
-        {} as Record<string, string>,
-      ),
+        {} as Record<string, string>
+      )
     ).toString();
 
     return apiClient<{ success: boolean; data: PaymentHistoryResponse }>(
-      `/api/payments/user/history${queryString ? `?${queryString}` : ''}`,
+      `/api/payments/user/history${queryString ? `?${queryString}` : ''}`
     );
   },
 
@@ -549,7 +549,7 @@ export const paymentApi = {
    */
   retryPayment: async (paymentId: string) => {
     return apiClient<{ success: boolean; data: Payment }>(`/api/payments/${paymentId}/retry`, {
-      method: 'POST',
+      method: 'POST'
     });
   },
 
@@ -559,7 +559,7 @@ export const paymentApi = {
   cancelPayment: async (paymentId: string, reason?: string) => {
     return apiClient<{ success: boolean; message: string }>(`/api/payments/${paymentId}/cancel`, {
       method: 'POST',
-      body: JSON.stringify({ reason }),
+      body: JSON.stringify({ reason })
     });
   },
 
@@ -570,7 +570,7 @@ export const paymentApi = {
     const token = getCookie('farmer_token');
     const url = `${API_BASE_URL}/api/payments/receipt/${paymentId}`;
     window.open(`${url}${token ? `?token=${token}` : ''}`, '_blank', 'noopener,noreferrer');
-  },
+  }
 };
 ```
 
@@ -592,7 +592,7 @@ import type {
   FeeCalculationRequest,
   PaymentInitiationRequest,
   FeeBreakdown,
-  Payment,
+  Payment
 } from '@/types/payment';
 
 export function usePayment() {
@@ -660,7 +660,7 @@ export function usePayment() {
     calculateFees,
     initiatePayment,
     retryPayment,
-    cancelPayment,
+    cancelPayment
   };
 }
 ```
@@ -688,7 +688,7 @@ export function usePaymentStatus({
   paymentId,
   enabled = true,
   pollingInterval = 3000,
-  onStatusChange,
+  onStatusChange
 }: UsePaymentStatusOptions) {
   const [payment, setPayment] = useState<Payment | null>(null);
   const [loading, setLoading] = useState(true);
@@ -1736,19 +1736,19 @@ describe('Payment API Client', () => {
           feeBreakdown: {
             baseFee: 5000,
             inspectionFee: 2000,
-            totalAmount: 7490,
-          },
-        },
+            totalAmount: 7490
+          }
+        }
       };
 
       (global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => mockResponse,
+        json: async () => mockResponse
       });
 
       const result = await paymentApi.calculateFees({
         applicationType: 'NEW_CERTIFICATION',
-        requiresInspection: true,
+        requiresInspection: true
       });
 
       expect(result.data.feeBreakdown.totalAmount).toBe(7490);
@@ -1763,21 +1763,21 @@ describe('Payment API Client', () => {
           paymentId: 'PAY_123',
           promptPay: {
             qrCodeImage: 'data:image/png;base64,...',
-            referenceNumber: 'GACP12345678',
-          },
-        },
+            referenceNumber: 'GACP12345678'
+          }
+        }
       };
 
       (global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => mockResponse,
+        json: async () => mockResponse
       });
 
       const result = await paymentApi.initiatePayment({
         applicationId: 'APP_123',
         paymentType: 'CERTIFICATION_FEE',
         amount: 7490,
-        feeBreakdown: {},
+        feeBreakdown: {}
       });
 
       expect(result.data.paymentId).toBe('PAY_123');
@@ -1801,19 +1801,19 @@ describe('usePaymentStatus', () => {
     const mockPayment = {
       paymentId: 'PAY_123',
       status: 'PENDING',
-      amount: 7490,
+      amount: 7490
     };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ success: true, data: mockPayment }),
+      json: async () => ({ success: true, data: mockPayment })
     });
 
     const { result } = renderHook(() =>
       usePaymentStatus({
         paymentId: 'PAY_123',
-        pollingInterval: 100,
-      }),
+        pollingInterval: 100
+      })
     );
 
     await waitFor(() => {
@@ -1827,19 +1827,19 @@ describe('usePaymentStatus', () => {
     const mockPayment = {
       paymentId: 'PAY_123',
       status: 'COMPLETED',
-      amount: 7490,
+      amount: 7490
     };
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ success: true, data: mockPayment }),
+      json: async () => ({ success: true, data: mockPayment })
     });
 
     const { result } = renderHook(() =>
       usePaymentStatus({
         paymentId: 'PAY_123',
-        pollingInterval: 100,
-      }),
+        pollingInterval: 100
+      })
     );
 
     await waitFor(() => {
@@ -1887,14 +1887,14 @@ test.describe('Payment Workflow', () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-Webhook-Secret': 'test-secret',
+          'X-Webhook-Secret': 'test-secret'
         },
         body: JSON.stringify({
           paymentId: 'PAY_123',
           status: 'success',
           transactionId: 'TRX_456',
-          amount: 7490,
-        }),
+          amount: 7490
+        })
       });
     });
 
@@ -1933,7 +1933,7 @@ test.describe('E2E: Payment System', () => {
     // Verify PDF download
     const [download] = await Promise.all([
       page.waitForEvent('download'),
-      page.click('button:has-text("ดาวน์โหลด")'),
+      page.click('button:has-text("ดาวน์โหลด")')
     ]);
 
     expect(download.suggestedFilename()).toMatch(/receipt-.*\.pdf/);
@@ -1979,19 +1979,19 @@ const paymentMonitoring = {
     // Failed payments > 5%
     failureRate: {
       threshold: 0.05,
-      action: 'Send alert to dev team',
+      action: 'Send alert to dev team'
     },
     // Pending payments > 15 minutes
     stuckPayments: {
       threshold: 15 * 60 * 1000,
-      action: 'Auto-cancel and notify',
+      action: 'Auto-cancel and notify'
     },
     // Webhook failures
     webhookErrors: {
       threshold: 3,
-      action: 'Send critical alert',
-    },
-  },
+      action: 'Send critical alert'
+    }
+  }
 };
 ```
 

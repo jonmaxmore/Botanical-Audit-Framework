@@ -5,7 +5,7 @@ import QRCode from 'qrcode';
 
 // Mock QRCode library
 jest.mock('qrcode', () => ({
-  toCanvas: jest.fn(),
+  toCanvas: jest.fn()
 }));
 
 describe('VerifyPage', () => {
@@ -229,7 +229,7 @@ describe('VerifyPage', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('123 หมู่ 5 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี 20230'),
+          screen.getByText('123 หมู่ 5 ต.ทุ่งสุขลา อ.ศรีราชา จ.ชลบุรี 20230')
         ).toBeInTheDocument();
       });
     });
@@ -438,7 +438,7 @@ describe('VerifyPage', () => {
           expect.stringContaining('GACP-2025-0001'),
           expect.objectContaining({
             width: 200,
-            margin: 2,
+            margin: 2
           })
         );
       });

@@ -60,16 +60,19 @@ aws logs tail /ecs/gacp-backend --follow
 ## Troubleshooting
 
 **ECS tasks not starting:**
+
 ```bash
 aws ecs describe-tasks --cluster gacp-cluster-production --tasks TASK_ID
 ```
 
 **Secrets not loading:**
+
 ```bash
 aws secretsmanager get-secret-value --secret-id gacp-platform/production
 ```
 
 **Health check failing:**
+
 ```bash
 aws elbv2 describe-target-health --target-group-arn TG_ARN
 ```

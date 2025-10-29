@@ -23,21 +23,21 @@ class MockOCRService {
         address: '123 หมู่ 1 ตำบลบางขุนเทียน เขตบางขุนเทียน กรุงเทพมหานคร 10150',
         dateOfBirth: '1985-03-15',
         issueDate: '2020-03-15',
-        expiryDate: '2030-03-15',
+        expiryDate: '2030-03-15'
       },
       land_deed: {
         deedNumber: 'ข.21234',
         landSize: '5-2-75',
         location: 'ตำบลบางขุนเทียน เขตบางขุนเทียน กรุงเทพมหานคร',
         ownerName: 'นายสมชาย ใจดี',
-        coordinates: '13.686159, 100.414374',
+        coordinates: '13.686159, 100.414374'
       },
       business_registration: {
         businessName: 'วิสาหกิจชุมชนเกษตรอินทรีย์บางขุนเทียน',
         registrationNumber: 'สวช.1234/2566',
         businessType: 'วิสาหกิจชุมชน',
-        registrationDate: '2023-01-15',
-      },
+        registrationDate: '2023-01-15'
+      }
     };
 
     return {
@@ -45,7 +45,7 @@ class MockOCRService {
       confidence: 0.95,
       extractedData: mockData[documentType] || {},
       rawText: `Extracted text from ${documentType}`,
-      processingTime: 1000,
+      processingTime: 1000
     };
   }
 }
@@ -59,7 +59,7 @@ class MockNLPService {
       validate_thai_id: /^\d{13}$/,
       extract_land_size: /(\d+)-(\d+)-(\d+)/,
       validate_business_name: /วิสาหกิจชุมชน|สหกรณ์|บริษัท|ห้างหุ้นส่วน/,
-      extract_coordinates: /(-?\d+\.\d+),\s*(-?\d+\.\d+)/,
+      extract_coordinates: /(-?\d+\.\d+),\s*(-?\d+\.\d+)/
     };
 
     const pattern = intents[intent];
@@ -70,7 +70,7 @@ class MockNLPService {
       confidence: matches ? 0.9 : 0.2,
       matches: matches || [],
       intent: intent,
-      suggestions: matches ? [] : [`รูปแบบ ${intent} ไม่ถูกต้อง`],
+      suggestions: matches ? [] : [`รูปแบบ ${intent} ไม่ถูกต้อง`]
     };
   }
 }
@@ -97,7 +97,7 @@ class DocumentProcessingLayer extends EventEmitter {
       status: 'processing',
       documentType,
       applicantType,
-      startTime,
+      startTime
     });
 
     try {
@@ -114,7 +114,7 @@ class DocumentProcessingLayer extends EventEmitter {
       const validatedData = await this.validateExtractedData(
         ocrResult.extractedData,
         documentType,
-        applicantType,
+        applicantType
       );
 
       // Step 3: Cross-reference validation
@@ -130,16 +130,16 @@ class DocumentProcessingLayer extends EventEmitter {
           ocrConfidence: ocrResult.confidence,
           nlpConfidence: validatedData.confidence,
           crossRefPassed: crossRefResult.passed,
-          issues: [...validatedData.issues, ...crossRefResult.issues],
+          issues: [...validatedData.issues, ...crossRefResult.issues]
         },
         processingTime: Date.now() - startTime,
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       this.processingQueue.set(processId, {
         ...this.processingQueue.get(processId),
         status: 'completed',
-        result,
+        result
       });
 
       this.emit('document_processed', result);
@@ -154,13 +154,13 @@ class DocumentProcessingLayer extends EventEmitter {
         documentType,
         applicantType,
         processingTime: Date.now() - startTime,
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       this.processingQueue.set(processId, {
         ...this.processingQueue.get(processId),
         status: 'failed',
-        error: errorResult,
+        error: errorResult
       });
 
       this.emit('document_processing_failed', errorResult);
@@ -184,16 +184,16 @@ class DocumentProcessingLayer extends EventEmitter {
         validators: {
           idNumber: value => /^\d{13}$/.test(value),
           fullName: value => value && value.length > 5,
-          address: value => value && value.includes('จังหวัด'),
-        },
+          address: value => value && value.includes('จังหวัด')
+        }
       },
       land_deed: {
         required: ['deedNumber', 'landSize', 'ownerName'],
         validators: {
           deedNumber: value => /^[ขค]\.\d+$/.test(value),
           landSize: value => /^\d+-\d+-\d+$/.test(value),
-          ownerName: value => value && value.length > 5,
-        },
+          ownerName: value => value && value.length > 5
+        }
       },
       business_registration: {
         required: ['businessName', 'registrationNumber'],
@@ -204,9 +204,9 @@ class DocumentProcessingLayer extends EventEmitter {
             }
             return value && value.length > 5;
           },
-          registrationNumber: value => /^สวช\.\d+\/\d{4}$/.test(value),
-        },
-      },
+          registrationNumber: value => /^สวช\.\d+\/\d{4}$/.test(value)
+        }
+      }
     };
 
     const rules = validationRules[documentType];
@@ -245,7 +245,7 @@ class DocumentProcessingLayer extends EventEmitter {
     return {
       data: extractedData,
       confidence: Math.max(confidence, 0.1),
-      issues: issues,
+      issues: issues
     };
   }
 
@@ -289,7 +289,7 @@ class DocumentProcessingLayer extends EventEmitter {
     return {
       valid: idNumber.length === 13,
       name: 'นายสมชาย ใจดี',
-      status: 'active',
+      status: 'active'
     };
   }
 
@@ -337,28 +337,28 @@ class ValidationLayer extends EventEmitter {
       pattern: /^[ก-๏\s]+$/,
       minLength: 5,
       maxLength: 100,
-      message: 'กรุณากรอกชื่อ-นามสกุลเป็นภาษาไทย',
+      message: 'กรุณากรอกชื่อ-นามสกุลเป็นภาษาไทย'
     });
 
     this.validationRules.set('thai_id', {
       required: true,
       pattern: /^\d{13}$/,
       validator: this.validateThaiID,
-      message: 'กรุณากรอกหมายเลขบัตรประชาชน 13 หลัก',
+      message: 'กรุณากรอกหมายเลขบัตรประชาชน 13 หลัก'
     });
 
     // ข้อมูลที่ดิน
     this.validationRules.set('land_deed_number', {
       required: true,
       pattern: /^[ขค]\.\d+$/,
-      message: 'รูปแบบเลขที่โฉนดไม่ถูกต้อง (เช่น ข.12345)',
+      message: 'รูปแบบเลขที่โฉนดไม่ถูกต้อง (เช่น ข.12345)'
     });
 
     this.validationRules.set('land_size', {
       required: true,
       pattern: /^\d+-\d+-\d+$/,
       validator: this.validateLandSize,
-      message: 'รูปแบบขนาดที่ดินไม่ถูกต้อง (เช่น 5-2-75)',
+      message: 'รูปแบบขนาดที่ดินไม่ถูกต้อง (เช่น 5-2-75)'
     });
 
     // ข้อมูลการเพาะปลูก
@@ -368,7 +368,7 @@ class ValidationLayer extends EventEmitter {
       min: 0.1,
       max: 1000000,
       validator: this.validateCultivationArea,
-      message: 'พื้นที่เพาะปลูกต้องมากกว่า 0.1 ตารางเมตร',
+      message: 'พื้นที่เพาะปลูกต้องมากกว่า 0.1 ตารางเมตร'
     });
 
     this.validationRules.set('plant_quantity', {
@@ -377,14 +377,14 @@ class ValidationLayer extends EventEmitter {
       min: 1,
       max: 100000,
       validator: this.validatePlantQuantity,
-      message: 'จำนวนต้นปลูกต้องมากกว่า 0 ต้น',
+      message: 'จำนวนต้นปลูกต้องมากกว่า 0 ต้น'
     });
 
     // Cross-field validation rules
     this.crossFieldValidators.set('area_vs_quantity', {
       fields: ['cultivation_area', 'plant_quantity'],
       validator: this.validateAreaVsQuantity,
-      message: 'จำนวนต้นปลูกมากเกินไปเมื่อเทียบกับพื้นที่',
+      message: 'จำนวนต้นปลูกมากเกินไปเมื่อเทียบกับพื้นที่'
     });
 
     console.log('📋 Validation rules loaded: ' + this.validationRules.size + ' rules');
@@ -405,7 +405,7 @@ class ValidationLayer extends EventEmitter {
       valid: true,
       errors: [],
       warnings: [],
-      suggestions: [],
+      suggestions: []
     };
 
     try {
@@ -481,7 +481,7 @@ class ValidationLayer extends EventEmitter {
         valid: false,
         errors: ['เกิดข้อผิดพลาดในการตรวจสอบข้อมูล'],
         warnings: [],
-        suggestions: [],
+        suggestions: []
       };
     }
   }
@@ -518,13 +518,13 @@ class ValidationLayer extends EventEmitter {
           valid: validationResult.valid,
           errors: validationResult.errors || [],
           warnings: validationResult.warnings || [],
-          suggestions: validationResult.suggestions || [],
+          suggestions: validationResult.suggestions || []
         });
 
         this.emit('cross_field_validated', {
           validator: validatorName,
           fields: config.fields,
-          result: validationResult,
+          result: validationResult
         });
       } catch (error) {
         console.error(`Cross-field validation error for ${validatorName}:`, error);
@@ -534,7 +534,7 @@ class ValidationLayer extends EventEmitter {
           valid: false,
           errors: ['เกิดข้อผิดพลาดในการตรวจสอบข้อมูล'],
           warnings: [],
-          suggestions: [],
+          suggestions: []
         });
       }
     }
@@ -571,7 +571,7 @@ class ValidationLayer extends EventEmitter {
       valid: overallValid,
       fieldResults,
       crossFieldResults,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     this.emit('form_validated', formValidationResult);
@@ -588,7 +588,7 @@ class ValidationLayer extends EventEmitter {
     if (!/^\d{13}$/.test(idNumber)) {
       return {
         valid: false,
-        errors: ['หมายเลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก'],
+        errors: ['หมายเลขบัตรประชาชนต้องเป็นตัวเลข 13 หลัก']
       };
     }
 
@@ -603,7 +603,7 @@ class ValidationLayer extends EventEmitter {
     if (checkDigit !== digits[12]) {
       return {
         valid: false,
-        errors: ['หมายเลขบัตรประชาชนไม่ถูกต้อง (checksum ผิด)'],
+        errors: ['หมายเลขบัตรประชาชนไม่ถูกต้อง (checksum ผิด)']
       };
     }
 
@@ -618,7 +618,7 @@ class ValidationLayer extends EventEmitter {
     if (!match) {
       return {
         valid: false,
-        errors: ['รูปแบบขนาดที่ดินไม่ถูกต้อง ต้องเป็น ไร่-งาน-วา (เช่น 5-2-75)'],
+        errors: ['รูปแบบขนาดที่ดินไม่ถูกต้อง ต้องเป็น ไร่-งาน-วา (เช่น 5-2-75)']
       };
     }
 
@@ -629,7 +629,7 @@ class ValidationLayer extends EventEmitter {
       return {
         valid: false,
         errors: ['งานต้องไม่เกิน 4'],
-        suggestions: ['1 ไร่ = 4 งาน'],
+        suggestions: ['1 ไร่ = 4 งาน']
       };
     }
 
@@ -637,7 +637,7 @@ class ValidationLayer extends EventEmitter {
       return {
         valid: false,
         errors: ['วาต้องไม่เกิน 100'],
-        suggestions: ['1 งาน = 100 วา'],
+        suggestions: ['1 งาน = 100 วา']
       };
     }
 
@@ -650,8 +650,8 @@ class ValidationLayer extends EventEmitter {
       metadata: {
         totalWa,
         totalSqm: sqm,
-        displayText: `${landSize} (${sqm.toLocaleString()} ตร.ม.)`,
-      },
+        displayText: `${landSize} (${sqm.toLocaleString()} ตร.ม.)`
+      }
     };
   }
 
@@ -664,7 +664,7 @@ class ValidationLayer extends EventEmitter {
     if (numArea <= 0) {
       return {
         valid: false,
-        errors: ['พื้นที่เพาะปลูกต้องมากกว่า 0'],
+        errors: ['พื้นที่เพาะปลูกต้องมากกว่า 0']
       };
     }
 
@@ -672,7 +672,7 @@ class ValidationLayer extends EventEmitter {
     if (numArea > 10000) {
       return {
         valid: true,
-        warnings: ['พื้นที่เพาะปลูกขนาดใหญ่มาก กรุณาตรวจสอบอีกครั้ง'],
+        warnings: ['พื้นที่เพาะปลูกขนาดใหญ่มาก กรุณาตรวจสอบอีกครั้ง']
       };
     }
 
@@ -688,7 +688,7 @@ class ValidationLayer extends EventEmitter {
     if (numQuantity <= 0) {
       return {
         valid: false,
-        errors: ['จำนวนต้นปลูกต้องมากกว่า 0'],
+        errors: ['จำนวนต้นปลูกต้องมากกว่า 0']
       };
     }
 
@@ -696,7 +696,7 @@ class ValidationLayer extends EventEmitter {
     if (numQuantity > 1000) {
       return {
         valid: true,
-        warnings: ['จำนวนต้นปลูกจำนวนมาก กรุณาตรวจสอบอีกครั้ง'],
+        warnings: ['จำนวนต้นปลูกจำนวนมาก กรุณาตรวจสอบอีกครั้ง']
       };
     }
 
@@ -720,8 +720,8 @@ class ValidationLayer extends EventEmitter {
         errors: ['จำนวนต้นปลูกมากเกินไปเมื่อเทียบกับพื้นที่'],
         suggestions: [
           `ปัจจุบัน: ${plantsPerSqm.toFixed(2)} ต้น/ตร.ม.`,
-          'แนะนำ: 1-4 ต้น/ตร.ม. สำหรับกัญชา',
-        ],
+          'แนะนำ: 1-4 ต้น/ตร.ม. สำหรับกัญชา'
+        ]
       };
     }
 
@@ -729,7 +729,7 @@ class ValidationLayer extends EventEmitter {
       return {
         valid: true,
         warnings: ['จำนวนต้นปลูกน้อยเมื่อเทียบกับพื้นที่ อาจไม่คุ้มค่าทางเศรษฐกิจ'],
-        suggestions: [`ปัจจุบัน: ${plantsPerSqm.toFixed(2)} ต้น/ตร.ม.`],
+        suggestions: [`ปัจจุบัน: ${plantsPerSqm.toFixed(2)} ต้น/ตร.ม.`]
       };
     }
 
@@ -737,8 +737,8 @@ class ValidationLayer extends EventEmitter {
       valid: true,
       metadata: {
         plantsPerSqm: plantsPerSqm.toFixed(2),
-        efficiency: plantsPerSqm >= 1 ? 'ดี' : 'ต่ำ',
-      },
+        efficiency: plantsPerSqm >= 1 ? 'ดี' : 'ต่ำ'
+      }
     };
   }
 }
@@ -769,11 +769,11 @@ class GuidanceLayer extends EventEmitter {
           'ตรวจสอบคุณภาพดินและน้ำก่อนปลูก',
           'ห่างจากแหล่งมลพิษอย่างน้อย 500 เมตร',
           'อัปโหลดผลการวิเคราะห์ดินล่าสุด',
-          'อัปโหลดผลการวิเคราะห์คุณภาพน้ำ',
+          'อัปโหลดผลการวิเคราะห์คุณภาพน้ำ'
         ],
         relatedDocuments: ['soil_analysis', 'water_quality_test'],
-        severity: 'high',
-      },
+        severity: 'high'
+      }
     });
 
     // Guidance for pest control
@@ -788,10 +788,10 @@ class GuidanceLayer extends EventEmitter {
           'ห้ามใช้วัตถุอันตรายทางการเกษตร (สารเคมีสังเคราะห์)',
           'ใช้หลัก IPM (Integrated Pest Management)',
           'บันทึกการใช้สารควบคุมศัตรูพืชทุกครั้ง',
-          'เก็บใบรับรองสารชีวภัณฑ์ที่ใช้',
+          'เก็บใบรับรองสารชีวภัณฑ์ที่ใช้'
         ],
-        severity: 'critical',
-      },
+        severity: 'critical'
+      }
     });
 
     // Guidance for land ownership
@@ -804,14 +804,14 @@ class GuidanceLayer extends EventEmitter {
         requiredDocuments: [
           'หนังสือให้ความยินยอมจากผู้ให้เช่า',
           'สัญญาเช่าที่ดิน (หากมี)',
-          'หนังสือแสดงกรรมสิทธิ์ของผู้ให้เช่า',
+          'หนังสือแสดงกรรมสิทธิ์ของผู้ให้เช่า'
         ],
         nextSteps: [
           'อัปโหลดเอกสารในส่วน "เอกสารประกอบ"',
-          'ตรวจสอบให้แน่ใจว่าสัญญาเช่ายังไม่หมดอายุ',
+          'ตรวจสอบให้แน่ใจว่าสัญญาเช่ายังไม่หมดอายุ'
         ],
-        severity: 'medium',
-      },
+        severity: 'medium'
+      }
     });
 
     // Business type specific guidance
@@ -824,14 +824,14 @@ class GuidanceLayer extends EventEmitter {
         requirements: [
           'ต้องดำเนินการภายใต้ความร่วมมือกับหน่วยงานรัฐ',
           'ต้องมีสมาชิกชุมชนเข้าร่วมโครงการ',
-          'จำเป็นต้องมีแผนการแบ่งปันผลประโยชน์กับชุมชน',
+          'จำเป็นต้องมีแผนการแบ่งปันผลประโยชน์กับชุมชน'
         ],
         nextSteps: [
           'เตรียมหนังสือยืนยันจากหน่วยงานรัฐที่ให้ความร่วมมือ',
-          'จัดทำบัญชีรายชื่อสมาชิกวิสาหกิจชุมชน',
+          'จัดทำบัญชีรายชื่อสมาชิกวิสาหกิจชุมชน'
         ],
-        severity: 'medium',
-      },
+        severity: 'medium'
+      }
     });
 
     console.log('💡 Guidance rules loaded: ' + this.guidanceRules.size + ' rules');
@@ -855,7 +855,7 @@ class GuidanceLayer extends EventEmitter {
           id: ruleId,
           ...guidance,
           triggeredBy: rule.trigger,
-          timestamp: new Date(),
+          timestamp: new Date()
         });
       }
     }
@@ -867,7 +867,7 @@ class GuidanceLayer extends EventEmitter {
     // Emit guidance event
     this.emit('guidance_provided', {
       context,
-      guidance: applicableGuidance,
+      guidance: applicableGuidance
     });
 
     return applicableGuidance;
@@ -919,7 +919,7 @@ class GuidanceLayer extends EventEmitter {
       guidance.progressInfo = {
         currentStep: context.formProgress.currentStep,
         totalSteps: context.formProgress.totalSteps,
-        completionPercent: context.formProgress.completionPercent,
+        completionPercent: context.formProgress.completionPercent
       };
     }
 
@@ -945,7 +945,7 @@ class GuidanceLayer extends EventEmitter {
         title: 'เอกสารที่ยังไม่ได้อัปโหลด',
         message: 'กรุณาเตรียมเอกสารต่อไปนี้ให้ครบถ้วน',
         missingDocuments: missingDocs,
-        severity: 'high',
+        severity: 'high'
       });
     }
 
@@ -959,7 +959,7 @@ class GuidanceLayer extends EventEmitter {
         message: 'ส่วนที่ยังไม่ได้กรอก',
         incompleteSections: completionStatus.incompleteSections,
         nextRecommendedSection: completionStatus.nextSection,
-        severity: 'low',
+        severity: 'low'
       });
     }
 
@@ -972,7 +972,7 @@ class GuidanceLayer extends EventEmitter {
         title: 'ความเสี่ยงด้านการปฏิบัติตามข้อกำหนด',
         message: 'พบความเสี่ยงที่อาจส่งผลต่อการได้รับใบรับรอง',
         risks: complianceRisks,
-        severity: 'high',
+        severity: 'high'
       });
     }
 
@@ -987,10 +987,10 @@ class GuidanceLayer extends EventEmitter {
       วิสาหกิจชุมชน: [
         'หนังสือรับรองวิสาหกิจชุมชน',
         'บัญชีรายชื่อสมาชิก',
-        'หนังสือยินยอมจากหน่วยงานรัฐ',
+        'หนังสือยินยอมจากหน่วยงานรัฐ'
       ],
       บุคคลธรรมดา: ['บัตรประจำตัวประชาชน', 'หนังสือยินยอมจากผู้รับอนุญาตผลิตยา'],
-      นิติบุคคล: ['หนังสือรับรองนิติบุคคล', 'หนังสือมอบอำนาจ'],
+      นิติบุคคล: ['หนังสือรับรองนิติบุคคล', 'หนังสือมอบอำนาจ']
     };
 
     const applicantType = formData.applicant_type;
@@ -1014,7 +1014,7 @@ class GuidanceLayer extends EventEmitter {
       'cultivation_plan',
       'pest_control_plan',
       'harvest_plan',
-      'documents',
+      'documents'
     ];
 
     const sectionCompleteness = {
@@ -1023,7 +1023,7 @@ class GuidanceLayer extends EventEmitter {
       cultivation_plan: ['cultivation_area', 'plant_quantity', 'cultivation_type'],
       pest_control_plan: ['pest_control_method', 'approved_substances'],
       harvest_plan: ['harvest_season', 'expected_yield'],
-      documents: ['uploadedDocuments'],
+      documents: ['uploadedDocuments']
     };
 
     let completedSections = 0;
@@ -1037,7 +1037,7 @@ class GuidanceLayer extends EventEmitter {
       } else {
         incompleteSections.push({
           section,
-          missingFields: fields.filter(field => !formData[field] || formData[field] === ''),
+          missingFields: fields.filter(field => !formData[field] || formData[field] === '')
         });
       }
     }
@@ -1050,7 +1050,7 @@ class GuidanceLayer extends EventEmitter {
       completedSections,
       totalSections: requiredSections.length,
       incompleteSections,
-      nextSection,
+      nextSection
     };
   }
 
@@ -1067,7 +1067,7 @@ class GuidanceLayer extends EventEmitter {
         severity: 'critical',
         issue: 'ใช้สารเคมีในการควบคุมศัตรูพืช',
         impact: 'ขัดต่อข้อกำหนด GACP ข้อ 9.6',
-        recommendation: 'เปลี่ยนไปใช้สารชีวภัณฑ์หรือวิธีการอินทรีย์',
+        recommendation: 'เปลี่ยนไปใช้สารชีวภัณฑ์หรือวิธีการอินทรีย์'
       });
     }
 
@@ -1078,7 +1078,7 @@ class GuidanceLayer extends EventEmitter {
         severity: 'high',
         issue: 'อยู่ใกล้แหล่งมลพิษเกินไป',
         impact: 'อาจไม่ผ่านการตรวจสอบสภาพแวดล้อม',
-        recommendation: 'หาพื้นที่ปลูกที่ห่างจากแหล่งมลพิษอย่างน้อย 500 เมตร',
+        recommendation: 'หาพื้นที่ปลูกที่ห่างจากแหล่งมลพิษอย่างน้อย 500 เมตร'
       });
     }
 
@@ -1090,7 +1090,7 @@ class GuidanceLayer extends EventEmitter {
         severity: 'medium',
         issue: 'เอกสารไม่ครบถ้วน',
         impact: 'อาจทำให้การอนุมัติล่าช้า',
-        recommendation: 'เตรียมเอกสารให้ครบถ้วนก่อนส่งคำขอ',
+        recommendation: 'เตรียมเอกสารให้ครบถ้วนก่อนส่งคำขอ'
       });
     }
 
@@ -1105,7 +1105,7 @@ class GuidanceLayer extends EventEmitter {
       document_requirement: 15, // 15 minutes to prepare documents
       compliance_warning: 5, // 5 minutes to read and understand
       procedural_info: 10, // 10 minutes to review process
-      risk_warning: 20, // 20 minutes to address risks
+      risk_warning: 20 // 20 minutes to address risks
     };
 
     return timeEstimates[guidanceType] || 10;
@@ -1120,7 +1120,7 @@ class GuidanceLayer extends EventEmitter {
       type: 'error_resolution',
       title: 'วิธีแก้ไขข้อผิดพลาด',
       error: error.message,
-      timestamp: new Date(),
+      timestamp: new Date()
     };
 
     // Specific guidance based on error type
@@ -1128,19 +1128,19 @@ class GuidanceLayer extends EventEmitter {
       errorGuidance.solutions = [
         'ตรวจสอบการพิมพ์หมายเลขบัตรประชาชนอีกครั้ง',
         'ตรวจสอบหน้าบัตรประชาชนว่าชัดเจนหรือไม่',
-        'ลองถ่ายรูปบัตรประชาชนใหม่ในแสงที่เพียงพอ',
+        'ลองถ่ายรูปบัตรประชาชนใหม่ในแสงที่เพียงพอ'
       ];
     } else if (error.field === 'land_deed_number') {
       errorGuidance.solutions = [
         'ตรวจสอบเลขที่โฉนดจากเอกสารต้นฉบับ',
         'รูปแบบที่ถูกต้อง: ข.12345 หรือ ค.67890',
-        'อัปโหลดรูปภาพโฉนดที่ชัดเจน',
+        'อัปโหลดรูปภาพโฉนดที่ชัดเจน'
       ];
     } else {
       errorGuidance.solutions = [
         'ตรวจสอบข้อมูลที่กรอกอีกครั้ง',
         'อ่านคำแนะนำและตัวอย่างที่ให้ไว้',
-        'ติดต่อเจ้าหน้าที่หากยังมีปัญหา',
+        'ติดต่อเจ้าหน้าที่หากยังมีปัญหา'
       ];
     }
 
@@ -1177,7 +1177,7 @@ class GACPAIAssistantSystem extends EventEmitter {
         this.emit('form_data_extracted', {
           documentType: result.documentType,
           extractedData: result.extractedData,
-          confidence: result.validation.ocrConfidence,
+          confidence: result.validation.ocrConfidence
         });
       }
     });
@@ -1188,9 +1188,9 @@ class GACPAIAssistantSystem extends EventEmitter {
         this.guidanceProvider.provideErrorGuidance(
           {
             field: result.field,
-            message: result.errors[0],
+            message: result.errors[0]
           },
-          { currentField: result.field },
+          { currentField: result.field }
         );
       }
     });
@@ -1200,7 +1200,7 @@ class GACPAIAssistantSystem extends EventEmitter {
       const guidance = await this.guidanceProvider.provideGuidance({
         formData: result.fieldResults,
         formValidation: result,
-        action: 'form_validation_completed',
+        action: 'form_validation_completed'
       });
 
       this.emit('comprehensive_guidance', guidance);
@@ -1217,19 +1217,19 @@ class GACPAIAssistantSystem extends EventEmitter {
       const result = await this.documentProcessor.processDocument(
         documentFile,
         documentType,
-        applicantType,
+        applicantType
       );
 
       this.emit('ai_processing_completed', {
         layer: 'document_processing',
-        result,
+        result
       });
 
       return result;
     } catch (error) {
       this.emit('ai_processing_error', {
         layer: 'document_processing',
-        error: error.message,
+        error: error.message
       });
       throw error;
     }
@@ -1247,13 +1247,13 @@ class GACPAIAssistantSystem extends EventEmitter {
         currentField: fieldName,
         fieldResult: result,
         formData: context,
-        action: 'field_validation_failed',
+        action: 'field_validation_failed'
       });
 
       this.emit('real_time_assistance', {
         field: fieldName,
         validation: result,
-        guidance,
+        guidance
       });
     }
 
@@ -1273,7 +1273,7 @@ class GACPAIAssistantSystem extends EventEmitter {
     const guidance = await this.guidanceProvider.provideGuidance({
       formData,
       formValidation: validationResult,
-      action: 'comprehensive_review',
+      action: 'comprehensive_review'
     });
 
     // Step 3: Compile comprehensive report
@@ -1283,7 +1283,7 @@ class GACPAIAssistantSystem extends EventEmitter {
       guidance: guidance,
       readinessScore: this.calculateReadinessScore(validationResult, guidance),
       recommendations: this.generateFinalRecommendations(validationResult, guidance),
-      estimatedApprovalChance: this.estimateApprovalChance(validationResult, guidance),
+      estimatedApprovalChance: this.estimateApprovalChance(validationResult, guidance)
     };
 
     this.emit('ai_analysis_completed', aiAnalysisReport);
@@ -1340,7 +1340,7 @@ class GACPAIAssistantSystem extends EventEmitter {
       recommendations.push({
         priority: 'critical',
         title: 'ปัญหาร้ายแรงที่ต้องแก้ไขก่อนยื่นขอ',
-        items: criticalGuidance.map(g => g.message),
+        items: criticalGuidance.map(g => g.message)
       });
     }
 
@@ -1350,7 +1350,7 @@ class GACPAIAssistantSystem extends EventEmitter {
       recommendations.push({
         priority: 'high',
         title: 'ปัญหาสำคัญที่ควรแก้ไข',
-        items: highGuidance.map(g => g.message),
+        items: highGuidance.map(g => g.message)
       });
     }
 
@@ -1360,7 +1360,7 @@ class GACPAIAssistantSystem extends EventEmitter {
       recommendations.push({
         priority: 'medium',
         title: 'เอกสารที่ต้องเตรียม',
-        items: docGuidance.flatMap(g => g.requiredDocuments || []),
+        items: docGuidance.flatMap(g => g.requiredDocuments || [])
       });
     }
 
@@ -1393,18 +1393,18 @@ class GACPAIAssistantSystem extends EventEmitter {
     return {
       documentProcessor: {
         queueSize: this.documentProcessor.processingQueue.size,
-        processingHistory: this.documentProcessor.getProcessingHistory().length,
+        processingHistory: this.documentProcessor.getProcessingHistory().length
       },
       validator: {
         rulesLoaded: this.validator.validationRules.size,
-        crossFieldRules: this.validator.crossFieldValidators.size,
+        crossFieldRules: this.validator.crossFieldValidators.size
       },
       guidanceProvider: {
         guidanceRules: this.guidanceProvider.guidanceRules.size,
-        contextualHints: this.guidanceProvider.contextualHints.size,
+        contextualHints: this.guidanceProvider.contextualHints.size
       },
       status: 'operational',
-      timestamp: new Date(),
+      timestamp: new Date()
     };
   }
 
@@ -1419,7 +1419,7 @@ class GACPAIAssistantSystem extends EventEmitter {
         type: 'sop_guidance',
         timestamp: new Date(),
         phase,
-        action,
+        action
       };
 
       switch (action) {
@@ -1428,7 +1428,7 @@ class GACPAIAssistantSystem extends EventEmitter {
             ...guidance,
             title: 'เริ่มต้น SOP Session',
             message: `ยินดีต้อนรับสู่ขั้นตอน ${this.getPhaseDisplayName(phase)}!`,
-            severity: 'info',
+            severity: 'info'
           };
           break;
 
@@ -1437,7 +1437,7 @@ class GACPAIAssistantSystem extends EventEmitter {
             ...guidance,
             title: `เปลี่ยนขั้นตอน`,
             message: `เสร็จสิ้นแล้ว กำลังเริ่มต้นขั้นตอนใหม่`,
-            severity: 'success',
+            severity: 'success'
           };
           break;
 
@@ -1453,7 +1453,7 @@ class GACPAIAssistantSystem extends EventEmitter {
         type: 'error',
         message: 'ไม่สามารถให้คำแนะนำได้',
         severity: 'error',
-        timestamp: new Date(),
+        timestamp: new Date()
       };
     }
   }
@@ -1467,7 +1467,7 @@ class GACPAIAssistantSystem extends EventEmitter {
       planting: 'ขั้นตอนการปลูก',
       growing: 'ขั้นตอนการเพาะปลูก',
       harvesting: 'ขั้นตอนการเก็บเกี่ยว',
-      post_harvest: 'ขั้นตอนหลังการเก็บเกี่ยว',
+      post_harvest: 'ขั้นตอนหลังการเก็บเกี่ยว'
     };
     return phaseNames[phaseId] || phaseId;
   }
@@ -1477,5 +1477,5 @@ module.exports = {
   GACPAIAssistantSystem,
   DocumentProcessingLayer,
   ValidationLayer,
-  GuidanceLayer,
+  GuidanceLayer
 };

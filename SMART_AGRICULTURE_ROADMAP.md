@@ -15,24 +15,28 @@
 ## ✅ Current Capabilities (Already Built)
 
 ### 1. AI Fertilizer Recommendation ✅
+
 - NPK calculation by growth stage
 - Soil nutrient analysis
 - Organic fertilizer recommendations
 - Cannabis + 5 medicinal plants support
 
 ### 2. IoT Sensor Integration ✅
+
 - Real-time soil moisture monitoring
 - pH level tracking
 - Temperature & humidity sensors
 - Automated alerts
 
 ### 3. Farm Management ✅
+
 - Farm registration
 - Field/plot management
 - Cultivation cycle tracking
 - Harvest recording
 
 ### 4. Plant Database ✅
+
 - 6 plant species data
 - Growth stage information
 - Nutrient requirements
@@ -47,18 +51,21 @@
 #### 1. **Soil Analysis & Recommendation Engine**
 
 **Features:**
+
 - Upload soil test results (PDF/Image)
 - AI analyzes mineral deficiencies
 - Recommends soil amendments
 - Province-specific soil data integration
 
 **Data Sources:**
+
 - Land Development Department (กรมพัฒนาที่ดิน)
 - Soil Science Division
 - University research papers
 - International soil databases
 
 **Implementation:**
+
 ```javascript
 // New Service: apps/backend/services/ai/soil-analysis.service.js
 
@@ -76,6 +83,7 @@ getProvinceOptimalSoil(province, plantType) {
 ```
 
 **Database:**
+
 ```javascript
 // New Model: SoilProfile
 {
@@ -104,18 +112,21 @@ getProvinceOptimalSoil(province, plantType) {
 #### 2. **Province Suitability Mapping**
 
 **Features:**
+
 - Interactive map showing best crops per province
 - Climate zone classification
 - Soil type distribution
 - Success rate statistics
 
 **Data Integration:**
+
 - Thai Meteorological Department
 - Department of Agriculture
 - Provincial agricultural offices
 - Historical yield data
 
 **Implementation:**
+
 ```javascript
 // New Service: apps/backend/services/ai/crop-suitability.service.js
 
@@ -139,18 +150,21 @@ getOptimalCropsForProvince(province) {
 #### 1. **Smart Irrigation Scheduler**
 
 **Features:**
+
 - Calculate water requirements by growth stage
 - Weather-based irrigation adjustments
 - Soil moisture integration
 - Water conservation recommendations
 
 **Data Sources:**
+
 - Thai Meteorological Department API
 - Evapotranspiration (ET) data
 - Rainfall forecasts
 - Soil moisture sensors
 
 **Implementation:**
+
 ```javascript
 // New Service: apps/backend/services/ai/irrigation-scheduler.service.js
 
@@ -171,6 +185,7 @@ optimizeWaterUsage(farmData) {
 #### 2. **Water Quality Analysis**
 
 **Features:**
+
 - Analyze water test results
 - Check for contaminants
 - Recommend water treatment
@@ -183,12 +198,14 @@ optimizeWaterUsage(farmData) {
 #### 1. **Microclimate Management**
 
 **Features:**
+
 - Temperature optimization recommendations
 - Humidity control strategies
 - Light exposure analysis
 - Ventilation recommendations
 
 **Implementation:**
+
 ```javascript
 // New Service: apps/backend/services/ai/climate-optimizer.service.js
 
@@ -207,6 +224,7 @@ forecastGrowthConditions(location, plantingDate) {
 #### 2. **Weather Integration**
 
 **Features:**
+
 - 7-day weather forecast
 - Extreme weather alerts
 - Planting date recommendations
@@ -219,18 +237,21 @@ forecastGrowthConditions(location, plantingDate) {
 #### 1. **Seed Genetics Database**
 
 **Features:**
+
 - Strain/variety characteristics
 - Genetic traits database
 - Yield potential analysis
 - Disease resistance information
 
 **Data Sources:**
+
 - Department of Agriculture seed registry
 - University research
 - International seed databases
 - Breeder information
 
 **Implementation:**
+
 ```javascript
 // New Model: SeedGenetics
 {
@@ -258,12 +279,14 @@ forecastGrowthConditions(location, plantingDate) {
 #### 2. **Seed Recommendation Engine**
 
 **Features:**
+
 - Match seeds to farm conditions
 - Predict yield based on genetics + environment
 - Recommend best varieties for location
 - Track seed performance
 
 **Implementation:**
+
 ```javascript
 // New Service: apps/backend/services/ai/seed-recommendation.service.js
 
@@ -431,23 +454,23 @@ apps/backend/models/
 
 ### Development Costs
 
-| Phase | Duration | Team | Cost (THB) |
-|-------|----------|------|------------|
-| 5A: Soil Intelligence | 3-4 months | 2 devs + 1 data scientist | 600,000 |
-| 5B: Water Management | 2-3 months | 2 devs | 400,000 |
-| 5C: Climate Optimization | 2-3 months | 2 devs | 400,000 |
-| 5D: Genetic Intelligence | 4-6 months | 2 devs + 1 scientist | 800,000 |
-| **Total** | **11-16 months** | | **2,200,000** |
+| Phase                    | Duration         | Team                      | Cost (THB)    |
+| ------------------------ | ---------------- | ------------------------- | ------------- |
+| 5A: Soil Intelligence    | 3-4 months       | 2 devs + 1 data scientist | 600,000       |
+| 5B: Water Management     | 2-3 months       | 2 devs                    | 400,000       |
+| 5C: Climate Optimization | 2-3 months       | 2 devs                    | 400,000       |
+| 5D: Genetic Intelligence | 4-6 months       | 2 devs + 1 scientist      | 800,000       |
+| **Total**                | **11-16 months** |                           | **2,200,000** |
 
 ### Data Acquisition Costs
 
-| Data Source | Type | Cost/Year (THB) |
-|-------------|------|-----------------|
-| Weather API | Subscription | 50,000 |
-| Satellite Imagery | Free (Sentinel) | 0 |
-| Soil Database | One-time | 100,000 |
-| Research Papers | Subscription | 30,000 |
-| **Total** | | **180,000/year** |
+| Data Source       | Type            | Cost/Year (THB)  |
+| ----------------- | --------------- | ---------------- |
+| Weather API       | Subscription    | 50,000           |
+| Satellite Imagery | Free (Sentinel) | 0                |
+| Soil Database     | One-time        | 100,000          |
+| Research Papers   | Subscription    | 30,000           |
+| **Total**         |                 | **180,000/year** |
 
 ---
 
@@ -492,20 +515,24 @@ apps/backend/models/
 ## 🚀 Implementation Priority
 
 ### Phase 5A (High Priority - Start Now)
+
 1. ✅ Soil Analysis Engine
 2. ✅ Province Suitability Mapping
 3. ✅ Basic recommendations
 
 ### Phase 5B (High Priority - Q2)
+
 1. ✅ Irrigation Scheduler
 2. ✅ Water Management
 3. ✅ Weather Integration
 
 ### Phase 5C (Medium Priority - Q3)
+
 1. ✅ Climate Optimizer
 2. ✅ Microclimate Management
 
 ### Phase 5D (Long-term - Q4)
+
 1. ✅ Seed Genetics Database
 2. ✅ Yield Prediction ML
 3. ✅ Advanced Analytics

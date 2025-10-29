@@ -15,14 +15,14 @@ import {
   isPaymentTimedOut,
   type PaymentRecord,
   type PaymentStatus,
-  type PaymentReason,
+  type PaymentReason
 } from '../business-logic';
 
 // Mock REFUND_POLICY for tests
 const REFUND_POLICY = {
   fullRefund: { days: 3, percentage: 100 },
   partialRefund: { days: 7, percentage: 50 },
-  noRefund: { percentage: 0 },
+  noRefund: { percentage: 0 }
 };
 
 // Mock processPayment function (simplified for tests)
@@ -47,18 +47,18 @@ async function processPayment(data: {
       paymentId: 'pay_' + Date.now(),
       transactionId: 'txn_' + Date.now(),
       amount: data.amount,
-      paidAt: new Date(),
+      paidAt: new Date()
     };
   }
   if (data.token === 'tokn_test_network_error') {
     return {
       success: false,
-      error: 'Payment failed due to network error',
+      error: 'Payment failed due to network error'
     };
   }
   return {
     success: false,
-    error: 'Invalid token',
+    error: 'Invalid token'
   };
 }
 
@@ -72,7 +72,7 @@ function checkPaymentTimeout(createdAt: Date): boolean {
     status: 'PENDING',
     reason: 'INITIAL_SUBMISSION',
     createdAt,
-    expiresAt: new Date(createdAt.getTime() + PAYMENT_TIMEOUT_MINUTES * 60 * 1000),
+    expiresAt: new Date(createdAt.getTime() + PAYMENT_TIMEOUT_MINUTES * 60 * 1000)
   };
   return isPaymentTimedOut(mockPayment);
 }
@@ -81,7 +81,7 @@ function checkPaymentTimeout(createdAt: Date): boolean {
 function calculateRefundAmount(
   amount: number,
   paidAt: Date,
-  cancelledAt: Date,
+  cancelledAt: Date
 ): {
   refundAmount: number;
   refundPercentage: number;
@@ -89,7 +89,7 @@ function calculateRefundAmount(
   deductedAmount: number;
 } {
   const daysSincePaid = Math.floor(
-    (cancelledAt.getTime() - paidAt.getTime()) / (1000 * 60 * 60 * 24),
+    (cancelledAt.getTime() - paidAt.getTime()) / (1000 * 60 * 60 * 24)
   );
 
   let refundPercentage = 0;
@@ -108,7 +108,7 @@ function calculateRefundAmount(
     refundAmount,
     refundPercentage,
     canRefund: refundPercentage > 0,
-    deductedAmount,
+    deductedAmount
   };
 }
 
@@ -166,7 +166,7 @@ describe('Payment Module', () => {
         userId: 'USER001',
         amount: 5000,
         token: 'tokn_test_valid',
-        submissionCount: 1,
+        submissionCount: 1
       });
 
       expect(result.success).toBe(true);
@@ -181,7 +181,7 @@ describe('Payment Module', () => {
         userId: 'USER002',
         amount: 5000,
         token: 'tokn_test_invalid',
-        submissionCount: 1,
+        submissionCount: 1
       });
 
       expect(result.success).toBe(false);
@@ -195,7 +195,7 @@ describe('Payment Module', () => {
         userId: 'USER003',
         amount: 5000,
         token: 'tokn_test_network_error',
-        submissionCount: 1,
+        submissionCount: 1
       });
 
       expect(result.success).toBe(false);
@@ -208,7 +208,7 @@ describe('Payment Module', () => {
         userId: 'USER004',
         amount: 25000,
         token: 'tokn_test_valid',
-        submissionCount: 2,
+        submissionCount: 2
       });
 
       expect(result.success).toBe(true);
@@ -257,7 +257,7 @@ describe('Payment Module', () => {
         reason: 'INITIAL_SUBMISSION' as PaymentReason,
         createdAt: new Date('2025-10-23T10:00:00Z'),
         expiresAt: new Date('2025-10-23T10:30:00Z'),
-        paidAt: new Date('2025-10-23T10:00:00Z'),
+        paidAt: new Date('2025-10-23T10:00:00Z')
       };
 
       const receipt = generateReceipt(mockPayment, 'txn_001');
@@ -278,7 +278,7 @@ describe('Payment Module', () => {
         reason: 'INITIAL_SUBMISSION' as PaymentReason,
         createdAt: new Date(),
         expiresAt: new Date(),
-        paidAt: new Date(),
+        paidAt: new Date()
       };
 
       const receipt = generateReceipt(mockPayment, 'txn_002');
@@ -296,7 +296,7 @@ describe('Payment Module', () => {
         reason: 'INITIAL_SUBMISSION' as PaymentReason,
         createdAt: new Date(),
         expiresAt: new Date(),
-        paidAt: new Date(),
+        paidAt: new Date()
       };
 
       const mockPayment2: PaymentRecord = {
@@ -308,7 +308,7 @@ describe('Payment Module', () => {
         reason: 'INITIAL_SUBMISSION' as PaymentReason,
         createdAt: new Date(),
         expiresAt: new Date(),
-        paidAt: new Date(),
+        paidAt: new Date()
       };
 
       const receipt1 = generateReceipt(mockPayment1, 'txn_003');

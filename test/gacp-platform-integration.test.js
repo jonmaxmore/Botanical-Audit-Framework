@@ -26,7 +26,7 @@ const GACPAIAssistantSystem = require('../business-logic/gacp-ai-assistant-syste
 const TEST_CONFIG = {
   MONGODB_TEST_URI: process.env.MONGODB_TEST_URI || 'mongodb://localhost:27017/gacp-test',
   API_PORT: 4001,
-  TIMEOUT: 30000,
+  TIMEOUT: 30000
 };
 
 // Global test setup
@@ -141,9 +141,9 @@ describe('🌿 GACP Platform Integration Tests', function () {
             nitrogen: 45,
             phosphorus: 23,
             potassium: 67,
-            notes: 'Soil analysis complete - optimal conditions',
+            notes: 'Soil analysis complete - optimal conditions'
           },
-          completedAt: new Date(),
+          completedAt: new Date()
         };
 
         const result = await sopWizard.recordActivity(sessionId, activityData);
@@ -161,14 +161,14 @@ describe('🌿 GACP Platform Integration Tests', function () {
         const activities = [
           { activityType: 'soil_testing', phase: 'pre_planting' },
           { activityType: 'seed_selection', phase: 'pre_planting' },
-          { activityType: 'site_preparation', phase: 'pre_planting' },
+          { activityType: 'site_preparation', phase: 'pre_planting' }
         ];
 
         for (const activity of activities) {
           await sopWizard.recordActivity(sessionId, {
             ...activity,
             data: { notes: 'Test activity' },
-            completedAt: new Date(),
+            completedAt: new Date()
           });
         }
 
@@ -207,10 +207,10 @@ describe('🌿 GACP Platform Integration Tests', function () {
           location: {
             latitude: 13.7563,
             longitude: 100.5018,
-            address: 'Bangkok, Thailand',
+            address: 'Bangkok, Thailand'
           },
           size: 1000,
-          cropType: 'cannabis',
+          cropType: 'cannabis'
         };
 
         const createdFarm = await farmService.createFarm(farmData);
@@ -228,7 +228,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
           userId: testUserId,
           location: { latitude: 13.7563, longitude: 100.5018 },
           size: 1000,
-          cropType: 'cannabis',
+          cropType: 'cannabis'
         };
 
         const farm = await farmService.createFarm(farmData);
@@ -238,9 +238,9 @@ describe('🌿 GACP Platform Integration Tests', function () {
           phase: 'pre_planting',
           data: {
             ph: 6.5,
-            nutrients: { nitrogen: 40, phosphorus: 20, potassium: 30 },
+            nutrients: { nitrogen: 40, phosphorus: 20, potassium: 30 }
           },
-          userId: testUserId,
+          userId: testUserId
         };
 
         const activity = await farmService.recordActivity(farm.id, activityData);
@@ -272,7 +272,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
           ph: 6.8,
           nitrogen: 45,
           phosphorus: 23,
-          potassium: 67,
+          potassium: 67
         };
 
         const validation = await aiAssistant.validateSOPActivity('soil_testing', activityData);
@@ -301,14 +301,14 @@ describe('🌿 GACP Platform Integration Tests', function () {
       const prePlantingActivities = [
         { activityType: 'soil_testing', data: { ph: 6.8 } },
         { activityType: 'seed_selection', data: { strain: 'Northern Lights' } },
-        { activityType: 'site_preparation', data: { area: 500 } },
+        { activityType: 'site_preparation', data: { area: 500 } }
       ];
 
       for (const activity of prePlantingActivities) {
         await sopWizard.recordActivity(session.sessionId, {
           ...activity,
           phase: 'pre_planting',
-          completedAt: new Date(),
+          completedAt: new Date()
         });
       }
 
@@ -322,7 +322,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
         activityType: 'planting',
         phase: 'planting',
         data: { seedCount: 100, plantingDate: new Date() },
-        completedAt: new Date(),
+        completedAt: new Date()
       });
 
       // 5. Verify compliance score increases
@@ -344,7 +344,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
         userId: testUserId,
         location: { latitude: 13.7563, longitude: 100.5018 },
         size: 1000,
-        cropType: 'cannabis',
+        cropType: 'cannabis'
       });
 
       // 2. Start SOP session for the farm
@@ -357,7 +357,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
         type: 'soil_testing',
         phase: 'pre_planting',
         data: { ph: 6.5, nutrients: { nitrogen: 40 } },
-        userId: testUserId,
+        userId: testUserId
       };
 
       // Record in farm management
@@ -368,7 +368,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
         activityType: 'soil_testing',
         phase: 'pre_planting',
         data: activityData.data,
-        completedAt: new Date(),
+        completedAt: new Date()
       });
 
       // 4. Verify both systems updated
@@ -414,14 +414,14 @@ describe('🌿 GACP Platform Integration Tests', function () {
           activityType: 'soil_testing',
           phase: 'pre_planting',
           data: { ph: 6.5 + Math.random() * 0.6 }, // Random pH 6.5-7.1
-          completedAt: new Date(),
+          completedAt: new Date()
         });
       }
 
       // Record all activities and measure time
       const startTime = Date.now();
       const results = await Promise.all(
-        activities.map(activity => sopWizard.recordActivity(session.sessionId, activity)),
+        activities.map(activity => sopWizard.recordActivity(session.sessionId, activity))
       );
       const endTime = Date.now();
 
@@ -454,7 +454,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
         .post('/api/farm-management/farms')
         .send({
           name: '', // Empty name should fail validation
-          userId: 'test-user',
+          userId: 'test-user'
           // Missing required location field
         })
         .expect(400);
@@ -475,9 +475,9 @@ describe('🌿 GACP Platform Integration Tests', function () {
         phase: 'pre_planting',
         data: {
           ph: '<script>alert("xss")</script>',
-          notes: '${process.env.DATABASE_URL}',
+          notes: '${process.env.DATABASE_URL}'
         },
-        completedAt: new Date(),
+        completedAt: new Date()
       };
 
       const result = await sopWizard.recordActivity(session.sessionId, maliciousInput);
@@ -504,7 +504,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
         userId: testUserId,
         location: { latitude: 13.7563, longitude: 100.5018 },
         size: 1000,
-        cropType: 'cannabis',
+        cropType: 'cannabis'
       });
 
       const session = await sopWizard.startSession(testUserId, farm.id);
@@ -514,7 +514,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
         type: 'soil_testing',
         phase: 'pre_planting',
         data: { ph: 6.8, nitrogen: 45 },
-        timestamp: new Date(),
+        timestamp: new Date()
       };
 
       await farmService.recordActivity(farm.id, { ...activityData, userId: testUserId });
@@ -522,7 +522,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
         activityType: activityData.type,
         phase: activityData.phase,
         data: activityData.data,
-        completedAt: activityData.timestamp,
+        completedAt: activityData.timestamp
       });
 
       // Verify data consistency
@@ -554,7 +554,7 @@ describe('🌿 GACP Platform Integration Tests', function () {
           activityType: 'soil_testing',
           phase: 'pre_planting',
           data: { ph: 6.8 },
-          completedAt: new Date(),
+          completedAt: new Date()
         });
 
         expect.fail('Should have thrown an error');
@@ -581,10 +581,10 @@ class TestDataGenerator {
       location: {
         latitude: 13.7563 + (Math.random() - 0.5) * 0.1,
         longitude: 100.5018 + (Math.random() - 0.5) * 0.1,
-        address: 'Bangkok, Thailand',
+        address: 'Bangkok, Thailand'
       },
       size: Math.floor(Math.random() * 5000) + 500,
-      cropType: 'cannabis',
+      cropType: 'cannabis'
     };
   }
 
@@ -593,16 +593,16 @@ class TestDataGenerator {
       soil_testing: { ph: 6.5 + Math.random(), nitrogen: Math.floor(Math.random() * 50) + 20 },
       seed_selection: {
         strain: 'Northern Lights',
-        seedCount: Math.floor(Math.random() * 200) + 50,
+        seedCount: Math.floor(Math.random() * 200) + 50
       },
-      planting: { plantingDate: new Date(), area: Math.floor(Math.random() * 1000) + 100 },
+      planting: { plantingDate: new Date(), area: Math.floor(Math.random() * 1000) + 100 }
     };
 
     return {
       activityType: type,
       phase,
       data: dataTemplates[type] || { notes: 'Test activity' },
-      completedAt: new Date(),
+      completedAt: new Date()
     };
   }
 }
@@ -610,5 +610,5 @@ class TestDataGenerator {
 // Export test utilities for use in other test files
 module.exports = {
   TestDataGenerator,
-  TEST_CONFIG,
+  TEST_CONFIG
 };

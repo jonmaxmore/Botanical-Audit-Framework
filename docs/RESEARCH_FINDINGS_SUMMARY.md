@@ -113,8 +113,8 @@ iotDevices: [
     model: String,
     calibrationData: Object,
     dataEndpoint: String,
-    status: 'active' | 'maintenance' | 'offline',
-  },
+    status: 'active' | 'maintenance' | 'offline'
+  }
 ];
 ```
 

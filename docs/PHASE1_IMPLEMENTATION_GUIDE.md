@@ -46,8 +46,8 @@ Admin Portal UI อยู่ที่ `apps/admin-portal/` แต่**ยัง�
 const response = await fetch('/api/dtam/dashboard/statistics', {
   headers: {
     Authorization: `Bearer ${dtamToken}`,
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
 const data = await response.json();
@@ -218,7 +218,7 @@ export class ApiError extends Error {
   constructor(
     public status: number,
     public message: string,
-    public data?: any,
+    public data?: any
   ) {
     super(message);
     this.name = 'ApiError';
@@ -227,14 +227,14 @@ export class ApiError extends Error {
 
 export async function apiClient<T = any>(
   endpoint: string,
-  options: RequestOptions = {},
+  options: RequestOptions = {}
 ): Promise<T> {
   const { requireAuth = true, ...fetchOptions } = options;
 
   // Build headers
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
-    ...(fetchOptions.headers || {}),
+    ...(fetchOptions.headers || {})
   };
 
   // Add authentication token for DTAM
@@ -250,7 +250,7 @@ export async function apiClient<T = any>(
   // Make request
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...fetchOptions,
-    headers,
+    headers
   });
 
   // Handle response
@@ -259,7 +259,7 @@ export async function apiClient<T = any>(
     throw new ApiError(
       response.status,
       errorData.message || `Request failed with status ${response.status}`,
-      errorData,
+      errorData
     );
   }
 
@@ -355,7 +355,7 @@ export const dashboardApi = {
     apiClient<{
       applications: Array<{ date: string; count: number }>;
       approvals: Array<{ date: string; count: number }>;
-    }>(`/api/dtam/dashboard/trends?period=${period}`),
+    }>(`/api/dtam/dashboard/trends?period=${period}`)
 };
 ```
 
@@ -451,7 +451,7 @@ export const applicationsApi = {
    */
   getDocuments: (id: string) =>
     apiClient<Array<{ id: string; type: string; url: string }>>(
-      `/api/applications/${id}/documents`,
+      `/api/applications/${id}/documents`
     ),
 
   /**
@@ -465,7 +465,7 @@ export const applicationsApi = {
       compliance: number;
       approved: boolean;
       comments: string;
-    },
+    }
   ) => apiClient(`/api/applications/${id}/review`, { method: 'POST', body: JSON.stringify(data) }),
 
   /**
@@ -479,11 +479,11 @@ export const applicationsApi = {
       passed: boolean;
       findings: string;
       photos?: string[];
-    },
+    }
   ) =>
     apiClient(`/api/applications/${id}/inspection`, {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(data)
     }),
 
   /**
@@ -492,7 +492,7 @@ export const applicationsApi = {
   approve: (id: string, comments: string = '') =>
     apiClient(`/api/applications/${id}/approve`, {
       method: 'POST',
-      body: JSON.stringify({ comments }),
+      body: JSON.stringify({ comments })
     }),
 
   /**
@@ -501,7 +501,7 @@ export const applicationsApi = {
   reject: (id: string, reason: string) =>
     apiClient(`/api/applications/${id}/reject`, {
       method: 'POST',
-      body: JSON.stringify({ reason }),
+      body: JSON.stringify({ reason })
     }),
 
   /**
@@ -515,7 +515,7 @@ export const applicationsApi = {
         actor: string;
         notes: string;
       }>
-    >(`/api/applications/${id}/history`),
+    >(`/api/applications/${id}/history`)
 };
 ```
 
@@ -558,7 +558,7 @@ export function useDashboard() {
     statistics,
     loading,
     error,
-    reload: loadStatistics,
+    reload: loadStatistics
   };
 }
 ```

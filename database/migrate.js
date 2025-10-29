@@ -47,7 +47,7 @@ async function getExecutedMigrations(db) {
 async function recordMigration(db, name) {
   await db.collection(MIGRATIONS_COLLECTION).insertOne({
     name,
-    executedAt: new Date(),
+    executedAt: new Date()
   });
 }
 
@@ -258,7 +258,7 @@ async function main() {
     console.log('🔌 Connecting to MongoDB...');
     connection = await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true
     });
     console.log('✅ Connected to MongoDB\n');
 
@@ -294,5 +294,5 @@ if (require.main === module) {
 module.exports = {
   runMigrationsUp,
   rollbackLastMigration,
-  rollbackAllMigrations,
+  rollbackAllMigrations
 };

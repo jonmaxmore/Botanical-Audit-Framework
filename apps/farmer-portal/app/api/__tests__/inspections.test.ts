@@ -23,7 +23,7 @@ const createMockInspection = (overrides?: Partial<Inspection>): Inspection => ({
   scheduledDate: new Date('2025-02-01'),
   status: 'SCHEDULED',
   createdAt: new Date('2025-01-15'),
-  ...overrides,
+  ...overrides
 });
 
 describe('API Routes: /api/inspections', () => {
@@ -32,12 +32,12 @@ describe('API Routes: /api/inspections', () => {
       const inspections = [
         createMockInspection({ id: 'insp-001', applicationId: 'app-001' }),
         createMockInspection({ id: 'insp-002', applicationId: 'app-002' }),
-        createMockInspection({ id: 'insp-003', applicationId: 'app-001' }),
+        createMockInspection({ id: 'insp-003', applicationId: 'app-001' })
       ];
 
       const farmerApplicationIds = ['app-001'];
       const farmerInspections = inspections.filter(insp =>
-        farmerApplicationIds.includes(insp.applicationId),
+        farmerApplicationIds.includes(insp.applicationId)
       );
 
       expect(farmerInspections).toHaveLength(2);
@@ -48,7 +48,7 @@ describe('API Routes: /api/inspections', () => {
       const inspections = [
         createMockInspection({ id: 'insp-001', inspectorId: 'inspector-001' }),
         createMockInspection({ id: 'insp-002', inspectorId: 'inspector-002' }),
-        createMockInspection({ id: 'insp-003', inspectorId: 'inspector-001' }),
+        createMockInspection({ id: 'insp-003', inspectorId: 'inspector-001' })
       ];
 
       const inspectorInspections = inspections.filter(insp => insp.inspectorId === 'inspector-001');
@@ -60,7 +60,7 @@ describe('API Routes: /api/inspections', () => {
       const inspections = [
         createMockInspection({ id: 'insp-001', status: 'SCHEDULED' }),
         createMockInspection({ id: 'insp-002', status: 'COMPLETED' }),
-        createMockInspection({ id: 'insp-003', status: 'SCHEDULED' }),
+        createMockInspection({ id: 'insp-003', status: 'SCHEDULED' })
       ];
 
       const scheduledInspections = inspections.filter(insp => insp.status === 'SCHEDULED');
@@ -72,13 +72,13 @@ describe('API Routes: /api/inspections', () => {
       const inspections = [
         createMockInspection({ scheduledDate: new Date('2025-01-15') }),
         createMockInspection({ scheduledDate: new Date('2025-02-15') }),
-        createMockInspection({ scheduledDate: new Date('2025-03-15') }),
+        createMockInspection({ scheduledDate: new Date('2025-03-15') })
       ];
 
       const from = new Date('2025-02-01');
       const to = new Date('2025-02-28');
       const filtered = inspections.filter(
-        insp => insp.scheduledDate >= from && insp.scheduledDate <= to,
+        insp => insp.scheduledDate >= from && insp.scheduledDate <= to
       );
 
       expect(filtered).toHaveLength(1);
@@ -90,7 +90,7 @@ describe('API Routes: /api/inspections', () => {
     it('should find inspection by id', () => {
       const inspections = [
         createMockInspection({ id: 'insp-001' }),
-        createMockInspection({ id: 'insp-002' }),
+        createMockInspection({ id: 'insp-002' })
       ];
 
       const found = inspections.find(insp => insp.id === 'insp-001');
@@ -186,7 +186,7 @@ describe('API Routes: /api/inspections', () => {
         ...inspection,
         status: 'COMPLETED' as const,
         complianceScore: 85,
-        completedAt: new Date(),
+        completedAt: new Date()
       };
 
       expect(completed.status).toBe('COMPLETED');
@@ -290,7 +290,7 @@ describe('API Routes: /api/inspections', () => {
         { area: 'Storage', status: 'PASS' },
         { area: 'Documentation', status: 'PASS' },
         { area: 'Hygiene', status: 'PASS' },
-        { area: 'Equipment', status: 'PASS' },
+        { area: 'Equipment', status: 'PASS' }
       ];
 
       const passCount = findings.filter(f => f.status === 'PASS').length;
@@ -304,7 +304,7 @@ describe('API Routes: /api/inspections', () => {
         { area: 'Storage', status: 'PASS' },
         { area: 'Documentation', status: 'FAIL' },
         { area: 'Hygiene', status: 'PASS' },
-        { area: 'Equipment', status: 'PASS' },
+        { area: 'Equipment', status: 'PASS' }
       ];
 
       const passCount = findings.filter(f => f.status === 'PASS').length;

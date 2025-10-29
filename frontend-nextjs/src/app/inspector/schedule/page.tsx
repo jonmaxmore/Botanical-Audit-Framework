@@ -33,7 +33,7 @@ import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**
  * Inspector Schedule Page
- * 
+ *
  * หน้าตารางนัดตรวจสำหรับ INSPECTOR
  * - แสดงนัดตรวจทั้งหมดในรูปแบบ list/calendar
  * - Accept/Reschedule appointments
@@ -56,7 +56,7 @@ interface Inspection {
 const InspectorSchedulePage: React.FC = () => {
   const router = useRouter();
   const { applications } = useApplicationContext();
-  
+
   const [loading, setLoading] = useState(true);
   const [inspections, setInspections] = useState<Inspection[]>([]);
   const [filterType, setFilterType] = useState<'all' | 'VDO_CALL' | 'ON_SITE'>('all');
@@ -74,10 +74,11 @@ const InspectorSchedulePage: React.FC = () => {
   const loadSchedule = () => {
     try {
       // กรองใบสมัครที่อยู่ในขั้นตอนตรวจสอบ
-      const inspectionApplications = applications.filter(app => 
-        app.workflowState === 'INSPECTION_SCHEDULED' ||
-        app.workflowState === 'INSPECTION_VDO_CALL' ||
-        app.workflowState === 'INSPECTION_ON_SITE'
+      const inspectionApplications = applications.filter(
+        (app) =>
+          app.workflowState === 'INSPECTION_SCHEDULED' ||
+          app.workflowState === 'INSPECTION_VDO_CALL' ||
+          app.workflowState === 'INSPECTION_ON_SITE'
       );
 
       // Mock inspections data
@@ -103,11 +104,13 @@ const InspectorSchedulePage: React.FC = () => {
       // Filter by type
       let filtered = mockInspections;
       if (filterType !== 'all') {
-        filtered = mockInspections.filter(ins => ins.type === filterType);
+        filtered = mockInspections.filter((ins) => ins.type === filterType);
       }
 
       // Sort by date
-      filtered.sort((a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime());
+      filtered.sort(
+        (a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime()
+      );
 
       setInspections(filtered);
       setLoading(false);
@@ -119,10 +122,8 @@ const InspectorSchedulePage: React.FC = () => {
 
   const handleAccept = (inspection: Inspection) => {
     // Update status to accepted
-    setInspections(prev => 
-      prev.map(ins => 
-        ins.id === inspection.id ? { ...ins, status: 'accepted' } : ins
-      )
+    setInspections((prev) =>
+      prev.map((ins) => (ins.id === inspection.id ? { ...ins, status: 'accepted' } : ins))
     );
     alert(`ยืนยันนัดตรวจ: ${inspection.farmName}`);
   };
@@ -143,15 +144,17 @@ const InspectorSchedulePage: React.FC = () => {
     if (!rescheduleDialog.inspection) return;
 
     // Update scheduled date/time
-    setInspections(prev =>
-      prev.map(ins =>
+    setInspections((prev) =>
+      prev.map((ins) =>
         ins.id === rescheduleDialog.inspection!.id
           ? { ...ins, scheduledDate: newDate, scheduledTime: newTime }
           : ins
       )
     );
 
-    alert(`เปลี่ยนนัดตรวจเป็น: ${new Date(newDate).toLocaleDateString('th-TH')} เวลา ${newTime} น.`);
+    alert(
+      `เปลี่ยนนัดตรวจเป็น: ${new Date(newDate).toLocaleDateString('th-TH')} เวลา ${newTime} น.`
+    );
     handleCloseReschedule();
   };
 
@@ -177,19 +180,27 @@ const InspectorSchedulePage: React.FC = () => {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'pending': return 'รอยืนยัน';
-      case 'accepted': return 'ยืนยันแล้ว';
-      case 'scheduled': return 'นัดแล้ว';
-      default: return status;
+      case 'pending':
+        return 'รอยืนยัน';
+      case 'accepted':
+        return 'ยืนยันแล้ว';
+      case 'scheduled':
+        return 'นัดแล้ว';
+      default:
+        return status;
     }
   };
 
   const getStatusColor = (status: string): 'default' | 'success' | 'warning' => {
     switch (status) {
-      case 'pending': return 'warning';
-      case 'accepted': return 'success';
-      case 'scheduled': return 'default';
-      default: return 'default';
+      case 'pending':
+        return 'warning';
+      case 'accepted':
+        return 'success';
+      case 'scheduled':
+        return 'default';
+      default:
+        return 'default';
     }
   };
 
@@ -199,7 +210,7 @@ const InspectorSchedulePage: React.FC = () => {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -209,11 +220,13 @@ const InspectorSchedulePage: React.FC = () => {
     return date.toDateString() === today.toDateString();
   };
 
-  const pendingCount = inspections.filter(ins => ins.status === 'pending').length;
+  const pendingCount = inspections.filter((ins) => ins.status === 'pending').length;
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -238,11 +251,16 @@ const InspectorSchedulePage: React.FC = () => {
             variant={filterType === 'all' ? 'contained' : 'outlined'}
             onClick={() => setFilterType('all')}
           >
-            ทั้งหมด ({applications.filter(app => 
-              app.workflowState === 'INSPECTION_SCHEDULED' ||
-              app.workflowState === 'INSPECTION_VDO_CALL' ||
-              app.workflowState === 'INSPECTION_ON_SITE'
-            ).length})
+            ทั้งหมด (
+            {
+              applications.filter(
+                (app) =>
+                  app.workflowState === 'INSPECTION_SCHEDULED' ||
+                  app.workflowState === 'INSPECTION_VDO_CALL' ||
+                  app.workflowState === 'INSPECTION_ON_SITE'
+              ).length
+            }
+            )
           </Button>
           <Button
             variant={filterType === 'VDO_CALL' ? 'contained' : 'outlined'}
@@ -266,7 +284,8 @@ const InspectorSchedulePage: React.FC = () => {
       {/* Alert for Pending */}
       {pendingCount > 0 && (
         <Alert severity="warning" sx={{ mb: 3 }}>
-          มีนัดตรวจรอยืนยัน <strong>{pendingCount} รายการ</strong> - กรุณายืนยันหรือเปลี่ยนนัดภายใน 24 ชั่วโมง
+          มีนัดตรวจรอยืนยัน <strong>{pendingCount} รายการ</strong> - กรุณายืนยันหรือเปลี่ยนนัดภายใน
+          24 ชั่วโมง
         </Alert>
       )}
 
@@ -278,7 +297,7 @@ const InspectorSchedulePage: React.FC = () => {
       ) : (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {inspections.map((inspection) => (
-            <Card 
+            <Card
               key={inspection.id}
               sx={{
                 ...(isToday(inspection.scheduledDate) && {
@@ -289,10 +308,25 @@ const InspectorSchedulePage: React.FC = () => {
               }}
             >
               <CardContent>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'start',
+                    mb: 2,
+                  }}
+                >
                   <Box sx={{ flex: 1 }}>
                     {/* Title */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1, flexWrap: 'wrap' }}>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        mb: 1,
+                        flexWrap: 'wrap',
+                      }}
+                    >
                       {getInspectionTypeIcon(inspection.type)}
                       <Typography variant="h6" fontWeight="bold">
                         {inspection.farmName}
@@ -314,10 +348,12 @@ const InspectorSchedulePage: React.FC = () => {
 
                     {/* Details */}
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                      <strong>เกษตรกร:</strong> {inspection.farmerName} | <strong>เลขที่:</strong> {inspection.applicationNumber}
+                      <strong>เกษตรกร:</strong> {inspection.farmerName} | <strong>เลขที่:</strong>{' '}
+                      {inspection.applicationNumber}
                     </Typography>
                     <Typography variant="body2" color="text.secondary" gutterBottom>
-                      📅 <strong>นัดหมาย:</strong> {formatDate(inspection.scheduledDate)} เวลา {inspection.scheduledTime} น.
+                      📅 <strong>นัดหมาย:</strong> {formatDate(inspection.scheduledDate)} เวลา{' '}
+                      {inspection.scheduledTime} น.
                     </Typography>
                     {inspection.type === 'ON_SITE' && inspection.address && (
                       <Typography variant="body2" color="text.secondary">
@@ -386,7 +422,8 @@ const InspectorSchedulePage: React.FC = () => {
                   กำลังเปลี่ยนนัดสำหรับ: <strong>{rescheduleDialog.inspection.farmName}</strong>
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  นัดเดิม: {formatDate(rescheduleDialog.inspection.scheduledDate)} เวลา {rescheduleDialog.inspection.scheduledTime} น.
+                  นัดเดิม: {formatDate(rescheduleDialog.inspection.scheduledDate)} เวลา{' '}
+                  {rescheduleDialog.inspection.scheduledTime} น.
                 </Typography>
               </Alert>
 
@@ -412,9 +449,7 @@ const InspectorSchedulePage: React.FC = () => {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseReschedule}>
-            ยกเลิก
-          </Button>
+          <Button onClick={handleCloseReschedule}>ยกเลิก</Button>
           <Button
             variant="contained"
             color="primary"

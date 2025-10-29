@@ -8,8 +8,8 @@ const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
   timeout: 30000, // 30 seconds timeout
   headers: {
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
 });
 
 // Request interceptor - Add authentication token to all requests
@@ -26,7 +26,7 @@ apiClient.interceptors.request.use(
   },
   (error: AxiosError) => {
     return Promise.reject(error);
-  },
+  }
 );
 
 // Response interceptor - Handle common errors
@@ -66,7 +66,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  },
+  }
 );
 
 // API Response type
@@ -90,18 +90,18 @@ export const handleApiError = (error: unknown): ApiError => {
     return {
       message: error.response?.data?.message || error.message || 'An error occurred',
       status: error.response?.status,
-      data: error.response?.data,
+      data: error.response?.data
     };
   }
 
   if (error instanceof Error) {
     return {
-      message: error.message,
+      message: error.message
     };
   }
 
   return {
-    message: 'An unknown error occurred',
+    message: 'An unknown error occurred'
   };
 };
 

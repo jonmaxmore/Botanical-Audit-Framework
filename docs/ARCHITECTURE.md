@@ -1258,7 +1258,7 @@ const certificateAccessControl = async (req, res, next) => {
   // DTAM Reviewer - NO certificate access
   if (user.role === 'reviewer') {
     return res.status(403).json({
-      error: 'Access denied - reviewers handle documents only, not certificates',
+      error: 'Access denied - reviewers handle documents only, not certificates'
     });
   }
 
@@ -1266,11 +1266,11 @@ const certificateAccessControl = async (req, res, next) => {
   if (user.role === 'inspector') {
     const application = await Application.findOne({
       certificateId,
-      assignedInspector: user._id,
+      assignedInspector: user._id
     });
     if (!application) {
       return res.status(403).json({
-        error: 'Access denied - not assigned to this case',
+        error: 'Access denied - not assigned to this case'
       });
     }
     return next();
@@ -1292,7 +1292,7 @@ const documentReviewAccessControl = async (req, res, next) => {
   // Only Reviewer, Approver, Admin can review documents
   if (!['reviewer', 'approver', 'admin'].includes(user.role)) {
     return res.status(403).json({
-      error: 'Access denied - insufficient permissions to review documents',
+      error: 'Access denied - insufficient permissions to review documents'
     });
   }
 
@@ -1317,7 +1317,7 @@ const inspectionAccessControl = async (req, res, next) => {
     }
     if (inspection.assignedInspector.toString() !== user._id.toString()) {
       return res.status(403).json({
-        error: 'Access denied - not assigned to this inspection',
+        error: 'Access denied - not assigned to this inspection'
       });
     }
     return next();
@@ -1325,7 +1325,7 @@ const inspectionAccessControl = async (req, res, next) => {
 
   // Reviewer - no inspection access
   return res.status(403).json({
-    error: 'Access denied - reviewers cannot access inspections',
+    error: 'Access denied - reviewers cannot access inspections'
   });
 };
 
@@ -1338,7 +1338,7 @@ const certificateIssuanceAccessControl = async (req, res, next) => {
     return res.status(403).json({
       error: 'Access denied - only approvers can issue certificates',
       message:
-        'Reviewers handle document review, Inspectors handle farm inspections. Only Approvers can issue certificates.',
+        'Reviewers handle document review, Inspectors handle farm inspections. Only Approvers can issue certificates.'
     });
   }
 

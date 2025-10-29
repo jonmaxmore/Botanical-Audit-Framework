@@ -10,7 +10,7 @@ import {
   formatDuration,
   formatFileSize,
   formatPercentage,
-  truncateText,
+  truncateText
 } from '../utils/format';
 
 describe('Format Utilities', () => {

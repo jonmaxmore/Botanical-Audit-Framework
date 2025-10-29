@@ -324,7 +324,7 @@ class PDPAComplianceService {
       purpose,
       consentedAt: new Date(),
       ipAddress: req.ip,
-      version: '1.0',
+      version: '1.0'
     });
   }
 
@@ -334,7 +334,7 @@ class PDPAComplianceService {
       personalData: await User.findById(userId),
       applications: await Application.find({ userId }),
       certificates: await Certificate.find({ userId }),
-      exportedAt: new Date(),
+      exportedAt: new Date()
     };
   }
 
@@ -346,7 +346,7 @@ class PDPAComplianceService {
       // Mask personal data
       name: '***',
       email: '***@***',
-      phone: '***-***-****',
+      phone: '***-***-****'
     });
   }
 }
@@ -361,7 +361,7 @@ class NationalSSOService {
     const token = await axios.post('https://imauth.bora.dopa.go.th/api/v2/oauth2/token/', {
       code: authCode,
       client_id: '...',
-      client_secret: '...',
+      client_secret: '...'
     });
     return token;
   }
@@ -460,8 +460,8 @@ rs.initiate({
   members: [
     { _id: 0, host: 'mongo1:27017', priority: 2 },
     { _id: 1, host: 'mongo2:27017', priority: 1 },
-    { _id: 2, host: 'mongo3:27017', priority: 1 },
-  ],
+    { _id: 2, host: 'mongo3:27017', priority: 1 }
+  ]
 });
 
 // Sharding (Horizontal Scaling)

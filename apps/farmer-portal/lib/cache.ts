@@ -42,7 +42,7 @@ const REDIS_CONFIG: CacheConfig = {
   port: parseInt(process.env.REDIS_PORT || '6379'),
   password: process.env.REDIS_PASSWORD,
   db: parseInt(process.env.REDIS_DB || '0'),
-  keyPrefix: process.env.REDIS_KEY_PREFIX || 'gacp:',
+  keyPrefix: process.env.REDIS_KEY_PREFIX || 'gacp:'
 };
 
 let redisClient: RedisClientType | null = null;
@@ -58,10 +58,10 @@ export async function initializeRedis(): Promise<RedisClientType> {
   redisClient = createClient({
     socket: {
       host: REDIS_CONFIG.host,
-      port: REDIS_CONFIG.port,
+      port: REDIS_CONFIG.port
     },
     password: REDIS_CONFIG.password,
-    database: REDIS_CONFIG.db,
+    database: REDIS_CONFIG.db
   });
 
   redisClient.on('error', err => {
@@ -127,7 +127,7 @@ const KEYS = {
 
   // Rate Limiting
   rateLimit: (userId: string, endpoint: string) =>
-    `${REDIS_CONFIG.keyPrefix}ratelimit:${userId}:${endpoint}`,
+    `${REDIS_CONFIG.keyPrefix}ratelimit:${userId}:${endpoint}`
 };
 
 // ============================================================================
@@ -154,7 +154,7 @@ export const CACHE_TTL = {
   inspectorSchedule: 30 * 60,
 
   // Rate Limit: 1 minute
-  rateLimit: 60,
+  rateLimit: 60
 } as const;
 
 // ============================================================================
@@ -474,7 +474,7 @@ export async function getCacheStats(): Promise<CacheStats> {
     misses,
     keys,
     memory,
-    hitRate,
+    hitRate
   };
 }
 
@@ -492,18 +492,18 @@ export async function healthCheck(): Promise<{
     if (pong === 'PONG') {
       return {
         status: 'healthy',
-        message: 'Redis is connected and responding',
+        message: 'Redis is connected and responding'
       };
     }
 
     return {
       status: 'unhealthy',
-      message: 'Redis ping failed',
+      message: 'Redis ping failed'
     };
   } catch (error) {
     return {
       status: 'unhealthy',
-      message: error instanceof Error ? error.message : 'Unknown error',
+      message: error instanceof Error ? error.message : 'Unknown error'
     };
   }
 }
@@ -552,7 +552,7 @@ const cacheModule = {
   healthCheck,
 
   // Constants
-  CACHE_TTL,
+  CACHE_TTL
 };
 
 export default cacheModule;

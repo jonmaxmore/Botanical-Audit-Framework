@@ -25,30 +25,30 @@ const LoginHistorySchema = new Schema(
     timestamp: {
       type: Date,
       required: true,
-      default: Date.now,
+      default: Date.now
     },
     ipAddress: {
       type: String,
       required: true,
-      maxlength: 45, // IPv6 max length
+      maxlength: 45 // IPv6 max length
     },
     userAgent: {
       type: String,
       required: true,
-      maxlength: 500,
+      maxlength: 500
     },
     success: {
       type: Boolean,
       required: true,
-      default: true,
+      default: true
     },
     failureReason: {
       type: String,
       enum: [null, 'INVALID_PASSWORD', 'ACCOUNT_LOCKED', 'ACCOUNT_SUSPENDED'],
-      default: null,
-    },
+      default: null
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 /**
@@ -60,7 +60,7 @@ const UserSchema = new Schema(
     // === PRIMARY KEY ===
     _id: {
       type: Schema.Types.ObjectId,
-      auto: true,
+      auto: true
     },
 
     // === UNIQUE IDENTIFIERS ===
@@ -68,7 +68,7 @@ const UserSchema = new Schema(
       type: String,
       required: true,
       match: /^USR-\d{4}-[A-Z0-9]{8}$/,
-      description: 'Format: USR-YYYY-XXXXXXXX',
+      description: 'Format: USR-YYYY-XXXXXXXX'
     },
 
     email: {
@@ -76,20 +76,20 @@ const UserSchema = new Schema(
       required: true,
       lowercase: true,
       trim: true,
-      match: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/,
+      match: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/
     },
 
     // === THAI ID VALIDATION ===
     thaiId: {
       type: String,
       match: /^[0-9]{13}$/,
-      description: '13-digit Thai national ID (Mod 11 validated)',
+      description: '13-digit Thai national ID (Mod 11 validated)'
     },
 
     thaiIdVerified: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
 
     // === AUTHENTICATION ===
@@ -97,12 +97,12 @@ const UserSchema = new Schema(
       type: String,
       required: true,
       select: false, // Never return in queries by default
-      description: 'Bcrypt hash with cost factor 12',
+      description: 'Bcrypt hash with cost factor 12'
     },
 
     passwordChangedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     loginAttempts: {
@@ -110,18 +110,18 @@ const UserSchema = new Schema(
       required: true,
       default: 0,
       min: 0,
-      max: 5,
+      max: 5
     },
 
     accountLocked: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
 
     accountLockedUntil: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // === PROFILE ===
@@ -130,19 +130,19 @@ const UserSchema = new Schema(
       required: true,
       trim: true,
       minlength: 2,
-      maxlength: 200,
+      maxlength: 200
     },
 
     phoneNumber: {
       type: String,
       match: /^0[0-9]{9}$/,
-      description: 'Thai phone format: 0XXXXXXXXX',
+      description: 'Thai phone format: 0XXXXXXXXX'
     },
 
     phoneVerified: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
 
     // === ROLE-BASED ACCESS CONTROL ===
@@ -151,7 +151,7 @@ const UserSchema = new Schema(
       required: true,
       enum: ['FARMER', 'DTAM', 'ADMIN'],
       default: 'FARMER',
-      index: true,
+      index: true
     },
 
     permissions: [
@@ -182,9 +182,9 @@ const UserSchema = new Schema(
           'document:*',
 
           // Admin permissions (use '*' for all)
-          '*',
-        ],
-      },
+          '*'
+        ]
+      }
     ],
 
     // === STATUS ===
@@ -193,24 +193,24 @@ const UserSchema = new Schema(
       required: true,
       enum: ['ACTIVE', 'INACTIVE', 'SUSPENDED', 'DELETED'],
       default: 'ACTIVE',
-      index: true,
+      index: true
     },
 
     emailVerified: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
 
     emailVerificationToken: {
       type: String,
       select: false, // Don't expose in queries
-      default: null,
+      default: null
     },
 
     emailVerificationExpires: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // === PASSWORD RESET ===
@@ -218,44 +218,44 @@ const UserSchema = new Schema(
       type: String,
       select: false, // Don't expose in queries
       default: null,
-      description: 'Hex-encoded token for password reset (64 chars)',
+      description: 'Hex-encoded token for password reset (64 chars)'
     },
 
     passwordResetExpires: {
       type: Date,
       default: null,
-      description: 'Token expiration timestamp (typically 1 hour)',
+      description: 'Token expiration timestamp (typically 1 hour)'
     },
 
     // === TWO-FACTOR AUTHENTICATION (Future) ===
     twoFactorEnabled: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
 
     twoFactorSecret: {
       type: String,
       select: false,
-      default: null,
+      default: null
     },
 
     // === AUDIT ===
     lastLoginAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     lastLoginIp: {
       type: String,
       maxlength: 45,
-      default: null,
+      default: null
     },
 
     loginHistory: {
       type: [LoginHistorySchema],
       default: [],
-      description: 'Max 10 recent logins (FIFO)',
+      description: 'Max 10 recent logins (FIFO)'
     },
 
     // === TIMESTAMPS ===
@@ -263,25 +263,25 @@ const UserSchema = new Schema(
       type: Date,
       required: true,
       default: Date.now,
-      immutable: true,
+      immutable: true
     },
 
     updatedAt: {
       type: Date,
       required: true,
-      default: Date.now,
+      default: Date.now
     },
 
     deletedAt: {
       type: Date,
-      default: null,
-    },
+      default: null
+    }
   },
   {
     timestamps: true, // Auto-manage createdAt/updatedAt
     collection: 'users',
-    versionKey: false,
-  },
+    versionKey: false
+  }
 );
 
 // ========================================
@@ -303,8 +303,8 @@ UserSchema.index(
   { email: 1 },
   {
     partialFilterExpression: { status: 'ACTIVE' },
-    name: 'active_users_email',
-  },
+    name: 'active_users_email'
+  }
 );
 
 // ========================================
@@ -349,7 +349,7 @@ UserSchema.methods.recordLogin = async function (
   ipAddress,
   userAgent,
   success,
-  failureReason = null,
+  failureReason = null
 ) {
   // Add to login history (keep max 10)
   const loginRecord = {
@@ -357,7 +357,7 @@ UserSchema.methods.recordLogin = async function (
     ipAddress,
     userAgent,
     success,
-    failureReason,
+    failureReason
   };
 
   this.loginHistory.unshift(loginRecord);
@@ -443,7 +443,7 @@ UserSchema.statics.findActiveByRole = function (role) {
   return this.find({
     role,
     status: 'ACTIVE',
-    emailVerified: true,
+    emailVerified: true
   }).sort({ createdAt: -1 });
 };
 
@@ -532,11 +532,11 @@ UserSchema.set('toJSON', {
     delete ret.twoFactorSecret;
     delete ret.__v;
     return ret;
-  },
+  }
 });
 
 UserSchema.set('toObject', {
-  virtuals: true,
+  virtuals: true
 });
 
 // ========================================

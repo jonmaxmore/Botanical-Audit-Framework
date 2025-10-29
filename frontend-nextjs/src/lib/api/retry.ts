@@ -1,7 +1,7 @@
 /**
  * Retry Utility for API Calls
  * INTEGRATIVE REFINEMENT - Week 3-4 Task 2.1
- * 
+ *
  * Lightweight retry wrapper with exponential backoff
  * No external dependencies - pure TypeScript implementation
  */
@@ -63,16 +63,16 @@ function calculateDelay(
  * Sleep for specified milliseconds
  */
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
  * Retry wrapper for fetch API calls
- * 
+ *
  * @param fn - Async function to retry (typically a fetch call)
  * @param options - Retry configuration options
  * @returns Promise resolving to the function result
- * 
+ *
  * @example
  * ```typescript
  * const data = await retryFetch(
@@ -84,10 +84,7 @@ function sleep(ms: number): Promise<void> {
  * );
  * ```
  */
-export async function retryFetch<T>(
-  fn: () => Promise<T>,
-  options: RetryOptions = {}
-): Promise<T> {
+export async function retryFetch<T>(fn: () => Promise<T>, options: RetryOptions = {}): Promise<T> {
   const config = { ...DEFAULT_OPTIONS, ...options };
   let lastError: Error;
 
@@ -101,8 +98,7 @@ export async function retryFetch<T>(
 
       // Check if we should retry
       const shouldRetry =
-        attempt < config.maxAttempts &&
-        isRetryableError(error, config.retryableStatuses);
+        attempt < config.maxAttempts && isRetryableError(error, config.retryableStatuses);
 
       if (!shouldRetry) {
         // Not retryable or max attempts reached
@@ -122,13 +118,10 @@ export async function retryFetch<T>(
 
       // Log retry attempt (development only)
       if (process.env.NODE_ENV === 'development') {
-        console.warn(
-          `🔄 Retry attempt ${attempt}/${config.maxAttempts} after ${delay}ms`,
-          {
-            error: error.message,
-            status: error.status,
-          }
-        );
+        console.warn(`🔄 Retry attempt ${attempt}/${config.maxAttempts} after ${delay}ms`, {
+          error: error.message,
+          status: error.status,
+        });
       }
 
       // Wait before retrying
@@ -143,7 +136,7 @@ export async function retryFetch<T>(
 /**
  * Retry wrapper specifically for fetch with JSON response
  * Handles common API patterns with automatic JSON parsing
- * 
+ *
  * @example
  * ```typescript
  * const response = await retryFetchJSON<LoginResponse>(
@@ -179,11 +172,11 @@ export async function retryFetchJSON<T>(
 /**
  * Create a retryable fetch function with preset options
  * Useful for consistent retry behavior across multiple calls
- * 
+ *
  * @example
  * ```typescript
  * const apiCall = createRetryableFetch({ maxAttempts: 5, initialDelay: 500 });
- * 
+ *
  * const user = await apiCall(() => fetch('/api/user'));
  * const posts = await apiCall(() => fetch('/api/posts'));
  * ```

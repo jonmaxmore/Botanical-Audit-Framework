@@ -251,7 +251,7 @@ export default function ReviewDialog({
                   : 'Add optional comments about this review'
               }
               value={reviewComment}
-              onChange={e => setReviewComment(e.target.value)}
+              onChange={(e) => setReviewComment(e.target.value)}
               disabled={loading}
               error={reviewAction === 'rejected' && !reviewComment.trim()}
               helperText={

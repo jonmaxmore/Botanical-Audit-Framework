@@ -115,7 +115,7 @@ export default function DTAMReviewPage() {
   // Search and filter state
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>(
-    'all',
+    'all'
   );
   const [urgencyFilter, setUrgencyFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
   const [searchDebounce, setSearchDebounce] = useState<NodeJS.Timeout | null>(null);
@@ -175,7 +175,7 @@ export default function DTAMReviewPage() {
   };
 
   const handleRefresh = () => {
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Handle search with debounce
@@ -191,7 +191,7 @@ export default function DTAMReviewPage() {
     // Set new timeout for debounced search
     const timeout = setTimeout(() => {
       setPage(0); // Reset to first page on search
-      setRefreshTrigger(prev => prev + 1);
+      setRefreshTrigger((prev) => prev + 1);
     }, 500);
 
     setSearchDebounce(timeout);
@@ -201,14 +201,14 @@ export default function DTAMReviewPage() {
   const handleStatusFilterChange = (event: SelectChangeEvent<string>) => {
     setStatusFilter(event.target.value as 'all' | 'pending' | 'approved' | 'rejected');
     setPage(0);
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Handle urgency filter change
   const handleUrgencyFilterChange = (event: SelectChangeEvent<string>) => {
     setUrgencyFilter(event.target.value as 'all' | 'low' | 'medium' | 'high');
     setPage(0);
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Handle clear filters
@@ -217,7 +217,7 @@ export default function DTAMReviewPage() {
     setStatusFilter('all');
     setUrgencyFilter('all');
     setPage(0);
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   // Check if any filters are active
@@ -235,7 +235,7 @@ export default function DTAMReviewPage() {
 
   const handleReviewComplete = () => {
     setSuccessMessage('Application reviewed successfully');
-    setRefreshTrigger(prev => prev + 1);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   const handleDownload = async (applicationId: string, fileName: string) => {
@@ -361,7 +361,7 @@ export default function DTAMReviewPage() {
                   size="small"
                   onDelete={() => {
                     setSearchQuery('');
-                    setRefreshTrigger(prev => prev + 1);
+                    setRefreshTrigger((prev) => prev + 1);
                   }}
                 />
               )}
@@ -371,7 +371,7 @@ export default function DTAMReviewPage() {
                   size="small"
                   onDelete={() => {
                     setStatusFilter('all');
-                    setRefreshTrigger(prev => prev + 1);
+                    setRefreshTrigger((prev) => prev + 1);
                   }}
                 />
               )}
@@ -381,7 +381,7 @@ export default function DTAMReviewPage() {
                   size="small"
                   onDelete={() => {
                     setUrgencyFilter('all');
-                    setRefreshTrigger(prev => prev + 1);
+                    setRefreshTrigger((prev) => prev + 1);
                   }}
                 />
               )}
@@ -513,7 +513,7 @@ export default function DTAMReviewPage() {
                   </TableRow>
                 ) : (
                   // Data rows
-                  applications.map(app => (
+                  applications.map((app) => (
                     <TableRow key={app._id} hover>
                       <TableCell>
                         <Typography variant="body2" className="font-medium">

@@ -48,7 +48,7 @@ import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**
  * Admin Certificate & User Management Page
- * 
+ *
  * หน้าจัดการใบรับรองและผู้ใช้งาน
  * - Tab 1: Certificate Management (ใบรับรองที่ออก, ยกเลิก)
  * - Tab 2: User Management (CRUD ผู้ใช้, จัดการ roles)
@@ -56,11 +56,46 @@ import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 // Mock users data
 const mockUsers = [
-  { id: '1', name: 'สมชาย ใจดี', email: 'farmer1@example.com', role: 'FARMER', status: 'active', createdAt: '2024-01-15' },
-  { id: '2', name: 'สมหญิง รักษ์ดี', email: 'farmer2@example.com', role: 'FARMER', status: 'active', createdAt: '2024-02-20' },
-  { id: '3', name: 'วิชัย ตรวจสอบ', email: 'officer1@example.com', role: 'DTAM_OFFICER', status: 'active', createdAt: '2023-12-01' },
-  { id: '4', name: 'สุดา ลงพื้นที่', email: 'inspector1@example.com', role: 'INSPECTOR', status: 'active', createdAt: '2023-11-15' },
-  { id: '5', name: 'ผู้จัดการ ระบบ', email: 'admin1@example.com', role: 'ADMIN', status: 'active', createdAt: '2023-10-01' },
+  {
+    id: '1',
+    name: 'สมชาย ใจดี',
+    email: 'farmer1@example.com',
+    role: 'FARMER',
+    status: 'active',
+    createdAt: '2024-01-15',
+  },
+  {
+    id: '2',
+    name: 'สมหญิง รักษ์ดี',
+    email: 'farmer2@example.com',
+    role: 'FARMER',
+    status: 'active',
+    createdAt: '2024-02-20',
+  },
+  {
+    id: '3',
+    name: 'วิชัย ตรวจสอบ',
+    email: 'officer1@example.com',
+    role: 'DTAM_OFFICER',
+    status: 'active',
+    createdAt: '2023-12-01',
+  },
+  {
+    id: '4',
+    name: 'สุดา ลงพื้นที่',
+    email: 'inspector1@example.com',
+    role: 'INSPECTOR',
+    status: 'active',
+    createdAt: '2023-11-15',
+  },
+  {
+    id: '5',
+    name: 'ผู้จัดการ ระบบ',
+    email: 'admin1@example.com',
+    role: 'ADMIN',
+    status: 'active',
+    createdAt: '2023-10-01',
+  },
 ];
 
 interface TabPanelProps {
@@ -113,19 +148,19 @@ const AdminManagementPage: React.FC = () => {
   });
 
   // Get issued certificates
-  const issuedCertificates = applications.filter(app => 
-    app.workflowState === 'CERTIFICATE_ISSUED' || app.workflowState === 'APPROVED'
-  ).map((app, index) => ({
-    id: app.id,
-    certificateNumber: `GACP-${new Date().getFullYear()}-${String(index + 1).padStart(4, '0')}`,
-    applicationNumber: app.applicationNumber,
-    farmName: app.farmInfo?.name,
-    farmerName: app.farmerInfo?.name,
-    issueDate: new Date().toISOString(),
-    expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year
-    status: 'active',
-    score: app.inspectionData?.totalScore || 0,
-  }));
+  const issuedCertificates = applications
+    .filter((app) => app.workflowState === 'CERTIFICATE_ISSUED' || app.workflowState === 'APPROVED')
+    .map((app, index) => ({
+      id: app.id,
+      certificateNumber: `GACP-${new Date().getFullYear()}-${String(index + 1).padStart(4, '0')}`,
+      applicationNumber: app.applicationNumber,
+      farmName: app.farmInfo?.name,
+      farmerName: app.farmerInfo?.name,
+      issueDate: new Date().toISOString(),
+      expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year
+      status: 'active',
+      score: app.inspectionData?.totalScore || 0,
+    }));
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setTabValue(newValue);
@@ -205,9 +240,7 @@ const AdminManagementPage: React.FC = () => {
   const handleSaveUser = () => {
     if (selectedUser) {
       // Edit existing user
-      setUsers(prev => 
-        prev.map(u => u.id === selectedUser.id ? { ...u, ...userForm } : u)
-      );
+      setUsers((prev) => prev.map((u) => (u.id === selectedUser.id ? { ...u, ...userForm } : u)));
       alert('แก้ไขผู้ใช้สำเร็จ');
     } else {
       // Add new user
@@ -216,7 +249,7 @@ const AdminManagementPage: React.FC = () => {
         ...userForm,
         createdAt: new Date().toISOString(),
       };
-      setUsers(prev => [...prev, newUser]);
+      setUsers((prev) => [...prev, newUser]);
       alert('เพิ่มผู้ใช้สำเร็จ');
     }
     handleCloseUserDialog();
@@ -224,43 +257,55 @@ const AdminManagementPage: React.FC = () => {
 
   const handleDeleteUser = () => {
     if (confirm(`ยืนยันลบผู้ใช้ ${selectedUser?.name}?`)) {
-      setUsers(prev => prev.filter(u => u.id !== selectedUser?.id));
+      setUsers((prev) => prev.filter((u) => u.id !== selectedUser?.id));
       alert('ลบผู้ใช้สำเร็จ');
       handleUserMenuClose();
     }
   };
 
   // Filter certificates
-  const filteredCertificates = issuedCertificates.filter(cert =>
-    cert.certificateNumber.toLowerCase().includes(certSearch.toLowerCase()) ||
-    cert.farmName?.toLowerCase().includes(certSearch.toLowerCase()) ||
-    cert.farmerName?.toLowerCase().includes(certSearch.toLowerCase())
+  const filteredCertificates = issuedCertificates.filter(
+    (cert) =>
+      cert.certificateNumber.toLowerCase().includes(certSearch.toLowerCase()) ||
+      cert.farmName?.toLowerCase().includes(certSearch.toLowerCase()) ||
+      cert.farmerName?.toLowerCase().includes(certSearch.toLowerCase())
   );
 
   // Filter users
-  const filteredUsers = users.filter(user =>
-    user.name.toLowerCase().includes(userSearch.toLowerCase()) ||
-    user.email.toLowerCase().includes(userSearch.toLowerCase()) ||
-    user.role.toLowerCase().includes(userSearch.toLowerCase())
+  const filteredUsers = users.filter(
+    (user) =>
+      user.name.toLowerCase().includes(userSearch.toLowerCase()) ||
+      user.email.toLowerCase().includes(userSearch.toLowerCase()) ||
+      user.role.toLowerCase().includes(userSearch.toLowerCase())
   );
 
   const getRoleLabel = (role: string) => {
     switch (role) {
-      case 'FARMER': return 'เกษตรกร';
-      case 'DTAM_OFFICER': return 'เจ้าหน้าที่ตรวจเอกสาร';
-      case 'INSPECTOR': return 'เจ้าหน้าที่ตรวจฟาร์ม';
-      case 'ADMIN': return 'ผู้ดูแลระบบ';
-      default: return role;
+      case 'FARMER':
+        return 'เกษตรกร';
+      case 'DTAM_OFFICER':
+        return 'เจ้าหน้าที่ตรวจเอกสาร';
+      case 'INSPECTOR':
+        return 'เจ้าหน้าที่ตรวจฟาร์ม';
+      case 'ADMIN':
+        return 'ผู้ดูแลระบบ';
+      default:
+        return role;
     }
   };
 
   const getRoleColor = (role: string) => {
     switch (role) {
-      case 'FARMER': return 'default';
-      case 'DTAM_OFFICER': return 'primary';
-      case 'INSPECTOR': return 'secondary';
-      case 'ADMIN': return 'error';
-      default: return 'default';
+      case 'FARMER':
+        return 'default';
+      case 'DTAM_OFFICER':
+        return 'primary';
+      case 'INSPECTOR':
+        return 'secondary';
+      case 'ADMIN':
+        return 'error';
+      default:
+        return 'default';
     }
   };
 
@@ -304,8 +349,8 @@ const AdminManagementPage: React.FC = () => {
 
             {/* Statistics */}
             <Alert severity="info" sx={{ mb: 3 }}>
-              ใบรับรองที่ออกแล้ว: <strong>{issuedCertificates.length}</strong> ใบ | 
-              ใบรับรองใช้งาน: <strong>{issuedCertificates.filter(c => c.status === 'active').length}</strong> ใบ
+              ใบรับรองที่ออกแล้ว: <strong>{issuedCertificates.length}</strong> ใบ | ใบรับรองใช้งาน:{' '}
+              <strong>{issuedCertificates.filter((c) => c.status === 'active').length}</strong> ใบ
             </Alert>
 
             {/* Table */}
@@ -313,15 +358,33 @@ const AdminManagementPage: React.FC = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell><strong>เลขที่ใบรับรอง</strong></TableCell>
-                    <TableCell><strong>ใบสมัคร</strong></TableCell>
-                    <TableCell><strong>ชื่อฟาร์ม</strong></TableCell>
-                    <TableCell><strong>เกษตรกร</strong></TableCell>
-                    <TableCell><strong>คะแนน</strong></TableCell>
-                    <TableCell><strong>วันที่ออก</strong></TableCell>
-                    <TableCell><strong>หมดอายุ</strong></TableCell>
-                    <TableCell><strong>สถานะ</strong></TableCell>
-                    <TableCell><strong>จัดการ</strong></TableCell>
+                    <TableCell>
+                      <strong>เลขที่ใบรับรอง</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>ใบสมัคร</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>ชื่อฟาร์ม</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>เกษตรกร</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>คะแนน</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>วันที่ออก</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>หมดอายุ</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>สถานะ</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>จัดการ</strong>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -338,7 +401,7 @@ const AdminManagementPage: React.FC = () => {
                         <TableCell>{cert.farmName}</TableCell>
                         <TableCell>{cert.farmerName}</TableCell>
                         <TableCell>
-                          <Chip 
+                          <Chip
                             label={`${cert.score}/100`}
                             color={cert.score >= 90 ? 'success' : 'primary'}
                             size="small"
@@ -351,17 +414,14 @@ const AdminManagementPage: React.FC = () => {
                           {new Date(cert.expiryDate).toLocaleDateString('th-TH')}
                         </TableCell>
                         <TableCell>
-                          <Chip 
+                          <Chip
                             label={cert.status === 'active' ? 'ใช้งาน' : 'ยกเลิก'}
                             color={cert.status === 'active' ? 'success' : 'error'}
                             size="small"
                           />
                         </TableCell>
                         <TableCell>
-                          <IconButton
-                            size="small"
-                            onClick={(e) => handleCertMenuOpen(e, cert)}
-                          >
+                          <IconButton size="small" onClick={(e) => handleCertMenuOpen(e, cert)}>
                             <MoreVertIcon />
                           </IconButton>
                         </TableCell>
@@ -416,9 +476,9 @@ const AdminManagementPage: React.FC = () => {
 
             {/* Statistics */}
             <Alert severity="info" sx={{ mb: 3 }}>
-              ผู้ใช้ทั้งหมด: <strong>{users.length}</strong> คน | 
-              เกษตรกร: <strong>{users.filter(u => u.role === 'FARMER').length}</strong> | 
-              เจ้าหน้าที่: <strong>{users.filter(u => u.role !== 'FARMER').length}</strong>
+              ผู้ใช้ทั้งหมด: <strong>{users.length}</strong> คน | เกษตรกร:{' '}
+              <strong>{users.filter((u) => u.role === 'FARMER').length}</strong> | เจ้าหน้าที่:{' '}
+              <strong>{users.filter((u) => u.role !== 'FARMER').length}</strong>
             </Alert>
 
             {/* Table */}
@@ -426,12 +486,24 @@ const AdminManagementPage: React.FC = () => {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell><strong>ชื่อ</strong></TableCell>
-                    <TableCell><strong>อีเมล</strong></TableCell>
-                    <TableCell><strong>บทบาท</strong></TableCell>
-                    <TableCell><strong>สถานะ</strong></TableCell>
-                    <TableCell><strong>วันที่สร้าง</strong></TableCell>
-                    <TableCell><strong>จัดการ</strong></TableCell>
+                    <TableCell>
+                      <strong>ชื่อ</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>อีเมล</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>บทบาท</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>สถานะ</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>วันที่สร้าง</strong>
+                    </TableCell>
+                    <TableCell>
+                      <strong>จัดการ</strong>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -446,14 +518,14 @@ const AdminManagementPage: React.FC = () => {
                         </TableCell>
                         <TableCell>{user.email}</TableCell>
                         <TableCell>
-                          <Chip 
+                          <Chip
                             label={getRoleLabel(user.role)}
                             color={getRoleColor(user.role) as any}
                             size="small"
                           />
                         </TableCell>
                         <TableCell>
-                          <Chip 
+                          <Chip
                             label={user.status === 'active' ? 'ใช้งาน' : 'ระงับ'}
                             color={user.status === 'active' ? 'success' : 'error'}
                             size="small"
@@ -463,10 +535,7 @@ const AdminManagementPage: React.FC = () => {
                           {new Date(user.createdAt).toLocaleDateString('th-TH')}
                         </TableCell>
                         <TableCell>
-                          <IconButton
-                            size="small"
-                            onClick={(e) => handleUserMenuOpen(e, user)}
-                          >
+                          <IconButton size="small" onClick={(e) => handleUserMenuOpen(e, user)}>
                             <MoreVertIcon />
                           </IconButton>
                         </TableCell>
@@ -496,11 +565,7 @@ const AdminManagementPage: React.FC = () => {
       </Paper>
 
       {/* Certificate Menu */}
-      <Menu
-        anchorEl={certMenuAnchor}
-        open={Boolean(certMenuAnchor)}
-        onClose={handleCertMenuClose}
-      >
+      <Menu anchorEl={certMenuAnchor} open={Boolean(certMenuAnchor)} onClose={handleCertMenuClose}>
         <MenuItem onClick={handleViewCertificate}>
           <VisibilityIcon sx={{ mr: 1 }} fontSize="small" />
           ดูใบรับรอง
@@ -516,12 +581,13 @@ const AdminManagementPage: React.FC = () => {
       </Menu>
 
       {/* User Menu */}
-      <Menu
-        anchorEl={userMenuAnchor}
-        open={Boolean(userMenuAnchor)}
-        onClose={handleUserMenuClose}
-      >
-        <MenuItem onClick={() => { handleOpenUserDialog(selectedUser); handleUserMenuClose(); }}>
+      <Menu anchorEl={userMenuAnchor} open={Boolean(userMenuAnchor)} onClose={handleUserMenuClose}>
+        <MenuItem
+          onClick={() => {
+            handleOpenUserDialog(selectedUser);
+            handleUserMenuClose();
+          }}
+        >
           <EditIcon sx={{ mr: 1 }} fontSize="small" />
           แก้ไข
         </MenuItem>
@@ -533,9 +599,7 @@ const AdminManagementPage: React.FC = () => {
 
       {/* User Dialog */}
       <Dialog open={userDialog} onClose={handleCloseUserDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>
-          {selectedUser ? 'แก้ไขผู้ใช้' : 'เพิ่มผู้ใช้ใหม่'}
-        </DialogTitle>
+        <DialogTitle>{selectedUser ? 'แก้ไขผู้ใช้' : 'เพิ่มผู้ใช้ใหม่'}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
             <TextField
@@ -579,8 +643,8 @@ const AdminManagementPage: React.FC = () => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseUserDialog}>ยกเลิก</Button>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={handleSaveUser}
             disabled={!userForm.name || !userForm.email}
           >

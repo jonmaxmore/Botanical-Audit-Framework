@@ -13,9 +13,11 @@ Phase 3 เพิ่มฟังก์ชันการทำงานหลั
 ### ✨ New Pages Created (4 files - 1,800+ lines)
 
 #### 1. **Application Form** (`/farmer/applications/new`)
+
 **File**: `frontend-nextjs/src/app/farmer/applications/new/page.tsx` (700+ lines)
 
 **Features**:
+
 - ✅ **Multi-Step Form** (3 steps)
   - Step 1: ข้อมูลฟาร์ม (Farm Information)
   - Step 2: ข้อมูลเกษตรกร (Farmer Details)
@@ -33,6 +35,7 @@ Phase 3 เพิ่มฟังก์ชันการทำงานหลั
 **Form Fields**:
 
 **ข้อมูลฟาร์ม (12 fields)**:
+
 - ชื่อฟาร์ม (Farm Name) - required
 - พื้นที่ฟาร์ม (Farm Size in Rai) - required
 - ที่อยู่ฟาร์ม (Farm Address) - required
@@ -46,6 +49,7 @@ Phase 3 เพิ่มฟังก์ชันการทำงานหลั
 - ผลผลิตโดยประมาณ (Estimated Yield) - optional
 
 **ข้อมูลเกษตรกร (6 fields)**:
+
 - ชื่อ-นามสกุล (Full Name) - required
 - เลขบัตรประชาชน (ID Card Number) - required, 13 digits
 - เบอร์โทรศัพท์ (Phone) - required, 10 digits
@@ -55,6 +59,7 @@ Phase 3 เพิ่มฟังก์ชันการทำงานหลั
 - หมายเหตุ (Remarks) - optional
 
 **User Flow**:
+
 ```
 1. เกษตรกรคลิก "ยื่นคำขอ" จาก Dashboard
 2. ระบบแสดงหน้า Form (Step 1: ข้อมูลฟาร์ม)
@@ -70,9 +75,11 @@ Phase 3 เพิ่มฟังก์ชันการทำงานหลั
 ---
 
 #### 2. **Application Detail** (`/farmer/applications/[id]`)
+
 **File**: `frontend-nextjs/src/app/farmer/applications/[id]/page.tsx` (650+ lines)
 
 **Features**:
+
 - ✅ **Application Overview**
   - Application number, date, current status
   - Status badge (color-coded by state)
@@ -86,7 +93,7 @@ Phase 3 เพิ่มฟังก์ชันการทำงานหลั
   - DOCUMENT_REVIEW → "รอผลการตรวจสอบเอกสาร" (Info)
   - DOCUMENT_REVISION → "แก้ไขและอัปโหลดเอกสารใหม่" (Upload)
   - PAYMENT_PENDING_2 → "ชำระเงิน 25,000 บาท" (Pay)
-  - INSPECTION_* → "รอการตรวจฟาร์ม" (Info)
+  - INSPECTION\_\* → "รอการตรวจฟาร์ม" (Info)
   - PENDING_APPROVAL → "รออนุมัติผล" (Info)
   - CERTIFICATE_GENERATING → "กำลังออกใบรับรอง" (Info)
   - CERTIFICATE_ISSUED → "ดาวน์โหลดใบรับรอง GACP" (Download)
@@ -106,6 +113,7 @@ Phase 3 เพิ่มฟังก์ชันการทำงานหลั
   - Progress bar (≥80 = pass)
 
 **Status Color Mapping**:
+
 ```typescript
 DRAFT → gray
 SUBMITTED → blue (info)
@@ -124,9 +132,11 @@ CERTIFICATE_ISSUED → green (success)
 ---
 
 #### 3. **Document Upload** (`/farmer/documents`)
+
 **File**: `frontend-nextjs/src/app/farmer/documents/page-new.tsx` (400+ lines)
 
 **Features**:
+
 - ✅ **5 Required Document Types**
   1. บัตรประชาชน (ID Card)
   2. ทะเบียนบ้าน (House Registration)
@@ -146,16 +156,17 @@ CERTIFICATE_ISSUED → green (success)
   - Re-upload option
 - ✅ **Workflow-Aware**
   - Can upload only in specific states:
-    * SUBMITTED
-    * PAYMENT_PROCESSING_1
-    * DOCUMENT_REVIEW
-    * DOCUMENT_REVISION
+    - SUBMITTED
+    - PAYMENT_PROCESSING_1
+    - DOCUMENT_REVIEW
+    - DOCUMENT_REVISION
   - Disabled otherwise
 - ✅ **Instructions & Warnings**
   - File type/size requirements
   - Upload instructions
 
 **User Flow**:
+
 ```
 1. เกษตรกรเข้าหน้า /farmer/documents?app=APP123
 2. เห็น 5 document types พร้อมสถานะ
@@ -171,9 +182,11 @@ CERTIFICATE_ISSUED → green (success)
 ---
 
 #### 4. **Payment** (`/farmer/payments`)
+
 **File**: `frontend-nextjs/src/app/farmer/payments/page.tsx` (450+ lines)
 
 **Features**:
+
 - ✅ **Two Payment Phases**
   - **Phase 1**: 5,000 THB (ค่าตรวจสอบเอกสาร)
   - **Phase 2**: 25,000 THB (ค่าตรวจสอบฟาร์ม)
@@ -203,6 +216,7 @@ CERTIFICATE_ISSUED → green (success)
   - Can pay only when status = PAYMENT_PENDING_1 or PAYMENT_PENDING_2
 
 **QR Code Instructions**:
+
 ```
 1. เปิดแอปธนาคาร
 2. เลือกเมนู "สแกน QR"
@@ -213,6 +227,7 @@ CERTIFICATE_ISSUED → green (success)
 ```
 
 **Bank Transfer Instructions**:
+
 ```
 1. โอนเงิน X บาท ไปยังบัญชีที่แสดง
 2. บันทึกหมายเลขอ้างอิง
@@ -220,6 +235,7 @@ CERTIFICATE_ISSUED → green (success)
 ```
 
 **User Flow**:
+
 ```
 1. เกษตรกรเข้าหน้า /farmer/payments?app=APP123&phase=1
 2. เห็น Payment Amount Card (฿5,000 or ฿25,000)
@@ -242,6 +258,7 @@ CERTIFICATE_ISSUED → green (success)
 ## 📊 Updated Progress
 
 ### Phase 1-2: Foundation (100% ✅)
+
 - ✅ Context Providers (Auth + Application)
 - ✅ Components (WorkflowProgress)
 - ✅ Authentication Pages (Login, Register, Unauthorized)
@@ -249,17 +266,20 @@ CERTIFICATE_ISSUED → green (success)
 - ✅ Farmer Dashboard (Workflow-aware)
 
 ### Phase 3: Farmer Application Flow (100% ✅)
+
 - ✅ Application Form (/farmer/applications/new) - 700 lines
 - ✅ Application Detail (/farmer/applications/[id]) - 650 lines
 - ✅ Document Upload (/farmer/documents) - 400 lines
 - ✅ Payment (/farmer/payments) - 450 lines
 
 ### Phase 4: Other Roles (0% 🔴)
+
 - 🔴 Officer Dashboard & Review Pages
 - 🔴 Inspector Dashboard & Inspection Pages
 - 🔴 Admin Dashboard & Management Pages
 
 ### Backend API Integration (0% 🔴)
+
 - 🔴 Authentication endpoints
 - 🔴 Applications CRUD endpoints
 - 🔴 Document upload endpoints
@@ -391,7 +411,7 @@ const canUploadDocuments = () => {
     'SUBMITTED',
     'PAYMENT_PROCESSING_1',
     'DOCUMENT_REVIEW',
-    'DOCUMENT_REVISION',
+    'DOCUMENT_REVISION'
   ];
   return allowedStates.includes(currentApplication.workflowState);
 };
@@ -438,6 +458,7 @@ frontend-nextjs/src/app/farmer/documents/
 ## 🎮 How to Test Phase 3
 
 ### Prerequisites
+
 - Backend running on port 3004
 - Frontend running on port 3000
 - Logged in as Farmer (farmer@gacp.th / demo1234)
@@ -574,7 +595,9 @@ frontend-nextjs/src/app/farmer/documents/
 ## ✨ Highlights & Achievements
 
 ### 1. Complete Farmer Flow
+
 เกษตรกรสามารถทำทุกขั้นตอนได้ครบ:
+
 - ✅ ยื่นคำขอ
 - ✅ ชำระเงินรอบที่ 1
 - ✅ อัปโหลดเอกสาร
@@ -582,18 +605,22 @@ frontend-nextjs/src/app/farmer/documents/
 - ✅ ติดตามสถานะ
 
 ### 2. Workflow-Aware UI
+
 ทุกหน้าปรับตัวตาม workflow state:
+
 - Dynamic buttons (enabled/disabled)
 - Contextual messages
 - Smart next action suggestions
 
 ### 3. User-Friendly Forms
+
 - Multi-step with validation
 - Clear error messages
 - Progress indicators
 - Save draft functionality
 
 ### 4. Professional Design
+
 - Material-UI components
 - Responsive layout
 - Color-coded status
@@ -606,18 +633,21 @@ frontend-nextjs/src/app/farmer/documents/
 ### Phase 4: Other Roles (10-15 hours)
 
 **Officer Pages** (4-5 hours):
+
 1. Dashboard with review queue
 2. Application review page
 3. Document review interface
 4. Approve/Reject/Request Revision actions
 
 **Inspector Pages** (4-5 hours):
+
 1. Dashboard with inspection schedule
 2. Inspection calendar view
 3. VDO Call form
 4. On-site inspection form (8 CCPs scoring)
 
 **Admin Pages** (4-5 hours):
+
 1. System overview dashboard
 2. User management (CRUD)
 3. Application oversight
@@ -627,12 +657,14 @@ frontend-nextjs/src/app/farmer/documents/
 ### Phase 5: Backend API Integration (5-8 hours)
 
 **Authentication** (1-2 hours):
+
 - POST /api/auth/login
 - POST /api/auth/register
 - POST /api/auth/logout
 - POST /api/auth/refresh
 
 **Applications** (2-3 hours):
+
 - GET /api/applications
 - GET /api/applications/:id
 - POST /api/applications
@@ -640,11 +672,13 @@ frontend-nextjs/src/app/farmer/documents/
 - POST /api/applications/:id/submit
 
 **Documents** (1-2 hours):
+
 - POST /api/applications/:id/documents (with multipart/form-data)
 - GET /api/applications/:id/documents
 - GET /api/documents/:id/download
 
 **Payments** (1-2 hours):
+
 - POST /api/applications/:id/payments
 - GET /api/applications/:id/payments
 - PUT /api/payments/:id/verify (for officers)
@@ -652,12 +686,14 @@ frontend-nextjs/src/app/farmer/documents/
 ### Phase 6: Testing & Deployment (3-5 hours)
 
 **Testing**:
+
 - End-to-end workflow testing
 - Cross-role testing
 - Edge cases and error handling
 - Performance testing
 
 **Deployment**:
+
 - Environment configuration
 - Database migrations
 - Production build
@@ -668,15 +704,15 @@ frontend-nextjs/src/app/farmer/documents/
 
 ## 📈 Progress Overview
 
-| Phase | Description | Status | Progress |
-|-------|-------------|--------|----------|
-| Phase 1 | Planning & Analysis | ✅ Complete | 100% |
-| Phase 2 | Foundation (Context, Auth, Components) | ✅ Complete | 100% |
-| **Phase 3** | **Farmer Application Flow** | **✅ Complete** | **100%** |
-| Phase 4 | Officer/Inspector/Admin | 🔴 Not Started | 0% |
-| Phase 5 | Backend API Integration | 🔴 Not Started | 0% |
-| Phase 6 | Testing & Deployment | 🔴 Not Started | 0% |
-| **Overall** | **GACP Platform** | **🟡 In Progress** | **50%** |
+| Phase       | Description                            | Status             | Progress |
+| ----------- | -------------------------------------- | ------------------ | -------- |
+| Phase 1     | Planning & Analysis                    | ✅ Complete        | 100%     |
+| Phase 2     | Foundation (Context, Auth, Components) | ✅ Complete        | 100%     |
+| **Phase 3** | **Farmer Application Flow**            | **✅ Complete**    | **100%** |
+| Phase 4     | Officer/Inspector/Admin                | 🔴 Not Started     | 0%       |
+| Phase 5     | Backend API Integration                | 🔴 Not Started     | 0%       |
+| Phase 6     | Testing & Deployment                   | 🔴 Not Started     | 0%       |
+| **Overall** | **GACP Platform**                      | **🟡 In Progress** | **50%**  |
 
 ---
 
@@ -687,12 +723,14 @@ frontend-nextjs/src/app/farmer/documents/
 เราได้สร้างระบบการทำงานหลักของเกษตรกรครบทุกขั้นตอน:
 
 ### ✅ Completed (2,200+ lines new code)
+
 1. **Application Form** - ยื่นคำขอ (700 lines)
 2. **Application Detail** - ดูรายละเอียด (650 lines)
 3. **Document Upload** - อัปโหลดเอกสาร (400 lines)
 4. **Payment** - ชำระเงิน (450 lines)
 
 ### 🎯 Key Features
+
 - Multi-step forms with validation
 - Workflow-aware UI (dynamic based on state)
 - Smart next action suggestions
@@ -703,6 +741,7 @@ frontend-nextjs/src/app/farmer/documents/
 - Thai language support
 
 ### 📊 Progress
+
 - **Phase 1-2**: 100% ✅
 - **Phase 3**: 100% ✅
 - **Overall**: 50% complete

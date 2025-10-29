@@ -16,7 +16,7 @@ console.log(chalk.gray(`Timestamp: ${new Date().toISOString()}\n`));
 // Run comprehensive QA test
 const testProcess = spawn('node', ['test/comprehensive-qa-test.js'], {
   cwd: process.cwd(),
-  stdio: 'inherit',
+  stdio: 'inherit'
 });
 
 testProcess.on('error', error => {

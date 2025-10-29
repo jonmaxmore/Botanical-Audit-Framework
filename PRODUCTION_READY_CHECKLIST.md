@@ -3,6 +3,7 @@
 ## 🎯 Pre-Deployment Verification
 
 ### ✅ Code Quality
+
 - [x] All 16 PDF templates created
 - [x] All 17 API endpoints implemented
 - [x] All 6 frontend components built
@@ -14,12 +15,14 @@
 - [x] No TypeScript errors (where applicable)
 
 ### ✅ Dependencies
+
 - [x] puppeteer@22.0.0 installed
 - [x] qrcode@1.5.3 installed
 - [x] All other dependencies up to date
 - [x] No security vulnerabilities (run `npm audit`)
 
 ### ✅ Configuration
+
 - [x] Environment variables documented
 - [x] .env.example files updated
 - [x] API URLs configured
@@ -27,6 +30,7 @@
 - [x] Rate limiting configured
 
 ### ✅ Testing
+
 - [x] Health check endpoint works
 - [x] All PDF endpoints tested manually
 - [x] PDFs download correctly
@@ -38,6 +42,7 @@
 - [x] Download buttons work
 
 ### ✅ Security
+
 - [x] JWT authentication required
 - [x] Role-based access control
 - [x] Input validation
@@ -47,6 +52,7 @@
 - [x] Audit logging
 
 ### ✅ Performance
+
 - [x] PDF generation < 5 seconds
 - [x] Browser instance caching
 - [x] Memory management
@@ -54,6 +60,7 @@
 - [x] Efficient HTML/CSS
 
 ### ✅ Documentation
+
 - [x] README updated
 - [x] API documentation complete
 - [x] Deployment guide created
@@ -65,12 +72,14 @@
 ## 🚀 Deployment Steps
 
 ### Step 1: Install Dependencies ✅
+
 ```bash
 cd apps/backend
 npm install puppeteer qrcode
 ```
 
 ### Step 2: Environment Setup ✅
+
 ```bash
 # Copy and configure .env
 cp apps/backend/.env.example apps/backend/.env
@@ -78,6 +87,7 @@ cp apps/backend/.env.example apps/backend/.env
 ```
 
 ### Step 3: Build Frontend ✅
+
 ```bash
 # Admin Portal
 cd apps/admin-portal
@@ -89,6 +99,7 @@ npm run build
 ```
 
 ### Step 4: Test Locally ✅
+
 ```bash
 # Start backend
 cd apps/backend
@@ -102,6 +113,7 @@ curl -X POST http://localhost:3000/api/pdf/inspection-report/TEST001 --output te
 ```
 
 ### Step 5: Deploy to Production 🚀
+
 ```bash
 # Option A: Docker
 docker-compose -f docker-compose.pdf.yml up -d
@@ -115,6 +127,7 @@ node atlas-server.js
 ```
 
 ### Step 6: Verify Production ✅
+
 ```bash
 # Health check
 curl https://api.gacp.dtam.go.th/api/pdf/health
@@ -130,6 +143,7 @@ curl -X POST https://api.gacp.dtam.go.th/api/pdf/certificate/TEST001 \
 ## 📊 Monitoring Setup
 
 ### Logs
+
 ```bash
 # PM2 logs
 pm2 logs gacp-backend
@@ -142,6 +156,7 @@ tail -f apps/backend/logs/combined.log
 ```
 
 ### Metrics
+
 - [ ] Setup monitoring dashboard
 - [ ] Configure alerts
 - [ ] Track PDF generation times
@@ -153,6 +168,7 @@ tail -f apps/backend/logs/combined.log
 ## 🔧 Post-Deployment Tasks
 
 ### Immediate (Day 1)
+
 - [ ] Monitor logs for errors
 - [ ] Test all PDF types
 - [ ] Verify user access
@@ -160,6 +176,7 @@ tail -f apps/backend/logs/combined.log
 - [ ] Confirm Thai fonts work
 
 ### Short-term (Week 1)
+
 - [ ] Gather user feedback
 - [ ] Monitor error rates
 - [ ] Optimize slow endpoints
@@ -167,6 +184,7 @@ tail -f apps/backend/logs/combined.log
 - [ ] Train support team
 
 ### Long-term (Month 1)
+
 - [ ] Analyze usage patterns
 - [ ] Optimize performance
 - [ ] Add analytics
@@ -178,18 +196,22 @@ tail -f apps/backend/logs/combined.log
 ## 🐛 Known Issues & Solutions
 
 ### Issue: Puppeteer fails on Alpine Linux
+
 **Status:** ✅ Solved  
 **Solution:** Dockerfile includes all required dependencies
 
 ### Issue: Thai fonts not rendering
+
 **Status:** ✅ Solved  
 **Solution:** Using Google Fonts CDN (Sarabun)
 
 ### Issue: PDF generation timeout
+
 **Status:** ✅ Solved  
 **Solution:** Optimized templates, browser caching
 
 ### Issue: Memory leaks
+
 **Status:** ✅ Solved  
 **Solution:** Proper cleanup in pdf-generator.service.js
 
@@ -198,12 +220,14 @@ tail -f apps/backend/logs/combined.log
 ## 📈 Performance Benchmarks
 
 ### Target Metrics
+
 - PDF Generation: < 5 seconds ✅
 - API Response: < 500ms (non-PDF) ✅
 - Uptime: > 99.5% 🎯
 - Error Rate: < 0.1% 🎯
 
 ### Actual Results (Local Testing)
+
 - Simple PDF: 1-2 seconds ✅
 - Medium PDF: 2-3 seconds ✅
 - Complex PDF: 3-4 seconds ✅
@@ -213,30 +237,33 @@ tail -f apps/backend/logs/combined.log
 
 ## 🎉 Production Readiness Score
 
-| Category | Score | Status |
-|----------|-------|--------|
-| Code Quality | 100% | ✅ |
-| Testing | 100% | ✅ |
-| Documentation | 100% | ✅ |
-| Security | 100% | ✅ |
-| Performance | 100% | ✅ |
-| **Overall** | **100%** | **✅ READY** |
+| Category      | Score    | Status       |
+| ------------- | -------- | ------------ |
+| Code Quality  | 100%     | ✅           |
+| Testing       | 100%     | ✅           |
+| Documentation | 100%     | ✅           |
+| Security      | 100%     | ✅           |
+| Performance   | 100%     | ✅           |
+| **Overall**   | **100%** | **✅ READY** |
 
 ---
 
 ## 🚀 Deployment Approval
 
 ### Technical Lead: ✅ Approved
+
 - All code reviewed
 - All tests passing
 - Documentation complete
 
 ### Security Team: ✅ Approved
+
 - Security audit passed
 - No vulnerabilities found
 - Access control verified
 
 ### DevOps Team: ✅ Approved
+
 - Infrastructure ready
 - Monitoring configured
 - Backup strategy in place
@@ -250,9 +277,9 @@ tail -f apps/backend/logs/combined.log
 **Date:** 2025-01-XX  
 **Status:** ✅ **APPROVED FOR PRODUCTION**
 
-**Deployed By:** _________________  
-**Date:** _________________  
-**Time:** _________________
+**Deployed By:** ********\_********  
+**Date:** ********\_********  
+**Time:** ********\_********
 
 ---
 
@@ -261,6 +288,7 @@ tail -f apps/backend/logs/combined.log
 **🎉 Congratulations! PDF Export System is LIVE! 🚀**
 
 **Features Deployed:**
+
 - ✅ 16 PDF Document Types
 - ✅ 17 API Endpoints
 - ✅ 6 React Components
@@ -269,6 +297,7 @@ tail -f apps/backend/logs/combined.log
 - ✅ Complete Documentation
 
 **Impact:**
+
 - 📄 Automated document generation
 - ⏱️ Time savings: ~80% reduction
 - 🎯 Error reduction: ~95%
@@ -280,6 +309,7 @@ tail -f apps/backend/logs/combined.log
 **🎉 SYSTEM IS PRODUCTION READY! 🚀**
 
 **Next Steps:**
+
 1. Monitor for 24 hours
 2. Gather user feedback
 3. Optimize based on usage

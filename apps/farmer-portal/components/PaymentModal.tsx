@@ -35,7 +35,7 @@ export default function PaymentModal({ isOpen, onClose, applicationId }: Payment
   const [completeFormData, setCompleteFormData] = useState({
     transactionId: '',
     method: 'qr_code' as Payment['method'],
-    receiptUrl: '',
+    receiptUrl: ''
   });
 
   // Fetch payments
@@ -69,7 +69,7 @@ export default function PaymentModal({ isOpen, onClose, applicationId }: Payment
       const response = await fetch(`/api/payments/${paymentId}/complete`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(completeFormData),
+        body: JSON.stringify(completeFormData)
       });
 
       const data = await response.json();
@@ -99,7 +99,7 @@ export default function PaymentModal({ isOpen, onClose, applicationId }: Payment
       setLoading(true);
 
       const response = await fetch(`/api/payments/${paymentId}/cancel`, {
-        method: 'PUT',
+        method: 'PUT'
       });
 
       const data = await response.json();
@@ -123,7 +123,7 @@ export default function PaymentModal({ isOpen, onClose, applicationId }: Payment
     return new Intl.NumberFormat('th-TH', {
       style: 'currency',
       currency: 'THB',
-      minimumFractionDigits: 0,
+      minimumFractionDigits: 0
     }).format(amount);
   };
 
@@ -134,7 +134,7 @@ export default function PaymentModal({ isOpen, onClose, applicationId }: Payment
       month: 'long',
       day: 'numeric',
       hour: '2-digit',
-      minute: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -304,7 +304,7 @@ export default function PaymentModal({ isOpen, onClose, applicationId }: Payment
                                 onChange={e =>
                                   setCompleteFormData({
                                     ...completeFormData,
-                                    transactionId: e.target.value,
+                                    transactionId: e.target.value
                                   })
                                 }
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -314,7 +314,7 @@ export default function PaymentModal({ isOpen, onClose, applicationId }: Payment
                                 onChange={e =>
                                   setCompleteFormData({
                                     ...completeFormData,
-                                    method: e.target.value as Payment['method'],
+                                    method: e.target.value as Payment['method']
                                   })
                                 }
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
@@ -332,7 +332,7 @@ export default function PaymentModal({ isOpen, onClose, applicationId }: Payment
                                 onChange={e =>
                                   setCompleteFormData({
                                     ...completeFormData,
-                                    receiptUrl: e.target.value,
+                                    receiptUrl: e.target.value
                                   })
                                 }
                                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"

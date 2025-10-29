@@ -25,39 +25,39 @@ const FarmAddressSchema = new Schema(
     houseNo: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     moo: {
       type: String,
       trim: true,
-      default: null,
+      default: null
     },
     tambon: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     amphoe: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
     province: {
       type: String,
       required: true,
       trim: true,
-      index: true,
+      index: true
     },
     postalCode: {
       type: String,
       required: true,
-      match: /^[0-9]{5}$/,
+      match: /^[0-9]{5}$/
     },
     gpsCoordinates: {
       type: {
         type: String,
         enum: ['Point'],
-        required: true,
+        required: true
       },
       coordinates: {
         type: [Number], // [longitude, latitude]
@@ -72,12 +72,12 @@ const FarmAddressSchema = new Schema(
               v[1] <= 90
             ); // latitude
           },
-          message: 'Invalid GPS coordinates',
-        },
-      },
-    },
+          message: 'Invalid GPS coordinates'
+        }
+      }
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 /**
@@ -103,39 +103,39 @@ const StateHistorySchema = new Schema(
         'CERTIFICATE_ISSUED',
         'REJECTED',
         'REVISION_REQUIRED',
-        'EXPIRED',
-      ],
+        'EXPIRED'
+      ]
     },
     enteredAt: {
       type: Date,
       required: true,
-      default: Date.now,
+      default: Date.now
     },
     exitedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     duration: {
       type: Number, // milliseconds
-      default: null,
+      default: null
     },
     actor: {
       type: String,
       required: true,
-      description: 'userId who triggered this state change',
+      description: 'userId who triggered this state change'
     },
     actorRole: {
       type: String,
       required: true,
-      enum: ['FARMER', 'DTAM', 'ADMIN', 'SYSTEM'],
+      enum: ['FARMER', 'DTAM', 'ADMIN', 'SYSTEM']
     },
     notes: {
       type: String,
       maxlength: 1000,
-      default: null,
-    },
+      default: null
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 /**
@@ -146,47 +146,47 @@ const DTAMReviewSchema = new Schema(
   {
     reviewerId: {
       type: String,
-      required: true,
+      required: true
     },
     reviewerName: {
       type: String,
-      required: true,
+      required: true
     },
     assignedAt: {
       type: Date,
       required: true,
-      default: Date.now,
+      default: Date.now
     },
     reviewStartedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     reviewCompletedAt: {
       type: Date,
-      default: null,
+      default: null
     },
     reviewNotes: {
       type: String,
       maxlength: 2000,
-      default: null,
+      default: null
     },
     reviewDecision: {
       type: String,
       enum: [null, 'APPROVE_PHASE1', 'REJECT', 'REQUEST_REVISION'],
-      default: null,
+      default: null
     },
     rejectionReason: {
       type: String,
       maxlength: 1000,
-      default: null,
+      default: null
     },
     revisionNotes: {
       type: String,
       maxlength: 1000,
-      default: null,
-    },
+      default: null
+    }
   },
-  { _id: false },
+  { _id: false }
 );
 
 /**
@@ -198,7 +198,7 @@ const ApplicationSchema = new Schema(
     // === PRIMARY KEY ===
     _id: {
       type: Schema.Types.ObjectId,
-      auto: true,
+      auto: true
     },
 
     // === UNIQUE IDENTIFIERS ===
@@ -208,7 +208,7 @@ const ApplicationSchema = new Schema(
       unique: true,
       index: true,
       match: /^APP-\d{4}-[A-Z0-9]{8}$/,
-      description: 'Format: APP-YYYY-XXXXXXXX',
+      description: 'Format: APP-YYYY-XXXXXXXX'
     },
 
     applicationNumber: {
@@ -217,7 +217,7 @@ const ApplicationSchema = new Schema(
       unique: true,
       index: true,
       match: /^GACP-\d{4}-\d{6}$/,
-      description: 'Public-facing number: GACP-YYYY-NNNNNN',
+      description: 'Public-facing number: GACP-YYYY-NNNNNN'
     },
 
     // === USER REFERENCE ===
@@ -225,26 +225,26 @@ const ApplicationSchema = new Schema(
       type: String,
       required: true,
       index: true,
-      ref: 'User',
+      ref: 'User'
     },
 
     // Denormalized for performance
     farmerName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
 
     farmerEmail: {
       type: String,
       required: true,
-      lowercase: true,
+      lowercase: true
     },
 
     farmerPhone: {
       type: String,
       required: true,
-      match: /^0[0-9]{9}$/,
+      match: /^0[0-9]{9}$/
     },
 
     // === FARM INFORMATION ===
@@ -254,12 +254,12 @@ const ApplicationSchema = new Schema(
       trim: true,
       minlength: 2,
       maxlength: 200,
-      index: 'text', // Full-text search
+      index: 'text' // Full-text search
     },
 
     farmAddress: {
       type: FarmAddressSchema,
-      required: true,
+      required: true
     },
 
     farmSize: {
@@ -267,27 +267,27 @@ const ApplicationSchema = new Schema(
       required: true,
       min: 0.1,
       max: 10000,
-      description: 'Farm size in specified unit',
+      description: 'Farm size in specified unit'
     },
 
     farmSizeUnit: {
       type: String,
       required: true,
       enum: ['rai', 'sqm', 'hectare'],
-      default: 'rai',
+      default: 'rai'
     },
 
     // === CULTIVATION DETAILS ===
     cultivationType: {
       type: String,
       required: true,
-      enum: ['INDOOR', 'OUTDOOR', 'GREENHOUSE'],
+      enum: ['INDOOR', 'OUTDOOR', 'GREENHOUSE']
     },
 
     cannabisVariety: {
       type: String,
       required: true,
-      enum: ['CBD', 'THC', 'MIXED'],
+      enum: ['CBD', 'THC', 'MIXED']
     },
 
     // === APPLICATION WORKFLOW (12-State FSM) ===
@@ -308,10 +308,10 @@ const ApplicationSchema = new Schema(
         'CERTIFICATE_ISSUED',
         'REJECTED',
         'REVISION_REQUIRED',
-        'EXPIRED',
+        'EXPIRED'
       ],
       default: 'DRAFT',
-      index: true,
+      index: true
     },
 
     previousState: {
@@ -331,27 +331,27 @@ const ApplicationSchema = new Schema(
         'CERTIFICATE_ISSUED',
         'REJECTED',
         'REVISION_REQUIRED',
-        'EXPIRED',
+        'EXPIRED'
       ],
-      default: null,
+      default: null
     },
 
     stateChangedAt: {
       type: Date,
       required: true,
-      default: Date.now,
+      default: Date.now
     },
 
     // State history (embedded array, max ~20 entries)
     stateHistory: {
       type: [StateHistorySchema],
-      default: [],
+      default: []
     },
 
     // === DTAM REVIEW ===
     dtamReview: {
       type: DTAMReviewSchema,
-      default: null,
+      default: null
     },
 
     // === DOCUMENTS (Referenced) ===
@@ -360,120 +360,120 @@ const ApplicationSchema = new Schema(
       type: Number,
       required: true,
       default: 0,
-      min: 0,
+      min: 0
     },
 
     requiredDocumentsComplete: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
 
     // === PAYMENT REFERENCES ===
     phase1PaymentId: {
       type: String,
       default: null,
-      description: 'Reference to invoices collection',
+      description: 'Reference to invoices collection'
     },
 
     phase1PaidAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     phase2PaymentId: {
       type: String,
-      default: null,
+      default: null
     },
 
     phase2PaidAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     totalFeePaid: {
       type: Number,
       required: true,
       default: 0,
-      min: 0,
+      min: 0
     },
 
     totalFeeExpected: {
       type: Number,
       required: true,
       default: 30000, // ฿5,000 + ฿25,000
-      description: 'Phase 1 (฿5,000) + Phase 2 (฿25,000)',
+      description: 'Phase 1 (฿5,000) + Phase 2 (฿25,000)'
     },
 
     // === INSPECTION ===
     inspectionScheduledAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     inspectionCompletedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     inspectionResult: {
       type: String,
       enum: [null, 'PASS', 'FAIL', 'CONDITIONAL'],
-      default: null,
+      default: null
     },
 
     inspectionNotes: {
       type: String,
       maxlength: 2000,
-      default: null,
+      default: null
     },
 
     // === CERTIFICATE REFERENCE ===
     certificateId: {
       type: String,
       default: null,
-      description: 'Reference to certificates collection',
+      description: 'Reference to certificates collection'
     },
 
     certificateIssuedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // === TIMELINE ESTIMATION ===
     estimatedCompletionDate: {
       type: Date,
-      default: null,
+      default: null
     },
 
     estimatedReviewDays: {
       type: Number,
       default: 14,
-      description: 'Estimated days for DTAM review',
+      description: 'Estimated days for DTAM review'
     },
 
     estimatedInspectionDays: {
       type: Number,
       default: 7,
-      description: 'Estimated days for inspection',
+      description: 'Estimated days for inspection'
     },
 
     estimatedTotalDays: {
       type: Number,
       default: 30,
-      description: 'Total estimated days to completion',
+      description: 'Total estimated days to completion'
     },
 
     // === METADATA ===
     submittedAt: {
       type: Date,
       default: null,
-      index: true,
+      index: true
     },
 
     completedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // === STATUS FLAGS ===
@@ -481,18 +481,18 @@ const ApplicationSchema = new Schema(
       type: Boolean,
       required: true,
       default: true,
-      index: true,
+      index: true
     },
 
     isDeleted: {
       type: Boolean,
       required: true,
-      default: false,
+      default: false
     },
 
     deletedAt: {
       type: Date,
-      default: null,
+      default: null
     },
 
     // === TIMESTAMPS ===
@@ -501,20 +501,20 @@ const ApplicationSchema = new Schema(
       required: true,
       default: Date.now,
       immutable: true,
-      index: true,
+      index: true
     },
 
     updatedAt: {
       type: Date,
       required: true,
-      default: Date.now,
-    },
+      default: Date.now
+    }
   },
   {
     timestamps: true,
     collection: 'applications',
-    versionKey: false,
-  },
+    versionKey: false
+  }
 );
 
 // ========================================
@@ -537,7 +537,7 @@ ApplicationSchema.index({ 'farmAddress.gpsCoordinates': '2dsphere' });
 ApplicationSchema.index({
   farmName: 'text',
   farmerName: 'text',
-  'farmAddress.province': 'text',
+  'farmAddress.province': 'text'
 });
 
 // Partial index (active applications only)
@@ -546,10 +546,10 @@ ApplicationSchema.index(
   {
     partialFilterExpression: {
       isActive: true,
-      isDeleted: false,
+      isDeleted: false
     },
-    name: 'active_applications_queue',
-  },
+    name: 'active_applications_queue'
+  }
 );
 
 // ========================================
@@ -614,7 +614,7 @@ ApplicationSchema.methods.transitionTo = async function (
   newState,
   actorId,
   actorRole,
-  notes = null,
+  notes = null
 ) {
   // Validate state transition
   if (!this.isValidTransition(newState)) {
@@ -638,7 +638,7 @@ ApplicationSchema.methods.transitionTo = async function (
     duration: null,
     actor: actorId,
     actorRole: actorRole,
-    notes: notes,
+    notes: notes
   });
 
   // Update state
@@ -680,7 +680,7 @@ ApplicationSchema.methods.isValidTransition = function (targetState) {
     APPROVED: ['CERTIFICATE_ISSUED'],
     CERTIFICATE_ISSUED: [], // Terminal state
     REJECTED: [], // Terminal state
-    EXPIRED: [], // Terminal state
+    EXPIRED: [] // Terminal state
   };
 
   const allowedTransitions = validTransitions[this.state] || [];
@@ -703,7 +703,7 @@ ApplicationSchema.methods.assignReviewer = async function (reviewerId, reviewerN
     reviewNotes: null,
     reviewDecision: null,
     rejectionReason: null,
-    revisionNotes: null,
+    revisionNotes: null
   };
 
   await this.save();
@@ -729,7 +729,7 @@ ApplicationSchema.methods.calculateProgress = function () {
     CERTIFICATE_ISSUED: 100,
     REJECTED: 0,
     REVISION_REQUIRED: 15,
-    EXPIRED: 0,
+    EXPIRED: 0
   };
 
   return stateProgress[this.state] || 0;
@@ -766,7 +766,7 @@ ApplicationSchema.statics.generateApplicationNumber = async function () {
 
   // Find last application number for this year
   const lastApp = await this.findOne({
-    applicationNumber: new RegExp(`^${prefix}`),
+    applicationNumber: new RegExp(`^${prefix}`)
   }).sort({ applicationNumber: -1 });
 
   let nextNumber = 1;
@@ -786,7 +786,7 @@ ApplicationSchema.statics.findDTAMQueue = function () {
   return this.find({
     state: 'UNDER_REVIEW',
     isActive: true,
-    isDeleted: false,
+    isDeleted: false
   }).sort({ submittedAt: 1 }); // FIFO
 };
 
@@ -803,13 +803,13 @@ ApplicationSchema.statics.findNearLocation = function (longitude, latitude, maxD
       $near: {
         $geometry: {
           type: 'Point',
-          coordinates: [longitude, latitude],
+          coordinates: [longitude, latitude]
         },
-        $maxDistance: maxDistanceKm * 1000, // Convert to meters
-      },
+        $maxDistance: maxDistanceKm * 1000 // Convert to meters
+      }
     },
     isActive: true,
-    isDeleted: false,
+    isDeleted: false
   });
 };
 
@@ -860,11 +860,11 @@ ApplicationSchema.set('toJSON', {
   transform: function (doc, ret) {
     delete ret.__v;
     return ret;
-  },
+  }
 });
 
 ApplicationSchema.set('toObject', {
-  virtuals: true,
+  virtuals: true
 });
 
 // ========================================

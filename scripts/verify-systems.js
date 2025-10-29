@@ -10,7 +10,7 @@ class SystemVerification {
     this.results = {
       files: [],
       systems: [],
-      errors: [],
+      errors: []
     };
   }
 
@@ -38,7 +38,7 @@ class SystemVerification {
       'business-logic/gacp-standards-comparison-system.js',
       'api-integration-layer.js',
       'package.json',
-      '.prettierrc',
+      '.prettierrc'
     ];
 
     requiredFiles.forEach(file => {
@@ -66,7 +66,7 @@ class SystemVerification {
         __dirname,
         '..',
         'business-logic',
-        'gacp-survey-system.js',
+        'gacp-survey-system.js'
       );
       if (fs.existsSync(surveySystemPath)) {
         const content = fs.readFileSync(surveySystemPath, 'utf8');
@@ -77,7 +77,7 @@ class SystemVerification {
           '4-region analytics',
           'multi-language support',
           'standalone system',
-          'EventEmitter',
+          'EventEmitter'
         ];
 
         const checks = [
@@ -86,7 +86,7 @@ class SystemVerification {
           { name: 'Region Support', test: content.includes('เหนือ') && content.includes('อีสาน') },
           { name: 'Language Support', test: content.includes('th') && content.includes('en') },
           { name: 'Survey Templates', test: content.includes('templates') },
-          { name: 'Export Statement', test: content.includes('module.exports') },
+          { name: 'Export Statement', test: content.includes('module.exports') }
         ];
 
         checks.forEach(check => {
@@ -98,7 +98,7 @@ class SystemVerification {
             this.results.systems.push({
               system: 'Survey',
               feature: check.name,
-              status: 'missing',
+              status: 'missing'
             });
           }
         });
@@ -114,7 +114,7 @@ class SystemVerification {
         __dirname,
         '..',
         'business-logic',
-        'gacp-standards-comparison-system.js',
+        'gacp-standards-comparison-system.js'
       );
       if (fs.existsSync(standardsSystemPath)) {
         const content = fs.readFileSync(standardsSystemPath, 'utf8');
@@ -122,7 +122,7 @@ class SystemVerification {
         const checks = [
           {
             name: 'Class Definition',
-            test: content.includes('class GACPStandardsComparisonSystem'),
+            test: content.includes('class GACPStandardsComparisonSystem')
           },
           { name: 'EventEmitter Extension', test: content.includes('extends EventEmitter') },
           { name: 'GACP Standard', test: content.includes('GACP') },
@@ -132,7 +132,7 @@ class SystemVerification {
           { name: 'ISO-22000 Standard', test: content.includes('ISO-22000') },
           { name: 'HACCP Standard', test: content.includes('HACCP') },
           { name: 'Gap Analysis', test: content.includes('gapAnalysis') },
-          { name: 'Export Statement', test: content.includes('module.exports') },
+          { name: 'Export Statement', test: content.includes('module.exports') }
         ];
 
         checks.forEach(check => {
@@ -141,14 +141,14 @@ class SystemVerification {
             this.results.systems.push({
               system: 'Standards',
               feature: check.name,
-              status: 'ok',
+              status: 'ok'
             });
           } else {
             console.log(`  ❌ Standards System: ${check.name}`);
             this.results.systems.push({
               system: 'Standards',
               feature: check.name,
-              status: 'missing',
+              status: 'missing'
             });
           }
         });
@@ -172,7 +172,7 @@ class SystemVerification {
         'gacp-survey-system.js',
         'gacp-standards-comparison-system.js',
         'gacp-business-rules-engine.js',
-        'gacp-workflow-engine.js',
+        'gacp-workflow-engine.js'
       ],
       folders: [
         'business-logic',
@@ -180,8 +180,8 @@ class SystemVerification {
         'apps/frontend',
         'apps/farmer-portal',
         'apps/admin-portal',
-        'apps/certificate-portal',
-      ],
+        'apps/certificate-portal'
+      ]
     };
 
     console.log(`  📦 Project Name: ${projectInfo.projectName}`);

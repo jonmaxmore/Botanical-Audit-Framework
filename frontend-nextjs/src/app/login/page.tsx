@@ -12,7 +12,7 @@ import {
   InputAdornment,
   IconButton,
   Link as MuiLink,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import { Visibility, VisibilityOff, Login as LoginIcon } from '@mui/icons-material';
 import { useAuth } from '@/contexts/AuthContext';
@@ -26,13 +26,13 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
     setError(null);
   };
@@ -49,7 +49,7 @@ export default function LoginPage() {
     try {
       await login({
         email: formData.email,
-        password: formData.password
+        password: formData.password,
       });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'เข้าสู่ระบบไม่สำเร็จ');
@@ -61,7 +61,7 @@ export default function LoginPage() {
       FARMER: { email: 'farmer@gacp.th', password: 'demo1234' },
       DTAM_OFFICER: { email: 'officer@gacp.th', password: 'demo1234' },
       INSPECTOR: { email: 'inspector@gacp.th', password: 'demo1234' },
-      ADMIN: { email: 'admin@gacp.th', password: 'demo1234' }
+      ADMIN: { email: 'admin@gacp.th', password: 'demo1234' },
     };
 
     try {
@@ -77,7 +77,7 @@ export default function LoginPage() {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)'
+        background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
       }}
     >
       <Container maxWidth="sm">
@@ -125,14 +125,11 @@ export default function LoginPage() {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton
-                      onClick={() => setShowPassword(!showPassword)}
-                      edge="end"
-                    >
+                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
 
@@ -162,7 +159,11 @@ export default function LoginPage() {
           </Box>
 
           <Box sx={{ mt: 4 }}>
-            <Typography variant="caption" color="text.secondary" sx={{ mb: 2, display: 'block', textAlign: 'center' }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ mb: 2, display: 'block', textAlign: 'center' }}
+            >
               🎮 สำหรับทดสอบ (Demo Accounts):
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
@@ -202,11 +203,7 @@ export default function LoginPage() {
           </Box>
 
           <Box sx={{ textAlign: 'center', mt: 3 }}>
-            <Button
-              variant="text"
-              onClick={() => router.push('/')}
-              sx={{ textTransform: 'none' }}
-            >
+            <Button variant="text" onClick={() => router.push('/')} sx={{ textTransform: 'none' }}>
               ← กลับหน้าหลัก
             </Button>
           </Box>

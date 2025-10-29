@@ -7,7 +7,7 @@ describe('Validation Schemas', () => {
         scientificName: 'Quercus robur',
         commonName: 'English Oak',
         family: 'Fagaceae',
-        status: 'active',
+        status: 'active'
       };
 
       const result = plantSchema.safeParse(validPlant);
@@ -16,7 +16,7 @@ describe('Validation Schemas', () => {
 
     it('should reject plant with missing required fields', () => {
       const invalidPlant = {
-        scientificName: '',
+        scientificName: ''
       };
 
       const result = plantSchema.safeParse(invalidPlant);
@@ -30,7 +30,7 @@ describe('Validation Schemas', () => {
         plantId: 'plant-123',
         auditDate: new Date().toISOString(),
         auditor: 'Jane Smith',
-        status: 'pending',
+        status: 'pending'
       };
 
       const result = auditSchema.safeParse(validAudit);
@@ -42,7 +42,7 @@ describe('Validation Schemas', () => {
         plantId: 'plant-123',
         auditDate: new Date().toISOString(),
         auditor: 'Jane Smith',
-        status: 'invalid-status',
+        status: 'invalid-status'
       };
 
       const result = auditSchema.safeParse(invalidAudit);

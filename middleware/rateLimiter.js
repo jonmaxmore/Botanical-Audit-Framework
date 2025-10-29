@@ -48,12 +48,12 @@ function createRedisClient() {
         retryStrategy: times => {
           if (times > 3) {
             console.warn(
-              '⚠️  Redis connection failed - falling back to memory store for rate limiting',
+              '⚠️  Redis connection failed - falling back to memory store for rate limiting'
             );
             return null; // Stop retrying
           }
           return Math.min(times * 100, 3000);
-        },
+        }
       });
 
       redis.on('connect', () => {
@@ -90,7 +90,7 @@ function createRateLimiter(options) {
     skipSuccessfulRequests = false,
     skipFailedRequests = false,
     keyGenerator = undefined,
-    handler = undefined,
+    handler = undefined
   } = options;
 
   const config = {
@@ -101,18 +101,18 @@ function createRateLimiter(options) {
       error: 'TooManyRequests',
       message,
       code: 'RATE_LIMIT_EXCEEDED',
-      retryAfter: Math.ceil(windowMs / 1000), // seconds
+      retryAfter: Math.ceil(windowMs / 1000) // seconds
     },
     standardHeaders: true, // Return rate limit info in `RateLimit-*` headers
     legacyHeaders: false, // Disable `X-RateLimit-*` headers
     skipSuccessfulRequests,
-    skipFailedRequests,
+    skipFailedRequests
   };
 
   // ใช้ Redis store ถ้ามี
   if (redisClient) {
     config.store = new RedisStore({
-      sendCommand: (...args) => redisClient.call(...args),
+      sendCommand: (...args) => redisClient.call(...args)
     });
   }
 
@@ -160,9 +160,9 @@ const authRateLimiter = createRateLimiter({
       message: 'Too many authentication attempts',
       code: 'AUTH_RATE_LIMIT_EXCEEDED',
       retryAfter: 900, // 15 minutes in seconds
-      hint: 'Please wait 15 minutes before trying again',
+      hint: 'Please wait 15 minutes before trying again'
     });
-  },
+  }
 });
 
 /**
@@ -195,9 +195,9 @@ const apiRateLimiter = createRateLimiter({
       code: 'API_RATE_LIMIT_EXCEEDED',
       retryAfter: 900, // 15 minutes in seconds
       limit: 100,
-      window: '15 minutes',
+      window: '15 minutes'
     });
-  },
+  }
 });
 
 /**
@@ -219,7 +219,7 @@ const apiRateLimiter = createRateLimiter({
 const publicRateLimiter = createRateLimiter({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 200, // 200 requests
-  message: 'Too many requests. Please try again later.',
+  message: 'Too many requests. Please try again later.'
 });
 
 /**
@@ -249,9 +249,9 @@ const strictRateLimiter = createRateLimiter({
       message: 'Strict rate limit exceeded for sensitive operation',
       code: 'STRICT_RATE_LIMIT_EXCEEDED',
       retryAfter: 3600, // 1 hour in seconds
-      hint: 'This operation is limited to 10 requests per hour',
+      hint: 'This operation is limited to 10 requests per hour'
     });
-  },
+  }
 });
 
 /**
@@ -280,7 +280,7 @@ function dynamicRateLimiter(req, res, next) {
   const limiter = createRateLimiter({
     windowMs: 15 * 60 * 1000,
     max,
-    message: `Rate limit exceeded. Your limit is ${max} requests per 15 minutes.`,
+    message: `Rate limit exceeded. Your limit is ${max} requests per 15 minutes.`
   });
 
   return limiter(req, res, next);
@@ -302,7 +302,7 @@ function logRateLimitHit(req, identifier) {
     method: req.method,
     identifier,
     timestamp: new Date().toISOString(),
-    userAgent: req.get('user-agent'),
+    userAgent: req.get('user-agent')
   });
 }
 
@@ -329,5 +329,5 @@ module.exports = {
   dynamicRateLimiter,
   createRateLimiter,
   logRateLimitHit,
-  attachRateLimitLogger,
+  attachRateLimitLogger
 };

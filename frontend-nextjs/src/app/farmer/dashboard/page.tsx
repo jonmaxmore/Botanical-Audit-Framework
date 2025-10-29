@@ -14,7 +14,7 @@ import {
   Alert,
   CircularProgress,
   LinearProgress,
-  Divider
+  Divider,
 } from '@mui/material';
 import {
   Assignment,
@@ -25,7 +25,7 @@ import {
   Warning,
   Error,
   ArrowForward,
-  Timeline
+  Timeline,
 } from '@mui/icons-material';
 import { useAuth, withAuth } from '@/contexts/AuthContext';
 import { useApplication } from '@/contexts/ApplicationContext';
@@ -53,7 +53,7 @@ function FarmerDashboardPage() {
         action: 'ยื่นคำขอ',
         path: '/farmer/applications/new',
         color: 'primary' as const,
-        icon: <Assignment />
+        icon: <Assignment />,
       };
     }
 
@@ -65,7 +65,7 @@ function FarmerDashboardPage() {
           action: 'แก้ไขใบสมัคร',
           path: `/farmer/applications/${activeApplication.id}`,
           color: 'warning' as const,
-          icon: <Warning />
+          icon: <Warning />,
         };
       case 'PAYMENT_PENDING_1':
         return {
@@ -74,7 +74,7 @@ function FarmerDashboardPage() {
           action: 'ชำระเงิน',
           path: '/farmer/payments',
           color: 'error' as const,
-          icon: <Payment />
+          icon: <Payment />,
         };
       case 'DOCUMENT_REVIEW':
         return {
@@ -83,7 +83,7 @@ function FarmerDashboardPage() {
           action: 'ดูสถานะ',
           path: `/farmer/applications/${activeApplication.id}`,
           color: 'info' as const,
-          icon: <Description />
+          icon: <Description />,
         };
       case 'DOCUMENT_REVISION':
         return {
@@ -92,7 +92,7 @@ function FarmerDashboardPage() {
           action: 'แก้ไขเอกสาร',
           path: '/farmer/documents',
           color: 'warning' as const,
-          icon: <Warning />
+          icon: <Warning />,
         };
       case 'PAYMENT_PENDING_2':
         return {
@@ -101,7 +101,7 @@ function FarmerDashboardPage() {
           action: 'ชำระเงิน',
           path: '/farmer/payments',
           color: 'error' as const,
-          icon: <Payment />
+          icon: <Payment />,
         };
       case 'INSPECTION_SCHEDULED':
       case 'INSPECTION_VDO_CALL':
@@ -112,7 +112,7 @@ function FarmerDashboardPage() {
           action: 'ดูตารางตรวจสอบ',
           path: `/farmer/applications/${activeApplication.id}`,
           color: 'info' as const,
-          icon: <LocationOn />
+          icon: <LocationOn />,
         };
       case 'PENDING_APPROVAL':
         return {
@@ -121,7 +121,7 @@ function FarmerDashboardPage() {
           action: 'ดูสถานะ',
           path: `/farmer/applications/${activeApplication.id}`,
           color: 'info' as const,
-          icon: <CheckCircle />
+          icon: <CheckCircle />,
         };
       case 'APPROVED':
       case 'CERTIFICATE_GENERATING':
@@ -131,7 +131,7 @@ function FarmerDashboardPage() {
           action: 'ดูสถานะ',
           path: `/farmer/applications/${activeApplication.id}`,
           color: 'success' as const,
-          icon: <CheckCircle />
+          icon: <CheckCircle />,
         };
       default:
         return {
@@ -140,7 +140,7 @@ function FarmerDashboardPage() {
           action: 'ดูใบสมัคร',
           path: `/farmer/applications/${activeApplication.id}`,
           color: 'primary' as const,
-          icon: <Assignment />
+          icon: <Assignment />,
         };
     }
   };
@@ -157,7 +157,14 @@ function FarmerDashboardPage() {
   if (isLoading) {
     return (
       <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '50vh' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '50vh',
+          }}
+        >
           <CircularProgress size={60} />
         </Box>
       </Container>
@@ -192,16 +199,16 @@ function FarmerDashboardPage() {
           <Typography variant="body1" fontWeight={600}>
             คุณยังไม่มีใบสมัคร GACP
           </Typography>
-          <Typography variant="body2">
-            เริ่มยื่นคำขอเพื่อรับการรับรองมาตรฐาน WHO-GACP
-          </Typography>
+          <Typography variant="body2">เริ่มยื่นคำขอเพื่อรับการรับรองมาตรฐาน WHO-GACP</Typography>
         </Alert>
       )}
 
       {activeApplication && (
         <>
           <Paper sx={{ p: 3, mb: 4 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+            >
               <Box>
                 <Typography variant="h6" fontWeight={600}>
                   ใบสมัคร: {activeApplication.applicationNumber}
@@ -213,7 +220,8 @@ function FarmerDashboardPage() {
               <Chip
                 label={activeApplication.currentState}
                 color={
-                  activeApplication.currentState.includes('APPROVED') || activeApplication.currentState === 'CERTIFICATE_ISSUED'
+                  activeApplication.currentState.includes('APPROVED') ||
+                  activeApplication.currentState === 'CERTIFICATE_ISSUED'
                     ? 'success'
                     : activeApplication.currentState.includes('REJECTED')
                       ? 'error'
@@ -269,7 +277,7 @@ function FarmerDashboardPage() {
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           py: 1,
-                          borderBottom: '1px solid #f0f0f0'
+                          borderBottom: '1px solid #f0f0f0',
                         }}
                       >
                         <Typography variant="body2">{doc.type}</Typography>
@@ -277,7 +285,11 @@ function FarmerDashboardPage() {
                           label={doc.status}
                           size="small"
                           color={
-                            doc.status === 'APPROVED' ? 'success' : doc.status === 'REJECTED' ? 'error' : 'default'
+                            doc.status === 'APPROVED'
+                              ? 'success'
+                              : doc.status === 'REJECTED'
+                                ? 'error'
+                                : 'default'
                           }
                         />
                       </Box>
@@ -302,7 +314,9 @@ function FarmerDashboardPage() {
                         <Chip
                           label={paymentStatus.phase1.status}
                           size="small"
-                          color={paymentStatus.phase1.status === 'COMPLETED' ? 'success' : 'warning'}
+                          color={
+                            paymentStatus.phase1.status === 'COMPLETED' ? 'success' : 'warning'
+                          }
                           sx={{ mt: 1 }}
                         />
                       ) : (
@@ -317,7 +331,9 @@ function FarmerDashboardPage() {
                         <Chip
                           label={paymentStatus.phase2.status}
                           size="small"
-                          color={paymentStatus.phase2.status === 'COMPLETED' ? 'success' : 'warning'}
+                          color={
+                            paymentStatus.phase2.status === 'COMPLETED' ? 'success' : 'warning'
+                          }
                           sx={{ mt: 1 }}
                         />
                       ) : (
@@ -344,7 +360,7 @@ function FarmerDashboardPage() {
                   ? '#4caf50 0%, #388e3c 100%'
                   : '#2196f3 0%, #1976d2 100%'
           })`,
-          color: 'white'
+          color: 'white',
         }}
       >
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -363,8 +379,13 @@ function FarmerDashboardPage() {
           onClick={() => router.push(nextAction.path)}
           sx={{
             bgcolor: 'white',
-            color: nextAction.color === 'error' ? '#f44336' : nextAction.color === 'warning' ? '#ff9800' : '#2196f3',
-            '&:hover': { bgcolor: '#f5f5f5' }
+            color:
+              nextAction.color === 'error'
+                ? '#f44336'
+                : nextAction.color === 'warning'
+                  ? '#ff9800'
+                  : '#2196f3',
+            '&:hover': { bgcolor: '#f5f5f5' },
           }}
         >
           {nextAction.action}
@@ -398,7 +419,11 @@ function FarmerDashboardPage() {
                     }
                     sx={{ mt: 1 }}
                   />
-                  <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ mt: 1, display: 'block' }}
+                  >
                     ขั้นตอน {app.currentStep}/8
                   </Typography>
                 </CardContent>

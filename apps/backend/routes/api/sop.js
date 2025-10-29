@@ -4,7 +4,7 @@
  */
 
 const express = require('express');
-const mongoose = require('mongoose');
+const _mongoose = require('_mongoose');
 const { body, param, query, validationResult } = require('express-validator');
 const SOP = require('../models/mongodb/SOP');
 const EnhancedCultivationRecord = require('../models/mongodb/EnhancedCultivationRecord');

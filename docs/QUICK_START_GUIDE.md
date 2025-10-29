@@ -3,6 +3,7 @@
 ## 📋 สิ่งที่ทำเสร็จแล้ว
 
 ### ✅ Phase 1-2 Complete
+
 - Context Providers (AuthContext, ApplicationContext)
 - Landing Page แบบ Role-Based
 - Login/Register Pages พร้อม Demo Accounts
@@ -22,20 +23,22 @@ http://localhost:3000
 ### 2. Login ด้วย Demo Account
 
 ไปที่หน้า Login:
+
 ```
 http://localhost:3000/login
 ```
 
 **Demo Accounts** (4 roles):
 
-| Role | Email | Password | Access |
-|------|-------|----------|--------|
-| 🌾 **Farmer** | `farmer@gacp.th` | `demo1234` | `/farmer/dashboard` |
-| 👔 **Officer** | `officer@gacp.th` | `demo1234` | `/officer/dashboard` |
+| Role             | Email               | Password   | Access                 |
+| ---------------- | ------------------- | ---------- | ---------------------- |
+| 🌾 **Farmer**    | `farmer@gacp.th`    | `demo1234` | `/farmer/dashboard`    |
+| 👔 **Officer**   | `officer@gacp.th`   | `demo1234` | `/officer/dashboard`   |
 | 🔍 **Inspector** | `inspector@gacp.th` | `demo1234` | `/inspector/dashboard` |
-| ⚙️ **Admin** | `admin@gacp.th` | `demo1234` | `/admin/dashboard` |
+| ⚙️ **Admin**     | `admin@gacp.th`     | `demo1234` | `/admin/dashboard`     |
 
 **วิธีใช้ Demo Account**:
+
 1. ไปที่หน้า `/login`
 2. คลิกปุ่ม **"เกษตรกร (Farmer)"** (หรือ role อื่นๆ)
 3. ระบบจะ auto-login และ redirect ไป Dashboard
@@ -52,11 +55,13 @@ http://localhost:3000/login
 ### 4. Register (สมัครสมาชิกใหม่)
 
 ไปที่:
+
 ```
 http://localhost:3000/register
 ```
 
 **Steps**:
+
 1. เลือก Role (Farmer/Officer/Inspector/Admin)
 2. กรอก:
    - ชื่อ-นามสกุล
@@ -102,14 +107,14 @@ import { useAuth } from '@/contexts/AuthContext';
 
 function MyComponent() {
   const { user, token, login, logout, isAuthenticated } = useAuth();
-  
+
   // ข้อมูล user
-  console.log(user?.name);  // "ชื่อเกษตรกร"
-  console.log(user?.role);  // "FARMER"
-  
+  console.log(user?.name); // "ชื่อเกษตรกร"
+  console.log(user?.role); // "FARMER"
+
   // Login
   await login({ email: 'test@gacp.th', password: '123456' });
-  
+
   // Logout
   logout();
 }
@@ -145,15 +150,15 @@ function MyComponent() {
     isLoading,
     error
   } = useApplication();
-  
+
   useEffect(() => {
     fetchApplications();
   }, []);
-  
+
   // สร้างใบสมัครใหม่
   const app = await createApplication({
     farmName: 'ฟาร์มตัวอย่าง',
-    farmSize: 10,
+    farmSize: 10
     // ...
   });
 }
@@ -167,8 +172,8 @@ import WorkflowProgress from '@/components/WorkflowProgress';
 <WorkflowProgress
   currentState="DOCUMENT_REVIEW"
   currentStep={3}
-  variant="horizontal"  // or "vertical"
-/>
+  variant="horizontal" // or "vertical"
+/>;
 ```
 
 ---
@@ -217,18 +222,22 @@ PUT  /api/payments/:id/confirm
 ## 🐛 Troubleshooting
 
 ### Issue 1: "คุณยังไม่มีใบสมัคร GACP"
+
 **Cause**: ยังไม่มี Backend API เชื่อมต่อ  
 **Solution**: ปกติ - รอสร้างหน้า Application Form และเชื่อมต่อ API
 
 ### Issue 2: คลิก "ยื่นคำขอ" แล้ว 404
+
 **Cause**: หน้า `/farmer/applications/new` ยังไม่ได้สร้าง  
 **Solution**: รอ Phase 3 (Next Step)
 
 ### Issue 3: Lint Errors (CRLF)
+
 **Cause**: Line ending differences (Windows vs Unix)  
 **Solution**: ไม่กระทบการทำงาน - ใช้ได้ปกติ
 
 ### Issue 4: Login ไม่ได้ (Network Error)
+
 **Cause**: Backend API ไม่ทำงาน  
 **Solution**: ตอนนี้ใช้ Demo Accounts (auto-login) แทน
 
@@ -239,17 +248,21 @@ PUT  /api/payments/:id/confirm
 ### Phase 3: Farmer Application Flow (8-10 hours)
 
 1. **สร้างหน้า Application Form**
+
    ```
    /farmer/applications/new
    ```
+
    - Farm Information Form
    - Validation
    - Save as DRAFT
 
 2. **สร้างหน้า Upload Documents**
+
    ```
    /farmer/documents
    ```
+
    - 5 document types:
      - บัตรประชาชน (ID Card)
      - ทะเบียนบ้าน (House Registration)
@@ -260,9 +273,11 @@ PUT  /api/payments/:id/confirm
    - Preview
 
 3. **สร้างหน้า Payment**
+
    ```
    /farmer/payments
    ```
+
    - Phase 1: 5,000 THB
    - Phase 2: 25,000 THB
    - QR Code Payment
@@ -288,17 +303,17 @@ PUT  /api/payments/:id/confirm
 
 ## 🎯 Current Status
 
-| Component | Status | Progress |
-|-----------|--------|----------|
-| Context Providers | ✅ Complete | 100% |
-| Authentication | ✅ Complete | 100% |
-| Landing Page | ✅ Complete | 100% |
-| Farmer Dashboard | ✅ Complete | 100% |
-| Farmer Forms | 🔴 Not Started | 0% |
-| Officer Pages | 🔴 Not Started | 0% |
-| Inspector Pages | 🔴 Not Started | 0% |
-| Admin Pages | 🔴 Not Started | 0% |
-| Backend API | 🔴 Not Started | 0% |
+| Component         | Status         | Progress |
+| ----------------- | -------------- | -------- |
+| Context Providers | ✅ Complete    | 100%     |
+| Authentication    | ✅ Complete    | 100%     |
+| Landing Page      | ✅ Complete    | 100%     |
+| Farmer Dashboard  | ✅ Complete    | 100%     |
+| Farmer Forms      | 🔴 Not Started | 0%       |
+| Officer Pages     | 🔴 Not Started | 0%       |
+| Inspector Pages   | 🔴 Not Started | 0%       |
+| Admin Pages       | 🔴 Not Started | 0%       |
+| Backend API       | 🔴 Not Started | 0%       |
 
 **Overall**: **35%** Complete (Foundation Ready)
 
@@ -307,12 +322,14 @@ PUT  /api/payments/:id/confirm
 ## 💡 Tips
 
 ### For Developers
+
 - ใช้ `withAuth()` HOC สำหรับ protected routes
 - ใช้ `useAuth()` hook เพื่อเข้าถึง user และ authentication
 - ใช้ `useApplication()` hook เพื่อจัดการ applications
 - WorkflowProgress component รองรับ 27 workflow states
 
 ### For Testing
+
 - ใช้ Demo Accounts สำหรับทดสอบแต่ละ role
 - ตรวจสอบ Console สำหรับ errors
 - ดู Network tab สำหรับ API calls (ตอนนี้ยังไม่มี)

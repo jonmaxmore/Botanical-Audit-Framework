@@ -10,7 +10,7 @@ describe('CancellationDialog Component', () => {
   const mockApplication = {
     id: 'app-001',
     status: 'PENDING_PAYMENT' as const,
-    submissionCount: 3,
+    submissionCount: 3
   };
 
   describe('Rendering', () => {

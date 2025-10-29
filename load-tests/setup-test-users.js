@@ -3,7 +3,7 @@
 /**
  * Setup Test Users for Load Testing
  * Creates test user accounts in the database
- * 
+ *
  * Run from project root: node load-tests/setup-test-users.js
  */
 
@@ -27,7 +27,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test',
     role: 'farmer',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest1@gacp.dtam.go.th',
@@ -35,7 +35,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 1',
     role: 'farmer',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest2@gacp.dtam.go.th',
@@ -43,7 +43,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 2',
     role: 'farmer',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest3@gacp.dtam.go.th',
@@ -51,7 +51,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 3',
     role: 'farmer',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest4@gacp.dtam.go.th',
@@ -59,7 +59,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 4',
     role: 'farmer',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest5@gacp.dtam.go.th',
@@ -67,7 +67,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 5',
     role: 'inspector',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest6@gacp.dtam.go.th',
@@ -75,7 +75,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 6',
     role: 'inspector',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest7@gacp.dtam.go.th',
@@ -83,7 +83,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 7',
     role: 'auditor',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest8@gacp.dtam.go.th',
@@ -91,7 +91,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 8',
     role: 'auditor',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest9@gacp.dtam.go.th',
@@ -99,7 +99,7 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 9',
     role: 'admin',
-    status: 'active',
+    status: 'active'
   },
   {
     email: 'loadtest10@gacp.dtam.go.th',
@@ -107,8 +107,8 @@ const testUsers = [
     firstName: 'Load',
     lastName: 'Test 10',
     role: 'admin',
-    status: 'active',
-  },
+    status: 'active'
+  }
 ];
 
 async function setupTestUsers() {
@@ -141,7 +141,7 @@ async function setupTestUsers() {
           lastName: testUser.lastName,
           role: testUser.role,
           status: testUser.status,
-          isEmailVerified: true, // Skip verification for test users
+          isEmailVerified: true // Skip verification for test users
         });
 
         console.log(`✅ Created: ${testUser.email} (${testUser.role})`);

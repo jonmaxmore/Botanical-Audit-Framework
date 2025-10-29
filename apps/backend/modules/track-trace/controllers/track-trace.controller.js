@@ -3,7 +3,6 @@
  * HTTP handlers for product tracking system
  */
 
-const TrackTraceService = require('../services/track-trace.service');
 const { successResponse, errorResponse } = require('../../shared/utils/response');
 const logger = require('../../shared/utils/logger');
 

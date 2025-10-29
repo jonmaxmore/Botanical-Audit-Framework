@@ -4,12 +4,12 @@
 
 ### ✅ เอกสารที่เพิ่มเติม (4 ชิ้น)
 
-| # | เอกสาร | ผู้ใช้งาน | Template | API | Frontend | Status |
-|---|--------|----------|----------|-----|----------|--------|
-| 5 | รายงานสรุปคำขอรับรอง | Reviewer | ✅ | ✅ | ✅ | ✅ |
-| 6 | รายงานการตรวจสอบเอกสาร | Reviewer | ✅ | ✅ | ✅ | ✅ |
-| 7 | ใบนัดหมายตรวจสอบ | Inspector/Farmer | ✅ | ✅ | ✅ | ✅ |
-| 8 | แบบฟอร์ม GACP Checklist | Inspector | ✅ | ✅ | ✅ | ✅ |
+| #   | เอกสาร                  | ผู้ใช้งาน        | Template | API | Frontend | Status |
+| --- | ----------------------- | ---------------- | -------- | --- | -------- | ------ |
+| 5   | รายงานสรุปคำขอรับรอง    | Reviewer         | ✅       | ✅  | ✅       | ✅     |
+| 6   | รายงานการตรวจสอบเอกสาร  | Reviewer         | ✅       | ✅  | ✅       | ✅     |
+| 7   | ใบนัดหมายตรวจสอบ        | Inspector/Farmer | ✅       | ✅  | ✅       | ✅     |
+| 8   | แบบฟอร์ม GACP Checklist | Inspector        | ✅       | ✅  | ✅       | ✅     |
 
 ---
 
@@ -21,6 +21,7 @@
 **วัตถุประสงค์:** นำเสนอหัวหน้างาน, เก็บเข้าแฟ้ม
 
 **เนื้อหา:**
+
 - ข้อมูลเกษตรกรและฟาร์ม
 - รายละเอียดพืชที่ขอรับรอง
 - เอกสารประกอบทั้งหมด (checklist)
@@ -28,6 +29,7 @@
 - ประวัติการแก้ไข
 
 **API Endpoint:**
+
 ```
 POST /api/pdf/application-summary/:applicationId
 ```
@@ -40,6 +42,7 @@ POST /api/pdf/application-summary/:applicationId
 **วัตถุประสงค์:** ส่งต่อให้ Inspector, เก็บหลักฐาน
 
 **เนื้อหา:**
+
 - รายการเอกสารที่ตรวจสอบแล้ว
 - ผลการตรวจสอบแต่ละเอกสาร (ผ่าน/ไม่ผ่าน)
 - ข้อบกพร่องที่พบ
@@ -47,6 +50,7 @@ POST /api/pdf/application-summary/:applicationId
 - ลายเซ็นดิจิทัล/ชื่อผู้ตรวจสอบ
 
 **API Endpoint:**
+
 ```
 POST /api/pdf/document-verification/:applicationId
 ```
@@ -59,6 +63,7 @@ POST /api/pdf/document-verification/:applicationId
 **วัตถุประสงค์:** ส่งให้เกษตรกร, เก็บหลักฐานการนัดหมาย
 
 **เนื้อหา:**
+
 - ข้อมูลเกษตรกรและฟาร์ม
 - วันเวลานัดหมาย (Video Call/Onsite)
 - รายการที่ต้องตรวจสอบ
@@ -67,11 +72,13 @@ POST /api/pdf/document-verification/:applicationId
 - วิธีการเข้าร่วม Video Call
 
 **API Endpoint:**
+
 ```
 POST /api/pdf/inspection-appointment/:inspectionId
 ```
 
 **Features:**
+
 - ✅ รองรับทั้ง Video Call และ Onsite
 - ✅ รายการเอกสารที่ต้องเตรียม (8 รายการ)
 - ✅ คำแนะนำการเข้าร่วม Video Call
@@ -86,12 +93,14 @@ POST /api/pdf/inspection-appointment/:inspectionId
 **วัตถุประสงค์:** พิมพ์ไปใช้ในการตรวจสอบภาคสนาม
 
 **เนื้อหา:**
+
 - 8 Critical Control Points พร้อมช่องกรอก
 - พื้นที่สำหรับบันทึกข้อสังเกต
-- ช่องคะแนนแต่ละข้อ (___/10)
+- ช่องคะแนนแต่ละข้อ (\_\_\_/10)
 - ช่องลายเซ็นเกษตรกร/ผู้ตรวจสอบ
 
 **8 CCPs:**
+
 1. คุณภาพเมล็ดพันธุ์ (Seed Quality)
 2. การจัดการดิน (Soil Management)
 3. การจัดการศัตรูพืช (Pest Management)
@@ -102,15 +111,17 @@ POST /api/pdf/inspection-appointment/:inspectionId
 8. การอบรมบุคลากร (Personnel Training)
 
 **API Endpoint:**
+
 ```
 POST /api/pdf/inspection-checklist/:inspectionId
 ```
 
 **Features:**
+
 - ✅ Checkbox สำหรับแต่ละข้อ
 - ✅ พื้นที่บันทึกข้อสังเกตขนาดใหญ่
-- ✅ ช่องคะแนน (___/10)
-- ✅ สรุปคะแนนรวม (___/80)
+- ✅ ช่องคะแนน (\_\_\_/10)
+- ✅ สรุปคะแนนรวม (\_\_\_/80)
 - ✅ ช่องลายเซ็น 2 ฝ่าย
 
 ---
@@ -122,13 +133,15 @@ POST /api/pdf/inspection-checklist/:inspectionId
 **Location:** `apps/admin-portal/components/pdf/ReviewerPDFExports.tsx`
 
 **Usage:**
+
 ```tsx
 import ReviewerPDFExports from '@/components/pdf/ReviewerPDFExports';
 
-<ReviewerPDFExports applicationId="APP001" />
+<ReviewerPDFExports applicationId="APP001" />;
 ```
 
 **Features:**
+
 - รายงานสรุปคำขอรับรอง
 - รายงานการตรวจสอบเอกสาร
 
@@ -139,6 +152,7 @@ import ReviewerPDFExports from '@/components/pdf/ReviewerPDFExports';
 **Location:** `apps/admin-portal/components/pdf/InspectorPDFExports.tsx`
 
 **New Documents:**
+
 - ✅ ใบนัดหมายตรวจสอบ (สีน้ำเงิน)
 - ✅ แบบฟอร์ม GACP Checklist (สีน้ำเงิน)
 
@@ -148,17 +162,18 @@ import ReviewerPDFExports from '@/components/pdf/ReviewerPDFExports';
 
 ### Phase 1 + Phase 2 Complete
 
-| Phase | Documents | Status | Completion |
-|-------|-----------|--------|------------|
-| Phase 1 | 4 เอกสาร | ✅ Complete | 100% |
-| Phase 2 | 4 เอกสาร | ✅ Complete | 100% |
-| **Total** | **8 เอกสาร** | **✅ Complete** | **100%** |
+| Phase     | Documents    | Status          | Completion |
+| --------- | ------------ | --------------- | ---------- |
+| Phase 1   | 4 เอกสาร     | ✅ Complete     | 100%       |
+| Phase 2   | 4 เอกสาร     | ✅ Complete     | 100%       |
+| **Total** | **8 เอกสาร** | **✅ Complete** | **100%**   |
 
 ---
 
 ## 🚀 API Endpoints Summary
 
 ### Phase 1 (Critical Documents)
+
 ```
 POST /api/pdf/inspection-report/:inspectionId
 POST /api/pdf/certificate/:certificateId
@@ -167,6 +182,7 @@ POST /api/pdf/approval-letter/:applicationId
 ```
 
 ### Phase 2 (Workflow Documents)
+
 ```
 POST /api/pdf/application-summary/:applicationId
 POST /api/pdf/document-verification/:applicationId
@@ -175,6 +191,7 @@ POST /api/pdf/inspection-checklist/:inspectionId
 ```
 
 ### Health Check
+
 ```
 GET /api/pdf/health
 ```
@@ -205,10 +222,7 @@ import InspectorPDFExports from '@/components/pdf/InspectorPDFExports';
 function InspectorDashboard() {
   return (
     <Box>
-      <InspectorPDFExports 
-        inspectionId="INS001" 
-        applicationId="APP001" 
-      />
+      <InspectorPDFExports inspectionId="INS001" applicationId="APP001" />
     </Box>
   );
 }
@@ -219,6 +233,7 @@ function InspectorDashboard() {
 ## 📈 Statistics
 
 **Phase 2 Development:**
+
 - ⏱️ Development Time: ~2 hours
 - 📄 Templates Created: 4
 - 🔌 API Endpoints: 4
@@ -226,6 +241,7 @@ function InspectorDashboard() {
 - 📝 Lines of Code: ~800
 
 **Total (Phase 1 + 2):**
+
 - 📄 Templates: 8
 - 🔌 API Endpoints: 8
 - 🎨 Frontend Components: 5

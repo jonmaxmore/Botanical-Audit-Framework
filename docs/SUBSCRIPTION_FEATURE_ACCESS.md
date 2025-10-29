@@ -187,7 +187,7 @@ router.post(
   checkFeatureAccess('aiRecommendations'),
   (req, res) => {
     // ... logic
-  },
+  }
 );
 ```
 
@@ -209,7 +209,7 @@ router.post(
 ```javascript
 const {
   checkFeatureAccess,
-  requireFeatureEnabled,
+  requireFeatureEnabled
 } = require('../middleware/feature-access.middleware');
 
 // ใช้ 2 middleware ร่วมกัน
@@ -222,7 +222,7 @@ router.post(
     // 1. มีสิทธิ์เข้าถึง (based on subscription)
     // 2. เปิดใช้งานฟีเจอร์แล้ว (enabled = true)
     // ... logic
-  },
+  }
 );
 ```
 

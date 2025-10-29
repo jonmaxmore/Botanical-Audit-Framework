@@ -1,6 +1,7 @@
 # This directory contains SSL/TLS certificates for Nginx
 
 ## For Development (Self-Signed)
+
 ```bash
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
   -keyout privkey.pem \
@@ -9,6 +10,7 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
 ```
 
 ## For Production (Let's Encrypt)
+
 ```bash
 sudo certbot certonly --standalone \
   -d farmer.yourdomain.com \
@@ -22,6 +24,7 @@ sudo cp /etc/letsencrypt/live/farmer.yourdomain.com/privkey.pem ./
 ```
 
 ## Required Files
+
 - `fullchain.pem` - Full certificate chain
 - `privkey.pem` - Private key
 

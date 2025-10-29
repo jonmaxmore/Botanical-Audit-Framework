@@ -37,7 +37,7 @@ import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**
  * Inspector Dashboard
- * 
+ *
  * หน้า Dashboard สำหรับ INSPECTOR (พนักงานตรวจสอบพื้นที่/ฟาร์ม)
  * แสดง:
  * - Upcoming Inspections (นัดตรวจที่กำลังจะถึง)
@@ -72,7 +72,7 @@ interface Statistics {
 const InspectorDashboardPage: React.FC = () => {
   const router = useRouter();
   const { applications } = useApplicationContext();
-  
+
   const [loading, setLoading] = useState(true);
   const [upcomingInspections, setUpcomingInspections] = useState<Inspection[]>([]);
   const [activeInspections, setActiveInspections] = useState<Inspection[]>([]);
@@ -92,11 +92,12 @@ const InspectorDashboardPage: React.FC = () => {
   const loadDashboardData = () => {
     try {
       // กรองใบสมัครที่อยู่ในขั้นตอนตรวจสอบ
-      const inspectionApplications = applications.filter(app => 
-        app.workflowState === 'INSPECTION_SCHEDULED' ||
-        app.workflowState === 'INSPECTION_VDO_CALL' ||
-        app.workflowState === 'INSPECTION_ON_SITE' ||
-        app.workflowState === 'INSPECTION_COMPLETED'
+      const inspectionApplications = applications.filter(
+        (app) =>
+          app.workflowState === 'INSPECTION_SCHEDULED' ||
+          app.workflowState === 'INSPECTION_VDO_CALL' ||
+          app.workflowState === 'INSPECTION_ON_SITE' ||
+          app.workflowState === 'INSPECTION_COMPLETED'
       );
 
       // Mock inspections data
@@ -112,10 +113,13 @@ const InspectorDashboardPage: React.FC = () => {
           farmerName: app.farmerInfo?.name || 'ไม่ระบุ',
           farmName: app.farmInfo?.name || 'ไม่ระบุ',
           type: app.workflowState === 'INSPECTION_VDO_CALL' ? 'VDO_CALL' : 'ON_SITE',
-          status: 
-            app.workflowState === 'INSPECTION_COMPLETED' ? 'completed' :
-            app.workflowState === 'INSPECTION_VDO_CALL' || app.workflowState === 'INSPECTION_ON_SITE' ? 'in_progress' :
-            'scheduled',
+          status:
+            app.workflowState === 'INSPECTION_COMPLETED'
+              ? 'completed'
+              : app.workflowState === 'INSPECTION_VDO_CALL' ||
+                  app.workflowState === 'INSPECTION_ON_SITE'
+                ? 'in_progress'
+                : 'scheduled',
           scheduledDate: scheduledDate.toISOString().split('T')[0],
           scheduledTime: `${9 + (index % 6)}:00`,
           address: app.farmInfo?.address,
@@ -124,28 +128,31 @@ const InspectorDashboardPage: React.FC = () => {
       });
 
       // แยก upcoming และ active
-      const upcoming = mockInspections.filter(ins => ins.status === 'scheduled');
-      const active = mockInspections.filter(ins => ins.status === 'in_progress');
+      const upcoming = mockInspections.filter((ins) => ins.status === 'scheduled');
+      const active = mockInspections.filter((ins) => ins.status === 'in_progress');
 
       // Sort by date
-      upcoming.sort((a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime());
+      upcoming.sort(
+        (a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime()
+      );
 
       setUpcomingInspections(upcoming);
       setActiveInspections(active);
 
       // Calculate statistics (Mock data)
-      const completed = mockInspections.filter(ins => ins.status === 'completed');
-      const scores = completed.filter(ins => ins.score).map(ins => ins.score!);
-      const avgScore = scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
-      const passCount = scores.filter(s => s >= 80).length;
+      const completed = mockInspections.filter((ins) => ins.status === 'completed');
+      const scores = completed.filter((ins) => ins.score).map((ins) => ins.score!);
+      const avgScore =
+        scores.length > 0 ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
+      const passCount = scores.filter((s) => s >= 80).length;
 
       setStatistics({
         completedThisWeek: Math.min(completed.length, 5),
         completedThisMonth: completed.length,
         averageScore: avgScore,
         passRate: scores.length > 0 ? Math.round((passCount / scores.length) * 100) : 0,
-        vdoCallCount: mockInspections.filter(ins => ins.type === 'VDO_CALL').length,
-        onSiteCount: mockInspections.filter(ins => ins.type === 'ON_SITE').length,
+        vdoCallCount: mockInspections.filter((ins) => ins.type === 'VDO_CALL').length,
+        onSiteCount: mockInspections.filter((ins) => ins.type === 'ON_SITE').length,
       });
 
       setLoading(false);
@@ -181,11 +188,11 @@ const InspectorDashboardPage: React.FC = () => {
 
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('th-TH', { 
-      weekday: 'short', 
-      year: 'numeric', 
-      month: 'short', 
-      day: 'numeric' 
+    return date.toLocaleDateString('th-TH', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     });
   };
 
@@ -204,7 +211,9 @@ const InspectorDashboardPage: React.FC = () => {
 
   if (loading) {
     return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}>
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '80vh' }}
+      >
         <CircularProgress />
       </Box>
     );
@@ -226,11 +235,25 @@ const InspectorDashboardPage: React.FC = () => {
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {/* Upcoming Inspections */}
         <Grid item xs={12} md={3}>
-          <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
+          <Card
+            sx={{ height: '100%', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
                 <ScheduleIcon sx={{ fontSize: 40, color: 'white', opacity: 0.9 }} />
-                <Badge badgeContent={upcomingInspections.filter(ins => isToday(ins.scheduledDate)).length} color="error">
+                <Badge
+                  badgeContent={
+                    upcomingInspections.filter((ins) => isToday(ins.scheduledDate)).length
+                  }
+                  color="error"
+                >
                   <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>
                     {upcomingInspections.length}
                   </Typography>
@@ -240,7 +263,7 @@ const InspectorDashboardPage: React.FC = () => {
                 นัดตรวจที่กำลังจะถึง
               </Typography>
               <Typography variant="caption" sx={{ color: 'white', opacity: 0.7 }}>
-                {upcomingInspections.filter(ins => isToday(ins.scheduledDate)).length} นัดวันนี้
+                {upcomingInspections.filter((ins) => isToday(ins.scheduledDate)).length} นัดวันนี้
               </Typography>
             </CardContent>
           </Card>
@@ -248,9 +271,18 @@ const InspectorDashboardPage: React.FC = () => {
 
         {/* Completed This Week */}
         <Grid item xs={12} md={3}>
-          <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}>
+          <Card
+            sx={{ height: '100%', background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
                 <CheckCircleIcon sx={{ fontSize: 40, color: 'white', opacity: 0.9 }} />
                 <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>
                   {statistics.completedThisWeek}
@@ -268,9 +300,18 @@ const InspectorDashboardPage: React.FC = () => {
 
         {/* Average Score */}
         <Grid item xs={12} md={3}>
-          <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}>
+          <Card
+            sx={{ height: '100%', background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
                 <StarIcon sx={{ fontSize: 40, color: 'white', opacity: 0.9 }} />
                 <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>
                   {statistics.averageScore}
@@ -288,9 +329,18 @@ const InspectorDashboardPage: React.FC = () => {
 
         {/* Active Inspections */}
         <Grid item xs={12} md={3}>
-          <Card sx={{ height: '100%', background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }}>
+          <Card
+            sx={{ height: '100%', background: 'linear-gradient(135deg, #fa709a 0%, #fee140 100%)' }}
+          >
             <CardContent>
-              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  mb: 1,
+                }}
+              >
                 <AssignmentIcon sx={{ fontSize: 40, color: 'white', opacity: 0.9 }} />
                 <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold' }}>
                   {activeInspections.length}
@@ -311,12 +361,14 @@ const InspectorDashboardPage: React.FC = () => {
         {/* Today's Schedule & Upcoming */}
         <Grid item xs={12} md={8}>
           <Paper sx={{ p: 3 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}
+            >
               <Typography variant="h6" fontWeight="bold">
                 📅 ตารางนัดตรวจ
               </Typography>
-              <Button 
-                variant="outlined" 
+              <Button
+                variant="outlined"
                 size="small"
                 startIcon={<CalendarMonthIcon />}
                 onClick={handleViewSchedule}
@@ -342,7 +394,7 @@ const InspectorDashboardPage: React.FC = () => {
                           bgcolor: index % 2 === 0 ? 'grey.50' : 'white',
                           borderRadius: 1,
                           mb: 1,
-                          ...(isToday(inspection.scheduledDate) && { 
+                          ...(isToday(inspection.scheduledDate) && {
                             bgcolor: 'primary.lighter',
                             border: '2px solid',
                             borderColor: 'primary.main',
@@ -355,7 +407,14 @@ const InspectorDashboardPage: React.FC = () => {
                           </Box>
                           <ListItemText
                             primary={
-                              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap' }}>
+                              <Box
+                                sx={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: 1,
+                                  flexWrap: 'wrap',
+                                }}
+                              >
                                 <Typography variant="body1" fontWeight="bold">
                                   {inspection.farmName}
                                 </Typography>
@@ -375,13 +434,19 @@ const InspectorDashboardPage: React.FC = () => {
                             secondary={
                               <Box sx={{ mt: 0.5 }}>
                                 <Typography variant="body2" color="text.secondary">
-                                  <strong>เกษตรกร:</strong> {inspection.farmerName} | <strong>เลขที่:</strong> {inspection.applicationNumber}
+                                  <strong>เกษตรกร:</strong> {inspection.farmerName} |{' '}
+                                  <strong>เลขที่:</strong> {inspection.applicationNumber}
                                 </Typography>
                                 <Typography variant="caption" color="text.secondary">
-                                  📅 {formatDate(inspection.scheduledDate)} เวลา {inspection.scheduledTime} น.
+                                  📅 {formatDate(inspection.scheduledDate)} เวลา{' '}
+                                  {inspection.scheduledTime} น.
                                 </Typography>
                                 {inspection.type === 'ON_SITE' && inspection.address && (
-                                  <Typography variant="caption" color="text.secondary" display="block">
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    display="block"
+                                  >
                                     📍 {inspection.address}
                                   </Typography>
                                 )}
@@ -395,12 +460,7 @@ const InspectorDashboardPage: React.FC = () => {
                   ))}
                 </List>
                 {upcomingInspections.length > 5 && (
-                  <Button
-                    fullWidth
-                    variant="text"
-                    onClick={handleViewSchedule}
-                    sx={{ mt: 2 }}
-                  >
+                  <Button fullWidth variant="text" onClick={handleViewSchedule} sx={{ mt: 2 }}>
                     ดูนัดตรวจทั้งหมด ({upcomingInspections.length} รายการ)
                   </Button>
                 )}
@@ -415,7 +475,10 @@ const InspectorDashboardPage: React.FC = () => {
                 </Typography>
                 <List>
                   {activeInspections.map((inspection) => (
-                    <ListItem key={inspection.id} sx={{ bgcolor: 'warning.lighter', borderRadius: 1, mb: 1 }}>
+                    <ListItem
+                      key={inspection.id}
+                      sx={{ bgcolor: 'warning.lighter', borderRadius: 1, mb: 1 }}
+                    >
                       <ListItemButton onClick={() => handleStartInspection(inspection)}>
                         <ListItemText
                           primary={
@@ -461,9 +524,9 @@ const InspectorDashboardPage: React.FC = () => {
                     {statistics.averageScore}/100
                   </Typography>
                 </Box>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={statistics.averageScore} 
+                <LinearProgress
+                  variant="determinate"
+                  value={statistics.averageScore}
                   color="primary"
                   sx={{ height: 8, borderRadius: 1 }}
                 />
@@ -477,9 +540,9 @@ const InspectorDashboardPage: React.FC = () => {
                     {statistics.passRate}%
                   </Typography>
                 </Box>
-                <LinearProgress 
-                  variant="determinate" 
-                  value={statistics.passRate} 
+                <LinearProgress
+                  variant="determinate"
+                  value={statistics.passRate}
                   color="success"
                   sx={{ height: 8, borderRadius: 1 }}
                 />
@@ -534,14 +597,8 @@ const InspectorDashboardPage: React.FC = () => {
               </Box>
 
               {/* Performance Indicator */}
-              <Alert 
-                severity="success" 
-                icon={<TrendingUpIcon />}
-                sx={{ mt: 3 }}
-              >
-                <Typography variant="body2">
-                  คุณตรวจได้เร็วกว่าค่าเฉลี่ย 10% 🎯
-                </Typography>
+              <Alert severity="success" icon={<TrendingUpIcon />} sx={{ mt: 3 }}>
+                <Typography variant="body2">คุณตรวจได้เร็วกว่าค่าเฉลี่ย 10% 🎯</Typography>
               </Alert>
             </Box>
           </Paper>
@@ -559,23 +616,24 @@ const InspectorDashboardPage: React.FC = () => {
         <Box component="ul" sx={{ pl: 2 }}>
           <li>
             <Typography variant="body2">
-              <strong>Phase 6A - VDO Call:</strong> ตรวจสอบเบื้องต้นผ่าน Video Conference → ตัดสินใจว่าเพียงพอหรือต้องลงพื้นที่
+              <strong>Phase 6A - VDO Call:</strong> ตรวจสอบเบื้องต้นผ่าน Video Conference →
+              ตัดสินใจว่าเพียงพอหรือต้องลงพื้นที่
             </Typography>
           </li>
           <li>
             <Typography variant="body2">
-              <strong>Phase 6B - On-Site:</strong> ลงพื้นที่ตรวจฟาร์ม → ให้คะแนน 8 Critical Control Points (CCPs) รวม 100 คะแนน
+              <strong>Phase 6B - On-Site:</strong> ลงพื้นที่ตรวจฟาร์ม → ให้คะแนน 8 Critical Control
+              Points (CCPs) รวม 100 คะแนน
             </Typography>
           </li>
           <li>
             <Typography variant="body2">
-              <strong>เกณฑ์ผ่าน:</strong> ≥80 คะแนน = ผ่าน (Pass) | 70-79 = มีเงื่อนไข (Conditional) | &lt;70 = ไม่ผ่าน (Fail)
+              <strong>เกณฑ์ผ่าน:</strong> ≥80 คะแนน = ผ่าน (Pass) | 70-79 = มีเงื่อนไข (Conditional)
+              | &lt;70 = ไม่ผ่าน (Fail)
             </Typography>
           </li>
           <li>
-            <Typography variant="body2">
-              ถ่ายรูปหลักฐานทุก CCP และเขียนรายงานสรุปผล
-            </Typography>
+            <Typography variant="body2">ถ่ายรูปหลักฐานทุก CCP และเขียนรายงานสรุปผล</Typography>
           </li>
         </Box>
       </Paper>

@@ -88,7 +88,8 @@ table {
   margin: 15px 0;
 }
 
-th, td {
+th,
+td {
   border: 1px solid #ddd;
   padding: 10px;
   text-align: left;
@@ -151,7 +152,7 @@ tr:nth-child(even) {
   body {
     margin: 0;
   }
-  
+
   .page-break {
     page-break-after: always;
   }

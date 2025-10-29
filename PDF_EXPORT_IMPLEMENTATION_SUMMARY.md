@@ -5,10 +5,12 @@
 ### 🔧 Backend Infrastructure
 
 **1. Dependencies Installed**
+
 - ✅ `puppeteer@22.0.0` - HTML to PDF generation
 - ✅ `qrcode@1.5.3` - QR code generation for certificates
 
 **2. Core Services Created**
+
 ```
 apps/backend/services/pdf/
 ├── pdf-generator.service.js       ✅ Core PDF generation engine
@@ -25,6 +27,7 @@ apps/backend/services/pdf/
 ```
 
 **3. API Routes**
+
 ```
 POST /api/pdf/inspection-report/:inspectionId        ✅ รายงานตรวจสอบ
 POST /api/pdf/certificate/:certificateId            ✅ ใบรับรอง GACP
@@ -34,6 +37,7 @@ GET  /api/pdf/health                                 ✅ Health check
 ```
 
 **4. Server Integration**
+
 - ✅ Mounted PDF routes in `atlas-server.js`
 - ✅ Added logging for PDF service
 
@@ -42,6 +46,7 @@ GET  /api/pdf/health                                 ✅ Health check
 ### 🎨 Frontend Components
 
 **1. Admin Portal (DTAM Staff)**
+
 ```
 apps/admin-portal/components/pdf/
 ├── PDFExportButton.tsx           ✅ Reusable PDF button
@@ -50,6 +55,7 @@ apps/admin-portal/components/pdf/
 ```
 
 **Features:**
+
 - ✅ Loading states with spinner
 - ✅ Success/error notifications
 - ✅ Automatic file download
@@ -57,6 +63,7 @@ apps/admin-portal/components/pdf/
 - ✅ Material-UI styling
 
 **2. Farmer Portal**
+
 ```
 apps/farmer-portal/components/pdf/
 ├── PDFExportButton.tsx           ✅ Reusable PDF button
@@ -64,6 +71,7 @@ apps/farmer-portal/components/pdf/
 ```
 
 **Features:**
+
 - ✅ Application confirmation
 - ✅ Payment receipts
 - ✅ Inspection appointments
@@ -74,12 +82,12 @@ apps/farmer-portal/components/pdf/
 
 ## 📋 Phase 1 Documents (4 Critical PDFs)
 
-| Document | Status | Template | API | Frontend |
-|----------|--------|----------|-----|----------|
-| 1. รายงานผลการตรวจสอบ (Inspection Report) | ✅ | ✅ | ✅ | ✅ |
-| 2. ใบรับรองมาตรฐาน GACP (Certificate) | ✅ | ✅ | ✅ | ✅ |
-| 3. ใบเสร็จรับเงิน (Payment Receipt) | ✅ | ✅ | ✅ | ✅ |
-| 4. หนังสืออนุมัติ (Approval Letter) | ✅ | ✅ | ✅ | ✅ |
+| Document                                  | Status | Template | API | Frontend |
+| ----------------------------------------- | ------ | -------- | --- | -------- |
+| 1. รายงานผลการตรวจสอบ (Inspection Report) | ✅     | ✅       | ✅  | ✅       |
+| 2. ใบรับรองมาตรฐาน GACP (Certificate)     | ✅     | ✅       | ✅  | ✅       |
+| 3. ใบเสร็จรับเงิน (Payment Receipt)       | ✅     | ✅       | ✅  | ✅       |
+| 4. หนังสืออนุมัติ (Approval Letter)       | ✅     | ✅       | ✅  | ✅       |
 
 ---
 
@@ -88,6 +96,7 @@ apps/farmer-portal/components/pdf/
 ### Backend API
 
 **1. Generate Inspection Report**
+
 ```bash
 curl -X POST http://localhost:3000/api/pdf/inspection-report/INS001 \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -95,6 +104,7 @@ curl -X POST http://localhost:3000/api/pdf/inspection-report/INS001 \
 ```
 
 **2. Generate Certificate**
+
 ```bash
 curl -X POST http://localhost:3000/api/pdf/certificate/CERT001 \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -102,6 +112,7 @@ curl -X POST http://localhost:3000/api/pdf/certificate/CERT001 \
 ```
 
 **3. Generate Payment Receipt**
+
 ```bash
 curl -X POST http://localhost:3000/api/pdf/payment-receipt/PAY001 \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -109,6 +120,7 @@ curl -X POST http://localhost:3000/api/pdf/payment-receipt/PAY001 \
 ```
 
 **4. Generate Approval Letter**
+
 ```bash
 curl -X POST http://localhost:3000/api/pdf/approval-letter/APP001?decision=approved \
   -H "Authorization: Bearer YOUR_TOKEN" \
@@ -120,36 +132,32 @@ curl -X POST http://localhost:3000/api/pdf/approval-letter/APP001?decision=appro
 ### Frontend Components
 
 **Inspector Dashboard**
+
 ```tsx
 import InspectorPDFExports from '@/components/pdf/InspectorPDFExports';
 
-<InspectorPDFExports 
-  inspectionId="INS001" 
-  applicationId="APP001" 
-/>
+<InspectorPDFExports inspectionId="INS001" applicationId="APP001" />;
 ```
 
 **Approver Dashboard**
+
 ```tsx
 import ApproverPDFExports from '@/components/pdf/ApproverPDFExports';
 
-<ApproverPDFExports 
-  applicationId="APP001"
-  certificateId="CERT001"
-  decision="approved"
-/>
+<ApproverPDFExports applicationId="APP001" certificateId="CERT001" decision="approved" />;
 ```
 
 **Farmer Portal**
+
 ```tsx
 import FarmerPDFExports from '@/components/pdf/FarmerPDFExports';
 
-<FarmerPDFExports 
+<FarmerPDFExports
   applicationId="APP001"
   paymentId="PAY001"
   inspectionId="INS001"
   certificateId="CERT001"
-/>
+/>;
 ```
 
 ---
@@ -159,22 +167,26 @@ import FarmerPDFExports from '@/components/pdf/FarmerPDFExports';
 ### มาตรฐานเอกสารราชการไทย
 
 **1. Header**
+
 - ✅ ชื่อหน่วยงาน: กรมการแพทย์แผนไทยและการแพทย์ทางเลือก
 - ✅ ชื่อภาษาอังกฤษ: Department of Thai Traditional and Alternative Medicine
 - ✅ เลขที่เอกสาร และวันที่
 
 **2. Content**
+
 - ✅ ฟอนต์: Sarabun (ฟอนต์ราชการ)
 - ✅ ขนาดฟอนต์: 16pt (เนื้อหา), 18pt (หัวข้อ)
 - ✅ ระยะขอบ: 25mm ทุกด้าน
 - ✅ สีหลัก: #0066cc (น้ำเงินราชการ)
 
 **3. Footer**
+
 - ✅ ลายเซ็นดิจิทัล/ชื่อผู้อนุมัติ
 - ✅ ข้อมูลติดต่อหน่วยงาน
 - ✅ เลขหน้า (auto-generated)
 
 **4. Special Features**
+
 - ✅ Watermark ("ต้นฉบับ", "สำเนา")
 - ✅ QR Code (สำหรับใบรับรองและใบเสร็จ)
 - ✅ Thai date formatting (พ.ศ.)
@@ -185,18 +197,21 @@ import FarmerPDFExports from '@/components/pdf/FarmerPDFExports';
 ## 📦 Next Steps (Phase 2-4)
 
 ### Phase 2: Workflow Documents (สัปดาห์ที่ 2)
+
 - [ ] Application Summary (Reviewer)
 - [ ] Document Verification Report (Reviewer)
 - [ ] Inspection Appointment (Inspector/Farmer)
 - [ ] Inspection Checklist (Inspector)
 
 ### Phase 3: Performance Reports (สัปดาห์ที่ 3)
+
 - [ ] Reviewer Performance Report
 - [ ] Inspector Performance Report
 - [ ] Approval Statistics Report
 - [ ] System Summary Report
 
 ### Phase 4: Additional Documents (สัปดาห์ที่ 4)
+
 - [ ] Assignment Report (Reviewer)
 - [ ] Video Inspection Report (Inspector)
 - [ ] Complete Summary (Approver)
@@ -209,18 +224,21 @@ import FarmerPDFExports from '@/components/pdf/FarmerPDFExports';
 ## 🔧 Installation & Setup
 
 ### 1. Install Dependencies
+
 ```bash
 cd apps/backend
 npm install puppeteer qrcode
 ```
 
 ### 2. Start Backend Server
+
 ```bash
 cd apps/backend
 npm run dev
 ```
 
 ### 3. Test PDF Generation
+
 ```bash
 # Health check
 curl http://localhost:3000/api/pdf/health
@@ -231,6 +249,7 @@ curl -X POST http://localhost:3000/api/pdf/inspection-report/TEST001 \
 ```
 
 ### 4. Frontend Integration
+
 ```bash
 # Admin Portal
 cd apps/admin-portal
@@ -246,7 +265,9 @@ npm run dev
 ## 🐛 Troubleshooting
 
 ### Issue: Puppeteer fails to launch
+
 **Solution:**
+
 ```bash
 # Install Chromium dependencies (Linux)
 sudo apt-get install -y chromium-browser
@@ -257,13 +278,17 @@ npm install puppeteer
 ```
 
 ### Issue: Thai fonts not rendering
+
 **Solution:**
+
 - Templates use Google Fonts (Sarabun)
 - Ensure internet connection for font loading
 - Or download TH Sarabun New locally
 
 ### Issue: PDF download not working
+
 **Solution:**
+
 - Check CORS settings in backend
 - Verify Authorization token
 - Check browser console for errors
@@ -273,11 +298,13 @@ npm install puppeteer
 ## 📊 Performance
 
 ### PDF Generation Times
+
 - Simple document (Receipt): ~1-2 seconds
 - Medium document (Report): ~2-3 seconds
 - Complex document (Certificate): ~3-4 seconds
 
 ### Optimization Tips
+
 - Cache Puppeteer browser instance ✅
 - Reuse templates ✅
 - Compress images before embedding
@@ -288,16 +315,19 @@ npm install puppeteer
 ## 🔐 Security
 
 ### Access Control
+
 - ✅ JWT authentication required
 - ✅ Role-based access (Inspector, Approver, Farmer)
 - ✅ Document ownership validation
 
 ### Watermarks
+
 - ✅ "ต้นฉบับ" for original documents
 - ✅ User info embedded in watermark
 - ✅ Download timestamp tracking
 
 ### Audit Trail
+
 - ✅ Log all PDF generations
 - ✅ Track who downloaded what
 - ✅ Store generation metadata
@@ -307,6 +337,7 @@ npm install puppeteer
 ## 📈 Statistics
 
 **Phase 1 Completion:**
+
 - ✅ 4/4 Critical documents (100%)
 - ✅ 4 HTML templates created
 - ✅ 1 CSS stylesheet

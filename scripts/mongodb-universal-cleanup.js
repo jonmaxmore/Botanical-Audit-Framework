@@ -23,13 +23,13 @@ const DATABASES = {
   local: {
     name: 'Local MongoDB',
     uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_production',
-    color: '\x1b[36m', // Cyan
+    color: '\x1b[36m' // Cyan
   },
   atlas: {
     name: 'MongoDB Atlas',
     uri: process.env.MONGODB_ATLAS_URI || process.env.MONGODB_URI_ATLAS || null,
-    color: '\x1b[35m', // Magenta
-  },
+    color: '\x1b[35m' // Magenta
+  }
 };
 
 // Core collections to keep (even if empty)
@@ -40,23 +40,23 @@ const KEEP_COLLECTIONS = [
   'invoices',
   'auditlogs',
   'refreshtokens',
-  'sessions',
+  'sessions'
 ];
 
 // Models with duplicate indexes to fix
 const MODELS_TO_FIX = [
   {
     file: 'database/models/User.model.js',
-    fields: ['userId', 'email', 'thaiId', 'phoneNumber'],
+    fields: ['userId', 'email', 'thaiId', 'phoneNumber']
   },
   {
     file: 'database/models/Certificate.model.js',
-    fields: ['certificateId', 'certificateNumber', 'applicationId'],
+    fields: ['certificateId', 'certificateNumber', 'applicationId']
   },
   {
     file: 'database/models/Invoice.model.js',
-    fields: ['invoiceId', 'invoiceNumber', 'sequenceNumber'],
-  },
+    fields: ['invoiceId', 'invoiceNumber', 'sequenceNumber']
+  }
 ];
 
 class MongoDBUniversalCleanup {
@@ -65,7 +65,7 @@ class MongoDBUniversalCleanup {
     this.targets = options.targets || ['local'];
     this.report = {
       timestamp: new Date(),
-      results: {},
+      results: {}
     };
   }
 
@@ -120,7 +120,7 @@ class MongoDBUniversalCleanup {
       connected: false,
       emptyCollections: [],
       orphanedRecords: [],
-      errors: [],
+      errors: []
     };
 
     try {
@@ -128,7 +128,7 @@ class MongoDBUniversalCleanup {
       console.log('🔌 Connecting...');
       await mongoose.connect(db.uri, {
         serverSelectionTimeoutMS: 10000,
-        socketTimeoutMS: 45000,
+        socketTimeoutMS: 45000
       });
 
       result.connected = true;
@@ -156,7 +156,7 @@ class MongoDBUniversalCleanup {
 
               result.emptyCollections.push({
                 name: coll.name,
-                action: shouldKeep ? 'KEEP' : 'DELETE',
+                action: shouldKeep ? 'KEEP' : 'DELETE'
               });
 
               if (!this.dryRun && !shouldKeep) {
@@ -198,15 +198,15 @@ class MongoDBUniversalCleanup {
                 from: 'users',
                 localField: 'userId',
                 foreignField: '_id',
-                as: 'user',
-              },
+                as: 'user'
+              }
             },
             {
-              $match: { user: { $size: 0 } },
+              $match: { user: { $size: 0 } }
             },
             {
-              $project: { _id: 1, applicationId: 1 },
-            },
+              $project: { _id: 1, applicationId: 1 }
+            }
           ]);
 
           if (orphanedApps.length > 0) {
@@ -214,7 +214,7 @@ class MongoDBUniversalCleanup {
 
             result.orphanedRecords.push({
               type: 'applications',
-              count: orphanedApps.length,
+              count: orphanedApps.length
             });
 
             if (!this.dryRun) {
@@ -243,15 +243,15 @@ class MongoDBUniversalCleanup {
                 from: 'applications',
                 localField: 'applicationId',
                 foreignField: '_id',
-                as: 'application',
-              },
+                as: 'application'
+              }
             },
             {
-              $match: { application: { $size: 0 } },
+              $match: { application: { $size: 0 } }
             },
             {
-              $project: { _id: 1, certificateNumber: 1 },
-            },
+              $project: { _id: 1, certificateNumber: 1 }
+            }
           ]);
 
           if (orphanedCerts.length > 0) {
@@ -259,7 +259,7 @@ class MongoDBUniversalCleanup {
 
             result.orphanedRecords.push({
               type: 'certificates',
-              count: orphanedCerts.length,
+              count: orphanedCerts.length
             });
 
             if (!this.dryRun) {
@@ -285,10 +285,10 @@ class MongoDBUniversalCleanup {
       // Summary
       console.log(`${db.color}📊 Summary for ${db.name}:\x1b[0m`);
       console.log(
-        `   Empty collections: ${deleteCount} ${this.dryRun ? 'would be' : 'were'} deleted`,
+        `   Empty collections: ${deleteCount} ${this.dryRun ? 'would be' : 'were'} deleted`
       );
       console.log(
-        `   Orphaned records: ${result.orphanedRecords.reduce((sum, r) => sum + r.count, 0)} ${this.dryRun ? 'would be' : 'were'} deleted`,
+        `   Orphaned records: ${result.orphanedRecords.reduce((sum, r) => sum + r.count, 0)} ${this.dryRun ? 'would be' : 'were'} deleted`
       );
       console.log('');
     } catch (error) {
@@ -377,10 +377,10 @@ class MongoDBUniversalCleanup {
       }
 
       console.log(
-        `   Empty collections deleted: ${result.emptyCollections.filter(c => c.action === 'DELETE').length}`,
+        `   Empty collections deleted: ${result.emptyCollections.filter(c => c.action === 'DELETE').length}`
       );
       console.log(
-        `   Orphaned records deleted: ${result.orphanedRecords.reduce((sum, r) => sum + r.count, 0)}`,
+        `   Orphaned records deleted: ${result.orphanedRecords.reduce((sum, r) => sum + r.count, 0)}`
       );
 
       if (result.errors.length > 0) {
@@ -450,7 +450,7 @@ What it does:
 
   const options = {
     dryRun: args.includes('--dry-run') || args.includes('-d'),
-    targets: [],
+    targets: []
   };
 
   if (args.includes('--local')) {

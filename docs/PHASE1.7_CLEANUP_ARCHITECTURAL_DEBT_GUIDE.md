@@ -162,14 +162,14 @@ exports.getApplications = async (req, res) => {
       meta: {
         total: apps.length,
         limit: req.query.limit || 20,
-        offset: req.query.offset || 0,
-      },
+        offset: req.query.offset || 0
+      }
     });
   } catch (error) {
     logger.error('Failed to fetch applications', { error: error.message });
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch applications',
+      error: 'Failed to fetch applications'
     });
   }
 };
@@ -281,7 +281,7 @@ class ApiResponse {
       success: true,
       data,
       meta,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 
@@ -291,9 +291,9 @@ class ApiResponse {
       error: {
         message,
         statusCode,
-        details,
+        details
       },
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 
@@ -305,9 +305,9 @@ class ApiResponse {
         page: pagination.page,
         limit: pagination.limit,
         total: pagination.total,
-        totalPages: Math.ceil(pagination.total / pagination.limit),
+        totalPages: Math.ceil(pagination.total / pagination.limit)
       },
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     };
   }
 }
@@ -368,7 +368,7 @@ module.exports = {
   // Cache
   CACHE_TTL_SHORT: 300, // 5 minutes
   CACHE_TTL_MEDIUM: 3600, // 1 hour
-  CACHE_TTL_LONG: 86400, // 24 hours
+  CACHE_TTL_LONG: 86400 // 24 hours
 };
 ```
 
@@ -402,7 +402,7 @@ function findUnusedImports(filePath) {
       unused.push({
         file: filePath,
         import: match[0],
-        line: content.substring(0, match.index).split('\n').length,
+        line: content.substring(0, match.index).split('\n').length
       });
     }
   }
@@ -444,7 +444,7 @@ const ApplicationSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: 'User' },
   farmId: { type: Schema.Types.ObjectId, ref: 'Farm' },
   status: String,
-  createdAt: Date,
+  createdAt: Date
 });
 
 // ✅ AFTER - Proper indexes
@@ -453,30 +453,30 @@ const ApplicationSchema = new Schema({
     type: String,
     required: true,
     unique: true,
-    index: true, // Fast lookup by application number
+    index: true // Fast lookup by application number
   },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true,
-    index: true, // Fast lookup by user
+    index: true // Fast lookup by user
   },
   farmId: {
     type: Schema.Types.ObjectId,
     ref: 'Farm',
     required: true,
-    index: true, // Fast lookup by farm
+    index: true // Fast lookup by farm
   },
   status: {
     type: String,
     enum: ['DRAFT', 'SUBMITTED', 'UNDER_REVIEW', 'APPROVED', 'REJECTED'],
-    index: true, // Fast filtering by status
+    index: true // Fast filtering by status
   },
   createdAt: {
     type: Date,
     default: Date.now,
-    index: true, // Fast sorting by date
-  },
+    index: true // Fast sorting by date
+  }
 });
 
 // Compound indexes for common queries
@@ -526,7 +526,7 @@ exports.getApplications = async (req, res) => {
     applications.map(async app => {
       const user = await User.findById(app.userId);
       return { ...app.toJSON(), user };
-    }),
+    })
   );
 
   res.json(applicationsWithUser);
@@ -556,7 +556,7 @@ exports.getApplications = async (req, res) => {
     userId,
     farmId,
     sortBy = 'createdAt',
-    sortOrder = 'desc',
+    sortOrder = 'desc'
   } = req.query;
 
   // Build query
@@ -575,15 +575,15 @@ exports.getApplications = async (req, res) => {
       .limit(parseInt(limit))
       .skip((parseInt(page) - 1) * parseInt(limit))
       .lean(),
-    Application.countDocuments(query),
+    Application.countDocuments(query)
   ]);
 
   res.json(
     ApiResponse.paginated(applications, {
       page: parseInt(page),
       limit: parseInt(limit),
-      total,
-    }),
+      total
+    })
   );
 };
 ```
@@ -612,7 +612,7 @@ function queryMonitor(slowQueryThreshold = 1000) {
           logger.warn('Slow query detected', {
             model: this.model.modelName,
             query: this.getQuery(),
-            executionTime: `${executionTime}ms`,
+            executionTime: `${executionTime}ms`
           });
         }
       }
@@ -647,7 +647,7 @@ class RedisCache {
       host: process.env.REDIS_HOST || 'localhost',
       port: parseInt(process.env.REDIS_PORT) || 6379,
       password: process.env.REDIS_PASSWORD,
-      retryStrategy: times => Math.min(times * 50, 2000),
+      retryStrategy: times => Math.min(times * 50, 2000)
     });
 
     this.client.on('error', error => {
@@ -747,7 +747,7 @@ function cacheMiddleware(options = {}) {
   const {
     ttl = 3600,
     keyGenerator = req => `cache:${req.method}:${req.originalUrl}`,
-    condition = () => true,
+    condition = () => true
   } = options;
 
   return async (req, res, next) => {
@@ -815,9 +815,9 @@ router.get(
     keyGenerator: req => {
       const { page, limit, status, userId } = req.query;
       return `applications:list:${page}:${limit}:${status}:${userId}`;
-    },
+    }
   }),
-  applicationController.getApplications,
+  applicationController.getApplications
 );
 
 // Cache single application for 1 hour
@@ -825,9 +825,9 @@ router.get(
   '/applications/:id',
   cacheMiddleware({
     ttl: CACHE_TTL_MEDIUM,
-    keyGenerator: req => `applications:${req.params.id}`,
+    keyGenerator: req => `applications:${req.params.id}`
   }),
-  applicationController.getApplication,
+  applicationController.getApplication
 );
 
 // Invalidate cache on updates
@@ -839,7 +839,7 @@ router.put(
     await cache.delPattern('applications:list:*');
     next();
   },
-  applicationController.updateApplication,
+  applicationController.updateApplication
 );
 
 module.exports = router;
@@ -860,7 +860,7 @@ npm install --save-dev @next/bundle-analyzer
 
 ```javascript
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
-  enabled: process.env.ANALYZE === 'true',
+  enabled: process.env.ANALYZE === 'true'
 });
 
 /** @type {import('next').NextConfig} */
@@ -871,12 +871,12 @@ const nextConfig = {
   // Optimize images
   images: {
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 60
   },
 
   // Tree shaking
   experimental: {
-    optimizePackageImports: ['lodash', 'date-fns', 'lucide-react'],
+    optimizePackageImports: ['lodash', 'date-fns', 'lucide-react']
   },
 
   // Webpack optimization
@@ -885,12 +885,12 @@ const nextConfig = {
       // Replace moment with date-fns
       config.resolve.alias = {
         ...config.resolve.alias,
-        moment: 'date-fns',
+        moment: 'date-fns'
       };
     }
 
     return config;
-  },
+  }
 };
 
 module.exports = withBundleAnalyzer(nextConfig);
@@ -1124,21 +1124,21 @@ module.exports = function securityHeaders(app) {
           fontSrc: ["'self'", 'https://fonts.gstatic.com'],
           imgSrc: ["'self'", 'data:', 'https:'],
           scriptSrc: ["'self'"],
-          connectSrc: ["'self'", process.env.NEXT_PUBLIC_API_URL],
-        },
+          connectSrc: ["'self'", process.env.NEXT_PUBLIC_API_URL]
+        }
       },
       hsts: {
         maxAge: 31536000,
         includeSubDomains: true,
-        preload: true,
+        preload: true
       },
       frameguard: {
-        action: 'deny',
+        action: 'deny'
       },
       referrerPolicy: {
-        policy: 'strict-origin-when-cross-origin',
-      },
-    }),
+        policy: 'strict-origin-when-cross-origin'
+      }
+    })
   );
 
   // Additional security headers
@@ -1180,7 +1180,7 @@ const validationRules = {
     query('limit')
       .optional()
       .isInt({ min: 1, max: 100 })
-      .withMessage('Limit must be between 1 and 100'),
+      .withMessage('Limit must be between 1 and 100')
   ],
 
   // File upload
@@ -1200,7 +1200,7 @@ const validationRules = {
     }
 
     return true;
-  }),
+  })
 };
 
 /**
@@ -1214,8 +1214,8 @@ function handleValidationErrors(req, res, next) {
       success: false,
       error: {
         message: 'Validation failed',
-        details: errors.array(),
-      },
+        details: errors.array()
+      }
     });
   }
 
@@ -1224,7 +1224,7 @@ function handleValidationErrors(req, res, next) {
 
 module.exports = {
   validationRules,
-  handleValidationErrors,
+  handleValidationErrors
 };
 ```
 
@@ -1238,9 +1238,9 @@ router.post(
   [
     body('farmId').isMongoId(),
     body('certificateType').isIn(['GACP', 'GAP', 'ORGANIC']),
-    handleValidationErrors,
+    handleValidationErrors
   ],
-  applicationController.createApplication,
+  applicationController.createApplication
 );
 ```
 
@@ -1255,35 +1255,35 @@ const Redis = require('ioredis');
 
 const redisClient = new Redis({
   host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT) || 6379,
+  port: parseInt(process.env.REDIS_PORT) || 6379
 });
 
 // General API rate limit
 const apiLimiter = rateLimit({
   store: new RedisStore({
     client: redisClient,
-    prefix: 'rate-limit:api:',
+    prefix: 'rate-limit:api:'
   }),
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // 100 requests per window
-  message: 'Too many requests, please try again later',
+  message: 'Too many requests, please try again later'
 });
 
 // Strict rate limit for authentication endpoints
 const authLimiter = rateLimit({
   store: new RedisStore({
     client: redisClient,
-    prefix: 'rate-limit:auth:',
+    prefix: 'rate-limit:auth:'
   }),
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 5, // 5 login attempts per window
   message: 'Too many login attempts, please try again later',
-  skipSuccessfulRequests: true, // Don't count successful logins
+  skipSuccessfulRequests: true // Don't count successful logins
 });
 
 module.exports = {
   apiLimiter,
-  authLimiter,
+  authLimiter
 };
 ```
 
@@ -1347,7 +1347,7 @@ function sanitizeQuery(query) {
 
 module.exports = {
   escapeRegex,
-  sanitizeQuery,
+  sanitizeQuery
 };
 ```
 
@@ -1403,7 +1403,7 @@ describe('Certificate Entity', () => {
         certificateType: 'GACP',
         status: 'ACTIVE',
         issueDate: new Date('2024-01-01'),
-        expiryDate: new Date('2027-01-01'),
+        expiryDate: new Date('2027-01-01')
       };
 
       const cert = new Certificate(data);
@@ -1420,7 +1420,7 @@ describe('Certificate Entity', () => {
       const cert = new Certificate({
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
-        farmId: 'farm123',
+        farmId: 'farm123'
       });
 
       expect(cert.certificateType).toBe('GACP');
@@ -1437,7 +1437,7 @@ describe('Certificate Entity', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        issueDate,
+        issueDate
       });
 
       const expiry = cert.calculateExpiryDate();
@@ -1454,7 +1454,7 @@ describe('Certificate Entity', () => {
         userId: 'user123',
         farmId: 'farm123',
         status: 'ACTIVE',
-        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
+        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year from now
       });
 
       expect(cert.isValid()).toBe(true);
@@ -1466,7 +1466,7 @@ describe('Certificate Entity', () => {
         userId: 'user123',
         farmId: 'farm123',
         status: 'ACTIVE',
-        expiryDate: new Date(Date.now() - 1), // Yesterday
+        expiryDate: new Date(Date.now() - 1) // Yesterday
       });
 
       expect(cert.isValid()).toBe(false);
@@ -1478,7 +1478,7 @@ describe('Certificate Entity', () => {
         userId: 'user123',
         farmId: 'farm123',
         status: 'REVOKED',
-        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+        expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
       });
 
       expect(cert.isValid()).toBe(false);
@@ -1491,7 +1491,7 @@ describe('Certificate Entity', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        expiryDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000), // 60 days
+        expiryDate: new Date(Date.now() + 60 * 24 * 60 * 60 * 1000) // 60 days
       });
 
       expect(cert.isNearExpiry()).toBe(true);
@@ -1502,7 +1502,7 @@ describe('Certificate Entity', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        expiryDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000), // 120 days
+        expiryDate: new Date(Date.now() + 120 * 24 * 60 * 60 * 1000) // 120 days
       });
 
       expect(cert.isNearExpiry()).toBe(false);
@@ -1513,7 +1513,7 @@ describe('Certificate Entity', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        expiryDate: new Date(Date.now() - 1), // Yesterday
+        expiryDate: new Date(Date.now() - 1) // Yesterday
       });
 
       expect(cert.isNearExpiry()).toBe(false);
@@ -1526,7 +1526,7 @@ describe('Certificate Entity', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        status: 'ACTIVE',
+        status: 'ACTIVE'
       });
 
       cert.revoke('Non-compliance', 'admin123');
@@ -1542,7 +1542,7 @@ describe('Certificate Entity', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        status: 'REVOKED',
+        status: 'REVOKED'
       });
 
       expect(() => {
@@ -1558,7 +1558,7 @@ describe('Certificate Entity', () => {
         userId: 'user123',
         farmId: 'farm123',
         status: 'ACTIVE',
-        expiryDate: new Date('2025-01-01'),
+        expiryDate: new Date('2025-01-01')
       });
 
       const newExpiry = new Date('2028-01-01');
@@ -1575,7 +1575,7 @@ describe('Certificate Entity', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        status: 'REVOKED',
+        status: 'REVOKED'
       });
 
       expect(() => {
@@ -1593,7 +1593,7 @@ describe('Certificate Entity', () => {
         certificateType: 'GACP',
         status: 'ACTIVE',
         issueDate: new Date('2024-01-01'),
-        expiryDate: new Date('2027-01-01'),
+        expiryDate: new Date('2027-01-01')
       });
 
       const result = cert.validate();
@@ -1616,7 +1616,7 @@ describe('Certificate Entity', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        certificateType: 'INVALID',
+        certificateType: 'INVALID'
       });
 
       const result = cert.validate();
@@ -1630,7 +1630,7 @@ describe('Certificate Entity', () => {
         userId: 'user123',
         farmId: 'farm123',
         issueDate: new Date('2027-01-01'),
-        expiryDate: new Date('2024-01-01'),
+        expiryDate: new Date('2024-01-01')
       });
 
       const result = cert.validate();
@@ -1654,7 +1654,7 @@ const mockCertificateRepository = {
   findById: jest.fn(),
   findByApplicationId: jest.fn(),
   save: jest.fn(),
-  findByUserId: jest.fn(),
+  findByUserId: jest.fn()
 };
 
 describe('CertificateService', () => {
@@ -1671,7 +1671,7 @@ describe('CertificateService', () => {
         id: '123',
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
-        farmId: 'farm123',
+        farmId: 'farm123'
       });
 
       mockCertificateRepository.findById.mockResolvedValue(mockCert);
@@ -1686,7 +1686,7 @@ describe('CertificateService', () => {
       mockCertificateRepository.findById.mockResolvedValue(null);
 
       await expect(certificateService.getCertificateById('123')).rejects.toThrow(
-        'Certificate not found',
+        'Certificate not found'
       );
     });
   });
@@ -1697,7 +1697,7 @@ describe('CertificateService', () => {
         certificateNumber: 'CERT-2024-001',
         applicationId: 'app123',
         userId: 'user123',
-        farmId: 'farm123',
+        farmId: 'farm123'
       };
 
       const savedCert = new Certificate({ ...data, id: '123' });
@@ -1723,7 +1723,7 @@ describe('CertificateService', () => {
         certificateNumber: 'CERT-2024-001',
         userId: 'user123',
         farmId: 'farm123',
-        status: 'ACTIVE',
+        status: 'ACTIVE'
       });
 
       mockCertificateRepository.findById.mockResolvedValue(mockCert);
@@ -1763,7 +1763,7 @@ describe('Certificate API Integration Tests', () => {
       email: 'test@example.com',
       password: 'password123',
       fullName: 'Test User',
-      role: 'FARMER',
+      role: 'FARMER'
     });
     userId = user.id;
 
@@ -1793,7 +1793,7 @@ describe('Certificate API Integration Tests', () => {
         .send({
           applicationId: 'app123',
           farmId: 'farm123',
-          certificateType: 'GACP',
+          certificateType: 'GACP'
         });
 
       expect(response.status).toBe(201);
@@ -1804,7 +1804,7 @@ describe('Certificate API Integration Tests', () => {
     it('should return 401 without auth token', async () => {
       const response = await request(app).post('/api/certificates').send({
         applicationId: 'app123',
-        farmId: 'farm123',
+        farmId: 'farm123'
       });
 
       expect(response.status).toBe(401);
@@ -1828,7 +1828,7 @@ describe('Certificate API Integration Tests', () => {
         certificateNumber: 'CERT-2024-001',
         userId,
         farmId: 'farm123',
-        applicationId: 'app123',
+        applicationId: 'app123'
       });
 
       const response = await request(app)
@@ -1858,14 +1858,14 @@ describe('Certificate API Integration Tests', () => {
         userId,
         farmId: 'farm123',
         applicationId: 'app123',
-        status: 'ACTIVE',
+        status: 'ACTIVE'
       });
 
       const response = await request(app)
         .put(`/api/certificates/${cert.id}/revoke`)
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          reason: 'Non-compliance',
+          reason: 'Non-compliance'
         });
 
       expect(response.status).toBe(200);
@@ -2135,22 +2135,22 @@ const config = {
     uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp',
     options: {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
-    },
+      useUnifiedTopology: true
+    }
   },
 
   // Redis
   redis: {
     host: process.env.REDIS_HOST || 'localhost',
     port: parseInt(process.env.REDIS_PORT) || 6379,
-    password: process.env.REDIS_PASSWORD,
+    password: process.env.REDIS_PASSWORD
   },
 
   // JWT
   jwt: {
     secret: process.env.JWT_SECRET || 'your-secret-key',
     expiresIn: process.env.JWT_EXPIRES_IN || '24h',
-    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d',
+    refreshExpiresIn: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
   },
 
   // Email
@@ -2160,28 +2160,28 @@ const config = {
     secure: process.env.SMTP_SECURE === 'true',
     auth: {
       user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
+      pass: process.env.SMTP_PASS
     },
-    from: process.env.EMAIL_FROM || 'noreply@gacp.doa.go.th',
+    from: process.env.EMAIL_FROM || 'noreply@gacp.doa.go.th'
   },
 
   // File Upload
   upload: {
     maxSize: parseInt(process.env.MAX_FILE_SIZE) || 10 * 1024 * 1024, // 10MB
     allowedTypes: ['image/jpeg', 'image/png', 'application/pdf'],
-    destination: process.env.UPLOAD_PATH || './uploads',
+    destination: process.env.UPLOAD_PATH || './uploads'
   },
 
   // Certificate
   certificate: {
     validityYears: 3,
-    expiryWarningDays: 90,
+    expiryWarningDays: 90
   },
 
   // Pagination
   pagination: {
     defaultLimit: 20,
-    maxLimit: 100,
+    maxLimit: 100
   },
 
   // Rate Limiting
@@ -2189,26 +2189,26 @@ const config = {
     windowMs: 15 * 60 * 1000, // 15 minutes
     maxRequests: 100,
     authWindowMs: 15 * 60 * 1000,
-    authMaxRequests: 5,
+    authMaxRequests: 5
   },
 
   // WebSocket
   websocket: {
     pingTimeout: 60000,
-    pingInterval: 25000,
+    pingInterval: 25000
   },
 
   // Logging
   logging: {
     level: process.env.LOG_LEVEL || 'info',
-    file: process.env.LOG_FILE || './logs/app.log',
+    file: process.env.LOG_FILE || './logs/app.log'
   },
 
   // CORS
   cors: {
     origin: process.env.CORS_ORIGINS?.split(',') || ['http://localhost:3001'],
-    credentials: true,
-  },
+    credentials: true
+  }
 };
 
 module.exports = config;
@@ -2758,16 +2758,16 @@ const benchmarks = [
     name: 'GET /api/applications',
     url: 'http://localhost:3000/api/applications',
     headers: {
-      Authorization: 'Bearer test-token',
-    },
+      Authorization: 'Bearer test-token'
+    }
   },
   {
     name: 'GET /api/certificates/:id',
     url: 'http://localhost:3000/api/certificates/123',
     headers: {
-      Authorization: 'Bearer test-token',
-    },
-  },
+      Authorization: 'Bearer test-token'
+    }
+  }
 ];
 
 async function runBenchmark(config) {
@@ -2778,7 +2778,7 @@ async function runBenchmark(config) {
     url: config.url,
     connections: 10,
     duration: 10,
-    headers: config.headers,
+    headers: config.headers
   });
 
   console.log(`Requests/sec: ${result.requests.mean}`);

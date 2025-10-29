@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * Farm Repository Interface (Domain Layer)
  *

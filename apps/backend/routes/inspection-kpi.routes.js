@@ -14,7 +14,7 @@ router.get('/inspections/kpi', async (req, res) => {
       onsiteCount: 0,
       avgResponseTime: 0,
       approvalRate: 0,
-      onsiteNeedRate: 0,
+      onsiteNeedRate: 0
     };
 
     res.json({

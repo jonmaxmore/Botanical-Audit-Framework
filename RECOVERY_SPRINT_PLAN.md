@@ -13,12 +13,14 @@
 **Root Cause:** Empty page components + missing env vars
 
 **Tasks:**
+
 1. Create environment variable templates
 2. Add error boundaries to all apps
 3. Fix empty page components
 4. Test all routes
 
 **Files to Fix:**
+
 - `apps/admin-portal/.env.local.example`
 - `apps/certificate-portal/.env.local.example`
 - `apps/admin-portal/app/*/page.tsx` (12 files)
@@ -29,6 +31,7 @@
 **Target:** 70% → 100%
 
 **Priority Features:**
+
 1. User Management (Day 3)
    - List users with search/filter
    - Create/edit user forms
@@ -46,6 +49,7 @@
    - Inspector performance
 
 **Deliverables:**
+
 - 12 functional pages
 - API integration complete
 - Tests passing
@@ -55,6 +59,7 @@
 **Target:** 50% → 100%
 
 **Features:**
+
 1. Certificate Management
    - Advanced search
    - Bulk operations
@@ -66,6 +71,7 @@
    - QR batch generation
 
 **Deliverables:**
+
 - 4 functional pages
 - Export working
 - Tests passing
@@ -80,12 +86,14 @@
 **Frontend:** ❌ Build from scratch
 
 **Components to Build:**
+
 1. QR Scanner Component
 2. Batch Lookup Page
 3. Traceability Timeline
 4. Public Verification Page
 
 **Routes:**
+
 - `/track-trace/scan`
 - `/track-trace/batch/[id]`
 - `/track-trace/verify`
@@ -97,12 +105,14 @@
 **Frontend:** ❌ Build from scratch
 
 **Components to Build:**
+
 1. Survey Builder
 2. Dynamic Form Renderer
 3. Response Collection
 4. Analytics Dashboard
 
 **Routes:**
+
 - `/surveys/builder`
 - `/surveys/[id]/respond`
 - `/surveys/[id]/results`
@@ -114,12 +124,14 @@
 **Frontend:** ❌ Build from scratch
 
 **Components to Build:**
+
 1. Comparison Dashboard
 2. Chart Visualizations
 3. Farm Benchmarking
 4. Export Functionality
 
 **Routes:**
+
 - `/comparison/dashboard`
 - `/comparison/farm/[id]`
 - `/comparison/standards`
@@ -132,6 +144,7 @@
 ### Day 1-2: Frontend-Backend Integration
 
 **Tasks:**
+
 1. Connect all UIs to APIs
 2. Test CRUD operations
 3. Verify real-time updates
@@ -139,6 +152,7 @@
 5. Validate data flow
 
 **Test Scenarios:**
+
 - User creates application → Track & Trace
 - Inspector submits survey → Results display
 - Farm comparison → Export report
@@ -147,6 +161,7 @@
 ### Day 3-4: Testing
 
 **Unit Tests:**
+
 - Admin portal components
 - Certificate portal components
 - Track & Trace components
@@ -154,12 +169,14 @@
 - Comparison components
 
 **Integration Tests:**
+
 - API connectivity
 - Data persistence
 - Real-time updates
 - Error handling
 
 **E2E Tests:**
+
 - Complete workflows
 - Multi-user scenarios
 - Edge cases
@@ -167,12 +184,14 @@
 ### Day 5: Performance & Security
 
 **Performance:**
+
 - Load testing (1000+ users)
 - Response time optimization
 - Database query optimization
 - Caching strategy
 
 **Security:**
+
 - OWASP Top 10 scan
 - Dependency audit
 - Penetration testing
@@ -181,6 +200,7 @@
 ### Day 6-7: Staging Deployment
 
 **Tasks:**
+
 1. Deploy to staging environment
 2. Run smoke tests
 3. UAT with stakeholders
@@ -194,6 +214,7 @@
 ### Environment Variables Setup
 
 **All Portals Need:**
+
 ```bash
 # .env.local
 NEXT_PUBLIC_API_URL=http://localhost:3000
@@ -278,18 +299,21 @@ export default function Page() {
 ## Success Metrics
 
 ### Week 1
+
 - [ ] All routes render (no white screens)
 - [ ] Admin portal 100% complete
 - [ ] Certificate portal 100% complete
 - [ ] Environment variables configured
 
 ### Week 2
+
 - [ ] Track & Trace UI complete
 - [ ] Survey System UI complete
 - [ ] GACP Comparison UI complete
 - [ ] All APIs connected
 
 ### Week 3
+
 - [ ] All tests passing (>80% coverage)
 - [ ] Performance benchmarks met
 - [ ] Security audit passed
@@ -300,6 +324,7 @@ export default function Page() {
 ## Risk Mitigation
 
 ### Technical Risks
+
 1. **Integration Issues**
    - Mitigation: Daily integration testing
    - Fallback: Stub APIs if needed
@@ -313,6 +338,7 @@ export default function Page() {
    - Fallback: Fix critical issues immediately
 
 ### Schedule Risks
+
 1. **Scope Creep**
    - Mitigation: Strict feature freeze
    - Fallback: Move non-critical to Phase 2
@@ -330,6 +356,7 @@ export default function Page() {
 **Any blockers?**
 
 **Metrics to Track:**
+
 - Routes fixed
 - Components completed
 - Tests passing
@@ -340,6 +367,7 @@ export default function Page() {
 ## Definition of Done
 
 ### Feature Complete
+
 - [ ] Code written and reviewed
 - [ ] Unit tests passing
 - [ ] Integration tests passing
@@ -347,6 +375,7 @@ export default function Page() {
 - [ ] No critical bugs
 
 ### Sprint Complete
+
 - [ ] All features done
 - [ ] All tests passing
 - [ ] Performance acceptable

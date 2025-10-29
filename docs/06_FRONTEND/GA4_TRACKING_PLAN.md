@@ -64,7 +64,7 @@ gtag('event', 'payment_initiated', {
   currency: 'THB',
   submission_count: 3,
   payment_reason: 'RESUBMISSION_FEE',
-  timestamp: new Date().toISOString(),
+  timestamp: new Date().toISOString()
 });
 ```
 
@@ -94,7 +94,7 @@ gtag('event', 'payment_completed', {
   transaction_id: 'trx_789',
   payment_method: 'credit_card',
   time_to_pay: 180, // seconds
-  submission_count: 3,
+  submission_count: 3
 });
 ```
 
@@ -124,7 +124,7 @@ gtag('event', 'payment_timeout', {
   currency: 'THB',
   time_expired: 900, // 15 minutes in seconds
   submission_count: 3,
-  last_page_viewed: '/payment/checkout',
+  last_page_viewed: '/payment/checkout'
 });
 ```
 
@@ -154,7 +154,7 @@ gtag('event', 'payment_cancelled', {
   amount: 5000,
   currency: 'THB',
   cancellation_reason: 'user_cancelled',
-  time_before_cancel: 120, // seconds
+  time_before_cancel: 120 // seconds
 });
 ```
 
@@ -173,7 +173,7 @@ gtag('event', 'payment_failed', {
   currency: 'THB',
   error_code: 'CARD_DECLINED',
   error_message: 'Insufficient funds',
-  payment_method: 'credit_card',
+  payment_method: 'credit_card'
 });
 ```
 
@@ -190,7 +190,7 @@ gtag('event', 'application_created', {
   application_id: 'app_123',
   user_id: 'user_456',
   user_role: 'FARMER',
-  timestamp: new Date().toISOString(),
+  timestamp: new Date().toISOString()
 });
 ```
 
@@ -207,7 +207,7 @@ gtag('event', 'application_submitted', {
   submission_count: 1,
   is_resubmission: false,
   document_count: 5,
-  time_to_complete: 1200, // seconds from created to submitted
+  time_to_complete: 1200 // seconds from created to submitted
 });
 ```
 
@@ -226,7 +226,7 @@ gtag('event', 'application_approved', {
   approver_id: 'admin_789',
   submission_count: 1,
   total_processing_time: 86400, // seconds
-  rejection_count: 0,
+  rejection_count: 0
 });
 ```
 
@@ -245,7 +245,7 @@ gtag('event', 'application_rejected', {
   reviewer_id: 'admin_789',
   submission_count: 1,
   rejection_reason: 'INCOMPLETE_DOCUMENTS',
-  rejection_count: 1,
+  rejection_count: 1
 });
 ```
 
@@ -262,7 +262,7 @@ gtag('event', 'application_cancelled', {
   cancellation_status: 'DRAFT', // Status when cancelled
   cancellation_reason: 'user_initiated',
   had_payment: false,
-  refund_amount: 0, // Always 0 (no refunds)
+  refund_amount: 0 // Always 0 (no refunds)
 });
 ```
 
@@ -282,7 +282,7 @@ gtag('event', 'reschedule_requested', {
   reschedule_count: 1,
   original_date: '2025-10-20',
   new_date: '2025-10-25',
-  reason: 'Weather conditions',
+  reason: 'Weather conditions'
 });
 ```
 
@@ -300,7 +300,7 @@ gtag('event', 'reschedule_limit_reached', {
   user_id: 'user_456',
   reschedule_count: 1,
   max_reschedule: 1,
-  action_taken: 'REJOINED_QUEUE',
+  action_taken: 'REJOINED_QUEUE'
 });
 ```
 
@@ -319,7 +319,7 @@ gtag('event', 'certificate_issued', {
   user_id: 'user_789',
   certificate_type: 'GACP',
   validity_period: 365, // days
-  total_cost: 5000, // Total paid
+  total_cost: 5000 // Total paid
 });
 ```
 
@@ -336,7 +336,7 @@ gtag('event', 'certificate_revoked', {
   revoked_by: 'admin_456',
   revocation_reason: 'VIOLATION_OF_STANDARDS',
   wait_period_days: 30,
-  reapplication_date: '2025-11-20',
+  reapplication_date: '2025-11-20'
 });
 ```
 
@@ -353,7 +353,7 @@ gtag('event', 'certificate_verified', {
   certificate_id: 'cert_123',
   verification_method: 'QR_CODE', // or 'SEARCH'
   is_valid: true,
-  verifier_ip: '192.168.1.1',
+  verifier_ip: '192.168.1.1'
 });
 ```
 
@@ -372,7 +372,7 @@ gtag('event', 'admin_bulk_operation', {
   entity_type: 'APPLICATION',
   entity_count: 10,
   success_count: 9,
-  failed_count: 1,
+  failed_count: 1
 });
 ```
 
@@ -388,7 +388,7 @@ gtag('event', 'admin_report_generated', {
   report_type: 'MONTHLY_REVENUE',
   date_range: '2025-10-01_to_2025-10-31',
   export_format: 'CSV',
-  record_count: 150,
+  record_count: 150
 });
 ```
 
@@ -403,7 +403,7 @@ gtag('event', 'admin_announcement_created', {
   admin_id: 'admin_123',
   announcement_type: 'MAINTENANCE',
   target_audience: 'ALL_USERS',
-  scheduled_date: '2025-10-25',
+  scheduled_date: '2025-10-25'
 });
 ```
 
@@ -447,7 +447,7 @@ declare global {
     gtag?: (
       command: 'event' | 'config',
       targetId: string,
-      config?: Record<string, unknown>,
+      config?: Record<string, unknown>
     ) => void;
     dataLayer?: unknown[];
   }
@@ -551,7 +551,7 @@ export const analytics = {
     certificateId: string;
     verificationMethod: string;
     isValid: boolean;
-  }) => trackEvent('certificate_verified', params),
+  }) => trackEvent('certificate_verified', params)
 };
 ```
 

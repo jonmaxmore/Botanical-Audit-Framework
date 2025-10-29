@@ -16,28 +16,28 @@
 ```
 1. DRAFT (ร่าง)
    ↓ [Farmer: ยื่นคำขอ]
-   
+
 2. SUBMITTED (ยื่นคำขอแล้ว)
    ↓ [Farmer: ชำระเงิน 15,000฿]
-   
+
 3. PAYMENT_PENDING (รอชำระเงิน)
    ↓ [System: ยืนยันการชำระเงิน]
-   
+
 4. DOCUMENT_REVIEW (ตรวจเอกสาร)
    ↓ [Reviewer: ตรวจสอบเอกสาร]
-   
+
 5. INSPECTION_SCHEDULED (นัดตรวจสอบ)
    ↓ [Inspector: ตรวจสอบสถานที่]
-   
+
 6. INSPECTION_COMPLETED (ตรวจสอบเสร็จ)
    ↓ [Farmer: ชำระเงินงวด 2 = 15,000฿]
-   
+
 7. FINAL_REVIEW (รอการอนุมัติ)
    ↓ [Approver: อนุมัติ/ไม่อนุมัติ]
-   
+
 8. APPROVED (อนุมัติ) / REJECTED (ไม่อนุมัติ)
    ↓ [System: ออกใบรับรอง]
-   
+
 9. CERTIFICATE_ISSUED (ออกใบรับรองแล้ว)
 ```
 
@@ -48,6 +48,7 @@
 ### 👨‍🌾 Farmer Portal (เกษตรกร)
 
 #### หน้าหลัก (Dashboard)
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 🏠 Dashboard                                    │
@@ -61,7 +62,9 @@
 ```
 
 #### 1. `/applications` - รายการคำขอทั้งหมด
+
 **ประเภท:** Data Table (ERP-style)
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 📋 คำขอใบรับรอง GACP                           │
@@ -76,6 +79,7 @@
 ```
 
 **Features:**
+
 - ✅ ตาราง sortable, filterable
 - ✅ Status badge สีต่างกัน
 - ✅ Quick actions (ดู, แก้ไข, ลบ)
@@ -85,7 +89,9 @@
 ---
 
 #### 2. `/applications/[id]` - รายละเอียดคำขอ
+
 **ประเภท:** Detail View + Timeline
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 📄 คำขอ #001 - ฟาร์มสุขใจ                      │
@@ -109,6 +115,7 @@
 ```
 
 **Features:**
+
 - ✅ Timeline แสดงสถานะ
 - ✅ Comment system (2-way communication)
 - ✅ Document viewer
@@ -118,7 +125,9 @@
 ---
 
 #### 3. `/application/new` - ยื่นคำขอใหม่
+
 **ประเภท:** Multi-step Form (Wizard)
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 📝 ยื่นคำขอใบรับรอง GACP                       │
@@ -137,6 +146,7 @@
 ```
 
 **Steps:**
+
 1. เลือกฟาร์ม
 2. เลือกพืช + ข้อมูลการปลูก
 3. อัปโหลดเอกสาร (10+ ประเภท)
@@ -145,7 +155,9 @@
 ---
 
 #### 4. `/farms` - จัดการฟาร์ม
+
 **ประเภท:** Card Grid + Map View
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 🏡 ฟาร์มของฉัน                                 │
@@ -162,6 +174,7 @@
 ```
 
 **Features:**
+
 - ✅ Card view / List view / Map view
 - ✅ Quick stats (พื้นที่, แปลง, พืช)
 - ✅ GPS location
@@ -170,7 +183,9 @@
 ---
 
 #### 5. `/tasks` - ใบงานของฉัน (Task Management)
+
 **ประเภท:** Kanban Board / List View
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ ✅ ใบงานของฉัน                                 │
@@ -188,6 +203,7 @@
 ```
 
 **Task Types:**
+
 - 📋 อัปโหลดเอกสารเพิ่มเติม
 - 💰 ชำระเงิน
 - 📅 เตรียมตัวตรวจสอบ
@@ -197,7 +213,9 @@
 ---
 
 #### 6. `/notifications` - การแจ้งเตือน
+
 **ประเภท:** Notification Center
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 🔔 การแจ้งเตือน                                 │
@@ -218,7 +236,9 @@
 ---
 
 #### 7. `/certificates` - ใบรับรองของฉัน
+
 **ประเภท:** Card Grid + Detail View
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 🏆 ใบรับรอง GACP                               │
@@ -237,7 +257,9 @@
 ---
 
 #### 8. `/smart-farming` - Smart Farming Dashboard
+
 **ประเภท:** Dashboard with Widgets
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 🌾 Smart Farming                                │
@@ -264,6 +286,7 @@
 ### 👨‍💼 DTAM Portal (เจ้าหน้าที่)
 
 #### Reviewer Dashboard
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 📋 ใบงานตรวจเอกสาร                             │
@@ -277,6 +300,7 @@
 ```
 
 #### Inspector Dashboard
+
 ```
 ┌─────────────────────────────────────────────────┐
 │ 🔍 ใบงานตรวจสอบสถานที่                         │
@@ -294,30 +318,35 @@
 ## 🎨 UI/UX Design Principles
 
 ### 1. Dashboard-First Design
+
 - **หน้าแรก = Dashboard** (ไม่ใช่ Landing Page)
 - แสดงข้อมูลสำคัญทันที
 - Quick actions ที่ใช้บ่อย
 - Real-time notifications
 
 ### 2. Task-Oriented
+
 - **ใบงาน (Tasks)** เป็นศูนย์กลาง
 - แสดงสิ่งที่ต้องทำ ชัดเจน
 - Priority + Deadline
 - One-click action
 
 ### 3. ERP-Style Tables
+
 - Sortable, Filterable, Searchable
 - Bulk actions
 - Export data
 - Pagination
 
 ### 4. Real-time Updates
+
 - Socket.IO notifications
 - Status changes
 - New tasks
 - Comments/Messages
 
 ### 5. Mobile-Responsive
+
 - ใช้งานบนมือถือได้
 - Touch-friendly
 - Simplified mobile view
@@ -348,6 +377,7 @@
 ## ✅ สรุปหน้าที่ต้องสร้าง (ตาม Workflow)
 
 ### Priority 1: Core Workflow (สำคัญมาก)
+
 1. ✅ `/dashboard` - Dashboard (มีแล้ว)
 2. ❌ `/tasks` - ใบงานของฉัน (ใหม่)
 3. ❌ `/applications` - รายการคำขอ
@@ -356,6 +386,7 @@
 6. ❌ `/farms` - จัดการฟาร์ม
 
 ### Priority 2: Supporting Features
+
 7. ❌ `/certificates` - ใบรับรอง
 8. ❌ `/notifications` - การแจ้งเตือน
 9. ❌ `/smart-farming` - Smart Farming

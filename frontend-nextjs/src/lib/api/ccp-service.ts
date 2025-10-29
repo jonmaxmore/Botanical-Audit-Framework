@@ -188,7 +188,7 @@ class GACPCCPService {
    */
   async getCCPDefinition(ccpId: string): Promise<CCPDefinition | null> {
     const framework = await this.getCCPFramework();
-    return framework.ccps.find(ccp => ccp.id === ccpId) || null;
+    return framework.ccps.find((ccp) => ccp.id === ccpId) || null;
   }
 
   /**
@@ -258,7 +258,7 @@ class GACPCCPService {
       result.certificate = this.generateCertificateInfo(
         totalWeightedScore,
         allCCPsPassed,
-        framework,
+        framework
       );
 
       // Determine risk level
@@ -389,7 +389,7 @@ class GACPCCPService {
    */
   private determineCertificateLevel(
     score: number,
-    framework: CCPFrameworkInfo,
+    framework: CCPFrameworkInfo
   ): 'gold' | 'silver' | 'bronze' | 'none' {
     if (score >= 90) return 'gold';
     if (score >= 85) return 'silver';
@@ -403,7 +403,7 @@ class GACPCCPService {
   private generateCertificateInfo(
     score: number,
     allCCPsPassed: boolean,
-    framework: CCPFrameworkInfo,
+    framework: CCPFrameworkInfo
   ): CCPAssessmentResult['certificate'] {
     const level = this.determineCertificateLevel(score, framework);
     const eligible = score >= framework.scoringSystem.OVERALL_PASSING_SCORE && allCCPsPassed;
@@ -429,7 +429,7 @@ class GACPCCPService {
    */
   private determineRiskLevel(
     score: number,
-    framework: CCPFrameworkInfo,
+    framework: CCPFrameworkInfo
   ): 'low' | 'medium' | 'high' {
     if (score >= 85) return 'low';
     if (score >= 75) return 'medium';
@@ -441,7 +441,7 @@ class GACPCCPService {
    */
   private generateFollowUpRequirements(
     result: CCPAssessmentResult,
-    assessmentData: CCPAssessmentData,
+    assessmentData: CCPAssessmentData
   ): CCPAssessmentResult['followUp'] {
     const requirements: string[] = [];
 

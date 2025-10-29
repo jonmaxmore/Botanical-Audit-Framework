@@ -8,13 +8,13 @@
 
 ## 📊 สถิติการสร้างไฟล์
 
-| Type              | Files | Lines  | Purpose                               |
-| ----------------- | ----- | ------ | ------------------------------------- |
-| **Test Files**    | 2     | 2,100  | QA test suite + Mock API server       |
-| **Scripts**       | 4     | 150    | Test runners + verification tools     |
-| **Documentation** | 4     | 850    | Complete guides and reports           |
-| **Config**        | 1     | 35     | PowerShell quick start script         |
-| **Total**         | **11**| **3,135** | **Complete QA/QC Testing System** |
+| Type              | Files  | Lines     | Purpose                           |
+| ----------------- | ------ | --------- | --------------------------------- |
+| **Test Files**    | 2      | 2,100     | QA test suite + Mock API server   |
+| **Scripts**       | 4      | 150       | Test runners + verification tools |
+| **Documentation** | 4      | 850       | Complete guides and reports       |
+| **Config**        | 1      | 35        | PowerShell quick start script     |
+| **Total**         | **11** | **3,135** | **Complete QA/QC Testing System** |
 
 ---
 
@@ -504,18 +504,18 @@ End Time: 2025-10-21T10:05:00.000Z
 
 ## 🔄 Reverse Testing Details
 
-| Test                          | Role               | Purpose                      |
-| ----------------------------- | ------------------ | ---------------------------- |
-| Cancel Application            | Farmer             | ยกเลิกคำขอรับรอง             |
-| Delete Farm                   | Farmer             | ลบฟาร์ม (ถ้าไม่มี app active)|
-| Revert Document Approval      | Document Reviewer  | เพิกถอนการอนุมัติเอกสาร      |
-| Edit Inspection Findings      | Farm Inspector     | แก้ไขผลการตรวจสอบ           |
-| Reopen Completed Inspection   | Farm Inspector     | เปิดการตรวจสอบที่เสร็จแล้ว   |
-| Reject Application            | Approver           | ปฏิเสธคำขอรับรอง            |
-| Revoke Certificate            | Approver           | เพิกถอนใบรับรอง             |
-| Deactivate User               | Admin              | ปิดการใช้งานผู้ใช้          |
-| Restore User                  | Admin              | เปิดการใช้งานผู้ใช้          |
-| Rollback System Settings      | Admin              | คืนค่าการตั้งค่า            |
+| Test                        | Role              | Purpose                       |
+| --------------------------- | ----------------- | ----------------------------- |
+| Cancel Application          | Farmer            | ยกเลิกคำขอรับรอง              |
+| Delete Farm                 | Farmer            | ลบฟาร์ม (ถ้าไม่มี app active) |
+| Revert Document Approval    | Document Reviewer | เพิกถอนการอนุมัติเอกสาร       |
+| Edit Inspection Findings    | Farm Inspector    | แก้ไขผลการตรวจสอบ             |
+| Reopen Completed Inspection | Farm Inspector    | เปิดการตรวจสอบที่เสร็จแล้ว    |
+| Reject Application          | Approver          | ปฏิเสธคำขอรับรอง              |
+| Revoke Certificate          | Approver          | เพิกถอนใบรับรอง               |
+| Deactivate User             | Admin             | ปิดการใช้งานผู้ใช้            |
+| Restore User                | Admin             | เปิดการใช้งานผู้ใช้           |
+| Rollback System Settings    | Admin             | คืนค่าการตั้งค่า              |
 
 ---
 
@@ -541,18 +541,18 @@ End Time: 2025-10-21T10:05:00.000Z
 
 ## 🎯 Quality Metrics
 
-| Metric                    | Value        | Status |
-| ------------------------- | ------------ | ------ |
-| Test Coverage             | 100%         | ✅     |
-| Success Rate (Expected)   | 100%         | ✅     |
-| Total Test Cases          | 66           | ✅     |
-| Reverse Tests             | 10           | ✅     |
-| Code Lines                | 3,135        | ✅     |
-| Documentation Pages       | 4            | ✅     |
-| API Endpoints             | 50+          | ✅     |
-| User Roles Tested         | 5/5          | ✅     |
-| Main Systems Tested       | 6/6          | ✅     |
-| Supporting Systems Tested | 4/4          | ✅     |
+| Metric                    | Value | Status |
+| ------------------------- | ----- | ------ |
+| Test Coverage             | 100%  | ✅     |
+| Success Rate (Expected)   | 100%  | ✅     |
+| Total Test Cases          | 66    | ✅     |
+| Reverse Tests             | 10    | ✅     |
+| Code Lines                | 3,135 | ✅     |
+| Documentation Pages       | 4     | ✅     |
+| API Endpoints             | 50+   | ✅     |
+| User Roles Tested         | 5/5   | ✅     |
+| Main Systems Tested       | 6/6   | ✅     |
+| Supporting Systems Tested | 4/4   | ✅     |
 
 ---
 

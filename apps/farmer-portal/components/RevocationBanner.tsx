@@ -55,7 +55,7 @@ export interface RevocationBannerProps {
 
 function calculateRemainingDays(
   revokedAt: Date,
-  waitPeriodDays: number,
+  waitPeriodDays: number
 ): {
   remainingDays: number;
   allowedDate: Date;
@@ -71,7 +71,7 @@ function calculateRemainingDays(
   return {
     remainingDays: Math.max(0, remainingDays),
     allowedDate,
-    canApply: now >= allowedDate,
+    canApply: now >= allowedDate
   };
 }
 
@@ -79,7 +79,7 @@ function formatThaiDate(date: Date): string {
   return date.toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric',
+    day: 'numeric'
   });
 }
 
@@ -95,11 +95,11 @@ export function RevocationBanner({
   userId,
   onDismiss,
   dismissible = false,
-  className = '',
+  className = ''
 }: RevocationBannerProps) {
   const [isDismissed, setIsDismissed] = useState(false);
   const [remainingInfo, setRemainingInfo] = useState(
-    calculateRemainingDays(revokedAt, waitPeriodDays),
+    calculateRemainingDays(revokedAt, waitPeriodDays)
   );
 
   // Check localStorage on mount
@@ -119,7 +119,7 @@ export function RevocationBanner({
       () => {
         setRemainingInfo(calculateRemainingDays(revokedAt, waitPeriodDays));
       },
-      60 * 60 * 1000,
+      60 * 60 * 1000
     ); // Update every hour
 
     return () => clearInterval(intervalId);
@@ -144,14 +144,14 @@ export function RevocationBanner({
       return {
         title: '✅ คุณสามารถยื่นคำขอใหม่ได้แล้ว',
         description: 'ระยะเวลารอคอย 30 วันผ่านไปแล้ว คุณสามารถยื่นคำขอรับรองใหม่ได้ทันที',
-        type: 'success' as const,
+        type: 'success' as const
       };
     }
 
     return {
       title: '⚠️ ใบรับรองของคุณถูกเพิกถอน',
       description: `คุณต้องรอ ${remainingInfo.remainingDays} วัน ก่อนยื่นคำขอใหม่`,
-      type: 'warning' as const,
+      type: 'warning' as const
     };
   };
 
@@ -164,15 +164,15 @@ export function RevocationBanner({
       icon: 'text-green-600',
       title: 'text-green-900',
       text: 'text-green-800',
-      button: 'bg-green-600 hover:bg-green-700',
+      button: 'bg-green-600 hover:bg-green-700'
     },
     warning: {
       container: 'bg-red-50 border-red-300',
       icon: 'text-red-600',
       title: 'text-red-900',
       text: 'text-red-800',
-      button: 'bg-red-600 hover:bg-red-700',
-    },
+      button: 'bg-red-600 hover:bg-red-700'
+    }
   };
 
   const style = styles[message.type];
@@ -250,7 +250,7 @@ export function RevocationBanner({
                     message.type === 'success' ? 'bg-green-600' : 'bg-red-600'
                   }`}
                   style={{
-                    width: `${((waitPeriodDays - remainingInfo.remainingDays) / waitPeriodDays) * 100}%`,
+                    width: `${((waitPeriodDays - remainingInfo.remainingDays) / waitPeriodDays) * 100}%`
                   }}
                 />
               </div>
@@ -309,7 +309,7 @@ export function RevocationBanner({
 export function CompactRevocationBanner({
   remainingDays,
   allowedDate,
-  className = '',
+  className = ''
 }: {
   remainingDays: number;
   allowedDate: Date;

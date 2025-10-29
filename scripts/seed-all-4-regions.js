@@ -15,43 +15,43 @@ const commonPersonalQuestions = [
     id: 'name',
     question: 'ชื่อ-นามสกุล',
     type: 'text',
-    required: true,
+    required: true
   },
   {
     id: 'age',
     question: 'อายุ (ปี)',
     type: 'number',
     required: true,
-    validation: { min: 18, max: 100 },
+    validation: { min: 18, max: 100 }
   },
   {
     id: 'gender',
     question: 'เพศ',
     type: 'multiple_choice',
     required: true,
-    options: ['ชาย', 'หญิง', 'ไม่ระบุ'],
+    options: ['ชาย', 'หญิง', 'ไม่ระบุ']
   },
   {
     id: 'education',
     question: 'ระดับการศึกษา',
     type: 'multiple_choice',
     required: true,
-    options: ['ประถมศึกษา', 'มัธยมศึกษา', 'ปวช./ปวส.', 'ปริญญาตรี', 'สูงกว่าปริญญาตรี'],
+    options: ['ประถมศึกษา', 'มัธยมศึกษา', 'ปวช./ปวส.', 'ปริญญาตรี', 'สูงกว่าปริญญาตรี']
   },
   {
     id: 'phone',
     question: 'เบอร์โทรศัพท์',
     type: 'text',
     required: true,
-    validation: { pattern: '^[0-9]{10}$' },
+    validation: { pattern: '^[0-9]{10}$' }
   },
   {
     id: 'experience_years',
     question: 'ประสบการณ์การปลูกกัญชา (ปี)',
     type: 'number',
     required: true,
-    validation: { min: 0, max: 50 },
-  },
+    validation: { min: 0, max: 50 }
+  }
 ];
 
 const commonCostQuestions = [
@@ -60,50 +60,50 @@ const commonCostQuestions = [
     question: 'ค่าเช่าที่ดิน/ปี (บาท)',
     type: 'number',
     required: true,
-    validation: { min: 0 },
+    validation: { min: 0 }
   },
   {
     id: 'cost_seeds',
     question: 'ค่าพันธุ์/กล้า (บาท)',
     type: 'number',
     required: true,
-    validation: { min: 0 },
+    validation: { min: 0 }
   },
   {
     id: 'cost_fertilizer',
     question: 'ค่าปุ๋ยและสารบำรุง (บาท)',
     type: 'number',
     required: true,
-    validation: { min: 0 },
+    validation: { min: 0 }
   },
   {
     id: 'cost_labor',
     question: 'ค่าแรงงาน (บาท)',
     type: 'number',
     required: true,
-    validation: { min: 0 },
+    validation: { min: 0 }
   },
   {
     id: 'cost_equipment',
     question: 'ค่าอุปกรณ์และเครื่องมือ (บาท)',
     type: 'number',
     required: true,
-    validation: { min: 0 },
+    validation: { min: 0 }
   },
   {
     id: 'cost_utilities',
     question: 'ค่าน้ำ-ค่าไฟ (บาท)',
     type: 'number',
     required: true,
-    validation: { min: 0 },
+    validation: { min: 0 }
   },
   {
     id: 'cost_other',
     question: 'ค่าใช้จ่ายอื่นๆ (บาท)',
     type: 'number',
     required: false,
-    validation: { min: 0 },
-  },
+    validation: { min: 0 }
+  }
 ];
 
 const commonRevenueQuestions = [
@@ -112,15 +112,15 @@ const commonRevenueQuestions = [
     question: 'ผลผลิตรวม (กิโลกรัม)',
     type: 'number',
     required: true,
-    validation: { min: 0 },
+    validation: { min: 0 }
   },
   {
     id: 'price_per_kg',
     question: 'ราคาขายเฉลี่ย (บาท/กิโลกรัม)',
     type: 'number',
     required: true,
-    validation: { min: 0 },
-  },
+    validation: { min: 0 }
+  }
 ];
 
 // Generate Central template
@@ -139,7 +139,7 @@ function generateCentralTemplate() {
         id: 1,
         title: 'ข้อมูลส่วนตัว',
         description: 'กรอกข้อมูลพื้นฐานของผู้ตอบแบบสอบถาม',
-        questions: commonPersonalQuestions,
+        questions: commonPersonalQuestions
       },
       {
         id: 2,
@@ -151,36 +151,36 @@ function generateCentralTemplate() {
             question: 'พื้นที่ฟาร์ม (ไร่)',
             type: 'number',
             required: true,
-            validation: { min: 0 },
+            validation: { min: 0 }
           },
           {
             id: 'cultivation_type',
             question: 'ประเภทการเพาะปลูก',
             type: 'multiple_choice',
             required: true,
-            options: ['Indoor', 'Greenhouse', 'Outdoor', 'Mixed'],
+            options: ['Indoor', 'Greenhouse', 'Outdoor', 'Mixed']
           },
           // Central-specific questions
           {
             id: 'central_has_iot',
             question: 'มีระบบ IoT สำหรับติดตามสภาพแวดล้อมหรือไม่?',
             type: 'yes_no',
-            required: true,
+            required: true
           },
           {
             id: 'central_automation',
             question: 'ใช้ระบบ Automation ในการควบคุมแสง/น้ำหรือไม่?',
             type: 'yes_no',
-            required: true,
+            required: true
           },
           {
             id: 'central_climate_control',
             question: 'มีระบบ Climate Control แบบไหน?',
             type: 'checkbox',
             required: false,
-            options: ['ควบคุมอุณหภูมิ', 'ควบคุมความชื้น', 'ควบคุม CO2', 'ควบคุมแสง', 'ไม่มี'],
-          },
-        ],
+            options: ['ควบคุมอุณหภูมิ', 'ควบคุมความชื้น', 'ควบคุม CO2', 'ควบคุมแสง', 'ไม่มี']
+          }
+        ]
       },
       {
         id: 3,
@@ -192,28 +192,28 @@ function generateCentralTemplate() {
             question: 'รอบการเพาะปลูกต่อปี',
             type: 'number',
             required: true,
-            validation: { min: 1, max: 12 },
+            validation: { min: 1, max: 12 }
           },
           {
             id: 'fertilizer_type',
             question: 'ประเภทปุ๋ยที่ใช้',
             type: 'checkbox',
             required: true,
-            options: ['ปุ๋ยเคมี', 'ปุ๋ยอินทรีย์', 'ปุ๋ยชีวภาพ', 'ผสมผสาน'],
-          },
-        ],
+            options: ['ปุ๋ยเคมี', 'ปุ๋ยอินทรีย์', 'ปุ๋ยชีวภาพ', 'ผสมผสาน']
+          }
+        ]
       },
       {
         id: 4,
         title: 'ต้นทุนการผลิต',
         description: 'รายการค่าใช้จ่ายในการผลิต',
-        questions: commonCostQuestions,
+        questions: commonCostQuestions
       },
       {
         id: 5,
         title: 'รายได้และผลผลิต',
         description: 'ข้อมูลเกี่ยวกับผลผลิตและรายได้',
-        questions: commonRevenueQuestions,
+        questions: commonRevenueQuestions
       },
       {
         id: 6,
@@ -225,16 +225,16 @@ function generateCentralTemplate() {
             question: 'ช่องทางการขาย',
             type: 'checkbox',
             required: true,
-            options: ['ขายส่ง', 'ขายปลีก', 'ออนไลน์', 'ส่งโรงงาน', 'ส่งออก'],
+            options: ['ขายส่ง', 'ขายปลีก', 'ออนไลน์', 'ส่งโรงงาน', 'ส่งออก']
           },
           {
             id: 'main_products',
             question: 'ผลิตภัณฑ์หลักที่ขาย',
             type: 'checkbox',
             required: true,
-            options: ['ดอก', 'ใบ', 'น้ำมัน', 'สารสกัด', 'อื่นๆ'],
-          },
-        ],
+            options: ['ดอก', 'ใบ', 'น้ำมัน', 'สารสกัด', 'อื่นๆ']
+          }
+        ]
       },
       {
         id: 7,
@@ -246,24 +246,24 @@ function generateCentralTemplate() {
             question: 'ปัญหาหลักที่พบ',
             type: 'checkbox',
             required: false,
-            options: ['ต้นทุนสูง', 'ราคาตลาดไม่แน่นอน', 'ขาดความรู้', 'โรคและแมลง', 'การตลาด'],
+            options: ['ต้นทุนสูง', 'ราคาตลาดไม่แน่นอน', 'ขาดความรู้', 'โรคและแมลง', 'การตลาด']
           },
           {
             id: 'support_needed',
             question: 'ต้องการการสนับสนุนด้านใด',
             type: 'checkbox',
             required: false,
-            options: ['เทคนิคการเพาะปลูก', 'การตลาด', 'แหล่งเงินทุน', 'การรับรอง', 'เทคโนโลยี'],
-          },
-        ],
-      },
+            options: ['เทคนิคการเพาะปลูก', 'การตลาด', 'แหล่งเงินทุน', 'การรับรอง', 'เทคโนโลยี']
+          }
+        ]
+      }
     ],
     metadata: {
       createdAt: new Date(),
       version: '1.0',
       status: 'active',
-      lastUpdated: new Date(),
-    },
+      lastUpdated: new Date()
+    }
   };
 }
 
@@ -282,7 +282,7 @@ function generateSouthernTemplate() {
       {
         id: 1,
         title: 'ข้อมูลส่วนตัว',
-        questions: commonPersonalQuestions,
+        questions: commonPersonalQuestions
       },
       {
         id: 2,
@@ -292,21 +292,21 @@ function generateSouthernTemplate() {
             id: 'farm_area_rai',
             question: 'พื้นที่ฟาร์ม (ไร่)',
             type: 'number',
-            required: true,
+            required: true
           },
           {
             id: 'cultivation_type',
             question: 'ประเภทการเพาะปลูก',
             type: 'multiple_choice',
             required: true,
-            options: ['Indoor', 'Greenhouse', 'Outdoor', 'Mixed'],
+            options: ['Indoor', 'Greenhouse', 'Outdoor', 'Mixed']
           },
           // Southern-specific questions
           {
             id: 'south_humidity_problem',
             question: 'มีปัญหาความชื้นสูงในฟาร์มหรือไม่?',
             type: 'yes_no',
-            required: true,
+            required: true
           },
           {
             id: 'south_ventilation',
@@ -318,16 +318,16 @@ function generateSouthernTemplate() {
               'พัดลมไฟฟ้า',
               'ระบบระบายอากาศอัตโนมัติ',
               'เปิดหลังคา',
-              'อื่นๆ',
-            ],
+              'อื่นๆ'
+            ]
           },
           {
             id: 'south_fungus_prevention',
             question: 'มีระบบป้องกันเชื้อราหรือไม่?',
             type: 'yes_no',
-            required: true,
-          },
-        ],
+            required: true
+          }
+        ]
       },
       {
         id: 3,
@@ -337,26 +337,26 @@ function generateSouthernTemplate() {
             id: 'cultivation_cycles',
             question: 'รอบการเพาะปลูกต่อปี',
             type: 'number',
-            required: true,
+            required: true
           },
           {
             id: 'disease_management',
             question: 'วิธีจัดการโรคพืช',
             type: 'checkbox',
             required: true,
-            options: ['ใช้สารเคมี', 'ชีววิธี', 'ผสมผสาน', 'ป้องกันด้วยสภาพแวดล้อม'],
-          },
-        ],
+            options: ['ใช้สารเคมี', 'ชีววิธี', 'ผสมผสาน', 'ป้องกันด้วยสภาพแวดล้อม']
+          }
+        ]
       },
       {
         id: 4,
         title: 'ต้นทุนการผลิต',
-        questions: commonCostQuestions,
+        questions: commonCostQuestions
       },
       {
         id: 5,
         title: 'รายได้และผลผลิต',
-        questions: commonRevenueQuestions,
+        questions: commonRevenueQuestions
       },
       {
         id: 6,
@@ -367,9 +367,9 @@ function generateSouthernTemplate() {
             question: 'ช่องทางการขาย',
             type: 'checkbox',
             required: true,
-            options: ['ขายส่ง', 'ขายปลีก', 'ออนไลน์', 'ส่งโรงงาน', 'ท่องเที่ยว'],
-          },
-        ],
+            options: ['ขายส่ง', 'ขายปลีก', 'ออนไลน์', 'ส่งโรงงาน', 'ท่องเที่ยว']
+          }
+        ]
       },
       {
         id: 7,
@@ -380,17 +380,17 @@ function generateSouthernTemplate() {
             question: 'ปัญหาหลักที่พบ',
             type: 'checkbox',
             required: false,
-            options: ['ความชื้นสูง', 'โรคราและแมลง', 'การระบายอากาศ', 'พายุและฝน', 'การตลาด'],
-          },
-        ],
-      },
+            options: ['ความชื้นสูง', 'โรคราและแมลง', 'การระบายอากาศ', 'พายุและฝน', 'การตลาด']
+          }
+        ]
+      }
     ],
     metadata: {
       createdAt: new Date(),
       version: '1.0',
       status: 'active',
-      lastUpdated: new Date(),
-    },
+      lastUpdated: new Date()
+    }
   };
 }
 
@@ -409,7 +409,7 @@ function generateNorthernTemplate() {
       {
         id: 1,
         title: 'ข้อมูลส่วนตัว',
-        questions: commonPersonalQuestions,
+        questions: commonPersonalQuestions
       },
       {
         id: 2,
@@ -419,14 +419,14 @@ function generateNorthernTemplate() {
             id: 'farm_area_rai',
             question: 'พื้นที่ฟาร์ม (ไร่)',
             type: 'number',
-            required: true,
+            required: true
           },
           {
             id: 'cultivation_type',
             question: 'ประเภทการเพาะปลูก',
             type: 'multiple_choice',
             required: true,
-            options: ['Indoor', 'Greenhouse', 'Outdoor', 'Mixed'],
+            options: ['Indoor', 'Greenhouse', 'Outdoor', 'Mixed']
           },
           // Northern-specific questions
           {
@@ -434,33 +434,28 @@ function generateNorthernTemplate() {
             question: 'ปลูกบนพื้นที่ภูเขาระดับความสูงเท่าไร? (เมตร)',
             type: 'number',
             required: true,
-            validation: { min: 0, max: 2500 },
+            validation: { min: 0, max: 2500 }
           },
           {
             id: 'north_organic_cert',
             question: 'ได้รับการรับรอง Organic หรือไม่?',
             type: 'yes_no',
-            required: true,
+            required: true
           },
           {
             id: 'north_thai_strain',
             question: 'ใช้พันธุ์กัญชาไทยดั้งเดิมหรือไม่?',
             type: 'yes_no',
-            required: true,
+            required: true
           },
           {
             id: 'north_climate',
             question: 'อากาศเย็นส่งผลต่อการปลูกอย่างไร?',
             type: 'multiple_choice',
             required: true,
-            options: [
-              'ช่วยให้คุณภาพดีขึ้น',
-              'ทำให้เติบโตช้า',
-              'ต้องใช้ greenhouse',
-              'ไม่มีผลกระทบ',
-            ],
-          },
-        ],
+            options: ['ช่วยให้คุณภาพดีขึ้น', 'ทำให้เติบโตช้า', 'ต้องใช้ greenhouse', 'ไม่มีผลกระทบ']
+          }
+        ]
       },
       {
         id: 3,
@@ -470,25 +465,25 @@ function generateNorthernTemplate() {
             id: 'cultivation_cycles',
             question: 'รอบการเพาะปลูกต่อปี',
             type: 'number',
-            required: true,
+            required: true
           },
           {
             id: 'organic_method',
             question: 'ใช้วิธีการออร์แกนิกหรือไม่?',
             type: 'yes_no',
-            required: true,
-          },
-        ],
+            required: true
+          }
+        ]
       },
       {
         id: 4,
         title: 'ต้นทุนการผลิต',
-        questions: commonCostQuestions,
+        questions: commonCostQuestions
       },
       {
         id: 5,
         title: 'รายได้และผลผลิต',
-        questions: commonRevenueQuestions,
+        questions: commonRevenueQuestions
       },
       {
         id: 6,
@@ -499,15 +494,15 @@ function generateNorthernTemplate() {
             question: 'ช่องทางการขาย',
             type: 'checkbox',
             required: true,
-            options: ['ขายส่ง', 'ขายปลีกพรีเมียม', 'ออนไลน์', 'ส่งออก', 'ท่องเที่ยว'],
+            options: ['ขายส่ง', 'ขายปลีกพรีเมียม', 'ออนไลน์', 'ส่งออก', 'ท่องเที่ยว']
           },
           {
             id: 'premium_market',
             question: 'ขายในตลาดพรีเมียมหรือไม่?',
             type: 'yes_no',
-            required: true,
-          },
-        ],
+            required: true
+          }
+        ]
       },
       {
         id: 7,
@@ -518,17 +513,17 @@ function generateNorthernTemplate() {
             question: 'ปัญหาหลักที่พบ',
             type: 'checkbox',
             required: false,
-            options: ['อากาศหนาว', 'การขนส่ง', 'ต้นทุนสูง', 'ตลาดจำกัด', 'ขาดการรับรอง'],
-          },
-        ],
-      },
+            options: ['อากาศหนาว', 'การขนส่ง', 'ต้นทุนสูง', 'ตลาดจำกัด', 'ขาดการรับรอง']
+          }
+        ]
+      }
     ],
     metadata: {
       createdAt: new Date(),
       version: '1.0',
       status: 'active',
-      lastUpdated: new Date(),
-    },
+      lastUpdated: new Date()
+    }
   };
 }
 
@@ -547,7 +542,7 @@ function generateNortheasternTemplate() {
       {
         id: 1,
         title: 'ข้อมูลส่วนตัว',
-        questions: commonPersonalQuestions,
+        questions: commonPersonalQuestions
       },
       {
         id: 2,
@@ -557,43 +552,43 @@ function generateNortheasternTemplate() {
             id: 'farm_area_rai',
             question: 'พื้นที่ฟาร์ม (ไร่)',
             type: 'number',
-            required: true,
+            required: true
           },
           {
             id: 'cultivation_type',
             question: 'ประเภทการเพาะปลูก',
             type: 'multiple_choice',
             required: true,
-            options: ['Indoor', 'Greenhouse', 'Outdoor', 'Mixed'],
+            options: ['Indoor', 'Greenhouse', 'Outdoor', 'Mixed']
           },
           // Northeastern-specific questions
           {
             id: 'ne_irrigation',
             question: 'มีระบบชลประทานหรือไม่?',
             type: 'yes_no',
-            required: true,
+            required: true
           },
           {
             id: 'ne_water_storage',
             question: 'มีบ่อเก็บน้ำขนาดเท่าไร? (ลูกบาศก์เมตร)',
             type: 'number',
             required: true,
-            validation: { min: 0 },
+            validation: { min: 0 }
           },
           {
             id: 'ne_drought_resistant',
             question: 'ใช้พันธุ์ทนแล้งหรือไม่?',
             type: 'yes_no',
-            required: true,
+            required: true
           },
           {
             id: 'ne_soil_type',
             question: 'ประเภทของดิน',
             type: 'multiple_choice',
             required: true,
-            options: ['ดินทราย', 'ดินร่วน', 'ดินเหนียว', 'ปรับปรุงแล้ว'],
-          },
-        ],
+            options: ['ดินทราย', 'ดินร่วน', 'ดินเหนียว', 'ปรับปรุงแล้ว']
+          }
+        ]
       },
       {
         id: 3,
@@ -603,26 +598,26 @@ function generateNortheasternTemplate() {
             id: 'cultivation_cycles',
             question: 'รอบการเพาะปลูกต่อปี',
             type: 'number',
-            required: true,
+            required: true
           },
           {
             id: 'water_management',
             question: 'วิธีการจัดการน้ำ',
             type: 'checkbox',
             required: true,
-            options: ['ระบบน้ำหยด', 'สปริงเกอร์', 'รดด้วยมือ', 'ระบบอัตโนมัติ'],
-          },
-        ],
+            options: ['ระบบน้ำหยด', 'สปริงเกอร์', 'รดด้วยมือ', 'ระบบอัตโนมัติ']
+          }
+        ]
       },
       {
         id: 4,
         title: 'ต้นทุนการผลิต',
-        questions: commonCostQuestions,
+        questions: commonCostQuestions
       },
       {
         id: 5,
         title: 'รายได้และผลผลิต',
-        questions: commonRevenueQuestions,
+        questions: commonRevenueQuestions
       },
       {
         id: 6,
@@ -633,9 +628,9 @@ function generateNortheasternTemplate() {
             question: 'ช่องทางการขาย',
             type: 'checkbox',
             required: true,
-            options: ['ขายส่ง', 'ขายปลีก', 'ออนไลน์', 'ตลาดชุมชน', 'ส่งโรงงาน'],
-          },
-        ],
+            options: ['ขายส่ง', 'ขายปลีก', 'ออนไลน์', 'ตลาดชุมชน', 'ส่งโรงงาน']
+          }
+        ]
       },
       {
         id: 7,
@@ -646,17 +641,17 @@ function generateNortheasternTemplate() {
             question: 'ปัญหาหลักที่พบ',
             type: 'checkbox',
             required: false,
-            options: ['ขาดแคลนน้ำ', 'ดินไม่เหมาะสม', 'ฝนแล้ง', 'ต้นทุนน้ำ', 'การตลาด'],
-          },
-        ],
-      },
+            options: ['ขาดแคลนน้ำ', 'ดินไม่เหมาะสม', 'ฝนแล้ง', 'ต้นทุนน้ำ', 'การตลาด']
+          }
+        ]
+      }
     ],
     metadata: {
       createdAt: new Date(),
       version: '1.0',
       status: 'active',
-      lastUpdated: new Date(),
-    },
+      lastUpdated: new Date()
+    }
   };
 }
 
@@ -677,7 +672,7 @@ async function seedAllTemplates() {
       generateCentralTemplate(),
       generateSouthernTemplate(),
       generateNorthernTemplate(),
-      generateNortheasternTemplate(),
+      generateNortheasternTemplate()
     ];
 
     console.log('🌱 Creating survey templates for all 4 regions...\n');

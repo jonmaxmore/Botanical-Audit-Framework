@@ -10,7 +10,7 @@
 import {
   canReschedule as canRescheduleApp,
   MAX_RESCHEDULE_COUNT,
-  type Application,
+  type Application
 } from '../business-logic';
 
 // Helper: Create mock application for testing
@@ -23,7 +23,7 @@ function createMockApplication(rescheduleCount: number): Application {
     rejectionCount: 0,
     rescheduleCount,
     createdAt: new Date(),
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 }
 

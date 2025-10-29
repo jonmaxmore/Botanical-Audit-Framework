@@ -5,6 +5,7 @@
 โปรเจกต์มีระบบ **Offline-First Queue** ที่สมบูรณ์แล้ว สามารถนำมาใช้กับการทดสอบได้ทันที!
 
 **ตำแหน่งไฟล์หลัก:**
+
 1. ✅ `apps/frontend/src/utils/apiClient.js` - Offline Queue System (Legacy)
 2. ✅ `frontend-nextjs/src/lib/api/retry.ts` - Retry Logic with Exponential Backoff (Modern)
 3. ✅ Backend มี Queue System หลายระดับ
@@ -33,7 +34,7 @@ storeOfflineAction(method, url, data) {
 // 2. Sync อัตโนมัติเมื่ออินเทอร์เน็ตกลับมา
 async syncOfflineActions() {
   const offlineActions = JSON.parse(localStorage.getItem('offline_actions') || '[]');
-  
+
   for (const action of offlineActions) {
     try {
       await api[action.method](action.url, action.data);
@@ -43,7 +44,7 @@ async syncOfflineActions() {
       console.error(`Failed to sync: ${action.method} ${action.url}`, error);
     }
   }
-  
+
   // ลบ actions ที่ sync สำเร็จแล้ว
   localStorage.setItem('offline_actions', JSON.stringify(remaining));
 }
@@ -80,19 +81,16 @@ await apiClient.syncOfflineActions();
 
 ```typescript
 interface RetryOptions {
-  maxAttempts?: number;          // Default: 3
-  initialDelay?: number;         // Default: 1000ms
-  maxDelay?: number;             // Default: 10000ms
-  backoffMultiplier?: number;    // Default: 2 (exponential)
-  retryableStatuses?: number[];  // Default: [408, 429, 500, 502, 503, 504]
+  maxAttempts?: number; // Default: 3
+  initialDelay?: number; // Default: 1000ms
+  maxDelay?: number; // Default: 10000ms
+  backoffMultiplier?: number; // Default: 2 (exponential)
+  retryableStatuses?: number[]; // Default: [408, 429, 500, 502, 503, 504]
   onRetry?: (attempt: number, error: Error) => void;
 }
 
 // Retry wrapper สำหรับ fetch
-export async function retryFetch<T>(
-  fn: () => Promise<T>,
-  options?: RetryOptions
-): Promise<T> {
+export async function retryFetch<T>(fn: () => Promise<T>, options?: RetryOptions): Promise<T> {
   // Retry with exponential backoff
   // Attempt 1: wait 1s
   // Attempt 2: wait 2s
@@ -104,7 +102,7 @@ export async function retryFetchJSON<T>(
   url: string,
   init?: RequestInit,
   retryOptions?: RetryOptions
-): Promise<T>
+): Promise<T>;
 ```
 
 #### **Retryable Errors:**
@@ -128,11 +126,12 @@ import { retryFetch, retryFetchJSON } from '@/lib/api/retry';
 
 // ตัวอย่างที่ 1: Retry fetch with custom options
 const data = await retryFetch(
-  () => fetch('http://localhost:3004/api/applications', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(applicationData)
-  }),
+  () =>
+    fetch('http://localhost:3004/api/applications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(applicationData)
+    }),
   {
     maxAttempts: 5,
     initialDelay: 2000,
@@ -166,7 +165,7 @@ class GACPEventBus {
     this.deadLetterQueue = [];
     this.config = {
       maxRetries: 3,
-      retryDelay: 5000,
+      retryDelay: 5000
     };
   }
 
@@ -240,7 +239,7 @@ describe('Offline Queue System', () => {
     global.fetch.mockRejectedValue(new Error('Network Error'));
 
     const testData = { farmName: 'Test Farm' };
-    
+
     try {
       await apiClient.post('/api/applications', testData);
     } catch (error) {
@@ -248,15 +247,13 @@ describe('Offline Queue System', () => {
     }
 
     // ตรวจสอบว่า action ถูกเก็บใน localStorage
-    const offlineActions = JSON.parse(
-      localStorage.getItem('offline_actions') || '[]'
-    );
+    const offlineActions = JSON.parse(localStorage.getItem('offline_actions') || '[]');
 
     expect(offlineActions).toHaveLength(1);
     expect(offlineActions[0]).toMatchObject({
       method: 'post',
       url: '/api/applications',
-      data: testData,
+      data: testData
     });
   });
 
@@ -264,14 +261,14 @@ describe('Offline Queue System', () => {
     // 1. เก็บ actions หลายตัวใน queue
     const actions = [
       { method: 'post', url: '/api/applications', data: { id: 1 } },
-      { method: 'post', url: '/api/applications', data: { id: 2 } },
+      { method: 'post', url: '/api/applications', data: { id: 2 } }
     ];
     localStorage.setItem('offline_actions', JSON.stringify(actions));
 
     // 2. Mock successful fetch
     global.fetch.mockResolvedValue({
       ok: true,
-      json: async () => ({ success: true }),
+      json: async () => ({ success: true })
     });
 
     // 3. Sync
@@ -280,10 +277,8 @@ describe('Offline Queue System', () => {
     // 4. ตรวจสอบ
     expect(synced).toBe(2); // 2 actions synced
     expect(global.fetch).toHaveBeenCalledTimes(2);
-    
-    const remaining = JSON.parse(
-      localStorage.getItem('offline_actions') || '[]'
-    );
+
+    const remaining = JSON.parse(localStorage.getItem('offline_actions') || '[]');
     expect(remaining).toHaveLength(0); // queue cleared
   });
 
@@ -291,7 +286,7 @@ describe('Offline Queue System', () => {
     // 1. เก็บ 2 actions
     const actions = [
       { method: 'post', url: '/api/applications', data: { id: 1 } },
-      { method: 'post', url: '/api/applications', data: { id: 2 } },
+      { method: 'post', url: '/api/applications', data: { id: 2 } }
     ];
     localStorage.setItem('offline_actions', JSON.stringify(actions));
 
@@ -304,9 +299,7 @@ describe('Offline Queue System', () => {
     await apiClient.syncOfflineActions();
 
     // 4. ตรวจสอบว่า action ที่ล้มเหลวยังอยู่ใน queue
-    const remaining = JSON.parse(
-      localStorage.getItem('offline_actions') || '[]'
-    );
+    const remaining = JSON.parse(localStorage.getItem('offline_actions') || '[]');
     expect(remaining).toHaveLength(1);
     expect(remaining[0].data.id).toBe(2);
   });
@@ -343,10 +336,7 @@ describe('Retry Logic', () => {
       return Promise.resolve({ ok: true, json: () => ({ success: true }) });
     });
 
-    const promise = retryFetch(
-      () => mockFetch(),
-      { maxAttempts: 3, initialDelay: 1000 }
-    );
+    const promise = retryFetch(() => mockFetch(), { maxAttempts: 3, initialDelay: 1000 });
 
     // Attempt 1 fails immediately
     await jest.advanceTimersByTimeAsync(0);
@@ -365,16 +355,14 @@ describe('Retry Logic', () => {
 
   it('should retry only on retryable HTTP status codes', async () => {
     const testCases = [
-      { status: 503, shouldRetry: true },  // Service Unavailable
-      { status: 500, shouldRetry: true },  // Internal Server Error
+      { status: 503, shouldRetry: true }, // Service Unavailable
+      { status: 500, shouldRetry: true }, // Internal Server Error
       { status: 404, shouldRetry: false }, // Not Found - NOT retryable
-      { status: 400, shouldRetry: false }, // Bad Request - NOT retryable
+      { status: 400, shouldRetry: false } // Bad Request - NOT retryable
     ];
 
     for (const testCase of testCases) {
-      const mockFetch = jest.fn(() =>
-        Promise.reject({ status: testCase.status })
-      );
+      const mockFetch = jest.fn(() => Promise.reject({ status: testCase.status }));
 
       try {
         await retryFetch(() => mockFetch(), { maxAttempts: 2 });
@@ -395,10 +383,7 @@ describe('Retry Logic', () => {
     const mockFetch = jest.fn(() => Promise.reject(new Error('Network Error')));
 
     try {
-      await retryFetch(
-        () => mockFetch(),
-        { maxAttempts: 3, onRetry }
-      );
+      await retryFetch(() => mockFetch(), { maxAttempts: 3, onRetry });
     } catch (error) {
       // Expected to fail
     }
@@ -434,13 +419,11 @@ describe('Offline Integration Tests', () => {
     const applicationData = {
       farmName: 'Test Farm Offline',
       farmerId: 'farmer123',
-      cropType: 'Rice',
+      cropType: 'Rice'
     };
 
     // Mock network error
-    global.fetch = jest.fn(() => 
-      Promise.reject(new Error('Network Error'))
-    );
+    global.fetch = jest.fn(() => Promise.reject(new Error('Network Error')));
 
     // Try to create application (will fail and queue)
     try {
@@ -457,7 +440,7 @@ describe('Offline Integration Tests', () => {
     global.fetch = jest.fn((url, options) => {
       // Call actual API route handler
       const request = createMockRequest('POST', '/api/applications', {
-        body: JSON.parse(options.body),
+        body: JSON.parse(options.body)
       });
       return createApplication(request);
     });
@@ -471,9 +454,7 @@ describe('Offline Integration Tests', () => {
     expect(applications[0].farmName).toBe('Test Farm Offline');
 
     // 5. Queue should be empty
-    const remainingQueue = JSON.parse(
-      localStorage.getItem('offline_actions') || '[]'
-    );
+    const remainingQueue = JSON.parse(localStorage.getItem('offline_actions') || '[]');
     expect(remainingQueue).toHaveLength(0);
   });
 
@@ -482,12 +463,10 @@ describe('Offline Integration Tests', () => {
     const operations = [
       { url: '/api/applications', data: { farmName: 'Farm 1' } },
       { url: '/api/applications', data: { farmName: 'Farm 2' } },
-      { url: '/api/applications', data: { farmName: 'Farm 3' } },
+      { url: '/api/applications', data: { farmName: 'Farm 3' } }
     ];
 
-    global.fetch = jest.fn(() => 
-      Promise.reject(new Error('Network Error'))
-    );
+    global.fetch = jest.fn(() => Promise.reject(new Error('Network Error')));
 
     for (const op of operations) {
       try {
@@ -502,7 +481,7 @@ describe('Offline Integration Tests', () => {
     // 2. Back online - sync all
     global.fetch = jest.fn((url, options) => {
       const request = createMockRequest('POST', url, {
-        body: JSON.parse(options.body),
+        body: JSON.parse(options.body)
       });
       return createApplication(request);
     });
@@ -581,16 +560,16 @@ test.describe('Offline Queue E2E', () => {
     await client.send('Network.enable');
     await client.send('Network.emulateNetworkConditions', {
       offline: false,
-      downloadThroughput: 50 * 1024,  // 50 KB/s
-      uploadThroughput: 20 * 1024,    // 20 KB/s
-      latency: 500,                    // 500ms
+      downloadThroughput: 50 * 1024, // 50 KB/s
+      uploadThroughput: 20 * 1024, // 20 KB/s
+      latency: 500 // 500ms
     });
 
     await page.goto('http://localhost:3001/farmer/applications/create');
 
     // Fill form
     await page.fill('[name="farmName"]', 'Slow Network Farm');
-    
+
     // Track retry attempts
     const retryAttempts = [];
     page.on('console', msg => {
@@ -730,7 +709,7 @@ const queue = [
 ];
 
 // Sort by priority before sync
-queue.sort((a, b) => 
+queue.sort((a, b) =>
   priorityOrder[a.priority] - priorityOrder[b.priority]
 );
 ```
@@ -785,6 +764,7 @@ if (action.retryCount >= action.maxRetries) {
 **สรุป:** ระบบ Offline Queue ที่มีอยู่ **พร้อมใช้งาน** และ **นำมาทดสอบได้ทันที**! ✅
 
 **Next Steps:**
+
 1. เพิ่ม unit tests สำหรับ queue system
 2. ทดสอบ integration กับ HTTP tests ที่มีอยู่
 3. เพิ่ม E2E tests สำหรับ offline scenarios

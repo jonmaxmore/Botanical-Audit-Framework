@@ -64,7 +64,7 @@ const CANCELLATION_REASONS = [
   { value: 'time', label: 'ใช้เวลานานเกินไป', icon: '⏰' },
   { value: 'requirements', label: 'ไม่สามารถปฏิบัติตามข้อกำหนดได้', icon: '📋' },
   { value: 'personal', label: 'เหตุผลส่วนตัว', icon: '👤' },
-  { value: 'other', label: 'อื่นๆ', icon: '📝' },
+  { value: 'other', label: 'อื่นๆ', icon: '📝' }
 ];
 
 const NO_REFUND_POLICY = {
@@ -72,8 +72,8 @@ const NO_REFUND_POLICY = {
   details: [
     'ค่าธรรมเนียมที่ชำระแล้วไม่สามารถขอคืนได้',
     'นโยบายนี้ใช้กับทุกกรณีไม่มีข้อยกเว้น',
-    'กรุณาพิจารณาอย่างรอบคอบก่อนยืนยันการยกเลิก',
-  ],
+    'กรุณาพิจารณาอย่างรอบคอบก่อนยืนยันการยกเลิก'
+  ]
 };
 
 // ============================================================================
@@ -88,7 +88,7 @@ export function CancellationDialog({
   hasPaidFee,
   paidAmount = 0,
   onConfirm,
-  isLoading = false,
+  isLoading = false
 }: CancellationDialogProps) {
   const [step, setStep] = useState<'reason' | 'confirm' | 'success'>('reason');
   const [reason, setReason] = useState('');
@@ -141,7 +141,7 @@ export function CancellationDialog({
         applicationId,
         reason,
         acknowledgedNoRefund: hasPaidFee ? acknowledgedNoRefund : true,
-        additionalNotes: additionalNotes || undefined,
+        additionalNotes: additionalNotes || undefined
       });
 
       setStep('success');

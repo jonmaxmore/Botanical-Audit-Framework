@@ -45,7 +45,7 @@ async function seedDTAMAdmin() {
       role: DTAMStaff.ROLES.ADMIN,
       department: 'IT & Administration',
       position: 'System Administrator',
-      phoneNumber: '0201234567',
+      phoneNumber: '0201234567'
     };
 
     // Check if admin already exists
@@ -63,7 +63,7 @@ async function seedDTAMAdmin() {
       const readline = require('readline');
       const rl = readline.createInterface({
         input: process.stdin,
-        output: process.stdout,
+        output: process.stdout
       });
 
       const answer = await new Promise(resolve => {
@@ -105,7 +105,7 @@ async function seedDTAMAdmin() {
       permissions: permissions,
       department: adminData.department,
       position: adminData.position,
-      phoneNumber: adminData.phoneNumber,
+      phoneNumber: adminData.phoneNumber
     });
 
     // Validate entity

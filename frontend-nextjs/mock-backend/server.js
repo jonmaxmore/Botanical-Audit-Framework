@@ -2,7 +2,7 @@
  * 🎭 Mock Backend API Server
  * =========================
  * Production-quality Mock API with realistic workflow logic
- * 
+ *
  * Features:
  * - Express server on port 3004
  * - In-memory database with relationships
@@ -10,10 +10,10 @@
  * - GACP 8-step workflow state machine
  * - Realistic mock data
  * - Complete CRUD operations
- * 
+ *
  * Usage:
  *   node mock-backend/server.js
- * 
+ *
  * Endpoints:
  *   POST   /api/auth/register
  *   POST   /api/auth/login
@@ -85,30 +85,30 @@ const WORKFLOW_STATES = {
   DRAFT: 'DRAFT',
   SUBMITTED: 'SUBMITTED',
   PAYMENT_PENDING: 'PAYMENT_PENDING',
-  
+
   // Step 3: Officer Review
   DOCUMENT_REVIEW: 'DOCUMENT_REVIEW',
   DOCUMENT_APPROVED: 'DOCUMENT_APPROVED',
   DOCUMENT_REJECTED: 'DOCUMENT_REJECTED',
   DOCUMENT_REVISION: 'DOCUMENT_REVISION',
-  
+
   // Step 4: System Auto-approval
   AUTO_APPROVED: 'AUTO_APPROVED',
-  
+
   // Step 5: Farmer Payment 2
   INSPECTION_PAYMENT_PENDING: 'INSPECTION_PAYMENT_PENDING',
-  
+
   // Step 6: Inspector
   INSPECTION_SCHEDULED: 'INSPECTION_SCHEDULED',
   VDO_CALL_COMPLETED: 'VDO_CALL_COMPLETED',
   ON_SITE_REQUIRED: 'ON_SITE_REQUIRED',
   ON_SITE_COMPLETED: 'ON_SITE_COMPLETED',
-  
+
   // Step 7: Admin
   PENDING_APPROVAL: 'PENDING_APPROVAL',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED',
-  
+
   // Step 8: Certificate
   CERTIFICATE_ISSUED: 'CERTIFICATE_ISSUED',
 };
@@ -130,7 +130,10 @@ const WORKFLOW_TRANSITIONS = {
     WORKFLOW_STATES.VDO_CALL_COMPLETED,
     WORKFLOW_STATES.ON_SITE_REQUIRED,
   ],
-  [WORKFLOW_STATES.VDO_CALL_COMPLETED]: [WORKFLOW_STATES.PENDING_APPROVAL, WORKFLOW_STATES.ON_SITE_REQUIRED],
+  [WORKFLOW_STATES.VDO_CALL_COMPLETED]: [
+    WORKFLOW_STATES.PENDING_APPROVAL,
+    WORKFLOW_STATES.ON_SITE_REQUIRED,
+  ],
   [WORKFLOW_STATES.ON_SITE_REQUIRED]: [WORKFLOW_STATES.ON_SITE_COMPLETED],
   [WORKFLOW_STATES.ON_SITE_COMPLETED]: [WORKFLOW_STATES.PENDING_APPROVAL],
   [WORKFLOW_STATES.PENDING_APPROVAL]: [WORKFLOW_STATES.APPROVED, WORKFLOW_STATES.REJECTED],
@@ -161,17 +164,19 @@ function generateMockUsers() {
     password: 'password123', // In production, this would be hashed
     role: user.role,
     name: user.name,
-    phoneNumber: `081-${String(index + 1).padStart(3, '0')}-${Math.floor(Math.random() * 10000).toString().padStart(4, '0')}`,
+    phoneNumber: `081-${String(index + 1).padStart(3, '0')}-${Math.floor(Math.random() * 10000)
+      .toString()
+      .padStart(4, '0')}`,
     createdAt: new Date(Date.now() - Math.random() * 90 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date().toISOString(),
   }));
 }
 
 function generateMockApplications(users) {
-  const farmers = users.filter(u => u.role === 'FARMER');
+  const farmers = users.filter((u) => u.role === 'FARMER');
   const provinces = ['เชียงใหม่', 'เชียงราย', 'ลำปาง', 'น่าน', 'พะเยา'];
   const cropTypes = ['Cannabis Sativa', 'Cannabis Indica', 'Hybrid Strain'];
-  
+
   const applications = [];
   const now = Date.now();
 
@@ -197,20 +202,40 @@ function generateMockApplications(users) {
     experience: 5,
     previousCertification: 'GAP',
     remarks: 'ฟาร์มตัวอย่างที่ผ่านการรับรองแล้ว - ระบบปลูกแบบออร์แกนิค ใช้น้ำจากบ่อบาดาล',
-    
+
     // Workflow state
     workflowState: WORKFLOW_STATES.APPROVED,
     currentStep: 8,
-    
+
     // Documents
     documents: {
-      idCard: { url: '/mock/id-card-001.pdf', status: 'APPROVED', uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString() },
-      houseRegistration: { url: '/mock/house-001.pdf', status: 'APPROVED', uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString() },
-      landDeed: { url: '/mock/land-001.pdf', status: 'APPROVED', uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString() },
-      farmMap: { url: '/mock/map-001.jpg', status: 'APPROVED', uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString() },
-      waterQuality: { url: '/mock/water-001.pdf', status: 'APPROVED', uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString() },
+      idCard: {
+        url: '/mock/id-card-001.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      houseRegistration: {
+        url: '/mock/house-001.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      landDeed: {
+        url: '/mock/land-001.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      farmMap: {
+        url: '/mock/map-001.jpg',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      waterQuality: {
+        url: '/mock/water-001.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000).toISOString(),
+      },
     },
-    
+
     // Review data (Officer)
     reviewData: {
       officerId: 'user-3',
@@ -222,7 +247,7 @@ function generateMockApplications(users) {
       decision: 'APPROVED',
       reviewedAt: new Date(now - 55 * 24 * 60 * 60 * 1000).toISOString(),
     },
-    
+
     // Inspection data
     inspectionData: {
       inspectorId: 'user-4',
@@ -230,7 +255,7 @@ function generateMockApplications(users) {
       type: 'ON_SITE',
       scheduledDate: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
       completedDate: new Date(now - 25 * 24 * 60 * 60 * 1000).toISOString(),
-      
+
       vdoCallData: {
         checklistItems: [
           { id: 1, label: 'ตรวจสอบพื้นที่ปลูกผ่าน VDO', checked: true },
@@ -240,17 +265,65 @@ function generateMockApplications(users) {
         decision: 'ON_SITE_REQUIRED',
         notes: 'ต้องลงพื้นที่เพื่อตรวจสอบรายละเอียดเพิ่มเติม',
       },
-      
+
       onSiteData: {
         ccpScores: [
-          { id: 1, name: 'Seed Selection & Planting Material', score: 14, maxScore: 15, notes: 'เมล็ดพันธุ์มีคุณภาพดี มีใบรับรอง' },
-          { id: 2, name: 'Soil Management & Fertilization', score: 15, maxScore: 15, notes: 'ดินมีความอุดมสมบูรณ์ ระบบปุ๋ยอินทรีย์ดีเยี่ยม' },
-          { id: 3, name: 'Pest & Disease Management', score: 14, maxScore: 15, notes: 'ใช้ IPM มีการบันทึกประจำ' },
-          { id: 4, name: 'Harvesting Procedures', score: 14, maxScore: 15, notes: 'กระบวนการเก็บเกี่ยวถูกต้อง' },
-          { id: 5, name: 'Post-Harvest Handling', score: 15, maxScore: 15, notes: 'การจัดการหลังการเก็บเกี่ยวดีมาก' },
-          { id: 6, name: 'Storage Conditions', score: 9, maxScore: 10, notes: 'ห้องเก็บมีอุณหภูมิและความชื้นเหมาะสม' },
-          { id: 7, name: 'Record Keeping & Traceability', score: 10, maxScore: 10, notes: 'ระบบบันทึกครบถ้วน สามารถตรวจสอบย้อนกลับได้' },
-          { id: 8, name: 'Worker Safety & Hygiene', score: 5, maxScore: 5, notes: 'มีมาตรการความปลอดภัยครบถ้วน' },
+          {
+            id: 1,
+            name: 'Seed Selection & Planting Material',
+            score: 14,
+            maxScore: 15,
+            notes: 'เมล็ดพันธุ์มีคุณภาพดี มีใบรับรอง',
+          },
+          {
+            id: 2,
+            name: 'Soil Management & Fertilization',
+            score: 15,
+            maxScore: 15,
+            notes: 'ดินมีความอุดมสมบูรณ์ ระบบปุ๋ยอินทรีย์ดีเยี่ยม',
+          },
+          {
+            id: 3,
+            name: 'Pest & Disease Management',
+            score: 14,
+            maxScore: 15,
+            notes: 'ใช้ IPM มีการบันทึกประจำ',
+          },
+          {
+            id: 4,
+            name: 'Harvesting Procedures',
+            score: 14,
+            maxScore: 15,
+            notes: 'กระบวนการเก็บเกี่ยวถูกต้อง',
+          },
+          {
+            id: 5,
+            name: 'Post-Harvest Handling',
+            score: 15,
+            maxScore: 15,
+            notes: 'การจัดการหลังการเก็บเกี่ยวดีมาก',
+          },
+          {
+            id: 6,
+            name: 'Storage Conditions',
+            score: 9,
+            maxScore: 10,
+            notes: 'ห้องเก็บมีอุณหภูมิและความชื้นเหมาะสม',
+          },
+          {
+            id: 7,
+            name: 'Record Keeping & Traceability',
+            score: 10,
+            maxScore: 10,
+            notes: 'ระบบบันทึกครบถ้วน สามารถตรวจสอบย้อนกลับได้',
+          },
+          {
+            id: 8,
+            name: 'Worker Safety & Hygiene',
+            score: 5,
+            maxScore: 5,
+            notes: 'มีมาตรการความปลอดภัยครบถ้วน',
+          },
         ],
         totalScore: 96,
         passStatus: 'PASS',
@@ -258,7 +331,7 @@ function generateMockApplications(users) {
         photos: ['photo1.jpg', 'photo2.jpg', 'photo3.jpg'],
       },
     },
-    
+
     // Approval data (Admin)
     approvalData: {
       adminId: 'user-5',
@@ -267,16 +340,28 @@ function generateMockApplications(users) {
       notes: 'อนุมัติการรับรอง - คะแนนผ่านเกณฑ์สูงมาก (96/100)',
       approvedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString(),
     },
-    
+
     // Certificate
     certificateId: 'cert-001',
-    
+
     // Payments
     payments: [
-      { id: 'pay-001', amount: 5000, type: 'APPLICATION_FEE', status: 'PAID', paidAt: new Date(now - 58 * 24 * 60 * 60 * 1000).toISOString() },
-      { id: 'pay-002', amount: 8000, type: 'INSPECTION_FEE', status: 'PAID', paidAt: new Date(now - 35 * 24 * 60 * 60 * 1000).toISOString() },
+      {
+        id: 'pay-001',
+        amount: 5000,
+        type: 'APPLICATION_FEE',
+        status: 'PAID',
+        paidAt: new Date(now - 58 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: 'pay-002',
+        amount: 8000,
+        type: 'INSPECTION_FEE',
+        status: 'PAID',
+        paidAt: new Date(now - 35 * 24 * 60 * 60 * 1000).toISOString(),
+      },
     ],
-    
+
     createdAt: new Date(now - 65 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString(),
   });
@@ -303,18 +388,38 @@ function generateMockApplications(users) {
     experience: 3,
     previousCertification: 'ไม่มี',
     remarks: 'เริ่มปลูกใหม่ ต้องการรับรอง GACP',
-    
+
     workflowState: WORKFLOW_STATES.PENDING_APPROVAL,
     currentStep: 7,
-    
+
     documents: {
-      idCard: { url: '/mock/id-card-002.pdf', status: 'APPROVED', uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString() },
-      houseRegistration: { url: '/mock/house-002.pdf', status: 'APPROVED', uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString() },
-      landDeed: { url: '/mock/land-002.pdf', status: 'APPROVED', uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString() },
-      farmMap: { url: '/mock/map-002.jpg', status: 'APPROVED', uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString() },
-      waterQuality: { url: '/mock/water-002.pdf', status: 'APPROVED', uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString() },
+      idCard: {
+        url: '/mock/id-card-002.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      houseRegistration: {
+        url: '/mock/house-002.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      landDeed: {
+        url: '/mock/land-002.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      farmMap: {
+        url: '/mock/map-002.jpg',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      waterQuality: {
+        url: '/mock/water-002.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000).toISOString(),
+      },
     },
-    
+
     reviewData: {
       officerId: 'user-3',
       officerName: 'นางสาว พิมพ์ใจ ตรวจสอบ',
@@ -325,14 +430,14 @@ function generateMockApplications(users) {
       decision: 'APPROVED',
       reviewedAt: new Date(now - 25 * 24 * 60 * 60 * 1000).toISOString(),
     },
-    
+
     inspectionData: {
       inspectorId: 'user-4',
       inspectorName: 'นาย วิชัย ตรวจการ',
       type: 'VDO_CALL',
       scheduledDate: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
       completedDate: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      
+
       vdoCallData: {
         checklistItems: [
           { id: 1, label: 'ตรวจสอบพื้นที่ปลูกผ่าน VDO', checked: true },
@@ -344,12 +449,24 @@ function generateMockApplications(users) {
         estimatedScore: 85,
       },
     },
-    
+
     payments: [
-      { id: 'pay-003', amount: 5000, type: 'APPLICATION_FEE', status: 'PAID', paidAt: new Date(now - 28 * 24 * 60 * 60 * 1000).toISOString() },
-      { id: 'pay-004', amount: 8000, type: 'INSPECTION_FEE', status: 'PAID', paidAt: new Date(now - 15 * 24 * 60 * 60 * 1000).toISOString() },
+      {
+        id: 'pay-003',
+        amount: 5000,
+        type: 'APPLICATION_FEE',
+        status: 'PAID',
+        paidAt: new Date(now - 28 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: 'pay-004',
+        amount: 8000,
+        type: 'INSPECTION_FEE',
+        status: 'PAID',
+        paidAt: new Date(now - 15 * 24 * 60 * 60 * 1000).toISOString(),
+      },
     ],
-    
+
     createdAt: new Date(now - 35 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
   });
@@ -366,8 +483,8 @@ function generateMockApplications(users) {
     district: 'เกาะคา',
     subDistrict: 'ท่าผา',
     postalCode: '52130',
-    latitude: 18.4000,
-    longitude: 99.5000,
+    latitude: 18.4,
+    longitude: 99.5,
     cropType: 'Hybrid Strain',
     estimatedYield: 150,
     email: farmers[0]?.email,
@@ -376,22 +493,48 @@ function generateMockApplications(users) {
     experience: 5,
     previousCertification: 'GAP',
     remarks: 'ฟาร์มใหม่ในเครือข่าย',
-    
+
     workflowState: WORKFLOW_STATES.DOCUMENT_REVIEW,
     currentStep: 3,
-    
+
     documents: {
-      idCard: { url: '/mock/id-card-003.pdf', status: 'PENDING', uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString() },
-      houseRegistration: { url: '/mock/house-003.pdf', status: 'PENDING', uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString() },
-      landDeed: { url: '/mock/land-003.pdf', status: 'PENDING', uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString() },
-      farmMap: { url: '/mock/map-003.jpg', status: 'PENDING', uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString() },
-      waterQuality: { url: '/mock/water-003.pdf', status: 'PENDING', uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString() },
+      idCard: {
+        url: '/mock/id-card-003.pdf',
+        status: 'PENDING',
+        uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      houseRegistration: {
+        url: '/mock/house-003.pdf',
+        status: 'PENDING',
+        uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      landDeed: {
+        url: '/mock/land-003.pdf',
+        status: 'PENDING',
+        uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      farmMap: {
+        url: '/mock/map-003.jpg',
+        status: 'PENDING',
+        uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      waterQuality: {
+        url: '/mock/water-003.pdf',
+        status: 'PENDING',
+        uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
+      },
     },
-    
+
     payments: [
-      { id: 'pay-005', amount: 5000, type: 'APPLICATION_FEE', status: 'PAID', paidAt: new Date(now - 6 * 24 * 60 * 60 * 1000).toISOString() },
+      {
+        id: 'pay-005',
+        amount: 5000,
+        type: 'APPLICATION_FEE',
+        status: 'PAID',
+        paidAt: new Date(now - 6 * 24 * 60 * 60 * 1000).toISOString(),
+      },
     ],
-    
+
     createdAt: new Date(now - 7 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(now - 5 * 24 * 60 * 60 * 1000).toISOString(),
   });
@@ -418,18 +561,38 @@ function generateMockApplications(users) {
     experience: 3,
     previousCertification: 'ไม่มี',
     remarks: 'พร้อมรับการตรวจสอบ',
-    
+
     workflowState: WORKFLOW_STATES.INSPECTION_SCHEDULED,
     currentStep: 6,
-    
+
     documents: {
-      idCard: { url: '/mock/id-card-004.pdf', status: 'APPROVED', uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString() },
-      houseRegistration: { url: '/mock/house-004.pdf', status: 'APPROVED', uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString() },
-      landDeed: { url: '/mock/land-004.pdf', status: 'APPROVED', uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString() },
-      farmMap: { url: '/mock/map-004.jpg', status: 'APPROVED', uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString() },
-      waterQuality: { url: '/mock/water-004.pdf', status: 'APPROVED', uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString() },
+      idCard: {
+        url: '/mock/id-card-004.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      houseRegistration: {
+        url: '/mock/house-004.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      landDeed: {
+        url: '/mock/land-004.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      farmMap: {
+        url: '/mock/map-004.jpg',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      waterQuality: {
+        url: '/mock/water-004.pdf',
+        status: 'APPROVED',
+        uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000).toISOString(),
+      },
     },
-    
+
     reviewData: {
       officerId: 'user-3',
       officerName: 'นางสาว พิมพ์ใจ ตรวจสอบ',
@@ -440,19 +603,31 @@ function generateMockApplications(users) {
       decision: 'APPROVED',
       reviewedAt: new Date(now - 15 * 24 * 60 * 60 * 1000).toISOString(),
     },
-    
+
     inspectionData: {
       inspectorId: 'user-4',
       inspectorName: 'นาย วิชัย ตรวจการ',
       type: 'VDO_CALL',
       scheduledDate: new Date(now + 3 * 24 * 60 * 60 * 1000).toISOString(), // อีก 3 วัน
     },
-    
+
     payments: [
-      { id: 'pay-006', amount: 5000, type: 'APPLICATION_FEE', status: 'PAID', paidAt: new Date(now - 22 * 24 * 60 * 60 * 1000).toISOString() },
-      { id: 'pay-007', amount: 8000, type: 'INSPECTION_FEE', status: 'PAID', paidAt: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString() },
+      {
+        id: 'pay-006',
+        amount: 5000,
+        type: 'APPLICATION_FEE',
+        status: 'PAID',
+        paidAt: new Date(now - 22 * 24 * 60 * 60 * 1000).toISOString(),
+      },
+      {
+        id: 'pay-007',
+        amount: 8000,
+        type: 'INSPECTION_FEE',
+        status: 'PAID',
+        paidAt: new Date(now - 10 * 24 * 60 * 60 * 1000).toISOString(),
+      },
     ],
-    
+
     createdAt: new Date(now - 25 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(now - 8 * 24 * 60 * 60 * 1000).toISOString(),
   });
@@ -479,12 +654,12 @@ function generateMockApplications(users) {
     experience: 5,
     previousCertification: '',
     remarks: '',
-    
+
     workflowState: WORKFLOW_STATES.DRAFT,
     currentStep: 1,
-    
+
     documents: {},
-    
+
     createdAt: new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString(),
     updatedAt: new Date(now - 2 * 24 * 60 * 60 * 1000).toISOString(),
   });
@@ -494,8 +669,8 @@ function generateMockApplications(users) {
 
 function generateMockCertificates(applications) {
   return applications
-    .filter(app => app.workflowState === WORKFLOW_STATES.APPROVED)
-    .map(app => ({
+    .filter((app) => app.workflowState === WORKFLOW_STATES.APPROVED)
+    .map((app) => ({
       id: app.certificateId || `cert-${app.id}`,
       applicationId: app.id,
       certificateNumber: `GACP-2025-${app.id.replace('app-', '').padStart(4, '0')}`,
@@ -505,7 +680,11 @@ function generateMockCertificates(applications) {
       cropType: app.cropType,
       farmSize: app.farmSize,
       issueDate: app.approvalData?.approvedAt || new Date().toISOString(),
-      expiryDate: new Date(new Date(app.approvalData?.approvedAt || Date.now()).setFullYear(new Date().getFullYear() + 1)).toISOString(),
+      expiryDate: new Date(
+        new Date(app.approvalData?.approvedAt || Date.now()).setFullYear(
+          new Date().getFullYear() + 1
+        )
+      ).toISOString(),
       status: 'ACTIVE',
       qrCode: `https://gacp.example.com/verify/${app.certificateId}`,
       pdfUrl: `/certificates/${app.certificateId}.pdf`,
@@ -517,7 +696,7 @@ function initializeDatabase() {
   database.users = generateMockUsers();
   database.applications = generateMockApplications(database.users);
   database.certificates = generateMockCertificates(database.applications);
-  
+
   console.log('✅ Database initialized:');
   console.log(`   - Users: ${database.users.length}`);
   console.log(`   - Applications: ${database.applications.length}`);
@@ -538,7 +717,7 @@ app.post('/api/auth/register', (req, res) => {
   }
 
   // Check if user exists
-  const existingUser = database.users.find(u => u.email === email);
+  const existingUser = database.users.find((u) => u.email === email);
   if (existingUser) {
     return res.status(409).json({ message: 'User already exists' });
   }
@@ -558,15 +737,13 @@ app.post('/api/auth/register', (req, res) => {
   database.users.push(newUser);
 
   // Generate JWT token
-  const token = jwt.sign(
-    { id: newUser.id, email: newUser.email, role: newUser.role },
-    JWT_SECRET,
-    { expiresIn: '24h' }
-  );
+  const token = jwt.sign({ id: newUser.id, email: newUser.email, role: newUser.role }, JWT_SECRET, {
+    expiresIn: '24h',
+  });
 
   // Return user (without password)
   const { password: _, ...userWithoutPassword } = newUser;
-  
+
   res.status(201).json({
     message: 'Registration successful',
     token,
@@ -584,7 +761,7 @@ app.post('/api/auth/login', (req, res) => {
   }
 
   // Find user
-  const user = database.users.find(u => u.email === email);
+  const user = database.users.find((u) => u.email === email);
   if (!user) {
     return res.status(401).json({ message: 'Invalid credentials' });
   }
@@ -595,15 +772,13 @@ app.post('/api/auth/login', (req, res) => {
   }
 
   // Generate JWT token
-  const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
-    { expiresIn: '24h' }
-  );
+  const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, {
+    expiresIn: '24h',
+  });
 
   // Return user (without password)
   const { password: _, ...userWithoutPassword } = user;
-  
+
   res.json({
     message: 'Login successful',
     token,
@@ -625,31 +800,32 @@ app.get('/api/applications', authenticateToken, (req, res) => {
 
   // Filter by role
   if (userRole === 'FARMER') {
-    filtered = filtered.filter(app => app.farmerId === userId);
+    filtered = filtered.filter((app) => app.farmerId === userId);
   }
 
   // Filter by status
   if (status) {
-    filtered = filtered.filter(app => app.workflowState === status);
+    filtered = filtered.filter((app) => app.workflowState === status);
   }
 
   // Filter by province
   if (province) {
-    filtered = filtered.filter(app => app.province === province);
+    filtered = filtered.filter((app) => app.province === province);
   }
 
   // Filter by cropType
   if (cropType) {
-    filtered = filtered.filter(app => app.cropType === cropType);
+    filtered = filtered.filter((app) => app.cropType === cropType);
   }
 
   // Search
   if (search) {
     const searchLower = search.toLowerCase();
-    filtered = filtered.filter(app =>
-      app.farmName.toLowerCase().includes(searchLower) ||
-      app.farmerName.toLowerCase().includes(searchLower) ||
-      app.id.toLowerCase().includes(searchLower)
+    filtered = filtered.filter(
+      (app) =>
+        app.farmName.toLowerCase().includes(searchLower) ||
+        app.farmerName.toLowerCase().includes(searchLower) ||
+        app.id.toLowerCase().includes(searchLower)
     );
   }
 
@@ -670,7 +846,7 @@ app.get('/api/applications', authenticateToken, (req, res) => {
 // Get single application
 app.get('/api/applications/:id', authenticateToken, (req, res) => {
   const { id } = req.params;
-  const application = database.applications.find(app => app.id === id);
+  const application = database.applications.find((app) => app.id === id);
 
   if (!application) {
     return res.status(404).json({ message: 'Application not found' });
@@ -717,7 +893,7 @@ app.post('/api/applications', authenticateToken, (req, res) => {
 // Update application
 app.put('/api/applications/:id', authenticateToken, (req, res) => {
   const { id } = req.params;
-  const index = database.applications.findIndex(app => app.id === id);
+  const index = database.applications.findIndex((app) => app.id === id);
 
   if (index === -1) {
     return res.status(404).json({ message: 'Application not found' });
@@ -746,7 +922,7 @@ app.put('/api/applications/:id', authenticateToken, (req, res) => {
 // Submit application (transition from DRAFT to SUBMITTED)
 app.post('/api/applications/:id/submit', authenticateToken, (req, res) => {
   const { id } = req.params;
-  const application = database.applications.find(app => app.id === id);
+  const application = database.applications.find((app) => app.id === id);
 
   if (!application) {
     return res.status(404).json({ message: 'Application not found' });
@@ -778,15 +954,18 @@ app.post('/api/applications/:id/review', authenticateToken, (req, res) => {
     return res.status(403).json({ message: 'Access denied' });
   }
 
-  const application = database.applications.find(app => app.id === id);
+  const application = database.applications.find((app) => app.id === id);
 
   if (!application) {
     return res.status(404).json({ message: 'Application not found' });
   }
 
-  const newState = decision === 'APPROVED' ? WORKFLOW_STATES.DOCUMENT_APPROVED :
-                   decision === 'REJECTED' ? WORKFLOW_STATES.DOCUMENT_REJECTED :
-                   WORKFLOW_STATES.DOCUMENT_REVISION;
+  const newState =
+    decision === 'APPROVED'
+      ? WORKFLOW_STATES.DOCUMENT_APPROVED
+      : decision === 'REJECTED'
+        ? WORKFLOW_STATES.DOCUMENT_REJECTED
+        : WORKFLOW_STATES.DOCUMENT_REVISION;
 
   if (!canTransition(application.workflowState, newState)) {
     return res.status(400).json({ message: 'Invalid workflow transition' });
@@ -831,14 +1010,16 @@ app.post('/api/applications/:id/inspection/vdo-call', authenticateToken, (req, r
     return res.status(403).json({ message: 'Access denied' });
   }
 
-  const application = database.applications.find(app => app.id === id);
+  const application = database.applications.find((app) => app.id === id);
 
   if (!application) {
     return res.status(404).json({ message: 'Application not found' });
   }
 
-  const newState = decision === 'SUFFICIENT' ? WORKFLOW_STATES.VDO_CALL_COMPLETED :
-                   WORKFLOW_STATES.ON_SITE_REQUIRED;
+  const newState =
+    decision === 'SUFFICIENT'
+      ? WORKFLOW_STATES.VDO_CALL_COMPLETED
+      : WORKFLOW_STATES.ON_SITE_REQUIRED;
 
   application.inspectionData = {
     ...application.inspectionData,
@@ -878,7 +1059,7 @@ app.post('/api/applications/:id/inspection/on-site', authenticateToken, (req, re
     return res.status(403).json({ message: 'Access denied' });
   }
 
-  const application = database.applications.find(app => app.id === id);
+  const application = database.applications.find((app) => app.id === id);
 
   if (!application) {
     return res.status(404).json({ message: 'Application not found' });
@@ -920,14 +1101,13 @@ app.post('/api/applications/:id/approve', authenticateToken, (req, res) => {
     return res.status(403).json({ message: 'Access denied' });
   }
 
-  const application = database.applications.find(app => app.id === id);
+  const application = database.applications.find((app) => app.id === id);
 
   if (!application) {
     return res.status(404).json({ message: 'Application not found' });
   }
 
-  const newState = decision === 'APPROVED' ? WORKFLOW_STATES.APPROVED :
-                   WORKFLOW_STATES.REJECTED;
+  const newState = decision === 'APPROVED' ? WORKFLOW_STATES.APPROVED : WORKFLOW_STATES.REJECTED;
 
   if (!canTransition(application.workflowState, newState)) {
     return res.status(400).json({ message: 'Invalid workflow transition' });

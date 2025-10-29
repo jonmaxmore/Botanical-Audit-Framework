@@ -83,7 +83,7 @@ const AuthLogic = {
     requireUppercase: true,
     requireLowercase: true,
     requireNumber: true,
-    requireSpecialChar: true,
+    requireSpecialChar: true
   },
 
   // Account Security
@@ -91,13 +91,13 @@ const AuthLogic = {
     maxFailedAttempts: 5,
     lockoutDuration: 30 * 60 * 1000, // 30 minutes
     sessionTimeout: 15 * 60 * 1000, // 15 minutes
-    refreshTokenExpiry: 7 * 24 * 60 * 60 * 1000, // 7 days
+    refreshTokenExpiry: 7 * 24 * 60 * 60 * 1000 // 7 days
   },
 
   // Email Verification
   verification: {
     tokenExpiry: 24 * 60 * 60 * 1000, // 24 hours
-    resendCooldown: 5 * 60 * 1000, // 5 minutes
+    resendCooldown: 5 * 60 * 1000 // 5 minutes
   },
 
   // Validation Rules
@@ -110,7 +110,7 @@ const AuthLogic = {
       /[0-9]/.test(password) &&
       /[!@#$%^&*]/.test(password)
     );
-  },
+  }
 };
 ```
 
@@ -302,7 +302,7 @@ const ApplicationLogic = {
           context.paymentPhase2Completed &&
           context.approverRole === 'APPROVER'
         );
-      },
+      }
     };
 
     const key = `${fromState} -> ${toState}`;
@@ -315,15 +315,15 @@ const ApplicationLogic = {
       amount: 5000,
       currency: 'THB',
       requiredBefore: 'submit',
-      refundable: false,
+      refundable: false
     },
     phase2: {
       amount: 25000,
       currency: 'THB',
       requiredBefore: 'approval',
       refundable: true, // if rejected after payment
-      refundPercentage: 50, // 50% refund if rejected
-    },
+      refundPercentage: 50 // 50% refund if rejected
+    }
   },
 
   // Rejection Rules
@@ -331,7 +331,7 @@ const ApplicationLogic = {
     lockPeriod: 7 * 24 * 60 * 60 * 1000, // 7 days
     feeRequiredEvery: 2, // Fee required every 2 rejections
     resubmitFee: 5000, // ฿5,000 every 2 rejections
-    requiresNewPayment: rejectionCount => rejectionCount > 0 && rejectionCount % 2 === 0,
+    requiresNewPayment: rejectionCount => rejectionCount > 0 && rejectionCount % 2 === 0
   },
 
   // Document Validation
@@ -341,15 +341,15 @@ const ApplicationLogic = {
     allowedTypes: ['application/pdf', 'image/jpeg', 'image/png'],
     validateDocument(file) {
       return file.size <= this.maxFileSize && this.allowedTypes.includes(file.type);
-    },
+    }
   },
 
   // Timeline SLA
   sla: {
     review: 3 * 24 * 60 * 60 * 1000, // 3 days
     inspection: 7 * 24 * 60 * 60 * 1000, // 7 days
-    approval: 2 * 24 * 60 * 60 * 1000, // 2 days
-  },
+    approval: 2 * 24 * 60 * 60 * 1000 // 2 days
+  }
 };
 ```
 
@@ -463,29 +463,29 @@ const PaymentLogic = {
       amount: 5000,
       requiredAt: 'application_submit',
       refundable: false,
-      description: 'Initial application fee',
+      description: 'Initial application fee'
     },
     phase2: {
       amount: 25000,
       requiredAt: 'before_approval',
       refundable: true,
       refundPercentage: 50,
-      description: 'Certification processing fee',
-    },
+      description: 'Certification processing fee'
+    }
   },
 
   // Refund Policy
   refund: {
     phase1: {
       allowed: false,
-      reason: 'Non-refundable application fee',
+      reason: 'Non-refundable application fee'
     },
     phase2: {
       allowed: true,
       conditions: ['application_rejected_after_payment', 'application_withdrawn_before_inspection'],
       percentage: 50, // 50% refund
-      processingDays: 14, // 14 days to process refund
-    },
+      processingDays: 14 // 14 days to process refund
+    }
   },
 
   // Payment Gateway Config
@@ -494,26 +494,26 @@ const PaymentLogic = {
       provider: 'Stripe',
       enabled: true,
       processingFee: 2.9, // 2.9% + ฿10
-      fixedFee: 10,
+      fixedFee: 10
     },
     promptPay: {
       provider: 'SCB',
       enabled: true,
       processingFee: 0,
-      qrCodeExpiry: 15 * 60 * 1000, // 15 minutes
+      qrCodeExpiry: 15 * 60 * 1000 // 15 minutes
     },
     bankTransfer: {
       enabled: true,
       accounts: [{ bank: 'SCB', accountNo: '123-456-7890', name: 'GACP Platform' }],
-      verificationTime: 24 * 60 * 60 * 1000, // 24 hours
-    },
+      verificationTime: 24 * 60 * 60 * 1000 // 24 hours
+    }
   },
 
   // Invoice Expiry
   invoice: {
     dueDays: 7,
     reminderDays: [3, 1], // send reminder 3 days and 1 day before
-    expiredGracePeriod: 1 * 24 * 60 * 60 * 1000, // 1 day grace
+    expiredGracePeriod: 1 * 24 * 60 * 60 * 1000 // 1 day grace
   },
 
   // Validation
@@ -524,7 +524,7 @@ const PaymentLogic = {
       !this.isExpired(invoice) &&
       this.isPaymentMethodValid(paymentData.method)
     );
-  },
+  }
 };
 ```
 
@@ -625,7 +625,7 @@ const CertificateLogic = {
     validityPeriod: 3 * 365 * 24 * 60 * 60 * 1000, // 3 years
     numberFormat: 'GACP-YYYY-NNNNNN',
     qrVersion: 1,
-    hmacAlgorithm: 'sha256',
+    hmacAlgorithm: 'sha256'
   },
 
   // QR Code Generation
@@ -639,7 +639,7 @@ const CertificateLogic = {
         farmName: certificate.farmName,
         issuedDate: certificate.issuedDate,
         expiryDate: certificate.expiryDate,
-        hash: this.calculateHMAC(certificate),
+        hash: this.calculateHMAC(certificate)
       };
     },
     calculateHMAC(data) {
@@ -650,7 +650,7 @@ const CertificateLogic = {
     verifyHMAC(payload, providedHash) {
       const calculatedHash = this.calculateHMAC(payload);
       return calculatedHash === providedHash;
-    },
+    }
   },
 
   // PDF Generation
@@ -660,7 +660,7 @@ const CertificateLogic = {
     orientation: 'portrait',
     fonts: {
       thai: 'Sarabun',
-      english: 'Roboto',
+      english: 'Roboto'
     },
     generateContent(certificate) {
       return {
@@ -673,9 +673,9 @@ const CertificateLogic = {
         issuedDate: formatDate(certificate.issuedDate, 'DD/MM/YYYY'),
         expiryDate: formatDate(certificate.expiryDate, 'DD/MM/YYYY'),
         qrCodeUrl: certificate.qrCodeUrl,
-        signature: 'ผู้อำนวยการ กรมวิชาการเกษตร',
+        signature: 'ผู้อำนวยการ กรมวิชาการเกษตร'
       };
-    },
+    }
   },
 
   // Validation Rules
@@ -689,7 +689,7 @@ const CertificateLogic = {
     },
     isRevoked(certificate) {
       return certificate.status === 'revoked';
-    },
+    }
   },
 
   // Revocation Rules
@@ -699,11 +699,11 @@ const CertificateLogic = {
       'non_compliance',
       'farm_closed',
       'farmer_request',
-      'administrative',
+      'administrative'
     ],
     requiresApproval: true,
-    notificationRequired: true,
-  },
+    notificationRequired: true
+  }
 };
 ```
 
@@ -803,7 +803,7 @@ const AuditLogic = {
     'payment_processed',
     'payment_refunded',
     'user_deleted',
-    'system_config_changed',
+    'system_config_changed'
   ],
 
   // Action Categories
@@ -812,7 +812,7 @@ const AuditLogic = {
     application: ['application_submitted', 'application_updated', 'application_approved'],
     payment: ['payment_initiated', 'payment_completed', 'payment_failed'],
     certificate: ['certificate_generated', 'certificate_verified', 'certificate_revoked'],
-    system: ['config_changed', 'user_created', 'user_updated', 'role_changed'],
+    system: ['config_changed', 'user_created', 'user_updated', 'role_changed']
   },
 
   // Data Retention Policy
@@ -820,7 +820,7 @@ const AuditLogic = {
     critical: null, // Keep forever
     standard: 365 * 24 * 60 * 60 * 1000, // 1 year
     authentication: 90 * 24 * 60 * 60 * 1000, // 90 days
-    archive: true, // Archive to cold storage after retention
+    archive: true // Archive to cold storage after retention
   },
 
   // SIEM Integration
@@ -829,7 +829,7 @@ const AuditLogic = {
     endpoint: process.env.SIEM_ENDPOINT,
     sendCriticalOnly: true,
     batchSize: 100,
-    sendInterval: 5 * 60 * 1000, // 5 minutes
+    sendInterval: 5 * 60 * 1000 // 5 minutes
   },
 
   // Log Structure
@@ -842,24 +842,24 @@ const AuditLogic = {
         name: actor.name,
         email: actor.email,
         ipAddress: actor.ipAddress,
-        userAgent: actor.userAgent,
+        userAgent: actor.userAgent
       },
       resource: {
         type: resource.type,
         id: resource.id,
         beforeState: resource.beforeState,
-        afterState: resource.afterState,
+        afterState: resource.afterState
       },
       metadata: {
         ...metadata,
         source: 'gacp-backend',
-        environment: process.env.NODE_ENV,
+        environment: process.env.NODE_ENV
       },
       timestamp: new Date(),
       critical: this.criticalActions.includes(action),
-      status: 'success',
+      status: 'success'
     };
-  },
+  }
 };
 ```
 
@@ -941,14 +941,14 @@ const TransactionLogic = {
     backoffMultiplier: 2,
     initialDelay: 1000, // 1 second
     maxDelay: 10000, // 10 seconds
-    retryableErrors: ['WriteConflict', 'LockTimeout', 'NetworkError'],
+    retryableErrors: ['WriteConflict', 'LockTimeout', 'NetworkError']
   },
 
   // Transaction Timeout
   timeout: {
     default: 30000, // 30 seconds
     long: 60000, // 1 minute (for complex operations)
-    short: 10000, // 10 seconds (for simple operations)
+    short: 10000 // 10 seconds (for simple operations)
   },
 
   // Execute with Rollback
@@ -1021,7 +1021,7 @@ const TransactionLogic = {
 
       throw error;
     }
-  },
+  }
 };
 ```
 
@@ -1042,9 +1042,9 @@ const operations = [
       return await Application.findByIdAndUpdate(
         applicationId,
         { status: 'approved', approvedAt: new Date() },
-        { session, new: true },
+        { session, new: true }
       );
-    },
+    }
   },
   {
     name: 'Generate Certificate',
@@ -1054,12 +1054,12 @@ const operations = [
           {
             applicationId,
             number: generateCertificateNumber(),
-            status: 'active',
-          },
+            status: 'active'
+          }
         ],
-        { session },
+        { session }
       );
-    },
+    }
   },
   {
     name: 'Send Notification',
@@ -1067,16 +1067,16 @@ const operations = [
       return await notificationService.send({
         userId,
         type: 'application_approved',
-        message: 'Your application has been approved!',
+        message: 'Your application has been approved!'
       });
-    },
-  },
+    }
+  }
 ];
 
 const result = await transactionManager.executeWithRollback(operations, {
   action: 'approve_application',
   actor: currentUser,
-  resource: { type: 'application', id: applicationId },
+  resource: { type: 'application', id: applicationId }
 });
 ```
 

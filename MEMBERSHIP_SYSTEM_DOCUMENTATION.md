@@ -525,7 +525,7 @@ const userModule = new UserManagementModule({
   database: mongoose.connection.db,
   cacheService: redisClient,
   auditService: auditLogger,
-  notificationService: emailService,
+  notificationService: emailService
 });
 ```
 

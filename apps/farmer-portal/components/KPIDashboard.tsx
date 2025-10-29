@@ -14,7 +14,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
+  ResponsiveContainer
 } from 'recharts';
 import { TrendingUp, Clock, CheckCircle, AlertCircle, Users } from 'lucide-react';
 
@@ -109,14 +109,14 @@ export default function KPIDashboard({ className = '' }: KPIDashboardProps) {
       value: systemMetrics.totalApplications,
       icon: Users,
       color: 'blue',
-      trend: null,
+      trend: null
     },
     {
       title: 'เสร็จสมบูรณ์',
       value: systemMetrics.completedApplications,
       icon: CheckCircle,
       color: 'green',
-      trend: `${systemMetrics.overallCompletionRate.toFixed(1)}%`,
+      trend: `${systemMetrics.overallCompletionRate.toFixed(1)}%`
     },
     {
       title: 'เวลาดำเนินการเฉลี่ย',
@@ -124,7 +124,7 @@ export default function KPIDashboard({ className = '' }: KPIDashboardProps) {
       suffix: 'ชม.',
       icon: Clock,
       color: 'yellow',
-      trend: null,
+      trend: null
     },
     {
       title: 'อัตราความล่าช้า',
@@ -132,8 +132,8 @@ export default function KPIDashboard({ className = '' }: KPIDashboardProps) {
       suffix: '%',
       icon: AlertCircle,
       color: 'red',
-      trend: null,
-    },
+      trend: null
+    }
   ];
 
   // Role performance data for bar chart
@@ -148,7 +148,7 @@ export default function KPIDashboard({ className = '' }: KPIDashboardProps) {
             : metric.role,
     completed: metric.completedTasks,
     delayed: metric.delayedTasks,
-    completionRate: metric.completionRate,
+    completionRate: metric.completionRate
   }));
 
   // Role distribution data for pie chart
@@ -161,7 +161,7 @@ export default function KPIDashboard({ className = '' }: KPIDashboardProps) {
           : metric.role === 'approver'
             ? 'อนุมัติ'
             : metric.role,
-    value: metric.totalTasks,
+    value: metric.totalTasks
   }));
 
   return (
@@ -195,7 +195,7 @@ export default function KPIDashboard({ className = '' }: KPIDashboardProps) {
             blue: 'bg-blue-100 text-blue-600',
             green: 'bg-green-100 text-green-600',
             yellow: 'bg-yellow-100 text-yellow-600',
-            red: 'bg-red-100 text-red-600',
+            red: 'bg-red-100 text-red-600'
           }[card.color];
 
           return (

@@ -144,7 +144,7 @@ const REQUIRED_ENV_VARS = [
   'JWT_SECRET',
   'JWT_EXPIRES_IN',
   'DTAM_JWT_SECRET',
-  'DTAM_JWT_EXPIRES_IN',
+  'DTAM_JWT_EXPIRES_IN'
 ];
 
 function validateEnvironment() {
@@ -196,14 +196,14 @@ const authLimiter = rateLimit({
   max: 5, // จำกัด 5 attempts
   message: 'Too many login attempts, please try again later',
   standardHeaders: true,
-  legacyHeaders: false,
+  legacyHeaders: false
 });
 
 // Rate limiter สำหรับ API endpoints ทั่วไป
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
   max: 100, // จำกัด 100 requests
-  message: 'Too many requests, please try again later',
+  message: 'Too many requests, please try again later'
 });
 
 module.exports = { authLimiter, apiLimiter };
@@ -234,7 +234,7 @@ const dbOptions = {
   minPoolSize: 2, // จำนวน connections ขั้นต่ำ
   socketTimeoutMS: 45000, // Timeout ของ socket
   serverSelectionTimeoutMS: 5000,
-  family: 4, // Use IPv4
+  family: 4 // Use IPv4
 };
 
 async function connectDatabase() {

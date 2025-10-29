@@ -18,7 +18,7 @@ router.post('/inspections/:id/schedule', async (req, res) => {
       inspectorTeam: inspectorTeam || [],
       notes: notes || '',
       status: 'pending_confirmation',
-      createdAt: new Date(),
+      createdAt: new Date()
     };
 
     // TODO: Save to database

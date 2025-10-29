@@ -16,7 +16,7 @@ export enum NotificationType {
   CERTIFICATE_READY = 'certificate_ready',
   REJECTION_NOTICE = 'rejection_notice',
   SYSTEM_ALERT = 'system_alert',
-  MESSAGE_RECEIVED = 'message_received',
+  MESSAGE_RECEIVED = 'message_received'
 }
 
 // Priority levels
@@ -24,7 +24,7 @@ export enum NotificationPriority {
   LOW = 'low',
   MEDIUM = 'medium',
   HIGH = 'high',
-  CRITICAL = 'critical',
+  CRITICAL = 'critical'
 }
 
 // Notification interface
@@ -54,7 +54,7 @@ interface NotificationPanelProps {
 export default function NotificationPanel({
   userId: _userId,
   isOpen,
-  onClose,
+  onClose
 }: NotificationPanelProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
@@ -74,7 +74,7 @@ export default function NotificationPanel({
           page: pageNum.toString(),
           limit: '20',
           sortBy: 'createdAt',
-          sortOrder: 'desc',
+          sortOrder: 'desc'
         });
 
         if (filterType !== 'all') params.append('type', filterType);
@@ -94,7 +94,7 @@ export default function NotificationPanel({
         setLoading(false);
       }
     },
-    [filterType, filterPriority],
+    [filterType, filterPriority]
   );
 
   // Load initial notifications
@@ -119,12 +119,12 @@ export default function NotificationPanel({
   const markAsRead = async (notificationId: string) => {
     try {
       const response = await fetch(`/api/notifications/${notificationId}/read`, {
-        method: 'PUT',
+        method: 'PUT'
       });
 
       if (response.ok) {
         setNotifications(prev =>
-          prev.map(n => (n._id === notificationId ? { ...n, read: true, readAt: new Date() } : n)),
+          prev.map(n => (n._id === notificationId ? { ...n, read: true, readAt: new Date() } : n))
         );
       }
     } catch (error) {
@@ -136,7 +136,7 @@ export default function NotificationPanel({
   const markAllAsRead = async () => {
     try {
       const response = await fetch('/api/notifications/read-all', {
-        method: 'PUT',
+        method: 'PUT'
       });
 
       if (response.ok) {
@@ -151,7 +151,7 @@ export default function NotificationPanel({
   const deleteNotification = async (notificationId: string) => {
     try {
       const response = await fetch(`/api/notifications/${notificationId}`, {
-        method: 'DELETE',
+        method: 'DELETE'
       });
 
       if (response.ok) {
@@ -221,7 +221,7 @@ export default function NotificationPanel({
     return new Date(date).toLocaleDateString('th-TH', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric',
+      day: 'numeric'
     });
   };
 
@@ -342,7 +342,7 @@ export default function NotificationPanel({
                         </h3>
                         <span
                           className={`flex-shrink-0 text-xs px-2 py-0.5 rounded-full ${getPriorityColor(
-                            notification.priority,
+                            notification.priority
                           )}`}
                         >
                           {notification.priority}

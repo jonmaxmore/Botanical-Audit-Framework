@@ -324,7 +324,9 @@ export async function getInspectorPerformance(): Promise<
 /**
  * Export dashboard data to CSV
  */
-export async function exportDashboardCSV(type: 'applications' | 'users' | 'revenue'): Promise<Blob> {
+export async function exportDashboardCSV(
+  type: 'applications' | 'users' | 'revenue'
+): Promise<Blob> {
   const response = await fetch(`${API_BASE_URL}/dashboard/export/${type}`, {
     method: 'GET',
     headers: createHeaders(),
@@ -393,10 +395,34 @@ export function getMockDashboardData(): AdminDashboard {
       { cropType: 'กระท่อม (Kratom)', count: 12, percentage: 1.0 },
     ],
     regionalData: [
-      { region: 'ภาคเหนือ', province: 'เชียงใหม่', applications: 234, certificates: 198, farmers: 187 },
-      { region: 'ภาคเหนือ', province: 'เชียงราย', applications: 189, certificates: 156, farmers: 145 },
-      { region: 'ภาคกลาง', province: 'กรุงเทพฯ', applications: 156, certificates: 134, farmers: 98 },
-      { region: 'ภาคตะวันออกเฉียงเหนือ', province: 'อุบลราชธานี', applications: 143, certificates: 121, farmers: 115 },
+      {
+        region: 'ภาคเหนือ',
+        province: 'เชียงใหม่',
+        applications: 234,
+        certificates: 198,
+        farmers: 187,
+      },
+      {
+        region: 'ภาคเหนือ',
+        province: 'เชียงราย',
+        applications: 189,
+        certificates: 156,
+        farmers: 145,
+      },
+      {
+        region: 'ภาคกลาง',
+        province: 'กรุงเทพฯ',
+        applications: 156,
+        certificates: 134,
+        farmers: 98,
+      },
+      {
+        region: 'ภาคตะวันออกเฉียงเหนือ',
+        province: 'อุบลราชธานี',
+        applications: 143,
+        certificates: 121,
+        farmers: 115,
+      },
       { region: 'ภาคใต้', province: 'สงขลา', applications: 98, certificates: 87, farmers: 76 },
     ],
     recentActivity: [

@@ -13,6 +13,7 @@ Admin Portal ได้ลบ Mock data ทั้งหมดออกแล้�
 ### 1. Users (ผู้ใช้งาน)
 
 **ต้องสร้าง:**
+
 - Admin users (อย่างน้อย 2 คน)
 - Reviewer users (อย่างน้อย 3 คน)
 - Inspector users (อย่างน้อย 3 คน)
@@ -20,6 +21,7 @@ Admin Portal ได้ลบ Mock data ทั้งหมดออกแล้�
 - Farmer users (อย่างน้อย 10 คน)
 
 **API Endpoint:**
+
 ```
 POST /api/users
 {
@@ -36,6 +38,7 @@ POST /api/users
 ### 2. Applications (คำขอรับรอง)
 
 **ต้องสร้าง:**
+
 - Draft applications (5 รายการ)
 - Submitted applications (10 รายการ)
 - Under review applications (8 รายการ)
@@ -45,6 +48,7 @@ POST /api/users
 - Certificate issued (10 รายการ)
 
 **API Endpoint:**
+
 ```
 POST /api/farmer/applications
 {
@@ -76,11 +80,13 @@ POST /api/farmer/applications
 ### 3. Reviews (การตรวจสอบ)
 
 **ต้องสร้าง:**
+
 - Assign reviewers to applications
 - Complete reviews with decisions
 - Add comments to applications
 
 **API Endpoints:**
+
 ```
 POST /api/dtam/applications/:id/assign-reviewer
 {
@@ -107,10 +113,12 @@ POST /api/dtam/applications/:id/comments
 ### 4. Inspections (การตรวจสอบภาคสนาม)
 
 **ต้องสร้าง:**
+
 - Assign inspectors to applications
 - Complete inspections with results
 
 **API Endpoints:**
+
 ```
 POST /api/dtam/applications/:id/assign-inspector
 {
@@ -131,10 +139,12 @@ POST /api/dtam/applications/:id/inspection/complete
 ### 5. Approvals (การอนุมัติ)
 
 **ต้องสร้าง:**
+
 - Approve applications
 - Reject applications
 
 **API Endpoints:**
+
 ```
 POST /api/dtam/applications/:id/approve
 {
@@ -167,6 +177,7 @@ POST /api/dtam/applications/:id/reject
 7. **Approve Application** → Application status: approved, certificate_issued
 
 **Expected Result:**
+
 - ✅ Application ปรากฏใน `/applications` list
 - ✅ Application detail แสดงข้อมูลครบถ้วน
 - ✅ Timeline แสดงประวัติทุกขั้นตอน
@@ -181,6 +192,7 @@ POST /api/dtam/applications/:id/reject
 3. **Complete Review** (reject) → Application status: rejected
 
 **Expected Result:**
+
 - ✅ Application status = rejected
 - ✅ Rejection reason แสดงใน detail page
 - ✅ ไม่สามารถ approve ได้อีก
@@ -195,6 +207,7 @@ POST /api/dtam/applications/:id/reject
 4. **Test pagination**
 
 **Expected Result:**
+
 - ✅ Filter ทำงานถูกต้อง
 - ✅ Search ทำงานถูกต้อง
 - ✅ Pagination ทำงานถูกต้อง
@@ -208,6 +221,7 @@ POST /api/dtam/applications/:id/reject
 3. **Test user detail** page
 
 **Expected Result:**
+
 - ✅ Users แสดงครบถ้วน
 - ✅ Filter by role ทำงาน
 - ✅ User detail แสดงข้อมูลถูกต้อง
@@ -222,6 +236,7 @@ POST /api/dtam/applications/:id/reject
 4. **Export Reports** to CSV
 
 **Expected Result:**
+
 - ✅ Dashboard แสดงสถิติถูกต้อง
 - ✅ Statistics page แสดงข้อมูลถูกต้อง
 - ✅ Export CSV ทำงาน
@@ -232,24 +247,24 @@ POST /api/dtam/applications/:id/reject
 
 ### ข้อมูลขั้นต่ำที่ต้องมี:
 
-| Type | Minimum | Recommended |
-|------|---------|-------------|
-| **Users** | 10 | 20+ |
-| - Admin | 1 | 2 |
-| - Reviewer | 2 | 3 |
-| - Inspector | 2 | 3 |
-| - Approver | 1 | 2 |
-| - Farmer | 4 | 10+ |
-| **Applications** | 10 | 30+ |
-| - Draft | 1 | 3 |
-| - Submitted | 2 | 5 |
-| - Under Review | 2 | 5 |
-| - Approved | 3 | 10 |
-| - Rejected | 1 | 3 |
-| - Certificate Issued | 1 | 5 |
-| **Comments** | 5 | 20+ |
-| **Reviews** | 5 | 15+ |
-| **Inspections** | 3 | 10+ |
+| Type                 | Minimum | Recommended |
+| -------------------- | ------- | ----------- |
+| **Users**            | 10      | 20+         |
+| - Admin              | 1       | 2           |
+| - Reviewer           | 2       | 3           |
+| - Inspector          | 2       | 3           |
+| - Approver           | 1       | 2           |
+| - Farmer             | 4       | 10+         |
+| **Applications**     | 10      | 30+         |
+| - Draft              | 1       | 3           |
+| - Submitted          | 2       | 5           |
+| - Under Review       | 2       | 5           |
+| - Approved           | 3       | 10          |
+| - Rejected           | 1       | 3           |
+| - Certificate Issued | 1       | 5           |
+| **Comments**         | 5       | 20+         |
+| **Reviews**          | 5       | 15+         |
+| **Inspections**      | 3       | 10+         |
 
 ---
 
@@ -293,6 +308,7 @@ npm run seed:test
 ## ✅ Testing Checklist
 
 ### Login & Authentication
+
 - [ ] Login with admin account
 - [ ] Login with reviewer account
 - [ ] Login with inspector account
@@ -301,6 +317,7 @@ npm run seed:test
 - [ ] Token expiration handling
 
 ### Applications Management
+
 - [ ] View applications list
 - [ ] Filter by status
 - [ ] Search applications
@@ -314,6 +331,7 @@ npm run seed:test
 - [ ] Add comments
 
 ### User Management
+
 - [ ] View users list
 - [ ] Filter by role
 - [ ] Search users
@@ -323,6 +341,7 @@ npm run seed:test
 - [ ] Delete user
 
 ### Certificates
+
 - [ ] View certificates list
 - [ ] Search certificates
 - [ ] View certificate detail
@@ -330,12 +349,14 @@ npm run seed:test
 - [ ] Revoke certificate
 
 ### Reports & Statistics
+
 - [ ] View dashboard statistics
 - [ ] View statistics page
 - [ ] Export applications CSV
 - [ ] Generate reports
 
 ### Error Handling
+
 - [ ] Empty state (no data)
 - [ ] Loading states
 - [ ] Error messages
@@ -356,22 +377,25 @@ npm run seed:test
 ## Test Report - [Date]
 
 ### Tester: [Name]
+
 ### Environment: [Dev/Staging/Production]
 
 ### Test Results:
 
-| Test Case | Status | Notes |
-|-----------|--------|-------|
-| Login | ✅ Pass | - |
-| Applications List | ✅ Pass | - |
+| Test Case          | Status  | Notes             |
+| ------------------ | ------- | ----------------- |
+| Login              | ✅ Pass | -                 |
+| Applications List  | ✅ Pass | -                 |
 | Application Detail | ❌ Fail | Error message XYZ |
-| ... | ... | ... |
+| ...                | ...     | ...               |
 
 ### Issues Found:
+
 1. [Issue description]
 2. [Issue description]
 
 ### Screenshots:
+
 [Attach screenshots]
 ```
 
@@ -388,6 +412,7 @@ npm run seed:test
 ## 📞 Support
 
 **หากพบปัญหาหรือต้องการความช่วยเหลือ:**
+
 - สร้าง Issue ใน GitHub
 - ติดต่อ Development Team
 - ดู Documentation ใน `docs/` folder

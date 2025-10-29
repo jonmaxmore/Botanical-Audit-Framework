@@ -10,7 +10,7 @@ if (typeof Request === 'undefined') {
   global.Request = class Request {
     constructor(
       public url: string,
-      public init: any,
+      public init: any
     ) {}
     async json() {
       return JSON.parse(this.init.body);
@@ -25,7 +25,7 @@ if (typeof Response === 'undefined') {
   global.Response = class Response {
     constructor(
       public body: any,
-      public init?: any,
+      public init?: any
     ) {}
     async json() {
       return typeof this.body === 'string' ? JSON.parse(this.body) : this.body;

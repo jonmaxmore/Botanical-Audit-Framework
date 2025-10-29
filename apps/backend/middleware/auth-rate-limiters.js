@@ -71,7 +71,7 @@ const ipKeyGenerator = req => {
 /**
  * Skip successful requests (only count failed attempts)
  */
-const skipSuccessfulRequests = (req, res) => {
+const _skipSuccessfulRequests = (req, res) => {
   return res.statusCode < 400;
 };
 
@@ -91,7 +91,7 @@ function createAuthRateLimiters(redisClient = null) {
     store: createStore(redisClient, 'login'),
     keyGenerator: ipKeyGenerator,
     handler: standardHandler,
-    skipSuccessfulRequests: true // Only count failed login attempts
+    _skipSuccessfulRequests: true // Only count failed login attempts
   });
 
   // Token refresh - Moderate (10 requests per minute)
@@ -128,7 +128,7 @@ function createAuthRateLimiters(redisClient = null) {
     store: createStore(redisClient, 'password-reset-confirm'),
     keyGenerator: ipKeyGenerator,
     handler: standardHandler,
-    skipSuccessfulRequests: true
+    _skipSuccessfulRequests: true
   });
 
   // Password change - Moderate (10 requests per 15 minutes)

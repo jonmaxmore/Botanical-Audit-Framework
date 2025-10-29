@@ -2,7 +2,7 @@ import { test as setup, expect } from '@playwright/test';
 
 /**
  * Setup Project: Create Test Users
- * 
+ *
  * This runs before all tests to ensure test users exist in the database.
  * Fixes BUG #1: Login test user doesn't exist
  */
@@ -12,7 +12,7 @@ const SETUP_USER = {
   password: 'TestPass123!',
   name: 'สมชาย ใจดี',
   phoneNumber: '0812345678',
-  role: 'FARMER'
+  role: 'FARMER',
 };
 
 setup('create test user via registration', async ({ page }) => {
@@ -43,10 +43,10 @@ setup('create test user via registration', async ({ page }) => {
 
     // Check if we got redirected to dashboard (success) or still on register (user exists)
     const currentUrl = page.url();
-    
+
     if (currentUrl.includes('dashboard')) {
       console.log('✅ Test user created successfully and logged in');
-      
+
       // Logout so tests can login fresh
       const logoutButton = page.getByRole('button', { name: /logout|ออกจากระบบ/i });
       if (await logoutButton.isVisible({ timeout: 2000 }).catch(() => false)) {
@@ -55,8 +55,11 @@ setup('create test user via registration', async ({ page }) => {
       }
     } else if (currentUrl.includes('register')) {
       // Check if there's an error about existing user
-      const errorMessage = await page.getByText(/อีเมลนี้ถูกใช้งานแล้ว|email.*already|already.*exists/i).isVisible({ timeout: 2000 }).catch(() => false);
-      
+      const errorMessage = await page
+        .getByText(/อีเมลนี้ถูกใช้งานแล้ว|email.*already|already.*exists/i)
+        .isVisible({ timeout: 2000 })
+        .catch(() => false);
+
       if (errorMessage) {
         console.log('ℹ️  Test user already exists - this is fine');
       } else {

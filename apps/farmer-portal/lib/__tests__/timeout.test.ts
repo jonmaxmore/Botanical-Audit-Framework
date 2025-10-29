@@ -10,7 +10,7 @@
 import {
   isPaymentTimedOut as isPaymentTimedOutRecord,
   PAYMENT_TIMEOUT_MINUTES,
-  type PaymentRecord,
+  type PaymentRecord
 } from '../business-logic';
 
 // Helper: Create mock payment record
@@ -24,7 +24,7 @@ function createMockPayment(createdAt: Date): PaymentRecord {
     status: 'PENDING',
     reason: 'INITIAL_SUBMISSION',
     createdAt,
-    expiresAt,
+    expiresAt
   };
 }
 

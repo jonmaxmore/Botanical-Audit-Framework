@@ -47,11 +47,7 @@ const provinces = [
 ];
 
 // Crop types
-const cropTypes = [
-  'กัญชา (Cannabis)',
-  'กัญชง (Hemp)',
-  'พืชสมุนไพรอื่นๆ',
-];
+const cropTypes = ['กัญชา (Cannabis)', 'กัญชง (Hemp)', 'พืชสมุนไพรอื่นๆ'];
 
 interface FormData {
   // Farm Information
@@ -66,7 +62,7 @@ interface FormData {
   longitude: string;
   cropType: string;
   estimatedYield: string;
-  
+
   // Farmer Information
   farmerName: string;
   idCardNumber: string;
@@ -74,7 +70,7 @@ interface FormData {
   email: string;
   experience: string;
   previousCertification: string;
-  
+
   // Additional
   remarks: string;
 }
@@ -82,12 +78,12 @@ interface FormData {
 const NewApplicationPage = () => {
   const router = useRouter();
   const { createApplication } = useApplication();
-  
+
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   const [formData, setFormData] = useState<FormData>({
     farmName: '',
     farmSize: '',
@@ -109,12 +105,12 @@ const NewApplicationPage = () => {
     remarks: '',
   });
 
-  const handleChange = (field: keyof FormData) => (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    setFormData({ ...formData, [field]: event.target.value });
-    setError('');
-  };
+  const handleChange =
+    (field: keyof FormData) =>
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setFormData({ ...formData, [field]: event.target.value });
+      setError('');
+    };
 
   const validateStep = (step: number): boolean => {
     switch (step) {
@@ -140,7 +136,7 @@ const NewApplicationPage = () => {
           return false;
         }
         break;
-        
+
       case 1: // Farmer Information
         if (!formData.farmerName.trim()) {
           setError('กรุณากรอกชื่อ-นามสกุล');
@@ -183,16 +179,16 @@ const NewApplicationPage = () => {
     setLoading(true);
     setError('');
     setSuccess('');
-    
+
     try {
       // Create application as DRAFT
       const result = await createApplication({
         ...formData,
         status: 'DRAFT',
       });
-      
+
       setSuccess('บันทึกแบบร่างสำเร็จ! กำลังกลับไปหน้า Dashboard...');
-      
+
       setTimeout(() => {
         router.push('/farmer/dashboard');
       }, 2000);
@@ -207,20 +203,20 @@ const NewApplicationPage = () => {
     if (!validateStep(activeStep)) {
       return;
     }
-    
+
     setLoading(true);
     setError('');
     setSuccess('');
-    
+
     try {
       // Create and submit application
       const result = await createApplication({
         ...formData,
         status: 'SUBMITTED',
       });
-      
+
       setSuccess('ยื่นคำขอสำเร็จ! กำลังกลับไปหน้า Dashboard...');
-      
+
       setTimeout(() => {
         router.push('/farmer/dashboard');
       }, 2000);
@@ -242,7 +238,7 @@ const NewApplicationPage = () => {
               </Typography>
               <Divider sx={{ mb: 2 }} />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -253,7 +249,7 @@ const NewApplicationPage = () => {
                 placeholder="เช่น ฟาร์มกัญชาสวนดอกไม้"
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -266,7 +262,7 @@ const NewApplicationPage = () => {
                 inputProps={{ min: 0, step: 0.01 }}
               />
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -279,7 +275,7 @@ const NewApplicationPage = () => {
                 placeholder="เช่น 123 หมู่ 5"
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -296,7 +292,7 @@ const NewApplicationPage = () => {
                 ))}
               </TextField>
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -305,7 +301,7 @@ const NewApplicationPage = () => {
                 onChange={handleChange('district')}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -314,7 +310,7 @@ const NewApplicationPage = () => {
                 onChange={handleChange('subDistrict')}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -324,7 +320,7 @@ const NewApplicationPage = () => {
                 inputProps={{ maxLength: 5 }}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -334,7 +330,7 @@ const NewApplicationPage = () => {
                 placeholder="เช่น 18.7883"
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -344,7 +340,7 @@ const NewApplicationPage = () => {
                 placeholder="เช่น 98.9853"
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -361,7 +357,7 @@ const NewApplicationPage = () => {
                 ))}
               </TextField>
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -374,7 +370,7 @@ const NewApplicationPage = () => {
             </Grid>
           </Grid>
         );
-        
+
       case 1:
         return (
           <Grid container spacing={3}>
@@ -384,7 +380,7 @@ const NewApplicationPage = () => {
               </Typography>
               <Divider sx={{ mb: 2 }} />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -395,7 +391,7 @@ const NewApplicationPage = () => {
                 placeholder="เช่น นายสมชาย ใจดี"
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -407,7 +403,7 @@ const NewApplicationPage = () => {
                 inputProps={{ maxLength: 13 }}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -419,7 +415,7 @@ const NewApplicationPage = () => {
                 inputProps={{ maxLength: 10 }}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -431,7 +427,7 @@ const NewApplicationPage = () => {
                 placeholder="example@email.com"
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -443,7 +439,7 @@ const NewApplicationPage = () => {
                 inputProps={{ min: 0 }}
               />
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -456,7 +452,7 @@ const NewApplicationPage = () => {
                 <MenuItem value="yes">เคย</MenuItem>
               </TextField>
             </Grid>
-            
+
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -470,7 +466,7 @@ const NewApplicationPage = () => {
             </Grid>
           </Grid>
         );
-        
+
       case 2:
         return (
           <Grid container spacing={3}>
@@ -480,7 +476,7 @@ const NewApplicationPage = () => {
               </Typography>
               <Divider sx={{ mb: 2 }} />
             </Grid>
-            
+
             <Grid item xs={12}>
               <Card variant="outlined">
                 <CardContent>
@@ -489,35 +485,45 @@ const NewApplicationPage = () => {
                   </Typography>
                   <Grid container spacing={1}>
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">ชื่อฟาร์ม:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        ชื่อฟาร์ม:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.farmName}</Typography>
                     </Grid>
-                    
+
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">พื้นที่:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        พื้นที่:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.farmSize} ไร่</Typography>
                     </Grid>
-                    
+
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">ที่อยู่:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        ที่อยู่:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.farmAddress}</Typography>
                     </Grid>
-                    
+
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">จังหวัด:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        จังหวัด:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.province}</Typography>
                     </Grid>
-                    
+
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">ประเภทพืช:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        ประเภทพืช:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.cropType}</Typography>
@@ -526,7 +532,7 @@ const NewApplicationPage = () => {
                 </CardContent>
               </Card>
             </Grid>
-            
+
             <Grid item xs={12}>
               <Card variant="outlined">
                 <CardContent>
@@ -535,35 +541,45 @@ const NewApplicationPage = () => {
                   </Typography>
                   <Grid container spacing={1}>
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">ชื่อ-นามสกุล:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        ชื่อ-นามสกุล:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.farmerName}</Typography>
                     </Grid>
-                    
+
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">เลขบัตรประชาชน:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        เลขบัตรประชาชน:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.idCardNumber}</Typography>
                     </Grid>
-                    
+
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">โทรศัพท์:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        โทรศัพท์:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.phone}</Typography>
                     </Grid>
-                    
+
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">อีเมล:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        อีเมล:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.email}</Typography>
                     </Grid>
-                    
+
                     <Grid item xs={6}>
-                      <Typography variant="body2" color="text.secondary">ประสบการณ์:</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        ประสบการณ์:
+                      </Typography>
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant="body2">{formData.experience} ปี</Typography>
@@ -572,7 +588,7 @@ const NewApplicationPage = () => {
                 </CardContent>
               </Card>
             </Grid>
-            
+
             <Grid item xs={12}>
               <Alert severity="info">
                 กรุณาตรวจสอบข้อมูลให้ถูกต้อง หลังจากยื่นคำขอแล้ว คุณจะต้องชำระเงินรอบแรก 5,000 บาท
@@ -581,7 +597,7 @@ const NewApplicationPage = () => {
             </Grid>
           </Grid>
         );
-        
+
       default:
         return null;
     }
@@ -615,7 +631,7 @@ const NewApplicationPage = () => {
             {error}
           </Alert>
         )}
-        
+
         {success && (
           <Alert severity="success" sx={{ mb: 3 }}>
             {success}
@@ -623,9 +639,7 @@ const NewApplicationPage = () => {
         )}
 
         {/* Form Content */}
-        <Box sx={{ mb: 4 }}>
-          {renderStepContent(activeStep)}
-        </Box>
+        <Box sx={{ mb: 4 }}>{renderStepContent(activeStep)}</Box>
 
         {/* Navigation Buttons */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
@@ -636,18 +650,14 @@ const NewApplicationPage = () => {
           >
             ยกเลิก
           </Button>
-          
+
           <Box sx={{ display: 'flex', gap: 2 }}>
             {activeStep > 0 && (
-              <Button
-                variant="outlined"
-                onClick={handleBack}
-                disabled={loading}
-              >
+              <Button variant="outlined" onClick={handleBack} disabled={loading}>
                 ย้อนกลับ
               </Button>
             )}
-            
+
             <Button
               variant="outlined"
               onClick={handleSaveDraft}
@@ -656,7 +666,7 @@ const NewApplicationPage = () => {
             >
               บันทึกแบบร่าง
             </Button>
-            
+
             {activeStep < steps.length - 1 ? (
               <Button
                 variant="contained"

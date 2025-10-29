@@ -182,7 +182,7 @@ const Button = ({ primary, disabled }) => (
     className={clsx(
       'px-6 py-2 rounded-lg transition-colors',
       primary ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700',
-      disabled && 'opacity-50 cursor-not-allowed',
+      disabled && 'opacity-50 cursor-not-allowed'
     )}
   >
     Button

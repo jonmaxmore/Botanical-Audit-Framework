@@ -14,7 +14,7 @@ const REGIONS = {
   CENTRAL: 'central',
   SOUTH: 'south',
   NORTH: 'north',
-  NORTHEAST: 'northeast',
+  NORTHEAST: 'northeast'
 };
 
 // Survey Templates
@@ -41,30 +41,30 @@ const templates = [
             type: 'select',
             required: true,
             options: ['central', 'south', 'north', 'northeast'],
-            validation: { type: 'string', enum: ['central', 'south', 'north', 'northeast'] },
+            validation: { type: 'string', enum: ['central', 'south', 'north', 'northeast'] }
           },
           {
             questionId: 'province',
             text: 'จังหวัด',
             type: 'select',
             required: true,
-            validation: { type: 'string' },
+            validation: { type: 'string' }
           },
           {
             questionId: 'district',
             text: 'อำเภอ',
             type: 'text',
             required: true,
-            validation: { type: 'string' },
+            validation: { type: 'string' }
           },
           {
             questionId: 'subdistrict',
             text: 'ตำบล',
             type: 'text',
             required: true,
-            validation: { type: 'string' },
-          },
-        ],
+            validation: { type: 'string' }
+          }
+        ]
       },
       {
         stepNumber: 2,
@@ -77,58 +77,58 @@ const templates = [
             text: 'ชื่อ',
             type: 'text',
             required: true,
-            validation: { type: 'string', minLength: 2, maxLength: 50 },
+            validation: { type: 'string', minLength: 2, maxLength: 50 }
           },
           {
             questionId: 'lastName',
             text: 'นามสกุล',
             type: 'text',
             required: true,
-            validation: { type: 'string', minLength: 2, maxLength: 50 },
+            validation: { type: 'string', minLength: 2, maxLength: 50 }
           },
           {
             questionId: 'gender',
             text: 'เพศ',
             type: 'radio',
             required: true,
-            options: ['male', 'female', 'not_specified'],
+            options: ['male', 'female', 'not_specified']
           },
           {
             questionId: 'age',
             text: 'อายุ (ปี)',
             type: 'number',
             required: true,
-            validation: { type: 'number', min: 18, max: 100 },
+            validation: { type: 'number', min: 18, max: 100 }
           },
           {
             questionId: 'education',
             text: 'ระดับการศึกษา',
             type: 'select',
             required: true,
-            options: ['elementary', 'secondary', 'vocational', 'bachelor', 'master', 'other'],
+            options: ['elementary', 'secondary', 'vocational', 'bachelor', 'master', 'other']
           },
           {
             questionId: 'phone',
             text: 'เบอร์โทรศัพท์',
             type: 'text',
             required: true,
-            validation: { type: 'string', pattern: '^0\\d{8,9}$' },
+            validation: { type: 'string', pattern: '^0\\d{8,9}$' }
           },
           {
             questionId: 'email',
             text: 'อีเมล',
             type: 'text',
             required: false,
-            validation: { type: 'string', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$' },
+            validation: { type: 'string', pattern: '^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$' }
           },
           {
             questionId: 'cannabisExperienceYears',
             text: 'ประสบการณ์ปลูกกัญชา (ปี)',
             type: 'number',
             required: true,
-            validation: { type: 'number', min: 0, max: 50 },
-          },
-        ],
+            validation: { type: 'number', min: 0, max: 50 }
+          }
+        ]
       },
       {
         stepNumber: 3,
@@ -141,35 +141,35 @@ const templates = [
             text: 'ขนาดพื้นที่ทั้งหมด (ไร่-งาน-วา)',
             type: 'object',
             required: true,
-            fields: ['rai', 'ngan', 'wa'],
+            fields: ['rai', 'ngan', 'wa']
           },
           {
             questionId: 'cannabisAreaSize',
             text: 'พื้นที่ปลูกกัญชา (ไร่-งาน-วา)',
             type: 'object',
             required: true,
-            fields: ['rai', 'ngan', 'wa'],
+            fields: ['rai', 'ngan', 'wa']
           },
           {
             questionId: 'landOwnership',
             text: 'ลักษณะที่ดิน',
             type: 'radio',
             required: true,
-            options: ['owned', 'rented', 'other'],
+            options: ['owned', 'rented', 'other']
           },
           {
             questionId: 'cultivationType',
             text: 'ประเภทการปลูก',
             type: 'checkbox',
             required: true,
-            options: ['outdoor', 'greenhouse', 'indoor', 'mixed'],
+            options: ['outdoor', 'greenhouse', 'indoor', 'mixed']
           },
           {
             questionId: 'waterSources',
             text: 'แหล่งน้ำ',
             type: 'checkbox',
             required: true,
-            options: ['groundwater', 'tap_water', 'river', 'rain', 'other'],
+            options: ['groundwater', 'tap_water', 'river', 'rain', 'other']
           },
           // Region-specific questions for Central
           {
@@ -179,7 +179,7 @@ const templates = [
             required: true,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'hvacSystem',
@@ -188,7 +188,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'automatedIrrigation',
@@ -197,7 +197,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'ledLighting',
@@ -206,7 +206,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'urbanFarming',
@@ -215,9 +215,9 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
-          },
-        ],
+            regions: ['central']
+          }
+        ]
       },
       {
         stepNumber: 4,
@@ -230,28 +230,28 @@ const templates = [
             text: 'จำนวนรอบการปลูกต่อปี',
             type: 'number',
             required: true,
-            validation: { type: 'number', min: 1, max: 12 },
+            validation: { type: 'number', min: 1, max: 12 }
           },
           {
             questionId: 'plantsPerCycle',
             text: 'จำนวนต้นต่อรอบ',
             type: 'number',
             required: true,
-            validation: { type: 'number', min: 1 },
+            validation: { type: 'number', min: 1 }
           },
           {
             questionId: 'strains',
             text: 'สายพันธุ์ที่ปลูก',
             type: 'checkbox',
             required: true,
-            options: ['thai', 'sativa', 'indica', 'hybrid', 'high_cbd', 'high_thc', 'other'],
+            options: ['thai', 'sativa', 'indica', 'hybrid', 'high_cbd', 'high_thc', 'other']
           },
           {
             questionId: 'propagationMethod',
             text: 'วิธีการขยายพันธุ์',
             type: 'radio',
             required: true,
-            options: ['seeds', 'clones', 'both'],
+            options: ['seeds', 'clones', 'both']
           },
           {
             questionId: 'fertilizer',
@@ -261,8 +261,8 @@ const templates = [
             fields: {
               type: { type: 'radio', options: ['chemical', 'organic', 'mixed'] },
               amountPerCycle: { type: 'number', min: 0 },
-              frequencyPerWeek: { type: 'number', min: 0 },
-            },
+              frequencyPerWeek: { type: 'number', min: 0 }
+            }
           },
           {
             questionId: 'pestControl',
@@ -271,8 +271,8 @@ const templates = [
             required: true,
             fields: {
               method: { type: 'radio', options: ['chemical', 'biological', 'mixed', 'none'] },
-              frequencyPerMonth: { type: 'number', min: 0 },
-            },
+              frequencyPerMonth: { type: 'number', min: 0 }
+            }
           },
           {
             questionId: 'labor',
@@ -282,8 +282,8 @@ const templates = [
             fields: {
               permanent: { type: 'number', min: 0 },
               temporary: { type: 'number', min: 0 },
-              familyMembers: { type: 'number', min: 0 },
-            },
+              familyMembers: { type: 'number', min: 0 }
+            }
           },
           // Region-specific questions for Central
           {
@@ -293,7 +293,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'iotSensors',
@@ -302,7 +302,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'automatedSystem',
@@ -311,7 +311,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'dataLogging',
@@ -320,9 +320,9 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
-          },
-        ],
+            regions: ['central']
+          }
+        ]
       },
       {
         stepNumber: 5,
@@ -342,54 +342,54 @@ const templates = [
               labor: { type: 'number', min: 0, label: 'แรงงาน' },
               utilities: { type: 'number', min: 0, label: 'น้ำและไฟฟ้า' },
               equipment: { type: 'number', min: 0, label: 'อุปกรณ์' },
-              other: { type: 'number', min: 0, label: 'อื่นๆ' },
+              other: { type: 'number', min: 0, label: 'อื่นๆ' }
             },
             autoCalculate: true,
             formula:
-              'totalCost = seeds + fertilizer + pesticides + labor + utilities + equipment + other',
+              'totalCost = seeds + fertilizer + pesticides + labor + utilities + equipment + other'
           },
           {
             questionId: 'yieldPerCycle',
             text: 'ผลผลิตต่อรอบ (กิโลกรัม)',
             type: 'number',
             required: true,
-            validation: { type: 'number', min: 0 },
+            validation: { type: 'number', min: 0 }
           },
           {
             questionId: 'pricePerKg',
             text: 'ราคาขายต่อกิโลกรัม (บาท)',
             type: 'number',
             required: true,
-            validation: { type: 'number', min: 0 },
-          },
+            validation: { type: 'number', min: 0 }
+          }
         ],
         autoCalculations: [
           {
             field: 'totalCost',
             formula:
-              'costs.seeds + costs.fertilizer + costs.pesticides + costs.labor + costs.utilities + costs.equipment + costs.other',
+              'costs.seeds + costs.fertilizer + costs.pesticides + costs.labor + costs.utilities + costs.equipment + costs.other'
           },
           {
             field: 'totalRevenue',
-            formula: 'yieldPerCycle * pricePerKg',
+            formula: 'yieldPerCycle * pricePerKg'
           },
           {
             field: 'netProfit',
-            formula: 'totalRevenue - totalCost',
+            formula: 'totalRevenue - totalCost'
           },
           {
             field: 'profitMargin',
-            formula: '(netProfit / totalRevenue) * 100',
+            formula: '(netProfit / totalRevenue) * 100'
           },
           {
             field: 'costPerKg',
-            formula: 'totalCost / yieldPerCycle',
+            formula: 'totalCost / yieldPerCycle'
           },
           {
             field: 'costPerPlant',
-            formula: 'totalCost / plantsPerCycle',
-          },
-        ],
+            formula: 'totalCost / plantsPerCycle'
+          }
+        ]
       },
       {
         stepNumber: 6,
@@ -402,28 +402,28 @@ const templates = [
             text: 'ช่องทางการขาย',
             type: 'checkbox',
             required: true,
-            options: ['hospital', 'pharmacy', 'distributor', 'direct', 'export', 'other'],
+            options: ['hospital', 'pharmacy', 'distributor', 'direct', 'export', 'other']
           },
           {
             questionId: 'productForms',
             text: 'รูปแบบผลิตภัณฑ์',
             type: 'checkbox',
             required: true,
-            options: ['dried_flower', 'extract', 'dried_leaf', 'processed', 'other'],
+            options: ['dried_flower', 'extract', 'dried_leaf', 'processed', 'other']
           },
           {
             questionId: 'targetMarket',
             text: 'ตลาดเป้าหมาย',
             type: 'radio',
             required: true,
-            options: ['medical', 'research', 'industrial', 'mixed'],
+            options: ['medical', 'research', 'industrial', 'mixed']
           },
           {
             questionId: 'hasContract',
             text: 'มีสัญญาซื้อขายล่วงหน้า',
             type: 'radio',
             required: true,
-            options: ['yes', 'no'],
+            options: ['yes', 'no']
           },
           // Region-specific questions for Central
           {
@@ -433,7 +433,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'onlineSales',
@@ -442,7 +442,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'brandDevelopment',
@@ -451,7 +451,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'exportReady',
@@ -460,9 +460,9 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
-          },
-        ],
+            regions: ['central']
+          }
+        ]
       },
       {
         stepNumber: 7,
@@ -482,8 +482,8 @@ const templates = [
               'knowledge',
               'equipment',
               'strain_quality',
-              'other',
-            ],
+              'other'
+            ]
           },
           {
             questionId: 'marketProblems',
@@ -496,8 +496,8 @@ const templates = [
               'competition',
               'quality_requirements',
               'transportation',
-              'other',
-            ],
+              'other'
+            ]
           },
           {
             questionId: 'legalProblems',
@@ -509,8 +509,8 @@ const templates = [
               'certification_cost',
               'strict_standards',
               'legal_knowledge',
-              'other',
-            ],
+              'other'
+            ]
           },
           {
             questionId: 'supportNeeds',
@@ -524,8 +524,8 @@ const templates = [
               'legal_consultation',
               'equipment',
               'product_development',
-              'other',
-            ],
+              'other'
+            ]
           },
           // Region-specific problems for Central
           {
@@ -535,7 +535,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'strictRegulations',
@@ -544,7 +544,7 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'neighborComplaints',
@@ -553,21 +553,21 @@ const templates = [
             required: false,
             options: ['yes', 'no'],
             regionSpecific: true,
-            regions: ['central'],
+            regions: ['central']
           },
           {
             questionId: 'additionalComments',
             text: 'ข้อคิดเห็นเพิ่มเติม',
             type: 'textarea',
-            required: false,
-          },
-        ],
-      },
+            required: false
+          }
+        ]
+      }
     ],
 
     createdAt: new Date(),
-    updatedAt: new Date(),
-  },
+    updatedAt: new Date()
+  }
 ];
 
 // Note: Templates for South, North, and Northeast regions would be similar

@@ -14,7 +14,7 @@ import {
   DemoUser,
   DemoApplication,
   DemoInspection,
-  DemoCertificate,
+  DemoCertificate
 } from '../lib/demoData';
 
 interface DemoDashboardProps {
@@ -72,27 +72,27 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
         approved: demoApplications.filter((app: DemoApplication) => app.status === 'approved')
           .length,
         rejected: demoApplications.filter((app: DemoApplication) => app.status === 'rejected')
-          .length,
+          .length
       },
       inspections: {
         scheduled: demoInspections.filter((ins: DemoInspection) => ins.status === 'scheduled')
           .length,
         completed: demoInspections.filter((ins: DemoInspection) => ins.status === 'completed')
           .length,
-        pending: demoInspections.filter((ins: DemoInspection) => ins.status === 'pending').length,
+        pending: demoInspections.filter((ins: DemoInspection) => ins.status === 'pending').length
       },
       certificates: {
         active: demoCertificates.filter((cert: DemoCertificate) => cert.status === 'active').length,
         expired: demoCertificates.filter((cert: DemoCertificate) => cert.status === 'expired')
           .length,
-        total: demoCertificates.length,
+        total: demoCertificates.length
       },
       users: {
         farmers: demoUsers.filter((user: DemoUser) => user.role === 'farmer').length,
         inspectors: demoUsers.filter((user: DemoUser) => user.role === 'inspector').length,
         reviewers: demoUsers.filter((user: DemoUser) => user.role === 'reviewer').length,
-        admins: demoUsers.filter((user: DemoUser) => user.role === 'admin').length,
-      },
+        admins: demoUsers.filter((user: DemoUser) => user.role === 'admin').length
+      }
     };
     setStats(dashboardStats);
   }, []);
@@ -113,11 +113,11 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           {
             title: 'คำขอของฉัน',
             value: demoApplications.filter(
-              (app: DemoApplication) => app.farmerId === currentUser.id,
+              (app: DemoApplication) => app.farmerId === currentUser.id
             ).length,
             subtitle: 'คำขอทั้งหมด',
             icon: '📝',
-            color: 'bg-blue-50 border-blue-200 text-blue-600',
+            color: 'bg-blue-50 border-blue-200 text-blue-600'
           },
           {
             title: 'การตรวจสอบ',
@@ -125,18 +125,18 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
               .length,
             subtitle: 'รอตรวจสอบ',
             icon: '🔍',
-            color: 'bg-yellow-50 border-yellow-200 text-yellow-600',
+            color: 'bg-yellow-50 border-yellow-200 text-yellow-600'
           },
           {
             title: 'ใบรับรอง',
             value: demoCertificates.filter(
               (cert: DemoCertificate) =>
-                cert.farmerId === currentUser.id && cert.status === 'active',
+                cert.farmerId === currentUser.id && cert.status === 'active'
             ).length,
             subtitle: 'ใบรับรองที่ใช้งานได้',
             icon: '🏆',
-            color: 'bg-green-50 border-green-200 text-green-600',
-          },
+            color: 'bg-green-50 border-green-200 text-green-600'
+          }
         ];
 
       case 'inspector':
@@ -145,29 +145,29 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
             title: 'งานตรวจสอบ',
             value: demoInspections.filter(
               (ins: DemoInspection) =>
-                ins.inspectorId === currentUser.id && ins.status === 'scheduled',
+                ins.inspectorId === currentUser.id && ins.status === 'scheduled'
             ).length,
             subtitle: 'ที่ได้รับมอบหมาย',
             icon: '📋',
-            color: 'bg-orange-50 border-orange-200 text-orange-600',
+            color: 'bg-orange-50 border-orange-200 text-orange-600'
           },
           {
             title: 'ตรวจสอบแล้ว',
             value: demoInspections.filter(
               (ins: DemoInspection) =>
-                ins.inspectorId === currentUser.id && ins.status === 'completed',
+                ins.inspectorId === currentUser.id && ins.status === 'completed'
             ).length,
             subtitle: 'ในเดือนนี้',
             icon: '✅',
-            color: 'bg-green-50 border-green-200 text-green-600',
+            color: 'bg-green-50 border-green-200 text-green-600'
           },
           {
             title: 'คะแนนเฉลี่ย',
             value: '8.5',
             subtitle: 'คะแนนการตรวจสอบ',
             icon: '⭐',
-            color: 'bg-purple-50 border-purple-200 text-purple-600',
-          },
+            color: 'bg-purple-50 border-purple-200 text-purple-600'
+          }
         ];
 
       case 'reviewer':
@@ -178,24 +178,24 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
               .length,
             subtitle: 'คำขอที่ต้องประเมิน',
             icon: '📊',
-            color: 'bg-blue-50 border-blue-200 text-blue-600',
+            color: 'bg-blue-50 border-blue-200 text-blue-600'
           },
           {
             title: 'ประเมินแล้ว',
             value: demoApplications.filter((app: DemoApplication) =>
-              ['approved', 'rejected'].includes(app.status),
+              ['approved', 'rejected'].includes(app.status)
             ).length,
             subtitle: 'ในเดือนนี้',
             icon: '📈',
-            color: 'bg-green-50 border-green-200 text-green-600',
+            color: 'bg-green-50 border-green-200 text-green-600'
           },
           {
             title: 'อัตราผ่าน',
             value: '85%',
             subtitle: 'ของการประเมิน',
             icon: '🎯',
-            color: 'bg-indigo-50 border-indigo-200 text-indigo-600',
-          },
+            color: 'bg-indigo-50 border-indigo-200 text-indigo-600'
+          }
         ];
 
       case 'admin':
@@ -206,22 +206,22 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
             value: stats.applications.total,
             subtitle: `รอดำเนินการ ${stats.applications.pending} รายการ`,
             icon: '📊',
-            color: 'bg-blue-50 border-blue-200 text-blue-600',
+            color: 'bg-blue-50 border-blue-200 text-blue-600'
           },
           {
             title: 'การตรวจสอบ',
             value: stats.inspections.completed,
             subtitle: `เสร็จสิ้นแล้ว/${stats.inspections.scheduled + stats.inspections.completed} รายการ`,
             icon: '🔍',
-            color: 'bg-green-50 border-green-200 text-green-600',
+            color: 'bg-green-50 border-green-200 text-green-600'
           },
           {
             title: 'ใบรับรอง',
             value: stats.certificates.active,
             subtitle: `ใช้งานได้/${stats.certificates.total} ใบ`,
             icon: '🏆',
-            color: 'bg-yellow-50 border-yellow-200 text-yellow-600',
-          },
+            color: 'bg-yellow-50 border-yellow-200 text-yellow-600'
+          }
         ];
     }
   };
@@ -233,7 +233,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
     demoApplications
       .filter(
         (app: DemoApplication) =>
-          userRole === 'admin' || (userRole === 'farmer' && app.farmerId === currentUser.id),
+          userRole === 'admin' || (userRole === 'farmer' && app.farmerId === currentUser.id)
       )
       .slice(0, 3)
       .forEach((app: DemoApplication) => {
@@ -241,7 +241,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           id: app.id,
           type: 'application',
           message: `คำขอ GACP #${app.id} สถานะ: ${app.status}`,
-          timestamp: app.submittedDate,
+          timestamp: app.submittedDate
         });
       });
 
@@ -249,7 +249,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
     demoInspections
       .filter(
         (ins: DemoInspection) =>
-          userRole === 'admin' || (userRole === 'inspector' && ins.inspectorId === currentUser.id),
+          userRole === 'admin' || (userRole === 'inspector' && ins.inspectorId === currentUser.id)
       )
       .slice(0, 2)
       .forEach((ins: DemoInspection) => {
@@ -257,7 +257,7 @@ export default function DemoDashboard({ userRole = 'farmer', className = '' }: D
           id: ins.id,
           type: 'inspection',
           message: `การตรวจสอบ #${ins.id}`,
-          timestamp: ins.date,
+          timestamp: ins.date
         });
       });
 

@@ -56,6 +56,7 @@ nano terraform.tfvars
 ```
 
 **Edit terraform.tfvars:**
+
 ```hcl
 aws_region = "ap-southeast-1"
 environment = "production"
@@ -101,6 +102,7 @@ bash ../../scripts/deploy/setup-infrastructure.sh
 ```
 
 **This will:**
+
 - Initialize Terraform
 - Create ECR repository
 - Deploy AWS Secrets Manager
@@ -120,6 +122,7 @@ bash ../../scripts/deploy/deploy-aws.sh
 ```
 
 **This will:**
+
 - Build Docker image
 - Push to ECR
 - Deploy to ECS
@@ -169,16 +172,16 @@ aws logs tail /ecs/gacp-backend --follow --region ap-southeast-1
 
 ### AWS Resources Created
 
-| Resource | Name | Purpose |
-|----------|------|---------|
-| VPC | gacp-vpc-production | Network isolation |
-| Subnets | gacp-public-1/2, gacp-private-1/2 | Multi-AZ deployment |
-| NAT Gateway | gacp-nat | Outbound internet |
-| ECS Cluster | gacp-cluster-production | Container orchestration |
-| ALB | gacp-alb | Load balancing |
-| Redis | gacp-redis | Caching & sessions |
-| S3 | gacp-documents-production | Document storage |
-| Secrets Manager | gacp-platform/production | Secret storage |
+| Resource        | Name                              | Purpose                 |
+| --------------- | --------------------------------- | ----------------------- |
+| VPC             | gacp-vpc-production               | Network isolation       |
+| Subnets         | gacp-public-1/2, gacp-private-1/2 | Multi-AZ deployment     |
+| NAT Gateway     | gacp-nat                          | Outbound internet       |
+| ECS Cluster     | gacp-cluster-production           | Container orchestration |
+| ALB             | gacp-alb                          | Load balancing          |
+| Redis           | gacp-redis                        | Caching & sessions      |
+| S3              | gacp-documents-production         | Document storage        |
+| Secrets Manager | gacp-platform/production          | Secret storage          |
 
 ### Estimated Monthly Cost
 
@@ -261,16 +264,19 @@ aws ec2 describe-security-groups \
 ## Next Steps
 
 ### Week 2: Portal Completion
+
 1. Complete admin portal
 2. Complete certificate portal
 3. Integration testing
 
 ### Week 3: Testing
+
 1. E2E tests
 2. Load testing
 3. Security testing
 
 ### Week 4: Production Launch
+
 1. Final review
 2. Production deployment
 3. Monitoring setup

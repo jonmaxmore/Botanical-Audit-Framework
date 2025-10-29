@@ -7,9 +7,9 @@ const mockPush = jest.fn();
 const mockPathname = jest.fn();
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: mockPush,
+    push: mockPush
   }),
-  usePathname: () => mockPathname(),
+  usePathname: () => mockPathname()
 }));
 
 // Mock localStorage
@@ -25,12 +25,12 @@ const localStorageMock = (() => {
     }),
     clear: jest.fn(() => {
       store = {};
-    }),
+    })
   };
 })();
 
 Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock,
+  value: localStorageMock
 });
 
 describe('DashboardLayout', () => {
@@ -44,7 +44,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Test Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
       expect(screen.getByText('Test Content')).toBeInTheDocument();
     });
@@ -53,7 +53,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
       const titles = screen.getAllByText('Certificate Portal');
       expect(titles.length).toBeGreaterThan(0);
@@ -63,7 +63,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
       expect(screen.getByTestId('AccountCircleIcon')).toBeInTheDocument();
     });
@@ -74,7 +74,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       // All menu items - use getAllByText to handle potential duplicates
@@ -84,7 +84,7 @@ describe('DashboardLayout', () => {
         'QR Scanner',
         'Search',
         'Reports',
-        'Settings',
+        'Settings'
       ];
       menuItems.forEach(item => {
         expect(screen.getAllByText(item).length).toBeGreaterThan(0);
@@ -95,7 +95,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       const buttons = screen.getAllByText('Dashboard');
@@ -110,7 +110,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       const buttons = screen.getAllByText('Certificates');
@@ -125,7 +125,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       const buttons = screen.getAllByText('Settings');
@@ -142,7 +142,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');
@@ -160,7 +160,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');
@@ -184,7 +184,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');
@@ -212,7 +212,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       const buttons = screen.getAllByText('Dashboard');
@@ -226,7 +226,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       const buttons = screen.getAllByText('Certificates');
@@ -240,7 +240,7 @@ describe('DashboardLayout', () => {
       render(
         <DashboardLayout>
           <div>Content</div>
-        </DashboardLayout>,
+        </DashboardLayout>
       );
 
       expect(screen.getByTestId('MenuIcon')).toBeInTheDocument();

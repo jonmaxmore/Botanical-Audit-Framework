@@ -3,19 +3,24 @@
 ## Overview
 
 Automated code quality checks are now configured to run:
+
 - **On commit:** TypeScript + ESLint + Formatting
 - **On push:** TypeScript + ESLint + Tests
 
 ## What Runs When
 
 ### Pre-Commit Hook (`.husky/pre-commit`)
+
 Runs automatically before every commit:
+
 1. **TypeScript type checking** - Validates types across all portals
 2. **ESLint** - Checks code quality and style
 3. **Prettier** - Auto-formats staged files
 
 ### Pre-Push Hook (`.husky/pre-push`)
+
 Runs automatically before pushing to remote:
+
 1. **TypeScript type checking**
 2. **ESLint**
 3. **Unit tests**
@@ -56,18 +61,21 @@ git push --no-verify
 ## Troubleshooting
 
 **Hook not running:**
+
 ```bash
 # Reinstall husky
 npm run prepare
 ```
 
 **Permission errors (Linux/Mac):**
+
 ```bash
 chmod +x .husky/pre-commit
 chmod +x .husky/pre-push
 ```
 
 **Slow checks:**
+
 - Pre-commit checks only staged files (fast)
 - Pre-push checks entire codebase (slower but thorough)
 

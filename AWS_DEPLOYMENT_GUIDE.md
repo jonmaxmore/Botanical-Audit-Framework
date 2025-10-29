@@ -218,6 +218,7 @@ echo "Add this IP to MongoDB Atlas whitelist: $NAT_IP"
 #### 8.2 Update Connection String
 
 In MongoDB Atlas:
+
 1. Go to Database Access → Add IP Address
 2. Add NAT Gateway IP
 3. Copy connection string
@@ -287,6 +288,7 @@ artillery run load-test.yml
 ## 📊 Post-Deployment Checklist
 
 ### Security
+
 - [ ] All secrets in AWS Secrets Manager
 - [ ] No hardcoded credentials in code
 - [ ] SSL certificate configured
@@ -295,6 +297,7 @@ artillery run load-test.yml
 - [ ] CloudTrail enabled
 
 ### Monitoring
+
 - [ ] CloudWatch alarms configured
 - [ ] Log aggregation working
 - [ ] Health checks passing
@@ -302,6 +305,7 @@ artillery run load-test.yml
 - [ ] Backup strategy in place
 
 ### Performance
+
 - [ ] API response time < 200ms
 - [ ] Page load time < 2s
 - [ ] Database queries optimized
@@ -309,6 +313,7 @@ artillery run load-test.yml
 - [ ] Caching enabled
 
 ### Documentation
+
 - [ ] Deployment runbook updated
 - [ ] Architecture diagrams current
 - [ ] API documentation published
@@ -322,6 +327,7 @@ artillery run load-test.yml
 **Symptoms:** Tasks start then immediately stop
 
 **Solutions:**
+
 ```bash
 # Check task logs
 aws ecs describe-tasks \
@@ -339,6 +345,7 @@ aws ecs describe-tasks \
 **Symptoms:** Targets marked unhealthy
 
 **Solutions:**
+
 ```bash
 # Check target health
 aws elbv2 describe-target-health \
@@ -358,6 +365,7 @@ curl http://TASK_IP:3000/health
 **Symptoms:** Application fails with "Missing required environment variables"
 
 **Solutions:**
+
 ```bash
 # Verify secrets exist
 aws secretsmanager get-secret-value \
@@ -419,20 +427,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-southeast-1
-      
+
       - name: Build and push Docker image
         run: |
           aws ecr get-login-password | docker login --username AWS --password-stdin $ECR_REGISTRY
           docker build -t gacp-backend .
           docker push $ECR_REGISTRY/gacp-backend:latest
-      
+
       - name: Deploy to ECS
         run: |
           aws ecs update-service --cluster gacp-cluster-production --service gacp-backend --force-new-deployment

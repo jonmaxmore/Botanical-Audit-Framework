@@ -10,7 +10,7 @@ import {
   TrendingUp,
   People,
   Description,
-  Dashboard,
+  Dashboard
 } from '@mui/icons-material';
 
 export default function TailwindExamplesPage() {

@@ -13,7 +13,7 @@ describe('API Routes: /api/auth', () => {
         email: 'newfarmer@example.com',
         password: 'SecurePass123!',
         name: 'นายชาญชัย ทดสอบ',
-        role: 'farmer',
+        role: 'farmer'
       };
 
       expect(validPayload.email).toBeDefined();
@@ -97,12 +97,12 @@ describe('API Routes: /api/auth', () => {
         email: 'farmer@test.com',
         password: 'password123',
         role: 'farmer',
-        farmerId: 'F001',
+        farmerId: 'F001'
       },
       { id: '2', email: 'reviewer@test.com', password: 'password123', role: 'reviewer' },
       { id: '3', email: 'inspector@test.com', password: 'password123', role: 'inspector' },
       { id: '4', email: 'approver@test.com', password: 'password123', role: 'approver' },
-      { id: '5', email: 'admin@test.com', password: 'password123', role: 'admin' },
+      { id: '5', email: 'admin@test.com', password: 'password123', role: 'admin' }
     ];
 
     it('should find user with correct credentials', () => {

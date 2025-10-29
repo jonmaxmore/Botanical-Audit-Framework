@@ -323,10 +323,10 @@ const testUsers = {
       password: 'Test@1234',
       email: 'newfarmer@test.com',
       name: 'New Farmer',
-      role: 'farmer',
+      role: 'farmer'
       // ...
-    },
-  ],
+    }
+  ]
 };
 ```
 

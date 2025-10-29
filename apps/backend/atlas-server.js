@@ -651,10 +651,10 @@ async function startServer() {
   try {
     // Load secrets from AWS if in production
     await secretsManager.initialize();
-    
+
     // Validate required environment variables
     validateEnvironment();
-    
+
     appLogger.info('🔗 Connecting to MongoDB Atlas...');
     const connected = await mongoManager.connect();
 

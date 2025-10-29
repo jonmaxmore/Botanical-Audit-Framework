@@ -222,7 +222,7 @@ services:
           '--no-verbose',
           '--tries=1',
           '--spider',
-          'http://localhost:3000/api/health/live',
+          'http://localhost:3000/api/health/live'
         ]
       interval: 30s
       timeout: 10s

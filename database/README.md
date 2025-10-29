@@ -120,13 +120,13 @@ const user = await User.create({
   passwordHash: await bcrypt.hash('password', 12),
   fullName: 'John Farmer',
   role: 'FARMER',
-  permissions: ['application:create', 'application:read:own'],
+  permissions: ['application:create', 'application:read:own']
 });
 
 // Example: Find user's applications
 const applications = await Application.find({
   userId: user.userId,
-  isActive: true,
+  isActive: true
 }).sort({ createdAt: -1 });
 ```
 
@@ -276,7 +276,7 @@ console.log(app.isValidTransition('SUBMITTED')); // true (from DRAFT)
 const AuditLog = require('./database/models/AuditLog.model');
 const integrity = await AuditLog.verifyChainIntegrity(
   new Date('2025-10-01'),
-  new Date('2025-10-31'),
+  new Date('2025-10-31')
 );
 console.log(integrity.intact); // Should be true
 ```
@@ -317,7 +317,7 @@ mongoose.connect(process.env.MONGODB_URI, {
   serverSelectionTimeoutMS: 5000,
   retryWrites: true,
   retryReads: true,
-  readPreference: 'secondaryPreferred', // Read from replicas
+  readPreference: 'secondaryPreferred' // Read from replicas
 });
 ```
 

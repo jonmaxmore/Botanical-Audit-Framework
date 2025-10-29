@@ -1413,7 +1413,7 @@ enum Permission {
   // Certificate permissions
   CERTIFICATE_READ = 'certificate:read',
   CERTIFICATE_ISSUE = 'certificate:issue',
-  CERTIFICATE_REVOKE = 'certificate:revoke',
+  CERTIFICATE_REVOKE = 'certificate:revoke'
 }
 
 const RolePermissions: Record<string, Permission[]> = {
@@ -1427,7 +1427,7 @@ const RolePermissions: Record<string, Permission[]> = {
     Permission.SOP_CREATE,
     Permission.SOP_READ,
     Permission.SOP_UPDATE,
-    Permission.CERTIFICATE_READ,
+    Permission.CERTIFICATE_READ
   ],
 
   dtam_reviewer: [Permission.APPLICATION_READ, Permission.DTAM_REVIEW],
@@ -1438,13 +1438,13 @@ const RolePermissions: Record<string, Permission[]> = {
     Permission.APPLICATION_READ,
     Permission.DTAM_APPROVE,
     Permission.CERTIFICATE_ISSUE,
-    Permission.CERTIFICATE_REVOKE,
+    Permission.CERTIFICATE_REVOKE
   ],
 
   dtam_admin: [
     // All permissions
-    ...Object.values(Permission),
-  ],
+    ...Object.values(Permission)
+  ]
 };
 
 // Middleware Usage:
@@ -1732,7 +1732,7 @@ Log Format (JSON):
     'message': 'Application submitted',
     'context':
       { 'application_id': 'APP-2025-0001', 'farmer_id': 'F-123', 'request_id': 'req_abc123' },
-    'metadata': { 'environment': 'production', 'hostname': 'app-server-1', 'pid': 12345 },
+    'metadata': { 'environment': 'production', 'hostname': 'app-server-1', 'pid': 12345 }
   }
 
 Log Storage:

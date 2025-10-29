@@ -18,50 +18,55 @@ const WORKFLOW_STEPS = [
     step: 1,
     label: 'ยื่นคำขอ',
     description: 'Application Submission',
-    states: ['DRAFT', 'SUBMITTED']
+    states: ['DRAFT', 'SUBMITTED'],
   },
   {
     step: 2,
     label: 'ชำระเงินรอบแรก',
     description: '5,000 บาท',
-    states: ['PAYMENT_PENDING_1', 'PAYMENT_PROCESSING_1']
+    states: ['PAYMENT_PENDING_1', 'PAYMENT_PROCESSING_1'],
   },
   {
     step: 3,
     label: 'ตรวจสอบเอกสาร',
     description: 'Document Review',
-    states: ['DOCUMENT_REVIEW', 'DOCUMENT_REVISION', 'DOCUMENT_REJECTED']
+    states: ['DOCUMENT_REVIEW', 'DOCUMENT_REVISION', 'DOCUMENT_REJECTED'],
   },
   {
     step: 4,
     label: 'เอกสารผ่าน',
     description: 'Document Approved',
-    states: ['DOCUMENT_APPROVED']
+    states: ['DOCUMENT_APPROVED'],
   },
   {
     step: 5,
     label: 'ชำระเงินรอบสอง',
     description: '25,000 บาท',
-    states: ['PAYMENT_PENDING_2', 'PAYMENT_PROCESSING_2']
+    states: ['PAYMENT_PENDING_2', 'PAYMENT_PROCESSING_2'],
   },
   {
     step: 6,
     label: 'ตรวจสอบฟาร์ม',
     description: 'Field Inspection',
-    states: ['INSPECTION_SCHEDULED', 'INSPECTION_VDO_CALL', 'INSPECTION_ON_SITE', 'INSPECTION_COMPLETED']
+    states: [
+      'INSPECTION_SCHEDULED',
+      'INSPECTION_VDO_CALL',
+      'INSPECTION_ON_SITE',
+      'INSPECTION_COMPLETED',
+    ],
   },
   {
     step: 7,
     label: 'อนุมัติผล',
     description: 'Final Approval',
-    states: ['PENDING_APPROVAL', 'APPROVED', 'REJECTED']
+    states: ['PENDING_APPROVAL', 'APPROVED', 'REJECTED'],
   },
   {
     step: 8,
     label: 'รับใบรับรอง',
     description: 'Certificate',
-    states: ['CERTIFICATE_GENERATING', 'CERTIFICATE_ISSUED']
-  }
+    states: ['CERTIFICATE_GENERATING', 'CERTIFICATE_ISSUED'],
+  },
 ];
 
 const getStepStatus = (stepNumber: number, currentStep: number, currentState: WorkflowState) => {
@@ -102,7 +107,7 @@ const getStatusColor = (status: string): string => {
 export default function WorkflowProgress({
   currentState,
   currentStep,
-  variant = 'horizontal'
+  variant = 'horizontal',
 }: WorkflowProgressProps) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
@@ -110,7 +115,11 @@ export default function WorkflowProgress({
 
   return (
     <Box sx={{ width: '100%', py: 2 }}>
-      <Stepper activeStep={currentStep - 1} orientation={orientation} alternativeLabel={orientation === 'horizontal'}>
+      <Stepper
+        activeStep={currentStep - 1}
+        orientation={orientation}
+        alternativeLabel={orientation === 'horizontal'}
+      >
         {WORKFLOW_STEPS.map((step) => {
           const status = getStepStatus(step.step, currentStep, currentState);
           const statusColor = getStatusColor(status);
@@ -123,8 +132,8 @@ export default function WorkflowProgress({
                 sx={{
                   '& .MuiStepLabel-label': {
                     color: statusColor,
-                    fontWeight: status === 'active' ? 600 : 400
-                  }
+                    fontWeight: status === 'active' ? 600 : 400,
+                  },
                 }}
               >
                 <Typography variant="body2" fontWeight={status === 'active' ? 600 : 400}>
@@ -141,8 +150,8 @@ export default function WorkflowProgress({
 
       <Box sx={{ mt: 2, textAlign: 'center' }}>
         <Typography variant="body2" color="text.secondary">
-          ขั้นตอนปัจจุบัน: <strong>{WORKFLOW_STEPS[currentStep - 1]?.label}</strong> (
-          {currentStep}/8)
+          ขั้นตอนปัจจุบัน: <strong>{WORKFLOW_STEPS[currentStep - 1]?.label}</strong> ({currentStep}
+          /8)
         </Typography>
         <Typography variant="caption" color="text.secondary">
           สถานะ: {currentState}

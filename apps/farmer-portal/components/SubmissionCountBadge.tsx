@@ -16,7 +16,7 @@ export default function SubmissionCountBadge({ count, className = '' }: Submissi
         text: 'text-green-800',
         border: 'border-green-300',
         icon: '✅',
-        label: 'ครั้งแรก',
+        label: 'ครั้งแรก'
       };
     } else if (count === 2) {
       return {
@@ -24,7 +24,7 @@ export default function SubmissionCountBadge({ count, className = '' }: Submissi
         text: 'text-yellow-800',
         border: 'border-yellow-300',
         icon: '⚠️',
-        label: 'ส่งซ้ำ',
+        label: 'ส่งซ้ำ'
       };
     } else if (count >= 3) {
       return {
@@ -32,7 +32,7 @@ export default function SubmissionCountBadge({ count, className = '' }: Submissi
         text: 'text-red-800',
         border: 'border-red-300',
         icon: '🔴',
-        label: 'ต้องชำระเพิ่ม',
+        label: 'ต้องชำระเพิ่ม'
       };
     } else {
       return {
@@ -40,7 +40,7 @@ export default function SubmissionCountBadge({ count, className = '' }: Submissi
         text: 'text-gray-800',
         border: 'border-gray-300',
         icon: '📋',
-        label: 'ยังไม่ส่ง',
+        label: 'ยังไม่ส่ง'
       };
     }
   };

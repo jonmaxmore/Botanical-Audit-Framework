@@ -32,31 +32,31 @@ module.exports = {
             properties: {
               userId: {
                 bsonType: 'string',
-                pattern: '^USR-[0-9]{4}-[A-Z0-9]{8}$',
+                pattern: '^USR-[0-9]{4}-[A-Z0-9]{8}$'
               },
               email: {
                 bsonType: 'string',
-                pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$',
+                pattern: '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$'
               },
               thaiId: {
                 bsonType: ['string', 'null'],
-                pattern: '^[0-9]{13}$',
+                pattern: '^[0-9]{13}$'
               },
               phoneNumber: {
                 bsonType: ['string', 'null'],
-                pattern: '^0[0-9]{9}$',
+                pattern: '^0[0-9]{9}$'
               },
               role: {
-                enum: ['FARMER', 'DTAM', 'ADMIN'],
+                enum: ['FARMER', 'DTAM', 'ADMIN']
               },
               status: {
-                enum: ['ACTIVE', 'SUSPENDED', 'DELETED'],
-              },
-            },
-          },
+                enum: ['ACTIVE', 'SUSPENDED', 'DELETED']
+              }
+            }
+          }
         },
         validationLevel: 'strict',
-        validationAction: 'error',
+        validationAction: 'error'
       });
       console.log('    ✅ users collection created');
 
@@ -73,11 +73,11 @@ module.exports = {
             properties: {
               applicationId: {
                 bsonType: 'string',
-                pattern: '^APP-[0-9]{4}-[A-Z0-9]{8}$',
+                pattern: '^APP-[0-9]{4}-[A-Z0-9]{8}$'
               },
               applicationNumber: {
                 bsonType: 'string',
-                pattern: '^GACP-[0-9]{4}-[0-9]{6}$',
+                pattern: '^GACP-[0-9]{4}-[0-9]{6}$'
               },
               state: {
                 enum: [
@@ -94,19 +94,19 @@ module.exports = {
                   'CERTIFICATE_ISSUED',
                   'REJECTED',
                   'REVISION_REQUIRED',
-                  'EXPIRED',
-                ],
+                  'EXPIRED'
+                ]
               },
               farmSize: {
                 bsonType: 'number',
                 minimum: 0.1,
-                maximum: 10000,
-              },
-            },
-          },
+                maximum: 10000
+              }
+            }
+          }
         },
         validationLevel: 'strict',
-        validationAction: 'error',
+        validationAction: 'error'
       });
       console.log('    ✅ applications collection created');
 
@@ -123,23 +123,23 @@ module.exports = {
             properties: {
               invoiceId: {
                 bsonType: 'string',
-                pattern: '^INV-[0-9]{4}-[0-9]{6}$',
+                pattern: '^INV-[0-9]{4}-[0-9]{6}$'
               },
               invoiceType: {
-                enum: ['PHASE1_FEE', 'PHASE2_FEE'],
+                enum: ['PHASE1_FEE', 'PHASE2_FEE']
               },
               amount: {
                 bsonType: 'number',
-                minimum: 0,
+                minimum: 0
               },
               status: {
-                enum: ['PENDING', 'PAID', 'EXPIRED'],
-              },
-            },
-          },
+                enum: ['PENDING', 'PAID', 'EXPIRED']
+              }
+            }
+          }
         },
         validationLevel: 'strict',
-        validationAction: 'error',
+        validationAction: 'error'
       });
       console.log('    ✅ invoices collection created');
 
@@ -156,20 +156,20 @@ module.exports = {
             properties: {
               certificateId: {
                 bsonType: 'string',
-                pattern: '^CERT-[0-9]{4}-[A-Z0-9]{8}$',
+                pattern: '^CERT-[0-9]{4}-[A-Z0-9]{8}$'
               },
               certificateNumber: {
                 bsonType: 'string',
-                pattern: '^GACP-CERT-[0-9]{4}-[0-9]{6}$',
+                pattern: '^GACP-CERT-[0-9]{4}-[0-9]{6}$'
               },
               status: {
-                enum: ['ACTIVE', 'EXPIRING_SOON', 'EXPIRED', 'REVOKED'],
-              },
-            },
-          },
+                enum: ['ACTIVE', 'EXPIRING_SOON', 'EXPIRED', 'REVOKED']
+              }
+            }
+          }
         },
         validationLevel: 'strict',
-        validationAction: 'error',
+        validationAction: 'error'
       });
       console.log('    ✅ certificates collection created');
 
@@ -179,9 +179,9 @@ module.exports = {
           timeseries: {
             timeField: 'timestamp',
             metaField: 'metadata',
-            granularity: 'seconds',
+            granularity: 'seconds'
           },
-          expireAfterSeconds: 220752000, // 7 years (Thai tax law)
+          expireAfterSeconds: 220752000 // 7 years (Thai tax law)
         });
         console.log('    ✅ audit_logs time-series collection created (7-year retention)');
       } catch (error) {
@@ -227,7 +227,7 @@ module.exports = {
         'invoices',
         'payments',
         'certificates',
-        'audit_logs',
+        'audit_logs'
       ];
 
       for (const collectionName of collections) {
@@ -248,5 +248,5 @@ module.exports = {
       console.error('❌ Rollback failed:', error.message);
       throw error;
     }
-  },
+  }
 };

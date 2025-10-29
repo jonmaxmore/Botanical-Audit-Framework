@@ -364,7 +364,7 @@ if (soilData.moisture < 30) {
     type: 'low_moisture',
     severity: 'warning',
     message: 'ความชื้นในดินต่ำ ควรให้น้ำภายใน 6 ชั่วโมง',
-    action: 'เปิดระบบรดน้ำหรือรดน้ำด้วยมือ',
+    action: 'เปิดระบบรดน้ำหรือรดน้ำด้วยมือ'
   });
 }
 
@@ -373,7 +373,7 @@ if (soilData.ph < 5.5 || soilData.ph > 7.0) {
     type: 'ph_imbalance',
     severity: 'critical',
     message: `pH ดินไม่เหมาะสม (${soilData.ph}) สำหรับกัญชา`,
-    action: soilData.ph < 5.5 ? 'ใส่ปูนขาว' : 'ใส่กำมะถัน',
+    action: soilData.ph < 5.5 ? 'ใส่ปูนขาว' : 'ใส่กำมะถัน'
   });
 }
 ```
@@ -517,7 +517,7 @@ class FertilizerRecommendationEngine {
           applicationMethod: 'โรยรอบโคนต้น หรือละลายน้ำรด',
           frequency: 'ทุก 7-10 วัน',
           timing: 'ช่วงเช้า หลังรดน้ำ',
-          caution: 'ระวังใส่มากเกินไป อาจทำให้ใบไหม้',
+          caution: 'ระวังใส่มากเกินไป อาจทำให้ใบไหม้'
         });
       }
 
@@ -529,7 +529,7 @@ class FertilizerRecommendationEngine {
           fertilizer: 'ปุ๋ย Super Phosphate หรือ Bone Meal',
           amount: this.calculatePAmount(npk.phosphorus),
           applicationMethod: 'ผสมดิน หรือละลายน้ำรด',
-          frequency: 'ทุก 14 วัน',
+          frequency: 'ทุก 14 วัน'
         });
       }
     }
@@ -544,7 +544,7 @@ class FertilizerRecommendationEngine {
           fertilizer: 'ปุ๋ยโพแทส หรือ Kelp Meal',
           amount: this.calculateKAmount(npk.potassium),
           npkRatio: '5-10-15 (ลด N เพิ่ม K)',
-          frequency: 'ทุก 7 วัน',
+          frequency: 'ทุก 7 วัน'
         });
       }
     }
@@ -559,7 +559,7 @@ class FertilizerRecommendationEngine {
         amount: this.calculateLimeAmount(ph),
         applicationMethod: 'โรยทั่วแปลง พรวนดินให้เข้ากัน',
         waitTime: '2 สัปดาห์ ก่อนตรวจ pH อีกครั้ง',
-        benefit: 'ช่วยให้ธาตุอาหารดูดซึมได้ดีขึ้น',
+        benefit: 'ช่วยให้ธาตุอาหารดูดซึมได้ดีขึ้น'
       });
     }
 
@@ -571,7 +571,7 @@ class FertilizerRecommendationEngine {
         solution: 'กำมะถัน (Sulfur) หรือ Peat Moss',
         amount: this.calculateSulfurAmount(ph),
         applicationMethod: 'ผสมดิน รดน้ำให้ชุ่ม',
-        waitTime: '3-4 สัปดาห์',
+        waitTime: '3-4 สัปดาห์'
       });
     }
 
@@ -584,7 +584,7 @@ class FertilizerRecommendationEngine {
         solution: 'คอมโพสต์ หรือ มูลไส้เดือน',
         amount: '2-5 กก./ตร.ม.',
         benefit: 'เพิ่มความอุดมสมบูรณ์ ปรับโครงสร้างดิน',
-        timing: 'ก่อนปลูก หรือระหว่างเติบโต',
+        timing: 'ก่อนปลูก หรือระหว่างเติบโต'
       });
     }
 
@@ -626,7 +626,7 @@ class IrrigationRecommendationEngine {
         amount: this.calculateWaterAmount(currentDeficit, farmData.area),
         duration: '45-60 นาที',
         method: 'Drip irrigation แนะนำ (ประหยัดน้ำ 40%)',
-        timing: 'ตอนนี้เลย หรือพอแดดไม่ร้อน (16:00-18:00)',
+        timing: 'ตอนนี้เลย หรือพอแดดไม่ร้อน (16:00-18:00)'
       };
     }
 
@@ -637,7 +637,7 @@ class IrrigationRecommendationEngine {
         action: 'รอให้ฝนตก',
         reason: `คาดว่าจะมีฝน ${weatherForecast.rain}mm ภายใน 24 ชม.`,
         savings: this.calculateWaterSavings(weatherForecast.rain, farmData.area),
-        nextCheck: 'ตรวจสอบอีกครั้งหลังฝนตก 12 ชม.',
+        nextCheck: 'ตรวจสอบอีกครั้งหลังฝนตก 12 ชม.'
       };
     }
 
@@ -649,10 +649,10 @@ class IrrigationRecommendationEngine {
         amount: this.calculateWaterAmount(currentDeficit, farmData.area),
         optimalTimes: [
           { time: '06:00-08:00', reason: 'ช่วงเช้า ระเหยน้อย' },
-          { time: '17:00-19:00', reason: 'ช่วงเย็น ต้นพักผ่อน' },
+          { time: '17:00-19:00', reason: 'ช่วงเย็น ต้นพักผ่อน' }
         ],
         method: 'Drip หรือ Sprinkler',
-        avoid: 'ช่วงเที่ยง (11:00-15:00) น้ำระเหยมาก',
+        avoid: 'ช่วงเที่ยง (11:00-15:00) น้ำระเหยมาก'
       };
     }
 
@@ -663,7 +663,7 @@ class IrrigationRecommendationEngine {
         symptoms: ['ใบหุบ', 'ยอดอ่อนตก', 'เติบโตช้า'],
         immediateAction: 'ให้น้ำ + ตรวจระบบรดน้ำ',
         investigation: 'ตรวจสอบท่อน้ำรั่ว, หัวสปริงเกอร์อุดตัน',
-        prevention: 'ติดตั้ง soil moisture sensor เพิ่ม',
+        prevention: 'ติดตั้ง soil moisture sensor เพิ่ม'
       };
     }
 
@@ -671,7 +671,7 @@ class IrrigationRecommendationEngine {
       urgency: 'low',
       action: 'ไม่ต้องให้น้ำ',
       reason: `ความชื้นเพียงพอ (${soilMoisture}%)`,
-      nextWatering: this.estimateNextWatering(soilMoisture, weatherForecast),
+      nextWatering: this.estimateNextWatering(soilMoisture, weatherForecast)
     };
   }
 
@@ -689,8 +689,8 @@ class IrrigationRecommendationEngine {
         efficiency < 70 ? 'เปลี่ยนเป็น Drip irrigation (ประสิทธิภาพ 90%)' : null,
         'ให้น้ำช่วงเช้า-เย็น เพื่อลดการระเหย',
         'ตรวจสอบท่อรั่วทุกสัปดาห์',
-        'ใช้ mulch คลุมดิน ลดการระเหยน้ำ 25%',
-      ].filter(Boolean),
+        'ใช้ mulch คลุมดิน ลดการระเหยน้ำ 25%'
+      ].filter(Boolean)
     };
   }
 }
@@ -729,7 +729,7 @@ class EnhancedAIAssistant {
       const farmData = await this.getFarmData(context.userId);
       const recommendations = this.fertilizerEngine.recommend({
         ...farmData.soil,
-        ph: entities.soilPH,
+        ph: entities.soilPH
       });
 
       return this.generateNaturalResponse(recommendations, 'th');

@@ -2,9 +2,30 @@
 
 export default function CertificatesPage() {
   const certificates = [
-    { id: 'GACP-001', farm: 'ฟาร์มสุขใจ', crop: 'กัญชา', issued: '15/01/2025', expires: '15/01/2026', status: 'active' },
-    { id: 'GACP-002', farm: 'ฟาร์มปลอดภัย', crop: 'ขมิ้น', issued: '10/01/2025', expires: '10/01/2026', status: 'active' },
-    { id: 'GACP-003', farm: 'ฟาร์มอินทรีย์', crop: 'กัญชา', issued: '05/12/2024', expires: '05/12/2025', status: 'expiring' },
+    {
+      id: 'GACP-001',
+      farm: 'ฟาร์มสุขใจ',
+      crop: 'กัญชา',
+      issued: '15/01/2025',
+      expires: '15/01/2026',
+      status: 'active'
+    },
+    {
+      id: 'GACP-002',
+      farm: 'ฟาร์มปลอดภัย',
+      crop: 'ขมิ้น',
+      issued: '10/01/2025',
+      expires: '10/01/2026',
+      status: 'active'
+    },
+    {
+      id: 'GACP-003',
+      farm: 'ฟาร์มอินทรีย์',
+      crop: 'กัญชา',
+      issued: '05/12/2024',
+      expires: '05/12/2025',
+      status: 'expiring'
+    }
   ];
 
   return (
@@ -16,19 +37,28 @@ export default function CertificatesPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {certificates.map((cert) => (
-            <div key={cert.id} className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition">
-              <div className={`h-2 ${cert.status === 'active' ? 'bg-green-500' : 'bg-yellow-500'}`} />
+          {certificates.map(cert => (
+            <div
+              key={cert.id}
+              className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition"
+            >
+              <div
+                className={`h-2 ${cert.status === 'active' ? 'bg-green-500' : 'bg-yellow-500'}`}
+              />
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <div className="text-4xl">📜</div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                    cert.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'
-                  }`}>
+                  <span
+                    className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      cert.status === 'active'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}
+                  >
                     {cert.status === 'active' ? 'ใช้งานได้' : 'ใกล้หมดอายุ'}
                   </span>
                 </div>
-                
+
                 <h3 className="text-xl font-bold text-gray-900 mb-2">{cert.id}</h3>
                 <div className="space-y-2 text-sm mb-4">
                   <div className="flex justify-between">
@@ -45,7 +75,9 @@ export default function CertificatesPage() {
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">หมดอายุ:</span>
-                    <span className={`font-medium ${cert.status === 'expiring' ? 'text-yellow-600' : ''}`}>
+                    <span
+                      className={`font-medium ${cert.status === 'expiring' ? 'text-yellow-600' : ''}`}
+                    >
                       {cert.expires}
                     </span>
                   </div>

@@ -121,7 +121,7 @@ class GACPAuthService {
 
       const response = await gacpApiClient.post<GACPAuthToken>(
         GACP_API_CONFIG.ENDPOINTS.AUTH.LOGIN,
-        credentials,
+        credentials
       );
 
       // Store authentication data if login successful
@@ -155,7 +155,7 @@ class GACPAuthService {
 
       const response = await gacpApiClient.post<GACPAuthToken>(
         GACP_API_CONFIG.ENDPOINTS.AUTH.REGISTER,
-        userData,
+        userData
       );
 
       // Store authentication data if registration successful
@@ -232,7 +232,7 @@ class GACPAuthService {
 
       const response = await gacpApiClient.put<UserProfile>(
         GACP_API_CONFIG.ENDPOINTS.AUTH.PROFILE,
-        profileData,
+        profileData
       );
 
       // Update local user data if successful
@@ -258,7 +258,7 @@ class GACPAuthService {
 
       return await gacpApiClient.post<void>(
         `${GACP_API_CONFIG.ENDPOINTS.AUTH.PROFILE}/change-password`,
-        passwordData,
+        passwordData
       );
     } catch (error) {
       console.error('[GACP Auth] Change password failed:', error);
@@ -276,7 +276,7 @@ class GACPAuthService {
 
       return await gacpApiClient.post<void>(
         `${GACP_API_CONFIG.ENDPOINTS.AUTH.PROFILE}/reset-password`,
-        resetData,
+        resetData
       );
     } catch (error) {
       console.error('[GACP Auth] Request password reset failed:', error);
@@ -294,7 +294,7 @@ class GACPAuthService {
 
       return await gacpApiClient.post<void>(
         `${GACP_API_CONFIG.ENDPOINTS.AUTH.PROFILE}/confirm-reset-password`,
-        resetData,
+        resetData
       );
     } catch (error) {
       console.error('[GACP Auth] Confirm password reset failed:', error);
@@ -320,7 +320,7 @@ class GACPAuthService {
   async refreshToken(): Promise<GACPApiResponse<GACPAuthToken>> {
     try {
       const response = await gacpApiClient.post<GACPAuthToken>(
-        GACP_API_CONFIG.ENDPOINTS.AUTH.REFRESH,
+        GACP_API_CONFIG.ENDPOINTS.AUTH.REFRESH
       );
 
       // Update stored token if successful

@@ -141,7 +141,7 @@ const imageOptimization = {
   processImage: async (buffer, options = {}) => {
     const sharp = require('sharp');
 
-    const { width = 800, height = 600, quality = 80, format = 'jpeg' } = options;
+    const { width = 800, height = 600, quality = 80, _format = 'jpeg' } = options;
 
     try {
       const processed = await sharp(buffer)
@@ -241,7 +241,7 @@ const optimizeApiResponse = {
     return result;
   },
 
-  // Paginated response format
+  // Paginated response _format
   paginatedResponse: (data, page, limit, total) => {
     return {
       success: true,

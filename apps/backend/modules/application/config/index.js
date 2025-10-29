@@ -28,8 +28,6 @@
 
 const logger = require('../../../shared/logger/logger');
 const path = require('path');
-const fs = require('fs');
-
 /**
  * Enhanced Application Module Configuration Class
  */

@@ -52,7 +52,7 @@ function isUnsafeDefault(value) {
     'gacp-platform-secret',
     'example-secret',
     'test-secret',
-    'secret-key-here',
+    'secret-key-here'
   ];
 
   const lowerValue = value.toLowerCase();
@@ -102,7 +102,7 @@ function loadJWTConfiguration() {
   console.log(`${'='.repeat(80)}\n`);
   console.log(`Environment: ${env}`);
   console.log(
-    `Security Level: ${isDevelopment ? 'Development (Relaxed)' : 'Production (Strict)'}\n`,
+    `Security Level: ${isDevelopment ? 'Development (Relaxed)' : 'Production (Strict)'}\n`
   );
 
   // =====================================
@@ -131,7 +131,7 @@ function loadJWTConfiguration() {
           '   2. Set it in your .env file:\n' +
           '      JWT_SECRET=<your-generated-secret>\n' +
           '   \n' +
-          '   3. Restart the application\n',
+          '   3. Restart the application\n'
       );
     }
   } else if (isUnsafeDefault(jwtSecret)) {
@@ -154,7 +154,7 @@ function loadJWTConfiguration() {
           "      node -e \"console.log(require('crypto').randomBytes(64).toString('hex'))\"\n" +
           '   \n' +
           '   2. Update your .env file with the new secret\n' +
-          '   3. Restart the application\n',
+          '   3. Restart the application\n'
       );
     }
   } else {
@@ -188,7 +188,7 @@ function loadJWTConfiguration() {
           '   2. Set it in your .env file:\n' +
           '      DTAM_JWT_SECRET=<your-generated-secret>\n' +
           '   \n' +
-          '   3. Restart the application\n',
+          '   3. Restart the application\n'
       );
     }
   } else if (isUnsafeDefault(dtamJwtSecret)) {
@@ -205,7 +205,7 @@ function loadJWTConfiguration() {
           '   \n' +
           '   Problem: This secret is insecure and should not be used in production\n' +
           '   \n' +
-          '   How to fix: (same as JWT_SECRET above)\n',
+          '   How to fix: (same as JWT_SECRET above)\n'
       );
     }
   } else {
@@ -222,7 +222,7 @@ function loadJWTConfiguration() {
         '   \n' +
         '   How to fix:\n' +
         '   1. Generate TWO different secrets\n' +
-        '   2. Set them separately in .env file\n',
+        '   2. Set them separately in .env file\n'
     );
   }
 
@@ -246,17 +246,17 @@ function loadJWTConfiguration() {
       expiry: jwtExpiry,
       algorithm: 'HS256',
       issuer: 'gacp-platform',
-      audience: 'gacp-public-users',
+      audience: 'gacp-public-users'
     },
     dtam: {
       secret: dtamJwtSecret,
       expiry: dtamJwtExpiry,
       algorithm: 'HS256',
       issuer: 'gacp-platform',
-      audience: 'gacp-dtam-staff',
+      audience: 'gacp-dtam-staff'
     },
     environment: env,
-    isDevelopment,
+    isDevelopment
   };
 }
 
@@ -278,7 +278,7 @@ function verifyToken(token, type, config) {
     return jwt.verify(token, jwtConfig.secret, {
       issuer: jwtConfig.issuer,
       audience: jwtConfig.audience,
-      algorithms: [jwtConfig.algorithm],
+      algorithms: [jwtConfig.algorithm]
     });
   } catch (error) {
     // Enhanced error messages
@@ -316,7 +316,7 @@ function signToken(payload, type, config) {
     expiresIn: jwtConfig.expiry,
     issuer: jwtConfig.issuer,
     audience: jwtConfig.audience,
-    algorithm: jwtConfig.algorithm,
+    algorithm: jwtConfig.algorithm
   });
 }
 
@@ -325,5 +325,5 @@ module.exports = {
   verifyToken,
   signToken,
   generateSecureSecret,
-  isUnsafeDefault,
+  isUnsafeDefault
 };

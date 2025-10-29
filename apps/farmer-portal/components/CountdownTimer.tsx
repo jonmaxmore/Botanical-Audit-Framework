@@ -66,13 +66,13 @@ export function CountdownTimer({
   criticalThreshold = 60, // 1 minute
   autoStart = true,
   showPauseButton = false,
-  className = '',
+  className = ''
 }: CountdownTimerProps) {
   const [state, setState] = useState<TimerState>({
     remainingSeconds: initialSeconds,
     isRunning: autoStart,
     isPaused: false,
-    hasTimedOut: false,
+    hasTimedOut: false
   });
 
   // Format time as MM:SS
@@ -89,7 +89,7 @@ export function CountdownTimer({
       if (seconds <= warningThreshold) return 'warning';
       return 'normal';
     },
-    [criticalThreshold, warningThreshold],
+    [criticalThreshold, warningThreshold]
   );
 
   // Timer effect
@@ -109,7 +109,7 @@ export function CountdownTimer({
             ...prev,
             remainingSeconds: 0,
             isRunning: false,
-            hasTimedOut: true,
+            hasTimedOut: true
           };
         }
 
@@ -120,7 +120,7 @@ export function CountdownTimer({
 
         return {
           ...prev,
-          remainingSeconds: newRemaining,
+          remainingSeconds: newRemaining
         };
       });
     }, 1000);
@@ -146,7 +146,7 @@ export function CountdownTimer({
       remainingSeconds: initialSeconds,
       isRunning: autoStart,
       isPaused: false,
-      hasTimedOut: false,
+      hasTimedOut: false
     });
   }, [initialSeconds, autoStart]);
 
@@ -158,20 +158,20 @@ export function CountdownTimer({
       container: 'bg-blue-50 border-blue-200',
       text: 'text-blue-900',
       icon: 'text-blue-600',
-      progress: 'bg-blue-600',
+      progress: 'bg-blue-600'
     },
     warning: {
       container: 'bg-yellow-50 border-yellow-300',
       text: 'text-yellow-900',
       icon: 'text-yellow-600',
-      progress: 'bg-yellow-600',
+      progress: 'bg-yellow-600'
     },
     critical: {
       container: 'bg-red-50 border-red-300 animate-pulse',
       text: 'text-red-900',
       icon: 'text-red-600',
-      progress: 'bg-red-600',
-    },
+      progress: 'bg-red-600'
+    }
   };
 
   const styles = urgencyStyles[urgencyLevel];
@@ -275,7 +275,7 @@ export function CountdownTimer({
 export function CompactCountdownTimer({
   initialSeconds = 900,
   onTimeout,
-  className = '',
+  className = ''
 }: Pick<CountdownTimerProps, 'initialSeconds' | 'onTimeout' | 'className'>) {
   const [remainingSeconds, setRemainingSeconds] = useState(initialSeconds);
 

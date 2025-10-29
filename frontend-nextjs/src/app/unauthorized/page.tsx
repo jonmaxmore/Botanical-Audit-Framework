@@ -31,7 +31,7 @@ export default function UnauthorizedPage() {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        background: 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)'
+        background: 'linear-gradient(135deg, #f44336 0%, #d32f2f 100%)',
       }}
     >
       <Container maxWidth="sm">

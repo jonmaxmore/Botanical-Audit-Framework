@@ -15,7 +15,7 @@ interface State {
 
 /**
  * Error Boundary Component (Task 2.2)
- * 
+ *
  * Catches React render errors and displays user-friendly Thai error UI
  * Prevents full app crashes from component failures
  * Provides "Try again" recovery button
@@ -42,7 +42,7 @@ class ErrorBoundary extends Component<Props, State> {
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     // Log error details for debugging
     console.error('🔴 ErrorBoundary caught an error:', error, errorInfo);
-    
+
     // Update state with error details
     this.setState({
       error,
@@ -107,9 +107,7 @@ class ErrorBoundary extends Component<Props, State> {
               </div>
 
               {/* Error Title */}
-              <h2 className="text-3xl font-extrabold text-gray-900 mb-2">
-                เกิดข้อผิดพลาด
-              </h2>
+              <h2 className="text-3xl font-extrabold text-gray-900 mb-2">เกิดข้อผิดพลาด</h2>
 
               {/* Error Description */}
               <p className="text-base text-gray-600 mb-6">

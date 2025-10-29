@@ -71,7 +71,7 @@ export default function NotificationBell({ userId, className = '' }: Notificatio
                   icon: '/notification-icon.png',
                   badge: '/badge-icon.png',
                   tag: message.data.notificationId,
-                  requireInteraction: message.data.priority === 'critical',
+                  requireInteraction: message.data.priority === 'critical'
                 });
               }
 

@@ -1,6 +1,6 @@
 /**
  * Authentication Setup for E2E Tests
- * 
+ *
  * This setup file handles authentication for all three portals before tests run.
  * It creates storage states that can be reused across test sessions.
  */

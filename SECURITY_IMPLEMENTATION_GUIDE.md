@@ -12,6 +12,7 @@ npm install @aws-sdk/client-secrets-manager
 ### Step 2: Configure AWS Credentials
 
 **Option A: AWS CLI (Recommended for local development)**
+
 ```bash
 aws configure
 # Enter your AWS Access Key ID
@@ -20,6 +21,7 @@ aws configure
 ```
 
 **Option B: Environment Variables**
+
 ```bash
 export AWS_ACCESS_KEY_ID=your-access-key
 export AWS_SECRET_ACCESS_KEY=your-secret-key
@@ -48,6 +50,7 @@ terraform apply
 ### Step 4: Update Backend Configuration
 
 Edit `apps/backend/.env`:
+
 ```bash
 NODE_ENV=production
 USE_AWS_SECRETS=true
@@ -63,6 +66,7 @@ node atlas-server.js
 ```
 
 Expected output:
+
 ```
 🔐 Loading secrets from AWS Secrets Manager...
 ✅ Secrets loaded successfully
@@ -87,6 +91,7 @@ git diff
 ### Manual Review Required
 
 Files that need manual review:
+
 1. `apps/backend/shared/auth.js` - JWT secret references
 2. `apps/backend/config/config-manager.js` - Database URIs
 3. `apps/backend/routes/auth.js` - Authentication logic
@@ -106,6 +111,7 @@ const JWT_SECRET = process.env.TEST_JWT_SECRET || 'test-secret-for-ci';
 ## Phase 3: Environment-Specific Configuration
 
 ### Development (.env.development)
+
 ```bash
 NODE_ENV=development
 USE_AWS_SECRETS=false
@@ -115,6 +121,7 @@ MONGODB_URI=mongodb://localhost:27017/gacp-dev
 ```
 
 ### Staging (.env.staging)
+
 ```bash
 NODE_ENV=staging
 USE_AWS_SECRETS=true
@@ -122,6 +129,7 @@ AWS_SECRET_NAME=gacp-platform/staging
 ```
 
 ### Production (.env.production)
+
 ```bash
 NODE_ENV=production
 USE_AWS_SECRETS=true
@@ -154,22 +162,25 @@ CMD ["node", "atlas-server.js"]
 {
   "taskRoleArn": "arn:aws:iam::ACCOUNT:role/gacp-ecs-task-role",
   "executionRoleArn": "arn:aws:iam::ACCOUNT:role/gacp-ecs-execution-role",
-  "containerDefinitions": [{
-    "name": "gacp-backend",
-    "image": "ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/gacp-backend:latest",
-    "environment": [
-      {"name": "NODE_ENV", "value": "production"},
-      {"name": "USE_AWS_SECRETS", "value": "true"},
-      {"name": "AWS_REGION", "value": "ap-southeast-1"},
-      {"name": "AWS_SECRET_NAME", "value": "gacp-platform/production"}
-    ]
-  }]
+  "containerDefinitions": [
+    {
+      "name": "gacp-backend",
+      "image": "ACCOUNT.dkr.ecr.ap-southeast-1.amazonaws.com/gacp-backend:latest",
+      "environment": [
+        { "name": "NODE_ENV", "value": "production" },
+        { "name": "USE_AWS_SECRETS", "value": "true" },
+        { "name": "AWS_REGION", "value": "ap-southeast-1" },
+        { "name": "AWS_SECRET_NAME", "value": "gacp-platform/production" }
+      ]
+    }
+  ]
 }
 ```
 
 ## Security Checklist
 
 ### Pre-Deployment
+
 - [ ] All hardcoded secrets removed from production code
 - [ ] AWS Secrets Manager configured
 - [ ] Environment variables validated
@@ -178,6 +189,7 @@ CMD ["node", "atlas-server.js"]
 - [ ] Secrets rotation policy defined
 
 ### Post-Deployment
+
 - [ ] Secrets loading tested in staging
 - [ ] Application starts successfully
 - [ ] Authentication works correctly
@@ -192,6 +204,7 @@ CMD ["node", "atlas-server.js"]
 **Error:** `Failed to load secrets from AWS`
 
 **Solutions:**
+
 1. Check AWS credentials: `aws sts get-caller-identity`
 2. Verify IAM permissions for Secrets Manager
 3. Confirm secret name matches: `gacp-platform/production`
@@ -202,6 +215,7 @@ CMD ["node", "atlas-server.js"]
 **Error:** `Missing required environment variables`
 
 **Solutions:**
+
 1. Verify secrets are loaded: Check logs for "✅ Secrets loaded"
 2. Ensure all required secrets exist in AWS Secrets Manager
 3. Check secret JSON structure matches expected format
@@ -211,6 +225,7 @@ CMD ["node", "atlas-server.js"]
 **Error:** `MongoDB connection failed`
 
 **Solutions:**
+
 1. Verify MONGODB_URI is loaded correctly
 2. Check MongoDB Atlas IP whitelist
 3. Confirm database credentials are valid
@@ -220,6 +235,7 @@ CMD ["node", "atlas-server.js"]
 ### Secret Rotation
 
 Rotate secrets every 90 days:
+
 ```bash
 # Generate new secret
 NEW_SECRET=$(node -e "console.log(require('crypto').randomBytes(64).toString('hex'))")
@@ -236,6 +252,7 @@ kubectl rollout restart deployment/gacp-backend
 ### Monitoring
 
 Set up CloudWatch alarms:
+
 - Failed secret retrieval attempts
 - Unauthorized access attempts
 - Secret rotation failures
@@ -243,6 +260,7 @@ Set up CloudWatch alarms:
 ### Audit Logging
 
 Enable AWS CloudTrail for Secrets Manager:
+
 - Track who accessed secrets
 - Monitor secret modifications
 - Alert on suspicious activity
@@ -259,6 +277,7 @@ Enable AWS CloudTrail for Secrets Manager:
 ## Support
 
 For issues or questions:
+
 - Check logs: `tail -f apps/backend/logs/combined.log`
 - Review AWS CloudWatch logs
 - Contact DevOps team

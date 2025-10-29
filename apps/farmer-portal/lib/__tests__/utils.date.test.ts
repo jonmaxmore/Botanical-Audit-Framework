@@ -13,7 +13,7 @@ import {
   getNextBusinessDay,
   toThaiYear,
   startOfDay,
-  endOfDay,
+  endOfDay
 } from '../utils/date';
 
 describe('Date Utilities', () => {

@@ -10,7 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  Filler,
+  Filler
 } from 'chart.js';
 
 // Register Chart.js components
@@ -24,7 +24,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
-  Filler,
+  Filler
 );
 
 // Chart theme colors (matching Material-UI theme)
@@ -36,7 +36,7 @@ export const chartColors = {
   info: 'rgb(2, 136, 209)', // Light Blue
   purple: 'rgb(123, 31, 162)', // Purple
   teal: 'rgb(0, 137, 123)', // Teal
-  pink: 'rgb(216, 27, 96)', // Pink
+  pink: 'rgb(216, 27, 96)' // Pink
 };
 
 // Chart color with transparency
@@ -48,7 +48,7 @@ export const chartColorsAlpha = {
   info: 'rgba(2, 136, 209, 0.6)',
   purple: 'rgba(123, 31, 162, 0.6)',
   teal: 'rgba(0, 137, 123, 0.6)',
-  pink: 'rgba(216, 27, 96, 0.6)',
+  pink: 'rgba(216, 27, 96, 0.6)'
 };
 
 // Chart default options
@@ -64,46 +64,46 @@ export const defaultChartOptions = {
         usePointStyle: true,
         font: {
           size: 12,
-          family: "'Roboto', sans-serif",
-        },
-      },
+          family: "'Roboto', sans-serif"
+        }
+      }
     },
     tooltip: {
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
       padding: 12,
       titleFont: {
         size: 14,
-        weight: 'bold' as const,
+        weight: 'bold' as const
       },
       bodyFont: {
-        size: 13,
+        size: 13
       },
-      cornerRadius: 4,
-    },
+      cornerRadius: 4
+    }
   },
   scales: {
     x: {
       grid: {
-        display: false,
+        display: false
       },
       ticks: {
         font: {
-          size: 11,
-        },
-      },
+          size: 11
+        }
+      }
     },
     y: {
       grid: {
-        color: 'rgba(0, 0, 0, 0.05)',
+        color: 'rgba(0, 0, 0, 0.05)'
       },
       ticks: {
         font: {
-          size: 11,
-        },
+          size: 11
+        }
       },
-      beginAtZero: true,
-    },
-  },
+      beginAtZero: true
+    }
+  }
 };
 
 // Line chart options
@@ -113,20 +113,20 @@ export const lineChartOptions = {
     ...defaultChartOptions.plugins,
     legend: {
       ...defaultChartOptions.plugins.legend,
-      display: true,
-    },
+      display: true
+    }
   },
   elements: {
     line: {
       tension: 0.4, // Smooth curves
-      borderWidth: 2,
+      borderWidth: 2
     },
     point: {
       radius: 3,
       hoverRadius: 5,
-      hitRadius: 10,
-    },
-  },
+      hitRadius: 10
+    }
+  }
 };
 
 // Bar chart options
@@ -136,15 +136,15 @@ export const barChartOptions = {
     ...defaultChartOptions.plugins,
     legend: {
       ...defaultChartOptions.plugins.legend,
-      display: true,
-    },
+      display: true
+    }
   },
   elements: {
     bar: {
       borderWidth: 0,
-      borderRadius: 4,
-    },
-  },
+      borderRadius: 4
+    }
+  }
 };
 
 // Pie/Doughnut chart options
@@ -160,19 +160,19 @@ export const pieChartOptions = {
         usePointStyle: true,
         font: {
           size: 12,
-          family: "'Roboto', sans-serif",
-        },
-      },
+          family: "'Roboto', sans-serif"
+        }
+      }
     },
     tooltip: {
       backgroundColor: 'rgba(0, 0, 0, 0.8)',
       padding: 12,
       titleFont: {
         size: 14,
-        weight: 'bold' as const,
+        weight: 'bold' as const
       },
       bodyFont: {
-        size: 13,
+        size: 13
       },
       cornerRadius: 4,
       callbacks: {
@@ -182,38 +182,38 @@ export const pieChartOptions = {
           const total = context.dataset.data.reduce((a: number, b: number) => a + b, 0);
           const percentage = ((value / total) * 100).toFixed(1);
           return `${label}: ${value} (${percentage}%)`;
-        },
-      },
-    },
-  },
+        }
+      }
+    }
+  }
 };
 
 // Status color mapping
 export const statusColors = {
   pending: chartColors.warning,
   approved: chartColors.success,
-  rejected: chartColors.error,
+  rejected: chartColors.error
 };
 
 // Status color mapping with alpha
 export const statusColorsAlpha = {
   pending: chartColorsAlpha.warning,
   approved: chartColorsAlpha.success,
-  rejected: chartColorsAlpha.error,
+  rejected: chartColorsAlpha.error
 };
 
 // Urgency color mapping
 export const urgencyColors = {
   high: chartColors.error,
   medium: chartColors.warning,
-  low: chartColors.success,
+  low: chartColors.success
 };
 
 // Urgency color mapping with alpha
 export const urgencyColorsAlpha = {
   high: chartColorsAlpha.error,
   medium: chartColorsAlpha.warning,
-  low: chartColorsAlpha.success,
+  low: chartColorsAlpha.success
 };
 
 // Helper function to generate gradient background
@@ -229,7 +229,7 @@ export const formatChartDate = (dateString: string): string => {
   const date = new Date(dateString);
   return date.toLocaleDateString('th-TH', {
     day: 'numeric',
-    month: 'short',
+    month: 'short'
   });
 };
 
@@ -262,8 +262,8 @@ export const generateMonthLabels = (months: number): string[] => {
     labels.push(
       date.toLocaleDateString('th-TH', {
         month: 'short',
-        year: 'numeric',
-      }),
+        year: 'numeric'
+      })
     );
   }
 

@@ -38,7 +38,7 @@ const colors = {
   red: '\x1b[31m',
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
-  cyan: '\x1b[36m',
+  cyan: '\x1b[36m'
 };
 
 // Helper functions
@@ -47,7 +47,7 @@ const log = {
   success: msg => console.log(`${colors.green}✓${colors.reset} ${msg}`),
   error: msg => console.log(`${colors.red}✗${colors.reset} ${msg}`),
   warning: msg => console.log(`${colors.yellow}⚠${colors.reset} ${msg}`),
-  section: msg => console.log(`\n${colors.cyan}${colors.bright}━━━ ${msg} ━━━${colors.reset}\n`),
+  section: msg => console.log(`\n${colors.cyan}${colors.bright}━━━ ${msg} ━━━${colors.reset}\n`)
 };
 
 // Configuration
@@ -60,12 +60,12 @@ const config = {
       minPoolSize: parseInt(process.env.MONGODB_MIN_POOL_SIZE) || 10,
       maxIdleTimeMS: parseInt(process.env.MONGODB_MAX_IDLE_TIME_MS) || 60000,
       serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    },
+      socketTimeoutMS: 45000
+    }
   },
   redis: {
-    url: process.env.UPSTASH_REDIS_URL,
-  },
+    url: process.env.UPSTASH_REDIS_URL
+  }
 };
 
 // Database schema definitions
@@ -79,7 +79,7 @@ const collections = [
       { key: { isActive: 1 } },
       { key: { createdAt: -1 } },
       { key: { email: 1, role: 1 } },
-      { key: { 'profile.firstName': 'text', 'profile.lastName': 'text' } },
+      { key: { 'profile.firstName': 'text', 'profile.lastName': 'text' } }
     ],
     validation: {
       $jsonSchema: {
@@ -88,7 +88,7 @@ const collections = [
         properties: {
           email: {
             bsonType: 'string',
-            pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$',
+            pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
           },
           phone: { bsonType: 'string', pattern: '^\\+?[0-9]{10,15}$' },
           password: { bsonType: 'string', minLength: 60, maxLength: 60 },
@@ -98,14 +98,14 @@ const collections = [
             bsonType: 'object',
             properties: {
               firstName: { bsonType: 'string' },
-              lastName: { bsonType: 'string' },
-            },
+              lastName: { bsonType: 'string' }
+            }
           },
           twoFactorEnabled: { bsonType: 'bool' },
-          twoFactorSecret: { bsonType: 'string' },
-        },
-      },
-    },
+          twoFactorSecret: { bsonType: 'string' }
+        }
+      }
+    }
   },
   {
     name: 'farms',
@@ -115,8 +115,8 @@ const collections = [
       { key: { 'location.coordinates': '2dsphere' } },
       { key: { certificationStatus: 1 } },
       { key: { createdAt: -1 } },
-      { key: { farmerId: 1, status: 1 } },
-    ],
+      { key: { farmerId: 1, status: 1 } }
+    ]
   },
   {
     name: 'applications',
@@ -127,8 +127,8 @@ const collections = [
       { key: { applicationNumber: 1 }, options: { unique: true } },
       { key: { createdAt: -1 } },
       { key: { farmerId: 1, status: 1 } },
-      { key: { status: 1, createdAt: -1 } },
-    ],
+      { key: { status: 1, createdAt: -1 } }
+    ]
   },
   {
     name: 'inspections',
@@ -139,8 +139,8 @@ const collections = [
       { key: { scheduledDate: 1 } },
       { key: { createdAt: -1 } },
       { key: { inspectorId: 1, status: 1 } },
-      { key: { status: 1, scheduledDate: 1 } },
-    ],
+      { key: { status: 1, scheduledDate: 1 } }
+    ]
   },
   {
     name: 'audits',
@@ -149,8 +149,8 @@ const collections = [
       { key: { auditorId: 1 } },
       { key: { status: 1 } },
       { key: { createdAt: -1 } },
-      { key: { auditorId: 1, status: 1 } },
-    ],
+      { key: { auditorId: 1, status: 1 } }
+    ]
   },
   {
     name: 'certificates',
@@ -161,8 +161,8 @@ const collections = [
       { key: { status: 1 } },
       { key: { expiryDate: 1 } },
       { key: { createdAt: -1 } },
-      { key: { farmId: 1, status: 1 } },
-    ],
+      { key: { farmId: 1, status: 1 } }
+    ]
   },
   {
     name: 'documents',
@@ -170,8 +170,8 @@ const collections = [
       { key: { entityType: 1, entityId: 1 } },
       { key: { uploadedBy: 1 } },
       { key: { status: 1 } },
-      { key: { createdAt: -1 } },
-    ],
+      { key: { createdAt: -1 } }
+    ]
   },
   {
     name: 'notifications',
@@ -180,8 +180,8 @@ const collections = [
       { key: { isRead: 1 } },
       { key: { createdAt: -1 } },
       { key: { userId: 1, isRead: 1, createdAt: -1 } },
-      { key: { createdAt: 1 }, options: { expireAfterSeconds: 7776000 } }, // 90 days TTL
-    ],
+      { key: { createdAt: 1 }, options: { expireAfterSeconds: 7776000 } } // 90 days TTL
+    ]
   },
   {
     name: 'activity_logs',
@@ -190,8 +190,8 @@ const collections = [
       { key: { action: 1 } },
       { key: { entityType: 1, entityId: 1 } },
       { key: { createdAt: -1 } },
-      { key: { createdAt: 1 }, options: { expireAfterSeconds: 15552000 } }, // 180 days TTL
-    ],
+      { key: { createdAt: 1 }, options: { expireAfterSeconds: 15552000 } } // 180 days TTL
+    ]
   },
   {
     name: 'sessions',
@@ -199,8 +199,8 @@ const collections = [
       { key: { userId: 1 } },
       { key: { token: 1 }, options: { unique: true } },
       { key: { expiresAt: 1 }, options: { expireAfterSeconds: 0 } }, // Auto-delete expired sessions
-      { key: { createdAt: -1 } },
-    ],
+      { key: { createdAt: -1 } }
+    ]
   },
   {
     name: 'otp_codes',
@@ -208,13 +208,13 @@ const collections = [
       { key: { identifier: 1, type: 1 } },
       { key: { code: 1 } },
       { key: { expiresAt: 1 }, options: { expireAfterSeconds: 0 } }, // Auto-delete expired OTPs
-      { key: { createdAt: -1 } },
-    ],
+      { key: { createdAt: -1 } }
+    ]
   },
   {
     name: 'settings',
-    indexes: [{ key: { key: 1 }, options: { unique: true } }, { key: { category: 1 } }],
-  },
+    indexes: [{ key: { key: 1 }, options: { unique: true } }, { key: { category: 1 } }]
+  }
 ];
 
 // Main setup function
@@ -231,7 +231,7 @@ async function setupInfrastructure() {
     indexesCreated: 0,
     redisConnection: false,
     adminUserCreated: false,
-    errors: [],
+    errors: []
   };
 
   try {
@@ -288,7 +288,7 @@ async function validateEnvironment() {
     'UPSTASH_REDIS_URL',
     'JWT_SECRET',
     'JWT_REFRESH_SECRET',
-    'NODE_ENV',
+    'NODE_ENV'
   ];
 
   const optional = [
@@ -297,7 +297,7 @@ async function validateEnvironment() {
     'AWS_S3_BUCKET',
     'TWILIO_ACCOUNT_SID',
     'TWILIO_AUTH_TOKEN',
-    'EMAIL_FROM',
+    'EMAIL_FROM'
   ];
 
   let allValid = true;
@@ -386,7 +386,7 @@ async function connectMongoDB() {
     log.info(`MongoDB Version: ${serverInfo.version}`);
     log.info(`Database Name: ${config.mongodb.dbName}`);
     log.info(
-      `Connection Pool: ${config.mongodb.options.minPoolSize}-${config.mongodb.options.maxPoolSize} connections`,
+      `Connection Pool: ${config.mongodb.options.minPoolSize}-${config.mongodb.options.maxPoolSize} connections`
     );
 
     return client;
@@ -412,7 +412,7 @@ async function setupDatabase(db) {
         // Create collection with validation
         if (collectionDef.validation) {
           await db.createCollection(collectionDef.name, {
-            validator: collectionDef.validation,
+            validator: collectionDef.validation
           });
           log.success(`Created collection: ${collectionDef.name} (with validation)`);
         } else {
@@ -449,7 +449,7 @@ async function setupDatabase(db) {
   }
 
   log.success(
-    `Database setup complete: ${collectionsCount} collections created, ${indexesCount} indexes created`,
+    `Database setup complete: ${collectionsCount} collections created, ${indexesCount} indexes created`
   );
 
   return { collectionsCount, indexesCount };
@@ -484,12 +484,12 @@ async function createAdminUser(db) {
     profile: {
       firstName: 'System',
       lastName: 'Administrator',
-      title: 'Admin',
+      title: 'Admin'
     },
     permissions: ['*'], // All permissions
     createdAt: new Date(),
     updatedAt: new Date(),
-    lastLoginAt: null,
+    lastLoginAt: null
   };
 
   await usersCollection.insertOne(adminUser);
@@ -515,8 +515,8 @@ async function connectRedis() {
           return new Error('Redis connection failed after 3 retries');
         }
         return retries * 500;
-      },
-    },
+      }
+    }
   });
 
   client.on('error', err => {
@@ -562,7 +562,7 @@ async function connectRedis() {
 function displaySummary(results) {
   console.log('\n' + '='.repeat(60));
   console.log(
-    `${colors.bright}${colors.cyan}GACP Platform - Infrastructure Setup Summary${colors.reset}`,
+    `${colors.bright}${colors.cyan}GACP Platform - Infrastructure Setup Summary${colors.reset}`
   );
   console.log('='.repeat(60) + '\n');
 
@@ -592,7 +592,7 @@ function displaySummary(results) {
 
   if (allSuccess) {
     console.log(
-      `${colors.green}${colors.bright}✓ Infrastructure setup completed successfully!${colors.reset}`,
+      `${colors.green}${colors.bright}✓ Infrastructure setup completed successfully!${colors.reset}`
     );
     console.log('\nNext steps:');
     console.log('1. Start backend server: cd apps/backend && pnpm dev');

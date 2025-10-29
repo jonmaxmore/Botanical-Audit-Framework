@@ -3,11 +3,26 @@ const fs = require('fs');
 const path = require('path');
 
 const REPLACEMENTS = [
-  { pattern: /JWT_SECRET\s*=\s*['"]([^'"]+)['"]/g, replacement: "JWT_SECRET = process.env.JWT_SECRET || 'CHANGE_ME'" },
-  { pattern: /FARMER_JWT_SECRET\s*=\s*['"]([^'"]+)['"]/g, replacement: "FARMER_JWT_SECRET = process.env.FARMER_JWT_SECRET || 'CHANGE_ME'" },
-  { pattern: /DTAM_JWT_SECRET\s*=\s*['"]([^'"]+)['"]/g, replacement: "DTAM_JWT_SECRET = process.env.DTAM_JWT_SECRET || 'CHANGE_ME'" },
-  { pattern: /mongodb:\/\/localhost:27017\/([a-zA-Z0-9_-]+)/g, replacement: "process.env.MONGODB_URI || 'mongodb://localhost:27017/$1'" },
-  { pattern: /redis:\/\/localhost:6379/g, replacement: "process.env.REDIS_URL || 'redis://localhost:6379'" },
+  {
+    pattern: /JWT_SECRET\s*=\s*['"]([^'"]+)['"]/g,
+    replacement: "JWT_SECRET = process.env.JWT_SECRET || 'CHANGE_ME'"
+  },
+  {
+    pattern: /FARMER_JWT_SECRET\s*=\s*['"]([^'"]+)['"]/g,
+    replacement: "FARMER_JWT_SECRET = process.env.FARMER_JWT_SECRET || 'CHANGE_ME'"
+  },
+  {
+    pattern: /DTAM_JWT_SECRET\s*=\s*['"]([^'"]+)['"]/g,
+    replacement: "DTAM_JWT_SECRET = process.env.DTAM_JWT_SECRET || 'CHANGE_ME'"
+  },
+  {
+    pattern: /mongodb:\/\/localhost:27017\/([a-zA-Z0-9_-]+)/g,
+    replacement: "process.env.MONGODB_URI || 'mongodb://localhost:27017/$1'"
+  },
+  {
+    pattern: /redis:\/\/localhost:6379/g,
+    replacement: "process.env.REDIS_URL || 'redis://localhost:6379'"
+  }
 ];
 
 const EXCLUDE_DIRS = ['node_modules', '.git', 'dist', 'build', 'coverage', 'archive'];
@@ -43,7 +58,7 @@ function processDirectory(dir) {
   let totalChanges = 0;
   const entries = fs.readdirSync(dir, { withFileTypes: true });
 
-  entries.forEach((entry) => {
+  entries.forEach(entry => {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory() && !EXCLUDE_DIRS.includes(entry.name)) {
       totalChanges += processDirectory(fullPath);

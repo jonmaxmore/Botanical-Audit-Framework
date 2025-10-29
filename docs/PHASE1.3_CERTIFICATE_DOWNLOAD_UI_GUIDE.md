@@ -437,7 +437,7 @@ class ApiError extends Error {
   constructor(
     public status: number,
     public message: string,
-    public data?: any,
+    public data?: any
   ) {
     super(message);
     this.name = 'ApiError';
@@ -447,7 +447,7 @@ class ApiError extends Error {
 async function apiClient<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
-    ...(options.headers || {}),
+    ...(options.headers || {})
   };
 
   const token = getCookie('farmer_token');
@@ -457,7 +457,7 @@ async function apiClient<T = any>(endpoint: string, options: RequestInit = {}): 
 
   const response = await fetch(`${API_BASE_URL}${endpoint}`, {
     ...options,
-    headers,
+    headers
   });
 
   if (!response.ok) {
@@ -465,7 +465,7 @@ async function apiClient<T = any>(endpoint: string, options: RequestInit = {}): 
     throw new ApiError(
       response.status,
       errorData.message || `Request failed with status ${response.status}`,
-      errorData,
+      errorData
     );
   }
 
@@ -488,12 +488,12 @@ export const certificateApi = {
           if (value !== undefined) acc[key] = String(value);
           return acc;
         },
-        {} as Record<string, string>,
-      ),
+        {} as Record<string, string>
+      )
     ).toString();
 
     return apiClient<{ success: boolean; data: CertificateListResponse }>(
-      `/api/certificates${queryString ? `?${queryString}` : ''}`,
+      `/api/certificates${queryString ? `?${queryString}` : ''}`
     );
   },
 
@@ -522,7 +522,7 @@ export const certificateApi = {
     if (format) params.append('format', format);
 
     return apiClient<{ success: boolean; data: QRCodeData }>(
-      `/api/certificates/${certificateId}/qrcode${params.toString() ? `?${params.toString()}` : ''}`,
+      `/api/certificates/${certificateId}/qrcode${params.toString() ? `?${params.toString()}` : ''}`
     );
   },
 
@@ -535,9 +535,9 @@ export const certificateApi = {
 
     return apiClient<{ success: boolean; data: CertificateVerificationResult }>(
       `/api/public/certificates/verify/${certificateNumber}${params.toString() ? `?${params.toString()}` : ''}`,
-      { headers: {} }, // No auth required
+      { headers: {} } // No auth required
     );
-  },
+  }
 };
 ```
 
@@ -1839,8 +1839,8 @@ class PDFGenerationService {
       margins: { top: 50, bottom: 50, left: 50, right: 50 },
       fonts: {
         thaiRegular: 'fonts/THSarabunNew.ttf',
-        thaiBold: 'fonts/THSarabunNew-Bold.ttf',
-      },
+        thaiBold: 'fonts/THSarabunNew-Bold.ttf'
+      }
     };
   }
 
@@ -1852,7 +1852,7 @@ class PDFGenerationService {
   async generateCertificatePDF(certificate) {
     try {
       logger.info(
-        `[PDFGenerationService] Generating PDF for certificate: ${certificate.certificateNumber}`,
+        `[PDFGenerationService] Generating PDF for certificate: ${certificate.certificateNumber}`
       );
 
       // Create PDF document
@@ -1864,8 +1864,8 @@ class PDFGenerationService {
           Author: 'Department of Agriculture - GACP Platform',
           Subject: `GACP Certificate for ${certificate.farmName}`,
           Keywords: 'GACP, Certificate, Thai Agriculture',
-          CreationDate: new Date(),
-        },
+          CreationDate: new Date()
+        }
       });
 
       // Generate PDF content
@@ -1890,8 +1890,8 @@ class PDFGenerationService {
           certificateId: certificate.certificateId,
           certificateNumber: certificate.certificateNumber,
           farmerId: certificate.farmerId,
-          generatedAt: new Date().toISOString(),
-        },
+          generatedAt: new Date().toISOString()
+        }
       });
 
       logger.info(`[PDFGenerationService] PDF generated successfully: ${uploadResult.url}`);
@@ -1901,7 +1901,7 @@ class PDFGenerationService {
         pdfUrl: uploadResult.url,
         fileName,
         fileSize: pdfBuffer.length,
-        generatedAt: new Date(),
+        generatedAt: new Date()
       };
     } catch (error) {
       logger.error('[PDFGenerationService] PDF generation failed:', error);
@@ -1982,7 +1982,7 @@ class PDFGenerationService {
       `ที่อยู่: ${location.address}, ${location.subdistrict}, ${location.district}, ${location.province} ${location.postalCode}`,
       50,
       startY + 110,
-      { width: 400 },
+      { width: 400 }
     );
 
     doc.moveDown(2);
@@ -2000,8 +2000,8 @@ class PDFGenerationService {
         margin: 1,
         color: {
           dark: '#000000',
-          light: '#FFFFFF',
-        },
+          light: '#FFFFFF'
+        }
       });
 
       // Convert data URL to buffer
@@ -2053,11 +2053,11 @@ class PDFGenerationService {
       .fontSize(9)
       .text('ตรวจสอบความถูกต้องของใบรับรองได้ที่ https://gacp.doa.go.th/verify', 50, 750, {
         align: 'center',
-        width: 500,
+        width: 500
       })
       .text('© 2025 กรมวิชาการเกษตร กระทรวงเกษตรและสหกรณ์', 50, 765, {
         align: 'center',
-        width: 500,
+        width: 500
       });
   }
 
@@ -2073,7 +2073,7 @@ class PDFGenerationService {
         .fontSize(72)
         .text(this._getStatusLabel(certificate.status).toUpperCase(), 0, 400, {
           align: 'center',
-          rotate: 45,
+          rotate: 45
         })
         .opacity(1);
     }
@@ -2112,7 +2112,7 @@ class PDFGenerationService {
       'กันยายน',
       'ตุลาคม',
       'พฤศจิกายน',
-      'ธันวาคม',
+      'ธันวาคม'
     ];
     return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${thaiYear}`;
   }
@@ -2127,7 +2127,7 @@ class PDFGenerationService {
       expired: 'หมดอายุ',
       revoked: 'ถูกเพิกถอน',
       renewed: 'ต่ออายุแล้ว',
-      suspended: 'ระงับชั่วคราว',
+      suspended: 'ระงับชั่วคราว'
     };
     return labels[status] || 'ไม่ทราบสถานะ';
   }
@@ -2160,9 +2160,9 @@ class StorageService {
         region: process.env.AWS_REGION || 'us-east-1',
         credentials: {
           accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
         },
-        endpoint: this.storageType === 'r2' ? process.env.R2_ENDPOINT : undefined,
+        endpoint: this.storageType === 'r2' ? process.env.R2_ENDPOINT : undefined
       });
       this.bucket = process.env.STORAGE_BUCKET;
     } else {
@@ -2201,7 +2201,7 @@ class StorageService {
       fileName,
       size: buffer.length,
       contentType,
-      metadata,
+      metadata
     };
   }
 
@@ -2211,7 +2211,7 @@ class StorageService {
       Key: fileName,
       Body: buffer,
       ContentType: contentType,
-      Metadata: metadata,
+      Metadata: metadata
     });
 
     await this.s3Client.send(command);
@@ -2226,7 +2226,7 @@ class StorageService {
       fileName,
       size: buffer.length,
       contentType,
-      metadata,
+      metadata
     };
   }
 }
@@ -2383,20 +2383,20 @@ describe('certificateApi', () => {
           certificates: [],
           total: 0,
           page: 1,
-          limit: 10,
-        },
+          limit: 10
+        }
       };
 
       (global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => mockResponse,
+        json: async () => mockResponse
       });
 
       const result = await certificateApi.getCertificates();
 
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining('/api/certificates'),
-        expect.any(Object),
+        expect.any(Object)
       );
       expect(result).toEqual(mockResponse);
     });
@@ -2408,13 +2408,13 @@ describe('certificateApi', () => {
         success: true,
         data: {
           valid: true,
-          certificate: { certificateNumber: 'GACP-2025-0001' },
-        },
+          certificate: { certificateNumber: 'GACP-2025-0001' }
+        }
       };
 
       (global.fetch as any).mockResolvedValueOnce({
         ok: true,
-        json: async () => mockResponse,
+        json: async () => mockResponse
       });
 
       const result = await certificateApi.verifyCertificate('GACP-2025-0001');
@@ -2422,8 +2422,8 @@ describe('certificateApi', () => {
       expect(global.fetch).toHaveBeenCalledWith(
         expect.stringContaining('/api/public/certificates/verify/GACP-2025-0001'),
         expect.objectContaining({
-          headers: {}, // No auth headers
-        }),
+          headers: {} // No auth headers
+        })
       );
       expect(result).toEqual(mockResponse);
     });
@@ -2581,10 +2581,10 @@ export default defineConfig({
         lines: 80,
         functions: 80,
         branches: 80,
-        statements: 80,
-      },
-    },
-  },
+        statements: 80
+      }
+    }
+  }
 });
 ```
 
@@ -2653,9 +2653,9 @@ db.certificates.updateMany(
       pdfUrl: null,
       pdfGeneratedAt: null,
       downloadCount: 0,
-      verificationCount: 0,
-    },
-  },
+      verificationCount: 0
+    }
+  }
 );
 ```
 

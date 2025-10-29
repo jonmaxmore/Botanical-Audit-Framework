@@ -10,6 +10,7 @@
 ### ✅ Core Authentication & Authorization
 
 #### 1. **auth-farmer** (Complete)
+
 - **Location:** [apps/backend/modules/auth-farmer](apps/backend/modules/auth-farmer)
 - **Purpose:** Farmer self-registration and authentication
 - **Features:**
@@ -22,6 +23,7 @@
 - **Status:** Production-ready
 
 #### 2. **auth-dtam** (Complete)
+
 - **Location:** [apps/backend/modules/auth-dtam](apps/backend/modules/auth-dtam)
 - **Purpose:** Government officer (DTAM) authentication
 - **Features:**
@@ -38,6 +40,7 @@
 ### ✅ Certification Workflow
 
 #### 3. **application** (Complete)
+
 - **Location:** [apps/backend/modules/application](apps/backend/modules/application)
 - **Purpose:** GACP certification application management
 - **Features:**
@@ -52,6 +55,7 @@
 - **Note:** Supports cannabis as primary crop + 5 medicinal plants
 
 #### 4. **application-workflow** (Complete)
+
 - **Location:** [apps/backend/modules/application-workflow](apps/backend/modules/application-workflow)
 - **Purpose:** Multi-stage approval workflow engine
 - **Features:**
@@ -70,6 +74,7 @@
 - **Status:** Production-ready
 
 #### 5. **certificate-management** (Complete)
+
 - **Location:** [apps/backend/modules/certificate-management](apps/backend/modules/certificate-management)
 - **Purpose:** Certificate issuance and lifecycle management
 - **Features:**
@@ -88,6 +93,7 @@
 ### ✅ Farm & Cultivation Management
 
 #### 6. **farm-management** (Complete)
+
 - **Location:** [apps/backend/modules/farm-management](apps/backend/modules/farm-management)
 - **Purpose:** Farm registration and operations tracking
 - **Features:**
@@ -107,6 +113,7 @@
 ### ✅ Document & Content Management
 
 #### 7. **document-management** (Integrated)
+
 - **Location:** Integrated within application module
 - **Purpose:** Document upload, validation, and storage
 - **Features:**
@@ -125,6 +132,7 @@
 ### ✅ Analytics & Reporting
 
 #### 8. **dashboard** (Complete)
+
 - **Location:** [apps/backend/modules/dashboard](apps/backend/modules/dashboard)
 - **Purpose:** Real-time analytics and KPI dashboards
 - **Features:**
@@ -138,6 +146,7 @@
 - **Status:** Production-ready
 
 #### 9. **reporting-analytics** (Complete)
+
 - **Location:** Integrated in backend services
 - **Purpose:** Advanced analytics and insights
 - **Features:**
@@ -153,6 +162,7 @@
 ### ✅ Notifications & Communications
 
 #### 10. **notification** (Complete)
+
 - **Location:** [apps/backend/modules/notification](apps/backend/modules/notification)
 - **Purpose:** Multi-channel notification system
 - **Features:**
@@ -176,6 +186,7 @@
 ### ✅ Payment Processing
 
 #### 11. **payment-service** (Complete)
+
 - **Location:** Integrated in backend services
 - **Purpose:** Payment collection and tracking
 - **Payment Structure:**
@@ -196,6 +207,7 @@
 ### ✅ Compliance & Standards
 
 #### 12. **standards-comparison** (Complete)
+
 - **Location:** [apps/backend/modules/standards-comparison](apps/backend/modules/standards-comparison)
 - **Purpose:** GACP standards knowledge base
 - **Features:**
@@ -213,6 +225,7 @@
 - **Status:** Production-ready
 
 #### 13. **audit** (Complete)
+
 - **Location:** [apps/backend/modules/audit](apps/backend/modules/audit)
 - **Purpose:** Comprehensive audit logging
 - **Features:**
@@ -229,6 +242,7 @@
 ### ✅ Survey & Data Collection
 
 #### 14. **survey-system** (Complete)
+
 - **Location:** [apps/backend/modules/survey-system](apps/backend/modules/survey-system)
 - **Purpose:** Cannabis compliance surveys
 - **Features:**
@@ -245,6 +259,7 @@
 ### ✅ Traceability & QR Codes
 
 #### 15. **track-trace** (Complete)
+
 - **Location:** [apps/backend/modules/track-trace](apps/backend/modules/track-trace)
 - **Purpose:** Seed-to-sale traceability
 - **Features:**
@@ -261,6 +276,7 @@
 ### ✅ AI & Smart Recommendations
 
 #### 16. **AI Fertilizer Recommendation Engine** (Complete)
+
 - **Location:** [apps/backend/services/ai/fertilizer-recommendation.service.js](apps/backend/services/ai/fertilizer-recommendation.service.js)
 - **Purpose:** Intelligent fertilizer recommendations
 - **Features:**
@@ -273,6 +289,7 @@
 - **Status:** Production-ready (Live)
 
 #### 17. **AI Irrigation Modeling** (In Progress - 70%)
+
 - **Location:** Planned in AI services
 - **Purpose:** Smart irrigation scheduling
 - **Features:**
@@ -283,6 +300,7 @@
 - **Status:** In Development
 
 #### 18. **NLP Crop Guidance** (In Progress - 60%)
+
 - **Location:** Planned in AI services
 - **Purpose:** Natural language processing for crop advice
 - **Features:**
@@ -296,6 +314,7 @@
 ## Frontend Applications
 
 ### ✅ 1. **Farmer Portal** (100% Complete)
+
 - **Location:** [apps/farmer-portal](apps/farmer-portal)
 - **Framework:** Next.js 15.1.3, React 18.3.1, TypeScript 5.7.2
 - **Routes:** 31 fully functional routes
@@ -312,6 +331,7 @@
 - **Status:** Production-ready
 
 ### ⚠️ 2. **Admin Portal** (40-60% Complete)
+
 - **Location:** [apps/admin-portal](apps/admin-portal)
 - **Framework:** Next.js 15.1.3
 - **Routes:** 2 routes (needs expansion)
@@ -327,6 +347,7 @@
 - **Status:** Partial implementation
 
 ### ⚠️ 3. **Certificate Portal** (60% Complete)
+
 - **Location:** [apps/certificate-portal](apps/certificate-portal)
 - **Framework:** Next.js 15.1.3
 - **Implemented:**
@@ -342,6 +363,7 @@
 - **Status:** Partial implementation
 
 ### ⚠️ 4. **Legacy Frontend** (Deprecated)
+
 - **Location:** [apps/frontend](apps/frontend)
 - **Status:** Being phased out - DO NOT enhance
 - **Note:** Reference only, prefer Next.js apps
@@ -374,6 +396,7 @@
 ### Global GACP Certification Platforms
 
 #### 1. **CSQ 2.0 Certification Program** (Canada/USA)
+
 - **Launch:** October 2025
 - **Features:**
   - Accredited cGACP and cGMP certification
@@ -383,12 +406,14 @@
 - **Target Markets:** North America
 
 #### 2. **Q-Cert GACP** (Europe)
+
 - **Accreditation:** ISO 17065 by Hellenic Accreditation Body
 - **Standards:** EU GACP + WHO Guidelines
 - **Strengths:** European market access
 - **Target Markets:** EU, international
 
 #### 3. **SGS GACP Medical Cannabis Certification** (Global)
+
 - **Provider:** SGS (Swiss-based global certifier)
 - **Features:**
   - Full supply chain certification
@@ -397,6 +422,7 @@
 - **Strengths:** Established reputation, international presence
 
 #### 4. **Control Union Medical Cannabis Standard (CUMCS-GAP)** (Global)
+
 - **Compliance:** WHO + EMA GACP Guidelines
 - **Certification:** Dual certificate (CUMCS-GAP + GACP)
 - **Coverage:** Propagation, cultivation, post-harvest
@@ -405,6 +431,7 @@
 ### Blockchain Traceability Platforms
 
 #### **HerBChain** (Hong Kong/China)
+
 - **Technology:** Blockchain-based platform for herbal products
 - **Features:**
   - QR code verification
@@ -414,6 +441,7 @@
 - **Strengths:** End-to-end transparency, consumer trust
 
 #### **Traditional Chinese Medicine (TCM) Systems**
+
 - **Features:**
   - Blockchain for anti-counterfeiting
   - Full supply chain tracking

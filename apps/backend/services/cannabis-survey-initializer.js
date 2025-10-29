@@ -4,7 +4,6 @@
  */
 
 const logger = require('../shared/logger/logger');
-const mongoose = require('mongoose');
 const { createCannabisTemplates } = require('../config/cannabisTemplates');
 const { CannabisSurveyTemplate, CannabisQuestion } = require('../models/CannabisSurvey');
 const User = require('../models/user');

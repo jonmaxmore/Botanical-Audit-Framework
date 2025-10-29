@@ -157,7 +157,7 @@ export const PAYMENT_TIMEOUT_MS = PAYMENT_TIMEOUT_MINUTES * 60 * 1000;
 export function createPaymentRecord(
   applicationId: string,
   userId: string,
-  submissionCount: number,
+  submissionCount: number
 ): Omit<PaymentRecord, 'id'> {
   const now = new Date();
   const expiresAt = new Date(now.getTime() + PAYMENT_TIMEOUT_MS);
@@ -169,7 +169,7 @@ export function createPaymentRecord(
     status: 'PENDING',
     reason: getPaymentReason(submissionCount),
     createdAt: now,
-    expiresAt,
+    expiresAt
   };
 }
 
@@ -198,7 +198,7 @@ export function handlePaymentTimeout(payment: PaymentRecord): PaymentRecord {
     return {
       ...payment,
       status: 'TIMEOUT',
-      cancelledAt: new Date(),
+      cancelledAt: new Date()
     };
   }
   return payment;
@@ -223,14 +223,14 @@ export function canReschedule(application: Application): {
   if (application.rescheduleCount >= MAX_RESCHEDULE_COUNT) {
     return {
       allowed: false,
-      reason: `คุณได้ใช้สิทธิ์เลื่อนนัดหมายครบแล้ว (${MAX_RESCHEDULE_COUNT} ครั้ง)`,
+      reason: `คุณได้ใช้สิทธิ์เลื่อนนัดหมายครบแล้ว (${MAX_RESCHEDULE_COUNT} ครั้ง)`
     };
   }
 
   if (application.status !== 'PENDING_INSPECTION') {
     return {
       allowed: false,
-      reason: 'สถานะใบสมัครไม่อนุญาตให้เลื่อนนัด',
+      reason: 'สถานะใบสมัครไม่อนุญาตให้เลื่อนนัด'
     };
   }
 
@@ -244,7 +244,7 @@ export function recordReschedule(application: Application): Application {
   return {
     ...application,
     rescheduleCount: application.rescheduleCount + 1,
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 }
 
@@ -283,7 +283,7 @@ export function canApplyAfterRevocation(certificate: Certificate): boolean {
   const now = new Date();
   const revokedDate = new Date(certificate.revokedDate);
   const daysSinceRevocation = Math.floor(
-    (now.getTime() - revokedDate.getTime()) / (24 * 60 * 60 * 1000),
+    (now.getTime() - revokedDate.getTime()) / (24 * 60 * 60 * 1000)
   );
 
   return daysSinceRevocation >= REVOCATION_WAIT_PERIOD_DAYS;
@@ -321,7 +321,7 @@ export function getRemainingWaitDays(certificate: Certificate): number {
  */
 export const REFUND_POLICY = {
   allowed: false,
-  reason: 'ไม่มีการคืนเงินทุกกรณี',
+  reason: 'ไม่มีการคืนเงินทุกกรณี'
 };
 
 /**
@@ -342,7 +342,7 @@ export function canCancelApplication(application: Application): boolean {
     'UNDER_REVIEW',
     'PENDING_INSPECTION',
     'PENDING_PAYMENT',
-    'REJECTED',
+    'REJECTED'
   ];
 
   return cancellableStatuses.includes(application.status);
@@ -355,7 +355,7 @@ export function cancelApplication(application: Application): Application {
   return {
     ...application,
     status: 'CANCELLED',
-    updatedAt: new Date(),
+    updatedAt: new Date()
   };
 }
 
@@ -378,7 +378,7 @@ export function validateApplicationSubmission(application: Application): {
 
   return {
     valid: errors.length === 0,
-    errors,
+    errors
   };
 }
 
@@ -395,7 +395,7 @@ export function getStatusDisplayText(status: ApplicationStatus): string {
     PAYMENT_TIMEOUT: 'หมดเวลาชำระเงิน',
     APPROVED: 'อนุมัติแล้ว',
     REJECTED: 'ไม่ผ่าน',
-    CANCELLED: 'ยกเลิกแล้ว',
+    CANCELLED: 'ยกเลิกแล้ว'
   };
 
   return statusMap[status] || status;
@@ -415,25 +415,25 @@ export function getBusinessRulesSummary() {
         description: 'ค่าธรรมเนียมการส่งซ้ำทุก 2 ครั้งที่ไม่ผ่าน',
         amount: 5000,
         formula: '(submissionCount % 2 === 1) && (submissionCount >= 3)',
-        examples: 'ครั้งที่ 3, 5, 7, 9, 11...',
+        examples: 'ครั้งที่ 3, 5, 7, 9, 11...'
       },
       timeout: {
         description: 'ต้องชำระภายใน 15 นาที',
         minutes: PAYMENT_TIMEOUT_MINUTES,
-        autoCancel: true,
+        autoCancel: true
       },
-      refund: REFUND_POLICY,
+      refund: REFUND_POLICY
     },
     reschedule: {
       limit: MAX_RESCHEDULE_COUNT,
       description: 'เลื่อนนัดหมายได้สูงสุด 1 ครั้งต่อใบสมัคร',
-      afterLimit: 'กลับเข้าคิวใหม่',
+      afterLimit: 'กลับเข้าคิวใหม่'
     },
     revocation: {
       waitPeriod: REVOCATION_WAIT_PERIOD_DAYS,
       description: 'ต้องรอ 30 วันหลังใบรับรองถูกเพิกถอน',
-      unit: 'วัน',
-    },
+      unit: 'วัน'
+    }
   };
 }
 
@@ -476,7 +476,7 @@ const businessLogic = {
   PAYMENT_TIMEOUT_MINUTES,
   MAX_RESCHEDULE_COUNT,
   REVOCATION_WAIT_PERIOD_DAYS,
-  REFUND_POLICY,
+  REFUND_POLICY
 };
 
 export default businessLogic;

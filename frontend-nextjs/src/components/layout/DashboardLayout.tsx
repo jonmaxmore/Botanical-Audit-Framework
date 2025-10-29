@@ -118,7 +118,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
 
       {/* Navigation Menu */}
       <List className="px-2 py-4">
-        {menuItems.map(item => {
+        {menuItems.map((item) => {
           const isActive = pathname === item.path;
           return (
             <ListItem key={item.text} disablePadding className="mb-2">
@@ -180,7 +180,7 @@ export default function DashboardLayout({ children, userRole }: DashboardLayoutP
           </IconButton>
 
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
-            {menuItems.find(item => item.path === pathname)?.text || 'Dashboard'}
+            {menuItems.find((item) => item.path === pathname)?.text || 'Dashboard'}
           </Typography>
 
           {/* Notifications */}

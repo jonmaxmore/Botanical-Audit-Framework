@@ -16,7 +16,7 @@ import {
   createPaymentRecord,
   isPaymentTimedOut,
   PAYMENT_TIMEOUT_MINUTES,
-  REFUND_POLICY,
+  REFUND_POLICY
 } from './business-logic';
 
 // ============================================================================
@@ -85,7 +85,7 @@ const OMISE_CONFIG = {
   publicKey: process.env.OMISE_PUBLIC_KEY || 'pkey_test_mock_12345',
   secretKey: process.env.OMISE_SECRET_KEY || 'skey_test_mock_67890',
   apiVersion: '2019-05-29',
-  baseUrl: 'https://api.omise.co',
+  baseUrl: 'https://api.omise.co'
 };
 
 // ============================================================================
@@ -98,7 +98,7 @@ const OMISE_CONFIG = {
 export function createPaymentSession(
   applicationId: string,
   userId: string,
-  submissionCount: number,
+  submissionCount: number
 ): PaymentSession {
   const paymentRecord = createPaymentRecord(applicationId, userId, submissionCount);
   const sessionId = generateSessionId();
@@ -107,12 +107,12 @@ export function createPaymentSession(
     id: sessionId,
     paymentRecord: {
       ...paymentRecord,
-      id: generatePaymentId(),
+      id: generatePaymentId()
     },
     omisePublicKey: OMISE_CONFIG.publicKey,
     returnUrl: `/applications/${applicationId}/payment/success`,
     cancelUrl: `/applications/${applicationId}/payment/cancel`,
-    expiresAt: paymentRecord.expiresAt,
+    expiresAt: paymentRecord.expiresAt
   };
 }
 
@@ -128,14 +128,14 @@ export function isPaymentSessionValid(session: PaymentSession): {
   if (now > session.expiresAt) {
     return {
       valid: false,
-      reason: `หมดเวลาชำระเงิน (เกิน ${PAYMENT_TIMEOUT_MINUTES} นาที)`,
+      reason: `หมดเวลาชำระเงิน (เกิน ${PAYMENT_TIMEOUT_MINUTES} นาที)`
     };
   }
 
   if (session.paymentRecord.status !== 'PENDING') {
     return {
       valid: false,
-      reason: 'สถานะการชำระเงินไม่ถูกต้อง',
+      reason: 'สถานะการชำระเงินไม่ถูกต้อง'
     };
   }
 
@@ -168,7 +168,7 @@ export async function createOmiseCharge(request: OmiseChargeRequest): Promise<Om
     paid: isSuccess,
     transaction: isSuccess ? transactionId : null,
     created_at: new Date().toISOString(),
-    metadata: request.metadata as unknown as Record<string, string>,
+    metadata: request.metadata as unknown as Record<string, string>
   };
 }
 
@@ -188,7 +188,7 @@ export async function verifyOmiseCharge(chargeId: string): Promise<OmiseChargeRe
     paid: true,
     transaction: `trx_mock_${Date.now()}`,
     created_at: new Date().toISOString(),
-    metadata: {},
+    metadata: {}
   };
 }
 
@@ -201,14 +201,14 @@ export async function verifyOmiseCharge(chargeId: string): Promise<OmiseChargeRe
  */
 export async function processPayment(
   session: PaymentSession,
-  omiseToken: string,
+  omiseToken: string
 ): Promise<PaymentResult> {
   // 1. Validate session
   const validation = isPaymentSessionValid(session);
   if (!validation.valid) {
     return {
       success: false,
-      error: validation.reason,
+      error: validation.reason
     };
   }
 
@@ -216,7 +216,7 @@ export async function processPayment(
   if (isPaymentTimedOut(session.paymentRecord)) {
     return {
       success: false,
-      error: 'หมดเวลาชำระเงิน กรุณาเริ่มกระบวนการใหม่',
+      error: 'หมดเวลาชำระเงิน กรุณาเริ่มกระบวนการใหม่'
     };
   }
 
@@ -230,8 +230,8 @@ export async function processPayment(
       metadata: {
         applicationId: session.paymentRecord.applicationId,
         userId: session.paymentRecord.userId,
-        submissionCount: '0', // Should be passed from application
-      },
+        submissionCount: '0' // Should be passed from application
+      }
     };
 
     const charge = await createOmiseCharge(chargeRequest);
@@ -242,19 +242,19 @@ export async function processPayment(
         paymentId: session.paymentRecord.id,
         transactionId: charge.transaction ?? undefined,
         amount: session.paymentRecord.amount,
-        paidAt: new Date(),
+        paidAt: new Date()
       };
     } else {
       return {
         success: false,
-        error: 'การชำระเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง',
+        error: 'การชำระเงินไม่สำเร็จ กรุณาลองใหม่อีกครั้ง'
       };
     }
   } catch (error) {
     console.error('Payment processing error:', error);
     return {
       success: false,
-      error: 'เกิดข้อผิดพลาดในระบบชำระเงิน กรุณาติดต่อเจ้าหน้าที่',
+      error: 'เกิดข้อผิดพลาดในระบบชำระเงิน กรุณาติดต่อเจ้าหน้าที่'
     };
   }
 }
@@ -264,12 +264,12 @@ export async function processPayment(
  */
 export function updatePaymentRecordAfterSuccess(
   payment: PaymentRecord,
-  _transactionId: string,
+  _transactionId: string
 ): PaymentRecord {
   return {
     ...payment,
     status: 'PAID',
-    paidAt: new Date(),
+    paidAt: new Date()
   };
 }
 
@@ -278,12 +278,12 @@ export function updatePaymentRecordAfterSuccess(
  */
 export function cancelPayment(
   payment: PaymentRecord,
-  reason: 'TIMEOUT' | 'USER_CANCELLED',
+  reason: 'TIMEOUT' | 'USER_CANCELLED'
 ): PaymentRecord {
   return {
     ...payment,
     status: reason === 'TIMEOUT' ? 'TIMEOUT' : 'CANCELLED',
-    cancelledAt: new Date(),
+    cancelledAt: new Date()
   };
 }
 
@@ -306,7 +306,7 @@ export function generateReceipt(payment: PaymentRecord, _transactionId: string):
     paidAt: payment.paidAt || new Date(),
     receiptNumber,
     description: 'ค่าธรรมเนียมการยื่นคำขอรับรอง GACP',
-    taxId: '0-0000-00000-00-0', // Organization tax ID
+    taxId: '0-0000-00000-00-0' // Organization tax ID
   };
 }
 
@@ -337,7 +337,7 @@ export function formatReceipt(receipt: Receipt): string {
 วันที่: ${receipt.paidAt.toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric',
+    day: 'numeric'
   })}
 
 ───────────────────────────────────────────────────
@@ -394,7 +394,7 @@ export function calculatePaymentStats(payments: PaymentRecord[]): {
     timeout: 0,
     cancelled: 0,
     totalRevenue: 0,
-    averagePaymentTime: 0,
+    averagePaymentTime: 0
   };
 
   let paymentTimeSum = 0;
@@ -440,7 +440,7 @@ export function getPaymentMethodDisplay(method: string): string {
     mobile_banking: 'Mobile Banking',
     internet_banking: 'Internet Banking',
     truemoney: 'TrueMoney Wallet',
-    alipay: 'Alipay',
+    alipay: 'Alipay'
   };
 
   return methods[method] || method;
@@ -471,7 +471,7 @@ const paymentModule = {
   getPaymentMethodDisplay,
 
   // Config
-  OMISE_CONFIG,
+  OMISE_CONFIG
 };
 
 export default paymentModule;

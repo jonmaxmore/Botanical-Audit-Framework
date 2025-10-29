@@ -3,7 +3,6 @@
  * HTTP request handlers for 4-region GACP survey system
  */
 
-const SurveySystemService = require('../services/survey-system.service');
 const { successResponse, errorResponse } = require('../../shared/utils/response');
 const logger = require('../../shared/utils/logger');
 

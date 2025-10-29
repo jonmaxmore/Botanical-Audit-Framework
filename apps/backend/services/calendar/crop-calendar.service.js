@@ -21,7 +21,7 @@ class CropCalendarService {
   getBestPlantingDate(crop, province) {
     const calendar = CROP_CALENDAR[crop] || CROP_CALENDAR.cannabis;
     const region = this.getRegion(province);
-    
+
     return {
       bestMonths: calendar.bestPlantingMonths,
       duration: calendar.duration,

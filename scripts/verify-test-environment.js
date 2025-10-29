@@ -19,10 +19,10 @@ const requiredFiles = [
   'scripts/run-qa-tests.js',
   'start-qa-testing.ps1',
   'docs/QA_TESTING_GUIDE.md',
-  'docs/QA_TESTING_SUMMARY_REPORT.md',
+  'docs/QA_TESTING_SUMMARY_REPORT.md'
 ];
 
-requiredFiles.forEach((file) => {
+requiredFiles.forEach(file => {
   const filePath = path.join(__dirname, '..', file);
   if (fs.existsSync(filePath)) {
     const stats = fs.statSync(filePath);
@@ -41,10 +41,10 @@ try {
   const packageJson = require('../package.json');
   const allDeps = {
     ...packageJson.dependencies,
-    ...packageJson.devDependencies,
+    ...packageJson.devDependencies
   };
 
-  requiredDeps.forEach((dep) => {
+  requiredDeps.forEach(dep => {
     if (allDeps[dep]) {
       console.log(`  ✓ ${dep} (${allDeps[dep]})`);
     } else {
@@ -82,7 +82,7 @@ server.listen(3000, '127.0.0.1', () => {
   server.close();
 });
 
-server.on('error', (err) => {
+server.on('error', err => {
   if (err.code === 'EADDRINUSE') {
     console.log('  ⚠️  Port 3000 is in use (will need to stop existing server)');
   } else {

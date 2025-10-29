@@ -35,7 +35,7 @@ const KEEP_COLLECTIONS = [
   'invoices',
   'auditlogs',
   'refreshtokens',
-  'sessions',
+  'sessions'
 ];
 
 class AdvancedDatabaseCleanup {
@@ -50,11 +50,11 @@ class AdvancedDatabaseCleanup {
         emptyCollections: [],
         orphanedRecords: [],
         duplicateIndexes: [],
-        unusedData: [],
+        unusedData: []
       },
       actions: [],
       errors: [],
-      statistics: {},
+      statistics: {}
     };
   }
 
@@ -69,7 +69,7 @@ class AdvancedDatabaseCleanup {
 
     try {
       await mongoose.connect(uri, {
-        serverSelectionTimeoutMS: 5000,
+        serverSelectionTimeoutMS: 5000
       });
 
       console.log('✅ Connected successfully\n');
@@ -120,7 +120,7 @@ class AdvancedDatabaseCleanup {
             this.report.findings.emptyCollections.push({
               name: coll.name,
               count: 0,
-              action: shouldKeep ? 'KEEP' : 'DELETE',
+              action: shouldKeep ? 'KEEP' : 'DELETE'
             });
 
             if (shouldKeep) {
@@ -135,7 +135,7 @@ class AdvancedDatabaseCleanup {
       }
 
       const deleteCount = this.report.findings.emptyCollections.filter(
-        c => c.action === 'DELETE',
+        c => c.action === 'DELETE'
       ).length;
 
       if (deleteCount === 0) {
@@ -171,7 +171,7 @@ class AdvancedDatabaseCleanup {
               duplicates.push({
                 name: index.name,
                 key: index.key,
-                duplicate: indexKeys[keyStr],
+                duplicate: indexKeys[keyStr]
               });
             } else {
               indexKeys[keyStr] = index.name;
@@ -183,7 +183,7 @@ class AdvancedDatabaseCleanup {
 
             this.report.findings.duplicateIndexes.push({
               collection: coll.name,
-              duplicates: duplicates,
+              duplicates: duplicates
             });
           }
         } catch (error) {
@@ -195,7 +195,7 @@ class AdvancedDatabaseCleanup {
         console.log('   ✓ No duplicate indexes found\n');
       } else {
         console.log(
-          `\n   Found: ${this.report.findings.duplicateIndexes.length} collections with duplicate indexes\n`,
+          `\n   Found: ${this.report.findings.duplicateIndexes.length} collections with duplicate indexes\n`
         );
       }
     } catch (error) {
@@ -218,15 +218,15 @@ class AdvancedDatabaseCleanup {
             from: 'users',
             localField: 'userId',
             foreignField: '_id',
-            as: 'user',
-          },
+            as: 'user'
+          }
         },
         {
-          $match: { user: { $size: 0 } },
+          $match: { user: { $size: 0 } }
         },
         {
-          $project: { _id: 1, applicationId: 1, userId: 1 },
-        },
+          $project: { _id: 1, applicationId: 1, userId: 1 }
+        }
       ]);
 
       if (orphanedApps.length > 0) {
@@ -234,7 +234,7 @@ class AdvancedDatabaseCleanup {
         this.report.findings.orphanedRecords.push({
           type: 'applications',
           count: orphanedApps.length,
-          records: orphanedApps.slice(0, 5), // First 5 for review
+          records: orphanedApps.slice(0, 5) // First 5 for review
         });
       }
 
@@ -245,15 +245,15 @@ class AdvancedDatabaseCleanup {
             from: 'applications',
             localField: 'applicationId',
             foreignField: '_id',
-            as: 'application',
-          },
+            as: 'application'
+          }
         },
         {
-          $match: { application: { $size: 0 } },
+          $match: { application: { $size: 0 } }
         },
         {
-          $project: { _id: 1, certificateNumber: 1, applicationId: 1 },
-        },
+          $project: { _id: 1, certificateNumber: 1, applicationId: 1 }
+        }
       ]);
 
       if (orphanedCerts.length > 0) {
@@ -261,7 +261,7 @@ class AdvancedDatabaseCleanup {
         this.report.findings.orphanedRecords.push({
           type: 'certificates',
           count: orphanedCerts.length,
-          records: orphanedCerts.slice(0, 5),
+          records: orphanedCerts.slice(0, 5)
         });
       }
 
@@ -287,7 +287,7 @@ class AdvancedDatabaseCleanup {
         collections: [],
         totalSize: 0,
         totalDocuments: 0,
-        emptyCollections: 0,
+        emptyCollections: 0
       };
 
       for (const coll of collections) {
@@ -299,7 +299,7 @@ class AdvancedDatabaseCleanup {
             name: coll.name,
             documents: count,
             size: collStats.size || 0,
-            indexes: collStats.nindexes || 0,
+            indexes: collStats.nindexes || 0
           });
 
           stats.totalSize += collStats.size || 0;
@@ -337,10 +337,10 @@ class AdvancedDatabaseCleanup {
     // Empty collections
     if (this.report.findings.emptyCollections.length > 0) {
       const deleteCount = this.report.findings.emptyCollections.filter(
-        c => c.action === 'DELETE',
+        c => c.action === 'DELETE'
       ).length;
       console.log(
-        `📦 Empty Collections: ${this.report.findings.emptyCollections.length} (${deleteCount} can be deleted)`,
+        `📦 Empty Collections: ${this.report.findings.emptyCollections.length} (${deleteCount} can be deleted)`
       );
 
       this.report.findings.emptyCollections.forEach(coll => {
@@ -353,7 +353,7 @@ class AdvancedDatabaseCleanup {
     // Duplicate indexes
     if (this.report.findings.duplicateIndexes.length > 0) {
       console.log(
-        `🔍 Duplicate Indexes: ${this.report.findings.duplicateIndexes.length} collections affected`,
+        `🔍 Duplicate Indexes: ${this.report.findings.duplicateIndexes.length} collections affected`
       );
       this.report.findings.duplicateIndexes.forEach(item => {
         console.log(`   ⚠️  ${item.collection}: ${item.duplicates.length} duplicates`);
@@ -422,14 +422,14 @@ class AdvancedDatabaseCleanup {
           this.report.actions.push({
             action: 'deleteEmptyCollection',
             collection: coll.name,
-            success: true,
+            success: true
           });
         } catch (error) {
           console.log(`   ❌ Failed to delete ${coll.name}: ${error.message}`);
           this.report.errors.push({
             step: 'deleteCollection',
             collection: coll.name,
-            error: error.message,
+            error: error.message
           });
         }
       }
@@ -468,14 +468,14 @@ class AdvancedDatabaseCleanup {
             action: 'deleteOrphanedRecords',
             type: item.type,
             count: result.deletedCount,
-            success: true,
+            success: true
           });
         } catch (error) {
           console.log(`   ❌ Failed: ${error.message}`);
           this.report.errors.push({
             step: 'deleteOrphanedRecords',
             type: item.type,
-            error: error.message,
+            error: error.message
           });
         }
       }
@@ -510,7 +510,7 @@ class AdvancedDatabaseCleanup {
           collection: item.collection,
           count: item.duplicates.length,
           success: false,
-          note: 'Manual fix required',
+          note: 'Manual fix required'
         });
       }
     }
@@ -580,7 +580,7 @@ if (require.main === module) {
   const options = {
     analyzeOnly: args.includes('--analyze'),
     dryRun: args.includes('--dry-run'),
-    fixIndexes: args.includes('--fix-indexes'),
+    fixIndexes: args.includes('--fix-indexes')
   };
 
   if (args.includes('--help')) {

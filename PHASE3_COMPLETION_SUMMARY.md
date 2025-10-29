@@ -28,6 +28,7 @@ All implementations follow security best practices and are production-ready.
 **File Created**: `apps/backend/middleware/auth-rate-limiters.js` (153 lines)
 
 **Specialized Rate Limiters**:
+
 ```javascript
 - loginLimiter:          5 attempts / 15 minutes (IP + email-based)
 - passwordResetLimiter:  3 attempts / hour
@@ -37,17 +38,20 @@ All implementations follow security best practices and are production-ready.
 ```
 
 **Key Features**:
+
 - ✅ Redis-backed distributed rate limiting
 - ✅ IP + user-based tracking for login attempts
 - ✅ Exponential backoff for repeated failures
 - ✅ Skip successful requests (optional per limiter)
 - ✅ Custom 429 error responses with retry-after headers
-- ✅ Standardized X-RateLimit-* headers
+- ✅ Standardized X-RateLimit-\* headers
 
 **Dependencies Added**:
+
 - `rate-limit-redis@4.2.0` - Distributed rate limiting store
 
 **Integration**:
+
 - Updated `authRoutes.js` to use specialized rate limiters
 - Applied to all authentication endpoints:
   - POST /auth/login
@@ -60,6 +64,7 @@ All implementations follow security best practices and are production-ready.
   - PUT /auth/profile
 
 **Security Benefits**:
+
 - 🛡️ Prevents brute force attacks on login
 - 🛡️ Limits password reset request abuse
 - 🛡️ Protects against distributed attacks (Redis backing)
@@ -74,18 +79,20 @@ All implementations follow security best practices and are production-ready.
 **File Created**: `apps/backend/middleware/file-upload-validator.js` (363 lines)
 
 **Magic Byte Definitions**:
+
 ```javascript
-PDF:  [0x25, 0x50, 0x44, 0x46, 0x2D]  // %PDF-
-JPEG: [0xFF, 0xD8, 0xFF]
-PNG:  [0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A]
-GIF:  [0x47, 0x49, 0x46, 0x38]
-DOC:  [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]
-DOCX: [0x50, 0x4B, 0x03, 0x04]  // ZIP header
-XLS:  [0xD0, 0xCF, 0x11, 0xE0, 0xA1, 0xB1, 0x1A, 0xE1]
-XLSX: [0x50, 0x4B, 0x03, 0x04]  // ZIP header
+PDF: [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
+JPEG: [0xff, 0xd8, 0xff];
+PNG: [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+GIF: [0x47, 0x49, 0x46, 0x38];
+DOC: [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1];
+DOCX: [0x50, 0x4b, 0x03, 0x04]; // ZIP header
+XLS: [0xd0, 0xcf, 0x11, 0xe0, 0xa1, 0xb1, 0x1a, 0xe1];
+XLSX: [0x50, 0x4b, 0x03, 0x04]; // ZIP header
 ```
 
 **Key Features**:
+
 - ✅ Magic byte verification (binary signature checking)
 - ✅ MIME type validation
 - ✅ File size limits (configurable per type)
@@ -94,28 +101,33 @@ XLSX: [0x50, 0x4B, 0x03, 0x04]  // ZIP header
 - ✅ Support for 8 file types
 
 **Validation Layers**:
+
 1. **Extension Check** - Validates file extension against whitelist
 2. **MIME Type Check** - Validates Content-Type header
 3. **Magic Byte Check** - Reads first bytes and compares with known signatures
 4. **Size Check** - Enforces configurable size limits
 
 **Default Size Limits**:
+
 - Images (JPEG, PNG, GIF): 5 MB
 - Documents (PDF, DOC, DOCX): 10 MB
 - Spreadsheets (XLS, XLSX): 10 MB
 
 **Security Benefits**:
+
 - 🛡️ Prevents file type spoofing attacks
 - 🛡️ Blocks malicious files disguised with fake extensions
 - 🛡️ Enforces strict file type validation
 - 🛡️ Prevents oversized file uploads (DoS protection)
 
 **Ready for Integration**:
+
 ```javascript
 const { validateFile } = require('./middleware/file-upload-validator');
 
 // Example usage
-router.post('/upload', 
+router.post(
+  '/upload',
   upload.single('file'),
   validateFile({
     allowedTypes: ['pdf', 'jpeg', 'png'],
@@ -134,6 +146,7 @@ router.post('/upload',
 **File Created**: `apps/backend/middleware/cors-config.js` (159 lines)
 
 **Production Origins**:
+
 ```javascript
 const PRODUCTION_ORIGINS = [
   'https://farmer.gacp.dtam.go.th',
@@ -143,25 +156,28 @@ const PRODUCTION_ORIGINS = [
 ```
 
 **Pattern-Based Matching**:
+
 ```javascript
 const ALLOWED_ORIGIN_PATTERNS = [
-  /^https:\/\/.*\.gacp\.dtam\.go\.th$/,  // All subdomains
-  /^https:\/\/.*\.vercel\.app$/          // Vercel preview deployments
+  /^https:\/\/.*\.gacp\.dtam\.go\.th$/, // All subdomains
+  /^https:\/\/.*\.vercel\.app$/ // Vercel preview deployments
 ];
 ```
 
 **Development Origins**:
+
 ```javascript
 const DEVELOPMENT_ORIGINS = [
-  'http://localhost:3000',  // Farmer Portal
-  'http://localhost:3001',  // Admin Portal
-  'http://localhost:3002',  // Certificate Portal
-  'http://localhost:3003',  // Inspector App
-  'http://localhost:5000'   // Backend
+  'http://localhost:3000', // Farmer Portal
+  'http://localhost:3001', // Admin Portal
+  'http://localhost:3002', // Certificate Portal
+  'http://localhost:3003', // Inspector App
+  'http://localhost:5000' // Backend
 ];
 ```
 
 **Key Features**:
+
 - ✅ Strict origin validation
 - ✅ Pattern-based domain matching
 - ✅ Environment-specific behavior
@@ -170,6 +186,7 @@ const DEVELOPMENT_ORIGINS = [
 - ✅ Exposed headers for rate limiting
 
 **CORS Configuration**:
+
 ```javascript
 {
   origin: function(origin, callback) {
@@ -183,10 +200,12 @@ const DEVELOPMENT_ORIGINS = [
 ```
 
 **Integration**:
+
 - Updated `server.js` to use enhanced CORS
 - Added `corsLoggingMiddleware()` for request logging
 
 **Security Benefits**:
+
 - 🛡️ Prevents unauthorized cross-origin requests
 - 🛡️ Pattern matching simplifies subdomain management
 - 🛡️ Logging helps detect CORS attacks
@@ -203,36 +222,42 @@ const DEVELOPMENT_ORIGINS = [
 ### Core Components
 
 #### 1. Token Blacklisting
+
 ```javascript
 async blacklistToken(token, expiresIn, reason = 'MANUAL_REVOCATION')
 async isTokenBlacklisted(token)
 ```
 
 **Features**:
+
 - Redis-backed blacklist storage
 - SHA-256 token hashing (avoids storing actual tokens)
 - Automatic expiration (TTL matches token expiry)
 - Reason tracking for audit logs
 
 **Use Cases**:
+
 - User logout
 - Password change/reset
 - Account compromise
 - Suspicious activity
 
 #### 2. Token Versioning
+
 ```javascript
 async getTokenVersion(userId)
 async incrementTokenVersion(userId, reason = 'SECURITY_EVENT')
 ```
 
 **Features**:
+
 - Per-user version tracking
 - Auto-increment on security events
 - 90-day expiration (matches password max age)
 - Version mismatch detection
 
 **Rotation Triggers**:
+
 - `PASSWORD_CHANGED`
 - `PASSWORD_RESET`
 - `EMAIL_CHANGED`
@@ -242,6 +267,7 @@ async incrementTokenVersion(userId, reason = 'SECURITY_EVENT')
 - `MULTIPLE_FAILED_LOGINS`
 
 #### 3. Token Family Tracking
+
 ```javascript
 createTokenFamily()
 async storeTokenFamily(familyId, data, expiresIn)
@@ -251,14 +277,16 @@ async isTokenFamilyCompromised(familyId)
 ```
 
 **Features**:
+
 - Tracks token chains (access + refresh tokens)
 - Detects replay attacks
 - Usage counting and timestamps
 - Automatic invalidation on suspicious activity
 
 **Security Mechanism**:
+
 ```
-Login generates: 
+Login generates:
   familyId = "abc-123-def"
   accessToken (v1, familyId)
   refreshToken (v1, familyId)
@@ -276,6 +304,7 @@ If old refreshToken reused:
 #### UserAuthenticationService.js
 
 **1. Constructor**:
+
 ```javascript
 constructor(dependencies = {}) {
   // ... existing code
@@ -283,7 +312,8 @@ constructor(dependencies = {}) {
 }
 ```
 
-**2. _generateTokens() - Enhanced**:
+**2. \_generateTokens() - Enhanced**:
+
 ```javascript
 async _generateTokens(user) {
   const sessionId = crypto.randomUUID();
@@ -322,6 +352,7 @@ async _generateTokens(user) {
 ```
 
 **3. refreshToken() - Enhanced**:
+
 ```javascript
 async refreshToken(refreshToken, context = {}) {
   try {
@@ -361,6 +392,7 @@ async refreshToken(refreshToken, context = {}) {
 ```
 
 **4. logout() - Enhanced**:
+
 ```javascript
 async logout(userId, sessionId, context = {}) {
   try {
@@ -386,6 +418,7 @@ async logout(userId, sessionId, context = {}) {
 ```
 
 **5. changePassword() - Enhanced**:
+
 ```javascript
 async changePassword(userId, currentPassword, newPassword, context = {}) {
   try {
@@ -403,6 +436,7 @@ async changePassword(userId, currentPassword, newPassword, context = {}) {
 ```
 
 **6. New Helper Method**:
+
 ```javascript
 _getTokenExpirySeconds(token) {
   try {
@@ -420,31 +454,39 @@ _getTokenExpirySeconds(token) {
 #### authRoutes.js
 
 **1. Imports**:
+
 ```javascript
-const { checkTokenBlacklist, checkTokenVersion } = require('../../../../middleware/jwt-token-manager');
+const {
+  checkTokenBlacklist,
+  checkTokenVersion
+} = require('../../../../middleware/jwt-token-manager');
 ```
 
 **2. Middleware Stack** (for protected routes):
+
 ```javascript
-router.get('/profile',
+router.get(
+  '/profile',
   rateLimiters.generalAuthLimiter,
   authenticationMiddleware.extractToken(),
-  checkTokenBlacklist(tokenManager),    // NEW - Phase 3.4
-  checkTokenVersion(tokenManager),      // NEW - Phase 3.4
+  checkTokenBlacklist(tokenManager), // NEW - Phase 3.4
+  checkTokenVersion(tokenManager), // NEW - Phase 3.4
   authenticationMiddleware.authenticate(),
   (req, res) => userAuthenticationController.getProfile(req, res)
 );
 ```
 
 **3. Applied to Routes**:
+
 - ✅ GET /auth/profile
 - ✅ PUT /auth/profile
 - ✅ GET /auth/verify
-- ✅ All admin routes (/auth/users/*)
+- ✅ All admin routes (/auth/users/\*)
 
 #### UserManagementModule (index.js)
 
 **1. Constructor**:
+
 ```javascript
 constructor(dependencies = {}) {
   this.cacheService = dependencies.cacheService;
@@ -453,7 +495,8 @@ constructor(dependencies = {}) {
 }
 ```
 
-**2. _initializeComponents()**:
+**2. \_initializeComponents()**:
+
 ```javascript
 _initializeComponents() {
   // Initialize token manager
@@ -464,33 +507,38 @@ _initializeComponents() {
 ```
 
 **3. Route Creation**:
+
 ```javascript
 this.authRoutes = createAuthRoutes({
   userAuthenticationController: this.authenticationController,
   authenticationMiddleware: this.authenticationMiddleware,
-  tokenManager: this.tokenManager,      // NEW
-  redisClient: this.redisClient,        // NEW
+  tokenManager: this.tokenManager, // NEW
+  redisClient: this.redisClient // NEW
 });
 ```
 
 ### Security Benefits
 
 **Token Rotation**:
+
 - 🛡️ Automatic invalidation on security events
 - 🛡️ Version-based token validation
 - 🛡️ Prevents use of old tokens after password change
 
 **Blacklisting**:
+
 - 🛡️ Immediate token revocation on logout
 - 🛡️ Graceful handling of compromised tokens
 - 🛡️ Audit trail for revoked tokens
 
 **Replay Attack Prevention**:
+
 - 🛡️ Token family tracking detects reused refresh tokens
 - 🛡️ Automatic invalidation of compromised families
 - 🛡️ Usage counting and timestamp tracking
 
 **Distributed Systems**:
+
 - 🛡️ Redis-backed storage supports horizontal scaling
 - 🛡️ Consistent state across multiple backend instances
 - 🛡️ Automatic cleanup with TTL expiration
@@ -543,6 +591,7 @@ this.authRoutes = createAuthRoutes({
 ### Before Phase 3: 85/100
 
 **Critical Issues** (All Fixed in Phase 1 & 2):
+
 - ✅ JWT secret validation
 - ✅ Test credentials removed
 - ✅ MongoDB authentication
@@ -555,12 +604,14 @@ this.authRoutes = createAuthRoutes({
 ### After Phase 3: 92/100 (+7 points)
 
 **Medium Priority Issues** (All Fixed):
+
 - ✅ Auth endpoint rate limiting (+2 points)
 - ✅ File upload validation (+2 points)
 - ✅ CORS improvements (+1 point)
 - ✅ JWT rotation policy (+2 points)
 
 **Remaining Low Priority Issues** (8 points):
+
 - ⏳ API rate limiting (general endpoints) - 2 points
 - ⏳ Input sanitization enhancements - 2 points
 - ⏳ Security headers audit - 1 point
@@ -575,6 +626,7 @@ this.authRoutes = createAuthRoutes({
 ## 📦 Files Changed
 
 ### Created (4 files):
+
 ```
 apps/backend/middleware/
 ├── auth-rate-limiters.js      (153 lines) - Specialized rate limiters
@@ -584,6 +636,7 @@ apps/backend/middleware/
 ```
 
 ### Modified (5 files):
+
 ```
 apps/backend/
 ├── modules/user-management/
@@ -595,6 +648,7 @@ apps/backend/
 ```
 
 ### Total Changes:
+
 - **Lines Added**: 1,341
 - **Lines Deleted**: 63
 - **Net Change**: +1,278 lines
@@ -604,12 +658,15 @@ apps/backend/
 ## 🔧 Dependencies
 
 ### Added:
+
 - `rate-limit-redis@4.2.0` - Distributed rate limiting with Redis store
 
 ### Updated:
+
 - None (all existing dependencies compatible)
 
 ### Peer Dependencies:
+
 - `redis@^4.0.0` (already installed)
 - `express-rate-limit@^6.0.0` (already installed)
 - `jsonwebtoken@^9.0.0` (already installed)
@@ -622,6 +679,7 @@ apps/backend/
 ### Unit Tests Needed:
 
 **1. Auth Rate Limiters** (`auth-rate-limiters.test.js`):
+
 ```javascript
 - Test login rate limiting (5 attempts / 15min)
 - Test password reset rate limiting (3 attempts / hour)
@@ -633,6 +691,7 @@ apps/backend/
 ```
 
 **2. File Upload Validator** (`file-upload-validator.test.js`):
+
 ```javascript
 - Test magic byte verification for each file type
 - Test MIME type validation
@@ -644,6 +703,7 @@ apps/backend/
 ```
 
 **3. CORS Configuration** (`cors-config.test.js`):
+
 ```javascript
 - Test production origin validation
 - Test development origin validation
@@ -654,6 +714,7 @@ apps/backend/
 ```
 
 **4. JWT Token Manager** (`jwt-token-manager.test.js`):
+
 ```javascript
 - Test token blacklisting
 - Test token version increment
@@ -666,6 +727,7 @@ apps/backend/
 ### Integration Tests Needed:
 
 **1. Rate Limiting Flow**:
+
 ```javascript
 - Login endpoint: Verify 5 attempts trigger lockout
 - Password reset: Verify 3 attempts trigger lockout
@@ -673,6 +735,7 @@ apps/backend/
 ```
 
 **2. File Upload Flow**:
+
 ```javascript
 - Upload valid files (each type)
 - Upload malicious files (fake extensions)
@@ -681,6 +744,7 @@ apps/backend/
 ```
 
 **3. JWT Rotation Flow**:
+
 ```javascript
 - Login → Refresh → Verify token family
 - Change password → Verify old tokens invalid
@@ -691,6 +755,7 @@ apps/backend/
 ### End-to-End Tests Needed:
 
 **1. Authentication Flow with Rate Limiting**:
+
 ```javascript
 - Multiple failed logins → Rate limit triggered
 - Successful login → Rate limit reset
@@ -698,6 +763,7 @@ apps/backend/
 ```
 
 **2. Token Rotation Scenario**:
+
 ```javascript
 - User A logs in
 - User A changes password
@@ -722,6 +788,7 @@ apps/backend/
 ### Environment Configuration:
 
 **Required Environment Variables**:
+
 ```bash
 # Existing (already configured)
 JWT_SECRET=<strong-secret-32+chars>
@@ -734,6 +801,7 @@ ALLOWED_ORIGINS=https://farmer.gacp.dtam.go.th,https://admin.gacp.dtam.go.th
 ```
 
 **Redis Configuration**:
+
 ```bash
 # Ensure Redis is running and accessible
 redis-cli ping  # Should return PONG
@@ -749,22 +817,26 @@ redis-cli KEYS "token:*"
 ### Deployment Steps:
 
 1. **Backup Database**:
+
    ```bash
    mongodump --uri="mongodb://localhost:27017/gacp" --out=backup/pre-phase3
    ```
 
 2. **Update Dependencies**:
+
    ```bash
    pnpm install --filter @gacp/backend
    ```
 
 3. **Restart Services**:
+
    ```bash
    pm2 restart gacp-backend
    pm2 logs gacp-backend --lines 100
    ```
 
 4. **Verify Rate Limiting**:
+
    ```bash
    # Test login rate limiting
    for i in {1..6}; do
@@ -776,6 +848,7 @@ redis-cli KEYS "token:*"
    ```
 
 5. **Verify CORS**:
+
    ```bash
    # Test production origin
    curl -H "Origin: https://farmer.gacp.dtam.go.th" \
@@ -785,18 +858,19 @@ redis-cli KEYS "token:*"
    ```
 
 6. **Verify JWT Rotation**:
+
    ```bash
    # Login
    TOKEN=$(curl -X POST http://localhost:5000/api/auth/login \
      -H "Content-Type: application/json" \
      -d '{"email":"test@test.com","password":"correct"}' | jq -r .data.accessToken)
-   
+
    # Change password
    curl -X POST http://localhost:5000/api/auth/change-password \
      -H "Authorization: Bearer $TOKEN" \
      -H "Content-Type: application/json" \
      -d '{"currentPassword":"correct","newPassword":"newpassword123"}'
-   
+
    # Try to use old token
    curl -X GET http://localhost:5000/api/auth/profile \
      -H "Authorization: Bearer $TOKEN"
@@ -806,6 +880,7 @@ redis-cli KEYS "token:*"
 ### Monitoring:
 
 **Logs to Monitor**:
+
 ```bash
 # Rate limiting events
 pm2 logs gacp-backend | grep "Rate limit exceeded"
@@ -824,6 +899,7 @@ pm2 logs gacp-backend | grep "Token family compromised"
 ```
 
 **Redis Metrics**:
+
 ```bash
 # Monitor rate limiting keys
 redis-cli --scan --pattern "rl:*" | wc -l
@@ -841,6 +917,7 @@ redis-cli --scan --pattern "token:family:*" | wc -l
 ### Rollback Plan:
 
 If issues occur:
+
 ```bash
 # 1. Revert to previous commit
 git revert 86df00c
@@ -863,26 +940,31 @@ curl http://localhost:5000/api/health
 ### Expected Performance Changes:
 
 **Rate Limiting**:
+
 - ✅ Minimal overhead (~1-2ms per request)
 - ✅ Redis lookup: <1ms average
 - ✅ Horizontal scaling supported
 
 **File Validation**:
+
 - ⚠️ Magic byte check: ~5-10ms per file
 - ⚠️ Acceptable for upload endpoints
 - ✅ Configurable size limits prevent DoS
 
 **CORS Validation**:
+
 - ✅ Negligible overhead (<1ms)
 - ✅ Pattern matching: O(n) where n = number of patterns (~5)
 
 **JWT Rotation**:
+
 - ⚠️ Token generation: +10-15ms (version + family lookup)
 - ⚠️ Token validation: +5-10ms (blacklist + version check)
 - ✅ Redis caching minimizes overhead
 - ✅ Acceptable for authentication endpoints
 
 **Overall Impact**:
+
 - 🎯 Authentication endpoints: +15-25ms average
 - 🎯 File upload endpoints: +5-10ms average
 - 🎯 General endpoints: <2ms average
@@ -891,11 +973,13 @@ curl http://localhost:5000/api/health
 ### Load Testing Results (TBD - Phase 11):
 
 **Baseline (before Phase 3)**:
+
 - Login: ~50ms average
 - Token refresh: ~30ms average
 - Protected route: ~20ms average
 
 **After Phase 3** (estimated):
+
 - Login: ~65ms average (+15ms)
 - Token refresh: ~40ms average (+10ms)
 - Protected route: ~25ms average (+5ms)
@@ -907,12 +991,14 @@ curl http://localhost:5000/api/health
 ### Attack Surface Reduction:
 
 **Before Phase 3**:
+
 - ⚠️ Unlimited authentication attempts
 - ⚠️ File type spoofing possible
 - ⚠️ Permissive CORS configuration
 - ⚠️ No token rotation on security events
 
 **After Phase 3**:
+
 - ✅ Rate-limited authentication (5-100 attempts)
 - ✅ Magic byte validation prevents file spoofing
 - ✅ Strict CORS with pattern matching
@@ -920,19 +1006,20 @@ curl http://localhost:5000/api/health
 
 ### Threat Mitigation:
 
-| Threat | Before | After | Mitigation |
-|--------|--------|-------|------------|
-| Brute Force Attack | ⚠️ Medium | ✅ Low | Rate limiting (5/15min) |
-| Password Reset Abuse | ⚠️ High | ✅ Low | Rate limiting (3/hour) |
-| File Upload Attack | ⚠️ High | ✅ Low | Magic byte validation |
-| CORS Attack | ⚠️ Medium | ✅ Low | Strict origin validation |
-| Token Replay Attack | ⚠️ Medium | ✅ Low | Family tracking |
-| Stolen Token Use | ⚠️ Medium | ✅ Low | Token blacklisting |
-| Session Hijacking | ⚠️ Medium | ✅ Low | Token versioning |
+| Threat               | Before    | After  | Mitigation               |
+| -------------------- | --------- | ------ | ------------------------ |
+| Brute Force Attack   | ⚠️ Medium | ✅ Low | Rate limiting (5/15min)  |
+| Password Reset Abuse | ⚠️ High   | ✅ Low | Rate limiting (3/hour)   |
+| File Upload Attack   | ⚠️ High   | ✅ Low | Magic byte validation    |
+| CORS Attack          | ⚠️ Medium | ✅ Low | Strict origin validation |
+| Token Replay Attack  | ⚠️ Medium | ✅ Low | Family tracking          |
+| Stolen Token Use     | ⚠️ Medium | ✅ Low | Token blacklisting       |
+| Session Hijacking    | ⚠️ Medium | ✅ Low | Token versioning         |
 
 ### Compliance:
 
 **Security Standards Met**:
+
 - ✅ OWASP Top 10 (2021)
   - A01: Broken Access Control → Fixed with rate limiting
   - A07: Identification and Authentication Failures → Fixed with JWT rotation
@@ -953,6 +1040,7 @@ curl http://localhost:5000/api/health
 ## 📝 Documentation Updates Needed
 
 ### API Documentation:
+
 - [ ] Update rate limiting section (5 new limiters)
 - [ ] Document file upload requirements (magic bytes)
 - [ ] Document CORS origins (production + patterns)
@@ -960,12 +1048,14 @@ curl http://localhost:5000/api/health
 - [ ] Add error response examples (429, 401 TOKEN_OUTDATED)
 
 ### Developer Guide:
+
 - [ ] Add JWT rotation guide (trigger events)
 - [ ] Add file upload integration guide
 - [ ] Add rate limiting customization guide
 - [ ] Add CORS configuration guide
 
 ### Operations Manual:
+
 - [ ] Add Redis monitoring guide (token keys)
 - [ ] Add rate limiting troubleshooting
 - [ ] Add token rotation debugging guide
@@ -976,6 +1066,7 @@ curl http://localhost:5000/api/health
 ## 🎯 Next Steps
 
 ### Immediate (Week 1):
+
 1. ✅ Commit and push Phase 3 changes
 2. ✅ Update TODO list (Phase 3 complete)
 3. [ ] Write unit tests for new middleware
@@ -983,12 +1074,14 @@ curl http://localhost:5000/api/health
 5. [ ] Update API documentation
 
 ### Short-term (Week 2-3):
+
 6. [ ] Load testing (Task 11)
 7. [ ] Performance optimization based on results
 8. [ ] Security audit of Phase 3 implementation
 9. [ ] Update security documentation
 
 ### Medium-term (Week 4-10):
+
 10. [ ] **Inspector Mobile App** (Task 12 - CRITICAL)
     - 4-6 weeks development
     - Offline-first architecture
@@ -997,6 +1090,7 @@ curl http://localhost:5000/api/health
 12. [ ] Approver Portal (Task 14 - 2-3 weeks)
 
 ### Long-term (Future):
+
 13. [ ] Phase 4: Low Priority Security (8 points)
 14. [ ] Penetration testing
 15. [ ] Security certification (ISO 27001)
@@ -1017,11 +1111,13 @@ curl http://localhost:5000/api/health
 ### Team Recognition:
 
 **Contributors**:
+
 - Backend Security Team
 - DevOps Team
 - QA Team
 
 **Special Thanks**:
+
 - Redis team for rate-limit-redis library
 - OWASP for security guidelines
 - GACP stakeholders for prioritization
@@ -1033,16 +1129,19 @@ curl http://localhost:5000/api/health
 ### Issues or Questions:
 
 **Security Concerns**:
+
 - Report immediately to security team
 - Email: security@gacp.dtam.go.th
 - Slack: #security-alerts
 
 **Technical Issues**:
+
 - Create GitHub issue with label `phase-3`
 - Slack: #backend-support
 - Email: backend-team@gacp.dtam.go.th
 
 **Documentation**:
+
 - Wiki: https://github.com/jonmaxmore/Botanical-Audit-Framework/wiki
 - API Docs: https://api.gacp.dtam.go.th/docs
 - Security Docs: https://security.gacp.dtam.go.th

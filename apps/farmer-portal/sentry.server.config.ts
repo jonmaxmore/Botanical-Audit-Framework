@@ -37,7 +37,7 @@ Sentry.init({
     'Network request failed',
     // Cancelled requests
     'AbortError',
-    'Request aborted',
+    'Request aborted'
   ],
 
   // Release tracking
@@ -48,7 +48,7 @@ Sentry.init({
     Sentry.httpIntegration({
       // Track outgoing HTTP requests (filter out health checks)
       // Filtering is handled by tracesSampler below
-    }),
+    })
   ],
 
   // Custom trace sampling (replaces tracesSampleRate when defined)
@@ -63,5 +63,5 @@ Sentry.init({
 
   // Session replay
   replaysSessionSampleRate: 0.1,
-  replaysOnErrorSampleRate: 1.0,
+  replaysOnErrorSampleRate: 1.0
 });

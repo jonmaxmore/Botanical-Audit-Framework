@@ -11,7 +11,7 @@ const secrets = {
   FARMER_JWT_SECRET: generateSecret(64),
   DTAM_JWT_SECRET: generateSecret(64),
   SESSION_SECRET: generateSecret(32),
-  ENCRYPTION_KEY: generateSecret(32),
+  ENCRYPTION_KEY: generateSecret(32)
 };
 
 console.log('Copy these to your terraform.tfvars or .env file:\n');

@@ -8,11 +8,46 @@ export default function ApplicationsPage() {
   const [search, setSearch] = useState('');
 
   const applications = [
-    { id: '001', farm: 'ฟาร์มสุขใจ', crop: 'กัญชา', status: 'document_review', date: '15/01/2025', progress: 60 },
-    { id: '002', farm: 'ฟาร์มปลอดภัย', crop: 'ขมิ้น', status: 'payment_pending', date: '10/01/2025', progress: 20 },
-    { id: '003', farm: 'ฟาร์มอินทรีย์', crop: 'กัญชา', status: 'approved', date: '05/01/2025', progress: 100 },
-    { id: '004', farm: 'ฟาร์มสุขใจ', crop: 'ขิง', status: 'inspection_scheduled', date: '12/01/2025', progress: 70 },
-    { id: '005', farm: 'ฟาร์มปลอดภัย', crop: 'กระชาย', status: 'submitted', date: '18/01/2025', progress: 10 },
+    {
+      id: '001',
+      farm: 'ฟาร์มสุขใจ',
+      crop: 'กัญชา',
+      status: 'document_review',
+      date: '15/01/2025',
+      progress: 60
+    },
+    {
+      id: '002',
+      farm: 'ฟาร์มปลอดภัย',
+      crop: 'ขมิ้น',
+      status: 'payment_pending',
+      date: '10/01/2025',
+      progress: 20
+    },
+    {
+      id: '003',
+      farm: 'ฟาร์มอินทรีย์',
+      crop: 'กัญชา',
+      status: 'approved',
+      date: '05/01/2025',
+      progress: 100
+    },
+    {
+      id: '004',
+      farm: 'ฟาร์มสุขใจ',
+      crop: 'ขิง',
+      status: 'inspection_scheduled',
+      date: '12/01/2025',
+      progress: 70
+    },
+    {
+      id: '005',
+      farm: 'ฟาร์มปลอดภัย',
+      crop: 'กระชาย',
+      status: 'submitted',
+      date: '18/01/2025',
+      progress: 10
+    }
   ];
 
   const statusMap: Record<string, { label: string; color: string; bg: string }> = {
@@ -22,7 +57,7 @@ export default function ApplicationsPage() {
     document_review: { label: 'ตรวจเอกสาร', color: 'text-purple-800', bg: 'bg-purple-100' },
     inspection_scheduled: { label: 'นัดตรวจสอบ', color: 'text-orange-800', bg: 'bg-orange-100' },
     approved: { label: 'อนุมัติแล้ว', color: 'text-green-800', bg: 'bg-green-100' },
-    rejected: { label: 'ไม่ผ่าน', color: 'text-red-800', bg: 'bg-red-100' },
+    rejected: { label: 'ไม่ผ่าน', color: 'text-red-800', bg: 'bg-red-100' }
   };
 
   const filteredApps = applications.filter(app => {
@@ -40,7 +75,10 @@ export default function ApplicationsPage() {
             <h1 className="text-3xl font-bold text-gray-900">📋 คำขอใบรับรอง GACP</h1>
             <p className="text-gray-600 mt-1">จัดการคำขอทั้งหมดของคุณ</p>
           </div>
-          <Link href="/application/new" className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold">
+          <Link
+            href="/application/new"
+            className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 font-semibold"
+          >
             + ยื่นคำขอใหม่
           </Link>
         </div>
@@ -52,15 +90,21 @@ export default function ApplicationsPage() {
             <div className="text-sm text-gray-600">ทั้งหมด</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
-            <div className="text-2xl font-bold text-yellow-600">{applications.filter(a => a.status === 'payment_pending').length}</div>
+            <div className="text-2xl font-bold text-yellow-600">
+              {applications.filter(a => a.status === 'payment_pending').length}
+            </div>
             <div className="text-sm text-gray-600">รอชำระเงิน</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
-            <div className="text-2xl font-bold text-purple-600">{applications.filter(a => a.status === 'document_review').length}</div>
+            <div className="text-2xl font-bold text-purple-600">
+              {applications.filter(a => a.status === 'document_review').length}
+            </div>
             <div className="text-sm text-gray-600">กำลังตรวจสอบ</div>
           </div>
           <div className="bg-white p-4 rounded-lg shadow">
-            <div className="text-2xl font-bold text-green-600">{applications.filter(a => a.status === 'approved').length}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {applications.filter(a => a.status === 'approved').length}
+            </div>
             <div className="text-sm text-gray-600">อนุมัติแล้ว</div>
           </div>
         </div>
@@ -72,12 +116,12 @@ export default function ApplicationsPage() {
               type="text"
               placeholder="🔍 ค้นหาฟาร์ม หรือพืช..."
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={e => setSearch(e.target.value)}
               className="flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             />
             <select
               value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+              onChange={e => setFilter(e.target.value)}
               className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
             >
               <option value="all">ทั้งหมด</option>
@@ -95,17 +139,31 @@ export default function ApplicationsPage() {
           <table className="min-w-full">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ฟาร์ม</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">พืช</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">สถานะ</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ความคืบหน้า</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">วันที่</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">การดำเนินการ</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  ID
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  ฟาร์ม
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  พืช
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  สถานะ
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  ความคืบหน้า
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  วันที่
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                  การดำเนินการ
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredApps.map((app) => (
+              {filteredApps.map(app => (
                 <tr key={app.id} className="hover:bg-gray-50">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className="font-mono text-sm font-semibold text-gray-900">#{app.id}</span>
@@ -117,21 +175,29 @@ export default function ApplicationsPage() {
                     <span className="text-gray-600">{app.crop}</span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <span className={`px-3 py-1 text-xs font-semibold rounded-full ${statusMap[app.status].bg} ${statusMap[app.status].color}`}>
+                    <span
+                      className={`px-3 py-1 text-xs font-semibold rounded-full ${statusMap[app.status].bg} ${statusMap[app.status].color}`}
+                    >
                       {statusMap[app.status].label}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center space-x-2">
                       <div className="w-24 bg-gray-200 rounded-full h-2">
-                        <div className="bg-green-600 h-2 rounded-full" style={{ width: `${app.progress}%` }}></div>
+                        <div
+                          className="bg-green-600 h-2 rounded-full"
+                          style={{ width: `${app.progress}%` }}
+                        ></div>
                       </div>
                       <span className="text-xs text-gray-600">{app.progress}%</span>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{app.date}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <Link href={`/applications/${app.id}`} className="text-green-600 hover:underline font-medium">
+                    <Link
+                      href={`/applications/${app.id}`}
+                      className="text-green-600 hover:underline font-medium"
+                    >
                       ดูรายละเอียด →
                     </Link>
                   </td>

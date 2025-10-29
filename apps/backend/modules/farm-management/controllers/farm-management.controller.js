@@ -3,7 +3,6 @@
  * HTTP request handlers for farm management operations
  */
 
-const FarmManagementService = require('../services/farm-management.service');
 const { successResponse, errorResponse } = require('../../shared/utils/response');
 const logger = require('../../shared/utils/logger');
 

@@ -21,7 +21,7 @@ const MIGRATION_CONFIG = {
   batchSize: 100,
   maxRetries: 3,
   backupEnabled: true,
-  verificationEnabled: true,
+  verificationEnabled: true
 };
 
 // Migration States
@@ -31,7 +31,7 @@ const MIGRATION_STATES = {
   COMPLETED: 'completed',
   FAILED: 'failed',
   ROLLING_BACK: 'rolling_back',
-  ROLLED_BACK: 'rolled_back',
+  ROLLED_BACK: 'rolled_back'
 };
 
 class DatabaseMigrationManager extends EventEmitter {
@@ -119,9 +119,9 @@ class DatabaseMigrationManager extends EventEmitter {
         processedRecords: 0,
         successfulRecords: 0,
         failedRecords: 0,
-        skippedRecords: 0,
+        skippedRecords: 0
       },
-      errors: [],
+      errors: []
     };
 
     this.currentMigration = migration;
@@ -156,7 +156,7 @@ class DatabaseMigrationManager extends EventEmitter {
         step: 'migration_process',
         error: error.message,
         timestamp: new Date(),
-        stack: error.stack,
+        stack: error.stack
       });
 
       await this.updateMigrationStatus();
@@ -176,7 +176,7 @@ class DatabaseMigrationManager extends EventEmitter {
     const step = {
       stepName: 'pre_migration_check',
       startedAt: new Date(),
-      status: 'running',
+      status: 'running'
     };
 
     this.currentMigration.steps.push(step);
@@ -208,7 +208,7 @@ class DatabaseMigrationManager extends EventEmitter {
 
     if (freeSpace < requiredSpace) {
       throw new Error(
-        `Insufficient disk space. Required: ${requiredSpace}, Available: ${freeSpace}`,
+        `Insufficient disk space. Required: ${requiredSpace}, Available: ${freeSpace}`
       );
     }
 
@@ -232,7 +232,7 @@ class DatabaseMigrationManager extends EventEmitter {
     const step = {
       stepName: 'create_backup',
       startedAt: new Date(),
-      status: 'running',
+      status: 'running'
     };
 
     this.currentMigration.steps.push(step);
@@ -281,7 +281,7 @@ class DatabaseMigrationManager extends EventEmitter {
     const step = {
       stepName: 'migrate_collections',
       startedAt: new Date(),
-      status: 'running',
+      status: 'running'
     };
 
     this.currentMigration.steps.push(step);
@@ -336,7 +336,7 @@ class DatabaseMigrationManager extends EventEmitter {
             step: 'migrate_farms',
             recordId: farm._id,
             error: error.message,
-            timestamp: new Date(),
+            timestamp: new Date()
           });
         }
         processedCount++;
@@ -349,7 +349,7 @@ class DatabaseMigrationManager extends EventEmitter {
 
       if (processedCount % 100 === 0) {
         console.log(
-          `📊 Farms migration progress: ${processedCount} processed, ${successCount} success, ${errorCount} errors`,
+          `📊 Farms migration progress: ${processedCount} processed, ${successCount} success, ${errorCount} errors`
         );
         await this.updateMigrationStatus();
       }
@@ -384,9 +384,9 @@ class DatabaseMigrationManager extends EventEmitter {
             confidence: 0,
             verificationStatus: 'pending',
             ocrEngine: null,
-            nlpEngine: null,
-          },
-        },
+            nlpEngine: null
+          }
+        }
       },
 
       // Location & Geographic Data
@@ -398,23 +398,23 @@ class DatabaseMigrationManager extends EventEmitter {
           district: oldFarm.address?.district || oldFarm.district || '',
           province: oldFarm.address?.province || oldFarm.province || '',
           postalCode: oldFarm.address?.postalCode || oldFarm.postalCode || '',
-          country: 'Thailand',
+          country: 'Thailand'
         },
         coordinates: {
           type: 'Point',
-          coordinates: oldFarm.coordinates || [0, 0],
+          coordinates: oldFarm.coordinates || [0, 0]
         },
         elevationMeters: oldFarm.elevation || 0,
         landSize: {
           totalArea: oldFarm.landSize?.total || oldFarm.totalArea || 0,
           cultivationArea: oldFarm.landSize?.cultivation || oldFarm.cultivationArea || 0,
           storageArea: oldFarm.landSize?.storage || 0,
-          processingArea: oldFarm.landSize?.processing || 0,
+          processingArea: oldFarm.landSize?.processing || 0
         },
         boundaries: {
           type: oldFarm.boundaries?.type || 'Polygon',
-          coordinates: oldFarm.boundaries?.coordinates || [[]],
-        },
+          coordinates: oldFarm.boundaries?.coordinates || [[]]
+        }
       },
 
       // Enhanced Cultivation Data
@@ -430,12 +430,12 @@ class DatabaseMigrationManager extends EventEmitter {
             supplier: crop.seedSource?.supplier || '',
             certificationNumber: crop.seedSource?.certification || '',
             batchNumber: crop.seedSource?.batch || '',
-            purchaseDate: crop.seedSource?.date || null,
-          },
+            purchaseDate: crop.seedSource?.date || null
+          }
         })),
 
         systems: oldFarm.systems || [],
-        productionPlan: oldFarm.productionPlan || [],
+        productionPlan: oldFarm.productionPlan || []
       },
 
       // IoT Integration (empty for existing records)
@@ -449,8 +449,8 @@ class DatabaseMigrationManager extends EventEmitter {
           currentScore: oldFarm.complianceScore || 0,
           lastCalculated: oldFarm.lastScored || null,
           categoryScores: oldFarm.categoryScores || {},
-          riskFactors: [],
-        },
+          riskFactors: []
+        }
       },
 
       // Audit Trail
@@ -464,20 +464,20 @@ class DatabaseMigrationManager extends EventEmitter {
             name: 'System Migration',
             role: 'system',
             ipAddress: '127.0.0.1',
-            userAgent: 'DatabaseMigrationManager',
+            userAgent: 'DatabaseMigrationManager'
           },
           changes: {
             field: 'schema_version',
             oldValue: MIGRATION_CONFIG.sourceVersion,
             newValue: MIGRATION_CONFIG.targetVersion,
-            changeReason: 'Database schema migration',
+            changeReason: 'Database schema migration'
           },
           verification: {
             checksum: this.calculateChecksum(newFarm),
             digitalSignature: '',
-            blockchainHash: '',
-          },
-        },
+            blockchainHash: ''
+          }
+        }
       ],
 
       // System Metadata
@@ -490,9 +490,9 @@ class DatabaseMigrationManager extends EventEmitter {
         dataIntegrity: {
           checksum: this.calculateChecksum(newFarm),
           lastVerified: new Date(),
-          verificationStatus: 'verified',
-        },
-      },
+          verificationStatus: 'verified'
+        }
+      }
     };
 
     return newFarm;
@@ -522,7 +522,7 @@ class DatabaseMigrationManager extends EventEmitter {
       for (const application of batch) {
         try {
           await applicationsCollection.replaceOne({ _id: application._id }, application, {
-            upsert: true,
+            upsert: true
           });
           successCount++;
         } catch (error) {
@@ -539,7 +539,7 @@ class DatabaseMigrationManager extends EventEmitter {
     }
 
     console.log(
-      `✅ Applications migration completed: ${successCount} success, ${errorCount} errors`,
+      `✅ Applications migration completed: ${successCount} success, ${errorCount} errors`
     );
   }
 
@@ -563,15 +563,15 @@ class DatabaseMigrationManager extends EventEmitter {
           currentStep: oldApplication.currentStep || 1,
           totalSteps: 7,
           completedSteps: oldApplication.completedSteps || [],
-          stepProgress: [],
-        },
+          stepProgress: []
+        }
       },
 
       // AI Processing (empty for existing records)
       aiProcessing: {
         documentProcessing: [],
         validationResults: [],
-        guidanceHistory: [],
+        guidanceHistory: []
       },
 
       status: {
@@ -581,8 +581,8 @@ class DatabaseMigrationManager extends EventEmitter {
           currentPhase: oldApplication.currentPhase || 'submission',
           phaseProgress: oldApplication.progress || 0,
           estimatedCompletion: oldApplication.estimatedCompletion || null,
-          bottlenecks: [],
-        },
+          bottlenecks: []
+        }
       },
 
       documents: (oldApplication.documents || []).map(doc => ({
@@ -601,13 +601,13 @@ class DatabaseMigrationManager extends EventEmitter {
         encryption: {
           encrypted: false,
           algorithm: '',
-          keyId: '',
+          keyId: ''
         },
         integrity: {
           checksum: this.calculateChecksum(doc),
           digitalSignature: '',
-          tamperDetected: false,
-        },
+          tamperDetected: false
+        }
       })),
 
       financial: {
@@ -615,8 +615,8 @@ class DatabaseMigrationManager extends EventEmitter {
         paidAmount: oldApplication.fees?.paid || 0,
         outstandingAmount: oldApplication.fees?.outstanding || 0,
         paymentHistory: oldApplication.payments || [],
-        discounts: oldApplication.discounts || [],
-      },
+        discounts: oldApplication.discounts || []
+      }
     };
 
     return newApplication;
@@ -671,7 +671,7 @@ class DatabaseMigrationManager extends EventEmitter {
         harvestDate: oldBatch.harvestDate || null,
         expectedYield: oldBatch.expectedYield || 0,
         actualYield: oldBatch.actualYield || 0,
-        qualityGrade: oldBatch.qualityGrade || 'A',
+        qualityGrade: oldBatch.qualityGrade || 'A'
       },
 
       traceabilityGraph: {
@@ -680,11 +680,11 @@ class DatabaseMigrationManager extends EventEmitter {
           supplier: oldBatch.seedSupplier || '',
           certificationNumber: oldBatch.seedCertification || '',
           geneticProfile: {},
-          parentBatches: [],
+          parentBatches: []
         },
         productionStages: [],
         processing: [],
-        distribution: [],
+        distribution: []
       },
 
       qrCode: {
@@ -694,13 +694,13 @@ class DatabaseMigrationManager extends EventEmitter {
         expiryDate: null,
         scanCount: oldBatch.scanCount || 0,
         lastScanned: oldBatch.lastScanned || null,
-        verificationChain: [],
+        verificationChain: []
       },
 
       compliance: {
         gacpCompliant: oldBatch.gacpCompliant || false,
         complianceChecks: [],
-        testingResults: [],
+        testingResults: []
       },
 
       recordChain: [
@@ -712,9 +712,9 @@ class DatabaseMigrationManager extends EventEmitter {
           data: { migrationId: this.migrationId },
           previousHash: '',
           currentHash: this.calculateChecksum(oldBatch),
-          digitalSignature: '',
-        },
-      ],
+          digitalSignature: ''
+        }
+      ]
     };
   }
 
@@ -727,7 +727,7 @@ class DatabaseMigrationManager extends EventEmitter {
     const step = {
       stepName: 'create_indexes',
       startedAt: new Date(),
-      status: 'running',
+      status: 'running'
     };
 
     this.currentMigration.steps.push(step);
@@ -768,7 +768,7 @@ class DatabaseMigrationManager extends EventEmitter {
     const step = {
       stepName: 'verify_migration',
       startedAt: new Date(),
-      status: 'running',
+      status: 'running'
     };
 
     this.currentMigration.steps.push(step);
@@ -794,11 +794,11 @@ class DatabaseMigrationManager extends EventEmitter {
         totalCount: count,
         sampleSize: sampleDocs.length,
         validSamples: validDocs,
-        validationRate: sampleDocs.length > 0 ? (validDocs / sampleDocs.length) * 100 : 0,
+        validationRate: sampleDocs.length > 0 ? (validDocs / sampleDocs.length) * 100 : 0
       };
 
       console.log(
-        `📊 ${collectionName} verification: ${validDocs}/${sampleDocs.length} valid samples`,
+        `📊 ${collectionName} verification: ${validDocs}/${sampleDocs.length} valid samples`
       );
     }
 
@@ -838,7 +838,7 @@ class DatabaseMigrationManager extends EventEmitter {
     const step = {
       stepName: 'post_migration_cleanup',
       startedAt: new Date(),
-      status: 'running',
+      status: 'running'
     };
 
     this.currentMigration.steps.push(step);
@@ -866,9 +866,9 @@ class DatabaseMigrationManager extends EventEmitter {
       {
         version: MIGRATION_CONFIG.targetVersion,
         updatedAt: new Date(),
-        migrationId: this.migrationId,
+        migrationId: this.migrationId
       },
-      { upsert: true },
+      { upsert: true }
     );
 
     console.log(`✅ Database version updated to ${MIGRATION_CONFIG.targetVersion}`);
@@ -906,9 +906,9 @@ class DatabaseMigrationManager extends EventEmitter {
           steps: this.currentMigration.steps,
           statistics: this.currentMigration.statistics,
           errors: this.currentMigration.errors,
-          endedAt: this.currentMigration.endedAt,
-        },
-      },
+          endedAt: this.currentMigration.endedAt
+        }
+      }
     );
   }
 
@@ -1042,7 +1042,7 @@ class DatabaseMigrationManager extends EventEmitter {
             ? (this.currentMigration.statistics.processedRecords /
                 this.currentMigration.statistics.totalRecords) *
               100
-            : 0,
+            : 0
       },
       steps: this.currentMigration.steps,
       errors: this.currentMigration.errors,
@@ -1050,7 +1050,7 @@ class DatabaseMigrationManager extends EventEmitter {
       endedAt: this.currentMigration.endedAt,
       duration: this.currentMigration.endedAt
         ? this.currentMigration.endedAt - this.currentMigration.startedAt
-        : Date.now() - this.currentMigration.startedAt,
+        : Date.now() - this.currentMigration.startedAt
     };
   }
 }
@@ -1058,5 +1058,5 @@ class DatabaseMigrationManager extends EventEmitter {
 module.exports = {
   DatabaseMigrationManager,
   MIGRATION_CONFIG,
-  MIGRATION_STATES,
+  MIGRATION_STATES
 };

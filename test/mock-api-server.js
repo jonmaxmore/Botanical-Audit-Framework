@@ -28,13 +28,13 @@ const storage = {
   certificates: [],
   surveys: [],
   comparisons: [],
-  logs: [],
+  logs: []
 };
 
 // Helper: Generate JWT Token (Mock)
 const generateToken = (userId, role) => {
   return Buffer.from(JSON.stringify({ userId, role, exp: Date.now() + 3600000 })).toString(
-    'base64',
+    'base64'
   );
 };
 
@@ -74,7 +74,7 @@ app.post('/api/auth/register', (req, res) => {
     lastName,
     phoneNumber,
     role: role || 'farmer',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
   };
 
   storage.users.push(user);
@@ -83,7 +83,7 @@ app.post('/api/auth/register', (req, res) => {
   res.status(201).json({
     success: true,
     message: 'User registered successfully',
-    data: { userId, email },
+    data: { userId, email }
   });
 });
 
@@ -103,7 +103,7 @@ app.post('/api/auth/login', (req, res) => {
   res.json({
     success: true,
     token,
-    user: { userId: user.userId, email: user.email, role: user.role },
+    user: { userId: user.userId, email: user.email, role: user.role }
   });
 });
 
@@ -116,7 +116,7 @@ app.post('/api/auth/dtam/login', (req, res) => {
     'document_reviewer@dtam.go.th': { role: 'document_reviewer', userId: 'dtam-reviewer-001' },
     'inspector@dtam.go.th': { role: 'inspector', userId: 'dtam-inspector-001' },
     'approver@dtam.go.th': { role: 'approver', userId: 'dtam-approver-001' },
-    'admin@dtam.go.th': { role: 'admin', userId: 'dtam-admin-001' },
+    'admin@dtam.go.th': { role: 'admin', userId: 'dtam-admin-001' }
   };
 
   const user = dtamUsers[email];
@@ -129,13 +129,13 @@ app.post('/api/auth/dtam/login', (req, res) => {
   storage.logs.push({
     action: 'dtam_login',
     userId: user.userId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({
     success: true,
     token,
-    user: { userId: user.userId, email, role: user.role },
+    user: { userId: user.userId, email, role: user.role }
   });
 });
 
@@ -144,7 +144,7 @@ app.post('/api/auth/logout', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'logout',
     userId: req.user.userId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Logged out successfully' });
 });
@@ -163,8 +163,8 @@ app.get('/api/farmer/dashboard', verifyToken, (req, res) => {
     data: {
       farms: userFarms.length,
       applications: userApplications.length,
-      pendingApplications: userApplications.filter(a => a.status === 'pending').length,
-    },
+      pendingApplications: userApplications.filter(a => a.status === 'pending').length
+    }
   });
 });
 
@@ -185,7 +185,7 @@ app.post('/api/farm-management/farms', verifyToken, (req, res) => {
     area,
     cropType,
     createdAt: new Date().toISOString(),
-    status: 'active',
+    status: 'active'
   };
 
   storage.farms.push(farm);
@@ -193,7 +193,7 @@ app.post('/api/farm-management/farms', verifyToken, (req, res) => {
     action: 'create_farm',
     farmId,
     userId: req.user.userId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.status(201).json({ success: true, data: { farmId }, message: 'Farm created successfully' });
@@ -221,12 +221,12 @@ app.put('/api/farm-management/farms/:farmId', verifyToken, (req, res) => {
   storage.farms[farmIndex] = {
     ...storage.farms[farmIndex],
     ...req.body,
-    updatedAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
   };
   storage.logs.push({
     action: 'update_farm',
     farmId: req.params.farmId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, data: storage.farms[farmIndex], message: 'Farm updated successfully' });
@@ -242,7 +242,7 @@ app.delete('/api/farm-management/farms/:farmId', verifyToken, (req, res) => {
 
   // Check active applications
   const activeApps = storage.applications.filter(
-    a => a.farmId === req.params.farmId && a.status !== 'cancelled',
+    a => a.farmId === req.params.farmId && a.status !== 'cancelled'
   );
 
   if (activeApps.length > 0) {
@@ -255,7 +255,7 @@ app.delete('/api/farm-management/farms/:farmId', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'delete_farm',
     farmId: req.params.farmId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Farm deleted successfully' });
@@ -277,14 +277,14 @@ app.post('/api/applications/create', verifyToken, (req, res) => {
     applicationType,
     cropDetails,
     status: 'draft',
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
   };
 
   storage.applications.push(application);
   storage.logs.push({
     action: 'create_application',
     applicationId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res
@@ -295,7 +295,7 @@ app.post('/api/applications/create', verifyToken, (req, res) => {
 // Submit Application
 app.post('/api/applications/:applicationId/submit', verifyToken, (req, res) => {
   const appIndex = storage.applications.findIndex(
-    a => a.applicationId === req.params.applicationId,
+    a => a.applicationId === req.params.applicationId
   );
 
   if (appIndex === -1) {
@@ -307,7 +307,7 @@ app.post('/api/applications/:applicationId/submit', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'submit_application',
     applicationId: req.params.applicationId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Application submitted successfully' });
@@ -323,14 +323,14 @@ app.get('/api/applications/:applicationId/status', verifyToken, (req, res) => {
 
   res.json({
     success: true,
-    data: { status: application.status, applicationId: application.applicationId },
+    data: { status: application.status, applicationId: application.applicationId }
   });
 });
 
 // Cancel Application
 app.post('/api/applications/:applicationId/cancel', verifyToken, (req, res) => {
   const appIndex = storage.applications.findIndex(
-    a => a.applicationId === req.params.applicationId,
+    a => a.applicationId === req.params.applicationId
   );
 
   if (appIndex === -1) {
@@ -343,7 +343,7 @@ app.post('/api/applications/:applicationId/cancel', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'cancel_application',
     applicationId: req.params.applicationId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Application cancelled successfully' });
@@ -360,7 +360,7 @@ app.post('/api/documents/upload', verifyToken, (req, res) => {
     documentId,
     ...req.body,
     uploadedBy: req.user.userId,
-    uploadedAt: new Date().toISOString(),
+    uploadedAt: new Date().toISOString()
   };
 
   storage.logs.push({ action: 'upload_document', documentId, timestamp: new Date().toISOString() });
@@ -381,7 +381,7 @@ app.post('/api/survey/submit', verifyToken, (req, res) => {
     surveyId,
     userId: req.user.userId,
     ...req.body,
-    submittedAt: new Date().toISOString(),
+    submittedAt: new Date().toISOString()
   };
 
   storage.surveys.push(survey);
@@ -407,15 +407,15 @@ app.post('/api/standards-comparison/compare', verifyToken, (req, res) => {
     results: {
       GACP: { score: 85, compliant: true },
       GAP: { score: 78, compliant: true },
-      Organic: { score: 72, compliant: false },
-    },
+      Organic: { score: 72, compliant: false }
+    }
   };
 
   storage.comparisons.push(comparison);
   storage.logs.push({
     action: 'compare_standards',
     comparisonId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, data: comparison, message: 'Standards comparison completed' });
@@ -448,8 +448,8 @@ app.get('/api/dtam/applications/:applicationId/documents', verifyToken, (req, re
     success: true,
     data: [
       { documentId: 'doc-001', type: 'land_ownership', status: 'pending' },
-      { documentId: 'doc-002', type: 'farm_plan', status: 'pending' },
-    ],
+      { documentId: 'doc-002', type: 'farm_plan', status: 'pending' }
+    ]
   });
 });
 
@@ -458,7 +458,7 @@ app.post('/api/dtam/documents/review', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'review_document',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Document reviewed successfully' });
 });
@@ -468,7 +468,7 @@ app.post('/api/dtam/documents/request-revision', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'request_revision',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Revision requested successfully' });
 });
@@ -479,7 +479,7 @@ app.post(
   verifyToken,
   (req, res) => {
     const appIndex = storage.applications.findIndex(
-      a => a.applicationId === req.params.applicationId,
+      a => a.applicationId === req.params.applicationId
     );
 
     if (appIndex !== -1) {
@@ -490,11 +490,11 @@ app.post(
     storage.logs.push({
       action: 'complete_document_review',
       applicationId: req.params.applicationId,
-      timestamp: new Date().toISOString(),
+      timestamp: new Date().toISOString()
     });
 
     res.json({ success: true, message: 'Document review completed' });
-  },
+  }
 );
 
 // Get Review History
@@ -510,8 +510,8 @@ app.get('/api/dtam/applications/:applicationId/review-report', verifyToken, (req
     data: {
       applicationId: req.params.applicationId,
       reportType: 'document_review',
-      generatedAt: new Date().toISOString(),
-    },
+      generatedAt: new Date().toISOString()
+    }
   });
 });
 
@@ -520,7 +520,7 @@ app.post('/api/dtam/documents/revert-approval', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'revert_approval',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Document approval reverted' });
 });
@@ -554,14 +554,14 @@ app.post('/api/dtam/inspections/start', verifyToken, (req, res) => {
     inspectorId: req.user.userId,
     ...req.body,
     status: 'in_progress',
-    startedAt: new Date().toISOString(),
+    startedAt: new Date().toISOString()
   };
 
   storage.inspections.push(inspection);
   storage.logs.push({
     action: 'start_inspection',
     inspectionId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.status(201).json({ success: true, data: { inspectionId }, message: 'Inspection started' });
@@ -570,7 +570,7 @@ app.post('/api/dtam/inspections/start', verifyToken, (req, res) => {
 // Record Findings
 app.post('/api/dtam/inspections/record-findings', verifyToken, (req, res) => {
   const inspectionIndex = storage.inspections.findIndex(
-    i => i.inspectionId === req.body.inspectionId,
+    i => i.inspectionId === req.body.inspectionId
   );
 
   if (inspectionIndex !== -1) {
@@ -581,7 +581,7 @@ app.post('/api/dtam/inspections/record-findings', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'record_findings',
     inspectionId: req.body.inspectionId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Findings recorded successfully' });
@@ -590,7 +590,7 @@ app.post('/api/dtam/inspections/record-findings', verifyToken, (req, res) => {
 // Check Compliance
 app.post('/api/dtam/inspections/check-compliance', verifyToken, (req, res) => {
   const inspectionIndex = storage.inspections.findIndex(
-    i => i.inspectionId === req.body.inspectionId,
+    i => i.inspectionId === req.body.inspectionId
   );
 
   if (inspectionIndex !== -1) {
@@ -600,7 +600,7 @@ app.post('/api/dtam/inspections/check-compliance', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'check_compliance',
     inspectionId: req.body.inspectionId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Compliance checked successfully' });
@@ -611,7 +611,7 @@ app.post('/api/dtam/inspections/upload-photos', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'upload_photos',
     inspectionId: req.body.inspectionId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Photos uploaded successfully' });
 });
@@ -619,7 +619,7 @@ app.post('/api/dtam/inspections/upload-photos', verifyToken, (req, res) => {
 // Complete Inspection
 app.post('/api/dtam/inspections/complete', verifyToken, (req, res) => {
   const inspectionIndex = storage.inspections.findIndex(
-    i => i.inspectionId === req.body.inspectionId,
+    i => i.inspectionId === req.body.inspectionId
   );
 
   if (inspectionIndex !== -1) {
@@ -631,7 +631,7 @@ app.post('/api/dtam/inspections/complete', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'complete_inspection',
     inspectionId: req.body.inspectionId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Inspection completed successfully' });
@@ -646,8 +646,8 @@ app.get('/api/dtam/inspections/:inspectionId/report', verifyToken, (req, res) =>
     data: {
       inspectionId: req.params.inspectionId,
       inspection,
-      generatedAt: new Date().toISOString(),
-    },
+      generatedAt: new Date().toISOString()
+    }
   });
 });
 
@@ -662,7 +662,7 @@ app.put('/api/dtam/inspections/edit-finding', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'edit_finding',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Finding updated successfully' });
 });
@@ -670,7 +670,7 @@ app.put('/api/dtam/inspections/edit-finding', verifyToken, (req, res) => {
 // Reopen Inspection
 app.post('/api/dtam/inspections/:inspectionId/reopen', verifyToken, (req, res) => {
   const inspectionIndex = storage.inspections.findIndex(
-    i => i.inspectionId === req.params.inspectionId,
+    i => i.inspectionId === req.params.inspectionId
   );
 
   if (inspectionIndex !== -1) {
@@ -681,7 +681,7 @@ app.post('/api/dtam/inspections/:inspectionId/reopen', verifyToken, (req, res) =
   storage.logs.push({
     action: 'reopen_inspection',
     inspectionId: req.params.inspectionId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Inspection reopened successfully' });
@@ -694,7 +694,7 @@ app.post('/api/dtam/inspections/:inspectionId/reopen', verifyToken, (req, res) =
 // Get Pending Approvals
 app.get('/api/dtam/approvals/pending', verifyToken, (req, res) => {
   const pending = storage.applications.filter(
-    a => a.status === 'submitted' || a.documentReviewStatus === 'completed',
+    a => a.status === 'submitted' || a.documentReviewStatus === 'completed'
   );
   res.json({ success: true, data: pending, count: pending.length });
 });
@@ -713,8 +713,8 @@ app.get('/api/dtam/applications/:applicationId/summary', verifyToken, (req, res)
       application,
       documentsReviewed: true,
       inspectionCompleted: true,
-      readyForApproval: true,
-    },
+      readyForApproval: true
+    }
   });
 });
 
@@ -725,8 +725,8 @@ app.get('/api/dtam/applications/:applicationId/all-documents', verifyToken, (req
     data: [
       { type: 'application', status: 'complete' },
       { type: 'documents', status: 'approved' },
-      { type: 'inspection', status: 'completed' },
-    ],
+      { type: 'inspection', status: 'completed' }
+    ]
   });
 });
 
@@ -740,8 +740,8 @@ app.get('/api/dtam/inspections/:inspectionId/full-report', verifyToken, (req, re
       inspectionId: req.params.inspectionId,
       inspection,
       fullReport: true,
-      generatedAt: new Date().toISOString(),
-    },
+      generatedAt: new Date().toISOString()
+    }
   });
 });
 
@@ -758,7 +758,7 @@ app.post('/api/dtam/approvals/approve', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'approve_application',
     applicationId: req.body.applicationId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Application approved successfully' });
@@ -778,7 +778,7 @@ app.post('/api/dtam/approvals/reject', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'reject_application',
     applicationId: req.body.applicationId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Application rejected' });
@@ -787,7 +787,7 @@ app.post('/api/dtam/approvals/reject', verifyToken, (req, res) => {
 // Get Approval History
 app.get('/api/dtam/approvals/history', verifyToken, (req, res) => {
   const history = storage.logs.filter(
-    l => l.action.includes('approve') || l.action.includes('reject'),
+    l => l.action.includes('approve') || l.action.includes('reject')
   );
   res.json({ success: true, data: history, count: history.length });
 });
@@ -804,23 +804,21 @@ app.post('/api/certificates/generate', verifyToken, (req, res) => {
     ...req.body,
     generatedBy: req.user.userId,
     generatedAt: new Date().toISOString(),
-    status: 'active',
+    status: 'active'
   };
 
   storage.certificates.push(certificate);
   storage.logs.push({
     action: 'generate_certificate',
     certificateId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
-  res
-    .status(201)
-    .json({
-      success: true,
-      data: { certificateId },
-      message: 'Certificate generated successfully',
-    });
+  res.status(201).json({
+    success: true,
+    data: { certificateId },
+    message: 'Certificate generated successfully'
+  });
 });
 
 // Revoke Certificate
@@ -836,7 +834,7 @@ app.post('/api/certificates/revoke', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'revoke_certificate',
     certificateId: req.body.certificateId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Certificate revoked successfully' });
@@ -854,9 +852,9 @@ app.get('/api/notifications', verifyToken, (req, res) => {
       {
         id: 1,
         message: 'แอปพลิเคชันของคุณได้รับการอนุมัติแล้ว',
-        createdAt: new Date().toISOString(),
-      },
-    ],
+        createdAt: new Date().toISOString()
+      }
+    ]
   });
 });
 
@@ -873,8 +871,8 @@ app.get('/api/admin/dashboard', verifyToken, (req, res) => {
       totalFarms: storage.farms.length,
       totalApplications: storage.applications.length,
       totalInspections: storage.inspections.length,
-      totalCertificates: storage.certificates.length,
-    },
+      totalCertificates: storage.certificates.length
+    }
   });
 });
 
@@ -890,7 +888,7 @@ app.post('/api/admin/staff/create', verifyToken, (req, res) => {
     staffId,
     ...req.body,
     createdBy: req.user.userId,
-    createdAt: new Date().toISOString(),
+    createdAt: new Date().toISOString()
   };
 
   storage.users.push(staff);
@@ -911,7 +909,7 @@ app.put('/api/admin/users/permissions', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'update_permissions',
     userId: req.body.userId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'Permissions updated successfully' });
@@ -927,8 +925,8 @@ app.get('/api/admin/statistics', verifyToken, (req, res) => {
       applications: storage.applications.length,
       approvedApplications: storage.applications.filter(a => a.status === 'approved').length,
       certificates: storage.certificates.length,
-      activeCertificates: storage.certificates.filter(c => c.status === 'active').length,
-    },
+      activeCertificates: storage.certificates.filter(c => c.status === 'active').length
+    }
   });
 });
 
@@ -947,8 +945,8 @@ app.post('/api/admin/reports/generate', verifyToken, (req, res) => {
     data: {
       reportId,
       reportType: req.body.reportType,
-      generatedAt: new Date().toISOString(),
-    },
+      generatedAt: new Date().toISOString()
+    }
   });
 });
 
@@ -957,7 +955,7 @@ app.put('/api/admin/settings', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'update_settings',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Settings updated successfully' });
 });
@@ -968,13 +966,13 @@ app.post('/api/admin/survey/templates', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'create_survey_template',
     templateId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.status(201).json({
     success: true,
     data: { templateId },
-    message: 'Survey template created successfully',
+    message: 'Survey template created successfully'
   });
 });
 
@@ -983,7 +981,7 @@ app.put('/api/admin/standards/update', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'update_standards',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Standards updated successfully' });
 });
@@ -1000,7 +998,7 @@ app.post('/api/admin/notifications/send', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'send_notification',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Notification sent successfully' });
 });
@@ -1013,7 +1011,7 @@ app.post('/api/admin/backup/create', verifyToken, (req, res) => {
   res.json({
     success: true,
     data: { backupId, createdAt: new Date().toISOString() },
-    message: 'Backup created successfully',
+    message: 'Backup created successfully'
   });
 });
 
@@ -1022,7 +1020,7 @@ app.put('/api/admin/theme/update', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'update_theme',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Theme updated successfully' });
 });
@@ -1038,7 +1036,7 @@ app.put('/api/admin/users/:userId/deactivate', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'deactivate_user',
     userId: req.params.userId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'User deactivated successfully' });
@@ -1055,7 +1053,7 @@ app.put('/api/admin/users/:userId/activate', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'activate_user',
     userId: req.params.userId,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
 
   res.json({ success: true, message: 'User activated successfully' });
@@ -1066,7 +1064,7 @@ app.post('/api/admin/settings/rollback', verifyToken, (req, res) => {
   storage.logs.push({
     action: 'rollback_settings',
     data: req.body,
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString()
   });
   res.json({ success: true, message: 'Settings rolled back successfully' });
 });

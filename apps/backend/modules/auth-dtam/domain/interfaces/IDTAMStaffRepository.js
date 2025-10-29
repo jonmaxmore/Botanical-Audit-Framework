@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * DTAM Staff Repository Interface
  * Domain Layer - Clean Architecture

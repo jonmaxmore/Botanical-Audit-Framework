@@ -19,6 +19,7 @@
 **Recommendation: Agora.io**
 
 **เหตุผล:**
+
 - ✅ Free tier: 10,000 นาที/เดือน (เพียงพอสำหรับ testing)
 - ✅ Paid: $0.99/1,000 นาที (ถูกกว่า Twilio)
 - ✅ มี Thailand data center (latency ต่ำ)
@@ -27,6 +28,7 @@
 - ✅ มี Recording API
 
 **Alternative: Zoom SDK**
+
 - ✅ คนรู้จักมาก (UX ดี)
 - ❌ ราคาแพงกว่า
 - ❌ Setup ซับซ้อนกว่า
@@ -38,7 +40,7 @@
 
 // Routes
 POST   /api/inspections/:id/video/start
-POST   /api/inspections/:id/video/join  
+POST   /api/inspections/:id/video/join
 POST   /api/inspections/:id/video/end
 GET    /api/inspections/:id/video/token
 POST   /api/inspections/:id/video/recording
@@ -96,7 +98,9 @@ export class AgoraService {
       this.appCertificate,
       channelName,
       uid,
-      role === 'publisher' ? AgoraAccessToken.RtcRole.PUBLISHER : AgoraAccessToken.RtcRole.SUBSCRIBER,
+      role === 'publisher'
+        ? AgoraAccessToken.RtcRole.PUBLISHER
+        : AgoraAccessToken.RtcRole.SUBSCRIBER,
       privilegeExpiredTs
     );
 
@@ -105,20 +109,23 @@ export class AgoraService {
 
   async startRecording(channelName: string, uid: number) {
     // Call Agora Cloud Recording API
-    const response = await fetch('https://api.agora.io/v1/apps/{appId}/cloud_recording/resourceid', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${Buffer.from(`${this.appId}:${this.appCertificate}`).toString('base64')}`
-      },
-      body: JSON.stringify({
-        cname: channelName,
-        uid: uid.toString(),
-        clientRequest: {
-          resourceExpiredHour: 24
-        }
-      })
-    });
+    const response = await fetch(
+      'https://api.agora.io/v1/apps/{appId}/cloud_recording/resourceid',
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Basic ${Buffer.from(`${this.appId}:${this.appCertificate}`).toString('base64')}`
+        },
+        body: JSON.stringify({
+          cname: channelName,
+          uid: uid.toString(),
+          clientRequest: {
+            resourceExpiredHour: 24
+          }
+        })
+      }
+    );
 
     return response.json();
   }
@@ -175,13 +182,13 @@ export default function VideoCallRoom({ inspectionId, channelName, token, uid, r
     // Event listeners
     agoraClient.on('user-published', async (user, mediaType) => {
       await agoraClient.subscribe(user, mediaType);
-      
+
       if (mediaType === 'video') {
         setRemoteUsers(prev => [...prev, user]);
         const remoteVideoTrack = user.videoTrack;
         remoteVideoTrack?.play(remoteVideoRef.current!);
       }
-      
+
       if (mediaType === 'audio') {
         user.audioTrack?.play();
       }
@@ -231,11 +238,11 @@ export default function VideoCallRoom({ inspectionId, channelName, token, uid, r
       canvas.height = video.videoHeight;
       canvas.getContext('2d')?.drawImage(video, 0, 0);
       const blob = await new Promise<Blob>((resolve) => canvas.toBlob(resolve as any, 'image/jpeg'));
-      
+
       // Upload to server
       const formData = new FormData();
       formData.append('snapshot', blob, `snapshot-${Date.now()}.jpg`);
-      
+
       await fetch(`/api/inspections/${inspectionId}/video/snapshot`, {
         method: 'POST',
         body: formData
@@ -328,24 +335,28 @@ export default function VideoCallRoom({ inspectionId, channelName, token, uid, r
 ### Option 1: Progressive Web App (PWA)
 
 **Pros:**
+
 - ✅ ไม่ต้อง install app
 - ✅ เปิดผ่าน browser ได้เลย
 - ✅ Development เร็ว
 - ✅ Update ง่าย
 
 **Cons:**
+
 - ❌ Performance ต่ำกว่า Native
 - ❌ Camera control จำกัด
 
 ### Option 2: React Native
 
 **Pros:**
+
 - ✅ Performance ดี
 - ✅ Camera control เต็มรูปแบบ
 - ✅ Offline mode
 - ✅ GPS tagging
 
 **Cons:**
+
 - ❌ Development นานกว่า
 - ❌ ต้อง publish ใน App Store/Play Store
 
@@ -425,28 +436,28 @@ s3://gacp-inspections/
 
 ## 📊 Implementation Timeline
 
-| Week | Tasks | Deliverables |
-|------|-------|--------------|
-| **Week 1** | Backend Setup | APIs, Agora integration, Database schema |
-| **Week 2** | Frontend (Inspector) | Video call component, Integration |
-| **Week 3** | Frontend (Farmer) | PWA, Mobile-friendly UI |
-| **Week 4** | Recording & Storage | Cloud recording, S3 upload |
-| **Week 5** | Testing | Integration testing, Load testing |
-| **Week 6** | Deployment | Production deployment, Training |
+| Week       | Tasks                | Deliverables                             |
+| ---------- | -------------------- | ---------------------------------------- |
+| **Week 1** | Backend Setup        | APIs, Agora integration, Database schema |
+| **Week 2** | Frontend (Inspector) | Video call component, Integration        |
+| **Week 3** | Frontend (Farmer)    | PWA, Mobile-friendly UI                  |
+| **Week 4** | Recording & Storage  | Cloud recording, S3 upload               |
+| **Week 5** | Testing              | Integration testing, Load testing        |
+| **Week 6** | Deployment           | Production deployment, Training          |
 
 ---
 
 ## 💰 Budget Breakdown
 
-| Item | Cost (THB) | Notes |
-|------|------------|-------|
-| **Agora.io** | 5,000/month | ~5,000 นาที/เดือน |
-| **S3 Storage** | 2,000/month | Video recordings |
-| **Development** | 150,000 | 6 weeks × 25,000/week |
-| **Testing** | 20,000 | QA testing |
-| **Training** | 10,000 | Inspector training |
-| **Contingency** | 13,000 | 10% buffer |
-| **Total** | **200,000** | One-time + 7,000/month |
+| Item            | Cost (THB)  | Notes                  |
+| --------------- | ----------- | ---------------------- |
+| **Agora.io**    | 5,000/month | ~5,000 นาที/เดือน      |
+| **S3 Storage**  | 2,000/month | Video recordings       |
+| **Development** | 150,000     | 6 weeks × 25,000/week  |
+| **Testing**     | 20,000      | QA testing             |
+| **Training**    | 10,000      | Inspector training     |
+| **Contingency** | 13,000      | 10% buffer             |
+| **Total**       | **200,000** | One-time + 7,000/month |
 
 **ROI:** ประหยัด 850,000 THB/เดือน → คืนทุนใน **1 เดือน**!
 
@@ -456,13 +467,13 @@ s3://gacp-inspections/
 
 ### KPIs:
 
-| Metric | Target | Current | Improvement |
-|--------|--------|---------|-------------|
-| **Inspection Time** | 1 hour | 5-10 hours | 80-90% ↓ |
-| **Inspectors Needed** | 7-8 | 25 | 68% ↓ |
-| **Cost per Inspection** | 400 THB | 1,250 THB | 68% ↓ |
-| **Inspections per Day** | 6-7 | 2 | 250% ↑ |
-| **Travel Cost** | 150K/month | 500K/month | 70% ↓ |
+| Metric                  | Target     | Current    | Improvement |
+| ----------------------- | ---------- | ---------- | ----------- |
+| **Inspection Time**     | 1 hour     | 5-10 hours | 80-90% ↓    |
+| **Inspectors Needed**   | 7-8        | 25         | 68% ↓       |
+| **Cost per Inspection** | 400 THB    | 1,250 THB  | 68% ↓       |
+| **Inspections per Day** | 6-7        | 2          | 250% ↑      |
+| **Travel Cost**         | 150K/month | 500K/month | 70% ↓       |
 
 ---
 

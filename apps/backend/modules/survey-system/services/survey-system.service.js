@@ -3,7 +3,6 @@
  * Business logic for 4-region GACP survey system with 7-step wizard
  */
 
-const { v4: uuidv4 } = require('uuid');
 const { ObjectId } = require('mongodb');
 const { AppError } = require('../../shared/utils/error-handler');
 const logger = require('../../shared/utils/logger');

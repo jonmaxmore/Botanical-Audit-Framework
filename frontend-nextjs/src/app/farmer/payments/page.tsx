@@ -38,14 +38,14 @@ const PaymentPage = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { fetchApplicationById, recordPayment, currentApplication } = useApplication();
-  
+
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<'qr' | 'bank'>('qr');
   const [receipt, setReceipt] = useState<File | null>(null);
   const [transactionRef, setTransactionRef] = useState('');
-  
+
   const applicationId = searchParams.get('app');
   const phase = searchParams.get('phase'); // '1' or '2'
 
@@ -56,7 +56,7 @@ const PaymentPage = () => {
   const loadData = async () => {
     setLoading(true);
     setError('');
-    
+
     try {
       if (applicationId) {
         await fetchApplicationById(applicationId);
@@ -71,20 +71,20 @@ const PaymentPage = () => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-    
+
     // Validate file type
     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
     if (!allowedTypes.includes(file.type)) {
       alert('กรุณาอัปโหลดไฟล์ JPG, PNG หรือ PDF เท่านั้น');
       return;
     }
-    
+
     // Validate file size (max 5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert('ขนาดไฟล์ต้องไม่เกิน 5 MB');
       return;
     }
-    
+
     setReceipt(file);
   };
 
@@ -93,22 +93,22 @@ const PaymentPage = () => {
       setError('กรุณาอัปโหลดหลักฐานการชำระเงิน');
       return;
     }
-    
+
     if (paymentMethod === 'bank' && !transactionRef.trim()) {
       setError('กรุณากรอกหมายเลขอ้างอิง');
       return;
     }
-    
+
     setSubmitting(true);
     setError('');
-    
+
     try {
       await recordPayment(applicationId, parseInt(phase), {
         method: paymentMethod,
         receiptFile: receipt,
         transactionRef: transactionRef || undefined,
       });
-      
+
       alert('บันทึกการชำระเงินสำเร็จ! เจ้าหน้าที่จะตรวจสอบภายใน 1-2 วันทำการ');
       router.push(`/farmer/applications/${applicationId}`);
     } catch (err: any) {
@@ -264,7 +264,7 @@ const PaymentPage = () => {
             สแกน QR Code เพื่อชำระเงิน
           </Typography>
           <Divider sx={{ mb: 2 }} />
-          
+
           <Box sx={{ textAlign: 'center', mb: 2 }}>
             {/* Mock QR Code - Replace with real QR generator */}
             <Box
@@ -309,7 +309,7 @@ const PaymentPage = () => {
             ข้อมูลบัญชีธนาคาร
           </Typography>
           <Divider sx={{ mb: 2 }} />
-          
+
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Card variant="outlined">
@@ -320,14 +320,14 @@ const PaymentPage = () => {
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     ธนาคารกรุงไทย (KTB)
                   </Typography>
-                  
+
                   <Typography variant="subtitle2" color="text.secondary">
                     ชื่อบัญชี
                   </Typography>
                   <Typography variant="body1" sx={{ mb: 1 }}>
                     กรมวิชาการเกษตร กระทรวงเกษตรและสหกรณ์
                   </Typography>
-                  
+
                   <Typography variant="subtitle2" color="text.secondary">
                     เลขที่บัญชี
                   </Typography>
@@ -335,10 +335,14 @@ const PaymentPage = () => {
                     <Typography variant="h6" color="primary">
                       123-4-56789-0
                     </Typography>
-                    <Chip label="คัดลอก" size="small" onClick={() => {
-                      navigator.clipboard.writeText('1234567890');
-                      alert('คัดลอกเลขบัญชีแล้ว');
-                    }} />
+                    <Chip
+                      label="คัดลอก"
+                      size="small"
+                      onClick={() => {
+                        navigator.clipboard.writeText('1234567890');
+                        alert('คัดลอกเลขบัญชีแล้ว');
+                      }}
+                    />
                   </Box>
                 </CardContent>
               </Card>
@@ -373,7 +377,7 @@ const PaymentPage = () => {
           อัปโหลดหลักฐานการชำระเงิน
         </Typography>
         <Divider sx={{ mb: 2 }} />
-        
+
         <Button
           variant="outlined"
           component="label"
@@ -382,20 +386,15 @@ const PaymentPage = () => {
           sx={{ mb: 2 }}
         >
           เลือกไฟล์
-          <input
-            type="file"
-            hidden
-            accept="image/*,.pdf"
-            onChange={handleFileSelect}
-          />
+          <input type="file" hidden accept="image/*,.pdf" onChange={handleFileSelect} />
         </Button>
-        
+
         {receipt && (
           <Alert severity="success">
             เลือกไฟล์: {receipt.name} ({(receipt.size / 1024).toFixed(2)} KB)
           </Alert>
         )}
-        
+
         {!receipt && (
           <Alert severity="warning">
             กรุณาอัปโหลดสลิปหรือหลักฐานการโอนเงิน (JPG, PNG หรือ PDF)

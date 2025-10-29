@@ -138,14 +138,14 @@ const states = [
   'SUBMITTED', // 2. Farmer submits
   'UNDER_REVIEW', // 3. DTAM reviews
   'APPROVED', // 4. Application approved
-  'REJECTED', // 5. Application rejected
+  'REJECTED' // 5. Application rejected
   // ... 12 states total
 ];
 
 const transitions = {
   DRAFT: ['SUBMITTED'],
   SUBMITTED: ['UNDER_REVIEW', 'CANCELLED'],
-  UNDER_REVIEW: ['APPROVED', 'REJECTED', 'MORE_INFO_REQUIRED'],
+  UNDER_REVIEW: ['APPROVED', 'REJECTED', 'MORE_INFO_REQUIRED']
   // ... define all transitions
 };
 ```

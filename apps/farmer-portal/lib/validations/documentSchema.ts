@@ -8,7 +8,7 @@ export const DOCUMENT_TYPES = [
   'Water Test Results',
   'Soil Test Results',
   'Organic Certificate',
-  'Other',
+  'Other'
 ] as const;
 
 export type DocumentType = (typeof DOCUMENT_TYPES)[number];
@@ -71,7 +71,7 @@ export const documentUploadSchema = yup
         if (!value) return false;
         const fileName = value.name.toLowerCase();
         return ALLOWED_FILE_EXTENSIONS.some(ext => fileName.endsWith(ext));
-      }),
+      })
   })
   .required();
 

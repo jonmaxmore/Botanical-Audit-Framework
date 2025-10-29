@@ -3,7 +3,7 @@ const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client
 class SecretsManager {
   constructor() {
     this.client = new SecretsManagerClient({
-      region: process.env.AWS_REGION || 'ap-southeast-1',
+      region: process.env.AWS_REGION || 'ap-southeast-1'
     });
     this.secretsCache = null;
     this.cacheExpiry = null;
@@ -18,7 +18,7 @@ class SecretsManager {
     try {
       const response = await this.client.send(
         new GetSecretValueCommand({
-          SecretId: process.env.AWS_SECRET_NAME || 'gacp-platform/production',
+          SecretId: process.env.AWS_SECRET_NAME || 'gacp-platform/production'
         })
       );
 
@@ -28,7 +28,7 @@ class SecretsManager {
 
       this.secretsCache = JSON.parse(response.SecretString);
       this.cacheExpiry = Date.now() + this.cacheDuration;
-      
+
       return this.secretsCache;
     } catch (error) {
       console.error('Failed to load secrets from AWS:', error.message);

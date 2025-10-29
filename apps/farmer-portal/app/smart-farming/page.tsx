@@ -104,7 +104,9 @@ export default function SmartFarmingPage() {
                   <span className="text-blue-600">💧</span>
                   <span className="font-semibold text-blue-900">การรดน้ำ</span>
                 </div>
-                <p className="text-sm text-blue-800">รดน้ำเช้า 4.5 ลิตร ตรวจสอบความชื้นดินก่อนรดน้ำ</p>
+                <p className="text-sm text-blue-800">
+                  รดน้ำเช้า 4.5 ลิตร ตรวจสอบความชื้นดินก่อนรดน้ำ
+                </p>
               </div>
               <div className="p-3 bg-green-50 rounded-lg">
                 <div className="flex items-center space-x-2 mb-1">

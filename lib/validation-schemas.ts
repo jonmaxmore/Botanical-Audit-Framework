@@ -9,7 +9,7 @@ export const plantSchema = z.object({
   location: z.string().optional(),
   notes: z.string().optional(),
   createdAt: z.string().or(z.date()).optional(),
-  updatedAt: z.string().or(z.date()).optional(),
+  updatedAt: z.string().or(z.date()).optional()
 });
 
 export const auditSchema = z.object({
@@ -19,7 +19,7 @@ export const auditSchema = z.object({
   auditor: z.string().min(1, 'Auditor name is required'),
   findings: z.string().optional(),
   status: z.enum(['pending', 'completed', 'reviewed']).default('pending'),
-  createdAt: z.string().or(z.date()).optional(),
+  createdAt: z.string().or(z.date()).optional()
 });
 
 export type Plant = z.infer<typeof plantSchema>;

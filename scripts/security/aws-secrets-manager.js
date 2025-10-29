@@ -6,7 +6,7 @@ class AWSSecretsManager {
   constructor() {
     this.secretsConfig = {
       region: process.env.AWS_REGION || 'ap-southeast-1',
-      secretName: process.env.SECRET_NAME || 'gacp-platform/production',
+      secretName: process.env.SECRET_NAME || 'gacp-platform/production'
     };
   }
 
@@ -204,7 +204,7 @@ exec "$@"
 
   generate() {
     const outputDir = path.join(process.cwd(), 'infrastructure', 'aws-secrets');
-    
+
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }

@@ -594,7 +594,7 @@ describe('AuthService', () => {
     it('should return tokens for valid credentials', async () => {
       const result = await authService.login({
         email: 'test@example.com',
-        password: 'password123',
+        password: 'password123'
       });
 
       expect(result).toHaveProperty('accessToken');
@@ -605,8 +605,8 @@ describe('AuthService', () => {
       await expect(
         authService.login({
           email: 'test@example.com',
-          password: 'wrong_password',
-        }),
+          password: 'wrong_password'
+        })
       ).rejects.toThrow('Invalid credentials');
     });
   });

@@ -1,7 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, TextField, Button, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio, Typography, Divider, Alert } from '@mui/material';
+import {
+  Box,
+  TextField,
+  Button,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
+  Typography,
+  Divider,
+  Alert,
+} from '@mui/material';
 import GACPChecklist from './GACPChecklist';
 import axios from 'axios';
 
@@ -11,8 +23,12 @@ interface InspectionReportFormProps {
   onSubmit: () => void;
 }
 
-export default function InspectionReportForm({ inspectionId, snapshotCount, onSubmit }: InspectionReportFormProps) {
-  const [checklistItems, setChecklistItems] = useState([]);
+export default function InspectionReportForm({
+  inspectionId,
+  snapshotCount,
+  onSubmit,
+}: InspectionReportFormProps) {
+  const [checklistItems, setChecklistItems] = useState<any[]>([]);
   const [summary, setSummary] = useState('');
   const [strengths, setStrengths] = useState('');
   const [weaknesses, setWeaknesses] = useState('');
@@ -24,17 +40,20 @@ export default function InspectionReportForm({ inspectionId, snapshotCount, onSu
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/inspections/${inspectionId}/report`, {
-        inspectionType: 'online',
-        summary,
-        strengths: strengths.split('\n').filter(s => s.trim()),
-        weaknesses: weaknesses.split('\n').filter(w => w.trim()),
-        recommendations: recommendations.split('\n').filter(r => r.trim()),
-        checklistItems,
-        decision,
-        reason,
-        snapshotCount,
-      });
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/inspections/${inspectionId}/report`,
+        {
+          inspectionType: 'online',
+          summary,
+          strengths: strengths.split('\n').filter(s => s.trim()),
+          weaknesses: weaknesses.split('\n').filter(w => w.trim()),
+          recommendations: recommendations.split('\n').filter(r => r.trim()),
+          checklistItems,
+          decision,
+          reason,
+          snapshotCount,
+        }
+      );
       onSubmit();
     } catch (error) {
       console.error('Failed to submit report:', error);
@@ -47,7 +66,9 @@ export default function InspectionReportForm({ inspectionId, snapshotCount, onSu
 
   return (
     <Box sx={{ maxWidth: 800, mx: 'auto', p: 3 }}>
-      <Typography variant="h5" gutterBottom>รายงานผลการตรวจสอบ</Typography>
+      <Typography variant="h5" gutterBottom>
+        รายงานผลการตรวจสอบ
+      </Typography>
       <Divider sx={{ mb: 3 }} />
 
       <Alert severity="info" sx={{ mb: 3 }}>
@@ -60,7 +81,7 @@ export default function InspectionReportForm({ inspectionId, snapshotCount, onSu
         multiline
         rows={4}
         value={summary}
-        onChange={(e) => setSummary(e.target.value)}
+        onChange={e => setSummary(e.target.value)}
         required
         sx={{ mb: 3 }}
       />
@@ -73,7 +94,7 @@ export default function InspectionReportForm({ inspectionId, snapshotCount, onSu
         multiline
         rows={3}
         value={strengths}
-        onChange={(e) => setStrengths(e.target.value)}
+        onChange={e => setStrengths(e.target.value)}
         placeholder="- มีการจัดการดินที่ดี&#10;- เอกสารครบถ้วน"
         sx={{ mb: 3 }}
       />
@@ -84,7 +105,7 @@ export default function InspectionReportForm({ inspectionId, snapshotCount, onSu
         multiline
         rows={3}
         value={weaknesses}
-        onChange={(e) => setWeaknesses(e.target.value)}
+        onChange={e => setWeaknesses(e.target.value)}
         placeholder="- ขาดการฝึกอบรมบุคลากร&#10;- พื้นที่เก็บรักษาไม่เพียงพอ"
         sx={{ mb: 3 }}
       />
@@ -95,15 +116,19 @@ export default function InspectionReportForm({ inspectionId, snapshotCount, onSu
         multiline
         rows={3}
         value={recommendations}
-        onChange={(e) => setRecommendations(e.target.value)}
+        onChange={e => setRecommendations(e.target.value)}
         placeholder="- ควรจัดอบรมบุคลากร&#10;- ควรปรับปรุงพื้นที่เก็บรักษา"
         sx={{ mb: 3 }}
       />
 
       <FormControl component="fieldset" sx={{ mb: 3 }}>
         <FormLabel component="legend">การตัดสินใจ</FormLabel>
-        <RadioGroup value={decision} onChange={(e) => setDecision(e.target.value as any)}>
-          <FormControlLabel value="approve" control={<Radio />} label="✅ ผ่านการตรวจสอบ (ส่งต่อผู้อนุมัติ)" />
+        <RadioGroup value={decision} onChange={e => setDecision(e.target.value as any)}>
+          <FormControlLabel
+            value="approve"
+            control={<Radio />}
+            label="✅ ผ่านการตรวจสอบ (ส่งต่อผู้อนุมัติ)"
+          />
           <FormControlLabel value="need_onsite" control={<Radio />} label="❓ ต้องตรวจสอบ Onsite" />
           <FormControlLabel value="reject" control={<Radio />} label="❌ ไม่ผ่าน (ปฏิเสธ)" />
         </RadioGroup>
@@ -116,7 +141,7 @@ export default function InspectionReportForm({ inspectionId, snapshotCount, onSu
           multiline
           rows={3}
           value={reason}
-          onChange={(e) => setReason(e.target.value)}
+          onChange={e => setReason(e.target.value)}
           required
           sx={{ mb: 3 }}
         />

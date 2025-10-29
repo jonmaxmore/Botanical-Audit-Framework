@@ -140,11 +140,11 @@ const GACPIntegrationTest: React.FC = () => {
     testName: string,
     status: TestResult['status'],
     message: string,
-    details?: any,
+    details?: any
   ) => {
-    setTestState(prev => ({
+    setTestState((prev) => ({
       ...prev,
-      results: prev.results.map(test =>
+      results: prev.results.map((test) =>
         test.name === testName
           ? {
               ...test,
@@ -153,7 +153,7 @@ const GACPIntegrationTest: React.FC = () => {
               details,
               timestamp: new Date().toISOString(),
             }
-          : test,
+          : test
       ),
     }));
   };
@@ -164,12 +164,12 @@ const GACPIntegrationTest: React.FC = () => {
   const calculateSummary = (results: TestResult[]) => {
     const summary = {
       total: results.length,
-      passed: results.filter(r => r.status === 'success').length,
-      failed: results.filter(r => r.status === 'error').length,
-      warnings: results.filter(r => r.status === 'warning').length,
+      passed: results.filter((r) => r.status === 'success').length,
+      failed: results.filter((r) => r.status === 'error').length,
+      warnings: results.filter((r) => r.status === 'warning').length,
     };
 
-    setTestState(prev => ({ ...prev, summary }));
+    setTestState((prev) => ({ ...prev, summary }));
     return summary;
   };
 
@@ -177,7 +177,7 @@ const GACPIntegrationTest: React.FC = () => {
    * Test backend connectivity
    */
   const testBackendConnectivity = async (): Promise<void> => {
-    setTestState(prev => ({ ...prev, currentTest: 'Backend Connectivity' }));
+    setTestState((prev) => ({ ...prev, currentTest: 'Backend Connectivity' }));
     updateTestResult('Backend Connectivity', 'running', 'Connecting to backend server...');
 
     try {
@@ -192,20 +192,20 @@ const GACPIntegrationTest: React.FC = () => {
           'Backend Connectivity',
           'success',
           `Backend server is healthy (uptime: ${Math.round(data.uptime || 0)}s)`,
-          data,
+          data
         );
       } else {
         updateTestResult(
           'Backend Connectivity',
           'error',
-          `Backend server returned status ${response.status}`,
+          `Backend server returned status ${response.status}`
         );
       }
     } catch (error: any) {
       updateTestResult(
         'Backend Connectivity',
         'error',
-        `Failed to connect to backend: ${error.message}`,
+        `Failed to connect to backend: ${error.message}`
       );
     }
   };
@@ -214,7 +214,7 @@ const GACPIntegrationTest: React.FC = () => {
    * Test GACP workflow API
    */
   const testGACPWorkflowAPI = async (): Promise<void> => {
-    setTestState(prev => ({ ...prev, currentTest: 'GACP Workflow API' }));
+    setTestState((prev) => ({ ...prev, currentTest: 'GACP Workflow API' }));
     updateTestResult('GACP Workflow API', 'running', 'Testing workflow endpoints...');
 
     try {
@@ -240,28 +240,28 @@ const GACPIntegrationTest: React.FC = () => {
               'GACP Workflow API',
               'success',
               `Workflow API validated: ${workflowData.workflowStates} states, ${workflowData.transitions} transitions`,
-              workflowData,
+              workflowData
             );
           } else {
             updateTestResult(
               'GACP Workflow API',
               'warning',
               'Workflow API structure is incomplete or invalid',
-              workflowData,
+              workflowData
             );
           }
         } else {
           updateTestResult(
             'GACP Workflow API',
             'error',
-            'Workflow API returned invalid response format',
+            'Workflow API returned invalid response format'
           );
         }
       } else {
         updateTestResult(
           'GACP Workflow API',
           'error',
-          `Workflow API returned status ${response.status}`,
+          `Workflow API returned status ${response.status}`
         );
       }
     } catch (error: any) {
@@ -273,7 +273,7 @@ const GACPIntegrationTest: React.FC = () => {
    * Test CCP framework API
    */
   const testCCPFrameworkAPI = async (): Promise<void> => {
-    setTestState(prev => ({ ...prev, currentTest: 'CCP Framework API' }));
+    setTestState((prev) => ({ ...prev, currentTest: 'CCP Framework API' }));
     updateTestResult('CCP Framework API', 'running', 'Testing CCP assessment endpoints...');
 
     try {
@@ -299,35 +299,35 @@ const GACPIntegrationTest: React.FC = () => {
               'CCP Framework API',
               'success',
               `CCP Framework validated: ${ccpData.totalCCPs} CCPs, HACCP methodology`,
-              ccpData,
+              ccpData
             );
           } else {
             updateTestResult(
               'CCP Framework API',
               'warning',
               'CCP Framework structure is incomplete or invalid',
-              ccpData,
+              ccpData
             );
           }
         } else {
           updateTestResult(
             'CCP Framework API',
             'error',
-            'CCP Framework API returned invalid response format',
+            'CCP Framework API returned invalid response format'
           );
         }
       } else {
         updateTestResult(
           'CCP Framework API',
           'error',
-          `CCP Framework API returned status ${response.status}`,
+          `CCP Framework API returned status ${response.status}`
         );
       }
     } catch (error: any) {
       updateTestResult(
         'CCP Framework API',
         'error',
-        `CCP Framework API test failed: ${error.message}`,
+        `CCP Framework API test failed: ${error.message}`
       );
     }
   };
@@ -336,14 +336,14 @@ const GACPIntegrationTest: React.FC = () => {
    * Test business logic validation
    */
   const testBusinessLogicValidation = async (): Promise<void> => {
-    setTestState(prev => ({
+    setTestState((prev) => ({
       ...prev,
       currentTest: 'Business Logic Validation',
     }));
     updateTestResult(
       'Business Logic Validation',
       'running',
-      'Testing business rules and validation...',
+      'Testing business rules and validation...'
     );
 
     try {
@@ -379,35 +379,35 @@ const GACPIntegrationTest: React.FC = () => {
               'Business Logic Validation',
               'success',
               `Business logic validated: Score calculation accurate (${actualScore}%)`,
-              result,
+              result
             );
           } else {
             updateTestResult(
               'Business Logic Validation',
               'warning',
               `Score calculation deviation detected: expected ${expectedScore}%, got ${actualScore}%`,
-              result,
+              result
             );
           }
         } else {
           updateTestResult(
             'Business Logic Validation',
             'error',
-            'Business logic test returned invalid response',
+            'Business logic test returned invalid response'
           );
         }
       } else {
         updateTestResult(
           'Business Logic Validation',
           'error',
-          `Business logic test returned status ${response.status}`,
+          `Business logic test returned status ${response.status}`
         );
       }
     } catch (error: any) {
       updateTestResult(
         'Business Logic Validation',
         'error',
-        `Business logic test failed: ${error.message}`,
+        `Business logic test failed: ${error.message}`
       );
     }
   };
@@ -416,50 +416,50 @@ const GACPIntegrationTest: React.FC = () => {
    * Run all integration tests
    */
   const runAllTests = async () => {
-    setTestState(prev => ({ ...prev, isRunning: true }));
+    setTestState((prev) => ({ ...prev, isRunning: true }));
 
     // Initialize test results
     initializeTests();
 
     // Run tests sequentially
     await testBackendConnectivity();
-    await new Promise(resolve => setTimeout(resolve, 500)); // Small delay for UI
+    await new Promise((resolve) => setTimeout(resolve, 500)); // Small delay for UI
 
     // Update other tests to simulated results for demonstration
     updateTestResult(
       'API Configuration',
       'success',
-      'API client properly configured with base URL http://localhost:3004',
+      'API client properly configured with base URL http://localhost:3004'
     );
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     updateTestResult(
       'Authentication Service',
       'warning',
-      'Authentication endpoints configured but not tested (requires user credentials)',
+      'Authentication endpoints configured but not tested (requires user credentials)'
     );
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     await testGACPWorkflowAPI();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     await testCCPFrameworkAPI();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     await testBusinessLogicValidation();
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     updateTestResult(
       'Error Handling',
       'success',
-      'Error handling patterns implemented in API client',
+      'Error handling patterns implemented in API client'
     );
-    await new Promise(resolve => setTimeout(resolve, 300));
+    await new Promise((resolve) => setTimeout(resolve, 300));
 
     updateTestResult('Performance Metrics', 'success', 'Average API response time: <200ms');
 
     // Calculate final summary
-    setTestState(prev => {
+    setTestState((prev) => {
       const summary = calculateSummary(prev.results);
       return { ...prev, isRunning: false, currentTest: '' };
     });

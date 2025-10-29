@@ -71,7 +71,7 @@ describe('useDemo Hook', () => {
     it('should simulate creating application', () => {
       const newApp = {
         farmName: 'ฟาร์มทดสอบ',
-        farmAddress: '123 ถ.ทดสอบ',
+        farmAddress: '123 ถ.ทดสอบ'
       };
 
       // Test: act(() => result.current.createDemoApplication(newApp))

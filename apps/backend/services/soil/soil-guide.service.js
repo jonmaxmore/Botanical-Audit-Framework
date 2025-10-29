@@ -22,7 +22,7 @@ const SOIL_TYPES = {
 class SoilGuideService {
   getSoilRecommendation(soilType, pH, crop) {
     const soil = SOIL_TYPES[soilType] || SOIL_TYPES.loam;
-    
+
     return {
       soilInfo: soil,
       pHAdvice: this.getPHAdvice(pH),

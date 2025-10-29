@@ -45,7 +45,7 @@ const CONFIG = {
 
   // Safety
   BACKUP_BEFORE_CLEANUP: true,
-  MAX_BATCH_SIZE: 1000,
+  MAX_BATCH_SIZE: 1000
 };
 
 class DatabaseCleanupTool {
@@ -57,7 +57,7 @@ class DatabaseCleanupTool {
       summary: {},
       actions: [],
       errors: [],
-      statistics: {},
+      statistics: {}
     };
   }
 
@@ -73,7 +73,7 @@ class DatabaseCleanupTool {
     try {
       await mongoose.connect(uri, {
         serverSelectionTimeoutMS: 5000,
-        socketTimeoutMS: 45000,
+        socketTimeoutMS: 45000
       });
 
       console.log('✅ Connected to MongoDB successfully\n');
@@ -128,7 +128,7 @@ class DatabaseCleanupTool {
       collections: [],
       totalSize: 0,
       totalDocuments: 0,
-      totalIndexes: 0,
+      totalIndexes: 0
     };
 
     for (const coll of collections) {
@@ -140,7 +140,7 @@ class DatabaseCleanupTool {
           size: collStats.size || 0,
           storageSize: collStats.storageSize || 0,
           avgObjSize: collStats.avgObjSize || 0,
-          nIndexes: collStats.nindexes || 0,
+          nIndexes: collStats.nindexes || 0
         };
 
         stats.collections.push(collInfo);
@@ -167,7 +167,7 @@ class DatabaseCleanupTool {
 
       // Find expired tokens
       const expiredTokens = await RefreshToken.find({
-        expiresAt: { $lt: cutoffDate },
+        expiresAt: { $lt: cutoffDate }
       });
 
       if (expiredTokens.length === 0) {
@@ -179,14 +179,14 @@ class DatabaseCleanupTool {
 
       if (!this.dryRun) {
         const result = await RefreshToken.deleteMany({
-          expiresAt: { $lt: cutoffDate },
+          expiresAt: { $lt: cutoffDate }
         });
 
         console.log(`   ✅ Deleted: ${result.deletedCount} expired tokens\n`);
         this.report.actions.push({
           action: 'cleanExpiredTokens',
           count: result.deletedCount,
-          size: 'N/A',
+          size: 'N/A'
         });
       } else {
         console.log(`   🔍 DRY RUN: Would delete ${expiredTokens.length} tokens\n`);
@@ -210,7 +210,7 @@ class DatabaseCleanupTool {
       // Find old drafts
       const oldDrafts = await Application.find({
         status: 'DRAFT',
-        createdAt: { $lt: cutoffDate },
+        createdAt: { $lt: cutoffDate }
       });
 
       if (oldDrafts.length === 0) {
@@ -223,14 +223,14 @@ class DatabaseCleanupTool {
       if (!this.dryRun) {
         const result = await Application.deleteMany({
           status: 'DRAFT',
-          createdAt: { $lt: cutoffDate },
+          createdAt: { $lt: cutoffDate }
         });
 
         console.log(`   ✅ Deleted: ${result.deletedCount} old drafts\n`);
         this.report.actions.push({
           action: 'cleanOldDrafts',
           count: result.deletedCount,
-          size: 'N/A',
+          size: 'N/A'
         });
       } else {
         console.log(`   🔍 DRY RUN: Would delete ${oldDrafts.length} drafts\n`);
@@ -253,7 +253,7 @@ class DatabaseCleanupTool {
 
       // Find old logs
       const oldLogs = await AuditLog.countDocuments({
-        createdAt: { $lt: cutoffDate },
+        createdAt: { $lt: cutoffDate }
       });
 
       if (oldLogs === 0) {
@@ -265,14 +265,14 @@ class DatabaseCleanupTool {
 
       if (!this.dryRun) {
         const result = await AuditLog.deleteMany({
-          createdAt: { $lt: cutoffDate },
+          createdAt: { $lt: cutoffDate }
         });
 
         console.log(`   ✅ Deleted: ${result.deletedCount} old audit logs\n`);
         this.report.actions.push({
           action: 'cleanOldAuditLogs',
           count: result.deletedCount,
-          size: 'N/A',
+          size: 'N/A'
         });
       } else {
         console.log(`   🔍 DRY RUN: Would delete ${oldLogs} audit logs\n`);
@@ -299,15 +299,15 @@ class DatabaseCleanupTool {
             from: 'users',
             localField: 'userId',
             foreignField: '_id',
-            as: 'user',
-          },
+            as: 'user'
+          }
         },
         {
-          $match: { user: { $size: 0 } },
+          $match: { user: { $size: 0 } }
         },
         {
-          $project: { _id: 1, applicationId: 1, userId: 1 },
-        },
+          $project: { _id: 1, applicationId: 1, userId: 1 }
+        }
       ]);
 
       if (orphanedApps.length > 0) {
@@ -321,7 +321,7 @@ class DatabaseCleanupTool {
           this.report.actions.push({
             action: 'cleanOrphanedApplications',
             count: result.deletedCount,
-            size: 'N/A',
+            size: 'N/A'
           });
         } else {
           console.log(`   🔍 DRY RUN: Would delete ${orphanedApps.length} orphaned applications`);
@@ -337,15 +337,15 @@ class DatabaseCleanupTool {
             from: 'applications',
             localField: 'applicationId',
             foreignField: '_id',
-            as: 'application',
-          },
+            as: 'application'
+          }
         },
         {
-          $match: { application: { $size: 0 } },
+          $match: { application: { $size: 0 } }
         },
         {
-          $project: { _id: 1, certificateNumber: 1, applicationId: 1 },
-        },
+          $project: { _id: 1, certificateNumber: 1, applicationId: 1 }
+        }
       ]);
 
       if (orphanedCerts.length > 0) {
@@ -359,7 +359,7 @@ class DatabaseCleanupTool {
           this.report.actions.push({
             action: 'cleanOrphanedCertificates',
             count: result.deletedCount,
-            size: 'N/A',
+            size: 'N/A'
           });
         } else {
           console.log(`   🔍 DRY RUN: Would delete ${orphanedCerts.length} orphaned certificates`);
@@ -406,7 +406,7 @@ class DatabaseCleanupTool {
         this.report.actions.push({
           action: 'optimizeIndexes',
           count: collections.length,
-          size: 'N/A',
+          size: 'N/A'
         });
       }
     } catch (error) {
@@ -433,7 +433,7 @@ class DatabaseCleanupTool {
           try {
             await mongoose.connection.db.command({
               compact: coll.name,
-              force: true,
+              force: true
             });
             console.log(`   ✅ Compacted ${coll.name}`);
           } catch (error) {
@@ -517,7 +517,7 @@ class DatabaseCleanupTool {
     try {
       console.log('🚀 Database Cleanup Tool\n');
       console.log(
-        `Mode: ${this.dryRun ? '🔍 DRY RUN (no changes)' : '⚡ EXECUTION (will make changes)'}`,
+        `Mode: ${this.dryRun ? '🔍 DRY RUN (no changes)' : '⚡ EXECUTION (will make changes)'}`
       );
       console.log(`Deep Clean: ${this.deep ? 'YES' : 'NO'}\n`);
 
@@ -559,7 +559,7 @@ if (require.main === module) {
 
   const options = {
     dryRun: args.includes('--dry-run') || args.includes('-d'),
-    deep: args.includes('--deep') || args.includes('--full'),
+    deep: args.includes('--deep') || args.includes('--full')
   };
 
   if (args.includes('--help') || args.includes('-h')) {

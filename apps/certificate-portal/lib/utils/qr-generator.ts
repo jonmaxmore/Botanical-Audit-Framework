@@ -19,10 +19,10 @@ export async function generateQRCode(data: string, options?: QRCodeOptions): Pro
     margin: 2,
     color: {
       dark: '#000000',
-      light: '#FFFFFF',
+      light: '#FFFFFF'
     },
     errorCorrectionLevel: 'M',
-    ...options,
+    ...options
   };
 
   try {
@@ -40,13 +40,13 @@ export async function generateQRCode(data: string, options?: QRCodeOptions): Pro
 export async function generateQRCodeCanvas(
   data: string,
   canvas: HTMLCanvasElement,
-  options?: QRCodeOptions,
+  options?: QRCodeOptions
 ): Promise<void> {
   const defaultOptions: QRCodeOptions = {
     width: 200,
     margin: 2,
     errorCorrectionLevel: 'M',
-    ...options,
+    ...options
   };
 
   try {
@@ -63,7 +63,7 @@ export async function generateQRCodeCanvas(
  */
 export async function generateCertificateQR(
   certificateNumber: string,
-  options?: QRCodeOptions,
+  options?: QRCodeOptions
 ): Promise<string> {
   const verificationURL = `${process.env.NEXT_PUBLIC_API_URL}/verify/${certificateNumber}`;
   return generateQRCode(verificationURL, options);
@@ -102,5 +102,5 @@ export default {
   generateQRCodeCanvas,
   generateCertificateQR,
   downloadQRCode,
-  isValidQRData,
+  isValidQRData
 };

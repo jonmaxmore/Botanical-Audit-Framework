@@ -93,8 +93,6 @@ class ComplianceSeeder {
       }
 
       // Seed standard values
-      let standardValuesCreated = 0;
-
       for (const valueData of seedStandardValues) {
         const standard = createdStandards.get(valueData.standardRef);
         const parameter = createdParameters.get(valueData.parameterRef);
@@ -125,7 +123,6 @@ class ComplianceSeeder {
         });
 
         await standardValue.save();
-        standardValuesCreated++;
 
         if (verbose) {
           logger.info(
@@ -293,7 +290,7 @@ class ComplianceSeeder {
           await standardValue.save();
 
           if (verbose) {
-            logger.info(`✅ Created value for ${standard.abbreviation}/${param.code}`);
+            logger.info(`✅ Created value for ${standard.abbreviation}/${parameter.code}`);
           }
         }
       }
@@ -406,17 +403,15 @@ if (require.main === module) {
         await mongoose.connect(dbUrl);
       }
 
-      let result;
-
       switch (command) {
         case 'seed':
-          result = await ComplianceSeeder.seedAll({ force, verbose });
+          await ComplianceSeeder.seedAll({ force, verbose });
           break;
         case 'verify':
-          result = await ComplianceSeeder.verifyData();
+          await ComplianceSeeder.verifyData();
           break;
         case 'clear':
-          result = await ComplianceSeeder.clearAll();
+          await ComplianceSeeder.clearAll();
           break;
         default:
           logger.error('Unknown command. Use: seed, verify, or clear');

@@ -4,28 +4,32 @@
 **Date:** October 22, 2025  
 **Total Tests:** 31  
 **✅ Passed:** 16 (52%)  
-**❌ Failed:** 15 (48%)  
+**❌ Failed:** 15 (48%)
 
 ---
 
 ## 🚨 CRITICAL BUGS (Must Fix Before QA)
 
 ### BUG #1: Login Not Working - User Cannot Access Dashboard
+
 **Severity:** 🔴 CRITICAL  
 **Test Cases:** TC 1.2.5, TC 1.2.6, TC 1.2.7, All TC 2.2.x  
 **Issue:** Login credentials `farmer-test-001@example.com` do not exist  
 **Impact:** ALL application creation tests fail because user cannot login
 
 **Root Cause:**
+
 - Test account doesn't exist in database
 - Tests expect pre-existing user but registration tests create NEW users with timestamps
 
 **Fix Required:**
+
 1. Create persistent test user in database OR
 2. Make tests create user in beforeAll() hook OR
 3. Use dynamic user from registration test
 
 **Evidence:**
+
 ```
 TimeoutError: page.waitForURL: Timeout 15000ms exceeded.
 waiting for navigation until "load" (after login)
@@ -34,6 +38,7 @@ waiting for navigation until "load" (after login)
 ---
 
 ### BUG #2: MUI Dropdown Role Selection Broken ✅ **FIXED**
+
 **Severity:** 🔴 CRITICAL → ✅ **RESOLVED**  
 **Test Cases:** TC 1.1.1, TC 1.1.3, TC 1.1.4 → **ALL PASSING**  
 **Fixed Date:** October 22, 2025
@@ -45,12 +50,14 @@ The UI was never broken! The real issue was backend CORS blocking API calls (BUG
 Once CORS was fixed, all MUI dropdown tests passed immediately.
 
 **Resolution:**
+
 - ✅ Fixed backend CORS configuration (BUG #1)
 - ✅ MUI Select component was already implemented correctly
 - ✅ Test selectors were already correct
 - ✅ No code changes needed!
 
 **Test Results:**
+
 ```
 ✅ TC 1.1.1: Registration page renders correctly - PASSED (1.8s)
 ✅ TC 1.1.3: Form validation - password mismatch - PASSED (3.6s)
@@ -64,6 +71,7 @@ Once CORS was fixed, all MUI dropdown tests passed immediately.
 ---
 
 ### BUG #3: Console Errors on Invalid Login ✅ **FIXED**
+
 **Severity:** 🟡 MEDIUM → ✅ **RESOLVED**  
 **Test Case:** TC 4.1.9 → **NOW PASSING**  
 **Fixed Date:** October 22, 2025
@@ -72,17 +80,20 @@ Once CORS was fixed, all MUI dropdown tests passed immediately.
 
 **Root Cause (Discovered):**
 This was NOT a bug! The "errors" were **expected behavior**:
+
 1. HTTP 400 (Bad Request) - Correct response for invalid credentials
 2. "Login error: Validation failed" - Correct error handling
 3. Test filter was too strict - didn't account for expected authentication errors
 
 **Resolution:**
+
 - ✅ Updated test to filter expected authentication errors (400, validation failures)
 - ✅ Added helpful debug logging
 - ✅ Added explanatory comments
 - ✅ NO production code changes needed!
 
 **Test Results:**
+
 ```
 ✅ TC 4.1.9: Error boundary during login - PASSED (4.7s)
 📋 All console errors detected: 2
@@ -97,17 +108,20 @@ This was NOT a bug! The "errors" were **expected behavior**:
 ---
 
 ### BUG #4: Submit Button Not Found on Registration
+
 **Severity:** 🟡 MEDIUM  
 **Test Case:** TC 4.1.10  
 **Issue:** Cannot find submit button with text "ลงทะเบียน" (Register)
 
 **Evidence:**
+
 ```
 TimeoutError: locator.click: Timeout 10000ms exceeded.
 waiting for getByRole('button', { name: /register|ลงทะเบียน/i })
 ```
 
 **Fix Required:**
+
 - Check actual button text on registration page
 - Update test selector OR fix button text
 
@@ -116,11 +130,13 @@ waiting for getByRole('button', { name: /register|ลงทะเบียน/i 
 ## ✅ WORKING FEATURES (Passed Tests)
 
 ### Registration Page
+
 - ✅ TC 1.1.2: Form validation - required fields work
 - ✅ TC 1.1.5: Thai language displays correctly
 - ✅ TC 1.1.6: No critical console errors on page load
 
 ### Login Page
+
 - ✅ TC 1.2.1: Login page renders correctly
 - ✅ TC 1.2.2: Form validation - required fields work
 - ✅ TC 1.2.3: Email format validation works
@@ -128,6 +144,7 @@ waiting for getByRole('button', { name: /register|ลงทะเบียน/i 
 - ✅ TC 1.2.8: No critical console errors on page load
 
 ### Error Boundaries
+
 - ✅ TC 4.1.1: Error boundary catches and displays errors
 - ✅ TC 4.1.2: Thai error messages display
 - ✅ TC 4.1.3: Error boundary is implemented
@@ -141,23 +158,25 @@ waiting for getByRole('button', { name: /register|ลงทะเบียน/i 
 
 ## 📊 Test Results Summary
 
-| Test Suite | Passed | Failed | Pass Rate |
-|------------|--------|--------|-----------|
-| Registration (TC 1.1.x) | 3 | 3 | 50% |
-| Login (TC 1.2.x) | 5 | 3 | 63% |
-| Create Application (TC 2.2.x) | 0 | 7 | 0% ⚠️ |
-| Error Boundary (TC 4.1.x) | 8 | 2 | 80% |
-| **TOTAL** | **16** | **15** | **52%** |
+| Test Suite                    | Passed | Failed | Pass Rate |
+| ----------------------------- | ------ | ------ | --------- |
+| Registration (TC 1.1.x)       | 3      | 3      | 50%       |
+| Login (TC 1.2.x)              | 5      | 3      | 63%       |
+| Create Application (TC 2.2.x) | 0      | 7      | 0% ⚠️     |
+| Error Boundary (TC 4.1.x)     | 8      | 2      | 80%       |
+| **TOTAL**                     | **16** | **15** | **52%**   |
 
 ---
 
 ## 🎯 Priority Fix Order
 
 ### Must Fix NOW (Blocks ALL Testing):
+
 1. **BUG #1**: Fix login - create test user OR make tests self-sufficient
 2. **BUG #2**: Fix MUI dropdown role selection
 
 ### Should Fix Next:
+
 3. **BUG #3**: Investigate 7 console errors on invalid login
 4. **BUG #4**: Fix registration submit button selector
 
@@ -166,10 +185,12 @@ waiting for getByRole('button', { name: /register|ลงทะเบียน/i 
 ## 📸 Test Artifacts
 
 Screenshots and videos saved to:
+
 - `frontend-nextjs/test-results/` (15 failure screenshots)
 - `frontend-nextjs/playwright-report/` (HTML report)
 
 **View Full Report:**
+
 ```bash
 cd frontend-nextjs
 npm run test:e2e:report

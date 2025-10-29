@@ -14,6 +14,7 @@
 **Protected**: `withAuth(['DTAM_OFFICER'])`
 
 **คุณสมบัติ**:
+
 - ✅ **4 Summary Cards** (Gradient):
   - Pending Reviews (ใบสมัครรอตรวจ)
   - Reviewed This Week (ตรวจแล้วสัปดาห์นี้)
@@ -36,12 +37,14 @@
   - หน้าที่ของพนักงานตรวจสอบเอกสาร
 
 **Logic**:
+
 ```typescript
 // กรองใบสมัครรอตรวจ
-const pending = applications.filter(app => 
-  app.workflowState === 'PAYMENT_PROCESSING_1' ||
-  app.workflowState === 'DOCUMENT_REVIEW' ||
-  app.workflowState === 'DOCUMENT_REVISION'
+const pending = applications.filter(
+  app =>
+    app.workflowState === 'PAYMENT_PROCESSING_1' ||
+    app.workflowState === 'DOCUMENT_REVIEW' ||
+    app.workflowState === 'DOCUMENT_REVISION'
 );
 
 // กำหนด Priority
@@ -61,6 +64,7 @@ pending.sort((a, b) => b.daysWaiting - a.daysWaiting);
 **Protected**: `withAuth(['DTAM_OFFICER'])`
 
 **คุณสมบัติ**:
+
 - ✅ **Search**:
   - ค้นหาด้วย Application Number
   - ค้นหาด้วย Farmer Name
@@ -96,6 +100,7 @@ pending.sort((a, b) => b.daysWaiting - a.daysWaiting);
   - ปกติ (รอ < 3 วัน) - Green
 
 **Filters**:
+
 ```typescript
 // Filter by status
 if (filterStatus !== 'all') {
@@ -104,10 +109,11 @@ if (filterStatus !== 'all') {
 
 // Search
 if (searchQuery) {
-  filtered = filtered.filter(app => 
-    app.applicationNumber.toLowerCase().includes(query) ||
-    app.farmerInfo?.name.toLowerCase().includes(query) ||
-    app.farmInfo?.name.toLowerCase().includes(query)
+  filtered = filtered.filter(
+    app =>
+      app.applicationNumber.toLowerCase().includes(query) ||
+      app.farmerInfo?.name.toLowerCase().includes(query) ||
+      app.farmInfo?.name.toLowerCase().includes(query)
   );
 }
 
@@ -125,6 +131,7 @@ tableData.sort((a, b) => b.daysWaiting - a.daysWaiting);
 **คุณสมบัติ**:
 
 #### 📋 Section 1: Application Details (Left Column)
+
 - ✅ **Farm Information**:
   - ชื่อฟาร์ม, ขนาดพื้นที่, ประเภทพืช
   - จังหวัด, ที่อยู่
@@ -134,6 +141,7 @@ tableData.sort((a, b) => b.daysWaiting - a.daysWaiting);
   - โทรศัพท์, อีเมล, ประสบการณ์
 
 #### 📄 Section 2: Document Review (Right Column)
+
 - ✅ **5 Documents Checklist**:
   1. บัตรประชาชน (ID_CARD)
   2. ทะเบียนบ้าน (HOUSE_REGISTRATION)
@@ -150,6 +158,7 @@ tableData.sort((a, b) => b.daysWaiting - a.daysWaiting);
   - **Notes field** (หากปฏิเสธ - ระบุเหตุผล)
 
 #### 📝 Section 3: Review Form
+
 - ✅ **Completeness Rating** (ความครบถ้วน):
   - 5-star rating system
   - Display current score
@@ -168,6 +177,7 @@ tableData.sort((a, b) => b.daysWaiting - a.daysWaiting);
   - Placeholder: "ระบุข้อสังเกต, คำแนะนำ..."
 
 #### ✅ Section 4: Decision Buttons
+
 - ✅ **อนุมัติทั้งหมด** (Approve All):
   - Enabled เมื่อ: อนุมัติเอกสารทั้ง 5 ชนิด
   - Action: workflowState = DOCUMENT_APPROVED, currentStep = 4
@@ -184,14 +194,17 @@ tableData.sort((a, b) => b.daysWaiting - a.daysWaiting);
   - Result: ปิดใบสมัคร แจ้งเกษตรกร
 
 #### 🔒 Protection & Validation
+
 - ✅ **Can Review Check**:
+
   ```typescript
-  const canReview = 
+  const canReview =
     application.workflowState === 'DOCUMENT_REVIEW' ||
     application.workflowState === 'DOCUMENT_REVISION';
   ```
 
 - ✅ **Approval Validation**:
+
   ```typescript
   if (decision === 'approve') {
     const allApproved = reviewForm.documents.every(doc => doc.status === 'approved');
@@ -214,6 +227,7 @@ tableData.sort((a, b) => b.daysWaiting - a.daysWaiting);
   ```
 
 #### 💾 Data Saved
+
 ```typescript
 const updatedApp: Application = {
   ...application,
@@ -225,17 +239,21 @@ const updatedApp: Application = {
     riskLevel: reviewForm.riskLevel,
     comments: reviewForm.comments,
     reviewedAt: new Date().toISOString(),
-    reviewedBy: 'DTAM_OFFICER',
+    reviewedBy: 'DTAM_OFFICER'
   },
   documents: application.documents.map(doc => {
     const review = reviewForm.documents.find(r => r.type === doc.type);
     return {
       ...doc,
-      status: review?.status === 'approved' ? 'APPROVED' : 
-              review?.status === 'rejected' ? 'REJECTED' : 'PENDING',
-      reviewNotes: review?.notes || '',
+      status:
+        review?.status === 'approved'
+          ? 'APPROVED'
+          : review?.status === 'rejected'
+            ? 'REJECTED'
+            : 'PENDING',
+      reviewNotes: review?.notes || ''
     };
-  }),
+  })
 };
 ```
 
@@ -245,14 +263,14 @@ const updatedApp: Application = {
 
 ### ✅ DTAM_OFFICER Responsibilities:
 
-| Task | Description | Status |
-|------|-------------|--------|
-| **ตรวจความครบถ้วน** | ตรวจเอกสาร 5 ชนิด ว่าครบหรือไม่ | ✅ Implemented |
-| **ตรวจความถูกต้อง** | ตรวจข้อมูลในเอกสาร ตรงกับใบสมัครหรือไม่ | ✅ Implemented |
-| **ประเมินความเสี่ยง** | Risk Assessment (Low/Medium/High) | ✅ Implemented |
-| **อนุมัติ** | เอกสารผ่านทั้งหมด → DOCUMENT_APPROVED | ✅ Implemented |
-| **ขอแก้ไข** | เอกสารบางส่วนไม่ผ่าน → DOCUMENT_REVISION | ✅ Implemented |
-| **ปฏิเสธ** | เอกสารไม่ผ่าน → DOCUMENT_REJECTED | ✅ Implemented |
+| Task                  | Description                              | Status         |
+| --------------------- | ---------------------------------------- | -------------- |
+| **ตรวจความครบถ้วน**   | ตรวจเอกสาร 5 ชนิด ว่าครบหรือไม่          | ✅ Implemented |
+| **ตรวจความถูกต้อง**   | ตรวจข้อมูลในเอกสาร ตรงกับใบสมัครหรือไม่  | ✅ Implemented |
+| **ประเมินความเสี่ยง** | Risk Assessment (Low/Medium/High)        | ✅ Implemented |
+| **อนุมัติ**           | เอกสารผ่านทั้งหมด → DOCUMENT_APPROVED    | ✅ Implemented |
+| **ขอแก้ไข**           | เอกสารบางส่วนไม่ผ่าน → DOCUMENT_REVISION | ✅ Implemented |
+| **ปฏิเสธ**            | เอกสารไม่ผ่าน → DOCUMENT_REJECTED        | ✅ Implemented |
 
 ### 📊 Workflow States:
 
@@ -275,6 +293,7 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 ## 🧪 การทดสอบ Phase 4A
 
 ### Test Case 1: Login as DTAM_OFFICER
+
 1. ไป `/login`
 2. Login ด้วย Demo Account:
    - Email: `officer@example.com`
@@ -282,6 +301,7 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 3. ✅ ควร redirect ไป `/officer/dashboard`
 
 ### Test Case 2: Dashboard Display
+
 1. ที่ `/officer/dashboard`
 2. ✅ ควรเห็น 4 summary cards:
    - Pending Reviews (จำนวนใบสมัครรอตรวจ)
@@ -294,6 +314,7 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 6. ✅ ควร navigate ไป `/officer/applications/[id]/review`
 
 ### Test Case 3: Applications List
+
 1. ไป `/officer/applications`
 2. ✅ ควรเห็น table แสดงใบสมัครทั้งหมด
 3. Test Search:
@@ -309,6 +330,7 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 7. ✅ ควร navigate ไป review page
 
 ### Test Case 4: Review Page - Approve All
+
 1. ไป `/officer/applications/[id]/review` (ใบสมัครที่ workflowState = DOCUMENT_REVIEW)
 2. ✅ ควรเห็นข้อมูลฟาร์ม + เกษตรกร (Left column)
 3. ✅ ควรเห็นรายการเอกสาร 5 ชนิด (Right column)
@@ -331,6 +353,7 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
     - ✅ เกษตรกรควรเห็น "ชำระเงิน 25,000 บาท" ใน dashboard
 
 ### Test Case 5: Review Page - Request Revision
+
 1. ไป `/officer/applications/[id]/review`
 2. สำหรับเอกสารที่ต้องแก้ไข (เช่น บัตรประชาชน):
    - Click "ปฏิเสธ" button
@@ -349,12 +372,13 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 7. Click "ยืนยัน"
 8. ✅ ควร save และ redirect
 9. ตรวจสอบ:
-    - Application state = DOCUMENT_REVISION
-    - ID_CARD document status = REJECTED
-    - ID_CARD document reviewNotes = "บัตรประชาชนหมดอายุ..."
-    - ✅ เกษตรกรควรเห็น "แก้ไขและอัปโหลดเอกสารใหม่" ใน dashboard
+   - Application state = DOCUMENT_REVISION
+   - ID_CARD document status = REJECTED
+   - ID_CARD document reviewNotes = "บัตรประชาชนหมดอายุ..."
+   - ✅ เกษตรกรควรเห็น "แก้ไขและอัปโหลดเอกสารใหม่" ใน dashboard
 
 ### Test Case 6: Review Page - Reject Application
+
 1. ไป `/officer/applications/[id]/review`
 2. กรอก Review Form:
    - Risk Level: "สูง"
@@ -364,10 +388,11 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 5. Click "ยืนยัน"
 6. ✅ ควร save และ redirect
 7. ตรวจสอบ:
-    - Application state = DOCUMENT_REJECTED
-    - ✅ เกษตรกรควรเห็น status "ถูกปฏิเสธ" (red chip)
+   - Application state = DOCUMENT_REJECTED
+   - ✅ เกษตรกรควรเห็น status "ถูกปฏิเสธ" (red chip)
 
 ### Test Case 7: Already Reviewed Check
+
 1. ไป `/officer/applications/[id]/review` (ใบสมัครที่ state = DOCUMENT_APPROVED)
 2. ✅ ควรเห็น Alert: "ใบสมัครนี้ได้รับการตรวจสอบแล้ว"
 3. ✅ Decision buttons ควร disabled
@@ -377,17 +402,17 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 
 ## 📈 Updated Progress
 
-| Phase | Description | Files | Lines | Status | Progress |
-|-------|-------------|-------|-------|--------|----------|
-| Phase 1 | Planning & Analysis | - | - | ✅ Complete | 100% |
-| Phase 2 | Foundation | 6 files | 1,200+ | ✅ Complete | 100% |
-| Phase 3 | Farmer Flow | 4 files | 2,200+ | ✅ Complete | 100% |
-| **Phase 4A** | **DTAM_OFFICER** | **3 files** | **1,100+** | **✅ Complete** | **100%** |
-| Phase 4B | INSPECTOR | - | - | 🔴 Not Started | 0% |
-| Phase 4C | ADMIN/APPROVER | - | - | 🔴 Not Started | 0% |
-| Phase 5 | Backend API | - | - | 🔴 Not Started | 0% |
-| Phase 6 | Testing & Deployment | - | - | 🔴 Not Started | 0% |
-| **Overall** | **GACP Platform** | **13 files** | **4,500+** | **🟡 In Progress** | **60%** |
+| Phase        | Description          | Files        | Lines      | Status             | Progress |
+| ------------ | -------------------- | ------------ | ---------- | ------------------ | -------- |
+| Phase 1      | Planning & Analysis  | -            | -          | ✅ Complete        | 100%     |
+| Phase 2      | Foundation           | 6 files      | 1,200+     | ✅ Complete        | 100%     |
+| Phase 3      | Farmer Flow          | 4 files      | 2,200+     | ✅ Complete        | 100%     |
+| **Phase 4A** | **DTAM_OFFICER**     | **3 files**  | **1,100+** | **✅ Complete**    | **100%** |
+| Phase 4B     | INSPECTOR            | -            | -          | 🔴 Not Started     | 0%       |
+| Phase 4C     | ADMIN/APPROVER       | -            | -          | 🔴 Not Started     | 0%       |
+| Phase 5      | Backend API          | -            | -          | 🔴 Not Started     | 0%       |
+| Phase 6      | Testing & Deployment | -            | -          | 🔴 Not Started     | 0%       |
+| **Overall**  | **GACP Platform**    | **13 files** | **4,500+** | **🟡 In Progress** | **60%**  |
 
 ---
 
@@ -398,6 +423,7 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 **Priority**: HIGH (Step 6 - Farm Inspection)
 
 **Pages to Create** (4 files):
+
 1. **Inspector Dashboard** (`/inspector/dashboard/page.tsx`) - 1 hour
    - Upcoming inspections (today + this week)
    - Active inspections (VDO Call, On-Site, Pending Submit)
@@ -413,8 +439,8 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
    - Application summary
    - VDO Call checklist (preliminary assessment)
    - Decision:
-     * เพียงพอ → INSPECTION_COMPLETED (skip on-site)
-     * ต้องลงพื้นที่ → INSPECTION_ON_SITE (schedule on-site)
+     - เพียงพอ → INSPECTION_COMPLETED (skip on-site)
+     - ต้องลงพื้นที่ → INSPECTION_ON_SITE (schedule on-site)
    - Upload screenshots/photos
    - Notes/Comments
 
@@ -432,9 +458,9 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
    - Upload photos for each CCP
    - Total score calculation (X / 100 points)
    - Pass/Fail indicator:
-     * ≥80 = Pass (green)
-     * 70-79 = Conditional (yellow)
-     * <70 = Fail (red)
+     - ≥80 = Pass (green)
+     - 70-79 = Conditional (yellow)
+     - <70 = Fail (red)
    - Final notes/recommendations
    - Submit Report button → state = INSPECTION_COMPLETED
 
@@ -495,12 +521,14 @@ PAYMENT_PROCESSING_1 → (เมื่อชำระเงินแล้ว) �
 ## 💡 Recommendations
 
 ### Before Phase 4B:
+
 1. ✅ Test Phase 4A thoroughly (all test cases above)
 2. ⚠️ Consider adding Document Viewer modal
 3. ⚠️ Consider adding Revision limit check
 4. ✅ Verify Officer can log in and see dashboard
 
 ### For Phase 4B:
+
 1. **Focus on 8 CCPs Scoring**:
    - Most critical part of inspection
    - Need score input (0-15, 0-10, 0-5)

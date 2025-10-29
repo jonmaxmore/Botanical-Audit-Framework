@@ -155,7 +155,7 @@ export default function DemoMainPage() {
               { step: 3, title: 'นัดตรวจสอบ', icon: '📅', role: 'ผู้ตรวจสอบ' },
               { step: 4, title: 'ตรวจพื้นที่', icon: '🔍', role: 'ผู้ตรวจสอบ' },
               { step: 5, title: 'ประเมินผล', icon: '⚖️', role: 'ผู้ประเมิน' },
-              { step: 6, title: 'ออกใบรับรอง', icon: '🏆', role: 'ผู้ประเมิน' },
+              { step: 6, title: 'ออกใบรับรอง', icon: '🏆', role: 'ผู้ประเมิน' }
             ].map((item, index) => (
               <div key={item.step} className="text-center">
                 <div className="flex items-center justify-center w-12 h-12 bg-blue-100 rounded-full mb-3 mx-auto">
@@ -181,20 +181,20 @@ export default function DemoMainPage() {
               label: 'ใบรับรองที่ออกแล้ว',
               value: '1,892',
               color: 'bg-green-50 text-green-600',
-              icon: '🏆',
+              icon: '🏆'
             },
             {
               label: 'อยู่ระหว่างดำเนินการ',
               value: '325',
               color: 'bg-yellow-50 text-yellow-600',
-              icon: '⏳',
+              icon: '⏳'
             },
             {
               label: 'ผู้ใช้งานทั้งหมด',
               value: '1,247',
               color: 'bg-purple-50 text-purple-600',
-              icon: '👥',
-            },
+              icon: '👥'
+            }
           ].map((stat, index) => (
             <div key={index} className="bg-white rounded-lg border p-6 text-center">
               <div

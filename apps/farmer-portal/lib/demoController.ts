@@ -53,7 +53,7 @@ export class DemoController {
   getStatus() {
     return {
       isDemoMode: this.demoMode,
-      currentStep: this.currentStep,
+      currentStep: this.currentStep
     };
   }
 }

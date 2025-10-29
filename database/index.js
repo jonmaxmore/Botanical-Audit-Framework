@@ -28,6 +28,6 @@ module.exports = {
     Application,
     Invoice,
     Certificate,
-    AuditLog,
-  },
+    AuditLog
+  }
 };

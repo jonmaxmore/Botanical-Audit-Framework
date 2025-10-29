@@ -59,7 +59,12 @@ router.post('/irrigation/calculate', (req, res) => {
   try {
     const { crop, growthStage, temperature, humidity, rainfall, soilType } = req.body;
     const result = IrrigationService.calculateWaterNeeds(
-      crop, growthStage, temperature, humidity, rainfall, soilType
+      crop,
+      growthStage,
+      temperature,
+      humidity,
+      rainfall,
+      soilType
     );
     res.json({ success: true, data: result });
   } catch (error) {

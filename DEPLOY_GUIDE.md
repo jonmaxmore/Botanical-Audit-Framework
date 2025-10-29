@@ -19,6 +19,7 @@ Choose the deployment method that best fits your needs:
 ## Option 1: 🐳 Docker Production Deployment (RECOMMENDED)
 
 ### Prerequisites
+
 - Docker Engine 24.0+ installed
 - Docker Compose v2.20+ installed
 - 4GB+ RAM available
@@ -117,15 +118,15 @@ docker exec -it gacp-redis redis-cli ping
 
 ### Step 5: Access Services
 
-| Service | URL | Credentials |
-|---------|-----|-------------|
-| **Frontend** | http://localhost:3000 | - |
-| **API** | http://localhost:4000 | - |
-| **MongoDB** | localhost:27017 | gacp_admin / [password] |
-| **Redis** | localhost:6379 | [password] |
-| **Grafana** | http://localhost:3001 | admin / [GRAFANA_PASSWORD] |
-| **Prometheus** | http://localhost:9090 | - |
-| **Kibana** | http://localhost:5601 | - |
+| Service        | URL                   | Credentials                |
+| -------------- | --------------------- | -------------------------- |
+| **Frontend**   | http://localhost:3000 | -                          |
+| **API**        | http://localhost:4000 | -                          |
+| **MongoDB**    | localhost:27017       | gacp_admin / [password]    |
+| **Redis**      | localhost:6379        | [password]                 |
+| **Grafana**    | http://localhost:3001 | admin / [GRAFANA_PASSWORD] |
+| **Prometheus** | http://localhost:9090 | -                          |
+| **Kibana**     | http://localhost:5601 | -                          |
 
 ### Step 6: SSL Configuration (Production)
 
@@ -239,6 +240,7 @@ gcloud run deploy gacp-api \
 ## Option 3: 🖥️ Local Production Deployment
 
 ### Prerequisites
+
 - Node.js 18+ installed
 - MongoDB installed and running
 - Redis installed and running
@@ -304,15 +306,15 @@ http {
     upstream gacp_api {
         server localhost:4000;
     }
-    
+
     upstream gacp_frontend {
         server localhost:3000;
     }
-    
+
     server {
         listen 80;
         server_name yourdomain.com;
-        
+
         location /api {
             proxy_pass http://gacp_api;
             proxy_http_version 1.1;
@@ -321,7 +323,7 @@ http {
             proxy_set_header Host $host;
             proxy_cache_bypass $http_upgrade;
         }
-        
+
         location / {
             proxy_pass http://gacp_frontend;
             proxy_http_version 1.1;
@@ -335,6 +337,7 @@ http {
 ```
 
 Start nginx:
+
 ```powershell
 cd C:\nginx
 start nginx

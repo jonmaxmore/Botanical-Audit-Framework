@@ -12,6 +12,7 @@
 ได้ทำการลบ Mock data ทั้งหมดออกจาก Admin Portal แล้ว ระบบจะแสดงเฉพาะข้อมูลจาก Backend API จริงเท่านั้น
 
 **เหตุผล:**
+
 - ✅ ป้องกันความสับสนระหว่าง Mock data กับ Real data
 - ✅ ให้ทีม QA สร้างข้อมูลทดสอบที่สมจริง
 - ✅ ทดสอบ Integration กับ Backend จริง
@@ -22,9 +23,11 @@
 ## 🗑️ Files Cleaned
 
 ### 1. ✅ Statistics Page
+
 **File:** `apps/admin-portal/app/statistics/page.tsx`
 
 **Before:**
+
 ```typescript
 // Hard-coded mock statistics
 <Typography variant="h3">71.5%</Typography>
@@ -34,6 +37,7 @@
 ```
 
 **After:**
+
 ```typescript
 // Real data from API
 <Typography variant="h4">{stats.total || 0}</Typography>
@@ -46,18 +50,18 @@
 
 ## 📊 Pages Status
 
-| Page | Mock Data Removed | API Connected | Empty State |
-|------|-------------------|---------------|-------------|
-| Login | ✅ Yes | ✅ Yes | N/A |
-| Applications | ✅ Yes | ✅ Yes | ✅ Yes |
-| Dashboard | ✅ Yes | ✅ Yes | ✅ Yes |
-| Application Detail | ✅ Yes | ✅ Yes | ✅ Yes |
-| Reviews | ✅ Yes | ✅ Yes | ✅ Yes |
-| Users | ✅ Yes | ✅ Yes | ✅ Yes |
-| Inspectors | ✅ Yes | ✅ Yes | ✅ Yes |
-| Certificates | ✅ Yes | ✅ Yes | ✅ Yes |
-| Reports | ✅ Yes | ✅ Yes | ✅ Yes |
-| Statistics | ✅ Yes | ✅ Yes | ✅ Yes |
+| Page               | Mock Data Removed | API Connected | Empty State |
+| ------------------ | ----------------- | ------------- | ----------- |
+| Login              | ✅ Yes            | ✅ Yes        | N/A         |
+| Applications       | ✅ Yes            | ✅ Yes        | ✅ Yes      |
+| Dashboard          | ✅ Yes            | ✅ Yes        | ✅ Yes      |
+| Application Detail | ✅ Yes            | ✅ Yes        | ✅ Yes      |
+| Reviews            | ✅ Yes            | ✅ Yes        | ✅ Yes      |
+| Users              | ✅ Yes            | ✅ Yes        | ✅ Yes      |
+| Inspectors         | ✅ Yes            | ✅ Yes        | ✅ Yes      |
+| Certificates       | ✅ Yes            | ✅ Yes        | ✅ Yes      |
+| Reports            | ✅ Yes            | ✅ Yes        | ✅ Yes      |
+| Statistics         | ✅ Yes            | ✅ Yes        | ✅ Yes      |
 
 ---
 
@@ -66,30 +70,35 @@
 ### When No Data Exists:
 
 #### 1. Applications Page
+
 ```
 แสดง: "ไม่พบคำขอรับรอง"
 Action: ให้ QA สร้างข้อมูลผ่าน API
 ```
 
 #### 2. Dashboard
+
 ```
 แสดง: Statistics = 0
 Action: ให้ QA สร้าง Applications
 ```
 
 #### 3. Users Page
+
 ```
 แสดง: "No users found"
 Action: ให้ QA สร้าง Users
 ```
 
 #### 4. Certificates Page
+
 ```
 แสดง: "ยังไม่มีใบรับรอง"
 Action: ให้ QA Approve Applications
 ```
 
 #### 5. Statistics Page
+
 ```
 แสดง: "ไม่มีข้อมูลสถิติ - กรุณาสร้างข้อมูลทดสอบ"
 Action: ให้ QA สร้างข้อมูลเพียงพอ
@@ -126,6 +135,7 @@ Total: 56 Applications minimum
 ## 📝 API Endpoints for QA
 
 ### Create Users
+
 ```bash
 POST /api/users
 {
@@ -137,6 +147,7 @@ POST /api/users
 ```
 
 ### Create Applications
+
 ```bash
 POST /api/farmer/applications
 {
@@ -149,6 +160,7 @@ POST /api/farmer/applications
 ```
 
 ### Complete Workflow
+
 ```bash
 # 1. Assign Reviewer
 POST /api/dtam/applications/:id/assign-reviewer
@@ -171,17 +183,20 @@ POST /api/dtam/applications/:id/approve
 ## ✅ Benefits
 
 ### 1. Real Testing
+
 - ✅ ทดสอบกับข้อมูลจริง
 - ✅ ทดสอบ API Integration
 - ✅ ทดสอบ Error Handling
 - ✅ ทดสอบ Empty States
 
 ### 2. Production Ready
+
 - ✅ ไม่มี Mock data ใน Production
 - ✅ ทดสอบ Performance จริง
 - ✅ ทดสอบ Load จริง
 
 ### 3. QA Control
+
 - ✅ QA สร้างข้อมูลเอง
 - ✅ QA ควบคุม Test Scenarios
 - ✅ QA ทดสอบ Edge Cases
@@ -191,6 +206,7 @@ POST /api/dtam/applications/:id/approve
 ## 🔧 How to Create Test Data
 
 ### Option 1: Use Postman/Insomnia
+
 ```
 1. Import API collection
 2. Create users
@@ -199,12 +215,14 @@ POST /api/dtam/applications/:id/approve
 ```
 
 ### Option 2: Use Seed Script
+
 ```bash
 cd apps/backend
 npm run seed:test
 ```
 
 ### Option 3: Use Database Direct
+
 ```bash
 mongosh "mongodb://localhost:27017/gacp"
 db.users.insertMany([...])
@@ -216,6 +234,7 @@ db.applications.insertMany([...])
 ## 📊 Verification Checklist
 
 ### ✅ Verify Mock Data Removed:
+
 - [x] No hard-coded statistics
 - [x] No hard-coded user lists
 - [x] No hard-coded application lists
@@ -223,6 +242,7 @@ db.applications.insertMany([...])
 - [x] All data from API only
 
 ### ✅ Verify Empty States:
+
 - [x] Applications page shows empty state
 - [x] Users page shows empty state
 - [x] Certificates page shows empty state
@@ -230,6 +250,7 @@ db.applications.insertMany([...])
 - [x] Statistics page shows info message
 
 ### ✅ Verify API Integration:
+
 - [x] All pages call real APIs
 - [x] Error handling works
 - [x] Loading states work
@@ -282,6 +303,7 @@ All Mock data has been removed successfully. System is ready for QA testing with
 ## 📞 Support
 
 **Need Help?**
+
 - Check `QA_TESTING_GUIDE.md`
 - Contact Development Team
 - Create GitHub Issue
