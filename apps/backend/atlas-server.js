@@ -503,6 +503,7 @@ app.use('/api', require('./routes/inspection-snapshots.routes'));
 app.use('/api', require('./routes/inspection-report.routes'));
 app.use('/api', require('./routes/inspection-scheduling.routes'));
 app.use('/api', require('./routes/inspection-upcoming.routes'));
+app.use('/api', require('./routes/inspection-kpi.routes'));
 appLogger.info('✅ Video Inspection routes mounted');
 
 // ============================================================================
