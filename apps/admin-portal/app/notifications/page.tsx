@@ -28,7 +28,12 @@ export default function NotificationsPage() {
         <Typography variant="h4" gutterBottom>
           🔔 Notifications
         </Typography>
-        <NotificationsList />
+        <NotificationsList
+          notifications={[]}
+          onMarkAsRead={() => {}}
+          onMarkAllAsRead={() => {}}
+          onDelete={() => {}}
+        />
       </Container>
     </ErrorBoundary>
   );

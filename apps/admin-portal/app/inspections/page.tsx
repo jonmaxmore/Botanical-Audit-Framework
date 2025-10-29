@@ -37,7 +37,7 @@ export default function InspectionsPage() {
           <Tab label="Upcoming" />
         </Tabs>
         {tab === 0 && <InspectionCalendar />}
-        {tab === 1 && <InspectionScheduler />}
+        {tab === 1 && <InspectionScheduler inspectionId="" onScheduled={() => {}} />}
         {tab === 2 && <UpcomingInspections />}
       </Container>
     </ErrorBoundary>

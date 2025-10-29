@@ -485,3 +485,7 @@ export function RetryErrorBoundary({
     </ErrorBoundary>
   );
 }
+
+
+// Default export for compatibility
+export default ErrorBoundary;

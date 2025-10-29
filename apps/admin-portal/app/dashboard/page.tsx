@@ -59,6 +59,7 @@ export default function DashboardPage() {
             <KPICard
               title="คำขอทั้งหมด"
               value={stats.totalApplications}
+              icon={<div>📋</div>}
               color="primary"
             />
           </Grid>
@@ -66,6 +67,7 @@ export default function DashboardPage() {
             <KPICard
               title="รอตรวจสอบ"
               value={stats.pendingReview}
+              icon={<div>⏳</div>}
               color="warning"
             />
           </Grid>
@@ -73,6 +75,7 @@ export default function DashboardPage() {
             <KPICard
               title="อนุมัติแล้ว"
               value={stats.approved}
+              icon={<div>✅</div>}
               color="success"
             />
           </Grid>
@@ -80,12 +83,13 @@ export default function DashboardPage() {
             <KPICard
               title="ไม่อนุมัติ"
               value={stats.rejected}
+              icon={<div>❌</div>}
               color="error"
             />
           </Grid>
 
           <Grid item xs={12} md={8}>
-            <ActivitySummary />
+            <ActivitySummary activities={[]} />
           </Grid>
 
           <Grid item xs={12} md={4}>
@@ -93,7 +97,16 @@ export default function DashboardPage() {
           </Grid>
 
           <Grid item xs={12}>
-            <InspectorKPICards />
+            <InspectorKPICards
+              data={{
+                totalInspections: 0,
+                completedToday: 0,
+                upcomingThisWeek: 0,
+                videoCallCount: 0,
+                onsiteCount: 0,
+                avgResponseTime: 0,
+              }}
+            />
           </Grid>
         </Grid>
       </Container>

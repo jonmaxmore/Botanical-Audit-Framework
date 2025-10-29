@@ -41,11 +41,22 @@ export default function UsersPage() {
             Add User
           </Button>
         </Box>
-        <UsersTable />
+        <UsersTable users={[]} onView={() => {}} onEdit={() => {}} onDelete={() => {}} />
         <Box mt={4}>
-          <RoleManagement />
+          <RoleManagement
+            roles={[]}
+            permissions={[]}
+            onAddRole={() => {}}
+            onEditRole={() => {}}
+            onDeleteRole={() => {}}
+          />
         </Box>
-        <UserFormDialog open={openDialog} onClose={() => setOpenDialog(false)} />
+        <UserFormDialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          onSubmit={() => {}}
+          mode="create"
+        />
       </Container>
     </ErrorBoundary>
   );

@@ -34,12 +34,12 @@ export default function SettingsPage() {
         <Grid container spacing={3}>
           <Grid item xs={12} md={6}>
             <Paper sx={{ p: 3 }}>
-              <SystemSettingsForm />
+              <SystemSettingsForm onSave={async (settings) => {}} />
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper sx={{ p: 3 }}>
-              <NotificationSettings />
+              <NotificationSettings onSave={async (settings) => {}} />
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -49,7 +49,7 @@ export default function SettingsPage() {
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper sx={{ p: 3 }}>
-              <BackupRestore />
+              <BackupRestore onBackup={async () => {}} onRestore={async (file) => {}} onDelete={async (id) => {}} />
             </Paper>
           </Grid>
         </Grid>

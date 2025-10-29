@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+// @ts-ignore - Agora SDK is optional and may not be installed
 import AgoraRTC, {
   IAgoraRTCClient,
   ICameraVideoTrack,
@@ -39,7 +40,7 @@ export const useAgoraVideoCall = ({ inspectionId, role }: UseAgoraVideoCallProps
         const client = AgoraRTC.createClient({ mode: 'rtc', codec: 'vp8' });
         clientRef.current = client;
 
-        client.on('user-published', async (user, mediaType) => {
+        client.on('user-published', async (user: any, mediaType: any) => {
           await client.subscribe(user, mediaType);
 
           setRemoteUsers(prev => {
@@ -58,7 +59,7 @@ export const useAgoraVideoCall = ({ inspectionId, role }: UseAgoraVideoCallProps
           });
         });
 
-        client.on('user-unpublished', (user, mediaType) => {
+        client.on('user-unpublished', (user: any, mediaType: any) => {
           setRemoteUsers(prev => {
             const newMap = new Map(prev);
             const userData = newMap.get(user.uid as number);
@@ -81,7 +82,7 @@ export const useAgoraVideoCall = ({ inspectionId, role }: UseAgoraVideoCallProps
           });
         });
 
-        client.on('user-left', user => {
+        client.on('user-left', (user: any) => {
           setRemoteUsers(prev => {
             const newMap = new Map(prev);
             newMap.delete(user.uid as number);

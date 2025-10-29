@@ -28,7 +28,7 @@ export default function ReportsPage() {
         <Typography variant="h4" gutterBottom>
           📊 Reports & Analytics
         </Typography>
-        <ReportGenerator />
+        <ReportGenerator onGenerate={() => {}} />
       </Container>
     </ErrorBoundary>
   );
