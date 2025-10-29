@@ -1,157 +1,105 @@
-# 🚀 GACP Platform - Quick Start Guide
+# 🚀 Quick Start Guide
 
-## สถานะปัจจุบัน
+## Development Mode (แนะนำสำหรับการพัฒนา)
 
-✅ **Backend Code:** 95% พร้อม (แก้ไข bugs แล้ว)  
-✅ **MongoDB Atlas:** Connected  
-✅ **Docker Config:** พร้อม  
-✅ **Terraform Config:** พร้อม  
-⏳ **AWS Deployment:** รอ prerequisites
-
----
-
-## ขั้นตอนที่เหลือ
-
-### 1. ติดตั้ง AWS CLI
-
-**Download:**
-```
-https://awscli.amazonaws.com/AWSCLIV2.msi
-```
-
-**ติดตั้งแล้ว ทดสอบ:**
-```powershell
-aws --version
-# Expected: aws-cli/2.x.x
-```
-
-**Configure:**
-```powershell
-aws configure
-```
-
-ใส่:
-- AWS Access Key ID: `[จาก AWS Console]`
-- AWS Secret Access Key: `[จาก AWS Console]`
-- Region: `ap-southeast-1`
-- Output: `json`
-
-**ทดสอบ:**
-```powershell
-aws sts get-caller-identity
-```
-
----
-
-### 2. ติดตั้ง Terraform
-
-**Download:**
-```
-https://www.terraform.io/downloads
-```
-
-**ทดสอบ:**
-```powershell
-terraform --version
-```
-
----
-
-### 3. ติดตั้ง Docker Desktop
-
-**Download:**
-```
-https://www.docker.com/products/docker-desktop
-```
-
-**เปิด Docker Desktop แล้วทดสอบ:**
-```powershell
-docker --version
-docker ps
-```
-
----
-
-### 4. Deploy to AWS
-
-**เมื่อติดตั้งครบทั้ง 3 ตัว:**
+### 1. Start Servers
 
 ```powershell
-# Run deployment script
-.\deploy.ps1
+.\start-dev-simple.ps1
 ```
 
-**หรือ Manual:**
+This will open 2 PowerShell windows:
+
+- **Backend** on port 5000
+- **Frontend** on port 3000
+
+### 2. Access Application
+
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- Health Check: http://localhost:5000/health
+
+### 3. Stop Servers
+
+Close both PowerShell windows or press `Ctrl+C` in each window.
+
+---
+
+## Production Mode (สำหรับ Production/Staging)
+
+### 1. Build Frontend (First Time Only)
+
 ```powershell
-# 1. Get Account ID
-$ACCOUNT_ID = aws sts get-caller-identity --query Account --output text
+cd apps/frontend
+pnpm build
+cd ..\..
+```
 
-# 2. Generate secrets
-$FARMER_SECRET = node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-$DTAM_SECRET = node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
+### 2. Start Production Servers
 
-# 3. Create ECR
-aws ecr create-repository --repository-name gacp-backend --region ap-southeast-1
+```powershell
+.\start-production.ps1
+```
 
-# 4. Build Docker
-cd apps\backend
-docker build -t gacp-backend .
+### 3. Monitor with PM2
 
-# 5. Login to ECR
-aws ecr get-login-password --region ap-southeast-1 | docker login --username AWS --password-stdin "$ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com"
+```powershell
+# View status
+pnpm exec pm2 status
 
-# 6. Push Docker
-docker tag gacp-backend:latest "$ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/gacp-backend:latest"
-docker push "$ACCOUNT_ID.dkr.ecr.ap-southeast-1.amazonaws.com/gacp-backend:latest"
+# View logs
+pnpm exec pm2 logs
 
-# 7. Deploy Terraform
-cd ..\..\infrastructure\aws
-terraform init
-terraform plan
-terraform apply
+# Restart all
+pnpm exec pm2 restart all
+
+# Stop all
+pnpm exec pm2 stop all
+```
+
+### 4. Stop Servers
+
+```powershell
+pnpm exec pm2 delete all
 ```
 
 ---
 
-## ⏱️ เวลาที่ใช้
+## Troubleshooting
 
-- Install prerequisites: 10 นาที
-- Deploy to AWS: 20 นาที
-- **รวม: 30 นาที**
+### Port Already in Use
 
----
+```powershell
+# Find and kill process
+netstat -ano | findstr ":3000"
+netstat -ano | findstr ":5000"
+Stop-Process -Id <PID> -Force
+```
 
-## 💰 ค่าใช้จ่าย
+### MongoDB Not Running
 
-- **ปีแรก:** $50-80/เดือน (Free Tier)
-- **หลังปีแรก:** $107-127/เดือน
+```powershell
+# Start MongoDB
+Start-Service MongoDB
 
----
+# Check status
+Get-Service | Where-Object { $_.DisplayName -like "*MongoDB*" }
+```
 
-## 📞 ติดปัญหา?
+### Check for Zombie Processes
 
-**ถ้า AWS CLI ไม่ติดตั้ง:**
-- Download: https://awscli.amazonaws.com/AWSCLIV2.msi
-- Restart PowerShell หลังติดตั้ง
-
-**ถ้าไม่มี AWS Account:**
-- สมัครที่: https://aws.amazon.com/free/
-- ใช้เวลา 5 นาที
-
-**ถ้า Docker ไม่ทำงาน:**
-- เปิด Docker Desktop
-- รอจน status เป็น "Running"
+```powershell
+.\monitor-zombies.ps1 -DurationMinutes 5
+```
 
 ---
 
-## 🎯 Next Steps
+## 📚 Full Documentation
 
-1. ✅ ติดตั้ง AWS CLI
-2. ✅ Configure AWS credentials
-3. ✅ ติดตั้ง Terraform
-4. ✅ ติดตั้ง Docker Desktop
-5. 🚀 Run `.\deploy.ps1`
+- [SERVER_MANAGEMENT_GUIDE.md](./SERVER_MANAGEMENT_GUIDE.md) - Complete server management guide
+- [PRODUCTION_FINAL_REPORT.md](./PRODUCTION_FINAL_REPORT.md) - Final production report
+- [PM2_GUIDE.md](./PM2_GUIDE.md) - PM2 detailed usage
 
 ---
 
-**พร้อมแล้ว?** รัน `.\deploy.ps1`
+**Note**: Always use `start-dev-simple.ps1` for development. Only use PM2 (`start-production.ps1`) for production builds!
