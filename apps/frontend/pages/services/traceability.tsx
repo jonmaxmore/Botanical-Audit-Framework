@@ -19,7 +19,7 @@ import {
 import {
   ArrowBack as ArrowBackIcon,
   QrCode as QrCodeIcon,
-  Eco as EcoIcon,
+  Nature as EcoIcon, // Use Nature instead of Eco
   LocalShipping as LocalShippingIcon,
   Store as StoreIcon,
   Person as PersonIcon

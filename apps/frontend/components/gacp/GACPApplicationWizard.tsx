@@ -55,7 +55,8 @@ import {
   AccountCircle,
   Business,
   LocationOn,
-  Eco,
+  // Eco, // Not available in this version
+  Nature, // Use Nature instead of Eco
   BugReport,
   Assignment,
   CloudUpload,
@@ -72,6 +73,7 @@ import {
 } from '@mui/icons-material';
 
 // Import AI Assistant System
+// @ts-expect-error - JavaScript module without type declarations
 import { GACPAIAssistantSystem } from '../../../business-logic/gacp-ai-assistant-system';
 
 // Application wizard steps configuration
@@ -101,7 +103,7 @@ const WIZARD_STEPS = [
     id: 'cultivation_plan',
     label: 'แผนการเพาะปลูก',
     title: 'รายละเอียดการเพาะปลูกและพันธุ์กัญชา',
-    icon: <Eco />,
+    icon: <Nature />,
     required: true
   },
   {

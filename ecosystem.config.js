@@ -54,9 +54,9 @@ module.exports = {
     {
       name: 'frontend',
       cwd: './apps/frontend',
-      script: 'pnpm',
-      args: 'start', // Production mode - 'next start'
-      interpreter: 'none',
+      script: 'node_modules/next/dist/bin/next',
+      args: 'start',
+      interpreter: 'node',
       instances: 1,
       exec_mode: 'fork',
 
