@@ -42,8 +42,16 @@ export function isExpired(date: Date): boolean {
  * @returns Days remaining (0 if expired)
  */
 export function getDaysUntilExpiry(expiryDate: Date): number {
-  const days = getDaysBetween(new Date(), expiryDate);
-  return Math.max(0, days);
+  const nowStart = startOfDay(new Date());
+  const expiryStart = startOfDay(expiryDate);
+  const diffMs = expiryStart.getTime() - nowStart.getTime();
+
+  if (diffMs <= 0) {
+    return 0;
+  }
+
+  // Round to smooth out DST transitions while preserving whole-day differences
+  return Math.round(diffMs / (1000 * 60 * 60 * 24));
 }
 
 /**
