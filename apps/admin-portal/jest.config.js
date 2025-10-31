@@ -48,6 +48,9 @@ const customJestConfig = {
   // Test match patterns
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
 
+  // Skip placeholder suites that intentionally have no assertions
+  testPathIgnorePatterns: ['<rootDir>/app/reports/__tests__/page.test.tsx'],
+
   // Transform ignore patterns
   transformIgnorePatterns: ['node_modules/(?!(qrcode|axios)/)'],
 

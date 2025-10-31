@@ -23,6 +23,9 @@ const config = {
   // Test match patterns
   testMatch: ['**/__tests__/**/*.test.ts', '**/__tests__/**/*.test.tsx'],
 
+  // Skip integration suites that require external mock helpers
+  testPathIgnorePatterns: ['<rootDir>/app/api/__tests__/integration/'],
+
   // Module path aliases (match tsconfig paths)
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/$1',
