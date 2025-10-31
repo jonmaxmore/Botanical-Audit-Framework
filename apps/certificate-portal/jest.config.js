@@ -52,10 +52,7 @@ const customJestConfig = {
   transformIgnorePatterns: ['node_modules/(?!(qrcode|axios)/)'],
 
   // Module file extensions
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-
-  // Verbose output
-  verbose: true
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node']
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

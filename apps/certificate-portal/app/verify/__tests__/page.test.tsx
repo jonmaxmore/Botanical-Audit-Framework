@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import VerifyPage from '../page';
 import QRCode from 'qrcode';
@@ -9,13 +9,21 @@ jest.mock('qrcode', () => ({
 }));
 
 describe('VerifyPage', () => {
+  const advanceVerificationTimers = async (duration = 1500) => {
+    await act(async () => {
+      jest.advanceTimersByTime(duration);
+    });
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
     jest.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
+    act(() => {
+      jest.runOnlyPendingTimers();
+    });
     jest.useRealTimers();
   });
 
@@ -176,7 +184,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('ใบรับรองถูกต้อง')).toBeInTheDocument();
@@ -192,7 +200,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('GACP-2025-0001')).toBeInTheDocument();
@@ -208,7 +216,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('สวนมะม่วงทองดี')).toBeInTheDocument();
@@ -225,7 +233,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(
@@ -243,7 +251,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('มะม่วง')).toBeInTheDocument();
@@ -260,7 +268,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         const statusChip = screen.getByText('ใช้งานได้');
@@ -278,7 +286,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('ออกให้')).toBeInTheDocument();
@@ -295,7 +303,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText(/ใบรับรองนี้ถูกต้องและยังคงใช้งานได้/)).toBeInTheDocument();
@@ -311,7 +319,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         const icon = document.querySelector('[data-testid="CheckCircleIcon"]');
@@ -330,7 +338,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('ไม่พบใบรับรอง')).toBeInTheDocument();
@@ -346,7 +354,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         const icon = document.querySelector('[data-testid="CancelIcon"]');
@@ -363,7 +371,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.queryByText('เกษตรกร')).not.toBeInTheDocument();
@@ -382,7 +390,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(QRCode.toCanvas).toHaveBeenCalled();
@@ -398,7 +406,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('QR Code ใบรับรอง')).toBeInTheDocument();
@@ -414,7 +422,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('สแกน QR Code เพื่อตรวจสอบใบรับรอง')).toBeInTheDocument();
@@ -430,7 +438,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(QRCode.toCanvas).toHaveBeenCalledWith(
@@ -455,7 +463,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(QRCode.toCanvas).not.toHaveBeenCalled();
@@ -482,7 +490,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.queryByText(/วิธีการใช้งาน:/)).not.toBeInTheDocument();
@@ -500,7 +508,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('ใช้งานได้')).toBeInTheDocument();
@@ -519,7 +527,7 @@ describe('VerifyPage', () => {
       let button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         expect(screen.getByText('ใบรับรองถูกต้อง')).toBeInTheDocument();
@@ -545,7 +553,7 @@ describe('VerifyPage', () => {
       const button = screen.getByRole('button', { name: /ตรวจสอบ/i });
       fireEvent.click(button);
 
-      jest.advanceTimersByTime(1500);
+      await advanceVerificationTimers();
 
       await waitFor(() => {
         const personIcon = document.querySelector('[data-testid="PersonIcon"]');

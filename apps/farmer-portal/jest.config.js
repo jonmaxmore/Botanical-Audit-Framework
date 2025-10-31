@@ -14,7 +14,6 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const config = {
-  coverageProvider: 'v8',
   testEnvironment: 'jsdom',
 
   // Setup files
@@ -73,8 +72,7 @@ const config = {
   // Ignore transform for these patterns
   transformIgnorePatterns: ['node_modules/(?!(@gacp)/)', '^.+\\.module\\.(css|sass|scss)$'],
 
-  // Verbose output
-  verbose: true
+  // Verbose output handled at root config
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

@@ -22,6 +22,12 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const logError = (...args: unknown[]) => {
+  if (process.env.NODE_ENV !== 'test') {
+    console.error(...args);
+  }
+};
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -43,7 +49,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(JSON.parse(storedUser));
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
+      logError('Auth check failed:', error);
       // Clear invalid data
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -103,7 +109,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       // Redirect to dashboard
       router.push('/dashboard');
     } catch (error) {
-      console.error('Login failed:', error);
+      logError('Login failed:', error);
       throw error;
     }
   };

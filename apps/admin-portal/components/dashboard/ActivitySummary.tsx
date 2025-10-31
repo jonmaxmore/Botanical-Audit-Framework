@@ -107,26 +107,35 @@ export default function ActivitySummary({ activities }: ActivitySummaryProps) {
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
+                    disableTypography
                     primary={
-                      <Typography variant="body2" fontWeight={500}>
+                      <Typography component="span" variant="body2" fontWeight={500}>
                         {activity.title}
                       </Typography>
                     }
                     secondary={
-                      <Box>
-                        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                      <Box component="span" sx={{ display: 'block' }}>
+                        <Typography
+                          component="span"
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ mt: 0.5, display: 'block' }}
+                        >
                           {activity.description}
                         </Typography>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 1 }}>
-                          <Typography variant="caption" color="text.secondary">
+                        <Box
+                          component="span"
+                          sx={{ display: 'inline-flex', alignItems: 'center', gap: 1, mt: 1 }}
+                        >
+                          <Typography component="span" variant="caption" color="text.secondary">
                             {formatTimeAgo(activity.time)}
                           </Typography>
                           {activity.user && (
                             <>
-                              <Typography variant="caption" color="text.secondary">
+                              <Typography component="span" variant="caption" color="text.secondary">
                                 •
                               </Typography>
-                              <Typography variant="caption" color="text.secondary">
+                              <Typography component="span" variant="caption" color="text.secondary">
                                 {activity.user}
                               </Typography>
                             </>

@@ -12,5 +12,7 @@ module.exports = {
     '<rootDir>/frontend-nextjs/playwright-report/'
   ],
   coverageDirectory: '<rootDir>/coverage',
-  collectCoverage: false
+  collectCoverage: false,
+  coverageProvider: 'v8',
+  verbose: true
 };
