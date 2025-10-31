@@ -15,10 +15,6 @@ import {
   Grid,
   Card,
   CardContent,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Avatar,
   Paper,
   TextField,
   MenuItem,
@@ -31,11 +27,12 @@ import {
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
-  Agriculture as AgricultureIcon,
-  Person as PersonIcon,
   Save as SaveIcon,
   Send as SendIcon
 } from '@mui/icons-material';
+import FarmerLayout from '../../../components/layout/FarmerLayout';
+import { useAuth } from '../../../contexts/AuthContext';
+import { UserRole } from '../../../types/user.types';
 
 // Types
 interface FarmerData {
@@ -99,6 +96,7 @@ const cropTypes = [
 
 export default function CreateApplicationPage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [activeStep, setActiveStep] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -134,25 +132,23 @@ export default function CreateApplicationPage() {
 
   // Load user data on mount
   useEffect(() => {
-    const userStr = localStorage.getItem('currentUser');
-    if (!userStr) {
-      router.push('/login?role=farmer');
+    if (!user || user.role !== UserRole.FARMER) {
       return;
     }
 
-    const user = JSON.parse(userStr);
-    setFarmerData({
+    setFarmerData(prev => ({
+      ...prev,
       fullName: user.fullName || '',
       email: user.email || '',
-      phoneNumber: user.phoneNumber || '',
-      nationalId: user.nationalId || '',
+      phoneNumber: user.phone || '',
+      nationalId: user.idCardNumber || '',
       address: user.address || '',
       province: user.province || '',
       district: user.district || '',
       subdistrict: user.subdistrict || '',
       postalCode: user.postalCode || ''
-    });
-  }, [router]);
+    }));
+  }, [user]);
 
   const handleNext = () => {
     // Validate current step
@@ -199,7 +195,7 @@ export default function CreateApplicationPage() {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       const response = await fetch('http://localhost:5000/api/applications', {
         method: 'POST',
         headers: {
@@ -217,7 +213,7 @@ export default function CreateApplicationPage() {
         throw new Error('ไม่สามารถบันทึกแบบร่างได้');
       }
 
-      const data = await response.json();
+      await response.json();
       setSuccess('บันทึกแบบร่างสำเร็จ');
 
       setTimeout(() => {
@@ -235,7 +231,7 @@ export default function CreateApplicationPage() {
     setError('');
 
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       const response = await fetch('http://localhost:5000/api/applications', {
         method: 'POST',
         headers: {
@@ -254,7 +250,7 @@ export default function CreateApplicationPage() {
         throw new Error(errorData.message || 'ไม่สามารถส่งคำขอได้');
       }
 
-      const data = await response.json();
+      await response.json();
       setSuccess('ส่งคำขอสำเร็จ! กำลังเปลี่ยนหน้า...');
 
       setTimeout(() => {
@@ -447,31 +443,6 @@ export default function CreateApplicationPage() {
                 inputProps={{ maxLength: 5 }}
               />
             </Grid>
-            <Grid item xs={12} md={4}>
-              <TextField
-                fullWidth
-                required
-                type="number"
-                label="ขนาดพื้นที่"
-                value={farmData.farmSize}
-                onChange={e => setFarmData({ ...farmData, farmSize: e.target.value })}
-                inputProps={{ min: 0, step: 0.01 }}
-              />
-            </Grid>
-            <Grid item xs={12} md={2}>
-              <TextField
-                fullWidth
-                select
-                label="หน่วย"
-                value={farmData.farmSizeUnit}
-                onChange={e => setFarmData({ ...farmData, farmSizeUnit: e.target.value })}
-              >
-                <MenuItem value="ไร่">ไร่</MenuItem>
-                <MenuItem value="งาน">งาน</MenuItem>
-                <MenuItem value="ตารางวา">ตารางวา</MenuItem>
-                <MenuItem value="เฮกตาร์">เฮกตาร์</MenuItem>
-              </TextField>
-            </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -633,92 +604,101 @@ export default function CreateApplicationPage() {
         <title>สร้างคำขอรับรอง GACP | ระบบเกษตรกร</title>
       </Head>
 
-      <AppBar position="sticky" sx={{ backgroundColor: '#2e7d32' }}>
-        <Toolbar>
-          <IconButton edge="start" color="inherit" onClick={() => router.push('/farmer/dashboard')}>
-            <ArrowBackIcon />
-          </IconButton>
-          <AgricultureIcon sx={{ mr: 2 }} />
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            สร้างคำขอรับรอง GACP
-          </Typography>
-          <IconButton color="inherit">
-            <Avatar sx={{ bgcolor: '#1b5e20' }}>
-              <PersonIcon />
-            </Avatar>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
+      <FarmerLayout>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', sm: 'row' },
+              alignItems: { xs: 'flex-start', sm: 'center' },
+              justifyContent: 'space-between',
+              gap: 2,
+              mb: 3
+            }}
+          >
+            <Button
+              variant="text"
+              startIcon={<ArrowBackIcon />}
+              onClick={() => router.push('/farmer/dashboard')}
+            >
+              กลับสู่แดชบอร์ด
+            </Button>
+            <Typography variant="h4" fontWeight={700}>
+              สร้างคำขอรับรอง GACP
+            </Typography>
+          </Box>
 
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Card sx={{ mb: 3 }}>
-          <CardContent sx={{ p: 4 }}>
-            <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
-              {steps.map(label => (
-                <Step key={label}>
-                  <StepLabel>{label}</StepLabel>
-                </Step>
-              ))}
-            </Stepper>
+          <Card sx={{ mb: 3 }}>
+            <CardContent sx={{ p: 4 }}>
+              <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
+                {steps.map(label => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
 
-            {error && (
-              <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError('')}>
-                {error}
-              </Alert>
-            )}
+              {error && (
+                <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError('')}>
+                  {error}
+                </Alert>
+              )}
 
-            {success && (
-              <Alert severity="success" sx={{ mb: 3 }}>
-                {success}
-              </Alert>
-            )}
+              {success && (
+                <Alert severity="success" sx={{ mb: 3 }}>
+                  {success}
+                </Alert>
+              )}
 
-            <Box sx={{ minHeight: 400 }}>{renderStepContent(activeStep)}</Box>
+              <Box sx={{ minHeight: 400 }}>{renderStepContent(activeStep)}</Box>
 
-            <Divider sx={{ my: 3 }} />
+              <Divider sx={{ my: 3 }} />
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Button
-                disabled={activeStep === 0}
-                onClick={handleBack}
-                sx={{ mr: 1 }}
-                variant="outlined"
+              <Box
+                sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 2 }}
               >
-                ย้อนกลับ
-              </Button>
+                <Button
+                  disabled={activeStep === 0}
+                  onClick={handleBack}
+                  sx={{ mr: { sm: 1 } }}
+                  variant="outlined"
+                >
+                  ย้อนกลับ
+                </Button>
 
-              <Box sx={{ display: 'flex', gap: 2 }}>
-                {activeStep === steps.length - 1 && (
-                  <Button
-                    variant="outlined"
-                    startIcon={<SaveIcon />}
-                    onClick={handleSaveDraft}
-                    disabled={loading}
-                  >
-                    บันทึกแบบร่าง
-                  </Button>
-                )}
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  {activeStep === steps.length - 1 && (
+                    <Button
+                      variant="outlined"
+                      startIcon={<SaveIcon />}
+                      onClick={handleSaveDraft}
+                      disabled={loading}
+                    >
+                      บันทึกแบบร่าง
+                    </Button>
+                  )}
 
-                {activeStep === steps.length - 1 ? (
-                  <Button
-                    variant="contained"
-                    onClick={handleSubmit}
-                    disabled={loading}
-                    startIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
-                    sx={{ bgcolor: '#2e7d32' }}
-                  >
-                    {loading ? 'กำลังส่ง...' : 'ส่งคำขอ'}
-                  </Button>
-                ) : (
-                  <Button variant="contained" onClick={handleNext} sx={{ bgcolor: '#2e7d32' }}>
-                    ถัดไป
-                  </Button>
-                )}
+                  {activeStep === steps.length - 1 ? (
+                    <Button
+                      variant="contained"
+                      onClick={handleSubmit}
+                      disabled={loading}
+                      startIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
+                      sx={{ bgcolor: '#2e7d32' }}
+                    >
+                      {loading ? 'กำลังส่ง...' : 'ส่งคำขอ'}
+                    </Button>
+                  ) : (
+                    <Button variant="contained" onClick={handleNext} sx={{ bgcolor: '#2e7d32' }}>
+                      ถัดไป
+                    </Button>
+                  )}
+                </Box>
               </Box>
-            </Box>
-          </CardContent>
-        </Card>
-      </Container>
+            </CardContent>
+          </Card>
+        </Container>
+      </FarmerLayout>
     </>
   );
 }

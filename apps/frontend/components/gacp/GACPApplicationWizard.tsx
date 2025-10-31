@@ -11,7 +11,7 @@
  * 3. นิติบุคคล (Juristic Person)
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Box,
   Card,
@@ -49,8 +49,6 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  Tooltip,
-  IconButton,
   Snackbar
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
@@ -66,20 +64,16 @@ import {
   Assignment,
   CloudUpload,
   CheckCircle,
-  Warning,
-  Info,
   Error,
   ExpandMore,
-  Help,
   Description,
-  Verified,
-  Schedule,
-  MonetizationOn
+  Verified
 } from '@mui/icons-material';
 
 // Import AI Assistant System
 // @ts-expect-error - JavaScript module without type declarations
 import { GACPAIAssistantSystem } from '../../../business-logic/gacp-ai-assistant-system';
+import { createLogger } from '../../lib/logger';
 
 // Application wizard steps configuration
 const WIZARD_STEPS = [
@@ -183,6 +177,7 @@ const HiddenFileInput = styled('input')({
 });
 
 const GACPApplicationWizard = () => {
+  const wizardLogger = useMemo(() => createLogger('gacp-application-wizard'), []);
   // State management
   const [activeStep, setActiveStep] = useState(0);
   const [formData, setFormData] = useState({});
@@ -272,11 +267,11 @@ const GACPApplicationWizard = () => {
             }));
           }
         } catch (error) {
-          console.error('AI validation error:', error);
+          wizardLogger.error('AI validation error:', error);
         }
       }
     },
-    [aiAssistant, formData]
+    [aiAssistant, formData, wizardLogger]
   );
 
   // Handle document upload with AI processing
@@ -297,7 +292,7 @@ const GACPApplicationWizard = () => {
         }));
       }
     } catch (error) {
-      console.error('Document processing error:', error);
+      wizardLogger.error('Document processing error:', error);
     } finally {
       setIsProcessing(false);
     }
@@ -404,7 +399,7 @@ const GACPApplicationWizard = () => {
         throw new Error('Failed to submit application');
       }
     } catch (error) {
-      console.error('Submission error:', error);
+      wizardLogger.error('Submission error:', error);
       showFeedback('เกิดข้อผิดพลาดในการส่งคำขอ กรุณาลองใหม่อีกครั้ง', 'error');
     } finally {
       setIsProcessing(false);
@@ -416,12 +411,7 @@ const GACPApplicationWizard = () => {
     switch (stepId) {
       case 'applicant_type':
         return (
-          <ApplicantTypeStep
-            formData={formData}
-            onChange={handleFieldChange}
-            errors={errors}
-            aiGuidance={aiGuidance}
-          />
+          <ApplicantTypeStep formData={formData} onChange={handleFieldChange} errors={errors} />
         );
 
       case 'applicant_info':
@@ -431,7 +421,6 @@ const GACPApplicationWizard = () => {
             onChange={handleFieldChange}
             errors={errors}
             validationResults={validationResults}
-            aiGuidance={aiGuidance}
           />
         );
 
@@ -442,7 +431,6 @@ const GACPApplicationWizard = () => {
             onChange={handleFieldChange}
             errors={errors}
             validationResults={validationResults}
-            aiGuidance={aiGuidance}
           />
         );
 
@@ -453,28 +441,18 @@ const GACPApplicationWizard = () => {
             onChange={handleFieldChange}
             errors={errors}
             validationResults={validationResults}
-            aiGuidance={aiGuidance}
           />
         );
 
       case 'pest_control':
-        return (
-          <PestControlStep
-            formData={formData}
-            onChange={handleFieldChange}
-            errors={errors}
-            aiGuidance={aiGuidance}
-          />
-        );
+        return <PestControlStep formData={formData} onChange={handleFieldChange} errors={errors} />;
 
       case 'documents':
         return (
           <DocumentsStep
             formData={formData}
-            onChange={handleFieldChange}
             onDocumentUpload={handleDocumentUpload}
             isProcessing={isProcessing}
-            aiGuidance={aiGuidance}
           />
         );
 
@@ -533,7 +511,7 @@ const GACPApplicationWizard = () => {
               </Typography>
 
               <Stepper activeStep={activeStep} orientation="vertical">
-                {WIZARD_STEPS.map((step, index) => (
+                {WIZARD_STEPS.map(step => (
                   <Step key={step.id}>
                     <StepLabel icon={step.icon} error={errors[step.id]}>
                       <Typography variant="body2" fontWeight="medium">
@@ -634,7 +612,7 @@ const GACPApplicationWizard = () => {
 
 // Step Components
 
-const ApplicantTypeStep = ({ formData, onChange, errors, aiGuidance }) => (
+const ApplicantTypeStep = ({ formData, onChange, errors }) => (
   <Box>
     <FormControl component="fieldset" fullWidth>
       <FormLabel component="legend">เลือกประเภทผู้ยื่นขอใบรับรอง *</FormLabel>
@@ -779,7 +757,7 @@ const ApplicantInfoStep = ({ formData, onChange, errors, validationResults }) =>
   </Grid>
 );
 
-const LandInfoStep = ({ formData, onChange, errors, validationResults, aiGuidance }) => (
+const LandInfoStep = ({ formData, onChange, errors, validationResults }) => (
   <Grid container spacing={3}>
     <Grid item xs={12}>
       <Typography variant="h6" gutterBottom>
@@ -852,7 +830,7 @@ const LandInfoStep = ({ formData, onChange, errors, validationResults, aiGuidanc
   </Grid>
 );
 
-const CultivationPlanStep = ({ formData, onChange, errors, validationResults, aiGuidance }) => (
+const CultivationPlanStep = ({ formData, onChange, errors, validationResults }) => (
   <Grid container spacing={3}>
     <Grid item xs={12}>
       <Typography variant="h6" gutterBottom>
@@ -943,7 +921,7 @@ const CultivationPlanStep = ({ formData, onChange, errors, validationResults, ai
   </Grid>
 );
 
-const PestControlStep = ({ formData, onChange, errors, aiGuidance }) => (
+const PestControlStep = ({ formData, onChange, errors }) => (
   <Grid container spacing={3}>
     <Grid item xs={12}>
       <Typography variant="h6" gutterBottom>
@@ -997,7 +975,7 @@ const PestControlStep = ({ formData, onChange, errors, aiGuidance }) => (
   </Grid>
 );
 
-const DocumentsStep = ({ formData, onChange, onDocumentUpload, isProcessing, aiGuidance }) => {
+const DocumentsStep = ({ formData, onDocumentUpload, isProcessing }) => {
   const applicantType = formData.applicant_type;
   const requiredDocs = applicantType ? APPLICANT_TYPES[applicantType].requiredDocuments : [];
 

@@ -5,9 +5,12 @@ const express = require('express');
 const path = require('path');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 const fs = require('fs');
+const { createLogger } = require('../backend/shared/logger');
 
 const app = express();
 const PORT = process.env.PORT || 3000; // Frontend runs on port 3000
+
+const logger = createLogger('frontend-server');
 
 // Check if we're in development or production
 const isDev = process.env.NODE_ENV !== 'production';
@@ -20,7 +23,7 @@ const hasBuildFolder = fs.existsSync(buildPath);
 
 // For development mode - proxy API requests to backend
 if (isDev) {
-  console.log('🚀 Starting frontend development server with API proxy...');
+  logger.info('🚀 Starting frontend development server with API proxy...');
 
   // Proxy API requests to the backend
   app.use(
@@ -69,7 +72,7 @@ if (isDev) {
 }
 // For production mode - serve static files from build folder
 else if (hasBuildFolder) {
-  console.log('🚀 Starting frontend server in production mode...');
+  logger.info('🚀 Starting frontend server in production mode...');
 
   // Serve static files from the build folder
   app.use(express.static(buildPath));
@@ -81,7 +84,7 @@ else if (hasBuildFolder) {
 }
 // No build folder found
 else {
-  console.error('❌ Error: Build folder not found for production mode');
+  logger.error('❌ Error: Build folder not found for production mode');
   app.get('*', (req, res) => {
     res.status(500).send('Error: Production build not found. Run "npm run build" first.');
   });
@@ -89,5 +92,5 @@ else {
 
 // Start server
 app.listen(PORT, () => {
-  console.log(`Frontend server running on http://localhost:${PORT}`);
+  logger.info(`Frontend server running on http://localhost:${PORT}`);
 });

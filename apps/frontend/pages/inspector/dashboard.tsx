@@ -18,11 +18,9 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Chip,
   Avatar,
   Menu,
   MenuItem,
-  Button,
   Tabs,
   Tab
 } from '@mui/material';
@@ -35,8 +33,6 @@ import {
   Cancel as CancelIcon
 } from '@mui/icons-material';
 import { Inspector } from '../../types/user.types';
-import { ApplicationStatus } from '../../types/application.types';
-import { WorkflowService } from '../../lib/workflow.service';
 
 export default function InspectorDashboard() {
   const router = useRouter();

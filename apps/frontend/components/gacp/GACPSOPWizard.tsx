@@ -13,7 +13,7 @@
  * - Progress Tracking
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Image from 'next/image';
 import {
   Box,
@@ -30,24 +30,12 @@ import {
   AlertTitle,
   Chip,
   LinearProgress,
-  Paper,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   TextField,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   IconButton,
-  Badge,
-  Tooltip,
   Fab,
   Accordion,
   AccordionSummary,
@@ -55,6 +43,7 @@ import {
   Snackbar
 } from '@mui/material';
 import type { AlertColor } from '@mui/material';
+import { createLogger } from '../../lib/logger';
 
 import {
   Eco,
@@ -63,13 +52,8 @@ import {
   Agriculture,
   Inventory,
   PhotoCamera,
-  GpsFixed,
   CheckCircle,
-  Warning,
-  Info,
-  TrendingUp,
   Assignment,
-  LocationOn,
   Timer,
   Add,
   ExpandMore,
@@ -126,9 +110,14 @@ const SOP_PHASES = [
 
 const PHOTO_PREVIEW_CLASS = 'gacp-sop-photo-preview';
 
-const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }) => {
+const GACPSOPWizard = ({
+  farmId,
+  cultivationCycleId,
+  userId,
+  onSessionComplete: _onSessionComplete
+}) => {
+  const sopLogger = useMemo(() => createLogger('gacp-sop-wizard'), []);
   // State Management
-  const [activePhase, setActivePhase] = useState(0);
   const [sopSession, setSOPSession] = useState(null);
   const [sessionProgress, setSessionProgress] = useState(null);
   const [availableActivities, setAvailableActivities] = useState([]);
@@ -137,11 +126,9 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
   const [activityData, setActivityData] = useState({});
   const [photos, setPhotos] = useState([]);
   const [gpsLocation, setGPSLocation] = useState(null);
-  const [aiGuidance, setAIGuidance] = useState([]);
-  const [complianceScore, setComplianceScore] = useState(0);
+  const [aiGuidance] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const [showActivityDialog, setShowActivityDialog] = useState(false);
-  const [errors, setErrors] = useState({});
   const [feedback, setFeedback] = useState<{ message: string; severity: AlertColor } | null>(null);
   const showFeedback = (message: string, severity: AlertColor = 'info') => {
     setFeedback({ message, severity });
@@ -154,8 +141,16 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
   };
 
   // System Instances
-  const [sopSystem, setSOPSystem] = useState(null);
-  const [aiAssistant, setAIAssistant] = useState(null);
+  const sopSystemRef = useRef(null);
+  const aiAssistantRef = useRef(null);
+
+  const activePhaseIndex = useMemo(() => {
+    if (!sessionProgress?.session?.currentPhase) {
+      return 0;
+    }
+    const index = SOP_PHASES.findIndex(phase => phase.id === sessionProgress.session.currentPhase);
+    return index >= 0 ? index : 0;
+  }, [sessionProgress]);
 
   // Initialize systems
   useEffect(() => {
@@ -163,11 +158,11 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
       try {
         // Initialize SOP Wizard System
         const sop = new GACPSOPWizardSystem(null); // DB will be injected via API
-        setSOPSystem(sop);
+        sopSystemRef.current = sop;
 
         // Initialize AI Assistant
         const ai = new GACPAIAssistantSystem();
-        setAIAssistant(ai);
+        aiAssistantRef.current = ai;
 
         // Start SOP Session
         const sessionResult = await fetch('/api/sop/sessions', {
@@ -187,14 +182,14 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
           loadSessionProgressRef.current(session.id);
         }
       } catch (error) {
-        console.error('Error initializing SOP systems:', error);
+        sopLogger.error('Error initializing SOP systems:', error);
       }
     };
 
     if (farmId && cultivationCycleId && userId) {
       initializeSystems();
     }
-  }, [farmId, cultivationCycleId, userId]);
+  }, [farmId, cultivationCycleId, sopLogger, userId]);
 
   // Get GPS location
   useEffect(() => {
@@ -207,10 +202,10 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
             accuracy: position.coords.accuracy
           });
         },
-        error => console.warn('GPS not available:', error)
+        error => sopLogger.warn('GPS not available:', error)
       );
     }
-  }, []);
+  }, [sopLogger]);
 
   // Load session progress
   const loadSessionProgress = async sessionId => {
@@ -222,7 +217,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
         updateAvailableActivities(progress.session.currentPhase);
       }
     } catch (error) {
-      console.error('Error loading progress:', error);
+      sopLogger.error('Error loading progress:', error);
     }
   };
 
@@ -319,7 +314,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
         throw new Error('Failed to record activity');
       }
     } catch (error) {
-      console.error('Error recording activity:', error);
+      sopLogger.error('Error recording activity:', error);
       showFeedback('เกิดข้อผิดพลาดในการบันทึกกิจกรรม', 'error');
     } finally {
       setIsRecording(false);
@@ -429,7 +424,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
               ข้อมูลที่จำเป็น
             </Typography>
 
-            {currentActivity.requiredFields?.map((field, index) => (
+            {currentActivity.requiredFields?.map(field => (
               <TextField
                 key={field}
                 fullWidth
@@ -592,8 +587,8 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
                 ขั้นตอนการดำเนินงาน
               </Typography>
 
-              <Stepper activeStep={activePhase} orientation="vertical">
-                {SOP_PHASES.map((phase, index) => (
+              <Stepper activeStep={activePhaseIndex} orientation="vertical">
+                {SOP_PHASES.map(phase => (
                   <Step key={phase.id}>
                     <StepLabel
                       icon={
@@ -647,10 +642,10 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
           <Card>
             <CardContent>
               <Typography variant="h5" gutterBottom>
-                {SOP_PHASES[activePhase]?.name}
+                {SOP_PHASES[activePhaseIndex]?.name}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-                {SOP_PHASES[activePhase]?.description}
+                {SOP_PHASES[activePhaseIndex]?.description}
               </Typography>
 
               {/* Available Activities */}
@@ -712,7 +707,7 @@ const GACPSOPWizard = ({ farmId, cultivationCycleId, userId, onSessionComplete }
         sx={{ position: 'fixed', bottom: 20, right: 20 }}
         onClick={() => {
           // Show quick actions menu
-          console.log('Quick actions menu');
+          sopLogger.info('Quick actions menu opened');
         }}
       >
         <Analytics />

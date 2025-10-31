@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { createLogger } from '../../lib/logger';
 
 // Create axios instance with defaults
 const api = axios.create({
@@ -8,6 +9,8 @@ const api = axios.create({
     'Content-Type': 'application/json'
   }
 });
+
+const networkLogger = createLogger('api-client');
 
 // Request interceptor for auth tokens, etc
 api.interceptors.request.use(
@@ -76,7 +79,7 @@ const apiClient = {
     try {
       return await api.get(url, config);
     } catch (error) {
-      console.error(`GET ${url} failed:`, error);
+      networkLogger.error(`GET ${url} failed:`, error);
       throw error;
     }
   },
@@ -91,7 +94,7 @@ const apiClient = {
         this.storeOfflineAction('post', url, data);
       }
 
-      console.error(`POST ${url} failed:`, error);
+      networkLogger.error(`POST ${url} failed:`, error);
       throw error;
     }
   },
@@ -104,7 +107,7 @@ const apiClient = {
       if (error.message.includes('Network Error')) {
         this.storeOfflineAction('put', url, data);
       }
-      console.error(`PUT ${url} failed:`, error);
+      networkLogger.error(`PUT ${url} failed:`, error);
       throw error;
     }
   },
@@ -119,7 +122,7 @@ const apiClient = {
       timestamp: new Date().toISOString()
     });
     localStorage.setItem('offline_actions', JSON.stringify(offlineActions));
-    console.log('Action stored for offline use');
+    networkLogger.info('Action stored for offline use');
   },
 
   // Try to sync offline actions
@@ -130,16 +133,16 @@ const apiClient = {
       return 0;
     }
 
-    console.log(`Attempting to sync ${offlineActions.length} offline actions`);
+    networkLogger.info(`Attempting to sync ${offlineActions.length} offline actions`);
 
     const syncResults = await Promise.all(
       offlineActions.map(async action => {
         try {
           await api[action.method](action.url, action.data);
-          console.log(`Successfully synced: ${action.method} ${action.url}`);
+          networkLogger.info(`Successfully synced: ${action.method} ${action.url}`);
           return action;
         } catch (error) {
-          console.error(`Failed to sync: ${action.method} ${action.url}`, error);
+          networkLogger.error(`Failed to sync: ${action.method} ${action.url}`, error);
           return null;
         }
       })
@@ -166,7 +169,7 @@ const apiClient = {
 // Add auto sync on online event
 if (typeof window !== 'undefined') {
   window.addEventListener('online', () => {
-    console.log('Back online, attempting to sync');
+    networkLogger.info('Back online, attempting to sync');
     apiClient.syncOfflineActions();
   });
 }

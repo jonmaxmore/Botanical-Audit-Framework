@@ -25,13 +25,11 @@ import {
   IconButton,
   Button,
   Alert,
-  AlertTitle,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Divider,
-  Paper,
   Table,
   TableBody,
   TableCell,
@@ -39,33 +37,29 @@ import {
   TableHead,
   TableRow,
   Badge,
-  Tooltip,
   CircularProgress,
   Fab
 } from '@mui/material';
 
 import {
-  Dashboard,
   Agriculture,
   Assignment,
   Verified,
   Analytics,
-  TrendingUp,
   Warning,
   CheckCircle,
-  Schedule,
   Star,
   Refresh,
   Notifications,
-  Settings,
   ArrowUpward,
-  ArrowDownward,
   MoreVert,
   Add,
   Visibility,
   Edit,
   Assessment
 } from '@mui/icons-material';
+
+import { createLogger } from '../../lib/logger';
 
 // Type definitions for dashboard data
 interface DashboardData {
@@ -101,13 +95,14 @@ interface DashboardProps {
   role?: string;
 }
 
-const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'farmer' }) => {
+const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role: _role = 'farmer' }) => {
   // State Management
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [selectedTimeRange, setSelectedTimeRange] = useState('30days');
+  const [selectedTimeRange] = useState('30days');
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const dashboardLogger = createLogger('gacp-production-dashboard');
 
   // Colors for charts
   const CHART_COLORS = {
@@ -141,12 +136,12 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         lastUpdated: new Date()
       });
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
+      dashboardLogger.error('Error loading dashboard data:', error);
     } finally {
       setLoading(false);
       setIsRefreshing(false);
     }
-  }, [selectedTimeRange, userId]);
+  }, [dashboardLogger, selectedTimeRange, userId]);
 
   const loadNotifications = useCallback(async () => {
     try {
@@ -156,9 +151,9 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
         setNotifications(data.notifications || []);
       }
     } catch (error) {
-      console.error('Error loading notifications:', error);
+      dashboardLogger.error('Error loading notifications:', error);
     }
-  }, [userId]);
+  }, [dashboardLogger, userId]);
 
   useEffect(() => {
     loadDashboardData();
@@ -635,7 +630,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
       <Fab
         color="primary"
         sx={{ position: 'fixed', bottom: 20, right: 20 }}
-        onClick={() => console.log('Quick actions')}
+        onClick={() => dashboardLogger.info('Quick actions triggered')}
       >
         <Assessment />
       </Fab>

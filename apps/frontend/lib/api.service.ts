@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { createLogger } from './logger';
 
 // API base configuration
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
@@ -10,6 +11,8 @@ const apiClient = axios.create({
     'Content-Type': 'application/json'
   }
 });
+
+const serviceLogger = createLogger('api-service');
 
 // Request interceptor - add auth token to all requests
 apiClient.interceptors.request.use(
@@ -40,7 +43,7 @@ apiClient.interceptors.response.use(
 
     // Network errors
     if (!error.response) {
-      console.error('Network Error:', error.message);
+      serviceLogger.error('Network Error:', error.message);
     }
 
     return Promise.reject(error);

@@ -1,6 +1,9 @@
 import { GACPApplication, ApplicationStatus, WorkflowHistory } from '../types/application.types';
 import { UserRole } from '../types/user.types';
+import { createLogger } from './logger';
 import { WorkflowService } from './workflow.service';
+
+const applicationLogger = createLogger('application-service');
 
 export class ApplicationService {
   private static STORAGE_KEY = 'gacp_applications';
@@ -101,12 +104,12 @@ export class ApplicationService {
 
     // ตรวจสอบ workflow
     if (!WorkflowService.canTransition(app.status, newStatus)) {
-      console.error('Invalid workflow transition');
+      applicationLogger.error('Invalid workflow transition');
       return false;
     }
 
     if (!WorkflowService.hasPermission(performedByRole, newStatus)) {
-      console.error('User does not have permission');
+      applicationLogger.error('User does not have permission');
       return false;
     }
 

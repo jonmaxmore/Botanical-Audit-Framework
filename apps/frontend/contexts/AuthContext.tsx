@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useCallback, use
 import { useRouter } from 'next/router';
 import { AuthService } from '../lib/auth.service';
 import { UserApi } from '../lib/api.service';
+import { createLogger } from '../lib/logger';
 import { User, UserRole } from '../types/user.types';
 
 interface AuthContextType {
@@ -35,6 +36,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const authLogger = useMemo(() => createLogger('auth-context'), []);
 
   // ตรวจสอบว่ามีผู้ใช้ที่เข้าสู่ระบบอยู่แล้วหรือไม่
   useEffect(() => {
@@ -48,7 +50,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         }
       } catch (err: any) {
         // Silent fail - don't show error on initial load
-        console.log('Could not load user data:', err?.message || 'Network error');
+        authLogger.warn('Could not load user data:', err?.message || 'Network error');
         // Clear invalid tokens
         if (err?.response?.status === 401) {
           AuthService.logout();
@@ -59,7 +61,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
 
     initAuth();
-  }, []);
+  }, [authLogger]);
 
   // เข้าสู่ระบบ
   const login = useCallback(async (username: string, password: string): Promise<boolean> => {
@@ -96,11 +98,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const userData = (await UserApi.getCurrentUser()) as User;
       setUser(userData);
     } catch (err) {
-      console.error('Failed to refresh user data:', err);
+      authLogger.error('Failed to refresh user data:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [authLogger]);
 
   // ตรวจสอบบทบาท
   const hasRole = useCallback((role: UserRole): boolean => !!user && user.role === role, [user]);

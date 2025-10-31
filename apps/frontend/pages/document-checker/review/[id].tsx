@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import {
@@ -6,8 +6,6 @@ import {
   Container,
   Typography,
   Grid,
-  Card,
-  CardContent,
   AppBar,
   Toolbar,
   IconButton,
@@ -21,12 +19,6 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   List,
   ListItem,
   ListItemIcon,
@@ -46,8 +38,9 @@ import {
   LocationOn as LocationOnIcon
 } from '@mui/icons-material';
 import { ApplicationApi } from '../../../lib/api.service';
-import { GACPApplication, ApplicationStatus } from '../../../types/application.types';
 import { WorkflowService } from '../../../lib/workflow.service';
+import { GACPApplication, ApplicationStatus } from '../../../types/application.types';
+import { createLogger } from '../../../lib/logger';
 
 export default function DocumentReviewPage() {
   const router = useRouter();
@@ -69,6 +62,7 @@ export default function DocumentReviewPage() {
     photos: false
   });
   const [feedback, setFeedback] = useState<{ message: string; severity: AlertColor } | null>(null);
+  const reviewLogger = useMemo(() => createLogger('document-review'), []);
 
   const showFeedback = (message: string, severity: AlertColor = 'info') => {
     setFeedback({ message, severity });
@@ -90,12 +84,12 @@ export default function DocumentReviewPage() {
       };
       setApplication(data.data.application);
     } catch (err: any) {
-      console.error('Error loading application:', err);
+      reviewLogger.error('Error loading application:', err);
       setError(err.message || 'ไม่สามารถโหลดข้อมูลคำขอได้');
     } finally {
       setLoading(false);
     }
-  }, [id]);
+  }, [id, reviewLogger]);
 
   useEffect(() => {
     if (id) {
@@ -143,7 +137,7 @@ export default function DocumentReviewPage() {
       showFeedback('บันทึกผลการตรวจสอบเรียบร้อยแล้ว', 'success');
       router.push('/document-checker/dashboard');
     } catch (err: any) {
-      console.error('Error submitting review:', err);
+      reviewLogger.error('Error submitting review:', err);
       showFeedback(err.message || 'ไม่สามารถบันทึกผลการตรวจสอบได้', 'error');
     } finally {
       setSubmitting(false);
@@ -421,7 +415,7 @@ export default function DocumentReviewPage() {
           <Alert onClose={handleFeedbackClose} severity={feedback.severity} sx={{ width: '100%' }}>
             {feedback.message}
           </Alert>
-        ) : null}
+        ) : undefined}
       </Snackbar>
     </>
   );

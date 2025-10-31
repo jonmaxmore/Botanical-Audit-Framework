@@ -9,11 +9,6 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   AppBar,
   Toolbar
 } from '@mui/material';

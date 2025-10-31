@@ -18,11 +18,9 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Chip,
   Avatar,
   Menu,
   MenuItem,
-  Button,
   Tabs,
   Tab
 } from '@mui/material';
@@ -35,7 +33,6 @@ import {
   HourglassEmpty as HourglassEmptyIcon
 } from '@mui/icons-material';
 import { Approver } from '../../types/user.types';
-import { WorkflowService } from '../../lib/workflow.service';
 
 export default function ApproverDashboard() {
   const router = useRouter();
