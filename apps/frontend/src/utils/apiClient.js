@@ -13,10 +13,17 @@ const api = axios.create({
 api.interceptors.request.use(
   config => {
     const token = localStorage.getItem('auth_token');
-    if (token) {
-      config.headers['Authorization'] = `Bearer ${token}`;
+    if (!token) {
+      return config;
     }
-    return config;
+
+    return {
+      ...config,
+      headers: {
+        ...config.headers,
+        Authorization: `Bearer ${token}`
+      }
+    };
   },
   error => Promise.reject(error)
 );
@@ -28,25 +35,30 @@ api.interceptors.response.use(
     const originalRequest = error.config;
 
     // Network error handling with automatic retry
-    if (error.message.includes('Network Error') && !originalRequest._retry) {
-      originalRequest._retry = true;
+    const retryAttempt = originalRequest.retryAttempt || 0;
+
+    if (error.message.includes('Network Error') && retryAttempt === 0) {
+      const retryRequest = {
+        ...originalRequest,
+        retryAttempt: retryAttempt + 1
+      };
 
       // Wait 2 seconds and retry
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      return api(originalRequest);
+      await new Promise(resolve => {
+        setTimeout(resolve, 2000);
+      });
+      return api(retryRequest);
     }
 
     // Handle 401 unauthorized (expired token)
-    if (error.response && error.response.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;
-
+    if (error.response && error.response.status === 401 && retryAttempt === 0) {
       try {
         // Try to refresh token here if you have refresh token flow
         // const refreshResponse = await api.post('/auth/refresh');
         // Store new token
         // localStorage.setItem('auth_token', refreshResponse.data.token);
         // Retry original request
-        // return api(originalRequest);
+        // return api({ ...originalRequest, retryAttempt: retryAttempt + 1 });
       } catch (refreshError) {
         // Redirect to login if refresh fails
         window.location.href = '/login';
@@ -114,27 +126,32 @@ const apiClient = {
   async syncOfflineActions() {
     const offlineActions = JSON.parse(localStorage.getItem('offline_actions') || '[]');
 
-    if (offlineActions.length === 0) return;
+    if (offlineActions.length === 0) {
+      return 0;
+    }
 
     console.log(`Attempting to sync ${offlineActions.length} offline actions`);
 
-    const completedActions = [];
+    const syncResults = await Promise.all(
+      offlineActions.map(async action => {
+        try {
+          await api[action.method](action.url, action.data);
+          console.log(`Successfully synced: ${action.method} ${action.url}`);
+          return action;
+        } catch (error) {
+          console.error(`Failed to sync: ${action.method} ${action.url}`, error);
+          return null;
+        }
+      })
+    );
 
-    for (const action of offlineActions) {
-      try {
-        await api[action.method](action.url, action.data);
-        completedActions.push(action);
-        console.log(`Successfully synced: ${action.method} ${action.url}`);
-      } catch (error) {
-        console.error(`Failed to sync: ${action.method} ${action.url}`, error);
-      }
-    }
+    const completedActions = syncResults.filter(Boolean);
 
-    // Remove completed actions
     const remaining = offlineActions.filter(
       action =>
         !completedActions.some(
           completed =>
+            completed &&
             completed.url === action.url &&
             completed.method === action.method &&
             completed.timestamp === action.timestamp

@@ -51,5 +51,5 @@ export default function ProtectedRoute({ children, allowedRoles }: ProtectedRout
     );
   }
 
-  return <>{children}</>;
+  return children;
 }

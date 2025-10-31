@@ -174,9 +174,7 @@ export default function InspectorSchedule() {
     return days;
   };
 
-  const formatDateKey = (date: Date) => {
-    return date.toISOString().split('T')[0];
-  };
+  const formatDateKey = (date: Date) => date.toISOString().split('T')[0];
 
   const hasSchedule = (date: Date | null) => {
     if (!date) return false;

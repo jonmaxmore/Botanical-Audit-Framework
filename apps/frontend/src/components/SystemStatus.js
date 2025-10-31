@@ -30,17 +30,16 @@ const SystemStatus = () => {
     checkConnection();
   }, []);
 
-  return (
-    <div className="system-status">
-      {status.loading ? (
-        <p>Checking connection...</p>
-      ) : status.connected ? (
-        <p style={{ color: 'green' }}>✅ {status.message}</p>
-      ) : (
-        <p style={{ color: 'red' }}>❌ {status.message}</p>
-      )}
-    </div>
-  );
+  let content;
+  if (status.loading) {
+    content = <p>Checking connection...</p>;
+  } else if (status.connected) {
+    content = <p style={{ color: 'green' }}>✅ {status.message}</p>;
+  } else {
+    content = <p style={{ color: 'red' }}>❌ {status.message}</p>;
+  }
+
+  return <div className="system-status">{content}</div>;
 };
 
 export default SystemStatus;

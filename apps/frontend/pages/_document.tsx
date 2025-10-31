@@ -29,6 +29,7 @@ MyDocument.getInitialProps = async ctx => {
     originalRenderPage({
       enhanceApp: (App: any) =>
         function EnhanceApp(props) {
+          // eslint-disable-next-line react/jsx-props-no-spreading
           return <App emotionCache={cache} {...props} />;
         }
     });

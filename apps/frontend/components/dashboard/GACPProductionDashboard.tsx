@@ -12,7 +12,7 @@
  * - AI Insights & Recommendations
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Grid,
@@ -119,16 +119,7 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
   };
 
   // Load dashboard data
-  useEffect(() => {
-    loadDashboardData();
-    loadNotifications();
-
-    // Auto-refresh every 5 minutes
-    const interval = setInterval(loadDashboardData, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, [userId, selectedTimeRange]);
-
-  const loadDashboardData = async () => {
+  const loadDashboardData = useCallback(async () => {
     try {
       setIsRefreshing(true);
 
@@ -155,9 +146,9 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
       setLoading(false);
       setIsRefreshing(false);
     }
-  };
+  }, [selectedTimeRange, userId]);
 
-  const loadNotifications = async () => {
+  const loadNotifications = useCallback(async () => {
     try {
       const response = await fetch(`/api/notifications/${userId}`);
       if (response.ok) {
@@ -167,7 +158,16 @@ const GACPProductionDashboard: React.FC<DashboardProps> = ({ userId, role = 'far
     } catch (error) {
       console.error('Error loading notifications:', error);
     }
-  };
+  }, [userId]);
+
+  useEffect(() => {
+    loadDashboardData();
+    loadNotifications();
+
+    // Auto-refresh every 5 minutes
+    const interval = setInterval(loadDashboardData, 5 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, [loadDashboardData, loadNotifications]);
 
   // Render overview cards
   const renderOverviewCards = () => {

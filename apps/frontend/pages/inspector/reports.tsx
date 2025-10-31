@@ -157,7 +157,8 @@ export default function InspectorReports() {
   const getResultChip = (result: string) => {
     if (result.includes('ผ่าน')) {
       return <Chip label={result} color="success" size="small" />;
-    } else if (result.includes('ไม่ผ่าน')) {
+    }
+    if (result.includes('ไม่ผ่าน')) {
       return <Chip label={result} color="error" size="small" />;
     }
     return <Chip label={result} color="default" size="small" />;

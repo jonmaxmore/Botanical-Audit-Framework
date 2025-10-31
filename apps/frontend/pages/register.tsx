@@ -131,6 +131,8 @@ export default function RegisterPage() {
           return false;
         }
         break;
+      default:
+        break;
     }
     setError('');
     return true;
@@ -329,14 +331,14 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               margin="normal"
-              inputProps={{ maxLength: 13 }}
               helperText="กรอกตัวเลข 13 หลัก"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <Person color="action" />
                   </InputAdornment>
-                )
+                ),
+                inputProps: { maxLength: 13 }
               }}
             />
             <TextField

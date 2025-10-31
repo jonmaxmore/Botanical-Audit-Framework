@@ -174,8 +174,8 @@ export default function CreateApplicationPage() {
     setError('');
   };
 
-  const validateFarmerData = (): boolean => {
-    return !!(
+  const validateFarmerData = (): boolean =>
+    !!(
       farmerData.fullName &&
       farmerData.email &&
       farmerData.phoneNumber &&
@@ -183,10 +183,9 @@ export default function CreateApplicationPage() {
       farmerData.address &&
       farmerData.province
     );
-  };
 
-  const validateFarmData = (): boolean => {
-    return !!(
+  const validateFarmData = (): boolean =>
+    !!(
       farmData.farmName &&
       farmData.farmAddress &&
       farmData.farmProvince &&
@@ -194,7 +193,6 @@ export default function CreateApplicationPage() {
       farmData.cultivationType &&
       farmData.cropType
     );
-  };
 
   const handleSaveDraft = async () => {
     setLoading(true);

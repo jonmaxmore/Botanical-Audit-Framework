@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import {
@@ -35,6 +35,31 @@ export default function LoginPage() {
 
   const { login, user, loading, error: authError } = useAuth();
 
+  const redirectToDashboard = useCallback(
+    (role: UserRole) => {
+      switch (role) {
+        case UserRole.FARMER:
+          router.push('/farmer/dashboard');
+          break;
+        case UserRole.DOCUMENT_CHECKER:
+          router.push('/document-checker/dashboard');
+          break;
+        case UserRole.INSPECTOR:
+          router.push('/inspector/dashboard');
+          break;
+        case UserRole.APPROVER:
+          router.push('/approver/dashboard');
+          break;
+        case UserRole.ADMIN:
+          router.push('/admin/dashboard');
+          break;
+        default:
+          router.push('/');
+      }
+    },
+    [router]
+  );
+
   useEffect(() => {
     // ถ้าผู้ใช้ login อยู่แล้ว ให้ redirect ไปยังหน้าที่เหมาะสม
     if (user) {
@@ -45,27 +70,7 @@ export default function LoginPage() {
     if (expired === 'true') {
       setError('เซสชั่นของคุณหมดอายุ กรุณาเข้าสู่ระบบใหม่');
     }
-  }, [user, expired]);
-
-  const redirectToDashboard = (role: UserRole) => {
-    switch (role) {
-      case UserRole.FARMER:
-        router.push('/farmer/dashboard');
-        break;
-      case UserRole.DOCUMENT_CHECKER:
-        router.push('/document-checker/dashboard');
-        break;
-      case UserRole.INSPECTOR:
-        router.push('/inspector/dashboard');
-        break;
-      case UserRole.APPROVER:
-        router.push('/approver/dashboard');
-        break;
-      case UserRole.ADMIN:
-        router.push('/admin/dashboard');
-        break;
-    }
-  };
+  }, [user, expired, redirectToDashboard]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

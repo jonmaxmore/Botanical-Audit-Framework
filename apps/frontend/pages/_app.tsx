@@ -4,9 +4,9 @@ import { AppProps } from 'next/app';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CacheProvider, EmotionCache } from '@emotion/react';
+import { SnackbarProvider } from 'notistack';
 import { AuthProvider } from '../contexts/AuthContext';
 import createEmotionCache from '../lib/createEmotionCache';
-import { SnackbarProvider } from 'notistack';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -62,6 +62,7 @@ export default function MyApp(props: MyAppProps) {
               horizontal: 'right'
             }}
           >
+            {/* eslint-disable-next-line react/jsx-props-no-spreading */}
             <Component {...pageProps} />
           </SnackbarProvider>
         </AuthProvider>

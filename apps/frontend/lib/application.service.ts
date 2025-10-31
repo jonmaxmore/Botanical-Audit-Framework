@@ -4,6 +4,7 @@ import { WorkflowService } from './workflow.service';
 
 export class ApplicationService {
   private static STORAGE_KEY = 'gacp_applications';
+
   private static HISTORY_KEY = 'gacp_workflow_history';
 
   // ดึงรายการใบสมัครทั้งหมด
@@ -228,3 +229,5 @@ export class ApplicationService {
     };
   }
 }
+
+export default ApplicationService;

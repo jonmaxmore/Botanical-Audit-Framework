@@ -83,3 +83,5 @@ export class AuthService {
     return !!token;
   }
 }
+
+export default AuthService;

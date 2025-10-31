@@ -5,6 +5,8 @@
  * Implements WHO/ASEAN GACP guidelines and DTAM standards
  */
 
+const logger = require('../shared/logger');
+
 // Import Models (with fallback to mock if MongoDB unavailable)
 let Application, User, mongoose;
 try {
@@ -14,8 +16,6 @@ try {
 } catch (error) {
   logger.warn('[GACPApplicationService] Models not available, using mock mode');
 }
-
-const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
 const MockDatabaseService = require('./mock-database');
 

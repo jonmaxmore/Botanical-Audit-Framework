@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import {
@@ -32,8 +32,10 @@ import {
   ListItemIcon,
   ListItemText,
   Alert,
-  CircularProgress
+  CircularProgress,
+  Snackbar
 } from '@mui/material';
+import type { AlertColor } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
   CheckCircle as CheckCircleIcon,
@@ -66,18 +68,26 @@ export default function DocumentReviewPage() {
     previousCertificates: false,
     photos: false
   });
+  const [feedback, setFeedback] = useState<{ message: string; severity: AlertColor } | null>(null);
 
-  useEffect(() => {
-    if (id) {
-      loadApplication();
+  const showFeedback = (message: string, severity: AlertColor = 'info') => {
+    setFeedback({ message, severity });
+  };
+
+  const handleFeedbackClose = (_event?: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
     }
-  }, [id]);
+    setFeedback(null);
+  };
 
-  const loadApplication = async () => {
+  const loadApplication = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await ApplicationApi.getById(id as string);
+      const data = (await ApplicationApi.getById(id as string)) as {
+        data: { application: GACPApplication };
+      };
       setApplication(data.data.application);
     } catch (err: any) {
       console.error('Error loading application:', err);
@@ -85,7 +95,13 @@ export default function DocumentReviewPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      loadApplication();
+    }
+  }, [id, loadApplication]);
 
   const handleChecklistChange = (key: string) => {
     setDocumentChecklist(prev => ({
@@ -96,7 +112,7 @@ export default function DocumentReviewPage() {
 
   const handleSubmit = async () => {
     if (!checkResult) {
-      alert('กรุณาเลือกผลการตรวจสอบ');
+      showFeedback('กรุณาเลือกผลการตรวจสอบ', 'warning');
       return;
     }
 
@@ -104,13 +120,13 @@ export default function DocumentReviewPage() {
     if (checkResult === 'approved') {
       const allChecked = Object.values(documentChecklist).every(v => v);
       if (!allChecked) {
-        alert('กรุณาตรวจสอบเอกสารให้ครบถ้วนก่อนอนุมัติ');
+        showFeedback('กรุณาตรวจสอบเอกสารให้ครบถ้วนก่อนอนุมัติ', 'warning');
         return;
       }
     }
 
     if (!notes.trim()) {
-      alert('กรุณาระบุหมายเหตุ');
+      showFeedback('กรุณาระบุหมายเหตุ', 'warning');
       return;
     }
 
@@ -124,11 +140,11 @@ export default function DocumentReviewPage() {
         notes
       });
 
-      alert('บันทึกผลการตรวจสอบเรียบร้อยแล้ว');
+      showFeedback('บันทึกผลการตรวจสอบเรียบร้อยแล้ว', 'success');
       router.push('/document-checker/dashboard');
     } catch (err: any) {
       console.error('Error submitting review:', err);
-      alert(err.message || 'ไม่สามารถบันทึกผลการตรวจสอบได้');
+      showFeedback(err.message || 'ไม่สามารถบันทึกผลการตรวจสอบได้', 'error');
     } finally {
       setSubmitting(false);
     }
@@ -395,6 +411,18 @@ export default function DocumentReviewPage() {
           </Grid>
         </Grid>
       </Container>
+      <Snackbar
+        open={Boolean(feedback)}
+        autoHideDuration={6000}
+        onClose={handleFeedbackClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        {feedback ? (
+          <Alert onClose={handleFeedbackClose} severity={feedback.severity} sx={{ width: '100%' }}>
+            {feedback.message}
+          </Alert>
+        ) : null}
+      </Snackbar>
     </>
   );
 }

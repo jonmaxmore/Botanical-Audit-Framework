@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { AuthService } from '../lib/auth.service';
 import { UserApi } from '../lib/api.service';
@@ -62,7 +62,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   // เข้าสู่ระบบ
-  const login = async (username: string, password: string): Promise<boolean> => {
+  const login = useCallback(async (username: string, password: string): Promise<boolean> => {
     setLoading(true);
     setError(null);
     try {
@@ -70,60 +70,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (loggedInUser) {
         setUser(loggedInUser);
         return true;
-      } else {
-        setError('Invalid credentials');
-        return false;
       }
+      setError('Invalid credentials');
+      return false;
     } catch (err: any) {
       setError(err.message || 'Login failed');
       return false;
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // ออกจากระบบ
-  const logout = () => {
+  const logout = useCallback(() => {
     AuthService.logout();
     setUser(null);
     router.push('/login');
-  };
-
+  }, [router]);
   // โหลดข้อมูลผู้ใช้อีกครั้ง
-  const refreshUser = async () => {
+  const refreshUser = useCallback(async () => {
     if (!AuthService.isAuthenticated()) return;
 
     try {
       setLoading(true);
-      const userData = await UserApi.getCurrentUser();
+      const userData = (await UserApi.getCurrentUser()) as User;
       setUser(userData);
     } catch (err) {
       console.error('Failed to refresh user data:', err);
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // ตรวจสอบบทบาท
-  const hasRole = (role: UserRole): boolean => {
-    return !!user && user.role === role;
-  };
+  const hasRole = useCallback((role: UserRole): boolean => !!user && user.role === role, [user]);
 
-  const hasAnyRole = (roles: UserRole[]): boolean => {
-    return !!user && roles.includes(user.role);
-  };
+  const hasAnyRole = useCallback(
+    (roles: UserRole[]): boolean => !!user && roles.includes(user.role),
+    [user]
+  );
 
-  const value = {
-    user,
-    loading,
-    error,
-    login,
-    logout,
-    isAuthenticated: !!user,
-    hasRole,
-    hasAnyRole,
-    refreshUser
-  };
+  const contextValue = useMemo(
+    () => ({
+      user,
+      loading,
+      error,
+      login,
+      logout,
+      isAuthenticated: !!user,
+      hasRole,
+      hasAnyRole,
+      refreshUser
+    }),
+    [user, loading, error, login, logout, hasRole, hasAnyRole, refreshUser]
+  );
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>;
 };
