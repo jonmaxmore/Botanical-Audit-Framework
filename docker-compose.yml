@@ -5,7 +5,7 @@ services:
     image: node:22-alpine
     container_name: gacp-platform
     ports:
-      - '3004:3004'
+      - '5000:5000'
       - '3005:3005' # Alternative port
     volumes:
       - .:/workspace
@@ -16,13 +16,13 @@ services:
       echo 'Installing GACP Platform dependencies...' &&
       npm install &&
       echo 'Starting GACP Platform server...' &&
-      echo 'Access Demo at http://localhost:3004/demo.html' &&
-      echo 'Monitoring at http://localhost:3004/monitoring-dashboard.html' &&
-      echo 'API Docs at http://localhost:3004/api/docs/docs' &&
+      echo 'Access Demo at http://localhost:5000/demo.html' &&
+      echo 'Monitoring at http://localhost:5000/monitoring-dashboard.html' &&
+      echo 'API Docs at http://localhost:5000/api/docs/docs' &&
       node atlas-server.js"
     environment:
       - NODE_ENV=development
-      - PORT=3004
+      - PORT=5000
     restart: unless-stopped
     healthcheck:
       test:
@@ -32,7 +32,7 @@ services:
           '--quiet',
           '--tries=1',
           '--spider',
-          'http://localhost:3004/api/monitoring/health',
+          'http://localhost:5000/api/monitoring/health',
         ]
       interval: 30s
       timeout: 10s

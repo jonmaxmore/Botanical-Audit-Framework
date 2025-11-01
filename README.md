@@ -14,25 +14,21 @@ The system delivers an end-to-end digital workflow for growers, inspectors, and 
 
 **Cannabis** is the platform's primary crop and appears first in all menus, forms, and analytics displays, with full support for five additional Thai medicinal plants: turmeric, ginger, black galingale, plai, and kratom.
 
-## Core Capabilities
+## Core Services
 
-- **Certification Workflow** – Complete GACP application lifecycle from submission to certificate issuance, with multi-stage approval (Document Review → Field Inspection → Final Approval), payment processing (30,000 THB total), and automated notifications.
+The platform focuses on eleven production services. See `docs/SERVICE_MANIFEST.md` for owners, status, and next actions.
 
-- **Farm & Cultivation Management** – Digital farm registry, field/plot tracking, cultivation cycle recording, harvest management, and comprehensive cannabis cultivation support.
-
-- **Operations & Traceability** – Seed-to-sale tracking, QR code generation for products and certificates, database-backed audit trails, public verification endpoints, and complete chain of custody.
-
-- **IoT Smart Farming** – Real-time sensor data ingestion (soil moisture, pH, temperature, humidity), automated alerting for anomalies, and live dashboards for farm monitoring.
-
-- **AI-Powered Recommendations** – Intelligent fertilizer recommendations (NPK calculation, organic options), irrigation scheduling models, crop-specific guidance, and GACP-compliant practices.
-
-- **Document Management** – Secure file upload with magic byte validation, document categorization, version control, and S3-compatible storage.
-
-- **Multi-Channel Notifications** – Email, SMS, LINE Notify, and real-time Socket.IO updates for application status changes, inspection schedules, and certificate issuance.
-
-- **Analytics & Reporting** – Cannabis-first dashboards, regional breakdowns, approval rate trends, inspector performance metrics, and custom report generation (CSV, Excel, PDF).
-
-- **Security & Compliance** – Role-based access control (RBAC), separate JWT authentication for farmers and DTAM officers, rate limiting, OWASP Top 10 compliance (8/10), encryption at rest/in transit, comprehensive audit logging.
+- **Certification Workflow** – Submission → review → inspection → approval lifecycle with payments and certificate issuance.
+- **Farm & Cultivation Operations** – Farm registry, plot/crop tracking, cultivation logbook, harvest management.
+- **Traceability & Verification** – Seed-to-sale history, QR validation, public certificate portal, audit trails.
+- **IoT Monitoring & Alerts** – Sensor ingestion/normalization, anomaly alerts, real-time dashboards.
+- **AI Decision Support** – Fertilizer and irrigation recommendations, compliance risk scoring, anomaly detection.
+- **Document Management** – Secure uploads, magic byte validation, versioning, OCR metadata, tamper detection.
+- **Survey & Self-Assessment** – Pre-cert questionnaires, readiness scoring, inspector follow-up surveys.
+- **Standards Comparison** – GACP vs Thai GMP requirement mapping and remediation checklists.
+- **Notifications & Engagement** – Email/SMS/LINE/Socket.IO messaging for status changes and reminders.
+- **Analytics & Reporting** – Cannabis-first dashboards, inspector KPIs, SLA tracking, exportable reports.
+- **Security & Governance** – RBAC, dual JWT domains, PDPA compliance, audit logging, observability hooks.
 
 ## Architecture Overview
 
@@ -310,6 +306,8 @@ Before submitting changes:
 3. Ensure cannabis-first ordering in all UI components
 4. Update relevant documentation
 5. Add/update tests for new functionality
+6. Record structural doc updates in `docs/research/DOCUMENTATION_LOG.md` using the provided template
+7. Planned enhancement: add automation to verify documentation log updates once cadence increases (see `docs/research/DOCUMENTATION_LOG.md`)
 
 ## Documentation
 
@@ -319,6 +317,14 @@ Before submitting changes:
 - **API Reference:** [docs/API_DOCUMENTATION.md](docs/API_DOCUMENTATION.md)
 - **Competitor Research:** [docs/GLOBAL_COMPETITOR_RESEARCH_PLAN.md](docs/GLOBAL_COMPETITOR_RESEARCH_PLAN.md)
 - **System Audit:** [docs/EXISTING_SYSTEM_AUDIT.md](docs/EXISTING_SYSTEM_AUDIT.md)
+
+### Documentation Governance Summary
+
+- Structured updates are logged in `docs/research/DOCUMENTATION_LOG.md` using the shared template.
+- Contributors record structural doc changes after updates (see contributing checklist step 6).
+- Pending automation will ensure the log stays in sync once documentation cadence increases.
+- Schema and automation prerequisites for experimentation live in `docs/research/experiments/`.
+- Decisions and planned enhancements remain traceable via the documentation log.
 
 ## License
 

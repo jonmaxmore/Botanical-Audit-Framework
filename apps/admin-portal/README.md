@@ -37,7 +37,7 @@ pnpm start
 ### Development Server
 
 - URL: http://localhost:3002
-- API: http://localhost:3000
+- API: http://localhost:5000
 
 ## 📁 Project Structure
 
@@ -163,8 +163,8 @@ Create `.env.local` file:
 
 ```env
 # API Configuration
-API_BASE_URL=http://localhost:3000
-NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+API_BASE_URL=http://localhost:5000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
 
 # Admin Portal Configuration
 PORT=3002

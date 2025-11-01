@@ -19,42 +19,51 @@ export async function generateQRCode(data: string, options?: QRCodeOptions): Pro
     margin: 2,
     color: {
       dark: '#000000',
-      light: '#FFFFFF'
+      light: '#ffffff'
     },
-    errorCorrectionLevel: 'M',
-    ...options
+    errorCorrectionLevel: 'H'
   };
 
-  try {
-    const qrCodeDataURL = await QRCode.toDataURL(data, defaultOptions);
-    return qrCodeDataURL;
-  } catch (error) {
-    console.error('Error generating QR code:', error);
-    throw new Error('Failed to generate QR code');
-  }
+  const mergedOptions = {
+    ...defaultOptions,
+    ...options,
+    color: {
+      ...defaultOptions.color,
+      ...options?.color
+    }
+  };
+
+  return QRCode.toDataURL(data, mergedOptions);
 }
 
 /**
- * Generate QR code as canvas
+ * Generate QR code on canvas
  */
 export async function generateQRCodeCanvas(
-  data: string,
   canvas: HTMLCanvasElement,
+  data: string,
   options?: QRCodeOptions
 ): Promise<void> {
   const defaultOptions: QRCodeOptions = {
     width: 200,
     margin: 2,
-    errorCorrectionLevel: 'M',
-    ...options
+    color: {
+      dark: '#000000',
+      light: '#ffffff'
+    },
+    errorCorrectionLevel: 'H'
   };
 
-  try {
-    await QRCode.toCanvas(canvas, data, defaultOptions);
-  } catch (error) {
-    console.error('Error generating QR code canvas:', error);
-    throw new Error('Failed to generate QR code canvas');
-  }
+  const mergedOptions = {
+    ...defaultOptions,
+    ...options,
+    color: {
+      ...defaultOptions.color,
+      ...options?.color
+    }
+  };
+
+  await QRCode.toCanvas(canvas, data, mergedOptions);
 }
 
 /**
@@ -65,7 +74,8 @@ export async function generateCertificateQR(
   certificateNumber: string,
   options?: QRCodeOptions
 ): Promise<string> {
-  const verificationURL = `${process.env.NEXT_PUBLIC_API_URL}/verify/${certificateNumber}`;
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+  const verificationURL = `${baseUrl}/verify/${certificateNumber}`;
   return generateQRCode(verificationURL, options);
 }
 

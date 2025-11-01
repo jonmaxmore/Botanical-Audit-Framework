@@ -26,7 +26,7 @@ AGORA_APP_CERTIFICATE=4a458225df3358aee176b10efcca32869070dcbf1411175731e8639402
 **Admin Portal (.env.local)**
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 ## การใช้งาน
@@ -131,7 +131,7 @@ npm run dev
 3. ทดสอบ API:
 
 ```bash
-curl -X POST http://localhost:3000/api/video/inspections/123/video-token \
+curl -X POST http://localhost:5000/api/video/inspections/123/video-token \
   -H "Content-Type: application/json" \
   -d '{"uid": 12345, "role": "inspector"}'
 ```

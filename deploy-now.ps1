@@ -24,7 +24,7 @@ MONGODB_URI=mongodb+srv://gacp-premierprime:qwer1234@thai-gacp.re1651p.mongodb.n
 JWT_SECRET_FARMER=$JWT_FARMER
 JWT_SECRET_DTAM=$JWT_DTAM
 NODE_ENV=production
-PORT=3000
+PORT=5000
 EOF
 cd apps/backend
 pm2 delete gacp-backend 2>/dev/null || true
@@ -36,7 +36,7 @@ server {
     listen 80;
     server_name _;
     location / {
-        proxy_pass http://localhost:3000;
+    proxy_pass http://localhost:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

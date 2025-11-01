@@ -354,7 +354,7 @@ jobs:
         run: npm start &
         env:
           NODE_ENV: production
-          PORT: 3000
+          PORT: 5000
           DATABASE_URL: postgresql://gacp_admin:test_password@localhost:5432/gacp_certify_test
           REDIS_URL: redis://localhost:6379
           JWT_SECRET: test_jwt_secret_key
@@ -363,7 +363,7 @@ jobs:
       - name: Wait for application to be ready
         run: |
           for i in {1..30}; do
-            if curl -s http://localhost:3000/api/health/live > /dev/null; then
+            if curl -s http://localhost:5000/api/health/live > /dev/null; then
               echo "Application is ready!"
               exit 0
             fi
@@ -376,7 +376,7 @@ jobs:
       - name: Run E2E tests
         run: npm run test:e2e
         env:
-          BASE_URL: http://localhost:3000
+          BASE_URL: http://localhost:5000
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4

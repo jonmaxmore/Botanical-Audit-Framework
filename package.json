@@ -29,13 +29,27 @@
     "reinstall": "npm run clean && npm install"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@hookform/resolvers": "^3.10.0",
+    "@mui/icons-material": "^6.1.9",
+    "@mui/material": "^6.1.9",
+    "@mui/x-date-pickers": "^7.22.2",
+    "chart.js": "^4.5.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "concurrently": "^8.2.2",
     "http-proxy-middleware": "^3.0.5",
     "morgan": "^1.10.1",
     "next": "^16.0.0",
+    "react-chartjs-2": "^5.3.0",
+    "react-hook-form": "^7.65.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "recharts": "^2.15.0",
+    "tailwind-merge": "^2.5.5",
     "uuid": "^9.0.1",
+    "yup": "^1.7.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -84,7 +98,8 @@
     "overrides": {
       "playwright": ">=1.55.1",
       "@typescript-eslint/eslint-plugin": "6.21.0",
-      "@typescript-eslint/parser": "6.21.0"
+      "@typescript-eslint/parser": "6.21.0",
+      "eslint-plugin-react-hooks": "^5.2.0"
     }
   },
   "lint-staged": {

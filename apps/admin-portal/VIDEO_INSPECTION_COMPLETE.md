@@ -195,7 +195,7 @@ AGORA_APP_CERTIFICATE=4a458225df3358aee176b10efcca32869070dcbf1411175731e8639402
 **Frontend (.env.local)**
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
 
 ## 🧪 Testing

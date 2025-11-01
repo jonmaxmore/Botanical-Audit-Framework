@@ -191,7 +191,7 @@ POST   /api/certificates/validate // Validate certificate
 ### Environment Variables
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:3004/api
+NEXT_PUBLIC_API_URL=http://localhost:5000
 NEXT_PUBLIC_APP_NAME=GACP Certificate Portal
 JWT_SECRET=your-secret-key
 ```

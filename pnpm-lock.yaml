@@ -8,14 +8,42 @@ overrides:
   playwright: '>=1.55.1'
   '@typescript-eslint/eslint-plugin': 6.21.0
   '@typescript-eslint/parser': 6.21.0
+  eslint-plugin-react-hooks: ^5.2.0
 
 importers:
 
   .:
     dependencies:
+      '@emotion/react':
+        specifier: ^11.14.0
+        version: 11.14.0(@types/react@18.3.26)(react@18.3.1)
+      '@emotion/styled':
+        specifier: ^11.14.1
+        version: 11.14.1(@emotion/react@11.14.0)(@types/react@18.3.26)(react@18.3.1)
+      '@hookform/resolvers':
+        specifier: ^3.10.0
+        version: 3.10.0(react-hook-form@7.65.0)
+      '@mui/icons-material':
+        specifier: ^6.1.9
+        version: 6.5.0(@mui/material@6.5.0)(@types/react@18.3.26)(react@18.3.1)
+      '@mui/material':
+        specifier: ^6.1.9
+        version: 6.5.0(@emotion/react@11.14.0)(@emotion/styled@11.14.1)(@types/react@18.3.26)(react-dom@18.3.1)(react@18.3.1)
+      '@mui/x-date-pickers':
+        specifier: ^7.22.2
+        version: 7.29.4(@emotion/react@11.14.0)(@emotion/styled@11.14.1)(@mui/material@6.5.0)(@mui/system@7.3.3)(@types/react@18.3.26)(date-fns@4.1.0)(react-dom@18.3.1)(react@18.3.1)
+      chart.js:
+        specifier: ^4.5.1
+        version: 4.5.1
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       concurrently:
         specifier: ^8.2.2
         version: 8.2.2
+      date-fns:
+        specifier: ^4.1.0
+        version: 4.1.0
       http-proxy-middleware:
         specifier: ^3.0.5
         version: 3.0.5
@@ -28,12 +56,27 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.3.1
+      react-chartjs-2:
+        specifier: ^5.3.0
+        version: 5.3.1(chart.js@4.5.1)(react@18.3.1)
       react-dom:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
+      react-hook-form:
+        specifier: ^7.65.0
+        version: 7.65.0(react@18.3.1)
+      recharts:
+        specifier: ^2.15.0
+        version: 2.15.4(react-dom@18.3.1)(react@18.3.1)
+      tailwind-merge:
+        specifier: ^2.5.5
+        version: 2.6.0
       uuid:
         specifier: ^9.0.1
         version: 9.0.1
+      yup:
+        specifier: ^1.7.1
+        version: 1.7.1
       zod:
         specifier: ^3.22.4
         version: 3.25.76
@@ -13579,7 +13622,7 @@ packages:
       eslint-plugin-import: ^2.25.3
       eslint-plugin-jsx-a11y: ^6.5.1
       eslint-plugin-react: ^7.28.0
-      eslint-plugin-react-hooks: ^4.3.0
+      eslint-plugin-react-hooks: ^5.2.0
     dependencies:
       eslint: 8.57.1
       eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.32.0)(eslint@8.57.1)
@@ -13609,7 +13652,7 @@ packages:
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
-      eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-hooks: 5.2.0(eslint@8.57.1)
       typescript: 5.9.3
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
@@ -13636,7 +13679,7 @@ packages:
       eslint-plugin-import: 2.32.0(@typescript-eslint/parser@6.21.0)(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.5(eslint@8.57.1)
-      eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
+      eslint-plugin-react-hooks: 5.2.0(eslint@8.57.1)
       typescript: 5.9.3
     transitivePeerDependencies:
       - eslint-import-resolver-webpack
@@ -13826,15 +13869,6 @@ packages:
       prettier: 3.6.2
       prettier-linter-helpers: 1.0.0
       synckit: 0.11.11
-    dev: true
-
-  /eslint-plugin-react-hooks@4.6.2(eslint@8.57.1):
-    resolution: {integrity: sha512-QzliNJq4GinDBcD8gPB5v0wh6g8q3SUi6EFF0x8N/BL9PoVs0atuGc47ozMRyOWAKdwaZ5OnbOEa3WR+dSGKuQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0-0
-    dependencies:
-      eslint: 8.57.1
     dev: true
 
   /eslint-plugin-react-hooks@5.2.0(eslint@8.57.1):
