@@ -4,7 +4,6 @@
  */
 
 const { v4: uuidv4 } = require('uuid');
-const CultivationCycle = require('../models/CultivationCycle');
 const { AppError } = require('../../shared/utils/error-handler');
 const logger = require('../../shared/utils/logger');
 

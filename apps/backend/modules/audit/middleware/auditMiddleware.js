@@ -17,7 +17,7 @@ const logger = createLogger('audit-auditMiddleware');
  */
 function createAuditMiddleware(auditModule) {
   const { logFromRequest } = auditModule.services;
-  const { ACTION_TYPE, ENTITY_TYPE } = auditModule.constants;
+  const { ACTION_TYPE } = auditModule.constants;
 
   /**
    * Middleware to automatically log HTTP requests

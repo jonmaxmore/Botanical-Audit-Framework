@@ -24,7 +24,7 @@
  * comprehensive audit trails, and optimal user experience.
  */
 
-const { _body, _query, param } = require('express-validator');
+const { _body, _query } = require('express-validator');
 
 class EnhancedApplicationProcessingController {
   constructor({

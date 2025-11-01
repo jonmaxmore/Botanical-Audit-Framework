@@ -140,7 +140,7 @@ class GovernmentIntegrationWorkflowService {
       this.logger.log('[GovernmentIntegration] Initializing government system connections...');
 
       // Test connectivity to each system
-      for (const [systemCode, systemConfig] of Object.entries(this.governmentSystems)) {
+      for (const systemCode of Object.keys(this.governmentSystems)) {
         try {
           const healthStatus = await this.checkSystemHealth(systemCode);
           this.metrics.systemHealth[systemCode] = healthStatus;
@@ -389,7 +389,8 @@ class GovernmentIntegrationWorkflowService {
       const statusResults = [];
 
       // Check status in each government system
-      for (const [systemCode, systemConfig] of Object.entries(this.governmentSystems)) {
+      for (const systemCode of Object.keys(this.governmentSystems)) {
+        const systemConfig = this.governmentSystems[systemCode];
         try {
           const status = await this.checkCertificateStatusInSystem(systemCode, certificateNumber);
           statusResults.push({
@@ -559,7 +560,8 @@ class GovernmentIntegrationWorkflowService {
       // Add system-specific formatting
       const systemSpecificFormats = {};
 
-      for (const [systemCode, systemConfig] of Object.entries(this.governmentSystems)) {
+      for (const systemCode of Object.keys(this.governmentSystems)) {
+        const systemConfig = this.governmentSystems[systemCode];
         systemSpecificFormats[systemCode] = await this.formatForSpecificSystem(
           governmentFormat,
           systemCode,
@@ -713,9 +715,6 @@ class GovernmentIntegrationWorkflowService {
    */
   async checkSystemHealth(systemCode) {
     try {
-      const systemConfig = this.governmentSystems[systemCode];
-      // const healthEndpoint = systemConfig.endpoint + '/health';
-
       const response = await this.makeAuthenticatedRequest(systemCode, '/health', 'GET', {});
 
       return {

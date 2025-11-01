@@ -344,7 +344,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
    */
   async createPerformanceAssessment(assessmentRequest) {
     try {
-      const { userId, competencyId, assessmentType, contextData } = assessmentRequest;
+      const { userId, competencyId, assessmentType } = assessmentRequest;
 
       console.log(
         `[PerformanceAssessment] Creating assessment for user ${userId}, competency ${competencyId}`
@@ -734,7 +734,7 @@ class PerformanceAssessmentToolsSystem extends EventEmitter {
       }
 
       // Complete any active assessments
-      for (const [assessmentId, assessment] of this.assessmentData.activeAssessments) {
+      for (const [assessmentId] of this.assessmentData.activeAssessments) {
         await this.completeAssessment(assessmentId, 'system_shutdown');
       }
 

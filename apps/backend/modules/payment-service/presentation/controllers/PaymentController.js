@@ -30,7 +30,7 @@
  */
 
 const logger = require('../../../../shared/logger/logger');
-const { validationResult, body, param, query } = require('express-validator');
+const { validationResult, body, param } = require('express-validator');
 const PaymentService = require('../services/PaymentService');
 
 class PaymentController {

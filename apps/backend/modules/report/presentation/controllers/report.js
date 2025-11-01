@@ -68,8 +68,8 @@ class ReportController {
   async generateReport(req, res) {
     try {
       const { reportId } = req.params;
-      const userId = req.user.id;
-      const userRole = req.user.role;
+      const _userId = req.user.id;
+      const _userRole = req.user.role;
 
       // Check if user can access the report
       // const report = await this.getReportUseCase.execute(reportId, userId, userRole);

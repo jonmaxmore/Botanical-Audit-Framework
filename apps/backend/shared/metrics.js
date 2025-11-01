@@ -121,7 +121,7 @@ function recordServerStart(healthy = true) {
 }
 
 // Record socket.io event
-function recordSocketEvent(eventType, data = {}) {
+function recordSocketEvent(eventType, _data = {}) {
   switch (eventType) {
     case 'connection':
       metrics.socketIO.connections++;

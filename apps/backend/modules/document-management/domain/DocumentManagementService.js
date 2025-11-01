@@ -37,7 +37,6 @@
 const logger = require('../../../shared/logger/logger');
 const crypto = require('crypto');
 const path = require('path');
-const fs = require('fs').promises;
 const EventEmitter = require('events');
 
 class DocumentManagementService extends EventEmitter {

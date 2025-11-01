@@ -21,7 +21,7 @@ function initializeAuthRoutes() {
   // Login route
   router.post('/login', async (req, res) => {
     try {
-      const { email, password } = req.body;
+      const { email } = req.body;
 
       // Mock authentication logic
       const mockUser = {
@@ -245,8 +245,6 @@ function initializeDocumentRoutes() {
   // Get documents for application
   router.get('/:applicationId', authenticateToken, async (req, res) => {
     try {
-      const { applicationId } = req.params;
-
       const mockDocuments = [
         {
           id: 'DOC001',

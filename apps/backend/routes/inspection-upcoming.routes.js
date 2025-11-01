@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.get('/inspections/upcoming', async (req, res) => {
   try {
-    const { inspectorId } = req.query;
+    const { inspectorId: _inspectorId } = req.query;
 
     // TODO: Fetch upcoming inspections from database
     // Filter by inspectorId if provided

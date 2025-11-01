@@ -50,7 +50,7 @@ class LocalFileStorageService {
 
   async uploadFile(fileData, options = {}) {
     try {
-      const { buffer, originalName, mimeType } = fileData;
+      const { buffer, originalName } = fileData;
       const folder = options.folder || 'documents';
 
       // Generate unique filename
@@ -120,7 +120,7 @@ class LocalFileStorageService {
     }
   }
 
-  async getFileUrl(filePath, options = {}) {
+  async getFileUrl(filePath, _options = {}) {
     try {
       // For local storage, just return the static URL
       return `${this.config.baseUrl}/${filePath.replace(/\\/g, '/')}`;

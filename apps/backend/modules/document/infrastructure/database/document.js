@@ -354,7 +354,7 @@ class MongoDBDocumentRepository {
     }
   }
 
-  async findExpired(options = {}) {
+  async findExpired(_options = {}) {
     try {
       const query = {
         expiresAt: { $lte: new Date() },

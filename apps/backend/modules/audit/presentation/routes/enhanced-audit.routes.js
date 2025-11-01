@@ -380,19 +380,6 @@ function createEnhancedAuditRoutes(auditController, authMiddleware) {
     async (req, res) => {
       try {
         // This would integrate with reporting service
-        const reportData = {
-          type: req.body.reportType,
-          period: {
-            start: new Date(req.body.startDate),
-            end: new Date(req.body.endDate)
-          },
-          format: req.body.format || 'PDF',
-          options: {
-            includeViolations: req.body.includeViolations !== false,
-            includeResolutions: req.body.includeResolutions !== false
-          }
-        };
-
         res.json({
           success: true,
           message: 'Report generation initiated',

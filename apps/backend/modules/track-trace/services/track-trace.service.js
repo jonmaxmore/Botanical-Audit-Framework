@@ -171,9 +171,11 @@ class TrackTraceService {
       }
 
       // Update product
+      const { description, location, ...restUpdateData } = updateData;
+
       const update = {
         stage,
-        ...updateData,
+        ...restUpdateData,
         'metadata.lastUpdated': new Date(),
         'metadata.updatedBy': userId
       };
@@ -184,8 +186,8 @@ class TrackTraceService {
       await this.addTimelineEvent({
         productId,
         stage,
-        description: updateData.description || `Stage updated to ${stage}`,
-        location: updateData.location || 'Farm',
+        description: description || `Stage updated to ${stage}`,
+        location: location || 'Farm',
         verifiedBy: userId
       });
 
@@ -203,7 +205,7 @@ class TrackTraceService {
   /**
    * Update product data
    */
-  async updateProduct(productId, userId, updateData) {
+  async updateProduct(productId, userId, _updateData) {
     try {
       const { ObjectId } = require('mongodb');
       const product = await this.productsCollection.findOne({
@@ -218,12 +220,6 @@ class TrackTraceService {
       if (product.userId !== userId) {
         throw new AppError('Unauthorized access', 403);
       }
-
-      const update = {
-        ...updateData,
-        'metadata.lastUpdated': new Date(),
-        'metadata.updatedBy': userId
-      };
 
       // const result = await this.productsCollection.updateOne(
       //   { _id: new ObjectId(productId) },

@@ -43,7 +43,7 @@
  */
 
 const logger = require('../../../../shared/logger/logger');
-const { validationResult, query, _body, param } = require('express-validator');
+const { validationResult, query } = require('express-validator');
 
 class ReportingController {
   constructor(dependencies = {}) {

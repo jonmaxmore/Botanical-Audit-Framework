@@ -162,6 +162,22 @@ class TransactionManager {
 
       logger.info('✅ All operations completed successfully');
 
+      if (this.auditService) {
+        await this.auditService.logAction(
+          'compensation_sequence_completed',
+          { userId: metadata.userId || 'system', role: metadata.role || 'system' },
+          {
+            type: 'compensation_sequence',
+            id: `comp-${Date.now()}`,
+            after: { operations: executedOperations, results }
+          },
+          {
+            ...metadata,
+            operationCount: operations.length
+          }
+        );
+      }
+
       return {
         success: true,
         results,
@@ -296,7 +312,7 @@ class ApplicationService {
         return { notificationSent: true };
       }),
 
-      this.transactionManager.createOperation('Create audit log', async session => {
+      this.transactionManager.createOperation('Create audit log', async _session => {
         await this.auditService.logAction(
           'application_approved',
           { userId: approverId, role: 'approver' },
@@ -361,7 +377,7 @@ class ApplicationService {
 
       this.transactionManager.createOperation(
         'Send rejection notification',
-        async () => {
+        async _session => {
           const application = await Application.findById(applicationId);
 
           await this.notificationService.sendNotification({
@@ -380,7 +396,7 @@ class ApplicationService {
         null
       ),
 
-      this.transactionManager.createOperation('Create audit log', async () => {
+      this.transactionManager.createOperation('Create audit log', async _session => {
         await this.auditService.logAction(
           'application_rejected',
           { userId: reviewerId, role: 'reviewer' },
@@ -406,8 +422,6 @@ module.exports = {
 
 // Example usage
 if (require.main === module) {
-  const { MongoClient } = require('mongodb');
-
   const test = async function () {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/gacp_platform');
 
@@ -422,11 +436,11 @@ if (require.main === module) {
 
     // Test transaction
     const operations = [
-      transactionManager.createOperation('Operation 1', async session => {
+      transactionManager.createOperation('Operation 1', async _session => {
         logger.info('Executing operation 1');
         return { result: 'success' };
       }),
-      transactionManager.createOperation('Operation 2', async session => {
+      transactionManager.createOperation('Operation 2', async _session => {
         logger.info('Executing operation 2');
         return { result: 'success' };
       })

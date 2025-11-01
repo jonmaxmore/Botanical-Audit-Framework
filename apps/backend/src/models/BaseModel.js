@@ -164,7 +164,7 @@ class BaseModel {
     };
 
     // Update with validation
-    this.schema.statics.updateSafe = async function (id, data, options = {}) {
+    this.schema.statics.updateSafe = async function (id, data) {
       try {
         const document = await this.findByIdActive(id);
         if (!document) {

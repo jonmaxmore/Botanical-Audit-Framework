@@ -103,7 +103,7 @@ class SimpleReportGeneratorService {
   }
 
   async generateHTML(data, options = {}) {
-    const { title, parameters, filters } = options;
+    const { title, parameters } = options;
 
     let html = `<!DOCTYPE html>
 <html lang="th">

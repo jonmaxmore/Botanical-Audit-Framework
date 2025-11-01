@@ -39,7 +39,6 @@
  */
 
 const logger = require('../../../../shared/logger/logger');
-const moment = require('moment-timezone');
 
 class DashboardService {
   constructor(dependencies = {}) {
@@ -381,7 +380,7 @@ class DashboardService {
    * @param {Object} criteria - System monitoring criteria
    * @returns {Promise<Object>} Real-time system metrics
    */
-  async getSystemHealthMetrics(criteria = {}) {
+  async getSystemHealthMetrics(_criteria = {}) {
     try {
       logger.info('[DashboardService] Collecting real-time system health metrics...');
 

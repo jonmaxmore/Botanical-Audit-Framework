@@ -3,8 +3,6 @@ const router = express.Router();
 
 router.get('/inspections/kpi', async (req, res) => {
   try {
-    const { inspectorId } = req.query;
-
     // TODO: Calculate KPI from database
     const kpi = {
       totalInspections: 0,
