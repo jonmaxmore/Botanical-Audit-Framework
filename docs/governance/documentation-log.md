@@ -78,3 +78,13 @@ Each entry records context, rationale, and next actions for documentation update
 **Change Summary:** Enriched service READMEs with content from legacy guides, documented approval requests, and populated platform navigation guidance.  
 **Next Action:** Secure owner approvals, continue migrating remaining service docs, and run link/reference validation before final commit.  
 **Related Files:** docs/services/survey-self-assessment/README.md, docs/services/standards-comparison/README.md, docs/governance/archive-validation.md, docs/platform/README.md, docs/SURVEY_SERVICE_GUIDE.md, docs/SUSTAINABLE_NATIONAL_STANDARD_ARCHITECTURE.md
+
+---
+
+### Entry
+**Date:** 2025-11-01  
+**Author:** GitHub Copilot  
+**Context:** Documentation taxonomy migration and automation hardening (commit `16efa05`).  
+**Change Summary:** Relocated legacy deployment/development guides into the new docs taxonomy, added `organize-docs.ps1` to automate future restructures, and introduced a markdown link-check GitHub Action with shared config.  
+**Next Action:** Run link preview/CI validation on next push and monitor workflow results; update owners once all links stay green.  
+**Related Files:** docs/deployment/**/*, docs/development/**/*, docs/legacy/**/*, docs/governance/documentation-log.md, organize-docs.ps1, .github/workflows/markdown-link-check.yml
