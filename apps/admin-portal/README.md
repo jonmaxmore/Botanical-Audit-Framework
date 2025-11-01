@@ -50,6 +50,7 @@ apps/admin-portal/
 │   ├── theme-provider.tsx   # MUI theme configuration
 │   └── login/
 │       └── page.tsx         # Admin login page
+├── docs/                    # Operational guides & integration notes
 ├── components/              # Reusable components
 ├── lib/                     # Utilities and helpers
 ├── next.config.js           # Next.js configuration

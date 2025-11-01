@@ -5,6 +5,8 @@ This archive preserves the feasibility study, experiment logs, and scripts creat
 - Original location: `docs/research/`
 - Archived on: 2025-11-01
 - Reason: Deferred until post-final scope review
+- Current layout: All reference documents are stored in the local `docs/` subdirectory; existing
+  experiment, meeting, and script folders remain unchanged.
 
 > References inside these documents may still point to the former `docs/research/` paths. When reactivating this work, restore the folder structure or update the links accordingly.
 
@@ -18,13 +20,13 @@ This directory tracks the feasibility study and proof-of-concept for applying Hy
 
 ### Key Documents
 
-- `HYPERDIMENSIONAL_FEASIBILITY_PLAN.md` – Overall objectives, workflow, and roadmap.
-- `HDC_USE_CASE_SHORTLIST.md` – Candidate use cases and selection criteria.
-- `HDC_DATA_INVENTORY.md` – Overview of required datasets and quality notes.
-- `HDC_TOOLING_ASSESSMENT.md` – Prototype tooling and infrastructure checklist.
-- `HDC_TASK_BOARD.md` – Action items grouped by project phase.
-- `HDC_FEEDBACK_LOOP.md` – Stakeholder engagement cadence and communication guide.
-- `HDC_RISK_REGISTER.md` – Tracked risks, mitigations, and owners.
+- `docs/HYPERDIMENSIONAL_FEASIBILITY_PLAN.md` – Overall objectives, workflow, and roadmap.
+- `docs/HDC_USE_CASE_SHORTLIST.md` – Candidate use cases and selection criteria.
+- `docs/HDC_DATA_INVENTORY.md` – Overview of required datasets and quality notes.
+- `docs/HDC_TOOLING_ASSESSMENT.md` – Prototype tooling and infrastructure checklist.
+- `docs/HDC_TASK_BOARD.md` – Action items grouped by project phase.
+- `docs/HDC_FEEDBACK_LOOP.md` – Stakeholder engagement cadence and communication guide.
+- `docs/HDC_RISK_REGISTER.md` – Tracked risks, mitigations, and owners.
 
 ### Meetings & Logs
 

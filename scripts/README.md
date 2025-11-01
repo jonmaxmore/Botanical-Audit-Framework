@@ -200,6 +200,19 @@ Admin:
 
 ### Environment Variables (.env.uat)
 
+---
+
+## 🧹 Maintenance Helpers
+
+Use these scripts when you need to tidy up local build outputs or move legacy notes out of the way. Both default to preview mode so you can validate the impact before anything is deleted.
+
+| Script                                                       | Description                                                                                                                                               | Example                                          |
+| ------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `cleanup-build-artifacts.ps1` / `cleanup-build-artifacts.sh` | Removes `.next`, `dist`, `coverage`, and other generated folders. Accepts additional directory arguments.                                                 | `./scripts/cleanup-build-artifacts.ps1 -Execute` |
+| `archive-markdown.js`                                        | Lists markdown files that match the default patterns (`draft*`, `test*`, `notes*`, `*_old.md`) and can move them into `archive/_holding` on confirmation. | `node scripts/archive-markdown.js --execute`     |
+
+For additional guidance see `docs/MAINTENANCE.md`.
+
 ```env
 # Database
 MONGODB_URI=mongodb://localhost:27017/botanical-audit-uat
