@@ -13,7 +13,8 @@ const path = require('path');
 const PDFDocument = require('pdfkit');
 const crypto = require('crypto');
 
-const Application = require('../models/application');
+const Application = require('../models/Application');
+const Certificate = require('../models/Certificate');
 const _User = require('../models/user');
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
@@ -600,41 +601,84 @@ class GACPCertificateService {
   }
 
   async saveCertificateRecord(application, certificateData, digitalSignature, pdfInfo) {
-    // Update application with certificate information
-    application.certificate = {
+    // Create new Certificate document
+    const certificate = new Certificate({
       certificateNumber: certificateData.certificateNumber,
-      issueDate: certificateData.issueDate,
+      certificateType: 'full',
+      application: application._id,
+      holderInfo: {
+        holderType: application.applicantType || 'individual',
+        fullName:
+          application.applicantType === 'individual' ? application.applicant.fullName : undefined,
+        nationalId:
+          application.applicantType === 'individual' ? application.applicant.nationalId : undefined,
+        organizationName:
+          application.applicantType !== 'individual'
+            ? application.farmInformation.farmName
+            : undefined,
+        taxId:
+          application.applicantType !== 'individual'
+            ? application.farmInformation.taxId
+            : undefined,
+        address: {
+          province: application.farmInformation.location.province,
+          district: application.farmInformation.location.district,
+          subdistrict: application.farmInformation.location.subdistrict,
+          postalCode: application.farmInformation.location.postalCode
+        }
+      },
+      siteInfo: {
+        farmName: application.farmInformation.farmName,
+        location: application.farmInformation.location,
+        totalArea: application.farmInformation.farmSize,
+        certifiedArea: application.farmInformation.farmSize,
+        gpsCoordinates: application.farmInformation.gpsCoordinates,
+        crops: application.cropInformation.map(c => ({
+          cropName: c.cropType,
+          variety: c.variety,
+          plantingArea: c.plantingArea
+        }))
+      },
+      issuanceDate: certificateData.issueDate,
       expiryDate: certificateData.expiryDate,
-      validityPeriod: certificateData.validityPeriod,
       status: 'active',
-      verificationCode: certificateData.verificationCode,
-      digitalSignature: digitalSignature.signature,
-      pdfFilename: pdfInfo.filename,
-      pdfSize: pdfInfo.size
-    };
+      scope: certificateData.scope || 'Full GACP Certification',
+      standardsComplied: ['WHO GACP', 'ASEAN GACP'],
+      inspectionInfo: {
+        inspectionDate: application.inspectionDate,
+        finalScore: certificateData.finalScore,
+        inspector: application.assignedInspector
+      },
+      qrCode: {
+        data: certificateData.verificationCode,
+        imageUrl: pdfInfo.qrImagePath
+      },
+      verificationUrl: this.generatePublicVerificationUrl(certificateData.certificateNumber),
+      digitalSignature: {
+        algorithm: digitalSignature.algorithm,
+        hash: digitalSignature.signature,
+        timestamp: digitalSignature.timestamp
+      },
+      pdfUrl: `/certificates/${pdfInfo.filename}`,
+      pdfGeneratedAt: new Date()
+    });
 
+    await certificate.save();
+
+    // Update application with certificate reference
+    application.certificate = certificate._id;
+    application.status = 'CERTIFICATE_ISSUED';
     await application.save();
 
-    return application.certificate;
+    return certificate;
   }
 
   async findCertificateByNumber(certificateNumber) {
-    const application = await Application.findOne({
-      'certificate.certificateNumber': certificateNumber
-    }).populate('applicant');
+    const certificate = await Certificate.findOne({ certificateNumber })
+      .populate('application')
+      .lean();
 
-    if (!application || !application.certificate) {
-      return null;
-    }
-
-    return {
-      ...application.certificate.toObject(),
-      applicationId: application._id,
-      farmName: application.farmInformation.farmName,
-      farmerName: application.applicant.fullName,
-      location: application.farmInformation.location,
-      cropTypes: application.cropInformation.map(c => c.cropType)
-    };
+    return certificate;
   }
 
   verifyDigitalSignature(certificate) {
@@ -642,12 +686,12 @@ class GACPCertificateService {
       // Reconstruct the signed data
       const dataToVerify = JSON.stringify({
         certificateNumber: certificate.certificateNumber,
-        farmerName: certificate.farmerName,
-        farmName: certificate.farmName,
-        issueDate: certificate.issueDate,
+        holderName: certificate.holderInfo.organizationName || certificate.holderInfo.fullName,
+        farmName: certificate.siteInfo.farmName,
+        issuanceDate: certificate.issuanceDate,
         expiryDate: certificate.expiryDate,
-        finalScore: certificate.finalScore,
-        verificationCode: certificate.verificationCode
+        finalScore: certificate.inspectionInfo?.finalScore,
+        verificationUrl: certificate.verificationUrl
       });
 
       const secretKey = process.env.CERTIFICATE_SIGNING_KEY || 'default-secret-key';
@@ -656,7 +700,7 @@ class GACPCertificateService {
         .update(dataToVerify)
         .digest('hex');
 
-      return expectedSignature === certificate.digitalSignature;
+      return expectedSignature === certificate.digitalSignature?.hash;
     } catch (error) {
       logger.error('Error verifying digital signature', {
         error: error.message
@@ -669,7 +713,9 @@ class GACPCertificateService {
     // Remove sensitive data before returning to public
     const sanitized = { ...certificate };
     delete sanitized.digitalSignature;
-    delete sanitized.verificationCode;
+    delete sanitized.renewalHistory;
+    delete sanitized.suspensionHistory;
+    delete sanitized.revocationInfo;
     return sanitized;
   }
 

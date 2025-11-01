@@ -4,7 +4,7 @@
  * Production-ready with validation and error handling
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import {
@@ -25,12 +25,10 @@ import {
   CircularProgress,
   Divider
 } from '@mui/material';
-import {
-  ArrowBack as ArrowBackIcon,
-  Save as SaveIcon,
-  Send as SendIcon
-} from '@mui/icons-material';
+import { ArrowBack as ArrowBackIcon, Send as SendIcon } from '@mui/icons-material';
 import FarmerLayout from '../../../components/layout/FarmerLayout';
+import DocumentUploadSection from '../../../components/farmer/DocumentUploadSection';
+import ConsentBlock from '../../../components/farmer/ConsentBlock';
 import { useAuth } from '../../../contexts/AuthContext';
 import { UserRole } from '../../../types/user.types';
 
@@ -45,6 +43,10 @@ interface FarmerData {
   district: string;
   subdistrict: string;
   postalCode: string;
+  applicantType: 'INDIVIDUAL' | 'COMMUNITY_ENTERPRISE' | 'LEGAL_ENTITY';
+  organizationName: string;
+  registrationNumber: string;
+  taxId: string;
 }
 
 interface FarmData {
@@ -60,11 +62,39 @@ interface FarmData {
   cropType: string;
   latitude: string;
   longitude: string;
+  receivingOffice: 'DEPARTMENT_THAI_TRADITIONAL_MEDICINE' | 'PROVINCIAL_HEALTH_OFFICE';
 }
 
-const steps = ['ข้อมูลเกษตรกร', 'ข้อมูลฟาร์ม', 'ตรวจสอบข้อมูล'];
+const steps = [
+  'ข้อมูลเกษตรกร',
+  'ข้อมูลฟาร์ม',
+  'เอกสารประกอบ',
+  'ความยินยอมและลายเซ็น',
+  'ตรวจสอบข้อมูล'
+];
 
-const provinces = [
+type AddressHierarchy = Record<string, Record<string, string[]>>;
+
+const addressHierarchy: AddressHierarchy = {
+  กรุงเทพมหานคร: {
+    เขตพระนคร: ['แขวงพระบรมมหาราชวัง', 'แขวงวังบูรพาภิรมย์', 'แขวงวัดราชบพิธ'],
+    เขตดุสิต: ['แขวงดุสิต', 'แขวงวชิรพยาบาล', 'แขวงสวนจิตรลดา'],
+    เขตบางรัก: ['แขวงบางรัก', 'แขวงสีลม', 'แขวงสี่พระยา'],
+    เขตจตุจักร: ['แขวงลาดยาว', 'แขวงจตุจักร', 'แขวงบางเขน']
+  },
+  เชียงใหม่: {
+    อำเภอเมืองเชียงใหม่: ['ตำบลศรีภูมิ', 'ตำบลพระสิงห์', 'ตำบลสุเทพ'],
+    อำเภอสันทราย: ['ตำบลสันทรายน้อย', 'ตำบลสันทรายหลวง', 'ตำบลหนองแหย่ง'],
+    อำเภอหางดง: ['ตำบลหางดง', 'ตำบลสันผักหวาน', 'ตำบลหนองแก๋ว']
+  },
+  เชียงราย: {
+    อำเภอเมืองเชียงราย: ['ตำบลเวียง', 'ตำบลริมกก', 'ตำบลรอบเวียง'],
+    อำเภอแม่จัน: ['ตำบลแม่จัน', 'ตำบลจันจว้า', 'ตำบลป่าซาง'],
+    อำเภอเชียงของ: ['ตำบลเวียง', 'ตำบลศรีดอนชัย', 'ตำบลสถาน']
+  }
+};
+
+const baseProvinces = [
   'กรุงเทพมหานคร',
   'เชียงใหม่',
   'เชียงราย',
@@ -74,14 +104,29 @@ const provinces = [
   'แพร่',
   'แม่ฮ่องสอน',
   'ลำพูน'
-  // เพิ่มจังหวัดอื่นๆ ตามต้องการ
 ];
+
+const provinces = Array.from(new Set([...Object.keys(addressHierarchy), ...baseProvinces]));
 
 const cultivationTypes = [
   { value: 'OUTDOOR', label: 'กลางแจ้ง (Outdoor)' },
   { value: 'INDOOR', label: 'ในโรงเรือน (Indoor)' },
   { value: 'GREENHOUSE', label: 'โรงเรือนเกษตร (Greenhouse)' },
   { value: 'MIXED', label: 'แบบผสม (Mixed)' }
+];
+
+const applicantTypes = [
+  { value: 'INDIVIDUAL', label: 'บุคคลธรรมดา' },
+  { value: 'COMMUNITY_ENTERPRISE', label: 'วิสาหกิจชุมชน' },
+  { value: 'LEGAL_ENTITY', label: 'นิติบุคคล' }
+];
+
+const receivingOffices = [
+  {
+    value: 'DEPARTMENT_THAI_TRADITIONAL_MEDICINE',
+    label: 'กรมการแพทย์แผนไทยและการแพทย์ทางเลือก'
+  },
+  { value: 'PROVINCIAL_HEALTH_OFFICE', label: 'สำนักงานสาธารณสุขจังหวัด' }
 ];
 
 const cropTypes = [
@@ -94,6 +139,33 @@ const cropTypes = [
   'อื่นๆ'
 ];
 
+const farmSizeUnits = ['ไร่', 'งาน', 'ตารางเมตร'];
+
+const farmerRequiredFields: Array<{ key: keyof FarmerData; label: string }> = [
+  { key: 'fullName', label: 'ชื่อ-นามสกุล' },
+  { key: 'nationalId', label: 'เลขบัตรประชาชน' },
+  { key: 'email', label: 'อีเมล' },
+  { key: 'phoneNumber', label: 'เบอร์โทรศัพท์' },
+  { key: 'address', label: 'ที่อยู่' },
+  { key: 'province', label: 'จังหวัด' },
+  { key: 'district', label: 'อำเภอ/เขต' },
+  { key: 'subdistrict', label: 'ตำบล/แขวง' },
+  { key: 'postalCode', label: 'รหัสไปรษณีย์' }
+];
+
+const farmRequiredFields: Array<{ key: keyof FarmData; label: string }> = [
+  { key: 'farmName', label: 'ชื่อฟาร์ม' },
+  { key: 'farmAddress', label: 'ที่อยู่ฟาร์ม' },
+  { key: 'farmProvince', label: 'จังหวัดของฟาร์ม' },
+  { key: 'farmDistrict', label: 'อำเภอ/เขตของฟาร์ม' },
+  { key: 'farmSubdistrict', label: 'ตำบล/แขวงของฟาร์ม' },
+  { key: 'farmPostalCode', label: 'รหัสไปรษณีย์ฟาร์ม' },
+  { key: 'farmSize', label: 'ขนาดพื้นที่' },
+  { key: 'farmSizeUnit', label: 'หน่วยขนาดพื้นที่' },
+  { key: 'cultivationType', label: 'ประเภทการปลูก' },
+  { key: 'cropType', label: 'ประเภทพืช' }
+];
+
 export default function CreateApplicationPage() {
   const router = useRouter();
   const { user } = useAuth();
@@ -101,6 +173,8 @@ export default function CreateApplicationPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [applicationId, setApplicationId] = useState<string>('');
+  const [consentData, setConsentData] = useState<any>(null);
 
   // Form data
   const [farmerData, setFarmerData] = useState<FarmerData>({
@@ -112,7 +186,11 @@ export default function CreateApplicationPage() {
     province: '',
     district: '',
     subdistrict: '',
-    postalCode: ''
+    postalCode: '',
+    applicantType: 'INDIVIDUAL',
+    organizationName: '',
+    registrationNumber: '',
+    taxId: ''
   });
 
   const [farmData, setFarmData] = useState<FarmData>({
@@ -127,7 +205,8 @@ export default function CreateApplicationPage() {
     cultivationType: '',
     cropType: '',
     latitude: '',
-    longitude: ''
+    longitude: '',
+    receivingOffice: 'DEPARTMENT_THAI_TRADITIONAL_MEDICINE'
   });
 
   // Load user data on mount
@@ -150,15 +229,199 @@ export default function CreateApplicationPage() {
     }));
   }, [user]);
 
-  const handleNext = () => {
-    // Validate current step
-    if (activeStep === 0 && !validateFarmerData()) {
-      setError('กรุณากรอกข้อมูลเกษตรกรให้ครบถ้วน');
-      return;
+  const farmerDistrictOptions = useMemo(() => {
+    const province = farmerData.province;
+    if (!province || !addressHierarchy[province]) {
+      return [] as string[];
     }
-    if (activeStep === 1 && !validateFarmData()) {
-      setError('กรุณากรอกข้อมูลฟาร์มให้ครบถ้วน');
-      return;
+    const options = Object.keys(addressHierarchy[province]);
+    return farmerData.district && !options.includes(farmerData.district)
+      ? [...options, farmerData.district]
+      : options;
+  }, [farmerData.province, farmerData.district]);
+
+  const farmerSubdistrictOptions = useMemo(() => {
+    const province = farmerData.province;
+    const district = farmerData.district;
+    if (!province || !district || !addressHierarchy[province]?.[district]) {
+      return [] as string[];
+    }
+    const options = addressHierarchy[province][district];
+    return farmerData.subdistrict && !options.includes(farmerData.subdistrict)
+      ? [...options, farmerData.subdistrict]
+      : options;
+  }, [farmerData.province, farmerData.district, farmerData.subdistrict]);
+
+  const farmDistrictOptions = useMemo(() => {
+    const province = farmData.farmProvince;
+    if (!province || !addressHierarchy[province]) {
+      return [] as string[];
+    }
+    const options = Object.keys(addressHierarchy[province]);
+    return farmData.farmDistrict && !options.includes(farmData.farmDistrict)
+      ? [...options, farmData.farmDistrict]
+      : options;
+  }, [farmData.farmProvince, farmData.farmDistrict]);
+
+  const farmSubdistrictOptions = useMemo(() => {
+    const province = farmData.farmProvince;
+    const district = farmData.farmDistrict;
+    if (!province || !district || !addressHierarchy[province]?.[district]) {
+      return [] as string[];
+    }
+    const options = addressHierarchy[province][district];
+    return farmData.farmSubdistrict && !options.includes(farmData.farmSubdistrict)
+      ? [...options, farmData.farmSubdistrict]
+      : options;
+  }, [farmData.farmProvince, farmData.farmDistrict, farmData.farmSubdistrict]);
+
+  const handleFarmerProvinceChange = (provinceValue: string) => {
+    setFarmerData(prev => ({
+      ...prev,
+      province: provinceValue,
+      district: '',
+      subdistrict: ''
+    }));
+  };
+
+  const handleFarmerDistrictChange = (districtValue: string) => {
+    setFarmerData(prev => ({
+      ...prev,
+      district: districtValue,
+      subdistrict: ''
+    }));
+  };
+
+  const handleFarmProvinceChange = (provinceValue: string) => {
+    setFarmData(prev => ({
+      ...prev,
+      farmProvince: provinceValue,
+      farmDistrict: '',
+      farmSubdistrict: ''
+    }));
+  };
+
+  const handleFarmDistrictChange = (districtValue: string) => {
+    setFarmData(prev => ({
+      ...prev,
+      farmDistrict: districtValue,
+      farmSubdistrict: ''
+    }));
+  };
+
+  const getMissingFarmerFields = () =>
+    farmerRequiredFields
+      .filter(field => {
+        const value = farmerData[field.key];
+        return typeof value === 'string' ? value.trim() === '' : !value;
+      })
+      .map(field => field.label);
+
+  const getMissingFarmFields = () =>
+    farmRequiredFields
+      .filter(field => {
+        const value = farmData[field.key];
+        return typeof value === 'string' ? value.trim() === '' : !value;
+      })
+      .map(field => field.label);
+
+  const isCoordinateValid = (value: string) => {
+    if (value.trim() === '') {
+      return false;
+    }
+    return !Number.isNaN(Number(value));
+  };
+
+  const buildApplicationPayload = (status: 'DRAFT' | 'SUBMITTED') => {
+    const farmerPayload = Object.keys(farmerData).reduce<Record<string, string>>((acc, key) => {
+      const typedKey = key as keyof FarmerData;
+      acc[key] = String(farmerData[typedKey]).trim();
+      return acc;
+    }, {});
+
+    const farmPayload = Object.keys(farmData).reduce<Record<string, string>>((acc, key) => {
+      const typedKey = key as keyof FarmData;
+      acc[key] = String(farmData[typedKey]).trim();
+      return acc;
+    }, {});
+
+    return {
+      farmer: farmerPayload,
+      farm: farmPayload,
+      applicantType: farmerData.applicantType,
+      organizationName: farmerData.organizationName || undefined,
+      registrationNumber: farmerData.registrationNumber || undefined,
+      taxId: farmerData.taxId || undefined,
+      receivingOffice: farmData.receivingOffice,
+      status
+    };
+  };
+
+  const handleNext = async () => {
+    if (activeStep === 0) {
+      const missingFarmer = getMissingFarmerFields();
+      if (missingFarmer.length) {
+        setError(`กรุณากรอกข้อมูลเกษตรกรให้ครบ: ${missingFarmer.join(', ')}`);
+        return;
+      }
+    }
+
+    if (activeStep === 1) {
+      const missingFarm = getMissingFarmFields();
+      if (missingFarm.length) {
+        setError(`กรุณากรอกข้อมูลฟาร์มให้ครบ: ${missingFarm.join(', ')}`);
+        return;
+      }
+
+      if (!isCoordinateValid(farmData.latitude) || !isCoordinateValid(farmData.longitude)) {
+        setError('กรุณากรอกละติจูดและลองจิจูดเป็นตัวเลขที่ถูกต้อง');
+        return;
+      }
+
+      if (
+        !farmData.farmSize ||
+        Number.isNaN(Number(farmData.farmSize)) ||
+        Number(farmData.farmSize) <= 0
+      ) {
+        setError('กรุณากรอกขนาดพื้นที่มากกว่า 0');
+        return;
+      }
+
+      // Create DRAFT application before proceeding to documents
+      if (!applicationId) {
+        try {
+          setLoading(true);
+          const token = localStorage.getItem('authToken');
+          const payload = buildApplicationPayload('DRAFT');
+
+          const response = await fetch('/api/farmer/application', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'ไม่สามารถสร้างคำขอได้');
+          }
+
+          const responseData = await response.json();
+          if (!responseData?.success || !responseData?.data?._id) {
+            throw new Error(responseData?.message || 'ไม่สามารถสร้างคำขอได้');
+          }
+
+          setApplicationId(responseData.data._id);
+        } catch (err: any) {
+          setError(err.message || 'เกิดข้อผิดพลาดในการสร้างคำขอ');
+          setLoading(false);
+          return;
+        } finally {
+          setLoading(false);
+        }
+      }
     }
 
     setError('');
@@ -170,92 +433,73 @@ export default function CreateApplicationPage() {
     setError('');
   };
 
-  const validateFarmerData = (): boolean =>
-    !!(
-      farmerData.fullName &&
-      farmerData.email &&
-      farmerData.phoneNumber &&
-      farmerData.nationalId &&
-      farmerData.address &&
-      farmerData.province
-    );
-
-  const validateFarmData = (): boolean =>
-    !!(
-      farmData.farmName &&
-      farmData.farmAddress &&
-      farmData.farmProvince &&
-      farmData.farmSize &&
-      farmData.cultivationType &&
-      farmData.cropType
-    );
-
-  const handleSaveDraft = async () => {
-    setLoading(true);
-    setError('');
-
-    try {
-      const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:5000/api/applications', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
-        },
-        body: JSON.stringify({
-          farmer: farmerData,
-          farm: farmData,
-          status: 'DRAFT'
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error('ไม่สามารถบันทึกแบบร่างได้');
-      }
-
-      await response.json();
-      setSuccess('บันทึกแบบร่างสำเร็จ');
-
-      setTimeout(() => {
-        router.push('/farmer/applications');
-      }, 2000);
-    } catch (err: any) {
-      setError(err.message || 'เกิดข้อผิดพลาดในการบันทึก');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleSubmit = async () => {
     setLoading(true);
     setError('');
 
     try {
       const token = localStorage.getItem('authToken');
-      const response = await fetch('http://localhost:5000/api/applications', {
+
+      // Validate consent data
+      if (!consentData) {
+        setError('กรุณายืนยันความยินยอมและลายเซ็นก่อนส่งคำขอ');
+        setLoading(false);
+        return;
+      }
+
+      if (!applicationId) {
+        setError('ไม่พบหมายเลขคำขอ');
+        setLoading(false);
+        return;
+      }
+
+      // Step 1: Submit consent
+      const consentResponse = await fetch(`/api/farmer/application/${applicationId}/consent`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`
         },
         body: JSON.stringify({
-          farmer: farmerData,
-          farm: farmData,
-          status: 'SUBMITTED'
+          acceptedTerms: consentData.acceptedTerms,
+          acceptedPrivacy: consentData.acceptedPrivacy,
+          fullName: consentData.fullName,
+          nationalId: consentData.nationalId,
+          signatureType: consentData.signature.type,
+          signatureValue: consentData.signature.value,
+          version: '1.0'
         })
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (!consentResponse.ok) {
+        const errorData = await consentResponse.json();
+        throw new Error(errorData.message || 'ไม่สามารถบันทึกความยินยอมได้');
+      }
+
+      // Step 2: Submit application
+      const submitResponse = await fetch(`/api/farmer/application/${applicationId}/submit`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (!submitResponse.ok) {
+        const errorData = await submitResponse.json();
         throw new Error(errorData.message || 'ไม่สามารถส่งคำขอได้');
       }
 
-      await response.json();
-      setSuccess('ส่งคำขอสำเร็จ! กำลังเปลี่ยนหน้า...');
+      const responseData = await submitResponse.json();
+      if (!responseData?.success) {
+        throw new Error(responseData?.message || 'ไม่สามารถส่งคำขอได้');
+      }
+
+      setSuccess(responseData.message || 'ส่งคำขอสำเร็จ! กำลังเปลี่ยนหน้า...');
 
       setTimeout(() => {
-        router.push('/farmer/applications');
-      }, 2000);
+        router.push(`/farmer/application/payment?id=${applicationId}`);
+      }, 1500);
     } catch (err: any) {
       setError(err.message || 'เกิดข้อผิดพลาดในการส่งคำขอ');
     } finally {
@@ -269,11 +513,80 @@ export default function CreateApplicationPage() {
       case 0:
         return (
           <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                required
+                select
+                label="ประเภทผู้ขอ"
+                value={farmerData.applicantType}
+                onChange={e =>
+                  setFarmerData({
+                    ...farmerData,
+                    applicantType: e.target.value as FarmerData['applicantType']
+                  })
+                }
+                helperText="เลือกประเภทผู้ยื่นขอรับรอง"
+              >
+                {applicantTypes.map(type => (
+                  <MenuItem key={type.value} value={type.value}>
+                    {type.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+
+            {/* Conditional fields for non-individual applicants */}
+            {farmerData.applicantType !== 'INDIVIDUAL' && (
+              <>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    required
+                    label={
+                      farmerData.applicantType === 'COMMUNITY_ENTERPRISE'
+                        ? 'ชื่อวิสาหกิจชุมชน'
+                        : 'ชื่อนิติบุคคล'
+                    }
+                    value={farmerData.organizationName}
+                    onChange={e =>
+                      setFarmerData({ ...farmerData, organizationName: e.target.value })
+                    }
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    required
+                    label={
+                      farmerData.applicantType === 'COMMUNITY_ENTERPRISE'
+                        ? 'เลขทะเบียนวิสาหกิจชุมชน (สวช.01)'
+                        : 'เลขทะเบียนนิติบุคคล'
+                    }
+                    value={farmerData.registrationNumber}
+                    onChange={e =>
+                      setFarmerData({ ...farmerData, registrationNumber: e.target.value })
+                    }
+                  />
+                </Grid>
+                {farmerData.applicantType === 'LEGAL_ENTITY' && (
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label="เลขประจำตัวผู้เสียภาษี"
+                      value={farmerData.taxId}
+                      onChange={e => setFarmerData({ ...farmerData, taxId: e.target.value })}
+                    />
+                  </Grid>
+                )}
+              </>
+            )}
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
                 required
-                label="ชื่อ-นามสกุล"
+                label={farmerData.applicantType === 'INDIVIDUAL' ? 'ชื่อ-นามสกุล' : 'ผู้ติดต่อ'}
                 value={farmerData.fullName}
                 onChange={e => setFarmerData({ ...farmerData, fullName: e.target.value })}
               />
@@ -326,7 +639,7 @@ export default function CreateApplicationPage() {
                 select
                 label="จังหวัด"
                 value={farmerData.province}
-                onChange={e => setFarmerData({ ...farmerData, province: e.target.value })}
+                onChange={e => handleFarmerProvinceChange(e.target.value)}
               >
                 {provinces.map(province => (
                   <MenuItem key={province} value={province}>
@@ -338,22 +651,65 @@ export default function CreateApplicationPage() {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
+                required
                 label="อำเภอ/เขต"
+                select={Boolean(farmerDistrictOptions.length)}
                 value={farmerData.district}
-                onChange={e => setFarmerData({ ...farmerData, district: e.target.value })}
-              />
+                onChange={e =>
+                  farmerDistrictOptions.length
+                    ? handleFarmerDistrictChange(e.target.value)
+                    : setFarmerData({ ...farmerData, district: e.target.value })
+                }
+                helperText={
+                  farmerDistrictOptions.length
+                    ? 'เลือกอำเภอ/เขตตามจังหวัดที่ระบุ'
+                    : 'ระบุอำเภอ/เขตด้วยตนเอง'
+                }
+                SelectProps={farmerDistrictOptions.length ? { displayEmpty: true } : undefined}
+              >
+                {farmerDistrictOptions.length > 0 && (
+                  <MenuItem value="">
+                    <em>เลือกอำเภอ/เขต</em>
+                  </MenuItem>
+                )}
+                {farmerDistrictOptions.map(district => (
+                  <MenuItem key={district} value={district}>
+                    {district}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
+                required
                 label="ตำบล/แขวง"
+                select={Boolean(farmerSubdistrictOptions.length)}
                 value={farmerData.subdistrict}
                 onChange={e => setFarmerData({ ...farmerData, subdistrict: e.target.value })}
-              />
+                helperText={
+                  farmerSubdistrictOptions.length
+                    ? 'เลือกตำบล/แขวงตามอำเภอที่เลือก'
+                    : 'ระบุตำบล/แขวงด้วยตนเอง'
+                }
+                SelectProps={farmerSubdistrictOptions.length ? { displayEmpty: true } : undefined}
+              >
+                {farmerSubdistrictOptions.length > 0 && (
+                  <MenuItem value="">
+                    <em>เลือกตำบล/แขวง</em>
+                  </MenuItem>
+                )}
+                {farmerSubdistrictOptions.map(subdistrict => (
+                  <MenuItem key={subdistrict} value={subdistrict}>
+                    {subdistrict}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
+                required
                 label="รหัสไปรษณีย์"
                 value={farmerData.postalCode}
                 onChange={e => setFarmerData({ ...farmerData, postalCode: e.target.value })}
@@ -366,6 +722,29 @@ export default function CreateApplicationPage() {
       case 1:
         return (
           <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                required
+                select
+                label="หน่วยงานรับคำขอ"
+                value={farmData.receivingOffice}
+                onChange={e =>
+                  setFarmData({
+                    ...farmData,
+                    receivingOffice: e.target.value as FarmData['receivingOffice']
+                  })
+                }
+                helperText="เลือกหน่วยงานที่จะยื่นคำขอ"
+              >
+                {receivingOffices.map(office => (
+                  <MenuItem key={office.value} value={office.value}>
+                    {office.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
@@ -409,7 +788,7 @@ export default function CreateApplicationPage() {
                 select
                 label="จังหวัด"
                 value={farmData.farmProvince}
-                onChange={e => setFarmData({ ...farmData, farmProvince: e.target.value })}
+                onChange={e => handleFarmProvinceChange(e.target.value)}
               >
                 {provinces.map(province => (
                   <MenuItem key={province} value={province}>
@@ -421,27 +800,98 @@ export default function CreateApplicationPage() {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
+                required
                 label="อำเภอ/เขต"
+                select={Boolean(farmDistrictOptions.length)}
                 value={farmData.farmDistrict}
-                onChange={e => setFarmData({ ...farmData, farmDistrict: e.target.value })}
-              />
+                onChange={e =>
+                  farmDistrictOptions.length
+                    ? handleFarmDistrictChange(e.target.value)
+                    : setFarmData({ ...farmData, farmDistrict: e.target.value })
+                }
+                helperText={
+                  farmDistrictOptions.length
+                    ? 'เลือกอำเภอ/เขตตามจังหวัดที่ระบุ'
+                    : 'ระบุอำเภอ/เขตด้วยตนเอง'
+                }
+                SelectProps={farmDistrictOptions.length ? { displayEmpty: true } : undefined}
+              >
+                {farmDistrictOptions.length > 0 && (
+                  <MenuItem value="">
+                    <em>เลือกอำเภอ/เขต</em>
+                  </MenuItem>
+                )}
+                {farmDistrictOptions.map(district => (
+                  <MenuItem key={district} value={district}>
+                    {district}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
+                required
                 label="ตำบล/แขวง"
+                select={Boolean(farmSubdistrictOptions.length)}
                 value={farmData.farmSubdistrict}
                 onChange={e => setFarmData({ ...farmData, farmSubdistrict: e.target.value })}
-              />
+                helperText={
+                  farmSubdistrictOptions.length
+                    ? 'เลือกตำบล/แขวงตามอำเภอที่เลือก'
+                    : 'ระบุตำบล/แขวงด้วยตนเอง'
+                }
+                SelectProps={farmSubdistrictOptions.length ? { displayEmpty: true } : undefined}
+              >
+                {farmSubdistrictOptions.length > 0 && (
+                  <MenuItem value="">
+                    <em>เลือกตำบล/แขวง</em>
+                  </MenuItem>
+                )}
+                {farmSubdistrictOptions.map(subdistrict => (
+                  <MenuItem key={subdistrict} value={subdistrict}>
+                    {subdistrict}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
+                required
                 label="รหัสไปรษณีย์"
                 value={farmData.farmPostalCode}
                 onChange={e => setFarmData({ ...farmData, farmPostalCode: e.target.value })}
                 inputProps={{ maxLength: 5 }}
               />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                required
+                type="number"
+                label="ขนาดพื้นที่"
+                value={farmData.farmSize}
+                onChange={e => setFarmData({ ...farmData, farmSize: e.target.value })}
+                inputProps={{ min: 0, step: 0.1 }}
+                helperText="ระบุพื้นที่เพาะปลูกรวม"
+              />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                fullWidth
+                required
+                select
+                label="หน่วยขนาดพื้นที่"
+                value={farmData.farmSizeUnit}
+                onChange={e => setFarmData({ ...farmData, farmSizeUnit: e.target.value })}
+              >
+                {farmSizeUnits.map(unit => (
+                  <MenuItem key={unit} value={unit}>
+                    {unit}
+                  </MenuItem>
+                ))}
+              </TextField>
             </Grid>
             <Grid item xs={12} md={6}>
               <TextField
@@ -466,6 +916,7 @@ export default function CreateApplicationPage() {
                 value={farmData.latitude}
                 onChange={e => setFarmData({ ...farmData, latitude: e.target.value })}
                 placeholder="เช่น 18.7883"
+                helperText="กรอกค่าพิกัดเป็นตัวเลขทศนิยม"
               />
             </Grid>
             <Grid item xs={12} md={6}>
@@ -475,12 +926,43 @@ export default function CreateApplicationPage() {
                 value={farmData.longitude}
                 onChange={e => setFarmData({ ...farmData, longitude: e.target.value })}
                 placeholder="เช่น 98.9853"
+                helperText="กรอกค่าพิกัดเป็นตัวเลขทศนิยม"
               />
             </Grid>
           </Grid>
         );
 
       case 2:
+        // Documents Upload Step
+        return (
+          <Box>
+            {applicationId ? (
+              <DocumentUploadSection
+                applicationId={applicationId}
+                applicantType={farmerData.applicantType}
+              />
+            ) : (
+              <Alert severity="warning">กรุณารอสักครู่...</Alert>
+            )}
+          </Box>
+        );
+
+      case 3:
+        // Consent and Signature Step
+        return (
+          <Box>
+            <ConsentBlock
+              fullName={farmerData.fullName}
+              nationalId={farmerData.nationalId}
+              onConsentComplete={data => {
+                setConsentData(data);
+              }}
+            />
+          </Box>
+        );
+
+      case 4:
+        // Review Step
         return (
           <Box>
             <Typography variant="h6" gutterBottom sx={{ color: '#2e7d32', fontWeight: 600 }}>
@@ -667,17 +1149,6 @@ export default function CreateApplicationPage() {
                 </Button>
 
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                  {activeStep === steps.length - 1 && (
-                    <Button
-                      variant="outlined"
-                      startIcon={<SaveIcon />}
-                      onClick={handleSaveDraft}
-                      disabled={loading}
-                    >
-                      บันทึกแบบร่าง
-                    </Button>
-                  )}
-
                   {activeStep === steps.length - 1 ? (
                     <Button
                       variant="contained"

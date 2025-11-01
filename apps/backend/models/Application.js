@@ -11,7 +11,10 @@ const mongoose = require('mongoose');
 const ApplicationStatus = {
   DRAFT: 'draft',
   SUBMITTED: 'submitted',
+  PENDING_PAYMENT: 'pending_payment', // รอการชำระเงิน
+  PAYMENT_CONFIRMED: 'payment_confirmed', // ยืนยันการชำระเงินแล้ว
   UNDER_REVIEW: 'under_review',
+  PENDING_INSPECTION: 'pending_inspection', // รอกำหนดวันตรวจ
   INSPECTION_SCHEDULED: 'inspection_scheduled',
   INSPECTION_IN_PROGRESS: 'inspection_in_progress',
   INSPECTION_COMPLETED: 'inspection_completed',
@@ -145,7 +148,10 @@ const DocumentReferenceSchema = new mongoose.Schema(
       ]
     },
     fileName: String,
+    storageFileName: String,
+    storagePath: String,
     fileSize: Number,
+    mimeType: String,
     uploadDate: { type: Date, default: Date.now },
     verificationStatus: {
       type: String,
@@ -154,7 +160,36 @@ const DocumentReferenceSchema = new mongoose.Schema(
     },
     verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     verificationDate: Date,
-    notes: String
+    notes: String,
+    uploadedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    description: String
+  },
+  { _id: false }
+);
+
+const ConsentSignatureSchema = new mongoose.Schema(
+  {
+    type: {
+      type: String,
+      enum: ['typed', 'drawn'],
+      default: 'typed'
+    },
+    value: String
+  },
+  { _id: false }
+);
+
+const ConsentSchema = new mongoose.Schema(
+  {
+    acceptedTerms: { type: Boolean, required: true },
+    acceptedPrivacy: { type: Boolean, required: true },
+    fullName: { type: String, required: true, trim: true },
+    nationalId: { type: String, required: true, trim: true },
+    signedAt: { type: Date, default: Date.now },
+    ipAddress: String,
+    userAgent: String,
+    version: { type: String, default: '1.0' },
+    signature: { type: ConsentSignatureSchema, default: undefined }
   },
   { _id: false }
 );
@@ -225,6 +260,39 @@ const ApplicationSchema = new mongoose.Schema(
       required: true
     },
 
+    // Applicant Type & Organization Details (กทล.1 requirement)
+    applicantType: {
+      type: String,
+      required: true,
+      enum: ['INDIVIDUAL', 'COMMUNITY_ENTERPRISE', 'LEGAL_ENTITY'],
+      default: 'INDIVIDUAL'
+    },
+
+    organizationInfo: {
+      organizationName: String, // ชื่อวิสาหกิจ/นิติบุคคล
+      registrationNumber: String, // เลขทะเบียน (สวช.01 สำหรับวิสาหกิจ)
+      taxId: String, // เลขประจำตัวผู้เสียภาษี
+      registrationDate: Date,
+      certificateDocuments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }]
+    },
+
+    // Receiving Office (หน่วยงานรับคำขอ)
+    receivingOffice: {
+      type: String,
+      required: true,
+      enum: [
+        'DEPARTMENT_THAI_TRADITIONAL_MEDICINE', // กรมการแพทย์แผนไทยและการแพทย์ทางเลือก
+        'PROVINCIAL_HEALTH_OFFICE' // สำนักงานสาธารณสุขจังหวัด
+      ],
+      default: 'DEPARTMENT_THAI_TRADITIONAL_MEDICINE'
+    },
+
+    receivingOfficeDetails: {
+      provinceName: String, // สำหรับกรณีที่เลือก PROVINCIAL_HEALTH_OFFICE
+      officerName: String,
+      receivedDate: Date
+    },
+
     // Application Details
     farmInformation: {
       type: FarmInformationSchema,
@@ -242,6 +310,35 @@ const ApplicationSchema = new mongoose.Schema(
     },
 
     statusHistory: [StatusHistorySchema],
+
+    // Payment Information
+    payment: {
+      amount: {
+        type: Number,
+        default: 0 // จำนวนเงิน (บาท)
+      },
+      currency: {
+        type: String,
+        default: 'THB'
+      },
+      status: {
+        type: String,
+        enum: ['pending', 'paid', 'verified', 'cancelled'],
+        default: 'pending'
+      },
+      method: {
+        type: String,
+        enum: ['qr_code', 'bank_transfer', 'counter_service'],
+        default: 'qr_code'
+      },
+      qrCodeUrl: String, // URL ของ QR Code สำหรับชำระเงิน
+      referenceNumber: String, // เลขที่อ้างอิง
+      slipUrl: String, // URL ของสลิปโอนเงิน
+      paidAt: Date, // วันที่ชำระเงิน
+      verifiedAt: Date, // วันที่ตรวจสอบแล้ว
+      verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      notes: String
+    },
 
     // Timeline
     submissionDate: Date,
@@ -270,6 +367,9 @@ const ApplicationSchema = new mongoose.Schema(
 
     // Documentation
     documents: [DocumentReferenceSchema],
+
+    // Consent & Agreements
+    consent: { type: ConsentSchema, default: undefined },
 
     // Assigned Personnel
     assignedOfficer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -480,15 +580,34 @@ ApplicationSchema.pre('save', function (next) {
 
   // Validate status transitions
   if (this.isModified('currentStatus')) {
-    // Add validation logic for valid status transitions
+    // Complete transition rules matching HerbCtrl 14-step workflow
     const _validTransitions = {
       [ApplicationStatus.DRAFT]: [ApplicationStatus.SUBMITTED],
-      [ApplicationStatus.SUBMITTED]: [ApplicationStatus.UNDER_REVIEW],
-      [ApplicationStatus.UNDER_REVIEW]: [
-        ApplicationStatus.INSPECTION_SCHEDULED,
+      [ApplicationStatus.SUBMITTED]: [
+        ApplicationStatus.PENDING_PAYMENT,
         ApplicationStatus.REJECTED
-      ]
-      // ... add more transition rules
+      ],
+      [ApplicationStatus.PENDING_PAYMENT]: [
+        ApplicationStatus.PAYMENT_CONFIRMED,
+        ApplicationStatus.DRAFT
+      ],
+      [ApplicationStatus.PAYMENT_CONFIRMED]: [ApplicationStatus.UNDER_REVIEW],
+      [ApplicationStatus.UNDER_REVIEW]: [
+        ApplicationStatus.PENDING_INSPECTION,
+        ApplicationStatus.REJECTED
+      ],
+      [ApplicationStatus.PENDING_INSPECTION]: [ApplicationStatus.INSPECTION_SCHEDULED],
+      [ApplicationStatus.INSPECTION_SCHEDULED]: [ApplicationStatus.INSPECTION_IN_PROGRESS],
+      [ApplicationStatus.INSPECTION_IN_PROGRESS]: [ApplicationStatus.INSPECTION_COMPLETED],
+      [ApplicationStatus.INSPECTION_COMPLETED]: [ApplicationStatus.EVALUATION],
+      [ApplicationStatus.EVALUATION]: [ApplicationStatus.DECISION_PENDING],
+      [ApplicationStatus.DECISION_PENDING]: [
+        ApplicationStatus.APPROVED,
+        ApplicationStatus.REJECTED
+      ],
+      [ApplicationStatus.APPROVED]: [ApplicationStatus.CERTIFICATE_ISSUED],
+      [ApplicationStatus.CERTIFICATE_ISSUED]: [],
+      [ApplicationStatus.REJECTED]: []
     };
 
     // This would need to be enhanced with complete transition validation

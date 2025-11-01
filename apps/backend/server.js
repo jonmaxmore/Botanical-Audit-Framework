@@ -255,6 +255,10 @@ app.get('/api/health', async (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/health', require('./routes/health'));
 app.use('/api/applications', require('./routes/applications')); // ? Enabled for real API
+app.use('/api/farmer/application', require('./routes/farmer-application'));
+app.use('/api/admin/applications', require('./routes/admin-application')); // Admin application management
+app.use('/api/certificates', require('./routes/certificate')); // Certificate routes
+app.use('/api/inspections', require('./routes/inspection')); // Inspection routes
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ? Smart Agriculture APIs
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
