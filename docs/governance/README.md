@@ -4,6 +4,7 @@ This area centralizes governance artifacts that document why items are archived,
 
 ## Contents
 - `archive-validation.md` — Pending and completed confirmations for archiving or removing materials.
+- `documentation-log.md` — Time-stamped record of structural updates, approvals, and follow-up actions.
 - Change-control templates and approval logs (to be migrated from legacy governance docs).
 
 ## Usage Guidelines

@@ -155,7 +155,7 @@ server {
     server_name _;
 
     location / {
-        proxy_pass http://localhost:3000;
+  proxy_pass http://localhost:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -192,7 +192,7 @@ http://YOUR_PUBLIC_IP/api/health
 
 **ทดสอบจาก SSH:**
 ```bash
-curl http://localhost:3000/health
+curl http://localhost:5000/health
 ```
 
 - [ ] `/health` ตอบกลับ `{"status":"ok"}`

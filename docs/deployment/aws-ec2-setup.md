@@ -209,7 +209,7 @@ server {
     server_name _;
 
     location / {
-        proxy_pass http://localhost:3000;
+    proxy_pass http://localhost:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';
@@ -252,7 +252,7 @@ http://YOUR_PUBLIC_IP/api/health
 
 ### 7.2 ทดสอบ API
 ```bash
-curl http://localhost:3000/health
+curl http://localhost:5000/health
 ```
 
 ---
@@ -294,7 +294,7 @@ server {
 
     # Backend API
     location /api {
-        proxy_pass http://localhost:3000;
+        proxy_pass http://localhost:5000;
         proxy_http_version 1.1;
         proxy_set_header Upgrade $http_upgrade;
         proxy_set_header Connection 'upgrade';

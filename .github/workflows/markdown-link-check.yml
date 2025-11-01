@@ -1,0 +1,37 @@
+name: Markdown Link Check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  link-check:
+    runs-on: ubuntu-latest
+    name: Validate Markdown links
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install markdown-link-check
+        run: npm install -g markdown-link-check
+
+      - name: Run Markdown link check
+        run: |
+          echo "Running markdown-link-check..."
+          find docs -name "*.md" -print0 | xargs -0 -n1 markdown-link-check -q -c .github/markdown-check-config.json
+
+      - name: Summarize successful run
+        if: success()
+        run: echo "All Markdown links are valid."
+
+      - name: Summarize failed run
+        if: failure()
+        run: echo "Markdown links check failed. Review workflow logs."

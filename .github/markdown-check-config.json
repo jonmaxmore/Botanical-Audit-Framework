@@ -1,0 +1,9 @@
+{
+  "ignorePatterns": [
+    { "pattern": "^#" },
+    { "pattern": "^mailto:" },
+    { "pattern": "localhost" }
+  ],
+  "retryOn429": true,
+  "timeout": "10s"
+}

@@ -39,7 +39,7 @@ pnpm dev
 ### Backend Environment (.env)
 ```bash
 # Server
-PORT=3000
+PORT=5000
 NODE_ENV=development
 
 # Database
@@ -58,7 +58,7 @@ LINE_NOTIFY_TOKEN=your_line_token
 
 ### Frontend Environment (.env.local)
 ```bash
-NEXT_PUBLIC_API_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:5000
 NEXT_PUBLIC_ENVIRONMENT=development
 ```
 
