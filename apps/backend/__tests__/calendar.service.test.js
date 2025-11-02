@@ -317,7 +317,7 @@ describe('CalendarService', () => {
       CalendarEvent.findById = jest.fn().mockResolvedValue(mockEvent);
       CalendarEvent.findConflicts = jest.fn().mockResolvedValue([]);
 
-      const result = await calendarService.updateEvent(eventId, updates, { _id: 'user123' });
+      await calendarService.updateEvent(eventId, updates, { _id: 'user123' });
 
       expect(mockEvent.title).toBe('Updated Title');
       expect(mockEvent.save).toHaveBeenCalled();

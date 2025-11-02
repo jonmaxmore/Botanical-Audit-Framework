@@ -57,7 +57,6 @@ jest.mock('../middleware/rbac', () => ({
 
 describe('Calendar Routes', () => {
   let app;
-  let mockCalendarService;
 
   beforeEach(() => {
     app = express();
