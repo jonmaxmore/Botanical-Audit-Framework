@@ -18,6 +18,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const Inspection = require('../models/Inspection');
 const Application = require('../models/Application');
+const Notification = require('../models/Notification');
 const { authenticate } = require('../middleware/auth');
 const { authorize } = require('../middleware/authorize');
 const logger = require('../config/logger');
@@ -477,6 +478,26 @@ router.post('/:id/complete', authenticate, authorize(['admin', 'inspector']), as
 
     // Complete the inspection
     await inspection.completeInspection();
+
+    // Send inspection completed notification to farmer
+    const application = await Application.findById(inspection.application);
+    if (application) {
+      const passStatus = inspection.scoring.totalScore >= 70 ? 'ผ่าน' : 'ไม่ผ่าน';
+      await Notification.createAndSend({
+        userId: application.farmer,
+        type: 'inspection_completed',
+        title: 'การตรวจประเมินเสร็จสิ้น',
+        message: `การตรวจประเมินฟาร์มของคุณเสร็จสิ้นแล้ว ผลการประเมิน: ${passStatus} (คะแนน ${inspection.scoring.totalScore}/${inspection.scoring.maxScore})`,
+        priority: 'high',
+        actionUrl: `/inspections/${inspection._id}`,
+        actionLabel: 'ดูผลการตรวจ',
+        relatedEntity: {
+          entityType: 'inspection',
+          entityId: inspection._id
+        },
+        deliveryMethods: ['realtime', 'email']
+      });
+    }
 
     logger.info('Inspection completed', {
       inspectionId: inspection._id,
