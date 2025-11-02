@@ -265,6 +265,7 @@ app.use('/api/certificates', require('./routes/certificate')); // Certificate ro
 app.use('/api/inspections', require('./routes/inspection')); // Inspection routes
 app.use('/api/documents', require('./routes/document')); // Document Management System
 app.use('/api/notifications', require('./routes/notification')); // Notification System
+app.use('/api/analytics', require('./routes/analytics')); // Analytics Dashboard
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ? Smart Agriculture APIs
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
