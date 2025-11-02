@@ -15,7 +15,6 @@ import {
 import {
   AttachFile as AttachFileIcon,
   Download as DownloadIcon,
-  Delete as DeleteIcon,
   CloudUpload as CloudUploadIcon,
   InsertDriveFile as FileIcon,
   PictureAsPdf as PdfIcon,
@@ -55,7 +54,7 @@ export default function JobAttachmentList({ jobId, onUpdate }: JobAttachmentList
       setLoading(true);
       setError(null);
       const token = localStorage.getItem('token') || localStorage.getItem('inspector_token');
-      
+
       const response = await fetch(`${API_BASE_URL}/job-assignments/${jobId}/attachments`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -95,10 +94,13 @@ export default function JobAttachmentList({ jobId, onUpdate }: JobAttachmentList
 
       const formData = new FormData();
       formData.append('file', files[0]);
-      formData.append('uploadedBy', JSON.stringify({
-        userId: currentUser._id || currentUser.id,
-        name: currentUser.fullName || currentUser.name
-      }));
+      formData.append(
+        'uploadedBy',
+        JSON.stringify({
+          userId: currentUser._id || currentUser.id,
+          name: currentUser.fullName || currentUser.name
+        })
+      );
 
       const response = await fetch(`${API_BASE_URL}/job-assignments/${jobId}/attachments`, {
         method: 'POST',
@@ -213,23 +215,18 @@ export default function JobAttachmentList({ jobId, onUpdate }: JobAttachmentList
                 </IconButton>
               }
             >
-              <ListItemIcon>
-                {getFileIcon(attachment.mimeType)}
-              </ListItemIcon>
+              <ListItemIcon>{getFileIcon(attachment.mimeType)}</ListItemIcon>
               <ListItemText
                 primary={attachment.filename}
                 secondary={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mt: 0.5 }}>
-                    <Chip
-                      label={formatFileSize(attachment.size)}
-                      size="small"
-                      variant="outlined"
-                    />
+                    <Chip label={formatFileSize(attachment.size)} size="small" variant="outlined" />
                     <Typography variant="caption" color="textSecondary">
                       • อัปโหลดโดย {attachment.uploadedBy.name}
                     </Typography>
                     <Typography variant="caption" color="textSecondary">
-                      • {formatDistanceToNow(new Date(attachment.uploadedAt), {
+                      •{' '}
+                      {formatDistanceToNow(new Date(attachment.uploadedAt), {
                         addSuffix: true,
                         locale: th
                       })}

@@ -8,14 +8,9 @@ import {
   Paper,
   Divider,
   CircularProgress,
-  Alert,
-  IconButton
+  Alert
 } from '@mui/material';
-import {
-  Send as SendIcon,
-  Person as PersonIcon,
-  Reply as ReplyIcon
-} from '@mui/icons-material';
+import { Send as SendIcon, Person as PersonIcon } from '@mui/icons-material';
 import { formatDistanceToNow } from 'date-fns';
 import { th } from 'date-fns/locale';
 
@@ -50,12 +45,12 @@ export default function CommentThread({ jobId, onUpdate }: CommentThreadProps) {
       setLoading(true);
       setError(null);
       const token = localStorage.getItem('token') || localStorage.getItem('inspector_token');
-      
+
       const response = await fetch(`${API_BASE_URL}/job-assignments/${jobId}/comments`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {
@@ -86,12 +81,12 @@ export default function CommentThread({ jobId, onUpdate }: CommentThreadProps) {
       setError(null);
       const token = localStorage.getItem('token') || localStorage.getItem('inspector_token');
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-      
+
       const response = await fetch(`${API_BASE_URL}/job-assignments/${jobId}/comments`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           author: {
@@ -100,7 +95,7 @@ export default function CommentThread({ jobId, onUpdate }: CommentThreadProps) {
             role: currentUser.role
           },
           content: newComment.trim()
-        }),
+        })
       });
 
       if (!response.ok) {
@@ -168,7 +163,7 @@ export default function CommentThread({ jobId, onUpdate }: CommentThreadProps) {
           rows={3}
           placeholder="เขียนความคิดเห็น... (กด Ctrl+Enter เพื่อส่ง)"
           value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
+          onChange={e => setNewComment(e.target.value)}
           onKeyPress={handleKeyPress}
           disabled={submitting}
           variant="outlined"
@@ -198,7 +193,7 @@ export default function CommentThread({ jobId, onUpdate }: CommentThreadProps) {
         </Box>
       ) : (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {comments.map((comment) => (
+          {comments.map(comment => (
             <Paper key={comment._id} sx={{ p: 2 }} elevation={1}>
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <Avatar

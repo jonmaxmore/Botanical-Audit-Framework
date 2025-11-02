@@ -37,7 +37,6 @@ import {
   Cancel as CancelIcon,
   Refresh as RefreshIcon,
   Analytics as AnalyticsIcon,
-  Assignment as AssignmentIcon,
   Visibility as VisibilityIcon
 } from '@mui/icons-material';
 import { Inspector } from '../../types/user.types';
@@ -89,12 +88,12 @@ export default function InspectorDashboard() {
       setLoading(true);
       setError(null);
       const token = localStorage.getItem('token') || localStorage.getItem('inspector_token');
-      
+
       const response = await fetch(`${API_BASE_URL}/analytics/inspections`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {
@@ -116,14 +115,14 @@ export default function InspectorDashboard() {
     try {
       const token = localStorage.getItem('token') || localStorage.getItem('inspector_token');
       const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
-      
+
       const response = await fetch(
         `${API_BASE_URL}/job-assignments?assignedTo=${currentUser._id || currentUser.id}&status=pending,accepted,in_progress`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
+            'Content-Type': 'application/json'
+          }
         }
       );
 
@@ -205,29 +204,29 @@ export default function InspectorDashboard() {
   if (!currentUser) return null;
 
   const statsCards = [
-    { 
-      label: 'รอกำหนดวัน', 
-      value: stats?.pendingInspections || 0, 
-      icon: <ScheduleIcon />, 
-      color: '#2196f3' 
+    {
+      label: 'รอกำหนดวัน',
+      value: stats?.pendingInspections || 0,
+      icon: <ScheduleIcon />,
+      color: '#2196f3'
     },
-    { 
-      label: 'กำลังตรวจ', 
-      value: stats?.activeInspections || 0, 
-      icon: <AssessmentIcon />, 
-      color: '#ff9800' 
+    {
+      label: 'กำลังตรวจ',
+      value: stats?.activeInspections || 0,
+      icon: <AssessmentIcon />,
+      color: '#ff9800'
     },
-    { 
-      label: 'ผ่าน', 
-      value: stats?.passedInspections || 0, 
-      icon: <CheckCircleIcon />, 
-      color: '#4caf50' 
+    {
+      label: 'ผ่าน',
+      value: stats?.passedInspections || 0,
+      icon: <CheckCircleIcon />,
+      color: '#4caf50'
     },
-    { 
-      label: 'ไม่ผ่าน', 
-      value: stats?.failedInspections || 0, 
-      icon: <CancelIcon />, 
-      color: '#f44336' 
+    {
+      label: 'ไม่ผ่าน',
+      value: stats?.failedInspections || 0,
+      icon: <CancelIcon />,
+      color: '#f44336'
     }
   ];
 
@@ -366,9 +365,7 @@ export default function InspectorDashboard() {
                     .map(job => (
                       <TableRow key={job._id} hover>
                         <TableCell>
-                          <Typography variant="body2">
-                            {getJobTypeLabel(job.jobType)}
-                          </Typography>
+                          <Typography variant="body2">{getJobTypeLabel(job.jobType)}</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>

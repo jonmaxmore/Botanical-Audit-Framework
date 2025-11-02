@@ -431,201 +431,167 @@ function createJobAssignmentRoutes(jobAssignmentService) {
    * POST /api/job-assignments
    * Create new assignment
    */
-  router.post(
-    '/',
-    auth,
-    rbac(['admin', 'reviewer']),
-    async (req, res) => {
-      try {
-        const {
-          applicationId,
-          assignedTo,
-          role,
-          jobType,
-          priority,
-          strategy,
-          sla
-        } = req.body;
+  router.post('/', auth, rbac(['admin', 'reviewer']), async (req, res) => {
+    try {
+      const { applicationId, assignedTo, role, jobType, priority, strategy, sla } = req.body;
 
-        if (!applicationId || !assignedTo || !role) {
-          return res.status(400).json({
-            success: false,
-            error: 'applicationId, assignedTo, and role are required'
-          });
-        }
-
-        const assignmentData = {
-          applicationId,
-          assignedTo,
-          role,
-          jobType,
-          priority,
-          strategy,
-          sla,
-          assignedBy: req.user.id
-        };
-
-        const assignment = await jobAssignmentService.createAssignment(assignmentData);
-
-        logger.info(`Assignment created: ${assignment.id} by user ${req.user.id}`);
-
-        res.status(201).json({
-          success: true,
-          message: 'Assignment created successfully',
-          data: assignment
-        });
-      } catch (error) {
-        logger.error('Create assignment error:', error);
-        res.status(500).json({
+      if (!applicationId || !assignedTo || !role) {
+        return res.status(400).json({
           success: false,
-          error: error.message || 'Failed to create assignment'
+          error: 'applicationId, assignedTo, and role are required'
         });
       }
+
+      const assignmentData = {
+        applicationId,
+        assignedTo,
+        role,
+        jobType,
+        priority,
+        strategy,
+        sla,
+        assignedBy: req.user.id
+      };
+
+      const assignment = await jobAssignmentService.createAssignment(assignmentData);
+
+      logger.info(`Assignment created: ${assignment.id} by user ${req.user.id}`);
+
+      res.status(201).json({
+        success: true,
+        message: 'Assignment created successfully',
+        data: assignment
+      });
+    } catch (error) {
+      logger.error('Create assignment error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Failed to create assignment'
+      });
     }
-  );
+  });
 
   /**
    * PUT /api/job-assignments/:id/accept
    * Accept assignment
    */
-  router.put(
-    '/:id/accept',
-    auth,
-    async (req, res) => {
-      try {
-        const { id: assignmentId } = req.params;
-        const userId = req.user.id;
+  router.put('/:id/accept', auth, async (req, res) => {
+    try {
+      const { id: assignmentId } = req.params;
+      const userId = req.user.id;
 
-        const assignment = await jobAssignmentService.acceptAssignment(assignmentId, userId);
+      const assignment = await jobAssignmentService.acceptAssignment(assignmentId, userId);
 
-        logger.info(`Assignment ${assignmentId} accepted by user ${userId}`);
+      logger.info(`Assignment ${assignmentId} accepted by user ${userId}`);
 
-        res.status(200).json({
-          success: true,
-          message: 'Assignment accepted',
-          data: assignment
-        });
-      } catch (error) {
-        logger.error('Accept assignment error:', error);
-        res.status(500).json({
-          success: false,
-          error: error.message || 'Failed to accept assignment'
-        });
-      }
+      res.status(200).json({
+        success: true,
+        message: 'Assignment accepted',
+        data: assignment
+      });
+    } catch (error) {
+      logger.error('Accept assignment error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Failed to accept assignment'
+      });
     }
-  );
+  });
 
   /**
    * PUT /api/job-assignments/:id/start
    * Start working on assignment
    */
-  router.put(
-    '/:id/start',
-    auth,
-    async (req, res) => {
-      try {
-        const { id: assignmentId } = req.params;
-        const userId = req.user.id;
+  router.put('/:id/start', auth, async (req, res) => {
+    try {
+      const { id: assignmentId } = req.params;
+      const userId = req.user.id;
 
-        const assignment = await jobAssignmentService.startAssignment(assignmentId, userId);
+      const assignment = await jobAssignmentService.startAssignment(assignmentId, userId);
 
-        logger.info(`Assignment ${assignmentId} started by user ${userId}`);
+      logger.info(`Assignment ${assignmentId} started by user ${userId}`);
 
-        res.status(200).json({
-          success: true,
-          message: 'Assignment started',
-          data: assignment
-        });
-      } catch (error) {
-        logger.error('Start assignment error:', error);
-        res.status(500).json({
-          success: false,
-          error: error.message || 'Failed to start assignment'
-        });
-      }
+      res.status(200).json({
+        success: true,
+        message: 'Assignment started',
+        data: assignment
+      });
+    } catch (error) {
+      logger.error('Start assignment error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Failed to start assignment'
+      });
     }
-  );
+  });
 
   /**
    * PUT /api/job-assignments/:id/complete
    * Complete assignment (basic)
    */
-  router.put(
-    '/:id/complete',
-    auth,
-    async (req, res) => {
-      try {
-        const { id: assignmentId } = req.params;
-        const userId = req.user.id;
-        const data = req.body;
+  router.put('/:id/complete', auth, async (req, res) => {
+    try {
+      const { id: assignmentId } = req.params;
+      const userId = req.user.id;
+      const data = req.body;
 
-        const assignment = await jobAssignmentService.completeAssignment(
-          assignmentId,
-          userId,
-          data
-        );
+      const assignment = await jobAssignmentService.completeAssignment(assignmentId, userId, data);
 
-        logger.info(`Assignment ${assignmentId} completed by user ${userId}`);
+      logger.info(`Assignment ${assignmentId} completed by user ${userId}`);
 
-        res.status(200).json({
-          success: true,
-          message: 'Assignment completed',
-          data: assignment
-        });
-      } catch (error) {
-        logger.error('Complete assignment error:', error);
-        res.status(500).json({
-          success: false,
-          error: error.message || 'Failed to complete assignment'
-        });
-      }
+      res.status(200).json({
+        success: true,
+        message: 'Assignment completed',
+        data: assignment
+      });
+    } catch (error) {
+      logger.error('Complete assignment error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Failed to complete assignment'
+      });
     }
-  );
+  });
 
   /**
    * PUT /api/job-assignments/:id/reassign
    * Reassign job to different user
    */
-  router.put(
-    '/:id/reassign',
-    auth,
-    rbac(['admin', 'reviewer']),
-    async (req, res) => {
-      try {
-        const { id: assignmentId } = req.params;
-        const { newUserId, reason } = req.body;
-        const reassignedBy = req.user.id;
+  router.put('/:id/reassign', auth, rbac(['admin', 'reviewer']), async (req, res) => {
+    try {
+      const { id: assignmentId } = req.params;
+      const { newUserId, reason } = req.body;
+      const reassignedBy = req.user.id;
 
-        if (!newUserId || !reason) {
-          return res.status(400).json({
-            success: false,
-            error: 'newUserId and reason are required'
-          });
-        }
-
-        const assignment = await jobAssignmentService.reassignJob(
-          assignmentId,
-          newUserId,
-          reason,
-          reassignedBy
-        );
-
-        logger.info(`Assignment ${assignmentId} reassigned to ${newUserId} by ${reassignedBy}`);
-
-        res.status(200).json({
-          success: true,
-          message: 'Assignment reassigned successfully',
-          data: assignment
-        });
-      } catch (error) {
-        logger.error('Reassign assignment error:', error);
-        res.status(500).json({
+      if (!newUserId || !reason) {
+        return res.status(400).json({
           success: false,
-          error: error.message || 'Failed to reassign assignment'
+          error: 'newUserId and reason are required'
         });
       }
+
+      const assignment = await jobAssignmentService.reassignJob(
+        assignmentId,
+        newUserId,
+        reason,
+        reassignedBy
+      );
+
+      logger.info(`Assignment ${assignmentId} reassigned to ${newUserId} by ${reassignedBy}`);
+
+      res.status(200).json({
+        success: true,
+        message: 'Assignment reassigned successfully',
+        data: assignment
+      });
+    } catch (error) {
+      logger.error('Reassign assignment error:', error);
+      res.status(500).json({
+        success: false,
+        error: error.message || 'Failed to reassign assignment'
+      });
     }
-  );
+  });
 
   return router;
 }

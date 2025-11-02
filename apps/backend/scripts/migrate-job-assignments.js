@@ -1,6 +1,6 @@
 /**
  * Migration Script: Job Ticket System - Add New Fields
- * 
+ *
  * This script migrates existing job assignments to include new fields
  * from the Job Ticket System enhancement:
  * - jobType (default: 'field_inspection')
@@ -11,7 +11,7 @@
  * - history (initial entry from createdAt)
  * - relatedEntities (empty object)
  * - notifications (empty object)
- * 
+ *
  * Usage: node migrate-job-assignments.js
  */
 
@@ -26,9 +26,9 @@ const DRY_RUN = process.env.DRY_RUN === 'true'; // Set to 'true' to preview chan
 const DEFAULT_JOB_TYPES = {
   'on-site': 'field_inspection',
   'video-call': 'video_inspection',
-  'document': 'document_review',
+  document: 'document_review',
   'follow-up': 'follow_up',
-  'certification': 'certification_audit'
+  certification: 'certification_audit'
 };
 
 // Default SLA duration in days
@@ -49,15 +49,17 @@ async function migrateJobAssignments() {
     const collection = db.collection('jobassignments');
 
     // Find all job assignments that need migration
-    const assignmentsToMigrate = await collection.find({
-      $or: [
-        { jobType: { $exists: false } },
-        { comments: { $exists: false } },
-        { attachments: { $exists: false } },
-        { sla: { $exists: false } },
-        { history: { $exists: false } }
-      ]
-    }).toArray();
+    const assignmentsToMigrate = await collection
+      .find({
+        $or: [
+          { jobType: { $exists: false } },
+          { comments: { $exists: false } },
+          { attachments: { $exists: false } },
+          { sla: { $exists: false } },
+          { history: { $exists: false } }
+        ]
+      })
+      .toArray();
 
     console.log(`📊 Found ${assignmentsToMigrate.length} job assignments to migrate`);
     console.log('');
@@ -100,18 +102,20 @@ async function migrateJobAssignments() {
         // Calculate and add SLA if missing
         if (!assignment.sla) {
           const createdAt = assignment.createdAt || new Date();
-          const dueDate = assignment.scheduledDate || 
-                         new Date(createdAt.getTime() + DEFAULT_SLA_DAYS * 24 * 60 * 60 * 1000);
-          
+          const dueDate =
+            assignment.scheduledDate ||
+            new Date(createdAt.getTime() + DEFAULT_SLA_DAYS * 24 * 60 * 60 * 1000);
+
           const now = new Date();
           const remainingMs = dueDate.getTime() - now.getTime();
           const remainingHours = remainingMs / (1000 * 60 * 60);
-          
+
           updates.sla = {
             dueDate: dueDate,
-            breached: assignment.status === 'completed' 
-              ? (assignment.completedAt && assignment.completedAt > dueDate)
-              : (now > dueDate),
+            breached:
+              assignment.status === 'completed'
+                ? assignment.completedAt && assignment.completedAt > dueDate
+                : now > dueDate,
             remainingHours: Math.round(remainingHours * 100) / 100
           };
 
@@ -123,28 +127,34 @@ async function migrateJobAssignments() {
         // Add initial history entry if missing
         if (!assignment.history || assignment.history.length === 0) {
           const createdAt = assignment.createdAt || new Date();
-          const createdBy = assignment.createdBy || assignment.assignedBy || {
-            userId: 'system',
-            name: 'System',
-            role: 'system'
-          };
+          const createdBy = assignment.createdBy ||
+            assignment.assignedBy || {
+              userId: 'system',
+              name: 'System',
+              role: 'system'
+            };
 
-          updates.history = [{
-            action: 'created',
-            performedBy: {
-              userId: createdBy.userId || createdBy._id || 'system',
-              name: createdBy.name || createdBy.fullName || 'System',
-              role: createdBy.role || 'system'
-            },
-            changes: {
-              status: 'pending',
-              assignedTo: assignment.assignedTo
-            },
-            timestamp: createdAt
-          }];
+          updates.history = [
+            {
+              action: 'created',
+              performedBy: {
+                userId: createdBy.userId || createdBy._id || 'system',
+                name: createdBy.name || createdBy.fullName || 'System',
+                role: createdBy.role || 'system'
+              },
+              changes: {
+                status: 'pending',
+                assignedTo: assignment.assignedTo
+              },
+              timestamp: createdAt
+            }
+          ];
 
           // Add accepted entry if status is beyond pending
-          if (assignment.acceptedAt && ['accepted', 'in_progress', 'completed'].includes(assignment.status)) {
+          if (
+            assignment.acceptedAt &&
+            ['accepted', 'in_progress', 'completed'].includes(assignment.status)
+          ) {
             const acceptedBy = assignment.assignedTo || createdBy;
             updates.history.push({
               action: 'accepted',
@@ -219,10 +229,7 @@ async function migrateJobAssignments() {
           console.log(JSON.stringify(updates, null, 2));
           console.log('');
         } else {
-          await collection.updateOne(
-            { _id: assignment._id },
-            { $set: updates }
-          );
+          await collection.updateOne({ _id: assignment._id }, { $set: updates });
           console.log(`✅ Migrated assignment ${assignment._id}`);
         }
 
@@ -241,11 +248,12 @@ async function migrateJobAssignments() {
     console.log('');
 
     if (DRY_RUN) {
-      console.log('💡 This was a DRY RUN. To apply changes, run: DRY_RUN=false node migrate-job-assignments.js');
+      console.log(
+        '💡 This was a DRY RUN. To apply changes, run: DRY_RUN=false node migrate-job-assignments.js'
+      );
     } else {
       console.log('✨ Migration completed successfully!');
     }
-
   } catch (error) {
     console.error('❌ Migration failed:', error);
     process.exit(1);

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Paper, CircularProgress, Alert, Divider } from '@mui/material';
+import { Box, Typography, Paper, CircularProgress, Alert } from '@mui/material';
 import {
   Assignment as AssignmentIcon,
   CheckCircle as CheckCircleIcon,
@@ -57,18 +57,21 @@ const actionIcons: Record<string, React.ReactNode> = {
   updated: <EditIcon />
 };
 
-const actionColors: Record<string, 'primary' | 'success' | 'warning' | 'error' | 'info' | 'grey'> = {
-  created: 'info',
-  accepted: 'primary',
-  started: 'warning',
-  completed: 'success',
-  rejected: 'error',
-  reassigned: 'grey',
-  comment_added: 'info',
-  attachment_added: 'info',
-  status_changed: 'primary',
-  updated: 'grey'
-};
+function getActionColor(action: string): string {
+  const colors: Record<string, string> = {
+    created: 'info',
+    accepted: 'primary',
+    started: 'warning',
+    completed: 'success',
+    rejected: 'error',
+    reassigned: 'grey',
+    comment_added: 'info',
+    attachment_added: 'info',
+    status_changed: 'primary',
+    updated: 'grey'
+  };
+  return colors[action] || 'grey';
+}
 
 export default function JobHistoryTimeline({ jobId }: JobHistoryTimelineProps) {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -81,7 +84,7 @@ export default function JobHistoryTimeline({ jobId }: JobHistoryTimelineProps) {
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token') || localStorage.getItem('inspector_token');
-        
+
         const response = await fetch(`${API_BASE_URL}/job-assignments/${jobId}/history`, {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -174,7 +177,9 @@ export default function JobHistoryTimeline({ jobId }: JobHistoryTimelineProps) {
 
           {/* Content Card */}
           <Paper elevation={2} sx={{ p: 2 }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 1 }}>
+            <Box
+              sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', mb: 1 }}
+            >
               <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
                 {actionLabels[entry.action] || entry.action}
               </Typography>
@@ -182,7 +187,7 @@ export default function JobHistoryTimeline({ jobId }: JobHistoryTimelineProps) {
                 {format(new Date(entry.timestamp), 'dd MMM yyyy HH:mm น.', { locale: th })}
               </Typography>
             </Box>
-            
+
             <Typography variant="body2" color="textSecondary">
               โดย {entry.performedBy.name}
             </Typography>
@@ -201,19 +206,4 @@ export default function JobHistoryTimeline({ jobId }: JobHistoryTimelineProps) {
       ))}
     </Box>
   );
-
-  function getActionColor(action: string): string {
-    const colors: Record<string, string> = {
-      created: 'info',
-      accepted: 'primary',
-      started: 'warning',
-      completed: 'success',
-      rejected: 'error',
-      reassigned: 'grey',
-      comment_added: 'info',
-      attachment_added: 'info',
-      status_changed: 'primary',
-      updated: 'grey'
-    };
-    return colors[action] || 'grey';
-  }
+}
