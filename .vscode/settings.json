@@ -1,0 +1,72 @@
+{
+  "github.copilot.enable": {
+    "*": true,
+    "markdown": true,
+    "plaintext": false
+  },
+  "github.copilot.advanced": {
+    "debug.overrideEngine": "gpt-4",
+    "debug.overrideProxyUrl": "",
+    "debug.testOverrideProxyUrl": "",
+    "debug.filterLogCategories": "",
+    "debug.useNodeFetcher": false,
+    "debug.useElectronFetcher": true
+  },
+  // Limit MCP servers to prevent tool overload
+  "mcp.servers": {},
+  // Disable unnecessary tools for better performance
+  "github.copilot.chat.useProjectTemplates": false,
+  // TypeScript settings
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  // Editor settings
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  // File associations
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // Exclude patterns
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.git": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.next": true,
+    "**/archive": true,
+    "**/backup-*": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/package-lock.json": true,
+    "**/pnpm-lock.yaml": true,
+    "**/.next": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/archive": true,
+    "**/backup-*": true
+  },
+  // Watchers
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/dist/**": true,
+    "**/build/**": true,
+    "**/.next/**": true,
+    "**/archive/**": true,
+    "**/backup-*/**": true
+  }
+}
