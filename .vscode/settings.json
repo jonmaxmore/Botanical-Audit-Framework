@@ -4,14 +4,6 @@
     "markdown": true,
     "plaintext": false
   },
-  "github.copilot.advanced": {
-    "debug.overrideEngine": "gpt-4",
-    "debug.overrideProxyUrl": "",
-    "debug.testOverrideProxyUrl": "",
-    "debug.filterLogCategories": "",
-    "debug.useNodeFetcher": false,
-    "debug.useElectronFetcher": true
-  },
   // Limit MCP servers to prevent tool overload
   "mcp.servers": {},
   // Disable unnecessary tools for better performance

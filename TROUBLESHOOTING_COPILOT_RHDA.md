@@ -13,26 +13,27 @@ This warning typically occurs when:
 
 ### Solutions
 
-#### Solution 1: Reduce MCP Servers (Recommended)
-1. Open VSCode Settings (JSON) via `Ctrl+Shift+P` → "Preferences: Open User Settings (JSON)"
-2. Look for `"mcp.servers"` configuration
-3. Disable unnecessary MCP servers or limit to essential ones only:
-   ```json
-   "mcp.servers": {
-     // Keep only the essential servers you need
-   }
-   ```
-
-#### Solution 2: Use Workspace Settings
+#### Solution 1: Use Workspace Settings (Recommended)
 The repository now includes `.vscode/settings.json` with optimized settings:
 - MCP servers are limited to prevent tool overload
 - Excludes archived and backup directories
 - Optimized file watchers to improve performance
 
-If you have user-level settings that override these, consider:
-1. Creating a workspace-specific profile
-2. Temporarily disabling unused extensions
-3. Restarting VSCode after making changes
+These workspace settings should automatically resolve the issue. If you still see the warning, try:
+1. Reload VSCode window (`Ctrl+Shift+P` → "Reload Window")
+2. Check if user-level settings are overriding workspace settings
+3. Temporarily disable user-level MCP servers in your User Settings
+
+#### Solution 2: Reduce User-Level MCP Servers
+If workspace settings don't resolve the issue:
+1. Open VSCode Settings (JSON) via `Ctrl+Shift+P` → "Preferences: Open User Settings (JSON)"
+2. Look for `"mcp.servers"` configuration in your user settings
+3. Temporarily disable or reduce MCP servers in your user settings:
+   ```json
+   "mcp.servers": {
+     // Keep only the essential servers you need
+   }
+   ```
 
 #### Solution 3: Check GitHub Copilot Extensions
 1. Go to Extensions (`Ctrl+Shift+X`)
@@ -111,7 +112,7 @@ pnpm install --lockfile-only
 2. **Use Workspace-Specific Settings**: Keep VSCode settings in `.vscode/settings.json` for consistency across team
 
 3. **Regular Maintenance**:
-   - Clean unused `node_modules`: `pnpm clean && pnpm install`
+   - Clean unused `node_modules`: `rm -rf node_modules && pnpm install`
    - Update dependencies regularly: `pnpm update`
    - Review and archive old files periodically
 
