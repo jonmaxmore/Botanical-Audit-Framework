@@ -9,6 +9,7 @@ const multer = require('multer');
 const path = require('path');
 
 const Application = require('../models/Application');
+const Notification = require('../models/Notification');
 const GACPApplicationService = require('../services/gacp-application');
 const GACPInspectionService = require('../services/gacp-inspection');
 const GACPCertificateService = require('../services/gacp-certificate');
@@ -283,6 +284,22 @@ router.post(
   handleAsync(async (req, res) => {
     const application = await GACPApplicationService.submitApplication(req.params.id, req.user.id);
 
+    // Send notification to farmer
+    await Notification.createAndSend({
+      userId: req.user.id,
+      type: 'application_submitted',
+      title: 'คำขอของคุณได้รับการบันทึกแล้ว',
+      message: `คำขอรับรอง GACP เลขที่ ${application.applicationNumber} ได้รับการบันทึกเรียบร้อยแล้ว ทีมงานจะตรวจสอบภายใน 7-14 วันทำการ`,
+      priority: 'medium',
+      actionUrl: `/applications/${application._id}`,
+      actionLabel: 'ดูรายละเอียด',
+      relatedEntity: {
+        type: 'application',
+        id: application._id
+      },
+      deliveryMethods: ['realtime', 'email']
+    });
+
     res.json({
       success: true,
       message: 'Application submitted successfully',
@@ -315,6 +332,49 @@ router.post(
       req.body
     );
 
+    // Send notification based on decision
+    const application = result.application;
+    let notificationData = {
+      userId: application.userId,
+      relatedEntity: {
+        type: 'application',
+        id: application._id
+      },
+      actionUrl: `/applications/${application._id}`,
+      deliveryMethods: ['realtime', 'email']
+    };
+
+    if (req.body.decision === 'approved_for_inspection') {
+      notificationData = {
+        ...notificationData,
+        type: 'application_approved',
+        title: 'คำขอของคุณได้รับการอนุมัติ',
+        message: `คำขอเลขที่ ${application.applicationNumber} ผ่านการตรวจสอบเอกสารแล้ว กำลังจัดเตรียมการตรวจประเมินภาคสนาม`,
+        priority: 'high',
+        actionLabel: 'ดูรายละเอียด'
+      };
+    } else if (req.body.decision === 'rejected') {
+      notificationData = {
+        ...notificationData,
+        type: 'application_rejected',
+        title: 'คำขอไม่ผ่านการพิจารณา',
+        message: `คำขอเลขที่ ${application.applicationNumber} ไม่ผ่านการพิจารณา: ${req.body.notes}`,
+        priority: 'high',
+        actionLabel: 'ดูรายละเอียด'
+      };
+    } else if (req.body.decision === 'revision_required') {
+      notificationData = {
+        ...notificationData,
+        type: 'application_revision_required',
+        title: 'กรุณาแก้ไขคำขอ',
+        message: `คำขอเลขที่ ${application.applicationNumber} ต้องการแก้ไข: ${req.body.notes}`,
+        priority: 'medium',
+        actionLabel: 'แก้ไขเอกสาร'
+      };
+    }
+
+    await Notification.createAndSend(notificationData);
+
     res.json({
       success: true,
       message: 'Application review completed',
@@ -345,6 +405,22 @@ router.post(
       application,
       req.body.preferredDate
     );
+
+    // Send notification to farmer about inspection schedule
+    await Notification.createAndSend({
+      userId: application.userId,
+      type: 'inspection_scheduled',
+      title: 'กำหนดวันตรวจประเมิน',
+      message: `การตรวจประเมินภาคสนามสำหรับคำขอเลขที่ ${application.applicationNumber} กำหนดวันที่ ${new Date(req.body.preferredDate).toLocaleDateString('th-TH', { year: 'numeric', month: 'long', day: 'numeric' })}`,
+      priority: 'high',
+      actionUrl: `/inspections/${application._id}`,
+      actionLabel: 'ดูรายละเอียด',
+      relatedEntity: {
+        type: 'inspection',
+        id: application._id
+      },
+      deliveryMethods: ['realtime', 'email']
+    });
 
     res.json({
       success: true,
@@ -450,6 +526,25 @@ router.post(
       req.params.id,
       req.user.id
     );
+
+    // Get application details for notification
+    const application = await Application.findById(req.params.id);
+
+    // Send certificate issued notification
+    await Notification.createAndSend({
+      userId: application.userId,
+      type: 'certificate_issued',
+      title: 'ยินดีด้วย! คุณได้รับใบรับรอง GACP',
+      message: `ใบรับรอง GACP เลขที่ ${certificateData.certificate.certificateNumber} ได้ออกให้แล้ว สามารถดาวน์โหลดได้ทันที`,
+      priority: 'high',
+      actionUrl: `/certificates/${certificateData.certificate._id}`,
+      actionLabel: 'ดาวน์โหลดใบรับรอง',
+      relatedEntity: {
+        type: 'certificate',
+        id: certificateData.certificate._id
+      },
+      deliveryMethods: ['realtime', 'email']
+    });
 
     res.json({
       success: true,

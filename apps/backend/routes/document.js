@@ -17,6 +17,7 @@ const path = require('path');
 const fs = require('fs').promises;
 const crypto = require('crypto');
 const Document = require('../models/Document');
+const Notification = require('../models/Notification');
 const { DocumentType, DocumentCategory, DocumentStatus, AccessLevel } = Document;
 
 // Configure multer for file uploads
@@ -521,6 +522,22 @@ router.post('/:documentId/approve', authenticate, async (req, res) => {
     const { notes } = req.body;
     await document.approve(req.userId, notes);
 
+    // Send notification to document owner
+    await Notification.createAndSend({
+      userId: document.uploadedBy,
+      type: 'document_approved',
+      title: 'เอกสารได้รับการอนุมัติ',
+      message: `เอกสาร "${document.title}" ได้รับการอนุมัติแล้ว`,
+      priority: 'medium',
+      actionUrl: `/documents/${document._id}`,
+      actionLabel: 'ดูเอกสาร',
+      relatedEntity: {
+        type: 'document',
+        id: document._id
+      },
+      deliveryMethods: ['realtime', 'email']
+    });
+
     res.json({
       success: true,
       message: 'Document approved successfully'
@@ -565,6 +582,22 @@ router.post('/:documentId/reject', authenticate, async (req, res) => {
     }
 
     await document.reject(req.userId, notes);
+
+    // Send notification to document owner
+    await Notification.createAndSend({
+      userId: document.uploadedBy,
+      type: 'document_rejected',
+      title: 'เอกสารไม่ผ่านการอนุมัติ',
+      message: `เอกสาร "${document.title}" ไม่ผ่านการอนุมัติ: ${notes}`,
+      priority: 'high',
+      actionUrl: `/documents/${document._id}`,
+      actionLabel: 'แก้ไขเอกสาร',
+      relatedEntity: {
+        type: 'document',
+        id: document._id
+      },
+      deliveryMethods: ['realtime', 'email']
+    });
 
     res.json({
       success: true,
