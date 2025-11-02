@@ -13,7 +13,7 @@
  * - Authentication Routes: Express route configuration
  *
  * Features:
- * - Multi-role authentication (FARMER, DTAM_REVIEWER, DTAM_INSPECTOR, DTAM_ADMIN)
+ * - Multi-role authentication (FARMER, DTAM_REVIEWER, DTAM_INSPECTOR, DTAM_APPROVER, DTAM_ADMIN)
  * - JWT token management with refresh capability
  * - Role-based access control (RBAC)
  * - Password security and complexity validation

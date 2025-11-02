@@ -124,11 +124,19 @@ function requireInspector() {
 }
 
 /**
- * Shorthand for staff-only access (admin, reviewer, inspector)
+ * Shorthand for approver-only access
+ * @returns {Function} Express middleware function
+ */
+function requireApprover() {
+  return rbac(['approver', 'dtam_approver', 'admin']); // Admins can also approve
+}
+
+/**
+ * Shorthand for staff-only access (admin, reviewer, inspector, approver)
  * @returns {Function} Express middleware function
  */
 function requireStaff() {
-  return rbac(['admin', 'reviewer', 'inspector', 'approver']);
+  return rbac(['admin', 'reviewer', 'inspector', 'approver', 'dtam_approver']);
 }
 
 /**
@@ -188,5 +196,6 @@ module.exports.rbac = rbac;
 module.exports.requireAdmin = requireAdmin;
 module.exports.requireReviewer = requireReviewer;
 module.exports.requireInspector = requireInspector;
+module.exports.requireApprover = requireApprover;
 module.exports.requireStaff = requireStaff;
 module.exports.hasPermission = hasPermission;
