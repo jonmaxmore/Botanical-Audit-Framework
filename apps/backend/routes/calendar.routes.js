@@ -12,12 +12,13 @@
 
 const express = require('express');
 const router = express.Router();
-const calendarService = require('../services/calendar.service');
+const CalendarService = require('../services/calendar.service');
+const calendarService = new CalendarService();
 const googleCalendarService = require('../services/google-calendar.service');
 const { authenticate } = require('../middleware/auth');
 const { requireStaff, requireInspector } = require('../middleware/rbac');
 const { asyncHandler } = require('../middleware/asyncHandler');
-const { AppError } = require('../utils/errors');
+const { AppError } = require('../shared/errors');
 
 /**
  * @route   POST /api/calendar/events

@@ -20,6 +20,10 @@ const { AppError } = require('../shared/errors');
  * Calendar Service Class
  */
 class CalendarService {
+  constructor(notificationService = null) {
+    this.notificationService = notificationService;
+  }
+
   /**
    * Create a new calendar event
    *
@@ -387,6 +391,9 @@ class CalendarService {
 
       // TODO: Send booking notification to inspector and farmer
       // await this._sendBookingNotification(event, inspector, requester);
+      if (this.notificationService && this.notificationService.sendBookingConfirmation) {
+        await this.notificationService.sendBookingConfirmation(event, inspector, requester);
+      }
 
       logger.info('Inspection booked successfully', {
         eventId: event._id,
@@ -579,7 +586,7 @@ class CalendarService {
   /**
    * Validate inspector availability
    */
-  async _validateInspectorAvailability(inspectorId, startTime, endTime) {
+  async _validateInspectorAvailability(inspectorId, startTime, _endTime) {
     const availability = await InspectorAvailability.findOne({
       inspectorId,
       isActive: true

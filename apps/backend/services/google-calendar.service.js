@@ -20,7 +20,7 @@
 const { google } = require('googleapis');
 const CalendarEvent = require('../models/calendar-event-model');
 const InspectorAvailability = require('../models/inspector-availability-model');
-const logger = require('../utils/logger');
+const logger = require('../src/utils/logger');
 
 // Lazy load config to avoid require errors in tests
 let config;
@@ -30,17 +30,24 @@ const getConfig = () => {
   }
   return config;
 };
-const { AppError } = require('../utils/errors');
+const { AppError } = require('../shared/errors');
 
 class GoogleCalendarService {
   constructor() {
-    const cfg = getConfig();
-    this.oauth2Client = new google.auth.OAuth2(
-      cfg.google.clientId,
-      cfg.google.clientSecret,
-      cfg.google.redirectUri
-    );
-    this.calendar = google.calendar({ version: 'v3', auth: this.oauth2Client });
+    try {
+      const cfg = getConfig();
+      this.oauth2Client = new google.auth.OAuth2(
+        cfg.google.clientId,
+        cfg.google.clientSecret,
+        cfg.google.redirectUri
+      );
+      this.calendar = google.calendar({ version: 'v3', auth: this.oauth2Client });
+    } catch (error) {
+      // Allow service to load even if config is missing (for testing)
+      logger.warn('GoogleCalendarService: Config not loaded', { error: error.message });
+      this.oauth2Client = null;
+      this.calendar = null;
+    }
   }
 
   /**

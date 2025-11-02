@@ -11,6 +11,20 @@
 
 const request = require('supertest');
 const express = require('express');
+
+// Mock config before requiring google-calendar.service
+jest.mock('../../../config/google-calendar.config', () => ({
+  google: {
+    clientId: 'test-client-id',
+    clientSecret: 'test-client-secret',
+    redirectUri: 'http://localhost:3000/callback'
+  },
+  calendar: {
+    timeZone: 'Asia/Bangkok',
+    syncInterval: 300000
+  }
+}));
+
 const calendarRoutes = require('../routes/calendar.routes');
 const CalendarService = require('../services/calendar.service');
 
@@ -49,7 +63,6 @@ describe('Calendar Routes', () => {
     app = express();
     app.use(express.json());
     app.use('/api/calendar', calendarRoutes);
-    mockCalendarService = CalendarService.mock.instances[0];
     jest.clearAllMocks();
   });
 
