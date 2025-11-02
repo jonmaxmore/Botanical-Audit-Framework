@@ -1,7 +1,7 @@
 /**
  * Notification System Integration Tests
  * Comprehensive end-to-end testing for notification functionality
- * 
+ *
  * Tests:
  * 1. Notification Model & Database
  * 2. REST API Endpoints
@@ -15,8 +15,8 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 const io = require('socket.io-client');
 const Notification = require('../models/Notification');
-const Application = require('../models/Application');
-const Document = require('../models/Document');
+const _Application = require('../models/Application');
+const _Document = require('../models/Document');
 
 describe('Notification System - Integration Tests', () => {
   let app;
@@ -36,12 +36,10 @@ describe('Notification System - Integration Tests', () => {
     const port = server.address().port;
 
     // Create test user and get auth token
-    const loginRes = await request(app)
-      .post('/api/auth/login')
-      .send({
-        email: 'test@example.com',
-        password: 'testpassword123'
-      });
+    const loginRes = await request(app).post('/api/auth/login').send({
+      email: 'test@example.com',
+      password: 'testpassword123'
+    });
 
     authToken = loginRes.body.token;
     testUserId = loginRes.body.user._id;
@@ -52,7 +50,7 @@ describe('Notification System - Integration Tests', () => {
       reconnection: false
     });
 
-    await new Promise((resolve) => {
+    await new Promise(resolve => {
       socketClient.on('connect', resolve);
     });
   });
@@ -295,8 +293,8 @@ describe('Notification System - Integration Tests', () => {
   });
 
   describe('3. Socket.io Real-time Tests', () => {
-    test('should receive new notification via Socket.io', (done) => {
-      socketClient.once('notification:new', (data) => {
+    test('should receive new notification via Socket.io', done => {
+      socketClient.once('notification:new', data => {
         expect(data).toBeDefined();
         expect(data.title).toBe('Real-time Test');
         expect(data.type).toBe('system_update');
@@ -314,8 +312,8 @@ describe('Notification System - Integration Tests', () => {
       });
     }, 10000);
 
-    test('should receive unread count update', (done) => {
-      socketClient.once('notification:unread-count', (data) => {
+    test('should receive unread count update', done => {
+      socketClient.once('notification:unread-count', data => {
         expect(data).toBeDefined();
         expect(typeof data.count).toBe('number');
         done();
@@ -328,7 +326,7 @@ describe('Notification System - Integration Tests', () => {
       );
     }, 10000);
 
-    test('should handle multiple notifications simultaneously', (done) => {
+    test('should handle multiple notifications simultaneously', done => {
       let receivedCount = 0;
       const expectedCount = 3;
 
@@ -356,7 +354,7 @@ describe('Notification System - Integration Tests', () => {
 
   describe('4. Notification Triggers - Application Workflow', () => {
     test('should send notification when application is submitted', async () => {
-      const notificationPromise = new Promise((resolve) => {
+      const notificationPromise = new Promise(resolve => {
         socketClient.once('notification:new', resolve);
       });
 
@@ -550,9 +548,7 @@ describe('Notification System - Integration Tests', () => {
 
   describe('7. Error Handling & Edge Cases', () => {
     test('should reject unauthorized access', async () => {
-      await request(app)
-        .get('/api/notifications')
-        .expect(401);
+      await request(app).get('/api/notifications').expect(401);
     });
 
     test('should handle invalid notification ID', async () => {
@@ -590,13 +586,15 @@ describe('Notification System - Integration Tests', () => {
 
   describe('8. Performance & Scalability', () => {
     test('should handle bulk notification creation', async () => {
-      const notifications = Array(50).fill(null).map((_, i) => ({
-        userId: testUserId,
-        type: 'system_update',
-        title: `Bulk ${i}`,
-        message: 'Bulk test',
-        priority: 'low'
-      }));
+      const notifications = Array(50)
+        .fill(null)
+        .map((_, i) => ({
+          userId: testUserId,
+          type: 'system_update',
+          title: `Bulk ${i}`,
+          message: 'Bulk test',
+          priority: 'low'
+        }));
 
       const startTime = Date.now();
       await Notification.insertMany(notifications);
