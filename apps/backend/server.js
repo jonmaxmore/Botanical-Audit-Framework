@@ -181,6 +181,10 @@ app.use((req, res, next) => {
 // Initialize Socket.IO with Redis adapter for horizontal scaling
 const io = require('./services/socket-service').initialize(server, redisManager);
 
+// Initialize real-time notification service
+const realtimeService = require('./services/realtime.service');
+realtimeService.initialize(io);
+
 // Make socket.io available to routes
 app.set('io', io);
 
@@ -260,6 +264,7 @@ app.use('/api/admin/applications', require('./routes/admin-application')); // Ad
 app.use('/api/certificates', require('./routes/certificate')); // Certificate routes
 app.use('/api/inspections', require('./routes/inspection')); // Inspection routes
 app.use('/api/documents', require('./routes/document')); // Document Management System
+app.use('/api/notifications', require('./routes/notification')); // Notification System
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ? Smart Agriculture APIs
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
