@@ -41,6 +41,7 @@ import {
 } from '@mui/icons-material';
 import { Inspector } from '../../types/user.types';
 import JobDetailModal from '../../components/job-ticket/JobDetailModal';
+import CalendarWidget from '../../components/calendar/CalendarWidget';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
@@ -325,6 +326,19 @@ export default function InspectorDashboard() {
               </Card>
             </Grid>
           ))}
+        </Grid>
+
+        {/* Calendar Widget */}
+        <Grid container spacing={3} sx={{ mb: 4 }}>
+          <Grid item xs={12} md={4}>
+            <CalendarWidget
+              inspectorId={currentUser._id || currentUser.id}
+              onCreateEvent={() => router.push('/inspector/schedule')}
+            />
+          </Grid>
+          <Grid item xs={12} md={8}>
+            {/* Placeholder for additional widgets */}
+          </Grid>
         </Grid>
 
         <Paper sx={{ p: 3 }}>
