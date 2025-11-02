@@ -58,9 +58,13 @@
   ],
   "exclude": [
     "node_modules",
+    "**/node_modules/**",
+    "**/.pnpm/**",
     "apps/frontend",
     "apps/admin-portal",
     "apps/certificate-portal",
+    "apps/farmer-portal",
+    "apps/backend",
     "frontend-nextjs",
     "archive",
     "docs",
