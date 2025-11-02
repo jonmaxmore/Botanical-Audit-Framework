@@ -25,7 +25,8 @@ import {
   Tab,
   Button,
   Alert,
-  Skeleton
+  Skeleton,
+  Chip
 } from '@mui/material';
 import {
   Logout as LogoutIcon,
@@ -35,9 +36,12 @@ import {
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
   Refresh as RefreshIcon,
-  Analytics as AnalyticsIcon
+  Analytics as AnalyticsIcon,
+  Assignment as AssignmentIcon,
+  Visibility as VisibilityIcon
 } from '@mui/icons-material';
 import { Inspector } from '../../types/user.types';
+import JobDetailModal from '../../components/job-ticket/JobDetailModal';
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
@@ -50,6 +54,23 @@ interface InspectorStats {
   failedInspections: number;
 }
 
+interface JobAssignment {
+  _id: string;
+  jobType: string;
+  status: string;
+  applicationId: {
+    applicationNumber: string;
+    farmerName: string;
+    farmName: string;
+  };
+  sla: {
+    dueDate: string;
+    breached: boolean;
+    remainingHours?: number;
+  };
+  createdAt: string;
+}
+
 export default function InspectorDashboard() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<Inspector | null>(null);
@@ -58,6 +79,9 @@ export default function InspectorDashboard() {
   const [stats, setStats] = useState<InspectorStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [jobAssignments, setJobAssignments] = useState<JobAssignment[]>([]);
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
+  const [jobModalOpen, setJobModalOpen] = useState(false);
 
   // Fetch inspector analytics
   const fetchStats = async () => {
@@ -87,6 +111,33 @@ export default function InspectorDashboard() {
     }
   };
 
+  // Fetch job assignments
+  const fetchJobAssignments = async () => {
+    try {
+      const token = localStorage.getItem('token') || localStorage.getItem('inspector_token');
+      const currentUser = JSON.parse(localStorage.getItem('currentUser') || '{}');
+      
+      const response = await fetch(
+        `${API_BASE_URL}/job-assignments?assignedTo=${currentUser._id || currentUser.id}&status=pending,accepted,in_progress`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch job assignments');
+      }
+
+      const data = await response.json();
+      setJobAssignments(data.data || []);
+    } catch (err) {
+      console.error('Failed to load job assignments:', err);
+    }
+  };
+
   useEffect(() => {
     const userStr = localStorage.getItem('currentUser');
     if (!userStr) {
@@ -96,7 +147,55 @@ export default function InspectorDashboard() {
     const user = JSON.parse(userStr) as Inspector;
     setCurrentUser(user);
     fetchStats();
+    fetchJobAssignments();
   }, [router]);
+
+  const handleOpenJobDetail = (jobId: string) => {
+    setSelectedJobId(jobId);
+    setJobModalOpen(true);
+  };
+
+  const handleCloseJobDetail = () => {
+    setJobModalOpen(false);
+    setSelectedJobId(null);
+  };
+
+  const handleJobUpdate = () => {
+    fetchJobAssignments();
+    fetchStats();
+  };
+
+  const getStatusLabel = (status: string) => {
+    const labels: Record<string, string> = {
+      pending: 'รอดำเนินการ',
+      accepted: 'รับงาน',
+      in_progress: 'กำลังดำเนินการ',
+      completed: 'เสร็จสิ้น'
+    };
+    return labels[status] || status;
+  };
+
+  const getStatusColor = (status: string) => {
+    const colors: Record<string, string> = {
+      pending: '#2196f3',
+      accepted: '#ff9800',
+      in_progress: '#9c27b0',
+      completed: '#4caf50'
+    };
+    return colors[status] || '#757575';
+  };
+
+  const getJobTypeLabel = (jobType: string) => {
+    const labels: Record<string, string> = {
+      field_inspection: 'ตรวจประเมินภาคสนาม',
+      document_review: 'ตรวจสอบเอกสาร',
+      video_inspection: 'ตรวจผ่าน Video Call',
+      follow_up: 'ตรวจติดตาม',
+      certification_audit: 'ตรวจประเมินเพื่อรับรอง',
+      other: 'อื่นๆ'
+    };
+    return labels[jobType] || jobType;
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('currentUser');
@@ -240,26 +339,90 @@ export default function InspectorDashboard() {
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell>ประเภทงาน</TableCell>
                   <TableCell>เลขที่คำขอ</TableCell>
-                  <TableCell>ชื่อเกษตรกร</TableCell>
+                  <TableCell>เกษตรกร</TableCell>
                   <TableCell>ฟาร์ม</TableCell>
-                  <TableCell>วันที่กำหนด</TableCell>
                   <TableCell>สถานะ</TableCell>
                   <TableCell>การดำเนินการ</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                <TableRow>
-                  <TableCell colSpan={6} align="center">
-                    <Typography variant="body2" color="textSecondary" sx={{ py: 4 }}>
-                      ไม่มีรายการตรวจประเมิน
-                    </Typography>
-                  </TableCell>
-                </TableRow>
+                {jobAssignments.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} align="center">
+                      <Typography variant="body2" color="textSecondary" sx={{ py: 4 }}>
+                        ไม่มีรายการงาน
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  jobAssignments
+                    .filter(job => {
+                      if (tabValue === 0) return job.status === 'pending';
+                      if (tabValue === 1) return ['accepted', 'in_progress'].includes(job.status);
+                      return job.status === 'completed';
+                    })
+                    .map(job => (
+                      <TableRow key={job._id} hover>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {getJobTypeLabel(job.jobType)}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            {job.applicationId?.applicationNumber || 'N/A'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {job.applicationId?.farmerName || 'N/A'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Typography variant="body2">
+                            {job.applicationId?.farmName || 'N/A'}
+                          </Typography>
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label={getStatusLabel(job.status)}
+                            size="small"
+                            sx={{
+                              bgcolor: `${getStatusColor(job.status)}20`,
+                              color: getStatusColor(job.status),
+                              fontWeight: 600
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            startIcon={<VisibilityIcon />}
+                            onClick={() => handleOpenJobDetail(job._id)}
+                          >
+                            ดูรายละเอียด
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>
         </Paper>
+
+        {/* Job Detail Modal */}
+        {selectedJobId && (
+          <JobDetailModal
+            open={jobModalOpen}
+            onClose={handleCloseJobDetail}
+            jobId={selectedJobId}
+            onUpdate={handleJobUpdate}
+          />
+        )}
       </Container>
     </>
   );
