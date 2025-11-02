@@ -6,6 +6,7 @@
 const nodemailer = require('nodemailer');
 const logger = require('../shared/logger');
 const emailLogger = logger.createLogger('email-service');
+const emailTemplates = require('./email-templates');
 
 let transporter = null;
 
@@ -295,9 +296,220 @@ async function sendTestEmail(toEmail) {
 // Initialize on module load
 initialize();
 
+/**
+ * Send welcome email to new user
+ */
+async function sendWelcomeEmail(toEmail, userName, farmName) {
+  const emailContent = emailTemplates.welcomeEmail(userName, toEmail, farmName);
+
+  if (!transporter) {
+    if (process.env.NODE_ENV === 'development') {
+      emailLogger.info('Development mode - Welcome email would be sent to:', toEmail);
+      return { success: true, mode: 'development' };
+    }
+    throw new Error('Email transporter not initialized');
+  }
+
+  const mailOptions = {
+    from: `"${process.env.SMTP_FROM_NAME || 'GACP Platform'}" <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`,
+    to: toEmail,
+    subject: emailContent.subject,
+    text: emailContent.text,
+    html: emailContent.html
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  emailLogger.info(`Welcome email sent to ${toEmail}:`, info.messageId);
+
+  return { success: true, messageId: info.messageId };
+}
+
+/**
+ * Send password reset email
+ */
+async function sendPasswordResetEmail(toEmail, userName, resetToken) {
+  const emailContent = emailTemplates.passwordResetEmail(userName, resetToken);
+
+  if (!transporter) {
+    if (process.env.NODE_ENV === 'development') {
+      emailLogger.info('Development mode - Password reset email would be sent to:', toEmail);
+      return { success: true, mode: 'development' };
+    }
+    throw new Error('Email transporter not initialized');
+  }
+
+  const mailOptions = {
+    from: `"${process.env.SMTP_FROM_NAME || 'GACP Platform'}" <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`,
+    to: toEmail,
+    subject: emailContent.subject,
+    text: emailContent.text,
+    html: emailContent.html
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  emailLogger.info(`Password reset email sent to ${toEmail}:`, info.messageId);
+
+  return { success: true, messageId: info.messageId };
+}
+
+/**
+ * Send application submitted confirmation
+ */
+async function sendApplicationSubmittedEmail(toEmail, userName, applicationNumber, farmName) {
+  const emailContent = emailTemplates.applicationSubmittedEmail(
+    userName,
+    applicationNumber,
+    farmName
+  );
+
+  if (!transporter) {
+    if (process.env.NODE_ENV === 'development') {
+      emailLogger.info('Development mode - Application submitted email would be sent to:', toEmail);
+      return { success: true, mode: 'development' };
+    }
+    throw new Error('Email transporter not initialized');
+  }
+
+  const mailOptions = {
+    from: `"${process.env.SMTP_FROM_NAME || 'GACP Platform'}" <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`,
+    to: toEmail,
+    subject: emailContent.subject,
+    text: emailContent.text,
+    html: emailContent.html
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  emailLogger.info(`Application submitted email sent to ${toEmail}:`, info.messageId);
+
+  return { success: true, messageId: info.messageId };
+}
+
+/**
+ * Send application approved notification
+ */
+async function sendApplicationApprovedEmail(
+  toEmail,
+  userName,
+  applicationNumber,
+  farmName,
+  certificateNumber
+) {
+  const emailContent = emailTemplates.applicationApprovedEmail(
+    userName,
+    applicationNumber,
+    farmName,
+    certificateNumber
+  );
+
+  if (!transporter) {
+    if (process.env.NODE_ENV === 'development') {
+      emailLogger.info('Development mode - Application approved email would be sent to:', toEmail);
+      return { success: true, mode: 'development' };
+    }
+    throw new Error('Email transporter not initialized');
+  }
+
+  const mailOptions = {
+    from: `"${process.env.SMTP_FROM_NAME || 'GACP Platform'}" <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`,
+    to: toEmail,
+    subject: emailContent.subject,
+    text: emailContent.text,
+    html: emailContent.html
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  emailLogger.info(`Application approved email sent to ${toEmail}:`, info.messageId);
+
+  return { success: true, messageId: info.messageId };
+}
+
+/**
+ * Send application rejected notification
+ */
+async function sendApplicationRejectedEmail(
+  toEmail,
+  userName,
+  applicationNumber,
+  farmName,
+  reason
+) {
+  const emailContent = emailTemplates.applicationRejectedEmail(
+    userName,
+    applicationNumber,
+    farmName,
+    reason
+  );
+
+  if (!transporter) {
+    if (process.env.NODE_ENV === 'development') {
+      emailLogger.info('Development mode - Application rejected email would be sent to:', toEmail);
+      return { success: true, mode: 'development' };
+    }
+    throw new Error('Email transporter not initialized');
+  }
+
+  const mailOptions = {
+    from: `"${process.env.SMTP_FROM_NAME || 'GACP Platform'}" <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`,
+    to: toEmail,
+    subject: emailContent.subject,
+    text: emailContent.text,
+    html: emailContent.html
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  emailLogger.info(`Application rejected email sent to ${toEmail}:`, info.messageId);
+
+  return { success: true, messageId: info.messageId };
+}
+
+/**
+ * Send certificate expiring notification
+ */
+async function sendCertificateExpiringEmail(
+  toEmail,
+  userName,
+  certificateNumber,
+  farmName,
+  daysLeft
+) {
+  const emailContent = emailTemplates.certificateExpiringEmail(
+    userName,
+    certificateNumber,
+    farmName,
+    daysLeft
+  );
+
+  if (!transporter) {
+    if (process.env.NODE_ENV === 'development') {
+      emailLogger.info('Development mode - Certificate expiring email would be sent to:', toEmail);
+      return { success: true, mode: 'development' };
+    }
+    throw new Error('Email transporter not initialized');
+  }
+
+  const mailOptions = {
+    from: `"${process.env.SMTP_FROM_NAME || 'GACP Platform'}" <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`,
+    to: toEmail,
+    subject: emailContent.subject,
+    text: emailContent.text,
+    html: emailContent.html
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  emailLogger.info(`Certificate expiring email sent to ${toEmail}:`, info.messageId);
+
+  return { success: true, messageId: info.messageId };
+}
+
 module.exports = {
   initialize,
   sendNotificationEmail,
   sendBulkEmail,
-  sendTestEmail
+  sendTestEmail,
+  sendWelcomeEmail,
+  sendPasswordResetEmail,
+  sendApplicationSubmittedEmail,
+  sendApplicationApprovedEmail,
+  sendApplicationRejectedEmail,
+  sendCertificateExpiringEmail
 };

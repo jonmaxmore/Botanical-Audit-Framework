@@ -8,8 +8,7 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-// const QRCode = require('qrcode'); // Mock for development
-// const { createCanvas } = require('canvas'); // Mock for development
+const QRCode = require('qrcode');
 const PDFDocument = require('pdfkit');
 const crypto = require('crypto');
 
@@ -445,28 +444,35 @@ class GACPCertificateService {
   async generateQRCode(certificateData) {
     const verificationUrl = `${process.env.PUBLIC_URL || 'https://gacp.dtam.go.th'}/verify/${certificateData.certificateNumber}?code=${certificateData.verificationCode}`;
 
-    // Mock QR Code for development (replace with real implementation)
-    const qrCodeDataURL =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
-    /*
-    const qrCodeDataURL = await QRCode.toDataURL(verificationUrl, {
-      errorCorrectionLevel: 'H',
-      type: 'image/png',
-      quality: 0.92,
-      margin: 1,
-      color: {
-        dark: '#000000',
-        light: '#FFFFFF'
-      },
-      width: 200
-    });
-    */
+    try {
+      // Generate QR Code as Data URL
+      const qrCodeDataURL = await QRCode.toDataURL(verificationUrl, {
+        errorCorrectionLevel: 'H',
+        type: 'image/png',
+        quality: 0.92,
+        margin: 1,
+        color: {
+          dark: '#000000',
+          light: '#FFFFFF'
+        },
+        width: 200
+      });
 
-    return {
-      dataURL: qrCodeDataURL,
-      verificationUrl,
-      format: 'PNG'
-    };
+      return {
+        dataURL: qrCodeDataURL,
+        verificationUrl,
+        format: 'PNG'
+      };
+    } catch (error) {
+      logger.error('QR Code generation failed', { error: error.message });
+      // Fallback to placeholder QR if generation fails
+      return {
+        dataURL:
+          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+        verificationUrl,
+        format: 'PNG'
+      };
+    }
   }
 
   generateDigitalSignature(certificateData) {
