@@ -8,7 +8,7 @@
  */
 
 const EventEmitter = require('events');
-const logger = require('../utils/logger');
+const logger = require('../shared/logger');
 
 class JobAssignmentService extends EventEmitter {
   constructor(assignmentRepository, userRepository, kpiService) {
@@ -41,6 +41,16 @@ class JobAssignmentService extends EventEmitter {
       REVIEWER: 'reviewer',
       INSPECTOR: 'inspector',
       APPROVER: 'approver'
+    };
+
+    // Job types
+    this.JOB_TYPES = {
+      DOCUMENT_REVIEW: 'DOCUMENT_REVIEW',
+      FARM_INSPECTION: 'FARM_INSPECTION',
+      VIDEO_CALL_INSPECTION: 'VIDEO_CALL_INSPECTION',
+      ONSITE_INSPECTION: 'ONSITE_INSPECTION',
+      FINAL_APPROVAL: 'FINAL_APPROVAL',
+      GENERAL: 'GENERAL'
     };
 
     // Assignment strategies
@@ -136,6 +146,8 @@ class JobAssignmentService extends EventEmitter {
    * @param {string} data.priority - Priority level
    * @param {string} data.assignedBy - User ID who created assignment
    * @param {string} data.strategy - Assignment strategy
+   * @param {string} data.jobType - Job type (optional, defaults based on role)
+   * @param {Object} data.sla - SLA configuration (optional)
    * @returns {Promise<Object>} Created assignment
    */
   async createAssignment(data) {
@@ -146,7 +158,9 @@ class JobAssignmentService extends EventEmitter {
         role,
         priority = this.PRIORITY.MEDIUM,
         assignedBy = 'system',
-        strategy = this.STRATEGIES.MANUAL
+        strategy = this.STRATEGIES.MANUAL,
+        jobType = null,
+        sla = {}
       } = data;
 
       logger.info(`[JobAssignmentService] Creating assignment for ${assignedTo} (${role})`);
@@ -164,12 +178,16 @@ class JobAssignmentService extends EventEmitter {
         return existingAssignment;
       }
 
+      // Determine jobType based on role if not provided
+      const finalJobType = jobType || this._getDefaultJobType(role);
+
       // Create assignment
       const assignment = await this.assignmentRepository.create({
         applicationId,
         assignedTo,
         assignedBy,
         role,
+        jobType: finalJobType,
         priority,
         strategy,
         status: this.STATUS.ASSIGNED,
@@ -177,6 +195,27 @@ class JobAssignmentService extends EventEmitter {
         acceptedAt: null,
         startedAt: null,
         completedAt: null,
+        sla: {
+          expectedDuration: sla.expectedDuration || this._getDefaultSLA(finalJobType),
+          dueDate:
+            sla.dueDate ||
+            this._calculateDueDate(sla.expectedDuration || this._getDefaultSLA(finalJobType)),
+          actualDuration: null,
+          isOnTime: null,
+          delayReason: null
+        },
+        history: [
+          {
+            action: 'CREATED',
+            timestamp: new Date(),
+            actor: assignedBy,
+            details: {
+              strategy,
+              priority,
+              jobType: finalJobType
+            }
+          }
+        ],
         createdAt: new Date(),
         updatedAt: new Date()
       });
@@ -196,7 +235,8 @@ class JobAssignmentService extends EventEmitter {
         assignment,
         applicationId,
         assignedTo,
-        role
+        role,
+        jobType: finalJobType
       });
 
       logger.info(`[JobAssignmentService] Assignment created: ${assignment.id}`);
@@ -230,10 +270,18 @@ class JobAssignmentService extends EventEmitter {
         throw new Error(`Cannot accept assignment with status: ${assignment.status}`);
       }
 
+      // Record history
+      await assignment.recordHistory({
+        action: 'ACCEPTED',
+        actor: userId,
+        details: { acceptedAt: new Date() }
+      });
+
       const updatedAssignment = await this.assignmentRepository.update(assignmentId, {
         status: this.STATUS.ACCEPTED,
         acceptedAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        history: assignment.history
       });
 
       this.emit('assignment:accepted', { assignment: updatedAssignment, userId });
@@ -268,11 +316,19 @@ class JobAssignmentService extends EventEmitter {
         throw new Error(`Cannot start assignment with status: ${assignment.status}`);
       }
 
+      // Record history
+      await assignment.recordHistory({
+        action: 'STARTED',
+        actor: userId,
+        details: { startedAt: new Date() }
+      });
+
       const updatedAssignment = await this.assignmentRepository.update(assignmentId, {
         status: this.STATUS.IN_PROGRESS,
         startedAt: new Date(),
         acceptedAt: assignment.acceptedAt || new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        history: assignment.history
       });
 
       this.emit('assignment:started', { assignment: updatedAssignment, userId });
@@ -304,10 +360,22 @@ class JobAssignmentService extends EventEmitter {
         throw new Error('Unauthorized to complete this assignment');
       }
 
+      // Calculate SLA
+      await assignment.calculateSLA();
+
+      // Record history
+      await assignment.recordHistory({
+        action: 'COMPLETED',
+        actor: userId,
+        details: { completedAt: new Date(), ...data }
+      });
+
       const updatedAssignment = await this.assignmentRepository.update(assignmentId, {
         status: this.STATUS.COMPLETED,
         completedAt: new Date(),
         updatedAt: new Date(),
+        sla: assignment.sla,
+        history: assignment.history,
         ...data
       });
 
@@ -536,6 +604,276 @@ class JobAssignmentService extends EventEmitter {
       logger.error('[JobAssignmentService] Cancel assignment error:', error);
       throw error;
     }
+  }
+
+  /**
+   * Add comment to assignment
+   * @param {string} assignmentId - Assignment ID
+   * @param {Object} commentData - Comment data
+   * @param {string} commentData.userId - User ID who is commenting
+   * @param {string} commentData.message - Comment message
+   * @param {Array} commentData.attachments - Optional attachments
+   * @returns {Promise<Object>} Updated assignment
+   */
+  async addComment(assignmentId, commentData) {
+    try {
+      logger.info(`[JobAssignmentService] Adding comment to assignment ${assignmentId}`);
+
+      const assignment = await this.assignmentRepository.findById(assignmentId);
+      if (!assignment) {
+        throw new Error(`Assignment not found: ${assignmentId}`);
+      }
+
+      // Add comment using model method
+      await assignment.addComment(commentData);
+
+      // Save updated assignment
+      await assignment.save();
+
+      this.emit('assignment:comment_added', {
+        assignmentId,
+        comment: commentData,
+        assignment
+      });
+
+      logger.info(`[JobAssignmentService] Comment added to assignment ${assignmentId}`);
+      return assignment;
+    } catch (error) {
+      logger.error('[JobAssignmentService] Add comment error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Add attachment to assignment
+   * @param {string} assignmentId - Assignment ID
+   * @param {Object} attachmentData - Attachment data
+   * @param {string} attachmentData.type - Attachment type
+   * @param {string} attachmentData.fileName - File name
+   * @param {string} attachmentData.fileUrl - File URL
+   * @param {string} attachmentData.uploadedBy - User ID who uploaded
+   * @returns {Promise<Object>} Updated assignment
+   */
+  async addAttachment(assignmentId, attachmentData) {
+    try {
+      logger.info(`[JobAssignmentService] Adding attachment to assignment ${assignmentId}`);
+
+      const assignment = await this.assignmentRepository.findById(assignmentId);
+      if (!assignment) {
+        throw new Error(`Assignment not found: ${assignmentId}`);
+      }
+
+      // Add attachment using model method
+      await assignment.addAttachment(attachmentData);
+
+      // Save updated assignment
+      await assignment.save();
+
+      this.emit('assignment:attachment_added', {
+        assignmentId,
+        attachment: attachmentData,
+        assignment
+      });
+
+      logger.info(`[JobAssignmentService] Attachment added to assignment ${assignmentId}`);
+      return assignment;
+    } catch (error) {
+      logger.error('[JobAssignmentService] Add attachment error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Complete assignment with evidence
+   * @param {string} assignmentId - Assignment ID
+   * @param {string} userId - User ID (for verification)
+   * @param {Object} evidenceData - Evidence data
+   * @param {string} evidenceData.reportUrl - Report URL
+   * @param {number} evidenceData.score - Score (0-100)
+   * @param {string} evidenceData.recommendation - Recommendation
+   * @param {string} evidenceData.summary - Summary
+   * @returns {Promise<Object>} Updated assignment
+   */
+  async completeWithEvidence(assignmentId, userId, evidenceData) {
+    try {
+      logger.info(`[JobAssignmentService] Completing assignment ${assignmentId} with evidence`);
+
+      const assignment = await this.assignmentRepository.findById(assignmentId);
+      if (!assignment) {
+        throw new Error(`Assignment not found: ${assignmentId}`);
+      }
+
+      if (assignment.assignedTo !== userId) {
+        throw new Error('Unauthorized to complete this assignment');
+      }
+
+      // Complete with evidence using model method
+      await assignment.completeWithEvidence(evidenceData);
+
+      // Save updated assignment
+      await assignment.save();
+
+      // Complete KPI tracking
+      if (this.kpiService) {
+        await this.kpiService.completeTask(`assignment_${assignmentId}`, {
+          comments: evidenceData.summary || 'Assignment completed with evidence',
+          feedbackScore: evidenceData.score / 20 // Convert 0-100 to 0-5
+        });
+      }
+
+      this.emit('assignment:completed_with_evidence', {
+        assignmentId,
+        userId,
+        evidence: evidenceData,
+        assignment
+      });
+
+      logger.info(`[JobAssignmentService] Assignment ${assignmentId} completed with evidence`);
+      return assignment;
+    } catch (error) {
+      logger.error('[JobAssignmentService] Complete with evidence error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get assignment history
+   * @param {string} assignmentId - Assignment ID
+   * @returns {Promise<Array>} Assignment history
+   */
+  async getJobHistory(assignmentId) {
+    try {
+      const assignment = await this.assignmentRepository.findById(assignmentId);
+      if (!assignment) {
+        throw new Error(`Assignment not found: ${assignmentId}`);
+      }
+
+      return assignment.history || [];
+    } catch (error) {
+      logger.error('[JobAssignmentService] Get job history error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get assignment comments
+   * @param {string} assignmentId - Assignment ID
+   * @returns {Promise<Array>} Assignment comments
+   */
+  async getComments(assignmentId) {
+    try {
+      const assignment = await this.assignmentRepository.findById(assignmentId);
+      if (!assignment) {
+        throw new Error(`Assignment not found: ${assignmentId}`);
+      }
+
+      return assignment.comments || [];
+    } catch (error) {
+      logger.error('[JobAssignmentService] Get comments error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get assignment attachments
+   * @param {string} assignmentId - Assignment ID
+   * @returns {Promise<Array>} Assignment attachments
+   */
+  async getAttachments(assignmentId) {
+    try {
+      const assignment = await this.assignmentRepository.findById(assignmentId);
+      if (!assignment) {
+        throw new Error(`Assignment not found: ${assignmentId}`);
+      }
+
+      return assignment.attachments || [];
+    } catch (error) {
+      logger.error('[JobAssignmentService] Get attachments error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get jobs near deadline
+   * @param {number} hoursThreshold - Hours before deadline to consider
+   * @returns {Promise<Array>} Jobs near deadline
+   */
+  async getJobsNearDeadline(hoursThreshold = 24) {
+    try {
+      const JobAssignmentModel = require('../models/job-assignment-model');
+      return await JobAssignmentModel.findNearDeadline(hoursThreshold);
+    } catch (error) {
+      logger.error('[JobAssignmentService] Get jobs near deadline error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get SLA breached jobs
+   * @returns {Promise<Array>} SLA breached jobs
+   */
+  async getSLABreachedJobs() {
+    try {
+      const JobAssignmentModel = require('../models/job-assignment-model');
+      return await JobAssignmentModel.findSLABreached();
+    } catch (error) {
+      logger.error('[JobAssignmentService] Get SLA breached jobs error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get SLA statistics
+   * @param {Object} filters - Optional filters
+   * @returns {Promise<Object>} SLA statistics
+   */
+  async getSLAStatistics(filters = {}) {
+    try {
+      const JobAssignmentModel = require('../models/job-assignment-model');
+      return await JobAssignmentModel.getSLAStatistics(filters);
+    } catch (error) {
+      logger.error('[JobAssignmentService] Get SLA statistics error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Helper: Get default job type based on role
+   * @private
+   */
+  _getDefaultJobType(role) {
+    const roleToJobType = {
+      [this.ROLES.REVIEWER]: this.JOB_TYPES.DOCUMENT_REVIEW,
+      [this.ROLES.INSPECTOR]: this.JOB_TYPES.FARM_INSPECTION,
+      [this.ROLES.APPROVER]: this.JOB_TYPES.FINAL_APPROVAL
+    };
+    return roleToJobType[role] || this.JOB_TYPES.GENERAL;
+  }
+
+  /**
+   * Helper: Get default SLA duration in hours based on job type
+   * @private
+   */
+  _getDefaultSLA(jobType) {
+    const slaMap = {
+      [this.JOB_TYPES.DOCUMENT_REVIEW]: 48, // 2 days
+      [this.JOB_TYPES.FARM_INSPECTION]: 120, // 5 days
+      [this.JOB_TYPES.VIDEO_CALL_INSPECTION]: 72, // 3 days
+      [this.JOB_TYPES.ONSITE_INSPECTION]: 168, // 7 days
+      [this.JOB_TYPES.FINAL_APPROVAL]: 24, // 1 day
+      [this.JOB_TYPES.GENERAL]: 72 // 3 days
+    };
+    return slaMap[jobType] || 72;
+  }
+
+  /**
+   * Helper: Calculate due date based on expected duration
+   * @private
+   */
+  _calculateDueDate(expectedDurationHours) {
+    const dueDate = new Date();
+    dueDate.setHours(dueDate.getHours() + expectedDurationHours);
+    return dueDate;
   }
 }
 

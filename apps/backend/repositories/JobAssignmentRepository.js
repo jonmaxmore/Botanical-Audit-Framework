@@ -6,7 +6,7 @@
  * @version 1.0.0
  */
 
-const logger = require('../utils/logger');
+const logger = require('../shared/logger');
 
 class JobAssignmentRepository {
   constructor(database) {
@@ -458,6 +458,310 @@ class JobAssignmentRepository {
       return await this.collection.find().sort({ assignedAt: -1 }).limit(limit).toArray();
     } catch (error) {
       logger.error('[JobAssignmentRepository] findRecent error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Add comment to assignment
+   * @param {string} assignmentId - Assignment ID
+   * @param {Object} comment - Comment data
+   * @returns {Promise<Object|null>} Updated assignment
+   */
+  async addComment(assignmentId, comment) {
+    try {
+      const result = await this.collection.findOneAndUpdate(
+        { _id: assignmentId },
+        {
+          $push: { comments: comment },
+          $set: { updatedAt: new Date() }
+        },
+        { returnDocument: 'after' }
+      );
+
+      return result.value;
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] addComment error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get assignment comments
+   * @param {string} assignmentId - Assignment ID
+   * @returns {Promise<Array>} List of comments
+   */
+  async getComments(assignmentId) {
+    try {
+      const assignment = await this.collection.findOne(
+        { _id: assignmentId },
+        { projection: { comments: 1 } }
+      );
+
+      return assignment?.comments || [];
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] getComments error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Add attachment to assignment
+   * @param {string} assignmentId - Assignment ID
+   * @param {Object} attachment - Attachment data
+   * @returns {Promise<Object|null>} Updated assignment
+   */
+  async addAttachment(assignmentId, attachment) {
+    try {
+      const result = await this.collection.findOneAndUpdate(
+        { _id: assignmentId },
+        {
+          $push: { attachments: attachment },
+          $set: { updatedAt: new Date() }
+        },
+        { returnDocument: 'after' }
+      );
+
+      return result.value;
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] addAttachment error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get assignment attachments
+   * @param {string} assignmentId - Assignment ID
+   * @returns {Promise<Array>} List of attachments
+   */
+  async getAttachments(assignmentId) {
+    try {
+      const assignment = await this.collection.findOne(
+        { _id: assignmentId },
+        { projection: { attachments: 1 } }
+      );
+
+      return assignment?.attachments || [];
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] getAttachments error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get assignment history
+   * @param {string} assignmentId - Assignment ID
+   * @returns {Promise<Array>} List of history entries
+   */
+  async getHistory(assignmentId) {
+    try {
+      const assignment = await this.collection.findOne(
+        { _id: assignmentId },
+        { projection: { history: 1 } }
+      );
+
+      return assignment?.history || [];
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] getHistory error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Find jobs near deadline
+   * @param {number} hoursThreshold - Hours before deadline
+   * @returns {Promise<Array>} Jobs near deadline
+   */
+  async findNearDeadline(hoursThreshold = 24) {
+    try {
+      const now = new Date();
+      const threshold = new Date(now.getTime() + hoursThreshold * 60 * 60 * 1000);
+
+      return await this.collection
+        .find({
+          'sla.dueDate': {
+            $gte: now,
+            $lte: threshold
+          },
+          status: { $in: ['assigned', 'accepted', 'in_progress'] }
+        })
+        .sort({ 'sla.dueDate': 1 })
+        .toArray();
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] findNearDeadline error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Find SLA breached jobs
+   * @returns {Promise<Array>} SLA breached jobs
+   */
+  async findSLABreached() {
+    try {
+      const now = new Date();
+
+      return await this.collection
+        .find({
+          'sla.dueDate': { $lt: now },
+          'sla.isOnTime': false,
+          status: { $in: ['assigned', 'accepted', 'in_progress'] }
+        })
+        .sort({ 'sla.dueDate': 1 })
+        .toArray();
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] findSLABreached error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Update assignment SLA
+   * @param {string} assignmentId - Assignment ID
+   * @param {Object} slaData - SLA data
+   * @returns {Promise<Object|null>} Updated assignment
+   */
+  async updateSLA(assignmentId, slaData) {
+    try {
+      const result = await this.collection.findOneAndUpdate(
+        { _id: assignmentId },
+        {
+          $set: {
+            sla: slaData,
+            updatedAt: new Date()
+          }
+        },
+        { returnDocument: 'after' }
+      );
+
+      return result.value;
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] updateSLA error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Find assignments by job type
+   * @param {string} jobType - Job type
+   * @param {Object} filters - Optional filters (status, role)
+   * @returns {Promise<Array>} List of assignments
+   */
+  async findByJobType(jobType, filters = {}) {
+    try {
+      const query = { jobType };
+
+      if (filters.status) {
+        if (Array.isArray(filters.status)) {
+          query.status = { $in: filters.status };
+        } else {
+          query.status = filters.status;
+        }
+      }
+
+      if (filters.role) {
+        query.role = filters.role;
+      }
+
+      return await this.collection.find(query).sort({ assignedAt: -1 }).toArray();
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] findByJobType error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get comment count for assignment
+   * @param {string} assignmentId - Assignment ID
+   * @returns {Promise<number>} Comment count
+   */
+  async getCommentCount(assignmentId) {
+    try {
+      const assignment = await this.collection.findOne(
+        { _id: assignmentId },
+        { projection: { comments: 1 } }
+      );
+
+      return assignment?.comments?.length || 0;
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] getCommentCount error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Get SLA statistics
+   * @param {Object} filters - Optional filters
+   * @returns {Promise<Object>} SLA statistics
+   */
+  async getSLAStatistics(filters = {}) {
+    try {
+      const query = { status: 'completed' };
+
+      if (filters.role) {
+        query.role = filters.role;
+      }
+
+      if (filters.jobType) {
+        query.jobType = filters.jobType;
+      }
+
+      if (filters.startDate || filters.endDate) {
+        query.completedAt = {};
+        if (filters.startDate) {
+          query.completedAt.$gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+          query.completedAt.$lte = new Date(filters.endDate);
+        }
+      }
+
+      const stats = await this.collection
+        .aggregate([
+          { $match: query },
+          {
+            $group: {
+              _id: null,
+              total: { $sum: 1 },
+              onTime: {
+                $sum: {
+                  $cond: [{ $eq: ['$sla.isOnTime', true] }, 1, 0]
+                }
+              },
+              breached: {
+                $sum: {
+                  $cond: [{ $eq: ['$sla.isOnTime', false] }, 1, 0]
+                }
+              },
+              avgActualDuration: { $avg: '$sla.actualDuration' },
+              avgExpectedDuration: { $avg: '$sla.expectedDuration' }
+            }
+          }
+        ])
+        .toArray();
+
+      if (stats.length === 0) {
+        return {
+          total: 0,
+          onTime: 0,
+          breached: 0,
+          onTimePercentage: 0,
+          avgActualDuration: 0,
+          avgExpectedDuration: 0
+        };
+      }
+
+      const result = stats[0];
+      return {
+        total: result.total,
+        onTime: result.onTime,
+        breached: result.breached,
+        onTimePercentage: result.total > 0 ? (result.onTime / result.total) * 100 : 0,
+        avgActualDuration: result.avgActualDuration || 0,
+        avgExpectedDuration: result.avgExpectedDuration || 0
+      };
+    } catch (error) {
+      logger.error('[JobAssignmentRepository] getSLAStatistics error:', error);
       throw error;
     }
   }
