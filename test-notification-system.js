@@ -1,9 +1,9 @@
 /**
  * Manual Notification System Testing Script
- * 
+ *
  * Run this script to test notification system manually:
  * node test-notification-system.js
- * 
+ *
  * Tests:
  * 1. Database connection
  * 2. Notification model CRUD
@@ -12,11 +12,13 @@
  * 5. All 9 notification triggers
  */
 
+/* eslint-disable no-console */
+
 const mongoose = require('mongoose');
 const io = require('socket.io-client');
 const Notification = require('./apps/backend/models/Notification');
 const emailService = require('./apps/backend/services/email.service');
-const realtimeService = require('./apps/backend/services/realtime.service');
+// const realtimeService = require('./apps/backend/services/realtime.service'); // Not used in manual tests
 
 // ANSI color codes for console output
 const colors = {
@@ -30,11 +32,11 @@ const colors = {
 };
 
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ${colors.reset} ${msg}`),
-  success: (msg) => console.log(`${colors.green}✓${colors.reset} ${msg}`),
-  error: (msg) => console.log(`${colors.red}✗${colors.reset} ${msg}`),
-  warn: (msg) => console.log(`${colors.yellow}⚠${colors.reset} ${msg}`),
-  header: (msg) => console.log(`\n${colors.bright}${colors.cyan}${msg}${colors.reset}\n`)
+  info: msg => console.log(`${colors.blue}ℹ${colors.reset} ${msg}`),
+  success: msg => console.log(`${colors.green}✓${colors.reset} ${msg}`),
+  error: msg => console.log(`${colors.red}✗${colors.reset} ${msg}`),
+  warn: msg => console.log(`${colors.yellow}⚠${colors.reset} ${msg}`),
+  header: msg => console.log(`\n${colors.bright}${colors.cyan}${msg}${colors.reset}\n`)
 };
 
 // Test configuration
@@ -104,7 +106,6 @@ async function testNotificationModel() {
     await Notification.deleteOne({ _id: notification._id });
     const deleted = await Notification.findById(notification._id);
     recordResult('Delete notification', !deleted);
-
   } catch (error) {
     recordResult('Notification model operations', false, error);
   }
@@ -260,7 +261,6 @@ async function testQueryFilters() {
 
     // Cleanup
     await Notification.deleteMany({ _id: { $in: notifications.map(n => n._id) } });
-
   } catch (error) {
     recordResult('Query filters', false, error);
   }
@@ -283,7 +283,6 @@ async function testEmailService() {
 
     // In development mode, emails are logged, not sent
     log.info('Email delivery will be logged to console in dev mode');
-
   } catch (error) {
     recordResult('Email service', false, error);
   }
@@ -292,7 +291,7 @@ async function testEmailService() {
 async function testSocketIO() {
   log.header('8. Testing Socket.io Real-time Delivery');
 
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     try {
       log.info(`Connecting to ${TEST_CONFIG.socketUrl}...`);
 
@@ -310,7 +309,7 @@ async function testSocketIO() {
         recordResult('Socket.io connection', true);
 
         // Test receiving notification
-        socket.once('notification:new', (data) => {
+        socket.once('notification:new', data => {
           recordResult('Receive real-time notification', !!data);
           socket.close();
           resolve();
@@ -340,12 +339,11 @@ async function testSocketIO() {
         }, 10000);
       });
 
-      socket.on('connect_error', (error) => {
+      socket.on('connect_error', error => {
         log.warn(`Socket.io connection failed: ${error.message}`);
         recordResult('Socket.io connection', false, error);
         resolve();
       });
-
     } catch (error) {
       recordResult('Socket.io test', false, error);
       resolve();
@@ -379,7 +377,6 @@ async function testStaticMethod() {
 
     // Cleanup
     await Notification.deleteOne({ _id: notification._id });
-
   } catch (error) {
     recordResult('Notification.createAndSend()', false, error);
   }
@@ -418,7 +415,6 @@ async function testBulkOperations() {
 
     // Cleanup
     await Notification.deleteMany({ _id: { $in: created.map(n => n._id) } });
-
   } catch (error) {
     recordResult('Bulk operations', false, error);
   }
@@ -472,13 +468,13 @@ async function runAllTests() {
 }
 
 // Handle errors
-process.on('unhandledRejection', (error) => {
+process.on('unhandledRejection', error => {
   log.error(`Unhandled rejection: ${error.message}`);
   process.exit(1);
 });
 
 // Run tests
-runAllTests().catch((error) => {
+runAllTests().catch(error => {
   log.error(`Fatal error: ${error.message}`);
   console.error(error);
   process.exit(1);
