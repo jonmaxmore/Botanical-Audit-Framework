@@ -22,7 +22,10 @@ import {
   Menu,
   MenuItem,
   Tabs,
-  Tab
+  Tab,
+  Button,
+  Alert,
+  Skeleton
 } from '@mui/material';
 import {
   Logout as LogoutIcon,
@@ -30,15 +33,59 @@ import {
   Assessment as AssessmentIcon,
   Schedule as ScheduleIcon,
   CheckCircle as CheckCircleIcon,
-  Cancel as CancelIcon
+  Cancel as CancelIcon,
+  Refresh as RefreshIcon,
+  Analytics as AnalyticsIcon
 } from '@mui/icons-material';
 import { Inspector } from '../../types/user.types';
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+
+interface InspectorStats {
+  totalInspections: number;
+  pendingInspections: number;
+  activeInspections: number;
+  completedInspections: number;
+  passedInspections: number;
+  failedInspections: number;
+}
 
 export default function InspectorDashboard() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<Inspector | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [tabValue, setTabValue] = useState(0);
+  const [stats, setStats] = useState<InspectorStats | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch inspector analytics
+  const fetchStats = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const token = localStorage.getItem('token') || localStorage.getItem('inspector_token');
+      
+      const response = await fetch(`${API_BASE_URL}/analytics/inspections`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch inspection analytics');
+      }
+
+      const data = await response.json();
+      setStats(data.data);
+    } catch (err) {
+      console.error('Failed to load statistics:', err);
+      setError('ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const userStr = localStorage.getItem('currentUser');
@@ -48,6 +95,7 @@ export default function InspectorDashboard() {
     }
     const user = JSON.parse(userStr) as Inspector;
     setCurrentUser(user);
+    fetchStats();
   }, [router]);
 
   const handleLogout = () => {
@@ -57,11 +105,31 @@ export default function InspectorDashboard() {
 
   if (!currentUser) return null;
 
-  const stats = [
-    { label: 'รอกำหนดวัน', value: '0', icon: <ScheduleIcon />, color: '#2196f3' },
-    { label: 'กำลังตรวจ', value: '0', icon: <AssessmentIcon />, color: '#ff9800' },
-    { label: 'ผ่าน', value: '0', icon: <CheckCircleIcon />, color: '#4caf50' },
-    { label: 'ไม่ผ่าน', value: '0', icon: <CancelIcon />, color: '#f44336' }
+  const statsCards = [
+    { 
+      label: 'รอกำหนดวัน', 
+      value: stats?.pendingInspections || 0, 
+      icon: <ScheduleIcon />, 
+      color: '#2196f3' 
+    },
+    { 
+      label: 'กำลังตรวจ', 
+      value: stats?.activeInspections || 0, 
+      icon: <AssessmentIcon />, 
+      color: '#ff9800' 
+    },
+    { 
+      label: 'ผ่าน', 
+      value: stats?.passedInspections || 0, 
+      icon: <CheckCircleIcon />, 
+      color: '#4caf50' 
+    },
+    { 
+      label: 'ไม่ผ่าน', 
+      value: stats?.failedInspections || 0, 
+      icon: <CancelIcon />, 
+      color: '#f44336' 
+    }
   ];
 
   return (
@@ -98,12 +166,37 @@ export default function InspectorDashboard() {
       </AppBar>
 
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, mb: 4 }}>
-          แดชบอร์ดตรวจประเมิน
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
+          <Typography variant="h4" sx={{ fontWeight: 700 }}>
+            แดชบอร์ดตรวจประเมิน
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2 }}>
+            <Button
+              variant="outlined"
+              startIcon={<RefreshIcon />}
+              onClick={fetchStats}
+              disabled={loading}
+            >
+              รีเฟรช
+            </Button>
+            <Button
+              variant="contained"
+              startIcon={<AnalyticsIcon />}
+              onClick={() => router.push('/analytics')}
+            >
+              Analytics
+            </Button>
+          </Box>
+        </Box>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        )}
 
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          {stats.map((stat, index) => (
+          {statsCards.map((stat, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Card>
                 <CardContent>
@@ -119,9 +212,13 @@ export default function InspectorDashboard() {
                     >
                       {stat.icon}
                     </Box>
-                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                      {stat.value}
-                    </Typography>
+                    {loading && !stats ? (
+                      <Skeleton variant="text" width={60} height={40} />
+                    ) : (
+                      <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                        {stat.value}
+                      </Typography>
+                    )}
                   </Box>
                   <Typography variant="body2" color="textSecondary">
                     {stat.label}

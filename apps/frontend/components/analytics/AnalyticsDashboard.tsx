@@ -337,7 +337,14 @@ export default function AnalyticsDashboard() {
       {/* Trends Chart */}
       <Card sx={{ mb: 4 }}>
         <CardContent>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mb: 3
+            }}
+          >
             <Typography variant="h6">📈 แนวโน้มข้อมูล</Typography>
             <Stack direction="row" spacing={2}>
               <FormControl size="small" sx={{ minWidth: 150 }}>
@@ -410,11 +417,7 @@ export default function AnalyticsDashboard() {
               <Box sx={{ mt: 2 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography variant="body2">คำขอรอดำเนินการ</Typography>
-                  <Chip
-                    label={overview?.pendingApplications || 0}
-                    size="small"
-                    color="warning"
-                  />
+                  <Chip label={overview?.pendingApplications || 0} size="small" color="warning" />
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
                   <Typography variant="body2">เอกสารรอตรวจสอบ</Typography>

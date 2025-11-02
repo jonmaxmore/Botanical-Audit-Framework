@@ -23,7 +23,7 @@ const Application = require('../models/Application');
 const Document = require('../models/Document');
 const Certificate = require('../models/Certificate');
 const Inspection = require('../models/Inspection');
-const User = require('../models/User');
+const User = require('../models/user');
 const Notification = require('../models/Notification');
 
 // Middleware
