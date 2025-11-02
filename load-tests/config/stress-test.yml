@@ -1,0 +1,95 @@
+# 💪 Stress Test Configuration
+# ทดสอบความทนทาน - Peak Hours (09:00-10:00 และ 16:00-17:00)
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    # Warm-up phase
+    - duration: 60
+      arrivalRate: 5
+      name: "Warm-up"
+    
+    # Morning peak - รุนแรงมาก (400 users/hour)
+    - duration: 180
+      arrivalRate: 20  # 20 users/second
+      name: "Morning Peak - Extreme Load"
+    
+    # Maintain peak
+    - duration: 300
+      arrivalRate: 15  # 15 users/second
+      name: "Sustained Peak Load"
+    
+    # Evening peak - รุนแรงพิเศษ (500 users/hour)
+    - duration: 180
+      arrivalRate: 25  # 25 users/second
+      name: "Evening Peak - Maximum Load"
+    
+    # Cool down
+    - duration: 60
+      arrivalRate: 2
+      name: "Cool Down"
+
+  ensure:
+    maxErrorRate: 5  # Allow 5% error rate under stress
+    p95: 5000  # 95% of requests < 5 seconds (relaxed for stress)
+    p99: 10000  # 99% of requests < 10 seconds
+
+  plugins:
+    expect: {}
+    metrics-by-endpoint: {}
+
+scenarios:
+  # Critical paths under stress
+  - name: "Login Storm"
+    weight: 30
+    flow:
+      - post:
+          url: "/api/auth/farmer/login"
+          json:
+            email: "farmer{{ $randomNumber(1, 100) }}@example.com"
+            password: "Test@1234"
+          expect:
+            - statusCode: [200, 401, 429]  # Accept rate limiting
+
+  - name: "Dashboard Overload"
+    weight: 25
+    flow:
+      - get:
+          url: "/api/dashboard/farmer"
+          headers:
+            Authorization: "Bearer fake-token-{{ $randomString() }}"
+          expect:
+            - statusCode: [200, 401, 500, 503]
+
+  - name: "Application Creation Burst"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/applications"
+          headers:
+            Authorization: "Bearer fake-token"
+          json:
+            applicantType: "individual"
+            farmInformation:
+              farmName: "ฟาร์มทดสอบ"
+              farmSize: 10
+          expect:
+            - statusCode: [200, 201, 400, 401, 429, 500, 503]
+
+  - name: "Database Query Flood"
+    weight: 15
+    flow:
+      - get:
+          url: "/api/applications?page={{ $randomNumber(1, 100) }}&limit=20"
+          headers:
+            Authorization: "Bearer fake-token"
+          expect:
+            - statusCode: [200, 401, 500, 503]
+
+  - name: "Certificate Verification Storm"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/certificates/verify/GACP-2025-{{ $randomNumber(1, 15) }}-{{ $randomNumber(1, 9999) }}"
+          expect:
+            - statusCode: [200, 404, 500, 503]

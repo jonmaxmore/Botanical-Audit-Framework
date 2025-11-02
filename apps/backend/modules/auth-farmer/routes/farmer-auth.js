@@ -11,7 +11,7 @@ const router = express.Router();
 
 // Import from shared module
 const shared = require('../../shared');
-const { config, middleware, utils } = shared;
+const { config, middleware } = shared;
 
 // Import farmer-specific models
 const User = require('../models/user');
@@ -36,7 +36,7 @@ router.post(
       // Validate request
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
@@ -49,7 +49,7 @@ router.post(
       // Check if user already exists
       const existingUser = await User.findOne({ email: email.toLowerCase() });
       if (existingUser) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'อีเมลนี้ถูกใช้งานแล้ว',
           shared.constants.statusCodes.CONFLICT
@@ -85,7 +85,7 @@ router.post(
         { expiresIn: config.environment.jwtExpiry || '7d' }
       );
 
-      return utils.response.success(
+      return shared.response.success(
         res,
         {
           token,
@@ -106,7 +106,7 @@ router.post(
       );
     } catch (error) {
       logger.error('Registration error:', error);
-      return utils.response.error(
+      return shared.response.error(
         res,
         'ไม่สามารถลงทะเบียนได้ในขณะนี้',
         shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -131,7 +131,7 @@ router.post(
       // Validate request
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
@@ -144,7 +144,7 @@ router.post(
       // Find user
       const user = await User.findOne({ email: email.toLowerCase() });
       if (!user) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
           shared.constants.statusCodes.UNAUTHORIZED
@@ -153,11 +153,11 @@ router.post(
 
       // Check account status
       if (user.accountStatus === 'locked') {
-        return utils.response.error(res, 'บัญชีถูกล็อก กรุณาติดต่อผู้ดูแลระบบ', 423);
+        return shared.response.error(res, 'บัญชีถูกล็อก กรุณาติดต่อผู้ดูแลระบบ', 423);
       }
 
       if (user.accountStatus === 'suspended') {
-        return utils.response.error(res, 'บัญชีถูกระงับ กรุณาติดต่อผู้ดูแลระบบ', 423);
+        return shared.response.error(res, 'บัญชีถูกระงับ กรุณาติดต่อผู้ดูแลระบบ', 423);
       }
 
       // Verify password
@@ -171,7 +171,7 @@ router.post(
         }
         await user.save();
 
-        return utils.response.error(
+        return shared.response.error(
           res,
           'อีเมลหรือรหัสผ่านไม่ถูกต้อง',
           shared.constants.statusCodes.UNAUTHORIZED
@@ -196,7 +196,7 @@ router.post(
 
       logger.info(`Farmer logged in: ${user.email}`);
 
-      return utils.response.success(
+      return shared.response.success(
         res,
         {
           token,
@@ -216,7 +216,7 @@ router.post(
       );
     } catch (error) {
       logger.error('Login error:', error);
-      return utils.response.error(
+      return shared.response.error(
         res,
         'ไม่สามารถเข้าสู่ระบบได้ในขณะนี้',
         shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -238,10 +238,10 @@ router.get(
       const user = await User.findById(req.user.userId).select('-password');
 
       if (!user || user.accountStatus !== 'active') {
-        return utils.response.error(res, 'ไม่พบผู้ใช้งาน', shared.constants.statusCodes.NOT_FOUND);
+        return shared.response.error(res, 'ไม่พบผู้ใช้งาน', shared.constants.statusCodes.NOT_FOUND);
       }
 
-      return utils.response.success(res, {
+      return shared.response.success(res, {
         id: user._id,
         email: user.email,
         firstName: user.firstName,
@@ -257,7 +257,7 @@ router.get(
       });
     } catch (error) {
       logger.error('Get profile error:', error);
-      return utils.response.error(
+      return shared.response.error(
         res,
         'ไม่สามารถดึงข้อมูลโปรไฟล์ได้',
         shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -287,7 +287,7 @@ router.put(
       // Validate request
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
@@ -298,7 +298,7 @@ router.put(
       const user = await User.findById(req.user.userId);
 
       if (!user || user.accountStatus !== 'active') {
-        return utils.response.error(res, 'ไม่พบผู้ใช้งาน', shared.constants.statusCodes.NOT_FOUND);
+        return shared.response.error(res, 'ไม่พบผู้ใช้งาน', shared.constants.statusCodes.NOT_FOUND);
       }
 
       // Update allowed fields
@@ -314,7 +314,7 @@ router.put(
       Object.assign(user, updates);
       await user.save();
 
-      return utils.response.success(
+      return shared.response.success(
         res,
         {
           id: user._id,
@@ -332,7 +332,7 @@ router.put(
       );
     } catch (error) {
       logger.error('Update profile error:', error);
-      return utils.response.error(
+      return shared.response.error(
         res,
         'ไม่สามารถอัปเดตโปรไฟล์ได้',
         shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -358,7 +358,7 @@ router.post(
       // Validate request
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
@@ -369,7 +369,7 @@ router.post(
       const user = await User.findById(req.user.userId);
 
       if (!user || user.accountStatus !== 'active') {
-        return utils.response.error(res, 'ไม่พบผู้ใช้งาน', shared.constants.statusCodes.NOT_FOUND);
+        return shared.response.error(res, 'ไม่พบผู้ใช้งาน', shared.constants.statusCodes.NOT_FOUND);
       }
 
       const { currentPassword, newPassword } = req.body;
@@ -377,7 +377,7 @@ router.post(
       // Verify current password
       const isValidCurrentPassword = await user.comparePassword(currentPassword);
       if (!isValidCurrentPassword) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'รหัสผ่านปัจจุบันไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST
@@ -390,10 +390,10 @@ router.post(
 
       logger.info(`Password changed for user: ${user.email}`);
 
-      return utils.response.success(res, { success: true }, 'เปลี่ยนรหัสผ่านสำเร็จ');
+      return shared.response.success(res, { success: true }, 'เปลี่ยนรหัสผ่านสำเร็จ');
     } catch (error) {
       logger.error('Change password error:', error);
-      return utils.response.error(
+      return shared.response.error(
         res,
         'ไม่สามารถเปลี่ยนรหัสผ่านได้',
         shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -413,7 +413,7 @@ router.post(
   (req, res) => {
     // In production, add token to blacklist
     logger.info(`User logged out: ${req.user.email || req.user.userId}`);
-    return utils.response.success(res, { success: true }, 'ออกจากระบบสำเร็จ');
+    return shared.response.success(res, { success: true }, 'ออกจากระบบสำเร็จ');
   }
 );
 
@@ -426,17 +426,21 @@ router.get('/verify', (req, res) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
 
   if (!token) {
-    return utils.response.error(res, 'ไม่พบ token', shared.constants.statusCodes.UNAUTHORIZED);
+    return shared.response.error(res, 'ไม่พบ token', shared.constants.statusCodes.UNAUTHORIZED);
   }
 
   try {
     const decoded = jwt.verify(token, config.environment.jwtSecret || 'fallback-secret-key');
-    return utils.response.success(res, {
+    return shared.response.success(res, {
       valid: true,
       user: decoded
     });
   } catch (error) {
-    return utils.response.error(res, 'Token ไม่ถูกต้อง', shared.constants.statusCodes.UNAUTHORIZED);
+    return shared.response.error(
+      res,
+      'Token ไม่ถูกต้อง',
+      shared.constants.statusCodes.UNAUTHORIZED
+    );
   }
 });
 

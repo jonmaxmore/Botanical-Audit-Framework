@@ -1,0 +1,110 @@
+# 💨 Smoke Test Configuration
+# ทดสอบพื้นฐานว่าระบบทำงานได้
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 60
+      arrivalRate: 1
+      name: "Smoke Test"
+
+  ensure:
+    maxErrorRate: 0  # No errors allowed
+    p95: 1000  # 95% of requests < 1 second
+
+  plugins:
+    expect: {}
+
+scenarios:
+  - name: "Health Check"
+    weight: 10
+    flow:
+      - get:
+          url: "/health"
+          expect:
+            - statusCode: 200
+
+  - name: "Farmer Registration"
+    weight: 15
+    flow:
+      - post:
+          url: "/api/auth-farmer/register"
+          json:
+            email: "smoke_test_{{ $randomNumber() }}@example.com"
+            password: "Test@1234"
+            name: "Smoke Test User"
+            phone: "0812345678"
+            farmName: "ฟาร์มทดสอบ"
+            province: "กรุงเทพมหานคร"
+          expect:
+            - statusCode: [201, 400]  # 400 if email exists
+
+  - name: "Farmer Login"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/auth-farmer/login"
+          json:
+            email: "farmer1@example.com"
+            password: "Test@1234"
+          capture:
+            - json: "$.token"
+              as: "token"
+          expect:
+            - statusCode: 200
+            - hasProperty: "token"
+
+  - name: "View Dashboard"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/auth/farmer/login"
+          json:
+            email: "farmer1@example.com"
+            password: "Test@1234"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/dashboard/farmer"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  - name: "View Applications"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/auth/farmer/login"
+          json:
+            email: "farmer1@example.com"
+            password: "Test@1234"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/applications"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Verify Certificate"
+    weight: 10
+    flow:
+      - get:
+          url: "/api/certificates/verify/GACP-2025-BKK-0001"
+          expect:
+            - statusCode: [200, 404]
+
+  - name: "Officer Login"
+    weight: 5
+    flow:
+      - post:
+          url: "/api/auth-dtam/login"
+          json:
+            email: "officer1@dtam.go.th"
+            password: "Officer@123"
+          expect:
+            - statusCode: [200, 401]

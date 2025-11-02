@@ -12,7 +12,7 @@ const router = express.Router();
 
 // Import from shared module
 const shared = require('../../shared');
-const { config, utils } = shared;
+const { config } = shared;
 
 // Import DTAM-specific middleware (not from shared)
 const dtamMiddleware = require('../middleware/dtam-auth');
@@ -38,7 +38,7 @@ router.post(
       // Validate request
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
@@ -50,7 +50,7 @@ router.post(
 
       // Verify userType is DTAM_STAFF
       if (userType !== 'DTAM_STAFF') {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'คุณไม่มีสิทธิ์เข้าถึงระบบนี้',
           shared.constants.statusCodes.FORBIDDEN
@@ -64,7 +64,7 @@ router.post(
       });
 
       if (!staff) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
           shared.constants.statusCodes.UNAUTHORIZED
@@ -73,7 +73,7 @@ router.post(
 
       // Check if account is active
       if (!staff.isActive) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'บัญชีของคุณถูกระงับการใช้งาน',
           shared.constants.statusCodes.FORBIDDEN
@@ -91,7 +91,7 @@ router.post(
         }
         await staff.save();
 
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง',
           shared.constants.statusCodes.UNAUTHORIZED
@@ -123,7 +123,7 @@ router.post(
 
       logger.info(`DTAM staff login successful: ${staff.username} (${staff.role})`);
 
-      return utils.response.success(
+      return shared.response.success(
         res,
         {
           token,
@@ -142,7 +142,7 @@ router.post(
       );
     } catch (error) {
       logger.error('DTAM login error:', error);
-      return utils.response.error(
+      return shared.response.error(
         res,
         'เกิดข้อผิดพลาดในการเข้าสู่ระบบ',
         shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -157,7 +157,7 @@ router.post(
  * @access Public (but always returns 403)
  */
 router.post('/register', (req, res) => {
-  return utils.response.error(
+  return shared.response.error(
     res,
     'ไม่สามารถสมัครสมาชิกด้วยตนเองได้ - บัญชีเจ้าหน้าที่ต้องสร้างโดยผู้ดูแลระบบเท่านั้น กรุณาติดต่อผู้ดูแลระบบ',
     shared.constants.statusCodes.FORBIDDEN
@@ -174,7 +174,7 @@ router.get('/verify', (req, res) => {
     const token = req.headers.authorization?.replace('Bearer ', '');
 
     if (!token) {
-      return utils.response.error(res, 'ไม่พบ token', shared.constants.statusCodes.UNAUTHORIZED);
+      return shared.response.error(res, 'ไม่พบ token', shared.constants.statusCodes.UNAUTHORIZED);
     }
 
     // Verify token with DTAM secret
@@ -186,10 +186,10 @@ router.get('/verify', (req, res) => {
 
     // Verify userType
     if (decoded.userType !== 'DTAM_STAFF') {
-      return utils.response.error(res, 'Token ไม่ถูกต้อง', shared.constants.statusCodes.FORBIDDEN);
+      return shared.response.error(res, 'Token ไม่ถูกต้อง', shared.constants.statusCodes.FORBIDDEN);
     }
 
-    return utils.response.success(res, {
+    return shared.response.success(res, {
       valid: true,
       user: {
         userId: decoded.userId,
@@ -202,17 +202,17 @@ router.get('/verify', (req, res) => {
     });
   } catch (error) {
     if (error.name === 'JsonWebTokenError') {
-      return utils.response.error(
+      return shared.response.error(
         res,
         'Token ไม่ถูกต้อง',
         shared.constants.statusCodes.UNAUTHORIZED
       );
     }
     if (error.name === 'TokenExpiredError') {
-      return utils.response.error(res, 'Token หมดอายุ', shared.constants.statusCodes.UNAUTHORIZED);
+      return shared.response.error(res, 'Token หมดอายุ', shared.constants.statusCodes.UNAUTHORIZED);
     }
     logger.error('DTAM token verification error:', error);
-    return utils.response.error(
+    return shared.response.error(
       res,
       'เกิดข้อผิดพลาดในการตรวจสอบ token',
       shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -230,10 +230,14 @@ router.get('/profile', dtamMiddleware.verifyDTAMToken, async (req, res) => {
     const staff = await DTAMStaff.findById(req.user.userId).select('-password');
 
     if (!staff || !staff.isActive) {
-      return utils.response.error(res, 'ไม่พบข้อมูลผู้ใช้', shared.constants.statusCodes.NOT_FOUND);
+      return shared.response.error(
+        res,
+        'ไม่พบข้อมูลผู้ใช้',
+        shared.constants.statusCodes.NOT_FOUND
+      );
     }
 
-    return utils.response.success(res, {
+    return shared.response.success(res, {
       userId: staff._id,
       username: staff.username,
       email: staff.email,
@@ -248,7 +252,7 @@ router.get('/profile', dtamMiddleware.verifyDTAMToken, async (req, res) => {
     });
   } catch (error) {
     logger.error('Get DTAM profile error:', error);
-    return utils.response.error(
+    return shared.response.error(
       res,
       'ไม่สามารถดึงข้อมูลโปรไฟล์ได้',
       shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -269,7 +273,7 @@ router.get(
     try {
       const staffList = await DTAMStaff.find().select('-password').sort({ createdAt: -1 });
 
-      return utils.response.success(res, {
+      return shared.response.success(res, {
         count: staffList.length,
         staff: staffList.map(staff => ({
           userId: staff._id,
@@ -286,7 +290,7 @@ router.get(
       });
     } catch (error) {
       logger.error('Get DTAM staff list error:', error);
-      return utils.response.error(
+      return shared.response.error(
         res,
         'เกิดข้อผิดพลาด',
         shared.constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -322,7 +326,7 @@ router.post(
       // Validate request
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ข้อมูลไม่ถูกต้อง',
           shared.constants.statusCodes.BAD_REQUEST,
@@ -338,7 +342,7 @@ router.post(
       });
 
       if (existingStaff) {
-        return utils.response.error(
+        return shared.response.error(
           res,
           'ชื่อผู้ใช้หรืออีเมลนี้ถูกใช้งานแล้ว',
           shared.constants.statusCodes.CONFLICT
@@ -362,7 +366,7 @@ router.post(
 
       logger.info(`New DTAM staff created: ${newStaff.username} by ${req.user.username}`);
 
-      return utils.response.success(
+      return shared.response.success(
         res,
         {
           userId: newStaff._id,
@@ -378,7 +382,7 @@ router.post(
       );
     } catch (error) {
       logger.error('Create DTAM staff error:', error);
-      return utils.response.error(
+      return shared.response.error(
         res,
         'ไม่สามารถสร้างบัญชีได้',
         shared.constants.statusCodes.INTERNAL_SERVER_ERROR

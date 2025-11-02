@@ -1,0 +1,346 @@
+# 🎯 Load Testing Configuration
+# จำลอง 1,000 ผู้ใช้/วัน, 50 พนักงาน, จันทร์-ศุกร์ 09:00-17:00 เป็นเวลา 10 ปี
+
+config:
+  target: "http://localhost:3000"
+  phases:
+    # Phase 1: Morning Rush (09:00-10:00) - 40% of daily users
+    - duration: 3600
+      arrivalRate: 7  # ~400 users/hour (1000 * 0.4 / 1 hour)
+      name: "Morning Rush Hour"
+    
+    # Phase 2: Normal Load (10:00-12:00) - 20% of daily users  
+    - duration: 7200
+      arrivalRate: 1.4  # ~200 users/2 hours
+      name: "Mid Morning"
+    
+    # Phase 3: Lunch Break (12:00-13:00) - 10% of daily users
+    - duration: 3600
+      arrivalRate: 1.7  # ~100 users/hour
+      name: "Lunch Break"
+    
+    # Phase 4: Afternoon (13:00-16:00) - 20% of daily users
+    - duration: 10800
+      arrivalRate: 1.1  # ~200 users/3 hours
+      name: "Afternoon"
+    
+    # Phase 5: Evening Rush (16:00-17:00) - 10% of daily users
+    - duration: 3600
+      arrivalRate: 1.7  # ~100 users/hour
+      name: "Evening Rush"
+  
+  # Performance thresholds
+  ensure:
+    maxErrorRate: 1  # Max 1% error rate
+    p95: 2000  # 95% of requests < 2 seconds
+    p99: 5000  # 99% of requests < 5 seconds
+
+  # Plugins
+  plugins:
+    expect: {}
+    metrics-by-endpoint:
+      stripQueryString: true
+    statsd:
+      host: localhost
+      port: 8125
+      prefix: "gacp.loadtest"
+
+# Common variables
+variables:
+  farmer_emails:
+    - "farmer1@example.com"
+    - "farmer2@example.com"
+    - "farmer3@example.com"
+    - "farmer4@example.com"
+    - "farmer5@example.com"
+  
+  officer_emails:
+    - "officer1@dtam.go.th"
+    - "officer2@dtam.go.th"
+    - "officer3@dtam.go.th"
+    - "officer4@dtam.go.th"
+    - "officer5@dtam.go.th"
+  
+  inspector_emails:
+    - "inspector1@dtam.go.th"
+    - "inspector2@dtam.go.th"
+    - "inspector3@dtam.go.th"
+
+  provinces:
+    - "กรุงเทพมหานคร"
+    - "เชียงใหม่"
+    - "ขอนแก่น"
+    - "ภูเก็ต"
+    - "นครราชสีมา"
+
+  crop_types:
+    - "กัญชา"
+    - "กัญชง"
+    - "สมุนไพร"
+
+# Scenarios weighted by realistic usage patterns
+scenarios:
+  # Farmer scenarios (70% of traffic)
+  - name: "Farmer Registration"
+    weight: 5
+    flow:
+      - post:
+          url: "/api/auth/farmer/register"
+          json:
+            email: "farmer_{{ $randomNumber() }}@example.com"
+            password: "Test@1234"
+            name: "เกษตรกร {{ $randomString() }}"
+            phone: "08{{ $randomNumber(10000000, 99999999) }}"
+            farmName: "ฟาร์ม{{ $randomString() }}"
+            province: "{{ provinces[$randomNumber(0, 4)] }}"
+          capture:
+            - json: "$.token"
+              as: "token"
+          expect:
+            - statusCode: 201
+            - contentType: json
+            - hasProperty: "token"
+
+  - name: "Farmer Login"
+    weight: 20
+    flow:
+      - post:
+          url: "/api/auth/farmer/login"
+          json:
+            email: "{{ farmer_emails[$randomNumber(0, 4)] }}"
+            password: "Test@1234"
+          capture:
+            - json: "$.token"
+              as: "token"
+          expect:
+            - statusCode: 200
+
+  - name: "Create Application"
+    weight: 15
+    flow:
+      - post:
+          url: "/api/auth/farmer/login"
+          json:
+            email: "{{ farmer_emails[$randomNumber(0, 4)] }}"
+            password: "Test@1234"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - post:
+          url: "/api/applications"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            applicantType: "individual"
+            farmInformation:
+              farmName: "ฟาร์ม{{ $randomString() }}"
+              farmSize: "{{ $randomNumber(1, 50) }}"
+              location:
+                province: "{{ provinces[$randomNumber(0, 4)] }}"
+                district: "อำเภอทดสอบ"
+                subdistrict: "ตำบลทดสอบ"
+              crops:
+                - cropType: "{{ crop_types[$randomNumber(0, 2)] }}"
+                  plantingArea: "{{ $randomNumber(1, 20) }}"
+          expect:
+            - statusCode: [200, 201]
+
+  - name: "View Applications"
+    weight: 15
+    flow:
+      - post:
+          url: "/api/auth/farmer/login"
+          json:
+            email: "{{ farmer_emails[$randomNumber(0, 4)] }}"
+            password: "Test@1234"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/applications"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  - name: "View Dashboard"
+    weight: 10
+    flow:
+      - post:
+          url: "/api/auth/farmer/login"
+          json:
+            email: "{{ farmer_emails[$randomNumber(0, 4)] }}"
+            password: "Test@1234"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/dashboard/farmer"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Upload Document"
+    weight: 5
+    flow:
+      - post:
+          url: "/api/auth/farmer/login"
+          json:
+            email: "{{ farmer_emails[$randomNumber(0, 4)] }}"
+            password: "Test@1234"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - post:
+          url: "/api/applications/{{ $randomString() }}/documents"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          formData:
+            documentType: "LAND_OWNERSHIP"
+            file: "@./test-data/sample-document.pdf"
+          expect:
+            - statusCode: [200, 201, 404]  # 404 if app not found is OK
+
+  # Officer scenarios (20% of traffic)
+  - name: "Officer Login & Review"
+    weight: 10
+    flow:
+      - post:
+          url: "/api/auth/dtam/login"
+          json:
+            email: "{{ officer_emails[$randomNumber(0, 4)] }}"
+            password: "Officer@123"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/applications?status=SUBMITTED"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Officer Dashboard"
+    weight: 5
+    flow:
+      - post:
+          url: "/api/auth/dtam/login"
+          json:
+            email: "{{ officer_emails[$randomNumber(0, 4)] }}"
+            password: "Officer@123"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/dashboard/officer"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Review Application"
+    weight: 5
+    flow:
+      - post:
+          url: "/api/auth/dtam/login"
+          json:
+            email: "{{ officer_emails[$randomNumber(0, 4)] }}"
+            password: "Officer@123"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/applications?status=SUBMITTED&limit=1"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          capture:
+            - json: "$.data[0]._id"
+              as: "appId"
+      - post:
+          url: "/api/applications/{{ appId }}/review"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            completenessScore: "{{ $randomNumber(3, 5) }}"
+            accuracyScore: "{{ $randomNumber(3, 5) }}"
+            comments: "ตรวจสอบเอกสารเรียบร้อย"
+            decision: "APPROVED"
+          expect:
+            - statusCode: [200, 404]
+
+  # Inspector scenarios (10% of traffic)
+  - name: "Inspector Schedule"
+    weight: 5
+    flow:
+      - post:
+          url: "/api/auth/dtam/login"
+          json:
+            email: "{{ inspector_emails[$randomNumber(0, 2)] }}"
+            password: "Inspector@123"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/calendar/events"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Inspector Dashboard"
+    weight: 3
+    flow:
+      - post:
+          url: "/api/auth/dtam/login"
+          json:
+            email: "{{ inspector_emails[$randomNumber(0, 2)] }}"
+            password: "Inspector@123"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - get:
+          url: "/api/dashboard/inspector"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          expect:
+            - statusCode: 200
+
+  - name: "Complete Inspection"
+    weight: 2
+    flow:
+      - post:
+          url: "/api/auth/dtam/login"
+          json:
+            email: "{{ inspector_emails[$randomNumber(0, 2)] }}"
+            password: "Inspector@123"
+          capture:
+            - json: "$.token"
+              as: "token"
+      - post:
+          url: "/api/inspections/{{ $randomString() }}/complete"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            result: "PASS"
+            score: "{{ $randomNumber(80, 100) }}"
+            notes: "ผ่านการตรวจสอบ"
+          expect:
+            - statusCode: [200, 404]
+
+  # Public scenarios (anonymous)
+  - name: "Verify Certificate"
+    weight: 3
+    flow:
+      - get:
+          url: "/api/certificates/verify/GACP-2025-BKK-0001"
+          expect:
+            - statusCode: [200, 404]
+
+  - name: "View Public Info"
+    weight: 2
+    flow:
+      - get:
+          url: "/api/public/info"
+          expect:
+            - statusCode: 200

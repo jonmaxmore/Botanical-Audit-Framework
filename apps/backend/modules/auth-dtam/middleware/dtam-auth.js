@@ -14,7 +14,8 @@
  */
 
 const shared = require('../../shared');
-const { utils, constants } = shared;
+const { constants } = shared;
+
 const logger = require('../services/logger');
 const jwtConfig = require('../../../../../config/jwt-security');
 
@@ -45,7 +46,7 @@ const verifyDTAMToken = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return utils.response.error(
+      return shared.response.error(
         res,
         'ไม่พบ Authorization header',
         constants.statusCodes.UNAUTHORIZED
@@ -55,7 +56,7 @@ const verifyDTAMToken = (req, res, next) => {
     const token = authHeader.replace('Bearer ', '');
 
     if (!token) {
-      return utils.response.error(res, 'ไม่พบ token', constants.statusCodes.UNAUTHORIZED);
+      return shared.response.error(res, 'ไม่พบ token', constants.statusCodes.UNAUTHORIZED);
     }
 
     // Verify token with DTAM secret (จาก secure configuration)
@@ -63,7 +64,7 @@ const verifyDTAMToken = (req, res, next) => {
 
     // Verify user type is DTAM_STAFF
     if (decoded.userType !== 'DTAM_STAFF') {
-      return utils.response.error(
+      return shared.response.error(
         res,
         'คุณไม่มีสิทธิ์เข้าถึง - ต้องเป็นเจ้าหน้าที่ DTAM เท่านั้น',
         constants.statusCodes.FORBIDDEN
@@ -83,11 +84,11 @@ const verifyDTAMToken = (req, res, next) => {
     next();
   } catch (error) {
     if (error.name === 'JsonWebTokenError') {
-      return utils.response.error(res, 'Token ไม่ถูกต้อง', constants.statusCodes.UNAUTHORIZED);
+      return shared.response.error(res, 'Token ไม่ถูกต้อง', constants.statusCodes.UNAUTHORIZED);
     }
 
     if (error.name === 'TokenExpiredError') {
-      return utils.response.error(
+      return shared.response.error(
         res,
         'Token หมดอายุ กรุณาเข้าสู่ระบบใหม่',
         constants.statusCodes.UNAUTHORIZED
@@ -95,7 +96,7 @@ const verifyDTAMToken = (req, res, next) => {
     }
 
     logger.error('DTAM token verification error:', error);
-    return utils.response.error(
+    return shared.response.error(
       res,
       'เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์',
       constants.statusCodes.INTERNAL_SERVER_ERROR
@@ -112,11 +113,11 @@ const verifyDTAMToken = (req, res, next) => {
 const requireDTAMRole = (allowedRoles = []) => {
   return (req, res, next) => {
     if (!req.user) {
-      return utils.response.error(res, 'ไม่พบข้อมูลผู้ใช้', constants.statusCodes.UNAUTHORIZED);
+      return shared.response.error(res, 'ไม่พบข้อมูลผู้ใช้', constants.statusCodes.UNAUTHORIZED);
     }
 
     if (!allowedRoles.includes(req.user.role)) {
-      return utils.response.error(
+      return shared.response.error(
         res,
         'คุณไม่มีสิทธิ์ในการดำเนินการนี้',
         constants.statusCodes.FORBIDDEN,
@@ -137,11 +138,11 @@ const requireDTAMRole = (allowedRoles = []) => {
  */
 const requireDTAMAdmin = (req, res, next) => {
   if (!req.user) {
-    return utils.response.error(res, 'ไม่พบข้อมูลผู้ใช้', constants.statusCodes.UNAUTHORIZED);
+    return shared.response.error(res, 'ไม่พบข้อมูลผู้ใช้', constants.statusCodes.UNAUTHORIZED);
   }
 
   if (req.user.role !== 'admin') {
-    return utils.response.error(
+    return shared.response.error(
       res,
       'ต้องเป็นผู้ดูแลระบบเท่านั้น',
       constants.statusCodes.FORBIDDEN
@@ -157,11 +158,11 @@ const requireDTAMAdmin = (req, res, next) => {
  */
 const requireDTAMManagerOrAdmin = (req, res, next) => {
   if (!req.user) {
-    return utils.response.error(res, 'ไม่พบข้อมูลผู้ใช้', constants.statusCodes.UNAUTHORIZED);
+    return shared.response.error(res, 'ไม่พบข้อมูลผู้ใช้', constants.statusCodes.UNAUTHORIZED);
   }
 
   if (!['admin', 'manager'].includes(req.user.role)) {
-    return utils.response.error(
+    return shared.response.error(
       res,
       'ต้องเป็นผู้จัดการหรือผู้ดูแลระบบเท่านั้น',
       constants.statusCodes.FORBIDDEN
