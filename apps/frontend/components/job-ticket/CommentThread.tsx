@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -40,7 +40,7 @@ export default function CommentThread({ jobId, onUpdate }: CommentThreadProps) {
   const [error, setError] = useState<string | null>(null);
   const [newComment, setNewComment] = useState('');
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -65,13 +65,13 @@ export default function CommentThread({ jobId, onUpdate }: CommentThreadProps) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [jobId]);
 
   useEffect(() => {
     if (jobId) {
       fetchComments();
     }
-  }, [jobId]);
+  }, [jobId, fetchComments]);
 
   const handleSubmitComment = async () => {
     if (!newComment.trim()) return;

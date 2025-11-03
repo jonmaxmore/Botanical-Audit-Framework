@@ -184,7 +184,7 @@ export async function safeApiCall<T = any>(
   }
 }
 
-export default {
+const responseHelper = {
   normalizeResponse,
   extractData,
   isSuccess,
@@ -194,3 +194,5 @@ export default {
   extractPagination,
   safeApiCall
 };
+
+export default responseHelper;

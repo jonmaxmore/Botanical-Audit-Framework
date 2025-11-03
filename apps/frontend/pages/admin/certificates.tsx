@@ -20,7 +20,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   Chip,
   IconButton,
   Dialog,
@@ -86,11 +85,6 @@ export default function AdminCertificates() {
   const [actionReason, setActionReason] = useState('');
   const [actionLoading, setActionLoading] = useState(false);
 
-  useEffect(() => {
-    fetchCertificates();
-    fetchStats();
-  }, [page, statusFilter]);
-
   const fetchCertificates = useCallback(async () => {
     setLoading(true);
     try {
@@ -124,6 +118,11 @@ export default function AdminCertificates() {
       setLoading(false);
     }
   }, [page, statusFilter, searchQuery]);
+
+  useEffect(() => {
+    fetchCertificates();
+    fetchStats();
+  }, [fetchCertificates]);
 
   const fetchStats = async () => {
     try {

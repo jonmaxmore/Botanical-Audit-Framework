@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -94,7 +94,7 @@ export default function JobDetailModal({ open, onClose, jobId, onUpdate }: JobDe
   const [error, setError] = useState<string | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const fetchJobDetails = async () => {
+  const fetchJobDetails = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -119,13 +119,13 @@ export default function JobDetailModal({ open, onClose, jobId, onUpdate }: JobDe
     } finally {
       setLoading(false);
     }
-  };
+  }, [jobId]);
 
   useEffect(() => {
     if (open && jobId) {
       fetchJobDetails();
     }
-  }, [open, jobId, refreshKey]);
+  }, [open, jobId, refreshKey, fetchJobDetails]);
 
   const handleRefresh = () => {
     setRefreshKey(prev => prev + 1);

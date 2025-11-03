@@ -6,7 +6,7 @@
  * @module __tests__/crypto-service.test
  */
 
-const crypto = require('crypto');
+const _crypto = require('crypto');
 const fs = require('fs').promises;
 const path = require('path');
 const { CryptoService } = require('../services/crypto');

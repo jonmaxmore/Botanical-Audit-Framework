@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Typography,
@@ -49,7 +49,7 @@ export default function JobAttachmentList({ jobId, onUpdate }: JobAttachmentList
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchAttachments = async () => {
+  const fetchAttachments = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -74,13 +74,13 @@ export default function JobAttachmentList({ jobId, onUpdate }: JobAttachmentList
     } finally {
       setLoading(false);
     }
-  };
+  }, [jobId]);
 
   useEffect(() => {
     if (jobId) {
       fetchAttachments();
     }
-  }, [jobId]);
+  }, [jobId, fetchAttachments]);
 
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;

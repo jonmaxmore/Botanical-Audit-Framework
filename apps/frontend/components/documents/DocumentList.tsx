@@ -3,7 +3,7 @@
  * Display and manage documents with filtering and pagination
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -24,8 +24,7 @@ import {
   Pagination,
   CircularProgress,
   Alert,
-  InputAdornment,
-  Tooltip
+  InputAdornment
 } from '@mui/material';
 import {
   Search as SearchIcon,
@@ -37,7 +36,6 @@ import {
   Visibility as ViewIcon,
   CheckCircle as ApproveIcon,
   Cancel as RejectIcon,
-  History as HistoryIcon,
   InsertDriveFile as FileIcon,
   Image as ImageIcon,
   PictureAsPdf as PdfIcon
@@ -111,11 +109,7 @@ export default function DocumentList({
   const limit = compact ? 5 : 10;
 
   // Fetch documents
-  useEffect(() => {
-    fetchDocuments();
-  }, [page, typeFilter, categoryFilter, statusFilter, searchQuery, filterByEntityId]);
-
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     setLoading(true);
     setError(null);
 
@@ -148,7 +142,11 @@ export default function DocumentList({
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, typeFilter, categoryFilter, statusFilter, searchQuery, filterByEntityId, limit]);
+
+  useEffect(() => {
+    fetchDocuments();
+  }, [fetchDocuments]);
 
   // Get file icon
   const getFileIcon = (mimetype: string) => {

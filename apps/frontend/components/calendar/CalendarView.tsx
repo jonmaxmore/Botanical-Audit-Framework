@@ -12,14 +12,13 @@
 
 'use client';
 
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list';
 import { Box, Paper, Typography, Button, ButtonGroup, Chip } from '@mui/material';
-import { format } from 'date-fns';
 import { EventModal } from './EventModal';
 import { calendarApi } from '../../lib/api/calendar';
 
@@ -53,7 +52,7 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [currentView, setCurrentView] = useState('dayGridMonth');
-  const [loading, setLoading] = useState(false);
+  const [_loading, setLoading] = useState(false);
 
   // Fetch events from API
   const fetchEvents = async (start: Date, end: Date) => {

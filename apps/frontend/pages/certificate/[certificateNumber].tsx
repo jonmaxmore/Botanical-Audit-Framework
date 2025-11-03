@@ -3,8 +3,9 @@
  * Display full certificate information and verification status
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import {
   Box,
   Container,
@@ -74,13 +75,7 @@ export default function CertificateDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (certificateNumber) {
-      fetchCertificate();
-    }
-  }, [certificateNumber]);
-
-  const fetchCertificate = async () => {
+  const fetchCertificate = useCallback(async () => {
     try {
       const response = await fetch(`/api/certificates/${certificateNumber}`);
       const data = await response.json();
@@ -96,7 +91,13 @@ export default function CertificateDetail() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [certificateNumber]);
+
+  useEffect(() => {
+    if (certificateNumber) {
+      fetchCertificate();
+    }
+  }, [certificateNumber, fetchCertificate]);
 
   const handleDownloadPDF = () => {
     window.open(`/api/certificates/pdf/${certificateNumber}`, '_blank');
@@ -450,11 +451,14 @@ export default function CertificateDetail() {
                   }}
                 >
                   {certificate.qrCode.imageUrl ? (
-                    <img
-                      src={certificate.qrCode.imageUrl}
-                      alt="QR Code"
-                      style={{ width: 200, height: 200 }}
-                    />
+                    <Box sx={{ position: 'relative', width: 200, height: 200 }}>
+                      <Image
+                        src={certificate.qrCode.imageUrl}
+                        alt="QR Code"
+                        width={200}
+                        height={200}
+                      />
+                    </Box>
                   ) : (
                     <Box
                       sx={{

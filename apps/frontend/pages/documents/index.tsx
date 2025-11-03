@@ -26,9 +26,7 @@ import {
   Snackbar
 } from '@mui/material';
 import {
-  CloudUpload as UploadIcon,
-  Add as AddIcon,
-  FolderOpen as FolderIcon
+  CloudUpload as UploadIcon
 } from '@mui/icons-material';
 import { FileUploader, DocumentList, DocumentViewer } from '../../components/documents';
 

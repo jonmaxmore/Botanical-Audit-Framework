@@ -3,7 +3,7 @@
  * Display document details with preview and actions
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Dialog,
@@ -115,14 +115,7 @@ export default function DocumentViewer({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   // Fetch document details
-  useEffect(() => {
-    if (documentId && open) {
-      fetchDocument();
-      fetchVersions();
-    }
-  }, [documentId, open]);
-
-  const fetchDocument = async () => {
+  const fetchDocument = useCallback(async () => {
     if (!documentId) return;
 
     setLoading(true);
@@ -150,9 +143,9 @@ export default function DocumentViewer({
     } finally {
       setLoading(false);
     }
-  };
+  }, [documentId]);
 
-  const fetchVersions = async () => {
+  const fetchVersions = useCallback(async () => {
     if (!documentId) return;
 
     try {
@@ -172,7 +165,14 @@ export default function DocumentViewer({
     } catch (err) {
       console.error('Error fetching versions:', err);
     }
-  };
+  }, [documentId, document]);
+
+  useEffect(() => {
+    if (documentId && open) {
+      fetchDocument();
+      fetchVersions();
+    }
+  }, [documentId, open, fetchDocument, fetchVersions]);
 
   // Format file size
   const formatFileSize = (bytes: number) => {

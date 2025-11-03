@@ -3,7 +3,7 @@
  * Verify certificate authenticity with QR scanner
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import {
   Box,
@@ -52,13 +52,7 @@ export default function CertificateVerify() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    if (certificateNumber) {
-      verifyCertificate();
-    }
-  }, [certificateNumber]);
-
-  const verifyCertificate = async () => {
+  const verifyCertificate = useCallback(async () => {
     try {
       const response = await fetch(`/api/certificates/verify/${certificateNumber}`);
       const data = await response.json();
@@ -74,7 +68,13 @@ export default function CertificateVerify() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [certificateNumber]);
+
+  useEffect(() => {
+    if (certificateNumber) {
+      verifyCertificate();
+    }
+  }, [certificateNumber, verifyCertificate]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('th-TH', {

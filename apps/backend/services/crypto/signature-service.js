@@ -278,8 +278,8 @@ class SignatureService {
    * @private
    */
   async ensureLocalKeys() {
-    const publicKeyPath = path.join(this.keyDir, 'public.pem');
-    const privateKeyPath = path.join(this.keyDir, 'private.pem');
+    const _publicKeyPath = path.join(this.keyDir, 'public.pem');
+    const _privateKeyPath = path.join(this.keyDir, 'private.pem');
 
     try {
       // Try to load existing keys
@@ -524,7 +524,7 @@ class SignatureService {
     console.log(`✓ Backed up old keys to: ${backupDir}`);
 
     // Generate new keys
-    const { publicKey, privateKey } = await this.generateKeyPair();
+    const { publicKey, privateKey: _privateKey } = await this.generateKeyPair();
 
     console.log(`✓ Rotated keys to version ${version}`);
 

@@ -637,7 +637,7 @@ async function main() {
     const connectionString = await getConnectionString();
 
     // Step 7: Setup database and collections
-    const { success, uri } = await setupDatabase(connectionString, credentials);
+    const { success, uri: _uri } = await setupDatabase(connectionString, credentials);
 
     // Step 8: Save credentials
     if (success && credentials.length > 0) {

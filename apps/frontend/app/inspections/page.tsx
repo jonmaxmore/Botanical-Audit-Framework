@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -11,7 +11,6 @@ import {
   Button,
   TextField,
   MenuItem,
-  IconButton,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -20,7 +19,6 @@ import {
   Tab,
   List,
   ListItem,
-  ListItemText,
   ListItemButton,
   Badge,
   Alert,
@@ -34,11 +32,10 @@ import {
   Refresh as RefreshIcon,
   Assignment as AssignmentIcon,
   CheckCircle as CheckCircleIcon,
-  Warning as WarningIcon,
   Schedule as ScheduleIcon,
   Cancel as CancelIcon
 } from '@mui/icons-material';
-import { format, isAfter, isBefore, addDays } from 'date-fns';
+import { format } from 'date-fns';
 
 interface Inspection {
   _id: string;
@@ -115,12 +112,7 @@ export default function InspectionsPage() {
     search: ''
   });
 
-  useEffect(() => {
-    fetchInspections();
-    fetchStatistics();
-  }, [filters]);
-
-  const fetchInspections = async () => {
+  const fetchInspections = useCallback(async () => {
     try {
       setLoading(true);
       const queryParams = new URLSearchParams();
@@ -146,7 +138,12 @@ export default function InspectionsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filters]);
+
+  useEffect(() => {
+    fetchInspections();
+    fetchStatistics();
+  }, [fetchInspections]);
 
   const fetchStatistics = async () => {
     try {
