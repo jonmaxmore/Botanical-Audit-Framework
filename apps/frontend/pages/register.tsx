@@ -16,7 +16,12 @@ import {
   Grid,
   MenuItem,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Divider
 } from '@mui/material';
 import {
   Visibility,
@@ -42,6 +47,8 @@ export default function RegisterPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [openPrivacyModal, setOpenPrivacyModal] = useState(false);
+  const [openTermsModal, setOpenTermsModal] = useState(false);
   const [formData, setFormData] = useState({
     // Step 1: Account Info
     email: '',
@@ -60,7 +67,10 @@ export default function RegisterPage() {
     subDistrict: '',
     zipCode: '',
     farmSize: '',
-    acceptTerms: false
+    // Checkpoint 1: Registration Consents (GDPR + PDPA)
+    acceptPrivacyPolicy: false,
+    acceptTermsOfService: false,
+    acceptMarketing: false
   });
 
   const provinces = [
@@ -126,8 +136,8 @@ export default function RegisterPage() {
           setError('กรุณากรอกข้อมูลให้ครบถ้วน');
           return false;
         }
-        if (!formData.acceptTerms) {
-          setError('กรุณายอมรับข้อกำหนดและเงื่อนไข');
+        if (!formData.acceptPrivacyPolicy || !formData.acceptTermsOfService) {
+          setError('กรุณายอมรับนโยบายความเป็นส่วนตัวและข้อกำหนดการใช้งาน (บังคับ)');
           return false;
         }
         break;
@@ -472,25 +482,74 @@ export default function RegisterPage() {
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={formData.acceptTerms}
+                  checked={formData.acceptPrivacyPolicy}
                   onChange={handleCheckboxChange}
-                  name="acceptTerms"
+                  name="acceptPrivacyPolicy"
                   color="primary"
+                  required
                 />
               }
               label={
                 <Typography variant="body2">
-                  ฉันยอมรับ{' '}
-                  <Link href="/terms" target="_blank" sx={{ color: 'primary.main' }}>
-                    ข้อกำหนดและเงื่อนไข
-                  </Link>{' '}
-                  และ{' '}
-                  <Link href="/privacy" target="_blank" sx={{ color: 'primary.main' }}>
-                    นโยบายความเป็นส่วนตัว
+                  ✅ <strong>(บังคับ)</strong> ฉันยอมรับ{' '}
+                  <Link
+                    component="button"
+                    variant="body2"
+                    onClick={e => {
+                      e.preventDefault();
+                      setOpenPrivacyModal(true);
+                    }}
+                    sx={{ color: 'primary.main', textDecoration: 'underline' }}
+                  >
+                    นโยบายความเป็นส่วนตัว (Privacy Policy)
                   </Link>
                 </Typography>
               }
-              sx={{ mt: 2 }}
+              sx={{ mt: 2, alignItems: 'flex-start' }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.acceptTermsOfService}
+                  onChange={handleCheckboxChange}
+                  name="acceptTermsOfService"
+                  color="primary"
+                  required
+                />
+              }
+              label={
+                <Typography variant="body2">
+                  ✅ <strong>(บังคับ)</strong> ฉันยอมรับ{' '}
+                  <Link
+                    component="button"
+                    variant="body2"
+                    onClick={e => {
+                      e.preventDefault();
+                      setOpenTermsModal(true);
+                    }}
+                    sx={{ color: 'primary.main', textDecoration: 'underline' }}
+                  >
+                    ข้อกำหนดและเงื่อนไขการใช้งาน (Terms of Service)
+                  </Link>
+                </Typography>
+              }
+              sx={{ mt: 1, alignItems: 'flex-start' }}
+            />
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={formData.acceptMarketing}
+                  onChange={handleCheckboxChange}
+                  name="acceptMarketing"
+                  color="primary"
+                />
+              }
+              label={
+                <Typography variant="body2" color="text.secondary">
+                  📧 <em>(ไม่บังคับ)</em> ฉันยินยอมให้ระบบส่งข่าวสารและโปรโมชั่นทางอีเมล
+                </Typography>
+              }
+              sx={{ mt: 1, alignItems: 'flex-start' }}
             />
           </Box>
         );
@@ -624,6 +683,277 @@ export default function RegisterPage() {
           </Box>
         </Container>
       </Box>
+
+      {/* Privacy Policy Modal */}
+      <Dialog
+        open={openPrivacyModal}
+        onClose={() => setOpenPrivacyModal(false)}
+        maxWidth="md"
+        fullWidth
+        scroll="paper"
+      >
+        <DialogTitle>
+          <Typography variant="h5" fontWeight={600}>
+            นโยบายความเป็นส่วนตัว (Privacy Policy)
+          </Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Typography variant="body2" paragraph>
+            <strong>ปรับปรุงล่าสุด:</strong> 3 พฤศจิกายน 2025
+          </Typography>
+          <Divider sx={{ my: 2 }} />
+
+          <Typography variant="h6" gutterBottom>
+            1. ผู้ควบคุมข้อมูลส่วนบุคคล
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>ชื่อองค์กร:</strong> ระบบตรวจสอบและรับรองมาตรฐาน GACP
+            <br />
+            <strong>อีเมล:</strong> privacy@gacp-system.com
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            2. ข้อมูลที่เราเก็บรวบรวม
+          </Typography>
+          <Typography variant="body2" paragraph>
+            เราเก็บรวบรวมข้อมูลส่วนบุคคลดังนี้:
+            <br />
+            ✅ ข้อมูลบัญชี: ชื่อ-นามสกุล, อีเมล, เบอร์โทร, เลขบัตรประชาชน
+            <br />
+            ✅ ข้อมูลฟาร์ม: ชื่อฟาร์ม, ที่อยู่, พิกัด GPS, ขนาดพื้นที่
+            <br />
+            ✅ เอกสารประกอบ: สำเนาบัตรประชาชน, รูปภาพฟาร์ม, ผลการทดสอบ
+            <br />✅ Audit Logs: บันทึกการใช้งานระบบ (IP Address, Timestamp)
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            3. วัตถุประสงค์
+          </Typography>
+          <Typography variant="body2" paragraph>
+            เราเก็บข้อมูลเพื่อ:
+            <br />
+            ✅ ให้บริการระบบตรวจสอบและรับรอง GACP
+            <br />
+            ✅ ส่งข้อมูลให้ DTAM (กรมแพทย์แผนไทย) เพื่อตรวจสอบ
+            <br />
+            ✅ ปฏิบัติตามกฎหมาย PDPA และมาตรฐาน GMP
+            <br />✅ เก็บข้อมูลไว้ 5 ปี ตามกฎหมาย GMP Annex 11
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            4. การแชร์ข้อมูล
+          </Typography>
+          <Typography variant="body2" paragraph>
+            เราจะแชร์ข้อมูลกับ:
+            <br />
+            ✅ กรมแพทย์แผนไทย (DTAM) - เพื่อตรวจสอบ GACP
+            <br />
+            ✅ ห้องปฏิบัติการที่ได้รับรอง - เพื่อรับผลทดสอบ
+            <br />
+            ✅ MongoDB Atlas, AWS S3 - เก็บข้อมูล (มีการเข้ารหัส)
+            <br />
+            <br />
+            ❌ เราจะไม่แชร์กับบริษัทโฆษณา (Google Ads, Facebook Ads)
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            5. ระยะเวลาเก็บข้อมูล
+          </Typography>
+          <Typography variant="body2" paragraph>
+            เราเก็บข้อมูลไว้ <strong>5 ปี</strong> ตามกฎหมาย GMP Annex 11
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            6. สิทธิของท่าน (PDPA)
+          </Typography>
+          <Typography variant="body2" paragraph>
+            ท่านมีสิทธิ:
+            <br />
+            ✅ เข้าถึงข้อมูล (Download My Data)
+            <br />
+            ✅ แก้ไขข้อมูล (Edit Profile)
+            <br />
+            ✅ ถอนความยินยอม (Privacy Settings)
+            <br />
+            ⚠️ ไม่สามารถลบข้อมูลได้ทันที (ต้องเก็บ 5 ปีตามกฎหมาย)
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            7. มาตรการรักษาความปลอดภัย
+          </Typography>
+          <Typography variant="body2" paragraph>
+            ✅ HTTPS/TLS 1.3 - เข้ารหัสการสื่อสาร
+            <br />
+            ✅ bcrypt - เข้ารหัสรหัสผ่าน
+            <br />
+            ✅ JWT Token - Authentication
+            <br />✅ Audit Logs - บันทึกทุกการเปลี่ยนแปลง
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            8. ติดต่อเรา
+          </Typography>
+          <Typography variant="body2">
+            <strong>Email:</strong> privacy@gacp-system.com
+            <br />
+            <strong>DPO:</strong> dpo@gacp-system.com
+          </Typography>
+
+          <Alert severity="info" sx={{ mt: 3 }}>
+            <Typography variant="body2">
+              📖 <strong>เอกสารฉบับเต็ม:</strong> สามารถดูได้ที่{' '}
+              <Link href="/docs/privacy-policy" target="_blank">
+                /docs/privacy-policy
+              </Link>
+            </Typography>
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenPrivacyModal(false)} variant="contained">
+            ปิด
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      {/* Terms of Service Modal */}
+      <Dialog
+        open={openTermsModal}
+        onClose={() => setOpenTermsModal(false)}
+        maxWidth="md"
+        fullWidth
+        scroll="paper"
+      >
+        <DialogTitle>
+          <Typography variant="h5" fontWeight={600}>
+            ข้อกำหนดและเงื่อนไขการใช้งาน (Terms of Service)
+          </Typography>
+        </DialogTitle>
+        <DialogContent dividers>
+          <Typography variant="body2" paragraph>
+            <strong>ปรับปรุงล่าสุด:</strong> 3 พฤศจิกายน 2025
+          </Typography>
+          <Divider sx={{ my: 2 }} />
+
+          <Typography variant="h6" gutterBottom>
+            1. การยอมรับข้อกำหนด
+          </Typography>
+          <Typography variant="body2" paragraph>
+            เมื่อท่านลงทะเบียน ท่านยอมรับข้อกำหนดนี้ทั้งหมด
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            2. การใช้งานระบบ
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>ท่านสามารถ:</strong>
+            <br />
+            ✅ ลงทะเบียนฟาร์มและยื่นขอรับรอง GACP
+            <br />
+            ✅ บันทึกข้อมูลการเก็บเกี่ยว (Harvest Records)
+            <br />
+            ✅ อัปโหลดเอกสารประกอบ
+            <br />
+            ✅ ติดตามสถานะคำขอ
+            <br />
+            <br />
+            <strong>ห้าม:</strong>
+            <br />
+            ❌ ให้ข้อมูลเท็จหรือปลอมแปลงเอกสาร
+            <br />
+            ❌ Scraping หรือ Reverse Engineering
+            <br />
+            ❌ แชร์บัญชีให้ผู้อื่น
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            3. ความรับผิดชอบของผู้ใช้
+          </Typography>
+          <Typography variant="body2" paragraph>
+            ✅ ให้ข้อมูลที่ถูกต้องและครบถ้วน
+            <br />
+            ✅ รักษารหัสผ่านไม่ให้รั่วไหล
+            <br />
+            ✅ อัปเดตข้อมูลให้เป็นปัจจุบัน
+            <br />
+            ⚠️ หากให้ข้อมูลเท็จ อาจถูกแบนบัญชีและมีความผิดตามกฎหมาย
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            4. ค่าธรรมเนียม
+          </Typography>
+          <Typography variant="body2" paragraph>
+            <strong>ค่ายื่นคำขอ:</strong> 5,000 บาท
+            <br />
+            <strong>ค่าตรวจสอบภาคสนาม:</strong> 25,000 บาท
+            <br />
+            <strong>รวม:</strong> 30,000 บาท
+            <br />
+            <br />
+            ⚠️ ชำระหลังยื่นคำขอและ DTAM ยืนยันรับเรื่อง
+            <br />
+            ⚠️ ค่าธรรมเนียมไม่สามารถคืนได้
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            5. สิ่งที่เราไม่รับผิดชอบ
+          </Typography>
+          <Typography variant="body2" paragraph>
+            ❌ การตัดสินของ DTAM (Approve/Reject)
+            <br />
+            ❌ ความล่าช้าในการตรวจสอบ (90-180 วัน)
+            <br />
+            ❌ ค่าใช้จ่ายเพิ่มเติมจาก DTAM
+            <br />❌ ความเสียหายจากการใช้งานผิดวิธี
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            6. การแบนบัญชี
+          </Typography>
+          <Typography variant="body2" paragraph>
+            เราสามารถแบนบัญชีได้หาก:
+            <br />
+            ❌ ให้ข้อมูลเท็จ
+            <br />
+            ❌ ละเมิดข้อกำหนด
+            <br />
+            ❌ พยายาม hack ระบบ
+            <br />❌ ไม่ชำระค่าธรรมเนียม
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            7. การยกเลิกบัญชี
+          </Typography>
+          <Typography variant="body2" paragraph>
+            ✅ ท่านสามารถยกเลิกบัญชีได้ทุกเมื่อ
+            <br />
+            ⚠️ แต่ข้อมูลจะยังคงเก็บไว้ 5 ปีตามกฎหมาย
+          </Typography>
+
+          <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
+            8. กฎหมายที่ใช้บังคับ
+          </Typography>
+          <Typography variant="body2" paragraph>
+            ✅ กฎหมายไทย
+            <br />
+            ✅ พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล พ.ศ. 2562 (PDPA)
+            <br />✅ ข้อพิพาทระงับโดยศาลในประเทศไทย
+          </Typography>
+
+          <Alert severity="info" sx={{ mt: 3 }}>
+            <Typography variant="body2">
+              📖 <strong>เอกสารฉบับเต็ม:</strong> สามารถดูได้ที่{' '}
+              <Link href="/docs/terms-of-service" target="_blank">
+                /docs/terms-of-service
+              </Link>
+            </Typography>
+          </Alert>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenTermsModal(false)} variant="contained">
+            ปิด
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }
