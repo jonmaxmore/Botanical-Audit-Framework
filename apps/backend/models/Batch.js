@@ -97,6 +97,18 @@ const BatchSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
+    // === GACP Traceability (เพิ่มใหม่) ===
+    lotNumber: {
+      type: String,
+      required: true,
+      match: /^PT27-\d{4}-\d{3,4}$/, // Format: PT27-YYYY-NNN
+      index: true
+    },
+    harvestId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Harvest',
+      index: true
+    },
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Crop',
