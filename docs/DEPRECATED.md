@@ -1,6 +1,6 @@
 # Deprecated Files and Features
 
-**Last Updated:** October 26, 2025
+**Last Updated:** January 2025 (Code Deduplication Audit)
 **Platform Version:** 2.0.0
 
 ---
@@ -445,11 +445,33 @@ If you're unsure whether code is deprecated:
 
 **Document Maintained By:** GACP Platform Team
 **Review Frequency:** Monthly
-**Last Review:** October 26, 2025
+**Last Review:** January 2025 (Code Deduplication Audit)
 
 ---
 
 ## Changelog
+
+### January 2025 - Code Deduplication Cleanup
+
+- ✅ **Deleted:** `modules/shared/utils/date.js` (100% duplicate of `shared/utilities.js`)
+- ✅ **Deleted:** `src/middleware/validation.js` (stub only, no real implementation)
+- ✅ **Deleted:** `modules/shared/utils/validation.js` (merged into `shared/validation.js`)
+- ✅ **Deleted:** `src/controllers/applicationController.js` (stub returning 501 errors)
+- ✅ **Enhanced:** `shared/validation.js` - consolidated validation functions from multiple files
+- 📝 **Clarified:** `modules/shared/` is NOT duplicate - it's a re-export layer (architecture pattern)
+- 📝 **Documented:** Application routes need consolidation (deferred to Phase 2)
+- 🔍 **Audit:** Completed comprehensive code deduplication audit (see CODE_DEDUPLICATION_AUDIT.md)
+
+**Files Deleted (4 total):**
+1. `apps/backend/modules/shared/utils/date.js` - Duplicate date utilities
+2. `apps/backend/modules/shared/utils/validation.js` - Duplicate validation
+3. `apps/backend/src/middleware/validation.js` - Stub middleware
+4. `apps/backend/src/controllers/applicationController.js` - Stub controller
+
+**Files Enhanced (1 total):**
+1. `apps/backend/shared/validation.js` - Consolidated validation utilities
+
+**Impact:** Removed 100% duplicate code, established single source of truth for utilities
 
 ### October 26, 2025
 
@@ -466,4 +488,4 @@ If you're unsure whether code is deprecated:
 
 ---
 
-**Next Review:** November 26, 2025
+**Next Review:** February 2025
