@@ -76,5 +76,11 @@
       "@typescript-eslint/eslint-plugin": "6.21.0",
       "@typescript-eslint/parser": "6.21.0"
     }
+  },
+  "lint-staged": {
+    "**/*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "bash -c 'tsc --noEmit --skipLibCheck'"
+    ]
   }
 }
