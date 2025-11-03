@@ -9,12 +9,6 @@ interface NotificationBellProps {
   className?: string;
 }
 
-const WS_BASE_URL =
-  process.env.NEXT_PUBLIC_WS_URL ||
-  (process.env.NEXT_PUBLIC_API_URL
-    ? process.env.NEXT_PUBLIC_API_URL.replace(/^http/, 'ws')
-    : 'ws://localhost:5000');
-
 export default function NotificationBell({ userId, className = '' }: NotificationBellProps) {
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +47,7 @@ export default function NotificationBell({ userId, className = '' }: Notificatio
         const token = localStorage.getItem('authToken') || '';
 
         // Connect to WebSocket server
-  ws = new WebSocket(`${WS_BASE_URL}/notifications?token=${token}`);
+        ws = new WebSocket(`ws://localhost:3000/notifications?token=${token}`);
 
         ws.onopen = () => {
           console.log('WebSocket connected');

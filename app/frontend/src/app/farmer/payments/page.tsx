@@ -103,9 +103,7 @@ const PaymentPage = () => {
     setError('');
 
     try {
-  const paymentPhase: 1 | 2 = phase === '1' ? 1 : 2;
-
-  await recordPayment(applicationId, paymentPhase, {
+      await recordPayment(applicationId, parseInt(phase), {
         method: paymentMethod,
         receiptFile: receipt,
         transactionRef: transactionRef || undefined,
@@ -233,9 +231,7 @@ const PaymentPage = () => {
           </FormLabel>
           <RadioGroup
             value={paymentMethod}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setPaymentMethod(e.target.value as 'qr' | 'bank')
-            }
+            onChange={(e) => setPaymentMethod(e.target.value as 'qr' | 'bank')}
           >
             <FormControlLabel
               value="qr"
@@ -368,7 +364,7 @@ const PaymentPage = () => {
             fullWidth
             label="หมายเลขอ้างอิง (Transaction Reference)"
             value={transactionRef}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTransactionRef(e.target.value)}
+            onChange={(e) => setTransactionRef(e.target.value)}
             placeholder="เช่น 202310221234567890"
             sx={{ mt: 2 }}
           />

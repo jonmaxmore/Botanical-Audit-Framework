@@ -274,7 +274,7 @@ const ApplicationDetailPage = () => {
   }
 
   const {
-    workflowState: rawWorkflowState,
+    workflowState,
     currentStep,
     createdAt,
     farmInfo,
@@ -283,8 +283,6 @@ const ApplicationDetailPage = () => {
     payments,
     inspection,
   } = currentApplication;
-
-  const workflowState = rawWorkflowState ?? currentApplication.currentState;
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>

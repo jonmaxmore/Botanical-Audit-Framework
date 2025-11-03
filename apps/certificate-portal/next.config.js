@@ -7,7 +7,7 @@ const nextConfig = {
 
   // Environment variables
   env: {
-  NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3004/api',
     NEXT_PUBLIC_APP_NAME: 'GACP Certificate Portal',
     NEXT_PUBLIC_APP_VERSION: '1.0.0'
   },

@@ -33,6 +33,7 @@
 
 const EventEmitter = require('events');
 const axios = require('axios');
+const crypto = require('crypto');
 
 class GovernmentApiIntegrationService extends EventEmitter {
   constructor({
@@ -706,7 +707,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
       };
 
       // Check each government endpoint
-      for (const systemName of Object.keys(this.governmentEndpoints)) {
+      for (const [systemName, config] of Object.entries(this.governmentEndpoints)) {
         try {
           const healthCheck = await this._performHealthCheck(systemName);
           systemHealth.governmentEndpoints[systemName] = {
@@ -816,7 +817,7 @@ class GovernmentApiIntegrationService extends EventEmitter {
     }, 300000); // Refresh every 5 minutes
   }
 
-  async _callGovernmentApi(systemName, endpoint, data, _options = {}) {
+  async _callGovernmentApi(systemName, endpoint, data, options = {}) {
     const config = this.governmentEndpoints[systemName];
     if (!config) {
       throw new Error(`Unknown government system: ${systemName}`);

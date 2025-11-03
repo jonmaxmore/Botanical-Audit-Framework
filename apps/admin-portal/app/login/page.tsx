@@ -14,7 +14,7 @@ import {
 import { AdminPanelSettings as AdminIcon } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
 export default function AdminLoginPage() {
   const router = useRouter();

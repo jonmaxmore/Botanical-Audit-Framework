@@ -28,6 +28,7 @@
 const logger = require('../../../../shared/logger/logger');
 const Notification = require('../domain/entities/Notification');
 const Handlebars = require('handlebars');
+const fs = require('fs').promises;
 
 class NotificationService {
   constructor(dependencies = {}) {

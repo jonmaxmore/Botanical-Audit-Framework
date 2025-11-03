@@ -588,5 +588,7 @@ const gacpApiClient = new GACPApiClient();
 // Export everything needed for the application
 export { gacpApiClient, GACPAuthManager, GACP_API_CONFIG };
 
+export type { GACPApiResponse, GACPApiError, GACPAuthToken, GACPWorkflowInfo, GACPCCPFramework };
+
 // Default export
 export default gacpApiClient;

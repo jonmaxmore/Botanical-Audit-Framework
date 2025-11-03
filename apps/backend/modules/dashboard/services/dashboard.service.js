@@ -479,7 +479,7 @@ class DashboardService {
   /**
    * Get pending applications for DTAM
    */
-  async getPendingApplications(_role, limit = 10) {
+  async getPendingApplications(role, limit = 10) {
     try {
       const applications = await this.applicationsCollection
         .find({ status: { $in: ['pending', 'under_review'] } })
@@ -505,7 +505,7 @@ class DashboardService {
   /**
    * Get farmer notifications
    */
-  async getFarmerNotifications(userId, _limit = 5) {
+  async getFarmerNotifications(userId, limit = 5) {
     try {
       // Mock notifications for now - can be extended to use a notifications collection
       return [
@@ -527,7 +527,7 @@ class DashboardService {
   /**
    * Get DTAM notifications
    */
-  async getDTAMNotifications(userId, _limit = 5) {
+  async getDTAMNotifications(userId, limit = 5) {
     try {
       const pendingCount = await this.applicationsCollection.countDocuments({
         status: 'pending'
@@ -552,7 +552,7 @@ class DashboardService {
   /**
    * Get admin notifications
    */
-  async getAdminNotifications(_limit = 10) {
+  async getAdminNotifications(limit = 10) {
     try {
       const now = new Date();
       const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());

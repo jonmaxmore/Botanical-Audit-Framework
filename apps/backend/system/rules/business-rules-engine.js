@@ -44,7 +44,7 @@ class BusinessRulesEngine {
    * @param {Object} options - Execution options
    * @returns {Object} Validation results
    */
-  async executeRules(context, data) {
+  async executeRules(context, data, options = {}) {
     try {
       logger.info(`⚖️ Executing business rules for context: ${context}`);
 

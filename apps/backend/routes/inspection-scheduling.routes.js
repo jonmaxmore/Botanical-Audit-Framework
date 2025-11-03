@@ -37,7 +37,7 @@ router.post('/inspections/:id/schedule', async (req, res) => {
 
 router.put('/inspections/:id/schedule/confirm', async (req, res) => {
   try {
-    const { id: _inspectionId } = req.params;
+    const { id: inspectionId } = req.params;
     const { confirmed } = req.body;
 
     // TODO: Update schedule status in database
@@ -55,7 +55,7 @@ router.put('/inspections/:id/schedule/confirm', async (req, res) => {
 
 router.get('/inspections/:id/schedule', async (req, res) => {
   try {
-    const { id: _inspectionId } = req.params;
+    const { id: inspectionId } = req.params;
 
     // TODO: Fetch from database
     res.json({
@@ -69,7 +69,7 @@ router.get('/inspections/:id/schedule', async (req, res) => {
 
 router.get('/inspections/calendar', async (req, res) => {
   try {
-    const { startDate: _startDate, endDate: _endDate, inspectorId: _inspectorId } = req.query;
+    const { startDate, endDate, inspectorId } = req.query;
 
     // TODO: Fetch schedules from database
     res.json({

@@ -8,12 +8,12 @@
 
 const fs = require('fs').promises;
 const path = require('path');
-const QRCode = require('qrcode');
+// const QRCode = require('qrcode'); // Mock for development
+// const { createCanvas } = require('canvas'); // Mock for development
 const PDFDocument = require('pdfkit');
 const crypto = require('crypto');
 
-const Application = require('../models/Application');
-const Certificate = require('../models/Certificate');
+const Application = require('../models/application');
 const _User = require('../models/user');
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
@@ -444,35 +444,28 @@ class GACPCertificateService {
   async generateQRCode(certificateData) {
     const verificationUrl = `${process.env.PUBLIC_URL || 'https://gacp.dtam.go.th'}/verify/${certificateData.certificateNumber}?code=${certificateData.verificationCode}`;
 
-    try {
-      // Generate QR Code as Data URL
-      const qrCodeDataURL = await QRCode.toDataURL(verificationUrl, {
-        errorCorrectionLevel: 'H',
-        type: 'image/png',
-        quality: 0.92,
-        margin: 1,
-        color: {
-          dark: '#000000',
-          light: '#FFFFFF'
-        },
-        width: 200
-      });
+    // Mock QR Code for development (replace with real implementation)
+    const qrCodeDataURL =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==';
+    /*
+    const qrCodeDataURL = await QRCode.toDataURL(verificationUrl, {
+      errorCorrectionLevel: 'H',
+      type: 'image/png',
+      quality: 0.92,
+      margin: 1,
+      color: {
+        dark: '#000000',
+        light: '#FFFFFF'
+      },
+      width: 200
+    });
+    */
 
-      return {
-        dataURL: qrCodeDataURL,
-        verificationUrl,
-        format: 'PNG'
-      };
-    } catch (error) {
-      logger.error('QR Code generation failed', { error: error.message });
-      // Fallback to placeholder QR if generation fails
-      return {
-        dataURL:
-          'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
-        verificationUrl,
-        format: 'PNG'
-      };
-    }
+    return {
+      dataURL: qrCodeDataURL,
+      verificationUrl,
+      format: 'PNG'
+    };
   }
 
   generateDigitalSignature(certificateData) {
@@ -607,84 +600,41 @@ class GACPCertificateService {
   }
 
   async saveCertificateRecord(application, certificateData, digitalSignature, pdfInfo) {
-    // Create new Certificate document
-    const certificate = new Certificate({
+    // Update application with certificate information
+    application.certificate = {
       certificateNumber: certificateData.certificateNumber,
-      certificateType: 'full',
-      application: application._id,
-      holderInfo: {
-        holderType: application.applicantType || 'individual',
-        fullName:
-          application.applicantType === 'individual' ? application.applicant.fullName : undefined,
-        nationalId:
-          application.applicantType === 'individual' ? application.applicant.nationalId : undefined,
-        organizationName:
-          application.applicantType !== 'individual'
-            ? application.farmInformation.farmName
-            : undefined,
-        taxId:
-          application.applicantType !== 'individual'
-            ? application.farmInformation.taxId
-            : undefined,
-        address: {
-          province: application.farmInformation.location.province,
-          district: application.farmInformation.location.district,
-          subdistrict: application.farmInformation.location.subdistrict,
-          postalCode: application.farmInformation.location.postalCode
-        }
-      },
-      siteInfo: {
-        farmName: application.farmInformation.farmName,
-        location: application.farmInformation.location,
-        totalArea: application.farmInformation.farmSize,
-        certifiedArea: application.farmInformation.farmSize,
-        gpsCoordinates: application.farmInformation.gpsCoordinates,
-        crops: application.cropInformation.map(c => ({
-          cropName: c.cropType,
-          variety: c.variety,
-          plantingArea: c.plantingArea
-        }))
-      },
-      issuanceDate: certificateData.issueDate,
+      issueDate: certificateData.issueDate,
       expiryDate: certificateData.expiryDate,
+      validityPeriod: certificateData.validityPeriod,
       status: 'active',
-      scope: certificateData.scope || 'Full GACP Certification',
-      standardsComplied: ['WHO GACP', 'ASEAN GACP'],
-      inspectionInfo: {
-        inspectionDate: application.inspectionDate,
-        finalScore: certificateData.finalScore,
-        inspector: application.assignedInspector
-      },
-      qrCode: {
-        data: certificateData.verificationCode,
-        imageUrl: pdfInfo.qrImagePath
-      },
-      verificationUrl: this.generatePublicVerificationUrl(certificateData.certificateNumber),
-      digitalSignature: {
-        algorithm: digitalSignature.algorithm,
-        hash: digitalSignature.signature,
-        timestamp: digitalSignature.timestamp
-      },
-      pdfUrl: `/certificates/${pdfInfo.filename}`,
-      pdfGeneratedAt: new Date()
-    });
+      verificationCode: certificateData.verificationCode,
+      digitalSignature: digitalSignature.signature,
+      pdfFilename: pdfInfo.filename,
+      pdfSize: pdfInfo.size
+    };
 
-    await certificate.save();
-
-    // Update application with certificate reference
-    application.certificate = certificate._id;
-    application.status = 'CERTIFICATE_ISSUED';
     await application.save();
 
-    return certificate;
+    return application.certificate;
   }
 
   async findCertificateByNumber(certificateNumber) {
-    const certificate = await Certificate.findOne({ certificateNumber })
-      .populate('application')
-      .lean();
+    const application = await Application.findOne({
+      'certificate.certificateNumber': certificateNumber
+    }).populate('applicant');
 
-    return certificate;
+    if (!application || !application.certificate) {
+      return null;
+    }
+
+    return {
+      ...application.certificate.toObject(),
+      applicationId: application._id,
+      farmName: application.farmInformation.farmName,
+      farmerName: application.applicant.fullName,
+      location: application.farmInformation.location,
+      cropTypes: application.cropInformation.map(c => c.cropType)
+    };
   }
 
   verifyDigitalSignature(certificate) {
@@ -692,12 +642,12 @@ class GACPCertificateService {
       // Reconstruct the signed data
       const dataToVerify = JSON.stringify({
         certificateNumber: certificate.certificateNumber,
-        holderName: certificate.holderInfo.organizationName || certificate.holderInfo.fullName,
-        farmName: certificate.siteInfo.farmName,
-        issuanceDate: certificate.issuanceDate,
+        farmerName: certificate.farmerName,
+        farmName: certificate.farmName,
+        issueDate: certificate.issueDate,
         expiryDate: certificate.expiryDate,
-        finalScore: certificate.inspectionInfo?.finalScore,
-        verificationUrl: certificate.verificationUrl
+        finalScore: certificate.finalScore,
+        verificationCode: certificate.verificationCode
       });
 
       const secretKey = process.env.CERTIFICATE_SIGNING_KEY || 'default-secret-key';
@@ -706,7 +656,7 @@ class GACPCertificateService {
         .update(dataToVerify)
         .digest('hex');
 
-      return expectedSignature === certificate.digitalSignature?.hash;
+      return expectedSignature === certificate.digitalSignature;
     } catch (error) {
       logger.error('Error verifying digital signature', {
         error: error.message
@@ -719,9 +669,7 @@ class GACPCertificateService {
     // Remove sensitive data before returning to public
     const sanitized = { ...certificate };
     delete sanitized.digitalSignature;
-    delete sanitized.renewalHistory;
-    delete sanitized.suspensionHistory;
-    delete sanitized.revocationInfo;
+    delete sanitized.verificationCode;
     return sanitized;
   }
 

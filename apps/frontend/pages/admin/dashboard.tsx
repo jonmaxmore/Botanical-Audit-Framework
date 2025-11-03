@@ -17,9 +17,7 @@ import {
   Paper,
   Tabs,
   Tab,
-  Button,
-  Alert,
-  Skeleton
+  Button
 } from '@mui/material';
 import {
   Logout as LogoutIcon,
@@ -28,74 +26,16 @@ import {
   People as PeopleIcon,
   Assessment as AssessmentIcon,
   Settings as SettingsIcon,
-  BarChart as BarChartIcon,
-  Refresh as RefreshIcon,
-  Analytics as AnalyticsIcon
+  BarChart as BarChartIcon
 } from '@mui/icons-material';
 import { Admin } from '../../types/user.types';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-
-interface DashboardStats {
-  totalApplications: number;
-  totalDocuments: number;
-  totalCertificates: number;
-  totalInspections: number;
-  totalUsers: number;
-  pendingApplications: number;
-}
+import { allUsers } from '../../data/users.seed';
 
 export default function AdminDashboard() {
   const router = useRouter();
   const [currentUser, setCurrentUser] = useState<Admin | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [tabValue, setTabValue] = useState(0);
-  const [stats, setStats] = useState<DashboardStats | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  // Fetch analytics data
-  const fetchStats = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const token = localStorage.getItem('token') || localStorage.getItem('admin_token');
-      
-      const response = await fetch(`${API_BASE_URL}/analytics/overview`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch analytics data');
-      }
-
-      const data = await response.json();
-      const overview = data.data.overview;
-      
-      // Also fetch user stats
-      const usersResponse = await fetch(`${API_BASE_URL}/analytics/users`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-      
-      const usersData = await usersResponse.json();
-      
-      setStats({
-        ...overview,
-        totalUsers: usersData.data.totalUsers || 0,
-      });
-    } catch (err) {
-      console.error('Failed to load statistics:', err);
-      setError('ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     const userStr = localStorage.getItem('currentUser');
@@ -105,7 +45,6 @@ export default function AdminDashboard() {
     }
     const user = JSON.parse(userStr) as Admin;
     setCurrentUser(user);
-    fetchStats();
   }, [router]);
 
   const handleLogout = () => {
@@ -115,31 +54,16 @@ export default function AdminDashboard() {
 
   if (!currentUser) return null;
 
-  const statsCards = [
+  const stats = [
     {
       label: 'ผู้ใช้ทั้งหมด',
-      value: stats?.totalUsers || 0,
+      value: allUsers.length.toString(),
       icon: <PeopleIcon />,
       color: '#2196f3'
     },
-    { 
-      label: 'คำขอทั้งหมด', 
-      value: stats?.totalApplications || 0, 
-      icon: <AssessmentIcon />, 
-      color: '#9c27b0' 
-    },
-    { 
-      label: 'เอกสาร', 
-      value: stats?.totalDocuments || 0, 
-      icon: <AssessmentIcon />, 
-      color: '#4caf50' 
-    },
-    { 
-      label: 'ใบรับรอง', 
-      value: stats?.totalCertificates || 0, 
-      icon: <AssessmentIcon />, 
-      color: '#ff9800' 
-    }
+    { label: 'เกษตรกร', value: '10', icon: <PeopleIcon />, color: '#4caf50' },
+    { label: 'พนักงาน', value: '4', icon: <PeopleIcon />, color: '#ff9800' },
+    { label: 'คำขอทั้งหมด', value: '1', icon: <AssessmentIcon />, color: '#9c27b0' }
   ];
 
   return (
@@ -180,37 +104,12 @@ export default function AdminDashboard() {
       </AppBar>
 
       <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-          <Typography variant="h4" sx={{ fontWeight: 700 }}>
-            แดชบอร์ดผู้ดูแลระบบ
-          </Typography>
-          <Box sx={{ display: 'flex', gap: 2 }}>
-            <Button
-              variant="outlined"
-              startIcon={<RefreshIcon />}
-              onClick={fetchStats}
-              disabled={loading}
-            >
-              รีเฟรช
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<AnalyticsIcon />}
-              onClick={() => router.push('/analytics')}
-            >
-              Analytics
-            </Button>
-          </Box>
-        </Box>
-
-        {error && (
-          <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
-            {error}
-          </Alert>
-        )}
+        <Typography variant="h4" sx={{ fontWeight: 700, mb: 4 }}>
+          แดชบอร์ดผู้ดูแลระบบ
+        </Typography>
 
         <Grid container spacing={3} sx={{ mb: 4 }}>
-          {statsCards.map((stat, index) => (
+          {stats.map((stat, index) => (
             <Grid item xs={12} sm={6} md={3} key={index}>
               <Card>
                 <CardContent>
@@ -226,13 +125,9 @@ export default function AdminDashboard() {
                     >
                       {stat.icon}
                     </Box>
-                    {loading && !stats ? (
-                      <Skeleton variant="text" width={60} height={40} />
-                    ) : (
-                      <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                        {stat.value}
-                      </Typography>
-                    )}
+                    <Typography variant="h4" sx={{ fontWeight: 700 }}>
+                      {stat.value}
+                    </Typography>
                   </Box>
                   <Typography variant="body2" color="textSecondary">
                     {stat.label}

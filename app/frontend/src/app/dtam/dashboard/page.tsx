@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Typography, Paper, Box, Grid, Skeleton, Button, Alert } from '@mui/material';
+import { Typography, Paper, Box, Grid, Skeleton } from '@mui/material';
 import DashboardLayout from '@/components/layout/DashboardLayout';
-import { Description, Assessment, CheckCircle, TrendingUp, Warning, Refresh, Analytics as AnalyticsIcon } from '@mui/icons-material';
-import { useRouter } from 'next/navigation';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+import { Description, Assessment, CheckCircle, TrendingUp, Warning } from '@mui/icons-material';
+import { getApplicationStatistics } from '@/lib/api/applications';
 import {
   chartColors,
   chartColorsAlpha,
@@ -37,53 +35,32 @@ const Doughnut = dynamic(() => import('react-chartjs-2').then((mod) => mod.Dough
   loading: () => <Skeleton variant="circular" width={200} height={200} />,
 });
 
-interface DashboardStats {
-  totalApplications: number;
-  totalDocuments: number;
-  totalCertificates: number;
-  totalInspections: number;
-  pendingApplications: number;
-  pendingDocuments: number;
-  activeInspections: number;
-  activeCertificates: number;
-}
-
 export default function DTAMDashboardPage() {
-  const router = useRouter();
-  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [stats, setStats] = useState({
+    total: 0,
+    pending: 0,
+    approved: 0,
+    rejected: 0,
+    highPriority: 0,
+  });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
-  // Fetch analytics data from API
-  const fetchStats = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const token = localStorage.getItem('token') || localStorage.getItem('dtam_token');
-      
-      const response = await fetch(`${API_BASE_URL}/analytics/overview`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch analytics data');
-      }
-
-      const data = await response.json();
-      setStats(data.data.overview);
-    } catch (err) {
-      console.error('Failed to load statistics:', err);
-      setError('ไม่สามารถโหลดข้อมูลได้ กรุณาลองใหม่อีกครั้ง');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Load statistics
   useEffect(() => {
-    fetchStats();
+    const loadStats = async () => {
+      try {
+        const response = await getApplicationStatistics();
+        if (response.success && response.data) {
+          setStats(response.data);
+        }
+      } catch (error) {
+        console.error('Failed to load statistics:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadStats();
   }, []);
 
   // Line Chart Data - Applications over time (mock data)
@@ -107,53 +84,40 @@ export default function DTAMDashboardPage() {
     ],
   };
 
-  // Bar Chart Data - Distribution by type
+  // Bar Chart Data - Urgency distribution (mock data)
   const barChartData = {
-    labels: ['Applications', 'Documents', 'Certificates', 'Inspections'],
+    labels: ['High', 'Medium', 'Low'],
     datasets: [
       {
-        label: 'Total Count',
+        label: 'Applications by Urgency',
         data: [
-          stats?.totalApplications || 0,
-          stats?.totalDocuments || 0,
-          stats?.totalCertificates || 0,
-          stats?.totalInspections || 0,
+          stats.highPriority,
+          Math.floor(stats.pending / 2),
+          stats.pending - stats.highPriority - Math.floor(stats.pending / 2),
         ],
         backgroundColor: [
-          chartColorsAlpha.primary,
-          chartColorsAlpha.info,
-          chartColorsAlpha.success,
-          chartColorsAlpha.warning,
+          urgencyColorsAlpha.high,
+          urgencyColorsAlpha.medium,
+          urgencyColorsAlpha.low,
         ],
-        borderColor: [chartColors.primary, chartColors.info, chartColors.success, chartColors.warning],
+        borderColor: [urgencyColors.high, urgencyColors.medium, urgencyColors.low],
         borderWidth: 2,
       },
     ],
   };
 
-  // Doughnut Chart Data - Pending vs Active
+  // Doughnut Chart Data - Status distribution
   const doughnutChartData = {
-    labels: ['Active Certificates', 'Active Inspections', 'Pending Applications', 'Pending Documents'],
+    labels: ['Approved', 'Pending', 'Rejected'],
     datasets: [
       {
-        data: [
-          stats?.activeCertificates || 0,
-          stats?.activeInspections || 0,
-          stats?.pendingApplications || 0,
-          stats?.pendingDocuments || 0,
-        ],
+        data: [stats.approved, stats.pending, stats.rejected],
         backgroundColor: [
           statusColorsAlpha.approved,
-          chartColorsAlpha.warning,
           statusColorsAlpha.pending,
-          chartColorsAlpha.info,
+          statusColorsAlpha.rejected,
         ],
-        borderColor: [
-          statusColors.approved,
-          chartColors.warning,
-          statusColors.pending,
-          chartColors.info,
-        ],
+        borderColor: [statusColors.approved, statusColors.pending, statusColors.rejected],
         borderWidth: 2,
       },
     ],
@@ -163,40 +127,14 @@ export default function DTAMDashboardPage() {
     <DashboardLayout userRole="dtam">
       <Box>
         {/* Page Header */}
-        <Box className="mb-6 flex justify-between items-start">
-          <Box>
-            <Typography variant="h4" component="h1" className="font-bold text-gray-800">
-              DTAM Government Portal 🏢
-            </Typography>
-            <Typography variant="body1" className="text-gray-600 mt-1">
-              System overview and administrative management dashboard.
-            </Typography>
-          </Box>
-          <Box className="flex gap-2">
-            <Button
-              variant="outlined"
-              startIcon={<Refresh />}
-              onClick={fetchStats}
-              disabled={loading}
-            >
-              รีเฟรช
-            </Button>
-            <Button
-              variant="contained"
-              startIcon={<AnalyticsIcon />}
-              onClick={() => router.push('/analytics')}
-            >
-              Analytics
-            </Button>
-          </Box>
+        <Box className="mb-6">
+          <Typography variant="h4" component="h1" className="font-bold text-gray-800">
+            DTAM Government Portal 🏢
+          </Typography>
+          <Typography variant="body1" className="text-gray-600 mt-1">
+            System overview and administrative management dashboard.
+          </Typography>
         </Box>
-
-        {/* Error Alert */}
-        {error && (
-          <Alert severity="error" className="mb-4" onClose={() => setError(null)}>
-            {error}
-          </Alert>
-        )}
 
         {/* Statistics Cards */}
         <Grid container spacing={3} className="mb-6">
@@ -207,15 +145,15 @@ export default function DTAMDashboardPage() {
                   <Typography variant="body2" className="text-gray-600 mb-1">
                     Total Applications
                   </Typography>
-                  {loading && !stats ? (
+                  {loading ? (
                     <Skeleton variant="text" width={60} height={40} />
                   ) : (
                     <Typography variant="h4" className="font-bold text-gray-800">
-                      {stats?.totalApplications || 0}
+                      {stats.total}
                     </Typography>
                   )}
                   <Typography variant="caption" className="text-blue-600">
-                    Pending: {stats?.pendingApplications || 0}
+                    All time
                   </Typography>
                 </Box>
                 <Box className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center">
@@ -230,17 +168,17 @@ export default function DTAMDashboardPage() {
               <Box className="flex items-center justify-between">
                 <Box>
                   <Typography variant="body2" className="text-gray-600 mb-1">
-                    Total Documents
+                    Pending Review
                   </Typography>
-                  {loading && !stats ? (
+                  {loading ? (
                     <Skeleton variant="text" width={60} height={40} />
                   ) : (
                     <Typography variant="h4" className="font-bold text-gray-800">
-                      {stats?.totalDocuments || 0}
+                      {stats.pending}
                     </Typography>
                   )}
                   <Typography variant="caption" className="text-orange-600">
-                    Pending: {stats?.pendingDocuments || 0}
+                    Requires attention
                   </Typography>
                 </Box>
                 <Box className="w-14 h-14 rounded-full bg-orange-100 flex items-center justify-center">
@@ -255,17 +193,18 @@ export default function DTAMDashboardPage() {
               <Box className="flex items-center justify-between">
                 <Box>
                   <Typography variant="body2" className="text-gray-600 mb-1">
-                    Certificates
+                    Approved
                   </Typography>
-                  {loading && !stats ? (
+                  {loading ? (
                     <Skeleton variant="text" width={60} height={40} />
                   ) : (
                     <Typography variant="h4" className="font-bold text-gray-800">
-                      {stats?.totalCertificates || 0}
+                      {stats.approved}
                     </Typography>
                   )}
                   <Typography variant="caption" className="text-green-600">
-                    Active: {stats?.activeCertificates || 0}
+                    {stats.total > 0 ? Math.round((stats.approved / stats.total) * 100) : 0}%
+                    approval rate
                   </Typography>
                 </Box>
                 <Box className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center">
@@ -280,17 +219,17 @@ export default function DTAMDashboardPage() {
               <Box className="flex items-center justify-between">
                 <Box>
                   <Typography variant="body2" className="text-gray-600 mb-1">
-                    Inspections
+                    High Priority
                   </Typography>
-                  {loading && !stats ? (
+                  {loading ? (
                     <Skeleton variant="text" width={60} height={40} />
                   ) : (
                     <Typography variant="h4" className="font-bold text-gray-800">
-                      {stats?.totalInspections || 0}
+                      {stats.highPriority}
                     </Typography>
                   )}
                   <Typography variant="caption" className="text-red-600">
-                    Active: {stats?.activeInspections || 0}
+                    Urgent review needed
                   </Typography>
                 </Box>
                 <Box className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center">

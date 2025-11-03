@@ -244,6 +244,8 @@ router.get('/:role', (req, res) => {
  */
 router.get('/farmer/:userId', (req, res) => {
   try {
+    const { userId } = req.params;
+
     const dashboardData = {
       stats: mockStats.farmer,
       recentActivities: mockActivities.farmer,

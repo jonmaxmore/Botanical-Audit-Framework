@@ -13,7 +13,7 @@
  * - Evidence validation and compliance tracking
  */
 
-import { gacpApiClient, type GACPCCPFramework } from './gacp-api-client';
+import { gacpApiClient } from './gacp-api-client';
 
 // ============================================================================
 // TYPE DEFINITIONS - CCP Assessment Specific
@@ -157,7 +157,7 @@ class GACPCCPService {
       const response = await gacpApiClient.getGACPCCPs();
 
       if (response.success && response.data) {
-        this.ccpFramework = this.normalizeFrameworkData(response.data);
+        this.ccpFramework = response.data as CCPFrameworkInfo;
 
         console.log('[GACP CCP] Service initialized with', {
           totalCCPs: this.ccpFramework.totalCCPs,
@@ -171,29 +171,6 @@ class GACPCCPService {
       console.error('[GACP CCP] Initialization failed:', error);
       throw error;
     }
-  }
-
-  private normalizeFrameworkData(raw: GACPCCPFramework): CCPFrameworkInfo {
-    return {
-      totalCCPs: raw.totalCCPs,
-      ccps: raw.ccps.map((ccp) => ({
-        id: ccp.id,
-        name: ccp.name,
-        name_th: ccp.name_th,
-        criteria: ccp.criteria as CCPCriteria[],
-        weight: ccp.weight,
-        minScore: ccp.min_score,
-        complianceStandards: ccp.compliance_standards,
-      })),
-      scoringSystem: {
-        TOTAL_SCORE_MAX: raw.scoringSystem.TOTAL_SCORE_MAX,
-        OVERALL_PASSING_SCORE: raw.scoringSystem.OVERALL_PASSING_SCORE,
-        CERTIFICATE_LEVELS: raw.scoringSystem.CERTIFICATE_LEVELS,
-        RISK_LEVELS: raw.scoringSystem.RISK_LEVELS,
-      },
-      framework: raw.framework,
-      methodology: raw.methodology,
-    };
   }
 
   /**
@@ -508,5 +485,13 @@ class GACPCCPService {
 const gacpCCPService = GACPCCPService.getInstance();
 
 export { gacpCCPService };
+
+export type {
+  CCPAssessmentData,
+  CCPAssessmentResult,
+  CCPFrameworkInfo,
+  CCPDefinition,
+  CCPCriteria,
+};
 
 export default gacpCCPService;

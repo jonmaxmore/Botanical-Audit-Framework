@@ -125,7 +125,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         {
           maxAttempts: 3,
           initialDelay: 1000, // 1s, 2s, 4s backoff
-          onRetry: (attempt: number, error: Error) => {
+          onRetry: (attempt, error) => {
             console.warn(`🔄 Login retry ${attempt}/3:`, error.message);
           },
         }
@@ -230,7 +230,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         {
           maxAttempts: 3,
           initialDelay: 1000,
-          onRetry: (attempt: number, error: Error) => {
+          onRetry: (attempt, error) => {
             console.warn(`🔄 Register retry ${attempt}/3:`, error.message);
           },
         }
@@ -332,7 +332,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         {
           maxAttempts: 2, // Fewer retries for background refresh
           initialDelay: 500, // Faster retry (not user-facing)
-          onRetry: (attempt: number, error: Error) => {
+          onRetry: (attempt, error) => {
             console.warn(`🔄 Token refresh retry ${attempt}/2:`, error.message);
           },
         }

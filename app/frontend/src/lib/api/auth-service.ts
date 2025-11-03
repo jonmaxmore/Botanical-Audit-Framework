@@ -556,5 +556,14 @@ const gacpAuthService = GACPAuthService.getInstance();
 // Export types and service
 export { gacpAuthService };
 
+export type {
+  LoginCredentials,
+  RegisterData,
+  UserProfile,
+  PasswordChangeData,
+  PasswordResetData,
+  PasswordResetConfirmData,
+};
+
 // Default export
 export default gacpAuthService;

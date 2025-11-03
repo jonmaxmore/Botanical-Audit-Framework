@@ -28,7 +28,7 @@ export function createMockNextRequest(
   const { method = 'GET', body, headers = {}, searchParams = {} } = options;
 
   // Build full URL with search params
-  const urlObj = new URL(url, 'http://localhost:5000');
+  const urlObj = new URL(url, 'http://localhost:3000');
   Object.entries(searchParams).forEach(([key, value]) => {
     urlObj.searchParams.set(key, value);
   });

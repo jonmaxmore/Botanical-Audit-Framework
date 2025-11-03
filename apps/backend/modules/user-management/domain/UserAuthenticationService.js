@@ -5,7 +5,7 @@
  * Implements JWT token management with role-based access control (RBAC).
  *
  * Business Logic:
- * - Multi-role authentication (FARMER, DTAM_REVIEWER, DTAM_INSPECTOR, DTAM_APPROVER, DTAM_ADMIN)
+ * - Multi-role authentication (FARMER, DTAM_REVIEWER, DTAM_INSPECTOR, DTAM_ADMIN)
  * - Secure password handling with bcrypt
  * - JWT token lifecycle management
  * - Role-based permission validation
@@ -77,8 +77,7 @@ class UserAuthenticationService extends EventEmitter {
 
     // Role hierarchy and permissions
     this.roleHierarchy = {
-      DTAM_ADMIN: 5,
-      DTAM_APPROVER: 4,
+      DTAM_ADMIN: 4,
       DTAM_INSPECTOR: 3,
       DTAM_REVIEWER: 2,
       FARMER: 1
@@ -112,17 +111,6 @@ class UserAuthenticationService extends EventEmitter {
         'document:read:assigned',
         'jobticket:read:assigned',
         'jobticket:update:assigned'
-      ],
-      DTAM_APPROVER: [
-        'application:read:all',
-        'application:final-approve',
-        'application:reject:final',
-        'certificate:issue',
-        'certificate:sign',
-        'certificate:revoke',
-        'document:read:all',
-        'jobticket:read:all',
-        'jobticket:approve:final'
       ],
       DTAM_ADMIN: [
         'application:read:all',

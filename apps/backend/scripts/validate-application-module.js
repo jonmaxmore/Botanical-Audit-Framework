@@ -253,12 +253,14 @@ class StandaloneApplicationValidator {
         'validateEligibility',
         'generateAnalytics'
       ];
+      let methodsFound = 0;
 
       for (const method of requiredMethods) {
         this.results.totalChecks++;
         if (serviceContent.includes(method)) {
           logger.info(`  ✅ Method ${method} present`);
           this.results.passed++;
+          methodsFound++;
         } else {
           logger.info(`  ❌ Method ${method} missing`);
           this.results.failed++;
@@ -406,12 +408,14 @@ class StandaloneApplicationValidator {
 
       // ตรวจสอบ Route Categories
       const routeCategories = ['farmer', 'dtam', 'admin'];
+      let categoriesFound = 0;
 
       for (const category of routeCategories) {
         this.results.totalChecks++;
         if (routeContent.includes(category)) {
           logger.info(`  ✅ ${category} routes present`);
           this.results.passed++;
+          categoriesFound++;
         } else {
           logger.info(`  ❌ ${category} routes missing`);
           this.results.failed++;

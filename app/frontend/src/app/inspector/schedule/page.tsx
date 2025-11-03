@@ -1,42 +1,44 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import type { ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Alert,
   Box,
+  Container,
+  Typography,
+  Paper,
   Button,
+  Chip,
+  IconButton,
+  Tooltip,
+  Alert,
+  CircularProgress,
   Card,
   CardContent,
-  Chip,
-  CircularProgress,
-  Container,
   Dialog,
-  DialogActions,
-  DialogContent,
   DialogTitle,
-  Paper,
+  DialogContent,
+  DialogActions,
   TextField,
-  Tooltip,
-  Typography,
 } from '@mui/material';
 import {
-  ArrowForward as ArrowForwardIcon,
-  CheckCircle as CheckCircleIcon,
-  LocationOn as LocationOnIcon,
-  Schedule as ScheduleIcon,
   Videocam as VideocamIcon,
+  LocationOn as LocationOnIcon,
+  CheckCircle as CheckCircleIcon,
+  Schedule as ScheduleIcon,
+  ArrowForward as ArrowForwardIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
-import {
-  useApplicationContext,
-  type Application,
-  type WorkflowState,
-} from '@/contexts/ApplicationContext';
+import { withAuth } from '@/components/auth/withAuth';
+import { useApplicationContext } from '@/contexts/ApplicationContext';
 
-type InspectionType = 'VDO_CALL' | 'ON_SITE';
-type InspectionStatus = 'pending' | 'accepted' | 'scheduled';
+/**
+ * Inspector Schedule Page
+ *
+ * หน้าตารางนัดตรวจสำหรับ INSPECTOR
+ * - แสดงนัดตรวจทั้งหมดในรูปแบบ list/calendar
+ * - Accept/Reschedule appointments
+ * - Filter by type (VDO Call / On-Site)
+ */
 
 interface Inspection {
   id: string;
@@ -44,75 +46,70 @@ interface Inspection {
   applicationNumber: string;
   farmerName: string;
   farmName: string;
-  type: InspectionType;
-  status: InspectionStatus;
+  type: 'VDO_CALL' | 'ON_SITE';
+  status: 'pending' | 'accepted' | 'scheduled';
   scheduledDate: string;
   scheduledTime: string;
   address?: string;
 }
 
-const INSPECTION_STATES: WorkflowState[] = [
-  'INSPECTION_SCHEDULED',
-  'INSPECTION_VDO_CALL',
-  'INSPECTION_ON_SITE',
-];
-
-const matchesInspectionStage = (application: Application): boolean => {
-  const state: WorkflowState | undefined = application.workflowState ?? application.currentState;
-  return state ? INSPECTION_STATES.includes(state) : false;
-};
-
 const InspectorSchedulePage: React.FC = () => {
   const router = useRouter();
   const { applications } = useApplicationContext();
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [inspections, setInspections] = useState<Inspection[]>([]);
-  const [filterType, setFilterType] = useState<'all' | InspectionType>('all');
+  const [filterType, setFilterType] = useState<'all' | 'VDO_CALL' | 'ON_SITE'>('all');
   const [rescheduleDialog, setRescheduleDialog] = useState<{
     open: boolean;
     inspection: Inspection | null;
   }>({ open: false, inspection: null });
-  const [newDate, setNewDate] = useState<string>('');
-  const [newTime, setNewTime] = useState<string>('');
+  const [newDate, setNewDate] = useState('');
+  const [newTime, setNewTime] = useState('');
 
   useEffect(() => {
     loadSchedule();
   }, [applications, filterType]);
 
-  const loadSchedule = (): void => {
+  const loadSchedule = () => {
     try {
-      const inspectionApplications = applications.filter(matchesInspectionStage);
-
-      const mockInspections: Inspection[] = inspectionApplications.map(
-        (app: Application, index: number) => {
-          const today = new Date();
-          const scheduledDate = new Date(today);
-          scheduledDate.setDate(today.getDate() + index);
-
-          return {
-            id: `INS-${app.id}`,
-            applicationId: app.id,
-            applicationNumber: app.applicationNumber,
-            farmerName: app.farmerInfo?.name || app.farmerName || 'ไม่ระบุ',
-            farmName: app.farmInfo?.name || app.farmName || 'ไม่ระบุ',
-            type: index % 3 === 0 ? 'VDO_CALL' : 'ON_SITE',
-            status: index % 2 === 0 ? 'accepted' : 'pending',
-            scheduledDate: scheduledDate.toISOString().split('T')[0],
-            scheduledTime: `${9 + (index % 6)}:00`,
-            address: app.farmInfo?.address,
-          };
-        }
+      // กรองใบสมัครที่อยู่ในขั้นตอนตรวจสอบ
+      const inspectionApplications = applications.filter(
+        (app) =>
+          app.workflowState === 'INSPECTION_SCHEDULED' ||
+          app.workflowState === 'INSPECTION_VDO_CALL' ||
+          app.workflowState === 'INSPECTION_ON_SITE'
       );
 
+      // Mock inspections data
+      const mockInspections: Inspection[] = inspectionApplications.map((app, index) => {
+        const today = new Date();
+        const scheduledDate = new Date(today);
+        scheduledDate.setDate(today.getDate() + index);
+
+        return {
+          id: `INS-${app.id}`,
+          applicationId: app.id,
+          applicationNumber: app.applicationNumber,
+          farmerName: app.farmerInfo?.name || 'ไม่ระบุ',
+          farmName: app.farmInfo?.name || 'ไม่ระบุ',
+          type: index % 3 === 0 ? 'VDO_CALL' : 'ON_SITE',
+          status: index % 2 === 0 ? 'accepted' : 'pending',
+          scheduledDate: scheduledDate.toISOString().split('T')[0],
+          scheduledTime: `${9 + (index % 6)}:00`,
+          address: app.farmInfo?.address,
+        };
+      });
+
+      // Filter by type
       let filtered = mockInspections;
       if (filterType !== 'all') {
-        filtered = mockInspections.filter((inspection) => inspection.type === filterType);
+        filtered = mockInspections.filter((ins) => ins.type === filterType);
       }
 
+      // Sort by date
       filtered.sort(
-        (a: Inspection, b: Inspection) =>
-          new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime()
+        (a, b) => new Date(a.scheduledDate).getTime() - new Date(b.scheduledDate).getTime()
       );
 
       setInspections(filtered);
@@ -123,32 +120,32 @@ const InspectorSchedulePage: React.FC = () => {
     }
   };
 
-  const handleAccept = (inspection: Inspection): void => {
+  const handleAccept = (inspection: Inspection) => {
     // Update status to accepted
-    setInspections((prev: Inspection[]) =>
-      prev.map((ins: Inspection) => (ins.id === inspection.id ? { ...ins, status: 'accepted' } : ins))
+    setInspections((prev) =>
+      prev.map((ins) => (ins.id === inspection.id ? { ...ins, status: 'accepted' } : ins))
     );
     alert(`ยืนยันนัดตรวจ: ${inspection.farmName}`);
   };
 
-  const handleOpenReschedule = (inspection: Inspection): void => {
+  const handleOpenReschedule = (inspection: Inspection) => {
     setRescheduleDialog({ open: true, inspection });
     setNewDate(inspection.scheduledDate);
     setNewTime(inspection.scheduledTime);
   };
 
-  const handleCloseReschedule = (): void => {
+  const handleCloseReschedule = () => {
     setRescheduleDialog({ open: false, inspection: null });
     setNewDate('');
     setNewTime('');
   };
 
-  const handleConfirmReschedule = (): void => {
+  const handleConfirmReschedule = () => {
     if (!rescheduleDialog.inspection) return;
 
     // Update scheduled date/time
-    setInspections((prev: Inspection[]) =>
-      prev.map((ins: Inspection) =>
+    setInspections((prev) =>
+      prev.map((ins) =>
         ins.id === rescheduleDialog.inspection!.id
           ? { ...ins, scheduledDate: newDate, scheduledTime: newTime }
           : ins
@@ -161,7 +158,7 @@ const InspectorSchedulePage: React.FC = () => {
     handleCloseReschedule();
   };
 
-  const handleStartInspection = (inspection: Inspection): void => {
+  const handleStartInspection = (inspection: Inspection) => {
     if (inspection.type === 'VDO_CALL') {
       router.push(`/inspector/inspections/${inspection.applicationId}/vdo-call`);
     } else {
@@ -223,7 +220,7 @@ const InspectorSchedulePage: React.FC = () => {
     return date.toDateString() === today.toDateString();
   };
 
-  const pendingCount = inspections.filter((ins: Inspection) => ins.status === 'pending').length;
+  const pendingCount = inspections.filter((ins) => ins.status === 'pending').length;
 
   if (loading) {
     return (
@@ -256,7 +253,12 @@ const InspectorSchedulePage: React.FC = () => {
           >
             ทั้งหมด (
             {
-              applications.filter((app: Application) => matchesInspectionStage(app)).length
+              applications.filter(
+                (app) =>
+                  app.workflowState === 'INSPECTION_SCHEDULED' ||
+                  app.workflowState === 'INSPECTION_VDO_CALL' ||
+                  app.workflowState === 'INSPECTION_ON_SITE'
+              ).length
             }
             )
           </Button>
@@ -294,7 +296,7 @@ const InspectorSchedulePage: React.FC = () => {
         </Alert>
       ) : (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          {inspections.map((inspection: Inspection) => (
+          {inspections.map((inspection) => (
             <Card
               key={inspection.id}
               sx={{
@@ -430,9 +432,7 @@ const InspectorSchedulePage: React.FC = () => {
                 type="date"
                 label="วันที่ใหม่"
                 value={newDate}
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  setNewDate(event.target.value)
-                }
+                onChange={(e) => setNewDate(e.target.value)}
                 sx={{ mb: 2 }}
                 InputLabelProps={{ shrink: true }}
               />
@@ -442,9 +442,7 @@ const InspectorSchedulePage: React.FC = () => {
                 type="time"
                 label="เวลาใหม่"
                 value={newTime}
-                onChange={(event: ChangeEvent<HTMLInputElement>) =>
-                  setNewTime(event.target.value)
-                }
+                onChange={(e) => setNewTime(e.target.value)}
                 InputLabelProps={{ shrink: true }}
               />
             </Box>

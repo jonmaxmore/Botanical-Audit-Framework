@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const InspectionNotificationService = require('../services/inspection-notification.service');
 
 router.post('/inspections/:id/report', async (req, res) => {
   try {
@@ -42,6 +43,7 @@ router.post('/inspections/:id/report', async (req, res) => {
 
     // Send notifications
     if (req.app.get('io')) {
+      const notificationService = new InspectionNotificationService(req.app.get('io'));
       // TODO: Get farmerId and approverId from database
       // await notificationService.notifyInspectionCompleted(inspectionId, farmerId, decision);
       // if (decision === 'approve') {
@@ -62,6 +64,8 @@ router.post('/inspections/:id/report', async (req, res) => {
 
 router.get('/inspections/:id/report', async (req, res) => {
   try {
+    const { id: inspectionId } = req.params;
+
     // TODO: Fetch from database
     res.json({
       success: true,

@@ -7,6 +7,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
+// Import shared utilities
+const shared = require('../../shared');
 const logger = require('../services/logger');
 
 /**

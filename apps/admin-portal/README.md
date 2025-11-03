@@ -37,7 +37,7 @@ pnpm start
 ### Development Server
 
 - URL: http://localhost:3002
-- API: http://localhost:5000
+- API: http://localhost:3000
 
 ## 📁 Project Structure
 
@@ -50,7 +50,6 @@ apps/admin-portal/
 │   ├── theme-provider.tsx   # MUI theme configuration
 │   └── login/
 │       └── page.tsx         # Admin login page
-├── docs/                    # Operational guides & integration notes
 ├── components/              # Reusable components
 ├── lib/                     # Utilities and helpers
 ├── next.config.js           # Next.js configuration
@@ -164,8 +163,8 @@ Create `.env.local` file:
 
 ```env
 # API Configuration
-API_BASE_URL=http://localhost:5000
-NEXT_PUBLIC_API_BASE_URL=http://localhost:5000
+API_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
 
 # Admin Portal Configuration
 PORT=3002

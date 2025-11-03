@@ -39,7 +39,7 @@ import {
   ArrowBack as ArrowBackIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
+import { withAuth } from '@/components/auth/withAuth';
 import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
 
 /**

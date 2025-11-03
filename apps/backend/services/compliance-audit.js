@@ -484,11 +484,7 @@ class ComplianceAuditService {
             success: res.statusCode < 400,
             errorMessage: res.statusCode >= 400 ? `HTTP ${res.statusCode}` : null,
             sessionId: req.sessionID,
-            correlationId: req.headers['x-correlation-id'],
-            responseSummary:
-              responseData && typeof responseData === 'object'
-                ? responseData.message || responseData.status || null
-                : null
+            correlationId: req.headers['x-correlation-id']
           });
         } catch (error) {
           logger.error('Audit middleware error:', error);

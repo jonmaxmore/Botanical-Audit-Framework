@@ -395,6 +395,8 @@ class SeedRepository {
           .collection(this.collections.seeds)
           .findOne({ seedId: seed.seedId }, { session });
 
+        let savedDocument;
+
         if (existingSeed) {
           // Update existing seed
           seedDocument.updatedAt = new Date();
@@ -407,6 +409,8 @@ class SeedRepository {
           if (updateResult.matchedCount === 0) {
             throw new Error(`Failed to update seed: ${seed.seedId}`);
           }
+
+          savedDocument = seedDocument;
         } else {
           // Insert new seed
           seedDocument.createdAt = new Date();
@@ -420,6 +424,8 @@ class SeedRepository {
           if (!insertResult.insertedId) {
             throw new Error(`Failed to insert seed: ${seed.seedId}`);
           }
+
+          savedDocument = seedDocument;
         }
 
         // Step 4: Update audit log

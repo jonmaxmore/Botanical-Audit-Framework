@@ -115,7 +115,7 @@ docker-compose -f docker-compose.prod.yml logs -f
 
 ```env
 NODE_ENV=development
-API_URL=http://localhost:5000
+API_URL=http://localhost:3000
 DB_URL=mongodb://localhost:27017/gacp_dev
 ```
 

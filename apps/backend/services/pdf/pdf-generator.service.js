@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs').promises;
+const path = require('path');
 
 class PDFGeneratorService {
   constructor() {

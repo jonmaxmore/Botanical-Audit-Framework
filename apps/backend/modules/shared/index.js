@@ -61,6 +61,9 @@ module.exports = {
     date: dateUtils
   },
 
+  // Backward compatibility aliases (for auth routes that use shared.response directly)
+  response: responseUtils,
+
   // Constants exports
   constants: {
     statusCodes,

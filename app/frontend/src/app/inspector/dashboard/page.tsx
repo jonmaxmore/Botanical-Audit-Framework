@@ -32,7 +32,7 @@ import {
   CalendarMonth as CalendarMonthIcon,
   Star as StarIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
+import { withAuth } from '@/components/auth/withAuth';
 import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**

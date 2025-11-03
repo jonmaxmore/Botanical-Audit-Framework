@@ -484,7 +484,7 @@ class NotificationService {
    * Send custom notification
    */
   async sendCustomNotification(recipients, title, message, options = {}) {
-    const { priority = 'medium', metadata = {} } = options;
+    const { priority = 'medium', channels = ['inapp'], metadata = {} } = options;
 
     const notifications = recipients.map(userId => ({
       userId,

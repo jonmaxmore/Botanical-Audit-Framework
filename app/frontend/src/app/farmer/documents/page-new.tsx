@@ -122,14 +122,11 @@ const DocumentsPage = () => {
     setError('');
 
     try {
-      const formData = new FormData();
-      formData.append('documentType', selectedDocType);
-      formData.append('file', selectedFile);
-      if (remarks) {
-        formData.append('remarks', remarks);
-      }
-
-      await uploadDocument(applicationId, formData);
+      await uploadDocument(applicationId, {
+        documentType: selectedDocType,
+        file: selectedFile,
+        remarks,
+      });
 
       alert('อัปโหลดเอกสารสำเร็จ!');
       handleCloseUploadDialog();
@@ -184,8 +181,7 @@ const DocumentsPage = () => {
       'DOCUMENT_REVIEW',
       'DOCUMENT_REVISION',
     ];
-    const state = currentApplication.workflowState ?? currentApplication.currentState;
-    return allowedStates.includes(state);
+    return allowedStates.includes(currentApplication.workflowState);
   };
 
   if (loading) {
@@ -362,7 +358,7 @@ const DocumentsPage = () => {
               rows={3}
               label="หมายเหตุ (ถ้ามี)"
               value={remarks}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setRemarks(e.target.value)}
+              onChange={(e) => setRemarks(e.target.value)}
               placeholder="เช่น เอกสารฉบับนี้มีอายุถึง..."
             />
           </Box>

@@ -2,6 +2,8 @@
  * Enhanced Error Handling and Logging System for GACP Standards Comparison
  * Provides comprehensive error handling, logging, monitoring, and graceful shutdown
  */
+const winston = require('winston');
+const morgan = require('morgan');
 const fs = require('fs');
 const path = require('path');
 

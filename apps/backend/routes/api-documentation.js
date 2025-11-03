@@ -18,7 +18,7 @@ const API_CONFIG = {
   title: 'GACP Platform API Documentation',
   version: '1.0.0',
   description: 'Comprehensive API documentation for WHO-GACP certified cannabis farming platform',
-  baseUrl: process.env.API_BASE_URL || 'http://localhost:5000',
+  baseUrl: process.env.API_BASE_URL || 'http://localhost:3004',
   compliance: ['WHO-GACP', 'Thai-FDA', 'ASEAN-TM'],
   lastUpdated: new Date().toISOString()
 };
@@ -292,7 +292,7 @@ router.get('/openapi', (req, res) => {
           description: 'Production server'
         },
         {
-          url: 'http://localhost:5000',
+          url: 'http://localhost:3004',
           description: 'Development server'
         }
       ],

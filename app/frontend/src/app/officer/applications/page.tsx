@@ -30,8 +30,8 @@ import {
   Visibility as VisibilityIcon,
   Description as DescriptionIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
-import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
+import { withAuth } from '@/components/auth/withAuth';
+import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**
  * DTAM Officer Applications List
@@ -68,20 +68,6 @@ const OfficerApplicationsPage: React.FC = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const getWorkflowState = (app: Application) => app.workflowState ?? app.currentState;
-
-  const getSubmittedDate = (app: Application) => {
-    const submittedTimestamp = app.submittedAt ?? app.createdAt;
-    if (!submittedTimestamp) {
-      return new Date();
-    }
-
-    const submittedDate = new Date(submittedTimestamp);
-    return Number.isNaN(submittedDate.getTime()) ? new Date() : submittedDate;
-  };
-
-  const matchesQuery = (value?: string | null) => value?.toLowerCase() ?? '';
-
   useEffect(() => {
     loadApplications();
   }, [applications, searchQuery, filterStatus]);
@@ -89,36 +75,34 @@ const OfficerApplicationsPage: React.FC = () => {
   const loadApplications = () => {
     try {
       // กรองใบสมัครที่เกี่ยวข้องกับ DTAM_OFFICER
-      let filtered = applications.filter((app: Application) => {
-        const state = getWorkflowState(app);
-        return (
-          state === 'PAYMENT_PROCESSING_1' ||
-          state === 'DOCUMENT_REVIEW' ||
-          state === 'DOCUMENT_REVISION' ||
-          state === 'DOCUMENT_APPROVED' ||
-          state === 'DOCUMENT_REJECTED'
-        );
-      });
+      let filtered = applications.filter(
+        (app) =>
+          app.workflowState === 'PAYMENT_PROCESSING_1' ||
+          app.workflowState === 'DOCUMENT_REVIEW' ||
+          app.workflowState === 'DOCUMENT_REVISION' ||
+          app.workflowState === 'DOCUMENT_APPROVED' ||
+          app.workflowState === 'DOCUMENT_REJECTED'
+      );
 
       // Filter by status
       if (filterStatus !== 'all') {
-        filtered = filtered.filter((app: Application) => getWorkflowState(app) === filterStatus);
+        filtered = filtered.filter((app) => app.workflowState === filterStatus);
       }
 
       // Search by application number or farmer name
       if (searchQuery) {
         const query = searchQuery.toLowerCase();
         filtered = filtered.filter(
-          (app: Application) =>
+          (app) =>
             app.applicationNumber.toLowerCase().includes(query) ||
-            matchesQuery(app.farmerInfo?.name).includes(query) ||
-            matchesQuery(app.farmInfo?.name).includes(query)
+            app.farmerInfo?.name.toLowerCase().includes(query) ||
+            app.farmInfo?.name.toLowerCase().includes(query)
         );
       }
 
       // Map to table format
-      const tableData = filtered.map((app: Application) => {
-        const submittedDate = getSubmittedDate(app);
+      const tableData = filtered.map((app) => {
+        const submittedDate = new Date(app.submittedDate || Date.now());
         const daysWaiting = Math.floor(
           (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
         );
@@ -127,22 +111,20 @@ const OfficerApplicationsPage: React.FC = () => {
         if (daysWaiting > 5) priority = 'high';
         else if (daysWaiting > 2) priority = 'medium';
 
-        const workflowState = getWorkflowState(app);
-
         return {
           id: app.id,
           applicationNumber: app.applicationNumber,
           farmerName: app.farmerInfo?.name || 'ไม่ระบุ',
           farmName: app.farmInfo?.name || 'ไม่ระบุ',
           submittedDate: submittedDate.toLocaleDateString('th-TH'),
-          workflowState,
+          workflowState: app.workflowState,
           priority,
           daysWaiting,
         };
       });
 
       // Sort by days waiting (descending)
-  tableData.sort((a: TableApplication, b: TableApplication) => b.daysWaiting - a.daysWaiting);
+      tableData.sort((a, b) => b.daysWaiting - a.daysWaiting);
 
       setFilteredApplications(tableData);
       setLoading(false);
@@ -225,8 +207,7 @@ const OfficerApplicationsPage: React.FC = () => {
 
   // Get pending count
   const pendingCount = filteredApplications.filter(
-    (app: TableApplication) =>
-      app.workflowState === 'DOCUMENT_REVIEW' || app.workflowState === 'DOCUMENT_REVISION'
+    (app) => app.workflowState === 'DOCUMENT_REVIEW' || app.workflowState === 'DOCUMENT_REVISION'
   ).length;
 
   if (loading) {
@@ -258,7 +239,7 @@ const OfficerApplicationsPage: React.FC = () => {
           <TextField
             placeholder="ค้นหาเลขใบสมัคร, ชื่อเกษตรกร, ชื่อฟาร์ม..."
             value={searchQuery}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            onChange={(e) => setSearchQuery(e.target.value)}
             size="small"
             sx={{ flexGrow: 1, minWidth: 300 }}
             InputProps={{
@@ -275,9 +256,7 @@ const OfficerApplicationsPage: React.FC = () => {
             select
             label="สถานะ"
             value={filterStatus}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setFilterStatus(e.target.value as FilterStatus)
-            }
+            onChange={(e) => setFilterStatus(e.target.value as FilterStatus)}
             size="small"
             sx={{ minWidth: 200 }}
             InputProps={{
@@ -343,7 +322,7 @@ const OfficerApplicationsPage: React.FC = () => {
                 <TableBody>
                   {filteredApplications
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((app: TableApplication) => (
+                    .map((app) => (
                       <TableRow
                         key={app.id}
                         hover
@@ -391,7 +370,7 @@ const OfficerApplicationsPage: React.FC = () => {
                             <IconButton
                               color="primary"
                               size="small"
-                              onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+                              onClick={(e) => {
                                 e.stopPropagation();
                                 handleViewApplication(app.id);
                               }}
@@ -416,15 +395,7 @@ const OfficerApplicationsPage: React.FC = () => {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               labelRowsPerPage="แสดงต่อหน้า:"
-              labelDisplayedRows={({
-                from,
-                to,
-                count,
-              }: {
-                from: number;
-                to: number;
-                count: number;
-              }) => `${from}-${to} จาก ${count}`}
+              labelDisplayedRows={({ from, to, count }) => `${from}-${to} จาก ${count}`}
             />
           </>
         )}

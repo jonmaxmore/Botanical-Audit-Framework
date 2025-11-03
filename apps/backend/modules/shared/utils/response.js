@@ -107,5 +107,14 @@ module.exports = {
   notFoundResponse,
   unauthorizedResponse,
   forbiddenResponse,
-  paginatedResponse
+  paginatedResponse,
+
+  // Aliases for backward compatibility
+  success: successResponse,
+  error: errorResponse,
+  validationError: validationErrorResponse,
+  notFound: notFoundResponse,
+  unauthorized: unauthorizedResponse,
+  forbidden: forbiddenResponse,
+  paginated: paginatedResponse
 };

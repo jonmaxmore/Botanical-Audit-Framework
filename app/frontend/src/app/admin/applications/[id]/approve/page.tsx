@@ -43,7 +43,7 @@ import {
   Star as StarIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
+import { withAuth } from '@/components/auth/withAuth';
 import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
 
 /**
@@ -70,20 +70,20 @@ const AdminApprovalPage: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    if (!applicationId) {
-      return;
+    if (applicationId) {
+      loadApplication();
     }
+  }, [applicationId, applications]);
 
-    const matchedApplication = applications.find((appItem: Application) => appItem.id === applicationId);
-
-    if (matchedApplication) {
-      setApplication(matchedApplication);
+  const loadApplication = () => {
+    const app = applications.find((a) => a.id === applicationId);
+    if (app) {
+      setApplication(app);
       setLoading(false);
-      return;
+    } else {
+      router.push('/admin/dashboard');
     }
-
-    router.push('/admin/dashboard');
-  }, [applicationId, applications, router]);
+  };
 
   const handleOpenConfirm = () => {
     if (!decision) {
@@ -265,13 +265,11 @@ const AdminApprovalPage: React.FC = () => {
                   วันที่ยื่นใบสมัคร
                 </Typography>
                 <Typography variant="body1" fontWeight="medium">
-                  {application.submittedAt
-                    ? new Date(application.submittedAt).toLocaleDateString('th-TH', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                      })
-                    : 'ยังไม่ส่งใบสมัคร'}
+                  {new Date(application.submittedAt).toLocaleDateString('th-TH', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
                 </Typography>
               </Grid>
             </Grid>
@@ -579,9 +577,7 @@ const AdminApprovalPage: React.FC = () => {
               rows={6}
               label="หมายเหตุ / เหตุผล"
               value={adminNotes}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                setAdminNotes(event.target.value)
-              }
+              onChange={(e) => setAdminNotes(e.target.value)}
               placeholder="บันทึกเหตุผลการตัดสินใจ, คำแนะนำ, หรือข้อมูลเพิ่มเติม..."
               sx={{ mb: 2 }}
             />

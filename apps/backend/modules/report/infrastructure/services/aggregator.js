@@ -24,7 +24,7 @@ class SimpleDataAggregationService {
   }
 
   // Farmer Reports
-  async getFarmSummary(farmId, _filters = {}) {
+  async getFarmSummary(farmId, filters = {}) {
     const farm = await this.farmRepository.findById(farmId);
 
     if (!farm) {
@@ -60,7 +60,7 @@ class SimpleDataAggregationService {
     };
   }
 
-  async getCultivationHistory(farmId, _filters = {}) {
+  async getCultivationHistory(farmId, filters = {}) {
     const surveys = await this.surveyRepository.findByFarmId(farmId);
 
     return surveys.map(survey => ({
@@ -77,7 +77,7 @@ class SimpleDataAggregationService {
     }));
   }
 
-  async getCertificateStatus(farmerId, _filters = {}) {
+  async getCertificateStatus(farmerId, filters = {}) {
     const certificates = await this.certificateRepository.findByFarmerId(farmerId);
 
     return certificates.map(cert => ({
@@ -94,7 +94,7 @@ class SimpleDataAggregationService {
     }));
   }
 
-  async getTrainingProgress(farmerId, _filters = {}) {
+  async getTrainingProgress(farmerId, filters = {}) {
     const enrollments = await this.trainingEnrollmentRepository.findByFarmerId(farmerId);
 
     const progress = {
@@ -133,7 +133,7 @@ class SimpleDataAggregationService {
     }));
   }
 
-  async getSurveyResults(farmId, _filters = {}) {
+  async getSurveyResults(farmId, filters = {}) {
     const surveys = await this.surveyRepository.findByFarmId(farmId);
 
     return surveys.map(survey => ({

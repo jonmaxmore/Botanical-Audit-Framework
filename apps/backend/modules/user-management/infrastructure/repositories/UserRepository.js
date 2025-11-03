@@ -629,7 +629,7 @@ class UserRepository {
       throw new Error('Role is required');
     }
 
-    const validRoles = ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_APPROVER', 'DTAM_ADMIN'];
+    const validRoles = ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN'];
     if (!validRoles.includes(userData.role)) {
       throw new Error('Invalid role');
     }

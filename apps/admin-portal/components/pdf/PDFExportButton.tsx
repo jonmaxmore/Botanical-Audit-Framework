@@ -34,7 +34,7 @@ export default function PDFExportButton({
 
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}${endpoint}`,
+        `${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000'}${endpoint}`,
         {
           method: 'POST',
           headers: {

@@ -37,6 +37,20 @@ function formatThaiDate(date) {
 
 // Helper: Thai Baht Text
 function numberToThaiText(num) {
+  const ones = ['', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า'];
+  const tens = [
+    '',
+    'สิบ',
+    'ยี่สิบ',
+    'สามสิบ',
+    'สี่สิบ',
+    'ห้าสิบ',
+    'หกสิบ',
+    'เจ็ดสิบ',
+    'แปดสิบ',
+    'เก้าสิบ'
+  ];
+
   if (num === 0) return 'ศูนย์บาทถ้วน';
 
   const numStr = num.toString();

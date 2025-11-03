@@ -32,7 +32,7 @@ import {
   Alert,
 } from '@mui/material';
 import {
-  WorkspacePremium as CertificateIcon,
+  Certificate as CertificateIcon,
   Download as DownloadIcon,
   Visibility as VisibilityIcon,
   Block as BlockIcon,
@@ -43,7 +43,7 @@ import {
   People as PeopleIcon,
   Search as SearchIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
+import { withAuth } from '@/components/auth/withAuth';
 import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**

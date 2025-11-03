@@ -19,51 +19,42 @@ export async function generateQRCode(data: string, options?: QRCodeOptions): Pro
     margin: 2,
     color: {
       dark: '#000000',
-      light: '#ffffff'
+      light: '#FFFFFF'
     },
-    errorCorrectionLevel: 'H'
+    errorCorrectionLevel: 'M',
+    ...options
   };
 
-  const mergedOptions = {
-    ...defaultOptions,
-    ...options,
-    color: {
-      ...defaultOptions.color,
-      ...options?.color
-    }
-  };
-
-  return QRCode.toDataURL(data, mergedOptions);
+  try {
+    const qrCodeDataURL = await QRCode.toDataURL(data, defaultOptions);
+    return qrCodeDataURL;
+  } catch (error) {
+    console.error('Error generating QR code:', error);
+    throw new Error('Failed to generate QR code');
+  }
 }
 
 /**
- * Generate QR code on canvas
+ * Generate QR code as canvas
  */
 export async function generateQRCodeCanvas(
-  canvas: HTMLCanvasElement,
   data: string,
+  canvas: HTMLCanvasElement,
   options?: QRCodeOptions
 ): Promise<void> {
   const defaultOptions: QRCodeOptions = {
     width: 200,
     margin: 2,
-    color: {
-      dark: '#000000',
-      light: '#ffffff'
-    },
-    errorCorrectionLevel: 'H'
+    errorCorrectionLevel: 'M',
+    ...options
   };
 
-  const mergedOptions = {
-    ...defaultOptions,
-    ...options,
-    color: {
-      ...defaultOptions.color,
-      ...options?.color
-    }
-  };
-
-  await QRCode.toCanvas(canvas, data, mergedOptions);
+  try {
+    await QRCode.toCanvas(canvas, data, defaultOptions);
+  } catch (error) {
+    console.error('Error generating QR code canvas:', error);
+    throw new Error('Failed to generate QR code canvas');
+  }
 }
 
 /**
@@ -74,8 +65,7 @@ export async function generateCertificateQR(
   certificateNumber: string,
   options?: QRCodeOptions
 ): Promise<string> {
-  const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
-  const verificationURL = `${baseUrl}/verify/${certificateNumber}`;
+  const verificationURL = `${process.env.NEXT_PUBLIC_API_URL}/verify/${certificateNumber}`;
   return generateQRCode(verificationURL, options);
 }
 

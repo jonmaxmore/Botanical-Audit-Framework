@@ -30,16 +30,12 @@ import {
   Cancel as CancelIcon,
   TrendingUp as TrendingUpIcon,
   AttachMoney as AttachMoneyIcon,
-  WorkspacePremium as CertificateIcon,
+  Certificate as CertificateIcon,
   Warning as WarningIcon,
   Speed as SpeedIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
-import {
-  useApplicationContext,
-  type Application,
-  type WorkflowState,
-} from '@/contexts/ApplicationContext';
+import { withAuth } from '@/components/auth/withAuth';
+import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
 
 /**
  * Admin Dashboard Page
@@ -56,21 +52,6 @@ import {
 const AdminDashboardPage: React.FC = () => {
   const router = useRouter();
   const { applications } = useApplicationContext();
-
-  const getWorkflowState = (app: Application): WorkflowState =>
-    app.workflowState ?? app.currentState;
-
-  const getDaysSinceSubmission = (app: Application): number => {
-    const submittedTimestamp = app.submittedAt ?? app.createdAt;
-    if (!submittedTimestamp) return 0;
-
-    const submittedDate = new Date(submittedTimestamp);
-    if (Number.isNaN(submittedDate.getTime())) {
-      return 0;
-    }
-
-    return Math.floor((Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24));
-  };
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -79,21 +60,21 @@ const AdminDashboardPage: React.FC = () => {
 
   // Filter applications by workflow state
   const pendingApprovalApps = applications.filter(
-    (app: Application) => getWorkflowState(app) === 'PENDING_APPROVAL'
+    (app) => app.workflowState === 'PENDING_APPROVAL'
   );
-  const approvedApps = applications.filter((app: Application) => getWorkflowState(app) === 'APPROVED');
-  const rejectedApps = applications.filter((app: Application) =>
-    ['DOCUMENT_REJECTED', 'REJECTED'].includes(getWorkflowState(app))
+  const approvedApps = applications.filter((app) => app.workflowState === 'APPROVED');
+  const rejectedApps = applications.filter(
+    (app) => app.workflowState === 'DOCUMENT_REJECTED' || app.workflowState === 'REJECTED'
   );
   const inProgressApps = applications.filter(
-    (app: Application) =>
+    (app) =>
       ![
         'PENDING_APPROVAL',
         'APPROVED',
         'DOCUMENT_REJECTED',
         'REJECTED',
         'CERTIFICATE_ISSUED',
-      ].includes(getWorkflowState(app))
+      ].includes(app.workflowState)
   );
 
   // Calculate statistics
@@ -104,20 +85,18 @@ const AdminDashboardPage: React.FC = () => {
 
   // Financial statistics (Mock)
   const totalRevenue =
-    applications.filter((app: Application) =>
-      !['DOCUMENT_REJECTED', 'REJECTED'].includes(getWorkflowState(app))
-    )
-      .length * 5000; // 5000 THB per application
+    applications.filter(
+      (app) => app.workflowState !== 'DOCUMENT_REJECTED' && app.workflowState !== 'REJECTED'
+    ).length * 5000; // 5000 THB per application
   const pendingPayments =
     applications.filter(
-      (app: Application) =>
-        getWorkflowState(app) === 'PAYMENT_PROCESSING_1' ||
-        getWorkflowState(app) === 'PAYMENT_PROCESSING_2'
+      (app) =>
+        app.workflowState === 'PAYMENT_PROCESSING_1' || app.workflowState === 'PAYMENT_PROCESSING_2'
     ).length * 5000;
 
   // Certificate statistics
   const issuedCertificates = applications.filter(
-    (app: Application) => getWorkflowState(app) === 'CERTIFICATE_ISSUED'
+    (app) => app.workflowState === 'CERTIFICATE_ISSUED'
   ).length;
 
   // User statistics (Mock)
@@ -137,7 +116,9 @@ const AdminDashboardPage: React.FC = () => {
   // Priority scoring for pending approvals
   const getPriority = (app: Application) => {
     const inspectionScore = app.inspectionData?.totalScore || 0;
-    const daysWaiting = getDaysSinceSubmission(app);
+    const daysWaiting = Math.floor(
+      (Date.now() - new Date(app.submittedAt).getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     if (inspectionScore >= 90 && daysWaiting > 3)
       return { level: 'high', label: 'สูง', color: 'error' };
@@ -229,9 +210,9 @@ const AdminDashboardPage: React.FC = () => {
               </Typography>
               <Typography variant="caption" sx={{ opacity: 0.9 }}>
                 {
-                  pendingApprovalApps.filter((app: Application) => {
+                  pendingApprovalApps.filter((app) => {
                     const days = Math.floor(
-                      getDaysSinceSubmission(app)
+                      (Date.now() - new Date(app.submittedAt).getTime()) / (1000 * 60 * 60 * 24)
                     );
                     return days > 3;
                   }).length
@@ -316,10 +297,10 @@ const AdminDashboardPage: React.FC = () => {
               <Alert severity="info">ไม่มีใบสมัครรออนุมัติในขณะนี้</Alert>
             ) : (
               <List>
-                {pendingApprovalApps.slice(0, 5).map((app: Application) => {
+                {pendingApprovalApps.slice(0, 5).map((app) => {
                   const priority = getPriority(app);
                   const daysWaiting = Math.floor(
-                    getDaysSinceSubmission(app)
+                    (Date.now() - new Date(app.submittedAt).getTime()) / (1000 * 60 * 60 * 24)
                   );
                   const inspectionScore = app.inspectionData?.totalScore || 0;
 
@@ -387,42 +368,42 @@ const AdminDashboardPage: React.FC = () => {
                 {
                   step: 1,
                   label: 'ยื่นใบสมัคร',
-                  count: applications.filter((a: Application) => a.currentStep === 1).length,
+                  count: applications.filter((a) => a.currentStep === 1).length,
                 },
                 {
                   step: 2,
                   label: 'ชำระเงินครั้งที่ 1',
-                  count: applications.filter((a: Application) => a.currentStep === 2).length,
+                  count: applications.filter((a) => a.currentStep === 2).length,
                 },
                 {
                   step: 3,
                   label: 'ตรวจเอกสาร',
-                  count: applications.filter((a: Application) => a.currentStep === 3).length,
+                  count: applications.filter((a) => a.currentStep === 3).length,
                 },
                 {
                   step: 4,
                   label: 'เอกสารอนุมัติ',
-                  count: applications.filter((a: Application) => a.currentStep === 4).length,
+                  count: applications.filter((a) => a.currentStep === 4).length,
                 },
                 {
                   step: 5,
                   label: 'ชำระเงินครั้งที่ 2',
-                  count: applications.filter((a: Application) => a.currentStep === 5).length,
+                  count: applications.filter((a) => a.currentStep === 5).length,
                 },
                 {
                   step: 6,
                   label: 'ตรวจฟาร์ม',
-                  count: applications.filter((a: Application) => a.currentStep === 6).length,
+                  count: applications.filter((a) => a.currentStep === 6).length,
                 },
                 {
                   step: 7,
                   label: 'อนุมัติสุดท้าย',
-                  count: applications.filter((a: Application) => a.currentStep === 7).length,
+                  count: applications.filter((a) => a.currentStep === 7).length,
                 },
                 {
                   step: 8,
                   label: 'ออกใบรับรอง',
-                  count: applications.filter((a: Application) => a.currentStep === 8).length,
+                  count: applications.filter((a) => a.currentStep === 8).length,
                 },
               ].map((item) => (
                 <Grid item xs={12} sm={6} md={3} key={item.step}>

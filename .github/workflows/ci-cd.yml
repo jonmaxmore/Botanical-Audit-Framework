@@ -171,7 +171,7 @@ jobs:
         env:
           NODE_ENV: test
           MONGODB_URI: mongodb://testuser:testpass@localhost:27017/gacp_test?authSource=admin
-          PORT: 5000
+          PORT: 3004
 
       - name: Start frontend server
         working-directory: ./frontend-nextjs
@@ -181,19 +181,19 @@ jobs:
           sleep 10
         env:
           NODE_ENV: test
-          NEXT_PUBLIC_API_URL: http://localhost:5000
+          NEXT_PUBLIC_API_URL: http://localhost:3004
           PORT: 3000
 
       - name: Wait for services
         run: |
-          timeout 60 bash -c 'until curl -f http://localhost:5000/health; do sleep 2; done'
+          timeout 60 bash -c 'until curl -f http://localhost:3004/health; do sleep 2; done'
           timeout 60 bash -c 'until curl -f http://localhost:3000; do sleep 2; done'
 
       - name: Run E2E integration tests
         run: |
           cd apps/backend && npm run test:e2e
         env:
-          API_BASE_URL: http://localhost:5000
+          API_BASE_URL: http://localhost:3004
           FRONTEND_URL: http://localhost:3000
 
   # Performance Testing

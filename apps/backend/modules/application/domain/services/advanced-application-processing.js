@@ -206,7 +206,7 @@ class AdvancedApplicationProcessingService extends EventEmitter {
    * 5. Generate unique identifiers and tracking codes
    * 6. Create audit trail and performance tracking
    */
-  async createApplication(farmerData, applicationData, _options = {}) {
+  async createApplication(farmerData, applicationData, options = {}) {
     const operationId = this._generateOperationId();
     const startTime = Date.now();
 

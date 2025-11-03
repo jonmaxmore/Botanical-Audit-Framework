@@ -29,8 +29,8 @@ import {
   TrendingUp as TrendingUpIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
-import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
+import { withAuth } from '@/components/auth/withAuth';
+import { useApplicationContext } from '@/contexts/ApplicationContext';
 
 /**
  * DTAM Officer Dashboard
@@ -83,32 +83,18 @@ const OfficerDashboardPage: React.FC = () => {
     loadDashboardData();
   }, [applications]);
 
-  const getWorkflowState = (app: Application) => app.workflowState ?? app.currentState;
-
-  const getSubmittedDate = (app: Application) => {
-    const submittedTimestamp = app.submittedAt ?? app.createdAt;
-    if (!submittedTimestamp) {
-      return new Date();
-    }
-
-    const submittedDate = new Date(submittedTimestamp);
-    return Number.isNaN(submittedDate.getTime()) ? new Date() : submittedDate;
-  };
-
   const loadDashboardData = () => {
     try {
       // กรองใบสมัครที่รอตรวจ
       const pending = applications
-        .filter((app: Application) => {
-          const state = getWorkflowState(app);
-          return (
-            state === 'PAYMENT_PROCESSING_1' ||
-            state === 'DOCUMENT_REVIEW' ||
-            state === 'DOCUMENT_REVISION'
-          );
-        })
-        .map((app: Application) => {
-          const submittedDate = getSubmittedDate(app);
+        .filter(
+          (app) =>
+            app.workflowState === 'PAYMENT_PROCESSING_1' ||
+            app.workflowState === 'DOCUMENT_REVIEW' ||
+            app.workflowState === 'DOCUMENT_REVISION'
+        )
+        .map((app) => {
+          const submittedDate = new Date(app.submittedDate || Date.now());
           const daysWaiting = Math.floor(
             (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
           );
@@ -124,33 +110,31 @@ const OfficerDashboardPage: React.FC = () => {
             farmerName: app.farmerInfo?.name || 'ไม่ระบุ',
             farmName: app.farmInfo?.name || 'ไม่ระบุ',
             submittedDate: submittedDate.toLocaleDateString('th-TH'),
-            workflowState: getWorkflowState(app),
+            workflowState: app.workflowState,
             priority,
             daysWaiting,
           };
         })
-        .sort(
-          (a: PendingApplication, b: PendingApplication) => b.daysWaiting - a.daysWaiting
-        ); // เรียงตามวันที่รอมากสุด
+        .sort((a, b) => b.daysWaiting - a.daysWaiting); // เรียงตามวันที่รอมากสุด
 
       setPendingApplications(pending);
 
       // คำนวณสถิติ (Mock data - ต้องเชื่อม API จริง)
       const reviewed = applications.filter(
-        (app: Application) =>
-          getWorkflowState(app) === 'DOCUMENT_APPROVED' ||
-          getWorkflowState(app) === 'DOCUMENT_REVISION' ||
-          getWorkflowState(app) === 'DOCUMENT_REJECTED'
+        (app) =>
+          app.workflowState === 'DOCUMENT_APPROVED' ||
+          app.workflowState === 'DOCUMENT_REVISION' ||
+          app.workflowState === 'DOCUMENT_REJECTED'
       );
 
       const approved = applications.filter(
-        (app: Application) => getWorkflowState(app) === 'DOCUMENT_APPROVED'
+        (app) => app.workflowState === 'DOCUMENT_APPROVED'
       ).length;
       const revision = applications.filter(
-        (app: Application) => getWorkflowState(app) === 'DOCUMENT_REVISION'
+        (app) => app.workflowState === 'DOCUMENT_REVISION'
       ).length;
       const rejected = applications.filter(
-        (app: Application) => getWorkflowState(app) === 'DOCUMENT_REJECTED'
+        (app) => app.workflowState === 'DOCUMENT_REJECTED'
       ).length;
       const total = reviewed.length || 1; // หาร 0 ไม่ได้
 
@@ -380,7 +364,7 @@ const OfficerDashboardPage: React.FC = () => {
                   มีใบสมัครรอตรวจ {pendingApplications.length} รายการ (เรียงตามวันที่รอนานสุด)
                 </Typography>
                 <List>
-                  {pendingApplications.slice(0, 5).map((app: PendingApplication, index: number) => (
+                  {pendingApplications.slice(0, 5).map((app, index) => (
                     <React.Fragment key={app.id}>
                       <ListItem
                         sx={{

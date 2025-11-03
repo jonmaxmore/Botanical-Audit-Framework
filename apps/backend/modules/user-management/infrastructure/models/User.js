@@ -8,7 +8,6 @@
  * - FARMER: Farm owners applying for certification
  * - DTAM_REVIEWER: Document reviewers
  * - DTAM_INSPECTOR: Farm inspectors
- * - DTAM_APPROVER: Final approval and certificate issuance
  * - DTAM_ADMIN: System administrators
  *
  * Security Features:
@@ -66,9 +65,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'User role is required'],
       enum: {
-        values: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_APPROVER', 'DTAM_ADMIN'],
-        message:
-          'Role must be one of: FARMER, DTAM_REVIEWER, DTAM_INSPECTOR, DTAM_APPROVER, DTAM_ADMIN'
+        values: ['FARMER', 'DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN'],
+        message: 'Role must be one of: FARMER, DTAM_REVIEWER, DTAM_INSPECTOR, DTAM_ADMIN'
       },
       index: true
     },
@@ -401,14 +399,6 @@ userSchema.methods.hasPermission = function (permission) {
       'inspection:conduct',
       'inspection:report'
     ],
-    DTAM_APPROVER: [
-      'application:read:all',
-      'application:final-approve',
-      'certificate:issue',
-      'certificate:sign',
-      'application:reject:final',
-      'document:read:all'
-    ],
     DTAM_ADMIN: ['*'] // Admin has all permissions
   };
 
@@ -429,7 +419,6 @@ userSchema.methods._validateRoleSpecificProfile = function () {
 
     case 'DTAM_REVIEWER':
     case 'DTAM_INSPECTOR':
-    case 'DTAM_APPROVER':
     case 'DTAM_ADMIN':
       if (this.profile && this.profile.dtamInfo) {
         if (!this.profile.dtamInfo.employeeId) {

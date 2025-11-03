@@ -331,7 +331,7 @@ class GovernmentApiIntegrationService {
       };
 
       // Check each government service health
-      for (const serviceName of Object.keys(this.governmentServices)) {
+      for (const [serviceName, serviceConfig] of Object.entries(this.governmentServices)) {
         try {
           const serviceHealth = await this.checkServiceHealth(serviceName);
           health.services[serviceName] = serviceHealth;

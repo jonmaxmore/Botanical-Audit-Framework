@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { ChangeEvent } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import {
   Box,
@@ -38,12 +37,8 @@ import {
   CloudUpload as CloudUploadIcon,
   ArrowBack as ArrowBackIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
-import {
-  useApplicationContext,
-  type Application,
-  type InspectionChecklistItem,
-} from '@/contexts/ApplicationContext';
+import { withAuth } from '@/components/auth/withAuth';
+import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
 
 /**
  * VDO Call Inspection Page
@@ -56,10 +51,11 @@ import {
  * - บันทึกหมายเหตุ
  */
 
-type ChecklistItem = InspectionChecklistItem & {
+interface ChecklistItem {
+  id: string;
   label: string;
   checked: boolean;
-};
+}
 
 const VdoCallInspectionPage: React.FC = () => {
   const router = useRouter();
@@ -70,54 +66,14 @@ const VdoCallInspectionPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
   const [checklist, setChecklist] = useState<ChecklistItem[]>([
-    {
-      id: '1',
-      question: 'เกษตรกรแสดงพื้นที่ฟาร์มผ่านกล้อง',
-      label: 'เกษตรกรแสดงพื้นที่ฟาร์มผ่านกล้อง',
-      checked: false,
-    },
-    {
-      id: '2',
-      question: 'สามารถเห็นแปลงปลูกได้ชัดเจน',
-      label: 'สามารถเห็นแปลงปลูกได้ชัดเจน',
-      checked: false,
-    },
-    {
-      id: '3',
-      question: 'แสดงพื้นที่เก็บเก็บเกี่ยว/บ่มสุก',
-      label: 'แสดงพื้นที่เก็บเก็บเกี่ยว/บ่มสุก',
-      checked: false,
-    },
-    {
-      id: '4',
-      question: 'แสดงพื้นที่จัดเก็บ/คลังสินค้า',
-      label: 'แสดงพื้นที่จัดเก็บ/คลังสินค้า',
-      checked: false,
-    },
-    {
-      id: '5',
-      question: 'แสดงระบบน้ำและการชลประทาน',
-      label: 'แสดงระบบน้ำและการชลประทาน',
-      checked: false,
-    },
-    {
-      id: '6',
-      question: 'แสดงพื้นที่จัดการปุ๋ย/สารเคมี',
-      label: 'แสดงพื้นที่จัดการปุ๋ย/สารเคมี',
-      checked: false,
-    },
-    {
-      id: '7',
-      question: 'สามารถสอบถามเกี่ยวกับกระบวนการปลูกได้',
-      label: 'สามารถสอบถามเกี่ยวกับกระบวนการปลูกได้',
-      checked: false,
-    },
-    {
-      id: '8',
-      question: 'เกษตรกรมีความรู้เรื่อง GACP',
-      label: 'เกษตรกรมีความรู้เรื่อง GACP',
-      checked: false,
-    },
+    { id: '1', label: 'เกษตรกรแสดงพื้นที่ฟาร์มผ่านกล้อง', checked: false },
+    { id: '2', label: 'สามารถเห็นแปลงปลูกได้ชัดเจน', checked: false },
+    { id: '3', label: 'แสดงพื้นที่เก็บเก็บเกี่ยว/บ่มสุก', checked: false },
+    { id: '4', label: 'แสดงพื้นที่จัดเก็บ/คลังสินค้า', checked: false },
+    { id: '5', label: 'แสดงระบบน้ำและการชลประทาน', checked: false },
+    { id: '6', label: 'แสดงพื้นที่จัดการปุ๋ย/สารเคมี', checked: false },
+    { id: '7', label: 'สามารถสอบถามเกี่ยวกับกระบวนการปลูกได้', checked: false },
+    { id: '8', label: 'เกษตรกรมีความรู้เรื่อง GACP', checked: false },
   ]);
   const [decision, setDecision] = useState<'sufficient' | 'on_site' | null>(null);
   const [notes, setNotes] = useState('');
@@ -132,7 +88,7 @@ const VdoCallInspectionPage: React.FC = () => {
   }, [applicationId, applications]);
 
   const loadApplication = () => {
-    const app = applications.find((a: Application) => a.id === applicationId);
+    const app = applications.find((a) => a.id === applicationId);
     if (app) {
       setApplication(app);
       setLoading(false);
@@ -142,17 +98,15 @@ const VdoCallInspectionPage: React.FC = () => {
   };
 
   const handleChecklistChange = (id: string) => {
-    setChecklist((prev: ChecklistItem[]) =>
-      prev.map((item: ChecklistItem) =>
-        item.id === id ? { ...item, checked: !item.checked } : item
-      )
+    setChecklist((prev) =>
+      prev.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
     );
   };
 
   const handlePhotoUpload = () => {
     // Mock photo upload
     const mockPhotoUrl = `https://via.placeholder.com/300x200?text=VDO+Screenshot+${photos.length + 1}`;
-    setPhotos((prev: string[]) => [...prev, mockPhotoUrl]);
+    setPhotos((prev) => [...prev, mockPhotoUrl]);
     alert('อัปโหลดรูปภาพสำเร็จ (Mock)');
   };
 
@@ -185,14 +139,7 @@ const VdoCallInspectionPage: React.FC = () => {
         currentStep: decision === 'sufficient' ? 7 : 6,
         inspectionData: {
           type: 'VDO_CALL',
-          checklist: checklist.map((item: ChecklistItem) => {
-            const { checked, label, ...rest } = item;
-            return {
-              ...rest,
-              status: checked ? 'completed' : 'pending',
-              notes: checked ? 'ผ่านการตรวจผ่าน VDO Call' : undefined,
-            } as InspectionChecklistItem;
-          }),
+          checklist: checklist,
           decision: decision,
           notes: notes,
           photos: photos,
@@ -222,7 +169,7 @@ const VdoCallInspectionPage: React.FC = () => {
     }
   };
 
-  const checkedCount = checklist.filter((item: ChecklistItem) => item.checked).length;
+  const checkedCount = checklist.filter((item) => item.checked).length;
   const totalCount = checklist.length;
   const completionRate = Math.round((checkedCount / totalCount) * 100);
 
@@ -337,7 +284,7 @@ const VdoCallInspectionPage: React.FC = () => {
             </Alert>
 
             <List>
-              {checklist.map((item: ChecklistItem) => (
+              {checklist.map((item) => (
                 <ListItem key={item.id} sx={{ py: 0.5 }}>
                   <FormControlLabel
                     control={
@@ -373,7 +320,7 @@ const VdoCallInspectionPage: React.FC = () => {
 
             {photos.length > 0 && (
               <Grid container spacing={2}>
-                {photos.map((photo: string, index: number) => (
+                {photos.map((photo, index) => (
                   <Grid item xs={6} md={4} key={index}>
                     <Paper
                       sx={{
@@ -416,7 +363,7 @@ const VdoCallInspectionPage: React.FC = () => {
               multiline
               rows={4}
               value={notes}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNotes(e.target.value)}
+              onChange={(e) => setNotes(e.target.value)}
               placeholder="บันทึกข้อสังเกต, จุดที่ดี, จุดที่ควรปรับปรุง, คำแนะนำ..."
             />
           </Paper>
@@ -432,9 +379,7 @@ const VdoCallInspectionPage: React.FC = () => {
               <FormLabel component="legend">จากการตรวจผ่าน VDO Call คุณเห็นว่า:</FormLabel>
               <RadioGroup
                 value={decision}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setDecision(e.target.value as 'sufficient' | 'on_site')
-                }
+                onChange={(e) => setDecision(e.target.value as 'sufficient' | 'on_site')}
               >
                 <FormControlLabel
                   value="sufficient"

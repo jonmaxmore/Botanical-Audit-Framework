@@ -402,6 +402,10 @@ class FertilizerRecommendationService {
     if (!regional) return regionalNPK;
 
     // Get regional performance data for this plant
+    const regionalPerformance = regional.agriculture?.otherMedicinalPlants?.find(
+      p => p.plantType === plant.plantType
+    );
+
     // Adjust based on regional challenges
     if (regional.mlFeatures?.commonChallenges) {
       const challenges = regional.mlFeatures.commonChallenges;
@@ -474,7 +478,7 @@ class FertilizerRecommendationService {
    */
   async _matchProducts(finalNPK, context, options = {}) {
     const { growthStage, plant, region } = context;
-    const { organicOnly = false } = options;
+    const { organicOnly = false, maxPrice = null } = options;
 
     // Build query
     const query = {
@@ -538,7 +542,7 @@ class FertilizerRecommendationService {
    * Generate application schedule
    */
   _generateSchedule(finalNPK, product, context) {
-    const { growthStage, cycle } = context;
+    const { growthStage, farm, cycle, plantAge } = context;
 
     if (!product) {
       return {
@@ -669,7 +673,7 @@ class FertilizerRecommendationService {
    * Predict outcomes
    */
   async _predictOutcomes(finalNPK, context) {
-    const { plant, region } = context;
+    const { plant, region, farm } = context;
 
     // Get average yields for this plant in this region
     const avgYields = await HistoricalYield.getStatistics(plant.plantType, region);
@@ -713,7 +717,7 @@ class FertilizerRecommendationService {
   /**
    * Create audit log for GACP compliance
    */
-  _createAuditLog(context, finalNPK, products, _schedule) {
+  _createAuditLog(context, finalNPK, products, schedule) {
     return {
       timestamp: new Date(),
       farmId: context.farm._id,

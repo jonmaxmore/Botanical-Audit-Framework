@@ -64,13 +64,11 @@ class GACPEventBus extends EventEmitter {
    * @param {Object} options - Publishing options
    */
   async publish(eventType, payload = {}, options = {}) {
-    let eventRecord;
-
     try {
       const eventId = this._generateEventId();
       const timestamp = new Date();
 
-      eventRecord = {
+      const event = {
         id: eventId,
         type: eventType,
         payload,
@@ -88,29 +86,29 @@ class GACPEventBus extends EventEmitter {
       logger.info(`📤 Publishing event: ${eventType} (${eventId});`);
 
       // Validate event structure
-      this._validateEvent(eventRecord);
+      this._validateEvent(event);
 
       // Persist event if enabled
       if (this.config.enablePersistence && this.persistenceService) {
-        await this.persistenceService.saveEvent(eventRecord);
+        await this.persistenceService.saveEvent(event);
       }
 
       // Update metrics
       this.metrics.eventsPublished++;
 
       // Store in history
-      this._addToHistory(eventRecord);
+      this._addToHistory(event);
 
       // Emit to subscribers
       const processingStart = Date.now();
-      await this._processEvent(eventRecord);
+      await this._processEvent(event);
 
       const processingTime = Date.now() - processingStart;
       this._updateProcessingMetrics(processingTime);
 
       // Monitor event
       if (this.config.enableMonitoring && this.monitoringService) {
-        await this.monitoringService.trackEvent(eventRecord, processingTime);
+        await this.monitoringService.trackEvent(event, processingTime);
       }
 
       logger.info(`✅ Event published successfully: ${eventType} (${eventId});`);
@@ -120,7 +118,7 @@ class GACPEventBus extends EventEmitter {
       this.metrics.eventsFailed++;
 
       // Add to retry queue
-      await this._handleEventError(eventRecord || { type: eventType, payload }, error);
+      await this._handleEventError(event || { type: eventType, payload }, error);
       throw error;
     }
   }

@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import type { ChangeEvent, SyntheticEvent } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import {
   Box,
@@ -38,12 +37,8 @@ import {
   Star as StarIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/contexts/AuthContext';
-import {
-  useApplicationContext,
-  type Application,
-  type CCPResult,
-} from '@/contexts/ApplicationContext';
+import { withAuth } from '@/components/auth/withAuth';
+import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
 
 /**
  * On-Site Inspection Page
@@ -56,13 +51,15 @@ import {
  * - Final notes/recommendations
  */
 
-type CCP = CCPResult & {
+interface CCP {
+  id: string;
+  name: string;
   description: string;
   maxScore: number;
   score: number;
   notes: string;
   photos: string[];
-};
+}
 
 const OnSiteInspectionPage: React.FC = () => {
   const router = useRouter();
@@ -157,7 +154,7 @@ const OnSiteInspectionPage: React.FC = () => {
   }, [applicationId, applications]);
 
   const loadApplication = () => {
-  const app = applications.find((a: Application) => a.id === applicationId);
+    const app = applications.find((a) => a.id === applicationId);
     if (app) {
       setApplication(app);
       setLoading(false);
@@ -167,20 +164,18 @@ const OnSiteInspectionPage: React.FC = () => {
   };
 
   const handleScoreChange = (ccpId: string, newScore: number) => {
-    setCcps((prev: CCP[]) =>
-      prev.map((ccp: CCP) => (ccp.id === ccpId ? { ...ccp, score: newScore } : ccp))
-    );
+    setCcps((prev) => prev.map((ccp) => (ccp.id === ccpId ? { ...ccp, score: newScore } : ccp)));
   };
 
   const handleNotesChange = (ccpId: string, notes: string) => {
-    setCcps((prev: CCP[]) => prev.map((ccp: CCP) => (ccp.id === ccpId ? { ...ccp, notes } : ccp)));
+    setCcps((prev) => prev.map((ccp) => (ccp.id === ccpId ? { ...ccp, notes } : ccp)));
   };
 
   const handlePhotoUpload = (ccpId: string) => {
     // Mock photo upload
     const mockPhotoUrl = `https://via.placeholder.com/200x150?text=CCP+Photo`;
-    setCcps((prev: CCP[]) =>
-      prev.map((ccp: CCP) =>
+    setCcps((prev) =>
+      prev.map((ccp) =>
         ccp.id === ccpId ? { ...ccp, photos: [...ccp.photos, mockPhotoUrl] } : ccp
       )
     );
@@ -188,7 +183,7 @@ const OnSiteInspectionPage: React.FC = () => {
   };
 
   const handleOpenConfirm = () => {
-  const allScored = ccps.every((ccp: CCP) => ccp.score > 0);
+    const allScored = ccps.every((ccp) => ccp.score > 0);
     if (!allScored) {
       alert('กรุณาให้คะแนนทุก CCP ก่อนส่งรายงาน');
       return;
@@ -237,7 +232,7 @@ const OnSiteInspectionPage: React.FC = () => {
   };
 
   // Calculate total score
-  const totalScore = ccps.reduce((sum: number, ccp: CCP) => sum + ccp.score, 0);
+  const totalScore = ccps.reduce((sum, ccp) => sum + ccp.score, 0);
   const maxTotalScore = 100;
   const scorePercentage = (totalScore / maxTotalScore) * 100;
 
@@ -341,7 +336,7 @@ const OnSiteInspectionPage: React.FC = () => {
             <Typography variant="body2" fontWeight="bold" gutterBottom>
               คะแนนแต่ละ CCP:
             </Typography>
-            {ccps.map((ccp: CCP) => (
+            {ccps.map((ccp) => (
               <Box key={ccp.id} sx={{ mb: 1.5 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 0.5 }}>
                   <Typography variant="caption" color="text.secondary">
@@ -396,7 +391,7 @@ const OnSiteInspectionPage: React.FC = () => {
               ให้คะแนนแต่ละ CCP ตามความเหมาะสม พร้อมบันทึกหมายเหตุและอัปโหลดรูปภาพหลักฐาน
             </Alert>
 
-            {ccps.map((ccp: CCP, index: number) => (
+            {ccps.map((ccp, index) => (
               <Accordion key={ccp.id} sx={{ mb: 2 }}>
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Box
@@ -437,9 +432,7 @@ const OnSiteInspectionPage: React.FC = () => {
                       </Typography>
                       <Slider
                         value={ccp.score}
-                        onChange={(_: SyntheticEvent | Event, value: number | number[]) =>
-                          handleScoreChange(ccp.id, value as number)
-                        }
+                        onChange={(_, value) => handleScoreChange(ccp.id, value as number)}
                         min={0}
                         max={ccp.maxScore}
                         step={1}
@@ -473,9 +466,7 @@ const OnSiteInspectionPage: React.FC = () => {
                         multiline
                         rows={3}
                         value={ccp.notes}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                          handleNotesChange(ccp.id, e.target.value)
-                        }
+                        onChange={(e) => handleNotesChange(ccp.id, e.target.value)}
                         placeholder={`บันทึกข้อสังเกตสำหรับ ${ccp.name}...`}
                         size="small"
                       />
@@ -497,7 +488,7 @@ const OnSiteInspectionPage: React.FC = () => {
                       </Button>
                       {ccp.photos.length > 0 && (
                         <Grid container spacing={1}>
-                          {ccp.photos.map((photo: string, photoIndex: number) => (
+                          {ccp.photos.map((photo, photoIndex) => (
                             <Grid item xs={4} key={photoIndex}>
                               <Paper sx={{ p: 0.5 }}>
                                 <img
@@ -542,7 +533,7 @@ const OnSiteInspectionPage: React.FC = () => {
               multiline
               rows={6}
               value={finalNotes}
-              onChange={(e: ChangeEvent<HTMLInputElement>) => setFinalNotes(e.target.value)}
+              onChange={(e) => setFinalNotes(e.target.value)}
               placeholder="บันทึกสรุปผลการตรวจ, จุดแข็ง, จุดที่ควรปรับปรุง, คำแนะนำสำหรับเกษตรกร..."
             />
           </Paper>
@@ -600,7 +591,7 @@ const OnSiteInspectionPage: React.FC = () => {
             สรุป:
           </Typography>
           <List dense>
-            {ccps.map((ccp: CCP) => (
+            {ccps.map((ccp) => (
               <ListItem key={ccp.id}>
                 <ListItemIcon>
                   <CheckCircleIcon

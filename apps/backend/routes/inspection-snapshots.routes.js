@@ -50,7 +50,7 @@ router.post('/inspections/:id/snapshots', upload.array('snapshots', 20), async (
 
 router.get('/inspections/:id/snapshots', async (req, res) => {
   try {
-    const { id: _inspectionId } = req.params;
+    const { id: inspectionId } = req.params;
 
     // TODO: Fetch from database
     res.json({

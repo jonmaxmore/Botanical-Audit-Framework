@@ -88,11 +88,6 @@ export interface WorkflowTransitionRequest {
     inspectionDate?: string;
     correctionRequired?: string[];
     certificateLevel?: 'gold' | 'silver' | 'bronze';
-    farmName?: string;
-    farmLocation?: string;
-    paymentConfirmed?: boolean;
-    inspectorCertification?: string;
-    score?: number;
   };
 }
 
@@ -524,6 +519,14 @@ const gacpWorkflowService = GACPWorkflowService.getInstance();
 
 // Export types and service
 export { gacpWorkflowService };
+
+export type {
+  GACPWorkflowState,
+  GACPWorkflowTransition,
+  GACPApplication,
+  WorkflowTransitionRequest,
+  WorkflowValidationResult,
+};
 
 // Default export
 export default gacpWorkflowService;

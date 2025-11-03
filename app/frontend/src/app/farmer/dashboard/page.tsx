@@ -265,7 +265,7 @@ function FarmerDashboardPage() {
                   </Typography>
                   <Box sx={{ mt: 2 }}>
                     {activeApplication.documents.length === 0 && (
-                      <Alert severity="warning">
+                      <Alert severity="warning" size="small">
                         ยังไม่มีเอกสาร - โปรดอัปโหลด
                       </Alert>
                     )}

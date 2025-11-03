@@ -32,17 +32,11 @@ export type WorkflowState =
 export interface Payment {
   phase: 1 | 2;
   amount: number;
-  status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED' | 'PAID';
+  status: 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
   transactionId?: string;
   paidAt?: string;
   receiptUrl?: string;
 }
-
-export type PaymentCollection = Payment[] & {
-  phase1?: Payment;
-  phase2?: Payment;
-  [phase: string]: Payment | undefined;
-};
 
 export interface Document {
   id: string;
@@ -66,86 +60,6 @@ export interface Inspection {
   completedAt?: string;
 }
 
-export interface ReviewData {
-  completeness?: number;
-  accuracy?: number;
-  compliance?: number;
-  riskLevel?: string;
-  reviewer?: string;
-  reviewedAt?: string;
-  notes?: string;
-  [key: string]: string | number | boolean | null | undefined;
-}
-
-export interface CCPResult {
-  id: string;
-  name: string;
-  description?: string;
-  maxScore?: number;
-  score?: number;
-  notes?: string;
-  photos?: string[];
-}
-
-export interface InspectionChecklistItem {
-  id: string;
-  question: string;
-  description?: string;
-  score?: number;
-  status?: string;
-  notes?: string;
-  photos?: string[];
-}
-
-export interface InspectionSummary {
-  type?: 'ON_SITE' | 'VDO_CALL';
-  totalScore?: number;
-  passStatus?: string;
-  inspectorName?: string;
-  inspectedAt?: string;
-  inspectedBy?: string;
-  inspectorId?: string;
-  notes?: string;
-  decision?: string;
-  score?: number;
-  finalNotes?: string;
-  ccps?: CCPResult[];
-  checklist?: InspectionChecklistItem[];
-  photos?: string[];
-  attachments?: string[];
-}
-
-export interface ApprovalData {
-  decision?: string;
-  notes?: string;
-  approvedAt?: string;
-  approvedBy?: string;
-  [key: string]: string | number | boolean | null | undefined;
-}
-
-export interface FarmInfo {
-  name?: string;
-  farmName?: string;
-  address?: string;
-  farmAddress?: string;
-  size?: number | string;
-  farmSize?: number | string;
-  cropType?: string;
-  province?: string;
-  farmType?: string;
-  [key: string]: string | number | boolean | null | undefined;
-}
-
-export interface FarmerInfo {
-  name?: string;
-  farmerName?: string;
-  phone?: string;
-  email?: string;
-  experience?: number | string;
-  idCard?: string;
-  [key: string]: string | number | boolean | null | undefined;
-}
-
 export interface Application {
   id: string;
   applicationNumber: string;
@@ -156,28 +70,15 @@ export interface Application {
   createdAt: string;
   updatedAt: string;
   submittedAt?: string;
-  workflowState?: WorkflowState; // Legacy field support
-  farmName?: string;
-  farmInfo?: FarmInfo;
-  farmerInfo?: FarmerInfo;
-  reviewData?: ReviewData;
-  inspectionData?: InspectionSummary;
-  approvalData?: ApprovalData;
-  inspections: Inspection[];
-  inspection?: Inspection;
-  payments: PaymentCollection;
+  payments: Payment[];
   documents: Document[];
+  inspections: Inspection[];
   rejectionCount: number;
   approvalScore?: number;
   certificateNumber?: string;
   certificateIssuedAt?: string;
   certificateUrl?: string;
 }
-
-type UpdateApplicationFn = {
-  (application: Application): Promise<void>;
-  (id: string, data: any): Promise<void>;
-};
 
 interface ApplicationContextType {
   applications: Application[];
@@ -187,7 +88,7 @@ interface ApplicationContextType {
   fetchApplications: () => Promise<void>;
   fetchApplicationById: (id: string) => Promise<void>;
   createApplication: (farmData: any) => Promise<Application>;
-  updateApplication: UpdateApplicationFn;
+  updateApplication: (id: string, data: any) => Promise<void>;
   submitApplication: (id: string) => Promise<void>;
   recordPayment: (applicationId: string, phase: 1 | 2, paymentData: any) => Promise<void>;
   uploadDocument: (applicationId: string, documentData: FormData) => Promise<void>;
@@ -243,7 +144,7 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
         {
           maxAttempts: 2,
           initialDelay: 500,
-          onRetry: (attempt: number, error: Error) => {
+          onRetry: (attempt, error) => {
             console.warn(`🔄 Fetch applications retry ${attempt}/2:`, error.message);
           },
         }
@@ -283,7 +184,7 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
         {
           maxAttempts: 2,
           initialDelay: 500,
-          onRetry: (attempt: number, error: Error) => {
+          onRetry: (attempt, error) => {
             console.warn(`🔄 Fetch application retry ${attempt}/2:`, error.message);
           },
         }
@@ -326,7 +227,7 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
         {
           maxAttempts: 3,
           initialDelay: 1000,
-          onRetry: (attempt: number, error: Error) => {
+          onRetry: (attempt, error) => {
             console.warn(`🔄 Create application retry ${attempt}/3:`, error.message);
           },
         }
@@ -334,7 +235,7 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
 
       const newApplication = data.application;
 
-  setApplications((prev: Application[]) => [...prev, newApplication]);
+      setApplications((prev) => [...prev, newApplication]);
       setCurrentApplication(newApplication);
 
       return newApplication;
@@ -349,17 +250,7 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
   };
 
   // Update application (with Retry)
-  const syncApplicationsState = (updatedApplication: Application) => {
-    setApplications((prev: Application[]) =>
-      prev.map((app: Application) => (app.id === updatedApplication.id ? updatedApplication : app))
-    );
-
-    if (currentApplication?.id === updatedApplication.id) {
-      setCurrentApplication(updatedApplication);
-    }
-  };
-
-  const performUpdate = async (id: string, data: any) => {
+  const updateApplication = async (id: string, data: any) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -385,14 +276,19 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
         {
           maxAttempts: 3,
           initialDelay: 1000,
-          onRetry: (attempt: number, error: Error) => {
+          onRetry: (attempt, error) => {
             console.warn(`🔄 Update application retry ${attempt}/3:`, error.message);
           },
         }
       );
 
       const updatedApplication = responseData.application;
-      syncApplicationsState(updatedApplication);
+
+      setApplications((prev) => prev.map((app) => (app.id === id ? updatedApplication : app)));
+
+      if (currentApplication?.id === id) {
+        setCurrentApplication(updatedApplication);
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'An error occurred';
       setError(errorMessage);
@@ -401,19 +297,6 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const updateApplication: UpdateApplicationFn = async (
-    idOrApplication: string | Application,
-    data?: any
-  ) => {
-    if (typeof idOrApplication === 'string') {
-      await performUpdate(idOrApplication, data ?? {});
-      return;
-    }
-
-    const applicationData = idOrApplication;
-    syncApplicationsState(applicationData);
   };
 
   // Submit application
@@ -434,9 +317,7 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
       const data = await response.json();
       const submittedApplication = data.application;
 
-      setApplications((prev: Application[]) =>
-        prev.map((app: Application) => (app.id === id ? submittedApplication : app))
-      );
+      setApplications((prev) => prev.map((app) => (app.id === id ? submittedApplication : app)));
 
       if (currentApplication?.id === id) {
         setCurrentApplication(submittedApplication);
@@ -473,8 +354,8 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
       const data = await response.json();
       const updatedApplication = data.application;
 
-      setApplications((prev: Application[]) =>
-        prev.map((app: Application) => (app.id === applicationId ? updatedApplication : app))
+      setApplications((prev) =>
+        prev.map((app) => (app.id === applicationId ? updatedApplication : app))
       );
 
       if (currentApplication?.id === applicationId) {
@@ -511,8 +392,8 @@ export function ApplicationProvider({ children }: ApplicationProviderProps) {
       const data = await response.json();
       const updatedApplication = data.application;
 
-      setApplications((prev: Application[]) =>
-        prev.map((app: Application) => (app.id === applicationId ? updatedApplication : app))
+      setApplications((prev) =>
+        prev.map((app) => (app.id === applicationId ? updatedApplication : app))
       );
 
       if (currentApplication?.id === applicationId) {
@@ -559,9 +440,4 @@ export function useApplication() {
     throw new Error('useApplication must be used within an ApplicationProvider');
   }
   return context;
-}
-
-// Temporary alias for legacy imports while refactor stabilizes
-export function useApplicationContext() {
-  return useApplication();
 }

@@ -9,7 +9,6 @@
 const express = require('express');
 const router = express.Router();
 const logger = require('../utils/logger');
-const Notification = require('../models/Notification');
 
 /**
  * Initialize payment routes with dependencies
@@ -50,22 +49,6 @@ function initializePaymentRoutes(dependencies) {
         applicationId,
         farmerId,
         type
-      });
-
-      // Send payment required notification
-      await Notification.createAndSend({
-        userId: farmerId,
-        type: 'payment_required',
-        title: 'กรุณาชำระค่าธรรมเนียม',
-        message: `กรุณาชำระค่าธรรมเนียมจำนวน ${payment.amount} บาท สำหรับคำขอเลขที่ ${payment.applicationId} ภายใน 7 วัน`,
-        priority: 'high',
-        actionUrl: `/payments/${payment._id}`,
-        actionLabel: 'ชำระเงิน',
-        relatedEntity: {
-          entityType: 'payment',
-          entityId: payment._id
-        },
-        deliveryMethods: ['realtime', 'email']
       });
 
       res.status(201).json({
@@ -136,22 +119,6 @@ function initializePaymentRoutes(dependencies) {
         method,
         receiptNumber,
         receiptUrl
-      });
-
-      // Send payment received notification
-      await Notification.createAndSend({
-        userId: payment.farmerId,
-        type: 'payment_received',
-        title: 'ได้รับการชำระเงินแล้ว',
-        message: `การชำระเงินจำนวน ${payment.amount} บาท สำหรับคำขอเลขที่ ${payment.applicationId} ได้รับการยืนยันแล้ว ระบบจะดำเนินการต่อไป`,
-        priority: 'medium',
-        actionUrl: `/applications/${payment.applicationId}`,
-        actionLabel: 'ดูคำขอ',
-        relatedEntity: {
-          entityType: 'payment',
-          entityId: payment._id
-        },
-        deliveryMethods: ['realtime', 'email']
       });
 
       res.json({
