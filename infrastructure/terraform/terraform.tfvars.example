@@ -1,0 +1,125 @@
+# ============================================================================
+# Terraform Variables Example
+# Copy this file to terraform.tfvars and update with your values
+# ============================================================================
+
+# ------------------------------
+# General Configuration
+# ------------------------------
+
+project_name = "botanical-audit"
+environment  = "production"
+aws_region   = "ap-southeast-1" # Bangkok, Thailand
+
+# ------------------------------
+# Existing Resources Configuration (Option 1: Data Sources)
+# Set use_existing_vpc = true to use your existing AWS resources
+# ------------------------------
+
+use_existing_vpc     = true
+existing_vpc_id      = "vpc-03768ea49251845c3"
+existing_subnet_ids  = ["subnet-0a9aedf2d5d4793b4"]
+existing_instance_id = "i-036cad13893eb6511"
+
+# ------------------------------
+# VPC Configuration (only used if use_existing_vpc = false)
+# ------------------------------
+
+vpc_cidr               = "10.0.0.0/16"
+availability_zones     = ["ap-southeast-1a", "ap-southeast-1b"]
+public_subnet_cidrs    = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnet_cidrs   = ["10.0.11.0/24", "10.0.12.0/24"]
+enable_nat_gateway     = true
+single_nat_gateway     = false # Use one NAT per AZ for high availability
+
+# ------------------------------
+# Compute Configuration
+# ------------------------------
+
+ec2_instance_type    = "t3.medium" # 2 vCPU, 4GB RAM
+ec2_key_name         = null        # Set to your EC2 key pair name for SSH access
+asg_min_size         = 2
+asg_max_size         = 10
+asg_desired_capacity = 2
+backend_port         = 5000
+
+# ------------------------------
+# Database Configuration
+# ------------------------------
+
+# MongoDB Atlas connection string (keep this secret!)
+mongodb_connection_string = "mongodb+srv://app-user:<password>@botanical-audit-prod.xxxxx.mongodb.net/botanical_audit?retryWrites=true&w=majority"
+
+# Redis (optional - set enable_redis = true if needed)
+enable_redis   = false
+redis_node_type = "cache.t3.micro"
+
+# ------------------------------
+# Storage Configuration
+# ------------------------------
+
+s3_force_destroy             = false # Set to true only for testing
+s3_versioning_enabled        = true
+s3_lifecycle_glacier_days    = 90    # Days before moving to Glacier
+s3_lifecycle_expiration_days = 2555  # ~7 years
+
+# ------------------------------
+# Domain & SSL Configuration
+# ------------------------------
+
+domain_name         = "botanical-audit.com"
+api_subdomain       = "api"
+create_route53_zone = true
+acm_certificate_arn = "" # Leave empty to create new certificate
+
+# ------------------------------
+# Monitoring & Alerting
+# ------------------------------
+
+enable_cloudwatch_alarms = true
+alarm_email              = "admin@botanical-audit.com" # Email for alerts
+cpu_alarm_threshold      = 80                          # Percentage
+memory_alarm_threshold   = 85                          # Percentage
+
+# ------------------------------
+# Security Configuration
+# ------------------------------
+
+enable_kms_encryption = true
+kms_key_rotation      = true
+
+# Allow SSH from specific IPs only (empty list = no SSH)
+allowed_ssh_cidr_blocks = []
+# allowed_ssh_cidr_blocks = ["1.2.3.4/32"]  # Your office IP
+
+# Allow ALB access from internet
+allowed_alb_cidr_blocks = ["0.0.0.0/0"]
+
+# ------------------------------
+# Application Configuration
+# ------------------------------
+
+nodejs_version = "20.x"
+
+# GitHub repository for auto-deployment (optional)
+enable_auto_deploy = false
+github_repo        = "jonmaxmore/Botanical-Audit-Framework"
+github_branch      = "main"
+
+# Application environment variables (sensitive - keep secret!)
+app_environment_vars = {
+  NODE_ENV   = "production"
+  JWT_SECRET = "your-super-secret-jwt-key-here-change-this"
+  PORT       = "5000"
+  # Add more environment variables as needed
+}
+
+# ------------------------------
+# Additional Tags
+# ------------------------------
+
+additional_tags = {
+  CostCenter = "Production"
+  Team       = "GACP-Platform"
+  Contact    = "admin@botanical-audit.com"
+}

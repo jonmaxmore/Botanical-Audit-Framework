@@ -27,7 +27,7 @@ describe('Mongoose Models Validation', () => {
   describe('Record Model', () => {
     test('should have correct schema fields', () => {
       const paths = Object.keys(Record.schema.paths);
-      
+
       expect(paths).toContain('recordId');
       expect(paths).toContain('type');
       expect(paths).toContain('farmId');
@@ -123,7 +123,7 @@ describe('Mongoose Models Validation', () => {
 
     test('should have capped collection options', () => {
       const options = AuditLog.schema.options;
-      
+
       expect(options.capped).toBeDefined();
       expect(options.capped.size).toBe(5 * 1024 * 1024 * 1024); // 5GB
       expect(options.capped.max).toBe(10000000); // 10M documents
@@ -374,8 +374,8 @@ describe('Mongoose Models Validation', () => {
     });
 
     test('should have geospatial fields', () => {
-      const locationPaths = Object.keys(Farm.schema.paths).filter(
-        path => path.startsWith('location')
+      const locationPaths = Object.keys(Farm.schema.paths).filter(path =>
+        path.startsWith('location')
       );
 
       expect(locationPaths.length).toBeGreaterThan(0);
@@ -436,21 +436,21 @@ describe('Mongoose Models Validation', () => {
   describe('Model Indexes', () => {
     test('Record should have compound indexes', () => {
       const indexes = Record.schema.indexes();
-      
+
       // Should have at least 6 indexes (as documented)
       expect(indexes.length).toBeGreaterThanOrEqual(6);
     });
 
     test('AuditLog should have compound indexes', () => {
       const indexes = AuditLog.schema.indexes();
-      
+
       // Should have at least 4 indexes
       expect(indexes.length).toBeGreaterThanOrEqual(4);
     });
 
     test('IotReading should have compound indexes', () => {
       const indexes = IotReading.schema.indexes();
-      
+
       // Should have at least 5 indexes
       expect(indexes.length).toBeGreaterThanOrEqual(5);
     });
