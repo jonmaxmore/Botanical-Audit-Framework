@@ -115,8 +115,8 @@ const AdminDashboardPage: React.FC = () => {
   // Priority scoring for pending approvals
   const getPriority = (app: Application) => {
     const inspectionScore = app.approvalScore || 0;
-    const daysWaiting = app.submittedDate ? Math.floor(
-      (Date.now() - ((app.submittedDate) ? new Date(app.submittedDate) : new Date()).getTime()) / (1000 * 60 * 60 * 24)
+    const daysWaiting = app.submittedAt ? Math.floor(
+      (Date.now() - ((app.submittedAt) ? new Date(app.submittedAt) : new Date()).getTime()) / (1000 * 60 * 60 * 24)
     ) : 0;
 
     if (inspectionScore >= 90 && daysWaiting > 3)
@@ -211,7 +211,7 @@ const AdminDashboardPage: React.FC = () => {
                 {
                   pendingApprovalApps.filter((app) => {
                     const days = Math.floor(
-                      (Date.now() - ((app.submittedDate) ? new Date(app.submittedDate) : new Date()).getTime()) / (1000 * 60 * 60 * 24)
+                      (Date.now() - ((app.submittedAt) ? new Date(app.submittedAt) : new Date()).getTime()) / (1000 * 60 * 60 * 24)
                     );
                     return days > 3;
                   }).length
@@ -298,8 +298,8 @@ const AdminDashboardPage: React.FC = () => {
               <List>
                 {pendingApprovalApps.slice(0, 5).map((app) => {
                   const priority = getPriority(app);
-                  const daysWaiting = app.submittedDate ? Math.floor(
-                    (Date.now() - ((app.submittedDate) ? new Date(app.submittedDate) : new Date()).getTime()) / (1000 * 60 * 60 * 24)
+                  const daysWaiting = app.submittedAt ? Math.floor(
+                    (Date.now() - ((app.submittedAt) ? new Date(app.submittedAt) : new Date()).getTime()) / (1000 * 60 * 60 * 24)
                   ) : 0;
                   const inspectionScore = app.approvalScore || 0;
 

@@ -122,7 +122,7 @@ const InspectorDashboardPage: React.FC = () => {
                 : 'scheduled',
           scheduledDate: scheduledDate.toISOString().split('T')[0],
           scheduledTime: `${9 + (index % 6)}:00`,
-          address: /* removed farmInfo */ ""?.address,
+          address: "[Address]",
           score: app.currentState === 'INSPECTION_COMPLETED' ? 85 + (index % 15) : undefined,
         };
       });

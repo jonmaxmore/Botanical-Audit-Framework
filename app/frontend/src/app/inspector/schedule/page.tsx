@@ -97,7 +97,7 @@ const InspectorSchedulePage: React.FC = () => {
           status: index % 2 === 0 ? 'accepted' : 'pending',
           scheduledDate: scheduledDate.toISOString().split('T')[0],
           scheduledTime: `${9 + (index % 6)}:00`,
-          address: /* removed farmInfo */ ""?.address,
+          address: "[Address]",
         };
       });
 

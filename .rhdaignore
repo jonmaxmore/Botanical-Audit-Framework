@@ -1,0 +1,5 @@
+# RHDA (Red Hat Dependency Analytics) Ignore File
+# Ignore packages/config - no dependencies needed
+
+packages/config/
+packages/config/package.json

@@ -122,7 +122,7 @@ const AdminApprovalPage: React.FC = () => {
         currentStep: newStep,
         };
 
-      updateApplication(updatedApp, {});
+      updateApplication(updatedApp.id, updatedApp);
 
       if (decision === 'approve') {
         alert('✅ อนุมัติเรียบร้อย - ระบบจะออกใบรับรอง GACP');
@@ -259,7 +259,7 @@ const AdminApprovalPage: React.FC = () => {
                   วันที่ยื่นใบสมัคร
                 </Typography>
                 <Typography variant="body1" fontWeight="medium">
-                  {((application.submittedDate) ? new Date(application.submittedDate) : new Date()).toLocaleDateString('th-TH', {
+                  {((application.submittedAt) ? new Date(application.submittedAt) : new Date()).toLocaleDateString('th-TH', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
@@ -318,9 +318,9 @@ const AdminApprovalPage: React.FC = () => {
                         <Chip
                           label={reviewData.riskLevel || 'N/A'}
                           color={
-                            reviewData.riskLevel === 'Low'
+                            reviewData.riskLevel === 'low'
                               ? 'success'
-                              : reviewData.riskLevel === 'Medium'
+                              : reviewData.riskLevel === 'medium'
                                 ? 'warning'
                                 : 'error'
                           }
@@ -370,7 +370,7 @@ const AdminApprovalPage: React.FC = () => {
                       severity={
                         inspectionPass === 'pass'
                           ? 'success'
-                          : inspectionPass === 'conditional'
+                          : false /* conditional removed */
                             ? 'warning'
                             : 'error'
                       }
@@ -384,7 +384,7 @@ const AdminApprovalPage: React.FC = () => {
                         สถานะ:{' '}
                         {inspectionPass === 'pass'
                           ? 'ผ่าน (Pass) ✅'
-                          : inspectionPass === 'conditional'
+                          : false /* conditional removed */
                             ? 'มีเงื่อนไข (Conditional) ⚠️'
                             : 'ไม่ผ่าน (Fail) ❌'}
                       </Typography>
@@ -395,7 +395,7 @@ const AdminApprovalPage: React.FC = () => {
                       คะแนนแต่ละ CCP:
                     </Typography>
                     <Grid container spacing={1}>
-                      {latestInspection?.ccps?.map((ccp: any) => (
+                      {(latestInspection as any)?.ccps?.map((ccp: any) => (
                         <Grid item xs={12} md={6} key={ccp.id}>
                           <Accordion>
                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -448,10 +448,10 @@ const AdminApprovalPage: React.FC = () => {
                     </Grid>
 
                     {/* Final Notes */}
-                    {latestInspection?.finalNotes && (
+                    {(latestInspection as any)?.finalNotes && (
                       <Alert severity="info" icon={<InfoIcon />} sx={{ mt: 2 }}>
                         <Typography variant="body2">
-                          <strong>สรุปผล:</strong> {latestInspection?.finalNotes}
+                          <strong>สรุปผล:</strong> {(latestInspection as any)?.finalNotes}
                         </Typography>
                       </Alert>
                     )}

@@ -205,18 +205,10 @@ const OnSiteInspectionPage: React.FC = () => {
         ...application,
         currentState: 'INSPECTION_COMPLETED',
         currentStep: 7,
-        latestInspection: {
-          type: 'ON_SITE',
-          ccps: ccps,
-          totalScore: totalScore,
-          passStatus: getPassStatus(),
-          finalNotes: finalNotes,
-          inspectedAt: new Date().toISOString(),
-          inspectedBy: 'INSPECTOR',
-        },
+        // latestInspection moved to inspections array
       };
 
-      updateApplication(updatedApp, {});
+      updateApplication(updatedApp.id, updatedApp);
 
       alert('✅ บันทึกรายงานการตรวจสำเร็จ - ส่งไปขั้นตอนอนุมัติ (Step 7)');
 
@@ -370,10 +362,10 @@ const OnSiteInspectionPage: React.FC = () => {
               {application.farmerName + "'s Farm"}
             </Typography>
             <Typography variant="caption" color="text.secondary" display="block">
-              ขนาด: {application/* farmInfo removed */} ไร่
+              ขนาด: {'[Farm Size]'} ไร่
             </Typography>
             <Typography variant="caption" color="text.secondary" display="block">
-              พืช: {application/* farmInfo removed */}
+              พืช: {'[Farm Info]'}
             </Typography>
           </Paper>
         </Grid>

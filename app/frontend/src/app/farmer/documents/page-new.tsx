@@ -125,11 +125,13 @@ const DocumentsPage = () => {
     setError('');
 
     try {
-      await uploadDocument(applicationId, {
-        documentType: selectedDocType,
-        file: selectedFile,
-        remarks,
-      });
+      // Create proper FormData object
+      const formData = new FormData();
+      if (selectedFile) formData.append('file', selectedFile);
+      if (selectedDocType) formData.append('documentType', selectedDocType);
+      if (remarks) formData.append('remarks', remarks);
+      
+      await uploadDocument(applicationId, formData);
 
       alert('อัปโหลดเอกสารสำเร็จ!');
       handleCloseUploadDialog();

@@ -149,9 +149,9 @@ const ApplicationDetailPage = () => {
   const getSmartNextAction = () => {
     if (!currentApplication) return null;
 
-    const { workflowState } = currentApplication;
+    // currentState removed - use currentState instead
 
-    switch (workflowState) {
+    switch (currentState) {
       case 'DRAFT':
         return (
           <Button
@@ -275,14 +275,12 @@ const ApplicationDetailPage = () => {
   }
 
   const {
-    workflowState,
+    currentState,
     currentStep,
     createdAt,
-    farmInfo,
-    farmerInfo,
     documents,
     payments,
-    inspection,
+    inspections,
   } = currentApplication;
 
   return (
@@ -315,8 +313,8 @@ const ApplicationDetailPage = () => {
                 สถานะปัจจุบัน
               </Typography>
               <Chip
-                label={getStatusText(workflowState)}
-                color={getStatusColor(workflowState)}
+                label={getStatusText(currentState)}
+                color={getStatusColor(currentState)}
                 sx={{ mt: 1 }}
               />
             </Grid>
@@ -345,7 +343,7 @@ const ApplicationDetailPage = () => {
         <Typography variant="h6" gutterBottom>
           ความคืบหน้า
         </Typography>
-        <WorkflowProgress currentState={workflowState} currentStep={currentStep} />
+        <WorkflowProgress currentState={currentState} currentStep={currentStep} />
       </Paper>
 
       {/* Smart Next Action */}
@@ -367,31 +365,31 @@ const ApplicationDetailPage = () => {
             <Typography variant="body2" color="text.secondary">
               ชื่อฟาร์ม
             </Typography>
-            <Typography variant="body1">{farmInfo?.farmName || '-'}</Typography>
+            <Typography variant="body1">{'[Farm Name]'}</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="body2" color="text.secondary">
               พื้นที่
             </Typography>
-            <Typography variant="body1">{farmInfo?.farmSize || '-'} ไร่</Typography>
+            <Typography variant="body1">{'[Size]'} ไร่</Typography>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="body2" color="text.secondary">
               ที่อยู่
             </Typography>
-            <Typography variant="body1">{farmInfo?.farmAddress || '-'}</Typography>
+            <Typography variant="body1">{'[Address]'}</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="body2" color="text.secondary">
               จังหวัด
             </Typography>
-            <Typography variant="body1">{farmInfo?.province || '-'}</Typography>
+            <Typography variant="body1">{'[Province]'}</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="body2" color="text.secondary">
               ประเภทพืช
             </Typography>
-            <Typography variant="body1">{farmInfo?.cropType || '-'}</Typography>
+            <Typography variant="body1">{'[Crop Type]'}</Typography>
           </Grid>
         </Grid>
       </Paper>
@@ -407,25 +405,25 @@ const ApplicationDetailPage = () => {
             <Typography variant="body2" color="text.secondary">
               ชื่อ-นามสกุล
             </Typography>
-            <Typography variant="body1">{farmerInfo?.farmerName || '-'}</Typography>
+            <Typography variant="body1">{currentApplication.farmerName}</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="body2" color="text.secondary">
               เบอร์โทรศัพท์
             </Typography>
-            <Typography variant="body1">{farmerInfo?.phone || '-'}</Typography>
+            <Typography variant="body1">{'[Phone]'}</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="body2" color="text.secondary">
               อีเมล
             </Typography>
-            <Typography variant="body1">{farmerInfo?.email || '-'}</Typography>
+            <Typography variant="body1">{'[Email]'}</Typography>
           </Grid>
           <Grid item xs={12} md={6}>
             <Typography variant="body2" color="text.secondary">
               ประสบการณ์
             </Typography>
-            <Typography variant="body1">{farmerInfo?.experience || '-'} ปี</Typography>
+            <Typography variant="body1">{'[0]'} ปี</Typography>
           </Grid>
         </Grid>
       </Paper>
@@ -470,8 +468,8 @@ const ApplicationDetailPage = () => {
                   5,000 บาท
                 </Typography>
                 <Chip
-                  label={payments?.phase1?.status === "COMPLETED" ? 'ชำระแล้ว' : 'รอชำระเงิน'}
-                  color={payments?.phase1?.status === "COMPLETED" ? 'success' : 'warning'}
+                  label={payments?.[0]?.status === "COMPLETED" ? 'ชำระแล้ว' : 'รอชำระเงิน'}
+                  color={payments?.[0]?.status === "COMPLETED" ? 'success' : 'warning'}
                   size="small"
                   sx={{ mt: 1 }}
                 />
@@ -488,8 +486,8 @@ const ApplicationDetailPage = () => {
                   25,000 บาท
                 </Typography>
                 <Chip
-                  label={payments?.phase2?.status === "COMPLETED" ? 'ชำระแล้ว' : 'รอชำระเงิน'}
-                  color={payments?.phase2?.status === "COMPLETED" ? 'success' : 'default'}
+                  label={payments?.[1]?.status === "COMPLETED" ? 'ชำระแล้ว' : 'รอชำระเงิน'}
+                  color={payments?.[1]?.status === "COMPLETED" ? 'success' : 'default'}
                   size="small"
                   sx={{ mt: 1 }}
                 />
@@ -500,15 +498,15 @@ const ApplicationDetailPage = () => {
       </Paper>
 
       {/* Inspection Results (if completed) */}
-      {inspection && inspection.score !== undefined && (
+      {inspections?.[0] && inspections[0].score !== undefined && (
         <Paper elevation={2} sx={{ p: 3, mb: 3 }}>
           <Typography variant="h6" gutterBottom color="primary">
             ผลการตรวจฟาร์ม
           </Typography>
           <Divider sx={{ mb: 2 }} />
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Typography variant="h4" color={inspection.score >= 80 ? 'success.main' : 'error.main'}>
-              {inspection.score} คะแนน
+            <Typography variant="h4" color={inspections[0].score >= 80 ? 'success.main' : 'error.main'}>
+              {inspections[0].score} คะแนน
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ ml: 2 }}>
               (ผ่านเกณฑ์ ≥ 80 คะแนน)
@@ -516,15 +514,15 @@ const ApplicationDetailPage = () => {
           </Box>
           <LinearProgress
             variant="determinate"
-            value={inspection.score}
-            color={inspection.score >= 80 ? 'success' : 'error'}
+            value={inspections[0].score}
+            color={inspections[0].score >= 80 ? 'success' : 'error'}
             sx={{ height: 10, borderRadius: 5 }}
           />
         </Paper>
       )}
 
       {/* Action Button (for DRAFT status) */}
-      {workflowState === 'DRAFT' && (
+      {currentState === 'DRAFT' && (
         <Paper elevation={2} sx={{ p: 3 }}>
           <Button
             variant="contained"

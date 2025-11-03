@@ -103,7 +103,7 @@ const PaymentPage = () => {
     setError('');
 
     try {
-      await recordPayment(applicationId, parseInt(phase), {
+      await recordPayment(applicationId, (parseInt(phase) === 1 ? 1 : 2), {
         method: paymentMethod,
         receiptFile: receipt,
         transactionRef: transactionRef || undefined,

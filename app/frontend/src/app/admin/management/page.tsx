@@ -158,7 +158,7 @@ const AdminManagementPage: React.FC = () => {
       issueDate: new Date().toISOString(),
       expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year
       status: 'active',
-      score: app.inspections?.totalScore || 0,
+      score: app.approvalScore || 0,
     }));
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {

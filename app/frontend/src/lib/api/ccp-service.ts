@@ -157,7 +157,7 @@ class GACPCCPService {
       const response = await gacpApiClient.getGACPCCPs();
 
       if (response.success && response.data) {
-        this.ccpFramework = response.data as CCPFrameworkInfo;
+        this.ccpFramework = response.data as unknown as CCPFrameworkInfo;
 
         console.log('[GACP CCP] Service initialized with', {
           totalCCPs: this.ccpFramework.totalCCPs,

@@ -102,7 +102,7 @@ const OfficerApplicationsPage: React.FC = () => {
 
       // Map to table format
       const tableData = filtered.map((app) => {
-        const submittedDate = new Date(app.submittedDate || Date.now());
+        const submittedDate = new Date(app.submittedAt || Date.now());
         const daysWaiting = Math.floor(
           (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
         );

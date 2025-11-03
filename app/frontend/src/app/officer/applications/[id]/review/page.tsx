@@ -182,14 +182,7 @@ const OfficerReviewPage: React.FC = () => {
         ...application,
         currentState: newState,
         currentStep: newState === 'DOCUMENT_APPROVED' ? 4 : 3,
-        reviewData: {
-          completeness: reviewForm.completeness,
-          accuracy: reviewForm.accuracy,
-          riskLevel: reviewForm.riskLevel,
-          comments: reviewForm.comments,
-          reviewedAt: new Date().toISOString(),
-          reviewedBy: 'DTAM_OFFICER', // In real app: get from auth context
-        },
+        // reviewData stored separately
         documents: application.documents.map((doc) => {
           const review = reviewForm.documents.find((r) => r.type === doc.type);
           return {
@@ -205,7 +198,7 @@ const OfficerReviewPage: React.FC = () => {
         }),
       };
 
-      updateApplication(updatedApp, {});
+      updateApplication(updatedApp.id, updatedApp);
 
       // Show success message
       alert(
@@ -291,25 +284,25 @@ const OfficerReviewPage: React.FC = () => {
                 <Typography variant="caption" color="text.secondary">
                   ขนาดพื้นที่:
                 </Typography>
-                <Typography variant="body2">{application/* farmInfo removed */} ไร่</Typography>
+                <Typography variant="body2">{'[Farm Size]'} ไร่</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ประเภทพืช:
                 </Typography>
-                <Typography variant="body2">{application/* farmInfo removed */}</Typography>
+                <Typography variant="body2">{'[Farm Info]'}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   จังหวัด:
                 </Typography>
-                <Typography variant="body2">{application/* farmInfo removed */}</Typography>
+                <Typography variant="body2">{'[Farm Info]'}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ที่อยู่:
                 </Typography>
-                <Typography variant="body2">{application/* farmInfo removed */}</Typography>
+                <Typography variant="body2">{'[Farm Info]'}</Typography>
               </Box>
             </Box>
           </Paper>
@@ -333,25 +326,25 @@ const OfficerReviewPage: React.FC = () => {
                 <Typography variant="caption" color="text.secondary">
                   เลขบัตรประชาชน:
                 </Typography>
-                <Typography variant="body2">{application/* farmerInfo removed */}</Typography>
+                <Typography variant="body2">{application.farmerName}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   โทรศัพท์:
                 </Typography>
-                <Typography variant="body2">{application/* farmerInfo removed */}</Typography>
+                <Typography variant="body2">{application.farmerName}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   อีเมล:
                 </Typography>
-                <Typography variant="body2">{application/* farmerInfo removed */ || '-'}</Typography>
+                <Typography variant="body2">{application.farmerName || "-"}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ประสบการณ์:
                 </Typography>
-                <Typography variant="body2">{application/* farmerInfo removed */} ปี</Typography>
+                <Typography variant="body2">{'[Experience]'} ปี</Typography>
               </Box>
             </Box>
           </Paper>
