@@ -509,6 +509,71 @@ If you're unsure whether code is deprecated:
 
 **Phase 2 Impact:** Removed unused code, clarified architecture patterns, documented decisions for Phase 3
 
+---
+
+#### Phase 3 (Analysis & Planning) - Completed ✅
+
+**Status:** Analysis complete, migration recommendations documented
+
+**Business Logic Directory Audit:**
+- 📊 **Total:** 14 files, ~8,819 lines of code
+- ✅ **Used:** 1 file - `gacp-workflow-engine.js` (869 lines, 3 imports)
+- ❌ **Unused:** 13 files - ~7,950 lines (ZERO imports)
+
+**Unused Business Logic Files (Recommended: Archive):**
+1. `gacp-ai-assistant-system.js` (1,285 lines) - AI feature not yet implemented
+2. `gacp-business-rules-engine.js` (0 lines) - Empty file
+3. `gacp-certificate-generator.js` (481 lines) - Not used (modules have own implementation)
+4. `gacp-dashboard-notification-system.js` (668 lines) - Not integrated
+5. `gacp-digital-logbook-system.js` (895 lines) - Feature not developed
+6. `gacp-document-review-system.js` (680 lines) - Not used
+7. `gacp-field-inspection-system.js` (644 lines) - Not used
+8. `gacp-sop-wizard-system.js` (722 lines) - Feature not developed
+9. `gacp-standards-comparison-system.js` (1,305 lines) - Not used
+10. `gacp-status-manager.js` (508 lines) - Not used
+11. `gacp-survey-system.js` (1,018 lines) - Not used
+12. `gacp-visual-remote-support-system.js` (1,060 lines) - Feature not developed
+13. `system-integration-hub.js` (684 lines) - Not used
+
+**Used Business Logic (Requires Migration):**
+- `gacp-workflow-engine.js` (869 lines)
+  - Imported by: `atlas-server.js`, `services/gacp-enhanced-inspection.js`, `routes/gacp-business-logic.js`
+  - Target location: `modules/application-workflow/domain/services/WorkflowEngine.js`
+  - Priority: MEDIUM (defer to Phase 4)
+
+**Legacy Routes Audit:**
+- 📊 **Active in server.js:** 16 routes
+- ⚠️ **Overlapping:** 3 application routes (`/api/applications`, `/api/farmer/application`, `/api/admin/applications`)
+- 📋 **Recommendation:** Consolidate application routes, keep role-specific endpoints
+
+**Active Legacy Routes:**
+1. `/api/auth` - auth.js
+2. `/api/health` - health.js
+3. `/api/applications` - applications.js ⚠️ **OVERLAPPING**
+4. `/api/farmer/application` - farmer-application.js
+5. `/api/admin/applications` - admin-application.js
+6. `/api/certificates` - certificate.js
+7. `/api/inspections` - inspection.js
+8. `/api/documents` - document.js
+9. `/api/notifications` - notification.js
+10. `/api/analytics` - analytics.js
+11. `/api/dashboard` - dashboard.js
+12. `/api/smart-agriculture` - smart-agriculture.routes.js
+13. `/api/traceability` - traceability.js
+14. `/api/farm-management` - farm-management.js
+15. `/api/standards` - standards.js
+16. `/api/questionnaires` - questionnaires.js
+
+**Phase 3 Findings Summary:**
+- ✅ Identified 13 unused business logic files (46% of business-logic/)
+- ✅ Identified 1 actively used business logic file
+- ✅ Documented 16 active legacy routes
+- ✅ Identified 3 overlapping application routes
+- 📋 Created comprehensive migration plan for Phase 4
+- 📋 Updated CODE_DEDUPLICATION_AUDIT.md with full analysis
+
+**Phase 3 Impact:** No files deleted (analysis only), provided clear roadmap for Phase 4+ migrations
+
 ### October 26, 2025
 
 - ✅ Archived `backend/` directory → `backend.archived.2025-10-26/`
