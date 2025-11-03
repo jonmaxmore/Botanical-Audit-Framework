@@ -1,7 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import Image from 'next/image';
 import {
   Box,
   Container,
@@ -265,16 +264,14 @@ export default function HomePage() {
                   height: { xs: 250, md: 350 },
                   borderRadius: 2,
                   overflow: 'hidden',
-                  boxShadow: '0 10px 40px rgba(0,0,0,0.3)'
+                  boxShadow: '0 10px 40px rgba(0,0,0,0.3)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  background: 'linear-gradient(135deg, #2e7d32 0%, #66bb6a 100%)'
                 }}
               >
-                <Image
-                  src="/images/hero-farming.jpg"
-                  alt="GACP Certified Farming"
-                  fill
-                  style={{ objectFit: 'cover' }}
-                  priority
-                />
+                <AgricultureIcon sx={{ fontSize: 150, color: 'rgba(255,255,255,0.3)' }} />
               </Box>
             </Grid>
           </Grid>
@@ -357,12 +354,17 @@ export default function HomePage() {
           <Grid container spacing={4}>
             <Grid item xs={12} md={6}>
               <Card sx={{ height: '100%', boxShadow: 3 }}>
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image="/images/gacp-standard.jpg"
-                  alt="GACP Standard"
-                />
+                <Box
+                  sx={{
+                    height: 200,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #4caf50 0%, #8bc34a 100%)'
+                  }}
+                >
+                  <VerifiedIcon sx={{ fontSize: 80, color: 'white' }} />
+                </Box>
                 <CardContent>
                   <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
                     มาตรฐาน GACP คืออะไร?
@@ -382,12 +384,17 @@ export default function HomePage() {
 
             <Grid item xs={12} md={6}>
               <Card sx={{ height: '100%', boxShadow: 3 }}>
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image="/images/certification-process.jpg"
-                  alt="Certification Process"
-                />
+                <Box
+                  sx={{
+                    height: 200,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #66bb6a 0%, #aed581 100%)'
+                  }}
+                >
+                  <AssessmentIcon sx={{ fontSize: 80, color: 'white' }} />
+                </Box>
                 <CardContent>
                   <Typography variant="h5" gutterBottom sx={{ fontWeight: 600 }}>
                     กระบวนการรับรอง
@@ -610,21 +617,21 @@ export default function HomePage() {
                 date: '15 ต.ค. 2568',
                 category: 'ประกาศ',
                 title: 'เปิดรับสมัครเกษตรกรเข้าร่วมโครงการรับรอง GACP รุ่นที่ 12',
-                image: '/images/news-1.jpg',
+                icon: 'announcement',
                 tag: 'ใหม่'
               },
               {
                 date: '10 ต.ค. 2568',
                 category: 'อบรม',
                 title: 'อบรมเชิงปฏิบัติการ "การจัดการฟาร์มสมุนไพรตามมาตรฐาน GACP"',
-                image: '/images/news-2.jpg',
+                icon: 'training',
                 tag: 'กำลังดำเนินการ'
               },
               {
                 date: '5 ต.ค. 2568',
                 category: 'ข่าวสาร',
                 title: 'กระทรวงสาธารณสุขมอบรางวัลเกษตรกรดีเด่น ด้านการผลิตสมุนไพร',
-                image: '/images/news-3.jpg',
+                icon: 'news',
                 tag: null
               }
             ].map((news, index) => (
@@ -640,7 +647,24 @@ export default function HomePage() {
                   }}
                 >
                   <Box sx={{ position: 'relative' }}>
-                    <CardMedia component="img" height="180" image={news.image} alt={news.title} />
+                    <Box
+                      sx={{
+                        height: 180,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background:
+                          news.icon === 'announcement'
+                            ? 'linear-gradient(135deg, #ff9800 0%, #ffc107 100%)'
+                            : news.icon === 'training'
+                            ? 'linear-gradient(135deg, #2196f3 0%, #64b5f6 100%)'
+                            : 'linear-gradient(135deg, #4caf50 0%, #81c784 100%)'
+                      }}
+                    >
+                      {news.icon === 'announcement' && <AssignmentIcon sx={{ fontSize: 60, color: 'white' }} />}
+                      {news.icon === 'training' && <AssessmentIcon sx={{ fontSize: 60, color: 'white' }} />}
+                      {news.icon === 'news' && <DescriptionIcon sx={{ fontSize: 60, color: 'white' }} />}
+                    </Box>
                     {news.tag && (
                       <Chip
                         label={news.tag}
