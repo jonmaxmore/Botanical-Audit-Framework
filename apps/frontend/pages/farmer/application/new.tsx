@@ -1,6 +1,6 @@
 /**
  * Application Type Selection Page
- * หน้าเลือกประเภทคำขออนุญาต (PT9/PT10/PT11/GACP)
+ * หน้าเลือกประเภทคำขออนุญาต (GACP)
  */
 
 import React from 'react';
@@ -18,9 +18,6 @@ import {
   Chip,
 } from '@mui/material';
 import {
-  Agriculture as AgricultureIcon,
-  Factory as FactoryIcon,
-  Storefront as StorefrontIcon,
   Verified as VerifiedIcon,
   NavigateNext as NavigateNextIcon,
 } from '@mui/icons-material';
@@ -44,53 +41,17 @@ interface ApplicationType {
 
 const applicationTypes: ApplicationType[] = [
   {
-    id: 'pt9',
-    code: 'PT9',
-    nameTh: 'ใบอนุญาตเพาะปลูกพืชสมุนไพร',
-    nameEn: 'Herbal Cultivation License',
-    description: 'สำหรับเกษตรกรที่ต้องการเพาะปลูกพืชสมุนไพรที่ต้องขออนุญาต',
-    icon: <AgricultureIcon sx={{ fontSize: 60 }} />,
-    color: '#4caf50',
-    href: '/farmer/application/pt9/wizard',
-    fee: 500,
-    processingDays: 30,
-  },
-  {
-    id: 'pt10',
-    code: 'PT10',
-    nameTh: 'ใบอนุญาตแปรรูปพืชสมุนไพร',
-    nameEn: 'Herbal Processing License',
-    description: 'สำหรับผู้ประกอบการที่ต้องการแปรรูปพืชสมุนไพรเป็นผลิตภัณฑ์',
-    icon: <FactoryIcon sx={{ fontSize: 60 }} />,
-    color: '#2196f3',
-    href: '/farmer/application/pt10/wizard',
-    fee: 1000,
-    processingDays: 45,
-  },
-  {
-    id: 'pt11',
-    code: 'PT11',
-    nameTh: 'ใบอนุญาตจำหน่ายพืชสมุนไพร',
-    nameEn: 'Herbal Distribution License',
-    description: 'สำหรับผู้ประกอบการที่ต้องการจำหน่ายพืชสมุนไพรหรือผลิตภัณฑ์',
-    icon: <StorefrontIcon sx={{ fontSize: 60 }} />,
-    color: '#ff9800',
-    href: '/farmer/application/pt11/wizard',
-    fee: 750,
-    processingDays: 30,
-  },
-  {
     id: 'gacp',
     code: 'GACP',
     nameTh: 'ใบรับรอง GACP',
     nameEn: 'GACP Certification',
-    description: 'ใบรับรองการปฏิบัติทางการเกษตรที่ดีสำหรับพืชสมุนไพร (มีอยู่แล้ว)',
+    description: 'ใบรับรองการปฏิบัติทางการเกษตรและการเก็บรกัษาที่ดีสำหรับพืชสมุนไพร (Good Agricultural and Collection Practices)',
     icon: <VerifiedIcon sx={{ fontSize: 60 }} />,
     color: '#9c27b0',
     href: '/farmer/application/create',
     fee: 2000,
     processingDays: 60,
-    disabled: false, // มีอยู่แล้ว
+    disabled: false,
   },
 ];
 
@@ -106,7 +67,7 @@ const ApplicationTypeSelectionPage: React.FC = () => {
     <>
       <Head>
         <title>ยื่นคำขออนุญาตใหม่ | GACP System</title>
-        <meta name="description" content="เลือกประเภทคำขออนุญาต PT9, PT10, PT11 หรือ GACP" />
+        <meta name="description" content="ยื่นคำขอใบรับรอง GACP" />
       </Head>
 
       <Box sx={{ bgcolor: 'grey.50', minHeight: '100vh', py: 4 }}>
@@ -141,10 +102,10 @@ const ApplicationTypeSelectionPage: React.FC = () => {
             }}
           >
             <Typography variant="h4" gutterBottom fontWeight="bold">
-              ยื่นคำขออนุญาตใหม่
+              ยื่นคำขอใบรับรอง GACP
             </Typography>
             <Typography variant="body1" sx={{ opacity: 0.9 }}>
-              เลือกประเภทคำขออนุญาตที่ท่านต้องการยื่น
+              ใบรับรองการปฏิบัติทางการเกษตรและการเก็บรักษาที่ดีสำหรับพืชสมุนไพร
             </Typography>
           </Paper>
 

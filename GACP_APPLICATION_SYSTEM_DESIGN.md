@@ -22,19 +22,19 @@
 
 ## 1️⃣ System Overview {#1-overview}
 
-### ความแตกต่างระหว่าง PT9-PT11 และ GACP
+### GACP Certification Overview
 
-| Aspect | PT9-PT11 | GACP |
-|--------|----------|------|
-| **Purpose** | ใบอนุญาตตามกฎหมาย | ใบรับรองมาตรฐานคุณภาพ |
-| **Issuer** | กรมการแพทย์แผนไทยฯ | กรมการแพทย์แผนไทยฯ (ส่วนต่าง) |
-| **Process** | ขออนุญาต → ตรวจสอบเอกสาร → อนุมัติ | สมัคร → ตรวจสอบเอกสาร → ตรวจประเมินภาคสนาม → รับรอง |
-| **Duration** | 30-60 วัน | 90-180 วัน |
-| **Validity** | 3-5 ปี | 3 ปี |
-| **Focus** | Legal Compliance | Quality & Safety Standards |
-| **Documents** | 4-7 เอกสาร | 20+ เอกสาร + SOP |
-| **Inspection** | Optional | **Mandatory** (ภาคสนาม) |
-| **Standards** | ตามกฎหมาย | WHO GACP + ASEAN + Thai FDA |
+| Aspect | GACP Certification |
+|--------|-------------------|
+| **Purpose** | ใบรับรองมาตรฐานคุณภาพ |
+| **Issuer** | กรมการแพทย์แผนไทย (Traditional Medicine Dept) |
+| **Process** | สมัคร → ตรวจสอบเอกสาร → ตรวจประเมินภาคสนาม → รับรอง |
+| **Duration** | 90-180 วัน |
+| **Validity** | 3 ปี |
+| **Focus** | Quality & Safety Standards |
+| **Documents** | 20+ เอกสาร + SOP |
+| **Inspection** | **Mandatory** (ภาคสนาม) |
+| **Standards** | WHO GACP + ASEAN + Thai FDA |
 
 ### GACP Certification Scope
 

@@ -21,7 +21,7 @@
 
 ## 1️⃣ ภาพรวมระบบปัจจุบัน {#1-overview}
 
-### ✅ ที่มีอยู่แล้ว (Based on PT9 Forms)
+### ✅ ที่มีอยู่แล้ว (Current System)
 
 | Module | Status | Completeness |
 |--------|--------|--------------|
@@ -131,9 +131,6 @@ GACP มีหลักการ 5 ประการหลัก:
 
 | License Type | Description | Required Fields |
 |-------------|-------------|-----------------|
-| **PT9** | ใบอนุญาตเพาะปลูก | ✅ มีแล้วใน PT9 Forms |
-| **PT10** | ใบอนุญาตแปรรูป | ❌ ยังไม่มี |
-| **PT11** | ใบอนุญาตจำหน่าย | ❌ ยังไม่มี |
 | **GACP Certificate** | ใบรับรอง GACP | ❌ ยังไม่มี |
 | **Organic Cert** | ใบรับรองเกษตรอินทรีย์ | ⚠️ มีแต่ไม่ครบ |
 | **GMP** | Good Manufacturing Practice | ❌ ยังไม่มี |
@@ -145,9 +142,9 @@ interface LegalCompliance {
   // ใบอนุญาต
   licenses: [
     {
-      type: 'PT9' | 'PT10' | 'PT11' | 'GACP' | 'ORGANIC' | 'GMP';
+      type: 'GACP' | 'ORGANIC' | 'GMP';
       licenseNumber: string;
-      issuedBy: string; // กรมการแพทย์แผนไทย ฯลฯ
+      issuedBy: string; // กรมการแพทย์แผนไทย, กรมวิชาการเกษตร
       issueDate: Date;
       expiryDate: Date;
       status: 'active' | 'expired' | 'suspended' | 'revoked';
@@ -427,7 +424,7 @@ interface LegalCompliance {
   _id: ObjectId,
   entityType: 'user' | 'farm',
   entityId: ObjectId,
-  licenseType: 'PT9' | 'PT10' | 'PT11' | 'GACP' | 'ORGANIC' | 'GMP' | 'HALAL' | 'KOSHER',
+  licenseType: 'GACP' | 'ORGANIC' | 'GMP' | 'HALAL' | 'KOSHER',
   licenseNumber: String,
   issuedBy: String,
   issueDate: Date,
@@ -662,7 +659,7 @@ interface InternalAuditForm {
 
 ```typescript
 interface LicenseApplicationForm {
-  licenseType: 'PT9' | 'PT10' | 'PT11' | 'GACP';
+  licenseType: 'GACP' | 'ORGANIC' | 'GMP';
   entityType: 'user' | 'farm';
   entityId: string;
   
@@ -888,7 +885,7 @@ interface GACPChecklist {
 | Soil/Water Test Models | 2 days | Create collections + APIs |
 | Input Materials Tracking | 2 days | Create tracking system |
 | Harvest Records | 2 days | Lot/Batch management |
-| License Management | 2 days | PT9/PT10/PT11/GACP |
+| License Management | 2 days | GACP Certification |
 | **Total** | **8 days** | |
 
 #### **Phase 2: Traceability System (Week 3)**
