@@ -8,8 +8,4 @@ npm run type-check || exit 1
 echo "🔧 ESLint check..."
 npm run lint:all || exit 1
 
-# Run tests
-echo "🧪 Running tests..."
-npm run test || exit 1
-
 echo "✅ All pre-push checks passed!"

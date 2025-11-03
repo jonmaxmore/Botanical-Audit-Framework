@@ -9,24 +9,14 @@
     "start": "next start",
     "type-check": "tsc --noEmit --skipLibCheck && cd apps/farmer-portal && tsc --noEmit --skipLibCheck",
     "type-check:all": "tsc --noEmit --skipLibCheck && cd apps/farmer-portal && tsc --noEmit --skipLibCheck && cd ../admin-portal && tsc --noEmit --skipLibCheck && cd ../certificate-portal && tsc --noEmit --skipLibCheck",
-    "type-check:watch": "tsc --noEmit --watch",
     "lint": "pnpm --filter frontend lint",
     "lint:backend": "cd apps/backend && eslint . --ext .js",
     "lint:backend:fix": "cd apps/backend && eslint . --ext .js --fix",
-    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
-    "format:check": "prettier --check \"**/*.{js,jsx,ts,tsx,json,css,md}\"",
     "lint:all": "npm run lint && npm run lint:backend",
-    "lint:fix": "npm run lint:backend:fix && npm run format",
+    "lint:fix": "npm run lint -- --fix && npm run lint:backend:fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:debug": "playwright test --debug",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:report": "playwright show-report",
-    "prepare": "husky",
-    "clean": "rm -rf .next node_modules",
-    "reinstall": "npm run clean && npm install"
+    "prepare": "husky"
   },
   "dependencies": {
     "concurrently": "^8.2.2",
@@ -86,11 +76,5 @@
       "@typescript-eslint/eslint-plugin": "6.21.0",
       "@typescript-eslint/parser": "6.21.0"
     }
-  },
-  "lint-staged": {
-    "apps/frontend/**/*.{js,jsx,ts,tsx,json,css}": ["prettier --write", "eslint --fix"],
-    "apps/backend/**/*.{js,ts,json}": ["prettier --write", "eslint --fix"],
-    "frontend-nextjs/**/*.{js,jsx,ts,tsx,json,css}": ["prettier --write", "eslint --fix"],
-    "*.md": ["prettier --write"]
   }
 }

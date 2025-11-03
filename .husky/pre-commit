@@ -4,10 +4,8 @@ echo "🔍 Running pre-commit checks..."
 echo "📘 TypeScript check..."
 npm run type-check || exit 1
 
-# ESLint
-echo "🔧 ESLint check..."
-npm run lint:all || exit 1
+# ESLint with auto-fix
+echo "🔧 ESLint check and fix..."
+npm run lint:fix || exit 1
 
-# Lint-staged for formatting
-echo "✨ Formatting staged files..."
-npx lint-staged
+echo "✅ Pre-commit checks passed!"
