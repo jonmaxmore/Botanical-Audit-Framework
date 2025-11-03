@@ -23,6 +23,7 @@
     "@mui/icons-material": "^6.5.0",
     "@mui/material": "^6.5.0",
     "@mui/x-date-pickers": "^7.22.2",
+    "@types/react-chartjs-2": "^2.0.2",
     "axios": "^1.7.9",
     "chart.js": "^4.5.1",
     "clsx": "^2.1.1",

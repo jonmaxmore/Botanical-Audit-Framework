@@ -168,7 +168,7 @@ const OfficerReviewPage: React.FC = () => {
       }
 
       // Determine new workflow state
-      let newState: Application['workflowState'] = application.currentState;
+      let newState: Application['currentState'] = application.currentState;
       if (confirmDialog.decision === 'approve') {
         newState = 'DOCUMENT_APPROVED';
       } else if (confirmDialog.decision === 'revision') {
@@ -180,7 +180,7 @@ const OfficerReviewPage: React.FC = () => {
       // Update application
       const updatedApp: Application = {
         ...application,
-        workflowState: newState,
+        currentState: newState,
         currentStep: newState === 'DOCUMENT_APPROVED' ? 4 : 3,
         reviewData: {
           completeness: reviewForm.completeness,

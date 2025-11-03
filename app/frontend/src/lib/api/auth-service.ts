@@ -553,17 +553,8 @@ class GACPAuthService {
 // Create singleton instance
 const gacpAuthService = GACPAuthService.getInstance();
 
-// Export types and service
+// Export service (types already exported via export interface above)
 export { gacpAuthService };
-
-export type {
-  LoginCredentials,
-  RegisterData,
-  UserProfile,
-  PasswordChangeData,
-  PasswordResetData,
-  PasswordResetConfirmData,
-};
 
 // Default export
 export default gacpAuthService;

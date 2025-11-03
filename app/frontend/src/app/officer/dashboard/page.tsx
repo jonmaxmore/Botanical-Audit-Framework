@@ -48,7 +48,7 @@ interface PendingApplication {
   farmerName: string;
   farmName: string;
   submittedDate: string;
-  workflowState: string;
+  currentState: string;
   priority: 'high' | 'medium' | 'low';
   daysWaiting: number;
 }
@@ -94,7 +94,7 @@ const OfficerDashboardPage: React.FC = () => {
             app.currentState === 'DOCUMENT_REVISION'
         )
         .map((app) => {
-          const submittedDate = new Date(app.submittedAt || Date.now());
+          const submittedDate = new Date(app.submittedDate || Date.now());
           const daysWaiting = Math.floor(
             (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
           );
@@ -110,7 +110,7 @@ const OfficerDashboardPage: React.FC = () => {
             farmerName: app.farmerName || 'ไม่ระบุ',
             farmName: app.farmerName || 'ไม่ระบุ',
             submittedDate: submittedDate.toLocaleDateString('th-TH'),
-            workflowState: app.currentState,
+            currentState: app.currentState,
             priority,
             daysWaiting,
           };
@@ -406,7 +406,7 @@ const OfficerDashboardPage: React.FC = () => {
                                   {app.farmerName}
                                 </Typography>
                                 <Typography variant="caption" color="text.secondary">
-                                  ยื่นเมื่อ: {app.submittedAt} ({app.daysWaiting} วันที่แล้ว)
+                                  ยื่นเมื่อ: {app.submittedDate} ({app.daysWaiting} วันที่แล้ว)
                                 </Typography>
                               </Box>
                             }

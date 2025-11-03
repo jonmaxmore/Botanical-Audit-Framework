@@ -89,6 +89,9 @@ const DocumentsPage = () => {
   };
 
   const handleCloseUploadDialog = () => {
+    // Prevent closing during upload
+    if (uploading) return;
+
     setUploadDialogOpen(false);
     setSelectedDocType('');
     setSelectedFile(null);
@@ -329,7 +332,13 @@ const DocumentsPage = () => {
       </Paper>
 
       {/* Upload Dialog */}
-      <Dialog open={uploadDialogOpen} onClose={handleCloseUploadDialog} maxWidth="sm" fullWidth>
+      <Dialog
+        open={uploadDialogOpen}
+        onClose={handleCloseUploadDialog}
+        maxWidth="sm"
+        fullWidth
+        disableEscapeKeyDown={uploading}
+      >
         <DialogTitle>
           อัปโหลดเอกสาร: {DOCUMENT_TYPES.find((dt) => dt.id === selectedDocType)?.label}
         </DialogTitle>

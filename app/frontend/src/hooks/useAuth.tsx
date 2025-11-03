@@ -13,7 +13,7 @@
  */
 
 import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
-import { gacpAuthService } from '../api/auth-service';
+import { gacpAuthService } from '../lib/api/auth-service';
 
 // ============================================================================
 // TYPE DEFINITIONS - Authentication Hook
@@ -484,7 +484,5 @@ export const useTokenRefresh = () => {
 // ============================================================================
 // EXPORTS
 // ============================================================================
-
-export type { AuthUser, AuthState, AuthContextValue };
 
 export default useAuth;

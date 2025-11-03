@@ -128,13 +128,13 @@ const VdoCallInspectionPage: React.FC = () => {
 
     try {
       // Determine new workflow state
-      const newState: Application['workflowState'] =
+      const newState: Application['currentState'] =
         decision === 'sufficient' ? 'INSPECTION_COMPLETED' : 'INSPECTION_ON_SITE';
 
       // Update application
       const updatedApp: Application = {
         ...application,
-        workflowState: newState,
+        currentState: newState,
         currentStep: decision === 'sufficient' ? 7 : 6,
         latestInspection: {
           type: 'VDO_CALL',

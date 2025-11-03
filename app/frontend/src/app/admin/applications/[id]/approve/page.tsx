@@ -259,7 +259,7 @@ const AdminApprovalPage: React.FC = () => {
                   วันที่ยื่นใบสมัคร
                 </Typography>
                 <Typography variant="body1" fontWeight="medium">
-                  {((application.submittedAt) ? new Date(application.submittedAt) : new Date()).toLocaleDateString('th-TH', {
+                  {((application.submittedDate) ? new Date(application.submittedDate) : new Date()).toLocaleDateString('th-TH', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',

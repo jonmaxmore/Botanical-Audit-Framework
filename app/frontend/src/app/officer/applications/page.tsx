@@ -49,7 +49,7 @@ interface TableApplication {
   farmerName: string;
   farmName: string;
   submittedDate: string;
-  workflowState: string;
+  currentState: string;
   priority: 'high' | 'medium' | 'low';
   daysWaiting: number;
 }
@@ -102,7 +102,7 @@ const OfficerApplicationsPage: React.FC = () => {
 
       // Map to table format
       const tableData = filtered.map((app) => {
-        const submittedDate = new Date(app.submittedAt || Date.now());
+        const submittedDate = new Date(app.submittedDate || Date.now());
         const daysWaiting = Math.floor(
           (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
         );
@@ -117,7 +117,7 @@ const OfficerApplicationsPage: React.FC = () => {
           farmerName: app.farmerName || 'ไม่ระบุ',
           farmName: app.farmerName || 'ไม่ระบุ',
           submittedDate: submittedDate.toLocaleDateString('th-TH'),
-          workflowState: app.currentState,
+          currentState: app.currentState,
           priority,
           daysWaiting,
         };
@@ -344,7 +344,7 @@ const OfficerApplicationsPage: React.FC = () => {
                           <Typography variant="body2">{app.farmerName}</Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant="body2">{app.submittedAt}</Typography>
+                          <Typography variant="body2">{app.submittedDate}</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography variant="body2" fontWeight="medium">

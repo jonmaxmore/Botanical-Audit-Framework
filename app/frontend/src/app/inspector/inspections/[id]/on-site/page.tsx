@@ -203,7 +203,7 @@ const OnSiteInspectionPage: React.FC = () => {
       // Update application
       const updatedApp: Application = {
         ...application,
-        workflowState: 'INSPECTION_COMPLETED',
+        currentState: 'INSPECTION_COMPLETED',
         currentStep: 7,
         latestInspection: {
           type: 'ON_SITE',
