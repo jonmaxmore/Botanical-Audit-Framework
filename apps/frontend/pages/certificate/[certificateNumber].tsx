@@ -254,8 +254,8 @@ export default function CertificateDetail() {
               <Chip
                 label={getStatusLabel(certificate.status)}
                 color={getStatusColor(certificate.status)}
-                size="large"
-                sx={{ fontSize: '1.1rem', px: 2 }}
+                size="medium"
+                sx={{ fontSize: '1.1rem', px: 2, py: 1 }}
               />
             </Grid>
           </Grid>

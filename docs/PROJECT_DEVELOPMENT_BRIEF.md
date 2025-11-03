@@ -150,8 +150,8 @@ Core Modules:
 | Cross-System – Logging & Error Handling | 🟠 In Review | Widespread `console.error` usage across portals | Replace with shared logger utility and surface UI feedback | — | Need logging package imported in portals |
 | Backend APIs – Inspections Scheduling | 🔴 Blocked | `/apps/backend/routes/inspection-*.routes.js` return placeholders and server omits mounting | Finish persistence layer and register `/api/inspections` routes | — | Frontend scheduler hits 404/empty responses |
 | Backend APIs – Traceability | 🔴 Blocked | Traceability routes exist but commented out in `server.js`; UI cannot reach them | Enable `/api/traceability` with proper auth guards | — | Requires role policy review |
-| Cross-System – Type Safety | 🔴 Blocked | Type-check pipeline (`pnpm run type-check`) not executed during audit | Run checks and resolve compilation errors | — | Pending environment verification |
-| Cross-System – Lint Suite | 🔴 Blocked | Global lint (`pnpm run lint:all`) not run; console usage likely to fail rules | Execute lint suite and remediate findings | — | Needs workspace command coverage |
+| Cross-System – Type Safety | 🔴 Blocked | Type-check reveals 132 errors: missing `@mui/material`, `chart.js`, `react-chartjs-2`, `react-hook-form`, `yup`; installed but TS cache stale | Clear `.next` cache, re-run type-check, fix implicit `any` types | — | Dependencies installed; awaiting rebuild |
+| Cross-System – Lint Suite | 🔴 Blocked | Global lint (`pnpm run lint:all`) not run; console usage likely to fail rules | Execute lint suite and remediate findings | — | Queued after type-check resolution |
 
 **Status Codes:**  
 🟢 Ready | 🟠 In Review | 🔧 In Progress | 🔴 Blocked

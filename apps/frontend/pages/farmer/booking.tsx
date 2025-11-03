@@ -143,7 +143,7 @@ export default function FarmerBookingPage() {
             <DialogTitle>จองการตรวจสอบ</DialogTitle>
             <DialogContent>
               <BookingForm
-                farmId={user?.farmId || ''}
+                farmId={''}
                 onSuccess={handleBookingSuccess}
                 onCancel={() => setBookingModalOpen(false)}
               />
@@ -160,7 +160,7 @@ export default function FarmerBookingPage() {
             <DialogTitle>ปฏิทินการตรวจสอบของฉัน</DialogTitle>
             <DialogContent>
               <CalendarView
-                userId={user?._id || user?.id || ''}
+                userId={user?.id || ''}
                 role="FARMER"
                 onEventClick={() => {}}
               />

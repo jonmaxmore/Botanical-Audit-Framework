@@ -313,7 +313,6 @@ export const CalendarView: React.FC<CalendarViewProps> = ({
           slotMaxTime="20:00:00"
           allDaySlot={false}
           nowIndicator={true}
-          loading={loading}
         />
       </Paper>
 

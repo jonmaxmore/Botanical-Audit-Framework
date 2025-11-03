@@ -38,7 +38,7 @@ import {
 import { format } from 'date-fns';
 import { th } from 'date-fns/locale';
 import { useRouter } from 'next/router';
-import { calendarApi } from '../../../lib/api/calendar';
+import { calendarApi } from '../../lib/api/calendar';
 
 interface CalendarWidgetProps {
   inspectorId: string;

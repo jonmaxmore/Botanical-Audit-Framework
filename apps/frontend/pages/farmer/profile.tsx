@@ -14,6 +14,7 @@ import {
   Drawer,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   useMediaQuery,
@@ -82,15 +83,15 @@ export default function FarmerProfile() {
       </Box>
       <List>
         {menuItems.map(item => (
-          <ListItem
-            key={item.text}
-            component="div"
-            sx={{ cursor: 'pointer' }}
-            selected={router.pathname === item.path}
-            onClick={() => router.push(item.path)}
-          >
-            <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText primary={item.text} />
+          <ListItem key={item.text} disablePadding>
+            <ListItemButton
+              sx={{ cursor: 'pointer' }}
+              selected={router.pathname === item.path}
+              onClick={() => router.push(item.path)}
+            >
+              <ListItemIcon>{item.icon}</ListItemIcon>
+              <ListItemText primary={item.text} />
+            </ListItemButton>
           </ListItem>
         ))}
         <Divider sx={{ my: 1 }} />

@@ -36,16 +36,9 @@ import {
   Description as DescriptionIcon,
   TrendingUp as TrendingUpIcon,
   ContactMail as ContactMailIcon,
-  CompareArrows as CompareIcon,
-  LockOutlined as LockOutlinedIcon,
-  AssignmentTurnedIn as AssignmentTurnedInIcon,
-  Route as RouteIcon,
-  Poll as PollIcon,
-  WorkspacePremium as WorkspacePremiumIcon,
-  NotificationsActive as NotificationsActiveIcon,
-  BarChart as BarChartIcon,
-  MenuBook as MenuBookIcon,
-  FactCheck as FactCheckIcon
+  QrCode as QrCodeIcon,
+  Assignment as AssignmentIcon,
+  CompareArrows as CompareIcon
 } from '@mui/icons-material';
 
 export default function HomePage() {
@@ -56,207 +49,6 @@ export default function HomePage() {
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
-
-  const mainServices = [
-    {
-      id: 'auth-sso',
-      title: 'ระบบสมาชิกและการยืนยันตัวตน (SSO)',
-      summary: 'Single Sign-On, JWT, MFA-ready และ RBAC สำหรับทุกระบบในแพลตฟอร์ม',
-      highlights: [
-        'พร้อมใช้จริงในทุกพอร์ทัล',
-        'จัดการสิทธิ์ตามบทบาทอัตโนมัติ',
-        'รองรับ Multi-factor Authentication'
-      ],
-      icon: LockOutlinedIcon,
-      color: '#2e7d32',
-      status: 'พร้อมใช้งานจริง',
-      link: '/services/authentication'
-    },
-    {
-      id: 'application',
-      title: 'ระบบยื่นคำขอรับรองกัญชา GACP',
-      summary: 'กระบวนการ 7 ขั้นตอนสำหรับยื่นคำขอ ตรวจสอบเอกสาร และติดตามสถานะการรับรองกัญชา',
-      highlights: [
-        'โฟกัสเฉพาะกัญชาเป็นหลัก',
-        'ติดตามสถานะได้แบบเรียลไทม์',
-        'เชื่อมต่อการชำระเงินและการแจ้งเตือน'
-      ],
-      icon: AssignmentTurnedInIcon,
-      color: '#1b5e20',
-      status: 'พร้อมใช้งานจริง',
-      link: '/services/application'
-    },
-    {
-      id: 'farm-management',
-      title: 'ระบบบริหารจัดการฟาร์ม',
-      summary: 'ลงทะเบียนฟาร์ม จัดการสายพันธุ์กัญชา และควบคุมข้อมูลการเพาะปลูกตามมาตรฐาน',
-      highlights: [
-        'รองรับการควบคุมจากส่วนกลาง',
-        'บันทึกข้อมูลรอบการเพาะปลูก',
-        'ตรวจสอบฟาร์มแบบดิจิทัล'
-      ],
-      icon: AgricultureIcon,
-      color: '#43a047',
-      status: 'พร้อมใช้งานจริง',
-      link: '/services/farm-management'
-    },
-    {
-      id: 'track-trace',
-      title: 'ระบบติดตามย้อนกลับ (Track & Trace)',
-      summary: 'ติดตามผลิตภัณฑ์กัญชาตั้งแต่เมล็ดจนถึงการจำหน่าย พร้อม QR Code สำหรับตรวจสอบ',
-      highlights: ['Seed-to-sale ครบถ้วน', 'สร้าง QR Code อัตโนมัติ', 'รายงานย้อนกลับเพื่อตรวจสอบ'],
-      icon: RouteIcon,
-      color: '#00796b',
-      status: 'พร้อมใช้งานจริง',
-      link: '/services/track-trace'
-    },
-    {
-      id: 'survey',
-      title: 'ระบบสำรวจและแบบสอบถาม',
-      summary: 'สร้างแบบสอบถาม 4 ภูมิภาค วิเคราะห์ข้อมูลเกษตรกร และส่งออกผลลัพธ์ได้ทันที',
-      highlights: ['Standalone 100%', 'มีเทมเพลตพร้อมใช้', 'รายงานผลแบบเรียลไทม์'],
-      icon: PollIcon,
-      color: '#3949ab',
-      status: 'พร้อมใช้งานจริง',
-      link: '/services/survey'
-    },
-    {
-      id: 'standards',
-      title: 'ระบบเปรียบเทียบมาตรฐาน',
-      summary: 'เปรียบเทียบ GACP กับมาตรฐานสากล 8 รูปแบบ เพื่อวางแผนการรับรองและวิเคราะห์ช่องว่าง',
-      highlights: ['Standalone 100%', 'วิเคราะห์ Gap อัตโนมัติ', 'สร้าง Roadmap การปรับปรุง'],
-      icon: CompareIcon,
-      color: '#5e35b1',
-      status: 'พร้อมใช้งานจริง',
-      link: '/services/standards-comparison'
-    }
-  ];
-
-  const supportServices = [
-    {
-      id: 'certificate',
-      title: 'ระบบออกใบรับรอง',
-      summary: 'ออกและตรวจสอบใบรับรอง GACP พร้อมสแกน QR Code สำหรับประชาชน',
-      icon: WorkspacePremiumIcon,
-      color: '#00897b',
-      link: '/services/certificate'
-    },
-    {
-      id: 'field-inspection',
-      title: 'ระบบตรวจประเมินภาคสนาม',
-      summary: 'วางแผนและประเมิน 25 หัวข้อ CCP พร้อมติดตามคำสั่งแก้ไขแบบเรียลไทม์',
-      icon: FactCheckIcon,
-      color: '#0288d1',
-      link: '/services/field-inspection'
-    },
-    {
-      id: 'notification',
-      title: 'ระบบแจ้งเตือน',
-      summary: 'อีเมล SMS และ In-app Notification เชื่อมต่อทุกโมดูล',
-      icon: NotificationsActiveIcon,
-      color: '#e65100',
-      link: '/services/notification'
-    },
-    {
-      id: 'reporting',
-      title: 'ระบบรายงานและวิเคราะห์',
-      summary: 'แดชบอร์ดและ KPI เชิงลึกสำหรับผู้บริหาร เน้นข้อมูลกัญชาเป็นหลัก',
-      icon: BarChartIcon,
-      color: '#1e88e5',
-      link: '/services/reporting'
-    },
-    {
-      id: 'sop',
-      title: 'ระบบ SOP Wizard',
-      summary: 'สร้างและบริหารมาตรฐานการปฏิบัติงาน (SOP) สำหรับฟาร์มกัญชา',
-      icon: MenuBookIcon,
-      color: '#6d4c41',
-      link: '/services/sop'
-    }
-  ];
-
-  const personaSolutions = [
-    {
-      icon: AgricultureIcon,
-      title: 'เกษตรกรกัญชา',
-      description: 'ลงทะเบียน ยื่นคำขอ รับคำแนะนำการเพาะปลูก และติดตามสถานะรับรอง',
-      color: '#4caf50',
-      link: '/login?role=farmer'
-    },
-    {
-      icon: DescriptionIcon,
-      title: 'ผู้ตรวจสอบเอกสาร',
-      description: 'ตรวจสอบความครบถ้วนของเอกสารกัญชาและอนุมัติได้ในคลิกเดียว',
-      color: '#2196f3',
-      link: '/login?role=document_checker'
-    },
-    {
-      icon: AssessmentIcon,
-      title: 'ผู้ตรวจประเมินภาคสนาม',
-      description: 'วางแผนลงพื้นที่และบันทึกผลตรวจมาตรฐาน GACP ผ่านแท็บเล็ต',
-      color: '#ff9800',
-      link: '/login?role=inspector'
-    },
-    {
-      icon: VerifiedIcon,
-      title: 'ผู้อนุมัติ',
-      description: 'พิจารณาผลการตรวจและออกใบรับรองดิจิทัลได้ทันที',
-      color: '#9c27b0',
-      link: '/login?role=approver'
-    },
-    {
-      icon: TrendingUpIcon,
-      title: 'ผู้ดูแลระบบ / ผู้บริหาร',
-      description: 'ควบคุมทุกโมดูล จัดการผู้ใช้ และวิเคราะห์ข้อมูลเชิงนโยบาย',
-      color: '#f44336',
-      link: '/login?role=admin'
-    }
-  ];
-
-  const herbalPortfolio = [
-    {
-      id: 'cannabis',
-      name: 'กัญชา (Cannabis)',
-      scientificName: 'Cannabis sativa L.',
-      description: 'พืชหลักของแพลตฟอร์ม เน้นการเพาะปลูกเชิงการแพทย์ตามมาตรฐานสากล',
-      tag: 'Primary Crop'
-    },
-    {
-      id: 'turmeric',
-      name: 'ขมิ้นชัน (Turmeric)',
-      scientificName: 'Curcuma longa',
-      description: 'สมุนไพรเศรษฐกิจสำคัญของไทย ใช้ในการแพทย์แผนไทยและอุตสาหกรรมอาหาร',
-      tag: 'Medicinal Herb'
-    },
-    {
-      id: 'ginger',
-      name: 'ขิง (Ginger)',
-      scientificName: 'Zingiber officinale',
-      description: 'สมุนไพรฤทธิ์ร้อน ช่วยกระตุ้นระบบไหลเวียนและลดอาการอักเสบ',
-      tag: 'Medicinal Herb'
-    },
-    {
-      id: 'black-galingale',
-      name: 'กระชายดำ (Black Galingale)',
-      scientificName: 'Kaempferia parviflora',
-      description: 'สมุนไพรเสริมสมรรถภาพ มีสารต้านอนุมูลอิสระสูง',
-      tag: 'Medicinal Herb'
-    },
-    {
-      id: 'plai',
-      name: 'ไพล (Plai)',
-      scientificName: 'Zingiber montanum',
-      description: 'ใช้ในงานแพทย์แผนไทยสำหรับลดอาการอักเสบและปวดเมื่อย',
-      tag: 'Medicinal Herb'
-    },
-    {
-      id: 'kratom',
-      name: 'กระท่อม (Kratom)',
-      scientificName: 'Mitragyna speciosa',
-      description: 'สมุนไพรพื้นบ้านที่อยู่ในการกำกับดูแล เน้นการใช้ประโยชน์อย่างถูกกฎหมาย',
-      tag: 'Regulated Herb'
-    }
-  ];
 
   return (
     <>
@@ -615,7 +407,7 @@ export default function HomePage() {
         </Container>
       </Box>
 
-      {/* Services Section - แสดงบริการทั้งหมด */}
+      {/* Services Section - แบ่งตามบริการ */}
       <Box id="services" sx={{ py: 8, backgroundColor: '#f9f9f9' }}>
         <Container maxWidth="lg">
           <Typography
@@ -632,261 +424,165 @@ export default function HomePage() {
             color="textSecondary"
             sx={{ mb: 6, maxWidth: 800, mx: 'auto' }}
           >
-            แพลตฟอร์มดิจิทัลแบบครบวงจรสำหรับการบริหารจัดการและรับรองมาตรฐาน GACP
-            โดยให้ความสำคัญกับกัญชาเป็นลำดับแรก
-          </Typography>
-
-          <Typography variant="h4" align="center" sx={{ fontWeight: 700, color: '#2e7d32', mb: 4 }}>
-            บริการหลัก (Core Services)
-          </Typography>
-          <Grid container spacing={3}>
-            {mainServices.map(service => {
-              const IconComponent = service.icon;
-              return (
-                <Grid item xs={12} sm={6} md={4} key={service.id}>
-                  <Card
-                    sx={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.3s',
-                      '&:hover': {
-                        transform: 'translateY(-8px)',
-                        boxShadow: '0 12px 32px rgba(0,0,0,0.15)'
-                      }
-                    }}
-                  >
-                    <CardContent sx={{ flexGrow: 1, pt: 4 }}>
-                      <Box sx={{ textAlign: 'center', color: service.color, mb: 2 }}>
-                        <IconComponent sx={{ fontSize: 50 }} />
-                      </Box>
-                      <Typography
-                        variant="h6"
-                        gutterBottom
-                        sx={{ fontWeight: 600, textAlign: 'center' }}
-                      >
-                        {service.title}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        color="textSecondary"
-                        sx={{ mb: 2, textAlign: 'center' }}
-                      >
-                        {service.summary}
-                      </Typography>
-                      <Stack spacing={1} sx={{ mb: 3 }}>
-                        {service.highlights.map(item => (
-                          <Typography variant="body2" color="textSecondary" key={item}>
-                            • {item}
-                          </Typography>
-                        ))}
-                      </Stack>
-                      <Chip
-                        label={service.status}
-                        color="success"
-                        size="small"
-                        sx={{ fontWeight: 600 }}
-                      />
-                    </CardContent>
-                    <CardActions sx={{ justifyContent: 'center', pb: 3 }}>
-                      <Button
-                        size="small"
-                        href={service.link}
-                        sx={{ color: service.color, fontWeight: 600 }}
-                      >
-                        ดูรายละเอียด →
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-
-          <Typography
-            variant="h4"
-            align="center"
-            sx={{ fontWeight: 700, color: '#2e7d32', mt: 8, mb: 3 }}
-          >
-            บริการเสริม (Supporting Modules)
-          </Typography>
-          <Typography
-            variant="body1"
-            align="center"
-            color="textSecondary"
-            sx={{ mb: 5, maxWidth: 800, mx: 'auto' }}
-          >
-            โมดูลสนับสนุนที่เชื่อมต่อกับบริการหลัก เพื่อให้การพัฒนาฟาร์มกัญชาเป็นไปอย่างครบวงจร
+            ระบบครบวงจรสำหรับการบริหารจัดการและรับรองมาตรฐาน GACP
           </Typography>
 
           <Grid container spacing={3}>
-            {supportServices.map(service => {
-              const IconComponent = service.icon;
-              return (
-                <Grid item xs={12} sm={6} md={3} key={service.id}>
-                  <Card
-                    sx={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.3s',
-                      '&:hover': {
-                        transform: 'translateY(-8px)',
-                        boxShadow: '0 12px 32px rgba(0,0,0,0.15)'
-                      }
-                    }}
-                  >
-                    <CardContent sx={{ flexGrow: 1, textAlign: 'center', pt: 4 }}>
-                      <Box sx={{ color: service.color, mb: 2 }}>
-                        <IconComponent sx={{ fontSize: 48 }} />
-                      </Box>
-                      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-                        {service.title}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {service.summary}
-                      </Typography>
-                    </CardContent>
-                    <CardActions sx={{ justifyContent: 'center', pb: 3 }}>
-                      <Button
-                        size="small"
-                        href={service.link}
-                        sx={{ color: service.color, fontWeight: 600 }}
-                      >
-                        ดูรายละเอียด →
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-
-          <Typography
-            variant="h4"
-            align="center"
-            sx={{ fontWeight: 700, color: '#2e7d32', mt: 8, mb: 3 }}
-          >
-            โซลูชันตามกลุ่มผู้ใช้งาน
-          </Typography>
-          <Typography
-            variant="body1"
-            align="center"
-            color="textSecondary"
-            sx={{ mb: 5, maxWidth: 800, mx: 'auto' }}
-          >
-            ออกแบบประสบการณ์ให้เหมาะสมกับบทบาทของผู้ใช้งาน
-            โดยยังคงยึดหลักกัญชาเป็นศูนย์กลางของข้อมูล
-          </Typography>
-
-          <Grid container spacing={3}>
-            {personaSolutions.map(solution => {
-              const IconComponent = solution.icon;
-              return (
-                <Grid item xs={12} sm={6} md={4} key={solution.title}>
-                  <Card
-                    sx={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.3s',
-                      '&:hover': {
-                        transform: 'translateY(-8px)',
-                        boxShadow: '0 12px 32px rgba(0,0,0,0.15)'
-                      }
-                    }}
-                  >
-                    <CardContent sx={{ flexGrow: 1, textAlign: 'center', pt: 4 }}>
-                      <Box sx={{ color: solution.color, mb: 2 }}>
-                        <IconComponent sx={{ fontSize: 50 }} />
-                      </Box>
-                      <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
-                        {solution.title}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        {solution.description}
-                      </Typography>
-                    </CardContent>
-                    <CardActions sx={{ justifyContent: 'center', pb: 3 }}>
-                      <Button
-                        size="small"
-                        href={solution.link}
-                        sx={{ color: solution.color, fontWeight: 600 }}
-                      >
-                        เข้าสู่ระบบ →
-                      </Button>
-                    </CardActions>
-                  </Card>
-                </Grid>
-              );
-            })}
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Herbal Portfolio Section */}
-      <Box sx={{ py: 8, backgroundColor: '#fff' }}>
-        <Container maxWidth="lg">
-          <Typography
-            variant="h3"
-            align="center"
-            gutterBottom
-            sx={{ fontWeight: 700, color: '#2e7d32', mb: 2 }}
-          >
-            พืชสมุนไพรหลัก 6 ชนิดในแพลตฟอร์ม
-          </Typography>
-          <Typography
-            variant="body1"
-            align="center"
-            color="textSecondary"
-            sx={{ mb: 6, maxWidth: 820, mx: 'auto' }}
-          >
-            กัญชาเป็นตัวเลือกแรกและเป็นศูนย์กลางของทุกโมดูล
-            พร้อมการสนับสนุนสมุนไพรไทยที่มีศักยภาพอีก 5 ชนิดเพื่อเสริมเศรษฐกิจชุมชน
-          </Typography>
-
-          <Grid container spacing={3}>
-            {herbalPortfolio.map(herb => (
-              <Grid item xs={12} sm={6} md={4} key={herb.id}>
+            {[
+              {
+                icon: <AgricultureIcon sx={{ fontSize: 50 }} />,
+                title: 'สำหรับเกษตรกร',
+                description: 'ลงทะเบียนฟาร์ม ยื่นคำขอรับรอง ติดตามสถานะ และดาวน์โหลดใบรับรอง',
+                color: '#4caf50',
+                link: '/login?role=farmer'
+              },
+              {
+                icon: <DescriptionIcon sx={{ fontSize: 50 }} />,
+                title: 'ผู้ตรวจสอบเอกสาร',
+                description: 'ตรวจสอบความถูกต้องของเอกสาร อนุมัติหรือส่งกลับแก้ไข',
+                color: '#2196f3',
+                link: '/login?role=document_checker'
+              },
+              {
+                icon: <AssessmentIcon sx={{ fontSize: 50 }} />,
+                title: 'ผู้ตรวจประเมิน',
+                description: 'ตรวจประเมินฟาร์มตามมาตรฐาน GACP บันทึกผลและสรุปรายงาน',
+                color: '#ff9800',
+                link: '/login?role=inspector'
+              },
+              {
+                icon: <VerifiedIcon sx={{ fontSize: 50 }} />,
+                title: 'ผู้อนุมัติ',
+                description: 'พิจารณาอนุมัติการรับรอง ออกใบรับรอง GACP',
+                color: '#9c27b0',
+                link: '/login?role=approver'
+              },
+              {
+                icon: <TrendingUpIcon sx={{ fontSize: 50 }} />,
+                title: 'แอดมิน',
+                description: 'จัดการระบบทั้งหมด วิเคราะห์ข้อมูล Power BI และจัดการสิทธิ์ผู้ใช้',
+                color: '#f44336',
+                link: '/login?role=admin'
+              }
+            ].map((service, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
                 <Card
                   sx={{
                     height: '100%',
                     display: 'flex',
                     flexDirection: 'column',
-                    borderTop: herb.id === 'cannabis' ? '4px solid #2e7d32' : '4px solid #c8e6c9',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.08)'
+                    transition: 'all 0.3s',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: '0 12px 32px rgba(0,0,0,0.15)'
+                    }
                   }}
                 >
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        mb: 2
-                      }}
-                    >
-                      <Typography variant="h6" sx={{ fontWeight: 600, color: '#2e7d32' }}>
-                        {herb.name}
-                      </Typography>
-                      <Chip
-                        label={herb.tag}
-                        color={herb.id === 'cannabis' ? 'success' : 'default'}
-                        size="small"
-                        sx={{ fontWeight: 600 }}
-                      />
-                    </Box>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      sx={{ fontStyle: 'italic', mb: 2 }}
-                    >
-                      {herb.scientificName}
+                  <CardContent sx={{ flexGrow: 1, textAlign: 'center', pt: 4 }}>
+                    <Box sx={{ color: service.color, mb: 2 }}>{service.icon}</Box>
+                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                      {service.title}
                     </Typography>
                     <Typography variant="body2" color="textSecondary">
-                      {herb.description}
+                      {service.description}
                     </Typography>
                   </CardContent>
+                  <CardActions sx={{ justifyContent: 'center', pb: 3 }}>
+                    <Button
+                      size="small"
+                      href={service.link}
+                      sx={{ color: service.color, fontWeight: 600 }}
+                    >
+                      เรียนรู้เพิ่มเติม →
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+
+          {/* เพิ่มบริการเสริม */}
+          <Typography
+            variant="h4"
+            align="center"
+            sx={{ fontWeight: 700, color: '#2e7d32', mt: 8, mb: 3 }}
+          >
+            บริการเพิ่มเติม
+          </Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            color="textSecondary"
+            sx={{ mb: 5, maxWidth: 800, mx: 'auto' }}
+          >
+            บริการครบวงจรเพื่อเพิ่มประสิทธิภาพการทำเกษตรกรรมและการบริหารฟาร์มตามมาตรฐาน
+          </Typography>
+
+          <Grid container spacing={3}>
+            {[
+              {
+                icon: <LocalFloristIcon sx={{ fontSize: 50 }} />,
+                title: 'ระบบบริหารจัดการฟาร์ม',
+                description:
+                  'บันทึกข้อมูลการเพาะปลูก การดูแล การเก็บเกี่ยว และบริหารต้นทุนอย่างมีประสิทธิภาพ',
+                color: '#009688',
+                link: '/services/farm-management'
+              },
+              {
+                icon: <QrCodeIcon sx={{ fontSize: 50 }} />,
+                title: 'ระบบติดตามย้อนกลับ',
+                description:
+                  'QR Code สำหรับผลิตภัณฑ์ เพื่อติดตามย้อนกลับตั้งแต่แหล่งที่มาจนถึงผู้บริโภค',
+                color: '#3f51b5',
+                link: '/services/traceability'
+              },
+              {
+                icon: <AssignmentIcon sx={{ fontSize: 50 }} />,
+                title: 'ระบบแบบสอบถามเกษตรกรสี่ภาค',
+                description:
+                  'เก็บข้อมูลการทำเกษตรกรรมในพื้นที่ต่างๆ เพื่อวิเคราะห์และพัฒนาองค์ความรู้',
+                color: '#795548',
+                link: '/services/survey'
+              },
+              {
+                icon: <CompareIcon sx={{ fontSize: 50 }} />,
+                title: 'ระบบเปรียบเทียบมาตรฐาน',
+                description: 'เปรียบเทียบมาตรฐาน GACP กับมาตรฐานอื่นๆ เช่น Organic, GAP และ GMP',
+                color: '#607d8b',
+                link: '/services/standard-comparison'
+              }
+            ].map((service, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <Card
+                  sx={{
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'all 0.3s',
+                    '&:hover': {
+                      transform: 'translateY(-8px)',
+                      boxShadow: '0 12px 32px rgba(0,0,0,0.15)'
+                    }
+                  }}
+                >
+                  <CardContent sx={{ flexGrow: 1, textAlign: 'center', pt: 4 }}>
+                    <Box sx={{ color: service.color, mb: 2 }}>{service.icon}</Box>
+                    <Typography variant="h6" gutterBottom sx={{ fontWeight: 600 }}>
+                      {service.title}
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {service.description}
+                    </Typography>
+                  </CardContent>
+                  <CardActions sx={{ justifyContent: 'center', pb: 3 }}>
+                    <Button
+                      size="small"
+                      href={service.link}
+                      sx={{ color: service.color, fontWeight: 600 }}
+                    >
+                      เรียนรู้เพิ่มเติม →
+                    </Button>
+                  </CardActions>
                 </Card>
               </Grid>
             ))}

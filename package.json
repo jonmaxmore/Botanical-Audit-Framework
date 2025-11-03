@@ -29,27 +29,13 @@
     "reinstall": "npm run clean && npm install"
   },
   "dependencies": {
-    "@emotion/react": "^11.14.0",
-    "@emotion/styled": "^11.14.1",
-    "@hookform/resolvers": "^3.10.0",
-    "@mui/icons-material": "^6.5.0",
-    "@mui/material": "^6.5.0",
-    "@mui/x-date-pickers": "7.29.4",
-    "chart.js": "^4.5.1",
-    "clsx": "^2.1.1",
     "concurrently": "^8.2.2",
-    "date-fns": "^4.1.0",
     "http-proxy-middleware": "^3.0.5",
     "morgan": "^1.10.1",
-    "next": "16.0.0",
-    "react": "18.3.1",
-    "react-chartjs-2": "^5.3.0",
-    "react-dom": "18.3.1",
-    "react-hook-form": "^7.65.0",
-    "recharts": "^2.15.0",
-    "tailwind-merge": "^2.5.5",
+    "next": "^16.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "uuid": "^9.0.1",
-    "yup": "^1.7.1",
     "zod": "^3.22.4"
   },
   "devDependencies": {
@@ -57,10 +43,8 @@
     "@testing-library/jest-dom": "^6.1.5",
     "@testing-library/react": "^14.1.2",
     "@types/node": "^20.10.5",
-    "@types/react": "18.3.26",
-    "@types/react-dom": "18.3.7",
-    "@typescript-eslint/eslint-plugin": "^6.21.0",
-    "@typescript-eslint/parser": "^6.21.0",
+    "@types/react": "^18.2.45",
+    "@types/react-dom": "^18.2.18",
     "artillery": "^2.0.26",
     "autoprefixer": "^10.4.16",
     "axios": "^1.12.2",
@@ -68,6 +52,8 @@
     "chalk": "^5.6.2",
     "cors": "^2.8.5",
     "eslint": "^8.57.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-next": "15.5.6",
@@ -86,10 +72,8 @@
     "pm2": "^6.0.13",
     "postcss": "^8.4.32",
     "prettier": "^3.6.2",
-    "socket.io-client": "^4.8.1",
-    "supertest": "^7.1.4",
     "tailwindcss": "^3.4.0",
-    "typescript": "5.3.3"
+    "typescript": "^5.3.3"
   },
   "packageManager": "pnpm@8.15.0",
   "engines": {
@@ -100,26 +84,13 @@
     "overrides": {
       "playwright": ">=1.55.1",
       "@typescript-eslint/eslint-plugin": "6.21.0",
-      "@typescript-eslint/parser": "6.21.0",
-      "eslint-plugin-react-hooks": "^5.2.0",
-      "@opentelemetry/api": "1.6.0"
+      "@typescript-eslint/parser": "6.21.0"
     }
   },
   "lint-staged": {
-    "apps/frontend/**/*.{js,jsx,ts,tsx,json,css}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "apps/backend/**/*.{js,ts,json}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "frontend-nextjs/**/*.{js,jsx,ts,tsx,json,css}": [
-      "prettier --write",
-      "eslint --fix"
-    ],
-    "*.md": [
-      "prettier --write"
-    ]
+    "apps/frontend/**/*.{js,jsx,ts,tsx,json,css}": ["prettier --write", "eslint --fix"],
+    "apps/backend/**/*.{js,ts,json}": ["prettier --write", "eslint --fix"],
+    "frontend-nextjs/**/*.{js,jsx,ts,tsx,json,css}": ["prettier --write", "eslint --fix"],
+    "*.md": ["prettier --write"]
   }
 }

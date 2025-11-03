@@ -116,7 +116,7 @@ interface Inspection {
 export default function InspectionDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const inspectionId = params.id as string;
+  const inspectionId = params?.id as string;
 
   const [inspection, setInspection] = useState<Inspection | null>(null);
   const [loading, setLoading] = useState(true);

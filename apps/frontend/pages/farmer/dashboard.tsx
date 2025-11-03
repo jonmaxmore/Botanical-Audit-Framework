@@ -22,8 +22,7 @@ import {
   Agriculture as AgricultureIcon,
   Description as DescriptionIcon,
   TrendingUp as TrendingUpIcon,
-  Verified as VerifiedIcon,
-  CalendarToday as CalendarIcon
+  Verified as VerifiedIcon
 } from '@mui/icons-material';
 import FarmerLayout from '../../components/layout/FarmerLayout';
 import { useAuth } from '../../contexts/AuthContext';
@@ -101,22 +100,13 @@ export default function FarmerDashboard() {
             <Typography variant="h4" sx={{ fontWeight: 700 }}>
               สวัสดี, {user?.fullName || 'เกษตรกร'}
             </Typography>
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              <Button
-                variant="outlined"
-                startIcon={<CalendarIcon />}
-                onClick={() => router.push('/farmer/booking')}
-              >
-                จองการตรวจสอบ
-              </Button>
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => router.push('/farmer/application/create')}
-              >
-                ยื่นคำขอใหม่
-              </Button>
-            </Box>
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => router.push('/farmer/application/create')}
+            >
+              ยื่นคำขอใหม่
+            </Button>
           </Box>
 
           <Grid container spacing={3} sx={{ mb: 4 }}>
