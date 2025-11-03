@@ -1,9 +1,11 @@
 /**
  * API Configuration for GACP Platform
  * Connects Next.js frontend with Express.js backend
+ * With standardized response handling
  */
 
 import axios from 'axios';
+import { normalizeResponse, getErrorMessage } from './responseHelper';
 
 // Backend API Base URL
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3004';
@@ -29,15 +31,25 @@ api.interceptors.request.use(
   error => Promise.reject(error)
 );
 
-// Response interceptor for handling errors
+// Response interceptor for handling errors and normalizing responses
 api.interceptors.response.use(
-  response => response,
+  response => {
+    // Normalize all successful responses
+    response.data = normalizeResponse(response.data);
+    return response;
+  },
   error => {
     if (error.response?.status === 401) {
       // Handle unauthorized - redirect to login
       localStorage.removeItem('gacp_token');
       window.location.href = '/auth/login';
     }
+    
+    // Normalize error response
+    if (error.response?.data) {
+      error.message = getErrorMessage(error.response.data);
+    }
+    
     return Promise.reject(error);
   }
 );
