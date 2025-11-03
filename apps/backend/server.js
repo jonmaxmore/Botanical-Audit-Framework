@@ -268,12 +268,12 @@ app.use('/api/notifications', require('./routes/notification')); // Notification
 app.use('/api/analytics', require('./routes/analytics')); // Analytics Dashboard
 app.use('/api/dashboard', require('./routes/dashboard'));
 app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ? Smart Agriculture APIs
+app.use('/api/traceability', require('./routes/traceability')); // ✅ Traceability System - QR code tracking
+app.use('/api/farm-management', require('./routes/farm-management')); // ✅ Farm Management System
+app.use('/api/standards', require('./routes/standards')); // ✅ Standards Comparison System
+app.use('/api/questionnaires', require('./routes/questionnaires')); // ✅ Questionnaire/Survey System
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
-// app.use('/api/notifications', require('./routes/notifications')); // Commented - needs check
-// app.use('/api/farm-management', require('./routes/farm-management')); // Commented - needs check
-// app.use('/api/questionnaires', require('./routes/questionnaires')); // Commented - needs check
-// app.use('/api/standards', require('./routes/standards')); // Commented - needs check
-// app.use('/api/traceability', require('./routes/traceability')); // Commented - needs check
+// app.use('/api/notifications', require('./routes/notifications')); // Commented - duplicate route (already enabled above)
 
 // Global error handler
 app.use(errorMiddleware());

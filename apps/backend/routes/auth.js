@@ -290,7 +290,124 @@ router.post(
 );
 
 /**
- * POST /api/auth/refresh
+ * POST /api/auth/dtam/login
+ * DTAM Staff Login (compatibility endpoint for admin portal)
+ * This is an alias to the main login endpoint with DTAM-specific validation
+ */
+router.post(
+  '/dtam/login',
+  loginLimiter,
+  handleAsync(async (req, res) => {
+    const { username, email, password, userType } = req.body;
+
+    // Support both username and email for DTAM login
+    const loginIdentifier = username || email;
+
+    if (!loginIdentifier || !password) {
+      return sendError(res, 'VALIDATION_ERROR', 'Username/email and password are required', null, 400);
+    }
+
+    // Validate userType if provided
+    if (userType && userType !== 'DTAM_STAFF') {
+      return sendError(res, 'INVALID_USER_TYPE', 'Invalid user type for DTAM login', null, 400);
+    }
+
+    // Find DTAM staff user (admin or staff role)
+    const user = await User.findOne({
+      $or: [
+        { email: loginIdentifier.toLowerCase() },
+        { username: loginIdentifier }
+      ],
+      role: { $in: ['admin', 'staff', 'document_checker', 'inspector', 'approver'] },
+      status: 'active'
+    })
+      .select('+password')
+      .maxTimeMS(5000);
+
+    if (!user) {
+      return sendError(res, 'LOGIN_FAILED', 'Invalid credentials or unauthorized access', null, 401);
+    }
+
+    // Check if account is locked
+    if (user.isLocked) {
+      return sendError(
+        res,
+        'ACCOUNT_LOCKED',
+        `Account is locked due to multiple failed login attempts. Please try again after ${Math.ceil(user.lockUntil ? (user.lockUntil - Date.now()) / 60000 : 0)} minutes.`,
+        null,
+        423
+      );
+    }
+
+    // Verify password
+    const isPasswordValid = await user.comparePassword(password);
+
+    if (!isPasswordValid) {
+      await user.incrementLoginAttempts();
+      logger.warn({
+        message: 'DTAM login failed - invalid password',
+        userId: user._id,
+        email: user.email,
+        role: user.role,
+        ip: req.ip
+      });
+
+      return sendError(res, 'LOGIN_FAILED', 'Invalid credentials', null, 401);
+    }
+
+    // Reset login attempts on successful login
+    if (user.loginAttempts > 0) {
+      await user.resetLoginAttempts();
+    }
+
+    // Update login history
+    const loginHistoryEntry = {
+      timestamp: new Date(),
+      ip: req.ip,
+      userAgent: req.get('User-Agent'),
+      location: req.get('X-Forwarded-For') || req.connection.remoteAddress
+    };
+
+    await User.updateOne(
+      { _id: user._id },
+      {
+        $set: { lastLogin: new Date() },
+        $push: { loginHistory: { $each: [loginHistoryEntry], $slice: -10 } }
+      }
+    );
+
+    // Generate tokens
+    const accessToken = generateToken(user);
+    const refreshToken = generateRefreshToken(user);
+    const expiresIn = '24h';
+
+    logger.info({
+      message: 'DTAM staff login successful',
+      userId: user._id,
+      email: user.email,
+      role: user.role,
+      userType: userType || 'DTAM_STAFF',
+      ip: req.ip
+    });
+
+    res.json({
+      success: true,
+      message: 'DTAM login successful',
+      data: {
+        user: user.toPublicProfile(),
+        tokens: {
+          accessToken,
+          refreshToken,
+          expiresIn
+        },
+        userType: 'DTAM_STAFF'
+      }
+    });
+  })
+);
+
+/**
+ * POST /api/auth/refresh-token
  * Refresh access token
  */
 router.post(
