@@ -304,7 +304,13 @@ router.post(
     const loginIdentifier = username || email;
 
     if (!loginIdentifier || !password) {
-      return sendError(res, 'VALIDATION_ERROR', 'Username/email and password are required', null, 400);
+      return sendError(
+        res,
+        'VALIDATION_ERROR',
+        'Username/email and password are required',
+        null,
+        400
+      );
     }
 
     // Validate userType if provided
@@ -314,10 +320,7 @@ router.post(
 
     // Find DTAM staff user (admin or staff role)
     const user = await User.findOne({
-      $or: [
-        { email: loginIdentifier.toLowerCase() },
-        { username: loginIdentifier }
-      ],
+      $or: [{ email: loginIdentifier.toLowerCase() }, { username: loginIdentifier }],
       role: { $in: ['admin', 'staff', 'document_checker', 'inspector', 'approver'] },
       status: 'active'
     })
@@ -325,7 +328,13 @@ router.post(
       .maxTimeMS(5000);
 
     if (!user) {
-      return sendError(res, 'LOGIN_FAILED', 'Invalid credentials or unauthorized access', null, 401);
+      return sendError(
+        res,
+        'LOGIN_FAILED',
+        'Invalid credentials or unauthorized access',
+        null,
+        401
+      );
     }
 
     // Check if account is locked
