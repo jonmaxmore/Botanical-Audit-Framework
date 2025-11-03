@@ -453,25 +453,61 @@ If you're unsure whether code is deprecated:
 
 ### January 2025 - Code Deduplication Cleanup
 
+#### Phase 1 (Critical Fixes) - Completed ✅
+
 - ✅ **Deleted:** `modules/shared/utils/date.js` (100% duplicate of `shared/utilities.js`)
 - ✅ **Deleted:** `src/middleware/validation.js` (stub only, no real implementation)
 - ✅ **Deleted:** `modules/shared/utils/validation.js` (merged into `shared/validation.js`)
 - ✅ **Deleted:** `src/controllers/applicationController.js` (stub returning 501 errors)
 - ✅ **Enhanced:** `shared/validation.js` - consolidated validation functions from multiple files
 - 📝 **Clarified:** `modules/shared/` is NOT duplicate - it's a re-export layer (architecture pattern)
-- 📝 **Documented:** Application routes need consolidation (deferred to Phase 2)
+- 📝 **Documented:** Application routes need consolidation (deferred to Phase 3)
 - 🔍 **Audit:** Completed comprehensive code deduplication audit (see CODE_DEDUPLICATION_AUDIT.md)
 
-**Files Deleted (4 total):**
+**Phase 1 Files Deleted (4 total):**
 1. `apps/backend/modules/shared/utils/date.js` - Duplicate date utilities
 2. `apps/backend/modules/shared/utils/validation.js` - Duplicate validation
 3. `apps/backend/src/middleware/validation.js` - Stub middleware
 4. `apps/backend/src/controllers/applicationController.js` - Stub controller
 
-**Files Enhanced (1 total):**
+**Phase 1 Files Enhanced (1 total):**
 1. `apps/backend/shared/validation.js` - Consolidated validation utilities
 
-**Impact:** Removed 100% duplicate code, established single source of truth for utilities
+**Phase 1 Impact:** Removed 100% duplicate code, established single source of truth for utilities
+
+---
+
+#### Phase 2 (Warning Fixes) - Completed ✅
+
+- ✅ **Deleted:** `src/utils/logger.js` (unused comprehensive logger, modules use shared/logger)
+- 📝 **Reviewed:** Centralized `models/` - still in use by legacy routes and tests (defer to Phase 3)
+- 📝 **Reviewed:** Centralized `repositories/` - used by tests (keep for now)
+- 📝 **Clarified:** Server files (server.js, atlas-server.js, dev-server.js, simple-server.js) have distinct purposes
+- 📝 **Clarified:** Logger wrappers in modules/auth-* are NOT duplicates - they wrap shared/logger
+- 📝 **Clarified:** modules/shared/constants/ are sub-constants, not duplicates
+- 📝 **Verified:** modules use their own infrastructure/repositories (Clean Architecture pattern)
+
+**Phase 2 Files Deleted (1 total):**
+1. `apps/backend/src/utils/logger.js` - Unused logger (no imports found)
+
+**Phase 2 Architecture Clarifications:**
+
+| Component | Status | Decision |
+|-----------|--------|----------|
+| **Server Files** | ✅ Keep All | Each has distinct purpose (production/dev/demo) |
+| **Centralized Models** | 🟡 Keep (Legacy) | Still used by routes & tests, migrate in Phase 3 |
+| **Centralized Repositories** | 🟡 Keep (Tests) | Used by __tests__, modules use own repos |
+| **Logger Implementations** | ✅ Clarified | Modules wrap shared/logger (pattern, not duplicate) |
+| **Constants Structure** | ✅ Clarified | modules/shared/constants/ are sub-constants |
+
+**Server Files Purpose:**
+- `atlas-server.js` - MongoDB Atlas production server (706 lines)
+- `server.js` - Main production server with full features (384 lines)
+- `dev-server.js` - Development server with hot reload
+- `dev-simple-server.js` - Quick dev testing
+- `simple-server.js` - Demo server with mock APIs (413 lines)
+
+**Phase 2 Impact:** Removed unused code, clarified architecture patterns, documented decisions for Phase 3
 
 ### October 26, 2025
 
