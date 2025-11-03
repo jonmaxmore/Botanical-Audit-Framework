@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import {
   Box,
@@ -23,8 +23,7 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
-  Rating
+  TextField
 } from '@mui/material';
 import {
   ArrowBack as ArrowBackIcon,
@@ -127,11 +126,7 @@ export default function InspectionDetailPage() {
   >(null);
   const [actionData, setActionData] = useState<any>({});
 
-  useEffect(() => {
-    fetchInspection();
-  }, [inspectionId]);
-
-  const fetchInspection = async () => {
+  const fetchInspection = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(`/api/inspections/${inspectionId}`, {
@@ -150,7 +145,11 @@ export default function InspectionDetailPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [inspectionId]);
+
+  useEffect(() => {
+    fetchInspection();
+  }, [fetchInspection]);
 
   const handleAction = async () => {
     if (!inspection || !actionType) return;
