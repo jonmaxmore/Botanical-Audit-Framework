@@ -126,7 +126,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
           maxAttempts: 3,
           initialDelay: 1000, // 1s, 2s, 4s backoff
           onRetry: (attempt, error) => {
-            console.warn(`🔄 Login retry ${attempt}/3:`, error.message);
+            // Retry attempt logged silently for production
+            if (process.env.NODE_ENV === 'development') {
+              console.warn(`🔄 Login retry ${attempt}/3:`, error.message);
+            }
           },
         }
       );
@@ -148,7 +151,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.setItem('auth_token', realToken);
       localStorage.setItem('auth_user', JSON.stringify(realUser));
 
-      console.log('✅ Real Login Success:', { email: realUser.email, role: realUser.role });
+      // Login success - logged in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✅ Real Login Success:', { email: realUser.email, role: realUser.role });
+      }
 
       // Set loading to false BEFORE redirect to ensure withAuth HOC works correctly
       setIsLoading(false);
@@ -165,7 +171,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       return data; // Return login data
     } catch (error) {
-      console.error('Login error:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Login error:', error);
+      }
       setIsLoading(false); // Also set to false on error
       throw error;
     }
@@ -231,7 +239,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
           maxAttempts: 3,
           initialDelay: 1000,
           onRetry: (attempt, error) => {
-            console.warn(`🔄 Register retry ${attempt}/3:`, error.message);
+            if (process.env.NODE_ENV === 'development') {
+              console.warn(`🔄 Register retry ${attempt}/3:`, error.message);
+            }
           },
         }
       );
@@ -254,7 +264,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       localStorage.setItem('auth_token', realToken);
       localStorage.setItem('auth_user', JSON.stringify(realUser));
 
-      console.log('✅ Real Registration Success:', { email: realUser.email, role: realUser.role });
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✅ Real Registration Success:', { email: realUser.email, role: realUser.role });
+      }
 
       // Set loading to false BEFORE redirect to ensure withAuth HOC works correctly
       setIsLoading(false);
@@ -269,7 +281,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       router.push(roleRedirects[data.role] || '/');
     } catch (error) {
-      console.error('Registration error:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Registration error:', error);
+      }
       setIsLoading(false); // Also set to false on error
       throw error;
     }
@@ -333,7 +347,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
           maxAttempts: 2, // Fewer retries for background refresh
           initialDelay: 500, // Faster retry (not user-facing)
           onRetry: (attempt, error) => {
-            console.warn(`🔄 Token refresh retry ${attempt}/2:`, error.message);
+            if (process.env.NODE_ENV === 'development') {
+              console.warn(`🔄 Token refresh retry ${attempt}/2:`, error.message);
+            }
           },
         }
       );
@@ -341,7 +357,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setToken(data.token);
       localStorage.setItem('auth_token', data.token);
     } catch (error) {
-      console.error('Token refresh error:', error);
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Token refresh error:', error);
+      }
       logout();
     }
   };

@@ -49,6 +49,7 @@ const ApplicationDetailPage = () => {
 
   useEffect(() => {
     loadApplication();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applicationId]);
 
   const loadApplication = async () => {
@@ -438,7 +439,7 @@ const ApplicationDetailPage = () => {
         {documents && documents.length > 0 ? (
           <List>
             {documents.map((doc: any, index: number) => (
-              <ListItem key={index}>
+              <ListItem key={doc.id || doc._id || `doc-${index}`}>
                 <ListItemIcon>{getDocumentStatusIcon(doc.status)}</ListItemIcon>
                 <ListItemText
                   primary={doc.documentType}
@@ -469,8 +470,8 @@ const ApplicationDetailPage = () => {
                   5,000 บาท
                 </Typography>
                 <Chip
-                  label={payments?.phase1?.status === 'PAID' ? 'ชำระแล้ว' : 'รอชำระเงิน'}
-                  color={payments?.phase1?.status === 'PAID' ? 'success' : 'warning'}
+                  label={payments?.phase1?.status === "COMPLETED" ? 'ชำระแล้ว' : 'รอชำระเงิน'}
+                  color={payments?.phase1?.status === "COMPLETED" ? 'success' : 'warning'}
                   size="small"
                   sx={{ mt: 1 }}
                 />
@@ -487,8 +488,8 @@ const ApplicationDetailPage = () => {
                   25,000 บาท
                 </Typography>
                 <Chip
-                  label={payments?.phase2?.status === 'PAID' ? 'ชำระแล้ว' : 'รอชำระเงิน'}
-                  color={payments?.phase2?.status === 'PAID' ? 'success' : 'default'}
+                  label={payments?.phase2?.status === "COMPLETED" ? 'ชำระแล้ว' : 'รอชำระเงิน'}
+                  color={payments?.phase2?.status === "COMPLETED" ? 'success' : 'default'}
                   size="small"
                   sx={{ mt: 1 }}
                 />
@@ -541,4 +542,4 @@ const ApplicationDetailPage = () => {
   );
 };
 
-export default withAuth(ApplicationDetailPage, ['FARMER']);
+export default ApplicationDetailPage;

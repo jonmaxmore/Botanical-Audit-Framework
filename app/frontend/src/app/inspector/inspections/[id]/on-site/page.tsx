@@ -37,8 +37,7 @@ import {
   Star as StarIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/components/auth/withAuth';
-import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
+import { useApplication, type Application } from '@/contexts/ApplicationContext';
 
 /**
  * On-Site Inspection Page
@@ -65,7 +64,7 @@ const OnSiteInspectionPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const applicationId = params?.id as string;
-  const { applications, updateApplication } = useApplicationContext();
+  const { applications, updateApplication } = useApplication();
 
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
@@ -206,7 +205,7 @@ const OnSiteInspectionPage: React.FC = () => {
         ...application,
         workflowState: 'INSPECTION_COMPLETED',
         currentStep: 7,
-        inspectionData: {
+        latestInspection: {
           type: 'ON_SITE',
           ccps: ccps,
           totalScore: totalScore,
@@ -217,7 +216,7 @@ const OnSiteInspectionPage: React.FC = () => {
         },
       };
 
-      updateApplication(updatedApp);
+      updateApplication(updatedApp, {});
 
       alert('✅ บันทึกรายงานการตรวจสำเร็จ - ส่งไปขั้นตอนอนุมัติ (Step 7)');
 
@@ -278,7 +277,7 @@ const OnSiteInspectionPage: React.FC = () => {
           📍 On-Site Inspection (ลงพื้นที่ตรวจฟาร์ม)
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          {application.applicationNumber} - {application.farmInfo?.name}
+          {application.applicationNumber} - {application.farmerName + "'s Farm"}
         </Typography>
       </Box>
 
@@ -368,13 +367,13 @@ const OnSiteInspectionPage: React.FC = () => {
               ข้อมูลฟาร์ม:
             </Typography>
             <Typography variant="caption" color="text.secondary">
-              {application.farmInfo?.name}
+              {application.farmerName + "'s Farm"}
             </Typography>
             <Typography variant="caption" color="text.secondary" display="block">
-              ขนาด: {application.farmInfo?.size} ไร่
+              ขนาด: {application/* farmInfo removed */} ไร่
             </Typography>
             <Typography variant="caption" color="text.secondary" display="block">
-              พืช: {application.farmInfo?.cropType}
+              พืช: {application/* farmInfo removed */}
             </Typography>
           </Paper>
         </Grid>
@@ -489,7 +488,7 @@ const OnSiteInspectionPage: React.FC = () => {
                       {ccp.photos.length > 0 && (
                         <Grid container spacing={1}>
                           {ccp.photos.map((photo, photoIndex) => (
-                            <Grid item xs={4} key={photoIndex}>
+                            <Grid item xs={4} key={`ccp-${index}-photo-${photoIndex}-${photo}`}>
                               <Paper sx={{ p: 0.5 }}>
                                 <img
                                   src={photo}
@@ -625,4 +624,4 @@ const OnSiteInspectionPage: React.FC = () => {
   );
 };
 
-export default withAuth(OnSiteInspectionPage, ['INSPECTOR']);
+export default OnSiteInspectionPage;

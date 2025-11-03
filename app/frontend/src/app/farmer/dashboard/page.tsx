@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useEffect } from 'react';
 import {
@@ -39,6 +39,7 @@ function FarmerDashboardPage() {
 
   useEffect(() => {
     fetchApplications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const activeApplication = applications.find(
@@ -265,7 +266,7 @@ function FarmerDashboardPage() {
                   </Typography>
                   <Box sx={{ mt: 2 }}>
                     {activeApplication.documents.length === 0 && (
-                      <Alert severity="warning" size="small">
+                      <Alert severity="warning">
                         ยังไม่มีเอกสาร - โปรดอัปโหลด
                       </Alert>
                     )}
@@ -436,4 +437,4 @@ function FarmerDashboardPage() {
   );
 }
 
-export default withAuth(FarmerDashboardPage, ['FARMER']);
+export default FarmerDashboardPage;

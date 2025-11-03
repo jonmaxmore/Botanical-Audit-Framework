@@ -1,4 +1,4 @@
-/**
+﻿/**
  * GACP Platform - Integration Test Validation
  *
  * PURPOSE: Test and validate frontend-backend integration
@@ -229,7 +229,7 @@ const GACPIntegrationTest: React.FC = () => {
         if (data.success && data.data) {
           const workflowData = data.data;
           const isValid =
-            workflowData.workflowStates === 17 &&
+            workflowData.currentStates === 17 &&
             workflowData.transitions === 28 &&
             workflowData.framework === 'Thai FDA GACP Certification Process (2018)' &&
             Array.isArray(workflowData.compliance) &&
@@ -239,7 +239,7 @@ const GACPIntegrationTest: React.FC = () => {
             updateTestResult(
               'GACP Workflow API',
               'success',
-              `Workflow API validated: ${workflowData.workflowStates} states, ${workflowData.transitions} transitions`,
+              `Workflow API validated: ${workflowData.currentStates} states, ${workflowData.transitions} transitions`,
               workflowData
             );
           } else {

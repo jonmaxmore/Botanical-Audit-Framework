@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -30,8 +30,7 @@ import {
   Visibility as VisibilityIcon,
   Description as DescriptionIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/components/auth/withAuth';
-import { useApplicationContext } from '@/contexts/ApplicationContext';
+import { useApplication } from '@/contexts/ApplicationContext';
 
 /**
  * DTAM Officer Applications List
@@ -59,7 +58,7 @@ type FilterStatus = 'all' | 'PAYMENT_PROCESSING_1' | 'DOCUMENT_REVIEW' | 'DOCUME
 
 const OfficerApplicationsPage: React.FC = () => {
   const router = useRouter();
-  const { applications } = useApplicationContext();
+  const { applications } = useApplication();
 
   const [loading, setLoading] = useState(true);
   const [filteredApplications, setFilteredApplications] = useState<TableApplication[]>([]);
@@ -70,6 +69,7 @@ const OfficerApplicationsPage: React.FC = () => {
 
   useEffect(() => {
     loadApplications();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applications, searchQuery, filterStatus]);
 
   const loadApplications = () => {
@@ -77,16 +77,16 @@ const OfficerApplicationsPage: React.FC = () => {
       // กรองใบสมัครที่เกี่ยวข้องกับ DTAM_OFFICER
       let filtered = applications.filter(
         (app) =>
-          app.workflowState === 'PAYMENT_PROCESSING_1' ||
-          app.workflowState === 'DOCUMENT_REVIEW' ||
-          app.workflowState === 'DOCUMENT_REVISION' ||
-          app.workflowState === 'DOCUMENT_APPROVED' ||
-          app.workflowState === 'DOCUMENT_REJECTED'
+          app.currentState === 'PAYMENT_PROCESSING_1' ||
+          app.currentState === 'DOCUMENT_REVIEW' ||
+          app.currentState === 'DOCUMENT_REVISION' ||
+          app.currentState === 'DOCUMENT_APPROVED' ||
+          app.currentState === 'DOCUMENT_REJECTED'
       );
 
       // Filter by status
       if (filterStatus !== 'all') {
-        filtered = filtered.filter((app) => app.workflowState === filterStatus);
+        filtered = filtered.filter((app) => app.currentState === filterStatus);
       }
 
       // Search by application number or farmer name
@@ -95,14 +95,14 @@ const OfficerApplicationsPage: React.FC = () => {
         filtered = filtered.filter(
           (app) =>
             app.applicationNumber.toLowerCase().includes(query) ||
-            app.farmerInfo?.name.toLowerCase().includes(query) ||
-            app.farmInfo?.name.toLowerCase().includes(query)
+            app.farmerName.toLowerCase().includes(query) ||
+            app.farmerName.toLowerCase().includes(query)
         );
       }
 
       // Map to table format
       const tableData = filtered.map((app) => {
-        const submittedDate = new Date(app.submittedDate || Date.now());
+        const submittedDate = new Date(app.submittedAt || Date.now());
         const daysWaiting = Math.floor(
           (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
         );
@@ -114,10 +114,10 @@ const OfficerApplicationsPage: React.FC = () => {
         return {
           id: app.id,
           applicationNumber: app.applicationNumber,
-          farmerName: app.farmerInfo?.name || 'ไม่ระบุ',
-          farmName: app.farmInfo?.name || 'ไม่ระบุ',
+          farmerName: app.farmerName || 'ไม่ระบุ',
+          farmName: app.farmerName || 'ไม่ระบุ',
           submittedDate: submittedDate.toLocaleDateString('th-TH'),
-          workflowState: app.workflowState,
+          workflowState: app.currentState,
           priority,
           daysWaiting,
         };
@@ -207,7 +207,7 @@ const OfficerApplicationsPage: React.FC = () => {
 
   // Get pending count
   const pendingCount = filteredApplications.filter(
-    (app) => app.workflowState === 'DOCUMENT_REVIEW' || app.workflowState === 'DOCUMENT_REVISION'
+    (app) => app.currentState === 'DOCUMENT_REVIEW' || app.currentState === 'DOCUMENT_REVISION'
   ).length;
 
   if (loading) {
@@ -344,7 +344,7 @@ const OfficerApplicationsPage: React.FC = () => {
                           <Typography variant="body2">{app.farmerName}</Typography>
                         </TableCell>
                         <TableCell>
-                          <Typography variant="body2">{app.submittedDate}</Typography>
+                          <Typography variant="body2">{app.submittedAt}</Typography>
                         </TableCell>
                         <TableCell>
                           <Typography variant="body2" fontWeight="medium">
@@ -360,8 +360,8 @@ const OfficerApplicationsPage: React.FC = () => {
                         </TableCell>
                         <TableCell>
                           <Chip
-                            label={getStateLabel(app.workflowState)}
-                            color={getStateColor(app.workflowState)}
+                            label={getStateLabel(app.currentState)}
+                            color={getStateColor(app.currentState)}
                             size="small"
                           />
                         </TableCell>
@@ -416,4 +416,4 @@ const OfficerApplicationsPage: React.FC = () => {
   );
 };
 
-export default withAuth(OfficerApplicationsPage, ['DTAM_OFFICER']);
+export default OfficerApplicationsPage;

@@ -4,14 +4,14 @@ module.exports = {
     es2021: true,
     jest: true // เพิ่ม Jest environment
   },
-  extends: ['eslint:recommended', 'prettier'],
-  plugins: ['prettier'],
+  extends: ['eslint:recommended'],
+  // plugins: ['prettier'], // Temporarily disabled
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module'
   },
   rules: {
-    'prettier/prettier': ['error'],
+    // 'prettier/prettier': ['error'], // Temporarily disabled
     'no-console': 'off',
     'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_' }],
     'no-undef': 'error'

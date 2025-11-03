@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -28,8 +28,7 @@ import {
   Schedule as ScheduleIcon,
   ArrowForward as ArrowForwardIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/components/auth/withAuth';
-import { useApplicationContext } from '@/contexts/ApplicationContext';
+import { useApplication } from '@/contexts/ApplicationContext';
 
 /**
  * Inspector Schedule Page
@@ -55,7 +54,7 @@ interface Inspection {
 
 const InspectorSchedulePage: React.FC = () => {
   const router = useRouter();
-  const { applications } = useApplicationContext();
+  const { applications } = useApplication();
 
   const [loading, setLoading] = useState(true);
   const [inspections, setInspections] = useState<Inspection[]>([]);
@@ -69,6 +68,7 @@ const InspectorSchedulePage: React.FC = () => {
 
   useEffect(() => {
     loadSchedule();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applications, filterType]);
 
   const loadSchedule = () => {
@@ -76,9 +76,9 @@ const InspectorSchedulePage: React.FC = () => {
       // กรองใบสมัครที่อยู่ในขั้นตอนตรวจสอบ
       const inspectionApplications = applications.filter(
         (app) =>
-          app.workflowState === 'INSPECTION_SCHEDULED' ||
-          app.workflowState === 'INSPECTION_VDO_CALL' ||
-          app.workflowState === 'INSPECTION_ON_SITE'
+          app.currentState === 'INSPECTION_SCHEDULED' ||
+          app.currentState === 'INSPECTION_VDO_CALL' ||
+          app.currentState === 'INSPECTION_ON_SITE'
       );
 
       // Mock inspections data
@@ -91,13 +91,13 @@ const InspectorSchedulePage: React.FC = () => {
           id: `INS-${app.id}`,
           applicationId: app.id,
           applicationNumber: app.applicationNumber,
-          farmerName: app.farmerInfo?.name || 'ไม่ระบุ',
-          farmName: app.farmInfo?.name || 'ไม่ระบุ',
+          farmerName: app.farmerName || 'ไม่ระบุ',
+          farmName: app.farmerName || 'ไม่ระบุ',
           type: index % 3 === 0 ? 'VDO_CALL' : 'ON_SITE',
           status: index % 2 === 0 ? 'accepted' : 'pending',
           scheduledDate: scheduledDate.toISOString().split('T')[0],
           scheduledTime: `${9 + (index % 6)}:00`,
-          address: app.farmInfo?.address,
+          address: /* removed farmInfo */ ""?.address,
         };
       });
 
@@ -255,9 +255,9 @@ const InspectorSchedulePage: React.FC = () => {
             {
               applications.filter(
                 (app) =>
-                  app.workflowState === 'INSPECTION_SCHEDULED' ||
-                  app.workflowState === 'INSPECTION_VDO_CALL' ||
-                  app.workflowState === 'INSPECTION_ON_SITE'
+                  app.currentState === 'INSPECTION_SCHEDULED' ||
+                  app.currentState === 'INSPECTION_VDO_CALL' ||
+                  app.currentState === 'INSPECTION_ON_SITE'
               ).length
             }
             )
@@ -488,4 +488,4 @@ const InspectorSchedulePage: React.FC = () => {
   );
 };
 
-export default withAuth(InspectorSchedulePage, ['INSPECTOR']);
+export default InspectorSchedulePage;

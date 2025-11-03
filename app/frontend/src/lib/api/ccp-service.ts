@@ -486,12 +486,4 @@ const gacpCCPService = GACPCCPService.getInstance();
 
 export { gacpCCPService };
 
-export type {
-  CCPAssessmentData,
-  CCPAssessmentResult,
-  CCPFrameworkInfo,
-  CCPDefinition,
-  CCPCriteria,
-};
-
 export default gacpCCPService;

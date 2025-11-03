@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -32,7 +32,7 @@ import {
   Alert,
 } from '@mui/material';
 import {
-  Certificate as CertificateIcon,
+  CardMembership as CertificateIcon,
   Download as DownloadIcon,
   Visibility as VisibilityIcon,
   Block as BlockIcon,
@@ -43,8 +43,7 @@ import {
   People as PeopleIcon,
   Search as SearchIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/components/auth/withAuth';
-import { useApplicationContext } from '@/contexts/ApplicationContext';
+import { useApplication } from '@/contexts/ApplicationContext';
 
 /**
  * Admin Certificate & User Management Page
@@ -122,7 +121,7 @@ function TabPanel(props: TabPanelProps) {
 
 const AdminManagementPage: React.FC = () => {
   const router = useRouter();
-  const { applications } = useApplicationContext();
+  const { applications } = useApplication();
   const [tabValue, setTabValue] = useState(0);
 
   // Certificates state
@@ -149,17 +148,17 @@ const AdminManagementPage: React.FC = () => {
 
   // Get issued certificates
   const issuedCertificates = applications
-    .filter((app) => app.workflowState === 'CERTIFICATE_ISSUED' || app.workflowState === 'APPROVED')
+    .filter((app) => app.currentState === 'CERTIFICATE_ISSUED' || app.currentState === 'APPROVED')
     .map((app, index) => ({
       id: app.id,
       certificateNumber: `GACP-${new Date().getFullYear()}-${String(index + 1).padStart(4, '0')}`,
       applicationNumber: app.applicationNumber,
-      farmName: app.farmInfo?.name,
-      farmerName: app.farmerInfo?.name,
+      farmName: app.farmerName,
+      farmerName: app.farmerName,
       issueDate: new Date().toISOString(),
       expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year
       status: 'active',
-      score: app.inspectionData?.totalScore || 0,
+      score: app.inspections?.totalScore || 0,
     }));
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -656,4 +655,4 @@ const AdminManagementPage: React.FC = () => {
   );
 };
 
-export default withAuth(AdminManagementPage, ['ADMIN']);
+export default AdminManagementPage;

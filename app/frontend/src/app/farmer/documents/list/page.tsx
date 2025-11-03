@@ -474,7 +474,7 @@ export default function DocumentListPage() {
                 {loading ? (
                   // Loading skeleton rows
                   [...Array(rowsPerPage)].map((_, index) => (
-                    <TableRow key={index}>
+                    <TableRow key={`skeleton-row-${index}`}>
                       <TableCell>
                         <Skeleton />
                       </TableCell>

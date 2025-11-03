@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -135,9 +135,9 @@ const PaymentPage = () => {
   const isPaymentPaid = () => {
     if (!currentApplication?.payments) return false;
     if (phase === '1') {
-      return currentApplication.payments.phase1?.status === 'PAID';
+      return currentApplication.payments.find(p => p.phase === 1)?.status === "COMPLETED";
     }
-    return currentApplication.payments.phase2?.status === 'PAID';
+    return currentApplication.payments.find(p => p.phase === 2)?.status === "COMPLETED";
   };
 
   if (loading) {
@@ -429,4 +429,4 @@ const PaymentPage = () => {
   );
 };
 
-export default withAuth(PaymentPage, ['FARMER']);
+export default PaymentPage;

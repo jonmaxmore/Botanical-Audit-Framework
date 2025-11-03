@@ -37,8 +37,7 @@ import {
   CloudUpload as CloudUploadIcon,
   ArrowBack as ArrowBackIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/components/auth/withAuth';
-import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
+import { useApplication, type Application } from '@/contexts/ApplicationContext';
 
 /**
  * VDO Call Inspection Page
@@ -61,7 +60,7 @@ const VdoCallInspectionPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const applicationId = params?.id as string;
-  const { applications, updateApplication } = useApplicationContext();
+  const { applications, updateApplication } = useApplication();
 
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
@@ -137,7 +136,7 @@ const VdoCallInspectionPage: React.FC = () => {
         ...application,
         workflowState: newState,
         currentStep: decision === 'sufficient' ? 7 : 6,
-        inspectionData: {
+        latestInspection: {
           type: 'VDO_CALL',
           checklist: checklist,
           decision: decision,
@@ -151,7 +150,7 @@ const VdoCallInspectionPage: React.FC = () => {
         },
       };
 
-      updateApplication(updatedApp);
+      updateApplication(updatedApp, {});
 
       alert(
         decision === 'sufficient'
@@ -194,7 +193,7 @@ const VdoCallInspectionPage: React.FC = () => {
           📹 VDO Call Inspection
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          {application.applicationNumber} - {application.farmInfo?.name}
+          {application.applicationNumber} - {application.farmerName + "'s Farm"}
         </Typography>
       </Box>
 
@@ -212,26 +211,26 @@ const VdoCallInspectionPage: React.FC = () => {
                   ชื่อฟาร์ม:
                 </Typography>
                 <Typography variant="body2" fontWeight="medium">
-                  {application.farmInfo?.name}
+                  {application.farmerName + "'s Farm"}
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ขนาดพื้นที่:
                 </Typography>
-                <Typography variant="body2">{application.farmInfo?.size} ไร่</Typography>
+                <Typography variant="body2">{application/* farmInfo removed */} ไร่</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ประเภทพืช:
                 </Typography>
-                <Typography variant="body2">{application.farmInfo?.cropType}</Typography>
+                <Typography variant="body2">{application/* farmInfo removed */}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   จังหวัด:
                 </Typography>
-                <Typography variant="body2">{application.farmInfo?.province}</Typography>
+                <Typography variant="body2">{application/* farmInfo removed */}</Typography>
               </Box>
             </Box>
           </Paper>
@@ -247,20 +246,20 @@ const VdoCallInspectionPage: React.FC = () => {
                   ชื่อ-นามสกุล:
                 </Typography>
                 <Typography variant="body2" fontWeight="medium">
-                  {application.farmerInfo?.name}
+                  {application.farmerName}
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   โทรศัพท์:
                 </Typography>
-                <Typography variant="body2">{application.farmerInfo?.phone}</Typography>
+                <Typography variant="body2">{application/* farmerInfo removed */}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ประสบการณ์:
                 </Typography>
-                <Typography variant="body2">{application.farmerInfo?.experience} ปี</Typography>
+                <Typography variant="body2">{application/* farmerInfo removed */} ปี</Typography>
               </Box>
             </Box>
           </Paper>
@@ -321,7 +320,7 @@ const VdoCallInspectionPage: React.FC = () => {
             {photos.length > 0 && (
               <Grid container spacing={2}>
                 {photos.map((photo, index) => (
-                  <Grid item xs={6} md={4} key={index}>
+                  <Grid item xs={6} md={4} key={photo.id || photo.url || `photo-${index}`}>
                     <Paper
                       sx={{
                         p: 1,
@@ -499,4 +498,4 @@ const VdoCallInspectionPage: React.FC = () => {
   );
 };
 
-export default withAuth(VdoCallInspectionPage, ['INSPECTOR']);
+export default VdoCallInspectionPage;

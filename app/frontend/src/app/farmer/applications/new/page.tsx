@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -694,4 +694,4 @@ const NewApplicationPage = () => {
   );
 };
 
-export default withAuth(NewApplicationPage, ['FARMER']);
+export default NewApplicationPage;

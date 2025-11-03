@@ -65,7 +65,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
 }) => {
   const [dragActive, setDragActive] = useState(false);
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File): string | null => {
     // Check file size
     const sizeMB = file.size / (1024 * 1024);
     if (sizeMB > maxSize) {
@@ -84,7 +84,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
     }
 
     return null;
-  };
+  }, [accept, maxSize]);
 
   const handleFileUpload = useCallback(
     async (fileList: FileList) => {
@@ -135,7 +135,7 @@ const DocumentUpload: React.FC<DocumentUploadProps> = ({
 
       onChange([...files, ...newFiles]);
     },
-    [files, maxFiles, onChange, accept, maxSize]
+    [files, maxFiles, onChange, validateFile]
   );
 
   const simulateUpload = (

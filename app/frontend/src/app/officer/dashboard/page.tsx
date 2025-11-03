@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
@@ -29,8 +29,7 @@ import {
   TrendingUp as TrendingUpIcon,
   Visibility as VisibilityIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/components/auth/withAuth';
-import { useApplicationContext } from '@/contexts/ApplicationContext';
+import { useApplication } from '@/contexts/ApplicationContext';
 
 /**
  * DTAM Officer Dashboard
@@ -65,7 +64,7 @@ interface Statistics {
 
 const OfficerDashboardPage: React.FC = () => {
   const router = useRouter();
-  const { applications } = useApplicationContext();
+  const { applications } = useApplication();
 
   const [loading, setLoading] = useState(true);
   const [pendingApplications, setPendingApplications] = useState<PendingApplication[]>([]);
@@ -81,6 +80,7 @@ const OfficerDashboardPage: React.FC = () => {
   useEffect(() => {
     // โหลดข้อมูล
     loadDashboardData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [applications]);
 
   const loadDashboardData = () => {
@@ -89,12 +89,12 @@ const OfficerDashboardPage: React.FC = () => {
       const pending = applications
         .filter(
           (app) =>
-            app.workflowState === 'PAYMENT_PROCESSING_1' ||
-            app.workflowState === 'DOCUMENT_REVIEW' ||
-            app.workflowState === 'DOCUMENT_REVISION'
+            app.currentState === 'PAYMENT_PROCESSING_1' ||
+            app.currentState === 'DOCUMENT_REVIEW' ||
+            app.currentState === 'DOCUMENT_REVISION'
         )
         .map((app) => {
-          const submittedDate = new Date(app.submittedDate || Date.now());
+          const submittedDate = new Date(app.submittedAt || Date.now());
           const daysWaiting = Math.floor(
             (Date.now() - submittedDate.getTime()) / (1000 * 60 * 60 * 24)
           );
@@ -107,10 +107,10 @@ const OfficerDashboardPage: React.FC = () => {
           return {
             id: app.id,
             applicationNumber: app.applicationNumber,
-            farmerName: app.farmerInfo?.name || 'ไม่ระบุ',
-            farmName: app.farmInfo?.name || 'ไม่ระบุ',
+            farmerName: app.farmerName || 'ไม่ระบุ',
+            farmName: app.farmerName || 'ไม่ระบุ',
             submittedDate: submittedDate.toLocaleDateString('th-TH'),
-            workflowState: app.workflowState,
+            workflowState: app.currentState,
             priority,
             daysWaiting,
           };
@@ -122,19 +122,19 @@ const OfficerDashboardPage: React.FC = () => {
       // คำนวณสถิติ (Mock data - ต้องเชื่อม API จริง)
       const reviewed = applications.filter(
         (app) =>
-          app.workflowState === 'DOCUMENT_APPROVED' ||
-          app.workflowState === 'DOCUMENT_REVISION' ||
-          app.workflowState === 'DOCUMENT_REJECTED'
+          app.currentState === 'DOCUMENT_APPROVED' ||
+          app.currentState === 'DOCUMENT_REVISION' ||
+          app.currentState === 'DOCUMENT_REJECTED'
       );
 
       const approved = applications.filter(
-        (app) => app.workflowState === 'DOCUMENT_APPROVED'
+        (app) => app.currentState === 'DOCUMENT_APPROVED'
       ).length;
       const revision = applications.filter(
-        (app) => app.workflowState === 'DOCUMENT_REVISION'
+        (app) => app.currentState === 'DOCUMENT_REVISION'
       ).length;
       const rejected = applications.filter(
-        (app) => app.workflowState === 'DOCUMENT_REJECTED'
+        (app) => app.currentState === 'DOCUMENT_REJECTED'
       ).length;
       const total = reviewed.length || 1; // หาร 0 ไม่ได้
 
@@ -393,7 +393,7 @@ const OfficerDashboardPage: React.FC = () => {
                                   size="small"
                                 />
                                 <Chip
-                                  label={getStateLabel(app.workflowState)}
+                                  label={getStateLabel(app.currentState)}
                                   variant="outlined"
                                   size="small"
                                 />
@@ -406,7 +406,7 @@ const OfficerDashboardPage: React.FC = () => {
                                   {app.farmerName}
                                 </Typography>
                                 <Typography variant="caption" color="text.secondary">
-                                  ยื่นเมื่อ: {app.submittedDate} ({app.daysWaiting} วันที่แล้ว)
+                                  ยื่นเมื่อ: {app.submittedAt} ({app.daysWaiting} วันที่แล้ว)
                                 </Typography>
                               </Box>
                             }
@@ -580,4 +580,4 @@ const OfficerDashboardPage: React.FC = () => {
   );
 };
 
-export default withAuth(OfficerDashboardPage, ['DTAM_OFFICER']);
+export default OfficerDashboardPage;

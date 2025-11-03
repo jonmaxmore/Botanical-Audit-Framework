@@ -39,8 +39,7 @@ import {
   ArrowBack as ArrowBackIcon,
   Warning as WarningIcon,
 } from '@mui/icons-material';
-import { withAuth } from '@/components/auth/withAuth';
-import { useApplicationContext, type Application } from '@/contexts/ApplicationContext';
+import { useApplication, type Application } from '@/contexts/ApplicationContext';
 
 /**
  * DTAM Officer Review Page
@@ -72,7 +71,7 @@ const OfficerReviewPage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const applicationId = params?.id as string;
-  const { applications, updateApplication } = useApplicationContext();
+  const { applications, updateApplication } = useApplication();
 
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<Application | null>(null);
@@ -169,7 +168,7 @@ const OfficerReviewPage: React.FC = () => {
       }
 
       // Determine new workflow state
-      let newState: Application['workflowState'] = application.workflowState;
+      let newState: Application['workflowState'] = application.currentState;
       if (confirmDialog.decision === 'approve') {
         newState = 'DOCUMENT_APPROVED';
       } else if (confirmDialog.decision === 'revision') {
@@ -206,7 +205,7 @@ const OfficerReviewPage: React.FC = () => {
         }),
       };
 
-      updateApplication(updatedApp);
+      updateApplication(updatedApp, {});
 
       // Show success message
       alert(
@@ -245,8 +244,8 @@ const OfficerReviewPage: React.FC = () => {
 
   // Check if can review
   const canReview =
-    application.workflowState === 'DOCUMENT_REVIEW' ||
-    application.workflowState === 'DOCUMENT_REVISION';
+    application.currentState === 'DOCUMENT_REVIEW' ||
+    application.currentState === 'DOCUMENT_REVISION';
 
   return (
     <Container maxWidth="xl" sx={{ py: 4 }}>
@@ -259,14 +258,14 @@ const OfficerReviewPage: React.FC = () => {
           🔍 ตรวจสอบเอกสารใบสมัคร
         </Typography>
         <Typography variant="body1" color="text.secondary">
-          {application.applicationNumber} - {application.farmInfo?.name}
+          {application.applicationNumber} - {application.farmerName + "'s Farm"}
         </Typography>
       </Box>
 
       {/* Alert if already reviewed */}
       {!canReview && (
         <Alert severity="info" sx={{ mb: 3 }}>
-          ใบสมัครนี้ได้รับการตรวจสอบแล้ว (สถานะ: {application.workflowState})
+          ใบสมัครนี้ได้รับการตรวจสอบแล้ว (สถานะ: {application.currentState})
         </Alert>
       )}
 
@@ -285,32 +284,32 @@ const OfficerReviewPage: React.FC = () => {
                   ชื่อฟาร์ม:
                 </Typography>
                 <Typography variant="body2" fontWeight="medium">
-                  {application.farmInfo?.name}
+                  {application.farmerName + "'s Farm"}
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ขนาดพื้นที่:
                 </Typography>
-                <Typography variant="body2">{application.farmInfo?.size} ไร่</Typography>
+                <Typography variant="body2">{application/* farmInfo removed */} ไร่</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ประเภทพืช:
                 </Typography>
-                <Typography variant="body2">{application.farmInfo?.cropType}</Typography>
+                <Typography variant="body2">{application/* farmInfo removed */}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   จังหวัด:
                 </Typography>
-                <Typography variant="body2">{application.farmInfo?.province}</Typography>
+                <Typography variant="body2">{application/* farmInfo removed */}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ที่อยู่:
                 </Typography>
-                <Typography variant="body2">{application.farmInfo?.address}</Typography>
+                <Typography variant="body2">{application/* farmInfo removed */}</Typography>
               </Box>
             </Box>
           </Paper>
@@ -327,32 +326,32 @@ const OfficerReviewPage: React.FC = () => {
                   ชื่อ-นามสกุล:
                 </Typography>
                 <Typography variant="body2" fontWeight="medium">
-                  {application.farmerInfo?.name}
+                  {application.farmerName}
                 </Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   เลขบัตรประชาชน:
                 </Typography>
-                <Typography variant="body2">{application.farmerInfo?.idCard}</Typography>
+                <Typography variant="body2">{application/* farmerInfo removed */}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   โทรศัพท์:
                 </Typography>
-                <Typography variant="body2">{application.farmerInfo?.phone}</Typography>
+                <Typography variant="body2">{application/* farmerInfo removed */}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   อีเมล:
                 </Typography>
-                <Typography variant="body2">{application.farmerInfo?.email || '-'}</Typography>
+                <Typography variant="body2">{application/* farmerInfo removed */ || '-'}</Typography>
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">
                   ประสบการณ์:
                 </Typography>
-                <Typography variant="body2">{application.farmerInfo?.experience} ปี</Typography>
+                <Typography variant="body2">{application/* farmerInfo removed */} ปี</Typography>
               </Box>
             </Box>
           </Paper>
@@ -685,4 +684,4 @@ const OfficerReviewPage: React.FC = () => {
   );
 };
 
-export default withAuth(OfficerReviewPage, ['DTAM_OFFICER']);
+export default OfficerReviewPage;

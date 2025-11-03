@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -181,7 +181,7 @@ const DocumentsPage = () => {
       'DOCUMENT_REVIEW',
       'DOCUMENT_REVISION',
     ];
-    return allowedStates.includes(currentApplication.workflowState);
+    return allowedStates.includes(currentApplication.currentState);
   };
 
   if (loading) {
@@ -264,7 +264,7 @@ const DocumentsPage = () => {
         </Alert>
       ) : (
         <Alert severity="warning" sx={{ mb: 3 }}>
-          ไม่สามารถอัปโหลดเอกสารได้ในขณะนี้ สถานะปัจจุบัน: {currentApplication.workflowState}
+          ไม่สามารถอัปโหลดเอกสารได้ในขณะนี้ สถานะปัจจุบัน: {currentApplication.currentState}
         </Alert>
       )}
 
@@ -381,4 +381,4 @@ const DocumentsPage = () => {
   );
 };
 
-export default withAuth(DocumentsPage, ['FARMER']);
+export default DocumentsPage;

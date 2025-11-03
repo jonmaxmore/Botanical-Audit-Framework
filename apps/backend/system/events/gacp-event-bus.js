@@ -64,11 +64,12 @@ class GACPEventBus extends EventEmitter {
    * @param {Object} options - Publishing options
    */
   async publish(eventType, payload = {}, options = {}) {
+    let event; // Declare event outside try block to be accessible in catch
     try {
       const eventId = this._generateEventId();
       const timestamp = new Date();
 
-      const event = {
+      event = {
         id: eventId,
         type: eventType,
         payload,

@@ -47,22 +47,30 @@ apiClient.interceptors.response.use(
 
     // Handle 403 Forbidden - Insufficient permissions
     if (error.response?.status === 403) {
-      console.error('Access denied: Insufficient permissions');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Access denied: Insufficient permissions');
+      }
     }
 
     // Handle 404 Not Found
     if (error.response?.status === 404) {
-      console.error('Resource not found');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Resource not found');
+      }
     }
 
     // Handle 500 Internal Server Error
     if (error.response?.status === 500) {
-      console.error('Server error: Please try again later');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Server error: Please try again later');
+      }
     }
 
     // Handle network errors
     if (!error.response) {
-      console.error('Network error: Unable to connect to server');
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Network error: Unable to connect to server');
+      }
     }
 
     return Promise.reject(error);
