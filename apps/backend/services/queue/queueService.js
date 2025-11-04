@@ -7,6 +7,7 @@ const Bull = require('bull');
 const logger = require('../../utils/logger');
 const geminiService = require('../ai/geminiService');
 const notificationService = require('../notification/notificationService');
+const cacheService = require('../cache/cacheService');
 const DTAMApplication = require('../../models/DTAMApplication');
 
 class QueueService {
@@ -131,6 +132,12 @@ class QueueService {
           application.status = 'IN_REVIEW';
           application.aiQcCompletedAt = new Date();
           await application.save();
+
+          // Cache AI QC result
+          await cacheService.cacheAIQCResult(applicationId, qcResult.data);
+
+          // Invalidate application cache
+          await cacheService.invalidateApplication(applicationId);
 
           // Queue notification
           await this.addEmailJob({

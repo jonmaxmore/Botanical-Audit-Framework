@@ -282,6 +282,7 @@ app.use('/api/v1/dtam/approver', require('./routes/approver.routes')); // Approv
 
 // ✅ Phase 2: Queue Management System
 app.use('/api/v1/queue', require('./routes/queue.routes')); // Queue monitoring and management
+app.use('/api/v1/cache', require('./routes/cache.routes')); // Cache management
 
 // Global error handler
 app.use(errorMiddleware());

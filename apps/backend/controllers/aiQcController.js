@@ -5,6 +5,7 @@
 
 const geminiService = require('../services/ai/geminiService');
 const queueService = require('../services/queue/queueService');
+const cacheService = require('../services/cache/cacheService');
 const DTAMApplication = require('../models/DTAMApplication');
 const logger = require('../utils/logger');
 
@@ -99,6 +100,9 @@ exports.runAIQC = async (req, res) => {
 
     await appWithData.save();
 
+    // Cache AI QC result
+    await cacheService.cacheAIQCResult(applicationId, qcResult.data);
+
     logger.info(`AI QC completed for application ${applicationId}`, {
       score: qcResult.data.overallScore,
       inspectionType: qcResult.data.inspectionType
@@ -132,6 +136,18 @@ exports.getAIQCResults = async (req, res) => {
   try {
     const { applicationId } = req.params;
 
+    // Try to get from cache first
+    const cachedResult = await cacheService.getAIQCResult(applicationId);
+    
+    if (cachedResult) {
+      logger.debug(`Cache hit for AI QC result: ${applicationId}`);
+      return res.json({
+        success: true,
+        data: cachedResult,
+        cached: true
+      });
+    }
+
     const application = await DTAMApplication.findById(applicationId)
       .select('aiQc inspectionType aiQcCompletedAt');
 
@@ -148,6 +164,9 @@ exports.getAIQCResults = async (req, res) => {
         message: 'AI QC not completed for this application'
       });
     }
+
+    // Cache the result
+    await cacheService.cacheAIQCResult(applicationId, application.aiQc);
 
     res.json({
       success: true,
