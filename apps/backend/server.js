@@ -360,6 +360,13 @@ async function startServer() {
     await mongoManager.connect();
     await redisManager.connect();
 
+    // Start job scheduler if enabled (Phase 1)
+    if (process.env.ENABLE_SCHEDULER === 'true') {
+      const jobScheduler = require('./services/scheduler/jobScheduler');
+      jobScheduler.start();
+      appLogger.info('Job scheduler started');
+    }
+
     // Start the server
     server.listen(PORT, () => {
       appLogger.info(`Backend server running on http://localhost:${PORT}`);
@@ -376,7 +383,7 @@ async function startServer() {
 
     // Continue with limited functionality
     server.listen(PORT, () => {
-      appLogger.warn(`?? Backend server running in limited mode on http://localhost:${PORT}`);
+      appLogger.warn(`⚠️ Backend server running in limited mode on http://localhost:${PORT}`);
       appLogger.warn(`Some services may be unavailable`);
 
       // Record degraded startup
@@ -384,5 +391,22 @@ async function startServer() {
     });
   }
 }
+
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  appLogger.info('SIGTERM received, shutting down gracefully');
+  
+  // Stop job scheduler
+  if (process.env.ENABLE_SCHEDULER === 'true') {
+    const jobScheduler = require('./services/scheduler/jobScheduler');
+    jobScheduler.stop();
+  }
+  
+  // Close server
+  server.close(() => {
+    appLogger.info('Server closed');
+    process.exit(0);
+  });
+});
 
 startServer();
