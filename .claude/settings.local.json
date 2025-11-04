@@ -27,7 +27,16 @@
       "Bash(pnpm install:*)",
       "Bash(npm run lint:all:*)",
       "Bash(npx eslint:*)",
-      "Bash(npm run lint:backend:*)"
+      "Bash(npm run lint:backend:*)",
+      "Bash(powershell:*)",
+      "Bash(node:*)",
+      "Bash(nul)",
+      "Bash(npx --yes typescript@latest/tsc:*)",
+      "Bash(cat:*)",
+      "Bash(dir:*)",
+      "Bash(npx --yes typescript@latest tsc:*)",
+      "Bash(pnpm exec tsc:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "deny": [],
     "ask": []
