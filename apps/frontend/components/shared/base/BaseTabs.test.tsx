@@ -199,7 +199,7 @@ describe('BaseTabs - Disabled Tabs', () => {
 
 describe('BaseTabs - Lazy Loading', () => {
   it('only renders active tab content when lazy', () => {
-    const { container } = render(<BaseTabs tabs={mockTabs} lazy />);
+    render(<BaseTabs tabs={mockTabs} lazy />);
     expect(screen.getByText('Content 1')).toBeInTheDocument();
     expect(screen.queryByText('Content 2')).not.toBeInTheDocument();
   });

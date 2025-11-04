@@ -172,7 +172,7 @@ describe('BaseBadge - Icons', () => {
   });
 
   it('icons have correct size classes', () => {
-    const { container } = render(
+    render(
       <BaseBadge
         size="large"
         startIcon={<span data-testid="icon">✓</span>}

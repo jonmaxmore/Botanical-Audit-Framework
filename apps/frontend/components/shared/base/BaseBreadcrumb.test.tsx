@@ -108,14 +108,14 @@ describe('BaseBreadcrumb', () => {
 
   describe('Home Icon', () => {
     it('shows default home icon when showHomeIcon is true', () => {
-      const { container } = render(<BaseBreadcrumb items={mockItems} showHomeIcon />);
+      render(<BaseBreadcrumb items={mockItems} showHomeIcon />);
       const homeItem = screen.getByText('Home').closest('li');
       const icon = homeItem?.querySelector('svg');
       expect(icon).toBeInTheDocument();
     });
 
     it('does not show home icon by default', () => {
-      const { container } = render(<BaseBreadcrumb items={mockItems} />);
+      render(<BaseBreadcrumb items={mockItems} />);
       const homeItem = screen.getByText('Home').closest('li');
       const icon = homeItem?.querySelector('svg');
       expect(icon).not.toBeInTheDocument();

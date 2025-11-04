@@ -21,7 +21,6 @@ import {
 import {
   CheckCircle as CheckIcon,
   Warning as WarningIcon,
-  Error as ErrorIcon,
   CloudUpload as UploadIcon,
   Assessment as AssessmentIcon,
 } from '@mui/icons-material';
@@ -178,8 +177,8 @@ const AIQCModal: React.FC<AIQCModalProps> = ({ open, onClose, applicationId, onC
                     <Chip
                       label={getInspectionTypeLabel(result.inspectionType)}
                       color={getInspectionTypeColor(result.inspectionType)}
-                      size="large"
-                      sx={{ fontWeight: 'bold' }}
+                      size="medium"
+                      sx={{ fontWeight: 'bold', fontSize: '1rem', padding: '8px 16px' }}
                     />
                   </Grid>
                 </Grid>
