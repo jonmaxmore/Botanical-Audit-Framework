@@ -19,7 +19,6 @@ export function SimpleApprovalExample() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = async (data: any) => {
-    console.log('Approval data:', data);
     // Call API here
     await fetch('/api/applications/approve', {
       method: 'POST',
@@ -58,7 +57,6 @@ export function ReviewWithRatingExample() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = async (data: any) => {
-    console.log('Review data:', data);
     await fetch('/api/inspections/review', {
       method: 'POST',
       body: JSON.stringify({
@@ -97,7 +95,6 @@ export function CustomDecisionExample() {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSubmit = async (data: any) => {
-    console.log('Custom decision data:', data);
     await fetch('/api/documents/review', {
       method: 'POST',
       body: JSON.stringify({
@@ -167,7 +164,6 @@ export function WithAdditionalFieldsExample() {
   const [selectedInspector, setSelectedInspector] = useState('');
 
   const handleSubmit = async (data: any) => {
-    console.log('Data with additional fields:', data);
     await fetch('/api/inspections/assign', {
       method: 'POST',
       body: JSON.stringify({

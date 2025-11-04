@@ -13,11 +13,11 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import BaseActionModal from '../BaseActionModal';
-import type { DecisionOption, ActionFormData } from '../BaseActionModal';
+import type { DecisionOption } from '../BaseActionModal';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 
 // Mock decision options

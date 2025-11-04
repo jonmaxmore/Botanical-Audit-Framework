@@ -287,7 +287,7 @@ describe('BaseDialog', () => {
         { label: 'Text', onClick: jest.fn(), variant: 'text' as const },
       ];
 
-      const { container } = render(
+      render(
         <BaseDialog open={true} onClose={() => {}} actions={actions}>
           Content
         </BaseDialog>

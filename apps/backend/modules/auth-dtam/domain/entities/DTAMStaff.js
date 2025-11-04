@@ -48,7 +48,7 @@ class DTAMStaff {
     this.employeeId = employeeId;
     this.department = department;
     this.position = position;
-    this.role = role;
+    this.role = role; // ADMIN, REVIEWER, INSPECTOR, APPROVER
     this.permissions = permissions;
     this.phoneNumber = phoneNumber;
     this.status = status;
@@ -79,9 +79,9 @@ class DTAMStaff {
   // Role constants
   static ROLES = {
     ADMIN: 'ADMIN',
-    MANAGER: 'MANAGER',
     REVIEWER: 'REVIEWER',
-    AUDITOR: 'AUDITOR'
+    INSPECTOR: 'INSPECTOR',
+    APPROVER: 'APPROVER'
   };
 
   // Permission constants
@@ -91,6 +91,18 @@ class DTAMStaff {
     REVIEW_APPLICATIONS: 'review_applications',
     APPROVE_APPLICATIONS: 'approve_applications',
     REJECT_APPLICATIONS: 'reject_applications',
+
+    // Inspection permissions
+    VIEW_INSPECTIONS: 'view_inspections',
+    SCHEDULE_INSPECTION: 'schedule_inspection',
+    CONDUCT_INSPECTION: 'conduct_inspection',
+    COMPLETE_INSPECTION: 'complete_inspection',
+    UPLOAD_INSPECTION_EVIDENCE: 'upload_inspection_evidence',
+
+    // Approval permissions
+    VIEW_PENDING_APPROVALS: 'view_pending_approvals',
+    FINAL_APPROVAL: 'final_approval',
+    SEND_BACK_FOR_REVIEW: 'send_back_for_review',
 
     // Certificate permissions
     VIEW_CERTIFICATES: 'view_certificates',
@@ -122,6 +134,14 @@ class DTAMStaff {
         DTAMStaff.PERMISSIONS.REVIEW_APPLICATIONS,
         DTAMStaff.PERMISSIONS.APPROVE_APPLICATIONS,
         DTAMStaff.PERMISSIONS.REJECT_APPLICATIONS,
+        DTAMStaff.PERMISSIONS.VIEW_INSPECTIONS,
+        DTAMStaff.PERMISSIONS.SCHEDULE_INSPECTION,
+        DTAMStaff.PERMISSIONS.CONDUCT_INSPECTION,
+        DTAMStaff.PERMISSIONS.COMPLETE_INSPECTION,
+        DTAMStaff.PERMISSIONS.UPLOAD_INSPECTION_EVIDENCE,
+        DTAMStaff.PERMISSIONS.VIEW_PENDING_APPROVALS,
+        DTAMStaff.PERMISSIONS.FINAL_APPROVAL,
+        DTAMStaff.PERMISSIONS.SEND_BACK_FOR_REVIEW,
         DTAMStaff.PERMISSIONS.VIEW_CERTIFICATES,
         DTAMStaff.PERMISSIONS.ISSUE_CERTIFICATES,
         DTAMStaff.PERMISSIONS.REVOKE_CERTIFICATES,
@@ -136,19 +156,6 @@ class DTAMStaff {
         DTAMStaff.PERMISSIONS.EXPORT_DATA,
         DTAMStaff.PERMISSIONS.MANAGE_SETTINGS
       ],
-      MANAGER: [
-        DTAMStaff.PERMISSIONS.VIEW_APPLICATIONS,
-        DTAMStaff.PERMISSIONS.REVIEW_APPLICATIONS,
-        DTAMStaff.PERMISSIONS.APPROVE_APPLICATIONS,
-        DTAMStaff.PERMISSIONS.REJECT_APPLICATIONS,
-        DTAMStaff.PERMISSIONS.VIEW_CERTIFICATES,
-        DTAMStaff.PERMISSIONS.ISSUE_CERTIFICATES,
-        DTAMStaff.PERMISSIONS.VIEW_AUDITS,
-        DTAMStaff.PERMISSIONS.APPROVE_AUDITS,
-        DTAMStaff.PERMISSIONS.VIEW_STAFF,
-        DTAMStaff.PERMISSIONS.VIEW_REPORTS,
-        DTAMStaff.PERMISSIONS.EXPORT_DATA
-      ],
       REVIEWER: [
         DTAMStaff.PERMISSIONS.VIEW_APPLICATIONS,
         DTAMStaff.PERMISSIONS.REVIEW_APPLICATIONS,
@@ -156,12 +163,25 @@ class DTAMStaff {
         DTAMStaff.PERMISSIONS.VIEW_AUDITS,
         DTAMStaff.PERMISSIONS.VIEW_REPORTS
       ],
-      AUDITOR: [
+      INSPECTOR: [
         DTAMStaff.PERMISSIONS.VIEW_APPLICATIONS,
+        DTAMStaff.PERMISSIONS.VIEW_INSPECTIONS,
+        DTAMStaff.PERMISSIONS.SCHEDULE_INSPECTION,
+        DTAMStaff.PERMISSIONS.CONDUCT_INSPECTION,
+        DTAMStaff.PERMISSIONS.COMPLETE_INSPECTION,
+        DTAMStaff.PERMISSIONS.UPLOAD_INSPECTION_EVIDENCE,
         DTAMStaff.PERMISSIONS.VIEW_CERTIFICATES,
-        DTAMStaff.PERMISSIONS.VIEW_AUDITS,
-        DTAMStaff.PERMISSIONS.CREATE_AUDITS,
         DTAMStaff.PERMISSIONS.VIEW_REPORTS
+      ],
+      APPROVER: [
+        DTAMStaff.PERMISSIONS.VIEW_APPLICATIONS,
+        DTAMStaff.PERMISSIONS.VIEW_PENDING_APPROVALS,
+        DTAMStaff.PERMISSIONS.FINAL_APPROVAL,
+        DTAMStaff.PERMISSIONS.SEND_BACK_FOR_REVIEW,
+        DTAMStaff.PERMISSIONS.VIEW_CERTIFICATES,
+        DTAMStaff.PERMISSIONS.ISSUE_CERTIFICATES,
+        DTAMStaff.PERMISSIONS.VIEW_REPORTS,
+        DTAMStaff.PERMISSIONS.EXPORT_DATA
       ]
     };
 
