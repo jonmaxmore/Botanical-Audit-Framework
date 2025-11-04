@@ -25,6 +25,7 @@ const configManager = require('./config/config-manager');
 const logger = require('./shared/logger');
 const metrics = require('./shared/metrics');
 const { errorMiddleware, requestValidator } = require('./middleware');
+const { metricsMiddleware } = require('./middleware/metricsMiddleware');
 const appLogger = logger.createLogger('server');
 
 // Initialize configuration
@@ -141,6 +142,9 @@ app.use(
 
 // Request validation middleware
 app.use(requestValidator());
+
+// Phase 2: Metrics tracking middleware
+app.use(metricsMiddleware);
 
 // Performance tracking middleware
 app.use((req, res, next) => {
@@ -283,6 +287,10 @@ app.use('/api/v1/dtam/approver', require('./routes/approver.routes')); // Approv
 // ✅ Phase 2: Queue Management System
 app.use('/api/v1/queue', require('./routes/queue.routes')); // Queue monitoring and management
 app.use('/api/v1/cache', require('./routes/cache.routes')); // Cache management
+
+// ✅ Phase 2: Monitoring Dashboard System
+app.use('/api/v1/monitoring', require('./routes/monitoring')); // System monitoring and metrics
+app.use('/api/v1/alerts', require('./routes/alerts')); // Alert management
 
 // Global error handler
 app.use(errorMiddleware());
