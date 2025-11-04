@@ -43,17 +43,23 @@ try {
     mongodb: {
       uri: mongoUri,
       options: {
-        // Connection Pool Configuration (Task 1.2 - INTEGRATIVE REFINEMENT)
-        // OPTIMIZED for load testing (Oct 26, 2025)
-        maxPoolSize: 50, // Increased to handle concurrent requests (was 10)
-        minPoolSize: 5, // More warm connections for faster response (was 2)
+        // Connection Pool Configuration (Phase 2 Performance Optimization)
+        // OPTIMIZED for high concurrency and queue processing
+        maxPoolSize: 100, // Handle 1000+ requests/day with queue system
+        minPoolSize: 10, // Keep warm connections ready
         serverSelectionTimeoutMS: 5000, // Fail fast if server unreachable
         socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
         maxIdleTimeMS: 60000, // Close idle connections after 60s
-        waitQueueTimeoutMS: 10000 // Fail if can't get connection in 10s
-        // Remove deprecated options
-        // useNewUrlParser: true,
-        // useUnifiedTopology: true,
+        waitQueueTimeoutMS: 10000, // Fail if can't get connection in 10s
+        
+        // Performance optimizations
+        compressors: ['zlib'], // Compress network traffic
+        zlibCompressionLevel: 6, // Balance between speed and compression
+        
+        // Read/Write concerns
+        readPreference: 'primaryPreferred', // Prefer primary but allow secondary reads
+        w: 'majority', // Write to majority of replica set
+        journal: true // Ensure writes are journaled
       },
       reconnectInterval: 5000,
       reconnectAttempts: 5
