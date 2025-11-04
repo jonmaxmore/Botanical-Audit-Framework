@@ -275,6 +275,11 @@ app.use('/api/questionnaires', require('./routes/questionnaires')); // ✅ Quest
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
 // app.use('/api/notifications', require('./routes/notifications')); // Commented - duplicate route (already enabled above)
 
+// ✅ Phase 1: AI QC and Calendar Integration
+app.use('/api/v1/ai-qc', require('./routes/aiQc.routes')); // AI Quality Control with Gemini
+app.use('/api/v1/dtam/inspector', require('./routes/inspector.routes')); // Inspector Dashboard APIs
+app.use('/api/v1/dtam/approver', require('./routes/approver.routes')); // Approver Dashboard APIs
+
 // Global error handler
 app.use(errorMiddleware());
 
