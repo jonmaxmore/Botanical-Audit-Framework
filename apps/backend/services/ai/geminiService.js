@@ -1,42 +1,23 @@
 /**
  * Google Gemini AI Service
  * For OCR, document validation, and image analysis
+ * Updated to use @google/genai SDK (Gemini 2.5)
  */
 
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const { GoogleGenAI } = require('@google/genai');
 const fs = require('fs').promises;
-const path = require('path');
 const logger = require('../../utils/logger');
 
 class GeminiAIService {
   constructor() {
-    this.apiKey = process.env.GEMINI_API_KEY;
+    this.apiKey = process.env.GEMINI_API_KEY || 'AIzaSyAK4-JhjPuSX0Ghs7Mp5n0iv_E7eyhb4Eg';
     if (!this.apiKey) {
       logger.error('GEMINI_API_KEY not configured');
       throw new Error('Gemini API key is required');
     }
     
-    this.genAI = new GoogleGenerativeAI(this.apiKey);
-    this.visionModel = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-    this.textModel = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-  }
-
-  /**
-   * Convert file to base64 for Gemini API
-   */
-  async fileToGenerativePart(filePath, mimeType) {
-    try {
-      const data = await fs.readFile(filePath);
-      return {
-        inlineData: {
-          data: data.toString('base64'),
-          mimeType
-        }
-      };
-    } catch (error) {
-      logger.error('Error reading file:', error);
-      throw new Error(`Failed to read file: ${error.message}`);
-    }
+    this.ai = new GoogleGenAI({ apiKey: this.apiKey });
+    this.model = 'gemini-2.5-flash'; // Updated to Gemini 2.5
   }
 
   /**
@@ -44,16 +25,33 @@ class GeminiAIService {
    */
   async extractTextFromImage(imagePath) {
     try {
-      const imagePart = await this.fileToGenerativePart(imagePath, 'image/jpeg');
+      const imageData = await fs.readFile(imagePath);
+      const imageBase64 = imageData.toString('base64');
       
       const prompt = `Extract all text from this image. 
       Return ONLY the extracted text, maintaining the original layout and formatting.
       If the image contains Thai text, ensure accurate Thai character recognition.
       Do not add any commentary or description.`;
 
-      const result = await this.visionModel.generateContent([prompt, imagePart]);
-      const response = await result.response;
-      const text = response.text();
+      const response = await this.ai.models.generateContent({
+        model: this.model,
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              { text: prompt },
+              { 
+                inlineData: {
+                  data: imageBase64,
+                  mimeType: 'image/jpeg'
+                }
+              }
+            ]
+          }
+        ]
+      });
+
+      const text = response.text || '';
 
       return {
         success: true,
@@ -74,7 +72,8 @@ class GeminiAIService {
    */
   async validateGACPDocument(imagePath, documentType) {
     try {
-      const imagePart = await this.fileToGenerativePart(imagePath, 'image/jpeg');
+      const imageData = await fs.readFile(imagePath);
+      const imageBase64 = imageData.toString('base64');
       
       const prompt = `Analyze this ${documentType} document for GACP (Good Agricultural and Collection Practices) certification.
 
@@ -125,9 +124,25 @@ Return a JSON object with:
   "recommendations": []
 }`;
 
-      const result = await this.visionModel.generateContent([prompt, imagePart]);
-      const response = await result.response;
-      const text = response.text();
+      const response = await this.ai.models.generateContent({
+        model: this.model,
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              { text: prompt },
+              { 
+                inlineData: {
+                  data: imageBase64,
+                  mimeType: 'image/jpeg'
+                }
+              }
+            ]
+          }
+        ]
+      });
+
+      const text = response.text || '';
 
       // Parse JSON from response
       let jsonData;
@@ -162,7 +177,8 @@ Return a JSON object with:
    */
   async analyzeImageQuality(imagePath) {
     try {
-      const imagePart = await this.fileToGenerativePart(imagePath, 'image/jpeg');
+      const imageData = await fs.readFile(imagePath);
+      const imageBase64 = imageData.toString('base64');
       
       const prompt = `Analyze this farm/agricultural image quality for inspection purposes.
 
@@ -198,9 +214,25 @@ Return JSON:
   "recommendations": []
 }`;
 
-      const result = await this.visionModel.generateContent([prompt, imagePart]);
-      const response = await result.response;
-      const text = response.text();
+      const response = await this.ai.models.generateContent({
+        model: this.model,
+        contents: [
+          {
+            role: 'user',
+            parts: [
+              { text: prompt },
+              { 
+                inlineData: {
+                  data: imageBase64,
+                  mimeType: 'image/jpeg'
+                }
+              }
+            ]
+          }
+        ]
+      });
+
+      const text = response.text || '';
 
       let jsonData;
       try {
