@@ -1,0 +1,67 @@
+# Production Docker Multi-Stage Build for Backend
+# Optimized for size and security
+
+# Stage 1: Dependencies
+FROM node:22-alpine AS deps
+WORKDIR /app
+
+# Install production dependencies only
+COPY package.json package-lock.json* pnpm-lock.yaml* ./
+RUN \
+  if [ -f pnpm-lock.yaml ]; then \
+    corepack enable && corepack prepare pnpm@latest --activate && \
+    pnpm install --prod --frozen-lockfile; \
+  elif [ -f package-lock.json ]; then \
+    npm ci --only=production; \
+  else \
+    npm install --only=production; \
+  fi
+
+# Stage 2: Builder
+FROM node:22-alpine AS builder
+WORKDIR /app
+
+# Copy dependencies from deps stage
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# Build if needed (TypeScript, etc.)
+# RUN npm run build
+
+# Stage 3: Runner (Production)
+FROM node:22-alpine AS runner
+WORKDIR /app
+
+# Create non-root user
+RUN addgroup --system --gid 1001 nodejs && \
+    adduser --system --uid 1001 expressjs
+
+# Install production dependencies for sharp (image optimization)
+RUN apk add --no-cache \
+    libc6-compat \
+    vips-dev \
+    fftw-dev \
+    build-base \
+    python3
+
+# Copy necessary files
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/apps/backend ./apps/backend
+COPY --from=builder /app/package.json ./package.json
+
+# Create directories for uploads, logs
+RUN mkdir -p /app/uploads /app/logs && \
+    chown -R expressjs:nodejs /app
+
+# Switch to non-root user
+USER expressjs
+
+# Expose port
+EXPOSE 5000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD node -e "require('http').get('http://localhost:5000/api/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1); })"
+
+# Start application
+CMD ["node", "apps/backend/server.js"]
