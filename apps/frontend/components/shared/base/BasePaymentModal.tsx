@@ -165,12 +165,12 @@ export default function BasePaymentModal({
   currency = 'THB',
   items = [],
   payerName,
-  payerEmail,
+  payerEmail: _payerEmail,
   payeeOrganization = 'กรมส่งเสริมการเกษตร',
   paymentMethod = 'qr_promptpay',
   availablePaymentMethods = ['qr_promptpay', 'bank_transfer', 'credit_card'],
   promptPayId,
-  qrCodeData,
+  qrCodeData: _qrCodeData,
   qrCodeImage,
   status = 'pending',
   statusMessage,
@@ -178,7 +178,7 @@ export default function BasePaymentModal({
   receiptNumber,
   invoiceNumber,
   issuedDate = new Date(),
-  dueDate,
+  dueDate: _dueDate,
   onConfirmPayment,
   onCheckStatus,
   onDownloadReceipt,
@@ -381,6 +381,7 @@ export default function BasePaymentModal({
           <div className="flex justify-center mb-4">
             <div className="p-4 bg-white rounded-lg shadow-md">
               {qrCodeImage ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img src={qrCodeImage} alt="QR Code" className="w-64 h-64" />
               ) : (
                 <div className="w-64 h-64 bg-gray-200 flex items-center justify-center">

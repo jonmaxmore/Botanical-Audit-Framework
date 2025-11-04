@@ -23,7 +23,7 @@
 
 'use client';
 
-import React, { useState, useEffect, ReactNode } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { User, Mail, Phone, Shield, Building, Upload, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
 
 // ============================================================================
@@ -153,11 +153,11 @@ const DEFAULT_ROLES: RoleOption[] = [
 // ============================================================================
 
 export default function BaseUserForm({
-  mode,
+  mode = 'create',
   onSubmit,
   onCancel,
   initialData = {},
-  userId,
+  userId: _userId,
   showRoleSelection = true,
   showPasswordFields = mode === 'create',
   showDepartment = true,
@@ -377,7 +377,7 @@ export default function BaseUserForm({
     
     try {
       // Prepare data (exclude confirmPassword)
-      const { confirmPassword, ...submitData } = formData;
+      const { confirmPassword: _confirmPassword, ...submitData } = formData;
       
       // Remove password if not shown
       if (!showPasswordFields) {
@@ -570,6 +570,7 @@ export default function BaseUserForm({
           {/* Image Preview */}
           <div className="w-24 h-24 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border-2 border-gray-200">
             {imagePreview ? (
+              // eslint-disable-next-line @next/next/no-img-element
               <img src={imagePreview} alt="Profile" className="w-full h-full object-cover" />
             ) : (
               <User className="w-12 h-12 text-gray-400" />

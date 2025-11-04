@@ -46,7 +46,7 @@ export function CreateUserExample() {
 // ============================================================================
 
 export function EditUserExample() {
-  const [userData, setUserData] = useState({
+  const [userData] = useState({
     firstName: 'สมชาย',
     lastName: 'ดีมาก',
     email: 'somchai@example.com',
@@ -85,7 +85,7 @@ export function EditUserExample() {
 // ============================================================================
 
 export function UserProfileExample() {
-  const [userData, setUserData] = useState({
+  const [userData] = useState({
     firstName: 'สมศรี',
     lastName: 'ใจดี',
     email: 'somsri@example.com',

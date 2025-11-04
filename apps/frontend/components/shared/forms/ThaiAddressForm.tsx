@@ -25,7 +25,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { MapPin, Search, AlertCircle, CheckCircle, Loader } from 'lucide-react';
+import { MapPin, AlertCircle, CheckCircle, Loader } from 'lucide-react';
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -153,7 +153,7 @@ export default function ThaiAddressForm({
   provincePlaceholder = 'เลือกจังหวัด',
   districtPlaceholder = 'เลือกอำเภอ/เขต',
   subdistrictPlaceholder = 'เลือกตำบล/แขวง',
-  apiBaseUrl = '/api/thailand',
+  apiBaseUrl: _apiBaseUrl = '/api/thailand',
   onValidate,
   className = ''
 }: ThaiAddressFormProps) {
@@ -202,7 +202,7 @@ export default function ThaiAddressForm({
     } finally {
       setLoadingProvinces(false);
     }
-  }, [apiBaseUrl]);
+  }, []);
 
   const fetchDistricts = useCallback(async (provinceId: string) => {
     setLoadingDistricts(true);
@@ -220,7 +220,7 @@ export default function ThaiAddressForm({
     } finally {
       setLoadingDistricts(false);
     }
-  }, [apiBaseUrl]);
+  }, []);
 
   const fetchSubdistricts = useCallback(async (districtId: string) => {
     setLoadingSubdistricts(true);
@@ -238,7 +238,7 @@ export default function ThaiAddressForm({
     } finally {
       setLoadingSubdistricts(false);
     }
-  }, [apiBaseUrl]);
+  }, []);
 
   // ============================================================================
   // EFFECTS

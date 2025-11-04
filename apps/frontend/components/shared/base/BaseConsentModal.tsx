@@ -101,7 +101,7 @@ export interface BaseConsentModalProps {
 export default function BaseConsentModal({
   isOpen,
   onClose,
-  mode = 'custom',
+  mode: _mode = 'custom',
   title = 'ข้อตกลงและเงื่อนไข',
   consentItems,
   requireSignature = false,
@@ -115,7 +115,7 @@ export default function BaseConsentModal({
   clearSignatureLabel = 'ล้างลายเซ็น',
   showPrint = true,
   showDownload = true,
-  allowPartialAccept = false,
+  allowPartialAccept: _allowPartialAccept = false,
   loading = false,
   error,
   className = ''

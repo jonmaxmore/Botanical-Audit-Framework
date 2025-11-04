@@ -136,7 +136,6 @@ export default function DocumentUploadForm({
   required = false,
   disabled = false,
   label = 'อัพโหลดเอกสาร',
-  placeholder = 'อัพโหลดไฟล์หรือลากไฟล์มาวางที่นี่',
   dropzoneText = 'ลากไฟล์มาวางที่นี่',
   browseText = 'เลือกไฟล์',
   className = '',
@@ -239,6 +238,7 @@ export default function DocumentUploadForm({
         }
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [files, multiple, onUpload, onChange, onError, maxFiles, maxFileSize, acceptedFileTypes]);
 
   const uploadFile = async (uploadedFile: UploadedFile) => {
@@ -468,6 +468,7 @@ export default function DocumentUploadForm({
             >
               {/* Icon/Preview */}
               {showPreview && file.type.startsWith('image/') && file.url ? (
+                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={file.url}
                   alt={file.name}
