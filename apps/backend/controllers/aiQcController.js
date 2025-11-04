@@ -4,20 +4,19 @@
  */
 
 const geminiService = require('../services/ai/geminiService');
+const queueService = require('../services/queue/queueService');
 const DTAMApplication = require('../models/DTAMApplication');
 const logger = require('../utils/logger');
 
 /**
- * Run AI QC on a submitted application
+ * Run AI QC on a submitted application (async with queue)
  */
 exports.runAIQC = async (req, res) => {
   try {
     const { applicationId } = req.params;
+    const { useQueue = true } = req.body; // Option to run immediately or queue
 
-    const application = await DTAMApplication.findById(applicationId)
-      .populate('farmer.user')
-      .populate('documents')
-      .populate('images');
+    const application = await DTAMApplication.findById(applicationId);
 
     if (!application) {
       return res.status(404).json({
@@ -33,21 +32,47 @@ exports.runAIQC = async (req, res) => {
       });
     }
 
+    // Add to queue for background processing
+    if (useQueue && process.env.ENABLE_QUEUE === 'true') {
+      const job = await queueService.addAIQCJob(applicationId, {
+        priority: 5
+      });
+
+      logger.info(`AI QC job queued for application ${applicationId}`, {
+        jobId: job.id
+      });
+
+      return res.json({
+        success: true,
+        message: 'AI QC queued for processing',
+        data: {
+          jobId: job.id,
+          status: 'queued'
+        }
+      });
+    }
+
+    // Run immediately (fallback or when queue disabled)
+    const appWithData = await DTAMApplication.findById(applicationId)
+      .populate('farmer.user')
+      .populate('documents')
+      .populate('images');
+
     // Run AI QC
     const qcResult = await geminiService.performAIQC({
-      id: application._id,
-      lotId: application.lotId,
+      id: appWithData._id,
+      lotId: appWithData.lotId,
       farmer: {
-        name: application.farmer.name,
-        idCard: application.farmer.idCard
+        name: appWithData.farmer.name,
+        idCard: appWithData.farmer.idCard
       },
       farm: {
-        name: application.farmer.farmName,
-        location: application.farmer.farmLocation,
-        area: application.farmArea
+        name: appWithData.farmer.farmName,
+        location: appWithData.farmer.farmLocation,
+        area: appWithData.farmArea
       },
-      documents: application.documents || [],
-      images: application.images || []
+      documents: appWithData.documents || [],
+      images: appWithData.images || []
     });
 
     if (!qcResult.success) {
@@ -59,7 +84,7 @@ exports.runAIQC = async (req, res) => {
     }
 
     // Update application with AI QC results
-    application.aiQc = {
+    appWithData.aiQc = {
       completedAt: new Date(),
       overallScore: qcResult.data.overallScore,
       scores: qcResult.data.scores,
@@ -68,11 +93,11 @@ exports.runAIQC = async (req, res) => {
       recommendations: qcResult.data.recommendations
     };
 
-    application.inspectionType = qcResult.data.inspectionType;
-    application.status = 'IN_REVIEW';
-    application.aiQcCompletedAt = new Date();
+    appWithData.inspectionType = qcResult.data.inspectionType;
+    appWithData.status = 'IN_REVIEW';
+    appWithData.aiQcCompletedAt = new Date();
 
-    await application.save();
+    await appWithData.save();
 
     logger.info(`AI QC completed for application ${applicationId}`, {
       score: qcResult.data.overallScore,

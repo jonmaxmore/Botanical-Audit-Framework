@@ -280,6 +280,9 @@ app.use('/api/v1/ai-qc', require('./routes/aiQc.routes')); // AI Quality Control
 app.use('/api/v1/dtam/inspector', require('./routes/inspector.routes')); // Inspector Dashboard APIs
 app.use('/api/v1/dtam/approver', require('./routes/approver.routes')); // Approver Dashboard APIs
 
+// ✅ Phase 2: Queue Management System
+app.use('/api/v1/queue', require('./routes/queue.routes')); // Queue monitoring and management
+
 // Global error handler
 app.use(errorMiddleware());
 
@@ -294,6 +297,13 @@ const gracefulShutdown = async signal => {
   }, config.server.shutdownTimeout || 30000);
 
   try {
+    // Close queues if enabled (Phase 2)
+    if (process.env.ENABLE_QUEUE === 'true') {
+      const queueService = require('./services/queue/queueService');
+      await queueService.closeAll();
+      appLogger.info('Queue service closed');
+    }
+
     // Close server to stop accepting new connections
     server.close(() => {
       appLogger.info('HTTP server closed');
@@ -367,6 +377,13 @@ async function startServer() {
       appLogger.info('Job scheduler started');
     }
 
+    // Initialize queue service if enabled (Phase 2)
+    if (process.env.ENABLE_QUEUE === 'true') {
+      require('./services/queue/queueService'); // Initialize queues
+      appLogger.info('Queue service initialized - Bull queues ready');
+      appLogger.info('Available queues: AI QC, Email, Calendar, Report');
+    }
+
     // Start the server
     server.listen(PORT, () => {
       appLogger.info(`Backend server running on http://localhost:${PORT}`);
@@ -400,6 +417,12 @@ process.on('SIGTERM', async () => {
   if (process.env.ENABLE_SCHEDULER === 'true') {
     const jobScheduler = require('./services/scheduler/jobScheduler');
     jobScheduler.stop();
+  }
+  
+  // Close queue service
+  if (process.env.ENABLE_QUEUE === 'true') {
+    const queueService = require('./services/queue/queueService');
+    await queueService.closeAll();
   }
   
   // Close server

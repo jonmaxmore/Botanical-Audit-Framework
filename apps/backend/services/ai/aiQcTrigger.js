@@ -1,22 +1,22 @@
 /**
  * Automatic AI QC Trigger
  * Automatically runs AI QC when application is submitted
+ * Updated to use Bull queue for background processing
  */
 
-const geminiService = require('../services/ai/geminiService');
-const DTAMApplication = require('../models/DTAMApplication');
-const logger = require('../utils/logger');
+const queueService = require('../queue/queueService');
+const DTAMApplication = require('../../models/DTAMApplication');
+const logger = require('../../utils/logger');
 
 /**
  * Auto-trigger AI QC after application submission
+ * Uses queue for background processing
  */
 exports.autoTriggerAIQC = async (applicationId) => {
   try {
     logger.info(`Auto-triggering AI QC for application ${applicationId}`);
 
-    const application = await DTAMApplication.findById(applicationId)
-      .populate('documents')
-      .populate('images');
+    const application = await DTAMApplication.findById(applicationId);
 
     if (!application) {
       throw new Error('Application not found');
@@ -25,44 +25,64 @@ exports.autoTriggerAIQC = async (applicationId) => {
     // Only run AI QC for newly submitted applications
     if (application.status !== 'SUBMITTED') {
       logger.warn(`Application ${applicationId} is not in SUBMITTED status, skipping AI QC`);
-      return;
+      return { success: false, reason: 'Wrong status' };
     }
 
     // Check if AI QC already completed
     if (application.aiQcCompletedAt) {
       logger.warn(`AI QC already completed for application ${applicationId}`);
-      return;
+      return { success: false, reason: 'Already completed' };
     }
+
+    // Add to queue if enabled
+    if (process.env.ENABLE_QUEUE === 'true') {
+      const job = await queueService.addAIQCJob(applicationId, {
+        priority: 7, // Higher priority for auto-triggered
+        delay: 5000 // 5 seconds delay
+      });
+
+      logger.info(`AI QC job queued for application ${applicationId}`, {
+        jobId: job.id
+      });
+
+      return { success: true, jobId: job.id, status: 'queued' };
+    }
+
+    // Fallback: Run immediately if queue disabled
+    const geminiService = require('./geminiService');
+    const appWithData = await DTAMApplication.findById(applicationId)
+      .populate('documents')
+      .populate('images');
 
     // Run AI QC
     const qcResult = await geminiService.performAIQC({
-      id: application._id,
-      lotId: application.lotId,
+      id: appWithData._id,
+      lotId: appWithData.lotId,
       farmer: {
-        name: application.farmer.name,
-        idCard: application.farmer.idCard
+        name: appWithData.farmer.name,
+        idCard: appWithData.farmer.idCard
       },
       farm: {
-        name: application.farmer.farmName,
-        location: application.farmer.farmLocation,
-        area: application.farmArea
+        name: appWithData.farmer.farmName,
+        location: appWithData.farmer.farmLocation,
+        area: appWithData.farmArea
       },
-      documents: application.documents || [],
-      images: application.images || []
+      documents: appWithData.documents || [],
+      images: appWithData.images || []
     });
 
     if (!qcResult.success) {
       logger.error(`AI QC failed for application ${applicationId}:`, qcResult.error);
       
       // Still update application to move forward even if AI QC fails
-      application.status = 'IN_REVIEW';
-      application.inspectionType = 'ONSITE'; // Default to safest option
-      await application.save();
-      return;
+      appWithData.status = 'IN_REVIEW';
+      appWithData.inspectionType = 'ONSITE'; // Default to safest option
+      await appWithData.save();
+      return { success: false, error: qcResult.error, degraded: true };
     }
 
     // Update application with AI QC results
-    application.aiQc = {
+    appWithData.aiQc = {
       completedAt: new Date(),
       overallScore: qcResult.data.overallScore,
       scores: qcResult.data.scores,
@@ -71,25 +91,22 @@ exports.autoTriggerAIQC = async (applicationId) => {
       recommendations: qcResult.data.recommendations
     };
 
-    application.inspectionType = qcResult.data.inspectionType;
-    application.status = 'IN_REVIEW';
-    application.aiQcCompletedAt = new Date();
+    appWithData.inspectionType = qcResult.data.inspectionType;
+    appWithData.status = 'IN_REVIEW';
+    appWithData.aiQcCompletedAt = new Date();
 
-    await application.save();
+    await appWithData.save();
 
     logger.info(`AI QC completed successfully for application ${applicationId}`, {
       score: qcResult.data.overallScore,
       inspectionType: qcResult.data.inspectionType
     });
 
-    // TODO: Send notification to reviewer
-    // TODO: Add to review queue
+    return { success: true, data: qcResult.data };
 
   } catch (error) {
     logger.error(`Error in auto AI QC for application ${applicationId}:`, error);
-    
-    // Don't throw error - just log it and continue
-    // Application will proceed without AI QC
+    return { success: false, error: error.message };
   }
 };
 
