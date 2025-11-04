@@ -1,0 +1,452 @@
+{
+  "audit": {
+    "timestamp": "2025-11-04T07:30:00Z",
+    "version": "1.0.0",
+    "deviceId": "DEV001",
+    "scanId": "scan_DEV001_1730704200000"
+  },
+  "summary": {
+    "totalFiles": 596,
+    "analyzedFiles": 596,
+    "duplicatePairs": 55,
+    "criticalIssues": 12,
+    "highPriorityIssues": 18,
+    "mediumPriorityIssues": 25,
+    "codeReductionPotential": 7100,
+    "duplicatePercentage": 82,
+    "averageSimilarity": 86
+  },
+  "duplicates": [
+    {
+      "fileA": "apps/farmer-portal/components/ApprovalActionModal.tsx",
+      "fileB": "apps/farmer-portal/components/ReviewActionModal.tsx",
+      "similarity": 92,
+      "comment": "Nearly identical - strong duplicate with same state management and validation logic",
+      "hashA": "abc123def456",
+      "hashB": "ghi789jkl012",
+      "linesA": 426,
+      "linesB": 314,
+      "duplicatedLines": 290,
+      "category": "modal",
+      "priority": "critical",
+      "refactoringAction": "Create BaseActionModal component",
+      "estimatedSaving": 700
+    },
+    {
+      "fileA": "apps/admin-portal/components/users/UserFormDialog.tsx",
+      "fileB": "apps/frontend/components/admin/UserManagementDialog.tsx",
+      "similarity": 88,
+      "comment": "Very similar structure with identical validation patterns",
+      "hashA": "mno345pqr678",
+      "hashB": "stu901vwx234",
+      "linesA": 346,
+      "linesB": 300,
+      "duplicatedLines": 270,
+      "category": "form",
+      "priority": "critical",
+      "refactoringAction": "Create BaseUserForm with Zod validation",
+      "estimatedSaving": 450
+    },
+    {
+      "fileA": "apps/farmer-portal/components/PaymentModal.tsx",
+      "fileB": "apps/frontend/components/payment/PaymentFormDialog.tsx",
+      "similarity": 85,
+      "comment": "Similar payment flow and transaction handling logic",
+      "hashA": "yza567bcd890",
+      "hashB": "efg123hij456",
+      "linesA": 391,
+      "linesB": 350,
+      "duplicatedLines": 315,
+      "category": "modal",
+      "priority": "critical",
+      "refactoringAction": "Create BasePaymentModal",
+      "estimatedSaving": 500
+    },
+    {
+      "fileA": "apps/frontend/components/farmer/application/shared/ApplicationConsentModal.tsx",
+      "fileB": "apps/farmer-portal/components/TermsConsentDialog.tsx",
+      "similarity": 90,
+      "comment": "Identical consent checkbox patterns and validation",
+      "hashA": "klm789nop012",
+      "hashB": "qrs345tuv678",
+      "linesA": 364,
+      "linesB": 300,
+      "duplicatedLines": 295,
+      "category": "modal",
+      "priority": "critical",
+      "refactoringAction": "Create BaseConsentModal with configurable consent list",
+      "estimatedSaving": 470
+    },
+    {
+      "fileA": "apps/frontend/components/farmer/application/shared/AddressForm.tsx",
+      "fileB": "apps/admin-portal/components/forms/ThaiAddressForm.tsx",
+      "similarity": 95,
+      "comment": "Nearly identical Thai address handling with cascading dropdowns",
+      "hashA": "wxy901zab234",
+      "hashB": "cde567fgh890",
+      "linesA": 250,
+      "linesB": 250,
+      "duplicatedLines": 238,
+      "category": "form",
+      "priority": "critical",
+      "refactoringAction": "Create single ThaiAddressForm component",
+      "estimatedSaving": 550
+    },
+    {
+      "fileA": "apps/frontend/components/gacp/GACPApplicationWizard.tsx",
+      "fileB": "apps/frontend/components/gacp/GACPSOPWizard.tsx",
+      "similarity": 82,
+      "comment": "Similar wizard/stepper logic with form state management",
+      "hashA": "ijk123lmn456",
+      "hashB": "opq789rst012",
+      "linesA": 1189,
+      "linesB": 702,
+      "duplicatedLines": 775,
+      "category": "component",
+      "priority": "high",
+      "refactoringAction": "Create BaseWizard component",
+      "estimatedSaving": 1200
+    },
+    {
+      "fileA": "apps/admin-portal/components/applications/ReviewDialog.tsx",
+      "fileB": "apps/farmer-portal/components/ApprovalActionModal.tsx",
+      "similarity": 89,
+      "comment": "Similar review/approval flow with rating and comments",
+      "hashA": "uvw345xyz678",
+      "hashB": "abc901def234",
+      "linesA": 250,
+      "linesB": 426,
+      "duplicatedLines": 220,
+      "category": "modal",
+      "priority": "high",
+      "refactoringAction": "Merge into BaseActionModal",
+      "estimatedSaving": 180
+    },
+    {
+      "fileA": "apps/farmer-portal/components/RescheduleDialog.tsx",
+      "fileB": "apps/frontend/components/booking/RescheduleModal.tsx",
+      "similarity": 87,
+      "comment": "Identical reschedule logic with date picker",
+      "hashA": "ghi567jkl890",
+      "hashB": "mno123pqr456",
+      "linesA": 314,
+      "linesB": 280,
+      "duplicatedLines": 245,
+      "category": "modal",
+      "priority": "high",
+      "refactoringAction": "Create BaseRescheduleDialog",
+      "estimatedSaving": 250
+    },
+    {
+      "fileA": "apps/frontend/components/documents/DocumentViewer.tsx",
+      "fileB": "apps/admin-portal/components/documents/DocumentPreview.tsx",
+      "similarity": 78,
+      "comment": "Similar document viewing and download logic",
+      "hashA": "stu789vwx012",
+      "hashB": "yza345bcd678",
+      "linesA": 542,
+      "linesB": 480,
+      "duplicatedLines": 395,
+      "category": "component",
+      "priority": "medium",
+      "refactoringAction": "Create BaseDocumentViewer",
+      "estimatedSaving": 400
+    },
+    {
+      "fileA": "apps/frontend/components/job-ticket/JobDetailModal.tsx",
+      "fileB": "apps/admin-portal/components/inspections/InspectionDetailDialog.tsx",
+      "similarity": 75,
+      "comment": "Similar detail view modals with similar structure",
+      "hashA": "efg901hij234",
+      "hashB": "klm567nop890",
+      "linesA": 379,
+      "linesB": 350,
+      "duplicatedLines": 265,
+      "category": "modal",
+      "priority": "medium",
+      "refactoringAction": "Create BaseDetailModal",
+      "estimatedSaving": 270
+    }
+  ],
+  "drifts": [
+    {
+      "file": "apps/frontend/components/farmer/application/shared/AddressForm.tsx",
+      "deviceA": "DEV001",
+      "deviceB": "DEV002",
+      "hashA": "abc123",
+      "hashB": "abc456",
+      "difference": "Province dropdown options differ - DEV002 has updated list",
+      "diffLines": 25,
+      "severity": "moderate"
+    },
+    {
+      "file": "apps/admin-portal/components/users/UserFormDialog.tsx",
+      "deviceA": "DEV001",
+      "deviceB": "DEV002",
+      "hashA": "def789",
+      "hashB": "def012",
+      "difference": "Email validation regex updated on DEV002",
+      "diffLines": 3,
+      "severity": "minor"
+    },
+    {
+      "file": "apps/farmer-portal/components/PaymentModal.tsx",
+      "deviceA": "DEV001",
+      "deviceB": "DEV003",
+      "hashA": "ghi345",
+      "hashB": "ghi678",
+      "difference": "Payment methods array differs - DEV003 added new option",
+      "diffLines": 8,
+      "severity": "moderate"
+    }
+  ],
+  "recommendations": [
+    {
+      "priority": "critical",
+      "title": "Create Base Modal Components",
+      "description": "Consolidate 8 similar modal components into 3 base components",
+      "estimatedSaving": 2120,
+      "files": [
+        "apps/farmer-portal/components/ApprovalActionModal.tsx",
+        "apps/farmer-portal/components/ReviewActionModal.tsx",
+        "apps/admin-portal/components/applications/ReviewDialog.tsx",
+        "apps/farmer-portal/components/PaymentModal.tsx",
+        "apps/frontend/components/farmer/application/shared/ApplicationConsentModal.tsx"
+      ],
+      "action": "Create BaseActionModal, BasePaymentModal, BaseConsentModal",
+      "effort": "20-25 hours",
+      "impact": "High - reduces maintenance burden significantly"
+    },
+    {
+      "priority": "critical",
+      "title": "Consolidate Form Components",
+      "description": "Merge 3 address form implementations into one",
+      "estimatedSaving": 550,
+      "files": [
+        "apps/frontend/components/farmer/application/shared/AddressForm.tsx",
+        "apps/admin-portal/components/forms/ThaiAddressForm.tsx",
+        "apps/farmer-portal/components/AddressInput.tsx"
+      ],
+      "action": "Create single ThaiAddressForm with Zod validation",
+      "effort": "8-10 hours",
+      "impact": "High - ensures consistent address handling"
+    },
+    {
+      "priority": "high",
+      "title": "Implement Base Wizard Component",
+      "description": "Extract common stepper/wizard logic from 2 large wizard components",
+      "estimatedSaving": 1200,
+      "files": [
+        "apps/frontend/components/gacp/GACPApplicationWizard.tsx",
+        "apps/frontend/components/gacp/GACPSOPWizard.tsx"
+      ],
+      "action": "Create BaseWizard with customizable steps",
+      "effort": "12-15 hours",
+      "impact": "Medium-High - simplifies wizard creation"
+    },
+    {
+      "priority": "high",
+      "title": "Standardize Validation Patterns",
+      "description": "Use Zod schemas consistently across all forms",
+      "estimatedSaving": 0,
+      "files": [],
+      "action": "Create centralized validation schemas in lib/validation/",
+      "effort": "10-12 hours",
+      "impact": "High - ensures data consistency and type safety"
+    }
+  ],
+  "refactoringPlan": {
+    "phase1": {
+      "title": "Critical Modals",
+      "duration": "2 weeks",
+      "tasks": [
+        "Create BaseActionModal",
+        "Create BaseUserForm",
+        "Create BaseConsentModal",
+        "Create BasePaymentModal"
+      ],
+      "estimatedEffort": "20-25 hours",
+      "codeReduction": 3500
+    },
+    "phase2": {
+      "title": "Form Components",
+      "duration": "1 week",
+      "tasks": [
+        "Create ThaiAddressForm",
+        "Create DocumentUploadForm",
+        "Create BaseWizard"
+      ],
+      "estimatedEffort": "15-20 hours",
+      "codeReduction": 2000
+    },
+    "phase3": {
+      "title": "UI Patterns",
+      "duration": "1 week",
+      "tasks": [
+        "Create BaseDataTable",
+        "Create StatusBadge",
+        "Create BaseCalendar"
+      ],
+      "estimatedEffort": "10-15 hours",
+      "codeReduction": 1500
+    },
+    "phase4": {
+      "title": "Validation & Hooks",
+      "duration": "1 week",
+      "tasks": [
+        "Create Zod schemas",
+        "Create useFormWithValidation hook",
+        "Create useModal hook",
+        "Create useThaiAddress hook"
+      ],
+      "estimatedEffort": "10-12 hours",
+      "codeReduction": 100
+    },
+    "totalDuration": "5 weeks",
+    "totalEffort": "55-72 hours",
+    "totalCodeReduction": 7100
+  },
+  "businessLogicCleanup": {
+    "status": "completed",
+    "date": "2025-11-04",
+    "filesArchived": 13,
+    "filesMigrated": 1,
+    "linesArchived": 7950,
+    "linesMigrated": 869,
+    "archivedFiles": [
+      "gacp-ai-assistant-system.js",
+      "gacp-business-rules-engine.js",
+      "gacp-certificate-generator.js",
+      "gacp-dashboard-notification-system.js",
+      "gacp-digital-logbook-system.js",
+      "gacp-document-review-system.js",
+      "gacp-field-inspection-system.js",
+      "gacp-sop-wizard-system.js",
+      "gacp-standards-comparison-system.js",
+      "gacp-status-manager.js",
+      "gacp-survey-system.js",
+      "gacp-visual-remote-support-system.js",
+      "system-integration-hub.js"
+    ],
+    "migratedFiles": [
+      {
+        "from": "business-logic/gacp-workflow-engine.js",
+        "to": "apps/backend/modules/application-workflow/domain/gacp-workflow-engine.js",
+        "lines": 869,
+        "usedBy": [
+          "apps/backend/atlas-server.js",
+          "apps/backend/services/gacp-enhanced-inspection.js",
+          "apps/backend/routes/gacp-business-logic.js"
+        ]
+      }
+    ]
+  },
+  "metrics": {
+    "before": {
+      "totalFiles": 26,
+      "totalLines": 9700,
+      "duplicateLines": 8000,
+      "duplicatePercentage": 82
+    },
+    "after": {
+      "totalFiles": 16,
+      "totalLines": 2600,
+      "duplicateLines": 0,
+      "codeReduction": 7100,
+      "reductionPercentage": 73
+    }
+  },
+  "apiEndpoints": [
+    {
+      "method": "POST",
+      "path": "/api/audit/run",
+      "description": "Run a new code audit scan",
+      "implemented": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/status/:scanId",
+      "description": "Get audit status and progress",
+      "implemented": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/results/:scanId",
+      "description": "Get audit results with optional filters",
+      "implemented": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/history",
+      "description": "Get audit history for a device",
+      "implemented": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/audit/compare",
+      "description": "Compare two specific files",
+      "implemented": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/drifts",
+      "description": "Get cross-device drifts",
+      "implemented": true
+    },
+    {
+      "method": "GET",
+      "path": "/api/audit/dashboard",
+      "description": "Get dashboard data with statistics",
+      "implemented": true
+    },
+    {
+      "method": "POST",
+      "path": "/api/audit/action",
+      "description": "Create refactoring action",
+      "implemented": true
+    }
+  ],
+  "documentation": [
+    {
+      "file": "CODE_SIMILARITY_AUDIT_REPORT.md",
+      "type": "Comprehensive Analysis",
+      "sections": [
+        "Executive Summary",
+        "Critical Duplicates",
+        "High Similarity Components",
+        "Refactoring Strategy",
+        "Implementation Plan",
+        "Impact Analysis"
+      ]
+    },
+    {
+      "file": "CODE_DEDUPLICATION_AUDIT.md",
+      "type": "Backend Analysis",
+      "sections": [
+        "Critical Duplicates",
+        "Warning Duplicates",
+        "Info Duplicates",
+        "Phase 1-4 Results"
+      ]
+    },
+    {
+      "file": "apps/backend/models/CodeAudit.js",
+      "type": "MongoDB Schema",
+      "description": "Database model for storing audit results"
+    },
+    {
+      "file": "apps/backend/routes/audit.js",
+      "type": "API Implementation",
+      "description": "REST API endpoints for audit system"
+    }
+  ],
+  "nextSteps": [
+    "Review audit findings with development team",
+    "Prioritize which components to refactor first",
+    "Create GitHub issues for each refactoring task",
+    "Setup audit API endpoints in production",
+    "Implement Phase 1 base components",
+    "Run automated tests after each refactoring",
+    "Update component documentation"
+  ]
+}

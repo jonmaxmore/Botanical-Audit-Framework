@@ -24,7 +24,7 @@ const crypto = require('crypto');
 const path = require('path');
 
 // Import core business logic
-const { GACPWorkflowEngine } = require('../../../business-logic/gacp-workflow-engine');
+const { GACPWorkflowEngine } = require('../modules/application-workflow/domain/gacp-workflow-engine');
 
 // Import GACP Business Logic Models
 const {

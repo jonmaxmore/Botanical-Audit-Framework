@@ -21,7 +21,7 @@ const {
 } = require('../models/gacp-business-logic');
 const logger = require('../shared/logger');
 
-const { GACPWorkflowEngine } = require('../../../business-logic/gacp-workflow-engine');
+const { GACPWorkflowEngine } = require('../modules/application-workflow/domain/gacp-workflow-engine');
 
 class GACPEnhancedInspectionService {
   constructor(database = null) {
