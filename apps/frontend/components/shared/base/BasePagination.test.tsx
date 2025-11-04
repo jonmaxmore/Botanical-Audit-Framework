@@ -490,7 +490,7 @@ describe('BasePagination', () => {
 
   describe('Variants', () => {
     it('applies default variant classes', () => {
-      const { container } = render(
+      render(
         <BasePagination
           currentPage={1}
           totalItems={100}
