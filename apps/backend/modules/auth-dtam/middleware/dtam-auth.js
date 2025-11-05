@@ -15,9 +15,10 @@
 
 const shared = require('../../shared');
 const { constants } = shared;
+const path = require('path');
 
 const logger = require('../services/logger');
-const jwtConfig = require('../../../../../config/jwt-security');
+const jwtConfig = require(path.join(process.cwd(), 'config', 'jwt-security'));
 
 // โหลด JWT configuration (จะ throw error ถ้าไม่มี secret)
 let JWT_CONFIG;
