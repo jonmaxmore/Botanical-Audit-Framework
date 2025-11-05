@@ -46,34 +46,40 @@
 ## 🎯 AWS Services Required
 
 ### 1. **Compute**
+
 - **EC2 Instances:** t3.medium (2 vCPU, 4GB RAM) × 2
 - **Auto Scaling Group:** Min 2, Max 4 instances
 - **Application Load Balancer:** For high availability
 
 ### 2. **Database**
+
 - **DocumentDB:** 3-node cluster (MongoDB compatible)
   - Instance: db.t3.medium
   - Storage: 100GB with auto-scaling
   - Backup: 7-day retention
 
 ### 3. **Cache & Queue**
-- **ElastiCache for Redis:** 
+
+- **ElastiCache for Redis:**
   - Node: cache.t3.medium
   - Engine: Redis 7.x
   - Multi-AZ: Enabled
 
 ### 4. **Storage**
+
 - **S3 Buckets:**
   - `gacp-uploads` (certificates, documents)
   - `gacp-backups` (database backups)
   - `gacp-static` (frontend assets)
 
 ### 5. **Networking**
+
 - **VPC:** Custom VPC with public/private subnets
 - **Security Groups:** Configured for each service
 - **NAT Gateway:** For private subnet internet access
 
 ### 6. **DNS & CDN**
+
 - **Route 53:** Domain management
 - **CloudFront:** CDN for static assets
 
@@ -106,6 +112,7 @@ ssh -i "gacp-backend-server.pem" ec2-user@13.212.147.92
 ## 🚀 Quick Deploy (Option 1: Deploy to Your EC2)
 
 ### Prerequisites
+
 ```bash
 # Install AWS CLI (if not already installed)
 winget install Amazon.AWSCLI
@@ -333,6 +340,7 @@ echo "✅ GACP Platform deployed successfully!"
 ### 1. Security Groups
 
 **ALB Security Group:**
+
 ```bash
 # Allow HTTP/HTTPS from internet
 Inbound:
@@ -344,6 +352,7 @@ Outbound:
 ```
 
 **EC2 Security Group:**
+
 ```bash
 Inbound:
 - Port 3004 (API) from ALB Security Group
@@ -356,6 +365,7 @@ Outbound:
 ```
 
 **DocumentDB Security Group:**
+
 ```bash
 Inbound:
 - Port 27017 from EC2 Security Group only
@@ -365,6 +375,7 @@ Outbound:
 ```
 
 **ElastiCache Security Group:**
+
 ```bash
 Inbound:
 - Port 6379 from EC2 Security Group only
@@ -376,32 +387,24 @@ Outbound:
 ### 2. IAM Roles
 
 Create IAM role for EC2:
+
 ```json
 {
   "Version": "2012-10-17",
   "Statement": [
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:DeleteObject"
-      ],
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
       "Resource": "arn:aws:s3:::gacp-uploads/*"
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "ses:SendEmail",
-        "ses:SendRawEmail"
-      ],
+      "Action": ["ses:SendEmail", "ses:SendRawEmail"],
       "Resource": "*"
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "secretsmanager:GetSecretValue"
-      ],
+      "Action": ["secretsmanager:GetSecretValue"],
       "Resource": "arn:aws:secretsmanager:*:*:secret:gacp/*"
     }
   ]
@@ -412,25 +415,26 @@ Create IAM role for EC2:
 
 ## 📊 Cost Estimation (Monthly)
 
-| Service | Configuration | Cost (USD) |
-|---------|--------------|-----------|
-| EC2 (2 × t3.medium) | 2 vCPU, 4GB RAM | ~$60 |
-| DocumentDB (3 nodes) | db.t3.medium | ~$200 |
-| ElastiCache Redis | cache.t3.medium | ~$50 |
-| ALB | Standard | ~$25 |
-| S3 Storage | 100GB | ~$3 |
-| Data Transfer | 1TB/month | ~$90 |
-| CloudFront | 1TB/month | ~$85 |
-| Route 53 | 1 hosted zone | ~$1 |
-| **Total Estimated** | | **~$514/month** |
+| Service              | Configuration   | Cost (USD)      |
+| -------------------- | --------------- | --------------- |
+| EC2 (2 × t3.medium)  | 2 vCPU, 4GB RAM | ~$60            |
+| DocumentDB (3 nodes) | db.t3.medium    | ~$200           |
+| ElastiCache Redis    | cache.t3.medium | ~$50            |
+| ALB                  | Standard        | ~$25            |
+| S3 Storage           | 100GB           | ~$3             |
+| Data Transfer        | 1TB/month       | ~$90            |
+| CloudFront           | 1TB/month       | ~$85            |
+| Route 53             | 1 hosted zone   | ~$1             |
+| **Total Estimated**  |                 | **~$514/month** |
 
-*Costs are approximate and may vary based on usage*
+_Costs are approximate and may vary based on usage_
 
 ---
 
 ## ✅ Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] AWS account created and configured
 - [ ] AWS CLI installed and configured
 - [ ] Domain name registered (Route 53 or external)
@@ -438,6 +442,7 @@ Create IAM role for EC2:
 - [ ] Secrets generated (JWT_SECRET, etc.)
 
 ### Infrastructure
+
 - [ ] VPC and subnets created
 - [ ] Security groups configured
 - [ ] DocumentDB cluster created
@@ -447,6 +452,7 @@ Create IAM role for EC2:
 - [ ] Load balancer configured
 
 ### Application
+
 - [ ] Code deployed to EC2
 - [ ] Dependencies installed
 - [ ] Environment variables configured
@@ -455,6 +461,7 @@ Create IAM role for EC2:
 - [ ] Health checks passing
 
 ### Post-Deployment
+
 - [ ] DNS configured (Route 53)
 - [ ] SSL certificate installed
 - [ ] CloudFront distribution created
@@ -498,6 +505,7 @@ pm2 logs
 ## 🆘 Troubleshooting
 
 ### Issue: Cannot connect to DocumentDB
+
 ```bash
 # Download DocumentDB certificate
 wget https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
@@ -507,6 +515,7 @@ MONGODB_URI=mongodb://<endpoint>:27017/?ssl=true&ssl_ca_certs=global-bundle.pem&
 ```
 
 ### Issue: Redis connection timeout
+
 ```bash
 # Check security group
 aws elasticache describe-cache-clusters \
@@ -518,6 +527,7 @@ redis-cli -h <elasticache-endpoint> ping
 ```
 
 ### Issue: Application not starting
+
 ```bash
 # SSH to EC2
 ssh -i gacp-keypair.pem ec2-user@<EC2-IP>
@@ -537,11 +547,13 @@ pm2 restart all
 ## 📞 Support
 
 **AWS Support:**
+
 - Basic Plan: Free
 - Developer: $29/month
 - Business: $100/month
 
 **Documentation:**
+
 - AWS DocumentDB: https://docs.aws.amazon.com/documentdb/
 - AWS ElastiCache: https://docs.aws.amazon.com/elasticache/
 - AWS EC2: https://docs.aws.amazon.com/ec2/
