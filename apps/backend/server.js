@@ -40,14 +40,15 @@ const server = http.createServer(app);
 metrics.initRequestTracking(app);
 
 // HTTPS enforcement for production
-if (process.env.NODE_ENV === 'production') {
-  app.use((req, res, next) => {
-    if (req.header('x-forwarded-proto') !== 'https') {
-      return res.redirect(301, `https://${req.header('host')}${req.url}`);
-    }
-    next();
-  });
-}
+// TODO: Enable when SSL/TLS is configured with valid certificate
+// if (process.env.NODE_ENV === 'production') {
+//   app.use((req, res, next) => {
+//     if (req.header('x-forwarded-proto') !== 'https') {
+//       return res.redirect(301, `https://${req.header('host')}${req.url}`);
+//     }
+//     next();
+//   });
+// }
 
 // Security and performance middleware
 app.use(
