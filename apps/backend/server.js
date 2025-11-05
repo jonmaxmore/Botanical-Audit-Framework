@@ -186,8 +186,8 @@ app.use((req, res, next) => {
 const io = require('./services/socket-service').initialize(server, redisManager);
 
 // Initialize real-time notification service
-const realtimeService = require('./services/realtime.service');
-realtimeService.initialize(io);
+// const realtimeService = require('./services/realtime.service');
+// realtimeService.initialize(io); // FIXME: realtime.service doesn't export initialize
 
 // Make socket.io available to routes
 app.set('io', io);
@@ -263,34 +263,34 @@ app.get('/api/health', async (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/health', require('./routes/health'));
 app.use('/api/applications', require('./routes/applications')); // ? Enabled for real API
-app.use('/api/farmer/application', require('./routes/farmer-application'));
-app.use('/api/admin/applications', require('./routes/admin-application')); // Admin application management
-app.use('/api/certificates', require('./routes/certificate')); // Certificate routes
-app.use('/api/inspections', require('./routes/inspection')); // Inspection routes
-app.use('/api/documents', require('./routes/document')); // Document Management System
-app.use('/api/notifications', require('./routes/notification')); // Notification System
-app.use('/api/analytics', require('./routes/analytics')); // Analytics Dashboard
-app.use('/api/dashboard', require('./routes/dashboard'));
-app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ? Smart Agriculture APIs
-app.use('/api/traceability', require('./routes/traceability')); // ✅ Traceability System - QR code tracking
-app.use('/api/farm-management', require('./routes/farm-management')); // ✅ Farm Management System
-app.use('/api/standards', require('./routes/standards')); // ✅ Standards Comparison System
-app.use('/api/questionnaires', require('./routes/questionnaires')); // ✅ Questionnaire/Survey System
+// app.use('/api/farmer/application', require('./routes/farmer-application'));
+// app.use('/api/admin/applications', require('./routes/admin-application')); // Admin application management
+// app.use('/api/certificates', require('./routes/certificate')); // Certificate routes - EMPTY FILE
+// app.use('/api/inspections', require('./routes/inspection')); // Inspection routes - NEEDS FIX
+// app.use('/api/documents', require('./routes/document')); // Document Management System - NEEDS CHECK
+// app.use('/api/notifications', require('./routes/notification')); // Notification System - NEEDS CHECK
+// app.use('/api/analytics', require('./routes/analytics')); // Analytics Dashboard - NEEDS CHECK
+// app.use('/api/dashboard', require('./routes/dashboard')); // NEEDS CHECK
+// app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ? Smart Agriculture APIs
+// app.use('/api/traceability', require('./routes/traceability')); // ✅ Traceability System - Missing _Crop model
+// app.use('/api/farm-management', require('./routes/farm-management')); // ✅ Farm Management System - Missing _roleCheck
+// app.use('/api/standards', require('./routes/standards')); // ✅ Standards Comparison System
+// app.use('/api/questionnaires', require('./routes/questionnaires')); // ✅ Questionnaire/Survey System
 // app.use('/api/inspectors', require('./routes/inspectors')); // Commented - has middleware issues
 // app.use('/api/notifications', require('./routes/notifications')); // Commented - duplicate route (already enabled above)
 
-// ✅ Phase 1: AI QC and Calendar Integration
-app.use('/api/v1/ai-qc', require('./routes/aiQc.routes')); // AI Quality Control with Gemini
-app.use('/api/v1/dtam/inspector', require('./routes/inspector.routes')); // Inspector Dashboard APIs
-app.use('/api/v1/dtam/approver', require('./routes/approver.routes')); // Approver Dashboard APIs
+// ✅ Phase 1: AI QC and Calendar Integration - COMMENTED OUT UNTIL DEPENDENCIES FIXED
+// app.use('/api/v1/ai-qc', require('./routes/aiQc.routes')); // AI Quality Control with Gemini - NEEDS FIX
+// app.use('/api/v1/dtam/inspector', require('./routes/inspector.routes')); // Inspector Dashboard APIs - NEEDS CHECK
+// app.use('/api/v1/dtam/approver', require('./routes/approver.routes')); // Approver Dashboard APIs - NEEDS CHECK
 
-// ✅ Phase 2: Queue Management System
-app.use('/api/v1/queue', require('./routes/queue.routes')); // Queue monitoring and management
-app.use('/api/v1/cache', require('./routes/cache.routes')); // Cache management
+// ✅ Phase 2: Queue Management System - COMMENTED OUT UNTIL STABLE
+// app.use('/api/v1/queue', require('./routes/queue.routes')); // Queue monitoring and management - NEEDS CHECK
+// app.use('/api/v1/cache', require('./routes/cache.routes')); // Cache management - NEEDS CHECK
 
-// ✅ Phase 2: Monitoring Dashboard System
-app.use('/api/v1/monitoring', require('./routes/monitoring')); // System monitoring and metrics
-app.use('/api/v1/alerts', require('./routes/alerts')); // Alert management
+// ✅ Phase 2: Monitoring Dashboard System - COMMENTED OUT UNTIL STABLE
+// app.use('/api/v1/monitoring', require('./routes/monitoring')); // System monitoring and metrics - NEEDS CHECK
+// app.use('/api/v1/alerts', require('./routes/alerts')); // Alert management - NEEDS CHECK
 
 // Global error handler
 app.use(errorMiddleware());

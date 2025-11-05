@@ -284,29 +284,29 @@ async function optimize() {
   }
 }
 
+// CLI execution helper
+async function runOptimization() {
+  const mongoManager = require('../config/mongodb-manager');
+  try {
+    // Connect to database
+    await mongoManager.connect();
+    
+    // Run optimization
+    const result = await optimize();
+    
+    console.log('\n✅ Optimization successful!');
+    console.log(JSON.stringify(result, null, 2));
+    
+    process.exit(0);
+  } catch (error) {
+    console.error('\n❌ Optimization failed:', error);
+    process.exit(1);
+  }
+}
+
 // CLI execution
 if (require.main === module) {
-  const mongoManager = require('../config/mongodb-manager');
-  
-  async function run() {
-    try {
-      // Connect to database
-      await mongoManager.connect();
-      
-      // Run optimization
-      const result = await optimize();
-      
-      console.log('\n✅ Optimization successful!');
-      console.log(JSON.stringify(result, null, 2));
-      
-      process.exit(0);
-    } catch (error) {
-      console.error('\n❌ Optimization failed:', error);
-      process.exit(1);
-    }
-  }
-  
-  run();
+  runOptimization();
 }
 
 module.exports = {

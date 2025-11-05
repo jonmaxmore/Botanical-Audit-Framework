@@ -4,7 +4,7 @@
  */
 
 const cron = require('node-cron');
-const logger = require('../utils/logger');
+const logger = require('../../utils/logger');
 const aiQcTrigger = require('../services/ai/aiQcTrigger');
 
 class JobScheduler {
