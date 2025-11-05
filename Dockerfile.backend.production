@@ -7,17 +7,15 @@ WORKDIR /app
 
 # Install production dependencies only
 COPY package.json package-lock.json* pnpm-lock.yaml* ./
+# Skip all install scripts (including husky) - native modules will be rebuilt automatically
 RUN \
   if [ -f pnpm-lock.yaml ]; then \
     corepack enable && corepack prepare pnpm@latest --activate && \
-    pnpm install --prod --no-frozen-lockfile --ignore-scripts && \
-    pnpm rebuild sharp msgpackr-extract --ignore-scripts; \
+    pnpm install --prod --no-frozen-lockfile --ignore-scripts; \
   elif [ -f package-lock.json ]; then \
-    npm ci --only=production --ignore-scripts && \
-    npm rebuild sharp msgpackr-extract; \
+    npm ci --only=production --ignore-scripts; \
   else \
-    npm install --only=production --ignore-scripts && \
-    npm rebuild sharp msgpackr-extract; \
+    npm install --only=production --ignore-scripts; \
   fi
 
 # Stage 2: Builder
