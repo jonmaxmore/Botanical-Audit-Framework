@@ -245,8 +245,6 @@ jobs:
     needs: [security-scan, e2e-integration]
     if: github.ref == 'refs/heads/develop'
 
-    environment: staging
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
