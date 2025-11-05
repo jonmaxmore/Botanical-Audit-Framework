@@ -5,10 +5,18 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
 
+# Install build dependencies
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    libc6-compat
+
 # Copy backend package files only
 COPY apps/backend/package.json ./
-# Install production dependencies
-RUN npm install --only=production --ignore-scripts || true
+# Install production dependencies and rebuild native modules
+RUN npm install --only=production --ignore-scripts && \
+    npm rebuild bcrypt sharp
 
 # Stage 2: Runner (Production)
 FROM node:22-alpine AS runner
