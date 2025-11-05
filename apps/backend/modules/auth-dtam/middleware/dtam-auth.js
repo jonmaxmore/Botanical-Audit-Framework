@@ -18,7 +18,8 @@ const { constants } = shared;
 const path = require('path');
 
 const logger = require('../services/logger');
-const jwtConfig = require(path.join(process.cwd(), 'config', 'jwt-security'));
+// jwt-security.js is in root config/, not apps/backend/config/
+const jwtConfig = require(path.join(process.cwd(), '..', '..', 'config', 'jwt-security'));
 
 // โหลด JWT configuration (จะ throw error ถ้าไม่มี secret)
 let JWT_CONFIG;
