@@ -12,6 +12,7 @@ build/
 dist/
 .next/
 out/
+*.tsbuildinfo
 
 # Environment variables
 .env
@@ -37,7 +38,10 @@ lerna-debug.log*
 Thumbs.db
 
 # IDE
-.vscode/
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/extensions.json
 .idea/
 *.swp
 *.swo

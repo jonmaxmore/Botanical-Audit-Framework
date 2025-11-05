@@ -252,6 +252,7 @@ npm run test:e2e
 ### Essential Documentation
 
 - **Quick Start:** [docs/DEV_ENVIRONMENT_QUICK_START.md](docs/DEV_ENVIRONMENT_QUICK_START.md)
+- **Troubleshooting:** [TROUBLESHOOTING_COPILOT_RHDA.md](TROUBLESHOOTING_COPILOT_RHDA.md) - Resolve Copilot tool limit and RHDA lock file issues
 - **Architecture:** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - **Module Inventory:** [docs/EXISTING_MODULES_INVENTORY.md](docs/EXISTING_MODULES_INVENTORY.md)
 - **Deployment Guide:** [docs/05_DEPLOYMENT/](docs/05_DEPLOYMENT/)
