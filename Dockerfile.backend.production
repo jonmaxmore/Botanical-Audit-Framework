@@ -11,13 +11,13 @@ RUN \
   if [ -f pnpm-lock.yaml ]; then \
     corepack enable && corepack prepare pnpm@latest --activate && \
     pnpm install --prod --no-frozen-lockfile --ignore-scripts && \
-    pnpm rebuild; \
+    pnpm rebuild sharp msgpackr-extract --ignore-scripts; \
   elif [ -f package-lock.json ]; then \
     npm ci --only=production --ignore-scripts && \
-    npm rebuild; \
+    npm rebuild sharp msgpackr-extract; \
   else \
     npm install --only=production --ignore-scripts && \
-    npm rebuild; \
+    npm rebuild sharp msgpackr-extract; \
   fi
 
 # Stage 2: Builder
