@@ -36,7 +36,9 @@
       "Bash(dir:*)",
       "Bash(npx --yes typescript@latest tsc:*)",
       "Bash(pnpm exec tsc:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(ssh:*)",
+      "Bash(git remote get-url:*)"
     ],
     "deny": [],
     "ask": []
