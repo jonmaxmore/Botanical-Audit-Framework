@@ -49,7 +49,7 @@ Write-Host ""
 # Test 3: Applications Endpoint (Auth Required)
 Write-Host "[3/7] Testing Applications Endpoint..." -ForegroundColor Yellow
 try {
-    $apps = Invoke-RestMethod -Uri "$BASE_URL/api/applications" -Method GET
+    $null = Invoke-RestMethod -Uri "$BASE_URL/api/applications" -Method GET
     Write-Host "      ❌ Unexpected: Should require authentication" -ForegroundColor Red
     $failed++
 } catch {

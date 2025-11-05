@@ -245,9 +245,7 @@ jobs:
     needs: [security-scan, e2e-integration]
     if: github.ref == 'refs/heads/develop'
 
-    environment:
-      name: staging
-      url: https://gacp-staging.dtam.go.th
+    environment: staging
 
     steps:
       - name: Checkout code
