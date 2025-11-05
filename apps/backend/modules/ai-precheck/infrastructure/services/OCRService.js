@@ -170,7 +170,7 @@ class OCRService {
     }
 
     // Extract date of birth
-    const dobMatch = text.match(/เกิด[:\s]*(\d{1,2}[\s\/.-]\d{1,2}[\s\/.-]\d{2,4})/);
+    const dobMatch = text.match(/เกิด[:\s]*(\d{1,2}[\s/.-]\d{1,2}[\s/.-]\d{2,4})/);
     if (dobMatch) {
       data.dateOfBirth = dobMatch[1];
       data.confidence += 0.2;
@@ -236,10 +236,10 @@ class OCRService {
 
   /**
    * Check document quality (blur, darkness, etc.)
-   * @param {Object} document
+   * @param {Object} _document
    * @returns {Promise<Object>} Quality check result
    */
-  async checkDocumentQuality(document) {
+  async checkDocumentQuality(_document) {
     try {
       // TODO: Implement Google Vision quality detection
       // const [result] = await this.visionClient.imageProperties(document.path);
@@ -279,55 +279,35 @@ class OCRService {
 
   /**
    * Detect language in document
-   * @param {Object} document
+   * @param {Object} _document
    * @returns {Promise<string>} Detected language
    */
-  async detectLanguage(document) {
-    try {
-      // TODO: Implement Google Vision language detection
-      // const [result] = await this.visionClient.textDetection(document.path);
-      // return result.textAnnotations[0]?.locale || 'th';
+  async detectLanguage(_document) {
+    // TODO: Implement Google Vision language detection
+    // const [result] = await this.visionClient.textDetection(document.path);
+    // return result.textAnnotations[0]?.locale || 'th';
 
-      // Mock for now
-      return 'th'; // Thai
-
-    } catch (error) {
-      this.logger.error('Language detection failed', {
-        error: error.message
-      });
-      return 'unknown';
-    }
+    // Mock for now
+    return 'th'; // Thai
   }
 
   /**
    * Verify document authenticity
-   * @param {Object} document
+   * @param {Object} _document
    * @returns {Promise<Object>} Authenticity check result
    */
-  async verifyAuthenticity(document) {
-    try {
-      // TODO: Implement advanced authenticity checks
-      // - Check for digital watermarks
-      // - Detect photo manipulation
-      // - Verify government seals
+  async verifyAuthenticity(_document) {
+    // TODO: Implement advanced authenticity checks
+    // - Check for digital watermarks
+    // - Detect photo manipulation
+    // - Verify government seals
 
-      // Mock for now
-      return {
-        isAuthentic: true,
-        confidence: 0.9,
-        warnings: []
-      };
-
-    } catch (error) {
-      this.logger.error('Authenticity verification failed', {
-        error: error.message
-      });
-      return {
-        isAuthentic: false,
-        confidence: 0,
-        warnings: ['Verification failed']
-      };
-    }
+    // Mock for now
+    return {
+      isAuthentic: true,
+      confidence: 0.9,
+      warnings: []
+    };
   }
 }
 
