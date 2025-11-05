@@ -56,6 +56,7 @@ Fill in the following details:
 ```
 
 **Important Notes:**
+
 - **Type:** Select "Custom TCP" from dropdown
 - **Port range:** Enter exactly `5000`
 - **Source:** Using `0.0.0.0/0` allows access from anywhere
@@ -93,6 +94,7 @@ SSH         TCP        22           0.0.0.0/0    SSH Access
 ```
 
 This will automatically test:
+
 - ✅ Port connectivity
 - ✅ Health endpoint
 - ✅ Status endpoint
@@ -101,6 +103,7 @@ This will automatically test:
 ### Option 2: Manual Testing
 
 #### Test 1: Port Connectivity
+
 ```powershell
 Test-NetConnection -ComputerName 13.214.217.1 -Port 5000
 ```
@@ -108,6 +111,7 @@ Test-NetConnection -ComputerName 13.214.217.1 -Port 5000
 Expected result: `TcpTestSucceeded : True`
 
 #### Test 2: API Health Check
+
 ```powershell
 curl http://13.214.217.1:5000/api/health
 ```
@@ -117,6 +121,7 @@ Expected result: `{"status":"healthy",...}`
 #### Test 3: Browser Test
 
 Open in your browser:
+
 ```
 http://13.214.217.1:5000/api/health
 ```
@@ -130,11 +135,13 @@ You should see JSON response with health status.
 ### Using 0.0.0.0/0 (Anywhere)
 
 **Pros:**
+
 - ✅ Accessible from any location
 - ✅ Good for public APIs
 - ✅ Easy for testing and development
 
 **Cons:**
+
 - ⚠️ Exposed to the entire internet
 - ⚠️ More vulnerable to attacks
 - ⚠️ Should implement rate limiting
@@ -142,12 +149,14 @@ You should see JSON response with health status.
 ### Using Specific IP Ranges (Recommended for Production)
 
 **Option A: Your Office/Home IP**
+
 ```
 Source: Your.Public.IP.Address/32
 Description: Office network only
 ```
 
 **Option B: Your Company Network**
+
 ```
 Source: 203.0.113.0/24
 Description: Company network range
@@ -182,12 +191,14 @@ Add multiple rules for different authorized IPs
 ### Problem: Port test still fails after opening Security Group
 
 **Possible causes:**
+
 1. **Network ACL blocking**: Check VPC Network ACLs
 2. **Instance firewall**: Check OS-level firewall rules
 3. **Application not listening**: Verify PM2 status
 4. **Wrong port**: Ensure app is actually on port 5000
 
 **Debug commands:**
+
 ```bash
 # SSH to instance
 ssh -i C:\Users\usEr\.ssh\gacp-backend-server.pem ec2-user@13.214.217.1
@@ -205,6 +216,7 @@ pm2 logs backend --lines 50
 ### Problem: Connection times out
 
 **Check:**
+
 1. Security Group rule saved correctly
 2. Instance is in "running" state
 3. Public IP hasn't changed
@@ -212,7 +224,8 @@ pm2 logs backend --lines 50
 
 ### Problem: 401 Unauthorized on /api/applications
 
-**This is expected!** 
+**This is expected!**
+
 - The endpoint requires authentication
 - Get a JWT token first:
   ```bash
@@ -225,10 +238,12 @@ pm2 logs backend --lines 50
 ## 📞 Need Help?
 
 ### Useful AWS Documentation
+
 - [Security Groups](https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html)
 - [Troubleshooting](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/troubleshooting-connect.html)
 
 ### Check Current Status
+
 ```bash
 # On EC2 instance
 ssh -i C:\Users\usEr\.ssh\gacp-backend-server.pem ec2-user@13.214.217.1 "pm2 status && curl -s http://localhost:5000/api/health | jq"
@@ -243,7 +258,7 @@ When everything is working correctly, you should see:
 ```
 ✅ Port 5000 is OPEN
 ✅ Health Status: healthy
-✅ MongoDB: healthy  
+✅ MongoDB: healthy
 ✅ Server Status: ok
 ✅ Authentication required (401) - Expected behavior
 ```
@@ -251,11 +266,13 @@ When everything is working correctly, you should see:
 ---
 
 **Once port 5000 is open, your API will be publicly accessible at:**
+
 ```
 http://13.214.217.1:5000
 ```
 
 **Remember to:**
+
 - Document any API keys or tokens securely
 - Set up monitoring and alerts
 - Plan for HTTPS implementation

@@ -424,23 +424,20 @@ jobs:
             echo "status=success" >> $GITHUB_OUTPUT
           fi
 
-      - name: Send Slack notification
-        uses: 8398a7/action-slack@v3
+      - name: Slack notification
+        uses: slackapi/slack-github-action@v1
         if: always()
         with:
-          status: ${{ steps.check.outputs.status }}
-          text: |
-            CI Pipeline ${{ steps.check.outputs.status }}
-            Repository: ${{ github.repository }}
-            Branch: ${{ github.ref_name }}
-            Commit: ${{ github.sha }}
-            Author: ${{ github.actor }}
-          webhook_url: ${{ secrets.SLACK_WEBHOOK_URL }}
-          fields: repo,message,commit,author,action,eventName,ref,workflow
+          payload: |
+            {
+              "text": "CI Pipeline ${{ steps.check.outputs.status }}\nRepository: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\nAuthor: ${{ github.actor }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
       - name: Send email notification
         uses: dawidd6/action-send-mail@v3
-        if: failure() && secrets.EMAIL_USERNAME != ''
+        if: failure()
         with:
           server_address: smtp.gmail.com
           server_port: 465

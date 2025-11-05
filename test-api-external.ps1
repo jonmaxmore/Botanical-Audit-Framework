@@ -45,7 +45,7 @@ try {
 # Test 4: Applications endpoint (should return 401 without auth)
 Write-Host "`n[4/4] Testing /api/applications endpoint..." -ForegroundColor Yellow
 try {
-    $apps = Invoke-RestMethod -Uri "$API_BASE/api/applications" -Method Get -TimeoutSec 10
+    $null = Invoke-RestMethod -Uri "$API_BASE/api/applications" -Method Get -TimeoutSec 10
     Write-Host "⚠️  Unexpected: Got response without auth" -ForegroundColor Yellow
 } catch {
     if ($_.Exception.Response.StatusCode -eq 401) {

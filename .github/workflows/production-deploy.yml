@@ -179,20 +179,28 @@ jobs:
           curl -f https://api.yourdomain.com/api/health || exit 1
 
       - name: Notify deployment success
-        uses: 8398a7/action-slack@v3
+        uses: slackapi/slack-github-action@v1
         if: success()
         with:
-          status: ${{ job.status }}
-          text: 'Production deployment successful! 🚀'
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "Production deployment successful! 🚀",
+              "status": "${{ job.status }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
       - name: Notify deployment failure
-        uses: 8398a7/action-slack@v3
+        uses: slackapi/slack-github-action@v1
         if: failure()
         with:
-          status: ${{ job.status }}
-          text: 'Production deployment failed! ❌'
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          payload: |
+            {
+              "text": "Production deployment failed! ❌",
+              "status": "${{ job.status }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK }}
 
   # Job 6: Database Backup
   backup-database:
