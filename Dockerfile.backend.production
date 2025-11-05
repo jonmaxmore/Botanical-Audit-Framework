@@ -7,14 +7,16 @@ WORKDIR /app
 
 # Install production dependencies only
 COPY package.json package-lock.json* pnpm-lock.yaml* ./
+# Set HUSKY=0 to skip husky hooks during install
+ENV HUSKY=0
 RUN \
   if [ -f pnpm-lock.yaml ]; then \
     corepack enable && corepack prepare pnpm@latest --activate && \
-    pnpm install --prod --no-frozen-lockfile --ignore-scripts; \
+    pnpm install --prod --no-frozen-lockfile; \
   elif [ -f package-lock.json ]; then \
-    npm ci --only=production --ignore-scripts; \
+    npm ci --only=production; \
   else \
-    npm install --only=production --ignore-scripts; \
+    npm install --only=production; \
   fi
 
 # Stage 2: Builder
