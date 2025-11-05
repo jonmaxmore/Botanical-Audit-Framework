@@ -14,7 +14,7 @@ const shared = require('../../shared');
 const { config, middleware } = shared;
 
 // Import farmer-specific models (corrected path: go up 2 levels to reach apps/backend/models)
-const User = require('../../models/user');
+const User = require('../../models/User');
 const logger = require('../services/logger');
 
 /**
