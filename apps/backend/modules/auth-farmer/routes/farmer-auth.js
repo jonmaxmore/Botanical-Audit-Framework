@@ -11,10 +11,11 @@ const router = express.Router();
 
 // Import from shared module
 const shared = require('../../shared');
-const { config, middleware } = shared;
+const { config, middleware} = shared;
+const path = require('path');
 
-// Import farmer-specific models (corrected path: go up 2 levels to reach apps/backend/models)
-const User = require('../../models/User');
+// Import farmer-specific models (use absolute path to avoid case-sensitivity issues)
+const User = require(path.join(process.cwd(), 'models', 'User.js'));
 const logger = require('../services/logger');
 
 /**
