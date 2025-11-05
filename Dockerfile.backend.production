@@ -10,11 +10,11 @@ COPY package.json package-lock.json* pnpm-lock.yaml* ./
 RUN \
   if [ -f pnpm-lock.yaml ]; then \
     corepack enable && corepack prepare pnpm@latest --activate && \
-    pnpm install --prod --no-frozen-lockfile; \
+    pnpm install --prod --no-frozen-lockfile --ignore-scripts; \
   elif [ -f package-lock.json ]; then \
-    npm ci --only=production; \
+    npm ci --only=production --ignore-scripts; \
   else \
-    npm install --only=production; \
+    npm install --only=production --ignore-scripts; \
   fi
 
 # Stage 2: Builder
