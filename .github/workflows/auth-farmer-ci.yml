@@ -1,0 +1,67 @@
+name: Auth Farmer Module CI
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'apps/backend/modules/auth-farmer/**'
+      - 'apps/backend/shared/**'
+      - '.github/workflows/auth-farmer-ci.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'apps/backend/modules/auth-farmer/**'
+      - 'apps/backend/shared/**'
+
+jobs:
+  test-auth-farmer:
+    name: Test Auth Farmer Module
+    runs-on: ubuntu-latest
+
+    services:
+      mongodb:
+        image: mongo:7
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.adminCommand({ ping: 1 })'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      MONGODB_URI: mongodb://localhost:27017/botanical_test
+      JWT_SECRET: test-jwt-secret-ci
+      FARMER_JWT_SECRET: test-farmer-jwt-secret-ci
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript type-check
+        working-directory: apps/backend/modules/auth-farmer
+        run: npx tsc --noEmit
+
+      - name: Run tests with coverage
+        working-directory: apps/backend/modules/auth-farmer
+        run: npx jest --config=jest.config.js --coverage --coverageReporters=text --coverageReporters=lcov
+
+      - name: Upload coverage
+        uses: codecov/codecov-action@v4
+        with:
+          files: ./apps/backend/modules/auth-farmer/coverage/lcov.info
+          flags: auth-farmer
+        continue-on-error: true
