@@ -117,3 +117,4 @@ middleware
 openapi
 config/*.js
 !config/app-config.json
+!config/jwt-security.js
