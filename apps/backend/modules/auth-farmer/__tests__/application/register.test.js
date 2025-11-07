@@ -7,6 +7,11 @@ const RegisterUserUseCase = require('../../application/use-cases/register');
 const User = require('../../domain/entities/User');
 const Email = require('../../domain/value-objects/Email');
 const Password = require('../../domain/value-objects/Password');
+const { 
+  validUserPayload, 
+  createUserPayload,
+  createUniqueUserPayload 
+} = require('../fixtures/userFactory');
 
 describe('RegisterUserUseCase', () => {
   let registerUseCase;
@@ -49,19 +54,7 @@ describe('RegisterUserUseCase', () => {
 
   describe('Happy Path', () => {
     it('should register a new user successfully', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123',
-        phoneNumber: '0812345678',
-        address: '123 Test Street',
-        province: 'Bangkok',
-        district: 'Bang Khen',
-        subDistrict: 'Anusawari',
-        postalCode: '10220'
-      };
+      const userData = createUserPayload();
 
       // Setup mocks
       mockUserRepository.emailExists.mockResolvedValue(false);
@@ -90,14 +83,7 @@ describe('RegisterUserUseCase', () => {
     });
 
     it('should hash the password before saving', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123',
-        phoneNumber: '0812345678'
-      };
+      const userData = createUserPayload();
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(false);

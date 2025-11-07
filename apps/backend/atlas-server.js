@@ -141,6 +141,47 @@ app.get('/health', async (req, res) => {
   res.json(health);
 });
 
+// ============================================================================
+// API DOCUMENTATION & RATE LIMITING
+// ============================================================================
+
+// Import and mount Swagger UI for API documentation
+const { mountSwagger, createDocsIndex } = require('./modules/auth-farmer/presentation/swagger');
+try {
+  mountSwagger(app, '/api/docs/auth-farmer');
+  createDocsIndex(app);
+  appLogger.info('✅ Swagger UI mounted at /api/docs/auth-farmer');
+  appLogger.info('📚 API docs index available at /docs');
+} catch (error) {
+  appLogger.warn('⚠️  Failed to mount Swagger UI:', error.message);
+}
+
+// Rate limiting for auth endpoints
+const rateLimit = require('express-rate-limit');
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes  
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: 'Too many requests from this IP, please try again later',
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Apply strict rate limiting to sensitive auth routes
+const strictAuthLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20, // limit to 20 login attempts per 15 minutes
+  message: 'Too many authentication attempts, please try again later'
+});
+
+app.use('/api/auth', authLimiter);
+app.use('/api/auth/*/login', strictAuthLimiter);
+app.use('/api/auth/*/register', authLimiter);
+appLogger.info('✅ Rate limiting applied to /api/auth/* routes');
+
+// ============================================================================
+// ROUTES
+// ============================================================================
+
 // Root endpoint
 app.get('/', (req, res) => {
   res.json({
