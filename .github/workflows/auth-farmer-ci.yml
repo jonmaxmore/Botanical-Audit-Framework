@@ -65,3 +65,51 @@ jobs:
           files: ./apps/backend/modules/auth-farmer/coverage/lcov.info
           flags: auth-farmer
         continue-on-error: true
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: test-auth-farmer
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.STAGING_SSH_KEY }}
+
+      - name: Add staging host to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.STAGING_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to staging via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude '.git' \
+            --exclude 'coverage' \
+            --exclude '*.log' \
+            --exclude '.env*' \
+            ./ ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }}:${{ secrets.STAGING_PATH }}
+
+      - name: Install dependencies on staging
+        run: |
+          ssh ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} \
+            "cd ${{ secrets.STAGING_PATH }} && pnpm install --prod --frozen-lockfile"
+
+      - name: Restart application on staging
+        run: |
+          ssh ${{ secrets.STAGING_USER }}@${{ secrets.STAGING_HOST }} \
+            "cd ${{ secrets.STAGING_PATH }} && pm2 restart gacp-backend || pm2 start ecosystem.config.js"
+
+      - name: Health check
+        run: |
+          sleep 10
+          curl -f http://${{ secrets.STAGING_HOST }}/health || exit 1
+
+      - name: Deployment notification
+        if: success()
+        run: echo "✅ Deployment to staging successful!"
