@@ -5,10 +5,10 @@
  * Entry point for the farmer authentication module
  */
 
-// Import routes
-const farmerAuthRoutes = require('./routes/farmer-auth');
+// Import Clean Architecture container
+const createAuthFarmerModule = require('./container');
 
-// Import models
+// Import legacy models for backward compatibility (will be deprecated)
 const User = require('./models/user');
 
 // Import services
@@ -21,27 +21,30 @@ const validators = require('./validators/auth-validators');
  * Module exports
  */
 module.exports = {
-  // Routes
-  routes: {
-    farmerAuth: farmerAuthRoutes
-  },
+  // Clean Architecture factory (RECOMMENDED)
+  createModule: createAuthFarmerModule,
 
-  // Models
+  // Legacy exports (DEPRECATED - for backward compatibility only)
   models: {
     User
   },
 
-  // Services
   services: {
     logger
   },
 
-  // Validators
   validators,
 
-  // Convenience method to mount routes
+  // Convenience method to mount routes (DEPRECATED)
   mountRoutes: (app, basePath = '/api/auth-farmer') => {
-    app.use(basePath, farmerAuthRoutes);
-    logger.info(`Auth Farmer routes mounted at ${basePath}`);
+    logger.warn('DEPRECATED: Use createModule() with container pattern instead');
+    const farmerAuthModule = createAuthFarmerModule({
+      database: require('mongoose').connection,
+      jwtSecret: process.env.FARMER_JWT_SECRET || process.env.JWT_SECRET,
+      jwtExpiresIn: '24h',
+      bcryptSaltRounds: 12
+    });
+    app.use(basePath, farmerAuthModule.router);
+    logger.info(`Auth Farmer routes mounted at ${basePath} (via deprecated method)`);
   }
 };

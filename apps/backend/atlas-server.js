@@ -464,9 +464,16 @@ app.get('/api/db/test', async (req, res) => {
 // AUTHENTICATION MODULES
 // ============================================================================
 
-// Mount Farmer Authentication Routes
-app.use('/api/auth-farmer', require('./modules/auth-farmer/routes/farmer-auth'));
-appLogger.info('✅ Farmer Auth routes mounted at /api/auth-farmer');
+// Mount Farmer Authentication Routes (Clean Architecture)
+const createAuthFarmerModule = require('./modules/auth-farmer/container');
+const farmerAuthModule = createAuthFarmerModule({
+  database: mongoose.connection,
+  jwtSecret: process.env.FARMER_JWT_SECRET || process.env.JWT_SECRET,
+  jwtExpiresIn: '24h',
+  bcryptSaltRounds: 12
+});
+app.use('/api/auth/farmer', farmerAuthModule.router);
+appLogger.info('✅ Farmer Auth routes mounted at /api/auth/farmer (Clean Architecture)');
 
 // Mount DTAM Staff Authentication Routes
 app.use('/api/auth-dtam', require('./modules/auth-dtam/routes/dtam-auth'));
@@ -584,13 +591,13 @@ app.use((req, res) => {
         'GET /api - API documentation'
       ],
       authentication: [
-        'POST /api/auth-farmer/register - Farmer registration',
-        'POST /api/auth-farmer/login - Farmer login',
-        'GET /api/auth-farmer/profile - Get farmer profile (requires auth)',
-        'PUT /api/auth-farmer/profile - Update farmer profile (requires auth)',
-        'POST /api/auth-farmer/change-password - Change password (requires auth)',
-        'POST /api/auth-farmer/logout - Logout (requires auth)',
-        'GET /api/auth-farmer/verify - Verify token',
+        'POST /api/auth/farmer/register - Farmer registration',
+        'POST /api/auth/farmer/login - Farmer login',
+        'GET /api/auth/farmer/profile - Get farmer profile (requires auth)',
+        'PUT /api/auth/farmer/profile - Update farmer profile (requires auth)',
+        'GET /api/auth/farmer/verify-email/:token - Verify email',
+        'POST /api/auth/farmer/request-password-reset - Request password reset',
+        'POST /api/auth/farmer/reset-password - Reset password with token',
         'POST /api/auth-dtam/login - DTAM staff login',
         'GET /api/auth-dtam/profile - Get DTAM profile (requires auth)',
         'GET /api/auth-dtam/staff-list - List all staff (admin only)',
