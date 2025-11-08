@@ -53,33 +53,38 @@ class AuthController {
 
       return res.status(201).json({
         success: true,
-        message: 'Registration successful. Please verify your email.',
+        message: 'User registered successfully. Please verify your email.',
         data: {
-          userId: result.user.id,
-          email: result.user.email,
+          user: {
+            id: result.user.id,
+            email: result.user.email,
+            firstName: result.user.firstName,
+            lastName: result.user.lastName,
+            status: result.user.status
+          },
           verificationToken: result.verificationToken
         }
       });
     } catch (error) {
       logger.error('Registration error:', error);
 
-      if (error.message.includes('already exists')) {
+      if (error.message.includes('already exists') || error.message.includes('already registered')) {
         return res.status(409).json({
           success: false,
-          message: error.message
+          error: error.message
         });
       }
 
       if (error.message.includes('Invalid') || error.message.includes('required')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          error: error.message
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Registration failed. Please try again.'
+        error: 'Registration failed. Please try again.'
       });
     }
   }
@@ -115,37 +120,37 @@ class AuthController {
     } catch (error) {
       logger.error('Login error:', error);
 
-      if (error.message.includes('Invalid credentials')) {
+      if (error.message.includes('Invalid email or password') || error.message.includes('Invalid credentials')) {
         return res.status(401).json({
           success: false,
-          message: 'Invalid email or password'
+          error: 'Invalid email or password'
         });
       }
 
       if (error.message.includes('locked')) {
         return res.status(403).json({
           success: false,
-          message: error.message
+          error: error.message
         });
       }
 
-      if (error.message.includes('not verified')) {
+      if (error.message.includes('verify your email')) {
         return res.status(403).json({
           success: false,
-          message: 'Please verify your email before logging in'
+          error: 'Please verify your email before logging in'
         });
       }
 
       if (error.message.includes('suspended') || error.message.includes('inactive')) {
         return res.status(403).json({
           success: false,
-          message: 'Your account is not active. Please contact support.'
+          error: 'Your account is not active. Please contact support.'
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Login failed. Please try again.'
+        error: 'Login failed. Please try again.'
       });
     }
   }

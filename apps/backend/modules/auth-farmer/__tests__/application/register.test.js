@@ -66,12 +66,15 @@ describe('RegisterUserUseCase', () => {
       // Execute
       const result = await registerUseCase.execute(userData);
 
-      // Assert
-      expect(result).toBeInstanceOf(User);
-      expect(result.email).toBe(userData.email);
-      expect(result.firstName).toBe(userData.firstName);
-      expect(result.status).toBe('PENDING_VERIFICATION');
-      expect(result.isEmailVerified).toBe(false);
+      // Assert - result should contain user and verificationToken
+      expect(result).toHaveProperty('user');
+      expect(result).toHaveProperty('verificationToken');
+      expect(result.user).toBeInstanceOf(User);
+      expect(result.user.email).toBe(userData.email);
+      expect(result.user.firstName).toBe(userData.firstName);
+      expect(result.user.status).toBe('PENDING_VERIFICATION');
+      expect(result.user.isEmailVerified).toBe(false);
+      expect(result.verificationToken).toBe('verificationToken123');
 
       // Verify mocks called correctly
       expect(mockUserRepository.emailExists).toHaveBeenCalledWith(userData.email);

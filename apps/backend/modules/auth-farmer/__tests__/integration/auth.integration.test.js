@@ -84,7 +84,7 @@ describe('Auth Farmer Integration Tests', () => {
 
       expect(response.body).toMatchObject({
         success: false,
-        error: expect.stringContaining('already exists')
+        error: expect.stringMatching(/already (exists|registered)/i)
       });
     });
 
@@ -135,10 +135,11 @@ describe('Auth Farmer Integration Tests', () => {
     });
 
     it('should reject invalid credentials', async () => {
+      // Use non-existent email to test invalid credentials (not email verification)
       const response = await request(app)
         .post('/api/auth/farmer/login')
         .send({
-          email: testUser.email,
+          email: 'another.user@example.com',
           password: 'WrongPassword123'
         })
         .expect(401);

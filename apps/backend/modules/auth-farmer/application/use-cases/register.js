@@ -98,8 +98,11 @@ class RegisterUserUseCase {
       await this.eventBus.publish(event.toEventPayload());
     }
 
-    // 11. Return user (without sensitive data)
-    return savedUser;
+    // 11. Return user and verification token
+    return {
+      user: savedUser,
+      verificationToken: verificationToken
+    };
   }
 }
 
