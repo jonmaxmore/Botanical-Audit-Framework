@@ -37,7 +37,7 @@ class RequestReportUseCase {
       sharedWith: reportData.sharedWith || [],
       tags: reportData.tags || [],
       metadata: reportData.metadata || {},
-      status: Report.STATUS.PENDING
+      status: Report.STATUS.PENDING,
     });
 
     // Set next run for scheduled reports

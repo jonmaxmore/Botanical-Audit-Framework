@@ -67,14 +67,14 @@ module.exports = function () {
       requestId: req.id,
       userId: req.user?.id,
       ip: req.ip,
-      userAgent: req.get('User-Agent')
+      userAgent: req.get('User-Agent'),
     };
 
     // Log based on error severity
     if (statusCode >= 500) {
       errorLogger.error(`${statusCode} ${errorCode}: ${err.message}`, {
         ...errorContext,
-        stack: err.stack
+        stack: err.stack,
       });
 
       // Record metrics
@@ -98,7 +98,7 @@ module.exports = function () {
       code: errorCode,
       requestId: req.id,
       details: statusCode < 500 ? err.details : undefined,
-      stack: config.app.environment === 'development' && statusCode >= 500 ? err.stack : undefined
+      stack: config.app.environment === 'development' && statusCode >= 500 ? err.stack : undefined,
     });
   };
 };

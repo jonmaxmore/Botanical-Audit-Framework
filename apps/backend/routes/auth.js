@@ -12,7 +12,10 @@ const Joi = require('joi');
 
 const User = require('../models/user-model');
 const { authenticate, authorize, rateLimitSensitive } = require('../middleware/auth-middleware');
-const { validateRequest, validateUserRegistration } = require('../middleware/validation-middleware');
+const {
+  validateRequest,
+  validateUserRegistration,
+} = require('../middleware/validation-middleware');
 const { handleAsync, sendError } = require('../middleware/error-handler-middleware');
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('auth');
@@ -21,11 +24,11 @@ const logger = createLogger('auth');
 const loginSchema = Joi.object({
   email: Joi.string().email().required(),
   password: Joi.string().min(8).required(),
-  rememberMe: Joi.boolean().optional()
+  rememberMe: Joi.boolean().optional(),
 });
 
 const refreshTokenSchema = Joi.object({
-  refreshToken: Joi.string().required()
+  refreshToken: Joi.string().required(),
 });
 
 // Rate limiting for auth endpoints
@@ -39,10 +42,10 @@ const authLimiter = rateLimit({
   message: {
     success: false,
     message: 'Too many authentication attempts, please try again later',
-    retryAfter: 15 * 60
+    retryAfter: 15 * 60,
   },
   standardHeaders: true,
-  legacyHeaders: false
+  legacyHeaders: false,
 });
 
 const loginLimiter = rateLimit({
@@ -51,8 +54,8 @@ const loginLimiter = rateLimit({
   message: {
     success: false,
     message: 'Too many login attempts, please try again later',
-    retryAfter: 15 * 60
-  }
+    retryAfter: 15 * 60,
+  },
 });
 
 /**
@@ -69,13 +72,13 @@ const generateToken = user => {
     userId: user._id,
     email: user.email,
     role: user.role,
-    permissions: user.permissions
+    permissions: user.permissions,
   };
 
   return jwt.sign(payload, process.env.JWT_SECRET, {
     expiresIn: '24h',
     issuer: 'gacp-platform',
-    audience: 'gacp-users'
+    audience: 'gacp-users',
   });
 };
 
@@ -94,12 +97,12 @@ const generateRefreshToken = user => {
 
   const payload = {
     userId: user._id,
-    type: 'refresh'
+    type: 'refresh',
   };
 
   return jwt.sign(payload, refreshSecret, {
     expiresIn: '7d',
-    issuer: 'gacp-platform'
+    issuer: 'gacp-platform',
   });
 };
 
@@ -117,7 +120,7 @@ router.post(
     // Check if user already exists (Task 1.3 - Add 5s query timeout)
     // OWASP A05:2021 - Security Misconfiguration: Prevent user enumeration
     const existingUser = await User.findOne({
-      $or: [{ email: email.toLowerCase() }, { nationalId }]
+      $or: [{ email: email.toLowerCase() }, { nationalId }],
     }).maxTimeMS(5000); // Prevent hanging queries
 
     if (existingUser) {
@@ -125,7 +128,7 @@ router.post(
       return res.status(400).json({
         success: false,
         message: 'การลงทะเบียนไม่สำเร็จ กรุณาตรวจสอบข้อมูล',
-        code: 'REGISTRATION_FAILED'
+        code: 'REGISTRATION_FAILED',
       });
     }
 
@@ -138,7 +141,7 @@ router.post(
       nationalId,
       role,
       registrationSource: 'web',
-      ...roleSpecificData
+      ...roleSpecificData,
     };
 
     const user = new User(userData);
@@ -157,7 +160,7 @@ router.post(
       userId: user._id,
       email: user.email,
       role: user.role,
-      registrationSource: 'web'
+      registrationSource: 'web',
     });
 
     // TODO: Send verification email
@@ -170,16 +173,16 @@ router.post(
         tokens: {
           accessToken,
           refreshToken,
-          expiresIn: '24h'
+          expiresIn: '24h',
         },
         nextSteps: [
           'Verify your email address',
           'Complete your profile',
-          'Read platform guidelines'
-        ]
-      }
+          'Read platform guidelines',
+        ],
+      },
     });
-  })
+  }),
 );
 
 /**
@@ -196,7 +199,7 @@ router.post(
     // Find user with password (Task 1.3 - Add 5s query timeout)
     const user = await User.findOne({
       email: email.toLowerCase(),
-      status: 'active'
+      status: 'active',
     })
       .select('+password')
       .maxTimeMS(5000); // Prevent hanging queries
@@ -212,7 +215,7 @@ router.post(
         'ACCOUNT_LOCKED',
         'Account is temporarily locked due to too many failed login attempts',
         null,
-        403
+        403,
       );
     }
 
@@ -226,7 +229,7 @@ router.post(
         email: user.email,
         ip: req.ip,
         userAgent: req.get('User-Agent'),
-        attempts: user.loginAttempts + 1
+        attempts: user.loginAttempts + 1,
       });
 
       return sendError(res, 'LOGIN_FAILED', 'Invalid email or password', null, 401);
@@ -242,7 +245,7 @@ router.post(
       timestamp: new Date(),
       ip: req.ip,
       userAgent: req.get('User-Agent'),
-      location: req.get('X-Forwarded-For') || req.connection.remoteAddress
+      location: req.get('X-Forwarded-For') || req.connection.remoteAddress,
     };
 
     await User.updateOne(
@@ -252,11 +255,11 @@ router.post(
           loginHistory: {
             $each: [loginHistoryEntry],
             $position: 0,
-            $slice: 10 // Keep only last 10 entries
-          }
+            $slice: 10, // Keep only last 10 entries
+          },
         },
-        $set: { lastLogin: new Date() }
-      }
+        $set: { lastLogin: new Date() },
+      },
     );
 
     // Generate tokens
@@ -271,7 +274,7 @@ router.post(
       email: user.email,
       role: user.role,
       ip: req.ip,
-      rememberMe
+      rememberMe,
     });
 
     res.json({
@@ -282,11 +285,11 @@ router.post(
         tokens: {
           accessToken,
           refreshToken,
-          expiresIn
-        }
-      }
+          expiresIn,
+        },
+      },
     });
-  })
+  }),
 );
 
 /**
@@ -309,7 +312,7 @@ router.post(
         'VALIDATION_ERROR',
         'Username/email and password are required',
         null,
-        400
+        400,
       );
     }
 
@@ -322,7 +325,7 @@ router.post(
     const user = await User.findOne({
       $or: [{ email: loginIdentifier.toLowerCase() }, { username: loginIdentifier }],
       role: { $in: ['admin', 'staff', 'document_checker', 'inspector', 'approver'] },
-      status: 'active'
+      status: 'active',
     })
       .select('+password')
       .maxTimeMS(5000);
@@ -333,7 +336,7 @@ router.post(
         'LOGIN_FAILED',
         'Invalid credentials or unauthorized access',
         null,
-        401
+        401,
       );
     }
 
@@ -344,7 +347,7 @@ router.post(
         'ACCOUNT_LOCKED',
         `Account is locked due to multiple failed login attempts. Please try again after ${Math.ceil(user.lockUntil ? (user.lockUntil - Date.now()) / 60000 : 0)} minutes.`,
         null,
-        423
+        423,
       );
     }
 
@@ -358,7 +361,7 @@ router.post(
         userId: user._id,
         email: user.email,
         role: user.role,
-        ip: req.ip
+        ip: req.ip,
       });
 
       return sendError(res, 'LOGIN_FAILED', 'Invalid credentials', null, 401);
@@ -374,15 +377,15 @@ router.post(
       timestamp: new Date(),
       ip: req.ip,
       userAgent: req.get('User-Agent'),
-      location: req.get('X-Forwarded-For') || req.connection.remoteAddress
+      location: req.get('X-Forwarded-For') || req.connection.remoteAddress,
     };
 
     await User.updateOne(
       { _id: user._id },
       {
         $set: { lastLogin: new Date() },
-        $push: { loginHistory: { $each: [loginHistoryEntry], $slice: -10 } }
-      }
+        $push: { loginHistory: { $each: [loginHistoryEntry], $slice: -10 } },
+      },
     );
 
     // Generate tokens
@@ -396,7 +399,7 @@ router.post(
       email: user.email,
       role: user.role,
       userType: userType || 'DTAM_STAFF',
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.json({
@@ -407,12 +410,12 @@ router.post(
         tokens: {
           accessToken,
           refreshToken,
-          expiresIn
+          expiresIn,
         },
-        userType: 'DTAM_STAFF'
-      }
+        userType: 'DTAM_STAFF',
+      },
     });
-  })
+  }),
 );
 
 /**
@@ -428,7 +431,7 @@ router.post(
     try {
       const decoded = jwt.verify(
         refreshToken,
-        process.env.JWT_REFRESH_SECRET || 'default-refresh-secret'
+        process.env.JWT_REFRESH_SECRET || 'default-refresh-secret',
       );
 
       if (decoded.type !== 'refresh') {
@@ -450,18 +453,18 @@ router.post(
         message: 'Token refreshed successfully',
         data: {
           accessToken,
-          expiresIn: '24h'
-        }
+          expiresIn: '24h',
+        },
       });
     } catch (error) {
       logger.warn('Invalid refresh token', {
         error: error.message,
-        ip: req.ip
+        ip: req.ip,
       });
 
       return sendError(res, 'INVALID_TOKEN', 'Invalid refresh token', null, 401);
     }
-  })
+  }),
 );
 
 /**
@@ -477,14 +480,14 @@ router.post(
 
     logger.info('User logged out', {
       userId: req.user.id,
-      email: req.user.email
+      email: req.user.email,
     });
 
     res.json({
       success: true,
-      message: 'Logout successful'
+      message: 'Logout successful',
     });
-  })
+  }),
 );
 
 /**
@@ -507,10 +510,10 @@ router.get(
       data: {
         user: user.toPublicProfile(),
         permissions: user.permissions,
-        profileCompleteness: user.profileCompleteness
-      }
+        profileCompleteness: user.profileCompleteness,
+      },
     });
-  })
+  }),
 );
 
 /**
@@ -523,7 +526,7 @@ router.put(
   validateRequest({
     fullName: 'string|min:2|max:100',
     phone: 'string|regex:/^[+]?[0-9()\\s-]+$/',
-    notifications: 'object'
+    notifications: 'object',
   }),
   handleAsync(async (req, res) => {
     // Get user with 5s query timeout (Task 1.3)
@@ -554,17 +557,17 @@ router.put(
 
     logger.info('User profile updated', {
       userId: user._id,
-      updatedFields: Object.keys(req.body)
+      updatedFields: Object.keys(req.body),
     });
 
     res.json({
       success: true,
       message: 'Profile updated successfully',
       data: {
-        user: user.toPublicProfile()
-      }
+        user: user.toPublicProfile(),
+      },
     });
-  })
+  }),
 );
 
 /**
@@ -577,7 +580,7 @@ router.post(
   rateLimitSensitive(),
   validateRequest({
     currentPassword: 'required|string',
-    newPassword: 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/'
+    newPassword: 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/',
   }),
   handleAsync(async (req, res) => {
     const { currentPassword, newPassword } = req.body;
@@ -595,7 +598,7 @@ router.post(
     if (!isCurrentPasswordValid) {
       logger.warn('Failed password change attempt', {
         userId: user._id,
-        ip: req.ip
+        ip: req.ip,
       });
 
       return sendError(res, 'LOGIN_FAILED', 'Current password is incorrect', null, 401);
@@ -607,14 +610,14 @@ router.post(
 
     logger.info('Password changed', {
       userId: user._id,
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.json({
       success: true,
-      message: 'Password changed successfully'
+      message: 'Password changed successfully',
     });
-  })
+  }),
 );
 
 /**
@@ -625,7 +628,7 @@ router.post(
   '/forgot-password',
   authLimiter,
   validateRequest({
-    email: 'required|email'
+    email: 'required|email',
   }),
   handleAsync(async (req, res) => {
     const { email } = req.body;
@@ -633,14 +636,14 @@ router.post(
     // Find user with 5s query timeout (Task 1.3)
     const user = await User.findOne({
       email: email.toLowerCase(),
-      isActive: true
+      isActive: true,
     }).maxTimeMS(5000);
 
     // Always return success to prevent email enumeration
     if (!user) {
       return res.json({
         success: true,
-        message: 'If the email exists, a password reset link has been sent'
+        message: 'If the email exists, a password reset link has been sent',
       });
     }
 
@@ -651,16 +654,16 @@ router.post(
     logger.info('Password reset requested', {
       userId: user._id,
       email: user.email,
-      ip: req.ip
+      ip: req.ip,
     });
 
     // TODO: Send password reset email
 
     res.json({
       success: true,
-      message: 'If the email exists, a password reset link has been sent'
+      message: 'If the email exists, a password reset link has been sent',
     });
-  })
+  }),
 );
 
 /**
@@ -672,7 +675,7 @@ router.post(
   authLimiter,
   validateRequest({
     token: 'required|string',
-    newPassword: 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/'
+    newPassword: 'required|string|min:8|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/',
   }),
   handleAsync(async (req, res) => {
     const { token, newPassword } = req.body;
@@ -684,7 +687,7 @@ router.post(
     const user = await User.findOne({
       passwordResetToken: hashedToken,
       passwordResetExpires: { $gt: Date.now() },
-      isActive: true
+      isActive: true,
     }).maxTimeMS(5000);
 
     if (!user) {
@@ -702,14 +705,14 @@ router.post(
 
     logger.info('Password reset completed', {
       userId: user._id,
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.json({
       success: true,
-      message: 'Password reset successfully'
+      message: 'Password reset successfully',
     });
-  })
+  }),
 );
 
 /**
@@ -719,7 +722,7 @@ router.post(
 router.post(
   '/verify-email',
   validateRequest({
-    token: 'required|string'
+    token: 'required|string',
   }),
   handleAsync(async (req, res) => {
     const { token } = req.body;
@@ -730,7 +733,7 @@ router.post(
     // Find user with valid verification token and 5s query timeout (Task 1.3)
     const user = await User.findOne({
       emailVerificationToken: hashedToken,
-      emailVerificationExpires: { $gt: Date.now() }
+      emailVerificationExpires: { $gt: Date.now() },
     }).maxTimeMS(5000);
 
     if (!user) {
@@ -746,14 +749,14 @@ router.post(
 
     logger.info('Email verified', {
       userId: user._id,
-      email: user.email
+      email: user.email,
     });
 
     res.json({
       success: true,
-      message: 'Email verified successfully'
+      message: 'Email verified successfully',
     });
-  })
+  }),
 );
 
 /**
@@ -782,16 +785,16 @@ router.post(
 
     logger.info('Email verification resent', {
       userId: user._id,
-      email: user.email
+      email: user.email,
     });
 
     // TODO: Send verification email
 
     res.json({
       success: true,
-      message: 'Verification email sent'
+      message: 'Verification email sent',
     });
-  })
+  }),
 );
 
 /**
@@ -813,10 +816,10 @@ router.get(
       success: true,
       data: {
         loginHistory: user.loginHistory,
-        lastLogin: user.lastLogin
-      }
+        lastLogin: user.lastLogin,
+      },
     });
-  })
+  }),
 );
 
 /**
@@ -842,7 +845,7 @@ router.post(
 
     logger.info('API key generated', {
       userId: user._id,
-      keyExpiry: user.apiKeyExpiry
+      keyExpiry: user.apiKeyExpiry,
     });
 
     res.json({
@@ -850,10 +853,10 @@ router.post(
       message: 'API key generated successfully',
       data: {
         apiKey,
-        expiresAt: user.apiKeyExpiry
-      }
+        expiresAt: user.apiKeyExpiry,
+      },
     });
-  })
+  }),
 );
 
 module.exports = router;

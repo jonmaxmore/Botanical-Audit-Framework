@@ -1,6 +1,6 @@
 const REQUIRED_SECRETS = {
   production: ['FARMER_JWT_SECRET', 'DTAM_JWT_SECRET', 'MONGODB_URI', 'REDIS_URL'],
-  development: ['FARMER_JWT_SECRET', 'DTAM_JWT_SECRET']
+  development: ['FARMER_JWT_SECRET', 'DTAM_JWT_SECRET'],
 };
 
 function validateEnvironment() {

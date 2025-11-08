@@ -61,12 +61,12 @@ class CryptoService {
       this.signatureService = await initializeSignatureService({
         useKMS: options.useKMS || false,
         kmsKeyId: options.kmsKeyId,
-        keyDir: options.keyDir
+        keyDir: options.keyDir,
       });
 
       // Initialize timestamp service
       this.timestampService = getTimestampService({
-        provider: options.tsaProvider || 'freetsa'
+        provider: options.tsaProvider || 'freetsa',
       });
 
       this.initialized = true;
@@ -167,7 +167,7 @@ class CryptoService {
       hash,
       signature,
       previousHash: previousHash || '0'.repeat(64),
-      rfc3161Timestamp // Separate field to avoid overwriting record.timestamp
+      rfc3161Timestamp, // Separate field to avoid overwriting record.timestamp
     };
   } /**
    * Verify a complete record (hash chain + signature + timestamp)
@@ -184,7 +184,7 @@ class CryptoService {
     const signatureVerification = await this.signatureService.verifyRecord(
       record,
       previousHash,
-      publicKey
+      publicKey,
     );
 
     // Verify RFC 3161 timestamp (if present)
@@ -193,13 +193,13 @@ class CryptoService {
       try {
         timestampVerification = await this.timestampService.verifyTimestamp(
           record.rfc3161Timestamp.token,
-          record.hash
+          record.hash,
         );
       } catch (error) {
         console.warn('RFC 3161 timestamp verification failed:', error.message);
         timestampVerification = {
           valid: false,
-          error: error.message
+          error: error.message,
         };
       }
     }
@@ -207,7 +207,7 @@ class CryptoService {
     return {
       valid: signatureVerification.valid && (!timestampVerification || timestampVerification.valid),
       signature: signatureVerification,
-      timestamp: timestampVerification
+      timestamp: timestampVerification,
     };
   }
 
@@ -272,7 +272,7 @@ class CryptoService {
       const verification = await this.verifyRecord(record, previousHash);
       results.push({
         recordId: record.id || record.recordId,
-        ...verification
+        ...verification,
       });
 
       if (!verification.valid) {
@@ -287,7 +287,7 @@ class CryptoService {
       totalRecords: records.length,
       validRecords: results.filter(r => r.valid).length,
       invalidRecords: results.filter(r => !r.valid).length,
-      details: results
+      details: results,
     };
   }
 
@@ -330,7 +330,7 @@ class CryptoService {
       signatureService: this.signatureService ? 'ready' : 'not initialized',
       timestampService: this.timestampService ? 'ready' : 'not initialized',
       usingKMS: this.signatureService?.useKMS || false,
-      tsaProvider: this.timestampService?.tsaConfig?.name || 'unknown'
+      tsaProvider: this.timestampService?.tsaConfig?.name || 'unknown',
     };
   }
 }
@@ -384,5 +384,5 @@ module.exports = {
   rotateKeys: (...args) => getCryptoService().rotateKeys(...args),
   getTimestamp: (...args) => getCryptoService().getTimestamp(...args),
   clearTimestampCache: (...args) => getCryptoService().clearTimestampCache(...args),
-  getStatus: (...args) => getCryptoService().getStatus(...args)
+  getStatus: (...args) => getCryptoService().getStatus(...args),
 };

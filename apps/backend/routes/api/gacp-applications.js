@@ -20,7 +20,7 @@ const storage = multer.diskStorage({
     const uniqueName =
       Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
     cb(null, uniqueName);
-  }
+  },
 });
 
 const upload = multer({
@@ -34,7 +34,7 @@ const upload = multer({
     } else {
       cb(new Error('Invalid file type. Only JPG, PNG, and PDF files are allowed.'));
     }
-  }
+  },
 });
 
 // Create new application
@@ -50,13 +50,13 @@ router.post('/applications', async (req, res) => {
         farmerData: application.farmerData,
         complianceScore: application.complianceScore,
         sopValidation: application.sopValidation,
-        submissionReady: application.submissionReady
-      }
+        submissionReady: application.submissionReady,
+      },
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -76,13 +76,13 @@ router.put('/applications/:applicationId/farmer-data', async (req, res) => {
         farmerData: application.farmerData,
         complianceScore: application.complianceScore,
         sopValidation: application.sopValidation,
-        submissionReady: application.submissionReady
-      }
+        submissionReady: application.submissionReady,
+      },
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -98,7 +98,7 @@ router.post(
       if (!req.file) {
         return res.status(400).json({
           success: false,
-          error: 'No file uploaded'
+          error: 'No file uploaded',
         });
       }
 
@@ -112,14 +112,14 @@ router.post(
         path: req.file.path,
         size: req.file.size,
         mimetype: req.file.mimetype,
-        uploadedAt: new Date()
+        uploadedAt: new Date(),
       };
 
       const application = await gacpService.addDocument(
         applicationId,
         documentType,
         fileInfo,
-        analysisResult
+        analysisResult,
       );
 
       res.json({
@@ -131,16 +131,16 @@ router.post(
           complianceScore: application.complianceScore,
           sopValidation: application.sopValidation,
           submissionReady: application.submissionReady,
-          coaAnalysis: application.coaAnalysis
-        }
+          coaAnalysis: application.coaAnalysis,
+        },
       });
     } catch (error) {
       res.status(400).json({
         success: false,
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 // Get application details
@@ -152,7 +152,7 @@ router.get('/applications/:applicationId', async (req, res) => {
     if (!application) {
       return res.status(404).json({
         success: false,
-        error: 'Application not found'
+        error: 'Application not found',
       });
     }
 
@@ -169,13 +169,13 @@ router.get('/applications/:applicationId', async (req, res) => {
         coaAnalysis: application.coaAnalysis,
         status: application.status,
         createdAt: application.createdAt,
-        updatedAt: application.updatedAt
-      }
+        updatedAt: application.updatedAt,
+      },
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -188,12 +188,12 @@ router.get('/applications/:applicationId/sop-validation', async (req, res) => {
 
     res.json({
       success: true,
-      data: validationResult
+      data: validationResult,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -206,12 +206,12 @@ router.post('/applications/:applicationId/submit', async (req, res) => {
 
     res.json({
       success: true,
-      data: receipt
+      data: receipt,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -225,18 +225,18 @@ router.get('/applications/:applicationId/status', async (req, res) => {
     if (!status) {
       return res.status(404).json({
         success: false,
-        error: 'Application not found'
+        error: 'Application not found',
       });
     }
 
     res.json({
       success: true,
-      data: status
+      data: status,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -249,12 +249,12 @@ router.get('/applications/:applicationId/sop-report', async (req, res) => {
 
     res.json({
       success: true,
-      data: report
+      data: report,
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -267,7 +267,7 @@ router.post('/demo/analyze-document', upload.single('document'), async (req, res
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        error: 'No file uploaded'
+        error: 'No file uploaded',
       });
     }
 
@@ -279,15 +279,15 @@ router.post('/demo/analyze-document', upload.single('document'), async (req, res
         fileInfo: {
           name: req.file.originalname,
           size: req.file.size,
-          mimetype: req.file.mimetype
+          mimetype: req.file.mimetype,
         },
-        analysis: analysisResult
-      }
+        analysis: analysisResult,
+      },
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -298,7 +298,7 @@ router.post('/demo/analyze-coa', upload.single('coa'), async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        error: 'No COA file uploaded'
+        error: 'No COA file uploaded',
       });
     }
 
@@ -306,7 +306,7 @@ router.post('/demo/analyze-coa', upload.single('coa'), async (req, res) => {
       name: req.file.originalname,
       filename: req.file.filename,
       size: req.file.size,
-      mimetype: req.file.mimetype
+      mimetype: req.file.mimetype,
     };
 
     const coaAnalysis = await gacpService.analyzeCoA(fileInfo);
@@ -315,13 +315,13 @@ router.post('/demo/analyze-coa', upload.single('coa'), async (req, res) => {
       success: true,
       data: {
         fileInfo,
-        coaAnalysis
-      }
+        coaAnalysis,
+      },
     });
   } catch (error) {
     res.status(400).json({
       success: false,
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -332,14 +332,14 @@ router.use((error, req, res, _next) => {
     if (error.code === 'LIMIT_FILE_SIZE') {
       return res.status(400).json({
         success: false,
-        error: 'File size too large. Maximum size is 10MB.'
+        error: 'File size too large. Maximum size is 10MB.',
       });
     }
   }
 
   res.status(500).json({
     success: false,
-    error: error.message || 'Internal server error'
+    error: error.message || 'Internal server error',
   });
 });
 

@@ -1,6 +1,6 @@
 /**
  * Monitoring Routes
- * 
+ *
  * API endpoints for system monitoring and metrics
  * All routes require admin authentication
  */

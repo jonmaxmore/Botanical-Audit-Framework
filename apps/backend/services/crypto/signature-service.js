@@ -44,7 +44,7 @@ class SignatureService {
     // In-memory key cache
     this.keyCache = {
       public: null,
-      private: null
+      private: null,
     };
 
     // Initialization promise
@@ -113,7 +113,7 @@ class SignatureService {
       data: record.data,
       timestamp: timestamp,
       previousHash: previousHash || '0'.repeat(64), // Genesis record
-      userId: record.userId
+      userId: record.userId,
     };
 
     return this.generateHash(data);
@@ -136,9 +136,9 @@ class SignatureService {
         type: record.type,
         data: record.data,
         timestamp: record.timestamp || record.createdAt,
-        userId: record.userId
+        userId: record.userId,
       },
-      expectedPreviousHash
+      expectedPreviousHash,
     );
 
     return computedHash === record.hash;
@@ -188,7 +188,7 @@ class SignatureService {
         KeyId: this.kmsKeyId,
         Message: Buffer.from(hash, 'utf8'),
         MessageType: 'DIGEST',
-        SigningAlgorithm: 'RSASSA_PKCS1_V1_5_SHA_256'
+        SigningAlgorithm: 'RSASSA_PKCS1_V1_5_SHA_256',
       };
 
       const result = await AWS_KMS.sign(params).promise();
@@ -210,7 +210,7 @@ class SignatureService {
         Message: Buffer.from(hash, 'utf8'),
         MessageType: 'DIGEST',
         Signature: Buffer.from(signature, 'hex'),
-        SigningAlgorithm: 'RSASSA_PKCS1_V1_5_SHA_256'
+        SigningAlgorithm: 'RSASSA_PKCS1_V1_5_SHA_256',
       };
 
       const result = await AWS_KMS.verify(params).promise();
@@ -239,9 +239,9 @@ class SignatureService {
       const signature = sign.sign(
         {
           key: this.keyCache.private,
-          passphrase: process.env.KEY_PASSPHRASE || 'botanical-audit-framework-2025'
+          passphrase: process.env.KEY_PASSPHRASE || 'botanical-audit-framework-2025',
         },
-        'hex'
+        'hex',
       );
       return signature;
     } catch (error) {
@@ -306,14 +306,14 @@ class SignatureService {
           modulusLength: this.keySize,
           publicKeyEncoding: {
             type: 'spki',
-            format: 'pem'
+            format: 'pem',
           },
           privateKeyEncoding: {
             type: 'pkcs8',
             format: 'pem',
             cipher: 'aes-256-cbc',
-            passphrase: process.env.KEY_PASSPHRASE || 'botanical-audit-framework-2025'
-          }
+            passphrase: process.env.KEY_PASSPHRASE || 'botanical-audit-framework-2025',
+          },
         },
         async (err, publicKey, privateKey) => {
           if (err) {
@@ -337,7 +337,7 @@ class SignatureService {
           } catch (error) {
             reject(error);
           }
-        }
+        },
       );
     });
   }
@@ -452,7 +452,7 @@ class SignatureService {
       ...record,
       hash,
       signature,
-      previousHash: previousHash || '0'.repeat(64)
+      previousHash: previousHash || '0'.repeat(64),
     };
   }
 
@@ -484,15 +484,15 @@ class SignatureService {
             type: record.type,
             data: record.data,
             timestamp: record.timestamp || record.createdAt,
-            userId: record.userId
+            userId: record.userId,
           },
-          previousHash
-        )
+          previousHash,
+        ),
       },
       signature: {
         valid: signatureValid,
-        algorithm: this.algorithm
-      }
+        algorithm: this.algorithm,
+      },
     };
   }
 
@@ -532,7 +532,7 @@ class SignatureService {
       version,
       publicKey,
       backupPath: backupDir,
-      timestamp
+      timestamp,
     };
   }
 }
@@ -568,5 +568,5 @@ async function initializeSignatureService(options = {}) {
 module.exports = {
   SignatureService,
   getSignatureService,
-  initializeSignatureService
+  initializeSignatureService,
 };

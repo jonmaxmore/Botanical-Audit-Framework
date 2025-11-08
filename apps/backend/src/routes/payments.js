@@ -18,7 +18,7 @@ const {
   getPaymentStatus,
   processWebhook,
   getPaymentStats,
-  refundPayment
+  refundPayment,
 } = require('../controllers/paymentController');
 
 // Payment list and search
@@ -39,7 +39,7 @@ router.post(
   authenticate,
   authorize(['farmer', 'director']),
   validateRequest('paymentInitiation'),
-  initiatePayment
+  initiatePayment,
 );
 
 // Process refund
@@ -48,7 +48,7 @@ router.post(
   authenticate,
   authorize(['director', 'admin']),
   validateRequest('refund'),
-  refundPayment
+  refundPayment,
 );
 
 // Update payment
@@ -57,7 +57,7 @@ router.put(
   authenticate,
   authorize(['director', 'admin']),
   validateRequest('payment'),
-  updatePayment
+  updatePayment,
 );
 
 // Webhook endpoint (no authentication for external services)

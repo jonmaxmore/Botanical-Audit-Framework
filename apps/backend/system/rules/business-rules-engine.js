@@ -64,7 +64,7 @@ class BusinessRulesEngine {
         failed: 0,
         warnings: 0,
         violations: [],
-        metadata: {}
+        metadata: {},
       };
 
       for (const rule of sortedRules) {
@@ -84,7 +84,7 @@ class BusinessRulesEngine {
               message: ruleResult.message,
               field: ruleResult.field,
               correctionHint: ruleResult.correctionHint,
-              timestamp: new Date()
+              timestamp: new Date(),
             });
             logger.info(`❌ Rule failed: ${rule.name} - ${ruleResult.message}`);
           }
@@ -95,8 +95,8 @@ class BusinessRulesEngine {
               ...ruleResult.warnings.map(warning => ({
                 rule: rule.name,
                 message: warning,
-                timestamp: new Date()
-              }))
+                timestamp: new Date(),
+              })),
             );
             results.warnings++;
           }
@@ -113,7 +113,7 @@ class BusinessRulesEngine {
             severity: 'HIGH',
             message: `Rule execution failed: ${error.message}`,
             field: 'system',
-            timestamp: new Date()
+            timestamp: new Date(),
           });
         }
       }
@@ -126,7 +126,7 @@ class BusinessRulesEngine {
         passed: criticalViolations.length === 0 && highViolations.length === 0,
         canProceed: criticalViolations.length === 0,
         requiresReview: highViolations.length > 0,
-        score: this._calculateComplianceScore(results)
+        score: this._calculateComplianceScore(results),
       };
 
       logger.info(`📊 Rules execution completed: ${results.passed}/${results.totalRules} passed`);
@@ -156,7 +156,7 @@ class BusinessRulesEngine {
             passed: false,
             message: 'Birth date is required',
             field: 'farmerProfile.birthDate',
-            correctionHint: 'Please provide valid birth date'
+            correctionHint: 'Please provide valid birth date',
           };
         }
 
@@ -166,9 +166,9 @@ class BusinessRulesEngine {
           message: age < 18 ? `Farmer age is ${age}, must be at least 18` : null,
           field: 'farmerProfile.birthDate',
           correctionHint: age < 18 ? 'Farmer must be at least 18 years old to apply' : null,
-          metadata: { farmerAge: age }
+          metadata: { farmerAge: age },
         };
-      }
+      },
     });
 
     this._registerRule({
@@ -186,9 +186,9 @@ class BusinessRulesEngine {
           passed: true,
           warnings:
             age > 70 ? [`Farmer age is ${age}, consider additional support requirements`] : [],
-          metadata: { seniorFarmer: age > 70 }
+          metadata: { seniorFarmer: age > 70 },
         };
-      }
+      },
     });
 
     this._registerRule({
@@ -209,7 +209,9 @@ class BusinessRulesEngine {
         if (nationality !== 'THAI' && hasWorkPermit) {
           return {
             passed: true,
-            warnings: ['Non-Thai farmer with work permit - additional verification may be required']
+            warnings: [
+              'Non-Thai farmer with work permit - additional verification may be required',
+            ],
           };
         }
 
@@ -217,9 +219,9 @@ class BusinessRulesEngine {
           passed: false,
           message: 'Farmer must be Thai national or have valid work permit',
           field: 'farmerProfile.nationality',
-          correctionHint: 'Please provide Thai nationality or valid work permit documentation'
+          correctionHint: 'Please provide Thai nationality or valid work permit documentation',
         };
-      }
+      },
     });
 
     // FARM REQUIREMENTS RULES
@@ -239,7 +241,7 @@ class BusinessRulesEngine {
             passed: false,
             message: 'Farm total area is required',
             field: 'farmProfile.totalArea',
-            correctionHint: 'Please specify total farm area in rai'
+            correctionHint: 'Please specify total farm area in rai',
           };
         }
 
@@ -248,7 +250,7 @@ class BusinessRulesEngine {
           CANNABIS: 0.25, // 0.25 rai for cannabis
           HERB: 0.5, // 0.5 rai for herbs
           VEGETABLE: 1.0, // 1 rai for vegetables
-          DEFAULT: 0.25
+          DEFAULT: 0.25,
         };
 
         const minSize = minimumSizes[cropType] || minimumSizes.DEFAULT;
@@ -262,9 +264,9 @@ class BusinessRulesEngine {
           field: 'farmProfile.totalArea',
           correctionHint:
             totalArea < minSize ? `Minimum farm size for ${cropType} is ${minSize} rai` : null,
-          metadata: { farmArea: totalArea, minimumRequired: minSize }
+          metadata: { farmArea: totalArea, minimumRequired: minSize },
         };
-      }
+      },
     });
 
     this._registerRule({
@@ -286,9 +288,9 @@ class BusinessRulesEngine {
             farmArea > maxSizeThreshold
               ? [`Large farm (${farmArea} rai) may require additional environmental assessment`]
               : [],
-          metadata: { isLargeFarm: farmArea > maxSizeThreshold }
+          metadata: { isLargeFarm: farmArea > maxSizeThreshold },
         };
-      }
+      },
     });
 
     this._registerRule({
@@ -305,7 +307,7 @@ class BusinessRulesEngine {
             passed: false,
             message: 'Farm province is required',
             field: 'farmProfile.location.province',
-            correctionHint: 'Please specify farm province'
+            correctionHint: 'Please specify farm province',
           };
         }
 
@@ -322,9 +324,9 @@ class BusinessRulesEngine {
           correctionHint: !isAuthorized
             ? `Authorized provinces: ${authorizedProvinces.join(', ')}`
             : null,
-          metadata: { farmProvince: location.province, isAuthorized }
+          metadata: { farmProvince: location.province, isAuthorized },
         };
-      }
+      },
     });
 
     // GEOGRAPHIC COMPLIANCE RULES
@@ -342,7 +344,7 @@ class BusinessRulesEngine {
             passed: false,
             message: 'Farm coordinates are required for location verification',
             field: 'farmProfile.location.coordinates',
-            correctionHint: 'Please provide accurate GPS coordinates'
+            correctionHint: 'Please provide accurate GPS coordinates',
           };
         }
 
@@ -361,10 +363,10 @@ class BusinessRulesEngine {
             : null,
           metadata: {
             distanceToWater: waterSourceCheck.distance,
-            nearestWaterSource: waterSourceCheck.nearestSource
-          }
+            nearestWaterSource: waterSourceCheck.nearestSource,
+          },
         };
-      }
+      },
     });
 
     this._registerRule({
@@ -392,10 +394,10 @@ class BusinessRulesEngine {
             : null,
           metadata: {
             distanceToSchool: schoolCheck.distance,
-            nearestSchool: schoolCheck.nearestSchool
-          }
+            nearestSchool: schoolCheck.nearestSchool,
+          },
         };
-      }
+      },
     });
 
     // CROP SPECIFIC RULES
@@ -420,7 +422,7 @@ class BusinessRulesEngine {
             passed: false,
             message: 'Expected THC content must be specified for cannabis cultivation',
             field: 'farmProfile.cropDetails.expectedTHC',
-            correctionHint: `Cannabis must have THC content ≤ ${maxTHC}%`
+            correctionHint: `Cannabis must have THC content ≤ ${maxTHC}%`,
           };
         }
 
@@ -432,9 +434,9 @@ class BusinessRulesEngine {
               : null,
           field: 'farmProfile.cropDetails.expectedTHC',
           correctionHint: thcContent > maxTHC ? `THC content must not exceed ${maxTHC}%` : null,
-          metadata: { thcContent, maxAllowed: maxTHC }
+          metadata: { thcContent, maxAllowed: maxTHC },
         };
-      }
+      },
     });
 
     logger.info(`📋 Initialized ${this.rules.size} business rules`);
@@ -447,7 +449,7 @@ class BusinessRulesEngine {
     const rule = {
       ...ruleDefinition,
       id: ruleDefinition.name,
-      registeredAt: new Date()
+      registeredAt: new Date(),
     };
 
     this.rules.set(rule.name, rule);
@@ -533,7 +535,7 @@ class BusinessRulesEngine {
         field: result.field,
         correctionHint: result.correctionHint,
         warnings: result.warnings || [],
-        metadata: result.metadata
+        metadata: result.metadata,
       };
     } catch (error) {
       logger.error(`Rule execution error: ${rule.name}`, error);

@@ -16,7 +16,7 @@ function parsePaginationParams(req) {
   return {
     page,
     limit,
-    skip
+    skip,
   };
 }
 
@@ -34,7 +34,10 @@ function parseFieldSelection(req) {
 
   if (exclude) {
     // Exclude specified fields
-    return exclude.split(',').map(f => `-${f}`).join(' ');
+    return exclude
+      .split(',')
+      .map(f => `-${f}`)
+      .join(' ');
   }
 
   // Return null to include all fields (default)
@@ -73,8 +76,8 @@ function buildPaginatedResponse(data, total, page, limit) {
       hasNextPage,
       hasPrevPage,
       nextPage: hasNextPage ? page + 1 : null,
-      prevPage: hasPrevPage ? page - 1 : null
-    }
+      prevPage: hasPrevPage ? page - 1 : null,
+    },
   };
 }
 
@@ -91,7 +94,7 @@ async function paginateQuery(model, query = {}, options = {}) {
       limit = 10,
       sort = { createdAt: -1 },
       select = null,
-      populate = null
+      populate = null,
     } = options;
 
     const skip = (page - 1) * limit;
@@ -116,17 +119,10 @@ async function paginateQuery(model, query = {}, options = {}) {
     }
 
     // Apply sorting, skip, and limit
-    mongoQuery = mongoQuery
-      .sort(sort)
-      .skip(skip)
-      .limit(limit)
-      .lean(); // Use lean() for better performance
+    mongoQuery = mongoQuery.sort(sort).skip(skip).limit(limit).lean(); // Use lean() for better performance
 
     // Execute query and count in parallel
-    const [data, total] = await Promise.all([
-      mongoQuery.exec(),
-      model.countDocuments(query)
-    ]);
+    const [data, total] = await Promise.all([mongoQuery.exec(), model.countDocuments(query)]);
 
     return buildPaginatedResponse(data, total, page, limit);
   } catch (error) {
@@ -140,20 +136,14 @@ async function paginateQuery(model, query = {}, options = {}) {
  */
 async function paginateByCursor(model, query = {}, options = {}) {
   try {
-    const {
-      cursor = null,
-      limit = 10,
-      sort = { createdAt: -1 },
-      select = null
-    } = options;
+    const { cursor = null, limit = 10, sort = { createdAt: -1 }, select = null } = options;
 
     // Build query with cursor
-    const cursorQuery = cursor 
-      ? { ...query, _id: { $lt: cursor } }
-      : query;
+    const cursorQuery = cursor ? { ...query, _id: { $lt: cursor } } : query;
 
     // Build and execute query
-    let mongoQuery = model.find(cursorQuery)
+    let mongoQuery = model
+      .find(cursorQuery)
       .sort(sort)
       .limit(limit + 1) // Fetch one extra to check if there's more
       .lean();
@@ -171,16 +161,14 @@ async function paginateByCursor(model, query = {}, options = {}) {
     }
 
     // Get next cursor
-    const nextCursor = hasMore && data.length > 0 
-      ? data[data.length - 1]._id 
-      : null;
+    const nextCursor = hasMore && data.length > 0 ? data[data.length - 1]._id : null;
 
     return {
       data,
       cursor: {
         next: nextCursor,
-        hasMore
-      }
+        hasMore,
+      },
     };
   } catch (error) {
     logger.error('Cursor pagination error:', error);
@@ -193,22 +181,23 @@ async function paginateByCursor(model, query = {}, options = {}) {
  */
 const fieldPresets = {
   // Application list view (minimal data)
-  applicationList: 'lotId status farmer.name farmer.farmName createdAt inspectionType aiQc.overallScore',
-  
+  applicationList:
+    'lotId status farmer.name farmer.farmName createdAt inspectionType aiQc.overallScore',
+
   // Application detail view (full data)
   applicationDetail: '-__v', // Exclude only version key
-  
+
   // User list view
   userList: 'name email role active createdAt',
-  
+
   // User profile view
   userProfile: '-password -__v', // Exclude sensitive fields
-  
+
   // Inspector dashboard
   inspectorDashboard: 'lotId status farmer.name inspection.scheduledDate createdAt',
-  
+
   // Approver dashboard
-  approverDashboard: 'lotId status farmer.name inspector.name aiQc.overallScore createdAt'
+  approverDashboard: 'lotId status farmer.name inspector.name aiQc.overallScore createdAt',
 };
 
 /**
@@ -229,7 +218,7 @@ function lazyLoadMiddleware(modelName, preset = null) {
         limit,
         skip,
         sort,
-        fields
+        fields,
       };
 
       next();
@@ -238,7 +227,7 @@ function lazyLoadMiddleware(modelName, preset = null) {
       res.status(400).json({
         success: false,
         message: 'Invalid pagination parameters',
-        error: error.message
+        error: error.message,
       });
     }
   };
@@ -251,13 +240,13 @@ function lazyLoadMiddleware(modelName, preset = null) {
 function optimizeQuery(query) {
   // Add hint to use specific index if needed
   // query.hint({ status: 1, createdAt: -1 });
-  
+
   // Use lean() for read-only operations
   query.lean();
-  
+
   // Set read preference for better load distribution
   query.read('secondaryPreferred');
-  
+
   return query;
 }
 
@@ -267,10 +256,7 @@ function optimizeQuery(query) {
  */
 async function batchLoad(model, ids, options = {}) {
   try {
-    const {
-      select = null,
-      populate = null
-    } = options;
+    const { select = null, populate = null } = options;
 
     let query = model.find({ _id: { $in: ids } }).lean();
 
@@ -302,10 +288,7 @@ async function batchLoad(model, ids, options = {}) {
  * Memory-efficient for exports
  */
 async function streamResults(model, query, options = {}) {
-  const {
-    select = null,
-    batchSize = 100
-  } = options;
+  const { select = null, batchSize = 100 } = options;
 
   let mongoQuery = model.find(query).lean();
 
@@ -313,11 +296,9 @@ async function streamResults(model, query, options = {}) {
     mongoQuery = mongoQuery.select(select);
   }
 
-  return mongoQuery
-    .cursor({ batchSize })
-    .on('error', (error) => {
-      logger.error('Stream error:', error);
-    });
+  return mongoQuery.cursor({ batchSize }).on('error', error => {
+    logger.error('Stream error:', error);
+  });
 }
 
 module.exports = {
@@ -331,5 +312,5 @@ module.exports = {
   lazyLoadMiddleware,
   optimizeQuery,
   batchLoad,
-  streamResults
+  streamResults,
 };

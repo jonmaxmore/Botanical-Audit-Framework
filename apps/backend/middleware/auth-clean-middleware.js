@@ -31,7 +31,7 @@ const authenticateFarmer = (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Authentication required'
+        message: 'Authentication required',
       });
     }
 
@@ -40,7 +40,7 @@ const authenticateFarmer = (req, res, next) => {
     if (payload.type !== 'farmer') {
       return res.status(403).json({
         success: false,
-        message: 'Invalid user type. Farmer authentication required.'
+        message: 'Invalid user type. Farmer authentication required.',
       });
     }
 
@@ -49,7 +49,7 @@ const authenticateFarmer = (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: error.message || 'Invalid or expired token'
+      message: error.message || 'Invalid or expired token',
     });
   }
 };
@@ -66,7 +66,7 @@ const authenticateDTAMStaff = (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Authentication required'
+        message: 'Authentication required',
       });
     }
 
@@ -75,7 +75,7 @@ const authenticateDTAMStaff = (req, res, next) => {
     if (payload.type !== 'dtam_staff') {
       return res.status(403).json({
         success: false,
-        message: 'Invalid user type. DTAM staff authentication required.'
+        message: 'Invalid user type. DTAM staff authentication required.',
       });
     }
 
@@ -84,7 +84,7 @@ const authenticateDTAMStaff = (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: error.message || 'Invalid or expired token'
+      message: error.message || 'Invalid or expired token',
     });
   }
 };
@@ -102,7 +102,7 @@ const authenticateAny = (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Authentication required'
+        message: 'Authentication required',
       });
     }
 
@@ -116,7 +116,7 @@ const authenticateAny = (req, res, next) => {
     } else {
       return res.status(403).json({
         success: false,
-        message: 'Invalid user type'
+        message: 'Invalid user type',
       });
     }
 
@@ -125,7 +125,7 @@ const authenticateAny = (req, res, next) => {
   } catch (error) {
     return res.status(401).json({
       success: false,
-      message: error.message || 'Invalid or expired token'
+      message: error.message || 'Invalid or expired token',
     });
   }
 };
@@ -143,7 +143,7 @@ const requirePermission = permission => {
     if (!req.staff) {
       return res.status(401).json({
         success: false,
-        message: 'DTAM staff authentication required'
+        message: 'DTAM staff authentication required',
       });
     }
 
@@ -152,7 +152,7 @@ const requirePermission = permission => {
         success: false,
         message: `Permission denied. Required permission: ${permission}`,
         required: permission,
-        userPermissions: req.staff.permissions || []
+        userPermissions: req.staff.permissions || [],
       });
     }
 
@@ -172,24 +172,24 @@ const requireAllPermissions = permissions => {
     if (!req.staff) {
       return res.status(401).json({
         success: false,
-        message: 'DTAM staff authentication required'
+        message: 'DTAM staff authentication required',
       });
     }
 
     if (!req.staff.permissions) {
       return res.status(403).json({
         success: false,
-        message: 'No permissions found'
+        message: 'No permissions found',
       });
     }
 
     const hasAllPermissions = permissions.every(permission =>
-      req.staff.permissions.includes(permission)
+      req.staff.permissions.includes(permission),
     );
 
     if (!hasAllPermissions) {
       const missingPermissions = permissions.filter(
-        permission => !req.staff.permissions.includes(permission)
+        permission => !req.staff.permissions.includes(permission),
       );
 
       return res.status(403).json({
@@ -197,7 +197,7 @@ const requireAllPermissions = permissions => {
         message: `Permission denied. Missing permissions: ${missingPermissions.join(', ')}`,
         required: permissions,
         missing: missingPermissions,
-        userPermissions: req.staff.permissions
+        userPermissions: req.staff.permissions,
       });
     }
 
@@ -217,19 +217,19 @@ const requireAnyPermission = permissions => {
     if (!req.staff) {
       return res.status(401).json({
         success: false,
-        message: 'DTAM staff authentication required'
+        message: 'DTAM staff authentication required',
       });
     }
 
     if (!req.staff.permissions) {
       return res.status(403).json({
         success: false,
-        message: 'No permissions found'
+        message: 'No permissions found',
       });
     }
 
     const hasAnyPermission = permissions.some(permission =>
-      req.staff.permissions.includes(permission)
+      req.staff.permissions.includes(permission),
     );
 
     if (!hasAnyPermission) {
@@ -237,7 +237,7 @@ const requireAnyPermission = permissions => {
         success: false,
         message: `Permission denied. Required at least one of: ${permissions.join(', ')}`,
         required: permissions,
-        userPermissions: req.staff.permissions
+        userPermissions: req.staff.permissions,
       });
     }
 
@@ -257,7 +257,7 @@ const requireRole = role => {
     if (!req.staff) {
       return res.status(401).json({
         success: false,
-        message: 'DTAM staff authentication required'
+        message: 'DTAM staff authentication required',
       });
     }
 
@@ -266,7 +266,7 @@ const requireRole = role => {
         success: false,
         message: `Access denied. Required role: ${role}`,
         required: role,
-        userRole: req.staff.role
+        userRole: req.staff.role,
       });
     }
 
@@ -286,7 +286,7 @@ const requireAnyRole = roles => {
     if (!req.staff) {
       return res.status(401).json({
         success: false,
-        message: 'DTAM staff authentication required'
+        message: 'DTAM staff authentication required',
       });
     }
 
@@ -295,7 +295,7 @@ const requireAnyRole = roles => {
         success: false,
         message: `Access denied. Required roles: ${roles.join(', ')}`,
         required: roles,
-        userRole: req.staff.role
+        userRole: req.staff.role,
       });
     }
 
@@ -362,5 +362,5 @@ module.exports = {
   // Role-based (DTAM only)
   requireRole,
   requireAnyRole,
-  requireAdmin
+  requireAdmin,
 };

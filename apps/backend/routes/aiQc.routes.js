@@ -16,15 +16,15 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/ai-qc/');
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
     cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
+  },
 });
 
 const upload = multer({
   storage,
   limits: {
-    fileSize: 10 * 1024 * 1024 // 10MB limit
+    fileSize: 10 * 1024 * 1024, // 10MB limit
   },
   fileFilter: (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|pdf/;
@@ -36,7 +36,7 @@ const upload = multer({
     } else {
       cb(new Error('Only images (JPEG, PNG) and PDF files are allowed'));
     }
-  }
+  },
 });
 
 // All routes require authentication
@@ -50,7 +50,7 @@ router.use(protect);
 router.post(
   '/applications/:applicationId/run',
   requireRole(['ADMIN', 'REVIEWER']),
-  aiQcController.runAIQC
+  aiQcController.runAIQC,
 );
 
 /**
@@ -61,7 +61,7 @@ router.post(
 router.get(
   '/applications/:applicationId/results',
   requireRole(['ADMIN', 'REVIEWER', 'INSPECTOR', 'APPROVER']),
-  aiQcController.getAIQCResults
+  aiQcController.getAIQCResults,
 );
 
 /**
@@ -73,7 +73,7 @@ router.post(
   '/ocr',
   requireRole(['ADMIN', 'REVIEWER']),
   upload.single('image'),
-  aiQcController.extractText
+  aiQcController.extractText,
 );
 
 /**
@@ -85,7 +85,7 @@ router.post(
   '/validate-document',
   requireRole(['ADMIN', 'REVIEWER']),
   upload.single('document'),
-  aiQcController.validateDocument
+  aiQcController.validateDocument,
 );
 
 /**
@@ -97,7 +97,7 @@ router.post(
   '/analyze-image',
   requireRole(['ADMIN', 'REVIEWER', 'INSPECTOR']),
   upload.single('image'),
-  aiQcController.analyzeImageQuality
+  aiQcController.analyzeImageQuality,
 );
 
 /**
@@ -109,7 +109,7 @@ router.post(
   '/compare-documents',
   requireRole(['ADMIN', 'REVIEWER']),
   upload.array('documents', 2),
-  aiQcController.compareDocuments
+  aiQcController.compareDocuments,
 );
 
 /**
@@ -121,7 +121,7 @@ router.post(
   '/batch-ocr',
   requireRole(['ADMIN', 'REVIEWER']),
   upload.array('images', 10),
-  aiQcController.batchOCR
+  aiQcController.batchOCR,
 );
 
 /**
@@ -129,10 +129,6 @@ router.post(
  * @desc    Get AI QC statistics
  * @access  ADMIN
  */
-router.get(
-  '/stats',
-  requireRole(['ADMIN']),
-  aiQcController.getAIQCStats
-);
+router.get('/stats', requireRole(['ADMIN']), aiQcController.getAIQCStats);
 
 module.exports = router;

@@ -7,14 +7,14 @@ const CROP_CALENDAR = {
       { name: 'ต้นกล้า', days: 14 },
       { name: 'เจริญเติบโต', days: 35 },
       { name: 'ออกดอก', days: 28 },
-      { name: 'เก็บเกี่ยว', days: 6 }
+      { name: 'เก็บเกี่ยว', days: 6 },
     ],
     tips: {
       north: 'ปลูกพ.ย. - ธ.ค. ดีที่สุด',
       central: 'ปลูกต.ค. - พ.ย.',
-      south: 'ปลูกได้ตลอดปี'
-    }
-  }
+      south: 'ปลูกได้ตลอดปี',
+    },
+  },
 };
 
 class CropCalendarService {
@@ -26,7 +26,7 @@ class CropCalendarService {
       bestMonths: calendar.bestPlantingMonths,
       duration: calendar.duration,
       stages: calendar.stages,
-      regionalTip: calendar.tips[region] || calendar.tips.central
+      regionalTip: calendar.tips[region] || calendar.tips.central,
     };
   }
 

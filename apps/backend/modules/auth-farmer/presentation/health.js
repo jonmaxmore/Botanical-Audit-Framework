@@ -15,7 +15,7 @@ function mountHealth(app, mongoManager) {
       timestamp: new Date().toISOString(),
       uptime: process.uptime(),
       environment: process.env.NODE_ENV || 'development',
-      checks: {}
+      checks: {},
     };
 
     try {
@@ -29,10 +29,10 @@ function mountHealth(app, mongoManager) {
         health.status = 'degraded';
       }
     } catch (error) {
-      health.checks.mongodb = { 
-        status: 'error', 
+      health.checks.mongodb = {
+        status: 'error',
         connected: false,
-        error: error.message 
+        error: error.message,
       };
       health.status = 'error';
     }
@@ -43,7 +43,7 @@ function mountHealth(app, mongoManager) {
       status: 'ok',
       heapUsed: `${Math.round(memUsage.heapUsed / 1024 / 1024)}MB`,
       heapTotal: `${Math.round(memUsage.heapTotal / 1024 / 1024)}MB`,
-      rss: `${Math.round(memUsage.rss / 1024 / 1024)}MB`
+      rss: `${Math.round(memUsage.rss / 1024 / 1024)}MB`,
     };
 
     // Overall status code

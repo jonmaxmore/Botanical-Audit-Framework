@@ -40,7 +40,7 @@ class TrackTraceController {
       if (!productName || !quantity || !unit) {
         return errorResponse(res, {
           message: 'Product name, quantity, and unit are required',
-          statusCode: 400
+          statusCode: 400,
         });
       }
 
@@ -50,7 +50,7 @@ class TrackTraceController {
         variety,
         quantity,
         unit,
-        farmId
+        farmId,
       });
 
       return successResponse(res, result.data, 'Product batch created', 201);
@@ -69,14 +69,14 @@ class TrackTraceController {
       const userId = req.user.id;
       const filters = {
         stage: req.query.stage,
-        certificationStatus: req.query.certificationStatus
+        certificationStatus: req.query.certificationStatus,
       };
 
       const result = await this.trackTraceService.getUserProducts(userId, filters);
 
       return successResponse(res, {
         products: result.data,
-        total: result.total
+        total: result.total,
       });
     } catch (error) {
       logger.error('[TrackTraceController] Get products error:', error);
@@ -94,7 +94,7 @@ class TrackTraceController {
       const { ObjectId } = require('mongodb');
 
       const product = await this.trackTraceService.productsCollection.findOne({
-        _id: new ObjectId(id)
+        _id: new ObjectId(id),
       });
 
       if (!product) {
@@ -114,13 +114,13 @@ class TrackTraceController {
 
       // Get QR code
       const qrData = await this.trackTraceService.qrCodesCollection.findOne({
-        batchCode: product.batchCode
+        batchCode: product.batchCode,
       });
 
       return successResponse(res, {
         ...product,
         timeline,
-        qrData: qrData || null
+        qrData: qrData || null,
       });
     } catch (error) {
       logger.error('[TrackTraceController] Get product error:', error);
@@ -144,7 +144,7 @@ class TrackTraceController {
 
       await this.trackTraceService.updateProductStage(id, stage, userId, {
         description,
-        location
+        location,
       });
 
       return successResponse(res, null, 'Product stage updated');
@@ -207,7 +207,7 @@ class TrackTraceController {
       const { ObjectId } = require('mongodb');
 
       const product = await this.trackTraceService.productsCollection.findOne({
-        _id: new ObjectId(id)
+        _id: new ObjectId(id),
       });
 
       if (!product) {
@@ -241,14 +241,14 @@ class TrackTraceController {
       if (!stage || !description) {
         return errorResponse(res, {
           message: 'Stage and description are required',
-          statusCode: 400
+          statusCode: 400,
         });
       }
 
       // Check product ownership
       const { ObjectId } = require('mongodb');
       const product = await this.trackTraceService.productsCollection.findOne({
-        _id: new ObjectId(id)
+        _id: new ObjectId(id),
       });
 
       if (!product) {
@@ -264,7 +264,7 @@ class TrackTraceController {
         stage,
         description,
         location: location || 'Not specified',
-        verifiedBy: userId
+        verifiedBy: userId,
       });
 
       return successResponse(res, null, 'Timeline event added', 201);
@@ -300,7 +300,7 @@ class TrackTraceController {
       if (req.user.role !== 'admin') {
         return errorResponse(res, {
           message: 'Admin access required',
-          statusCode: 403
+          statusCode: 403,
         });
       }
 
@@ -315,7 +315,7 @@ class TrackTraceController {
         number: certificationNumber,
         issuedDate,
         expiryDate,
-        authority: authority || 'GACP Thailand Authority'
+        authority: authority || 'GACP Thailand Authority',
       });
 
       return successResponse(res, null, 'Certification updated');
@@ -335,7 +335,7 @@ class TrackTraceController {
         status: 'ok',
         service: 'track-trace',
         timestamp: new Date().toISOString(),
-        version: '1.0.0'
+        version: '1.0.0',
       });
     } catch (error) {
       return errorResponse(res, error);

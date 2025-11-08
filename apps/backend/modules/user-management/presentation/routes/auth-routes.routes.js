@@ -35,7 +35,7 @@ const logger = createLogger('user-management-authRoutes');
 
 const {
   checkTokenBlacklist,
-  checkTokenVersion
+  checkTokenVersion,
 } = require('../../../../middleware/jwt-token-manager-middleware');
 const router = express.Router();
 
@@ -58,12 +58,12 @@ function createAuthRoutes(dependencies = {}) {
 
   // User login - Very strict (5 attempts per 15min, skip successful)
   router.post('/login', rateLimiters.loginLimiter, validationRules.login, (req, res) =>
-    userAuthenticationController.login(req, res)
+    userAuthenticationController.login(req, res),
   );
 
   // Token refresh - Moderate (10 per minute)
   router.post('/refresh', rateLimiters.refreshLimiter, validationRules.refreshToken, (req, res) =>
-    userAuthenticationController.refreshToken(req, res)
+    userAuthenticationController.refreshToken(req, res),
   );
 
   // Forgot password - Very strict (3 per hour)
@@ -71,7 +71,7 @@ function createAuthRoutes(dependencies = {}) {
     '/forgot-password',
     rateLimiters.passwordResetRequestLimiter,
     validationRules.forgotPassword,
-    (req, res) => userAuthenticationController.forgotPassword(req, res)
+    (req, res) => userAuthenticationController.forgotPassword(req, res),
   );
 
   // Reset password - Strict (5 per 15min, skip successful)
@@ -79,7 +79,7 @@ function createAuthRoutes(dependencies = {}) {
     '/reset-password',
     rateLimiters.passwordResetConfirmLimiter,
     validationRules.resetPassword,
-    (req, res) => userAuthenticationController.resetPassword(req, res)
+    (req, res) => userAuthenticationController.resetPassword(req, res),
   );
 
   /**
@@ -92,7 +92,7 @@ function createAuthRoutes(dependencies = {}) {
     rateLimiters.generalAuthLimiter,
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
-    (req, res) => userAuthenticationController.logout(req, res)
+    (req, res) => userAuthenticationController.logout(req, res),
   );
 
   // Change password - Moderate (10 per 15min)
@@ -102,7 +102,7 @@ function createAuthRoutes(dependencies = {}) {
     authenticationMiddleware.extractToken(),
     authenticationMiddleware.authenticate(),
     validationRules.changePassword,
-    (req, res) => userAuthenticationController.changePassword(req, res)
+    (req, res) => userAuthenticationController.changePassword(req, res),
   );
 
   // Get user profile - Normal rate (with token validation)
@@ -113,7 +113,7 @@ function createAuthRoutes(dependencies = {}) {
     checkTokenBlacklist(tokenManager),
     checkTokenVersion(tokenManager),
     authenticationMiddleware.authenticate(),
-    (req, res) => userAuthenticationController.getProfile(req, res)
+    (req, res) => userAuthenticationController.getProfile(req, res),
   );
 
   // Update user profile - Moderate (20 per 15min, with token validation)
@@ -125,7 +125,7 @@ function createAuthRoutes(dependencies = {}) {
     checkTokenVersion(tokenManager),
     authenticationMiddleware.authenticate(),
     validationRules.updateProfile,
-    (req, res) => userAuthenticationController.updateProfile(req, res)
+    (req, res) => userAuthenticationController.updateProfile(req, res),
   );
 
   // Token verification endpoint - Normal rate (with token validation)
@@ -146,11 +146,11 @@ function createAuthRoutes(dependencies = {}) {
             id: req.user.userId,
             email: req.user.email,
             role: req.user.role,
-            permissions: req.user.permissions
-          }
-        }
+            permissions: req.user.permissions,
+          },
+        },
       });
-    }
+    },
   );
 
   /**
@@ -177,18 +177,18 @@ function createAuthRoutes(dependencies = {}) {
             pagination: {
               total: 0,
               page: 1,
-              limit: 10
-            }
-          }
+              limit: 10,
+            },
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'INTERNAL_ERROR',
-          message: 'Error retrieving users'
+          message: 'Error retrieving users',
         });
       }
-    }
+    },
   );
 
   // Update user status (Admin only) - Moderate rate
@@ -208,17 +208,17 @@ function createAuthRoutes(dependencies = {}) {
           message: 'User status update endpoint (Admin only)',
           data: {
             userId: req.params.userId,
-            status: req.body.isActive
-          }
+            status: req.body.isActive,
+          },
         });
       } catch (error) {
         res.status(500).json({
           success: false,
           error: 'INTERNAL_ERROR',
-          message: 'Error updating user status'
+          message: 'Error updating user status',
         });
       }
-    }
+    },
   );
 
   /**
@@ -232,7 +232,7 @@ function createAuthRoutes(dependencies = {}) {
       service: 'User Authentication Service',
       status: 'healthy',
       timestamp: new Date(),
-      version: '1.0.0'
+      version: '1.0.0',
     });
   });
 
@@ -246,17 +246,17 @@ function createAuthRoutes(dependencies = {}) {
           requireUppercase: true,
           requireLowercase: true,
           requireNumbers: true,
-          requireSpecialChars: true
+          requireSpecialChars: true,
         },
         tokenPolicy: {
           accessTokenExpiry: '24h',
-          refreshTokenExpiry: '7d'
+          refreshTokenExpiry: '7d',
         },
         securityPolicy: {
           maxLoginAttempts: 5,
-          lockoutDuration: 30 // minutes
-        }
-      }
+          lockoutDuration: 30, // minutes
+        },
+      },
     });
   });
 
@@ -273,7 +273,7 @@ function createAuthRoutes(dependencies = {}) {
       success: false,
       error: 'INTERNAL_SERVER_ERROR',
       message: 'An unexpected error occurred',
-      ...(isDevelopment && { debug: error.message })
+      ...(isDevelopment && { debug: error.message }),
     });
   });
 
@@ -284,7 +284,7 @@ function createAuthRoutes(dependencies = {}) {
     res.status(404).json({
       success: false,
       error: 'ROUTE_NOT_FOUND',
-      message: `Authentication route not found: ${req.method} ${req.originalUrl}`
+      message: `Authentication route not found: ${req.method} ${req.originalUrl}`,
     });
   });
 

@@ -23,43 +23,43 @@ const AuditLogSchema = new mongoose.Schema(
         'LOGOUT',
         'VERIFY',
         'APPROVE',
-        'REJECT'
+        'REJECT',
       ],
-      index: true
+      index: true,
     },
 
     collection: {
       type: String,
       required: [true, 'Collection name is required'],
-      index: true
+      index: true,
     },
 
     documentId: {
       type: mongoose.Schema.Types.Mixed,
       required: [true, 'Document ID is required'],
-      index: true
+      index: true,
     },
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'User ID is required'],
-      index: true
+      index: true,
     },
 
     oldData: {
       type: mongoose.Schema.Types.Mixed,
-      default: null
+      default: null,
     },
 
     newData: {
       type: mongoose.Schema.Types.Mixed,
-      default: null
+      default: null,
     },
 
     changes: {
       type: mongoose.Schema.Types.Mixed,
-      default: null
+      default: null,
     },
 
     metadata: {
@@ -69,23 +69,23 @@ const AuditLogSchema = new mongoose.Schema(
       sessionId: String,
       method: String,
       path: String,
-      status: Number
+      status: Number,
     },
 
     timestamp: {
       type: Date,
       default: Date.now,
-      index: true
-    }
+      index: true,
+    },
   },
   {
     collection: 'audit_log',
     capped: {
       size: 5368709120, // 5GB
-      max: 10000000 // 10 million documents
+      max: 10000000, // 10 million documents
     },
-    versionKey: false
-  }
+    versionKey: false,
+  },
 );
 
 // Indexes
@@ -106,7 +106,7 @@ AuditLogSchema.statics.log = async function (entry) {
       newData: entry.newData || null,
       changes: entry.changes || null,
       metadata: entry.metadata || {},
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   } catch (error) {
     console.error('Failed to write audit log:', error);
@@ -121,7 +121,7 @@ AuditLogSchema.statics.logCreate = async function (collection, document, userId,
     documentId: document._id || document.id,
     userId,
     newData: document,
-    metadata
+    metadata,
   });
 };
 
@@ -131,7 +131,7 @@ AuditLogSchema.statics.logUpdate = async function (
   oldData,
   newData,
   userId,
-  metadata = {}
+  metadata = {},
 ) {
   const changes = {};
 
@@ -140,7 +140,7 @@ AuditLogSchema.statics.logUpdate = async function (
     if (JSON.stringify(oldData[key]) !== JSON.stringify(newData[key])) {
       changes[key] = {
         old: oldData[key],
-        new: newData[key]
+        new: newData[key],
       };
     }
   }
@@ -153,7 +153,7 @@ AuditLogSchema.statics.logUpdate = async function (
     oldData,
     newData,
     changes,
-    metadata
+    metadata,
   });
 };
 
@@ -164,7 +164,7 @@ AuditLogSchema.statics.logDelete = async function (collection, document, userId,
     documentId: document._id || document.id,
     userId,
     oldData: document,
-    metadata
+    metadata,
   });
 };
 
@@ -174,14 +174,14 @@ AuditLogSchema.statics.logAccess = async function (collection, documentId, userI
     collection,
     documentId,
     userId,
-    metadata
+    metadata,
   });
 };
 
 AuditLogSchema.statics.getDocumentHistory = async function (collection, documentId, limit = 50) {
   return await this.find({
     collection,
-    documentId
+    documentId,
   })
     .sort('-timestamp')
     .limit(limit)
@@ -190,7 +190,7 @@ AuditLogSchema.statics.getDocumentHistory = async function (collection, document
 
 AuditLogSchema.statics.getUserActivity = async function (userId, limit = 100) {
   return await this.find({
-    userId
+    userId,
   })
     .sort('-timestamp')
     .limit(limit)
@@ -210,17 +210,17 @@ AuditLogSchema.statics.getStatsByAction = async function (startDate, endDate) {
       $match: {
         timestamp: {
           $gte: startDate,
-          $lte: endDate
-        }
-      }
+          $lte: endDate,
+        },
+      },
     },
     {
       $group: {
         _id: '$action',
-        count: { $sum: 1 }
-      }
+        count: { $sum: 1 },
+      },
     },
-    { $sort: { count: -1 } }
+    { $sort: { count: -1 } },
   ]);
 };
 
@@ -230,19 +230,19 @@ AuditLogSchema.statics.getStatsByUser = async function (startDate, endDate, limi
       $match: {
         timestamp: {
           $gte: startDate,
-          $lte: endDate
-        }
-      }
+          $lte: endDate,
+        },
+      },
     },
     {
       $group: {
         _id: '$userId',
         count: { $sum: 1 },
-        actions: { $push: '$action' }
-      }
+        actions: { $push: '$action' },
+      },
     },
     { $sort: { count: -1 } },
-    { $limit: limit }
+    { $limit: limit },
   ]);
 };
 
@@ -252,7 +252,7 @@ AuditLogSchema.set('toJSON', {
     ret.id = ret._id;
     delete ret._id;
     return ret;
-  }
+  },
 });
 
 const AuditLogModel = mongoose.model('AuditLog', AuditLogSchema);

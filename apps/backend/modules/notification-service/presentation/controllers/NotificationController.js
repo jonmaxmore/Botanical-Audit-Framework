@@ -60,7 +60,7 @@ class NotificationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid query parameters',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -70,14 +70,14 @@ class NotificationController {
         notificationType,
         limit = 20,
         page = 1,
-        markAsRead = false
+        markAsRead = false,
       } = req.query;
 
       console.log(`[NotificationController] Getting notifications for user ${userId}`, {
         unreadOnly,
         notificationType,
         limit,
-        page
+        page,
       });
 
       const result = await this.notificationService.getUserNotifications(userId, {
@@ -85,7 +85,7 @@ class NotificationController {
         notificationType,
         limit: parseInt(limit),
         page: parseInt(page),
-        markAsRead: markAsRead === 'true'
+        markAsRead: markAsRead === 'true',
       });
 
       res.status(200).json({
@@ -93,15 +93,15 @@ class NotificationController {
         data: {
           notifications: result.notifications,
           pagination: result.pagination,
-          unreadCount: result.unreadCount
-        }
+          unreadCount: result.unreadCount,
+        },
       });
     } catch (error) {
       logger.error('[NotificationController] Get notifications error:', error);
       res.status(500).json({
         success: false,
         error: 'NOTIFICATIONS_ERROR',
-        message: 'Error retrieving notifications'
+        message: 'Error retrieving notifications',
       });
     }
   }
@@ -124,7 +124,7 @@ class NotificationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid notification data',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -138,7 +138,7 @@ class NotificationController {
         scheduledFor,
         templateId,
         templateVariables = {},
-        relatedEntities = {}
+        relatedEntities = {},
       } = req.body;
 
       const senderId = req.userId;
@@ -148,7 +148,7 @@ class NotificationController {
         recipientId,
         notificationType,
         senderId,
-        priority
+        priority,
       });
 
       // Check if sender has permission to send notifications
@@ -156,7 +156,7 @@ class NotificationController {
         return res.status(403).json({
           success: false,
           error: 'SEND_PERMISSION_DENIED',
-          message: 'You do not have permission to send this type of notification'
+          message: 'You do not have permission to send this type of notification',
         });
       }
 
@@ -174,7 +174,7 @@ class NotificationController {
         templateVariables,
         channels,
         scheduledFor: scheduledFor ? new Date(scheduledFor) : undefined,
-        relatedEntities
+        relatedEntities,
       });
 
       // Queue for delivery
@@ -188,7 +188,7 @@ class NotificationController {
           senderId,
           recipientId,
           notificationType,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
@@ -199,8 +199,8 @@ class NotificationController {
           notificationId: notification.notificationId,
           status: notification.status,
           scheduledFor: notification.scheduledFor,
-          channels: Object.keys(channels).filter(c => channels[c])
-        }
+          channels: Object.keys(channels).filter(c => channels[c]),
+        },
       });
     } catch (error) {
       logger.error('[NotificationController] Send notification error:', error);
@@ -209,14 +209,14 @@ class NotificationController {
         return res.status(404).json({
           success: false,
           error: 'RECIPIENT_NOT_FOUND',
-          message: 'Recipient user not found'
+          message: 'Recipient user not found',
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'SEND_NOTIFICATION_ERROR',
-        message: 'Error sending notification'
+        message: 'Error sending notification',
       });
     }
   }
@@ -239,7 +239,7 @@ class NotificationController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid bulk notification data',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -252,7 +252,7 @@ class NotificationController {
         channels = { email: true, sms: false, inApp: true },
         scheduledFor,
         templateId,
-        templateVariables = {}
+        templateVariables = {},
       } = req.body;
 
       const senderId = req.userId;
@@ -261,7 +261,7 @@ class NotificationController {
       console.log('[NotificationController] Sending bulk notification', {
         notificationType,
         senderId,
-        recipientFilters
+        recipientFilters,
       });
 
       // Check bulk notification permissions (admin only)
@@ -269,7 +269,7 @@ class NotificationController {
         return res.status(403).json({
           success: false,
           error: 'BULK_PERMISSION_DENIED',
-          message: 'Only administrators can send bulk notifications'
+          message: 'Only administrators can send bulk notifications',
         });
       }
 
@@ -283,7 +283,7 @@ class NotificationController {
         channels,
         scheduledFor,
         templateId,
-        templateVariables
+        templateVariables,
       });
 
       // Log bulk notification
@@ -294,14 +294,14 @@ class NotificationController {
           senderId,
           recipientCount: result.recipientCount,
           notificationType,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
       res.status(201).json({
         success: true,
         message: 'Bulk notification sent successfully',
-        data: result
+        data: result,
       });
     } catch (error) {
       logger.error('[NotificationController] Bulk notification error:', error);
@@ -310,7 +310,7 @@ class NotificationController {
         return res.status(400).json({
           success: false,
           error: 'NO_RECIPIENTS',
-          message: error.message
+          message: error.message,
         });
       }
 
@@ -318,14 +318,14 @@ class NotificationController {
         return res.status(429).json({
           success: false,
           error: 'BULK_RATE_LIMIT',
-          message: error.message
+          message: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         error: 'BULK_NOTIFICATION_ERROR',
-        message: 'Error sending bulk notification'
+        message: 'Error sending bulk notification',
       });
     }
   }
@@ -347,7 +347,7 @@ class NotificationController {
         return res.status(400).json({
           success: false,
           error: 'VALIDATION_ERROR',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -357,14 +357,14 @@ class NotificationController {
       // Find notification and verify ownership
       const notification = await this.notificationService.notificationRepository.findOne({
         notificationId,
-        recipientId: userId
+        recipientId: userId,
       });
 
       if (!notification) {
         return res.status(404).json({
           success: false,
           error: 'NOTIFICATION_NOT_FOUND',
-          message: 'Notification not found or access denied'
+          message: 'Notification not found or access denied',
         });
       }
 
@@ -379,15 +379,15 @@ class NotificationController {
         message: 'Notification marked as read',
         data: {
           notificationId: notification.notificationId,
-          readAt: notification.channels.inApp.readAt
-        }
+          readAt: notification.channels.inApp.readAt,
+        },
       });
     } catch (error) {
       logger.error('[NotificationController] Mark as read error:', error);
       res.status(500).json({
         success: false,
         error: 'MARK_READ_ERROR',
-        message: 'Error marking notification as read'
+        message: 'Error marking notification as read',
       });
     }
   }
@@ -409,14 +409,14 @@ class NotificationController {
       // Find notification and verify ownership
       const notification = await this.notificationService.notificationRepository.findOne({
         notificationId,
-        recipientId: userId
+        recipientId: userId,
       });
 
       if (!notification) {
         return res.status(404).json({
           success: false,
           error: 'NOTIFICATION_NOT_FOUND',
-          message: 'Notification not found or access denied'
+          message: 'Notification not found or access denied',
         });
       }
 
@@ -428,15 +428,15 @@ class NotificationController {
         message: 'Notification dismissed',
         data: {
           notificationId: notification.notificationId,
-          dismissedAt: notification.channels.inApp.dismissedAt
-        }
+          dismissedAt: notification.channels.inApp.dismissedAt,
+        },
       });
     } catch (error) {
       logger.error('[NotificationController] Dismiss notification error:', error);
       res.status(500).json({
         success: false,
         error: 'DISMISS_ERROR',
-        message: 'Error dismissing notification'
+        message: 'Error dismissing notification',
       });
     }
   }
@@ -462,19 +462,19 @@ class NotificationController {
         return res.status(403).json({
           success: false,
           error: 'DELETE_PERMISSION_DENIED',
-          message: 'Only administrators can delete notifications'
+          message: 'Only administrators can delete notifications',
         });
       }
 
       const notification = await this.notificationService.notificationRepository.findOne({
-        notificationId
+        notificationId,
       });
 
       if (!notification) {
         return res.status(404).json({
           success: false,
           error: 'NOTIFICATION_NOT_FOUND',
-          message: 'Notification not found'
+          message: 'Notification not found',
         });
       }
 
@@ -483,7 +483,7 @@ class NotificationController {
         return res.status(400).json({
           success: false,
           error: 'CANNOT_DELETE_OPENED',
-          message: 'Cannot delete notifications that have been opened'
+          message: 'Cannot delete notifications that have been opened',
         });
       }
 
@@ -497,20 +497,20 @@ class NotificationController {
           notificationId,
           deletedBy: userId,
           reason,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
       res.status(200).json({
         success: true,
-        message: 'Notification deleted successfully'
+        message: 'Notification deleted successfully',
       });
     } catch (error) {
       logger.error('[NotificationController] Delete notification error:', error);
       res.status(500).json({
         success: false,
         error: 'DELETE_ERROR',
-        message: 'Error deleting notification'
+        message: 'Error deleting notification',
       });
     }
   }
@@ -535,15 +535,15 @@ class NotificationController {
         success: true,
         data: {
           templates,
-          totalCount: Object.keys(templates).length
-        }
+          totalCount: Object.keys(templates).length,
+        },
       });
     } catch (error) {
       logger.error('[NotificationController] Get templates error:', error);
       res.status(500).json({
         success: false,
         error: 'TEMPLATES_ERROR',
-        message: 'Error retrieving templates'
+        message: 'Error retrieving templates',
       });
     }
   }
@@ -563,7 +563,7 @@ class NotificationController {
         startDate = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         endDate = new Date(),
         notificationType,
-        groupBy = 'day'
+        groupBy = 'day',
       } = req.query;
 
       const userRole = req.userRole;
@@ -573,7 +573,7 @@ class NotificationController {
         return res.status(403).json({
           success: false,
           error: 'STATS_PERMISSION_DENIED',
-          message: 'Insufficient permissions to view statistics'
+          message: 'Insufficient permissions to view statistics',
         });
       }
 
@@ -582,7 +582,7 @@ class NotificationController {
         startDate: new Date(startDate),
         endDate: new Date(endDate),
         notificationType,
-        groupBy
+        groupBy,
       });
 
       res.status(200).json({
@@ -592,17 +592,17 @@ class NotificationController {
           period: {
             startDate,
             endDate,
-            groupBy
+            groupBy,
           },
-          generatedAt: new Date()
-        }
+          generatedAt: new Date(),
+        },
       });
     } catch (error) {
       logger.error('[NotificationController] Statistics error:', error);
       res.status(500).json({
         success: false,
         error: 'STATISTICS_ERROR',
-        message: 'Error retrieving statistics'
+        message: 'Error retrieving statistics',
       });
     }
   }
@@ -621,7 +621,7 @@ class NotificationController {
       const {
         recipientEmail,
         recipientPhone,
-        channels = { email: true, sms: false, inApp: true }
+        channels = { email: true, sms: false, inApp: true },
       } = req.body;
 
       const userRole = req.userRole;
@@ -631,7 +631,7 @@ class NotificationController {
         return res.status(403).json({
           success: false,
           error: 'TEST_PERMISSION_DENIED',
-          message: 'Only administrators can send test notifications'
+          message: 'Only administrators can send test notifications',
         });
       }
 
@@ -646,9 +646,9 @@ class NotificationController {
         templateId: 'test-notification',
         templateVariables: {
           testTime: new Date(),
-          testerRole: userRole
+          testerRole: userRole,
         },
-        channels
+        channels,
       };
 
       // Send test notification
@@ -657,14 +657,14 @@ class NotificationController {
       res.status(200).json({
         success: true,
         message: 'Test notification sent successfully',
-        data: result
+        data: result,
       });
     } catch (error) {
       logger.error('[NotificationController] Test notification error:', error);
       res.status(500).json({
         success: false,
         error: 'TEST_ERROR',
-        message: 'Error sending test notification'
+        message: 'Error sending test notification',
       });
     }
   }
@@ -683,10 +683,10 @@ class NotificationController {
         'APPLICATION_REJECTED',
         'APPLICATION_NEEDS_REVISION',
         'DOCUMENT_APPROVED',
-        'DOCUMENT_REJECTED'
+        'DOCUMENT_REJECTED',
       ],
       DTAM_INSPECTOR: ['INSPECTION_SCHEDULED', 'INSPECTION_COMPLETED'],
-      FARMER: [] // Cannot send notifications
+      FARMER: [], // Cannot send notifications
     };
 
     const allowedTypes = permissions[userRole] || [];
@@ -702,23 +702,23 @@ class NotificationController {
       'application-submitted': {
         name: 'Application Submitted',
         description: 'Confirmation when farmer submits application',
-        variables: ['user.firstName', 'application.farmName', 'application.applicationNumber']
+        variables: ['user.firstName', 'application.farmName', 'application.applicationNumber'],
       },
       'application-approved': {
         name: 'Application Approved',
         description: 'Notification when application is approved',
-        variables: ['user.firstName', 'application.farmName', 'certificate.url']
+        variables: ['user.firstName', 'application.farmName', 'certificate.url'],
       },
       'payment-required': {
         name: 'Payment Required',
         description: 'Payment reminder with QR code',
-        variables: ['user.firstName', 'payment.amount', 'qrCode.image']
+        variables: ['user.firstName', 'payment.amount', 'qrCode.image'],
       },
       'inspection-scheduled': {
         name: 'Inspection Scheduled',
         description: 'Inspection appointment notification',
-        variables: ['user.firstName', 'inspection.date', 'inspector.name']
-      }
+        variables: ['user.firstName', 'inspection.date', 'inspector.name'],
+      },
     };
 
     // Filter templates based on role permissions
@@ -729,8 +729,8 @@ class NotificationController {
     // Return subset for other roles
     return Object.fromEntries(
       Object.entries(allTemplates).filter(
-        ([key]) => !key.includes('admin') && !key.includes('bulk')
-      )
+        ([key]) => !key.includes('admin') && !key.includes('bulk'),
+      ),
     );
   }
 
@@ -750,7 +750,7 @@ class NotificationController {
           .isInt({ min: 1, max: 100 })
           .withMessage('limit must be between 1 and 100'),
         query('page').optional().isInt({ min: 1 }).withMessage('page must be positive integer'),
-        query('markAsRead').optional().isBoolean().withMessage('markAsRead must be boolean')
+        query('markAsRead').optional().isBoolean().withMessage('markAsRead must be boolean'),
       ],
 
       sendNotification: [
@@ -771,7 +771,7 @@ class NotificationController {
           .optional()
           .isIn(['LOW', 'NORMAL', 'HIGH', 'CRITICAL'])
           .withMessage('Invalid priority level'),
-        body('scheduledFor').optional().isISO8601().withMessage('Invalid scheduled date format')
+        body('scheduledFor').optional().isISO8601().withMessage('Invalid scheduled date format'),
       ],
 
       sendBulkNotification: [
@@ -782,15 +782,15 @@ class NotificationController {
           .withMessage('Message is required'),
         body('notificationType').isString().withMessage('Notification type is required'),
         body('recipientFilters').isObject().withMessage('Recipient filters are required'),
-        body('scheduledFor').optional().isISO8601().withMessage('Invalid scheduled date format')
+        body('scheduledFor').optional().isISO8601().withMessage('Invalid scheduled date format'),
       ],
 
       notificationId: [
         param('notificationId')
           .isString()
           .isLength({ min: 10, max: 50 })
-          .withMessage('Valid notification ID is required')
-      ]
+          .withMessage('Valid notification ID is required'),
+      ],
     };
   }
 }

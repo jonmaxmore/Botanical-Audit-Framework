@@ -4,62 +4,62 @@ const TaskSchema = new mongoose.Schema({
   title: {
     type: String,
     required: true,
-    trim: true
+    trim: true,
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   status: {
     type: String,
     enum: ['pending', 'in-progress', 'completed', 'rejected'],
-    default: 'pending'
+    default: 'pending',
   },
   priority: {
     type: String,
     enum: ['low', 'medium', 'high', 'urgent'],
-    default: 'medium'
+    default: 'medium',
   },
   location: {
     name: String,
     coordinates: {
       lat: Number,
-      lng: Number
+      lng: Number,
     },
-    address: String
+    address: String,
   },
   dueDate: {
-    type: Date
+    type: Date,
   },
   assignedTo: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   completedAt: {
-    type: Date
+    type: Date,
   },
   comments: [
     {
       text: String,
       user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
       },
       createdAt: {
         type: Date,
-        default: Date.now
-      }
-    }
+        default: Date.now,
+      },
+    },
   ],
   attachments: [
     {
@@ -68,10 +68,10 @@ const TaskSchema = new mongoose.Schema({
       mimeType: String,
       uploadedAt: {
         type: Date,
-        default: Date.now
-      }
-    }
-  ]
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 module.exports = mongoose.model('Task', TaskSchema);

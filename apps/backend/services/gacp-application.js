@@ -3,7 +3,7 @@
  * Core business logic for GACP certification process
  *
  * Implements WHO/ASEAN GACP guidelines and DTAM standards
- * 
+ *
  * Phase 2 Integration:
  * - Queue Service: Async email notifications, document processing
  * - Cache Service: High-performance data caching (1 hour TTL)
@@ -67,8 +67,8 @@ class GACPApplicationService {
       const existingApplication = await Application.findOne({
         applicant: farmerId,
         currentStatus: {
-          $nin: ['approved', 'rejected', 'certificate_issued']
-        }
+          $nin: ['approved', 'rejected', 'certificate_issued'],
+        },
       });
 
       if (existingApplication) {
@@ -84,7 +84,7 @@ class GACPApplicationService {
         farmInformation: applicationData.farmInformation,
         cropInformation: applicationData.cropInformation,
         documents: applicationData.documents || [],
-        currentStatus: 'draft'
+        currentStatus: 'draft',
       });
 
       // 5. Perform initial risk assessment
@@ -98,15 +98,18 @@ class GACPApplicationService {
 
       // 8. Queue welcome email notification (async - don't block)
       if (process.env.ENABLE_QUEUE === 'true') {
-        await queueService.addEmailJob({
-          type: 'application-created',
-          applicationId: application._id,
-          data: {
-            farmerEmail: farmer.email,
-            farmerName: farmer.name,
-            applicationNumber: application.applicationNumber
-          }
-        }, { priority: 5 });
+        await queueService.addEmailJob(
+          {
+            type: 'application-created',
+            applicationId: application._id,
+            data: {
+              farmerEmail: farmer.email,
+              farmerName: farmer.name,
+              applicationNumber: application.applicationNumber,
+            },
+          },
+          { priority: 5 },
+        );
       }
 
       // 9. Invalidate applications list cache
@@ -117,7 +120,7 @@ class GACPApplicationService {
         applicationId: application._id,
         applicationNumber: application.applicationNumber,
         farmerId,
-        riskLevel: application.riskAssessment.level
+        riskLevel: application.riskAssessment.level,
       });
 
       await session.commitTransaction();
@@ -126,7 +129,7 @@ class GACPApplicationService {
       await session.abortTransaction();
       logger.error('Error creating GACP application', {
         farmerId,
-        error: error.message
+        error: error.message,
       });
       throw error;
     } finally {
@@ -165,24 +168,30 @@ class GACPApplicationService {
       // 5. Queue notification emails (async - don't block response)
       if (process.env.ENABLE_QUEUE === 'true') {
         // Notify farmer
-        await queueService.addEmailJob({
-          type: 'application-submitted',
-          applicationId,
-          data: {
-            farmerEmail: application.applicant.email,
-            applicationNumber: application.applicationNumber
-          }
-        }, { priority: 5 });
+        await queueService.addEmailJob(
+          {
+            type: 'application-submitted',
+            applicationId,
+            data: {
+              farmerEmail: application.applicant.email,
+              applicationNumber: application.applicationNumber,
+            },
+          },
+          { priority: 5 },
+        );
 
         // Notify assigned officer
-        await queueService.addEmailJob({
-          type: 'new-application-assignment',
-          applicationId,
-          data: {
-            officerEmail: assignedOfficer.email,
-            applicationNumber: application.applicationNumber
-          }
-        }, { priority: 6 });
+        await queueService.addEmailJob(
+          {
+            type: 'new-application-assignment',
+            applicationId,
+            data: {
+              officerEmail: assignedOfficer.email,
+              applicationNumber: application.applicationNumber,
+            },
+          },
+          { priority: 6 },
+        );
       }
 
       // 6. Invalidate cache
@@ -192,14 +201,14 @@ class GACPApplicationService {
       logger.info('Application submitted', {
         applicationId,
         applicationNumber: application.applicationNumber,
-        assignedOfficer: assignedOfficer._id
+        assignedOfficer: assignedOfficer._id,
       });
 
       return application;
     } catch (error) {
       logger.error('Error submitting application', {
         applicationId,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -237,7 +246,7 @@ class GACPApplicationService {
         documentValidation,
         farmInfoScore,
         practiceScore,
-        riskLevel: application.riskAssessment.level
+        riskLevel: application.riskAssessment.level,
       });
 
       // 6. Make review decision
@@ -247,7 +256,7 @@ class GACPApplicationService {
         await application.updateStatus(
           'inspection_scheduled',
           reviewerId,
-          'Approved for field inspection'
+          'Approved for field inspection',
         );
 
         // Schedule inspection
@@ -261,7 +270,7 @@ class GACPApplicationService {
         await application.updateStatus(
           'rejected',
           reviewerId,
-          'Application does not meet minimum requirements'
+          'Application does not meet minimum requirements',
         );
       }
 
@@ -272,23 +281,26 @@ class GACPApplicationService {
         achievedScore: preliminaryScore,
         assessor: reviewerId,
         notes: reviewData.notes,
-        recommendations: reviewData.recommendations || []
+        recommendations: reviewData.recommendations || [],
       });
 
       await application.save();
 
       // 8. Queue notification emails (async)
       if (process.env.ENABLE_QUEUE === 'true') {
-        await queueService.addEmailJob({
-          type: `application-review-${decision}`,
-          applicationId,
-          data: {
-            farmerEmail: application.applicant.email,
-            decision,
-            preliminaryScore,
-            reviewerNotes: reviewData.notes
-          }
-        }, { priority: 5 });
+        await queueService.addEmailJob(
+          {
+            type: `application-review-${decision}`,
+            applicationId,
+            data: {
+              farmerEmail: application.applicant.email,
+              decision,
+              preliminaryScore,
+              reviewerNotes: reviewData.notes,
+            },
+          },
+          { priority: 5 },
+        );
       }
 
       // 9. Invalidate cache
@@ -299,19 +311,19 @@ class GACPApplicationService {
         applicationId,
         decision,
         preliminaryScore,
-        reviewerId
+        reviewerId,
       });
 
       return {
         application,
         decision,
         preliminaryScore,
-        nextSteps: this.getNextSteps(decision)
+        nextSteps: this.getNextSteps(decision),
       };
     } catch (error) {
       logger.error('Error reviewing application', {
         applicationId,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -326,12 +338,12 @@ class GACPApplicationService {
       // 1. Find available inspector based on location and expertise
       const availableInspector = await this.findAvailableInspector(
         application.farmInformation.location.province,
-        application.cropInformation.map(crop => crop.cropType)
+        application.cropInformation.map(crop => crop.cropType),
       );
 
       if (!availableInspector) {
         throw new BusinessLogicError(
-          'No available inspector found for this location and crop type'
+          'No available inspector found for this location and crop type',
         );
       }
 
@@ -354,18 +366,18 @@ class GACPApplicationService {
       logger.info('Inspection scheduled', {
         applicationId: application._id,
         inspectorId: availableInspector._id,
-        inspectionDate
+        inspectionDate,
       });
 
       return {
         inspector: availableInspector,
         inspectionDate,
-        estimatedDuration: this.calculateInspectionDuration(application)
+        estimatedDuration: this.calculateInspectionDuration(application),
       };
     } catch (error) {
       logger.error('Error scheduling inspection', {
         applicationId: application._id,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -389,7 +401,7 @@ class GACPApplicationService {
       await application.updateStatus(
         'inspection_completed',
         inspectorId,
-        'Field inspection completed'
+        'Field inspection completed',
       );
       application.inspectionCompleted = new Date();
 
@@ -401,7 +413,7 @@ class GACPApplicationService {
         application.assessmentScores.push({
           ...score,
           assessor: inspectorId,
-          assessmentDate: new Date()
+          assessmentDate: new Date(),
         });
       });
 
@@ -417,13 +429,13 @@ class GACPApplicationService {
           decisionDate: new Date(),
           decisionBy: inspectorId,
           validityPeriod: 24, // 2 years
-          reasons: ['All compliance requirements met']
+          reasons: ['All compliance requirements met'],
         };
 
         await application.updateStatus(
           'approved',
           inspectorId,
-          `Approved with score ${finalScore}`
+          `Approved with score ${finalScore}`,
         );
 
         // Generate certificate
@@ -436,7 +448,7 @@ class GACPApplicationService {
           decisionBy: inspectorId,
           validityPeriod: 12, // 1 year with conditions
           conditions: inspectionResults.correctiveActions || [],
-          reasons: ['Conditional approval - corrective actions required']
+          reasons: ['Conditional approval - corrective actions required'],
         };
       } else {
         certificationDecision = 'rejected';
@@ -445,13 +457,13 @@ class GACPApplicationService {
           decisionDate: new Date(),
           decisionBy: inspectorId,
           reasons: inspectionResults.nonComplianceReasons || ['Insufficient compliance score'],
-          appealDeadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // 30 days
+          appealDeadline: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
         };
 
         await application.updateStatus(
           'rejected',
           inspectorId,
-          `Rejected with score ${finalScore}`
+          `Rejected with score ${finalScore}`,
         );
       }
 
@@ -469,19 +481,19 @@ class GACPApplicationService {
         applicationId,
         finalScore,
         decision: certificationDecision,
-        inspectorId
+        inspectorId,
       });
 
       return {
         application,
         finalScore,
         decision: certificationDecision,
-        complianceScores
+        complianceScores,
       };
     } catch (error) {
       logger.error('Error processing inspection results', {
         applicationId,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -507,7 +519,7 @@ class GACPApplicationService {
       'application_form',
       'farm_management_plan',
       'cultivation_records',
-      'land_rights_certificate'
+      'land_rights_certificate',
     ];
 
     const submittedDocuments = application.documents.map(doc => doc.documentType);
@@ -530,7 +542,7 @@ class GACPApplicationService {
       certificateFee: 500 * cropMultiplier,
       totalFee: baseFee + baseFee * sizeMultiplier + 500 * cropMultiplier,
       paidAmount: 0,
-      paymentStatus: 'pending'
+      paymentStatus: 'pending',
     };
   }
 
@@ -541,7 +553,7 @@ class GACPApplicationService {
     const officers = await User.find({
       role: 'dtam_officer',
       'workLocation.provinces': province,
-      isActive: true
+      isActive: true,
     }).sort({ 'workload.activeApplications': 1 });
 
     if (officers.length === 0) {
@@ -556,7 +568,7 @@ class GACPApplicationService {
     let score = 0;
     const totalDocuments = application.documents.length;
     const verifiedDocuments = application.documents.filter(
-      doc => doc.verificationStatus === 'verified'
+      doc => doc.verificationStatus === 'verified',
     ).length;
 
     score = totalDocuments > 0 ? (verifiedDocuments / totalDocuments) * 100 : 0;
@@ -565,7 +577,7 @@ class GACPApplicationService {
       score,
       totalDocuments,
       verifiedDocuments,
-      issues: application.documents.filter(doc => doc.verificationStatus === 'rejected')
+      issues: application.documents.filter(doc => doc.verificationStatus === 'rejected'),
     };
   }
 
@@ -609,7 +621,7 @@ class GACPApplicationService {
       low: 0,
       medium: -5,
       high: -10,
-      critical: -20
+      critical: -20,
     };
 
     return Math.max(0, baseScore + (riskAdjustments[riskLevel] || 0));
@@ -620,18 +632,18 @@ class GACPApplicationService {
       approved_for_inspection: [
         'Wait for inspection scheduling notification',
         'Prepare farm for field inspection',
-        'Ensure all cultivation records are up to date'
+        'Ensure all cultivation records are up to date',
       ],
       revision_required: [
         'Review feedback and requirements',
         'Submit additional documentation',
-        'Address identified issues'
+        'Address identified issues',
       ],
       rejected: [
         'Review rejection reasons',
         'Consider appeal within 30 days',
-        'Improve practices and reapply'
-      ]
+        'Improve practices and reapply',
+      ],
     };
 
     return nextSteps[decision] || [];
@@ -643,7 +655,7 @@ class GACPApplicationService {
       role: 'inspector',
       'expertise.provinces': province,
       'expertise.cropTypes': { $in: cropTypes },
-      isActive: true
+      isActive: true,
     }).sort({ 'workload.scheduledInspections': 1 });
 
     return inspectors[0] || null;
@@ -679,7 +691,7 @@ class GACPApplicationService {
       'post_harvest_handling',
       'storage_transportation',
       'record_keeping',
-      'worker_training'
+      'worker_training',
     ];
 
     return categories.map(category => ({
@@ -687,25 +699,29 @@ class GACPApplicationService {
       maxScore: 15, // Each category worth 15 points (total 120, normalized to 100)
       achievedScore: inspectionResults.scores[category] || 0,
       notes: inspectionResults.notes[category] || '',
-      recommendations: inspectionResults.recommendations[category] || []
+      recommendations: inspectionResults.recommendations[category] || [],
     }));
   }
 
   async generateCertificate(application) {
     // Queue certificate generation (async - don't block)
     if (process.env.ENABLE_QUEUE === 'true') {
-      await queueService.addJob('document-processing', {
-        type: 'certificate-generation',
-        applicationId: application._id,
-        priority: 'high'
-      }, { priority: 8 });
-      
+      await queueService.addJob(
+        'document-processing',
+        {
+          type: 'certificate-generation',
+          applicationId: application._id,
+          priority: 'high',
+        },
+        { priority: 8 },
+      );
+
       logger.info('Certificate generation queued', {
-        applicationId: application._id
+        applicationId: application._id,
       });
     } else {
       logger.info('Certificate generation initiated', {
-        applicationId: application._id
+        applicationId: application._id,
       });
     }
   }
@@ -724,13 +740,13 @@ class GACPApplicationService {
 
     application.surveillanceSchedule = surveillanceDates;
     await application.save();
-    
+
     // Queue surveillance notification
     if (process.env.ENABLE_QUEUE === 'true') {
       await queueService.addNotificationJob({
         type: 'surveillance-scheduled',
         applicationId: application._id,
-        dates: surveillanceDates
+        dates: surveillanceDates,
       });
     }
   }
@@ -739,7 +755,7 @@ class GACPApplicationService {
     // Deprecated: Use queueService instead
     logger.warn('sendNotifications is deprecated, use queueService.addEmailJob()', {
       applicationId: application._id,
-      eventType
+      eventType,
     });
   }
 
@@ -749,7 +765,7 @@ class GACPApplicationService {
       await queueService.addCalendarJob(null, {
         type: 'block-time',
         inspectorId,
-        date
+        date,
       });
     }
     logger.info('Inspector calendar blocked', { inspectorId, date });
@@ -762,7 +778,7 @@ class GACPApplicationService {
   async getApplicationById(applicationId) {
     const cacheKey = `application:${applicationId}`;
     const cached = await cacheService.get(cacheKey);
-    
+
     if (cached) {
       logger.debug('Application cache hit', { applicationId });
       return cached;
@@ -788,7 +804,7 @@ class GACPApplicationService {
   async getApplications(filters = {}, options = {}) {
     const cacheKey = `applications:list:${JSON.stringify({ filters, options })}`;
     const cached = await cacheService.get(cacheKey);
-    
+
     if (cached) {
       logger.debug('Applications list cache hit');
       return cached;
@@ -814,7 +830,7 @@ class GACPApplicationService {
 
     const result = {
       applications,
-      pagination: { page, limit, total, pages: Math.ceil(total / limit) }
+      pagination: { page, limit, total, pages: Math.ceil(total / limit) },
     };
 
     await cacheService.set(cacheKey, result, 300);
@@ -828,7 +844,7 @@ class GACPApplicationService {
   async getDashboardStats() {
     const cacheKey = 'applications:dashboard:stats';
     const cached = await cacheService.get(cacheKey);
-    
+
     if (cached) {
       logger.debug('Dashboard stats cache hit');
       return cached;
@@ -840,13 +856,15 @@ class GACPApplicationService {
         draft: await Application.countDocuments({ currentStatus: 'draft' }),
         submitted: await Application.countDocuments({ currentStatus: 'submitted' }),
         under_review: await Application.countDocuments({ currentStatus: 'under_review' }),
-        inspection_scheduled: await Application.countDocuments({ currentStatus: 'inspection_scheduled' }),
+        inspection_scheduled: await Application.countDocuments({
+          currentStatus: 'inspection_scheduled',
+        }),
         approved: await Application.countDocuments({ currentStatus: 'approved' }),
-        rejected: await Application.countDocuments({ currentStatus: 'rejected' })
+        rejected: await Application.countDocuments({ currentStatus: 'rejected' }),
       },
       thisMonth: await Application.countDocuments({
-        createdAt: { $gte: new Date(new Date().setDate(1)) }
-      })
+        createdAt: { $gte: new Date(new Date().setDate(1)) },
+      }),
     };
 
     await cacheService.set(cacheKey, stats, 300);

@@ -85,13 +85,13 @@ class NotificationModule {
       // Initialize controller
       this.controller = new NotificationController({
         ...this.dependencies,
-        notificationService: this.service
+        notificationService: this.service,
       });
 
       // Initialize routes
       this.routes = new NotificationRoutes({
         ...this.dependencies,
-        notificationController: this.controller
+        notificationController: this.controller,
       });
 
       this.isInitialized = true;
@@ -151,16 +151,16 @@ class NotificationModule {
         'Bulk notifications',
         'Analytics and reporting',
         'Rate limiting',
-        'Audit logging'
+        'Audit logging',
       ],
       integration: [
         'Application workflow',
         'Payment system',
         'Document management',
         'User management',
-        'Audit system'
+        'Audit system',
       ],
-      endpoints: this.routes ? this.routes.getRouteInfo().endpoints.length : 0
+      endpoints: this.routes ? this.routes.getRouteInfo().endpoints.length : 0,
     };
 
     logger.info('[NotificationModule] Capabilities:', JSON.stringify(capabilities, null, 2));
@@ -219,7 +219,7 @@ class NotificationModule {
   async sendWorkflowNotification(workflowData) {
     if (!this.isInitialized) {
       throw new Error(
-        'NotificationModule must be initialized before sending workflow notifications'
+        'NotificationModule must be initialized before sending workflow notifications',
       );
     }
     return await this.service.sendWorkflowNotification(workflowData);
@@ -233,7 +233,7 @@ class NotificationModule {
   async sendPaymentNotification(paymentData) {
     if (!this.isInitialized) {
       throw new Error(
-        'NotificationModule must be initialized before sending payment notifications'
+        'NotificationModule must be initialized before sending payment notifications',
       );
     }
     return await this.service.sendPaymentNotification(paymentData);
@@ -285,7 +285,7 @@ class NotificationModule {
       return {
         status: 'unhealthy',
         reason: 'Module not initialized',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     }
 
@@ -312,18 +312,18 @@ class NotificationModule {
           'Bulk notifications',
           'Analytics and reporting',
           'Rate limiting',
-          'Audit logging'
+          'Audit logging',
         ],
         integrations: [
           'Application workflow',
           'Payment system',
           'Document management',
           'User management',
-          'Audit system'
-        ]
+          'Audit system',
+        ],
       },
       routes: this.routes ? this.routes.getRouteInfo() : null,
-      dependencies: Object.keys(this.dependencies)
+      dependencies: Object.keys(this.dependencies),
     };
   }
 

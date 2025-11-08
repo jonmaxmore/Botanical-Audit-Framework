@@ -23,18 +23,18 @@ const mongoose = require('mongoose');
 const GrowthStageSchema = new mongoose.Schema({
   stageName: {
     type: String,
-    required: true
+    required: true,
     // e.g., 'seedling', 'vegetative', 'flowering', 'harvest'
   },
   stageNameThai: {
     type: String,
-    required: true
+    required: true,
     // e.g., 'ต้นกล้า', 'แตกกิ่งใบ', 'ออกดอก', 'เก็บเกี่ยว'
   },
   durationDays: {
     min: Number,
     max: Number,
-    typical: Number
+    typical: Number,
   },
   description: String,
   descriptionThai: String,
@@ -45,36 +45,36 @@ const GrowthStageSchema = new mongoose.Schema({
       optimal: Number,
       unit: {
         type: String,
-        default: 'celsius'
-      }
+        default: 'celsius',
+      },
     },
     humidity: {
       min: Number,
       max: Number,
-      optimal: Number
+      optimal: Number,
     },
     soilMoisture: {
       min: Number, // %
       max: Number, // %
-      optimal: Number // %
+      optimal: Number, // %
     },
     soilPH: {
       min: Number,
       max: Number,
-      optimal: Number
+      optimal: Number,
     },
     lightHours: {
       min: Number,
       max: Number,
-      optimal: Number
-    }
+      optimal: Number,
+    },
   },
   nutrients: {
     npkRatio: String, // e.g., "20-10-20"
     nitrogen: String, // e.g., "high", "medium", "low"
     phosphorus: String,
     potassium: String,
-    micronutrients: [String] // e.g., ["calcium", "magnesium", "iron"]
+    micronutrients: [String], // e.g., ["calcium", "magnesium", "iron"]
   },
   waterRequirements: {
     frequency: String, // e.g., "daily", "every 2-3 days"
@@ -82,8 +82,8 @@ const GrowthStageSchema = new mongoose.Schema({
     litersPerPlantPerDay: {
       min: Number,
       max: Number,
-      typical: Number
-    }
+      typical: Number,
+    },
   },
   commonActivities: [
     {
@@ -91,15 +91,15 @@ const GrowthStageSchema = new mongoose.Schema({
       activityThai: String,
       timing: String,
       frequency: String,
-      gacpCompliant: Boolean
-    }
-  ]
+      gacpCompliant: Boolean,
+    },
+  ],
 });
 
 const NutrientDeficiencySchema = new mongoose.Schema({
   nutrient: {
     type: String,
-    required: true
+    required: true,
     // e.g., "nitrogen", "phosphorus", "potassium", "calcium", etc.
   },
   nutrientThai: String,
@@ -108,19 +108,19 @@ const NutrientDeficiencySchema = new mongoose.Schema({
   visualIndicators: {
     leafColor: String,
     leafPattern: String,
-    affectedArea: String // e.g., "older leaves", "new growth"
+    affectedArea: String, // e.g., "older leaves", "new growth"
   },
   correction: {
     fertilizer: [String],
     applicationRate: String,
     applicationMethod: String,
-    timeToRecovery: String
+    timeToRecovery: String,
   },
   correctionThai: {
     fertilizer: [String],
     applicationRate: String,
-    applicationMethod: String
-  }
+    applicationMethod: String,
+  },
 });
 
 const PlantCatalogSchema = new mongoose.Schema(
@@ -129,7 +129,7 @@ const PlantCatalogSchema = new mongoose.Schema(
     plantId: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
       // e.g., "cannabis-001", "turmeric-001"
     },
     plantType: {
@@ -141,18 +141,18 @@ const PlantCatalogSchema = new mongoose.Schema(
         'ginger', // ขิง
         'black_galingale', // กระชายดำ
         'plai', // ไพล
-        'kratom' // กระท่อม
-      ]
+        'kratom', // กระท่อม
+      ],
     },
     isPrimaryCrop: {
       type: Boolean,
-      default: false
+      default: false,
       // Cannabis should be TRUE, others FALSE
     },
     developmentPhase: {
       type: String,
       enum: ['current', 'future', 'research'],
-      default: 'current'
+      default: 'current',
       // Cannabis: 'current', Others: 'future'
     },
 
@@ -160,18 +160,18 @@ const PlantCatalogSchema = new mongoose.Schema(
     commonName: {
       english: {
         type: String,
-        required: true
+        required: true,
       },
       thai: {
         type: String,
-        required: true
+        required: true,
       },
       scientific: {
         type: String,
-        required: true
+        required: true,
         // e.g., "Cannabis sativa L."
       },
-      localNames: [String] // Regional Thai names
+      localNames: [String], // Regional Thai names
     },
 
     // === Plant Classification ===
@@ -179,30 +179,30 @@ const PlantCatalogSchema = new mongoose.Schema(
       kingdom: String,
       family: String,
       genus: String,
-      species: String
+      species: String,
     },
 
     category: {
       type: String,
       enum: ['medicinal_herb', 'spice', 'aromatic', 'controlled_substance'],
-      required: true
+      required: true,
     },
 
     // === Regulatory & GACP Information ===
     gacpCompliance: {
       required: {
         type: Boolean,
-        default: false
+        default: false,
       },
       regulatoryBody: String, // e.g., "กรมแพทย์แผนไทยและการแพทย์ทางเลือก"
       licenseRequired: {
         type: Boolean,
-        default: false
+        default: false,
       },
       licenseTypes: [String], // e.g., ["cultivation", "processing", "distribution"]
       controlledSubstance: {
         type: Boolean,
-        default: false
+        default: false,
       },
       thcLimit: Number, // For hemp/cannabis only
       cbdContent: String, // For hemp/cannabis only
@@ -212,51 +212,51 @@ const PlantCatalogSchema = new mongoose.Schema(
           lawNameThai: String,
           year: Number,
           description: String,
-          url: String
-        }
+          url: String,
+        },
       ],
-      requiredSOPs: [String] // e.g., ["SOP-01", "SOP-02", ...]
+      requiredSOPs: [String], // e.g., ["SOP-01", "SOP-02", ...]
     },
 
     // === Cultivation Information ===
     cultivationInfo: {
       growingDifficulty: {
         type: String,
-        enum: ['beginner', 'intermediate', 'advanced', 'expert']
+        enum: ['beginner', 'intermediate', 'advanced', 'expert'],
       },
       climateZones: [String], // Thai climate zones where it grows well
       suitableRegions: [
         {
           type: String,
-          enum: ['north', 'northeast', 'central', 'east', 'west', 'south']
-        }
+          enum: ['north', 'northeast', 'central', 'east', 'west', 'south'],
+        },
       ],
       preferredProvinces: [String], // List of Thai provinces
 
       elevationRange: {
         min: Number, // meters above sea level
         max: Number,
-        optimal: Number
+        optimal: Number,
       },
 
       soilTypes: [
         {
           type: String,
-          enum: ['loam', 'sandy_loam', 'clay_loam', 'silt_loam', 'sandy', 'clay']
-        }
+          enum: ['loam', 'sandy_loam', 'clay_loam', 'silt_loam', 'sandy', 'clay'],
+        },
       ],
 
       propagationMethods: [
         {
           method: {
             type: String,
-            enum: ['seed', 'cutting', 'rhizome', 'division', 'tissue_culture']
+            enum: ['seed', 'cutting', 'rhizome', 'division', 'tissue_culture'],
           },
           successRate: Number, // %
           timeToMaturity: Number, // days
           difficulty: String,
-          gacpApproved: Boolean
-        }
+          gacpApproved: Boolean,
+        },
       ],
 
       averageGrowingPeriod: {
@@ -264,13 +264,13 @@ const PlantCatalogSchema = new mongoose.Schema(
         unit: {
           type: String,
           enum: ['days', 'weeks', 'months'],
-          default: 'days'
-        }
+          default: 'days',
+        },
       },
 
       harvestCycles: {
         cyclesPerYear: Number,
-        continuousHarvest: Boolean
+        continuousHarvest: Boolean,
       },
 
       yieldExpectations: {
@@ -278,21 +278,21 @@ const PlantCatalogSchema = new mongoose.Schema(
           min: Number,
           max: Number,
           average: Number,
-          unit: String // e.g., "grams", "kg"
+          unit: String, // e.g., "grams", "kg"
         },
         perRai: {
           min: Number,
           max: Number,
           average: Number,
-          unit: String
+          unit: String,
         },
         perHectare: {
           min: Number,
           max: Number,
           average: Number,
-          unit: String
-        }
-      }
+          unit: String,
+        },
+      },
     },
 
     // === Growth Stages ===
@@ -304,24 +304,24 @@ const PlantCatalogSchema = new mongoose.Schema(
         germination: { min: Number, max: Number, optimal: Number },
         growth: { min: Number, max: Number, optimal: Number },
         flowering: { min: Number, max: Number, optimal: Number },
-        unit: { type: String, default: 'celsius' }
+        unit: { type: String, default: 'celsius' },
       },
       humidity: {
         germination: { min: Number, max: Number, optimal: Number },
         vegetative: { min: Number, max: Number, optimal: Number },
         flowering: { min: Number, max: Number, optimal: Number },
-        harvest: { min: Number, max: Number, optimal: Number }
+        harvest: { min: Number, max: Number, optimal: Number },
       },
       rainfall: {
         annualMin: Number, // mm
         annualMax: Number, // mm
-        annualOptimal: Number // mm
+        annualOptimal: Number, // mm
       },
       sunlight: {
         hoursPerDay: { min: Number, max: Number, optimal: Number },
         intensity: String, // "full sun", "partial shade", etc.
-        photoperiod: String // "short-day", "long-day", "day-neutral"
-      }
+        photoperiod: String, // "short-day", "long-day", "day-neutral"
+      },
     },
 
     // === Nutrient Information ===
@@ -329,7 +329,7 @@ const PlantCatalogSchema = new mongoose.Schema(
       overall: String, // "high", "medium", "low"
       npkPreferences: {
         vegetative: String, // e.g., "3-1-2"
-        flowering: String // e.g., "1-3-2"
+        flowering: String, // e.g., "1-3-2"
       },
       deficiencySymptoms: [NutrientDeficiencySchema],
       organicFertilizers: [
@@ -339,9 +339,9 @@ const PlantCatalogSchema = new mongoose.Schema(
           npkRatio: String,
           applicationRate: String,
           frequency: String,
-          gacpApproved: Boolean
-        }
-      ]
+          gacpApproved: Boolean,
+        },
+      ],
     },
 
     // === Common Diseases & Pests ===
@@ -350,32 +350,32 @@ const PlantCatalogSchema = new mongoose.Schema(
         {
           diseaseId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'DiseasePest'
+            ref: 'DiseasePest',
           },
           diseaseName: String,
           diseaseNameThai: String,
           prevalence: {
             type: String,
-            enum: ['rare', 'occasional', 'common', 'very_common']
+            enum: ['rare', 'occasional', 'common', 'very_common'],
           },
-          seasonality: [String] // e.g., ["rainy_season", "hot_season"]
-        }
+          seasonality: [String], // e.g., ["rainy_season", "hot_season"]
+        },
       ],
       pests: [
         {
           pestId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'DiseasePest'
+            ref: 'DiseasePest',
           },
           pestName: String,
           pestNameThai: String,
           prevalence: {
             type: String,
-            enum: ['rare', 'occasional', 'common', 'very_common']
+            enum: ['rare', 'occasional', 'common', 'very_common'],
           },
-          seasonality: [String]
-        }
-      ]
+          seasonality: [String],
+        },
+      ],
     },
 
     // === Medicinal & Economic Value ===
@@ -386,8 +386,8 @@ const PlantCatalogSchema = new mongoose.Schema(
           compoundNameThai: String,
           concentration: String,
           medicalUse: String,
-          medicalUseThai: String
-        }
+          medicalUseThai: String,
+        },
       ],
       traditionalUses: [
         {
@@ -395,28 +395,28 @@ const PlantCatalogSchema = new mongoose.Schema(
           conditionThai: String,
           preparation: String,
           preparationThai: String,
-          dosage: String
-        }
+          dosage: String,
+        },
       ],
       modernApplications: [String],
-      modernApplicationsThai: [String]
+      modernApplicationsThai: [String],
     },
 
     economicData: {
       marketDemand: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
       },
       averagePrice: {
         fresh: { value: Number, unit: String }, // THB per kg
         dried: { value: Number, unit: String },
-        processed: { value: Number, unit: String }
+        processed: { value: Number, unit: String },
       },
       exportPotential: {
         type: String,
-        enum: ['none', 'low', 'medium', 'high', 'very_high']
+        enum: ['none', 'low', 'medium', 'high', 'very_high'],
       },
-      targetMarkets: [String] // e.g., ["domestic", "china", "europe", "usa"]
+      targetMarkets: [String], // e.g., ["domestic", "china", "europe", "usa"]
     },
 
     // === AI/ML Features ===
@@ -433,8 +433,8 @@ const PlantCatalogSchema = new mongoose.Schema(
           region: String,
           averageYield: Number,
           successRate: Number,
-          commonChallenges: [String]
-        }
+          commonChallenges: [String],
+        },
       ],
 
       // Environmental tolerances (for AI decision-making)
@@ -443,8 +443,8 @@ const PlantCatalogSchema = new mongoose.Schema(
         flood: { type: String, enum: ['low', 'medium', 'high'] },
         heat: { type: String, enum: ['low', 'medium', 'high'] },
         cold: { type: String, enum: ['low', 'medium', 'high'] },
-        salinity: { type: String, enum: ['low', 'medium', 'high'] }
-      }
+        salinity: { type: String, enum: ['low', 'medium', 'high'] },
+      },
     },
 
     // === References & Documentation ===
@@ -456,8 +456,8 @@ const PlantCatalogSchema = new mongoose.Schema(
           year: Number,
           journal: String,
           doi: String,
-          url: String
-        }
+          url: String,
+        },
       ],
       gacpGuidelines: [
         {
@@ -465,17 +465,17 @@ const PlantCatalogSchema = new mongoose.Schema(
           titleThai: String,
           issuingBody: String,
           year: Number,
-          url: String
-        }
+          url: String,
+        },
       ],
       cultivationGuides: [
         {
           title: String,
           titleThai: String,
           source: String,
-          url: String
-        }
-      ]
+          url: String,
+        },
+      ],
     },
 
     // === Images & Media ===
@@ -485,35 +485,35 @@ const PlantCatalogSchema = new mongoose.Schema(
         caption: String,
         captionThai: String,
         stage: String, // Which growth stage this image represents
-        isPrimary: Boolean
-      }
+        isPrimary: Boolean,
+      },
     ],
 
     // === Status & Metadata ===
     status: {
       type: String,
       enum: ['active', 'research', 'deprecated'],
-      default: 'active'
+      default: 'active',
     },
 
     dataQuality: {
       completeness: Number, // 0-100
       lastVerified: Date,
       verifiedBy: String,
-      needsUpdate: Boolean
+      needsUpdate: Boolean,
     },
 
     version: {
       type: Number,
-      default: 1
+      default: 1,
     },
 
     notes: String,
-    notesThai: String
+    notesThai: String,
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 // === Indexes for Performance ===
@@ -543,7 +543,7 @@ PlantCatalogSchema.statics.getActivePlants = function () {
 PlantCatalogSchema.statics.getPlantsByRegion = function (region) {
   return this.find({
     status: 'active',
-    'cultivationInfo.suitableRegions': region
+    'cultivationInfo.suitableRegions': region,
   }).sort({ isPrimaryCrop: -1 });
 };
 
@@ -577,7 +577,7 @@ PlantCatalogSchema.methods.getGACPRequirements = function () {
     licenseRequired: this.gacpCompliance.licenseRequired,
     licenseTypes: this.gacpCompliance.licenseTypes,
     requiredSOPs: this.gacpCompliance.requiredSOPs,
-    regulatoryBody: this.gacpCompliance.regulatoryBody
+    regulatoryBody: this.gacpCompliance.regulatoryBody,
   };
 };
 

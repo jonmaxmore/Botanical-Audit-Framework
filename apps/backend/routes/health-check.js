@@ -16,10 +16,10 @@ router.get('/health', async (req, res) => {
     memory: {
       free: os.freemem(),
       total: os.totalmem(),
-      usage: (1 - os.freemem() / os.totalmem()) * 100
+      usage: (1 - os.freemem() / os.totalmem()) * 100,
     },
     cpu: os.loadavg(),
-    hostname: os.hostname()
+    hostname: os.hostname(),
   };
 
   // Determine overall status
@@ -29,7 +29,7 @@ router.get('/health', async (req, res) => {
     status: isHealthy ? 'healthy' : 'degraded',
     timestamp: new Date().toISOString(),
     mongodb: mongoHealth,
-    system: systemHealth
+    system: systemHealth,
   });
 });
 
@@ -38,7 +38,7 @@ router.post('/mongodb/reconnect', async (req, res) => {
   res.json({
     success: result,
     message: result ? 'Reconnection successful' : 'Reconnection failed',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 

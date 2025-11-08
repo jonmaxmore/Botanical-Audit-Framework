@@ -50,7 +50,7 @@ let standardsService = null;
  */
 async function initializeEngine(db) {
   const { initializeStandardsComparison } = require(
-    path.join(__dirname, '../../modules/standards-comparison')
+    path.join(__dirname, '../../modules/standards-comparison'),
   );
   const result = await initializeStandardsComparison(db, auth);
   standardsService = result.service;
@@ -62,7 +62,7 @@ const checkEngineInitialized = (req, res, next) => {
   if (!standardsService) {
     return res.status(503).json({
       success: false,
-      error: 'Standards service not initialized. Please wait for database connection.'
+      error: 'Standards service not initialized. Please wait for database connection.',
     });
   }
   next();
@@ -82,7 +82,7 @@ router.get('/health', checkEngineInitialized, (req, res) => {
     service: 'Standards Comparison API',
     status: 'operational',
     standardsLoaded: standardsService.standards ? standardsService.standards.size : 0,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 
@@ -102,14 +102,14 @@ router.get('/', checkEngineInitialized, async (req, res) => {
     res.json({
       success: true,
       count: standards.length,
-      standards
+      standards,
     });
   } catch (error) {
     logger.error('[Standards API] List error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve standards',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -131,20 +131,20 @@ router.get('/:id', checkEngineInitialized, async (req, res) => {
     if (!standard) {
       return res.status(404).json({
         success: false,
-        error: `Standard not found: ${id}`
+        error: `Standard not found: ${id}`,
       });
     }
 
     res.json({
       success: true,
-      standard
+      standard,
     });
   } catch (error) {
     logger.error('[Standards API] Get standard error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve standard',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -180,14 +180,14 @@ router.post('/compare', auth, checkEngineInitialized, async (req, res) => {
     if (!farmId || !standardIds || !farmData) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: farmId, standardIds, farmData'
+        error: 'Missing required fields: farmId, standardIds, farmData',
       });
     }
 
     if (!Array.isArray(standardIds) || standardIds.length === 0) {
       return res.status(400).json({
         success: false,
-        error: 'standardIds must be a non-empty array'
+        error: 'standardIds must be a non-empty array',
       });
     }
 
@@ -195,7 +195,7 @@ router.post('/compare', auth, checkEngineInitialized, async (req, res) => {
     const result = await standardsService.compareAgainstStandards({
       farmId,
       standardIds,
-      farmData
+      farmData,
     });
 
     if (!result.success) {
@@ -210,15 +210,15 @@ router.post('/compare', auth, checkEngineInitialized, async (req, res) => {
       summary: {
         standardsCompared: result.results.length,
         certified: result.results.filter(r => r.certified).length,
-        notCertified: result.results.filter(r => !r.certified).length
-      }
+        notCertified: result.results.filter(r => !r.certified).length,
+      },
     });
   } catch (error) {
     logger.error('[Standards API] Comparison error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to complete comparison',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -238,13 +238,13 @@ router.get('/comparison/:id', auth, checkEngineInitialized, async (req, res) => 
     const { ObjectId } = require('mongodb');
 
     const comparison = await standardsService.comparisons.findOne({
-      _id: new ObjectId(id)
+      _id: new ObjectId(id),
     });
 
     if (!comparison) {
       return res.status(404).json({
         success: false,
-        error: 'Comparison not found'
+        error: 'Comparison not found',
       });
     }
 
@@ -255,15 +255,15 @@ router.get('/comparison/:id', auth, checkEngineInitialized, async (req, res) => 
         farmId: comparison.farmId,
         farmData: comparison.farmData,
         results: comparison.comparisons,
-        createdAt: comparison.createdAt
-      }
+        createdAt: comparison.createdAt,
+      },
     });
   } catch (error) {
     logger.error('[Standards API] Get comparison error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve comparison',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -294,15 +294,15 @@ router.get('/gaps/:comparisonId', auth, checkEngineInitialized, async (req, res)
         totalGaps: result.gapCount,
         priority: result.priority,
         gaps: result.gaps,
-        topRecommendations: result.recommendations
-      }
+        topRecommendations: result.recommendations,
+      },
     });
   } catch (error) {
     logger.error('[Standards API] Gap analysis error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to analyze gaps',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -331,14 +331,14 @@ router.get('/history/:farmId', auth, checkEngineInitialized, async (req, res) =>
       success: true,
       farmId,
       historyCount: result.count,
-      comparisons: result.comparisons
+      comparisons: result.comparisons,
     });
   } catch (error) {
     logger.error('[Standards API] History error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve history',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -366,7 +366,7 @@ router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async
     const groupedRecommendations = {
       critical: result.recommendations.filter(r => r.priority === 'Critical'),
       important: result.recommendations.filter(r => r.priority === 'Important'),
-      optional: result.recommendations.filter(r => r.priority === 'Optional')
+      optional: result.recommendations.filter(r => r.priority === 'Optional'),
     };
 
     res.json({
@@ -378,15 +378,15 @@ router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async
         total: result.recommendations.length,
         critical: groupedRecommendations.critical.length,
         important: groupedRecommendations.important.length,
-        optional: groupedRecommendations.optional.length
-      }
+        optional: groupedRecommendations.optional.length,
+      },
     });
   } catch (error) {
     logger.error('[Standards API] Recommendations error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to generate recommendations',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -397,5 +397,5 @@ router.get('/recommendations/:comparisonId', auth, checkEngineInitialized, async
 
 module.exports = {
   router,
-  initializeEngine
+  initializeEngine,
 };

@@ -30,7 +30,7 @@ function createDTAMAuthRouter(authController) {
    * @access Public
    */
   router.post('/request-password-reset', dtamValidator.validateRequestPasswordReset, (req, res) =>
-    authController.requestPasswordReset(req, res)
+    authController.requestPasswordReset(req, res),
   );
 
   /**
@@ -39,7 +39,7 @@ function createDTAMAuthRouter(authController) {
    * @access Public
    */
   router.post('/reset-password', dtamValidator.validateResetPassword, (req, res) =>
-    authController.resetPassword(req, res)
+    authController.resetPassword(req, res),
   );
 
   /**
@@ -48,7 +48,7 @@ function createDTAMAuthRouter(authController) {
    * @access Private (requires DTAM authentication)
    */
   router.get('/profile', authMiddleware.authenticateDTAMStaff, (req, res) =>
-    authController.getProfile(req, res)
+    authController.getProfile(req, res),
   );
 
   /**
@@ -60,7 +60,7 @@ function createDTAMAuthRouter(authController) {
     '/profile',
     authMiddleware.authenticateDTAMStaff,
     dtamValidator.validateUpdateProfile,
-    (req, res) => authController.updateProfile(req, res)
+    (req, res) => authController.updateProfile(req, res),
   );
 
   /**
@@ -72,7 +72,7 @@ function createDTAMAuthRouter(authController) {
     '/staff',
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requirePermission('view_staff'),
-    (req, res) => authController.listStaff(req, res)
+    (req, res) => authController.listStaff(req, res),
   );
 
   /**
@@ -85,7 +85,7 @@ function createDTAMAuthRouter(authController) {
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requirePermission('create_staff'),
     dtamValidator.validateCreateStaff,
-    (req, res) => authController.createStaff(req, res)
+    (req, res) => authController.createStaff(req, res),
   );
 
   /**
@@ -98,7 +98,7 @@ function createDTAMAuthRouter(authController) {
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requirePermission('update_staff'),
     dtamValidator.validateUpdateRole,
-    (req, res) => authController.updateStaffRole(req, res)
+    (req, res) => authController.updateStaffRole(req, res),
   );
 
   return router;

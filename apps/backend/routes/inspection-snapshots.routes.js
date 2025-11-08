@@ -12,7 +12,7 @@ const upload = multer({
     } else {
       cb(new Error('Only images allowed'));
     }
-  }
+  },
 });
 
 router.post('/inspections/:id/snapshots', upload.array('snapshots', 20), async (req, res) => {
@@ -31,7 +31,7 @@ router.post('/inspections/:id/snapshots', upload.array('snapshots', 20), async (
       mimetype: file.mimetype,
       caption: Array.isArray(captions) ? captions[index] : captions,
       timestamp: Array.isArray(timestamps) ? timestamps[index] : timestamps,
-      buffer: file.buffer
+      buffer: file.buffer,
     }));
 
     // TODO: Upload to S3 and save to database
@@ -40,7 +40,7 @@ router.post('/inspections/:id/snapshots', upload.array('snapshots', 20), async (
       success: true,
       message: 'Snapshots uploaded successfully',
       count: snapshots.length,
-      inspectionId
+      inspectionId,
     });
   } catch (error) {
     console.error('Error uploading snapshots:', error);
@@ -55,7 +55,7 @@ router.get('/inspections/:id/snapshots', async (req, res) => {
     // TODO: Fetch from database
     res.json({
       success: true,
-      snapshots: []
+      snapshots: [],
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch snapshots' });

@@ -21,7 +21,7 @@ describe('MongoDB Connection Tests', () => {
     // Connect to test database
     await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
     console.log('✓ Connected to MongoDB test database');
   }, 30000);
@@ -68,16 +68,16 @@ describe('MongoDB Connection Tests', () => {
         data: {
           plant: 'Cannabis Sativa',
           quantity: 100,
-          location: 'Field A'
+          location: 'Field A',
         },
         location: {
           type: 'Point',
-          coordinates: [100.5234, 13.7367] // Bangkok coordinates
+          coordinates: [100.5234, 13.7367], // Bangkok coordinates
         },
         hash: 'a'.repeat(64),
         signature: 'b'.repeat(128),
         previousHash: '0'.repeat(64),
-        userId: new mongoose.Types.ObjectId()
+        userId: new mongoose.Types.ObjectId(),
       });
 
       expect(record).toBeDefined();
@@ -100,7 +100,7 @@ describe('MongoDB Connection Tests', () => {
       const updated = await Record.findByIdAndUpdate(
         testRecordId,
         { $set: { 'data.quantity': 150 } },
-        { new: true }
+        { new: true },
       );
 
       expect(updated.data.quantity).toBe(150);
@@ -133,12 +133,12 @@ describe('MongoDB Connection Tests', () => {
         userId: new mongoose.Types.ObjectId(),
         newData: {
           type: 'PLANTING',
-          data: { plant: 'Cannabis' }
+          data: { plant: 'Cannabis' },
         },
         metadata: {
           ip: '127.0.0.1',
-          userAgent: 'Jest Test'
-        }
+          userAgent: 'Jest Test',
+        },
       });
 
       expect(log).toBeDefined();
@@ -156,7 +156,7 @@ describe('MongoDB Connection Tests', () => {
     test('should verify capped collection', async () => {
       // ใช้ db.command แทน collection.stats()
       const stats = await mongoose.connection.db.command({
-        collStats: 'audit_log'
+        collStats: 'audit_log',
       });
 
       expect(stats.capped).toBe(true);
@@ -173,12 +173,12 @@ describe('MongoDB Connection Tests', () => {
           farmId: new mongoose.Types.ObjectId(),
           deviceId: 'device-001',
           provider: 'dygis', // lowercase
-          sensorType: 'temperature'
+          sensorType: 'temperature',
         },
         timestamp: new Date(),
         value: 28.5,
         unit: '°C',
-        quality: 'good' // enum string
+        quality: 'good', // enum string
       });
 
       expect(reading).toBeDefined();
@@ -188,7 +188,7 @@ describe('MongoDB Connection Tests', () => {
 
     test('should find readings by sensor type', async () => {
       const readings = await IotReading.find({
-        'metadata.sensorType': 'temperature'
+        'metadata.sensorType': 'temperature',
       }).limit(10);
 
       expect(Array.isArray(readings)).toBe(true);
@@ -198,7 +198,7 @@ describe('MongoDB Connection Tests', () => {
     test('should verify timeseries collection', async () => {
       const collections = await mongoose.connection.db
         .listCollections({
-          name: 'iot_readings'
+          name: 'iot_readings',
         })
         .toArray();
 
@@ -220,8 +220,8 @@ describe('MongoDB Connection Tests', () => {
         farmId: new mongoose.Types.ObjectId(),
         config: {
           apiEndpoint: 'https://api.dygis.com',
-          apiKey: 'test-key-123'
-        }
+          apiKey: 'test-key-123',
+        },
       });
 
       await provider.save();
@@ -245,7 +245,7 @@ describe('MongoDB Connection Tests', () => {
       }
 
       const providers = await IotProvider.find({
-        farmId: provider.farmId
+        farmId: provider.farmId,
       });
 
       expect(providers.length).toBeGreaterThan(0);
@@ -273,10 +273,10 @@ describe('MongoDB Connection Tests', () => {
               deviceId: 'device-002',
               name: 'Temperature Sensor',
               type: 'temperature',
-              status: 'online'
-            }
-          }
-        }
+              status: 'online',
+            },
+          },
+        },
       );
 
       const updated = await IotProvider.findById(testProviderId);
@@ -301,8 +301,8 @@ test-key-data-here
         status: 'ACTIVE',
         validFrom: new Date(),
         metadata: {
-          environment: 'development' // ต้องเป็น development, staging, หรือ production
-        }
+          environment: 'development', // ต้องเป็น development, staging, หรือ production
+        },
       });
 
       expect(store).toBeDefined();
@@ -336,8 +336,8 @@ duplicate-test
           status: 'ACTIVE',
           validFrom: new Date(),
           metadata: {
-            environment: 'development'
-          }
+            environment: 'development',
+          },
         });
 
         // Should not reach here
@@ -359,12 +359,12 @@ duplicate-test
         data: { plant: 'Cannabis' },
         location: {
           type: 'Point',
-          coordinates: [100.5234, 13.7367] // Bangkok coordinates
+          coordinates: [100.5234, 13.7367], // Bangkok coordinates
         },
         hash: 'a'.repeat(64),
         signature: 'b'.repeat(128),
         previousHash: '0'.repeat(64),
-        userId: new mongoose.Types.ObjectId()
+        userId: new mongoose.Types.ObjectId(),
       });
 
       expect(record.location).toBeDefined();
@@ -381,11 +381,11 @@ duplicate-test
           $near: {
             $geometry: {
               type: 'Point',
-              coordinates: [100.5234, 13.7367]
+              coordinates: [100.5234, 13.7367],
             },
-            $maxDistance: 10000 // 10km
-          }
-        }
+            $maxDistance: 10000, // 10km
+          },
+        },
       }).limit(10);
 
       expect(Array.isArray(nearbyRecords)).toBe(true);
@@ -410,7 +410,7 @@ duplicate-test
           hash: hash, // hex string 64 characters
           signature: 'b'.repeat(128),
           previousHash: '0'.repeat(64),
-          userId: new mongoose.Types.ObjectId()
+          userId: new mongoose.Types.ObjectId(),
         });
       }
 
@@ -418,7 +418,7 @@ duplicate-test
       const duration = Date.now() - startTime;
 
       console.log(
-        `✓ Inserted ${batchSize} records in ${duration}ms (${(duration / batchSize).toFixed(2)}ms/record)`
+        `✓ Inserted ${batchSize} records in ${duration}ms (${(duration / batchSize).toFixed(2)}ms/record)`,
       );
       expect(duration).toBeLessThan(5000); // Should complete in < 5 seconds
     });
@@ -436,12 +436,12 @@ duplicate-test
             farmId: new mongoose.Types.ObjectId(),
             deviceId: `device-${i % 10}`,
             provider: 'dygis', // lowercase
-            sensorType: i % 2 === 0 ? 'temperature' : 'soil_moisture'
+            sensorType: i % 2 === 0 ? 'temperature' : 'soil_moisture',
           },
           timestamp: new Date(Date.now() - i * 60000), // 1 minute intervals
           value: 20 + Math.random() * 15,
           unit: i % 2 === 0 ? '°C' : '%',
-          quality: qualityOptions[i % 4] // enum string
+          quality: qualityOptions[i % 4], // enum string
         });
       }
 
@@ -449,7 +449,7 @@ duplicate-test
       const duration = Date.now() - startTime;
 
       console.log(
-        `✓ Inserted ${batchSize} IoT readings in ${duration}ms (${(duration / batchSize).toFixed(2)}ms/reading)`
+        `✓ Inserted ${batchSize} IoT readings in ${duration}ms (${(duration / batchSize).toFixed(2)}ms/reading)`,
       );
       expect(duration).toBeLessThan(10000); // Should complete in < 10 seconds
     });

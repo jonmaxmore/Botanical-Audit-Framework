@@ -11,7 +11,7 @@ if (!process.env.DEBUG) {
     debug: jest.fn(),
     info: jest.fn(),
     warn: jest.fn(),
-    error: jest.fn()
+    error: jest.fn(),
   };
 }
 
@@ -21,17 +21,25 @@ process.env.JWT_SECRET = 'test-jwt-secret-key-for-unit-tests';
 process.env.FARMER_JWT_SECRET = 'test-farmer-jwt-secret-key';
 
 // Mock logger to avoid file I/O during tests
-jest.mock('../infrastructure/logging/logger', () => ({
-  info: jest.fn(),
-  error: jest.fn(),
-  warn: jest.fn(),
-  debug: jest.fn()
-}), { virtual: true });
+jest.mock(
+  '../infrastructure/logging/logger',
+  () => ({
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+  }),
+  { virtual: true },
+);
 
 // Also mock the backend shared logger
-jest.mock('../../shared/logger/logger', () => ({
-  info: jest.fn(),
-  error: jest.fn(),
-  warn: jest.fn(),
-  debug: jest.fn()
-}), { virtual: true });
+jest.mock(
+  '../../shared/logger/logger',
+  () => ({
+    info: jest.fn(),
+    error: jest.fn(),
+    warn: jest.fn(),
+    debug: jest.fn(),
+  }),
+  { virtual: true },
+);

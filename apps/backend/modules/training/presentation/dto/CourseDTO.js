@@ -30,7 +30,7 @@ class CourseDTO {
         durationMinutes: module.durationMinutes,
         lessonCount: module.lessons?.length || 0,
         lessons: module.lessons,
-        isRequired: module.isRequired
+        isRequired: module.isRequired,
       })),
 
       totalDurationMinutes: course.totalDurationMinutes,
@@ -64,7 +64,7 @@ class CourseDTO {
       publishedAt: course.publishedAt,
       archivedAt: course.archivedAt,
       createdAt: course.createdAt,
-      updatedAt: course.updatedAt
+      updatedAt: course.updatedAt,
     };
   }
 
@@ -101,7 +101,7 @@ class CourseDTO {
       isFull: course.isFull(),
 
       publishedAt: course.publishedAt,
-      createdAt: course.createdAt
+      createdAt: course.createdAt,
     };
   }
 
@@ -118,7 +118,7 @@ class CourseDTO {
       level: course.level,
       status: course.status,
       thumbnailUrl: course.thumbnailUrl,
-      isEnrollmentAvailable: course.isEnrollmentAvailable()
+      isEnrollmentAvailable: course.isEnrollmentAvailable(),
     };
   }
 
@@ -129,7 +129,7 @@ class CourseDTO {
     return {
       success: true,
       message,
-      data
+      data,
     };
   }
 
@@ -140,7 +140,7 @@ class CourseDTO {
     return {
       success: false,
       message,
-      errors
+      errors,
     };
   }
 }

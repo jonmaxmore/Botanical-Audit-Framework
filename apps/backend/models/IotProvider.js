@@ -17,21 +17,21 @@ const IotProviderSchema = new mongoose.Schema(
       index: true,
       trim: true,
       uppercase: true,
-      match: [/^IOT-[A-Z0-9-]+$/, 'Provider ID must start with IOT-']
+      match: [/^IOT-[A-Z0-9-]+$/, 'Provider ID must start with IOT-'],
     },
 
     name: {
       type: String,
       required: [true, 'Provider name is required'],
       enum: ['dygis', 'malin', 'sensecap', 'thaismartfarm', 'custom'],
-      index: true
+      index: true,
     },
 
     farmId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: [true, 'Farm ID is required'],
-      index: true
+      index: true,
     },
 
     config: {
@@ -46,15 +46,15 @@ const IotProviderSchema = new mongoose.Schema(
         username: String,
         password: String,
         clientId: String,
-        topics: [String]
-      }
+        topics: [String],
+      },
     },
 
     devices: [
       {
         deviceId: {
           type: String,
-          required: true
+          required: true,
         },
         name: String,
         type: String,
@@ -65,17 +65,17 @@ const IotProviderSchema = new mongoose.Schema(
             unit: String,
             min: Number,
             max: Number,
-            critical: Number
-          }
+            critical: Number,
+          },
         ],
         lastSeen: Date,
         status: {
           type: String,
           enum: ['online', 'offline', 'error', 'unknown'],
-          default: 'unknown'
+          default: 'unknown',
         },
-        metadata: mongoose.Schema.Types.Mixed
-      }
+        metadata: mongoose.Schema.Types.Mixed,
+      },
     ],
 
     thresholds: [
@@ -85,15 +85,15 @@ const IotProviderSchema = new mongoose.Schema(
         max: Number,
         critical: Number,
         alertEmail: [String],
-        alertPhone: [String]
-      }
+        alertPhone: [String],
+      },
     ],
 
     status: {
       type: String,
       enum: ['ACTIVE', 'INACTIVE', 'ERROR', 'TESTING'],
       default: 'TESTING',
-      index: true
+      index: true,
     },
 
     lastSync: Date,
@@ -101,26 +101,26 @@ const IotProviderSchema = new mongoose.Schema(
     statistics: {
       totalReadings: {
         type: Number,
-        default: 0
+        default: 0,
       },
       lastReading: Date,
       errors: {
         type: Number,
-        default: 0
+        default: 0,
       },
-      uptime: Number
+      uptime: Number,
     },
 
     metadata: {
       notes: String,
       supportContact: String,
-      documentationUrl: String
-    }
+      documentationUrl: String,
+    },
   },
   {
     timestamps: true,
-    collection: 'iot_providers'
-  }
+    collection: 'iot_providers',
+  },
 );
 
 // Indexes
@@ -160,7 +160,7 @@ IotProviderSchema.methods.addDevice = async function (device) {
   this.devices.push({
     ...device,
     lastSeen: new Date(),
-    status: 'unknown'
+    status: 'unknown',
   });
 
   return await this.save();
@@ -225,10 +225,10 @@ IotProviderSchema.statics.getStatsByProvider = async function () {
         _id: '$name',
         count: { $sum: 1 },
         totalDevices: { $sum: { $size: '$devices' } },
-        totalReadings: { $sum: '$statistics.totalReadings' }
-      }
+        totalReadings: { $sum: '$statistics.totalReadings' },
+      },
     },
-    { $sort: { count: -1 } }
+    { $sort: { count: -1 } },
   ]);
 };
 
@@ -248,7 +248,7 @@ IotProviderSchema.post('save', function (doc) {
     providerId: doc.providerId,
     name: doc.name,
     farmId: doc.farmId,
-    deviceCount: doc.devices.length
+    deviceCount: doc.devices.length,
   });
 });
 
@@ -271,7 +271,7 @@ IotProviderSchema.set('toJSON', {
     }
 
     return ret;
-  }
+  },
 });
 
 const IotProviderModel = mongoose.model('IotProvider', IotProviderSchema);

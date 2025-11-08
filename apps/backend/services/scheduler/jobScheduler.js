@@ -28,7 +28,7 @@ class JobScheduler {
           logger.error('Scheduled AI QC processing failed:', error);
         }
       });
-      
+
       this.jobs.push({ name: 'AI QC Queue', job: aiQcJob });
       logger.info('Scheduled: AI QC Queue Processing (every 5 minutes)');
     }
@@ -42,7 +42,7 @@ class JobScheduler {
         logger.error('Certificate expiry check failed:', error);
       }
     });
-    
+
     this.jobs.push({ name: 'Certificate Expiry', job: certExpiryJob });
     logger.info('Scheduled: Certificate Expiry Check (daily at 8 AM)');
 
@@ -55,7 +55,7 @@ class JobScheduler {
         logger.error('Inspection reminder failed:', error);
       }
     });
-    
+
     this.jobs.push({ name: 'Inspection Reminder', job: inspectionReminderJob });
     logger.info('Scheduled: Inspection Reminder (daily at 7 AM)');
 
@@ -68,7 +68,7 @@ class JobScheduler {
         logger.error('Database cleanup failed:', error);
       }
     });
-    
+
     this.jobs.push({ name: 'Database Cleanup', job: cleanupJob });
     logger.info('Scheduled: Database Cleanup (weekly on Sunday at 2 AM)');
 
@@ -81,7 +81,7 @@ class JobScheduler {
         logger.error('Monthly report generation failed:', error);
       }
     });
-    
+
     this.jobs.push({ name: 'Monthly Reports', job: monthlyReportJob });
     logger.info('Scheduled: Monthly Reports (1st of each month at 1 AM)');
 
@@ -93,7 +93,7 @@ class JobScheduler {
    */
   stop() {
     logger.info('Stopping job scheduler');
-    
+
     this.jobs.forEach(({ name, job }) => {
       job.stop();
       logger.info(`Stopped job: ${name}`);
@@ -115,13 +115,13 @@ class JobScheduler {
    */
   async runJob(jobName) {
     const job = this.jobs.find(({ name }) => name === jobName);
-    
+
     if (!job) {
       throw new Error(`Job not found: ${jobName}`);
     }
 
     logger.info(`Manually running job: ${jobName}`);
-    
+
     // Jobs are functions, so we need to extract and call them
     // This is a workaround since cron jobs don't expose their callback directly
     switch (jobName) {

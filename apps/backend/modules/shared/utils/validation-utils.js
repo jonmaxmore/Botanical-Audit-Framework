@@ -24,14 +24,14 @@ function isValidPhoneNumber(phone) {
  */
 function isValidNationalId(nationalId) {
   if (!nationalId || nationalId.length !== 13) return false;
-  
+
   const digits = nationalId.split('').map(Number);
   let sum = 0;
-  
+
   for (let i = 0; i < 12; i++) {
     sum += digits[i] * (13 - i);
   }
-  
+
   const checkDigit = (11 - (sum % 11)) % 10;
   return checkDigit === digits[12];
 }
@@ -51,16 +51,16 @@ function sanitizeString(str) {
  */
 function validateRequired(data, requiredFields) {
   const missing = [];
-  
+
   for (const field of requiredFields) {
     if (!data[field] || data[field] === '') {
       missing.push(field);
     }
   }
-  
+
   return {
     isValid: missing.length === 0,
-    missing
+    missing,
   };
 }
 
@@ -70,7 +70,7 @@ function validateRequired(data, requiredFields) {
 function isValidDateRange(startDate, endDate) {
   const start = new Date(startDate);
   const end = new Date(endDate);
-  
+
   return start <= end;
 }
 
@@ -80,5 +80,5 @@ module.exports = {
   isValidNationalId,
   sanitizeString,
   validateRequired,
-  isValidDateRange
+  isValidDateRange,
 };

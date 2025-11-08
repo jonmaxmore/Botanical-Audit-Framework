@@ -11,19 +11,19 @@ class CacheService {
     this.redis = null;
     this.enabled = process.env.ENABLE_CACHE !== 'false'; // Default enabled
     this.defaultTTL = 3600; // 1 hour default
-    
+
     // TTL configurations for different data types (in seconds)
     this.ttl = {
-      AI_QC_RESULT: 3600,        // 1 hour
+      AI_QC_RESULT: 3600, // 1 hour
       INSPECTOR_AVAILABILITY: 900, // 15 minutes
-      APPLICATION_LIST: 300,      // 5 minutes
-      APPLICATION_DETAIL: 1800,   // 30 minutes
-      FARM_INFO: 7200,           // 2 hours
-      CERTIFICATE: 86400,        // 24 hours
-      USER_PROFILE: 3600,        // 1 hour
-      STATISTICS: 600,           // 10 minutes
-      CALENDAR_EVENTS: 1800,     // 30 minutes
-      NOTIFICATIONS: 300         // 5 minutes
+      APPLICATION_LIST: 300, // 5 minutes
+      APPLICATION_DETAIL: 1800, // 30 minutes
+      FARM_INFO: 7200, // 2 hours
+      CERTIFICATE: 86400, // 24 hours
+      USER_PROFILE: 3600, // 1 hour
+      STATISTICS: 600, // 10 minutes
+      CALENDAR_EVENTS: 1800, // 30 minutes
+      NOTIFICATIONS: 300, // 5 minutes
     };
 
     this.initialize();
@@ -40,7 +40,7 @@ class CacheService {
       }
 
       this.redis = redisManager.getClient();
-      
+
       if (this.redis) {
         logger.info('Cache service initialized with Redis');
       } else {
@@ -70,12 +70,12 @@ class CacheService {
 
     try {
       const data = await this.redis.get(key);
-      
+
       if (data) {
         logger.debug(`Cache hit: ${key}`);
         return JSON.parse(data);
       }
-      
+
       logger.debug(`Cache miss: ${key}`);
       return null;
     } catch (error) {
@@ -98,7 +98,7 @@ class CacheService {
 
       await this.redis.setex(key, expiry, serialized);
       logger.debug(`Cache set: ${key} (TTL: ${expiry}s)`);
-      
+
       return true;
     } catch (error) {
       logger.error(`Cache set error for ${key}:`, error);
@@ -134,12 +134,12 @@ class CacheService {
 
     try {
       const keys = await this.redis.keys(pattern);
-      
+
       if (keys.length > 0) {
         await this.redis.del(...keys);
         logger.debug(`Cache deleted ${keys.length} keys matching: ${pattern}`);
       }
-      
+
       return true;
     } catch (error) {
       logger.error(`Cache delete pattern error for ${pattern}:`, error);
@@ -227,7 +227,7 @@ class CacheService {
     const filterKey = JSON.stringify(filters);
     const hash = require('crypto').createHash('md5').update(filterKey).digest('hex');
     const key = this.generateKey('application_list', hash);
-    
+
     return await this.set(key, applications, this.ttl.APPLICATION_LIST);
   }
 
@@ -238,7 +238,7 @@ class CacheService {
     const filterKey = JSON.stringify(filters);
     const hash = require('crypto').createHash('md5').update(filterKey).digest('hex');
     const key = this.generateKey('application_list', hash);
-    
+
     return await this.get(key);
   }
 
@@ -265,10 +265,10 @@ class CacheService {
     // Delete specific application
     const appKey = this.generateKey('application', applicationId);
     await this.delete(appKey);
-    
+
     // Delete all application lists (since they might include this application)
     await this.deletePattern('gacp:application_list:*');
-    
+
     logger.info(`Invalidated cache for application: ${applicationId}`);
   }
 
@@ -399,7 +399,7 @@ class CacheService {
 
       // Warm frequently accessed statistics
       // This would be called during server startup or scheduled job
-      
+
       logger.info('Cache warming completed');
     } catch (error) {
       logger.error('Cache warming error:', error);
@@ -414,14 +414,14 @@ class CacheService {
       return {
         enabled: false,
         keys: 0,
-        memory: 0
+        memory: 0,
       };
     }
 
     try {
       // Get number of keys matching our prefix
       const keys = await this.redis.keys('gacp:*');
-      
+
       // Get Redis memory info
       const info = await this.redis.info('memory');
       const memoryMatch = info.match(/used_memory:(\d+)/);
@@ -430,15 +430,15 @@ class CacheService {
       return {
         enabled: true,
         keys: keys.length,
-        memory: Math.round(memory / 1024 / 1024 * 100) / 100, // MB
+        memory: Math.round((memory / 1024 / 1024) * 100) / 100, // MB
         patterns: {
           ai_qc: (await this.redis.keys('gacp:ai_qc:*')).length,
           applications: (await this.redis.keys('gacp:application*')).length,
           inspectors: (await this.redis.keys('gacp:inspector*')).length,
           users: (await this.redis.keys('gacp:user:*')).length,
           statistics: (await this.redis.keys('gacp:statistics:*')).length,
-          calendar: (await this.redis.keys('gacp:calendar:*')).length
-        }
+          calendar: (await this.redis.keys('gacp:calendar:*')).length,
+        },
       };
     } catch (error) {
       logger.error('Failed to get cache stats:', error);
@@ -446,7 +446,7 @@ class CacheService {
         enabled: true,
         keys: 0,
         memory: 0,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -461,12 +461,12 @@ class CacheService {
 
     try {
       const keys = await this.redis.keys('gacp:*');
-      
+
       if (keys.length > 0) {
         await this.redis.del(...keys);
         logger.info(`Cleared ${keys.length} cache entries`);
       }
-      
+
       return true;
     } catch (error) {
       logger.error('Clear cache error:', error);

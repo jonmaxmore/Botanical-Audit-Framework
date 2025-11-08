@@ -26,7 +26,7 @@ class QAVerificationService {
     try {
       this.logger.info('Starting QA verification', {
         applicationId,
-        verifierId: verifier._id
+        verifierId: verifier._id,
       });
 
       const application = await this.applicationRepository.findById(applicationId);
@@ -46,7 +46,7 @@ class QAVerificationService {
         documentCheck,
         photoCheck,
         reportCheck,
-        complianceCheck
+        complianceCheck,
       });
 
       // Determine verification status
@@ -57,7 +57,7 @@ class QAVerificationService {
         documentCheck,
         photoCheck,
         reportCheck,
-        complianceCheck
+        complianceCheck,
       });
 
       const result = {
@@ -67,28 +67,27 @@ class QAVerificationService {
           documents: documentCheck,
           photos: photoCheck,
           report: reportCheck,
-          compliance: complianceCheck
+          compliance: complianceCheck,
         },
         issues,
         verifiedBy: verifier._id,
         verifiedAt: new Date(),
         comments: verificationData.comments || '',
-        nextAction: this.determineNextAction(status, issues)
+        nextAction: this.determineNextAction(status, issues),
       };
 
       this.logger.info('QA verification completed', {
         applicationId,
         status,
         qaScore,
-        issuesCount: issues.length
+        issuesCount: issues.length,
       });
 
       return result;
-
     } catch (error) {
       this.logger.error('QA verification failed', {
         applicationId,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -112,7 +111,7 @@ class QAVerificationService {
       checks.push({
         type: 'MISSING_DOCUMENTS',
         severity: 'HIGH',
-        message: `Missing documents: ${missingDocs.join(', ')}`
+        message: `Missing documents: ${missingDocs.join(', ')}`,
       });
       score -= 30;
     }
@@ -122,7 +121,7 @@ class QAVerificationService {
       checks.push({
         type: 'POOR_QUALITY',
         severity: 'MEDIUM',
-        message: 'Document quality is poor (blurry, incomplete, or illegible)'
+        message: 'Document quality is poor (blurry, incomplete, or illegible)',
       });
       score -= 20;
     }
@@ -132,7 +131,7 @@ class QAVerificationService {
       checks.push({
         type: 'DATA_MISMATCH',
         severity: 'HIGH',
-        message: 'Document data does not match application data'
+        message: 'Document data does not match application data',
       });
       score -= 25;
     }
@@ -141,7 +140,7 @@ class QAVerificationService {
       passed: score >= 70,
       score: Math.max(0, score),
       checks,
-      issuesFound: checks.length
+      issuesFound: checks.length,
     };
   }
 
@@ -161,7 +160,7 @@ class QAVerificationService {
       checks.push({
         type: 'INSUFFICIENT_PHOTOS',
         severity: 'HIGH',
-        message: `Only ${photoCount} photos provided (minimum 5 required)`
+        message: `Only ${photoCount} photos provided (minimum 5 required)`,
       });
       score -= 30;
     }
@@ -171,22 +170,20 @@ class QAVerificationService {
       checks.push({
         type: 'POOR_PHOTO_QUALITY',
         severity: 'MEDIUM',
-        message: 'Photos are poor quality (blurry, dark, or unclear)'
+        message: 'Photos are poor quality (blurry, dark, or unclear)',
       });
       score -= 20;
     }
 
     // Check if photos show required areas
     const requiredAreas = ['farm_entrance', 'growing_area', 'storage', 'equipment'];
-    const missingAreas = requiredAreas.filter(area =>
-      !photoFeedback?.coveredAreas?.includes(area)
-    );
+    const missingAreas = requiredAreas.filter(area => !photoFeedback?.coveredAreas?.includes(area));
 
     if (missingAreas.length > 0) {
       checks.push({
         type: 'MISSING_COVERAGE',
         severity: 'MEDIUM',
-        message: `Missing photos of: ${missingAreas.join(', ')}`
+        message: `Missing photos of: ${missingAreas.join(', ')}`,
       });
       score -= 15 * missingAreas.length;
     }
@@ -196,7 +193,7 @@ class QAVerificationService {
       checks.push({
         type: 'PHOTO_MANIPULATION',
         severity: 'CRITICAL',
-        message: 'Photos appear to be manipulated or edited'
+        message: 'Photos appear to be manipulated or edited',
       });
       score -= 50;
     }
@@ -205,7 +202,7 @@ class QAVerificationService {
       passed: score >= 70,
       score: Math.max(0, score),
       checks,
-      issuesFound: checks.length
+      issuesFound: checks.length,
     };
   }
 
@@ -224,7 +221,7 @@ class QAVerificationService {
       checks.push({
         type: 'INCOMPLETE_REPORT',
         severity: 'HIGH',
-        message: 'Inspection report is incomplete or missing summary'
+        message: 'Inspection report is incomplete or missing summary',
       });
       score -= 30;
     }
@@ -234,7 +231,7 @@ class QAVerificationService {
       checks.push({
         type: 'UNCLEAR_REPORT',
         severity: 'MEDIUM',
-        message: 'Report is unclear or poorly written'
+        message: 'Report is unclear or poorly written',
       });
       score -= 20;
     }
@@ -244,7 +241,7 @@ class QAVerificationService {
       checks.push({
         type: 'POOR_DOCUMENTATION',
         severity: 'MEDIUM',
-        message: 'Findings are not well-documented or lack detail'
+        message: 'Findings are not well-documented or lack detail',
       });
       score -= 25;
     }
@@ -254,7 +251,7 @@ class QAVerificationService {
       checks.push({
         type: 'INAPPROPRIATE_RECOMMENDATIONS',
         severity: 'MEDIUM',
-        message: 'Recommendations do not match findings'
+        message: 'Recommendations do not match findings',
       });
       score -= 20;
     }
@@ -263,7 +260,7 @@ class QAVerificationService {
       passed: score >= 70,
       score: Math.max(0, score),
       checks,
-      issuesFound: checks.length
+      issuesFound: checks.length,
     };
   }
 
@@ -285,18 +282,18 @@ class QAVerificationService {
       'pestControl',
       'storage',
       'hygiene',
-      'recordKeeping'
+      'recordKeeping',
     ];
 
-    const missingCriteria = requiredCriteria.filter(criteria =>
-      !application.inspectionReport?.gacpChecklist?.[criteria]
+    const missingCriteria = requiredCriteria.filter(
+      criteria => !application.inspectionReport?.gacpChecklist?.[criteria],
     );
 
     if (missingCriteria.length > 0) {
       checks.push({
         type: 'MISSING_CRITERIA',
         severity: 'HIGH',
-        message: `Missing GACP criteria: ${missingCriteria.join(', ')}`
+        message: `Missing GACP criteria: ${missingCriteria.join(', ')}`,
       });
       score -= 15 * missingCriteria.length;
     }
@@ -306,7 +303,7 @@ class QAVerificationService {
       checks.push({
         type: 'UNJUSTIFIED_DECISION',
         severity: 'HIGH',
-        message: 'Approval/rejection decision is not properly justified'
+        message: 'Approval/rejection decision is not properly justified',
       });
       score -= 30;
     }
@@ -316,7 +313,7 @@ class QAVerificationService {
       checks.push({
         type: 'INACCURATE_RISK_ASSESSMENT',
         severity: 'MEDIUM',
-        message: 'Risk assessment appears inaccurate'
+        message: 'Risk assessment appears inaccurate',
       });
       score -= 20;
     }
@@ -325,7 +322,7 @@ class QAVerificationService {
       passed: score >= 70,
       score: Math.max(0, score),
       checks,
-      issuesFound: checks.length
+      issuesFound: checks.length,
     };
   }
 
@@ -336,17 +333,17 @@ class QAVerificationService {
    */
   calculateQAScore({ documentCheck, photoCheck, reportCheck, complianceCheck }) {
     const weights = {
-      documents: 0.25,  // 25%
-      photos: 0.25,     // 25%
-      report: 0.25,     // 25%
-      compliance: 0.25  // 25%
+      documents: 0.25, // 25%
+      photos: 0.25, // 25%
+      report: 0.25, // 25%
+      compliance: 0.25, // 25%
     };
 
     const score =
-      (documentCheck.score * weights.documents) +
-      (photoCheck.score * weights.photos) +
-      (reportCheck.score * weights.report) +
-      (complianceCheck.score * weights.compliance);
+      documentCheck.score * weights.documents +
+      photoCheck.score * weights.photos +
+      reportCheck.score * weights.report +
+      complianceCheck.score * weights.compliance;
 
     return Math.round(score);
   }
@@ -383,7 +380,7 @@ class QAVerificationService {
       ...documentCheck.checks,
       ...photoCheck.checks,
       ...reportCheck.checks,
-      ...complianceCheck.checks
+      ...complianceCheck.checks,
     ];
 
     // Sort by severity (CRITICAL > HIGH > MEDIUM > LOW)
@@ -425,7 +422,7 @@ class QAVerificationService {
       this.logger.info('Requesting re-inspection', {
         applicationId,
         verifierId: verifier._id,
-        reason
+        reason,
       });
 
       const application = await this.applicationRepository.findById(applicationId);
@@ -439,15 +436,14 @@ class QAVerificationService {
         requestedAt: new Date(),
         reason,
         originalInspectorId: application.routing?.assignedInspectorId,
-        status: 'PENDING_REASSIGNMENT'
+        status: 'PENDING_REASSIGNMENT',
       };
 
       return reInspectionRequest;
-
     } catch (error) {
       this.logger.error('Re-inspection request failed', {
         applicationId,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -462,28 +458,30 @@ class QAVerificationService {
     try {
       const applications = await this.applicationRepository.findAll({
         ...filters,
-        hasQAVerification: true
+        hasQAVerification: true,
       });
 
       const total = applications.length;
       const approved = applications.filter(a => a.qaVerification?.status === 'APPROVED').length;
-      const needsCorrection = applications.filter(a => a.qaVerification?.status === 'NEEDS_CORRECTION').length;
+      const needsCorrection = applications.filter(
+        a => a.qaVerification?.status === 'NEEDS_CORRECTION',
+      ).length;
       const rejected = applications.filter(a => a.qaVerification?.status === 'REJECTED').length;
 
-      const avgQAScore = total > 0
-        ? applications.reduce((sum, a) => sum + (a.qaVerification?.qaScore || 0), 0) / total
-        : 0;
+      const avgQAScore =
+        total > 0
+          ? applications.reduce((sum, a) => sum + (a.qaVerification?.qaScore || 0), 0) / total
+          : 0;
 
       return {
         total,
         approved,
         needsCorrection,
         rejected,
-        approvalRate: total > 0 ? (approved / total * 100).toFixed(1) : 0,
+        approvalRate: total > 0 ? ((approved / total) * 100).toFixed(1) : 0,
         avgQAScore: avgQAScore.toFixed(1),
-        rejectionRate: total > 0 ? (rejected / total * 100).toFixed(1) : 0
+        rejectionRate: total > 0 ? ((rejected / total) * 100).toFixed(1) : 0,
       };
-
     } catch (error) {
       this.logger.error('Failed to get QA statistics', { error: error.message });
       throw error;

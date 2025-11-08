@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
   nationalId: String,
   isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
 });
 
 const applicationSchema = new mongoose.Schema({
@@ -85,9 +85,9 @@ const applicationSchema = new mongoose.Schema({
       'PENDING_APPROVAL',
       'APPROVED',
       'REJECTED',
-      'CERTIFICATE_ISSUED'
+      'CERTIFICATE_ISSUED',
     ],
-    default: 'DRAFT'
+    default: 'DRAFT',
   },
   currentStep: { type: Number, default: 1 },
 
@@ -97,7 +97,7 @@ const applicationSchema = new mongoose.Schema({
     houseRegistration: { url: String, status: String, uploadedAt: Date },
     landDeed: { url: String, status: String, uploadedAt: Date },
     farmMap: { url: String, status: String, uploadedAt: Date },
-    waterQuality: { url: String, status: String, uploadedAt: Date }
+    waterQuality: { url: String, status: String, uploadedAt: Date },
   },
 
   // Review Data (Officer)
@@ -109,7 +109,7 @@ const applicationSchema = new mongoose.Schema({
     riskLevel: String,
     comments: String,
     decision: String,
-    reviewedAt: Date
+    reviewedAt: Date,
   },
 
   // Inspection Data (Inspector)
@@ -123,7 +123,7 @@ const applicationSchema = new mongoose.Schema({
       checklistItems: [{ id: Number, label: String, checked: Boolean }],
       decision: String,
       notes: String,
-      estimatedScore: Number
+      estimatedScore: Number,
     },
     onSiteData: {
       ccpScores: [
@@ -132,14 +132,14 @@ const applicationSchema = new mongoose.Schema({
           name: String,
           score: Number,
           maxScore: Number,
-          notes: String
-        }
+          notes: String,
+        },
       ],
       totalScore: Number,
       passStatus: String,
       finalNotes: String,
-      photos: [String]
-    }
+      photos: [String],
+    },
   },
 
   // Approval Data (Admin)
@@ -148,7 +148,7 @@ const applicationSchema = new mongoose.Schema({
     adminName: String,
     decision: String,
     notes: String,
-    approvedAt: Date
+    approvedAt: Date,
   },
 
   // Certificate
@@ -161,12 +161,12 @@ const applicationSchema = new mongoose.Schema({
       amount: Number,
       type: String,
       status: String,
-      paidAt: Date
-    }
+      paidAt: Date,
+    },
   ],
 
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
 });
 
 const certificateSchema = new mongoose.Schema({
@@ -183,7 +183,7 @@ const certificateSchema = new mongoose.Schema({
   qrCode: String,
   pdfUrl: String,
   createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now }
+  updatedAt: { type: Date, default: Date.now },
 });
 
 // Models
@@ -207,7 +207,7 @@ async function generateUsers() {
       name: 'สมชาย ใจดี',
       phoneNumber: '081-111-2222',
       nationalId: '1-5099-00123-45-6',
-      isActive: true
+      isActive: true,
     },
     {
       email: 'farmer2@example.com',
@@ -216,7 +216,7 @@ async function generateUsers() {
       name: 'สมศรี รักษ์ดิน',
       phoneNumber: '081-222-3333',
       nationalId: '1-5799-00234-56-7',
-      isActive: true
+      isActive: true,
     },
     {
       email: 'officer@example.com',
@@ -225,7 +225,7 @@ async function generateUsers() {
       name: 'นางสาว พิมพ์ใจ ตรวจสอบ',
       phoneNumber: '081-333-4444',
       nationalId: '1-1099-00345-67-8',
-      isActive: true
+      isActive: true,
     },
     {
       email: 'inspector@example.com',
@@ -234,7 +234,7 @@ async function generateUsers() {
       name: 'นาย วิชัย ตรวจการ',
       phoneNumber: '081-444-5555',
       nationalId: '1-1199-00456-78-9',
-      isActive: true
+      isActive: true,
     },
     {
       email: 'admin@example.com',
@@ -243,8 +243,8 @@ async function generateUsers() {
       name: 'ผู้จัดการ ระบบ',
       phoneNumber: '081-555-6666',
       nationalId: '1-1010-00567-89-0',
-      isActive: true
-    }
+      isActive: true,
+    },
   ];
 }
 
@@ -287,28 +287,28 @@ function generateApplications(users) {
         idCard: {
           url: '/uploads/id-card-001.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000),
         },
         houseRegistration: {
           url: '/uploads/house-001.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000),
         },
         landDeed: {
           url: '/uploads/land-001.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000),
         },
         farmMap: {
           url: '/uploads/map-001.jpg',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000),
         },
         waterQuality: {
           url: '/uploads/water-001.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000)
-        }
+          uploadedAt: new Date(now - 60 * 24 * 60 * 60 * 1000),
+        },
       },
 
       reviewData: {
@@ -319,7 +319,7 @@ function generateApplications(users) {
         riskLevel: 'low',
         comments: 'เอกสารครบถ้วน ถูกต้องทุกประการ',
         decision: 'APPROVED',
-        reviewedAt: new Date(now - 55 * 24 * 60 * 60 * 1000)
+        reviewedAt: new Date(now - 55 * 24 * 60 * 60 * 1000),
       },
 
       inspectionData: {
@@ -332,10 +332,10 @@ function generateApplications(users) {
           checklistItems: [
             { id: 1, label: 'ตรวจสอบพื้นที่ปลูก', checked: true },
             { id: 2, label: 'ตรวจสอบระบบน้ำ', checked: true },
-            { id: 3, label: 'ตรวจสอบโครงสร้าง', checked: true }
+            { id: 3, label: 'ตรวจสอบโครงสร้าง', checked: true },
           ],
           decision: 'ON_SITE_REQUIRED',
-          notes: 'ต้องลงพื้นที่เพิ่มเติม'
+          notes: 'ต้องลงพื้นที่เพิ่มเติม',
         },
         onSiteData: {
           ccpScores: [
@@ -344,7 +344,7 @@ function generateApplications(users) {
               name: 'Seed Selection & Planting',
               score: 14,
               maxScore: 15,
-              notes: 'เมล็ดพันธุ์มีคุณภาพดี'
+              notes: 'เมล็ดพันธุ์มีคุณภาพดี',
             },
             { id: 2, name: 'Soil Management', score: 15, maxScore: 15, notes: 'ดินอุดมสมบูรณ์' },
             { id: 3, name: 'Pest Management', score: 14, maxScore: 15, notes: 'ใช้ IPM' },
@@ -352,13 +352,13 @@ function generateApplications(users) {
             { id: 5, name: 'Post-Harvest', score: 15, maxScore: 15, notes: 'ดีมาก' },
             { id: 6, name: 'Storage', score: 9, maxScore: 10, notes: 'อุณหภูมิเหมาะสม' },
             { id: 7, name: 'Record Keeping', score: 10, maxScore: 10, notes: 'บันทึกครบถ้วน' },
-            { id: 8, name: 'Worker Safety', score: 5, maxScore: 5, notes: 'มาตรการครบ' }
+            { id: 8, name: 'Worker Safety', score: 5, maxScore: 5, notes: 'มาตรการครบ' },
           ],
           totalScore: 96,
           passStatus: 'PASS',
           finalNotes: 'ฟาร์มมีมาตรฐานสูงมาก แนะนำให้รับรอง ⭐⭐⭐⭐⭐',
-          photos: ['photo1.jpg', 'photo2.jpg']
-        }
+          photos: ['photo1.jpg', 'photo2.jpg'],
+        },
       },
 
       approvalData: {
@@ -366,7 +366,7 @@ function generateApplications(users) {
         adminName: admin.name,
         decision: 'APPROVED',
         notes: 'อนุมัติการรับรอง - คะแนน 96/100',
-        approvedAt: new Date(now - 20 * 24 * 60 * 60 * 1000)
+        approvedAt: new Date(now - 20 * 24 * 60 * 60 * 1000),
       },
 
       payments: [
@@ -375,19 +375,19 @@ function generateApplications(users) {
           amount: 5000,
           type: 'APPLICATION_FEE',
           status: 'PAID',
-          paidAt: new Date(now - 58 * 24 * 60 * 60 * 1000)
+          paidAt: new Date(now - 58 * 24 * 60 * 60 * 1000),
         },
         {
           id: 'pay-002',
           amount: 8000,
           type: 'INSPECTION_FEE',
           status: 'PAID',
-          paidAt: new Date(now - 35 * 24 * 60 * 60 * 1000)
-        }
+          paidAt: new Date(now - 35 * 24 * 60 * 60 * 1000),
+        },
       ],
 
       createdAt: new Date(now - 65 * 24 * 60 * 60 * 1000),
-      updatedAt: new Date(now - 20 * 24 * 60 * 60 * 1000)
+      updatedAt: new Date(now - 20 * 24 * 60 * 60 * 1000),
     },
 
     // Application 2: PENDING_APPROVAL (รอ Admin)
@@ -419,28 +419,28 @@ function generateApplications(users) {
         idCard: {
           url: '/uploads/id-card-002.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000),
         },
         houseRegistration: {
           url: '/uploads/house-002.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000),
         },
         landDeed: {
           url: '/uploads/land-002.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000),
         },
         farmMap: {
           url: '/uploads/map-002.jpg',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000),
         },
         waterQuality: {
           url: '/uploads/water-002.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000)
-        }
+          uploadedAt: new Date(now - 30 * 24 * 60 * 60 * 1000),
+        },
       },
 
       reviewData: {
@@ -451,7 +451,7 @@ function generateApplications(users) {
         riskLevel: 'medium',
         comments: 'เอกสารครบถ้วน',
         decision: 'APPROVED',
-        reviewedAt: new Date(now - 25 * 24 * 60 * 60 * 1000)
+        reviewedAt: new Date(now - 25 * 24 * 60 * 60 * 1000),
       },
 
       inspectionData: {
@@ -464,12 +464,12 @@ function generateApplications(users) {
           checklistItems: [
             { id: 1, label: 'ตรวจสอบพื้นที่ปลูก', checked: true },
             { id: 2, label: 'ตรวจสอบระบบน้ำ', checked: true },
-            { id: 3, label: 'ตรวจสอบโครงสร้าง', checked: true }
+            { id: 3, label: 'ตรวจสอบโครงสร้าง', checked: true },
           ],
           decision: 'SUFFICIENT',
           notes: 'ผ่าน VDO Call',
-          estimatedScore: 85
-        }
+          estimatedScore: 85,
+        },
       },
 
       payments: [
@@ -478,19 +478,19 @@ function generateApplications(users) {
           amount: 5000,
           type: 'APPLICATION_FEE',
           status: 'PAID',
-          paidAt: new Date(now - 28 * 24 * 60 * 60 * 1000)
+          paidAt: new Date(now - 28 * 24 * 60 * 60 * 1000),
         },
         {
           id: 'pay-004',
           amount: 8000,
           type: 'INSPECTION_FEE',
           status: 'PAID',
-          paidAt: new Date(now - 15 * 24 * 60 * 60 * 1000)
-        }
+          paidAt: new Date(now - 15 * 24 * 60 * 60 * 1000),
+        },
       ],
 
       createdAt: new Date(now - 35 * 24 * 60 * 60 * 1000),
-      updatedAt: new Date(now - 5 * 24 * 60 * 60 * 1000)
+      updatedAt: new Date(now - 5 * 24 * 60 * 60 * 1000),
     },
 
     // Application 3: DOCUMENT_REVIEW (รอ Officer)
@@ -522,28 +522,28 @@ function generateApplications(users) {
         idCard: {
           url: '/uploads/id-card-003.pdf',
           status: 'PENDING',
-          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000),
         },
         houseRegistration: {
           url: '/uploads/house-003.pdf',
           status: 'PENDING',
-          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000),
         },
         landDeed: {
           url: '/uploads/land-003.pdf',
           status: 'PENDING',
-          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000),
         },
         farmMap: {
           url: '/uploads/map-003.jpg',
           status: 'PENDING',
-          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000),
         },
         waterQuality: {
           url: '/uploads/water-003.pdf',
           status: 'PENDING',
-          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000)
-        }
+          uploadedAt: new Date(now - 5 * 24 * 60 * 60 * 1000),
+        },
       },
 
       payments: [
@@ -552,12 +552,12 @@ function generateApplications(users) {
           amount: 5000,
           type: 'APPLICATION_FEE',
           status: 'PAID',
-          paidAt: new Date(now - 6 * 24 * 60 * 60 * 1000)
-        }
+          paidAt: new Date(now - 6 * 24 * 60 * 60 * 1000),
+        },
       ],
 
       createdAt: new Date(now - 7 * 24 * 60 * 60 * 1000),
-      updatedAt: new Date(now - 5 * 24 * 60 * 60 * 1000)
+      updatedAt: new Date(now - 5 * 24 * 60 * 60 * 1000),
     },
 
     // Application 4: INSPECTION_SCHEDULED (รอ Inspector)
@@ -589,28 +589,28 @@ function generateApplications(users) {
         idCard: {
           url: '/uploads/id-card-004.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000),
         },
         houseRegistration: {
           url: '/uploads/house-004.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000),
         },
         landDeed: {
           url: '/uploads/land-004.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000),
         },
         farmMap: {
           url: '/uploads/map-004.jpg',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000)
+          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000),
         },
         waterQuality: {
           url: '/uploads/water-004.pdf',
           status: 'APPROVED',
-          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000)
-        }
+          uploadedAt: new Date(now - 20 * 24 * 60 * 60 * 1000),
+        },
       },
 
       reviewData: {
@@ -621,14 +621,14 @@ function generateApplications(users) {
         riskLevel: 'low',
         comments: 'เอกสารครบถ้วน',
         decision: 'APPROVED',
-        reviewedAt: new Date(now - 15 * 24 * 60 * 60 * 1000)
+        reviewedAt: new Date(now - 15 * 24 * 60 * 60 * 1000),
       },
 
       inspectionData: {
         inspectorId: inspector._id,
         inspectorName: inspector.name,
         type: 'VDO_CALL',
-        scheduledDate: new Date(now + 3 * 24 * 60 * 60 * 1000)
+        scheduledDate: new Date(now + 3 * 24 * 60 * 60 * 1000),
       },
 
       payments: [
@@ -637,19 +637,19 @@ function generateApplications(users) {
           amount: 5000,
           type: 'APPLICATION_FEE',
           status: 'PAID',
-          paidAt: new Date(now - 22 * 24 * 60 * 60 * 1000)
+          paidAt: new Date(now - 22 * 24 * 60 * 60 * 1000),
         },
         {
           id: 'pay-007',
           amount: 8000,
           type: 'INSPECTION_FEE',
           status: 'PAID',
-          paidAt: new Date(now - 10 * 24 * 60 * 60 * 1000)
-        }
+          paidAt: new Date(now - 10 * 24 * 60 * 60 * 1000),
+        },
       ],
 
       createdAt: new Date(now - 25 * 24 * 60 * 60 * 1000),
-      updatedAt: new Date(now - 8 * 24 * 60 * 60 * 1000)
+      updatedAt: new Date(now - 8 * 24 * 60 * 60 * 1000),
     },
 
     // Application 5: DRAFT (ยังไม่ส่ง)
@@ -680,8 +680,8 @@ function generateApplications(users) {
       documents: {},
 
       createdAt: new Date(now - 2 * 24 * 60 * 60 * 1000),
-      updatedAt: new Date(now - 2 * 24 * 60 * 60 * 1000)
-    }
+      updatedAt: new Date(now - 2 * 24 * 60 * 60 * 1000),
+    },
   ];
 }
 
@@ -696,11 +696,11 @@ function generateCertificate(application) {
     farmSize: application.farmSize,
     issueDate: application.approvalData.approvedAt,
     expiryDate: new Date(
-      new Date(application.approvalData.approvedAt).setFullYear(new Date().getFullYear() + 1)
+      new Date(application.approvalData.approvedAt).setFullYear(new Date().getFullYear() + 1),
     ),
     status: 'ACTIVE',
     qrCode: `https://gacp.example.com/verify/${application._id}`,
-    pdfUrl: `/certificates/${application._id}.pdf`
+    pdfUrl: `/certificates/${application._id}.pdf`,
   };
 }
 
@@ -737,7 +737,7 @@ async function seedDatabase() {
     const applications = await Application.insertMany(applicationsData);
     console.log(`✅ Created ${applications.length} applications:`);
     applications.forEach(a =>
-      console.log(`   - ${a.id || a._id}: ${a.farmName} (${a.workflowState})`)
+      console.log(`   - ${a.id || a._id}: ${a.farmName} (${a.workflowState})`),
     );
     console.log('');
 

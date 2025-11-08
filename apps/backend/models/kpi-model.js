@@ -15,21 +15,21 @@ const KPISchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true
+      index: true,
     },
 
     // Application reference
     applicationId: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
 
     // User reference
     userId: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
 
     // Role
@@ -37,7 +37,7 @@ const KPISchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['reviewer', 'inspector', 'approver'],
-      index: true
+      index: true,
     },
 
     // Task status
@@ -46,25 +46,25 @@ const KPISchema = new mongoose.Schema(
       required: true,
       enum: ['pending', 'in_progress', 'completed', 'delayed', 'cancelled'],
       default: 'pending',
-      index: true
+      index: true,
     },
 
     // Time tracking
     startTime: {
       type: Date,
       required: true,
-      index: true
+      index: true,
     },
 
     endTime: {
       type: Date,
-      default: null
+      default: null,
     },
 
     // Processing time (in minutes)
     processingTime: {
       type: Number,
-      default: null
+      default: null,
     },
 
     // SLA threshold (in hours)
@@ -75,59 +75,59 @@ const KPISchema = new mongoose.Schema(
         const thresholds = {
           reviewer: 72,
           inspector: 120,
-          approver: 48
+          approver: 48,
         };
         return thresholds[this.role] || 72;
-      }
+      },
     },
 
     // Delay tracking
     isDelayed: {
       type: Boolean,
       default: false,
-      index: true
+      index: true,
     },
 
     delayMinutes: {
       type: Number,
-      default: 0
+      default: 0,
     },
 
     // Feedback and comments
     comments: {
       type: String,
-      default: null
+      default: null,
     },
 
     feedbackScore: {
       type: Number,
       min: 1,
       max: 5,
-      default: null
+      default: null,
     },
 
     // Metadata
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {}
+      default: {},
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true
+      index: true,
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   },
   {
     timestamps: true,
-    collection: 'kpis'
-  }
+    collection: 'kpis',
+  },
 );
 
 // Compound indexes for better query performance
@@ -209,7 +209,7 @@ KPISchema.methods.cancelTask = function (reason) {
 // Static method: Find delayed tasks
 KPISchema.statics.findDelayed = function () {
   return this.find({
-    status: { $in: ['in_progress', 'delayed'] }
+    status: { $in: ['in_progress', 'delayed'] },
   }).sort({ startTime: 1 });
 };
 
@@ -238,26 +238,26 @@ KPISchema.statics.getRoleMetrics = function (role, filters = {}) {
         _id: null,
         totalTasks: { $sum: 1 },
         completedTasks: {
-          $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+          $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
         },
         delayedTasks: {
-          $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] }
+          $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] },
         },
         inProgressTasks: {
-          $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] }
+          $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] },
         },
         avgProcessingTime: {
           $avg: {
-            $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null]
-          }
+            $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null],
+          },
         },
         avgFeedbackScore: {
           $avg: {
-            $cond: [{ $ifNull: ['$feedbackScore', false] }, '$feedbackScore', null]
-          }
-        }
-      }
-    }
+            $cond: [{ $ifNull: ['$feedbackScore', false] }, '$feedbackScore', null],
+          },
+        },
+      },
+    },
   ]);
 };
 
@@ -282,23 +282,23 @@ KPISchema.statics.getUserMetrics = function (userId, filters = {}) {
         _id: null,
         totalTasks: { $sum: 1 },
         completedTasks: {
-          $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+          $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
         },
         delayedTasks: {
-          $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] }
+          $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] },
         },
         avgProcessingTime: {
           $avg: {
-            $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null]
-          }
+            $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null],
+          },
         },
         avgFeedbackScore: {
           $avg: {
-            $cond: [{ $ifNull: ['$feedbackScore', false] }, '$feedbackScore', null]
-          }
-        }
-      }
-    }
+            $cond: [{ $ifNull: ['$feedbackScore', false] }, '$feedbackScore', null],
+          },
+        },
+      },
+    },
   ]);
 };
 
@@ -308,7 +308,7 @@ KPISchema.statics.getDailyTrends = function (role = null, days = 30) {
   startDate.setDate(startDate.getDate() - days);
 
   const matchStage = {
-    startTime: { $gte: startDate }
+    startTime: { $gte: startDate },
   };
 
   if (role) {
@@ -320,23 +320,23 @@ KPISchema.statics.getDailyTrends = function (role = null, days = 30) {
     {
       $group: {
         _id: {
-          $dateToString: { format: '%Y-%m-%d', date: '$startTime' }
+          $dateToString: { format: '%Y-%m-%d', date: '$startTime' },
         },
         total: { $sum: 1 },
         completed: {
-          $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+          $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
         },
         delayed: {
-          $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] }
+          $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] },
         },
         avgProcessingTime: {
           $avg: {
-            $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null]
-          }
-        }
-      }
+            $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null],
+          },
+        },
+      },
     },
-    { $sort: { _id: 1 } }
+    { $sort: { _id: 1 } },
   ]);
 };
 

@@ -6,7 +6,7 @@
 const {
   CannabisSurveyTemplate,
   CannabisQuestion,
-  CannabisSurveyResponse
+  CannabisSurveyResponse,
 } = require('../models/CannabisSurvey');
 const SOP = require('../models/SOP');
 const User = require('../models/user-model');
@@ -33,20 +33,20 @@ class CannabisSurveyService {
             required: true,
             certificationLevel:
               templateData.cannabisMetadata?.gacpCompliance?.certificationLevel || 'standard',
-            sopRequired: true
+            sopRequired: true,
           },
           thcLimitCompliance: {
             required: true,
             maxThcLevel: templateData.cannabisMetadata?.thcLimitCompliance?.maxThcLevel || 0.2,
-            testingRequired: true
-          }
+            testingRequired: true,
+          },
         },
         settings: {
           ...templateData.settings,
           requireLicenseVerification: true,
           encryptSensitiveData: true,
-          auditTrail: true
-        }
+          auditTrail: true,
+        },
       });
 
       await cannabisTemplate.save();
@@ -62,8 +62,8 @@ class CannabisSurveyService {
         metadata: {
           templateId: cannabisTemplate._id,
           templateType: templateData.cannabisMetadata?.surveyType,
-          cannabisCategory: templateData.cannabisMetadata?.cannabisCategory
-        }
+          cannabisCategory: templateData.cannabisMetadata?.cannabisCategory,
+        },
       });
 
       return cannabisTemplate;
@@ -78,7 +78,7 @@ class CannabisSurveyService {
         'cannabisMetadata.cannabisCategory': cannabisCategory,
         region: { $in: [region, 'national'] },
         status: 'published',
-        'accessControl.allowedRoles': userRole
+        'accessControl.allowedRoles': userRole,
       };
 
       const templates = await CannabisSurveyTemplate.find(query)
@@ -96,7 +96,7 @@ class CannabisSurveyService {
     try {
       const questions = await CannabisQuestion.find({
         templateId,
-        isActive: true
+        isActive: true,
       }).sort({ order: 1 });
 
       return questions;
@@ -120,8 +120,8 @@ class CannabisSurveyService {
         cannabisProperties: {
           ...questionData.cannabisProperties,
           complianceCritical: this.isComplianceCritical(questionData.category, questionData.type),
-          riskLevel: this.assessQuestionRiskLevel(questionData.category, questionData.type)
-        }
+          riskLevel: this.assessQuestionRiskLevel(questionData.category, questionData.type),
+        },
       });
 
       await cannabisQuestion.save();
@@ -140,8 +140,8 @@ class CannabisSurveyService {
         cannabisProperties: {
           ...q.cannabisProperties,
           complianceCritical: this.isComplianceCritical(q.category, q.type),
-          riskLevel: this.assessQuestionRiskLevel(q.category, q.type)
-        }
+          riskLevel: this.assessQuestionRiskLevel(q.category, q.type),
+        },
       }));
 
       const createdQuestions = await CannabisQuestion.insertMany(questions);
@@ -179,10 +179,10 @@ class CannabisSurveyService {
               action: 'response_created',
               timestamp: new Date(),
               userId: userId,
-              details: { templateId: responseData.templateId }
-            }
-          ]
-        }
+              details: { templateId: responseData.templateId },
+            },
+          ],
+        },
       });
 
       await cannabisResponse.save();
@@ -230,13 +230,13 @@ class CannabisSurveyService {
         action: 'response_updated',
         timestamp: new Date(),
         userId: userId,
-        details: { changes: Object.keys(updateData) }
+        details: { changes: Object.keys(updateData) },
       });
 
       const updatedResponse = await CannabisSurveyResponse.findByIdAndUpdate(
         responseId,
         updateData,
-        { new: true, runValidators: true }
+        { new: true, runValidators: true },
       );
 
       return updatedResponse;
@@ -250,7 +250,7 @@ class CannabisSurveyService {
     try {
       const questions = await CannabisQuestion.find({
         templateId: template._id,
-        isActive: true
+        isActive: true,
       });
 
       let totalScore = 0;
@@ -261,7 +261,7 @@ class CannabisSurveyService {
         adoptedSOPs: [],
         complianceLevel: 0,
         gaps: [],
-        recommendations: []
+        recommendations: [],
       };
 
       for (const answer of answers) {
@@ -288,7 +288,7 @@ class CannabisSurveyService {
           riskFactors.push({
             factor: question.text,
             severity: question.cannabisProperties.riskLevel,
-            questionCategory: question.category
+            questionCategory: question.category,
           });
         }
 
@@ -310,7 +310,7 @@ class CannabisSurveyService {
         score:
           categoryScores[category].count > 0
             ? categoryScores[category].score / categoryScores[category].count
-            : 0
+            : 0,
       }));
 
       // Determine overall risk
@@ -328,17 +328,17 @@ class CannabisSurveyService {
         completionRate: answers.length / questions.length,
         complianceScore: {
           overall: Math.round(overallScore),
-          byCategory
+          byCategory,
         },
         riskProfile: {
           overallRisk,
-          riskFactors
+          riskFactors,
         },
         sopAdherence,
         qualityMetrics: {
           overallQuality: Math.round(overallScore),
-          qualityParameters: await this.extractQualityParameters(answers, questions)
-        }
+          qualityParameters: await this.extractQualityParameters(answers, questions),
+        },
       };
     } catch (error) {
       throw new Error(`Failed to calculate response analytics: ${error.message}`);
@@ -352,8 +352,8 @@ class CannabisSurveyService {
         'respondent.farmCode': farmCode,
         createdAt: {
           $gte: new Date(dateRange.startDate),
-          $lte: new Date(dateRange.endDate)
-        }
+          $lte: new Date(dateRange.endDate),
+        },
       };
 
       const responses = await CannabisSurveyResponse.find(query)
@@ -370,14 +370,14 @@ class CannabisSurveyService {
         sopAdoption: {
           adopted: new Set(),
           gaps: new Set(),
-          adoptionRate: 0
+          adoptionRate: 0,
         },
         regulatoryCompliance: {
           cannabisAct: 0,
           gacpStandards: 0,
-          fdaRegulations: 0
+          fdaRegulations: 0,
         },
-        recommendations: []
+        recommendations: [],
       };
 
       let totalComplianceScore = 0;
@@ -387,10 +387,10 @@ class CannabisSurveyService {
 
         // Track SOP adoption
         response.analytics.sopAdherence.adoptedSOPs.forEach(sop =>
-          complianceReport.sopAdoption.adopted.add(sop)
+          complianceReport.sopAdoption.adopted.add(sop),
         );
         response.analytics.sopAdherence.gaps.forEach(sop =>
-          complianceReport.sopAdoption.gaps.add(sop)
+          complianceReport.sopAdoption.gaps.add(sop),
         );
 
         // Track risk areas
@@ -404,7 +404,7 @@ class CannabisSurveyService {
         complianceReport.complianceTrend.push({
           date: response.createdAt,
           score: response.analytics.complianceScore.overall,
-          surveyType: response.templateId.cannabisMetadata.surveyType
+          surveyType: response.templateId.cannabisMetadata.surveyType,
         });
       }
 
@@ -475,10 +475,10 @@ class CannabisSurveyService {
                 adoptionDate: response.createdAt,
                 adoptionLevel: 'implemented',
                 evidenceSource: 'cannabis_survey',
-                evidenceId: responseId
-              }
-            }
-          }
+                evidenceId: responseId,
+              },
+            },
+          },
         );
       }
 
@@ -510,8 +510,8 @@ class CannabisSurveyService {
           metadata: {
             responseId: response._id,
             riskLevel: response.analytics.riskProfile.overallRisk,
-            riskFactors: response.analytics.riskProfile.riskFactors.slice(0, 3)
-          }
+            riskFactors: response.analytics.riskProfile.riskFactors.slice(0, 3),
+          },
         });
       }
 
@@ -528,8 +528,8 @@ class CannabisSurveyService {
           metadata: {
             responseId: response._id,
             complianceScore: response.analytics.complianceScore.overall,
-            improvements: response.analytics.sopAdherence.recommendations.slice(0, 3)
-          }
+            improvements: response.analytics.sopAdherence.recommendations.slice(0, 3),
+          },
         });
       }
 
@@ -552,8 +552,8 @@ class CannabisSurveyService {
           surveyResponseId: response._id,
           riskFactor: risk.factor,
           riskSeverity: risk.severity,
-          farmCode: response.respondent.farmCode
-        }
+          farmCode: response.respondent.farmCode,
+        },
       }));
 
       // Create tasks via Blitzz integration
@@ -573,7 +573,7 @@ class CannabisSurveyService {
       'license_verification',
       'quality_testing',
       'compliance_verification',
-      'regulatory_awareness'
+      'regulatory_awareness',
     ];
 
     const criticalTypes = ['license_verification', 'thc_measurement', 'compliance_checklist'];
@@ -585,7 +585,7 @@ class CannabisSurveyService {
     const highRiskCategories = [
       'quality_testing',
       'compliance_verification',
-      'regulatory_awareness'
+      'regulatory_awareness',
     ];
 
     const criticalTypes = ['license_verification', 'thc_measurement'];
@@ -651,7 +651,7 @@ class CannabisSurveyService {
           parameter: param.parameter,
           value: parseFloat(answer.answer) || 0,
           unit: param.acceptableRange?.unit || '',
-          status: this.assessParameterStatus(parseFloat(answer.answer) || 0, param.acceptableRange)
+          status: this.assessParameterStatus(parseFloat(answer.answer) || 0, param.acceptableRange),
         });
       }
     }
@@ -675,7 +675,7 @@ class CannabisSurveyService {
         priority: 'high',
         category: 'compliance_improvement',
         recommendation: 'Implement comprehensive compliance training program',
-        recommendationTH: 'จัดโปรแกรมการฝึกอบรมการปฏิบัติตามข้อกำหนดอย่างครอบคลุม'
+        recommendationTH: 'จัดโปรแกรมการฝึกอบรมการปฏิบัติตามข้อกำหนดอย่างครอบคลุม',
       });
     }
 
@@ -684,7 +684,7 @@ class CannabisSurveyService {
         priority: 'medium',
         category: 'sop_adoption',
         recommendation: 'Increase SOP adoption through focused training',
-        recommendationTH: 'เพิ่มการนำ SOP ไปใช้ผ่านการฝึกอบรมเฉพาะ'
+        recommendationTH: 'เพิ่มการนำ SOP ไปใช้ผ่านการฝึกอบรมเฉพาะ',
       });
     }
 
@@ -693,7 +693,7 @@ class CannabisSurveyService {
         priority: 'high',
         category: 'risk_management',
         recommendation: 'Develop systematic risk management procedures',
-        recommendationTH: 'พัฒนาขั้นตอนการบริหารความเสี่ยงอย่างเป็นระบบ'
+        recommendationTH: 'พัฒนาขั้นตอนการบริหารความเสี่ยงอย่างเป็นระบบ',
       });
     }
 
@@ -723,7 +723,7 @@ class CannabisSurveyService {
           descriptionTH: 'รวบรวมเอกสารกัญชาที่จำเป็นทั้งหมดสำหรับการตรวจสอบที่จะมาถึง',
           dueDate: new Date(audit.auditDate.getTime() - 7 * 24 * 60 * 60 * 1000), // 7 days before audit
           priority: 'high',
-          category: 'audit_preparation'
+          category: 'audit_preparation',
         },
         {
           title: 'Review SOP Compliance Status',
@@ -732,8 +732,8 @@ class CannabisSurveyService {
           descriptionTH: 'ตรวจสอบและปรับปรุงการปฏิบัติตาม SOP ตามผลการสำรวจ',
           dueDate: new Date(audit.auditDate.getTime() - 5 * 24 * 60 * 60 * 1000), // 5 days before audit
           priority: 'medium',
-          category: 'compliance_review'
-        }
+          category: 'compliance_review',
+        },
       ];
 
       for (const task of preparationTasks) {
@@ -742,8 +742,8 @@ class CannabisSurveyService {
           metadata: {
             auditId: audit._id,
             surveyResponseId: response._id,
-            farmCode: response.respondent.farmCode
-          }
+            farmCode: response.respondent.farmCode,
+          },
         });
       }
 
@@ -773,7 +773,7 @@ class CannabisSurveyService {
   async getResponsesByFarm(farmCode, limit = 10) {
     try {
       const responses = await CannabisSurveyResponse.find({
-        'respondent.farmCode': farmCode
+        'respondent.farmCode': farmCode,
       })
         .populate('templateId', 'title titleTH cannabisMetadata')
         .sort({ createdAt: -1 })

@@ -53,7 +53,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           validityPeriod: 24, // months
           renewalRequired: true,
           governmentReporting: true,
-          prerequisites: []
+          prerequisites: [],
         },
 
         GACP_ADVANCED: {
@@ -63,7 +63,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           validityPeriod: 36, // months
           renewalRequired: true,
           governmentReporting: true,
-          prerequisites: ['GACP_BASIC']
+          prerequisites: ['GACP_BASIC'],
         },
 
         GACP_INSPECTOR: {
@@ -73,7 +73,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           validityPeriod: 24, // months
           renewalRequired: true,
           governmentReporting: true,
-          prerequisites: ['GACP_ADVANCED']
+          prerequisites: ['GACP_ADVANCED'],
         },
 
         ORGANIC_FARMING: {
@@ -83,8 +83,8 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           validityPeriod: 36, // months
           renewalRequired: true,
           governmentReporting: false,
-          prerequisites: []
-        }
+          prerequisites: [],
+        },
       },
 
       // Assessment Requirements
@@ -97,8 +97,8 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           // Practical assessment requirements
           required: true,
           passingScore: 85,
-          evaluatorRequired: true
-        }
+          evaluatorRequired: true,
+        },
       },
 
       // Compliance and Reporting
@@ -107,22 +107,22 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           DOA: ['GACP_BASIC', 'GACP_ADVANCED', 'GACP_INSPECTOR'],
           FDA: ['GACP_BASIC', 'GACP_ADVANCED'],
           enabled: true,
-          reportingSchedule: 'weekly'
+          reportingSchedule: 'weekly',
         },
 
         auditTrail: {
           required: true,
           retentionPeriod: 7, // years
           includeAssessmentDetails: true,
-          includeTrainingProgress: true
+          includeTrainingProgress: true,
         },
 
         qualityAssurance: {
           randomAuditPercentage: 10, // Percentage of certificates to audit
           auditCriteria: ['completion_verification', 'score_validation', 'identity_confirmation'],
-          auditFrequency: 'monthly'
-        }
-      }
+          auditFrequency: 'monthly',
+        },
+      },
     };
 
     // Tracking data structures
@@ -131,7 +131,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
       completedCertifications: new Map(), // Completed certificates
       pendingAssessments: new Map(), // Pending assessments
       renewalSchedule: new Map(), // Renewal tracking
-      complianceStatus: new Map() // Compliance status tracking
+      complianceStatus: new Map(), // Compliance status tracking
     };
 
     // System status
@@ -175,14 +175,14 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         timestamp: new Date(),
         system: 'certification_tracking',
         status: 'active',
-        integrations: ['training', 'assessment', 'government', 'audit']
+        integrations: ['training', 'assessment', 'government', 'audit'],
       });
 
       return {
         success: true,
         message: 'Certification tracking system initialized',
         activeIntegrations: this.getActiveIntegrations(),
-        trackingStatus: 'operational'
+        trackingStatus: 'operational',
       };
     } catch (error) {
       logger.error('[CertificationTracking] Initialization error:', error);
@@ -258,7 +258,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
             completedCourses: [],
             currentCourse: courseId,
             overallProgress: 0,
-            milestones: this.generateProgressMilestones(pathway)
+            milestones: this.generateProgressMilestones(pathway),
           },
 
           // Assessment tracking
@@ -266,7 +266,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
             pendingAssessments: [],
             completedAssessments: [],
             overallScore: 0,
-            attemptsRemaining: this.certificationConfig.assessmentRequirements.maxRetries
+            attemptsRemaining: this.certificationConfig.assessmentRequirements.maxRetries,
           },
 
           // Compliance tracking
@@ -274,7 +274,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
             requiresGovernmentReporting: pathway.governmentReporting,
             auditTrailComplete: false,
             qualityAssurancePassed: false,
-            complianceScore: 0
+            complianceScore: 0,
           },
 
           // Timeline tracking
@@ -282,8 +282,8 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
             estimatedCompletion: this.calculateEstimatedCompletion(pathway),
             actualCompletion: null,
             renewalDue: null,
-            keyMilestones: []
-          }
+            keyMilestones: [],
+          },
         };
 
         // Store tracking record
@@ -297,12 +297,12 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           userId,
           certificationType: pathway.type,
           trackingId: `${userId}:${pathway.type}`,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
 
       console.log(
-        `[CertificationTracking] Started tracking for user ${userId} in ${certificationPathways.length} pathways`
+        `[CertificationTracking] Started tracking for user ${userId} in ${certificationPathways.length} pathways`,
       );
     } catch (error) {
       logger.error('[CertificationTracking] Enrollment tracking error:', error);
@@ -331,7 +331,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         courseProgress[courseId] = {
           lessonsCompleted: (courseProgress[courseId]?.lessonsCompleted || 0) + 1,
           overallProgress: progressPercentage,
-          lastUpdated: new Date()
+          lastUpdated: new Date(),
         };
 
         // Update overall certification progress
@@ -380,7 +380,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         trackingRecord.progress.courseCompletions[courseId] = {
           completionDate: completionTimestamp,
           score: completionScore,
-          attempts: completionData.attempts || 1
+          attempts: completionData.attempts || 1,
         };
 
         // Calculate updated progress
@@ -400,7 +400,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           this.emit('assessment_ready', {
             userId: trackingRecord.userId,
             certificationType: trackingRecord.certificationType,
-            assessmentDetails: await this.getAssessmentDetails(trackingRecord.certificationType)
+            assessmentDetails: await this.getAssessmentDetails(trackingRecord.certificationType),
           });
         }
 
@@ -413,7 +413,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           courseId,
           certificationType: trackingRecord.certificationType,
           overallProgress: trackingRecord.progress.overallProgress,
-          readyForAssessment: allCoursesCompleted
+          readyForAssessment: allCoursesCompleted,
         });
       }
     } catch (error) {
@@ -440,7 +440,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
 
       if (!trackingRecord) {
         console.log(
-          `[CertificationTracking] No tracking record found for assessment ${assessmentId}`
+          `[CertificationTracking] No tracking record found for assessment ${assessmentId}`,
         );
         return;
       }
@@ -459,7 +459,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         maxScore,
         completionDate: new Date(),
         passed: percentage >= requiredScore,
-        attemptNumber: trackingRecord.assessmentStatus.completedAssessments.length + 1
+        attemptNumber: trackingRecord.assessmentStatus.completedAssessments.length + 1,
       };
 
       trackingRecord.assessmentStatus.completedAssessments.push(assessmentRecord);
@@ -488,7 +488,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         certificationType: trackingRecord.certificationType,
         certificationEligible: assessmentRecord.passed
           ? await this.checkCertificationEligibility(trackingRecord)
-          : false
+          : false,
       });
     } catch (error) {
       logger.error('[CertificationTracking] Assessment processing error:', error);
@@ -508,7 +508,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
   async generateCertificate(trackingRecord) {
     try {
       console.log(
-        `[CertificationTracking] Generating certificate for user ${trackingRecord.userId}`
+        `[CertificationTracking] Generating certificate for user ${trackingRecord.userId}`,
       );
 
       const certType =
@@ -535,12 +535,12 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           // Compliance information
           governmentReported: certType.governmentReporting,
           auditTrailId: await this.generateAuditTrailId(trackingRecord),
-          qualityAssuranceVerified: true
+          qualityAssuranceVerified: true,
         },
 
         // Tracking information
         trackingId: `${trackingRecord.userId}:${trackingRecord.certificationType}`,
-        generationTimestamp: new Date()
+        generationTimestamp: new Date(),
       };
 
       // Generate certificate through certificate service
@@ -552,7 +552,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         certificateId: certificate.id,
         certificateNumber: certificateData.details.certificateNumber,
         issueDate: certificateData.details.issueDate,
-        expiryDate: certificateData.details.expiryDate
+        expiryDate: certificateData.details.expiryDate,
       };
 
       // Move to completed certifications
@@ -572,18 +572,18 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         userId: trackingRecord.userId,
         certificationType: trackingRecord.certificationType,
         certificateId: certificate.id,
-        certificateNumber: certificateData.details.certificateNumber
+        certificateNumber: certificateData.details.certificateNumber,
       });
 
       // Send notification to user
       this.emit('certification_completed', {
         userId: trackingRecord.userId,
         certificationType: trackingRecord.certificationType,
-        certificate: certificate
+        certificate: certificate,
       });
 
       console.log(
-        `[CertificationTracking] Certificate issued successfully: ${certificateData.details.certificateNumber}`
+        `[CertificationTracking] Certificate issued successfully: ${certificateData.details.certificateNumber}`,
       );
 
       return certificate;
@@ -619,36 +619,36 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
         // Renewal timeline
         renewalDue: trackingRecord.certificateDetails.expiryDate,
         renewalStartDate: new Date(
-          trackingRecord.certificateDetails.expiryDate.getTime() - 90 * 24 * 60 * 60 * 1000
+          trackingRecord.certificateDetails.expiryDate.getTime() - 90 * 24 * 60 * 60 * 1000,
         ), // 90 days before expiry
 
         // Renewal requirements
         renewalRequirements: {
           continuingEducation: await this.getContinuingEducationRequirements(
-            trackingRecord.certificationType
+            trackingRecord.certificationType,
           ),
           assessmentRequired: certType.minPassingScore > 0,
-          practicalEvaluation: certType.practicalEvaluation?.required || false
+          practicalEvaluation: certType.practicalEvaluation?.required || false,
         },
 
         // Tracking status
         status: 'ACTIVE',
         remindersSent: [],
         renewalInitiated: false,
-        renewalCompleted: false
+        renewalCompleted: false,
       };
 
       // Store renewal tracking
       this.trackingData.renewalSchedule.set(
         `${trackingRecord.userId}:${trackingRecord.certificationType}`,
-        renewalTrackingData
+        renewalTrackingData,
       );
 
       // Schedule renewal reminders
       await this.scheduleRenewalReminders(renewalTrackingData);
 
       console.log(
-        `[CertificationTracking] Renewal tracking setup for ${trackingRecord.certificationType}`
+        `[CertificationTracking] Renewal tracking setup for ${trackingRecord.certificationType}`,
       );
     } catch (error) {
       logger.error('[CertificationTracking] Renewal tracking setup error:', error);
@@ -672,7 +672,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
           totalCompletedCertifications: this.trackingData.completedCertifications.size,
           pendingRenewals: this.trackingData.renewalSchedule.size,
           complianceRate: await this.calculateComplianceRate(),
-          averageCompletionTime: await this.calculateAverageCompletionTime()
+          averageCompletionTime: await this.calculateAverageCompletionTime(),
         },
 
         activeTracking: {
@@ -681,7 +681,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
             certificationType: record.certificationType,
             progress: record.progress.overallProgress,
             status: record.currentStatus,
-            estimatedCompletion: record.timeline.estimatedCompletion
+            estimatedCompletion: record.timeline.estimatedCompletion,
           })),
 
           readyForAssessment: Array.from(this.trackingData.activeCertifications.values())
@@ -689,41 +689,41 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
             .map(record => ({
               userId: record.userId,
               certificationType: record.certificationType,
-              scheduledAssessments: record.assessmentStatus.pendingAssessments
-            }))
+              scheduledAssessments: record.assessmentStatus.pendingAssessments,
+            })),
         },
 
         renewalTracking: {
           upcomingRenewals: Array.from(this.trackingData.renewalSchedule.values())
             .filter(
-              renewal => renewal.renewalDue <= new Date(Date.now() + 90 * 24 * 60 * 60 * 1000)
+              renewal => renewal.renewalDue <= new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
             )
             .map(renewal => ({
               userId: renewal.userId,
               certificationType: renewal.certificationType,
               renewalDue: renewal.renewalDue,
-              status: renewal.status
+              status: renewal.status,
             })),
 
           overdueRenewals: Array.from(this.trackingData.renewalSchedule.values()).filter(
-            renewal => renewal.renewalDue < new Date() && !renewal.renewalCompleted
-          ).length
+            renewal => renewal.renewalDue < new Date() && !renewal.renewalCompleted,
+          ).length,
         },
 
         compliance: {
           governmentReporting: await this.getGovernmentReportingStatus(),
           qualityAssurance: await this.getQualityAssuranceStatus(),
-          auditCompliance: await this.getAuditComplianceStatus()
+          auditCompliance: await this.getAuditComplianceStatus(),
         },
 
         analytics: {
           certificationTrends: await this.getCertificationTrends(),
           completionRates: await this.getCompletionRates(),
-          assessmentPerformance: await this.getAssessmentPerformance()
+          assessmentPerformance: await this.getAssessmentPerformance(),
         },
 
         generatedAt: new Date(),
-        systemStatus: this.integrationActive ? 'ACTIVE' : 'INACTIVE'
+        systemStatus: this.integrationActive ? 'ACTIVE' : 'INACTIVE',
       };
 
       return dashboard;
@@ -750,14 +750,14 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
             holderDetails: await this.getUserDetails(trackingRecord.userId),
             issueDate: certificate.issueDate,
             expiryDate: certificate.expiryDate,
-            trainingDetails: trackingRecord.progress
-          }
+            trainingDetails: trackingRecord.progress,
+          },
         };
 
         await this.governmentIntegration.submitCertificateReport(reportData);
 
         console.log(
-          `[CertificationTracking] Certificate reported to government: ${certificate.certificateNumber}`
+          `[CertificationTracking] Certificate reported to government: ${certificate.certificateNumber}`,
         );
       }
     } catch (error) {
@@ -776,7 +776,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
       completedCertifications: this.trackingData.completedCertifications.size,
       renewalTrackingActive: this.trackingData.renewalSchedule.size,
       lastUpdate: new Date(),
-      integrations: this.getActiveIntegrations()
+      integrations: this.getActiveIntegrations(),
     };
   }
 
@@ -812,7 +812,7 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
       return {
         success: true,
         message: 'Certification tracking system stopped',
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     } catch (error) {
       logger.error('[CertificationTracking] Stop error:', error);

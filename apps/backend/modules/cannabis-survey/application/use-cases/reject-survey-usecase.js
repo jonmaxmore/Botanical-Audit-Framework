@@ -41,8 +41,8 @@ class RejectSurveyUseCase {
         reviewedAt: rejectedSurvey.reviewedAt,
         reviewNotes: null,
         rejectionReason: rejectedSurvey.rejectionReason,
-        revisionNotes: null
-      })
+        revisionNotes: null,
+      }),
     );
 
     return rejectedSurvey;

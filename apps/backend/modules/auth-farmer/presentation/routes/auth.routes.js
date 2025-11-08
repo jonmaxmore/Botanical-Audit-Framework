@@ -23,7 +23,7 @@ function createAuthRouter(authController) {
    * @access Public
    */
   router.post('/register', authValidator.validateRegister, (req, res) =>
-    authController.register(req, res)
+    authController.register(req, res),
   );
 
   /**
@@ -46,7 +46,7 @@ function createAuthRouter(authController) {
    * @access Public
    */
   router.post('/request-password-reset', authValidator.validateRequestPasswordReset, (req, res) =>
-    authController.requestPasswordReset(req, res)
+    authController.requestPasswordReset(req, res),
   );
 
   /**
@@ -55,7 +55,7 @@ function createAuthRouter(authController) {
    * @access Public
    */
   router.post('/reset-password', authValidator.validateResetPassword, (req, res) =>
-    authController.resetPassword(req, res)
+    authController.resetPassword(req, res),
   );
 
   /**
@@ -64,7 +64,7 @@ function createAuthRouter(authController) {
    * @access Private (requires authentication)
    */
   router.get('/profile', authMiddleware.authenticateFarmer, (req, res) =>
-    authController.getProfile(req, res)
+    authController.getProfile(req, res),
   );
 
   /**
@@ -76,7 +76,7 @@ function createAuthRouter(authController) {
     '/profile',
     authMiddleware.authenticateFarmer,
     authValidator.validateUpdateProfile,
-    (req, res) => authController.updateProfile(req, res)
+    (req, res) => authController.updateProfile(req, res),
   );
 
   return router;

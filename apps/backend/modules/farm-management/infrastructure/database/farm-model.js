@@ -20,7 +20,7 @@ const farmSchema = new mongoose.Schema(
     farmType: {
       type: String,
       required: true,
-      enum: Object.values(Farm.FARM_TYPE)
+      enum: Object.values(Farm.FARM_TYPE),
     },
     // Location
     address: { type: String, required: true },
@@ -38,7 +38,7 @@ const farmSchema = new mongoose.Schema(
     cultivationMethod: { type: String, required: true },
     irrigationType: {
       type: String,
-      enum: [...Object.values(Farm.IRRIGATION_TYPE), null]
+      enum: [...Object.values(Farm.IRRIGATION_TYPE), null],
     },
     soilType: { type: String },
     waterSource: { type: String },
@@ -48,7 +48,7 @@ const farmSchema = new mongoose.Schema(
       required: true,
       enum: Object.values(Farm.STATUS),
       default: Farm.STATUS.DRAFT,
-      index: true
+      index: true,
     },
     verificationNotes: { type: String },
     verifiedBy: { type: String, index: true },
@@ -57,12 +57,12 @@ const farmSchema = new mongoose.Schema(
     // Metadata
     submittedAt: { type: Date },
     createdAt: { type: Date, default: Date.now, index: true },
-    updatedAt: { type: Date, default: Date.now }
+    updatedAt: { type: Date, default: Date.now },
   },
   {
     collection: 'farms',
-    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' }
-  }
+    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
+  },
 );
 
 // Compound indexes
@@ -112,7 +112,7 @@ class MongoDBFarmRepository extends IFarmRepository {
       rejectionReason: doc.rejectionReason,
       submittedAt: doc.submittedAt,
       createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt
+      updatedAt: doc.updatedAt,
     });
   }
 
@@ -144,7 +144,7 @@ class MongoDBFarmRepository extends IFarmRepository {
       verifiedAt: farm.verifiedAt,
       rejectionReason: farm.rejectionReason,
       submittedAt: farm.submittedAt,
-      updatedAt: farm.updatedAt
+      updatedAt: farm.updatedAt,
     };
 
     if (farm.id) {
@@ -220,12 +220,12 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       const [docs, total] = await Promise.all([
         this.FarmModel.find(query).limit(limit).skip(skip).sort(sort),
-        this.FarmModel.countDocuments(query)
+        this.FarmModel.countDocuments(query),
       ]);
 
       return {
         farms: docs.map(doc => this.toDomain(doc)),
-        total
+        total,
       };
     } catch (error) {
       logger.error('Error finding farms with filters:', error);
@@ -279,7 +279,7 @@ class MongoDBFarmRepository extends IFarmRepository {
           const distance = c;
 
           return distance <= radiusInRadians;
-        }
+        },
       })
         .limit(limit)
         .skip(skip);
@@ -342,7 +342,7 @@ class MongoDBFarmRepository extends IFarmRepository {
       const result = await this.FarmModel.aggregate([
         { $group: { _id: '$province', count: { $sum: 1 } } },
         { $project: { province: '$_id', count: 1, _id: 0 } },
-        { $sort: { count: -1 } }
+        { $sort: { count: -1 } },
       ]);
 
       return result;
@@ -357,7 +357,7 @@ class MongoDBFarmRepository extends IFarmRepository {
       const result = await this.FarmModel.aggregate([
         { $group: { _id: '$status', count: { $sum: 1 } } },
         { $project: { status: '$_id', count: 1, _id: 0 } },
-        { $sort: { count: -1 } }
+        { $sort: { count: -1 } },
       ]);
 
       return result;

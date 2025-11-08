@@ -23,16 +23,16 @@ describe('Job Assignment System - Integration Tests', () => {
         findOne: jest.fn(),
         find: jest.fn(() => ({
           sort: jest.fn(() => ({
-            toArray: jest.fn(() => Promise.resolve([]))
-          }))
+            toArray: jest.fn(() => Promise.resolve([])),
+          })),
         })),
         insertOne: jest.fn(),
         findOneAndUpdate: jest.fn(),
         countDocuments: jest.fn(),
         aggregate: jest.fn(() => ({
-          toArray: jest.fn(() => Promise.resolve([]))
-        }))
-      }))
+          toArray: jest.fn(() => Promise.resolve([])),
+        })),
+      })),
     };
 
     // Mock user repository
@@ -40,16 +40,16 @@ describe('Job Assignment System - Integration Tests', () => {
       findByRole: jest.fn(() =>
         Promise.resolve([
           { id: 'user1', role: 'inspector' },
-          { id: 'user2', role: 'inspector' }
-        ])
-      )
+          { id: 'user2', role: 'inspector' },
+        ]),
+      ),
     };
 
     // Mock KPI service
     mockKpiService = {
       startTask: jest.fn(() => Promise.resolve()),
       completeTask: jest.fn(() => Promise.resolve()),
-      cancelTask: jest.fn(() => Promise.resolve())
+      cancelTask: jest.fn(() => Promise.resolve()),
     };
 
     // Initialize repository and service
@@ -175,7 +175,7 @@ describe('Job Assignment System - Integration Tests', () => {
           expectedDuration: 120,
           dueDate: new Date(Date.now() + 120 * 60 * 60 * 1000),
           actualDuration: null,
-          isOnTime: null
+          isOnTime: null,
         },
         save: jest.fn(() => Promise.resolve()),
         addComment: jest.fn(function (data) {
@@ -183,7 +183,7 @@ describe('Job Assignment System - Integration Tests', () => {
             commentId: 'comment-1',
             userId: data.userId,
             message: data.message,
-            timestamp: new Date()
+            timestamp: new Date(),
           });
         }),
         addAttachment: jest.fn(function (data) {
@@ -192,7 +192,7 @@ describe('Job Assignment System - Integration Tests', () => {
             type: data.type,
             fileName: data.fileName,
             fileUrl: data.fileUrl,
-            uploadedBy: data.uploadedBy
+            uploadedBy: data.uploadedBy,
           });
         }),
         recordHistory: jest.fn(function (data) {
@@ -205,7 +205,7 @@ describe('Job Assignment System - Integration Tests', () => {
         completeWithEvidence: jest.fn(function (data) {
           this.status = 'completed';
           this.completionEvidence = data;
-        })
+        }),
       };
 
       // Mock repository methods
@@ -216,7 +216,7 @@ describe('Job Assignment System - Integration Tests', () => {
       await service.addComment('test-assignment-1', {
         userId: 'user1',
         message: 'Starting inspection',
-        attachments: []
+        attachments: [],
       });
       expect(mockAssignment.addComment).toHaveBeenCalled();
       expect(mockAssignment.comments.length).toBe(1);
@@ -227,7 +227,7 @@ describe('Job Assignment System - Integration Tests', () => {
         type: 'INSPECTION_PHOTO',
         fileName: 'farm-photo.jpg',
         fileUrl: 'https://storage.example.com/farm-photo.jpg',
-        uploadedBy: 'user1'
+        uploadedBy: 'user1',
       });
       expect(mockAssignment.addAttachment).toHaveBeenCalled();
       expect(mockAssignment.attachments.length).toBe(1);
@@ -238,7 +238,7 @@ describe('Job Assignment System - Integration Tests', () => {
         reportUrl: 'https://storage.example.com/report.pdf',
         score: 85,
         recommendation: 'APPROVED',
-        summary: 'Farm meets GACP standards'
+        summary: 'Farm meets GACP standards',
       });
       expect(mockAssignment.completeWithEvidence).toHaveBeenCalled();
       expect(mockAssignment.status).toBe('completed');
@@ -257,9 +257,9 @@ describe('Job Assignment System - Integration Tests', () => {
           expectedDuration: 120,
           dueDate: new Date(Date.now() + 20 * 60 * 60 * 1000), // 20 hours from now
           actualDuration: null,
-          isOnTime: null
+          isOnTime: null,
         },
-        calculateSLA: JobAssignmentModel.prototype.calculateSLA
+        calculateSLA: JobAssignmentModel.prototype.calculateSLA,
       };
 
       await mockAssignment.calculateSLA();
@@ -276,9 +276,9 @@ describe('Job Assignment System - Integration Tests', () => {
           expectedDuration: 120,
           dueDate: new Date(Date.now() - 30 * 60 * 60 * 1000), // 30 hours ago (overdue)
           actualDuration: null,
-          isOnTime: null
+          isOnTime: null,
         },
-        calculateSLA: JobAssignmentModel.prototype.calculateSLA
+        calculateSLA: JobAssignmentModel.prototype.calculateSLA,
       };
 
       await mockAssignment.calculateSLA();

@@ -11,7 +11,7 @@ class PDFGeneratorService {
     if (!this.browser) {
       this.browser = await puppeteer.launch({
         headless: 'new',
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
       });
     }
     return this.browser;
@@ -30,7 +30,7 @@ class PDFGeneratorService {
           top: '25mm',
           right: '25mm',
           bottom: '25mm',
-          left: '25mm'
+          left: '25mm',
         },
         printBackground: true,
         displayHeaderFooter: true,
@@ -42,7 +42,7 @@ class PDFGeneratorService {
             <span class="pageNumber"></span> / <span class="totalPages"></span>
           </div>
         `,
-        ...options
+        ...options,
       };
 
       const pdfBuffer = await page.pdf(pdfOptions);

@@ -11,7 +11,7 @@ router.get('/inspections/upcoming', async (req, res) => {
 
     res.json({
       success: true,
-      inspections: []
+      inspections: [],
     });
   } catch (error) {
     console.error('Error fetching upcoming inspections:', error);

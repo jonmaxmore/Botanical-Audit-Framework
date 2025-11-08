@@ -27,7 +27,7 @@ const NutrientContentSchema = new mongoose.Schema({
       type: Number,
       required: true,
       min: 0,
-      max: 100
+      max: 100,
     },
     form: {
       type: String,
@@ -36,49 +36,49 @@ const NutrientContentSchema = new mongoose.Schema({
         'ammonium', // NH4 (ช้า)
         'urea', // CO(NH2)2 (ปานกลาง)
         'organic', // จากอินทรีย์
-        'mixed' // ผสม
-      ]
+        'mixed', // ผสม
+      ],
     },
     releaseRate: {
       type: String,
-      enum: ['immediate', 'slow', 'controlled', 'mixed']
-    }
+      enum: ['immediate', 'slow', 'controlled', 'mixed'],
+    },
   },
   phosphorus: {
     percentage: {
       type: Number,
       required: true,
       min: 0,
-      max: 100
+      max: 100,
     },
     form: String, // e.g., "P2O5", "rock phosphate"
     availability: {
       type: String,
-      enum: ['high', 'medium', 'low']
-    }
+      enum: ['high', 'medium', 'low'],
+    },
   },
   potassium: {
     percentage: {
       type: Number,
       required: true,
       min: 0,
-      max: 100
+      max: 100,
     },
-    form: String // e.g., "K2O", "potassium sulfate"
+    form: String, // e.g., "K2O", "potassium sulfate"
   },
 
   // Secondary Macronutrients
   calcium: {
     percentage: Number,
-    form: String
+    form: String,
   },
   magnesium: {
     percentage: Number,
-    form: String
+    form: String,
   },
   sulfur: {
     percentage: Number,
-    form: String
+    form: String,
   },
 
   // Micronutrients
@@ -86,34 +86,34 @@ const NutrientContentSchema = new mongoose.Schema({
     {
       element: {
         type: String,
-        enum: ['iron', 'zinc', 'manganese', 'copper', 'boron', 'molybdenum', 'chlorine']
+        enum: ['iron', 'zinc', 'manganese', 'copper', 'boron', 'molybdenum', 'chlorine'],
       },
       elementSymbol: String, // Fe, Zn, Mn, Cu, B, Mo, Cl
       percentage: Number,
       ppm: Number, // parts per million
       form: String, // e.g., "chelated", "sulfate"
-      elementThai: String
-    }
+      elementThai: String,
+    },
   ],
 
   // Other beneficial ingredients
   organicMatter: {
     percentage: Number,
-    source: String // e.g., "compost", "manure", "seaweed"
+    source: String, // e.g., "compost", "manure", "seaweed"
   },
   beneficialMicroorganisms: [
     {
       type: String, // e.g., "mycorrhizae", "trichoderma"
-      concentration: String
-    }
+      concentration: String,
+    },
   ],
   aminoAcids: {
     percentage: Number,
-    types: [String]
+    types: [String],
   },
   humic_fulvic_acids: {
-    percentage: Number
-  }
+    percentage: Number,
+  },
 });
 
 const ApplicationGuidelinesSchema = new mongoose.Schema({
@@ -127,8 +127,8 @@ const ApplicationGuidelinesSchema = new mongoose.Schema({
       'top_dressing', // โรยหน้าดิน
       'broadcasting', // หว่านกระจาย
       'band_placement', // ใส่เป็นแถว
-      'mixed' // หลายวิธี
-    ]
+      'mixed', // หลายวิธี
+    ],
   },
   methodThai: String,
 
@@ -139,7 +139,7 @@ const ApplicationGuidelinesSchema = new mongoose.Schema({
     frequency: String, // e.g., "weekly", "every 2 weeks"
     dilution: String, // For liquid fertilizers: "1:100"
     notes: String,
-    notesThai: String
+    notesThai: String,
   },
   floweringStage: {
     rate: String,
@@ -147,14 +147,14 @@ const ApplicationGuidelinesSchema = new mongoose.Schema({
     frequency: String,
     dilution: String,
     notes: String,
-    notesThai: String
+    notesThai: String,
   },
   seedlingStage: {
     rate: String,
     frequency: String,
     dilution: String,
     notes: String,
-    notesThai: String
+    notesThai: String,
   },
 
   // Mixing instructions
@@ -164,27 +164,27 @@ const ApplicationGuidelinesSchema = new mongoose.Schema({
     compatibility: [String], // Compatible products
     incompatible: [String], // Incompatible products
     instructions: String,
-    instructionsThai: String
+    instructionsThai: String,
   },
 
   // Timing
   bestTimeToApply: {
     timeOfDay: {
       type: String,
-      enum: ['morning', 'afternoon', 'evening', 'any']
+      enum: ['morning', 'afternoon', 'evening', 'any'],
     },
     weatherConditions: String, // "Avoid rain within 24h"
-    temperatureRange: String
+    temperatureRange: String,
   },
 
   // Safety
   preharvest_interval: {
     type: Number, // Days before harvest
-    required: true
+    required: true,
   },
   safetyPrecautions: [String],
   safetyPrecautionsThai: [String],
-  protectiveEquipment: [String]
+  protectiveEquipment: [String],
 });
 
 const FertilizerProductSchema = new mongoose.Schema(
@@ -193,13 +193,13 @@ const FertilizerProductSchema = new mongoose.Schema(
     productId: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
       // e.g., "FERT-TH-001"
     },
 
     productName: {
       type: String,
-      required: true
+      required: true,
     },
     productNameThai: String,
 
@@ -207,12 +207,12 @@ const FertilizerProductSchema = new mongoose.Schema(
     manufacturer: {
       name: {
         type: String,
-        required: true
+        required: true,
       },
       nameThai: String,
       country: String,
       website: String,
-      contact: String
+      contact: String,
     },
 
     // === Product Type ===
@@ -225,8 +225,8 @@ const FertilizerProductSchema = new mongoose.Schema(
           'organic', // อินทรีย์
           'bio_organic', // ชีวภาพอินทรีย์
           'bio_fertilizer', // ชีวภาพ
-          'mixed' // ผสม
-        ]
+          'mixed', // ผสม
+        ],
       },
       secondary: {
         type: String,
@@ -236,9 +236,9 @@ const FertilizerProductSchema = new mongoose.Schema(
           'granular', // เม็ด
           'pellet', // เม็ด
           'slow_release', // ละลายช้า
-          'controlled_release' // ควบคุมการละลาย
-        ]
-      }
+          'controlled_release', // ควบคุมการละลาย
+        ],
+      },
     },
 
     // === Registration & Compliance ===
@@ -247,20 +247,20 @@ const FertilizerProductSchema = new mongoose.Schema(
       registrationNumber: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
         // e.g., "ปอ.1-12345/2567"
       },
       issuedDate: Date,
       expiryDate: Date,
       issuingAuthority: {
         type: String,
-        default: 'กรมวิชาการเกษตร (Department of Agriculture)'
+        default: 'กรมวิชาการเกษตร (Department of Agriculture)',
       },
       status: {
         type: String,
         enum: ['active', 'expired', 'suspended', 'cancelled'],
-        default: 'active'
-      }
+        default: 'active',
+      },
     },
 
     // GACP & Certifications
@@ -268,11 +268,11 @@ const FertilizerProductSchema = new mongoose.Schema(
       gacpApproved: {
         type: Boolean,
         required: true,
-        default: false
+        default: false,
       },
       organicCertified: {
         type: Boolean,
-        default: false
+        default: false,
       },
       certifications: [
         {
@@ -282,9 +282,9 @@ const FertilizerProductSchema = new mongoose.Schema(
           certificateNumber: String,
           issuedDate: Date,
           expiryDate: Date,
-          documentUrl: String
-        }
-      ]
+          documentUrl: String,
+        },
+      ],
       // Accepted certifications: Organic Thailand, IFOAM, EU Organic, USDA Organic, etc.
     },
 
@@ -293,24 +293,24 @@ const FertilizerProductSchema = new mongoose.Schema(
       containsHumanWaste: {
         type: Boolean,
         default: false,
-        required: true
+        required: true,
         // MUST be false per GACP
       },
       containsHeavyMetals: {
         type: Boolean,
-        default: false
+        default: false,
       },
       containsProhibitedChemicals: {
         type: Boolean,
-        default: false
+        default: false,
       },
-      notes: String
+      notes: String,
     },
 
     // === NPK & Nutrient Content ===
     npkRatio: {
       type: String,
-      required: true
+      required: true,
       // e.g., "20-10-20", "15-15-15", "5-10-10"
     },
     nutrients: NutrientContentSchema,
@@ -320,31 +320,31 @@ const FertilizerProductSchema = new mongoose.Schema(
       plants: [
         {
           type: String,
-          enum: ['cannabis', 'turmeric', 'ginger', 'black_galingale', 'plai', 'kratom', 'all']
-        }
+          enum: ['cannabis', 'turmeric', 'ginger', 'black_galingale', 'plai', 'kratom', 'all'],
+        },
       ],
       growthStages: [
         {
           type: String,
-          enum: ['seedling', 'vegetative', 'flowering', 'fruiting', 'all']
-        }
+          enum: ['seedling', 'vegetative', 'flowering', 'fruiting', 'all'],
+        },
       ],
       cultivationMethods: [
         {
           type: String,
-          enum: ['soil', 'hydroponic', 'coco', 'soilless', 'organic', 'all']
-        }
+          enum: ['soil', 'hydroponic', 'coco', 'soilless', 'organic', 'all'],
+        },
       ],
       soilTypes: [
         {
           type: String,
-          enum: ['sandy', 'clay', 'loam', 'silt', 'peat', 'all']
-        }
+          enum: ['sandy', 'clay', 'loam', 'silt', 'peat', 'all'],
+        },
       ],
       soilPHRange: {
         min: Number,
-        max: Number
-      }
+        max: Number,
+      },
     },
 
     // === Application Guidelines ===
@@ -356,41 +356,41 @@ const FertilizerProductSchema = new mongoose.Schema(
         region: {
           type: String,
           enum: ['north', 'northeast', 'central', 'east', 'west', 'south', 'nationwide'],
-          default: 'nationwide'
+          default: 'nationwide',
         },
         size: {
           amount: Number,
           unit: {
             type: String,
-            enum: ['kg', 'liter', 'gram', 'ml', 'ton']
-          }
+            enum: ['kg', 'liter', 'gram', 'ml', 'ton'],
+          },
         },
         price: {
           amount: Number,
           currency: {
             type: String,
-            default: 'THB'
-          }
+            default: 'THB',
+          },
         },
         pricePerUnit: Number, // Calculated: price / size
         bulk_discount: {
           minQuantity: Number,
-          discountPercent: Number
-        }
-      }
+          discountPercent: Number,
+        },
+      },
     ],
 
     // === Availability ===
     availability: {
       inStock: {
         type: Boolean,
-        default: true
+        default: true,
       },
       availableRegions: [
         {
           type: String,
-          enum: ['north', 'northeast', 'central', 'east', 'west', 'south']
-        }
+          enum: ['north', 'northeast', 'central', 'east', 'west', 'south'],
+        },
       ],
       suppliers: [
         {
@@ -398,7 +398,7 @@ const FertilizerProductSchema = new mongoose.Schema(
           nameThai: String,
           type: {
             type: String,
-            enum: ['manufacturer', 'distributor', 'retailer', 'online']
+            enum: ['manufacturer', 'distributor', 'retailer', 'online'],
           },
           location: String,
           province: String,
@@ -406,18 +406,18 @@ const FertilizerProductSchema = new mongoose.Schema(
             phone: String,
             email: String,
             website: String,
-            line: String
+            line: String,
           },
-          verified: Boolean
-        }
+          verified: Boolean,
+        },
       ],
       onlineStores: [
         {
           platform: String, // e.g., "Lazada", "Shopee"
           url: String,
-          price: Number
-        }
-      ]
+          price: Number,
+        },
+      ],
     },
 
     // === Performance Data ===
@@ -425,32 +425,32 @@ const FertilizerProductSchema = new mongoose.Schema(
       effectivenessRating: {
         type: Number,
         min: 0,
-        max: 5
+        max: 5,
       },
       yieldImpact: {
         averageIncrease: Number, // %
-        studiesBased: Number // number of studies/reports
+        studiesBased: Number, // number of studies/reports
       },
       userSatisfaction: {
         rating: {
           type: Number,
           min: 0,
-          max: 5
+          max: 5,
         },
-        numberOfReviews: Number
+        numberOfReviews: Number,
       },
       environmentalImpact: {
         leachingRisk: {
           type: String,
-          enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+          enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
         },
         waterPollutionRisk: {
           type: String,
-          enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+          enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
         },
         carbonFootprint: String,
-        sustainabilityScore: Number // 0-100
-      }
+        sustainabilityScore: Number, // 0-100
+      },
     },
 
     // === Storage & Handling ===
@@ -458,28 +458,28 @@ const FertilizerProductSchema = new mongoose.Schema(
       shelfLife: {
         duration: Number, // months
         conditions: String, // "Cool, dry place"
-        conditionsThai: String
+        conditionsThai: String,
       },
       temperature: {
         min: Number, // °C
-        max: Number
+        max: Number,
       },
       humidity: {
-        max: Number // %
+        max: Number, // %
       },
       packaging: {
         type: String, // "Sealed bag", "Bottle"
         material: String,
-        recyclable: Boolean
+        recyclable: Boolean,
       },
       hazards: [
         {
           type: String,
-          enum: ['flammable', 'corrosive', 'toxic', 'explosive', 'none']
-        }
+          enum: ['flammable', 'corrosive', 'toxic', 'explosive', 'none'],
+        },
       ],
       storageWarnings: [String],
-      storageWarningsThai: [String]
+      storageWarningsThai: [String],
     },
 
     // === User Reviews ===
@@ -487,16 +487,16 @@ const FertilizerProductSchema = new mongoose.Schema(
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User'
+          ref: 'User',
         },
         farmId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Farm'
+          ref: 'Farm',
         },
         rating: {
           type: Number,
           min: 1,
-          max: 5
+          max: 5,
         },
         review: String,
         plantUsedOn: String,
@@ -505,13 +505,13 @@ const FertilizerProductSchema = new mongoose.Schema(
         verified: Boolean, // Verified purchase
         helpful: {
           type: Number,
-          default: 0
+          default: 0,
         },
         createdAt: {
           type: Date,
-          default: Date.now
-        }
-      }
+          default: Date.now,
+        },
+      },
     ],
 
     // === Images & Documents ===
@@ -520,7 +520,7 @@ const FertilizerProductSchema = new mongoose.Schema(
       labelImage: String,
       certificationDocs: [String],
       msdsDocument: String, // Material Safety Data Sheet
-      technicalDatasheet: String
+      technicalDatasheet: String,
     },
 
     // === AI/ML Features ===
@@ -532,26 +532,26 @@ const FertilizerProductSchema = new mongoose.Schema(
       seasonalDemand: [
         {
           month: Number, // 1-12
-          demandLevel: Number // 0-100
-        }
-      ]
+          demandLevel: Number, // 0-100
+        },
+      ],
     },
 
     // === Status & Metadata ===
     status: {
       type: String,
       enum: ['active', 'discontinued', 'out_of_stock', 'pending_approval'],
-      default: 'active'
+      default: 'active',
     },
 
     featured: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     verified: {
       type: Boolean,
-      default: false
+      default: false,
       // Verified by admin/expert
     },
 
@@ -559,20 +559,20 @@ const FertilizerProductSchema = new mongoose.Schema(
       completeness: Number, // 0-100
       lastVerified: Date,
       verifiedBy: String,
-      needsUpdate: Boolean
+      needsUpdate: Boolean,
     },
 
     version: {
       type: Number,
-      default: 1
+      default: 1,
     },
 
     notes: String,
-    notesThai: String
+    notesThai: String,
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 // === Indexes ===
@@ -587,7 +587,7 @@ FertilizerProductSchema.index({ 'performance.userSatisfaction.rating': -1 });
 FertilizerProductSchema.index({
   productName: 'text',
   productNameThai: 'text',
-  brand: 'text'
+  brand: 'text',
 });
 
 // === Virtual Fields ===
@@ -622,7 +622,7 @@ FertilizerProductSchema.statics.getGACPApproved = function (filters = {}) {
     'registration.status': 'active',
     'prohibited.containsHumanWaste': false,
     status: 'active',
-    ...filters
+    ...filters,
   });
 };
 
@@ -634,7 +634,7 @@ FertilizerProductSchema.statics.getOrganicFertilizers = function (filters = {}) 
     'compliance.organicCertified': true,
     'type.primary': { $in: ['organic', 'bio_organic', 'bio_fertilizer'] },
     status: 'active',
-    ...filters
+    ...filters,
   });
 };
 
@@ -646,18 +646,18 @@ FertilizerProductSchema.statics.findByNPKRatio = function (targetRatio, toleranc
   return this.find({
     'nutrients.nitrogen.percentage': {
       $gte: targetRatio.N - tolerance,
-      $lte: targetRatio.N + tolerance
+      $lte: targetRatio.N + tolerance,
     },
     'nutrients.phosphorus.percentage': {
       $gte: targetRatio.P - tolerance,
-      $lte: targetRatio.P + tolerance
+      $lte: targetRatio.P + tolerance,
     },
     'nutrients.potassium.percentage': {
       $gte: targetRatio.K - tolerance,
-      $lte: targetRatio.K + tolerance
+      $lte: targetRatio.K + tolerance,
     },
     'compliance.gacpApproved': true,
-    status: 'active'
+    status: 'active',
   }).sort({ 'performance.userSatisfaction.rating': -1 });
 };
 
@@ -667,13 +667,13 @@ FertilizerProductSchema.statics.findByNPKRatio = function (targetRatio, toleranc
 FertilizerProductSchema.statics.getForGrowthStage = function (
   plantType,
   growthStage,
-  region = null
+  region = null,
 ) {
   const query = {
     'recommendedFor.plants': { $in: [plantType, 'all'] },
     'recommendedFor.growthStages': { $in: [growthStage, 'all'] },
     'compliance.gacpApproved': true,
-    status: 'active'
+    status: 'active',
   };
 
   if (region) {
@@ -690,7 +690,7 @@ FertilizerProductSchema.statics.getTopRated = function (limit = 10) {
   return this.find({
     status: 'active',
     'compliance.gacpApproved': true,
-    'performance.userSatisfaction.rating': { $gte: 4.0 }
+    'performance.userSatisfaction.rating': { $gte: 4.0 },
   })
     .sort({ 'performance.userSatisfaction.rating': -1 })
     .limit(limit);
@@ -703,11 +703,11 @@ FertilizerProductSchema.statics.searchProducts = function (query) {
   return this.find(
     {
       $text: { $search: query },
-      status: 'active'
+      status: 'active',
     },
     {
-      score: { $meta: 'textScore' }
-    }
+      score: { $meta: 'textScore' },
+    },
   ).sort({ score: { $meta: 'textScore' } });
 };
 
@@ -765,7 +765,7 @@ FertilizerProductSchema.methods.calculateCost = function (farmSize, growthStage,
     unit: 'kg',
     cost,
     currency: 'THB',
-    pricePerUnit: price.pricePerUnit
+    pricePerUnit: price.pricePerUnit,
   };
 };
 

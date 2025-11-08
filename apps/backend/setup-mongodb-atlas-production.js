@@ -31,7 +31,7 @@ const config = {
     publicKey: process.env.MONGODB_ATLAS_PUBLIC_KEY,
     privateKey: process.env.MONGODB_ATLAS_PRIVATE_KEY,
     groupId: process.env.MONGODB_ATLAS_GROUP_ID, // Project ID
-    apiUrl: 'https://cloud.mongodb.com/api/atlas/v1.0'
+    apiUrl: 'https://cloud.mongodb.com/api/atlas/v1.0',
   },
 
   // Cluster Configuration
@@ -44,7 +44,7 @@ const config = {
     diskSizeGB: 10,
     backupEnabled: true,
     autoScalingEnabled: true,
-    autoScalingMaxInstanceSize: 'M30'
+    autoScalingMaxInstanceSize: 'M30',
   },
 
   // Database Configuration
@@ -62,8 +62,8 @@ const config = {
           { key: { userId: 1 }, name: 'idx_userId' },
           { key: { farmId: 1 }, name: 'idx_farmId' },
           { key: { createdAt: -1 }, name: 'idx_createdAt' },
-          { key: { 'data.location': '2dsphere' }, name: 'idx_location_geo' }
-        ]
+          { key: { 'data.location': '2dsphere' }, name: 'idx_location_geo' },
+        ],
       },
       {
         name: 'audit_log',
@@ -75,8 +75,8 @@ const config = {
           { key: { recordId: 1 }, name: 'idx_recordId' },
           { key: { userId: 1 }, name: 'idx_userId' },
           { key: { timestamp: -1 }, name: 'idx_timestamp' },
-          { key: { action: 1 }, name: 'idx_action' }
-        ]
+          { key: { action: 1 }, name: 'idx_action' },
+        ],
       },
       {
         name: 'iot_readings',
@@ -86,8 +86,8 @@ const config = {
         granularity: 'minutes',
         indexes: [
           { key: { 'metadata.farmId': 1, timestamp: -1 }, name: 'idx_farm_time' },
-          { key: { 'metadata.deviceId': 1, timestamp: -1 }, name: 'idx_device_time' }
-        ]
+          { key: { 'metadata.deviceId': 1, timestamp: -1 }, name: 'idx_device_time' },
+        ],
       },
       {
         name: 'iot_providers',
@@ -96,8 +96,8 @@ const config = {
         indexes: [
           { key: { provider: 1, farmId: 1 }, unique: true, name: 'idx_provider_farm' },
           { key: { userId: 1 }, name: 'idx_userId' },
-          { key: { status: 1 }, name: 'idx_status' }
-        ]
+          { key: { status: 1 }, name: 'idx_status' },
+        ],
       },
       {
         name: 'signature_store',
@@ -106,8 +106,8 @@ const config = {
         indexes: [
           { key: { hash: 1 }, unique: true, name: 'idx_hash' },
           { key: { keyId: 1 }, name: 'idx_keyId' },
-          { key: { createdAt: -1 }, name: 'idx_createdAt' }
-        ]
+          { key: { createdAt: -1 }, name: 'idx_createdAt' },
+        ],
       },
       {
         name: 'farms',
@@ -118,8 +118,8 @@ const config = {
           { key: { userId: 1 }, name: 'idx_userId' },
           { key: { 'location.coordinates': '2dsphere' }, name: 'idx_location' },
           { key: { status: 1 }, name: 'idx_status' },
-          { key: { createdAt: -1 }, name: 'idx_createdAt' }
-        ]
+          { key: { createdAt: -1 }, name: 'idx_createdAt' },
+        ],
       },
       {
         name: 'users',
@@ -129,10 +129,10 @@ const config = {
           { key: { email: 1 }, unique: true, name: 'idx_email' },
           { key: { userId: 1 }, unique: true, name: 'idx_userId' },
           { key: { role: 1 }, name: 'idx_role' },
-          { key: { createdAt: -1 }, name: 'idx_createdAt' }
-        ]
-      }
-    ]
+          { key: { createdAt: -1 }, name: 'idx_createdAt' },
+        ],
+      },
+    ],
   },
 
   // Security Configuration
@@ -143,33 +143,33 @@ const config = {
         username: 'botanical_app',
         password: null, // Will be generated
         roles: [{ db: 'botanical_audit', role: 'readWrite' }],
-        description: 'Application user with read/write access'
+        description: 'Application user with read/write access',
       },
       {
         username: 'botanical_readonly',
         password: null, // Will be generated
         roles: [{ db: 'botanical_audit', role: 'read' }],
-        description: 'Read-only user for reporting/analytics'
+        description: 'Read-only user for reporting/analytics',
       },
       {
         username: 'botanical_admin',
         password: null, // Will be generated
         roles: [
           { db: 'botanical_audit', role: 'dbAdmin' },
-          { db: 'botanical_audit', role: 'readWrite' }
+          { db: 'botanical_audit', role: 'readWrite' },
         ],
-        description: 'Admin user for maintenance'
-      }
+        description: 'Admin user for maintenance',
+      },
     ],
 
     // IP Whitelist (CIDR notation)
     ipWhitelist: [
       {
         cidrBlock: '0.0.0.0/0', // Temporarily allow all (change to specific IPs in production!)
-        comment: 'Allow from anywhere (DEV ONLY - CHANGE IN PRODUCTION!)'
-      }
-    ]
-  }
+        comment: 'Allow from anywhere (DEV ONLY - CHANGE IN PRODUCTION!)',
+      },
+    ],
+  },
 };
 
 // Utility: Generate secure password
@@ -189,7 +189,7 @@ function generateSecurePassword(length = 32) {
 function makeAtlasRequest(method, path, body = null) {
   return new Promise((resolve, reject) => {
     const auth = Buffer.from(`${config.atlas.publicKey}:${config.atlas.privateKey}`).toString(
-      'base64'
+      'base64',
     );
 
     const options = {
@@ -198,8 +198,8 @@ function makeAtlasRequest(method, path, body = null) {
       method: method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Basic ${auth}`
-      }
+        Authorization: `Basic ${auth}`,
+      },
     };
 
     const req = https.request(options, res => {
@@ -234,7 +234,7 @@ async function validateCredentials() {
 
   if (!config.atlas.publicKey || !config.atlas.privateKey || !config.atlas.groupId) {
     throw new Error(
-      'Missing Atlas credentials. Set MONGODB_ATLAS_PUBLIC_KEY, MONGODB_ATLAS_PRIVATE_KEY, MONGODB_ATLAS_GROUP_ID'
+      'Missing Atlas credentials. Set MONGODB_ATLAS_PUBLIC_KEY, MONGODB_ATLAS_PRIVATE_KEY, MONGODB_ATLAS_GROUP_ID',
     );
   }
 
@@ -255,7 +255,7 @@ async function checkClusterExists() {
   try {
     const cluster = await makeAtlasRequest(
       'GET',
-      `/groups/${config.atlas.groupId}/clusters/${config.cluster.name}`
+      `/groups/${config.atlas.groupId}/clusters/${config.cluster.name}`,
     );
     console.log(`   ✓ Cluster "${config.cluster.name}" already exists (${cluster.stateName})`);
     return cluster;
@@ -279,7 +279,7 @@ async function createCluster() {
       providerName: config.cluster.provider,
       regionName: config.cluster.region,
       instanceSizeName: config.cluster.instanceSize,
-      diskSizeGB: config.cluster.diskSizeGB
+      diskSizeGB: config.cluster.diskSizeGB,
     },
     mongoDBMajorVersion: config.cluster.mongoDBMajorVersion,
     backupEnabled: config.cluster.backupEnabled,
@@ -288,8 +288,8 @@ async function createCluster() {
       compute: {
         enabled: config.cluster.autoScalingEnabled,
         scaleDownEnabled: true,
-        maxInstanceSize: config.cluster.autoScalingMaxInstanceSize
-      }
+        maxInstanceSize: config.cluster.autoScalingMaxInstanceSize,
+      },
     },
     replicationSpecs: [
       {
@@ -300,18 +300,18 @@ async function createCluster() {
             electableNodes: 3,
             priority: 7,
             readOnlyNodes: 0,
-            analyticsNodes: 0
-          }
-        ]
-      }
-    ]
+            analyticsNodes: 0,
+          },
+        ],
+      },
+    ],
   };
 
   try {
     const cluster = await makeAtlasRequest(
       'POST',
       `/groups/${config.atlas.groupId}/clusters`,
-      clusterConfig
+      clusterConfig,
     );
     console.log(`   ✓ Cluster creation initiated: ${cluster.name}`);
     console.log(`   ⏳ Waiting for cluster to be ready (this may take 7-10 minutes)...`);
@@ -334,7 +334,7 @@ async function waitForClusterReady(maxWaitMinutes = 15) {
     try {
       const cluster = await makeAtlasRequest(
         'GET',
-        `/groups/${config.atlas.groupId}/clusters/${config.cluster.name}`
+        `/groups/${config.atlas.groupId}/clusters/${config.cluster.name}`,
       );
 
       if (cluster.stateName === 'IDLE') {
@@ -361,8 +361,8 @@ async function configureIPWhitelist() {
       await makeAtlasRequest('POST', `/groups/${config.atlas.groupId}/whitelist`, [
         {
           cidrBlock: entry.cidrBlock,
-          comment: entry.comment
-        }
+          comment: entry.comment,
+        },
       ]);
       console.log(`   ✓ Added IP whitelist: ${entry.cidrBlock}`);
     } catch (error) {
@@ -391,14 +391,14 @@ async function createDatabaseUsers() {
         databaseName: 'admin',
         username: user.username,
         password: password,
-        roles: user.roles
+        roles: user.roles,
       });
       console.log(`   ✓ Created user: ${user.username}`);
 
       credentials.push({
         username: user.username,
         password: password,
-        description: user.description
+        description: user.description,
       });
     } catch (error) {
       if (error.message.includes('DUPLICATE')) {
@@ -418,7 +418,7 @@ async function getConnectionString() {
 
   const cluster = await makeAtlasRequest(
     'GET',
-    `/groups/${config.atlas.groupId}/clusters/${config.cluster.name}`
+    `/groups/${config.atlas.groupId}/clusters/${config.cluster.name}`,
   );
 
   const connectionString = cluster.connectionStrings.standardSrv;
@@ -444,7 +444,7 @@ async function setupDatabase(connectionString, credentials) {
 
   const client = new MongoClient(uri, {
     serverSelectionTimeoutMS: 30000,
-    connectTimeoutMS: 30000
+    connectTimeoutMS: 30000,
   });
 
   try {
@@ -464,7 +464,7 @@ async function setupDatabase(connectionString, credentials) {
         indexes,
         timeField,
         metaField,
-        granularity
+        granularity,
       } = collectionConfig;
 
       // Check if collection exists
@@ -478,7 +478,7 @@ async function setupDatabase(connectionString, credentials) {
           options.timeseries = {
             timeField,
             metaField,
-            granularity
+            granularity,
           };
         }
 
@@ -492,7 +492,7 @@ async function setupDatabase(connectionString, credentials) {
 
         await db.createCollection(name, options);
         console.log(
-          `   ✓ Created collection: ${name}${timeseries ? ' (timeseries)' : ''}${capped ? ' (capped)' : ''}`
+          `   ✓ Created collection: ${name}${timeseries ? ' (timeseries)' : ''}${capped ? ' (capped)' : ''}`,
         );
       } else {
         console.log(`   ℹ Collection already exists: ${name}`);
@@ -506,7 +506,7 @@ async function setupDatabase(connectionString, credentials) {
           try {
             await collection.createIndex(index.key, {
               unique: index.unique || false,
-              name: index.name
+              name: index.name,
             });
             console.log(`      ✓ Created index: ${index.name}`);
           } catch (error) {
@@ -678,5 +678,5 @@ module.exports = {
   createDatabaseUsers,
   getConnectionString,
   setupDatabase,
-  saveCredentials
+  saveCredentials,
 };

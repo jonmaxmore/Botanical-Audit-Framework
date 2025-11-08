@@ -23,7 +23,7 @@ const handleValidationErrors = (req, res, next) => {
     return res.status(400).json({
       success: false,
       message: 'Validation errors',
-      errors: errors.array()
+      errors: errors.array(),
     });
   }
   next();
@@ -53,14 +53,14 @@ router.get(
         'review',
         'completed',
         'cancelled',
-        'postponed'
+        'postponed',
       ]),
     query('auditType').optional().isString(),
     query('auditorId').optional().isString(),
     query('farmCode').optional().isString(),
     query('view').optional().isIn(['calendar', 'list', 'gantt']),
     query('page').optional().isInt({ min: 1 }),
-    query('limit').optional().isInt({ min: 1, max: 100 })
+    query('limit').optional().isInt({ min: 1, max: 100 }),
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -74,7 +74,7 @@ router.get(
         farmCode,
         view = 'list',
         page = 1,
-        limit = 20
+        limit = 20,
       } = req.query;
 
       // Build query
@@ -97,7 +97,7 @@ router.get(
       if (auditorId) {
         query.$or = [
           { 'personnel.leadAuditor.userId': auditorId },
-          { 'personnel.auditTeam.userId': auditorId }
+          { 'personnel.auditTeam.userId': auditorId },
         ];
       }
 
@@ -108,7 +108,7 @@ router.get(
       if (req.user.role === 'auditor') {
         query.$or = [
           { 'personnel.leadAuditor.userId': req.user.id },
-          { 'personnel.auditTeam.userId': req.user.id }
+          { 'personnel.auditTeam.userId': req.user.id },
         ];
       }
 
@@ -123,8 +123,8 @@ router.get(
               _id: {
                 $dateToString: {
                   format: '%Y-%m-%d',
-                  date: '$scheduling.scheduledDate'
-                }
+                  date: '$scheduling.scheduledDate',
+                },
               },
               audits: {
                 $push: {
@@ -136,13 +136,13 @@ router.get(
                   farmName: '$auditTarget.farmName',
                   leadAuditor: '$personnel.leadAuditor.name',
                   scheduledTime: '$scheduling.scheduledTime',
-                  priority: '$priority'
-                }
+                  priority: '$priority',
+                },
               },
-              count: { $sum: 1 }
-            }
+              count: { $sum: 1 },
+            },
           },
-          { $sort: { _id: 1 } }
+          { $sort: { _id: 1 } },
         ]);
       } else {
         // List/Gantt view - paginated results
@@ -150,7 +150,7 @@ router.get(
           page: parseInt(page),
           limit: parseInt(limit),
           sort: { 'scheduling.scheduledDate': 1 },
-          populate: [{ path: 'auditTarget.farmCode', select: 'farmInfo.name farmInfo.ownerName' }]
+          populate: [{ path: 'auditTarget.farmCode', select: 'farmInfo.name farmInfo.ownerName' }],
         };
 
         result = await AuditCalendar.paginate(query, options);
@@ -169,20 +169,20 @@ router.get(
                   pages: result.totalPages,
                   total: result.totalDocs,
                   hasNext: result.hasNextPage,
-                  hasPrev: result.hasPrevPage
-                }
-              })
-        }
+                  hasPrev: result.hasPrevPage,
+                },
+              }),
+        },
       });
     } catch (error) {
       logger.error('Error fetching audit calendar:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching audit calendar',
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -202,7 +202,7 @@ router.get(
       if (req.user.role === 'auditor') {
         query.$or = [
           { 'personnel.leadAuditor.userId': req.user.id },
-          { 'personnel.auditTeam.userId': req.user.id }
+          { 'personnel.auditTeam.userId': req.user.id },
         ];
       } else if (req.user.role === 'farmer') {
         // Get farm codes for this farmer
@@ -228,18 +228,18 @@ router.get(
         success: true,
         data: {
           upcomingAudits: filteredAudits,
-          count: filteredAudits.length
-        }
+          count: filteredAudits.length,
+        },
       });
     } catch (error) {
       logger.error('Error fetching upcoming audits:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching upcoming audits',
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -255,15 +255,15 @@ router.get('/overdue', authenticate, authorizeRoles(['admin', 'supervisor']), as
       success: true,
       data: {
         overdueAudits,
-        count: overdueAudits.length
-      }
+        count: overdueAudits.length,
+      },
     });
   } catch (error) {
     logger.error('Error fetching overdue audits:', error);
     res.status(500).json({
       success: false,
       message: 'Error fetching overdue audits',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -285,18 +285,18 @@ router.get(
         success: true,
         data: {
           cannabisAudits,
-          count: cannabisAudits.length
-        }
+          count: cannabisAudits.length,
+        },
       });
     } catch (error) {
       logger.error('Error fetching cannabis audits:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching cannabis audits',
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -318,7 +318,7 @@ router.get(
       if (!audit) {
         return res.status(404).json({
           success: false,
-          message: 'Audit not found'
+          message: 'Audit not found',
         });
       }
 
@@ -335,29 +335,29 @@ router.get(
         if (!farm || farm.farmInfo.ownerEmail !== req.user.email) {
           return res.status(403).json({
             success: false,
-            message: 'Access denied'
+            message: 'Access denied',
           });
         }
       } else if (!hasAccess) {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
       res.json({
         success: true,
-        data: { audit }
+        data: { audit },
       });
     } catch (error) {
       logger.error('Error fetching audit:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching audit',
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -380,12 +380,12 @@ router.post(
       'complaint_audit',
       'follow_up',
       'cannabis_compliance',
-      'sop_compliance'
+      'sop_compliance',
     ]),
     body('scheduledDate').isISO8601(),
     body('farmCode').isString().notEmpty(),
     body('leadAuditorId').isString().notEmpty(),
-    body('estimatedDuration').optional().isFloat({ min: 0.5, max: 24 })
+    body('estimatedDuration').optional().isFloat({ min: 0.5, max: 24 }),
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -396,25 +396,25 @@ router.post(
           scheduledDate: new Date(req.body.scheduledDate),
           scheduledTime: req.body.scheduledTime || { start: '09:00', end: '17:00' },
           duration: {
-            estimated: req.body.estimatedDuration || 8
-          }
+            estimated: req.body.estimatedDuration || 8,
+          },
         },
         auditTarget: {
-          farmCode: req.body.farmCode
+          farmCode: req.body.farmCode,
         },
         personnel: {
           leadAuditor: {
             userId: req.body.leadAuditorId,
-            assignedAt: new Date()
+            assignedAt: new Date(),
           },
-          auditTeam: []
+          auditTeam: [],
         },
         createdBy: {
           userId: req.user.id,
           name: req.user.firstName + ' ' + req.user.lastName,
-          role: req.user.role
+          role: req.user.role,
         },
-        status: 'scheduled'
+        status: 'scheduled',
       };
 
       // Get farm information
@@ -424,7 +424,7 @@ router.post(
         auditData.auditTarget.farmerInfo = {
           name: farm.farmInfo.ownerName,
           phone: farm.farmInfo.phone,
-          email: farm.farmInfo.email
+          email: farm.farmInfo.email,
         };
 
         // Check if cannabis audit is required
@@ -435,8 +435,8 @@ router.post(
           auditData.cannabisAuditDetails = {
             required: true,
             licenseVerification: {
-              licenseNumber: farm.cannabisFeatures?.licenseInfo?.licenseNumber
-            }
+              licenseNumber: farm.cannabisFeatures?.licenseInfo?.licenseNumber,
+            },
           };
         }
       }
@@ -447,7 +447,7 @@ router.post(
       // Send notifications
       await audit.sendNotification('audit_scheduled', [
         req.body.leadAuditorId,
-        audit.auditTarget.farmerInfo?.email
+        audit.auditTarget.farmerInfo?.email,
       ]);
 
       res.status(201).json({
@@ -456,18 +456,18 @@ router.post(
         data: {
           auditId: audit.auditId,
           scheduledDate: audit.scheduling.scheduledDate,
-          farmCode: audit.auditTarget.farmCode
-        }
+          farmCode: audit.auditTarget.farmCode,
+        },
       });
     } catch (error) {
       logger.error('Error scheduling audit:', error);
       res.status(500).json({
         success: false,
         message: 'Error scheduling audit',
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -482,7 +482,7 @@ router.put(
     param('auditId').isString().notEmpty(),
     body('newDate').isISO8601(),
     body('reason').isString().isLength({ min: 10, max: 500 }),
-    body('newTime').optional().isObject()
+    body('newTime').optional().isObject(),
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -495,7 +495,7 @@ router.put(
       if (!audit) {
         return res.status(404).json({
           success: false,
-          message: 'Audit not found'
+          message: 'Audit not found',
         });
       }
 
@@ -508,7 +508,7 @@ router.put(
       if (!canReschedule) {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions to reschedule audit'
+          message: 'Insufficient permissions to reschedule audit',
         });
       }
 
@@ -526,7 +526,7 @@ router.put(
       // Send notifications
       await audit.sendNotification('audit_rescheduled', [
         audit.personnel.leadAuditor.userId,
-        audit.auditTarget.farmerInfo?.email
+        audit.auditTarget.farmerInfo?.email,
       ]);
 
       res.json({
@@ -535,18 +535,18 @@ router.put(
         data: {
           auditId: audit.auditId,
           newDate: audit.scheduling.scheduledDate,
-          reason
-        }
+          reason,
+        },
       });
     } catch (error) {
       logger.error('Error rescheduling audit:', error);
       res.status(500).json({
         success: false,
         message: 'Error rescheduling audit',
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -569,10 +569,10 @@ router.put(
       'review',
       'completed',
       'cancelled',
-      'postponed'
+      'postponed',
     ]),
     body('reason').optional().isString(),
-    body('notes').optional().isString()
+    body('notes').optional().isString(),
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -585,7 +585,7 @@ router.put(
       if (!audit) {
         return res.status(404).json({
           success: false,
-          message: 'Audit not found'
+          message: 'Audit not found',
         });
       }
 
@@ -598,7 +598,7 @@ router.put(
       if (!canUpdate) {
         return res.status(403).json({
           success: false,
-          message: 'Insufficient permissions to update audit status'
+          message: 'Insufficient permissions to update audit status',
         });
       }
 
@@ -616,18 +616,18 @@ router.put(
         data: {
           auditId: audit.auditId,
           status: audit.status,
-          updatedAt: new Date()
-        }
+          updatedAt: new Date(),
+        },
       });
     } catch (error) {
       logger.error('Error updating audit status:', error);
       res.status(500).json({
         success: false,
         message: 'Error updating audit status',
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 /**
@@ -642,7 +642,7 @@ router.get(
   [
     param('auditorId').isString().notEmpty(),
     query('startDate').optional().isISO8601(),
-    query('endDate').optional().isISO8601()
+    query('endDate').optional().isISO8601(),
   ],
   handleValidationErrors,
   async (req, res) => {
@@ -654,7 +654,7 @@ router.get(
       if (req.user.role === 'auditor' && req.user.id !== auditorId) {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
@@ -671,19 +671,19 @@ router.get(
           workload: workload[0] || {
             totalAudits: 0,
             estimatedHours: 0,
-            auditTypes: []
-          }
-        }
+            auditTypes: [],
+          },
+        },
       });
     } catch (error) {
       logger.error('Error fetching auditor workload:', error);
       res.status(500).json({
         success: false,
         message: 'Error fetching auditor workload',
-        error: error.message
+        error: error.message,
       });
     }
-  }
+  },
 );
 
 module.exports = router;

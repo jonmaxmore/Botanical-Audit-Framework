@@ -20,14 +20,14 @@ class ListReportsUseCase {
     const result = await this.reportRepository.findWithFilters(accessFilters, {
       page,
       limit,
-      sort: { createdAt: -1 }
+      sort: { createdAt: -1 },
     });
 
     return {
       reports: result.reports,
       total: result.total,
       page,
-      limit
+      limit,
     };
   }
 
@@ -40,7 +40,7 @@ class ListReportsUseCase {
     // Farmers can only see their own reports or public reports
     return {
       ...filters,
-      $or: [{ requestedBy: userId }, { isPublic: true }, { sharedWith: userId }]
+      $or: [{ requestedBy: userId }, { isPublic: true }, { sharedWith: userId }],
     };
   }
 }

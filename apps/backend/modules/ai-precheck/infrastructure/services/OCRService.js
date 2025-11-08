@@ -25,13 +25,13 @@ class OCRService {
   async extractDocumentData(documents) {
     try {
       this.logger.info('Starting OCR extraction', {
-        documentCount: documents.length
+        documentCount: documents.length,
       });
 
       const results = {
         nationalId: null,
         landDeed: null,
-        qualityIssues: []
+        qualityIssues: [],
       };
 
       // Extract National ID data
@@ -52,7 +52,7 @@ class OCRService {
         if (!qualityCheck.passed) {
           results.qualityIssues.push({
             document: doc.type,
-            issues: qualityCheck.issues
+            issues: qualityCheck.issues,
           });
         }
       }
@@ -60,14 +60,13 @@ class OCRService {
       this.logger.info('OCR extraction completed', {
         hasNationalId: !!results.nationalId,
         hasLandDeed: !!results.landDeed,
-        qualityIssuesCount: results.qualityIssues.length
+        qualityIssuesCount: results.qualityIssues.length,
       });
 
       return results;
-
     } catch (error) {
       this.logger.error('OCR extraction failed', {
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -95,12 +94,11 @@ class OCRService {
         address: 'จ.เชียงใหม่',
         issueDate: '2020-01-01',
         expiryDate: '2027-01-01',
-        confidence: 0.95
+        confidence: 0.95,
       };
-
     } catch (error) {
       this.logger.error('National ID extraction failed', {
-        error: error.message
+        error: error.message,
       });
       return null;
     }
@@ -128,14 +126,13 @@ class OCRService {
         landSize: '10 ไร่',
         coordinates: {
           lat: 18.7883,
-          lng: 98.9853
+          lng: 98.9853,
         },
-        confidence: 0.92
+        confidence: 0.92,
       };
-
     } catch (error) {
       this.logger.error('Land deed extraction failed', {
-        error: error.message
+        error: error.message,
       });
       return null;
     }
@@ -152,7 +149,7 @@ class OCRService {
       name: null,
       dateOfBirth: null,
       address: null,
-      confidence: 0
+      confidence: 0,
     };
 
     // Extract 13-digit ID number
@@ -200,7 +197,7 @@ class OCRService {
       ownerName: null,
       location: null,
       landSize: null,
-      confidence: 0
+      confidence: 0,
     };
 
     // Extract deed number (NS-xxxxx pattern)
@@ -225,7 +222,9 @@ class OCRService {
     }
 
     // Extract location
-    const locationMatch = text.match(/(ต\.[\u0E00-\u0E7F\s]+อ\.[\u0E00-\u0E7F\s]+จ\.[\u0E00-\u0E7F\s]+)/);
+    const locationMatch = text.match(
+      /(ต\.[\u0E00-\u0E7F\s]+อ\.[\u0E00-\u0E7F\s]+จ\.[\u0E00-\u0E7F\s]+)/,
+    );
     if (locationMatch) {
       data.location = locationMatch[1].trim();
       data.confidence += 0.3;
@@ -262,17 +261,16 @@ class OCRService {
       return {
         passed: issues.length === 0,
         issues,
-        qualityScore: Math.min(100, 100 - (issues.length * 20))
+        qualityScore: Math.min(100, 100 - issues.length * 20),
       };
-
     } catch (error) {
       this.logger.error('Quality check failed', {
-        error: error.message
+        error: error.message,
       });
       return {
         passed: false,
         issues: ['Quality check failed'],
-        qualityScore: 0
+        qualityScore: 0,
       };
     }
   }
@@ -306,7 +304,7 @@ class OCRService {
     return {
       isAuthentic: true,
       confidence: 0.9,
-      warnings: []
+      warnings: [],
     };
   }
 }

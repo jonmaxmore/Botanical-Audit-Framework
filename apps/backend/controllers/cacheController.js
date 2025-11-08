@@ -16,14 +16,14 @@ exports.getCacheStats = async (req, res) => {
     res.json({
       success: true,
       data: stats,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     logger.error('Failed to get cache stats:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve cache statistics',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -39,12 +39,12 @@ exports.clearAllCache = async (req, res) => {
       logger.info('All cache cleared by admin');
       res.json({
         success: true,
-        message: 'All cache cleared successfully'
+        message: 'All cache cleared successfully',
       });
     } else {
       res.status(500).json({
         success: false,
-        message: 'Failed to clear cache'
+        message: 'Failed to clear cache',
       });
     }
   } catch (error) {
@@ -52,7 +52,7 @@ exports.clearAllCache = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to clear cache',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -67,7 +67,7 @@ exports.clearCachePattern = async (req, res) => {
     if (!pattern) {
       return res.status(400).json({
         success: false,
-        message: 'Pattern is required'
+        message: 'Pattern is required',
       });
     }
 
@@ -77,12 +77,12 @@ exports.clearCachePattern = async (req, res) => {
       logger.info(`Cache pattern cleared: ${pattern}`);
       res.json({
         success: true,
-        message: `Cache cleared for pattern: ${pattern}`
+        message: `Cache cleared for pattern: ${pattern}`,
       });
     } else {
       res.status(500).json({
         success: false,
-        message: 'Failed to clear cache pattern'
+        message: 'Failed to clear cache pattern',
       });
     }
   } catch (error) {
@@ -90,7 +90,7 @@ exports.clearCachePattern = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to clear cache pattern',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -107,14 +107,14 @@ exports.invalidateApplication = async (req, res) => {
     logger.info(`Cache invalidated for application: ${applicationId}`);
     res.json({
       success: true,
-      message: 'Application cache invalidated'
+      message: 'Application cache invalidated',
     });
   } catch (error) {
     logger.error('Invalidate application cache error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to invalidate application cache',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -129,14 +129,14 @@ exports.warmCache = async (req, res) => {
     logger.info('Cache warming completed');
     res.json({
       success: true,
-      message: 'Cache warming completed'
+      message: 'Cache warming completed',
     });
   } catch (error) {
     logger.error('Cache warming error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to warm cache',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -153,7 +153,7 @@ exports.healthCheck = async (req, res) => {
       success: true,
       healthy,
       data: stats,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     logger.error('Cache health check error:', error);
@@ -161,7 +161,7 @@ exports.healthCheck = async (req, res) => {
       success: false,
       healthy: false,
       message: 'Cache health check failed',
-      error: error.message
+      error: error.message,
     });
   }
 };

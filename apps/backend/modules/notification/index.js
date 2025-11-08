@@ -67,7 +67,7 @@ async function initializeNotification(db, authMiddleware, adminMiddleware) {
         } else {
           res.status(403).json({
             success: false,
-            message: 'Admin access required'
+            message: 'Admin access required',
           });
         }
       };
@@ -91,7 +91,7 @@ async function initializeNotification(db, authMiddleware, adminMiddleware) {
     return {
       router,
       service: notificationService,
-      controller: notificationController
+      controller: notificationController,
     };
   } catch (error) {
     logger.error('Failed to initialize Notification module (LEGACY);:', error);
@@ -128,7 +128,7 @@ module.exports = {
       'Application (use cases)',
       'Infrastructure (MongoDB, Email)',
       'Presentation (controllers, routes, DTOs)',
-      'Integration (DI container, helpers)'
+      'Integration (DI container, helpers)',
     ],
     features: [
       'Multi-channel delivery (In-app, Email, SMS)',
@@ -141,8 +141,8 @@ module.exports = {
       'Related entity linking',
       'Action URLs for navigation',
       'Email HTML templates',
-      'Statistics and analytics'
+      'Statistics and analytics',
     ],
-    channels: ['IN_APP (MongoDB)', 'EMAIL (NodeMailer)', 'SMS (future integration)']
-  })
+    channels: ['IN_APP (MongoDB)', 'EMAIL (NodeMailer)', 'SMS (future integration)'],
+  }),
 };

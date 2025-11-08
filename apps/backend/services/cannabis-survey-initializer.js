@@ -25,7 +25,7 @@ class CannabisSurveyInitializer {
         return {
           success: true,
           message: 'System already initialized',
-          existingTemplates: await this.getSystemStats()
+          existingTemplates: await this.getSystemStats(),
         };
       }
 
@@ -72,8 +72,8 @@ class CannabisSurveyInitializer {
         results: {
           templates: templateResults,
           sampleData,
-          stats
-        }
+          stats,
+        },
       };
     } catch (error) {
       logger.error('❌ Cannabis Survey System initialization failed:', error);
@@ -112,7 +112,7 @@ class CannabisSurveyInitializer {
       // Try to find existing admin user
       let admin = await User.findOne({
         role: 'admin',
-        email: { $regex: /system|admin|cannabis/i }
+        email: { $regex: /system|admin|cannabis/i },
       });
 
       if (!admin) {
@@ -128,13 +128,13 @@ class CannabisSurveyInitializer {
             'manage_cannabis_surveys',
             'view_all_responses',
             'manage_templates',
-            'system_administration'
+            'system_administration',
           ],
           profile: {
             organization: 'GACP Cannabis Division',
             position: 'Cannabis Survey System Administrator',
-            specializations: ['cannabis_regulations', 'survey_management', 'compliance_monitoring']
-          }
+            specializations: ['cannabis_regulations', 'survey_management', 'compliance_monitoring'],
+          },
         });
 
         await admin.save();
@@ -174,8 +174,8 @@ class CannabisSurveyInitializer {
                   province: 'Bangkok',
                   district: 'Sample District',
                   subdistrict: 'Sample Subdistrict',
-                  zipCode: '10100'
-                }
+                  zipCode: '10100',
+                },
               },
               farmCode: `SAMPLE-FARM-${String(i + 1).padStart(3, '0')}`,
               cannabisLicense: {
@@ -184,7 +184,7 @@ class CannabisSurveyInitializer {
                 issueDate: new Date(),
                 expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000), // 1 year from now
                 issuingAuthority: 'Department of Agriculture',
-                verificationStatus: 'verified'
+                verificationStatus: 'verified',
               },
               farmDetails: {
                 farmName: `Sample Cannabis Farm ${i + 1}`,
@@ -193,8 +193,8 @@ class CannabisSurveyInitializer {
                 cultivationMethod: i % 2 === 0 ? 'indoor' : 'greenhouse',
                 securityMeasures: ['cctv_24_7', 'access_control', 'perimeter_fence'],
                 irrigationSystem: 'drip_irrigation',
-                soilType: 'loamy_soil'
-              }
+                soilType: 'loamy_soil',
+              },
             },
             answers: this.generateSampleAnswers(questions),
             status: 'submitted',
@@ -205,20 +205,20 @@ class CannabisSurveyInitializer {
                 byCategory: [
                   { category: 'license_verification', score: 100 },
                   { category: 'cultivation_practices', score: 85 + i * 5 },
-                  { category: 'compliance_verification', score: 90 + i * 3 }
-                ]
+                  { category: 'compliance_verification', score: 90 + i * 3 },
+                ],
               },
               riskProfile: {
                 overallRisk: i === 0 ? 'low' : 'medium',
-                riskFactors: []
+                riskFactors: [],
               },
               sopAdherence: {
                 adoptedSOPs: ['GACP-CULT-001', 'GACP-WATER-001'],
                 complianceLevel: 80 + i * 10,
                 gaps: [],
-                recommendations: ['Continue current practices', 'Consider advanced monitoring']
-              }
-            }
+                recommendations: ['Continue current practices', 'Consider advanced monitoring'],
+              },
+            },
           };
 
           sampleResponses.push(sampleResponse);
@@ -249,7 +249,7 @@ class CannabisSurveyInitializer {
           if (question.options && question.options.length > 0) {
             // Prefer options with higher compliance scores
             const sortedOptions = question.options.sort(
-              (a, b) => (b.complianceScore || 50) - (a.complianceScore || 50)
+              (a, b) => (b.complianceScore || 50) - (a.complianceScore || 50),
             );
             answer = sortedOptions[0].value;
           }
@@ -304,7 +304,7 @@ class CannabisSurveyInitializer {
           answer = {
             licenseNumber: `CB-${Date.now()}-${Math.random().toString(36).substr(2, 6)}`,
             licenseType: 'cultivation',
-            expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
+            expiryDate: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
           };
           break;
 
@@ -327,8 +327,8 @@ class CannabisSurveyInitializer {
         metadata: {
           answeredAt: new Date(),
           timeSpent: Math.floor(Math.random() * 120) + 30, // 30-150 seconds
-          confidence: Math.floor(Math.random() * 2) + 4 // 4-5 confidence
-        }
+          confidence: Math.floor(Math.random() * 2) + 4, // 4-5 confidence
+        },
       });
     }
 
@@ -344,7 +344,7 @@ class CannabisSurveyInitializer {
       for (const template of templates) {
         const questionCount = await CannabisQuestion.countDocuments({
           templateId: template._id,
-          isActive: true
+          isActive: true,
         });
 
         if (questionCount === 0) {
@@ -354,7 +354,7 @@ class CannabisSurveyInitializer {
 
       // Check for orphaned questions
       const orphanedQuestions = await CannabisQuestion.countDocuments({
-        templateId: { $nin: templates.map(t => t._id) }
+        templateId: { $nin: templates.map(t => t._id) },
       });
 
       if (orphanedQuestions > 0) {
@@ -366,7 +366,7 @@ class CannabisSurveyInitializer {
       const expectedTypes = [
         'pre_cultivation_assessment',
         'cultivation_practices',
-        'harvest_processing'
+        'harvest_processing',
       ];
       const missingTypes = expectedTypes.filter(type => !surveyTypes.includes(type));
 
@@ -395,7 +395,7 @@ class CannabisSurveyInitializer {
           CannabisQuestion.countDocuments({ isActive: true }),
           CannabisSurveyTemplate.distinct('cannabisMetadata.surveyType'),
           CannabisSurveyTemplate.distinct('cannabisMetadata.cannabisCategory'),
-          CannabisSurveyTemplate.distinct('region')
+          CannabisSurveyTemplate.distinct('region'),
         ]);
 
       return {
@@ -407,8 +407,8 @@ class CannabisSurveyInitializer {
         details: {
           surveyTypes,
           cannabisCategories,
-          regions
-        }
+          regions,
+        },
       };
     } catch (error) {
       logger.error('Error getting system stats:', error);
@@ -417,7 +417,7 @@ class CannabisSurveyInitializer {
         questions: 0,
         surveyTypes: 0,
         cannabisCategories: 0,
-        regions: 0
+        regions: 0,
       };
     }
   }
@@ -428,7 +428,7 @@ class CannabisSurveyInitializer {
 
       return await this.initialize({
         ...options,
-        recreateTemplates: true
+        recreateTemplates: true,
       });
     } catch (error) {
       logger.error('Error during reinitialization:', error);
@@ -446,7 +446,7 @@ class CannabisSurveyInitializer {
         initialized: this.isInitialized,
         stats,
         validation,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
       return health;
@@ -455,7 +455,7 @@ class CannabisSurveyInitializer {
         status: 'error',
         initialized: false,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     }
   }
@@ -465,7 +465,7 @@ class CannabisSurveyInitializer {
     try {
       const template = new CannabisSurveyTemplate({
         ...templateData,
-        createdBy
+        createdBy,
       });
 
       await template.save();
@@ -483,12 +483,12 @@ class CannabisSurveyInitializer {
     try {
       const templates = await CannabisSurveyTemplate.find().populate(
         'createdBy',
-        'firstName lastName email'
+        'firstName lastName email',
       );
 
       const templateIds = templates.map(t => t._id);
       const questions = await CannabisQuestion.find({
-        templateId: { $in: templateIds }
+        templateId: { $in: templateIds },
       });
 
       const configuration = {
@@ -496,7 +496,7 @@ class CannabisSurveyInitializer {
         version: '1.0.0',
         templates: templates,
         questions: questions,
-        stats: await this.getSystemStats()
+        stats: await this.getSystemStats(),
       };
 
       return configuration;

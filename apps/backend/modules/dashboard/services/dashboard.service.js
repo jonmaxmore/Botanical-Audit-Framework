@@ -57,7 +57,7 @@ class DashboardService {
           this.getFarmerApplications(userId, 5),
           this.getFarmerFarms(userId),
           this.getFarmerProducts(userId, 5),
-          this.getFarmerNotifications(userId, 5)
+          this.getFarmerNotifications(userId, 5),
         ]);
 
       return {
@@ -67,7 +67,7 @@ class DashboardService {
         farms,
         products,
         notifications,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       logger.error('Error getting farmer dashboard:', error);
@@ -84,7 +84,7 @@ class DashboardService {
         this.getDTAMStats(role),
         this.getRecentActivities(userId, 10),
         this.getPendingApplications(role, 10),
-        this.getDTAMNotifications(userId, 5)
+        this.getDTAMNotifications(userId, 5),
       ]);
 
       return {
@@ -92,7 +92,7 @@ class DashboardService {
         recentActivities,
         pendingApplications,
         notifications,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       logger.error('Error getting DTAM dashboard:', error);
@@ -109,7 +109,7 @@ class DashboardService {
         this.getAdminStats(),
         this.getSystemHealth(),
         this.getRecentActivities(null, 20), // All activities
-        this.getAdminNotifications(10)
+        this.getAdminNotifications(10),
       ]);
 
       return {
@@ -117,7 +117,7 @@ class DashboardService {
         systemHealth,
         recentActivities,
         notifications,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       logger.error('Error getting admin dashboard:', error);
@@ -142,7 +142,7 @@ class DashboardService {
         todayApplications,
         totalFarms,
         totalProducts,
-        certifiedProducts
+        certifiedProducts,
       ] = await Promise.all([
         this.applicationsCollection.countDocuments({ userId }),
         this.applicationsCollection.countDocuments({ userId, status: 'pending' }),
@@ -150,14 +150,14 @@ class DashboardService {
         this.applicationsCollection.countDocuments({ userId, status: 'rejected' }),
         this.applicationsCollection.countDocuments({
           userId,
-          createdAt: { $gte: todayStart }
+          createdAt: { $gte: todayStart },
         }),
         this.farmsCollection.countDocuments({ userId }),
         this.productsCollection.countDocuments({ userId }),
         this.productsCollection.countDocuments({
           userId,
-          certificationStatus: 'CERTIFIED'
-        })
+          certificationStatus: 'CERTIFIED',
+        }),
       ]);
 
       // Calculate average processing time
@@ -165,7 +165,7 @@ class DashboardService {
         .find({
           userId,
           status: { $in: ['approved', 'rejected'] },
-          completedAt: { $exists: true }
+          completedAt: { $exists: true },
         })
         .toArray();
 
@@ -189,7 +189,7 @@ class DashboardService {
         certifiedProducts,
         averageProcessingTime,
         certificationRate:
-          totalProducts > 0 ? Math.round((certifiedProducts / totalProducts) * 100) : 0
+          totalProducts > 0 ? Math.round((certifiedProducts / totalProducts) * 100) : 0,
       };
     } catch (error) {
       logger.error('Error getting farmer stats:', error);
@@ -213,21 +213,21 @@ class DashboardService {
         rejectedApplications,
         todayApplications,
         weekApplications,
-        activeUsers
+        activeUsers,
       ] = await Promise.all([
         this.applicationsCollection.countDocuments({}),
         this.applicationsCollection.countDocuments({ status: 'pending' }),
         this.applicationsCollection.countDocuments({ status: 'approved' }),
         this.applicationsCollection.countDocuments({ status: 'rejected' }),
         this.applicationsCollection.countDocuments({
-          createdAt: { $gte: todayStart }
+          createdAt: { $gte: todayStart },
         }),
         this.applicationsCollection.countDocuments({
-          createdAt: { $gte: weekStart }
+          createdAt: { $gte: weekStart },
         }),
         this.usersCollection.countDocuments({
-          lastLoginAt: { $gte: weekStart }
-        })
+          lastLoginAt: { $gte: weekStart },
+        }),
       ]);
 
       // Calculate average processing time
@@ -235,7 +235,7 @@ class DashboardService {
         .find({
           status: { $in: ['approved', 'rejected'] },
           completedAt: { $exists: true },
-          createdAt: { $gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000) }
+          createdAt: { $gte: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000) },
         })
         .limit(100)
         .toArray();
@@ -259,7 +259,7 @@ class DashboardService {
         activeUsers,
         averageProcessingTime,
         approvalRate:
-          totalApplications > 0 ? Math.round((approvedApplications / totalApplications) * 100) : 0
+          totalApplications > 0 ? Math.round((approvedApplications / totalApplications) * 100) : 0,
       };
     } catch (error) {
       logger.error('Error getting DTAM stats:', error);
@@ -284,20 +284,20 @@ class DashboardService {
         todayApplications,
         monthApplications,
         pendingReviews,
-        activeInspections
+        activeInspections,
       ] = await Promise.all([
         this.applicationsCollection.countDocuments({}),
         this.usersCollection.countDocuments({}),
         this.farmsCollection.countDocuments({}),
         this.productsCollection.countDocuments({}),
         this.applicationsCollection.countDocuments({
-          createdAt: { $gte: todayStart }
+          createdAt: { $gte: todayStart },
         }),
         this.applicationsCollection.countDocuments({
-          createdAt: { $gte: monthStart }
+          createdAt: { $gte: monthStart },
         }),
         this.applicationsCollection.countDocuments({ status: 'pending' }),
-        this.applicationsCollection.countDocuments({ status: 'under_review' })
+        this.applicationsCollection.countDocuments({ status: 'under_review' }),
       ]);
 
       // Application status breakdown
@@ -306,9 +306,9 @@ class DashboardService {
           {
             $group: {
               _id: '$status',
-              count: { $sum: 1 }
-            }
-          }
+              count: { $sum: 1 },
+            },
+          },
         ])
         .toArray();
 
@@ -318,9 +318,9 @@ class DashboardService {
           {
             $group: {
               _id: '$role',
-              count: { $sum: 1 }
-            }
-          }
+              count: { $sum: 1 },
+            },
+          },
         ])
         .toArray();
 
@@ -340,7 +340,7 @@ class DashboardService {
         userRoleBreakdown: userRoleBreakdown.reduce((acc, item) => {
           acc[item._id] = item.count;
           return acc;
-        }, {})
+        }, {}),
       };
     } catch (error) {
       logger.error('Error getting admin stats:', error);
@@ -362,16 +362,16 @@ class DashboardService {
           connected: true,
           collections: collections.length,
           dataSize: dbStats.dataSize,
-          storageSize: dbStats.storageSize
+          storageSize: dbStats.storageSize,
         },
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       logger.error('Error getting system health:', error);
       return {
         status: 'unhealthy',
         error: error.message,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     }
   }
@@ -395,7 +395,7 @@ class DashboardService {
         action: activity.action,
         description: activity.description,
         type: activity.type,
-        timestamp: activity.timestamp
+        timestamp: activity.timestamp,
       }));
     } catch (error) {
       logger.error('Error getting recent activities:', error);
@@ -421,7 +421,7 @@ class DashboardService {
         farmName: app.farmName || app.farmData?.farmName,
         status: app.status,
         submittedAt: app.createdAt,
-        type: app.cropType || app.farmData?.cropType
+        type: app.cropType || app.farmData?.cropType,
       }));
     } catch (error) {
       logger.error('Error getting farmer applications:', error);
@@ -442,7 +442,7 @@ class DashboardService {
         location: farm.location,
         size: farm.size,
         cropType: farm.cropType,
-        status: farm.status
+        status: farm.status,
       }));
     } catch (error) {
       logger.error('Error getting farmer farms:', error);
@@ -468,7 +468,7 @@ class DashboardService {
         stage: product.stage,
         certificationStatus: product.certificationStatus,
         quantity: product.quantity,
-        unit: product.unit
+        unit: product.unit,
       }));
     } catch (error) {
       logger.error('Error getting farmer products:', error);
@@ -494,7 +494,7 @@ class DashboardService {
         farmName: app.farmName || app.farmData?.farmName,
         status: app.status,
         submittedAt: app.createdAt,
-        type: app.cropType || app.farmData?.cropType
+        type: app.cropType || app.farmData?.cropType,
       }));
     } catch (error) {
       logger.error('Error getting pending applications:', error);
@@ -515,8 +515,8 @@ class DashboardService {
           message: 'คำขอรับรองของคุณอยู่ในระหว่างการตรวจสอบ',
           type: 'info',
           read: false,
-          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString()
-        }
+          timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+        },
       ];
     } catch (error) {
       logger.error('Error getting farmer notifications:', error);
@@ -530,7 +530,7 @@ class DashboardService {
   async getDTAMNotifications(userId, limit = 5) {
     try {
       const pendingCount = await this.applicationsCollection.countDocuments({
-        status: 'pending'
+        status: 'pending',
       });
 
       return [
@@ -540,8 +540,8 @@ class DashboardService {
           message: `มีคำขอรับรอง ${pendingCount} รายการรอการตรวจสอบ`,
           type: pendingCount > 5 ? 'warning' : 'info',
           read: false,
-          timestamp: new Date().toISOString()
-        }
+          timestamp: new Date().toISOString(),
+        },
       ];
     } catch (error) {
       logger.error('Error getting DTAM notifications:', error);
@@ -559,9 +559,9 @@ class DashboardService {
 
       const [todayApplications, pendingReviews] = await Promise.all([
         this.applicationsCollection.countDocuments({
-          createdAt: { $gte: todayStart }
+          createdAt: { $gte: todayStart },
         }),
-        this.applicationsCollection.countDocuments({ status: 'pending' })
+        this.applicationsCollection.countDocuments({ status: 'pending' }),
       ]);
 
       const notifications = [];
@@ -573,7 +573,7 @@ class DashboardService {
           message: `มีคำขอรับรอง ${todayApplications} รายการวันนี้`,
           type: 'info',
           read: false,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
 
@@ -584,7 +584,7 @@ class DashboardService {
           message: `มีคำขอรอการตรวจสอบ ${pendingReviews} รายการ`,
           type: 'warning',
           read: false,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
 
@@ -643,8 +643,8 @@ class DashboardService {
           this.applicationsCollection.countDocuments({ status: 'pending' }),
           this.applicationsCollection.countDocuments({ status: 'under_review' }),
           this.usersCollection.countDocuments({
-            lastLoginAt: { $gte: fiveMinutesAgo }
-          })
+            lastLoginAt: { $gte: fiveMinutesAgo },
+          }),
         ]);
 
       return {
@@ -653,7 +653,7 @@ class DashboardService {
         activeInspections,
         recentLogins,
         systemHealth: 'healthy',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       logger.error('Error getting realtime stats:', error);

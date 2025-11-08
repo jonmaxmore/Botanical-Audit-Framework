@@ -40,7 +40,7 @@ describe('Mongoose Models Validation', () => {
 
     test('should have required fields', () => {
       const requiredPaths = Object.keys(Record.schema.paths).filter(
-        path => Record.schema.paths[path].isRequired
+        path => Record.schema.paths[path].isRequired,
       );
 
       expect(requiredPaths).toContain('recordId');
@@ -64,7 +64,7 @@ describe('Mongoose Models Validation', () => {
     test('should have geospatial index', () => {
       const indexes = Record.schema.indexes();
       const hasGeoIndex = indexes.some(
-        index => index[0].location && index[0].location === '2dsphere'
+        index => index[0].location && index[0].location === '2dsphere',
       );
 
       expect(hasGeoIndex).toBe(true);
@@ -84,7 +84,7 @@ describe('Mongoose Models Validation', () => {
         farmId: new mongoose.Types.ObjectId(),
         data: {},
         hash: 'a'.repeat(64),
-        signature: 'b'.repeat(128)
+        signature: 'b'.repeat(128),
       });
 
       const error = record.validateSync();
@@ -99,7 +99,7 @@ describe('Mongoose Models Validation', () => {
         farmId: new mongoose.Types.ObjectId(),
         data: {},
         hash: 'short', // Too short
-        signature: 'b'.repeat(128)
+        signature: 'b'.repeat(128),
       });
 
       const error = record.validateSync();
@@ -152,7 +152,7 @@ describe('Mongoose Models Validation', () => {
         action: 'INVALID_ACTION', // Invalid
         collection: 'farms',
         documentId: 'farm-001',
-        userId: new mongoose.Types.ObjectId()
+        userId: new mongoose.Types.ObjectId(),
       });
 
       const error = log.validateSync();
@@ -202,10 +202,10 @@ describe('Mongoose Models Validation', () => {
         metadata: {
           farmId: new mongoose.Types.ObjectId(),
           deviceId: 'device-001',
-          sensorType: 'temperature'
+          sensorType: 'temperature',
         },
         value: 25.5,
-        unit: '°C'
+        unit: '°C',
         // Missing timestamp
       });
 
@@ -252,7 +252,7 @@ describe('Mongoose Models Validation', () => {
       const provider = new IotProvider({
         providerId: 'prov-001',
         name: 'DYGIS',
-        farmId: new mongoose.Types.ObjectId()
+        farmId: new mongoose.Types.ObjectId(),
       });
 
       expect(typeof provider.activate).toBe('function');
@@ -271,7 +271,7 @@ describe('Mongoose Models Validation', () => {
       const provider = new IotProvider({
         providerId: 'IOT-TEST-001',
         name: 'dygis',
-        farmId: new mongoose.Types.ObjectId()
+        farmId: new mongoose.Types.ObjectId(),
       });
 
       expect(provider.status).toBe('TESTING'); // default คือ TESTING
@@ -312,7 +312,7 @@ describe('Mongoose Models Validation', () => {
     test('should have unique version constraint', () => {
       const indexes = SignatureStore.schema.indexes();
       const hasUniqueVersion = indexes.some(
-        index => index[0].version && index[1] && index[1].unique === true
+        index => index[0].version && index[1] && index[1].unique === true,
       );
 
       expect(hasUniqueVersion).toBe(true);
@@ -323,7 +323,7 @@ describe('Mongoose Models Validation', () => {
         version: 1,
         publicKey: '-----BEGIN PUBLIC KEY-----\ntest\n-----END PUBLIC KEY-----',
         algorithm: 'RSA-SHA256',
-        keySize: 2048
+        keySize: 2048,
       });
 
       expect(typeof store.rotate).toBe('function');
@@ -342,7 +342,7 @@ describe('Mongoose Models Validation', () => {
         version: 1,
         publicKey: '-----BEGIN PUBLIC KEY-----\ntest\n-----END PUBLIC KEY-----',
         algorithm: 'RSA-SHA256',
-        keySize: 2048
+        keySize: 2048,
       });
 
       expect(store.status).toBe('ACTIVE');
@@ -353,7 +353,7 @@ describe('Mongoose Models Validation', () => {
         version: 1,
         publicKey: 'invalid-key-format', // Invalid PEM
         algorithm: 'RSA-SHA256',
-        keySize: 2048
+        keySize: 2048,
       });
 
       const error = store.validateSync();
@@ -375,7 +375,7 @@ describe('Mongoose Models Validation', () => {
 
     test('should have geospatial fields', () => {
       const locationPaths = Object.keys(Farm.schema.paths).filter(path =>
-        path.startsWith('location')
+        path.startsWith('location'),
       );
 
       expect(locationPaths.length).toBeGreaterThan(0);
@@ -396,7 +396,7 @@ describe('Mongoose Models Validation', () => {
     test('should have unique email constraint', () => {
       const indexes = User.schema.indexes();
       const hasUniqueEmail = indexes.some(
-        index => index[0].email && index[1] && index[1].unique === true
+        index => index[0].email && index[1] && index[1].unique === true,
       );
 
       expect(hasUniqueEmail).toBe(true);

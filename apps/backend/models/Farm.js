@@ -4,50 +4,50 @@ const LocationSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['Point'],
-    default: 'Point'
+    default: 'Point',
   },
   coordinates: {
     type: [Number], // [longitude, latitude]
-    required: true
-  }
+    required: true,
+  },
 });
 
 const PlotSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   size: {
     value: Number,
     unit: {
       type: String,
       enum: ['rai', 'acre', 'hectare', 'sqm'],
-      default: 'rai'
-    }
+      default: 'rai',
+    },
   },
   location: LocationSchema,
   boundary: {
     type: [[Number]], // Array of [longitude, latitude] points forming polygon
-    default: []
+    default: [],
   },
   soilType: String,
   crops: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Crop'
-    }
+      ref: 'Crop',
+    },
   ],
   status: {
     type: String,
     enum: ['active', 'fallow', 'preparing', 'harvested'],
-    default: 'active'
-  }
+    default: 'active',
+  },
 });
 
 const CertificationSchema = new mongoose.Schema({
   type: {
     type: String,
-    required: true
+    required: true,
   },
   issuingBody: String,
   certificateNumber: String,
@@ -56,7 +56,7 @@ const CertificationSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['active', 'expired', 'revoked', 'pending'],
-    default: 'active'
+    default: 'active',
   },
   documents: [
     {
@@ -64,10 +64,10 @@ const CertificationSchema = new mongoose.Schema({
       fileUrl: String,
       uploadedAt: {
         type: Date,
-        default: Date.now
-      }
-    }
-  ]
+        default: Date.now,
+      },
+    },
+  ],
 });
 
 const FarmSchema = new mongoose.Schema(
@@ -75,22 +75,22 @@ const FarmSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     registrationNumber: {
       type: String,
-      unique: true
+      unique: true,
     },
     owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     managers: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
+        ref: 'User',
+      },
     ],
     contactDetails: {
       phone: String,
@@ -104,49 +104,49 @@ const FarmSchema = new mongoose.Schema(
         postalCode: String,
         country: {
           type: String,
-          default: 'Thailand'
-        }
-      }
+          default: 'Thailand',
+        },
+      },
     },
     location: LocationSchema,
     region: {
       type: String,
       enum: ['north', 'northeast', 'central', 'east', 'west', 'south'],
-      required: true
+      required: true,
     },
     totalArea: {
       value: Number,
       unit: {
         type: String,
         enum: ['rai', 'acre', 'hectare', 'sqm'],
-        default: 'rai'
-      }
+        default: 'rai',
+      },
     },
     plots: [PlotSchema],
     farmingType: {
       type: String,
       enum: ['conventional', 'organic', 'gapHybrid', 'hydroponic', 'mixed'],
-      default: 'conventional'
+      default: 'conventional',
     },
     certifications: [CertificationSchema],
     waterSources: [
       {
         type: String,
-        enum: ['river', 'reservoir', 'groundwater', 'rainfall', 'irrigation', 'other']
-      }
+        enum: ['river', 'reservoir', 'groundwater', 'rainfall', 'irrigation', 'other'],
+      },
     ],
     founded: Date,
     images: [
       {
         url: String,
         caption: String,
-        isPrimary: Boolean
-      }
+        isPrimary: Boolean,
+      },
     ],
     status: {
       type: String,
       enum: ['active', 'inactive', 'pending', 'suspended'],
-      default: 'active'
+      default: 'active',
     },
 
     // === Membership & Feature Access Control ===
@@ -154,77 +154,77 @@ const FarmSchema = new mongoose.Schema(
       tier: {
         type: String,
         enum: ['free', 'basic', 'premium', 'enterprise'],
-        default: 'free'
+        default: 'free',
       },
       startDate: Date,
       expiryDate: Date,
       autoRenew: {
         type: Boolean,
-        default: false
+        default: false,
       },
       paymentStatus: {
         type: String,
         enum: ['active', 'pending', 'overdue', 'cancelled'],
-        default: 'active'
-      }
+        default: 'active',
+      },
     },
     featureAccess: {
       // Phase 2: IoT Features (Optional - Free for now, may become premium)
       iotMonitoring: {
         enabled: {
           type: Boolean,
-          default: false
+          default: false,
         },
         availableInTier: {
           type: String,
           enum: ['free', 'basic', 'premium', 'enterprise'],
-          default: 'free' // เบื้องต้นให้ฟรี
+          default: 'free', // เบื้องต้นให้ฟรี
         },
-        activatedAt: Date
+        activatedAt: Date,
       },
       // Phase 3: AI Features (Optional - Free for now, may become premium)
       aiRecommendations: {
         enabled: {
           type: Boolean,
-          default: false
+          default: false,
         },
         availableInTier: {
           type: String,
           enum: ['free', 'basic', 'premium', 'enterprise'],
-          default: 'free' // เบื้องต้นให้ฟรี
+          default: 'free', // เบื้องต้นให้ฟรี
         },
         activatedAt: Date,
         features: {
           fertilizer: {
             type: Boolean,
-            default: false
+            default: false,
           },
           irrigation: {
             type: Boolean,
-            default: false
+            default: false,
           },
           diseasePrediction: {
             type: Boolean,
-            default: false
+            default: false,
           },
           yieldPrediction: {
             type: Boolean,
-            default: false
-          }
-        }
+            default: false,
+          },
+        },
       },
       // Advanced Analytics (Future - Premium only)
       advancedAnalytics: {
         enabled: {
           type: Boolean,
-          default: false
+          default: false,
         },
         availableInTier: {
           type: String,
           enum: ['premium', 'enterprise'],
-          default: 'premium'
-        }
-      }
+          default: 'premium',
+        },
+      },
     },
 
     // === Phase 2: IoT & Smart Farming (Optional) ===
@@ -233,19 +233,19 @@ const FarmSchema = new mongoose.Schema(
     iotDevices: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'IoTDevice'
-      }
+        ref: 'IoTDevice',
+      },
     ],
     sensorMonitoring: {
       enabled: {
         type: Boolean,
-        default: false
+        default: false,
       },
       alertsEnabled: {
         type: Boolean,
-        default: false
+        default: false,
       },
-      lastDataReceived: Date
+      lastDataReceived: Date,
     },
     realTimeData: {
       currentSoilMoisture: Number, // %
@@ -256,10 +256,10 @@ const FarmSchema = new mongoose.Schema(
       npk: {
         nitrogen: Number, // ppm
         phosphorus: Number, // ppm
-        potassium: Number // ppm
+        potassium: Number, // ppm
       },
       ec: Number, // Electrical Conductivity (mS/cm)
-      lastUpdated: Date
+      lastUpdated: Date,
     },
 
     // === Phase 3: AI Recommendations & ML (Optional) ===
@@ -274,7 +274,7 @@ const FarmSchema = new mongoose.Schema(
         amountPerRai: Number,
         estimatedCost: Number,
         reason: String,
-        confidence: Number // 0-100
+        confidence: Number, // 0-100
       },
       irrigation: {
         lastScheduleGenerated: Date,
@@ -285,19 +285,19 @@ const FarmSchema = new mongoose.Schema(
             duration: Number, // minutes
             method: {
               type: String,
-              enum: ['drip', 'sprinkler', 'flood', 'manual']
+              enum: ['drip', 'sprinkler', 'flood', 'manual'],
             },
-            reason: String
-          }
+            reason: String,
+          },
         ],
         estimatedWaterSavings: Number, // %
-        estimatedCostSavings: Number // THB
+        estimatedCostSavings: Number, // THB
       },
       disease: {
         lastPrediction: Date,
         riskLevel: {
           type: String,
-          enum: ['low', 'medium', 'high', 'critical']
+          enum: ['low', 'medium', 'high', 'critical'],
         },
         predictedDiseases: [
           {
@@ -305,10 +305,10 @@ const FarmSchema = new mongoose.Schema(
             diseaseName: String,
             probability: Number, // 0-100
             peakRiskDate: Date,
-            preventiveMeasures: [String]
-          }
+            preventiveMeasures: [String],
+          },
         ],
-        overallRisk: Number // 0-100
+        overallRisk: Number, // 0-100
       },
       yield: {
         lastPrediction: Date,
@@ -316,22 +316,22 @@ const FarmSchema = new mongoose.Schema(
         confidence: Number, // 0-100
         expectedHarvestDate: Date,
         factors: [String],
-        comparisonToRegionalAverage: Number // % difference
-      }
+        comparisonToRegionalAverage: Number, // % difference
+      },
     },
 
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
     updatedAt: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 // Create geo-spatial index for location

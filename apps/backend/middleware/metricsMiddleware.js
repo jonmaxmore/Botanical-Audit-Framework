@@ -1,6 +1,6 @@
 /**
  * Metrics Tracking Middleware
- * 
+ *
  * Automatically track API requests, response times, and status codes
  * Integrates with metricsService for centralized monitoring
  */
@@ -31,16 +31,16 @@ const metricsMiddleware = (req, res, next) => {
  * Wrap mongoose queries to capture execution time
  */
 const trackQuery = (model, operation) => {
-  return async function(...args) {
+  return async function (...args) {
     const startTime = Date.now();
-    
+
     try {
       const result = await model[operation](...args);
       const duration = Date.now() - startTime;
-      
+
       // Track query metrics
       metricsService.trackQuery(operation, duration, duration > 500);
-      
+
       return result;
     } catch (error) {
       const duration = Date.now() - startTime;
@@ -53,13 +53,13 @@ const trackQuery = (model, operation) => {
 /**
  * Mongoose plugin to track all queries
  */
-const mongooseMetricsPlugin = (schema) => {
+const mongooseMetricsPlugin = schema => {
   // Track find queries
-  schema.pre('find', function() {
+  schema.pre('find', function () {
     this._startTime = Date.now();
   });
 
-  schema.post('find', function(_docs) {
+  schema.post('find', function (_docs) {
     if (this._startTime) {
       const duration = Date.now() - this._startTime;
       metricsService.trackQuery('find', duration, duration > 500);
@@ -67,11 +67,11 @@ const mongooseMetricsPlugin = (schema) => {
   });
 
   // Track findOne queries
-  schema.pre('findOne', function() {
+  schema.pre('findOne', function () {
     this._startTime = Date.now();
   });
 
-  schema.post('findOne', function(_doc) {
+  schema.post('findOne', function (_doc) {
     if (this._startTime) {
       const duration = Date.now() - this._startTime;
       metricsService.trackQuery('find', duration, duration > 500);
@@ -79,11 +79,11 @@ const mongooseMetricsPlugin = (schema) => {
   });
 
   // Track save operations
-  schema.pre('save', function() {
+  schema.pre('save', function () {
     this._startTime = Date.now();
   });
 
-  schema.post('save', function(_doc) {
+  schema.post('save', function (_doc) {
     if (this._startTime) {
       const duration = Date.now() - this._startTime;
       metricsService.trackQuery('insert', duration, duration > 500);
@@ -91,11 +91,11 @@ const mongooseMetricsPlugin = (schema) => {
   });
 
   // Track update operations
-  schema.pre('updateOne', function() {
+  schema.pre('updateOne', function () {
     this._startTime = Date.now();
   });
 
-  schema.post('updateOne', function(_result) {
+  schema.post('updateOne', function (_result) {
     if (this._startTime) {
       const duration = Date.now() - this._startTime;
       metricsService.trackQuery('update', duration, duration > 500);
@@ -103,11 +103,11 @@ const mongooseMetricsPlugin = (schema) => {
   });
 
   // Track delete operations
-  schema.pre('deleteOne', function() {
+  schema.pre('deleteOne', function () {
     this._startTime = Date.now();
   });
 
-  schema.post('deleteOne', function(_result) {
+  schema.post('deleteOne', function (_result) {
     if (this._startTime) {
       const duration = Date.now() - this._startTime;
       metricsService.trackQuery('delete', duration, duration > 500);
@@ -118,5 +118,5 @@ const mongooseMetricsPlugin = (schema) => {
 module.exports = {
   metricsMiddleware,
   trackQuery,
-  mongooseMetricsPlugin
+  mongooseMetricsPlugin,
 };

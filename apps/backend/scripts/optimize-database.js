@@ -20,52 +20,52 @@ async function createIndexes() {
 
     // DTAMApplication indexes
     logger.info('Creating indexes for DTAMApplication...');
-    
+
     await DTAMApplication.collection.createIndex(
       { status: 1, createdAt: -1 },
-      { name: 'status_created_idx', background: true }
+      { name: 'status_created_idx', background: true },
     );
     logger.info('✅ Created compound index: status + createdAt');
 
     await DTAMApplication.collection.createIndex(
       { 'inspector._id': 1, status: 1 },
-      { name: 'inspector_status_idx', background: true }
+      { name: 'inspector_status_idx', background: true },
     );
     logger.info('✅ Created compound index: inspector + status');
 
     await DTAMApplication.collection.createIndex(
       { 'farmer._id': 1, createdAt: -1 },
-      { name: 'farmer_created_idx', background: true }
+      { name: 'farmer_created_idx', background: true },
     );
     logger.info('✅ Created compound index: farmer + createdAt');
 
     await DTAMApplication.collection.createIndex(
       { 'approver._id': 1, status: 1 },
-      { name: 'approver_status_idx', background: true }
+      { name: 'approver_status_idx', background: true },
     );
     logger.info('✅ Created compound index: approver + status');
 
     await DTAMApplication.collection.createIndex(
       { lotId: 1 },
-      { name: 'lot_id_idx', unique: true, background: true }
+      { name: 'lot_id_idx', unique: true, background: true },
     );
     logger.info('✅ Created unique index: lotId');
 
     await DTAMApplication.collection.createIndex(
       { inspectionType: 1, status: 1 },
-      { name: 'inspection_type_status_idx', background: true }
+      { name: 'inspection_type_status_idx', background: true },
     );
     logger.info('✅ Created compound index: inspectionType + status');
 
     await DTAMApplication.collection.createIndex(
       { 'aiQc.completedAt': -1 },
-      { name: 'ai_qc_completed_idx', background: true, sparse: true }
+      { name: 'ai_qc_completed_idx', background: true, sparse: true },
     );
     logger.info('✅ Created index: aiQc.completedAt');
 
     await DTAMApplication.collection.createIndex(
       { 'inspection.scheduledDate': 1 },
-      { name: 'inspection_scheduled_idx', background: true, sparse: true }
+      { name: 'inspection_scheduled_idx', background: true, sparse: true },
     );
     logger.info('✅ Created index: inspection.scheduledDate');
 
@@ -74,26 +74,23 @@ async function createIndexes() {
 
     await User.collection.createIndex(
       { email: 1 },
-      { name: 'email_idx', unique: true, background: true }
+      { name: 'email_idx', unique: true, background: true },
     );
     logger.info('✅ Created unique index: email');
 
     await User.collection.createIndex(
       { role: 1, active: 1 },
-      { name: 'role_active_idx', background: true }
+      { name: 'role_active_idx', background: true },
     );
     logger.info('✅ Created compound index: role + active');
 
     await User.collection.createIndex(
-      { 'idCard': 1 },
-      { name: 'id_card_idx', unique: true, sparse: true, background: true }
+      { idCard: 1 },
+      { name: 'id_card_idx', unique: true, sparse: true, background: true },
     );
     logger.info('✅ Created unique index: idCard');
 
-    await User.collection.createIndex(
-      { 'phone': 1 },
-      { name: 'phone_idx', background: true }
-    );
+    await User.collection.createIndex({ phone: 1 }, { name: 'phone_idx', background: true });
     logger.info('✅ Created index: phone');
 
     // Text search indexes
@@ -104,9 +101,9 @@ async function createIndexes() {
         lotId: 'text',
         'farmer.name': 'text',
         'farmer.farmName': 'text',
-        'farmer.farmLocation.province': 'text'
+        'farmer.farmLocation.province': 'text',
       },
-      { name: 'application_search_idx', background: true }
+      { name: 'application_search_idx', background: true },
     );
     logger.info('✅ Created text search index for applications');
 
@@ -114,25 +111,25 @@ async function createIndexes() {
       {
         name: 'text',
         email: 'text',
-        phone: 'text'
+        phone: 'text',
       },
-      { name: 'user_search_idx', background: true }
+      { name: 'user_search_idx', background: true },
     );
     logger.info('✅ Created text search index for users');
 
     logger.info('✅ Database optimization completed successfully!');
-    
+
     // Get index statistics
     const appIndexes = await DTAMApplication.collection.getIndexes();
     const userIndexes = await User.collection.getIndexes();
-    
+
     logger.info(`DTAMApplication indexes: ${Object.keys(appIndexes).length}`);
     logger.info(`User indexes: ${Object.keys(userIndexes).length}`);
 
     return {
       success: true,
       applicationIndexes: Object.keys(appIndexes).length,
-      userIndexes: Object.keys(userIndexes).length
+      userIndexes: Object.keys(userIndexes).length,
     };
   } catch (error) {
     logger.error('Database optimization failed:', error);
@@ -151,29 +148,33 @@ async function analyzeQueryPerformance() {
     const queries = [
       {
         name: 'Applications by status',
-        query: () => DTAMApplication.find({ status: 'SUBMITTED' }).explain('executionStats')
+        query: () => DTAMApplication.find({ status: 'SUBMITTED' }).explain('executionStats'),
       },
       {
         name: 'Applications by inspector',
-        query: () => DTAMApplication.find({ 
-          'inspector._id': mongoose.Types.ObjectId(),
-          status: 'ASSIGNED' 
-        }).explain('executionStats')
+        query: () =>
+          DTAMApplication.find({
+            'inspector._id': mongoose.Types.ObjectId(),
+            status: 'ASSIGNED',
+          }).explain('executionStats'),
       },
       {
         name: 'Applications by farmer',
-        query: () => DTAMApplication.find({ 
-          'farmer._id': mongoose.Types.ObjectId() 
-        }).sort({ createdAt: -1 }).explain('executionStats')
+        query: () =>
+          DTAMApplication.find({
+            'farmer._id': mongoose.Types.ObjectId(),
+          })
+            .sort({ createdAt: -1 })
+            .explain('executionStats'),
       },
       {
         name: 'Active users by role',
-        query: () => User.find({ role: 'inspector', active: true }).explain('executionStats')
-      }
+        query: () => User.find({ role: 'inspector', active: true }).explain('executionStats'),
+      },
     ];
 
     const results = [];
-    
+
     for (const { name, query } of queries) {
       try {
         const stats = await query();
@@ -187,8 +188,9 @@ async function analyzeQueryPerformance() {
           executionTime: `${executionTime}ms`,
           docsExamined,
           docsReturned,
-          efficiency: docsExamined > 0 ? (docsReturned / docsExamined * 100).toFixed(2) + '%' : 'N/A',
-          indexUsed
+          efficiency:
+            docsExamined > 0 ? ((docsReturned / docsExamined) * 100).toFixed(2) + '%' : 'N/A',
+          indexUsed,
         });
 
         logger.info(`Query: ${name}`);
@@ -214,14 +216,14 @@ async function analyzeQueryPerformance() {
 async function getDatabaseStats() {
   try {
     const stats = await mongoose.connection.db.stats();
-    
+
     return {
       collections: stats.collections,
       dataSize: (stats.dataSize / 1024 / 1024).toFixed(2) + ' MB',
       storageSize: (stats.storageSize / 1024 / 1024).toFixed(2) + ' MB',
       indexes: stats.indexes,
       indexSize: (stats.indexSize / 1024 / 1024).toFixed(2) + ' MB',
-      avgObjSize: (stats.avgObjSize / 1024).toFixed(2) + ' KB'
+      avgObjSize: (stats.avgObjSize / 1024).toFixed(2) + ' KB',
     };
   } catch (error) {
     logger.error('Failed to get database stats:', error);
@@ -235,10 +237,10 @@ async function getDatabaseStats() {
 async function dropUnusedIndexes() {
   try {
     logger.warn('⚠️  Dropping unused indexes...');
-    
+
     // This is a placeholder - implement based on your needs
     // Use db.collection.getIndexes() to review first
-    
+
     logger.info('✅ Unused indexes dropped');
   } catch (error) {
     logger.error('Failed to drop indexes:', error);
@@ -257,7 +259,7 @@ async function optimize() {
 
     // Create indexes
     const indexResult = await createIndexes();
-    
+
     // Get database stats
     const dbStats = await getDatabaseStats();
     logger.info('Database Statistics:');
@@ -276,7 +278,7 @@ async function optimize() {
       success: true,
       indexes: indexResult,
       stats: dbStats,
-      performance: perfResults
+      performance: perfResults,
     };
   } catch (error) {
     logger.error('Optimization failed:', error);
@@ -290,13 +292,13 @@ async function runOptimization() {
   try {
     // Connect to database
     await mongoManager.connect();
-    
+
     // Run optimization
     const result = await optimize();
-    
+
     console.log('\n✅ Optimization successful!');
     console.log(JSON.stringify(result, null, 2));
-    
+
     process.exit(0);
   } catch (error) {
     console.error('\n❌ Optimization failed:', error);
@@ -313,5 +315,5 @@ module.exports = {
   createIndexes,
   analyzeQueryPerformance,
   getDatabaseStats,
-  optimize
+  optimize,
 };

@@ -23,7 +23,7 @@ function secureCookies(options = {}) {
     sameSite: 'strict',
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     path: '/',
-    ...options
+    ...options,
   };
 
   return (req, res, next) => {
@@ -34,7 +34,7 @@ function secureCookies(options = {}) {
       // Merge with secure defaults
       const secureOptions = {
         ...defaultOptions,
-        ...cookieOptions
+        ...cookieOptions,
       };
 
       // Force secure in production
@@ -46,7 +46,7 @@ function secureCookies(options = {}) {
       if (process.env.NODE_ENV !== 'production') {
         logger.debug('[SecureCookies] Setting cookie:', {
           name,
-          options: secureOptions
+          options: secureOptions,
         });
       }
 
@@ -71,7 +71,7 @@ function clearAllCookies(req, res, next) {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'strict',
-      path: '/'
+      path: '/',
     });
   });
 
@@ -80,5 +80,5 @@ function clearAllCookies(req, res, next) {
 
 module.exports = {
   secureCookies,
-  clearAllCookies
+  clearAllCookies,
 };

@@ -64,7 +64,7 @@ router.post('/irrigation/calculate', (req, res) => {
       temperature,
       humidity,
       rainfall,
-      soilType
+      soilType,
     );
     res.json({ success: true, data: result });
   } catch (error) {

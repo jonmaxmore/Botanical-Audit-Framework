@@ -14,7 +14,7 @@ const STATUS = {
   UNDER_REVIEW: 'UNDER_REVIEW', // Being reviewed by DTAM staff
   APPROVED: 'APPROVED', // Approved by DTAM
   REJECTED: 'REJECTED', // Rejected with reason
-  REVISION_REQUIRED: 'REVISION_REQUIRED' // Needs farmer revision
+  REVISION_REQUIRED: 'REVISION_REQUIRED', // Needs farmer revision
 };
 
 // Cultivation Purpose Constants
@@ -22,7 +22,7 @@ const PURPOSE = {
   RESEARCH: 'RESEARCH', // Research purposes
   MEDICAL: 'MEDICAL', // Medical production
   INDUSTRIAL: 'INDUSTRIAL', // Industrial hemp
-  EDUCATION: 'EDUCATION' // Educational purposes
+  EDUCATION: 'EDUCATION', // Educational purposes
 };
 
 // Plant Type Constants
@@ -30,7 +30,7 @@ const PLANT_TYPE = {
   CANNABIS_SATIVA: 'CANNABIS_SATIVA',
   CANNABIS_INDICA: 'CANNABIS_INDICA',
   HEMP: 'HEMP',
-  HYBRID: 'HYBRID'
+  HYBRID: 'HYBRID',
 };
 
 class Survey {
@@ -84,7 +84,7 @@ class Survey {
 
     // Timestamps
     createdAt = new Date(),
-    updatedAt = new Date()
+    updatedAt = new Date(),
   }) {
     // Identifiers
     this.id = id;
@@ -164,7 +164,7 @@ class Survey {
       ...surveyData,
       status: STATUS.DRAFT,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 
@@ -199,7 +199,7 @@ class Survey {
       'additionalNotes',
       'complianceChecklist',
       'thcContent',
-      'cbdContent'
+      'cbdContent',
     ];
 
     allowedFields.forEach(field => {
@@ -399,7 +399,7 @@ class Survey {
       areaUnit: this.areaUnit,
       status: this.status,
       submittedAt: this.submittedAt,
-      reviewedAt: this.reviewedAt
+      reviewedAt: this.reviewedAt,
     };
   }
 
@@ -456,5 +456,5 @@ module.exports = {
   Survey,
   STATUS,
   PURPOSE,
-  PLANT_TYPE
+  PLANT_TYPE,
 };

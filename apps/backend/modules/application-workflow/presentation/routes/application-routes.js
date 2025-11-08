@@ -31,7 +31,7 @@ const {
   authorize,
   validateRequest,
   rateLimit,
-  auditLog
+  auditLog,
 } = require('../../../shared/middleware');
 
 const router = express.Router();
@@ -61,7 +61,7 @@ function createApplicationRoutes(dependencies = {}) {
     rateLimit({ windowMs: 60 * 60 * 1000, max: 10 }), // 10 per hour
     validateRequest('createApplication'),
     auditLog('APPLICATION_CREATE'),
-    applicationController.createApplication
+    applicationController.createApplication,
   );
 
   /**
@@ -74,7 +74,7 @@ function createApplicationRoutes(dependencies = {}) {
     authenticate,
     validateRequest('getApplication'),
     auditLog('APPLICATION_VIEW'),
-    applicationController.getApplication
+    applicationController.getApplication,
   );
 
   /**
@@ -88,7 +88,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['FARMER']),
     validateRequest('updateApplication'),
     auditLog('APPLICATION_UPDATE'),
-    applicationController.updateApplication
+    applicationController.updateApplication,
   );
 
   /**
@@ -102,7 +102,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['FARMER']),
     validateRequest('submitApplication'),
     auditLog('APPLICATION_SUBMIT'),
-    applicationController.submitApplication
+    applicationController.submitApplication,
   );
 
   /**
@@ -121,7 +121,7 @@ function createApplicationRoutes(dependencies = {}) {
     '/:id/workflow-history',
     authenticate,
     auditLog('WORKFLOW_HISTORY_VIEW'),
-    applicationController.getWorkflowHistory
+    applicationController.getWorkflowHistory,
   );
 
   // ==============================================
@@ -139,7 +139,7 @@ function createApplicationRoutes(dependencies = {}) {
     authenticate,
     authorize(['FARMER']),
     validateRequest('getFarmerApplications'),
-    applicationController.getFarmerApplications
+    applicationController.getFarmerApplications,
   );
 
   // ==============================================
@@ -157,7 +157,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_REVIEWER']),
     validateRequest('approveForPayment'),
     auditLog('APPLICATION_APPROVE_PAYMENT'),
-    applicationController.approveForPayment
+    applicationController.approveForPayment,
   );
 
   /**
@@ -171,7 +171,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_REVIEWER']),
     validateRequest('requestRevision'),
     auditLog('APPLICATION_REQUEST_REVISION'),
-    applicationController.requestRevision
+    applicationController.requestRevision,
   );
 
   // ==============================================
@@ -189,7 +189,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_INSPECTOR']),
     validateRequest('scheduleInspection'),
     auditLog('INSPECTION_SCHEDULE'),
-    applicationController.scheduleInspection
+    applicationController.scheduleInspection,
   );
 
   /**
@@ -203,7 +203,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_INSPECTOR']),
     validateRequest('completeInspection'),
     auditLog('INSPECTION_COMPLETE'),
-    applicationController.completeInspection
+    applicationController.completeInspection,
   );
 
   // ==============================================
@@ -221,7 +221,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_ADMIN', 'ADMIN']),
     validateRequest('finalApproval'),
     auditLog('APPLICATION_FINAL_APPROVAL'),
-    applicationController.finalApproval
+    applicationController.finalApproval,
   );
 
   // ==============================================
@@ -239,7 +239,7 @@ function createApplicationRoutes(dependencies = {}) {
     authorize(['DTAM_REVIEWER', 'DTAM_INSPECTOR', 'DTAM_ADMIN', 'ADMIN']),
     validateRequest('rejectApplication'),
     auditLog('APPLICATION_REJECT'),
-    applicationController.rejectApplication
+    applicationController.rejectApplication,
   );
 
   // ==============================================
@@ -266,7 +266,7 @@ function createApplicationRoutes(dependencies = {}) {
         logger.error('[ApplicationRoutes] Payment webhook error:', error);
         res.status(500).json({ success: false, error: 'Webhook processing failed' });
       }
-    }
+    },
   );
 
   return router;
@@ -285,15 +285,15 @@ const routeDocumentation = {
       body: {
         farmer: { type: 'object', required: true },
         farm: { type: 'object', required: true },
-        documents: { type: 'array', required: false }
+        documents: { type: 'array', required: false },
       },
       responses: {
         201: 'Application created successfully',
         400: 'Validation error',
         403: 'Forbidden - Farmers only',
-        429: 'Rate limit exceeded'
-      }
-    }
+        429: 'Rate limit exceeded',
+      },
+    },
   },
 
   '/applications/:id': {
@@ -303,8 +303,8 @@ const routeDocumentation = {
       responses: {
         200: 'Application details with workflow status',
         403: 'Access denied',
-        404: 'Application not found'
-      }
+        404: 'Application not found',
+      },
     },
     PUT: {
       description: 'Update application (draft/revision states only)',
@@ -312,9 +312,9 @@ const routeDocumentation = {
       responses: {
         200: 'Application updated',
         400: 'Cannot edit in current state',
-        403: 'Access denied'
-      }
-    }
+        403: 'Access denied',
+      },
+    },
   },
 
   '/applications/:id/submit': {
@@ -324,9 +324,9 @@ const routeDocumentation = {
       responses: {
         200: 'Application submitted',
         400: 'Missing required documents',
-        403: 'Access denied'
-      }
-    }
+        403: 'Access denied',
+      },
+    },
   },
 
   '/dtam/applications/:id/approve-payment': {
@@ -335,14 +335,14 @@ const routeDocumentation = {
       access: 'DTAM_REVIEWER',
       body: {
         findings: { type: 'array', required: false },
-        notes: { type: 'string', required: false }
+        notes: { type: 'string', required: false },
       },
       responses: {
         200: 'Approved for payment',
         400: 'Invalid state transition',
-        403: 'Reviewer access required'
-      }
-    }
+        403: 'Reviewer access required',
+      },
+    },
   },
 
   '/dtam/applications/:id/request-revision': {
@@ -351,14 +351,14 @@ const routeDocumentation = {
       access: 'DTAM_REVIEWER',
       body: {
         reasons: { type: 'array', required: true },
-        notes: { type: 'string', required: true }
+        notes: { type: 'string', required: true },
       },
       responses: {
         200: 'Revision requested',
         400: 'Max revisions exceeded',
-        403: 'Reviewer access required'
-      }
-    }
+        403: 'Reviewer access required',
+      },
+    },
   },
 
   '/dtam/applications/:id/schedule-inspection': {
@@ -368,14 +368,14 @@ const routeDocumentation = {
       body: {
         scheduledDate: { type: 'string', format: 'date-time', required: true },
         type: { type: 'string', enum: ['onsite', 'virtual'], required: true },
-        notes: { type: 'string', required: false }
+        notes: { type: 'string', required: false },
       },
       responses: {
         200: 'Inspection scheduled',
         400: 'Invalid date or type',
-        403: 'Inspector access required'
-      }
-    }
+        403: 'Inspector access required',
+      },
+    },
   },
 
   '/dtam/applications/:id/complete-inspection': {
@@ -386,14 +386,14 @@ const routeDocumentation = {
         findings: { type: 'array', required: true },
         checklist: { type: 'object', required: true },
         photos: { type: 'array', required: false },
-        notes: { type: 'string', required: false }
+        notes: { type: 'string', required: false },
       },
       responses: {
         200: 'Inspection completed',
         400: 'Compliance score too low',
-        403: 'Inspector access required'
-      }
-    }
+        403: 'Inspector access required',
+      },
+    },
   },
 
   '/dtam/applications/:id/final-approval': {
@@ -403,14 +403,14 @@ const routeDocumentation = {
       body: {
         signature: { type: 'string', required: true },
         notes: { type: 'string', required: false },
-        certificateTemplate: { type: 'string', required: false }
+        certificateTemplate: { type: 'string', required: false },
       },
       responses: {
         200: 'Application approved, certificate will be issued',
         400: 'Missing signature',
-        403: 'Admin access required'
-      }
-    }
+        403: 'Admin access required',
+      },
+    },
   },
 
   '/dtam/applications/:id/reject': {
@@ -419,17 +419,17 @@ const routeDocumentation = {
       access: 'DTAM staff',
       body: {
         reason: { type: 'string', required: true },
-        notes: { type: 'string', required: false }
+        notes: { type: 'string', required: false },
       },
       responses: {
         200: 'Application rejected',
-        403: 'DTAM access required'
-      }
-    }
-  }
+        403: 'DTAM access required',
+      },
+    },
+  },
 };
 
 module.exports = {
   createApplicationRoutes,
-  routeDocumentation
+  routeDocumentation,
 };

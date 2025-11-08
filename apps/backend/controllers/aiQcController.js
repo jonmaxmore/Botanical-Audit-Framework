@@ -22,25 +22,25 @@ exports.runAIQC = async (req, res) => {
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found'
+        message: 'Application not found',
       });
     }
 
     if (application.status !== 'SUBMITTED') {
       return res.status(400).json({
         success: false,
-        message: 'Application must be in SUBMITTED status for AI QC'
+        message: 'Application must be in SUBMITTED status for AI QC',
       });
     }
 
     // Add to queue for background processing
     if (useQueue && process.env.ENABLE_QUEUE === 'true') {
       const job = await queueService.addAIQCJob(applicationId, {
-        priority: 5
+        priority: 5,
       });
 
       logger.info(`AI QC job queued for application ${applicationId}`, {
-        jobId: job.id
+        jobId: job.id,
       });
 
       return res.json({
@@ -48,8 +48,8 @@ exports.runAIQC = async (req, res) => {
         message: 'AI QC queued for processing',
         data: {
           jobId: job.id,
-          status: 'queued'
-        }
+          status: 'queued',
+        },
       });
     }
 
@@ -65,22 +65,22 @@ exports.runAIQC = async (req, res) => {
       lotId: appWithData.lotId,
       farmer: {
         name: appWithData.farmer.name,
-        idCard: appWithData.farmer.idCard
+        idCard: appWithData.farmer.idCard,
       },
       farm: {
         name: appWithData.farmer.farmName,
         location: appWithData.farmer.farmLocation,
-        area: appWithData.farmArea
+        area: appWithData.farmArea,
       },
       documents: appWithData.documents || [],
-      images: appWithData.images || []
+      images: appWithData.images || [],
     });
 
     if (!qcResult.success) {
       return res.status(500).json({
         success: false,
         message: 'AI QC failed',
-        error: qcResult.error
+        error: qcResult.error,
       });
     }
 
@@ -91,7 +91,7 @@ exports.runAIQC = async (req, res) => {
       scores: qcResult.data.scores,
       inspectionType: qcResult.data.inspectionType,
       issues: qcResult.data.issues,
-      recommendations: qcResult.data.recommendations
+      recommendations: qcResult.data.recommendations,
     };
 
     appWithData.inspectionType = qcResult.data.inspectionType;
@@ -105,7 +105,7 @@ exports.runAIQC = async (req, res) => {
 
     logger.info(`AI QC completed for application ${applicationId}`, {
       score: qcResult.data.overallScore,
-      inspectionType: qcResult.data.inspectionType
+      inspectionType: qcResult.data.inspectionType,
     });
 
     res.json({
@@ -116,15 +116,15 @@ exports.runAIQC = async (req, res) => {
         overallScore: qcResult.data.overallScore,
         inspectionType: qcResult.data.inspectionType,
         issues: qcResult.data.issues,
-        recommendations: qcResult.data.recommendations
-      }
+        recommendations: qcResult.data.recommendations,
+      },
     });
   } catch (error) {
     logger.error('AI QC error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to run AI QC',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -138,30 +138,31 @@ exports.getAIQCResults = async (req, res) => {
 
     // Try to get from cache first
     const cachedResult = await cacheService.getAIQCResult(applicationId);
-    
+
     if (cachedResult) {
       logger.debug(`Cache hit for AI QC result: ${applicationId}`);
       return res.json({
         success: true,
         data: cachedResult,
-        cached: true
+        cached: true,
       });
     }
 
-    const application = await DTAMApplication.findById(applicationId)
-      .select('aiQc inspectionType aiQcCompletedAt');
+    const application = await DTAMApplication.findById(applicationId).select(
+      'aiQc inspectionType aiQcCompletedAt',
+    );
 
     if (!application) {
       return res.status(404).json({
         success: false,
-        message: 'Application not found'
+        message: 'Application not found',
       });
     }
 
     if (!application.aiQc) {
       return res.status(404).json({
         success: false,
-        message: 'AI QC not completed for this application'
+        message: 'AI QC not completed for this application',
       });
     }
 
@@ -170,14 +171,14 @@ exports.getAIQCResults = async (req, res) => {
 
     res.json({
       success: true,
-      data: application.aiQc
+      data: application.aiQc,
     });
   } catch (error) {
     logger.error('Get AI QC results error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to get AI QC results',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -190,7 +191,7 @@ exports.extractText = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: 'No image file provided'
+        message: 'No image file provided',
       });
     }
 
@@ -200,7 +201,7 @@ exports.extractText = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: 'OCR failed',
-        error: result.error
+        error: result.error,
       });
     }
 
@@ -208,15 +209,15 @@ exports.extractText = async (req, res) => {
       success: true,
       data: {
         extractedText: result.extractedText,
-        confidence: result.confidence
-      }
+        confidence: result.confidence,
+      },
     });
   } catch (error) {
     logger.error('OCR error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to extract text',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -231,14 +232,14 @@ exports.validateDocument = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: 'No document file provided'
+        message: 'No document file provided',
       });
     }
 
     if (!documentType) {
       return res.status(400).json({
         success: false,
-        message: 'Document type is required'
+        message: 'Document type is required',
       });
     }
 
@@ -248,20 +249,20 @@ exports.validateDocument = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: 'Document validation failed',
-        error: result.error
+        error: result.error,
       });
     }
 
     res.json({
       success: true,
-      data: result.data
+      data: result.data,
     });
   } catch (error) {
     logger.error('Document validation error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to validate document',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -274,7 +275,7 @@ exports.analyzeImageQuality = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({
         success: false,
-        message: 'No image file provided'
+        message: 'No image file provided',
       });
     }
 
@@ -284,20 +285,20 @@ exports.analyzeImageQuality = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: 'Image analysis failed',
-        error: result.error
+        error: result.error,
       });
     }
 
     res.json({
       success: true,
-      data: result.data
+      data: result.data,
     });
   } catch (error) {
     logger.error('Image analysis error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to analyze image',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -310,7 +311,7 @@ exports.compareDocuments = async (req, res) => {
     if (!req.files || req.files.length !== 2) {
       return res.status(400).json({
         success: false,
-        message: 'Exactly 2 document files are required'
+        message: 'Exactly 2 document files are required',
       });
     }
 
@@ -321,20 +322,20 @@ exports.compareDocuments = async (req, res) => {
       return res.status(500).json({
         success: false,
         message: 'Document comparison failed',
-        error: result.error
+        error: result.error,
       });
     }
 
     res.json({
       success: true,
-      data: result.data
+      data: result.data,
     });
   } catch (error) {
     logger.error('Document comparison error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to compare documents',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -347,7 +348,7 @@ exports.batchOCR = async (req, res) => {
     if (!req.files || req.files.length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'No files provided'
+        message: 'No files provided',
       });
     }
 
@@ -360,15 +361,15 @@ exports.batchOCR = async (req, res) => {
         total: results.length,
         successful: results.filter(r => r.success).length,
         failed: results.filter(r => !r.success).length,
-        results
-      }
+        results,
+      },
     });
   } catch (error) {
     logger.error('Batch OCR error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to process batch OCR',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -381,20 +382,20 @@ exports.getAIQCStats = async (req, res) => {
     const stats = await DTAMApplication.aggregate([
       {
         $match: {
-          aiQcCompletedAt: { $exists: true }
-        }
+          aiQcCompletedAt: { $exists: true },
+        },
       },
       {
         $group: {
           _id: '$inspectionType',
           count: { $sum: 1 },
-          avgScore: { $avg: '$aiQc.overallScore' }
-        }
-      }
+          avgScore: { $avg: '$aiQc.overallScore' },
+        },
+      },
     ]);
 
     const totalProcessed = await DTAMApplication.countDocuments({
-      aiQcCompletedAt: { $exists: true }
+      aiQcCompletedAt: { $exists: true },
     });
 
     res.json({
@@ -402,15 +403,15 @@ exports.getAIQCStats = async (req, res) => {
       data: {
         totalProcessed,
         byInspectionType: stats,
-        overallAvgScore: stats.reduce((sum, s) => sum + s.avgScore, 0) / stats.length || 0
-      }
+        overallAvgScore: stats.reduce((sum, s) => sum + s.avgScore, 0) / stats.length || 0,
+      },
     });
   } catch (error) {
     logger.error('Get AI QC stats error:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to get AI QC statistics',
-      error: error.message
+      error: error.message,
     });
   }
 };

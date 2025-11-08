@@ -32,7 +32,7 @@ class GACPSystemOrchestrator {
     auditService,
     reportingService,
     eventBus,
-    configService
+    configService,
   }) {
     this.services = {
       application: applicationService,
@@ -42,7 +42,7 @@ class GACPSystemOrchestrator {
       certificate: certificateService,
       notification: notificationService,
       audit: auditService,
-      reporting: reportingService
+      reporting: reportingService,
     };
 
     this.eventBus = eventBus;
@@ -91,7 +91,7 @@ class GACPSystemOrchestrator {
         submittedAt: new Date(),
         currentStage: 'DOCUMENT_COLLECTION',
         requiredDocuments: this._getRequiredDocuments(applicationData),
-        businessRules: this._getApplicableBusinessRules(applicationData)
+        businessRules: this._getApplicableBusinessRules(applicationData),
       });
 
       // 2. Validate business rules
@@ -108,7 +108,7 @@ class GACPSystemOrchestrator {
         userId,
         amount: paymentInfo.totalAmount,
         feeBreakdown: paymentInfo.breakdown,
-        dueDate: this._calculatePaymentDueDate()
+        dueDate: this._calculatePaymentDueDate(),
       });
 
       logger.info(`💰 Payment record created: ฿${paymentInfo.totalAmount}`);
@@ -120,7 +120,7 @@ class GACPSystemOrchestrator {
         requiredDocuments: this._getRequiredDocuments(applicationData),
         paymentInfo,
         nextSteps: this._getNextSteps('DOCUMENT_COLLECTION'),
-        channels: ['email', 'sms', 'in-app']
+        channels: ['email', 'sms', 'in-app'],
       });
 
       // 5. Schedule follow-up reminders
@@ -135,15 +135,15 @@ class GACPSystemOrchestrator {
         metadata: {
           stage: 'DOCUMENT_COLLECTION',
           paymentAmount: paymentInfo.totalAmount,
-          requiredDocuments: this._getRequiredDocuments(applicationData).length
-        }
+          requiredDocuments: this._getRequiredDocuments(applicationData).length,
+        },
       });
 
       logger.info(`✅ Application submission workflow initialized: ${applicationId}`);
     } catch (error) {
       console.error(
         `❌ Application submission workflow failed: ${event.payload.applicationId}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'SUBMISSION', error);
     }
@@ -163,7 +163,7 @@ class GACPSystemOrchestrator {
       await this._updateWorkflowState(applicationId, 'DOCUMENTS_COMPLETE', {
         documentsCompletedAt: new Date(),
         currentStage: 'PAYMENT_VERIFICATION',
-        nextAction: 'VERIFY_PAYMENT'
+        nextAction: 'VERIFY_PAYMENT',
       });
 
       // 2. Check payment status
@@ -179,7 +179,7 @@ class GACPSystemOrchestrator {
           applicationId,
           paymentInfo: paymentStatus,
           urgency: 'NORMAL',
-          channels: ['email', 'sms', 'in-app']
+          channels: ['email', 'sms', 'in-app'],
         });
 
         logger.info(`💰 Payment reminder sent for application: ${applicationId}`);
@@ -195,14 +195,14 @@ class GACPSystemOrchestrator {
         applicationId,
         userId,
         milestone: 'DOCUMENT_COLLECTION',
-        nextStage: paymentStatus.isPaid ? 'QC_REVIEW' : 'PAYMENT_VERIFICATION'
+        nextStage: paymentStatus.isPaid ? 'QC_REVIEW' : 'PAYMENT_VERIFICATION',
       });
 
       logger.info(`✅ Documents completion processed: ${applicationId}`);
     } catch (error) {
       console.error(
         `❌ Documents completion processing failed: ${event.payload.applicationId}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'DOCUMENTS_COMPLETE', error);
     }
@@ -223,7 +223,7 @@ class GACPSystemOrchestrator {
         paymentCompletedAt: new Date(),
         paymentAmount: paymentData.amount,
         currentStage: 'QC_REVIEW',
-        nextAction: 'ASSIGN_QC_OFFICER'
+        nextAction: 'ASSIGN_QC_OFFICER',
       });
 
       // 2. Trigger QC review process
@@ -235,7 +235,7 @@ class GACPSystemOrchestrator {
         applicationId,
         paymentData,
         nextSteps: this._getNextSteps('QC_REVIEW'),
-        channels: ['email', 'sms', 'in-app']
+        channels: ['email', 'sms', 'in-app'],
       });
 
       // 4. Update financial reporting
@@ -243,14 +243,14 @@ class GACPSystemOrchestrator {
         applicationId,
         paymentAmount: paymentData.amount,
         paymentDate: new Date(),
-        category: 'APPLICATION_FEE'
+        category: 'APPLICATION_FEE',
       });
 
       logger.info(`✅ Payment completion processed: ${applicationId}`);
     } catch (error) {
       console.error(
         `❌ Payment completion processing failed: ${event.payload.applicationId}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'PAYMENT_COMPLETE', error);
     }
@@ -271,7 +271,7 @@ class GACPSystemOrchestrator {
         approvedAt: new Date(),
         approvedBy,
         currentStage: 'CERTIFICATE_GENERATION',
-        nextAction: 'GENERATE_CERTIFICATE'
+        nextAction: 'GENERATE_CERTIFICATE',
       });
 
       // 2. Validate final business rules
@@ -286,7 +286,7 @@ class GACPSystemOrchestrator {
         applicationId,
         applicationData,
         issuedBy: approvedBy,
-        validityPeriod: 36 // 3 years
+        validityPeriod: 36, // 3 years
       });
 
       // 4. Send approval notification
@@ -295,7 +295,7 @@ class GACPSystemOrchestrator {
         applicationId,
         approvedBy,
         nextSteps: this._getNextSteps('CERTIFICATE_GENERATION'),
-        channels: ['email', 'sms', 'in-app']
+        channels: ['email', 'sms', 'in-app'],
       });
 
       // 5. Update success metrics
@@ -303,14 +303,14 @@ class GACPSystemOrchestrator {
         applicationId,
         approvalDate: new Date(),
         processingTime: await this._calculateProcessingTime(applicationId),
-        approvedBy
+        approvedBy,
       });
 
       logger.info(`✅ Application approval processed: ${applicationId}`);
     } catch (error) {
       console.error(
         `❌ Application approval processing failed: ${event.payload.applicationId}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'APPROVAL', error);
     }
@@ -332,7 +332,7 @@ class GACPSystemOrchestrator {
         certificateId,
         certificateNumber,
         currentStage: 'COMPLETED',
-        workflowStatus: 'SUCCESS'
+        workflowStatus: 'SUCCESS',
       });
 
       // 2. Generate final completion report
@@ -346,7 +346,7 @@ class GACPSystemOrchestrator {
         certificateId,
         certificateNumber,
         downloadInstructions: this._getCertificateDownloadInstructions(certificateId),
-        channels: ['email', 'sms', 'in-app']
+        channels: ['email', 'sms', 'in-app'],
       });
 
       // 4. Schedule post-issuance follow-ups
@@ -359,14 +359,14 @@ class GACPSystemOrchestrator {
         certificateId,
         userId,
         totalProcessingTime: await this._calculateProcessingTime(applicationId),
-        completedAt: new Date()
+        completedAt: new Date(),
       });
 
       logger.info(`🎯 Certificate generation workflow completed: ${certificateNumber}`);
     } catch (error) {
       console.error(
         `❌ Certificate generation processing failed: ${event.payload.certificateNumber}`,
-        error
+        error,
       );
       await this._handleWorkflowError(event.payload.applicationId, 'CERTIFICATE_GENERATION', error);
     }
@@ -386,7 +386,7 @@ class GACPSystemOrchestrator {
       const roleChangeValidation = await this.services.userManagement.validateRoleChange(
         changedBy,
         oldRole,
-        newRole
+        newRole,
       );
 
       if (!roleChangeValidation.valid) {
@@ -405,8 +405,8 @@ class GACPSystemOrchestrator {
           oldRole,
           newRole,
           changedBy,
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       });
 
       // 4. Send role change notification
@@ -416,7 +416,7 @@ class GACPSystemOrchestrator {
         newRole,
         changedBy,
         newPermissions: await this.services.userManagement.getUserPermissions(userId),
-        channels: ['email', 'in-app']
+        channels: ['email', 'in-app'],
       });
 
       logger.info(`✅ User role change processed: ${userId} (${oldRole} → ${newRole});`);
@@ -439,10 +439,10 @@ class GACPSystemOrchestrator {
         {
           status,
           timestamp: new Date(),
-          metadata
-        }
+          metadata,
+        },
       ],
-      ...metadata
+      ...metadata,
     };
 
     this.workflowStates.set(applicationId, workflowState);
@@ -467,14 +467,14 @@ class GACPSystemOrchestrator {
     existingState.history.push({
       status,
       timestamp: new Date(),
-      metadata
+      metadata,
     });
 
     // Update current state
     Object.assign(existingState, {
       status,
       lastUpdated: new Date(),
-      ...metadata
+      ...metadata,
     });
 
     this.workflowStates.set(applicationId, existingState);
@@ -490,7 +490,7 @@ class GACPSystemOrchestrator {
     // 1. Find available QC officer
     const qcOfficer = await this.services.userManagement.findAvailableQCOfficer({
       workload: 'LIGHT',
-      province: await this._getApplicationProvince(applicationId)
+      province: await this._getApplicationProvince(applicationId),
     });
 
     if (!qcOfficer) {
@@ -505,7 +505,7 @@ class GACPSystemOrchestrator {
       qcOfficerId: qcOfficer.id,
       assignedAt: new Date(),
       currentStage: 'QC_REVIEW',
-      nextAction: 'QC_INSPECTION'
+      nextAction: 'QC_INSPECTION',
     });
 
     // 4. Notify QC officer
@@ -513,7 +513,7 @@ class GACPSystemOrchestrator {
       userId: qcOfficer.id,
       applicationId,
       assignmentDetails: await this._getQCAssignmentDetails(applicationId),
-      channels: ['email', 'in-app']
+      channels: ['email', 'in-app'],
     });
 
     logger.info(`👨‍🔬 QC Officer assigned: ${qcOfficer.id} for application: ${applicationId}`);
@@ -533,14 +533,14 @@ class GACPSystemOrchestrator {
           rule: rule.name,
           violation: result.message,
           severity: rule.severity,
-          field: result.field
+          field: result.field,
         });
       }
     }
 
     return {
       valid: violations.length === 0,
-      violations
+      violations,
     };
   }
 
@@ -558,9 +558,9 @@ class GACPSystemOrchestrator {
             return {
               valid: age >= 18,
               message: age < 18 ? 'Farmer must be at least 18 years old' : null,
-              field: 'farmerProfile.birthDate'
+              field: 'farmerProfile.birthDate',
             };
-          }
+          },
         },
         {
           name: 'FARM_SIZE_MINIMUM',
@@ -570,9 +570,9 @@ class GACPSystemOrchestrator {
             return {
               valid: farmSize >= 0.25, // Minimum 0.25 rai
               message: farmSize < 0.25 ? 'Farm size must be at least 0.25 rai' : null,
-              field: 'farmProfile.totalArea'
+              field: 'farmProfile.totalArea',
             };
-          }
+          },
         },
         {
           name: 'VALID_FARM_LOCATION',
@@ -583,10 +583,10 @@ class GACPSystemOrchestrator {
             return {
               valid: isValidProvince,
               message: !isValidProvince ? 'Invalid farm province' : null,
-              field: 'farmProfile.location.province'
+              field: 'farmProfile.location.province',
             };
-          }
-        }
+          },
+        },
       ],
       APPROVAL: [
         {
@@ -594,16 +594,16 @@ class GACPSystemOrchestrator {
           severity: 'CRITICAL',
           validate: async data => {
             const documentStatus = await this.services.document.getDocumentCompleteness(
-              data.applicationId
+              data.applicationId,
             );
             return {
               valid: documentStatus.allValidated,
               message: !documentStatus.allValidated
                 ? 'Not all required documents are validated'
                 : null,
-              field: 'documents'
+              field: 'documents',
             };
-          }
+          },
         },
         {
           name: 'PAYMENT_COMPLETED',
@@ -613,11 +613,11 @@ class GACPSystemOrchestrator {
             return {
               valid: paymentStatus.isPaid,
               message: !paymentStatus.isPaid ? 'Payment not completed' : null,
-              field: 'payment'
+              field: 'payment',
             };
-          }
-        }
-      ]
+          },
+        },
+      ],
     };
   }
 
@@ -630,7 +630,7 @@ class GACPSystemOrchestrator {
     // Update application status
     await this.services.application.updateStatus(applicationId, 'BUSINESS_RULE_VIOLATION', {
       violations,
-      violatedAt: new Date()
+      violatedAt: new Date(),
     });
 
     // Send violation notification
@@ -640,14 +640,14 @@ class GACPSystemOrchestrator {
       applicationId,
       violations,
       correctionInstructions: this._getViolationCorrectionInstructions(violations),
-      channels: ['email', 'in-app']
+      channels: ['email', 'in-app'],
     });
 
     // Log audit event
     await this.services.audit.logBusinessRuleViolation({
       applicationId,
       violations,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -662,7 +662,7 @@ class GACPSystemOrchestrator {
       errorStage: stage,
       errorMessage: error.message,
       errorAt: new Date(),
-      requiresManualIntervention: true
+      requiresManualIntervention: true,
     });
 
     // Send error notification to administrators
@@ -671,7 +671,7 @@ class GACPSystemOrchestrator {
       stage,
       error: error.message,
       timestamp: new Date(),
-      channels: ['email']
+      channels: ['email'],
     });
 
     // Log critical audit event
@@ -681,7 +681,7 @@ class GACPSystemOrchestrator {
       stage,
       error: error.message,
       severity: 'HIGH',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -701,7 +701,7 @@ class GACPSystemOrchestrator {
     return {
       totalDays: Math.ceil((endTime - startTime) / (1000 * 60 * 60 * 24)),
       totalHours: Math.ceil((endTime - startTime) / (1000 * 60 * 60)),
-      businessDays: this._calculateBusinessDays(startTime, endTime)
+      businessDays: this._calculateBusinessDays(startTime, endTime),
     };
   }
 
@@ -740,11 +740,11 @@ class GACPSystemOrchestrator {
       DOCUMENT_COLLECTION: [
         'อัปโหลดเอกสารที่จำเป็นทั้งหมด',
         'ตรวจสอบความถูกต้องของเอกสาร',
-        'ชำระค่าธรรมเนียม'
+        'ชำระค่าธรรมเนียม',
       ],
       PAYMENT_VERIFICATION: ['ชำระค่าธรรมเนียมการสมัคร', 'รอการตรวจสอบการชำระเงิน'],
       QC_REVIEW: ['รอการตรวจสอบจากเจ้าหน้าที่ QC', 'อาจมีการนัดหมายตรวจสอบพื้นที่'],
-      CERTIFICATE_GENERATION: ['รอการออกใบรับรอง', 'จะได้รับการแจ้งเตือนเมื่อใบรับรองพร้อม']
+      CERTIFICATE_GENERATION: ['รอการออกใบรับรอง', 'จะได้รับการแจ้งเตือนเมื่อใบรับรองพร้อม'],
     };
 
     return nextSteps[stage] || [];

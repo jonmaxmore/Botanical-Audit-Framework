@@ -42,7 +42,7 @@ class RejectFarmUseCase {
         verifiedBy: updatedFarm.verifiedBy,
         verifiedAt: updatedFarm.verifiedAt,
         notes: null,
-        rejectionReason: updatedFarm.rejectionReason
+        rejectionReason: updatedFarm.rejectionReason,
       });
       this.eventBus.publish(event);
     }

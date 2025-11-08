@@ -16,14 +16,14 @@ exports.getQueueStats = async (req, res) => {
     res.json({
       success: true,
       data: stats,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     logger.error('Failed to get queue stats:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to retrieve queue statistics',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -37,14 +37,14 @@ exports.cleanOldJobs = async (req, res) => {
 
     res.json({
       success: true,
-      message: 'Old jobs cleaned successfully'
+      message: 'Old jobs cleaned successfully',
     });
   } catch (error) {
     logger.error('Failed to clean old jobs:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to clean old jobs',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -58,14 +58,14 @@ exports.pauseQueues = async (req, res) => {
 
     res.json({
       success: true,
-      message: 'All queues paused'
+      message: 'All queues paused',
     });
   } catch (error) {
     logger.error('Failed to pause queues:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to pause queues',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -79,14 +79,14 @@ exports.resumeQueues = async (req, res) => {
 
     res.json({
       success: true,
-      message: 'All queues resumed'
+      message: 'All queues resumed',
     });
   } catch (error) {
     logger.error('Failed to resume queues:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to resume queues',
-      error: error.message
+      error: error.message,
     });
   }
 };
@@ -97,23 +97,23 @@ exports.resumeQueues = async (req, res) => {
 exports.healthCheck = async (req, res) => {
   try {
     const stats = await queueService.getQueueStats();
-    
+
     // Check if any queue has too many failed jobs
     const alerts = [];
-    
+
     if (stats.aiQc.failed > 10) {
       alerts.push({
         queue: 'AI QC',
         severity: 'warning',
-        message: `${stats.aiQc.failed} failed jobs`
+        message: `${stats.aiQc.failed} failed jobs`,
       });
     }
-    
+
     if (stats.aiQc.waiting > 50) {
       alerts.push({
         queue: 'AI QC',
         severity: 'warning',
-        message: `${stats.aiQc.waiting} jobs waiting`
+        message: `${stats.aiQc.waiting} jobs waiting`,
       });
     }
 
@@ -124,7 +124,7 @@ exports.healthCheck = async (req, res) => {
       healthy: isHealthy,
       stats,
       alerts,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   } catch (error) {
     logger.error('Queue health check failed:', error);
@@ -132,7 +132,7 @@ exports.healthCheck = async (req, res) => {
       success: false,
       healthy: false,
       message: 'Health check failed',
-      error: error.message
+      error: error.message,
     });
   }
 };

@@ -43,7 +43,7 @@ class GenerateCertificateUseCase {
 
       if (applicationData.status !== 'DTAM_APPROVED') {
         throw new Error(
-          `Cannot generate certificate. Application status is ${applicationData.status}, expected DTAM_APPROVED`
+          `Cannot generate certificate. Application status is ${applicationData.status}, expected DTAM_APPROVED`,
         );
       }
 
@@ -74,7 +74,7 @@ class GenerateCertificateUseCase {
           province: applicationData.farmProfile.location.province,
           district: applicationData.farmProfile.location.district,
           subdistrict: applicationData.farmProfile.location.subdistrict,
-          coordinates: applicationData.farmProfile.location.coordinates
+          coordinates: applicationData.farmProfile.location.coordinates,
         },
         cropDetails: applicationData.farmProfile.cropDetails,
         certificationStandard: applicationData.farmProfile.certificationStandard || 'GACP',
@@ -82,7 +82,7 @@ class GenerateCertificateUseCase {
         expiryDate,
         verificationCode,
         issuedBy,
-        status: 'ACTIVE'
+        status: 'ACTIVE',
       });
 
       logger.info(`📋 Certificate entity created: ${certificate.certificateNumber}`);
@@ -91,7 +91,7 @@ class GenerateCertificateUseCase {
       const qrCodeData = {
         certificateNumber: certificate.certificateNumber,
         verificationCode: certificate.verificationCode,
-        verifyUrl: `https://gacp.go.th/verify/${certificate.certificateNumber}`
+        verifyUrl: `https://gacp.go.th/verify/${certificate.certificateNumber}`,
       };
 
       const qrCode = await this.qrcodeService.generateQRCode(qrCodeData);
@@ -102,7 +102,7 @@ class GenerateCertificateUseCase {
       const pdfResult = await this.pdfService.generateCertificatePDF({
         ...certificate.toJSON(),
         qrCodeUrl: qrCode.url,
-        applicationData
+        applicationData,
       });
 
       certificate.setPDFInfo(pdfResult.url, pdfResult.path);
@@ -123,9 +123,9 @@ class GenerateCertificateUseCase {
           farmId: savedCertificate.farmId,
           issuedBy,
           issuedDate,
-          expiryDate
+          expiryDate,
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       logger.info(`✅ Certificate generation completed: ${savedCertificate.certificateNumber}`);
@@ -139,9 +139,9 @@ class GenerateCertificateUseCase {
         payload: {
           applicationId,
           error: error.message,
-          issuedBy
+          issuedBy,
         },
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       throw error;

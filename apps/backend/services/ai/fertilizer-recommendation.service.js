@@ -101,17 +101,17 @@ class FertilizerRecommendationService {
               plant: context.plant.commonName.thai,
               cultivar: context.cultivar?.name?.thai || 'ไม่ระบุ',
               growthStage: context.growthStage,
-              region: context.region
-            }
+              region: context.region,
+            },
           },
-          auditLog
-        }
+          auditLog,
+        },
       };
     } catch (error) {
       return {
         success: false,
         error: error.message,
-        errorCode: error.code || 'RECOMMENDATION_ERROR'
+        errorCode: error.code || 'RECOMMENDATION_ERROR',
       };
     }
   }
@@ -144,7 +144,7 @@ class FertilizerRecommendationService {
 
     // Load regional conditions
     const regional = await RegionalConditions.findOne({
-      province: { $regex: new RegExp(farm.location.province, 'i') }
+      province: { $regex: new RegExp(farm.location.province, 'i') },
     }).lean();
 
     // Get current environmental data
@@ -153,7 +153,7 @@ class FertilizerRecommendationService {
       humidity: farm.realTimeData?.humidity || regional?.climate?.averageAnnualHumidity || 70,
       soilPH: farm.realTimeData?.currentSoilPH || farm.soilPH || 6.5,
       soilMoisture: farm.realTimeData?.currentSoilMoisture || 60,
-      npk: farm.realTimeData?.npk || { nitrogen: 0, phosphorus: 0, potassium: 0 }
+      npk: farm.realTimeData?.npk || { nitrogen: 0, phosphorus: 0, potassium: 0 },
     };
 
     // Calculate plant age
@@ -170,7 +170,7 @@ class FertilizerRecommendationService {
       growthStage: growthStage || this._determineGrowthStage(plantAge, cycle.cropType),
       plantAge,
       environment: currentEnvironment,
-      region: farm.location?.region || 'central'
+      region: farm.location?.region || 'central',
     };
   }
 
@@ -261,7 +261,7 @@ class FertilizerRecommendationService {
       K: Math.round(baseNPK.K),
       ratio: `${baseNPK.N}-${baseNPK.P}-${baseNPK.K}`,
       confidence,
-      source: stageData ? 'plant_catalog' : 'research_default'
+      source: stageData ? 'plant_catalog' : 'research_default',
     };
   }
 
@@ -275,7 +275,7 @@ class FertilizerRecommendationService {
     return {
       N: parts[0] || 10,
       P: parts[1] || 10,
-      K: parts[2] || 10
+      K: parts[2] || 10,
     };
   }
 
@@ -403,7 +403,7 @@ class FertilizerRecommendationService {
 
     // Get regional performance data for this plant
     const regionalPerformance = regional.agriculture?.otherMedicinalPlants?.find(
-      p => p.plantType === plant.plantType
+      p => p.plantType === plant.plantType,
     );
 
     // Adjust based on regional challenges
@@ -428,7 +428,7 @@ class FertilizerRecommendationService {
     const historicalYields = await HistoricalYield.find({
       'location.region': region,
       'plant.plantType': plant.plantType,
-      'outcome.success.successScore': { $gte: 80 }
+      'outcome.success.successScore': { $gte: 80 },
     })
       .limit(10)
       .lean();
@@ -465,7 +465,7 @@ class FertilizerRecommendationService {
         regionalNPK.confidence = (envNPK.confidence || 80) + 10; // Boost confidence
         regionalNPK.reason = regionalNPK.reason || [];
         regionalNPK.reason.push(
-          `ปรับตามข้อมูลการปลูกที่ประสบความสำเร็จในภูมิภาคนี้ (${count} รายการ)`
+          `ปรับตามข้อมูลการปลูกที่ประสบความสำเร็จในภูมิภาคนี้ (${count} รายการ)`,
         );
       }
     }
@@ -487,7 +487,7 @@ class FertilizerRecommendationService {
       'prohibited.containsHumanWaste': false,
       status: 'active',
       'recommendedFor.plants': { $in: [plant.plantType, 'all'] },
-      'recommendedFor.growthStages': { $in: [growthStage, 'all'] }
+      'recommendedFor.growthStages': { $in: [growthStage, 'all'] },
     };
 
     // Organic filter
@@ -506,20 +506,20 @@ class FertilizerRecommendationService {
       ...query,
       'nutrients.nitrogen.percentage': {
         $gte: finalNPK.N - tolerance,
-        $lte: finalNPK.N + tolerance
+        $lte: finalNPK.N + tolerance,
       },
       'nutrients.phosphorus.percentage': {
         $gte: finalNPK.P - tolerance,
-        $lte: finalNPK.P + tolerance
+        $lte: finalNPK.P + tolerance,
       },
       'nutrients.potassium.percentage': {
         $gte: finalNPK.K - tolerance,
-        $lte: finalNPK.K + tolerance
-      }
+        $lte: finalNPK.K + tolerance,
+      },
     })
       .sort({
         'performance.userSatisfaction.rating': -1,
-        'mlFeatures.recommendationScore': -1
+        'mlFeatures.recommendationScore': -1,
       })
       .limit(5)
       .lean();
@@ -529,7 +529,7 @@ class FertilizerRecommendationService {
       const widerProducts = await FertilizerProduct.getForGrowthStage(
         plant.plantType,
         growthStage,
-        region
+        region,
       );
 
       return widerProducts.slice(0, 3);
@@ -546,14 +546,14 @@ class FertilizerRecommendationService {
 
     if (!product) {
       return {
-        error: 'No suitable products found'
+        error: 'No suitable products found',
       };
     }
 
     const applicationData = product.application?.[`${growthStage}Stage`];
     if (!applicationData) {
       return {
-        error: `No application data for ${growthStage} stage`
+        error: `No application data for ${growthStage} stage`,
       };
     }
 
@@ -568,7 +568,7 @@ class FertilizerRecommendationService {
     // Ensure we don't go past harvest date
     const maxApplications = Math.min(
       12, // Max 12 applications
-      Math.floor((endDate - startDate) / (frequencyDays * 24 * 60 * 60 * 1000))
+      Math.floor((endDate - startDate) / (frequencyDays * 24 * 60 * 60 * 1000)),
     );
 
     for (let i = 0; i < maxApplications; i++) {
@@ -587,7 +587,7 @@ class FertilizerRecommendationService {
         product: {
           id: product._id,
           name: product.productName,
-          nameThai: product.productNameThai
+          nameThai: product.productNameThai,
         },
         amount: applicationData.rate,
         amountPerRai: applicationData.ratePerRai,
@@ -596,7 +596,7 @@ class FertilizerRecommendationService {
         npk: finalNPK,
         notes: applicationData.notes,
         notesThai: applicationData.notesThai,
-        gacpCompliant: true
+        gacpCompliant: true,
       });
     }
 
@@ -607,7 +607,7 @@ class FertilizerRecommendationService {
       frequencyDays,
       startDate,
       endDate: schedule[schedule.length - 1]?.date || startDate,
-      preharvest_interval: product.application.preharvest_interval
+      preharvest_interval: product.application.preharvest_interval,
     };
   }
 
@@ -636,7 +636,7 @@ class FertilizerRecommendationService {
   _calculateCosts(scheduleData, products, context) {
     if (!scheduleData.schedule || scheduleData.schedule.length === 0) {
       return {
-        error: 'No schedule available'
+        error: 'No schedule available',
       };
     }
 
@@ -644,7 +644,7 @@ class FertilizerRecommendationService {
       const cost = product.calculateCost?.(
         context.farm.farmSize?.value || 1,
         context.growthStage,
-        context.region
+        context.region,
       );
 
       return {
@@ -652,20 +652,20 @@ class FertilizerRecommendationService {
           id: product._id,
           name: product.productName,
           nameThai: product.productNameThai,
-          npkRatio: product.npkRatio
+          npkRatio: product.npkRatio,
         },
         costBreakdown: cost,
         totalApplications: scheduleData.totalApplications,
         estimatedTotalCost: cost ? cost.cost * scheduleData.totalApplications : null,
         currency: 'THB',
-        perRaiPerCycle: cost ? cost.cost * scheduleData.totalApplications : null
+        perRaiPerCycle: cost ? cost.cost * scheduleData.totalApplications : null,
       };
     });
 
     return {
       options: costs,
       cheapest: costs.reduce((min, c) => (c.estimatedTotalCost < min.estimatedTotalCost ? c : min)),
-      recommended: costs[0] // Top-rated
+      recommended: costs[0], // Top-rated
     };
   }
 
@@ -684,20 +684,20 @@ class FertilizerRecommendationService {
         max: 25,
         average: 15,
         unit: '%',
-        confidence: 'medium'
+        confidence: 'medium',
       },
       expectedQuality: {
         rating: 'good',
-        confidence: 'medium'
+        confidence: 'medium',
       },
       environmentalImpact: {
         rating: 'low',
-        description: 'ใช้ปุ๋ยที่ผ่านมาตรฐาน GACP ลดผลกระทบต่อสิ่งแว่งล้อม'
+        description: 'ใช้ปุ๋ยที่ผ่านมาตรฐาน GACP ลดผลกระทบต่อสิ่งแว่งล้อม',
       },
       gacpCompliance: {
         status: 'compliant',
-        confidence: 100
-      }
+        confidence: 100,
+      },
     };
 
     // If we have historical data, make better predictions
@@ -707,7 +707,7 @@ class FertilizerRecommendationService {
         perRai: avgData.avgYieldPerRai * 1.15, // 15% increase
         unit: 'kg/rai',
         basedOn: `${avgData.count} การปลูกที่ผ่านมา`,
-        confidence: 'high'
+        confidence: 'high',
       };
     }
 
@@ -733,15 +733,15 @@ class FertilizerRecommendationService {
           id: p._id,
           name: p.productName,
           registrationNumber: p.registration.registrationNumber,
-          gacpApproved: p.compliance.gacpApproved
-        }))
+          gacpApproved: p.compliance.gacpApproved,
+        })),
       },
       environmental: context.environment,
       region: context.region,
       province: context.farm.location?.province,
       method: 'rule_based_expert_system',
       gacpCompliant: true,
-      createdBy: 'system'
+      createdBy: 'system',
     };
   }
 }

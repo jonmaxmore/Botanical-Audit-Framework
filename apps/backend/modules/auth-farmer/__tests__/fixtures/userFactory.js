@@ -17,7 +17,7 @@ const validUserPayload = {
   province: 'Bangkok',
   district: 'Bang Khen',
   subDistrict: 'Anusawari',
-  postalCode: '10220'
+  postalCode: '10220',
 };
 
 /**
@@ -34,7 +34,7 @@ const validUserPayload2 = {
   province: 'Chiang Mai',
   district: 'Mueang',
   subDistrict: 'Suthep',
-  postalCode: '50200'
+  postalCode: '50200',
 };
 
 /**
@@ -46,7 +46,7 @@ const minimalValidUserPayload = {
   firstName: 'Min',
   lastName: 'Imal',
   idCard: '1111111111111',
-  phoneNumber: '+66811111111'
+  phoneNumber: '+66811111111',
 };
 
 /**
@@ -58,7 +58,7 @@ const userWithWeakPassword = {
   firstName: 'Weak',
   lastName: 'Password',
   idCard: '2222222222222',
-  phoneNumber: '+66822222222'
+  phoneNumber: '+66822222222',
 };
 
 /**
@@ -70,7 +70,7 @@ const userWithInvalidEmail = {
   firstName: 'Invalid',
   lastName: 'Email',
   idCard: '3333333333333',
-  phoneNumber: '+66833333333'
+  phoneNumber: '+66833333333',
 };
 
 /**
@@ -78,7 +78,7 @@ const userWithInvalidEmail = {
  */
 const userMissingFields = {
   email: 'missing@example.com',
-  password: 'ValidP@ssw0rd123'
+  password: 'ValidP@ssw0rd123',
   // Missing firstName, lastName, idCard, phoneNumber
 };
 
@@ -90,7 +90,7 @@ const userMissingFields = {
 function createUserPayload(overrides = {}) {
   return {
     ...validUserPayload,
-    ...overrides
+    ...overrides,
   };
 }
 
@@ -104,7 +104,7 @@ function createUniqueUserPayload(prefix = 'user') {
   return createUserPayload({
     email: `${prefix}-${timestamp}@example.com`,
     idCard: `${timestamp}`.padEnd(13, '0').slice(0, 13),
-    phoneNumber: `+668${timestamp}`.slice(0, 12)
+    phoneNumber: `+668${timestamp}`.slice(0, 12),
   });
 }
 
@@ -116,5 +116,5 @@ module.exports = {
   userWithInvalidEmail,
   userMissingFields,
   createUserPayload,
-  createUniqueUserPayload
+  createUniqueUserPayload,
 };

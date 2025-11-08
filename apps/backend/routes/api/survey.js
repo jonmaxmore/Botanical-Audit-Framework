@@ -18,9 +18,9 @@ const mockSurveyTemplates = {
           'Organic composting',
           'Chemical fertilizers',
           'Mixed organic and chemical',
-          'Natural soil with no additives'
+          'Natural soil with no additives',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'water_source',
@@ -31,9 +31,9 @@ const mockSurveyTemplates = {
           'Natural rainwater',
           'River/stream water',
           'Well water',
-          'Municipal water supply'
+          'Municipal water supply',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'pest_control',
@@ -45,16 +45,16 @@ const mockSurveyTemplates = {
           'Biological control methods',
           'Integrated pest management',
           'Chemical pesticides',
-          'No pest control'
+          'No pest control',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'harvest_timing',
         type: 'text',
         category: 'Harvesting',
         question: 'Describe your harvesting schedule and methods',
-        required: true
+        required: true,
       },
       {
         id: 'certification_knowledge',
@@ -63,9 +63,9 @@ const mockSurveyTemplates = {
         question: 'Rate your understanding of GACP standards (1-5)',
         min: 1,
         max: 5,
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   central: {
     id: 'central',
@@ -83,9 +83,9 @@ const mockSurveyTemplates = {
           'Pathumthani 1',
           'RD6',
           'Organic local varieties',
-          'Other'
+          'Other',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'fertilizer_type',
@@ -97,9 +97,9 @@ const mockSurveyTemplates = {
           'Chemical NPK',
           'Bio-fertilizers',
           'Mixed organic-chemical',
-          'No fertilizers'
+          'No fertilizers',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'storage_method',
@@ -111,25 +111,25 @@ const mockSurveyTemplates = {
           'Traditional barn storage',
           'Plastic containers',
           'Silo storage',
-          'Open air drying'
+          'Open air drying',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'market_access',
         type: 'text',
         category: 'Marketing',
         question: 'Describe your main market channels and customers',
-        required: true
+        required: true,
       },
       {
         id: 'gacp_training',
         type: 'yes_no',
         category: 'Training',
         question: 'Have you received formal GACP training?',
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   southern: {
     id: 'southern',
@@ -143,7 +143,7 @@ const mockSurveyTemplates = {
         category: 'Crop Diversity',
         question: 'What medicinal plants do you primarily cultivate?',
         options: ['Turmeric', 'Ginger', 'Lemongrass', 'Galangal', 'Kaffir lime', 'Other herbs'],
-        required: true
+        required: true,
       },
       {
         id: 'climate_adaptation',
@@ -155,23 +155,23 @@ const mockSurveyTemplates = {
           'Raised bed cultivation',
           'Greenhouse protection',
           'Seasonal crop rotation',
-          'No special measures'
+          'No special measures',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'organic_certification',
         type: 'yes_no',
         category: 'Certification',
         question: 'Do you have organic certification for your products?',
-        required: true
+        required: true,
       },
       {
         id: 'processing_methods',
         type: 'text',
         category: 'Processing',
         question: 'Describe your post-harvest processing methods',
-        required: true
+        required: true,
       },
       {
         id: 'sustainability_practices',
@@ -180,9 +180,9 @@ const mockSurveyTemplates = {
         question: 'Rate your implementation of sustainable farming practices (1-5)',
         min: 1,
         max: 5,
-        required: true
-      }
-    ]
+        required: true,
+      },
+    ],
   },
   northeastern: {
     id: 'northeastern',
@@ -200,9 +200,9 @@ const mockSurveyTemplates = {
           'Rainwater harvesting',
           'Drought-resistant varieties',
           'Water storage tanks',
-          'Reduce cultivation area'
+          'Reduce cultivation area',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'soil_salinity',
@@ -214,23 +214,23 @@ const mockSurveyTemplates = {
           'Salt-tolerant crops',
           'Improved drainage',
           'Gypsum application',
-          'No salinity issues'
+          'No salinity issues',
         ],
-        required: true
+        required: true,
       },
       {
         id: 'traditional_knowledge',
         type: 'text',
         category: 'Indigenous Practices',
         question: 'What traditional farming knowledge do you apply?',
-        required: true
+        required: true,
       },
       {
         id: 'community_cooperation',
         type: 'yes_no',
         category: 'Cooperation',
         question: 'Do you participate in farmer cooperatives or groups?',
-        required: true
+        required: true,
       },
       {
         id: 'income_diversification',
@@ -242,12 +242,12 @@ const mockSurveyTemplates = {
           'Handicraft production',
           'Off-farm employment',
           'Agricultural services',
-          'Farming only'
+          'Farming only',
         ],
-        required: true
-      }
-    ]
-  }
+        required: true,
+      },
+    ],
+  },
 };
 
 // Mock survey responses storage
@@ -265,18 +265,18 @@ router.get('/templates', (req, res) => {
       name: template.name,
       region: template.region,
       description: template.description,
-      questionCount: template.questions.length
+      questionCount: template.questions.length,
     }));
 
     res.json({
       success: true,
-      data: templates
+      data: templates,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -294,19 +294,19 @@ router.get('/templates/:region', (req, res) => {
     if (!template) {
       return res.status(404).json({
         success: false,
-        message: 'Survey template not found for this region'
+        message: 'Survey template not found for this region',
       });
     }
 
     res.json({
       success: true,
-      data: template
+      data: template,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -323,7 +323,7 @@ router.post('/responses', (req, res) => {
     if (!region || !answers) {
       return res.status(400).json({
         success: false,
-        message: 'Region and answers are required'
+        message: 'Region and answers are required',
       });
     }
 
@@ -333,7 +333,7 @@ router.post('/responses', (req, res) => {
       answers,
       farmerInfo: farmerInfo || {},
       submittedAt: new Date().toISOString(),
-      status: 'submitted'
+      status: 'submitted',
     };
 
     mockSurveyResponses.push(response);
@@ -346,15 +346,15 @@ router.post('/responses', (req, res) => {
       data: {
         responseId: response.id,
         complianceScore,
-        recommendations: generateRecommendations(region, answers, complianceScore)
+        recommendations: generateRecommendations(region, answers, complianceScore),
       },
-      message: 'Survey response submitted successfully'
+      message: 'Survey response submitted successfully',
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -378,13 +378,13 @@ router.get('/responses', (req, res) => {
     res.json({
       success: true,
       data: responses,
-      total: responses.length
+      total: responses.length,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -398,7 +398,7 @@ router.get('/analytics/:region', (req, res) => {
   try {
     const { region } = req.params;
     const regionResponses = mockSurveyResponses.filter(
-      r => r.region.toLowerCase() === region.toLowerCase()
+      r => r.region.toLowerCase() === region.toLowerCase(),
     );
 
     const analytics = {
@@ -410,18 +410,18 @@ router.get('/analytics/:region', (req, res) => {
           : 0,
       responsesByMonth: getResponsesByMonth(regionResponses),
       commonIssues: getCommonIssues(regionResponses),
-      recommendations: getRegionalRecommendations(region)
+      recommendations: getRegionalRecommendations(region),
     };
 
     res.json({
       success: true,
-      data: analytics
+      data: analytics,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Server error',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -443,8 +443,8 @@ router.get('/health', (req, res) => {
       'GET /api/survey/templates/:region',
       'POST /api/survey/responses',
       'GET /api/survey/responses',
-      'GET /api/survey/analytics/:region'
-    ]
+      'GET /api/survey/analytics/:region',
+    ],
   });
 });
 
@@ -510,7 +510,7 @@ function getResponsesByMonth(responses) {
     September: Math.floor(responses.length * 0.08),
     October: Math.floor(responses.length * 0.12),
     November: Math.floor(responses.length * 0.08),
-    December: Math.floor(responses.length * 0.02)
+    December: Math.floor(responses.length * 0.02),
   };
 }
 
@@ -520,7 +520,7 @@ function getCommonIssues(_responses) {
     'Lack of organic certification knowledge',
     'Limited access to sustainable pest control methods',
     'Inadequate storage facilities',
-    'Limited market access for premium products'
+    'Limited market access for premium products',
   ];
 }
 
@@ -529,23 +529,23 @@ function getRegionalRecommendations(region) {
     northern: [
       'Implement terraced farming for sloped terrain',
       'Use cold-season vegetable rotation',
-      'Establish community water management systems'
+      'Establish community water management systems',
     ],
     central: [
       'Optimize rice-fish farming systems',
       'Improve mechanization for efficiency',
-      'Develop direct marketing channels'
+      'Develop direct marketing channels',
     ],
     southern: [
       'Implement proper drainage for monsoon season',
       'Focus on medicinal plant certification',
-      'Develop agrotourism opportunities'
+      'Develop agrotourism opportunities',
     ],
     northeastern: [
       'Implement drought-resistant crop varieties',
       'Establish farmer cooperative networks',
-      'Develop value-added processing capabilities'
-    ]
+      'Develop value-added processing capabilities',
+    ],
   };
 
   return regionalRecs[region.toLowerCase()] || regionalRecs.central;

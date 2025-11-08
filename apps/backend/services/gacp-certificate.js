@@ -4,7 +4,7 @@
  *
  * Implements digital signatures, QR codes, and blockchain verification
  * Based on Thai DTAM and ASEAN digital certificate standards
- * 
+ *
  * Phase 2 Integration:
  * - Queue Service: Async PDF generation (blocks 5-10s → 50ms response)
  * - Cache Service: Certificate data caching
@@ -40,7 +40,7 @@ class GACPCertificateService {
       await fs.mkdir(this.templateDirectory, { recursive: true });
     } catch (error) {
       logger.error('Error creating certificate directories', {
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -69,17 +69,21 @@ class GACPCertificateService {
 
       // Queue certificate PDF generation (heavy operation 5-10s)
       if (process.env.ENABLE_QUEUE === 'true') {
-        const job = await queueService.addJob('document-processing', {
-          type: 'certificate-pdf-generation',
-          applicationId,
-          certificateNumber,
-          approvedBy
-        }, { priority: 8, delay: 1000 });
+        const job = await queueService.addJob(
+          'document-processing',
+          {
+            type: 'certificate-pdf-generation',
+            applicationId,
+            certificateNumber,
+            approvedBy,
+          },
+          { priority: 8, delay: 1000 },
+        );
 
         logger.info('Certificate generation queued', {
           jobId: job.id,
           applicationId,
-          certificateNumber
+          certificateNumber,
         });
 
         // Return immediately (fast response!)
@@ -88,17 +92,16 @@ class GACPCertificateService {
           jobId: job.id,
           certificateNumber,
           message: 'Certificate generation in progress. You will receive an email when ready.',
-          estimatedTime: '2-5 minutes'
+          estimatedTime: '2-5 minutes',
         };
       }
 
       // Fallback: Generate synchronously (slow, for development)
       return await this._generateCertificateSync(application, certificateNumber, approvedBy);
-      
     } catch (error) {
       logger.error('Error queueing certificate generation', {
         applicationId,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -114,7 +117,7 @@ class GACPCertificateService {
       const certificateData = this.prepareCertificateData(
         application,
         certificateNumber,
-        approvedBy
+        approvedBy,
       );
 
       // Generate QR code for verification
@@ -131,14 +134,14 @@ class GACPCertificateService {
         application,
         certificateData,
         digitalSignature,
-        certificatePDF
+        certificatePDF,
       );
 
       // Update application status
       await application.updateStatus(
         'certificate_issued',
         approvedBy,
-        `Certificate ${certificateNumber} issued`
+        `Certificate ${certificateNumber} issued`,
       );
 
       // Invalidate cache
@@ -147,15 +150,18 @@ class GACPCertificateService {
 
       // Queue email notification (async)
       if (process.env.ENABLE_QUEUE === 'true') {
-        await queueService.addEmailJob({
-          type: 'certificate-issued',
-          applicationId: application._id,
-          data: {
-            farmerEmail: application.applicant.email,
-            certificateNumber,
-            downloadUrl: certificatePDF.filePath
-          }
-        }, { priority: 6 });
+        await queueService.addEmailJob(
+          {
+            type: 'certificate-issued',
+            applicationId: application._id,
+            data: {
+              farmerEmail: application.applicant.email,
+              certificateNumber,
+              downloadUrl: certificatePDF.filePath,
+            },
+          },
+          { priority: 6 },
+        );
       }
 
       // Schedule certificate expiry reminder
@@ -165,7 +171,7 @@ class GACPCertificateService {
         applicationId: application._id,
         certificateNumber,
         validityPeriod: certificateData.validityPeriod,
-        issuedBy: approvedBy
+        issuedBy: approvedBy,
       });
 
       return {
@@ -173,12 +179,12 @@ class GACPCertificateService {
         certificateNumber,
         pdfPath: certificatePDF.filePath,
         qrCode: qrCodeData,
-        publicVerificationUrl: this.generatePublicVerificationUrl(certificateNumber)
+        publicVerificationUrl: this.generatePublicVerificationUrl(certificateNumber),
       };
     } catch (error) {
       logger.error('Error generating certificate synchronously', {
         applicationId: application._id,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -194,7 +200,7 @@ class GACPCertificateService {
       // Check cache first
       const cacheKey = `certificate:verify:${certificateNumber}`;
       const cached = await cacheService.get(cacheKey);
-      
+
       if (cached) {
         logger.debug('Certificate verification cache hit', { certificateNumber });
         return cached;
@@ -207,7 +213,7 @@ class GACPCertificateService {
         const result = {
           valid: false,
           reason: 'Certificate not found',
-          status: 'invalid'
+          status: 'invalid',
         };
         // Don't cache invalid certificates
         return result;
@@ -219,7 +225,7 @@ class GACPCertificateService {
           valid: false,
           reason: `Certificate is ${certificate.status}`,
           status: certificate.status,
-          certificate: this.sanitizeCertificateData(certificate)
+          certificate: this.sanitizeCertificateData(certificate),
         };
         // Cache for 5 minutes (might be reactivated)
         await cacheService.set(cacheKey, result, 300);
@@ -233,7 +239,7 @@ class GACPCertificateService {
           reason: 'Certificate has expired',
           status: 'expired',
           expiryDate: certificate.expiryDate,
-          certificate: this.sanitizeCertificateData(certificate)
+          certificate: this.sanitizeCertificateData(certificate),
         };
         // Cache expired certificates for 1 hour
         await cacheService.set(cacheKey, result, 3600);
@@ -247,7 +253,7 @@ class GACPCertificateService {
         const result = {
           valid: false,
           reason: 'Invalid digital signature',
-          status: 'tampered'
+          status: 'tampered',
         };
         // Don't cache tampered certificates
         return result;
@@ -258,7 +264,7 @@ class GACPCertificateService {
         const result = {
           valid: false,
           reason: 'Invalid verification code',
-          status: 'invalid'
+          status: 'invalid',
         };
         return result;
       }
@@ -271,23 +277,23 @@ class GACPCertificateService {
         verificationDetails: {
           verifiedAt: new Date(),
           digitalSignatureValid: true,
-          blockchainVerified: false // TODO: Implement blockchain verification
-        }
+          blockchainVerified: false, // TODO: Implement blockchain verification
+        },
       };
-      
+
       // Cache valid certificate for 1 hour
       await cacheService.set(cacheKey, result, 3600);
-      
+
       return result;
     } catch (error) {
       logger.error('Error verifying certificate', {
         certificateNumber,
-        error: error.message
+        error: error.message,
       });
       return {
         valid: false,
         reason: 'Verification system error',
-        status: 'error'
+        status: 'error',
       };
     }
   }
@@ -306,7 +312,7 @@ class GACPCertificateService {
 
       // Check if renewal is allowed
       const daysUntilExpiry = Math.ceil(
-        (certificate.expiryDate - new Date()) / (1000 * 60 * 60 * 24)
+        (certificate.expiryDate - new Date()) / (1000 * 60 * 60 * 24),
       );
 
       if (daysUntilExpiry > 90) {
@@ -319,7 +325,7 @@ class GACPCertificateService {
       if (!complianceCheck.compliant) {
         throw new BusinessLogicError(
           'Certificate cannot be renewed due to compliance issues: ' +
-            complianceCheck.issues.join(', ')
+            complianceCheck.issues.join(', '),
         );
       }
 
@@ -334,7 +340,7 @@ class GACPCertificateService {
         renewedBy,
         previousExpiryDate: certificate.expiryDate,
         newExpiryDate,
-        renewalNotes: renewalData.notes || ''
+        renewalNotes: renewalData.notes || '',
       });
 
       await certificate.save();
@@ -345,18 +351,18 @@ class GACPCertificateService {
       logger.info('Certificate renewed', {
         certificateNumber,
         newExpiryDate,
-        renewedBy
+        renewedBy,
       });
 
       return {
         certificate,
         renewalNotice,
-        newExpiryDate
+        newExpiryDate,
       };
     } catch (error) {
       logger.error('Error renewing certificate', {
         certificateNumber,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -392,7 +398,7 @@ class GACPCertificateService {
         await application.updateStatus(
           'certificate_revoked',
           revokedBy,
-          `Certificate revoked: ${revocationReason}`
+          `Certificate revoked: ${revocationReason}`,
         );
       }
 
@@ -405,17 +411,17 @@ class GACPCertificateService {
       logger.warn('Certificate revoked', {
         certificateNumber,
         revokedBy,
-        reason: revocationReason
+        reason: revocationReason,
       });
 
       return {
         certificate,
-        revocationConfirmation: true
+        revocationConfirmation: true,
       };
     } catch (error) {
       logger.error('Error revoking certificate', {
         certificateNumber,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -442,16 +448,16 @@ class GACPCertificateService {
               issueDate: verification.certificate.issueDate,
               expiryDate: verification.certificate.expiryDate,
               certificationBody: 'กรมการปกครอง (DTAM)',
-              standards: ['WHO GACP', 'ASEAN GACP']
+              standards: ['WHO GACP', 'ASEAN GACP'],
             }
-          : null
+          : null,
       };
 
       return verificationPage;
     } catch (error) {
       logger.error('Error generating verification page', {
         certificateNumber,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -472,8 +478,8 @@ class GACPCertificateService {
       'certificate.certificateNumber': new RegExp(`^${prefix}-`),
       'certificate.issueDate': {
         $gte: new Date(year, 0, 1),
-        $lt: new Date(year + 1, 0, 1)
-      }
+        $lt: new Date(year + 1, 0, 1),
+      },
     }).sort({ 'certificate.certificateNumber': -1 });
 
     let sequentialNumber = 1;
@@ -507,7 +513,7 @@ class GACPCertificateService {
         district: application.farmInformation.location.district,
         province: application.farmInformation.location.province,
         postalCode: application.farmInformation.location.postalCode,
-        coordinates: application.farmInformation.location.coordinates
+        coordinates: application.farmInformation.location.coordinates,
       },
 
       // Farm Details
@@ -533,7 +539,7 @@ class GACPCertificateService {
 
       // Verification
       verificationCode: crypto.randomBytes(16).toString('hex'),
-      digitalSignatureAlgorithm: 'RSA-SHA256'
+      digitalSignatureAlgorithm: 'RSA-SHA256',
     };
   }
 
@@ -560,7 +566,7 @@ class GACPCertificateService {
     return {
       dataURL: qrCodeDataURL,
       verificationUrl,
-      format: 'PNG'
+      format: 'PNG',
     };
   }
 
@@ -573,7 +579,7 @@ class GACPCertificateService {
       issueDate: certificateData.issueDate,
       expiryDate: certificateData.expiryDate,
       finalScore: certificateData.finalScore,
-      verificationCode: certificateData.verificationCode
+      verificationCode: certificateData.verificationCode,
     });
 
     // Create signature using HMAC for now (replace with RSA in production)
@@ -584,7 +590,7 @@ class GACPCertificateService {
       algorithm: 'HMAC-SHA256',
       signature,
       signedData: dataToSign,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
   }
 
@@ -595,7 +601,7 @@ class GACPCertificateService {
     // Create PDF document
     const doc = new PDFDocument({
       size: 'A4',
-      margins: { top: 50, bottom: 50, left: 72, right: 72 }
+      margins: { top: 50, bottom: 50, left: 72, right: 72 },
     });
 
     // Pipe to file
@@ -614,7 +620,7 @@ class GACPCertificateService {
     return {
       filename,
       filePath,
-      size: (await fs.stat(filePath)).size
+      size: (await fs.stat(filePath)).size,
     };
   }
 
@@ -649,7 +655,7 @@ class GACPCertificateService {
       .font('Helvetica')
       .text(`Farmer: ${data.farmerName}`)
       .text(
-        `Location: ${data.location.subdistrict}, ${data.location.district}, ${data.location.province}`
+        `Location: ${data.location.subdistrict}, ${data.location.district}, ${data.location.province}`,
       )
       .text(`Farm Size: ${data.farmSize} rai`)
       .text(`Crop Types: ${data.cropTypes.join(', ')}`);
@@ -706,7 +712,7 @@ class GACPCertificateService {
       verificationCode: certificateData.verificationCode,
       digitalSignature: digitalSignature.signature,
       pdfFilename: pdfInfo.filename,
-      pdfSize: pdfInfo.size
+      pdfSize: pdfInfo.size,
     };
 
     await application.save();
@@ -716,7 +722,7 @@ class GACPCertificateService {
 
   async findCertificateByNumber(certificateNumber) {
     const application = await Application.findOne({
-      'certificate.certificateNumber': certificateNumber
+      'certificate.certificateNumber': certificateNumber,
     }).populate('applicant');
 
     if (!application || !application.certificate) {
@@ -729,7 +735,7 @@ class GACPCertificateService {
       farmName: application.farmInformation.farmName,
       farmerName: application.applicant.fullName,
       location: application.farmInformation.location,
-      cropTypes: application.cropInformation.map(c => c.cropType)
+      cropTypes: application.cropInformation.map(c => c.cropType),
     };
   }
 
@@ -743,7 +749,7 @@ class GACPCertificateService {
         issueDate: certificate.issueDate,
         expiryDate: certificate.expiryDate,
         finalScore: certificate.finalScore,
-        verificationCode: certificate.verificationCode
+        verificationCode: certificate.verificationCode,
       });
 
       const secretKey = process.env.CERTIFICATE_SIGNING_KEY || 'default-secret-key';
@@ -755,7 +761,7 @@ class GACPCertificateService {
       return expectedSignature === certificate.digitalSignature;
     } catch (error) {
       logger.error('Error verifying digital signature', {
-        error: error.message
+        error: error.message,
       });
       return false;
     }
@@ -782,7 +788,7 @@ class GACPCertificateService {
     // Check for recent surveillance violations
     if (application.surveillanceViolations && application.surveillanceViolations.length > 0) {
       const recentViolations = application.surveillanceViolations.filter(
-        v => new Date() - v.date < 365 * 24 * 60 * 60 * 1000 // Within last year
+        v => new Date() - v.date < 365 * 24 * 60 * 60 * 1000, // Within last year
       );
 
       if (recentViolations.length > 0) {
@@ -793,7 +799,7 @@ class GACPCertificateService {
     // Check for complaint records
     if (application.complaintRecords && application.complaintRecords.length > 0) {
       const unresolvedComplaints = application.complaintRecords.filter(
-        c => c.status !== 'resolved'
+        c => c.status !== 'resolved',
       );
       if (unresolvedComplaints.length > 0) {
         issues.push('Unresolved complaints');
@@ -802,7 +808,7 @@ class GACPCertificateService {
 
     return {
       compliant: issues.length === 0,
-      issues
+      issues,
     };
   }
 
@@ -814,7 +820,7 @@ class GACPCertificateService {
       renewalDate: new Date(),
       renewedBy,
       newExpiryDate: certificate.expiryDate,
-      notes: 'Certificate renewed based on continued compliance'
+      notes: 'Certificate renewed based on continued compliance',
     };
   }
 
@@ -822,14 +828,14 @@ class GACPCertificateService {
     // Add to public revocation list (this would be a separate collection in production)
     logger.info('Certificate added to revocation list', {
       certificateNumber: certificate.certificateNumber,
-      revocationDate: certificate.revocationDate
+      revocationDate: certificate.revocationDate,
     });
   }
 
   async sendRevocationNotifications(certificate) {
     // Send notifications about certificate revocation
     logger.info('Revocation notifications sent', {
-      certificateNumber: certificate.certificateNumber
+      certificateNumber: certificate.certificateNumber,
     });
   }
 
@@ -847,7 +853,7 @@ class GACPCertificateService {
       ขอนแก่น: 'KK',
       อุบลราชธานี: 'UB',
       สงขลา: 'SK',
-      ภูเก็ต: 'PK'
+      ภูเก็ต: 'PK',
       // Add more provinces as needed
     };
 
@@ -868,7 +874,7 @@ class GACPCertificateService {
 
     logger.info('Certificate expiry reminders scheduled', {
       certificateNumber: certificate.certificateNumber,
-      reminders: [reminder90, reminder30]
+      reminders: [reminder90, reminder30],
     });
   }
 }

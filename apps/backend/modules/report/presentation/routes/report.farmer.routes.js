@@ -11,7 +11,7 @@ const router = express.Router();
 module.exports = (reportController, authenticateFarmer) => {
   // Request a new report
   router.post('/request', authenticateFarmer, (req, res) =>
-    reportController.requestReport(req, res)
+    reportController.requestReport(req, res),
   );
 
   // List my reports
@@ -22,17 +22,17 @@ module.exports = (reportController, authenticateFarmer) => {
 
   // Download report file
   router.get('/:reportId/download', authenticateFarmer, (req, res) =>
-    reportController.downloadReport(req, res)
+    reportController.downloadReport(req, res),
   );
 
   // Generate report manually (trigger generation)
   router.post('/:reportId/generate', authenticateFarmer, (req, res) =>
-    reportController.generateReport(req, res)
+    reportController.generateReport(req, res),
   );
 
   // Delete my report
   router.delete('/:reportId', authenticateFarmer, (req, res) =>
-    reportController.deleteReport(req, res)
+    reportController.deleteReport(req, res),
   );
 
   return router;

@@ -32,7 +32,7 @@ class DocumentHelper {
       tags: metadata.tags,
       expiresAt: metadata.expiresAt,
       issuedDate: metadata.issuedDate,
-      accessLevel: metadata.accessLevel || Document.ACCESS_LEVEL.INTERNAL
+      accessLevel: metadata.accessLevel || Document.ACCESS_LEVEL.INTERNAL,
     });
   }
 
@@ -157,7 +157,7 @@ class DocumentHelper {
 
     return await repository.count({
       'relatedEntity.type': entityType,
-      'relatedEntity.id': entityId
+      'relatedEntity.id': entityId,
     });
   }
 
@@ -172,10 +172,10 @@ class DocumentHelper {
       {
         status: Document.STATUS.APPROVED,
         'relatedEntity.type': entityType,
-        'relatedEntity.id': entityId
+        'relatedEntity.id': entityId,
       },
       userId,
-      userRole
+      userRole,
     );
   }
 
@@ -188,11 +188,11 @@ class DocumentHelper {
       {
         relatedEntity: {
           type: entityType,
-          id: entityId
-        }
+          id: entityId,
+        },
       },
       userId,
-      userRole
+      userRole,
     );
   }
 
@@ -203,10 +203,10 @@ class DocumentHelper {
     return await this.updateDocumentMetadata(
       documentId,
       {
-        relatedEntity: null
+        relatedEntity: null,
       },
       userId,
-      userRole
+      userRole,
     );
   }
 

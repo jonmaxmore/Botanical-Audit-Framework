@@ -85,7 +85,7 @@ class ApplicationRepository {
         kpis: [],
         submissionCount: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       });
 
       return {
@@ -96,7 +96,7 @@ class ApplicationRepository {
         kpis: [],
         submissionCount: 1,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
     } catch (error) {
       logger.error('[ApplicationRepository] create error:', error);
@@ -117,10 +117,10 @@ class ApplicationRepository {
         {
           $set: {
             ...updateData,
-            updatedAt: new Date()
-          }
+            updatedAt: new Date(),
+          },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -147,12 +147,12 @@ class ApplicationRepository {
               type: paymentData.type,
               amount: paymentData.amount,
               status: paymentData.status,
-              createdAt: paymentData.createdAt
-            }
+              createdAt: paymentData.createdAt,
+            },
           },
-          $set: { updatedAt: new Date() }
+          $set: { updatedAt: new Date() },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -174,15 +174,15 @@ class ApplicationRepository {
       const result = await this.collection.findOneAndUpdate(
         {
           _id: applicationId,
-          'payments.paymentId': paymentId
+          'payments.paymentId': paymentId,
         },
         {
           $set: {
             'payments.$.status': status,
-            updatedAt: new Date()
-          }
+            updatedAt: new Date(),
+          },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -209,12 +209,12 @@ class ApplicationRepository {
               assignedTo: assignmentData.assignedTo,
               role: assignmentData.role,
               status: assignmentData.status,
-              assignedAt: assignmentData.assignedAt
-            }
+              assignedAt: assignmentData.assignedAt,
+            },
           },
-          $set: { updatedAt: new Date() }
+          $set: { updatedAt: new Date() },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -236,15 +236,15 @@ class ApplicationRepository {
       const result = await this.collection.findOneAndUpdate(
         {
           _id: applicationId,
-          'assignments.assignmentId': assignmentId
+          'assignments.assignmentId': assignmentId,
         },
         {
           $set: {
             'assignments.$.status': status,
-            updatedAt: new Date()
-          }
+            updatedAt: new Date(),
+          },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -273,12 +273,12 @@ class ApplicationRepository {
               status: kpiData.status,
               startTime: kpiData.startTime,
               endTime: kpiData.endTime,
-              processingTime: kpiData.processingTime
-            }
+              processingTime: kpiData.processingTime,
+            },
           },
-          $set: { updatedAt: new Date() }
+          $set: { updatedAt: new Date() },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -299,9 +299,9 @@ class ApplicationRepository {
         { _id: applicationId },
         {
           $inc: { submissionCount: 1 },
-          $set: { updatedAt: new Date() }
+          $set: { updatedAt: new Date() },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -320,7 +320,7 @@ class ApplicationRepository {
     try {
       const application = await this.collection.findOne(
         { _id: applicationId },
-        { projection: { submissionCount: 1 } }
+        { projection: { submissionCount: 1 } },
       );
 
       return application?.submissionCount || 0;
@@ -377,11 +377,11 @@ class ApplicationRepository {
             {
               $group: {
                 _id: '$status',
-                count: { $sum: 1 }
-              }
-            }
+                count: { $sum: 1 },
+              },
+            },
           ])
-          .toArray()
+          .toArray(),
       ]);
 
       return {
@@ -389,7 +389,7 @@ class ApplicationRepository {
         byStatus: statusBreakdown.reduce((acc, item) => {
           acc[item._id] = item.count;
           return acc;
-        }, {})
+        }, {}),
       };
     } catch (error) {
       logger.error('[ApplicationRepository] getStatistics error:', error);
@@ -405,7 +405,7 @@ class ApplicationRepository {
     try {
       return await this.collection
         .find({
-          'payments.status': 'pending'
+          'payments.status': 'pending',
         })
         .sort({ submittedAt: -1 })
         .toArray();

@@ -30,7 +30,7 @@ function formatThaiDate(date) {
     'ก.ย.',
     'ต.ค.',
     'พ.ย.',
-    'ธ.ค.'
+    'ธ.ค.',
   ];
   return `${d.getDate()} ${months[d.getMonth()]} ${thaiYear}`;
 }
@@ -48,7 +48,7 @@ function numberToThaiText(num) {
     'หกสิบ',
     'เจ็ดสิบ',
     'แปดสิบ',
-    'เก้าสิบ'
+    'เก้าสิบ',
   ];
 
   if (num === 0) return 'ศูนย์บาทถ้วน';
@@ -106,19 +106,19 @@ router.post('/inspection-report/:inspectionId', async (req, res) => {
       recommendations: 'แนะนำให้ใช้ระบบดิจิทัลในการจัดเก็บข้อมูล',
       decision: 'อนุมัติ (Approved)',
       decisionColor: '#28a745',
-      watermark: 'ต้นฉบับ'
+      watermark: 'ต้นฉบับ',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/inspector/inspection-report.html'
+      '../services/pdf/templates/inspector/inspection-report.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, inspectionData);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=inspection-report-${inspectionId}.pdf`
+      `attachment; filename=inspection-report-${inspectionId}.pdf`,
     );
     res.send(pdfBuffer);
   } catch (error) {
@@ -144,17 +144,17 @@ router.post('/certificate/:certificateId', async (req, res) => {
       expiryDate: formatThaiDate(new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)),
       qrCodeUrl,
       approverName: 'นายอนุมัติ ตรวจสอบ',
-      directorName: 'นายอธิบดี กรมฯ'
+      directorName: 'นายอธิบดี กรมฯ',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/approver/certificate.html'
+      '../services/pdf/templates/approver/certificate.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, certificateData, {
       format: 'A4',
       landscape: false,
-      printBackground: true
+      printBackground: true,
     });
 
     res.setHeader('Content-Type', 'application/pdf');
@@ -187,12 +187,12 @@ router.post('/payment-receipt/:paymentId', async (req, res) => {
       paymentMethod: 'โอนเงินผ่านธนาคาร',
       transactionRef: `TXN${Date.now()}`,
       paymentDate: formatThaiDate(new Date()),
-      qrCodeUrl
+      qrCodeUrl,
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/farmer/payment-receipt.html'
+      '../services/pdf/templates/farmer/payment-receipt.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, receiptData);
 
@@ -236,19 +236,19 @@ router.post('/approval-letter/:applicationId', async (req, res) => {
         : 'สามารถยื่นคำขอใหม่ได้หลังจาก 3 เดือน',
       contactInfo: 'กรมการแพทย์แผนไทยฯ โทร 02-xxx-xxxx',
       approverName: 'นายอนุมัติ ตรวจสอบ',
-      approverPosition: 'ผู้อำนวยการกอง'
+      approverPosition: 'ผู้อำนวยการกอง',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/approver/approval-letter.html'
+      '../services/pdf/templates/approver/approval-letter.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, letterData);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=approval-letter-${applicationId}.pdf`
+      `attachment; filename=approval-letter-${applicationId}.pdf`,
     );
     res.send(pdfBuffer);
   } catch (error) {
@@ -289,19 +289,19 @@ router.post('/application-summary/:applicationId', async (req, res) => {
         <tr><td>${formatThaiDate(new Date())}</td><td>ยื่นคำขอ</td><td>นางสาวสมหญิง รักษ์ดี</td></tr>
         <tr><td>${formatThaiDate(new Date())}</td><td>เริ่มตรวจสอบเอกสาร</td><td>นายตรวจสอบ เอกสาร</td></tr>
       `,
-      watermark: 'ต้นฉบับ'
+      watermark: 'ต้นฉบับ',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/reviewer/application-summary.html'
+      '../services/pdf/templates/reviewer/application-summary.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, summaryData);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=application-summary-${applicationId}.pdf`
+      `attachment; filename=application-summary-${applicationId}.pdf`,
     );
     res.send(pdfBuffer);
   } catch (error) {
@@ -337,19 +337,19 @@ router.post('/document-verification/:applicationId', async (req, res) => {
       nextSteps: 'เมื่อเกษตรกรแก้ไขเอกสารเรียบร้อยแล้ว จะดำเนินการมอบหมายให้ผู้ตรวจสอบภาคสนาม',
       reviewerName: 'นายตรวจสอบ เอกสาร',
       verificationDate: formatThaiDate(new Date()),
-      watermark: 'ต้นฉบับ'
+      watermark: 'ต้นฉบับ',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/reviewer/document-verification.html'
+      '../services/pdf/templates/reviewer/document-verification.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, verificationData);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=document-verification-${applicationId}.pdf`
+      `attachment; filename=document-verification-${applicationId}.pdf`,
     );
     res.send(pdfBuffer);
   } catch (error) {
@@ -379,12 +379,12 @@ router.post('/inspection-appointment/:inspectionId', async (req, res) => {
       inspectorEmail: 'somchai@dtam.go.th',
       isVideoCall: true,
       platformUrl: 'https://gacp.dtam.go.th',
-      gpsCoordinates: '18.7756° N, 98.9319° E'
+      gpsCoordinates: '18.7756° N, 98.9319° E',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/inspector/appointment-letter.html'
+      '../services/pdf/templates/inspector/appointment-letter.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, appointmentData);
 
@@ -408,12 +408,12 @@ router.post('/inspection-checklist/:inspectionId', async (req, res) => {
       applicationNumber: 'GACP-2025-001234',
       farmName: 'ฟาร์มกัญชาอินทรีย์',
       farmerName: 'นางสาวสมหญิง รักษ์ดี',
-      inspectorName: 'นายสมชาย ใจดี'
+      inspectorName: 'นายสมชาย ใจดี',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/inspector/inspection-checklist.html'
+      '../services/pdf/templates/inspector/inspection-checklist.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, checklistData);
 
@@ -466,19 +466,19 @@ router.post('/reviewer-performance/:reviewerId', async (req, res) => {
       changePercent: '+18.4',
       changeColor: '#28a745',
       supervisorName: 'นายหัวหน้า แผนก',
-      reportDate: formatThaiDate(new Date())
+      reportDate: formatThaiDate(new Date()),
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/reviewer/performance-report.html'
+      '../services/pdf/templates/reviewer/performance-report.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, performanceData);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=reviewer-performance-${reviewerId}.pdf`
+      `attachment; filename=reviewer-performance-${reviewerId}.pdf`,
     );
     res.send(pdfBuffer);
   } catch (error) {
@@ -535,19 +535,19 @@ router.post('/inspector-performance/:inspectorId', async (req, res) => {
       statusText: 'เกินเป้าหมาย',
       statusColor: '#28a745',
       supervisorName: 'นายหัวหน้า แผนก',
-      reportDate: formatThaiDate(new Date())
+      reportDate: formatThaiDate(new Date()),
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/inspector/performance-report.html'
+      '../services/pdf/templates/inspector/performance-report.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, performanceData);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=inspector-performance-${inspectorId}.pdf`
+      `attachment; filename=inspector-performance-${inspectorId}.pdf`,
     );
     res.send(pdfBuffer);
   } catch (error) {
@@ -612,12 +612,12 @@ router.post('/approval-statistics', async (req, res) => {
         <tr><td>กุมภาพันธ์ 2568</td><td>52</td><td>36</td><td>69%</td></tr>
         <tr><td>มีนาคม 2568</td><td>53</td><td>37</td><td>70%</td></tr>
       `,
-      approverName: 'นายอนุมัติ ตรวจสอบ'
+      approverName: 'นายอนุมัติ ตรวจสอบ',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/approver/statistics-report.html'
+      '../services/pdf/templates/approver/statistics-report.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, statsData);
 
@@ -698,12 +698,12 @@ router.post('/system-summary', async (req, res) => {
         <tr><td>4</td><td>ขอนแก่น</td><td>76</td><td>48</td></tr>
         <tr><td>5</td><td>กรุงเทพฯ</td><td>65</td><td>42</td></tr>
       `,
-      adminName: 'นายผู้ดูแล ระบบ'
+      adminName: 'นายผู้ดูแล ระบบ',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/admin/system-summary.html'
+      '../services/pdf/templates/admin/system-summary.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, summaryData);
 
@@ -735,7 +735,7 @@ router.post('/farmer-confirmation/:applicationId', async (req, res) => {
         <tr><td>เอกสารสิทธิ์ที่ดิน</td><td style="color: #28a745;">✓ ส่งแล้ว</td></tr>
         <tr><td>แผนผังฟาร์ม</td><td style="color: #28a745;">✓ ส่งแล้ว</td></tr>
       `,
-      qrCodeUrl
+      qrCodeUrl,
     };
 
     const templatePath = path.join(__dirname, '../services/pdf/templates/farmer/confirmation.html');
@@ -778,12 +778,12 @@ router.post('/video-inspection-report/:inspectionId', async (req, res) => {
       totalScore: '72',
       decision: 'อนุมัติ (Approved)',
       decisionColor: '#28a745',
-      recommendations: 'แนะนำให้ปรับปรุงระบบการจัดเก็บเอกสารให้เป็นดิจิทัล'
+      recommendations: 'แนะนำให้ปรับปรุงระบบการจัดเก็บเอกสารให้เป็นดิจิทัล',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/inspector/video-report.html'
+      '../services/pdf/templates/inspector/video-report.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, videoReportData);
 
@@ -826,19 +826,19 @@ router.post('/complete-summary/:applicationId', async (req, res) => {
       totalScore: '85',
       certificateLevel: 'ระดับดี (Good)',
       recommendation: 'แนะนำให้อนุมัติการรับรองมาตรฐาน GACP',
-      approverRecommendation: 'ฟาร์มมีการจัดการที่ดี ผ่านเกณฑ์การประเมินทุกข้อ แนะนำให้อนุมัติ'
+      approverRecommendation: 'ฟาร์มมีการจัดการที่ดี ผ่านเกณฑ์การประเมินทุกข้อ แนะนำให้อนุมัติ',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/approver/complete-summary.html'
+      '../services/pdf/templates/approver/complete-summary.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, summaryData);
 
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader(
       'Content-Disposition',
-      `attachment; filename=complete-summary-${applicationId}.pdf`
+      `attachment; filename=complete-summary-${applicationId}.pdf`,
     );
     res.send(pdfBuffer);
   } catch (error) {
@@ -900,12 +900,12 @@ router.post('/financial-report', async (req, res) => {
       cardPercent: '17.5',
       promptpayCount: '56',
       promptpayPercent: '6.5',
-      financeOfficer: 'นางสาวการเงิน บัญชี'
+      financeOfficer: 'นางสาวการเงิน บัญชี',
     };
 
     const templatePath = path.join(
       __dirname,
-      '../services/pdf/templates/admin/financial-report.html'
+      '../services/pdf/templates/admin/financial-report.html',
     );
     const pdfBuffer = await pdfGenerator.generateFromTemplate(templatePath, financialData);
 
@@ -925,7 +925,7 @@ router.get('/health', (req, res) => {
     service: 'PDF Export Service',
     phase: 'All Phases Complete (1-4)',
     documents: 16,
-    version: '1.0.0'
+    version: '1.0.0',
   });
 });
 

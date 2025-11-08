@@ -20,7 +20,7 @@ const API_CONFIG = {
   description: 'Comprehensive API documentation for WHO-GACP certified cannabis farming platform',
   baseUrl: process.env.API_BASE_URL || 'http://localhost:3004',
   compliance: ['WHO-GACP', 'Thai-FDA', 'ASEAN-TM'],
-  lastUpdated: new Date().toISOString()
+  lastUpdated: new Date().toISOString(),
 };
 
 // API Endpoints Documentation
@@ -39,14 +39,14 @@ const API_ENDPOINTS = {
             currentWorkflow: 'WHO-GACP-2024',
             states: [
               { id: 1, name: 'Initial Application', status: 'active' },
-              { id: 2, name: 'Document Review', status: 'pending' }
-            ]
-          }
-        }
-      }
+              { id: 2, name: 'Document Review', status: 'pending' },
+            ],
+          },
+        },
+      },
     },
     compliance: ['WHO-GACP', 'Thai-FDA'],
-    caching: '5 minutes'
+    caching: '5 minutes',
   },
 
   '/api/gacp/ccps': {
@@ -66,15 +66,15 @@ const API_ENDPOINTS = {
                 id: 'CCP01',
                 name: 'Soil Quality Management',
                 weight: 15,
-                compliance: 'WHO-GACP Section 4.2'
-              }
-            ]
-          }
-        }
-      }
+                compliance: 'WHO-GACP Section 4.2',
+              },
+            ],
+          },
+        },
+      },
     },
     compliance: ['WHO-GACP', 'HACCP'],
-    caching: '10 minutes'
+    caching: '10 minutes',
   },
 
   '/api/gacp/test/score-calculation': {
@@ -94,9 +94,9 @@ const API_ENDPOINTS = {
           CCP05: 92,
           CCP06: 78,
           CCP07: 85,
-          CCP08: 87
-        }
-      }
+          CCP08: 87,
+        },
+      },
     ],
     responses: {
       200: {
@@ -108,14 +108,14 @@ const API_ENDPOINTS = {
             weightedScore: 'Good',
             certificateLevel: 'GACP-Standard',
             breakdown: {
-              CCP01: { score: 85, weight: 15, weighted: 12.75 }
-            }
-          }
-        }
-      }
+              CCP01: { score: 85, weight: 15, weighted: 12.75 },
+            },
+          },
+        },
+      },
     },
     compliance: ['WHO-GACP'],
-    caching: 'No cache'
+    caching: 'No cache',
   },
 
   '/api/gacp/workflow/:state/requirements': {
@@ -127,8 +127,8 @@ const API_ENDPOINTS = {
         type: 'string',
         required: true,
         description: 'Workflow state ID or name',
-        example: 'initial-application'
-      }
+        example: 'initial-application',
+      },
     ],
     responses: {
       200: {
@@ -138,13 +138,13 @@ const API_ENDPOINTS = {
           data: {
             state: 'initial-application',
             requirements: ['Valid farm registration documents', 'Soil quality assessment report'],
-            estimatedDuration: '5-7 business days'
-          }
-        }
-      }
+            estimatedDuration: '5-7 business days',
+          },
+        },
+      },
     },
     compliance: ['WHO-GACP'],
-    caching: '15 minutes'
+    caching: '15 minutes',
   },
 
   '/api/gacp/workflow/transition': {
@@ -155,26 +155,26 @@ const API_ENDPOINTS = {
         name: 'applicationId',
         type: 'string',
         required: true,
-        description: 'Application unique identifier'
+        description: 'Application unique identifier',
       },
       {
         name: 'fromState',
         type: 'string',
         required: true,
-        description: 'Current state'
+        description: 'Current state',
       },
       {
         name: 'toState',
         type: 'string',
         required: true,
-        description: 'Target state'
+        description: 'Target state',
       },
       {
         name: 'validationData',
         type: 'object',
         required: false,
-        description: 'Additional validation data'
-      }
+        description: 'Additional validation data',
+      },
     ],
     responses: {
       200: {
@@ -186,13 +186,13 @@ const API_ENDPOINTS = {
             transitionId: 'TXN-001',
             fromState: 'document-review',
             toState: 'field-inspection',
-            transitionDate: '2025-10-19T10:30:00Z'
-          }
-        }
-      }
+            transitionDate: '2025-10-19T10:30:00Z',
+          },
+        },
+      },
     },
     compliance: ['WHO-GACP'],
-    caching: 'No cache'
+    caching: 'No cache',
   },
 
   '/api/gacp/compliance': {
@@ -213,16 +213,16 @@ const API_ENDPOINTS = {
               {
                 name: 'Cultivation Practices',
                 requirements: 45,
-                compliance: 'WHO-GACP Section 4'
-              }
-            ]
-          }
-        }
-      }
+                compliance: 'WHO-GACP Section 4',
+              },
+            ],
+          },
+        },
+      },
     },
     compliance: ['WHO-GACP', 'Thai-FDA', 'ASEAN-TM'],
-    caching: '30 minutes'
-  }
+    caching: '30 minutes',
+  },
 };
 
 // Generate API Documentation
@@ -237,8 +237,8 @@ router.get('/docs', (req, res) => {
         enabled: true,
         limits: {
           default: '100 requests per minute',
-          authenticated: '1000 requests per minute'
-        }
+          authenticated: '1000 requests per minute',
+        },
       },
       errorCodes: {
         400: 'Bad Request - Invalid parameters',
@@ -246,26 +246,26 @@ router.get('/docs', (req, res) => {
         403: 'Forbidden - Insufficient permissions',
         404: 'Not Found - Endpoint or resource not found',
         429: 'Too Many Requests - Rate limit exceeded',
-        500: 'Internal Server Error - Server error occurred'
+        500: 'Internal Server Error - Server error occurred',
       },
       supportContact: {
         email: 'api-support@gacp-platform.com',
         documentation: 'https://docs.gacp-platform.com',
-        repository: 'https://github.com/gacp-platform/api'
-      }
+        repository: 'https://github.com/gacp-platform/api',
+      },
     };
 
     res.status(200).json({
       success: true,
       data: documentation,
-      generatedAt: new Date().toISOString()
+      generatedAt: new Date().toISOString(),
     });
   } catch (error) {
     logger.error('API Documentation Generation Error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to generate API documentation',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -280,21 +280,21 @@ router.get('/openapi', (req, res) => {
         version: API_CONFIG.version,
         description: API_CONFIG.description,
         contact: {
-          email: 'api-support@gacp-platform.com'
+          email: 'api-support@gacp-platform.com',
         },
         license: {
-          name: 'GACP Platform License'
-        }
+          name: 'GACP Platform License',
+        },
       },
       servers: [
         {
           url: API_CONFIG.baseUrl,
-          description: 'Production server'
+          description: 'Production server',
         },
         {
           url: 'http://localhost:3004',
-          description: 'Development server'
-        }
+          description: 'Development server',
+        },
       ],
       paths: {},
       components: {
@@ -302,15 +302,15 @@ router.get('/openapi', (req, res) => {
           bearerAuth: {
             type: 'http',
             scheme: 'bearer',
-            bearerFormat: 'JWT'
-          }
-        }
+            bearerFormat: 'JWT',
+          },
+        },
       },
       security: [
         {
-          bearerAuth: []
-        }
-      ]
+          bearerAuth: [],
+        },
+      ],
     };
 
     // Convert endpoints to OpenAPI format
@@ -321,8 +321,8 @@ router.get('/openapi', (req, res) => {
           summary: endpoint.description,
           parameters: endpoint.parameters || [],
           responses: endpoint.responses,
-          tags: ['GACP API']
-        }
+          tags: ['GACP API'],
+        },
       };
     }
 
@@ -332,7 +332,7 @@ router.get('/openapi', (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to generate OpenAPI specification',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -347,30 +347,30 @@ router.get('/health', (req, res) => {
         version: API_CONFIG.version,
         uptime: process.uptime(),
         memory: process.memoryUsage(),
-        endpoints: Object.keys(API_ENDPOINTS).length
+        endpoints: Object.keys(API_ENDPOINTS).length,
       },
       database: {
         connected: true, // This should be checked against actual DB
-        latency: '< 10ms' // This should be measured
+        latency: '< 10ms', // This should be measured
       },
       services: {
         gacpWorkflow: 'operational',
         ccpFramework: 'operational',
-        scoringSystem: 'operational'
+        scoringSystem: 'operational',
       },
-      compliance: API_CONFIG.compliance
+      compliance: API_CONFIG.compliance,
     };
 
     res.status(200).json({
       success: true,
-      data: healthStatus
+      data: healthStatus,
     });
   } catch (error) {
     logger.error('API Health Check Error:', error);
     res.status(500).json({
       success: false,
       error: 'Health check failed',
-      details: error.message
+      details: error.message,
     });
   }
 });

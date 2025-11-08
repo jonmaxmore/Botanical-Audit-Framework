@@ -18,7 +18,7 @@ class FarmController {
     listFarmsUseCase,
     startFarmReviewUseCase,
     approveFarmUseCase,
-    rejectFarmUseCase
+    rejectFarmUseCase,
   }) {
     this.registerFarmUseCase = registerFarmUseCase;
     this.updateFarmUseCase = updateFarmUseCase;
@@ -40,13 +40,13 @@ class FarmController {
 
       const farm = await this.registerFarmUseCase.execute({
         ownerId,
-        ...req.body
+        ...req.body,
       });
 
       return res.status(201).json({
         success: true,
         message: 'Farm registered successfully',
-        farm: farm.toJSON()
+        farm: farm.toJSON(),
       });
     } catch (error) {
       logger.error('Register farm error:', error);
@@ -54,20 +54,20 @@ class FarmController {
       if (error.message.includes('already exists')) {
         return res.status(409).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       if (error.message.includes('validation failed')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to register farm'
+        message: 'Failed to register farm',
       });
     }
   }
@@ -84,13 +84,13 @@ class FarmController {
       const farm = await this.updateFarmUseCase.execute({
         farmId,
         ownerId,
-        ...req.body
+        ...req.body,
       });
 
       return res.status(200).json({
         success: true,
         message: 'Farm updated successfully',
-        farm: farm.toJSON()
+        farm: farm.toJSON(),
       });
     } catch (error) {
       logger.error('Update farm error:', error);
@@ -98,34 +98,34 @@ class FarmController {
       if (error.message === 'Farm not found') {
         return res.status(404).json({
           success: false,
-          message: 'Farm not found'
+          message: 'Farm not found',
         });
       }
 
       if (error.message.includes('permission')) {
         return res.status(403).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       if (error.message.includes('cannot be edited')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       if (error.message.includes('already exists')) {
         return res.status(409).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to update farm'
+        message: 'Failed to update farm',
       });
     }
   }
@@ -141,13 +141,13 @@ class FarmController {
 
       const farm = await this.submitFarmForReviewUseCase.execute({
         farmId,
-        ownerId
+        ownerId,
       });
 
       return res.status(200).json({
         success: true,
         message: 'Farm submitted for review successfully',
-        farm: farm.toJSON()
+        farm: farm.toJSON(),
       });
     } catch (error) {
       logger.error('Submit farm error:', error);
@@ -155,34 +155,34 @@ class FarmController {
       if (error.message === 'Farm not found') {
         return res.status(404).json({
           success: false,
-          message: 'Farm not found'
+          message: 'Farm not found',
         });
       }
 
       if (error.message.includes('permission')) {
         return res.status(403).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       if (error.message.includes('cannot be submitted')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       if (error.message.includes('validation failed')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to submit farm for review'
+        message: 'Failed to submit farm for review',
       });
     }
   }
@@ -201,12 +201,12 @@ class FarmController {
       const farm = await this.getFarmDetailsUseCase.execute({
         farmId,
         userId,
-        userType
+        userType,
       });
 
       return res.status(200).json({
         success: true,
-        farm: farm.toJSON()
+        farm: farm.toJSON(),
       });
     } catch (error) {
       logger.error('Get farm details error:', error);
@@ -214,20 +214,20 @@ class FarmController {
       if (error.message === 'Farm not found') {
         return res.status(404).json({
           success: false,
-          message: 'Farm not found'
+          message: 'Farm not found',
         });
       }
 
       if (error.message.includes('permission')) {
         return res.status(403).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to get farm details'
+        message: 'Failed to get farm details',
       });
     }
   }
@@ -252,20 +252,20 @@ class FarmController {
         filters,
         page: parseInt(page),
         limit: parseInt(limit),
-        sort: sortObj
+        sort: sortObj,
       });
 
       return res.status(200).json({
         success: true,
         ...result,
-        farms: result.farms.map(farm => farm.toJSON())
+        farms: result.farms.map(farm => farm.toJSON()),
       });
     } catch (error) {
       logger.error('List farms error:', error);
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to list farms'
+        message: 'Failed to list farms',
       });
     }
   }
@@ -281,13 +281,13 @@ class FarmController {
 
       const farm = await this.startFarmReviewUseCase.execute({
         farmId,
-        staffId
+        staffId,
       });
 
       return res.status(200).json({
         success: true,
         message: 'Farm review started',
-        farm: farm.toJSON()
+        farm: farm.toJSON(),
       });
     } catch (error) {
       logger.error('Start farm review error:', error);
@@ -295,20 +295,20 @@ class FarmController {
       if (error.message === 'Farm not found') {
         return res.status(404).json({
           success: false,
-          message: 'Farm not found'
+          message: 'Farm not found',
         });
       }
 
       if (error.message.includes('Only PENDING_REVIEW')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to start farm review'
+        message: 'Failed to start farm review',
       });
     }
   }
@@ -326,13 +326,13 @@ class FarmController {
       const farm = await this.approveFarmUseCase.execute({
         farmId,
         staffId,
-        notes
+        notes,
       });
 
       return res.status(200).json({
         success: true,
         message: 'Farm approved successfully',
-        farm: farm.toJSON()
+        farm: farm.toJSON(),
       });
     } catch (error) {
       logger.error('Approve farm error:', error);
@@ -340,20 +340,20 @@ class FarmController {
       if (error.message === 'Farm not found') {
         return res.status(404).json({
           success: false,
-          message: 'Farm not found'
+          message: 'Farm not found',
         });
       }
 
       if (error.message.includes('Only UNDER_REVIEW')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to approve farm'
+        message: 'Failed to approve farm',
       });
     }
   }
@@ -371,13 +371,13 @@ class FarmController {
       const farm = await this.rejectFarmUseCase.execute({
         farmId,
         staffId,
-        reason
+        reason,
       });
 
       return res.status(200).json({
         success: true,
         message: 'Farm rejected',
-        farm: farm.toJSON()
+        farm: farm.toJSON(),
       });
     } catch (error) {
       logger.error('Reject farm error:', error);
@@ -385,27 +385,27 @@ class FarmController {
       if (error.message === 'Farm not found') {
         return res.status(404).json({
           success: false,
-          message: 'Farm not found'
+          message: 'Farm not found',
         });
       }
 
       if (error.message.includes('required')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       if (error.message.includes('Only UNDER_REVIEW')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to reject farm'
+        message: 'Failed to reject farm',
       });
     }
   }

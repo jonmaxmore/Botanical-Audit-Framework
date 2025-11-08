@@ -24,14 +24,14 @@ class ProductionDatabaseService {
     }
 
     const mongoUri = process.env.MONGODB_URI;
-    
+
     if (!mongoUri) {
       throw new Error('MONGODB_URI environment variable is not set');
     }
 
     try {
       logger.info('Connecting to MongoDB Atlas...');
-      
+
       await mongoose.connect(mongoUri, {
         maxPoolSize: 10,
         minPoolSize: 2,
@@ -67,7 +67,7 @@ class ProductionDatabaseService {
       this.handleReconnect();
     });
 
-    this.connection.on('error', (error) => {
+    this.connection.on('error', error => {
       logger.error('MongoDB connection error:', error);
       this.isConnected = false;
     });
@@ -101,9 +101,11 @@ class ProductionDatabaseService {
 
     this.reconnectAttempts++;
     const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
-    
-    logger.info(`Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-    
+
+    logger.info(
+      `Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts}/${this.maxReconnectAttempts})`,
+    );
+
     setTimeout(async () => {
       try {
         await this.connect();
@@ -144,7 +146,7 @@ class ProductionDatabaseService {
       return {
         status: 'healthy',
         connected: true,
-        responseTime: Date.now()
+        responseTime: Date.now(),
       };
     } catch (error) {
       logger.error('Database health check failed:', error);
@@ -161,7 +163,7 @@ class ProductionDatabaseService {
       readyState: mongoose.connection.readyState,
       host: mongoose.connection.host,
       name: mongoose.connection.name,
-      reconnectAttempts: this.reconnectAttempts
+      reconnectAttempts: this.reconnectAttempts,
     };
   }
 }

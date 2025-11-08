@@ -11,7 +11,7 @@ function toThaiDate(date) {
   const year = d.getFullYear() + 543; // Convert to Buddhist calendar
   const month = String(d.getMonth() + 1).padStart(2, '0');
   const day = String(d.getDate()).padStart(2, '0');
-  
+
   return `${day}/${month}/${year}`;
 }
 
@@ -28,7 +28,7 @@ function toISODate(date) {
 function getDateRange(range) {
   const now = new Date();
   const start = new Date(now);
-  
+
   switch (range) {
     case 'today':
       start.setHours(0, 0, 0, 0);
@@ -45,10 +45,10 @@ function getDateRange(range) {
     default:
       start.setDate(now.getDate() - 30);
   }
-  
+
   return {
     start: start.toISOString(),
-    end: now.toISOString()
+    end: now.toISOString(),
   };
 }
 
@@ -100,5 +100,5 @@ module.exports = {
   addDays,
   isPastDate,
   isFutureDate,
-  formatTimestamp
+  formatTimestamp,
 };

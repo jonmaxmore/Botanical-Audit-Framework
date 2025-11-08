@@ -116,41 +116,41 @@ function createAuthDTAMModule(config) {
   const createDTAMStaffUseCase = new CreateDTAMStaffUseCase({
     staffRepository,
     passwordHasher,
-    eventBus
+    eventBus,
   });
 
   const loginDTAMStaffUseCase = new LoginDTAMStaffUseCase({
     staffRepository,
     passwordHasher,
     jwtService,
-    eventBus
+    eventBus,
   });
 
   const requestPasswordResetUseCase = new RequestDTAMStaffPasswordResetUseCase({
     staffRepository,
     tokenGenerator,
-    eventBus
+    eventBus,
   });
 
   const resetPasswordUseCase = new ResetDTAMStaffPasswordUseCase({
     staffRepository,
-    passwordHasher
+    passwordHasher,
   });
 
   const getProfileUseCase = new GetDTAMStaffProfileUseCase({
-    staffRepository
+    staffRepository,
   });
 
   const updateProfileUseCase = new UpdateDTAMStaffProfileUseCase({
-    staffRepository
+    staffRepository,
   });
 
   const listStaffUseCase = new ListDTAMStaffUseCase({
-    staffRepository
+    staffRepository,
   });
 
   const updateRoleUseCase = new UpdateDTAMStaffRoleUseCase({
-    staffRepository
+    staffRepository,
   });
 
   // Presentation Layer
@@ -162,7 +162,7 @@ function createAuthDTAMModule(config) {
     getProfileUseCase,
     updateProfileUseCase,
     listStaffUseCase,
-    updateRoleUseCase
+    updateRoleUseCase,
   });
 
   // Create and return router
@@ -173,8 +173,8 @@ function createAuthDTAMModule(config) {
     services: {
       staffRepository,
       passwordHasher,
-      jwtService
-    }
+      jwtService,
+    },
   };
 }
 

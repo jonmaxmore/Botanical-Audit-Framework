@@ -144,11 +144,11 @@ const validateCreateSurvey = [
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
-        errors: errors.array()
+        errors: errors.array(),
       });
     }
     next();
-  }
+  },
 ];
 
 // Validation rules for updating a survey
@@ -222,11 +222,11 @@ const validateUpdateSurvey = [
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
-        errors: errors.array()
+        errors: errors.array(),
       });
     }
     next();
-  }
+  },
 ];
 
 // Validation rules for approving a survey
@@ -244,11 +244,11 @@ const validateApproveSurvey = [
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
-        errors: errors.array()
+        errors: errors.array(),
       });
     }
     next();
-  }
+  },
 ];
 
 // Validation rules for rejecting a survey
@@ -267,11 +267,11 @@ const validateRejectSurvey = [
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
-        errors: errors.array()
+        errors: errors.array(),
       });
     }
     next();
-  }
+  },
 ];
 
 // Validation rules for requesting revision
@@ -290,11 +290,11 @@ const validateRequestRevision = [
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
-        errors: errors.array()
+        errors: errors.array(),
       });
     }
     next();
-  }
+  },
 ];
 
 module.exports = {
@@ -302,5 +302,5 @@ module.exports = {
   validateUpdateSurvey,
   validateApproveSurvey,
   validateRejectSurvey,
-  validateRequestRevision
+  validateRequestRevision,
 };

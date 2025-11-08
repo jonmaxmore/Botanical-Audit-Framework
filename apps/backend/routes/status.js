@@ -10,7 +10,7 @@ router.get('/status', (req, res) => {
     status: 'ok',
     message: 'Botanical Audit Framework API is running',
     timestamp: new Date().toISOString(),
-    mongodb: mongoManager.getStatus()
+    mongodb: mongoManager.getStatus(),
   });
 });
 

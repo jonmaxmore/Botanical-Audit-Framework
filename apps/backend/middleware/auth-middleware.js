@@ -31,7 +31,7 @@ try {
     // Fallback config for Jest/test mode
     JWT_CONFIG = {
       public: { secret: 'test-public-jwt-secret-for-jest' },
-      dtam: { secret: 'test-dtam-jwt-secret-for-jest' }
+      dtam: { secret: 'test-dtam-jwt-secret-for-jest' },
     };
     logger.warn('⚠️  Using fallback JWT config for test environment');
   } else {
@@ -61,7 +61,7 @@ function authenticateFarmer(req, res, next) {
         success: false,
         error: 'Unauthorized',
         message: 'Access token required',
-        code: 'NO_TOKEN'
+        code: 'NO_TOKEN',
       });
     }
 
@@ -76,7 +76,7 @@ function authenticateFarmer(req, res, next) {
         message: 'Farmer access only',
         code: 'INVALID_ROLE',
         requiredRole: ['FARMER', 'PUBLIC'],
-        yourRole: decoded.role
+        yourRole: decoded.role,
       });
     }
 
@@ -93,7 +93,7 @@ function authenticateFarmer(req, res, next) {
         error: 'Unauthorized',
         message: 'Token has expired',
         code: 'TOKEN_EXPIRED',
-        expiredAt: error.expiredAt
+        expiredAt: error.expiredAt,
       });
     }
 
@@ -102,7 +102,7 @@ function authenticateFarmer(req, res, next) {
         success: false,
         error: 'Unauthorized',
         message: 'Invalid token',
-        code: 'INVALID_TOKEN'
+        code: 'INVALID_TOKEN',
       });
     }
 
@@ -110,7 +110,7 @@ function authenticateFarmer(req, res, next) {
       success: false,
       error: 'Forbidden',
       message: 'Authentication failed',
-      code: 'AUTH_FAILED'
+      code: 'AUTH_FAILED',
     });
   }
 }
@@ -135,7 +135,7 @@ function authenticateDTAM(req, res, next) {
         success: false,
         error: 'Unauthorized',
         message: 'Access token required',
-        code: 'NO_TOKEN'
+        code: 'NO_TOKEN',
       });
     }
 
@@ -150,7 +150,7 @@ function authenticateDTAM(req, res, next) {
       'REVIEWER',
       'MANAGER',
       'INSPECTOR',
-      'APPROVER'
+      'APPROVER',
     ];
     if (!decoded.role || !validDTAMRoles.includes(decoded.role)) {
       return res.status(403).json({
@@ -159,7 +159,7 @@ function authenticateDTAM(req, res, next) {
         message: 'DTAM staff access only',
         code: 'INVALID_ROLE',
         requiredRoles: validDTAMRoles,
-        yourRole: decoded.role
+        yourRole: decoded.role,
       });
     }
 
@@ -176,7 +176,7 @@ function authenticateDTAM(req, res, next) {
         error: 'Unauthorized',
         message: 'Token has expired - please login again',
         code: 'TOKEN_EXPIRED',
-        expiredAt: error.expiredAt
+        expiredAt: error.expiredAt,
       });
     }
 
@@ -185,7 +185,7 @@ function authenticateDTAM(req, res, next) {
         success: false,
         error: 'Unauthorized',
         message: 'Invalid token',
-        code: 'INVALID_TOKEN'
+        code: 'INVALID_TOKEN',
       });
     }
 
@@ -193,7 +193,7 @@ function authenticateDTAM(req, res, next) {
       success: false,
       error: 'Forbidden',
       message: 'Authentication failed',
-      code: 'AUTH_FAILED'
+      code: 'AUTH_FAILED',
     });
   }
 }
@@ -240,7 +240,7 @@ module.exports = {
       return res.status(401).json({
         success: false,
         error: 'Unauthorized',
-        message: 'Authentication required'
+        message: 'Authentication required',
       });
     }
 
@@ -254,7 +254,7 @@ module.exports = {
         error: 'Forbidden',
         message: 'Insufficient permissions',
         requiredRoles: allowedRoles,
-        yourRole: req.user.role
+        yourRole: req.user.role,
       });
     }
 
@@ -264,5 +264,5 @@ module.exports = {
     // Simple rate limiting placeholder
     // In production, use express-rate-limit
     return (req, res, next) => next();
-  }
+  },
 };

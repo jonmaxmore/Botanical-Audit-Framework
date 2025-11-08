@@ -21,7 +21,7 @@ class DocumentController {
     updateDocumentMetadataUseCase,
     getDocumentsByRelatedEntityUseCase,
     getPendingDocumentsUseCase,
-    getDocumentStatisticsUseCase
+    getDocumentStatisticsUseCase,
   }) {
     this.uploadDocumentUseCase = uploadDocumentUseCase;
     this.getDocumentUseCase = getDocumentUseCase;
@@ -39,8 +39,8 @@ class DocumentController {
     this.upload = multer({
       storage: multer.memoryStorage(),
       limits: {
-        fileSize: 10 * 1024 * 1024 // 10MB
-      }
+        fileSize: 10 * 1024 * 1024, // 10MB
+      },
     });
   }
 
@@ -50,7 +50,7 @@ class DocumentController {
       if (!req.file) {
         return res.status(400).json({
           success: false,
-          message: 'No file uploaded'
+          message: 'No file uploaded',
         });
       }
 
@@ -67,7 +67,7 @@ class DocumentController {
         tags: req.body.tags ? JSON.parse(req.body.tags) : [],
         metadata: req.body.metadata ? JSON.parse(req.body.metadata) : {},
         expiresAt: req.body.expiresAt,
-        issuedDate: req.body.issuedDate
+        issuedDate: req.body.issuedDate,
       };
 
       const document = await this.uploadDocumentUseCase.execute(uploadData, req.file);
@@ -75,14 +75,14 @@ class DocumentController {
       res.status(201).json({
         success: true,
         message: 'Document uploaded successfully',
-        data: document
+        data: document,
       });
     } catch (error) {
       logger.error('Error uploading document:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to upload document',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -98,7 +98,7 @@ class DocumentController {
 
       res.status(200).json({
         success: true,
-        data: document
+        data: document,
       });
     } catch (error) {
       logger.error('Error getting document:', error);
@@ -110,7 +110,7 @@ class DocumentController {
       res.status(status).json({
         success: false,
         message: 'Failed to get document',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -137,7 +137,7 @@ class DocumentController {
       res.status(status).json({
         success: false,
         message: 'Failed to download document',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -151,13 +151,13 @@ class DocumentController {
         category: req.query.category,
         tags: req.query.tags ? req.query.tags.split(',') : undefined,
         startDate: req.query.startDate,
-        endDate: req.query.endDate
+        endDate: req.query.endDate,
       };
 
       const options = {
         page: parseInt(req.query.page) || 1,
         limit: parseInt(req.query.limit) || 20,
-        sort: req.query.sort ? JSON.parse(req.query.sort) : { uploadedAt: -1 }
+        sort: req.query.sort ? JSON.parse(req.query.sort) : { uploadedAt: -1 },
       };
 
       const userId = req.user.id;
@@ -167,14 +167,14 @@ class DocumentController {
 
       res.status(200).json({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       logger.error('Error listing documents:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to list documents',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -189,7 +189,7 @@ class DocumentController {
 
       const options = {
         type: req.query.type,
-        status: req.query.status
+        status: req.query.status,
       };
 
       const documents = await this.getDocumentsByRelatedEntityUseCase.execute(
@@ -197,19 +197,19 @@ class DocumentController {
         entityId,
         userId,
         userRole,
-        options
+        options,
       );
 
       res.status(200).json({
         success: true,
-        data: documents
+        data: documents,
       });
     } catch (error) {
       logger.error('Error getting documents by entity:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get documents',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -226,7 +226,7 @@ class DocumentController {
       res.status(200).json({
         success: true,
         message: 'Document approved successfully',
-        data: document
+        data: document,
       });
     } catch (error) {
       logger.error('Error approving document:', error);
@@ -234,7 +234,7 @@ class DocumentController {
       res.status(status).json({
         success: false,
         message: 'Failed to approve document',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -249,7 +249,7 @@ class DocumentController {
       if (!reason) {
         return res.status(400).json({
           success: false,
-          message: 'Rejection reason is required'
+          message: 'Rejection reason is required',
         });
       }
 
@@ -258,7 +258,7 @@ class DocumentController {
       res.status(200).json({
         success: true,
         message: 'Document rejected successfully',
-        data: document
+        data: document,
       });
     } catch (error) {
       logger.error('Error rejecting document:', error);
@@ -266,7 +266,7 @@ class DocumentController {
       res.status(status).json({
         success: false,
         message: 'Failed to reject document',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -283,13 +283,13 @@ class DocumentController {
         documentId,
         updates,
         userId,
-        userRole
+        userRole,
       );
 
       res.status(200).json({
         success: true,
         message: 'Document updated successfully',
-        data: document
+        data: document,
       });
     } catch (error) {
       logger.error('Error updating document:', error);
@@ -301,7 +301,7 @@ class DocumentController {
       res.status(status).json({
         success: false,
         message: 'Failed to update document',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -318,13 +318,13 @@ class DocumentController {
         documentId,
         userId,
         userRole,
-        hardDelete
+        hardDelete,
       );
 
       res.status(200).json({
         success: true,
         message: hardDelete ? 'Document deleted permanently' : 'Document archived successfully',
-        data: result
+        data: result,
       });
     } catch (error) {
       logger.error('Error deleting document:', error);
@@ -336,7 +336,7 @@ class DocumentController {
       res.status(status).json({
         success: false,
         message: 'Failed to delete document',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -347,21 +347,21 @@ class DocumentController {
       const options = {
         page: parseInt(req.query.page) || 1,
         limit: parseInt(req.query.limit) || 20,
-        sort: req.query.sort ? JSON.parse(req.query.sort) : { uploadedAt: 1 }
+        sort: req.query.sort ? JSON.parse(req.query.sort) : { uploadedAt: 1 },
       };
 
       const result = await this.getPendingDocumentsUseCase.execute(options);
 
       res.status(200).json({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       logger.error('Error getting pending documents:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get pending documents',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -372,21 +372,21 @@ class DocumentController {
       const filters = {
         uploadedBy: req.query.uploadedBy,
         startDate: req.query.startDate,
-        endDate: req.query.endDate
+        endDate: req.query.endDate,
       };
 
       const statistics = await this.getDocumentStatisticsUseCase.execute(filters);
 
       res.status(200).json({
         success: true,
-        data: statistics
+        data: statistics,
       });
     } catch (error) {
       logger.error('Error getting statistics:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to get document statistics',
-        error: error.message
+        error: error.message,
       });
     }
   }

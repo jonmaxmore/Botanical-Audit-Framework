@@ -48,5 +48,5 @@ module.exports = {
   // File upload errors
   FILE_TOO_LARGE: 'File size exceeds maximum limit',
   INVALID_FILE_TYPE: 'Invalid file type',
-  UPLOAD_FAILED: 'File upload failed'
+  UPLOAD_FAILED: 'File upload failed',
 };

@@ -4,48 +4,48 @@ const NotificationSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: ['task', 'report', 'message', 'system'],
-    required: true
+    required: true,
   },
   title: {
     type: String,
-    required: true
+    required: true,
   },
   message: {
     type: String,
-    required: true
+    required: true,
   },
   recipient: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   sender: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   read: {
     type: Boolean,
-    default: false
+    default: false,
   },
   readAt: {
-    type: Date
+    type: Date,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   data: {
     taskId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Task'
+      ref: 'Task',
     },
     reportId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Report'
+      ref: 'Report',
     },
     priority: String,
-    url: String
-  }
+    url: String,
+  },
 });
 
 module.exports = mongoose.model('Notification', NotificationSchema);

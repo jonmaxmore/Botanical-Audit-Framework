@@ -43,13 +43,13 @@ class RequestDTAMStaffPasswordResetUseCase {
       const event = new DTAMStaffPasswordResetRequested(
         staff,
         resetToken,
-        staff.passwordResetTokenExpiresAt
+        staff.passwordResetTokenExpiresAt,
       );
       await this.eventBus.publish(event);
 
       return {
         success: true,
-        resetToken // Only for testing/development
+        resetToken, // Only for testing/development
       };
     } catch (error) {
       logger.error('Password reset request error:', error);

@@ -1,7 +1,7 @@
 /**
  * Validation Utilities
  * Comprehensive validation functions for GACP Platform
- * 
+ *
  * Consolidated from multiple validation files:
  * - shared/validation.js (original)
  * - modules/shared/utils/validation.js (merged 2025-01)
@@ -224,5 +224,5 @@ module.exports = {
 
   // Sanitization
   sanitizeString,
-  sanitizeObject
+  sanitizeObject,
 };

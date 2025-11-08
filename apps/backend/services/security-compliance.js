@@ -45,7 +45,7 @@ class EncryptionService {
         tag: tag.toString('hex'),
         algorithm: this.algorithm,
         context,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       };
     } catch (error) {
       throw new Error(`Encryption failed: ${error.message}`);
@@ -64,7 +64,7 @@ class EncryptionService {
       }
 
       const decipher = crypto.createDecipher(algorithm, this.masterKey, {
-        iv: Buffer.from(iv, 'hex')
+        iv: Buffer.from(iv, 'hex'),
       });
 
       decipher.setAuthTag(Buffer.from(tag, 'hex'));
@@ -182,7 +182,7 @@ class RBACService {
       // Reporting
       'report.generate': 'Generate reports',
       'report.export': 'Export reports',
-      'dashboard.view': 'View dashboard'
+      'dashboard.view': 'View dashboard',
     };
 
     permissions.forEach((description, permission) => {
@@ -195,7 +195,7 @@ class RBACService {
         name: 'Super Administrator',
         description: 'Full system access',
         permissions: Array.from(this.permissions.keys()),
-        inheritFrom: []
+        inheritFrom: [],
       },
 
       admin: {
@@ -220,9 +220,9 @@ class RBACService {
           'payment.view',
           'audit.read',
           'report.generate',
-          'dashboard.view'
+          'dashboard.view',
         ],
-        inheritFrom: []
+        inheritFrom: [],
       },
 
       reviewer: {
@@ -236,9 +236,9 @@ class RBACService {
           'certificate.read',
           'inspection.review',
           'dashboard.view',
-          'report.generate'
+          'report.generate',
         ],
-        inheritFrom: []
+        inheritFrom: [],
       },
 
       inspector: {
@@ -249,9 +249,9 @@ class RBACService {
           'inspection.schedule',
           'inspection.conduct',
           'certificate.read',
-          'dashboard.view'
+          'dashboard.view',
         ],
-        inheritFrom: []
+        inheritFrom: [],
       },
 
       farmer: {
@@ -263,21 +263,21 @@ class RBACService {
           'application.update',
           'certificate.read',
           'payment.process',
-          'dashboard.view'
+          'dashboard.view',
         ],
         inheritFrom: [],
         resourceRestrictions: {
           application: 'own', // Can only access own applications
-          certificate: 'own' // Can only access own certificates
-        }
+          certificate: 'own', // Can only access own certificates
+        },
       },
 
       auditor: {
         name: 'Auditor',
         description: 'View audit trails and generate compliance reports',
         permissions: ['audit.read', 'audit.export', 'report.generate', 'report.export'],
-        inheritFrom: []
-      }
+        inheritFrom: [],
+      },
     };
 
     roles.forEach((role, roleName) => {
@@ -293,7 +293,7 @@ class RBACService {
       'payment',
       'audit',
       'report',
-      'system'
+      'system',
     ]);
   }
 
@@ -351,7 +351,7 @@ class RBACService {
 
     return role.permissions.map(permission => ({
       permission,
-      description: this.permissions.get(permission)?.description || permission
+      description: this.permissions.get(permission)?.description || permission,
     }));
   }
 
@@ -389,21 +389,21 @@ class RBACService {
           resource = {
             type: resourceType,
             id: req.params.id,
-            ownerId: req.resource?.ownerId || req.resource?.userId
+            ownerId: req.resource?.ownerId || req.resource?.userId,
           };
         }
 
         const hasPermission = await this.hasPermission(user, requiredPermission, resource, {
           method: req.method,
           path: req.path,
-          body: req.body
+          body: req.body,
         });
 
         if (!hasPermission) {
           return res.status(403).json({
             error: 'Insufficient permissions',
             required: requiredPermission,
-            userRole: user.role
+            userRole: user.role,
           });
         }
 
@@ -428,26 +428,26 @@ class DataClassificationService {
         level: 0,
         description: 'Information that can be shared publicly',
         encryptionRequired: false,
-        auditLevel: 'BASIC'
+        auditLevel: 'BASIC',
       },
       INTERNAL: {
         level: 1,
         description: 'Internal business information',
         encryptionRequired: false,
-        auditLevel: 'STANDARD'
+        auditLevel: 'STANDARD',
       },
       CONFIDENTIAL: {
         level: 2,
         description: 'Sensitive business or personal information',
         encryptionRequired: true,
-        auditLevel: 'DETAILED'
+        auditLevel: 'DETAILED',
       },
       RESTRICTED: {
         level: 3,
         description: 'Highly sensitive information requiring special handling',
         encryptionRequired: true,
-        auditLevel: 'COMPREHENSIVE'
-      }
+        auditLevel: 'COMPREHENSIVE',
+      },
     };
   }
 
@@ -460,7 +460,7 @@ class DataClassificationService {
       /\b\d{13}\b/g, // Thai National ID
       /\b\d{4}-\d{4}-\d{4}-\d{4}\b/g, // Credit card
       /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/g, // Email
-      /\b\d{3}-\d{3}-\d{4}\b/g // Phone number
+      /\b\d{3}-\d{3}-\d{4}\b/g, // Phone number
     ];
 
     const dataString = JSON.stringify(data);
@@ -492,5 +492,5 @@ class DataClassificationService {
 module.exports = {
   EncryptionService,
   RBACService,
-  DataClassificationService
+  DataClassificationService,
 };

@@ -46,14 +46,14 @@ class SurveySystemService {
           gacp: 0,
           sustainability: 0,
           market: 0,
-          regionalBonus: 0
+          regionalBonus: 0,
         },
 
         metadata: {
           createdAt: new Date(),
           lastSavedAt: new Date(),
-          submittedAt: null
-        }
+          submittedAt: null,
+        },
       };
 
       if (this.responsesCollection) {
@@ -64,13 +64,13 @@ class SurveySystemService {
 
       return {
         success: true,
-        data: response
+        data: response,
       };
     } catch (error) {
       logger.error('[SurveyService] Error creating survey response:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -85,7 +85,7 @@ class SurveySystemService {
       }
 
       const response = await this.responsesCollection.findOne({
-        _id: new ObjectId(surveyId)
+        _id: new ObjectId(surveyId),
       });
 
       if (!response) {
@@ -105,7 +105,7 @@ class SurveySystemService {
         4: 'managementProduction',
         5: 'costRevenue',
         6: 'marketSales',
-        7: 'problemsNeeds'
+        7: 'problemsNeeds',
       };
 
       const fieldName = stepFieldMap[stepId];
@@ -121,7 +121,7 @@ class SurveySystemService {
         [fieldName]: stepData,
         progress,
         currentStep: stepId,
-        'metadata.lastSavedAt': new Date()
+        'metadata.lastSavedAt': new Date(),
       };
 
       // If all steps complete, mark as ready for submission
@@ -131,7 +131,7 @@ class SurveySystemService {
 
       await this.responsesCollection.updateOne(
         { _id: new ObjectId(surveyId) },
-        { $set: updateData }
+        { $set: updateData },
       );
 
       logger.info(`[SurveyService] Step ${stepId} updated`, { surveyId, progress });
@@ -139,7 +139,7 @@ class SurveySystemService {
       return {
         currentStep: stepId,
         progress,
-        isComplete: progress === 100
+        isComplete: progress === 100,
       };
     } catch (error) {
       logger.error('[SurveyService] Error updating wizard step:', error);
@@ -157,7 +157,7 @@ class SurveySystemService {
       }
 
       const response = await this.responsesCollection.findOne({
-        _id: new ObjectId(surveyId)
+        _id: new ObjectId(surveyId),
       });
 
       if (!response) {
@@ -191,18 +191,18 @@ class SurveySystemService {
             scores: {
               ...scores,
               regionalBonus,
-              total: totalScore
+              total: totalScore,
             },
             recommendations,
-            'metadata.submittedAt': new Date()
-          }
-        }
+            'metadata.submittedAt': new Date(),
+          },
+        },
       );
 
       logger.info('[SurveyService] Survey submitted', {
         surveyId,
         totalScore,
-        region: response.region
+        region: response.region,
       });
 
       return {
@@ -211,7 +211,7 @@ class SurveySystemService {
         regionalBonus,
         totalScore,
         recommendations,
-        submittedAt: new Date()
+        submittedAt: new Date(),
       };
     } catch (error) {
       logger.error('[SurveyService] Error submitting wizard:', error);
@@ -231,7 +231,7 @@ class SurveySystemService {
       const responses = await this.responsesCollection
         .find({
           region: region.toLowerCase(),
-          state: 'SUBMITTED'
+          state: 'SUBMITTED',
         })
         .toArray();
 
@@ -241,7 +241,7 @@ class SurveySystemService {
           averageScore: 0,
           scoreDistribution: {},
           commonIssues: [],
-          recommendations: []
+          recommendations: [],
         };
       }
 
@@ -256,7 +256,7 @@ class SurveySystemService {
           .length,
         fair: responses.filter(r => (r.scores?.total || 0) >= 50 && (r.scores?.total || 0) < 70)
           .length,
-        poor: responses.filter(r => (r.scores?.total || 0) < 50).length
+        poor: responses.filter(r => (r.scores?.total || 0) < 50).length,
       };
 
       // Common issues
@@ -270,7 +270,7 @@ class SurveySystemService {
         averageScore: Math.round(averageScore),
         scoreDistribution,
         commonIssues,
-        recommendations
+        recommendations,
       };
     } catch (error) {
       logger.error('[SurveyService] Error getting regional analytics:', error);
@@ -294,7 +294,7 @@ class SurveySystemService {
 
       return {
         regions: comparison,
-        insights
+        insights,
       };
     } catch (error) {
       logger.error('[SurveyService] Error comparing regions:', error);
@@ -316,9 +316,9 @@ class SurveySystemService {
           {
             $group: {
               _id: '$state',
-              count: { $sum: 1 }
-            }
-          }
+              count: { $sum: 1 },
+            },
+          },
         ])
         .toArray();
 
@@ -331,9 +331,9 @@ class SurveySystemService {
             $group: {
               _id: '$region',
               count: { $sum: 1 },
-              avgScore: { $avg: '$scores.total' }
-            }
-          }
+              avgScore: { $avg: '$scores.total' },
+            },
+          },
         ])
         .toArray();
 
@@ -346,10 +346,10 @@ class SurveySystemService {
         byRegion: byRegion.reduce((acc, reg) => {
           acc[reg._id] = {
             count: reg.count,
-            avgScore: Math.round(reg.avgScore || 0)
+            avgScore: Math.round(reg.avgScore || 0),
           };
           return acc;
-        }, {})
+        }, {}),
       };
     } catch (error) {
       logger.error('[SurveyService] Error getting statistics:', error);
@@ -372,7 +372,7 @@ class SurveySystemService {
       'managementProduction',
       'costRevenue',
       'marketSales',
-      'problemsNeeds'
+      'problemsNeeds',
     ];
 
     let completedSteps = 0;
@@ -432,7 +432,7 @@ class SurveySystemService {
       overall,
       gacp: gacpScore,
       sustainability: sustainabilityScore,
-      market: marketScore
+      market: marketScore,
     };
   }
 
@@ -444,23 +444,23 @@ class SurveySystemService {
       northern: {
         condition: scores.sustainability >= 60,
         bonus: 10,
-        reason: 'Mountain farming sustainability practices'
+        reason: 'Mountain farming sustainability practices',
       },
       central: {
         condition: scores.market >= 60,
         bonus: 10,
-        reason: 'Central market access advantages'
+        reason: 'Central market access advantages',
       },
       southern: {
         condition: scores.gacp >= 60,
         bonus: 10,
-        reason: 'Southern GACP implementation excellence'
+        reason: 'Southern GACP implementation excellence',
       },
       northeastern: {
         condition: scores.sustainability >= 60,
         bonus: 10,
-        reason: 'Northeastern organic farming practices'
-      }
+        reason: 'Northeastern organic farming practices',
+      },
     };
 
     const rule = bonusRules[region.toLowerCase()];
@@ -480,7 +480,7 @@ class SurveySystemService {
         priority: 'HIGH',
         text: 'Consider attending GACP certification training workshops',
         impact: 'Will improve overall compliance score by 20-30%',
-        sopActivities: ['soil_testing', 'water_testing', 'seed_selection'] // Recommended SOP activities
+        sopActivities: ['soil_testing', 'water_testing', 'seed_selection'], // Recommended SOP activities
       });
     }
 
@@ -491,7 +491,7 @@ class SurveySystemService {
         priority: 'MEDIUM',
         text: 'Implement water conservation and organic practices',
         impact: 'Reduces costs and improves environmental score',
-        sopActivities: ['daily_watering', 'pest_monitoring', 'disease_inspection']
+        sopActivities: ['daily_watering', 'pest_monitoring', 'disease_inspection'],
       });
     }
 
@@ -502,7 +502,7 @@ class SurveySystemService {
         priority: 'MEDIUM',
         text: 'Explore cooperative memberships for better market access',
         impact: 'Can increase revenue by 15-25%',
-        sopActivities: ['quality_testing', 'final_packaging']
+        sopActivities: ['quality_testing', 'final_packaging'],
       });
     }
 
@@ -514,8 +514,8 @@ class SurveySystemService {
         priority: 'LOW',
         text,
         impact: 'Optimizes regional advantages',
-        sopActivities: this._getRegionalSOPActivities(response.region)
-      }))
+        sopActivities: this._getRegionalSOPActivities(response.region),
+      })),
     );
 
     return recommendations;
@@ -529,7 +529,7 @@ class SurveySystemService {
       northern: ['soil_preparation', 'water_testing', 'growth_measurement'],
       central: ['irrigation_setup', 'weekly_fertilizing', 'processing'],
       southern: ['pest_monitoring', 'disease_inspection', 'drying_process'],
-      northeastern: ['daily_watering', 'maturity_assessment', 'storage_conditions']
+      northeastern: ['daily_watering', 'maturity_assessment', 'storage_conditions'],
     };
     return regionalSOPs[region.toLowerCase()] || [];
   }
@@ -546,7 +546,7 @@ class SurveySystemService {
       const response = await this.responsesCollection.findOne({
         _id: new ObjectId(surveyId),
         userId,
-        state: 'SUBMITTED'
+        state: 'SUBMITTED',
       });
 
       if (!response) {
@@ -558,7 +558,7 @@ class SurveySystemService {
         priority_activities: [],
         phase_focus: '',
         estimated_timeline: '',
-        compliance_gap_analysis: {}
+        compliance_gap_analysis: {},
       };
 
       // Determine priority phase based on lowest scores
@@ -568,7 +568,7 @@ class SurveySystemService {
           'soil_testing',
           'water_testing',
           'seed_selection',
-          'area_measurement'
+          'area_measurement',
         ];
         sopRecommendations.estimated_timeline = '2-3 สัปดาห์';
       } else if (scores.sustainability < 60) {
@@ -576,7 +576,7 @@ class SurveySystemService {
         sopRecommendations.priority_activities = [
           'pest_monitoring',
           'disease_inspection',
-          'growth_measurement'
+          'growth_measurement',
         ];
         sopRecommendations.estimated_timeline = '6-8 สัปดาห์';
       } else if (scores.market < 60) {
@@ -584,7 +584,7 @@ class SurveySystemService {
         sopRecommendations.priority_activities = [
           'quality_testing',
           'final_packaging',
-          'storage_conditions'
+          'storage_conditions',
         ];
         sopRecommendations.estimated_timeline = '1-2 สัปดาห์';
       }
@@ -595,7 +595,7 @@ class SurveySystemService {
         target_score: 80,
         gap: Math.max(0, 80 - (scores.total || 0)),
         required_activities: sopRecommendations.priority_activities.length,
-        estimated_points: sopRecommendations.priority_activities.length * 15 // Average points per activity
+        estimated_points: sopRecommendations.priority_activities.length * 15, // Average points per activity
       };
 
       // Regional adjustments
@@ -607,7 +607,7 @@ class SurveySystemService {
         sopRecommendations,
         surveyScores: scores,
         region: response.region,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       };
     } catch (error) {
       logger.error('[SurveyService] Error generating SOP recommendations:', error);
@@ -626,7 +626,7 @@ class SurveySystemService {
 
       const response = await this.responsesCollection.findOne({
         _id: new ObjectId(surveyId),
-        userId
+        userId,
       });
 
       if (!response) {
@@ -639,9 +639,9 @@ class SurveySystemService {
         {
           $set: {
             linkedFarmId: farmId,
-            'metadata.linkedAt': new Date()
-          }
-        }
+            'metadata.linkedAt': new Date(),
+          },
+        },
       );
 
       // Generate SOP recommendations for the farm
@@ -654,8 +654,8 @@ class SurveySystemService {
         linkage: {
           surveyId,
           farmId,
-          linkedAt: new Date()
-        }
+          linkedAt: new Date(),
+        },
       };
     } catch (error) {
       logger.error('[SurveyService] Error linking survey to farm:', error);
@@ -692,23 +692,23 @@ class SurveySystemService {
       northern: [
         'Implement terraced farming for mountain terrain',
         'Focus on highland crop varieties',
-        'Establish community water management'
+        'Establish community water management',
       ],
       central: [
         'Optimize rice-herb rotation systems',
         'Leverage central market access',
-        'Implement mechanization for efficiency'
+        'Implement mechanization for efficiency',
       ],
       southern: [
         'Improve monsoon drainage systems',
         'Focus on medicinal plant certification',
-        'Develop agrotourism opportunities'
+        'Develop agrotourism opportunities',
       ],
       northeastern: [
         'Implement drought-resistant varieties',
         'Establish farmer cooperative networks',
-        'Develop value-added processing'
-      ]
+        'Develop value-added processing',
+      ],
     };
 
     return regionalRecs[region.toLowerCase()] || regionalRecs.central;
@@ -735,7 +735,7 @@ class SurveySystemService {
       insights.push({
         type: 'BEST_PERFORMER',
         text: `${highestRegion} region leads with average score of ${highestScore}`,
-        data: { region: highestRegion, score: highestScore }
+        data: { region: highestRegion, score: highestScore },
       });
     }
 
@@ -754,7 +754,7 @@ class SurveySystemService {
       insights.push({
         type: 'MOST_ACTIVE',
         text: `${mostActive} region has highest participation with ${mostResponses} surveys`,
-        data: { region: mostActive, responses: mostResponses }
+        data: { region: mostActive, responses: mostResponses },
       });
     }
 

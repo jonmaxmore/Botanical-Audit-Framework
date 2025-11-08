@@ -1,9 +1,9 @@
 /**
  * Alert Service
- * 
+ *
  * Threshold-based alerting system with multiple notification channels
  * Monitors metrics and triggers alerts when thresholds are exceeded
- * 
+ *
  * Features:
  * - Threshold monitoring
  * - Email notifications
@@ -21,69 +21,69 @@ const logger = require('../../shared/logger');
 class AlertService extends EventEmitter {
   constructor() {
     super();
-    
+
     // Alert history (last 100 alerts)
     this.alertHistory = [];
     this.maxHistorySize = 100;
-    
+
     // Alert deduplication (prevent duplicate alerts within time window)
     this.recentAlerts = new Map();
     this.deduplicationWindow = 300000; // 5 minutes
-    
+
     // Email configuration
     this.emailTransporter = null;
     this.setupEmailTransporter();
-    
+
     // Alert rules (can be configured)
     this.alertRules = {
       cpu: {
         warning: 70,
         critical: 85,
-        enabled: true
+        enabled: true,
       },
       memory: {
         warning: 75,
         critical: 90,
-        enabled: true
+        enabled: true,
       },
       disk: {
         warning: 80,
         critical: 95,
-        enabled: true
+        enabled: true,
       },
       queryTime: {
         warning: 300,
         critical: 1000,
-        enabled: true
+        enabled: true,
       },
       cacheHitRate: {
         warning: 60,
         critical: 40,
-        enabled: true
+        enabled: true,
       },
       apiResponseTime: {
         warning: 500,
         critical: 2000,
-        enabled: true
+        enabled: true,
       },
       errorRate: {
         warning: 2,
         critical: 5,
-        enabled: true
+        enabled: true,
       },
       queueFailed: {
         warning: 5,
         critical: 20,
-        enabled: true
-      }
+        enabled: true,
+      },
     };
-    
+
     // Alert recipients
     this.recipients = {
       email: process.env.ALERT_EMAILS?.split(',') || ['admin@example.com'],
-      sms: process.env.ALERT_SMS?.split(',') || []
+      sms: process.env.ALERT_SMS?.split(',') || [],
     };
-    
+
     console.log('✅ Alert Service initialized');
   }
 
@@ -103,8 +103,8 @@ class AlertService extends EventEmitter {
         secure: process.env.SMTP_SECURE === 'true',
         auth: {
           user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASS
-        }
+          pass: process.env.SMTP_PASS,
+        },
       });
 
       console.log('✅ Email transporter configured');
@@ -118,7 +118,7 @@ class AlertService extends EventEmitter {
    */
   checkMetric(metricName, value, metadata = {}) {
     const rule = this.alertRules[metricName];
-    
+
     if (!rule || !rule.enabled) {
       return;
     }
@@ -142,7 +142,7 @@ class AlertService extends EventEmitter {
         value,
         threshold,
         severity,
-        ...metadata
+        ...metadata,
       });
     }
   }
@@ -166,7 +166,10 @@ class AlertService extends EventEmitter {
 
     // Log alert
     const logLevel = alert.severity === 'critical' ? 'error' : 'warn';
-    logger[logLevel](`🚨 ALERT: ${alert.metric} = ${alert.value} (threshold: ${alert.threshold})`, alert);
+    logger[logLevel](
+      `🚨 ALERT: ${alert.metric} = ${alert.value} (threshold: ${alert.threshold})`,
+      alert,
+    );
 
     // Send notifications
     await this.sendNotifications(alert);
@@ -186,7 +189,7 @@ class AlertService extends EventEmitter {
    */
   isDuplicateAlert(alert) {
     const recent = this.recentAlerts.get(alert.metric);
-    
+
     if (!recent) {
       return false;
     }
@@ -194,7 +197,7 @@ class AlertService extends EventEmitter {
     // Check if same severity and similar value
     const isSameSeverity = recent.severity === alert.severity;
     const valueDiff = Math.abs(recent.value - alert.value);
-    const isSimilarValue = valueDiff < (alert.threshold * 0.05); // Within 5%
+    const isSimilarValue = valueDiff < alert.threshold * 0.05; // Within 5%
 
     return isSameSeverity && isSimilarValue;
   }
@@ -224,7 +227,7 @@ class AlertService extends EventEmitter {
   async sendEmailAlert(alert) {
     try {
       const subject = `[${alert.severity.toUpperCase()}] System Alert: ${alert.metric}`;
-      
+
       const html = `
         <h2>System Alert</h2>
         <p><strong>Severity:</strong> ${alert.severity.toUpperCase()}</p>
@@ -237,7 +240,9 @@ class AlertService extends EventEmitter {
         
         <h3>Recommended Actions:</h3>
         <ul>
-          ${this.getRecommendedActions(alert.metric).map(action => `<li>${action}</li>`).join('')}
+          ${this.getRecommendedActions(alert.metric)
+            .map(action => `<li>${action}</li>`)
+            .join('')}
         </ul>
         
         <hr>
@@ -250,7 +255,7 @@ class AlertService extends EventEmitter {
         from: process.env.SMTP_FROM || 'alerts@botanicalaudit.com',
         to: this.recipients.email.join(','),
         subject,
-        html
+        html,
       });
 
       console.log(`📧 Email alert sent for ${alert.metric}`);
@@ -266,16 +271,15 @@ class AlertService extends EventEmitter {
     try {
       // TODO: Implement SMS provider (Twilio, AWS SNS, etc.)
       const message = `[${alert.severity.toUpperCase()}] ${alert.metric}: ${alert.value} (threshold: ${alert.threshold})`;
-      
+
       console.log(`📱 SMS alert (not implemented): ${message}`);
-      
+
       // Example with Twilio:
       // await twilioClient.messages.create({
       //   body: message,
       //   from: process.env.TWILIO_PHONE,
       //   to: this.recipients.sms
       // });
-      
     } catch (error) {
       console.error('❌ Error sending SMS alert:', error);
     }
@@ -290,50 +294,50 @@ class AlertService extends EventEmitter {
         'Check for runaway processes',
         'Review application performance',
         'Consider scaling horizontally',
-        'Optimize heavy computations'
+        'Optimize heavy computations',
       ],
       memory: [
         'Check for memory leaks',
         'Review cache size configuration',
         'Clear unused data',
-        'Consider increasing server memory'
+        'Consider increasing server memory',
       ],
       disk: [
         'Clean up old logs',
         'Remove temporary files',
         'Archive old data',
-        'Expand disk storage'
+        'Expand disk storage',
       ],
       queryTime: [
         'Review slow queries',
         'Check database indexes',
         'Optimize query patterns',
-        'Consider query caching'
+        'Consider query caching',
       ],
       cacheHitRate: [
         'Review cache TTL settings',
         'Implement cache warming',
         'Check cache key generation',
-        'Analyze cache usage patterns'
+        'Analyze cache usage patterns',
       ],
       apiResponseTime: [
         'Check server load',
         'Review endpoint performance',
         'Implement caching',
-        'Optimize database queries'
+        'Optimize database queries',
       ],
       errorRate: [
         'Check application logs',
         'Review recent deployments',
         'Investigate error patterns',
-        'Check external service status'
+        'Check external service status',
       ],
       queueFailed: [
         'Check queue worker status',
         'Review failed job errors',
         'Check Redis connection',
-        'Retry failed jobs if safe'
-      ]
+        'Retry failed jobs if safe',
+      ],
     };
 
     return actions[metric] || ['Review system logs', 'Contact system administrator'];
@@ -344,7 +348,7 @@ class AlertService extends EventEmitter {
    */
   addToHistory(alert) {
     this.alertHistory.unshift(alert);
-    
+
     // Keep only last N alerts
     if (this.alertHistory.length > this.maxHistorySize) {
       this.alertHistory = this.alertHistory.slice(0, this.maxHistorySize);
@@ -356,11 +360,11 @@ class AlertService extends EventEmitter {
    */
   getAlertHistory(limit = 50, severity = null) {
     let history = this.alertHistory;
-    
+
     if (severity) {
       history = history.filter(alert => alert.severity === severity);
     }
-    
+
     return history.slice(0, limit);
   }
 
@@ -373,12 +377,10 @@ class AlertService extends EventEmitter {
     const oneDay = 86400000;
 
     const recentAlerts = this.alertHistory.filter(
-      alert => now - alert.timestamp.getTime() < oneHour
+      alert => now - alert.timestamp.getTime() < oneHour,
     );
 
-    const todayAlerts = this.alertHistory.filter(
-      alert => now - alert.timestamp.getTime() < oneDay
-    );
+    const todayAlerts = this.alertHistory.filter(alert => now - alert.timestamp.getTime() < oneDay);
 
     const byMetric = {};
     this.alertHistory.forEach(alert => {
@@ -387,7 +389,7 @@ class AlertService extends EventEmitter {
 
     const bySeverity = {
       warning: this.alertHistory.filter(a => a.severity === 'warning').length,
-      critical: this.alertHistory.filter(a => a.severity === 'critical').length
+      critical: this.alertHistory.filter(a => a.severity === 'critical').length,
     };
 
     return {
@@ -396,7 +398,7 @@ class AlertService extends EventEmitter {
       last24Hours: todayAlerts.length,
       byMetric,
       bySeverity,
-      mostRecent: this.alertHistory[0] || null
+      mostRecent: this.alertHistory[0] || null,
     };
   }
 
@@ -407,7 +409,7 @@ class AlertService extends EventEmitter {
     if (this.alertRules[metric]) {
       this.alertRules[metric] = {
         ...this.alertRules[metric],
-        ...updates
+        ...updates,
       };
       console.log(`✅ Alert rule updated for ${metric}`, updates);
     }
@@ -437,7 +439,7 @@ class AlertService extends EventEmitter {
       value: 100,
       threshold: 50,
       severity: 'warning',
-      message: 'This is a test alert'
+      message: 'This is a test alert',
     };
 
     await this.triggerAlert(testAlert);
@@ -450,7 +452,7 @@ const alertService = new AlertService();
 
 // Listen to metric alerts from metrics service
 if (global.eventEmitter) {
-  global.eventEmitter.on('metric:alert', (alert) => {
+  global.eventEmitter.on('metric:alert', alert => {
     alertService.triggerAlert(alert);
   });
 }

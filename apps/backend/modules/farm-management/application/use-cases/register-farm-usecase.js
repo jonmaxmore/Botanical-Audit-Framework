@@ -27,7 +27,7 @@ class RegisterFarmUseCase {
     cultivationMethod,
     irrigationType,
     soilType,
-    waterSource
+    waterSource,
   }) {
     const Farm = require('../../domain/entities/Farm');
     const FarmRegistered = require('../../domain/events/FarmRegistered');
@@ -56,7 +56,7 @@ class RegisterFarmUseCase {
       cultivationMethod,
       irrigationType,
       soilType,
-      waterSource
+      waterSource,
     });
 
     // Validate farm data
@@ -77,7 +77,7 @@ class RegisterFarmUseCase {
         province: savedFarm.province,
         district: savedFarm.district,
         totalArea: savedFarm.totalArea,
-        createdAt: savedFarm.createdAt
+        createdAt: savedFarm.createdAt,
       });
       this.eventBus.publish(event);
     }

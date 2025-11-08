@@ -32,7 +32,7 @@ function initializeDashboardModule(repositories) {
     repositories.trainingEnrollmentRepository,
     repositories.documentRepository,
     repositories.notificationRepository,
-    repositories.auditRepository
+    repositories.auditRepository,
   );
 }
 
@@ -56,5 +56,5 @@ module.exports = {
     .initializeDashboardDTAMRoutes,
 
   // DTOs
-  DashboardDTO: require('./presentation/dto/DashboardDTO').DashboardDTO
+  DashboardDTO: require('./presentation/dto/DashboardDTO').DashboardDTO,
 };

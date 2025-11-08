@@ -40,18 +40,18 @@ describe('Auth Farmer E2E Integration Tests', () => {
     if (client) {
       await client.close();
     }
-    
+
     // Stop MongoDB Memory Server
     if (mongod) {
       await mongod.stop();
     }
-    
+
     // Close mongoose connection if any
     const mongoose = require('mongoose');
     if (mongoose.connection.readyState !== 0) {
       await mongoose.connection.close();
     }
-    
+
     // Give time for cleanup
     await new Promise(resolve => setTimeout(resolve, 500));
   });
@@ -75,7 +75,7 @@ describe('Auth Farmer E2E Integration Tests', () => {
         province: 'Bangkok',
         district: 'Bang Khen',
         subDistrict: 'Anusawari',
-        postalCode: '10220'
+        postalCode: '10220',
       };
 
       const registerRes = await request(app)
@@ -93,17 +93,16 @@ describe('Auth Farmer E2E Integration Tests', () => {
       const userId = registerRes.body.id;
 
       // Step 2: Manually verify email (skip email verification for testing)
-      await db.collection('users').updateOne(
-        { _id: userId },
-        { $set: { isEmailVerified: true, status: 'ACTIVE' } }
-      );
+      await db
+        .collection('users')
+        .updateOne({ _id: userId }, { $set: { isEmailVerified: true, status: 'ACTIVE' } });
 
       // Step 3: Login with registered credentials
       const loginRes = await request(app)
         .post(`${baseURL}/login`)
         .send({
           email: registerPayload.email,
-          password: registerPayload.password
+          password: registerPayload.password,
         })
         .expect('Content-Type', /json/);
 
@@ -128,26 +127,25 @@ describe('Auth Farmer E2E Integration Tests', () => {
         firstName: 'Wrong',
         lastName: 'Pass',
         idCard: '9876543210987',
-        phoneNumber: '+66876543210'
+        phoneNumber: '+66876543210',
       };
 
-      await request(app)
-        .post(`${baseURL}/register`)
-        .send(registerPayload)
-        .expect(201);
+      await request(app).post(`${baseURL}/register`).send(registerPayload).expect(201);
 
       // Manually verify email
-      await db.collection('users').updateOne(
-        { email: registerPayload.email },
-        { $set: { isEmailVerified: true, status: 'ACTIVE' } }
-      );
+      await db
+        .collection('users')
+        .updateOne(
+          { email: registerPayload.email },
+          { $set: { isEmailVerified: true, status: 'ACTIVE' } },
+        );
 
       // Step 2: Attempt login with wrong password
       const loginRes = await request(app)
         .post(`${baseURL}/login`)
         .send({
           email: registerPayload.email,
-          password: 'WrongP@ssword123'
+          password: 'WrongP@ssword123',
         })
         .expect('Content-Type', /json/);
 
@@ -161,7 +159,7 @@ describe('Auth Farmer E2E Integration Tests', () => {
         .post(`${baseURL}/login`)
         .send({
           email: 'nonexistent@example.com',
-          password: 'SomeP@ssword123'
+          password: 'SomeP@ssword123',
         })
         .expect('Content-Type', /json/);
 
@@ -176,14 +174,11 @@ describe('Auth Farmer E2E Integration Tests', () => {
         firstName: 'Duplicate',
         lastName: 'User',
         idCard: '1111111111111',
-        phoneNumber: '+66811111111'
+        phoneNumber: '+66811111111',
       };
 
       // First registration
-      await request(app)
-        .post(`${baseURL}/register`)
-        .send(registerPayload)
-        .expect(201);
+      await request(app).post(`${baseURL}/register`).send(registerPayload).expect(201);
 
       // Second registration with same email
       const duplicateRes = await request(app)
@@ -191,7 +186,7 @@ describe('Auth Farmer E2E Integration Tests', () => {
         .send({
           ...registerPayload,
           idCard: '2222222222222', // Different ID card
-          phoneNumber: '+66822222222'
+          phoneNumber: '+66822222222',
         })
         .expect('Content-Type', /json/);
 
@@ -207,14 +202,11 @@ describe('Auth Farmer E2E Integration Tests', () => {
         firstName: 'IDCard',
         lastName: 'User',
         idCard: '3333333333333',
-        phoneNumber: '+66833333333'
+        phoneNumber: '+66833333333',
       };
 
       // First registration
-      await request(app)
-        .post(`${baseURL}/register`)
-        .send(registerPayload)
-        .expect(201);
+      await request(app).post(`${baseURL}/register`).send(registerPayload).expect(201);
 
       // Second registration with same ID card
       const duplicateRes = await request(app)
@@ -222,7 +214,7 @@ describe('Auth Farmer E2E Integration Tests', () => {
         .send({
           ...registerPayload,
           email: 'idcard2@example.com', // Different email
-          phoneNumber: '+66844444444'
+          phoneNumber: '+66844444444',
         })
         .expect('Content-Type', /json/);
 
@@ -244,28 +236,23 @@ describe('Auth Farmer E2E Integration Tests', () => {
         firstName: 'Profile',
         lastName: 'User',
         idCard: '5555555555555',
-        phoneNumber: '+66855555555'
+        phoneNumber: '+66855555555',
       };
 
-      const registerRes = await request(app)
-        .post(`${baseURL}/register`)
-        .send(registerPayload);
+      const registerRes = await request(app).post(`${baseURL}/register`).send(registerPayload);
 
       userId = registerRes.body.id;
 
       // Verify email
-      await db.collection('users').updateOne(
-        { _id: userId },
-        { $set: { isEmailVerified: true, status: 'ACTIVE' } }
-      );
+      await db
+        .collection('users')
+        .updateOne({ _id: userId }, { $set: { isEmailVerified: true, status: 'ACTIVE' } });
 
       // Login
-      const loginRes = await request(app)
-        .post(`${baseURL}/login`)
-        .send({
-          email: registerPayload.email,
-          password: registerPayload.password
-        });
+      const loginRes = await request(app).post(`${baseURL}/login`).send({
+        email: registerPayload.email,
+        password: registerPayload.password,
+      });
 
       authToken = loginRes.body.token;
     });
@@ -314,26 +301,21 @@ describe('Auth Farmer E2E Integration Tests', () => {
         firstName: 'Update',
         lastName: 'User',
         idCard: '6666666666666',
-        phoneNumber: '+66866666666'
+        phoneNumber: '+66866666666',
       };
 
-      const registerRes = await request(app)
-        .post(`${baseURL}/register`)
-        .send(registerPayload);
+      const registerRes = await request(app).post(`${baseURL}/register`).send(registerPayload);
 
       userId = registerRes.body.id;
 
-      await db.collection('users').updateOne(
-        { _id: userId },
-        { $set: { isEmailVerified: true, status: 'ACTIVE' } }
-      );
+      await db
+        .collection('users')
+        .updateOne({ _id: userId }, { $set: { isEmailVerified: true, status: 'ACTIVE' } });
 
-      const loginRes = await request(app)
-        .post(`${baseURL}/login`)
-        .send({
-          email: registerPayload.email,
-          password: registerPayload.password
-        });
+      const loginRes = await request(app).post(`${baseURL}/login`).send({
+        email: registerPayload.email,
+        password: registerPayload.password,
+      });
 
       authToken = loginRes.body.token;
     });
@@ -343,7 +325,7 @@ describe('Auth Farmer E2E Integration Tests', () => {
         firstName: 'Updated',
         lastName: 'Name',
         phoneNumber: '+66899999999',
-        address: '999 New Address'
+        address: '999 New Address',
       };
 
       const updateRes = await request(app)
@@ -371,16 +353,14 @@ describe('Auth Farmer E2E Integration Tests', () => {
   describe('Password Reset Flow', () => {
     it('should request password reset for existing email', async () => {
       // Register user first
-      await request(app)
-        .post(`${baseURL}/register`)
-        .send({
-          email: 'reset@example.com',
-          password: 'OldP@ss123',
-          firstName: 'Reset',
-          lastName: 'User',
-          idCard: '7777777777777',
-          phoneNumber: '+66877777777'
-        });
+      await request(app).post(`${baseURL}/register`).send({
+        email: 'reset@example.com',
+        password: 'OldP@ss123',
+        firstName: 'Reset',
+        lastName: 'User',
+        idCard: '7777777777777',
+        phoneNumber: '+66877777777',
+      });
 
       // Request password reset
       const resetRes = await request(app)

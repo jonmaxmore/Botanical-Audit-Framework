@@ -15,7 +15,7 @@ const validateStartWizard = [
     .isIn(['central', 'southern', 'northern', 'northeastern'])
     .withMessage('Invalid region'),
 
-  body('farmId').optional().isString().withMessage('Farm ID must be a string')
+  body('farmId').optional().isString().withMessage('Farm ID must be a string'),
 ];
 
 /**
@@ -38,7 +38,7 @@ const validateUpdateStep = [
     .notEmpty()
     .withMessage('Step data is required')
     .isObject()
-    .withMessage('Step data must be an object')
+    .withMessage('Step data must be an object'),
 ];
 
 /**
@@ -57,7 +57,7 @@ const validatePersonalInfo = [
     .matches(/^[0-9]{10}$/)
     .withMessage('Phone must be 10 digits'),
 
-  body('stepData.email').optional().isEmail().withMessage('Invalid email format')
+  body('stepData.email').optional().isEmail().withMessage('Invalid email format'),
 ];
 
 /**
@@ -79,7 +79,7 @@ const validateFarmInfo = [
   body('stepData.annualProduction')
     .optional()
     .isFloat({ min: 0 })
-    .withMessage('Annual production must be positive')
+    .withMessage('Annual production must be positive'),
 ];
 
 /**
@@ -95,7 +95,7 @@ const validateManagementProduction = [
   body('stepData.certificationDate')
     .optional()
     .isISO8601()
-    .withMessage('Invalid certification date format')
+    .withMessage('Invalid certification date format'),
 ];
 
 /**
@@ -115,7 +115,7 @@ const validateCostRevenue = [
   body('stepData.profitMargin')
     .optional()
     .isFloat({ min: -100, max: 100 })
-    .withMessage('Profit margin must be between -100% to 100%')
+    .withMessage('Profit margin must be between -100% to 100%'),
 ];
 
 /**
@@ -126,7 +126,7 @@ const validateMarketSales = [
 
   body('stepData.directToConsumer').isBoolean().withMessage('Direct to consumer must be boolean'),
 
-  body('stepData.mainMarkets').optional().isArray().withMessage('Main markets must be an array')
+  body('stepData.mainMarkets').optional().isArray().withMessage('Main markets must be an array'),
 ];
 
 /**
@@ -143,7 +143,7 @@ const validateProblemsNeeds = [
   body('stepData.supportNeeded')
     .optional()
     .isString()
-    .withMessage('Support needed must be a string')
+    .withMessage('Support needed must be a string'),
 ];
 
 /**
@@ -154,7 +154,7 @@ const validateSubmitWizard = [
     .notEmpty()
     .withMessage('Survey ID is required')
     .isMongoId()
-    .withMessage('Invalid survey ID format')
+    .withMessage('Invalid survey ID format'),
 ];
 
 /**
@@ -165,7 +165,7 @@ const validateGetSurvey = [
     .notEmpty()
     .withMessage('Survey ID is required')
     .isMongoId()
-    .withMessage('Invalid survey ID format')
+    .withMessage('Invalid survey ID format'),
 ];
 
 /**
@@ -176,7 +176,7 @@ const validateRegionalAnalytics = [
     .notEmpty()
     .withMessage('Region is required')
     .isIn(['central', 'southern', 'northern', 'northeastern'])
-    .withMessage('Invalid region')
+    .withMessage('Invalid region'),
 ];
 
 /**
@@ -192,7 +192,7 @@ const validateCompareRegions = [
       const validRegions = ['central', 'southern', 'northern', 'northeastern'];
       return regions.every(r => validRegions.includes(r));
     })
-    .withMessage('Invalid region in list')
+    .withMessage('Invalid region in list'),
 ];
 
 /**
@@ -204,7 +204,7 @@ const validateQueryFilters = [
   query('region')
     .optional()
     .isIn(['central', 'southern', 'northern', 'northeastern'])
-    .withMessage('Invalid region')
+    .withMessage('Invalid region'),
 ];
 
 /**
@@ -246,8 +246,8 @@ const handleValidationErrors = (req, res, next) => {
       errors: errors.array().map(err => ({
         field: err.param,
         message: err.msg,
-        value: err.value
-      }))
+        value: err.value,
+      })),
     });
   }
 
@@ -269,5 +269,5 @@ module.exports = {
   validateCompareRegions,
   validateQueryFilters,
   getStepValidator,
-  handleValidationErrors
+  handleValidationErrors,
 };

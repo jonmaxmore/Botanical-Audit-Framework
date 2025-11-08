@@ -19,7 +19,7 @@ class Course {
   static STATUS = {
     DRAFT: 'DRAFT', // Being created/edited
     PUBLISHED: 'PUBLISHED', // Available for enrollment
-    ARCHIVED: 'ARCHIVED' // No longer available
+    ARCHIVED: 'ARCHIVED', // No longer available
   };
 
   // Course Type Constants
@@ -27,14 +27,14 @@ class Course {
     MANDATORY: 'MANDATORY', // Required for GACP certification
     OPTIONAL: 'OPTIONAL', // Additional training
     ADVANCED: 'ADVANCED', // For certified farmers
-    REFRESHER: 'REFRESHER' // Periodic recertification
+    REFRESHER: 'REFRESHER', // Periodic recertification
   };
 
   // Course Level Constants
   static LEVEL = {
     BEGINNER: 'BEGINNER',
     INTERMEDIATE: 'INTERMEDIATE',
-    ADVANCED: 'ADVANCED'
+    ADVANCED: 'ADVANCED',
   };
 
   constructor(data = {}) {
@@ -104,7 +104,7 @@ class Course {
       status: Course.STATUS.DRAFT,
       createdBy,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 
@@ -131,7 +131,7 @@ class Course {
       order: module.order,
       durationMinutes: module.durationMinutes || 0,
       lessons: module.lessons || [],
-      isRequired: module.isRequired !== false
+      isRequired: module.isRequired !== false,
     });
 
     this.modules.sort((a, b) => a.order - b.order);
@@ -151,7 +151,7 @@ class Course {
     this.modules[moduleIndex] = {
       ...this.modules[moduleIndex],
       ...updates,
-      id: this.modules[moduleIndex].id // Preserve ID
+      id: this.modules[moduleIndex].id, // Preserve ID
     };
 
     if (updates.order) {
@@ -286,7 +286,7 @@ class Course {
       'passingScore',
       'maxEnrollments',
       'thumbnailUrl',
-      'previewVideoUrl'
+      'previewVideoUrl',
     ];
 
     Object.keys(updates).forEach(key => {
@@ -408,7 +408,7 @@ class Course {
       totalDurationMinutes: this.totalDurationMinutes,
       currentEnrollments: this.currentEnrollments,
       completionRate: this.getCompletionRate(),
-      isEnrollmentAvailable: this.isEnrollmentAvailable()
+      isEnrollmentAvailable: this.isEnrollmentAvailable(),
     };
   }
 
@@ -445,7 +445,7 @@ class Course {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 }

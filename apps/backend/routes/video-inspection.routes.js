@@ -29,7 +29,7 @@ router.post('/inspections/:id/video-token', async (req, res) => {
       channelName,
       uid,
       RtcRole.PUBLISHER,
-      privilegeExpiredTs
+      privilegeExpiredTs,
     );
 
     res.json({
@@ -37,7 +37,7 @@ router.post('/inspections/:id/video-token', async (req, res) => {
       channelName,
       uid,
       appId,
-      expiresAt: privilegeExpiredTs
+      expiresAt: privilegeExpiredTs,
     });
   } catch (error) {
     console.error('Error generating Agora token:', error);

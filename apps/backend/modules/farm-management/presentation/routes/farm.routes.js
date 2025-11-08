@@ -24,7 +24,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
     '/',
     authMiddleware.authenticateFarmer,
     validators.validateRegisterFarm,
-    (req, res) => farmController.registerFarm(req, res)
+    (req, res) => farmController.registerFarm(req, res),
   );
 
   /**
@@ -32,7 +32,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
    * GET /api/farms
    */
   farmerRouter.get('/', authMiddleware.authenticateFarmer, (req, res) =>
-    farmController.listFarms(req, res)
+    farmController.listFarms(req, res),
   );
 
   /**
@@ -40,7 +40,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
    * GET /api/farms/:id
    */
   farmerRouter.get('/:id', authMiddleware.authenticateFarmer, (req, res) =>
-    farmController.getFarmDetails(req, res)
+    farmController.getFarmDetails(req, res),
   );
 
   /**
@@ -51,7 +51,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
     '/:id',
     authMiddleware.authenticateFarmer,
     validators.validateUpdateFarm,
-    (req, res) => farmController.updateFarm(req, res)
+    (req, res) => farmController.updateFarm(req, res),
   );
 
   /**
@@ -59,7 +59,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
    * POST /api/farms/:id/submit
    */
   farmerRouter.post('/:id/submit', authMiddleware.authenticateFarmer, (req, res) =>
-    farmController.submitFarmForReview(req, res)
+    farmController.submitFarmForReview(req, res),
   );
 
   // ===================================================================
@@ -74,7 +74,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
     '/',
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requireAnyPermission(['view_applications', 'review_applications']),
-    (req, res) => farmController.listFarms(req, res)
+    (req, res) => farmController.listFarms(req, res),
   );
 
   /**
@@ -85,7 +85,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
     '/:id',
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requireAnyPermission(['view_applications', 'review_applications']),
-    (req, res) => farmController.getFarmDetails(req, res)
+    (req, res) => farmController.getFarmDetails(req, res),
   );
 
   /**
@@ -96,7 +96,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
     '/:id/start-review',
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requirePermission('review_applications'),
-    (req, res) => farmController.startFarmReview(req, res)
+    (req, res) => farmController.startFarmReview(req, res),
   );
 
   /**
@@ -108,7 +108,7 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requirePermission('approve_applications'),
     validators.validateApproveFarm,
-    (req, res) => farmController.approveFarm(req, res)
+    (req, res) => farmController.approveFarm(req, res),
   );
 
   /**
@@ -120,12 +120,12 @@ function createFarmRoutes(farmController, authMiddleware, validators) {
     authMiddleware.authenticateDTAMStaff,
     authMiddleware.requirePermission('reject_applications'),
     validators.validateRejectFarm,
-    (req, res) => farmController.rejectFarm(req, res)
+    (req, res) => farmController.rejectFarm(req, res),
   );
 
   return {
     farmerRouter,
-    dtamRouter
+    dtamRouter,
   };
 }
 

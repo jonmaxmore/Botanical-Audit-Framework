@@ -14,7 +14,7 @@ const SignatureStoreSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Key version is required'],
       unique: true,
-      index: true
+      index: true,
     },
 
     publicKey: {
@@ -24,95 +24,95 @@ const SignatureStoreSchema = new mongoose.Schema(
         validator: function (v) {
           return v.includes('BEGIN PUBLIC KEY') && v.includes('END PUBLIC KEY');
         },
-        message: 'Invalid PEM public key format'
-      }
+        message: 'Invalid PEM public key format',
+      },
     },
 
     algorithm: {
       type: String,
       required: [true, 'Algorithm is required'],
       enum: ['RSA-SHA256', 'ECDSA-SHA256'],
-      default: 'RSA-SHA256'
+      default: 'RSA-SHA256',
     },
 
     keySize: {
       type: Number,
       required: [true, 'Key size is required'],
       enum: [2048, 4096],
-      default: 2048
+      default: 2048,
     },
 
     keySource: {
       type: String,
       required: [true, 'Key source is required'],
       enum: ['local', 'kms'],
-      default: 'local'
+      default: 'local',
     },
 
     kmsKeyId: {
       type: String,
-      required: false
+      required: false,
     },
 
     status: {
       type: String,
       enum: ['ACTIVE', 'ROTATED', 'REVOKED'],
       default: 'ACTIVE',
-      index: true
+      index: true,
     },
 
     validFrom: {
       type: Date,
       required: [true, 'Valid from date is required'],
-      default: Date.now
+      default: Date.now,
     },
 
     validUntil: {
       type: Date,
-      required: false
+      required: false,
     },
 
     rotatedAt: {
-      type: Date
+      type: Date,
     },
 
     revokedAt: {
-      type: Date
+      type: Date,
     },
 
     revokedReason: {
-      type: String
+      type: String,
     },
 
     statistics: {
       signaturesCreated: {
         type: Number,
-        default: 0
+        default: 0,
       },
       signaturesVerified: {
         type: Number,
-        default: 0
+        default: 0,
       },
-      lastUsed: Date
+      lastUsed: Date,
     },
 
     metadata: {
       environment: {
         type: String,
         enum: ['development', 'staging', 'production'],
-        required: true
+        required: true,
       },
       createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
       },
-      notes: String
-    }
+      notes: String,
+    },
   },
   {
     timestamps: true,
-    collection: 'signature_store'
-  }
+    collection: 'signature_store',
+  },
 );
 
 // Indexes
@@ -156,7 +156,7 @@ SignatureStoreSchema.methods.rotate = async function (newPublicKey, newVersion) 
     kmsKeyId: this.kmsKeyId,
     status: 'ACTIVE',
     validFrom: new Date(),
-    metadata: this.metadata
+    metadata: this.metadata,
   });
 
   await this.save();
@@ -215,8 +215,8 @@ SignatureStoreSchema.statics.createInitial = async function (publicKey, environm
     metadata: {
       environment,
       createdBy,
-      notes: 'Initial key pair'
-    }
+      notes: 'Initial key pair',
+    },
   });
 };
 
@@ -229,7 +229,7 @@ SignatureStoreSchema.statics.getStats = async function () {
     rotated: keys.filter(k => k.status === 'ROTATED').length,
     revoked: keys.filter(k => k.status === 'REVOKED').length,
     totalSignatures: keys.reduce((sum, k) => sum + k.statistics.signaturesCreated, 0),
-    totalVerifications: keys.reduce((sum, k) => sum + k.statistics.signaturesVerified, 0)
+    totalVerifications: keys.reduce((sum, k) => sum + k.statistics.signaturesVerified, 0),
   };
 };
 
@@ -239,7 +239,7 @@ SignatureStoreSchema.pre('save', async function (next) {
   if (this.status === 'ACTIVE' && !this.isNew) {
     const others = await this.constructor.find({
       _id: { $ne: this._id },
-      status: 'ACTIVE'
+      status: 'ACTIVE',
     });
 
     for (const other of others) {
@@ -257,7 +257,7 @@ SignatureStoreSchema.post('save', function (doc) {
   this.constructor.emit('keyCreated', {
     version: doc.version,
     algorithm: doc.algorithm,
-    status: doc.status
+    status: doc.status,
   });
 });
 
@@ -276,7 +276,7 @@ SignatureStoreSchema.set('toJSON', {
     }
 
     return ret;
-  }
+  },
 });
 
 const SignatureStoreModel = mongoose.model('SignatureStore', SignatureStoreSchema);

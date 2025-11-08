@@ -1,9 +1,9 @@
 /**
  * Metrics Service
- * 
+ *
  * Centralized metrics collection and monitoring service
  * Tracks system performance, database queries, cache hits, queue jobs, and API metrics
- * 
+ *
  * Features:
  * - Real-time system metrics (CPU, memory, disk)
  * - Database performance metrics
@@ -27,7 +27,7 @@ class MetricsService {
         cpu: [],
         memory: [],
         disk: [],
-        uptime: 0
+        uptime: 0,
       },
       database: {
         queryTime: [],
@@ -37,15 +37,15 @@ class MetricsService {
           find: 0,
           insert: 0,
           update: 0,
-          delete: 0
-        }
+          delete: 0,
+        },
       },
       cache: {
         hits: 0,
         misses: 0,
         hitRate: 0,
         operations: [],
-        memory: []
+        memory: [],
       },
       queue: {
         jobs: {
@@ -53,45 +53,45 @@ class MetricsService {
           completed: 0,
           failed: 0,
           delayed: 0,
-          waiting: 0
+          waiting: 0,
         },
         processingTime: [],
-        throughput: []
+        throughput: [],
       },
       api: {
         requests: {
           total: 0,
           success: 0,
           error: 0,
-          by_endpoint: {}
+          by_endpoint: {},
         },
         responseTime: [],
         statusCodes: {
           '2xx': 0,
           '3xx': 0,
           '4xx': 0,
-          '5xx': 0
-        }
-      }
+          '5xx': 0,
+        },
+      },
     };
 
     // Time windows for aggregation (last N minutes)
     this.timeWindows = {
-      realtime: 1,      // 1 minute
-      short: 5,         // 5 minutes
-      medium: 15,       // 15 minutes
-      long: 60          // 1 hour
+      realtime: 1, // 1 minute
+      short: 5, // 5 minutes
+      medium: 15, // 15 minutes
+      long: 60, // 1 hour
     };
 
     // Alert thresholds
     this.thresholds = {
-      cpu: 80,                    // %
-      memory: 85,                 // %
-      disk: 90,                   // %
-      queryTime: 500,             // ms
-      cacheHitRate: 50,           // %
-      apiResponseTime: 1000,      // ms
-      errorRate: 5                // %
+      cpu: 80, // %
+      memory: 85, // %
+      disk: 90, // %
+      queryTime: 500, // ms
+      cacheHitRate: 50, // %
+      apiResponseTime: 1000, // ms
+      errorRate: 5, // %
     };
 
     // Start metrics collection
@@ -156,7 +156,6 @@ class MetricsService {
       this.checkThreshold('cpu', cpuUsage);
       this.checkThreshold('memory', memoryUsage);
       this.checkThreshold('disk', diskUsage);
-
     } catch (error) {
       console.error('Error collecting system metrics:', error);
     }
@@ -179,7 +178,7 @@ class MetricsService {
 
     const idle = totalIdle / cpus.length;
     const total = totalTick / cpus.length;
-    const usage = 100 - (100 * idle / total);
+    const usage = 100 - (100 * idle) / total;
 
     return Math.round(usage * 100) / 100;
   }
@@ -222,27 +221,25 @@ class MetricsService {
 
       // Calculate hit rate
       const total = this.metrics.cache.hits + this.metrics.cache.misses;
-      this.metrics.cache.hitRate = total > 0 
-        ? Math.round((this.metrics.cache.hits / total) * 10000) / 100 
-        : 0;
+      this.metrics.cache.hitRate =
+        total > 0 ? Math.round((this.metrics.cache.hits / total) * 10000) / 100 : 0;
 
       this.metrics.cache.operations.push({
         hits: this.metrics.cache.hits,
         misses: this.metrics.cache.misses,
         hitRate: this.metrics.cache.hitRate,
-        timestamp
+        timestamp,
       });
 
       if (stats.memory) {
         this.metrics.cache.memory.push({
           value: stats.memory.usedMemory,
-          timestamp
+          timestamp,
         });
       }
 
       // Check hit rate threshold
       this.checkThreshold('cacheHitRate', this.metrics.cache.hitRate);
-
     } catch (error) {
       console.error('Error collecting cache metrics:', error);
     }
@@ -264,13 +261,12 @@ class MetricsService {
         completed: stats.completedCount || 0,
         failed: stats.failedCount || 0,
         delayed: stats.delayedCount || 0,
-        waiting: stats.waitingCount || 0
+        waiting: stats.waitingCount || 0,
       };
 
       // Calculate throughput (jobs per minute)
       const throughput = this.calculateThroughput();
       this.metrics.queue.throughput.push({ value: throughput, timestamp });
-
     } catch (error) {
       console.error('Error collecting queue metrics:', error);
     }
@@ -282,17 +278,17 @@ class MetricsService {
   trackQuery(operation, duration, isSlowQuery = false) {
     const timestamp = Date.now();
 
-    this.metrics.database.queryTime.push({ 
+    this.metrics.database.queryTime.push({
       operation,
-      duration, 
-      timestamp 
+      duration,
+      timestamp,
     });
 
     if (isSlowQuery || duration > this.thresholds.queryTime) {
       this.metrics.database.slowQueries.push({
         operation,
         duration,
-        timestamp
+        timestamp,
       });
 
       this.checkThreshold('queryTime', duration);
@@ -325,7 +321,7 @@ class MetricsService {
       jobType,
       duration,
       status,
-      timestamp
+      timestamp,
     });
   }
 
@@ -360,7 +356,7 @@ class MetricsService {
       this.metrics.api.requests.by_endpoint[endpoint] = {
         count: 0,
         avgTime: 0,
-        totalTime: 0
+        totalTime: 0,
       };
     }
     const endpointMetrics = this.metrics.api.requests.by_endpoint[endpoint];
@@ -374,12 +370,12 @@ class MetricsService {
       path,
       statusCode,
       duration,
-      timestamp
+      timestamp,
     });
 
     // Check thresholds
     this.checkThreshold('apiResponseTime', duration);
-    
+
     const errorRate = (this.metrics.api.requests.error / this.metrics.api.requests.total) * 100;
     this.checkThreshold('errorRate', errorRate);
   }
@@ -390,7 +386,7 @@ class MetricsService {
   calculateThroughput() {
     const oneMinuteAgo = Date.now() - 60000;
     const recentJobs = this.metrics.queue.processingTime.filter(
-      job => job.timestamp > oneMinuteAgo
+      job => job.timestamp > oneMinuteAgo,
     );
     return recentJobs.length;
   }
@@ -414,7 +410,7 @@ class MetricsService {
       value,
       threshold,
       timestamp: new Date(),
-      severity: value > threshold * 1.5 ? 'critical' : 'warning'
+      severity: value > threshold * 1.5 ? 'critical' : 'warning',
     };
 
     console.warn(`⚠️  ALERT: ${metricName} = ${value} (threshold: ${threshold})`);
@@ -437,28 +433,28 @@ class MetricsService {
         cpu: this.aggregateMetrics(this.metrics.system.cpu, cutoff),
         memory: this.aggregateMetrics(this.metrics.system.memory, cutoff),
         disk: this.aggregateMetrics(this.metrics.system.disk, cutoff),
-        uptime: this.metrics.system.uptime
+        uptime: this.metrics.system.uptime,
       },
       database: {
         queryTime: this.aggregateMetrics(this.metrics.database.queryTime, cutoff),
         slowQueries: this.metrics.database.slowQueries.filter(q => q.timestamp > cutoff).length,
-        operations: this.metrics.database.operations
+        operations: this.metrics.database.operations,
       },
       cache: {
         hits: this.metrics.cache.hits,
         misses: this.metrics.cache.misses,
         hitRate: this.metrics.cache.hitRate,
-        recent: this.metrics.cache.operations.filter(op => op.timestamp > cutoff)
+        recent: this.metrics.cache.operations.filter(op => op.timestamp > cutoff),
       },
       queue: this.metrics.queue,
       api: {
         requests: this.metrics.api.requests,
         responseTime: this.aggregateMetrics(this.metrics.api.responseTime, cutoff),
         statusCodes: this.metrics.api.statusCodes,
-        topEndpoints: this.getTopEndpoints(10)
+        topEndpoints: this.getTopEndpoints(10),
       },
       timestamp: new Date(),
-      timeWindow
+      timeWindow,
     };
   }
 
@@ -467,7 +463,7 @@ class MetricsService {
    */
   aggregateMetrics(dataArray, cutoff) {
     const filtered = dataArray.filter(item => item.timestamp > cutoff);
-    
+
     if (filtered.length === 0) {
       return { avg: 0, min: 0, max: 0, p95: 0, p99: 0, count: 0 };
     }
@@ -490,7 +486,7 @@ class MetricsService {
       max: Math.round(max * 100) / 100,
       p95: Math.round(p95 * 100) / 100,
       p99: Math.round(p99 * 100) / 100,
-      count: filtered.length
+      count: filtered.length,
     };
   }
 
@@ -501,7 +497,7 @@ class MetricsService {
     const endpoints = Object.entries(this.metrics.api.requests.by_endpoint)
       .map(([endpoint, metrics]) => ({
         endpoint,
-        ...metrics
+        ...metrics,
       }))
       .sort((a, b) => b.count - a.count)
       .slice(0, limit);
@@ -519,16 +515,17 @@ class MetricsService {
       }
 
       const serverStatus = await mongoose.connection.db.admin().serverStatus();
-      
+
       return {
         current: serverStatus.connections.current,
         available: serverStatus.connections.available,
         totalCreated: serverStatus.connections.totalCreated,
         active: serverStatus.connections.active || 0,
         utilization: Math.round(
-          (serverStatus.connections.current / 
-          (serverStatus.connections.current + serverStatus.connections.available)) * 100
-        )
+          (serverStatus.connections.current /
+            (serverStatus.connections.current + serverStatus.connections.available)) *
+            100,
+        ),
       };
     } catch (error) {
       console.error('Error getting connection pool metrics:', error);
@@ -548,9 +545,9 @@ class MetricsService {
         system: this.checkSystemHealth(metrics.system),
         database: await this.checkDatabaseHealth(),
         cache: await this.checkCacheHealth(),
-        queue: await this.checkQueueHealth()
+        queue: await this.checkQueueHealth(),
       },
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Overall status
@@ -582,7 +579,7 @@ class MetricsService {
 
     return {
       status: issues.length > 0 ? 'warning' : 'healthy',
-      issues
+      issues,
     };
   }
 
@@ -596,7 +593,7 @@ class MetricsService {
         0: 'disconnected',
         1: 'connected',
         2: 'connecting',
-        3: 'disconnecting'
+        3: 'disconnecting',
       };
 
       const isConnected = state === 1;
@@ -614,13 +611,13 @@ class MetricsService {
         status: issues.length > 0 ? 'warning' : 'healthy',
         state: stateMap[state],
         issues,
-        pool: poolMetrics
+        pool: poolMetrics,
       };
     } catch (error) {
       return {
         status: 'critical',
         issues: ['Failed to check database health'],
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -645,13 +642,13 @@ class MetricsService {
         status: issues.length > 0 ? 'warning' : 'healthy',
         connected: isConnected,
         hitRate: this.metrics.cache.hitRate,
-        issues
+        issues,
       };
     } catch (error) {
       return {
         status: 'critical',
         issues: ['Failed to check cache health'],
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -675,13 +672,13 @@ class MetricsService {
       return {
         status: issues.length > 0 ? 'warning' : 'healthy',
         jobs: this.metrics.queue.jobs,
-        issues
+        issues,
       };
     } catch (error) {
       return {
         status: 'critical',
         issues: ['Failed to check queue health'],
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -698,19 +695,31 @@ class MetricsService {
     this.metrics.system.disk = this.metrics.system.disk.filter(m => m.timestamp > oneHourAgo);
 
     // Clean database metrics
-    this.metrics.database.queryTime = this.metrics.database.queryTime.filter(m => m.timestamp > oneHourAgo);
-    this.metrics.database.slowQueries = this.metrics.database.slowQueries.filter(m => m.timestamp > oneHourAgo);
+    this.metrics.database.queryTime = this.metrics.database.queryTime.filter(
+      m => m.timestamp > oneHourAgo,
+    );
+    this.metrics.database.slowQueries = this.metrics.database.slowQueries.filter(
+      m => m.timestamp > oneHourAgo,
+    );
 
     // Clean cache metrics
-    this.metrics.cache.operations = this.metrics.cache.operations.filter(m => m.timestamp > oneHourAgo);
+    this.metrics.cache.operations = this.metrics.cache.operations.filter(
+      m => m.timestamp > oneHourAgo,
+    );
     this.metrics.cache.memory = this.metrics.cache.memory.filter(m => m.timestamp > oneHourAgo);
 
     // Clean queue metrics
-    this.metrics.queue.processingTime = this.metrics.queue.processingTime.filter(m => m.timestamp > oneHourAgo);
-    this.metrics.queue.throughput = this.metrics.queue.throughput.filter(m => m.timestamp > oneHourAgo);
+    this.metrics.queue.processingTime = this.metrics.queue.processingTime.filter(
+      m => m.timestamp > oneHourAgo,
+    );
+    this.metrics.queue.throughput = this.metrics.queue.throughput.filter(
+      m => m.timestamp > oneHourAgo,
+    );
 
     // Clean API metrics
-    this.metrics.api.responseTime = this.metrics.api.responseTime.filter(m => m.timestamp > oneHourAgo);
+    this.metrics.api.responseTime = this.metrics.api.responseTime.filter(
+      m => m.timestamp > oneHourAgo,
+    );
 
     console.log('🧹 Cleaned up old metrics (keeping last hour)');
   }
@@ -726,19 +735,19 @@ class MetricsService {
       total: 0,
       success: 0,
       error: 0,
-      by_endpoint: {}
+      by_endpoint: {},
     };
     this.metrics.api.statusCodes = {
       '2xx': 0,
       '3xx': 0,
       '4xx': 0,
-      '5xx': 0
+      '5xx': 0,
     };
     this.metrics.database.operations = {
       find: 0,
       insert: 0,
       update: 0,
-      delete: 0
+      delete: 0,
     };
 
     console.log('🔄 Metrics reset');
@@ -751,7 +760,7 @@ class MetricsService {
     return {
       ...this.getMetrics('long'),
       thresholds: this.thresholds,
-      exportedAt: new Date()
+      exportedAt: new Date(),
     };
   }
 }

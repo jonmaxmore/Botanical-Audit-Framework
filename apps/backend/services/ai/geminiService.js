@@ -16,7 +16,7 @@ class GeminiAIService {
       logger.error('GEMINI_API_KEY not configured');
       throw new Error('Gemini API key is required');
     }
-    
+
     // Using stable SDK - cost-effective and production-ready
     this.genAI = new GoogleGenerativeAI(this.apiKey);
     this.model = this.genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
@@ -31,8 +31,8 @@ class GeminiAIService {
       return {
         inlineData: {
           data: imageData.toString('base64'),
-          mimeType: 'image/jpeg'
-        }
+          mimeType: 'image/jpeg',
+        },
       };
     } catch (error) {
       logger.error('Error reading file:', error);
@@ -46,7 +46,7 @@ class GeminiAIService {
   async extractTextFromImage(imagePath) {
     try {
       const imagePart = await this.fileToGenerativePart(imagePath);
-      
+
       const prompt = `Extract all text from this image. 
       Return ONLY the extracted text, maintaining the original layout and formatting.
       If the image contains Thai text, ensure accurate Thai character recognition.
@@ -59,13 +59,13 @@ class GeminiAIService {
       return {
         success: true,
         extractedText: text,
-        confidence: 0.85
+        confidence: 0.85,
       };
     } catch (error) {
       logger.error('OCR extraction error:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -76,7 +76,7 @@ class GeminiAIService {
   async validateGACPDocument(imagePath, documentType) {
     try {
       const imagePart = await this.fileToGenerativePart(imagePath);
-      
+
       const prompt = `Analyze this ${documentType} document for GACP (Good Agricultural and Collection Practices) certification.
 
 Required information to extract:
@@ -134,7 +134,8 @@ Return a JSON object with:
       let jsonData;
       try {
         // Try to extract JSON from markdown code block if present
-        const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/```\n([\s\S]*?)\n```/);
+        const jsonMatch =
+          text.match(/```json\n([\s\S]*?)\n```/) || text.match(/```\n([\s\S]*?)\n```/);
         if (jsonMatch) {
           jsonData = JSON.parse(jsonMatch[1]);
         } else {
@@ -147,13 +148,13 @@ Return a JSON object with:
 
       return {
         success: true,
-        data: jsonData
+        data: jsonData,
       };
     } catch (error) {
       logger.error('Document validation error:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -164,7 +165,7 @@ Return a JSON object with:
   async analyzeImageQuality(imagePath) {
     try {
       const imagePart = await this.fileToGenerativePart(imagePath);
-      
+
       const prompt = `Analyze this farm/agricultural image quality for inspection purposes.
 
 Evaluate:
@@ -205,7 +206,8 @@ Return JSON:
 
       let jsonData;
       try {
-        const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/```\n([\s\S]*?)\n```/);
+        const jsonMatch =
+          text.match(/```json\n([\s\S]*?)\n```/) || text.match(/```\n([\s\S]*?)\n```/);
         if (jsonMatch) {
           jsonData = JSON.parse(jsonMatch[1]);
         } else {
@@ -217,13 +219,13 @@ Return JSON:
 
       return {
         success: true,
-        data: jsonData
+        data: jsonData,
       };
     } catch (error) {
       logger.error('Image quality analysis error:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -240,7 +242,7 @@ Return JSON:
         overallScore: 0,
         inspectionType: 'ONSITE', // Default
         issues: [],
-        recommendations: []
+        recommendations: [],
       };
 
       // 1. Document Validation
@@ -254,10 +256,11 @@ Return JSON:
             }
           }
         }
-        
+
         if (docResults.length > 0) {
-          const avgDocScore = docResults.reduce((sum, r) => 
-            sum + (r.validation?.overallScore || 0), 0) / docResults.length;
+          const avgDocScore =
+            docResults.reduce((sum, r) => sum + (r.validation?.overallScore || 0), 0) /
+            docResults.length;
           results.scores.documentValidation = avgDocScore;
         }
       }
@@ -275,36 +278,36 @@ Return JSON:
         }
 
         if (imageResults.length > 0) {
-          const avgImageScore = imageResults.reduce((sum, r) => 
-            sum + (r.quality?.overallScore || 0), 0) / imageResults.length;
+          const avgImageScore =
+            imageResults.reduce((sum, r) => sum + (r.quality?.overallScore || 0), 0) /
+            imageResults.length;
           results.scores.imageQuality = avgImageScore;
         }
       }
 
       // 3. Data Completeness Check
       const requiredFields = [
-        'farmer.name', 
-        'farmer.idCard', 
-        'farm.name', 
+        'farmer.name',
+        'farmer.idCard',
+        'farm.name',
         'farm.location',
         'farm.area',
-        'lotId'
+        'lotId',
       ];
-      
+
       let completenessScore = 0;
       requiredFields.forEach(field => {
         const value = this.getNestedValue(applicationData, field);
         if (value && value !== '') {
-          completenessScore += (10 / requiredFields.length);
+          completenessScore += 10 / requiredFields.length;
         }
       });
       results.scores.dataCompleteness = completenessScore;
 
       // 4. Calculate Overall Score
       const scores = Object.values(results.scores);
-      results.overallScore = scores.length > 0 
-        ? scores.reduce((sum, score) => sum + score, 0) / scores.length 
-        : 0;
+      results.overallScore =
+        scores.length > 0 ? scores.reduce((sum, score) => sum + score, 0) / scores.length : 0;
 
       // 5. Determine Inspection Type based on score
       if (results.overallScore >= 90) {
@@ -331,13 +334,13 @@ Return JSON:
 
       return {
         success: true,
-        data: results
+        data: results,
       };
     } catch (error) {
       logger.error('AI QC error:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -346,8 +349,12 @@ Return JSON:
    * Helper to get nested object value
    */
   getNestedValue(obj, path) {
-    return path.split('.').reduce((current, prop) => 
-      current && current[prop] !== undefined ? current[prop] : null, obj);
+    return path
+      .split('.')
+      .reduce(
+        (current, prop) => (current && current[prop] !== undefined ? current[prop] : null),
+        obj,
+      );
   }
 
   /**
@@ -359,7 +366,7 @@ Return JSON:
       const result = await this.extractTextFromImage(imagePath);
       results.push({
         imagePath,
-        ...result
+        ...result,
       });
     }
     return results;
@@ -405,7 +412,8 @@ Return JSON:
 
       let jsonData;
       try {
-        const jsonMatch = text.match(/```json\n([\s\S]*?)\n```/) || text.match(/```\n([\s\S]*?)\n```/);
+        const jsonMatch =
+          text.match(/```json\n([\s\S]*?)\n```/) || text.match(/```\n([\s\S]*?)\n```/);
         if (jsonMatch) {
           jsonData = JSON.parse(jsonMatch[1]);
         } else {
@@ -417,13 +425,13 @@ Return JSON:
 
       return {
         success: true,
-        data: jsonData
+        data: jsonData,
       };
     } catch (error) {
       logger.error('Document comparison error:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }

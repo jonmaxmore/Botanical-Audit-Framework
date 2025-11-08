@@ -19,7 +19,7 @@ const {
   submitSurveyResponse,
   getSurveyStats,
   getSurveyRegions,
-  getSurveyByRegion
+  getSurveyByRegion,
 } = require('../controllers/surveyController');
 
 // Public endpoints for survey participation
@@ -44,7 +44,7 @@ router.post(
   authenticate,
   authorize(['director', 'admin']),
   validateRequest('survey'),
-  createSurvey
+  createSurvey,
 );
 
 // Update survey
@@ -53,7 +53,7 @@ router.put(
   authenticate,
   authorize(['director', 'admin']),
   validateRequest('survey'),
-  updateSurvey
+  updateSurvey,
 );
 
 // Delete survey

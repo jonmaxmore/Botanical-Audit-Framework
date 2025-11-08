@@ -19,7 +19,7 @@ router.post('/route/:applicationId', async (req, res) => {
     if (!applicationId) {
       return res.status(400).json({
         success: false,
-        message: 'Application ID is required'
+        message: 'Application ID is required',
       });
     }
 
@@ -36,16 +36,15 @@ router.post('/route/:applicationId', async (req, res) => {
         assignedInspectorId: 'inspector-123',
         estimatedDuration: '4 hours',
         routedAt: new Date(),
-        routingReason: 'Medium score application. Video first, onsite if needed. Review score: 75'
-      }
+        routingReason: 'Medium score application. Video first, onsite if needed. Review score: 75',
+      },
     });
-
   } catch (error) {
     console.error('Smart Router error:', error);
     res.status(500).json({
       success: false,
       message: 'Routing failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -68,7 +67,7 @@ router.get('/inspector-workload', async (req, res) => {
             assignedCases: 5,
             completedToday: 2,
             qualityScore: 95,
-            status: 'available'
+            status: 'available',
           },
           {
             id: 'inspector-2',
@@ -76,21 +75,21 @@ router.get('/inspector-workload', async (req, res) => {
             assignedCases: 7,
             completedToday: 3,
             qualityScore: 92,
-            status: 'busy'
-          }
+            status: 'busy',
+          },
         ],
         summary: {
           totalInspectors: 2,
           avgWorkload: 6,
-          balanced: true
-        }
-      }
+          balanced: true,
+        },
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to get workload',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -110,14 +109,14 @@ router.post('/rebalance', async (req, res) => {
         avgWorkload: 6,
         overloaded: 0,
         underloaded: 0,
-        balanced: true
-      }
+        balanced: true,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Rebalancing failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -135,7 +134,7 @@ router.put('/reassign/:applicationId', async (req, res) => {
     if (!inspectorId) {
       return res.status(400).json({
         success: false,
-        message: 'Inspector ID is required'
+        message: 'Inspector ID is required',
       });
     }
 
@@ -148,15 +147,14 @@ router.put('/reassign/:applicationId', async (req, res) => {
         applicationId,
         newInspectorId: inspectorId,
         reason: reason || 'Manual reassignment',
-        reassignedAt: new Date()
-      }
+        reassignedAt: new Date(),
+      },
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Reassignment failed',
-      error: error.message
+      error: error.message,
     });
   }
 });

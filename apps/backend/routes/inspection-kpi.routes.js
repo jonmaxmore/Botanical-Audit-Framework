@@ -14,12 +14,12 @@ router.get('/inspections/kpi', async (req, res) => {
       onsiteCount: 0,
       avgResponseTime: 0,
       approvalRate: 0,
-      onsiteNeedRate: 0
+      onsiteNeedRate: 0,
     };
 
     res.json({
       success: true,
-      kpi
+      kpi,
     });
   } catch (error) {
     console.error('Error fetching KPI:', error);

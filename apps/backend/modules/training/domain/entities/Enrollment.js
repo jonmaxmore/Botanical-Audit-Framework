@@ -21,7 +21,7 @@ class Enrollment {
     COMPLETED: 'COMPLETED', // Finished all modules and passed
     FAILED: 'FAILED', // Finished but didn't pass
     CANCELLED: 'CANCELLED', // Cancelled by farmer or admin
-    EXPIRED: 'EXPIRED' // Expired due to time limit
+    EXPIRED: 'EXPIRED', // Expired due to time limit
   };
 
   constructor(data = {}) {
@@ -41,7 +41,7 @@ class Enrollment {
       currentModuleId: null, // Current module being studied
       currentLessonId: null, // Current lesson being studied
       progressPercentage: 0, // 0-100
-      totalTimeSpentMinutes: 0 // Total study time
+      totalTimeSpentMinutes: 0, // Total study time
     };
 
     // Assessment Results
@@ -81,7 +81,7 @@ class Enrollment {
       expiresAt,
       enrolledBy: enrolledBy || farmerId,
       enrolledAt: new Date(),
-      status: Enrollment.STATUS.ACTIVE
+      status: Enrollment.STATUS.ACTIVE,
     });
   }
 
@@ -167,7 +167,7 @@ class Enrollment {
 
     // Weight: 50% modules, 50% lessons
     this.progress.progressPercentage = Math.round(
-      (moduleProgress * 0.5 + lessonProgress * 0.5) * 100
+      (moduleProgress * 0.5 + lessonProgress * 0.5) * 100,
     );
   }
 
@@ -188,7 +188,7 @@ class Enrollment {
       score,
       answers,
       timeSpentMinutes,
-      submittedAt: new Date()
+      submittedAt: new Date(),
     });
 
     this.attemptCount++;
@@ -424,7 +424,7 @@ class Enrollment {
       remainingAttempts: this.getRemainingAttempts(),
       enrolledAt: this.enrolledAt,
       completedAt: this.completedAt,
-      daysActive: this.getDaysSinceEnrollment()
+      daysActive: this.getDaysSinceEnrollment(),
     };
   }
 
@@ -448,7 +448,7 @@ class Enrollment {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 }

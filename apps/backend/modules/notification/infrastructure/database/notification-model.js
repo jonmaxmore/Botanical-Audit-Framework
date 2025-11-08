@@ -17,14 +17,14 @@ const notificationSchema = new mongoose.Schema(
     recipientType: {
       type: String,
       enum: Object.values(Notification.RECIPIENT_TYPE),
-      required: true
+      required: true,
     },
     recipientRole: String,
 
     type: {
       type: String,
       enum: Object.values(Notification.TYPE),
-      required: true
+      required: true,
     },
     title: { type: String, required: true },
     message: { type: String, required: true },
@@ -33,35 +33,35 @@ const notificationSchema = new mongoose.Schema(
     priority: {
       type: String,
       enum: Object.values(Notification.PRIORITY),
-      default: Notification.PRIORITY.MEDIUM
+      default: Notification.PRIORITY.MEDIUM,
     },
     status: {
       type: String,
       enum: Object.values(Notification.STATUS),
-      default: Notification.STATUS.UNREAD
+      default: Notification.STATUS.UNREAD,
     },
 
     channels: [
       {
         type: String,
-        enum: Object.values(Notification.CHANNEL)
-      }
+        enum: Object.values(Notification.CHANNEL),
+      },
     ],
     deliveryStatus: {
       inApp: {
         sent: { type: Boolean, default: false },
-        sentAt: Date
+        sentAt: Date,
       },
       email: {
         sent: { type: Boolean, default: false },
         sentAt: Date,
-        error: String
+        error: String,
       },
       sms: {
         sent: { type: Boolean, default: false },
         sentAt: Date,
-        error: String
-      }
+        error: String,
+      },
     },
 
     actionUrl: String,
@@ -69,7 +69,7 @@ const notificationSchema = new mongoose.Schema(
 
     relatedEntity: {
       type: String,
-      id: String
+      id: String,
     },
 
     metadata: mongoose.Schema.Types.Mixed,
@@ -80,12 +80,12 @@ const notificationSchema = new mongoose.Schema(
     archivedAt: Date,
     expiresAt: Date,
 
-    sentBy: mongoose.Schema.Types.ObjectId
+    sentBy: mongoose.Schema.Types.ObjectId,
   },
   {
     timestamps: true,
-    collection: 'notifications'
-  }
+    collection: 'notifications',
+  },
 );
 
 // Indexes
@@ -112,7 +112,7 @@ class MongoDBNotificationRepository {
       id: data._id.toString(),
       ...data,
       recipientId: data.recipientId?.toString(),
-      sentBy: data.sentBy?.toString()
+      sentBy: data.sentBy?.toString(),
     });
   }
 
@@ -140,7 +140,7 @@ class MongoDBNotificationRepository {
         // Update existing
         const updated = await this.NotificationModel.findByIdAndUpdate(data._id, data, {
           new: true,
-          runValidators: true
+          runValidators: true,
         });
         return this.toDomain(updated);
       } else {
@@ -179,14 +179,14 @@ class MongoDBNotificationRepository {
 
       const [docs, total] = await Promise.all([
         this.NotificationModel.find(query).sort(sort).skip(skip).limit(limit),
-        this.NotificationModel.countDocuments(query)
+        this.NotificationModel.countDocuments(query),
       ]);
 
       return {
         notifications: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding notifications by recipient:', error);
@@ -198,7 +198,7 @@ class MongoDBNotificationRepository {
     try {
       const docs = await this.NotificationModel.find({
         recipientId: mongoose.Types.ObjectId(recipientId),
-        status: Notification.STATUS.UNREAD
+        status: Notification.STATUS.UNREAD,
       })
         .sort({ sentAt: -1 })
         .limit(50); // Limit to recent 50
@@ -219,14 +219,14 @@ class MongoDBNotificationRepository {
 
       const [docs, total] = await Promise.all([
         this.NotificationModel.find({ type }).sort(sort).skip(skip).limit(limit),
-        this.NotificationModel.countDocuments({ type })
+        this.NotificationModel.countDocuments({ type }),
       ]);
 
       return {
         notifications: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding notifications by type:', error);
@@ -243,14 +243,14 @@ class MongoDBNotificationRepository {
 
       const [docs, total] = await Promise.all([
         this.NotificationModel.find({ status }).sort(sort).skip(skip).limit(limit),
-        this.NotificationModel.countDocuments({ status })
+        this.NotificationModel.countDocuments({ status }),
       ]);
 
       return {
         notifications: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding notifications by status:', error);
@@ -267,14 +267,14 @@ class MongoDBNotificationRepository {
 
       const [docs, total] = await Promise.all([
         this.NotificationModel.find({ priority }).sort(sort).skip(skip).limit(limit),
-        this.NotificationModel.countDocuments({ priority })
+        this.NotificationModel.countDocuments({ priority }),
       ]);
 
       return {
         notifications: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding notifications by priority:', error);
@@ -306,14 +306,14 @@ class MongoDBNotificationRepository {
 
       const [docs, total] = await Promise.all([
         this.NotificationModel.find(query).sort(sort).skip(skip).limit(limit),
-        this.NotificationModel.countDocuments(query)
+        this.NotificationModel.countDocuments(query),
       ]);
 
       return {
         notifications: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding notifications with filters:', error);
@@ -325,7 +325,7 @@ class MongoDBNotificationRepository {
     try {
       const query = {
         recipientId: null,
-        recipientType
+        recipientType,
       };
 
       if (role) {
@@ -339,14 +339,14 @@ class MongoDBNotificationRepository {
 
       const [docs, total] = await Promise.all([
         this.NotificationModel.find(query).sort(sort).skip(skip).limit(limit),
-        this.NotificationModel.countDocuments(query)
+        this.NotificationModel.countDocuments(query),
       ]);
 
       return {
         notifications: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding broadcast notifications:', error);
@@ -358,7 +358,7 @@ class MongoDBNotificationRepository {
     try {
       return await this.NotificationModel.countDocuments({
         recipientId: mongoose.Types.ObjectId(recipientId),
-        status: Notification.STATUS.UNREAD
+        status: Notification.STATUS.UNREAD,
       });
     } catch (error) {
       logger.error('Error counting unread notifications:', error);
@@ -380,14 +380,14 @@ class MongoDBNotificationRepository {
       const result = await this.NotificationModel.updateMany(
         {
           recipientId: mongoose.Types.ObjectId(recipientId),
-          status: Notification.STATUS.UNREAD
+          status: Notification.STATUS.UNREAD,
         },
         {
           $set: {
             status: Notification.STATUS.READ,
-            readAt: new Date()
-          }
-        }
+            readAt: new Date(),
+          },
+        },
       );
       return result.modifiedCount;
     } catch (error) {
@@ -399,7 +399,7 @@ class MongoDBNotificationRepository {
   async deleteExpired() {
     try {
       const result = await this.NotificationModel.deleteMany({
-        expiresAt: { $lte: new Date() }
+        expiresAt: { $lte: new Date() },
       });
       return result.deletedCount;
     } catch (error) {
@@ -425,31 +425,31 @@ class MongoDBNotificationRepository {
         archivedCount,
         byType,
         byPriority,
-        byChannel
+        byChannel,
       ] = await Promise.all([
         this.NotificationModel.countDocuments(matchStage),
         this.NotificationModel.countDocuments({
           ...matchStage,
-          status: Notification.STATUS.UNREAD
+          status: Notification.STATUS.UNREAD,
         }),
         this.NotificationModel.countDocuments({ ...matchStage, status: Notification.STATUS.READ }),
         this.NotificationModel.countDocuments({
           ...matchStage,
-          status: Notification.STATUS.ARCHIVED
+          status: Notification.STATUS.ARCHIVED,
         }),
         this.NotificationModel.aggregate([
           { $match: matchStage },
-          { $group: { _id: '$type', count: { $sum: 1 } } }
+          { $group: { _id: '$type', count: { $sum: 1 } } },
         ]),
         this.NotificationModel.aggregate([
           { $match: matchStage },
-          { $group: { _id: '$priority', count: { $sum: 1 } } }
+          { $group: { _id: '$priority', count: { $sum: 1 } } },
         ]),
         this.NotificationModel.aggregate([
           { $match: matchStage },
           { $unwind: '$channels' },
-          { $group: { _id: '$channels', count: { $sum: 1 } } }
-        ])
+          { $group: { _id: '$channels', count: { $sum: 1 } } },
+        ]),
       ]);
 
       return {
@@ -468,7 +468,7 @@ class MongoDBNotificationRepository {
         byChannel: byChannel.reduce((acc, item) => {
           acc[item._id] = item.count;
           return acc;
-        }, {})
+        }, {}),
       };
     } catch (error) {
       logger.error('Error getting notification statistics:', error);

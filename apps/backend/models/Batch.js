@@ -12,21 +12,21 @@ const ProcessingStepSchema = new mongoose.Schema({
       'packaging',
       'transport',
       'storage',
-      'other'
+      'other',
     ],
-    required: true
+    required: true,
   },
   location: {
     name: String,
     coordinates: {
       lat: Number,
-      lng: Number
+      lng: Number,
     },
-    address: String
+    address: String,
   },
   startTime: {
     type: Date,
-    required: true
+    required: true,
   },
   endTime: Date,
   temperature: {
@@ -34,50 +34,50 @@ const ProcessingStepSchema = new mongoose.Schema({
     unit: {
       type: String,
       enum: ['celsius', 'fahrenheit'],
-      default: 'celsius'
-    }
+      default: 'celsius',
+    },
   },
   humidity: Number,
   performedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   equipment: [String],
   notes: String,
   parameters: {
     // Flexible schema for type-specific parameters
     type: Map,
-    of: mongoose.Schema.Types.Mixed
+    of: mongoose.Schema.Types.Mixed,
   },
   images: [
     {
       url: String,
-      caption: String
-    }
+      caption: String,
+    },
   ],
   verifiedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
-  verifiedAt: Date
+  verifiedAt: Date,
 });
 
 const QualityCheckSchema = new mongoose.Schema({
   type: {
     type: String,
-    required: true
+    required: true,
   },
   performedAt: {
     type: Date,
-    required: true
+    required: true,
   },
   performedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   results: {
     type: Map,
-    of: mongoose.Schema.Types.Mixed
+    of: mongoose.Schema.Types.Mixed,
   },
   passed: Boolean,
   notes: String,
@@ -85,9 +85,9 @@ const QualityCheckSchema = new mongoose.Schema({
     {
       name: String,
       fileUrl: String,
-      type: String
-    }
-  ]
+      type: String,
+    },
+  ],
 });
 
 const BatchSchema = new mongoose.Schema(
@@ -95,63 +95,63 @@ const BatchSchema = new mongoose.Schema(
     batchId: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
     // === GACP Traceability (เพิ่มใหม่) ===
     lotNumber: {
       type: String,
       required: true,
       match: /^PT27-\d{4}-\d{3,4}$/, // Format: PT27-YYYY-NNN
-      index: true
+      index: true,
     },
     harvestId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Harvest',
-      index: true
+      index: true,
     },
     product: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Crop',
-      required: true
+      required: true,
     },
     farm: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
-      required: true
+      required: true,
     },
     harvestDate: {
       type: Date,
-      required: true
+      required: true,
     },
     plot: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Farm.plots'
+      ref: 'Farm.plots',
     },
     quantity: {
       initial: {
         value: Number,
-        unit: String
+        unit: String,
       },
       current: {
         value: Number,
-        unit: String
-      }
+        unit: String,
+      },
     },
     processingSteps: [ProcessingStepSchema],
     qualityChecks: [QualityCheckSchema],
     certifications: [
       {
-        type: String
-      }
+        type: String,
+      },
     ],
     status: {
       type: String,
       enum: ['processing', 'ready', 'shipped', 'delivered', 'rejected'],
-      default: 'processing'
+      default: 'processing',
     },
     shelfLife: {
       bestBefore: Date,
-      expiryDate: Date
+      expiryDate: Date,
     },
     storageConditions: {
       temperature: {
@@ -160,47 +160,47 @@ const BatchSchema = new mongoose.Schema(
         unit: {
           type: String,
           enum: ['celsius', 'fahrenheit'],
-          default: 'celsius'
-        }
+          default: 'celsius',
+        },
       },
       humidity: {
         min: Number,
-        max: Number
+        max: Number,
       },
-      specialInstructions: String
+      specialInstructions: String,
     },
     childBatches: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Batch'
-      }
+        ref: 'Batch',
+      },
     ],
     parentBatch: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Batch'
+      ref: 'Batch',
     },
     traceabilityCode: {
       type: String,
-      unique: true
+      unique: true,
     },
     qrCode: String,
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
     updatedAt: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 // Pre-save hook to generate traceability code if not provided

@@ -37,7 +37,7 @@ async function initializeTrackTrace({ db, authenticateToken }) {
 
     return {
       router,
-      service: trackTraceService
+      service: trackTraceService,
     };
   } catch (error) {
     logger.error('[TrackTrace] Initialization failed:', error);
@@ -61,7 +61,7 @@ const config = {
     { name: 'PROCESSING', description: 'Product processing', order: 4 },
     { name: 'PACKAGING', description: 'Product packaging', order: 5 },
     { name: 'DISTRIBUTION', description: 'Ready for distribution', order: 6 },
-    { name: 'COMPLETED', description: 'Journey completed', order: 7 }
+    { name: 'COMPLETED', description: 'Journey completed', order: 7 },
   ],
 
   // Certification statuses
@@ -70,7 +70,7 @@ const config = {
     { name: 'IN_REVIEW', description: 'Under review' },
     { name: 'CERTIFIED', description: 'GACP certified' },
     { name: 'REJECTED', description: 'Certification rejected' },
-    { name: 'EXPIRED', description: 'Certification expired' }
+    { name: 'EXPIRED', description: 'Certification expired' },
   ],
 
   // Quantity units
@@ -83,7 +83,7 @@ const config = {
   endpoints: {
     public: {
       lookup: 'GET /api/track-trace/lookup/:batchCode',
-      health: 'GET /api/track-trace/health'
+      health: 'GET /api/track-trace/health',
     },
     private: {
       getProducts: 'GET /api/track-trace/products',
@@ -94,15 +94,15 @@ const config = {
       updateStage: 'PUT /api/track-trace/products/:id/stage',
       getQRCode: 'GET /api/track-trace/products/:id/qrcode',
       addTimeline: 'POST /api/track-trace/products/:id/timeline',
-      getStatistics: 'GET /api/track-trace/statistics'
+      getStatistics: 'GET /api/track-trace/statistics',
     },
     admin: {
-      updateCertification: 'PUT /api/track-trace/products/:id/certification'
-    }
-  }
+      updateCertification: 'PUT /api/track-trace/products/:id/certification',
+    },
+  },
 };
 
 module.exports = {
   initializeTrackTrace,
-  config
+  config,
 };

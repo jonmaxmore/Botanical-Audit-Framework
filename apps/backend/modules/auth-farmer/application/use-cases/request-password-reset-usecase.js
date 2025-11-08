@@ -37,7 +37,7 @@ class RequestPasswordResetUseCase {
     if (!user) {
       return {
         success: true,
-        message: 'If the email exists, a password reset link has been sent'
+        message: 'If the email exists, a password reset link has been sent',
       };
     }
 
@@ -45,7 +45,7 @@ class RequestPasswordResetUseCase {
     if (user.status === 'SUSPENDED') {
       return {
         success: true,
-        message: 'If the email exists, a password reset link has been sent'
+        message: 'If the email exists, a password reset link has been sent',
       };
     }
 
@@ -64,7 +64,7 @@ class RequestPasswordResetUseCase {
         userId: user.id,
         email: user.email,
         resetToken: resetToken,
-        expiresAt: user.passwordResetExpiry
+        expiresAt: user.passwordResetExpiry,
       });
 
       await this.eventBus.publish(event.toEventPayload());
@@ -72,7 +72,7 @@ class RequestPasswordResetUseCase {
 
     return {
       success: true,
-      message: 'If the email exists, a password reset link has been sent'
+      message: 'If the email exists, a password reset link has been sent',
     };
   }
 }

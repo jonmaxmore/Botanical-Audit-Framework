@@ -41,7 +41,7 @@ function createStore(redisClient, prefix) {
     return new RedisStore({
       client: redisClient,
       prefix: `rate-limit:${prefix}:`,
-      sendCommand: (...args) => redisClient.sendCommand(args)
+      sendCommand: (...args) => redisClient.sendCommand(args),
     });
   } catch (error) {
     logger.error('[RateLimiter] Failed to create Redis store:', error);
@@ -57,7 +57,7 @@ const standardHandler = (req, res) => {
     success: false,
     error: 'RATE_LIMIT_EXCEEDED',
     message: 'Too many requests, please try again later',
-    retryAfter: res.getHeader('Retry-After')
+    retryAfter: res.getHeader('Retry-After'),
   });
 };
 
@@ -91,7 +91,7 @@ function createAuthRateLimiters(redisClient = null) {
     store: createStore(redisClient, 'login'),
     keyGenerator: ipKeyGenerator,
     handler: standardHandler,
-    _skipSuccessfulRequests: true // Only count failed login attempts
+    _skipSuccessfulRequests: true, // Only count failed login attempts
   });
 
   // Token refresh - Moderate (10 requests per minute)
@@ -103,7 +103,7 @@ function createAuthRateLimiters(redisClient = null) {
     legacyHeaders: false,
     store: createStore(redisClient, 'refresh'),
     keyGenerator: ipKeyGenerator,
-    handler: standardHandler
+    handler: standardHandler,
   });
 
   // Password reset request - Very strict (3 requests per hour)
@@ -115,7 +115,7 @@ function createAuthRateLimiters(redisClient = null) {
     legacyHeaders: false,
     store: createStore(redisClient, 'password-reset-request'),
     keyGenerator: ipKeyGenerator,
-    handler: standardHandler
+    handler: standardHandler,
   });
 
   // Password reset confirmation - Strict (5 attempts per 15 minutes)
@@ -128,7 +128,7 @@ function createAuthRateLimiters(redisClient = null) {
     store: createStore(redisClient, 'password-reset-confirm'),
     keyGenerator: ipKeyGenerator,
     handler: standardHandler,
-    _skipSuccessfulRequests: true
+    _skipSuccessfulRequests: true,
   });
 
   // Password change - Moderate (10 requests per 15 minutes)
@@ -140,7 +140,7 @@ function createAuthRateLimiters(redisClient = null) {
     legacyHeaders: false,
     store: createStore(redisClient, 'password-change'),
     keyGenerator: ipKeyGenerator,
-    handler: standardHandler
+    handler: standardHandler,
   });
 
   // Registration - Strict (5 registrations per hour per IP)
@@ -152,7 +152,7 @@ function createAuthRateLimiters(redisClient = null) {
     legacyHeaders: false,
     store: createStore(redisClient, 'registration'),
     keyGenerator: ipKeyGenerator,
-    handler: standardHandler
+    handler: standardHandler,
   });
 
   // Profile updates - Moderate (20 requests per 15 minutes)
@@ -164,7 +164,7 @@ function createAuthRateLimiters(redisClient = null) {
     legacyHeaders: false,
     store: createStore(redisClient, 'profile-update'),
     keyGenerator: ipKeyGenerator,
-    handler: standardHandler
+    handler: standardHandler,
   });
 
   // General auth endpoints - Normal (100 requests per 15 minutes)
@@ -176,7 +176,7 @@ function createAuthRateLimiters(redisClient = null) {
     legacyHeaders: false,
     store: createStore(redisClient, 'auth-general'),
     keyGenerator: ipKeyGenerator,
-    handler: standardHandler
+    handler: standardHandler,
   });
 
   // Email verification - Strict (5 requests per hour)
@@ -188,7 +188,7 @@ function createAuthRateLimiters(redisClient = null) {
     legacyHeaders: false,
     store: createStore(redisClient, 'email-verification'),
     keyGenerator: ipKeyGenerator,
-    handler: standardHandler
+    handler: standardHandler,
   });
 
   // Account recovery - Very strict (3 requests per day)
@@ -200,7 +200,7 @@ function createAuthRateLimiters(redisClient = null) {
     legacyHeaders: false,
     store: createStore(redisClient, 'account-recovery'),
     keyGenerator: ipKeyGenerator,
-    handler: standardHandler
+    handler: standardHandler,
   });
 
   logger.info('[AuthRateLimiters] Initialized with', {
@@ -215,8 +215,8 @@ function createAuthRateLimiters(redisClient = null) {
       'profile-update (20/15min)',
       'general (100/15min)',
       'email-verification (5/hour)',
-      'account-recovery (3/day)'
-    ]
+      'account-recovery (3/day)',
+    ],
   });
 
   return {
@@ -229,10 +229,10 @@ function createAuthRateLimiters(redisClient = null) {
     profileUpdateLimiter,
     generalAuthLimiter,
     emailVerificationLimiter,
-    accountRecoveryLimiter
+    accountRecoveryLimiter,
   };
 }
 
 module.exports = {
-  createAuthRateLimiters
+  createAuthRateLimiters,
 };

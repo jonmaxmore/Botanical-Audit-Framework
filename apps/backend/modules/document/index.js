@@ -23,5 +23,5 @@ module.exports = {
   DocumentTypes: Document.TYPE,
   DocumentStatuses: Document.STATUS,
   DocumentCategories: Document.CATEGORY,
-  DocumentAccessLevels: Document.ACCESS_LEVEL
+  DocumentAccessLevels: Document.ACCESS_LEVEL,
 };

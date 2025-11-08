@@ -24,17 +24,17 @@ const SoilTestSchema = new mongoose.Schema(
         type: Number,
         min: 0,
         max: 14,
-        required: true
+        required: true,
       },
       status: {
         type: String,
         enum: ['pass', 'fail', 'warning'],
-        default: 'pass'
+        default: 'pass',
       },
       referenceRange: {
         min: Number,
-        max: Number
-      }
+        max: Number,
+      },
     },
 
     // Heavy Metals (โลหะหนัก - mg/kg)
@@ -43,33 +43,33 @@ const SoilTestSchema = new mongoose.Schema(
         value: Number,
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 100 } // WHO limit
+        limit: { type: Number, default: 100 }, // WHO limit
       },
       cadmium: {
         value: Number,
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 3 }
+        limit: { type: Number, default: 3 },
       },
       mercury: {
         value: Number,
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 1 }
+        limit: { type: Number, default: 1 },
       },
       arsenic: {
         value: Number,
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 20 }
-      }
+        limit: { type: Number, default: 20 },
+      },
     },
 
     // NPK (ธาตุอาหารหลัก)
     npk: {
       nitrogen: { type: Number }, // N (%)
       phosphorus: { type: Number }, // P (%)
-      potassium: { type: Number } // K (%)
+      potassium: { type: Number }, // K (%)
     },
 
     // Organic Matter (อินทรียวัตถุ - %)
@@ -77,8 +77,8 @@ const SoilTestSchema = new mongoose.Schema(
       value: Number,
       status: {
         type: String,
-        enum: ['excellent', 'good', 'fair', 'poor']
-      }
+        enum: ['excellent', 'good', 'fair', 'poor'],
+      },
     },
 
     // Other Parameters
@@ -86,11 +86,11 @@ const SoilTestSchema = new mongoose.Schema(
     cationExchangeCapacity: Number, // CEC (cmol/kg)
     texture: {
       type: String,
-      enum: ['clay', 'loam', 'sand', 'silt', 'mixed']
+      enum: ['clay', 'loam', 'sand', 'silt', 'mixed'],
     },
-    notes: String
+    notes: String,
   },
-  { _id: false }
+  { _id: false },
 );
 
 // === Sub-Schema: Water Test (การทดสอบน้ำ) ===
@@ -102,17 +102,17 @@ const WaterTestSchema = new mongoose.Schema(
         type: Number,
         min: 0,
         max: 14,
-        required: true
+        required: true,
       },
       status: {
         type: String,
         enum: ['pass', 'fail', 'warning'],
-        default: 'pass'
+        default: 'pass',
       },
       referenceRange: {
         min: { type: Number, default: 6.5 },
-        max: { type: Number, default: 8.5 }
-      }
+        max: { type: Number, default: 8.5 },
+      },
     },
 
     // Heavy Metals (mg/L)
@@ -121,26 +121,26 @@ const WaterTestSchema = new mongoose.Schema(
         value: Number,
         unit: { type: String, default: 'mg/L' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 0.01 }
+        limit: { type: Number, default: 0.01 },
       },
       cadmium: {
         value: Number,
         unit: { type: String, default: 'mg/L' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 0.003 }
+        limit: { type: Number, default: 0.003 },
       },
       mercury: {
         value: Number,
         unit: { type: String, default: 'mg/L' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 0.001 }
+        limit: { type: Number, default: 0.001 },
       },
       arsenic: {
         value: Number,
         unit: { type: String, default: 'mg/L' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 0.01 }
-      }
+        limit: { type: Number, default: 0.01 },
+      },
     },
 
     // Microbiological (จุลินทรีย์)
@@ -148,12 +148,12 @@ const WaterTestSchema = new mongoose.Schema(
       value: Number, // CFU/100mL
       unit: { type: String, default: 'CFU/100mL' },
       status: { type: String, enum: ['pass', 'fail', 'warning'] },
-      limit: { type: Number, default: 0 } // No E. coli allowed
+      limit: { type: Number, default: 0 }, // No E. coli allowed
     },
     totalColiform: {
       value: Number,
       unit: { type: String, default: 'CFU/100mL' },
-      status: { type: String, enum: ['pass', 'fail', 'warning'] }
+      status: { type: String, enum: ['pass', 'fail', 'warning'] },
     },
 
     // Physical Parameters
@@ -161,11 +161,11 @@ const WaterTestSchema = new mongoose.Schema(
       value: Number, // NTU
       unit: { type: String, default: 'NTU' },
       status: { type: String, enum: ['pass', 'fail', 'warning'] },
-      limit: { type: Number, default: 5 }
+      limit: { type: Number, default: 5 },
     },
     totalDissolvedSolids: {
       value: Number, // TDS (mg/L)
-      unit: { type: String, default: 'mg/L' }
+      unit: { type: String, default: 'mg/L' },
     },
     electricalConductivity: Number, // EC (µS/cm)
 
@@ -174,9 +174,9 @@ const WaterTestSchema = new mongoose.Schema(
     nitrate: Number, // mg/L
     sulfate: Number, // mg/L
 
-    notes: String
+    notes: String,
   },
-  { _id: false }
+  { _id: false },
 );
 
 // === Sub-Schema: Product Test (การทดสอบผลผลิต) ===
@@ -191,8 +191,8 @@ const ProductTestSchema = new mongoose.Schema(
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
         limit: Number, // MRL (Maximum Residue Limit)
-        method: String // วิธีวิเคราะห์ (e.g., GC-MS, LC-MS)
-      }
+        method: String, // วิธีวิเคราะห์ (e.g., GC-MS, LC-MS)
+      },
     ],
 
     // Heavy Metals in Product (mg/kg)
@@ -201,26 +201,26 @@ const ProductTestSchema = new mongoose.Schema(
         value: Number,
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 10 }
+        limit: { type: Number, default: 10 },
       },
       cadmium: {
         value: Number,
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 0.3 }
+        limit: { type: Number, default: 0.3 },
       },
       mercury: {
         value: Number,
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 0.1 }
+        limit: { type: Number, default: 0.1 },
       },
       arsenic: {
         value: Number,
         unit: { type: String, default: 'mg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 5 }
-      }
+        limit: { type: Number, default: 5 },
+      },
     },
 
     // Microbial Contamination (การปนเปื้อนจุลินทรีย์)
@@ -229,29 +229,29 @@ const ProductTestSchema = new mongoose.Schema(
         value: Number, // CFU/g
         unit: { type: String, default: 'CFU/g' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: Number
+        limit: Number,
       },
       yeastMold: {
         value: Number, // CFU/g
         unit: { type: String, default: 'CFU/g' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: Number
+        limit: Number,
       },
       eColi: {
         value: Number,
         unit: { type: String, default: 'CFU/g' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 0 }
+        limit: { type: Number, default: 0 },
       },
       salmonella: {
         detected: Boolean,
-        status: { type: String, enum: ['pass', 'fail'], default: 'pass' }
+        status: { type: String, enum: ['pass', 'fail'], default: 'pass' },
       },
       staphylococcus: {
         value: Number,
         unit: { type: String, default: 'CFU/g' },
-        status: { type: String, enum: ['pass', 'fail', 'warning'] }
-      }
+        status: { type: String, enum: ['pass', 'fail', 'warning'] },
+      },
     },
 
     // Mycotoxins (สารพิษจากเชื้อรา - µg/kg)
@@ -260,26 +260,26 @@ const ProductTestSchema = new mongoose.Schema(
         value: Number,
         unit: { type: String, default: 'µg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 5 }
+        limit: { type: Number, default: 5 },
       },
       totalAflatoxins: {
         value: Number,
         unit: { type: String, default: 'µg/kg' },
         status: { type: String, enum: ['pass', 'fail', 'warning'] },
-        limit: { type: Number, default: 10 }
+        limit: { type: Number, default: 10 },
       },
       ochratoxinA: {
         value: Number,
         unit: { type: String, default: 'µg/kg' },
-        status: { type: String, enum: ['pass', 'fail', 'warning'] }
-      }
+        status: { type: String, enum: ['pass', 'fail', 'warning'] },
+      },
     },
 
     // Moisture Content (ความชื้น - %)
     moistureContent: {
       value: Number,
       status: { type: String, enum: ['pass', 'fail', 'warning'] },
-      limit: Number
+      limit: Number,
     },
 
     // Active Compounds (สารสำคัญ - สำหรับสมุนไพร)
@@ -288,13 +288,13 @@ const ProductTestSchema = new mongoose.Schema(
         name: String,
         value: Number,
         unit: String,
-        method: String
-      }
+        method: String,
+      },
     ],
 
-    notes: String
+    notes: String,
   },
-  { _id: false }
+  { _id: false },
 );
 
 // === Main LabTest Schema ===
@@ -305,7 +305,7 @@ const LabTestSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true
+      index: true,
     },
 
     // === References ===
@@ -313,22 +313,22 @@ const LabTestSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: true,
-      index: true
+      index: true,
     },
     harvestId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Harvest',
-      index: true
+      index: true,
     },
     batchId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Batch',
-      index: true
+      index: true,
     },
     applicationId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Application',
-      index: true
+      index: true,
     },
 
     // === Test Type ===
@@ -336,52 +336,52 @@ const LabTestSchema = new mongoose.Schema(
       type: String,
       enum: ['soil', 'water', 'product'],
       required: true,
-      index: true
+      index: true,
     },
 
     // === Test Data (conditional based on testType) ===
     soilTest: {
       type: SoilTestSchema,
-      default: undefined
+      default: undefined,
     },
     waterTest: {
       type: WaterTestSchema,
-      default: undefined
+      default: undefined,
     },
     productTest: {
       type: ProductTestSchema,
-      default: undefined
+      default: undefined,
     },
 
     // === Test Details ===
     testDate: {
       type: Date,
       required: true,
-      index: true
+      index: true,
     },
     sampleCollectionDate: {
       type: Date,
-      required: true
+      required: true,
     },
     sampleCollectionLocation: {
       name: String,
       coordinates: {
         lat: Number,
-        lng: Number
-      }
+        lng: Number,
+      },
     },
     sampleId: String, // Lab's internal sample ID
 
     // === Laboratory Info ===
     labName: {
       type: String,
-      required: true
+      required: true,
     },
     labLicenseNumber: String,
     labAccreditation: {
       type: String,
       enum: ['ISO17025', 'GLP', 'other', 'none'],
-      default: 'none'
+      default: 'none',
     },
     testMethod: String, // e.g., "AOAC 2015.01", "EPA 3051A"
     analyst: String,
@@ -390,11 +390,11 @@ const LabTestSchema = new mongoose.Schema(
     reportNumber: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
     reportFileId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Document'
+      ref: 'Document',
     },
     reportIssuedDate: Date,
 
@@ -404,19 +404,19 @@ const LabTestSchema = new mongoose.Schema(
       enum: ['pass', 'fail', 'conditional', 'pending'],
       required: true,
       default: 'pending',
-      index: true
+      index: true,
     },
 
     // === GACP Compliance ===
     gacpCompliant: {
       type: Boolean,
       default: false,
-      index: true
+      index: true,
     },
     complianceNotes: String,
     reviewedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
     reviewDate: Date,
 
@@ -427,15 +427,15 @@ const LabTestSchema = new mongoose.Schema(
         action: String,
         priority: {
           type: String,
-          enum: ['high', 'medium', 'low']
+          enum: ['high', 'medium', 'low'],
         },
         deadline: Date,
         status: {
           type: String,
           enum: ['pending', 'in-progress', 'completed'],
-          default: 'pending'
-        }
-      }
+          default: 'pending',
+        },
+      },
     ],
 
     // === Status & Metadata ===
@@ -443,7 +443,7 @@ const LabTestSchema = new mongoose.Schema(
       type: String,
       enum: ['draft', 'submitted', 'completed', 'cancelled'],
       default: 'draft',
-      index: true
+      index: true,
     },
     notes: String,
 
@@ -451,18 +451,18 @@ const LabTestSchema = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
       default: false,
-      index: true
+      index: true,
     },
     deletedAt: Date,
     deletedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
+      ref: 'User',
+    },
   },
   {
     timestamps: true, // createdAt, updatedAt
-    collection: 'labtests'
-  }
+    collection: 'labtests',
+  },
 );
 
 // ============================================
@@ -486,7 +486,7 @@ LabTestSchema.statics.generateTestCode = async function (year) {
   const prefix = `LAB-${currentYear}-`;
 
   const lastTest = await this.findOne({
-    testCode: new RegExp(`^${prefix}`)
+    testCode: new RegExp(`^${prefix}`),
   })
     .sort({ testCode: -1 })
     .select('testCode')
@@ -609,7 +609,7 @@ LabTestSchema.pre('save', function () {
 // Prevent hard delete
 LabTestSchema.pre('deleteOne', { document: true, query: false }, function () {
   throw new Error(
-    'Hard delete not allowed. Use softDelete() method instead for 5-year retention compliance.'
+    'Hard delete not allowed. Use softDelete() method instead for 5-year retention compliance.',
   );
 });
 

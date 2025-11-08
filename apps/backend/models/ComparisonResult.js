@@ -3,24 +3,24 @@ const mongoose = require('mongoose');
 const ComparisonResultItemSchema = new mongoose.Schema({
   requirementId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true
+    required: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
   },
   category: {
     type: String,
-    required: true
+    required: true,
   },
   complianceStatus: {
     type: String,
     enum: ['compliant', 'partially-compliant', 'non-compliant', 'not-applicable', 'unknown'],
-    required: true
+    required: true,
   },
   evidence: [String],
   evidenceNeeded: [String],
-  notes: String
+  notes: String,
 });
 
 const ComparisonResultSchema = new mongoose.Schema(
@@ -28,41 +28,41 @@ const ComparisonResultSchema = new mongoose.Schema(
     farm: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
-      required: true
+      required: true,
     },
     standard: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Standard',
-      required: true
+      required: true,
     },
     comparedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     comparedAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
     results: [ComparisonResultItemSchema],
     overallCompliance: {
       percentage: {
         type: Number,
-        required: true
+        required: true,
       },
       achieved: {
         type: Number,
-        required: true
+        required: true,
       },
       total: {
         type: Number,
-        required: true
-      }
+        required: true,
+      },
     },
     status: {
       type: String,
       enum: ['pass', 'fail', 'na'],
-      default: 'na'
+      default: 'na',
     },
     recommendations: String,
     attachments: [
@@ -71,14 +71,14 @@ const ComparisonResultSchema = new mongoose.Schema(
         fileUrl: String,
         uploadedAt: {
           type: Date,
-          default: Date.now
-        }
-      }
-    ]
+          default: Date.now,
+        },
+      },
+    ],
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 module.exports = mongoose.model('ComparisonResult', ComparisonResultSchema);

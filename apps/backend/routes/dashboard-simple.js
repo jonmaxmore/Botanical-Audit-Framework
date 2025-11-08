@@ -16,8 +16,8 @@ router.get('/', (req, res) => {
       totalApplications: 0,
       activeCertificates: 0,
       pendingReviews: 0,
-      registeredFarmers: 0
-    }
+      registeredFarmers: 0,
+    },
   });
 });
 
@@ -30,19 +30,19 @@ router.get('/stats', (req, res) => {
         total: 0,
         pending: 0,
         approved: 0,
-        rejected: 0
+        rejected: 0,
       },
       certificates: {
         active: 0,
         expired: 0,
-        revoked: 0
+        revoked: 0,
       },
       users: {
         farmers: 0,
         inspectors: 0,
-        admins: 0
-      }
-    }
+        admins: 0,
+      },
+    },
   });
 });
 
@@ -51,7 +51,7 @@ router.get('/health', (req, res) => {
   res.json({
     service: 'dashboard-service',
     status: 'healthy',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 

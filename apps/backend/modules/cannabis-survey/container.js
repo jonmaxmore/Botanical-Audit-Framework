@@ -79,7 +79,7 @@ function createCannabisSurveyModule(config) {
 
   eventBus.subscribe('SurveyReviewCompleted', event => {
     console.log(
-      `[SurveyReviewCompleted] Survey ${event.surveyId} review completed: ${event.status}`
+      `[SurveyReviewCompleted] Survey ${event.surveyId} review completed: ${event.status}`,
     );
     // TODO: Notify farmer of review result
     // TODO: If approved, enable next steps in workflow
@@ -90,43 +90,43 @@ function createCannabisSurveyModule(config) {
   // Application Layer - Use Cases
   const createSurveyUseCase = new CreateSurveyUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   const updateSurveyUseCase = new UpdateSurveyUseCase({
-    surveyRepository
+    surveyRepository,
   });
 
   const submitSurveyUseCase = new SubmitSurveyUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   const getSurveyDetailsUseCase = new GetSurveyDetailsUseCase({
-    surveyRepository
+    surveyRepository,
   });
 
   const listSurveysUseCase = new ListSurveysUseCase({
-    surveyRepository
+    surveyRepository,
   });
 
   const startSurveyReviewUseCase = new StartSurveyReviewUseCase({
-    surveyRepository
+    surveyRepository,
   });
 
   const approveSurveyUseCase = new ApproveSurveyUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   const rejectSurveyUseCase = new RejectSurveyUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   const requestSurveyRevisionUseCase = new RequestSurveyRevisionUseCase({
     surveyRepository,
-    eventBus
+    eventBus,
   });
 
   // Presentation Layer - Controller
@@ -139,14 +139,14 @@ function createCannabisSurveyModule(config) {
     startSurveyReviewUseCase,
     approveSurveyUseCase,
     rejectSurveyUseCase,
-    requestSurveyRevisionUseCase
+    requestSurveyRevisionUseCase,
   });
 
   // Presentation Layer - Routes
   const { farmerRouter, dtamRouter } = createSurveyRoutes(
     surveyController,
     authMiddleware,
-    validators
+    validators,
   );
 
   // Return module interface
@@ -159,15 +159,15 @@ function createCannabisSurveyModule(config) {
     services: {
       surveyRepository,
       getSurveyDetailsUseCase,
-      listSurveysUseCase
+      listSurveysUseCase,
     },
 
     // Constants for use by other modules
     constants: {
       STATUS,
       PURPOSE,
-      PLANT_TYPE
-    }
+      PLANT_TYPE,
+    },
   };
 }
 

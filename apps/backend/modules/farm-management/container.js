@@ -87,7 +87,7 @@ function createFarmManagementModule(config) {
   // FarmSubmittedForReview Event
   eventBus.subscribe('FarmSubmittedForReview', event => {
     console.log(
-      `[FarmSubmittedForReview] Farm ${event.farmName} (ID: ${event.farmId}) submitted for review`
+      `[FarmSubmittedForReview] Farm ${event.farmName} (ID: ${event.farmId}) submitted for review`,
     );
     // TODO: Notify DTAM staff about new farm to review
     // TODO: Add to review queue
@@ -113,38 +113,38 @@ function createFarmManagementModule(config) {
 
   const registerFarmUseCase = new RegisterFarmUseCase({
     farmRepository,
-    eventBus
+    eventBus,
   });
 
   const updateFarmUseCase = new UpdateFarmUseCase({
-    farmRepository
+    farmRepository,
   });
 
   const submitFarmForReviewUseCase = new SubmitFarmForReviewUseCase({
     farmRepository,
-    eventBus
+    eventBus,
   });
 
   const getFarmDetailsUseCase = new GetFarmDetailsUseCase({
-    farmRepository
+    farmRepository,
   });
 
   const listFarmsUseCase = new ListFarmsUseCase({
-    farmRepository
+    farmRepository,
   });
 
   const startFarmReviewUseCase = new StartFarmReviewUseCase({
-    farmRepository
+    farmRepository,
   });
 
   const approveFarmUseCase = new ApproveFarmUseCase({
     farmRepository,
-    eventBus
+    eventBus,
   });
 
   const rejectFarmUseCase = new RejectFarmUseCase({
     farmRepository,
-    eventBus
+    eventBus,
   });
 
   // ===================================================================
@@ -159,13 +159,13 @@ function createFarmManagementModule(config) {
     listFarmsUseCase,
     startFarmReviewUseCase,
     approveFarmUseCase,
-    rejectFarmUseCase
+    rejectFarmUseCase,
   });
 
   const { farmerRouter, dtamRouter } = createFarmRoutes(
     farmController,
     authMiddleware,
-    farmValidators
+    farmValidators,
   );
 
   // ===================================================================
@@ -181,15 +181,15 @@ function createFarmManagementModule(config) {
     services: {
       farmRepository,
       getFarmDetailsUseCase,
-      listFarmsUseCase
+      listFarmsUseCase,
     },
 
     // Constants
     constants: {
       STATUS: Farm.STATUS,
       FARM_TYPE: Farm.FARM_TYPE,
-      IRRIGATION_TYPE: Farm.IRRIGATION_TYPE
-    }
+      IRRIGATION_TYPE: Farm.IRRIGATION_TYPE,
+    },
   };
 }
 

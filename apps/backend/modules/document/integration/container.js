@@ -46,14 +46,14 @@ class DocumentModuleContainer {
     // Application Layer - Use Cases
     this.uploadDocumentUseCase = new UploadDocumentUseCase(
       this.documentRepository,
-      this.fileStorageService
+      this.fileStorageService,
     );
 
     this.getDocumentUseCase = new GetDocumentUseCase(this.documentRepository);
 
     this.downloadDocumentUseCase = new DownloadDocumentUseCase(
       this.documentRepository,
-      this.fileStorageService
+      this.fileStorageService,
     );
 
     this.listDocumentsUseCase = new ListDocumentsUseCase(this.documentRepository);
@@ -64,13 +64,13 @@ class DocumentModuleContainer {
 
     this.deleteDocumentUseCase = new DeleteDocumentUseCase(
       this.documentRepository,
-      this.fileStorageService
+      this.fileStorageService,
     );
 
     this.updateDocumentMetadataUseCase = new UpdateDocumentMetadataUseCase(this.documentRepository);
 
     this.getDocumentsByRelatedEntityUseCase = new GetDocumentsByRelatedEntityUseCase(
-      this.documentRepository
+      this.documentRepository,
     );
 
     this.getPendingDocumentsUseCase = new GetPendingDocumentsUseCase(this.documentRepository);
@@ -89,7 +89,7 @@ class DocumentModuleContainer {
       this.updateDocumentMetadataUseCase,
       this.getDocumentsByRelatedEntityUseCase,
       this.getPendingDocumentsUseCase,
-      this.getDocumentStatisticsUseCase
+      this.getDocumentStatisticsUseCase,
     );
   }
 
@@ -175,5 +175,5 @@ function getDocumentModuleContainer(database = null) {
 
 module.exports = {
   DocumentModuleContainer,
-  getDocumentModuleContainer
+  getDocumentModuleContainer,
 };

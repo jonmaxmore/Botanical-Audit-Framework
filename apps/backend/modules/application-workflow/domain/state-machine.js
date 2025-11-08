@@ -44,75 +44,75 @@ class ApplicationStateMachine {
       // Terminal States
       CERTIFICATE_ISSUED: 'certificate_issued', // Certificate generated and issued
       REJECTED: 'rejected', // Application rejected (with reason)
-      EXPIRED: 'expired' // Application expired (180 days timeout)
+      EXPIRED: 'expired', // Application expired (180 days timeout)
     };
 
     // Valid State Transitions - Business Rules Implementation
     this.TRANSITIONS = {
       [this.STATES.DRAFT]: [
         this.STATES.SUBMITTED, // Farmer completes and submits application
-        this.STATES.EXPIRED // Draft timeout (30 days)
+        this.STATES.EXPIRED, // Draft timeout (30 days)
       ],
 
       [this.STATES.SUBMITTED]: [
         this.STATES.UNDER_REVIEW, // Auto-transition when payment confirmed
-        this.STATES.EXPIRED // Submission timeout
+        this.STATES.EXPIRED, // Submission timeout
       ],
 
       [this.STATES.UNDER_REVIEW]: [
         this.STATES.PAYMENT_PENDING, // Reviewer approves documents
         this.STATES.REVISION_REQUIRED, // Reviewer requests changes
         this.STATES.REJECTED, // Reviewer rejects application
-        this.STATES.EXPIRED // Review timeout (14 days)
+        this.STATES.EXPIRED, // Review timeout (14 days)
       ],
 
       [this.STATES.REVISION_REQUIRED]: [
         this.STATES.SUBMITTED, // Farmer resubmits with changes
         this.STATES.REJECTED, // Max revisions exceeded (3 times)
-        this.STATES.EXPIRED // Revision timeout (30 days)
+        this.STATES.EXPIRED, // Revision timeout (30 days)
       ],
 
       [this.STATES.PAYMENT_PENDING]: [
         this.STATES.PAYMENT_VERIFIED, // Payment webhook confirmation
-        this.STATES.EXPIRED // Payment timeout (7 days)
+        this.STATES.EXPIRED, // Payment timeout (7 days)
       ],
 
       [this.STATES.PAYMENT_VERIFIED]: [
         this.STATES.INSPECTION_SCHEDULED, // Inspector schedules farm visit
-        this.STATES.EXPIRED // Scheduling timeout (14 days)
+        this.STATES.EXPIRED, // Scheduling timeout (14 days)
       ],
 
       [this.STATES.INSPECTION_SCHEDULED]: [
         this.STATES.INSPECTION_COMPLETED, // Inspector completes inspection
         this.STATES.REJECTED, // Inspector fails application
-        this.STATES.EXPIRED // Inspection timeout (30 days)
+        this.STATES.EXPIRED, // Inspection timeout (30 days)
       ],
 
       [this.STATES.INSPECTION_COMPLETED]: [
         this.STATES.PHASE2_PAYMENT_PENDING, // Auto-transition after successful inspection
         this.STATES.REJECTED, // Inspector fails application
-        this.STATES.EXPIRED // Report timeout (7 days)
+        this.STATES.EXPIRED, // Report timeout (7 days)
       ],
 
       [this.STATES.PHASE2_PAYMENT_PENDING]: [
         this.STATES.PHASE2_PAYMENT_VERIFIED, // Final payment confirmed
-        this.STATES.EXPIRED // Payment timeout (7 days)
+        this.STATES.EXPIRED, // Payment timeout (7 days)
       ],
 
       [this.STATES.PHASE2_PAYMENT_VERIFIED]: [
         this.STATES.APPROVED, // Approver grants final approval
         this.STATES.REJECTED, // Approver rejects
-        this.STATES.EXPIRED // Approval timeout (14 days)
+        this.STATES.EXPIRED, // Approval timeout (14 days)
       ],
 
       [this.STATES.APPROVED]: [
-        this.STATES.CERTIFICATE_ISSUED // Auto-transition when certificate generated
+        this.STATES.CERTIFICATE_ISSUED, // Auto-transition when certificate generated
       ],
 
       // Terminal states - no further transitions
       [this.STATES.CERTIFICATE_ISSUED]: [],
       [this.STATES.REJECTED]: [],
-      [this.STATES.EXPIRED]: []
+      [this.STATES.EXPIRED]: [],
     };
 
     // State Metadata - Business Context for Each State
@@ -123,7 +123,7 @@ class ApplicationStateMachine {
         timeoutDays: 30,
         nextActions: ['Complete application form', 'Upload required documents'],
         canEdit: true,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.SUBMITTED]: {
@@ -132,7 +132,7 @@ class ApplicationStateMachine {
         timeoutDays: 3,
         nextActions: ['Automatic assignment to reviewer'],
         canEdit: false,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.UNDER_REVIEW]: {
@@ -141,7 +141,7 @@ class ApplicationStateMachine {
         timeoutDays: 14,
         nextActions: ['Review documents', 'Approve or request revision'],
         canEdit: false,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.REVISION_REQUIRED]: {
@@ -150,7 +150,7 @@ class ApplicationStateMachine {
         timeoutDays: 30,
         nextActions: ['Address reviewer comments', 'Resubmit application'],
         canEdit: true,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.PAYMENT_PENDING]: {
@@ -161,7 +161,7 @@ class ApplicationStateMachine {
         canEdit: false,
         paymentRequired: true,
         paymentAmount: 5000,
-        paymentPhase: 1
+        paymentPhase: 1,
       },
 
       [this.STATES.PAYMENT_VERIFIED]: {
@@ -170,7 +170,7 @@ class ApplicationStateMachine {
         timeoutDays: 14,
         nextActions: ['Schedule farm inspection', 'Contact farmer'],
         canEdit: false,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.INSPECTION_SCHEDULED]: {
@@ -179,7 +179,7 @@ class ApplicationStateMachine {
         timeoutDays: 30,
         nextActions: ['Conduct farm inspection', 'Submit inspection report'],
         canEdit: false,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.INSPECTION_COMPLETED]: {
@@ -188,7 +188,7 @@ class ApplicationStateMachine {
         timeoutDays: 7,
         nextActions: ['Automatic transition to payment'],
         canEdit: false,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.PHASE2_PAYMENT_PENDING]: {
@@ -199,7 +199,7 @@ class ApplicationStateMachine {
         canEdit: false,
         paymentRequired: true,
         paymentAmount: 25000,
-        paymentPhase: 2
+        paymentPhase: 2,
       },
 
       [this.STATES.PHASE2_PAYMENT_VERIFIED]: {
@@ -208,7 +208,7 @@ class ApplicationStateMachine {
         timeoutDays: 14,
         nextActions: ['Final review and approval', 'Generate certificate'],
         canEdit: false,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.APPROVED]: {
@@ -217,7 +217,7 @@ class ApplicationStateMachine {
         timeoutDays: 1,
         nextActions: ['Automatic certificate generation'],
         canEdit: false,
-        paymentRequired: false
+        paymentRequired: false,
       },
 
       [this.STATES.CERTIFICATE_ISSUED]: {
@@ -227,7 +227,7 @@ class ApplicationStateMachine {
         nextActions: ['Download certificate', 'Start compliance tracking'],
         canEdit: false,
         paymentRequired: false,
-        isTerminal: true
+        isTerminal: true,
       },
 
       [this.STATES.REJECTED]: {
@@ -237,7 +237,7 @@ class ApplicationStateMachine {
         nextActions: ['Review rejection reason', 'Submit new application'],
         canEdit: false,
         paymentRequired: false,
-        isTerminal: true
+        isTerminal: true,
       },
 
       [this.STATES.EXPIRED]: {
@@ -247,8 +247,8 @@ class ApplicationStateMachine {
         nextActions: ['Submit new application'],
         canEdit: false,
         paymentRequired: false,
-        isTerminal: true
-      }
+        isTerminal: true,
+      },
     };
 
     // Role Permissions - Who can trigger which transitions
@@ -257,19 +257,19 @@ class ApplicationStateMachine {
         'draft_to_submitted',
         'revision_required_to_submitted',
         'payment_pending_to_payment_verified',
-        'phase2_payment_pending_to_phase2_payment_verified'
+        'phase2_payment_pending_to_phase2_payment_verified',
       ],
 
       DTAM_REVIEWER: [
         'under_review_to_payment_pending',
         'under_review_to_revision_required',
-        'under_review_to_rejected'
+        'under_review_to_rejected',
       ],
 
       DTAM_INSPECTOR: [
         'payment_verified_to_inspection_scheduled',
         'inspection_scheduled_to_inspection_completed',
-        'inspection_scheduled_to_rejected'
+        'inspection_scheduled_to_rejected',
       ],
 
       DTAM_ADMIN: ['phase2_payment_verified_to_approved', 'phase2_payment_verified_to_rejected'],
@@ -278,8 +278,8 @@ class ApplicationStateMachine {
         'submitted_to_under_review',
         'inspection_completed_to_phase2_payment_pending',
         'approved_to_certificate_issued',
-        '*_to_expired' // System can expire any state
-      ]
+        '*_to_expired', // System can expire any state
+      ],
     };
   }
 
@@ -394,7 +394,7 @@ class ApplicationStateMachine {
       return {
         valid: false,
         error: 'INVALID_STATE',
-        message: 'Invalid state provided'
+        message: 'Invalid state provided',
       };
     }
 
@@ -403,7 +403,7 @@ class ApplicationStateMachine {
       return {
         valid: false,
         error: 'INVALID_TRANSITION',
-        message: `Cannot transition from ${fromState} to ${toState}`
+        message: `Cannot transition from ${fromState} to ${toState}`,
       };
     }
 
@@ -412,7 +412,7 @@ class ApplicationStateMachine {
       return {
         valid: false,
         error: 'INSUFFICIENT_PERMISSIONS',
-        message: `Role ${userRole} cannot perform this transition`
+        message: `Role ${userRole} cannot perform this transition`,
       };
     }
 
@@ -424,7 +424,7 @@ class ApplicationStateMachine {
 
     return {
       valid: true,
-      message: 'Transition allowed'
+      message: 'Transition allowed',
     };
   }
 
@@ -439,7 +439,7 @@ class ApplicationStateMachine {
           return {
             valid: false,
             error: 'MISSING_DOCUMENTS',
-            message: 'Required documents must be uploaded before submission'
+            message: 'Required documents must be uploaded before submission',
           };
         }
         break;
@@ -449,7 +449,7 @@ class ApplicationStateMachine {
           return {
             valid: false,
             error: 'MISSING_PAYMENT_REFERENCE',
-            message: 'Payment reference is required'
+            message: 'Payment reference is required',
           };
         }
         break;
@@ -459,7 +459,7 @@ class ApplicationStateMachine {
           return {
             valid: false,
             error: 'MISSING_INSPECTION_REPORT',
-            message: 'Inspection report is required'
+            message: 'Inspection report is required',
           };
         }
         break;
@@ -469,7 +469,7 @@ class ApplicationStateMachine {
           return {
             valid: false,
             error: 'MISSING_APPROVER_SIGNATURE',
-            message: 'Approver signature is required'
+            message: 'Approver signature is required',
           };
         }
         break;
@@ -496,7 +496,7 @@ class ApplicationStateMachine {
       paymentStates: Object.values(this.STATES).filter(state => this.isPaymentState(state)),
       terminalStates: Object.values(this.STATES).filter(state => this.isTerminalState(state)),
       averageProcessTime: '45-60 days',
-      successRate: '85%'
+      successRate: '85%',
     };
   }
 }

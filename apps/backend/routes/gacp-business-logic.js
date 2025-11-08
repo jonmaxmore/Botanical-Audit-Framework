@@ -24,7 +24,9 @@ const crypto = require('crypto');
 const path = require('path');
 
 // Import core business logic
-const { GACPWorkflowEngine } = require('../modules/application-workflow/domain/gacp-workflow-engine');
+const {
+  GACPWorkflowEngine,
+} = require('../modules/application-workflow/domain/gacp-workflow-engine');
 
 // Import GACP Business Logic Models
 const {
@@ -36,7 +38,7 @@ const {
   getCCPList,
   calculateTotalScore,
   getCertificateLevel,
-  validateCCPScores
+  validateCCPScores,
 } = require('../models/gacp-business-logic');
 
 // Initialize workflow engine
@@ -61,34 +63,34 @@ router.get('/workflow', async (req, res) => {
           'WHO-GACP',
           'Thai-FDA-GACP-2018',
           'ASEAN-TM-Guidelines',
-          'FAO-Agricultural-Practices'
+          'FAO-Agricultural-Practices',
         ],
         states: workflowSteps,
         stateDefinitions: Object.keys(GACPApplicationStatus).map(key => ({
           key,
           value: GACPApplicationStatus[key],
-          description: getStatusDescription(GACPApplicationStatus[key])
+          description: getStatusDescription(GACPApplicationStatus[key]),
         })),
         workflowGraph: workflowGraph,
         businessRules: {
           minimumPassingScore: GACPScoringSystem.OVERALL_PASSING_SCORE,
           certificateLevels: GACPScoringSystem.CERTIFICATE_LEVELS,
-          riskLevels: GACPScoringSystem.RISK_LEVELS
-        }
+          riskLevels: GACPScoringSystem.RISK_LEVELS,
+        },
       },
       metadata: {
         version: '1.0.0',
         lastUpdated: new Date().toISOString(),
         totalStates: workflowSteps.length,
-        totalTransitions: workflowGraph.edges.length
-      }
+        totalTransitions: workflowGraph.edges.length,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve workflow information',
       message: error.message,
-      code: 'GACP_WORKFLOW_ERROR'
+      code: 'GACP_WORKFLOW_ERROR',
     });
   }
 });
@@ -104,7 +106,7 @@ router.get('/ccps', async (req, res) => {
       id: key,
       ...ccp,
       weightPercentage: `${ccp.weight}%`,
-      minScorePercentage: `${ccp.min_score}%`
+      minScorePercentage: `${ccp.min_score}%`,
     }));
 
     res.json({
@@ -118,23 +120,23 @@ router.get('/ccps', async (req, res) => {
         scoringSystem: {
           totalMaxScore: GACPScoringSystem.TOTAL_SCORE_MAX,
           passingScore: GACPScoringSystem.OVERALL_PASSING_SCORE,
-          certificateLevels: GACPScoringSystem.CERTIFICATE_LEVELS
+          certificateLevels: GACPScoringSystem.CERTIFICATE_LEVELS,
         },
-        complianceRequirements: GACPComplianceFramework.REQUIRED_DOCUMENTS
+        complianceRequirements: GACPComplianceFramework.REQUIRED_DOCUMENTS,
       },
       metadata: {
         version: '1.0.0',
         lastUpdated: new Date().toISOString(),
         ccpCount: ccpList.length,
-        methodology: 'HACCP-adapted-for-medicinal-plants'
-      }
+        methodology: 'HACCP-adapted-for-medicinal-plants',
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve CCP framework',
       message: error.message,
-      code: 'GACP_CCP_ERROR'
+      code: 'GACP_CCP_ERROR',
     });
   }
 });
@@ -151,7 +153,7 @@ router.post('/test/score-calculation', async (req, res) => {
       return res.status(400).json({
         success: false,
         error: 'Invalid input: scores object required',
-        code: 'INVALID_INPUT'
+        code: 'INVALID_INPUT',
       });
     }
 
@@ -178,7 +180,7 @@ router.post('/test/score-calculation', async (req, res) => {
           weight: ccp.weight,
           weightedScore: (score * ccp.weight) / 100,
           minScore: ccp.min_score,
-          passed: score >= ccp.min_score
+          passed: score >= ccp.min_score,
         };
       })
       .filter(Boolean);
@@ -192,8 +194,8 @@ router.post('/test/score-calculation', async (req, res) => {
       calculation: {
         method: 'weighted-average',
         formula: 'Σ(CCP_Score × CCP_Weight) / Σ(CCP_Weight)',
-        totalWeight: ccpContributions.reduce((sum, ccp) => sum + ccp.weight, 0)
-      }
+        totalWeight: ccpContributions.reduce((sum, ccp) => sum + ccp.weight, 0),
+      },
     };
 
     res.json({
@@ -202,15 +204,15 @@ router.post('/test/score-calculation', async (req, res) => {
       metadata: {
         timestamp: new Date().toISOString(),
         inputScores: scores,
-        calculationMethod: 'GACP-weighted-scoring-system'
-      }
+        calculationMethod: 'GACP-weighted-scoring-system',
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Score calculation failed',
       message: error.message,
-      code: 'SCORE_CALCULATION_ERROR'
+      code: 'SCORE_CALCULATION_ERROR',
     });
   }
 });
@@ -227,7 +229,7 @@ router.get('/workflow/:state/requirements', async (req, res) => {
       return res.status(404).json({
         success: false,
         error: 'Invalid workflow state',
-        code: 'INVALID_STATE'
+        code: 'INVALID_STATE',
       });
     }
 
@@ -238,7 +240,7 @@ router.get('/workflow/:state/requirements', async (req, res) => {
       return res.status(404).json({
         success: false,
         error: 'Requirements not found for this state',
-        code: 'REQUIREMENTS_NOT_FOUND'
+        code: 'REQUIREMENTS_NOT_FOUND',
       });
     }
 
@@ -248,19 +250,19 @@ router.get('/workflow/:state/requirements', async (req, res) => {
         state: stateValue,
         stateName: state.toUpperCase(),
         description: getStatusDescription(stateValue),
-        ...requirements
+        ...requirements,
       },
       metadata: {
         timestamp: new Date().toISOString(),
-        requestedState: state
-      }
+        requestedState: state,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve state requirements',
       message: error.message,
-      code: 'STATE_REQUIREMENTS_ERROR'
+      code: 'STATE_REQUIREMENTS_ERROR',
     });
   }
 });
@@ -277,7 +279,7 @@ router.post('/workflow/transition', async (req, res) => {
       return res.status(400).json({
         success: false,
         error: 'currentState and targetState are required',
-        code: 'MISSING_PARAMETERS'
+        code: 'MISSING_PARAMETERS',
       });
     }
 
@@ -285,7 +287,7 @@ router.post('/workflow/transition', async (req, res) => {
       currentState,
       targetState,
       context || {},
-      actor || { role: 'system' }
+      actor || { role: 'system' },
     );
 
     res.json({
@@ -293,15 +295,15 @@ router.post('/workflow/transition', async (req, res) => {
       data: result,
       metadata: {
         timestamp: new Date().toISOString(),
-        transition: `${currentState} → ${targetState}`
-      }
+        transition: `${currentState} → ${targetState}`,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Workflow transition failed',
       message: error.message,
-      code: 'WORKFLOW_TRANSITION_ERROR'
+      code: 'WORKFLOW_TRANSITION_ERROR',
     });
   }
 });
@@ -324,28 +326,28 @@ router.get('/compliance', async (req, res) => {
           technical: [
             'Soil analysis report',
             'Water quality test results',
-            'Seed/planting material certificates'
+            'Seed/planting material certificates',
           ],
           operational: [
             'Pesticide usage records',
             'Harvesting and processing records',
-            'Staff training certificates'
+            'Staff training certificates',
           ],
-          quality: ['Internal audit reports', 'Quality control procedures']
-        }
+          quality: ['Internal audit reports', 'Quality control procedures'],
+        },
       },
       metadata: {
         version: '1.0.0',
         lastUpdated: new Date().toISOString(),
-        totalDocuments: GACPComplianceFramework.REQUIRED_DOCUMENTS.length
-      }
+        totalDocuments: GACPComplianceFramework.REQUIRED_DOCUMENTS.length,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve compliance information',
       message: error.message,
-      code: 'COMPLIANCE_ERROR'
+      code: 'COMPLIANCE_ERROR',
     });
   }
 });
@@ -371,7 +373,7 @@ function getStatusDescription(status) {
     certificate_issued: 'ออกใบรับรอง - ใช้ได้ 3 ปี',
     certificate_suspended: 'ระงับใบรับรอง - ชั่วคราว',
     certificate_revoked: 'เพิกถอนใบรับรอง - ถาวร',
-    certificate_expired: 'หมดอายุ - ต้องต่ออายุ'
+    certificate_expired: 'หมดอายุ - ต้องต่ออายุ',
   };
 
   return descriptions[status] || status;

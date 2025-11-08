@@ -19,7 +19,7 @@ class Notification {
   static STATUS = {
     UNREAD: 'UNREAD', // Not yet read
     READ: 'READ', // Read by recipient
-    ARCHIVED: 'ARCHIVED' // Archived by recipient
+    ARCHIVED: 'ARCHIVED', // Archived by recipient
   };
 
   // Notification Type Constants
@@ -67,7 +67,7 @@ class Notification {
     INFO: 'INFO',
     WARNING: 'WARNING',
     ERROR: 'ERROR',
-    SUCCESS: 'SUCCESS'
+    SUCCESS: 'SUCCESS',
   };
 
   // Priority Level Constants
@@ -75,14 +75,14 @@ class Notification {
     LOW: 'LOW',
     MEDIUM: 'MEDIUM',
     HIGH: 'HIGH',
-    URGENT: 'URGENT'
+    URGENT: 'URGENT',
   };
 
   // Delivery Channel Constants
   static CHANNEL = {
     IN_APP: 'IN_APP', // In-app notification
     EMAIL: 'EMAIL', // Email notification
-    SMS: 'SMS' // SMS notification (future)
+    SMS: 'SMS', // SMS notification (future)
   };
 
   // Recipient Type Constants
@@ -91,7 +91,7 @@ class Notification {
     DTAM_STAFF: 'DTAM_STAFF',
     ALL_FARMERS: 'ALL_FARMERS', // Broadcast to all farmers
     ALL_DTAM_STAFF: 'ALL_DTAM_STAFF', // Broadcast to all staff
-    ROLE: 'ROLE' // Broadcast to specific role
+    ROLE: 'ROLE', // Broadcast to specific role
   };
 
   constructor(data = {}) {
@@ -117,7 +117,7 @@ class Notification {
     this.deliveryStatus = data.deliveryStatus || {
       inApp: { sent: false, sentAt: null },
       email: { sent: false, sentAt: null, error: null },
-      sms: { sent: false, sentAt: null, error: null }
+      sms: { sent: false, sentAt: null, error: null },
     };
 
     // Action/Link
@@ -153,7 +153,7 @@ class Notification {
     channels,
     actionUrl,
     relatedEntity,
-    sentBy
+    sentBy,
   }) {
     if (!title || !message) {
       throw new Error('Title and message are required');
@@ -171,7 +171,7 @@ class Notification {
       relatedEntity,
       sentBy,
       sentAt: new Date(),
-      createdAt: new Date()
+      createdAt: new Date(),
     });
   }
 
@@ -184,7 +184,7 @@ class Notification {
     message,
     priority,
     channels,
-    sentBy
+    sentBy,
   }) {
     if (!title || !message) {
       throw new Error('Title and message are required');
@@ -205,7 +205,7 @@ class Notification {
       channels: channels || [Notification.CHANNEL.IN_APP],
       sentBy,
       sentAt: new Date(),
-      createdAt: new Date()
+      createdAt: new Date(),
     });
   }
 
@@ -383,7 +383,7 @@ class Notification {
       isUrgent: this.isUrgent(),
       hasAction: !!this.actionUrl,
       sentAt: this.sentAt,
-      timeSince: this.getTimeSinceSent()
+      timeSince: this.getTimeSinceSent(),
     };
   }
 
@@ -408,7 +408,7 @@ class Notification {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 }

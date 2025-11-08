@@ -17,16 +17,16 @@ class ImageOptimizationService {
         high: 85,
         medium: 75,
         low: 60,
-        thumbnail: 70
+        thumbnail: 70,
       },
-      
+
       // Size presets
       sizes: {
         thumbnail: { width: 200, height: 200 },
         small: { width: 400, height: 400 },
         medium: { width: 800, height: 800 },
         large: { width: 1200, height: 1200 },
-        preview: { width: 600, height: 400 }
+        preview: { width: 600, height: 400 },
       },
 
       // Max dimensions for uploads
@@ -37,7 +37,7 @@ class ImageOptimizationService {
       supportedFormats: ['jpg', 'jpeg', 'png', 'webp'],
 
       // Output format
-      outputFormat: 'webp' // Modern format, better compression
+      outputFormat: 'webp', // Modern format, better compression
     };
   }
 
@@ -54,22 +54,24 @@ class ImageOptimizationService {
         maxWidth = this.config.maxWidth,
         maxHeight = this.config.maxHeight,
         format = 'webp',
-        fit = 'inside'
+        fit = 'inside',
       } = options;
 
       const image = sharp(inputPath);
       const metadata = await image.metadata();
 
       logger.debug(`Optimizing image: ${inputPath}`);
-      logger.debug(`Original size: ${metadata.width}x${metadata.height}, ${(metadata.size / 1024).toFixed(2)} KB`);
+      logger.debug(
+        `Original size: ${metadata.width}x${metadata.height}, ${(metadata.size / 1024).toFixed(2)} KB`,
+      );
 
       // Resize if needed
       let pipeline = image;
-      
+
       if (metadata.width > maxWidth || metadata.height > maxHeight) {
         pipeline = pipeline.resize(maxWidth, maxHeight, {
           fit,
-          withoutEnlargement: true
+          withoutEnlargement: true,
         });
       }
 
@@ -79,10 +81,10 @@ class ImageOptimizationService {
       } else if (format === 'jpeg' || format === 'jpg') {
         pipeline = pipeline.jpeg({ quality, progressive: true });
       } else if (format === 'png') {
-        pipeline = pipeline.png({ 
+        pipeline = pipeline.png({
           quality,
           compressionLevel: 9,
-          adaptiveFiltering: true
+          adaptiveFiltering: true,
         });
       }
 
@@ -105,7 +107,7 @@ class ImageOptimizationService {
         compressionRatio: parseFloat(compressionRatio),
         width: metadata.width > maxWidth ? maxWidth : metadata.width,
         height: metadata.height > maxHeight ? maxHeight : metadata.height,
-        format
+        format,
       };
     } catch (error) {
       logger.error('Image optimization failed:', error);
@@ -124,18 +126,20 @@ class ImageOptimizationService {
       await sharp(inputPath)
         .resize(dimensions.width, dimensions.height, {
           fit: 'cover',
-          position: 'center'
+          position: 'center',
         })
         .webp({ quality })
         .toFile(outputPath);
 
-      logger.info(`Thumbnail generated: ${path.basename(outputPath)} (${dimensions.width}x${dimensions.height})`);
+      logger.info(
+        `Thumbnail generated: ${path.basename(outputPath)} (${dimensions.width}x${dimensions.height})`,
+      );
 
       return {
         success: true,
         path: outputPath,
         width: dimensions.width,
-        height: dimensions.height
+        height: dimensions.height,
       };
     } catch (error) {
       logger.error('Thumbnail generation failed:', error);
@@ -149,14 +153,14 @@ class ImageOptimizationService {
   async generateMultipleSizes(inputPath, outputDir, baseName) {
     try {
       const results = {};
-      
+
       for (const [sizeName, dimensions] of Object.entries(this.config.sizes)) {
         const outputPath = path.join(outputDir, `${baseName}_${sizeName}.webp`);
-        
+
         await sharp(inputPath)
           .resize(dimensions.width, dimensions.height, {
             fit: 'inside',
-            withoutEnlargement: true
+            withoutEnlargement: true,
           })
           .webp({ quality: this.config.quality.medium })
           .toFile(outputPath);
@@ -164,15 +168,15 @@ class ImageOptimizationService {
         results[sizeName] = {
           path: outputPath,
           width: dimensions.width,
-          height: dimensions.height
+          height: dimensions.height,
         };
       }
 
       logger.info(`Generated ${Object.keys(results).length} sizes for ${baseName}`);
-      
+
       return {
         success: true,
-        sizes: results
+        sizes: results,
       };
     } catch (error) {
       logger.error('Multiple sizes generation failed:', error);
@@ -195,23 +199,24 @@ class ImageOptimizationService {
       const outputPath = path.join(uploadDir, optimizedFileName);
 
       // Different optimization based on type
-      const options = type === 'thumbnail' 
-        ? {
-            quality: this.config.quality.thumbnail,
-            maxWidth: 400,
-            maxHeight: 400
-          }
-        : type === 'document'
-        ? {
-            quality: this.config.quality.high,
-            maxWidth: 1600,
-            maxHeight: 1600
-          }
-        : {
-            quality: this.config.quality.medium,
-            maxWidth: 1200,
-            maxHeight: 1200
-          };
+      const options =
+        type === 'thumbnail'
+          ? {
+              quality: this.config.quality.thumbnail,
+              maxWidth: 400,
+              maxHeight: 400,
+            }
+          : type === 'document'
+            ? {
+                quality: this.config.quality.high,
+                maxWidth: 1600,
+                maxHeight: 1600,
+              }
+            : {
+                quality: this.config.quality.medium,
+                maxWidth: 1200,
+                maxHeight: 1200,
+              };
 
       const result = await this.optimizeImage(file.path, outputPath, options);
 
@@ -224,18 +229,18 @@ class ImageOptimizationService {
         original: {
           path: file.path,
           size: file.size,
-          mimetype: file.mimetype
+          mimetype: file.mimetype,
         },
         optimized: {
           path: outputPath,
           size: result.optimizedSize,
           compressionRatio: result.compressionRatio,
           width: result.width,
-          height: result.height
+          height: result.height,
         },
         thumbnail: {
-          path: thumbnailPath
-        }
+          path: thumbnailPath,
+        },
       };
     } catch (error) {
       logger.error('Upload optimization failed:', error);
@@ -249,21 +254,21 @@ class ImageOptimizationService {
   async batchOptimize(files, options = {}) {
     try {
       const results = [];
-      
+
       for (const file of files) {
         try {
           const result = await this.optimizeUploadedImage(file, options.type);
           results.push({
             file: file.originalname,
             success: true,
-            ...result
+            ...result,
           });
         } catch (error) {
           logger.error(`Failed to optimize ${file.originalname}:`, error);
           results.push({
             file: file.originalname,
             success: false,
-            error: error.message
+            error: error.message,
           });
         }
       }
@@ -276,7 +281,7 @@ class ImageOptimizationService {
         total: files.length,
         successful,
         failed: files.length - successful,
-        results
+        results,
       };
     } catch (error) {
       logger.error('Batch optimization failed:', error);
@@ -290,16 +295,14 @@ class ImageOptimizationService {
   async convertToWebP(inputPath, quality = 80) {
     try {
       const outputPath = inputPath.replace(/\.(jpg|jpeg|png)$/i, '.webp');
-      
-      await sharp(inputPath)
-        .webp({ quality })
-        .toFile(outputPath);
+
+      await sharp(inputPath).webp({ quality }).toFile(outputPath);
 
       logger.info(`Converted to WebP: ${path.basename(outputPath)}`);
 
       return {
         success: true,
-        outputPath
+        outputPath,
       };
     } catch (error) {
       logger.error('WebP conversion failed:', error);
@@ -313,7 +316,7 @@ class ImageOptimizationService {
   async getImageMetadata(imagePath) {
     try {
       const metadata = await sharp(imagePath).metadata();
-      
+
       return {
         width: metadata.width,
         height: metadata.height,
@@ -321,7 +324,7 @@ class ImageOptimizationService {
         size: metadata.size,
         colorSpace: metadata.space,
         hasAlpha: metadata.hasAlpha,
-        orientation: metadata.orientation
+        orientation: metadata.orientation,
       };
     } catch (error) {
       logger.error('Failed to get image metadata:', error);
@@ -335,12 +338,12 @@ class ImageOptimizationService {
   async validateImage(file) {
     try {
       const ext = path.extname(file.originalname).toLowerCase().replace('.', '');
-      
+
       // Check format
       if (!this.config.supportedFormats.includes(ext)) {
         return {
           valid: false,
-          error: `Unsupported format: ${ext}. Supported: ${this.config.supportedFormats.join(', ')}`
+          error: `Unsupported format: ${ext}. Supported: ${this.config.supportedFormats.join(', ')}`,
         };
       }
 
@@ -351,7 +354,7 @@ class ImageOptimizationService {
       if (metadata.width > 4000 || metadata.height > 4000) {
         return {
           valid: false,
-          error: `Image too large: ${metadata.width}x${metadata.height}. Max: 4000x4000`
+          error: `Image too large: ${metadata.width}x${metadata.height}. Max: 4000x4000`,
         };
       }
 
@@ -359,19 +362,19 @@ class ImageOptimizationService {
       if (file.size > 10 * 1024 * 1024) {
         return {
           valid: false,
-          error: `File too large: ${(file.size / 1024 / 1024).toFixed(2)} MB. Max: 10 MB`
+          error: `File too large: ${(file.size / 1024 / 1024).toFixed(2)} MB. Max: 10 MB`,
         };
       }
 
       return {
         valid: true,
-        metadata
+        metadata,
       };
     } catch (error) {
       logger.error('Image validation failed:', error);
       return {
         valid: false,
-        error: 'Invalid image file'
+        error: 'Invalid image file',
       };
     }
   }
@@ -384,13 +387,13 @@ class ImageOptimizationService {
       const files = await fs.readdir(directory);
       const now = Date.now();
       const maxAge = daysOld * 24 * 60 * 60 * 1000;
-      
+
       let deleted = 0;
 
       for (const file of files) {
         const filePath = path.join(directory, file);
         const stats = await fs.stat(filePath);
-        
+
         if (now - stats.mtimeMs > maxAge) {
           await fs.unlink(filePath);
           deleted++;
@@ -401,7 +404,7 @@ class ImageOptimizationService {
 
       return {
         success: true,
-        deleted
+        deleted,
       };
     } catch (error) {
       logger.error('Cleanup failed:', error);

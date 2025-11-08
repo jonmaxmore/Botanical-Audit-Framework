@@ -36,7 +36,7 @@ async function connectToDatabase() {
       retryWrites: true,
       w: 'majority',
       ssl: true,
-      authSource: 'admin'
+      authSource: 'admin',
     };
 
     await mongoose.connect(mongoURI, options);
@@ -100,11 +100,11 @@ app.use(
       'http://localhost:3000',
       'http://localhost:3004',
       'http://127.0.0.1:3000',
-      'http://127.0.0.1:3004'
+      'http://127.0.0.1:3004',
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-    credentials: true
-  })
+    credentials: true,
+  }),
 );
 
 app.use(express.json({ limit: '10mb' }));
@@ -118,7 +118,7 @@ app.get('/api/monitoring/health', async (req, res) => {
   let databaseHealth = {
     status: dbStatus,
     connected: isDbConnected,
-    error: dbError
+    error: dbError,
   };
 
   // If connected, get additional database info
@@ -132,7 +132,7 @@ app.get('/api/monitoring/health', async (req, res) => {
         host: serverStatus.host,
         version: serverStatus.version,
         uptime: serverStatus.uptime,
-        connections: serverStatus.connections
+        connections: serverStatus.connections,
       };
     } catch (error) {
       databaseHealth.additionalInfo = 'Could not fetch server status';
@@ -149,7 +149,7 @@ app.get('/api/monitoring/health', async (req, res) => {
     service: 'GACP Platform Production Server',
     version: '1.0.0',
     database: databaseHealth,
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
   });
 });
 
@@ -159,7 +159,7 @@ app.get('/api/monitoring/health/database', async (req, res) => {
     return res.status(503).json({
       success: false,
       error: 'Database not connected',
-      details: dbError
+      details: dbError,
     });
   }
 
@@ -177,14 +177,14 @@ app.get('/api/monitoring/health/database', async (req, res) => {
         collectionsNames: collections.map(c => c.name),
         dataSize: stats.dataSize,
         storageSize: stats.storageSize,
-        indexes: stats.indexes
-      }
+        indexes: stats.indexes,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Database query failed',
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -202,34 +202,34 @@ app.get('/api/gacp/workflow', async (req, res) => {
           id: 1,
           name: 'Initial Application',
           status: 'active',
-          requirements: ['Farm registration', 'Soil assessment']
+          requirements: ['Farm registration', 'Soil assessment'],
         },
         {
           id: 2,
           name: 'Site Inspection',
           status: 'pending',
-          requirements: ['GPS coordinates', 'Site photos']
+          requirements: ['GPS coordinates', 'Site photos'],
         },
         {
           id: 3,
           name: 'Soil Testing',
           status: 'pending',
-          requirements: ['Soil samples', 'Lab analysis']
+          requirements: ['Soil samples', 'Lab analysis'],
         },
         {
           id: 4,
           name: 'Seed Source Verification',
           status: 'pending',
-          requirements: ['Seed certificate', 'Genetics verification']
+          requirements: ['Seed certificate', 'Genetics verification'],
         },
         {
           id: 5,
           name: 'Growing Environment Setup',
           status: 'pending',
-          requirements: ['Climate control', 'Security measures']
-        }
-      ]
-    }
+          requirements: ['Climate control', 'Security measures'],
+        },
+      ],
+    },
   };
 
   if (isDbConnected) {
@@ -262,52 +262,52 @@ app.get('/api/gacp/ccps', async (req, res) => {
           id: 'CCP01',
           name: 'Soil Quality Management',
           weight: 15,
-          compliance: 'WHO-GACP Section 4.2'
+          compliance: 'WHO-GACP Section 4.2',
         },
         {
           id: 'CCP02',
           name: 'Water Quality Control',
           weight: 12,
-          compliance: 'WHO-GACP Section 4.3'
+          compliance: 'WHO-GACP Section 4.3',
         },
         {
           id: 'CCP03',
           name: 'Seed/Planting Material',
           weight: 10,
-          compliance: 'WHO-GACP Section 4.1'
+          compliance: 'WHO-GACP Section 4.1',
         },
         {
           id: 'CCP04',
           name: 'Harvesting Operations',
           weight: 18,
-          compliance: 'WHO-GACP Section 5.1'
+          compliance: 'WHO-GACP Section 5.1',
         },
         {
           id: 'CCP05',
           name: 'Post-harvest Processing',
           weight: 15,
-          compliance: 'WHO-GACP Section 5.2'
+          compliance: 'WHO-GACP Section 5.2',
         },
         {
           id: 'CCP06',
           name: 'Storage Conditions',
           weight: 12,
-          compliance: 'WHO-GACP Section 5.3'
+          compliance: 'WHO-GACP Section 5.3',
         },
         {
           id: 'CCP07',
           name: 'Quality Control Testing',
           weight: 10,
-          compliance: 'WHO-GACP Section 6.1'
+          compliance: 'WHO-GACP Section 6.1',
         },
         {
           id: 'CCP08',
           name: 'Documentation & Traceability',
           weight: 8,
-          compliance: 'WHO-GACP Section 7.1'
-        }
-      ]
-    }
+          compliance: 'WHO-GACP Section 7.1',
+        },
+      ],
+    },
   };
 
   res.json(mockData);
@@ -320,7 +320,7 @@ app.post('/api/gacp/test/score-calculation', (req, res) => {
   if (!scores) {
     return res.status(400).json({
       success: false,
-      error: 'Scores object is required'
+      error: 'Scores object is required',
     });
   }
 
@@ -333,7 +333,7 @@ app.post('/api/gacp/test/score-calculation', (req, res) => {
     CCP05: 15,
     CCP06: 12,
     CCP07: 10,
-    CCP08: 8
+    CCP08: 8,
   };
 
   let totalScore = 0;
@@ -349,7 +349,7 @@ app.post('/api/gacp/test/score-calculation', (req, res) => {
       breakdown[ccpId] = {
         score: score,
         weight: weight,
-        weighted: weighted
+        weighted: weighted,
       };
 
       totalScore += weighted;
@@ -372,8 +372,8 @@ app.post('/api/gacp/test/score-calculation', (req, res) => {
       certificateLevel: certificateLevel,
       breakdown: breakdown,
       calculatedAt: new Date().toISOString(),
-      dataSource: isDbConnected ? 'database' : 'mock'
-    }
+      dataSource: isDbConnected ? 'database' : 'mock',
+    },
   });
 });
 
@@ -389,20 +389,20 @@ app.get('/api/gacp/compliance', (req, res) => {
         'WHO-GACP': {
           status: 'compliant',
           sections: 17,
-          lastUpdated: '2024-01-15'
+          lastUpdated: '2024-01-15',
         },
         'Thai-FDA': {
           status: 'compliant',
           sections: 12,
-          lastUpdated: '2024-02-01'
+          lastUpdated: '2024-02-01',
         },
         'ASEAN-TM': {
           status: 'compliant',
           sections: 8,
-          lastUpdated: '2024-01-30'
-        }
-      }
-    }
+          lastUpdated: '2024-01-30',
+        },
+      },
+    },
   });
 });
 
@@ -538,41 +538,41 @@ app.get('/api/docs/docs', (req, res) => {
       database: {
         status: dbStatus,
         connected: isDbConnected,
-        type: 'MongoDB Atlas'
+        type: 'MongoDB Atlas',
       },
       endpoints: [
         {
           method: 'GET',
           path: '/api/monitoring/health',
-          description: 'System health check with database status'
+          description: 'System health check with database status',
         },
         {
           method: 'GET',
           path: '/api/monitoring/health/database',
-          description: 'Detailed database health and statistics'
+          description: 'Detailed database health and statistics',
         },
         {
           method: 'GET',
           path: '/api/gacp/workflow',
-          description: 'Get GACP workflow states'
+          description: 'Get GACP workflow states',
         },
         {
           method: 'GET',
           path: '/api/gacp/ccps',
-          description: 'Get Critical Control Points'
+          description: 'Get Critical Control Points',
         },
         {
           method: 'POST',
           path: '/api/gacp/test/score-calculation',
-          description: 'Calculate GACP scores'
+          description: 'Calculate GACP scores',
         },
         {
           method: 'GET',
           path: '/api/gacp/compliance',
-          description: 'Get compliance standards information'
-        }
-      ]
-    }
+          description: 'Get compliance standards information',
+        },
+      ],
+    },
   });
 });
 
@@ -582,7 +582,7 @@ app.use((err, req, res, _next) => {
   res.status(500).json({
     success: false,
     error: 'Internal server error',
-    message: err.message
+    message: err.message,
   });
 });
 
@@ -599,8 +599,8 @@ app.use((req, res) => {
       'POST /api/gacp/test/score-calculation',
       'GET /api/gacp/compliance',
       'GET /demo.html',
-      'GET /api/docs/docs'
-    ]
+      'GET /api/docs/docs',
+    ],
   });
 });
 

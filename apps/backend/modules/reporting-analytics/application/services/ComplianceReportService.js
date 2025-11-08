@@ -87,7 +87,7 @@ class ComplianceReportService {
       await this._initializeComplianceScoring();
 
       console.log(
-        '[ComplianceReportService] Initialization completed with regulatory compliance capabilities'
+        '[ComplianceReportService] Initialization completed with regulatory compliance capabilities',
       );
     } catch (error) {
       logger.error('[ComplianceReportService] Initialization failed:', error);
@@ -120,19 +120,19 @@ class ComplianceReportService {
       // Step 3: Perform compliance validation against DTAM standards
       const complianceValidation = await this._validateDTAMCompliance(
         complianceData,
-        normalizedCriteria
+        normalizedCriteria,
       );
 
       // Step 4: Calculate compliance scores and ratings
       const complianceScores = await this._calculateDTAMComplianceScores(
         complianceData,
-        complianceValidation
+        complianceValidation,
       );
 
       // Step 5: Generate risk assessment and mitigation recommendations
       const riskAssessment = await this._performComplianceRiskAssessment(
         complianceData,
-        complianceScores
+        complianceScores,
       );
 
       // Step 6: Compile audit trail documentation
@@ -151,18 +151,18 @@ class ComplianceReportService {
           generatedAt: new Date(),
           period: {
             start: normalizedCriteria.startDate,
-            end: normalizedCriteria.endDate
+            end: normalizedCriteria.endDate,
           },
           reportingPeriod: normalizedCriteria.reportType,
           certificationBody: 'Department of Thai Traditional and Alternative Medicine (DTAM)',
-          complianceFramework: 'GACP Cannabis Certification Standards'
+          complianceFramework: 'GACP Cannabis Certification Standards',
         },
         executive_summary: {
           overallComplianceScore: complianceScores.overall,
           complianceStatus: this._determineComplianceStatus(complianceScores.overall),
           criticalIssues: riskAssessment.criticalIssues.length,
           recommendedActions: recommendations ? recommendations.priority.length : 0,
-          certificationsSummary: complianceData.certifications.summary
+          certificationsSummary: complianceData.certifications.summary,
         },
         application_compliance: {
           processingCompliance: {
@@ -170,21 +170,21 @@ class ComplianceReportService {
             processedWithinSLA: complianceData.applications.withinSLA,
             slaComplianceRate: complianceScores.applications.sla,
             averageProcessingTime: complianceData.applications.averageTime,
-            complianceScore: complianceScores.applications.overall
+            complianceScore: complianceScores.applications.overall,
           },
           qualityCompliance: {
             gacpAdherence: complianceScores.applications.gacp,
             inspectionQuality: complianceScores.inspections.quality,
             certificationAccuracy: complianceScores.certifications.accuracy,
             rejectionRate: complianceData.applications.rejectionRate,
-            appealSuccess: complianceData.applications.appealSuccess
+            appealSuccess: complianceData.applications.appealSuccess,
           },
           documentationCompliance: {
             documentCompleteness: complianceScores.documents.completeness,
             retentionCompliance: complianceScores.documents.retention,
             accessControlCompliance: complianceScores.documents.access,
-            auditTrailCompleteness: complianceScores.audit.completeness
-          }
+            auditTrailCompleteness: complianceScores.audit.completeness,
+          },
         },
         financial_compliance: {
           revenueReporting: {
@@ -192,14 +192,14 @@ class ComplianceReportService {
             feeCollection: complianceData.financial.feeCollection,
             paymentProcessing: complianceScores.financial.processing,
             auditTrail: complianceScores.financial.auditTrail,
-            taxCompliance: complianceScores.financial.tax
+            taxCompliance: complianceScores.financial.tax,
           },
           transactionCompliance: {
             paymentTransparency: complianceScores.financial.transparency,
             antiMoneyLaundering: complianceScores.financial.aml,
             fraudPrevention: complianceScores.financial.fraud,
-            dataProtection: complianceScores.financial.dataProtection
-          }
+            dataProtection: complianceScores.financial.dataProtection,
+          },
         },
         data_privacy_compliance: {
           pdpaCompliance: {
@@ -207,57 +207,57 @@ class ComplianceReportService {
             dataMinimization: complianceScores.privacy.minimization,
             rightToErasure: complianceScores.privacy.erasure,
             dataPortability: complianceScores.privacy.portability,
-            breachNotification: complianceScores.privacy.breach
+            breachNotification: complianceScores.privacy.breach,
           },
           dataSecurityCompliance: {
             encryptionCompliance: complianceScores.security.encryption,
             accessControlCompliance: complianceScores.security.access,
             backupCompliance: complianceScores.security.backup,
-            incidentResponse: complianceScores.security.incident
-          }
+            incidentResponse: complianceScores.security.incident,
+          },
         },
         operational_compliance: {
           processCompliance: {
             sopAdherence: complianceScores.operations.sop,
             qualityAssurance: complianceScores.operations.qa,
             continuousImprovement: complianceScores.operations.improvement,
-            staffTraining: complianceScores.operations.training
+            staffTraining: complianceScores.operations.training,
           },
           systemCompliance: {
             systemAvailability: complianceScores.system.availability,
             performanceStandards: complianceScores.system.performance,
             securityStandards: complianceScores.system.security,
-            disasterRecovery: complianceScores.system.recovery
-          }
+            disasterRecovery: complianceScores.system.recovery,
+          },
         },
         risk_assessment: {
           complianceRisks: riskAssessment.complianceRisks,
           operationalRisks: riskAssessment.operationalRisks,
           securityRisks: riskAssessment.securityRisks,
           financialRisks: riskAssessment.financialRisks,
-          mitigationStrategies: riskAssessment.mitigationStrategies
+          mitigationStrategies: riskAssessment.mitigationStrategies,
         },
         audit_trail: {
           auditCompleteness: auditTrail.completeness,
           auditAccuracy: auditTrail.accuracy,
           auditRetention: auditTrail.retention,
           auditAccess: auditTrail.access,
-          auditSummary: auditTrail.summary
+          auditSummary: auditTrail.summary,
         },
         recommendations: recommendations
           ? {
               priorityActions: recommendations.priority,
               improvementOpportunities: recommendations.improvements,
               bestPractices: recommendations.bestPractices,
-              implementationTimeline: recommendations.timeline
+              implementationTimeline: recommendations.timeline,
             }
           : null,
         appendices: {
           detailedFindings: complianceValidation.detailedFindings,
           evidenceDocuments: auditTrail.evidenceDocuments,
           complianceMatrixs: complianceValidation.complianceMatrix,
-          technicalSpecifications: complianceData.technicalSpecs
-        }
+          technicalSpecifications: complianceData.technicalSpecs,
+        },
       };
 
       // Step 9: Generate report export and delivery
@@ -272,7 +272,7 @@ class ComplianceReportService {
       }
 
       console.log(
-        `[ComplianceReportService] DTAM compliance report generated (Score: ${complianceScores.overall}%)`
+        `[ComplianceReportService] DTAM compliance report generated (Score: ${complianceScores.overall}%)`,
       );
 
       return exportedReport;
@@ -309,53 +309,53 @@ class ComplianceReportService {
           generatedAt: new Date(),
           period: {
             start: normalizedCriteria.startDate,
-            end: normalizedCriteria.endDate
+            end: normalizedCriteria.endDate,
           },
-          auditScope: normalizedCriteria.auditScope || 'COMPREHENSIVE'
+          auditScope: normalizedCriteria.auditScope || 'COMPREHENSIVE',
         },
         audit_summary: {
           totalAuditEntries: auditData.entries.length,
           auditCompleteness: auditAnalysis.completeness,
           auditAccuracy: auditAnalysis.accuracy,
           criticalEvents: auditData.criticalEvents.length,
-          securityEvents: auditData.securityEvents.length
+          securityEvents: auditData.securityEvents.length,
         },
         application_audit: {
           applicationEvents: auditData.applications,
           stateTransitions: auditData.stateTransitions,
           decisionPoints: auditData.decisions,
-          userActions: auditData.userActions
+          userActions: auditData.userActions,
         },
         financial_audit: {
           paymentTransactions: auditData.payments,
           revenueTracking: auditData.revenue,
           feeCalculations: auditData.fees,
-          refundProcessing: auditData.refunds
+          refundProcessing: auditData.refunds,
         },
         system_audit: {
           systemEvents: auditData.systemEvents,
           securityEvents: auditData.securityEvents,
           accessLogs: auditData.accessLogs,
-          errorLogs: auditData.errorLogs
+          errorLogs: auditData.errorLogs,
         },
         data_audit: {
           dataChanges: auditData.dataChanges,
           dataAccess: auditData.dataAccess,
           dataRetention: auditData.dataRetention,
-          dataPrivacy: auditData.dataPrivacy
+          dataPrivacy: auditData.dataPrivacy,
         },
         compliance_events: {
           complianceChecks: auditData.complianceChecks,
           policyViolations: auditData.violations,
           correctiveActions: auditData.correctiveActions,
-          preventiveMeasures: auditData.preventiveMeasures
-        }
+          preventiveMeasures: auditData.preventiveMeasures,
+        },
       };
 
       const exportedReport = await this._exportComplianceReport(auditReport, 'pdf');
 
       console.log(
-        `[ComplianceReportService] Audit trail report generated (${auditData.entries.length} entries)`
+        `[ComplianceReportService] Audit trail report generated (${auditData.entries.length} entries)`,
       );
 
       return exportedReport;
@@ -392,9 +392,9 @@ class ComplianceReportService {
           generatedAt: new Date(),
           period: {
             start: normalizedCriteria.startDate,
-            end: normalizedCriteria.endDate
+            end: normalizedCriteria.endDate,
           },
-          complianceFramework: 'Personal Data Protection Act (PDPA) B.E. 2562'
+          complianceFramework: 'Personal Data Protection Act (PDPA) B.E. 2562',
         },
         pdpa_compliance: {
           consentManagement: pdpaAnalysis.consent,
@@ -402,27 +402,27 @@ class ComplianceReportService {
           purposeLimitation: pdpaAnalysis.purpose,
           dataAccuracy: pdpaAnalysis.accuracy,
           storagelimitation: pdpaAnalysis.storage,
-          dataSubjectRights: pdpaAnalysis.rights
+          dataSubjectRights: pdpaAnalysis.rights,
         },
         data_processing: {
           personalDataInventory: privacyData.dataInventory,
           processingLawfulness: privacyData.lawfulness,
           crossBorderTransfers: privacyData.transfers,
-          thirdPartySharing: privacyData.thirdParty
+          thirdPartySharing: privacyData.thirdParty,
         },
         security_measures: {
           technicalSafeguards: privacyData.technical,
           organizationalSafeguards: privacyData.organizational,
           incidentResponse: privacyData.incidents,
-          breachNotification: privacyData.breaches
+          breachNotification: privacyData.breaches,
         },
         rights_management: {
           accessRequests: privacyData.accessRequests,
           rectificationRequests: privacyData.rectification,
           erasureRequests: privacyData.erasure,
           portabilityRequests: privacyData.portability,
-          objectionRequests: privacyData.objections
-        }
+          objectionRequests: privacyData.objections,
+        },
       };
 
       const exportedReport = await this._exportComplianceReport(privacyReport, 'pdf');
@@ -433,7 +433,7 @@ class ComplianceReportService {
     } catch (error) {
       console.error(
         '[ComplianceReportService] Privacy compliance report generation failed:',
-        error
+        error,
       );
       throw new Error(`Privacy compliance report generation failed: ${error.message}`);
     }
@@ -466,53 +466,53 @@ class ComplianceReportService {
           generatedAt: new Date(),
           period: {
             start: normalizedCriteria.startDate,
-            end: normalizedCriteria.endDate
+            end: normalizedCriteria.endDate,
           },
-          securityFramework: 'ISO 27001 / NIST Cybersecurity Framework'
+          securityFramework: 'ISO 27001 / NIST Cybersecurity Framework',
         },
         security_posture: {
           overallSecurityScore: securityAnalysis.overallScore,
           securityMaturity: securityAnalysis.maturity,
           riskLevel: securityAnalysis.riskLevel,
-          complianceGaps: securityAnalysis.gaps
+          complianceGaps: securityAnalysis.gaps,
         },
         access_control: {
           identityManagement: securityData.identity,
           accessManagement: securityData.access,
           privilegedAccess: securityData.privileged,
-          authenticationSecurity: securityData.authentication
+          authenticationSecurity: securityData.authentication,
         },
         data_protection: {
           dataEncryption: securityData.encryption,
           dataBackup: securityData.backup,
           dataRecovery: securityData.recovery,
-          dataClassification: securityData.classification
+          dataClassification: securityData.classification,
         },
         network_security: {
           firewallConfiguration: securityData.firewall,
           intrusionDetection: securityData.intrusion,
           networkMonitoring: securityData.monitoring,
-          vulnerabilityManagement: securityData.vulnerability
+          vulnerabilityManagement: securityData.vulnerability,
         },
         incident_management: {
           incidentResponse: securityData.incidents,
           securityEvents: securityData.events,
           threatIntelligence: securityData.threats,
-          forensicCapabilities: securityData.forensics
-        }
+          forensicCapabilities: securityData.forensics,
+        },
       };
 
       const exportedReport = await this._exportComplianceReport(securityReport, 'pdf');
 
       console.log(
-        `[ComplianceReportService] Security compliance report generated (Score: ${securityAnalysis.overallScore}%)`
+        `[ComplianceReportService] Security compliance report generated (Score: ${securityAnalysis.overallScore}%)`,
       );
 
       return exportedReport;
     } catch (error) {
       console.error(
         '[ComplianceReportService] Security compliance report generation failed:',
-        error
+        error,
       );
       throw new Error(`Security compliance report generation failed: ${error.message}`);
     }
@@ -532,32 +532,32 @@ class ComplianceReportService {
             'application_form',
             'facility_plan',
             'cultivation_plan',
-            'quality_manual'
-          ]
+            'quality_manual',
+          ],
         },
         qualityStandards: {
           gacpCompliance: 95, // percentage
           inspectionCoverage: 100, // percentage
-          certificationAccuracy: 98 // percentage
+          certificationAccuracy: 98, // percentage
         },
         financialStandards: {
           feeTransparency: 100, // percentage
           paymentProcessing: 95, // percentage
-          auditTrailCompleteness: 100 // percentage
-        }
+          auditTrailCompleteness: 100, // percentage
+        },
       },
       pdpa: {
         consentRequirements: ['explicit', 'informed', 'freely_given'],
         dataRetention: 365, // days after purpose fulfillment
         breachNotification: 72, // hours
-        rightsResponse: 30 // days
+        rightsResponse: 30, // days
       },
       security: {
         encryption: 'AES-256',
         backupFrequency: 24, // hours
         accessReview: 90, // days
-        incidentResponse: 4 // hours
-      }
+        incidentResponse: 4, // hours
+      },
     };
   }
 
@@ -569,16 +569,16 @@ class ComplianceReportService {
     return {
       monthly: {
         reports: ['dtam_monthly', 'privacy_monthly', 'security_monthly'],
-        deliveryDate: 5 // 5th of each month
+        deliveryDate: 5, // 5th of each month
       },
       quarterly: {
         reports: ['dtam_quarterly', 'audit_quarterly'],
-        deliveryDate: 15 // 15th of the first month of each quarter
+        deliveryDate: 15, // 15th of the first month of each quarter
       },
       annual: {
         reports: ['dtam_annual', 'privacy_annual', 'security_annual'],
-        deliveryDate: 31 // January 31st
-      }
+        deliveryDate: 31, // January 31st
+      },
     };
   }
 
@@ -592,7 +592,7 @@ class ComplianceReportService {
       payments: 7, // years
       auditLogs: 5, // years
       personalData: 3, // years after last contact
-      securityLogs: 2 // years
+      securityLogs: 2, // years
     };
   }
 
@@ -608,13 +608,13 @@ class ComplianceReportService {
         services: {
           database: 'unknown',
           audit: 'unknown',
-          reporting: 'unknown'
+          reporting: 'unknown',
         },
         compliance: {
           dtamConnection: 'unknown',
           auditTrailHealth: 'unknown',
-          reportingSchedule: 'active'
-        }
+          reportingSchedule: 'active',
+        },
       };
 
       // Check dependencies
@@ -638,7 +638,7 @@ class ComplianceReportService {
       return {
         status: 'unhealthy',
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     }
   }
@@ -721,7 +721,7 @@ class ComplianceReportService {
       complianceAreas: criteria.complianceAreas || ['all'],
       includeRecommendations: criteria.includeRecommendations !== false,
       autoDeliver: criteria.autoDeliver || false,
-      recipients: criteria.recipients || []
+      recipients: criteria.recipients || [],
     };
   }
 

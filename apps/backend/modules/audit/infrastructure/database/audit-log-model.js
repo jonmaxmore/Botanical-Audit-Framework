@@ -17,7 +17,7 @@ const {
   ACTION_TYPE,
   ENTITY_TYPE,
   SEVERITY,
-  ACTOR_TYPE
+  ACTOR_TYPE,
 } = require('../../domain/entities/AuditLog');
 
 // Mongoose Schema
@@ -28,11 +28,11 @@ const auditLogSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(ACTOR_TYPE),
       required: true,
-      index: true
+      index: true,
     },
     actorId: {
       type: mongoose.Schema.Types.ObjectId,
-      index: true
+      index: true,
     },
     actorName: String,
     actorEmail: String,
@@ -43,7 +43,7 @@ const auditLogSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(ACTION_TYPE),
       required: true,
-      index: true
+      index: true,
     },
     actionDescription: String,
 
@@ -51,11 +51,11 @@ const auditLogSchema = new mongoose.Schema(
     entityType: {
       type: String,
       enum: Object.values(ENTITY_TYPE),
-      index: true
+      index: true,
     },
     entityId: {
       type: mongoose.Schema.Types.ObjectId,
-      index: true
+      index: true,
     },
     entityName: String,
 
@@ -66,8 +66,8 @@ const auditLogSchema = new mongoose.Schema(
       {
         field: String,
         from: mongoose.Schema.Types.Mixed,
-        to: mongoose.Schema.Types.Mixed
-      }
+        to: mongoose.Schema.Types.Mixed,
+      },
     ],
 
     // Request Context
@@ -81,7 +81,7 @@ const auditLogSchema = new mongoose.Schema(
     // Metadata
     ipAddress: {
       type: String,
-      index: true
+      index: true,
     },
     userAgent: String,
     sessionId: String,
@@ -89,7 +89,7 @@ const auditLogSchema = new mongoose.Schema(
       type: String,
       enum: Object.values(SEVERITY),
       default: SEVERITY.INFO,
-      index: true
+      index: true,
     },
     tags: [String],
     metadata: mongoose.Schema.Types.Mixed,
@@ -98,7 +98,7 @@ const auditLogSchema = new mongoose.Schema(
     success: {
       type: Boolean,
       default: true,
-      index: true
+      index: true,
     },
     errorMessage: String,
     errorStack: String,
@@ -107,13 +107,13 @@ const auditLogSchema = new mongoose.Schema(
     timestamp: {
       type: Date,
       default: Date.now,
-      index: true
-    }
+      index: true,
+    },
   },
   {
     timestamps: true,
-    collection: 'audit_logs'
-  }
+    collection: 'audit_logs',
+  },
 );
 
 // Compound indexes for common queries
@@ -167,7 +167,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
       errorMessage: doc.errorMessage,
       errorStack: doc.errorStack,
       timestamp: doc.timestamp,
-      createdAt: doc.createdAt
+      createdAt: doc.createdAt,
     });
   }
 
@@ -198,7 +198,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
       success: auditLog.success,
       errorMessage: auditLog.errorMessage,
       errorStack: auditLog.errorStack,
-      timestamp: auditLog.timestamp
+      timestamp: auditLog.timestamp,
     };
 
     // Optional fields (only include if present)
@@ -274,7 +274,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       const docs = await this.AuditLogModel.find({
         entityType,
-        entityId: new mongoose.Types.ObjectId(entityId)
+        entityId: new mongoose.Types.ObjectId(entityId),
       })
         .sort(sort)
         .skip(skip)
@@ -320,7 +320,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         query.$or = [
           { actionDescription: { $regex: filters.search, $options: 'i' } },
           { entityName: { $regex: filters.search, $options: 'i' } },
-          { actorName: { $regex: filters.search, $options: 'i' } }
+          { actorName: { $regex: filters.search, $options: 'i' } },
         ];
       }
 
@@ -341,8 +341,8 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
       const docs = await this.AuditLogModel.find({
         timestamp: {
           $gte: new Date(startDate),
-          $lte: new Date(endDate)
-        }
+          $lte: new Date(endDate),
+        },
       })
         .sort({ timestamp: -1 })
         .skip(skip)
@@ -374,7 +374,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
       const securityActions = [
         ACTION_TYPE.SECURITY_VIOLATION,
         ACTION_TYPE.ACCESS_DENIED,
-        ACTION_TYPE.SUSPICIOUS_ACTIVITY
+        ACTION_TYPE.SUSPICIOUS_ACTIVITY,
       ];
 
       const docs = await this.AuditLogModel.find({ actionType: { $in: securityActions } })
@@ -430,7 +430,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         failedActions,
         actionTypeStats,
         severityStats,
-        actorTypeStats
+        actorTypeStats,
       ] = await Promise.all([
         this.AuditLogModel.countDocuments(query),
         this.AuditLogModel.countDocuments({ ...query, success: true }),
@@ -439,16 +439,16 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
           { $match: query },
           { $group: { _id: '$actionType', count: { $sum: 1 } } },
           { $sort: { count: -1 } },
-          { $limit: 10 }
+          { $limit: 10 },
         ]),
         this.AuditLogModel.aggregate([
           { $match: query },
-          { $group: { _id: '$severity', count: { $sum: 1 } } }
+          { $group: { _id: '$severity', count: { $sum: 1 } } },
         ]),
         this.AuditLogModel.aggregate([
           { $match: query },
-          { $group: { _id: '$actorType', count: { $sum: 1 } } }
-        ])
+          { $group: { _id: '$actorType', count: { $sum: 1 } } },
+        ]),
       ]);
 
       return {
@@ -458,7 +458,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         successRate: totalLogs > 0 ? ((successfulActions / totalLogs) * 100).toFixed(2) : 0,
         topActions: actionTypeStats.map(stat => ({
           actionType: stat._id,
-          count: stat.count
+          count: stat.count,
         })),
         bySeverity: severityStats.reduce((acc, stat) => {
           acc[stat._id] = stat.count;
@@ -467,7 +467,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         byActorType: actorTypeStats.reduce((acc, stat) => {
           acc[stat._id] = stat.count;
           return acc;
-        }, {})
+        }, {}),
       };
     } catch (error) {
       logger.error('Error getting audit statistics:', error);
@@ -481,8 +481,8 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         actorId: new mongoose.Types.ObjectId(actorId),
         timestamp: {
           $gte: new Date(startDate),
-          $lte: new Date(endDate)
-        }
+          $lte: new Date(endDate),
+        },
       };
 
       const [totalActions, actionsByType, recentActions] = await Promise.all([
@@ -490,9 +490,9 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         this.AuditLogModel.aggregate([
           { $match: query },
           { $group: { _id: '$actionType', count: { $sum: 1 } } },
-          { $sort: { count: -1 } }
+          { $sort: { count: -1 } },
         ]),
-        this.AuditLogModel.find(query).sort({ timestamp: -1 }).limit(10)
+        this.AuditLogModel.find(query).sort({ timestamp: -1 }).limit(10),
       ]);
 
       return {
@@ -501,9 +501,9 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
         totalActions,
         actionsByType: actionsByType.map(stat => ({
           actionType: stat._id,
-          count: stat.count
+          count: stat.count,
         })),
-        recentActions: recentActions.map(doc => this.toDomain(doc))
+        recentActions: recentActions.map(doc => this.toDomain(doc)),
       };
     } catch (error) {
       logger.error('Error getting activity summary:', error);
@@ -514,7 +514,7 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
   async deleteOldLogs(beforeDate) {
     try {
       const result = await this.AuditLogModel.deleteMany({
-        timestamp: { $lt: new Date(beforeDate) }
+        timestamp: { $lt: new Date(beforeDate) },
       });
       return result.deletedCount;
     } catch (error) {

@@ -8,7 +8,10 @@
 
 const express = require('express');
 const router = express.Router();
-const { authenticateToken: authenticate, requireRole: authorize } = require('../middleware/auth-middleware');
+const {
+  authenticateToken: authenticate,
+  requireRole: authorize,
+} = require('../middleware/auth-middleware');
 const { validateRequest } = require('../middleware/validation-middleware');
 const {
   getAllApplications,
@@ -18,7 +21,7 @@ const {
   deleteApplication,
   submitApplication,
   reviewApplication,
-  getApplicationStats
+  getApplicationStats,
 } = require('../controllers/applicationController');
 
 // Application list and search
@@ -29,7 +32,7 @@ router.get(
   '/stats',
   authenticate,
   authorize(['director', 'auditor', 'admin']),
-  getApplicationStats
+  getApplicationStats,
 );
 
 // Get specific application
@@ -41,7 +44,7 @@ router.post(
   authenticate,
   authorize(['farmer']),
   validateRequest('application'),
-  createApplication
+  createApplication,
 );
 
 // Submit application for review
@@ -53,7 +56,7 @@ router.post(
   authenticate,
   authorize(['director', 'auditor']),
   validateRequest('applicationReview'),
-  reviewApplication
+  reviewApplication,
 );
 
 // Update application

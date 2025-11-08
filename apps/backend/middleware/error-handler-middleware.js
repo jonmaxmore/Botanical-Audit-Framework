@@ -57,7 +57,7 @@ const ERROR_CODES = {
   FILE_UPLOAD_FAILED: 'FILE_UPLOAD_FAILED',
   FILE_TOO_LARGE: 'FILE_TOO_LARGE',
   INVALID_FILE_TYPE: 'INVALID_FILE_TYPE',
-  SECURITY_VIOLATION: 'SECURITY_VIOLATION'
+  SECURITY_VIOLATION: 'SECURITY_VIOLATION',
 };
 
 /**
@@ -97,7 +97,7 @@ const ERROR_MESSAGES_TH = {
 
   [ERROR_CODES.PAYMENT_PROCESSING_FAILED]: 'การชำระเงินล้มเหลว',
   [ERROR_CODES.EMAIL_DELIVERY_FAILED]: 'การส่งอีเมลล้มเหลว',
-  [ERROR_CODES.SMS_DELIVERY_FAILED]: 'การส่ง SMS ล้มเหลว'
+  [ERROR_CODES.SMS_DELIVERY_FAILED]: 'การส่ง SMS ล้มเหลว',
 };
 
 /**
@@ -116,7 +116,7 @@ const createErrorResponse = (errorCode, message, details = null, statusCode = 50
     messageThTh: ERROR_MESSAGES_TH[errorCode] || 'เกิดข้อผิดพลาดที่ไม่ทราบสาเหตุ',
     details: details,
     timestamp: new Date().toISOString(),
-    statusCode: statusCode
+    statusCode: statusCode,
   };
 };
 
@@ -131,7 +131,7 @@ const errorHandler = (err, req, res, _next) => {
     method: req.method,
     ip: req.ip,
     userAgent: req.get('User-Agent'),
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 
   // Handle specific error types
@@ -140,7 +140,7 @@ const errorHandler = (err, req, res, _next) => {
       ERROR_CODES.VALIDATION_ERROR,
       'Validation failed',
       err.errors,
-      400
+      400,
     );
     return res.status(400).json(errorResponse);
   }
@@ -150,7 +150,7 @@ const errorHandler = (err, req, res, _next) => {
       ERROR_CODES.DATABASE_ERROR,
       'Database operation failed',
       process.env.NODE_ENV === 'development' ? err.message : null,
-      500
+      500,
     );
     return res.status(500).json(errorResponse);
   }
@@ -160,7 +160,7 @@ const errorHandler = (err, req, res, _next) => {
       ERROR_CODES.INVALID_TOKEN,
       'Invalid token',
       null,
-      401
+      401,
     );
     return res.status(401).json(errorResponse);
   }
@@ -170,7 +170,7 @@ const errorHandler = (err, req, res, _next) => {
       ERROR_CODES.TOKEN_EXPIRED,
       'Token expired',
       null,
-      401
+      401,
     );
     return res.status(401).json(errorResponse);
   }
@@ -180,7 +180,7 @@ const errorHandler = (err, req, res, _next) => {
     ERROR_CODES.INTERNAL_SERVER_ERROR,
     'Internal server error',
     process.env.NODE_ENV === 'development' ? err.message : null,
-    500
+    500,
   );
 
   res.status(500).json(errorResponse);
@@ -194,7 +194,7 @@ const notFoundHandler = (req, res) => {
     ERROR_CODES.RESOURCE_NOT_FOUND,
     'Endpoint not found',
     { endpoint: req.path, method: req.method },
-    404
+    404,
   );
   res.status(404).json(errorResponse);
 };
@@ -211,7 +211,7 @@ const sendSuccess = (res, data = null, message = 'Operation successful', statusC
     success: true,
     message: message,
     data: data,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 };
 
@@ -247,5 +247,5 @@ module.exports = {
   sendSuccess,
   sendError,
   asyncHandler,
-  handleAsync: asyncHandler // Alias for backward compatibility
+  handleAsync: asyncHandler, // Alias for backward compatibility
 };

@@ -18,7 +18,7 @@ const TaskAssignmentSchema = new mongoose.Schema(
       required: true,
       default: function () {
         return `TASK-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-      }
+      },
     },
 
     // Blitzz integration
@@ -29,10 +29,10 @@ const TaskAssignmentSchema = new mongoose.Schema(
       syncStatus: {
         type: String,
         enum: ['pending', 'synced', 'error', 'manual'],
-        default: 'pending'
+        default: 'pending',
       },
       lastSyncAt: Date,
-      syncErrors: [String]
+      syncErrors: [String],
     },
 
     // Task information
@@ -55,25 +55,25 @@ const TaskAssignmentSchema = new mongoose.Schema(
           'training', // การฝึกอบรม
           'system_maintenance', // บำรุงรักษาระบบ
           'administrative', // งานธุรการ
-          'custom' // กำหนดเอง
+          'custom', // กำหนดเอง
         ],
-        required: true
+        required: true,
       },
 
       priority: {
         type: String,
         enum: ['low', 'medium', 'high', 'urgent', 'critical'],
-        default: 'medium'
+        default: 'medium',
       },
 
       complexity: {
         type: String,
         enum: ['simple', 'moderate', 'complex', 'expert'],
-        default: 'moderate'
+        default: 'moderate',
       },
 
       estimatedHours: Number,
-      actualHours: Number
+      actualHours: Number,
     },
 
     // Assignment details
@@ -83,14 +83,14 @@ const TaskAssignmentSchema = new mongoose.Schema(
         userName: String,
         userRole: String,
         userEmail: String,
-        assignedAt: { type: Date, default: Date.now }
+        assignedAt: { type: Date, default: Date.now },
       },
 
       assignedBy: {
         userId: String,
         userName: String,
         userRole: String,
-        assignedAt: Date
+        assignedAt: Date,
       },
 
       team: [
@@ -99,8 +99,8 @@ const TaskAssignmentSchema = new mongoose.Schema(
           userName: String,
           userRole: String,
           responsibility: String,
-          addedAt: { type: Date, default: Date.now }
-        }
+          addedAt: { type: Date, default: Date.now },
+        },
       ],
 
       reassignmentHistory: [
@@ -109,9 +109,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           toUserId: String,
           reason: String,
           reassignedBy: String,
-          reassignedAt: { type: Date, default: Date.now }
-        }
-      ]
+          reassignedAt: { type: Date, default: Date.now },
+        },
+      ],
     },
 
     // Scheduling and deadlines
@@ -132,9 +132,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           status: {
             type: String,
             enum: ['pending', 'in_progress', 'completed', 'cancelled'],
-            default: 'pending'
-          }
-        }
+            default: 'pending',
+          },
+        },
       ],
 
       // Time tracking
@@ -146,9 +146,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           duration: Number, // minutes
           description: String,
           billable: { type: Boolean, default: true },
-          entryDate: { type: Date, default: Date.now }
-        }
-      ]
+          entryDate: { type: Date, default: Date.now },
+        },
+      ],
     },
 
     // Context and relationships
@@ -171,10 +171,10 @@ const TaskAssignmentSchema = new mongoose.Schema(
           dependsOnTaskId: String,
           dependencyType: {
             type: String,
-            enum: ['blocks', 'requires', 'related', 'follows']
+            enum: ['blocks', 'requires', 'related', 'follows'],
           },
-          description: String
-        }
+          description: String,
+        },
       ],
 
       // Related documents and resources
@@ -184,9 +184,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           resourceId: String,
           resourceUrl: String,
           description: String,
-          required: { type: Boolean, default: false }
-        }
-      ]
+          required: { type: Boolean, default: false },
+        },
+      ],
     },
 
     // Task requirements and specifications
@@ -201,7 +201,7 @@ const TaskAssignmentSchema = new mongoose.Schema(
       cannabisLicense: {
         required: { type: Boolean, default: false },
         licenseType: String,
-        minimumLevel: String
+        minimumLevel: String,
       },
 
       // Quality requirements
@@ -209,8 +209,8 @@ const TaskAssignmentSchema = new mongoose.Schema(
         {
           standard: String,
           requirement: String,
-          measurementCriteria: String
-        }
+          measurementCriteria: String,
+        },
       ],
 
       // Compliance requirements
@@ -218,9 +218,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
         {
           checkType: String,
           requirement: String,
-          verificationMethod: String
-        }
-      ]
+          verificationMethod: String,
+        },
+      ],
     },
 
     // Status and workflow
@@ -237,9 +237,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           'revision', // แก้ไข
           'completed', // เสร็จสิ้น
           'cancelled', // ยกเลิก
-          'rejected' // ปฏิเสธ
+          'rejected', // ปฏิเสธ
         ],
-        default: 'draft'
+        default: 'draft',
       },
 
       statusHistory: [
@@ -248,14 +248,14 @@ const TaskAssignmentSchema = new mongoose.Schema(
           changedAt: { type: Date, default: Date.now },
           changedBy: String,
           reason: String,
-          notes: String
-        }
+          notes: String,
+        },
       ],
 
       workflowStep: String,
       nextAction: String,
       escalated: { type: Boolean, default: false },
-      escalationLevel: Number
+      escalationLevel: Number,
     },
 
     // Progress and deliverables
@@ -271,13 +271,13 @@ const TaskAssignmentSchema = new mongoose.Schema(
           status: {
             type: String,
             enum: ['pending', 'in_progress', 'completed', 'approved', 'rejected'],
-            default: 'pending'
+            default: 'pending',
           },
           submittedAt: Date,
           approvedAt: Date,
           rejectionReason: String,
-          fileUrls: [String]
-        }
+          fileUrls: [String],
+        },
       ],
 
       checkpoints: [
@@ -288,9 +288,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           scheduledDate: Date,
           completedAt: Date,
           status: String,
-          notes: String
-        }
-      ]
+          notes: String,
+        },
+      ],
     },
 
     // Communication and updates
@@ -302,7 +302,7 @@ const TaskAssignmentSchema = new mongoose.Schema(
           userName: String,
           updateType: {
             type: String,
-            enum: ['progress', 'issue', 'question', 'milestone', 'completion']
+            enum: ['progress', 'issue', 'question', 'milestone', 'completion'],
           },
           message: String,
           timestamp: { type: Date, default: Date.now },
@@ -310,9 +310,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           visibility: {
             type: String,
             enum: ['all', 'team', 'assigned', 'admin'],
-            default: 'team'
-          }
-        }
+            default: 'team',
+          },
+        },
       ],
 
       comments: [
@@ -323,8 +323,8 @@ const TaskAssignmentSchema = new mongoose.Schema(
           comment: String,
           timestamp: { type: Date, default: Date.now },
           edited: { type: Boolean, default: false },
-          editedAt: Date
-        }
+          editedAt: Date,
+        },
       ],
 
       notifications: [
@@ -333,9 +333,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           type: String,
           sentTo: [String],
           sentAt: Date,
-          acknowledged: [String]
-        }
-      ]
+          acknowledged: [String],
+        },
+      ],
     },
 
     // Review and approval
@@ -351,8 +351,8 @@ const TaskAssignmentSchema = new mongoose.Schema(
           rating: { type: Number, min: 1, max: 5 },
           feedback: String,
           approved: Boolean,
-          recommendations: [String]
-        }
+          recommendations: [String],
+        },
       ],
 
       finalApproval: {
@@ -360,8 +360,8 @@ const TaskAssignmentSchema = new mongoose.Schema(
         approvedBy: String,
         approvedAt: Date,
         conditions: [String],
-        rejectionReason: String
-      }
+        rejectionReason: String,
+      },
     },
 
     // Integration with other systems
@@ -372,8 +372,8 @@ const TaskAssignmentSchema = new mongoose.Schema(
           eventId: String,
           platform: String,
           eventUrl: String,
-          createdAt: Date
-        }
+          createdAt: Date,
+        },
       ],
 
       // Document management
@@ -384,8 +384,8 @@ const TaskAssignmentSchema = new mongoose.Schema(
           filename: String,
           url: String,
           uploadedAt: Date,
-          uploadedBy: String
-        }
+          uploadedBy: String,
+        },
       ],
 
       // Video call integration
@@ -395,9 +395,9 @@ const TaskAssignmentSchema = new mongoose.Schema(
           platform: String,
           meetingUrl: String,
           scheduledFor: Date,
-          duration: Number
-        }
-      ]
+          duration: Number,
+        },
+      ],
     },
 
     // Analytics and metrics
@@ -409,7 +409,7 @@ const TaskAssignmentSchema = new mongoose.Schema(
         onTimeCompletion: Boolean,
         qualityScore: Number,
         efficiencyScore: Number,
-        stakeholderSatisfaction: Number
+        stakeholderSatisfaction: Number,
       },
 
       costs: {
@@ -420,17 +420,17 @@ const TaskAssignmentSchema = new mongoose.Schema(
           {
             category: String,
             amount: Number,
-            description: String
-          }
-        ]
-      }
-    }
+            description: String,
+          },
+        ],
+      },
+    },
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-  }
+    toObject: { virtuals: true },
+  },
 );
 
 // Indexes
@@ -501,8 +501,8 @@ class BlitzzIntegrationService extends EventEmitter {
         {
           taskId: internalTask.taskId,
           title: internalTask.taskInfo.title,
-          userRole: taskData.assignment.assignedTo.userRole
-        }
+          userRole: taskData.assignment.assignedTo.userRole,
+        },
       );
 
       this.emit('task_created', internalTask);
@@ -527,9 +527,9 @@ class BlitzzIntegrationService extends EventEmitter {
         {
           headers: {
             Authorization: `Bearer ${this.apiKey}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            'Content-Type': 'application/json',
+          },
+        },
       );
 
       // Update internal task with Blitzz ID
@@ -574,7 +574,7 @@ class BlitzzIntegrationService extends EventEmitter {
         internalTask.taskInfo.category,
         'gacp-platform',
         ...(internalTask.context.farmCode ? [`farm-${internalTask.context.farmCode}`] : []),
-        ...(internalTask.context.auditId ? [`audit-${internalTask.context.auditId}`] : [])
+        ...(internalTask.context.auditId ? [`audit-${internalTask.context.auditId}`] : []),
       ],
       custom_fields: {
         gacp_task_id: internalTask.taskId,
@@ -582,8 +582,8 @@ class BlitzzIntegrationService extends EventEmitter {
         audit_id: internalTask.context.auditId,
         sop_code: internalTask.context.sopCode,
         category: internalTask.taskInfo.category,
-        cannabis_license_required: internalTask.requirements.cannabisLicense.required
-      }
+        cannabis_license_required: internalTask.requirements.cannabisLicense.required,
+      },
     };
   }
 
@@ -596,7 +596,7 @@ class BlitzzIntegrationService extends EventEmitter {
       medium: 'Medium',
       high: 'High',
       urgent: 'High',
-      critical: 'High'
+      critical: 'High',
     };
     return mapping[priority] || 'Medium';
   }
@@ -615,7 +615,7 @@ class BlitzzIntegrationService extends EventEmitter {
       revision: 'In Progress',
       completed: 'Done',
       cancelled: 'Cancelled',
-      rejected: 'Cancelled'
+      rejected: 'Cancelled',
     };
     return mapping[status] || 'To Do';
   }
@@ -636,7 +636,7 @@ class BlitzzIntegrationService extends EventEmitter {
         changedAt: new Date(),
         changedBy: userId,
         reason,
-        notes
+        notes,
       });
 
       task.status.current = newStatus;
@@ -677,14 +677,14 @@ class BlitzzIntegrationService extends EventEmitter {
         `${this.apiBaseUrl}/workspaces/${this.workspaceId}/projects/${this.projectId}/tasks/${task.blitzzIntegration.externalTaskId}`,
         {
           status: blitzzStatus,
-          completion_percentage: task.progress.completionPercentage
+          completion_percentage: task.progress.completionPercentage,
         },
         {
           headers: {
             Authorization: `Bearer ${this.apiKey}`,
-            'Content-Type': 'application/json'
-          }
-        }
+            'Content-Type': 'application/json',
+          },
+        },
       );
 
       task.blitzzIntegration.lastSyncAt = new Date();
@@ -707,14 +707,14 @@ class BlitzzIntegrationService extends EventEmitter {
     // Notify assignee
     notifications.push({
       userId: task.assignment.assignedTo.userId,
-      message: `Task "${task.taskInfo.title}" status changed to ${newStatus}`
+      message: `Task "${task.taskInfo.title}" status changed to ${newStatus}`,
     });
 
     // Notify team members
     for (const member of task.assignment.team) {
       notifications.push({
         userId: member.userId,
-        message: `Team task "${task.taskInfo.title}" status changed to ${newStatus}`
+        message: `Team task "${task.taskInfo.title}" status changed to ${newStatus}`,
       });
     }
 
@@ -723,17 +723,17 @@ class BlitzzIntegrationService extends EventEmitter {
       await this.notificationService.createNotification({
         recipient: {
           userId: notification.userId,
-          userRole: 'user' // Would be determined from user data
+          userRole: 'user', // Would be determined from user data
         },
         content: {
           title: 'Task Status Update',
           titleTH: 'อัปเดตสถานะงาน',
-          message: notification.message
+          message: notification.message,
         },
         classification: {
           category: 'task_assignment',
           eventType: 'task_status_changed',
-          priority: 'medium'
+          priority: 'medium',
         },
         context: {
           taskId: task.taskId,
@@ -741,10 +741,10 @@ class BlitzzIntegrationService extends EventEmitter {
             {
               label: 'View Task',
               labelTH: 'ดูงาน',
-              url: `/tasks/${task.taskId}`
-            }
-          ]
-        }
+              url: `/tasks/${task.taskId}`,
+            },
+          ],
+        },
       });
     }
   }
@@ -763,31 +763,31 @@ class BlitzzIntegrationService extends EventEmitter {
         description: 'Prepare all required documents for the upcoming audit',
         category: 'audit_preparation',
         priority: 'high',
-        estimatedHours: 4
+        estimatedHours: 4,
       },
       assignment: {
         assignedTo: {
           userId: auditData.farmerId,
           userName: auditData.farmerName,
           userRole: 'farmer',
-          userEmail: auditData.farmerEmail
+          userEmail: auditData.farmerEmail,
         },
         assignedBy: {
           userId: auditData.scheduledBy,
           userName: auditData.scheduledByName,
-          userRole: 'admin'
-        }
+          userRole: 'admin',
+        },
       },
       scheduling: {
-        dueDate: new Date(auditData.auditDate.getTime() - 3 * 24 * 60 * 60 * 1000) // 3 days before audit
+        dueDate: new Date(auditData.auditDate.getTime() - 3 * 24 * 60 * 60 * 1000), // 3 days before audit
       },
       context: {
         farmCode: auditData.farmCode,
         auditId: auditData.auditId,
         sourceSystem: 'gacp-platform',
         sourceEvent: 'audit_scheduled',
-        automatedTask: true
-      }
+        automatedTask: true,
+      },
     });
 
     tasks.push(docTask);
@@ -800,24 +800,24 @@ class BlitzzIntegrationService extends EventEmitter {
         description: 'Ensure farm is ready for physical inspection',
         category: 'audit_preparation',
         priority: 'high',
-        estimatedHours: 6
+        estimatedHours: 6,
       },
       assignment: {
         assignedTo: {
           userId: auditData.farmerId,
           userName: auditData.farmerName,
           userRole: 'farmer',
-          userEmail: auditData.farmerEmail
-        }
+          userEmail: auditData.farmerEmail,
+        },
       },
       scheduling: {
-        dueDate: new Date(auditData.auditDate.getTime() - 1 * 24 * 60 * 60 * 1000) // 1 day before audit
+        dueDate: new Date(auditData.auditDate.getTime() - 1 * 24 * 60 * 60 * 1000), // 1 day before audit
       },
       context: {
         farmCode: auditData.farmCode,
         auditId: auditData.auditId,
-        automatedTask: true
-      }
+        automatedTask: true,
+      },
     });
 
     tasks.push(farmTask);
@@ -831,30 +831,30 @@ class BlitzzIntegrationService extends EventEmitter {
           description: 'Verify cannabis cultivation compliance and documentation',
           category: 'cannabis_compliance',
           priority: 'critical',
-          estimatedHours: 3
+          estimatedHours: 3,
         },
         assignment: {
           assignedTo: {
             userId: auditData.farmerId,
             userName: auditData.farmerName,
             userRole: 'farmer',
-            userEmail: auditData.farmerEmail
-          }
+            userEmail: auditData.farmerEmail,
+          },
         },
         scheduling: {
-          dueDate: new Date(auditData.auditDate.getTime() - 2 * 24 * 60 * 60 * 1000) // 2 days before audit
+          dueDate: new Date(auditData.auditDate.getTime() - 2 * 24 * 60 * 60 * 1000), // 2 days before audit
         },
         context: {
           farmCode: auditData.farmCode,
           auditId: auditData.auditId,
-          automatedTask: true
+          automatedTask: true,
         },
         requirements: {
           cannabisLicense: {
             required: true,
-            licenseType: 'cultivation'
-          }
-        }
+            licenseType: 'cultivation',
+          },
+        },
       });
 
       tasks.push(cannabisTask);
@@ -897,7 +897,7 @@ class BlitzzIntegrationService extends EventEmitter {
     const { status, category, priority, includeTeam = false, page = 1, limit = 20 } = options;
 
     const query = {
-      $or: [{ 'assignment.assignedTo.userId': userId }]
+      $or: [{ 'assignment.assignedTo.userId': userId }],
     };
 
     if (includeTeam) {
@@ -921,8 +921,8 @@ class BlitzzIntegrationService extends EventEmitter {
         current: page,
         total: Math.ceil(total / limit),
         hasNext: page < Math.ceil(total / limit),
-        hasPrev: page > 1
-      }
+        hasPrev: page > 1,
+      },
     };
   }
 
@@ -936,22 +936,22 @@ class BlitzzIntegrationService extends EventEmitter {
       overdueTasks,
       completedToday,
       tasksByCategory,
-      tasksByPriority
+      tasksByPriority,
     ] = await Promise.all([
       TaskAssignment.countDocuments(),
       TaskAssignment.countDocuments({ 'status.current': { $in: ['assigned', 'in_progress'] } }),
       TaskAssignment.countDocuments({
         'scheduling.dueDate': { $lt: new Date() },
-        'status.current': { $nin: ['completed', 'cancelled'] }
+        'status.current': { $nin: ['completed', 'cancelled'] },
       }),
       TaskAssignment.countDocuments({
         'status.current': 'completed',
         'scheduling.completedAt': {
-          $gte: new Date(new Date().setHours(0, 0, 0, 0))
-        }
+          $gte: new Date(new Date().setHours(0, 0, 0, 0)),
+        },
       }),
       TaskAssignment.aggregate([{ $group: { _id: '$taskInfo.category', count: { $sum: 1 } } }]),
-      TaskAssignment.aggregate([{ $group: { _id: '$taskInfo.priority', count: { $sum: 1 } } }])
+      TaskAssignment.aggregate([{ $group: { _id: '$taskInfo.priority', count: { $sum: 1 } } }]),
     ]);
 
     return {
@@ -959,12 +959,12 @@ class BlitzzIntegrationService extends EventEmitter {
         totalTasks,
         pendingTasks,
         overdueTasks,
-        completedToday
+        completedToday,
       },
       distribution: {
         byCategory: tasksByCategory,
-        byPriority: tasksByPriority
-      }
+        byPriority: tasksByPriority,
+      },
     };
   }
 }
@@ -973,5 +973,5 @@ const TaskAssignment = mongoose.model('TaskAssignment', TaskAssignmentSchema);
 
 module.exports = {
   TaskAssignment,
-  BlitzzIntegrationService
+  BlitzzIntegrationService,
 };

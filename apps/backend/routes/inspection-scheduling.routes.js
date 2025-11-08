@@ -18,7 +18,7 @@ router.post('/inspections/:id/schedule', async (req, res) => {
       inspectorTeam: inspectorTeam || [],
       notes: notes || '',
       status: 'pending_confirmation',
-      createdAt: new Date()
+      createdAt: new Date(),
     };
 
     // TODO: Save to database
@@ -27,7 +27,7 @@ router.post('/inspections/:id/schedule', async (req, res) => {
     res.json({
       success: true,
       message: 'Inspection scheduled successfully',
-      schedule
+      schedule,
     });
   } catch (error) {
     console.error('Error scheduling inspection:', error);
@@ -46,7 +46,7 @@ router.put('/inspections/:id/schedule/confirm', async (req, res) => {
     res.json({
       success: true,
       message: confirmed ? 'Schedule confirmed' : 'Schedule rejected',
-      confirmed
+      confirmed,
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to confirm schedule' });
@@ -60,7 +60,7 @@ router.get('/inspections/:id/schedule', async (req, res) => {
     // TODO: Fetch from database
     res.json({
       success: true,
-      schedule: null
+      schedule: null,
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch schedule' });
@@ -74,7 +74,7 @@ router.get('/inspections/calendar', async (req, res) => {
     // TODO: Fetch schedules from database
     res.json({
       success: true,
-      schedules: []
+      schedules: [],
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch calendar' });

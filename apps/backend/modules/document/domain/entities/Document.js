@@ -37,7 +37,7 @@ class Document {
     CONTRACT: 'CONTRACT',
     AGREEMENT: 'AGREEMENT',
     REPORT: 'REPORT',
-    OTHER: 'OTHER'
+    OTHER: 'OTHER',
   };
 
   // Document Status
@@ -47,7 +47,7 @@ class Document {
     APPROVED: 'APPROVED', // Approved by staff
     REJECTED: 'REJECTED', // Rejected by staff
     EXPIRED: 'EXPIRED', // Document expired
-    ARCHIVED: 'ARCHIVED' // Archived (soft delete)
+    ARCHIVED: 'ARCHIVED', // Archived (soft delete)
   };
 
   // File Categories
@@ -58,14 +58,14 @@ class Document {
     CERTIFICATE: 'CERTIFICATE',
     BUSINESS: 'BUSINESS',
     REPORT: 'REPORT',
-    OTHER: 'OTHER'
+    OTHER: 'OTHER',
   };
 
   // Access Level
   static ACCESS_LEVEL = {
     PRIVATE: 'PRIVATE', // Only owner can view
     INTERNAL: 'INTERNAL', // Owner + DTAM staff
-    PUBLIC: 'PUBLIC' // Anyone authenticated
+    PUBLIC: 'PUBLIC', // Anyone authenticated
   };
 
   constructor(data = {}) {
@@ -162,7 +162,7 @@ class Document {
       status: Document.STATUS.PENDING,
       uploadedAt: new Date(),
       version: 1,
-      isLatestVersion: true
+      isLatestVersion: true,
     });
   }
 
@@ -236,7 +236,7 @@ class Document {
       reviewedBy: null,
       reviewedAt: null,
       reviewNotes: '',
-      rejectionReason: ''
+      rejectionReason: '',
     });
   }
 

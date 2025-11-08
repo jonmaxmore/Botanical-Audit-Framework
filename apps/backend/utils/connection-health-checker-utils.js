@@ -41,7 +41,7 @@ class ConnectionHealthChecker {
     const results = {
       timestamp: new Date().toISOString(),
       overall: 'healthy',
-      connections: {}
+      connections: {},
     };
 
     // Check MongoDB

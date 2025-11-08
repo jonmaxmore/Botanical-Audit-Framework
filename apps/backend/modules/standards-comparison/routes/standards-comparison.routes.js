@@ -16,7 +16,7 @@ function initializeRoutes(controller, authMiddleware) {
     if (!controller.service.initialized) {
       return res.status(503).json({
         success: false,
-        message: 'Standards Comparison service is not initialized yet'
+        message: 'Standards Comparison service is not initialized yet',
       });
     }
     next();
@@ -59,7 +59,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private (requires authentication)
    */
   router.get('/comparison/:id', authMiddleware, (req, res) =>
-    controller.getComparisonResults(req, res)
+    controller.getComparisonResults(req, res),
   );
 
   /**
@@ -75,7 +75,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private (requires authentication)
    */
   router.get('/history/:farmId', authMiddleware, (req, res) =>
-    controller.getComparisonHistory(req, res)
+    controller.getComparisonHistory(req, res),
   );
 
   /**
@@ -84,7 +84,7 @@ function initializeRoutes(controller, authMiddleware) {
    * @access  Private (requires authentication)
    */
   router.get('/recommendations/:comparisonId', authMiddleware, (req, res) =>
-    controller.getRecommendations(req, res)
+    controller.getRecommendations(req, res),
   );
 
   return router;

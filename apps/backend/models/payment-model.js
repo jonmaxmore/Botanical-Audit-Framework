@@ -15,21 +15,21 @@ const PaymentSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      index: true
+      index: true,
     },
 
     // Application reference
     applicationId: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
 
     // Farmer reference
     farmerId: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
 
     // Payment type
@@ -37,14 +37,14 @@ const PaymentSchema = new mongoose.Schema(
       type: String,
       required: true,
       enum: ['initial', 'resubmission'],
-      index: true
+      index: true,
     },
 
     // Payment amount (THB)
     amount: {
       type: Number,
       required: true,
-      default: 5000
+      default: 5000,
     },
 
     // Payment status
@@ -53,89 +53,89 @@ const PaymentSchema = new mongoose.Schema(
       required: true,
       enum: ['pending', 'completed', 'failed', 'cancelled'],
       default: 'pending',
-      index: true
+      index: true,
     },
 
     // Payment method
     method: {
       type: String,
       enum: ['credit_card', 'bank_transfer', 'qr_code', 'promptpay'],
-      default: null
+      default: null,
     },
 
     // Transaction details
     transactionId: {
       type: String,
       default: null,
-      index: true
+      index: true,
     },
 
     transactionDate: {
       type: Date,
-      default: null
+      default: null,
     },
 
     // Receipt information
     receiptNumber: {
       type: String,
-      default: null
+      default: null,
     },
 
     receiptUrl: {
       type: String,
-      default: null
+      default: null,
     },
 
     // Submission count (for resubmission payments)
     submissionCount: {
       type: Number,
-      default: null
+      default: null,
     },
 
     // Payment gateway response
     gatewayResponse: {
       type: mongoose.Schema.Types.Mixed,
-      default: null
+      default: null,
     },
 
     // Notes and comments
     notes: {
       type: String,
-      default: null
+      default: null,
     },
 
     // Metadata
     metadata: {
       type: mongoose.Schema.Types.Mixed,
-      default: {}
+      default: {},
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true
+      index: true,
     },
 
     updatedAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
 
     paidAt: {
       type: Date,
-      default: null
+      default: null,
     },
 
     cancelledAt: {
       type: Date,
-      default: null
-    }
+      default: null,
+    },
   },
   {
     timestamps: true,
-    collection: 'payments'
-  }
+    collection: 'payments',
+  },
 );
 
 // Indexes for better query performance
@@ -195,7 +195,7 @@ PaymentSchema.statics.findOverdue = function (days = 7) {
 
   return this.find({
     status: 'pending',
-    createdAt: { $lte: cutoffDate }
+    createdAt: { $lte: cutoffDate },
   }).sort({ createdAt: 1 });
 };
 
@@ -231,17 +231,17 @@ PaymentSchema.statics.getStatistics = function (filters = {}) {
         byStatus: {
           $push: {
             status: '$status',
-            amount: '$amount'
-          }
+            amount: '$amount',
+          },
         },
         byType: {
           $push: {
             type: '$type',
-            amount: '$amount'
-          }
-        }
-      }
-    }
+            amount: '$amount',
+          },
+        },
+      },
+    },
   ]);
 };
 

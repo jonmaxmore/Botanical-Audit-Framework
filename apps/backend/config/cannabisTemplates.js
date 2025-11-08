@@ -28,49 +28,49 @@ const cannabisTemplates = [
           cultivationLicense: true,
           processingLicense: false,
           tradingLicense: false,
-          researchLicense: false
+          researchLicense: false,
         },
         thcLimitCompliance: {
           required: true,
           maxThcLevel: 0.2,
-          testingRequired: true
+          testingRequired: true,
         },
         gacpCompliance: {
           required: true,
           certificationLevel: 'standard',
-          sopRequired: true
+          sopRequired: true,
         },
         targetAudience: {
           farmers: true,
           processors: false,
           researchers: false,
           regulators: false,
-          traders: false
+          traders: false,
         },
         cultivationStages: [
           { stage: 'planning', applicable: true, priority: 10 },
           { stage: 'soil_preparation', applicable: true, priority: 9 },
-          { stage: 'planting', applicable: true, priority: 8 }
+          { stage: 'planting', applicable: true, priority: 8 },
         ],
         qualityParameters: [
           {
             parameter: 'soil_ph',
             required: true,
             testingMethod: 'digital_ph_meter',
-            acceptableRange: { min: 6.0, max: 7.5, unit: 'pH' }
+            acceptableRange: { min: 6.0, max: 7.5, unit: 'pH' },
           },
           {
             parameter: 'soil_nutrients',
             required: true,
             testingMethod: 'soil_analysis',
-            acceptableRange: { min: 1.5, max: 3.0, unit: 'EC' }
-          }
+            acceptableRange: { min: 1.5, max: 3.0, unit: 'EC' },
+          },
         ],
         regulatoryFocus: [
           { regulation: 'cannabis_act_2019', applicable: true, complianceLevel: 'mandatory' },
           { regulation: 'gacp_standards', applicable: true, complianceLevel: 'mandatory' },
-          { regulation: 'fda_regulations', applicable: true, complianceLevel: 'mandatory' }
-        ]
+          { regulation: 'fda_regulations', applicable: true, complianceLevel: 'mandatory' },
+        ],
       },
       settings: {
         allowAnonymous: false,
@@ -78,14 +78,14 @@ const cannabisTemplates = [
         requireLocation: true,
         requireLicenseVerification: true,
         encryptSensitiveData: true,
-        auditTrail: true
+        auditTrail: true,
       },
       accessControl: {
         restrictedAccess: true,
         allowedRoles: ['farmer', 'reviewer', 'cannabis_specialist'],
         licenseVerificationRequired: true,
-        securityClearance: 'restricted'
-      }
+        securityClearance: 'restricted',
+      },
     },
     questions: [
       {
@@ -101,19 +101,19 @@ const cannabisTemplates = [
             {
               regulation: 'cannabis_act_2019',
               section: 'Section 15',
-              requirement: 'Valid cultivation license required'
-            }
-          ]
+              requirement: 'Valid cultivation license required',
+            },
+          ],
         },
         validation: {
           required: true,
           customValidation: {
             rule: 'license_number_format',
             errorMessage: 'Invalid license number format',
-            errorMessageTH: 'รูปแบบหมายเลขใบอนุญาตไม่ถูกต้อง'
-          }
+            errorMessageTH: 'รูปแบบหมายเลขใบอนุญาตไม่ถูกต้อง',
+          },
         },
-        order: 1
+        order: 1,
       },
       {
         type: 'cultivation_area',
@@ -126,19 +126,19 @@ const cannabisTemplates = [
           qualityParameter: {
             parameter: 'cultivation_area',
             measurementMethod: 'land_survey',
-            acceptableRange: { min: 0.1, max: 50, unit: 'rai' }
-          }
+            acceptableRange: { min: 0.1, max: 50, unit: 'rai' },
+          },
         },
         validation: {
           required: true,
           minValue: 0.1,
-          maxValue: 50
+          maxValue: 50,
         },
         metadata: {
           helpText: 'Area must not exceed license limitations',
-          helpTextTH: 'พื้นที่ต้องไม่เกินข้อจำกัดในใบอนุญาต'
+          helpTextTH: 'พื้นที่ต้องไม่เกินข้อจำกัดในใบอนุญาต',
         },
-        order: 2
+        order: 2,
       },
       {
         type: 'single_choice',
@@ -151,41 +151,41 @@ const cannabisTemplates = [
             label: 'Outdoor cultivation',
             labelTH: 'การเพาะปลูกกลางแจ้ง',
             complianceScore: 70,
-            riskImpact: 'neutral'
+            riskImpact: 'neutral',
           },
           {
             value: 'indoor',
             label: 'Indoor cultivation',
             labelTH: 'การเพาะปลูกในอาคาร',
             complianceScore: 90,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'greenhouse',
             label: 'Greenhouse cultivation',
             labelTH: 'การเพาะปลูกในโรงเรือน',
             complianceScore: 85,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'mixed',
             label: 'Mixed method',
             labelTH: 'วิธีผสม',
             complianceScore: 75,
-            riskImpact: 'neutral'
-          }
+            riskImpact: 'neutral',
+          },
         ],
         cannabisProperties: {
           riskLevel: 'medium',
           sopLinked: {
             sopCode: 'GACP-CULT-001',
-            relevance: 'direct'
-          }
+            relevance: 'direct',
+          },
         },
         validation: {
-          required: true
+          required: true,
         },
-        order: 3
+        order: 3,
       },
       {
         type: 'multi_choice',
@@ -198,36 +198,36 @@ const cannabisTemplates = [
             label: '24/7 CCTV surveillance',
             labelTH: 'กล้องวงจรปิดตลอด 24 ชั่วโมง',
             complianceScore: 100,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'access_control',
             label: 'Access control system',
             labelTH: 'ระบบควบคุมการเข้าถึง',
             complianceScore: 95,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'perimeter_fence',
             label: 'Perimeter fencing',
             labelTH: 'รั้วรอบพื้นที่',
             complianceScore: 80,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'security_guard',
             label: 'Security personnel',
             labelTH: 'เจ้าหน้าที่รักษาความปลอดภัย',
             complianceScore: 85,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'alarm_system',
             label: 'Alarm system',
             labelTH: 'ระบบสัญญาณเตือน',
             complianceScore: 75,
-            riskImpact: 'positive'
-          }
+            riskImpact: 'positive',
+          },
         ],
         cannabisProperties: {
           complianceCritical: true,
@@ -236,18 +236,18 @@ const cannabisTemplates = [
             {
               regulation: 'cannabis_act_2019',
               section: 'Section 22',
-              requirement: 'Adequate security measures required'
-            }
-          ]
+              requirement: 'Adequate security measures required',
+            },
+          ],
         },
         validation: {
-          required: true
+          required: true,
         },
         metadata: {
           helpText: 'Select all applicable security measures',
-          helpTextTH: 'เลือกมาตรการรักษาความปลอดภัยที่เกี่ยวข้องทั้งหมด'
+          helpTextTH: 'เลือกมาตรการรักษาความปลอดภัยที่เกี่ยวข้องทั้งหมด',
         },
-        order: 4
+        order: 4,
       },
       {
         type: 'boolean',
@@ -260,17 +260,17 @@ const cannabisTemplates = [
           riskLevel: 'high',
           sopLinked: {
             sopCode: 'GACP-WATER-001',
-            relevance: 'direct'
-          }
+            relevance: 'direct',
+          },
         },
         validation: {
-          required: true
+          required: true,
         },
         metadata: {
           helpText: 'Water quality testing is mandatory before cultivation',
-          helpTextTH: 'การทดสอบคุณภาพน้ำเป็นข้อบังคับก่อนการเพาะปลูก'
+          helpTextTH: 'การทดสอบคุณภาพน้ำเป็นข้อบังคับก่อนการเพาะปลูก',
         },
-        order: 5
+        order: 5,
       },
       {
         type: 'text',
@@ -282,20 +282,20 @@ const cannabisTemplates = [
           riskLevel: 'medium',
           qualityParameter: {
             parameter: 'strain_specification',
-            measurementMethod: 'genetic_analysis'
-          }
+            measurementMethod: 'genetic_analysis',
+          },
         },
         validation: {
           required: true,
-          maxLength: 500
+          maxLength: 500,
         },
         metadata: {
           placeholderText:
             'e.g., CBD strain with <0.2% THC, Medical strain with 1:20 THC:CBD ratio',
           placeholderTextTH:
-            'เช่น พันธุ์ CBD ที่มี THC น้อยกว่า 0.2%, พันธุ์การแพทย์ที่มีอัตราส่วน THC:CBD เป็น 1:20'
+            'เช่น พันธุ์ CBD ที่มี THC น้อยกว่า 0.2%, พันธุ์การแพทย์ที่มีอัตราส่วน THC:CBD เป็น 1:20',
         },
-        order: 6
+        order: 6,
       },
       {
         type: 'rating_scale',
@@ -308,33 +308,33 @@ const cannabisTemplates = [
             value: '2',
             label: 'Basic knowledge',
             labelTH: 'ความรู้ขั้นพื้นฐาน',
-            complianceScore: 40
+            complianceScore: 40,
           },
           {
             value: '3',
             label: 'Moderate knowledge',
             labelTH: 'ความรู้ปานกลาง',
-            complianceScore: 60
+            complianceScore: 60,
           },
           { value: '4', label: 'Good knowledge', labelTH: 'ความรู้ดี', complianceScore: 80 },
           {
             value: '5',
             label: 'Expert knowledge',
             labelTH: 'ความรู้ระดับผู้เชี่ยวชาญ',
-            complianceScore: 100
-          }
+            complianceScore: 100,
+          },
         ],
         cannabisProperties: {
           riskLevel: 'medium',
           sopLinked: {
             sopCode: 'GACP-TRAIN-001',
-            relevance: 'indirect'
-          }
+            relevance: 'indirect',
+          },
         },
         validation: {
-          required: true
+          required: true,
         },
-        order: 7
+        order: 7,
       },
       {
         type: 'boolean',
@@ -348,14 +348,14 @@ const cannabisTemplates = [
             {
               regulation: 'cannabis_act_2019',
               section: 'Section 18',
-              requirement: 'Mandatory training completion'
-            }
-          ]
+              requirement: 'Mandatory training completion',
+            },
+          ],
         },
         validation: {
-          required: true
+          required: true,
         },
-        order: 8
+        order: 8,
       },
       {
         type: 'single_choice',
@@ -368,41 +368,41 @@ const cannabisTemplates = [
             label: 'Drip irrigation system',
             labelTH: 'ระบบน้ำหยด',
             complianceScore: 90,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'sprinkler',
             label: 'Sprinkler system',
             labelTH: 'ระบบสปริงเกอร์',
             complianceScore: 75,
-            riskImpact: 'neutral'
+            riskImpact: 'neutral',
           },
           {
             value: 'flood_irrigation',
             label: 'Flood irrigation',
             labelTH: 'การให้น้ำแบบท่วม',
             complianceScore: 50,
-            riskImpact: 'negative'
+            riskImpact: 'negative',
           },
           {
             value: 'manual_watering',
             label: 'Manual watering',
             labelTH: 'การให้น้ำด้วยมือ',
             complianceScore: 60,
-            riskImpact: 'neutral'
-          }
+            riskImpact: 'neutral',
+          },
         ],
         cannabisProperties: {
           riskLevel: 'medium',
           sopLinked: {
             sopCode: 'GACP-IRRIG-001',
-            relevance: 'direct'
-          }
+            relevance: 'direct',
+          },
         },
         validation: {
-          required: true
+          required: true,
         },
-        order: 9
+        order: 9,
       },
       {
         type: 'compliance_checklist',
@@ -416,51 +416,51 @@ const cannabisTemplates = [
             label: 'Valid cultivation license obtained',
             labelTH: 'ได้รับใบอนุญาตเพาะปลูกที่ถูกต้อง',
             complianceScore: 100,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'site_inspection',
             label: 'Site inspection by authorities completed',
             labelTH: 'การตรวจสถานที่โดยหน่วยงานที่เกี่ยวข้องเสร็จสิ้นแล้ว',
             complianceScore: 100,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'security_approved',
             label: 'Security measures approved by authorities',
             labelTH: 'มาตรการรักษาความปลอดภัยได้รับการอนุมัติจากหน่วยงาน',
             complianceScore: 100,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'sop_prepared',
             label: 'Standard Operating Procedures (SOPs) prepared',
             labelTH: 'เตรียมขั้นตอนการปฏิบัติงานมาตรฐาน (SOPs) แล้ว',
             complianceScore: 95,
-            riskImpact: 'positive'
+            riskImpact: 'positive',
           },
           {
             value: 'records_system',
             label: 'Record keeping system established',
             labelTH: 'จัดระบบการบันทึกข้อมูลแล้ว',
             complianceScore: 90,
-            riskImpact: 'positive'
-          }
+            riskImpact: 'positive',
+          },
         ],
         cannabisProperties: {
           complianceCritical: true,
-          riskLevel: 'critical'
+          riskLevel: 'critical',
         },
         validation: {
-          required: true
+          required: true,
         },
         metadata: {
           helpText: 'All items must be completed before cultivation can begin',
-          helpTextTH: 'รายการทั้งหมดต้องเสร็จสิ้นก่อนที่จะเริ่มการเพาะปลูกได้'
+          helpTextTH: 'รายการทั้งหมดต้องเสร็จสิ้นก่อนที่จะเริ่มการเพาะปลูกได้',
         },
-        order: 10
-      }
-    ]
+        order: 10,
+      },
+    ],
   },
 
   {
@@ -481,20 +481,20 @@ const cannabisTemplates = [
           cultivationLicense: true,
           processingLicense: false,
           tradingLicense: false,
-          researchLicense: false
+          researchLicense: false,
         },
         cultivationStages: [
           { stage: 'vegetative_growth', applicable: true, priority: 10 },
           { stage: 'flowering', applicable: true, priority: 10 },
-          { stage: 'harvesting', applicable: true, priority: 9 }
-        ]
+          { stage: 'harvesting', applicable: true, priority: 9 },
+        ],
       },
       settings: {
         allowAnonymous: false,
         allowMultipleSubmissions: true,
         requireLocation: true,
-        requireLicenseVerification: true
-      }
+        requireLicenseVerification: true,
+      },
     },
     questions: [
       {
@@ -503,7 +503,7 @@ const cannabisTemplates = [
         textTH: 'วันที่เริ่มต้นรอบการเพาะปลูกปัจจุบันคือเมื่อใด?',
         category: 'general_information',
         validation: { required: true },
-        order: 1
+        order: 1,
       },
       {
         type: 'single_choice',
@@ -516,18 +516,18 @@ const cannabisTemplates = [
             value: 'vegetative',
             label: 'Vegetative',
             labelTH: 'ระยะเจริญเติบโตทางใบ',
-            complianceScore: 85
+            complianceScore: 85,
           },
           { value: 'flowering', label: 'Flowering', labelTH: 'ระยะออกดอก', complianceScore: 90 },
           {
             value: 'harvest_ready',
             label: 'Harvest ready',
             labelTH: 'พร้อมเก็บเกี่ยว',
-            complianceScore: 95
-          }
+            complianceScore: 95,
+          },
         ],
         validation: { required: true },
-        order: 2
+        order: 2,
       },
       {
         type: 'number',
@@ -536,14 +536,14 @@ const cannabisTemplates = [
         category: 'cultivation_practices',
         cannabisProperties: {
           complianceCritical: true,
-          riskLevel: 'high'
+          riskLevel: 'high',
         },
         validation: {
           required: true,
           minValue: 1,
-          maxValue: 1000
+          maxValue: 1000,
         },
-        order: 3
+        order: 3,
       },
       {
         type: 'multi_choice',
@@ -555,39 +555,39 @@ const cannabisTemplates = [
             value: 'organic_pesticides',
             label: 'Organic pesticides',
             labelTH: 'สารกำจัดศัตรูพืชอินทรีย์',
-            complianceScore: 90
+            complianceScore: 90,
           },
           {
             value: 'biological_control',
             label: 'Biological control',
             labelTH: 'การควบคุมทางชีววิทยา',
-            complianceScore: 95
+            complianceScore: 95,
           },
           {
             value: 'integrated_pest_management',
             label: 'Integrated Pest Management (IPM)',
             labelTH: 'การจัดการศัตรูพืชแบบบูรณาการ',
-            complianceScore: 100
+            complianceScore: 100,
           },
           {
             value: 'chemical_pesticides',
             label: 'Chemical pesticides (approved only)',
             labelTH: 'สารเคมีกำจัดศัตรูพืช (ที่อนุมัติเท่านั้น)',
-            complianceScore: 70
+            complianceScore: 70,
           },
           {
             value: 'none',
             label: 'No pest management',
             labelTH: 'ไม่มีการจัดการศัตรูพืช',
-            complianceScore: 30
-          }
+            complianceScore: 30,
+          },
         ],
         cannabisProperties: {
           complianceCritical: true,
-          riskLevel: 'high'
+          riskLevel: 'high',
         },
         validation: { required: true },
-        order: 4
+        order: 4,
       },
       {
         type: 'thc_measurement',
@@ -601,21 +601,21 @@ const cannabisTemplates = [
           qualityParameter: {
             parameter: 'thc_content',
             measurementMethod: 'laboratory_analysis',
-            acceptableRange: { min: 0, max: 0.2, unit: '%' }
-          }
+            acceptableRange: { min: 0, max: 0.2, unit: '%' },
+          },
         },
         validation: {
           required: true,
           minValue: 0,
-          maxValue: 30
+          maxValue: 30,
         },
         metadata: {
           helpText: 'THC content must not exceed 0.2% for industrial hemp',
-          helpTextTH: 'ปริมาณ THC ต้องไม่เกิน 0.2% สำหรับกัญชงอุตสาหกรรม'
+          helpTextTH: 'ปริมาณ THC ต้องไม่เกิน 0.2% สำหรับกัญชงอุตสาหกรรม',
         },
-        order: 5
-      }
-    ]
+        order: 5,
+      },
+    ],
   },
 
   {
@@ -636,15 +636,15 @@ const cannabisTemplates = [
           cultivationLicense: true,
           processingLicense: true,
           tradingLicense: false,
-          researchLicense: false
+          researchLicense: false,
         },
         cultivationStages: [
           { stage: 'harvesting', applicable: true, priority: 10 },
           { stage: 'drying_curing', applicable: true, priority: 10 },
           { stage: 'processing', applicable: true, priority: 9 },
-          { stage: 'packaging', applicable: true, priority: 8 }
-        ]
-      }
+          { stage: 'packaging', applicable: true, priority: 8 },
+        ],
+      },
     },
     questions: [
       {
@@ -653,7 +653,7 @@ const cannabisTemplates = [
         textTH: 'วันที่เก็บเกี่ยวคือเมื่อใด?',
         category: 'harvest_timing',
         validation: { required: true },
-        order: 1
+        order: 1,
       },
       {
         type: 'number',
@@ -665,14 +665,14 @@ const cannabisTemplates = [
           qualityParameter: {
             parameter: 'total_yield',
             measurementMethod: 'precision_scale',
-            acceptableRange: { min: 0.1, max: 10000, unit: 'kg' }
-          }
+            acceptableRange: { min: 0.1, max: 10000, unit: 'kg' },
+          },
         },
         validation: {
           required: true,
-          minValue: 0.1
+          minValue: 0.1,
         },
-        order: 2
+        order: 2,
       },
       {
         type: 'single_choice',
@@ -684,36 +684,36 @@ const cannabisTemplates = [
             value: 'air_drying',
             label: 'Air drying',
             labelTH: 'การอบแห้งด้วยอากาศ',
-            complianceScore: 85
+            complianceScore: 85,
           },
           {
             value: 'controlled_environment',
             label: 'Controlled environment drying',
             labelTH: 'การอบแห้งในสภาพแวดล้อมควบคุม',
-            complianceScore: 95
+            complianceScore: 95,
           },
           {
             value: 'freeze_drying',
             label: 'Freeze drying',
             labelTH: 'การอบแห้งแบบแช่แข็ง',
-            complianceScore: 90
+            complianceScore: 90,
           },
           {
             value: 'heat_drying',
             label: 'Heat drying',
             labelTH: 'การอบแห้งด้วยความร้อน',
-            complianceScore: 70
-          }
+            complianceScore: 70,
+          },
         ],
         cannabisProperties: {
           riskLevel: 'medium',
           sopLinked: {
             sopCode: 'GACP-DRY-001',
-            relevance: 'direct'
-          }
+            relevance: 'direct',
+          },
         },
         validation: { required: true },
-        order: 3
+        order: 3,
       },
       {
         type: 'boolean',
@@ -722,10 +722,10 @@ const cannabisTemplates = [
         category: 'quality_testing',
         cannabisProperties: {
           complianceCritical: true,
-          riskLevel: 'critical'
+          riskLevel: 'critical',
         },
         validation: { required: true },
-        order: 4
+        order: 4,
       },
       {
         type: 'number',
@@ -735,17 +735,17 @@ const cannabisTemplates = [
         cannabisProperties: {
           thcRelevant: true,
           complianceCritical: true,
-          riskLevel: 'critical'
+          riskLevel: 'critical',
         },
         validation: {
           required: true,
           minValue: 0,
-          maxValue: 30
+          maxValue: 30,
         },
-        order: 5
-      }
-    ]
-  }
+        order: 5,
+      },
+    ],
+  },
 ];
 
 // Function to create all templates and questions
@@ -757,7 +757,7 @@ async function createCannabisTemplates(createdBy = null) {
       // Create template
       const template = new CannabisSurveyTemplate({
         ...templateData.template,
-        createdBy: createdBy || new mongoose.Types.ObjectId()
+        createdBy: createdBy || new mongoose.Types.ObjectId(),
       });
 
       await template.save();
@@ -766,7 +766,7 @@ async function createCannabisTemplates(createdBy = null) {
       const questions = templateData.questions.map((q, index) => ({
         ...q,
         templateId: template._id,
-        order: q.order || index + 1
+        order: q.order || index + 1,
       }));
 
       const createdQuestions = await CannabisQuestion.insertMany(questions);
@@ -774,11 +774,11 @@ async function createCannabisTemplates(createdBy = null) {
       results.push({
         template: template,
         questions: createdQuestions,
-        questionCount: createdQuestions.length
+        questionCount: createdQuestions.length,
       });
 
       logger.info(
-        `Created cannabis survey template: ${template.title} with ${createdQuestions.length} questions`
+        `Created cannabis survey template: ${template.title} with ${createdQuestions.length} questions`,
       );
     }
 
@@ -800,7 +800,7 @@ async function createIndividualTemplate(templateIndex, createdBy = null) {
 
     const template = new CannabisSurveyTemplate({
       ...templateData.template,
-      createdBy: createdBy || new mongoose.Types.ObjectId()
+      createdBy: createdBy || new mongoose.Types.ObjectId(),
     });
 
     await template.save();
@@ -808,7 +808,7 @@ async function createIndividualTemplate(templateIndex, createdBy = null) {
     const questions = templateData.questions.map((q, index) => ({
       ...q,
       templateId: template._id,
-      order: q.order || index + 1
+      order: q.order || index + 1,
     }));
 
     const createdQuestions = await CannabisQuestion.insertMany(questions);
@@ -816,7 +816,7 @@ async function createIndividualTemplate(templateIndex, createdBy = null) {
     return {
       template: template,
       questions: createdQuestions,
-      questionCount: createdQuestions.length
+      questionCount: createdQuestions.length,
     };
   } catch (error) {
     logger.error('Error creating individual cannabis template:', error);
@@ -830,7 +830,7 @@ async function getTemplateByType(surveyType, region = 'national') {
     const template = await CannabisSurveyTemplate.findOne({
       'cannabisMetadata.surveyType': surveyType,
       region: { $in: [region, 'national'] },
-      status: 'published'
+      status: 'published',
     });
 
     if (!template) {
@@ -839,12 +839,12 @@ async function getTemplateByType(surveyType, region = 'national') {
 
     const questions = await CannabisQuestion.find({
       templateId: template._id,
-      isActive: true
+      isActive: true,
     }).sort({ order: 1 });
 
     return {
       template,
-      questions
+      questions,
     };
   } catch (error) {
     logger.error('Error getting template by type:', error);
@@ -863,7 +863,7 @@ async function updateTemplateQuestions(templateId, newQuestions) {
       ...q,
       templateId,
       order: q.order || index + 1,
-      isActive: true
+      isActive: true,
     }));
 
     const createdQuestions = await CannabisQuestion.insertMany(questions);
@@ -880,5 +880,5 @@ module.exports = {
   createCannabisTemplates,
   createIndividualTemplate,
   getTemplateByType,
-  updateTemplateQuestions
+  updateTemplateQuestions,
 };

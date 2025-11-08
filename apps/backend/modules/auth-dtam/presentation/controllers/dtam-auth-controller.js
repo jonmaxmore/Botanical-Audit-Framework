@@ -22,7 +22,7 @@ class DTAMStaffAuthController {
     getProfileUseCase,
     updateProfileUseCase,
     listStaffUseCase,
-    updateRoleUseCase
+    updateRoleUseCase,
   }) {
     this.createDTAMStaffUseCase = createDTAMStaffUseCase;
     this.loginDTAMStaffUseCase = loginDTAMStaffUseCase;
@@ -51,7 +51,7 @@ class DTAMStaffAuthController {
         role: req.body.role,
         permissions: req.body.permissions,
         phoneNumber: req.body.phoneNumber,
-        createdBy: req.staff.staffId // From auth middleware
+        createdBy: req.staff.staffId, // From auth middleware
       });
 
       return res.status(201).json({
@@ -60,8 +60,8 @@ class DTAMStaffAuthController {
         data: {
           staffId: result.staff.id,
           email: result.staff.email,
-          role: result.staff.role
-        }
+          role: result.staff.role,
+        },
       });
     } catch (error) {
       logger.error('Create staff error:', error);
@@ -69,20 +69,20 @@ class DTAMStaffAuthController {
       if (error.message.includes('already exists')) {
         return res.status(409).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       if (error.message.includes('Invalid') || error.message.includes('required')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to create staff. Please try again.'
+        message: 'Failed to create staff. Please try again.',
       });
     }
   }
@@ -97,7 +97,7 @@ class DTAMStaffAuthController {
         email: req.body.email,
         password: req.body.password,
         ipAddress: req.ip,
-        userAgent: req.get('user-agent')
+        userAgent: req.get('user-agent'),
       });
 
       return res.status(200).json({
@@ -115,9 +115,9 @@ class DTAMStaffAuthController {
             position: result.staff.position,
             role: result.staff.role,
             permissions: result.staff.permissions,
-            status: result.staff.status
-          }
-        }
+            status: result.staff.status,
+          },
+        },
       });
     } catch (error) {
       logger.error('Login error:', error);
@@ -125,27 +125,27 @@ class DTAMStaffAuthController {
       if (error.message.includes('Invalid credentials')) {
         return res.status(401).json({
           success: false,
-          message: 'Invalid email or password'
+          message: 'Invalid email or password',
         });
       }
 
       if (error.message.includes('locked')) {
         return res.status(403).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       if (error.message.includes('not active')) {
         return res.status(403).json({
           success: false,
-          message: 'Your account is not active. Please contact administrator.'
+          message: 'Your account is not active. Please contact administrator.',
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Login failed. Please try again.'
+        message: 'Login failed. Please try again.',
       });
     }
   }
@@ -157,13 +157,13 @@ class DTAMStaffAuthController {
   async requestPasswordReset(req, res) {
     try {
       await this.requestPasswordResetUseCase.execute({
-        email: req.body.email
+        email: req.body.email,
       });
 
       // Always return success (prevent email enumeration)
       return res.status(200).json({
         success: true,
-        message: 'If an account with that email exists, a password reset link has been sent.'
+        message: 'If an account with that email exists, a password reset link has been sent.',
       });
     } catch (error) {
       logger.error('Password reset request error:', error);
@@ -171,7 +171,7 @@ class DTAMStaffAuthController {
       // Always return success (prevent email enumeration)
       return res.status(200).json({
         success: true,
-        message: 'If an account with that email exists, a password reset link has been sent.'
+        message: 'If an account with that email exists, a password reset link has been sent.',
       });
     }
   }
@@ -184,12 +184,12 @@ class DTAMStaffAuthController {
     try {
       await this.resetPasswordUseCase.execute({
         token: req.body.token,
-        newPassword: req.body.newPassword
+        newPassword: req.body.newPassword,
       });
 
       return res.status(200).json({
         success: true,
-        message: 'Password reset successful. You can now login with your new password.'
+        message: 'Password reset successful. You can now login with your new password.',
       });
     } catch (error) {
       logger.error('Password reset error:', error);
@@ -197,20 +197,20 @@ class DTAMStaffAuthController {
       if (error.message.includes('Invalid') || error.message.includes('expired')) {
         return res.status(404).json({
           success: false,
-          message: 'Invalid or expired reset token'
+          message: 'Invalid or expired reset token',
         });
       }
 
       if (error.message.includes('weak') || error.message.includes('requirements')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Password reset failed. Please try again.'
+        message: 'Password reset failed. Please try again.',
       });
     }
   }
@@ -227,7 +227,7 @@ class DTAMStaffAuthController {
 
       return res.status(200).json({
         success: true,
-        data: staff
+        data: staff,
       });
     } catch (error) {
       logger.error('Get profile error:', error);
@@ -235,13 +235,13 @@ class DTAMStaffAuthController {
       if (error.message.includes('not found')) {
         return res.status(404).json({
           success: false,
-          message: 'Staff not found'
+          message: 'Staff not found',
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to retrieve profile'
+        message: 'Failed to retrieve profile',
       });
     }
   }
@@ -261,15 +261,15 @@ class DTAMStaffAuthController {
           lastName: req.body.lastName,
           phoneNumber: req.body.phoneNumber,
           department: req.body.department,
-          position: req.body.position
+          position: req.body.position,
         },
-        updatedBy: staffId
+        updatedBy: staffId,
       });
 
       return res.status(200).json({
         success: true,
         message: 'Profile updated successfully',
-        data: staff
+        data: staff,
       });
     } catch (error) {
       logger.error('Update profile error:', error);
@@ -277,27 +277,27 @@ class DTAMStaffAuthController {
       if (error.message.includes('not found')) {
         return res.status(404).json({
           success: false,
-          message: 'Staff not found'
+          message: 'Staff not found',
         });
       }
 
       if (error.message.includes('not active')) {
         return res.status(403).json({
           success: false,
-          message: 'Cannot update profile. Account is not active.'
+          message: 'Cannot update profile. Account is not active.',
         });
       }
 
       if (error.message.includes('Invalid') || error.message.includes('required')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Profile update failed. Please try again.'
+        message: 'Profile update failed. Please try again.',
       });
     }
   }
@@ -312,26 +312,26 @@ class DTAMStaffAuthController {
         role: req.query.role,
         status: req.query.status,
         department: req.query.department,
-        search: req.query.search
+        search: req.query.search,
       };
 
       const pagination = {
         page: parseInt(req.query.page) || 1,
-        limit: parseInt(req.query.limit) || 20
+        limit: parseInt(req.query.limit) || 20,
       };
 
       const result = await this.listStaffUseCase.execute({ filters, pagination });
 
       return res.status(200).json({
         success: true,
-        data: result
+        data: result,
       });
     } catch (error) {
       logger.error('List staff error:', error);
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to retrieve staff list'
+        message: 'Failed to retrieve staff list',
       });
     }
   }
@@ -349,13 +349,13 @@ class DTAMStaffAuthController {
         staffId,
         role: req.body.role,
         permissions: req.body.permissions,
-        updatedBy
+        updatedBy,
       });
 
       return res.status(200).json({
         success: true,
         message: 'Staff role updated successfully',
-        data: staff
+        data: staff,
       });
     } catch (error) {
       logger.error('Update role error:', error);
@@ -363,20 +363,20 @@ class DTAMStaffAuthController {
       if (error.message.includes('not found')) {
         return res.status(404).json({
           success: false,
-          message: 'Staff not found'
+          message: 'Staff not found',
         });
       }
 
       if (error.message.includes('Invalid')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       return res.status(500).json({
         success: false,
-        message: 'Failed to update staff role'
+        message: 'Failed to update staff role',
       });
     }
   }

@@ -21,48 +21,48 @@ const ChainOfCustodySchema = new mongoose.Schema(
     transferredFrom: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     transferredTo: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true
+      required: true,
     },
     transferDate: {
       type: Date,
       required: true,
-      default: Date.now
+      default: Date.now,
     },
     location: {
       name: String, // ชื่อสถานที่ (e.g., "โรงคัดแยก", "โรงเก็บ")
       address: String,
       coordinates: {
         lat: Number,
-        lng: Number
-      }
+        lng: Number,
+      },
     },
     condition: {
       type: String,
       enum: ['excellent', 'good', 'fair', 'poor'],
-      required: true
+      required: true,
     },
     temperature: {
       value: Number,
       unit: {
         type: String,
         enum: ['celsius', 'fahrenheit'],
-        default: 'celsius'
-      }
+        default: 'celsius',
+      },
     },
     humidity: Number, // %
     notes: String,
     signature: String, // Digital signature hash
     witnessedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
+      ref: 'User',
+    },
   },
-  { _id: true, timestamps: true }
+  { _id: true, timestamps: true },
 );
 
 // Main Harvest Schema
@@ -74,7 +74,7 @@ const HarvestSchema = new mongoose.Schema(
       required: true,
       unique: true,
       match: /^PT27-\d{4}-\d{3,4}$/, // Format: PT27-YYYY-NNN or PT27-YYYY-NNNN
-      index: true
+      index: true,
     },
 
     // === References (อ้างอิง) ===
@@ -82,46 +82,46 @@ const HarvestSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: true,
-      index: true
+      index: true,
     },
     plotId: {
       type: String, // Plot name/ID within the farm
-      required: true
+      required: true,
     },
     cropId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Crop',
-      required: true
+      required: true,
     },
     farmerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      index: true
+      index: true,
     },
 
     // === Harvest Details (รายละเอียดการเก็บเกี่ยว) ===
     harvestDate: {
       type: Date,
       required: true,
-      index: true
+      index: true,
     },
     harvestSeason: {
       type: String,
       enum: ['rainy', 'winter', 'summer', 'year-round'],
-      default: 'rainy'
+      default: 'rainy',
     },
     quantity: {
       value: {
         type: Number,
         required: true,
-        min: 0
+        min: 0,
       },
       unit: {
         type: String,
         enum: ['kg', 'ton', 'piece', 'bunch'],
-        default: 'kg'
-      }
+        default: 'kg',
+      },
     },
 
     // === Quality Assessment (การประเมินคุณภาพ) ===
@@ -129,25 +129,25 @@ const HarvestSchema = new mongoose.Schema(
       grade: {
         type: String,
         enum: ['A', 'B', 'C', 'reject'],
-        default: 'B'
+        default: 'B',
       },
       appearance: {
         type: String,
-        enum: ['excellent', 'good', 'fair', 'poor']
+        enum: ['excellent', 'good', 'fair', 'poor'],
       },
       moistureContent: Number, // %
       contaminationLevel: {
         type: String,
         enum: ['none', 'low', 'medium', 'high'],
-        default: 'none'
+        default: 'none',
       },
       damagePercentage: {
         type: Number,
         min: 0,
         max: 100,
-        default: 0
+        default: 0,
       },
-      notes: String
+      notes: String,
     },
 
     // === Weather Conditions (สภาพอากาศ) ===
@@ -157,23 +157,23 @@ const HarvestSchema = new mongoose.Schema(
       rainfall: Number, // mm
       conditions: {
         type: String,
-        enum: ['sunny', 'cloudy', 'rainy', 'stormy']
-      }
+        enum: ['sunny', 'cloudy', 'rainy', 'stormy'],
+      },
     },
 
     // === Labor & Equipment (แรงงานและอุปกรณ์) ===
     harvestedBy: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-      }
+        ref: 'User',
+      },
     ],
     equipment: [
       {
         name: String,
         type: String,
-        serialNumber: String
-      }
+        serialNumber: String,
+      },
     ],
     laborHours: Number, // Total labor hours
 
@@ -181,21 +181,21 @@ const HarvestSchema = new mongoose.Schema(
     postHarvestTreatment: {
       washing: {
         type: Boolean,
-        default: false
+        default: false,
       },
       sorting: {
         type: Boolean,
-        default: false
+        default: false,
       },
       drying: {
         type: Boolean,
-        default: false
+        default: false,
       },
       cooling: {
         type: Boolean,
-        default: false
+        default: false,
       },
-      notes: String
+      notes: String,
     },
 
     // === Storage (การเก็บรักษา) ===
@@ -206,8 +206,8 @@ const HarvestSchema = new mongoose.Schema(
       duration: Number, // hours
       conditions: {
         type: String,
-        enum: ['cold', 'ambient', 'controlled']
-      }
+        enum: ['cold', 'ambient', 'controlled'],
+      },
     },
 
     // === Chain of Custody (CoC) ===
@@ -216,11 +216,11 @@ const HarvestSchema = new mongoose.Schema(
     // === GACP Compliance (การปฏิบัติตาม GACP) ===
     gacpVerified: {
       type: Boolean,
-      default: false
+      default: false,
     },
     verifiedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
+      ref: 'User',
     },
     verificationDate: Date,
     verificationNotes: String,
@@ -229,20 +229,20 @@ const HarvestSchema = new mongoose.Schema(
     batchIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Batch'
-      }
+        ref: 'Batch',
+      },
     ],
     labTestIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'LabTest'
-      }
+        ref: 'LabTest',
+      },
     ],
     documentIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Document'
-      }
+        ref: 'Document',
+      },
     ],
 
     // === Photos (รูปภาพ) ===
@@ -252,9 +252,9 @@ const HarvestSchema = new mongoose.Schema(
         caption: String,
         uploadedAt: {
           type: Date,
-          default: Date.now
-        }
-      }
+          default: Date.now,
+        },
+      },
     ],
 
     // === Status & Metadata ===
@@ -262,7 +262,7 @@ const HarvestSchema = new mongoose.Schema(
       type: String,
       enum: ['pending', 'verified', 'processed', 'shipped', 'cancelled'],
       default: 'pending',
-      index: true
+      index: true,
     },
     notes: String,
 
@@ -270,18 +270,18 @@ const HarvestSchema = new mongoose.Schema(
     isDeleted: {
       type: Boolean,
       default: false,
-      index: true
+      index: true,
     },
     deletedAt: Date,
     deletedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
+      ref: 'User',
+    },
   },
   {
     timestamps: true, // createdAt, updatedAt
-    collection: 'harvests'
-  }
+    collection: 'harvests',
+  },
 );
 
 // ============================================
@@ -308,7 +308,7 @@ HarvestSchema.statics.generateLotNumber = async function (year) {
 
   // Find the last lot number for this year
   const lastHarvest = await this.findOne({
-    lotNumber: new RegExp(`^${prefix}`)
+    lotNumber: new RegExp(`^${prefix}`),
   })
     .sort({ lotNumber: -1 })
     .select('lotNumber')
@@ -373,7 +373,7 @@ HarvestSchema.methods.getTraceabilityPath = async function () {
     { path: 'cropId', select: 'name scientificName' },
     { path: 'farmerId', select: 'name email' },
     { path: 'batchIds', select: 'traceabilityCode qrCode' },
-    { path: 'labTestIds', select: 'testType testDate gacpCompliant' }
+    { path: 'labTestIds', select: 'testType testDate gacpCompliant' },
   ]);
 
   return {
@@ -387,7 +387,7 @@ HarvestSchema.methods.getTraceabilityPath = async function () {
     batches: this.batchIds,
     labTests: this.labTestIds,
     chainOfCustody: this.chainOfCustody,
-    gacpVerified: this.gacpVerified
+    gacpVerified: this.gacpVerified,
   };
 };
 
@@ -422,7 +422,7 @@ HarvestSchema.pre('save', async function () {
 // Prevent hard delete (enforce soft delete)
 HarvestSchema.pre('deleteOne', { document: true, query: false }, function (_next) {
   throw new Error(
-    'Hard delete not allowed. Use softDelete() method instead for 5-year retention compliance.'
+    'Hard delete not allowed. Use softDelete() method instead for 5-year retention compliance.',
   );
 });
 

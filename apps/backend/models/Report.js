@@ -4,20 +4,20 @@ const ReportSchema = new mongoose.Schema({
   task: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Task',
-    required: true
+    required: true,
   },
   findings: {
     type: String,
-    required: true
+    required: true,
   },
   recommendations: {
     type: String,
-    required: true
+    required: true,
   },
   compliance: {
     type: String,
     enum: ['compliant', 'non-compliant', 'partially-compliant'],
-    default: 'compliant'
+    default: 'compliant',
   },
   images: [
     {
@@ -25,32 +25,32 @@ const ReportSchema = new mongoose.Schema({
       caption: String,
       uploadedAt: {
         type: Date,
-        default: Date.now
-      }
-    }
+        default: Date.now,
+      },
+    },
   ],
   submittedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true
+    required: true,
   },
   submittedAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   reviewedBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
+    ref: 'User',
   },
   reviewedAt: {
-    type: Date
+    type: Date,
   },
   reviewStatus: {
     type: String,
     enum: ['pending', 'approved', 'rejected', 'needs-revision'],
-    default: 'pending'
+    default: 'pending',
   },
-  reviewComments: String
+  reviewComments: String,
 });
 
 module.exports = mongoose.model('Report', ReportSchema);

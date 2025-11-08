@@ -14,14 +14,14 @@ class DTAMApplication {
     id = null,
     applicationNumber = null,
     lotId = null,
-    
+
     // Farmer Information
     farmerId,
     farmerName,
     farmerIdCard,
     farmerPhone,
     farmerEmail = null,
-    
+
     // Farm Information
     farmName,
     farmAddress,
@@ -33,29 +33,29 @@ class DTAMApplication {
     farmGPS = null,
     cropType,
     cultivationMethod = null,
-    
+
     // Application Status
     status = DTAMApplication.STATUS.DRAFT,
     currentStage = DTAMApplication.STAGE.SUBMISSION,
-    
+
     // Documents
     uploadedDocuments = [],
     requiredDocuments = DTAMApplication.REQUIRED_DOCUMENTS,
-    
+
     // AI QC Results
     aiQcScore = null,
     aiQcGrade = null,
     aiQcInspectionMode = null,
     aiQcIssues = [],
     aiQcCompletedAt = null,
-    
+
     // Review Stage
     reviewerId = null,
     reviewerName = null,
     reviewStatus = null,
     reviewComments = null,
     reviewedAt = null,
-    
+
     // Inspection Stage
     inspectorId = null,
     inspectorName = null,
@@ -66,44 +66,44 @@ class DTAMApplication {
     inspectionStatus = null,
     inspectionReport = null,
     inspectionEvidence = [],
-    
+
     // Approval Stage
     approverId = null,
     approverName = null,
     approvalStatus = null,
     approvalComments = null,
     approvedAt = null,
-    
+
     // Certificate
     certificateNumber = null,
     certificateIssuedAt = null,
     certificateExpiresAt = null,
     certificateStatus = null,
-    
+
     // Payment
     paymentRequired = true,
     paymentAmount = 0,
     paymentStatus = DTAMApplication.PAYMENT_STATUS.PENDING,
     paymentReceipt = null,
     paymentDate = null,
-    
+
     // Metadata
     submittedAt = null,
     createdAt = new Date(),
     updatedAt = new Date(),
     createdBy = null,
-    updatedBy = null
+    updatedBy = null,
   }) {
     this.id = id;
     this.applicationNumber = applicationNumber;
     this.lotId = lotId;
-    
+
     this.farmerId = farmerId;
     this.farmerName = farmerName;
     this.farmerIdCard = farmerIdCard;
     this.farmerPhone = farmerPhone;
     this.farmerEmail = farmerEmail;
-    
+
     this.farmName = farmName;
     this.farmAddress = farmAddress;
     this.farmProvince = farmProvince;
@@ -114,25 +114,25 @@ class DTAMApplication {
     this.farmGPS = farmGPS;
     this.cropType = cropType;
     this.cultivationMethod = cultivationMethod;
-    
+
     this.status = status;
     this.currentStage = currentStage;
-    
+
     this.uploadedDocuments = uploadedDocuments;
     this.requiredDocuments = requiredDocuments;
-    
+
     this.aiQcScore = aiQcScore;
     this.aiQcGrade = aiQcGrade;
     this.aiQcInspectionMode = aiQcInspectionMode;
     this.aiQcIssues = aiQcIssues;
     this.aiQcCompletedAt = aiQcCompletedAt;
-    
+
     this.reviewerId = reviewerId;
     this.reviewerName = reviewerName;
     this.reviewStatus = reviewStatus;
     this.reviewComments = reviewComments;
     this.reviewedAt = reviewedAt;
-    
+
     this.inspectorId = inspectorId;
     this.inspectorName = inspectorName;
     this.inspectionType = inspectionType;
@@ -142,24 +142,24 @@ class DTAMApplication {
     this.inspectionStatus = inspectionStatus;
     this.inspectionReport = inspectionReport;
     this.inspectionEvidence = inspectionEvidence;
-    
+
     this.approverId = approverId;
     this.approverName = approverName;
     this.approvalStatus = approvalStatus;
     this.approvalComments = approvalComments;
     this.approvedAt = approvedAt;
-    
+
     this.certificateNumber = certificateNumber;
     this.certificateIssuedAt = certificateIssuedAt;
     this.certificateExpiresAt = certificateExpiresAt;
     this.certificateStatus = certificateStatus;
-    
+
     this.paymentRequired = paymentRequired;
     this.paymentAmount = paymentAmount;
     this.paymentStatus = paymentStatus;
     this.paymentReceipt = paymentReceipt;
     this.paymentDate = paymentDate;
-    
+
     this.submittedAt = submittedAt;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
@@ -180,7 +180,7 @@ class DTAMApplication {
     PENDING_APPROVAL: 'PENDING_APPROVAL',
     APPROVED: 'APPROVED',
     REJECTED: 'REJECTED',
-    CERTIFICATE_ISSUED: 'CERTIFICATE_ISSUED'
+    CERTIFICATE_ISSUED: 'CERTIFICATE_ISSUED',
   };
 
   // Stage constants
@@ -190,14 +190,14 @@ class DTAMApplication {
     REVIEW: 'REVIEW',
     INSPECTION: 'INSPECTION',
     APPROVAL: 'APPROVAL',
-    CERTIFICATE: 'CERTIFICATE'
+    CERTIFICATE: 'CERTIFICATE',
   };
 
   // Inspection type constants
   static INSPECTION_TYPE = {
     VIDEO: 'VIDEO',
     HYBRID: 'HYBRID',
-    ONSITE: 'ONSITE'
+    ONSITE: 'ONSITE',
   };
 
   // Payment status constants
@@ -205,7 +205,7 @@ class DTAMApplication {
     PENDING: 'PENDING',
     PAID: 'PAID',
     VERIFIED: 'VERIFIED',
-    REFUNDED: 'REFUNDED'
+    REFUNDED: 'REFUNDED',
   };
 
   // Required documents
@@ -217,7 +217,7 @@ class DTAMApplication {
     'water_source_photo',
     'crop_photo',
     'storage_facility_photo',
-    'farmer_photo'
+    'farmer_photo',
   ];
 
   /**
@@ -409,12 +409,12 @@ class DTAMApplication {
 
     this.certificateNumber = certificateNumber;
     this.certificateIssuedAt = new Date();
-    
+
     // Certificate valid for 3 years
     const expiryDate = new Date();
     expiryDate.setFullYear(expiryDate.getFullYear() + 3);
     this.certificateExpiresAt = expiryDate;
-    
+
     this.certificateStatus = 'ACTIVE';
     this.status = DTAMApplication.STATUS.CERTIFICATE_ISSUED;
     this.updatedAt = new Date();
@@ -466,7 +466,7 @@ class DTAMApplication {
       [DTAMApplication.STAGE.REVIEW]: 'กำลังตรวจสอบ',
       [DTAMApplication.STAGE.INSPECTION]: 'กำลังตรวจประเมิน',
       [DTAMApplication.STAGE.APPROVAL]: 'รออนุมัติ',
-      [DTAMApplication.STAGE.CERTIFICATE]: 'ออกใบรับรอง'
+      [DTAMApplication.STAGE.CERTIFICATE]: 'ออกใบรับรอง',
     };
     return stageNames[this.currentStage] || this.currentStage;
   }
@@ -514,15 +514,15 @@ class DTAMApplication {
       id: this.id,
       applicationNumber: this.applicationNumber,
       lotId: this.lotId,
-      
+
       farmer: {
         id: this.farmerId,
         name: this.farmerName,
         idCard: this.farmerIdCard,
         phone: this.farmerPhone,
-        email: this.farmerEmail
+        email: this.farmerEmail,
       },
-      
+
       farm: {
         name: this.farmName,
         address: this.farmAddress,
@@ -533,74 +533,84 @@ class DTAMApplication {
         area: this.farmArea,
         gps: this.farmGPS,
         cropType: this.cropType,
-        cultivationMethod: this.cultivationMethod
+        cultivationMethod: this.cultivationMethod,
       },
-      
+
       status: this.status,
       currentStage: this.currentStage,
       currentStageDisplay: this.getCurrentStageDisplay(),
-      
+
       documents: {
         uploaded: this.uploadedDocuments,
         required: this.requiredDocuments,
-        missing: this.getMissingDocuments()
+        missing: this.getMissingDocuments(),
       },
-      
-      aiQc: this.aiQcScore ? {
-        score: this.aiQcScore,
-        grade: this.aiQcGrade,
-        inspectionMode: this.aiQcInspectionMode,
-        issues: this.aiQcIssues,
-        completedAt: this.aiQcCompletedAt
-      } : null,
-      
-      review: this.reviewerId ? {
-        reviewerId: this.reviewerId,
-        reviewerName: this.reviewerName,
-        status: this.reviewStatus,
-        comments: this.reviewComments,
-        reviewedAt: this.reviewedAt
-      } : null,
-      
-      inspection: this.inspectorId ? {
-        inspectorId: this.inspectorId,
-        inspectorName: this.inspectorName,
-        type: this.inspectionType,
-        scheduledDate: this.inspectionScheduledDate,
-        completedDate: this.inspectionCompletedDate,
-        score: this.inspectionScore,
-        status: this.inspectionStatus,
-        report: this.inspectionReport,
-        evidence: this.inspectionEvidence
-      } : null,
-      
-      approval: this.approverId ? {
-        approverId: this.approverId,
-        approverName: this.approverName,
-        status: this.approvalStatus,
-        comments: this.approvalComments,
-        approvedAt: this.approvedAt
-      } : null,
-      
-      certificate: this.certificateNumber ? {
-        number: this.certificateNumber,
-        issuedAt: this.certificateIssuedAt,
-        expiresAt: this.certificateExpiresAt,
-        status: this.certificateStatus
-      } : null,
-      
+
+      aiQc: this.aiQcScore
+        ? {
+            score: this.aiQcScore,
+            grade: this.aiQcGrade,
+            inspectionMode: this.aiQcInspectionMode,
+            issues: this.aiQcIssues,
+            completedAt: this.aiQcCompletedAt,
+          }
+        : null,
+
+      review: this.reviewerId
+        ? {
+            reviewerId: this.reviewerId,
+            reviewerName: this.reviewerName,
+            status: this.reviewStatus,
+            comments: this.reviewComments,
+            reviewedAt: this.reviewedAt,
+          }
+        : null,
+
+      inspection: this.inspectorId
+        ? {
+            inspectorId: this.inspectorId,
+            inspectorName: this.inspectorName,
+            type: this.inspectionType,
+            scheduledDate: this.inspectionScheduledDate,
+            completedDate: this.inspectionCompletedDate,
+            score: this.inspectionScore,
+            status: this.inspectionStatus,
+            report: this.inspectionReport,
+            evidence: this.inspectionEvidence,
+          }
+        : null,
+
+      approval: this.approverId
+        ? {
+            approverId: this.approverId,
+            approverName: this.approverName,
+            status: this.approvalStatus,
+            comments: this.approvalComments,
+            approvedAt: this.approvedAt,
+          }
+        : null,
+
+      certificate: this.certificateNumber
+        ? {
+            number: this.certificateNumber,
+            issuedAt: this.certificateIssuedAt,
+            expiresAt: this.certificateExpiresAt,
+            status: this.certificateStatus,
+          }
+        : null,
+
       payment: {
         required: this.paymentRequired,
         amount: this.paymentAmount,
         status: this.paymentStatus,
         receipt: this.paymentReceipt,
-        date: this.paymentDate
+        date: this.paymentDate,
       },
-      
+
       processingTime: this.getProcessingTime(),
       submittedAt: this.submittedAt,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     };
   }
 }

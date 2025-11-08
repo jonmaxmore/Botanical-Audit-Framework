@@ -55,18 +55,18 @@ router.post('/', [auth, adminAuth], async (req, res) => {
       applicableRegions,
       targetFarmTypes,
       sections,
-      scoringSystem
+      scoringSystem,
     } = req.body;
 
     // Check version uniqueness
     const existingQuestionnaire = await Questionnaire.findOne({
       title,
-      version
+      version,
     });
 
     if (existingQuestionnaire) {
       return res.status(400).json({
-        message: 'Questionnaire with this title and version already exists'
+        message: 'Questionnaire with this title and version already exists',
       });
     }
 
@@ -79,7 +79,7 @@ router.post('/', [auth, adminAuth], async (req, res) => {
       targetFarmTypes: targetFarmTypes || ['all'],
       sections: sections || [],
       scoringSystem: scoringSystem || { enabled: false },
-      createdBy: req.user.id
+      createdBy: req.user.id,
     });
 
     const questionnaire = await newQuestionnaire.save();
@@ -123,14 +123,14 @@ router.put('/:id', [auth, adminAuth], async (req, res) => {
     // Don't allow updates to active or archived questionnaires
     if (questionnaire.status !== 'draft') {
       return res.status(400).json({
-        message: 'Only draft questionnaires can be updated'
+        message: 'Only draft questionnaires can be updated',
       });
     }
 
     const updatedQuestionnaire = await Questionnaire.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
-      { new: true }
+      { new: true },
     );
 
     res.json(updatedQuestionnaire);
@@ -158,7 +158,7 @@ router.patch('/:id/activate', [auth, adminAuth], async (req, res) => {
 
     res.json({
       status: 'active',
-      message: 'Questionnaire activated successfully'
+      message: 'Questionnaire activated successfully',
     });
   } catch (err) {
     questionnaireLogger.error(`Error activating questionnaire ${req.params.id}:`, err);
@@ -180,7 +180,7 @@ router.patch('/:id/archive', [auth, adminAuth], async (req, res) => {
 
     res.json({
       status: 'archived',
-      message: 'Questionnaire archived successfully'
+      message: 'Questionnaire archived successfully',
     });
   } catch (err) {
     questionnaireLogger.error(`Error archiving questionnaire ${req.params.id}:`, err);
@@ -199,7 +199,7 @@ router.post('/:id/responses', auth, async (req, res) => {
 
     if (questionnaire.status !== 'active') {
       return res.status(400).json({
-        message: 'Cannot respond to inactive questionnaire'
+        message: 'Cannot respond to inactive questionnaire',
       });
     }
 
@@ -230,7 +230,7 @@ router.post('/:id/responses', auth, async (req, res) => {
       status: req.body.status || 'draft',
       responses: responses || [],
       region: region,
-      location: farm.location
+      location: farm.location,
     });
 
     // If submitting directly, record submission date
@@ -262,7 +262,7 @@ router.post('/:id/responses', auth, async (req, res) => {
           farmName: farm.name,
           submittedBy: req.user.id,
           region: region,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     }
@@ -312,7 +312,7 @@ router.get('/analytics/regional', [auth, adminAuth], async (req, res) => {
     // Count submissions by region
     const submissionsByRegion = await QuestionnaireResponse.aggregate([
       { $match: { status: { $in: ['submitted', 'approved'] } } },
-      { $group: { _id: '$region', count: { $sum: 1 } } }
+      { $group: { _id: '$region', count: { $sum: 1 } } },
     ]);
 
     // Average scores by region (if scoring is enabled)
@@ -320,16 +320,16 @@ router.get('/analytics/regional', [auth, adminAuth], async (req, res) => {
       {
         $match: {
           status: { $in: ['approved'] },
-          overallScore: { $exists: true, $ne: null }
-        }
+          overallScore: { $exists: true, $ne: null },
+        },
       },
       {
         $group: {
           _id: '$region',
           avgScore: { $avg: '$overallScore' },
-          count: { $sum: 1 }
-        }
-      }
+          count: { $sum: 1 },
+        },
+      },
     ]);
 
     // Pass/fail rates by region
@@ -337,14 +337,14 @@ router.get('/analytics/regional', [auth, adminAuth], async (req, res) => {
       {
         $match: {
           status: { $in: ['approved'] },
-          result: { $exists: true, $ne: null }
-        }
+          result: { $exists: true, $ne: null },
+        },
       },
       {
         $group: {
           _id: { region: '$region', result: '$result' },
-          count: { $sum: 1 }
-        }
+          count: { $sum: 1 },
+        },
       },
       {
         $group: {
@@ -352,12 +352,12 @@ router.get('/analytics/regional', [auth, adminAuth], async (req, res) => {
           results: {
             $push: {
               result: '$_id.result',
-              count: '$count'
-            }
+              count: '$count',
+            },
           },
-          totalCount: { $sum: '$count' }
-        }
-      }
+          totalCount: { $sum: '$count' },
+        },
+      },
     ]);
 
     // Format results
@@ -371,14 +371,14 @@ router.get('/analytics/regional', [auth, adminAuth], async (req, res) => {
         failRate: (failCount / item.totalCount) * 100,
         passCount,
         failCount,
-        totalCount: item.totalCount
+        totalCount: item.totalCount,
       };
     });
 
     res.json({
       submissionsByRegion,
       scoresByRegion,
-      resultsByRegion: formattedResults
+      resultsByRegion: formattedResults,
     });
   } catch (err) {
     questionnaireLogger.error('Error generating regional analytics:', err);

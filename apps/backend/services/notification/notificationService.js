@@ -1,7 +1,7 @@
 /**
  * Notification Service
  * Handles email, SMS, and in-app notifications
- * 
+ *
  * Phase 2 Integration:
  * - Queue Service: Async email sending (800ms → 20ms response)
  * - Batch notifications for efficiency
@@ -19,7 +19,7 @@ class NotificationService {
   constructor() {
     // Email transporter (using environment variables)
     this.transporter = null;
-    
+
     if (process.env.SMTP_HOST && process.env.SMTP_PORT) {
       this.transporter = nodemailer.createTransport({
         host: process.env.SMTP_HOST,
@@ -27,8 +27,8 @@ class NotificationService {
         secure: process.env.SMTP_SECURE === 'true',
         auth: {
           user: process.env.SMTP_USER,
-          pass: process.env.SMTP_PASSWORD
-        }
+          pass: process.env.SMTP_PASSWORD,
+        },
       });
       logger.info('Email transporter configured');
     } else {
@@ -44,10 +44,13 @@ class NotificationService {
     try {
       // Use queue if enabled (recommended for production)
       if (process.env.ENABLE_QUEUE === 'true') {
-        await queueService.addEmailJob({
-          type: 'generic',
-          data: { to, subject, html, text }
-        }, { priority });
+        await queueService.addEmailJob(
+          {
+            type: 'generic',
+            data: { to, subject, html, text },
+          },
+          { priority },
+        );
 
         logger.info('Email queued:', { to, subject });
         return { success: true, status: 'queued' };
@@ -64,7 +67,7 @@ class NotificationService {
         to,
         subject,
         text,
-        html
+        html,
       });
 
       logger.info('Email sent:', { to, subject, messageId: info.messageId });
@@ -83,28 +86,33 @@ class NotificationService {
     try {
       // Get all reviewers
       const reviewers = await DTAMStaff.find({ role: 'REVIEWER', isActive: true });
-      
+
       // Queue all emails at once (batch processing)
       if (process.env.ENABLE_QUEUE === 'true') {
         const emailJobs = reviewers.map(reviewer =>
-          queueService.addEmailJob({
-            type: 'new-application-reviewer',
-            applicationId: application._id,
-            data: {
-              reviewerEmail: reviewer.email,
-              applicationNumber: application.applicationNumber,
-              farmerName: application.farmer?.name,
-              farmName: application.farmer?.farmName,
-              lotId: application.lotId,
-              aiQcScore: application.aiQc?.overallScore,
-              inspectionType: application.inspectionType
-            }
-          }, { priority: 6 })
+          queueService.addEmailJob(
+            {
+              type: 'new-application-reviewer',
+              applicationId: application._id,
+              data: {
+                reviewerEmail: reviewer.email,
+                applicationNumber: application.applicationNumber,
+                farmerName: application.farmer?.name,
+                farmName: application.farmer?.farmName,
+                lotId: application.lotId,
+                aiQcScore: application.aiQc?.overallScore,
+                inspectionType: application.inspectionType,
+              },
+            },
+            { priority: 6 },
+          ),
         );
 
         await Promise.all(emailJobs);
-        
-        logger.info(`Queued emails for ${reviewers.length} reviewers about application ${application.applicationNumber}`);
+
+        logger.info(
+          `Queued emails for ${reviewers.length} reviewers about application ${application.applicationNumber}`,
+        );
         return { success: true, notified: reviewers.length, status: 'queued' };
       }
 
@@ -119,17 +127,23 @@ class NotificationService {
             <p><strong>เกษตรกร:</strong> ${application.farmer.name}</p>
             <p><strong>แปลง:</strong> ${application.farmer.farmName}</p>
             <p><strong>Lot ID:</strong> ${application.lotId}</p>
-            ${application.aiQc ? `
+            ${
+              application.aiQc
+                ? `
               <p><strong>คะแนน AI QC:</strong> ${application.aiQc.overallScore}/10</p>
               <p><strong>ประเภทการตรวจ:</strong> ${application.inspectionType}</p>
-            ` : ''}
+            `
+                : ''
+            }
             <p><a href="${process.env.FRONTEND_URL}/reviewer/dashboard">ตรวจสอบใบสมัคร</a></p>
           `,
-          text: `ใบสมัครใหม่รอการตรวจสอบ\n\nเลขที่: ${application.applicationNumber}\nเกษตรกร: ${application.farmer.name}\nLot ID: ${application.lotId}`
+          text: `ใบสมัครใหม่รอการตรวจสอบ\n\nเลขที่: ${application.applicationNumber}\nเกษตรกร: ${application.farmer.name}\nLot ID: ${application.lotId}`,
         });
       }
 
-      logger.info(`Notified ${reviewers.length} reviewers about new application ${application.applicationNumber}`);
+      logger.info(
+        `Notified ${reviewers.length} reviewers about new application ${application.applicationNumber}`,
+      );
       return { success: true, notified: reviewers.length };
     } catch (error) {
       logger.error('Failed to notify reviewers:', error);
@@ -144,21 +158,26 @@ class NotificationService {
     try {
       // Use queue for better performance
       if (process.env.ENABLE_QUEUE === 'true') {
-        await queueService.addEmailJob({
-          type: 'inspector-assignment',
-          applicationId: application._id,
-          data: {
-            inspectorEmail: inspector.email,
-            applicationNumber: application.applicationNumber,
-            farmerName: application.farmer?.name,
-            farmName: application.farmer?.farmName,
-            inspectionType: application.inspectionType,
-            scheduledDate: application.inspectionSchedule?.scheduledDate,
-            meetLink: application.inspectionSchedule?.meetLink
-          }
-        }, { priority: 7 });
+        await queueService.addEmailJob(
+          {
+            type: 'inspector-assignment',
+            applicationId: application._id,
+            data: {
+              inspectorEmail: inspector.email,
+              applicationNumber: application.applicationNumber,
+              farmerName: application.farmer?.name,
+              farmName: application.farmer?.farmName,
+              inspectionType: application.inspectionType,
+              scheduledDate: application.inspectionSchedule?.scheduledDate,
+              meetLink: application.inspectionSchedule?.meetLink,
+            },
+          },
+          { priority: 7 },
+        );
 
-        logger.info(`Queued inspector notification for ${inspector.email} about ${application.applicationNumber}`);
+        logger.info(
+          `Queued inspector notification for ${inspector.email} about ${application.applicationNumber}`,
+        );
         return { success: true, status: 'queued' };
       }
 
@@ -173,18 +192,28 @@ class NotificationService {
           <p><strong>แปลง:</strong> ${application.farmer.farmName}</p>
           <p><strong>Lot ID:</strong> ${application.lotId}</p>
           <p><strong>ประเภทการตรวจ:</strong> ${application.inspectionType}</p>
-          ${application.inspectionSchedule ? `
+          ${
+            application.inspectionSchedule
+              ? `
             <p><strong>วันที่นัดหมาย:</strong> ${new Date(application.inspectionSchedule.scheduledDate).toLocaleDateString('th-TH')}</p>
-            ${application.inspectionSchedule.meetLink ? `
+            ${
+              application.inspectionSchedule.meetLink
+                ? `
               <p><strong>Google Meet:</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
-            ` : ''}
-          ` : ''}
+            `
+                : ''
+            }
+          `
+              : ''
+          }
           <p><a href="${process.env.FRONTEND_URL}/inspector/dashboard">ดูรายละเอียดงาน</a></p>
         `,
-        text: `มอบหมายงานตรวจประเมินใหม่\n\nเลขที่: ${application.applicationNumber}\nเกษตรกร: ${application.farmer.name}\nประเภท: ${application.inspectionType}`
+        text: `มอบหมายงานตรวจประเมินใหม่\n\nเลขที่: ${application.applicationNumber}\nเกษตรกร: ${application.farmer.name}\nประเภท: ${application.inspectionType}`,
       });
 
-      logger.info(`Notified inspector ${inspector.email} about assignment ${application.applicationNumber}`);
+      logger.info(
+        `Notified inspector ${inspector.email} about assignment ${application.applicationNumber}`,
+      );
       return { success: true };
     } catch (error) {
       logger.error('Failed to notify inspector:', error);
@@ -199,7 +228,7 @@ class NotificationService {
     try {
       // Get all approvers
       const approvers = await DTAMStaff.find({ role: 'APPROVER', isActive: true });
-      
+
       for (const approver of approvers) {
         await this.sendEmail({
           to: approver.email,
@@ -214,11 +243,13 @@ class NotificationService {
             <p><strong>ผู้ตรวจประเมิน:</strong> ${application.inspector?.name || 'N/A'}</p>
             <p><a href="${process.env.FRONTEND_URL}/approver/dashboard">อนุมัติใบสมัคร</a></p>
           `,
-          text: `ใบสมัครรอการอนุมัติ\n\nเลขที่: ${application.applicationNumber}\nเกษตรกร: ${application.farmer.name}\nLot ID: ${application.lotId}`
+          text: `ใบสมัครรอการอนุมัติ\n\nเลขที่: ${application.applicationNumber}\nเกษตรกร: ${application.farmer.name}\nLot ID: ${application.lotId}`,
         });
       }
 
-      logger.info(`Notified ${approvers.length} approvers about completed inspection ${application.applicationNumber}`);
+      logger.info(
+        `Notified ${approvers.length} approvers about completed inspection ${application.applicationNumber}`,
+      );
       return { success: true, notified: approvers.length };
     } catch (error) {
       logger.error('Failed to notify approvers:', error);
@@ -239,7 +270,7 @@ class NotificationService {
         APPROVED: 'ใบสมัครได้รับการอนุมัติ',
         REJECTED: 'ใบสมัครไม่ได้รับการอนุมัติ',
         SENT_BACK: 'ใบสมัครถูกส่งกลับเพื่อแก้ไข',
-        CERTIFICATE_ISSUED: 'ออกใบรับรอง GACP แล้ว'
+        CERTIFICATE_ISSUED: 'ออกใบรับรอง GACP แล้ว',
       };
 
       await this.sendEmail({
@@ -250,24 +281,42 @@ class NotificationService {
           <p><strong>เลขที่ใบสมัคร:</strong> ${application.applicationNumber}</p>
           <p><strong>Lot ID:</strong> ${application.lotId}</p>
           <p><strong>สถานะใหม่:</strong> ${statusMessages[newStatus]}</p>
-          ${application.inspectionSchedule && newStatus === 'INSPECTION_SCHEDULED' ? `
+          ${
+            application.inspectionSchedule && newStatus === 'INSPECTION_SCHEDULED'
+              ? `
             <p><strong>วันที่นัดหมาย:</strong> ${new Date(application.inspectionSchedule.scheduledDate).toLocaleDateString('th-TH')}</p>
-            ${application.inspectionSchedule.meetLink ? `
+            ${
+              application.inspectionSchedule.meetLink
+                ? `
               <p><strong>Google Meet:</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
-            ` : ''}
-          ` : ''}
-          ${application.rejectionReason ? `
+            `
+                : ''
+            }
+          `
+              : ''
+          }
+          ${
+            application.rejectionReason
+              ? `
             <p><strong>เหตุผล:</strong> ${application.rejectionReason}</p>
-          ` : ''}
-          ${application.sendBackReason ? `
+          `
+              : ''
+          }
+          ${
+            application.sendBackReason
+              ? `
             <p><strong>รายละเอียด:</strong> ${application.sendBackReason}</p>
-          ` : ''}
+          `
+              : ''
+          }
           <p><a href="${process.env.FRONTEND_URL}/farmer/applications/${application._id}">ดูรายละเอียด</a></p>
         `,
-        text: `สถานะใบสมัคร GACP เปลี่ยนแปลง\n\nเลขที่: ${application.applicationNumber}\nLot ID: ${application.lotId}\nสถานะใหม่: ${statusMessages[newStatus]}`
+        text: `สถานะใบสมัคร GACP เปลี่ยนแปลง\n\nเลขที่: ${application.applicationNumber}\nLot ID: ${application.lotId}\nสถานะใหม่: ${statusMessages[newStatus]}`,
       });
 
-      logger.info(`Notified farmer about status change to ${newStatus} for ${application.applicationNumber}`);
+      logger.info(
+        `Notified farmer about status change to ${newStatus} for ${application.applicationNumber}`,
+      );
       return { success: true };
     } catch (error) {
       logger.error('Failed to notify farmer:', error);
@@ -295,13 +344,17 @@ class NotificationService {
             <p><strong>แปลง:</strong> ${farmer.farmName}</p>
             <p><strong>วันที่:</strong> ${new Date(application.inspectionSchedule.scheduledDate).toLocaleDateString('th-TH')}</p>
             <p><strong>เวลา:</strong> ${application.inspectionSchedule.scheduledTime}</p>
-            ${application.inspectionSchedule.meetLink ? `
+            ${
+              application.inspectionSchedule.meetLink
+                ? `
               <p><strong>Google Meet:</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
-            ` : `
+            `
+                : `
               <p><strong>สถานที่:</strong> ${farmer.farmLocation}</p>
-            `}
+            `
+            }
           `,
-          text: `แจ้งเตือนการตรวจประเมินพรุ่งนี้\n\nเลขที่: ${application.applicationNumber}\nเกษตรกร: ${farmer.name}`
+          text: `แจ้งเตือนการตรวจประเมินพรุ่งนี้\n\nเลขที่: ${application.applicationNumber}\nเกษตรกร: ${farmer.name}`,
         });
       }
 
@@ -316,14 +369,18 @@ class NotificationService {
             <p><strong>วันที่:</strong> ${new Date(application.inspectionSchedule.scheduledDate).toLocaleDateString('th-TH')}</p>
             <p><strong>เวลา:</strong> ${application.inspectionSchedule.scheduledTime}</p>
             <p><strong>ผู้ตรวจประเมิน:</strong> ${inspector?.name || 'N/A'}</p>
-            ${application.inspectionSchedule.meetLink ? `
+            ${
+              application.inspectionSchedule.meetLink
+                ? `
               <p><strong>Google Meet:</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
               <p>กรุณาเตรียมความพร้อม: กล้อง, ไมโครโฟน, และการเชื่อมต่ออินเทอร์เน็ต</p>
-            ` : `
+            `
+                : `
               <p>กรุณาเตรียมความพร้อมและรอรับเจ้าหน้าที่ที่แปลง</p>
-            `}
+            `
+            }
           `,
-          text: `แจ้งเตือนการตรวจประเมินพรุ่งนี้\n\nLot ID: ${application.lotId}\nวันที่: ${new Date(application.inspectionSchedule.scheduledDate).toLocaleDateString('th-TH')}`
+          text: `แจ้งเตือนการตรวจประเมินพรุ่งนี้\n\nLot ID: ${application.lotId}\nวันที่: ${new Date(application.inspectionSchedule.scheduledDate).toLocaleDateString('th-TH')}`,
         });
       }
 
@@ -341,7 +398,7 @@ class NotificationService {
   async sendCertificateExpiryNotification(certificate) {
     try {
       const daysUntilExpiry = Math.ceil(
-        (new Date(certificate.expiryDate) - new Date()) / (1000 * 60 * 60 * 24)
+        (new Date(certificate.expiryDate) - new Date()) / (1000 * 60 * 60 * 24),
       );
 
       await this.sendEmail({
@@ -356,7 +413,7 @@ class NotificationService {
           <p>กรุณายื่นใบสมัครต่ออายุก่อนวันหมดอายุเพื่อความต่อเนื่องในการรับรอง</p>
           <p><a href="${process.env.FRONTEND_URL}/farmer/applications/new">ยื่นใบสมัครต่ออายุ</a></p>
         `,
-        text: `ใบรับรอง GACP ของคุณใกล้หมดอายุ\n\nเลขที่: ${certificate.certificateNumber}\nLot ID: ${certificate.lotId}\nหมดอายุ: ${new Date(certificate.expiryDate).toLocaleDateString('th-TH')}\nเหลืออีก: ${daysUntilExpiry} วัน`
+        text: `ใบรับรอง GACP ของคุณใกล้หมดอายุ\n\nเลขที่: ${certificate.certificateNumber}\nLot ID: ${certificate.lotId}\nหมดอายุ: ${new Date(certificate.expiryDate).toLocaleDateString('th-TH')}\nเหลืออีก: ${daysUntilExpiry} วัน`,
       });
 
       logger.info(`Sent certificate expiry notification for ${certificate.certificateNumber}`);

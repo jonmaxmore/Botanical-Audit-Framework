@@ -25,6 +25,6 @@ module.exports = {
     admin: ['read:all', 'write:all', 'delete:all', 'manage:users'],
     reviewer: ['read:all', 'write:review', 'approve:applications'],
     manager: ['read:all', 'write:all', 'reports:view'],
-    inspector: ['read:inspections', 'write:inspections']
-  }
+    inspector: ['read:inspections', 'write:inspections'],
+  },
 };

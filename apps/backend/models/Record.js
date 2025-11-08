@@ -21,7 +21,7 @@ const RecordSchema = new mongoose.Schema(
       unique: true,
       index: true,
       trim: true,
-      maxlength: [100, 'Record ID cannot exceed 100 characters']
+      maxlength: [100, 'Record ID cannot exceed 100 characters'],
     },
 
     type: {
@@ -43,18 +43,18 @@ const RecordSchema = new mongoose.Schema(
           'SHIPPING',
           'DISPOSAL',
           'INSPECTION',
-          'OTHER'
+          'OTHER',
         ],
-        message: '{VALUE} is not a valid record type'
+        message: '{VALUE} is not a valid record type',
       },
-      index: true
+      index: true,
     },
 
     farmId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: [true, 'Farm ID is required'],
-      index: true
+      index: true,
     },
 
     data: {
@@ -64,15 +64,15 @@ const RecordSchema = new mongoose.Schema(
         validator: function (v) {
           return v && typeof v === 'object' && Object.keys(v).length > 0;
         },
-        message: 'Record data cannot be empty'
-      }
+        message: 'Record data cannot be empty',
+      },
     },
 
     location: {
       type: {
         type: String,
         enum: ['Point'],
-        default: 'Point'
+        default: 'Point',
       },
       coordinates: {
         type: [Number], // [longitude, latitude]
@@ -89,9 +89,9 @@ const RecordSchema = new mongoose.Schema(
                 v[1] <= 90)
             );
           },
-          message: 'Invalid coordinates [longitude, latitude]'
-        }
-      }
+          message: 'Invalid coordinates [longitude, latitude]',
+        },
+      },
     },
 
     hash: {
@@ -99,76 +99,76 @@ const RecordSchema = new mongoose.Schema(
       required: [true, 'Hash is required'],
       unique: true,
       index: true,
-      match: [/^[0-9a-f]{64}$/, 'Hash must be 64-character hex string']
+      match: [/^[0-9a-f]{64}$/, 'Hash must be 64-character hex string'],
     },
 
     signature: {
       type: String,
       required: [true, 'Signature is required'],
-      match: [/^[0-9a-f]+$/, 'Signature must be hex string']
+      match: [/^[0-9a-f]+$/, 'Signature must be hex string'],
     },
 
     previousHash: {
       type: String,
       required: [true, 'Previous hash is required'],
       index: true,
-      match: [/^[0-9a-f]{64}$/, 'Previous hash must be 64-character hex string']
+      match: [/^[0-9a-f]{64}$/, 'Previous hash must be 64-character hex string'],
     },
 
     timestamp: {
       timestamp: {
         type: Date,
-        required: false
+        required: false,
       },
       token: {
         type: String,
-        required: false
+        required: false,
       },
       provider: {
         type: String,
         enum: ['FreeTSA', 'DigiCert', 'GlobalSign', 'fallback', null],
-        required: false
+        required: false,
       },
       algorithm: {
         type: String,
         enum: ['sha256', null],
-        required: false
-      }
+        required: false,
+      },
     },
 
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: [true, 'User ID is required'],
-      index: true
+      index: true,
     },
 
     metadata: {
       device: String,
       ipAddress: String,
       userAgent: String,
-      notes: String
+      notes: String,
     },
 
     verified: {
       type: Boolean,
       default: false,
-      index: true
+      index: true,
     },
 
     verifiedAt: {
-      type: Date
+      type: Date,
     },
 
     verifiedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User'
-    }
+      ref: 'User',
+    },
   },
   {
     timestamps: true,
-    collection: 'records'
-  }
+    collection: 'records',
+  },
 );
 
 // Indexes
@@ -202,9 +202,9 @@ RecordSchema.methods.verify = async function (previousHash = null) {
       hash: this.hash,
       signature: this.signature,
       timestamp: this.timestamp,
-      userId: this.userId.toString()
+      userId: this.userId.toString(),
     },
-    previousHash
+    previousHash,
   );
 
   return verification;
@@ -277,10 +277,10 @@ RecordSchema.statics.createRecord = async function (recordData, previousHash = n
       type: recordData.type,
       data: recordData.data,
       timestamp: new Date().toISOString(),
-      userId: recordData.userId.toString()
+      userId: recordData.userId.toString(),
     },
     previousHash,
-    false // No timestamp for speed (enable in production if needed)
+    false, // No timestamp for speed (enable in production if needed)
   );
 
   // Create record
@@ -289,7 +289,7 @@ RecordSchema.statics.createRecord = async function (recordData, previousHash = n
     hash: signedData.hash,
     signature: signedData.signature,
     previousHash: signedData.previousHash,
-    timestamp: signedData.timestamp
+    timestamp: signedData.timestamp,
   });
 
   return await record.save();
@@ -311,8 +311,8 @@ RecordSchema.statics.verifyChain = async function (farmId, limit = 100) {
       signature: r.signature,
       previousHash: r.previousHash,
       timestamp: r.timestamp,
-      userId: r.userId.toString()
-    }))
+      userId: r.userId.toString(),
+    })),
   );
 
   return verification;
@@ -328,11 +328,11 @@ RecordSchema.statics.findByLocation = function (longitude, latitude, maxDistance
       $near: {
         $geometry: {
           type: 'Point',
-          coordinates: [longitude, latitude]
+          coordinates: [longitude, latitude],
         },
-        $maxDistance: maxDistanceMeters
-      }
-    }
+        $maxDistance: maxDistanceMeters,
+      },
+    },
   });
 };
 
@@ -343,10 +343,10 @@ RecordSchema.statics.getStatsByType = async function (farmId) {
       $group: {
         _id: '$type',
         count: { $sum: 1 },
-        lastActivity: { $max: '$createdAt' }
-      }
+        lastActivity: { $max: '$createdAt' },
+      },
     },
-    { $sort: { count: -1 } }
+    { $sort: { count: -1 } },
   ]);
 };
 
@@ -368,7 +368,7 @@ RecordSchema.post('save', async function (doc) {
     type: doc.type,
     farmId: doc.farmId,
     userId: doc.userId,
-    timestamp: doc.createdAt
+    timestamp: doc.createdAt,
   });
 });
 
@@ -376,7 +376,7 @@ RecordSchema.post('findOneAndUpdate', async function (doc) {
   if (doc) {
     this.model.emit('recordUpdated', {
       recordId: doc.recordId,
-      changes: this.getUpdate()
+      changes: this.getUpdate(),
     });
   }
 });
@@ -385,7 +385,7 @@ RecordSchema.post('findOneAndDelete', async function (doc) {
   if (doc) {
     this.model.emit('recordDeleted', {
       recordId: doc.recordId,
-      farmId: doc.farmId
+      farmId: doc.farmId,
     });
   }
 });
@@ -414,7 +414,7 @@ RecordSchema.set('toJSON', {
     delete ret._id;
     delete ret.__v;
     return ret;
-  }
+  },
 });
 
 const RecordModel = mongoose.model('Record', RecordSchema);

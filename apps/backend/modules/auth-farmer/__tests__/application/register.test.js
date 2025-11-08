@@ -7,10 +7,10 @@ const RegisterUserUseCase = require('../../application/use-cases/register-usecas
 const User = require('../../domain/entities/User');
 const Email = require('../../domain/value-objects/Email');
 const Password = require('../../domain/value-objects/Password');
-const { 
-  validUserPayload, 
+const {
+  validUserPayload,
   createUserPayload,
-  createUniqueUserPayload 
+  createUniqueUserPayload,
 } = require('../fixtures/userFactory');
 
 describe('RegisterUserUseCase', () => {
@@ -25,22 +25,22 @@ describe('RegisterUserUseCase', () => {
     mockUserRepository = {
       emailExists: jest.fn(),
       idCardExists: jest.fn(),
-      save: jest.fn()
+      save: jest.fn(),
     };
 
     // Mock password hasher
     mockPasswordHasher = {
-      hash: jest.fn()
+      hash: jest.fn(),
     };
 
     // Mock token generator
     mockTokenGenerator = {
-      generate: jest.fn()
+      generate: jest.fn(),
     };
 
     // Mock event bus
     mockEventBus = {
-      publish: jest.fn()
+      publish: jest.fn(),
     };
 
     // Create use case instance
@@ -48,7 +48,7 @@ describe('RegisterUserUseCase', () => {
       userRepository: mockUserRepository,
       passwordHasher: mockPasswordHasher,
       tokenGenerator: mockTokenGenerator,
-      eventBus: mockEventBus
+      eventBus: mockEventBus,
     });
   });
 
@@ -97,7 +97,7 @@ describe('RegisterUserUseCase', () => {
       await registerUseCase.execute(userData);
 
       expect(mockPasswordHasher.hash).toHaveBeenCalledWith(userData.password);
-      
+
       const savedUser = mockUserRepository.save.mock.calls[0][0];
       expect(savedUser.password).toBe('$2b$12$hashedPassword');
     });
@@ -130,8 +130,8 @@ describe('RegisterUserUseCase', () => {
 
       expect(mockEventBus.publish).toHaveBeenCalledWith(
         expect.objectContaining({
-          type: 'UserRegistered'
-        })
+          type: 'UserRegistered',
+        }),
       );
     });
   });
@@ -143,7 +143,7 @@ describe('RegisterUserUseCase', () => {
       mockUserRepository.emailExists.mockResolvedValue(true);
 
       await expect(registerUseCase.execute(userData)).rejects.toThrow(
-        /already exists|already registered/i
+        /already exists|already registered/i,
       );
 
       expect(mockUserRepository.emailExists).toHaveBeenCalledWith(userData.email);
@@ -158,7 +158,7 @@ describe('RegisterUserUseCase', () => {
       mockUserRepository.idCardExists.mockResolvedValue(true);
 
       await expect(registerUseCase.execute(userData)).rejects.toThrow(
-        /already exists|already registered/i
+        /already exists|already registered/i,
       );
 
       expect(mockUserRepository.idCardExists).toHaveBeenCalledWith(userData.idCard);
@@ -181,7 +181,7 @@ describe('RegisterUserUseCase', () => {
     it('should throw error for missing required fields', async () => {
       const userData = {
         email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123'
+        password: 'SecureP@ssw0rd123',
         // Missing firstName, lastName, idCard
       };
 

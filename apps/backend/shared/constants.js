@@ -8,11 +8,11 @@ module.exports = {
     ADMIN: 'admin',
     FARMER: 'farmer',
     DTAM: 'dtam',
-    AUDITOR: 'auditor'
+    AUDITOR: 'auditor',
   },
   STATUS: {
     PENDING: 'pending',
     APPROVED: 'approved',
-    REJECTED: 'rejected'
-  }
+    REJECTED: 'rejected',
+  },
 };

@@ -32,7 +32,7 @@ class StandaloneApplicationValidator {
       passed: 0,
       failed: 0,
       warnings: 0,
-      errors: []
+      errors: [],
     };
 
     this.moduleBasePath = path.join(__dirname, '../modules/application');
@@ -43,22 +43,22 @@ class StandaloneApplicationValidator {
       'config/index.js': { required: true, type: 'configuration' },
       'domain/services/AdvancedApplicationProcessingService.js': {
         required: true,
-        type: 'service'
+        type: 'service',
       },
       'application/controllers/EnhancedApplicationProcessingController.js': {
         required: true,
-        type: 'controller'
+        type: 'controller',
       },
       'infrastructure/integrations/DocumentManagementIntegrationSystem.js': {
         required: true,
-        type: 'integration'
+        type: 'integration',
       },
       'infrastructure/integrations/GovernmentApiIntegrationService.js': {
         required: true,
-        type: 'integration'
+        type: 'integration',
       },
       'presentation/routes/enhanced-application.routes.js': { required: true, type: 'routes' },
-      'tests/integration/ApplicationIntegrationTestSuite.js': { required: true, type: 'test' }
+      'tests/integration/ApplicationIntegrationTestSuite.js': { required: true, type: 'test' },
     };
 
     // Business logic validation patterns
@@ -67,7 +67,7 @@ class StandaloneApplicationValidator {
       documentTypes: ['FARMER_ID', 'LAND_OWNERSHIP', 'FARM_REGISTRATION'],
       governmentServices: ['nationalId', 'landDepartment', 'moac', 'doa', 'fda'],
       workflowMethods: ['createApplication', 'processStateTransition', 'uploadDocument'],
-      securityFeatures: ['authentication', 'authorization', 'audit', 'encryption']
+      securityFeatures: ['authentication', 'authorization', 'audit', 'encryption'],
     };
   }
 
@@ -224,7 +224,7 @@ class StandaloneApplicationValidator {
 
     const servicePath = path.join(
       this.moduleBasePath,
-      'domain/services/AdvancedApplicationProcessingService.js'
+      'domain/services/AdvancedApplicationProcessingService.js',
     );
 
     if (!fs.existsSync(servicePath)) {
@@ -251,7 +251,7 @@ class StandaloneApplicationValidator {
         'createApplication',
         'processStateTransition',
         'validateEligibility',
-        'generateAnalytics'
+        'generateAnalytics',
       ];
       let methodsFound = 0;
 
@@ -308,7 +308,7 @@ class StandaloneApplicationValidator {
 
     const controllerPath = path.join(
       this.moduleBasePath,
-      'application/controllers/EnhancedApplicationProcessingController.js'
+      'application/controllers/EnhancedApplicationProcessingController.js',
     );
 
     if (!fs.existsSync(controllerPath)) {
@@ -385,7 +385,7 @@ class StandaloneApplicationValidator {
 
     const routePath = path.join(
       this.moduleBasePath,
-      'presentation/routes/enhanced-application.routes.js'
+      'presentation/routes/enhanced-application.routes.js',
     );
 
     if (!fs.existsSync(routePath)) {
@@ -458,7 +458,7 @@ class StandaloneApplicationValidator {
     const mainFiles = [
       'domain/services/AdvancedApplicationProcessingService.js',
       'infrastructure/integrations/DocumentManagementIntegrationSystem.js',
-      'infrastructure/integrations/GovernmentApiIntegrationService.js'
+      'infrastructure/integrations/GovernmentApiIntegrationService.js',
     ];
 
     let combinedContent = '';
@@ -525,7 +525,7 @@ class StandaloneApplicationValidator {
 
     const testPath = path.join(
       this.moduleBasePath,
-      'tests/integration/ApplicationIntegrationTestSuite.js'
+      'tests/integration/ApplicationIntegrationTestSuite.js',
     );
 
     if (!fs.existsSync(testPath)) {

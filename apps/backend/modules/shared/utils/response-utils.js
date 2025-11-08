@@ -15,7 +15,7 @@ const successResponse = (res, data = null, message = 'Success', statusCode = 200
     success: true,
     message,
     data,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 };
 
@@ -30,7 +30,7 @@ const errorResponse = (res, message = 'Error', statusCode = 500, errors = null) 
   const response = {
     success: false,
     message,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 
   if (errors) {
@@ -94,9 +94,9 @@ const paginatedResponse = (res, data, page, limit, total) => {
       total,
       totalPages: Math.ceil(total / limit),
       hasNext: page * limit < total,
-      hasPrev: page > 1
+      hasPrev: page > 1,
     },
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 };
 
@@ -116,5 +116,5 @@ module.exports = {
   notFound: notFoundResponse,
   unauthorized: unauthorizedResponse,
   forbidden: forbiddenResponse,
-  paginated: paginatedResponse
+  paginated: paginatedResponse,
 };

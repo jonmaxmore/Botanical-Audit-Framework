@@ -8,9 +8,9 @@ const createLogger = module => {
     defaultMeta: { service: module },
     transports: [
       new winston.transports.Console({
-        format: winston.format.combine(winston.format.colorize(), winston.format.simple())
-      })
-    ]
+        format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+      }),
+    ],
   });
 };
 
@@ -20,9 +20,9 @@ const defaultLogger = winston.createLogger({
   defaultMeta: { service: 'gacp-backend' },
   transports: [
     new winston.transports.Console({
-      format: winston.format.combine(winston.format.colorize(), winston.format.simple())
-    })
-  ]
+      format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
+    }),
+  ],
 });
 
 module.exports = defaultLogger;

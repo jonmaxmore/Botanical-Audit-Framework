@@ -43,7 +43,7 @@ router.post('/', [auth, validateTask], async (req, res) => {
       dueDate: dueDate ? new Date(dueDate) : undefined,
       location,
       createdBy: req.user.id,
-      status: 'pending'
+      status: 'pending',
     });
 
     const task = await newTask.save();
@@ -54,7 +54,7 @@ router.post('/', [auth, validateTask], async (req, res) => {
       io.to(`inspector:${assignedTo}`).emit('new-task', {
         taskId: task._id,
         title: task.title,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
 
@@ -99,7 +99,7 @@ router.patch('/:id/status', auth, async (req, res) => {
       task.comments.push({
         text: comment,
         user: req.user.id,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
     }
 
@@ -112,7 +112,7 @@ router.patch('/:id/status', auth, async (req, res) => {
         taskId: task._id,
         status,
         updatedBy: req.user.id,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
 

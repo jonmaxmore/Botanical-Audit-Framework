@@ -12,7 +12,7 @@ const comparisonSchema = new mongoose.Schema(
     farmId: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
 
     // Farm data submitted for comparison
@@ -20,7 +20,7 @@ const comparisonSchema = new mongoose.Schema(
       farmName: {
         type: String,
         required: true,
-        index: true
+        index: true,
       },
       location: {
         province: String,
@@ -28,8 +28,8 @@ const comparisonSchema = new mongoose.Schema(
         subDistrict: String,
         coordinates: {
           latitude: Number,
-          longitude: Number
-        }
+          longitude: Number,
+        },
       },
       cropType: String,
       farmSize: Number,
@@ -45,7 +45,7 @@ const comparisonSchema = new mongoose.Schema(
         foodSafety: Boolean,
         environmental: Boolean,
         wasteManagement: Boolean,
-        traceability: Boolean
+        traceability: Boolean,
       },
 
       // Documents
@@ -53,8 +53,8 @@ const comparisonSchema = new mongoose.Schema(
         {
           type: String,
           name: String,
-          uploadedAt: Date
-        }
+          uploadedAt: Date,
+        },
       ],
 
       // Certifications
@@ -65,8 +65,8 @@ const comparisonSchema = new mongoose.Schema(
         complete: Boolean,
         cultivation: Boolean,
         harvesting: Boolean,
-        batchTracking: Boolean
-      }
+        batchTracking: Boolean,
+      },
     },
 
     // Comparison results for each standard
@@ -96,16 +96,16 @@ const comparisonSchema = new mongoose.Schema(
                 requirement: String,
                 priority: {
                   type: String,
-                  enum: ['critical', 'important', 'optional']
+                  enum: ['critical', 'important', 'optional'],
                 },
                 weight: Number,
                 met: Boolean,
-                score: Number
-              }
-            ]
-          }
-        ]
-      }
+                score: Number,
+              },
+            ],
+          },
+        ],
+      },
     ],
 
     // Overall summary
@@ -113,19 +113,19 @@ const comparisonSchema = new mongoose.Schema(
       standardsCompared: Number,
       certified: Number,
       notCertified: Number,
-      averageScore: Number
+      averageScore: Number,
     },
 
     // Timestamps
     createdAt: {
       type: Date,
       default: Date.now,
-      index: true
-    }
+      index: true,
+    },
   },
   {
-    collection: 'standards_comparisons'
-  }
+    collection: 'standards_comparisons',
+  },
 );
 
 // Indexes for performance
@@ -183,7 +183,7 @@ comparisonSchema.statics.findRecent = function (farmId, days = 30) {
 
   return this.find({
     farmId,
-    createdAt: { $gte: startDate }
+    createdAt: { $gte: startDate },
   }).sort({ createdAt: -1 });
 };
 
@@ -193,9 +193,9 @@ comparisonSchema.statics.findCertified = function (standardId) {
     comparisons: {
       $elemMatch: {
         standardId,
-        certified: true
-      }
-    }
+        certified: true,
+      },
+    },
   });
 };
 

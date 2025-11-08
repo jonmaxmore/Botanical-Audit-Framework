@@ -21,7 +21,7 @@ class GACPBusinessRulesValidator {
       QUALITY_STANDARDS: 'WHO_GMP',
 
       // ตามกฎกระทรวงกรมวิชาการเกษตร
-      AGRICULTURAL_STANDARDS: 'DOA_Standards'
+      AGRICULTURAL_STANDARDS: 'DOA_Standards',
     };
 
     // ค่าธรรมเนียมตามประกาศทางราชการ
@@ -29,7 +29,7 @@ class GACPBusinessRulesValidator {
       PHASE1_DOCUMENT_REVIEW: 5000, // บาท
       PHASE2_INSPECTION_CERTIFICATE: 25000, // บาท
       RESUBMISSION_FEE: 5000, // บาท (ครั้งที่ 3 เป็นต้นไป)
-      TOTAL_STANDARD_FEE: 30000 // บาท
+      TOTAL_STANDARD_FEE: 30000, // บาท
     };
 
     // ระยะเวลาดำเนินการตาม SLA ภาครัฐ
@@ -38,7 +38,7 @@ class GACPBusinessRulesValidator {
       INSPECTION_SCHEDULE_DAYS: 7, // วันทำการ
       FINAL_APPROVAL_DAYS: 2, // วันทำการ
       CERTIFICATE_VALIDITY_YEARS: 3, // ปี
-      MAX_REVISION_ATTEMPTS: 3 // ครั้ง
+      MAX_REVISION_ATTEMPTS: 3, // ครั้ง
     };
   }
 
@@ -51,7 +51,7 @@ class GACPBusinessRulesValidator {
       isValid: true,
       errors: [],
       warnings: [],
-      businessRuleViolations: []
+      businessRuleViolations: [],
     };
 
     try {
@@ -61,7 +61,7 @@ class GACPBusinessRulesValidator {
           rule: 'THAI_CITIZENSHIP_REQUIRED',
           message: 'เกษตรกรต้องเป็นพลเมืองไทย (ตามพระราชบัญญัติยา)',
           field: 'nationalId',
-          severity: 'CRITICAL'
+          severity: 'CRITICAL',
         });
         validationResult.isValid = false;
       }
@@ -72,7 +72,7 @@ class GACPBusinessRulesValidator {
           rule: 'FARMER_REGISTRATION_REQUIRED',
           message: 'ต้องมีหมายเลขทะเบียนเกษตรกร (ตามกฎกระทรวงเกษตรฯ)',
           field: 'farmerRegistrationNumber',
-          severity: 'CRITICAL'
+          severity: 'CRITICAL',
         });
         validationResult.isValid = false;
       }
@@ -83,7 +83,7 @@ class GACPBusinessRulesValidator {
           rule: 'VALID_FARM_AREA_REQUIRED',
           message: 'พื้นที่เพาะปลูกต้องระบุขนาดและพิกัดที่ชัดเจน',
           field: 'farmArea',
-          severity: 'HIGH'
+          severity: 'HIGH',
         });
         validationResult.isValid = false;
       }
@@ -94,7 +94,7 @@ class GACPBusinessRulesValidator {
           rule: 'APPROVED_CROP_TYPES_ONLY',
           message: 'สามารถปลูกได้เฉพาะสมุนไพรที่อยู่ในรายการอนุญาต',
           field: 'cropTypes',
-          severity: 'HIGH'
+          severity: 'HIGH',
         });
         validationResult.isValid = false;
       }
@@ -105,7 +105,7 @@ class GACPBusinessRulesValidator {
       validationResult.errors.push({
         rule: 'SYSTEM_ERROR',
         message: `ข้อผิดพลาดในการตรวจสอบ: ${error.message}`,
-        severity: 'CRITICAL'
+        severity: 'CRITICAL',
       });
       return validationResult;
     }
@@ -121,7 +121,7 @@ class GACPBusinessRulesValidator {
       missingDocuments: [],
       invalidDocuments: [],
       completionPercentage: 0,
-      businessRuleViolations: []
+      businessRuleViolations: [],
     };
 
     // เอกสารที่จำเป็นตามกฎหมาย
@@ -132,7 +132,7 @@ class GACPBusinessRulesValidator {
         formats: ['pdf', 'jpg', 'png'],
         maxSize: 5 * 1024 * 1024, // 5MB
         required: true,
-        legalBasis: 'กฎกระทรวงเกษตรและสหกรณ์'
+        legalBasis: 'กฎกระทรวงเกษตรและสหกรณ์',
       },
       {
         type: 'LAND_OWNERSHIP_PROOF',
@@ -140,7 +140,7 @@ class GACPBusinessRulesValidator {
         formats: ['pdf'],
         maxSize: 10 * 1024 * 1024, // 10MB
         required: true,
-        legalBasis: 'พระราชบัญญัติที่ดิน'
+        legalBasis: 'พระราชบัญญัติที่ดิน',
       },
       {
         type: 'WATER_QUALITY_REPORT',
@@ -148,7 +148,7 @@ class GACPBusinessRulesValidator {
         formats: ['pdf'],
         maxSize: 5 * 1024 * 1024,
         required: true,
-        legalBasis: 'มาตรฐาน WHO GMP'
+        legalBasis: 'มาตรฐาน WHO GMP',
       },
       {
         type: 'SOIL_ANALYSIS',
@@ -156,7 +156,7 @@ class GACPBusinessRulesValidator {
         formats: ['pdf'],
         maxSize: 5 * 1024 * 1024,
         required: true,
-        legalBasis: 'มาตรฐาน WHO GMP'
+        legalBasis: 'มาตรฐาน WHO GMP',
       },
       {
         type: 'CULTIVATION_PLAN',
@@ -164,7 +164,7 @@ class GACPBusinessRulesValidator {
         formats: ['pdf', 'doc', 'docx'],
         maxSize: 10 * 1024 * 1024,
         required: true,
-        legalBasis: 'มาตรฐาน GACP'
+        legalBasis: 'มาตรฐาน GACP',
       },
       {
         type: 'STORAGE_FACILITY_PHOTOS',
@@ -172,8 +172,8 @@ class GACPBusinessRulesValidator {
         formats: ['jpg', 'png'],
         maxSize: 20 * 1024 * 1024, // 20MB total
         required: true,
-        legalBasis: 'มาตรฐาน WHO GMP'
-      }
+        legalBasis: 'มาตรฐาน WHO GMP',
+      },
     ];
 
     try {
@@ -189,7 +189,7 @@ class GACPBusinessRulesValidator {
             type: requiredDoc.type,
             name: requiredDoc.name,
             legalBasis: requiredDoc.legalBasis,
-            severity: 'CRITICAL'
+            severity: 'CRITICAL',
           });
           validationResult.isValid = false;
         } else {
@@ -200,7 +200,7 @@ class GACPBusinessRulesValidator {
               type: requiredDoc.type,
               name: requiredDoc.name,
               error: `รูปแบบไฟล์ไม่ถูกต้อง (ต้องเป็น: ${requiredDoc.formats.join(', ')})`,
-              severity: 'HIGH'
+              severity: 'HIGH',
             });
             validationResult.isValid = false;
           }
@@ -211,7 +211,7 @@ class GACPBusinessRulesValidator {
               type: requiredDoc.type,
               name: requiredDoc.name,
               error: `ไฟล์ใหญ่เกินไป (สูงสุด: ${requiredDoc.maxSize / 1024 / 1024}MB)`,
-              severity: 'MEDIUM'
+              severity: 'MEDIUM',
             });
             validationResult.isValid = false;
           }
@@ -235,7 +235,7 @@ class GACPBusinessRulesValidator {
       validationResult.businessRuleViolations.push({
         rule: 'DOCUMENT_VALIDATION_ERROR',
         message: `ข้อผิดพลาดในการตรวจสอบเอกสาร: ${error.message}`,
-        severity: 'CRITICAL'
+        severity: 'CRITICAL',
       });
       return validationResult;
     }
@@ -251,7 +251,7 @@ class GACPBusinessRulesValidator {
       errors: [],
       requiredAmount: 0,
       paymentPhase: null,
-      businessRuleViolations: []
+      businessRuleViolations: [],
     };
 
     try {
@@ -267,7 +267,7 @@ class GACPBusinessRulesValidator {
             rule: 'PHASE1_PAYMENT_REQUIRED',
             message: `ต้องชำระค่าตรวจสอบเอกสาร ${validationResult.requiredAmount} บาท`,
             legalBasis: 'ประกาศกรมวิชาการเกษตร เรื่อง อัตราค่าธรรมเนียม',
-            severity: 'CRITICAL'
+            severity: 'CRITICAL',
           });
           validationResult.isValid = false;
         }
@@ -282,7 +282,7 @@ class GACPBusinessRulesValidator {
             rule: 'PHASE2_PAYMENT_REQUIRED',
             message: `ต้องชำระค่าตรวจประเมินและออกใบรับรอง ${validationResult.requiredAmount} บาท`,
             legalBasis: 'ประกาศกรมวิชาการเกษตร เรื่อง อัตราค่าธรรมเนียม',
-            severity: 'CRITICAL'
+            severity: 'CRITICAL',
           });
           validationResult.isValid = false;
         }
@@ -294,7 +294,7 @@ class GACPBusinessRulesValidator {
           validationResult.errors.push({
             rule: 'PROMPTPAY_VERIFICATION_REQUIRED',
             message: 'ต้องมีหลักฐานการชำระเงินผ่าน PromptPay',
-            severity: 'HIGH'
+            severity: 'HIGH',
           });
           validationResult.isValid = false;
         }
@@ -306,7 +306,7 @@ class GACPBusinessRulesValidator {
       validationResult.errors.push({
         rule: 'PAYMENT_VALIDATION_ERROR',
         message: `ข้อผิดพลาดในการตรวจสอบการชำระเงิน: ${error.message}`,
-        severity: 'CRITICAL'
+        severity: 'CRITICAL',
       });
       return validationResult;
     }
@@ -322,7 +322,7 @@ class GACPBusinessRulesValidator {
       errors: [],
       warnings: [],
       complianceScore: 0,
-      requiredActions: []
+      requiredActions: [],
     };
 
     // เกณฑ์การตรวจประเมินตามมาตรฐาน GACP
@@ -335,8 +335,8 @@ class GACPBusinessRulesValidator {
           'ใช้เมล็ดพันธุ์ที่ได้มาตรฐาน',
           'ควบคุมการใช้สารเคมี',
           'จัดการน้ำอย่างเหมาะสม',
-          'ป้องกันการปนเปื้อน'
-        ]
+          'ป้องกันการปนเปื้อน',
+        ],
       },
       {
         category: 'POST_HARVEST_HANDLING',
@@ -346,8 +346,8 @@ class GACPBusinessRulesValidator {
           'การทำความสะอาดที่เหมาะสม',
           'การแยกแยะผลผลิต',
           'การป้องกันการปนเปื้อน',
-          'การควบคุมอุณหภูมิและความชื้น'
-        ]
+          'การควบคุมอุณหภูมิและความชื้น',
+        ],
       },
       {
         category: 'STORAGE_CONDITIONS',
@@ -357,8 +357,8 @@ class GACPBusinessRulesValidator {
           'คลังเก็บสะอาดและแห้ง',
           'ป้องกันสัตว์รบกวน',
           'ระบบระบายอากาศเหมาะสม',
-          'การจัดเก็บแยกประเภท'
-        ]
+          'การจัดเก็บแยกประเภท',
+        ],
       },
       {
         category: 'RECORD_KEEPING',
@@ -368,8 +368,8 @@ class GACPBusinessRulesValidator {
           'บันทึกการเพาะปลูกครบถ้วน',
           'บันทึกการใช้สารเคมี',
           'บันทึกผลผลิตและการจำหน่าย',
-          'เอกสารสามารถตรวจสอบได้'
-        ]
+          'เอกสารสามารถตรวจสอบได้',
+        ],
       },
       {
         category: 'WORKER_SAFETY',
@@ -379,9 +379,9 @@ class GACPBusinessRulesValidator {
           'อุปกรณ์ป้องกันอันตรายส่วนบุคคล',
           'การฝึกอบรมผู้ปฏิบัติงาน',
           'การดูแลสุขภาพผู้ปฏิบัติงาน',
-          'มาตรการฉุกเฉิน'
-        ]
-      }
+          'มาตรการฉุกเฉิน',
+        ],
+      },
     ];
 
     try {
@@ -396,7 +396,7 @@ class GACPBusinessRulesValidator {
             rule: 'MISSING_INSPECTION_CATEGORY',
             message: `ไม่พบข้อมูลการตรวจประเมิน: ${criteria.name}`,
             category: criteria.category,
-            severity: 'HIGH'
+            severity: 'HIGH',
           });
           validationResult.isValid = false;
           continue;
@@ -416,7 +416,7 @@ class GACPBusinessRulesValidator {
             message: `คะแนนหมวด ${criteria.name} ต่ำกว่าเกณฑ์ (${categoryScore}% < 70%)`,
             category: criteria.category,
             score: categoryScore,
-            severity: 'HIGH'
+            severity: 'HIGH',
           });
           validationResult.isValid = false;
         }
@@ -427,7 +427,7 @@ class GACPBusinessRulesValidator {
             validationResult.requiredActions.push({
               category: criteria.name,
               action: requirement,
-              priority: 'HIGH'
+              priority: 'HIGH',
             });
           }
         }
@@ -442,7 +442,7 @@ class GACPBusinessRulesValidator {
           rule: 'OVERALL_COMPLIANCE_INSUFFICIENT',
           message: `คะแนนรวมต่ำกว่าเกณฑ์ (${validationResult.complianceScore.toFixed(1)}% < 80%)`,
           overallScore: validationResult.complianceScore,
-          severity: 'CRITICAL'
+          severity: 'CRITICAL',
         });
         validationResult.isValid = false;
       }
@@ -452,7 +452,7 @@ class GACPBusinessRulesValidator {
         validationResult.errors.push({
           rule: 'INSPECTION_EVIDENCE_REQUIRED',
           message: 'ต้องมีรูปถ่ายหลักฐานการตรวจประเมิน',
-          severity: 'HIGH'
+          severity: 'HIGH',
         });
         validationResult.isValid = false;
       }
@@ -463,7 +463,7 @@ class GACPBusinessRulesValidator {
       validationResult.errors.push({
         rule: 'INSPECTION_VALIDATION_ERROR',
         message: `ข้อผิดพลาดในการตรวจสอบการประเมิน: ${error.message}`,
-        severity: 'CRITICAL'
+        severity: 'CRITICAL',
       });
       return validationResult;
     }
@@ -477,7 +477,7 @@ class GACPBusinessRulesValidator {
       isValid: true,
       warnings: [],
       slaBreaches: [],
-      currentSLAStatus: {}
+      currentSLAStatus: {},
     };
 
     try {
@@ -487,20 +487,20 @@ class GACPBusinessRulesValidator {
           fromState: 'SUBMITTED',
           toState: 'UNDER_REVIEW',
           maxDays: this.SLA_REQUIREMENTS.DOCUMENT_REVIEW_DAYS,
-          description: 'การตรวจสอบเอกสาร'
+          description: 'การตรวจสอบเอกสาร',
         },
         {
           fromState: 'PAYMENT_VERIFIED',
           toState: 'INSPECTION_SCHEDULED',
           maxDays: this.SLA_REQUIREMENTS.INSPECTION_SCHEDULE_DAYS,
-          description: 'การนัดหมายตรวจประเมิน'
+          description: 'การนัดหมายตรวจประเมิน',
         },
         {
           fromState: 'INSPECTION_COMPLETED',
           toState: 'APPROVED',
           maxDays: this.SLA_REQUIREMENTS.FINAL_APPROVAL_DAYS,
-          description: 'การอนุมัติขั้นสุดท้าย'
-        }
+          description: 'การอนุมัติขั้นสุดท้าย',
+        },
       ];
 
       for (const slaCheck of slaChecks) {
@@ -517,7 +517,7 @@ class GACPBusinessRulesValidator {
               expectedDays: slaCheck.maxDays,
               actualDays: Math.ceil(daysDiff),
               delay: Math.ceil(daysDiff - slaCheck.maxDays),
-              severity: 'HIGH'
+              severity: 'HIGH',
             });
           }
         }
@@ -528,7 +528,7 @@ class GACPBusinessRulesValidator {
         validationResult.warnings.push({
           rule: 'SLA_BREACH_DETECTED',
           message: `พบการล่าช้าในกระบวนการ ${validationResult.slaBreaches.length} ขั้นตอน`,
-          breaches: validationResult.slaBreaches
+          breaches: validationResult.slaBreaches,
         });
       }
 
@@ -536,7 +536,7 @@ class GACPBusinessRulesValidator {
     } catch (error) {
       validationResult.warnings.push({
         rule: 'SLA_VALIDATION_ERROR',
-        message: `ไม่สามารถตรวจสอบ SLA ได้: ${error.message}`
+        message: `ไม่สามารถตรวจสอบ SLA ได้: ${error.message}`,
       });
       return validationResult;
     }
@@ -597,7 +597,7 @@ class GACPBusinessRulesValidator {
       'โหระพา',
       'สะระแหน่',
       'ผักชี',
-      'ผักชีฝรั่ง'
+      'ผักชีฝรั่ง',
     ];
 
     return cropTypes.every(crop => APPROVED_HERBS.includes(crop));

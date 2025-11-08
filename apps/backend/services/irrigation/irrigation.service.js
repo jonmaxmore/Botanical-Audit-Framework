@@ -10,13 +10,13 @@ class IrrigationService {
     return {
       waterPerDay: finalWater,
       frequency: soilType === 'sand' ? 'ทุกวัน' : 'วันเว้นวัน',
-      tips: this.getWaterTips(crop, growthStage)
+      tips: this.getWaterTips(crop, growthStage),
     };
   }
 
   getCropCoefficient(crop, stage) {
     const coefficients = {
-      cannabis: { seedling: 0.3, vegetative: 0.7, flowering: 1.0, harvest: 0.5 }
+      cannabis: { seedling: 0.3, vegetative: 0.7, flowering: 1.0, harvest: 0.5 },
     };
     return coefficients[crop]?.[stage] || 0.7;
   }

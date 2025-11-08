@@ -32,16 +32,11 @@ class DocumentValidationService {
       // 2. OCR and extract text (if documents present)
       let extractedData = {};
       if (completeness.score >= 60) {
-        extractedData = await this.ocrService.extractDocumentData(
-          application.documents
-        );
+        extractedData = await this.ocrService.extractDocumentData(application.documents);
       }
 
       // 3. Validate extracted data
-      const validation = await this.validateExtractedData(
-        extractedData,
-        application
-      );
+      const validation = await this.validateExtractedData(extractedData, application);
 
       // 4. Calculate risk score
       const riskScore = await this.calculateRiskScore({
@@ -49,7 +44,7 @@ class DocumentValidationService {
         validation,
         farmerHistory: application.farmer?.history || {},
         farmSize: application.farm?.size || 0,
-        cropType: application.cropType || 'unknown'
+        cropType: application.cropType || 'unknown',
       });
 
       // 5. Generate recommendation
@@ -68,23 +63,22 @@ class DocumentValidationService {
           completeness,
           extractedData,
           validation,
-          riskScore
-        }
+          riskScore,
+        },
       };
 
       this.logger.info('AI Pre-Check completed', {
         applicationId: application._id,
         score: completeness.score,
         recommendation,
-        processingTime
+        processingTime,
       });
 
       return result;
-
     } catch (error) {
       this.logger.error('AI Pre-Check failed', {
         applicationId: application._id,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -101,13 +95,11 @@ class DocumentValidationService {
       'FARM_LICENSE',
       'FARM_MAP',
       'LAND_DEED',
-      'PAYMENT_RECEIPT'
+      'PAYMENT_RECEIPT',
     ];
 
     const documents = application.documents || [];
-    const present = requiredDocuments.filter(docType =>
-      documents.find(d => d.type === docType)
-    );
+    const present = requiredDocuments.filter(docType => documents.find(d => d.type === docType));
 
     const score = (present.length / requiredDocuments.length) * 100;
     const missing = requiredDocuments.filter(doc => !present.includes(doc));
@@ -117,7 +109,7 @@ class DocumentValidationService {
       total: requiredDocuments.length,
       present: present.length,
       missing,
-      presentDocs: present
+      presentDocs: present,
     };
   }
 
@@ -151,7 +143,7 @@ class DocumentValidationService {
       passed: issues.length === 0,
       issues,
       paymentVerified,
-      extractedData
+      extractedData,
     };
   }
 
@@ -167,7 +159,7 @@ class DocumentValidationService {
       farmerHistory: 20,
       farmSize: 15,
       cropType: 10,
-      paymentStatus: 25
+      paymentStatus: 25,
     };
 
     let score = 0;
@@ -176,8 +168,11 @@ class DocumentValidationService {
     score += (completeness.score / 100) * weights.documentCompleteness;
 
     // Farmer history (20%)
-    const historyScore = farmerHistory.previousCertified ? 100 :
-                        farmerHistory.previousRejected ? 0 : 50;
+    const historyScore = farmerHistory.previousCertified
+      ? 100
+      : farmerHistory.previousRejected
+        ? 0
+        : 50;
     score += (historyScore / 100) * weights.farmerHistory;
 
     // Farm size (15%) - smaller farms = lower risk
@@ -205,8 +200,8 @@ class DocumentValidationService {
         history: Math.round((historyScore / 100) * weights.farmerHistory),
         size: Math.round((sizeScore / 100) * weights.farmSize),
         crop: Math.round((cropScore / 100) * weights.cropType),
-        payment: Math.round((paymentScore / 100) * weights.paymentStatus)
-      }
+        payment: Math.round((paymentScore / 100) * weights.paymentStatus),
+      },
     };
   }
 
@@ -228,7 +223,7 @@ class DocumentValidationService {
    * @returns {boolean}
    */
   namesMatch(name1, name2) {
-    const normalize = (str) => str.toLowerCase().replace(/\s+/g, '');
+    const normalize = str => str.toLowerCase().replace(/\s+/g, '');
     return normalize(name1) === normalize(name2);
   }
 }

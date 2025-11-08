@@ -46,8 +46,8 @@ class SubmitSurveyUseCase {
         farmerId: submittedSurvey.farmerId,
         surveyYear: submittedSurvey.surveyYear,
         surveyPeriod: submittedSurvey.surveyPeriod,
-        submittedAt: submittedSurvey.submittedAt
-      })
+        submittedAt: submittedSurvey.submittedAt,
+      }),
     );
 
     return submittedSurvey;

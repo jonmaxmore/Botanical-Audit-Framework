@@ -51,7 +51,7 @@ const verifyDTAMToken = (req, res, next) => {
       return shared.response.error(
         res,
         'ไม่พบ Authorization header',
-        constants.statusCodes.UNAUTHORIZED
+        constants.statusCodes.UNAUTHORIZED,
       );
     }
 
@@ -69,7 +69,7 @@ const verifyDTAMToken = (req, res, next) => {
       return shared.response.error(
         res,
         'คุณไม่มีสิทธิ์เข้าถึง - ต้องเป็นเจ้าหน้าที่ DTAM เท่านั้น',
-        constants.statusCodes.FORBIDDEN
+        constants.statusCodes.FORBIDDEN,
       );
     }
 
@@ -80,7 +80,7 @@ const verifyDTAMToken = (req, res, next) => {
       email: decoded.email,
       userType: decoded.userType,
       role: decoded.role,
-      department: decoded.department
+      department: decoded.department,
     };
 
     next();
@@ -93,7 +93,7 @@ const verifyDTAMToken = (req, res, next) => {
       return shared.response.error(
         res,
         'Token หมดอายุ กรุณาเข้าสู่ระบบใหม่',
-        constants.statusCodes.UNAUTHORIZED
+        constants.statusCodes.UNAUTHORIZED,
       );
     }
 
@@ -101,7 +101,7 @@ const verifyDTAMToken = (req, res, next) => {
     return shared.response.error(
       res,
       'เกิดข้อผิดพลาดในการตรวจสอบสิทธิ์',
-      constants.statusCodes.INTERNAL_SERVER_ERROR
+      constants.statusCodes.INTERNAL_SERVER_ERROR,
     );
   }
 };
@@ -125,8 +125,8 @@ const requireDTAMRole = (allowedRoles = []) => {
         constants.statusCodes.FORBIDDEN,
         {
           requiredRole: allowedRoles,
-          yourRole: req.user.role
-        }
+          yourRole: req.user.role,
+        },
       );
     }
 
@@ -147,7 +147,7 @@ const requireDTAMAdmin = (req, res, next) => {
     return shared.response.error(
       res,
       'ต้องเป็นผู้ดูแลระบบเท่านั้น',
-      constants.statusCodes.FORBIDDEN
+      constants.statusCodes.FORBIDDEN,
     );
   }
 
@@ -167,7 +167,7 @@ const requireDTAMManagerOrAdmin = (req, res, next) => {
     return shared.response.error(
       res,
       'ต้องเป็นผู้จัดการหรือผู้ดูแลระบบเท่านั้น',
-      constants.statusCodes.FORBIDDEN
+      constants.statusCodes.FORBIDDEN,
     );
   }
 
@@ -178,5 +178,5 @@ module.exports = {
   verifyDTAMToken,
   requireDTAMRole,
   requireDTAMAdmin,
-  requireDTAMManagerOrAdmin
+  requireDTAMManagerOrAdmin,
 };

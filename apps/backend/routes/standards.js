@@ -42,18 +42,18 @@ router.post('/', [auth, adminAuth], async (req, res) => {
       requirements,
       certificationProcess,
       validityPeriod,
-      issuingBody
+      issuingBody,
     } = req.body;
 
     // Check if standard already exists
     const existingStandard = await Standard.findOne({
       name,
-      version
+      version,
     });
 
     if (existingStandard) {
       return res.status(400).json({
-        message: 'Standard with this name and version already exists'
+        message: 'Standard with this name and version already exists',
       });
     }
 
@@ -68,7 +68,7 @@ router.post('/', [auth, adminAuth], async (req, res) => {
       validityPeriod,
       issuingBody,
       isActive: true,
-      createdBy: req.user.id
+      createdBy: req.user.id,
     });
 
     const standard = await newStandard.save();
@@ -108,7 +108,7 @@ router.put('/:id', [auth, adminAuth], async (req, res) => {
     const updatedStandard = await Standard.findByIdAndUpdate(
       req.params.id,
       { $set: req.body },
-      { new: true }
+      { new: true },
     );
 
     res.json(updatedStandard);
@@ -159,7 +159,7 @@ router.post('/compare', auth, async (req, res) => {
         category: req.category,
         complianceStatus: 'unknown',
         evidenceNeeded: [],
-        notes: ''
+        notes: '',
       };
 
       // Here would be the actual logic to check each requirement against farm data
@@ -203,13 +203,13 @@ router.post('/compare', auth, async (req, res) => {
       overallCompliance: {
         percentage: compliancePercentage,
         achieved: overallScore.achieved,
-        total: overallScore.total
+        total: overallScore.total,
       },
       status: compliancePercentage >= 80 ? 'pass' : 'fail',
       recommendations:
         compliancePercentage < 80
           ? 'Several areas need improvement before certification can be achieved.'
-          : 'Farm is largely compliant, minor improvements recommended.'
+          : 'Farm is largely compliant, minor improvements recommended.',
     });
 
     const savedComparison = await newComparison.save();
@@ -314,7 +314,7 @@ router.get('/comparisons/:id/action-plan', auth, async (req, res) => {
       ) {
         // Find the full requirement details from the standard
         const requirement = comparison.standard.requirements.find(
-          req => req._id.toString() === result.requirementId.toString()
+          req => req._id.toString() === result.requirementId.toString(),
         );
 
         const actionItem = {
@@ -325,7 +325,7 @@ router.get('/comparisons/:id/action-plan', auth, async (req, res) => {
           recommendedActions: [],
           evidenceNeeded: result.evidenceNeeded,
           priority: result.complianceStatus === 'non-compliant' ? 'high' : 'medium',
-          estimatedEffort: requirement?.complexity || 'medium'
+          estimatedEffort: requirement?.complexity || 'medium',
         };
 
         // Generate recommended actions based on requirement category
@@ -333,27 +333,27 @@ router.get('/comparisons/:id/action-plan', auth, async (req, res) => {
         if (result.category === 'documentation') {
           actionItem.recommendedActions.push(
             'Prepare and organize required documentation',
-            'Implement document management system'
+            'Implement document management system',
           );
         } else if (result.category === 'environmental') {
           actionItem.recommendedActions.push(
             'Conduct environmental impact assessment',
-            'Implement mitigation measures for identified impacts'
+            'Implement mitigation measures for identified impacts',
           );
         } else if (result.category === 'social') {
           actionItem.recommendedActions.push(
             'Review labor practices and policies',
-            'Ensure fair compensation and safe working conditions'
+            'Ensure fair compensation and safe working conditions',
           );
         } else if (result.category === 'technical') {
           actionItem.recommendedActions.push(
             'Update farming methods to align with requirements',
-            'Invest in required equipment or infrastructure'
+            'Invest in required equipment or infrastructure',
           );
         } else {
           actionItem.recommendedActions.push(
             'Review requirement details and develop compliance strategy',
-            'Consult with certification expert for guidance'
+            'Consult with certification expert for guidance',
           );
         }
 
@@ -376,7 +376,7 @@ router.get('/comparisons/:id/action-plan', auth, async (req, res) => {
       generatedAt: new Date(),
       overallCompliance: comparison.overallCompliance,
       actionItems,
-      summary: `This action plan addresses ${actionItems.length} areas that need improvement for compliance with ${comparison.standard.name}.`
+      summary: `This action plan addresses ${actionItems.length} areas that need improvement for compliance with ${comparison.standard.name}.`,
     };
 
     res.json(actionPlan);

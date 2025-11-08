@@ -30,9 +30,9 @@ function initialize(server, redisManager) {
       origin: config.server.cors?.allowedOrigins ||
         process.env.ALLOWED_ORIGINS?.split(',') || ['*'],
       methods: config.server.cors?.allowedMethods || ['GET', 'POST'],
-      credentials: true
+      credentials: true,
     },
-    transports: ['websocket', 'polling']
+    transports: ['websocket', 'polling'],
   });
 
   // Setup Redis adapter for horizontal scaling if Redis is enabled
@@ -76,7 +76,7 @@ async function authenticate(socket, next) {
     // Attach user data to socket for later use
     socket.auth = {
       authenticated: true,
-      user: decoded
+      user: decoded,
     };
 
     socketLogger.debug(`Socket authenticated for user ${decoded.id}`);
@@ -251,5 +251,5 @@ module.exports = {
   emitToRole,
   emitToAll,
   emitToFarm,
-  getIo: () => io
+  getIo: () => io,
 };

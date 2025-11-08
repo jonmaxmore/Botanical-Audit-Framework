@@ -13,7 +13,7 @@ const logger = require('../shared/logger');
 const {
   seedStandards,
   seedParameters,
-  seedStandardValues
+  seedStandardValues,
 } = require('../data/compliance-seed-data');
 
 class ComplianceSeeder {
@@ -35,8 +35,8 @@ class ComplianceSeeder {
             message: 'Database already seeded. Use force option to override.',
             counts: {
               standards: existingStandards,
-              parameters: existingParameters
-            }
+              parameters: existingParameters,
+            },
           };
         }
       }
@@ -63,7 +63,7 @@ class ComplianceSeeder {
         const standard = new Standard({
           ...standardData,
           createdBy: adminUserId,
-          lastModifiedBy: adminUserId
+          lastModifiedBy: adminUserId,
         });
 
         await standard.save();
@@ -81,7 +81,7 @@ class ComplianceSeeder {
         const parameter = new Parameter({
           ...parameterData,
           createdBy: adminUserId,
-          lastModifiedBy: adminUserId
+          lastModifiedBy: adminUserId,
         });
 
         await parameter.save();
@@ -99,7 +99,7 @@ class ComplianceSeeder {
 
         if (!standard || !parameter) {
           console.warn(
-            `  ⚠️  Skipping value: Standard '${valueData.standardRef}' or Parameter '${valueData.parameterRef}' not found`
+            `  ⚠️  Skipping value: Standard '${valueData.standardRef}' or Parameter '${valueData.parameterRef}' not found`,
           );
           continue;
         }
@@ -119,14 +119,14 @@ class ComplianceSeeder {
           testingFrequency: valueData.testingFrequency,
           dataQuality: valueData.dataQuality,
           createdBy: adminUserId,
-          lastModifiedBy: adminUserId
+          lastModifiedBy: adminUserId,
         });
 
         await standardValue.save();
 
         if (verbose) {
           logger.info(
-            `✅ Created standard value for ${valueData.standardRef}/${valueData.parameterRef}`
+            `✅ Created standard value for ${valueData.standardRef}/${valueData.parameterRef}`,
           );
         }
       }
@@ -137,13 +137,13 @@ class ComplianceSeeder {
       const finalCounts = {
         standards: await Standard.countDocuments(),
         parameters: await Parameter.countDocuments(),
-        standardValues: await StandardValue.countDocuments()
+        standardValues: await StandardValue.countDocuments(),
       };
 
       return {
         success: true,
         message: 'Database seeded successfully',
-        counts: finalCounts
+        counts: finalCounts,
       };
     } catch (error) {
       logger.error('❌ Error seeding compliance database:', error);
@@ -169,7 +169,7 @@ class ComplianceSeeder {
           description: 'Cadmium content in dried medicinal plant material',
           riskLevel: 'high',
           severity: 'critical',
-          displayOrder: 6
+          displayOrder: 6,
         },
         {
           name: 'Mercury',
@@ -182,7 +182,7 @@ class ComplianceSeeder {
           description: 'Mercury content in dried medicinal plant material',
           riskLevel: 'critical',
           severity: 'critical',
-          displayOrder: 7
+          displayOrder: 7,
         },
         {
           name: 'Escherichia coli',
@@ -195,7 +195,7 @@ class ComplianceSeeder {
           description: 'E. coli count in medicinal plant material',
           riskLevel: 'high',
           severity: 'major',
-          displayOrder: 8
+          displayOrder: 8,
         },
         {
           name: 'Pesticide Residues',
@@ -208,8 +208,8 @@ class ComplianceSeeder {
           description: 'Total pesticide residue content',
           riskLevel: 'high',
           severity: 'major',
-          displayOrder: 9
-        }
+          displayOrder: 9,
+        },
       ];
 
       // Create additional parameters
@@ -221,7 +221,7 @@ class ComplianceSeeder {
           tags: [paramData.subcategory, paramData.category],
           keywords: [paramData.code.toLowerCase(), paramData.name.toLowerCase()],
           createdBy: adminUserId,
-          lastModifiedBy: adminUserId
+          lastModifiedBy: adminUserId,
         });
 
         await parameter.save();
@@ -255,14 +255,14 @@ class ComplianceSeeder {
           standardRef: 'THAI_FDA',
           parameterRef: 'PESTICIDE',
           limitValue: 0.01,
-          strictnessScore: 9
+          strictnessScore: 9,
         },
         {
           standardRef: 'ASEAN_HERBAL',
           parameterRef: 'PESTICIDE',
           limitValue: 0.03,
-          strictnessScore: 8
-        }
+          strictnessScore: 8,
+        },
       ];
 
       // Create additional standard values
@@ -284,7 +284,7 @@ class ComplianceSeeder {
             testingFrequency: 'per_batch',
             dataQuality: 'verified',
             createdBy: adminUserId,
-            lastModifiedBy: adminUserId
+            lastModifiedBy: adminUserId,
           });
 
           await standardValue.save();
@@ -316,22 +316,22 @@ class ComplianceSeeder {
             from: 'standards',
             localField: 'standardId',
             foreignField: '_id',
-            as: 'standard'
-          }
+            as: 'standard',
+          },
         },
         {
           $lookup: {
             from: 'parameters',
             localField: 'parameterId',
             foreignField: '_id',
-            as: 'parameter'
-          }
+            as: 'parameter',
+          },
         },
         {
           $match: {
-            $or: [{ standard: { $size: 0 } }, { parameter: { $size: 0 } }]
-          }
-        }
+            $or: [{ standard: { $size: 0 } }, { parameter: { $size: 0 } }],
+          },
+        },
       ]);
 
       if (orphanedValues.length > 0) {
@@ -344,7 +344,7 @@ class ComplianceSeeder {
       for (const standard of standards) {
         const valueCount = await StandardValue.countDocuments({
           standardId: standard._id,
-          status: 'active'
+          status: 'active',
         });
 
         if (valueCount === 0) {
@@ -358,8 +358,8 @@ class ComplianceSeeder {
           standards: standards.length,
           parameters: parameters.length,
           standardValues: standardValues.length,
-          orphanedValues: orphanedValues.length
-        }
+          orphanedValues: orphanedValues.length,
+        },
       };
     } catch (error) {
       logger.error('❌ Error verifying data:', error);

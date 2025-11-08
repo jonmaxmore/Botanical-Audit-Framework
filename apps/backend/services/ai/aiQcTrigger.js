@@ -12,7 +12,7 @@ const logger = require('../../utils/logger');
  * Auto-trigger AI QC after application submission
  * Uses queue for background processing
  */
-exports.autoTriggerAIQC = async (applicationId) => {
+exports.autoTriggerAIQC = async applicationId => {
   try {
     logger.info(`Auto-triggering AI QC for application ${applicationId}`);
 
@@ -38,11 +38,11 @@ exports.autoTriggerAIQC = async (applicationId) => {
     if (process.env.ENABLE_QUEUE === 'true') {
       const job = await queueService.addAIQCJob(applicationId, {
         priority: 7, // Higher priority for auto-triggered
-        delay: 5000 // 5 seconds delay
+        delay: 5000, // 5 seconds delay
       });
 
       logger.info(`AI QC job queued for application ${applicationId}`, {
-        jobId: job.id
+        jobId: job.id,
       });
 
       return { success: true, jobId: job.id, status: 'queued' };
@@ -60,20 +60,20 @@ exports.autoTriggerAIQC = async (applicationId) => {
       lotId: appWithData.lotId,
       farmer: {
         name: appWithData.farmer.name,
-        idCard: appWithData.farmer.idCard
+        idCard: appWithData.farmer.idCard,
       },
       farm: {
         name: appWithData.farmer.farmName,
         location: appWithData.farmer.farmLocation,
-        area: appWithData.farmArea
+        area: appWithData.farmArea,
       },
       documents: appWithData.documents || [],
-      images: appWithData.images || []
+      images: appWithData.images || [],
     });
 
     if (!qcResult.success) {
       logger.error(`AI QC failed for application ${applicationId}:`, qcResult.error);
-      
+
       // Still update application to move forward even if AI QC fails
       appWithData.status = 'IN_REVIEW';
       appWithData.inspectionType = 'ONSITE'; // Default to safest option
@@ -88,7 +88,7 @@ exports.autoTriggerAIQC = async (applicationId) => {
       scores: qcResult.data.scores,
       inspectionType: qcResult.data.inspectionType,
       issues: qcResult.data.issues,
-      recommendations: qcResult.data.recommendations
+      recommendations: qcResult.data.recommendations,
     };
 
     appWithData.inspectionType = qcResult.data.inspectionType;
@@ -99,11 +99,10 @@ exports.autoTriggerAIQC = async (applicationId) => {
 
     logger.info(`AI QC completed successfully for application ${applicationId}`, {
       score: qcResult.data.overallScore,
-      inspectionType: qcResult.data.inspectionType
+      inspectionType: qcResult.data.inspectionType,
     });
 
     return { success: true, data: qcResult.data };
-
   } catch (error) {
     logger.error(`Error in auto AI QC for application ${applicationId}:`, error);
     return { success: false, error: error.message };
@@ -113,12 +112,12 @@ exports.autoTriggerAIQC = async (applicationId) => {
 /**
  * Batch process multiple applications
  */
-exports.batchProcessAIQC = async (applicationIds) => {
+exports.batchProcessAIQC = async applicationIds => {
   const results = {
     total: applicationIds.length,
     successful: 0,
     failed: 0,
-    errors: []
+    errors: [],
   };
 
   for (const appId of applicationIds) {
@@ -129,7 +128,7 @@ exports.batchProcessAIQC = async (applicationIds) => {
       results.failed++;
       results.errors.push({
         applicationId: appId,
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -140,7 +139,7 @@ exports.batchProcessAIQC = async (applicationIds) => {
 /**
  * Check if AI QC is needed
  */
-exports.isAIQCNeeded = (application) => {
+exports.isAIQCNeeded = application => {
   return (
     application.status === 'SUBMITTED' &&
     !application.aiQcCompletedAt &&
@@ -155,7 +154,7 @@ exports.getAIQCQueue = async () => {
   try {
     const applications = await DTAMApplication.find({
       status: 'SUBMITTED',
-      aiQcCompletedAt: { $exists: false }
+      aiQcCompletedAt: { $exists: false },
     })
       .select('applicationNumber lotId farmer.name submittedAt')
       .sort({ submittedAt: 1 })
@@ -164,13 +163,13 @@ exports.getAIQCQueue = async () => {
     return {
       success: true,
       count: applications.length,
-      applications
+      applications,
     };
   } catch (error) {
     logger.error('Error getting AI QC queue:', error);
     return {
       success: false,
-      error: error.message
+      error: error.message,
     };
   }
 };

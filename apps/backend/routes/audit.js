@@ -1,9 +1,9 @@
 /**
  * Code Audit API Routes
- * 
+ *
  * REST API endpoints for code duplication and similarity auditing.
  * Supports running audits, viewing history, and tracking cross-device drifts.
- * 
+ *
  * @version 1.0.0
  * @created November 4, 2025
  */
@@ -32,7 +32,7 @@ router.post('/run', async (req, res) => {
       directories = ['apps/**'],
       filePatterns = ['**/*.{tsx,jsx,ts,js}'],
       minSimilarity = 70,
-      excludePatterns = ['**/node_modules/**', '**/*.test.*', '**/*.spec.*', '**/__tests__/**']
+      excludePatterns = ['**/node_modules/**', '**/*.test.*', '**/*.spec.*', '**/__tests__/**'],
     } = req.body;
 
     // Generate unique scan ID
@@ -48,7 +48,7 @@ router.post('/run', async (req, res) => {
       filePatterns,
       config: {
         minSimilarity,
-        excludePatterns
+        excludePatterns,
       },
       status: 'running',
       startedAt: new Date(),
@@ -57,21 +57,20 @@ router.post('/run', async (req, res) => {
         analyzedFiles: 0,
         duplicateCount: 0,
         driftCount: 0,
-        codeReduction: 0
+        codeReduction: 0,
       },
       metadata: {
         nodeVersion: process.version,
-        platform: process.platform
-      }
+        platform: process.platform,
+      },
     });
 
     await audit.save();
 
     // Run audit asynchronously
-    runAudit(audit._id, directories, filePatterns, excludePatterns, minSimilarity)
-      .catch(err => {
-        console.error('Audit failed:', err);
-      });
+    runAudit(audit._id, directories, filePatterns, excludePatterns, minSimilarity).catch(err => {
+      console.error('Audit failed:', err);
+    });
 
     res.json({
       success: true,
@@ -79,16 +78,15 @@ router.post('/run', async (req, res) => {
       data: {
         scanId,
         auditId: audit._id,
-        status: 'running'
-      }
+        status: 'running',
+      },
     });
-
   } catch (error) {
     console.error('Error starting audit:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to start audit',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -106,7 +104,7 @@ router.get('/status/:scanId', async (req, res) => {
     if (!audit) {
       return res.status(404).json({
         success: false,
-        message: 'Audit not found'
+        message: 'Audit not found',
       });
     }
 
@@ -119,16 +117,15 @@ router.get('/status/:scanId', async (req, res) => {
         summary: audit.summary,
         startedAt: audit.startedAt,
         completedAt: audit.completedAt,
-        duration: audit.duration
-      }
+        duration: audit.duration,
+      },
     });
-
   } catch (error) {
     console.error('Error getting audit status:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to get audit status',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -147,7 +144,7 @@ router.get('/results/:scanId', async (req, res) => {
     if (!audit) {
       return res.status(404).json({
         success: false,
-        message: 'Audit not found'
+        message: 'Audit not found',
       });
     }
 
@@ -172,16 +169,15 @@ router.get('/results/:scanId', async (req, res) => {
         summary: audit.summary,
         duplicates,
         drifts: audit.drifts,
-        completedAt: audit.completedAt
-      }
+        completedAt: audit.completedAt,
+      },
     });
-
   } catch (error) {
     console.error('Error getting audit results:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to get audit results',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -192,12 +188,7 @@ router.get('/results/:scanId', async (req, res) => {
  */
 router.get('/history', async (req, res) => {
   try {
-    const {
-      deviceId,
-      limit = 10,
-      skip = 0,
-      status = 'completed'
-    } = req.query;
+    const { deviceId, limit = 10, skip = 0, status = 'completed' } = req.query;
 
     const query = {};
     if (deviceId) query.deviceId = deviceId;
@@ -219,17 +210,16 @@ router.get('/history', async (req, res) => {
           total,
           limit: parseInt(limit),
           skip: parseInt(skip),
-          hasMore: total > (parseInt(skip) + parseInt(limit))
-        }
-      }
+          hasMore: total > parseInt(skip) + parseInt(limit),
+        },
+      },
     });
-
   } catch (error) {
     console.error('Error getting audit history:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to get audit history',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -245,7 +235,7 @@ router.post('/compare', async (req, res) => {
     if (!fileA || !fileB) {
       return res.status(400).json({
         success: false,
-        message: 'Both fileA and fileB are required'
+        message: 'Both fileA and fileB are required',
       });
     }
 
@@ -253,15 +243,14 @@ router.post('/compare', async (req, res) => {
 
     res.json({
       success: true,
-      data: result
+      data: result,
     });
-
   } catch (error) {
     console.error('Error comparing files:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to compare files',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -277,7 +266,7 @@ router.get('/drifts', async (req, res) => {
     if (!deviceA || !deviceB) {
       return res.status(400).json({
         success: false,
-        message: 'Both deviceA and deviceB are required'
+        message: 'Both deviceA and deviceB are required',
       });
     }
 
@@ -289,16 +278,15 @@ router.get('/drifts', async (req, res) => {
         deviceA,
         deviceB,
         drifts,
-        count: drifts.length
-      }
+        count: drifts.length,
+      },
     });
-
   } catch (error) {
     console.error('Error getting drifts:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to get drifts',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -321,8 +309,8 @@ router.get('/dashboard', async (req, res) => {
         success: true,
         data: {
           hasAudit: false,
-          message: 'No audit found'
-        }
+          message: 'No audit found',
+        },
       });
     }
 
@@ -333,8 +321,10 @@ router.get('/dashboard', async (req, res) => {
 
     // Get refactoring actions
     const refactoringActions = await RefactoringAction.find({
-      auditId: latestAudit._id
-    }).sort({ priority: -1, createdAt: -1 }).limit(10);
+      auditId: latestAudit._id,
+    })
+      .sort({ priority: -1, createdAt: -1 })
+      .limit(10);
 
     res.json({
       success: true,
@@ -344,28 +334,27 @@ router.get('/dashboard', async (req, res) => {
           scanId: latestAudit.scanId,
           deviceId: latestAudit.deviceId,
           completedAt: latestAudit.completedAt,
-          summary: latestAudit.summary
+          summary: latestAudit.summary,
         },
         statistics: {
           totalScans,
           criticalDuplicates: criticalDuplicates.length,
           highSimilarity: highSimilarity.length,
-          totalDuplicateLines: latestAudit.getTotalDuplicateLines()
+          totalDuplicateLines: latestAudit.getTotalDuplicateLines(),
         },
         topDuplicates: latestAudit.duplicates
           .sort((a, b) => b.similarity - a.similarity)
           .slice(0, 10),
         criticalDuplicates,
-        refactoringActions
-      }
+        refactoringActions,
+      },
     });
-
   } catch (error) {
     console.error('Error getting dashboard data:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to get dashboard data',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -384,7 +373,7 @@ router.post('/action', async (req, res) => {
       filesAffected,
       priority = 'medium',
       assignedTo,
-      estimatedHours
+      estimatedHours,
     } = req.body;
 
     const refactoringAction = new RefactoringAction({
@@ -396,7 +385,7 @@ router.post('/action', async (req, res) => {
       priority,
       assignedTo,
       estimatedHours,
-      status: 'planned'
+      status: 'planned',
     });
 
     await refactoringAction.save();
@@ -404,15 +393,14 @@ router.post('/action', async (req, res) => {
     res.json({
       success: true,
       message: 'Refactoring action created',
-      data: refactoringAction
+      data: refactoringAction,
     });
-
   } catch (error) {
     console.error('Error creating refactoring action:', error);
     res.status(500).json({
       success: false,
       message: 'Failed to create refactoring action',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -448,9 +436,9 @@ async function runAudit(auditId, directories, filePatterns, excludePatterns, min
           hash,
           lines,
           size: stats.size,
-          lastModified: stats.mtime
+          lastModified: stats.mtime,
         };
-      })
+      }),
     );
 
     audit.fileHashes = fileHashes;
@@ -468,7 +456,6 @@ async function runAudit(auditId, directories, filePatterns, excludePatterns, min
     await audit.save();
 
     console.log(`Audit ${audit.scanId} completed: ${duplicates.length} duplicates found`);
-
   } catch (error) {
     console.error('Audit failed:', error);
     const audit = await CodeAudit.findById(auditId);
@@ -493,7 +480,7 @@ async function findFiles(directories, patterns, excludes) {
       const fullPattern = path.join(dir, pattern);
       const files = await globAsync(fullPattern, {
         ignore: excludes,
-        absolute: true
+        absolute: true,
       });
       files.forEach(file => allFiles.add(file));
     }
@@ -536,7 +523,7 @@ async function findDuplicates(fileHashes, minSimilarity) {
           duplicatedLines: Math.round((similarity / 100) * Math.min(fileA.lines, fileB.lines)),
           category,
           priority,
-          status: 'pending'
+          status: 'pending',
         });
       }
     }
@@ -581,7 +568,7 @@ async function compareFiles(fileA, fileB) {
 
   const similarity = await calculateSimilarity(
     { path: fileA, hash: hashA, lines: linesA.length },
-    { path: fileB, hash: hashB, lines: linesB.length }
+    { path: fileB, hash: hashB, lines: linesB.length },
   );
 
   return {
@@ -592,7 +579,7 @@ async function compareFiles(fileA, fileB) {
     hashB,
     linesA: linesA.length,
     linesB: linesB.length,
-    identical: hashA === hashB
+    identical: hashA === hashB,
   };
 }
 

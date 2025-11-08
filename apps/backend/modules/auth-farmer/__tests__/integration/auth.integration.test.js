@@ -26,7 +26,7 @@ describe('Auth Farmer Integration Tests', () => {
     province: 'Bangkok',
     district: 'Bang Khen',
     subDistrict: 'Anusawari',
-    postalCode: '10220'
+    postalCode: '10220',
   };
 
   beforeAll(async () => {
@@ -44,7 +44,7 @@ describe('Auth Farmer Integration Tests', () => {
       database: mongoose.connection,
       jwtSecret: 'test-jwt-secret-key-for-integration-tests',
       jwtExpiresIn: '1h',
-      bcryptSaltRounds: 10
+      bcryptSaltRounds: 10,
     });
 
     app.use('/api/auth/farmer', farmerAuthModule.router);
@@ -64,14 +64,14 @@ describe('Auth Farmer Integration Tests', () => {
 
       expect(response.body).toMatchObject({
         success: true,
-        message: expect.stringContaining('registered')
+        message: expect.stringContaining('registered'),
       });
       expect(response.body.data).toHaveProperty('user');
       expect(response.body.data.user).toMatchObject({
         email: testUser.email,
         firstName: testUser.firstName,
         lastName: testUser.lastName,
-        status: 'PENDING_VERIFICATION'
+        status: 'PENDING_VERIFICATION',
       });
       expect(response.body.data.user).not.toHaveProperty('password');
     });
@@ -84,7 +84,7 @@ describe('Auth Farmer Integration Tests', () => {
 
       expect(response.body).toMatchObject({
         success: false,
-        error: expect.stringMatching(/already (exists|registered)/i)
+        error: expect.stringMatching(/already (exists|registered)/i),
       });
     });
 
@@ -93,12 +93,12 @@ describe('Auth Farmer Integration Tests', () => {
         .post('/api/auth/farmer/register')
         .send({
           ...testUser,
-          email: 'invalid-email'
+          email: 'invalid-email',
         })
         .expect(400);
 
       expect(response.body).toMatchObject({
-        success: false
+        success: false,
       });
     });
 
@@ -108,12 +108,12 @@ describe('Auth Farmer Integration Tests', () => {
         .send({
           ...testUser,
           email: 'another.farmer@example.com',
-          password: 'weak'
+          password: 'weak',
         })
         .expect(400);
 
       expect(response.body).toMatchObject({
-        success: false
+        success: false,
       });
     });
   });
@@ -124,13 +124,13 @@ describe('Auth Farmer Integration Tests', () => {
         .post('/api/auth/farmer/login')
         .send({
           email: testUser.email,
-          password: testUser.password
+          password: testUser.password,
         })
         .expect(403);
 
       expect(response.body).toMatchObject({
         success: false,
-        error: expect.stringContaining('verify')
+        error: expect.stringContaining('verify'),
       });
     });
 
@@ -140,13 +140,13 @@ describe('Auth Farmer Integration Tests', () => {
         .post('/api/auth/farmer/login')
         .send({
           email: 'another.user@example.com',
-          password: 'WrongPassword123'
+          password: 'WrongPassword123',
         })
         .expect(401);
 
       expect(response.body).toMatchObject({
         success: false,
-        error: expect.stringContaining('Invalid')
+        error: expect.stringContaining('Invalid'),
       });
     });
 
@@ -155,12 +155,12 @@ describe('Auth Farmer Integration Tests', () => {
         .post('/api/auth/farmer/login')
         .send({
           email: 'nonexistent@example.com',
-          password: testUser.password
+          password: testUser.password,
         })
         .expect(401);
 
       expect(response.body).toMatchObject({
-        success: false
+        success: false,
       });
     });
   });
@@ -183,13 +183,13 @@ describe('Auth Farmer Integration Tests', () => {
       const response = await request(app)
         .post('/api/auth/farmer/request-password-reset')
         .send({
-          email: testUser.email
+          email: testUser.email,
         })
         .expect(200);
 
       expect(response.body).toMatchObject({
         success: true,
-        message: expect.stringContaining('reset')
+        message: expect.stringContaining('reset'),
       });
     });
 
@@ -198,12 +198,12 @@ describe('Auth Farmer Integration Tests', () => {
       const response = await request(app)
         .post('/api/auth/farmer/request-password-reset')
         .send({
-          email: 'nonexistent@example.com'
+          email: 'nonexistent@example.com',
         })
         .expect(200);
 
       expect(response.body).toMatchObject({
-        success: true
+        success: true,
       });
     });
   });

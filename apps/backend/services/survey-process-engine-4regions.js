@@ -8,21 +8,21 @@ class SurveyProcessEngine4Regions {
     return {
       success: false,
       message: 'Survey processing not implemented yet',
-      data: null
+      data: null,
     };
   }
 
   async validateSurvey(_surveyData) {
     return {
       valid: true,
-      errors: []
+      errors: [],
     };
   }
 
   async calculateScores(_surveyData) {
     return {
       totalScore: 0,
-      categoryScores: {}
+      categoryScores: {},
     };
   }
 }

@@ -13,7 +13,7 @@ class PerformanceOptimizer {
     this.memoryCache = new NodeCache({
       stdTTL: 300, // 5 minutes default
       checkperiod: 60,
-      useClones: false
+      useClones: false,
     });
 
     this.redisClient = null;
@@ -29,18 +29,18 @@ class PerformanceOptimizer {
       format: winston.format.combine(
         winston.format.timestamp(),
         winston.format.errors({ stack: true }),
-        winston.format.json()
+        winston.format.json(),
       ),
       transports: [
         new winston.transports.File({
           filename: 'logs/performance.log',
           maxsize: 5242880, // 5MB
-          maxFiles: 5
+          maxFiles: 5,
         }),
         new winston.transports.Console({
-          format: winston.format.simple()
-        })
-      ]
+          format: winston.format.simple(),
+        }),
+      ],
     });
   }
 
@@ -63,7 +63,7 @@ class PerformanceOptimizer {
             return undefined;
           }
           return Math.min(options.attempt * 100, 3000);
-        }
+        },
       });
 
       await this.redisClient.connect();
@@ -159,7 +159,7 @@ class PerformanceOptimizer {
       users: ['email', 'username', 'role'],
       applications: ['status', 'farmerId', 'applicationNumber'],
       certificates: ['certificateNumber', 'isActive', 'expiryDate'],
-      farms: ['farmerId', 'isActive', 'location.province']
+      farms: ['farmerId', 'isActive', 'location.province'],
     };
 
     if (commonIndexes[collection]) {
@@ -219,9 +219,9 @@ class PerformanceOptimizer {
         this.recordMetric('rate_limit_exceeded', 1);
         res.status(429).json({
           error: 'Too many requests',
-          retryAfter: Math.round(15 * 60) // 15 minutes
+          retryAfter: Math.round(15 * 60), // 15 minutes
         });
-      }
+      },
     });
   }
 
@@ -236,7 +236,7 @@ class PerformanceOptimizer {
       },
       level: 6, // Good balance between speed and compression
       threshold: 1024, // Only compress responses > 1KB
-      chunkSize: 16 * 1024 // 16KB chunks
+      chunkSize: 16 * 1024, // 16KB chunks
     });
   }
 
@@ -250,15 +250,15 @@ class PerformanceOptimizer {
           fontSrc: ["'self'", 'https://fonts.gstatic.com'],
           imgSrc: ["'self'", 'data:', 'https:'],
           scriptSrc: ["'self'"],
-          connectSrc: ["'self'", 'https://api.gacp.go.th']
-        }
+          connectSrc: ["'self'", 'https://api.gacp.go.th'],
+        },
       },
       crossOriginEmbedderPolicy: false,
       hsts: {
         maxAge: 31536000,
         includeSubDomains: true,
-        preload: true
-      }
+        preload: true,
+      },
     });
   }
 
@@ -289,17 +289,17 @@ class PerformanceOptimizer {
       cacheStats: {
         memory: {
           keys: this.memoryCache.keys().length,
-          stats: this.memoryCache.getStats()
-        }
+          stats: this.memoryCache.getStats(),
+        },
       },
-      metrics: {}
+      metrics: {},
     };
 
     // Calculate metric averages
     for (const [name, values] of this.metrics.entries()) {
       if (values.length > 0) {
         const recentValues = values.filter(
-          v => Date.now() - v.timestamp < 60000 // Last minute
+          v => Date.now() - v.timestamp < 60000, // Last minute
         );
 
         if (recentValues.length > 0) {
@@ -307,7 +307,7 @@ class PerformanceOptimizer {
           report.metrics[name] = {
             count: recentValues.length,
             average: sum / recentValues.length,
-            latest: recentValues[recentValues.length - 1].value
+            latest: recentValues[recentValues.length - 1].value,
           };
         }
       }
@@ -426,5 +426,5 @@ process.on('SIGINT', () => performanceOptimizer.gracefulShutdown());
 module.exports = {
   PerformanceOptimizer,
   performanceOptimizer,
-  setupPerformanceMiddleware
+  setupPerformanceMiddleware,
 };

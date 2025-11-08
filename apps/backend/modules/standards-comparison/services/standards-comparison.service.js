@@ -35,7 +35,7 @@ class StandardsComparisonService {
 
       this.initialized = true;
       console.log(
-        `Standards Comparison Service initialized with ${this.standards.length} standards`
+        `Standards Comparison Service initialized with ${this.standards.length} standards`,
       );
     } catch (error) {
       logger.error('Failed to initialize Standards Comparison Service:', error);
@@ -88,27 +88,27 @@ class StandardsComparisonService {
                 id: 'site_01',
                 requirement: 'Appropriate soil conditions',
                 priority: 'critical',
-                weight: 10
+                weight: 10,
               },
               {
                 id: 'site_02',
                 requirement: 'Water quality testing',
                 priority: 'critical',
-                weight: 10
+                weight: 10,
               },
               {
                 id: 'site_03',
                 requirement: 'Environmental impact assessment',
                 priority: 'important',
-                weight: 8
+                weight: 8,
               },
               {
                 id: 'site_04',
                 requirement: 'Land use history documentation',
                 priority: 'important',
-                weight: 7
-              }
-            ]
+                weight: 7,
+              },
+            ],
           },
           {
             category: 'cultivation',
@@ -118,33 +118,33 @@ class StandardsComparisonService {
                 id: 'cult_01',
                 requirement: 'Proper seed/planting material',
                 priority: 'critical',
-                weight: 10
+                weight: 10,
               },
               {
                 id: 'cult_02',
                 requirement: 'Cultivation techniques documentation',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'cult_03',
                 requirement: 'Pest management plan',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'cult_04',
                 requirement: 'Fertilizer usage records',
                 priority: 'important',
-                weight: 8
+                weight: 8,
               },
               {
                 id: 'cult_05',
                 requirement: 'Irrigation management',
                 priority: 'important',
-                weight: 7
-              }
-            ]
+                weight: 7,
+              },
+            ],
           },
           {
             category: 'harvesting',
@@ -154,27 +154,27 @@ class StandardsComparisonService {
                 id: 'harv_01',
                 requirement: 'Proper harvesting time and methods',
                 priority: 'critical',
-                weight: 10
+                weight: 10,
               },
               {
                 id: 'harv_02',
                 requirement: 'Post-harvest handling procedures',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'harv_03',
                 requirement: 'Drying and storage conditions',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'harv_04',
                 requirement: 'Contamination prevention',
                 priority: 'critical',
-                weight: 10
-              }
-            ]
+                weight: 10,
+              },
+            ],
           },
           {
             category: 'quality_control',
@@ -184,22 +184,22 @@ class StandardsComparisonService {
                 id: 'qc_01',
                 requirement: 'Quality testing procedures',
                 priority: 'critical',
-                weight: 10
+                weight: 10,
               },
               { id: 'qc_02', requirement: 'Heavy metal testing', priority: 'critical', weight: 10 },
               {
                 id: 'qc_03',
                 requirement: 'Microbiological testing',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'qc_04',
                 requirement: 'Pesticide residue testing',
                 priority: 'critical',
-                weight: 10
-              }
-            ]
+                weight: 10,
+              },
+            ],
           },
           {
             category: 'documentation',
@@ -209,22 +209,22 @@ class StandardsComparisonService {
                 id: 'doc_01',
                 requirement: 'Complete farm records',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'doc_02',
                 requirement: 'Batch tracking system',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'doc_03',
                 requirement: 'Supplier documentation',
                 priority: 'important',
-                weight: 8
+                weight: 8,
               },
-              { id: 'doc_04', requirement: 'Training records', priority: 'important', weight: 7 }
-            ]
+              { id: 'doc_04', requirement: 'Training records', priority: 'important', weight: 7 },
+            ],
           },
           {
             category: 'safety',
@@ -234,31 +234,31 @@ class StandardsComparisonService {
                 id: 'safe_01',
                 requirement: 'Worker safety training',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'safe_02',
                 requirement: 'Protective equipment provision',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'safe_03',
                 requirement: 'First aid facilities',
                 priority: 'important',
-                weight: 7
+                weight: 7,
               },
               {
                 id: 'safe_04',
                 requirement: 'Fair labor practices',
                 priority: 'important',
-                weight: 8
-              }
-            ]
-          }
+                weight: 8,
+              },
+            ],
+          },
         ],
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       },
       {
         _id: new ObjectId(),
@@ -276,21 +276,21 @@ class StandardsComparisonService {
                 id: 'fs_01',
                 requirement: 'HACCP-based approach',
                 priority: 'critical',
-                weight: 10
+                weight: 10,
               },
               {
                 id: 'fs_02',
                 requirement: 'Contamination risk assessment',
                 priority: 'critical',
-                weight: 10
+                weight: 10,
               },
               {
                 id: 'fs_03',
                 requirement: 'Product handling procedures',
                 priority: 'critical',
-                weight: 9
-              }
-            ]
+                weight: 9,
+              },
+            ],
           },
           {
             category: 'environmental',
@@ -300,21 +300,21 @@ class StandardsComparisonService {
                 id: 'env_01',
                 requirement: 'Biodiversity conservation',
                 priority: 'important',
-                weight: 8
+                weight: 8,
               },
               {
                 id: 'env_02',
                 requirement: 'Waste management plan',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'env_03',
                 requirement: 'Energy efficiency measures',
                 priority: 'optional',
-                weight: 5
-              }
-            ]
+                weight: 5,
+              },
+            ],
           },
           {
             category: 'traceability',
@@ -324,26 +324,26 @@ class StandardsComparisonService {
                 id: 'trace_01',
                 requirement: 'Product identification system',
                 priority: 'critical',
-                weight: 10
+                weight: 10,
               },
               {
                 id: 'trace_02',
                 requirement: 'Supply chain documentation',
                 priority: 'critical',
-                weight: 9
+                weight: 9,
               },
               {
                 id: 'trace_03',
                 requirement: 'Recall procedures',
                 priority: 'important',
-                weight: 8
-              }
-            ]
-          }
+                weight: 8,
+              },
+            ],
+          },
         ],
         createdAt: new Date(),
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
     ];
   }
 
@@ -357,7 +357,7 @@ class StandardsComparisonService {
       version: standard.version,
       description: standard.description,
       categoryCount: standard.requirements.length,
-      criteriaCount: standard.requirements.reduce((sum, req) => sum + req.criteria.length, 0)
+      criteriaCount: standard.requirements.reduce((sum, req) => sum + req.criteria.length, 0),
     }));
   }
 
@@ -386,7 +386,7 @@ class StandardsComparisonService {
           standardId,
           standardName: standard.name,
           version: standard.version,
-          ...comparisonResult
+          ...comparisonResult,
         });
       }
 
@@ -395,7 +395,7 @@ class StandardsComparisonService {
         standardsCompared: standardIds.length,
         certified: results.filter(r => r.certified).length,
         notCertified: results.filter(r => !r.certified).length,
-        averageScore: results.reduce((sum, r) => sum + r.score, 0) / results.length
+        averageScore: results.reduce((sum, r) => sum + r.score, 0) / results.length,
       };
 
       // Store comparison in database
@@ -404,7 +404,7 @@ class StandardsComparisonService {
         farmData,
         comparisons: results,
         summary,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
       const insertResult = await this.comparisonsCollection.insertOne(comparison);
@@ -412,7 +412,7 @@ class StandardsComparisonService {
       return {
         comparisonId: insertResult.insertedId.toString(),
         results,
-        summary
+        summary,
       };
     } catch (error) {
       logger.error('Error comparing against standards:', error);
@@ -443,7 +443,7 @@ class StandardsComparisonService {
       certified,
       categoryResults,
       totalScore,
-      maxScore
+      maxScore,
     };
   }
 
@@ -466,7 +466,7 @@ class StandardsComparisonService {
         priority: criterion.priority,
         weight: criterion.weight,
         met,
-        score
+        score,
       });
 
       categoryScore += score;
@@ -479,7 +479,7 @@ class StandardsComparisonService {
       score: categoryScore,
       maxScore: maxCategoryScore,
       percentage: maxCategoryScore > 0 ? Math.round((categoryScore / maxCategoryScore) * 100) : 0,
-      criteria: criteriaResults
+      criteria: criteriaResults,
     };
   }
 
@@ -547,7 +547,7 @@ class StandardsComparisonService {
   async analyzeGaps({ comparisonId }) {
     try {
       const comparison = await this.comparisonsCollection.findOne({
-        _id: new ObjectId(comparisonId)
+        _id: new ObjectId(comparisonId),
       });
 
       if (!comparison) {
@@ -568,7 +568,7 @@ class StandardsComparisonService {
                 categoryTitle: categoryResult.title,
                 requirement: criterion.requirement,
                 priority: criterion.priority,
-                weight: criterion.weight
+                weight: criterion.weight,
               };
 
               gaps.push(gap);
@@ -585,7 +585,7 @@ class StandardsComparisonService {
       const gapsByPriority = {
         critical: gaps.filter(g => g.priority === 'critical').length,
         important: gaps.filter(g => g.priority === 'important').length,
-        optional: gaps.filter(g => g.priority === 'optional').length
+        optional: gaps.filter(g => g.priority === 'optional').length,
       };
 
       return {
@@ -593,7 +593,7 @@ class StandardsComparisonService {
         totalGaps: gaps.length,
         gapsByPriority,
         gaps,
-        recommendations
+        recommendations,
       };
     } catch (error) {
       logger.error('Error analyzing gaps:', error);
@@ -622,7 +622,7 @@ class StandardsComparisonService {
         'Implement HACCP-based approach. Conduct regular contamination risk assessments.',
       environmental:
         'Develop environmental management plan. Implement waste management procedures.',
-      traceability: 'Establish product identification and tracking system. Document supply chain.'
+      traceability: 'Establish product identification and tracking system. Document supply chain.',
     };
 
     const action =
@@ -637,7 +637,7 @@ class StandardsComparisonService {
       priority: gap.priority,
       action,
       estimatedCost: this.estimateCost(gap.priority),
-      timeframe: this.estimateTimeframe(gap.priority)
+      timeframe: this.estimateTimeframe(gap.priority),
     };
   }
 
@@ -648,7 +648,7 @@ class StandardsComparisonService {
     const costs = {
       critical: 'High (฿50,000 - ฿200,000)',
       important: 'Medium (฿20,000 - ฿50,000)',
-      optional: 'Low (฿5,000 - ฿20,000)'
+      optional: 'Low (฿5,000 - ฿20,000)',
     };
     return costs[priority] || 'Variable';
   }
@@ -660,7 +660,7 @@ class StandardsComparisonService {
     const timeframes = {
       critical: '1-3 months',
       important: '2-6 months',
-      optional: '3-12 months'
+      optional: '3-12 months',
     };
     return timeframes[priority] || 'Varies';
   }
@@ -683,10 +683,10 @@ class StandardsComparisonService {
           standardId: c.standardId,
           standardName: c.standardName,
           score: c.score,
-          certified: c.certified
+          certified: c.certified,
         })),
         summary: comparison.summary,
-        createdAt: comparison.createdAt
+        createdAt: comparison.createdAt,
       }));
     } catch (error) {
       logger.error('Error getting comparison history:', error);
@@ -700,7 +700,7 @@ class StandardsComparisonService {
   async getComparison(comparisonId) {
     try {
       const comparison = await this.comparisonsCollection.findOne({
-        _id: new ObjectId(comparisonId)
+        _id: new ObjectId(comparisonId),
       });
 
       if (!comparison) {
@@ -713,7 +713,7 @@ class StandardsComparisonService {
         farmData: comparison.farmData,
         comparisons: comparison.comparisons,
         summary: comparison.summary,
-        createdAt: comparison.createdAt
+        createdAt: comparison.createdAt,
       };
     } catch (error) {
       logger.error('Error getting comparison:', error);

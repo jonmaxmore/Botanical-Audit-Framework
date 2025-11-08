@@ -17,7 +17,7 @@ class ListFarmsUseCase {
     filters = {},
     page = 1,
     limit = 10,
-    sort = { createdAt: -1 }
+    sort = { createdAt: -1 },
   }) {
     const skip = (page - 1) * limit;
 
@@ -28,7 +28,7 @@ class ListFarmsUseCase {
       const farms = await this.farmRepository.findByOwnerId(userId, {
         limit,
         skip,
-        sort
+        sort,
       });
 
       const total = await this.farmRepository.countByOwner(userId);
@@ -39,7 +39,7 @@ class ListFarmsUseCase {
       result = await this.farmRepository.findWithFilters(filters, {
         limit,
         skip,
-        sort
+        sort,
       });
     } else {
       throw new Error('Invalid user type');
@@ -50,7 +50,7 @@ class ListFarmsUseCase {
       total: result.total,
       page,
       limit,
-      totalPages: Math.ceil(result.total / limit)
+      totalPages: Math.ceil(result.total / limit),
     };
   }
 }

@@ -17,7 +17,7 @@ class Farm {
     APPROVED: 'APPROVED', // DTAM approved
     REJECTED: 'REJECTED', // DTAM rejected
     SUSPENDED: 'SUSPENDED', // Temporarily suspended
-    INACTIVE: 'INACTIVE' // Deactivated
+    INACTIVE: 'INACTIVE', // Deactivated
   };
 
   // Farm Types
@@ -25,7 +25,7 @@ class Farm {
     OUTDOOR: 'OUTDOOR', // Outdoor cultivation
     GREENHOUSE: 'GREENHOUSE', // Greenhouse cultivation
     INDOOR: 'INDOOR', // Indoor cultivation
-    MIXED: 'MIXED' // Mixed cultivation
+    MIXED: 'MIXED', // Mixed cultivation
   };
 
   // Irrigation Types
@@ -34,7 +34,7 @@ class Farm {
     SPRINKLER: 'SPRINKLER', // Sprinkler irrigation
     FLOOD: 'FLOOD', // Flood irrigation
     MANUAL: 'MANUAL', // Manual watering
-    MIXED: 'MIXED' // Mixed methods
+    MIXED: 'MIXED', // Mixed methods
   };
 
   constructor({
@@ -68,7 +68,7 @@ class Farm {
     // Metadata
     submittedAt,
     createdAt = new Date(),
-    updatedAt = new Date()
+    updatedAt = new Date(),
   }) {
     this.id = id;
     this.ownerId = ownerId;
@@ -128,7 +128,7 @@ class Farm {
     cultivationMethod,
     irrigationType,
     soilType,
-    waterSource
+    waterSource,
   }) {
     return new Farm({
       ownerId,
@@ -150,7 +150,7 @@ class Farm {
       waterSource,
       status: Farm.STATUS.DRAFT,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     });
   }
 
@@ -173,7 +173,7 @@ class Farm {
     cultivationMethod,
     irrigationType,
     soilType,
-    waterSource
+    waterSource,
   }) {
     if (farmName !== undefined) this.farmName = farmName;
     if (farmType !== undefined) this.farmType = farmType;
@@ -342,7 +342,7 @@ class Farm {
       ngan: 4,
       wa: 400,
       sqm: 1600,
-      hectare: 0.16
+      hectare: 0.16,
     };
 
     if (!conversionRates[unit]) {
@@ -420,7 +420,7 @@ class Farm {
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -459,7 +459,7 @@ class Farm {
       cultivationPercentage: this.getCultivationPercentage(),
       canEdit: this.canEdit(),
       canSubmit: this.canSubmit(),
-      isApproved: this.isApproved()
+      isApproved: this.isApproved(),
     };
   }
 }

@@ -39,8 +39,8 @@ class TrackTraceService {
         metadata: {
           createdAt: new Date(),
           lastUpdated: new Date(),
-          createdBy: userId
-        }
+          createdBy: userId,
+        },
       };
 
       const result = await this.productsCollection.insertOne(product);
@@ -51,7 +51,7 @@ class TrackTraceService {
         stage: 'PLANTING',
         description: 'Product batch created',
         location: 'Farm',
-        verifiedBy: userId
+        verifiedBy: userId,
       });
 
       // Generate QR code
@@ -62,8 +62,8 @@ class TrackTraceService {
         data: {
           ...product,
           _id: result.insertedId,
-          qrCode
-        }
+          qrCode,
+        },
       };
     } catch (error) {
       logger.error('[TrackTrace] Create batch error:', error);
@@ -96,8 +96,8 @@ class TrackTraceService {
         data: {
           ...product,
           timeline,
-          qrData: qrCodeData || null
-        }
+          qrData: qrCodeData || null,
+        },
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -129,7 +129,7 @@ class TrackTraceService {
       return {
         success: true,
         data: products,
-        total: products.length
+        total: products.length,
       };
     } catch (error) {
       logger.error('[TrackTrace] Get user products error:', error);
@@ -144,7 +144,7 @@ class TrackTraceService {
     try {
       const { ObjectId } = require('mongodb');
       const product = await this.productsCollection.findOne({
-        _id: new ObjectId(productId)
+        _id: new ObjectId(productId),
       });
 
       if (!product) {
@@ -164,7 +164,7 @@ class TrackTraceService {
         'PROCESSING',
         'PACKAGING',
         'DISTRIBUTION',
-        'COMPLETED'
+        'COMPLETED',
       ];
       if (!validStages.includes(stage)) {
         throw new AppError('Invalid stage', 400);
@@ -175,7 +175,7 @@ class TrackTraceService {
         stage,
         ...updateData,
         'metadata.lastUpdated': new Date(),
-        'metadata.updatedBy': userId
+        'metadata.updatedBy': userId,
       };
 
       await this.productsCollection.updateOne({ _id: new ObjectId(productId) }, { $set: update });
@@ -186,12 +186,12 @@ class TrackTraceService {
         stage,
         description: updateData.description || `Stage updated to ${stage}`,
         location: updateData.location || 'Farm',
-        verifiedBy: userId
+        verifiedBy: userId,
       });
 
       return {
         success: true,
-        message: 'Product stage updated'
+        message: 'Product stage updated',
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -207,7 +207,7 @@ class TrackTraceService {
     try {
       const { ObjectId } = require('mongodb');
       const product = await this.productsCollection.findOne({
-        _id: new ObjectId(productId)
+        _id: new ObjectId(productId),
       });
 
       if (!product) {
@@ -222,7 +222,7 @@ class TrackTraceService {
       const update = {
         ...updateData,
         'metadata.lastUpdated': new Date(),
-        'metadata.updatedBy': userId
+        'metadata.updatedBy': userId,
       };
 
       // const result = await this.productsCollection.updateOne(
@@ -232,7 +232,7 @@ class TrackTraceService {
 
       return {
         success: true,
-        message: 'Product updated'
+        message: 'Product updated',
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -248,7 +248,7 @@ class TrackTraceService {
     try {
       const { ObjectId } = require('mongodb');
       const product = await this.productsCollection.findOne({
-        _id: new ObjectId(productId)
+        _id: new ObjectId(productId),
       });
 
       if (!product) {
@@ -272,7 +272,7 @@ class TrackTraceService {
 
       return {
         success: true,
-        message: 'Product deleted'
+        message: 'Product deleted',
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -293,8 +293,8 @@ class TrackTraceService {
         location,
         verifiedBy,
         metadata: {
-          createdAt: new Date()
-        }
+          createdAt: new Date(),
+        },
       };
 
       await this.timelineCollection.insertOne(event);
@@ -324,7 +324,7 @@ class TrackTraceService {
         location: sopActivity.gpsLocation
           ? `GPS: ${sopActivity.gpsLocation.latitude}, ${sopActivity.gpsLocation.longitude}`
           : 'Farm Location',
-        verifiedBy: sopActivity.recordedBy
+        verifiedBy: sopActivity.recordedBy,
       });
 
       // Update product with SOP compliance data
@@ -336,20 +336,20 @@ class TrackTraceService {
             phase: sopActivity.phase,
             compliancePoints: sopActivity.compliancePoints,
             recordedAt: sopActivity.recordedAt,
-            gacpRequirement: sopActivity.gacpRequirement
-          }
+            gacpRequirement: sopActivity.gacpRequirement,
+          },
         },
-        'metadata.lastUpdated': new Date()
+        'metadata.lastUpdated': new Date(),
       };
 
       await this.productsCollection.updateOne(
         { batchCode },
-        { $addToSet: sopUpdate.sopActivities }
+        { $addToSet: sopUpdate.sopActivities },
       );
 
       return {
         success: true,
-        message: 'SOP activity linked to batch successfully'
+        message: 'SOP activity linked to batch successfully',
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -371,7 +371,7 @@ class TrackTraceService {
       const sopActivities = product.sopActivities || [];
       const totalPoints = sopActivities.reduce(
         (sum, activity) => sum + (activity.compliancePoints || 0),
-        0
+        0,
       );
 
       // Calculate compliance percentage (345 is max possible points)
@@ -396,9 +396,9 @@ class TrackTraceService {
             phase: activity.phase,
             points: activity.compliancePoints,
             recordedAt: activity.recordedAt,
-            requirement: activity.gacpRequirement
-          }))
-        }
+            requirement: activity.gacpRequirement,
+          })),
+        },
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -429,7 +429,7 @@ class TrackTraceService {
         type: 'image/png',
         quality: 0.92,
         margin: 1,
-        width: 300
+        width: 300,
       });
 
       // Save enhanced QR code data
@@ -440,7 +440,7 @@ class TrackTraceService {
         type: 'enhanced',
         complianceScore: complianceData.data.compliancePercentage,
         sopActivitiesCount: complianceData.data.totalSOPActivities,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       };
 
       await this.qrCodesCollection.updateOne({ batchCode }, { $set: qrData }, { upsert: true });
@@ -449,7 +449,7 @@ class TrackTraceService {
         success: true,
         qrCode: qrCodeImage,
         verifyUrl,
-        complianceData: complianceData.data
+        complianceData: complianceData.data,
       };
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -478,7 +478,7 @@ class TrackTraceService {
         type: 'image/png',
         quality: 0.92,
         margin: 1,
-        width: 300
+        width: 300,
       });
 
       // Save QR code data
@@ -486,7 +486,7 @@ class TrackTraceService {
         batchCode,
         url: verifyUrl,
         qrCode: qrCodeImage,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       };
 
       await this.qrCodesCollection.insertOne(qrData);
@@ -507,17 +507,17 @@ class TrackTraceService {
 
       const certified = await this.productsCollection.countDocuments({
         userId,
-        certificationStatus: 'CERTIFIED'
+        certificationStatus: 'CERTIFIED',
       });
 
       const pending = await this.productsCollection.countDocuments({
         userId,
-        certificationStatus: 'PENDING'
+        certificationStatus: 'PENDING',
       });
 
       const inProgress = await this.productsCollection.countDocuments({
         userId,
-        stage: { $in: ['PLANTING', 'GROWING', 'HARVESTING', 'PROCESSING'] }
+        stage: { $in: ['PLANTING', 'GROWING', 'HARVESTING', 'PROCESSING'] },
       });
 
       // Get products by stage
@@ -535,8 +535,8 @@ class TrackTraceService {
           byStage: byStage.reduce((acc, item) => {
             acc[item._id] = item.count;
             return acc;
-          }, {})
-        }
+          }, {}),
+        },
       };
     } catch (error) {
       logger.error('[TrackTrace] Get statistics error:', error);
@@ -556,9 +556,9 @@ class TrackTraceService {
         certification: {
           status,
           ...certificationData,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
-        'metadata.lastUpdated': new Date()
+        'metadata.lastUpdated': new Date(),
       };
 
       await this.productsCollection.updateOne({ _id: new ObjectId(productId) }, { $set: update });
@@ -569,12 +569,12 @@ class TrackTraceService {
         stage: 'CERTIFICATION',
         description: `Certification status: ${status}`,
         location: 'Certification Authority',
-        verifiedBy: 'System'
+        verifiedBy: 'System',
       });
 
       return {
         success: true,
-        message: 'Certification status updated'
+        message: 'Certification status updated',
       };
     } catch (error) {
       logger.error('[TrackTrace] Update certification error:', error);

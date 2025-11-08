@@ -16,7 +16,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
     if (!controller.service.initialized) {
       return res.status(503).json({
         success: false,
-        message: 'Notification service is not initialized yet'
+        message: 'Notification service is not initialized yet',
       });
     }
     next();
@@ -31,7 +31,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (User or Admin)
    */
   router.get('/user/:userId', authMiddleware, (req, res) =>
-    controller.getUserNotifications(req, res)
+    controller.getUserNotifications(req, res),
   );
 
   /**
@@ -40,7 +40,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (User or Admin)
    */
   router.get('/user/:userId/unread-count', authMiddleware, (req, res) =>
-    controller.getUnreadCount(req, res)
+    controller.getUnreadCount(req, res),
   );
 
   /**
@@ -49,7 +49,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (User or Admin)
    */
   router.get('/user/:userId/stats', authMiddleware, (req, res) =>
-    controller.getNotificationStats(req, res)
+    controller.getNotificationStats(req, res),
   );
 
   /**
@@ -58,7 +58,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (User or Admin)
    */
   router.get('/user/:userId/preferences', authMiddleware, (req, res) =>
-    controller.getPreferences(req, res)
+    controller.getPreferences(req, res),
   );
 
   /**
@@ -67,7 +67,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (User)
    */
   router.patch('/:notificationId/read', authMiddleware, (req, res) =>
-    controller.markAsRead(req, res)
+    controller.markAsRead(req, res),
   );
 
   /**
@@ -76,7 +76,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (User or Admin)
    */
   router.patch('/user/:userId/read-all', authMiddleware, (req, res) =>
-    controller.markAllAsRead(req, res)
+    controller.markAllAsRead(req, res),
   );
 
   /**
@@ -85,7 +85,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (User)
    */
   router.delete('/:notificationId', authMiddleware, (req, res) =>
-    controller.deleteNotification(req, res)
+    controller.deleteNotification(req, res),
   );
 
   /**
@@ -94,7 +94,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (User or Admin)
    */
   router.put('/user/:userId/preferences', authMiddleware, (req, res) =>
-    controller.updatePreferences(req, res)
+    controller.updatePreferences(req, res),
   );
 
   /**
@@ -103,7 +103,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (Admin only)
    */
   router.post('/send', authMiddleware, adminMiddleware, (req, res) =>
-    controller.sendCustomNotification(req, res)
+    controller.sendCustomNotification(req, res),
   );
 
   /**
@@ -112,7 +112,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (Admin only)
    */
   router.post('/broadcast', authMiddleware, adminMiddleware, (req, res) =>
-    controller.broadcastAnnouncement(req, res)
+    controller.broadcastAnnouncement(req, res),
   );
 
   /**
@@ -121,7 +121,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (Admin only)
    */
   router.post('/test', authMiddleware, adminMiddleware, (req, res) =>
-    controller.sendTestNotification(req, res)
+    controller.sendTestNotification(req, res),
   );
 
   /**
@@ -130,7 +130,7 @@ function initializeRoutes(controller, authMiddleware, adminMiddleware) {
    * @access  Private (Admin only)
    */
   router.get('/templates', authMiddleware, adminMiddleware, (req, res) =>
-    controller.getTemplates(req, res)
+    controller.getTemplates(req, res),
   );
 
   /**

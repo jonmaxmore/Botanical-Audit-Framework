@@ -21,8 +21,8 @@ const validate = (req, res, next) => {
       message: 'Validation failed',
       errors: errors.array().map(error => ({
         field: error.path,
-        message: error.msg
-      }))
+        message: error.msg,
+      })),
     });
   }
   next();
@@ -105,7 +105,7 @@ const validateRegister = [
     .isLength({ max: 100 })
     .withMessage('Sub-district must not exceed 100 characters'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -122,7 +122,7 @@ const validateLogin = [
 
   body('password').notEmpty().withMessage('Password is required'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -137,7 +137,7 @@ const validateRequestPasswordReset = [
     .normalizeEmail()
     .toLowerCase(),
 
-  validate
+  validate,
 ];
 
 /**
@@ -158,7 +158,7 @@ const validateResetPassword = [
     .matches(/[0-9]/)
     .withMessage('Password must contain at least one number'),
 
-  validate
+  validate,
 ];
 
 /**
@@ -227,7 +227,7 @@ const validateUpdateProfile = [
     .isLength({ max: 500 })
     .withMessage('Address must not exceed 500 characters'),
 
-  validate
+  validate,
 ];
 
 module.exports = {
@@ -235,5 +235,5 @@ module.exports = {
   validateLogin,
   validateRequestPasswordReset,
   validateResetPassword,
-  validateUpdateProfile
+  validateUpdateProfile,
 };

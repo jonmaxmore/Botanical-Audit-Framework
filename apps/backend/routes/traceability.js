@@ -28,11 +28,11 @@ router.post('/batches', auth, async (req, res) => {
       harvestDate,
       quantity: {
         initial: quantity,
-        current: quantity
+        current: quantity,
       },
       processingSteps: processingSteps || [],
       qualityChecks: qualityChecks || [],
-      createdBy: req.user.id
+      createdBy: req.user.id,
     });
 
     // Generate batch ID and traceability code
@@ -109,7 +109,7 @@ router.post('/batches/:id/processing-steps', auth, async (req, res) => {
       startTime,
       endTime,
       performedBy: req.user.id,
-      notes
+      notes,
     });
 
     await batch.save();
@@ -149,7 +149,7 @@ router.post('/batches/:id/quality-checks', auth, async (req, res) => {
       performedAt,
       passed,
       performedBy: req.user.id,
-      notes
+      notes,
     });
 
     await batch.save();
@@ -181,7 +181,7 @@ router.get('/batches/verify/:traceabilityCode', async (req, res) => {
   } catch (err) {
     traceLogger.error(
       `Error verifying batch with traceability code ${req.params.traceabilityCode}:`,
-      err
+      err,
     );
     res.status(500).json({ message: 'Server error' });
   }
@@ -220,24 +220,24 @@ router.get('/batches/:id/report', auth, async (req, res) => {
         traceabilityCode: batch.traceabilityCode,
         status: batch.status,
         createdBy: batch.createdBy.name,
-        createdAt: batch.createdAt
+        createdAt: batch.createdAt,
       },
       product: {
         id: batch.product._id,
         name: batch.product.name,
         scientificName: batch.product.scientificName,
-        variety: batch.product.variety
+        variety: batch.product.variety,
       },
       farm: {
         id: batch.farm._id,
         name: batch.farm.name,
         region: batch.farm.region,
-        address: batch.farm.contactDetails?.address
+        address: batch.farm.contactDetails?.address,
       },
       harvest: {
         date: batch.harvestDate,
         initialQuantity: batch.quantity.initial,
-        currentQuantity: batch.quantity.current
+        currentQuantity: batch.quantity.current,
       },
       processingTimeline: batch.processingSteps.map(step => ({
         type: step.type,
@@ -245,18 +245,18 @@ router.get('/batches/:id/report', auth, async (req, res) => {
         startTime: step.startTime,
         endTime: step.endTime,
         performedBy: step.performedBy?.name || 'Unknown',
-        notes: step.notes
+        notes: step.notes,
       })),
       qualityChecks: batch.qualityChecks.map(check => ({
         type: check.type,
         performedAt: check.performedAt,
         performedBy: check.performedBy?.name || 'Unknown',
         passed: check.passed,
-        notes: check.notes
+        notes: check.notes,
       })),
       certifications: batch.certifications,
       childBatches: batch.childBatches,
-      parentBatch: batch.parentBatch
+      parentBatch: batch.parentBatch,
     };
 
     res.json(report);
@@ -291,7 +291,7 @@ router.post('/batches/:id/split', auth, async (req, res) => {
 
     if (totalSplitQuantity > parentBatch.quantity.current.value) {
       return res.status(400).json({
-        message: 'Total split quantity exceeds current batch quantity'
+        message: 'Total split quantity exceeds current batch quantity',
       });
     }
 
@@ -314,14 +314,14 @@ router.post('/batches/:id/split', auth, async (req, res) => {
         plot: parentBatch.plot,
         quantity: {
           initial: childBatchData.quantity,
-          current: childBatchData.quantity
+          current: childBatchData.quantity,
         },
         processingSteps: [...parentBatch.processingSteps],
         qualityChecks: [...parentBatch.qualityChecks],
         certifications: [...parentBatch.certifications],
         status: childBatchData.status || parentBatch.status,
         parentBatch: parentBatch._id,
-        createdBy: req.user.id
+        createdBy: req.user.id,
       });
 
       // Add split step
@@ -329,7 +329,7 @@ router.post('/batches/:id/split', auth, async (req, res) => {
         type: 'other',
         notes: `Split from parent batch ${parentBatch.batchId}`,
         startTime: new Date(),
-        performedBy: req.user.id
+        performedBy: req.user.id,
       });
 
       const savedChildBatch = await newChildBatch.save();
@@ -353,14 +353,14 @@ router.post('/batches/:id/split', auth, async (req, res) => {
       type: 'other',
       notes: `Split into ${childBatchIds.length} child batches`,
       startTime: new Date(),
-      performedBy: req.user.id
+      performedBy: req.user.id,
     });
 
     await parentBatch.save();
 
     res.status(201).json({
       parentBatch,
-      childBatches: createdChildBatches
+      childBatches: createdChildBatches,
     });
   } catch (err) {
     traceLogger.error(`Error splitting batch ${req.params.id}:`, err);
@@ -398,7 +398,7 @@ router.post('/batches/:id/movement', auth, async (req, res) => {
       carrier,
       trackingNumber,
       temperature,
-      notes
+      notes,
     } = req.body;
 
     // Add transport step
@@ -407,7 +407,7 @@ router.post('/batches/:id/movement', auth, async (req, res) => {
       location: {
         name: origin.name,
         coordinates: origin.coordinates,
-        address: origin.address
+        address: origin.address,
       },
       startTime: new Date(departureTime),
       endTime: actualArrival ? new Date(actualArrival) : undefined,
@@ -419,8 +419,8 @@ router.post('/batches/:id/movement', auth, async (req, res) => {
         transportMethod,
         carrier,
         trackingNumber,
-        estimatedArrival: estimatedArrival ? new Date(estimatedArrival) : undefined
-      }
+        estimatedArrival: estimatedArrival ? new Date(estimatedArrival) : undefined,
+      },
     });
 
     // Update batch status if delivered
@@ -441,7 +441,7 @@ router.post('/batches/:id/movement', auth, async (req, res) => {
         from: origin.name,
         to: destination.name,
         departureTime,
-        estimatedArrival
+        estimatedArrival,
       });
     }
 
@@ -465,12 +465,12 @@ router.get('/analytics', [auth, adminAuth], async (req, res) => {
         $group: {
           _id: {
             year: { $year: '$createdAt' },
-            month: { $month: '$createdAt' }
+            month: { $month: '$createdAt' },
           },
-          count: { $sum: 1 }
-        }
+          count: { $sum: 1 },
+        },
       },
-      { $sort: { '_id.year': 1, '_id.month': 1 } }
+      { $sort: { '_id.year': 1, '_id.month': 1 } },
     ]);
 
     // Batch statuses
@@ -478,9 +478,9 @@ router.get('/analytics', [auth, adminAuth], async (req, res) => {
       {
         $group: {
           _id: '$status',
-          count: { $sum: 1 }
-        }
-      }
+          count: { $sum: 1 },
+        },
+      },
     ]);
 
     // Quality check success rates
@@ -491,9 +491,9 @@ router.get('/analytics', [auth, adminAuth], async (req, res) => {
           _id: '$qualityChecks.type',
           total: { $sum: 1 },
           passed: {
-            $sum: { $cond: [{ $eq: ['$qualityChecks.passed', true] }, 1, 0] }
-          }
-        }
+            $sum: { $cond: [{ $eq: ['$qualityChecks.passed', true] }, 1, 0] },
+          },
+        },
       },
       {
         $project: {
@@ -501,10 +501,10 @@ router.get('/analytics', [auth, adminAuth], async (req, res) => {
           total: 1,
           passed: 1,
           passRate: {
-            $multiply: [{ $divide: ['$passed', '$total'] }, 100]
-          }
-        }
-      }
+            $multiply: [{ $divide: ['$passed', '$total'] }, 100],
+          },
+        },
+      },
     ]);
 
     // Traceability code scans
@@ -514,7 +514,7 @@ router.get('/analytics', [auth, adminAuth], async (req, res) => {
     res.json({
       batchesByMonth,
       batchStatusCounts,
-      qualityCheckStats
+      qualityCheckStats,
     });
   } catch (err) {
     traceLogger.error('Error generating traceability analytics:', err);

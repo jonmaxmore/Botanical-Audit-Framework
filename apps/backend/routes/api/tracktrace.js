@@ -51,7 +51,7 @@ async function initializeEngine(db) {
   const { initializeTrackTrace } = require(path.join(__dirname, '../../modules/track-trace'));
   const result = await initializeTrackTrace({
     db,
-    authenticateToken: auth
+    authenticateToken: auth,
   });
   trackTraceService = result.service;
   logger.info('[TrackTrace API] Service initialized from module');
@@ -62,7 +62,7 @@ const checkEngineInitialized = (req, res, next) => {
   if (!trackTraceService) {
     return res.status(503).json({
       success: false,
-      error: 'Track & Trace service not initialized. Please wait for database connection.'
+      error: 'Track & Trace service not initialized. Please wait for database connection.',
     });
   }
   next();
@@ -82,7 +82,7 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
     console.log('[TrackTrace API] QR Generation Request:', {
       cycleId: req.params.cycleId,
       body: req.body,
-      user: req.user
+      user: req.user,
     });
 
     const { cycleId } = req.params;
@@ -93,7 +93,7 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
       logger.error('[TrackTrace API] No farmer ID in request');
       return res.status(401).json({
         success: false,
-        error: 'User authentication failed - no farmer ID'
+        error: 'User authentication failed - no farmer ID',
       });
     }
 
@@ -101,7 +101,7 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
       logger.error('[TrackTrace API] Missing fields:', { farmName, cropType });
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: farmName, cropType'
+        error: 'Missing required fields: farmName, cropType',
       });
     }
 
@@ -109,14 +109,14 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
       cycleId,
       farmerId,
       farmName,
-      cropType
+      cropType,
     });
 
     const result = await trackTraceService.generateQRCode({
       cycleId,
       farmerId,
       farmName,
-      cropType
+      cropType,
     });
 
     logger.info('[TrackTrace API] QR Generation result:', result);
@@ -129,7 +129,7 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
     res.status(201).json({
       success: true,
       message: 'QR Code generated successfully',
-      data: result.data
+      data: result.data,
     });
   } catch (error) {
     logger.error('[TrackTrace API] QR generation exception:', error);
@@ -138,7 +138,7 @@ router.post('/cycles/:cycleId/qrcode', auth, checkEngineInitialized, async (req,
       success: false,
       error: 'Failed to generate QR code',
       message: error.message,
-      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
     });
   }
 });
@@ -164,7 +164,7 @@ router.get('/verify/:qrCodeId', checkEngineInitialized, async (req, res) => {
     res.json({
       success: true,
       verified: result.verified,
-      data: result.data
+      data: result.data,
     });
   } catch (error) {
     logger.error('[TrackTrace API] Verification error:', error);
@@ -172,7 +172,7 @@ router.get('/verify/:qrCodeId', checkEngineInitialized, async (req, res) => {
       success: false,
       verified: false,
       error: 'Verification failed',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -193,7 +193,7 @@ router.post('/activities', auth, checkEngineInitialized, async (req, res) => {
     if (!qrCodeId || !type || !description) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: qrCodeId, type, description'
+        error: 'Missing required fields: qrCodeId, type, description',
       });
     }
 
@@ -208,13 +208,13 @@ router.post('/activities', auth, checkEngineInitialized, async (req, res) => {
       'quality_check',
       'packaging',
       'shipping',
-      'delivered'
+      'delivered',
     ];
 
     if (!validTypes.includes(type)) {
       return res.status(400).json({
         success: false,
-        error: `Invalid activity type. Valid types: ${validTypes.join(', ')}`
+        error: `Invalid activity type. Valid types: ${validTypes.join(', ')}`,
       });
     }
 
@@ -227,9 +227,9 @@ router.post('/activities', auth, checkEngineInitialized, async (req, res) => {
       performedBy: {
         userId: req.user.userId,
         name: req.user.name || req.user.email,
-        role: req.user.role
+        role: req.user.role,
       },
-      metadata: metadata || {}
+      metadata: metadata || {},
     });
 
     if (!result.success) {
@@ -239,14 +239,14 @@ router.post('/activities', auth, checkEngineInitialized, async (req, res) => {
     res.status(201).json({
       success: true,
       message: 'Activity logged successfully',
-      data: result.data
+      data: result.data,
     });
   } catch (error) {
     logger.error('[TrackTrace API] Activity logging error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to log activity',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -272,14 +272,14 @@ router.get('/qrcode/:qrCodeId/timeline', checkEngineInitialized, async (req, res
 
     res.json({
       success: true,
-      data: result.data
+      data: result.data,
     });
   } catch (error) {
     logger.error('[TrackTrace API] Timeline error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve timeline',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -299,14 +299,14 @@ router.get('/analytics', auth, checkEngineInitialized, async (req, res) => {
     const filters = {
       dateFrom: req.query.dateFrom,
       dateTo: req.query.dateTo,
-      farmerId: req.query.farmerId || req.user.userId
+      farmerId: req.query.farmerId || req.user.userId,
     };
 
     // Admin can view all, farmers can only view their own
     if (req.user.role !== 'admin' && filters.farmerId !== req.user.userId) {
       return res.status(403).json({
         success: false,
-        error: 'Access denied: Can only view own analytics'
+        error: 'Access denied: Can only view own analytics',
       });
     }
 
@@ -318,14 +318,14 @@ router.get('/analytics', auth, checkEngineInitialized, async (req, res) => {
 
     res.json({
       success: true,
-      data: result.data
+      data: result.data,
     });
   } catch (error) {
     logger.error('[TrackTrace API] Analytics error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve analytics',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -348,7 +348,7 @@ router.put('/qrcode/:qrCodeId/status', auth, checkEngineInitialized, async (req,
     if (!status) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required field: status'
+        error: 'Missing required field: status',
       });
     }
 
@@ -360,14 +360,14 @@ router.put('/qrcode/:qrCodeId/status', auth, checkEngineInitialized, async (req,
 
     res.json({
       success: true,
-      message: result.message
+      message: result.message,
     });
   } catch (error) {
     logger.error('[TrackTrace API] Status update error:', error);
     res.status(500).json({
       success: false,
       error: 'Failed to update status',
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -385,7 +385,7 @@ router.get('/health', (req, res) => {
     success: true,
     service: 'Track & Trace API',
     status: trackTraceService ? 'operational' : 'initializing',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   });
 });
 

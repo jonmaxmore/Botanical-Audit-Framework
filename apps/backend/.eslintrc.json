@@ -13,6 +13,33 @@
     "ecmaVersion": 2022,
     "sourceType": "module"
   },
+  "overrides": [
+    {
+      "files": ["*.ts", "**/*.ts"],
+      "parser": "@typescript-eslint/parser",
+      "parserOptions": {
+        "ecmaVersion": 2022,
+        "sourceType": "module",
+        "project": null
+      },
+      "plugins": ["@typescript-eslint"],
+      "extends": [
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "rules": {
+        "@typescript-eslint/no-unused-vars": [
+          "warn",
+          {
+            "argsIgnorePattern": "^_",
+            "varsIgnorePattern": "^_"
+          }
+        ],
+        "node/no-missing-import": "off",
+        "node/no-unsupported-features/es-syntax": "off",
+        "node/no-unpublished-import": "off"
+      }
+    }
+  ],
   "rules": {
     // File naming convention - enforce kebab-case
     "unicorn/filename-case": [

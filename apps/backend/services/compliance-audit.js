@@ -47,8 +47,8 @@ const auditLogSchema = new mongoose.Schema(
         'SECURITY_EVENT',
         'ERROR_EVENT',
         'COMPLIANCE_CHECK',
-        'AUDIT_ACCESS'
-      ]
+        'AUDIT_ACCESS',
+      ],
     },
 
     // Who performed the action
@@ -58,7 +58,7 @@ const auditLogSchema = new mongoose.Schema(
       role: { type: String, required: true },
       name: { type: String },
       ipAddress: { type: String, required: true },
-      userAgent: { type: String }
+      userAgent: { type: String },
     },
 
     // What was affected
@@ -67,7 +67,7 @@ const auditLogSchema = new mongoose.Schema(
       id: { type: String, required: true },
       name: { type: String },
       previousState: { type: mongoose.Schema.Types.Mixed },
-      newState: { type: mongoose.Schema.Types.Mixed }
+      newState: { type: mongoose.Schema.Types.Mixed },
     },
 
     // Action details
@@ -80,8 +80,8 @@ const auditLogSchema = new mongoose.Schema(
       riskLevel: {
         type: String,
         enum: ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'],
-        default: 'LOW'
-      }
+        default: 'LOW',
+      },
     },
 
     // Compliance metadata
@@ -90,10 +90,10 @@ const auditLogSchema = new mongoose.Schema(
       dataClassification: {
         type: String,
         enum: ['PUBLIC', 'INTERNAL', 'CONFIDENTIAL', 'RESTRICTED'],
-        default: 'INTERNAL'
+        default: 'INTERNAL',
       },
       retentionPeriod: { type: Number, default: 2555 }, // days (7 years default)
-      businessJustification: { type: String }
+      businessJustification: { type: String },
     },
 
     // Technical metadata
@@ -104,20 +104,20 @@ const auditLogSchema = new mongoose.Schema(
       environment: { type: String, required: true },
       version: { type: String },
       checksumBefore: { type: String },
-      checksumAfter: { type: String }
+      checksumAfter: { type: String },
     },
 
     // Tamper protection
     integrity: {
       hash: { type: String, required: true },
       signature: { type: String },
-      verified: { type: Boolean, default: true }
-    }
+      verified: { type: Boolean, default: true },
+    },
   },
   {
     timestamps: true,
-    collection: 'audit_logs'
-  }
+    collection: 'audit_logs',
+  },
 );
 
 // Prevent modification of audit logs
@@ -163,14 +163,14 @@ class ComplianceAuditService {
           role: eventData.userRole,
           name: eventData.userName,
           ipAddress: eventData.ipAddress,
-          userAgent: eventData.userAgent
+          userAgent: eventData.userAgent,
         },
         resource: {
           type: eventData.resourceType,
           id: eventData.resourceId,
           name: eventData.resourceName,
           previousState: eventData.previousState,
-          newState: eventData.newState
+          newState: eventData.newState,
         },
         action: {
           description: eventData.description,
@@ -178,13 +178,13 @@ class ComplianceAuditService {
           endpoint: eventData.endpoint,
           success: eventData.success !== false,
           errorMessage: eventData.errorMessage,
-          riskLevel: this.assessRiskLevel(eventData)
+          riskLevel: this.assessRiskLevel(eventData),
         },
         compliance: {
           regulatoryBasis: this.determineRegulatoryBasis(eventData),
           dataClassification: eventData.dataClassification || 'INTERNAL',
           retentionPeriod: eventData.retentionPeriod || 2555,
-          businessJustification: eventData.businessJustification
+          businessJustification: eventData.businessJustification,
         },
         technical: {
           sessionId: eventData.sessionId,
@@ -193,15 +193,15 @@ class ComplianceAuditService {
           environment: this.environment,
           version: process.env.APP_VERSION || '1.0.0',
           checksumBefore: eventData.checksumBefore,
-          checksumAfter: eventData.checksumAfter
-        }
+          checksumAfter: eventData.checksumAfter,
+        },
       };
 
       // Generate integrity hash
       auditEntry.integrity = {
         hash: this.generateIntegrityHash(auditEntry),
         signature: this.generateSignature(auditEntry),
-        verified: true
+        verified: true,
       };
 
       const audit = new AuditLog(auditEntry);
@@ -210,7 +210,7 @@ class ComplianceAuditService {
       return {
         success: true,
         eventId: auditEntry.eventId,
-        timestamp: auditEntry.timestamp
+        timestamp: auditEntry.timestamp,
       };
     } catch (error) {
       // Critical: Audit logging failure should be escalated
@@ -221,7 +221,7 @@ class ComplianceAuditService {
         await this.logSystemEvent('AUDIT_LOGGING_FAILURE', {
           error: error.message,
           originalEvent: eventData,
-          riskLevel: 'CRITICAL'
+          riskLevel: 'CRITICAL',
         });
       } catch (fallbackError) {
         logger.error('CRITICAL: Fallback audit logging also failed:', fallbackError);
@@ -249,7 +249,7 @@ class ComplianceAuditService {
       success: data.success !== false,
       errorMessage: data.error,
       riskLevel: data.riskLevel || 'LOW',
-      ...data
+      ...data,
     });
   }
 
@@ -284,13 +284,13 @@ class ComplianceAuditService {
 
     const [auditLogs, total] = await Promise.all([
       AuditLog.find(query).sort(sort).skip(skip).limit(limit).lean(),
-      AuditLog.countDocuments(query)
+      AuditLog.countDocuments(query),
     ]);
 
     // Verify integrity of retrieved logs
     const verifiedLogs = auditLogs.map(log => ({
       ...log,
-      integrityVerified: this.verifyIntegrity(log)
+      integrityVerified: this.verifyIntegrity(log),
     }));
 
     return {
@@ -299,8 +299,8 @@ class ComplianceAuditService {
         page,
         limit,
         total,
-        pages: Math.ceil(total / limit)
-      }
+        pages: Math.ceil(total / limit),
+      },
     };
   }
 
@@ -315,25 +315,25 @@ class ComplianceAuditService {
         $match: {
           timestamp: {
             $gte: new Date(startDate),
-            $lte: new Date(endDate)
+            $lte: new Date(endDate),
           },
-          'compliance.regulatoryBasis': regulatoryBasis
-        }
+          'compliance.regulatoryBasis': regulatoryBasis,
+        },
       },
       {
         $group: {
           _id: {
             eventType: '$eventType',
             riskLevel: '$action.riskLevel',
-            success: '$action.success'
+            success: '$action.success',
           },
           count: { $sum: 1 },
-          events: { $push: '$eventId' }
-        }
+          events: { $push: '$eventId' },
+        },
       },
       {
-        $sort: { count: -1 }
-      }
+        $sort: { count: -1 },
+      },
     ];
 
     const aggregation = await AuditLog.aggregate(pipeline);
@@ -343,7 +343,7 @@ class ComplianceAuditService {
       period: { startDate, endDate },
       summary: aggregation,
       generatedAt: new Date(),
-      totalEvents: aggregation.reduce((sum, group) => sum + group.count, 0)
+      totalEvents: aggregation.reduce((sum, group) => sum + group.count, 0),
     };
   }
 
@@ -380,7 +380,7 @@ class ComplianceAuditService {
       resourceType: auditEntry.resource.type,
       resourceId: auditEntry.resource.id,
       action: auditEntry.action.description,
-      success: auditEntry.action.success
+      success: auditEntry.action.success,
     };
 
     return crypto
@@ -484,7 +484,7 @@ class ComplianceAuditService {
             success: res.statusCode < 400,
             errorMessage: res.statusCode >= 400 ? `HTTP ${res.statusCode}` : null,
             sessionId: req.sessionID,
-            correlationId: req.headers['x-correlation-id']
+            correlationId: req.headers['x-correlation-id'],
           });
         } catch (error) {
           logger.error('Audit middleware error:', error);

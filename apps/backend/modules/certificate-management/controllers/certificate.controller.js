@@ -30,14 +30,14 @@ class CertificateController {
         standardId,
         standardName,
         score,
-        validityYears
+        validityYears,
       } = req.body;
 
       // Validate required fields
       if (!applicationId || !farmId || !userId || !farmName || !farmerName) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields'
+          message: 'Missing required fields',
         });
       }
 
@@ -56,20 +56,20 @@ class CertificateController {
         standardName,
         score,
         issuedBy,
-        validityYears
+        validityYears,
       });
 
       res.status(201).json({
         success: true,
         message: 'Certificate created successfully',
-        certificate
+        certificate,
       });
     } catch (error) {
       logger.error('Error creating certificate:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to create certificate',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -86,7 +86,7 @@ class CertificateController {
 
       res.json({
         success: true,
-        certificate
+        certificate,
       });
     } catch (error) {
       logger.error('Error getting certificate:', error);
@@ -95,14 +95,14 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           message: 'Certificate not found',
-          error: error.message
+          error: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve certificate',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -119,7 +119,7 @@ class CertificateController {
 
       res.json({
         success: true,
-        certificate
+        certificate,
       });
     } catch (error) {
       logger.error('Error getting certificate:', error);
@@ -128,14 +128,14 @@ class CertificateController {
         return res.status(404).json({
           success: false,
           message: 'Certificate not found',
-          error: error.message
+          error: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve certificate',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -154,26 +154,26 @@ class CertificateController {
       if (requestUserId !== userId && req.user?.role !== 'admin') {
         return res.status(403).json({
           success: false,
-          message: 'Access denied'
+          message: 'Access denied',
         });
       }
 
       const certificates = await this.service.getCertificatesByUser(userId, {
         status,
-        standardId
+        standardId,
       });
 
       res.json({
         success: true,
         count: certificates.length,
-        certificates
+        certificates,
       });
     } catch (error) {
       logger.error('Error getting certificates by user:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve certificates',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -189,19 +189,19 @@ class CertificateController {
       const result = await this.service.getAllCertificates(
         { status, standardId, search },
         parseInt(page, 10),
-        parseInt(limit, 10)
+        parseInt(limit, 10),
       );
 
       res.json({
         success: true,
-        ...result
+        ...result,
       });
     } catch (error) {
       logger.error('Error getting all certificates:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve certificates',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -219,14 +219,14 @@ class CertificateController {
 
       res.json({
         success: result.valid,
-        ...result
+        ...result,
       });
     } catch (error) {
       logger.error('Error verifying certificate:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to verify certificate',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -247,7 +247,7 @@ class CertificateController {
       res.json({
         success: true,
         message: 'Certificate renewed successfully',
-        certificate: newCertificate
+        certificate: newCertificate,
       });
     } catch (error) {
       logger.error('Error renewing certificate:', error);
@@ -255,14 +255,14 @@ class CertificateController {
       if (error.message.includes('only be renewed within')) {
         return res.status(400).json({
           success: false,
-          message: error.message
+          message: error.message,
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to renew certificate',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -279,7 +279,7 @@ class CertificateController {
       if (!reason) {
         return res.status(400).json({
           success: false,
-          message: 'Revocation reason is required'
+          message: 'Revocation reason is required',
         });
       }
 
@@ -289,7 +289,7 @@ class CertificateController {
 
       res.json({
         success: true,
-        ...result
+        ...result,
       });
     } catch (error) {
       logger.error('Error revoking certificate:', error);
@@ -297,14 +297,14 @@ class CertificateController {
       if (error.message.includes('not found')) {
         return res.status(404).json({
           success: false,
-          message: 'Certificate not found'
+          message: 'Certificate not found',
         });
       }
 
       res.status(500).json({
         success: false,
         message: 'Failed to revoke certificate',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -326,7 +326,7 @@ class CertificateController {
       if (!certificate.pdfUrl) {
         return res.status(404).json({
           success: false,
-          message: 'PDF not yet generated'
+          message: 'PDF not yet generated',
         });
       }
 
@@ -334,14 +334,14 @@ class CertificateController {
         success: true,
         message: 'Certificate ready for download',
         pdfUrl: certificate.pdfUrl,
-        certificateNumber: certificate.certificateNumber
+        certificateNumber: certificate.certificateNumber,
       });
     } catch (error) {
       logger.error('Error downloading certificate:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to download certificate',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -356,14 +356,14 @@ class CertificateController {
 
       res.json({
         success: true,
-        stats
+        stats,
       });
     } catch (error) {
       logger.error('Error getting certificate stats:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve certificate statistics',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -381,14 +381,14 @@ class CertificateController {
       res.json({
         success: true,
         count: certificates.length,
-        certificates
+        certificates,
       });
     } catch (error) {
       logger.error('Error getting expiring certificates:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to retrieve expiring certificates',
-        error: error.message
+        error: error.message,
       });
     }
   }
@@ -405,7 +405,7 @@ class CertificateController {
       if (!pdfUrl) {
         return res.status(400).json({
           success: false,
-          message: 'PDF URL is required'
+          message: 'PDF URL is required',
         });
       }
 
@@ -413,14 +413,14 @@ class CertificateController {
 
       res.json({
         success: true,
-        ...result
+        ...result,
       });
     } catch (error) {
       logger.error('Error updating PDF info:', error);
       res.status(500).json({
         success: false,
         message: 'Failed to update PDF info',
-        error: error.message
+        error: error.message,
       });
     }
   }

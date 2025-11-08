@@ -22,7 +22,7 @@ class RiskScoringService {
   async calculateRisk(application, extractedData) {
     try {
       this.logger.info('Calculating risk score', {
-        applicationId: application._id
+        applicationId: application._id,
       });
 
       // Calculate individual risk components
@@ -34,20 +34,20 @@ class RiskScoringService {
 
       // Weight each component
       const weights = {
-        document: 0.25,    // 25%
-        farmer: 0.20,      // 20%
-        farm: 0.20,        // 20%
-        historical: 0.20,  // 20%
-        fraud: 0.15        // 15%
+        document: 0.25, // 25%
+        farmer: 0.2, // 20%
+        farm: 0.2, // 20%
+        historical: 0.2, // 20%
+        fraud: 0.15, // 15%
       };
 
       // Calculate weighted score
       const riskScore =
-        (documentRisk.score * weights.document) +
-        (farmerRisk.score * weights.farmer) +
-        (farmRisk.score * weights.farm) +
-        (historicalRisk.score * weights.historical) +
-        (fraudRisk.score * weights.fraud);
+        documentRisk.score * weights.document +
+        farmerRisk.score * weights.farmer +
+        farmRisk.score * weights.farm +
+        historicalRisk.score * weights.historical +
+        fraudRisk.score * weights.fraud;
 
       // Determine risk level
       const riskLevel = this.determineRiskLevel(riskScore);
@@ -58,7 +58,7 @@ class RiskScoringService {
         ...farmerRisk.flags,
         ...farmRisk.flags,
         ...historicalRisk.flags,
-        ...fraudRisk.flags
+        ...fraudRisk.flags,
       ];
 
       // Generate recommendation
@@ -74,24 +74,23 @@ class RiskScoringService {
           farmer: farmerRisk,
           farm: farmRisk,
           historical: historicalRisk,
-          fraud: fraudRisk
+          fraud: fraudRisk,
         },
-        calculatedAt: new Date()
+        calculatedAt: new Date(),
       };
 
       this.logger.info('Risk calculation completed', {
         applicationId: application._id,
         riskScore: result.riskScore,
         riskLevel: result.riskLevel,
-        flagsCount: flags.length
+        flagsCount: flags.length,
       });
 
       return result;
-
     } catch (error) {
       this.logger.error('Risk calculation failed', {
         applicationId: application._id,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -115,7 +114,7 @@ class RiskScoringService {
       flags.push({
         type: 'MISSING_DOCUMENTS',
         severity: 'HIGH',
-        message: `Missing: ${missingDocs.join(', ')}`
+        message: `Missing: ${missingDocs.join(', ')}`,
       });
       score -= 30 * missingDocs.length;
     }
@@ -125,7 +124,7 @@ class RiskScoringService {
       flags.push({
         type: 'DOCUMENT_QUALITY_ISSUES',
         severity: 'MEDIUM',
-        message: `Quality issues in ${extractedData.qualityIssues.length} documents`
+        message: `Quality issues in ${extractedData.qualityIssues.length} documents`,
       });
       score -= 15 * extractedData.qualityIssues.length;
     }
@@ -134,13 +133,13 @@ class RiskScoringService {
     if (extractedData?.nationalId) {
       const idMatch = this.checkNameConsistency(
         application.farmer?.name,
-        extractedData.nationalId.name
+        extractedData.nationalId.name,
       );
       if (!idMatch) {
         flags.push({
           type: 'NAME_MISMATCH',
           severity: 'HIGH',
-          message: 'Name on ID does not match application'
+          message: 'Name on ID does not match application',
         });
         score -= 40;
       }
@@ -148,7 +147,7 @@ class RiskScoringService {
 
     return {
       score: Math.max(0, score),
-      flags
+      flags,
     };
   }
 
@@ -169,7 +168,7 @@ class RiskScoringService {
       flags.push({
         type: 'PREVIOUS_REJECTION',
         severity: 'HIGH',
-        message: 'Farmer has previous rejected applications'
+        message: 'Farmer has previous rejected applications',
       });
       score -= 40;
     }
@@ -179,7 +178,7 @@ class RiskScoringService {
       flags.push({
         type: 'COMPLIANCE_VIOLATIONS',
         severity: 'HIGH',
-        message: `${history.violations.length} previous violations`
+        message: `${history.violations.length} previous violations`,
       });
       score -= 20 * Math.min(history.violations.length, 3);
     }
@@ -192,7 +191,7 @@ class RiskScoringService {
       flags.push({
         type: 'INCOMPLETE_PROFILE',
         severity: 'MEDIUM',
-        message: `Missing: ${missingFields.join(', ')}`
+        message: `Missing: ${missingFields.join(', ')}`,
       });
       score -= 10 * missingFields.length;
     }
@@ -204,7 +203,7 @@ class RiskScoringService {
 
     return {
       score: Math.max(0, score),
-      flags
+      flags,
     };
   }
 
@@ -224,7 +223,7 @@ class RiskScoringService {
       flags.push({
         type: 'LARGE_FARM',
         severity: 'MEDIUM',
-        message: 'Large farm size requires thorough inspection'
+        message: 'Large farm size requires thorough inspection',
       });
       score -= 15;
     }
@@ -234,7 +233,7 @@ class RiskScoringService {
       flags.push({
         type: 'HIGH_RISK_CROP',
         severity: 'MEDIUM',
-        message: 'Cannabis cultivation requires additional oversight'
+        message: 'Cannabis cultivation requires additional oversight',
       });
       score -= 10;
     }
@@ -244,7 +243,7 @@ class RiskScoringService {
       flags.push({
         type: 'REMOTE_LOCATION',
         severity: 'LOW',
-        message: 'Remote farm location'
+        message: 'Remote farm location',
       });
       score -= 5;
     }
@@ -257,14 +256,14 @@ class RiskScoringService {
       flags.push({
         type: 'INCOMPLETE_FARM_DATA',
         severity: 'MEDIUM',
-        message: `Missing farm data: ${missingFields.join(', ')}`
+        message: `Missing farm data: ${missingFields.join(', ')}`,
       });
       score -= 10 * missingFields.length;
     }
 
     return {
       score: Math.max(0, score),
-      flags
+      flags,
     };
   }
 
@@ -288,7 +287,7 @@ class RiskScoringService {
       flags.push({
         type: 'FREQUENT_APPLICATIONS',
         severity: 'MEDIUM',
-        message: `${recentApplications} applications in past year`
+        message: `${recentApplications} applications in past year`,
       });
       score -= 15;
     }
@@ -298,7 +297,7 @@ class RiskScoringService {
       flags.push({
         type: 'QUICK_REAPPLICATION',
         severity: 'MEDIUM',
-        message: 'Quick re-application after rejection'
+        message: 'Quick re-application after rejection',
       });
       score -= 20;
     }
@@ -308,14 +307,14 @@ class RiskScoringService {
       flags.push({
         type: 'MULTIPLE_FAILED_INSPECTIONS',
         severity: 'HIGH',
-        message: `${history.failedInspections} failed inspections`
+        message: `${history.failedInspections} failed inspections`,
       });
       score -= 25;
     }
 
     return {
       score: Math.max(0, score),
-      flags
+      flags,
     };
   }
 
@@ -336,7 +335,7 @@ class RiskScoringService {
       flags.push({
         type: 'DUPLICATE_NATIONAL_ID',
         severity: 'CRITICAL',
-        message: 'National ID already used in another application'
+        message: 'National ID already used in another application',
       });
       score -= 60;
     }
@@ -346,7 +345,7 @@ class RiskScoringService {
       flags.push({
         type: 'LOW_OCR_CONFIDENCE',
         severity: 'MEDIUM',
-        message: 'Low confidence in document authenticity'
+        message: 'Low confidence in document authenticity',
       });
       score -= 20;
     }
@@ -354,13 +353,13 @@ class RiskScoringService {
     // Check for inconsistent addresses
     const addressMatch = this.checkAddressConsistency(
       application.farmer?.address,
-      application.farm?.location
+      application.farm?.location,
     );
     if (!addressMatch) {
       flags.push({
         type: 'ADDRESS_INCONSISTENCY',
         severity: 'MEDIUM',
-        message: 'Farmer address and farm location are very different'
+        message: 'Farmer address and farm location are very different',
       });
       score -= 15;
     }
@@ -371,14 +370,14 @@ class RiskScoringService {
       flags.push({
         type: 'SUSPICIOUS_COMPLETENESS',
         severity: 'LOW',
-        message: 'Unusually complete data for first-time applicant'
+        message: 'Unusually complete data for first-time applicant',
       });
       score -= 5;
     }
 
     return {
       score: Math.max(0, score),
-      flags
+      flags,
     };
   }
 
@@ -428,7 +427,7 @@ class RiskScoringService {
     if (!name1 || !name2) return false;
 
     // Normalize and compare
-    const normalize = (str) => str.trim().toLowerCase().replace(/\s+/g, ' ');
+    const normalize = str => str.trim().toLowerCase().replace(/\s+/g, ' ');
     return normalize(name1) === normalize(name2);
   }
 
@@ -443,8 +442,14 @@ class RiskScoringService {
 
     // Check if they share the same province
     const provinces = [
-      'เชียงใหม่', 'กรุงเทพ', 'ขอนแก่น', 'นครราชสีมา',
-      'เชียงราย', 'ลำปาง', 'พะเยา', 'แม่ฮ่องสอน'
+      'เชียงใหม่',
+      'กรุงเทพ',
+      'ขอนแก่น',
+      'นครราชสีมา',
+      'เชียงราย',
+      'ลำปาง',
+      'พะเยา',
+      'แม่ฮ่องสอน',
     ];
 
     for (const province of provinces) {
@@ -476,7 +481,7 @@ class RiskScoringService {
       'documents.nationalId',
       'documents.landDeed',
       'documents.farmPhotos',
-      'cropType'
+      'cropType',
     ];
 
     const presentFields = allFields.filter(field => {

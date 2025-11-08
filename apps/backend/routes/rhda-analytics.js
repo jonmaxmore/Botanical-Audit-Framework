@@ -20,37 +20,37 @@ const mockRHDAData = {
       efficiency: 87.5,
       productivity: 91.2,
       satisfaction: 4.2,
-      status: 'healthy'
+      status: 'healthy',
     },
     departments: {
       inspection: {
         total: 45,
         active: 42,
         workload: 78,
-        performance: 88
+        performance: 88,
       },
       review: {
         total: 35,
         active: 33,
         workload: 82,
-        performance: 92
+        performance: 92,
       },
       admin: {
         total: 25,
         active: 24,
         workload: 65,
-        performance: 95
+        performance: 95,
       },
       support: {
         total: 51,
         active: 43,
         workload: 71,
-        performance: 85
-      }
+        performance: 85,
+      },
     },
     warnings: [],
     alerts: [],
-    lastUpdate: new Date().toISOString()
+    lastUpdate: new Date().toISOString(),
   },
   analytics: {
     performance: {
@@ -58,30 +58,30 @@ const mockRHDAData = {
         date: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
         efficiency: Math.round(85 + Math.random() * 10),
         productivity: Math.round(87 + Math.random() * 8),
-        quality: Math.round(90 + Math.random() * 7)
+        quality: Math.round(90 + Math.random() * 7),
       })),
       weekly: Array.from({ length: 12 }, (_, i) => ({
         week: `Week ${i + 1}`,
         efficiency: Math.round(85 + Math.random() * 10),
         productivity: Math.round(87 + Math.random() * 8),
-        quality: Math.round(90 + Math.random() * 7)
+        quality: Math.round(90 + Math.random() * 7),
       })),
       monthly: Array.from({ length: 6 }, (_, i) => ({
         month: new Date(2025, 9 - i, 1).toLocaleString('en-US', {
-          month: 'short'
+          month: 'short',
         }),
         efficiency: Math.round(85 + Math.random() * 10),
         productivity: Math.round(87 + Math.random() * 8),
-        quality: Math.round(90 + Math.random() * 7)
-      }))
+        quality: Math.round(90 + Math.random() * 7),
+      })),
     },
     trends: {
       efficiency: { trend: 'up', change: 2.3 },
       productivity: { trend: 'up', change: 1.8 },
       satisfaction: { trend: 'stable', change: 0.1 },
-      workload: { trend: 'down', change: -3.2 }
-    }
-  }
+      workload: { trend: 'down', change: -3.2 },
+    },
+  },
 };
 
 // Health check for RHDA system
@@ -95,15 +95,15 @@ router.get('/health', (req, res) => {
       components: {
         workplace_stats: 'operational',
         analytics_engine: 'operational',
-        data_pipeline: 'operational'
-      }
+        data_pipeline: 'operational',
+      },
     });
   } catch (error) {
     res.status(500).json({
       service: 'rhda-analytics',
       status: 'unhealthy',
       error: error.message,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -120,7 +120,7 @@ router.get('/workplace-stats', (req, res) => {
       stats = {
         ...stats,
         focused_department: department,
-        department_data: stats.departments[department]
+        department_data: stats.departments[department],
       };
     }
 
@@ -136,15 +136,15 @@ router.get('/workplace-stats', (req, res) => {
         request_id: `rhda_${Date.now()}`,
         generated_at: new Date().toISOString(),
         period: period,
-        department: department || 'all'
-      }
+        department: department || 'all',
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve workplace statistics',
       message: error.message,
-      code: 'RHDA_WORKPLACE_ERROR'
+      code: 'RHDA_WORKPLACE_ERROR',
     });
   }
 });
@@ -167,13 +167,13 @@ router.get('/analytics', (req, res) => {
           total_points: analyticsData.performance[period].length,
           avg_efficiency: Math.round(
             analyticsData.performance[period].reduce((sum, item) => sum + item.efficiency, 0) /
-              analyticsData.performance[period].length
+              analyticsData.performance[period].length,
           ),
           avg_productivity: Math.round(
             analyticsData.performance[period].reduce((sum, item) => sum + item.productivity, 0) /
-              analyticsData.performance[period].length
-          )
-        }
+              analyticsData.performance[period].length,
+          ),
+        },
       };
     }
 
@@ -184,15 +184,15 @@ router.get('/analytics', (req, res) => {
         request_id: `rhda_analytics_${Date.now()}`,
         generated_at: new Date().toISOString(),
         type: type,
-        period: period
-      }
+        period: period,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve analytics data',
       message: error.message,
-      code: 'RHDA_ANALYTICS_ERROR'
+      code: 'RHDA_ANALYTICS_ERROR',
     });
   }
 });
@@ -211,7 +211,7 @@ router.get('/warnings', (req, res) => {
         message: 'Inspection department workload above 80%',
         timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
         department: 'inspection',
-        resolved: false
+        resolved: false,
       },
       {
         id: 'warn_002',
@@ -220,7 +220,7 @@ router.get('/warnings', (req, res) => {
         message: 'Slight decrease in overall efficiency detected',
         timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000).toISOString(),
         department: 'all',
-        resolved: true
+        resolved: true,
       },
       {
         id: 'warn_003',
@@ -230,8 +230,8 @@ router.get('/warnings', (req, res) => {
         timestamp: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
         department: 'system',
         resolved: false,
-        details: 'This corresponds to the RHDA analysis failure mentioned'
-      }
+        details: 'This corresponds to the RHDA analysis failure mentioned',
+      },
     ];
 
     let filteredWarnings = sampleWarnings;
@@ -251,22 +251,22 @@ router.get('/warnings', (req, res) => {
           high: filteredWarnings.filter(w => w.level === 'high').length,
           medium: filteredWarnings.filter(w => w.level === 'medium').length,
           low: filteredWarnings.filter(w => w.level === 'low').length,
-          unresolved: filteredWarnings.filter(w => !w.resolved).length
-        }
+          unresolved: filteredWarnings.filter(w => !w.resolved).length,
+        },
       },
       meta: {
         request_id: `rhda_warnings_${Date.now()}`,
         generated_at: new Date().toISOString(),
         level: level,
-        limit: limit
-      }
+        limit: limit,
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve warnings',
       message: error.message,
-      code: 'RHDA_WARNINGS_ERROR'
+      code: 'RHDA_WARNINGS_ERROR',
     });
   }
 });
@@ -284,15 +284,15 @@ router.patch('/warnings/:warningId/resolve', (req, res) => {
         warning_id: warningId,
         resolved_at: new Date().toISOString(),
         resolved_by: resolved_by || 'system',
-        notes: notes || 'Resolved via API'
-      }
+        notes: notes || 'Resolved via API',
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to resolve warning',
       message: error.message,
-      code: 'RHDA_RESOLVE_ERROR'
+      code: 'RHDA_RESOLVE_ERROR',
     });
   }
 });
@@ -312,24 +312,24 @@ router.get('/status', (req, res) => {
         components: {
           data_collector: {
             status: 'healthy',
-            last_update: new Date().toISOString()
+            last_update: new Date().toISOString(),
           },
           analytics_engine: {
             status: 'healthy',
             last_update: new Date().toISOString(),
-            note: 'Archive exclusion rules applied'
+            note: 'Archive exclusion rules applied',
           },
           reporting_system: {
             status: 'healthy',
-            last_update: new Date().toISOString()
-          }
+            last_update: new Date().toISOString(),
+          },
         },
         metrics: {
           processed_records: 15420,
           active_analyses: 3,
           pending_reports: 0,
           error_count: 0,
-          excluded_paths: ['archive/**', 'backup-*/**', '*-backup/**']
+          excluded_paths: ['archive/**', 'backup-*/**', '*-backup/**'],
         },
         configuration: {
           archive_scanning: false,
@@ -341,17 +341,17 @@ router.get('/status', (req, res) => {
             'node_modules/',
             '.git/',
             'dist/',
-            'build/'
-          ]
-        }
-      }
+            'build/',
+          ],
+        },
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve system status',
       message: error.message,
-      code: 'RHDA_STATUS_ERROR'
+      code: 'RHDA_STATUS_ERROR',
     });
   }
 });
@@ -373,8 +373,8 @@ router.get('/config', (req, res) => {
             'node_modules/**',
             '.git/**',
             'dist/**',
-            'build/**'
-          ]
+            'build/**',
+          ],
         },
         workspace_config: {
           active_apps: [
@@ -382,23 +382,23 @@ router.get('/config', (req, res) => {
             'apps/farmer-portal',
             'apps/admin-portal',
             'apps/certificate-portal',
-            'frontend-nextjs'
+            'frontend-nextjs',
           ],
-          archived_paths: ['archive/', 'backup-frontends/', 'backup-phase2-*/']
+          archived_paths: ['archive/', 'backup-frontends/', 'backup-phase2-*/'],
         },
         error_handling: {
           skip_missing_lockfiles_in_archived: true,
           continue_on_archive_errors: true,
-          log_excluded_paths: false
-        }
-      }
+          log_excluded_paths: false,
+        },
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       error: 'Failed to retrieve configuration',
       message: error.message,
-      code: 'RHDA_CONFIG_ERROR'
+      code: 'RHDA_CONFIG_ERROR',
     });
   }
 });

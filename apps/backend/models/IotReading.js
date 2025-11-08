@@ -16,16 +16,16 @@ const IotReadingSchema = new mongoose.Schema(
       farmId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Farm',
-        required: [true, 'Farm ID is required']
+        required: [true, 'Farm ID is required'],
       },
       deviceId: {
         type: String,
-        required: [true, 'Device ID is required']
+        required: [true, 'Device ID is required'],
       },
       provider: {
         type: String,
         required: [true, 'Provider is required'],
-        enum: ['dygis', 'malin', 'sensecap', 'thaismartfarm', 'custom']
+        enum: ['dygis', 'malin', 'sensecap', 'thaismartfarm', 'custom'],
       },
       sensorType: {
         type: String,
@@ -44,75 +44,75 @@ const IotReadingSchema = new mongoose.Schema(
           'rain',
           'pressure',
           'battery',
-          'custom'
-        ]
-      }
+          'custom',
+        ],
+      },
     },
 
     // Timestamp (required for timeseries)
     timestamp: {
       type: Date,
-      required: [true, 'Timestamp is required']
+      required: [true, 'Timestamp is required'],
     },
 
     // Measurements
     value: {
       type: Number,
-      required: [true, 'Value is required']
+      required: [true, 'Value is required'],
     },
 
     unit: {
       type: String,
-      required: [true, 'Unit is required']
+      required: [true, 'Unit is required'],
     },
 
     // Optional fields
     location: {
       type: {
         type: String,
-        enum: ['Point']
+        enum: ['Point'],
       },
-      coordinates: [Number] // [longitude, latitude]
+      coordinates: [Number], // [longitude, latitude]
     },
 
     quality: {
       type: String,
       enum: ['good', 'fair', 'poor', 'unknown'],
-      default: 'unknown'
+      default: 'unknown',
     },
 
     raw: mongoose.Schema.Types.Mixed, // Original data from provider
 
     processed: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     alert: {
       triggered: {
         type: Boolean,
-        default: false
+        default: false,
       },
       type: {
         type: String,
-        enum: ['high', 'low', 'critical', null]
+        enum: ['high', 'low', 'critical', null],
       },
       notified: {
         type: Boolean,
-        default: false
-      }
-    }
+        default: false,
+      },
+    },
   },
   {
     collection: 'iot_readings',
     timeseries: {
       timeField: 'timestamp',
       metaField: 'metadata',
-      granularity: 'minutes'
+      granularity: 'minutes',
     },
     expireAfterSeconds: 31536000, // 1 year retention
-    versionKey: false
-  }
+    versionKey: false,
+  },
 );
 
 // Indexes
@@ -129,14 +129,14 @@ IotReadingSchema.statics.record = async function (reading) {
       farmId: reading.farmId,
       deviceId: reading.deviceId,
       provider: reading.provider,
-      sensorType: reading.sensorType
+      sensorType: reading.sensorType,
     },
     timestamp: reading.timestamp || new Date(),
     value: reading.value,
     unit: reading.unit,
     location: reading.location || null,
     quality: reading.quality || 'unknown',
-    raw: reading.raw || null
+    raw: reading.raw || null,
   });
 };
 
@@ -146,14 +146,14 @@ IotReadingSchema.statics.recordBatch = async function (readings) {
       farmId: r.farmId,
       deviceId: r.deviceId,
       provider: r.provider,
-      sensorType: r.sensorType
+      sensorType: r.sensorType,
     },
     timestamp: r.timestamp || new Date(),
     value: r.value,
     unit: r.unit,
     location: r.location || null,
     quality: r.quality || 'unknown',
-    raw: r.raw || null
+    raw: r.raw || null,
   }));
 
   return await this.insertMany(documents, { ordered: false });
@@ -163,7 +163,7 @@ IotReadingSchema.statics.getLatest = async function (farmId, deviceId, sensorTyp
   return await this.findOne({
     'metadata.farmId': farmId,
     'metadata.deviceId': deviceId,
-    'metadata.sensorType': sensorType
+    'metadata.sensorType': sensorType,
   }).sort('-timestamp');
 };
 
@@ -172,15 +172,15 @@ IotReadingSchema.statics.getTimeSeries = async function (
   sensorType,
   startDate,
   endDate,
-  limit = 1000
+  limit = 1000,
 ) {
   return await this.find({
     'metadata.farmId': farmId,
     'metadata.sensorType': sensorType,
     timestamp: {
       $gte: startDate,
-      $lte: endDate
-    }
+      $lte: endDate,
+    },
   })
     .sort('timestamp')
     .limit(limit)
@@ -192,24 +192,24 @@ IotReadingSchema.statics.getAggregates = async function (
   sensorType,
   startDate,
   endDate,
-  interval = 'hour'
+  interval = 'hour',
 ) {
   const dateFormat = {
     hour: {
       year: { $year: '$timestamp' },
       month: { $month: '$timestamp' },
       day: { $dayOfMonth: '$timestamp' },
-      hour: { $hour: '$timestamp' }
+      hour: { $hour: '$timestamp' },
     },
     day: {
       year: { $year: '$timestamp' },
       month: { $month: '$timestamp' },
-      day: { $dayOfMonth: '$timestamp' }
+      day: { $dayOfMonth: '$timestamp' },
     },
     month: {
       year: { $year: '$timestamp' },
-      month: { $month: '$timestamp' }
-    }
+      month: { $month: '$timestamp' },
+    },
   };
 
   return await this.aggregate([
@@ -219,9 +219,9 @@ IotReadingSchema.statics.getAggregates = async function (
         'metadata.sensorType': sensorType,
         timestamp: {
           $gte: startDate,
-          $lte: endDate
-        }
-      }
+          $lte: endDate,
+        },
+      },
     },
     {
       $group: {
@@ -230,10 +230,10 @@ IotReadingSchema.statics.getAggregates = async function (
         min: { $min: '$value' },
         max: { $max: '$value' },
         count: { $sum: 1 },
-        unit: { $first: '$unit' }
-      }
+        unit: { $first: '$unit' },
+      },
     },
-    { $sort: { _id: 1 } }
+    { $sort: { _id: 1 } },
   ]);
 };
 
@@ -262,7 +262,7 @@ IotReadingSchema.statics.checkThresholds = async function (farmId, rules) {
       latest.alert = {
         triggered: true,
         type,
-        notified: false
+        notified: false,
       };
       await latest.save();
 
@@ -274,7 +274,7 @@ IotReadingSchema.statics.checkThresholds = async function (farmId, rules) {
         unit: latest.unit,
         threshold: type === 'high' || type === 'critical' ? rule.max : rule.min,
         type,
-        timestamp: latest.timestamp
+        timestamp: latest.timestamp,
       });
     }
   }
@@ -286,7 +286,7 @@ IotReadingSchema.statics.getPendingAlerts = async function (farmId) {
   return await this.find({
     'metadata.farmId': farmId,
     'alert.triggered': true,
-    'alert.notified': false
+    'alert.notified': false,
   }).sort('-timestamp');
 };
 
@@ -300,7 +300,7 @@ IotReadingSchema.set('toJSON', {
     ret.id = ret._id;
     delete ret._id;
     return ret;
-  }
+  },
 });
 
 const IotReadingModel = mongoose.model('IotReading', IotReadingSchema);

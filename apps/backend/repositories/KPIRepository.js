@@ -134,7 +134,7 @@ class KPIRepository {
     try {
       return await this.collection
         .find({
-          status: { $in: ['in_progress', 'delayed'] }
+          status: { $in: ['in_progress', 'delayed'] },
         })
         .sort({ startTime: 1 })
         .toArray();
@@ -153,13 +153,13 @@ class KPIRepository {
     try {
       const result = await this.collection.insertOne({
         ...kpiData,
-        createdAt: new Date()
+        createdAt: new Date(),
       });
 
       return {
         id: result.insertedId,
         ...kpiData,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
     } catch (error) {
       logger.error('[KPIRepository] create error:', error);
@@ -180,10 +180,10 @@ class KPIRepository {
         {
           $set: {
             ...updateData,
-            updatedAt: new Date()
-          }
+            updatedAt: new Date(),
+          },
         },
-        { returnDocument: 'after' }
+        { returnDocument: 'after' },
       );
 
       return result.value;
@@ -236,26 +236,26 @@ class KPIRepository {
               _id: null,
               totalTasks: { $sum: 1 },
               completedTasks: {
-                $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
               },
               delayedTasks: {
-                $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] },
               },
               inProgressTasks: {
-                $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'in_progress'] }, 1, 0] },
               },
               avgProcessingTime: {
                 $avg: {
-                  $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null]
-                }
+                  $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null],
+                },
               },
               avgFeedbackScore: {
                 $avg: {
-                  $cond: [{ $ifNull: ['$feedbackScore', false] }, '$feedbackScore', null]
-                }
-              }
-            }
-          }
+                  $cond: [{ $ifNull: ['$feedbackScore', false] }, '$feedbackScore', null],
+                },
+              },
+            },
+          },
         ])
         .toArray();
 
@@ -266,7 +266,7 @@ class KPIRepository {
           delayedTasks: 0,
           inProgressTasks: 0,
           avgProcessingTime: 0,
-          avgFeedbackScore: 0
+          avgFeedbackScore: 0,
         }
       );
     } catch (error) {
@@ -303,23 +303,23 @@ class KPIRepository {
               _id: null,
               totalTasks: { $sum: 1 },
               completedTasks: {
-                $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
               },
               delayedTasks: {
-                $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] },
               },
               avgProcessingTime: {
                 $avg: {
-                  $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null]
-                }
+                  $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null],
+                },
               },
               avgFeedbackScore: {
                 $avg: {
-                  $cond: [{ $ifNull: ['$feedbackScore', false] }, '$feedbackScore', null]
-                }
-              }
-            }
-          }
+                  $cond: [{ $ifNull: ['$feedbackScore', false] }, '$feedbackScore', null],
+                },
+              },
+            },
+          },
         ])
         .toArray();
 
@@ -329,7 +329,7 @@ class KPIRepository {
           completedTasks: 0,
           delayedTasks: 0,
           avgProcessingTime: 0,
-          avgFeedbackScore: 0
+          avgFeedbackScore: 0,
         }
       );
     } catch (error) {
@@ -367,18 +367,18 @@ class KPIRepository {
                 _id: null,
                 totalTasks: { $sum: 1 },
                 completedTasks: {
-                  $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+                  $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
                 },
                 delayedTasks: {
-                  $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] }
+                  $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] },
                 },
                 avgProcessingTime: {
                   $avg: {
-                    $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null]
-                  }
-                }
-              }
-            }
+                    $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null],
+                  },
+                },
+              },
+            },
           ])
           .toArray(),
 
@@ -391,22 +391,22 @@ class KPIRepository {
                 _id: '$role',
                 totalTasks: { $sum: 1 },
                 completedTasks: {
-                  $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+                  $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
                 },
                 delayedTasks: {
-                  $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] }
-                }
-              }
-            }
+                  $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] },
+                },
+              },
+            },
           ])
-          .toArray()
+          .toArray(),
       ]);
 
       const overall = overallMetrics[0] || {
         totalTasks: 0,
         completedTasks: 0,
         delayedTasks: 0,
-        avgProcessingTime: 0
+        avgProcessingTime: 0,
       };
 
       return {
@@ -415,10 +415,10 @@ class KPIRepository {
           acc[item._id] = {
             totalTasks: item.totalTasks,
             completedTasks: item.completedTasks,
-            delayedTasks: item.delayedTasks
+            delayedTasks: item.delayedTasks,
           };
           return acc;
-        }, {})
+        }, {}),
       };
     } catch (error) {
       logger.error('[KPIRepository] getSystemMetrics error:', error);
@@ -438,7 +438,7 @@ class KPIRepository {
       startDate.setDate(startDate.getDate() - days);
 
       const query = {
-        startTime: { $gte: startDate }
+        startTime: { $gte: startDate },
       };
 
       if (role) {
@@ -451,23 +451,23 @@ class KPIRepository {
           {
             $group: {
               _id: {
-                $dateToString: { format: '%Y-%m-%d', date: '$startTime' }
+                $dateToString: { format: '%Y-%m-%d', date: '$startTime' },
               },
               total: { $sum: 1 },
               completed: {
-                $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'completed'] }, 1, 0] },
               },
               delayed: {
-                $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] }
+                $sum: { $cond: [{ $eq: ['$status', 'delayed'] }, 1, 0] },
               },
               avgProcessingTime: {
                 $avg: {
-                  $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null]
-                }
-              }
-            }
+                  $cond: [{ $ifNull: ['$processingTime', false] }, '$processingTime', null],
+                },
+              },
+            },
           },
-          { $sort: { _id: 1 } }
+          { $sort: { _id: 1 } },
         ])
         .toArray();
 
@@ -477,7 +477,7 @@ class KPIRepository {
         completed: item.completed,
         delayed: item.delayed,
         completionRate: item.total > 0 ? ((item.completed / item.total) * 100).toFixed(2) : 0,
-        avgProcessingTime: item.avgProcessingTime || 0
+        avgProcessingTime: item.avgProcessingTime || 0,
       }));
     } catch (error) {
       logger.error('[KPIRepository] getDailyTrends error:', error);

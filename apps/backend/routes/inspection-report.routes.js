@@ -14,7 +14,7 @@ router.post('/inspections/:id/report', async (req, res) => {
       checklistItems,
       decision,
       reason,
-      snapshotCount
+      snapshotCount,
     } = req.body;
 
     if (!summary || !decision) {
@@ -36,7 +36,7 @@ router.post('/inspections/:id/report', async (req, res) => {
       decision,
       reason,
       snapshotCount,
-      submittedAt: new Date()
+      submittedAt: new Date(),
     };
 
     // TODO: Save to database and update application status
@@ -54,7 +54,7 @@ router.post('/inspections/:id/report', async (req, res) => {
     res.json({
       success: true,
       message: 'Report submitted successfully',
-      report
+      report,
     });
   } catch (error) {
     console.error('Error submitting report:', error);
@@ -69,7 +69,7 @@ router.get('/inspections/:id/report', async (req, res) => {
     // TODO: Fetch from database
     res.json({
       success: true,
-      report: null
+      report: null,
     });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch report' });

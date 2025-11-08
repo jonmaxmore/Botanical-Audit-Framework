@@ -10,41 +10,41 @@ const surveySchema = new Schema({
   farmerId: {
     type: Schema.Types.ObjectId,
     ref: 'Farmer',
-    required: true
+    required: true,
   },
   surveyType: {
     type: String,
     enum: ['4-regions', 'cannabis', 'general'],
-    default: '4-regions'
+    default: '4-regions',
   },
   region: {
     type: String,
-    enum: ['central', 'southern', 'northern', 'northeastern']
+    enum: ['central', 'southern', 'northern', 'northeastern'],
   },
   status: {
     type: String,
     enum: ['draft', 'submitted', 'reviewed', 'approved'],
-    default: 'draft'
+    default: 'draft',
   },
   responses: {
     type: Map,
     of: Schema.Types.Mixed,
-    default: {}
+    default: {},
   },
   score: {
     type: Number,
     min: 0,
     max: 100,
-    default: 0
+    default: 0,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 surveySchema.pre('save', function (next) {

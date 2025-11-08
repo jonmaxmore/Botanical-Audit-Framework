@@ -3,37 +3,37 @@ const mongoose = require('mongoose');
 const GrowingCycleSchema = new mongoose.Schema({
   plot: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Farm.plots'
+    ref: 'Farm.plots',
   },
   plantingDate: {
     type: Date,
-    required: true
+    required: true,
   },
   expectedHarvestDate: Date,
   actualHarvestDate: Date,
   status: {
     type: String,
     enum: ['planned', 'planted', 'growing', 'harvested', 'failed'],
-    default: 'planned'
+    default: 'planned',
   },
   plantingDensity: {
     value: Number,
-    unit: String
+    unit: String,
   },
   inputs: [
     {
       type: {
         type: String,
-        enum: ['fertilizer', 'pesticide', 'herbicide', 'water', 'other']
+        enum: ['fertilizer', 'pesticide', 'herbicide', 'water', 'other'],
       },
       name: String,
       applicationDate: Date,
       quantity: {
         value: Number,
-        unit: String
+        unit: String,
       },
-      notes: String
-    }
+      notes: String,
+    },
   ],
   activities: [
     {
@@ -47,27 +47,27 @@ const GrowingCycleSchema = new mongoose.Schema({
           'weeding',
           'pruning',
           'harvesting',
-          'other'
-        ]
+          'other',
+        ],
       },
       date: Date,
       performedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
       },
       notes: String,
-      images: [String]
-    }
+      images: [String],
+    },
   ],
   yield: {
     expected: {
       value: Number,
-      unit: String
+      unit: String,
     },
     actual: {
       value: Number,
-      unit: String
-    }
+      unit: String,
+    },
   },
   notes: String,
   weather: [
@@ -76,8 +76,8 @@ const GrowingCycleSchema = new mongoose.Schema({
       temperature: Number,
       humidity: Number,
       rainfall: Number,
-      notes: String
-    }
+      notes: String,
+    },
   ],
 
   // === Phase 2: Sensor Data Integration ===
@@ -91,12 +91,12 @@ const GrowingCycleSchema = new mongoose.Schema({
     avgNPK: {
       nitrogen: Number, // ppm
       phosphorus: Number, // ppm
-      potassium: Number // ppm
+      potassium: Number, // ppm
     },
     dataCollectionPeriod: {
       start: Date,
-      end: Date
-    }
+      end: Date,
+    },
   },
 
   // === Phase 3: AI Insights & ML Features ===
@@ -106,13 +106,13 @@ const GrowingCycleSchema = new mongoose.Schema({
       confidence: Number, // 0-100
       generatedAt: Date,
       factors: [String], // List of factors affecting yield
-      comparisonToPrediction: Number // % difference (actual vs predicted)
+      comparisonToPrediction: Number, // % difference (actual vs predicted)
     },
     healthAssessment: {
       overallScore: Number, // 0-100
       issues: [String], // Current problems detected
       recommendations: [String], // Suggested actions
-      lastAssessment: Date
+      lastAssessment: Date,
     },
     nextActions: [
       {
@@ -120,15 +120,15 @@ const GrowingCycleSchema = new mongoose.Schema({
         dueDate: Date,
         priority: {
           type: String,
-          enum: ['low', 'medium', 'high', 'urgent']
+          enum: ['low', 'medium', 'high', 'urgent'],
         },
         completed: {
           type: Boolean,
-          default: false
+          default: false,
         },
-        completedAt: Date
-      }
-    ]
+        completedAt: Date,
+      },
+    ],
   },
 
   // === ML Features (Calculated for Machine Learning) ===
@@ -142,36 +142,36 @@ const GrowingCycleSchema = new mongoose.Schema({
       {
         type: {
           type: String,
-          enum: ['drought', 'flood', 'heat', 'cold', 'pest', 'disease']
+          enum: ['drought', 'flood', 'heat', 'cold', 'pest', 'disease'],
         },
         date: Date,
         severity: {
           type: String,
-          enum: ['minor', 'moderate', 'severe']
+          enum: ['minor', 'moderate', 'severe'],
         },
-        duration: Number // days
-      }
-    ]
-  }
+        duration: Number, // days
+      },
+    ],
+  },
 });
 
 const CropSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true
+      required: true,
     },
     scientificName: String,
     variety: String,
     category: {
       type: String,
       enum: ['vegetable', 'fruit', 'grain', 'herb', 'flower', 'tree', 'other'],
-      required: true
+      required: true,
     },
     farm: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
-      required: true
+      required: true,
     },
     growingCycles: [GrowingCycleSchema],
     averageGrowingPeriod: {
@@ -179,14 +179,14 @@ const CropSchema = new mongoose.Schema(
       unit: {
         type: String,
         enum: ['days', 'weeks', 'months'],
-        default: 'days'
-      }
+        default: 'days',
+      },
     },
     optimalConditions: {
       soilType: String,
       soilPH: {
         min: Number,
-        max: Number
+        max: Number,
       },
       temperature: {
         min: Number,
@@ -194,31 +194,31 @@ const CropSchema = new mongoose.Schema(
         unit: {
           type: String,
           enum: ['celsius', 'fahrenheit'],
-          default: 'celsius'
-        }
+          default: 'celsius',
+        },
       },
       sunlight: String,
-      waterRequirements: String
+      waterRequirements: String,
     },
     images: [
       {
         url: String,
-        caption: String
-      }
+        caption: String,
+      },
     ],
     notes: String,
     createdAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
     updatedAt: {
       type: Date,
-      default: Date.now
-    }
+      default: Date.now,
+    },
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 module.exports = mongoose.model('Crop', CropSchema);

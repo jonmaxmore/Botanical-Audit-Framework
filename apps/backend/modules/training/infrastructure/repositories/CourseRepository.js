@@ -31,7 +31,7 @@ class CourseRepository {
       maxCoursesPerFarmer: 5,
       courseExpiryMonths: 24,
       prerequisiteCheckEnabled: true,
-      auditTrailEnabled: true
+      auditTrailEnabled: true,
     };
   }
 
@@ -73,16 +73,16 @@ class CourseRepository {
           enrollmentCount: 0,
           completionRate: 0,
           averageScore: 0,
-          lastAnalyticsUpdate: new Date()
+          lastAnalyticsUpdate: new Date(),
         },
         auditTrail: [
           {
             action: 'CREATED',
             timestamp: new Date(),
             userId: courseData.createdBy,
-            changes: 'Course created'
-          }
-        ]
+            changes: 'Course created',
+          },
+        ],
       };
 
       // Insert into database
@@ -164,7 +164,7 @@ class CourseRepository {
         page = 1,
         limit = 20,
         sortBy = 'createdAt',
-        sortOrder = -1
+        sortOrder = -1,
       } = options;
 
       const collection = this.db.collection(this.collectionName);
@@ -176,7 +176,7 @@ class CourseRepository {
         level,
         isActive,
         farmerId,
-        includeEnrollmentCheck
+        includeEnrollmentCheck,
       });
 
       // Execute query with pagination
@@ -209,8 +209,8 @@ class CourseRepository {
           totalCount,
           totalPages: Math.ceil(totalCount / limit),
           hasNextPage: page < Math.ceil(totalCount / limit),
-          hasPreviousPage: page > 1
-        }
+          hasPreviousPage: page > 1,
+        },
       };
     } catch (error) {
       this.logger.error('[CourseRepository] Find all failed:', error);
@@ -240,7 +240,7 @@ class CourseRepository {
       const update = {
         ...updateData,
         updatedAt: new Date(),
-        version: (currentCourse.version || 1) + 1
+        version: (currentCourse.version || 1) + 1,
       };
 
       // Add audit trail entry
@@ -249,7 +249,7 @@ class CourseRepository {
           action: 'UPDATED',
           timestamp: new Date(),
           userId: updateData.updatedBy,
-          changes: this.generateChangesSummary(currentCourse, updateData)
+          changes: this.generateChangesSummary(currentCourse, updateData),
         };
 
         update.$push = { auditTrail: auditEntry };
@@ -293,17 +293,17 @@ class CourseRepository {
             status: Course.STATUS.ARCHIVED,
             deletedAt: new Date(),
             deletedBy: deletedBy,
-            updatedAt: new Date()
+            updatedAt: new Date(),
           },
           $push: {
             auditTrail: {
               action: 'DELETED',
               timestamp: new Date(),
               userId: deletedBy,
-              changes: 'Course archived/deleted'
-            }
-          }
-        }
+              changes: 'Course archived/deleted',
+            },
+          },
+        },
       );
 
       if (result.matchedCount === 0) {
@@ -362,7 +362,7 @@ class CourseRepository {
         if (!prerequisiteCheck.satisfied) {
           return {
             eligible: false,
-            reason: `Prerequisites not met: ${prerequisiteCheck.missing.join(', ')}`
+            reason: `Prerequisites not met: ${prerequisiteCheck.missing.join(', ')}`,
           };
         }
       }
@@ -372,7 +372,7 @@ class CourseRepository {
       if (farmerEnrollmentCount >= this.businessRules.maxCoursesPerFarmer) {
         return {
           eligible: false,
-          reason: `Maximum concurrent enrollments reached (${this.businessRules.maxCoursesPerFarmer})`
+          reason: `Maximum concurrent enrollments reached (${this.businessRules.maxCoursesPerFarmer})`,
         };
       }
 
@@ -382,8 +382,8 @@ class CourseRepository {
         businessRules: {
           prerequisitesSatisfied: true,
           enrollmentLimitOk: true,
-          courseAvailable: true
-        }
+          courseAvailable: true,
+        },
       };
     } catch (error) {
       this.logger.error('[CourseRepository] Eligibility check failed:', error);
@@ -408,19 +408,19 @@ class CourseRepository {
           totalEnrollments: course.businessMetadata?.enrollmentCount || 0,
           activeEnrollments: await this.getActiveEnrollmentCount(courseId),
           completionRate: course.businessMetadata?.completionRate || 0,
-          averageScore: course.businessMetadata?.averageScore || 0
+          averageScore: course.businessMetadata?.averageScore || 0,
         },
         performanceMetrics: {
           averageCompletionTime: await this.getAverageCompletionTime(courseId),
           dropoutRate: await this.getDropoutRate(courseId),
-          satisfactionScore: await this.getSatisfactionScore(courseId)
+          satisfactionScore: await this.getSatisfactionScore(courseId),
         },
         businessMetrics: {
           revenueGenerated: 0, // Would calculate based on course fees
           costPerCompletion: 0, // Would calculate operational costs
-          roi: 0 // Return on investment calculation
+          roi: 0, // Return on investment calculation
         },
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       };
 
       return analytics;
@@ -459,7 +459,7 @@ class CourseRepository {
     if (enrollmentCount > 0) {
       const restrictedFields = ['code', 'type', 'passingScore'];
       const hasRestrictedChanges = restrictedFields.some(field =>
-        Object.prototype.hasOwnProperty.call(updateData, field)
+        Object.prototype.hasOwnProperty.call(updateData, field),
       );
 
       if (hasRestrictedChanges) {
@@ -518,7 +518,7 @@ class CourseRepository {
     // Simplified implementation - would check completion records
     return {
       satisfied: true,
-      missing: []
+      missing: [],
     };
   }
 
@@ -584,7 +584,7 @@ class CourseRepository {
     return {
       id: courseDoc._id.toString(),
       ...courseDoc,
-      _id: undefined // Remove MongoDB internal ID
+      _id: undefined, // Remove MongoDB internal ID
     };
   }
 

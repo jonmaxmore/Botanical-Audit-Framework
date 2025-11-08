@@ -59,7 +59,7 @@ class LoginDTAMStaffUseCase {
       email: staff.email,
       type: 'dtam_staff',
       role: staff.role,
-      permissions: staff.permissions
+      permissions: staff.permissions,
     });
 
     // Publish domain event
@@ -68,7 +68,7 @@ class LoginDTAMStaffUseCase {
 
     return {
       staff,
-      token
+      token,
     };
   }
 }

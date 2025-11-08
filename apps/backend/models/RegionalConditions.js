@@ -30,25 +30,25 @@ const MonthlyClimateSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 1,
-    max: 12
+    max: 12,
   },
   temperature: {
     min: Number, // °C
     max: Number, // °C
-    average: Number // °C
+    average: Number, // °C
   },
   humidity: {
     min: Number, // %
     max: Number, // %
-    average: Number // %
+    average: Number, // %
   },
   rainfall: {
     averageMm: Number, // mm
     rainyDays: Number, // Number of days with rain
     intensity: {
       type: String,
-      enum: ['very_light', 'light', 'moderate', 'heavy', 'very_heavy']
-    }
+      enum: ['very_light', 'light', 'moderate', 'heavy', 'very_heavy'],
+    },
   },
   sunlightHours: Number, // Average hours per day
   evapotranspiration: Number, // mm (ET0)
@@ -56,24 +56,24 @@ const MonthlyClimateSchema = new mongoose.Schema({
   extremeWeatherRisk: {
     drought: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     flood: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     storm: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-    }
-  }
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+    },
+  },
 });
 
 const SeasonalPatternSchema = new mongoose.Schema({
   season: {
     type: String,
     required: true,
-    enum: ['hot', 'rainy', 'cool', 'dry']
+    enum: ['hot', 'rainy', 'cool', 'dry'],
     // Hot (ร้อน): March-May
     // Rainy (ฝน): June-October
     // Cool/Winter (หนาว): November-February
@@ -85,17 +85,17 @@ const SeasonalPatternSchema = new mongoose.Schema({
     humidityRange: String,
     rainfallPattern: String,
     farmingActivities: [String], // Common activities during this season
-    farmingActivitiesThai: [String]
+    farmingActivitiesThai: [String],
   },
   suitableFor: [
     {
       plantType: String,
       activity: {
         type: String,
-        enum: ['planting', 'growing', 'flowering', 'harvesting']
-      }
-    }
-  ]
+        enum: ['planting', 'growing', 'flowering', 'harvesting'],
+      },
+    },
+  ],
 });
 
 const SoilDataSchema = new mongoose.Schema({
@@ -112,60 +112,60 @@ const SoilDataSchema = new mongoose.Schema({
         'silty',
         'laterite',
         'alluvial',
-        'peat'
-      ]
-    }
+        'peat',
+      ],
+    },
   ],
   soilPH: {
     average: Number,
     range: {
       min: Number,
-      max: Number
+      max: Number,
     },
     suitability: {
       type: String,
-      enum: ['very_acidic', 'acidic', 'slightly_acidic', 'neutral', 'alkaline']
-    }
+      enum: ['very_acidic', 'acidic', 'slightly_acidic', 'neutral', 'alkaline'],
+    },
   },
   fertility: {
     level: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     organicMatter: {
       percentage: Number,
       level: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-      }
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+      },
     },
     nutrients: {
       nitrogen: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
       },
       phosphorus: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
       },
       potassium: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-      }
-    }
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+      },
+    },
   },
   drainage: {
     type: String,
-    enum: ['very_poor', 'poor', 'moderate', 'good', 'excellent']
+    enum: ['very_poor', 'poor', 'moderate', 'good', 'excellent'],
   },
   waterRetention: {
     type: String,
-    enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+    enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
   },
   texture: String,
   depth: {
     type: String,
-    enum: ['very_shallow', 'shallow', 'moderate', 'deep', 'very_deep']
+    enum: ['very_shallow', 'shallow', 'moderate', 'deep', 'very_deep'],
   },
   commonIssues: [String], // e.g., ["salinity", "compaction", "erosion"]
   commonIssuesThai: [String],
@@ -176,22 +176,22 @@ const SoilDataSchema = new mongoose.Schema({
       solution: String,
       solutionThai: String,
       materials: [String],
-      estimatedCost: String
-    }
-  ]
+      estimatedCost: String,
+    },
+  ],
 });
 
 const WaterResourceSchema = new mongoose.Schema({
   availability: {
     type: String,
     enum: ['very_scarce', 'scarce', 'moderate', 'abundant', 'very_abundant'],
-    required: true
+    required: true,
   },
   sources: [
     {
       type: String,
-      enum: ['river', 'reservoir', 'groundwater', 'rainfall', 'canal', 'natural_spring']
-    }
+      enum: ['river', 'reservoir', 'groundwater', 'rainfall', 'canal', 'natural_spring'],
+    },
   ],
   majorWaterBodies: [
     {
@@ -199,58 +199,58 @@ const WaterResourceSchema = new mongoose.Schema({
       nameThai: String,
       type: {
         type: String,
-        enum: ['river', 'lake', 'reservoir', 'dam']
+        enum: ['river', 'lake', 'reservoir', 'dam'],
       },
       reliability: {
         type: String,
-        enum: ['unreliable', 'seasonal', 'reliable', 'very_reliable']
-      }
-    }
+        enum: ['unreliable', 'seasonal', 'reliable', 'very_reliable'],
+      },
+    },
   ],
   irrigationInfrastructure: {
     availability: {
       type: String,
-      enum: ['none', 'limited', 'moderate', 'good', 'excellent']
+      enum: ['none', 'limited', 'moderate', 'good', 'excellent'],
     },
-    types: [String] // e.g., ["canal", "pump", "drip", "sprinkler"]
+    types: [String], // e.g., ["canal", "pump", "drip", "sprinkler"]
   },
   groundwaterDepth: {
     average: Number, // meters
     quality: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent']
+      enum: ['poor', 'fair', 'good', 'excellent'],
     },
-    salinityIssue: Boolean
+    salinityIssue: Boolean,
   },
   waterQuality: {
     rating: {
       type: String,
-      enum: ['poor', 'fair', 'good', 'excellent']
+      enum: ['poor', 'fair', 'good', 'excellent'],
     },
-    commonIssues: [String] // e.g., ["salinity", "contamination", "hardness"]
+    commonIssues: [String], // e.g., ["salinity", "contamination", "hardness"]
   },
   droughtRisk: {
     frequency: {
       type: String,
-      enum: ['rare', 'occasional', 'frequent', 'very_frequent']
+      enum: ['rare', 'occasional', 'frequent', 'very_frequent'],
     },
     severity: {
       type: String,
-      enum: ['mild', 'moderate', 'severe', 'extreme']
+      enum: ['mild', 'moderate', 'severe', 'extreme'],
     },
-    typicalMonths: [Number] // 1-12
+    typicalMonths: [Number], // 1-12
   },
   floodRisk: {
     frequency: {
       type: String,
-      enum: ['rare', 'occasional', 'frequent', 'very_frequent']
+      enum: ['rare', 'occasional', 'frequent', 'very_frequent'],
     },
     severity: {
       type: String,
-      enum: ['mild', 'moderate', 'severe', 'extreme']
+      enum: ['mild', 'moderate', 'severe', 'extreme'],
     },
-    typicalMonths: [Number] // 1-12
-  }
+    typicalMonths: [Number], // 1-12
+  },
 });
 
 const AgriculturalDataSchema = new mongoose.Schema({
@@ -259,74 +259,74 @@ const AgriculturalDataSchema = new mongoose.Schema({
       plantType: String,
       areaUnderCultivation: {
         value: Number,
-        unit: { type: String, default: 'rai' }
+        unit: { type: String, default: 'rai' },
       },
       averageYield: {
         value: Number,
-        unit: String
+        unit: String,
       },
       economicImportance: {
         type: String,
-        enum: ['minor', 'moderate', 'important', 'very_important', 'critical']
-      }
-    }
+        enum: ['minor', 'moderate', 'important', 'very_important', 'critical'],
+      },
+    },
   ],
   cannabisSuitability: {
     overall: {
       type: String,
       enum: ['unsuitable', 'marginal', 'suitable', 'good', 'excellent'],
-      required: true
+      required: true,
     },
     factors: [String],
     factorsThai: [String],
     recommendedCultivars: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'PlantCultivar'
-      }
+        ref: 'PlantCultivar',
+      },
     ],
     expectedYield: {
       min: Number,
       max: Number,
       average: Number,
-      unit: { type: String, default: 'kg/rai' }
+      unit: { type: String, default: 'kg/rai' },
     },
     challenges: [String],
     challengesThai: [String],
     opportunities: [String],
-    opportunitiesThai: [String]
+    opportunitiesThai: [String],
   },
   otherMedicinalPlants: [
     {
       plantType: {
         type: String,
-        enum: ['turmeric', 'ginger', 'black_galingale', 'plai', 'kratom']
+        enum: ['turmeric', 'ginger', 'black_galingale', 'plai', 'kratom'],
       },
       suitability: {
         type: String,
-        enum: ['unsuitable', 'marginal', 'suitable', 'good', 'excellent']
+        enum: ['unsuitable', 'marginal', 'suitable', 'good', 'excellent'],
       },
       currentProduction: Boolean, // Is it currently being grown here?
       potentialYield: {
         value: Number,
-        unit: String
-      }
-    }
+        unit: String,
+      },
+    },
   ],
   farmingPractices: {
     predominantStyle: {
       type: String,
-      enum: ['traditional', 'conventional', 'semi_modern', 'modern', 'organic']
+      enum: ['traditional', 'conventional', 'semi_modern', 'modern', 'organic'],
     },
     mechanization: {
       type: String,
-      enum: ['none', 'low', 'medium', 'high', 'very_high']
+      enum: ['none', 'low', 'medium', 'high', 'very_high'],
     },
     technologyAdoption: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-    }
-  }
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+    },
+  },
 });
 
 const EconomicDataSchema = new mongoose.Schema({
@@ -334,33 +334,33 @@ const EconomicDataSchema = new mongoose.Schema({
     average: Number, // THB per rai
     range: {
       min: Number,
-      max: Number
-    }
+      max: Number,
+    },
   },
   laborCost: {
     averageDaily: Number, // THB per day
     availability: {
       type: String,
-      enum: ['scarce', 'limited', 'adequate', 'abundant']
-    }
+      enum: ['scarce', 'limited', 'adequate', 'abundant'],
+    },
   },
   inputCosts: {
     fertilizer: String, // Price range description
     water: String,
-    electricity: String
+    electricity: String,
   },
   marketAccess: {
     rating: {
       type: String,
-      enum: ['very_poor', 'poor', 'fair', 'good', 'excellent']
+      enum: ['very_poor', 'poor', 'fair', 'good', 'excellent'],
     },
     nearestMarket: String,
     distanceKm: Number,
     transportInfrastructure: {
       type: String,
-      enum: ['very_poor', 'poor', 'fair', 'good', 'excellent']
-    }
-  }
+      enum: ['very_poor', 'poor', 'fair', 'good', 'excellent'],
+    },
+  },
 });
 
 const RegionalConditionsSchema = new mongoose.Schema(
@@ -369,25 +369,25 @@ const RegionalConditionsSchema = new mongoose.Schema(
     provinceId: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
       // e.g., "TH-10" for Bangkok, "TH-50" for Chiang Mai
     },
 
     province: {
       english: {
         type: String,
-        required: true
+        required: true,
       },
       thai: {
         type: String,
-        required: true
-      }
+        required: true,
+      },
     },
 
     region: {
       type: String,
       required: true,
-      enum: ['north', 'northeast', 'central', 'east', 'west', 'south']
+      enum: ['north', 'northeast', 'central', 'east', 'west', 'south'],
     },
 
     subregion: String, // More specific classification if needed
@@ -396,35 +396,35 @@ const RegionalConditionsSchema = new mongoose.Schema(
     geography: {
       area: {
         value: Number, // sq km
-        unit: { type: String, default: 'sq_km' }
+        unit: { type: String, default: 'sq_km' },
       },
       capitalCity: {
         english: String,
-        thai: String
+        thai: String,
       },
       coordinates: {
         type: {
           type: String,
           enum: ['Point'],
-          default: 'Point'
+          default: 'Point',
         },
         coordinates: {
-          type: [Number] // [longitude, latitude]
-        }
+          type: [Number], // [longitude, latitude]
+        },
       },
       elevation: {
         min: Number, // meters
         max: Number,
-        average: Number
+        average: Number,
       },
       terrain: {
         type: String,
-        enum: ['flat', 'rolling', 'hilly', 'mountainous', 'coastal', 'mixed']
+        enum: ['flat', 'rolling', 'hilly', 'mountainous', 'coastal', 'mixed'],
       },
       coastalProvince: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
 
     // === Climate Data ===
@@ -432,13 +432,13 @@ const RegionalConditionsSchema = new mongoose.Schema(
       type: {
         type: String,
         enum: ['tropical_savanna', 'tropical_monsoon', 'tropical_rainforest', 'humid_subtropical'],
-        required: true
+        required: true,
       },
       averageAnnualTemp: Number, // °C
       averageAnnualRainfall: Number, // mm
       averageAnnualHumidity: Number, // %
       monthlyData: [MonthlyClimateSchema],
-      seasonalPatterns: [SeasonalPatternSchema]
+      seasonalPatterns: [SeasonalPatternSchema],
     },
 
     // === Soil Data ===
@@ -458,37 +458,37 @@ const RegionalConditionsSchema = new mongoose.Schema(
       electricity: {
         reliability: {
           type: String,
-          enum: ['very_poor', 'poor', 'fair', 'good', 'excellent']
+          enum: ['very_poor', 'poor', 'fair', 'good', 'excellent'],
         },
         costLevel: {
           type: String,
-          enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-        }
+          enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+        },
       },
       roads: {
         quality: {
           type: String,
-          enum: ['very_poor', 'poor', 'fair', 'good', 'excellent']
+          enum: ['very_poor', 'poor', 'fair', 'good', 'excellent'],
         },
         accessibility: {
           type: String,
-          enum: ['very_poor', 'poor', 'fair', 'good', 'excellent']
-        }
+          enum: ['very_poor', 'poor', 'fair', 'good', 'excellent'],
+        },
       },
       internet: {
         availability: {
           type: String,
-          enum: ['none', 'limited', 'moderate', 'good', 'excellent']
+          enum: ['none', 'limited', 'moderate', 'good', 'excellent'],
         },
-        coverage: Number // % of area covered
+        coverage: Number, // % of area covered
       },
       storageProcessing: {
         availability: {
           type: String,
-          enum: ['none', 'limited', 'moderate', 'good', 'excellent']
+          enum: ['none', 'limited', 'moderate', 'good', 'excellent'],
         },
-        types: [String] // e.g., ["cold_storage", "drying_facilities", "processing_plants"]
-      }
+        types: [String], // e.g., ["cold_storage", "drying_facilities", "processing_plants"]
+      },
     },
 
     // === ML Features & Statistics ===
@@ -508,12 +508,12 @@ const RegionalConditionsSchema = new mongoose.Schema(
       bestPlantingWindow: {
         start: Number, // Month (1-12)
         end: Number, // Month (1-12)
-        confidence: Number // 0-100
+        confidence: Number, // 0-100
       },
       worstPlantingWindow: {
         start: Number,
-        end: Number
-      }
+        end: Number,
+      },
     },
 
     // === Government Support ===
@@ -521,9 +521,9 @@ const RegionalConditionsSchema = new mongoose.Schema(
       agriculturalExtension: {
         availability: {
           type: String,
-          enum: ['none', 'limited', 'moderate', 'good', 'excellent']
+          enum: ['none', 'limited', 'moderate', 'good', 'excellent'],
         },
-        offices: [String] // List of relevant offices
+        offices: [String], // List of relevant offices
       },
       subsidies: [
         {
@@ -531,24 +531,24 @@ const RegionalConditionsSchema = new mongoose.Schema(
           programThai: String,
           description: String,
           descriptionThai: String,
-          applicableTo: [String] // Crop types
-        }
+          applicableTo: [String], // Crop types
+        },
       ],
       trainingPrograms: [
         {
           name: String,
           nameThai: String,
           provider: String,
-          frequency: String
-        }
-      ]
+          frequency: String,
+        },
+      ],
     },
 
     // === Local Knowledge ===
     localExpertise: {
       farmerExperience: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
       },
       traditionalKnowledge: String,
       traditionalKnowledgeThai: String,
@@ -560,10 +560,10 @@ const RegionalConditionsSchema = new mongoose.Schema(
           summaryThai: String,
           farmId: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Farm'
-          }
-        }
-      ]
+            ref: 'Farm',
+          },
+        },
+      ],
     },
 
     // === Nearby Resources ===
@@ -572,12 +572,12 @@ const RegionalConditionsSchema = new mongoose.Schema(
       researchCenters: [String],
       supplierDensity: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
       },
       buyerDensity: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-      }
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+      },
     },
 
     // === Data Quality & Metadata ===
@@ -585,31 +585,31 @@ const RegionalConditionsSchema = new mongoose.Schema(
       completeness: Number, // 0-100
       accuracy: {
         type: String,
-        enum: ['low', 'medium', 'high', 'verified']
+        enum: ['low', 'medium', 'high', 'verified'],
       },
       lastUpdated: Date,
       lastVerified: Date,
       dataSources: [String],
-      needsUpdate: Boolean
+      needsUpdate: Boolean,
     },
 
     version: {
       type: Number,
-      default: 1
+      default: 1,
     },
 
     status: {
       type: String,
       enum: ['active', 'draft', 'needs_review'],
-      default: 'active'
+      default: 'active',
     },
 
     notes: String,
-    notesThai: String
+    notesThai: String,
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 // === Indexes ===
@@ -633,7 +633,7 @@ RegionalConditionsSchema.statics.getProvincesByRegion = function (region) {
 RegionalConditionsSchema.statics.getBestForCannabis = function (limit = 10) {
   return this.find({
     status: 'active',
-    'agriculture.cannabisSuitability.overall': { $in: ['good', 'excellent'] }
+    'agriculture.cannabisSuitability.overall': { $in: ['good', 'excellent'] },
   })
     .sort({ 'mlFeatures.cannabisSuitabilityScore': -1 })
     .limit(limit);
@@ -645,19 +645,19 @@ RegionalConditionsSchema.statics.getBestForCannabis = function (limit = 10) {
 RegionalConditionsSchema.statics.getNearestProvinces = function (
   longitude,
   latitude,
-  maxDistance = 100000
+  maxDistance = 100000,
 ) {
   return this.find({
     'geography.coordinates': {
       $near: {
         $geometry: {
           type: 'Point',
-          coordinates: [longitude, latitude]
+          coordinates: [longitude, latitude],
         },
-        $maxDistance: maxDistance // meters
-      }
+        $maxDistance: maxDistance, // meters
+      },
     },
-    status: 'active'
+    status: 'active',
   });
 };
 
@@ -668,7 +668,7 @@ RegionalConditionsSchema.statics.getSuitableForPlant = function (plantType) {
   if (plantType === 'cannabis') {
     return this.find({
       status: 'active',
-      'agriculture.cannabisSuitability.overall': { $in: ['suitable', 'good', 'excellent'] }
+      'agriculture.cannabisSuitability.overall': { $in: ['suitable', 'good', 'excellent'] },
     }).sort({ 'mlFeatures.cannabisSuitabilityScore': -1 });
   } else {
     return this.find({
@@ -676,9 +676,9 @@ RegionalConditionsSchema.statics.getSuitableForPlant = function (plantType) {
       'agriculture.otherMedicinalPlants': {
         $elemMatch: {
           plantType: plantType,
-          suitability: { $in: ['suitable', 'good', 'excellent'] }
-        }
-      }
+          suitability: { $in: ['suitable', 'good', 'excellent'] },
+        },
+      },
     });
   }
 };
@@ -738,7 +738,7 @@ RegionalConditionsSchema.methods.isGoodPlantingTime = function (plantType, month
     recommended: inBestWindow,
     notRecommended: inWorstWindow,
     neutral: !inBestWindow && !inWorstWindow,
-    confidence: inBestWindow ? bestWindow.confidence : 0
+    confidence: inBestWindow ? bestWindow.confidence : 0,
   };
 };
 
@@ -784,7 +784,7 @@ RegionalConditionsSchema.methods.getSuitabilityForFarm = function (farmData) {
           ? 'Good Location'
           : score >= 40
             ? 'Challenging but Possible'
-            : 'Not Recommended'
+            : 'Not Recommended',
   };
 };
 

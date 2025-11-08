@@ -20,7 +20,7 @@ function initializeDashboardFarmerRoutes(dashboardController) {
    * GET /api/farmer/dashboard
    */
   router.get('/', authenticateFarmer, (req, res) =>
-    dashboardController.getFarmerDashboard(req, res)
+    dashboardController.getFarmerDashboard(req, res),
   );
 
   /**
@@ -28,7 +28,7 @@ function initializeDashboardFarmerRoutes(dashboardController) {
    * GET /api/farmer/dashboard/alerts
    */
   router.get('/alerts', authenticateFarmer, (req, res) =>
-    dashboardController.getFarmerAlerts(req, res)
+    dashboardController.getFarmerAlerts(req, res),
   );
 
   /**
@@ -36,7 +36,7 @@ function initializeDashboardFarmerRoutes(dashboardController) {
    * GET /api/farmer/dashboard/quick-actions
    */
   router.get('/quick-actions', authenticateFarmer, (req, res) =>
-    dashboardController.getFarmerQuickActions(req, res)
+    dashboardController.getFarmerQuickActions(req, res),
   );
 
   return router;

@@ -20,7 +20,7 @@ const colors = {
   yellow: '\x1b[33m',
   blue: '\x1b[34m',
   magenta: '\x1b[35m',
-  cyan: '\x1b[36m'
+  cyan: '\x1b[36m',
 };
 
 // Test results
@@ -29,7 +29,7 @@ const results = {
   passed: 0,
   failed: 0,
   skipped: 0,
-  tests: []
+  tests: [],
 };
 
 /**
@@ -51,14 +51,14 @@ function makeRequest(options, postData = null) {
           const response = {
             statusCode: res.statusCode,
             headers: res.headers,
-            body: data ? JSON.parse(data) : null
+            body: data ? JSON.parse(data) : null,
           };
           resolve(response);
         } catch (error) {
           resolve({
             statusCode: res.statusCode,
             headers: res.headers,
-            body: data
+            body: data,
           });
         }
       });
@@ -95,8 +95,8 @@ async function testGet(name, path, expectedStatus = 200, _expectedBody = null) {
     path: url.pathname + url.search,
     method: 'GET',
     headers: {
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   };
 
   try {
@@ -112,10 +112,10 @@ async function testGet(name, path, expectedStatus = 200, _expectedBody = null) {
     } else {
       results.failed++;
       console.log(
-        `${colors.red}✗${colors.reset} ${name} - Expected ${expectedStatus}, got ${response.statusCode}`
+        `${colors.red}✗${colors.reset} ${name} - Expected ${expectedStatus}, got ${response.statusCode}`,
       );
       console.log(
-        `${colors.yellow}   Response: ${JSON.stringify(response.body).substring(0, 200)}${colors.reset}`
+        `${colors.yellow}   Response: ${JSON.stringify(response.body).substring(0, 200)}${colors.reset}`,
       );
     }
 
@@ -127,7 +127,7 @@ async function testGet(name, path, expectedStatus = 200, _expectedBody = null) {
       actual: response.statusCode,
       duration,
       passed,
-      response: response.body
+      response: response.body,
     });
 
     return response;
@@ -143,7 +143,7 @@ async function testGet(name, path, expectedStatus = 200, _expectedBody = null) {
       actual: 'ERROR',
       duration: 0,
       passed: false,
-      error: error.message
+      error: error.message,
     });
 
     return null;
@@ -164,8 +164,8 @@ async function testPost(name, path, data, expectedStatus = 200, token = null) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Content-Length': Buffer.byteLength(JSON.stringify(data))
-    }
+      'Content-Length': Buffer.byteLength(JSON.stringify(data)),
+    },
   };
 
   if (token) {
@@ -185,7 +185,7 @@ async function testPost(name, path, data, expectedStatus = 200, token = null) {
     } else {
       results.failed++;
       console.log(
-        `${colors.red}✗${colors.reset} ${name} - Expected ${expectedStatus}, got ${response.statusCode}`
+        `${colors.red}✗${colors.reset} ${name} - Expected ${expectedStatus}, got ${response.statusCode}`,
       );
     }
 
@@ -197,7 +197,7 @@ async function testPost(name, path, data, expectedStatus = 200, token = null) {
       actual: response.statusCode,
       duration,
       passed,
-      response: response.body
+      response: response.body,
     });
 
     return response;
@@ -213,7 +213,7 @@ async function testPost(name, path, data, expectedStatus = 200, token = null) {
       actual: 'ERROR',
       duration: 0,
       passed: false,
-      error: error.message
+      error: error.message,
     });
 
     return null;
@@ -247,9 +247,9 @@ async function runSmokeTests() {
       password: 'TestPassword123!',
       firstName: 'Test',
       lastName: 'User',
-      phoneNumber: '0812345678'
+      phoneNumber: '0812345678',
     },
-    201
+    201,
   );
 
   let farmerToken = null;
@@ -263,9 +263,9 @@ async function runSmokeTests() {
     '/api/auth-farmer/login',
     {
       email: randomEmail,
-      password: 'TestPassword123!'
+      password: 'TestPassword123!',
     },
-    200
+    200,
   );
 
   if (!farmerToken && loginResponse && loginResponse.body && loginResponse.body.data) {
@@ -277,7 +277,7 @@ async function runSmokeTests() {
     await testGet('Farmer Token Verification', `/api/auth-farmer/verify?token=${farmerToken}`, 200);
   } else {
     console.log(
-      `${colors.yellow}⚠${colors.reset} Skipping token verification - no token available`
+      `${colors.yellow}⚠${colors.reset} Skipping token verification - no token available`,
     );
     results.skipped++;
   }
@@ -292,9 +292,9 @@ async function runSmokeTests() {
     {
       username: 'test-dtam',
       password: 'TestPassword123!',
-      email: 'test@dtam.go.th'
+      email: 'test@dtam.go.th',
     },
-    403
+    403,
   );
 
   // Test 4: Application API (if token available)
@@ -310,8 +310,8 @@ async function runSmokeTests() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${farmerToken}`
-      }
+        Authorization: `Bearer ${farmerToken}`,
+      },
     };
 
     try {
@@ -323,12 +323,12 @@ async function runSmokeTests() {
       if (response.statusCode === 200 || response.statusCode === 401) {
         results.passed++;
         console.log(
-          `${colors.green}✓${colors.reset} Get Applications Endpoint (${duration}ms) - Status: ${response.statusCode}`
+          `${colors.green}✓${colors.reset} Get Applications Endpoint (${duration}ms) - Status: ${response.statusCode}`,
         );
       } else {
         results.failed++;
         console.log(
-          `${colors.red}✗${colors.reset} Get Applications Endpoint - Unexpected status: ${response.statusCode}`
+          `${colors.red}✗${colors.reset} Get Applications Endpoint - Unexpected status: ${response.statusCode}`,
         );
       }
     } catch (error) {
@@ -356,8 +356,8 @@ async function runSmokeTests() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${farmerToken}`
-      }
+        Authorization: `Bearer ${farmerToken}`,
+      },
     };
 
     try {
@@ -373,12 +373,12 @@ async function runSmokeTests() {
       ) {
         results.passed++;
         console.log(
-          `${colors.green}✓${colors.reset} Dashboard Realtime Stats (${duration}ms) - Status: ${response.statusCode}`
+          `${colors.green}✓${colors.reset} Dashboard Realtime Stats (${duration}ms) - Status: ${response.statusCode}`,
         );
       } else {
         results.failed++;
         console.log(
-          `${colors.red}✗${colors.reset} Dashboard Realtime Stats - Unexpected status: ${response.statusCode}`
+          `${colors.red}✗${colors.reset} Dashboard Realtime Stats - Unexpected status: ${response.statusCode}`,
         );
       }
     } catch (error) {

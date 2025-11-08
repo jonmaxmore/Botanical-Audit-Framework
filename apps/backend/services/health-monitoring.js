@@ -34,7 +34,7 @@ class HealthMonitoringService {
         name: packageJson.name,
         buildTime: process.env.BUILD_TIME || new Date().toISOString(),
         gitCommit: process.env.GIT_COMMIT || 'unknown',
-        environment: process.env.NODE_ENV || 'development'
+        environment: process.env.NODE_ENV || 'development',
       };
     } catch (error) {
       return {
@@ -43,7 +43,7 @@ class HealthMonitoringService {
         buildTime: new Date().toISOString(),
         gitCommit: 'unknown',
         environment: process.env.NODE_ENV || 'development',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -60,10 +60,10 @@ class HealthMonitoringService {
       timestamp: new Date().toISOString(),
       uptime: {
         milliseconds: uptime,
-        human: this.formatUptime(uptime)
+        human: this.formatUptime(uptime),
       },
       version: this.version.version,
-      environment: this.version.environment
+      environment: this.version.environment,
     };
   }
 
@@ -78,7 +78,7 @@ class HealthMonitoringService {
       version: this.version,
       uptime: this.getUptimeInfo(),
       system: this.getSystemInfo(),
-      checks: {}
+      checks: {},
     };
 
     // Database connectivity check
@@ -119,8 +119,8 @@ class HealthMonitoringService {
           message: 'Database disconnected',
           details: {
             state: mongoose.connection.readyState,
-            stateDescription: this.getMongooseState(mongoose.connection.readyState)
-          }
+            stateDescription: this.getMongooseState(mongoose.connection.readyState),
+          },
         };
       }
 
@@ -139,8 +139,8 @@ class HealthMonitoringService {
           database: mongoose.connection.db.databaseName,
           host: mongoose.connection.host,
           port: mongoose.connection.port,
-          state: 'connected'
-        }
+          state: 'connected',
+        },
       };
     } catch (error) {
       return {
@@ -149,8 +149,8 @@ class HealthMonitoringService {
         error: error.message,
         details: {
           state: mongoose.connection.readyState,
-          stateDescription: this.getMongooseState(mongoose.connection.readyState)
-        }
+          stateDescription: this.getMongooseState(mongoose.connection.readyState),
+        },
       };
     }
   }
@@ -177,15 +177,15 @@ class HealthMonitoringService {
           rss: this.formatBytes(usage.rss),
           heapTotal: this.formatBytes(usage.heapTotal),
           heapUsed: this.formatBytes(usage.heapUsed),
-          external: this.formatBytes(usage.external)
+          external: this.formatBytes(usage.external),
         },
         system: {
           total: this.formatBytes(totalMemory),
           free: this.formatBytes(freeMemory),
           used: this.formatBytes(usedMemory),
-          usagePercent: memoryUsagePercent.toFixed(1) + '%'
-        }
-      }
+          usagePercent: memoryUsagePercent.toFixed(1) + '%',
+        },
+      },
     };
   }
 
@@ -202,14 +202,14 @@ class HealthMonitoringService {
         message: 'Disk accessible',
         details: {
           path: process.cwd(),
-          accessible: true
-        }
+          accessible: true,
+        },
       };
     } catch (error) {
       return {
         status: 'critical',
         message: 'Disk check failed',
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -228,8 +228,8 @@ class HealthMonitoringService {
       message: 'All external services accessible',
       details: {
         checkedServices: services.length,
-        services
-      }
+        services,
+      },
     };
   }
 
@@ -244,7 +244,7 @@ class HealthMonitoringService {
       pid: process.pid,
       cpus: os.cpus().length,
       loadAverage: os.loadavg(),
-      hostname: os.hostname()
+      hostname: os.hostname(),
     };
   }
 
@@ -258,12 +258,12 @@ class HealthMonitoringService {
     return {
       process: {
         milliseconds: processUptime,
-        human: this.formatUptime(processUptime)
+        human: this.formatUptime(processUptime),
       },
       system: {
         milliseconds: systemUptime,
-        human: this.formatUptime(systemUptime)
-      }
+        human: this.formatUptime(systemUptime),
+      },
     };
   }
 
@@ -300,7 +300,7 @@ class HealthMonitoringService {
       0: 'disconnected',
       1: 'connected',
       2: 'connecting',
-      3: 'disconnecting'
+      3: 'disconnecting',
     };
     return states[state] || 'unknown';
   }
@@ -326,7 +326,7 @@ class HealthMonitoringService {
           res.status(503).json({
             status: 'unhealthy',
             error: error.message,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
         }
       },
@@ -342,7 +342,7 @@ class HealthMonitoringService {
           res.status(503).json({
             status: 'critical',
             error: error.message,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
           });
         }
       },
@@ -350,7 +350,7 @@ class HealthMonitoringService {
       // Version information: GET /version
       version: (req, res) => {
         res.status(200).json(this.version);
-      }
+      },
     };
   }
 }

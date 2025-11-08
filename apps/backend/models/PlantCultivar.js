@@ -29,15 +29,15 @@ const ChemicalProfileSchema = new mongoose.Schema({
     percentage: Number, // %
     range: {
       min: Number,
-      max: Number
-    }
+      max: Number,
+    },
   },
   cbd: {
     percentage: Number, // %
     range: {
       min: Number,
-      max: Number
-    }
+      max: Number,
+    },
   },
   cbn: Number, // %
   cbg: Number, // %
@@ -46,8 +46,8 @@ const ChemicalProfileSchema = new mongoose.Schema({
       name: String,
       percentage: Number,
       aroma: String,
-      effects: [String]
-    }
+      effects: [String],
+    },
   ],
 
   // For other medicinal plants
@@ -58,14 +58,14 @@ const ChemicalProfileSchema = new mongoose.Schema({
       concentration: String,
       unit: String,
       medicalBenefit: String,
-      medicalBenefitThai: String
-    }
+      medicalBenefitThai: String,
+    },
   ],
 
   curcuminContent: Number, // % for turmeric
   gingerolContent: Number, // % for ginger
   alkaloidContent: Number, // % for kratom
-  essentialOilContent: Number // % for aromatic plants
+  essentialOilContent: Number, // % for aromatic plants
 });
 
 const GrowingCharacteristicsSchema = new mongoose.Schema({
@@ -74,17 +74,17 @@ const GrowingCharacteristicsSchema = new mongoose.Schema({
     indoor: {
       min: Number, // cm
       max: Number,
-      average: Number
+      average: Number,
     },
     outdoor: {
       min: Number,
       max: Number,
-      average: Number
-    }
+      average: Number,
+    },
   },
   structure: {
     type: String,
-    enum: ['compact', 'medium', 'tall', 'bushy', 'slender']
+    enum: ['compact', 'medium', 'tall', 'bushy', 'slender'],
   },
   leafShape: String,
   leafColor: String,
@@ -92,15 +92,15 @@ const GrowingCharacteristicsSchema = new mongoose.Schema({
   // Growth behavior
   growthRate: {
     type: String,
-    enum: ['very_slow', 'slow', 'medium', 'fast', 'very_fast']
+    enum: ['very_slow', 'slow', 'medium', 'fast', 'very_fast'],
   },
   branchingPattern: {
     type: String,
-    enum: ['minimal', 'moderate', 'heavy']
+    enum: ['minimal', 'moderate', 'heavy'],
   },
   nodeSpacing: {
     type: String,
-    enum: ['tight', 'medium', 'wide']
+    enum: ['tight', 'medium', 'wide'],
   },
 
   // Flowering/harvest characteristics
@@ -108,142 +108,142 @@ const GrowingCharacteristicsSchema = new mongoose.Schema({
     value: Number, // days
     range: {
       min: Number,
-      max: Number
-    }
+      max: Number,
+    },
   },
   floweringTrigger: {
     type: String,
-    enum: ['photoperiod', 'autoflower', 'age', 'environmental']
+    enum: ['photoperiod', 'autoflower', 'age', 'environmental'],
   },
   harvestWindow: {
     durationDays: Number,
     flexibility: {
       type: String,
-      enum: ['strict', 'moderate', 'flexible']
-    }
+      enum: ['strict', 'moderate', 'flexible'],
+    },
   },
 
   // Yield characteristics
   yieldPotential: {
     indoor: {
       perPlant: { min: Number, max: Number, average: Number, unit: String },
-      perSqm: { min: Number, max: Number, average: Number, unit: String }
+      perSqm: { min: Number, max: Number, average: Number, unit: String },
     },
     outdoor: {
       perPlant: { min: Number, max: Number, average: Number, unit: String },
-      perRai: { min: Number, max: Number, average: Number, unit: String }
-    }
+      perRai: { min: Number, max: Number, average: Number, unit: String },
+    },
   },
 
   // Root system
   rootDepth: {
     type: String,
-    enum: ['shallow', 'medium', 'deep']
+    enum: ['shallow', 'medium', 'deep'],
   },
   rootSpread: {
     type: String,
-    enum: ['narrow', 'medium', 'wide']
-  }
+    enum: ['narrow', 'medium', 'wide'],
+  },
 });
 
 const EnvironmentalToleranceSchema = new mongoose.Schema({
   temperature: {
     coldTolerance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     heatTolerance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     minTemp: Number, // °C
     maxTemp: Number, // °C
-    optimalTemp: Number // °C
+    optimalTemp: Number, // °C
   },
   humidity: {
     moldResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     budRotResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
-    optimalHumidity: Number // %
+    optimalHumidity: Number, // %
   },
   water: {
     droughtTolerance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     overWateringTolerance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     waterRequirement: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-    }
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+    },
   },
   pests: {
     spiderMiteResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     aphidResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     generalPestResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-    }
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+    },
   },
   diseases: {
     powderyMildewResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     botrytisResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     rootRotResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
     },
     generalDiseaseResistance: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-    }
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+    },
   },
   nutrient: {
     feedingRequirement: {
       type: String,
-      enum: ['very_light', 'light', 'medium', 'heavy', 'very_heavy']
+      enum: ['very_light', 'light', 'medium', 'heavy', 'very_heavy'],
     },
     nutrientBurnSensitivity: {
       type: String,
-      enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-    }
-  }
+      enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+    },
+  },
 });
 
 const RegionalPerformanceSchema = new mongoose.Schema({
   region: {
     type: String,
     enum: ['north', 'northeast', 'central', 'east', 'west', 'south'],
-    required: true
+    required: true,
   },
   provinces: [String], // Thai provinces where tested
   performanceRating: {
     type: Number,
     min: 0,
-    max: 10
+    max: 10,
   },
   averageYield: {
     value: Number,
-    unit: String
+    unit: String,
   },
   successRate: Number, // %
   commonChallenges: [String],
@@ -255,8 +255,8 @@ const RegionalPerformanceSchema = new mongoose.Schema({
   numberOfTrials: Number, // How many farms tested this
   dataQuality: {
     type: String,
-    enum: ['estimated', 'limited', 'moderate', 'comprehensive']
-  }
+    enum: ['estimated', 'limited', 'moderate', 'comprehensive'],
+  },
 });
 
 const PlantCultivarSchema = new mongoose.Schema(
@@ -265,25 +265,25 @@ const PlantCultivarSchema = new mongoose.Schema(
     cultivarId: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
       // e.g., "cannabis-cv-001", "turmeric-cv-001"
     },
 
     plantCatalog: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'PlantCatalog',
-      required: true
+      required: true,
     },
 
     plantType: {
       type: String,
       required: true,
-      enum: ['cannabis', 'turmeric', 'ginger', 'black_galingale', 'plai', 'kratom']
+      enum: ['cannabis', 'turmeric', 'ginger', 'black_galingale', 'plai', 'kratom'],
     },
 
     isPrimaryPlant: {
       type: Boolean,
-      default: false
+      default: false,
       // Cannabis cultivars should be TRUE
     },
 
@@ -291,12 +291,12 @@ const PlantCultivarSchema = new mongoose.Schema(
     name: {
       common: {
         type: String,
-        required: true
+        required: true,
         // e.g., "Northern Lights", "Chiang Mai Turmeric"
       },
       thai: String,
       scientific: String,
-      aliases: [String] // Other names this cultivar is known by
+      aliases: [String], // Other names this cultivar is known by
     },
 
     // === Cannabis-Specific Classification ===
@@ -312,14 +312,14 @@ const PlantCultivarSchema = new mongoose.Schema(
           'balanced_hybrid',
           'ruderalis',
           'hemp',
-          null
-        ]
+          null,
+        ],
       },
       generation: String, // e.g., "F1", "IBL", "S1"
       lineage: {
         parent1: String,
         parent2: String,
-        breeder: String
+        breeder: String,
       },
       purpose: {
         type: String,
@@ -331,9 +331,9 @@ const PlantCultivarSchema = new mongoose.Schema(
           'seed',
           'cbd',
           'research',
-          null
-        ]
-      }
+          null,
+        ],
+      },
     },
 
     // === Chemical Profile ===
@@ -343,27 +343,27 @@ const PlantCultivarSchema = new mongoose.Schema(
     legalStatus: {
       thaiLegal: {
         type: Boolean,
-        default: false
+        default: false,
       },
       thcCompliant: {
         type: Boolean,
-        default: false
+        default: false,
         // TRUE if THC < 0.2% (hemp) or approved for medical use
       },
       requiresLicense: {
         type: Boolean,
-        default: true
+        default: true,
       },
       licenseCategory: {
         type: String,
-        enum: ['medical', 'industrial_hemp', 'research', 'traditional_medicine', null]
+        enum: ['medical', 'industrial_hemp', 'research', 'traditional_medicine', null],
       },
       gacpCertifiable: {
         type: Boolean,
-        default: true
+        default: true,
       },
       notes: String,
-      notesThai: String
+      notesThai: String,
     },
 
     // === Growing Characteristics ===
@@ -377,18 +377,18 @@ const PlantCultivarSchema = new mongoose.Schema(
       overall: {
         type: String,
         enum: ['beginner', 'easy', 'moderate', 'difficult', 'expert'],
-        required: true
+        required: true,
       },
       indoorDifficulty: {
         type: String,
-        enum: ['beginner', 'easy', 'moderate', 'difficult', 'expert']
+        enum: ['beginner', 'easy', 'moderate', 'difficult', 'expert'],
       },
       outdoorDifficulty: {
         type: String,
-        enum: ['beginner', 'easy', 'moderate', 'difficult', 'expert']
+        enum: ['beginner', 'easy', 'moderate', 'difficult', 'expert'],
       },
       reasons: [String],
-      reasonsThai: [String]
+      reasonsThai: [String],
     },
 
     // === Regional Performance ===
@@ -399,8 +399,8 @@ const PlantCultivarSchema = new mongoose.Schema(
       climates: [
         {
           type: String,
-          enum: ['tropical', 'subtropical', 'temperate', 'arid', 'humid']
-        }
+          enum: ['tropical', 'subtropical', 'temperate', 'arid', 'humid'],
+        },
       ],
       growingMethods: [
         {
@@ -413,17 +413,17 @@ const PlantCultivarSchema = new mongoose.Schema(
             'soil',
             'coco',
             'organic',
-            'raised_bed'
-          ]
-        }
+            'raised_bed',
+          ],
+        },
       ],
       farmerTypes: [
         {
           type: String,
-          enum: ['beginner', 'intermediate', 'advanced', 'commercial', 'home_grower']
-        }
+          enum: ['beginner', 'intermediate', 'advanced', 'commercial', 'home_grower'],
+        },
       ],
-      purposes: [String] // e.g., ["high yield", "quality", "resilience", "medical"]
+      purposes: [String], // e.g., ["high yield", "quality", "resilience", "medical"]
     },
 
     // === Advantages & Disadvantages ===
@@ -433,9 +433,9 @@ const PlantCultivarSchema = new mongoose.Schema(
         advantageThai: String,
         importance: {
           type: String,
-          enum: ['minor', 'moderate', 'major', 'critical']
-        }
-      }
+          enum: ['minor', 'moderate', 'major', 'critical'],
+        },
+      },
     ],
 
     disadvantages: [
@@ -444,11 +444,11 @@ const PlantCultivarSchema = new mongoose.Schema(
         disadvantageThai: String,
         severity: {
           type: String,
-          enum: ['minor', 'moderate', 'major', 'critical']
+          enum: ['minor', 'moderate', 'major', 'critical'],
         },
         mitigation: String,
-        mitigationThai: String
-      }
+        mitigationThai: String,
+      },
     ],
 
     // === Awards & Recognition ===
@@ -457,8 +457,8 @@ const PlantCultivarSchema = new mongoose.Schema(
         awardName: String,
         year: Number,
         organization: String,
-        category: String
-      }
+        category: String,
+      },
     ],
 
     // === Breeder Information ===
@@ -468,50 +468,50 @@ const PlantCultivarSchema = new mongoose.Schema(
       website: String,
       reputation: {
         type: String,
-        enum: ['unknown', 'emerging', 'established', 'renowned', 'legendary']
-      }
+        enum: ['unknown', 'emerging', 'established', 'renowned', 'legendary'],
+      },
     },
 
     // === Availability ===
     availability: {
       inThailand: {
         type: Boolean,
-        default: false
+        default: false,
       },
       suppliers: [
         {
           name: String,
           location: String,
           contact: String,
-          verified: Boolean
-        }
+          verified: Boolean,
+        },
       ],
       seedAvailability: {
         type: String,
-        enum: ['unavailable', 'rare', 'limited', 'available', 'common']
+        enum: ['unavailable', 'rare', 'limited', 'available', 'common'],
       },
       cloneAvailability: {
         type: String,
-        enum: ['unavailable', 'rare', 'limited', 'available', 'common']
+        enum: ['unavailable', 'rare', 'limited', 'available', 'common'],
       },
       estimatedCost: {
         seeds: { value: Number, unit: String },
         clones: { value: Number, unit: String },
-        currency: { type: String, default: 'THB' }
-      }
+        currency: { type: String, default: 'THB' },
+      },
     },
 
     // === Market Information ===
     marketData: {
       demand: {
         type: String,
-        enum: ['very_low', 'low', 'medium', 'high', 'very_high']
+        enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
       },
       priceRange: {
         min: Number,
         max: Number,
         average: Number,
-        unit: { type: String, default: 'THB/kg' }
+        unit: { type: String, default: 'THB/kg' },
       },
       targetBuyers: [String], // e.g., ["medical", "pharmaceutical", "export"]
       seasonalDemand: [
@@ -519,10 +519,10 @@ const PlantCultivarSchema = new mongoose.Schema(
           month: Number,
           demandLevel: {
             type: String,
-            enum: ['very_low', 'low', 'medium', 'high', 'very_high']
-          }
-        }
-      ]
+            enum: ['very_low', 'low', 'medium', 'high', 'very_high'],
+          },
+        },
+      ],
     },
 
     // === AI/ML Features ===
@@ -537,11 +537,11 @@ const PlantCultivarSchema = new mongoose.Schema(
           issue: String,
           frequency: {
             type: String,
-            enum: ['rare', 'occasional', 'common', 'frequent']
+            enum: ['rare', 'occasional', 'common', 'frequent'],
           },
-          resolution: String
-        }
-      ]
+          resolution: String,
+        },
+      ],
     },
 
     // === User Ratings & Reviews ===
@@ -551,18 +551,18 @@ const PlantCultivarSchema = new mongoose.Schema(
       yield: Number,
       quality: Number,
       resilience: Number,
-      numberOfRatings: { type: Number, default: 0 }
+      numberOfRatings: { type: Number, default: 0 },
     },
 
     reviews: [
       {
         userId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'User'
+          ref: 'User',
         },
         farmId: {
           type: mongoose.Schema.Types.ObjectId,
-          ref: 'Farm'
+          ref: 'Farm',
         },
         rating: Number,
         review: String,
@@ -570,8 +570,8 @@ const PlantCultivarSchema = new mongoose.Schema(
         growingMethod: String,
         verified: Boolean, // Verified purchase/cultivation
         helpful: { type: Number, default: 0 },
-        createdAt: { type: Date, default: Date.now }
-      }
+        createdAt: { type: Date, default: Date.now },
+      },
     ],
 
     // === Growing Tips ===
@@ -586,17 +586,17 @@ const PlantCultivarSchema = new mongoose.Schema(
             'training',
             'pest_control',
             'harvesting',
-            'curing'
-          ]
+            'curing',
+          ],
         },
         tip: String,
         tipThai: String,
         importance: {
           type: String,
-          enum: ['nice_to_know', 'recommended', 'important', 'critical']
+          enum: ['nice_to_know', 'recommended', 'important', 'critical'],
         },
-        source: String // Who provided this tip
-      }
+        source: String, // Who provided this tip
+      },
     ],
 
     // === Images & Media ===
@@ -607,8 +607,8 @@ const PlantCultivarSchema = new mongoose.Schema(
         captionThai: String,
         stage: String, // Growth stage this image represents
         isPrimary: Boolean,
-        uploadedBy: String
-      }
+        uploadedBy: String,
+      },
     ],
 
     // === References ===
@@ -620,26 +620,26 @@ const PlantCultivarSchema = new mongoose.Schema(
           lab: String,
           date: Date,
           results: String,
-          url: String
-        }
-      ]
+          url: String,
+        },
+      ],
     },
 
     // === Status & Metadata ===
     status: {
       type: String,
       enum: ['active', 'testing', 'discontinued', 'research'],
-      default: 'active'
+      default: 'active',
     },
 
     featured: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     verified: {
       type: Boolean,
-      default: false
+      default: false,
       // TRUE if cultivar information has been verified by experts
     },
 
@@ -647,24 +647,24 @@ const PlantCultivarSchema = new mongoose.Schema(
       completeness: Number, // 0-100
       accuracy: {
         type: String,
-        enum: ['low', 'medium', 'high', 'verified']
+        enum: ['low', 'medium', 'high', 'verified'],
       },
       lastVerified: Date,
       verifiedBy: String,
-      needsUpdate: Boolean
+      needsUpdate: Boolean,
     },
 
     version: {
       type: Number,
-      default: 1
+      default: 1,
     },
 
     notes: String,
-    notesThai: String
+    notesThai: String,
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 // === Indexes ===
@@ -684,7 +684,7 @@ PlantCultivarSchema.statics.getFeaturedCultivars = function (plantType = 'cannab
   return this.find({
     plantType,
     featured: true,
-    status: 'active'
+    status: 'active',
   }).sort({ 'ratings.overall': -1 });
 };
 
@@ -695,7 +695,7 @@ PlantCultivarSchema.statics.getBeginnerFriendly = function (plantType = 'cannabi
   return this.find({
     plantType,
     status: 'active',
-    'cultivationDifficulty.overall': { $in: ['beginner', 'easy'] }
+    'cultivationDifficulty.overall': { $in: ['beginner', 'easy'] },
   }).sort({ 'ratings.overall': -1 });
 };
 
@@ -706,7 +706,7 @@ PlantCultivarSchema.statics.getByRegion = function (region, plantType = 'cannabi
   return this.find({
     plantType,
     status: 'active',
-    'regionalPerformance.region': region
+    'regionalPerformance.region': region,
   }).sort({ 'regionalPerformance.performanceRating': -1 });
 };
 
@@ -718,7 +718,7 @@ PlantCultivarSchema.statics.getThaiLegal = function (plantType = 'cannabis') {
     plantType,
     status: 'active',
     'legalStatus.thaiLegal': true,
-    'legalStatus.thcCompliant': true
+    'legalStatus.thcCompliant': true,
   });
 };
 
@@ -727,7 +727,7 @@ PlantCultivarSchema.statics.getThaiLegal = function (plantType = 'cannabis') {
  */
 PlantCultivarSchema.statics.getHighYield = function (
   plantType = 'cannabis',
-  growingMethod = 'outdoor'
+  growingMethod = 'outdoor',
 ) {
   const sortField =
     growingMethod === 'indoor'
@@ -736,7 +736,7 @@ PlantCultivarSchema.statics.getHighYield = function (
 
   return this.find({
     plantType,
-    status: 'active'
+    status: 'active',
   }).sort({ [sortField]: -1 });
 };
 
@@ -748,9 +748,9 @@ PlantCultivarSchema.statics.searchCultivars = function (query) {
     $or: [
       { 'name.common': new RegExp(query, 'i') },
       { 'name.thai': new RegExp(query, 'i') },
-      { 'name.aliases': new RegExp(query, 'i') }
+      { 'name.aliases': new RegExp(query, 'i') },
     ],
-    status: 'active'
+    status: 'active',
   });
 };
 
@@ -805,7 +805,7 @@ PlantCultivarSchema.methods.getSuitabilityScore = function (conditions) {
           ? 'Recommended'
           : score >= 40
             ? 'Possible with care'
-            : 'Not Recommended'
+            : 'Not Recommended',
   };
 };
 

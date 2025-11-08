@@ -26,14 +26,14 @@ class SamplingService {
       applicationId: application._id,
       riskLevel,
       samplingRate,
-      shouldSample
+      shouldSample,
     });
 
     return {
       shouldSample,
       riskLevel,
       samplingRate,
-      reason: this.getSamplingReason(riskLevel, shouldSample)
+      reason: this.getSamplingReason(riskLevel, shouldSample),
     };
   }
 
@@ -51,13 +51,15 @@ class SamplingService {
     }
 
     // Check inspector quality score
-    const inspectorQuality = application.routing?.assignedInspector?.workloadMetrics?.qualityScore || 100;
+    const inspectorQuality =
+      application.routing?.assignedInspector?.workloadMetrics?.qualityScore || 100;
     if (inspectorQuality < 85) {
       flags.push('low_inspector_quality');
     }
 
     // Check if new inspector (less experience)
-    const inspectorCasesCompleted = application.routing?.assignedInspector?.workloadMetrics?.completedThisMonth || 0;
+    const inspectorCasesCompleted =
+      application.routing?.assignedInspector?.workloadMetrics?.completedThisMonth || 0;
     if (inspectorCasesCompleted < 5) {
       flags.push('new_inspector');
     }
@@ -100,9 +102,9 @@ class SamplingService {
    */
   getSamplingRate(riskLevel) {
     const rates = {
-      'HIGH': 1.0,    // 100% sampling
-      'MEDIUM': 0.3,  // 30% sampling
-      'LOW': 0.1      // 10% sampling
+      HIGH: 1.0, // 100% sampling
+      MEDIUM: 0.3, // 30% sampling
+      LOW: 0.1, // 10% sampling
     };
 
     return rates[riskLevel] || 0.1;
@@ -120,9 +122,9 @@ class SamplingService {
     }
 
     const reasons = {
-      'HIGH': 'High-risk case - requires QA verification',
-      'MEDIUM': 'Medium risk - selected for QA verification',
-      'LOW': 'Low risk - randomly selected for QA verification'
+      HIGH: 'High-risk case - requires QA verification',
+      MEDIUM: 'Medium risk - selected for QA verification',
+      LOW: 'Low risk - randomly selected for QA verification',
     };
 
     return reasons[riskLevel] || 'Selected for QA verification';
@@ -155,7 +157,7 @@ class SamplingService {
           riskLevel: samplingDecision.riskLevel,
           samplingReason: samplingDecision.reason,
           priority: this.calculateQAPriority(samplingDecision.riskLevel),
-          queuedAt: new Date()
+          queuedAt: new Date(),
         });
       }
     });
@@ -173,9 +175,9 @@ class SamplingService {
    */
   calculateQAPriority(riskLevel) {
     const priorities = {
-      'HIGH': 100,
-      'MEDIUM': 50,
-      'LOW': 10
+      HIGH: 100,
+      MEDIUM: 50,
+      LOW: 10,
     };
 
     return priorities[riskLevel] || 10;
@@ -195,9 +197,9 @@ class SamplingService {
 
     // SLA: HIGH = 1 day, MEDIUM = 3 days, LOW = 7 days
     const sla = {
-      'HIGH': 1,
-      'MEDIUM': 3,
-      'LOW': 7
+      HIGH: 1,
+      MEDIUM: 3,
+      LOW: 7,
     };
 
     return daysSinceCompletion > (sla[riskLevel] || 7);
@@ -224,9 +226,9 @@ class SamplingService {
     return {
       total,
       sampled,
-      samplingRate: total > 0 ? (sampled / total * 100).toFixed(1) : 0,
+      samplingRate: total > 0 ? ((sampled / total) * 100).toFixed(1) : 0,
       byRisk,
-      notSampled: total - sampled
+      notSampled: total - sampled,
     };
   }
 }

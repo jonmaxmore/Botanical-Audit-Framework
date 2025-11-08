@@ -24,7 +24,7 @@ const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.errors({ stack: true }),
   winston.format.splat(),
-  winston.format.json()
+  winston.format.json(),
 );
 
 // Console format for development
@@ -37,7 +37,7 @@ const consoleFormat = winston.format.combine(
       msg += ` ${JSON.stringify(meta)}`;
     }
     return msg;
-  })
+  }),
 );
 
 // Configure transports
@@ -47,13 +47,13 @@ const transports = [];
 transports.push(
   new winston.transports.Console({
     format: isProduction ? logFormat : consoleFormat,
-  })
+  }),
 );
 
 // File transport for production
 if (isProduction) {
   const logPath = process.env.LOG_FILE_PATH || '/var/log/botanical-audit';
-  
+
   transports.push(
     new winston.transports.File({
       filename: `${logPath}/error.log`,
@@ -61,7 +61,7 @@ if (isProduction) {
       format: logFormat,
       maxsize: 10485760, // 10MB
       maxFiles: 5,
-    })
+    }),
   );
 
   transports.push(
@@ -70,7 +70,7 @@ if (isProduction) {
       format: logFormat,
       maxsize: 10485760, // 10MB
       maxFiles: 10,
-    })
+    }),
   );
 }
 
@@ -78,7 +78,7 @@ if (isProduction) {
 if (process.env.LOGTAIL_SOURCE_TOKEN) {
   const { Logtail } = require('@logtail/node');
   const { LogtailTransport } = require('@logtail/winston');
-  
+
   const logtail = new Logtail(process.env.LOGTAIL_SOURCE_TOKEN);
   transports.push(new LogtailTransport(logtail));
 }
@@ -100,7 +100,7 @@ const originalWarn = logger.warn.bind(logger);
 
 logger.error = (message, ...meta) => {
   originalError(message, ...meta);
-  
+
   if (isProduction && process.env.SENTRY_DSN) {
     if (message instanceof Error) {
       Sentry.captureException(message);
@@ -112,7 +112,7 @@ logger.error = (message, ...meta) => {
 
 logger.warn = (message, ...meta) => {
   originalWarn(message, ...meta);
-  
+
   if (isProduction && process.env.SENTRY_DSN && meta.some(m => m.critical)) {
     Sentry.captureMessage(message, 'warning');
   }

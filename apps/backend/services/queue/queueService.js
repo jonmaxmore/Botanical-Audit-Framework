@@ -18,7 +18,7 @@ class QueueService {
       port: parseInt(process.env.REDIS_PORT || '6379'),
       password: process.env.REDIS_PASSWORD || undefined,
       maxRetriesPerRequest: null,
-      enableReadyCheck: false
+      enableReadyCheck: false,
     };
 
     // AI QC Processing Queue
@@ -28,11 +28,11 @@ class QueueService {
         attempts: 3,
         backoff: {
           type: 'exponential',
-          delay: 2000
+          delay: 2000,
         },
         removeOnComplete: 100, // Keep last 100 completed jobs
-        removeOnFail: 500 // Keep last 500 failed jobs
-      }
+        removeOnFail: 500, // Keep last 500 failed jobs
+      },
     });
 
     // Email Notification Queue
@@ -42,11 +42,11 @@ class QueueService {
         attempts: 5,
         backoff: {
           type: 'exponential',
-          delay: 1000
+          delay: 1000,
         },
         removeOnComplete: 50,
-        removeOnFail: 200
-      }
+        removeOnFail: 200,
+      },
     });
 
     // Calendar Sync Queue
@@ -56,11 +56,11 @@ class QueueService {
         attempts: 3,
         backoff: {
           type: 'fixed',
-          delay: 3000
+          delay: 3000,
         },
         removeOnComplete: 50,
-        removeOnFail: 100
-      }
+        removeOnFail: 100,
+      },
     });
 
     // Report Generation Queue
@@ -70,13 +70,13 @@ class QueueService {
         attempts: 2,
         timeout: 300000, // 5 minutes
         removeOnComplete: 20,
-        removeOnFail: 50
-      }
+        removeOnFail: 50,
+      },
     });
 
     // Setup processors
     this.setupProcessors();
-    
+
     // Setup event listeners
     this.setupEventListeners();
 
@@ -88,7 +88,7 @@ class QueueService {
    */
   setupProcessors() {
     // AI QC Processor
-    this.aiQcQueue.process('run-ai-qc', async (job) => {
+    this.aiQcQueue.process('run-ai-qc', async job => {
       const { applicationId } = job.data;
       logger.info(`Processing AI QC for application ${applicationId}`);
 
@@ -107,15 +107,15 @@ class QueueService {
           lotId: application.lotId,
           farmer: {
             name: application.farmer.name,
-            idCard: application.farmer.idCard
+            idCard: application.farmer.idCard,
           },
           farm: {
             name: application.farmer.farmName,
             location: application.farmer.farmLocation,
-            area: application.farmArea
+            area: application.farmArea,
           },
           documents: application.documents || [],
-          images: application.images || []
+          images: application.images || [],
         });
 
         if (qcResult.success) {
@@ -126,7 +126,7 @@ class QueueService {
             scores: qcResult.data.scores,
             inspectionType: qcResult.data.inspectionType,
             issues: qcResult.data.issues,
-            recommendations: qcResult.data.recommendations
+            recommendations: qcResult.data.recommendations,
           };
           application.inspectionType = qcResult.data.inspectionType;
           application.status = 'IN_REVIEW';
@@ -142,7 +142,7 @@ class QueueService {
           // Queue notification
           await this.addEmailJob({
             type: 'new-application',
-            applicationId: application._id
+            applicationId: application._id,
           });
 
           return { success: true, result: qcResult.data };
@@ -156,7 +156,7 @@ class QueueService {
     });
 
     // Email Processor
-    this.emailQueue.process('send-email', async (job) => {
+    this.emailQueue.process('send-email', async job => {
       const { type, applicationId, data } = job.data;
       logger.info(`Sending ${type} email for application ${applicationId}`);
 
@@ -177,7 +177,7 @@ class QueueService {
           case 'inspector-assignment':
             result = await notificationService.notifyInspectorAssignment(
               application,
-              application.inspector
+              application.inspector,
             );
             break;
           case 'inspection-complete':
@@ -186,7 +186,7 @@ class QueueService {
           case 'status-change':
             result = await notificationService.notifyFarmerStatusChange(
               application,
-              data.newStatus
+              data.newStatus,
             );
             break;
           case 'inspection-reminder':
@@ -204,19 +204,19 @@ class QueueService {
     });
 
     // Calendar Processor
-    this.calendarQueue.process('create-event', async (job) => {
+    this.calendarQueue.process('create-event', async job => {
       const { applicationId, eventData } = job.data;
       logger.info(`Creating calendar event for application ${applicationId}`);
 
       try {
         const googleCalendarService = require('../calendar/googleCalendarService');
         const result = await googleCalendarService.createInspectionEvent(eventData);
-        
+
         if (result.success) {
           // Update application with event ID
           await DTAMApplication.findByIdAndUpdate(applicationId, {
             'inspectionSchedule.calendarEventId': result.data.eventId,
-            'inspectionSchedule.meetLink': result.data.meetLink
+            'inspectionSchedule.meetLink': result.data.meetLink,
           });
         }
 
@@ -228,7 +228,7 @@ class QueueService {
     });
 
     // Report Processor
-    this.reportQueue.process('generate-report', async (job) => {
+    this.reportQueue.process('generate-report', async job => {
       const { reportType, startDate, endDate } = job.data;
       logger.info(`Generating ${reportType} report from ${startDate} to ${endDate}`);
 
@@ -253,12 +253,12 @@ class QueueService {
       logger.error(`AI QC job ${job.id} failed:`, err.message);
     });
 
-    this.aiQcQueue.on('stalled', (job) => {
+    this.aiQcQueue.on('stalled', job => {
       logger.warn(`AI QC job ${job.id} stalled`);
     });
 
     // Email Queue Events
-    this.emailQueue.on('completed', (job) => {
+    this.emailQueue.on('completed', job => {
       logger.info(`Email job ${job.id} completed`);
     });
 
@@ -267,7 +267,7 @@ class QueueService {
     });
 
     // Calendar Queue Events
-    this.calendarQueue.on('completed', (job) => {
+    this.calendarQueue.on('completed', job => {
       logger.info(`Calendar job ${job.id} completed`);
     });
 
@@ -276,7 +276,7 @@ class QueueService {
     });
 
     // Report Queue Events
-    this.reportQueue.on('completed', (job) => {
+    this.reportQueue.on('completed', job => {
       logger.info(`Report job ${job.id} completed`);
     });
 
@@ -291,55 +291,71 @@ class QueueService {
    * Add AI QC job to queue
    */
   async addAIQCJob(applicationId, options = {}) {
-    return this.aiQcQueue.add('run-ai-qc', {
-      applicationId
-    }, {
-      priority: options.priority || 5,
-      delay: options.delay || 0,
-      ...options
-    });
+    return this.aiQcQueue.add(
+      'run-ai-qc',
+      {
+        applicationId,
+      },
+      {
+        priority: options.priority || 5,
+        delay: options.delay || 0,
+        ...options,
+      },
+    );
   }
 
   /**
    * Add email job to queue
    */
   async addEmailJob({ type, applicationId, data = {} }, options = {}) {
-    return this.emailQueue.add('send-email', {
-      type,
-      applicationId,
-      data
-    }, {
-      priority: options.priority || 5,
-      delay: options.delay || 0,
-      ...options
-    });
+    return this.emailQueue.add(
+      'send-email',
+      {
+        type,
+        applicationId,
+        data,
+      },
+      {
+        priority: options.priority || 5,
+        delay: options.delay || 0,
+        ...options,
+      },
+    );
   }
 
   /**
    * Add calendar job to queue
    */
   async addCalendarJob(applicationId, eventData, options = {}) {
-    return this.calendarQueue.add('create-event', {
-      applicationId,
-      eventData
-    }, {
-      priority: options.priority || 5,
-      ...options
-    });
+    return this.calendarQueue.add(
+      'create-event',
+      {
+        applicationId,
+        eventData,
+      },
+      {
+        priority: options.priority || 5,
+        ...options,
+      },
+    );
   }
 
   /**
    * Add report generation job to queue
    */
   async addReportJob(reportType, startDate, endDate, options = {}) {
-    return this.reportQueue.add('generate-report', {
-      reportType,
-      startDate,
-      endDate
-    }, {
-      priority: options.priority || 3,
-      ...options
-    });
+    return this.reportQueue.add(
+      'generate-report',
+      {
+        reportType,
+        startDate,
+        endDate,
+      },
+      {
+        priority: options.priority || 3,
+        ...options,
+      },
+    );
   }
 
   /**
@@ -356,7 +372,7 @@ class QueueService {
       calendarWaiting,
       calendarActive,
       reportWaiting,
-      reportActive
+      reportActive,
     ] = await Promise.all([
       this.aiQcQueue.getWaitingCount(),
       this.aiQcQueue.getActiveCount(),
@@ -367,7 +383,7 @@ class QueueService {
       this.calendarQueue.getWaitingCount(),
       this.calendarQueue.getActiveCount(),
       this.reportQueue.getWaitingCount(),
-      this.reportQueue.getActiveCount()
+      this.reportQueue.getActiveCount(),
     ]);
 
     return {
@@ -375,20 +391,20 @@ class QueueService {
         waiting: aiQcWaiting,
         active: aiQcActive,
         completed: aiQcCompleted,
-        failed: aiQcFailed
+        failed: aiQcFailed,
       },
       email: {
         waiting: emailWaiting,
-        active: emailActive
+        active: emailActive,
       },
       calendar: {
         waiting: calendarWaiting,
-        active: calendarActive
+        active: calendarActive,
       },
       report: {
         waiting: reportWaiting,
-        active: reportActive
-      }
+        active: reportActive,
+      },
     };
   }
 
@@ -406,7 +422,7 @@ class QueueService {
       this.calendarQueue.clean(grace, 'completed'),
       this.calendarQueue.clean(grace, 'failed'),
       this.reportQueue.clean(grace, 'completed'),
-      this.reportQueue.clean(grace, 'failed')
+      this.reportQueue.clean(grace, 'failed'),
     ]);
 
     logger.info('Old jobs cleaned (>7 days)');
@@ -420,7 +436,7 @@ class QueueService {
       this.aiQcQueue.pause(),
       this.emailQueue.pause(),
       this.calendarQueue.pause(),
-      this.reportQueue.pause()
+      this.reportQueue.pause(),
     ]);
     logger.info('All queues paused');
   }
@@ -433,7 +449,7 @@ class QueueService {
       this.aiQcQueue.resume(),
       this.emailQueue.resume(),
       this.calendarQueue.resume(),
-      this.reportQueue.resume()
+      this.reportQueue.resume(),
     ]);
     logger.info('All queues resumed');
   }
@@ -446,7 +462,7 @@ class QueueService {
       this.aiQcQueue.close(),
       this.emailQueue.close(),
       this.calendarQueue.close(),
-      this.reportQueue.close()
+      this.reportQueue.close(),
     ]);
     logger.info('All queues closed');
   }

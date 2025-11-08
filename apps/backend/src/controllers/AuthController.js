@@ -10,7 +10,7 @@ const {
   asyncHandler,
   ValidationError,
   AuthenticationError,
-  NotFoundError
+  NotFoundError,
 } = require('../utils/error-handler-utils');
 const { _validateRequest, _schemas, isValidEmail } = require('../utils/validation');
 const logger = require('../utils/logger');
@@ -24,7 +24,7 @@ class AuthController {
     return jwt.sign({ id: userId }, config.security.jwtSecret, {
       expiresIn: config.security.jwtExpiry,
       issuer: 'gacp-platform',
-      audience: 'gacp-users'
+      audience: 'gacp-users',
     });
   }
 
@@ -63,7 +63,7 @@ class AuthController {
       firstName,
       lastName,
       role,
-      status: 'pending'
+      status: 'pending',
     };
 
     const user = await User.createSafe(userData);
@@ -77,7 +77,7 @@ class AuthController {
 
     logger.auth('register', user, {
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(201).json({
@@ -86,8 +86,8 @@ class AuthController {
       data: {
         user: user.getSafeProfile(),
         token,
-        verificationRequired: true
-      }
+        verificationRequired: true,
+      },
     });
   });
 
@@ -105,7 +105,7 @@ class AuthController {
     // Find user with password
     const user = await User.findOne({
       email: email.toLowerCase(),
-      isDeleted: false
+      isDeleted: false,
     }).select('+password');
 
     if (!user) {
@@ -134,7 +134,7 @@ class AuthController {
 
     logger.auth('login', user, {
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(200).json({
@@ -144,8 +144,8 @@ class AuthController {
         user: user.getSafeProfile(),
         token,
         refreshToken,
-        expiresIn: config.security.jwtExpire
-      }
+        expiresIn: config.security.jwtExpire,
+      },
     });
   });
 
@@ -160,12 +160,12 @@ class AuthController {
 
     logger.auth('logout', req.user, {
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(200).json({
       success: true,
-      message: 'Logout successful'
+      message: 'Logout successful',
     });
   });
 
@@ -182,7 +182,7 @@ class AuthController {
     res.status(200).json({
       success: true,
       message: 'User profile retrieved successfully',
-      data: user.getSafeProfile()
+      data: user.getSafeProfile(),
     });
   });
 
@@ -201,7 +201,7 @@ class AuthController {
       // Don't reveal whether user exists or not
       return res.status(200).json({
         success: true,
-        message: 'If a user with that email exists, a password reset link has been sent.'
+        message: 'If a user with that email exists, a password reset link has been sent.',
       });
     }
 
@@ -211,7 +211,7 @@ class AuthController {
 
     logger.auth('forgot_password', user, {
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     // In production, send email with reset link
@@ -220,7 +220,7 @@ class AuthController {
       success: true,
       message: 'If a user with that email exists, a password reset link has been sent.',
       // In development only - remove in production
-      ...(config.environment === 'development' && { resetToken })
+      ...(config.environment === 'development' && { resetToken }),
     });
   });
 
@@ -240,7 +240,7 @@ class AuthController {
     const user = await User.findOne({
       passwordResetToken: hashedToken,
       passwordResetExpires: { $gt: Date.now() },
-      isDeleted: false
+      isDeleted: false,
     });
 
     if (!user) {
@@ -255,12 +255,12 @@ class AuthController {
 
     logger.auth('password_reset', user, {
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(200).json({
       success: true,
-      message: 'Password reset successfully'
+      message: 'Password reset successfully',
     });
   });
 
@@ -286,7 +286,7 @@ class AuthController {
 
     logger.auth('token_refresh', user, {
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(200).json({
@@ -295,8 +295,8 @@ class AuthController {
       data: {
         token: newToken,
         refreshToken: newRefreshToken,
-        expiresIn: config.security.jwtExpire
-      }
+        expiresIn: config.security.jwtExpire,
+      },
     });
   });
 
@@ -316,7 +316,7 @@ class AuthController {
     const user = await User.findOne({
       emailVerificationToken: hashedToken,
       emailVerificationExpires: { $gt: Date.now() },
-      isDeleted: false
+      isDeleted: false,
     });
 
     if (!user) {
@@ -337,12 +337,12 @@ class AuthController {
 
     logger.auth('email_verified', user, {
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(200).json({
       success: true,
-      message: 'Email verified successfully'
+      message: 'Email verified successfully',
     });
   });
 
@@ -362,14 +362,14 @@ class AuthController {
       return res.status(200).json({
         success: true,
         message:
-          'If a user with that email exists and needs verification, a new verification email has been sent.'
+          'If a user with that email exists and needs verification, a new verification email has been sent.',
       });
     }
 
     if (user.isEmailVerified) {
       return res.status(200).json({
         success: true,
-        message: 'Email is already verified'
+        message: 'Email is already verified',
       });
     }
 
@@ -379,7 +379,7 @@ class AuthController {
 
     logger.auth('verification_resent', user, {
       userAgent: req.get('User-Agent'),
-      ip: req.ip
+      ip: req.ip,
     });
 
     res.status(200).json({
@@ -387,7 +387,7 @@ class AuthController {
       message:
         'If a user with that email exists and needs verification, a new verification email has been sent.',
       // In development only - remove in production
-      ...(config.environment === 'development' && { verificationToken })
+      ...(config.environment === 'development' && { verificationToken }),
     });
   });
 
@@ -406,8 +406,8 @@ class AuthController {
       message: 'User is authenticated',
       data: {
         isAuthenticated: true,
-        user: user.getSafeProfile()
-      }
+        user: user.getSafeProfile(),
+      },
     });
   });
 }

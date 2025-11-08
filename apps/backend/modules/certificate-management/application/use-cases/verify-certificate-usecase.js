@@ -47,7 +47,7 @@ class VerifyCertificateUseCase {
           verificationCode,
           clientIP,
           result: 'NOT_FOUND',
-          timestamp: new Date()
+          timestamp: new Date(),
         });
 
         return {
@@ -56,8 +56,8 @@ class VerifyCertificateUseCase {
           message: 'ไม่พบใบรับรองในระบบ',
           details: {
             certificateNumber,
-            verifiedAt: new Date()
-          }
+            verifiedAt: new Date(),
+          },
         };
       }
 
@@ -69,7 +69,7 @@ class VerifyCertificateUseCase {
           clientIP,
           result: 'INVALID_CODE',
           certificateId: certificate.id,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
 
         return {
@@ -78,8 +78,8 @@ class VerifyCertificateUseCase {
           message: 'รหัสตรวจสอบไม่ถูกต้อง',
           details: {
             certificateNumber,
-            verifiedAt: new Date()
-          }
+            verifiedAt: new Date(),
+          },
         };
       }
 
@@ -96,7 +96,7 @@ class VerifyCertificateUseCase {
         clientIP,
         result: validationResult.status,
         certificateId: certificate.id,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       // 6. ส่งผลการตรวจสอบ
@@ -116,16 +116,16 @@ class VerifyCertificateUseCase {
             issuedDate: certificate.issuedDate,
             expiryDate: certificate.expiryDate,
             status: certificate.status,
-            verificationCount: certificate.verificationCount
+            verificationCount: certificate.verificationCount,
           },
           details: {
             verifiedAt: new Date(),
-            daysUntilExpiry: this._calculateDaysUntilExpiry(certificate.expiryDate)
-          }
+            daysUntilExpiry: this._calculateDaysUntilExpiry(certificate.expiryDate),
+          },
         };
       } else {
         console.log(
-          `❌ Certificate verification failed: ${certificateNumber} - ${validationResult.message}`
+          `❌ Certificate verification failed: ${certificateNumber} - ${validationResult.message}`,
         );
 
         return {
@@ -136,12 +136,12 @@ class VerifyCertificateUseCase {
             certificateNumber: certificate.certificateNumber,
             status: certificate.status,
             farmerName: certificate.farmerName,
-            farmName: certificate.farmName
+            farmName: certificate.farmName,
           },
           details: {
             verifiedAt: new Date(),
-            ...validationResult.details
-          }
+            ...validationResult.details,
+          },
         };
       }
     } catch (error) {
@@ -154,7 +154,7 @@ class VerifyCertificateUseCase {
         clientIP,
         result: 'ERROR',
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       throw error;
@@ -179,8 +179,8 @@ class VerifyCertificateUseCase {
             message: 'ใบรับรองหมดอายุแล้ว',
             details: {
               expiredDate: expiryDate,
-              expiredDays: Math.ceil((now - expiryDate) / (1000 * 60 * 60 * 24))
-            }
+              expiredDays: Math.ceil((now - expiryDate) / (1000 * 60 * 60 * 24)),
+            },
           };
         }
 
@@ -191,14 +191,14 @@ class VerifyCertificateUseCase {
             isValid: true,
             status: 'VALID_EXPIRING_SOON',
             message: `ใบรับรองใช้งานได้ แต่จะหมดอายุใน ${daysUntilExpiry} วัน`,
-            details: { daysUntilExpiry }
+            details: { daysUntilExpiry },
           };
         }
 
         return {
           isValid: true,
           status: 'VALID',
-          message: 'ใบรับรองถูกต้องและใช้งานได้'
+          message: 'ใบรับรองถูกต้องและใช้งานได้',
         };
       }
 
@@ -209,8 +209,8 @@ class VerifyCertificateUseCase {
           message: 'ใบรับรองถูกยกเลิกแล้ว',
           details: {
             revokedDate: certificate.revocationInfo?.revokedAt,
-            revokedReason: certificate.revocationInfo?.reason
-          }
+            revokedReason: certificate.revocationInfo?.reason,
+          },
         };
 
       case 'RENEWED':
@@ -220,15 +220,15 @@ class VerifyCertificateUseCase {
           message: 'ใบรับรองได้ถูกต่ออายุแล้ว กรุณาใช้ใบรับรองฉบับใหม่',
           details: {
             renewedDate: certificate.renewalInfo?.renewedAt,
-            newCertificateId: certificate.renewalInfo?.newCertificateId
-          }
+            newCertificateId: certificate.renewalInfo?.newCertificateId,
+          },
         };
 
       default:
         return {
           isValid: false,
           status: 'INVALID',
-          message: `สถานะใบรับรองไม่ถูกต้อง: ${certificate.status}`
+          message: `สถานะใบรับรองไม่ถูกต้อง: ${certificate.status}`,
         };
     }
   }

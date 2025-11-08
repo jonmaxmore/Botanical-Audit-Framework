@@ -18,12 +18,12 @@ const documentSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: Object.values(Document.TYPE),
-      required: true
+      required: true,
     },
     category: {
       type: String,
       enum: Object.values(Document.CATEGORY),
-      required: true
+      required: true,
     },
 
     fileName: { type: String, required: true },
@@ -38,13 +38,13 @@ const documentSchema = new mongoose.Schema(
     uploadedByType: { type: String, enum: ['FARMER', 'DTAM_STAFF'], required: true },
     relatedEntity: {
       type: String,
-      id: String
+      id: String,
     },
 
     status: {
       type: String,
       enum: Object.values(Document.STATUS),
-      default: Document.STATUS.PENDING
+      default: Document.STATUS.PENDING,
     },
     reviewedBy: mongoose.Schema.Types.ObjectId,
     reviewedAt: Date,
@@ -54,7 +54,7 @@ const documentSchema = new mongoose.Schema(
     accessLevel: {
       type: String,
       enum: Object.values(Document.ACCESS_LEVEL),
-      default: Document.ACCESS_LEVEL.INTERNAL
+      default: Document.ACCESS_LEVEL.INTERNAL,
     },
     allowedRoles: [String],
 
@@ -77,12 +77,12 @@ const documentSchema = new mongoose.Schema(
     lastAccessedAt: Date,
 
     uploadedAt: { type: Date, default: Date.now },
-    archivedAt: Date
+    archivedAt: Date,
   },
   {
     timestamps: true,
-    collection: 'documents'
-  }
+    collection: 'documents',
+  },
 );
 
 // Indexes
@@ -110,7 +110,7 @@ class MongoDBDocumentRepository {
       ...data,
       uploadedBy: data.uploadedBy?.toString(),
       reviewedBy: data.reviewedBy?.toString(),
-      previousVersionId: data.previousVersionId?.toString()
+      previousVersionId: data.previousVersionId?.toString(),
     });
   }
 
@@ -140,7 +140,7 @@ class MongoDBDocumentRepository {
       if (data._id) {
         const updated = await this.DocumentModel.findByIdAndUpdate(data._id, data, {
           new: true,
-          runValidators: true
+          runValidators: true,
         });
         return this.toDomain(updated);
       } else {
@@ -178,14 +178,14 @@ class MongoDBDocumentRepository {
 
       const [docs, total] = await Promise.all([
         this.DocumentModel.find(query).sort(sort).skip(skip).limit(limit),
-        this.DocumentModel.countDocuments(query)
+        this.DocumentModel.countDocuments(query),
       ]);
 
       return {
         documents: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding documents by uploader:', error);
@@ -198,7 +198,7 @@ class MongoDBDocumentRepository {
       const query = {
         'relatedEntity.type': entityType,
         'relatedEntity.id': entityId,
-        status: { $ne: Document.STATUS.ARCHIVED }
+        status: { $ne: Document.STATUS.ARCHIVED },
       };
 
       if (options.type) query.type = options.type;
@@ -222,14 +222,14 @@ class MongoDBDocumentRepository {
 
       const [docs, total] = await Promise.all([
         this.DocumentModel.find({ status }).sort(sort).skip(skip).limit(limit),
-        this.DocumentModel.countDocuments({ status })
+        this.DocumentModel.countDocuments({ status }),
       ]);
 
       return {
         documents: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding documents by status:', error);
@@ -246,14 +246,14 @@ class MongoDBDocumentRepository {
 
       const [docs, total] = await Promise.all([
         this.DocumentModel.find({ type }).sort(sort).skip(skip).limit(limit),
-        this.DocumentModel.countDocuments({ type })
+        this.DocumentModel.countDocuments({ type }),
       ]);
 
       return {
         documents: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding documents by type:', error);
@@ -270,14 +270,14 @@ class MongoDBDocumentRepository {
 
       const [docs, total] = await Promise.all([
         this.DocumentModel.find({ category }).sort(sort).skip(skip).limit(limit),
-        this.DocumentModel.countDocuments({ category })
+        this.DocumentModel.countDocuments({ category }),
       ]);
 
       return {
         documents: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding documents by category:', error);
@@ -311,14 +311,14 @@ class MongoDBDocumentRepository {
 
       const [docs, total] = await Promise.all([
         this.DocumentModel.find(query).sort(sort).skip(skip).limit(limit),
-        this.DocumentModel.countDocuments(query)
+        this.DocumentModel.countDocuments(query),
       ]);
 
       return {
         documents: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding documents with filters:', error);
@@ -329,7 +329,7 @@ class MongoDBDocumentRepository {
   async findPendingReview(options = {}) {
     try {
       const query = {
-        status: { $in: [Document.STATUS.PENDING, Document.STATUS.UNDER_REVIEW] }
+        status: { $in: [Document.STATUS.PENDING, Document.STATUS.UNDER_REVIEW] },
       };
 
       const page = options.page || 1;
@@ -339,14 +339,14 @@ class MongoDBDocumentRepository {
 
       const [docs, total] = await Promise.all([
         this.DocumentModel.find(query).sort(sort).skip(skip).limit(limit),
-        this.DocumentModel.countDocuments(query)
+        this.DocumentModel.countDocuments(query),
       ]);
 
       return {
         documents: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding pending documents:', error);
@@ -358,7 +358,7 @@ class MongoDBDocumentRepository {
     try {
       const query = {
         expiresAt: { $lte: new Date() },
-        status: { $ne: Document.STATUS.EXPIRED }
+        status: { $ne: Document.STATUS.EXPIRED },
       };
 
       const docs = await this.DocumentModel.find(query);
@@ -379,8 +379,8 @@ class MongoDBDocumentRepository {
       const versions = await this.DocumentModel.find({
         $or: [
           { _id: mongoose.Types.ObjectId(documentId) },
-          { previousVersionId: mongoose.Types.ObjectId(documentId) }
-        ]
+          { previousVersionId: mongoose.Types.ObjectId(documentId) },
+        ],
       }).sort({ version: -1 });
 
       return versions.map(doc => this.toDomain(doc));
@@ -395,8 +395,8 @@ class MongoDBDocumentRepository {
       const doc = await this.DocumentModel.findOne({
         $or: [
           { _id: mongoose.Types.ObjectId(originalDocumentId), isLatestVersion: true },
-          { previousVersionId: mongoose.Types.ObjectId(originalDocumentId), isLatestVersion: true }
-        ]
+          { previousVersionId: mongoose.Types.ObjectId(originalDocumentId), isLatestVersion: true },
+        ],
       });
 
       return this.toDomain(doc);
@@ -435,11 +435,11 @@ class MongoDBDocumentRepository {
       const result = await this.DocumentModel.updateMany(
         {
           expiresAt: { $lte: new Date() },
-          status: { $ne: Document.STATUS.EXPIRED }
+          status: { $ne: Document.STATUS.EXPIRED },
         },
         {
-          $set: { status: Document.STATUS.EXPIRED }
-        }
+          $set: { status: Document.STATUS.EXPIRED },
+        },
       );
       return result.modifiedCount;
     } catch (error) {
@@ -465,20 +465,20 @@ class MongoDBDocumentRepository {
         this.DocumentModel.countDocuments(matchStage),
         this.DocumentModel.aggregate([
           { $match: matchStage },
-          { $group: { _id: '$status', count: { $sum: 1 } } }
+          { $group: { _id: '$status', count: { $sum: 1 } } },
         ]),
         this.DocumentModel.aggregate([
           { $match: matchStage },
-          { $group: { _id: '$type', count: { $sum: 1 } } }
+          { $group: { _id: '$type', count: { $sum: 1 } } },
         ]),
         this.DocumentModel.aggregate([
           { $match: matchStage },
-          { $group: { _id: '$category', count: { $sum: 1 } } }
+          { $group: { _id: '$category', count: { $sum: 1 } } },
         ]),
         this.DocumentModel.aggregate([
           { $match: matchStage },
-          { $group: { _id: null, total: { $sum: '$fileSize' } } }
-        ])
+          { $group: { _id: null, total: { $sum: '$fileSize' } } },
+        ]),
       ]);
 
       return {
@@ -495,7 +495,7 @@ class MongoDBDocumentRepository {
           acc[item._id] = item.count;
           return acc;
         }, {}),
-        totalSizeBytes: totalSize.length > 0 ? totalSize[0].total : 0
+        totalSizeBytes: totalSize.length > 0 ? totalSize[0].total : 0,
       };
     } catch (error) {
       logger.error('Error getting document statistics:', error);
@@ -516,7 +516,7 @@ class MongoDBDocumentRepository {
   async searchDocuments(searchText, options = {}) {
     try {
       const query = {
-        $text: { $search: searchText }
+        $text: { $search: searchText },
       };
 
       if (options.status) query.status = options.status;
@@ -532,14 +532,14 @@ class MongoDBDocumentRepository {
           .sort({ score: { $meta: 'textScore' } })
           .skip(skip)
           .limit(limit),
-        this.DocumentModel.countDocuments(query)
+        this.DocumentModel.countDocuments(query),
       ]);
 
       return {
         documents: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error searching documents:', error);

@@ -75,7 +75,7 @@ class ReportingController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid dashboard parameters',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -84,7 +84,7 @@ class ReportingController {
         modules: req.query.modules ? req.query.modules.split(',') : undefined,
         userRole: req.userRole,
         includeAlerts: req.query.includeAlerts !== 'false',
-        includeTrends: req.query.includeTrends !== 'false'
+        includeTrends: req.query.includeTrends !== 'false',
       };
 
       // Generate dashboard metrics
@@ -94,7 +94,7 @@ class ReportingController {
       await this._logAuditEvent('DASHBOARD_ACCESSED', {
         userId: req.userId,
         criteria,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(200).json({
@@ -103,8 +103,8 @@ class ReportingController {
         metadata: {
           requestId: req.id,
           generatedAt: new Date(),
-          cacheStatus: dashboardData.metadata?.cached || false
-        }
+          cacheStatus: dashboardData.metadata?.cached || false,
+        },
       });
     } catch (error) {
       logger.error('[ReportingController] Dashboard metrics error:', error);
@@ -112,14 +112,14 @@ class ReportingController {
       await this._logAuditEvent('DASHBOARD_ERROR', {
         userId: req.userId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(500).json({
         success: false,
         error: 'DASHBOARD_ERROR',
         message: 'Error retrieving dashboard metrics',
-        requestId: req.id
+        requestId: req.id,
       });
     }
   }
@@ -142,7 +142,7 @@ class ReportingController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid application report parameters',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -152,7 +152,7 @@ class ReportingController {
         format: req.query.format || 'json',
         includeStates: req.query.states ? req.query.states.split(',') : undefined,
         includeMetrics: req.query.includeMetrics !== 'false',
-        includeRawData: req.query.includeRawData === 'true'
+        includeRawData: req.query.includeRawData === 'true',
       };
 
       // Generate application report
@@ -163,7 +163,7 @@ class ReportingController {
         userId: req.userId,
         criteria,
         reportId: applicationReport.metadata?.reportId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       // Handle different response formats
@@ -177,8 +177,8 @@ class ReportingController {
         metadata: {
           requestId: req.id,
           generatedAt: new Date(),
-          format: criteria.format
-        }
+          format: criteria.format,
+        },
       });
     } catch (error) {
       logger.error('[ReportingController] Application report error:', error);
@@ -186,14 +186,14 @@ class ReportingController {
       await this._logAuditEvent('APPLICATION_REPORT_ERROR', {
         userId: req.userId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(500).json({
         success: false,
         error: 'REPORT_GENERATION_ERROR',
         message: 'Error generating application report',
-        requestId: req.id
+        requestId: req.id,
       });
     }
   }
@@ -216,7 +216,7 @@ class ReportingController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid financial report parameters',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -226,7 +226,7 @@ class ReportingController {
         format: req.query.format || 'json',
         includeTransactions: req.query.includeTransactions === 'true',
         includeForecasting: req.query.includeForecasting === 'true',
-        groupBy: req.query.groupBy || 'day'
+        groupBy: req.query.groupBy || 'day',
       };
 
       // Generate financial report
@@ -237,7 +237,7 @@ class ReportingController {
         userId: req.userId,
         criteria,
         reportId: financialReport.metadata?.reportId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       // Handle different response formats
@@ -251,8 +251,8 @@ class ReportingController {
         metadata: {
           requestId: req.id,
           generatedAt: new Date(),
-          format: criteria.format
-        }
+          format: criteria.format,
+        },
       });
     } catch (error) {
       logger.error('[ReportingController] Financial report error:', error);
@@ -260,14 +260,14 @@ class ReportingController {
       await this._logAuditEvent('FINANCIAL_REPORT_ERROR', {
         userId: req.userId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(500).json({
         success: false,
         error: 'REPORT_GENERATION_ERROR',
         message: 'Error generating financial report',
-        requestId: req.id
+        requestId: req.id,
       });
     }
   }
@@ -290,7 +290,7 @@ class ReportingController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid user activity report parameters',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -300,7 +300,7 @@ class ReportingController {
         format: req.query.format || 'json',
         userRoles: req.query.roles ? req.query.roles.split(',') : undefined,
         includeAnalytics: req.query.includeAnalytics === 'true',
-        includeBehavioralInsights: req.query.includeBehavioralInsights === 'true'
+        includeBehavioralInsights: req.query.includeBehavioralInsights === 'true',
       };
 
       // Generate user activity report
@@ -311,7 +311,7 @@ class ReportingController {
         userId: req.userId,
         criteria,
         reportId: userReport.metadata?.reportId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       // Handle different response formats
@@ -325,8 +325,8 @@ class ReportingController {
         metadata: {
           requestId: req.id,
           generatedAt: new Date(),
-          format: criteria.format
-        }
+          format: criteria.format,
+        },
       });
     } catch (error) {
       logger.error('[ReportingController] User activity report error:', error);
@@ -334,14 +334,14 @@ class ReportingController {
       await this._logAuditEvent('USER_ACTIVITY_REPORT_ERROR', {
         userId: req.userId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(500).json({
         success: false,
         error: 'REPORT_GENERATION_ERROR',
         message: 'Error generating user activity report',
-        requestId: req.id
+        requestId: req.id,
       });
     }
   }
@@ -364,7 +364,7 @@ class ReportingController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid compliance report parameters',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -374,7 +374,7 @@ class ReportingController {
         reportType: req.query.reportType || 'monthly',
         complianceAreas: req.query.areas ? req.query.areas.split(',') : undefined,
         includeRecommendations: req.query.includeRecommendations !== 'false',
-        format: req.query.format || 'pdf' // Default to PDF for compliance reports
+        format: req.query.format || 'pdf', // Default to PDF for compliance reports
       };
 
       // Generate compliance report using specialized service
@@ -385,7 +385,7 @@ class ReportingController {
         userId: req.userId,
         criteria,
         reportId: complianceReport.metadata?.reportId,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       // Handle file download for compliance reports
@@ -400,8 +400,8 @@ class ReportingController {
           requestId: req.id,
           generatedAt: new Date(),
           format: criteria.format,
-          complianceFramework: 'DTAM GACP Standards'
-        }
+          complianceFramework: 'DTAM GACP Standards',
+        },
       });
     } catch (error) {
       logger.error('[ReportingController] Compliance report error:', error);
@@ -409,14 +409,14 @@ class ReportingController {
       await this._logAuditEvent('COMPLIANCE_REPORT_ERROR', {
         userId: req.userId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(500).json({
         success: false,
         error: 'COMPLIANCE_REPORT_ERROR',
         message: 'Error generating compliance report',
-        requestId: req.id
+        requestId: req.id,
       });
     }
   }
@@ -439,7 +439,7 @@ class ReportingController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid business analytics parameters',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -448,7 +448,7 @@ class ReportingController {
         endDate: req.query.endDate ? new Date(req.query.endDate) : undefined,
         analysisTypes: req.query.analysisTypes ? req.query.analysisTypes.split(',') : undefined,
         granularity: req.query.granularity || 'daily',
-        includePredictions: req.query.includePredictions === 'true'
+        includePredictions: req.query.includePredictions === 'true',
       };
 
       // Generate business analytics
@@ -458,7 +458,7 @@ class ReportingController {
       await this._logAuditEvent('BUSINESS_ANALYTICS_ACCESSED', {
         userId: req.userId,
         criteria,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(200).json({
@@ -467,8 +467,8 @@ class ReportingController {
         metadata: {
           requestId: req.id,
           generatedAt: new Date(),
-          analyticsScope: 'comprehensive'
-        }
+          analyticsScope: 'comprehensive',
+        },
       });
     } catch (error) {
       logger.error('[ReportingController] Business analytics error:', error);
@@ -476,14 +476,14 @@ class ReportingController {
       await this._logAuditEvent('BUSINESS_ANALYTICS_ERROR', {
         userId: req.userId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(500).json({
         success: false,
         error: 'ANALYTICS_ERROR',
         message: 'Error generating business analytics',
-        requestId: req.id
+        requestId: req.id,
       });
     }
   }
@@ -506,7 +506,7 @@ class ReportingController {
           success: false,
           error: 'VALIDATION_ERROR',
           message: 'Invalid predictive analytics parameters',
-          details: errors.array()
+          details: errors.array(),
         });
       }
 
@@ -515,7 +515,7 @@ class ReportingController {
         endDate: req.query.endDate ? new Date(req.query.endDate) : undefined,
         modelTypes: req.query.models ? req.query.models.split(',') : undefined,
         forecastPeriod: parseInt(req.query.forecastPeriod) || 90, // days
-        includeConfidenceIntervals: req.query.includeConfidence === 'true'
+        includeConfidenceIntervals: req.query.includeConfidence === 'true',
       };
 
       // Generate predictive models and forecasts
@@ -525,7 +525,7 @@ class ReportingController {
       await this._logAuditEvent('PREDICTIVE_ANALYTICS_ACCESSED', {
         userId: req.userId,
         criteria,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(200).json({
@@ -535,8 +535,8 @@ class ReportingController {
           requestId: req.id,
           generatedAt: new Date(),
           forecastPeriod: criteria.forecastPeriod,
-          modelAccuracy: predictiveAnalytics.modelPerformance?.averageAccuracy || 'N/A'
-        }
+          modelAccuracy: predictiveAnalytics.modelPerformance?.averageAccuracy || 'N/A',
+        },
       });
     } catch (error) {
       logger.error('[ReportingController] Predictive analytics error:', error);
@@ -544,14 +544,14 @@ class ReportingController {
       await this._logAuditEvent('PREDICTIVE_ANALYTICS_ERROR', {
         userId: req.userId,
         error: error.message,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
 
       res.status(500).json({
         success: false,
         error: 'PREDICTIVE_ANALYTICS_ERROR',
         message: 'Error generating predictive analytics',
-        requestId: req.id
+        requestId: req.id,
       });
     }
   }
@@ -570,7 +570,7 @@ class ReportingController {
         this.reportingService.healthCheck(),
         this.dashboardService.healthCheck(),
         this.analyticsService.healthCheck(),
-        this.complianceService.healthCheck()
+        this.complianceService.healthCheck(),
       ]);
 
       const overallHealth = {
@@ -580,15 +580,15 @@ class ReportingController {
           reporting: healthChecks[0],
           dashboard: healthChecks[1],
           analytics: healthChecks[2],
-          compliance: healthChecks[3]
-        }
+          compliance: healthChecks[3],
+        },
       };
 
       const statusCode = overallHealth.status === 'healthy' ? 200 : 503;
 
       res.status(statusCode).json({
         success: overallHealth.status === 'healthy',
-        data: overallHealth
+        data: overallHealth,
       });
     } catch (error) {
       logger.error('[ReportingController] Health check error:', error);
@@ -596,7 +596,7 @@ class ReportingController {
       res.status(503).json({
         success: false,
         error: 'HEALTH_CHECK_ERROR',
-        message: 'Error checking service health'
+        message: 'Error checking service health',
       });
     }
   }
@@ -630,7 +630,7 @@ class ReportingController {
       pdf: 'application/pdf',
       excel: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
       csv: 'text/csv',
-      json: 'application/json'
+      json: 'application/json',
     };
 
     return contentTypes[format] || 'application/octet-stream';
@@ -645,7 +645,7 @@ class ReportingController {
       if (this.auditService) {
         await this.auditService.log({
           type: eventType,
-          ...eventData
+          ...eventData,
         });
       }
     } catch (error) {
@@ -668,7 +668,7 @@ class ReportingController {
           .isString()
           .withMessage('Modules must be a comma-separated string'),
         query('includeAlerts').optional().isBoolean().withMessage('includeAlerts must be boolean'),
-        query('includeTrends').optional().isBoolean().withMessage('includeTrends must be boolean')
+        query('includeTrends').optional().isBoolean().withMessage('includeTrends must be boolean'),
       ],
       reports: [
         query('startDate').optional().isISO8601().withMessage('Invalid start date format'),
@@ -677,7 +677,10 @@ class ReportingController {
           .optional()
           .isIn(['json', 'pdf', 'excel', 'csv'])
           .withMessage('Invalid format parameter'),
-        query('includeRawData').optional().isBoolean().withMessage('includeRawData must be boolean')
+        query('includeRawData')
+          .optional()
+          .isBoolean()
+          .withMessage('includeRawData must be boolean'),
       ],
       analytics: [
         query('startDate').optional().isISO8601().withMessage('Invalid start date format'),
@@ -689,8 +692,8 @@ class ReportingController {
         query('includePredictions')
           .optional()
           .isBoolean()
-          .withMessage('includePredictions must be boolean')
-      ]
+          .withMessage('includePredictions must be boolean'),
+      ],
     };
   }
 }

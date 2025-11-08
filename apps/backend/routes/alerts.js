@@ -1,6 +1,6 @@
 /**
  * Alert Routes
- * 
+ *
  * API endpoints for alert management
  * All routes require admin authentication
  */

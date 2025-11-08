@@ -40,7 +40,7 @@ class RegisterRequestDTO {
       farmName: this.farmName,
       province: this.province,
       district: this.district,
-      subDistrict: this.subDistrict
+      subDistrict: this.subDistrict,
     };
   }
 }
@@ -63,7 +63,7 @@ class LoginRequestDTO {
       email: this.email,
       password: this.password,
       ipAddress,
-      userAgent
+      userAgent,
     };
   }
 }
@@ -148,7 +148,7 @@ class UserResponseDTO {
       status: this.status,
       isEmailVerified: this.isEmailVerified,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     };
   }
 }
@@ -167,7 +167,7 @@ class RegisterResponseDTO {
     return new RegisterResponseDTO({
       userId: output.user.id,
       email: output.user.email,
-      verificationToken: output.verificationToken
+      verificationToken: output.verificationToken,
     });
   }
 
@@ -175,7 +175,7 @@ class RegisterResponseDTO {
     return {
       userId: this.userId,
       email: this.email,
-      verificationToken: this.verificationToken
+      verificationToken: this.verificationToken,
     };
   }
 }
@@ -192,14 +192,14 @@ class LoginResponseDTO {
   static fromUseCaseOutput(output) {
     return new LoginResponseDTO({
       accessToken: output.token,
-      user: UserResponseDTO.fromDomain(output.user)
+      user: UserResponseDTO.fromDomain(output.user),
     });
   }
 
   toJSON() {
     return {
       accessToken: this.accessToken,
-      user: this.user.toJSON()
+      user: this.user.toJSON(),
     };
   }
 }
@@ -239,5 +239,5 @@ module.exports = {
   UserResponseDTO,
   RegisterResponseDTO,
   LoginResponseDTO,
-  ApiResponse
+  ApiResponse,
 };

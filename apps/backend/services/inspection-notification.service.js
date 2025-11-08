@@ -10,7 +10,7 @@ class InspectionNotificationService {
       type: 'inspection_started',
       inspectionId,
       message,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     // TODO: Send email/SMS
@@ -24,7 +24,7 @@ class InspectionNotificationService {
       inspectionId,
       message,
       scheduledTime,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     // TODO: Send email/SMS with calendar invite
@@ -35,14 +35,14 @@ class InspectionNotificationService {
       type: 'video_call_starting',
       inspectionId,
       message: 'Inspector กำลังเริ่ม Video Call',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     this.io.to(`user_${inspectorId}`).emit('notification', {
       type: 'video_call_starting',
       inspectionId,
       message: 'Farmer เข้าร่วม Video Call แล้ว',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -50,7 +50,7 @@ class InspectionNotificationService {
     const messages = {
       approve: '✅ ผ่านการตรวจสอบ! กำลังส่งไปยังผู้อนุมัติ',
       need_onsite: '❓ จำเป็นต้องตรวจสอบ Onsite - รอการนัดหมาย',
-      reject: '❌ คำขอถูกปฏิเสธ - กรุณาแก้ไขและยื่นใหม่'
+      reject: '❌ คำขอถูกปฏิเสธ - กรุณาแก้ไขและยื่นใหม่',
     };
 
     this.io.to(`user_${farmerId}`).emit('notification', {
@@ -58,7 +58,7 @@ class InspectionNotificationService {
       inspectionId,
       decision,
       message: messages[decision],
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     // TODO: Send email/SMS
@@ -69,7 +69,7 @@ class InspectionNotificationService {
       type: 'pending_approval',
       applicationId,
       message: 'คำขอใหม่รอการอนุมัติ',
-      timestamp: new Date()
+      timestamp: new Date(),
     });
   }
 
@@ -81,7 +81,7 @@ class InspectionNotificationService {
       inspectionId,
       message,
       scheduledDate,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     // TODO: Send email/SMS
@@ -93,7 +93,7 @@ class InspectionNotificationService {
       inspectionId,
       message: `ยืนยันการนัดหมาย ${schedule.type === 'video_call' ? 'Video Call' : 'Onsite'} วันที่ ${schedule.scheduledDate}`,
       schedule,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     this.io.to(`user_${inspectorId}`).emit('notification', {
@@ -101,7 +101,7 @@ class InspectionNotificationService {
       inspectionId,
       message: 'เกษตรกรยืนยันการนัดหมายแล้ว',
       schedule,
-      timestamp: new Date()
+      timestamp: new Date(),
     });
 
     // TODO: Send calendar invite via email

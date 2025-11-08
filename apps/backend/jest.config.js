@@ -5,16 +5,8 @@
 module.exports = {
   testEnvironment: 'node',
   roots: ['<rootDir>/modules'],
-  testMatch: [
-    '**/__tests__/**/*.test.js',
-    '**/__tests__/**/*.test.ts'
-  ],
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/.next/',
-    '/dist/',
-    '/build/'
-  ],
+  testMatch: ['**/__tests__/**/*.test.js', '**/__tests__/**/*.test.ts'],
+  testPathIgnorePatterns: ['/node_modules/', '/.next/', '/dist/', '/build/'],
   moduleFileExtensions: ['js', 'ts', 'json'],
   verbose: true,
   maxWorkers: 1, // Run tests serially to avoid DB conflicts
@@ -26,14 +18,14 @@ module.exports = {
     'modules/**/application/**/*.js',
     'modules/**/infrastructure/**/*.js',
     '!**/__tests__/**',
-    '!**/node_modules/**'
+    '!**/node_modules/**',
   ],
   coverageThreshold: {
     global: {
       branches: 70,
       functions: 70,
       lines: 80,
-      statements: 80
-    }
-  }
+      statements: 80,
+    },
+  },
 };

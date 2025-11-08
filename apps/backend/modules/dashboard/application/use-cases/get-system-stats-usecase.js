@@ -16,7 +16,7 @@ class GetSystemStatisticsUseCase {
     trainingEnrollmentRepository,
     documentRepository,
     notificationRepository,
-    auditRepository
+    auditRepository,
   ) {
     this.farmRepository = farmRepository;
     this.certificateRepository = certificateRepository;
@@ -36,14 +36,14 @@ class GetSystemStatisticsUseCase {
         surveysStats,
         trainingStats,
         documentsStats,
-        activityStats
+        activityStats,
       ] = await Promise.all([
         this._getFarmsStatistics(filters),
         this._getCertificatesStatistics(filters),
         this._getSurveysStatistics(filters),
         this._getTrainingStatistics(filters),
         this._getDocumentsStatistics(filters),
-        this._getActivityStatistics(filters)
+        this._getActivityStatistics(filters),
       ]);
 
       return {
@@ -53,7 +53,7 @@ class GetSystemStatisticsUseCase {
         training: trainingStats,
         documents: documentsStats,
         activity: activityStats,
-        generatedAt: new Date()
+        generatedAt: new Date(),
       };
     } catch (error) {
       throw new Error(`Failed to get system statistics: ${error.message}`);
@@ -74,7 +74,7 @@ class GetSystemStatisticsUseCase {
       total,
       totalArea: Math.round(totalArea),
       averageArea: Math.round(averageArea),
-      byStatus: this._countByField(farms.farms, 'status')
+      byStatus: this._countByField(farms.farms, 'status'),
     };
   }
 
@@ -84,7 +84,7 @@ class GetSystemStatisticsUseCase {
     // Get certificates for analysis
     const certificates = await this.certificateRepository.findWithFilters(filters, {
       page: 1,
-      limit: 10000
+      limit: 10000,
     });
 
     const active = certificates.certificates.filter(c => c.isActive()).length;
@@ -100,7 +100,7 @@ class GetSystemStatisticsUseCase {
       expired,
       expiringSoon,
       byType: this._countByField(certificates.certificates, 'type'),
-      byStatus: this._countByField(certificates.certificates, 'status')
+      byStatus: this._countByField(certificates.certificates, 'status'),
     };
   }
 
@@ -119,7 +119,7 @@ class GetSystemStatisticsUseCase {
       pending,
       completionRate: total > 0 ? Math.round((completed / total) * 100) : 0,
       byStatus: this._countByField(surveys.surveys, 'status'),
-      byCultivationType: this._countByField(surveys.surveys, 'cultivationType')
+      byCultivationType: this._countByField(surveys.surveys, 'cultivationType'),
     };
   }
 
@@ -130,19 +130,19 @@ class GetSystemStatisticsUseCase {
         totalEnrollments: 0,
         completed: 0,
         active: 0,
-        completionRate: 0
+        completionRate: 0,
       };
     }
 
     const [totalCourses, totalEnrollments] = await Promise.all([
       this.trainingCourseRepository.count(filters),
-      this.trainingEnrollmentRepository.count(filters)
+      this.trainingEnrollmentRepository.count(filters),
     ]);
 
     // Get enrollments for analysis
     const enrollments = await this.trainingEnrollmentRepository.findWithFilters(filters, {
       page: 1,
-      limit: 10000
+      limit: 10000,
     });
 
     const completed = enrollments.enrollments.filter(e => e.isCompleted()).length;
@@ -154,7 +154,7 @@ class GetSystemStatisticsUseCase {
       completed,
       active,
       completionRate: totalEnrollments > 0 ? Math.round((completed / totalEnrollments) * 100) : 0,
-      byStatus: this._countByField(enrollments.enrollments, 'status')
+      byStatus: this._countByField(enrollments.enrollments, 'status'),
     };
   }
 
@@ -165,7 +165,7 @@ class GetSystemStatisticsUseCase {
         approved: 0,
         pending: 0,
         rejected: 0,
-        totalSize: 0
+        totalSize: 0,
       };
     }
 
@@ -174,7 +174,7 @@ class GetSystemStatisticsUseCase {
     // Get documents for analysis
     const documents = await this.documentRepository.findWithFilters(filters, {
       page: 1,
-      limit: 10000
+      limit: 10000,
     });
 
     const approved = documents.documents.filter(d => d.isApproved()).length;
@@ -190,7 +190,7 @@ class GetSystemStatisticsUseCase {
       totalSize,
       totalSizeMB: Math.round(totalSize / 1024 / 1024),
       byType: this._countByField(documents.documents, 'type'),
-      byStatus: this._countByField(documents.documents, 'status')
+      byStatus: this._countByField(documents.documents, 'status'),
     };
   }
 
@@ -199,7 +199,7 @@ class GetSystemStatisticsUseCase {
       return {
         totalActions: 0,
         byAction: {},
-        byUser: {}
+        byUser: {},
       };
     }
 
@@ -208,7 +208,7 @@ class GetSystemStatisticsUseCase {
     return {
       totalActions: result.total,
       byAction: this._countByField(result.logs, 'action'),
-      byEntityType: this._countByField(result.logs, 'entityType')
+      byEntityType: this._countByField(result.logs, 'entityType'),
     };
   }
 

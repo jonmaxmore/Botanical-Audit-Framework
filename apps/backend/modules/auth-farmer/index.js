@@ -26,11 +26,11 @@ module.exports = {
 
   // Legacy exports (DEPRECATED - for backward compatibility only)
   models: {
-    User
+    User,
   },
 
   services: {
-    logger
+    logger,
   },
 
   validators,
@@ -42,9 +42,9 @@ module.exports = {
       database: require('mongoose').connection,
       jwtSecret: process.env.FARMER_JWT_SECRET || process.env.JWT_SECRET,
       jwtExpiresIn: '24h',
-      bcryptSaltRounds: 12
+      bcryptSaltRounds: 12,
     });
     app.use(basePath, farmerAuthModule.router);
     logger.info(`Auth Farmer routes mounted at ${basePath} (via deprecated method)`);
-  }
+  },
 };

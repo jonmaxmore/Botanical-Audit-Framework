@@ -3,20 +3,20 @@ const SOIL_TYPES = {
     name: 'ดินเหนียว',
     suitableCrops: ['ข้าว', 'กัญชา'],
     improvements: ['เพิ่มอินทรีย์วัตถุ 500 kg/ไร่', 'ไถพรวนให้ร่วนซุย'],
-    fertilizer: { N: 'ปานกลาง', P: 'สูง', K: 'ปานกลาง' }
+    fertilizer: { N: 'ปานกลาง', P: 'สูง', K: 'ปานกลาง' },
   },
   loam: {
     name: 'ดินร่วน',
     suitableCrops: ['กัญชา', 'ขมิ้น', 'ขิง'],
     improvements: ['รักษาอินทรีย์วัตถุ'],
-    fertilizer: { N: 'ปานกลาง', P: 'ปานกลาง', K: 'ปานกลาง' }
+    fertilizer: { N: 'ปานกลาง', P: 'ปานกลาง', K: 'ปานกลาง' },
   },
   sand: {
     name: 'ดินทราย',
     suitableCrops: ['มันสำปะหลัง', 'ถั่ว'],
     improvements: ['เพิ่มอินทรีย์วัตถุ 1,000 kg/ไร่', 'รดน้ำบ่อย'],
-    fertilizer: { N: 'สูง', P: 'สูง', K: 'สูง' }
-  }
+    fertilizer: { N: 'สูง', P: 'สูง', K: 'สูง' },
+  },
 };
 
 class SoilGuideService {
@@ -28,7 +28,7 @@ class SoilGuideService {
       pHAdvice: this.getPHAdvice(pH),
       cropSuitability: soil.suitableCrops.includes(crop) ? 'เหมาะสม' : 'ปานกลาง',
       improvements: soil.improvements,
-      fertilizer: soil.fertilizer
+      fertilizer: soil.fertilizer,
     };
   }
 

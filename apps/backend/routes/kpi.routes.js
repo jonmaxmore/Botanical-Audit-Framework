@@ -32,7 +32,7 @@ function initializeKPIRoutes(dependencies) {
       if (!applicationId || !role || !userId) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required fields: applicationId, role, userId'
+          message: 'Missing required fields: applicationId, role, userId',
         });
       }
 
@@ -41,19 +41,19 @@ function initializeKPIRoutes(dependencies) {
         applicationId,
         role,
         userId,
-        comments
+        comments,
       });
 
       res.status(201).json({
         success: true,
         message: 'Task tracking started',
-        data: kpi
+        data: kpi,
       });
     } catch (error) {
       logger.error('[KPI API] Start task error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to start task tracking'
+        message: error.message || 'Failed to start task tracking',
       });
     }
   });
@@ -71,19 +71,19 @@ function initializeKPIRoutes(dependencies) {
 
       const kpi = await kpiService.completeTask(taskId, {
         comments,
-        feedbackScore
+        feedbackScore,
       });
 
       res.json({
         success: true,
         message: 'Task completed',
-        data: kpi
+        data: kpi,
       });
     } catch (error) {
       logger.error('[KPI API] Complete task error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to complete task'
+        message: error.message || 'Failed to complete task',
       });
     }
   });
@@ -102,7 +102,7 @@ function initializeKPIRoutes(dependencies) {
       if (!comments) {
         return res.status(400).json({
           success: false,
-          message: 'Missing required field: comments'
+          message: 'Missing required field: comments',
         });
       }
 
@@ -111,13 +111,13 @@ function initializeKPIRoutes(dependencies) {
       res.json({
         success: true,
         message: 'Task comments updated',
-        data: kpi
+        data: kpi,
       });
     } catch (error) {
       logger.error('[KPI API] Update comments error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to update task comments'
+        message: error.message || 'Failed to update task comments',
       });
     }
   });
@@ -136,7 +136,7 @@ function initializeKPIRoutes(dependencies) {
       if (!feedbackScore || feedbackScore < 1 || feedbackScore > 5) {
         return res.status(400).json({
           success: false,
-          message: 'Feedback score must be between 1 and 5'
+          message: 'Feedback score must be between 1 and 5',
         });
       }
 
@@ -145,13 +145,13 @@ function initializeKPIRoutes(dependencies) {
       res.json({
         success: true,
         message: 'Feedback score set',
-        data: kpi
+        data: kpi,
       });
     } catch (error) {
       logger.error('[KPI API] Set feedback error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to set feedback score'
+        message: error.message || 'Failed to set feedback score',
       });
     }
   });
@@ -176,13 +176,13 @@ function initializeKPIRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: metrics
+        data: metrics,
       });
     } catch (error) {
       logger.error('[KPI API] Get role metrics error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get role metrics'
+        message: error.message || 'Failed to get role metrics',
       });
     }
   });
@@ -206,13 +206,13 @@ function initializeKPIRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: metrics
+        data: metrics,
       });
     } catch (error) {
       logger.error('[KPI API] Get user metrics error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get user metrics'
+        message: error.message || 'Failed to get user metrics',
       });
     }
   });
@@ -235,13 +235,13 @@ function initializeKPIRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: metrics
+        data: metrics,
       });
     } catch (error) {
       logger.error('[KPI API] Get system metrics error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get system metrics'
+        message: error.message || 'Failed to get system metrics',
       });
     }
   });
@@ -258,13 +258,13 @@ function initializeKPIRoutes(dependencies) {
       res.json({
         success: true,
         count: delayedTasks.length,
-        data: delayedTasks
+        data: delayedTasks,
       });
     } catch (error) {
       logger.error('[KPI API] Get delayed tasks error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get delayed tasks'
+        message: error.message || 'Failed to get delayed tasks',
       });
     }
   });
@@ -283,13 +283,13 @@ function initializeKPIRoutes(dependencies) {
 
       res.json({
         success: true,
-        data: trends
+        data: trends,
       });
     } catch (error) {
       logger.error('[KPI API] Get trends error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get KPI trends'
+        message: error.message || 'Failed to get KPI trends',
       });
     }
   });
@@ -308,13 +308,13 @@ function initializeKPIRoutes(dependencies) {
       res.json({
         success: true,
         message: 'Task cancelled',
-        data: kpi
+        data: kpi,
       });
     } catch (error) {
       logger.error('[KPI API] Cancel task error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to cancel task'
+        message: error.message || 'Failed to cancel task',
       });
     }
   });
@@ -336,7 +336,7 @@ function initializeKPIRoutes(dependencies) {
       const [systemMetrics, delayedTasks, trends] = await Promise.all([
         kpiService.getSystemMetrics(filters),
         kpiService.detectDelayedTasks(),
-        kpiService.getTrends(null, 7) // Last 7 days
+        kpiService.getTrends(null, 7), // Last 7 days
       ]);
 
       res.json({
@@ -345,16 +345,16 @@ function initializeKPIRoutes(dependencies) {
           systemMetrics,
           delayedTasks: {
             count: delayedTasks.length,
-            tasks: delayedTasks.slice(0, 10) // Top 10
+            tasks: delayedTasks.slice(0, 10), // Top 10
           },
-          recentTrends: trends
-        }
+          recentTrends: trends,
+        },
       });
     } catch (error) {
       logger.error('[KPI API] Get dashboard data error:', error);
       res.status(500).json({
         success: false,
-        message: error.message || 'Failed to get dashboard data'
+        message: error.message || 'Failed to get dashboard data',
       });
     }
   });

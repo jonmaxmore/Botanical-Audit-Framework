@@ -22,7 +22,7 @@ const dtamStaffSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      index: true
+      index: true,
     },
     email: {
       type: String,
@@ -30,76 +30,76 @@ const dtamStaffSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
       trim: true,
-      index: true
+      index: true,
     },
     password: {
       type: String,
       required: true,
       minlength: 8,
-      select: false // Don't return password by default
+      select: false, // Don't return password by default
     },
     firstName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     lastName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     userType: {
       type: String,
       enum: ['DTAM_STAFF'],
       default: 'DTAM_STAFF',
-      required: true
+      required: true,
     },
     role: {
       type: String,
       enum: ['admin', 'reviewer', 'manager', 'inspector', 'operator'],
       default: 'reviewer',
-      required: true
+      required: true,
     },
     department: {
       type: String,
       default: 'กรมส่งเสริมการเกษตร',
-      trim: true
+      trim: true,
     },
     isActive: {
       type: Boolean,
-      default: true
+      default: true,
     },
     lastLoginAt: {
-      type: Date
+      type: Date,
     },
     loginCount: {
       type: Number,
-      default: 0
+      default: 0,
     },
     failedLoginAttempts: {
       type: Number,
-      default: 0
+      default: 0,
     },
     lockedAt: {
-      type: Date
+      type: Date,
     },
     passwordChangedAt: {
-      type: Date
+      type: Date,
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'DTAMStaff'
+      ref: 'DTAMStaff',
     },
     metadata: {
       createdByUsername: String,
       createdByRole: String,
-      ipAddress: String
-    }
+      ipAddress: String,
+    },
   },
   {
     timestamps: true,
-    collection: 'dtam_staff'
-  }
+    collection: 'dtam_staff',
+  },
 );
 
 // Apply shared mongoose plugins (commented out - plugin not available)
@@ -124,7 +124,7 @@ dtamStaffSchema.set('toJSON', {
   transform: function (doc, ret) {
     delete ret.password;
     return ret;
-  }
+  },
 });
 
 dtamStaffSchema.set('toObject', { virtuals: true });
@@ -190,11 +190,11 @@ dtamStaffSchema.methods.getPermissions = function () {
       'reject_applications',
       'view_statistics',
       'manage_staff',
-      'export_data'
+      'export_data',
     ],
     reviewer: ['view_applications', 'review_applications', 'view_statistics', 'create_reports'],
     inspector: ['view_applications', 'conduct_inspections', 'upload_documents', 'create_reports'],
-    operator: ['view_applications', 'update_status', 'view_statistics']
+    operator: ['view_applications', 'update_status', 'view_statistics'],
   };
 
   return rolePermissions[this.role] || rolePermissions.operator;
@@ -207,7 +207,7 @@ dtamStaffSchema.methods.getPermissions = function () {
 dtamStaffSchema.methods.updateLastLogin = async function () {
   return this.updateOne({
     $set: { lastLoginAt: new Date() },
-    $inc: { loginCount: 1 }
+    $inc: { loginCount: 1 },
   });
 };
 
@@ -233,7 +233,7 @@ dtamStaffSchema.methods.getSafeProfile = function () {
  */
 dtamStaffSchema.statics.findByIdentifier = function (identifier) {
   return this.findOne({
-    $or: [{ username: identifier.toLowerCase() }, { email: identifier.toLowerCase() }]
+    $or: [{ username: identifier.toLowerCase() }, { email: identifier.toLowerCase() }],
   });
 };
 
@@ -261,9 +261,9 @@ dtamStaffSchema.statics.createStaff = async function (staffData, creator = null)
         ? {
             createdByUsername: creator.username,
             createdByRole: creator.role,
-            ipAddress: creator.ipAddress
+            ipAddress: creator.ipAddress,
           }
-        : {}
+        : {},
     });
 
     if (creator) {
@@ -275,7 +275,7 @@ dtamStaffSchema.statics.createStaff = async function (staffData, creator = null)
     logger.info('DTAM staff created successfully', {
       staffId: staff._id,
       username: staff.username,
-      createdBy: creator?.username
+      createdBy: creator?.username,
     });
 
     return staff.getSafeProfile();
@@ -302,7 +302,7 @@ dtamStaffSchema.statics.authenticate = async function (identifier, password) {
     if (staff.isAccountLocked()) {
       return {
         success: false,
-        message: 'Account temporarily locked. Try again later.'
+        message: 'Account temporarily locked. Try again later.',
       };
     }
 
@@ -316,7 +316,7 @@ dtamStaffSchema.statics.authenticate = async function (identifier, password) {
     if (!isMatch) {
       // Increment failed attempts
       await staff.updateOne({
-        $inc: { failedLoginAttempts: 1 }
+        $inc: { failedLoginAttempts: 1 },
       });
 
       // Lock account after 5 failed attempts
@@ -324,8 +324,8 @@ dtamStaffSchema.statics.authenticate = async function (identifier, password) {
         await staff.updateOne({
           $set: {
             isActive: false,
-            lockedAt: new Date()
-          }
+            lockedAt: new Date(),
+          },
         });
       }
 
@@ -336,20 +336,20 @@ dtamStaffSchema.statics.authenticate = async function (identifier, password) {
     await staff.updateOne({
       $set: {
         failedLoginAttempts: 0,
-        lastLoginAt: new Date()
+        lastLoginAt: new Date(),
       },
-      $inc: { loginCount: 1 }
+      $inc: { loginCount: 1 },
     });
 
     return {
       success: true,
-      staff: staff.getSafeProfile()
+      staff: staff.getSafeProfile(),
     };
   } catch (error) {
     logger.error('Authentication error:', error);
     return {
       success: false,
-      message: 'Authentication failed'
+      message: 'Authentication failed',
     };
   }
 };
@@ -372,7 +372,7 @@ dtamStaffSchema.statics.getStaffList = async function (options = {}) {
       { firstName: { $regex: search, $options: 'i' } },
       { lastName: { $regex: search, $options: 'i' } },
       { username: { $regex: search, $options: 'i' } },
-      { email: { $regex: search, $options: 'i' } }
+      { email: { $regex: search, $options: 'i' } },
     ];
   }
 
@@ -380,7 +380,7 @@ dtamStaffSchema.statics.getStaffList = async function (options = {}) {
 
   const [staff, total] = await Promise.all([
     this.find(query).select('-password').sort({ createdAt: -1 }).skip(skip).limit(limit),
-    this.countDocuments(query)
+    this.countDocuments(query),
   ]);
 
   return {
@@ -389,8 +389,8 @@ dtamStaffSchema.statics.getStaffList = async function (options = {}) {
       page: Number(page),
       limit: Number(limit),
       total,
-      pages: Math.ceil(total / limit)
-    }
+      pages: Math.ceil(total / limit),
+    },
   };
 };
 

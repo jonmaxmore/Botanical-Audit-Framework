@@ -21,7 +21,7 @@ class ProcessScheduledReportsUseCase {
       total: dueReports.length,
       success: 0,
       failed: 0,
-      errors: []
+      errors: [],
     };
 
     // Process each report
@@ -33,7 +33,7 @@ class ProcessScheduledReportsUseCase {
         results.failed++;
         results.errors.push({
           reportId: report.id,
-          error: error.message
+          error: error.message,
         });
       }
     }

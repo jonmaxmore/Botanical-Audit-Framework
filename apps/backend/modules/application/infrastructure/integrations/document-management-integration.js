@@ -37,7 +37,7 @@ class DocumentManagementIntegrationSystem {
       documentsProcessed: 0,
       ocrExtractions: 0,
       qualityChecks: 0,
-      errors: 0
+      errors: 0,
     };
 
     // Document type configurations
@@ -47,29 +47,29 @@ class DocumentManagementIntegrationSystem {
         requiredFields: ['citizenId', 'name', 'address'],
         validationRules: ['identity_validation', 'expiry_check'],
         maxSizeMB: 10,
-        allowedFormats: ['pdf', 'jpg', 'png']
+        allowedFormats: ['pdf', 'jpg', 'png'],
       },
       LAND_OWNERSHIP: {
         name: 'Land Ownership Document',
         requiredFields: ['titleDeedNumber', 'landArea', 'ownerName'],
         validationRules: ['land_validation', 'ownership_verification'],
         maxSizeMB: 15,
-        allowedFormats: ['pdf']
+        allowedFormats: ['pdf'],
       },
       FARM_REGISTRATION: {
         name: 'Farm Registration Certificate',
         requiredFields: ['registrationNumber', 'farmName', 'farmType'],
         validationRules: ['registration_validation', 'farm_verification'],
         maxSizeMB: 10,
-        allowedFormats: ['pdf', 'jpg', 'png']
+        allowedFormats: ['pdf', 'jpg', 'png'],
       },
       CULTIVATION_PLAN: {
         name: 'Cultivation Plan Document',
         requiredFields: ['planDetails', 'cropType', 'schedule'],
         validationRules: ['plan_validation', 'technical_review'],
         maxSizeMB: 20,
-        allowedFormats: ['pdf', 'doc', 'docx']
-      }
+        allowedFormats: ['pdf', 'doc', 'docx'],
+      },
     };
   }
 
@@ -133,7 +133,7 @@ class DocumentManagementIntegrationSystem {
         extractedData: processingResult.extractedData,
         qualityScore: qualityResult.score,
         uploadedAt: new Date(),
-        processedAt: processingResult.processedAt
+        processedAt: processingResult.processedAt,
       };
     } catch (error) {
       this.metrics.errors++;
@@ -154,7 +154,7 @@ class DocumentManagementIntegrationSystem {
         confidence: 0.95,
         language: 'th-en',
         processingTime: 2500,
-        extractedEntities: []
+        extractedEntities: [],
       };
 
       // Add type-specific entity extraction
@@ -163,7 +163,7 @@ class DocumentManagementIntegrationSystem {
           ocrResult.extractedEntities = [
             { type: 'citizenId', value: '1234567890123', confidence: 0.98 },
             { type: 'name', value: 'สมชาย ใจดี', confidence: 0.95 },
-            { type: 'address', value: 'กรุงเทพมหานคร', confidence: 0.92 }
+            { type: 'address', value: 'กรุงเทพมหานคร', confidence: 0.92 },
           ];
           break;
 
@@ -171,7 +171,7 @@ class DocumentManagementIntegrationSystem {
           ocrResult.extractedEntities = [
             { type: 'titleDeedNumber', value: 'TD123456789', confidence: 0.97 },
             { type: 'landArea', value: '5.5', confidence: 0.96 },
-            { type: 'ownerName', value: 'สมชาย ใจดี', confidence: 0.94 }
+            { type: 'ownerName', value: 'สมชาย ใจดี', confidence: 0.94 },
           ];
           break;
 
@@ -179,7 +179,7 @@ class DocumentManagementIntegrationSystem {
           ocrResult.extractedEntities = [
             { type: 'registrationNumber', value: 'FR987654321', confidence: 0.96 },
             { type: 'farmName', value: 'ฟาร์มกัญชาเพื่อสุขภาพ', confidence: 0.93 },
-            { type: 'farmType', value: 'Indoor Cultivation', confidence: 0.91 }
+            { type: 'farmType', value: 'Indoor Cultivation', confidence: 0.91 },
           ];
           break;
       }
@@ -204,7 +204,7 @@ class DocumentManagementIntegrationSystem {
         readability: await this.checkReadability(processingResult),
         completeness: await this.checkCompleteness(processingResult, typeConfig),
         authenticity: await this.checkAuthenticity(processingResult),
-        compliance: await this.checkCompliance(processingResult, typeConfig)
+        compliance: await this.checkCompliance(processingResult, typeConfig),
       };
 
       // Calculate overall quality score
@@ -229,7 +229,7 @@ class DocumentManagementIntegrationSystem {
         score: overallScore,
         checks: qualityChecks,
         recommendations: this.generateRecommendations(qualityChecks),
-        timestamp: new Date()
+        timestamp: new Date(),
       };
     } catch (error) {
       logger.error('[DocumentManagementSystem] Quality assurance failed:', error);
@@ -251,7 +251,7 @@ class DocumentManagementIntegrationSystem {
           status: 'APPROVED',
           uploadedAt: new Date(Date.now() - 86400000),
           processedAt: new Date(Date.now() - 82800000),
-          qualityScore: 0.95
+          qualityScore: 0.95,
         },
         {
           documentId: 'DOC-002',
@@ -259,8 +259,8 @@ class DocumentManagementIntegrationSystem {
           status: 'REVIEW_REQUIRED',
           uploadedAt: new Date(Date.now() - 43200000),
           processedAt: new Date(Date.now() - 39600000),
-          qualityScore: 0.78
-        }
+          qualityScore: 0.78,
+        },
       ];
 
       // Filter based on user role
@@ -275,9 +275,9 @@ class DocumentManagementIntegrationSystem {
             total: filteredDocuments.length,
             approved: filteredDocuments.filter(d => d.status === 'APPROVED').length,
             pending: filteredDocuments.filter(d => d.status === 'REVIEW_REQUIRED').length,
-            rejected: filteredDocuments.filter(d => d.status === 'REJECTED').length
-          }
-        }
+            rejected: filteredDocuments.filter(d => d.status === 'REJECTED').length,
+          },
+        },
       };
     } catch (error) {
       logger.error('[DocumentManagementSystem] Status retrieval failed:', error);
@@ -296,10 +296,10 @@ class DocumentManagementIntegrationSystem {
         components: {
           storage: await this.checkStorageHealth(),
           ocrService: await this.checkOCRHealth(),
-          qualityService: await this.checkQualityServiceHealth()
+          qualityService: await this.checkQualityServiceHealth(),
         },
         metrics: { ...this.metrics },
-        queueSize: this.processQueue.length
+        queueSize: this.processQueue.length,
       };
 
       // Check if any component is unhealthy
@@ -315,7 +315,7 @@ class DocumentManagementIntegrationSystem {
       return {
         status: 'unhealthy',
         timestamp: new Date(),
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -366,7 +366,7 @@ class DocumentManagementIntegrationSystem {
     return {
       documentId: `DOC-${Date.now()}`,
       filePath: `/documents/${documentData.applicationId}/${documentData.documentType}`,
-      storedAt: new Date()
+      storedAt: new Date(),
     };
   }
 
@@ -377,7 +377,7 @@ class DocumentManagementIntegrationSystem {
     return {
       documentId: storageResult.documentId,
       extractedData: ocrResult,
-      processedAt: new Date()
+      processedAt: new Date(),
     };
   }
 
@@ -425,7 +425,7 @@ class DocumentManagementIntegrationSystem {
           documentType: doc.documentType,
           status: doc.status,
           uploadedAt: doc.uploadedAt,
-          qualityScore: doc.qualityScore
+          qualityScore: doc.qualityScore,
         };
       }
 

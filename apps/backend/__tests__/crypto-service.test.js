@@ -30,7 +30,7 @@ describe('CryptoService', () => {
     await cryptoService.initialize({
       useKMS: false, // Use local keys for testing
       keyDir: TEST_KEY_DIR,
-      tsaProvider: 'freetsa'
+      tsaProvider: 'freetsa',
     });
   });
 
@@ -110,7 +110,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis', quantity: 100 },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const hash = cryptoService.generateHashChain(record, null);
@@ -125,7 +125,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis' },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const record2 = {
@@ -133,7 +133,7 @@ describe('CryptoService', () => {
         type: 'WATERING',
         data: { amount: '5L' },
         timestamp: '2025-05-21T11:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const hash1 = cryptoService.generateHashChain(record1, null);
@@ -149,7 +149,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis' },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const hash = cryptoService.generateHashChain(record, null);
@@ -166,7 +166,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis' },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const hash = cryptoService.generateHashChain(record, null);
@@ -175,7 +175,7 @@ describe('CryptoService', () => {
       const tamperedRecord = {
         ...record,
         data: { plant: 'Cannabis', quantity: 999 }, // Changed data
-        hash
+        hash,
       };
 
       const isValid = cryptoService.verifyHashChain(tamperedRecord, null);
@@ -248,13 +248,13 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis', quantity: 100 },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const signedRecord = await cryptoService.signRecord(
         record,
         null,
-        false // No RFC 3161 timestamp
+        false, // No RFC 3161 timestamp
       );
 
       expect(signedRecord.hash).toBeDefined();
@@ -270,13 +270,13 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis' },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const signedRecord = await cryptoService.signRecord(
         record,
         null,
-        true // Include RFC 3161 timestamp
+        true, // Include RFC 3161 timestamp
       );
 
       expect(signedRecord.hash).toBeDefined();
@@ -292,7 +292,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis' },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const signedRecord = await cryptoService.signRecord(record, null, false);
@@ -313,7 +313,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis', quantity: 100 },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const signedRecord = await cryptoService.signRecord(record, null, false);
@@ -336,22 +336,22 @@ describe('CryptoService', () => {
           type: 'PLANTING',
           data: { plant: 'Cannabis' },
           timestamp: '2025-05-21T10:00:00.000Z',
-          userId: 'user-1'
+          userId: 'user-1',
         },
         {
           id: 'record-2',
           type: 'WATERING',
           data: { amount: '5L' },
           timestamp: '2025-05-21T11:00:00.000Z',
-          userId: 'user-1'
+          userId: 'user-1',
         },
         {
           id: 'record-3',
           type: 'HARVEST',
           data: { weight: '2kg' },
           timestamp: '2025-05-21T12:00:00.000Z',
-          userId: 'user-1'
-        }
+          userId: 'user-1',
+        },
       ];
 
       const signedRecords = await cryptoService.signRecordsBatch(records, false);
@@ -369,15 +369,15 @@ describe('CryptoService', () => {
           type: 'PLANTING',
           data: { plant: 'Cannabis' },
           timestamp: '2025-05-21T10:00:00.000Z',
-          userId: 'user-1'
+          userId: 'user-1',
         },
         {
           id: 'record-2',
           type: 'WATERING',
           data: { amount: '5L' },
           timestamp: '2025-05-21T11:00:00.000Z',
-          userId: 'user-1'
-        }
+          userId: 'user-1',
+        },
       ];
 
       const signedRecords = await cryptoService.signRecordsBatch(records, false);
@@ -396,15 +396,15 @@ describe('CryptoService', () => {
           type: 'PLANTING',
           data: { plant: 'Cannabis' },
           timestamp: '2025-05-21T10:00:00.000Z',
-          userId: 'user-1'
+          userId: 'user-1',
         },
         {
           id: 'record-2',
           type: 'WATERING',
           data: { amount: '5L' },
           timestamp: '2025-05-21T11:00:00.000Z',
-          userId: 'user-1'
-        }
+          userId: 'user-1',
+        },
       ];
 
       const signedRecords = await cryptoService.signRecordsBatch(records, false);
@@ -426,7 +426,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis', index: i },
         timestamp: new Date().toISOString(),
-        userId: 'user-1'
+        userId: 'user-1',
       }));
 
       const startTime = Date.now();
@@ -446,7 +446,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: { plant: 'Cannabis', index: i },
         timestamp: new Date().toISOString(),
-        userId: 'user-1'
+        userId: 'user-1',
       }));
 
       const signedRecords = await cryptoService.signRecordsBatch(records, false);
@@ -460,7 +460,7 @@ describe('CryptoService', () => {
       expect(verification.valid).toBe(true);
       expect(duration).toBeLessThan(5000); // Should complete in < 5 seconds
       console.log(
-        `Verified 100 records in ${duration}ms (${(duration / 100).toFixed(2)}ms/record)`
+        `Verified 100 records in ${duration}ms (${(duration / 100).toFixed(2)}ms/record)`,
       );
     }, 10000);
   });
@@ -472,7 +472,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: {},
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const signedRecord = await cryptoService.signRecord(record, null, false);
@@ -485,7 +485,7 @@ describe('CryptoService', () => {
       const largeData = {
         field1: 'x'.repeat(10000),
         field2: 'y'.repeat(10000),
-        field3: 'z'.repeat(10000)
+        field3: 'z'.repeat(10000),
       };
 
       const record = {
@@ -493,7 +493,7 @@ describe('CryptoService', () => {
         type: 'PLANTING',
         data: largeData,
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const signedRecord = await cryptoService.signRecord(record, null, false);
@@ -507,10 +507,10 @@ describe('CryptoService', () => {
         id: 'record-1',
         type: 'PLANTING',
         data: {
-          text: '🌱 Cannabis ภาษาไทย 中文 العربية'
+          text: '🌱 Cannabis ภาษาไทย 中文 العربية',
         },
         timestamp: '2025-05-21T10:00:00.000Z',
-        userId: 'user-1'
+        userId: 'user-1',
       };
 
       const signedRecord = await cryptoService.signRecord(record, null, false);

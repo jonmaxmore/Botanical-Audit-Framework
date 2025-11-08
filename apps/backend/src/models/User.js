@@ -19,13 +19,13 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       index: true,
-      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please provide a valid email']
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please provide a valid email'],
     },
     password: {
       type: String,
       required: [true, 'Password is required'],
       minlength: [8, 'Password must be at least 8 characters'],
-      select: false // Don't include in queries by default
+      select: false, // Don't include in queries by default
     },
 
     // Profile fields
@@ -33,25 +33,25 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'First name is required'],
       trim: true,
-      maxlength: [50, 'First name cannot exceed 50 characters']
+      maxlength: [50, 'First name cannot exceed 50 characters'],
     },
     lastName: {
       type: String,
       required: [true, 'Last name is required'],
       trim: true,
-      maxlength: [50, 'Last name cannot exceed 50 characters']
+      maxlength: [50, 'Last name cannot exceed 50 characters'],
     },
     displayName: {
       type: String,
       trim: true,
-      maxlength: [100, 'Display name cannot exceed 100 characters']
+      maxlength: [100, 'Display name cannot exceed 100 characters'],
     },
 
     // Contact information
     phone: {
       type: String,
       trim: true,
-      match: [/^(08|09|06)\d{8}$/, 'Please provide a valid Thai phone number']
+      match: [/^(08|09|06)\d{8}$/, 'Please provide a valid Thai phone number'],
     },
     address: {
       street: String,
@@ -60,8 +60,8 @@ const userSchema = new mongoose.Schema(
       postalCode: String,
       country: {
         type: String,
-        default: 'Thailand'
-      }
+        default: 'Thailand',
+      },
     },
 
     // User role and permissions
@@ -69,16 +69,16 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: {
         values: ['farmer', 'inspector', 'admin', 'auditor', 'customer'],
-        message: 'Role must be one of: farmer, inspector, admin, auditor, customer'
+        message: 'Role must be one of: farmer, inspector, admin, auditor, customer',
       },
       default: 'farmer',
-      index: true
+      index: true,
     },
     permissions: [
       {
         type: String,
-        enum: ['read', 'write', 'delete', 'admin', 'audit', 'inspect']
-      }
+        enum: ['read', 'write', 'delete', 'admin', 'audit', 'inspect'],
+      },
     ],
 
     // Account status
@@ -86,44 +86,44 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: {
         values: ['active', 'inactive', 'suspended', 'pending'],
-        message: 'Status must be one of: active, inactive, suspended, pending'
+        message: 'Status must be one of: active, inactive, suspended, pending',
       },
       default: 'pending',
-      index: true
+      index: true,
     },
 
     // Verification
     isEmailVerified: {
       type: Boolean,
-      default: false
+      default: false,
     },
     emailVerificationToken: {
       type: String,
-      select: false
+      select: false,
     },
     emailVerificationExpires: {
       type: Date,
-      select: false
+      select: false,
     },
 
     // Password reset
     passwordResetToken: {
       type: String,
-      select: false
+      select: false,
     },
     passwordResetExpires: {
       type: Date,
-      select: false
+      select: false,
     },
     passwordChangedAt: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
 
     // Profile picture
     avatar: {
       type: String, // URL to profile image
-      default: null
+      default: null,
     },
 
     // Additional profile information
@@ -131,11 +131,11 @@ const userSchema = new mongoose.Schema(
     gender: {
       type: String,
       enum: ['male', 'female', 'other'],
-      default: null
+      default: null,
     },
     nationality: {
       type: String,
-      default: 'Thai'
+      default: 'Thai',
     },
 
     // Preferences
@@ -143,52 +143,52 @@ const userSchema = new mongoose.Schema(
       language: {
         type: String,
         enum: ['th', 'en'],
-        default: 'th'
+        default: 'th',
       },
       notifications: {
         email: {
           type: Boolean,
-          default: true
+          default: true,
         },
         sms: {
           type: Boolean,
-          default: false
+          default: false,
         },
         push: {
           type: Boolean,
-          default: true
-        }
+          default: true,
+        },
       },
       theme: {
         type: String,
         enum: ['light', 'dark', 'auto'],
-        default: 'light'
-      }
+        default: 'light',
+      },
     },
 
     // Activity tracking
     lastLogin: Date,
     loginCount: {
       type: Number,
-      default: 0
+      default: 0,
     },
     lastActivity: {
       type: Date,
-      default: Date.now
+      default: Date.now,
     },
 
     // Related data
     farmerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farmer',
-      default: null
-    }
+      default: null,
+    },
   },
   {
     timestamps: true,
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
-  }
+    toObject: { virtuals: true },
+  },
 );
 
 // Indexes
@@ -202,7 +202,7 @@ userSchema.index({
   firstName: 'text',
   lastName: 'text',
   displayName: 'text',
-  email: 'text'
+  email: 'text',
 });
 
 // Virtual fields
@@ -320,7 +320,7 @@ userSchema.methods.getSafeProfile = function () {
     preferences: this.preferences,
     lastLogin: this.lastLogin,
     createdAt: this.createdAt,
-    updatedAt: this.updatedAt
+    updatedAt: this.updatedAt,
   };
 };
 
@@ -353,9 +353,9 @@ userSchema.statics.getUserStats = async function () {
         suspended: { $sum: { $cond: [{ $eq: ['$status', 'suspended'] }, 1, 0] } },
         farmers: { $sum: { $cond: [{ $eq: ['$role', 'farmer'] }, 1, 0] } },
         inspectors: { $sum: { $cond: [{ $eq: ['$role', 'inspector'] }, 1, 0] } },
-        admins: { $sum: { $cond: [{ $eq: ['$role', 'admin'] }, 1, 0] } }
-      }
-    }
+        admins: { $sum: { $cond: [{ $eq: ['$role', 'admin'] }, 1, 0] } },
+      },
+    },
   ]);
 
   return (
@@ -366,7 +366,7 @@ userSchema.statics.getUserStats = async function () {
       suspended: 0,
       farmers: 0,
       inspectors: 0,
-      admins: 0
+      admins: 0,
     }
   );
 };

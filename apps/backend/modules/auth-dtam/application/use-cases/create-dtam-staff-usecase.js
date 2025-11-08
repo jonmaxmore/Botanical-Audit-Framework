@@ -33,7 +33,7 @@ class CreateDTAMStaffUseCase {
     role,
     permissions,
     phoneNumber,
-    createdBy
+    createdBy,
   }) {
     // Validate email
     const emailVO = new Email(email);
@@ -84,7 +84,7 @@ class CreateDTAMStaffUseCase {
       status: DTAMStaff.STATUS.ACTIVE,
       isEmailVerified: true, // DTAM staff emails are pre-verified
       emailVerifiedAt: new Date(),
-      createdBy
+      createdBy,
     });
 
     // Validate entity
@@ -98,7 +98,7 @@ class CreateDTAMStaffUseCase {
     await this.eventBus.publish(event);
 
     return {
-      staff: savedStaff
+      staff: savedStaff,
     };
   }
 }

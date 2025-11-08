@@ -28,7 +28,7 @@ class UpdateFarmUseCase {
     cultivationMethod,
     irrigationType,
     soilType,
-    waterSource
+    waterSource,
   }) {
     // Find farm
     const farm = await this.farmRepository.findById(farmId);
@@ -71,7 +71,7 @@ class UpdateFarmUseCase {
       cultivationMethod,
       irrigationType,
       soilType,
-      waterSource
+      waterSource,
     });
 
     // Validate updated farm

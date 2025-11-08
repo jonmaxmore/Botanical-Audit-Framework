@@ -20,23 +20,23 @@ const surveySchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Farm',
       required: true,
-      index: true
+      index: true,
     },
     farmerId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
-      index: true
+      index: true,
     },
     surveyYear: {
       type: Number,
       required: true,
-      index: true
+      index: true,
     },
     surveyPeriod: {
       type: String,
       required: true,
-      index: true
+      index: true,
     },
 
     // Cultivation Information
@@ -44,28 +44,28 @@ const surveySchema = new mongoose.Schema(
       type: String,
       enum: Object.values(PURPOSE),
       required: true,
-      index: true
+      index: true,
     },
     plantType: {
       type: String,
       enum: Object.values(PLANT_TYPE),
       required: true,
-      index: true
+      index: true,
     },
     strainName: String,
     numberOfPlants: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
     },
     cultivationArea: {
       type: Number,
       required: true,
-      min: 0
+      min: 0,
     },
     areaUnit: {
       type: String,
-      default: 'rai'
+      default: 'rai',
     },
     plantingDate: Date,
     expectedHarvestDate: Date,
@@ -81,7 +81,7 @@ const surveySchema = new mongoose.Schema(
     expectedYield: Number,
     yieldUnit: {
       type: String,
-      default: 'kg'
+      default: 'kg',
     },
     targetMarket: String,
 
@@ -90,16 +90,16 @@ const surveySchema = new mongoose.Schema(
       {
         url: String,
         description: String,
-        uploadedAt: Date
-      }
+        uploadedAt: Date,
+      },
     ],
     documents: [
       {
         url: String,
         filename: String,
         fileType: String,
-        uploadedAt: Date
-      }
+        uploadedAt: Date,
+      },
     ],
     additionalNotes: String,
 
@@ -108,15 +108,15 @@ const surveySchema = new mongoose.Schema(
       type: String,
       enum: Object.values(STATUS),
       default: STATUS.DRAFT,
-      index: true
+      index: true,
     },
     submittedAt: {
       type: Date,
-      index: true
+      index: true,
     },
     reviewedBy: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'DTAMStaff'
+      ref: 'DTAMStaff',
     },
     reviewedAt: Date,
     reviewNotes: String,
@@ -126,15 +126,15 @@ const surveySchema = new mongoose.Schema(
     // Compliance
     complianceChecklist: {
       type: Map,
-      of: Boolean
+      of: Boolean,
     },
     thcContent: Number,
-    cbdContent: Number
+    cbdContent: Number,
   },
   {
     timestamps: true,
-    collection: 'cannabis_surveys'
-  }
+    collection: 'cannabis_surveys',
+  },
 );
 
 // Compound indexes
@@ -194,7 +194,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
       thcContent: doc.thcContent,
       cbdContent: doc.cbdContent,
       createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt
+      updatedAt: doc.updatedAt,
     });
   }
 
@@ -238,7 +238,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
       thcContent: survey.thcContent,
       cbdContent: survey.cbdContent,
       createdAt: survey.createdAt,
-      updatedAt: survey.updatedAt
+      updatedAt: survey.updatedAt,
     };
   }
 
@@ -320,7 +320,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
       if (filters.search) {
         query.$or = [
           { strainName: { $regex: filters.search, $options: 'i' } },
-          { growingMethod: { $regex: filters.search, $options: 'i' } }
+          { growingMethod: { $regex: filters.search, $options: 'i' } },
         ];
       }
 
@@ -374,7 +374,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
       const doc = await this.SurveyModel.findByIdAndUpdate(mongoDoc._id, mongoDoc, {
         upsert: true,
         new: true,
-        runValidators: true
+        runValidators: true,
       });
 
       return this.toDomain(doc);
@@ -406,7 +406,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
   async countByFarmer(farmerId) {
     try {
       return await this.SurveyModel.countDocuments({
-        farmerId: new mongoose.Types.ObjectId(farmerId)
+        farmerId: new mongoose.Types.ObjectId(farmerId),
       });
     } catch (error) {
       logger.error('Error counting surveys by farmer:', error);
@@ -422,8 +422,8 @@ class MongoDBSurveyRepository extends ISurveyRepository {
             _id: '$purpose',
             count: { $sum: 1 },
             totalPlants: { $sum: '$numberOfPlants' },
-            totalArea: { $sum: '$cultivationArea' }
-          }
+            totalArea: { $sum: '$cultivationArea' },
+          },
         },
         {
           $project: {
@@ -431,9 +431,9 @@ class MongoDBSurveyRepository extends ISurveyRepository {
             count: 1,
             totalPlants: 1,
             totalArea: 1,
-            _id: 0
-          }
-        }
+            _id: 0,
+          },
+        },
       ]);
     } catch (error) {
       logger.error('Error getting statistics by purpose:', error);
@@ -449,8 +449,8 @@ class MongoDBSurveyRepository extends ISurveyRepository {
             _id: '$plantType',
             count: { $sum: 1 },
             totalPlants: { $sum: '$numberOfPlants' },
-            totalArea: { $sum: '$cultivationArea' }
-          }
+            totalArea: { $sum: '$cultivationArea' },
+          },
         },
         {
           $project: {
@@ -458,9 +458,9 @@ class MongoDBSurveyRepository extends ISurveyRepository {
             count: 1,
             totalPlants: 1,
             totalArea: 1,
-            _id: 0
-          }
-        }
+            _id: 0,
+          },
+        },
       ]);
     } catch (error) {
       logger.error('Error getting statistics by plant type:', error);
@@ -476,12 +476,12 @@ class MongoDBSurveyRepository extends ISurveyRepository {
           $group: {
             _id: {
               period: '$surveyPeriod',
-              status: '$status'
+              status: '$status',
             },
             count: { $sum: 1 },
             totalPlants: { $sum: '$numberOfPlants' },
-            totalArea: { $sum: '$cultivationArea' }
-          }
+            totalArea: { $sum: '$cultivationArea' },
+          },
         },
         {
           $project: {
@@ -490,10 +490,10 @@ class MongoDBSurveyRepository extends ISurveyRepository {
             count: 1,
             totalPlants: 1,
             totalArea: 1,
-            _id: 0
-          }
+            _id: 0,
+          },
         },
-        { $sort: { period: 1, status: 1 } }
+        { $sort: { period: 1, status: 1 } },
       ]);
     } catch (error) {
       logger.error('Error getting statistics by year:', error);
@@ -506,7 +506,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
       const query = {
         farmId: new mongoose.Types.ObjectId(farmId),
         surveyYear: year,
-        surveyPeriod: period
+        surveyPeriod: period,
       };
 
       if (excludeId) {
@@ -524,7 +524,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
   async findRecentlySubmitted(limit = 10) {
     try {
       const docs = await this.SurveyModel.find({
-        status: { $in: [STATUS.SUBMITTED, STATUS.UNDER_REVIEW] }
+        status: { $in: [STATUS.SUBMITTED, STATUS.UNDER_REVIEW] },
       })
         .sort({ submittedAt: -1 })
         .limit(limit);
@@ -539,7 +539,7 @@ class MongoDBSurveyRepository extends ISurveyRepository {
   async findRequiringAttention() {
     try {
       const docs = await this.SurveyModel.find({
-        $or: [{ status: STATUS.SUBMITTED }, { status: STATUS.UNDER_REVIEW }]
+        $or: [{ status: STATUS.SUBMITTED }, { status: STATUS.UNDER_REVIEW }],
       }).sort({ submittedAt: 1 });
 
       return docs.map(doc => this.toDomain(doc));

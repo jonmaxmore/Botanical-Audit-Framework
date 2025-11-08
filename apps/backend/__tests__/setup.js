@@ -43,13 +43,13 @@ beforeAll(async () => {
   try {
     // Load MongoDB manager
     mongoManager = safeRequire('../config/mongodb-manager');
-    
+
     // Load Redis service (if exists)
     redisService = safeRequire('../services/redis-service');
-    
+
     // If Express app/server started globally in tests
     startedServer = global.__APP_SERVER__;
-    
+
     logger.info('🧪 Jest setup initialized.');
   } catch (err) {
     logger.error('❌ Jest setup initialization failed:', err);
@@ -74,7 +74,7 @@ afterAll(async () => {
       logger.info('✅ MongoDB disconnected via mongodb-manager');
       await new Promise(resolve => setTimeout(resolve, 500));
     }
-    
+
     // 🧩 Close mongoose connection directly (fallback)
     try {
       const mongoose = require('mongoose');
@@ -86,31 +86,31 @@ afterAll(async () => {
     } catch (error) {
       // Mongoose not used in this test
     }
-    
+
     // 🧩 Close Redis (if connected)
     if (redisService && typeof redisService.disconnect === 'function') {
       await redisService.disconnect();
       logger.info('✅ Redis disconnected');
     }
-    
+
     // 🧩 Close Express server (if started)
     if (startedServer && typeof startedServer.close === 'function') {
-      await new Promise((resolve) => {
+      await new Promise(resolve => {
         startedServer.close(() => {
           logger.info('✅ Express server closed');
           resolve();
         });
       });
     }
-    
+
     // 🧩 Restore real timers and clear all
     jest.useRealTimers();
     jest.clearAllTimers();
     jest.clearAllMocks();
-    
+
     // Give time for all async operations to complete
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
+
     logger.info('🎉 Jest teardown completed successfully');
   } catch (error) {
     logger.error('❌ Jest teardown error:', error);

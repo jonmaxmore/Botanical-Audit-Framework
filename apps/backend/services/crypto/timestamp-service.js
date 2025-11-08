@@ -28,20 +28,20 @@ const TSA_PROVIDERS = {
     name: 'FreeTSA',
     url: 'https://freetsa.org/tsr',
     free: true,
-    rateLimit: '10 requests/minute'
+    rateLimit: '10 requests/minute',
   },
   digicert: {
     name: 'DigiCert',
     url: 'https://timestamp.digicert.com',
     free: false,
-    apiKey: process.env.DIGICERT_API_KEY
+    apiKey: process.env.DIGICERT_API_KEY,
   },
   globalsign: {
     name: 'GlobalSign',
     url: 'https://timestamp.globalsign.com/tsa/r6advanced1',
     free: false,
-    apiKey: process.env.GLOBALSIGN_API_KEY
-  }
+    apiKey: process.env.GLOBALSIGN_API_KEY,
+  },
 };
 
 /**
@@ -110,10 +110,10 @@ class TimestampService {
         version: 1,
         messageImprint: {
           hashAlgorithm: 'sha256',
-          hashedMessage: hashBuffer
+          hashedMessage: hashBuffer,
         },
         nonce: crypto.randomBytes(8),
-        certReq: true
+        certReq: true,
       };
 
       // Encode to DER format
@@ -141,7 +141,7 @@ class TimestampService {
 
     // Message imprint
     const hashAlgOID = Buffer.from([
-      0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01
+      0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01,
     ]); // SHA-256
     const hashValue = request.messageImprint.hashedMessage;
     parts.push(
@@ -150,8 +150,8 @@ class TimestampService {
         Buffer.from([0x30, hashAlgOID.length]),
         hashAlgOID,
         Buffer.from([0x04, hashValue.length]),
-        hashValue
-      ])
+        hashValue,
+      ]),
     );
 
     // Nonce
@@ -165,7 +165,7 @@ class TimestampService {
     const tsRequest = Buffer.concat([
       Buffer.from([0x30, 0x82]),
       Buffer.from([(content.length >> 8) & 0xff, content.length & 0xff]),
-      content
+      content,
     ]);
 
     return tsRequest;
@@ -186,9 +186,9 @@ class TimestampService {
         method: 'POST',
         headers: {
           'Content-Type': 'application/timestamp-query',
-          'Content-Length': tsRequest.length
+          'Content-Length': tsRequest.length,
         },
-        timeout: this.timeout
+        timeout: this.timeout,
       };
 
       // Add API key if required
@@ -251,7 +251,7 @@ class TimestampService {
         timestamp,
         provider: this.tsaConfig.name,
         algorithm: 'sha256',
-        raw: tsResponse.toString('base64')
+        raw: tsResponse.toString('base64'),
       };
     } catch (error) {
       console.error('Failed to parse timestamp response:', error);
@@ -282,7 +282,7 @@ class TimestampService {
 
       return {
         status,
-        timeStampToken
+        timeStampToken,
       };
     } catch (error) {
       console.error('Failed to decode timestamp response:', error);
@@ -326,7 +326,7 @@ class TimestampService {
       if (!valid) {
         return {
           valid: false,
-          error: 'Invalid token structure'
+          error: 'Invalid token structure',
         };
       }
 
@@ -340,13 +340,13 @@ class TimestampService {
         valid: hashMatches,
         timestamp,
         provider: this.tsaConfig.name,
-        algorithm: 'sha256'
+        algorithm: 'sha256',
       };
     } catch (error) {
       console.error('Timestamp verification failed:', error);
       return {
         valid: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -399,7 +399,7 @@ class TimestampService {
         token: result.token,
         provider: result.provider,
         algorithm: result.algorithm,
-        createdAt: new Date().toISOString()
+        createdAt: new Date().toISOString(),
       };
     } catch (error) {
       console.error('Failed to timestamp record:', error);
@@ -412,7 +412,7 @@ class TimestampService {
         provider: 'fallback',
         algorithm: 'sha256',
         createdAt: new Date().toISOString(),
-        warning: 'RFC 3161 timestamp not available'
+        warning: 'RFC 3161 timestamp not available',
       };
     }
   }
@@ -440,7 +440,7 @@ class TimestampService {
         results.push({
           hash,
           error: error.message,
-          timestamp: new Date().toISOString()
+          timestamp: new Date().toISOString(),
         });
       }
     }
@@ -470,7 +470,7 @@ class TimestampService {
   getCacheStats() {
     return {
       size: this.cache.size,
-      provider: this.tsaConfig.name
+      provider: this.tsaConfig.name,
     };
   }
 }
@@ -494,5 +494,5 @@ function getTimestampService(options = {}) {
 module.exports = {
   TimestampService,
   getTimestampService,
-  TSA_PROVIDERS
+  TSA_PROVIDERS,
 };

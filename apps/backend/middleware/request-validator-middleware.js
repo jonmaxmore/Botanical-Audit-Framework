@@ -102,7 +102,7 @@ function validateRequest(req, schema, options = {}) {
 
   return {
     hasErrors: Object.keys(validationErrors).length > 0,
-    errors: validationErrors
+    errors: validationErrors,
   };
 }
 
@@ -113,7 +113,7 @@ function formatJoiError(error) {
   return error.details.map(detail => ({
     message: detail.message,
     path: detail.path,
-    type: detail.type
+    type: detail.type,
   }));
 }
 
@@ -127,7 +127,7 @@ module.exports = function (options = {}) {
   const defaultOptions = {
     abortEarly: false,
     stripUnknown: true,
-    ...options
+    ...options,
   };
 
   return function (req, res, next) {
@@ -148,7 +148,7 @@ module.exports = function (options = {}) {
     if (result.hasErrors) {
       validatorLogger.warn(`Validation failed for ${req.method} ${req.path}`, {
         errors: result.errors,
-        requestId: req.id
+        requestId: req.id,
       });
 
       return next(AppError.validation('Request validation failed', result.errors));

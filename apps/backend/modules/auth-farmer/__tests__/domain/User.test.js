@@ -10,7 +10,7 @@ describe('User Domain Entity', () => {
   describe('Constructor and Creation', () => {
     it('should create a user with valid data', () => {
       const userData = createUserPayload({
-        password: 'hashedPassword123' // Already hashed for domain entity
+        password: 'hashedPassword123', // Already hashed for domain entity
       });
 
       const user = new User(userData);
@@ -23,9 +23,11 @@ describe('User Domain Entity', () => {
     });
 
     it('should set default values for optional fields', () => {
-      const user = new User(createUserPayload({
-        password: 'hashedPassword123'
-      }));
+      const user = new User(
+        createUserPayload({
+          password: 'hashedPassword123',
+        }),
+      );
 
       expect(user.loginAttempts).toBe(0);
       expect(user.lockedUntil).toBeNull();
@@ -40,7 +42,7 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: 'John',
         lastName: 'Doe',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       expect(user.getFullName()).toBe('John Doe');
@@ -52,7 +54,7 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: 'John',
         lastName: '',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       expect(user.getFullName()).toBe('John');
@@ -67,7 +69,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        status: 'ACTIVE'
+        status: 'ACTIVE',
       });
 
       expect(user.isActive()).toBe(true);
@@ -80,7 +82,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        status: 'PENDING_VERIFICATION'
+        status: 'PENDING_VERIFICATION',
       });
 
       expect(user.isActive()).toBe(false);
@@ -93,7 +95,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        status: 'SUSPENDED'
+        status: 'SUSPENDED',
       });
 
       expect(user.isActive()).toBe(false);
@@ -108,7 +110,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        accountLockedUntil: null
+        accountLockedUntil: null,
       });
 
       expect(user.isAccountLocked()).toBe(false);
@@ -123,7 +125,7 @@ describe('User Domain Entity', () => {
         lastName: 'Doe',
         idCard: '1234567890123',
         lockedUntil: futureDate,
-        isLocked: true
+        isLocked: true,
       });
 
       expect(user.isAccountLocked()).toBe(true);
@@ -137,7 +139,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        accountLockedUntil: pastDate
+        accountLockedUntil: pastDate,
       });
 
       expect(user.isAccountLocked()).toBe(false);
@@ -152,7 +154,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        status: 'PENDING_VERIFICATION'
+        status: 'PENDING_VERIFICATION',
       });
 
       user.verifyEmail();
@@ -169,7 +171,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        status: 'PENDING_VERIFICATION'
+        status: 'PENDING_VERIFICATION',
       });
 
       user.verifyEmail();
@@ -186,7 +188,7 @@ describe('User Domain Entity', () => {
         lastName: 'Doe',
         idCard: '1234567890123',
         status: 'ACTIVE',
-        isEmailVerified: false
+        isEmailVerified: false,
       });
 
       user.verifyEmail();
@@ -204,7 +206,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        loginAttempts: 3
+        loginAttempts: 3,
       });
 
       user.recordSuccessfulLogin();
@@ -218,7 +220,7 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: 'John',
         lastName: 'Doe',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       const beforeLogin = new Date();
@@ -240,7 +242,7 @@ describe('User Domain Entity', () => {
         idCard: '1234567890123',
         lockedUntil: futureDate,
         loginAttempts: 5,
-        isLocked: true
+        isLocked: true,
       });
 
       user.recordSuccessfulLogin();
@@ -259,7 +261,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        loginAttempts: 2
+        loginAttempts: 2,
       });
 
       user.recordFailedLogin(5);
@@ -274,7 +276,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        loginAttempts: 4
+        loginAttempts: 4,
       });
 
       user.recordFailedLogin(5);
@@ -292,7 +294,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        loginAttempts: 2
+        loginAttempts: 2,
       });
 
       user.recordFailedLogin(5);
@@ -308,7 +310,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        loginAttempts: 4
+        loginAttempts: 4,
       });
 
       user.recordFailedLogin();
@@ -325,7 +327,7 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: 'John',
         lastName: 'Doe',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       const durationMinutes = 30;
@@ -333,7 +335,7 @@ describe('User Domain Entity', () => {
 
       expect(user.isLocked).toBe(true);
       expect(user.lockedUntil).toBeInstanceOf(Date);
-      
+
       const expectedLockUntil = new Date(Date.now() + durationMinutes * 60 * 1000);
       const timeDiff = Math.abs(user.lockedUntil.getTime() - expectedLockUntil.getTime());
       expect(timeDiff).toBeLessThan(1000); // Within 1 second
@@ -345,14 +347,14 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: 'John',
         lastName: 'Doe',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       user.lock();
 
       expect(user.isLocked).toBe(true);
       expect(user.lockedUntil).toBeInstanceOf(Date);
-      
+
       const expectedLockUntil = new Date(Date.now() + 30 * 60 * 1000);
       const timeDiff = Math.abs(user.lockedUntil.getTime() - expectedLockUntil.getTime());
       expect(timeDiff).toBeLessThan(1000);
@@ -369,7 +371,7 @@ describe('User Domain Entity', () => {
         lastName: 'Doe',
         idCard: '1234567890123',
         lockedUntil: futureDate,
-        isLocked: true
+        isLocked: true,
       });
 
       user.unlock();
@@ -386,7 +388,7 @@ describe('User Domain Entity', () => {
         lastName: 'Doe',
         idCard: '1234567890123',
         loginAttempts: 5,
-        isLocked: true
+        isLocked: true,
       });
 
       user.unlock();
@@ -404,7 +406,7 @@ describe('User Domain Entity', () => {
         lastName: 'Doe',
         idCard: '1234567890123',
         status: 'PENDING_VERIFICATION',
-        isEmailVerified: true
+        isEmailVerified: true,
       });
 
       user.activate();
@@ -421,7 +423,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        status: 'ACTIVE'
+        status: 'ACTIVE',
       });
 
       user.suspend('Violation of terms');
@@ -436,7 +438,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        status: 'ACTIVE'
+        status: 'ACTIVE',
       });
 
       const reason = 'Fraudulent activity detected';
@@ -456,7 +458,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        phoneNumber: '0812345678'
+        phoneNumber: '0812345678',
       });
 
       const errors = user.validate();
@@ -470,7 +472,7 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: 'John',
         lastName: 'Doe',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       const errors = user.validate();
@@ -485,7 +487,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        phoneNumber: '0812345678'
+        phoneNumber: '0812345678',
       });
 
       const errors = user.validate();
@@ -500,7 +502,7 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: '',
         lastName: 'Doe',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       const errors = user.validate();
@@ -514,7 +516,7 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: 'John',
         lastName: '',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       const errors = user.validate();
@@ -528,7 +530,7 @@ describe('User Domain Entity', () => {
         password: '',
         firstName: '',
         lastName: '',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       const errors = user.validate();
@@ -544,7 +546,7 @@ describe('User Domain Entity', () => {
         password: 'hashedPassword123',
         firstName: 'John',
         lastName: 'Doe',
-        idCard: '1234567890123'
+        idCard: '1234567890123',
       });
 
       const json = user.toJSON();
@@ -559,7 +561,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        phoneNumber: '0812345678'
+        phoneNumber: '0812345678',
       });
 
       const json = user.toJSON();
@@ -579,7 +581,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        phoneNumber: '0812345678'
+        phoneNumber: '0812345678',
       });
 
       const profile = user.toPublicProfile();
@@ -597,7 +599,7 @@ describe('User Domain Entity', () => {
         firstName: 'John',
         lastName: 'Doe',
         idCard: '1234567890123',
-        province: 'Bangkok'
+        province: 'Bangkok',
       });
 
       const profile = user.toPublicProfile();

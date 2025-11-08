@@ -19,7 +19,7 @@ router.post('/validate', async (req, res) => {
     if (!applicationId) {
       return res.status(400).json({
         success: false,
-        message: 'Application ID is required'
+        message: 'Application ID is required',
       });
     }
 
@@ -35,16 +35,15 @@ router.post('/validate', async (req, res) => {
         riskLevel: 'LOW',
         recommendation: 'PROCEED_TO_QC',
         checkedAt: new Date(),
-        processingTimeMs: 1250
-      }
+        processingTimeMs: 1250,
+      },
     });
-
   } catch (error) {
     console.error('AI Pre-Check error:', error);
     res.status(500).json({
       success: false,
       message: 'AI Pre-Check failed',
-      error: error.message
+      error: error.message,
     });
   }
 });
@@ -63,22 +62,22 @@ router.get('/config', async (req, res) => {
         thresholds: {
           autoReject: 50,
           fastTrack: 90,
-          complexCase: 70
+          complexCase: 70,
         },
         weights: {
           documentCompleteness: 30,
           farmerHistory: 20,
           farmSize: 15,
           cropType: 10,
-          paymentStatus: 25
-        }
-      }
+          paymentStatus: 25,
+        },
+      },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
       message: 'Failed to get config',
-      error: error.message
+      error: error.message,
     });
   }
 });

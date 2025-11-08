@@ -35,20 +35,17 @@ class RoutingService {
         location: application.farm?.province || application.farm?.location,
         inspectionType,
         specialization: application.cropType,
-        priority
+        priority,
       });
 
       // 4. Estimate duration
-      const estimatedDuration = this.estimateDuration(
-        inspectionType,
-        application.farm?.size || 5
-      );
+      const estimatedDuration = this.estimateDuration(inspectionType, application.farm?.size || 5);
 
       // 5. Generate routing reason
       const routingReason = this.generateRoutingReason({
         priority,
         inspectionType,
-        reviewScore: application.qcReview?.preScore || 0
+        reviewScore: application.qcReview?.preScore || 0,
       });
 
       const result = {
@@ -57,22 +54,21 @@ class RoutingService {
         assignedInspectorId: inspector?._id || null,
         estimatedDuration,
         routedAt: new Date(),
-        routingReason
+        routingReason,
       };
 
       this.logger.info('Smart Router completed', {
         applicationId: application._id,
         priority,
         inspectionType,
-        inspectorId: inspector?._id
+        inspectorId: inspector?._id,
       });
 
       return result;
-
     } catch (error) {
       this.logger.error('Smart Router failed', {
         applicationId: application._id,
-        error: error.message
+        error: error.message,
       });
       throw error;
     }
@@ -89,19 +85,22 @@ class RoutingService {
       reviewScore: 40,
       farmerHistory: 30,
       farmSize: 20,
-      cropType: 10
+      cropType: 10,
     };
 
     let score = 0;
 
     // Review score (40%)
-    const reviewScore = application.qcReview?.preScore ||
-                       application.aiPreCheck?.completenessScore || 50;
+    const reviewScore =
+      application.qcReview?.preScore || application.aiPreCheck?.completenessScore || 50;
     score += (reviewScore / 100) * weights.reviewScore;
 
     // Farmer history (30%)
-    const historyScore = application.farmer?.history?.previousCertified ? 100 :
-                        application.farmer?.history?.previousRejected ? 0 : 50;
+    const historyScore = application.farmer?.history?.previousCertified
+      ? 100
+      : application.farmer?.history?.previousRejected
+        ? 0
+        : 50;
     score += (historyScore / 100) * weights.farmerHistory;
 
     // Farm size (20%)
@@ -125,8 +124,8 @@ class RoutingService {
    * @returns {string} Inspection type
    */
   determineInspectionType(application) {
-    const reviewScore = application.qcReview?.preScore ||
-                       application.aiPreCheck?.completenessScore || 50;
+    const reviewScore =
+      application.qcReview?.preScore || application.aiPreCheck?.completenessScore || 50;
     const farmerHistory = application.farmer?.history || {};
     const farmSize = application.farm?.size || 5;
 
@@ -170,7 +169,7 @@ class RoutingService {
       const inspectors = await this.inspectorRepository.findAvailable({
         maxWorkload: 10,
         specialization,
-        isActive: true
+        isActive: true,
       });
 
       if (!inspectors || inspectors.length === 0) {
@@ -201,7 +200,6 @@ class RoutingService {
       });
 
       return sorted[0];
-
     } catch (error) {
       this.logger.error('Find inspector failed', { error: error.message });
       throw error;
@@ -216,9 +214,9 @@ class RoutingService {
    */
   estimateDuration(inspectionType, farmSize) {
     const baseTime = {
-      'VIDEO_ONLY': 2,      // 2 hours
-      'HYBRID': 4,          // 4 hours
-      'FULL_ONSITE': 8      // 8 hours (1 day)
+      VIDEO_ONLY: 2, // 2 hours
+      HYBRID: 4, // 4 hours
+      FULL_ONSITE: 8, // 8 hours (1 day)
     };
 
     const sizeMultiplier = farmSize > 10 ? 1.5 : 1.0;
@@ -265,37 +263,37 @@ class RoutingService {
       this.logger.info('Starting workload rebalancing');
 
       const inspectors = await this.inspectorRepository.findAll({
-        isActive: true
+        isActive: true,
       });
 
       // Calculate average workload
-      const totalWorkload = inspectors.reduce((sum, i) =>
-        sum + (i.workloadMetrics?.assignedCases || 0), 0
+      const totalWorkload = inspectors.reduce(
+        (sum, i) => sum + (i.workloadMetrics?.assignedCases || 0),
+        0,
       );
       const avgWorkload = totalWorkload / inspectors.length;
 
       // Find overloaded and underloaded inspectors
-      const overloaded = inspectors.filter(i =>
-        (i.workloadMetrics?.assignedCases || 0) > avgWorkload * 1.3
+      const overloaded = inspectors.filter(
+        i => (i.workloadMetrics?.assignedCases || 0) > avgWorkload * 1.3,
       );
-      const underloaded = inspectors.filter(i =>
-        (i.workloadMetrics?.assignedCases || 0) < avgWorkload * 0.7
+      const underloaded = inspectors.filter(
+        i => (i.workloadMetrics?.assignedCases || 0) < avgWorkload * 0.7,
       );
 
       this.logger.info('Workload analysis', {
         total: inspectors.length,
         avgWorkload,
         overloaded: overloaded.length,
-        underloaded: underloaded.length
+        underloaded: underloaded.length,
       });
 
       return {
         avgWorkload,
         overloaded: overloaded.length,
         underloaded: underloaded.length,
-        balanced: overloaded.length === 0 && underloaded.length === 0
+        balanced: overloaded.length === 0 && underloaded.length === 0,
       };
-
     } catch (error) {
       this.logger.error('Workload rebalancing failed', { error: error.message });
       throw error;

@@ -23,17 +23,17 @@ const courseSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: Object.values(Course.TYPE),
-      default: Course.TYPE.MANDATORY
+      default: Course.TYPE.MANDATORY,
     },
     level: {
       type: String,
       enum: Object.values(Course.LEVEL),
-      default: Course.LEVEL.BEGINNER
+      default: Course.LEVEL.BEGINNER,
     },
     status: {
       type: String,
       enum: Object.values(Course.STATUS),
-      default: Course.STATUS.DRAFT
+      default: Course.STATUS.DRAFT,
     },
 
     // Structure
@@ -52,11 +52,11 @@ const courseSchema = new mongoose.Schema(
             type: String, // VIDEO, DOCUMENT, QUIZ
             contentUrl: String,
             durationMinutes: Number,
-            order: Number
-          }
+            order: Number,
+          },
         ],
-        isRequired: { type: Boolean, default: true }
-      }
+        isRequired: { type: Boolean, default: true },
+      },
     ],
     totalDurationMinutes: { type: Number, default: 0 },
     totalLessons: { type: Number, default: 0 },
@@ -73,8 +73,8 @@ const courseSchema = new mongoose.Schema(
         type: String, // DOCUMENT, VIDEO, LINK
         title: String,
         url: String,
-        size: Number
-      }
+        size: Number,
+      },
     ],
     assessments: [
       {
@@ -83,8 +83,8 @@ const courseSchema = new mongoose.Schema(
         type: String, // QUIZ, EXAM
         questionCount: Number,
         timeLimit: Number,
-        passingScore: Number
-      }
+        passingScore: Number,
+      },
     ],
 
     // Instructor
@@ -93,8 +93,8 @@ const courseSchema = new mongoose.Schema(
         name: String,
         title: String,
         bio: String,
-        avatarUrl: String
-      }
+        avatarUrl: String,
+      },
     ],
 
     // Enrollment
@@ -111,12 +111,12 @@ const courseSchema = new mongoose.Schema(
     publishedAt: Date,
     archivedAt: Date,
     createdBy: mongoose.Schema.Types.ObjectId,
-    updatedBy: mongoose.Schema.Types.ObjectId
+    updatedBy: mongoose.Schema.Types.ObjectId,
   },
   {
     timestamps: true,
-    collection: 'courses'
-  }
+    collection: 'courses',
+  },
 );
 
 // Indexes
@@ -144,7 +144,7 @@ class MongoDBCourseRepository {
       ...data,
       prerequisites: data.prerequisites?.map(id => id.toString()) || [],
       createdBy: data.createdBy?.toString(),
-      updatedBy: data.updatedBy?.toString()
+      updatedBy: data.updatedBy?.toString(),
     });
   }
 
@@ -175,7 +175,7 @@ class MongoDBCourseRepository {
         // Update existing
         const updated = await this.CourseModel.findByIdAndUpdate(data._id, data, {
           new: true,
-          runValidators: true
+          runValidators: true,
         });
         return this.toDomain(updated);
       } else {
@@ -218,14 +218,14 @@ class MongoDBCourseRepository {
 
       const [docs, total] = await Promise.all([
         this.CourseModel.find({ status }).sort(sort).skip(skip).limit(limit),
-        this.CourseModel.countDocuments({ status })
+        this.CourseModel.countDocuments({ status }),
       ]);
 
       return {
         courses: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding courses by status:', error);
@@ -242,14 +242,14 @@ class MongoDBCourseRepository {
 
       const [docs, total] = await Promise.all([
         this.CourseModel.find({ type }).sort(sort).skip(skip).limit(limit),
-        this.CourseModel.countDocuments({ type })
+        this.CourseModel.countDocuments({ type }),
       ]);
 
       return {
         courses: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding courses by type:', error);
@@ -263,8 +263,8 @@ class MongoDBCourseRepository {
         status: Course.STATUS.PUBLISHED,
         $or: [
           { maxEnrollments: null },
-          { $expr: { $lt: ['$currentEnrollments', '$maxEnrollments'] } }
-        ]
+          { $expr: { $lt: ['$currentEnrollments', '$maxEnrollments'] } },
+        ],
       };
 
       if (filters.type) query.type = filters.type;
@@ -280,14 +280,14 @@ class MongoDBCourseRepository {
 
       const [docs, total] = await Promise.all([
         this.CourseModel.find(query).sort(sort).skip(skip).limit(limit),
-        this.CourseModel.countDocuments(query)
+        this.CourseModel.countDocuments(query),
       ]);
 
       return {
         courses: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding available courses:', error);
@@ -298,7 +298,7 @@ class MongoDBCourseRepository {
   async search(searchText, filters = {}, options = {}) {
     try {
       const query = {
-        $text: { $search: searchText }
+        $text: { $search: searchText },
       };
 
       if (filters.status) query.status = filters.status;
@@ -314,14 +314,14 @@ class MongoDBCourseRepository {
           .sort({ score: { $meta: 'textScore' } })
           .skip(skip)
           .limit(limit),
-        this.CourseModel.countDocuments(query)
+        this.CourseModel.countDocuments(query),
       ]);
 
       return {
         courses: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error searching courses:', error);
@@ -343,7 +343,7 @@ class MongoDBCourseRepository {
         query.$or = [
           { title: new RegExp(filters.search, 'i') },
           { description: new RegExp(filters.search, 'i') },
-          { code: new RegExp(filters.search, 'i') }
+          { code: new RegExp(filters.search, 'i') },
         ];
       }
 
@@ -354,14 +354,14 @@ class MongoDBCourseRepository {
 
       const [docs, total] = await Promise.all([
         this.CourseModel.find(query).sort(sort).skip(skip).limit(limit),
-        this.CourseModel.countDocuments(query)
+        this.CourseModel.countDocuments(query),
       ]);
 
       return {
         courses: docs.map(doc => this.toDomain(doc)),
         total,
         page,
-        limit
+        limit,
       };
     } catch (error) {
       logger.error('Error finding courses with filters:', error);
@@ -373,7 +373,7 @@ class MongoDBCourseRepository {
     try {
       const docs = await this.CourseModel.find({
         type: Course.TYPE.MANDATORY,
-        status: Course.STATUS.PUBLISHED
+        status: Course.STATUS.PUBLISHED,
       }).sort({ createdAt: 1 });
 
       return docs.map(doc => this.toDomain(doc));
@@ -428,7 +428,7 @@ class MongoDBCourseRepository {
         totalEnrollments,
         totalCompletions,
         byType,
-        byLevel
+        byLevel,
       ] = await Promise.all([
         this.CourseModel.countDocuments(),
         this.CourseModel.countDocuments({ status: Course.STATUS.PUBLISHED }),
@@ -436,16 +436,16 @@ class MongoDBCourseRepository {
         this.CourseModel.countDocuments({ status: Course.STATUS.ARCHIVED }),
         this.CourseModel.countDocuments({
           type: Course.TYPE.MANDATORY,
-          status: Course.STATUS.PUBLISHED
+          status: Course.STATUS.PUBLISHED,
         }),
         this.CourseModel.aggregate([
-          { $group: { _id: null, total: { $sum: '$currentEnrollments' } } }
+          { $group: { _id: null, total: { $sum: '$currentEnrollments' } } },
         ]),
         this.CourseModel.aggregate([
-          { $group: { _id: null, total: { $sum: '$completionCount' } } }
+          { $group: { _id: null, total: { $sum: '$completionCount' } } },
         ]),
         this.CourseModel.aggregate([{ $group: { _id: '$type', count: { $sum: 1 } } }]),
-        this.CourseModel.aggregate([{ $group: { _id: '$level', count: { $sum: 1 } } }])
+        this.CourseModel.aggregate([{ $group: { _id: '$level', count: { $sum: 1 } } }]),
       ]);
 
       return {
@@ -467,7 +467,7 @@ class MongoDBCourseRepository {
         byLevel: byLevel.reduce((acc, item) => {
           acc[item._id] = item.count;
           return acc;
-        }, {})
+        }, {}),
       };
     } catch (error) {
       logger.error('Error getting course statistics:', error);

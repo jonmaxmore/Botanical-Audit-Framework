@@ -22,7 +22,7 @@ describe('Integration Tests - Full System', () => {
     // Connect to MongoDB
     await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
-      useUnifiedTopology: true
+      useUnifiedTopology: true,
     });
     console.log('✓ Connected to MongoDB');
 
@@ -59,10 +59,10 @@ describe('Integration Tests - Full System', () => {
           strain: 'OG Kush',
           quantity: 100,
           location: 'Field A',
-          test: true
+          test: true,
         },
         timestamp: new Date().toISOString(),
-        userId: testUserId.toString()
+        userId: testUserId.toString(),
       };
 
       // Step 2: Sign record with crypto service
@@ -88,7 +88,7 @@ describe('Integration Tests - Full System', () => {
         signature: signedRecord.signature,
         previousHash: signedRecord.previousHash,
         userId: testUserId,
-        verified: false
+        verified: false,
       });
 
       expect(record).toBeDefined();
@@ -100,7 +100,7 @@ describe('Integration Tests - Full System', () => {
       // Step 4: Create audit log
       await AuditLog.logCreate('records', record._id.toString(), testUserId, record.toObject(), {
         test: true,
-        ip: '127.0.0.1'
+        ip: '127.0.0.1',
       });
 
       console.log('✓ Created audit log entry');
@@ -135,17 +135,17 @@ describe('Integration Tests - Full System', () => {
         data: {
           amount: '5L',
           method: 'drip irrigation',
-          test: true
+          test: true,
         },
         timestamp: new Date().toISOString(),
-        userId: testUserId.toString()
+        userId: testUserId.toString(),
       };
 
       // Step 2: Sign with previous hash (create chain)
       const signedRecord = await cryptoService.signRecord(
         recordData,
         genesisRecord.hash, // Link to previous
-        false
+        false,
       );
 
       expect(signedRecord.previousHash).toBe(genesisRecord.hash);
@@ -164,7 +164,7 @@ describe('Integration Tests - Full System', () => {
         signature: signedRecord.signature,
         previousHash: signedRecord.previousHash,
         userId: testUserId,
-        verified: false
+        verified: false,
       });
 
       secondRecord = record;
@@ -173,14 +173,14 @@ describe('Integration Tests - Full System', () => {
       // Step 4: Create audit log
       await AuditLog.logCreate('records', record._id.toString(), testUserId, record.toObject(), {
         test: true,
-        ip: '127.0.0.1'
+        ip: '127.0.0.1',
       });
     }, 30000);
 
     test('should verify complete chain (genesis + second)', async () => {
       // Load both records
       const records = await Record.find({
-        _id: { $in: [genesisRecord._id, secondRecord._id] }
+        _id: { $in: [genesisRecord._id, secondRecord._id] },
       }).sort({ createdAt: 1 });
 
       expect(records.length).toBe(2);
@@ -202,7 +202,7 @@ describe('Integration Tests - Full System', () => {
       // Mark all as verified
       await Record.updateMany(
         { _id: { $in: [genesisRecord._id, secondRecord._id] } },
-        { verified: true }
+        { verified: true },
       );
     }, 30000);
 
@@ -237,10 +237,10 @@ describe('Integration Tests - Full System', () => {
           type: i % 2 === 0 ? 'FERTILIZING' : 'WATERING',
           data: {
             batch: i,
-            test: true
+            test: true,
           },
           timestamp: new Date().toISOString(),
-          userId: testUserId.toString()
+          userId: testUserId.toString(),
         });
       }
 
@@ -251,7 +251,7 @@ describe('Integration Tests - Full System', () => {
 
       expect(signedRecords.length).toBe(batchSize);
       console.log(
-        `✓ Signed ${batchSize} records in ${signingDuration}ms (${(signingDuration / batchSize).toFixed(2)}ms/record)`
+        `✓ Signed ${batchSize} records in ${signingDuration}ms (${(signingDuration / batchSize).toFixed(2)}ms/record)`,
       );
 
       // Save to MongoDB
@@ -264,7 +264,7 @@ describe('Integration Tests - Full System', () => {
         signature: sr.signature,
         previousHash: sr.previousHash,
         userId: testUserId,
-        verified: false
+        verified: false,
       }));
 
       await Record.insertMany(mongoRecords);
@@ -288,10 +288,10 @@ describe('Integration Tests - Full System', () => {
         data: {
           quantity: 50,
           quality: 'A',
-          test: true
+          test: true,
         },
         timestamp: new Date().toISOString(),
-        userId: testUserId.toString()
+        userId: testUserId.toString(),
       };
 
       const signedRecord = await cryptoService.signRecord(recordData, null, false);
@@ -304,13 +304,13 @@ describe('Integration Tests - Full System', () => {
         hash: signedRecord.hash,
         signature: signedRecord.signature,
         previousHash: signedRecord.previousHash,
-        userId: testUserId
+        userId: testUserId,
       });
 
       // Log CREATE
       await AuditLog.logCreate('records', record._id.toString(), testUserId, record.toObject(), {
         test: true,
-        action: 'integration-test'
+        action: 'integration-test',
       });
 
       // Update record
@@ -325,7 +325,7 @@ describe('Integration Tests - Full System', () => {
         testUserId,
         oldData,
         record.toObject(),
-        { test: true, action: 'integration-test' }
+        { test: true, action: 'integration-test' },
       );
 
       // Get audit trail
@@ -362,7 +362,7 @@ describe('Integration Tests - Full System', () => {
           keySize: 2048,
           keySource: 'local',
           status: 'ACTIVE',
-          validFrom: new Date()
+          validFrom: new Date(),
         });
 
         console.log('✓ Stored public key in SignatureStore');
@@ -401,10 +401,10 @@ describe('Integration Tests - Full System', () => {
           data: {
             amount: '5L',
             test: true,
-            performanceTest: true
+            performanceTest: true,
           },
           timestamp: new Date().toISOString(),
-          userId: testUserId.toString()
+          userId: testUserId.toString(),
         });
       }
       const generateTime = Date.now() - startTime;
@@ -424,7 +424,7 @@ describe('Integration Tests - Full System', () => {
         hash: sr.hash,
         signature: sr.signature,
         previousHash: sr.previousHash,
-        userId: testUserId
+        userId: testUserId,
       }));
       await Record.insertMany(mongoRecords);
       const saveTime = Date.now() - saveStartTime;
@@ -441,7 +441,7 @@ describe('Integration Tests - Full System', () => {
       console.log('\n✓ Performance Test Results:');
       console.log(`  Records: ${recordCount}`);
       console.log(
-        `  Generate: ${generateTime}ms (${(generateTime / recordCount).toFixed(2)}ms/record)`
+        `  Generate: ${generateTime}ms (${(generateTime / recordCount).toFixed(2)}ms/record)`,
       );
       console.log(`  Sign: ${signTime}ms (${(signTime / recordCount).toFixed(2)}ms/record)`);
       console.log(`  Save: ${saveTime}ms (${(saveTime / recordCount).toFixed(2)}ms/record)`);
@@ -465,7 +465,7 @@ describe('Integration Tests - Full System', () => {
         hash: 'short', // Too short
         signature: 'invalid',
         previousHash: '0'.repeat(64),
-        userId: testUserId
+        userId: testUserId,
       };
 
       try {
@@ -492,7 +492,7 @@ describe('Integration Tests - Full System', () => {
 
       const records = await Record.find({
         farmId: testFarmId,
-        'data.test': true
+        'data.test': true,
       })
         .limit(100)
         .select('recordId type hash createdAt')
@@ -509,7 +509,7 @@ describe('Integration Tests - Full System', () => {
 
       const logs = await AuditLog.find({
         userId: testUserId,
-        'metadata.test': true
+        'metadata.test': true,
       })
         .limit(100)
         .sort({ timestamp: -1 })

@@ -38,7 +38,7 @@ class CreateStaffRequestDTO {
       role: this.role,
       permissions: this.permissions,
       phoneNumber: this.phoneNumber,
-      createdBy
+      createdBy,
     };
   }
 }
@@ -61,7 +61,7 @@ class LoginRequestDTO {
       email: this.email,
       password: this.password,
       ipAddress,
-      userAgent
+      userAgent,
     };
   }
 }
@@ -111,7 +111,7 @@ class UpdateRoleRequestDTO {
       staffId,
       role: this.role,
       permissions: this.permissions,
-      updatedBy
+      updatedBy,
     };
   }
 }
@@ -160,7 +160,7 @@ class StaffResponseDTO {
       isEmailVerified: this.isEmailVerified,
       lastLoginAt: this.lastLoginAt,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     };
   }
 }
@@ -197,7 +197,7 @@ class StaffPublicProfileDTO {
       department: this.department,
       position: this.position,
       role: this.role,
-      status: this.status
+      status: this.status,
     };
   }
 }
@@ -214,14 +214,14 @@ class LoginResponseDTO {
   static fromUseCaseOutput(output) {
     return new LoginResponseDTO({
       accessToken: output.token,
-      staff: StaffResponseDTO.fromDomain(output.staff)
+      staff: StaffResponseDTO.fromDomain(output.staff),
     });
   }
 
   toJSON() {
     return {
       accessToken: this.accessToken,
-      staff: this.staff.toJSON()
+      staff: this.staff.toJSON(),
     };
   }
 }
@@ -262,5 +262,5 @@ module.exports = {
   StaffResponseDTO,
   StaffPublicProfileDTO,
   LoginResponseDTO,
-  ApiResponse
+  ApiResponse,
 };

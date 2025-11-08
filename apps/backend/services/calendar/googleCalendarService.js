@@ -10,18 +10,15 @@ class GoogleCalendarService {
   constructor() {
     this.clientId = process.env.GOOGLE_CLIENT_ID;
     this.clientSecret = process.env.GOOGLE_CLIENT_SECRET;
-    this.redirectUri = process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3001/api/v1/calendar/oauth2callback';
-    
+    this.redirectUri =
+      process.env.GOOGLE_REDIRECT_URI || 'http://localhost:3001/api/v1/calendar/oauth2callback';
+
     if (!this.clientId || !this.clientSecret) {
       logger.error('Google Calendar credentials not configured');
       throw new Error('Google Calendar credentials are required');
     }
 
-    this.oauth2Client = new google.auth.OAuth2(
-      this.clientId,
-      this.clientSecret,
-      this.redirectUri
-    );
+    this.oauth2Client = new google.auth.OAuth2(this.clientId, this.clientSecret, this.redirectUri);
 
     this.calendar = google.calendar({ version: 'v3', auth: this.oauth2Client });
   }
@@ -32,13 +29,13 @@ class GoogleCalendarService {
   getAuthUrl() {
     const scopes = [
       'https://www.googleapis.com/auth/calendar',
-      'https://www.googleapis.com/auth/calendar.events'
+      'https://www.googleapis.com/auth/calendar.events',
     ];
 
     return this.oauth2Client.generateAuthUrl({
       access_type: 'offline',
       scope: scopes,
-      prompt: 'consent'
+      prompt: 'consent',
     });
   }
 
@@ -92,29 +89,32 @@ Location: ${eventData.farmLocation || 'See application details'}
         location: eventData.farmLocation,
         attendees: [
           { email: eventData.inspectorEmail },
-          ...(eventData.farmerEmail ? [{ email: eventData.farmerEmail }] : [])
+          ...(eventData.farmerEmail ? [{ email: eventData.farmerEmail }] : []),
         ],
         reminders: {
           useDefault: false,
           overrides: [
             { method: 'email', minutes: 24 * 60 }, // 1 day before
-            { method: 'popup', minutes: 60 },      // 1 hour before
+            { method: 'popup', minutes: 60 }, // 1 hour before
           ],
         },
         colorId: this.getColorIdByType(eventData.type),
-        conferenceData: eventData.type === 'VIDEO' ? {
-          createRequest: {
-            requestId: `${eventData.applicationNumber}-${Date.now()}`,
-            conferenceSolutionKey: { type: 'hangoutsMeet' }
-          }
-        } : undefined
+        conferenceData:
+          eventData.type === 'VIDEO'
+            ? {
+                createRequest: {
+                  requestId: `${eventData.applicationNumber}-${Date.now()}`,
+                  conferenceSolutionKey: { type: 'hangoutsMeet' },
+                },
+              }
+            : undefined,
       };
 
       const response = await this.calendar.events.insert({
         calendarId: 'primary',
         resource: event,
         conferenceDataVersion: eventData.type === 'VIDEO' ? 1 : 0,
-        sendUpdates: 'all'
+        sendUpdates: 'all',
       });
 
       logger.info(`Calendar event created: ${response.data.id}`);
@@ -123,13 +123,13 @@ Location: ${eventData.farmLocation || 'See application details'}
         success: true,
         eventId: response.data.id,
         htmlLink: response.data.htmlLink,
-        meetLink: response.data.conferenceData?.entryPoints?.[0]?.uri
+        meetLink: response.data.conferenceData?.entryPoints?.[0]?.uri,
       };
     } catch (error) {
       logger.error('Error creating calendar event:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -141,38 +141,42 @@ Location: ${eventData.farmLocation || 'See application details'}
     try {
       const event = await this.calendar.events.get({
         calendarId: 'primary',
-        eventId: eventId
+        eventId: eventId,
       });
 
       const updatedEvent = {
         ...event.data,
         ...updates,
-        start: updates.startDateTime ? {
-          dateTime: updates.startDateTime,
-          timeZone: 'Asia/Bangkok'
-        } : event.data.start,
-        end: updates.endDateTime ? {
-          dateTime: updates.endDateTime,
-          timeZone: 'Asia/Bangkok'
-        } : event.data.end
+        start: updates.startDateTime
+          ? {
+              dateTime: updates.startDateTime,
+              timeZone: 'Asia/Bangkok',
+            }
+          : event.data.start,
+        end: updates.endDateTime
+          ? {
+              dateTime: updates.endDateTime,
+              timeZone: 'Asia/Bangkok',
+            }
+          : event.data.end,
       };
 
       const response = await this.calendar.events.update({
         calendarId: 'primary',
         eventId: eventId,
         resource: updatedEvent,
-        sendUpdates: 'all'
+        sendUpdates: 'all',
       });
 
       return {
         success: true,
-        eventId: response.data.id
+        eventId: response.data.id,
       };
     } catch (error) {
       logger.error('Error updating calendar event:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -185,17 +189,17 @@ Location: ${eventData.farmLocation || 'See application details'}
       await this.calendar.events.delete({
         calendarId: 'primary',
         eventId: eventId,
-        sendUpdates: 'all'
+        sendUpdates: 'all',
       });
 
       return {
-        success: true
+        success: true,
       };
     } catch (error) {
       logger.error('Error deleting calendar event:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -210,8 +214,8 @@ Location: ${eventData.farmLocation || 'See application details'}
           timeMin: startDate,
           timeMax: endDate,
           timeZone: 'Asia/Bangkok',
-          items: [{ id: inspectorEmail }]
-        }
+          items: [{ id: inspectorEmail }],
+        },
       });
 
       const busySlots = response.data.calendars[inspectorEmail]?.busy || [];
@@ -219,13 +223,13 @@ Location: ${eventData.farmLocation || 'See application details'}
       return {
         success: true,
         busySlots,
-        availableSlots: this.calculateAvailableSlots(startDate, endDate, busySlots)
+        availableSlots: this.calculateAvailableSlots(startDate, endDate, busySlots),
       };
     } catch (error) {
       logger.error('Error checking availability:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -237,7 +241,7 @@ Location: ${eventData.farmLocation || 'See application details'}
     try {
       const startDate = new Date(preferredDate);
       startDate.setHours(8, 0, 0, 0); // Start at 8 AM
-      
+
       const endDate = new Date(preferredDate);
       endDate.setHours(17, 0, 0, 0); // End at 5 PM
 
@@ -246,8 +250,8 @@ Location: ${eventData.farmLocation || 'See application details'}
           timeMin: startDate.toISOString(),
           timeMax: endDate.toISOString(),
           timeZone: 'Asia/Bangkok',
-          items: inspectorEmails.map(email => ({ id: email }))
-        }
+          items: inspectorEmails.map(email => ({ id: email })),
+        },
       });
 
       // Find common free slots
@@ -260,7 +264,7 @@ Location: ${eventData.farmLocation || 'See application details'}
       const freeSlots = this.calculateAvailableSlots(
         startDate.toISOString(),
         endDate.toISOString(),
-        allBusySlots
+        allBusySlots,
       );
 
       // Filter slots that can accommodate the duration
@@ -272,13 +276,13 @@ Location: ${eventData.farmLocation || 'See application details'}
       return {
         success: true,
         availableSlots: suitableSlots,
-        bestSlot: suitableSlots[0] || null
+        bestSlot: suitableSlots[0] || null,
       };
     } catch (error) {
       logger.error('Error finding time slot:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -295,18 +299,18 @@ Location: ${eventData.farmLocation || 'See application details'}
         singleEvents: true,
         orderBy: 'startTime',
         q: '[GACP]',
-        attendees: inspectorEmail ? [inspectorEmail] : undefined
+        attendees: inspectorEmail ? [inspectorEmail] : undefined,
       });
 
       return {
         success: true,
-        events: response.data.items || []
+        events: response.data.items || [],
       };
     } catch (error) {
       logger.error('Error listing events:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -318,18 +322,18 @@ Location: ${eventData.farmLocation || 'See application details'}
     try {
       const response = await this.calendar.events.get({
         calendarId: 'primary',
-        eventId: eventId
+        eventId: eventId,
       });
 
       return {
         success: true,
-        event: response.data
+        event: response.data,
       };
     } catch (error) {
       logger.error('Error getting event:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -355,7 +359,7 @@ Location: ${eventData.farmLocation || 'See application details'}
       if (currentTime < busyStart) {
         available.push({
           start: currentTime.toISOString(),
-          end: busyStart.toISOString()
+          end: busyStart.toISOString(),
         });
       }
 
@@ -366,7 +370,7 @@ Location: ${eventData.farmLocation || 'See application details'}
     if (currentTime < end) {
       available.push({
         start: currentTime.toISOString(),
-        end: end.toISOString()
+        end: end.toISOString(),
       });
     }
 
@@ -378,9 +382,9 @@ Location: ${eventData.farmLocation || 'See application details'}
    */
   getColorIdByType(type) {
     const colorMap = {
-      'VIDEO': '7',    // Peacock blue
-      'HYBRID': '5',   // Yellow
-      'ONSITE': '11'   // Red
+      VIDEO: '7', // Peacock blue
+      HYBRID: '5', // Yellow
+      ONSITE: '11', // Red
     };
     return colorMap[type] || '1'; // Default lavender
   }
@@ -400,13 +404,13 @@ Location: ${eventData.farmLocation || 'See application details'}
       logger.info(`Reminder processed for event: ${eventId}`);
 
       return {
-        success: true
+        success: true,
       };
     } catch (error) {
       logger.error('Error sending reminder:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }
@@ -421,24 +425,24 @@ Location: ${eventData.farmLocation || 'See application details'}
         timeMin: startDate,
         timeMax: endDate,
         singleEvents: true,
-        q: '[GACP]'
+        q: '[GACP]',
       });
 
       const events = response.data.items || [];
       const inspectorEvents = events.filter(event =>
-        event.attendees?.some(a => a.email === inspectorEmail)
+        event.attendees?.some(a => a.email === inspectorEmail),
       );
 
       return {
         success: true,
         totalEvents: inspectorEvents.length,
-        events: inspectorEvents
+        events: inspectorEvents,
       };
     } catch (error) {
       logger.error('Error getting workload:', error);
       return {
         success: false,
-        error: error.message
+        error: error.message,
       };
     }
   }

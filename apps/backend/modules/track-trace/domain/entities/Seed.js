@@ -20,7 +20,7 @@ class Seed {
     geneticLineage,
     supplier,
     certificationDetails,
-    qualityMetrics
+    qualityMetrics,
   }) {
     // Core identification
     this.seedId = seedId;
@@ -32,7 +32,7 @@ class Seed {
       parentStrains: geneticLineage?.parentStrains || [],
       generationNumber: geneticLineage?.generationNumber || 1,
       breedingHistory: geneticLineage?.breedingHistory || [],
-      geneticMarkers: geneticLineage?.geneticMarkers || []
+      geneticMarkers: geneticLineage?.geneticMarkers || [],
     };
 
     // Supply chain information
@@ -41,7 +41,7 @@ class Seed {
       supplierName: supplier?.supplierName,
       licenseNumber: supplier?.licenseNumber,
       contactInfo: supplier?.contactInfo,
-      certification: supplier?.certification
+      certification: supplier?.certification,
     };
 
     // Quality and certification
@@ -51,7 +51,7 @@ class Seed {
       certificationDate: certificationDetails?.certificationDate,
       expiryDate: certificationDetails?.expiryDate,
       certificationType: certificationDetails?.certificationType || 'ORGANIC_SEED',
-      complianceStatus: certificationDetails?.complianceStatus || 'PENDING'
+      complianceStatus: certificationDetails?.complianceStatus || 'PENDING',
     };
 
     // Quality metrics and testing results
@@ -62,7 +62,7 @@ class Seed {
       viabilityScore: qualityMetrics?.viabilityScore || 0,
       testingDate: qualityMetrics?.testingDate,
       testingLab: qualityMetrics?.testingLab,
-      testResults: qualityMetrics?.testResults || []
+      testResults: qualityMetrics?.testResults || [],
     };
 
     // Tracking information
@@ -72,7 +72,7 @@ class Seed {
       currentStatus: 'REGISTERED',
       distributionHistory: [],
       plantingRecords: [],
-      locationHistory: []
+      locationHistory: [],
     };
 
     // Business rules validation
@@ -97,7 +97,7 @@ class Seed {
         field: 'germinationRate',
         message: 'Germination rate must be at least 85%',
         currentValue: this.qualityMetrics.germinationRate,
-        requiredValue: 85
+        requiredValue: 85,
       });
     }
 
@@ -107,7 +107,7 @@ class Seed {
         field: 'purityPercentage',
         message: 'Seed purity must be at least 95%',
         currentValue: this.qualityMetrics.purityPercentage,
-        requiredValue: 95
+        requiredValue: 95,
       });
     }
 
@@ -117,7 +117,7 @@ class Seed {
         field: 'moistureContent',
         message: 'Moisture content must be between 5-8%',
         currentValue: this.qualityMetrics.moistureContent,
-        acceptableRange: '5-8%'
+        acceptableRange: '5-8%',
       });
     }
 
@@ -129,7 +129,7 @@ class Seed {
       validationErrors.push({
         field: 'certification',
         message: 'Seed certification has expired',
-        expiryDate: this.certificationDetails.expiryDate
+        expiryDate: this.certificationDetails.expiryDate,
       });
     }
 
@@ -159,7 +159,7 @@ class Seed {
       ...newMetrics,
       testingDate: testingInfo.testingDate,
       testingLab: testingInfo.testingLab,
-      lastUpdated: new Date()
+      lastUpdated: new Date(),
     };
 
     // Recalculate overall quality score
@@ -175,7 +175,7 @@ class Seed {
       updatedAt: new Date(),
       previousMetrics: { ...this.qualityMetrics },
       newMetrics: newMetrics,
-      testingInfo: testingInfo
+      testingInfo: testingInfo,
     });
 
     // Re-validate business rules
@@ -198,7 +198,7 @@ class Seed {
       germinationRate: 0.4,
       purityPercentage: 0.3,
       viabilityScore: 0.2,
-      moistureContent: 0.1
+      moistureContent: 0.1,
     };
 
     // Normalize moisture content score (optimal range: 6-7%)
@@ -261,7 +261,7 @@ class Seed {
       transportMethod: distributionDetails.transportMethod,
       expectedPlantingDate: distributionDetails.expectedPlantingDate,
       distributionStatus: 'DISTRIBUTED',
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Add to distribution history
@@ -274,7 +274,7 @@ class Seed {
       farmId: farmInfo.farmId,
       farmName: farmInfo.farmName,
       locationCoordinates: farmInfo.coordinates,
-      updatedAt: new Date()
+      updatedAt: new Date(),
     };
 
     // Update location history
@@ -282,7 +282,7 @@ class Seed {
       location: this.trackingInfo.currentLocation,
       timestamp: new Date(),
       action: 'DISTRIBUTION',
-      distributionId: distributionRecord.distributionId
+      distributionId: distributionRecord.distributionId,
     });
 
     this.trackingInfo.updatedAt = new Date();
@@ -325,7 +325,7 @@ class Seed {
       plantedBy: plantingInfo.plantedBy,
       expectedGerminationDate: this.calculateExpectedGerminationDate(plantingInfo.plantingDate),
       expectedHarvestDate: this.calculateExpectedHarvestDate(plantingInfo.plantingDate),
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Add to planting records
@@ -369,7 +369,7 @@ class Seed {
       INDICA: 3, // 3-5 days typical
       SATIVA: 4, // 4-7 days typical
       HYBRID: 3, // 3-6 days typical
-      AUTO_FLOWERING: 2 // 2-4 days typical
+      AUTO_FLOWERING: 2, // 2-4 days typical
     };
 
     return strainGerminationPeriods[this.strain?.type] || 4;
@@ -383,7 +383,7 @@ class Seed {
       INDICA: 90, // ~90 days seed to harvest
       SATIVA: 120, // ~120 days seed to harvest
       HYBRID: 105, // ~105 days seed to harvest
-      AUTO_FLOWERING: 75 // ~75 days seed to harvest
+      AUTO_FLOWERING: 75, // ~75 days seed to harvest
     };
 
     return strainGrowthPeriods[this.strain?.type] || 100;
@@ -402,8 +402,8 @@ class Seed {
           startDate: plantingRecord.plantingDate,
           expectedEndDate: plantingRecord.expectedGerminationDate,
           status: 'IN_PROGRESS',
-          timestamp: new Date()
-        }
+          timestamp: new Date(),
+        },
       ],
       monitoringSchedule: this.createMonitoringSchedule(plantingRecord),
       growthMetrics: {
@@ -411,8 +411,8 @@ class Seed {
         plantHeight: [],
         leafCount: [],
         healthScore: [],
-        environmentalConditions: []
-      }
+        environmentalConditions: [],
+      },
     };
   }
 
@@ -432,7 +432,7 @@ class Seed {
         date: monitoringDate,
         phase: 'GERMINATION',
         frequency: 'DAILY',
-        checkPoints: ['germination_progress', 'soil_moisture', 'temperature']
+        checkPoints: ['germination_progress', 'soil_moisture', 'temperature'],
       });
     }
 
@@ -445,7 +445,7 @@ class Seed {
         date: monitoringDate,
         phase: 'VEGETATIVE',
         frequency: 'WEEKLY',
-        checkPoints: ['plant_height', 'leaf_development', 'pest_check', 'nutrient_levels']
+        checkPoints: ['plant_height', 'leaf_development', 'pest_check', 'nutrient_levels'],
       });
     }
 
@@ -490,19 +490,19 @@ class Seed {
         seedId: this.seedId,
         batchNumber: this.batchNumber,
         strain: this.strain,
-        supplier: this.supplier.supplierName
+        supplier: this.supplier.supplierName,
       },
       qualityStatus: {
         overallScore:
           this.qualityMetrics.overallQualityScore || this.calculateOverallQualityScore(),
         complianceStatus: this.certificationDetails.complianceStatus,
-        certificationValid: this.isCertificationValid()
+        certificationValid: this.isCertificationValid(),
       },
       trackingStatus: {
         currentStatus: this.trackingInfo.currentStatus,
         currentLocation: this.trackingInfo.currentLocation,
         distributionCount: this.trackingInfo.distributionHistory.length,
-        plantingCount: this.trackingInfo.plantingRecords.length
+        plantingCount: this.trackingInfo.plantingRecords.length,
       },
       timeline: {
         registered: this.trackingInfo.createdAt,
@@ -510,14 +510,14 @@ class Seed {
         distributionHistory: this.trackingInfo.distributionHistory.map(d => ({
           date: d.distributionDate,
           farm: d.farmName,
-          quantity: d.quantity
+          quantity: d.quantity,
         })),
         plantingHistory: this.trackingInfo.plantingRecords.map(p => ({
           date: p.plantingDate,
           plot: p.plotId,
-          quantity: p.seedsPlanted
-        }))
-      }
+          quantity: p.seedsPlanted,
+        })),
+      },
     };
   }
 }

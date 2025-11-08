@@ -29,12 +29,12 @@ class BaseModel {
         createdAt: {
           type: Date,
           default: Date.now,
-          index: true
+          index: true,
         },
         updatedAt: {
           type: Date,
-          default: Date.now
-        }
+          default: Date.now,
+        },
       });
     }
 
@@ -44,12 +44,12 @@ class BaseModel {
         isDeleted: {
           type: Boolean,
           default: false,
-          index: true
+          index: true,
         },
         deletedAt: {
           type: Date,
-          default: null
-        }
+          default: null,
+        },
       });
     }
 
@@ -58,8 +58,8 @@ class BaseModel {
       this.schema.add({
         version: {
           type: Number,
-          default: 0
-        }
+          default: 0,
+        },
       });
     }
   }
@@ -137,7 +137,7 @@ class BaseModel {
     this.schema.statics.softDeleteById = function (id) {
       return this.findByIdAndUpdate(id, {
         isDeleted: true,
-        deletedAt: new Date()
+        deletedAt: new Date(),
       });
     };
 
@@ -145,7 +145,7 @@ class BaseModel {
     this.schema.statics.softDeleteMany = function (filter = {}) {
       return this.updateMany(filter, {
         isDeleted: true,
-        deletedAt: new Date()
+        deletedAt: new Date(),
       });
     };
 
@@ -189,7 +189,7 @@ class BaseModel {
         limit = 10,
         sort = { createdAt: -1 },
         populate = null,
-        select = null
+        select = null,
       } = options;
 
       const skip = (page - 1) * limit;
@@ -207,7 +207,7 @@ class BaseModel {
 
       const [documents, total] = await Promise.all([
         query.exec(),
-        this.countDocuments(activeFilter)
+        this.countDocuments(activeFilter),
       ]);
 
       return {
@@ -218,8 +218,8 @@ class BaseModel {
           total,
           pages: Math.ceil(total / limit),
           hasNext: page * limit < total,
-          hasPrev: page > 1
-        }
+          hasPrev: page > 1,
+        },
       };
     };
 
@@ -228,12 +228,12 @@ class BaseModel {
       const searchFilter = {
         ...filter,
         isDeleted: false,
-        $text: { $search: searchTerm }
+        $text: { $search: searchTerm },
       };
 
       return this.findPaginated(searchFilter, {
         ...options,
-        sort: { score: { $meta: 'textScore' }, ...options.sort }
+        sort: { score: { $meta: 'textScore' }, ...options.sort },
       });
     };
 
@@ -310,7 +310,7 @@ class BaseModel {
         count: stats.count,
         size: stats.size,
         avgObjSize: stats.avgObjSize,
-        indexes: stats.nindexes
+        indexes: stats.nindexes,
       };
     } catch (error) {
       logger.error(`Failed to get stats for ${this.modelName}:`, error);

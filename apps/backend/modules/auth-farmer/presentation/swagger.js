@@ -15,7 +15,7 @@ const fs = require('fs');
  */
 function loadOpenAPISpec() {
   const specPath = path.join(__dirname, '../../../../../openapi/auth-farmer.yaml');
-  
+
   if (!fs.existsSync(specPath)) {
     console.warn(`⚠️  OpenAPI spec not found at: ${specPath}`);
     // Return minimal spec if file not found
@@ -24,9 +24,9 @@ function loadOpenAPISpec() {
       info: {
         title: 'GACP Auth Farmer API',
         version: '1.0.0',
-        description: 'OpenAPI specification not loaded'
+        description: 'OpenAPI specification not loaded',
       },
-      paths: {}
+      paths: {},
     };
   }
 
@@ -41,9 +41,9 @@ function loadOpenAPISpec() {
       info: {
         title: 'GACP Auth Farmer API',
         version: '1.0.0',
-        description: 'Error loading OpenAPI specification'
+        description: 'Error loading OpenAPI specification',
       },
-      paths: {}
+      paths: {},
     };
   }
 }
@@ -57,13 +57,13 @@ const swaggerOptions = {
     displayRequestDuration: true,
     filter: true,
     syntaxHighlight: {
-      theme: 'monokai'
+      theme: 'monokai',
     },
     tryItOutEnabled: true,
-    persistAuthorization: true
+    persistAuthorization: true,
   },
   customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'GACP Auth Farmer API Docs'
+  customSiteTitle: 'GACP Auth Farmer API Docs',
 };
 
 /**
@@ -75,11 +75,7 @@ function mountSwagger(app, basePath = '/api/docs') {
   const spec = loadOpenAPISpec();
 
   // Serve Swagger UI at /api/docs
-  app.use(
-    basePath,
-    swaggerUi.serve,
-    swaggerUi.setup(spec, swaggerOptions)
-  );
+  app.use(basePath, swaggerUi.serve, swaggerUi.setup(spec, swaggerOptions));
 
   // Also provide JSON endpoint for programmatic access
   app.get(`${basePath}.json`, (req, res) => {
@@ -98,7 +94,7 @@ function mountSwagger(app, basePath = '/api/docs') {
 function mountMultipleSpecs(app, specs = []) {
   specs.forEach(({ path: mountPath, file }) => {
     const specPath = path.join(__dirname, '../../../../../openapi', file);
-    
+
     if (!fs.existsSync(specPath)) {
       console.warn(`⚠️  Spec not found: ${specPath}`);
       return;
@@ -106,11 +102,7 @@ function mountMultipleSpecs(app, specs = []) {
 
     try {
       const spec = YAML.load(specPath);
-      app.use(
-        mountPath,
-        swaggerUi.serve,
-        swaggerUi.setup(spec, swaggerOptions)
-      );
+      app.use(mountPath, swaggerUi.serve, swaggerUi.setup(spec, swaggerOptions));
       console.log(`📚 Swagger UI mounted at: ${mountPath}`);
     } catch (error) {
       console.error(`❌ Error loading spec ${file}:`, error.message);
@@ -206,5 +198,5 @@ module.exports = {
   mountSwagger,
   mountMultipleSpecs,
   createDocsIndex,
-  loadOpenAPISpec
+  loadOpenAPISpec,
 };

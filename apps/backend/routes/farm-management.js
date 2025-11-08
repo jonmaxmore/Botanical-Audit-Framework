@@ -21,7 +21,7 @@ router.get('/', auth, async (req, res) => {
     if (search) {
       filter.$or = [
         { name: { $regex: search, $options: 'i' } },
-        { registrationNumber: { $regex: search, $options: 'i' } }
+        { registrationNumber: { $regex: search, $options: 'i' } },
       ];
     }
 
@@ -51,7 +51,7 @@ router.post('/', auth, async (req, res) => {
       region,
       totalArea,
       farmingType,
-      waterSources
+      waterSources,
     } = req.body;
 
     // Check for duplicate registration
@@ -59,7 +59,7 @@ router.post('/', auth, async (req, res) => {
       const existingFarm = await Farm.findOne({ registrationNumber });
       if (existingFarm) {
         return res.status(400).json({
-          message: 'Farm with this registration number already exists'
+          message: 'Farm with this registration number already exists',
         });
       }
     }
@@ -75,7 +75,7 @@ router.post('/', auth, async (req, res) => {
       farmingType,
       waterSources,
       plots: [],
-      certifications: []
+      certifications: [],
     });
 
     const farm = await newFarm.save();
@@ -87,7 +87,7 @@ router.post('/', auth, async (req, res) => {
         farmId: farm._id,
         name: farm.name,
         owner: req.user.id,
-        timestamp: new Date()
+        timestamp: new Date(),
       });
     }
 
@@ -173,7 +173,7 @@ router.post('/:id/plots', auth, async (req, res) => {
       size,
       location,
       soilType,
-      status
+      status,
     });
 
     await farm.save();
@@ -236,7 +236,7 @@ router.post('/:id/crops', auth, async (req, res) => {
       scientificName,
       variety,
       category,
-      farm: req.params.id
+      farm: req.params.id,
     });
 
     const crop = await newCrop.save();
@@ -298,7 +298,7 @@ router.get('/:id/analytics', auth, async (req, res) => {
             cropName: crop.name,
             plotId: cycle.plot,
             harvestDate: cycle.expectedHarvestDate,
-            expectedYield: cycle.yield.expected
+            expectedYield: cycle.yield.expected,
           });
         }
       });
@@ -315,7 +315,7 @@ router.get('/:id/analytics', auth, async (req, res) => {
       upcomingHarvests,
       certifications: farm.certifications
         .filter(cert => cert.status === 'active')
-        .map(cert => cert.type)
+        .map(cert => cert.type),
     });
   } catch (err) {
     farmLogger.error(`Error generating analytics for farm ${req.params.id}:`, err);

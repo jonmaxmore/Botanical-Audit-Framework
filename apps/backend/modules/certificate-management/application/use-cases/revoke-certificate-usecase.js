@@ -37,7 +37,7 @@ class RevokeCertificateUseCase {
       certificateNumber: updatedCertificate.certificateNumber,
       userId: updatedCertificate.userId,
       reason,
-      revokedBy
+      revokedBy,
     });
 
     await this.eventBus.publish(event.toEventPayload());

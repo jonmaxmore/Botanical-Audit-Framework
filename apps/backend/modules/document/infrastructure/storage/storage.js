@@ -14,7 +14,7 @@ const sharp = require('sharp'); // For image processing
 const logger = {
   error: (msg, err) => console.error(msg, err),
   info: msg => console.log(msg),
-  warn: msg => console.warn(msg)
+  warn: msg => console.warn(msg),
 };
 
 class LocalFileStorageService {
@@ -32,8 +32,8 @@ class LocalFileStorageService {
         'application/msword',
         'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
         'application/vnd.ms-excel',
-        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
-      ]
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      ],
     };
 
     // Ensure upload directory exists
@@ -80,7 +80,7 @@ class LocalFileStorageService {
         filePath,
         fileUrl,
         fileName,
-        checksum
+        checksum,
       };
     } catch (error) {
       logger.error('Error uploading file:', error);
@@ -145,7 +145,7 @@ class LocalFileStorageService {
       await sharp(fullPath)
         .resize(width, height, {
           fit: 'inside',
-          withoutEnlargement: true
+          withoutEnlargement: true,
         })
         .toFile(thumbnailFullPath);
 
@@ -153,7 +153,7 @@ class LocalFileStorageService {
 
       return {
         thumbnailPath,
-        thumbnailUrl
+        thumbnailUrl,
       };
     } catch (error) {
       logger.error('Error generating thumbnail:', error);
@@ -199,7 +199,7 @@ class LocalFileStorageService {
 
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -230,14 +230,14 @@ class LocalFileStorageService {
       return {
         totalSizeBytes: totalSize,
         totalSizeMB: (totalSize / 1024 / 1024).toFixed(2),
-        fileCount
+        fileCount,
       };
     } catch (error) {
       logger.error('Error getting storage statistics:', error);
       return {
         totalSizeBytes: 0,
         totalSizeMB: '0.00',
-        fileCount: 0
+        fileCount: 0,
       };
     }
   }
@@ -272,13 +272,13 @@ class LocalFileStorageService {
 
       return {
         deletedCount,
-        cutoffDate: cutoffDate.toISOString()
+        cutoffDate: cutoffDate.toISOString(),
       };
     } catch (error) {
       logger.error('Error cleaning up old files:', error);
       return {
         deletedCount: 0,
-        error: error.message
+        error: error.message,
       };
     }
   }
