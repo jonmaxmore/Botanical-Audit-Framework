@@ -17,21 +17,21 @@ const IUserRepository = require('./domain/interfaces/IUserRepository'); // Used 
 /* eslint-enable no-unused-vars */
 
 // Infrastructure
-const MongoDBUserRepository = require('./infrastructure/database/user');
+const MongoDBUserRepository = require('./infrastructure/database/user-model');
 const BcryptPasswordHasher = require('./infrastructure/security/password');
 const JWTService = require('./infrastructure/security/token');
 
 // Application (Use Cases)
-const RegisterUserUseCase = require('./application/use-cases/register');
-const LoginUserUseCase = require('./application/use-cases/login');
-const VerifyEmailUseCase = require('./application/use-cases/verify-email');
-const RequestPasswordResetUseCase = require('./application/use-cases/request-password-reset');
-const ResetPasswordUseCase = require('./application/use-cases/reset-password');
-const GetUserProfileUseCase = require('./application/use-cases/get-profile');
-const UpdateUserProfileUseCase = require('./application/use-cases/update-profile');
+const RegisterUserUseCase = require('./application/use-cases/register-usecase');
+const LoginUserUseCase = require('./application/use-cases/login-usecase');
+const VerifyEmailUseCase = require('./application/use-cases/verify-email-usecase');
+const RequestPasswordResetUseCase = require('./application/use-cases/request-password-reset-usecase');
+const ResetPasswordUseCase = require('./application/use-cases/reset-password-usecase');
+const GetUserProfileUseCase = require('./application/use-cases/get-profile-usecase');
+const UpdateUserProfileUseCase = require('./application/use-cases/update-profile-usecase');
 
 // Presentation
-const AuthController = require('./presentation/controllers/auth');
+const AuthController = require('./presentation/controllers/auth-controller');
 const createAuthRouter = require('./presentation/routes/auth.routes');
 
 /**
@@ -68,7 +68,7 @@ class SimpleEventBus {
  */
 class TokenGenerator {
   generate() {
-    return require('crypto').randomBytes(32).toString('hex');
+    return require('../../shared/utils/crypto-utils').randomBytes(32).toString('hex');
   }
 }
 

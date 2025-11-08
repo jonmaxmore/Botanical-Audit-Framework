@@ -10,24 +10,24 @@
 const Report = require('../domain/entities/Report');
 
 // Infrastructure
-const MongoDBReportRepository = require('../infrastructure/repositories/report');
-const SimpleReportGeneratorService = require('../infrastructure/services/generator');
-const SimpleDataAggregationService = require('../infrastructure/services/aggregator');
+const MongoDBReportRepository = require('../infrastructure/repositories/report-repository');
+const SimpleReportGeneratorService = require('../infrastructure/services/generator-service');
+const SimpleDataAggregationService = require('../infrastructure/services/aggregator-service');
 const mongoose = require('mongoose');
 
 // Application Use Cases
-const RequestReportUseCase = require('../application/use-cases/request-report');
-const GenerateReportUseCase = require('../application/use-cases/generate-report');
-const GetReportUseCase = require('../application/use-cases/get-report');
-const DownloadReportUseCase = require('../application/use-cases/download-report');
-const ListReportsUseCase = require('../application/use-cases/list-reports');
-const DeleteReportUseCase = require('../application/use-cases/delete-report');
-const GetReportStatisticsUseCase = require('../application/use-cases/get-report-statistics');
-const ProcessScheduledReportsUseCase = require('../application/use-cases/process-scheduled-reports');
-const RetryFailedReportUseCase = require('../application/use-cases/retry-failed-report');
+const RequestReportUseCase = require('../application/use-cases/request-report-usecase');
+const GenerateReportUseCase = require('../application/use-cases/generate-report-usecase');
+const GetReportUseCase = require('../application/use-cases/get-report-usecase');
+const DownloadReportUseCase = require('../application/use-cases/download-report-usecase');
+const ListReportsUseCase = require('../application/use-cases/list-reports-usecase');
+const DeleteReportUseCase = require('../application/use-cases/delete-report-usecase');
+const GetReportStatisticsUseCase = require('../application/use-cases/get-report-statistics-usecase');
+const ProcessScheduledReportsUseCase = require('../application/use-cases/process-scheduled-reports-usecase');
+const RetryFailedReportUseCase = require('../application/use-cases/retry-failed-report-usecase');
 
 // Presentation
-const ReportController = require('../presentation/controllers/report');
+const ReportController = require('../presentation/controllers/report-controller');
 const farmerRoutes = require('../presentation/routes/report.farmer.routes');
 const dtamRoutes = require('../presentation/routes/report.dtam.routes');
 

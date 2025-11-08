@@ -8,22 +8,22 @@
  */
 
 const logger = require('../../shared/logger/logger');
-const MongoDBSurveyRepository = require('./infrastructure/database/survey');
+const MongoDBSurveyRepository = require('./infrastructure/database/survey-model');
 const { STATUS, PURPOSE, PLANT_TYPE } = require('./domain/entities/Survey');
 
 // Use Cases
-const CreateSurveyUseCase = require('./application/use-cases/create-survey');
-const UpdateSurveyUseCase = require('./application/use-cases/update-survey');
-const SubmitSurveyUseCase = require('./application/use-cases/submit-survey');
-const GetSurveyDetailsUseCase = require('./application/use-cases/get-survey-details');
-const ListSurveysUseCase = require('./application/use-cases/list-surveys');
-const StartSurveyReviewUseCase = require('./application/use-cases/start-survey-review');
-const ApproveSurveyUseCase = require('./application/use-cases/approve-survey');
-const RejectSurveyUseCase = require('./application/use-cases/reject-survey');
-const RequestSurveyRevisionUseCase = require('./application/use-cases/request-survey-revision');
+const CreateSurveyUseCase = require('./application/use-cases/create-survey-usecase');
+const UpdateSurveyUseCase = require('./application/use-cases/update-survey-usecase');
+const SubmitSurveyUseCase = require('./application/use-cases/submit-survey-usecase');
+const GetSurveyDetailsUseCase = require('./application/use-cases/get-survey-details-usecase');
+const ListSurveysUseCase = require('./application/use-cases/list-surveys-usecase');
+const StartSurveyReviewUseCase = require('./application/use-cases/start-survey-review-usecase');
+const ApproveSurveyUseCase = require('./application/use-cases/approve-survey-usecase');
+const RejectSurveyUseCase = require('./application/use-cases/reject-survey-usecase');
+const RequestSurveyRevisionUseCase = require('./application/use-cases/request-survey-revision-usecase');
 
 // Presentation Layer
-const SurveyController = require('./presentation/controllers/survey');
+const SurveyController = require('./presentation/controllers/survey-controller');
 const createSurveyRoutes = require('./presentation/routes/survey.routes');
 const validators = require('./presentation/validators/survey.validator');
 

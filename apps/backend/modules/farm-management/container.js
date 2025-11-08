@@ -10,20 +10,20 @@ const logger = require('../../shared/logger/logger');
 const Farm = require('./domain/entities/Farm');
 
 // Application Use Cases
-const RegisterFarmUseCase = require('./application/use-cases/register-farm');
-const UpdateFarmUseCase = require('./application/use-cases/update-farm');
-const SubmitFarmForReviewUseCase = require('./application/use-cases/submit-farm-for-review');
-const GetFarmDetailsUseCase = require('./application/use-cases/get-farm-details');
-const ListFarmsUseCase = require('./application/use-cases/list-farms');
-const StartFarmReviewUseCase = require('./application/use-cases/start-farm-review');
-const ApproveFarmUseCase = require('./application/use-cases/approve-farm');
-const RejectFarmUseCase = require('./application/use-cases/reject-farm');
+const RegisterFarmUseCase = require('./application/use-cases/register-farm-usecase');
+const UpdateFarmUseCase = require('./application/use-cases/update-farm-usecase');
+const SubmitFarmForReviewUseCase = require('./application/use-cases/submit-farm-for-review-usecase');
+const GetFarmDetailsUseCase = require('./application/use-cases/get-farm-details-usecase');
+const ListFarmsUseCase = require('./application/use-cases/list-farms-usecase');
+const StartFarmReviewUseCase = require('./application/use-cases/start-farm-review-usecase');
+const ApproveFarmUseCase = require('./application/use-cases/approve-farm-usecase');
+const RejectFarmUseCase = require('./application/use-cases/reject-farm-usecase');
 
 // Infrastructure
-const MongoDBFarmRepository = require('./infrastructure/database/farm');
+const MongoDBFarmRepository = require('./infrastructure/database/farm-model');
 
 // Presentation
-const FarmController = require('./presentation/controllers/farm');
+const FarmController = require('./presentation/controllers/farm-controller');
 const createFarmRoutes = require('./presentation/routes/farm.routes');
 const farmValidators = require('./presentation/validators/farm.validator');
 
