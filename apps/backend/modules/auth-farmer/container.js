@@ -11,7 +11,7 @@
  */
 
 /* eslint-disable no-unused-vars */
-const logger = require('../../shared/logger/logger');
+const logger = require('../../shared/logger');
 const mongoose = require('mongoose'); // Used in JSDoc type annotations
 const IUserRepository = require('./domain/interfaces/IUserRepository'); // Used for interface documentation
 /* eslint-enable no-unused-vars */

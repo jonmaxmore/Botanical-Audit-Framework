@@ -21,7 +21,7 @@ afterEach(() => {
   jest.clearAllTimers();
 });
 
-afterAll(() => {
+afterAll(async () => {
   // Ensure real timers are restored
   jest.useRealTimers();
   
@@ -30,6 +30,19 @@ afterAll(() => {
   
   // Clear all mocks
   jest.clearAllMocks();
+  
+  // Disconnect database if connected
+  try {
+    const mongoManager = require('../config/mongodb-manager');
+    if (mongoManager && mongoManager.disconnect) {
+      await mongoManager.disconnect();
+    }
+  } catch (error) {
+    // Database not initialized in this test - safe to ignore
+  }
+  
+  // Give time for all async operations to complete
+  await new Promise(resolve => setTimeout(resolve, 100));
 });
 
 // Increase timeout for integration tests

@@ -43,10 +43,6 @@ const {
 const { GACPWorkflowEngine } = require('./modules/application-workflow/domain/gacp-workflow-engine');
 const GACPEnhancedInspectionService = require('./services/gacp-enhanced-inspection');
 
-// Import Database Health Monitor
-// eslint-disable-next-line no-unused-vars
-const dbHealthMonitor = require('./services/database-health-monitor');
-
 // Import Health Monitoring Service
 const HealthMonitoringService = require('./services/health-monitoring');
 
@@ -173,9 +169,10 @@ const strictAuthLimiter = rateLimit({
   message: 'Too many authentication attempts, please try again later'
 });
 
+// Rate limiting - Express 5 compatible path patterns
 app.use('/api/auth', authLimiter);
-app.use('/api/auth/*/login', strictAuthLimiter);
-app.use('/api/auth/*/register', authLimiter);
+app.use(/^\/api\/auth\/[^/]+\/login$/, strictAuthLimiter); // Match /api/auth/:role/login
+app.use(/^\/api\/auth\/[^/]+\/register$/, authLimiter);    // Match /api/auth/:role/register
 appLogger.info('✅ Rate limiting applied to /api/auth/* routes');
 
 // ============================================================================
