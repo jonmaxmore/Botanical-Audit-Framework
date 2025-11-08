@@ -169,14 +169,20 @@ class CannabisSurveyIntegrationService {
     const criticalQuestions = template.cannabisMetadata.qualityParameters?.length || 0;
     const regulatoryRequirements = template.cannabisMetadata.regulatoryFocus?.length || 0;
 
-    if (criticalQuestions > 5 || regulatoryRequirements > 3) return 'expert';
-    if (criticalQuestions > 2 || regulatoryRequirements > 1) return 'intermediate';
+    if (criticalQuestions > 5 || regulatoryRequirements > 3) {
+      return 'expert';
+    }
+    if (criticalQuestions > 2 || regulatoryRequirements > 1) {
+      return 'intermediate';
+    }
     return 'beginner';
   }
 
   async syncResponseToMicroservice(cannabisResponse) {
     try {
-      if (!this.isConnected) return;
+      if (!this.isConnected) {
+        return;
+      }
 
       // Convert cannabis response to standard format
       const standardResponse = {
@@ -375,7 +381,9 @@ class CannabisSurveyIntegrationService {
   async integrateWithFarmManagement(responseId) {
     try {
       const response = await CannabisSurveyResponse.findById(responseId);
-      if (!response) return;
+      if (!response) {
+        return;
+      }
 
       // Extract cultivation data from cannabis survey
       const cultivationData = this.extractCultivationData(response);
@@ -447,7 +455,9 @@ class CannabisSurveyIntegrationService {
   async triggerComplianceNotifications(responseId) {
     try {
       const response = await CannabisSurveyResponse.findById(responseId);
-      if (!response) return;
+      if (!response) {
+        return;
+      }
 
       // Generate notifications based on cannabis survey results
       const notifications = [];
@@ -516,7 +526,9 @@ class CannabisSurveyIntegrationService {
   async createComplianceTasks(responseId) {
     try {
       const response = await CannabisSurveyResponse.findById(responseId);
-      if (!response) return;
+      if (!response) {
+        return;
+      }
 
       const tasks = [];
 

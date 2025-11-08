@@ -450,7 +450,9 @@ class DTAMApplication {
    * Calculate processing time (in days)
    */
   getProcessingTime() {
-    if (!this.submittedAt) return 0;
+    if (!this.submittedAt) {
+      return 0;
+    }
     const endDate = this.certificateIssuedAt || new Date();
     const diffTime = Math.abs(endDate - this.submittedAt);
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));

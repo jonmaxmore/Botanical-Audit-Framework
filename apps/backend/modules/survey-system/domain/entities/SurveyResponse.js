@@ -631,7 +631,9 @@ class SurveyResponse {
 
   updateSectionProgress(sectionId, _questionInfo) {
     const progress = this.sectionProgress.get(sectionId);
-    if (!progress) return;
+    if (!progress) {
+      return;
+    }
 
     // Mark section as started if not already
     if (!progress.startedAt) {

@@ -364,7 +364,9 @@ ApplicationSchema.virtual('isOverdue').get(function () {
 });
 
 ApplicationSchema.virtual('daysInProcess').get(function () {
-  if (!this.submissionDate) return 0;
+  if (!this.submissionDate) {
+    return 0;
+  }
   const endDate = this.actualCompletionDate || new Date();
   return Math.floor((endDate - this.submissionDate) / (1000 * 60 * 60 * 24));
 });
@@ -391,7 +393,9 @@ ApplicationSchema.methods.updateStatus = function (newStatus, userId, reason, no
 };
 
 ApplicationSchema.methods.calculateTotalScore = function () {
-  if (this.assessmentScores.length === 0) return 0;
+  if (this.assessmentScores.length === 0) {
+    return 0;
+  }
 
   const totalPossible = this.assessmentScores.reduce((sum, score) => sum + score.maxScore, 0);
   const totalAchieved = this.assessmentScores.reduce((sum, score) => sum + score.achievedScore, 0);
@@ -428,10 +432,15 @@ ApplicationSchema.methods.assessRisk = function () {
 
   // Determine risk level
   let riskLevel;
-  if (riskScore >= 6) riskLevel = RiskLevel.CRITICAL;
-  else if (riskScore >= 4) riskLevel = RiskLevel.HIGH;
-  else if (riskScore >= 2) riskLevel = RiskLevel.MEDIUM;
-  else riskLevel = RiskLevel.LOW;
+  if (riskScore >= 6) {
+    riskLevel = RiskLevel.CRITICAL;
+  } else if (riskScore >= 4) {
+    riskLevel = RiskLevel.HIGH;
+  } else if (riskScore >= 2) {
+    riskLevel = RiskLevel.MEDIUM;
+  } else {
+    riskLevel = RiskLevel.LOW;
+  }
 
   this.riskAssessment = {
     level: riskLevel,

@@ -227,7 +227,9 @@ async function healthCheck() {
 
 // Utility to mask sensitive information in URI
 function maskUri(uri) {
-  if (!uri) return 'undefined';
+  if (!uri) {
+    return 'undefined';
+  }
   try {
     const parsedUri = new URL(uri);
     if (parsedUri.password) {

@@ -547,7 +547,9 @@ class GACPBusinessRulesValidator {
   // ========================================
 
   _validateThaiNationalID(nationalId) {
-    if (!nationalId || nationalId.length !== 13) return false;
+    if (!nationalId || nationalId.length !== 13) {
+      return false;
+    }
 
     // ตรวจสอบ checksum ของบัตรประชาชนไทย
     const digits = nationalId.split('').map(Number);
@@ -562,7 +564,9 @@ class GACPBusinessRulesValidator {
   }
 
   _validateFarmArea(farmArea) {
-    if (!farmArea) return false;
+    if (!farmArea) {
+      return false;
+    }
 
     return (
       farmArea.size > 0 &&
@@ -584,7 +588,9 @@ class GACPBusinessRulesValidator {
   }
 
   _validateCropTypes(cropTypes) {
-    if (!cropTypes || !Array.isArray(cropTypes)) return false;
+    if (!cropTypes || !Array.isArray(cropTypes)) {
+      return false;
+    }
 
     // รายการสมุนไพรที่อนุญาตตามกฎหมาย
     const APPROVED_HERBS = [

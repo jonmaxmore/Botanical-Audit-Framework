@@ -291,7 +291,9 @@ class ApplicationController {
       const { page = 1, limit = 10, status, sortBy = 'createdAt', sortOrder = 'desc' } = req.query;
 
       const filters = { farmerId: req.user.id };
-      if (status) filters.status = status;
+      if (status) {
+        filters.status = status;
+      }
 
       const applications = await this.applicationRepo.findWithPagination(filters, {
         page: parseInt(page),

@@ -199,10 +199,18 @@ class CertificateListQueryDTO {
   toApplicationQuery() {
     const query = {};
 
-    if (this.userId) query.userId = this.userId;
-    if (this.farmId) query.farmId = this.farmId;
-    if (this.status) query.status = this.status;
-    if (this.certificateType) query.certificateType = this.certificateType;
+    if (this.userId) {
+      query.userId = this.userId;
+    }
+    if (this.farmId) {
+      query.farmId = this.farmId;
+    }
+    if (this.status) {
+      query.status = this.status;
+    }
+    if (this.certificateType) {
+      query.certificateType = this.certificateType;
+    }
 
     return {
       filters: query,

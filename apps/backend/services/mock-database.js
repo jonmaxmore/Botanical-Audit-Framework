@@ -135,7 +135,9 @@ class MockDatabaseService {
               break;
             }
           }
-          if (matches) return doc;
+          if (matches) {
+            return doc;
+          }
         }
         return null;
       },
@@ -152,7 +154,9 @@ class MockDatabaseService {
               break;
             }
           }
-          if (matches) results.push(doc);
+          if (matches) {
+            results.push(doc);
+          }
         }
 
         return {
@@ -166,7 +170,9 @@ class MockDatabaseService {
               return results.sort((a, b) => {
                 const aVal = a[sortKey];
                 const bVal = b[sortKey];
-                if (sortOrder === 1) return aVal > bVal ? 1 : -1;
+                if (sortOrder === 1) {
+                  return aVal > bVal ? 1 : -1;
+                }
                 return aVal < bVal ? 1 : -1;
               });
             },

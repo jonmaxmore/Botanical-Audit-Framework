@@ -28,6 +28,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
+    project: null, // Disable type-aware linting to prevent hanging
   },
   extends: [
     'eslint:recommended',

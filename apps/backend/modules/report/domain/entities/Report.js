@@ -168,10 +168,18 @@ class Report {
     ];
     const exportTypes = ['DATA_EXPORT', 'CUSTOM_REPORT'];
 
-    if (farmerTypes.includes(type)) return Report.CATEGORY.FARMER;
-    if (dtamTypes.includes(type)) return Report.CATEGORY.DTAM;
-    if (analyticsTypes.includes(type)) return Report.CATEGORY.ANALYTICS;
-    if (exportTypes.includes(type)) return Report.CATEGORY.EXPORT;
+    if (farmerTypes.includes(type)) {
+      return Report.CATEGORY.FARMER;
+    }
+    if (dtamTypes.includes(type)) {
+      return Report.CATEGORY.DTAM;
+    }
+    if (analyticsTypes.includes(type)) {
+      return Report.CATEGORY.ANALYTICS;
+    }
+    if (exportTypes.includes(type)) {
+      return Report.CATEGORY.EXPORT;
+    }
 
     return Report.CATEGORY.EXPORT;
   }
@@ -270,16 +278,24 @@ class Report {
   // Access control methods
   canAccess(userId, userRole) {
     // Public reports
-    if (this.isPublic) return true;
+    if (this.isPublic) {
+      return true;
+    }
 
     // Owner can access
-    if (this.requestedBy === userId) return true;
+    if (this.requestedBy === userId) {
+      return true;
+    }
 
     // DTAM staff can access all reports
-    if (userRole === 'dtam' || userRole === 'admin') return true;
+    if (userRole === 'dtam' || userRole === 'admin') {
+      return true;
+    }
 
     // Explicitly shared with user
-    if (this.sharedWith.includes(userId)) return true;
+    if (this.sharedWith.includes(userId)) {
+      return true;
+    }
 
     return false;
   }
@@ -336,8 +352,12 @@ class Report {
   }
 
   isDueForGeneration() {
-    if (!this.isScheduled()) return false;
-    if (!this.nextRunAt) return true; // First run
+    if (!this.isScheduled()) {
+      return false;
+    }
+    if (!this.nextRunAt) {
+      return true;
+    } // First run
     return new Date() >= new Date(this.nextRunAt);
   }
 
@@ -355,7 +375,9 @@ class Report {
 
   // Utility methods
   getFileSizeFormatted() {
-    if (!this.fileSize) return 'N/A';
+    if (!this.fileSize) {
+      return 'N/A';
+    }
 
     const units = ['B', 'KB', 'MB', 'GB'];
     let size = this.fileSize;
@@ -370,7 +392,9 @@ class Report {
   }
 
   getDaysUntilExpiration() {
-    if (!this.expiresAt) return null;
+    if (!this.expiresAt) {
+      return null;
+    }
 
     const now = new Date();
     const expiry = new Date(this.expiresAt);
@@ -381,7 +405,9 @@ class Report {
   }
 
   getGenerationDuration() {
-    if (!this.generatedAt || !this.completedAt) return null;
+    if (!this.generatedAt || !this.completedAt) {
+      return null;
+    }
 
     const duration = new Date(this.completedAt) - new Date(this.generatedAt);
     return Math.round(duration / 1000); // seconds

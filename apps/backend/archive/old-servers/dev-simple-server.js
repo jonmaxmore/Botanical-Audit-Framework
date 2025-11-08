@@ -197,9 +197,13 @@ app.post('/api/gacp/test/score-calculation', (req, res) => {
   const finalScore = (totalScore / totalWeight) * 100;
 
   let certificateLevel = 'Not Qualified';
-  if (finalScore >= 90) certificateLevel = 'GACP-Excellent';
-  else if (finalScore >= 75) certificateLevel = 'GACP-Standard';
-  else if (finalScore >= 60) certificateLevel = 'GACP-Basic';
+  if (finalScore >= 90) {
+    certificateLevel = 'GACP-Excellent';
+  } else if (finalScore >= 75) {
+    certificateLevel = 'GACP-Standard';
+  } else if (finalScore >= 60) {
+    certificateLevel = 'GACP-Basic';
+  }
 
   res.json({
     success: true,

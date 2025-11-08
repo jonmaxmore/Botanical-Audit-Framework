@@ -39,8 +39,12 @@ function initializeNotificationRoutes(dependencies) {
         options.read = read === 'true';
       }
 
-      if (type) options.type = type;
-      if (priority) options.priority = priority;
+      if (type) {
+        options.type = type;
+      }
+      if (priority) {
+        options.priority = priority;
+      }
 
       const notifications = await notificationService.getUserNotifications(userId, options);
 

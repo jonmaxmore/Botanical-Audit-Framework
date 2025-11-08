@@ -189,8 +189,11 @@ class DocumentValidationService {
 
     // Determine risk level
     let level = 'MEDIUM';
-    if (score >= 80) level = 'LOW';
-    else if (score < 60) level = 'HIGH';
+    if (score >= 80) {
+      level = 'LOW';
+    } else if (score < 60) {
+      level = 'HIGH';
+    }
 
     return {
       score: Math.round(score),
@@ -211,8 +214,12 @@ class DocumentValidationService {
    * @returns {string} Recommendation
    */
   generateRecommendation(riskScore) {
-    if (riskScore.score < 50) return 'AUTO_REJECT';
-    if (riskScore.score >= 90) return 'FAST_TRACK';
+    if (riskScore.score < 50) {
+      return 'AUTO_REJECT';
+    }
+    if (riskScore.score >= 90) {
+      return 'FAST_TRACK';
+    }
     return 'PROCEED_TO_QC';
   }
 

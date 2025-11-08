@@ -111,14 +111,24 @@ class EnhancedAuditController {
 
       const filters = {};
 
-      if (severity) filters.severity = severity;
-      if (category) filters.category = category;
-      if (status) filters.status = status;
+      if (severity) {
+        filters.severity = severity;
+      }
+      if (category) {
+        filters.category = category;
+      }
+      if (status) {
+        filters.status = status;
+      }
 
       if (startDate || endDate) {
         filters.createdAt = {};
-        if (startDate) filters.createdAt.$gte = new Date(startDate);
-        if (endDate) filters.createdAt.$lte = new Date(endDate);
+        if (startDate) {
+          filters.createdAt.$gte = new Date(startDate);
+        }
+        if (endDate) {
+          filters.createdAt.$lte = new Date(endDate);
+        }
       }
 
       // Get violations from database
@@ -183,9 +193,15 @@ class EnhancedAuditController {
         updatedBy: userId,
       };
 
-      if (resolution) updateData.resolution = resolution;
-      if (correctiveActions) updateData.correctiveActions = correctiveActions;
-      if (status === 'RESOLVED') updateData.resolvedAt = new Date();
+      if (resolution) {
+        updateData.resolution = resolution;
+      }
+      if (correctiveActions) {
+        updateData.correctiveActions = correctiveActions;
+      }
+      if (status === 'RESOLVED') {
+        updateData.resolvedAt = new Date();
+      }
 
       await this.complianceMonitoringSystem.database
         .collection('compliance_violations')
@@ -418,7 +434,9 @@ class EnhancedAuditController {
       createdAt: { $gte: startDate, $lte: endDate },
     };
 
-    if (category) filters.category = category;
+    if (category) {
+      filters.category = category;
+    }
 
     // Violation trends
     const violationTrends = await this.complianceMonitoringSystem.database

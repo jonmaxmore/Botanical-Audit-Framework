@@ -7,7 +7,9 @@
 
 class ReportDTO {
   static toResponse(report) {
-    if (!report) return null;
+    if (!report) {
+      return null;
+    }
 
     return {
       id: report.id,
@@ -89,7 +91,9 @@ class ReportDTO {
   }
 
   static toSummaryResponse(report) {
-    if (!report) return null;
+    if (!report) {
+      return null;
+    }
 
     return {
       id: report.id,

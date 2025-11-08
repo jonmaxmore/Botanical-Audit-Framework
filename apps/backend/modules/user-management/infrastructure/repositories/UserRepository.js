@@ -137,7 +137,9 @@ class UserRepository {
    */
   async findByEmail(email, options = {}) {
     try {
-      if (!email) return null;
+      if (!email) {
+        return null;
+      }
 
       const normalizedEmail = email.toLowerCase().trim();
       const cacheKey = `user:email:${normalizedEmail}:${JSON.stringify(options)}`;
@@ -640,7 +642,9 @@ class UserRepository {
    * @private
    */
   async _clearUserCaches(userId) {
-    if (!this.cacheService) return;
+    if (!this.cacheService) {
+      return;
+    }
 
     try {
       const patterns = [`user:${userId}:*`, 'user:email:*:*'];
@@ -658,7 +662,9 @@ class UserRepository {
    * @private
    */
   async _clearUserListCaches() {
-    if (!this.cacheService) return;
+    if (!this.cacheService) {
+      return;
+    }
 
     try {
       const patterns = ['users:*', 'inspectors:*'];

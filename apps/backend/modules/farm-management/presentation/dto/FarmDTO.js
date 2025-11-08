@@ -120,22 +120,54 @@ class FarmDTO {
   static fromUpdateRequest(body) {
     const updates = {};
 
-    if (body.farmName !== undefined) updates.farmName = body.farmName;
-    if (body.farmType !== undefined) updates.farmType = body.farmType;
-    if (body.address !== undefined) updates.address = body.address;
-    if (body.subDistrict !== undefined) updates.subDistrict = body.subDistrict;
-    if (body.district !== undefined) updates.district = body.district;
-    if (body.province !== undefined) updates.province = body.province;
-    if (body.postalCode !== undefined) updates.postalCode = body.postalCode;
-    if (body.latitude !== undefined) updates.latitude = body.latitude;
-    if (body.longitude !== undefined) updates.longitude = body.longitude;
-    if (body.totalArea !== undefined) updates.totalArea = body.totalArea;
-    if (body.cultivationArea !== undefined) updates.cultivationArea = body.cultivationArea;
-    if (body.areaUnit !== undefined) updates.areaUnit = body.areaUnit;
-    if (body.cultivationMethod !== undefined) updates.cultivationMethod = body.cultivationMethod;
-    if (body.irrigationType !== undefined) updates.irrigationType = body.irrigationType;
-    if (body.soilType !== undefined) updates.soilType = body.soilType;
-    if (body.waterSource !== undefined) updates.waterSource = body.waterSource;
+    if (body.farmName !== undefined) {
+      updates.farmName = body.farmName;
+    }
+    if (body.farmType !== undefined) {
+      updates.farmType = body.farmType;
+    }
+    if (body.address !== undefined) {
+      updates.address = body.address;
+    }
+    if (body.subDistrict !== undefined) {
+      updates.subDistrict = body.subDistrict;
+    }
+    if (body.district !== undefined) {
+      updates.district = body.district;
+    }
+    if (body.province !== undefined) {
+      updates.province = body.province;
+    }
+    if (body.postalCode !== undefined) {
+      updates.postalCode = body.postalCode;
+    }
+    if (body.latitude !== undefined) {
+      updates.latitude = body.latitude;
+    }
+    if (body.longitude !== undefined) {
+      updates.longitude = body.longitude;
+    }
+    if (body.totalArea !== undefined) {
+      updates.totalArea = body.totalArea;
+    }
+    if (body.cultivationArea !== undefined) {
+      updates.cultivationArea = body.cultivationArea;
+    }
+    if (body.areaUnit !== undefined) {
+      updates.areaUnit = body.areaUnit;
+    }
+    if (body.cultivationMethod !== undefined) {
+      updates.cultivationMethod = body.cultivationMethod;
+    }
+    if (body.irrigationType !== undefined) {
+      updates.irrigationType = body.irrigationType;
+    }
+    if (body.soilType !== undefined) {
+      updates.soilType = body.soilType;
+    }
+    if (body.waterSource !== undefined) {
+      updates.waterSource = body.waterSource;
+    }
 
     return updates;
   }

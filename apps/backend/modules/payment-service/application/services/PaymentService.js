@@ -687,7 +687,9 @@ class PaymentService {
     };
 
     const discount = promoCodes[promoCode];
-    if (!discount) return 0;
+    if (!discount) {
+      return 0;
+    }
 
     if (discount < 1) {
       // Percentage discount

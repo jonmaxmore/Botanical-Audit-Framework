@@ -281,7 +281,9 @@ class EventBusService extends EventEmitter {
     await this.channel.consume(
       queue,
       async msg => {
-        if (!msg) return;
+        if (!msg) {
+          return;
+        }
 
         try {
           const event = JSON.parse(msg.content.toString());

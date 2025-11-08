@@ -625,7 +625,9 @@ class CertificateGenerationService {
    */
   async checkExistingValidCertificate(farmerId, courseId, certificateType) {
     try {
-      if (!this.database) return null;
+      if (!this.database) {
+        return null;
+      }
 
       const collection = this.database.collection('certificates');
       const existingCertificate = await collection.findOne({

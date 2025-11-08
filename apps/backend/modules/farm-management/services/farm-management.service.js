@@ -424,9 +424,13 @@ class FarmManagementService {
 
     if (check.findings && Array.isArray(check.findings)) {
       check.findings.forEach(finding => {
-        if (finding.severity === 'critical') score -= 20;
-        else if (finding.severity === 'major') score -= 10;
-        else if (finding.severity === 'minor') score -= 5;
+        if (finding.severity === 'critical') {
+          score -= 20;
+        } else if (finding.severity === 'major') {
+          score -= 10;
+        } else if (finding.severity === 'minor') {
+          score -= 5;
+        }
       });
     }
 

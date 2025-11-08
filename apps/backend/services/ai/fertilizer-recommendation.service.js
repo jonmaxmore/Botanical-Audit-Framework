@@ -180,14 +180,22 @@ class FertilizerRecommendationService {
   _determineGrowthStage(plantAge, cropType) {
     // Cannabis growth stages (simplified)
     if (cropType === 'cannabis') {
-      if (plantAge < 14) return 'seedling';
-      if (plantAge < 60) return 'vegetative';
+      if (plantAge < 14) {
+        return 'seedling';
+      }
+      if (plantAge < 60) {
+        return 'vegetative';
+      }
       return 'flowering';
     }
 
     // Default for other plants
-    if (plantAge < 21) return 'seedling';
-    if (plantAge < 90) return 'vegetative';
+    if (plantAge < 21) {
+      return 'seedling';
+    }
+    if (plantAge < 90) {
+      return 'vegetative';
+    }
     return 'flowering';
   }
 
@@ -269,7 +277,9 @@ class FertilizerRecommendationService {
    * Parse NPK ratio string (e.g., "20-10-20" -> {N: 20, P: 10, K: 20})
    */
   _parseNPKRatio(ratioString) {
-    if (!ratioString) return { N: 10, P: 10, K: 10 };
+    if (!ratioString) {
+      return { N: 10, P: 10, K: 10 };
+    }
 
     const parts = ratioString.split('-').map(n => parseInt(n));
     return {
@@ -399,7 +409,9 @@ class FertilizerRecommendationService {
 
     const regionalNPK = { ...envNPK };
 
-    if (!regional) return regionalNPK;
+    if (!regional) {
+      return regionalNPK;
+    }
 
     // Get regional performance data for this plant
     const regionalPerformance = regional.agriculture?.otherMedicinalPlants?.find(
@@ -615,17 +627,33 @@ class FertilizerRecommendationService {
    * Parse frequency string to days
    */
   _parseFrequency(frequency) {
-    if (!frequency) return 7; // Default weekly
+    if (!frequency) {
+      return 7;
+    } // Default weekly
 
     const lower = frequency.toLowerCase();
 
-    if (lower.includes('daily') || lower.includes('ทุกวัน')) return 1;
-    if (lower.includes('every 2 days') || lower.includes('2 วัน')) return 2;
-    if (lower.includes('every 3 days') || lower.includes('3 วัน')) return 3;
-    if (lower.includes('twice a week') || lower.includes('สัปดาห์ละ 2')) return 3.5;
-    if (lower.includes('weekly') || lower.includes('สัปดาห์')) return 7;
-    if (lower.includes('biweekly') || lower.includes('2 สัปดาห์')) return 14;
-    if (lower.includes('monthly') || lower.includes('เดือน')) return 30;
+    if (lower.includes('daily') || lower.includes('ทุกวัน')) {
+      return 1;
+    }
+    if (lower.includes('every 2 days') || lower.includes('2 วัน')) {
+      return 2;
+    }
+    if (lower.includes('every 3 days') || lower.includes('3 วัน')) {
+      return 3;
+    }
+    if (lower.includes('twice a week') || lower.includes('สัปดาห์ละ 2')) {
+      return 3.5;
+    }
+    if (lower.includes('weekly') || lower.includes('สัปดาห์')) {
+      return 7;
+    }
+    if (lower.includes('biweekly') || lower.includes('2 สัปดาห์')) {
+      return 14;
+    }
+    if (lower.includes('monthly') || lower.includes('เดือน')) {
+      return 30;
+    }
 
     return 7; // Default
   }

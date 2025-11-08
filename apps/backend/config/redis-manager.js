@@ -132,7 +132,9 @@ async function disconnect() {
 const cache = {
   async get(key) {
     try {
-      if (!isConnected) return null;
+      if (!isConnected) {
+        return null;
+      }
       const value = await redisClient.get(key);
       return value ? JSON.parse(value) : null;
     } catch (error) {
@@ -143,7 +145,9 @@ const cache = {
 
   async set(key, value, ttlSeconds) {
     try {
-      if (!isConnected) return false;
+      if (!isConnected) {
+        return false;
+      }
       const ttl = ttlSeconds || config.ttl || 86400; // Default 24 hours
       const serialized = JSON.stringify(value);
       await redisClient.set(key, serialized, 'EX', ttl);
@@ -156,7 +160,9 @@ const cache = {
 
   async delete(key) {
     try {
-      if (!isConnected) return false;
+      if (!isConnected) {
+        return false;
+      }
       await redisClient.del(key);
       return true;
     } catch (error) {
@@ -167,7 +173,9 @@ const cache = {
 
   async flush() {
     try {
-      if (!isConnected) return false;
+      if (!isConnected) {
+        return false;
+      }
       await redisClient.flushdb();
       return true;
     } catch (error) {
@@ -195,7 +203,9 @@ const messaging = {
   },
 
   unsubscribe(channel, callback) {
-    if (!isConnected || !pubSub) return false;
+    if (!isConnected || !pubSub) {
+      return false;
+    }
 
     pubSub.subscriber.unsubscribe(channel);
 

@@ -134,7 +134,9 @@ SignatureStoreSchema.virtual('isValid').get(function () {
 });
 
 SignatureStoreSchema.virtual('expiresIn').get(function () {
-  if (!this.validUntil) return null;
+  if (!this.validUntil) {
+    return null;
+  }
 
   const now = new Date();
   const diff = this.validUntil - now;

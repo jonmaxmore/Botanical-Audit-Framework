@@ -25,8 +25,12 @@ class UserController {
 
     // Build filter
     const filter = {};
-    if (role) filter.role = role;
-    if (status) filter.status = status;
+    if (role) {
+      filter.role = role;
+    }
+    if (status) {
+      filter.status = status;
+    }
 
     // Build sort options
     const sort = {};

@@ -33,8 +33,12 @@ class CropCalendarService {
   getRegion(province) {
     const north = ['เชียงใหม่', 'เชียงราย', 'ลำปาง'];
     const south = ['ภูเก็ต', 'สุราษฎร์ธานี', 'กระบี่'];
-    if (north.includes(province)) return 'north';
-    if (south.includes(province)) return 'south';
+    if (north.includes(province)) {
+      return 'north';
+    }
+    if (south.includes(province)) {
+      return 'south';
+    }
     return 'central';
   }
 }

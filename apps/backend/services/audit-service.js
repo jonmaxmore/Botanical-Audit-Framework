@@ -187,8 +187,12 @@ class AuditService {
     // Add time filter if provided
     if (options.from || options.to) {
       query.timestamp = {};
-      if (options.from) query.timestamp.$gte = new Date(options.from);
-      if (options.to) query.timestamp.$lte = new Date(options.to);
+      if (options.from) {
+        query.timestamp.$gte = new Date(options.from);
+      }
+      if (options.to) {
+        query.timestamp.$lte = new Date(options.to);
+      }
     }
 
     // Add action filter if provided
@@ -221,8 +225,12 @@ class AuditService {
 
     if (options.from || options.to) {
       query.timestamp = {};
-      if (options.from) query.timestamp.$gte = new Date(options.from);
-      if (options.to) query.timestamp.$lte = new Date(options.to);
+      if (options.from) {
+        query.timestamp.$gte = new Date(options.from);
+      }
+      if (options.to) {
+        query.timestamp.$lte = new Date(options.to);
+      }
     }
 
     const logs = await this.db
@@ -264,8 +272,12 @@ class AuditService {
     // Time range
     if (filters.from || filters.to) {
       query.timestamp = {};
-      if (filters.from) query.timestamp.$gte = new Date(filters.from);
-      if (filters.to) query.timestamp.$lte = new Date(filters.to);
+      if (filters.from) {
+        query.timestamp.$gte = new Date(filters.from);
+      }
+      if (filters.to) {
+        query.timestamp.$lte = new Date(filters.to);
+      }
     }
 
     const logs = await this.db

@@ -186,9 +186,15 @@ class AIPreCheckController {
       }
 
       const updates = {};
-      if (thresholds) updates['config.thresholds'] = thresholds;
-      if (weights) updates['config.weights'] = weights;
-      if (enabled !== undefined) updates.enabled = enabled;
+      if (thresholds) {
+        updates['config.thresholds'] = thresholds;
+      }
+      if (weights) {
+        updates['config.weights'] = weights;
+      }
+      if (enabled !== undefined) {
+        updates.enabled = enabled;
+      }
 
       const config = await this.aiConfigRepository.updateConfig('PRE_CHECK', updates);
 

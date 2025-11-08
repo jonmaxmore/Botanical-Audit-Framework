@@ -110,7 +110,9 @@ function createRenewCertificateUseCase(certificateRepository, eventBus) {
   return {
     async execute({ id, validityPeriod, renewedBy }) {
       const certificate = await certificateRepository.findById(id);
-      if (!certificate) throw new Error('Certificate not found');
+      if (!certificate) {
+        throw new Error('Certificate not found');
+      }
 
       const newExpiryDate = new Date();
       newExpiryDate.setMonth(newExpiryDate.getMonth() + validityPeriod);

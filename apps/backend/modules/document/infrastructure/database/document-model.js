@@ -102,7 +102,9 @@ class MongoDBDocumentRepository {
 
   // Convert MongoDB document to Domain Entity
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     const data = doc.toObject ? doc.toObject() : doc;
     return new Document({
@@ -167,9 +169,15 @@ class MongoDBDocumentRepository {
     try {
       const query = { uploadedBy: mongoose.Types.ObjectId(uploaderId) };
 
-      if (filters.status) query.status = filters.status;
-      if (filters.type) query.type = filters.type;
-      if (filters.category) query.category = filters.category;
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.type) {
+        query.type = filters.type;
+      }
+      if (filters.category) {
+        query.category = filters.category;
+      }
 
       const page = options.page || 1;
       const limit = options.limit || 20;
@@ -201,8 +209,12 @@ class MongoDBDocumentRepository {
         status: { $ne: Document.STATUS.ARCHIVED },
       };
 
-      if (options.type) query.type = options.type;
-      if (options.status) query.status = options.status;
+      if (options.type) {
+        query.type = options.type;
+      }
+      if (options.status) {
+        query.status = options.status;
+      }
 
       const docs = await this.DocumentModel.find(query).sort({ uploadedAt: -1 });
 
@@ -292,16 +304,26 @@ class MongoDBDocumentRepository {
       if (filters.uploadedBy) {
         query.uploadedBy = mongoose.Types.ObjectId(filters.uploadedBy);
       }
-      if (filters.status) query.status = filters.status;
-      if (filters.type) query.type = filters.type;
-      if (filters.category) query.category = filters.category;
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.type) {
+        query.type = filters.type;
+      }
+      if (filters.category) {
+        query.category = filters.category;
+      }
       if (filters.tags && filters.tags.length > 0) {
         query.tags = { $in: filters.tags };
       }
       if (filters.startDate || filters.endDate) {
         query.uploadedAt = {};
-        if (filters.startDate) query.uploadedAt.$gte = new Date(filters.startDate);
-        if (filters.endDate) query.uploadedAt.$lte = new Date(filters.endDate);
+        if (filters.startDate) {
+          query.uploadedAt.$gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+          query.uploadedAt.$lte = new Date(filters.endDate);
+        }
       }
 
       const page = options.page || 1;
@@ -373,7 +395,9 @@ class MongoDBDocumentRepository {
     try {
       // Find original document
       const original = await this.DocumentModel.findById(documentId);
-      if (!original) return [];
+      if (!original) {
+        return [];
+      }
 
       // Find all versions (including original)
       const versions = await this.DocumentModel.find({
@@ -419,9 +443,15 @@ class MongoDBDocumentRepository {
     try {
       const query = { uploadedBy: mongoose.Types.ObjectId(uploaderId) };
 
-      if (filters.status) query.status = filters.status;
-      if (filters.type) query.type = filters.type;
-      if (filters.category) query.category = filters.category;
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.type) {
+        query.type = filters.type;
+      }
+      if (filters.category) {
+        query.category = filters.category;
+      }
 
       return await this.DocumentModel.countDocuments(query);
     } catch (error) {
@@ -457,8 +487,12 @@ class MongoDBDocumentRepository {
       }
       if (filters.startDate || filters.endDate) {
         matchStage.uploadedAt = {};
-        if (filters.startDate) matchStage.uploadedAt.$gte = new Date(filters.startDate);
-        if (filters.endDate) matchStage.uploadedAt.$lte = new Date(filters.endDate);
+        if (filters.startDate) {
+          matchStage.uploadedAt.$gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+          matchStage.uploadedAt.$lte = new Date(filters.endDate);
+        }
       }
 
       const [totalDocuments, byStatus, byType, byCategory, totalSize] = await Promise.all([
@@ -519,9 +553,15 @@ class MongoDBDocumentRepository {
         $text: { $search: searchText },
       };
 
-      if (options.status) query.status = options.status;
-      if (options.type) query.type = options.type;
-      if (options.category) query.category = options.category;
+      if (options.status) {
+        query.status = options.status;
+      }
+      if (options.type) {
+        query.type = options.type;
+      }
+      if (options.category) {
+        query.category = options.category;
+      }
 
       const page = options.page || 1;
       const limit = options.limit || 20;

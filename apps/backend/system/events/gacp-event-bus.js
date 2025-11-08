@@ -530,7 +530,9 @@ class GACPEventBus extends EventEmitter {
 
   _sortSubscriptionsByPriority(eventType) {
     const subscriptions = this.subscribers.get(eventType);
-    if (!subscriptions) return;
+    if (!subscriptions) {
+      return;
+    }
 
     const priorityOrder = { HIGH: 3, NORMAL: 2, LOW: 1 };
 

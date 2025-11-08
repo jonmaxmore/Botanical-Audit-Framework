@@ -157,45 +157,85 @@ class AuditMiddleware {
     const path = req.path.toLowerCase();
 
     // Authentication actions
-    if (path.includes('/login')) return 'login';
-    if (path.includes('/logout')) return 'logout';
-    if (path.includes('/register')) return 'user_created';
-    if (path.includes('/password')) return 'password_change';
+    if (path.includes('/login')) {
+      return 'login';
+    }
+    if (path.includes('/logout')) {
+      return 'logout';
+    }
+    if (path.includes('/register')) {
+      return 'user_created';
+    }
+    if (path.includes('/password')) {
+      return 'password_change';
+    }
 
     // Application actions
     if (path.includes('/application')) {
-      if (method === 'POST') return 'application_created';
-      if (method === 'PUT' || method === 'PATCH') return 'application_modified';
-      if (method === 'DELETE') return 'application_deleted';
-      if (method === 'GET') return 'application_viewed';
+      if (method === 'POST') {
+        return 'application_created';
+      }
+      if (method === 'PUT' || method === 'PATCH') {
+        return 'application_modified';
+      }
+      if (method === 'DELETE') {
+        return 'application_deleted';
+      }
+      if (method === 'GET') {
+        return 'application_viewed';
+      }
     }
 
     // Document actions
     if (path.includes('/document') || path.includes('/upload')) {
-      if (method === 'POST') return 'document_uploaded';
-      if (method === 'GET') return 'document_viewed';
-      if (method === 'DELETE') return 'document_deleted';
+      if (method === 'POST') {
+        return 'document_uploaded';
+      }
+      if (method === 'GET') {
+        return 'document_viewed';
+      }
+      if (method === 'DELETE') {
+        return 'document_deleted';
+      }
     }
 
     // User management
     if (path.includes('/user')) {
-      if (method === 'POST') return 'user_created';
-      if (method === 'PUT' || method === 'PATCH') return 'user_modified';
-      if (method === 'DELETE') return 'user_deleted';
-      if (method === 'GET') return 'pii_viewed';
+      if (method === 'POST') {
+        return 'user_created';
+      }
+      if (method === 'PUT' || method === 'PATCH') {
+        return 'user_modified';
+      }
+      if (method === 'DELETE') {
+        return 'user_deleted';
+      }
+      if (method === 'GET') {
+        return 'pii_viewed';
+      }
     }
 
     // CMS actions
     if (path.includes('/cms')) {
-      if (method === 'POST') return 'content_created';
-      if (method === 'PUT' || method === 'PATCH') return 'content_modified';
-      if (method === 'DELETE') return 'content_deleted';
+      if (method === 'POST') {
+        return 'content_created';
+      }
+      if (method === 'PUT' || method === 'PATCH') {
+        return 'content_modified';
+      }
+      if (method === 'DELETE') {
+        return 'content_deleted';
+      }
     }
 
     // Payment actions
     if (path.includes('/payment')) {
-      if (method === 'POST') return 'payment_initiated';
-      if (method === 'GET') return 'payment_viewed';
+      if (method === 'POST') {
+        return 'payment_initiated';
+      }
+      if (method === 'GET') {
+        return 'payment_viewed';
+      }
     }
 
     // Default based on HTTP method
@@ -332,15 +372,21 @@ class AuditMiddleware {
       AuditMiddleware.containsPII(req.body, financialFields).found ||
       AuditMiddleware.containsPII(responseData, financialFields).found;
 
-    if (hasSensitive) return 'sensitive';
-    if (hasFinancial) return 'financial';
+    if (hasSensitive) {
+      return 'sensitive';
+    }
+    if (hasFinancial) {
+      return 'financial';
+    }
 
     const personalFields = ['email', 'phone', 'firstName', 'lastName', 'address'];
     const hasPersonal =
       AuditMiddleware.containsPII(req.body, personalFields).found ||
       AuditMiddleware.containsPII(responseData, personalFields).found;
 
-    if (hasPersonal) return 'personal';
+    if (hasPersonal) {
+      return 'personal';
+    }
 
     return 'public';
   }
@@ -525,11 +571,21 @@ class AuditMiddleware {
    * Extract OS from user agent
    */
   static extractOS(userAgent) {
-    if (/Windows/.test(userAgent)) return 'Windows';
-    if (/Mac OS/.test(userAgent)) return 'macOS';
-    if (/Linux/.test(userAgent)) return 'Linux';
-    if (/Android/.test(userAgent)) return 'Android';
-    if (/iOS|iPhone|iPad/.test(userAgent)) return 'iOS';
+    if (/Windows/.test(userAgent)) {
+      return 'Windows';
+    }
+    if (/Mac OS/.test(userAgent)) {
+      return 'macOS';
+    }
+    if (/Linux/.test(userAgent)) {
+      return 'Linux';
+    }
+    if (/Android/.test(userAgent)) {
+      return 'Android';
+    }
+    if (/iOS|iPhone|iPad/.test(userAgent)) {
+      return 'iOS';
+    }
     return 'Unknown';
   }
 
@@ -537,10 +593,18 @@ class AuditMiddleware {
    * Extract browser from user agent
    */
   static extractBrowser(userAgent) {
-    if (/Chrome/.test(userAgent)) return 'Chrome';
-    if (/Firefox/.test(userAgent)) return 'Firefox';
-    if (/Safari/.test(userAgent)) return 'Safari';
-    if (/Edge/.test(userAgent)) return 'Edge';
+    if (/Chrome/.test(userAgent)) {
+      return 'Chrome';
+    }
+    if (/Firefox/.test(userAgent)) {
+      return 'Firefox';
+    }
+    if (/Safari/.test(userAgent)) {
+      return 'Safari';
+    }
+    if (/Edge/.test(userAgent)) {
+      return 'Edge';
+    }
     return 'Unknown';
   }
 
@@ -550,13 +614,27 @@ class AuditMiddleware {
   static determineResourceType(req) {
     const path = req.path.toLowerCase();
 
-    if (path.includes('/user')) return 'user';
-    if (path.includes('/application')) return 'application';
-    if (path.includes('/document')) return 'document';
-    if (path.includes('/cms')) return 'cms_content';
-    if (path.includes('/track')) return 'track_trace';
-    if (path.includes('/payment')) return 'payment';
-    if (path.includes('/certificate')) return 'certificate';
+    if (path.includes('/user')) {
+      return 'user';
+    }
+    if (path.includes('/application')) {
+      return 'application';
+    }
+    if (path.includes('/document')) {
+      return 'document';
+    }
+    if (path.includes('/cms')) {
+      return 'cms_content';
+    }
+    if (path.includes('/track')) {
+      return 'track_trace';
+    }
+    if (path.includes('/payment')) {
+      return 'payment';
+    }
+    if (path.includes('/certificate')) {
+      return 'certificate';
+    }
 
     return 'system';
   }

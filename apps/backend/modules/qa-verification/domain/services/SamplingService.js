@@ -190,7 +190,9 @@ class SamplingService {
    * @returns {boolean} Is overdue
    */
   isQAOverdue(inspectionCompletedAt, riskLevel) {
-    if (!inspectionCompletedAt) return false;
+    if (!inspectionCompletedAt) {
+      return false;
+    }
 
     const now = new Date();
     const daysSinceCompletion = (now - inspectionCompletedAt) / (1000 * 60 * 60 * 24);

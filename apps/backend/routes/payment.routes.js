@@ -197,8 +197,12 @@ function initializePaymentRoutes(dependencies) {
       const { status, type } = req.query;
 
       const filters = {};
-      if (status) filters.status = status;
-      if (type) filters.type = type;
+      if (status) {
+        filters.status = status;
+      }
+      if (type) {
+        filters.type = type;
+      }
 
       const payments = await paymentService.getFarmerPayments(farmerId, filters);
 
@@ -250,10 +254,18 @@ function initializePaymentRoutes(dependencies) {
       const { startDate, endDate, status, type } = req.query;
 
       const filters = {};
-      if (startDate) filters.startDate = startDate;
-      if (endDate) filters.endDate = endDate;
-      if (status) filters.status = status;
-      if (type) filters.type = type;
+      if (startDate) {
+        filters.startDate = startDate;
+      }
+      if (endDate) {
+        filters.endDate = endDate;
+      }
+      if (status) {
+        filters.status = status;
+      }
+      if (type) {
+        filters.type = type;
+      }
 
       const statistics = await paymentService.getPaymentStatistics(filters);
 

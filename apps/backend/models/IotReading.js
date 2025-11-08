@@ -243,7 +243,9 @@ IotReadingSchema.statics.checkThresholds = async function (farmId, rules) {
   for (const rule of rules) {
     const latest = await this.getLatest(farmId, rule.deviceId, rule.sensorType);
 
-    if (!latest) continue;
+    if (!latest) {
+      continue;
+    }
 
     let triggered = false;
     let type = null;

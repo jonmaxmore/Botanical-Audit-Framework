@@ -726,9 +726,15 @@ HistoricalYieldSchema.statics.getSimilarRecords = function (conditions, limit = 
     status: { $in: ['verified', 'published'] },
   };
 
-  if (region) query['location.region'] = region;
-  if (cultivationMethod) query['cultivation.method'] = cultivationMethod;
-  if (season) query['mlFeatures.categorical.season'] = season;
+  if (region) {
+    query['location.region'] = region;
+  }
+  if (cultivationMethod) {
+    query['cultivation.method'] = cultivationMethod;
+  }
+  if (season) {
+    query['mlFeatures.categorical.season'] = season;
+  }
 
   return this.find(query).sort({ 'outcome.success.successScore': -1 }).limit(limit);
 };
@@ -823,9 +829,15 @@ HistoricalYieldSchema.methods.calculateTemperatureOptimality = function () {
   // This would compare actual temperature to optimal range for the plant
   // Simplified version - should reference PlantCatalog
   const avgTemp = this.environment.temperature.average;
-  if (avgTemp >= 20 && avgTemp <= 30) return 1.0;
-  if (avgTemp >= 18 && avgTemp <= 32) return 0.8;
-  if (avgTemp >= 15 && avgTemp <= 35) return 0.6;
+  if (avgTemp >= 20 && avgTemp <= 30) {
+    return 1.0;
+  }
+  if (avgTemp >= 18 && avgTemp <= 32) {
+    return 0.8;
+  }
+  if (avgTemp >= 15 && avgTemp <= 35) {
+    return 0.6;
+  }
   return 0.4;
 };
 
@@ -834,9 +846,15 @@ HistoricalYieldSchema.methods.calculateTemperatureOptimality = function () {
  */
 HistoricalYieldSchema.methods.calculateHumidityOptimality = function () {
   const avgHumidity = this.environment.humidity.average;
-  if (avgHumidity >= 50 && avgHumidity <= 70) return 1.0;
-  if (avgHumidity >= 40 && avgHumidity <= 80) return 0.8;
-  if (avgHumidity >= 30 && avgHumidity <= 90) return 0.6;
+  if (avgHumidity >= 50 && avgHumidity <= 70) {
+    return 1.0;
+  }
+  if (avgHumidity >= 40 && avgHumidity <= 80) {
+    return 0.8;
+  }
+  if (avgHumidity >= 30 && avgHumidity <= 90) {
+    return 0.6;
+  }
   return 0.4;
 };
 

@@ -40,7 +40,9 @@ class CertificateNumber {
    * Get year from certificate number
    */
   getYear() {
-    if (!this.isValid()) return null;
+    if (!this.isValid()) {
+      return null;
+    }
     return parseInt(this.value.split('-')[1]);
   }
 
@@ -48,7 +50,9 @@ class CertificateNumber {
    * Get date from certificate number
    */
   getDate() {
-    if (!this.isValid()) return null;
+    if (!this.isValid()) {
+      return null;
+    }
     const datePart = this.value.split('-')[2];
     const month = parseInt(datePart.substring(0, 2));
     const day = parseInt(datePart.substring(2, 4));
@@ -60,7 +64,9 @@ class CertificateNumber {
    * Get sequence number
    */
   getSequence() {
-    if (!this.isValid()) return null;
+    if (!this.isValid()) {
+      return null;
+    }
     return parseInt(this.value.split('-')[3]);
   }
 

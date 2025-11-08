@@ -60,7 +60,9 @@ const securityConfig = {
         : ['http://localhost:3000', 'http://localhost:5173'];
 
       // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
+      if (!origin) {
+        return callback(null, true);
+      }
 
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);

@@ -1075,7 +1075,9 @@ class EnhancedApplicationModuleConfig {
     const keys = path.split('.');
     const lastKey = keys.pop();
     const target = keys.reduce((obj, key) => {
-      if (!obj[key]) obj[key] = {};
+      if (!obj[key]) {
+        obj[key] = {};
+      }
       return obj[key];
     }, this.config);
 

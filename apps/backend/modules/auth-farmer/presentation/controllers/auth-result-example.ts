@@ -13,7 +13,7 @@ import {
   ConflictError,
   UnauthorizedError,
   ForbiddenError,
-  DomainError
+  DomainError,
 } from '../../../shared/errors';
 
 export class AuthControllerWithResult {
@@ -36,7 +36,7 @@ export class AuthControllerWithResult {
           success: false,
           error: error.message,
           code: error.code,
-          field: error.field
+          field: error.field,
         });
         return;
       }
@@ -46,7 +46,7 @@ export class AuthControllerWithResult {
           success: false,
           error: error.message,
           code: error.code,
-          resource: error.resource
+          resource: error.resource,
         });
         return;
       }
@@ -55,7 +55,7 @@ export class AuthControllerWithResult {
         res.status(401).json({
           success: false,
           error: error.message,
-          code: error.code
+          code: error.code,
         });
         return;
       }
@@ -64,7 +64,7 @@ export class AuthControllerWithResult {
         res.status(403).json({
           success: false,
           error: error.message,
-          code: error.code
+          code: error.code,
         });
         return;
       }
@@ -74,7 +74,7 @@ export class AuthControllerWithResult {
         res.status(error.statusCode).json({
           success: false,
           error: error.message,
-          code: error.code
+          code: error.code,
         });
         return;
       }
@@ -84,7 +84,7 @@ export class AuthControllerWithResult {
       res.status(500).json({
         success: false,
         error: 'Internal server error',
-        code: 'INTERNAL_ERROR'
+        code: 'INTERNAL_ERROR',
       });
       return;
     }
@@ -95,8 +95,8 @@ export class AuthControllerWithResult {
       success: true,
       message: 'Registration successful. Please verify your email.',
       data: {
-        user: user.toJSON() // Safe: password excluded
-      }
+        user: user.toJSON(), // Safe: password excluded
+      },
     });
   }
 }
@@ -122,8 +122,8 @@ export function mapErrorToResponse(error: Error): {
         error: error.message,
         code: error.code,
         ...(error instanceof ValidationError && { field: error.field }),
-        ...(error instanceof ConflictError && { resource: error.resource })
-      }
+        ...(error instanceof ConflictError && { resource: error.resource }),
+      },
     };
   }
 
@@ -134,7 +134,7 @@ export function mapErrorToResponse(error: Error): {
     body: {
       success: false,
       error: 'Internal server error',
-      code: 'INTERNAL_ERROR'
-    }
+      code: 'INTERNAL_ERROR',
+    },
   };
 }

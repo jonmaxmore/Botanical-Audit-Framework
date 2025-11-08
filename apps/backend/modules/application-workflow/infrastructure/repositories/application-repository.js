@@ -444,11 +444,17 @@ class ApplicationRepository {
     let findQuery = this.model.find(query);
 
     // Apply pagination
-    if (options.skip) findQuery = findQuery.skip(options.skip);
-    if (options.limit) findQuery = findQuery.limit(options.limit);
+    if (options.skip) {
+      findQuery = findQuery.skip(options.skip);
+    }
+    if (options.limit) {
+      findQuery = findQuery.limit(options.limit);
+    }
 
     // Apply sorting
-    if (options.sort) findQuery = findQuery.sort(options.sort);
+    if (options.sort) {
+      findQuery = findQuery.sort(options.sort);
+    }
 
     // Apply population
     if (options.populate) {

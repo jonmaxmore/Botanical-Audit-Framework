@@ -381,7 +381,9 @@ class Course {
    * Get completion rate
    */
   getCompletionRate() {
-    if (this.currentEnrollments === 0) return 0;
+    if (this.currentEnrollments === 0) {
+      return 0;
+    }
     return Math.round((this.completionCount / this.currentEnrollments) * 100);
   }
 
@@ -389,7 +391,9 @@ class Course {
    * Get enrollment utilization
    */
   getEnrollmentUtilization() {
-    if (!this.maxEnrollments) return 0;
+    if (!this.maxEnrollments) {
+      return 0;
+    }
     return Math.round((this.currentEnrollments / this.maxEnrollments) * 100);
   }
 
@@ -433,9 +437,15 @@ class Course {
   validate() {
     const errors = [];
 
-    if (!this.code) errors.push('Course code is required');
-    if (!this.title) errors.push('Course title is required');
-    if (!this.description) errors.push('Course description is required');
+    if (!this.code) {
+      errors.push('Course code is required');
+    }
+    if (!this.title) {
+      errors.push('Course title is required');
+    }
+    if (!this.description) {
+      errors.push('Course description is required');
+    }
     if (this.passingScore < 0 || this.passingScore > 100) {
       errors.push('Passing score must be between 0 and 100');
     }

@@ -113,8 +113,12 @@ class RoutingService {
     score += (cropScore / 100) * weights.cropType;
 
     // Determine priority
-    if (score >= 85) return 'FAST_TRACK';
-    if (score < 60) return 'HIGH_RISK';
+    if (score >= 85) {
+      return 'FAST_TRACK';
+    }
+    if (score < 60) {
+      return 'HIGH_RISK';
+    }
     return 'NORMAL';
   }
 
@@ -222,7 +226,9 @@ class RoutingService {
     const sizeMultiplier = farmSize > 10 ? 1.5 : 1.0;
     const hours = (baseTime[inspectionType] || 4) * sizeMultiplier;
 
-    if (hours <= 4) return `${hours} hours`;
+    if (hours <= 4) {
+      return `${hours} hours`;
+    }
     const days = Math.ceil(hours / 8);
     return `${days} day${days > 1 ? 's' : ''}`;
   }

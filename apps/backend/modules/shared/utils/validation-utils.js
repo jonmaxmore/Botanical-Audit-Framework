@@ -23,7 +23,9 @@ function isValidPhoneNumber(phone) {
  * Validate Thai National ID (13 digits)
  */
 function isValidNationalId(nationalId) {
-  if (!nationalId || nationalId.length !== 13) return false;
+  if (!nationalId || nationalId.length !== 13) {
+    return false;
+  }
 
   const digits = nationalId.split('').map(Number);
   let sum = 0;
@@ -40,7 +42,9 @@ function isValidNationalId(nationalId) {
  * Sanitize string input
  */
 function sanitizeString(str) {
-  if (!str) return '';
+  if (!str) {
+    return '';
+  }
   return str
     .replace(/[<>]/g, '') // Remove HTML tags
     .trim();

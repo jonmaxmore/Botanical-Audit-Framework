@@ -55,10 +55,18 @@ mongoose.deleteModel = function (modelName) {
 };
 
 // Clear any existing models
-if (mongoose.models.User) mongoose.deleteModel('User');
-if (mongoose.models.Application) mongoose.deleteModel('Application');
-if (mongoose.models.Inspection) mongoose.deleteModel('Inspection');
-if (mongoose.models.Certificate) mongoose.deleteModel('Certificate');
+if (mongoose.models.User) {
+  mongoose.deleteModel('User');
+}
+if (mongoose.models.Application) {
+  mongoose.deleteModel('Application');
+}
+if (mongoose.models.Inspection) {
+  mongoose.deleteModel('Inspection');
+}
+if (mongoose.models.Certificate) {
+  mongoose.deleteModel('Certificate');
+}
 
 const app = express();
 const port = process.env.PORT || 3005; // Different port to avoid conflicts

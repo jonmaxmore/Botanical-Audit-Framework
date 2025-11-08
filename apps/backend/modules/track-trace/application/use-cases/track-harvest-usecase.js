@@ -767,7 +767,9 @@ class TrackHarvestUseCase {
   }
 
   calculateAverageQualityScore(assessments) {
-    if (!assessments || assessments.length === 0) return 0;
+    if (!assessments || assessments.length === 0) {
+      return 0;
+    }
     const total = assessments.reduce((sum, assessment) => sum + assessment.qualityScore, 0);
     return Math.round(total / assessments.length);
   }

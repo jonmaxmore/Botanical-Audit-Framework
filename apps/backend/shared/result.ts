@@ -24,7 +24,7 @@ export type Result<T, E> = Ok<T> | Err<E>;
  */
 export const ok = <T, E = never>(value: T): Result<T, E> => ({
   ok: true,
-  value
+  value,
 });
 
 /**
@@ -32,7 +32,7 @@ export const ok = <T, E = never>(value: T): Result<T, E> => ({
  */
 export const err = <T = never, E = Error>(error: E): Result<T, E> => ({
   ok: false,
-  error
+  error,
 });
 
 /**
@@ -50,7 +50,9 @@ export const isErr = <T, E>(r: Result<T, E>): r is Err<E> => r.ok === false;
  * Use only when you're certain the Result is Ok
  */
 export const unwrap = <T, E>(r: Result<T, E>): T => {
-  if (isOk(r)) return r.value;
+  if (isOk(r)) {
+    return r.value;
+  }
   throw new Error('Cannot unwrap Err Result');
 };
 
@@ -64,19 +66,13 @@ export const unwrapOr = <T, E>(r: Result<T, E>, defaultValue: T): T => {
 /**
  * Map Result value (only if Ok)
  */
-export const map = <T, U, E>(
-  r: Result<T, E>,
-  fn: (value: T) => U
-): Result<U, E> => {
+export const map = <T, U, E>(r: Result<T, E>, fn: (value: T) => U): Result<U, E> => {
   return isOk(r) ? ok(fn(r.value)) : r;
 };
 
 /**
  * Map Result error (only if Err)
  */
-export const mapErr = <T, E, F>(
-  r: Result<T, E>,
-  fn: (error: E) => F
-): Result<T, F> => {
+export const mapErr = <T, E, F>(r: Result<T, E>, fn: (error: E) => F): Result<T, F> => {
   return isErr(r) ? err(fn(r.error)) : r;
 };

@@ -44,7 +44,9 @@ function findMatchingSchema(path, method) {
   for (const [key, value] of schemaRegistry.entries()) {
     const [schemaMethod, schemaPath] = key.split(':');
 
-    if (schemaMethod !== method.toUpperCase()) continue;
+    if (schemaMethod !== method.toUpperCase()) {
+      continue;
+    }
 
     // Convert route patterns to regex
     // e.g. /users/:id becomes /users/([^/]+)

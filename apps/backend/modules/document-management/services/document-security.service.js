@@ -332,16 +332,24 @@ class DocumentSecurityService {
     const hex = magicBytes.toString('hex').toLowerCase();
 
     // PDF
-    if (hex.startsWith('255044462d')) return 'application/pdf';
+    if (hex.startsWith('255044462d')) {
+      return 'application/pdf';
+    }
 
     // JPEG
-    if (hex.startsWith('ffd8')) return 'image/jpeg';
+    if (hex.startsWith('ffd8')) {
+      return 'image/jpeg';
+    }
 
     // PNG
-    if (hex.startsWith('89504e47')) return 'image/png';
+    if (hex.startsWith('89504e47')) {
+      return 'image/png';
+    }
 
     // TIFF
-    if (hex.startsWith('49492a00') || hex.startsWith('4d4d002a')) return 'image/tiff';
+    if (hex.startsWith('49492a00') || hex.startsWith('4d4d002a')) {
+      return 'image/tiff';
+    }
 
     return 'application/octet-stream';
   }
@@ -398,16 +406,22 @@ class DocumentSecurityService {
     let score = 0;
 
     // File size complexity
-    if (fileBuffer.length > 10 * 1024 * 1024) score += 20; // > 10MB
+    if (fileBuffer.length > 10 * 1024 * 1024) {
+      score += 20;
+    } // > 10MB
 
     // Entropy check (randomness)
     const entropy = this._calculateEntropy(fileBuffer);
-    if (entropy > 7.5) score += 30; // High entropy might indicate compression/encryption
+    if (entropy > 7.5) {
+      score += 30;
+    } // High entropy might indicate compression/encryption
 
     // Structure complexity (for PDFs)
     if (documentType === 'application/pdf') {
       const objectCount = (fileBuffer.toString('ascii').match(/obj/g) || []).length;
-      if (objectCount > 1000) score += 25;
+      if (objectCount > 1000) {
+        score += 25;
+      }
     }
 
     return {
@@ -459,9 +473,15 @@ class DocumentSecurityService {
    * ให้คำแนะนำความปลอดภัย
    */
   _getSecurityRecommendation(score, threats, warnings) {
-    if (threats.length > 0) return 'BLOCK';
-    if (score < 70) return 'QUARANTINE';
-    if (warnings.length > 3) return 'REVIEW';
+    if (threats.length > 0) {
+      return 'BLOCK';
+    }
+    if (score < 70) {
+      return 'QUARANTINE';
+    }
+    if (warnings.length > 3) {
+      return 'REVIEW';
+    }
     return 'ALLOW';
   }
 

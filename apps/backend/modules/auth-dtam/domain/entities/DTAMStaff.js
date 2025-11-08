@@ -206,7 +206,9 @@ class DTAMStaff {
    * Check if account is locked
    */
   isAccountLocked() {
-    if (!this.accountLockedUntil) return false;
+    if (!this.accountLockedUntil) {
+      return false;
+    }
     return new Date() < this.accountLockedUntil;
   }
 

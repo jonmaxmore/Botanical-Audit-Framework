@@ -408,8 +408,12 @@ class AnalyticsEngine {
       createdAt: { $gte: dateRange.start, $lte: dateRange.end },
     };
 
-    if (filters.status) query.status = filters.status;
-    if (filters.herbType) query['herbDetails.herbType'] = filters.herbType;
+    if (filters.status) {
+      query.status = filters.status;
+    }
+    if (filters.herbType) {
+      query['herbDetails.herbType'] = filters.herbType;
+    }
 
     const result = await Application.aggregate([
       { $match: query },

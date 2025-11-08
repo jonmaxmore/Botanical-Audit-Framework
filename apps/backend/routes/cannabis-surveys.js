@@ -323,10 +323,18 @@ router.get('/templates', async (req, res) => {
       'accessControl.allowedRoles': req.user.role,
     };
 
-    if (region) query.region = { $in: [region, 'national'] };
-    if (cannabisCategory) query['cannabisMetadata.cannabisCategory'] = cannabisCategory;
-    if (status) query.status = status;
-    if (surveyType) query['cannabisMetadata.surveyType'] = surveyType;
+    if (region) {
+      query.region = { $in: [region, 'national'] };
+    }
+    if (cannabisCategory) {
+      query['cannabisMetadata.cannabisCategory'] = cannabisCategory;
+    }
+    if (status) {
+      query.status = status;
+    }
+    if (surveyType) {
+      query['cannabisMetadata.surveyType'] = surveyType;
+    }
 
     const templates = await CannabisSurveyTemplate.find(query)
       .populate('createdBy', 'firstName lastName role')
@@ -418,7 +426,9 @@ router.get('/responses/my-farm', async (req, res) => {
     }
 
     const query = { 'respondent.farmCode': farmCode };
-    if (status) query.status = status;
+    if (status) {
+      query.status = status;
+    }
     if (surveyType) {
       // Need to populate template to filter by survey type
       const responses = await CannabisSurveyResponse.find(query)
@@ -607,14 +617,20 @@ router.get('/admin/responses', async (req, res) => {
     } = req.query;
 
     const query = {};
-    if (status) query.status = status;
-    if (riskLevel) query['analytics.riskProfile.overallRisk'] = riskLevel;
+    if (status) {
+      query.status = status;
+    }
+    if (riskLevel) {
+      query['analytics.riskProfile.overallRisk'] = riskLevel;
+    }
     if (complianceThreshold) {
       query['analytics.complianceScore.overall'] = {
         $lt: parseInt(complianceThreshold),
       };
     }
-    if (farmCode) query['respondent.farmCode'] = farmCode;
+    if (farmCode) {
+      query['respondent.farmCode'] = farmCode;
+    }
     if (startDate && endDate) {
       query.createdAt = {
         $gte: new Date(startDate),

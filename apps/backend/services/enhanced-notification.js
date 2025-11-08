@@ -561,7 +561,9 @@ class EnhancedNotificationService extends EventEmitter {
    * Interpolate template strings
    */
   interpolateString(template, variables) {
-    if (!template) return '';
+    if (!template) {
+      return '';
+    }
 
     return template.replace(/\{(\w+)\}/g, (match, key) => {
       return variables[key] || match;
@@ -589,9 +591,15 @@ class EnhancedNotificationService extends EventEmitter {
       notificationData.classification.priority === 'critical'
     ) {
       // High priority notifications use all available channels
-      if (userPrefs.email.enabled) channels.push({ channel: 'email', status: 'pending' });
-      if (userPrefs.sms.enabled) channels.push({ channel: 'sms', status: 'pending' });
-      if (userPrefs.push.enabled) channels.push({ channel: 'push', status: 'pending' });
+      if (userPrefs.email.enabled) {
+        channels.push({ channel: 'email', status: 'pending' });
+      }
+      if (userPrefs.sms.enabled) {
+        channels.push({ channel: 'sms', status: 'pending' });
+      }
+      if (userPrefs.push.enabled) {
+        channels.push({ channel: 'push', status: 'pending' });
+      }
     } else {
       // Normal priority based on preferences
       if (

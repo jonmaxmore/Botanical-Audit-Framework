@@ -262,8 +262,12 @@ function initializeAssignmentRoutes(dependencies) {
       const { status, role } = req.query;
 
       const filters = {};
-      if (status) filters.status = status;
-      if (role) filters.role = role;
+      if (status) {
+        filters.status = status;
+      }
+      if (role) {
+        filters.role = role;
+      }
 
       const assignments = await jobAssignmentService.getUserAssignments(userId, filters);
 
@@ -317,9 +321,15 @@ function initializeAssignmentRoutes(dependencies) {
       const { role, startDate, endDate } = req.query;
 
       const filters = {};
-      if (role) filters.role = role;
-      if (startDate) filters.startDate = startDate;
-      if (endDate) filters.endDate = endDate;
+      if (role) {
+        filters.role = role;
+      }
+      if (startDate) {
+        filters.startDate = startDate;
+      }
+      if (endDate) {
+        filters.endDate = endDate;
+      }
 
       const statistics = await jobAssignmentService.getStatistics(filters);
 
@@ -348,7 +358,9 @@ function initializeAssignmentRoutes(dependencies) {
       const { status } = req.query;
 
       const filters = {};
-      if (status) filters.status = status;
+      if (status) {
+        filters.status = status;
+      }
 
       const assignments = await jobAssignmentService.getUserAssignments(userId, filters);
 

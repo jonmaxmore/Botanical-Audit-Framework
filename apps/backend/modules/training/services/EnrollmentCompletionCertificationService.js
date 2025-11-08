@@ -647,7 +647,9 @@ class EnrollmentCompletionCertificationService {
   // Helper methods for calculations
 
   calculateAverageAssessmentScore(assessments) {
-    if (!assessments || assessments.length === 0) return 0;
+    if (!assessments || assessments.length === 0) {
+      return 0;
+    }
     const total = assessments.reduce((sum, assessment) => sum + (assessment.score || 0), 0);
     return Math.round((total / assessments.length) * 100) / 100;
   }
@@ -671,14 +673,18 @@ class EnrollmentCompletionCertificationService {
   }
 
   calculateConsistencyScore(assessments) {
-    if (!assessments || assessments.length < 2) return 100;
+    if (!assessments || assessments.length < 2) {
+      return 100;
+    }
     const scores = assessments.map(a => a.score || 0);
     const variance = this.calculateVariance(scores);
     return Math.max(0, 100 - variance * 2);
   }
 
   calculateImprovementRate(assessments) {
-    if (!assessments || assessments.length < 2) return 0;
+    if (!assessments || assessments.length < 2) {
+      return 0;
+    }
     const scores = assessments.map(a => a.score || 0);
     const firstScore = scores[0];
     const lastScore = scores[scores.length - 1];
@@ -708,14 +714,30 @@ class EnrollmentCompletionCertificationService {
   }
 
   determinePerformanceGrade(overallPerformance) {
-    if (overallPerformance >= 95) return 'A+';
-    if (overallPerformance >= 90) return 'A';
-    if (overallPerformance >= 85) return 'A-';
-    if (overallPerformance >= 80) return 'B+';
-    if (overallPerformance >= 75) return 'B';
-    if (overallPerformance >= 70) return 'B-';
-    if (overallPerformance >= 65) return 'C+';
-    if (overallPerformance >= 60) return 'C';
+    if (overallPerformance >= 95) {
+      return 'A+';
+    }
+    if (overallPerformance >= 90) {
+      return 'A';
+    }
+    if (overallPerformance >= 85) {
+      return 'A-';
+    }
+    if (overallPerformance >= 80) {
+      return 'B+';
+    }
+    if (overallPerformance >= 75) {
+      return 'B';
+    }
+    if (overallPerformance >= 70) {
+      return 'B-';
+    }
+    if (overallPerformance >= 65) {
+      return 'C+';
+    }
+    if (overallPerformance >= 60) {
+      return 'C';
+    }
     return 'D';
   }
 

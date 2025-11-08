@@ -729,9 +729,15 @@ class ComplianceReportService {
     return `CPL-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
   _determineComplianceStatus(score) {
-    if (score >= 95) return 'EXCELLENT';
-    if (score >= 85) return 'GOOD';
-    if (score >= 75) return 'ACCEPTABLE';
+    if (score >= 95) {
+      return 'EXCELLENT';
+    }
+    if (score >= 85) {
+      return 'GOOD';
+    }
+    if (score >= 75) {
+      return 'ACCEPTABLE';
+    }
     return 'NEEDS_IMPROVEMENT';
   }
 

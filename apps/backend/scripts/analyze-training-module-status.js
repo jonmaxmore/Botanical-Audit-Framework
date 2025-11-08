@@ -318,7 +318,9 @@ class TrainingModuleStatusAnalyzer {
         const dirPath = path.join(this.trainingModulePath, dir);
         if (fs.existsSync(dirPath)) {
           const found = await this.searchInDirectory(dirPath, keyword);
-          if (found) return true;
+          if (found) {
+            return true;
+          }
         }
       }
       return false;
@@ -339,7 +341,9 @@ class TrainingModuleStatusAnalyzer {
 
       if (stats.isDirectory()) {
         const found = await this.searchInDirectory(filePath, keyword);
-        if (found) return true;
+        if (found) {
+          return true;
+        }
       } else if (file.endsWith('.js')) {
         const content = fs.readFileSync(filePath, 'utf8');
         if (content.toLowerCase().includes(keyword.toLowerCase())) {

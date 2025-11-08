@@ -349,7 +349,9 @@ class MongoDBReportRepository {
 
   // Helper methods
   _toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     return new Report({
       id: doc._id,

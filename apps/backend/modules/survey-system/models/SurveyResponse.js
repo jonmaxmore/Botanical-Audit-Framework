@@ -216,13 +216,23 @@ SurveyResponseSchema.virtual('isComplete').get(function () {
 
 // Virtual: Score grade
 SurveyResponseSchema.virtual('grade').get(function () {
-  if (!this.scores || !this.scores.overall) return null;
+  if (!this.scores || !this.scores.overall) {
+    return null;
+  }
 
   const score = this.scores.overall;
-  if (score >= 85) return 'A';
-  if (score >= 75) return 'B';
-  if (score >= 65) return 'C';
-  if (score >= 50) return 'D';
+  if (score >= 85) {
+    return 'A';
+  }
+  if (score >= 75) {
+    return 'B';
+  }
+  if (score >= 65) {
+    return 'C';
+  }
+  if (score >= 50) {
+    return 'D';
+  }
   return 'F';
 });
 
@@ -251,8 +261,12 @@ SurveyResponseSchema.methods.updateAutoSave = function () {
 SurveyResponseSchema.statics.findByUser = function (userId, options = {}) {
   const query = { userId };
 
-  if (options.status) query.state = options.status;
-  if (options.region) query.region = options.region;
+  if (options.status) {
+    query.state = options.status;
+  }
+  if (options.region) {
+    query.region = options.region;
+  }
 
   return this.find(query)
     .sort({ 'metadata.createdAt': -1 })

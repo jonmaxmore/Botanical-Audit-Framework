@@ -439,8 +439,12 @@ router.get('/my-surveys', auth, async (req, res) => {
     const { status, region } = req.query;
 
     const query = { userId };
-    if (status) query.status = status;
-    if (region) query.region = region;
+    if (status) {
+      query.status = status;
+    }
+    if (region) {
+      query.region = region;
+    }
 
     const surveys = await Survey.find(query)
       .sort({ createdAt: -1 })
@@ -669,8 +673,12 @@ router.get('/admin/all', auth, async (req, res) => {
     const { page = 1, limit = 20, status, region } = req.query;
 
     const query = {};
-    if (status) query.status = status;
-    if (region) query.region = region;
+    if (status) {
+      query.status = status;
+    }
+    if (region) {
+      query.region = region;
+    }
 
     const surveys = await Survey.find(query)
       .sort({ createdAt: -1 })

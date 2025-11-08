@@ -105,7 +105,9 @@ class MongoDBNotificationRepository {
 
   // Convert MongoDB document to Domain Entity
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     const data = doc.toObject ? doc.toObject() : doc;
     return new Notification({
@@ -168,9 +170,15 @@ class MongoDBNotificationRepository {
     try {
       const query = { recipientId: mongoose.Types.ObjectId(recipientId) };
 
-      if (filters.status) query.status = filters.status;
-      if (filters.type) query.type = filters.type;
-      if (filters.priority) query.priority = filters.priority;
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.type) {
+        query.type = filters.type;
+      }
+      if (filters.priority) {
+        query.priority = filters.priority;
+      }
 
       const page = options.page || 1;
       const limit = options.limit || 20;
@@ -289,14 +297,26 @@ class MongoDBNotificationRepository {
       if (filters.recipientId) {
         query.recipientId = mongoose.Types.ObjectId(filters.recipientId);
       }
-      if (filters.recipientType) query.recipientType = filters.recipientType;
-      if (filters.type) query.type = filters.type;
-      if (filters.status) query.status = filters.status;
-      if (filters.priority) query.priority = filters.priority;
+      if (filters.recipientType) {
+        query.recipientType = filters.recipientType;
+      }
+      if (filters.type) {
+        query.type = filters.type;
+      }
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.priority) {
+        query.priority = filters.priority;
+      }
       if (filters.startDate || filters.endDate) {
         query.sentAt = {};
-        if (filters.startDate) query.sentAt.$gte = new Date(filters.startDate);
-        if (filters.endDate) query.sentAt.$lte = new Date(filters.endDate);
+        if (filters.startDate) {
+          query.sentAt.$gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+          query.sentAt.$lte = new Date(filters.endDate);
+        }
       }
 
       const page = options.page || 1;
@@ -414,8 +434,12 @@ class MongoDBNotificationRepository {
 
       if (filters.startDate || filters.endDate) {
         matchStage.sentAt = {};
-        if (filters.startDate) matchStage.sentAt.$gte = new Date(filters.startDate);
-        if (filters.endDate) matchStage.sentAt.$lte = new Date(filters.endDate);
+        if (filters.startDate) {
+          matchStage.sentAt.$gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+          matchStage.sentAt.$lte = new Date(filters.endDate);
+        }
       }
 
       const [

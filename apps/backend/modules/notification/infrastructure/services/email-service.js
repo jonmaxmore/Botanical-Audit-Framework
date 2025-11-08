@@ -115,7 +115,9 @@ class EmailNotificationService {
 
   // Helper: Strip HTML tags for plain text fallback
   _stripHtml(html) {
-    if (!html) return '';
+    if (!html) {
+      return '';
+    }
     return html
       .replace(/<style[^>]*>.*<\/style>/gi, '')
       .replace(/<script[^>]*>.*<\/script>/gi, '')

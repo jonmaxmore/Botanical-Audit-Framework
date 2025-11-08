@@ -24,11 +24,21 @@ class TrainingController {
       const { status, type, level, tags, search, page, limit, sort } = req.query;
 
       const filters = {};
-      if (status) filters.status = status;
-      if (type) filters.type = type;
-      if (level) filters.level = level;
-      if (tags) filters.tags = tags.split(',');
-      if (search) filters.search = search;
+      if (status) {
+        filters.status = status;
+      }
+      if (type) {
+        filters.type = type;
+      }
+      if (level) {
+        filters.level = level;
+      }
+      if (tags) {
+        filters.tags = tags.split(',');
+      }
+      if (search) {
+        filters.search = search;
+      }
 
       const options = {
         page: parseInt(page) || 1,
@@ -204,7 +214,9 @@ class TrainingController {
       const { status, page, limit } = req.query;
 
       const filters = {};
-      if (status) filters.status = status;
+      if (status) {
+        filters.status = status;
+      }
 
       const options = {
         page: parseInt(page) || 1,

@@ -196,7 +196,9 @@ async function setupProductionDatabase() {
         // Create or modify collection
         if (!existingNames.has(name)) {
           const options = {};
-          if (validator) options.validator = validator;
+          if (validator) {
+            options.validator = validator;
+          }
 
           await db.createCollection(name, options);
           logger.info(`  ✅ Created collection: ${name}`);

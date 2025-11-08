@@ -646,7 +646,9 @@ class PlantRepository {
    * Create plant entity from database document with enriched data
    */
   createPlantFromDocument(document, enrichedData = {}) {
-    if (!document) return null;
+    if (!document) {
+      return null;
+    }
 
     const PlantEntity = require('../domain/entities/Plant');
 
@@ -715,7 +717,9 @@ class PlantRepository {
   }
 
   calculatePlantAge(plant) {
-    if (!plant.plantingInfo?.plantingDate) return 0;
+    if (!plant.plantingInfo?.plantingDate) {
+      return 0;
+    }
     const plantingDate = new Date(plant.plantingInfo.plantingDate);
     const now = new Date();
     return Math.floor((now - plantingDate) / (1000 * 60 * 60 * 24));

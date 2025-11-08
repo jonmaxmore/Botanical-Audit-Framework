@@ -308,7 +308,9 @@ cultivationCycleSchema.index({ status: 1, phase: 1 });
 
 // Virtual for days since planting
 cultivationCycleSchema.virtual('daysSincePlanting').get(function () {
-  if (!this.plantingDate) return 0;
+  if (!this.plantingDate) {
+    return 0;
+  }
   const now = new Date();
   const diff = now - this.plantingDate;
   return Math.floor(diff / (1000 * 60 * 60 * 24));
@@ -332,9 +334,13 @@ cultivationCycleSchema.methods.calculateComplianceScore = function () {
 
   if (latest.findings) {
     latest.findings.forEach(finding => {
-      if (finding.severity === 'critical') score -= 20;
-      else if (finding.severity === 'major') score -= 10;
-      else if (finding.severity === 'minor') score -= 5;
+      if (finding.severity === 'critical') {
+        score -= 20;
+      } else if (finding.severity === 'major') {
+        score -= 10;
+      } else if (finding.severity === 'minor') {
+        score -= 5;
+      }
     });
   }
 

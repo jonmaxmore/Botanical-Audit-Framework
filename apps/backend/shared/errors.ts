@@ -13,7 +13,7 @@ export abstract class DomainError extends Error {
   constructor(
     message: string,
     public readonly code: string,
-    public readonly statusCode: number = 500
+    public readonly statusCode: number = 500,
   ) {
     super(message);
     this.name = this.constructor.name;
@@ -26,7 +26,10 @@ export abstract class DomainError extends Error {
  * Used when input data fails validation rules
  */
 export class ValidationError extends DomainError {
-  constructor(message: string, public readonly field?: string) {
+  constructor(
+    message: string,
+    public readonly field?: string,
+  ) {
     super(message, 'VALIDATION_ERROR', 400);
   }
 }
@@ -36,7 +39,10 @@ export class ValidationError extends DomainError {
  * Used when operation conflicts with existing state (e.g., duplicate email)
  */
 export class ConflictError extends DomainError {
-  constructor(message: string, public readonly resource?: string) {
+  constructor(
+    message: string,
+    public readonly resource?: string,
+  ) {
     super(message, 'CONFLICT_ERROR', 409);
   }
 }
@@ -46,7 +52,10 @@ export class ConflictError extends DomainError {
  * Used when requested resource doesn't exist
  */
 export class NotFoundError extends DomainError {
-  constructor(message: string, public readonly resource?: string) {
+  constructor(
+    message: string,
+    public readonly resource?: string,
+  ) {
     super(message, 'NOT_FOUND_ERROR', 404);
   }
 }

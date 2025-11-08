@@ -134,7 +134,9 @@ dtamStaffSchema.set('toObject', { virtuals: true });
  */
 dtamStaffSchema.pre('save', async function (next) {
   // Only hash if password is modified
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password')) {
+    return next();
+  }
 
   try {
     // Hash password with cost of 12
@@ -161,7 +163,9 @@ dtamStaffSchema.methods.comparePassword = async function (candidatePassword) {
   try {
     // Need to explicitly select password for comparison
     const staff = await mongoose.model('DTAMStaff').findById(this._id).select('+password');
-    if (!staff) return false;
+    if (!staff) {
+      return false;
+    }
     return await bcrypt.compare(candidatePassword, staff.password);
   } catch (error) {
     logger.error('Password comparison error:', error);
@@ -364,8 +368,12 @@ dtamStaffSchema.statics.getStaffList = async function (options = {}) {
 
   const query = { userType: 'DTAM_STAFF' };
 
-  if (role) query.role = role;
-  if (typeof isActive === 'boolean') query.isActive = isActive;
+  if (role) {
+    query.role = role;
+  }
+  if (typeof isActive === 'boolean') {
+    query.isActive = isActive;
+  }
 
   if (search) {
     query.$or = [

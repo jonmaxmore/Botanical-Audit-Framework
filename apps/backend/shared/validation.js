@@ -104,7 +104,9 @@ const isValidLongitude = lng => {
  * @returns {boolean} True if valid Thai ID
  */
 const isValidThaiID = id => {
-  if (!/^\d{13}$/.test(id)) return false;
+  if (!/^\d{13}$/.test(id)) {
+    return false;
+  }
 
   // Checksum validation
   let sum = 0;
@@ -149,7 +151,9 @@ const isValidDate = dateString => {
  * @returns {boolean} True if extension is allowed
  */
 const isValidFileExtension = (filename, allowedExtensions) => {
-  if (!filename || !allowedExtensions) return false;
+  if (!filename || !allowedExtensions) {
+    return false;
+  }
   const extension = filename.toLowerCase().split('.').pop();
   return allowedExtensions.includes(extension);
 };
@@ -160,7 +164,9 @@ const isValidFileExtension = (filename, allowedExtensions) => {
  * @returns {string} Sanitized string
  */
 const sanitizeString = str => {
-  if (typeof str !== 'string') return str;
+  if (typeof str !== 'string') {
+    return str;
+  }
   return str
     .replace(/<[^>]*>/g, '')
     .trim()
@@ -174,7 +180,9 @@ const sanitizeString = str => {
  * @returns {Object} Sanitized object
  */
 const sanitizeObject = (obj, allowedFields = []) => {
-  if (!obj || typeof obj !== 'object') return {};
+  if (!obj || typeof obj !== 'object') {
+    return {};
+  }
 
   const sanitized = {};
 

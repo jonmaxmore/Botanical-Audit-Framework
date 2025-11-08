@@ -22,8 +22,12 @@ class IrrigationService {
   }
 
   getWaterTips(crop, stage) {
-    if (stage === 'flowering') return 'ระยะออกดอก - ให้น้ำสม่ำเสมอ';
-    if (stage === 'seedling') return 'ต้นกล้า - รดน้ำเบาๆ';
+    if (stage === 'flowering') {
+      return 'ระยะออกดอก - ให้น้ำสม่ำเสมอ';
+    }
+    if (stage === 'seedling') {
+      return 'ต้นกล้า - รดน้ำเบาๆ';
+    }
     return 'รดน้ำตามปกติ';
   }
 }

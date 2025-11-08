@@ -454,7 +454,9 @@ TaskAssignmentSchema.virtual('isOverdue').get(function () {
 });
 
 TaskAssignmentSchema.virtual('daysUntilDue').get(function () {
-  if (!this.scheduling.dueDate) return null;
+  if (!this.scheduling.dueDate) {
+    return null;
+  }
   const today = new Date();
   const dueDate = new Date(this.scheduling.dueDate);
   const diffTime = dueDate - today;
@@ -904,9 +906,15 @@ class BlitzzIntegrationService extends EventEmitter {
       query.$or.push({ 'assignment.team.userId': userId });
     }
 
-    if (status) query['status.current'] = status;
-    if (category) query['taskInfo.category'] = category;
-    if (priority) query['taskInfo.priority'] = priority;
+    if (status) {
+      query['status.current'] = status;
+    }
+    if (category) {
+      query['taskInfo.category'] = category;
+    }
+    if (priority) {
+      query['taskInfo.priority'] = priority;
+    }
 
     const tasks = await TaskAssignment.find(query)
       .sort({ 'scheduling.dueDate': 1, 'taskInfo.priority': -1 })

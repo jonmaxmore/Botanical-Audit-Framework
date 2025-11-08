@@ -154,7 +154,9 @@ class MongoDBSurveyRepository extends ISurveyRepository {
    * Convert MongoDB document to Survey entity
    */
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     return new Survey({
       id: doc._id.toString(),
@@ -307,14 +309,30 @@ class MongoDBSurveyRepository extends ISurveyRepository {
 
       const query = {};
 
-      if (filters.status) query.status = filters.status;
-      if (filters.purpose) query.purpose = filters.purpose;
-      if (filters.plantType) query.plantType = filters.plantType;
-      if (filters.surveyYear) query.surveyYear = filters.surveyYear;
-      if (filters.surveyPeriod) query.surveyPeriod = filters.surveyPeriod;
-      if (filters.farmerId) query.farmerId = new mongoose.Types.ObjectId(filters.farmerId);
-      if (filters.farmId) query.farmId = new mongoose.Types.ObjectId(filters.farmId);
-      if (filters.reviewedBy) query.reviewedBy = new mongoose.Types.ObjectId(filters.reviewedBy);
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.purpose) {
+        query.purpose = filters.purpose;
+      }
+      if (filters.plantType) {
+        query.plantType = filters.plantType;
+      }
+      if (filters.surveyYear) {
+        query.surveyYear = filters.surveyYear;
+      }
+      if (filters.surveyPeriod) {
+        query.surveyPeriod = filters.surveyPeriod;
+      }
+      if (filters.farmerId) {
+        query.farmerId = new mongoose.Types.ObjectId(filters.farmerId);
+      }
+      if (filters.farmId) {
+        query.farmId = new mongoose.Types.ObjectId(filters.farmId);
+      }
+      if (filters.reviewedBy) {
+        query.reviewedBy = new mongoose.Types.ObjectId(filters.reviewedBy);
+      }
 
       // Search by strain name
       if (filters.search) {

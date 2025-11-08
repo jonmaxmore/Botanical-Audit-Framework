@@ -616,7 +616,9 @@ class TrainingWorkflowIntegrationManager {
    * Setup event handlers for training workflows
    */
   setupEventHandlers() {
-    if (!this.eventBus) return;
+    if (!this.eventBus) {
+      return;
+    }
 
     // Course completion events
     this.eventBus.on('COURSE_COMPLETED', async data => {
@@ -652,11 +654,15 @@ class TrainingWorkflowIntegrationManager {
     const completed = this.executionTracking.completedWorkflows.find(
       w => w.workflowId === workflowId,
     );
-    if (completed) return completed;
+    if (completed) {
+      return completed;
+    }
 
     // Check failed workflows
     const failed = this.executionTracking.failedWorkflows.find(w => w.workflowId === workflowId);
-    if (failed) return failed;
+    if (failed) {
+      return failed;
+    }
 
     return null;
   }

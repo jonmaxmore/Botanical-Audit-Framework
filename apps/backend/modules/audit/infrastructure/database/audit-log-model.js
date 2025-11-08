@@ -134,7 +134,9 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
    * Convert MongoDB document to AuditLog entity
    */
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     return new AuditLog({
       id: doc._id.toString(),
@@ -202,13 +204,27 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
     };
 
     // Optional fields (only include if present)
-    if (auditLog.id) doc._id = new mongoose.Types.ObjectId(auditLog.id);
-    if (auditLog.actorId) doc.actorId = new mongoose.Types.ObjectId(auditLog.actorId);
-    if (auditLog.actorName) doc.actorName = auditLog.actorName;
-    if (auditLog.actorEmail) doc.actorEmail = auditLog.actorEmail;
-    if (auditLog.actorRole) doc.actorRole = auditLog.actorRole;
-    if (auditLog.entityId) doc.entityId = new mongoose.Types.ObjectId(auditLog.entityId);
-    if (auditLog.entityName) doc.entityName = auditLog.entityName;
+    if (auditLog.id) {
+      doc._id = new mongoose.Types.ObjectId(auditLog.id);
+    }
+    if (auditLog.actorId) {
+      doc.actorId = new mongoose.Types.ObjectId(auditLog.actorId);
+    }
+    if (auditLog.actorName) {
+      doc.actorName = auditLog.actorName;
+    }
+    if (auditLog.actorEmail) {
+      doc.actorEmail = auditLog.actorEmail;
+    }
+    if (auditLog.actorRole) {
+      doc.actorRole = auditLog.actorRole;
+    }
+    if (auditLog.entityId) {
+      doc.entityId = new mongoose.Types.ObjectId(auditLog.entityId);
+    }
+    if (auditLog.entityName) {
+      doc.entityName = auditLog.entityName;
+    }
 
     return doc;
   }
@@ -294,20 +310,40 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
 
       const query = {};
 
-      if (filters.actorType) query.actorType = filters.actorType;
-      if (filters.actorId) query.actorId = new mongoose.Types.ObjectId(filters.actorId);
-      if (filters.actionType) query.actionType = filters.actionType;
-      if (filters.entityType) query.entityType = filters.entityType;
-      if (filters.entityId) query.entityId = new mongoose.Types.ObjectId(filters.entityId);
-      if (filters.severity) query.severity = filters.severity;
-      if (filters.success !== undefined) query.success = filters.success;
-      if (filters.ipAddress) query.ipAddress = filters.ipAddress;
+      if (filters.actorType) {
+        query.actorType = filters.actorType;
+      }
+      if (filters.actorId) {
+        query.actorId = new mongoose.Types.ObjectId(filters.actorId);
+      }
+      if (filters.actionType) {
+        query.actionType = filters.actionType;
+      }
+      if (filters.entityType) {
+        query.entityType = filters.entityType;
+      }
+      if (filters.entityId) {
+        query.entityId = new mongoose.Types.ObjectId(filters.entityId);
+      }
+      if (filters.severity) {
+        query.severity = filters.severity;
+      }
+      if (filters.success !== undefined) {
+        query.success = filters.success;
+      }
+      if (filters.ipAddress) {
+        query.ipAddress = filters.ipAddress;
+      }
 
       // Date range
       if (filters.startDate || filters.endDate) {
         query.timestamp = {};
-        if (filters.startDate) query.timestamp.$gte = new Date(filters.startDate);
-        if (filters.endDate) query.timestamp.$lte = new Date(filters.endDate);
+        if (filters.startDate) {
+          query.timestamp.$gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+          query.timestamp.$lte = new Date(filters.endDate);
+        }
       }
 
       // Tags
@@ -420,8 +456,12 @@ class MongoDBAuditLogRepository extends IAuditLogRepository {
       const query = {};
       if (filters.startDate || filters.endDate) {
         query.timestamp = {};
-        if (filters.startDate) query.timestamp.$gte = new Date(filters.startDate);
-        if (filters.endDate) query.timestamp.$lte = new Date(filters.endDate);
+        if (filters.startDate) {
+          query.timestamp.$gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+          query.timestamp.$lte = new Date(filters.endDate);
+        }
       }
 
       const [

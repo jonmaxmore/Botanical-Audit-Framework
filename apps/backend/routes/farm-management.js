@@ -14,10 +14,18 @@ router.get('/', auth, async (req, res) => {
 
     // Build filter
     const filter = {};
-    if (region) filter.region = region;
-    if (status) filter.status = status;
-    if (farmingType) filter.farmingType = farmingType;
-    if (owner) filter.owner = owner;
+    if (region) {
+      filter.region = region;
+    }
+    if (status) {
+      filter.status = status;
+    }
+    if (farmingType) {
+      filter.farmingType = farmingType;
+    }
+    if (owner) {
+      filter.owner = owner;
+    }
     if (search) {
       filter.$or = [
         { name: { $regex: search, $options: 'i' } },

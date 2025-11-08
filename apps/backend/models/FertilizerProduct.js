@@ -596,7 +596,9 @@ FertilizerProductSchema.index({
  * Calculate price per unit
  */
 FertilizerProductSchema.virtual('avgPricePerKg').get(function () {
-  if (!this.pricing || this.pricing.length === 0) return null;
+  if (!this.pricing || this.pricing.length === 0) {
+    return null;
+  }
 
   const prices = this.pricing.map(p => {
     if (p.size.unit === 'kg') {
@@ -743,15 +745,21 @@ FertilizerProductSchema.methods.getPriceForRegion = function (region, size = nul
  */
 FertilizerProductSchema.methods.calculateCost = function (farmSize, growthStage, region = null) {
   const price = this.getPriceForRegion(region || 'nationwide');
-  if (!price) return null;
+  if (!price) {
+    return null;
+  }
 
   const applicationRate = this.application[`${growthStage}Stage`];
-  if (!applicationRate) return null;
+  if (!applicationRate) {
+    return null;
+  }
 
   // Parse rate (e.g., "10-20 kg/rai" -> extract average)
   // This is simplified - production code would need robust parsing
   const rateMatch = applicationRate.ratePerRai?.match(/(\d+)-?(\d*)/);
-  if (!rateMatch) return null;
+  if (!rateMatch) {
+    return null;
+  }
 
   const minRate = parseInt(rateMatch[1]);
   const maxRate = rateMatch[2] ? parseInt(rateMatch[2]) : minRate;

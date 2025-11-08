@@ -15,8 +15,12 @@ router.get('/', auth, async (req, res) => {
 
     // Build filter
     const filter = {};
-    if (category) filter.category = category;
-    if (active === 'true') filter.isActive = true;
+    if (category) {
+      filter.category = category;
+    }
+    if (active === 'true') {
+      filter.isActive = true;
+    }
     if (region) {
       filter.$or = [{ applicableRegions: region }, { applicableRegions: 'all' }];
     }
@@ -182,8 +186,12 @@ router.post('/compare', auth, async (req, res) => {
       // Add to overall score if applicable
       if (randomStatus !== 'not-applicable') {
         overallScore.total += 1;
-        if (randomStatus === 'compliant') overallScore.achieved += 1;
-        if (randomStatus === 'partially-compliant') overallScore.achieved += 0.5;
+        if (randomStatus === 'compliant') {
+          overallScore.achieved += 1;
+        }
+        if (randomStatus === 'partially-compliant') {
+          overallScore.achieved += 0.5;
+        }
       }
 
       comparisonResults.push(result);

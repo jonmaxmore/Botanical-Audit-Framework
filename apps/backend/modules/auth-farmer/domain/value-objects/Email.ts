@@ -82,7 +82,9 @@ export class Email {
    * Compare with another Email
    */
   equals(other: Email): boolean {
-    if (!other) return false;
+    if (!other) {
+      return false;
+    }
     return this.value === other.value;
   }
 

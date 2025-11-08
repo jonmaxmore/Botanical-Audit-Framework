@@ -62,7 +62,9 @@ const ALLOWED_ORIGIN_PATTERNS = [
  * @returns {boolean}
  */
 function isOriginAllowed(origin, allowedOrigins, allowedPatterns = []) {
-  if (!origin) return false;
+  if (!origin) {
+    return false;
+  }
 
   // Check exact match in whitelist
   if (allowedOrigins.includes(origin)) {

@@ -125,7 +125,9 @@ export class User {
    * Check if account is locked
    */
   isAccountLocked(): boolean {
-    if (!this.accountLockedUntil) return false;
+    if (!this.accountLockedUntil) {
+      return false;
+    }
     return new Date() < this.accountLockedUntil;
   }
 
@@ -133,8 +135,12 @@ export class User {
    * Check if email verification is valid
    */
   isEmailVerificationValid(): boolean {
-    if (!this.emailVerificationToken) return false;
-    if (!this.emailVerificationExpiry) return false;
+    if (!this.emailVerificationToken) {
+      return false;
+    }
+    if (!this.emailVerificationExpiry) {
+      return false;
+    }
     return new Date() < this.emailVerificationExpiry;
   }
 
@@ -142,8 +148,12 @@ export class User {
    * Check if password reset token is valid
    */
   isPasswordResetValid(): boolean {
-    if (!this.passwordResetToken) return false;
-    if (!this.passwordResetExpiry) return false;
+    if (!this.passwordResetToken) {
+      return false;
+    }
+    if (!this.passwordResetExpiry) {
+      return false;
+    }
     return new Date() < this.passwordResetExpiry;
   }
 
@@ -155,12 +165,12 @@ export class User {
     this.emailVerifiedAt = new Date();
     this.emailVerificationToken = null;
     this.emailVerificationExpiry = null;
-    
+
     // Auto-activate if status is PENDING_VERIFICATION
     if (this.status === 'PENDING_VERIFICATION') {
       this.status = 'ACTIVE';
     }
-    
+
     this.updatedAt = new Date();
   }
 
@@ -262,7 +272,21 @@ export class User {
    * Update profile
    * @param updates - Profile updates
    */
-  updateProfile(updates: Partial<Pick<UserProps, 'firstName' | 'lastName' | 'phoneNumber' | 'address' | 'province' | 'district' | 'subdistrict' | 'zipCode'>>): void {
+  updateProfile(
+    updates: Partial<
+      Pick<
+        UserProps,
+        | 'firstName'
+        | 'lastName'
+        | 'phoneNumber'
+        | 'address'
+        | 'province'
+        | 'district'
+        | 'subdistrict'
+        | 'zipCode'
+      >
+    >,
+  ): void {
     Object.assign(this, updates);
     this.updatedAt = new Date();
   }
@@ -320,20 +344,26 @@ export class User {
       emailVerifiedAt: this.emailVerifiedAt,
       lastLoginAt: this.lastLoginAt,
       createdAt: this.createdAt,
-      updatedAt: this.updatedAt
+      updatedAt: this.updatedAt,
     };
   }
 
   /**
    * Convert to public profile (minimal data)
    */
-  toPublicProfile(): { id?: UserId; fullName: string; role: UserRole; province?: string; status: UserStatus } {
+  toPublicProfile(): {
+    id?: UserId;
+    fullName: string;
+    role: UserRole;
+    province?: string;
+    status: UserStatus;
+  } {
     return {
       id: this.id,
       fullName: this.getFullName(),
       role: this.role,
       province: this.province,
-      status: this.status
+      status: this.status,
     };
   }
 }

@@ -731,8 +731,12 @@ class SurveyManagementUseCase {
 
     // Filter questions based on complexity level
     let selectedQuestions = templates.filter(template => {
-      if (complexity === 'BASIC') return template.complexity === 'BASIC';
-      if (complexity === 'ADVANCED') return ['STANDARD', 'ADVANCED'].includes(template.complexity);
+      if (complexity === 'BASIC') {
+        return template.complexity === 'BASIC';
+      }
+      if (complexity === 'ADVANCED') {
+        return ['STANDARD', 'ADVANCED'].includes(template.complexity);
+      }
       return template.complexity === 'STANDARD'; // Default
     });
 

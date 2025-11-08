@@ -297,18 +297,30 @@ class Survey {
     const errors = [];
 
     // Basic information
-    if (!this.farmId) errors.push('Farm ID is required');
-    if (!this.farmerId) errors.push('Farmer ID is required');
-    if (!this.surveyYear) errors.push('Survey year is required');
-    if (!this.surveyPeriod) errors.push('Survey period is required');
+    if (!this.farmId) {
+      errors.push('Farm ID is required');
+    }
+    if (!this.farmerId) {
+      errors.push('Farmer ID is required');
+    }
+    if (!this.surveyYear) {
+      errors.push('Survey year is required');
+    }
+    if (!this.surveyPeriod) {
+      errors.push('Survey period is required');
+    }
 
     // Cultivation information
-    if (!this.purpose) errors.push('Cultivation purpose is required');
+    if (!this.purpose) {
+      errors.push('Cultivation purpose is required');
+    }
     if (!Object.values(PURPOSE).includes(this.purpose)) {
       errors.push(`Invalid purpose: ${this.purpose}`);
     }
 
-    if (!this.plantType) errors.push('Plant type is required');
+    if (!this.plantType) {
+      errors.push('Plant type is required');
+    }
     if (!Object.values(PLANT_TYPE).includes(this.plantType)) {
       errors.push(`Invalid plant type: ${this.plantType}`);
     }

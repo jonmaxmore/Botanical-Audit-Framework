@@ -166,8 +166,11 @@ class HealthMonitoringService {
     const memoryUsagePercent = (usedMemory / totalMemory) * 100;
 
     let status = 'healthy';
-    if (memoryUsagePercent > 90) status = 'critical';
-    else if (memoryUsagePercent > 75) status = 'degraded';
+    if (memoryUsagePercent > 90) {
+      status = 'critical';
+    } else if (memoryUsagePercent > 75) {
+      status = 'degraded';
+    }
 
     return {
       status,
@@ -276,9 +279,15 @@ class HealthMonitoringService {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
 
-    if (days > 0) return `${days}d ${hours % 24}h ${minutes % 60}m`;
-    if (hours > 0) return `${hours}h ${minutes % 60}m ${seconds % 60}s`;
-    if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
+    if (days > 0) {
+      return `${days}d ${hours % 24}h ${minutes % 60}m`;
+    }
+    if (hours > 0) {
+      return `${hours}h ${minutes % 60}m ${seconds % 60}s`;
+    }
+    if (minutes > 0) {
+      return `${minutes}m ${seconds % 60}s`;
+    }
     return `${seconds}s`;
   }
 
@@ -287,7 +296,9 @@ class HealthMonitoringService {
    */
   formatBytes(bytes) {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) {
+      return '0 Bytes';
+    }
     const i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
     return Math.round((bytes / Math.pow(1024, i)) * 100) / 100 + ' ' + sizes[i];
   }

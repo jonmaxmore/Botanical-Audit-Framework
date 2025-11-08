@@ -625,10 +625,18 @@ class Survey {
 
   // Analysis and recommendation methods
   determineComplianceLevel(percentage) {
-    if (percentage >= 90) return 'FULL_COMPLIANCE';
-    if (percentage >= 75) return 'SUBSTANTIAL_COMPLIANCE';
-    if (percentage >= 60) return 'PARTIAL_COMPLIANCE';
-    if (percentage >= 40) return 'LIMITED_COMPLIANCE';
+    if (percentage >= 90) {
+      return 'FULL_COMPLIANCE';
+    }
+    if (percentage >= 75) {
+      return 'SUBSTANTIAL_COMPLIANCE';
+    }
+    if (percentage >= 60) {
+      return 'PARTIAL_COMPLIANCE';
+    }
+    if (percentage >= 40) {
+      return 'LIMITED_COMPLIANCE';
+    }
     return 'NON_COMPLIANCE';
   }
 

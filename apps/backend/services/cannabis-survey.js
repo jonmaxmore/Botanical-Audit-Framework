@@ -266,7 +266,9 @@ class CannabisSurveyService {
 
       for (const answer of answers) {
         const question = questions.find(q => q._id.toString() === answer.questionId.toString());
-        if (!question) continue;
+        if (!question) {
+          continue;
+        }
 
         // Calculate compliance score
         const answerScore = this.calculateAnswerScore(answer, question);
@@ -590,8 +592,12 @@ class CannabisSurveyService {
 
     const criticalTypes = ['license_verification', 'thc_measurement'];
 
-    if (criticalTypes.includes(type)) return 'critical';
-    if (highRiskCategories.includes(category)) return 'high';
+    if (criticalTypes.includes(type)) {
+      return 'critical';
+    }
+    if (highRiskCategories.includes(category)) {
+      return 'high';
+    }
     return 'medium';
   }
 
@@ -619,9 +625,15 @@ class CannabisSurveyService {
     const criticalFactors = riskFactors.filter(f => f.severity === 'critical').length;
     const highFactors = riskFactors.filter(f => f.severity === 'high').length;
 
-    if (criticalFactors > 0 || complianceScore < 50) return 'critical';
-    if (highFactors > 2 || complianceScore < 70) return 'high';
-    if (highFactors > 0 || complianceScore < 85) return 'medium';
+    if (criticalFactors > 0 || complianceScore < 50) {
+      return 'critical';
+    }
+    if (highFactors > 2 || complianceScore < 70) {
+      return 'high';
+    }
+    if (highFactors > 0 || complianceScore < 85) {
+      return 'medium';
+    }
     return 'low';
   }
 
@@ -660,10 +672,16 @@ class CannabisSurveyService {
   }
 
   assessParameterStatus(value, range) {
-    if (!range || typeof value !== 'number') return 'unknown';
+    if (!range || typeof value !== 'number') {
+      return 'unknown';
+    }
 
-    if (value >= range.min && value <= range.max) return 'acceptable';
-    if (value >= range.min * 0.9 && value <= range.max * 1.1) return 'marginal';
+    if (value >= range.min && value <= range.max) {
+      return 'acceptable';
+    }
+    if (value >= range.min * 0.9 && value <= range.max * 1.1) {
+      return 'marginal';
+    }
     return 'unacceptable';
   }
 

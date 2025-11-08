@@ -100,7 +100,9 @@ class TrackTraceService {
         },
       };
     } catch (error) {
-      if (error instanceof AppError) throw error;
+      if (error instanceof AppError) {
+        throw error;
+      }
       logger.error('[TrackTrace] Get product error:', error);
       throw new AppError('Failed to get product', 500);
     }
@@ -194,7 +196,9 @@ class TrackTraceService {
         message: 'Product stage updated',
       };
     } catch (error) {
-      if (error instanceof AppError) throw error;
+      if (error instanceof AppError) {
+        throw error;
+      }
       logger.error('[TrackTrace] Update stage error:', error);
       throw new AppError('Failed to update stage', 500);
     }
@@ -235,7 +239,9 @@ class TrackTraceService {
         message: 'Product updated',
       };
     } catch (error) {
-      if (error instanceof AppError) throw error;
+      if (error instanceof AppError) {
+        throw error;
+      }
       logger.error('[TrackTrace] Update product error:', error);
       throw new AppError('Failed to update product', 500);
     }
@@ -275,7 +281,9 @@ class TrackTraceService {
         message: 'Product deleted',
       };
     } catch (error) {
-      if (error instanceof AppError) throw error;
+      if (error instanceof AppError) {
+        throw error;
+      }
       logger.error('[TrackTrace] Delete product error:', error);
       throw new AppError('Failed to delete product', 500);
     }
@@ -352,7 +360,9 @@ class TrackTraceService {
         message: 'SOP activity linked to batch successfully',
       };
     } catch (error) {
-      if (error instanceof AppError) throw error;
+      if (error instanceof AppError) {
+        throw error;
+      }
       logger.error('[TrackTrace] Link SOP activity error:', error);
       throw new AppError('Failed to link SOP activity', 500);
     }
@@ -401,7 +411,9 @@ class TrackTraceService {
         },
       };
     } catch (error) {
-      if (error instanceof AppError) throw error;
+      if (error instanceof AppError) {
+        throw error;
+      }
       logger.error('[TrackTrace] Get compliance score error:', error);
       throw new AppError('Failed to get compliance score', 500);
     }
@@ -452,7 +464,9 @@ class TrackTraceService {
         complianceData: complianceData.data,
       };
     } catch (error) {
-      if (error instanceof AppError) throw error;
+      if (error instanceof AppError) {
+        throw error;
+      }
       logger.error('[TrackTrace] Generate enhanced QR error:', error);
       throw new AppError('Failed to generate enhanced QR code', 500);
     }

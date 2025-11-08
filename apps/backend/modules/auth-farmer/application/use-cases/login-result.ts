@@ -6,7 +6,11 @@
 
 import { Result, ok, err } from '../../../../shared/result';
 import { Email, InvalidEmailError } from '../../domain/value-objects/Email';
-import { Password, InvalidPasswordError, IPasswordHasher } from '../../domain/value-objects/Password';
+import {
+  Password,
+  InvalidPasswordError,
+  IPasswordHasher,
+} from '../../domain/value-objects/Password';
 import { User } from '../../domain/entities/User';
 
 /**
@@ -101,8 +105,8 @@ export class LoginUserUseCase {
       requireEmailVerification: boolean;
     } = {
       maxLoginAttempts: 5,
-      requireEmailVerification: true
-    }
+      requireEmailVerification: true,
+    },
   ) {}
 
   /**
@@ -136,7 +140,9 @@ export class LoginUserUseCase {
 
       // Step 4: Check if account is locked
       if (user.isAccountLocked()) {
-        return err(new AccountLockedError('Account is locked due to too many failed login attempts'));
+        return err(
+          new AccountLockedError('Account is locked due to too many failed login attempts'),
+        );
       }
 
       // Step 5: Check if account is suspended
@@ -170,7 +176,7 @@ export class LoginUserUseCase {
       // Step 10: Return success result
       return ok({
         user,
-        token
+        token,
       });
     } catch (error) {
       // Catch unexpected errors (database failures, etc.)

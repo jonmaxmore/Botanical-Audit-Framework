@@ -80,7 +80,9 @@ class MongoDBEnrollmentRepository {
 
   // Convert MongoDB document to Domain Entity
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     const data = doc.toObject ? doc.toObject() : doc;
     return new Enrollment({
@@ -164,7 +166,9 @@ class MongoDBEnrollmentRepository {
     try {
       const query = { farmerId: mongoose.Types.ObjectId(farmerId) };
 
-      if (filters.status) query.status = filters.status;
+      if (filters.status) {
+        query.status = filters.status;
+      }
 
       const page = options.page || 1;
       const limit = options.limit || 20;
@@ -196,7 +200,9 @@ class MongoDBEnrollmentRepository {
     try {
       const query = { courseId: mongoose.Types.ObjectId(courseId) };
 
-      if (filters.status) query.status = filters.status;
+      if (filters.status) {
+        query.status = filters.status;
+      }
 
       const page = options.page || 1;
       const limit = options.limit || 20;
@@ -360,8 +366,12 @@ class MongoDBEnrollmentRepository {
       }
       if (filters.startDate || filters.endDate) {
         matchStage.enrolledAt = {};
-        if (filters.startDate) matchStage.enrolledAt.$gte = new Date(filters.startDate);
-        if (filters.endDate) matchStage.enrolledAt.$lte = new Date(filters.endDate);
+        if (filters.startDate) {
+          matchStage.enrolledAt.$gte = new Date(filters.startDate);
+        }
+        if (filters.endDate) {
+          matchStage.enrolledAt.$lte = new Date(filters.endDate);
+        }
       }
 
       const [

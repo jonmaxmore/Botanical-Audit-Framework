@@ -482,7 +482,9 @@ class AnalyticsProcessingWorkflowService {
    */
   async aggregateEnrollmentMetrics() {
     try {
-      if (!this.database) return {};
+      if (!this.database) {
+        return {};
+      }
 
       const enrollmentsCollection = this.database.collection('enrollments');
       const today = new Date();
@@ -581,7 +583,9 @@ class AnalyticsProcessingWorkflowService {
    */
   async updateDashboardData(eventType, processingResult) {
     try {
-      if (!this.dashboardService) return;
+      if (!this.dashboardService) {
+        return;
+      }
 
       const dashboardUpdate = {
         eventType: eventType,

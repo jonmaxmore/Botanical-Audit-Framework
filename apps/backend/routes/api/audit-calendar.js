@@ -83,15 +83,23 @@ router.get(
       // Date range filter
       if (startDate || endDate) {
         query['scheduling.scheduledDate'] = {};
-        if (startDate) query['scheduling.scheduledDate'].$gte = new Date(startDate);
-        if (endDate) query['scheduling.scheduledDate'].$lte = new Date(endDate);
+        if (startDate) {
+          query['scheduling.scheduledDate'].$gte = new Date(startDate);
+        }
+        if (endDate) {
+          query['scheduling.scheduledDate'].$lte = new Date(endDate);
+        }
       }
 
       // Status filter
-      if (status) query.status = status;
+      if (status) {
+        query.status = status;
+      }
 
       // Audit type filter
-      if (auditType) query.auditType = auditType;
+      if (auditType) {
+        query.auditType = auditType;
+      }
 
       // Auditor filter
       if (auditorId) {
@@ -102,7 +110,9 @@ router.get(
       }
 
       // Farm filter
-      if (farmCode) query['auditTarget.farmCode'] = farmCode;
+      if (farmCode) {
+        query['auditTarget.farmCode'] = farmCode;
+      }
 
       // Role-based filtering
       if (req.user.role === 'auditor') {

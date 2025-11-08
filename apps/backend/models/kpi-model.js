@@ -139,7 +139,9 @@ KPISchema.index({ isDelayed: 1, status: 1 });
 
 // Virtual for processing time in hours
 KPISchema.virtual('processingHours').get(function () {
-  if (!this.processingTime) return null;
+  if (!this.processingTime) {
+    return null;
+  }
   return (this.processingTime / 60).toFixed(2);
 });
 
@@ -150,7 +152,9 @@ KPISchema.virtual('isCompleted').get(function () {
 
 // Virtual for is overdue (in progress but past SLA)
 KPISchema.virtual('isOverdue').get(function () {
-  if (this.status !== 'in_progress') return false;
+  if (this.status !== 'in_progress') {
+    return false;
+  }
   const now = new Date();
   const elapsed = (now - this.startTime) / (1000 * 60 * 60); // hours
   return elapsed > this.slaThreshold;

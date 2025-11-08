@@ -207,9 +207,15 @@ class PerformanceOptimizer {
       windowMs: 15 * 60 * 1000, // 15 minutes
       max: req => {
         // Different limits for different user types
-        if (req.user?.role === 'admin') return 1000;
-        if (req.user?.role === 'inspector') return 500;
-        if (req.user?.role === 'farmer') return 200;
+        if (req.user?.role === 'admin') {
+          return 1000;
+        }
+        if (req.user?.role === 'inspector') {
+          return 500;
+        }
+        if (req.user?.role === 'farmer') {
+          return 200;
+        }
         return 100; // Public/unauthenticated
       },
       message: 'Too many requests from this IP',

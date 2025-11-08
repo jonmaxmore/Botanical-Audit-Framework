@@ -340,7 +340,9 @@ class DocumentController {
 
       // Remove undefined values
       Object.keys(updateData).forEach(key => {
-        if (updateData[key] === undefined) delete updateData[key];
+        if (updateData[key] === undefined) {
+          delete updateData[key];
+        }
       });
 
       const updatedDocument = await this.documentRepository.update(id, updateData);
@@ -462,8 +464,12 @@ class DocumentController {
         status: status || 'ACTIVE',
       };
 
-      if (documentType) filters.documentType = documentType;
-      if (applicationId) filters.applicationId = applicationId;
+      if (documentType) {
+        filters.documentType = documentType;
+      }
+      if (applicationId) {
+        filters.applicationId = applicationId;
+      }
 
       // Role-based filtering
       if (userRole === 'FARMER') {
@@ -585,10 +591,14 @@ class DocumentController {
    */
   async _checkDocumentAccess(document, userId, userRole) {
     // Admin has full access
-    if (userRole === 'DTAM_ADMIN') return true;
+    if (userRole === 'DTAM_ADMIN') {
+      return true;
+    }
 
     // Document owner has access
-    if (document.uploadedBy.toString() === userId) return true;
+    if (document.uploadedBy.toString() === userId) {
+      return true;
+    }
 
     // Role-based access rules
     switch (userRole) {
@@ -616,7 +626,9 @@ class DocumentController {
    */
   async _checkUpdatePermissions(document, userId, userRole) {
     // Admin has full update access
-    if (userRole === 'DTAM_ADMIN') return true;
+    if (userRole === 'DTAM_ADMIN') {
+      return true;
+    }
 
     // Document owner can update (with restrictions)
     if (document.uploadedBy.toString() === userId) {

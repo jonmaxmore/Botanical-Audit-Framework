@@ -7,7 +7,9 @@
 
 class NotificationDTO {
   static toResponse(notification) {
-    if (!notification) return null;
+    if (!notification) {
+      return null;
+    }
 
     return {
       id: notification.id,

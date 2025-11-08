@@ -727,7 +727,9 @@ class ComplianceMonitoringSystem extends EventEmitter {
   }
 
   async checkDocumentExpiry(documents) {
-    if (!documents || documents.length === 0) return false;
+    if (!documents || documents.length === 0) {
+      return false;
+    }
 
     const currentTime = new Date();
     return documents.some(doc => {

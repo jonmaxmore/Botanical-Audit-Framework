@@ -519,7 +519,9 @@ class ApplicationWorkflowService {
         })
         .toArray();
 
-      if (approvedApps.length === 0) return 0;
+      if (approvedApps.length === 0) {
+        return 0;
+      }
 
       const totalDays = approvedApps.reduce((sum, app) => {
         const created = new Date(app.metadata.createdAt);

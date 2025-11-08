@@ -175,22 +175,54 @@ class Farm {
     soilType,
     waterSource,
   }) {
-    if (farmName !== undefined) this.farmName = farmName;
-    if (farmType !== undefined) this.farmType = farmType;
-    if (address !== undefined) this.address = address;
-    if (subDistrict !== undefined) this.subDistrict = subDistrict;
-    if (district !== undefined) this.district = district;
-    if (province !== undefined) this.province = province;
-    if (postalCode !== undefined) this.postalCode = postalCode;
-    if (latitude !== undefined) this.latitude = latitude;
-    if (longitude !== undefined) this.longitude = longitude;
-    if (totalArea !== undefined) this.totalArea = totalArea;
-    if (cultivationArea !== undefined) this.cultivationArea = cultivationArea;
-    if (areaUnit !== undefined) this.areaUnit = areaUnit;
-    if (cultivationMethod !== undefined) this.cultivationMethod = cultivationMethod;
-    if (irrigationType !== undefined) this.irrigationType = irrigationType;
-    if (soilType !== undefined) this.soilType = soilType;
-    if (waterSource !== undefined) this.waterSource = waterSource;
+    if (farmName !== undefined) {
+      this.farmName = farmName;
+    }
+    if (farmType !== undefined) {
+      this.farmType = farmType;
+    }
+    if (address !== undefined) {
+      this.address = address;
+    }
+    if (subDistrict !== undefined) {
+      this.subDistrict = subDistrict;
+    }
+    if (district !== undefined) {
+      this.district = district;
+    }
+    if (province !== undefined) {
+      this.province = province;
+    }
+    if (postalCode !== undefined) {
+      this.postalCode = postalCode;
+    }
+    if (latitude !== undefined) {
+      this.latitude = latitude;
+    }
+    if (longitude !== undefined) {
+      this.longitude = longitude;
+    }
+    if (totalArea !== undefined) {
+      this.totalArea = totalArea;
+    }
+    if (cultivationArea !== undefined) {
+      this.cultivationArea = cultivationArea;
+    }
+    if (areaUnit !== undefined) {
+      this.areaUnit = areaUnit;
+    }
+    if (cultivationMethod !== undefined) {
+      this.cultivationMethod = cultivationMethod;
+    }
+    if (irrigationType !== undefined) {
+      this.irrigationType = irrigationType;
+    }
+    if (soilType !== undefined) {
+      this.soilType = soilType;
+    }
+    if (waterSource !== undefined) {
+      this.waterSource = waterSource;
+    }
 
     this.updatedAt = new Date();
   }
@@ -357,7 +389,9 @@ class Farm {
    * Calculate cultivation percentage
    */
   getCultivationPercentage() {
-    if (!this.totalArea || this.totalArea === 0) return 0;
+    if (!this.totalArea || this.totalArea === 0) {
+      return 0;
+    }
     return (this.cultivationArea / this.totalArea) * 100;
   }
 
@@ -368,7 +402,9 @@ class Farm {
     const errors = [];
 
     // Required fields
-    if (!this.ownerId) errors.push('Owner ID is required');
+    if (!this.ownerId) {
+      errors.push('Owner ID is required');
+    }
     if (!this.farmName || this.farmName.trim().length === 0) {
       errors.push('Farm name is required');
     }
@@ -380,9 +416,15 @@ class Farm {
     if (!this.address || this.address.trim().length === 0) {
       errors.push('Address is required');
     }
-    if (!this.subDistrict) errors.push('Sub-district is required');
-    if (!this.district) errors.push('District is required');
-    if (!this.province) errors.push('Province is required');
+    if (!this.subDistrict) {
+      errors.push('Sub-district is required');
+    }
+    if (!this.district) {
+      errors.push('District is required');
+    }
+    if (!this.province) {
+      errors.push('Province is required');
+    }
     if (!this.postalCode || !/^\d{5}$/.test(this.postalCode)) {
       errors.push('Valid 5-digit postal code is required');
     }

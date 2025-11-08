@@ -230,8 +230,12 @@ class SurveySystemController {
       const { status, region } = req.query;
 
       const query = { userId };
-      if (status) query.state = status;
-      if (region) query.region = region;
+      if (status) {
+        query.state = status;
+      }
+      if (region) {
+        query.region = region;
+      }
 
       const surveys = await this.surveyService.responsesCollection
         .find(query)

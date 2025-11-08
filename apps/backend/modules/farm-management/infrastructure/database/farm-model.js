@@ -84,7 +84,9 @@ class MongoDBFarmRepository extends IFarmRepository {
    * Convert MongoDB document to Domain entity
    */
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     return new Farm({
       id: doc._id.toString(),
@@ -199,18 +201,34 @@ class MongoDBFarmRepository extends IFarmRepository {
 
       const query = {};
 
-      if (filters.status) query.status = filters.status;
-      if (filters.ownerId) query.ownerId = filters.ownerId;
-      if (filters.province) query.province = filters.province;
-      if (filters.district) query.district = filters.district;
-      if (filters.farmType) query.farmType = filters.farmType;
-      if (filters.verifiedBy) query.verifiedBy = filters.verifiedBy;
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.ownerId) {
+        query.ownerId = filters.ownerId;
+      }
+      if (filters.province) {
+        query.province = filters.province;
+      }
+      if (filters.district) {
+        query.district = filters.district;
+      }
+      if (filters.farmType) {
+        query.farmType = filters.farmType;
+      }
+      if (filters.verifiedBy) {
+        query.verifiedBy = filters.verifiedBy;
+      }
 
       // Date range filters
       if (filters.createdFrom || filters.createdTo) {
         query.createdAt = {};
-        if (filters.createdFrom) query.createdAt.$gte = new Date(filters.createdFrom);
-        if (filters.createdTo) query.createdAt.$lte = new Date(filters.createdTo);
+        if (filters.createdFrom) {
+          query.createdAt.$gte = new Date(filters.createdFrom);
+        }
+        if (filters.createdTo) {
+          query.createdAt.$lte = new Date(filters.createdTo);
+        }
       }
 
       // Search by farm name
@@ -238,7 +256,9 @@ class MongoDBFarmRepository extends IFarmRepository {
       const { limit = 10, skip = 0, sort = { createdAt: -1 } } = options;
 
       const query = { province };
-      if (district) query.district = district;
+      if (district) {
+        query.district = district;
+      }
 
       const docs = await this.FarmModel.find(query).limit(limit).skip(skip).sort(sort);
 

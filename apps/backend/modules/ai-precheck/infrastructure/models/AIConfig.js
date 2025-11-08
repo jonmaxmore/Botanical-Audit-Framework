@@ -179,7 +179,9 @@ aiConfigSchema.virtual('recall').get(function () {
 aiConfigSchema.virtual('f1Score').get(function () {
   const precision = parseFloat(this.precision);
   const recall = parseFloat(this.recall);
-  if (precision + recall === 0) return 0;
+  if (precision + recall === 0) {
+    return 0;
+  }
   return ((2 * precision * recall) / (precision + recall)).toFixed(2);
 });
 

@@ -786,12 +786,24 @@ class CertificationTrackingIntegrationSystem extends EventEmitter {
   getActiveIntegrations() {
     const integrations = [];
 
-    if (this.trainingService) integrations.push('training');
-    if (this.assessmentService) integrations.push('assessment');
-    if (this.certificateService) integrations.push('certificate');
-    if (this.governmentIntegration) integrations.push('government');
-    if (this.auditService) integrations.push('audit');
-    if (this.notificationService) integrations.push('notification');
+    if (this.trainingService) {
+      integrations.push('training');
+    }
+    if (this.assessmentService) {
+      integrations.push('assessment');
+    }
+    if (this.certificateService) {
+      integrations.push('certificate');
+    }
+    if (this.governmentIntegration) {
+      integrations.push('government');
+    }
+    if (this.auditService) {
+      integrations.push('audit');
+    }
+    if (this.notificationService) {
+      integrations.push('notification');
+    }
 
     return integrations;
   }

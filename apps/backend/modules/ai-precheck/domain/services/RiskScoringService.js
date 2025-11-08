@@ -387,8 +387,12 @@ class RiskScoringService {
    * @returns {string} Risk level
    */
   determineRiskLevel(riskScore) {
-    if (riskScore < 50) return 'HIGH';
-    if (riskScore < 70) return 'MEDIUM';
+    if (riskScore < 50) {
+      return 'HIGH';
+    }
+    if (riskScore < 70) {
+      return 'MEDIUM';
+    }
     return 'LOW';
   }
 
@@ -424,7 +428,9 @@ class RiskScoringService {
    * @returns {boolean} Names match
    */
   checkNameConsistency(name1, name2) {
-    if (!name1 || !name2) return false;
+    if (!name1 || !name2) {
+      return false;
+    }
 
     // Normalize and compare
     const normalize = str => str.trim().toLowerCase().replace(/\s+/g, ' ');
@@ -438,7 +444,9 @@ class RiskScoringService {
    * @returns {boolean} Addresses are consistent
    */
   checkAddressConsistency(farmerAddress, farmLocation) {
-    if (!farmerAddress || !farmLocation) return true; // Can't check
+    if (!farmerAddress || !farmLocation) {
+      return true;
+    } // Can't check
 
     // Check if they share the same province
     const provinces = [

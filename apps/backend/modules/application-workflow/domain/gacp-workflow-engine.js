@@ -990,12 +990,20 @@ class GACPWorkflowEngine extends EventEmitter {
       stats.byStep[app.currentStep] = (stats.byStep[app.currentStep] || 0) + 1;
 
       // Payment stats
-      if (app.payments.phase1.status === 'completed') stats.payments.phase1.completed++;
-      if (app.payments.phase1.status === 'pending') stats.payments.phase1.pending++;
+      if (app.payments.phase1.status === 'completed') {
+        stats.payments.phase1.completed++;
+      }
+      if (app.payments.phase1.status === 'pending') {
+        stats.payments.phase1.pending++;
+      }
       stats.payments.phase1.total += app.payments.phase1.amount || 0;
 
-      if (app.payments.phase2.status === 'completed') stats.payments.phase2.completed++;
-      if (app.payments.phase2.status === 'pending') stats.payments.phase2.pending++;
+      if (app.payments.phase2.status === 'completed') {
+        stats.payments.phase2.completed++;
+      }
+      if (app.payments.phase2.status === 'pending') {
+        stats.payments.phase2.pending++;
+      }
       stats.payments.phase2.total += app.payments.phase2.amount || 0;
 
       // Certificates

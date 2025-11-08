@@ -70,8 +70,12 @@ router.get('/tasks', [auth, inspectorAuth], async (req, res) => {
 
     // Build filter
     const filter = { assignedTo: req.user.id };
-    if (status) filter.status = status;
-    if (priority) filter.priority = priority;
+    if (status) {
+      filter.status = status;
+    }
+    if (priority) {
+      filter.priority = priority;
+    }
 
     // Build sort
     let sort = { dueDate: 1 }; // Default: Sort by due date (earliest first)

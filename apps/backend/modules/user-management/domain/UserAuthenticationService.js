@@ -670,7 +670,9 @@ class UserAuthenticationService extends EventEmitter {
    * @private
    */
   _isPasswordExpired(passwordUpdatedAt) {
-    if (!passwordUpdatedAt) return true;
+    if (!passwordUpdatedAt) {
+      return true;
+    }
     const expiryDate = new Date(passwordUpdatedAt.getTime() + this.config.password.maxAge);
     return new Date() > expiryDate;
   }
@@ -783,7 +785,9 @@ class UserAuthenticationService extends EventEmitter {
     const session = await this._getSession(sessionId);
     if (session) {
       session.lastActivity = new Date();
-      if (context.ip) session.ip = context.ip;
+      if (context.ip) {
+        session.ip = context.ip;
+      }
 
       await this.cacheService.set(
         `session:${sessionId}`,

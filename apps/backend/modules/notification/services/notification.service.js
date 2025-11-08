@@ -588,7 +588,9 @@ class NotificationService {
    * Helper: Check if channel is enabled
    */
   isChannelEnabled(channel, preferences) {
-    if (!preferences) return channel === 'inapp';
+    if (!preferences) {
+      return channel === 'inapp';
+    }
     return preferences[channel] !== false;
   }
 

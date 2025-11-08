@@ -205,8 +205,12 @@ async function setupCollections() {
         for (const indexDef of indexes) {
           try {
             const options = {};
-            if (indexDef.unique) options.unique = true;
-            if (indexDef.sparse) options.sparse = true;
+            if (indexDef.unique) {
+              options.unique = true;
+            }
+            if (indexDef.sparse) {
+              options.sparse = true;
+            }
             if (indexDef.expireAfterSeconds !== undefined) {
               options.expireAfterSeconds = indexDef.expireAfterSeconds;
             }

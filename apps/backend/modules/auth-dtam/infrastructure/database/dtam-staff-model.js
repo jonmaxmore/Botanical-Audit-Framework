@@ -143,7 +143,9 @@ class MongoDBDTAMStaffRepository extends IDTAMStaffRepository {
    * Convert MongoDB document to Domain entity
    */
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     return new DTAMStaff({
       id: doc._id.toString(),

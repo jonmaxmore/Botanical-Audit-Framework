@@ -371,7 +371,9 @@ class ApplicationStateMachine {
    */
   calculateExpirationDate(state, enteredAt = new Date()) {
     const timeoutDays = this.getStateTimeout(state);
-    if (!timeoutDays) return null;
+    if (!timeoutDays) {
+      return null;
+    }
 
     const expirationDate = new Date(enteredAt);
     expirationDate.setDate(expirationDate.getDate() + timeoutDays);

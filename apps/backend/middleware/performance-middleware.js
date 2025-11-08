@@ -230,7 +230,9 @@ const optimizeApiResponse = {
 
   // Pick only specified fields
   pickFields: (obj, fields) => {
-    if (!fields.length) return obj;
+    if (!fields.length) {
+      return obj;
+    }
 
     const result = {};
     fields.forEach(field => {

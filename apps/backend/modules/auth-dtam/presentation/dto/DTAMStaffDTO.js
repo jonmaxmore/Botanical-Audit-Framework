@@ -232,9 +232,15 @@ class LoginResponseDTO {
 class ApiResponse {
   constructor(success, data = null, message = null, errors = null) {
     this.success = success;
-    if (message) this.message = message;
-    if (data) this.data = data;
-    if (errors) this.errors = errors;
+    if (message) {
+      this.message = message;
+    }
+    if (data) {
+      this.data = data;
+    }
+    if (errors) {
+      this.errors = errors;
+    }
   }
 
   static success(data, message = null) {
@@ -247,9 +253,15 @@ class ApiResponse {
 
   toJSON() {
     const response = { success: this.success };
-    if (this.message) response.message = this.message;
-    if (this.data) response.data = this.data;
-    if (this.errors) response.errors = this.errors;
+    if (this.message) {
+      response.message = this.message;
+    }
+    if (this.data) {
+      response.data = this.data;
+    }
+    if (this.errors) {
+      response.errors = this.errors;
+    }
     return response;
   }
 }

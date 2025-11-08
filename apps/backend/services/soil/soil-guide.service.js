@@ -33,8 +33,12 @@ class SoilGuideService {
   }
 
   getPHAdvice(pH) {
-    if (pH < 6.0) return 'ดินเป็นกรด - ใส่ปูนขาว';
-    if (pH > 7.5) return 'ดินเป็นด่าง - ใส่ปุ๋ยอินทรีย์';
+    if (pH < 6.0) {
+      return 'ดินเป็นกรด - ใส่ปูนขาว';
+    }
+    if (pH > 7.5) {
+      return 'ดินเป็นด่าง - ใส่ปุ๋ยอินทรีย์';
+    }
     return 'ค่า pH เหมาะสม';
   }
 }

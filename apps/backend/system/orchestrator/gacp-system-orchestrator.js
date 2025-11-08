@@ -693,7 +693,9 @@ class GACPSystemOrchestrator {
       this.workflowStates.get(applicationId) ||
       (await this.services.application.getWorkflowState(applicationId));
 
-    if (!workflowState) return null;
+    if (!workflowState) {
+      return null;
+    }
 
     const startTime = new Date(workflowState.startedAt);
     const endTime = new Date();
@@ -759,7 +761,9 @@ class GACPSystemOrchestrator {
 
     while (curDate <= endDate) {
       const dayOfWeek = curDate.getDay();
-      if (dayOfWeek !== 0 && dayOfWeek !== 6) count++;
+      if (dayOfWeek !== 0 && dayOfWeek !== 6) {
+        count++;
+      }
       curDate.setDate(curDate.getDate() + 1);
     }
 

@@ -827,9 +827,15 @@ class GACPInspectionService {
   }
 
   categorizeComplianceLevel(score) {
-    if (score >= 85) return 'excellent';
-    if (score >= 70) return 'satisfactory';
-    if (score >= 60) return 'conditional';
+    if (score >= 85) {
+      return 'excellent';
+    }
+    if (score >= 70) {
+      return 'satisfactory';
+    }
+    if (score >= 60) {
+      return 'conditional';
+    }
     return 'insufficient';
   }
 

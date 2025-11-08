@@ -48,7 +48,9 @@ class MongoDBCertificateRepository extends ICertificateRepository {
    * Convert MongoDB document to Domain Entity
    */
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     return new Certificate({
       id: doc._id.toString(),

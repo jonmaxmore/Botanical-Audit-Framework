@@ -129,15 +129,31 @@ class Password {
   static getStrength(password) {
     let strength = 0;
 
-    if (password.length >= 8) strength++;
-    if (password.length >= 12) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) strength++;
+    if (password.length >= 8) {
+      strength++;
+    }
+    if (password.length >= 12) {
+      strength++;
+    }
+    if (/[a-z]/.test(password)) {
+      strength++;
+    }
+    if (/[A-Z]/.test(password)) {
+      strength++;
+    }
+    if (/[0-9]/.test(password)) {
+      strength++;
+    }
+    if (/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+      strength++;
+    }
 
-    if (strength <= 2) return 'weak';
-    if (strength <= 4) return 'medium';
+    if (strength <= 2) {
+      return 'weak';
+    }
+    if (strength <= 4) {
+      return 'medium';
+    }
     return 'strong';
   }
 

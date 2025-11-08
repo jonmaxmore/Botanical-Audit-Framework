@@ -87,7 +87,9 @@ class SimpleReportGeneratorService {
           headers
             .map(h => {
               const value = row[h];
-              if (value === null || value === undefined) return '""';
+              if (value === null || value === undefined) {
+                return '""';
+              }
               return `"${String(value).replace(/"/g, '""')}"`;
             })
             .join(',') + '\n';

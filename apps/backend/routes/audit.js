@@ -191,8 +191,12 @@ router.get('/history', async (req, res) => {
     const { deviceId, limit = 10, skip = 0, status = 'completed' } = req.query;
 
     const query = {};
-    if (deviceId) query.deviceId = deviceId;
-    if (status) query.status = status;
+    if (deviceId) {
+      query.deviceId = deviceId;
+    }
+    if (status) {
+      query.status = status;
+    }
 
     const audits = await CodeAudit.find(query)
       .sort({ createdAt: -1 })
@@ -417,7 +421,9 @@ async function runAudit(auditId, directories, filePatterns, excludePatterns, min
 
   try {
     const audit = await CodeAudit.findById(auditId);
-    if (!audit) throw new Error('Audit not found');
+    if (!audit) {
+      throw new Error('Audit not found');
+    }
 
     // Find all files
     const files = await findFiles(directories, filePatterns, excludePatterns);
@@ -502,7 +508,9 @@ async function findDuplicates(fileHashes, minSimilarity) {
       const fileB = fileHashes[j];
 
       // Skip if same file
-      if (fileA.path === fileB.path) continue;
+      if (fileA.path === fileB.path) {
+        continue;
+      }
 
       // Calculate similarity
       const similarity = await calculateSimilarity(fileA, fileB);
@@ -537,7 +545,9 @@ async function findDuplicates(fileHashes, minSimilarity) {
  */
 async function calculateSimilarity(fileA, fileB) {
   // Exact match
-  if (fileA.hash === fileB.hash) return 100;
+  if (fileA.hash === fileB.hash) {
+    return 100;
+  }
 
   // Read file contents
   const contentA = await fs.readFile(fileA.path, 'utf-8');
@@ -588,10 +598,18 @@ async function compareFiles(fileA, fileB) {
  */
 function categorizeFile(filePath) {
   const fileName = path.basename(filePath);
-  if (fileName.includes('Modal') || fileName.includes('Dialog')) return 'modal';
-  if (fileName.includes('Form')) return 'form';
-  if (fileName.startsWith('use')) return 'hook';
-  if (fileName.includes('util') || fileName.includes('helper')) return 'utility';
+  if (fileName.includes('Modal') || fileName.includes('Dialog')) {
+    return 'modal';
+  }
+  if (fileName.includes('Form')) {
+    return 'form';
+  }
+  if (fileName.startsWith('use')) {
+    return 'hook';
+  }
+  if (fileName.includes('util') || fileName.includes('helper')) {
+    return 'utility';
+  }
   return 'component';
 }
 
@@ -599,10 +617,18 @@ function categorizeFile(filePath) {
  * Determine priority based on similarity and category
  */
 function determinePriority(similarity, category) {
-  if (similarity >= 95) return 'critical';
-  if (similarity >= 85 && ['modal', 'form'].includes(category)) return 'critical';
-  if (similarity >= 85) return 'high';
-  if (similarity >= 75) return 'medium';
+  if (similarity >= 95) {
+    return 'critical';
+  }
+  if (similarity >= 85 && ['modal', 'form'].includes(category)) {
+    return 'critical';
+  }
+  if (similarity >= 85) {
+    return 'high';
+  }
+  if (similarity >= 75) {
+    return 'medium';
+  }
   return 'low';
 }
 
@@ -610,10 +636,18 @@ function determinePriority(similarity, category) {
  * Generate descriptive comment
  */
 function generateComment(fileA, fileB, similarity) {
-  if (similarity === 100) return 'Identical files - exact duplicate';
-  if (similarity >= 90) return 'Nearly identical - strong duplicate';
-  if (similarity >= 80) return 'Very similar structure - likely duplicate';
-  if (similarity >= 70) return 'Similar patterns - consider consolidation';
+  if (similarity === 100) {
+    return 'Identical files - exact duplicate';
+  }
+  if (similarity >= 90) {
+    return 'Nearly identical - strong duplicate';
+  }
+  if (similarity >= 80) {
+    return 'Very similar structure - likely duplicate';
+  }
+  if (similarity >= 70) {
+    return 'Similar patterns - consider consolidation';
+  }
   return 'Moderate similarity';
 }
 

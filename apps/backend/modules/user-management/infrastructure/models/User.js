@@ -288,7 +288,9 @@ userSchema.virtual('isLocked').get(function () {
 });
 
 userSchema.virtual('passwordAge').get(function () {
-  if (!this.passwordUpdatedAt) return null;
+  if (!this.passwordUpdatedAt) {
+    return null;
+  }
   return Math.floor((Date.now() - this.passwordUpdatedAt.getTime()) / (1000 * 60 * 60 * 24)); // Days
 });
 

@@ -142,7 +142,9 @@ ProductSchema.virtual('isCertified').get(function () {
 
 // Virtual: Check if expired
 ProductSchema.virtual('isExpired').get(function () {
-  if (!this.certification || !this.certification.expiryDate) return false;
+  if (!this.certification || !this.certification.expiryDate) {
+    return false;
+  }
   return new Date() > new Date(this.certification.expiryDate);
 });
 
@@ -189,8 +191,12 @@ ProductSchema.statics.findByBatchCode = function (batchCode) {
 ProductSchema.statics.findByUser = function (userId, filters = {}) {
   const query = { userId };
 
-  if (filters.stage) query.stage = filters.stage;
-  if (filters.certificationStatus) query.certificationStatus = filters.certificationStatus;
+  if (filters.stage) {
+    query.stage = filters.stage;
+  }
+  if (filters.certificationStatus) {
+    query.certificationStatus = filters.certificationStatus;
+  }
 
   return this.find(query).sort({ 'metadata.createdAt': -1 });
 };

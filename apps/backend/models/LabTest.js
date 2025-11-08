@@ -511,7 +511,9 @@ LabTestSchema.methods.calculateOverallResult = function () {
   // Check soil test
   if (this.testType === 'soil' && this.soilTest) {
     const { pH, heavyMetals } = this.soilTest;
-    if (pH?.status === 'fail') hasFailures = true;
+    if (pH?.status === 'fail') {
+      hasFailures = true;
+    }
     if (
       heavyMetals?.lead?.status === 'fail' ||
       heavyMetals?.cadmium?.status === 'fail' ||
@@ -525,7 +527,9 @@ LabTestSchema.methods.calculateOverallResult = function () {
   // Check water test
   if (this.testType === 'water' && this.waterTest) {
     const { pH, heavyMetals, eColi } = this.waterTest;
-    if (pH?.status === 'fail') hasFailures = true;
+    if (pH?.status === 'fail') {
+      hasFailures = true;
+    }
     if (
       heavyMetals?.lead?.status === 'fail' ||
       heavyMetals?.cadmium?.status === 'fail' ||
@@ -534,13 +538,17 @@ LabTestSchema.methods.calculateOverallResult = function () {
     ) {
       hasFailures = true;
     }
-    if (eColi?.status === 'fail') hasFailures = true;
+    if (eColi?.status === 'fail') {
+      hasFailures = true;
+    }
   }
 
   // Check product test
   if (this.testType === 'product' && this.productTest) {
     const { pesticideResidues, heavyMetals, microbial } = this.productTest;
-    if (pesticideResidues?.some(p => p.status === 'fail')) hasFailures = true;
+    if (pesticideResidues?.some(p => p.status === 'fail')) {
+      hasFailures = true;
+    }
     if (
       heavyMetals?.lead?.status === 'fail' ||
       heavyMetals?.cadmium?.status === 'fail' ||

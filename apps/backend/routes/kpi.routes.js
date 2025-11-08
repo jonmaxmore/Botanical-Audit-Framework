@@ -168,9 +168,15 @@ function initializeKPIRoutes(dependencies) {
       const { startDate, endDate, userId } = req.query;
 
       const filters = {};
-      if (startDate) filters.startDate = startDate;
-      if (endDate) filters.endDate = endDate;
-      if (userId) filters.userId = userId;
+      if (startDate) {
+        filters.startDate = startDate;
+      }
+      if (endDate) {
+        filters.endDate = endDate;
+      }
+      if (userId) {
+        filters.userId = userId;
+      }
 
       const metrics = await kpiService.getRoleMetrics(role, filters);
 
@@ -199,8 +205,12 @@ function initializeKPIRoutes(dependencies) {
       const { startDate, endDate } = req.query;
 
       const filters = {};
-      if (startDate) filters.startDate = startDate;
-      if (endDate) filters.endDate = endDate;
+      if (startDate) {
+        filters.startDate = startDate;
+      }
+      if (endDate) {
+        filters.endDate = endDate;
+      }
 
       const metrics = await kpiService.getUserMetrics(userId, filters);
 
@@ -228,8 +238,12 @@ function initializeKPIRoutes(dependencies) {
       const { startDate, endDate } = req.query;
 
       const filters = {};
-      if (startDate) filters.startDate = startDate;
-      if (endDate) filters.endDate = endDate;
+      if (startDate) {
+        filters.startDate = startDate;
+      }
+      if (endDate) {
+        filters.endDate = endDate;
+      }
 
       const metrics = await kpiService.getSystemMetrics(filters);
 
@@ -330,8 +344,12 @@ function initializeKPIRoutes(dependencies) {
       const { startDate, endDate } = req.query;
 
       const filters = {};
-      if (startDate) filters.startDate = startDate;
-      if (endDate) filters.endDate = endDate;
+      if (startDate) {
+        filters.startDate = startDate;
+      }
+      if (endDate) {
+        filters.endDate = endDate;
+      }
 
       const [systemMetrics, delayedTasks, trends] = await Promise.all([
         kpiService.getSystemMetrics(filters),

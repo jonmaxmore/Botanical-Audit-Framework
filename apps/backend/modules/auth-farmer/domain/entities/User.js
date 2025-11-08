@@ -86,7 +86,9 @@ class User {
    * @returns {boolean}
    */
   isAccountLocked() {
-    if (!this.isLocked) return false;
+    if (!this.isLocked) {
+      return false;
+    }
 
     // Check if lock period has expired
     if (this.lockedUntil && new Date() > this.lockedUntil) {
@@ -102,8 +104,12 @@ class User {
    * @returns {boolean}
    */
   isEmailVerificationValid() {
-    if (!this.emailVerificationToken) return false;
-    if (!this.emailVerificationExpiry) return false;
+    if (!this.emailVerificationToken) {
+      return false;
+    }
+    if (!this.emailVerificationExpiry) {
+      return false;
+    }
     return new Date() < this.emailVerificationExpiry;
   }
 
@@ -112,8 +118,12 @@ class User {
    * @returns {boolean}
    */
   isPasswordResetValid() {
-    if (!this.passwordResetToken) return false;
-    if (!this.passwordResetExpiry) return false;
+    if (!this.passwordResetToken) {
+      return false;
+    }
+    if (!this.passwordResetExpiry) {
+      return false;
+    }
     return new Date() < this.passwordResetExpiry;
   }
 

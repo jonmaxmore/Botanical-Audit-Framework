@@ -144,9 +144,15 @@ class ReportController {
       const { type, status, format, page = 1, limit = 20 } = req.query;
 
       const filters = {};
-      if (type) filters.type = type;
-      if (status) filters.status = status;
-      if (format) filters.format = format;
+      if (type) {
+        filters.type = type;
+      }
+      if (status) {
+        filters.status = status;
+      }
+      if (format) {
+        filters.format = format;
+      }
 
       const result = await this.listReportsUseCase.execute(
         filters,

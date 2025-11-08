@@ -7,7 +7,9 @@
 
 class DocumentDTO {
   static toResponse(document) {
-    if (!document) return null;
+    if (!document) {
+      return null;
+    }
 
     return {
       id: document.id,
@@ -91,7 +93,9 @@ class DocumentDTO {
   }
 
   static toSummaryResponse(document) {
-    if (!document) return null;
+    if (!document) {
+      return null;
+    }
 
     return {
       id: document.id,

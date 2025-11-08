@@ -54,7 +54,9 @@ class HealthCheckService {
    * Run all health checks
    */
   async runChecks() {
-    if (!this.isRunning) return;
+    if (!this.isRunning) {
+      return;
+    }
 
     logger.info(`\n[Health Check] Running checks at ${new Date().toISOString()}`);
 

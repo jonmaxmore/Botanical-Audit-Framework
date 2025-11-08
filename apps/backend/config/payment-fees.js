@@ -158,7 +158,9 @@ module.exports = {
 
   // ตรวจสอบว่าการชำระเงินหมดอายุหรือไม่
   isPaymentExpired: (paymentDate, phase = 1) => {
-    if (!paymentDate) return false;
+    if (!paymentDate) {
+      return false;
+    }
     const now = new Date();
     const expiry = new Date(paymentDate.getTime() + PAYMENT_FEES.PAYMENT_TIMEOUT[`PHASE_${phase}`]);
     return now > expiry;

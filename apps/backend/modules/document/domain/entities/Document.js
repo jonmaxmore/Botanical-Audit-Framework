@@ -313,8 +313,12 @@ class Document {
 
   // Check if document is expired
   isExpired() {
-    if (this.status === Document.STATUS.EXPIRED) return true;
-    if (this.expiresAt && new Date() > this.expiresAt) return true;
+    if (this.status === Document.STATUS.EXPIRED) {
+      return true;
+    }
+    if (this.expiresAt && new Date() > this.expiresAt) {
+      return true;
+    }
     return false;
   }
 
@@ -331,19 +335,31 @@ class Document {
   // Check if user can access document
   canAccess(userId, userRole) {
     // Archived documents cannot be accessed
-    if (this.isArchived()) return false;
+    if (this.isArchived()) {
+      return false;
+    }
 
     // Owner can always access
-    if (this.uploadedBy === userId) return true;
+    if (this.uploadedBy === userId) {
+      return true;
+    }
 
     // Check access level
-    if (this.accessLevel === Document.ACCESS_LEVEL.PUBLIC) return true;
-    if (this.accessLevel === Document.ACCESS_LEVEL.PRIVATE) return false;
+    if (this.accessLevel === Document.ACCESS_LEVEL.PUBLIC) {
+      return true;
+    }
+    if (this.accessLevel === Document.ACCESS_LEVEL.PRIVATE) {
+      return false;
+    }
     if (this.accessLevel === Document.ACCESS_LEVEL.INTERNAL) {
       // DTAM staff can access internal documents
-      if (userRole === 'DTAM_STAFF' || userRole === 'admin') return true;
+      if (userRole === 'DTAM_STAFF' || userRole === 'admin') {
+        return true;
+      }
       // Check allowed roles
-      if (this.allowedRoles.length > 0 && this.allowedRoles.includes(userRole)) return true;
+      if (this.allowedRoles.length > 0 && this.allowedRoles.includes(userRole)) {
+        return true;
+      }
     }
 
     return false;
@@ -370,7 +386,9 @@ class Document {
 
   // Get days until expiration
   getDaysUntilExpiration() {
-    if (!this.expiresAt) return null;
+    if (!this.expiresAt) {
+      return null;
+    }
     const now = new Date();
     const diff = this.expiresAt - now;
     return Math.ceil(diff / (1000 * 60 * 60 * 24));

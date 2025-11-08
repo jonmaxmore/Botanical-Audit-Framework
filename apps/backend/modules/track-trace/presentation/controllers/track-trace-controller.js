@@ -912,12 +912,24 @@ class TrackTraceController {
     const filters = {};
 
     // Parse standard filter parameters
-    if (queryParams.status) filters.status = queryParams.status;
-    if (queryParams.farmId) filters.farmId = queryParams.farmId;
-    if (queryParams.strain) filters.strain = queryParams.strain;
-    if (queryParams.dateFrom) filters.dateFrom = queryParams.dateFrom;
-    if (queryParams.dateTo) filters.dateTo = queryParams.dateTo;
-    if (queryParams.qualityMin) filters.qualityMin = parseInt(queryParams.qualityMin);
+    if (queryParams.status) {
+      filters.status = queryParams.status;
+    }
+    if (queryParams.farmId) {
+      filters.farmId = queryParams.farmId;
+    }
+    if (queryParams.strain) {
+      filters.strain = queryParams.strain;
+    }
+    if (queryParams.dateFrom) {
+      filters.dateFrom = queryParams.dateFrom;
+    }
+    if (queryParams.dateTo) {
+      filters.dateTo = queryParams.dateTo;
+    }
+    if (queryParams.qualityMin) {
+      filters.qualityMin = parseInt(queryParams.qualityMin);
+    }
 
     return filters;
   }

@@ -342,7 +342,9 @@ class AuditLog {
    * Generate changes summary
    */
   generateChangesSummary(before, after) {
-    if (!before || !after) return null;
+    if (!before || !after) {
+      return null;
+    }
 
     const changes = [];
     const allKeys = new Set([...Object.keys(before), ...Object.keys(after)]);
@@ -415,9 +417,15 @@ class AuditLog {
     const diffHours = Math.floor(diffMins / 60);
     const diffDays = Math.floor(diffHours / 24);
 
-    if (diffDays > 0) return `${diffDays} day(s) ago`;
-    if (diffHours > 0) return `${diffHours} hour(s) ago`;
-    if (diffMins > 0) return `${diffMins} minute(s) ago`;
+    if (diffDays > 0) {
+      return `${diffDays} day(s) ago`;
+    }
+    if (diffHours > 0) {
+      return `${diffHours} hour(s) ago`;
+    }
+    if (diffMins > 0) {
+      return `${diffMins} minute(s) ago`;
+    }
     return 'Just now';
   }
 }

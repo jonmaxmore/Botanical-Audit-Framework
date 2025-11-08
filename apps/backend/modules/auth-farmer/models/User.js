@@ -178,7 +178,9 @@ userSchema.set('toObject', { virtuals: true });
  */
 userSchema.pre('save', async function (next) {
   // Only hash if password is modified
-  if (!this.isModified('password')) return next();
+  if (!this.isModified('password')) {
+    return next();
+  }
 
   try {
     // Hash password with cost of 12
@@ -205,7 +207,9 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
   try {
     // Need to explicitly select password for comparison
     const user = await mongoose.model('User').findById(this._id).select('+password');
-    if (!user) return false;
+    if (!user) {
+      return false;
+    }
     return await bcrypt.compare(candidatePassword, user.password);
   } catch (error) {
     logger.error('Password comparison error:', error);
@@ -424,9 +428,15 @@ userSchema.statics.getUsers = async function (options = {}) {
 
   const query = {};
 
-  if (role) query.role = role;
-  if (organizationType) query.organizationType = organizationType;
-  if (typeof isActive === 'boolean') query.isActive = isActive;
+  if (role) {
+    query.role = role;
+  }
+  if (organizationType) {
+    query.organizationType = organizationType;
+  }
+  if (typeof isActive === 'boolean') {
+    query.isActive = isActive;
+  }
 
   if (search) {
     query.$or = [

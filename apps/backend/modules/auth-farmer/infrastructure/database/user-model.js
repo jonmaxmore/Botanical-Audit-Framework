@@ -148,7 +148,9 @@ class MongoDBUserRepository extends IUserRepository {
    * @returns {User}
    */
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     return new User({
       id: doc._id.toString(),
@@ -331,10 +333,18 @@ class MongoDBUserRepository extends IUserRepository {
     try {
       const query = {};
 
-      if (filters.status) query.status = filters.status;
-      if (filters.role) query.role = filters.role;
-      if (filters.isEmailVerified !== undefined) query.isEmailVerified = filters.isEmailVerified;
-      if (filters.province) query.province = filters.province;
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.role) {
+        query.role = filters.role;
+      }
+      if (filters.isEmailVerified !== undefined) {
+        query.isEmailVerified = filters.isEmailVerified;
+      }
+      if (filters.province) {
+        query.province = filters.province;
+      }
 
       const docs = await this.model
         .find(query)

@@ -31,7 +31,7 @@ export interface ILogger {
 export class MongoUserRepositoryWithDI {
   constructor(
     private readonly db: any, // Mongoose connection or collection
-    private readonly logger: ILogger
+    private readonly logger: ILogger,
   ) {}
 
   async save(user: User): Promise<void> {
@@ -40,12 +40,12 @@ export class MongoUserRepositoryWithDI {
       await this.db.collection('users_farmer').insertOne(userData);
       this.logger.info('User saved successfully', {
         userId: user.id,
-        email: user.email
+        email: user.email,
       });
     } catch (error) {
       this.logger.error('Failed to save user', {
         userId: user.id,
-        error: (error as Error).message
+        error: (error as Error).message,
       });
       throw error;
     }
@@ -63,7 +63,7 @@ export class MongoUserRepositoryWithDI {
     } catch (error) {
       this.logger.error('Error finding user by email', {
         email,
-        error: (error as Error).message
+        error: (error as Error).message,
       });
       throw error;
     }
@@ -76,7 +76,7 @@ export class MongoUserRepositoryWithDI {
     } catch (error) {
       this.logger.error('Error checking email existence', {
         email,
-        error: (error as Error).message
+        error: (error as Error).message,
       });
       throw error;
     }
@@ -89,7 +89,7 @@ export class MongoUserRepositoryWithDI {
     } catch (error) {
       this.logger.error('Error checking ID card existence', {
         idCard,
-        error: (error as Error).message
+        error: (error as Error).message,
       });
       throw error;
     }
@@ -125,7 +125,7 @@ export class MongoUserRepositoryWithDI {
       accountLockedUntil: doc.accountLockedUntil,
       metadata: doc.metadata,
       createdAt: doc.createdAt,
-      updatedAt: doc.updatedAt
+      updatedAt: doc.updatedAt,
     });
   }
 
@@ -158,7 +158,7 @@ export class MongoUserRepositoryWithDI {
       accountLockedUntil: user.accountLockedUntil,
       metadata: user.metadata,
       createdAt: user.createdAt,
-      updatedAt: user.updatedAt
+      updatedAt: user.updatedAt,
     };
   }
 }

@@ -380,10 +380,14 @@ class SurveySystemService {
     steps.forEach((step, index) => {
       if (index + 1 < currentStepId) {
         // Previous steps
-        if (response[step]) completedSteps++;
+        if (response[step]) {
+          completedSteps++;
+        }
       } else if (index + 1 === currentStepId) {
         // Current step
-        if (newStepData && Object.keys(newStepData).length > 0) completedSteps++;
+        if (newStepData && Object.keys(newStepData).length > 0) {
+          completedSteps++;
+        }
       }
     });
 

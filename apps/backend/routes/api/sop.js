@@ -78,10 +78,18 @@ router.get(
       // Build query
       const query = { status };
 
-      if (cropType) query.cropType = cropType;
-      if (difficulty) query.difficulty = difficulty;
-      if (strain) query['cannabisDetails.strain'] = strain;
-      if (medicalPurpose) query['cannabisDetails.medicalPurpose'] = medicalPurpose;
+      if (cropType) {
+        query.cropType = cropType;
+      }
+      if (difficulty) {
+        query.difficulty = difficulty;
+      }
+      if (strain) {
+        query['cannabisDetails.strain'] = strain;
+      }
+      if (medicalPurpose) {
+        query['cannabisDetails.medicalPurpose'] = medicalPurpose;
+      }
 
       if (search) {
         query.$or = [

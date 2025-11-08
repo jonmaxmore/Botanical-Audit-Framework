@@ -148,9 +148,15 @@ router.get('/', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, res) =>
     if (req.user.role === 'admin' && viewAll === 'true') {
       // Admin can view all tasks
       const query = {};
-      if (status) query['status.current'] = status;
-      if (category) query['taskInfo.category'] = category;
-      if (priority) query['taskInfo.priority'] = priority;
+      if (status) {
+        query['status.current'] = status;
+      }
+      if (category) {
+        query['taskInfo.category'] = category;
+      }
+      if (priority) {
+        query['taskInfo.priority'] = priority;
+      }
 
       const tasks = await TaskAssignment.find(query)
         .sort({ 'scheduling.dueDate': 1, 'taskInfo.priority': -1 })

@@ -586,16 +586,24 @@ class GACPApplicationService {
     let score = 0;
 
     // Location completeness (25%)
-    if (farmInfo.location && farmInfo.location.coordinates) score += 25;
+    if (farmInfo.location && farmInfo.location.coordinates) {
+      score += 25;
+    }
 
     // Land ownership documentation (25%)
-    if (farmInfo.landOwnership && farmInfo.landOwnership.documents.length > 0) score += 25;
+    if (farmInfo.landOwnership && farmInfo.landOwnership.documents.length > 0) {
+      score += 25;
+    }
 
     // Water source quality (25%)
-    if (farmInfo.waterSource && farmInfo.waterSource.quality === 'good') score += 25;
+    if (farmInfo.waterSource && farmInfo.waterSource.quality === 'good') {
+      score += 25;
+    }
 
     // Soil information (25%)
-    if (farmInfo.soilType && farmInfo.soilType.ph) score += 25;
+    if (farmInfo.soilType && farmInfo.soilType.ph) {
+      score += 25;
+    }
 
     return score;
   }
@@ -811,9 +819,15 @@ class GACPApplicationService {
     }
 
     const query = {};
-    if (filters.status) query.currentStatus = filters.status;
-    if (filters.farmerId) query.applicant = filters.farmerId;
-    if (filters.assignedOfficer) query.assignedOfficer = filters.assignedOfficer;
+    if (filters.status) {
+      query.currentStatus = filters.status;
+    }
+    if (filters.farmerId) {
+      query.applicant = filters.farmerId;
+    }
+    if (filters.assignedOfficer) {
+      query.assignedOfficer = filters.assignedOfficer;
+    }
 
     const page = options.page || 1;
     const limit = options.limit || 20;

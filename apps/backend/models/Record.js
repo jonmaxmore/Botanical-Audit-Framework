@@ -230,7 +230,9 @@ RecordSchema.methods.getChain = async function (direction = 'backward', limit = 
     // Traverse backward to genesis
     for (let i = 0; i < limit; i++) {
       const previous = await current.getPreviousRecord();
-      if (!previous) break;
+      if (!previous) {
+        break;
+      }
       chain.unshift(previous);
       current = previous;
     }
@@ -238,7 +240,9 @@ RecordSchema.methods.getChain = async function (direction = 'backward', limit = 
     // Traverse forward to latest
     for (let i = 0; i < limit; i++) {
       const next = await current.getNextRecord();
-      if (!next) break;
+      if (!next) {
+        break;
+      }
       chain.push(next);
       current = next;
     }

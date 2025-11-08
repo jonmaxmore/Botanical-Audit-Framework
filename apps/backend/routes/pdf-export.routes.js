@@ -51,7 +51,9 @@ function numberToThaiText(num) {
     'เก้าสิบ',
   ];
 
-  if (num === 0) return 'ศูนย์บาทถ้วน';
+  if (num === 0) {
+    return 'ศูนย์บาทถ้วน';
+  }
 
   const numStr = num.toString();
   const [baht, satang] = numStr.split('.');

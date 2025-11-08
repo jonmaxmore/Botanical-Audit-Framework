@@ -35,7 +35,9 @@ const isValidPhone = phone => {
  * Thai National ID Validation
  */
 const isValidThaiID = id => {
-  if (!/^\d{13}$/.test(id)) return false;
+  if (!/^\d{13}$/.test(id)) {
+    return false;
+  }
 
   // Checksum validation
   let sum = 0;
@@ -73,7 +75,9 @@ const isValidObjectId = id => {
  * File Extension Validation
  */
 const isValidFileExtension = (filename, allowedExtensions) => {
-  if (!filename || !allowedExtensions) return false;
+  if (!filename || !allowedExtensions) {
+    return false;
+  }
 
   const extension = filename.toLowerCase().split('.').pop();
   return allowedExtensions.includes(extension);
@@ -91,7 +95,9 @@ const isValidDate = dateString => {
  * Age Validation
  */
 const isValidAge = (birthDate, minAge = 0, maxAge = 150) => {
-  if (!isValidDate(birthDate)) return false;
+  if (!isValidDate(birthDate)) {
+    return false;
+  }
 
   const today = new Date();
   const birth = new Date(birthDate);
@@ -115,7 +121,9 @@ const isValidCoordinate = (lat, lng) => {
  * Sanitize String
  */
 const sanitizeString = str => {
-  if (typeof str !== 'string') return '';
+  if (typeof str !== 'string') {
+    return '';
+  }
 
   return str
     .trim()
@@ -128,7 +136,9 @@ const sanitizeString = str => {
  * Sanitize Object
  */
 const sanitizeObject = (obj, allowedFields = []) => {
-  if (!obj || typeof obj !== 'object') return {};
+  if (!obj || typeof obj !== 'object') {
+    return {};
+  }
 
   const sanitized = {};
 

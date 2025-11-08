@@ -14,7 +14,9 @@
  * @returns {string} Formatted date string
  */
 function formatDateThai(date, options = {}) {
-  if (!date) return '';
+  if (!date) {
+    return '';
+  }
 
   const defaultOptions = {
     year: 'numeric',
@@ -32,7 +34,9 @@ function formatDateThai(date, options = {}) {
  * @returns {string} ISO date string
  */
 function formatDateISO(date) {
-  if (!date) return '';
+  if (!date) {
+    return '';
+  }
   return new Date(date).toISOString();
 }
 
@@ -83,10 +87,18 @@ function formatRelativeTime(timestamp) {
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
 
-  if (diffMins < 1) return 'เมื่อสักครู่';
-  if (diffMins < 60) return `${diffMins} นาทีที่แล้ว`;
-  if (diffHours < 24) return `${diffHours} ชั่วโมงที่แล้ว`;
-  if (diffDays < 30) return `${diffDays} วันที่แล้ว`;
+  if (diffMins < 1) {
+    return 'เมื่อสักครู่';
+  }
+  if (diffMins < 60) {
+    return `${diffMins} นาทีที่แล้ว`;
+  }
+  if (diffHours < 24) {
+    return `${diffHours} ชั่วโมงที่แล้ว`;
+  }
+  if (diffDays < 30) {
+    return `${diffDays} วันที่แล้ว`;
+  }
 
   return formatDateThai(date);
 }
@@ -101,7 +113,9 @@ function formatRelativeTime(timestamp) {
  * @returns {boolean} True if valid
  */
 function isValidThaiId(id) {
-  if (!id || id.length !== 13) return false;
+  if (!id || id.length !== 13) {
+    return false;
+  }
 
   const digits = id.split('').map(Number);
   const checksum = digits.slice(0, 12).reduce((sum, digit, index) => sum + digit * (13 - index), 0);
@@ -115,7 +129,9 @@ function isValidThaiId(id) {
  * @returns {boolean} True if valid
  */
 function isValidThaiPhone(phone) {
-  if (!phone) return false;
+  if (!phone) {
+    return false;
+  }
   const cleaned = phone.replace(/[^0-9]/g, '');
   return /^(06|08|09)\d{8}$/.test(cleaned);
 }
@@ -126,7 +142,9 @@ function isValidThaiPhone(phone) {
  * @returns {boolean} True if valid
  */
 function isValidEmail(email) {
-  if (!email) return false;
+  if (!email) {
+    return false;
+  }
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 }
@@ -137,10 +155,18 @@ function isValidEmail(email) {
  * @returns {boolean} True if empty
  */
 function isEmpty(obj) {
-  if (obj === null || obj === undefined) return true;
-  if (typeof obj === 'string') return obj.trim().length === 0;
-  if (Array.isArray(obj)) return obj.length === 0;
-  if (typeof obj === 'object') return Object.keys(obj).length === 0;
+  if (obj === null || obj === undefined) {
+    return true;
+  }
+  if (typeof obj === 'string') {
+    return obj.trim().length === 0;
+  }
+  if (Array.isArray(obj)) {
+    return obj.length === 0;
+  }
+  if (typeof obj === 'object') {
+    return Object.keys(obj).length === 0;
+  }
   return false;
 }
 
@@ -154,7 +180,9 @@ function isEmpty(obj) {
  * @returns {string} Capitalized string
  */
 function capitalize(str) {
-  if (!str) return '';
+  if (!str) {
+    return '';
+  }
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -208,13 +236,17 @@ function generateRandomString(length = 8) {
  * @returns {Array} Deduplicated array
  */
 function removeDuplicates(arr, key = null) {
-  if (!Array.isArray(arr)) return [];
+  if (!Array.isArray(arr)) {
+    return [];
+  }
 
   if (key) {
     const seen = new Set();
     return arr.filter(item => {
       const keyValue = item[key];
-      if (seen.has(keyValue)) return false;
+      if (seen.has(keyValue)) {
+        return false;
+      }
       seen.add(keyValue);
       return true;
     });
@@ -230,7 +262,9 @@ function removeDuplicates(arr, key = null) {
  * @returns {Array} Array of chunks
  */
 function chunkArray(arr, size) {
-  if (!Array.isArray(arr) || size <= 0) return [];
+  if (!Array.isArray(arr) || size <= 0) {
+    return [];
+  }
 
   const chunks = [];
   for (let i = 0; i < arr.length; i += size) {
@@ -249,9 +283,15 @@ function chunkArray(arr, size) {
  * @returns {any} Cloned object
  */
 function deepClone(obj) {
-  if (obj === null || typeof obj !== 'object') return obj;
-  if (obj instanceof Date) return new Date(obj);
-  if (obj instanceof Array) return obj.map(item => deepClone(item));
+  if (obj === null || typeof obj !== 'object') {
+    return obj;
+  }
+  if (obj instanceof Date) {
+    return new Date(obj);
+  }
+  if (obj instanceof Array) {
+    return obj.map(item => deepClone(item));
+  }
   if (typeof obj === 'object') {
     const cloned = {};
     Object.keys(obj).forEach(key => {
@@ -269,7 +309,9 @@ function deepClone(obj) {
  * @returns {Object} Object with picked keys
  */
 function pick(obj, keys) {
-  if (!obj || !Array.isArray(keys)) return {};
+  if (!obj || !Array.isArray(keys)) {
+    return {};
+  }
 
   const result = {};
   keys.forEach(key => {
@@ -287,7 +329,9 @@ function pick(obj, keys) {
  * @returns {Object} Object without omitted keys
  */
 function omit(obj, keys) {
-  if (!obj) return {};
+  if (!obj) {
+    return {};
+  }
 
   const result = { ...obj };
   keys.forEach(key => delete result[key]);
@@ -304,7 +348,9 @@ function omit(obj, keys) {
  * @returns {string} Formatted file size
  */
 function formatFileSize(bytes) {
-  if (bytes === 0) return '0 Bytes';
+  if (bytes === 0) {
+    return '0 Bytes';
+  }
 
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
@@ -319,7 +365,9 @@ function formatFileSize(bytes) {
  * @returns {string} Formatted currency
  */
 function formatCurrency(amount) {
-  if (typeof amount !== 'number') return '฿0';
+  if (typeof amount !== 'number') {
+    return '฿0';
+  }
 
   return new Intl.NumberFormat('th-TH', {
     style: 'currency',
@@ -333,7 +381,9 @@ function formatCurrency(amount) {
  * @returns {string} Formatted number
  */
 function formatNumber(num) {
-  if (typeof num !== 'number') return '0';
+  if (typeof num !== 'number') {
+    return '0';
+  }
   return num.toLocaleString('th-TH');
 }
 

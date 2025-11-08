@@ -334,7 +334,9 @@ class Notification {
    * Check if notification is expired
    */
   isExpired() {
-    if (!this.expiresAt) return false;
+    if (!this.expiresAt) {
+      return false;
+    }
     return new Date() > this.expiresAt;
   }
 
@@ -363,9 +365,15 @@ class Notification {
     const diffHours = Math.floor(diffMs / 3600000);
     const diffDays = Math.floor(diffMs / 86400000);
 
-    if (diffMins < 1) return 'Just now';
-    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffMins < 1) {
+      return 'Just now';
+    }
+    if (diffMins < 60) {
+      return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    }
+    if (diffHours < 24) {
+      return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    }
     return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
   }
 
@@ -393,10 +401,18 @@ class Notification {
   validate() {
     const errors = [];
 
-    if (!this.title) errors.push('Title is required');
-    if (!this.message) errors.push('Message is required');
-    if (!this.type) errors.push('Type is required');
-    if (!this.recipientType) errors.push('Recipient type is required');
+    if (!this.title) {
+      errors.push('Title is required');
+    }
+    if (!this.message) {
+      errors.push('Message is required');
+    }
+    if (!this.type) {
+      errors.push('Type is required');
+    }
+    if (!this.recipientType) {
+      errors.push('Recipient type is required');
+    }
 
     if (this.recipientType === Notification.RECIPIENT_TYPE.ROLE && !this.recipientRole) {
       errors.push('Recipient role is required for role-based notifications');

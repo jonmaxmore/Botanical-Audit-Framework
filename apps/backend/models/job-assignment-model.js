@@ -174,13 +174,17 @@ JobAssignmentSchema.index({ assignedAt: -1 });
 
 // Virtual for time to accept (in minutes)
 JobAssignmentSchema.virtual('timeToAcceptMinutes').get(function () {
-  if (!this.acceptedAt) return null;
+  if (!this.acceptedAt) {
+    return null;
+  }
   return Math.floor((this.acceptedAt - this.assignedAt) / (1000 * 60));
 });
 
 // Virtual for time to complete (in minutes)
 JobAssignmentSchema.virtual('timeToCompleteMinutes').get(function () {
-  if (!this.completedAt) return null;
+  if (!this.completedAt) {
+    return null;
+  }
   return Math.floor((this.completedAt - this.assignedAt) / (1000 * 60));
 });
 
@@ -191,7 +195,9 @@ JobAssignmentSchema.virtual('isActive').get(function () {
 
 // Virtual for is overdue (24 hours without acceptance)
 JobAssignmentSchema.virtual('isOverdue').get(function () {
-  if (this.status !== 'assigned') return false;
+  if (this.status !== 'assigned') {
+    return false;
+  }
   const now = new Date();
   const hours = (now - this.assignedAt) / (1000 * 60 * 60);
   return hours > 24;

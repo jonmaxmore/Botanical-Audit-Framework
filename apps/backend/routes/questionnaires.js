@@ -15,8 +15,12 @@ router.get('/', auth, async (req, res) => {
 
     // Build filter
     const filter = {};
-    if (status) filter.status = status;
-    if (type) filter.type = type;
+    if (status) {
+      filter.status = status;
+    }
+    if (type) {
+      filter.type = type;
+    }
 
     // Region filter
     if (region) {

@@ -16,11 +16,21 @@ router.get('/', auth, async (req, res) => {
 
     // Build filter
     const filter = {};
-    if (status) filter.status = status;
-    if (assignedTo) filter.assignedTo = assignedTo;
-    if (createdBy) filter.createdBy = createdBy;
-    if (priority) filter.priority = priority;
-    if (dueDate) filter.dueDate = { $lte: new Date(dueDate) };
+    if (status) {
+      filter.status = status;
+    }
+    if (assignedTo) {
+      filter.assignedTo = assignedTo;
+    }
+    if (createdBy) {
+      filter.createdBy = createdBy;
+    }
+    if (priority) {
+      filter.priority = priority;
+    }
+    if (dueDate) {
+      filter.dueDate = { $lte: new Date(dueDate) };
+    }
 
     const tasks = await Task.find(filter).sort({ createdAt: -1 });
     res.json(tasks);

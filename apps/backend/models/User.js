@@ -312,23 +312,47 @@ userSchema.virtual('profileCompleteness').get(function () {
   let completion = 0;
   const totalFields = 10;
 
-  if (this.fullName) completion++;
-  if (this.phone) completion++;
-  if (this.nationalId) completion++;
-  if (this.isEmailVerified) completion++;
-  if (this.isPhoneVerified) completion++;
-  if (this.profilePicture) completion++;
+  if (this.fullName) {
+    completion++;
+  }
+  if (this.phone) {
+    completion++;
+  }
+  if (this.nationalId) {
+    completion++;
+  }
+  if (this.isEmailVerified) {
+    completion++;
+  }
+  if (this.isPhoneVerified) {
+    completion++;
+  }
+  if (this.profilePicture) {
+    completion++;
+  }
 
   // Role-specific completeness
   if (this.role === 'farmer') {
-    if (this.farmingExperience !== undefined) completion++;
-    if (this.farmerType) completion++;
+    if (this.farmingExperience !== undefined) {
+      completion++;
+    }
+    if (this.farmerType) {
+      completion++;
+    }
   } else if (this.role === 'inspector') {
-    if (this.expertise && this.expertise.cropTypes.length > 0) completion++;
-    if (this.expertise && this.expertise.experience !== undefined) completion++;
+    if (this.expertise && this.expertise.cropTypes.length > 0) {
+      completion++;
+    }
+    if (this.expertise && this.expertise.experience !== undefined) {
+      completion++;
+    }
   } else if (this.role === 'dtam_officer') {
-    if (this.workLocation && this.workLocation.provinces.length > 0) completion++;
-    if (this.workLocation && this.workLocation.office) completion++;
+    if (this.workLocation && this.workLocation.provinces.length > 0) {
+      completion++;
+    }
+    if (this.workLocation && this.workLocation.office) {
+      completion++;
+    }
   }
 
   return Math.round((completion / totalFields) * 100);

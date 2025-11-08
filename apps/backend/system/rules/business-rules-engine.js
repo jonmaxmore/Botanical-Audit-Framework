@@ -180,7 +180,9 @@ class BusinessRulesEngine {
       dependencies: ['FARMER_MINIMUM_AGE'],
       executor: async (data, metadata) => {
         const age = metadata.FARMER_MINIMUM_AGE?.farmerAge;
-        if (!age) return { passed: true };
+        if (!age) {
+          return { passed: true };
+        }
 
         return {
           passed: true,
@@ -278,7 +280,9 @@ class BusinessRulesEngine {
       dependencies: ['FARM_MINIMUM_SIZE'],
       executor: async (data, metadata) => {
         const farmArea = metadata.FARM_MINIMUM_SIZE?.farmArea;
-        if (!farmArea) return { passed: true };
+        if (!farmArea) {
+          return { passed: true };
+        }
 
         const maxSizeThreshold = 50; // 50 rai
 
@@ -378,7 +382,9 @@ class BusinessRulesEngine {
       dependencies: ['FARM_LOCATION_VALID'],
       executor: async (data, _metadata) => {
         const coordinates = data.farmProfile?.location?.coordinates;
-        if (!coordinates) return { passed: true }; // Will be caught by coordinate requirement rule
+        if (!coordinates) {
+          return { passed: true };
+        } // Will be caught by coordinate requirement rule
 
         const schoolCheck = await this.geoService.checkSchoolProximity(coordinates);
         const minimumDistance = 1000; // 1 kilometer
@@ -547,7 +553,9 @@ class BusinessRulesEngine {
    * Calculate compliance score
    */
   _calculateComplianceScore(results) {
-    if (results.totalRules === 0) return 100;
+    if (results.totalRules === 0) {
+      return 100;
+    }
 
     const criticalWeight = 40;
     const highWeight = 30;

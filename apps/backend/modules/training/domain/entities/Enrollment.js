@@ -336,8 +336,12 @@ class Enrollment {
    */
   isExpired() {
     // Check both status and expiry date
-    if (this.status === Enrollment.STATUS.EXPIRED) return true;
-    if (this.expiresAt && new Date() > this.expiresAt) return true;
+    if (this.status === Enrollment.STATUS.EXPIRED) {
+      return true;
+    }
+    if (this.expiresAt && new Date() > this.expiresAt) {
+      return true;
+    }
     return false;
   }
 
@@ -387,7 +391,9 @@ class Enrollment {
    * Get days until expiry
    */
   getDaysUntilExpiry() {
-    if (!this.expiresAt) return null;
+    if (!this.expiresAt) {
+      return null;
+    }
     const now = new Date();
     const diffTime = this.expiresAt - now;
     return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
@@ -434,8 +440,12 @@ class Enrollment {
   validate() {
     const errors = [];
 
-    if (!this.farmerId) errors.push('Farmer ID is required');
-    if (!this.courseId) errors.push('Course ID is required');
+    if (!this.farmerId) {
+      errors.push('Farmer ID is required');
+    }
+    if (!this.courseId) {
+      errors.push('Course ID is required');
+    }
     if (this.passingScore < 0 || this.passingScore > 100) {
       errors.push('Passing score must be between 0 and 100');
     }

@@ -267,16 +267,32 @@ class ComplianceAuditService {
 
     if (startDate || endDate) {
       query.timestamp = {};
-      if (startDate) query.timestamp.$gte = new Date(startDate);
-      if (endDate) query.timestamp.$lte = new Date(endDate);
+      if (startDate) {
+        query.timestamp.$gte = new Date(startDate);
+      }
+      if (endDate) {
+        query.timestamp.$lte = new Date(endDate);
+      }
     }
 
-    if (userId) query['user.id'] = userId;
-    if (eventType) query.eventType = eventType;
-    if (resourceType) query['resource.type'] = resourceType;
-    if (resourceId) query['resource.id'] = resourceId;
-    if (riskLevel) query['action.riskLevel'] = riskLevel;
-    if (success !== undefined) query['action.success'] = success;
+    if (userId) {
+      query['user.id'] = userId;
+    }
+    if (eventType) {
+      query.eventType = eventType;
+    }
+    if (resourceType) {
+      query['resource.type'] = resourceType;
+    }
+    if (resourceId) {
+      query['resource.id'] = resourceId;
+    }
+    if (riskLevel) {
+      query['action.riskLevel'] = riskLevel;
+    }
+    if (success !== undefined) {
+      query['action.success'] = success;
+    }
 
     // Execute query with pagination
     const skip = (page - 1) * limit;
@@ -401,7 +417,9 @@ class ComplianceAuditService {
    * Assess risk level based on event data
    */
   assessRiskLevel(eventData) {
-    if (eventData.riskLevel) return eventData.riskLevel;
+    if (eventData.riskLevel) {
+      return eventData.riskLevel;
+    }
 
     // Risk assessment logic
     if (eventData.eventType.includes('DELETE') || eventData.eventType.includes('REVOKE')) {

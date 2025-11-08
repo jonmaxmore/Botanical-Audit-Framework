@@ -146,7 +146,9 @@ PaymentSchema.index({ transactionId: 1 }, { sparse: true });
 
 // Virtual for payment age (in days)
 PaymentSchema.virtual('ageInDays').get(function () {
-  if (this.status !== 'pending') return null;
+  if (this.status !== 'pending') {
+    return null;
+  }
   const now = new Date();
   const created = this.createdAt;
   return Math.floor((now - created) / (1000 * 60 * 60 * 24));
@@ -154,7 +156,9 @@ PaymentSchema.virtual('ageInDays').get(function () {
 
 // Virtual for is overdue (7 days)
 PaymentSchema.virtual('isOverdue').get(function () {
-  if (this.status !== 'pending') return false;
+  if (this.status !== 'pending') {
+    return false;
+  }
   return this.ageInDays > 7;
 });
 

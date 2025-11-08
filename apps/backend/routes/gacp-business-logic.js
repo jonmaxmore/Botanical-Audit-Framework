@@ -170,7 +170,9 @@ router.post('/test/score-calculation', async (req, res) => {
     const ccpContributions = Object.entries(scores)
       .map(([ccpKey, score]) => {
         const ccp = GACPCriticalControlPoints[ccpKey];
-        if (!ccp) return null;
+        if (!ccp) {
+          return null;
+        }
 
         return {
           ccp: ccpKey,

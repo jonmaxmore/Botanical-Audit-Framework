@@ -136,7 +136,9 @@ class MongoDBCourseRepository {
 
   // Convert MongoDB document to Domain Entity
   toDomain(doc) {
-    if (!doc) return null;
+    if (!doc) {
+      return null;
+    }
 
     const data = doc.toObject ? doc.toObject() : doc;
     return new Course({
@@ -267,8 +269,12 @@ class MongoDBCourseRepository {
         ],
       };
 
-      if (filters.type) query.type = filters.type;
-      if (filters.level) query.level = filters.level;
+      if (filters.type) {
+        query.type = filters.type;
+      }
+      if (filters.level) {
+        query.level = filters.level;
+      }
       if (filters.tags && filters.tags.length > 0) {
         query.tags = { $in: filters.tags };
       }
@@ -301,9 +307,15 @@ class MongoDBCourseRepository {
         $text: { $search: searchText },
       };
 
-      if (filters.status) query.status = filters.status;
-      if (filters.type) query.type = filters.type;
-      if (filters.level) query.level = filters.level;
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.type) {
+        query.type = filters.type;
+      }
+      if (filters.level) {
+        query.level = filters.level;
+      }
 
       const page = options.page || 1;
       const limit = options.limit || 20;
@@ -333,9 +345,15 @@ class MongoDBCourseRepository {
     try {
       const query = {};
 
-      if (filters.status) query.status = filters.status;
-      if (filters.type) query.type = filters.type;
-      if (filters.level) query.level = filters.level;
+      if (filters.status) {
+        query.status = filters.status;
+      }
+      if (filters.type) {
+        query.type = filters.type;
+      }
+      if (filters.level) {
+        query.level = filters.level;
+      }
       if (filters.tags && filters.tags.length > 0) {
         query.tags = { $in: filters.tags };
       }

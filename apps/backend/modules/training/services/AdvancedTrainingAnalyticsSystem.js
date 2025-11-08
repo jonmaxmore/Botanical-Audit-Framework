@@ -385,18 +385,28 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
         let score = 0;
 
         // Low engagement indicates higher dropout risk
-        if (features.engagementRate < 50) score += 0.4;
-        else if (features.engagementRate < 70) score += 0.2;
+        if (features.engagementRate < 50) {
+          score += 0.4;
+        } else if (features.engagementRate < 70) {
+          score += 0.2;
+        }
 
         // Poor assessment performance indicates dropout risk
-        if (features.assessmentAverage < 60) score += 0.3;
-        else if (features.assessmentAverage < 75) score += 0.15;
+        if (features.assessmentAverage < 60) {
+          score += 0.3;
+        } else if (features.assessmentAverage < 75) {
+          score += 0.15;
+        }
 
         // Irregular login patterns indicate dropout risk
-        if (features.loginFrequency < 0.3) score += 0.2;
+        if (features.loginFrequency < 0.3) {
+          score += 0.2;
+        }
 
         // Help requests can indicate both engagement and struggle
-        if (features.helpRequests > 5) score += 0.1;
+        if (features.helpRequests > 5) {
+          score += 0.1;
+        }
 
         return Math.min(score, 1.0); // Cap at 100% risk
       },
@@ -514,7 +524,9 @@ class AdvancedTrainingAnalyticsSystem extends EventEmitter {
     const totalEnrollments = await this.getTotalEnrollments();
     const totalCompletions = await this.getTotalCompletions();
 
-    if (totalEnrollments === 0) return 0;
+    if (totalEnrollments === 0) {
+      return 0;
+    }
     return ((totalCompletions / totalEnrollments) * 100).toFixed(2);
   }
 

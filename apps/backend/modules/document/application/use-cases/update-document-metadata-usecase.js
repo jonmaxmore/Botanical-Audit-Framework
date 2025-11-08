@@ -27,12 +27,24 @@ class UpdateDocumentMetadataUseCase {
       }
 
       // Update allowed fields
-      if (updates.name) document.name = updates.name;
-      if (updates.description !== undefined) document.description = updates.description;
-      if (updates.tags) document.tags = updates.tags;
-      if (updates.metadata) document.updateMetadata(updates.metadata);
-      if (updates.expiresAt) document.setExpiration(new Date(updates.expiresAt));
-      if (updates.issuedDate) document.issuedDate = new Date(updates.issuedDate);
+      if (updates.name) {
+        document.name = updates.name;
+      }
+      if (updates.description !== undefined) {
+        document.description = updates.description;
+      }
+      if (updates.tags) {
+        document.tags = updates.tags;
+      }
+      if (updates.metadata) {
+        document.updateMetadata(updates.metadata);
+      }
+      if (updates.expiresAt) {
+        document.setExpiration(new Date(updates.expiresAt));
+      }
+      if (updates.issuedDate) {
+        document.issuedDate = new Date(updates.issuedDate);
+      }
 
       // Only admin/DTAM can update access level
       if (updates.accessLevel && (userRole === 'admin' || userRole === 'DTAM_STAFF')) {

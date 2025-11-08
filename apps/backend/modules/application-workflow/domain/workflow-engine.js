@@ -929,7 +929,9 @@ class ApplicationWorkflowEngine extends EventEmitter {
   }
 
   _calculateComplianceScore(inspectionReport) {
-    if (!inspectionReport.checklist) return 0;
+    if (!inspectionReport.checklist) {
+      return 0;
+    }
 
     const items = Object.values(inspectionReport.checklist);
     const passedItems = items.filter(item => item.passed === true);
@@ -957,7 +959,9 @@ class ApplicationWorkflowEngine extends EventEmitter {
   }
 
   _isApplicationExpired(application) {
-    if (!application.expiresAt) return false;
+    if (!application.expiresAt) {
+      return false;
+    }
     return new Date() > new Date(application.expiresAt);
   }
 
@@ -1244,7 +1248,9 @@ class ApplicationWorkflowEngine extends EventEmitter {
    * @private
    */
   _calculateComplianceScoreDetailed(inspectionReport) {
-    if (!inspectionReport.checklist) return 0;
+    if (!inspectionReport.checklist) {
+      return 0;
+    }
 
     const categories = {
       safety: { weight: 0.3, items: [] },
@@ -1267,7 +1273,9 @@ class ApplicationWorkflowEngine extends EventEmitter {
 
     // Calculate weighted scores for each category
     for (const [categoryName, categoryData] of Object.entries(categories)) {
-      if (categoryData.items.length === 0) continue;
+      if (categoryData.items.length === 0) {
+        continue;
+      }
 
       const passedItems = categoryData.items.filter(item => item.passed === true);
       const categoryScore = (passedItems.length / categoryData.items.length) * 100;

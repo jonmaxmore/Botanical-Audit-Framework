@@ -476,7 +476,9 @@ class DocumentContentValidationService {
    * ตรวจสอบ checksum เลขบัตรประชาชนไทย
    */
   _validateThaiIdChecksum(idNumber) {
-    if (!/^.{13}$/.test(idNumber)) return false;
+    if (!/^.{13}$/.test(idNumber)) {
+      return false;
+    }
 
     let sum = 0;
     for (let i = 0; i < 12; i++) {

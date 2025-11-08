@@ -53,9 +53,11 @@ export class Password {
     const hasUpperCase = /[A-Z]/.test(raw);
     const hasLowerCase = /[a-z]/.test(raw);
     const hasNumber = /[0-9]/.test(raw);
-    const hasSpecialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(raw);
+    const hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(raw);
 
-    const complexityCount = [hasUpperCase, hasLowerCase, hasNumber, hasSpecialChar].filter(Boolean).length;
+    const complexityCount = [hasUpperCase, hasLowerCase, hasNumber, hasSpecialChar].filter(
+      Boolean,
+    ).length;
 
     if (complexityCount < 3) {
       throw new InvalidPasswordError('password_too_weak');
@@ -74,8 +76,16 @@ export class Password {
 
     // Common weak passwords (extend this list as needed)
     const commonWeakPasswords = [
-      'password', 'password123', '12345678', 'qwerty', 'abc123',
-      'letmein', 'welcome', 'monkey', 'dragon', 'master'
+      'password',
+      'password123',
+      '12345678',
+      'qwerty',
+      'abc123',
+      'letmein',
+      'welcome',
+      'monkey',
+      'dragon',
+      'master',
     ];
 
     if (commonWeakPasswords.includes(raw.toLowerCase())) {
@@ -123,10 +133,18 @@ export class Password {
     score += Math.min(this.raw.length * 2, 40);
 
     // Complexity score (max 40 points)
-    if (/[A-Z]/.test(this.raw)) score += 10;
-    if (/[a-z]/.test(this.raw)) score += 10;
-    if (/[0-9]/.test(this.raw)) score += 10;
-    if (/[^A-Za-z0-9]/.test(this.raw)) score += 10;
+    if (/[A-Z]/.test(this.raw)) {
+      score += 10;
+    }
+    if (/[a-z]/.test(this.raw)) {
+      score += 10;
+    }
+    if (/[0-9]/.test(this.raw)) {
+      score += 10;
+    }
+    if (/[^A-Za-z0-9]/.test(this.raw)) {
+      score += 10;
+    }
 
     // Variety score (max 20 points)
     const uniqueChars = new Set(this.raw).size;
@@ -140,10 +158,18 @@ export class Password {
    */
   getStrengthLabel(): 'weak' | 'fair' | 'good' | 'strong' | 'very-strong' {
     const strength = this.getStrength();
-    if (strength < 40) return 'weak';
-    if (strength < 60) return 'fair';
-    if (strength < 80) return 'good';
-    if (strength < 90) return 'strong';
+    if (strength < 40) {
+      return 'weak';
+    }
+    if (strength < 60) {
+      return 'fair';
+    }
+    if (strength < 80) {
+      return 'good';
+    }
+    if (strength < 90) {
+      return 'strong';
+    }
     return 'very-strong';
   }
 }

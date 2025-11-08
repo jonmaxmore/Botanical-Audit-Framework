@@ -279,10 +279,18 @@ certificateSchema.virtual('canRenew').get(function () {
 certificateSchema.virtual('fullLocation').get(function () {
   const { address, subDistrict, district, province } = this.location;
   const parts = [];
-  if (address) parts.push(address);
-  if (subDistrict) parts.push(`ต.${subDistrict}`);
-  if (district) parts.push(`อ.${district}`);
-  if (province) parts.push(`จ.${province}`);
+  if (address) {
+    parts.push(address);
+  }
+  if (subDistrict) {
+    parts.push(`ต.${subDistrict}`);
+  }
+  if (district) {
+    parts.push(`อ.${district}`);
+  }
+  if (province) {
+    parts.push(`จ.${province}`);
+  }
   return parts.join(' ');
 });
 

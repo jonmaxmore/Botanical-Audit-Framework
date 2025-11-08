@@ -76,7 +76,9 @@ class EnvironmentConfig {
    */
   getRedisConfig() {
     const redisUrl = this.get('REDIS_URL');
-    if (!redisUrl) return null;
+    if (!redisUrl) {
+      return null;
+    }
 
     return {
       url: redisUrl,

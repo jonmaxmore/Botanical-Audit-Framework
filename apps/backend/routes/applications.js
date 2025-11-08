@@ -103,9 +103,15 @@ router.get(
       filter['farmInformation.location.province'] = req.user.workLocation.provinces[0];
     }
 
-    if (status) filter.currentStatus = status;
-    if (province) filter['farmInformation.location.province'] = province;
-    if (cropType) filter['cropInformation.cropType'] = cropType;
+    if (status) {
+      filter.currentStatus = status;
+    }
+    if (province) {
+      filter['farmInformation.location.province'] = province;
+    }
+    if (cropType) {
+      filter['cropInformation.cropType'] = cropType;
+    }
 
     const applications = await Application.find(filter)
       .populate('applicant', 'fullName email phone')

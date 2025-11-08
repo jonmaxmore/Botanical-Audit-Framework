@@ -15,7 +15,7 @@ import {
   EmailAlreadyExistsError,
   IdCardAlreadyExistsError,
   InvalidEmailFormatError,
-  WeakPasswordError
+  WeakPasswordError,
 } from '../../../shared/errors';
 import { IUserRepository } from '../../domain/interfaces/IUserRepository';
 import { User } from '../../domain/entities/User';
@@ -61,7 +61,7 @@ export class RegisterUserUseCase {
     private readonly userRepository: IUserRepository,
     private readonly passwordHasher: IPasswordHasher,
     private readonly tokenGenerator: ITokenGenerator,
-    private readonly eventBus: IEventBus
+    private readonly eventBus: IEventBus,
   ) {}
 
   async execute(dto: RegisterUserDTO): Promise<Result<User, RegisterError>> {
@@ -128,7 +128,7 @@ export class RegisterUserUseCase {
       subdistrict: dto.subDistrict,
       zipCode: dto.postalCode,
       emailVerificationToken: verificationToken,
-      status: 'PENDING_VERIFICATION'
+      status: 'PENDING_VERIFICATION',
     });
 
     // 8. Validate user entity
@@ -151,7 +151,7 @@ export class RegisterUserUseCase {
         userId: user.id,
         email: user.email,
         verificationToken,
-        occurredAt: new Date()
+        occurredAt: new Date(),
       });
     } catch (error) {
       // Event publishing failure shouldn't fail the registration

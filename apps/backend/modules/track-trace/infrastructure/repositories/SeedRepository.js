@@ -628,7 +628,9 @@ class SeedRepository {
    * Create seed entity from database document
    */
   createSeedFromDocument(document) {
-    if (!document) return null;
+    if (!document) {
+      return null;
+    }
 
     const SeedEntity = require('../domain/entities/Seed');
 
@@ -710,7 +712,9 @@ class SeedRepository {
 
   // Cache management methods
   async getCachedData(key) {
-    if (!this.cache) return null;
+    if (!this.cache) {
+      return null;
+    }
     try {
       return await this.cache.get(key);
     } catch (error) {
@@ -720,7 +724,9 @@ class SeedRepository {
   }
 
   async setCachedData(key, data, ttl) {
-    if (!this.cache) return;
+    if (!this.cache) {
+      return;
+    }
     try {
       await this.cache.set(key, data, ttl);
     } catch (error) {
@@ -729,7 +735,9 @@ class SeedRepository {
   }
 
   async invalidateRelatedCaches(seed) {
-    if (!this.cache) return;
+    if (!this.cache) {
+      return;
+    }
 
     const keysToInvalidate = [
       `seed:${seed.seedId}`,
@@ -748,7 +756,9 @@ class SeedRepository {
   }
 
   async invalidateAllSeedCaches(_seedId) {
-    if (!this.cache) return;
+    if (!this.cache) {
+      return;
+    }
 
     try {
       await this.cache.flushPattern('seed*');
