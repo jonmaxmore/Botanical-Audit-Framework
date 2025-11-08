@@ -80,7 +80,14 @@ module.exports = {
   overrides: [
     // ─────────────── Test Files (Relaxed Rules) ───────────────
     {
-      files: ['**/__tests__/**', '**/*.test.ts', '**/*.test.js'],
+      files: [
+        '**/__tests__/**/*.js',
+        '**/__tests__/**/*.ts',
+        '**/*.test.ts',
+        '**/*.test.js',
+        '**/*.spec.js',
+        '**/*.spec.ts',
+      ],
       env: {
         jest: true,
         node: true,
@@ -94,6 +101,7 @@ module.exports = {
         beforeEach: 'readonly',
         afterEach: 'readonly',
         jest: 'readonly',
+        console: 'readonly', // Explicitly allow console in tests
       },
       rules: {
         'no-console': 'off',
