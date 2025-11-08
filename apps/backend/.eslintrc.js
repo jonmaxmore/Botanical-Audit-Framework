@@ -33,7 +33,7 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
+    // 'plugin:prettier/recommended', // DISABLED: Causes hanging issues
   ],
   plugins: ['@typescript-eslint'],
   globals: {
