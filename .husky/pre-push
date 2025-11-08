@@ -4,9 +4,9 @@
 echo "🚀 Running Pre-Push Production Quality Gate"
 echo "────────────────────────────────────────────"
 
-# Step 1: Lint with production rules (backend only for now)
+# Step 1: Lint with production rules
 echo "🧩 Linting backend (production mode)..."
-cd apps/backend && cross-env NODE_ENV=production npx eslint . --ext .js,.ts
+cd apps/backend && npx cross-env NODE_ENV=production npx eslint .
 if [ $? -ne 0 ]; then
   echo "❌ Lint failed. Fix issues before pushing."
   exit 1
