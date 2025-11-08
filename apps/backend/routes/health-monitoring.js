@@ -10,7 +10,7 @@
 const logger = require('../shared/logger');
 const express = require('express');
 const router = express.Router();
-const dbHealthMonitor = require('../services/database-health-monitor');
+const dbHealthMonitor = require('../services/health-monitoring');
 
 // Basic health check endpoint
 router.get('/health', async (req, res) => {

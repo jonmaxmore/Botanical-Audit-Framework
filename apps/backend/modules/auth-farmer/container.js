@@ -68,7 +68,7 @@ class SimpleEventBus {
  */
 class TokenGenerator {
   generate() {
-    return require('../../shared/utils/crypto-utils').randomBytes(32).toString('hex');
+    return require('crypto').randomBytes(32).toString('hex');
   }
 }
 

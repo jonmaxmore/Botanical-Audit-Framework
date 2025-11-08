@@ -31,8 +31,7 @@ describe('Auth Farmer E2E Integration Tests', () => {
 
     // Import app after setting env vars
     // Adjust path based on your app structure
-    const createApp = require('../../../../atlas-server');
-    app = createApp;
+    app = require('../../../../atlas-server');
     baseURL = '/api/auth/farmer';
   });
 

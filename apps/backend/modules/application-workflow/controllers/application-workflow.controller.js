@@ -3,7 +3,7 @@
  * HTTP request handlers for application workflow operations
  */
 
-const { successResponse, errorResponse } = require('../../shared/utils/response-utils');
+const { successResponse, errorResponse } = require('../../shared/response');
 const logger = require('../../shared/utils/logger');
 
 class ApplicationWorkflowController {

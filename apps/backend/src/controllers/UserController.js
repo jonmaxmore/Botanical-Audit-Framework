@@ -5,7 +5,7 @@
 
 const { User } = require('../models');
 const { asyncHandler, ValidationError, NotFoundError } = require('../utils/error-handler-utils');
-const { _validateRequest, schemas } = require('../utils/validation-utils');
+const { _validateRequest, schemas } = require('../utils/validation');
 const logger = require('../utils/logger');
 
 class UserController {

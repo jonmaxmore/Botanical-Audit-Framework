@@ -11,7 +11,7 @@ const {
   verifyDTAMToken,
   requireDTAMRole,
   requireDTAMAdmin
-} = require('../modules/auth-dtam/middleware/dtam-auth-middleware');
+} = require('../modules/auth-dtam/middleware/dtam-auth');
 
 // Mock applications data (will be replaced with MongoDB queries)
 const mockApplications = [
