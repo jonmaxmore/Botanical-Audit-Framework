@@ -93,20 +93,14 @@ describe('RegisterUserUseCase', () => {
 
       await registerUseCase.execute(userData);
 
-      expect(mockPasswordHasher.hash).toHaveBeenCalledWith('SecureP@ssw0rd123');
+      expect(mockPasswordHasher.hash).toHaveBeenCalledWith(userData.password);
       
       const savedUser = mockUserRepository.save.mock.calls[0][0];
       expect(savedUser.password).toBe('$2b$12$hashedPassword');
     });
 
     it('should generate email verification token', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload();
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(false);
@@ -121,13 +115,7 @@ describe('RegisterUserUseCase', () => {
     });
 
     it('should publish UserRegistered event', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload();
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(false);
@@ -147,13 +135,7 @@ describe('RegisterUserUseCase', () => {
 
   describe('Error Cases', () => {
     it('should throw error if email already exists', async () => {
-      const userData = {
-        email: 'existing@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload({ email: 'existing@example.com' });
 
       mockUserRepository.emailExists.mockResolvedValue(true);
 
@@ -167,13 +149,7 @@ describe('RegisterUserUseCase', () => {
     });
 
     it('should throw error if ID card already exists', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload();
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(true);
@@ -188,25 +164,13 @@ describe('RegisterUserUseCase', () => {
     });
 
     it('should throw error for invalid email format', async () => {
-      const userData = {
-        email: 'invalid-email',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload({ email: 'invalid-email' });
 
       await expect(registerUseCase.execute(userData)).rejects.toThrow(/email/i);
     });
 
     it('should throw error for weak password', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'weak',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload({ password: 'weak' });
 
       await expect(registerUseCase.execute(userData)).rejects.toThrow(/password/i);
     });
@@ -222,13 +186,7 @@ describe('RegisterUserUseCase', () => {
     });
 
     it('should throw error if user validation fails', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: '', // Invalid: empty
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload({ firstName: '' }); // Invalid: empty
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(false);
@@ -241,13 +199,7 @@ describe('RegisterUserUseCase', () => {
 
   describe('Repository Error Handling', () => {
     it('should propagate repository errors', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload();
 
       mockUserRepository.emailExists.mockRejectedValue(new Error('Database connection failed'));
 
@@ -255,13 +207,7 @@ describe('RegisterUserUseCase', () => {
     });
 
     it('should propagate save errors', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload();
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(false);
@@ -275,13 +221,7 @@ describe('RegisterUserUseCase', () => {
 
   describe('Password Hasher Error Handling', () => {
     it('should propagate password hashing errors', async () => {
-      const userData = {
-        email: 'newuser@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload();
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(false);
@@ -293,13 +233,7 @@ describe('RegisterUserUseCase', () => {
 
   describe('Integration with Value Objects', () => {
     it('should use Email value object for validation', async () => {
-      const userData = {
-        email: 'test@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload({ email: 'test@example.com' });
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(false);
@@ -315,13 +249,7 @@ describe('RegisterUserUseCase', () => {
     });
 
     it('should use Password value object for validation', async () => {
-      const userData = {
-        email: 'test@example.com',
-        password: 'SecureP@ssw0rd123',
-        firstName: 'John',
-        lastName: 'Doe',
-        idCard: '1234567890123'
-      };
+      const userData = createUserPayload({ email: 'test@example.com' });
 
       mockUserRepository.emailExists.mockResolvedValue(false);
       mockUserRepository.idCardExists.mockResolvedValue(false);
