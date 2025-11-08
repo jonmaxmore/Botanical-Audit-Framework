@@ -10,10 +10,10 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const Joi = require('joi');
 
-const User = require('../models/user');
-const { authenticate, authorize, rateLimitSensitive } = require('../middleware/auth');
-const { validateRequest, validateUserRegistration } = require('../middleware/validation');
-const { handleAsync, sendError } = require('../middleware/error-handler');
+const User = require('../models/user-model');
+const { authenticate, authorize, rateLimitSensitive } = require('../middleware/auth-middleware');
+const { validateRequest, validateUserRegistration } = require('../middleware/validation-middleware');
+const { handleAsync, sendError } = require('../middleware/error-handler-middleware');
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('auth');
 

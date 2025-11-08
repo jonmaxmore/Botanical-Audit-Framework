@@ -3,7 +3,7 @@
  * Tests application layer business logic with mocked dependencies
  */
 
-const RegisterUserUseCase = require('../../application/use-cases/register');
+const RegisterUserUseCase = require('../../application/use-cases/register-usecase');
 const User = require('../../domain/entities/User');
 const Email = require('../../domain/value-objects/Email');
 const Password = require('../../domain/value-objects/Password');

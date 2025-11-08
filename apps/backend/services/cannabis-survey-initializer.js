@@ -6,7 +6,7 @@
 const logger = require('../shared/logger');
 const { createCannabisTemplates } = require('../config/cannabisTemplates');
 const { CannabisSurveyTemplate, CannabisQuestion } = require('../models/CannabisSurvey');
-const User = require('../models/user');
+const User = require('../models/user-model');
 
 class CannabisSurveyInitializer {
   constructor() {

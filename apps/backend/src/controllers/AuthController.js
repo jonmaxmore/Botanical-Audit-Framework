@@ -11,8 +11,8 @@ const {
   ValidationError,
   AuthenticationError,
   NotFoundError
-} = require('../utils/errorHandler');
-const { _validateRequest, _schemas, isValidEmail } = require('../utils/validation');
+} = require('../utils/error-handler-utils');
+const { _validateRequest, _schemas, isValidEmail } = require('../utils/validation-utils');
 const logger = require('../utils/logger');
 const config = require('../config/environment');
 

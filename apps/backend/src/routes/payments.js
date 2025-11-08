@@ -8,8 +8,8 @@
 
 const express = require('express');
 const router = express.Router();
-const { authenticate, authorize } = require('../middleware/auth');
-const { validateRequest } = require('../middleware/validation');
+const { authenticate, authorize } = require('../middleware/auth-middleware');
+const { validateRequest } = require('../middleware/validation-middleware');
 const {
   getAllPayments,
   getPaymentById,

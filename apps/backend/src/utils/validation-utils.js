@@ -3,7 +3,7 @@
  * Comprehensive validation functions for various data types
  */
 
-const { ValidationError } = require('./errorHandler');
+const { ValidationError } = require('./error-handler-utils');
 
 /**
  * Email Validation

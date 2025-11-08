@@ -17,15 +17,15 @@ const environment = require('./config/environment');
 const database = require('../../config/mongodb-manager');
 
 // Middleware
-const errorHandler = require('./middleware/error-handler');
-const authMiddleware = require('./middleware/auth');
-const securityMiddleware = require('./middleware/security');
+const errorHandler = require('./middleware/error-handler-middleware');
+const authMiddleware = require('./middleware/auth-middleware');
+const securityMiddleware = require('./middleware/security-middleware');
 
 // Utils
-const responseUtils = require('./utils/response');
-const validationUtils = require('./utils/validation');
-const cryptoUtils = require('./utils/crypto');
-const dateUtils = require('./utils/date');
+const responseUtils = require('./utils/response-utils');
+const validationUtils = require('./utils/validation-utils');
+const cryptoUtils = require('./utils/crypto-utils');
+const dateUtils = require('./utils/date-utils');
 
 // Constants
 const statusCodes = require('./constants/status-codes');

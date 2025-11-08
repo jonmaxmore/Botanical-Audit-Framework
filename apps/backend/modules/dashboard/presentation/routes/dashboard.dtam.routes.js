@@ -11,7 +11,7 @@ const express = require('express');
 const router = express.Router();
 
 // Middleware
-const { authenticateDTAM } = require('../../../../middleware/auth');
+const { authenticateDTAM } = require('../../../../middleware/auth-middleware');
 
 // Initialize routes with controller
 function initializeDashboardDTAMRoutes(dashboardController) {

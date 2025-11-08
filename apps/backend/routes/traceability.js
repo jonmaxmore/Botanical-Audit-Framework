@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const { adminAuth } = require('../middleware/auth');
+const auth = require('../middleware/auth-middleware');
+const { adminAuth } = require('../middleware/auth-middleware');
 const Batch = require('../models/Batch');
 const Farm = require('../models/Farm');
 const _Crop = require('../models/_Crop');

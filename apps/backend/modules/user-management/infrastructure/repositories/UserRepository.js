@@ -19,7 +19,7 @@
  */
 
 const logger = require('../../../../shared/logger/logger');
-const User = require('../models/user');
+const User = require('../models/User');
 const mongoose = require('mongoose');
 
 class UserRepository {

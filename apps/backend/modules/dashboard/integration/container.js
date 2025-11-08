@@ -7,10 +7,10 @@
  * Part of Clean Architecture - Integration Layer
  */
 
-const GetFarmerDashboardUseCase = require('../application/use-cases/get-farmer-dashboard');
-const GetDTAMDashboardUseCase = require('../application/use-cases/get-dtam-dashboard');
-const GetSystemStatisticsUseCase = require('../application/use-cases/get-system-stats');
-const DashboardController = require('../presentation/controllers/dashboard');
+const GetFarmerDashboardUseCase = require('../application/use-cases/get-farmer-dashboard-usecase');
+const GetDTAMDashboardUseCase = require('../application/use-cases/get-dtam-dashboard-usecase');
+const GetSystemStatisticsUseCase = require('../application/use-cases/get-system-stats-usecase');
+const DashboardController = require('../presentation/controllers/dashboard-controller');
 const {
   initializeDashboardFarmerRoutes
 } = require('../presentation/routes/dashboard.farmer.routes');

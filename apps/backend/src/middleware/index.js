@@ -3,7 +3,7 @@
  * Central export point for all middleware
  */
 
-const auth = require('./auth');
+const auth = require('./auth-middleware');
 
 module.exports = {
   auth

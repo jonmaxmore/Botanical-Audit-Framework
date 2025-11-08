@@ -13,9 +13,9 @@ const GACPApplicationService = require('../services/gacp-application');
 const GACPInspectionService = require('../services/gacp-inspection');
 const GACPCertificateService = require('../services/gacp-certificate');
 
-const { authenticate, authorize } = require('../middleware/auth');
-const { validateRequest } = require('../middleware/validation');
-const { handleAsync } = require('../middleware/error-handler');
+const { authenticate, authorize } = require('../middleware/auth-middleware');
+const { validateRequest } = require('../middleware/validation-middleware');
+const { handleAsync } = require('../middleware/error-handler-middleware');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({

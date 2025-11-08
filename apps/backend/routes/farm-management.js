@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
+const auth = require('../middleware/auth-middleware');
 const _roleCheck = require('../middleware/role-check');
 const Farm = require('../models/Farm');
 const Crop = require('../models/Crop');

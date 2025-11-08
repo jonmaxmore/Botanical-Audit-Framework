@@ -20,7 +20,7 @@ const cacheService = require('./cache/cacheService');
 let Application, User, mongoose;
 try {
   Application = require('../models/application');
-  User = require('../models/user');
+  User = require('../models/user-model');
   mongoose = require('mongoose');
 } catch (error) {
   logger.warn('[GACPApplicationService] Models not available, using mock mode');

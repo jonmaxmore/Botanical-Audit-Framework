@@ -5,7 +5,7 @@
 
 const jwt = require('jsonwebtoken');
 const { User } = require('../models');
-const { AuthenticationError, AuthorizationError } = require('../utils/errorHandler');
+const { AuthenticationError, AuthorizationError } = require('../utils/error-handler-utils');
 const logger = require('../utils/logger');
 const config = require('../config/environment');
 

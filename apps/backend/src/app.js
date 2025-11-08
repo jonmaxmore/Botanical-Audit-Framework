@@ -17,7 +17,7 @@ const config = require('./config/environment');
 const logger = require('./utils/logger');
 
 // Import Error Handlers
-const { globalErrorHandler, notFoundHandler } = require('./utils/errorHandler');
+const { globalErrorHandler, notFoundHandler } = require('./utils/error-handler-utils');
 
 class GACAApplication {
   constructor() {

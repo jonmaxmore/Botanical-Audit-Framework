@@ -9,7 +9,7 @@
 const _crypto = require('crypto');
 const fs = require('fs').promises;
 const path = require('path');
-const { CryptoService } = require('../services/crypto');
+const { CryptoService } = require('../services/crypto-utils');
 
 // Test configuration
 const TEST_KEY_DIR = path.join(__dirname, '../__test_keys__');

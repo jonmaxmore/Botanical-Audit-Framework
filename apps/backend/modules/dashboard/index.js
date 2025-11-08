@@ -42,12 +42,12 @@ module.exports = {
   DashboardModuleContainer,
 
   // Use Cases
-  GetFarmerDashboardUseCase: require('./application/use-cases/get-farmer-dashboard'),
-  GetDTAMDashboardUseCase: require('./application/use-cases/get-dtam-dashboard'),
-  GetSystemStatisticsUseCase: require('./application/use-cases/get-system-stats'),
+  GetFarmerDashboardUseCase: require('./application/use-cases/get-farmer-dashboard-usecase'),
+  GetDTAMDashboardUseCase: require('./application/use-cases/get-dtam-dashboard-usecase'),
+  GetSystemStatisticsUseCase: require('./application/use-cases/get-system-stats-usecase'),
 
   // Controller
-  DashboardController: require('./presentation/controllers/dashboard'),
+  DashboardController: require('./presentation/controllers/dashboard-controller'),
 
   // Routes
   initializeDashboardFarmerRoutes: require('./presentation/routes/dashboard.farmer.routes')

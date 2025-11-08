@@ -28,7 +28,7 @@ const ApplicationController = require('./presentation/controllers/ApplicationCon
 const {
   createApplicationRoutes,
   routeDocumentation
-} = require('./presentation/routes/applicationRoutes');
+} = require('./presentation/routes/pplication-routes.routes');
 
 /**
  * Application Workflow Module Factory

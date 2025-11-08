@@ -606,7 +606,7 @@ appLogger.info('✅ PDF Export routes mounted');
 // To integrate these modules, uncomment and configure the appropriate sections below:
 //
 // Example for Track & Trace:
-// const { initializeTrackTrace } = require('./modules/track-trace');
+// const { initializeTrackTrace } = require('./modules/track-trace-controller');
 // const trackTrace = await initializeTrackTrace({
 //   db: mongoManager.getDb(),
 //   authenticateToken: require('./modules/shared').middleware.auth

@@ -39,12 +39,12 @@
 
 const logger = require('../../shared/logger/logger');
 const UserAuthenticationService = require('./domain/UserAuthenticationService');
-const AuthenticationMiddleware = require('./presentation/middleware/AuthenticationMiddleware');
+const AuthenticationMiddleware = require('./presentation/middleware/AuthenticationMiddleware-middleware');
 const UserAuthenticationController = require('./presentation/controllers/UserAuthenticationController');
 const UserRepository = require('./infrastructure/repositories/UserRepository');
 const User = require('./infrastructure/models/User');
-const createAuthRoutes = require('./presentation/routes/authRoutes');
-const { JWTTokenManager } = require('../../middleware/jwt-token-manager');
+const createAuthRoutes = require('./presentation/routes/auth-routes.routes');
+const { JWTTokenManager } = require('../../middleware/jwt-token-manager-middleware');
 
 class UserManagementModule {
   constructor(dependencies = {}) {

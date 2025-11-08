@@ -39,7 +39,7 @@ const logger = require('../../../../shared/logger/logger');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const NotificationController = require('../controllers/NotificationController');
-const AuthenticationMiddleware = require('../../../user-management/presentation/middleware/AuthenticationMiddleware');
+const AuthenticationMiddleware = require('../../../user-management/presentation/middleware/AuthenticationMiddleware-middleware');
 
 class NotificationRoutes {
   constructor(dependencies = {}) {

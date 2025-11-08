@@ -3,8 +3,8 @@
  */
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const { validateTask } = require('../middleware/validators');
+const auth = require('../middleware/auth-middleware');
+const { validateTask } = require('../middleware/validators-middleware');
 const Task = require('../models/Task');
 const logger = require('../shared').logger;
 const taskLogger = logger.createLogger('tasks');

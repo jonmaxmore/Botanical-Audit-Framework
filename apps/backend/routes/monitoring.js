@@ -8,7 +8,7 @@
 const express = require('express');
 const router = express.Router();
 const monitoringController = require('../controllers/monitoringController');
-const { adminOnly } = require('../middleware/auth');
+const { adminOnly } = require('../middleware/auth-middleware');
 
 // Apply admin-only middleware to all monitoring routes
 router.use(adminOnly);

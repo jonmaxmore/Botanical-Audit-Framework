@@ -11,8 +11,8 @@ const router = express.Router();
 const fertilizerController = require('../../controllers/ai/fertilizer.controller');
 
 // TODO: Import authentication middleware when ready
-// const { authenticateUser } = require('../../middleware/auth');
-// const { isAdmin } = require('../../middleware/roles');
+// const { authenticateUser } = require('../../middleware/auth-middleware');
+// const { isAdmin } = require('../../middleware/roles-middleware');
 
 /**
  * @route   POST /api/ai/fertilizer/recommend

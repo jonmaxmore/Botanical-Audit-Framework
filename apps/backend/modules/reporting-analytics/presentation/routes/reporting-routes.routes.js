@@ -36,7 +36,7 @@ const logger = require('../../../../shared/logger/logger');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const ReportingController = require('../controllers/ReportingController');
-const AuthenticationMiddleware = require('../../../user-management/presentation/middleware/AuthenticationMiddleware');
+const AuthenticationMiddleware = require('../../../user-management/presentation/middleware/AuthenticationMiddleware-middleware');
 
 class ReportingRoutes {
   constructor(dependencies = {}) {

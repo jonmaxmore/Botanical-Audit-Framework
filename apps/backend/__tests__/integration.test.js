@@ -5,7 +5,7 @@
  */
 
 const mongoose = require('mongoose');
-const CryptoService = require('../services/crypto');
+const CryptoService = require('../services/crypto-utils');
 const Record = require('../models/Record');
 const AuditLog = require('../models/AuditLog');
 const SignatureStore = require('../models/SignatureStore');

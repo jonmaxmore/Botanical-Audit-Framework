@@ -9,7 +9,7 @@
 require('dotenv').config();
 
 // ?? CRITICAL: Validate all secrets BEFORE starting server
-const { validateAllSecrets } = require('./modules/shared/utils/validateSecrets');
+const { validateAllSecrets } = require('./modules/shared/utils/validate-secrets-utils');
 validateAllSecrets(); // Will exit process if any secret is invalid
 
 const express = require('express');
@@ -18,14 +18,14 @@ const morgan = require('morgan');
 const http = require('http');
 const helmet = require('helmet');
 const compression = require('compression');
-const { createCorsOptions, corsLoggingMiddleware } = require('./middleware/cors-config');
+const { createCorsOptions, corsLoggingMiddleware } = require('./middleware/cors-config-middleware');
 const mongoManager = require('./config/mongodb-manager');
 const redisManager = require('./config/redis-manager');
 const configManager = require('./config/config-manager');
 const logger = require('./shared/logger');
 const metrics = require('./shared/metrics');
 const { errorMiddleware, requestValidator } = require('./middleware');
-const { metricsMiddleware } = require('./middleware/metricsMiddleware');
+const { metricsMiddleware } = require('./middleware/metricsMiddleware-middleware');
 const appLogger = logger.createLogger('server');
 
 // Initialize configuration
@@ -261,17 +261,17 @@ app.get('/api/health', async (req, res) => {
 // app.use('/api', legacyRoutes); // Commented out - will setup later
 
 // Basic API routes
-app.use('/api/auth', require('./routes/auth'));
+app.use('/api/auth', require('./routes/auth-middleware'));
 app.use('/api/health', require('./routes/health'));
 app.use('/api/applications', require('./routes/applications')); // ? Enabled for real API
 // app.use('/api/farmer/application', require('./routes/farmer-application'));
 // app.use('/api/admin/applications', require('./routes/admin-application')); // Admin application management
-// app.use('/api/certificates', require('./routes/certificate')); // Certificate routes - EMPTY FILE
+// app.use('/api/certificates', require('./routes/certificate-model')); // Certificate routes - EMPTY FILE
 // app.use('/api/inspections', require('./routes/inspection')); // Inspection routes - NEEDS FIX
-// app.use('/api/documents', require('./routes/document')); // Document Management System - NEEDS CHECK
-// app.use('/api/notifications', require('./routes/notification')); // Notification System - NEEDS CHECK
+// app.use('/api/documents', require('./routes/document-model')); // Document Management System - NEEDS CHECK
+// app.use('/api/notifications', require('./routes/notification-model')); // Notification System - NEEDS CHECK
 // app.use('/api/analytics', require('./routes/analytics')); // Analytics Dashboard - NEEDS CHECK
-// app.use('/api/dashboard', require('./routes/dashboard')); // NEEDS CHECK
+// app.use('/api/dashboard', require('./routes/dashboard-controller')); // NEEDS CHECK
 // app.use('/api/smart-agriculture', require('./routes/smart-agriculture.routes')); // ? Smart Agriculture APIs
 // app.use('/api/traceability', require('./routes/traceability')); // ✅ Traceability System - Missing _Crop model
 // app.use('/api/farm-management', require('./routes/farm-management')); // ✅ Farm Management System - Missing _roleCheck

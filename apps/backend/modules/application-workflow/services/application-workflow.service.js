@@ -4,7 +4,7 @@
  */
 
 const { v4: uuidv4 } = require('uuid');
-const { AppError } = require('../../shared/utils/error-handler');
+const { AppError } = require('../../shared/utils/error-handler-utils');
 const logger = require('../../shared/utils/logger');
 
 class ApplicationWorkflowService {

@@ -4,7 +4,7 @@ const logger = createLogger('compliance');
 const StandardsController = require('../controllers/StandardsController');
 const ParametersController = require('../controllers/ParametersController');
 const ComparisonController = require('../controllers/ComparisonController');
-const { authenticateToken, requireAdmin } = require('../middleware/auth');
+const { authenticateToken, requireAdmin } = require('../middleware/auth-middleware');
 
 /**
  * GACP Quality Compliance Comparator - API Routes

@@ -7,7 +7,7 @@ const express = require('express');
 const router = express.Router();
 
 // Middleware (assume these exist)
-const { authenticateJWT, requireRole } = require('../../../middleware/auth');
+const { authenticateJWT, requireRole } = require('../../../middleware/auth-middleware');
 
 /**
  * GET /api/v1/dtam/approver/dashboard/stats

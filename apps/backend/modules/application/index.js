@@ -39,7 +39,7 @@ const mongoose = require('mongoose');
 // ============================================================================
 
 // Import enhanced application configuration
-const { config, getConfig, getSection, getConfigValue } = require('./config');
+const { config, getConfig, getSection, getConfigValue } = require('./config-utils');
 
 logger.info('[EnhancedApplicationModule] Loading enhanced application processing system...');
 
@@ -119,9 +119,9 @@ const {
 } = require('./presentation/routes/enhanced-application.routes');
 
 // API middleware and validators
-const ApplicationMiddleware = require('./presentation/middleware/ApplicationMiddleware');
-const ValidationMiddleware = require('./presentation/middleware/ValidationMiddleware');
-const AuthorizationMiddleware = require('./presentation/middleware/AuthorizationMiddleware');
+const ApplicationMiddleware = require('./presentation/middleware/ApplicationMiddleware-middleware');
+const ValidationMiddleware = require('./presentation/middleware/ValidationMiddleware-middleware');
+const AuthorizationMiddleware = require('./presentation/middleware/AuthorizationMiddleware-middleware');
 
 // ============================================================================
 // TESTING SUITE IMPORTS

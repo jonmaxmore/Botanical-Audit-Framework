@@ -8,7 +8,7 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const aiQcController = require('../controllers/aiQcController');
-const { protect, requireRole } = require('../middleware/auth');
+const { protect, requireRole } = require('../middleware/auth-middleware');
 
 // Configure multer for file uploads
 const storage = multer.diskStorage({

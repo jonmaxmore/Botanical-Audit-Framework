@@ -40,7 +40,7 @@ const logger = require('../../../../shared/logger/logger');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const PaymentController = require('../controllers/PaymentController');
-const AuthenticationMiddleware = require('../../../user-management/presentation/middleware/AuthenticationMiddleware');
+const AuthenticationMiddleware = require('../../../user-management/presentation/middleware/AuthenticationMiddleware-middleware');
 
 class PaymentRoutes {
   constructor(dependencies = {}) {

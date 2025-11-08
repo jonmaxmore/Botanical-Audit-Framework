@@ -29,7 +29,7 @@
 const logger = require('../../shared/logger/logger');
 const DocumentManagementService = require('./application/services/DocumentManagementService');
 const DocumentController = require('./presentation/controllers/DocumentController');
-const DocumentRoutes = require('./presentation/routes/DocumentRoutes');
+const DocumentRoutes = require('./presentation/routes/document-routes.routes');
 const Document = require('./domain/entities/Document');
 
 class DocumentManagementModule {

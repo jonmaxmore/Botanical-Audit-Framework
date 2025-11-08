@@ -7,9 +7,9 @@ const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { BlitzzIntegrationService, TaskAssignment } = require('../services/blitzz-integration');
-const auth = require('../middleware/auth');
-const rbac = require('../middleware/rbac');
-const auditMiddleware = require('../middleware/audit');
+const auth = require('../middleware/auth-middleware');
+const rbac = require('../middleware/rbac-middleware');
+const auditMiddleware = require('../middleware/audit-middleware');
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('task-assignment');
 

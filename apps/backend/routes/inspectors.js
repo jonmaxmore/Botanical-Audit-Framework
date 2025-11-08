@@ -3,8 +3,8 @@
  */
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth');
-const inspectorAuth = require('../middleware/inspector-auth');
+const auth = require('../middleware/auth-middleware');
+const inspectorAuth = require('../middleware/inspector-auth-middleware');
 const Task = require('../models/Task');
 const Report = require('../models/Report');
 const logger = require('../shared').logger;

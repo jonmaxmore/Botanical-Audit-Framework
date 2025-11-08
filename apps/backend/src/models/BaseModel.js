@@ -4,7 +4,7 @@
  */
 
 const mongoose = require('mongoose');
-const { DatabaseError, ValidationError } = require('../utils/errorHandler');
+const { DatabaseError, ValidationError } = require('../utils/error-handler-utils');
 const logger = require('../utils/logger');
 
 class BaseModel {

@@ -5,8 +5,8 @@
 const express = require('express');
 const router = express.Router();
 const cacheController = require('../controllers/cacheController');
-const { authenticate } = require('../middleware/auth');
-const { checkRole } = require('../middleware/roleCheck');
+const { authenticate } = require('../middleware/auth-middleware');
+const { checkRole } = require('../middleware/roleCheck-middleware');
 
 // All cache management requires admin role
 router.use(authenticate);

@@ -11,7 +11,7 @@
  */
 
 const mongoose = require('mongoose');
-const cryptoService = require('../services/crypto');
+const cryptoService = require('../services/crypto-utils');
 
 const RecordSchema = new mongoose.Schema(
   {

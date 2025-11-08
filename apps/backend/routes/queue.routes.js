@@ -5,8 +5,8 @@
 const express = require('express');
 const router = express.Router();
 const queueController = require('../controllers/queueController');
-const { authenticate } = require('../middleware/auth');
-const { checkRole } = require('../middleware/roleCheck');
+const { authenticate } = require('../middleware/auth-middleware');
+const { checkRole } = require('../middleware/roleCheck-middleware');
 
 // All queue management requires admin role
 router.use(authenticate);

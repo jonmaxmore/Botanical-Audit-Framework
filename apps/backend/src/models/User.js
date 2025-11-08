@@ -6,7 +6,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const BaseModel = require('./BaseModel');
-const { ValidationError } = require('../utils/errorHandler');
+const { ValidationError } = require('../utils/error-handler-utils');
 
 // User schema definition
 const userSchema = new mongoose.Schema(

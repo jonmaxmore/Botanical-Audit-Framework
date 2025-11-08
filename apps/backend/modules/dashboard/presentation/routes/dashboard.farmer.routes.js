@@ -11,7 +11,7 @@ const express = require('express');
 const router = express.Router();
 
 // Middleware
-const { authenticateFarmer } = require('../../../../middleware/auth');
+const { authenticateFarmer } = require('../../../../middleware/auth-middleware');
 
 // Initialize routes with controller
 function initializeDashboardFarmerRoutes(dashboardController) {

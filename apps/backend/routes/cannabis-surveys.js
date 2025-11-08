@@ -14,8 +14,8 @@ const {
   _CannabisQuestion,
   CannabisSurveyResponse
 } = require('../models/CannabisSurvey');
-const authMiddleware = require('../middleware/authMiddleware');
-const auditMiddleware = require('../middleware/audit');
+const authMiddleware = require('../middleware/authMiddleware-middleware');
+const auditMiddleware = require('../middleware/audit-middleware');
 const rateLimit = require('express-rate-limit');
 
 // Rate limiting for cannabis survey endpoints

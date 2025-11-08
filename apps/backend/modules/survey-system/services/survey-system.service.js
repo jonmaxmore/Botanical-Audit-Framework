@@ -4,7 +4,7 @@
  */
 
 const { ObjectId } = require('mongodb');
-const { AppError } = require('../../shared/utils/error-handler');
+const { AppError } = require('../../shared/utils/error-handler-utils');
 const logger = require('../../shared/utils/logger');
 
 class SurveySystemService {

@@ -16,7 +16,7 @@ const queueService = require('./queue/queueService');
 const cacheService = require('./cache/cacheService');
 
 const Application = require('../models/application');
-const _User = require('../models/user');
+const _User = require('../models/user-model');
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
 

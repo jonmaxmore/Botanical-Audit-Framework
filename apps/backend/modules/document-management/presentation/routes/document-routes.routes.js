@@ -34,7 +34,7 @@ const logger = require('../../../../shared/logger/logger');
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const DocumentController = require('../controllers/DocumentController');
-const AuthenticationMiddleware = require('../../../user-management/presentation/middleware/AuthenticationMiddleware');
+const AuthenticationMiddleware = require('../../../user-management/presentation/middleware/AuthenticationMiddleware-middleware');
 
 class DocumentRoutes {
   constructor(dependencies = {}) {
