@@ -1,13 +1,15 @@
 /**
- * Authentication Middleware
+ * Authentication Middleware (Production + Test Safe)
  *
  * Provides authentication functions for Clean Architecture modules.
  * Supports both Farmer (public) and DTAM (staff) authentication.
  *
- * ที่มาที่ไป (WHY):
- * - แยก authentication context ระหว่าง public users และ government staff
- * - ใช้ separate JWT secrets เพื่อความปลอดภัย
- * - มี clear error messages เพื่อ debugging
+ * ✅ Improvements:
+ * - Safe fallback JWT config for Jest/test environment
+ * - Upper/lowercase role normalization
+ * - Logger downgraded to .warn in catch blocks (no false Jest fail)
+ * - Defensive error handling for missing/malformed tokens
+ * - Clean exit prevention for unit tests
  *
  * Workflow:
  * Request → Extract Token → Verify with Correct Secret → Check Role → Attach User → Continue
@@ -18,14 +20,25 @@ const logger = createLogger('auth-middleware');
 const _jwt = require('jsonwebtoken');
 const jwtConfig = require('../../../config/jwt-security');
 
-// โหลด JWT configuration (จะ throw error ถ้าไม่มี secret)
+// ------------------------------------
+// ✅ Safe load of JWT configuration
+// ------------------------------------
 let JWT_CONFIG;
 try {
   JWT_CONFIG = jwtConfig.loadJWTConfiguration();
 } catch (error) {
-  logger.error('❌ Failed to load JWT configuration:', error.message);
-  logger.error('   Application cannot start without valid JWT secrets');
-  process.exit(1);
+  if (process.env.NODE_ENV === 'test') {
+    // Fallback config for Jest/test mode
+    JWT_CONFIG = {
+      public: { secret: 'test-public-jwt-secret-for-jest' },
+      dtam: { secret: 'test-dtam-jwt-secret-for-jest' }
+    };
+    logger.warn('⚠️  Using fallback JWT config for test environment');
+  } else {
+    logger.error('❌ Failed to load JWT configuration:', error.message);
+    logger.error('   Application cannot start without valid JWT secrets');
+    process.exit(1);
+  }
 }
 
 /**
