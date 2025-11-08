@@ -34,16 +34,30 @@ afterAll(async () => {
   // Disconnect database if connected
   try {
     const mongoManager = require('../config/mongodb-manager');
-    if (mongoManager && mongoManager.disconnect) {
+    if (mongoManager && typeof mongoManager.disconnect === 'function') {
       await mongoManager.disconnect();
+      // Wait for disconnect to complete
+      await new Promise(resolve => setTimeout(resolve, 500));
     }
   } catch (error) {
     // Database not initialized in this test - safe to ignore
+    console.error('Database cleanup warning:', error.message);
+  }
+  
+  // Close any remaining mongoose connections
+  try {
+    const mongoose = require('mongoose');
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.connection.close();
+      await new Promise(resolve => setTimeout(resolve, 500));
+    }
+  } catch (error) {
+    // Mongoose not used in this test
   }
   
   // Give time for all async operations to complete
-  await new Promise(resolve => setTimeout(resolve, 100));
+  await new Promise(resolve => setTimeout(resolve, 1000));
 });
 
 // Increase timeout for integration tests
-jest.setTimeout(10000); // 10 seconds
+jest.setTimeout(30000); // 30 seconds for E2E tests

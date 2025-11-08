@@ -36,8 +36,24 @@ describe('Auth Farmer E2E Integration Tests', () => {
   });
 
   afterAll(async () => {
-    await client.close();
-    await mongod.stop();
+    // Close MongoDB client
+    if (client) {
+      await client.close();
+    }
+    
+    // Stop MongoDB Memory Server
+    if (mongod) {
+      await mongod.stop();
+    }
+    
+    // Close mongoose connection if any
+    const mongoose = require('mongoose');
+    if (mongoose.connection.readyState !== 0) {
+      await mongoose.connection.close();
+    }
+    
+    // Give time for cleanup
+    await new Promise(resolve => setTimeout(resolve, 500));
   });
 
   beforeEach(async () => {

@@ -18,6 +18,8 @@ module.exports = {
   moduleFileExtensions: ['js', 'ts', 'json'],
   verbose: true,
   maxWorkers: 1, // Run tests serially to avoid DB conflicts
+  detectOpenHandles: true, // Detect async operations that prevent Jest from exiting
+  forceExit: false, // Don't force exit - fix the root cause instead
   setupFilesAfterEnv: ['<rootDir>/__tests__/setup.js'], // Global cleanup
   collectCoverageFrom: [
     'modules/**/domain/**/*.js',
