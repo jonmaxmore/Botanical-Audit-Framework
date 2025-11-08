@@ -17,7 +17,7 @@ const shared = require('../../shared');
 const { constants } = shared;
 const path = require('path');
 
-const logger = require('../services/logger');
+const logger = require('../../../shared/logger');
 // jwt-security.js is in root config/, not apps/backend/config/
 const jwtConfig = require(path.join(process.cwd(), '..', '..', 'config', 'jwt-security'));
 

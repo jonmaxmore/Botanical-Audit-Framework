@@ -16,7 +16,7 @@ const path = require('path');
 
 // Import farmer-specific models (use absolute path to avoid case-sensitivity issues)
 const User = require(path.join(process.cwd(), 'models', 'User.js'));
-const logger = require('../services/logger');
+const logger = require('../../../shared/logger');
 
 /**
  * @route POST /api/auth-farmer/register

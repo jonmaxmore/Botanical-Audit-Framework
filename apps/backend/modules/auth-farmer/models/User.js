@@ -11,7 +11,7 @@ const shared = require('../../shared');
 const { constants } = shared;
 
 // Import logger service
-const logger = require('../services/logger');
+const logger = require('../../../shared/logger');
 
 /**
  * User Schema

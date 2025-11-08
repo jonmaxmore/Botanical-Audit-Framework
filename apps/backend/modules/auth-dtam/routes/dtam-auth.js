@@ -19,7 +19,7 @@ const dtamMiddleware = require('../middleware/dtam-auth');
 
 // Import DTAM-specific models
 const DTAMStaff = require('../models/DTAMStaff');
-const logger = require('../services/logger');
+const logger = require('../../../shared/logger');
 
 /**
  * @route POST /api/auth-dtam/login
