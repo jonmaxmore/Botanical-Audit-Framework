@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🚀 Running Pre-Push Production Quality Gate"
+echo "────────────────────────────────────────────"
+
+# Step 1: Lint with production rules (backend only for now)
+echo "🧩 Linting backend (production mode)..."
+cd apps/backend && cross-env NODE_ENV=production npx eslint . --ext .js,.ts
+if [ $? -ne 0 ]; then
+  echo "❌ Lint failed. Fix issues before pushing."
+  exit 1
+fi
+cd ../..
+
+# Step 2: TypeScript build check
+if [ -f "apps/backend/tsconfig.json" ]; then
+  echo "🧱 Type checking backend..."
+  cd apps/backend && npx tsc --noEmit
+  if [ $? -ne 0 ]; then
+    echo "❌ Type check failed."
+    exit 1
+  fi
+  cd ../..
+fi
+
+# Step 3: Run full test suite
+echo "🧪 Running test suite..."
+npm test -- --bail --detectOpenHandles
+if [ $? -ne 0 ]; then
+  echo "❌ Some tests failed. Fix before pushing."
+  exit 1
+fi
+
+echo "✅ All pre-push checks passed successfully!"
+echo "────────────────────────────────────────────"
