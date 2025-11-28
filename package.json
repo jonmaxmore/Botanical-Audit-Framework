@@ -1,35 +1,39 @@
 {
   "name": "gacp-platform",
   "version": "2.0.0",
+  "type": "module",
   "private": true,
   "description": "GACP Platform Monorepo",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "type-check": "tsc --noEmit --skipLibCheck && cd apps/farmer-portal && tsc --noEmit --skipLibCheck",
-    "type-check:all": "tsc --noEmit --skipLibCheck && cd apps/farmer-portal && tsc --noEmit --skipLibCheck && cd ../admin-portal && tsc --noEmit --skipLibCheck && cd ../certificate-portal && tsc --noEmit --skipLibCheck",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "type-check": "turbo run type-check",
+    "type-check:all": "turbo run type-check",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix",
     "lint:prod": "cross-env NODE_ENV=production eslint .",
     "lint:dev": "cross-env NODE_ENV=development eslint .",
     "lint:test": "cross-env NODE_ENV=test eslint .",
-    "lint:backend": "cd apps/backend && cross-env NODE_ENV=development eslint .",
-    "lint:backend:fix": "cd apps/backend && cross-env NODE_ENV=development eslint . --fix",
-    "lint:backend:prod": "cd apps/backend && cross-env NODE_ENV=production eslint .",
-    "lint:all": "npm run lint",
+    "lint:backend": "turbo run lint --filter=gacp-backend",
+    "lint:backend:fix": "turbo run lint:fix --filter=gacp-backend",
+    "lint:backend:prod": "cross-env NODE_ENV=production turbo run lint --filter=gacp-backend",
+    "lint:all": "turbo run lint",
     "format": "prettier --write \"**/*.{js,ts,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{js,ts,json,md,yml,yaml}\"",
     "check:build": "cd apps/backend && tsc --noEmit",
     "check:full": "npm run lint:prod && npm run check:build && npm test",
-    "test": "jest",
+    "test": "jest --runInBand --detectOpenHandles",
     "test:watch": "jest --watch",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "dependencies": {
+    "@sentry/nextjs": "^10.21.0",
     "bull": "^4.16.5",
     "concurrently": "^8.2.2",
+    "date-fns": "^3.6.0",
     "http-proxy-middleware": "^3.0.5",
+    "lucide-react": "^0.545.0",
     "morgan": "^1.10.1",
     "next": "^16.0.0",
     "react": "^18.2.0",
@@ -47,7 +51,7 @@
     "@types/react-dom": "^18.2.18",
     "@typescript-eslint/eslint-plugin": "6.21.0",
     "@typescript-eslint/parser": "6.21.0",
-    "artillery": "^2.0.26",
+    "artillery": "^1.7.9",
     "autoprefixer": "^10.4.16",
     "axios": "^1.12.2",
     "body-parser": "^2.2.0",
@@ -55,12 +59,10 @@
     "cors": "^2.8.5",
     "cross-env": "^10.1.0",
     "eslint": "^8.57.1",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-next": "15.5.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-jest": "^29.0.1",
+    "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-jsx-a11y": "^6.9.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.0",
@@ -75,7 +77,9 @@
     "postcss": "^8.4.32",
     "prettier": "^3.6.2",
     "tailwindcss": "^3.4.0",
-    "typescript": "^5.3.3"
+    "ts-node": "^10.9.2",
+    "turbo": "^2.6.1",
+    "typescript": "^5.9.3"
   },
   "packageManager": "pnpm@8.15.0",
   "engines": {
@@ -88,11 +92,5 @@
       "@typescript-eslint/eslint-plugin": "6.21.0",
       "@typescript-eslint/parser": "6.21.0"
     }
-  },
-  "lint-staged": {
-    "**/*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "bash -c 'tsc --noEmit --skipLibCheck'"
-    ]
   }
 }

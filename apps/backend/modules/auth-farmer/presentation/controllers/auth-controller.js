@@ -45,10 +45,12 @@ class AuthController {
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
         idCard: req.body.idCard,
-        farmName: req.body.farmName,
+        address: req.body.address,
         province: req.body.province,
         district: req.body.district,
-        subDistrict: req.body.subDistrict,
+        subdistrict: req.body.subDistrict,
+        zipCode: req.body.postalCode || req.body.zipCode,
+        metadata: req.body.metadata,
       });
 
       return res.status(201).json({
@@ -61,9 +63,10 @@ class AuthController {
             firstName: result.user.firstName,
             lastName: result.user.lastName,
             status: result.user.status,
+            isEmailVerified: result.user.isEmailVerified,
           },
-          verificationToken: result.verificationToken,
         },
+        verificationToken: result.verificationToken,
       });
     } catch (error) {
       logger.error('Registration error:', error);
@@ -109,14 +112,14 @@ class AuthController {
         success: true,
         message: 'Login successful',
         data: {
-          accessToken: result.token,
+          token: result.token,
           user: {
             id: result.user.id,
             email: result.user.email,
             firstName: result.user.firstName,
             lastName: result.user.lastName,
-            farmName: result.user.farmName,
             status: result.user.status,
+            role: result.user.role,
           },
         },
       });
@@ -285,8 +288,8 @@ class AuthController {
       const user = await this.getUserProfileUseCase.execute({ userId });
 
       return res.status(200).json({
+        ...user,
         success: true,
-        data: user,
       });
     } catch (error) {
       logger.error('Get profile error:', error);
@@ -315,7 +318,7 @@ class AuthController {
 
       const user = await this.updateUserProfileUseCase.execute({
         userId,
-        updates: {
+        profileData: {
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           phoneNumber: req.body.phoneNumber,
@@ -324,16 +327,16 @@ class AuthController {
           farmingExperience: req.body.farmingExperience,
           province: req.body.province,
           district: req.body.district,
-          subDistrict: req.body.subDistrict,
-          postalCode: req.body.postalCode,
+          subdistrict: req.body.subDistrict,
+          zipCode: req.body.postalCode || req.body.zipCode,
           address: req.body.address,
         },
       });
 
       return res.status(200).json({
+        ...user,
         success: true,
         message: 'Profile updated successfully',
-        data: user,
       });
     } catch (error) {
       logger.error('Update profile error:', error);

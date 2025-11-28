@@ -1,9 +1,9 @@
 /**
  * Monitoring Dashboard Component
- * 
+ *
  * Real-time system monitoring dashboard for administrators
  * Displays metrics, health status, and performance indicators
- * 
+ *
  * Features:
  * - Real-time metrics updates (SSE)
  * - Interactive charts (Chart.js)
@@ -143,7 +143,7 @@ export default function MonitoringDashboard() {
   // Setup real-time updates (SSE)
   useEffect(() => {
     connectEventSource();
-    
+
     return () => {
       disconnectEventSource();
     };
@@ -158,7 +158,7 @@ export default function MonitoringDashboard() {
     eventSource.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        
+
         if (data.type === 'update') {
           setMetrics(data.metrics);
           setHealth(data.health);
@@ -171,7 +171,7 @@ export default function MonitoringDashboard() {
     eventSource.onerror = (err) => {
       console.error('SSE error:', err);
       eventSource.close();
-      
+
       // Reconnect after 5 seconds
       setTimeout(connectEventSource, 5000);
     };
@@ -196,13 +196,13 @@ export default function MonitoringDashboard() {
           }
         }
       );
-      
+
       if (!response.ok) throw new Error('Failed to fetch metrics');
-      
+
       const data = await response.json();
       setMetrics(data.data);
       setLoading(false);
-    } catch (err) {
+    } catch (err: any) {
       setError(err.message);
       setLoading(false);
     }
@@ -215,9 +215,9 @@ export default function MonitoringDashboard() {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      
+
       if (!response.ok) throw new Error('Failed to fetch health');
-      
+
       const data = await response.json();
       setHealth(data.data);
     } catch (err) {
@@ -238,7 +238,7 @@ export default function MonitoringDashboard() {
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }
       });
-      
+
       const data = await response.json();
       const blob = new Blob([JSON.stringify(data, null, 2)], {
         type: 'application/json'
@@ -285,7 +285,7 @@ export default function MonitoringDashboard() {
     const days = Math.floor(seconds / 86400);
     const hours = Math.floor((seconds % 86400) / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
-    
+
     return `${days}d ${hours}h ${minutes}m`;
   };
 
@@ -320,7 +320,7 @@ export default function MonitoringDashboard() {
         <Typography variant="h4" component="h1">
           System Monitoring
         </Typography>
-        
+
         <Box>
           <Tooltip title="Refresh">
             <IconButton onClick={handleRefresh}>
@@ -349,7 +349,7 @@ export default function MonitoringDashboard() {
               System Health: {health.status.toUpperCase()}
             </Typography>
           </Box>
-          
+
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={3}>
               <Box textAlign="center">
@@ -364,7 +364,7 @@ export default function MonitoringDashboard() {
                 />
               </Box>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Box textAlign="center">
                 <Typography variant="caption" color="textSecondary">
@@ -378,7 +378,7 @@ export default function MonitoringDashboard() {
                 />
               </Box>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Box textAlign="center">
                 <Typography variant="caption" color="textSecondary">
@@ -392,7 +392,7 @@ export default function MonitoringDashboard() {
                 />
               </Box>
             </Grid>
-            
+
             <Grid item xs={12} sm={6} md={3}>
               <Box textAlign="center">
                 <Typography variant="caption" color="textSecondary">
@@ -432,7 +432,7 @@ export default function MonitoringDashboard() {
                 <Typography variant="h6" gutterBottom>
                   System Resources
                 </Typography>
-                
+
                 <Box mb={2}>
                   <Typography variant="caption">CPU</Typography>
                   <Box display="flex" alignItems="center">
@@ -447,7 +447,7 @@ export default function MonitoringDashboard() {
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Box mb={2}>
                   <Typography variant="caption">Memory</Typography>
                   <Box display="flex" alignItems="center">
@@ -462,7 +462,7 @@ export default function MonitoringDashboard() {
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Box mb={2}>
                   <Typography variant="caption">Disk</Typography>
                   <Box display="flex" alignItems="center">
@@ -477,7 +477,7 @@ export default function MonitoringDashboard() {
                     </Typography>
                   </Box>
                 </Box>
-                
+
                 <Typography variant="body2" color="textSecondary">
                   Uptime: {formatUptime(metrics.system.uptime)}
                 </Typography>
@@ -492,7 +492,7 @@ export default function MonitoringDashboard() {
                 <Typography variant="h6" gutterBottom>
                   API Statistics
                 </Typography>
-                
+
                 <Box mb={2}>
                   <Typography variant="h4">
                     {metrics.api.requests.total}
@@ -501,7 +501,7 @@ export default function MonitoringDashboard() {
                     Total Requests
                   </Typography>
                 </Box>
-                
+
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <Typography variant="body2" color="success.main">
@@ -514,7 +514,7 @@ export default function MonitoringDashboard() {
                     </Typography>
                   </Grid>
                 </Grid>
-                
+
                 <Box mt={2}>
                   <Typography variant="caption" color="textSecondary">
                     Avg Response Time
@@ -534,7 +534,7 @@ export default function MonitoringDashboard() {
                 <Typography variant="h6" gutterBottom>
                   Cache Performance
                 </Typography>
-                
+
                 <Box mb={2}>
                   <Typography variant="h4">
                     {metrics.cache.hitRate.toFixed(1)}%
@@ -543,7 +543,7 @@ export default function MonitoringDashboard() {
                     Hit Rate
                   </Typography>
                 </Box>
-                
+
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
                     <Typography variant="body2">
@@ -556,7 +556,7 @@ export default function MonitoringDashboard() {
                     </Typography>
                   </Grid>
                 </Grid>
-                
+
                 <Box mt={2}>
                   <Doughnut
                     data={{

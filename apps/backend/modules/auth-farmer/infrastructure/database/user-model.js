@@ -126,7 +126,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    collection: 'users_farmer',
+    collection: process.env.FARMER_USERS_COLLECTION || 'users_farmer',
   },
 );
 

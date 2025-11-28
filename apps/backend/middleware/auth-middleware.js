@@ -17,28 +17,65 @@
 
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('auth-middleware');
-const _jwt = require('jsonwebtoken');
 const jwtConfig = require('../../../config/jwt-security');
 
 // ------------------------------------
 // ✅ Safe load of JWT configuration
 // ------------------------------------
 let JWT_CONFIG;
-try {
-  JWT_CONFIG = jwtConfig.loadJWTConfiguration();
-} catch (error) {
-  if (process.env.NODE_ENV === 'test') {
-    // Fallback config for Jest/test mode
-    JWT_CONFIG = {
-      public: { secret: 'test-public-jwt-secret-for-jest' },
-      dtam: { secret: 'test-dtam-jwt-secret-for-jest' },
-    };
-    logger.warn('⚠️  Using fallback JWT config for test environment');
-  } else {
-    logger.error('❌ Failed to load JWT configuration:', error.message);
-    logger.error('   Application cannot start without valid JWT secrets');
-    process.exit(1);
+function loadConfigSafely() {
+  try {
+    JWT_CONFIG = jwtConfig.loadJWTConfiguration();
+  } catch (error) {
+    if (process.env.NODE_ENV === 'test') {
+      JWT_CONFIG = {
+        public: { secret: 'test-public-jwt-secret-for-jest' },
+        dtam: { secret: 'test-dtam-jwt-secret-for-jest' },
+      };
+      process.env.FARMER_JWT_SECRET =
+        process.env.FARMER_JWT_SECRET || JWT_CONFIG.public.secret;
+      process.env.DTAM_JWT_SECRET =
+        process.env.DTAM_JWT_SECRET || JWT_CONFIG.dtam.secret;
+      logger.warn('⚠️  Using fallback JWT config for test environment');
+    } else {
+      logger.error('❌ Failed to load JWT configuration:', error.message);
+      logger.error('   Application cannot start without valid JWT secrets');
+      process.exit(1);
+    }
   }
+}
+
+loadConfigSafely();
+
+function getActiveJwtConfig() {
+  if (!JWT_CONFIG) {
+    loadConfigSafely();
+  }
+
+  const activeConfig = JWT_CONFIG;
+
+  const farmerSecret = process.env.FARMER_JWT_SECRET || process.env.JWT_SECRET;
+  if (activeConfig.public && farmerSecret && activeConfig.public.secret !== farmerSecret) {
+    activeConfig.public.secret = farmerSecret;
+  }
+
+  const dtamSecret = process.env.DTAM_JWT_SECRET;
+  if (activeConfig.dtam && dtamSecret && activeConfig.dtam.secret !== dtamSecret) {
+    activeConfig.dtam.secret = dtamSecret;
+  }
+
+  return activeConfig;
+}
+
+try {
+  if (JWT_CONFIG?.public?.secret && !process.env.FARMER_JWT_SECRET) {
+    process.env.FARMER_JWT_SECRET = JWT_CONFIG.public.secret;
+  }
+  if (JWT_CONFIG?.dtam?.secret && !process.env.DTAM_JWT_SECRET) {
+    process.env.DTAM_JWT_SECRET = JWT_CONFIG.dtam.secret;
+  }
+} catch (error) {
+  logger.warn('⚠️  Unable to synchronize JWT secrets with environment:', error.message);
 }
 
 /**
@@ -65,8 +102,8 @@ function authenticateFarmer(req, res, next) {
       });
     }
 
-    // ใช้ secure JWT secret จาก configuration
-    const decoded = jwtConfig.verifyToken(token, 'public', JWT_CONFIG);
+  // ใช้ secure JWT secret จาก configuration
+  const decoded = jwtConfig.verifyToken(token, 'public', getActiveJwtConfig());
 
     // Check role ต้องเป็น FARMER หรือ PUBLIC
     if (decoded.role !== 'FARMER' && decoded.role !== 'PUBLIC') {
@@ -140,7 +177,7 @@ function authenticateDTAM(req, res, next) {
     }
 
     // ใช้ DTAM JWT secret (แยกจาก public เพื่อความปลอดภัย)
-    const decoded = jwtConfig.verifyToken(token, 'dtam', JWT_CONFIG);
+    const decoded = jwtConfig.verifyToken(token, 'dtam', getActiveJwtConfig());
 
     // Check role ต้องเป็น DTAM staff roles
     const validDTAMRoles = [
@@ -213,7 +250,7 @@ function optionalAuth(req, res, next) {
 
     if (token) {
       try {
-        const decoded = jwtConfig.verifyToken(token, 'public', JWT_CONFIG);
+        const decoded = jwtConfig.verifyToken(token, 'public', getActiveJwtConfig());
         req.user = decoded;
       } catch (error) {
         // Token ไม่ถูกต้อง แต่ไม่ block request

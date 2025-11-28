@@ -11,6 +11,7 @@
  */
 
 /* eslint-disable no-unused-vars */
+const path = require('path');
 const logger = require('../../shared/logger');
 const mongoose = require('mongoose'); // Used in JSDoc type annotations
 const IUserRepository = require('./domain/interfaces/IUserRepository'); // Used for interface documentation
@@ -20,6 +21,7 @@ const IUserRepository = require('./domain/interfaces/IUserRepository'); // Used 
 const MongoDBUserRepository = require('./infrastructure/database/user-model');
 const BcryptPasswordHasher = require('./infrastructure/security/password');
 const JWTService = require('./infrastructure/security/token');
+const jwtSecurity = require(path.resolve(__dirname, '../../../../config/jwt-security'));
 
 // Application (Use Cases)
 const RegisterUserUseCase = require('./application/use-cases/register-usecase');
@@ -82,20 +84,54 @@ class TokenGenerator {
  * @returns {express.Router}
  */
 function createAuthFarmerModule(config) {
-  const { database, jwtSecret, jwtExpiresIn = '24h', bcryptSaltRounds = 12 } = config;
+  const {
+    database,
+    jwtSecret,
+    jwtExpiresIn,
+    bcryptSaltRounds = 12,
+    jwtConfig: explicitJwtConfig,
+  } = config;
 
   // Validate required configuration
   if (!database) {
     throw new Error('Database connection is required');
   }
-  if (!jwtSecret) {
+
+  const baseJwtConfig =
+    explicitJwtConfig || (!jwtSecret ? jwtSecurity.getJWTConfiguration() : null);
+
+  const resolvedJwtSecret = jwtSecret || baseJwtConfig?.public?.secret;
+  const resolvedJwtExpiry = jwtExpiresIn || baseJwtConfig?.public?.expiry || '24h';
+
+  if (!resolvedJwtSecret) {
     throw new Error('JWT secret is required');
+  }
+
+  if (!process.env.FARMER_JWT_SECRET || process.env.FARMER_JWT_SECRET !== resolvedJwtSecret) {
+    process.env.FARMER_JWT_SECRET = resolvedJwtSecret;
+  }
+
+  let farmerJwtMetadata = {};
+  // Keep shared JWT configuration in sync for middleware verification
+  try {
+    const sharedJwtConfig = jwtSecurity.getJWTConfiguration();
+    if (sharedJwtConfig?.public) {
+      sharedJwtConfig.public.secret = resolvedJwtSecret;
+      sharedJwtConfig.public.expiry = resolvedJwtExpiry;
+      farmerJwtMetadata = {
+        issuer: sharedJwtConfig.public.issuer,
+        audience: sharedJwtConfig.public.audience,
+        algorithm: sharedJwtConfig.public.algorithm,
+      };
+    }
+  } catch (error) {
+    logger.warn('Unable to synchronize shared JWT configuration:', error.message);
   }
 
   // Infrastructure Layer
   const userRepository = new MongoDBUserRepository(database);
   const passwordHasher = new BcryptPasswordHasher(bcryptSaltRounds);
-  const jwtService = new JWTService(jwtSecret, jwtExpiresIn);
+  const jwtService = new JWTService(resolvedJwtSecret, resolvedJwtExpiry, farmerJwtMetadata);
   const tokenGenerator = new TokenGenerator();
   const eventBus = new SimpleEventBus();
 

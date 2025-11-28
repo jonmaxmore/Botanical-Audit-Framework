@@ -67,11 +67,47 @@ try {
   };
 }
 
+function applyRuntimeOverrides(overrides = {}) {
+  config.mongodb = config.mongodb || {};
+  config.mongodb.options = config.mongodb.options || {};
+
+  if (overrides.uri) {
+    config.mongodb.uri = overrides.uri;
+  }
+
+  if (overrides.options) {
+    config.mongodb.options = {
+      ...config.mongodb.options,
+      ...overrides.options,
+    };
+  }
+
+  if (typeof overrides.reconnectInterval === 'number') {
+    config.mongodb.reconnectInterval = overrides.reconnectInterval;
+  }
+
+  if (typeof overrides.reconnectAttempts === 'number') {
+    config.mongodb.reconnectAttempts = overrides.reconnectAttempts;
+  }
+}
+
+// Allow environment variable override (used by tests and dynamic environments)
+const envMongoUri = process.env.MONGODB_URI;
+if (envMongoUri) {
+  applyRuntimeOverrides({ uri: envMongoUri });
+
+  const source = process.env.NODE_ENV === 'test' ? 'test environment' : 'environment variable';
+  dbLogger.info(`Overriding MongoDB URI from ${source}`);
+}
+
+dbLogger.info(`MongoDB manager initialized with URI: ${maskUri(config.mongodb.uri)}`);
+
 // Connection state
 let isConnected = false;
 let isConnecting = false;
 let reconnectTimer = null;
 let reconnectAttempts = 0;
+let hasAttachedListeners = false;
 
 /**
  * Initialize MongoDB connection
@@ -82,10 +118,23 @@ async function connect() {
   }
 
   isConnecting = true;
-  dbLogger.info(`Connecting to MongoDB: ${maskUri(config.mongodb.uri)}`);
+  const runtimeUri = process.env.MONGODB_URI || config.mongodb.uri;
+  const runtimeOptions = {
+    ...(config.mongodb.options || {}),
+  };
+
+  if (process.env.NODE_ENV === 'test') {
+    runtimeOptions.serverSelectionTimeoutMS = runtimeOptions.serverSelectionTimeoutMS || 5000;
+    runtimeOptions.socketTimeoutMS = runtimeOptions.socketTimeoutMS || 20000;
+    runtimeOptions.maxPoolSize = runtimeOptions.maxPoolSize || 10;
+    runtimeOptions.minPoolSize = runtimeOptions.minPoolSize || 1;
+    runtimeOptions.directConnection = runtimeOptions.directConnection ?? true;
+  }
+
+  dbLogger.info(`Connecting to MongoDB: ${maskUri(runtimeUri)}`);
 
   try {
-    await mongoose.connect(config.mongodb.uri, config.mongodb.options);
+    await mongoose.connect(runtimeUri, runtimeOptions);
     isConnected = true;
     isConnecting = false;
     reconnectAttempts = 0;
@@ -98,19 +147,23 @@ async function connect() {
   }
 
   // Set up event listeners
-  mongoose.connection.on('disconnected', () => {
-    isConnected = false;
-    dbLogger.warn('MongoDB disconnected');
-    scheduleReconnect();
-  });
-
-  mongoose.connection.on('error', error => {
-    dbLogger.error(`MongoDB connection error: ${error.message}`);
-    if (isConnected) {
+  if (!hasAttachedListeners) {
+    mongoose.connection.on('disconnected', () => {
       isConnected = false;
+      dbLogger.warn('MongoDB disconnected');
       scheduleReconnect();
-    }
-  });
+    });
+
+    mongoose.connection.on('error', error => {
+      dbLogger.error(`MongoDB connection error: ${error.message}`);
+      if (isConnected) {
+        isConnected = false;
+        scheduleReconnect();
+      }
+    });
+
+    hasAttachedListeners = true;
+  }
 
   return mongoose.connection;
 }
@@ -263,11 +316,42 @@ async function disconnect() {
   }
 }
 
+function configure(overrides = {}) {
+  applyRuntimeOverrides(overrides);
+  dbLogger.info(`MongoDB runtime configuration updated: ${maskUri(config.mongodb.uri)}`);
+}
+
+async function reset(overrides = {}) {
+  try {
+    await disconnect();
+  } catch (error) {
+    dbLogger.warn(`Reset disconnect warning: ${error.message}`);
+  }
+
+  reconnectAttempts = 0;
+  isConnecting = false;
+  isConnected = false;
+
+  try {
+    mongoose.connection.removeAllListeners();
+  } catch (error) {
+    dbLogger.debug(`No listeners to remove during reset: ${error.message}`);
+  }
+
+  hasAttachedListeners = false;
+  if (overrides && Object.keys(overrides).length > 0) {
+    applyRuntimeOverrides(overrides);
+  }
+}
+
 module.exports = {
   connect,
   disconnect,
   forceReconnect,
   getStatus,
   healthCheck,
+  configure,
+  reset,
+  isConnected: () => isConnected,
   connection: mongoose.connection,
 };

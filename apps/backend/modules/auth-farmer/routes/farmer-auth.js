@@ -13,10 +13,30 @@ const router = express.Router();
 const shared = require('../../shared');
 const { config, middleware } = shared;
 const path = require('path');
+const jwtSecurity = require(path.resolve(__dirname, '../../../../../config/jwt-security'));
 
 // Import farmer-specific models (use absolute path to avoid case-sensitivity issues)
 const User = require(path.join(process.cwd(), 'models', 'User.js'));
 const logger = require('../../../shared/logger');
+
+function getFarmerJwtOptions() {
+  const jwtConfig = jwtSecurity.getJWTConfiguration();
+  const farmerConfig = jwtConfig.public || {};
+
+  const options = {
+    secret: farmerConfig.secret || process.env.FARMER_JWT_SECRET || process.env.JWT_SECRET,
+    expiresIn: farmerConfig.expiry || config.environment.jwtExpiry || '7d',
+    issuer: farmerConfig.issuer,
+    audience: farmerConfig.audience,
+    algorithm: farmerConfig.algorithm || 'HS256',
+  };
+
+  if (!options.secret) {
+    throw new Error('Farmer JWT secret is not configured');
+  }
+
+  return options;
+}
 
 /**
  * @route POST /api/auth-farmer/register
@@ -76,15 +96,20 @@ router.post(
       logger.info(`New farmer registered: ${newUser.email}`);
 
       // Generate JWT token
-      const token = jwt.sign(
-        {
-          userId: newUser._id,
-          email: newUser.email,
-          role: newUser.role,
-        },
-        config.environment.jwtSecret || 'fallback-secret-key',
-        { expiresIn: config.environment.jwtExpiry || '7d' },
-      );
+      const farmerJwt = getFarmerJwtOptions();
+      const tokenPayload = {
+        userId: newUser._id,
+        email: newUser.email,
+        role: newUser.role,
+      };
+      const tokenOptions = {
+        expiresIn: farmerJwt.expiresIn,
+        issuer: farmerJwt.issuer,
+        audience: farmerJwt.audience,
+        algorithm: farmerJwt.algorithm,
+      };
+
+      const token = jwt.sign(tokenPayload, farmerJwt.secret, tokenOptions);
 
       return shared.response.success(
         res,
@@ -185,15 +210,20 @@ router.post(
       await user.save();
 
       // Generate JWT token
-      const token = jwt.sign(
-        {
-          userId: user._id,
-          email: user.email,
-          role: user.role,
-        },
-        config.environment.jwtSecret || 'fallback-secret-key',
-        { expiresIn: config.environment.jwtExpiry || '7d' },
-      );
+      const farmerJwt = getFarmerJwtOptions();
+      const tokenPayload = {
+        userId: user._id,
+        email: user.email,
+        role: user.role,
+      };
+      const tokenOptions = {
+        expiresIn: farmerJwt.expiresIn,
+        issuer: farmerJwt.issuer,
+        audience: farmerJwt.audience,
+        algorithm: farmerJwt.algorithm,
+      };
+
+      const token = jwt.sign(tokenPayload, farmerJwt.secret, tokenOptions);
 
       logger.info(`Farmer logged in: ${user.email}`);
 

@@ -6,7 +6,7 @@
 
 const request = require('supertest');
 const { MongoMemoryServer } = require('mongodb-memory-server');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 describe('Auth Farmer E2E Integration Tests', () => {
   let mongod;
@@ -58,7 +58,7 @@ describe('Auth Farmer E2E Integration Tests', () => {
 
   beforeEach(async () => {
     // Clear users collection before each test
-    await db.collection('users').deleteMany({});
+  await db.collection('users_farmer').deleteMany({});
   });
 
   describe('POST /register → POST /login flow', () => {
@@ -93,9 +93,10 @@ describe('Auth Farmer E2E Integration Tests', () => {
       const userId = registerRes.body.id;
 
       // Step 2: Manually verify email (skip email verification for testing)
-      await db
-        .collection('users')
-        .updateOne({ _id: userId }, { $set: { isEmailVerified: true, status: 'ACTIVE' } });
+      await db.collection('users_farmer').updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: { isEmailVerified: true, status: 'ACTIVE' } },
+      );
 
       // Step 3: Login with registered credentials
       const loginRes = await request(app)
@@ -133,12 +134,10 @@ describe('Auth Farmer E2E Integration Tests', () => {
       await request(app).post(`${baseURL}/register`).send(registerPayload).expect(201);
 
       // Manually verify email
-      await db
-        .collection('users')
-        .updateOne(
-          { email: registerPayload.email },
-          { $set: { isEmailVerified: true, status: 'ACTIVE' } },
-        );
+      await db.collection('users_farmer').updateOne(
+        { email: registerPayload.email.toLowerCase() },
+        { $set: { isEmailVerified: true, status: 'ACTIVE' } },
+      );
 
       // Step 2: Attempt login with wrong password
       const loginRes = await request(app)
@@ -244,9 +243,10 @@ describe('Auth Farmer E2E Integration Tests', () => {
       userId = registerRes.body.id;
 
       // Verify email
-      await db
-        .collection('users')
-        .updateOne({ _id: userId }, { $set: { isEmailVerified: true, status: 'ACTIVE' } });
+      await db.collection('users_farmer').updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: { isEmailVerified: true, status: 'ACTIVE' } },
+      );
 
       // Login
       const loginRes = await request(app).post(`${baseURL}/login`).send({
@@ -308,9 +308,10 @@ describe('Auth Farmer E2E Integration Tests', () => {
 
       userId = registerRes.body.id;
 
-      await db
-        .collection('users')
-        .updateOne({ _id: userId }, { $set: { isEmailVerified: true, status: 'ACTIVE' } });
+      await db.collection('users_farmer').updateOne(
+        { _id: new ObjectId(userId) },
+        { $set: { isEmailVerified: true, status: 'ACTIVE' } },
+      );
 
       const loginRes = await request(app).post(`${baseURL}/login`).send({
         email: registerPayload.email,

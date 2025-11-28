@@ -1,12 +1,12 @@
 /**
  * Base Action Modal Component
- * 
+ *
  * Reusable modal for approval, review, inspection, and other decision-making actions.
  * Consolidates logic from:
  * - ApprovalActionModal (farmer-portal)
  * - ReviewActionModal (farmer-portal)
  * - ReviewDialog (admin-portal)
- * 
+ *
  * Features:
  * - Configurable decision options
  * - Validation with feedback
@@ -14,7 +14,7 @@
  * - Rating/feedback score
  * - Additional fields support
  * - Consistent UI/UX
- * 
+ *
  * @version 1.0.0
  * @created November 4, 2025
  * @author Code Refactoring - Phase 5
@@ -43,16 +43,16 @@ export interface BaseActionModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: ActionFormData) => Promise<void>;
-  
+
   // Configuration
   type: 'approval' | 'review' | 'inspection' | 'custom';
   title: string;
   subtitle?: string;
-  
+
   // Decision options
   decisionOptions: DecisionOption[];
   defaultDecision?: string;
-  
+
   // Application/item data
   itemId: string;
   itemData: {
@@ -60,16 +60,16 @@ export interface BaseActionModalProps {
     identifier?: string;
     [key: string]: any;
   };
-  
+
   // Optional features
   showFeedbackScore?: boolean;
   showRating?: boolean;
   additionalFields?: ReactNode;
-  
+
   // Validation
   minCommentLength?: number;
   requiredFields?: string[];
-  
+
   // Customization
   className?: string;
   submitButtonText?: string;
@@ -111,7 +111,7 @@ export default function BaseActionModal({
   // ============================================================================
   // STATE
   // ============================================================================
-  
+
   const [loading, setLoading] = useState(false);
   const [decision, setDecision] = useState<string>(defaultDecision || decisionOptions[0]?.value || '');
   const [comments, setComments] = useState('');
@@ -245,7 +245,7 @@ export default function BaseActionModal({
                 disabled={loading}
                 className={`
                   flex items-center gap-3 p-4 border-2 rounded-lg transition-all
-                  ${isSelected 
+                  ${isSelected
                     ? `${selectedClass || 'border-blue-500 bg-blue-50'} ring-2 ring-offset-2 ring-blue-500`
                     : 'border-gray-200 bg-white hover:border-gray-300'
                   }
@@ -406,11 +406,11 @@ export default function BaseActionModal({
             {renderCommentsField()}
             {renderFeedbackScore()}
             {renderRating()}
-            
+
             {/* Additional Fields */}
             {additionalFields && (
               <div className="space-y-4">
-                {React.cloneElement(additionalFields as React.ReactElement, {
+                {React.cloneElement(additionalFields as React.ReactElement<any>, {
                   onChange: handleAdditionalDataChange,
                   disabled: loading,
                   errors

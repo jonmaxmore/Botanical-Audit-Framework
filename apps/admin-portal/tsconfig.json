@@ -1,16 +1,10 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2020",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "strict": false,
     "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
@@ -23,7 +17,11 @@
       "@/*": ["./*"],
       "@/components/*": ["./components/*"],
       "@/lib/*": ["./lib/*"],
-      "@/hooks/*": ["./hooks/*"]
+      "@/hooks/*": ["./hooks/*"],
+      "@gacp/constants": ["../../packages/constants/src/index.ts"],
+      "@gacp/types": ["../../packages/types/src/index.ts"],
+      "@gacp/ui": ["../../packages/ui/src/index.tsx"],
+      "@gacp/utils": ["../../packages/utils/src/index.ts"]
     },
     "baseUrl": "."
   },

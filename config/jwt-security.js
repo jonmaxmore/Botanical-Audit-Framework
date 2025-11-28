@@ -32,6 +32,11 @@
 const crypto = require('crypto');
 
 /**
+ * Cache configuration to ensure a single source of truth across modules.
+ */
+let cachedConfig = null;
+
+/**
  * ตรวจสอบว่าค่าที่ได้มาเป็น unsafe default หรือไม่
  *
  * @param {string} value - ค่าที่ต้องการตรวจสอบ
@@ -93,7 +98,14 @@ function generateSecureSecret() {
  * @throws {Error} ถ้าไม่มี secret หรือเป็น unsafe default ใน production
  * @returns {Object} JWT configuration
  */
-function loadJWTConfiguration() {
+function loadJWTConfiguration(options = {}) {
+  const forceReload =
+    typeof options === 'boolean' ? options : Boolean(options && options.forceReload);
+
+  if (!forceReload && cachedConfig) {
+    return cachedConfig;
+  }
+
   const env = process.env.NODE_ENV || 'development';
   const isDevelopment = env === 'development' || env === 'test';
 
@@ -108,28 +120,39 @@ function loadJWTConfiguration() {
   // =====================================
   // PUBLIC JWT SECRET (สำหรับ Farmers)
   // =====================================
-  let jwtSecret = process.env.JWT_SECRET;
+  const publicSecretSource = process.env.FARMER_JWT_SECRET
+    ? 'FARMER_JWT_SECRET'
+    : process.env.JWT_SECRET
+    ? 'JWT_SECRET'
+    : 'FARMER_JWT_SECRET/JWT_SECRET';
+  let jwtSecret = process.env.FARMER_JWT_SECRET || process.env.JWT_SECRET;
 
   if (!jwtSecret) {
     if (isDevelopment) {
       // Development: auto-generate และแจ้งเตือน
       jwtSecret = generateSecureSecret();
-      console.warn('⚠️  JWT_SECRET not set - Generated temporary secret for DEVELOPMENT');
+      console.warn(
+        `⚠️  ${publicSecretSource} not set - Generated temporary public JWT secret for DEVELOPMENT`
+      );
       console.warn('   Secret:', jwtSecret.substring(0, 16) + '...');
       console.warn('   ⚠️  DO NOT use this in production!\n');
+
+      // Persist generated secret so other modules share the same value
+      process.env.FARMER_JWT_SECRET = jwtSecret;
     } else {
       // Production: throw error
       throw new Error(
-        '🚨 SECURITY ERROR: JWT_SECRET is required in production\n' +
+        '🚨 SECURITY ERROR: FARMER_JWT_SECRET or JWT_SECRET is required in production\n' +
           '   \n' +
-          '   Why: JWT tokens secure user sessions. Without a secret, anyone can forge tokens.\n' +
+          '   Why: JWT tokens secure farmer sessions. Without a secret, anyone can forge tokens.\n' +
           '   \n' +
           '   How to fix:\n' +
           '   1. Generate a secure secret:\n' +
           "      node -e \"console.log(require('crypto').randomBytes(64).toString('hex'))\"\n" +
           '   \n' +
           '   2. Set it in your .env file:\n' +
-          '      JWT_SECRET=<your-generated-secret>\n' +
+          '      FARMER_JWT_SECRET=<your-generated-secret>\n' +
+          '      # หรือใช้ JWT_SECRET หากต้องการใช้คีย์ร่วม\n' +
           '   \n' +
           '   3. Restart the application\n'
       );
@@ -137,11 +160,13 @@ function loadJWTConfiguration() {
   } else if (isUnsafeDefault(jwtSecret)) {
     // ถ้าเป็น unsafe default
     if (isDevelopment) {
-      console.warn('⚠️  JWT_SECRET appears to be an unsafe default');
+      console.warn(
+        `⚠️  ${publicSecretSource} appears to be an unsafe default (short/placeholder value)`
+      );
       console.warn('   Consider generating a secure secret even for development\n');
     } else {
       throw new Error(
-        '🚨 SECURITY ERROR: JWT_SECRET contains unsafe default value\n' +
+        `🚨 SECURITY ERROR: ${publicSecretSource} contains unsafe default value\n` +
           '   \n' +
           '   Current value: ' +
           jwtSecret.substring(0, 30) +
@@ -158,7 +183,14 @@ function loadJWTConfiguration() {
       );
     }
   } else {
-    console.log('✅ JWT_SECRET: Configured (length: ' + jwtSecret.length + ' characters)');
+    console.log(
+      `✅ Public JWT secret (${publicSecretSource}) configured (length: ${jwtSecret.length} characters)`
+    );
+
+    // Ensure env mirrors validated secret for downstream modules
+    if (!process.env.FARMER_JWT_SECRET) {
+      process.env.FARMER_JWT_SECRET = jwtSecret;
+    }
   }
 
   // =====================================
@@ -173,6 +205,8 @@ function loadJWTConfiguration() {
       console.warn('⚠️  DTAM_JWT_SECRET not set - Generated temporary secret for DEVELOPMENT');
       console.warn('   Secret:', dtamJwtSecret.substring(0, 16) + '...');
       console.warn('   ⚠️  DO NOT use this in production!\n');
+
+      process.env.DTAM_JWT_SECRET = dtamJwtSecret;
     } else {
       // Production: throw error
       throw new Error(
@@ -210,6 +244,10 @@ function loadJWTConfiguration() {
     }
   } else {
     console.log('✅ DTAM_JWT_SECRET: Configured (length: ' + dtamJwtSecret.length + ' characters)');
+
+    if (!process.env.DTAM_JWT_SECRET) {
+      process.env.DTAM_JWT_SECRET = dtamJwtSecret;
+    }
   }
 
   // ตรวจสอบว่า JWT_SECRET และ DTAM_JWT_SECRET ไม่เหมือนกัน
@@ -240,7 +278,7 @@ function loadJWTConfiguration() {
   console.log(`${'='.repeat(80)}\n`);
 
   // Return configuration object
-  return {
+  cachedConfig = {
     public: {
       secret: jwtSecret,
       expiry: jwtExpiry,
@@ -258,6 +296,16 @@ function loadJWTConfiguration() {
     environment: env,
     isDevelopment
   };
+  return cachedConfig;
+}
+
+function getJWTConfiguration() {
+  return cachedConfig || loadJWTConfiguration();
+}
+
+function refreshJWTConfiguration() {
+  cachedConfig = null;
+  return loadJWTConfiguration({ forceReload: true });
 }
 
 /**
@@ -322,6 +370,8 @@ function signToken(payload, type, config) {
 
 module.exports = {
   loadJWTConfiguration,
+  getJWTConfiguration,
+  refreshJWTConfiguration,
   verifyToken,
   signToken,
   generateSecureSecret,

@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
-import BaseActionModal from '../../../frontend/components/shared/base/BaseActionModal';
-import type { ActionFormData, DecisionOption } from '../../../frontend/components/shared/base/BaseActionModal';
+import { BaseActionModal, BaseActionModalProps, ActionFormData, DecisionOption } from '@gacp/ui';
 import type { Application } from '../../lib/api/applications';
 
 interface ReviewDialogProps {

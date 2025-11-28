@@ -69,8 +69,8 @@ const validateRegister = [
   body('phoneNumber')
     .notEmpty()
     .withMessage('Phone number is required')
-    .matches(/^[0-9]{10}$/)
-    .withMessage('Phone number must be 10 digits'),
+    .matches(/^\+?[0-9]{9,15}$/)
+    .withMessage('Phone number must be between 9 and 15 digits and may start with +'),
 
   body('idCard')
     .notEmpty()
@@ -85,22 +85,19 @@ const validateRegister = [
     .withMessage('Farm name must not exceed 200 characters'),
 
   body('province')
-    .notEmpty()
-    .withMessage('Province is required')
+    .optional()
     .trim()
     .isLength({ max: 100 })
     .withMessage('Province must not exceed 100 characters'),
 
   body('district')
-    .notEmpty()
-    .withMessage('District is required')
+    .optional()
     .trim()
     .isLength({ max: 100 })
     .withMessage('District must not exceed 100 characters'),
 
   body('subDistrict')
-    .notEmpty()
-    .withMessage('Sub-district is required')
+    .optional()
     .trim()
     .isLength({ max: 100 })
     .withMessage('Sub-district must not exceed 100 characters'),
@@ -179,8 +176,8 @@ const validateUpdateProfile = [
 
   body('phoneNumber')
     .optional()
-    .matches(/^[0-9]{10}$/)
-    .withMessage('Phone number must be 10 digits'),
+    .matches(/^\+?[0-9]{9,15}$/)
+    .withMessage('Phone number must be between 9 and 15 digits and may start with +'),
 
   body('farmName')
     .optional()

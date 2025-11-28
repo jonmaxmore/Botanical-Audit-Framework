@@ -13,12 +13,17 @@ const { createLogger } = require('../../../../shared/logger');
 const logger = createLogger('auth-farmer-token');
 
 class JWTService {
-  constructor(secret, expiresIn = '24h') {
+  constructor(secret, expiresIn = '24h', metadata = {}) {
     if (!secret) {
       throw new Error('JWT secret is required');
     }
     this.secret = secret;
     this.expiresIn = expiresIn;
+    this.metadata = {
+      issuer: metadata?.issuer,
+      audience: metadata?.audience,
+      algorithm: metadata?.algorithm || 'HS256',
+    };
   }
 
   /**
@@ -32,6 +37,18 @@ class JWTService {
       const defaultOptions = {
         expiresIn: this.expiresIn,
       };
+
+      if (this.metadata.issuer) {
+        defaultOptions.issuer = this.metadata.issuer;
+      }
+
+      if (this.metadata.audience) {
+        defaultOptions.audience = this.metadata.audience;
+      }
+
+      if (this.metadata.algorithm) {
+        defaultOptions.algorithm = this.metadata.algorithm;
+      }
 
       const jwtOptions = {
         ...defaultOptions,
@@ -53,7 +70,21 @@ class JWTService {
    */
   verify(token) {
     try {
-      return jwt.verify(token, this.secret);
+      const verifyOptions = {};
+
+      if (this.metadata.issuer) {
+        verifyOptions.issuer = this.metadata.issuer;
+      }
+
+      if (this.metadata.audience) {
+        verifyOptions.audience = this.metadata.audience;
+      }
+
+      if (this.metadata.algorithm) {
+        verifyOptions.algorithms = [this.metadata.algorithm];
+      }
+
+      return jwt.verify(token, this.secret, verifyOptions);
     } catch (error) {
       if (error.name === 'TokenExpiredError') {
         throw new Error('Token has expired');

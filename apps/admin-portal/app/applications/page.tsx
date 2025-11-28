@@ -24,54 +24,39 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ApplicationsTable from '@/components/applications/ApplicationsTable';
 import ReviewDialog, { type ReviewData } from '@/components/applications/ReviewDialog';
 import DocumentViewer from '@/components/applications/DocumentViewer';
-import * as applicationsApi from '@/lib/api/applications';
 import type { Application } from '@/lib/api/applications';
+import { useApplications } from '@/hooks/useApplications';
+import { useApplicationActions } from '@/hooks/useApplicationActions';
 
 export default function ApplicationsPage() {
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(true);
-  const [applications, setApplications] = React.useState<Application[]>([]);
-  const [error, setError] = React.useState<string | null>(null);
+
+  // Custom Hooks
+  const { applications, loading, error, refreshApplications } = useApplications();
+  const {
+    snackbar,
+    handleCloseSnackbar,
+    assignReviewer,
+    startReview,
+    submitReview,
+    approveApplication,
+    rejectApplication,
+    verifyDocument,
+  } = useApplicationActions(refreshApplications);
 
   // Dialog states
   const [selectedApplication, setSelectedApplication] = React.useState<Application | null>(null);
   const [reviewDialogOpen, setReviewDialogOpen] = React.useState(false);
   const [documentViewerOpen, setDocumentViewerOpen] = React.useState(false);
   const [assignDialogOpen, setAssignDialogOpen] = React.useState(false);
+
+  // Local UI state
   const [reviewersList] = React.useState([
     { id: '1', name: 'ดร.สมชาย ใจดี' },
     { id: '2', name: 'ดร.สมหญิง มั่นคง' },
     { id: '3', name: 'ดร.วิชัย ชาญฉลาด' },
   ]);
   const [selectedReviewer, setSelectedReviewer] = React.useState('');
-
-  // Snackbar state
-  const [snackbar, setSnackbar] = React.useState({
-    open: false,
-    message: '',
-    severity: 'success' as 'success' | 'error' | 'warning' | 'info',
-  });
-
-  React.useEffect(() => {
-    loadApplications();
-  }, []);
-
-  const loadApplications = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await applicationsApi.getApplications();
-      setApplications(response.data);
-    } catch (err) {
-      console.error('Error loading applications:', err);
-      setError('ไม่สามารถโหลดข้อมูลคำขอได้ กำลังใช้ข้อมูลจำลอง');
-      // Fallback to mock data
-      const mockData = await applicationsApi.getMockApplicationsData();
-      setApplications(mockData);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSidebarToggle = () => {
     setSidebarOpen(!sidebarOpen);
@@ -89,41 +74,15 @@ export default function ApplicationsPage() {
 
   const handleConfirmAssign = async () => {
     if (!selectedApplication || !selectedReviewer) return;
-
-    try {
-      await applicationsApi.assignReviewer(selectedApplication.id, selectedReviewer);
-      setSnackbar({
-        open: true,
-        message: 'มอบหมายผู้ตรวจสอบสำเร็จ',
-        severity: 'success',
-      });
+    const success = await assignReviewer(selectedApplication, selectedReviewer);
+    if (success) {
       setAssignDialogOpen(false);
-      loadApplications();
-    } catch (err) {
-      setSnackbar({
-        open: true,
-        message: 'เกิดข้อผิดพลาดในการมอบหมาย',
-        severity: 'error',
-      });
+      setSelectedReviewer('');
     }
   };
 
   const handleStartReview = async (application: Application) => {
-    try {
-      await applicationsApi.startReview(application.id);
-      setSnackbar({
-        open: true,
-        message: 'เริ่มการตรวจสอบสำเร็จ',
-        severity: 'success',
-      });
-      loadApplications();
-    } catch (err) {
-      setSnackbar({
-        open: true,
-        message: 'เกิดข้อผิดพลาด',
-        severity: 'error',
-      });
-    }
+    await startReview(application);
   };
 
   const handleCompleteReview = (application: Application) => {
@@ -133,98 +92,23 @@ export default function ApplicationsPage() {
 
   const handleSubmitReview = async (reviewData: ReviewData) => {
     if (!selectedApplication) return;
-
-    try {
-      await applicationsApi.completeReview(selectedApplication.id, {
-        decision: reviewData.decision,
-        comments: reviewData.comment,
-        documentsVerified: true,
-        inspectionRequired: reviewData.decision === 'approve',
-      });
-      setSnackbar({
-        open: true,
-        message: 'บันทึกผลการตรวจสอบสำเร็จ',
-        severity: 'success',
-      });
+    const success = await submitReview(selectedApplication, reviewData);
+    if (success) {
       setReviewDialogOpen(false);
-      loadApplications();
-    } catch (err) {
-      setSnackbar({
-        open: true,
-        message: 'เกิดข้อผิดพลาด',
-        severity: 'error',
-      });
     }
   };
 
   const handleApprove = async (application: Application) => {
-    try {
-      await applicationsApi.approveApplication(application.id, {
-        comments: 'อนุมัติคำขอ',
-        certificateData: {
-          certificateType: 'gacp',
-          validUntil: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-        },
-      });
-      setSnackbar({
-        open: true,
-        message: 'อนุมัติคำขอสำเร็จ',
-        severity: 'success',
-      });
-      loadApplications();
-    } catch (err) {
-      setSnackbar({
-        open: true,
-        message: 'เกิดข้อผิดพลาด',
-        severity: 'error',
-      });
-    }
+    await approveApplication(application);
   };
 
   const handleReject = async (application: Application) => {
-    try {
-      await applicationsApi.rejectApplication(application.id, {
-        reason: 'ไม่ผ่านการตรวจสอบ',
-        comments: 'ไม่ผ่านการตรวจสอบ',
-      });
-      setSnackbar({
-        open: true,
-        message: 'ปฏิเสธคำขอสำเร็จ',
-        severity: 'success',
-      });
-      loadApplications();
-    } catch (err) {
-      setSnackbar({
-        open: true,
-        message: 'เกิดข้อผิดพลาด',
-        severity: 'error',
-      });
-    }
+    await rejectApplication(application);
   };
 
   const handleVerifyDocument = async (documentId: string, verified: boolean) => {
     if (!selectedApplication) return;
-
-    try {
-      await applicationsApi.verifyDocument(
-        selectedApplication.id,
-        documentId,
-        verified,
-        verified ? undefined : 'ยกเลิกการยืนยัน',
-      );
-      setSnackbar({
-        open: true,
-        message: verified ? 'ยืนยันเอกสารสำเร็จ' : 'ยกเลิกการยืนยันสำเร็จ',
-        severity: 'success',
-      });
-      loadApplications();
-    } catch (err) {
-      setSnackbar({
-        open: true,
-        message: 'เกิดข้อผิดพลาด',
-        severity: 'error',
-      });
-    }
+    await verifyDocument(selectedApplication, documentId, verified);
   };
 
   return (
@@ -267,7 +151,7 @@ export default function ApplicationsPage() {
                   <Button
                     variant="outlined"
                     startIcon={<RefreshIcon />}
-                    onClick={loadApplications}
+                    onClick={refreshApplications}
                     disabled={loading}
                   >
                     รีเฟรช
@@ -349,11 +233,11 @@ export default function ApplicationsPage() {
           <Snackbar
             open={snackbar.open}
             autoHideDuration={6000}
-            onClose={() => setSnackbar({ ...snackbar, open: false })}
+            onClose={handleCloseSnackbar}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
           >
             <Alert
-              onClose={() => setSnackbar({ ...snackbar, open: false })}
+              onClose={handleCloseSnackbar}
               severity={snackbar.severity}
               sx={{ width: '100%' }}
             >

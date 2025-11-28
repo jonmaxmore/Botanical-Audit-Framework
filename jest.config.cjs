@@ -1,9 +1,9 @@
 module.exports = {
   projects: [
-    '<rootDir>/apps/admin-portal',
-    '<rootDir>/apps/certificate-portal',
-    '<rootDir>/apps/farmer-portal',
-    '<rootDir>/apps/backend'
+    '<rootDir>/apps/admin-portal/jest.config.js',
+    '<rootDir>/apps/certificate-portal/jest.config.js',
+    '<rootDir>/apps/farmer-portal/jest.config.js',
+    '<rootDir>/apps/backend/jest.config.cjs'
   ],
   testPathIgnorePatterns: [
     '<rootDir>/node_modules/',
@@ -13,6 +13,5 @@ module.exports = {
   ],
   coverageDirectory: '<rootDir>/coverage',
   collectCoverage: false,
-  coverageProvider: 'v8',
-  verbose: true
+  coverageProvider: 'v8'
 };

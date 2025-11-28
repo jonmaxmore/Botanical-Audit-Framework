@@ -1,49 +1,16 @@
 'use client';
 
-import { Box, Container, Grid, Typography } from '@mui/material';
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { Box, Container, Grid, Typography, Alert } from '@mui/material';
 import KPICard from '@/components/dashboard/KPICard';
 import ActivitySummary from '@/components/dashboard/ActivitySummary';
 import QuickActionsPanel from '@/components/dashboard/QuickActionsPanel';
 import InspectorKPICards from '@/components/dashboard/InspectorKPICards';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
+import { useDashboardStats } from '@/hooks/useDashboardStats';
 
 export default function DashboardPage() {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  const [stats, setStats] = useState({
-    totalApplications: 0,
-    pendingReview: 0,
-    approved: 0,
-    rejected: 0,
-  });
-
-  useEffect(() => {
-    const token = localStorage.getItem('admin_token');
-    if (!token) {
-      router.push('/login');
-      return;
-    }
-
-    const fetchStats = async () => {
-      try {
-        setStats({
-          totalApplications: 156,
-          pendingReview: 23,
-          approved: 98,
-          rejected: 12,
-        });
-      } catch (error) {
-        console.error('Failed to fetch stats:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStats();
-  }, [router]);
+  const { stats, loading, error } = useDashboardStats();
 
   if (loading) return <LoadingSpinner />;
 
@@ -53,6 +20,12 @@ export default function DashboardPage() {
         <Typography variant="h4" gutterBottom>
           📊 Dashboard
         </Typography>
+
+        {error && (
+          <Alert severity="error" sx={{ mb: 3 }}>
+            {error}
+          </Alert>
+        )}
 
         <Grid container spacing={3}>
           <Grid item xs={12} md={3}>

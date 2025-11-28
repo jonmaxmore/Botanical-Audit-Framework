@@ -33,6 +33,16 @@ const mongoose = require('mongoose');
 // Import MongoDB Manager
 const mongoManager = require('./config/mongodb-manager');
 
+// Ensure MongoDB is connected when running inside Jest tests
+if (process.env.NODE_ENV === 'test') {
+  mongoManager
+    .connect()
+    .then(() => appLogger.info('✅ MongoDB connected for test environment'))
+    .catch(error =>
+      appLogger.error('❌ Failed to connect MongoDB for tests:', error.message || error),
+    );
+}
+
 // Import GACP Business Logic and Services
 const {
   GACPApplicationStatus,
@@ -139,7 +149,7 @@ app.get('/health', async (req, res) => {
     environment: process.env.NODE_ENV || 'development',
     database: dbHealth,
     mongodb: {
-      connected: mongoManager.isConnected,
+      connected: mongoManager.isConnected(),
       status: mongoManager.getStatus(),
     },
   };
@@ -215,7 +225,7 @@ app.get('/api', (req, res) => {
     name: 'GACP Atlas API',
     version: '1.0.0-atlas',
     mode: 'atlas',
-    database: mongoManager.isConnected ? 'Connected' : 'Disconnected',
+  database: mongoManager.isConnected() ? 'Connected' : 'Disconnected',
     monitoring: 'Available at /monitoring-dashboard.html',
     endpoints: {
       'GET /health': 'Health check with database status',
@@ -369,7 +379,7 @@ app.post('/api/gacp/inspections/initialize', async (req, res) => {
     }
 
     // Set database connection for inspection service
-    inspectionService.db = mongoManager.isConnected ? mongoose.connection.db : null;
+  inspectionService.db = mongoManager.isConnected() ? mongoose.connection.db : null;
 
     const result = await inspectionService.initializeInspection(
       applicationId,
@@ -401,7 +411,7 @@ app.post('/api/gacp/inspections/:inspectionId/ccp/:ccpId/assess', async (req, re
     }
 
     // Set database connection for inspection service
-    inspectionService.db = mongoManager.isConnected ? mongoose.connection.db : null;
+  inspectionService.db = mongoManager.isConnected() ? mongoose.connection.db : null;
 
     const result = await inspectionService.conductCCPAssessment(
       inspectionId,
@@ -463,10 +473,10 @@ app.get('/api/dashboard/test-stats', async (req, res) => {
   res.json({
     success: true,
     data: {
-      totalApplications: mongoManager.isConnected ? 'Loading from Atlas...' : 0,
-      totalUsers: mongoManager.isConnected ? 'Loading from Atlas...' : 0,
-      totalInspections: mongoManager.isConnected ? 'Loading from Atlas...' : 0,
-      totalCertificates: mongoManager.isConnected ? 'Loading from Atlas...' : 0,
+  totalApplications: mongoManager.isConnected() ? 'Loading from Atlas...' : 0,
+  totalUsers: mongoManager.isConnected() ? 'Loading from Atlas...' : 0,
+  totalInspections: mongoManager.isConnected() ? 'Loading from Atlas...' : 0,
+  totalCertificates: mongoManager.isConnected() ? 'Loading from Atlas...' : 0,
       database_status: dbHealth.status,
       database_info: mongoManager.getStatus(),
       server_info: {
@@ -481,7 +491,7 @@ app.get('/api/dashboard/test-stats', async (req, res) => {
 // Database connection test
 app.get('/api/db/test', async (req, res) => {
   try {
-    if (mongoManager.isConnected) {
+  if (mongoManager.isConnected()) {
       // Test basic database operations
       const collections = await mongoose.connection.db.listCollections().toArray();
 
@@ -754,7 +764,9 @@ process.on('SIGTERM', async () => {
   process.exit(0);
 });
 
-// Start the server
-startServer();
+// Start the server only when executing this file directly (skip during Jest imports)
+if (require.main === module) {
+  startServer();
+}
 
 module.exports = app;

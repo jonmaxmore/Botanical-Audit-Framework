@@ -1,15 +1,7 @@
 /**
- * Lint-Staged Configuration
- * Runs linting/formatting only on staged files before commit
+ * Bridge file so existing tooling that looks for `.lintstagedrc.js`
+ * will reuse the canonical CommonJS config.
  */
+import config from './.lintstagedrc.cjs';
 
-export default {
-  // JavaScript/TypeScript files
-  '*.{js,ts}': ['eslint --fix', 'prettier --write'],
-
-  // Config files, Markdown, YAML
-  '*.{json,md,yml,yaml}': ['prettier --write'],
-
-  // Package.json (special handling)
-  'package.json': ['prettier --write'],
-};
+export default config;

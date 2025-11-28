@@ -11,8 +11,8 @@ module.exports = {
   verbose: true,
   maxWorkers: 1, // Run tests serially to avoid DB conflicts
   detectOpenHandles: true, // Detect async operations that prevent Jest from exiting
-  forceExit: false, // Don't force exit - fix the root cause instead
-  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.js'], // Global cleanup
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  globalTeardown: '<rootDir>/jest.teardown.js',
   collectCoverageFrom: [
     'modules/**/domain/**/*.js',
     'modules/**/application/**/*.js',

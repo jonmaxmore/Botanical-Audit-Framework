@@ -28,5 +28,6 @@ module.exports = {
   coverageReporters: ['text', 'text-summary', 'html', 'lcov'],
   verbose: true,
   testTimeout: 10000,
-  setupFilesAfterEnv: ['<rootDir>/__tests__/setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/../../jest.setup.js'],
+  globalTeardown: '<rootDir>/../../jest.teardown.js',
 };
