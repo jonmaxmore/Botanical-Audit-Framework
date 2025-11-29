@@ -1,5 +1,4 @@
-  fs.mkdirSync(logsDir, { recursive: true });
-}
+
 
 /**
  * Enhanced error codes for GACP Standards Comparison system
