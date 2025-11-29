@@ -96,10 +96,17 @@ describe('AdminLoginPage', () => {
 
   it('should disable submit button while loading', async () => {
     (global.fetch as jest.Mock).mockImplementation(
-      () => new Promise(resolve => setTimeout(() => resolve({
-        ok: true,
-        json: async () => ({ token: 'test-token', user: {} }),
-      }), 100))
+      () =>
+        new Promise(resolve =>
+          setTimeout(
+            () =>
+              resolve({
+                ok: true,
+                json: async () => ({ token: 'test-token', user: {} }),
+              }),
+            100
+          )
+        )
     );
 
     render(<AdminLoginPage />);

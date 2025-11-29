@@ -124,7 +124,9 @@ export default function VideoInspectionSession({
         <Dialog open fullScreen>
           <Box sx={{ p: 3 }}>
             <Alert severity="info">Video call feature is under development</Alert>
-            <Button onClick={handleEndCall} sx={{ mt: 2 }}>End Call</Button>
+            <Button onClick={handleEndCall} sx={{ mt: 2 }}>
+              End Call
+            </Button>
           </Box>
         </Dialog>
       )}

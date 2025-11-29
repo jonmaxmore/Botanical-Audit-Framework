@@ -30,7 +30,7 @@ import {
   Tab,
   Tabs,
   IconButton,
-  Tooltip
+  Tooltip,
 } from '@mui/material';
 import {
   Refresh as RefreshIcon,
@@ -38,7 +38,7 @@ import {
   Settings as SettingsIcon,
   CheckCircle as CheckIcon,
   Warning as WarningIcon,
-  Error as ErrorIcon
+  Error as ErrorIcon,
 } from '@mui/icons-material';
 import { Line, Doughnut, Bar } from 'react-chartjs-2';
 import {
@@ -52,7 +52,7 @@ import {
   Title,
   Tooltip as ChartTooltip,
   Legend,
-  Filler
+  Filler,
 } from 'chart.js';
 
 // Register Chart.js components
@@ -71,13 +71,13 @@ ChartJS.register(
 
 interface MetricsData {
   system: {
-    cpu: { avg: number; max: number; };
-    memory: { avg: number; max: number; };
-    disk: { avg: number; max: number; };
+    cpu: { avg: number; max: number };
+    memory: { avg: number; max: number };
+    disk: { avg: number; max: number };
     uptime: number;
   };
   database: {
-    queryTime: { avg: number; p95: number; p99: number; };
+    queryTime: { avg: number; p95: number; p99: number };
     slowQueries: number;
     operations: {
       find: number;
@@ -105,7 +105,7 @@ interface MetricsData {
       success: number;
       error: number;
     };
-    responseTime: { avg: number; p95: number; p99: number; };
+    responseTime: { avg: number; p95: number; p99: number };
     statusCodes: {
       '2xx': number;
       '3xx': number;
@@ -118,10 +118,10 @@ interface MetricsData {
 interface HealthData {
   status: 'healthy' | 'degraded' | 'critical';
   checks: {
-    system: { status: string; issues: string[]; };
-    database: { status: string; issues: string[]; };
-    cache: { status: string; issues: string[]; };
-    queue: { status: string; issues: string[]; };
+    system: { status: string; issues: string[] };
+    database: { status: string; issues: string[] };
+    cache: { status: string; issues: string[] };
+    queue: { status: string; issues: string[] };
   };
 }
 
@@ -151,11 +151,9 @@ export default function MonitoringDashboard() {
 
   const connectEventSource = () => {
     const token = localStorage.getItem('token');
-    const eventSource = new EventSource(
-      `/api/v1/monitoring/stream?token=${token}`
-    );
+    const eventSource = new EventSource(`/api/v1/monitoring/stream?token=${token}`);
 
-    eventSource.onmessage = (event) => {
+    eventSource.onmessage = event => {
       try {
         const data = JSON.parse(event.data);
 
@@ -168,7 +166,7 @@ export default function MonitoringDashboard() {
       }
     };
 
-    eventSource.onerror = (err) => {
+    eventSource.onerror = err => {
       console.error('SSE error:', err);
       eventSource.close();
 
@@ -188,14 +186,11 @@ export default function MonitoringDashboard() {
 
   const fetchMetrics = async () => {
     try {
-      const response = await fetch(
-        `/api/v1/monitoring/metrics?timeWindow=${timeWindow}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`
-          }
-        }
-      );
+      const response = await fetch(`/api/v1/monitoring/metrics?timeWindow=${timeWindow}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
 
       if (!response.ok) throw new Error('Failed to fetch metrics');
 
@@ -212,8 +207,8 @@ export default function MonitoringDashboard() {
     try {
       const response = await fetch('/api/v1/monitoring/health', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       });
 
       if (!response.ok) throw new Error('Failed to fetch health');
@@ -235,13 +230,13 @@ export default function MonitoringDashboard() {
     try {
       const response = await fetch('/api/v1/monitoring/export', {
         headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
       });
 
       const data = await response.json();
       const blob = new Blob([JSON.stringify(data, null, 2)], {
-        type: 'application/json'
+        type: 'application/json',
       });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -442,9 +437,7 @@ export default function MonitoringDashboard() {
                       sx={{ flexGrow: 1, mr: 1 }}
                       color={metrics.system.cpu.avg > 80 ? 'error' : 'primary'}
                     />
-                    <Typography variant="body2">
-                      {metrics.system.cpu.avg.toFixed(1)}%
-                    </Typography>
+                    <Typography variant="body2">{metrics.system.cpu.avg.toFixed(1)}%</Typography>
                   </Box>
                 </Box>
 
@@ -457,9 +450,7 @@ export default function MonitoringDashboard() {
                       sx={{ flexGrow: 1, mr: 1 }}
                       color={metrics.system.memory.avg > 85 ? 'error' : 'primary'}
                     />
-                    <Typography variant="body2">
-                      {metrics.system.memory.avg.toFixed(1)}%
-                    </Typography>
+                    <Typography variant="body2">{metrics.system.memory.avg.toFixed(1)}%</Typography>
                   </Box>
                 </Box>
 
@@ -472,9 +463,7 @@ export default function MonitoringDashboard() {
                       sx={{ flexGrow: 1, mr: 1 }}
                       color={metrics.system.disk.avg > 90 ? 'error' : 'primary'}
                     />
-                    <Typography variant="body2">
-                      {metrics.system.disk.avg.toFixed(1)}%
-                    </Typography>
+                    <Typography variant="body2">{metrics.system.disk.avg.toFixed(1)}%</Typography>
                   </Box>
                 </Box>
 
@@ -494,9 +483,7 @@ export default function MonitoringDashboard() {
                 </Typography>
 
                 <Box mb={2}>
-                  <Typography variant="h4">
-                    {metrics.api.requests.total}
-                  </Typography>
+                  <Typography variant="h4">{metrics.api.requests.total}</Typography>
                   <Typography variant="caption" color="textSecondary">
                     Total Requests
                   </Typography>
@@ -519,9 +506,7 @@ export default function MonitoringDashboard() {
                   <Typography variant="caption" color="textSecondary">
                     Avg Response Time
                   </Typography>
-                  <Typography variant="h6">
-                    {metrics.api.responseTime.avg.toFixed(0)}ms
-                  </Typography>
+                  <Typography variant="h6">{metrics.api.responseTime.avg.toFixed(0)}ms</Typography>
                 </Box>
               </CardContent>
             </Card>
@@ -536,9 +521,7 @@ export default function MonitoringDashboard() {
                 </Typography>
 
                 <Box mb={2}>
-                  <Typography variant="h4">
-                    {metrics.cache.hitRate.toFixed(1)}%
-                  </Typography>
+                  <Typography variant="h4">{metrics.cache.hitRate.toFixed(1)}%</Typography>
                   <Typography variant="caption" color="textSecondary">
                     Hit Rate
                   </Typography>
@@ -546,14 +529,10 @@ export default function MonitoringDashboard() {
 
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
-                    <Typography variant="body2">
-                      Hits: {metrics.cache.hits}
-                    </Typography>
+                    <Typography variant="body2">Hits: {metrics.cache.hits}</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="body2">
-                      Misses: {metrics.cache.misses}
-                    </Typography>
+                    <Typography variant="body2">Misses: {metrics.cache.misses}</Typography>
                   </Grid>
                 </Grid>
 
@@ -561,14 +540,16 @@ export default function MonitoringDashboard() {
                   <Doughnut
                     data={{
                       labels: ['Hits', 'Misses'],
-                      datasets: [{
-                        data: [metrics.cache.hits, metrics.cache.misses],
-                        backgroundColor: ['#4caf50', '#f44336']
-                      }]
+                      datasets: [
+                        {
+                          data: [metrics.cache.hits, metrics.cache.misses],
+                          backgroundColor: ['#4caf50', '#f44336'],
+                        },
+                      ],
                     }}
                     options={{
                       responsive: true,
-                      maintainAspectRatio: false
+                      maintainAspectRatio: false,
                     }}
                     height={100}
                   />

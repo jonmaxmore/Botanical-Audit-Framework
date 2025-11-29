@@ -54,7 +54,7 @@ describe('PieChart', () => {
 
     const dataElement = screen.getByTestId('dataset-data-0');
     const dataValues = dataElement.textContent?.split(',') || [];
-    expect(dataValues.length).toBe(4);
+    expect(dataValues).toHaveLength(4);
     expect(dataElement).toHaveTextContent('32,45,8,15');
   });
 

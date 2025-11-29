@@ -53,12 +53,7 @@ export default function DashboardPage() {
             />
           </Grid>
           <Grid item xs={12} md={3}>
-            <KPICard
-              title="ไม่อนุมัติ"
-              value={stats.rejected}
-              icon={<div>❌</div>}
-              color="error"
-            />
+            <KPICard title="ไม่อนุมัติ" value={stats.rejected} icon={<div>❌</div>} color="error" />
           </Grid>
 
           <Grid item xs={12} md={8}>

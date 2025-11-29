@@ -1,6 +1,19 @@
 'use client';
 
-import { Container, Typography, Box, TextField, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+} from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Download } from '@mui/icons-material';
@@ -24,9 +37,27 @@ export default function AuditLogsPage() {
   if (loading) return <LoadingSpinner />;
 
   const logs = [
-    { id: 1, user: 'admin@gacp.go.th', action: 'Login', timestamp: '2025-01-15 10:30:00', ip: '192.168.1.1' },
-    { id: 2, user: 'reviewer@gacp.go.th', action: 'Approved Application', timestamp: '2025-01-15 11:45:00', ip: '192.168.1.2' },
-    { id: 3, user: 'inspector@gacp.go.th', action: 'Scheduled Inspection', timestamp: '2025-01-15 14:20:00', ip: '192.168.1.3' },
+    {
+      id: 1,
+      user: 'admin@gacp.go.th',
+      action: 'Login',
+      timestamp: '2025-01-15 10:30:00',
+      ip: '192.168.1.1',
+    },
+    {
+      id: 2,
+      user: 'reviewer@gacp.go.th',
+      action: 'Approved Application',
+      timestamp: '2025-01-15 11:45:00',
+      ip: '192.168.1.2',
+    },
+    {
+      id: 3,
+      user: 'inspector@gacp.go.th',
+      action: 'Scheduled Inspection',
+      timestamp: '2025-01-15 14:20:00',
+      ip: '192.168.1.3',
+    },
   ];
 
   return (
@@ -40,7 +71,7 @@ export default function AuditLogsPage() {
             fullWidth
             placeholder="Search logs..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
             InputProps={{
               startAdornment: <Search sx={{ mr: 1, color: 'text.secondary' }} />,
             }}
@@ -60,7 +91,7 @@ export default function AuditLogsPage() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {logs.map((log) => (
+              {logs.map(log => (
                 <TableRow key={log.id}>
                   <TableCell>{log.user}</TableCell>
                   <TableCell>{log.action}</TableCell>

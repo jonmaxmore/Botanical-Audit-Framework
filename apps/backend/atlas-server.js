@@ -738,6 +738,24 @@ async function startServer() {
       appLogger.info(
         `💾 Database: ${connected ? 'MongoDB Atlas Connected' : 'Disconnected - No Database'}`,
       );
+
+      // Initialize Certificate Management Module
+      if (connected) {
+        try {
+          const { initializeCertificateManagement } = require('./modules/certificate-management');
+          const sharedModule = require('./modules/shared');
+
+          const certModule = await initializeCertificateManagement(
+            mongoose.connection.db,
+            sharedModule.middleware.auth.authenticateToken
+          );
+          app.use('/api/certificates', certModule.router);
+          appLogger.info('✅ Certificate Management module mounted at /api/certificates');
+        } catch (err) {
+          appLogger.error('❌ Failed to mount Certificate module:', err.message);
+        }
+      }
+
       appLogger.info('');
       appLogger.info('🎯 Test Endpoints:');
       appLogger.info(`   POST http://localhost:${port}/api/auth/test-login`);

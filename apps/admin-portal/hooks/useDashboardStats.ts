@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import apiClient from '@/lib/api-client';
 
 export interface DashboardStats {
   totalApplications: number;
@@ -29,18 +30,25 @@ export function useDashboardStats() {
     try {
       setLoading(true);
       setError(null);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
 
+      const response = await apiClient.get('/dashboard/stats');
+
+      if (response.data.success) {
+        setStats(response.data.data);
+      } else {
+        // Fallback or error handling
+        throw new Error(response.data.message || 'Failed to fetch stats');
+      }
+    } catch (err: any) {
+      console.error('Failed to fetch stats:', err);
+      setError('ไม่สามารถโหลดข้อมูลสถิติได้ (Using Mock Data)');
+      // Fallback to mock data if API fails (e.g. endpoint not ready)
       setStats({
         totalApplications: 156,
         pendingReview: 23,
         approved: 98,
         rejected: 12,
       });
-    } catch (err: any) {
-      console.error('Failed to fetch stats:', err);
-      setError('ไม่สามารถโหลดข้อมูลสถิติได้');
     } finally {
       setLoading(false);
     }
@@ -57,3 +65,4 @@ export function useDashboardStats() {
     refreshStats: fetchStats,
   };
 }
+

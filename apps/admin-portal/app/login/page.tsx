@@ -13,8 +13,7 @@ import {
 } from '@mui/material';
 import { AdminPanelSettings as AdminIcon } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+import apiClient from '@/lib/api-client';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -29,27 +28,25 @@ export default function AdminLoginPage() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/auth/dtam/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+      // Use correct endpoint /auth-dtam/login
+      const response = await apiClient.post('/auth-dtam/login', { email, password });
+      const data = response.data;
 
-      const data = await response.json();
+      if (data.success) {
+        // Store token and user data
+        localStorage.setItem('admin_token', data.token);
+        localStorage.setItem('dtam_token', data.token);
+        localStorage.setItem('admin_user', JSON.stringify(data.user));
 
-      if (!response.ok) {
-        throw new Error(data.message || 'เข้าสู่ระบบไม่สำเร็จ');
+        // Redirect to dashboard
+        router.push('/dashboard');
+      } else {
+        throw new Error(data.message || 'Login failed');
       }
-
-      // Store token and user data
-      localStorage.setItem('admin_token', data.token);
-      localStorage.setItem('dtam_token', data.token);
-      localStorage.setItem('admin_user', JSON.stringify(data.user));
-
-      // Redirect to dashboard
-      router.push('/dashboard');
     } catch (err: any) {
-      setError(err.message || 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
+      console.error('Login error:', err);
+      setError(err.response?.data?.message || err.message || 'เกิดข้อผิดพลาดในการเข้าสู่ระบบ');
+    } finally {
       setLoading(false);
     }
   };
@@ -140,3 +137,4 @@ export default function AdminLoginPage() {
     </Box>
   );
 }
+

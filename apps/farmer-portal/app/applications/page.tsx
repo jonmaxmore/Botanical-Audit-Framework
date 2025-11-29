@@ -1,54 +1,69 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import apiClient from '../../lib/api-client';
+
+interface Application {
+  id: string;
+  farm: string;
+  crop: string;
+  status: string;
+  date: string;
+  progress: number;
+}
 
 export default function ApplicationsPage() {
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
+  const [applications, setApplications] = useState<Application[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const applications = [
-    {
-      id: '001',
-      farm: 'ฟาร์มสุขใจ',
-      crop: 'กัญชา',
-      status: 'document_review',
-      date: '15/01/2025',
-      progress: 60
-    },
-    {
-      id: '002',
-      farm: 'ฟาร์มปลอดภัย',
-      crop: 'ขมิ้น',
-      status: 'payment_pending',
-      date: '10/01/2025',
-      progress: 20
-    },
-    {
-      id: '003',
-      farm: 'ฟาร์มอินทรีย์',
-      crop: 'กัญชา',
-      status: 'approved',
-      date: '05/01/2025',
-      progress: 100
-    },
-    {
-      id: '004',
-      farm: 'ฟาร์มสุขใจ',
-      crop: 'ขิง',
-      status: 'inspection_scheduled',
-      date: '12/01/2025',
-      progress: 70
-    },
-    {
-      id: '005',
-      farm: 'ฟาร์มปลอดภัย',
-      crop: 'กระชาย',
-      status: 'submitted',
-      date: '18/01/2025',
-      progress: 10
-    }
-  ];
+  useEffect(() => {
+    const fetchApplications = async () => {
+      try {
+        const response = await apiClient.get('/applications');
+        // Transform API data to match UI needs if necessary
+        // Assuming API returns data in a compatible format or we map it here
+        const mappedApps = response.data.map((app: any) => ({
+          id: app._id || app.id,
+          farm: app.farmName || app.farm?.name || 'Unknown Farm',
+          crop: app.cropName || app.crop?.name || 'Unknown Crop',
+          status: app.status,
+          date: new Date(app.createdAt).toLocaleDateString('th-TH'),
+          progress: app.progress || 0
+        }));
+        setApplications(mappedApps);
+      } catch (err) {
+        console.error('Error fetching applications:', err);
+        setError('Failed to load applications.');
+        // Fallback to mock data
+        setApplications([
+          {
+            id: '001',
+            farm: 'ฟาร์มสุขใจ (Mock)',
+            crop: 'กัญชา',
+            status: 'document_review',
+            date: '15/01/2025',
+            progress: 60
+          },
+          {
+            id: '002',
+            farm: 'ฟาร์มปลอดภัย (Mock)',
+            crop: 'ขมิ้น',
+            status: 'payment_pending',
+            date: '10/01/2025',
+            progress: 20
+          }
+        ]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchApplications();
+  }, []);
 
   const statusMap: Record<string, { label: string; color: string; bg: string }> = {
     draft: { label: 'ร่าง', color: 'text-gray-800', bg: 'bg-gray-100' },
@@ -65,6 +80,8 @@ export default function ApplicationsPage() {
     if (search && !app.farm.includes(search) && !app.crop.includes(search)) return false;
     return true;
   });
+
+  if (loading) return <div className="p-6 text-center">Loading applications...</div>;
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -176,9 +193,9 @@ export default function ApplicationsPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
-                      className={`px-3 py-1 text-xs font-semibold rounded-full ${statusMap[app.status].bg} ${statusMap[app.status].color}`}
+                      className={`px-3 py-1 text-xs font-semibold rounded-full ${statusMap[app.status]?.bg || 'bg-gray-100'} ${statusMap[app.status]?.color || 'text-gray-800'}`}
                     >
-                      {statusMap[app.status].label}
+                      {statusMap[app.status]?.label || app.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">

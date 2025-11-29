@@ -49,7 +49,11 @@ export default function SettingsPage() {
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper sx={{ p: 3 }}>
-              <BackupRestore onBackup={async () => {}} onRestore={async (file: any) => {}} onDelete={async (id: any) => {}} />
+              <BackupRestore
+                onBackup={async () => {}}
+                onRestore={async (file: any) => {}}
+                onDelete={async (id: any) => {}}
+              />
             </Paper>
           </Grid>
         </Grid>

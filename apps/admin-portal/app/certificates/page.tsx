@@ -1,6 +1,15 @@
 'use client';
 
-import { Container, Typography, Box, TextField, Button, Grid, Card, CardContent } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  Grid,
+  Card,
+  CardContent,
+} from '@mui/material';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Search, Download } from '@mui/icons-material';
@@ -34,7 +43,7 @@ export default function CertificatesPage() {
             fullWidth
             placeholder="Search certificates..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={e => setSearch(e.target.value)}
             InputProps={{
               startAdornment: <Search sx={{ mr: 1, color: 'text.secondary' }} />,
             }}
@@ -44,7 +53,7 @@ export default function CertificatesPage() {
           </Button>
         </Box>
         <Grid container spacing={2}>
-          {[1, 2, 3].map((i) => (
+          {[1, 2, 3].map(i => (
             <Grid item xs={12} md={4} key={i}>
               <Card>
                 <CardContent>

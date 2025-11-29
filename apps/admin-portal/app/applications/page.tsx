@@ -199,7 +199,12 @@ export default function ApplicationsPage() {
             onVerifyDocument={handleVerifyDocument}
           />
 
-          <Dialog open={assignDialogOpen} onClose={() => setAssignDialogOpen(false)} maxWidth="sm" fullWidth>
+          <Dialog
+            open={assignDialogOpen}
+            onClose={() => setAssignDialogOpen(false)}
+            maxWidth="sm"
+            fullWidth
+          >
             <DialogTitle>มอบหมายผู้ตรวจสอบ</DialogTitle>
             <DialogContent>
               <TextField
@@ -207,10 +212,10 @@ export default function ApplicationsPage() {
                 fullWidth
                 label="เลือกผู้ตรวจสอบ"
                 value={selectedReviewer}
-                onChange={(e) => setSelectedReviewer(e.target.value)}
+                onChange={e => setSelectedReviewer(e.target.value)}
                 sx={{ mt: 2 }}
               >
-                {reviewersList.map((reviewer) => (
+                {reviewersList.map(reviewer => (
                   <MenuItem key={reviewer.id} value={reviewer.id}>
                     {reviewer.name}
                   </MenuItem>

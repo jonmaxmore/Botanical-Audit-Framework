@@ -1,7 +1,7 @@
 # 🏆 GACP Certificate Portal
 
-**Version**: 1.0.0  
-**Port**: 3003  
+**Version**: 1.0.0
+**Port**: 3003
 **Status**: ✅ Sprint 1 Development
 
 ## 📋 Overview
@@ -143,6 +143,10 @@ Password: password123
 ---
 
 ## 🎨 Tech Stack
+
+> [!WARNING]
+> **Tech Debt**: This portal currently uses **Material-UI (MUI)**, while the rest of the GACP platform uses a shared **Tailwind CSS** library (`@gacp/ui`).
+> Future refactoring should consider migrating to `@gacp/ui` for consistency, but this is a low-priority task as long as the UI remains functional.
 
 ### Frontend
 
@@ -367,7 +371,7 @@ npm run build
 
 ### Sprint 1-2 (Current)
 
-**Timeline**: Week 1-3  
+**Timeline**: Week 1-3
 **Status**: 🟡 In Progress
 
 #### Completed ✅
@@ -400,6 +404,6 @@ Copyright © 2025 GACP Platform. All rights reserved.
 
 ---
 
-**Last Updated**: October 15, 2025  
-**Version**: 1.0.0  
+**Last Updated**: October 15, 2025
+**Version**: 1.0.0
 **Status**: ✅ Active Development

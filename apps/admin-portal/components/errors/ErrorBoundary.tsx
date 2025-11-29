@@ -486,6 +486,5 @@ export function RetryErrorBoundary({
   );
 }
 
-
 // Default export for compatibility
 export default ErrorBoundary;

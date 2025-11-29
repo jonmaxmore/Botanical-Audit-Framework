@@ -30,14 +30,8 @@ export default function UsersPage() {
     <ErrorBoundary>
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4">
-            👥 User Management
-          </Typography>
-          <Button
-            variant="contained"
-            startIcon={<Add />}
-            onClick={() => setOpenDialog(true)}
-          >
+          <Typography variant="h4">👥 User Management</Typography>
+          <Button variant="contained" startIcon={<Add />} onClick={() => setOpenDialog(true)}>
             Add User
           </Button>
         </Box>

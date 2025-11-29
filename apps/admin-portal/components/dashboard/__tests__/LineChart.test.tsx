@@ -127,6 +127,6 @@ describe('LineChart', () => {
     // Check that default data has 7 data points (7 days)
     const dataset0 = screen.getByTestId('dataset-data-0');
     const dataPoints = dataset0.textContent?.split(',') || [];
-    expect(dataPoints.length).toBe(7);
+    expect(dataPoints).toHaveLength(7);
   });
 });

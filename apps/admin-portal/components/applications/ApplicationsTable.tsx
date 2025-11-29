@@ -367,8 +367,10 @@ export default function ApplicationsTable({
                   <TableCell>
                     {application.assignedReviewer ? (
                       <Typography variant="body2">
-                        {typeof application.assignedReviewer === 'object' && application.assignedReviewer !== null
-                          ? (application.assignedReviewer as any).name || String(application.assignedReviewer)
+                        {typeof application.assignedReviewer === 'object' &&
+                        application.assignedReviewer !== null
+                          ? (application.assignedReviewer as any).name ||
+                            String(application.assignedReviewer)
                           : String(application.assignedReviewer)}
                       </Typography>
                     ) : (

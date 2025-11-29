@@ -313,7 +313,7 @@ describe('AuthContext', () => {
 
       await waitFor(() => {
         // Should not have any new setItem calls
-        expect(localStorageMock.setItem.mock.calls.length).toBe(initialSetItemCount);
+        expect(localStorageMock.setItem.mock.calls).toHaveLength(initialSetItemCount);
       });
     });
   });

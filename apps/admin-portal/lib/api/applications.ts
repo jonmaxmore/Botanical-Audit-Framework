@@ -3,7 +3,7 @@
  * Admin Portal - Application Review & Management
  */
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+import apiClient from '@/lib/api-client';
 
 // ==================== Interfaces ====================
 
@@ -134,36 +134,6 @@ export interface InspectionResult {
   photos?: string[];
 }
 
-// ==================== Helper Functions ====================
-
-function getAuthToken(): string | null {
-  if (typeof window === 'undefined') return null;
-  return localStorage.getItem('admin_token') || localStorage.getItem('dtam_token');
-}
-
-function createHeaders(): HeadersInit {
-  const headers: HeadersInit = {
-    'Content-Type': 'application/json',
-  };
-
-  const token = getAuthToken();
-  if (token) {
-    headers['Authorization'] = `Bearer ${token}`;
-  }
-
-  return headers;
-}
-
-async function handleResponse<T>(response: Response): Promise<T> {
-  if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Unknown error' }));
-    throw new Error(error.message || `HTTP error! status: ${response.status}`);
-  }
-
-  const data = await response.json();
-  return data.data || data;
-}
-
 // ==================== API Functions ====================
 
 /**
@@ -179,22 +149,8 @@ export async function getApplications(params?: {
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }): Promise<ApplicationsListResponse> {
-  const queryParams = new URLSearchParams();
-  if (params?.page) queryParams.append('page', params.page.toString());
-  if (params?.limit) queryParams.append('limit', params.limit.toString());
-  if (params?.status) queryParams.append('status', params.status);
-  if (params?.cropType) queryParams.append('cropType', params.cropType);
-  if (params?.assignedTo) queryParams.append('assignedTo', params.assignedTo);
-  if (params?.search) queryParams.append('search', params.search);
-  if (params?.sortBy) queryParams.append('sortBy', params.sortBy);
-  if (params?.sortOrder) queryParams.append('sortOrder', params.sortOrder);
-
-  const response = await fetch(`${API_BASE_URL}/applications?${queryParams}`, {
-    method: 'GET',
-    headers: createHeaders(),
-  });
-
-  return handleResponse<ApplicationsListResponse>(response);
+  const response = await apiClient.get('/applications', { params });
+  return response.data;
 }
 
 /**
@@ -203,12 +159,8 @@ export async function getApplications(params?: {
 export async function getApplicationById(
   id: string
 ): Promise<{ success: boolean; data: Application }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${id}`, {
-    method: 'GET',
-    headers: createHeaders(),
-  });
-
-  return handleResponse<{ success: boolean; data: Application }>(response);
+  const response = await apiClient.get(`/applications/${id}`);
+  return response.data;
 }
 
 /**
@@ -218,13 +170,8 @@ export async function assignReviewer(
   applicationId: string,
   reviewerId: string
 ): Promise<{ success: boolean; message: string }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/assign-reviewer`, {
-    method: 'POST',
-    headers: createHeaders(),
-    body: JSON.stringify({ reviewerId }),
-  });
-
-  return handleResponse<{ success: boolean; message: string }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/assign-reviewer`, { reviewerId });
+  return response.data;
 }
 
 /**
@@ -233,12 +180,8 @@ export async function assignReviewer(
 export async function startReview(
   applicationId: string
 ): Promise<{ success: boolean; message: string }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/review`, {
-    method: 'POST',
-    headers: createHeaders(),
-  });
-
-  return handleResponse<{ success: boolean; message: string }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/review`);
+  return response.data;
 }
 
 /**
@@ -248,13 +191,8 @@ export async function completeReview(
   applicationId: string,
   decision: ReviewDecision
 ): Promise<{ success: boolean; message: string; data: Application }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/review/complete`, {
-    method: 'POST',
-    headers: createHeaders(),
-    body: JSON.stringify(decision),
-  });
-
-  return handleResponse<{ success: boolean; message: string; data: Application }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/review/complete`, decision);
+  return response.data;
 }
 
 /**
@@ -264,13 +202,8 @@ export async function assignInspector(
   applicationId: string,
   inspectorId: string
 ): Promise<{ success: boolean; message: string }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/assign-inspector`, {
-    method: 'POST',
-    headers: createHeaders(),
-    body: JSON.stringify({ inspectorId }),
-  });
-
-  return handleResponse<{ success: boolean; message: string }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/assign-inspector`, { inspectorId });
+  return response.data;
 }
 
 /**
@@ -279,12 +212,8 @@ export async function assignInspector(
 export async function startInspection(
   applicationId: string
 ): Promise<{ success: boolean; message: string }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/inspection/start`, {
-    method: 'POST',
-    headers: createHeaders(),
-  });
-
-  return handleResponse<{ success: boolean; message: string }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/inspection/start`);
+  return response.data;
 }
 
 /**
@@ -294,16 +223,8 @@ export async function completeInspection(
   applicationId: string,
   result: InspectionResult
 ): Promise<{ success: boolean; message: string; data: Application }> {
-  const response = await fetch(
-    `${API_BASE_URL}/applications/${applicationId}/inspection/complete`,
-    {
-      method: 'POST',
-      headers: createHeaders(),
-      body: JSON.stringify(result),
-    }
-  );
-
-  return handleResponse<{ success: boolean; message: string; data: Application }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/inspection/complete`, result);
+  return response.data;
 }
 
 /**
@@ -316,13 +237,8 @@ export async function approveApplication(
     certificateData?: Record<string, any>;
   }
 ): Promise<{ success: boolean; message: string; data: Application }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/approve`, {
-    method: 'POST',
-    headers: createHeaders(),
-    body: JSON.stringify(approvalData),
-  });
-
-  return handleResponse<{ success: boolean; message: string; data: Application }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/approve`, approvalData);
+  return response.data;
 }
 
 /**
@@ -335,13 +251,8 @@ export async function rejectApplication(
     comments: string;
   }
 ): Promise<{ success: boolean; message: string; data: Application }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/reject`, {
-    method: 'POST',
-    headers: createHeaders(),
-    body: JSON.stringify(rejectionData),
-  });
-
-  return handleResponse<{ success: boolean; message: string; data: Application }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/reject`, rejectionData);
+  return response.data;
 }
 
 /**
@@ -354,13 +265,8 @@ export async function addComment(
     type?: 'review' | 'inspection' | 'general';
   }
 ): Promise<{ success: boolean; message: string; data: Comment }> {
-  const response = await fetch(`${API_BASE_URL}/applications/${applicationId}/comments`, {
-    method: 'POST',
-    headers: createHeaders(),
-    body: JSON.stringify(commentData),
-  });
-
-  return handleResponse<{ success: boolean; message: string; data: Comment }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/comments`, commentData);
+  return response.data;
 }
 
 /**
@@ -372,16 +278,8 @@ export async function verifyDocument(
   verified: boolean,
   rejectionReason?: string
 ): Promise<{ success: boolean; message: string }> {
-  const response = await fetch(
-    `${API_BASE_URL}/applications/${applicationId}/documents/${documentId}/verify`,
-    {
-      method: 'POST',
-      headers: createHeaders(),
-      body: JSON.stringify({ verified, rejectionReason }),
-    }
-  );
-
-  return handleResponse<{ success: boolean; message: string }>(response);
+  const response = await apiClient.post(`/applications/${applicationId}/documents/${documentId}/verify`, { verified, rejectionReason });
+  return response.data;
 }
 
 /**
@@ -394,12 +292,8 @@ export async function getApplicationStats(): Promise<{
   byProvince: Record<string, number>;
   recentActivity: TimelineEvent[];
 }> {
-  const response = await fetch(`${API_BASE_URL}/applications/stats`, {
-    method: 'GET',
-    headers: createHeaders(),
-  });
-
-  return handleResponse(response);
+  const response = await apiClient.get('/applications/stats');
+  return response.data.data;
 }
 
 /**
@@ -411,22 +305,8 @@ export async function exportApplicationsCSV(filters?: {
   startDate?: string;
   endDate?: string;
 }): Promise<Blob> {
-  const queryParams = new URLSearchParams();
-  if (filters?.status) queryParams.append('status', filters.status);
-  if (filters?.cropType) queryParams.append('cropType', filters.cropType);
-  if (filters?.startDate) queryParams.append('startDate', filters.startDate);
-  if (filters?.endDate) queryParams.append('endDate', filters.endDate);
-
-  const response = await fetch(`${API_BASE_URL}/applications/export/csv?${queryParams}`, {
-    method: 'GET',
-    headers: createHeaders(),
-  });
-
-  if (!response.ok) {
-    throw new Error('Failed to export applications');
-  }
-
-  return response.blob();
+  const response = await apiClient.get('/applications/export/csv', { params: filters, responseType: 'blob' });
+  return response.data;
 }
 
 /**
@@ -465,3 +345,4 @@ export function getMockApplicationsData(): Application[] {
     // Add more mock data...
   ];
 }
+

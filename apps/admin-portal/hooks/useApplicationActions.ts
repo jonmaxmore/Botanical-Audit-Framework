@@ -15,7 +15,7 @@ export function useApplicationActions(onSuccess?: () => void) {
   };
 
   const handleCloseSnackbar = () => {
-    setSnackbar((prev) => ({ ...prev, open: false }));
+    setSnackbar(prev => ({ ...prev, open: false }));
   };
 
   const assignReviewer = async (application: Application, reviewerId: string) => {
@@ -92,13 +92,17 @@ export function useApplicationActions(onSuccess?: () => void) {
     }
   };
 
-  const verifyDocument = async (application: Application, documentId: string, verified: boolean) => {
+  const verifyDocument = async (
+    application: Application,
+    documentId: string,
+    verified: boolean
+  ) => {
     try {
       await applicationsApi.verifyDocument(
         application.id,
         documentId,
         verified,
-        verified ? undefined : 'ยกเลิกการยืนยัน',
+        verified ? undefined : 'ยกเลิกการยืนยัน'
       );
       showSnackbar(verified ? 'ยืนยันเอกสารสำเร็จ' : 'ยกเลิกการยืนยันสำเร็จ');
       onSuccess?.();

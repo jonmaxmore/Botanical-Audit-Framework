@@ -14,7 +14,8 @@
     "build:tsc": "tsc --noEmit",
     "lint": "eslint . --ext .js,.ts",
     "lint:fix": "eslint . --ext .js,.ts --fix",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "db:manager": "node scripts/db-manager.js"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.700.0",
