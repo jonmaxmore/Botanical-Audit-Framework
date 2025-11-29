@@ -141,7 +141,7 @@ const imageOptimization = {
   processImage: async (buffer, options = {}) => {
     const sharp = require('sharp');
 
-    const { width = 800, height = 600, quality = 80, _format = 'jpeg' } = options;
+    const { width = 800, height = 600, quality = 80 } = options;
 
     try {
       const processed = await sharp(buffer)

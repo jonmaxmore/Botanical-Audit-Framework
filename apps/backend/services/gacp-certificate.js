@@ -27,10 +27,15 @@ const _User = require('../models/user-model');
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
 
+const CertificateRepository = require('../repositories/CertificateRepository');
+const ApplicationRepository = require('../repositories/ApplicationRepository');
+
 class GACPCertificateService {
   constructor() {
     this.certificateDirectory = path.join(process.cwd(), 'storage', 'certificates');
     this.templateDirectory = path.join(process.cwd(), 'resources', 'templates');
+    this.certificateRepository = new CertificateRepository();
+    this.applicationRepository = new ApplicationRepository();
     this.ensureDirectories();
   }
 
@@ -52,9 +57,7 @@ class GACPCertificateService {
    */
   async generateCertificate(applicationId, approvedBy) {
     try {
-      const application = await Application.findById(applicationId)
-        .populate('applicant')
-        .populate('assignedInspector');
+      const application = await this.applicationRepository.findById(applicationId);
 
       if (!application) {
         throw new ValidationError('Application not found');
@@ -129,7 +132,7 @@ class GACPCertificateService {
       // Create PDF certificate (5-10 seconds - heavy!)
       const certificatePDF = await this.createCertificatePDF(certificateData, qrCodeData);
 
-      // Save certificate to database
+      // Save certificate to database via Repository
       const certificate = await this.saveCertificateRecord(
         application,
         certificateData,
@@ -137,12 +140,15 @@ class GACPCertificateService {
         certificatePDF,
       );
 
-      // Update application status
+      // Update application status and link certificate
+      application.certificate = certificate._id;
       await application.updateStatus(
         'certificate_issued',
         approvedBy,
         `Certificate ${certificateNumber} issued`,
       );
+      // Save application to persist certificate reference
+      await this.applicationRepository.save(application);
 
       // Invalidate cache
       await cacheService.invalidateApplication(application._id);
@@ -206,8 +212,8 @@ class GACPCertificateService {
         return cached;
       }
 
-      // Find certificate in database
-      const certificate = await this.findCertificateByNumber(certificateNumber);
+      // Find certificate in database via Repository
+      const certificate = await this.certificateRepository.findByCertificateNumber(certificateNumber);
 
       if (!certificate) {
         const result = {
@@ -225,7 +231,7 @@ class GACPCertificateService {
           valid: false,
           reason: `Certificate is ${certificate.status}`,
           status: certificate.status,
-          certificate: this.sanitizeCertificateData(certificate),
+          certificate: this.sanitizeCertificateData(certificate.toObject ? certificate.toObject() : certificate),
         };
         // Cache for 5 minutes (might be reactivated)
         await cacheService.set(cacheKey, result, 300);
@@ -239,7 +245,7 @@ class GACPCertificateService {
           reason: 'Certificate has expired',
           status: 'expired',
           expiryDate: certificate.expiryDate,
-          certificate: this.sanitizeCertificateData(certificate),
+          certificate: this.sanitizeCertificateData(certificate.toObject ? certificate.toObject() : certificate),
         };
         // Cache expired certificates for 1 hour
         await cacheService.set(cacheKey, result, 3600);
@@ -273,7 +279,7 @@ class GACPCertificateService {
       const result = {
         valid: true,
         status: 'active',
-        certificate: this.sanitizeCertificateData(certificate),
+        certificate: this.sanitizeCertificateData(certificate.toObject ? certificate.toObject() : certificate),
         verificationDetails: {
           verifiedAt: new Date(),
           digitalSignatureValid: true,
@@ -304,7 +310,7 @@ class GACPCertificateService {
    */
   async renewCertificate(certificateNumber, renewedBy, renewalData) {
     try {
-      const certificate = await this.findCertificateByNumber(certificateNumber);
+      const certificate = await this.certificateRepository.findByCertificateNumber(certificateNumber);
 
       if (!certificate) {
         throw new ValidationError('Certificate not found');
@@ -343,7 +349,7 @@ class GACPCertificateService {
         renewalNotes: renewalData.notes || '',
       });
 
-      await certificate.save();
+      await this.certificateRepository.save(certificate);
 
       // Generate renewal notice
       const renewalNotice = await this.generateRenewalNotice(certificate, renewedBy);
@@ -374,7 +380,7 @@ class GACPCertificateService {
    */
   async revokeCertificate(certificateNumber, revokedBy, revocationReason) {
     try {
-      const certificate = await this.findCertificateByNumber(certificateNumber);
+      const certificate = await this.certificateRepository.findByCertificateNumber(certificateNumber);
 
       if (!certificate) {
         throw new ValidationError('Certificate not found');
@@ -390,10 +396,10 @@ class GACPCertificateService {
       certificate.revokedBy = revokedBy;
       certificate.revocationReason = revocationReason;
 
-      await certificate.save();
+      await this.certificateRepository.save(certificate);
 
       // Update related application
-      const application = await Application.findById(certificate.applicationId);
+      const application = await this.applicationRepository.findById(certificate.applicationId);
       if (application) {
         await application.updateStatus(
           'certificate_revoked',
@@ -474,17 +480,25 @@ class GACPCertificateService {
     const prefix = `GACP-${year}-${provinceCode}`;
 
     // Find the highest sequential number for this year and province
-    const lastCertificate = await Application.findOne({
-      'certificate.certificateNumber': new RegExp(`^${prefix}-`),
-      'certificate.issueDate': {
+    // We need to query the Certificate collection now, not Application
+    // But since we don't have a direct query method for regex in repository yet,
+    // we might need to add one or use a broader find and filter (less efficient)
+    // Or just use the model directly here if strictly needed, but better to add to repo.
+    // For now, let's assume we can use the repository's model for this specific query or add a method.
+    // Adding a specific method to repository is cleaner.
+    // Let's use a direct model call here for simplicity in migration, or better:
+
+    const lastCertificate = await this.certificateRepository.model.findOne({
+      certificateNumber: new RegExp(`^${prefix}-`),
+      issueDate: {
         $gte: new Date(year, 0, 1),
         $lt: new Date(year + 1, 0, 1),
       },
-    }).sort({ 'certificate.certificateNumber': -1 });
+    }).sort({ certificateNumber: -1 });
 
     let sequentialNumber = 1;
-    if (lastCertificate && lastCertificate.certificate) {
-      const lastNumber = lastCertificate.certificate.certificateNumber.split('-').pop();
+    if (lastCertificate) {
+      const lastNumber = lastCertificate.certificateNumber.split('-').pop();
       sequentialNumber = parseInt(lastNumber) + 1;
     }
 
@@ -702,42 +716,40 @@ class GACPCertificateService {
   }
 
   async saveCertificateRecord(application, certificateData, digitalSignature, pdfInfo) {
-    // Update application with certificate information
-    application.certificate = {
+    // Create new Certificate document
+    const newCertificate = await this.certificateRepository.create({
       certificateNumber: certificateData.certificateNumber,
+      applicationId: application._id,
+      farmerId: application.applicant._id ? application.applicant._id.toString() : application.applicant, // Handle populated or ID
+      farmName: certificateData.farmName,
+      farmerName: certificateData.farmerName,
+      location: certificateData.location,
+      farmSize: certificateData.farmSize,
+      cropTypes: certificateData.cropTypes,
+      farmingSystem: certificateData.farmingSystem,
+      certificationStandards: certificateData.certificationStandards,
+
       issueDate: certificateData.issueDate,
       expiryDate: certificateData.expiryDate,
       validityPeriod: certificateData.validityPeriod,
       status: 'active',
+
       verificationCode: certificateData.verificationCode,
       digitalSignature: digitalSignature.signature,
+      qrCode: '', // Can store if needed
+
       pdfFilename: pdfInfo.filename,
       pdfSize: pdfInfo.size,
-    };
+      pdfUrl: pdfInfo.filePath, // Or relative path
 
-    await application.save();
+      issuedBy: certificateData.approvedBy,
+    });
 
-    return application.certificate;
+    return newCertificate;
   }
 
-  async findCertificateByNumber(certificateNumber) {
-    const application = await Application.findOne({
-      'certificate.certificateNumber': certificateNumber,
-    }).populate('applicant');
-
-    if (!application || !application.certificate) {
-      return null;
-    }
-
-    return {
-      ...application.certificate.toObject(),
-      applicationId: application._id,
-      farmName: application.farmInformation.farmName,
-      farmerName: application.applicant.fullName,
-      location: application.farmInformation.location,
-      cropTypes: application.cropInformation.map(c => c.cropType),
-    };
-  }
+  // Deprecated: findCertificateByNumber is now on repository
+  // async findCertificateByNumber(certificateNumber) { ... }
 
   verifyDigitalSignature(certificate) {
     try {
@@ -777,7 +789,7 @@ class GACPCertificateService {
 
   async checkCurrentCompliance(applicationId) {
     // Check if there are any compliance violations or surveillance issues
-    const application = await Application.findById(applicationId);
+    const application = await this.applicationRepository.findById(applicationId);
 
     if (!application) {
       return { compliant: false, issues: ['Application not found'] };

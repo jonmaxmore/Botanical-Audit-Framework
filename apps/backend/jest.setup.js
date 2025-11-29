@@ -1,4 +1,3 @@
-/* global jest */
 /**
  * Jest test harness setup for the backend service.
  * - Normalises environment variables for integration tests

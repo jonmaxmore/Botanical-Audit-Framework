@@ -1,25 +1,18 @@
 /**
  * ApplicationRepository
- * Data access layer for Application collection (updated with new fields)
+ * Data access layer for Application collection using Mongoose
  *
  * @module repositories/application
- * @version 2.0.0
+ * @version 2.1.0
  */
 
-const logger = require('../utils/logger');
+const logger = require('../shared/logger');
+const Application = require('../models/application');
+const { ApplicationStatus } = require('../models/application');
 
 class ApplicationRepository {
-  constructor(database) {
-    this.db = database;
-    this.collectionName = 'applications';
-  }
-
-  /**
-   * Get applications collection
-   * @private
-   */
-  get collection() {
-    return this.db.collection(this.collectionName);
+  constructor() {
+    this.model = Application;
   }
 
   /**
@@ -29,7 +22,10 @@ class ApplicationRepository {
    */
   async findById(applicationId) {
     try {
-      return await this.collection.findOne({ _id: applicationId });
+      return await this.model.findById(applicationId)
+        .populate('applicant')
+        .populate('assignedOfficer')
+        .populate('assignedInspector');
     } catch (error) {
       logger.error('[ApplicationRepository] findById error:', error);
       throw error;
@@ -37,20 +33,59 @@ class ApplicationRepository {
   }
 
   /**
+   * Find application by ID (lean version for performance)
+   * @param {string} applicationId - Application ID
+   * @returns {Promise<Object|null>} Plain object
+   */
+  async findByIdLean(applicationId) {
+    try {
+      return await this.model.findById(applicationId).lean();
+    } catch (error) {
+      logger.error('[ApplicationRepository] findByIdLean error:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Find active application for a farmer
+   * @param {string} farmerId
+   * @returns {Promise<Object|null>}
+   */
+  async findActiveByFarmer(farmerId) {
+    try {
+      return await this.model.findOne({
+        applicant: farmerId,
+        currentStatus: {
+          $nin: [
+            ApplicationStatus.APPROVED,
+            ApplicationStatus.REJECTED,
+            ApplicationStatus.CERTIFICATE_ISSUED
+          ],
+        },
+      });
+    } catch (error) {
+      logger.error('[ApplicationRepository] findActiveByFarmer error:', error);
+      throw error;
+    }
+  }
+
+  /**
    * Find applications by farmer ID
    * @param {string} farmerId - Farmer ID
-   * @param {Object} filters - Optional filters (status)
+   * @param {Object} filters - Optional filters
    * @returns {Promise<Array>} List of applications
    */
   async findByFarmer(farmerId, filters = {}) {
     try {
-      const query = { farmerId };
+      const query = { applicant: farmerId };
 
       if (filters.status) {
-        query.status = filters.status;
+        query.currentStatus = filters.status;
       }
 
-      return await this.collection.find(query).sort({ submittedAt: -1 }).toArray();
+      return await this.model.find(query)
+        .sort({ submissionDate: -1 })
+        .populate('assignedOfficer', 'name email');
     } catch (error) {
       logger.error('[ApplicationRepository] findByFarmer error:', error);
       throw error;
@@ -64,7 +99,9 @@ class ApplicationRepository {
    */
   async findByStatus(status) {
     try {
-      return await this.collection.find({ status }).sort({ submittedAt: -1 }).toArray();
+      return await this.model.find({ currentStatus: status })
+        .populate('applicant', 'name email phone')
+        .sort({ submissionDate: -1 });
     } catch (error) {
       logger.error('[ApplicationRepository] findByStatus error:', error);
       throw error;
@@ -74,30 +111,21 @@ class ApplicationRepository {
   /**
    * Create new application
    * @param {Object} applicationData - Application data
-   * @returns {Promise<Object>} Created application
+   * @param {Object} session - Mongoose session (optional)
+   * @returns {Promise<Object>} Created application document
    */
-  async create(applicationData) {
+  async create(applicationData, session = null) {
     try {
-      const result = await this.collection.insertOne({
-        ...applicationData,
-        payments: [],
-        assignments: [],
-        kpis: [],
-        submissionCount: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      });
+      const application = new this.model(applicationData);
 
-      return {
-        id: result.insertedId,
-        ...applicationData,
-        payments: [],
-        assignments: [],
-        kpis: [],
-        submissionCount: 1,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+      // If session is provided, save with session
+      if (session) {
+        await application.save({ session });
+      } else {
+        await application.save();
+      }
+
+      return application;
     } catch (error) {
       logger.error('[ApplicationRepository] create error:', error);
       throw error;
@@ -112,18 +140,16 @@ class ApplicationRepository {
    */
   async update(applicationId, updateData) {
     try {
-      const result = await this.collection.findOneAndUpdate(
-        { _id: applicationId },
+      return await this.model.findByIdAndUpdate(
+        applicationId,
         {
           $set: {
             ...updateData,
             updatedAt: new Date(),
           },
         },
-        { returnDocument: 'after' },
+        { new: true, runValidators: true }
       );
-
-      return result.value;
     } catch (error) {
       logger.error('[ApplicationRepository] update error:', error);
       throw error;
@@ -131,201 +157,16 @@ class ApplicationRepository {
   }
 
   /**
-   * Add payment to application
-   * @param {string} applicationId - Application ID
-   * @param {Object} paymentData - Payment data
-   * @returns {Promise<Object|null>} Updated application
+   * Save an application document
+   * Useful when modifying the document instance directly
+   * @param {Object} application - Mongoose document
+   * @returns {Promise<Object>} Saved document
    */
-  async addPayment(applicationId, paymentData) {
+  async save(application) {
     try {
-      const result = await this.collection.findOneAndUpdate(
-        { _id: applicationId },
-        {
-          $push: {
-            payments: {
-              paymentId: paymentData.id,
-              type: paymentData.type,
-              amount: paymentData.amount,
-              status: paymentData.status,
-              createdAt: paymentData.createdAt,
-            },
-          },
-          $set: { updatedAt: new Date() },
-        },
-        { returnDocument: 'after' },
-      );
-
-      return result.value;
+      return await application.save();
     } catch (error) {
-      logger.error('[ApplicationRepository] addPayment error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Update payment status in application
-   * @param {string} applicationId - Application ID
-   * @param {string} paymentId - Payment ID
-   * @param {string} status - New status
-   * @returns {Promise<Object|null>} Updated application
-   */
-  async updatePaymentStatus(applicationId, paymentId, status) {
-    try {
-      const result = await this.collection.findOneAndUpdate(
-        {
-          _id: applicationId,
-          'payments.paymentId': paymentId,
-        },
-        {
-          $set: {
-            'payments.$.status': status,
-            updatedAt: new Date(),
-          },
-        },
-        { returnDocument: 'after' },
-      );
-
-      return result.value;
-    } catch (error) {
-      logger.error('[ApplicationRepository] updatePaymentStatus error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Add assignment to application
-   * @param {string} applicationId - Application ID
-   * @param {Object} assignmentData - Assignment data
-   * @returns {Promise<Object|null>} Updated application
-   */
-  async addAssignment(applicationId, assignmentData) {
-    try {
-      const result = await this.collection.findOneAndUpdate(
-        { _id: applicationId },
-        {
-          $push: {
-            assignments: {
-              assignmentId: assignmentData.id,
-              assignedTo: assignmentData.assignedTo,
-              role: assignmentData.role,
-              status: assignmentData.status,
-              assignedAt: assignmentData.assignedAt,
-            },
-          },
-          $set: { updatedAt: new Date() },
-        },
-        { returnDocument: 'after' },
-      );
-
-      return result.value;
-    } catch (error) {
-      logger.error('[ApplicationRepository] addAssignment error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Update assignment status in application
-   * @param {string} applicationId - Application ID
-   * @param {string} assignmentId - Assignment ID
-   * @param {string} status - New status
-   * @returns {Promise<Object|null>} Updated application
-   */
-  async updateAssignmentStatus(applicationId, assignmentId, status) {
-    try {
-      const result = await this.collection.findOneAndUpdate(
-        {
-          _id: applicationId,
-          'assignments.assignmentId': assignmentId,
-        },
-        {
-          $set: {
-            'assignments.$.status': status,
-            updatedAt: new Date(),
-          },
-        },
-        { returnDocument: 'after' },
-      );
-
-      return result.value;
-    } catch (error) {
-      logger.error('[ApplicationRepository] updateAssignmentStatus error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Add KPI record to application
-   * @param {string} applicationId - Application ID
-   * @param {Object} kpiData - KPI data
-   * @returns {Promise<Object|null>} Updated application
-   */
-  async addKPI(applicationId, kpiData) {
-    try {
-      const result = await this.collection.findOneAndUpdate(
-        { _id: applicationId },
-        {
-          $push: {
-            kpis: {
-              taskId: kpiData.taskId,
-              role: kpiData.role,
-              userId: kpiData.userId,
-              status: kpiData.status,
-              startTime: kpiData.startTime,
-              endTime: kpiData.endTime,
-              processingTime: kpiData.processingTime,
-            },
-          },
-          $set: { updatedAt: new Date() },
-        },
-        { returnDocument: 'after' },
-      );
-
-      return result.value;
-    } catch (error) {
-      logger.error('[ApplicationRepository] addKPI error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Increment submission count
-   * @param {string} applicationId - Application ID
-   * @returns {Promise<Object|null>} Updated application
-   */
-  async incrementSubmissionCount(applicationId) {
-    try {
-      const result = await this.collection.findOneAndUpdate(
-        { _id: applicationId },
-        {
-          $inc: { submissionCount: 1 },
-          $set: { updatedAt: new Date() },
-        },
-        { returnDocument: 'after' },
-      );
-
-      return result.value;
-    } catch (error) {
-      logger.error('[ApplicationRepository] incrementSubmissionCount error:', error);
-      throw error;
-    }
-  }
-
-  /**
-   * Get submission count
-   * @param {string} applicationId - Application ID
-   * @returns {Promise<number>} Submission count
-   */
-  async getSubmissionCount(applicationId) {
-    try {
-      const application = await this.collection.findOne(
-        { _id: applicationId },
-        { projection: { submissionCount: 1 } },
-      );
-
-      return application?.submissionCount || 0;
-    } catch (error) {
-      logger.error('[ApplicationRepository] getSubmissionCount error:', error);
+      logger.error('[ApplicationRepository] save error:', error);
       throw error;
     }
   }
@@ -337,7 +178,7 @@ class ApplicationRepository {
    */
   async delete(applicationId) {
     try {
-      const result = await this.collection.deleteOne({ _id: applicationId });
+      const result = await this.model.deleteOne({ _id: applicationId });
       return result.deletedCount > 0;
     } catch (error) {
       logger.error('[ApplicationRepository] delete error:', error);
@@ -347,7 +188,7 @@ class ApplicationRepository {
 
   /**
    * Get application statistics
-   * @param {Object} filters - Optional filters (startDate, endDate, status)
+   * @param {Object} filters - Optional filters
    * @returns {Promise<Object>} Statistics
    */
   async getStatistics(filters = {}) {
@@ -355,33 +196,26 @@ class ApplicationRepository {
       const query = {};
 
       if (filters.startDate || filters.endDate) {
-        query.submittedAt = {};
+        query.submissionDate = {};
         if (filters.startDate) {
-          query.submittedAt.$gte = new Date(filters.startDate);
+          query.submissionDate.$gte = new Date(filters.startDate);
         }
         if (filters.endDate) {
-          query.submittedAt.$lte = new Date(filters.endDate);
+          query.submissionDate.$lte = new Date(filters.endDate);
         }
-      }
-
-      if (filters.status) {
-        query.status = filters.status;
       }
 
       const [totalCount, statusBreakdown] = await Promise.all([
-        this.collection.countDocuments(query),
-
-        this.collection
-          .aggregate([
-            { $match: query },
-            {
-              $group: {
-                _id: '$status',
-                count: { $sum: 1 },
-              },
+        this.model.countDocuments(query),
+        this.model.aggregate([
+          { $match: query },
+          {
+            $group: {
+              _id: '$currentStatus',
+              count: { $sum: 1 },
             },
-          ])
-          .toArray(),
+          },
+        ]),
       ]);
 
       return {
@@ -398,35 +232,50 @@ class ApplicationRepository {
   }
 
   /**
-   * Find applications with pending payments
+   * Find all applications with pagination and sorting
+   * @param {Object} query - Mongoose query object
+   * @param {Object} options - Pagination and sorting options
    * @returns {Promise<Array>} List of applications
    */
-  async findWithPendingPayments() {
+  async findAll(query = {}, options = {}) {
     try {
-      return await this.collection
-        .find({
-          'payments.status': 'pending',
-        })
-        .sort({ submittedAt: -1 })
-        .toArray();
+      const page = options.page || 1;
+      const limit = options.limit || 20;
+      const skip = (page - 1) * limit;
+      const sort = options.sort || { createdAt: -1 };
+
+      return await this.model.find(query)
+        .populate('applicant')
+        .populate('assignedOfficer')
+        .sort(sort)
+        .skip(skip)
+        .limit(limit);
     } catch (error) {
-      logger.error('[ApplicationRepository] findWithPendingPayments error:', error);
+      logger.error('[ApplicationRepository] findAll error:', error);
       throw error;
     }
   }
 
   /**
-   * Find recent applications
-   * @param {number} limit - Number of records
-   * @returns {Promise<Array>} List of applications
+   * Count documents matching query
+   * @param {Object} query - Mongoose query object
+   * @returns {Promise<number>} Count
    */
-  async findRecent(limit = 10) {
+  async count(query = {}) {
     try {
-      return await this.collection.find().sort({ submittedAt: -1 }).limit(limit).toArray();
+      return await this.model.countDocuments(query);
     } catch (error) {
-      logger.error('[ApplicationRepository] findRecent error:', error);
+      logger.error('[ApplicationRepository] count error:', error);
       throw error;
     }
+  }
+
+  /**
+   * Start a transaction session
+   * @returns {Promise<Object>} Mongoose session
+   */
+  async startSession() {
+    return await this.model.startSession();
   }
 }
 

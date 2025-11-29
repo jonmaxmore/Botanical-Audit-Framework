@@ -4,7 +4,7 @@
  */
 
 const Joi = require('joi');
-const _logger = require('../shared/logger');
+
 
 /**
  * Generic request validation middleware

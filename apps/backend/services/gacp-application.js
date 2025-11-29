@@ -11,41 +11,33 @@
  */
 
 const logger = require('../shared/logger');
+const ApplicationRepository = require('../repositories/ApplicationRepository');
 
 // Phase 2 Services Integration
 const queueService = require('./queue/queueService');
 const cacheService = require('./cache/cacheService');
 
-// Import Models (with fallback to mock if MongoDB unavailable)
-let Application, User, mongoose;
+// Import Models (User still needed for farmer/officer checks)
+let User, mongoose;
 try {
-  Application = require('../models/application');
   User = require('../models/user-model');
   mongoose = require('mongoose');
 } catch (error) {
-  logger.warn('[GACPApplicationService] Models not available, using mock mode');
+  logger.warn('[GACPApplicationService] Models not available');
 }
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
-const MockDatabaseService = require('./mock-database');
 
 class GACPApplicationService {
-  constructor(database = null, logger = null) {
-    this.db = database;
+  constructor(repository = null, logger = null) {
+    this.repository = repository || new ApplicationRepository();
     this.logger = logger || console;
-    this.mockDb = null;
-
-    // Initialize mock database if no real database connection
-    if (!database || !mongoose?.connection?.readyState) {
-      this.mockDb = new MockDatabaseService();
-      this.logger.info('GACPApplicationService: Using mock database mode');
-    }
   }
 
   /**
-   * Get database connection (real or mock)
+   * Get database connection (deprecated accessor)
    */
   getDB() {
-    return this.mockDb || this.db;
+    return mongoose.connection;
   }
 
   /**
@@ -53,7 +45,7 @@ class GACPApplicationService {
    * Validates farmer eligibility and initializes application
    */
   async createApplication(farmerId, applicationData) {
-    const session = await Application.startSession();
+    const session = await this.repository.startSession();
     session.startTransaction();
 
     try {
@@ -64,12 +56,8 @@ class GACPApplicationService {
       }
 
       // 2. Check for existing active applications
-      const existingApplication = await Application.findOne({
-        applicant: farmerId,
-        currentStatus: {
-          $nin: ['approved', 'rejected', 'certificate_issued'],
-        },
-      });
+      // 2. Check for existing active applications
+      const existingApplication = await this.repository.findActiveByFarmer(farmerId);
 
       if (existingApplication) {
         throw new BusinessLogicError('Farmer already has an active application in progress');
@@ -79,13 +67,13 @@ class GACPApplicationService {
       this.validateApplicationData(applicationData);
 
       // 4. Create application
-      const application = new Application({
+      const application = await this.repository.create({
         applicant: farmerId,
         farmInformation: applicationData.farmInformation,
         cropInformation: applicationData.cropInformation,
         documents: applicationData.documents || [],
         currentStatus: 'draft',
-      });
+      }, session);
 
       // 5. Perform initial risk assessment
       application.assessRisk();
@@ -93,8 +81,8 @@ class GACPApplicationService {
       // 6. Calculate initial fees
       await this.calculateFees(application);
 
-      // 7. Save application
-      await application.save({ session });
+      // 7. Save application (already saved by create, but saving again for updates)
+      await this.repository.save(application);
 
       // 8. Queue welcome email notification (async - don't block)
       if (process.env.ENABLE_QUEUE === 'true') {
@@ -143,7 +131,7 @@ class GACPApplicationService {
    */
   async submitApplication(applicationId, submittedBy) {
     try {
-      const application = await Application.findById(applicationId);
+      const application = await this.repository.findById(applicationId);
       if (!application) {
         throw new ValidationError('Application not found');
       }
@@ -163,7 +151,7 @@ class GACPApplicationService {
       // 4. Auto-assign to DTAM officer based on province
       const assignedOfficer = await this.assignDTAMOfficer(application);
       application.assignedOfficer = assignedOfficer._id;
-      await application.save();
+      await this.repository.save(application);
 
       // 5. Queue notification emails (async - don't block response)
       if (process.env.ENABLE_QUEUE === 'true') {
@@ -220,7 +208,7 @@ class GACPApplicationService {
    */
   async reviewApplication(applicationId, reviewerId, reviewData) {
     try {
-      const application = await Application.findById(applicationId);
+      const application = await this.repository.findById(applicationId);
       if (!application) {
         throw new ValidationError('Application not found');
       }
@@ -264,7 +252,7 @@ class GACPApplicationService {
       } else if (preliminaryScore >= 60) {
         decision = 'revision_required';
         application.complianceRequirements = reviewData.revisionRequirements || [];
-        await application.save();
+        await this.repository.save(application);
       } else {
         decision = 'rejected';
         await application.updateStatus(
@@ -284,7 +272,7 @@ class GACPApplicationService {
         recommendations: reviewData.recommendations || [],
       });
 
-      await application.save();
+      await this.repository.save(application);
 
       // 8. Queue notification emails (async)
       if (process.env.ENABLE_QUEUE === 'true') {
@@ -355,7 +343,7 @@ class GACPApplicationService {
       // 3. Update application
       application.assignedInspector = availableInspector._id;
       application.inspectionScheduled = inspectionDate;
-      await application.save();
+      await this.repository.save(application);
 
       // 4. Block inspector's calendar
       await this.blockInspectorCalendar(availableInspector._id, inspectionDate);
@@ -389,7 +377,7 @@ class GACPApplicationService {
    */
   async processInspectionResults(applicationId, inspectionResults, inspectorId) {
     try {
-      const application = await Application.findById(applicationId);
+      const application = await this.repository.findById(applicationId);
       if (!application) {
         throw new ValidationError('Application not found');
       }
@@ -467,7 +455,7 @@ class GACPApplicationService {
         );
       }
 
-      await application.save();
+      await this.repository.save(application);
 
       // 7. Send notifications
       await this.sendNotifications(application, `decision_${certificationDecision}`);
@@ -792,10 +780,7 @@ class GACPApplicationService {
       return cached;
     }
 
-    const application = await Application.findById(applicationId)
-      .populate('applicant')
-      .populate('assignedOfficer')
-      .populate('assignedInspector');
+    const application = await this.repository.findById(applicationId);
 
     if (!application) {
       throw new ValidationError('Application not found');
@@ -833,14 +818,13 @@ class GACPApplicationService {
     const limit = options.limit || 20;
     const skip = (page - 1) * limit;
 
-    const applications = await Application.find(query)
-      .populate('applicant')
-      .populate('assignedOfficer')
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit);
+    const applications = await this.repository.findAll(query, {
+      page,
+      limit,
+      sort: { createdAt: -1 }
+    });
 
-    const total = await Application.countDocuments(query);
+    const total = await this.repository.count(query);
 
     const result = {
       applications,
@@ -865,18 +849,18 @@ class GACPApplicationService {
     }
 
     const stats = {
-      total: await Application.countDocuments(),
+      total: await this.repository.count(),
       byStatus: {
-        draft: await Application.countDocuments({ currentStatus: 'draft' }),
-        submitted: await Application.countDocuments({ currentStatus: 'submitted' }),
-        under_review: await Application.countDocuments({ currentStatus: 'under_review' }),
-        inspection_scheduled: await Application.countDocuments({
+        draft: await this.repository.count({ currentStatus: 'draft' }),
+        submitted: await this.repository.count({ currentStatus: 'submitted' }),
+        under_review: await this.repository.count({ currentStatus: 'under_review' }),
+        inspection_scheduled: await this.repository.count({
           currentStatus: 'inspection_scheduled',
         }),
-        approved: await Application.countDocuments({ currentStatus: 'approved' }),
-        rejected: await Application.countDocuments({ currentStatus: 'rejected' }),
+        approved: await this.repository.count({ currentStatus: 'approved' }),
+        rejected: await this.repository.count({ currentStatus: 'rejected' }),
       },
-      thisMonth: await Application.countDocuments({
+      thisMonth: await this.repository.count({
         createdAt: { $gte: new Date(new Date().setDate(1)) },
       }),
     };

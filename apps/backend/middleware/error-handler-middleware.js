@@ -1,15 +1,3 @@
-/**
- * Enhanced Error Handling and Logging System for GACP Standards Comparison
- * Provides comprehensive error handling, logging, monitoring, and graceful shutdown
- */
-const _winston = require('winston');
-const _morgan = require('morgan');
-const fs = require('fs');
-const path = require('path');
-
-// Ensure logs directory exists
-const logsDir = path.join(process.cwd(), 'logs');
-if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
