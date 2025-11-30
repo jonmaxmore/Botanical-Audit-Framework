@@ -279,6 +279,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    strict: true, // Enforce strict schema
     toJSON: {
       virtuals: true,
       transform: function (doc, ret) {

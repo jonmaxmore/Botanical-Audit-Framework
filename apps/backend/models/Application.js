@@ -79,6 +79,11 @@ const FarmInformationSchema = new mongoose.Schema(
       organicMatter: Number,
       testResults: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabResult' }],
     },
+    plantingSystem: {
+      type: String,
+      required: true,
+      enum: ['soil', 'substrate', 'hydroponics', 'aeroponics', 'aquaponics'],
+    },
   },
   { _id: false },
 );
@@ -225,6 +230,12 @@ const ApplicationSchema = new mongoose.Schema(
       required: true,
     },
 
+    licenseType: {
+      type: String,
+      required: true,
+      enum: ['individual', 'cooperative', 'enterprise', 'research'],
+    },
+
     // Application Details
     farmInformation: {
       type: FarmInformationSchema,
@@ -345,6 +356,7 @@ const ApplicationSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
+    strict: true, // Enforce strict schema
     collection: 'gacp_applications',
   },
 );
