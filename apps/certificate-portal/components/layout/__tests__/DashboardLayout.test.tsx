@@ -7,9 +7,9 @@ const mockPush = jest.fn();
 const mockPathname = jest.fn();
 jest.mock('next/navigation', () => ({
   useRouter: () => ({
-    push: mockPush
+    push: mockPush,
   }),
-  usePathname: () => mockPathname()
+  usePathname: () => mockPathname(),
 }));
 
 // Mock localStorage
@@ -25,12 +25,12 @@ const localStorageMock = (() => {
     }),
     clear: jest.fn(() => {
       store = {};
-    })
+    }),
   };
 })();
 
 Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock
+  value: localStorageMock,
 });
 
 describe('DashboardLayout', () => {
@@ -84,9 +84,9 @@ describe('DashboardLayout', () => {
         'QR Scanner',
         'Search',
         'Reports',
-        'Settings'
+        'Settings',
       ];
-      menuItems.forEach(item => {
+      menuItems.forEach((item) => {
         expect(screen.getAllByText(item).length).toBeGreaterThan(0);
       });
     });
@@ -100,10 +100,9 @@ describe('DashboardLayout', () => {
 
       const buttons = screen.getAllByText('Dashboard');
       const dashboardButton = buttons[0].closest('[role="button"]');
-      if (dashboardButton) {
-        fireEvent.click(dashboardButton);
-        expect(mockPush).toHaveBeenCalledWith('/dashboard');
-      }
+      expect(dashboardButton).toBeInTheDocument();
+      fireEvent.click(dashboardButton!);
+      expect(mockPush).toHaveBeenCalledWith('/dashboard');
     });
 
     it('should navigate to certificates when clicking Certificates menu', () => {
@@ -115,10 +114,9 @@ describe('DashboardLayout', () => {
 
       const buttons = screen.getAllByText('Certificates');
       const certificatesButton = buttons[0].closest('[role="button"]');
-      if (certificatesButton) {
-        fireEvent.click(certificatesButton);
-        expect(mockPush).toHaveBeenCalledWith('/certificates');
-      }
+      expect(certificatesButton).toBeInTheDocument();
+      fireEvent.click(certificatesButton!);
+      expect(mockPush).toHaveBeenCalledWith('/certificates');
     });
 
     it('should navigate to settings when clicking Settings menu', () => {
@@ -130,10 +128,9 @@ describe('DashboardLayout', () => {
 
       const buttons = screen.getAllByText('Settings');
       const settingsButton = buttons[0].closest('[role="button"]');
-      if (settingsButton) {
-        fireEvent.click(settingsButton);
-        expect(mockPush).toHaveBeenCalledWith('/settings');
-      }
+      expect(settingsButton).toBeInTheDocument();
+      fireEvent.click(settingsButton!);
+      expect(mockPush).toHaveBeenCalledWith('/settings');
     });
   });
 
@@ -146,14 +143,13 @@ describe('DashboardLayout', () => {
       );
 
       const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');
-      if (avatarButton) {
-        fireEvent.click(avatarButton);
+      expect(avatarButton).toBeInTheDocument();
+      fireEvent.click(avatarButton!);
 
-        await waitFor(() => {
-          expect(screen.getByText('Profile')).toBeInTheDocument();
-          expect(screen.getByText('Logout')).toBeInTheDocument();
-        });
-      }
+      await waitFor(() => {
+        expect(screen.getByText('Profile')).toBeInTheDocument();
+        expect(screen.getByText('Logout')).toBeInTheDocument();
+      });
     });
 
     it('should navigate to profile when clicking Profile menu item', async () => {
@@ -164,17 +160,15 @@ describe('DashboardLayout', () => {
       );
 
       const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');
-      if (avatarButton) {
-        fireEvent.click(avatarButton);
+      expect(avatarButton).toBeInTheDocument();
+      fireEvent.click(avatarButton!);
 
-        await waitFor(() => {
-          const profileItem = screen.getByText('Profile').closest('li');
-          if (profileItem) {
-            fireEvent.click(profileItem);
-            expect(mockPush).toHaveBeenCalledWith('/profile');
-          }
-        });
-      }
+      await waitFor(() => {
+        const profileItem = screen.getByText('Profile').closest('li');
+        expect(profileItem).toBeInTheDocument();
+        fireEvent.click(profileItem!);
+        expect(mockPush).toHaveBeenCalledWith('/profile');
+      });
     });
 
     it('should logout and redirect to login when clicking Logout', async () => {
@@ -188,20 +182,18 @@ describe('DashboardLayout', () => {
       );
 
       const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');
-      if (avatarButton) {
-        fireEvent.click(avatarButton);
+      expect(avatarButton).toBeInTheDocument();
+      fireEvent.click(avatarButton!);
 
-        await waitFor(() => {
-          const logoutItem = screen.getByText('Logout').closest('li');
-          if (logoutItem) {
-            fireEvent.click(logoutItem);
-          }
-        });
+      await waitFor(() => {
+        const logoutItem = screen.getByText('Logout').closest('li');
+        expect(logoutItem).toBeInTheDocument();
+        fireEvent.click(logoutItem!);
+      });
 
-        expect(localStorageMock.removeItem).toHaveBeenCalledWith('cert_token');
-        expect(localStorageMock.removeItem).toHaveBeenCalledWith('cert_user');
-        expect(mockPush).toHaveBeenCalledWith('/login');
-      }
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith('cert_token');
+      expect(localStorageMock.removeItem).toHaveBeenCalledWith('cert_user');
+      expect(mockPush).toHaveBeenCalledWith('/login');
     });
   });
 

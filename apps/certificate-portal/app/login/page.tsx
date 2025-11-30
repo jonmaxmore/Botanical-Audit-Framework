@@ -12,7 +12,7 @@ import {
   InputAdornment,
   IconButton,
   Alert,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import { Visibility, VisibilityOff, VerifiedUser } from '@mui/icons-material';
 import { useSnackbar } from 'notistack';
@@ -35,7 +35,7 @@ export default function LoginPage() {
     try {
       // TODO: Replace with actual API call
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       // Demo credentials
       if (email === 'cert@gacp.test' && password === 'password123') {
@@ -47,7 +47,7 @@ export default function LoginPage() {
             id: '1',
             email: 'cert@gacp.test',
             name: 'Certificate Officer',
-            role: 'certificate_officer'
+            role: 'certificate_officer',
           })
         );
 
@@ -69,7 +69,7 @@ export default function LoginPage() {
         minHeight: '100vh',
         display: 'flex',
         alignItems: 'center',
-        background: 'linear-gradient(135deg, #1976d2 0%, #2196f3 100%)'
+        background: 'linear-gradient(135deg, #1976d2 0%, #2196f3 100%)',
       }}
     >
       <Container maxWidth="sm">
@@ -77,7 +77,7 @@ export default function LoginPage() {
           elevation={6}
           sx={{
             p: 4,
-            borderRadius: 3
+            borderRadius: 3,
           }}
         >
           {/* Header */}
@@ -91,7 +91,7 @@ export default function LoginPage() {
                 height: 80,
                 borderRadius: '50%',
                 bgcolor: 'primary.main',
-                mb: 2
+                mb: 2,
               }}
             >
               <VerifiedUser sx={{ fontSize: 48, color: 'white' }} />
@@ -118,7 +118,7 @@ export default function LoginPage() {
               label="อีเมล"
               type="email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
               margin="normal"
               autoComplete="email"
@@ -130,7 +130,7 @@ export default function LoginPage() {
               label="รหัสผ่าน"
               type={showPassword ? 'text' : 'password'}
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
               margin="normal"
               autoComplete="current-password"
@@ -141,7 +141,7 @@ export default function LoginPage() {
                       {showPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
-                )
+                ),
               }}
             />
 
@@ -165,7 +165,7 @@ export default function LoginPage() {
               bgcolor: 'info.lighter',
               borderRadius: 2,
               border: '1px solid',
-              borderColor: 'info.light'
+              borderColor: 'info.light',
             }}
           >
             <Typography variant="caption" color="info.dark" fontWeight={600}>

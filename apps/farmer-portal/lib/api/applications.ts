@@ -1,4 +1,4 @@
-import apiClient, { ApiResponse, handleApiError } from './client';
+import { apiClient, ApiResponse, handleApiError } from './client';
 
 // Application interface matching backend model
 export interface Application {
@@ -73,8 +73,8 @@ export const getApplications = async (
           documentType: params?.documentType,
           search: params?.search,
           startDate: params?.startDate,
-          endDate: params?.endDate
-        }
+          endDate: params?.endDate,
+        },
       }
     );
 
@@ -109,7 +109,7 @@ export const reviewApplication = async (
       `/api/dtam/applications/${params.applicationId}/review`,
       {
         status: params.status,
-        reviewComment: params.reviewComment
+        reviewComment: params.reviewComment,
       }
     );
 
@@ -137,7 +137,7 @@ export const getApplicationStatistics = async (): Promise<ApiResponse<Applicatio
 export const downloadApplicationDocument = async (applicationId: string): Promise<Blob> => {
   try {
     const response = await apiClient.get(`/api/dtam/applications/${applicationId}/download`, {
-      responseType: 'blob'
+      responseType: 'blob',
     });
 
     return response.data;

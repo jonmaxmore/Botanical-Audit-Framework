@@ -6,7 +6,7 @@ export function formatDateThai(date: string | Date): string {
   return d.toLocaleDateString('th-TH', {
     year: 'numeric',
     month: 'long',
-    day: 'numeric'
+    day: 'numeric',
   });
 }
 
@@ -18,7 +18,7 @@ export function formatDateShortThai(date: string | Date): string {
   return d.toLocaleDateString('th-TH', {
     year: '2-digit',
     month: '2-digit',
-    day: '2-digit'
+    day: '2-digit',
   });
 }
 
@@ -28,7 +28,7 @@ export function formatDateShortThai(date: string | Date): string {
 export function formatNumber(num: number, decimals: number = 2): string {
   return num.toLocaleString('th-TH', {
     minimumFractionDigits: decimals,
-    maximumFractionDigits: decimals
+    maximumFractionDigits: decimals,
   });
 }
 
@@ -115,7 +115,7 @@ export function parseCertificateNumber(certificateNumber: string): {
   return {
     standard: match[1],
     year: parseInt(match[2]),
-    sequence: parseInt(match[3])
+    sequence: parseInt(match[3]),
   };
 }
 
@@ -215,5 +215,5 @@ export default {
   getStatusLabelThai,
   debounce,
   deepClone,
-  isEmpty
+  isEmpty,
 };

@@ -4,11 +4,11 @@
  */
 
 const Bull = require('bull');
-const logger = require('../../utils/logger');
+const logger = require('../../shared/logger');
 const geminiService = require('../ai/geminiService');
 const notificationService = require('../notification/notificationService');
 const cacheService = require('../cache/cacheService');
-const DTAMApplication = require('../../models/DTAMApplication');
+const DTAMApplication = require('../../models/Application');
 
 class QueueService {
   constructor() {
@@ -71,6 +71,20 @@ class QueueService {
         timeout: 300000, // 5 minutes
         removeOnComplete: 20,
         removeOnFail: 50,
+      },
+    });
+
+    // Document Processing Queue
+    this.documentQueue = new Bull('document-processing', {
+      redis: redisConfig,
+      defaultJobOptions: {
+        attempts: 3,
+        backoff: {
+          type: 'exponential',
+          delay: 2000,
+        },
+        removeOnComplete: 50,
+        removeOnFail: 100,
       },
     });
 
@@ -237,6 +251,35 @@ class QueueService {
       return { success: true, message: 'Report generation not yet implemented' };
     });
 
+    // Document Processor
+    this.documentQueue.process('process-document', async job => {
+      const { type, applicationId, certificateNumber, approvedBy } = job.data;
+      logger.info(`Processing document job: ${type} for application ${applicationId}`);
+
+      try {
+        if (type === 'certificate-pdf-generation') {
+          // Circular dependency check: We need GACPCertificateService here
+          // But GACPCertificateService depends on QueueService
+          // We should require it inside the processor or use dependency injection
+          // For now, let's dynamic require
+          const gacpCertificateService = require('../gacp-certificate');
+          const applicationRepository = require('../../repositories/ApplicationRepository');
+          const appRepo = new applicationRepository();
+
+          const application = await appRepo.findById(applicationId);
+          if (!application) throw new Error('Application not found');
+
+          // Call the sync generation method
+          return await gacpCertificateService._generateCertificateSync(application, certificateNumber, approvedBy);
+        }
+
+        throw new Error(`Unknown document job type: ${type}`);
+      } catch (error) {
+        logger.error('Document processing failed:', error);
+        throw error;
+      }
+    });
+
     logger.info('Queue processors registered');
   }
 
@@ -282,6 +325,15 @@ class QueueService {
 
     this.reportQueue.on('failed', (job, err) => {
       logger.error(`Report job ${job.id} failed:`, err.message);
+    });
+
+    // Document Queue Events
+    this.documentQueue.on('completed', job => {
+      logger.info(`Document job ${job.id} completed`);
+    });
+
+    this.documentQueue.on('failed', (job, err) => {
+      logger.error(`Document job ${job.id} failed:`, err.message);
     });
 
     logger.info('Queue event listeners registered');
@@ -359,6 +411,21 @@ class QueueService {
   }
 
   /**
+   * Add document processing job to queue
+   */
+  async addDocumentJob(data, options = {}) {
+    return this.documentQueue.add(
+      'process-document',
+      data,
+      {
+        priority: options.priority || 5,
+        delay: options.delay || 0,
+        ...options,
+      },
+    );
+  }
+
+  /**
    * Get queue statistics
    */
   async getQueueStats() {
@@ -384,6 +451,8 @@ class QueueService {
       this.calendarQueue.getActiveCount(),
       this.reportQueue.getWaitingCount(),
       this.reportQueue.getActiveCount(),
+      this.documentQueue.getWaitingCount(),
+      this.documentQueue.getActiveCount(),
     ]);
 
     return {
@@ -405,6 +474,10 @@ class QueueService {
         waiting: reportWaiting,
         active: reportActive,
       },
+      document: {
+        waiting: arguments[10], // Result from Promise.all index 10
+        active: arguments[11], // Result from Promise.all index 11
+      },
     };
   }
 
@@ -423,6 +496,8 @@ class QueueService {
       this.calendarQueue.clean(grace, 'failed'),
       this.reportQueue.clean(grace, 'completed'),
       this.reportQueue.clean(grace, 'failed'),
+      this.documentQueue.clean(grace, 'completed'),
+      this.documentQueue.clean(grace, 'failed'),
     ]);
 
     logger.info('Old jobs cleaned (>7 days)');
@@ -437,6 +512,7 @@ class QueueService {
       this.emailQueue.pause(),
       this.calendarQueue.pause(),
       this.reportQueue.pause(),
+      this.documentQueue.pause(),
     ]);
     logger.info('All queues paused');
   }
@@ -450,6 +526,7 @@ class QueueService {
       this.emailQueue.resume(),
       this.calendarQueue.resume(),
       this.reportQueue.resume(),
+      this.documentQueue.resume(),
     ]);
     logger.info('All queues resumed');
   }
@@ -463,6 +540,7 @@ class QueueService {
       this.emailQueue.close(),
       this.calendarQueue.close(),
       this.reportQueue.close(),
+      this.documentQueue.close(),
     ]);
     logger.info('All queues closed');
   }

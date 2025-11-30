@@ -40,16 +40,18 @@ export default function CertificateDetailPage() {
             issueDate: new Date(certData.validFrom).toLocaleDateString('en-GB'),
             expiryDate: new Date(certData.validUntil).toLocaleDateString('en-GB'),
             // Keep original data for PDF/QR if needed
-            ...certData
+            ...certData,
           };
           setCertificate(mappedCert);
 
           // Generate QR Code
           try {
-            const url = await QRCode.toDataURL(JSON.stringify({
-              id: mappedCert.id,
-              verifyUrl: `https://gacp.go.th/verify/${mappedCert.id}`
-            }));
+            const url = await QRCode.toDataURL(
+              JSON.stringify({
+                id: mappedCert.id,
+                verifyUrl: `https://gacp.go.th/verify/${mappedCert.id}`,
+              })
+            );
             setQrCodeUrl(url);
           } catch (err) {
             console.error('QR Gen Error', err);
@@ -99,11 +101,7 @@ export default function CertificateDetailPage() {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <Button
-        startIcon={<ArrowBack />}
-        onClick={() => router.back()}
-        sx={{ mb: 2 }}
-      >
+      <Button startIcon={<ArrowBack />} onClick={() => router.back()} sx={{ mb: 2 }}>
         Back to List
       </Button>
 
@@ -119,8 +117,8 @@ export default function CertificateDetailPage() {
                 certificate.status === 'Active'
                   ? 'success'
                   : certificate.status === 'Expired'
-                  ? 'error'
-                  : 'default'
+                    ? 'error'
+                    : 'default'
               }
             />
           </Box>
@@ -128,11 +126,7 @@ export default function CertificateDetailPage() {
             <Button variant="outlined" startIcon={<Edit />}>
               Edit
             </Button>
-            <Button
-              variant="contained"
-              startIcon={<Download />}
-              onClick={handleDownloadPDF}
-            >
+            <Button variant="contained" startIcon={<Download />} onClick={handleDownloadPDF}>
               PDF
             </Button>
           </Box>
@@ -179,4 +173,3 @@ export default function CertificateDetailPage() {
     </Container>
   );
 }
-

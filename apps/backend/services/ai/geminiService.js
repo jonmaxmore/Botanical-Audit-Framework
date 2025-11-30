@@ -7,7 +7,7 @@
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 // Alternative SDK (experimental): const { GoogleGenAI } = require('@google/genai');
 const fs = require('fs').promises;
-const logger = require('../../utils/logger');
+const logger = require('../../shared/logger');
 
 class GeminiAIService {
   constructor() {
@@ -47,7 +47,7 @@ class GeminiAIService {
     try {
       const imagePart = await this.fileToGenerativePart(imagePath);
 
-      const prompt = `Extract all text from this image. 
+      const prompt = `Extract all text from this image.
       Return ONLY the extracted text, maintaining the original layout and formatting.
       If the image contains Thai text, ensure accurate Thai character recognition.
       Do not add any commentary or description.`;

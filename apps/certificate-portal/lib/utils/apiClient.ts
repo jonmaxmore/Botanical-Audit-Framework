@@ -16,25 +16,25 @@ const api = axios.create({
   baseURL: API_URL,
   timeout: 30000,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+  },
 });
 
 // Request interceptor - Add auth token
 api.interceptors.request.use(
-  config => {
+  (config) => {
     const token = localStorage.getItem('cert_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  error => Promise.reject(error)
+  (error) => Promise.reject(error)
 );
 
 // Response interceptor - Handle errors with retry
 api.interceptors.response.use(
-  response => response,
+  (response) => response,
   async (error: AxiosError) => {
     const originalRequest = error.config as AxiosRequestConfig & {
       _retry?: boolean;
@@ -69,7 +69,7 @@ api.interceptors.response.use(
 
       console.log(`Retrying request (attempt ${originalRequest._retryCount}/3) after ${delay}ms`);
 
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise((resolve) => setTimeout(resolve, delay));
       return api(originalRequest);
     }
 
@@ -95,7 +95,7 @@ export const offlineQueue = {
       method,
       url,
       data,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
     localStorage.setItem('offline_actions', JSON.stringify(actions));
     console.log(`[Offline Queue] Stored ${method} ${url}`);
@@ -139,7 +139,7 @@ export const offlineQueue = {
         await api.request({
           method: action.method,
           url: action.url,
-          data: action.data
+          data: action.data,
         });
 
         completedActions.push(action);
@@ -151,9 +151,9 @@ export const offlineQueue = {
 
     // Remove completed actions
     const remaining = actions.filter(
-      action =>
+      (action) =>
         !completedActions.some(
-          completed =>
+          (completed) =>
             completed.url === action.url &&
             completed.method === action.method &&
             completed.timestamp === action.timestamp
@@ -165,7 +165,7 @@ export const offlineQueue = {
     console.log(`[Offline Queue] Synced ${completedActions.length}/${actions.length} actions`);
 
     return completedActions.length;
-  }
+  },
 };
 
 // Auto-sync when browser goes online

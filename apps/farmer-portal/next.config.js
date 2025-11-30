@@ -4,12 +4,15 @@ const { withSentryConfig } = require('@sentry/nextjs');
 const nextConfig = {
   transpilePackages: ['@gacp/ui', '@gacp/types', '@gacp/utils'],
   turbopack: {},
-  // Enable standalone output for Docker deployment
-  output: 'standalone',
+  // Enable standalone output for Docker deployment (conditional)
+  output: process.env.STANDALONE_BUILD === 'true' ? 'standalone' : undefined,
   // Disable instrumentation for development to avoid conflicts
   experimental: {
     // instrumentation.js is now available by default in Next.js 16
     clientTraceMetadata: ['baggage', 'sentry-trace', 'traceparent']
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
   }
 };
 

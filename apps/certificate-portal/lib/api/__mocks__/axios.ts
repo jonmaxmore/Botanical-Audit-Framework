@@ -12,13 +12,13 @@ const mockAxiosInstance = {
   interceptors: {
     request: {
       use: jest.fn(),
-      handlers: []
+      handlers: [],
     },
     response: {
       use: jest.fn(),
-      handlers: []
-    }
-  }
+      handlers: [],
+    },
+  },
 };
 
 const mockedAxios = {
@@ -26,7 +26,7 @@ const mockedAxios = {
   mockGet,
   mockPost,
   mockPut,
-  mockDelete
+  mockDelete,
 };
 
 module.exports = mockedAxios;

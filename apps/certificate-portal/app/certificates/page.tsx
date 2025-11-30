@@ -60,7 +60,14 @@ export default function CertificatesPage() {
         setError('Failed to load certificates. Please try again later.');
         // Fallback to mock data for demo purposes if backend is empty/fails
         setCertificates([
-           { id: 'mock-1', certificateNumber: 'GACP-2025-0001', farmName: 'Mock Farm (Backend Offline)', status: 'Active', issueDate: '2025-01-10', expiryDate: '2026-01-10' }
+          {
+            id: 'mock-1',
+            certificateNumber: 'GACP-2025-0001',
+            farmName: 'Mock Farm (Backend Offline)',
+            status: 'Active',
+            issueDate: '2025-01-10',
+            expiryDate: '2026-01-10',
+          },
         ]);
       } finally {
         setLoading(false);
@@ -90,9 +97,7 @@ export default function CertificatesPage() {
     <ErrorBoundary>
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4">
-            📜 My Certificates
-          </Typography>
+          <Typography variant="h4">📜 My Certificates</Typography>
           <Button
             variant="contained"
             color="primary"
@@ -145,8 +150,8 @@ export default function CertificatesPage() {
                         cert.status === 'Active'
                           ? 'success'
                           : cert.status === 'Expired'
-                          ? 'error'
-                          : 'default'
+                            ? 'error'
+                            : 'default'
                       }
                       size="small"
                     />
@@ -192,4 +197,3 @@ export default function CertificatesPage() {
     </ErrorBoundary>
   );
 }
-

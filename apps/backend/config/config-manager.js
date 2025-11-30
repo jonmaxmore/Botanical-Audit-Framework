@@ -158,6 +158,7 @@ function loadConfig() {
 
     // Override with environment variables
     config = overrideWithEnvVars(config);
+    console.log('Config after env override:', JSON.stringify(config, null, 2));
 
     // Validate config
     const { error, value } = configSchema.validate(config);

@@ -17,18 +17,18 @@ export default function HomePage() {
     {
       icon: <VerifiedUser sx={{ fontSize: 48, color: '#2196f3' }} />,
       title: 'ยื่นคำขอใบรับรอง',
-      description: 'ยื่นขอใบรับรองมาตรฐาน GACP ออนไลน์ได้ตลอด 24 ชั่วโมง'
+      description: 'ยื่นขอใบรับรองมาตรฐาน GACP ออนไลน์ได้ตลอด 24 ชั่วโมง',
     },
     {
       icon: <PictureAsPdf sx={{ fontSize: 48, color: '#2196f3' }} />,
       title: 'อัปโหลดเอกสาร',
-      description: 'แนบเอกสารประกอบคำขอได้อย่างปลอดภัยและสะดวก'
+      description: 'แนบเอกสารประกอบคำขอได้อย่างปลอดภัยและสะดวก',
     },
     {
       icon: <CheckCircle sx={{ fontSize: 48, color: '#2196f3' }} />,
       title: 'ติดตามสถานะ',
-      description: 'ตรวจสอบสถานะคำขอและความคืบหน้าแบบ Real-time'
-    }
+      description: 'ตรวจสอบสถานะคำขอและความคืบหน้าแบบ Real-time',
+    },
   ];
 
   return (
@@ -38,7 +38,7 @@ export default function HomePage() {
         sx={{
           background: 'linear-gradient(135deg, #1976d2 0%, #2196f3 100%)',
           color: 'white',
-          py: 12
+          py: 12,
         }}
       >
         <Container maxWidth="lg">
@@ -62,8 +62,8 @@ export default function HomePage() {
                   fontSize: '1.1rem',
                   fontWeight: 600,
                   '&:hover': {
-                    bgcolor: '#f5f5f5'
-                  }
+                    bgcolor: '#f5f5f5',
+                  },
                 }}
               >
                 ยื่นคำขอใหม่
@@ -81,8 +81,8 @@ export default function HomePage() {
                   fontWeight: 600,
                   '&:hover': {
                     borderColor: '#f5f5f5',
-                    bgcolor: 'rgba(255, 255, 255, 0.1)'
-                  }
+                    bgcolor: 'rgba(255, 255, 255, 0.1)',
+                  },
                 }}
               >
                 คำขอของฉัน
@@ -110,8 +110,8 @@ export default function HomePage() {
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   '&:hover': {
                     transform: 'translateY(-8px)',
-                    boxShadow: 6
-                  }
+                    boxShadow: 6,
+                  },
                 }}
               >
                 <CardContent sx={{ textAlign: 'center', py: 4 }}>

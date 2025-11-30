@@ -1,32 +1,48 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { certificatesApi, Certificate } from '../../lib/api/certificates';
+
 export default function CertificatesPage() {
-  const certificates = [
-    {
-      id: 'GACP-001',
-      farm: 'ฟาร์มสุขใจ',
-      crop: 'กัญชา',
-      issued: '15/01/2025',
-      expires: '15/01/2026',
-      status: 'active'
-    },
-    {
-      id: 'GACP-002',
-      farm: 'ฟาร์มปลอดภัย',
-      crop: 'ขมิ้น',
-      issued: '10/01/2025',
-      expires: '10/01/2026',
-      status: 'active'
-    },
-    {
-      id: 'GACP-003',
-      farm: 'ฟาร์มอินทรีย์',
-      crop: 'กัญชา',
-      issued: '05/12/2024',
-      expires: '05/12/2025',
-      status: 'expiring'
-    }
-  ];
+  const [certificates, setCertificates] = useState<Certificate[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchCertificates = async () => {
+      try {
+        const response = await certificatesApi.getMyCertificates();
+        if (response.success && response.data) {
+          setCertificates(response.data);
+        } else {
+          setError(response.message || 'Failed to load certificates');
+        }
+      } catch (err) {
+        console.error('Error fetching certificates:', err);
+        setError('An error occurred while loading certificates');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCertificates();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6 flex justify-center items-center">
+        <div className="text-xl text-gray-600">Loading certificates...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-6 flex justify-center items-center">
+        <div className="text-xl text-red-600">Error: {error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
@@ -37,9 +53,9 @@ export default function CertificatesPage() {
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
-          {certificates.map(cert => (
+          {certificates.map((cert) => (
             <div
-              key={cert.id}
+              key={cert._id}
               className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition"
             >
               <div
@@ -55,30 +71,32 @@ export default function CertificatesPage() {
                         : 'bg-yellow-100 text-yellow-800'
                     }`}
                   >
-                    {cert.status === 'active' ? 'ใช้งานได้' : 'ใกล้หมดอายุ'}
+                    {cert.status === 'active' ? 'ใช้งานได้' : 'หมดอายุ/ระงับ'}
                   </span>
                 </div>
 
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{cert.id}</h3>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">{cert.certificateNumber}</h3>
                 <div className="space-y-2 text-sm mb-4">
                   <div className="flex justify-between">
                     <span className="text-gray-600">ฟาร์ม:</span>
-                    <span className="font-medium">{cert.farm}</span>
+                    <span className="font-medium">{cert.farmName}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">พืช:</span>
-                    <span className="font-medium">{cert.crop}</span>
+                    <span className="font-medium">{cert.cropTypes.join(', ')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">ออกเมื่อ:</span>
-                    <span className="font-medium">{cert.issued}</span>
+                    <span className="font-medium">
+                      {new Date(cert.issueDate).toLocaleDateString('th-TH')}
+                    </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-600">หมดอายุ:</span>
                     <span
-                      className={`font-medium ${cert.status === 'expiring' ? 'text-yellow-600' : ''}`}
+                      className={`font-medium ${cert.status !== 'active' ? 'text-yellow-600' : ''}`}
                     >
-                      {cert.expires}
+                      {new Date(cert.expiryDate).toLocaleDateString('th-TH')}
                     </span>
                   </div>
                 </div>

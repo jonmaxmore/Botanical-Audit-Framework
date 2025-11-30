@@ -38,6 +38,10 @@ async function runCleanupTasks() {
 globalThis.registerBackendCleanup = registerCleanup;
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'test';
+process.env.STORAGE_TYPE = 'local';
+process.env.STORAGE_LOCAL_PATH = './test-uploads';
+process.env.ENABLE_QUEUE = 'false';
+process.env.ENABLE_CACHE = 'false';
 
 const mongoManager = safeRequire('./config/mongodb-manager');
 const redisService = safeRequire('./services/redis-service');

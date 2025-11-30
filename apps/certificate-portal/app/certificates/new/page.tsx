@@ -74,7 +74,9 @@ export default function CreateCertificatePage() {
       }
     } catch (err: any) {
       console.error('Error creating certificate:', err);
-      setErrorMessage(err.response?.data?.message || 'Failed to create certificate. Please try again.');
+      setErrorMessage(
+        err.response?.data?.message || 'Failed to create certificate. Please try again.'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -82,11 +84,7 @@ export default function CreateCertificatePage() {
 
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
-      <Button
-        startIcon={<ArrowBack />}
-        onClick={() => router.back()}
-        sx={{ mb: 2 }}
-      >
+      <Button startIcon={<ArrowBack />} onClick={() => router.back()} sx={{ mb: 2 }}>
         Back to List
       </Button>
 
@@ -171,11 +169,7 @@ export default function CreateCertificatePage() {
 
             <Grid item xs={12}>
               <Box display="flex" justifyContent="flex-end" gap={2}>
-                <Button
-                  variant="outlined"
-                  onClick={() => router.back()}
-                  disabled={isSubmitting}
-                >
+                <Button variant="outlined" onClick={() => router.back()} disabled={isSubmitting}>
                   Cancel
                 </Button>
                 <Button

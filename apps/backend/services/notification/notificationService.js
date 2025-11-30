@@ -9,8 +9,8 @@
  */
 
 const nodemailer = require('nodemailer');
-const logger = require('../../utils/logger');
-const DTAMStaff = require('../../models/DTAMStaff');
+const logger = require('../../shared/logger');
+const DTAMStaff = require('../../models/User');
 
 // Phase 2 Services Integration
 const queueService = require('../queue/queueService');

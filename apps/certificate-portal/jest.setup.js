@@ -11,7 +11,7 @@ jest.mock('next/navigation', () => ({
       back: jest.fn(),
       pathname: '/',
       query: {},
-      asPath: '/'
+      asPath: '/',
     };
   },
   usePathname() {
@@ -22,7 +22,7 @@ jest.mock('next/navigation', () => ({
   },
   useParams() {
     return {};
-  }
+  },
 }));
 
 // Mock localStorage
@@ -30,27 +30,27 @@ const localStorageMock = (() => {
   let store = {};
 
   return {
-    getItem: key => store[key] || null,
+    getItem: (key) => store[key] || null,
     setItem: (key, value) => {
       store[key] = value.toString();
     },
-    removeItem: key => {
+    removeItem: (key) => {
       delete store[key];
     },
     clear: () => {
       store = {};
-    }
+    },
   };
 })();
 
 Object.defineProperty(window, 'localStorage', {
-  value: localStorageMock
+  value: localStorageMock,
 });
 
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
-  value: jest.fn().mockImplementation(query => ({
+  value: jest.fn().mockImplementation((query) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -58,8 +58,8 @@ Object.defineProperty(window, 'matchMedia', {
     removeListener: jest.fn(), // Deprecated
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn()
-  }))
+    dispatchEvent: jest.fn(),
+  })),
 });
 
 // Mock IntersectionObserver

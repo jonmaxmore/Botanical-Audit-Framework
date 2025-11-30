@@ -4,8 +4,7 @@
  * Provides distributed caching, session management,
  * and pub/sub capabilities for horizontal scaling.
  */
-const Redis = require('ioredis');
-const { _promisify } = require('util');
+const { createClient } = require('redis');
 const configManager = require('./config-manager');
 const logger = require('../shared/logger');
 const redisLogger = logger.createLogger('redis');
@@ -14,7 +13,6 @@ const redisLogger = logger.createLogger('redis');
 const config = configManager.getConfig().redis;
 let redisClient;
 let isConnected = false;
-let reconnectTimer = null;
 let pubSub = null;
 
 // Initialize Redis connection
@@ -32,17 +30,17 @@ async function connect() {
 
   try {
     const options = {
-      host: config.host,
-      port: config.port,
       password: config.password || undefined,
-      retryStrategy: times => {
-        const delay = Math.min(times * 50, 2000);
-        return delay;
-      },
-      maxRetriesPerRequest: 3,
+      socket: {
+        host: config.host,
+        port: config.port,
+        reconnectStrategy: (retries) => {
+          return Math.min(retries * 50, 2000);
+        }
+      }
     };
 
-    redisClient = new Redis(options);
+    redisClient = createClient(options);
 
     // Set up event handlers
     redisClient.on('connect', () => {
@@ -52,9 +50,10 @@ async function connect() {
 
     redisClient.on('error', err => {
       redisLogger.error(`Redis error: ${err.message}`);
+      // isConnected = false; // Node Redis manages connection state
     });
 
-    redisClient.on('close', () => {
+    redisClient.on('end', () => {
       isConnected = false;
       redisLogger.warn('Connection to Redis closed');
     });
@@ -63,48 +62,27 @@ async function connect() {
       redisLogger.info('Reconnecting to Redis...');
     });
 
+    await redisClient.connect();
+
     // Create pub/sub client for messaging
+    const pubClient = redisClient.duplicate();
+    const subClient = redisClient.duplicate();
+
+    await pubClient.connect();
+    await subClient.connect();
+
     pubSub = {
-      publisher: new Redis(options),
-      subscriber: new Redis(options),
+      publisher: pubClient,
+      subscriber: subClient,
     };
 
-    pubSub.subscriber.on('message', (channel, message) => {
-      redisLogger.debug(`Received message from ${channel}`);
-      messageHandlers.forEach(handler => {
-        if (handler.channel === channel || handler.channel === '*') {
-          handler.callback(channel, message);
-        }
-      });
-    });
-
-    // Initialize with a ping to verify connection
-    await redisClient.ping();
     isConnected = true;
-
     return redisClient;
   } catch (error) {
     isConnected = false;
     redisLogger.error(`Failed to connect to Redis: ${error.message}`);
-    scheduleReconnect();
     throw error;
   }
-}
-
-// Schedule reconnection
-function scheduleReconnect() {
-  if (reconnectTimer) {
-    clearTimeout(reconnectTimer);
-  }
-
-  reconnectTimer = setTimeout(async () => {
-    redisLogger.info('Attempting to reconnect to Redis...');
-    try {
-      await connect();
-    } catch (error) {
-      redisLogger.error(`Redis reconnection failed: ${error.message}`);
-    }
-  }, 5000);
 }
 
 // Disconnect from Redis
@@ -150,7 +128,7 @@ const cache = {
       }
       const ttl = ttlSeconds || config.ttl || 86400; // Default 24 hours
       const serialized = JSON.stringify(value);
-      await redisClient.set(key, serialized, 'EX', ttl);
+      await redisClient.set(key, serialized, { EX: ttl });
       return true;
     } catch (error) {
       redisLogger.error(`Cache set error for key ${key}: ${error.message}`);
@@ -176,7 +154,7 @@ const cache = {
       if (!isConnected) {
         return false;
       }
-      await redisClient.flushdb();
+      await redisClient.flushDb();
       return true;
     } catch (error) {
       redisLogger.error(`Cache flush error: ${error.message}`);
@@ -190,46 +168,64 @@ const messageHandlers = [];
 
 // Messaging methods
 const messaging = {
-  subscribe(channel, callback) {
+  async subscribe(channel, callback) {
     if (!isConnected || !pubSub) {
       redisLogger.warn(`Cannot subscribe to ${channel} - Redis not connected`);
       return false;
     }
 
-    pubSub.subscriber.subscribe(channel);
-    messageHandlers.push({ channel, callback });
-    redisLogger.debug(`Subscribed to channel ${channel}`);
-    return true;
+    try {
+      await pubSub.subscriber.subscribe(channel, (message) => {
+        redisLogger.debug(`Received message from ${channel}`);
+        callback(channel, message);
+      });
+
+      messageHandlers.push({ channel, callback });
+      redisLogger.debug(`Subscribed to channel ${channel}`);
+      return true;
+    } catch (error) {
+      redisLogger.error(`Subscribe error: ${error.message}`);
+      return false;
+    }
   },
 
-  unsubscribe(channel, callback) {
+  async unsubscribe(channel, callback) {
     if (!isConnected || !pubSub) {
       return false;
     }
 
-    pubSub.subscriber.unsubscribe(channel);
+    try {
+      await pubSub.subscriber.unsubscribe(channel);
 
-    const index = messageHandlers.findIndex(
-      h => h.channel === channel && (!callback || h.callback === callback),
-    );
+      const index = messageHandlers.findIndex(
+        h => h.channel === channel && (!callback || h.callback === callback),
+      );
 
-    if (index !== -1) {
-      messageHandlers.splice(index, 1);
+      if (index !== -1) {
+        messageHandlers.splice(index, 1);
+      }
+
+      return true;
+    } catch (error) {
+      redisLogger.error(`Unsubscribe error: ${error.message}`);
+      return false;
     }
-
-    return true;
   },
 
-  publish(channel, message) {
+  async publish(channel, message) {
     if (!isConnected || !pubSub) {
       redisLogger.warn(`Cannot publish to ${channel} - Redis not connected`);
       return false;
     }
 
-    const serialized = typeof message === 'string' ? message : JSON.stringify(message);
-
-    pubSub.publisher.publish(channel, serialized);
-    return true;
+    try {
+      const serialized = typeof message === 'string' ? message : JSON.stringify(message);
+      await pubSub.publisher.publish(channel, serialized);
+      return true;
+    } catch (error) {
+      redisLogger.error(`Publish error: ${error.message}`);
+      return false;
+    }
   },
 };
 

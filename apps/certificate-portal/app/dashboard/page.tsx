@@ -23,10 +23,30 @@ export default function DashboardPage() {
   }, [router]);
 
   const cards = [
-    { title: 'Active Certificates', value: stats.active, icon: <CheckCircle sx={{ fontSize: 48, color: '#4caf50' }} />, color: '#4caf50' },
-    { title: 'Pending', value: stats.pending, icon: <Pending sx={{ fontSize: 48, color: '#ff9800' }} />, color: '#ff9800' },
-    { title: 'Expired', value: stats.expired, icon: <Cancel sx={{ fontSize: 48, color: '#f44336' }} />, color: '#f44336' },
-    { title: 'Total', value: stats.total, icon: <Description sx={{ fontSize: 48, color: '#2196f3' }} />, color: '#2196f3' },
+    {
+      title: 'Active Certificates',
+      value: stats.active,
+      icon: <CheckCircle sx={{ fontSize: 48, color: '#4caf50' }} />,
+      color: '#4caf50',
+    },
+    {
+      title: 'Pending',
+      value: stats.pending,
+      icon: <Pending sx={{ fontSize: 48, color: '#ff9800' }} />,
+      color: '#ff9800',
+    },
+    {
+      title: 'Expired',
+      value: stats.expired,
+      icon: <Cancel sx={{ fontSize: 48, color: '#f44336' }} />,
+      color: '#f44336',
+    },
+    {
+      title: 'Total',
+      value: stats.total,
+      icon: <Description sx={{ fontSize: 48, color: '#2196f3' }} />,
+      color: '#2196f3',
+    },
   ];
 
   return (

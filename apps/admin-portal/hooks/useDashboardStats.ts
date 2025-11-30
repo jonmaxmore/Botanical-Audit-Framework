@@ -44,10 +44,10 @@ export function useDashboardStats() {
       setError('ไม่สามารถโหลดข้อมูลสถิติได้ (Using Mock Data)');
       // Fallback to mock data if API fails (e.g. endpoint not ready)
       setStats({
-        totalApplications: 156,
-        pendingReview: 23,
-        approved: 98,
-        rejected: 12,
+        totalApplications: 0,
+        pendingReview: 0,
+        approved: 0,
+        rejected: 0,
       });
     } finally {
       setLoading(false);
@@ -65,4 +65,3 @@ export function useDashboardStats() {
     refreshStats: fetchStats,
   };
 }
-

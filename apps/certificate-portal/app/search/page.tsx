@@ -1,7 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { Container, Typography, TextField, Button, Box, Card, CardContent, Alert } from '@mui/material';
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Card,
+  CardContent,
+  Alert,
+} from '@mui/material';
 import { Search } from '@mui/icons-material';
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 
@@ -53,7 +62,11 @@ export default function SearchPage() {
           </Button>
         </Box>
 
-        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }}>
+            {error}
+          </Alert>
+        )}
 
         {result && (
           <Card>

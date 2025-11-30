@@ -4,7 +4,7 @@ const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    './app/**/*.{js,ts,jsx,tsx,mdx}'
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -19,7 +19,7 @@ const config: Config = {
           600: '#1e88e5',
           700: '#1976d2',
           800: '#1565c0',
-          900: '#0d47a1'
+          900: '#0d47a1',
         },
         secondary: {
           50: '#f3e5f5',
@@ -31,14 +31,14 @@ const config: Config = {
           600: '#8e24aa',
           700: '#7b1fa2',
           800: '#6a1b9a',
-          900: '#4a148c'
-        }
-      }
-    }
+          900: '#4a148c',
+        },
+      },
+    },
   },
   plugins: [],
   corePlugins: {
-    preflight: false // Disable Tailwind's base styles to avoid conflicts with MUI
-  }
+    preflight: false, // Disable Tailwind's base styles to avoid conflicts with MUI
+  },
 };
 export default config;

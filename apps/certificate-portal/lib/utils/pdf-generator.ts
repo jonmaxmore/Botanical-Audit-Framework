@@ -42,10 +42,14 @@ export const generateCertificatePDF = async (certificate: any) => {
 
   doc.setFontSize(16);
   doc.setFont('helvetica', 'normal');
-  doc.text(`has successfully met the requirements for`, 148.5, startY + lineHeight * 2.5, { align: 'center' });
+  doc.text(`has successfully met the requirements for`, 148.5, startY + lineHeight * 2.5, {
+    align: 'center',
+  });
 
   doc.setFontSize(20);
-  doc.text(`Good Agricultural and Collection Practices`, 148.5, startY + lineHeight * 3.5, { align: 'center' });
+  doc.text(`Good Agricultural and Collection Practices`, 148.5, startY + lineHeight * 3.5, {
+    align: 'center',
+  });
 
   // Details
   doc.setFontSize(12);
@@ -64,7 +68,12 @@ export const generateCertificatePDF = async (certificate: any) => {
   // Footer
   doc.setFontSize(10);
   doc.setTextColor(150, 150, 150);
-  doc.text('This certificate is electronically generated and valid without signature.', 148.5, 195, { align: 'center' });
+  doc.text(
+    'This certificate is electronically generated and valid without signature.',
+    148.5,
+    195,
+    { align: 'center' }
+  );
 
   // Save
   doc.save(`${certificate.id}.pdf`);

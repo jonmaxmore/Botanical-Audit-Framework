@@ -8,13 +8,13 @@ import LoginPage from '../page';
 // Mock next/navigation
 const mockPush = jest.fn();
 jest.mock('next/navigation', () => ({
-  useRouter: jest.fn()
+  useRouter: jest.fn(),
 }));
 
 // Mock notistack
 const mockEnqueueSnackbar = jest.fn();
 jest.mock('notistack', () => ({
-  useSnackbar: jest.fn()
+  useSnackbar: jest.fn(),
 }));
 
 // Mock localStorage
@@ -28,12 +28,12 @@ const mockLocalStorage = (() => {
     clear: jest.fn(() => {
       store = {};
     }),
-    store
+    store,
   };
 })();
 
 Object.defineProperty(window, 'localStorage', {
-  value: mockLocalStorage
+  value: mockLocalStorage,
 });
 
 describe('LoginPage', () => {
@@ -98,17 +98,18 @@ describe('LoginPage', () => {
       const passwordInput = screen.getByLabelText(/รหัสผ่าน/i);
       const toggleButtons = screen.getAllByRole('button');
       const visibilityToggle = toggleButtons.find(
-        btn =>
+        (btn) =>
           btn.querySelector('[data-testid="VisibilityOffIcon"]') ||
           btn.querySelector('[data-testid="VisibilityIcon"]')
       );
 
       expect(passwordInput).toHaveAttribute('type', 'password');
+      expect(visibilityToggle).toBeDefined();
 
       if (visibilityToggle) {
         await user.click(visibilityToggle);
-        expect(passwordInput).toHaveAttribute('type', 'text');
       }
+      expect(passwordInput).toHaveAttribute('type', 'text');
     });
   });
 
@@ -136,7 +137,7 @@ describe('LoginPage', () => {
 
       await waitFor(() => {
         expect(mockEnqueueSnackbar).toHaveBeenCalledWith('เข้าสู่ระบบสำเร็จ!', {
-          variant: 'success'
+          variant: 'success',
         });
       });
 

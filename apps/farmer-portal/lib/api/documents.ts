@@ -1,4 +1,4 @@
-import apiClient, { ApiResponse, handleApiError } from './client';
+import { apiClient, ApiResponse, handleApiError } from './client';
 
 // Document interface matching backend model
 export interface Document {
@@ -63,8 +63,8 @@ export const uploadDocument = async (
       formData,
       {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+        },
       }
     );
 
@@ -88,8 +88,8 @@ export const getDocuments = async (
         documentType: params?.documentType,
         search: params?.search,
         startDate: params?.startDate,
-        endDate: params?.endDate
-      }
+        endDate: params?.endDate,
+      },
     });
 
     return response.data;
@@ -114,7 +114,7 @@ export const getDocumentById = async (documentId: string): Promise<ApiResponse<D
 export const downloadDocument = async (documentId: string): Promise<Blob> => {
   try {
     const response = await apiClient.get(`/api/documents/${documentId}/download`, {
-      responseType: 'blob'
+      responseType: 'blob',
     });
     return response.data;
   } catch (error) {

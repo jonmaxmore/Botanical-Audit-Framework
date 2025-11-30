@@ -20,7 +20,7 @@ const {
   verifyCertificate,
   renewCertificate,
   getCertificateStats,
-} = require('../controllers/certificateController');
+} = require('../controllers/CertificateController');
 
 // Certificate list and search
 router.get('/', authenticate, authorize(['director', 'auditor', 'admin']), getAllCertificates);

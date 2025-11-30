@@ -1,0 +1,589 @@
+[
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\certificates\\[id]\\page.tsx",
+    "messages": [
+      {
+        "ruleId": "@next/next/no-img-element",
+        "severity": 1,
+        "message": "Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element",
+        "line": 165,
+        "column": 17,
+        "nodeType": "JSXOpeningElement",
+        "endLine": 165,
+        "endColumn": 91
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "'use client';\n\nimport { useEffect, useState } from 'react';\nimport { useRouter, useParams } from 'next/navigation';\nimport {\n  Container,\n  Typography,\n  Box,\n  Paper,\n  Grid,\n  Chip,\n  Button,\n  Divider,\n  CircularProgress,\n} from '@mui/material';\nimport { ArrowBack, Download, QrCode2, Edit } from '@mui/icons-material';\nimport QRCode from 'qrcode';\nimport { generateCertificatePDF } from '@/lib/utils/pdf-generator';\nimport apiClient from '@/lib/api-client';\n\nexport default function CertificateDetailPage() {\n  const router = useRouter();\n  const params = useParams();\n  const [certificate, setCertificate] = useState<any>(null);\n  const [loading, setLoading] = useState(true);\n  const [qrCodeUrl, setQrCodeUrl] = useState('');\n\n  useEffect(() => {\n    const fetchCertificate = async () => {\n      const id = params.id as string;\n      try {\n        const response = await apiClient.get(`/certificates/${id}`);\n        if (response.data.success) {\n          const certData = response.data.data;\n          const mappedCert = {\n            id: certData.certificateNumber, // Display ID\n            _id: certData._id, // Internal ID\n            farmName: certData.farmName || 'Unknown Farm',\n            status: certData.status,\n            issueDate: new Date(certData.validFrom).toLocaleDateString('en-GB'),\n            expiryDate: new Date(certData.validUntil).toLocaleDateString('en-GB'),\n            // Keep original data for PDF/QR if needed\n            ...certData,\n          };\n          setCertificate(mappedCert);\n\n          // Generate QR Code\n          try {\n            const url = await QRCode.toDataURL(\n              JSON.stringify({\n                id: mappedCert.id,\n                verifyUrl: `https://gacp.go.th/verify/${mappedCert.id}`,\n              })\n            );\n            setQrCodeUrl(url);\n          } catch (err) {\n            console.error('QR Gen Error', err);\n          }\n        }\n      } catch (err) {\n        console.error('Failed to fetch certificate:', err);\n        // Fallback or error handling\n      } finally {\n        setLoading(false);\n      }\n    };\n\n    if (params.id) {\n      fetchCertificate();\n    }\n  }, [params.id]);\n\n  const handleDownloadPDF = () => {\n    if (certificate) {\n      generateCertificatePDF(certificate);\n    }\n  };\n\n  if (loading) {\n    return (\n      <Box display=\"flex\" justifyContent=\"center\" alignItems=\"center\" minHeight=\"50vh\">\n        <CircularProgress />\n      </Box>\n    );\n  }\n\n  if (!certificate) {\n    return (\n      <Container maxWidth=\"md\" sx={{ py: 4 }}>\n        <Typography variant=\"h5\" color=\"error\" align=\"center\">\n          Certificate not found\n        </Typography>\n        <Box display=\"flex\" justifyContent=\"center\" mt={2}>\n          <Button startIcon={<ArrowBack />} onClick={() => router.back()}>\n            Back to List\n          </Button>\n        </Box>\n      </Container>\n    );\n  }\n\n  return (\n    <Container maxWidth=\"md\" sx={{ py: 4 }}>\n      <Button startIcon={<ArrowBack />} onClick={() => router.back()} sx={{ mb: 2 }}>\n        Back to List\n      </Button>\n\n      <Paper sx={{ p: 4 }}>\n        <Box display=\"flex\" justifyContent=\"space-between\" alignItems=\"flex-start\" mb={3}>\n          <Box>\n            <Typography variant=\"h4\" gutterBottom>\n              {certificate.id}\n            </Typography>\n            <Chip\n              label={certificate.status}\n              color={\n                certificate.status === 'Active'\n                  ? 'success'\n                  : certificate.status === 'Expired'\n                    ? 'error'\n                    : 'default'\n              }\n            />\n          </Box>\n          <Box display=\"flex\" gap={1}>\n            <Button variant=\"outlined\" startIcon={<Edit />}>\n              Edit\n            </Button>\n            <Button variant=\"contained\" startIcon={<Download />} onClick={handleDownloadPDF}>\n              PDF\n            </Button>\n          </Box>\n        </Box>\n\n        <Divider sx={{ my: 3 }} />\n\n        <Grid container spacing={3}>\n          <Grid item xs={12} md={6}>\n            <Typography variant=\"subtitle2\" color=\"text.secondary\">\n              Farm Name\n            </Typography>\n            <Typography variant=\"h6\">{certificate.farmName}</Typography>\n          </Grid>\n\n          <Grid item xs={12} md={6}>\n            <Typography variant=\"subtitle2\" color=\"text.secondary\">\n              Issue Date\n            </Typography>\n            <Typography variant=\"h6\">{certificate.issueDate}</Typography>\n          </Grid>\n\n          <Grid item xs={12} md={6}>\n            <Typography variant=\"subtitle2\" color=\"text.secondary\">\n              Expiry Date\n            </Typography>\n            <Typography variant=\"h6\">{certificate.expiryDate}</Typography>\n          </Grid>\n\n          <Grid item xs={12} md={6}>\n            <Typography variant=\"subtitle2\" color=\"text.secondary\">\n              QR Code\n            </Typography>\n            <Box mt={1}>\n              {qrCodeUrl ? (\n                <img src={qrCodeUrl} alt=\"Certificate QR Code\" width={150} height={150} />\n              ) : (\n                <QrCode2 sx={{ fontSize: 60 }} />\n              )}\n            </Box>\n          </Grid>\n        </Grid>\n      </Paper>\n    </Container>\n  );\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\certificates\\new\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\certificates\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\dashboard\\page.tsx",
+    "messages": [
+      {
+        "ruleId": "@typescript-eslint/no-unused-vars",
+        "severity": 1,
+        "message": "'setStats' is assigned a value but never used. Allowed unused vars must match /^_/u.",
+        "line": 11,
+        "column": 17,
+        "nodeType": "Identifier",
+        "messageId": "unusedVar",
+        "endLine": 11,
+        "endColumn": 25
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "'use client';\n\nimport { useState, useEffect } from 'react';\nimport { useRouter } from 'next/navigation';\nimport { Container, Typography, Grid, Card, CardContent, Box } from '@mui/material';\nimport { CheckCircle, Pending, Cancel, Description } from '@mui/icons-material';\nimport ErrorBoundary from '@/components/common/ErrorBoundary';\n\nexport default function DashboardPage() {\n  const router = useRouter();\n  const [stats, setStats] = useState({\n    active: 12,\n    pending: 3,\n    expired: 2,\n    total: 17,\n  });\n\n  useEffect(() => {\n    const token = localStorage.getItem('cert_token');\n    if (!token) {\n      router.push('/login');\n    }\n  }, [router]);\n\n  const cards = [\n    {\n      title: 'Active Certificates',\n      value: stats.active,\n      icon: <CheckCircle sx={{ fontSize: 48, color: '#4caf50' }} />,\n      color: '#4caf50',\n    },\n    {\n      title: 'Pending',\n      value: stats.pending,\n      icon: <Pending sx={{ fontSize: 48, color: '#ff9800' }} />,\n      color: '#ff9800',\n    },\n    {\n      title: 'Expired',\n      value: stats.expired,\n      icon: <Cancel sx={{ fontSize: 48, color: '#f44336' }} />,\n      color: '#f44336',\n    },\n    {\n      title: 'Total',\n      value: stats.total,\n      icon: <Description sx={{ fontSize: 48, color: '#2196f3' }} />,\n      color: '#2196f3',\n    },\n  ];\n\n  return (\n    <ErrorBoundary>\n      <Container maxWidth=\"xl\" sx={{ py: 4 }}>\n        <Typography variant=\"h4\" gutterBottom>\n          📊 Dashboard\n        </Typography>\n        <Grid container spacing={3}>\n          {cards.map((card, index) => (\n            <Grid item xs={12} sm={6} md={3} key={index}>\n              <Card>\n                <CardContent>\n                  <Box display=\"flex\" flexDirection=\"column\" alignItems=\"center\" textAlign=\"center\">\n                    {card.icon}\n                    <Typography variant=\"h4\" sx={{ mt: 2, color: card.color }}>\n                      {card.value}\n                    </Typography>\n                    <Typography variant=\"body2\" color=\"text.secondary\">\n                      {card.title}\n                    </Typography>\n                  </Box>\n                </CardContent>\n              </Card>\n            </Grid>\n          ))}\n        </Grid>\n      </Container>\n    </ErrorBoundary>\n  );\n}\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\layout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\login\\__tests__\\page.test.tsx",
+    "messages": [
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 110,
+        "column": 9,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 110,
+        "endColumn": 62
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 1,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React from 'react';\r\nimport { render, screen, waitFor, fireEvent } from '@testing-library/react';\r\nimport userEvent from '@testing-library/user-event';\r\nimport { useRouter } from 'next/navigation';\r\nimport { useSnackbar } from 'notistack';\r\nimport LoginPage from '../page';\r\n\r\n// Mock next/navigation\r\nconst mockPush = jest.fn();\r\njest.mock('next/navigation', () => ({\r\n  useRouter: jest.fn(),\r\n}));\r\n\r\n// Mock notistack\r\nconst mockEnqueueSnackbar = jest.fn();\r\njest.mock('notistack', () => ({\r\n  useSnackbar: jest.fn(),\r\n}));\r\n\r\n// Mock localStorage\r\nconst mockLocalStorage = (() => {\r\n  let store: Record<string, string> = {};\r\n  return {\r\n    getItem: jest.fn((key: string) => store[key] || null),\r\n    setItem: jest.fn((key: string, value: string) => {\r\n      store[key] = value;\r\n    }),\r\n    clear: jest.fn(() => {\r\n      store = {};\r\n    }),\r\n    store,\r\n  };\r\n})();\r\n\r\nObject.defineProperty(window, 'localStorage', {\r\n  value: mockLocalStorage,\r\n});\r\n\r\ndescribe('LoginPage', () => {\r\n  beforeEach(() => {\r\n    jest.useFakeTimers();\r\n    (useRouter as jest.Mock).mockReturnValue({ push: mockPush });\r\n    (useSnackbar as jest.Mock).mockReturnValue({ enqueueSnackbar: mockEnqueueSnackbar });\r\n    mockLocalStorage.clear();\r\n    mockPush.mockClear();\r\n    mockEnqueueSnackbar.mockClear();\r\n  });\r\n\r\n  afterEach(() => {\r\n    jest.useRealTimers();\r\n    jest.clearAllMocks();\r\n  });\r\n\r\n  describe('Page Rendering', () => {\r\n    it('should render login form', () => {\r\n      render(<LoginPage />);\r\n      expect(screen.getByLabelText(/อีเมล/i)).toBeInTheDocument();\r\n      expect(screen.getByLabelText(/รหัสผ่าน/i)).toBeInTheDocument();\r\n    });\r\n\r\n    it('should render login button', () => {\r\n      render(<LoginPage />);\r\n      expect(screen.getByRole('button', { name: /เข้าสู่ระบบ/i })).toBeInTheDocument();\r\n    });\r\n\r\n    it('should render page title', () => {\r\n      render(<LoginPage />);\r\n      expect(screen.getByRole('heading', { name: /Certificate Portal/i })).toBeInTheDocument();\r\n    });\r\n\r\n    it('should have password visibility toggle', () => {\r\n      render(<LoginPage />);\r\n      const passwordInput = screen.getByLabelText(/รหัสผ่าน/i);\r\n      expect(passwordInput).toHaveAttribute('type', 'password');\r\n    });\r\n  });\r\n\r\n  describe('Form Interaction', () => {\r\n    it('should allow typing in email field', async () => {\r\n      const user = userEvent.setup({ delay: null });\r\n      render(<LoginPage />);\r\n      const emailInput = screen.getByLabelText(/อีเมล/i);\r\n      await user.type(emailInput, 'test@example.com');\r\n      expect(emailInput).toHaveValue('test@example.com');\r\n    });\r\n\r\n    it('should allow typing in password field', async () => {\r\n      const user = userEvent.setup({ delay: null });\r\n      render(<LoginPage />);\r\n      const passwordInput = screen.getByLabelText(/รหัสผ่าน/i);\r\n      await user.type(passwordInput, 'password123');\r\n      expect(passwordInput).toHaveValue('password123');\r\n    });\r\n\r\n    it('should toggle password visibility', async () => {\r\n      const user = userEvent.setup({ delay: null });\r\n      render(<LoginPage />);\r\n      const passwordInput = screen.getByLabelText(/รหัสผ่าน/i);\r\n      const toggleButtons = screen.getAllByRole('button');\r\n      const visibilityToggle = toggleButtons.find(\r\n        (btn) =>\r\n          btn.querySelector('[data-testid=\"VisibilityOffIcon\"]') ||\r\n          btn.querySelector('[data-testid=\"VisibilityIcon\"]')\r\n      );\r\n\r\n      expect(passwordInput).toHaveAttribute('type', 'password');\r\n\r\n      if (visibilityToggle) {\r\n        await user.click(visibilityToggle);\r\n        expect(passwordInput).toHaveAttribute('type', 'text');\r\n      }\r\n    });\r\n  });\r\n\r\n  describe('Login Success', () => {\r\n    it('should login successfully with correct credentials', async () => {\r\n      const user = userEvent.setup({ delay: null });\r\n      render(<LoginPage />);\r\n\r\n      const emailInput = screen.getByLabelText(/อีเมล/i);\r\n      const passwordInput = screen.getByLabelText(/รหัสผ่าน/i);\r\n      const loginButton = screen.getByRole('button', { name: /เข้าสู่ระบบ/i });\r\n\r\n      await user.type(emailInput, 'cert@gacp.test');\r\n      await user.type(passwordInput, 'password123');\r\n      fireEvent.click(loginButton);\r\n\r\n      jest.advanceTimersByTime(1000);\r\n\r\n      await waitFor(() => {\r\n        expect(mockLocalStorage.setItem).toHaveBeenCalledWith(\r\n          'cert_token',\r\n          'demo-token-certificate-officer'\r\n        );\r\n      });\r\n\r\n      await waitFor(() => {\r\n        expect(mockEnqueueSnackbar).toHaveBeenCalledWith('เข้าสู่ระบบสำเร็จ!', {\r\n          variant: 'success',\r\n        });\r\n      });\r\n\r\n      await waitFor(() => {\r\n        expect(mockPush).toHaveBeenCalledWith('/dashboard');\r\n      });\r\n    });\r\n\r\n    it('should store user data in localStorage', async () => {\r\n      const user = userEvent.setup({ delay: null });\r\n      render(<LoginPage />);\r\n\r\n      await user.type(screen.getByLabelText(/อีเมล/i), 'cert@gacp.test');\r\n      await user.type(screen.getByLabelText(/รหัสผ่าน/i), 'password123');\r\n      fireEvent.click(screen.getByRole('button', { name: /เข้าสู่ระบบ/i }));\r\n\r\n      jest.advanceTimersByTime(1000);\r\n\r\n      await waitFor(() => {\r\n        expect(mockLocalStorage.setItem).toHaveBeenCalledWith(\r\n          'cert_user',\r\n          expect.stringContaining('certificate_officer')\r\n        );\r\n      });\r\n    });\r\n  });\r\n\r\n  describe('Login Failure', () => {\r\n    it('should show error with incorrect credentials', async () => {\r\n      const user = userEvent.setup({ delay: null });\r\n      render(<LoginPage />);\r\n\r\n      await user.type(screen.getByLabelText(/อีเมล/i), 'wrong@test.com');\r\n      await user.type(screen.getByLabelText(/รหัสผ่าน/i), 'wrongpass');\r\n      fireEvent.click(screen.getByRole('button', { name: /เข้าสู่ระบบ/i }));\r\n\r\n      jest.advanceTimersByTime(1000);\r\n\r\n      await waitFor(() => {\r\n        expect(screen.getByText('อีเมลหรือรหัสผ่านไม่ถูกต้อง')).toBeInTheDocument();\r\n      });\r\n    });\r\n\r\n    it('should not redirect on failed login', async () => {\r\n      const user = userEvent.setup({ delay: null });\r\n      render(<LoginPage />);\r\n\r\n      await user.type(screen.getByLabelText(/อีเมล/i), 'wrong@test.com');\r\n      await user.type(screen.getByLabelText(/รหัสผ่าน/i), 'wrongpass');\r\n      fireEvent.click(screen.getByRole('button', { name: /เข้าสู่ระบบ/i }));\r\n\r\n      jest.advanceTimersByTime(1000);\r\n\r\n      await waitFor(() => {\r\n        expect(screen.getByText('อีเมลหรือรหัสผ่านไม่ถูกต้อง')).toBeInTheDocument();\r\n      });\r\n\r\n      expect(mockPush).not.toHaveBeenCalledWith('/dashboard');\r\n    });\r\n  });\r\n\r\n  describe('Loading State', () => {\r\n    it('should show loading state during login', async () => {\r\n      const user = userEvent.setup({ delay: null });\r\n      render(<LoginPage />);\r\n\r\n      await user.type(screen.getByLabelText(/อีเมล/i), 'cert@gacp.test');\r\n      await user.type(screen.getByLabelText(/รหัสผ่าน/i), 'password123');\r\n\r\n      const loginButton = screen.getByRole('button', { name: /เข้าสู่ระบบ/i });\r\n      fireEvent.click(loginButton);\r\n\r\n      expect(loginButton).toBeDisabled();\r\n    });\r\n  });\r\n});\r\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\login\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\search\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\verify\\[certificateNumber]\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\verify\\__tests__\\page.test.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\app\\verify\\page.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\components\\common\\ErrorBoundary.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\components\\layout\\DashboardLayout.tsx",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\components\\layout\\__tests__\\DashboardLayout.test.tsx",
+    "messages": [
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 105,
+        "column": 9,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 105,
+        "endColumn": 60
+      },
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 120,
+        "column": 9,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 120,
+        "endColumn": 63
+      },
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 135,
+        "column": 9,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 135,
+        "endColumn": 59
+      },
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 153,
+        "column": 11,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 153,
+        "endColumn": 66
+      },
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 154,
+        "column": 11,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 154,
+        "endColumn": 65
+      },
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 174,
+        "column": 13,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 174,
+        "endColumn": 62
+      },
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 201,
+        "column": 9,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 201,
+        "endColumn": 79
+      },
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 202,
+        "column": 9,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 202,
+        "endColumn": 78
+      },
+      {
+        "ruleId": "jest/no-conditional-expect",
+        "severity": 2,
+        "message": "Avoid calling `expect` conditionally`",
+        "line": 203,
+        "column": 9,
+        "nodeType": "CallExpression",
+        "messageId": "conditionalExpect",
+        "endLine": 203,
+        "endColumn": 56
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 9,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import React from 'react';\r\nimport { render, screen, fireEvent, waitFor } from '@testing-library/react';\r\nimport DashboardLayout from '../DashboardLayout';\r\n\r\n// Mock next/navigation\r\nconst mockPush = jest.fn();\r\nconst mockPathname = jest.fn();\r\njest.mock('next/navigation', () => ({\r\n  useRouter: () => ({\r\n    push: mockPush,\r\n  }),\r\n  usePathname: () => mockPathname(),\r\n}));\r\n\r\n// Mock localStorage\r\nconst localStorageMock = (() => {\r\n  let store: { [key: string]: string } = {};\r\n  return {\r\n    getItem: jest.fn((key: string) => store[key] || null),\r\n    setItem: jest.fn((key: string, value: string) => {\r\n      store[key] = value;\r\n    }),\r\n    removeItem: jest.fn((key: string) => {\r\n      delete store[key];\r\n    }),\r\n    clear: jest.fn(() => {\r\n      store = {};\r\n    }),\r\n  };\r\n})();\r\n\r\nObject.defineProperty(window, 'localStorage', {\r\n  value: localStorageMock,\r\n});\r\n\r\ndescribe('DashboardLayout', () => {\r\n  beforeEach(() => {\r\n    jest.clearAllMocks();\r\n    mockPathname.mockReturnValue('/dashboard');\r\n  });\r\n\r\n  describe('Layout Rendering', () => {\r\n    it('should render layout with children', () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Test Content</div>\r\n        </DashboardLayout>\r\n      );\r\n      expect(screen.getByText('Test Content')).toBeInTheDocument();\r\n    });\r\n\r\n    it('should render app title in drawer', () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n      const titles = screen.getAllByText('Certificate Portal');\r\n      expect(titles.length).toBeGreaterThan(0);\r\n    });\r\n\r\n    it('should render user avatar', () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n      expect(screen.getByTestId('AccountCircleIcon')).toBeInTheDocument();\r\n    });\r\n  });\r\n\r\n  describe('Navigation Menu', () => {\r\n    it('should render all menu items', () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      // All menu items - use getAllByText to handle potential duplicates\r\n      const menuItems = [\r\n        'Dashboard',\r\n        'Certificates',\r\n        'QR Scanner',\r\n        'Search',\r\n        'Reports',\r\n        'Settings',\r\n      ];\r\n      menuItems.forEach((item) => {\r\n        expect(screen.getAllByText(item).length).toBeGreaterThan(0);\r\n      });\r\n    });\r\n\r\n    it('should navigate to dashboard when clicking Dashboard menu', () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      const buttons = screen.getAllByText('Dashboard');\r\n      const dashboardButton = buttons[0].closest('[role=\"button\"]');\r\n      if (dashboardButton) {\r\n        fireEvent.click(dashboardButton);\r\n        expect(mockPush).toHaveBeenCalledWith('/dashboard');\r\n      }\r\n    });\r\n\r\n    it('should navigate to certificates when clicking Certificates menu', () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      const buttons = screen.getAllByText('Certificates');\r\n      const certificatesButton = buttons[0].closest('[role=\"button\"]');\r\n      if (certificatesButton) {\r\n        fireEvent.click(certificatesButton);\r\n        expect(mockPush).toHaveBeenCalledWith('/certificates');\r\n      }\r\n    });\r\n\r\n    it('should navigate to settings when clicking Settings menu', () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      const buttons = screen.getAllByText('Settings');\r\n      const settingsButton = buttons[0].closest('[role=\"button\"]');\r\n      if (settingsButton) {\r\n        fireEvent.click(settingsButton);\r\n        expect(mockPush).toHaveBeenCalledWith('/settings');\r\n      }\r\n    });\r\n  });\r\n\r\n  describe('User Menu', () => {\r\n    it('should open user menu when clicking avatar', async () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');\r\n      if (avatarButton) {\r\n        fireEvent.click(avatarButton);\r\n\r\n        await waitFor(() => {\r\n          expect(screen.getByText('Profile')).toBeInTheDocument();\r\n          expect(screen.getByText('Logout')).toBeInTheDocument();\r\n        });\r\n      }\r\n    });\r\n\r\n    it('should navigate to profile when clicking Profile menu item', async () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');\r\n      if (avatarButton) {\r\n        fireEvent.click(avatarButton);\r\n\r\n        await waitFor(() => {\r\n          const profileItem = screen.getByText('Profile').closest('li');\r\n          if (profileItem) {\r\n            fireEvent.click(profileItem);\r\n            expect(mockPush).toHaveBeenCalledWith('/profile');\r\n          }\r\n        });\r\n      }\r\n    });\r\n\r\n    it('should logout and redirect to login when clicking Logout', async () => {\r\n      localStorageMock.setItem('cert_token', 'test-token');\r\n      localStorageMock.setItem('cert_user', JSON.stringify({ id: '1' }));\r\n\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      const avatarButton = screen.getByTestId('AccountCircleIcon').closest('button');\r\n      if (avatarButton) {\r\n        fireEvent.click(avatarButton);\r\n\r\n        await waitFor(() => {\r\n          const logoutItem = screen.getByText('Logout').closest('li');\r\n          if (logoutItem) {\r\n            fireEvent.click(logoutItem);\r\n          }\r\n        });\r\n\r\n        expect(localStorageMock.removeItem).toHaveBeenCalledWith('cert_token');\r\n        expect(localStorageMock.removeItem).toHaveBeenCalledWith('cert_user');\r\n        expect(mockPush).toHaveBeenCalledWith('/login');\r\n      }\r\n    });\r\n  });\r\n\r\n  describe('Active Menu State', () => {\r\n    it('should highlight active menu item for /dashboard', () => {\r\n      mockPathname.mockReturnValue('/dashboard');\r\n\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      const buttons = screen.getAllByText('Dashboard');\r\n      const dashboardButton = buttons[0].closest('[role=\"button\"]');\r\n      expect(dashboardButton?.className).toContain('Mui-selected');\r\n    });\r\n\r\n    it('should highlight active menu item for /certificates', () => {\r\n      mockPathname.mockReturnValue('/certificates');\r\n\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      const buttons = screen.getAllByText('Certificates');\r\n      const certificatesButton = buttons[0].closest('[role=\"button\"]');\r\n      expect(certificatesButton?.className).toContain('Mui-selected');\r\n    });\r\n  });\r\n\r\n  describe('Mobile Drawer', () => {\r\n    it('should have mobile menu button', () => {\r\n      render(\r\n        <DashboardLayout>\r\n          <div>Content</div>\r\n        </DashboardLayout>\r\n      );\r\n\r\n      expect(screen.getByTestId('MenuIcon')).toBeInTheDocument();\r\n    });\r\n  });\r\n});\r\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\jest.config.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\jest.setup.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\api-client.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\api\\__mocks__\\axios.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\mock-data.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\theme\\index.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\types\\certificate.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\utils\\apiClient.ts",
+    "messages": [
+      {
+        "ruleId": "no-console",
+        "severity": 1,
+        "message": "Unexpected console statement.",
+        "line": 70,
+        "column": 7,
+        "nodeType": "MemberExpression",
+        "messageId": "unexpected",
+        "endLine": 70,
+        "endColumn": 18,
+        "suggestions": [
+          {
+            "messageId": "removeConsole",
+            "data": { "propertyName": "log" },
+            "fix": { "range": [1996, 2088], "text": "" },
+            "desc": "Remove the console.log()."
+          }
+        ]
+      },
+      {
+        "ruleId": "no-console",
+        "severity": 1,
+        "message": "Unexpected console statement.",
+        "line": 101,
+        "column": 5,
+        "nodeType": "MemberExpression",
+        "messageId": "unexpected",
+        "endLine": 101,
+        "endColumn": 16,
+        "suggestions": [
+          {
+            "messageId": "removeConsole",
+            "data": { "propertyName": "log" },
+            "fix": { "range": [2715, 2770], "text": "" },
+            "desc": "Remove the console.log()."
+          }
+        ]
+      },
+      {
+        "ruleId": "no-console",
+        "severity": 1,
+        "message": "Unexpected console statement.",
+        "line": 133,
+        "column": 5,
+        "nodeType": "MemberExpression",
+        "messageId": "unexpected",
+        "endLine": 133,
+        "endColumn": 16,
+        "suggestions": [
+          {
+            "messageId": "removeConsole",
+            "data": { "propertyName": "log" },
+            "fix": { "range": [3328, 3396], "text": "" },
+            "desc": "Remove the console.log()."
+          }
+        ]
+      },
+      {
+        "ruleId": "no-console",
+        "severity": 1,
+        "message": "Unexpected console statement.",
+        "line": 146,
+        "column": 9,
+        "nodeType": "MemberExpression",
+        "messageId": "unexpected",
+        "endLine": 146,
+        "endColumn": 20,
+        "suggestions": [
+          {
+            "messageId": "removeConsole",
+            "data": { "propertyName": "log" },
+            "fix": { "range": [3674, 3743], "text": "" },
+            "desc": "Remove the console.log()."
+          }
+        ]
+      },
+      {
+        "ruleId": "no-console",
+        "severity": 1,
+        "message": "Unexpected console statement.",
+        "line": 165,
+        "column": 5,
+        "nodeType": "MemberExpression",
+        "messageId": "unexpected",
+        "endLine": 165,
+        "endColumn": 16,
+        "suggestions": [
+          {
+            "messageId": "removeConsole",
+            "data": { "propertyName": "log" },
+            "fix": { "range": [4266, 4357], "text": "" },
+            "desc": "Remove the console.log()."
+          }
+        ]
+      },
+      {
+        "ruleId": "no-console",
+        "severity": 1,
+        "message": "Unexpected console statement.",
+        "line": 174,
+        "column": 5,
+        "nodeType": "MemberExpression",
+        "messageId": "unexpected",
+        "endLine": 174,
+        "endColumn": 16,
+        "suggestions": [
+          {
+            "messageId": "removeConsole",
+            "data": { "propertyName": "log" },
+            "fix": { "range": [4527, 4599], "text": "" },
+            "desc": "Remove the console.log()."
+          }
+        ]
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 6,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "/**\n * API Client with Retry and Offline Queue Support\n *\n * Features:\n * - Exponential backoff retry\n * - Offline queue (localStorage)\n * - Auto-sync when online\n * - Token management\n */\n\nimport axios, { AxiosError, AxiosRequestConfig } from 'axios';\n\nconst API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3004/api';\n\nconst api = axios.create({\n  baseURL: API_URL,\n  timeout: 30000,\n  headers: {\n    'Content-Type': 'application/json',\n  },\n});\n\n// Request interceptor - Add auth token\napi.interceptors.request.use(\n  (config) => {\n    const token = localStorage.getItem('cert_token');\n    if (token) {\n      config.headers.Authorization = `Bearer ${token}`;\n    }\n    return config;\n  },\n  (error) => Promise.reject(error)\n);\n\n// Response interceptor - Handle errors with retry\napi.interceptors.response.use(\n  (response) => response,\n  async (error: AxiosError) => {\n    const originalRequest = error.config as AxiosRequestConfig & {\n      _retry?: boolean;\n      _retryCount?: number;\n    };\n\n    // Handle 401 - Redirect to login\n    if (error.response?.status === 401 && !originalRequest._retry) {\n      originalRequest._retry = true;\n      localStorage.removeItem('cert_token');\n\n      // Only redirect if we're in the browser\n      if (typeof window !== 'undefined') {\n        window.location.href = '/login';\n      }\n\n      return Promise.reject(error);\n    }\n\n    // Handle retryable errors with exponential backoff\n    const retryableStatuses = [408, 429, 500, 502, 503, 504];\n    const isRetryable =\n      error.message.includes('Network Error') ||\n      error.message.includes('timeout') ||\n      (error.response?.status && retryableStatuses.includes(error.response.status));\n\n    if (isRetryable && (!originalRequest._retryCount || originalRequest._retryCount < 3)) {\n      originalRequest._retryCount = (originalRequest._retryCount || 0) + 1;\n\n      // Exponential backoff: 1s, 2s, 4s\n      const delay = 1000 * Math.pow(2, originalRequest._retryCount - 1);\n\n      console.log(`Retrying request (attempt ${originalRequest._retryCount}/3) after ${delay}ms`);\n\n      await new Promise((resolve) => setTimeout(resolve, delay));\n      return api(originalRequest);\n    }\n\n    return Promise.reject(error);\n  }\n);\n\n// Offline queue management\ninterface OfflineAction {\n  method: string;\n  url: string;\n  data?: any;\n  timestamp: string;\n}\n\nexport const offlineQueue = {\n  /**\n   * Store action in offline queue\n   */\n  store(method: string, url: string, data?: any): void {\n    const actions = this.getAll();\n    actions.push({\n      method,\n      url,\n      data,\n      timestamp: new Date().toISOString(),\n    });\n    localStorage.setItem('offline_actions', JSON.stringify(actions));\n    console.log(`[Offline Queue] Stored ${method} ${url}`);\n  },\n\n  /**\n   * Get all offline actions\n   */\n  getAll(): OfflineAction[] {\n    try {\n      const actionsJson = localStorage.getItem('offline_actions');\n      return actionsJson ? JSON.parse(actionsJson) : [];\n    } catch {\n      return [];\n    }\n  },\n\n  /**\n   * Clear all offline actions\n   */\n  clear(): void {\n    localStorage.setItem('offline_actions', JSON.stringify([]));\n  },\n\n  /**\n   * Sync all offline actions\n   */\n  async sync(): Promise<number> {\n    const actions = this.getAll();\n\n    if (actions.length === 0) {\n      return 0;\n    }\n\n    console.log(`[Offline Queue] Syncing ${actions.length} actions...`);\n\n    const completedActions: OfflineAction[] = [];\n\n    for (const action of actions) {\n      try {\n        await api.request({\n          method: action.method,\n          url: action.url,\n          data: action.data,\n        });\n\n        completedActions.push(action);\n        console.log(`[Offline Queue] Synced ${action.method} ${action.url}`);\n      } catch (error) {\n        console.error(`[Offline Queue] Failed to sync ${action.method} ${action.url}:`, error);\n      }\n    }\n\n    // Remove completed actions\n    const remaining = actions.filter(\n      (action) =>\n        !completedActions.some(\n          (completed) =>\n            completed.url === action.url &&\n            completed.method === action.method &&\n            completed.timestamp === action.timestamp\n        )\n    );\n\n    localStorage.setItem('offline_actions', JSON.stringify(remaining));\n\n    console.log(`[Offline Queue] Synced ${completedActions.length}/${actions.length} actions`);\n\n    return completedActions.length;\n  },\n};\n\n// Auto-sync when browser goes online\nif (typeof window !== 'undefined') {\n  window.addEventListener('online', () => {\n    console.log('[Network] Back online - attempting to sync offline queue');\n    offlineQueue.sync();\n  });\n}\n\nexport default api;\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\utils\\helpers.ts",
+    "messages": [
+      {
+        "ruleId": "import/no-anonymous-default-export",
+        "severity": 1,
+        "message": "Assign object to a variable before exporting as module default",
+        "line": 202,
+        "column": 1,
+        "nodeType": "ExportDefaultDeclaration",
+        "endLine": 219,
+        "endColumn": 3
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "/**\r\n * Format date to Thai locale\r\n */\r\nexport function formatDateThai(date: string | Date): string {\r\n  const d = typeof date === 'string' ? new Date(date) : date;\r\n  return d.toLocaleDateString('th-TH', {\r\n    year: 'numeric',\r\n    month: 'long',\r\n    day: 'numeric',\r\n  });\r\n}\r\n\r\n/**\r\n * Format date to short Thai format\r\n */\r\nexport function formatDateShortThai(date: string | Date): string {\r\n  const d = typeof date === 'string' ? new Date(date) : date;\r\n  return d.toLocaleDateString('th-TH', {\r\n    year: '2-digit',\r\n    month: '2-digit',\r\n    day: '2-digit',\r\n  });\r\n}\r\n\r\n/**\r\n * Format number with Thai locale\r\n */\r\nexport function formatNumber(num: number, decimals: number = 2): string {\r\n  return num.toLocaleString('th-TH', {\r\n    minimumFractionDigits: decimals,\r\n    maximumFractionDigits: decimals,\r\n  });\r\n}\r\n\r\n/**\r\n * Calculate days until expiry\r\n */\r\nexport function getDaysUntilExpiry(expiryDate: string | Date): number {\r\n  const expiry = typeof expiryDate === 'string' ? new Date(expiryDate) : expiryDate;\r\n  const today = new Date();\r\n  const diffTime = expiry.getTime() - today.getTime();\r\n  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));\r\n  return diffDays;\r\n}\r\n\r\n/**\r\n * Check if certificate is expiring soon (within 30 days)\r\n */\r\nexport function isExpiringSoon(expiryDate: string | Date): boolean {\r\n  const daysUntilExpiry = getDaysUntilExpiry(expiryDate);\r\n  return daysUntilExpiry > 0 && daysUntilExpiry <= 30;\r\n}\r\n\r\n/**\r\n * Check if certificate is expired\r\n */\r\nexport function isExpired(expiryDate: string | Date): boolean {\r\n  const daysUntilExpiry = getDaysUntilExpiry(expiryDate);\r\n  return daysUntilExpiry < 0;\r\n}\r\n\r\n/**\r\n * Validate Thai National ID\r\n */\r\nexport function validateNationalId(id: string): boolean {\r\n  if (!/^\\d{13}$/.test(id)) return false;\r\n\r\n  let sum = 0;\r\n  for (let i = 0; i < 12; i++) {\r\n    sum += parseInt(id.charAt(i)) * (13 - i);\r\n  }\r\n  const mod = sum % 11;\r\n  const check = (11 - mod) % 10;\r\n  return check === parseInt(id.charAt(12));\r\n}\r\n\r\n/**\r\n * Validate Thai postal code\r\n */\r\nexport function validatePostalCode(postalCode: string): boolean {\r\n  return /^\\d{5}$/.test(postalCode);\r\n}\r\n\r\n/**\r\n * Truncate text with ellipsis\r\n */\r\nexport function truncateText(text: string, maxLength: number): string {\r\n  if (text.length <= maxLength) return text;\r\n  return text.substring(0, maxLength) + '...';\r\n}\r\n\r\n/**\r\n * Generate certificate number\r\n */\r\nexport function generateCertificateNumber(\r\n  standard: string,\r\n  year: number,\r\n  sequence: number\r\n): string {\r\n  const paddedSequence = sequence.toString().padStart(4, '0');\r\n  return `${standard}-${year}-${paddedSequence}`;\r\n}\r\n\r\n/**\r\n * Parse certificate number\r\n */\r\nexport function parseCertificateNumber(certificateNumber: string): {\r\n  standard: string;\r\n  year: number;\r\n  sequence: number;\r\n} | null {\r\n  const match = certificateNumber.match(/^([A-Z]+)-(\\d{4})-(\\d{4})$/);\r\n  if (!match) return null;\r\n\r\n  return {\r\n    standard: match[1],\r\n    year: parseInt(match[2]),\r\n    sequence: parseInt(match[3]),\r\n  };\r\n}\r\n\r\n/**\r\n * Get certificate status color\r\n */\r\nexport function getStatusColor(status: string): string {\r\n  switch (status) {\r\n    case 'approved':\r\n      return '#4caf50';\r\n    case 'pending':\r\n      return '#ff9800';\r\n    case 'rejected':\r\n      return '#f44336';\r\n    case 'expired':\r\n      return '#9e9e9e';\r\n    case 'revoked':\r\n      return '#f44336';\r\n    default:\r\n      return '#2196f3';\r\n  }\r\n}\r\n\r\n/**\r\n * Get certificate status label in Thai\r\n */\r\nexport function getStatusLabelThai(status: string): string {\r\n  switch (status) {\r\n    case 'approved':\r\n      return 'อนุมัติแล้ว';\r\n    case 'pending':\r\n      return 'รออนุมัติ';\r\n    case 'rejected':\r\n      return 'ปฏิเสธ';\r\n    case 'expired':\r\n      return 'หมดอายุ';\r\n    case 'revoked':\r\n      return 'ยกเลิก';\r\n    default:\r\n      return status;\r\n  }\r\n}\r\n\r\n/**\r\n * Debounce function\r\n */\r\nexport function debounce<T extends (...args: any[]) => any>(\r\n  func: T,\r\n  wait: number\r\n): (...args: Parameters<T>) => void {\r\n  let timeout: NodeJS.Timeout | null = null;\r\n\r\n  return function executedFunction(...args: Parameters<T>) {\r\n    const later = () => {\r\n      timeout = null;\r\n      func(...args);\r\n    };\r\n\r\n    if (timeout) {\r\n      clearTimeout(timeout);\r\n    }\r\n    timeout = setTimeout(later, wait);\r\n  };\r\n}\r\n\r\n/**\r\n * Deep clone object\r\n */\r\nexport function deepClone<T>(obj: T): T {\r\n  return JSON.parse(JSON.stringify(obj));\r\n}\r\n\r\n/**\r\n * Check if object is empty\r\n */\r\nexport function isEmpty(obj: any): boolean {\r\n  if (obj === null || obj === undefined) return true;\r\n  if (typeof obj === 'string') return obj.trim().length === 0;\r\n  if (Array.isArray(obj)) return obj.length === 0;\r\n  if (typeof obj === 'object') return Object.keys(obj).length === 0;\r\n  return false;\r\n}\r\n\r\nexport default {\r\n  formatDateThai,\r\n  formatDateShortThai,\r\n  formatNumber,\r\n  getDaysUntilExpiry,\r\n  isExpiringSoon,\r\n  isExpired,\r\n  validateNationalId,\r\n  validatePostalCode,\r\n  truncateText,\r\n  generateCertificateNumber,\r\n  parseCertificateNumber,\r\n  getStatusColor,\r\n  getStatusLabelThai,\r\n  debounce,\r\n  deepClone,\r\n  isEmpty,\r\n};\r\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\utils\\pdf-generator.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\lib\\utils\\qr-generator.ts",
+    "messages": [
+      {
+        "ruleId": "import/no-anonymous-default-export",
+        "severity": 1,
+        "message": "Assign object to a variable before exporting as module default",
+        "line": 100,
+        "column": 1,
+        "nodeType": "ExportDefaultDeclaration",
+        "endLine": 106,
+        "endColumn": 3
+      }
+    ],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 1,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "source": "import QRCode from 'qrcode';\n\ninterface QRCodeOptions {\n  width?: number;\n  margin?: number;\n  color?: {\n    dark?: string;\n    light?: string;\n  };\n  errorCorrectionLevel?: 'L' | 'M' | 'Q' | 'H';\n}\n\n/**\n * Generate QR code as data URL\n */\nexport async function generateQRCode(data: string, options?: QRCodeOptions): Promise<string> {\n  const defaultOptions: QRCodeOptions = {\n    width: 200,\n    margin: 2,\n    color: {\n      dark: '#000000',\n      light: '#FFFFFF',\n    },\n    errorCorrectionLevel: 'M',\n    ...options,\n  };\n\n  try {\n    const qrCodeDataURL = await QRCode.toDataURL(data, defaultOptions);\n    return qrCodeDataURL;\n  } catch (error) {\n    console.error('Error generating QR code:', error);\n    throw new Error('Failed to generate QR code');\n  }\n}\n\n/**\n * Generate QR code as canvas\n */\nexport async function generateQRCodeCanvas(\n  data: string,\n  canvas: HTMLCanvasElement,\n  options?: QRCodeOptions\n): Promise<void> {\n  const defaultOptions: QRCodeOptions = {\n    width: 200,\n    margin: 2,\n    errorCorrectionLevel: 'M',\n    ...options,\n  };\n\n  try {\n    await QRCode.toCanvas(canvas, data, defaultOptions);\n  } catch (error) {\n    console.error('Error generating QR code canvas:', error);\n    throw new Error('Failed to generate QR code canvas');\n  }\n}\n\n/**\n * Generate certificate verification QR code\n * Contains certificate number and verification URL\n */\nexport async function generateCertificateQR(\n  certificateNumber: string,\n  options?: QRCodeOptions\n): Promise<string> {\n  const verificationURL = `${process.env.NEXT_PUBLIC_API_URL}/verify/${certificateNumber}`;\n  return generateQRCode(verificationURL, options);\n}\n\n/**\n * Download QR code as image\n */\nexport function downloadQRCode(dataURL: string, filename: string = 'qrcode.png'): void {\n  const link = document.createElement('a');\n  link.href = dataURL;\n  link.download = filename;\n  document.body.appendChild(link);\n  link.click();\n  document.body.removeChild(link);\n}\n\n/**\n * Validate QR code data\n */\nexport function isValidQRData(data: string): boolean {\n  if (!data || typeof data !== 'string') {\n    return false;\n  }\n\n  // Check if data is not too long (QR code has limits)\n  if (data.length > 4296) {\n    return false;\n  }\n\n  return true;\n}\n\nexport default {\n  generateQRCode,\n  generateQRCodeCanvas,\n  generateCertificateQR,\n  downloadQRCode,\n  isValidQRData,\n};\n",
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\next.config.js",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  },
+  {
+    "filePath": "C:\\Users\\usEr\\Documents\\GitHub\\Botanical-Audit-Framework\\apps\\certificate-portal\\tailwind.config.ts",
+    "messages": [],
+    "suppressedMessages": [],
+    "errorCount": 0,
+    "fatalErrorCount": 0,
+    "warningCount": 0,
+    "fixableErrorCount": 0,
+    "fixableWarningCount": 0,
+    "usedDeprecatedRules": []
+  }
+]

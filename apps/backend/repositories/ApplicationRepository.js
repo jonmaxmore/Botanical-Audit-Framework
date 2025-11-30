@@ -7,8 +7,8 @@
  */
 
 const logger = require('../shared/logger');
-const Application = require('../models/application');
-const { ApplicationStatus } = require('../models/application');
+const Application = require('../models/Application');
+const { ApplicationStatus } = require('../models/Application');
 
 class ApplicationRepository {
   constructor() {

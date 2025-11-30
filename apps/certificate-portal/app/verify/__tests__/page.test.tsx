@@ -5,7 +5,7 @@ import QRCode from 'qrcode';
 
 // Mock QRCode library
 jest.mock('qrcode', () => ({
-  toCanvas: jest.fn()
+  toCanvas: jest.fn(),
 }));
 
 describe('VerifyPage', () => {
@@ -446,7 +446,7 @@ describe('VerifyPage', () => {
           expect.stringContaining('GACP-2025-0001'),
           expect.objectContaining({
             width: 200,
-            margin: 2
+            margin: 2,
           })
         );
       });

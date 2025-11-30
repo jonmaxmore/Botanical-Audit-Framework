@@ -4,7 +4,7 @@
  */
 module.exports = {
   testEnvironment: 'node',
-  roots: ['<rootDir>/modules'],
+  roots: ['<rootDir>/modules', '<rootDir>/__tests__'],
   testMatch: ['**/__tests__/**/*.test.js', '**/__tests__/**/*.test.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/.next/', '/dist/', '/build/'],
   moduleFileExtensions: ['js', 'ts', 'json'],
