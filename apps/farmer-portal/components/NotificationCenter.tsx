@@ -1,5 +1,5 @@
 /**
- * Notification Center Component (V2)
+ * Notification Center Component (V2 - With Pagination)
  * In-app notification system for closed-loop communication
  * Replaces email notifications
  */
@@ -16,6 +16,8 @@ import {
   Calendar,
   CheckCircle,
   XCircle,
+  ChevronDown,
+  RefreshCw,
 } from 'lucide-react';
 
 interface Notification {
@@ -30,6 +32,13 @@ interface Notification {
     label: string;
     url: string;
   };
+}
+
+interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  pages: number;
 }
 
 interface NotificationCenterProps {
@@ -59,25 +68,66 @@ export default function NotificationCenter({ className = '' }: NotificationCente
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Fetch notifications
-  const fetchNotifications = async () => {
+  // NEW: Pagination state
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+
+  // Fetch notifications with pagination
+  const fetchNotifications = async (pageNum = 1, append = false) => {
     setLoading(true);
+    setError(null);
+
     try {
-      const response = await fetch('/api/v2/notifications', {
+      const response = await fetch(`/api/v2/notifications?page=${pageNum}&limit=10`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
-      const data = await response.json();
-      if (data.success) {
-        setNotifications(data.data.notifications);
-        setUnreadCount(data.data.unreadCount);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
-    } catch (error) {
-      console.error('Failed to fetch notifications:', error);
+
+      const data = await response.json();
+
+      if (data.success) {
+        // NEW: Handle pagination metadata
+        const newNotifications = data.data.notifications;
+
+        if (append) {
+          // Append for "Load More"
+          setNotifications((prev) => [...prev, ...newNotifications]);
+        } else {
+          // Replace for initial load
+          setNotifications(newNotifications);
+        }
+
+        setUnreadCount(data.data.unreadCount);
+        setPage(data.data.pagination.page);
+        setTotalPages(data.data.pagination.pages);
+        setTotalCount(data.data.pagination.total);
+        setHasMore(data.data.pagination.page < data.data.pagination.pages);
+      } else {
+        throw new Error('API returned success: false');
+      }
+    } catch (err) {
+      console.error('Failed to fetch notifications:', err);
+      setError(
+        err instanceof Error ? err.message : 'ไม่สามารถโหลดการแจ้งเตือนได้ กรุณาลองใหม่อีกครั้ง'
+      );
     } finally {
       setLoading(false);
+    }
+  };
+
+  // NEW: Load more notifications
+  const loadMore = () => {
+    if (!loading && hasMore) {
+      fetchNotifications(page + 1, true);
     }
   };
 
@@ -118,7 +168,7 @@ export default function NotificationCenter({ className = '' }: NotificationCente
 
   useEffect(() => {
     if (isOpen) {
-      fetchNotifications();
+      fetchNotifications(1, false);
     }
   }, [isOpen]);
 
@@ -168,7 +218,12 @@ export default function NotificationCenter({ className = '' }: NotificationCente
         <div className="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50 max-h-[600px] flex flex-col">
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">การแจ้งเตือน</h3>
+            <div>
+              <h3 className="text-lg font-semibold text-gray-900">การแจ้งเตือน</h3>
+              {totalCount > 0 && (
+                <p className="text-xs text-gray-500 mt-0.5">ทั้งหมด {totalCount} รายการ</p>
+              )}
+            </div>
             <div className="flex items-center gap-2">
               {unreadCount > 0 && (
                 <button
@@ -184,9 +239,28 @@ export default function NotificationCenter({ className = '' }: NotificationCente
             </div>
           </div>
 
+          {/* NEW: Error Banner */}
+          {error && (
+            <div className="p-3 bg-red-50 border-b border-red-200">
+              <div className="flex items-start gap-2">
+                <XCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm text-red-800">{error}</p>
+                  <button
+                    onClick={() => fetchNotifications(1, false)}
+                    className="text-xs text-red-600 hover:text-red-800 font-medium mt-1 flex items-center gap-1"
+                  >
+                    <RefreshCw className="w-3 h-3" />
+                    ลองใหม่อีกครั้ง
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Notification List */}
           <div className="overflow-y-auto flex-1">
-            {loading ? (
+            {loading && notifications.length === 0 ? (
               <div className="p-8 text-center text-gray-500">กำลังโหลด...</div>
             ) : notifications.length === 0 ? (
               <div className="p-8 text-center text-gray-500">
@@ -245,6 +319,29 @@ export default function NotificationCenter({ className = '' }: NotificationCente
               </div>
             )}
           </div>
+
+          {/* NEW: Load More Button */}
+          {hasMore && !error && (
+            <div className="p-3 border-t border-gray-200">
+              <button
+                onClick={loadMore}
+                disabled={loading}
+                className="w-full px-4 py-2 text-sm text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-md disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+              >
+                {loading ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    กำลังโหลด...
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-4 h-4" />
+                    โหลดเพิ่มเติม ({notifications.length} / {totalCount})
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
