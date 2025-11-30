@@ -15,6 +15,7 @@ const User = require('../../domain/entities/User');
 const Email = require('../../domain/value-objects/Email');
 const Password = require('../../domain/value-objects/Password');
 const UserRegistered = require('../../domain/events/UserRegistered');
+const { validateThaiID, validateLaserCode } = require('../../../../utils/validators');
 
 class RegisterUserUseCase {
   constructor({ userRepository, passwordHasher, tokenGenerator, eventBus }) {
@@ -48,6 +49,16 @@ class RegisterUserUseCase {
       throw new Error('ID card already registered');
     }
 
+    // 4.1 Validate ID Card (Real Algorithm)
+    if (!validateThaiID(request.idCard)) {
+      throw new Error('Invalid Thai ID Card number');
+    }
+
+    // 4.2 Validate Laser Code (Real Format)
+    if (!request.laserCode || !validateLaserCode(request.laserCode)) {
+      throw new Error('Invalid Laser Code format');
+    }
+
     // 5. Hash password
     const hashedPassword = await this.passwordHasher.hash(password.getPlainValue());
 
@@ -63,6 +74,8 @@ class RegisterUserUseCase {
       lastName: request.lastName,
       phoneNumber: request.phoneNumber,
       idCard: request.idCard,
+      idCardImage: request.idCardImage,
+      laserCode: request.laserCode,
       address: request.address || '',
       province: request.province || '',
       district: request.district || '',
@@ -70,6 +83,7 @@ class RegisterUserUseCase {
       zipCode: request.zipCode || '',
       role: 'FARMER',
       status: 'PENDING_VERIFICATION',
+      verificationStatus: 'pending',
       isEmailVerified: false,
       emailVerificationToken: verificationToken,
       emailVerificationExpiry: verificationExpiry,

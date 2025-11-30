@@ -9,10 +9,12 @@ const router = express.Router();
 // Import V2 route modules
 const notificationsRouter = require('./notifications');
 const ticketsRouter = require('./tickets');
+const kycRouter = require('./kyc');
 
 // Mount V2 routes
 router.use('/notifications', notificationsRouter);
 router.use('/tickets', ticketsRouter);
+router.use('/kyc', kycRouter);
 
 // Health check
 router.get('/health', (req, res) => {

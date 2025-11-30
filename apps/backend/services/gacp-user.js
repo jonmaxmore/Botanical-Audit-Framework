@@ -7,12 +7,14 @@
 
 const logger = require('../shared/logger');
 const UserRepository = require('../repositories/UserRepository');
+const EmailService = require('./email/EmailService');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 class GACPUserService {
   constructor() {
     this.repository = new UserRepository();
+    this.emailService = new EmailService();
   }
 
   /**
@@ -310,11 +312,19 @@ class GACPUserService {
     try {
       const user = await this.repository.findByEmail(email);
       if (user) {
-        user.generatePasswordResetToken();
+        const resetToken = user.generatePasswordResetToken();
         await this.repository.save(user);
-        // TODO: Send email
+
+        // Send password reset email
+        try {
+          await this.emailService.sendPasswordResetEmail(user, resetToken);
+          logger.info('[GACPUserService] Password reset email sent', { email: user.email });
+        } catch (emailError) {
+          logger.error('[GACPUserService] Failed to send password reset email:', emailError);
+          // Don't throw - we still want to allow password reset even if email fails
+        }
       }
-      // Always return success
+      // Always return success (security: don't reveal if email exists)
     } catch (error) {
       logger.error('[GACPUserService] requestPasswordReset error:', error);
       throw error;
@@ -390,9 +400,17 @@ class GACPUserService {
         throw new Error('Email is already verified');
       }
 
-      user.generateEmailVerificationToken();
+      const verificationToken = user.generateEmailVerificationToken();
       await this.repository.save(user);
-      // TODO: Send email
+
+      // Send verification email
+      try {
+        await this.emailService.sendVerificationEmail(user, verificationToken);
+        logger.info('[GACPUserService] Verification email sent', { userId: user._id, email: user.email });
+      } catch (emailError) {
+        logger.error('[GACPUserService] Failed to send verification email:', emailError);
+        throw new Error('Failed to send verification email. Please try again later.');
+      }
     } catch (error) {
       logger.error('[GACPUserService] resendVerification error:', error);
       throw error;

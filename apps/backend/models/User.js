@@ -48,6 +48,13 @@ const userSchema = new mongoose.Schema(
       match: [/^\d{13}$/, 'Please enter a valid Thai national ID'],
     },
 
+    laserCode: {
+      type: String,
+      required: function() { return this.role === 'farmer'; },
+      match: [/^[A-Z]{2}[0-9]{10}$/, 'Please enter a valid Laser Code (e.g., ME0123456789)'],
+      select: false, // Sensitive data
+    },
+
     // Role and Permissions
     role: {
       type: String,
@@ -101,6 +108,18 @@ const userSchema = new mongoose.Schema(
       filename: String,
       path: String,
       size: Number,
+      uploadedAt: Date,
+    },
+
+    // Identity Verification (KYC)
+    verificationStatus: {
+      type: String,
+      enum: ['pending', 'verified', 'rejected'],
+      default: 'pending',
+    },
+
+    idCardImage: {
+      path: String,
       uploadedAt: Date,
     },
 

@@ -1,6 +1,6 @@
 /**
  * Auditor Workspace Component (V2)
- * For virtual audit via video call (Bilzz integration)
+ * For virtual audit via video call (Daily.co integration)
  *
  * Features:
  * - Video call interface
@@ -46,6 +46,7 @@ const GACP_CHECKLIST: ChecklistItem[] = [
 export default function AuditorWorkspace({ applicationId, appointmentId }: AuditorWorkspaceProps) {
   const [checklist, setChecklist] = useState<ChecklistItem[]>(GACP_CHECKLIST);
   const [videoActive, setVideoActive] = useState(false);
+  const [roomUrl, setRoomUrl] = useState<string | null>(null);
   const [snapshots, setSnapshots] = useState<string[]>([]);
   const [notes, setNotes] = useState('');
 
@@ -162,19 +163,46 @@ export default function AuditorWorkspace({ applicationId, appointmentId }: Audit
         {/* Left: Video Call */}
         <div className="flex-1 p-6 bg-black flex flex-col">
           {/* Video Screen */}
-          <div className="flex-1 bg-gray-900 rounded-lg flex items-center justify-center mb-4">
+          <div className="flex-1 bg-gray-900 rounded-lg flex items-center justify-center mb-4 overflow-hidden relative">
             {videoActive ? (
-              <div className="text-white text-center">
-                <Video className="w-16 h-16 mx-auto mb-4" />
-                <p className="text-lg">Video Call Active</p>
-                <p className="text-sm text-gray-400 mt-2">(Bilzz Integration - Placeholder)</p>
-              </div>
+              roomUrl ? (
+                <iframe
+                  src={roomUrl}
+                  className="w-full h-full border-0"
+                  allow="camera; microphone; fullscreen; display-capture; autoplay"
+                />
+              ) : (
+                <div className="text-white text-center">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                  <p>Connecting to Video Room...</p>
+                </div>
+              )
             ) : (
               <div className="text-white text-center">
                 <Video className="w-16 h-16 mx-auto mb-4 text-gray-600" />
                 <p className="text-lg text-gray-400">รอเริ่มการตรวจ</p>
                 <button
-                  onClick={() => setVideoActive(true)}
+                  onClick={async () => {
+                    setVideoActive(true);
+                    try {
+                      const res = await fetch(`/api/inspections/${applicationId}/video-room`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ title: `Audit ${applicationId}` })
+                      });
+                      const data = await res.json();
+                      if (data.success && data.data.roomUrl) {
+                        setRoomUrl(data.data.roomUrl);
+                      } else {
+                        alert('Failed to create room: ' + (data.error || 'Unknown error'));
+                        setVideoActive(false);
+                      }
+                    } catch (e) {
+                      console.error(e);
+                      alert('Connection failed');
+                      setVideoActive(false);
+                    }
+                  }}
                   className="mt-4 px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
                 >
                   เริ่มการตรวจ

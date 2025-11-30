@@ -10,9 +10,7 @@ const express = require('express');
 const router = express.Router();
 const fertilizerController = require('../../controllers/ai/fertilizer.controller');
 
-// TODO: Import authentication middleware when ready
-// const { authenticateUser } = require('../../middleware/auth-middleware');
-// const { isAdmin } = require('../../middleware/roles-middleware');
+const { authenticateFarmer } = require('../../middleware/auth-middleware');
 
 /**
  * @route   POST /api/ai/fertilizer/recommend
@@ -28,7 +26,6 @@ const fertilizerController = require('../../controllers/ai/fertilizer.controller
  *            }
  *          }
  */
-router.post('/recommend', fertilizerController.generateRecommendation);
-// When auth is ready: router.post('/recommend', authenticateUser, fertilizerController.generateRecommendation);
+router.post('/recommend', authenticateFarmer, fertilizerController.generateRecommendation);
 
 module.exports = router;

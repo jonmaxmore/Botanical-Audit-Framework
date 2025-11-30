@@ -1,47 +1,25 @@
 const express = require('express');
-const { RtcTokenBuilder, RtcRole } = require('agora-access-token');
-const router = express.Router();
+const videoService = require('../services/videoService');
 
-router.post('/inspections/:id/video-token', async (req, res) => {
+router.post('/inspections/:id/video-room', async (req, res) => {
   try {
     const { id: inspectionId } = req.params;
-    const { uid, role } = req.body;
+    const { title } = req.body;
 
-    if (!uid || !role) {
-      return res.status(400).json({ error: 'uid and role are required' });
-    }
-
-    const appId = process.env.AGORA_APP_ID;
-    const appCertificate = process.env.AGORA_APP_CERTIFICATE;
-
-    if (!appId || !appCertificate) {
-      return res.status(500).json({ error: 'Agora credentials not configured' });
-    }
-
-    const channelName = `inspection_${inspectionId}`;
-    const expirationTimeInSeconds = 3600;
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    const privilegeExpiredTs = currentTimestamp + expirationTimeInSeconds;
-
-    const token = RtcTokenBuilder.buildTokenWithUid(
-      appId,
-      appCertificate,
-      channelName,
-      uid,
-      RtcRole.PUBLISHER,
-      privilegeExpiredTs,
-    );
+    // Create room using Daily.co Service
+    const roomDetails = await videoService.createRoom(inspectionId, title || `Inspection ${inspectionId}`);
 
     res.json({
-      token,
-      channelName,
-      uid,
-      appId,
-      expiresAt: privilegeExpiredTs,
+      success: true,
+      data: roomDetails
     });
   } catch (error) {
-    console.error('Error generating Agora token:', error);
-    res.status(500).json({ error: 'Failed to generate video token' });
+    console.error('Error creating video room:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to create video room',
+      details: error.message
+    });
   }
 });
 

@@ -51,6 +51,14 @@ const userSchema = new mongoose.Schema(
       trim: true,
       index: true,
     },
+    idCardImage: {
+      type: String,
+      required: false, // Optional for now, or true if strictly required
+    },
+    laserCode: {
+      type: String,
+      trim: true,
+    },
     address: {
       type: String,
       default: '',
@@ -81,6 +89,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: ['PENDING_VERIFICATION', 'ACTIVE', 'SUSPENDED', 'INACTIVE'],
       default: 'PENDING_VERIFICATION',
+      index: true,
+    },
+    verificationStatus: {
+      type: String,
+      enum: ['pending', 'verified', 'rejected'],
+      default: 'pending',
       index: true,
     },
     isEmailVerified: {
@@ -160,6 +174,8 @@ class MongoDBUserRepository extends IUserRepository {
       lastName: doc.lastName,
       phoneNumber: doc.phoneNumber,
       idCard: doc.idCard,
+      idCardImage: doc.idCardImage,
+      laserCode: doc.laserCode,
       address: doc.address,
       province: doc.province,
       district: doc.district,
@@ -167,6 +183,7 @@ class MongoDBUserRepository extends IUserRepository {
       zipCode: doc.zipCode,
       role: doc.role,
       status: doc.status,
+      verificationStatus: doc.verificationStatus,
       isEmailVerified: doc.isEmailVerified,
       emailVerificationToken: doc.emailVerificationToken,
       emailVerificationExpiry: doc.emailVerificationExpiry,
@@ -195,6 +212,8 @@ class MongoDBUserRepository extends IUserRepository {
       lastName: user.lastName,
       phoneNumber: user.phoneNumber,
       idCard: user.idCard,
+      idCardImage: user.idCardImage,
+      laserCode: user.laserCode,
       address: user.address,
       province: user.province,
       district: user.district,
@@ -202,6 +221,7 @@ class MongoDBUserRepository extends IUserRepository {
       zipCode: user.zipCode,
       role: user.role,
       status: user.status,
+      verificationStatus: user.verificationStatus,
       isEmailVerified: user.isEmailVerified,
       emailVerificationToken: user.emailVerificationToken,
       emailVerificationExpiry: user.emailVerificationExpiry,

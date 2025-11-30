@@ -8,6 +8,7 @@
 const express = require('express');
 const authValidator = require('../validators/auth.validator');
 const authMiddleware = require('../../../../middleware/auth-middleware');
+const upload = require('../../../../middleware/upload');
 
 /**
  * Create auth router
@@ -22,8 +23,10 @@ function createAuthRouter(authController) {
    * @desc Register new farmer account
    * @access Public
    */
-  router.post('/register', authValidator.validateRegister, (req, res) =>
-    authController.register(req, res),
+  router.post('/register',
+    upload.single('idCardImage'),
+    authValidator.validateRegister,
+    (req, res) => authController.register(req, res),
   );
 
   /**

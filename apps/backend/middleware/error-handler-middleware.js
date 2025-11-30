@@ -107,11 +107,13 @@ const createErrorResponse = (errorCode, message, details = null, statusCode = 50
   };
 };
 
+const logger = require('../shared/logger');
+
 /**
  * Express error handler middleware
  */
 const errorHandler = (err, req, res, _next) => {
-  console.error('Error occurred:', {
+  logger.error('Error occurred:', {
     message: err.message,
     stack: err.stack,
     url: req.url,
@@ -119,7 +121,19 @@ const errorHandler = (err, req, res, _next) => {
     ip: req.ip,
     userAgent: req.get('User-Agent'),
     timestamp: new Date().toISOString(),
+    errorCode: err.errorCode,
   });
+
+  // Handle AppError instances
+  if (err.isOperational) {
+    const errorResponse = createErrorResponse(
+      err.errorCode || ERROR_CODES.INTERNAL_SERVER_ERROR,
+      err.message,
+      err.details || null,
+      err.statusCode || 500
+    );
+    return res.status(err.statusCode || 500).json(errorResponse);
+  }
 
   // Handle specific error types
   if (err.name === 'ValidationError') {

@@ -59,6 +59,18 @@ router.post(
     cropInformation: 'required|array|min:1',
   }),
   handleAsync(async (req, res) => {
+    // Enforce KYC Verification
+    const User = require('../models/User');
+    const user = await User.findById(req.user.id);
+
+    if (!user || user.verificationStatus !== 'verified') {
+      return res.status(403).json({
+        success: false,
+        message: 'Identity verification required. Please wait for admin approval.',
+        error: 'KYC_REQUIRED'
+      });
+    }
+
     const application = await GACPApplicationService.createApplication(req.user.id, req.body);
 
     res.status(201).json({

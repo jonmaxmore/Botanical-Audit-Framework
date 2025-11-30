@@ -17,6 +17,8 @@ class User {
     lastName,
     phoneNumber,
     idCard,
+    idCardImage,
+    laserCode,
     address,
     province,
     district,
@@ -24,6 +26,7 @@ class User {
     zipCode,
     role = 'FARMER',
     status = 'PENDING_VERIFICATION',
+    verificationStatus = 'pending',
     isEmailVerified = false,
     emailVerificationToken = null,
     emailVerificationExpiry = null,
@@ -44,6 +47,8 @@ class User {
     this.lastName = lastName;
     this.phoneNumber = phoneNumber;
     this.idCard = idCard;
+    this.idCardImage = idCardImage;
+    this.laserCode = laserCode;
     this.address = address;
     this.province = province;
     this.district = district;
@@ -51,6 +56,7 @@ class User {
     this.zipCode = zipCode;
     this.role = role;
     this.status = status;
+    this.verificationStatus = verificationStatus;
     this.isEmailVerified = isEmailVerified;
     this.emailVerificationToken = emailVerificationToken;
     this.emailVerificationExpiry = emailVerificationExpiry;
@@ -291,6 +297,10 @@ class User {
       errors.push('ID card must be 13 digits');
     }
 
+    if (!this.laserCode) {
+      errors.push('Laser code is required');
+    }
+
     const validStatuses = ['PENDING_VERIFICATION', 'ACTIVE', 'SUSPENDED', 'INACTIVE'];
     if (!validStatuses.includes(this.status)) {
       errors.push('Invalid user status');
@@ -312,6 +322,8 @@ class User {
       fullName: this.getFullName(),
       phoneNumber: this.phoneNumber,
       idCard: this.idCard,
+      idCardImage: this.idCardImage,
+      laserCode: this.laserCode,
       address: this.address,
       province: this.province,
       district: this.district,
@@ -319,6 +331,7 @@ class User {
       zipCode: this.zipCode,
       role: this.role,
       status: this.status,
+      verificationStatus: this.verificationStatus,
       isEmailVerified: this.isEmailVerified,
       isActive: this.isActive(),
       isLocked: this.isAccountLocked(),

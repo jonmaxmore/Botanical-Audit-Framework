@@ -14,7 +14,9 @@ export default function RegisterPage() {
     confirmPassword: '',
     phone: '',
     nationalId: '',
+    laserCode: '',
   });
+  const [idCardImage, setIdCardImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -23,6 +25,12 @@ export default function RegisterPage() {
       ...formData,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setIdCardImage(e.target.files[0]);
+    }
   };
 
   const handleRegister = async (e: React.FormEvent) => {
@@ -36,16 +44,29 @@ export default function RegisterPage() {
       return;
     }
 
+    if (!idCardImage) {
+      setError('กรุณาอัปโหลดรูปถ่ายบัตรประชาชน');
+      setLoading(false);
+      return;
+    }
+
     try {
+      const data = new FormData();
+      data.append('fullName', formData.fullName);
+      data.append('email', formData.email);
+      data.append('password', formData.password);
+      data.append('phone', formData.phone);
+      data.append('nationalId', formData.nationalId);
+      data.append('laserCode', formData.laserCode);
+      data.append('role', 'farmer');
+      data.append('idCardImage', idCardImage);
+
       // Call the backend register endpoint
       // Note: The backend route is /api/auth/register
-      const response = await apiClient.post('/auth/register', {
-        fullName: formData.fullName,
-        email: formData.email,
-        password: formData.password,
-        phone: formData.phone,
-        nationalId: formData.nationalId,
-        role: 'farmer', // Force role to farmer
+      const response = await apiClient.post('/auth/register', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
       if (response.data.success) {
@@ -54,7 +75,7 @@ export default function RegisterPage() {
       }
     } catch (err: any) {
       console.error('Registration error:', err);
-      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+      setError(err.response?.data?.error || err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -107,7 +128,7 @@ export default function RegisterPage() {
 
             <div>
               <label htmlFor="nationalId" className="block text-sm font-medium text-gray-700">
-                เลขบัตรประชาชน
+                เลขบัตรประชาชน (13 หลัก)
               </label>
               <div className="mt-1">
                 <input
@@ -115,8 +136,45 @@ export default function RegisterPage() {
                   name="nationalId"
                   type="text"
                   required
+                  maxLength={13}
                   value={formData.nationalId}
                   onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="laserCode" className="block text-sm font-medium text-gray-700">
+                Laser Code (หลังบัตรประชาชน)
+              </label>
+              <div className="mt-1">
+                <input
+                  id="laserCode"
+                  name="laserCode"
+                  type="text"
+                  required
+                  placeholder="ME0-xxxxxxx-xx"
+                  value={formData.laserCode}
+                  onChange={handleChange}
+                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
+                />
+              </div>
+              <p className="mt-1 text-xs text-gray-500">กรอกเฉพาะตัวเลขและตัวอักษรภาษาอังกฤษ (ไม่ต้องใส่ขีด)</p>
+            </div>
+
+            <div>
+              <label htmlFor="idCardImage" className="block text-sm font-medium text-gray-700">
+                รูปถ่ายบัตรประชาชน
+              </label>
+              <div className="mt-1">
+                <input
+                  id="idCardImage"
+                  name="idCardImage"
+                  type="file"
+                  accept="image/*"
+                  required
+                  onChange={handleFileChange}
                   className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500 sm:text-sm"
                 />
               </div>

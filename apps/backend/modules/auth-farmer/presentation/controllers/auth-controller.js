@@ -38,6 +38,9 @@ class AuthController {
    */
   async register(req, res) {
     try {
+      console.log('Register Request Body:', JSON.stringify(req.body, null, 2));
+      console.log('Register Request File:', req.file);
+
       const result = await this.registerUserUseCase.execute({
         email: req.body.email,
         password: req.body.password,
@@ -45,6 +48,8 @@ class AuthController {
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
         idCard: req.body.idCard,
+        idCardImage: req.file ? req.file.path : null,
+        laserCode: req.body.laserCode,
         address: req.body.address,
         province: req.body.province,
         district: req.body.district,

@@ -4,7 +4,7 @@
  */
 module.exports = {
   testEnvironment: 'node',
-  roots: ['<rootDir>/modules', '<rootDir>/__tests__'],
+  roots: ['<rootDir>/modules', '<rootDir>/services', '<rootDir>/__tests__'],
   testMatch: ['**/__tests__/**/*.test.js', '**/__tests__/**/*.test.ts'],
   testPathIgnorePatterns: ['/node_modules/', '/.next/', '/dist/', '/build/'],
   moduleFileExtensions: ['js', 'ts', 'json'],
@@ -17,6 +17,7 @@ module.exports = {
     'modules/**/domain/**/*.js',
     'modules/**/application/**/*.js',
     'modules/**/infrastructure/**/*.js',
+    'services/**/*.js', // Added services directory for coverage
     '!**/__tests__/**',
     '!**/node_modules/**',
   ],
