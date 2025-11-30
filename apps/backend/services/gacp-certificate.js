@@ -22,8 +22,8 @@ const crypto = require('crypto');
 const queueService = require('./queue/queueService');
 const cacheService = require('./cache/cacheService');
 
-const Application = require('../models/application');
-const _User = require('../models/user-model');
+const Application = require('../models/Application');
+const _User = require('../models/User');
 const logger = require('../shared/logger');
 const { ValidationError, BusinessLogicError } = require('../shared/errors');
 
@@ -56,6 +56,7 @@ class GACPCertificateService {
    * Returns immediately with job ID
    */
   async generateCertificate(applicationId, approvedBy) {
+    console.log('GACPCertificateService.generateCertificate called with:', applicationId, approvedBy);
     try {
       const application = await this.applicationRepository.findById(applicationId);
 
@@ -72,8 +73,7 @@ class GACPCertificateService {
 
       // Queue certificate PDF generation (heavy operation 5-10s)
       if (process.env.ENABLE_QUEUE === 'true') {
-        const job = await queueService.addJob(
-          'document-processing',
+        const job = await queueService.addDocumentJob(
           {
             type: 'certificate-pdf-generation',
             applicationId,
