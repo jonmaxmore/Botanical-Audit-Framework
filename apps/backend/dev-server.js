@@ -319,6 +319,16 @@ app.get('/api/certificates', authenticateToken, async (req, res) => {
   }
 });
 
+// ===== V2 Routes (Closed-loop Ecosystem) =====
+// Mount V2 router for new notification and ticket system
+try {
+  const v2Router = require('./routes/v2');
+  app.use('/api/v2', authenticateToken, v2Router);
+  logger.info('✅ V2 Routes mounted at /api/v2');
+} catch (error) {
+  logger.warn('⚠️  V2 Routes not available:', error.message);
+}
+
 // Error handling middleware
 app.use((req, res) => {
   res.status(404).json({
