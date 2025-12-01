@@ -208,6 +208,42 @@ const DocumentReferenceSchema = new mongoose.Schema(
   { _id: false },
 );
 
+// Form Specific Data Schema (For ภ.ท.9, 10, 11)
+const FormSpecificDataSchema = new mongoose.Schema({
+  // ภ.ท.9 (Production/Cultivation)
+  production: {
+    securityMeasures: {
+      fenceDescription: String, // ลักษณะรั้ว
+      cctvCount: Number, // จำนวนกล้องวงจรปิด
+      guardCount: Number, // จำนวนเจ้าหน้าที่รักษาความปลอดภัย
+      accessControl: String, // ระบบควบคุมการเข้า-ออก
+    },
+    storageFacility: {
+      location: String, // สถานที่เก็บรักษา
+      security: String, // ระบบความปลอดภัยคลัง
+      temperatureControl: Boolean, // การควบคุมอุณหภูมิ
+    }
+  },
+  // ภ.ท.10 (Sale)
+  sale: {
+    dispensingMethod: { type: String, enum: ['pharmacy', 'clinic', 'other'] }, // วิธีการจำหน่าย
+    pharmacist: {
+      name: String, // ชื่อเภสัชกร/ผู้มีหน้าที่ปฏิบัติการ
+      licenseNumber: String, // เลขที่ใบอนุญาตประกอบวิชาชีพ
+    },
+    storageDetails: String // รายละเอียดสถานที่เก็บ
+  },
+  // ภ.ท.11 (Import/Export)
+  importExport: {
+    type: { type: String, enum: ['import', 'export'] },
+    country: String, // ประเทศต้นทาง/ปลายทาง
+    portOfEntryExit: String, // ด่านศุลกากร
+    transportMode: { type: String, enum: ['air', 'sea', 'land'] }, // ช่องทางการขนส่ง
+    carrierName: String, // ชื่อผู้ขนส่ง
+    expectedDate: Date // วันที่คาดว่าจะนำเข้า/ส่งออก
+  }
+}, { _id: false });
+
 // Main Application Schema
 const ApplicationSchema = new mongoose.Schema(
   {
@@ -253,6 +289,12 @@ const ApplicationSchema = new mongoose.Schema(
       required: true,
     },
     cropInformation: [CropInformationSchema],
+
+    // Form Specific Data (ภ.ท.9, 10, 11)
+    formSpecificData: {
+      type: FormSpecificDataSchema,
+      default: {}
+    },
 
     // GACP Compliance
     selfAssessment: [SelfAssessmentSchema],
