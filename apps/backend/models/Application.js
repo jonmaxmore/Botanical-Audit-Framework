@@ -2,7 +2,7 @@
  * GACP Application Model
  * Core business entity for certification applications
  *
- * Based on DTAM GACP Standards and WHO Guidelines
+ * Based on Thailand Cannabis GACP Guidelines (Official)
  */
 
 const mongoose = require('mongoose');
@@ -12,6 +12,7 @@ const ApplicationStatus = {
   DRAFT: 'draft',
   SUBMITTED: 'submitted',
   UNDER_REVIEW: 'under_review',
+  DOCUMENTS_PENDING: 'documents_pending', // Request for more docs
   INSPECTION_SCHEDULED: 'inspection_scheduled',
   INSPECTION_IN_PROGRESS: 'inspection_in_progress',
   INSPECTION_COMPLETED: 'inspection_completed',
@@ -22,68 +23,126 @@ const ApplicationStatus = {
   CERTIFICATE_ISSUED: 'certificate_issued',
 };
 
-// Risk Assessment Levels
-const RiskLevel = {
-  LOW: 'low',
-  MEDIUM: 'medium',
-  HIGH: 'high',
-  CRITICAL: 'critical',
+// Applicant Types
+const ApplicantType = {
+  INDIVIDUAL: 'individual',
+  COMMUNITY_ENTERPRISE: 'community_enterprise',
+  JURISTIC: 'juristic', // Company/Corporate
 };
+
+// Request Types
+const RequestType = {
+  NEW: 'new',
+  RENEWAL: 'renewal',
+  REPLACEMENT: 'replacement', // Substitute
+};
+
+// Certification Scopes
+const CertificationScope = {
+  CULTIVATION: 'cultivation',
+  PROCESSING: 'processing',
+  BOTH: 'both',
+};
+
+// Document Types (Mapped from GACP Requirements)
+const DocumentType = {
+  // General
+  APPLICATION_FORM: 'application_form', // 1
+  LAND_TITLE_DEED: 'land_title_deed', // 2
+  LAND_USE_CONSENT: 'land_use_consent', // 3
+  LOCATION_MAP: 'location_map', // 4
+  BUILDING_PLAN: 'building_plan', // 5
+  PHOTOS_EXTERIOR: 'photos_exterior', // 6
+  PRODUCTION_PLAN: 'production_plan', // 7
+  SECURITY_WASTE_PLAN: 'security_waste_plan', // 8
+  PHOTOS_INTERIOR: 'photos_interior', // 9
+  SOP_MANUAL: 'sop_manual', // 10 (Critical)
+
+  // Juristic / Corporate Specific
+  COMPANY_REGISTRATION: 'company_registration', // 11
+  SHAREHOLDER_LIST: 'shareholder_list', // 12
+  AUTHORIZED_REP_LETTER: 'authorized_rep_letter', // 13
+  POWER_OF_ATTORNEY: 'power_of_attorney', // 14 (Optional)
+
+  // Technical / QA
+  TRAINING_CERT_GACP: 'training_cert_gacp', // 15
+  STRAIN_CERT: 'strain_cert', // 16
+  TRAINING_RECORDS_INTERNAL: 'training_records_internal', // 17
+  STAFF_TEST_RESULTS: 'staff_test_results', // 18
+  TEST_PLANTING_MATERIAL: 'test_planting_material', // 19
+  TEST_WATER: 'test_water', // 20
+  TEST_FLOWER: 'test_flower', // 21
+  INPUT_MATERIALS_REPORT: 'input_materials_report', // 22
+  CONTROL_PLAN_CP_CCP: 'control_plan_cp_ccp', // 23
+  CALIBRATION_CERT_SCALE: 'calibration_cert_scale', // 24
+
+  // Other
+  OTHER: 'other', // 26
+};
+
+// Applicant Information Schema (Snapshot)
+const ApplicantInfoSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: Object.values(ApplicantType),
+    required: true,
+  },
+  name: { type: String, required: true }, // Name or Company Name
+  registrationId: { type: String, required: true }, // ID Card or Tax ID
+  address: { type: String, required: true },
+  mobile: { type: String, required: true },
+  email: String,
+  lineId: String,
+
+  // Juristic Specific
+  phone: String, // Office phone
+  representativeName: String, // Director/Authorized Person
+}, { _id: false });
+
+// Contact Person Schema (Coordinator)
+const ContactPersonSchema = new mongoose.Schema({
+  name: String,
+  mobile: String,
+  lineId: String,
+  email: String,
+}, { _id: false });
 
 // Farm Information Schema
 const FarmInformationSchema = new mongoose.Schema(
   {
-    farmName: {
-      type: String,
-      required: true,
-      trim: true,
-      maxLength: 200,
-    },
+    farmName: { type: String, required: true, trim: true },
     location: {
       address: { type: String, required: true },
       province: { type: String, required: true },
       district: { type: String, required: true },
       subDistrict: { type: String, required: true },
-      postalCode: { type: String, required: true, match: /^[0-9]{5}$/ },
+      postalCode: { type: String, required: true },
       coordinates: {
-        latitude: { type: Number, required: true, min: -90, max: 90 },
-        longitude: { type: Number, required: true, min: -180, max: 180 },
+        latitude: { type: Number, required: true },
+        longitude: { type: Number, required: true },
       },
+    },
+    locationType: {
+      type: String,
+      enum: ['outdoor', 'indoor', 'greenhouse', 'other'],
+      required: true,
     },
     farmSize: {
-      totalArea: { type: Number, required: true, min: 0.1 }, // in rai
-      cultivatedArea: { type: Number, required: true, min: 0.1 },
-      unit: { type: String, default: 'rai', enum: ['rai', 'hectare', 'sqm'] },
+      totalArea: { type: Number, required: true },
+      unit: { type: String, default: 'rai' },
     },
-    landOwnership: {
-      type: {
-        type: String,
-        required: true,
-        enum: ['owned', 'rented', 'cooperative', 'contract'],
-      },
-      documents: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Document' }],
-      landRightsCertificate: String,
+    landHistory: {
+      description: String, // Usage history > 2 years
+      hasContaminationRisk: Boolean,
     },
     waterSource: {
-      primary: {
-        type: String,
-        required: true,
-        enum: ['well', 'river', 'canal', 'rainwater', 'municipal'],
-      },
-      quality: { type: String, enum: ['good', 'fair', 'poor', 'unknown'] },
-      testResults: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabResult' }],
-    },
-    soilType: {
-      type: { type: String, enum: ['clay', 'sandy', 'loam', 'mixed'] },
-      ph: { type: Number, min: 0, max: 14 },
-      organicMatter: Number,
-      testResults: [{ type: mongoose.Schema.Types.ObjectId, ref: 'LabResult' }],
-    },
-    plantingSystem: {
       type: String,
       required: true,
-      enum: ['soil', 'substrate', 'hydroponics', 'aeroponics', 'aquaponics'],
     },
+    processingFacility: { // For Processing Scope
+      location: String,
+      hygieneMeasures: [String],
+    }
   },
   { _id: false },
 );
@@ -91,44 +150,41 @@ const FarmInformationSchema = new mongoose.Schema(
 // Crop Information Schema
 const CropInformationSchema = new mongoose.Schema(
   {
-    cropType: {
+    strainName: { type: String, required: true },
+    sourceOrigin: { type: String, required: true }, // Company/Farm source
+    partUsed: [{
       type: String,
       required: true,
-      enum: [
-        'turmeric', // ขมิ้นชัน
-        'ginger', // ขิง
-        'holy_basil', // กะเพรา
-        'galangal', // ข่า
-        'lemongrass', // ตะไคร้
-        'kaffir_lime', // มะกรูด
-        'pandan', // ใบเตย
-        'andrographis', // ฟ้าทลายโจร
-        'centella', // บัวบก
-        'butterfly_pea', // อัญชัน
-        'other', // อื่นๆ
-      ],
-    },
-    variety: String,
-    plantingArea: { type: Number, required: true, min: 0.1 },
-    plantingMethod: {
-      type: String,
-      enum: ['seeds', 'seedlings', 'cuttings', 'rhizomes', 'other'],
+    }],
+    expectedQuantity: {
+      value: Number,
+      unit: String,
     },
     plantingDate: Date,
-    expectedHarvestDate: Date,
-    productionCycle: {
-      type: String,
-      enum: ['annual', 'biennial', 'perennial'],
-    },
-    organicCertification: {
-      certified: { type: Boolean, default: false },
-      certifyingBody: String,
-      certificateNumber: String,
-      validUntil: Date,
-    },
+    harvestDate: Date,
   },
   { _id: false },
 );
+
+// Self Assessment Schema (GACP Checklist)
+const SelfAssessmentSchema = new mongoose.Schema({
+  category: {
+    type: String,
+    enum: [
+      'qa', 'hygiene', 'document', 'equipment', 'site',
+      'water', 'fertilizer', 'seeds', 'cultivation', 'harvest',
+      'processing', 'facility', 'packaging', 'storage'
+    ],
+    required: true
+  },
+  items: [{
+    questionId: String,
+    requirement: String,
+    compliant: { type: Boolean, default: false },
+    evidence: String,
+    attachment: { type: mongoose.Schema.Types.ObjectId, ref: 'Document' }
+  }]
+}, { _id: false });
 
 // Document Reference Schema
 const DocumentReferenceSchema = new mongoose.Schema(
@@ -136,20 +192,10 @@ const DocumentReferenceSchema = new mongoose.Schema(
     documentType: {
       type: String,
       required: true,
-      enum: [
-        'application_form',
-        'farm_management_plan',
-        'cultivation_records',
-        'land_rights_certificate',
-        'water_quality_report',
-        'soil_quality_report',
-        'organic_certificate',
-        'training_certificate',
-        'identification_document',
-        'other',
-      ],
+      enum: Object.values(DocumentType),
     },
     fileName: String,
+    fileUrl: String, // Path or URL
     fileSize: Number,
     uploadDate: { type: Date, default: Date.now },
     verificationStatus: {
@@ -157,58 +203,7 @@ const DocumentReferenceSchema = new mongoose.Schema(
       default: 'pending',
       enum: ['pending', 'verified', 'rejected'],
     },
-    verifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    verificationDate: Date,
     notes: String,
-  },
-  { _id: false },
-);
-
-// Assessment Score Schema
-const AssessmentScoreSchema = new mongoose.Schema(
-  {
-    category: {
-      type: String,
-      required: true,
-      enum: [
-        'documentation',
-        'farm_information',
-        'cultivation_practices',
-        'input_materials',
-        'harvesting',
-        'post_harvest',
-        'storage',
-        'record_keeping',
-        'worker_training',
-      ],
-    },
-    maxScore: { type: Number, required: true },
-    achievedScore: { type: Number, required: true, min: 0 },
-    assessor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    assessmentDate: { type: Date, default: Date.now },
-    notes: String,
-    recommendations: [String],
-  },
-  { _id: false },
-);
-
-// Status History Schema
-const StatusHistorySchema = new mongoose.Schema(
-  {
-    status: {
-      type: String,
-      required: true,
-      enum: Object.values(ApplicationStatus),
-    },
-    changedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
-      required: true,
-    },
-    changedAt: { type: Date, default: Date.now },
-    reason: String,
-    notes: String,
-    systemGenerated: { type: Boolean, default: false },
   },
   { _id: false },
 );
@@ -216,33 +211,55 @@ const StatusHistorySchema = new mongoose.Schema(
 // Main Application Schema
 const ApplicationSchema = new mongoose.Schema(
   {
-    // Basic Information
     applicationNumber: {
       type: String,
       required: true,
       unique: true,
-      match: /^GACP-\d{4}-\d{6}$/, // Format: GACP-YYYY-NNNNNN
     },
 
+    // Request Details
+    requestType: {
+      type: String,
+      enum: Object.values(RequestType),
+      default: RequestType.NEW,
+      required: true,
+    },
+    certificationScope: {
+      type: String,
+      enum: Object.values(CertificationScope),
+      required: true,
+    },
+    purpose: {
+      type: String,
+      enum: ['research', 'commercial_domestic', 'commercial_export', 'other'],
+      required: true,
+    },
+
+    // Applicant
     applicant: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },
-
-    licenseType: {
-      type: String,
+    applicantInfo: { // Snapshot at time of application
+      type: ApplicantInfoSchema,
       required: true,
-      enum: ['individual', 'cooperative', 'enterprise', 'research'],
     },
+    contactPerson: ContactPersonSchema,
 
-    // Application Details
+    // Farm & Crop
     farmInformation: {
       type: FarmInformationSchema,
       required: true,
     },
-
     cropInformation: [CropInformationSchema],
+
+    // GACP Compliance
+    selfAssessment: [SelfAssessmentSchema],
+
+    // Documents
+    documents: [DocumentReferenceSchema],
+    processVideoLink: String, // Item 25
 
     // Process Management
     currentStatus: {
@@ -251,273 +268,55 @@ const ApplicationSchema = new mongoose.Schema(
       enum: Object.values(ApplicationStatus),
       default: ApplicationStatus.DRAFT,
     },
-
-    statusHistory: [StatusHistorySchema],
-
-    // Timeline
-    submissionDate: Date,
-    targetCompletionDate: Date,
-    actualCompletionDate: Date,
-
-    // Assessment & Evaluation
-    riskAssessment: {
-      level: {
-        type: String,
-        enum: Object.values(RiskLevel),
-      },
-      factors: [String],
-      assessedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      assessmentDate: Date,
+    statusHistory: [{
+      status: String,
+      changedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+      changedAt: { type: Date, default: Date.now },
       notes: String,
+    }],
+
+    // Audit & Inspection
+    assignedAuditor: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    inspectionDate: Date,
+    inspectionReport: { type: mongoose.Schema.Types.ObjectId, ref: 'InspectionReport' },
+
+    // Scoring
+    totalScore: Number,
+    riskLevel: {
+      type: String,
+      enum: ['low', 'medium', 'high', 'critical'],
     },
 
-    assessmentScores: [AssessmentScoreSchema],
-
-    totalScore: {
-      type: Number,
-      min: 0,
-      max: 100,
-    },
-
-    // Documentation
-    documents: [DocumentReferenceSchema],
-
-    // Assigned Personnel
-    assignedOfficer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    assignedInspector: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-
-    // Inspection
-    inspectionScheduled: Date,
-    inspectionCompleted: Date,
-    inspectionReport: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'InspectionReport',
-    },
-
-    // Decision & Certificate
-    decision: {
-      result: {
-        type: String,
-        enum: ['approved', 'conditional_approval', 'rejected'],
-      },
-      decisionDate: Date,
-      decisionBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-      reasons: [String],
-      conditions: [String],
-      validityPeriod: Number, // in months
-      appealDeadline: Date,
-    },
-
-    certificate: { type: mongoose.Schema.Types.ObjectId, ref: 'Certificate' },
-
-    // Compliance & Monitoring
-    complianceRequirements: [String],
-    surveillanceSchedule: [Date],
-    nonComplianceIssues: [
-      {
-        issue: String,
-        severity: { type: String, enum: ['minor', 'major', 'critical'] },
-        identifiedDate: Date,
-        correctiveAction: String,
-        targetDate: Date,
-        status: {
-          type: String,
-          enum: ['open', 'in_progress', 'resolved', 'overdue'],
-        },
-      },
-    ],
-
-    // Financial
-    fees: {
-      applicationFee: { type: Number, default: 0 },
-      inspectionFee: { type: Number, default: 0 },
-      certificateFee: { type: Number, default: 0 },
-      totalFee: { type: Number, default: 0 },
-      paidAmount: { type: Number, default: 0 },
-      paymentStatus: {
-        type: String,
-        default: 'pending',
-        enum: ['pending', 'partial', 'paid', 'refunded'],
-      },
-      paymentHistory: [
-        {
-          amount: Number,
-          date: Date,
-          method: String,
-          reference: String,
-        },
-      ],
-    },
-
-    // System Fields
+    // System
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    version: { type: Number, default: 1 },
   },
   {
     timestamps: true,
-    strict: true, // Enforce strict schema
     collection: 'gacp_applications',
   },
 );
 
-// Indexes for Performance
+// Indexes
 ApplicationSchema.index({ applicationNumber: 1 }, { unique: true });
 ApplicationSchema.index({ applicant: 1 });
 ApplicationSchema.index({ currentStatus: 1 });
-ApplicationSchema.index({ submissionDate: 1 });
-ApplicationSchema.index({ assignedOfficer: 1 });
-ApplicationSchema.index({ 'farmInformation.location.province': 1 });
-ApplicationSchema.index({ 'cropInformation.cropType': 1 });
 
-// Virtual Fields
-ApplicationSchema.virtual('isOverdue').get(function () {
-  return this.targetCompletionDate && new Date() > this.targetCompletionDate;
-});
-
-ApplicationSchema.virtual('daysInProcess').get(function () {
-  if (!this.submissionDate) {
-    return 0;
-  }
-  const endDate = this.actualCompletionDate || new Date();
-  return Math.floor((endDate - this.submissionDate) / (1000 * 60 * 60 * 24));
-});
-
-// Instance Methods
-ApplicationSchema.methods.updateStatus = function (newStatus, userId, reason, notes) {
-  this.statusHistory.push({
-    status: this.currentStatus,
-    changedBy: userId,
-    changedAt: new Date(),
-    reason,
-    notes,
-  });
-
-  this.currentStatus = newStatus;
-  this.updatedAt = new Date();
-
-  // Auto-set target dates based on status
-  if (newStatus === ApplicationStatus.SUBMITTED && !this.targetCompletionDate) {
-    this.targetCompletionDate = new Date(Date.now() + 45 * 24 * 60 * 60 * 1000); // 45 days
-  }
-
-  return this.save();
-};
-
-ApplicationSchema.methods.calculateTotalScore = function () {
-  if (this.assessmentScores.length === 0) {
-    return 0;
-  }
-
-  const totalPossible = this.assessmentScores.reduce((sum, score) => sum + score.maxScore, 0);
-  const totalAchieved = this.assessmentScores.reduce((sum, score) => sum + score.achievedScore, 0);
-
-  this.totalScore = totalPossible > 0 ? Math.round((totalAchieved / totalPossible) * 100) : 0;
-  return this.totalScore;
-};
-
-ApplicationSchema.methods.assessRisk = function () {
-  const riskFactors = [];
-  let riskScore = 0;
-
-  // Location-based risk
-  const industrialProvinces = ['rayong', 'chonburi', 'samut_prakan'];
-  if (industrialProvinces.includes(this.farmInformation.location.province.toLowerCase())) {
-    riskFactors.push('proximity_to_industrial_area');
-    riskScore += 3;
-  }
-
-  // Farm size risk
-  if (this.farmInformation.farmSize.totalArea < 1) {
-    riskFactors.push('small_scale_operation');
-    riskScore += 1;
-  }
-
-  // Water source risk
-  if (['river', 'canal'].includes(this.farmInformation.waterSource.primary)) {
-    riskFactors.push('surface_water_dependency');
-    riskScore += 2;
-  }
-
-  // Experience risk (based on user creation date - proxy for experience)
-  // This would need to be enhanced with actual farming experience data
-
-  // Determine risk level
-  let riskLevel;
-  if (riskScore >= 6) {
-    riskLevel = RiskLevel.CRITICAL;
-  } else if (riskScore >= 4) {
-    riskLevel = RiskLevel.HIGH;
-  } else if (riskScore >= 2) {
-    riskLevel = RiskLevel.MEDIUM;
-  } else {
-    riskLevel = RiskLevel.LOW;
-  }
-
-  this.riskAssessment = {
-    level: riskLevel,
-    factors: riskFactors,
-    assessmentDate: new Date(),
-  };
-
-  return riskLevel;
-};
-
-// Static Methods
+// Generate Application Number
 ApplicationSchema.statics.generateApplicationNumber = function () {
-  const year = new Date().getFullYear();
-  const randomNum = Math.floor(Math.random() * 900000) + 100000; // 6-digit number
+  const year = new Date().getFullYear() + 543; // Thai Year
+  const randomNum = Math.floor(Math.random() * 900000) + 100000;
   return `GACP-${year}-${randomNum}`;
 };
 
-ApplicationSchema.statics.getApplicationsByStatus = function (status) {
-  return this.find({ currentStatus: status })
-    .populate('applicant', 'personalInfo contactInfo')
-    .populate('assignedOfficer', 'personalInfo')
-    .sort({ submissionDate: -1 });
-};
-
-ApplicationSchema.statics.getOverdueApplications = function () {
-  return this.find({
-    targetCompletionDate: { $lt: new Date() },
-    currentStatus: {
-      $nin: [
-        ApplicationStatus.APPROVED,
-        ApplicationStatus.REJECTED,
-        ApplicationStatus.CERTIFICATE_ISSUED,
-      ],
-    },
-  });
-};
-
-// Pre-save Middleware
 ApplicationSchema.pre('save', function (next) {
-  this.updatedAt = new Date();
-
-  // Auto-generate application number if not exists
   if (!this.applicationNumber) {
     this.applicationNumber = this.constructor.generateApplicationNumber();
   }
-
-  // Validate status transitions
-  if (this.isModified('currentStatus')) {
-    // Add validation logic for valid status transitions
-    const _validTransitions = {
-      [ApplicationStatus.DRAFT]: [ApplicationStatus.SUBMITTED],
-      [ApplicationStatus.SUBMITTED]: [ApplicationStatus.UNDER_REVIEW],
-      [ApplicationStatus.UNDER_REVIEW]: [
-        ApplicationStatus.INSPECTION_SCHEDULED,
-        ApplicationStatus.REJECTED,
-      ],
-      // ... add more transition rules
-    };
-
-    // This would need to be enhanced with complete transition validation
-  }
-
   next();
 });
 
 module.exports = mongoose.model('Application', ApplicationSchema);
 module.exports.ApplicationStatus = ApplicationStatus;
-module.exports.RiskLevel = RiskLevel;
+module.exports.DocumentType = DocumentType;
+module.exports.ApplicantType = ApplicantType;

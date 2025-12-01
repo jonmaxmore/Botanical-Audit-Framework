@@ -159,8 +159,6 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-
-
     // DTAM Officer & Inspector fields
     workLocation: {
       provinces: [
@@ -237,6 +235,21 @@ const userSchema = new mongoose.Schema(
         type: Number, // in hours
         default: 0,
       },
+    },
+
+    // Availability & Queue Management (New)
+    availability: {
+      isOnline: { type: Boolean, default: false }, // For real-time queue
+      autoAssignEnabled: { type: Boolean, default: true }, // Accept system assignment
+      unavailableDates: [{
+        date: Date,
+        reason: String, // 'leave', 'holiday', 'busy'
+        type: { type: String, enum: ['full_day', 'morning', 'afternoon'] }
+      }],
+      workingHours: {
+        start: { type: String, default: '09:00' },
+        end: { type: String, default: '17:00' }
+      }
     },
 
     // Authentication & Security
