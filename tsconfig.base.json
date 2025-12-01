@@ -7,6 +7,8 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {

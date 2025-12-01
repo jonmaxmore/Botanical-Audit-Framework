@@ -59,6 +59,20 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+    corporateId: {
+      type: String,
+      trim: true,
+      sparse: true,
+    },
+    farmerType: {
+      type: String,
+      enum: ['individual', 'cooperative', 'company'],
+      default: 'individual',
+    },
+    farmingExperience: {
+      type: Number,
+      min: 0,
+    },
     address: {
       type: String,
       default: '',
@@ -81,14 +95,14 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['FARMER', 'ADMIN'],
-      default: 'FARMER',
+      enum: ['farmer', 'admin', 'dtam_officer', 'inspector'],
+      default: 'farmer',
       index: true,
     },
     status: {
       type: String,
-      enum: ['PENDING_VERIFICATION', 'ACTIVE', 'SUSPENDED', 'INACTIVE'],
-      default: 'PENDING_VERIFICATION',
+      enum: ['pending_verification', 'active', 'suspended', 'inactive'],
+      default: 'pending_verification',
       index: true,
     },
     verificationStatus: {
@@ -140,7 +154,7 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-    collection: process.env.FARMER_USERS_COLLECTION || 'users_farmer',
+    collection: process.env.USERS_COLLECTION || 'users',
   },
 );
 
@@ -326,6 +340,7 @@ class MongoDBUserRepository extends IUserRepository {
         doc = await this.model.create(mongoData);
       }
 
+      console.log('MongoDB Save Result:', doc);
       return this.toDomain(doc);
     } catch (error) {
       logger.error('Error saving user:', error);

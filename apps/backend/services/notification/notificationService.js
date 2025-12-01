@@ -199,7 +199,7 @@ class NotificationService {
             ${
               application.inspectionSchedule.meetLink
                 ? `
-              <p><strong>Google Meet:</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
+              <p><strong>Video Call Link (Daily.co):</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
             `
                 : ''
             }
@@ -288,7 +288,7 @@ class NotificationService {
             ${
               application.inspectionSchedule.meetLink
                 ? `
-              <p><strong>Google Meet:</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
+              <p><strong>Video Call Link (Daily.co):</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
             `
                 : ''
             }
@@ -347,7 +347,7 @@ class NotificationService {
             ${
               application.inspectionSchedule.meetLink
                 ? `
-              <p><strong>Google Meet:</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
+              <p><strong>Video Call Link (Daily.co):</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
             `
                 : `
               <p><strong>สถานที่:</strong> ${farmer.farmLocation}</p>
@@ -372,7 +372,7 @@ class NotificationService {
             ${
               application.inspectionSchedule.meetLink
                 ? `
-              <p><strong>Google Meet:</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
+              <p><strong>Video Call Link (Daily.co):</strong> <a href="${application.inspectionSchedule.meetLink}">${application.inspectionSchedule.meetLink}</a></p>
               <p>กรุณาเตรียมความพร้อม: กล้อง, ไมโครโฟน, และการเชื่อมต่ออินเทอร์เน็ต</p>
             `
                 : `

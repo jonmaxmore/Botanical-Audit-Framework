@@ -92,7 +92,7 @@ const InspectionSchedule: React.FC<InspectionScheduleProps> = ({
       icon: <VideoIcon />,
       duration: 2,
       price: 500,
-      location: 'Google Meet (Online)'
+      location: 'Daily.co (Online)'
     },
     HYBRID: {
       color: 'warning',

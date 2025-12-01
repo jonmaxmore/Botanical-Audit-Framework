@@ -1,20 +1,17 @@
 /**
  * Task Assignment API Routes
- * Handles task creation, assignment, and management with Blitzz integration
+ * Handles task creation, assignment, and management
  */
 
 const express = require('express');
 const router = express.Router();
 const rateLimit = require('express-rate-limit');
-const { BlitzzIntegrationService, TaskAssignment } = require('../services/blitzz-integration');
+const TaskAssignment = require('../models/TaskAssignment');
 const auth = require('../middleware/auth-middleware');
 const rbac = require('../middleware/rbac-middleware');
 const auditMiddleware = require('../middleware/audit-middleware');
 const { createLogger } = require('../shared/logger');
 const logger = createLogger('task-assignment');
-
-// Initialize Blitzz service
-const blitzzService = new BlitzzIntegrationService();
 
 // Rate limiting for task creation
 const taskCreationLimiter = rateLimit({
@@ -54,7 +51,6 @@ router.post(
         scheduling,
         context,
         requirements,
-        syncWithBlitzz = true,
       } = req.body;
 
       // Validate required fields
@@ -84,10 +80,10 @@ router.post(
           sourceEvent: 'manual_creation',
         },
         requirements,
-        syncWithBlitzz,
       };
 
-      const task = await blitzzService.createTask(taskData);
+      const task = new TaskAssignment(taskData);
+      await task.save();
 
       // Log audit trail
       req.auditLog = {
@@ -111,7 +107,6 @@ router.post(
             status: task.status.current,
             assignedTo: task.assignment.assignedTo,
             dueDate: task.scheduling.dueDate,
-            blitzzSynced: task.blitzzIntegration.syncStatus === 'synced',
           },
         },
         message: 'Task created successfully',
@@ -143,49 +138,42 @@ router.get('/', auth, rbac(['admin', 'reviewer', 'farmer']), async (req, res) =>
       viewAll = 'false',
     } = req.query;
 
-    let result;
+    const query = {};
 
-    if (req.user.role === 'admin' && viewAll === 'true') {
-      // Admin can view all tasks
-      const query = {};
-      if (status) {
-        query['status.current'] = status;
+    // Filter by status, category, priority
+    if (status) query['status.current'] = status;
+    if (category) query['taskInfo.category'] = category;
+    if (priority) query['taskInfo.priority'] = priority;
+
+    // Access control
+    if (req.user.role !== 'admin' || viewAll !== 'true') {
+      if (includeTeam === 'true') {
+        query['$or'] = [
+          { 'assignment.assignedTo.userId': req.user.userId },
+          { 'assignment.team.userId': req.user.userId }
+        ];
+      } else {
+        query['assignment.assignedTo.userId'] = req.user.userId;
       }
-      if (category) {
-        query['taskInfo.category'] = category;
-      }
-      if (priority) {
-        query['taskInfo.priority'] = priority;
-      }
-
-      const tasks = await TaskAssignment.find(query)
-        .sort({ 'scheduling.dueDate': 1, 'taskInfo.priority': -1 })
-        .limit(parseInt(limit))
-        .skip((parseInt(page) - 1) * parseInt(limit))
-        .populate('assignment.assignedTo.userId', 'userName email role');
-
-      const total = await TaskAssignment.countDocuments(query);
-
-      result = {
-        tasks,
-        pagination: {
-          current: parseInt(page),
-          total: Math.ceil(total / parseInt(limit)),
-          hasNext: parseInt(page) < Math.ceil(total / parseInt(limit)),
-          hasPrev: parseInt(page) > 1,
-        },
-      };
-    } else {
-      // Get tasks for specific user
-      result = await blitzzService.getTasksForUser(req.user.userId, {
-        status,
-        category,
-        priority,
-        includeTeam: includeTeam === 'true',
-        page: parseInt(page),
-        limit: parseInt(limit),
-      });
     }
+
+    const tasks = await TaskAssignment.find(query)
+      .sort({ 'scheduling.dueDate': 1, 'taskInfo.priority': -1 })
+      .limit(parseInt(limit))
+      .skip((parseInt(page) - 1) * parseInt(limit));
+      // .populate('assignment.assignedTo.userId', 'userName email role'); // Removed populate as userId is string in schema
+
+    const total = await TaskAssignment.countDocuments(query);
+
+    const result = {
+      tasks,
+      pagination: {
+        current: parseInt(page),
+        total: Math.ceil(total / parseInt(limit)),
+        hasNext: parseInt(page) < Math.ceil(total / parseInt(limit)),
+        hasPrev: parseInt(page) > 1,
+      },
+    };
 
     res.json({
       success: true,
@@ -284,13 +272,32 @@ router.patch(
         });
       }
 
-      const task = await blitzzService.updateTaskStatus(
-        taskId,
+      const task = await TaskAssignment.findOne({ taskId });
+      if (!task) {
+        return res.status(404).json({
+          success: false,
+          error: 'Task not found',
+        });
+      }
+
+      // Update status history
+      task.status.statusHistory.push({
         status,
-        req.user.userId,
+        changedAt: new Date(),
+        changedBy: req.user.userId,
         reason,
         notes,
-      );
+      });
+
+      task.status.current = status;
+
+      // Set completion time if completed
+      if (status === 'completed') {
+        task.scheduling.completedAt = new Date();
+        task.progress.completionPercentage = 100;
+      }
+
+      await task.save();
 
       // Log audit trail
       req.auditLog = {
@@ -366,9 +373,6 @@ router.patch(
       task.assignment.assignedTo.assignedAt = new Date();
 
       await task.save();
-
-      // Send notifications to both old and new assignees
-      // Implementation would depend on your notification service
 
       // Log audit trail
       req.auditLog = {
@@ -552,8 +556,81 @@ router.post(
   async (req, res) => {
     try {
       const auditData = req.body;
+      const tasks = [];
 
-      const tasks = await blitzzService.createAuditPreparationTasks(auditData);
+      // Document preparation task
+      const docTask = new TaskAssignment({
+        taskInfo: {
+          title: `Prepare Documents for Audit - ${auditData.farmName}`,
+          titleTH: `เตรียมเอกสารสำหรับการตรวจสอบ - ${auditData.farmName}`,
+          description: 'Prepare all required documents for the upcoming audit',
+          category: 'audit_preparation',
+          priority: 'high',
+          estimatedHours: 4,
+        },
+        assignment: {
+          assignedTo: {
+            userId: auditData.farmerId,
+            userName: auditData.farmerName,
+            userRole: 'farmer',
+            userEmail: auditData.farmerEmail,
+          },
+          assignedBy: {
+            userId: auditData.scheduledBy,
+            userName: auditData.scheduledByName,
+            userRole: 'admin',
+          },
+        },
+        scheduling: {
+          dueDate: new Date(new Date(auditData.auditDate).getTime() - 3 * 24 * 60 * 60 * 1000), // 3 days before audit
+        },
+        context: {
+          farmCode: auditData.farmCode,
+          auditId: auditData.auditId,
+          sourceSystem: 'gacp-platform',
+          sourceEvent: 'audit_scheduled',
+          automatedTask: true,
+        },
+      });
+      await docTask.save();
+      tasks.push(docTask);
+
+      // Farm preparation task
+      const farmTask = new TaskAssignment({
+        taskInfo: {
+          title: `Prepare Farm for Audit - ${auditData.farmName}`,
+          titleTH: `เตรียมฟาร์มสำหรับการตรวจสอบ - ${auditData.farmName}`,
+          description: 'Ensure farm is ready for inspection according to GACP standards',
+          category: 'field_inspection',
+          priority: 'high',
+          estimatedHours: 8,
+        },
+        assignment: {
+          assignedTo: {
+            userId: auditData.farmerId,
+            userName: auditData.farmerName,
+            userRole: 'farmer',
+            userEmail: auditData.farmerEmail,
+          },
+          assignedBy: {
+            userId: auditData.scheduledBy,
+            userName: auditData.scheduledByName,
+            userRole: 'admin',
+          },
+        },
+        scheduling: {
+          dueDate: new Date(new Date(auditData.auditDate).getTime() - 1 * 24 * 60 * 60 * 1000), // 1 day before audit
+        },
+        context: {
+          farmCode: auditData.farmCode,
+          auditId: auditData.auditId,
+          sourceSystem: 'gacp-platform',
+          sourceEvent: 'audit_scheduled',
+          automatedTask: true,
+        },
+      });
+      await farmTask.save();
+      tasks.push(farmTask);
 
       // Log audit trail
       req.auditLog = {
@@ -595,7 +672,27 @@ router.post(
  */
 router.get('/dashboard/summary', auth, rbac(['admin', 'reviewer']), async (req, res) => {
   try {
-    const dashboardData = await blitzzService.getAdminDashboardData();
+    const totalTasks = await TaskAssignment.countDocuments();
+    const completedTasks = await TaskAssignment.countDocuments({ 'status.current': 'completed' });
+    const overdueTasks = await TaskAssignment.countDocuments({
+      'scheduling.dueDate': { $lt: new Date() },
+      'status.current': { $nin: ['completed', 'cancelled'] },
+    });
+
+    // Group by status
+    const statusBreakdown = await TaskAssignment.aggregate([
+      { $group: { _id: '$status.current', count: { $sum: 1 } } }
+    ]);
+
+    const dashboardData = {
+      totalTasks,
+      completedTasks,
+      overdueTasks,
+      statusBreakdown: statusBreakdown.reduce((acc, curr) => {
+        acc[curr._id] = curr.count;
+        return acc;
+      }, {}),
+    };
 
     res.json({
       success: true,
@@ -635,49 +732,6 @@ router.get('/overdue', auth, rbac(['admin', 'reviewer']), async (req, res) => {
     res.status(500).json({
       success: false,
       error: 'Failed to fetch overdue tasks',
-    });
-  }
-});
-
-/**
- * POST /api/tasks/:taskId/sync-blitzz
- * Manual sync with Blitzz
- */
-router.post('/:taskId/sync-blitzz', auth, rbac(['admin']), async (req, res) => {
-  try {
-    const { taskId } = req.params;
-
-    const task = await TaskAssignment.findOne({ taskId });
-
-    if (!task) {
-      return res.status(404).json({
-        success: false,
-        error: 'Task not found',
-      });
-    }
-
-    if (!task.blitzzIntegration.externalTaskId) {
-      // Create in Blitzz if not exists
-      await blitzzService.createBlitzzTask(task);
-    } else {
-      // Sync existing task
-      await blitzzService.syncTaskStatusToBlitzz(task);
-    }
-
-    res.json({
-      success: true,
-      data: {
-        syncStatus: task.blitzzIntegration.syncStatus,
-        lastSyncAt: task.blitzzIntegration.lastSyncAt,
-        externalTaskId: task.blitzzIntegration.externalTaskId,
-      },
-      message: 'Task synced with Blitzz successfully',
-    });
-  } catch (error) {
-    logger.error('Error syncing with Blitzz:', error);
-    res.status(500).json({
-      success: false,
-      error: 'Failed to sync with Blitzz',
     });
   }
 });

@@ -99,15 +99,7 @@ Location: ${eventData.farmLocation || 'See application details'}
           ],
         },
         colorId: this.getColorIdByType(eventData.type),
-        conferenceData:
-          eventData.type === 'VIDEO'
-            ? {
-                createRequest: {
-                  requestId: `${eventData.applicationNumber}-${Date.now()}`,
-                  conferenceSolutionKey: { type: 'hangoutsMeet' },
-                },
-              }
-            : undefined,
+          conferenceData: undefined,
       };
 
       const response = await this.calendar.events.insert({

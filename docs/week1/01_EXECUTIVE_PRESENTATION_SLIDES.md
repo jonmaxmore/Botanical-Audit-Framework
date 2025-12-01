@@ -1,7 +1,7 @@
 # GACP Platform Upgrade - Executive Presentation Slides
 
 **วันนำเสนอ:** วันจันทร์ Week 1, 10:00-11:00 AM
-**ห้องประชุม:** Conference Room A / Zoom
+**ห้องประชุม:** Conference Room A / Daily.co
 **ผู้นำเสนอ:** Tech Lead + Project Manager
 **ผู้เข้าร่วม:** ผู้อำนวยการ, CFO, DTAM Representatives
 

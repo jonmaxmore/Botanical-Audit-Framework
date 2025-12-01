@@ -55,6 +55,15 @@ const userSchema = new mongoose.Schema(
       select: false, // Sensitive data
     },
 
+    corporateId: {
+      type: String,
+      required: function() {
+        return this.role === 'farmer' && ['company', 'cooperative'].includes(this.farmerType);
+      },
+      match: [/^\d{13}$/, 'Please enter a valid Corporate ID'],
+      sparse: true,
+    },
+
     // Role and Permissions
     role: {
       type: String,

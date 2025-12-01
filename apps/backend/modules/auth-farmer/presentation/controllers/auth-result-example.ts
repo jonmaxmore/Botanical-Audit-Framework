@@ -35,8 +35,8 @@ export class AuthControllerWithResult {
         res.status(400).json({
           success: false,
           error: error.message,
-          code: error.code,
-          field: error.field,
+          code: (error as any).code,
+          field: (error as any).field,
         });
         return;
       }
@@ -45,8 +45,8 @@ export class AuthControllerWithResult {
         res.status(409).json({
           success: false,
           error: error.message,
-          code: error.code,
-          resource: error.resource,
+          code: (error as any).code,
+          resource: (error as any).resource,
         });
         return;
       }
@@ -55,7 +55,7 @@ export class AuthControllerWithResult {
         res.status(401).json({
           success: false,
           error: error.message,
-          code: error.code,
+          code: (error as any).code,
         });
         return;
       }
@@ -64,17 +64,17 @@ export class AuthControllerWithResult {
         res.status(403).json({
           success: false,
           error: error.message,
-          code: error.code,
+          code: (error as any).code,
         });
         return;
       }
 
       // Generic domain error
       if (error instanceof DomainError) {
-        res.status(error.statusCode).json({
+        res.status((error as any).statusCode).json({
           success: false,
           error: error.message,
-          code: error.code,
+          code: (error as any).code,
         });
         return;
       }
@@ -116,13 +116,13 @@ export function mapErrorToResponse(error: Error): {
 } {
   if (error instanceof DomainError) {
     return {
-      statusCode: error.statusCode,
+      statusCode: (error as any).statusCode,
       body: {
         success: false,
         error: error.message,
-        code: error.code,
-        ...(error instanceof ValidationError && { field: error.field }),
-        ...(error instanceof ConflictError && { resource: error.resource }),
+        code: (error as any).code,
+        ...(error instanceof ValidationError && { field: (error as any).field }),
+        ...(error instanceof ConflictError && { resource: (error as any).resource }),
       },
     };
   }

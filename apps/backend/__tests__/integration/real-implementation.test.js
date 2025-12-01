@@ -51,6 +51,8 @@ describe('Real Implementation Integration Tests', () => {
     district: 'Mae Rim',
     subDistrict: 'Mae Raem',
     postalCode: '50180',
+    farmerType: 'individual',
+    farmingExperience: 5,
   };
 
   beforeAll(async () => {
@@ -100,7 +102,7 @@ describe('Real Implementation Integration Tests', () => {
         .post('/api/auth/farmer/register')
         .send({ ...testUser, idCard: '1234567890123' }); // Invalid Check Digit
 
-      expect(res.status).toBe(500); // Or 400 depending on error handling
+      expect(res.status).toBe(400);
       expect(res.body.error).toMatch(/Invalid Thai ID/);
     });
 
@@ -109,7 +111,7 @@ describe('Real Implementation Integration Tests', () => {
         .post('/api/auth/farmer/register')
         .send({ ...testUser, laserCode: 'INVALID' });
 
-      expect(res.status).toBe(500);
+      expect(res.status).toBe(400);
       expect(res.body.error).toMatch(/Invalid Laser Code/);
     });
 
@@ -128,10 +130,15 @@ describe('Real Implementation Integration Tests', () => {
         .field('district', testUser.district)
         .field('subDistrict', testUser.subDistrict)
         .field('zipCode', testUser.zipCode)
+        .field('farmerType', testUser.farmerType)
+        .field('farmingExperience', testUser.farmingExperience)
         .attach('idCardImage', path.resolve(__dirname, '../fixtures/test-id-card.jpg'));
 
       console.log('Register Response:', JSON.stringify(res.body, null, 2));
 
+      if (res.status !== 201) {
+        console.log('Register Error:', JSON.stringify(res.body, null, 2));
+      }
       expect(res.status).toBe(201);
       expect(res.body.data.user.verificationStatus).toBe('pending');
     });

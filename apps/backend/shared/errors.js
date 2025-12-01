@@ -61,6 +61,17 @@ class NotFoundError extends AppError {
 }
 
 /**
+ * Conflict error class
+ */
+class ConflictError extends AppError {
+  constructor(message, resource = null) {
+    super(message, 409, 'CONFLICT_ERROR');
+    this.name = 'ConflictError';
+    this.resource = resource;
+  }
+}
+
+/**
  * Database error class
  */
 class DatabaseError extends AppError {
@@ -206,6 +217,7 @@ module.exports = {
   AuthenticationError,
   AuthorizationError,
   NotFoundError,
+  ConflictError,
   DatabaseError,
   BusinessLogicError,
 

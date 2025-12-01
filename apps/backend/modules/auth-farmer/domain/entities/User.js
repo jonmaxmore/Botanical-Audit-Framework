@@ -19,13 +19,16 @@ class User {
     idCard,
     idCardImage,
     laserCode,
+    corporateId,
+    farmerType,
+    farmingExperience,
     address,
     province,
     district,
     subdistrict,
     zipCode,
-    role = 'FARMER',
-    status = 'PENDING_VERIFICATION',
+    role = 'farmer',
+    status = 'pending_verification',
     verificationStatus = 'pending',
     isEmailVerified = false,
     emailVerificationToken = null,
@@ -49,6 +52,9 @@ class User {
     this.idCard = idCard;
     this.idCardImage = idCardImage;
     this.laserCode = laserCode;
+    this.corporateId = corporateId;
+    this.farmerType = farmerType;
+    this.farmingExperience = farmingExperience;
     this.address = address;
     this.province = province;
     this.district = district;
@@ -301,7 +307,7 @@ class User {
       errors.push('Laser code is required');
     }
 
-    const validStatuses = ['PENDING_VERIFICATION', 'ACTIVE', 'SUSPENDED', 'INACTIVE'];
+    const validStatuses = ['pending_verification', 'active', 'suspended', 'inactive'];
     if (!validStatuses.includes(this.status)) {
       errors.push('Invalid user status');
     }

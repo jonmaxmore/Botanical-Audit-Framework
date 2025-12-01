@@ -1,8 +1,8 @@
 # 🎯 GACP Platform - Team Onboarding & Communication Package
 
-**Version:** 2.0.0  
-**Date:** October 15, 2025  
-**For:** All Team Members (21 people)  
+**Version:** 2.0.0
+**Date:** October 15, 2025
+**For:** All Team Members (21 people)
 **Sprint 1 Start:** November 1, 2025 (17 days away)
 
 ---
@@ -137,7 +137,7 @@ We're excited to have you join the GACP (Good Agricultural and Collection Practi
 
 ### Project Management (2 people)
 
-**Lead:** คุณสมชาย (Project Manager)  
+**Lead:** คุณสมชาย (Project Manager)
 **Scrum Master:** คุณสมหญิง
 
 **Sprint 1 Focus:**
@@ -216,12 +216,12 @@ We're excited to have you join the GACP (Good Agricultural and Collection Practi
 
 ### **Success Criteria:**
 
-✅ User can register with email + OTP  
-✅ User can login with JWT authentication  
-✅ User can manage profile  
-✅ Admin can manage users (CRUD)  
-✅ Role-based access control works  
-✅ All APIs have tests  
+✅ User can register with email + OTP
+✅ User can login with JWT authentication
+✅ User can manage profile
+✅ Admin can manage users (CRUD)
+✅ Role-based access control works
+✅ All APIs have tests
 ✅ All UIs are responsive
 
 ### **Deliverables:**
@@ -244,7 +244,7 @@ We're excited to have you join the GACP (Good Agricultural and Collection Practi
 - What will I do today?
 - Any blockers?
 
-**Location:** Google Meet / Physical Office  
+**Location:** Google Meet / Physical Office
 **Attendance:** Mandatory for all team members
 
 ---
@@ -286,7 +286,7 @@ We're excited to have you join the GACP (Good Agricultural and Collection Practi
 ### **Communication**
 
 - **Chat:** Microsoft Teams / Slack (TBD)
-- **Video:** Google Meet
+- **Video:** Daily.co
 - **Email:** [Your company email]
 
 ### **Project Management**
@@ -432,27 +432,27 @@ We're excited to have you join the GACP (Good Agricultural and Collection Practi
 
 ### **1. Silent Blockers**
 
-❌ **Don't:** Work alone on blocker for days  
+❌ **Don't:** Work alone on blocker for days
 ✅ **Do:** Report blocker within 2 hours
 
 ### **2. Scope Creep**
 
-❌ **Don't:** Add features not in Sprint 1 plan  
+❌ **Don't:** Add features not in Sprint 1 plan
 ✅ **Do:** Stick to Sprint 1 goals, note ideas for later
 
 ### **3. Poor Communication**
 
-❌ **Don't:** Skip standups, ignore messages  
+❌ **Don't:** Skip standups, ignore messages
 ✅ **Do:** Attend all meetings, respond within 1 hour
 
 ### **4. No Testing**
 
-❌ **Don't:** "It works on my machine"  
+❌ **Don't:** "It works on my machine"
 ✅ **Do:** Write tests, run tests, pass tests
 
 ### **5. Last-Minute Work**
 
-❌ **Don't:** Wait until Day 9 to integrate  
+❌ **Don't:** Wait until Day 9 to integrate
 ✅ **Do:** Daily commits, continuous integration
 
 ---
@@ -527,9 +527,9 @@ We're excited to have you join the GACP (Good Agricultural and Collection Practi
 
 ### **Remember:**
 
-✅ Sprint 1 is the **foundation** - if we succeed here, Sprint 2-12 will be 60% easier  
-✅ We have **70-75% predicted success** with our plan  
-✅ **Communication + Discipline + Collaboration = Success**  
+✅ Sprint 1 is the **foundation** - if we succeed here, Sprint 2-12 will be 60% easier
+✅ We have **70-75% predicted success** with our plan
+✅ **Communication + Discipline + Collaboration = Success**
 ✅ **We're building something important** for Thai farmers
 
 ### **Your Role Matters:**
@@ -554,22 +554,22 @@ Every line of code you write, every design you create, every test you run, every
 
 ## ❓ FAQ
 
-**Q: Can I work remotely?**  
+**Q: Can I work remotely?**
 A: Yes, hybrid is OK. Just attend daily standup.
 
-**Q: What if I'm blocked?**  
+**Q: What if I'm blocked?**
 A: Report in standup or message PM immediately. Don't wait.
 
-**Q: How long should code review take?**  
+**Q: How long should code review take?**
 A: Max 2 hours. If longer, PM will assign more reviewers.
 
-**Q: Can I use my own tools?**  
+**Q: Can I use my own tools?**
 A: Yes, but deliverables must match team standards.
 
-**Q: What if I finish my tasks early?**  
+**Q: What if I finish my tasks early?**
 A: Help teammates, write more tests, improve documentation.
 
-**Q: What if I'm falling behind?**  
+**Q: What if I'm falling behind?**
 A: Tell PM/Scrum Master ASAP. We'll adjust or get help.
 
 ---
@@ -604,7 +604,7 @@ We're excited to work with you. Together, we'll build something amazing for Thai
 
 ---
 
-**Document Owner:** PM Team  
-**Last Updated:** October 15, 2025  
-**Version:** 2.0.0  
+**Document Owner:** PM Team
+**Last Updated:** October 15, 2025
+**Version:** 2.0.0
 **Status:** ✅ Ready for Distribution
