@@ -71,6 +71,7 @@ class GACPApplicationService {
         applicant: farmerId,
         farmInformation: applicationData.farmInformation,
         cropInformation: applicationData.cropInformation,
+        formSpecificData: applicationData.formSpecificData,
         documents: applicationData.documents || [],
         currentStatus: 'draft',
       }, session);

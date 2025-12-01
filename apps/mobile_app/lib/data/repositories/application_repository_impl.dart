@@ -47,34 +47,32 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
     required Map<String, File> documents,
   }) async {
     try {
-      final map = <String, dynamic>{
+      // Step 1: Create Application (JSON)
+      final body = {
         'establishmentId': establishmentId,
         'type': type,
-        ...formData, // Spread form data into the body
+        'farmerData': formData, // Backend expects 'farmerData' key
       };
 
-      // Handle file uploads using FormData
-      final data = FormData.fromMap(map);
-      
-      for (var entry in documents.entries) {
-        data.files.add(MapEntry(
-          entry.key,
-          await MultipartFile.fromFile(entry.value.path, filename: '${entry.key}.jpg'),
-        ));
-      }
-
-      final response = await _dioClient.post('/applications', data: data);
+      final response = await _dioClient.post('/applications', data: body);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         final item = response.data['data'];
+        final applicationId = item['applicationId'] ?? item['_id']; // Handle different response formats
+
+        // Step 2: Upload Documents
+        for (var entry in documents.entries) {
+          await _uploadDocument(applicationId, entry.key, entry.value);
+        }
+
         return Right(ApplicationEntity(
-          id: item['_id'] ?? item['id'],
-          type: item['type'] ?? type,
-          status: item['status'] ?? 'Pending',
-          establishmentId: item['establishment']?['_id'] ?? establishmentId,
-          establishmentName: item['establishment']?['name'] ?? 'Unknown',
-          formData: item['data'] ?? formData,
-          documents: [], // Files are uploaded, but response might not return full URLs immediately
+          id: applicationId,
+          type: type,
+          status: 'Pending',
+          establishmentId: establishmentId,
+          establishmentName: 'Current Farm', // Placeholder until refresh
+          formData: formData,
+          documents: documents.keys.toList(),
           createdAt: DateTime.now(),
         ));
       } else {
@@ -84,6 +82,23 @@ class ApplicationRepositoryImpl implements ApplicationRepository {
       return Left(ServerFailure(message: e.message ?? 'Network Error'));
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  Future<void> _uploadDocument(String applicationId, String docType, File file) async {
+    try {
+      String fileName = file.path.split('/').last;
+      FormData formData = FormData.fromMap({
+        'document': await MultipartFile.fromFile(file.path, filename: fileName),
+      });
+
+      await _dioClient.post(
+        '/applications/$applicationId/documents/$docType',
+        data: formData,
+      );
+    } catch (e) {
+      print('Failed to upload document $docType: $e');
+      // Continue uploading other documents even if one fails
     }
   }
 }

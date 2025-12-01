@@ -2,8 +2,12 @@
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
     "build": {
-      "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "dev": {
       "cache": false,
@@ -20,12 +24,21 @@
       "persistent": false
     },
     "test": {
-      "dependsOn": ["^build"]
+      "dependsOn": [
+        "^build"
+      ]
     },
     "clean": {
       "cache": false
     }
   },
-  "globalDependencies": ["tsconfig.base.json", "turbo.json"],
-  "globalEnv": ["NODE_ENV", "MONGODB_URI", "JWT_SECRET"]
+  "globalDependencies": [
+    "tsconfig.base.json",
+    "turbo.json"
+  ],
+  "globalEnv": [
+    "NODE_ENV",
+    "MONGODB_URI",
+    "JWT_SECRET"
+  ]
 }
