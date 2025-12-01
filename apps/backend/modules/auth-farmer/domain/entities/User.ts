@@ -11,6 +11,7 @@
 export type UserId = string;
 export type UserRole = 'FARMER' | 'INSPECTOR' | 'ADMIN';
 export type UserStatus = 'PENDING_VERIFICATION' | 'ACTIVE' | 'SUSPENDED' | 'INACTIVE';
+export type FarmerType = 'individual' | 'corporate';
 
 export interface UserProps {
   id?: UserId;
@@ -20,6 +21,10 @@ export interface UserProps {
   lastName: string;
   phoneNumber?: string;
   idCard?: string;
+  corporateId?: string;
+  licenseNumber?: string;
+  farmerType?: FarmerType;
+  farmingExperience?: number;
   address?: string;
   province?: string;
   district?: string;
@@ -52,6 +57,10 @@ export class User {
   readonly lastName: string;
   readonly phoneNumber?: string;
   readonly idCard?: string;
+  readonly corporateId?: string;
+  readonly licenseNumber?: string;
+  readonly farmerType: FarmerType;
+  readonly farmingExperience?: number;
   readonly address?: string;
   readonly province?: string;
   readonly district?: string;
@@ -83,6 +92,10 @@ export class User {
     this.lastName = props.lastName;
     this.phoneNumber = props.phoneNumber;
     this.idCard = props.idCard;
+    this.corporateId = props.corporateId;
+    this.licenseNumber = props.licenseNumber;
+    this.farmerType = props.farmerType || 'individual';
+    this.farmingExperience = props.farmingExperience;
     this.address = props.address;
     this.province = props.province;
     this.district = props.district;
@@ -333,6 +346,10 @@ export class User {
       lastName: this.lastName,
       phoneNumber: this.phoneNumber,
       idCard: this.idCard,
+      corporateId: this.corporateId,
+      licenseNumber: this.licenseNumber,
+      farmerType: this.farmerType,
+      farmingExperience: this.farmingExperience,
       address: this.address,
       province: this.province,
       district: this.district,

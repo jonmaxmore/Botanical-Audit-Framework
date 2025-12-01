@@ -50,18 +50,33 @@ const userSchema = new mongoose.Schema(
 
     laserCode: {
       type: String,
-      required: function() { return this.role === 'farmer'; },
+      required: function () { return this.role === 'farmer'; },
       match: [/^[A-Z]{2}[0-9]{10}$/, 'Please enter a valid Laser Code (e.g., ME0123456789)'],
       select: false, // Sensitive data
     },
 
     corporateId: {
       type: String,
-      required: function() {
-        return this.role === 'farmer' && ['company', 'cooperative'].includes(this.farmerType);
+      required: function () {
+        return this.role === 'farmer' && this.farmerType === 'corporate';
       },
       match: [/^\d{13}$/, 'Please enter a valid Corporate ID'],
       sparse: true,
+    },
+
+    licenseNumber: {
+      type: String,
+      trim: true,
+      sparse: true,
+    },
+
+    farmerType: {
+      type: String,
+      enum: ['individual', 'corporate'],
+      default: 'individual',
+      required: function () {
+        return this.role === 'farmer';
+      },
     },
 
     // Role and Permissions
@@ -144,13 +159,7 @@ const userSchema = new mongoose.Schema(
       },
     },
 
-    farmerType: {
-      type: String,
-      enum: ['individual', 'cooperative', 'company'],
-      required: function () {
-        return this.role === 'farmer';
-      },
-    },
+
 
     // DTAM Officer & Inspector fields
     workLocation: {

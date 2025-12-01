@@ -85,6 +85,38 @@ describe('RegisterUserUseCase', () => {
       expect(mockEventBus.publish).toHaveBeenCalled();
     });
 
+    it('should register a CORPORATE farmer successfully', async () => {
+      const userData = {
+        ...createUserPayload(),
+        farmerType: 'corporate',
+        corporateId: '1711266102673', // Valid Thai ID
+        farmingExperience: 5,
+        idCard: '8531233336593', // Valid Thai ID
+        laserCode: 'ME0123456789', // Valid Laser Code
+      };
+
+      // Setup mocks
+      mockUserRepository.emailExists.mockResolvedValue(false);
+      mockUserRepository.idCardExists.mockResolvedValue(false);
+      mockPasswordHasher.hash.mockResolvedValue('hashedPassword123');
+      mockTokenGenerator.generate.mockReturnValue('verificationToken123');
+      mockUserRepository.save.mockImplementation(user => Promise.resolve(user));
+
+      // Execute
+      const result = await registerUseCase.execute(userData);
+
+      // Assert
+      expect(result.user).toBeInstanceOf(User);
+      expect(result.user.farmerType).toBe('corporate');
+      expect(result.user.corporateId).toBe('1711266102673');
+      expect(result.user.farmingExperience).toBe(5);
+
+      // Verify save called with correct data
+      const savedUser = mockUserRepository.save.mock.calls[0][0];
+      expect(savedUser.farmerType).toBe('corporate');
+      expect(savedUser.corporateId).toBe('1711266102673');
+    });
+
     it('should hash the password before saving', async () => {
       const userData = createUserPayload();
 
