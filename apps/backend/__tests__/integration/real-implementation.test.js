@@ -132,7 +132,7 @@ describe('Real Implementation Integration Tests', () => {
         .field('zipCode', testUser.zipCode)
         .field('farmerType', testUser.farmerType)
         .field('farmingExperience', testUser.farmingExperience)
-        .attach('idCardImage', path.resolve(__dirname, '../fixtures/test-id-card.jpg'));
+        // .attach('idCardImage', path.resolve(__dirname, '../fixtures/test-id-card.jpg'));
 
       console.log('Register Response:', JSON.stringify(res.body, null, 2));
 

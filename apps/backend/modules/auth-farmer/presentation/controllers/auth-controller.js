@@ -74,6 +74,7 @@ class AuthController {
         verificationToken: result.verificationToken,
       });
     } catch (error) {
+      console.error('FULL ERROR:', error);
       logger.error('Registration error:', error);
 
       if (
