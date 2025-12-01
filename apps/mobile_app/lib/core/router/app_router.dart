@@ -5,6 +5,7 @@ import '../../presentation/navigation/app_shell.dart';
 import '../../presentation/features/establishment/screens/establishment_list_screen.dart';
 import '../../presentation/features/establishment/screens/establishment_form_screen.dart';
 import '../../presentation/features/dashboard/screens/dashboard_screen.dart';
+import '../../presentation/features/application/screens/application_form_screen.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
@@ -37,6 +38,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/applications',
             builder: (context, state) => const Center(child: Text('Applications Screen')),
+            routes: [
+              GoRoute(
+                path: 'new',
+                builder: (context, state) => const ApplicationFormScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: '/profile',
