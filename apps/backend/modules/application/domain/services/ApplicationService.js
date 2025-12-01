@@ -57,6 +57,15 @@ class ApplicationService {
             throw new Error('Self-assessment and documents are required');
         }
 
+        // Validate Form Specific Data (Forms 9-11)
+        if (application.certificationScope === 'cultivation') {
+            // Form 9 Requirement: Security Measures
+            if (!application.formSpecificData?.production?.securityMeasures?.fenceDescription) {
+                throw new Error('Form 9: Security measures (Fence Description) are required');
+            }
+        }
+        // TODO: Add more specific checks for Form 10/11 based on requestType or purpose
+
         application.status = 'submitted';
         application.submittedAt = new Date();
         application.history.push({
