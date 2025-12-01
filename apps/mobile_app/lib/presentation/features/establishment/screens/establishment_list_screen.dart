@@ -15,7 +15,7 @@ class EstablishmentListScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Establishments'),
+        title: const Text('My Sites'),
         actions: [
           IconButton(
             icon: const Icon(LucideIcons.plus),

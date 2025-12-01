@@ -35,7 +35,7 @@ class _MobileShell extends StatelessWidget {
           ),
           NavigationDestination(
             icon: Icon(LucideIcons.sprout),
-            label: 'Establishments',
+            label: 'My Sites',
           ),
           NavigationDestination(
             icon: Icon(LucideIcons.fileText),

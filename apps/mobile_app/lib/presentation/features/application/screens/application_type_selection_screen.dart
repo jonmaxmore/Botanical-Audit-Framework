@@ -15,7 +15,7 @@ class ApplicationTypeSelectionScreen extends StatelessWidget {
           _buildTypeCard(
             context,
             title: 'Cultivation / Production (Form 9)',
-            description: 'For farmers and producers requesting permission to grow or produce controlled herbs.',
+            description: 'For cultivation businesses and producers requesting permission to grow or produce controlled herbs.',
             icon: LucideIcons.sprout,
             color: Colors.green,
             type: 'GACP_FORM_9',
@@ -24,7 +24,7 @@ class ApplicationTypeSelectionScreen extends StatelessWidget {
           _buildTypeCard(
             context,
             title: 'Sale / Distribution (Form 10)',
-            description: 'For pharmacies, clinics, or businesses requesting permission to sell controlled herbs.',
+            description: 'For dispensing outlets, clinics, or businesses requesting permission to sell controlled herbs.',
             icon: LucideIcons.store,
             color: Colors.blue,
             type: 'GACP_FORM_10',
@@ -33,7 +33,7 @@ class ApplicationTypeSelectionScreen extends StatelessWidget {
           _buildTypeCard(
             context,
             title: 'Import / Export (Form 11)',
-            description: 'For businesses requesting permission to import or export controlled herbs.',
+            description: 'For import/export enterprises requesting permission to trade controlled herbs internationally.',
             icon: LucideIcons.container,
             color: Colors.orange,
             type: 'GACP_FORM_11',
